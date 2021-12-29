@@ -1,5 +1,6 @@
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
-import { RPC, supportedNetworks } from 'lib/dappConfig'
+import { supportedNetworks } from 'config'
+import { RPC } from 'config/rpc'
 
 export const walletconnect = new WalletConnectConnector({
   rpc: RPC,

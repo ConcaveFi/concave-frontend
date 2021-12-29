@@ -1,7 +1,7 @@
 import React from 'react'
 import type { AppProps } from 'next/app'
 import { DAppProvider } from '@usedapp/core'
-import { dappConfig } from 'lib/dappConfig'
+import { dappConfig } from 'config'
 import { ChakraProvider, cookieStorageManager, localStorageManager } from '@chakra-ui/react'
 import theme from 'theme'
 import '@fontsource/pt-sans'

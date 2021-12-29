@@ -1,20 +1,9 @@
-import {
-  Alert,
-  AlertDescription,
-  AlertIcon,
-  AlertTitle,
-  Container,
-  Flex,
-  Heading,
-  HStack,
-} from '@chakra-ui/react'
-import { useEthers, useNotifications } from '@usedapp/core'
-import { ToggleTheme } from 'components/ToggleTheme'
+import { Alert, AlertDescription, AlertIcon, AlertTitle, Container } from '@chakra-ui/react'
+import { useEthers } from '@usedapp/core'
 import React from 'react'
 import { getErrorMessage } from '../lib/utils'
-import { Balance } from './Balance'
-import { ConnectWallet } from './ConnectWallet'
 import { Head, MetaProps } from './MetaHead'
+import { TopBar } from './TopBar'
 
 // Extends `window` to add `ethereum`.
 declare global {
@@ -34,27 +23,16 @@ export const Page = ({ children, customMeta }: PageProps): JSX.Element => {
   return (
     <>
       <Head customMeta={customMeta} />
-      <header>
-        <Container maxWidth="container.xl">
-          <Flex my="8" alignItems={'center'} justifyContent="space-between">
-            <Heading as="h1">Concave</Heading>
-            <HStack gap="1">
-              <Balance />
-              <ConnectWallet />
-              <ToggleTheme />
-            </HStack>
-          </Flex>
-        </Container>
-      </header>
+      <TopBar />
       <main>
         <Container maxWidth="container.xl">
-          {error && (
-            <Alert status="error" mb="8">
-              <AlertIcon />
-              <AlertTitle mr={2}>Error:</AlertTitle>
-              <AlertDescription>{getErrorMessage(error)}</AlertDescription>
-            </Alert>
-          )}
+          {/* {error && ( */}
+          <Alert status="error" mb="8">
+            <AlertIcon />
+            <AlertTitle mr={2}>Error:</AlertTitle>
+            <AlertDescription>{getErrorMessage(error)}</AlertDescription>
+          </Alert>
+          {/* )} */}
           {children}
         </Container>
       </main>
