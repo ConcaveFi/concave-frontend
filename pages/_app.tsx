@@ -4,7 +4,7 @@ import { DAppProvider } from '@usedapp/core'
 import { dappConfig } from 'config'
 import { ChakraProvider, cookieStorageManager, localStorageManager } from '@chakra-ui/react'
 import theme from 'theme'
-import '@fontsource/pt-sans'
+import 'public/fonts.css'
 
 export function getServerSideProps({ req }) {
   return { props: { cookies: req.headers.cookie ?? '' } }
