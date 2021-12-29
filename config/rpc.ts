@@ -1,4 +1,4 @@
-import { Mainnet, Config, ChainId } from '@usedapp/core'
+import { ChainId } from '@usedapp/core'
 
 export const RPC = {
   [ChainId.Mainnet]: 'https://eth-mainnet.alchemyapi.io/v2/NTHRe8JdJXvX1FR3zKgdRA_mUwAyiwEJ',
@@ -12,13 +12,4 @@ export const RPC = {
   [ChainId.Arbitrum]: 'https://arb1.arbitrum.io/rpc',
   [ChainId.Fantom]: 'https://rpcapi.fantom.network',
   [ChainId.Fantom]: 'https://rpc.testnet.fantom.network',
-}
-
-export const supportedNetworks = [Mainnet]
-
-export const dappConfig: Config = {
-  networks: supportedNetworks,
-  readOnlyChainId: Mainnet.chainId, // default read only chain to connect
-  readOnlyUrls: RPC,
-  autoConnect: true,
 }
