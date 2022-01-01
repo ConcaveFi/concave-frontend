@@ -1,18 +1,37 @@
-import { ComponentStyleConfig } from '@chakra-ui/react'
-import { mode } from '@chakra-ui/theme-tools'
+import { ComponentStyleConfig, theme } from '@chakra-ui/react'
+import { mode, SystemStyleInterpolation } from '@chakra-ui/theme-tools'
+import { gradientStroke } from 'theme/utils/gradientStroke'
+import colors from '../colors'
 
 export const ButtonStyles: ComponentStyleConfig = {
-  // baseStyle: {
-  //   fontWeight: 'bold',
-  //   borderRadius: '16px',
-  // },
-  // style object for base or default style
-  baseStyle: {},
-  // styles for different sizes ("sm", "md", "lg")
-  sizes: {},
-  // styles for different visual variants ("outline", "solid")
-  variants: {},
-  // default values for `size` and `variant`
+  baseStyle: {
+    fontSize: '14px',
+    width: 'auto',
+  },
+  sizes: {
+    large: {
+      height: 50,
+      borderRadius: 'xl',
+    },
+  },
+  variants: {
+    'primary.outline': (props) => ({
+      ...gradientStroke(props),
+      shadow: 'up',
+    }),
+    primary: (props) => ({
+      ...gradientStroke(props),
+      bgGradient: colors.gradients.primary,
+      shadow: 'up',
+    }),
+    contained: {
+      shadow: 'up',
+      bg: 'transparent',
+    },
+    secondary: {
+      shadow: 'up',
+    },
+  },
   defaultProps: {},
 }
 

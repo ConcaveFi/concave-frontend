@@ -20,6 +20,7 @@ import { walletconnect } from 'lib/connectors'
 import { supportedNetworks } from 'config'
 import { NETWORKS } from 'config/networks'
 import { toOxfordComma } from 'lib/toOxfordComma'
+import colors from 'theme/colors'
 
 // Takes a long hash string and truncates it.
 function truncateHash(hash: string, length = 38): string {
@@ -64,8 +65,15 @@ const ConnectButton = ({ onError }: { onError: (e: Error) => void }) => {
   return (
     <>
       <Menu placement="bottom-end">
-        <MenuButton as={Button} variant="outline">
-          Connect wallet
+        <MenuButton
+          as={Button}
+          variant={'primary.outline'}
+          bgGradient={colors.gradients.green}
+          size="large"
+          borderWidth={2}
+          w={200}
+        >
+          Connect your wallet
         </MenuButton>
         <MenuList>
           <MenuItem
@@ -94,7 +102,7 @@ const ConnectButton = ({ onError }: { onError: (e: Error) => void }) => {
 
 export function ConnectWallet(): JSX.Element {
   const { account, error } = useEthers()
-  console.log(error)
+  // console.log(error)
   // const [state, setState] = useState<'idle' | 'unsupportedNetwork' | 'waitingUserAccept'>('idle')
 
   // const connectInjected = () => {

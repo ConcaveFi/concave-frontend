@@ -5,7 +5,7 @@ const globalStyles: Styles = {
     html: {
       fontFamily: 'body',
       color: mode('gray.800', 'whiteAlpha.900')(props),
-      bg: mode('white', '#121212')(props),
+      // bg: mode('white', '#121212')(props),
       lineHeight: 'base',
       'color-scheme': mode('light', 'dark')(props),
     },
