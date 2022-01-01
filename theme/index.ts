@@ -6,7 +6,7 @@ import Card from './components/CardStyles'
 import { fonts, shadows } from './foundations'
 
 const overrides: Partial<ChakraTheme> = {
-  config: { initialColorMode: 'system', cssVarPrefix: 'concave' },
+  config: { initialColorMode: 'dark', cssVarPrefix: 'concave' },
   styles: global,
   fonts,
   colors,
