@@ -17,6 +17,7 @@ import React from 'react'
 import colors from 'theme/colors'
 import { fonts } from 'theme/foundations'
 import { Page } from '../components/Page'
+import ZapInfoCard from 'components/ZapInfoCard'
 
 const BondCard = () => {
   return (
@@ -140,7 +141,8 @@ function Home() {
           </Box>
           <Flex gap={6} flexWrap="wrap" justify="center">
             <BondCard />
-            <BondInfoCard />
+            {/* <BondInfoCard /> */}
+            <ZapInfoCard />
           </Flex>
         </Flex>
       </Container>
