@@ -20,6 +20,7 @@ import { Page } from '../components/Page'
 import ZapInfoCard from 'components/ZapInfoCard'
 import SwapInfoCard from 'components/SwapInfoCard'
 import SwapCard from 'components/SwapCard'
+import ZapCard from 'components/ZapCard'
 
 const BondCard = () => {
   return (
@@ -142,8 +143,9 @@ function Home() {
             </Text>
           </Box>
           <Flex gap={6} flexWrap="wrap" justify="center">
-            <BondCard />
             <SwapCard />
+            {/* <BondCard /> */}
+            <ZapCard />
             {/* <BondInfoCard /> */}
             {/* <ZapInfoCard /> */}
             {/* <SwapInfoCard /> */}
