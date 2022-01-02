@@ -120,7 +120,7 @@ const BondInfoCard = () => {
   return (
     <Card w={484} variant="secondary" borderWidth={2} bgImage="/assets/cave.png">
       <Card px={10} py={8} variant="secondary" borderWidth={2} bgImage="/assets/cave.png">
-        <Text>AAAAAA</Text>
+        <Text>AAAAA</Text>
       </Card>
     </Card>
   )
