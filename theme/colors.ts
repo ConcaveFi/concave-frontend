@@ -17,10 +17,6 @@ export const colors = {
     500: '#1B3442',
   },
 
-  alphaWhite: {
-    50: 'rgba(255, 255, 255, 0.05)',
-  },
-
   strokeReflection:
     'linear-gradient(41.89deg, #53399B 0.69%, #7DE0FF 38.19%, #504179 72.85%, #84E2FF 100%)',
   gradients: {

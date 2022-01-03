@@ -1,29 +1,14 @@
-import {
-  Box,
-  Button,
-  Container,
-  Flex,
-  Heading,
-  HStack,
-  Icon,
-  Input,
-  Stack,
-  Text,
-} from '@chakra-ui/react'
-import { Card } from 'components/Card'
-import Image from 'next/image'
-import React from 'react'
-import colors from 'theme/colors'
-import { fonts } from 'theme/foundations'
-import { Page } from '../components/Page'
-import Gcnv from 'components/Gcnv'
+export const getServerSideProps = async (ctx) => {
+  return {
+    redirect: {
+      destination: '/swap',
+      permanent: false,
+    },
+  }
+}
 
 function Home() {
-  return (
-    <Page>
-      <Gcnv />
-    </Page>
-  )
+  return null
 }
 
 export default Home
