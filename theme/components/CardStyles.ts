@@ -6,7 +6,6 @@ import colors from '../colors'
 export const CardStyles: ComponentStyleConfig = {
   baseStyle: {
     borderRadius: '2xl',
-    width: 'fit-content',
   },
   sizes: {},
   variants: {
