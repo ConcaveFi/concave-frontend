@@ -6,21 +6,19 @@ export const gradientStroke = ({
 }: StyleFunctionProps): SystemStyleInterpolation => ({
   position: 'relative',
 
-  // couldn't find a way to make a transparent bg with rounded gradient borders
-
-  backgroundClip: 'padding-box',
-  border: `solid ${toPx(borderWidth)} transparent`,
-
-  '&:before': {
+  '&::before': {
     content: '""',
     position: 'absolute',
     top: 0,
+    left: 0,
     right: 0,
     bottom: 0,
-    left: 0,
-    zIndex: -1,
-    margin: `-${toPx(borderWidth)}`,
     borderRadius: 'inherit',
+    m: `-${toPx(borderWidth)}`,
+    p: toPx(borderWidth),
     bg: 'strokeReflection',
+    WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+    WebkitMaskComposite: 'destination-out',
+    maskComposite: 'exclude',
   },
 })
