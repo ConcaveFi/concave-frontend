@@ -1,14 +1,14 @@
-import { Box, BoxProps, useStyleConfig } from '@chakra-ui/react'
+import { useStyleConfig, StackProps, Stack } from '@chakra-ui/react'
 
-export interface CardProps extends BoxProps {
+export interface CardProps extends StackProps {
   variant?: 'primary' | 'secondary'
 }
 
 export function Card({ variant, children, ...rest }: CardProps) {
   const styles = useStyleConfig('Card', { variant })
   return (
-    <Box __css={styles} {...rest}>
+    <Stack __css={styles} {...rest} spacing={0}>
       {children}
-    </Box>
+    </Stack>
   )
 }
