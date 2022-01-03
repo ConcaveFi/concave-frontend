@@ -1,6 +1,6 @@
 {
   "name": "concave-frontend",
-  "author": "concave dao",
+  "author": "concave co-op",
   "license": "MIT",
   "version": "1.0.0",
   "scripts": {
@@ -13,13 +13,8 @@
     "test": "jest",
     "test-all": "yarn lint && yarn type-check && yarn test",
     "gen:theme-typings": "chakra-cli tokens ./theme/index.ts",
-    "postinstall": "npm run gen:theme-typings"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "pre-push": "yarn run type-check"
-    }
+    "postinstall": "npm run gen:theme-typings",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@apollo/client": "^3.5.6",

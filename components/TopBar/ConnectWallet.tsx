@@ -18,7 +18,6 @@ import { UnsupportedChainIdError } from '@web3-react/core'
 
 import { walletconnect } from 'lib/connectors'
 import { supportedNetworks } from 'config'
-import { NETWORKS } from 'config/networks'
 import { toOxfordComma } from 'lib/toOxfordComma'
 import colors from 'theme/colors'
 
@@ -51,8 +50,7 @@ const UnsuportedNetworkModal = ({ isOpen, onClose }) => (
     <ModalContent>
       <ModalContent>
         <Text>
-          We currently only support{' '}
-          {toOxfordComma(supportedNetworks.map((n) => NETWORKS[n.chainId].name))}
+          We currently only support {toOxfordComma(supportedNetworks.map((n) => n.chainName))}
         </Text>
         <Button onClick={() => switchNetwork()}>Swith to Ethereum</Button>
       </ModalContent>

@@ -16,7 +16,6 @@ import Image from 'next/image'
 import React from 'react'
 import colors from 'theme/colors'
 import { fonts } from 'theme/foundations'
-import { Page } from '../components/Page'
 
 function BondCard() {
     return (

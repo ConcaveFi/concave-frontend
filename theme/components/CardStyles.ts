@@ -1,7 +1,6 @@
 import { ComponentStyleConfig } from '@chakra-ui/react'
-import { mode } from '@chakra-ui/theme-tools'
 import { gradientStroke } from 'theme/utils/gradientStroke'
-import colors from '../colors'
+import colors from 'theme/colors'
 
 export const CardStyles: ComponentStyleConfig = {
   baseStyle: {
