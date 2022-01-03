@@ -6,66 +6,66 @@ function SwapInfoCard() {
   return (
     <Card w={484} variant="secondary" borderWidth={2} bgImage="/assets/cave.png">
       <Card shadow="down" borderRadius="2xl" h="100px" align="center" justify="center" spacing={0}>
-        <Text color="#5f7a99" fontSize="xs" fontWeight="bold">
+        <Text color="text.3" fontSize="xs" fontWeight="bold">
           Your balance
         </Text>
-        <Text color="#d7e9ff" fontSize="2xl" fontWeight="bold">
+        <Text color="text.2" fontSize="2xl" fontWeight="bold">
           0.314 gCNV
         </Text>
       </Card>
 
       <HStack h="150px" divider={<Box w="1px" h="100%" bg="strokeReflection" />}>
         <VStack w="100%">
-          <HStack color="#5f7a99" fontSize="xs" fontWeight="bold" spacing="5px">
+          <HStack color="text.3" fontSize="xs" fontWeight="bold" spacing="5px">
             <QuestionOutlineIcon />
             <Text>Projected APY</Text>
           </HStack>
-          <Text color="#d7e9ff" fontSize="2xl" fontWeight="bold">
+          <Text color="text.2" fontSize="2xl" fontWeight="bold">
             12321%
           </Text>
         </VStack>
         <VStack w="100%">
           <Stack alignItems="center" justifyContent="center" spacing="-2px">
-            <Text color="#5f7a99" fontSize="xs" fontWeight="bold">
+            <Text color="text.3" fontSize="xs" fontWeight="bold">
               gCNV Growth
             </Text>
-            <Text color="#5f7a99" fontSize="xs" fontWeight="bold">
+            <Text color="text.3" fontSize="xs" fontWeight="bold">
               30 days
             </Text>
           </Stack>
 
-          <Text color="#d7e9ff" fontSize="2xl" fontWeight="bold">
+          <Text color="text.2" fontSize="2xl" fontWeight="bold">
             $2,231.88
           </Text>
         </VStack>
         <VStack w="100%">
           <Stack alignItems="center" justifyContent="center" spacing="-2px">
-            <Text color="#5f7a99" fontSize="xs" fontWeight="bold">
+            <Text color="text.3" fontSize="xs" fontWeight="bold">
               gCNV Growth
             </Text>
-            <Text color="#5f7a99" fontSize="xs" fontWeight="bold">
+            <Text color="text.3" fontSize="xs" fontWeight="bold">
               24 hours
             </Text>
           </Stack>
-          <Text color="#d7e9ff" fontSize="2xl" fontWeight="bold">
+          <Text color="text.2" fontSize="2xl" fontWeight="bold">
             1.37%
           </Text>
         </VStack>
       </HStack>
 
       <Card shadow="down" borderRadius="2xl" h="100px" align="center" justify="center" spacing={0}>
-        <HStack color="#5f7a99" fontSize="xs" fontWeight="bold" spacing="5px">
+        <HStack color="text.3" fontSize="xs" fontWeight="bold" spacing="5px">
           <QuestionOutlineIcon />
           <Text>gCNV Intrinsic Value</Text>
         </HStack>
-        <Text color="#d7e9ff" fontSize="2xl" fontWeight="bold">
+        <Text color="text.2" fontSize="2xl" fontWeight="bold">
           1gCNV = 1.000127 CNV
         </Text>
       </Card>
 
       <HStack h="150px" divider={<Box w="1px" h="100%" bg="strokeReflection" />}>
         <VStack w="100%">
-          <Text color="#5f7a99" fontSize="xs" fontWeight="bold">
+          <Text color="text.3" fontSize="xs" fontWeight="bold">
             Time
           </Text>
           <Text color="#79b2f4" fontSize="sm" fontWeight="bold">
@@ -79,7 +79,7 @@ function SwapInfoCard() {
           </Text>
         </VStack>
         <VStack w="100%">
-          <Text color="#5f7a99" fontSize="xs" fontWeight="bold">
+          <Text color="text.3" fontSize="xs" fontWeight="bold">
             gCNV Growth
           </Text>
           <Text color="#79b2f4" fontSize="sm" fontWeight="bold">
@@ -93,7 +93,7 @@ function SwapInfoCard() {
           </Text>
         </VStack>
         <VStack w="100%">
-          <HStack color="#5f7a99" fontSize="xs" fontWeight="bold" spacing="5px">
+          <HStack color="text.3" fontSize="xs" fontWeight="bold" spacing="5px">
             <QuestionOutlineIcon />
             <Text>Treasury income</Text>
           </HStack>
