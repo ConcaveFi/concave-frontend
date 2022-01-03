@@ -17,14 +17,10 @@ import React from 'react'
 import colors from 'theme/colors'
 import { fonts } from 'theme/foundations'
 import { Page } from '../components/Page'
-import ZapInfoCard from 'components/ZapInfoCard'
-import SwapInfoCard from 'components/SwapInfoCard'
-import SwapCard from 'components/SwapCard'
-import ZapCard from 'components/ZapCard'
 
-const BondCard = () => {
-  return (
-    <Card px={10} py={8} variant="primary" borderWidth={2}>
+function BondCard() {
+    return (
+        <Card px={10} py={8} variant="primary" borderWidth={2}>
       <Stack gap={4}>
         <Flex direction="column" gap={1} px={5}>
           <Text textColor={'grey.500'} fontWeight={700}>
@@ -117,44 +113,7 @@ const BondCard = () => {
         </Button>
       </Stack>
     </Card>
-  )
+    )
 }
 
-const BondInfoCard = () => {
-  return (
-    <Card w={484} variant="secondary" borderWidth={2} bgImage="/assets/cave.png">
-      <Card px={10} py={8} variant="secondary" borderWidth={2} bgImage="/assets/cave.png">
-        <Text>AAAAA</Text>
-      </Card>
-    </Card>
-  )
-}
-
-function Home() {
-  return (
-    <Page>
-      <Container maxW="container.lg">
-        <Flex direction="column" gap={12}>
-          <Box mt={12}>
-            <Heading as="h1">Discounted gCNV</Heading>
-            <Text maxW={520}>
-              Get your gCNV that will grow internal CNV number your gCNV that will grow number or
-              smth idk lol Get your gCNV that will grow internal CNV number or smth idk lol
-            </Text>
-          </Box>
-          <Flex gap={6} flexWrap="wrap" justify="center">
-            {/* <SwapCard /> */}
-            {/* <BondCard />  */}
-            {/* <ZapCard /> */}
-            {/* <SwapInfoCard /> */}
-            {/* <BondInfoCard /> */}
-            {/* <ZapInfoCard /> */}
-            
-          </Flex>
-        </Flex>
-      </Container>
-    </Page>
-  )
-}
-
-export default Home
+export default BondCard
