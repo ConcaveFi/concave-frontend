@@ -14,7 +14,8 @@
     "test-all": "yarn lint && yarn type-check && yarn test",
     "gen:theme-typings": "chakra-cli tokens ./theme/index.ts",
     "postinstall": "npm run gen:theme-typings",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "precommit": "lint-staged"
   },
   "dependencies": {
     "@apollo/client": "^3.5.6",
