@@ -21,6 +21,7 @@ import ZapInfoCard from 'components/ZapInfoCard'
 import SwapInfoCard from 'components/SwapInfoCard'
 import SwapCard from 'components/SwapCard'
 import ZapCard from 'components/ZapCard'
+import Gcnv from 'components/Gcnv'
 
 const BondCard = () => {
   return (
@@ -133,26 +134,7 @@ const BondInfoCard = () => {
 function Home() {
   return (
     <Page>
-      <Container maxW="container.lg">
-        <Flex direction="column" gap={12}>
-          <Box mt={12}>
-            <Heading as="h1">Discounted gCNV</Heading>
-            <Text maxW={520}>
-              Get your gCNV that will grow internal CNV number your gCNV that will grow number or
-              smth idk lol Get your gCNV that will grow internal CNV number or smth idk lol
-            </Text>
-          </Box>
-          <Flex gap={6} flexWrap="wrap" justify="center">
-            {/* <SwapCard /> */}
-            {/* <BondCard />  */}
-            {/* <ZapCard /> */}
-            {/* <SwapInfoCard /> */}
-            {/* <BondInfoCard /> */}
-            {/* <ZapInfoCard /> */}
-            
-          </Flex>
-        </Flex>
-      </Container>
+      <Gcnv />
     </Page>
   )
 }
