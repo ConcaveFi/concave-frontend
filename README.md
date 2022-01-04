@@ -3,6 +3,7 @@
 This is frontend repo
 
 Reading the following tools doc will help you navigate and develop in this repo
+
 - [Next.js](https://nextjs.org/docs/basic-features)
 - [Typescript](https://www.typescriptlang.org/)
 - [TypeChain](https://github.com/ethereum-ts/TypeChain)
