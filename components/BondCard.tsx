@@ -16,11 +16,10 @@ import Image from 'next/image'
 import React from 'react'
 import colors from 'theme/colors'
 import { fonts } from 'theme/foundations'
-import { Page } from '../components/Page'
 
 function BondCard() {
-    return (
-        <Card px={10} py={8} variant="primary" borderWidth={2}>
+  return (
+    <Card px={10} py={8} variant="primary" borderWidth={2}>
       <Stack gap={4}>
         <Flex direction="column" gap={1} px={5}>
           <Text textColor={'grey.500'} fontWeight={700}>
@@ -113,7 +112,7 @@ function BondCard() {
         </Button>
       </Stack>
     </Card>
-    )
+  )
 }
 
 export default BondCard
