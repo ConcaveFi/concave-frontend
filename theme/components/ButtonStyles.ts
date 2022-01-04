@@ -1,6 +1,6 @@
 import { ComponentStyleConfig } from '@chakra-ui/react'
-import { gradientStroke } from 'theme/utils/gradientStroke'
-import colors from 'theme/colors'
+import { gradientStroke } from '../utils/gradientStroke'
+import colors from '../colors'
 
 export const ButtonStyles: ComponentStyleConfig = {
   baseStyle: {
