@@ -1,27 +1,64 @@
-import { HStack, Container, Flex, Heading, Button, Box } from '@chakra-ui/react'
+import { HStack, Container, Flex, Heading, Button, Box, Image, Text } from '@chakra-ui/react'
 import colors from 'theme/colors'
-import { Balance } from './Balance'
+import { ButtonLink } from 'components/ButtonLink'
 import { ConnectWallet } from './ConnectWallet'
-import { ToggleTheme } from './ToggleTheme'
 
 export const TopBar = () => {
   return (
-    <Box as="header">
-      {/* bg="green.500"> */}
+    <Box
+      as="header"
+      sx={{
+        position: 'relative',
+        height: 105,
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          bottom: 0,
+          width: '100%',
+          height: '100%',
+          zIndex: -1,
+          bg: 'url(/images/lines.svg)',
+        },
+      }}
+    >
+      {/* <Image
+        src={'/images/lines.svg'}
+        alt="top bar background"
+        maxWidth="1440px"
+        maxHeight="100px"
+        position="absolute"
+      /> */}
+
       <Container maxWidth="container.xl">
-        <Flex py="4" alignItems={'center'} justifyContent="space-between">
-          <Heading as="h1">Concave</Heading>
+        <Flex justifyContent="space-between" maxHeight="72px">
+          <Image
+            src={'/images/CNV_white_svg.svg'}
+            alt="concave logo"
+            maxWidth="100px"
+            maxHeight="120px"
+            position="relative"
+          />
+
+          <HStack spacing="0">
+            <ButtonLink selected variant="navigation" href="/swap">
+              Get gCNV
+            </ButtonLink>
+            <Button variant="navigation" href={'/placeholder_lending'}>
+              Lending and Borrowing
+            </Button>
+          </HStack>
+
           <HStack gap="1">
-            {/* <Balance /> */}
-            <Button
-              variant={'secondary'}
+            <ButtonLink
+              href="/placeholder_dashboard"
+              variant="secondary"
               bgGradient={colors.gradients.green}
               size="large"
-              w={200}
               borderRadius="2xl"
             >
               Dashboard
-            </Button>
+            </ButtonLink>
             <ConnectWallet />
           </HStack>
         </Flex>
