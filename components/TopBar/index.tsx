@@ -1,83 +1,68 @@
 import { HStack, Container, Flex, Heading, Button, Box, Image, Text } from '@chakra-ui/react'
 import colors from 'theme/colors'
-import { Balance } from './Balance'
+import { ButtonLink } from 'components/ButtonLink'
 import { ConnectWallet } from './ConnectWallet'
-import { ToggleTheme } from './ToggleTheme'
-import { Router, useRouter } from 'next/router'
-import navStyles from './navbar.module.css'
 
 export const TopBar = () => {
-  const router = useRouter()
-
   return (
-    <div className={navStyles.mobileNav}>
-      <Box as="header">
-        <Image
-          src={'/images/lines.svg'}
-          alt="top bar background"
-          maxWidth="1440px"
-          maxHeight="100px"
-          position="absolute"
-        />
+    <Box
+      as="header"
+      sx={{
+        position: 'relative',
+        height: 105,
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          bottom: 0,
+          width: '100%',
+          height: '100%',
+          zIndex: -1,
+          bg: 'url(/images/lines.svg)',
+        },
+      }}
+    >
+      {/* <Image
+        src={'/images/lines.svg'}
+        alt="top bar background"
+        maxWidth="1440px"
+        maxHeight="100px"
+        position="absolute"
+      /> */}
 
-        {/* bg="green.500"> */}
-        <Container maxWidth="container.xl">
-          <Flex alignItems={'center'} justifyContent="space-between">
-            <Heading as="h1">
-              <Image
-                src={'/images/CNV_white_svg.svg'}
-                alt="concave logo"
-                maxWidth="100px"
-                maxHeight="120px"
-                position="relative"
-              />
-            </Heading>
+      <Container maxWidth="container.xl">
+        <Flex justifyContent="space-between" maxHeight="72px">
+          <Image
+            src={'/images/CNV_white_svg.svg'}
+            alt="concave logo"
+            maxWidth="100px"
+            maxHeight="120px"
+            position="relative"
+          />
 
-            <HStack gap="0">
-              <Button
-                onClick={() => router.push('/swap')}
-                variant={'ghost'}
-                size="medium"
-                w={130}
-                maxHeight="200px"
-                _hover={{
-                  background: 'radial_reflection',
-                }}
-                _active={{ background: 'radial_reflection' }}
-              >
-                Get gCNV
-              </Button>
-              <Button
-                onClick={() => router.push('/placeholder_lending')}
-                variant={'ghost'}
-                size="medium"
-                w={185}
-                _active={{ background: 'radial_reflection' }}
-                _hover={{ background: 'radial_reflection' }}
-                borderRadius="1x1"
-              >
-                Lending and Borrowing
-              </Button>
-            </HStack>
+          <HStack spacing="0">
+            <ButtonLink selected variant="navigation" href="/swap">
+              Get gCNV
+            </ButtonLink>
+            <Button variant="navigation" href={'/placeholder_lending'}>
+              Lending and Borrowing
+            </Button>
+          </HStack>
 
-            <HStack gap="1">
-              {/* <Balance /> */}
-
-              <Button
-                onClick={() => router.push('/placeholder_dashboard')}
-                variant={'secondary'}
-                bgGradient={colors.gradients.green}
-                size="large"
-                w={200}
-                borderRadius="2xl"
-              >
-                Dashboard
-              </Button>
-              <ConnectWallet />
-            </HStack>
-          </Flex>
-        </Container>
-      </Box>
-    </div>
+          <HStack gap="1">
+            <ButtonLink
+              href="/placeholder_dashboard"
+              variant="secondary"
+              bgGradient={colors.gradients.green}
+              size="large"
+              borderRadius="2xl"
+            >
+              Dashboard
+            </ButtonLink>
+            <ConnectWallet />
+          </HStack>
+        </Flex>
+      </Container>
+    </Box>
   )
 }
