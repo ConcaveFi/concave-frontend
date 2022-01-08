@@ -44,9 +44,9 @@ export const TopBar = () => {
             <ButtonLink selected variant="navigation" href="/swap">
               Get gCNV
             </ButtonLink>
-            <Button variant="navigation" href={'/placeholder_lending'}>
+            <ButtonLink variant="navigation" href={'/placeholder_lending'}>
               Lending and Borrowing
-            </Button>
+            </ButtonLink>
           </HStack>
 
           <HStack gap="1">
