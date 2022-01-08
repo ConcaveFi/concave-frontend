@@ -3,13 +3,6 @@ import React from 'react'
 import { Head, MetaProps } from './MetaHead'
 import { TopBar } from './TopBar'
 
-// Extends `window` to add `ethereum`.
-declare global {
-  interface Window {
-    ethereum: any
-  }
-}
-
 interface PageProps {
   children: React.ReactNode
   customMeta?: MetaProps

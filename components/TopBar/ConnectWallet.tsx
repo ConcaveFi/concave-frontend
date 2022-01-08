@@ -20,6 +20,7 @@ import { walletconnect } from 'lib/connectors'
 import { supportedNetworks } from 'config'
 import { toOxfordComma } from 'lib/toOxfordComma'
 import colors from 'theme/colors'
+import { switchNetwork } from 'lib/wallet'
 
 // Takes a long hash string and truncates it.
 function truncateHash(hash: string, length = 38): string {
@@ -37,12 +38,6 @@ const DisconnectButton = () => {
     </Menu>
   )
 }
-
-const switchNetwork = (chainId = '0x1') =>
-  window.ethereum?.request({ method: 'wallet_switchEthereumChain', params: [{ chainId }] })
-
-const addNetwork = (params) =>
-  window.ethereum?.request({ method: 'wallet_addEthereumChain', params })
 
 const UnsuportedNetworkModal = ({ isOpen, onClose }) => (
   <Modal isOpen={isOpen} onClose={onClose}>
