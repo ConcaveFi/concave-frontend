@@ -5,11 +5,15 @@ import colors from '../colors'
 export const ButtonStyles: ComponentStyleConfig = {
   baseStyle: {
     fontSize: '14px',
+    lineHeight: 'initial',
     width: 'auto',
+    borderRadius: 0,
+    maxHeight: 'unset',
   },
   sizes: {
     large: {
       height: 50,
+      px: 8,
       borderRadius: 'xl',
     },
   },
@@ -23,13 +27,20 @@ export const ButtonStyles: ComponentStyleConfig = {
       bgGradient: colors.gradients.primary,
       shadow: 'up',
     }),
-    contained: {
-      shadow: 'up',
-      bg: 'transparent',
-    },
     secondary: {
       shadow: 'up',
     },
+    navigation: (props) => ({
+      height: '100%',
+      borderX: 'solid 1px',
+      borderColor: 'grey.800',
+      '&:nth-child(n+2)': {
+        borderLeft: 'unset', // prevent double border when side by side
+      },
+      bg: props.selected ? 'radialGradient' : 'transparent',
+      _active: { bg: 'radialGradient' },
+      _hover: { bg: 'radialGradient' },
+    }),
   },
   defaultProps: {},
 }
