@@ -4,81 +4,110 @@ import { Card } from './Card'
 
 function BondInfoCard() {
   return (
-    <Card w="100%" maxW={484} variant="secondary" borderWidth={2} bgImage="/assets/cave.png">
+    <Card w={484} variant="secondary" borderWidth={2} bgImage="/assets/cave.png">
       <Card shadow="down" borderRadius="2xl" h="100px" align="center" justify="center" spacing={0}>
         <Text color="text.3" fontSize="xs" fontWeight="bold">
-          gCNV Price
+          Your balance
         </Text>
         <Text color="text.2" fontSize="2xl" fontWeight="bold">
-          $3,214.21
+          0.314 gCNV
         </Text>
       </Card>
 
-      <Center>
-        <Box w="1px" h="100%" bg="strokeReflection" />
-        <VStack w="160px" h="100px" spacing={0} justify="center">
+      <HStack h="150px" divider={<Box w="1px" h="100%" bg="strokeReflection" />}>
+        <VStack w="100%">
           <HStack color="text.3" fontSize="xs" fontWeight="bold" spacing="5px">
             <QuestionOutlineIcon />
-            <Text>Contract Mechanics</Text>
+            <Text>Projected APY</Text>
           </HStack>
           <Text color="text.2" fontSize="2xl" fontWeight="bold">
-            +1.23%
+            12321%
           </Text>
         </VStack>
-        <Box w="1px" h="100%" bg="strokeReflection" />
-      </Center>
+        <VStack w="100%">
+          <Stack alignItems="center" justifyContent="center" spacing="-2px">
+            <Text color="text.3" fontSize="xs" fontWeight="bold">
+              gCNV Growth
+            </Text>
+            <Text color="text.3" fontSize="xs" fontWeight="bold">
+              30 days
+            </Text>
+          </Stack>
 
-      <Card shadow="down" borderRadius="2xl" h="100px" align="center" justify="center" spacing={0}>
-        <Text color="text.3" fontSize="xs" fontWeight="bold">
-          CNV * Index
-        </Text>
-        <Text color="text.2" fontSize="2xl" fontWeight="bold">
-          $3,112.03
-        </Text>
-      </Card>
-
-      <Grid h="100px" alignItems="center" templateColumns="repeat(3, 1fr)">
-        <VStack spacing={0}>
-          <Text color="text.3" fontSize="xs" fontWeight="bold">
-            CNV Price
-          </Text>
-          <Text color="text.2" fontSize="base" fontWeight="bold">
+          <Text color="text.2" fontSize="2xl" fontWeight="bold">
             $2,231.88
           </Text>
         </VStack>
-        <VStack spacing={0}>
-          <HStack color="text.3" fontSize="xs" fontWeight="bold" spacing="5px">
-            <QuestionOutlineIcon />
-            <Text>Index</Text>
-          </HStack>
-          <Text color="text.2" fontSize="base" fontWeight="bold">
-            1.00432
+        <VStack w="100%">
+          <Stack alignItems="center" justifyContent="center" spacing="-2px">
+            <Text color="text.3" fontSize="xs" fontWeight="bold">
+              gCNV Growth
+            </Text>
+            <Text color="text.3" fontSize="xs" fontWeight="bold">
+              24 hours
+            </Text>
+          </Stack>
+          <Text color="text.2" fontSize="2xl" fontWeight="bold">
+            1.37%
           </Text>
         </VStack>
-        <VStack spacing={0}>
-          <HStack color="text.3" fontSize="xs" fontWeight="bold" spacing="5px">
-            <QuestionOutlineIcon />
-            <Text>Execution Cost</Text>
-          </HStack>
-          <Text color="text.2" fontSize="base" fontWeight="bold">
-            ~214.12
-          </Text>
-        </VStack>
-      </Grid>
+      </HStack>
 
       <Card shadow="down" borderRadius="2xl" h="100px" align="center" justify="center" spacing={0}>
-        <HStack color="text.3" fontSize="xs" spacing="5px">
+        <HStack color="text.3" fontSize="xs" fontWeight="bold" spacing="5px">
           <QuestionOutlineIcon />
-          <Text fontWeight="bold">Contract Mechanics</Text>
+          <Text>gCNV Intrinsic Value</Text>
         </HStack>
-        <HStack fontSize="2xl" fontWeight="bold" spacing="3px">
-          <Text color="text.2">gCNV</Text>
-          <ChevronRightIcon color="#7f8ecf" />
-          <Text color="text.2">CNV</Text>
-          <ChevronRightIcon color="#7f8ecf" />
-          <Text color="text.2">Your Asset</Text>
-        </HStack>
+        <Text color="text.2" fontSize="2xl" fontWeight="bold">
+          1gCNV = 1.000127 CNV
+        </Text>
       </Card>
+
+      <HStack h="150px" divider={<Box w="1px" h="100%" bg="strokeReflection" />}>
+        <VStack w="100%">
+          <Text color="text.3" fontSize="xs" fontWeight="bold">
+            Time
+          </Text>
+          <Text color="#79b2f4" fontSize="sm" fontWeight="bold">
+            Just now
+          </Text>
+          <Text color="#6185B0" fontSize="sm" fontWeight="bold">
+            3 mins ago
+          </Text>
+          <Text color="#475477" fontSize="sm" fontWeight="bold">
+            3 days ago
+          </Text>
+        </VStack>
+        <VStack w="100%">
+          <Text color="text.3" fontSize="xs" fontWeight="bold">
+            gCNV Growth
+          </Text>
+          <Text color="#79b2f4" fontSize="sm" fontWeight="bold">
+            +0.00013
+          </Text>
+          <Text color="#6185B0" fontSize="sm" fontWeight="bold">
+            +0.00723
+          </Text>
+          <Text color="#475477" fontSize="sm" fontWeight="bold">
+            +0.00013
+          </Text>
+        </VStack>
+        <VStack w="100%">
+          <HStack color="text.3" fontSize="xs" fontWeight="bold" spacing="5px">
+            <QuestionOutlineIcon />
+            <Text>Treasury income</Text>
+          </HStack>
+          <Text color="#79b2f4" fontSize="sm" fontWeight="bold">
+            + 12 324 $
+          </Text>
+          <Text color="#6185B0" fontSize="sm" fontWeight="bold">
+            + 122 975 $
+          </Text>
+          <Text color="#475477" fontSize="sm" fontWeight="bold">
+            + 521 $
+          </Text>
+        </VStack>
+      </HStack>
     </Card>
   )
 }
