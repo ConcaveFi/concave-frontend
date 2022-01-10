@@ -5,7 +5,7 @@ export interface CardProps extends StackProps {
 }
 
 export function Card({ variant, children, ...rest }: CardProps) {
-  const styles = useStyleConfig('Card', { variant } as any)
+  const styles = useStyleConfig('Card', { variant })
   return (
     <Stack __css={styles} {...rest} spacing={0}>
       {children}
