@@ -6,108 +6,52 @@ function BondInfoCard() {
   return (
     <Card w={484} variant="secondary" borderWidth={2} bgImage="/assets/cave.png">
       <Card shadow="down" borderRadius="2xl" h="100px" align="center" justify="center" spacing={0}>
-        <Text color="text.3" fontSize="xs" fontWeight="bold">
-          Your balance
-        </Text>
-        <Text color="text.2" fontSize="2xl" fontWeight="bold">
-          0.314 gCNV
-        </Text>
+        <HStack color="text.3" fontSize="xs" fontWeight="bold" spacing="5px">
+          <QuestionOutlineIcon />
+          <Text>Vesting term</Text>
+        </HStack>
+        <Text color="text.2" fontSize="2xl" fontWeight="bold">5 days</Text>
       </Card>
 
-      <HStack h="150px" divider={<Box w="1px" h="100%" bg="strokeReflection" />}>
-        <VStack w="100%">
-          <HStack color="text.3" fontSize="xs" fontWeight="bold" spacing="5px">
-            <QuestionOutlineIcon />
-            <Text>Projected APY</Text>
-          </HStack>
-          <Text color="text.2" fontSize="2xl" fontWeight="bold">
-            12321%
-          </Text>
+      <HStack h="120px" divider={<Box w="1px" h="100%" bg="strokeReflection" />}>
+        <VStack w="100%" spacing="2px">
+          <Text color="text.3" fontSize="s" fontWeight="bold">Current Price</Text>
+          <Text color="text.2" fontSize="xl" fontWeight="bold">$3,312.31</Text>
         </VStack>
-        <VStack w="100%">
-          <Stack alignItems="center" justifyContent="center" spacing="-2px">
-            <Text color="text.3" fontSize="xs" fontWeight="bold">
-              gCNV Growth
-            </Text>
-            <Text color="text.3" fontSize="xs" fontWeight="bold">
-              30 days
-            </Text>
-          </Stack>
-
-          <Text color="text.2" fontSize="2xl" fontWeight="bold">
-            $2,231.88
-          </Text>
+        <VStack w="100%" spacing="2px">
+          <Text color="text.3" fontSize="s" fontWeight="bold" spacing="5px">Discount</Text>
+          <Text color="text.2" fontSize="3xl" fontWeight="bold">9.31%</Text>
         </VStack>
-        <VStack w="100%">
-          <Stack alignItems="center" justifyContent="center" spacing="-2px">
-            <Text color="text.3" fontSize="xs" fontWeight="bold">
-              gCNV Growth
-            </Text>
-            <Text color="text.3" fontSize="xs" fontWeight="bold">
-              24 hours
-            </Text>
-          </Stack>
-          <Text color="text.2" fontSize="2xl" fontWeight="bold">
-            1.37%
-          </Text>
+        <VStack w="100%" spacing="2px">
+          <Text color="text.3" fontSize="s" fontWeight="bold" spacing="5px">Discounted Price</Text>
+          <Text color="text.2" fontSize="xl" fontWeight="bold">$3,091.11</Text>
         </VStack>
       </HStack>
 
       <Card shadow="down" borderRadius="2xl" h="100px" align="center" justify="center" spacing={0}>
-        <HStack color="text.3" fontSize="xs" fontWeight="bold" spacing="5px">
-          <QuestionOutlineIcon />
-          <Text>gCNV Intrinsic Value</Text>
-        </HStack>
-        <Text color="text.2" fontSize="2xl" fontWeight="bold">
-          1gCNV = 1.000127 CNV
-        </Text>
+        <Text color="text.3" fontSize="s" fontWeight="bold">Max you can buy</Text>
+        <Text color="text.2" fontSize="3xl" fontWeight="bold">362.21 gCNV</Text>
       </Card>
 
-      <HStack h="150px" divider={<Box w="1px" h="100%" bg="strokeReflection" />}>
-        <VStack w="100%">
-          <Text color="text.3" fontSize="xs" fontWeight="bold">
-            Time
-          </Text>
-          <Text color="#79b2f4" fontSize="sm" fontWeight="bold">
-            Just now
-          </Text>
-          <Text color="#6185B0" fontSize="sm" fontWeight="bold">
-            3 mins ago
-          </Text>
-          <Text color="#475477" fontSize="sm" fontWeight="bold">
-            3 days ago
-          </Text>
+      <HStack h="120px" divider={<Box w="1px" h="100%" bg="strokeReflection" />}>
+        <VStack w="100%" spacing="2px">
+          <Text color="text.3" fontSize="s" fontWeight="bold">Pending</Text>
+          <Text color="text.2" fontSize="xl" fontWeight="bold">6.736 gCNV</Text>
         </VStack>
-        <VStack w="100%">
-          <Text color="text.3" fontSize="xs" fontWeight="bold">
-            gCNV Growth
-          </Text>
-          <Text color="#79b2f4" fontSize="sm" fontWeight="bold">
-            +0.00013
-          </Text>
-          <Text color="#6185B0" fontSize="sm" fontWeight="bold">
-            +0.00723
-          </Text>
-          <Text color="#475477" fontSize="sm" fontWeight="bold">
-            +0.00013
-          </Text>
+        <VStack w="100%" spacing="2px">
+          <Text color="text.3" fontSize="s" fontWeight="bold">Time to Fully Vest</Text>
+          <Text color="text.2" fontSize="xl" fontWeight="bold">4 days 6 hours</Text>
         </VStack>
-        <VStack w="100%">
-          <HStack color="text.3" fontSize="xs" fontWeight="bold" spacing="5px">
-            <QuestionOutlineIcon />
-            <Text>Treasury income</Text>
-          </HStack>
-          <Text color="#79b2f4" fontSize="sm" fontWeight="bold">
-            + 12 324 $
-          </Text>
-          <Text color="#6185B0" fontSize="sm" fontWeight="bold">
-            + 122 975 $
-          </Text>
-          <Text color="#475477" fontSize="sm" fontWeight="bold">
-            + 521 $
-          </Text>
+        <VStack w="100%" spacing="2px">
+          <Text color="text.3" fontSize="s" fontWeight="bold">Claimable</Text>
+          <Text color="text.2" fontSize="xl" fontWeight="bold">51.221 gCNV</Text>
         </VStack>
       </HStack>
+
+      <Card shadow="down" borderRadius="2xl" h="60px" align="center" justify="center" spacing={0}>
+        <Text color="text.2" fontSize="3xl" fontWeight="bold">Nothing to redeem</Text>
+      </Card>
+
     </Card>
   )
 }
