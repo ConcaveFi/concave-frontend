@@ -18,7 +18,7 @@ const App = ({ Component, pageProps }: AppProps) => {
       : localStorageManager
   return (
     <DAppProvider config={dappConfig}>
-      <ChakraProvider resetCSS theme={theme} colorModeManager={colorModeManager}>
+      <ChakraProvider resetCSS theme={theme} colorModeManager={colorModeManager} portalZIndex={100}>
         <Component {...pageProps} />
       </ChakraProvider>
     </DAppProvider>

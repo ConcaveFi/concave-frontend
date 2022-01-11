@@ -16,12 +16,12 @@ import Image from 'next/image'
 import React from 'react'
 import colors from 'theme/colors'
 import { fonts } from 'theme/foundations'
-import { Page } from '../components/Page'
+import { Page } from 'components/Page'
 
 function BondInfoCard() {
   return (
-    <Card w={484} variant="secondary" borderWidth={2} bgImage="/assets/cave.png">
-      <Card px={10} py={8} variant="secondary" borderWidth={2} bgImage="/assets/cave.png">
+    <Card w={484} borderWidth={2} bgImage="/assets/cave.png">
+      <Card px={10} py={8} borderWidth={2} bgImage="/assets/cave.png">
         <Text>AAAAA</Text>
       </Card>
     </Card>

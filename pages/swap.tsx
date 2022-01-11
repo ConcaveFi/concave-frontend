@@ -4,8 +4,8 @@ import React from 'react'
 import { Page } from '../components/Page'
 import { NavBar } from 'components/Gcnv'
 import GcnvTitle from 'components/GcnvTitle'
-import SwapCard from 'components/SwapCard'
-import SwapInfoCard from 'components/SwapInfoCard'
+import SwapInfoCard from 'components/GetCNV/SwapInfoCard'
+import BuyCard from 'components/GetCNV/BuyCard'
 
 function Swap() {
   return (
@@ -21,7 +21,7 @@ function Swap() {
           <NavBar active="swap" />
 
           <Flex gap={6} flexWrap="wrap" justify="center">
-            <SwapCard />
+            <BuyCard buttonLabel="Swap" />
             <SwapInfoCard />
           </Flex>
         </Flex>
