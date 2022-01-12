@@ -4,7 +4,7 @@ import { Card } from './Card'
 
 function ZapInfoCard() {
   return (
-    <Card w="100%" maxW={484} variant="secondary" borderWidth={2} bgImage="/assets/cave.png">
+    <Card w="100%" maxW={484} variants="secondary" borderWidth={2} bgImage="/assets/cave.png">
       <Card shadow="down" borderRadius="2xl" h="100px" align="center" justify="center" spacing={0}>
         <Text color="text.3" fontSize="xs" fontWeight="bold">
           gCNV Price

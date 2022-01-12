@@ -41,7 +41,7 @@ export const TopBar = () => {
           />
 
           <HStack spacing="0">
-            <ButtonLink selected variant="navigation" href="/swap">
+            <ButtonLink aria-selected variant="navigation" href="/swap">
               Get gCNV
             </ButtonLink>
             <ButtonLink variant="navigation" href={'/placeholder_lending'}>

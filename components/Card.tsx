@@ -1,11 +1,11 @@
 import { useStyleConfig, StackProps, Stack } from '@chakra-ui/react'
 
 export interface CardProps extends StackProps {
-  variant?: 'primary' | 'secondary'
+  variants?: 'primary' | 'secondary'
 }
 
-export function Card({ variant, children, ...rest }: CardProps) {
-  const styles = useStyleConfig('Card', { variant })
+export function Card({ variants, children, ...rest }: CardProps) {
+  const styles = useStyleConfig('Card', { variants })
   return (
     <Stack __css={styles} {...rest} spacing={0}>
       {children}

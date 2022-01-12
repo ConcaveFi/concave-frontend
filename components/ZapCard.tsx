@@ -8,7 +8,7 @@ import { fonts } from 'theme/foundations'
 
 function ZapCard() {
   return (
-    <Card px={10} py={8} variant="primary" borderWidth={2}>
+    <Card px={10} py={8} variants="primary" borderWidth={2}>
       <Stack gap={4}>
         <Flex direction="column" gap={1} px={5}>
           <Text textColor={'grey.500'} fontWeight={700}>

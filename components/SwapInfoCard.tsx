@@ -4,7 +4,7 @@ import { Card } from './Card'
 
 function SwapInfoCard() {
   return (
-    <Card w={484} variant="secondary" borderWidth={2} bgImage="/assets/cave.png">
+    <Card w={484} variants="secondary" borderWidth={2} bgImage="/assets/cave.png">
       <Card shadow="down" borderRadius="2xl" h="100px" align="center" justify="center" spacing={0}>
         <Text color="text.3" fontSize="xs" fontWeight="bold">
           Your balance

@@ -18,7 +18,7 @@ export const CardStyles: ComponentStyleConfig = {
     }),
   },
   defaultProps: {
-    variant: 'secondary',
+    variants: 'secondary',
   },
 }
 
