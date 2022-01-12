@@ -14,7 +14,7 @@ export function getServerSideProps({ req }) {
 
 const App = ({ Component, pageProps }: AppProps) => {
   // load Apollo
-  const client = useApollo(pageProps.initialApolloProps)
+  const apolloClient = useApollo(pageProps.initialApolloProps)
 
   // this ensures the theme will be right even on ssr pages (won't flash wrong theme)
   const colorModeManager =
@@ -22,7 +22,7 @@ const App = ({ Component, pageProps }: AppProps) => {
       ? cookieStorageManager(pageProps.cookies)
       : localStorageManager
   return (
-    <ApolloProvider client={client}>
+    <ApolloProvider client={apolloClient}>
       <DAppProvider config={dappConfig}>
         <ChakraProvider resetCSS theme={theme} colorModeManager={colorModeManager}>
           <Component {...pageProps} />

@@ -1,10 +1,10 @@
 import { Box, Center, Flex, Grid, HStack, Stack, Text, VStack } from '@chakra-ui/react'
 import { ChevronRightIcon, QuestionOutlineIcon } from '@chakra-ui/icons'
-import { Card } from './Card'
+import { Card } from 'components/Card'
 
 function BondInfoCard() {
   return (
-    <Card w={484} variants="secondary" borderWidth={2} bgImage="/assets/cave.png">
+    <Card w={484} borderWidth={2} bgImage="/assets/cave.png">
       <Card shadow="down" borderRadius="2xl" h="100px" align="center" justify="center" spacing={0}>
         <HStack color="text.3" fontSize="xs" fontWeight="bold" spacing="5px">
           <QuestionOutlineIcon />

@@ -1,10 +1,9 @@
 import { Container, Flex } from '@chakra-ui/react'
 import React from 'react'
 import { Page } from '../components/Page'
-import { NavBar } from 'components/Gcnv'
 import GcnvTitle from 'components/GcnvTitle'
-import BondCard from 'components/BondCard'
-import BondInfoCard from 'components/BondInfoCard'
+import BondInfoCard from 'components/GetCNV/DiscountInfoCard'
+import { BuyCard } from 'components/GetCNV/BuyCard'
 
 function Bond() {
   return (
@@ -16,11 +15,8 @@ function Bond() {
             description="Get your gCNV that will grow internal CNV number your gCNV that will grow number or
                         smth idk lol Get your gCNV that will grow internal CNV number or smth idk lol"
           />
-
-          <NavBar active="bond" />
-
           <Flex gap={6} flexWrap="wrap" justify="center">
-            <BondCard />
+            <BuyCard buttonLabel="Get with 5 day vesting" />
             <BondInfoCard />
           </Flex>
         </Flex>
