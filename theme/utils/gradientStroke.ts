@@ -3,7 +3,7 @@ import { toPx } from './toPx'
 
 export const gradientStroke = ({
   borderWidth = '1px',
-}: StyleFunctionProps): SystemStyleInterpolation => ({
+}: Partial<StyleFunctionProps>): SystemStyleInterpolation => ({
   position: 'relative',
 
   '&::before': {

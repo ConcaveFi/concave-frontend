@@ -1,9 +1,9 @@
 import Link, { LinkProps } from 'next/link'
 import { Button, ButtonProps } from '@chakra-ui/react'
 
-type ChakraAndNextProps = ButtonProps & LinkProps
+export type ButtonLinkProps = ButtonProps & LinkProps
 
-export function ButtonLink({ href, ...props }: ChakraAndNextProps) {
+export function ButtonLink({ href, ...props }: ButtonLinkProps) {
   return (
     <Link href={href} passHref>
       <Button {...props} />

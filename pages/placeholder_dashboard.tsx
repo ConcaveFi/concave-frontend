@@ -6,9 +6,7 @@ import { Page } from '../components/Page'
 function lending() {
   return (
     <Page>
-      <Container maxW="container.lg">
-       dashboard test
-      </Container>
+      <Container maxW="container.lg">dashboard test</Container>
     </Page>
   )
 }

@@ -1,8 +1,8 @@
-import { ComponentStyleConfig } from '@chakra-ui/react'
+import { ComponentSingleStyleConfig } from '@chakra-ui/react'
 import { gradientStroke } from '../utils/gradientStroke'
 import colors from '../colors'
 
-export const ButtonStyles: ComponentStyleConfig = {
+export const ButtonStyles: ComponentSingleStyleConfig = {
   baseStyle: {
     fontSize: '14px',
     lineHeight: 'initial',
@@ -34,10 +34,10 @@ export const ButtonStyles: ComponentStyleConfig = {
       height: '100%',
       borderX: 'solid 1px',
       borderColor: 'grey.800',
-      '&:nth-child(n+2)': {
+      _even: {
         borderLeft: 'unset', // prevent double border when side by side
       },
-      bg: props.selected ? 'radialGradient' : 'transparent',
+      bg: 'transparent',
       _active: { bg: 'radialGradient' },
       _hover: { bg: 'radialGradient' },
     }),

@@ -1,13 +1,13 @@
-import { useStyleConfig, StackProps, Stack } from '@chakra-ui/react'
+import { StackProps, Stack } from '@chakra-ui/react'
+import { gradientStroke } from 'theme/utils/gradientStroke'
 
-export interface CardProps extends StackProps {
-  variant?: 'primary' | 'secondary'
-}
-
-export function Card({ variant, children, ...rest }: CardProps) {
-  const styles = useStyleConfig('Card', { variant })
+export function Card({ children, spacing = 0, borderWidth, ...rest }: StackProps) {
   return (
-    <Stack __css={styles} {...rest} spacing={0}>
+    <Stack
+      __css={{ ...gradientStroke({ borderWidth }), borderRadius: '2xl' }} // __css can be overriten with the sx prop
+      spacing={spacing}
+      {...rest}
+    >
       {children}
     </Stack>
   )
