@@ -31,4 +31,6 @@ yarn
 yarn dev
 ```
 
+> copy `.env.example` to `.env`
+
 ...continue
