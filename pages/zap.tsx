@@ -1,5 +1,4 @@
 import { Container, Flex } from '@chakra-ui/react'
-import { Card } from 'components/Card'
 import React from 'react'
 import { Page } from '../components/Page'
 import GcnvTitle from 'components/GcnvTitle'

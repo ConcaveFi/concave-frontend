@@ -1,5 +1,4 @@
-import { Container, Flex } from '@chakra-ui/react'
-import { Card } from 'components/Card'
+import { Container } from '@chakra-ui/react'
 import React from 'react'
 import { Page } from '../components/Page'
 
