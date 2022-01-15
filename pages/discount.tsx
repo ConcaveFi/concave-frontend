@@ -1,6 +1,6 @@
 import { Container, Flex } from '@chakra-ui/react'
 import React from 'react'
-import { Page } from '../components/Page'
+import { Page } from 'components/Page'
 import GcnvTitle from 'components/GcnvTitle'
 import BondInfoCard from 'components/GetCNV/DiscountInfoCard'
 import { BuyCard } from 'components/GetCNV/BuyCard'

@@ -1,11 +1,11 @@
 import { Container, Flex } from '@chakra-ui/react'
 import { useQuery } from '@apollo/client'
 import React from 'react'
-import { Page } from '../components/Page'
+import { Page } from 'components/Page'
 import GcnvTitle from 'components/GcnvTitle'
 import BuyCard from 'components/GetCNV/BuyCard'
 import SwapInfoCard from 'components/GetCNV/SwapInfoCard'
-import { QUERY_TEST } from 'components/graphql/test'
+import { QUERY_TEST } from 'graphql/test'
 
 function Swap() {
   const { loading, error, data } = useQuery(QUERY_TEST)
