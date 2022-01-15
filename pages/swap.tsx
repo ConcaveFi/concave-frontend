@@ -18,8 +18,7 @@ function Swap() {
         <Flex direction="column" gap={12}>
           <GcnvTitle
             title="Swap gCNV"
-            description="Get your gCNV that will grow internal CNV number your gCNV that will grow number or
-                        smth idk lol Get your gCNV that will grow internal CNV number or smth idk lol"
+            description="Swap gCNV here"
           />
           <Flex gap={6} flexWrap="wrap" justify="center">
             <BuyCard buttonLabel="Swap" />
