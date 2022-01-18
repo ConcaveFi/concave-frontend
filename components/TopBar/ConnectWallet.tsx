@@ -60,7 +60,7 @@ const ConnectButton = ({ onError }: { onError: (e: Error) => void }) => {
       <Menu placement="bottom-end">
         <MenuButton
           as={Button}
-          variant={'primary.outline'}
+          variant={'secondary'}
           bgGradient={colors.gradients.green}
           size="large"
           borderWidth={2}
