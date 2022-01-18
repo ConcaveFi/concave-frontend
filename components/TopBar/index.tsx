@@ -1,68 +1,66 @@
-import { HStack, Container, Flex, Heading, Button, Box, Image, Text } from '@chakra-ui/react'
+import { HStack, Container, Flex, Heading, Button, Box, Image, Stack, Text } from '@chakra-ui/react'
 import colors from 'theme/colors'
-import { ButtonLink } from 'components/ButtonLink'
+import { ButtonLink, ButtonLinkProps } from 'components/ButtonLink'
 import { ConnectWallet } from './ConnectWallet'
+const NavButton = ({
+  label,
+  subLabel,
 
+  ...props
+}: ButtonLinkProps & { label: string; subLabel: string }) => (
+  <ButtonLink {...props} variant="navigation2">
+    <Stack p={2}>
+      <Text>{label}</Text>
+      <Text>{subLabel}</Text>
+    </Stack>
+  </ButtonLink>
+)
+
+const Concave_BTTN = ({
+  label,
+  iconPath,
+
+  ...props
+}: ButtonLinkProps & { iconPath: string; label: string }) => (
+  <ButtonLink {...props} variant="navigation_home">
+    <HStack p={2} gap="0">
+      <Image src={iconPath} width={20} height={20} alt="" positon="relative" />
+      <Text fontSize={24}>{label}</Text>
+    </HStack>
+  </ButtonLink>
+)
 export const TopBar = () => {
   return (
-    <Box
+    <Container
       as="header"
-      sx={{
-        position: 'relative',
-        height: 105,
-        '&::before': {
-          content: '""',
-          position: 'absolute',
-          top: 0,
-          bottom: 0,
-          width: '100%',
-          height: '100%',
-          zIndex: -1,
-          bg: 'url(/images/lines.svg)',
-        },
-      }}
+      borderRadius="lg"
+      borderWidth="1px"
+      bgGradient="linear-gradient(239.18deg, #1B3442 27.18%, #0A161F 96.11%)"
+      maxWidth="97.2%"
     >
-      {/* <Image
-        src={'/images/lines.svg'}
-        alt="top bar background"
-        maxWidth="1440px"
-        maxHeight="100px"
-        position="absolute"
-      /> */}
-
-      <Container maxWidth="container.xl">
-        <Flex justifyContent="space-between" maxHeight="72px">
-          <Image
-            src={'/images/CNV_white_svg.svg'}
-            alt="concave logo"
-            maxWidth="100px"
-            maxHeight="120px"
-            position="relative"
-          />
-
-          <HStack spacing="0">
-            <ButtonLink aria-selected variant="navigation" href="/swap">
-              Get gCNV
-            </ButtonLink>
-            <ButtonLink variant="navigation" href={'/placeholder_lending'}>
-              Lending and Borrowing
-            </ButtonLink>
-          </HStack>
-
-          <HStack gap="1">
-            <ButtonLink
-              href="/placeholder_dashboard"
-              variant="secondary"
-              bgGradient={colors.gradients.green}
-              size="large"
-              borderRadius="2xl"
-            >
-              Dashboard
-            </ButtonLink>
-            <ConnectWallet />
-          </HStack>
-        </Flex>
-      </Container>
-    </Box>
+      <Flex justifyContent="space-between">
+        <HStack spacing="0">
+          <Concave_BTTN iconPath="/icons/logo.svg" label="Concave" href="/swap "></Concave_BTTN>
+          <ButtonLink variant="navigation2" href={'/placeholder_lending'}>
+            get gCNV
+          </ButtonLink>
+          <NavButton href="/swap" label="Dynamic Bond" subLabel="Market"></NavButton>
+          <NavButton href="/swap" label="Lending and " subLabel="Borrowing"></NavButton>
+        </HStack>
+        <HStack gap="1">
+          <ButtonLink
+            href="/placeholder_dashboard"
+            variant="primary.outline"
+            bgGradient={colors.gradients.green}
+            size="large"
+            borderRadius="2xl"
+            w={200}
+          >
+            Dashboard
+          </ButtonLink>
+          <ConnectWallet />
+        </HStack>
+      </Flex>
+    </Container>
   )
 }
