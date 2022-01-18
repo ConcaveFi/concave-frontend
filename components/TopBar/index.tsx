@@ -1,52 +1,54 @@
-import { HStack, Container, Flex, Heading, Button, Box, Image, Text } from '@chakra-ui/react'
+import {
+  HStack,
+  Container,
+  Flex,
+  Heading,
+  Button,
+  Box,
+  Image,
+  Text,
+  Center,
+} from '@chakra-ui/react'
 import colors from 'theme/colors'
-import { ButtonLink } from 'components/ButtonLink'
+import { ButtonLink, ButtonLinkProps } from 'components/ButtonLink'
 import { ConnectWallet } from './ConnectWallet'
+import { Card } from 'components/Card'
+
+const Logo = () => (
+  <HStack pr={9} pl={6}>
+    <Image
+      src={'/assets/concave-logo.png'}
+      alt="concave logo"
+      maxWidth="52px"
+      position="relative"
+    />
+    <Heading fontSize="24px">Concave</Heading>
+  </HStack>
+)
+
+const TopBarNavItem = (props: ButtonLinkProps) => {
+  return (
+    <ButtonLink
+      variant="navigation"
+      w="100%"
+      maxW={48}
+      whiteSpace="break-spaces"
+      fontSize="sm"
+      {...props}
+    />
+  )
+}
 
 export const TopBar = () => {
   return (
-    <Box
-      as="header"
-      sx={{
-        position: 'relative',
-        height: 105,
-        '&::before': {
-          content: '""',
-          position: 'absolute',
-          top: 0,
-          bottom: 0,
-          width: '100%',
-          height: '100%',
-          zIndex: -1,
-          bg: 'url(/images/lines.svg)',
-        },
-      }}
-    >
-      {/* <Image
-        src={'/images/lines.svg'}
-        alt="top bar background"
-        maxWidth="1440px"
-        maxHeight="100px"
-        position="absolute"
-      /> */}
-
-      <Container maxWidth="container.xl">
+    <Center p={2}>
+      <Card as="header" bgGradient={colors.gradients.green} w="100%" p={3} maxW="container.xl">
         <Flex justifyContent="space-between" maxHeight="72px">
-          <Image
-            src={'/images/CNV_white_svg.svg'}
-            alt="concave logo"
-            maxWidth="100px"
-            maxHeight="120px"
-            position="relative"
-          />
-
-          <HStack spacing="0">
-            <ButtonLink aria-selected variant="navigation" href="/swap">
-              Get gCNV
-            </ButtonLink>
-            <ButtonLink variant="navigation" href={'/placeholder_lending'}>
-              Lending and Borrowing
-            </ButtonLink>
+          <HStack spacing="0" my={-3}>
+            <Logo />
+            <TopBarNavItem href="/swap">Get CNV</TopBarNavItem>
+            <TopBarNavItem href="/swap">Dynamic Bond Market</TopBarNavItem>
+            <TopBarNavItem href="/swap">Lending and Borrowing</TopBarNavItem>
           </HStack>
 
           <HStack gap="1">
@@ -62,7 +64,7 @@ export const TopBar = () => {
             <ConnectWallet />
           </HStack>
         </Flex>
-      </Container>
-    </Box>
+      </Card>
+    </Center>
   )
 }

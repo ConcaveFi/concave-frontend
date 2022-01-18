@@ -35,8 +35,13 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
       borderX: 'solid 1px',
       borderColor: 'grey.800',
       _even: {
-        borderLeft: 'unset', // prevent double border when side by side
+        border: 'unset', // prevent double border when side by side
       },
+      _last: {
+        borderX: 'solid 1px',
+        borderColor: 'grey.800',
+      },
+
       bg: 'transparent',
       _active: { bg: 'radialGradient' },
       _hover: { bg: 'radialGradient' },
