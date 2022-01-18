@@ -1,27 +1,30 @@
 import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 import { QuestionOutlineIcon } from '@chakra-ui/icons'
 import { Card } from 'components/Card'
-import { Info } from './Info'
+import { InfoItem, InfoCard } from './Info'
 
 function SwapInfoCard() {
   return (
-    <Card w={484} borderWidth={2} bgImage="/assets/cave.png">
+    <InfoCard>
       <Card shadow="down" borderRadius="2xl" h="100px" align="center" justify="center">
-        <Info label="Your balance">0.314 gCNV</Info>
+        <InfoItem label="Your balance">0.314 gCNV</InfoItem>
       </Card>
 
       <HStack h="150px" divider={<Box w="1px" h="100%" bg="strokeReflection" />}>
-        <Info label="Projected APY" tooltip="how much number go up auto compounding the whole year">
+        <InfoItem
+          label="Projected APY"
+          tooltip="how much number go up auto compounding the whole year"
+        >
           12321%
-        </Info>
-        <Info label={`gCNV Growth \n 30 days`}>$2,231.88</Info>
-        <Info label={`gCNV Growth \n 24 hours`}>1.37%</Info>
+        </InfoItem>
+        <InfoItem label={`gCNV Growth \n 30 days`}>$2,231.88</InfoItem>
+        <InfoItem label={`gCNV Growth \n 24 hours`}>1.37%</InfoItem>
       </HStack>
 
       <Card shadow="down" borderRadius="2xl" h="100px" align="center" justify="center" spacing={0}>
-        <Info label="gCNV Intrinsic Value" tooltip="how much CNV each gCNV is worth">
+        <InfoItem label="gCNV Intrinsic Value" tooltip="how much CNV each gCNV is worth">
           1gCNV = 1.000127 CNV
-        </Info>
+        </InfoItem>
       </Card>
 
       <HStack h="150px" divider={<Box w="1px" h="100%" bg="strokeReflection" />}>
@@ -69,7 +72,7 @@ function SwapInfoCard() {
           </Text>
         </VStack>
       </HStack>
-    </Card>
+    </InfoCard>
   )
 }
 

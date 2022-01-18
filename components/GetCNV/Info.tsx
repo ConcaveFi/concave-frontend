@@ -1,6 +1,7 @@
 import { HStack, Text, TextProps, Tooltip, VStack } from '@chakra-ui/react'
 import { QuestionOutlineIcon } from '@chakra-ui/icons'
 import { ReactNode } from 'react'
+import { Card, CardProps } from 'components/Card'
 
 const InfoLabel = ({ tooltip = '', ...props }: { tooltip?: string } & TextProps) => (
   <Tooltip label={tooltip} isDisabled={!tooltip} placement="right">
@@ -17,7 +18,7 @@ const InfoValue = ({ children }) => (
   </Text>
 )
 
-export const Info = ({
+export const InfoItem = ({
   tooltip,
   label,
   children,
@@ -32,4 +33,8 @@ export const Info = ({
     </InfoLabel>
     <InfoValue>{children}</InfoValue>
   </VStack>
+)
+
+export const InfoCard = (props: CardProps) => (
+  <Card w={484} borderWidth={2} bgImage="/assets/blackboard.png" h="min" {...props} />
 )

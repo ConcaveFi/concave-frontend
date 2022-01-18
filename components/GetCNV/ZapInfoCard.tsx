@@ -1,10 +1,11 @@
 import { Box, Center, Flex, Grid, HStack, Stack, Text, VStack } from '@chakra-ui/react'
 import { ChevronRightIcon, QuestionOutlineIcon } from '@chakra-ui/icons'
 import { Card } from 'components/Card'
+import { InfoCard } from './Info'
 
 function ZapInfoCard() {
   return (
-    <Card w="100%" maxW={484} borderWidth={2} bgImage="/assets/cave.png">
+    <InfoCard>
       <Card shadow="down" borderRadius="2xl" h="100px" align="center" justify="center" spacing={0}>
         <Text color="text.3" fontSize="xs" fontWeight="bold">
           gCNV Price
@@ -79,7 +80,7 @@ function ZapInfoCard() {
           <Text color="text.2">Your Asset</Text>
         </HStack>
       </Card>
-    </Card>
+    </InfoCard>
   )
 }
 
