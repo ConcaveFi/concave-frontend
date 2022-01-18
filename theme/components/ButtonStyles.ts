@@ -30,6 +30,34 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
     secondary: {
       shadow: 'up',
     },
+     navigation_home: (props) => ({
+      height: '100%',
+      bg: 'transparent',
+      _active: { bg: 'radialGradient' },
+      _hover: { bg: 'radialGradient' },
+    }),
+    navigation2: (props) => ({
+      height: '100%',
+      borderX: 'solid 1px',
+      boxShadow: '1px 0px 2px #101317',
+      textColor: 'grey.500',
+
+      bg: 'transparent',
+      _active: {
+        bg: 'radialGradient',
+        textDecorationLine: 'underline',
+        textDecorationColor: '#4FD1C5',
+        textDecorationThickness: '1px',
+        textColor: '#fff',
+      },
+      _hover: {
+        bg: 'radialGradient',
+        textDecorationLine: 'underline',
+        textDecorationColor: 'text.1',
+        textDecorationThickness: '1px',
+        textColor: '#fff',
+      },
+    }),
     navigation: (props) => ({
       height: '100%',
       borderX: 'solid 1px',
