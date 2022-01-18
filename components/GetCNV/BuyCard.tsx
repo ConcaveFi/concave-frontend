@@ -1,26 +1,32 @@
 import React, { useState } from 'react'
-import Image from 'next/image'
-import { Text, Button, HStack, Stack, Flex } from '@chakra-ui/react'
+import { Text, Button, HStack, Stack, Flex, ChakraComponent } from '@chakra-ui/react'
 import { ButtonLink, ButtonLinkProps } from 'components/ButtonLink'
 import { Card } from 'components/Card'
 import colors from 'theme/colors'
 import { BaseInput, Select, InputContainer, MaxAmount, ValueEstimation } from './Input'
+import { SwapIcon } from 'components/icons/swap'
+import { ZapIcon } from 'components/icons/zap'
+import { DiscountIcon } from 'components/icons/discount'
 
 const BuyNavButton = ({
-  iconPath,
+  Icon,
   label,
   subLabel,
   isActive,
   ...props
-}: ButtonLinkProps & { iconPath: string; label: string; subLabel: string }) => (
+}: ButtonLinkProps & { Icon: ChakraComponent<'svg'>; label: string; subLabel: string }) => (
   <ButtonLink
     {...props}
+    w="100%"
+    height="100%"
     isActive={isActive}
     variant="navigation"
     textColor={isActive ? 'text.1' : 'text.3'}
+    scroll={false}
+    pb={3} // accounts for the rounded corner of the inputs card, no bg clip (with mb={-3} on <BuyNav /> Container)
   >
-    <Stack p={3}>
-      <Image src={iconPath} width={48} height={48} alt="" color="red" />
+    <Stack p={3} align="center">
+      <Icon color={isActive ? 'text.1' : 'text.3'} h="48px" w="48px" />
       <Text fontSize={24}>{label}</Text>
       <Text>{subLabel}</Text>
     </Stack>
@@ -28,25 +34,25 @@ const BuyNavButton = ({
 )
 
 const BuyNav = ({ active }) => (
-  <HStack spacing={0}>
+  <HStack spacing={0} borderTopRadius="inherit" overflow="hidden" mb={-3}>
     <BuyNavButton
       isActive={active === 'swap'}
       href="/swap"
-      iconPath="/icons/swap.svg"
+      Icon={SwapIcon}
       label="Swap"
       subLabel="~$3,214"
     />
     <BuyNavButton
       isActive={active === 'discount'}
       href="/discount"
-      iconPath="/icons/discount.svg"
+      Icon={DiscountIcon}
       label="Discount"
       subLabel="~$3,214"
     />
     <BuyNavButton
       isActive={active === 'zap'}
       href="/zap"
-      iconPath="/icons/zap.svg"
+      Icon={ZapIcon}
       label="Zap"
       subLabel="~$3,214"
     />
@@ -113,9 +119,9 @@ export function BuyCard({ buttonLabel }) {
   const [inputToken, setInputToken] = useState(inputTokens[0])
 
   return (
-    <Card shadow="up" bgGradient={colors.gradients.green}>
+    <Card shadow="up" bgGradient={colors.gradients.green} maxW="450">
       <BuyNav active="swap" />
-      <Card px={10} py={8} gap={4}>
+      <Card px={10} py={8} gap={4} bgGradient={colors.gradients.green}>
         <FromInput
           maxAmount={100}
           value={amount}
