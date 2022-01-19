@@ -5,7 +5,7 @@ import { Card, CardProps } from 'components/Card'
 
 const InfoLabel = ({ tooltip = '', ...props }: { tooltip?: string } & TextProps) => (
   <Tooltip label={tooltip} isDisabled={!tooltip} placement="right">
-    <HStack color="text.3" fontSize="xs" fontWeight="bold" spacing={1}>
+    <HStack color="text.low" fontSize="xs" fontWeight="bold" spacing={1}>
       {tooltip && <QuestionOutlineIcon />}
       <Text {...props} />
     </HStack>
@@ -13,7 +13,7 @@ const InfoLabel = ({ tooltip = '', ...props }: { tooltip?: string } & TextProps)
 )
 
 const InfoValue = ({ children }) => (
-  <Text color="text.2" fontSize="2xl" fontWeight="bold">
+  <Text color="text.medium" fontSize="2xl" fontWeight="bold">
     {children}
   </Text>
 )

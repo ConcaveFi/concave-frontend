@@ -15,7 +15,6 @@ import {
 } from '@chakra-ui/react'
 import Image from 'next/image'
 import React from 'react'
-import colors from 'theme/colors'
 import NumberFormat, { NumberFormatProps } from 'react-number-format'
 
 export const BaseInput = (props: InputProps & NumberFormatProps) => (
@@ -27,7 +26,7 @@ export const BaseInput = (props: InputProps & NumberFormatProps) => (
     fontFamily="heading"
     fontWeight={700}
     fontSize={24}
-    _placeholder={{ color: 'text.1' }}
+    _placeholder={{ color: 'text.high' }}
     {...props}
   />
 )
@@ -40,7 +39,7 @@ export const InputContainer = (props) => (
     maxW={400}
     h={90}
     borderRadius="2xl"
-    bgGradient={colors.gradients.green}
+    bgGradient="linear(to-tr, secondary.150, secondary.100)"
     align="start"
     {...props}
   />

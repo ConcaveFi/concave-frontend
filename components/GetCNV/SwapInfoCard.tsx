@@ -29,7 +29,7 @@ function SwapInfoCard() {
 
       <HStack h="150px" divider={<Box w="1px" h="100%" bg="strokeReflection" />}>
         <VStack w="100%">
-          <Text color="text.3" fontSize="xs" fontWeight="bold">
+          <Text color="text.low" fontSize="xs" fontWeight="bold">
             Time
           </Text>
           <Text color="#79b2f4" fontSize="sm" fontWeight="bold">
@@ -43,7 +43,7 @@ function SwapInfoCard() {
           </Text>
         </VStack>
         <VStack w="100%">
-          <Text color="text.3" fontSize="xs" fontWeight="bold">
+          <Text color="text.low" fontSize="xs" fontWeight="bold">
             gCNV Growth
           </Text>
           <Text color="#79b2f4" fontSize="sm" fontWeight="bold">
@@ -57,7 +57,7 @@ function SwapInfoCard() {
           </Text>
         </VStack>
         <VStack w="100%">
-          <HStack color="text.3" fontSize="xs" fontWeight="bold" spacing="5px">
+          <HStack color="text.low" fontSize="xs" fontWeight="bold" spacing="5px">
             <QuestionOutlineIcon />
             <Text>Treasury income</Text>
           </HStack>
