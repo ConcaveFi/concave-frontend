@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { Text, Button, HStack, Stack, Flex, ChakraComponent } from '@chakra-ui/react'
 import { ButtonLink, ButtonLinkProps } from 'components/ButtonLink'
 import { Card } from 'components/Card'
-import colors from 'theme/colors'
 import { BaseInput, Select, InputContainer, MaxAmount, ValueEstimation } from './Input'
 import { SwapIcon } from 'components/icons/swap'
 import { ZapIcon } from 'components/icons/zap'
@@ -21,12 +20,11 @@ const BuyNavButton = ({
     height="100%"
     isActive={isActive}
     variant="navigation"
-    textColor={isActive ? 'text.1' : 'text.3'}
     scroll={false}
     pb={3} // accounts for the rounded corner of the inputs card, no bg clip (with mb={-3} on <BuyNav /> Container)
   >
     <Stack p={3} align="center">
-      <Icon color={isActive ? 'text.1' : 'text.3'} h="48px" w="48px" />
+      <Icon h="48px" w="48px" />
       <Text fontSize={24}>{label}</Text>
       <Text>{subLabel}</Text>
     </Stack>
@@ -34,7 +32,13 @@ const BuyNavButton = ({
 )
 
 const BuyNav = ({ active }) => (
-  <HStack spacing={0} borderTopRadius="inherit" overflow="hidden" mb={-3}>
+  <HStack
+    spacing={0}
+    borderTopRadius="inherit"
+    overflow="hidden"
+    mb={-3}
+    bgGradient="linear(to-tr, secondary.150, secondary.100)"
+  >
     <BuyNavButton
       isActive={active === 'swap'}
       href="/swap"
@@ -62,7 +66,7 @@ const BuyNav = ({ active }) => (
 function ToInput() {
   return (
     <Flex direction="column" gap={1} px={5}>
-      <Text textColor="grey.500" fontWeight={700}>
+      <Text textColor="text.low" fontWeight={700}>
         To (estimated)
       </Text>
       <InputContainer shadow="up">
@@ -90,7 +94,7 @@ function FromInput({
 }) {
   return (
     <Flex direction="column" gap={1} px={5}>
-      <Text textColor="text.3" fontWeight={700}>
+      <Text textColor="text.low" fontWeight={700}>
         From
       </Text>
       <InputContainer shadow="down">
@@ -114,14 +118,14 @@ function FromInput({
 
 export const inputTokens = ['eth', 'dai', 'frax']
 
-export function BuyCard({ buttonLabel }) {
+export function BuyCard({ buttonLabel, active }) {
   const [amount, setAmount] = useState('0')
   const [inputToken, setInputToken] = useState(inputTokens[0])
 
   return (
-    <Card shadow="up" bgGradient={colors.gradients.green} maxW="450">
-      <BuyNav active="swap" />
-      <Card px={10} py={8} gap={4} bgGradient={colors.gradients.green}>
+    <Card shadow="up" maxW="450">
+      <BuyNav active={active} />
+      <Card px={10} py={8} gap={4} bgGradient="linear(to-tr, secondary.150, secondary.100)">
         <FromInput
           maxAmount={100}
           value={amount}

@@ -22,7 +22,7 @@ function Swap() {
                         smth idk lol Get your gCNV that will grow internal CNV number or smth idk lol"
           />
           <Flex gap={6} flexWrap="wrap" justify="center">
-            <BuyCard buttonLabel="Swap" />
+            <BuyCard buttonLabel="Swap" active="swap" />
             <SwapInfoCard />
           </Flex>
         </Flex>

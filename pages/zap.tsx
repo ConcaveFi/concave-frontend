@@ -16,7 +16,7 @@ function Zap() {
                         smth idk lol Get your gCNV that will grow internal CNV number or smth idk lol"
           />
           <Flex gap={6} flexWrap="wrap" justify="center">
-            <BuyCard buttonLabel="Zap" />
+            <BuyCard buttonLabel="Zap" active="zap" />
             <ZapInfoCard />
           </Flex>
         </Flex>

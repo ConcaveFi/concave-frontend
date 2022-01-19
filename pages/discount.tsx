@@ -16,7 +16,7 @@ function Bond() {
                         smth idk lol Get your gCNV that will grow internal CNV number or smth idk lol"
           />
           <Flex gap={6} flexWrap="wrap" justify="center">
-            <BuyCard buttonLabel="Get with 5 day vesting" />
+            <BuyCard buttonLabel="Get with 5 day vesting" active="discount" />
             <BondInfoCard />
           </Flex>
         </Flex>
