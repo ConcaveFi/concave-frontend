@@ -15,7 +15,7 @@ function Zap() {
             description="Zap that ass for me, Zap dat ass for me!"
           />
           <Flex gap={6} flexWrap="wrap" justify="center">
-            <BuyCard buttonLabel="Zap" />
+            <BuyCard buttonLabel="Zap" active="zap" />
             <ZapInfoCard />
           </Flex>
         </Flex>

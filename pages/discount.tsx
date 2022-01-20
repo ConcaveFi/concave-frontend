@@ -15,7 +15,7 @@ function Bond() {
             description="Bond that gCNV or NGMI"
           />
           <Flex gap={6} flexWrap="wrap" justify="center">
-            <BuyCard buttonLabel="Get with 5 day vesting" />
+            <BuyCard buttonLabel="Get with 5 day vesting" active="discount" />
             <BondInfoCard />
           </Flex>
         </Flex>

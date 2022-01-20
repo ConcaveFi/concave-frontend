@@ -1,32 +1,32 @@
+/*
+Defining colors: 
+  - Base color: 100
+  - Shades darker than base color: >100 (eg. primary.110 -> 10% darker then primary)
+  - Shades lighter than base color: <100 (eg. secondary.20 -> 80% lighter then secondary)
+*/
+
 export const colors = {
-  text: {
-    1: '#fff',
-    2: '#D7E9FF',
-    3: '#5f7a99',
-    4: '#535966',
+  text: /* contrast */ {
+    high: '#fff',
+    medium: '#D7E9FF',
+    low: '#5f7a99',
   },
 
-  grey: {
-    500: '#5F7A99',
-    700: '#708aa7',
-    800: '#364C67',
+  primary: /* purple & blue */ {
+    1: '#8671C0',
+    2: '#4DBEE1',
   },
-  blue: {
-    500: '#419ceb',
+  secondary: /* green */ {
+    100: '#1B3442',
+    150: '#0A161F',
   },
-  green: {
-    500: '#1B3442',
-  },
+
+  subtle: '#2A425F',
 
   strokeReflection:
     'linear-gradient(41.89deg, #53399B 0.69%, #7DE0FF 38.19%, #504179 72.85%, #84E2FF 100%)',
   radialGradient:
     'radial-gradient(97.48% 82.4% at 49.69% 76.45%, #3082E1 0%, #3D3786 31.18%, transparent 100%)',
-
-  gradients: {
-    primary: 'linear(to-l, #8671C0 0%, #4DBEE1 100%)',
-    green: 'linear(239.18deg, #1B3442 27.18%, #0A161F 96.11%)',
-  },
 }
 
 export default colors

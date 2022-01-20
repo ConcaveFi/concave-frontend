@@ -10,9 +10,8 @@ const globalStyles: Styles = {
       'color-scheme': mode('light', 'dark')(props),
     },
     body: {
-      bgImage: 'url(/images/cave_bg.jpeg)',
+      bgImage: 'url(/assets/cave-bg.jpeg)',
       zIndex: -1,
-
       minHeight: '140vh', // temporary
     },
   }),

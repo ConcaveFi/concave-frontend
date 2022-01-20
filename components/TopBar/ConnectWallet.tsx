@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
   Button,
   Image,
@@ -10,8 +10,6 @@ import {
   ModalContent,
   ModalOverlay,
   Text,
-  useDisclosure,
-  useToast,
 } from '@chakra-ui/react'
 import { useEthers } from '@usedapp/core'
 import { UnsupportedChainIdError } from '@web3-react/core'
@@ -19,7 +17,6 @@ import { UnsupportedChainIdError } from '@web3-react/core'
 import { walletconnect } from 'lib/connectors'
 import { supportedNetworks } from 'config'
 import { toOxfordComma } from 'lib/toOxfordComma'
-import colors from 'theme/colors'
 import { switchNetwork } from 'lib/wallet'
 
 // Takes a long hash string and truncates it.
@@ -60,10 +57,9 @@ const ConnectButton = ({ onError }: { onError: (e: Error) => void }) => {
       <Menu placement="bottom-end">
         <MenuButton
           as={Button}
-          variant={'primary.outline'}
-          bgGradient={colors.gradients.green}
+          variant="secondary"
+          bgGradient="linear(to-tr, secondary.150, secondary.100)"
           size="large"
-          borderWidth={2}
           w={200}
         >
           Connect your wallet

@@ -21,7 +21,7 @@ function Swap() {
             description="Swap gCNV here"
           />
           <Flex gap={6} flexWrap="wrap" justify="center">
-            <BuyCard buttonLabel="Swap" />
+            <BuyCard buttonLabel="Swap" active="swap" />
             <SwapInfoCard />
           </Flex>
         </Flex>
