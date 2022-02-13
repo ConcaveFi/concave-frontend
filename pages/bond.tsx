@@ -2,31 +2,30 @@ import { Container, Flex } from '@chakra-ui/react'
 import React from 'react'
 import { Page } from '../components/Page'
 import GcnvTitle from 'components/GcnvTitle'
-import SuppliedAssetsCard from 'components/Lending/suppliedassets'
-import YourBorrowAssetsCard from 'components/Lending/yourborrowassets'
+import BondCard from 'components/Bond/bondcard'
 
-function lending() {
+function bondcardf() {
   return (
     <Page>
       <Container maxW="container.lg">
         <Flex direction="column" gap={12}>
-          <GcnvTitle title="Lending and Borrowing" description="placeholder" />
+          <GcnvTitle title="bonding" description="placeholder" />
           <Flex gap={6} flexWrap="wrap" justify="left">
-            <SuppliedAssetsCard buttonLabel={0} />
+            <BondCard buttonLabel={0} />
 
             <Flex gap={6} flexWrap="wrap" justify="right">
-              <YourBorrowAssetsCard buttonLabel={0} />
+              <BondCard buttonLabel={0} />
             </Flex>
           </Flex>
         </Flex>
       </Container>
       <Container maxW="container.lg">
         <Flex direction="column" gap={12}>
-          <GcnvTitle title="Supply" description="Earn interest on your deposit" />
+          <GcnvTitle title="bond title" description="bonds" />
         </Flex>
       </Container>
     </Page>
   )
 }
 
-export default lending
+export default bondcardf

@@ -16,10 +16,7 @@ function Swap() {
     <Page>
       <Container maxW="container.lg">
         <Flex direction="column" gap={12}>
-          <GcnvTitle
-            title="Swap gCNV"
-            description="Swap gCNV here"
-          />
+          <GcnvTitle title="Swap gCNV" description="Swap gCNV here" />
           <Flex gap={6} flexWrap="wrap" justify="center">
             <BuyCard buttonLabel="Swap" active="swap" />
             <SwapInfoCard />
