@@ -5,10 +5,6 @@ import React from 'react'
 import colors from 'theme/colors'
 import { fonts } from 'theme/foundations'
 
-
-
-
-
 const YourSuppAssets = ({ balance }) => (
   <Flex
     align="center"
@@ -32,9 +28,9 @@ export function FromInput() {
       <Text textColor="white.3" fontWeight={700}>
         Your Supplied Assets
       </Text>
-        <Stack align="left">
-          <YourSuppAssets balance="$2.402.83" />
-        </Stack>
+      <Stack align="left">
+        <YourSuppAssets balance="$2.402.83" />
+      </Stack>
     </Flex>
   )
 }
@@ -45,9 +41,9 @@ export function ToInput() {
       <Text textColor={'white.500'} fontWeight={600}>
         Asset APY Reward APY Balance Collateral
       </Text>
-        <Stack align="left" fontWeight={600}>
-          <Text fontSize={14}>Dola --- 7.98% --- 28.92% --- 4.01</Text>
-        </Stack>
+      <Stack align="left" fontWeight={600}>
+        <Text fontSize={14}>Dola --- 7.98% --- 28.92% --- 4.01</Text>
+      </Stack>
     </Flex>
   )
 }

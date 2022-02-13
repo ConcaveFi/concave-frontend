@@ -6,14 +6,11 @@ import { Card } from 'components/Card'
 import colors from 'theme/colors'
 import { FromInput, ToInput } from 'components/Lending/yourborrowassetsinfo'
 
-
-
-
 export function YourBorrowAssetsCard({ buttonLabel }) {
   return (
-    <Card shadow="up" bgGradient={colors.gradients.green}>
+    <Card shadow="up">
       <Card px={10} py={8} gap={4}>
-      <FromInput />
+        <FromInput />
         <ToInput />
       </Card>
     </Card>
