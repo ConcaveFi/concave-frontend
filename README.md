@@ -1,19 +1,34 @@
 # 🥄 Concave Frontend
 
-This is frontend repo
+This is the worlds best kept secret frontend monorepo
 
-Reading the following tools doc will help you navigate and develop in this repo
+## Resources
+
+Reading the following tools docs will help you navigate and develop in this repo
 
 - [Next.js](https://nextjs.org/docs/basic-features)
-- [Typescript](https://www.typescriptlang.org/)
-- [TypeChain](https://github.com/ethereum-ts/TypeChain)
-- [Ethers.js](https://docs.ethers.io/v5/)
-- [useDApp](https://usedapp.io/)
+- [wagmi](https://wagmi-xyz.vercel.app/)
 - [Chakra UI](https://chakra-ui.com/)
-- Linting with [ESLint](https://eslint.org/)
-- Formatting with [Prettier](https://prettier.io/)
 
-# Setting up Local Development
+## About
+
+We have two main workspaces: `apps` and `libs`
+
+### apps
+
+- `cave`: main concave app, bond, swap etc
+- `marketplace`: NFT Marketplace app
+
+bootstraping a new concave app? put it in `/apps`
+
+### libs
+
+- `@concave/ui`: has all chakra-ui components + more, you should add shared more abstracted components here, let use case specifics for each app components folder
+- `@concave/icon`: has all chakra-ui icons + more
+
+create more shared libs as you feel necessary in `/libs`
+
+# Setting up Development
 
 Prerequisites: [Node](https://nodejs.org/en/download/), [Yarn](https://classic.yarnpkg.com/en/docs/install/) and [Git](https://git-scm.com/downloads)
 
@@ -23,14 +38,14 @@ Prerequisites: [Node](https://nodejs.org/en/download/), [Yarn](https://classic.y
 git clone https://github.com/ConcaveDAO/concave-frontend.git
 cd concave-frontend
 
-# create and config env.local file
+# create and config env.local file following env.example on the app you wanna run
+# if you're on the vercel team, you can also run `vercel env pull` on the desired app folder
 
 # Install dependencies
 yarn
+
 # Start development server
-yarn dev
+yarn dev:<app_name> # eg. yarn dev:cave
 ```
 
-> copy `.env.example` to `.env`
-
-...continue
+running dev this way will build and watch dependencies, this means you can edit `@concave/ui` working on `apps/cave` and it will just work

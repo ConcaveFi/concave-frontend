@@ -2,7 +2,8 @@
   "files.exclude": {
     "**/node_modules": true,
     "**/.next": true,
-    "**/.vercel": true
+    "**/.vercel": true,
+    "**/dist": true
   },
   "eslint.packageManager": "yarn",
   "editor.codeActionsOnSave": {
