@@ -3,9 +3,9 @@ import { useQuery } from '@apollo/client'
 import React from 'react'
 import { Page } from 'components/Page'
 import GcnvTitle from 'components/GcnvTitle'
-import BuyCard from 'components/GetCNV/BuyCard'
-import SwapInfoCard from 'components/GetCNV/SwapInfoCard'
 import { QUERY_TEST } from 'graphql/test'
+import { CandleStickCard } from 'components/CandleStick/CandleStickCard'
+import SwapCard from 'components/GetCNV/SwapCard'
 
 function Swap() {
   const { loading, error, data } = useQuery(QUERY_TEST)
@@ -18,8 +18,8 @@ function Swap() {
         <Flex direction="column" gap={12}>
           <GcnvTitle title="Swap gCNV" description="Swap gCNV here" />
           <Flex gap={6} flexWrap="wrap" justify="center">
-            <BuyCard buttonLabel="Swap" active="swap" />
-            <SwapInfoCard />
+            <CandleStickCard />
+            <SwapCard buttonLabel="Swap" active="swap" />
           </Flex>
         </Flex>
       </Container>
