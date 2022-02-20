@@ -13,6 +13,8 @@ import {
   Stack,
   Text,
 } from '@concave/ui'
+import { SwapIcon } from 'components/icons/swap'
+import { ChevronDownIcon } from 'components/icons/chevronown'
 import Image from 'next/image'
 import React from 'react'
 import NumberFormat, { NumberFormatProps } from 'react-number-format'
@@ -78,8 +80,13 @@ export const Select = ({
   return (
     <Menu placement="bottom-end" autoSelect>
       <MenuButton
+        // boxShadow='md'
+        style={{
+          boxShadow:
+            '0px 4px 4px rgba(0, 0, 0, 0.25), inset -1px 1px 2px rgba(128, 186, 255, 0.05)',
+        }}
         as={Button}
-        bgColor="whiteAlpha.50"
+        bgColor="rgba(156, 156, 156, 0.01);"
         sx={selectItemStyles}
         leftIcon={<TokenIcon tokenName={selected} />}
         rightIcon={<ChevronDownIcon />}
@@ -104,16 +111,18 @@ export const MaxAmount = ({
     borderRadius="full"
     py={1}
     px={3}
-    bgColor="whiteAlpha.50"
     gap={1}
     fontSize={12}
     fontWeight={500}
+    backgroundColor="transparent"
     height="auto"
     textColor="grey.700"
     whiteSpace="nowrap"
     {...props}
   >
-    {label}: {max}
+    <Text textColor={'text.low'}>
+      {label}: {max}
+    </Text>
     <Text textColor={'text.highlight'}>Max</Text>
   </Button>
 )
