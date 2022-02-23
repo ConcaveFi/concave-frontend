@@ -4,8 +4,8 @@ import React from 'react'
 import { Page } from 'components/Page'
 import GcnvTitle from 'components/GcnvTitle'
 import { QUERY_TEST } from 'graphql/test'
-import { CandleStickCard } from 'components/CandleStick/CandleStickCard'
 import SwapCard from 'components/GetCNV/SwapCard'
+import { CandleStickCard } from 'components/CandleStickCard'
 
 function Swap() {
   const { loading, error, data } = useQuery(QUERY_TEST)
