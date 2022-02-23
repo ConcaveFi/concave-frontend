@@ -35,7 +35,7 @@ Prerequisites: [Node](https://nodejs.org/en/download/), [Yarn](https://classic.y
 > clone/fork:
 
 ```bash
-git clone https://github.com/ConcaveDAO/concave-frontend.git
+git clone https://github.com/ConcaveFi/concave-frontend.git
 cd concave-frontend
 
 # create and config env.local file following env.example on the app you wanna run
