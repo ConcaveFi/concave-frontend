@@ -1,6 +1,6 @@
 import React from 'react'
 import { Card } from '@concave/ui'
-import { FromInput, ToInput } from 'components/Lending/yourborrowassetsinfo'
+import { FromInput, ToInput } from 'components/Lending/YourBorrowAssetsInfo'
 
 export function YourBorrowAssetsCard({ buttonLabel }) {
   return (

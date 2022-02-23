@@ -2,7 +2,7 @@ import { Container, Flex } from '@concave/ui'
 import React from 'react'
 import { Page } from '../components/Page'
 import GcnvTitle from 'components/GcnvTitle'
-import BondCard from 'components/Bond/bondcard'
+import BondCard from 'components/Bond/BondCard'
 
 function bondcardf() {
   return (

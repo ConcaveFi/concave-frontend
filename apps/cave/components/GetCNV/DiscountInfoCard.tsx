@@ -25,7 +25,7 @@ function BondInfoCard() {
           </Text>
         </VStack>
         <VStack w="100%" spacing="2px">
-          <Text color="text.low" fontSize="s" fontWeight="bold" spacing="5px">
+          <Text color="text.low" fontSize="s" fontWeight="bold">
             Discount
           </Text>
           <Text color="text.medium" fontSize="3xl" fontWeight="bold">
@@ -33,7 +33,7 @@ function BondInfoCard() {
           </Text>
         </VStack>
         <VStack w="100%" spacing="2px">
-          <Text color="text.low" fontSize="s" fontWeight="bold" spacing="5px">
+          <Text color="text.low" fontSize="s" fontWeight="bold">
             Discounted Price
           </Text>
           <Text color="text.medium" fontSize="xl" fontWeight="bold">

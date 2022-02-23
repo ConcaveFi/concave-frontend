@@ -2,8 +2,8 @@ import { Container, Flex } from '@concave/ui'
 import React from 'react'
 import { Page } from '../components/Page'
 import GcnvTitle from 'components/GcnvTitle'
-import SuppliedAssetsCard from 'components/Lending/suppliedassets'
-import YourBorrowAssetsCard from 'components/Lending/yourborrowassets'
+import SuppliedAssetsCard from 'components/Lending/SuppliedAssets'
+import YourBorrowAssetsCard from 'components/Lending/YourBorrowAssets'
 
 function lending() {
   return (
