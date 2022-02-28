@@ -15,9 +15,10 @@ import {
 } from '@chakra-ui/react'
 import { Card } from '@concave/ui'
 import { SettingsIcon2, CnvQuestionIcon } from '@concave/icons'
-import { useSwapContext } from 'hooks/useSwap'
+import { SwapState } from 'hooks/useSwap'
 
-export const TransitionSettingsModalButton = () => {
+export const TransitionSettingsModalButton = (props: { swap: SwapState }) => {
+  const { swap } = props
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <>
@@ -33,7 +34,7 @@ export const TransitionSettingsModalButton = () => {
       <Modal isCentered onClose={onClose} isOpen={isOpen} motionPreset="slideInBottom">
         <ModalOverlay />
         <ModalContent width={'255px'} borderRadius={'3xl'}>
-          <TansactionSettings />
+          <TansactionSettings swap={swap} />
         </ModalContent>
       </Modal>
     </>
@@ -50,7 +51,7 @@ export const QuestionIcon = () => (
   />
 )
 
-export const TansactionSettings = () => {
+export const TansactionSettings = (props: { swap: SwapState }) => {
   const {
     expertMode,
     multihops,
@@ -60,7 +61,7 @@ export const TansactionSettings = () => {
     setExpertMode,
     setMultihops,
     setTransactionDeadLine,
-  } = useSwapContext()
+  } = props.swap
 
   return (
     <Card id="find" bgImage="/assets/blackboard.png">

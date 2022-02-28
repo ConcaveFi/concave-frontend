@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React from 'react'
 import {
   Text,
   Button,
@@ -19,7 +19,7 @@ import { GasIcon } from '@concave/icons'
 import { TransitionSettingsModalButton } from './TransactionSettings'
 import { BaseInput, InputContainer, MaxAmount, Select, ValueEstimation } from './Input'
 import { ButtonLink, ButtonLinkProps } from 'components/ButtonLink'
-import { useSwapContext } from 'hooks/useSwap'
+import { SwapState } from 'hooks/useSwap'
 
 const BuyNavButton = ({
   Icon,
@@ -84,6 +84,7 @@ function FromInput({
   tokenOptions,
   selectedToken,
   onSelectToken,
+  balances,
 }: {
   maxAmount: number
   value: string
@@ -91,9 +92,8 @@ function FromInput({
   tokenOptions: string[]
   selectedToken: typeof tokenOptions[number]
   onSelectToken: (token: typeof selectedToken) => void
+  balances: { [key: string]: number }
 }) {
-  const { balances } = useSwapContext()
-
   return (
     <Flex direction="column" gap={1} px={5}>
       <InputContainer shadow="down">
@@ -127,6 +127,7 @@ function ToInput({
   tokenOptions,
   selectedToken,
   onSelectToken,
+  balances,
 }: {
   maxAmount: number
   value: string
@@ -134,9 +135,8 @@ function ToInput({
   tokenOptions: string[]
   selectedToken: typeof tokenOptions[number]
   onSelectToken: (token: typeof selectedToken) => void
+  balances: { [key: string]: number }
 }) {
-  const { balances } = useSwapContext()
-
   return (
     <Flex direction="column" gap={1} px={5}>
       <InputContainer shadow="down">
@@ -161,23 +161,15 @@ function ToInput({
   )
 }
 
-export function SwapCard({ buttonLabel, active }) {
-  const {
-    USDValues,
-    inputTokens,
-    outputTokens,
-    gasPrice,
-    parsePrice,
-    selectedInputToken,
-    setSelectedInputToken,
-    selectedOutputToken,
-    setSelectedOutputToken,
-    inputTokenValue,
-    setInputTokenValue,
-    outputTokenValue,
-    setOutputTokenValue,
-  } = useSwapContext()
-
+export function SwapCard({
+  buttonLabel,
+  active,
+  swap,
+}: {
+  buttonLabel: string
+  active: string
+  swap: SwapState
+}) {
   return (
     <Card
       shadow="up"
@@ -191,11 +183,12 @@ export function SwapCard({ buttonLabel, active }) {
     >
       <FromInput
         maxAmount={100}
-        value={`${inputTokenValue}`}
-        onChangeValue={(from) => setInputTokenValue(+from)}
-        tokenOptions={inputTokens}
-        selectedToken={selectedInputToken}
-        onSelectToken={setSelectedInputToken}
+        balances={swap.balances}
+        value={`${swap.inputTokenValue}`}
+        onChangeValue={(from) => swap.setInputTokenValue(+from)}
+        tokenOptions={swap.inputTokens}
+        selectedToken={swap.selectedInputToken}
+        onSelectToken={swap.setSelectedInputToken}
       />
       <Flex align="center" justify="center">
         <Button
@@ -218,11 +211,12 @@ export function SwapCard({ buttonLabel, active }) {
       </Flex>
       <ToInput
         maxAmount={100}
-        value={`${outputTokenValue}`}
-        onChangeValue={(to) => setOutputTokenValue(+to)}
-        tokenOptions={outputTokens}
-        selectedToken={selectedOutputToken}
-        onSelectToken={setSelectedOutputToken}
+        balances={swap.balances}
+        value={`${swap.outputTokenValue}`}
+        onChangeValue={(to) => swap.setOutputTokenValue(+to)}
+        tokenOptions={swap.outputTokens}
+        selectedToken={swap.selectedOutputToken}
+        onSelectToken={swap.setSelectedOutputToken}
       />
       <HStack
         divider={<StackDivider boxShadow={'1px 0px 2px #101317'} />}
@@ -232,17 +226,17 @@ export function SwapCard({ buttonLabel, active }) {
       >
         <HStack>
           <Text fontWeight={700} fontSize="xs">
-            1 {selectedOutputToken} = {parsePrice} {selectedInputToken}
+            1 {swap.selectedOutputToken} = {swap.parsePrice} {swap.selectedInputToken}
           </Text>
           <Text paddingRight={2} fontWeight={700} fontSize="xs" textColor="text.low">
-            (${USDValues[selectedOutputToken]})
+            (${swap.USDValues[swap.selectedOutputToken]})
           </Text>
           <GasIcon viewBox="0 0 16 16" />
           <Text fontWeight={700} fontSize="xs" textColor="text.low">
-            ${gasPrice}
+            ${swap.gasPrice}
           </Text>
         </HStack>
-        <TransitionSettingsModalButton />
+        <TransitionSettingsModalButton swap={swap} />
       </HStack>
       <Button
         shadow={
