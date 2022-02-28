@@ -10,8 +10,6 @@ const globalStyles: Styles = {
     },
     body: {
       bgImage: 'url(/assets/cave-bg.jpeg)',
-      zIndex: -1,
-
       minHeight: '120vh', // temporary
     },
   }),

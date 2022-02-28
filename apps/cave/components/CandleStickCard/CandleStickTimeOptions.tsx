@@ -1,6 +1,6 @@
 import { Box, HStack, StackProps, useRadio, useRadioGroup } from '@chakra-ui/react'
+import { gradientStroke } from '@concave/ui'
 import React, { useMemo } from 'react'
-import { gradientStroke } from 'theme/utils/gradientStroke'
 
 type OwnProps = StackProps & { onChangeInteral: (interval: number) => void }
 export const CandleStickTimeOptions = ({ onChangeInteral, ...stackProps }: OwnProps) => {
@@ -19,13 +19,7 @@ export const CandleStickTimeOptions = ({ onChangeInteral, ...stackProps }: OwnPr
     },
   })
   return (
-    <HStack
-      py={1}
-      px={2}
-      borderRadius={'3xl'}
-      boxShadow="-1px 1px 3px rgba(126, 162, 255, 0.26), inset 0px -5px 5px rgba(255, 255, 255, 0.02), inset -9px 12px 24px rgba(13, 17, 23, 0.49)"
-      {...stackProps}
-    >
+    <HStack py={1} px={2} borderRadius={'3xl'} shadow={'low'} {...stackProps}>
       {Object.keys(intervals).map((value) => {
         const radio = getRadioProps({ value })
         return (
@@ -52,7 +46,7 @@ const RadioCard = (props) => {
         {...checkbox}
         cursor="pointer"
         minWidth={12}
-        align="center"
+        textAlign="center"
         boxShadow="md"
         _checked={checked}
         px={2}

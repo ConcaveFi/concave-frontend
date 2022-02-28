@@ -1,9 +1,8 @@
 import React, { useEffect, useRef } from 'react'
-import { createChart, IChartApi } from 'lightweight-charts'
-import { priceData } from './priceData'
+import { CandlestickData, createChart, IChartApi } from 'lightweight-charts'
 import { Box } from '@chakra-ui/react'
 
-const CandleStickChart = (props: { selectInterval: number }) => {
+const CandleStickChart = (props: { data: CandlestickData[] }) => {
   const chartContainerRef = useRef<HTMLDivElement>()
   const chart = useRef<IChartApi>()
 
@@ -14,7 +13,6 @@ const CandleStickChart = (props: { selectInterval: number }) => {
       layout: {
         backgroundColor: 'transparent',
         textColor: '#565A69',
-        fontFamily: 'Inter var',
       },
       leftPriceScale: {
         visible: true,
@@ -29,9 +27,9 @@ const CandleStickChart = (props: { selectInterval: number }) => {
         visible: false,
       },
       timeScale: {
-        borderVisible: false,
+        timeVisible: true,
+        secondsVisible: false,
       },
-
       grid: {
         horzLines: {
           visible: false,
@@ -42,15 +40,14 @@ const CandleStickChart = (props: { selectInterval: number }) => {
       },
       crosshair: {
         horzLine: {
-          visible: false,
-          labelVisible: false,
+          visible: true,
+          labelVisible: true,
+          style: 3,
         },
         vertLine: {
           visible: true,
-          style: 0,
-          width: 2,
-          color: '#505050',
           labelVisible: false,
+          style: 3,
         },
       },
     })
@@ -65,15 +62,11 @@ const CandleStickChart = (props: { selectInterval: number }) => {
       priceLineColor: 'white',
     })
 
-    candleSeries.setData(priceData)
-    chart.current?.subscribeCrosshairMove((e) => {
-      console.log(e)
-    })
+    candleSeries.setData(props.data)
   }, [])
-  console.log(chart)
   return (
     <Box mt={5}>
-      <div ref={chartContainerRef} className="chart-container" />
+      <Box ref={chartContainerRef} className="chart-container" />
     </Box>
   )
 }
