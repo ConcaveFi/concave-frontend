@@ -5,14 +5,21 @@ import { CandleStickTimeOptions } from 'components/CandleStickCard/CandleStickTi
 import dynamic from 'next/dynamic'
 import { CandleStickTokenOptions } from './CandleStickTokenOptions'
 import { useCandleStickChart } from 'hooks/useCandleStickChart'
+import { SwapState } from 'hooks/useSwap'
 
 const CandleStickChart = dynamic(() => import('./CandleStickChart'), {
   loading: () => <p>Loading ...</p>,
   ssr: false,
 })
 
-export function CandleStickCard() {
-  const { data, setSelectInerval, loading } = useCandleStickChart()
+export function CandleStickCard({ swap }: { swap: SwapState }) {
+  const { selectedInputToken, selectedOutputToken } = swap
+
+  const { data, setSelectInerval, loading } = useCandleStickChart({
+    selectedInputToken,
+    selectedOutputToken,
+  })
+
   return (
     <VStack>
       <Card bgImage="/assets/blackboard.png" align="stretch">
@@ -26,10 +33,14 @@ export function CandleStickCard() {
           backdropFilter={'blur(5px)'}
         >
           <HStack mb={2} gap={3}>
-            <CandleStickTokenOptions />
+            <CandleStickTokenOptions
+              selectedInputToken={selectedInputToken}
+              selectedOutputToken={selectedOutputToken}
+            />
             <CandleStickTimeOptions onChangeInteral={setSelectInerval} />
           </HStack>
-          {loading ? <Text pt={8}>Loading...</Text> : <CandleStickChart data={data} />}
+          {data.length}
+          {loading ? <Text pt={8}>Loading Data...</Text> : <CandleStickChart data={data} />}
         </Stack>
       </Card>
     </VStack>

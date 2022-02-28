@@ -1,10 +1,11 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 type useStateType<T> = React.Dispatch<React.SetStateAction<T>>
 
 const avaliableTokens = ['XMR', 'ETH', 'DAI', 'gCNV', 'FRAX'] as const
 export type AvaliableTokens = typeof avaliableTokens
-export const SwapContext = createContext<{
+
+export type SwapState = {
   expertMode: boolean
   setExpertMode: useStateType<boolean>
   multihops: boolean
@@ -27,7 +28,7 @@ export const SwapContext = createContext<{
   parsePrice: number
   balances: { [key: string]: number }
   USDValues: { [key: string]: number }
-}>(null)
+}
 
 export const useSwap = () => {
   const inputTokens = ['XMR', 'ETH', 'DAI', 'FRAX']
@@ -88,8 +89,4 @@ export const useSwap = () => {
     balances,
     USDValues,
   }
-}
-
-export const useSwapContext = () => {
-  return useContext(SwapContext)
 }

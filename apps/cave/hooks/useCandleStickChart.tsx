@@ -1,9 +1,13 @@
 import { CandlestickData } from 'lightweight-charts'
 import { useEffect, useState } from 'react'
-import { useSwapContext } from './useSwap'
 
-export const useCandleStickChart = () => {
-  const { selectedInputToken, selectedOutputToken } = useSwapContext()
+export const useCandleStickChart = ({
+  selectedInputToken,
+  selectedOutputToken,
+}: {
+  selectedInputToken: string
+  selectedOutputToken: string
+}) => {
   const [data, setData] = useState<CandlestickData[]>([])
   const [interval, setSelectInerval] = useState(300)
   const [loading, setLoading] = useState(true)
