@@ -1,5 +1,5 @@
 import { Box, HStack, Text, VStack, Card } from '@concave/ui'
-import { ChevronRightIcon, QuestionOutlineIcon } from '@concave/icons'
+import { QuestionOutlineIcon } from '@concave/icons'
 import { InfoCard } from './Info'
 
 function BondInfoCard() {

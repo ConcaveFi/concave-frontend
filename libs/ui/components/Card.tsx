@@ -10,7 +10,7 @@ export function Card({ children, spacing = 0, borderWidth, ...rest }: StackProps
       spacing={spacing}
       {...rest}
     >
-      {children}
+      <Stack>{children}</Stack>
     </Stack>
   )
 }

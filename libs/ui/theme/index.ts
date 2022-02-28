@@ -1,4 +1,4 @@
-import { ChakraTheme, extendTheme, theme as baseTheme } from '@chakra-ui/react'
+import { ChakraTheme, extendTheme } from '@chakra-ui/react'
 import global from './global'
 import colors from './colors'
 import Button from './components/ButtonStyles'

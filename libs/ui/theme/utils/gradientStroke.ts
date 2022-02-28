@@ -5,9 +5,6 @@ export const gradientStroke = ({
   borderWidth = '1px',
 }: Partial<StyleFunctionProps>): SystemStyleInterpolation => ({
   position: 'relative',
-  '& > *': {
-    zIndex: 1,
-  },
   '&::before': {
     content: '""',
     position: 'absolute',

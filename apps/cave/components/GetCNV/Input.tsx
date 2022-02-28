@@ -1,4 +1,4 @@
-import { ChevronDownIcon } from '@concave/icons'
+import { ChevronDownIcon2, TokenIcon } from '@concave/icons'
 import {
   Button,
   ButtonProps,
@@ -13,9 +13,6 @@ import {
   Stack,
   Text,
 } from '@concave/ui'
-import { SwapIcon } from 'components/icons/swap'
-import { ChevronDownIcon } from 'components/icons/chevronown'
-import Image from 'next/image'
 import React from 'react'
 import NumberFormat, { NumberFormatProps } from 'react-number-format'
 
@@ -57,13 +54,9 @@ const selectItemStyles = {
 
 const SelectItem = ({ name, ...props }: { name: string } & MenuItemProps) => (
   <MenuItem sx={selectItemStyles} {...props}>
-    <TokenIcon tokenName={name} />
-    <Text ml={2}>{name.toUpperCase()}</Text>
+    <TokenIcon size={'25px'} tokenName={name} />
+    <Text ml={2}>{name}</Text>
   </MenuItem>
-)
-
-const TokenIcon = ({ tokenName }: { tokenName: string }) => (
-  <Image src={`/assets/tokens/${tokenName}.svg`} width="18px" height="18px" alt="" />
 )
 
 const bringToBeginning = (arr, elem) => arr.sort((x, y) => (x == elem ? -1 : y == elem ? 1 : 0))
@@ -80,20 +73,21 @@ export const Select = ({
   return (
     <Menu placement="bottom-end" autoSelect>
       <MenuButton
-        // boxShadow='md'
         style={{
           boxShadow:
             '0px 4px 4px rgba(0, 0, 0, 0.25), inset -1px 1px 2px rgba(128, 186, 255, 0.05)',
         }}
+        p={2}
+        w={'115px'}
         as={Button}
         bgColor="rgba(156, 156, 156, 0.01);"
         sx={selectItemStyles}
-        leftIcon={<TokenIcon tokenName={selected} />}
-        rightIcon={<ChevronDownIcon />}
+        leftIcon={<TokenIcon size="25px" tokenName={selected} />}
+        rightIcon={<ChevronDownIcon2 />}
       >
-        {selected.toUpperCase()}
+        {selected}
       </MenuButton>
-      <MenuList bg="green.500" borderRadius="2xl" minW="min" px={1}>
+      <MenuList borderRadius="2xl" minW="min" px={1}>
         {bringToBeginning(tokens, selected).map((name) => (
           <SelectItem key={name} name={name} onClick={() => onSelect(name)} />
         ))}
@@ -106,7 +100,7 @@ export const MaxAmount = ({
   max,
   label,
   ...props
-}: { max: number; label: string } & ButtonProps) => (
+}: { max?: number; label: string } & ButtonProps) => (
   <Button
     borderRadius="full"
     py={1}
@@ -121,7 +115,7 @@ export const MaxAmount = ({
     {...props}
   >
     <Text textColor={'text.low'}>
-      {label}: {max}
+      {label} {max}
     </Text>
     <Text textColor={'text.highlight'}>Max</Text>
   </Button>
