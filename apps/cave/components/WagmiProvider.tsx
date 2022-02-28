@@ -17,10 +17,10 @@ const connectors = [
 const isChainSupported = (chainId?: number) => defaultChains.some((x) => x.id === chainId)
 
 const provider = ({ chainId }) =>
-  concaveProvider(isChainSupported(chainId) ? chainId : chain.mainnet)
+  concaveProvider(isChainSupported(chainId) ? chainId : chain.mainnet.id)
 
 const webSocketProvider = ({ chainId }) =>
-  concaveWSProvider(isChainSupported(chainId) ? chainId : chain.mainnet)
+  concaveWSProvider(isChainSupported(chainId) ? chainId : chain.mainnet.id)
 
 export const WagmiProvider = ({ children }: { children: ReactNode }) => (
   <Provider
