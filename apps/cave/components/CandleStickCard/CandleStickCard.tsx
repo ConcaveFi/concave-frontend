@@ -20,18 +20,18 @@ export function CandleStickCard({ swap }: { swap: SwapState }) {
   })
 
   return (
-    <VStack>
+    <VStack id="CandleStick">
       <Card bgImage="/assets/blackboard.png" align="stretch">
         <Stack
-          id="candle"
-          maxH={'390px'}
+          h={390}
+          w={568}
           spacing={4}
           px={8}
           py={8}
           borderRadius={'2xl'}
           backdropFilter={'blur(5px)'}
         >
-          <HStack mb={2} gap={3}>
+          <HStack mb={2} gap={2} justifyContent={'space-between'}>
             <CandleStickTokenOptions
               selectedInputToken={selectedInputToken}
               selectedOutputToken={selectedOutputToken}
