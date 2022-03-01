@@ -10,7 +10,6 @@ import {
   MenuItem,
   MenuItemProps,
   MenuList,
-  Stack,
   Text,
 } from '@concave/ui'
 import React from 'react'
@@ -120,17 +119,3 @@ export const MaxAmount = ({
     <Text textColor={'text.highlight'}>Max</Text>
   </Button>
 )
-
-export const ValueEstimation = ({ tokenName, estimationAmount }) => {
-  const currency = 'usd'
-  // useCurrency() or something like that
-  // useFormatCurrency (??) could be cool
-  return (
-    <Stack align="end" fontWeight={600}>
-      <Text fontSize={24}>{tokenName}</Text>
-      <Text fontSize={14} color="grey.700">
-        ~${estimationAmount[currency]}
-      </Text>
-    </Stack>
-  )
-}
