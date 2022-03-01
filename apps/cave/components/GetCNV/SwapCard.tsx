@@ -104,7 +104,7 @@ export function SwapCard({
     <Card
       shadow="up"
       maxW="400"
-      maxH="400"
+      h={390}
       px={10}
       py={8}
       gap={2}
