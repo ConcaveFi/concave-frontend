@@ -156,10 +156,10 @@ export function SwapCard({
       >
         <HStack>
           <Text fontWeight={700} fontSize="xs">
-            1 {swap.selectedOutputToken} = {swap.parsePrice} {swap.selectedInputToken}
+            1 {swap.selectedOutputToken} = {swap.valueInOutputToken} {swap.selectedInputToken}
           </Text>
           <Text paddingRight={2} fontWeight={700} fontSize="xs" textColor="text.low">
-            (${swap.USDValues[swap.selectedOutputToken]})
+            (${swap.priceInUSD})
           </Text>
           <GasIcon viewBox="0 0 16 16" />
           <Text fontWeight={700} fontSize="xs" textColor="text.low">

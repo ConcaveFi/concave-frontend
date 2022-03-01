@@ -66,7 +66,7 @@ export const TansactionSettings = (props: { swap: SwapState }) => {
   return (
     <Card id="find" bgImage="/assets/blackboard.png">
       <VStack
-        borderRadius="3xl"
+        borderRadius="2xl"
         padding={4}
         gap={4}
         divider={<Box w="100%" h="2px" bg="strokeReflection" />}
@@ -80,7 +80,7 @@ export const TansactionSettings = (props: { swap: SwapState }) => {
                 Slippage tolerance <QuestionIcon />
               </Text>
               <HStack>
-                <Card boxShadow={'low'}>
+                <Card boxShadow={'-1px 1px 5px rgba(255, 255, 255, 0.3)'}>
                   <InputGroup p={3} variant={'unstyled'} size="sm">
                     <Input
                       type="number"
@@ -93,7 +93,7 @@ export const TansactionSettings = (props: { swap: SwapState }) => {
                 </Card>
                 <Button
                   variant="primary.outline"
-                  borderRadius={'xl'}
+                  borderRadius={'2xl'}
                   height={'45px'}
                   backgroundColor={'whiteAlpha.200'}
                   padding={5}
@@ -111,7 +111,7 @@ export const TansactionSettings = (props: { swap: SwapState }) => {
               <Text fontSize={'sm'}>
                 Transaction deadline <QuestionIcon />
               </Text>
-              <Card boxShadow={'low'}>
+              <Card boxShadow={'-1px 1px 5px rgba(255, 255, 255, 0.3)'}>
                 <InputGroup p={3} variant={'unstyled'} size="sm">
                   <Input
                     defaultValue="30"
