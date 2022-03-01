@@ -25,9 +25,9 @@ export type SwapState = {
   inputTokens: string[]
   outputTokens: string[]
   gasPrice: number
-  parsePrice: number
+  valueInOutputToken: number
   balances: { [key: string]: number }
-  USDValues: { [key: string]: number }
+  priceInUSD: number
 }
 
 export const useSwap = () => {
@@ -50,9 +50,12 @@ export const useSwap = () => {
   }
 
   const gasPrice = 103.3
-  const [parsePrice, setParsePrice] = useState(23.1)
   const [selectedInputToken, setSelectedInputToken] = useState('XMR')
   const [selectedOutputToken, setSelectedOutputToken] = useState('gCNV')
+
+  const [priceInUSD, setPriceInUSD] = useState(0)
+
+  const [valueInOutputToken, setValueInOutputToken] = useState(0)
   const [expertMode, setExpertMode] = useState(false)
   const [multihops, setMultihops] = useState(true)
   const [transactionDeadLine, setTransactionDeadLine] = useState(30)
@@ -61,8 +64,9 @@ export const useSwap = () => {
   const [outputTokenValue, setOutputTokenValue] = useState(0.143)
 
   useEffect(() => {
+    setPriceInUSD(USDValues[selectedOutputToken])
     const result = USDValues[selectedOutputToken] / USDValues[selectedInputToken]
-    setParsePrice(+result.toFixed(2))
+    setValueInOutputToken(+result.toFixed(2))
   }, [selectedOutputToken, selectedInputToken])
 
   return {
@@ -85,8 +89,8 @@ export const useSwap = () => {
     inputTokens,
     outputTokens,
     gasPrice,
-    parsePrice,
+    valueInOutputToken,
     balances,
-    USDValues,
+    priceInUSD,
   }
 }
