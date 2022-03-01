@@ -1,4 +1,4 @@
-import { Container, Flex } from '@concave/ui'
+import { Container, Flex, HStack, VStack } from '@concave/ui'
 import { useQuery } from '@apollo/client'
 import React, { useState } from 'react'
 import { Page } from 'components/Page'
@@ -19,10 +19,10 @@ function Swap() {
       <Container maxW="container.lg">
         <Flex direction="column" gap={12}>
           <GcnvTitle title="Swap gCNV" description="Swap gCNV here" />
-          <Flex gap={6} flexWrap="wrap" justify="center">
+          <HStack gap={4} flexWrap="wrap" justify="center">
             <CandleStickCard swap={swap} />
             <SwapCard swap={swap} buttonLabel="Swap" active="swap" />
-          </Flex>
+          </HStack>
         </Flex>
       </Container>
     </Page>

@@ -14,7 +14,6 @@ const CandleStickChart = dynamic(() => import('./CandleStickChart'), {
 
 export function CandleStickCard({ swap }: { swap: SwapState }) {
   const { selectedInputToken, selectedOutputToken } = swap
-
   const { data, setSelectInerval, loading } = useCandleStickChart({
     selectedInputToken,
     selectedOutputToken,

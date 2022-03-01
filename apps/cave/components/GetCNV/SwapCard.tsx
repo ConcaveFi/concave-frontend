@@ -1,81 +1,12 @@
 import React from 'react'
-import {
-  Text,
-  Button,
-  HStack,
-  Stack,
-  Flex,
-  ChakraComponent,
-  StackDivider,
-  Container,
-} from '@chakra-ui/react'
+import { Text, Button, HStack, Stack, Flex, StackDivider } from '@chakra-ui/react'
 import { Card } from '@concave/ui'
 
-import { SwapIcon } from '@concave/icons'
-import { ZapIcon } from '@concave/icons'
-import { DiscountIcon } from '@concave/icons'
 import { ExpandArrow } from '@concave/icons'
 import { GasIcon } from '@concave/icons'
 import { TransitionSettingsModalButton } from './TransactionSettings'
-import { BaseInput, InputContainer, MaxAmount, Select, ValueEstimation } from './Input'
-import { ButtonLink, ButtonLinkProps } from 'components/ButtonLink'
+import { BaseInput, InputContainer, MaxAmount, Select } from './Input'
 import { SwapState } from 'hooks/useSwap'
-
-const BuyNavButton = ({
-  Icon,
-  label,
-  subLabel,
-  isActive,
-  ...props
-}: ButtonLinkProps & { Icon: ChakraComponent<'svg'>; label: string; subLabel: string }) => (
-  <ButtonLink
-    {...props}
-    w="100%"
-    height="100%"
-    isActive={isActive}
-    variant="navigation"
-    scroll={false}
-    pb={3} // accounts for the rounded corner of the inputs card, no bg clip (with mb={-3} on <BuyNav /> Container)
-  >
-    <Stack p={3} align="center">
-      <Icon h="48px" w="48px" />
-      <Text fontSize={24}>{label}</Text>
-      <Text>{subLabel}</Text>
-    </Stack>
-  </ButtonLink>
-)
-
-const BuyNav = ({ active }) => (
-  <HStack
-    spacing={0}
-    borderTopRadius="inherit"
-    overflow="hidden"
-    mb={-3}
-    bgGradient="linear(to-tr, secondary.150, secondary.100)"
-  >
-    <BuyNavButton
-      isActive={active === 'swap'}
-      href="/swap"
-      Icon={SwapIcon}
-      label="Swap"
-      subLabel="~$3,214"
-    />
-    <BuyNavButton
-      isActive={active === 'discount'}
-      href="/discount"
-      Icon={DiscountIcon}
-      label="Discount"
-      subLabel="~$3,214"
-    />
-    <BuyNavButton
-      isActive={active === 'zap'}
-      href="/zap"
-      Icon={ZapIcon}
-      label="Zap"
-      subLabel="~$3,214"
-    />
-  </HStack>
-)
 
 function FromInput({
   maxAmount,
@@ -163,7 +94,6 @@ function ToInput({
 
 export function SwapCard({
   buttonLabel,
-  active,
   swap,
 }: {
   buttonLabel: string
