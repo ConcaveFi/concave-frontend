@@ -13,6 +13,7 @@ const CandleStickChart = (props: { data: CandlestickData[] }) => {
       layout: {
         backgroundColor: 'transparent',
         textColor: '#565A69',
+        fontFamily: 'ProductSans',
       },
       leftPriceScale: {
         visible: true,
