@@ -14,7 +14,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { Card } from '@concave/ui'
-import { SettingsIcon2, CnvQuestionIcon } from '@concave/icons'
+import { SwapSettingsIcon, CnvQuestionIcon } from '@concave/icons'
 import { SwapState } from 'hooks/useSwap'
 
 export const TransitionSettingsModalButton = (props: { swap: SwapState }) => {
@@ -29,7 +29,7 @@ export const TransitionSettingsModalButton = (props: { swap: SwapState }) => {
         backgroundColor={'transparent'}
         onClick={onOpen}
       >
-        <SettingsIcon2 viewBox="0 0 20 25" cursor={'pointer'} />
+        <SwapSettingsIcon viewBox="0 0 20 25" cursor={'pointer'} />
       </Button>
       <Modal isCentered onClose={onClose} isOpen={isOpen} motionPreset="slideInBottom">
         <ModalOverlay />
