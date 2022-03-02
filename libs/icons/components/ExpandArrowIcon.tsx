@@ -1,7 +1,7 @@
 import { Icon } from '@chakra-ui/icons'
 import { IconProps } from '@chakra-ui/react'
 
-export const ExpandArrow = (props: IconProps) => (
+export const ExpandArrowIcon = (props: IconProps) => (
   <Icon viewBox="0 0 40 48" fill="none" {...props}>
     <rect width="40" height="48" fill="url(#pattern0)" />
     <defs>
