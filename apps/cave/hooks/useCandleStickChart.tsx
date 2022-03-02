@@ -34,9 +34,8 @@ export const randomDate = (
   },
 ): Promise<CandlestickData[]> => {
   const data = []
-  let date = opts.start
   let lastvalue = {
-    time: date,
+    time: opts.start,
     open: 7307.38,
     high: 7313.76,
     low: 7293.05,
