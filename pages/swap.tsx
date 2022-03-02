@@ -6,6 +6,7 @@ import GcnvTitle from 'components/GcnvTitle'
 import BuyCard from 'components/GetCNV/BuyCard'
 import SwapInfoCard from 'components/GetCNV/SwapInfoCard'
 import { QUERY_TEST } from 'graphql/test'
+import Sidebar from 'components/sidebar'
 
 function Swap() {
   const { loading, error, data } = useQuery(QUERY_TEST)
@@ -15,7 +16,7 @@ function Swap() {
   return (
     <Page>
       <Container maxW="container.lg">
-        <Flex direction="column" gap={12}>
+        <Flex direction="column" gap={6}>
           <GcnvTitle title="Swap gCNV" description="Swap gCNV here" />
           <Flex gap={6} flexWrap="wrap" justify="center">
             <BuyCard buttonLabel="Swap" active="swap" />
