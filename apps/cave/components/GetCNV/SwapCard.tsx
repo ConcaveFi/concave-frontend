@@ -1,12 +1,14 @@
 import React from 'react'
-import { Text, Button, HStack, Stack, Flex, StackDivider } from '@chakra-ui/react'
-import { Card } from '@concave/ui'
+import { Text, Button, HStack, Stack, Flex, StackDivider, Card } from '@concave/ui'
 
-import { ExpandArrow } from '@concave/icons'
+import { ExpandArrowIcon } from '@concave/icons'
 import { GasIcon } from '@concave/icons'
 import { TransitionSettingsModalButton } from './TransactionSettings'
-import { BaseInput, InputContainer, MaxAmount, Select } from './Input'
+import { Select } from './Select'
 import { SwapState } from 'hooks/useSwap'
+import { BaseInput } from './BaseInput'
+import { InputContainer } from './InputContainer'
+import { MaxAmount } from './MaxAmount'
 
 function FromInput({
   maxAmount,
@@ -136,7 +138,7 @@ export function SwapCard({
             fontWeight: 600,
           }}
         >
-          <ExpandArrow />
+          <ExpandArrowIcon />
         </Button>
       </Flex>
       <ToInput
