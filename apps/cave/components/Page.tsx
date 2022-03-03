@@ -1,8 +1,8 @@
-import { Container, HStack } from '@chakra-ui/react'
+import { Container, HStack } from '@concave/ui'
 import React from 'react'
 import { Head, MetaProps } from './MetaHead'
 
-import Sidebar from './sidebar'
+import Sidebar from './Sidebar'
 interface PageProps {
   children: React.ReactNode
   customMeta?: MetaProps
