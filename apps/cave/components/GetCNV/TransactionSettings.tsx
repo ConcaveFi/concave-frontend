@@ -133,14 +133,18 @@ export const TansactionSettings = (props: { swap: SwapState }) => {
               <Text fontSize={'sm'}>
                 Expert Mode <QuestionIcon />
               </Text>
-              <Switch isChecked={expertMode} onChange={() => setExpertMode(!expertMode)} />
+              <Switch
+                size="sm"
+                isChecked={expertMode}
+                onChange={() => setExpertMode(!expertMode)}
+              />
             </HStack>
             <HStack justifyContent={'space-between'} width={'100%'}>
               <Text fontSize={'sm'}>
                 Multihops
                 <QuestionIcon />
               </Text>
-              <Switch isChecked={multihops} onChange={() => setMultihops(!multihops)} />
+              <Switch size="sm" isChecked={multihops} onChange={() => setMultihops(!multihops)} />
             </HStack>
           </VStack>
         </VStack>
