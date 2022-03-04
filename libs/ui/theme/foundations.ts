@@ -14,4 +14,6 @@ export const shadows = {
   down: '-1px 1px 3px 0px #7EA2FF42, -9px 12px 24px 0px #0D11177D inset, 0px -5px 5px 0px #FFFFFF05 inset',
   'mini-down': 'inset 0px 1px 2px rgba(0, 0, 0, 0.33)',
   outline: '0 0 0 3px transparent',
+  'Big Down':
+    '-1px 1px 3px 0px #7EA2FF42, -9px 12px 24px 0px #0D11177D inset, 0px -5px 5px 0px #FFFFFF05 inset',
 }

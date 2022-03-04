@@ -3,6 +3,8 @@ import global from './global'
 import colors from './colors'
 import Button from './components/ButtonStyles'
 import Tooltip from './components/TooltipStyles'
+import CloseButton from './components/CloseButtonStyles'
+import Input from './components/InputStyles'
 import { fonts, shadows } from './foundations'
 
 const theme = extendTheme({
@@ -14,6 +16,8 @@ const theme = extendTheme({
   components: {
     Button,
     Tooltip,
+    CloseButton,
+    Input,
   },
 }) as ChakraTheme
 
