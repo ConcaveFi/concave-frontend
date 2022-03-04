@@ -1,40 +1,26 @@
 import React from 'react'
 import { Button, Image, Menu, MenuButton, MenuItem, MenuList } from '@concave/ui'
 import { useAccount, useConnect } from 'wagmi'
+import { useAuth } from 'components/AuthProvider'
 
-// Takes a long hash string and truncates it.
-function truncateHash(hash: string, length = 38): string {
-  return hash.replace(hash.substring(6, length), '...')
+function miniAddy(address: string, length = 38): string {
+  return address.replace(address.substring(6, length), '...')
 }
 
 const DisconnectButton = () => {
-  const [account, disconnect] = useAccount()
-  if (!account.data?.address) return null
+  const { user, signOut } = useAuth()
+  if (!user.address) return null
   return (
     <Menu placement="bottom-end">
-      <MenuButton as={Button}>{truncateHash(account.data?.address)}</MenuButton>
+      <MenuButton as={Button}>{miniAddy(user.address)}</MenuButton>
       <MenuList>
-        <MenuItem onClick={disconnect}>Disconnect</MenuItem>
+        <MenuItem onClick={signOut}>Disconnect</MenuItem>
       </MenuList>
     </Menu>
   )
 }
 
-// const UnsuportedNetworkModal = ({ isOpen, onClose }) => (
-//   <Modal isOpen={isOpen} onClose={onClose}>
-//     <ModalOverlay />
-//     <ModalContent>
-//       <ModalContent>
-//         <Text>
-//           We currently only support {toOxfordComma(supportedNetworks.map((n) => n.chainName))}
-//         </Text>
-//         <Button onClick={() => switchNetwork()}>Swith to Ethereum</Button>
-//       </ModalContent>
-//     </ModalContent>
-//   </Modal>
-// )
-
-const ConnectButton = ({ onError }: { onError: (e: Error) => void }) => {
+const ConnectButton = () => {
   const [
     {
       data: { connectors },
@@ -73,21 +59,13 @@ const ConnectButton = ({ onError }: { onError: (e: Error) => void }) => {
             WalletConnect
           </MenuItem>
         </MenuList>
-        {/* <UnsuportedNetworkModal
-          isOpen={state === 'unsupportedNetwork'}
-          onClose={() => setState('idle')}
-        /> */}
       </Menu>
     </>
   )
 }
 
 export function ConnectWallet(): JSX.Element {
-  const [account] = useAccount()
+  const { isSignedIn } = useAuth()
 
-  return account.data?.address ? (
-    <DisconnectButton />
-  ) : (
-    <ConnectButton onError={(e) => console.log(e)} />
-  )
+  return isSignedIn ? <DisconnectButton /> : <ConnectButton />
 }

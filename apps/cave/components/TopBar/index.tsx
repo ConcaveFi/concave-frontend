@@ -59,7 +59,7 @@ export const TopBar = () => {
 
           <HStack gap="1">
             <ButtonLink
-              href="/placeholder_dashboard"
+              href="/dashboard"
               variant="primary.outline"
               bgGradient="linear(to-tr, secondary.150, secondary.100)"
               w="200px"
