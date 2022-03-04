@@ -60,7 +60,7 @@ export const AuthProvider: React.FC = ({ children }) => {
   const _signIn = useMutation(signIn)
   const signOut = useMutation(() => {
     disconnect()
-    return authFech('logout')
+    return authFetch('logout')
   })
 
   const user = useQuery('me', () => authFetch('me'), { refetchOnWindowFocus: true })
