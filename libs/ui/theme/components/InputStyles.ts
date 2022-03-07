@@ -1,18 +1,36 @@
-import { ComponentSingleStyleConfig } from '@chakra-ui/react'
+import { ComponentMultiStyleConfig } from '@chakra-ui/react'
 
-export const InputStyles: ComponentSingleStyleConfig = {
-  baseStyle: {},
-  sizes: {},
+export const InputStyles: ComponentMultiStyleConfig = {
+  parts: ['field'],
+  baseStyle: {
+    field: {
+      fontWeight: 'medium',
+      _placeholder: {
+        color: 'text.low',
+      },
+    },
+  },
+  sizes: {
+    small: {
+      field: {
+        height: '40px',
+        fontSize: 'sm',
+      },
+    },
+  },
   variants: {
     primary: {
-      p: 3,
-      shadow: 'Big Down',
-      borderRadius: '2xl',
-      bgColor: 'blackAlpha.300',
+      field: {
+        p: 3,
+        borderRadius: 'xl',
+        shadow: 'Big Down',
+        bgColor: 'blackAlpha.300',
+      },
     },
   },
   defaultProps: {
     variant: 'primary',
+    size: 'small',
   },
 }
 

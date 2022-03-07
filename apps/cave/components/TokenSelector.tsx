@@ -35,43 +35,43 @@ const tokens = [
     name: 'ethereum',
     symbol: 'eth',
     decimals: 18,
-    address: 'd11f313qs',
+    address: 'd11f3313qs',
+    image: '/assets/tokens/eth.svg',
+  },
+  {
+    name: 'dai stablecoin',
+    symbol: 'dai',
+    decimals: 18,
+    address: 'd11f31113qs',
+    image: '/assets/tokens/dai.svg',
+  },
+  {
+    name: 'ethereum',
+    symbol: 'eth',
+    decimals: 18,
+    address: 'd11f3153qs',
     image: '/assets/tokens/eth.svg',
   },
   {
     name: 'ethereum',
     symbol: 'eth',
     decimals: 18,
-    address: 'd11f313qs',
+    address: 'd11f376513qs',
     image: '/assets/tokens/eth.svg',
   },
   {
     name: 'ethereum',
     symbol: 'eth',
     decimals: 18,
-    address: 'd11f313qs',
-    image: '/assets/tokens/eth.svg',
-  },
-  {
-    name: 'ethereum',
-    symbol: 'eth',
-    decimals: 18,
-    address: 'd11f313qs',
-    image: '/assets/tokens/eth.svg',
-  },
-  {
-    name: 'ethereum',
-    symbol: 'eth',
-    decimals: 18,
-    address: 'd11f313qs',
+    address: 'd2311f313qs',
     image: '/assets/tokens/eth.svg',
   },
 ]
 
 function TokenSelector({}) {
   return (
-    <Modal onClose={() => null} spacing="2" title="Select a Token" isOpen={true} blurOverlay>
-      <Input variant="primary" placeholder="adada" />
+    <Modal blurOverlay spacing={6} title="Select a Token" onClose={() => null} isOpen={true}>
+      <Input placeholder="Search name or paste address" />
       <TokensList tokens={tokens} />
     </Modal>
   )

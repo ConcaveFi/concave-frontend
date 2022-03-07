@@ -14,10 +14,10 @@ const theme = extendTheme({
   colors,
   shadows,
   components: {
+    Input,
     Button,
     Tooltip,
     CloseButton,
-    Input,
   },
 }) as ChakraTheme
 

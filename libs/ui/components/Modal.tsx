@@ -8,13 +8,14 @@ import {
   ModalCloseButton,
   ModalProps as ChakraModalProps,
   SystemProps,
+  Stack,
 } from '@chakra-ui/react'
 import { ReactNode } from 'react'
 import { Card } from './Card'
 
 export interface ModalProps extends ChakraModalProps {
-  blurOverlay: boolean
   title: string
+  blurOverlay?: boolean
   spacing?: SystemProps['margin']
   children: ReactNode
 }
@@ -30,13 +31,8 @@ export function Modal({ children, title, blurOverlay = false, spacing, ...props 
           </Text>
           <ModalCloseButton position="unset" />
         </Flex>
-        <ModalBody
-          as={Card}
-          spacing={spacing}
-          p={6}
-          bgGradient="linear(to-tr, secondary.150, secondary.100)"
-        >
-          {children}
+        <ModalBody as={Card} p={6} bgGradient="linear(to-tr, secondary.150, secondary.100)">
+          <Stack spacing={spacing}>{children}</Stack>
         </ModalBody>
       </ModalContent>
     </ChakraModal>

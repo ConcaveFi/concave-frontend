@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Text, Button, HStack, Stack, Flex, ChakraComponent, Card } from '@concave/ui'
 import { ButtonLink, ButtonLinkProps } from 'components/ButtonLink'
-import { BaseInput, Select, InputContainer, MaxAmount, ValueEstimation } from './Input'
+// import { BaseInput, Select, InputContainer, MaxAmount, ValueEstimation } from './Input'
 import { SwapIcon, ZapIcon, DiscountIcon } from '@concave/icons'
 
 const BuyNavButton = ({
@@ -65,10 +65,10 @@ function ToInput() {
       <Text textColor="text.low" fontWeight={700}>
         To (estimated)
       </Text>
-      <InputContainer shadow="up">
+      {/* <InputContainer shadow="up">
         <BaseInput />
         <ValueEstimation tokenName="gCNV" estimationAmount={{ usd: 2601 }} />
-      </InputContainer>
+      </InputContainer> */}
     </Flex>
   )
 }
@@ -93,7 +93,7 @@ function FromInput({
       <Text textColor="text.low" fontWeight={700}>
         From
       </Text>
-      <InputContainer shadow="down">
+      {/* <InputContainer shadow="down">
         <BaseInput
           value={value}
           onValueChange={({ value }) => onChangeValue(value)}
@@ -107,7 +107,7 @@ function FromInput({
             onClick={() => onChangeValue(maxAmount.toString())}
           />
         </Stack>
-      </InputContainer>
+      </InputContainer> */}
     </Flex>
   )
 }
