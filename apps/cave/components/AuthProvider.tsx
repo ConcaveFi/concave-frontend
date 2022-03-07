@@ -20,7 +20,7 @@ const createSiweMessage = async (address: string, chainId: number) => {
 }
 
 const verifySignature = async (message: string, signature: string) =>
-  authFetch('verify-siwe', {
+  authFetch('verify', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ message, signature }),
@@ -60,7 +60,7 @@ export const AuthProvider: React.FC = ({ children }) => {
   const _signIn = useMutation(signIn)
   const signOut = useMutation(() => {
     disconnect()
-    return authFech('logout')
+    return authFetch('logout')
   })
 
   const user = useQuery('me', () => authFetch('me'), { refetchOnWindowFocus: true })
