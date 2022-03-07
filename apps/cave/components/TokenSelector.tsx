@@ -70,7 +70,7 @@ const tokens = [
 
 function TokenSelector({}) {
   return (
-    <Modal blurOverlay spacing={6} title="Select a Token" onClose={() => null} isOpen={true}>
+    <Modal title="Select a Token" onClose={() => null} isOpen={true}>
       <Input placeholder="Search name or paste address" />
       <TokensList tokens={tokens} />
     </Modal>
