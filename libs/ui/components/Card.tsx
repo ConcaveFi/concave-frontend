@@ -8,7 +8,6 @@ export const CardStyles = ({ borderWidth = 1 }: Partial<StyleFunctionProps> = {}
   ...gradientStroke({ borderWidth }),
   borderRadius: '2xl',
   maxW: '100%',
-  p: 6,
   bgGradient: 'linear(to-tr, secondary.150, secondary.100)',
 })
 

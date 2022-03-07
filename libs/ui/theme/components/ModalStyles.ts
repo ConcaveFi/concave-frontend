@@ -9,6 +9,7 @@ export const ModalStyles: ComponentMultiStyleConfig = {
       display: 'flex',
       flexDirection: 'column',
       gap: 6,
+      p: 6,
       maxH: '75vh',
       overflowY: 'auto',
     },

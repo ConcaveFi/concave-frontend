@@ -30,8 +30,8 @@ export function Modal({
       <ModalContent>
         <ModalHeader textAlign={titleAlign}>{title}</ModalHeader>
         <ModalCloseButton />
-        <Card p={0}>
-          <ModalBody p={6}>{children}</ModalBody>
+        <Card>
+          <ModalBody>{children}</ModalBody>
         </Card>
       </ModalContent>
     </ChakraModal>
