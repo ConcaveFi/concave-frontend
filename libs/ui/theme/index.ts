@@ -1,4 +1,4 @@
-import { ChakraTheme, extendTheme, theme as baseTheme } from '@chakra-ui/react'
+import { ChakraTheme, extendTheme } from '@chakra-ui/react'
 import global from './global'
 import colors from './colors'
 import Button from './components/ButtonStyles'
@@ -6,6 +6,7 @@ import Tooltip from './components/TooltipStyles'
 import CloseButton from './components/CloseButtonStyles'
 import Input from './components/InputStyles'
 import Modal from './components/ModalStyles'
+import Switch from './components/SwitchStyles'
 import { fonts, shadows } from './foundations'
 
 const theme = extendTheme({
@@ -17,6 +18,7 @@ const theme = extendTheme({
   components: {
     Input,
     Button,
+    Switch,
     Tooltip,
     CloseButton,
     Modal,
