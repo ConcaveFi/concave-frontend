@@ -1,7 +1,8 @@
 import { ComponentMultiStyleConfig } from '@chakra-ui/react'
+import { inputAnatomy } from '@chakra-ui/anatomy'
 
 export const InputStyles: ComponentMultiStyleConfig = {
-  parts: ['field'],
+  parts: inputAnatomy.keys,
   baseStyle: {
     field: {
       fontWeight: 'medium',
