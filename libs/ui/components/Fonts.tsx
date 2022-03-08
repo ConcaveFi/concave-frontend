@@ -17,7 +17,7 @@ const makeFontFaces = (familyName: string, weights: number[]) =>
 }
 `,
     )
-    .join('')
+    .join(' ')
 
 export const ConcaveFonts = () => (
   <Global
