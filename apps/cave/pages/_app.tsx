@@ -1,7 +1,7 @@
 import type { AppProps } from 'next/app'
 import { ApolloProvider } from '@apollo/client'
 import { useApollo } from 'lib/apollo'
-import { ConcaveFonts, ThemeProvider } from '@concave/ui'
+import { ConcaveFonts, Image, ThemeProvider } from '@concave/ui'
 import { WagmiProvider } from 'components/WagmiProvider'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { useState } from 'react'
@@ -16,9 +16,6 @@ const globalStyles: Styles = {
       colorScheme: 'dark',
     },
     body: {
-      bgImage: 'url(/assets/cave-bg.jpeg)', // <img/> component for this may be more performant
-      zIndex: -1,
-
       minHeight: '120vh', // temporary
     },
   }),
@@ -32,6 +29,7 @@ const App = ({ Component, pageProps }: AppProps) => {
       <QueryClientProvider client={queryClient}>
         <WagmiProvider>
           <ThemeProvider globalStyles={globalStyles} cookies={pageProps.cookies}>
+            <Image zIndex={-1} pos="absolute" inset={0} src="/assets/cave-bg.jpeg" alt="" />
             <ConcaveFonts />
             <Component {...pageProps} />
           </ThemeProvider>

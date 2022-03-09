@@ -5,6 +5,7 @@ import Tooltip from './components/TooltipStyles'
 import CloseButton from './components/CloseButtonStyles'
 import Input from './components/InputStyles'
 import Modal from './components/ModalStyles'
+import Card from './components/CardStyles'
 import { fonts, shadows } from './foundations'
 
 const theme = extendTheme({
@@ -18,6 +19,7 @@ const theme = extendTheme({
     Tooltip,
     CloseButton,
     Modal,
+    Card,
   },
 }) as ChakraTheme
 
