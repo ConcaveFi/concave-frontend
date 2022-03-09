@@ -14,7 +14,10 @@
     },
     "clean": {
       "cache": false
-    }
-  },
+    },
+    "postinstall": {
+      "cache": false
+  }
+},
   "globalDependencies": ["tsconfig.json", ".eslintrc"]
 }
