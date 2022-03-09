@@ -29,8 +29,5 @@
     "npm": ">=7.0.0",
     "node": ">=14.0.0"
   },
-  "packageManager": "yarn@1.22.17",
-  "dependencies": {
-    "@chakra-ui/react": "^1.8.6"
-  }
+  "packageManager": "yarn@1.22.17"
 }
