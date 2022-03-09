@@ -13,10 +13,12 @@ export const Page = ({ children, customMeta }: PageProps): JSX.Element => {
   return (
     <>
       <Head customMeta={customMeta} />
-      {/* <TopBar /> */}
-      {/* <Sidebar /> */}
       <main>
-        <Container maxWidth="container.xl">{children}</Container>
+      <SideBar>
+        <Container maxWidth="container.xl">
+          {children}
+        </Container>
+        </SideBar> 
       </main>
     </>
   )
