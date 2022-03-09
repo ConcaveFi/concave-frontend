@@ -1,6 +1,7 @@
 import { Container } from '@concave/ui'
 import React from 'react'
 import { Head, MetaProps } from './MetaHead'
+import Sidebar from './SideBar/SideBar'
 import { TopBar } from './TopBar'
 
 interface PageProps {
@@ -12,9 +13,12 @@ export const Page = ({ children, customMeta }: PageProps): JSX.Element => {
   return (
     <>
       <Head customMeta={customMeta} />
-      <TopBar />
       <main>
-        <Container maxWidth="container.xl">{children}</Container>
+      <SideBar>
+        <Container maxWidth="container.xl">
+          {children}
+        </Container>
+        </SideBar> 
       </main>
     </>
   )
