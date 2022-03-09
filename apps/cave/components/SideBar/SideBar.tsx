@@ -14,22 +14,28 @@ import {
   BoxProps,
   FlexProps,
 } from '@chakra-ui/react'
-import { FaDiscord, FaTwitter, FaTwitch } from 'react-icons/fa'
+import { FaDiscord, FaTwitter, FaTwitch, FaShoppingCart, FaRandom, FaBatteryThreeQuarters, FaBriefcase } from 'react-icons/fa'
 import { FiMenu } from 'react-icons/fi'
 import { SiGitbook } from 'react-icons/si'
 import { IconType } from 'react-icons'
 import { ReactText } from 'react'
 import { SwapCard } from 'components/Swap/SwapCard'
 import { useSwap } from 'components/Swap/useSwap'
+import { Image } from '@concave/ui'
 
 interface LinkItemProps {
   name: string
   icon: IconType
 }
 const LinkItems: Array<LinkItemProps> = [
+  { name: 'Bonds', icon: FaBriefcase }, 
+  { name: 'Liquid Staking', icon: FaBatteryThreeQuarters }, 
+  { name: 'Marketplace', icon: FaShoppingCart }, 
+  { name: 'Swap', icon: FaRandom }, 
+  
   { name: 'Discord', icon: FaDiscord },
   { name: 'Twitter', icon: FaTwitter },
-  { name: 'Twitch', icon: FaTwitch },
+  { name: 'Twitch', icon: FaTwitch }, 
   { name: 'Documentation', icon: SiGitbook },
 ]
 
@@ -45,7 +51,7 @@ export default function Sidebar({ children }: { children: ReactNode }) {
         onClose={onClose}
         returnFocusOnClose={false}
         onOverlayClick={onClose}
-        size="full"
+        size="lg"
       >
         <DrawerContent>
           <SidebarContent onClose={onClose} />
@@ -76,8 +82,14 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       {...rest}
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
+      <Image
+      src={'/assets/concave-logo.png'}
+      alt="concave logo"
+      maxWidth="52px"
+      position="relative"
+    />
         <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-          Concave
+        Concave
         </Text>
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
