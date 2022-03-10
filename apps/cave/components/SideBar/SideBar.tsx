@@ -48,10 +48,10 @@ const LinkItems: Array<LinkItemProps> = [
   { name: 'Documentation', icon: SiGitbook, link: 'https://docs.concave.lol/introduction/' },
 ]
 
-export default function Sidebar({ children }: { children: ReactNode }) {
+export function SideBar() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
-    <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
+    <Box minH="100vh">
       <SidebarContent onClose={() => onClose} display={{ base: 'none', md: 'block' }} />
       <Drawer
         autoFocus={false}
@@ -68,9 +68,9 @@ export default function Sidebar({ children }: { children: ReactNode }) {
       </Drawer>
       {/* mobilenav */}
       <MobileNav display={{ base: 'flex', md: 'none' }} onOpen={onOpen} />
-      <Box ml={{ base: 0, md: 60 }} p="4">
-        {children}
-      </Box>
+      {/* <Box ml={{ base: 0, md: 60 }} p="4"> */}
+      {/* {children} */}
+      {/* </Box> */}
     </Box>
   )
 }
@@ -86,7 +86,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       borderRight="1px"
       borderRightColor={useColorModeValue('gray.200', 'gray.700')}
       w={{ base: 'full', md: 60 }}
-      pos="fixed"
+      // pos="fixed"
       h="full"
       {...rest}
     >
@@ -122,9 +122,7 @@ const NavItem = ({ icon, children, link, ...rest }: NavItemProps) => {
       href={link}
       {...(link.startsWith('http')
         ? { target: '_blank', rel: 'noopener noreferrer' }
-        : {
-            replace: true,
-          })}
+        : { replace: 'true' })}
       style={{ textDecoration: 'none' }}
       _focus={{ boxShadow: 'none' }}
     >

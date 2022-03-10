@@ -1,6 +1,5 @@
 import { Avatar, Box, Card, Container, Flex, Image, Stack, Text } from '@concave/ui'
 import React from 'react'
-import { Page } from '../components/Page'
 import GcnvTitle from 'components/GcnvTitle'
 import TokenSelector from 'components/TokenSelector'
 
@@ -30,29 +29,27 @@ const BondInfo = ({ asset, roi, vestingTerm, icon }) => {
 
 function Bond() {
   return (
-    <Page>
-      <Container maxW="container.lg">
-        <Flex direction="column" gap={12}>
-          <GcnvTitle
-            title="Dynamic Bond Market"
-            description="Get your gCNV that will grow internal CNV number  your gCNV that will grow number or smth idk lol Get your gCNV that will grow internal CNV number or smth idk lol"
-          />
+    <Container maxW="container.lg">
+      <Flex direction="column" gap={12}>
+        <GcnvTitle
+          title="Dynamic Bond Market"
+          description="Get your gCNV that will grow internal CNV number  your gCNV that will grow number or smth idk lol Get your gCNV that will grow internal CNV number or smth idk lol"
+        />
 
-          <Card
-            variant="secondary"
-            w="430px"
-            borderWidth={3}
-            px={6}
-            py={20}
-            shadow="Inner Glow"
-            gap={10}
-          >
-            <BondInfo asset="CNV" icon="" roi="9.4%" vestingTerm="5 days" />
-            <BondInfo asset="CNV" icon="" roi="9.4%" vestingTerm="5 days" />
-          </Card>
-        </Flex>
-      </Container>
-    </Page>
+        <Card
+          variant="secondary"
+          w="430px"
+          borderWidth={3}
+          px={6}
+          py={20}
+          shadow="Inner Glow"
+          gap={10}
+        >
+          <BondInfo asset="CNV" icon="" roi="9.4%" vestingTerm="5 days" />
+          <BondInfo asset="CNV" icon="" roi="9.4%" vestingTerm="5 days" />
+        </Card>
+      </Flex>
+    </Container>
   )
 }
 

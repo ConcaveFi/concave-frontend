@@ -6,6 +6,8 @@ import { WagmiProvider } from 'components/WagmiProvider'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { useState } from 'react'
 import { Styles } from '@chakra-ui/theme-tools'
+import { NextPage } from 'next'
+import { DefaultLayout } from 'components/Layout'
 
 const globalStyles: Styles = {
   global: (props) => ({
@@ -16,22 +18,33 @@ const globalStyles: Styles = {
       colorScheme: 'dark',
     },
     body: {
-      minHeight: '120vh', // temporary
+      // minHeight: '120vh', // temporary
     },
   }),
 }
 
-const App = ({ Component, pageProps }: AppProps) => {
+type NextPageWithLayout = NextPage & {
+  getLayout?: React.FC
+}
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout
+}
+
+const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   const apolloClient = useApollo(pageProps.initialApolloProps)
   const [queryClient] = useState(() => new QueryClient())
+  const Layout = Component.getLayout || DefaultLayout
   return (
     <ApolloProvider client={apolloClient}>
       <QueryClientProvider client={queryClient}>
         <WagmiProvider>
           <ThemeProvider globalStyles={globalStyles} cookies={pageProps.cookies}>
-            <Image zIndex={-1} pos="absolute" inset={0} src="/assets/cave-bg.jpeg" alt="" />
+            <Image zIndex={-1} pos="absolute" inset={0} src="/background.jpg" alt="" />
             <ConcaveFonts />
-            <Component {...pageProps} />
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
           </ThemeProvider>
         </WagmiProvider>
       </QueryClientProvider>
