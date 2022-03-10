@@ -14,30 +14,30 @@
     "gen": "DOTENV_CONFIG_PATH=./.env graphql-codegen --config codegen.yml -r dotenv/config"
   },
   "dependencies": {
-    "@apollo/client": "^3.5.7",
+    "@apollo/client": "^3.5.10",
     "@concave/icons": "*",
     "@concave/ui": "*",
-    "ethers": "^5.5.3",
-    "graphql": "^16.2.0",
+    "ethers": "^5.6.0",
+    "graphql": "^16.3.0",
     "iron-session": "^6.0.5",
     "lightweight-charts": "^3.8.0",
-    "next": "^12.0.8",
+    "next": "^12.1.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-icons": "^4.3.1",
     "react-number-format": "^4.9.1",
     "react-query": "^3.34.16",
     "siwe": "^1.1.2",
-    "wagmi": "^0.2.12"
+    "wagmi": "^0.2.18"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^2.6.2",
     "@graphql-codegen/introspection": "^2.1.1",
-    "@graphql-codegen/typescript": "^2.4.5",
-    "@graphql-codegen/typescript-operations": "^2.3.2",
-    "@graphql-codegen/typescript-react-apollo": "^3.2.8",
-    "@types/node": "^17.0.19",
-    "@types/react": "^17.0.39",
+    "@graphql-codegen/typescript": "^2.4.7",
+    "@graphql-codegen/typescript-operations": "^2.3.4",
+    "@graphql-codegen/typescript-react-apollo": "^3.2.10",
+    "@types/node": "^17.0.21",
+    "@types/react": "^17.0.40",
     "identity-obj-proxy": "^3.0.0"
   }
 }
