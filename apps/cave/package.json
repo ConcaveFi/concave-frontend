@@ -9,8 +9,7 @@
     "build": "yarn fix-assets-symlink && next build",
     "start": "next start",
     "lint": "next lint --fix",
-    "fix-assets-symlink": "rimraf ./public/assets && syncdir ../../../assets ./public/assets --copy",
-    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf .next",
+    "fix-assets-symlink": "rimraf ./public/assets && syncdir ../../assets ./public/assets --copy",
     "test-all": "yarn lint && yarn type-check && yarn test",
     "gen": "DOTENV_CONFIG_PATH=./.env graphql-codegen --config codegen.yml -r dotenv/config"
   },
