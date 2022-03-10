@@ -151,11 +151,6 @@ interface MobileProps extends FlexProps {
 }
 
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
-  const swap = useSwap({
-    inputTokens: ['XMR', 'ETH', 'DAI', 'FRAX'],
-    outputTokens: ['XMR', 'ETH', 'DAI', 'FRAX'],
-  })
-
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -173,7 +168,6 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       <Text fontSize="2xl" ml="8" fontFamily="monospace" fontWeight="bold">
         Concave
       </Text>
-      <SwapCard swap={swap} buttonLabel="Swap" active="swap" />
     </Flex>
   )
 }
