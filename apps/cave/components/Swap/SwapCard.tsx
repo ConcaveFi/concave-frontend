@@ -4,7 +4,6 @@ import { ExpandArrowIcon, SwapSettingsIcon } from '@concave/icons'
 import { GasIcon } from '@concave/icons'
 import { SwapSettingsModal } from './SwapSettings'
 import { Select } from './Select'
-import { BaseInput } from './BaseInput'
 import { InputContainer } from './InputContainer'
 import { MaxAmount } from './MaxAmount'
 import { SwapSettingsCard } from './SwapSettingsCard'
@@ -20,7 +19,7 @@ function FromInput({
 }: {
   token: Token
   tokenOptions: string[]
-  onChangeValue: (value: string) => void
+  onChangeValue: (value: number) => void
   onSelectToken: (token: string) => void
 }) {
   return (
@@ -28,8 +27,11 @@ function FromInput({
       <InputContainer shadow="down">
         <Stack align="start">
           <NumericInput
-            value={`${token.amount}`}
-            onChange={({ target }) => onChangeValue(target.value)}
+            max={token.maxAmount}
+            value={token.amount}
+            onChangeValue={({ floatValue }) => {
+              onChangeValue(floatValue)
+            }}
           />
           <Text fontWeight={'bold'} textColor={'text.low'}>
             {useCurrency(token.price * +token.amount)}
@@ -40,7 +42,7 @@ function FromInput({
           <MaxAmount
             label="Balance:"
             max={token.maxAmount}
-            onClick={() => onChangeValue('' + token.maxAmount)}
+            onClick={() => onChangeValue(token.maxAmount)}
           />
         </Stack>
       </InputContainer>
@@ -55,7 +57,7 @@ function ToInput({
   onSelectToken,
 }: {
   token: Token
-  onChangeValue: (value: string) => void
+  onChangeValue: (value: number) => void
   tokenOptions: string[]
   onSelectToken: (token: string) => void
 }) {
@@ -64,8 +66,10 @@ function ToInput({
       <InputContainer shadow="down">
         <Stack align="start">
           <NumericInput
-            value={`${token.amount}`}
-            onChange={({ target }) => onChangeValue(target.value)}
+            value={token.amount}
+            onChangeValue={({ floatValue }) => {
+              onChangeValue(floatValue)
+            }}
           />
           <Text fontWeight={'bold'} textColor={'text.low'}>
             {useCurrency(token.price * +token.amount)}
