@@ -12,7 +12,8 @@
   ],
   "scripts": {
     "gen:theme-typings": "chakra-cli tokens ./theme/index.ts",
-    "postinstall": "npm run gen:theme-typings",
+    "postinstall": "yarn gen:theme-typings",
+  
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "build": "tsup index.tsx --format esm,cjs --dts --external react --inject inject-react.js",
     "dev": "tsup index.tsx --format esm,cjs --watch --dts --external react --inject inject-react.js",

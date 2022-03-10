@@ -6,6 +6,7 @@ import CloseButton from './components/CloseButtonStyles'
 import Input from './components/InputStyles'
 import Modal from './components/ModalStyles'
 import Card from './components/CardStyles'
+import Switch from './components/SwitchStyles'
 import { fonts, shadows } from './foundations'
 
 const theme = extendTheme({
@@ -16,6 +17,7 @@ const theme = extendTheme({
   components: {
     Input,
     Button,
+    Switch,
     Tooltip,
     CloseButton,
     Modal,
