@@ -34,23 +34,24 @@ import { Image } from '@concave/ui'
 interface LinkItemProps {
   name: string
   icon: IconType
+  link: string
 }
 const LinkItems: Array<LinkItemProps> = [
-  { name: 'Bonds', icon: FaBriefcase },
-  { name: 'Liquid Staking', icon: FaBatteryThreeQuarters },
-  { name: 'Marketplace', icon: FaShoppingCart },
-  { name: 'Swap', icon: FaRandom },
+  { name: 'Bonds', icon: FaBriefcase, link: 'bond' },
+  { name: 'Liquid Staking', icon: FaBatteryThreeQuarters, link: '/stake' },
+  { name: 'Marketplace', icon: FaShoppingCart, link: '/marketplace' },
+  { name: 'Swap', icon: FaRandom, link: 'swap' },
 
-  { name: 'Discord', icon: FaDiscord },
-  { name: 'Twitter', icon: FaTwitter },
-  { name: 'Twitch', icon: FaTwitch },
-  { name: 'Documentation', icon: SiGitbook },
+  { name: 'Discord', icon: FaDiscord, link: '/' },
+  { name: 'Twitter', icon: FaTwitter, link: 'https://twitter.com/ConcaveFi' },
+  { name: 'Twitch', icon: FaTwitch, link: '/' },
+  { name: 'Documentation', icon: SiGitbook, link: 'https://docs.concave.lol/introduction/' },
 ]
 
-export default function Sidebar({ children }: { children: ReactNode }) {
+export function SideBar() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
-    <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
+    <Box minH="100vh">
       <SidebarContent onClose={() => onClose} display={{ base: 'none', md: 'block' }} />
       <Drawer
         autoFocus={false}
@@ -67,9 +68,9 @@ export default function Sidebar({ children }: { children: ReactNode }) {
       </Drawer>
       {/* mobilenav */}
       <MobileNav display={{ base: 'flex', md: 'none' }} onOpen={onOpen} />
-      <Box ml={{ base: 0, md: 60 }} p="4">
-        {children}
-      </Box>
+      {/* <Box ml={{ base: 0, md: 60 }} p="4"> */}
+      {/* {children} */}
+      {/* </Box> */}
     </Box>
   )
 }
@@ -85,7 +86,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       borderRight="1px"
       borderRightColor={useColorModeValue('gray.200', 'gray.700')}
       w={{ base: 'full', md: 60 }}
-      pos="fixed"
+      // pos="fixed"
       h="full"
       {...rest}
     >
@@ -102,7 +103,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
       {LinkItems.map((link) => (
-        <NavItem key={link.name} icon={link.icon}>
+        <NavItem key={link.name} icon={link.icon} link={link.link}>
           {link.name}
         </NavItem>
       ))}
@@ -112,11 +113,19 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 
 interface NavItemProps extends FlexProps {
   icon: IconType
+  link: string
   children: ReactText
 }
-const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
+const NavItem = ({ icon, children, link, ...rest }: NavItemProps) => {
   return (
-    <Link href="#" style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
+    <Link
+      href={link}
+      {...(link.startsWith('http')
+        ? { target: '_blank', rel: 'noopener noreferrer' }
+        : { replace: 'true' })}
+      style={{ textDecoration: 'none' }}
+      _focus={{ boxShadow: 'none' }}
+    >
       <Flex
         align="center"
         p="4"

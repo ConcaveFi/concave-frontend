@@ -1,28 +1,28 @@
-import { StackProps, Stack } from '@chakra-ui/react'
-import { StyleFunctionProps, SystemStyleInterpolation } from '@chakra-ui/theme-tools'
-import { gradientStroke } from 'theme/utils/gradientStroke'
+import { StackProps, Stack, useMultiStyleConfig, forwardRef, Image, Box } from '@chakra-ui/react'
 
 export interface CardProps extends StackProps {
-  borderWidth?: number
+  variant?: 'primary' | 'secondary' // find better way
 }
 
-export const CardStyles = ({
-  borderWidth = 1,
-}: Partial<StyleFunctionProps> = {}): SystemStyleInterpolation => ({
-  ...gradientStroke({ borderWidth }),
-  borderRadius: '2xl',
-  maxW: '100%',
-  bgGradient: 'linear(to-tr, secondary.150, secondary.100)',
-})
-
-export function Card({ children, spacing = 0, borderWidth, ...rest }: CardProps) {
-  return (
-    <Stack
-      __css={{ ...CardStyles({ borderWidth }) }} // __css can be overriten with the sx prop
-      spacing={spacing}
-      {...rest}
-    >
-      {children}
-    </Stack>
-  )
-}
+export const Card = forwardRef<CardProps, 'div'>(
+  ({ children, variant, borderWidth, ...rest }, ref) => {
+    const styles = useMultiStyleConfig('Card', { variant, borderWidth })
+    const imageSrc = (styles.backgroundImage as any)?.src
+    return (
+      <Box ref={ref} __css={styles.outerContainer}>
+        <Stack pos="relative" overflow="hidden" __css={styles.innerContainer} {...rest}>
+          {imageSrc && (
+            <Image
+              __css={styles.backgroundImage}
+              position="absolute"
+              inset={0}
+              src={imageSrc}
+              alt=""
+            />
+          )}
+          {children}
+        </Stack>
+      </Box>
+    )
+  },
+)

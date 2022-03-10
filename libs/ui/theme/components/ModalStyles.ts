@@ -1,7 +1,8 @@
 import { ComponentMultiStyleConfig } from '@chakra-ui/react'
+import { modalAnatomy } from '@chakra-ui/anatomy'
 
 export const ModalStyles: ComponentMultiStyleConfig = {
-  parts: ['dialog', 'dialogContainer', 'overlay', 'header', 'body', 'closeButton'],
+  parts: modalAnatomy.keys,
   baseStyle: {
     dialog: { bg: 'transparent', shadow: 'none', gap: 4 },
     header: { p: 0, fontWeight: 'bold', fontSize: '3xl', fontFamily: 'heading' },
