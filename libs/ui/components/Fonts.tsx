@@ -1,6 +1,6 @@
 import { Global } from '@emotion/react'
 
-const concaveFontsSrc = 'https://concave-assets.vercel.app/fonts' // 'https://concave.lol/assets/fonts'
+const concaveFontsSrc = '/assets/fonts'
 
 const makeFontFaces = (familyName: string, weights: number[]) =>
   weights
