@@ -2,7 +2,8 @@ import type { AppProps } from 'next/app'
 import { ApolloProvider } from '@apollo/client'
 import { useApollo } from 'lib/apollo'
 import { ConcaveFonts, Image, ThemeProvider } from '@concave/ui'
-import { WagmiProvider } from 'components/WagmiProvider'
+import { WagmiProvider } from 'contexts/WagmiProvider'
+import { AuthProvider } from 'contexts/AuthProvider'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { useState } from 'react'
 import { Styles } from '@chakra-ui/theme-tools'
@@ -39,13 +40,15 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
     <ApolloProvider client={apolloClient}>
       <QueryClientProvider client={queryClient}>
         <WagmiProvider>
-          <ThemeProvider globalStyles={globalStyles} cookies={pageProps.cookies}>
-            <Image zIndex={-1} pos="absolute" inset={0} src="/background.jpg" alt="" />
-            <ConcaveFonts />
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
-          </ThemeProvider>
+          <AuthProvider>
+            <ThemeProvider globalStyles={globalStyles} cookies={pageProps.cookies}>
+              <Image zIndex={-1} pos="absolute" inset={0} src="/background.jpg" alt="" />
+              <ConcaveFonts />
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+            </ThemeProvider>
+          </AuthProvider>
         </WagmiProvider>
       </QueryClientProvider>
     </ApolloProvider>

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button, Image, Menu, MenuButton, MenuItem, MenuList } from '@concave/ui'
 import { useAccount, useConnect } from 'wagmi'
-import { useAuth } from 'components/AuthProvider'
+import { useAuth } from 'contexts/AuthProvider'
 
 function miniAddy(address: string, length = 38): string {
   return address.replace(address.substring(6, length), '...')
