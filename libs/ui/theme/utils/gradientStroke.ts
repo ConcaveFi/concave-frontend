@@ -1,5 +1,4 @@
 import { StyleFunctionProps, SystemStyleInterpolation } from '@chakra-ui/theme-tools'
-import theme from 'theme'
 import { toPx } from './toPx'
 
 export const gradientStroke = ({
@@ -17,7 +16,7 @@ export const gradientStroke = ({
     left: 0,
     right: 0,
     bottom: 0,
-    borderRadius: `${toPx(theme.radii[borderRadius] + borderWidth)}`,
+    borderRadius: 'inherit',
     m: `-${toPx(borderWidth)}`,
     p: toPx(borderWidth),
     bg: 'strokeReflection',

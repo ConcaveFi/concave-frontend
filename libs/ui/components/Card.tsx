@@ -1,7 +1,7 @@
 import { StackProps, Stack, useMultiStyleConfig, forwardRef, Image, Box } from '@chakra-ui/react'
 
 export interface CardProps extends StackProps {
-  variant: 'primary' | 'secondary' // find better way
+  variant?: 'primary' | 'secondary' // find better way
 }
 
 export const Card = forwardRef<CardProps, 'div'>(

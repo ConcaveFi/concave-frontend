@@ -1,5 +1,5 @@
 import { ComponentMultiStyleConfig, theme } from '@chakra-ui/react'
-import { gradientStroke } from 'theme/utils/gradientStroke'
+import { gradientStroke } from '../utils/gradientStroke'
 
 export const CardStyles: ComponentMultiStyleConfig = {
   parts: ['outerContainer', 'backgroundImage', 'innerContainer'],
