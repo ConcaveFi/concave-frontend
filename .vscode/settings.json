@@ -3,6 +3,7 @@
     "**/node_modules": true,
     "**/.next": true,
     "**/.vercel": true,
+    "**/.turbo": true,
     "**/dist": true
   },
   "eslint.packageManager": "yarn",
