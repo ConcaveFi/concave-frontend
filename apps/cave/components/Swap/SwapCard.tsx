@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, Button, HStack, Stack, Flex, StackDivider, Card } from '@concave/ui'
+import { Text, Button, HStack, Stack, Flex, StackDivider, Card, NumericInput } from '@concave/ui'
 import { ExpandArrowIcon, SwapSettingsIcon } from '@concave/icons'
 import { GasIcon } from '@concave/icons'
 import { SwapSettingsModal } from './SwapSettings'
@@ -27,7 +27,7 @@ function FromInput({
     <Flex direction="column" gap={1} px={5}>
       <InputContainer shadow="down">
         <Stack align="start">
-          <BaseInput
+          <NumericInput
             value={`${token.amount}`}
             onChange={({ target }) => onChangeValue(target.value)}
           />
@@ -63,7 +63,7 @@ function ToInput({
     <Flex direction="column" gap={1} px={5}>
       <InputContainer shadow="down">
         <Stack align="start">
-          <BaseInput
+          <NumericInput
             value={`${token.amount}`}
             onChange={({ target }) => onChangeValue(target.value)}
           />
