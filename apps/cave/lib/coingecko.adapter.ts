@@ -12,7 +12,7 @@ class CoingeckoApiProxy {
     return this.coins
   }
 
-  async discoveryId(symbol: string) {
+  async getTokenId(symbol: string) {
     const coins = await this.getCoins()
     const { id } = coins.find((item) => {
       return item.symbol.toLowerCase() === symbol?.toLowerCase()
@@ -21,7 +21,7 @@ class CoingeckoApiProxy {
   }
 
   async getTokenPrice(symbol: string) {
-    const id = await this.discoveryId(symbol)
+    const id = await this.getTokenId(symbol)
     return Promise.resolve(
       coingeckoApi.tokenPrice({
         currency: 'usd',
@@ -37,7 +37,7 @@ class CoingeckoApiProxy {
     token: string
     interval: CandleStickIntervalTypes
   }) {
-    const id = await this.discoveryId(token)
+    const id = await this.getTokenId(token)
     return coingeckoApi.fetchCandleStickData({ id, interval })
   }
 }
