@@ -15,7 +15,7 @@ export const CandleStickTimeOptions = ({
   ...stackProps
 }: OwnProps) => {
   return (
-    <HStack py={1} px={2} borderRadius={'3xl'} shadow={'low'} {...stackProps}>
+    <HStack p={2} borderRadius={'3xl'} shadow={'low'} {...stackProps}>
       <BoxRadioGroup options={intervals} defaultValue={defaultValue} onChange={onChangeInteral} />
     </HStack>
   )

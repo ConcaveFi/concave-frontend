@@ -1,112 +1,38 @@
 import React from 'react'
-import { Text, Button, HStack, Stack, Flex, StackDivider, Card, NumericInput } from '@concave/ui'
+import {
+  Text,
+  Button,
+  HStack,
+  Flex,
+  StackDivider,
+  Card,
+  NumericInput,
+  CardProps,
+} from '@concave/ui'
 import { ExpandArrowIcon, SwapSettingsIcon } from '@concave/icons'
 import { GasIcon } from '@concave/icons'
 import { SwapSettingsModal } from './SwapSettings'
-import { Select } from './Select'
-import { InputContainer } from './InputContainer'
-import { MaxAmount } from './MaxAmount'
 import { SwapSettingsCard } from './SwapSettingsCard'
-import { Token, UseSwap } from './useSwap'
+import { UseSwap } from './useSwap'
 import { useCurrency } from 'hooks/useCurrency'
 import { useGasPrice } from 'hooks/useGasPrice'
-
-function FromInput({
-  token,
-  onChangeValue,
-  tokenOptions,
-  onSelectToken,
-}: {
-  token: Token
-  tokenOptions: string[]
-  onChangeValue: (value: number) => void
-  onSelectToken: (token: string) => void
-}) {
-  return (
-    <Flex direction="column" gap={1} px={5}>
-      <InputContainer shadow="down">
-        <Stack align="start">
-          <NumericInput
-            max={token.maxAmount}
-            value={token.amount}
-            onChangeValue={({ floatValue }) => {
-              onChangeValue(floatValue)
-            }}
-          />
-          <Text fontWeight={'bold'} textColor={'text.low'}>
-            {useCurrency(token.price * +token.amount)}
-          </Text>
-        </Stack>
-        <Stack align="end">
-          <Select tokens={tokenOptions} onSelect={onSelectToken} selected={token.symbol} />
-          <MaxAmount
-            label="Balance:"
-            max={token.maxAmount}
-            onClick={() => onChangeValue(token.maxAmount)}
-          />
-        </Stack>
-      </InputContainer>
-    </Flex>
-  )
-}
-
-function ToInput({
-  token,
-  tokenOptions,
-  onChangeValue,
-  onSelectToken,
-}: {
-  token: Token
-  onChangeValue: (value: number) => void
-  tokenOptions: string[]
-  onSelectToken: (token: string) => void
-}) {
-  return (
-    <Flex direction="column" gap={1} px={5}>
-      <InputContainer shadow="down">
-        <Stack align="start">
-          <NumericInput
-            value={token.amount}
-            onChangeValue={({ floatValue }) => {
-              onChangeValue(floatValue)
-            }}
-          />
-          <Text fontWeight={'bold'} textColor={'text.low'}>
-            {useCurrency(token.price * +token.amount)}
-          </Text>
-        </Stack>
-        <Stack align="end">
-          <Select tokens={tokenOptions} onSelect={onSelectToken} selected={token.symbol} />
-          <Text fontSize={'xs'} textColor={'text.low'}>
-            Balance: {token.maxAmount}
-          </Text>
-        </Stack>
-      </InputContainer>
-    </Flex>
-  )
-}
+import { Input } from './Input'
 
 export function SwapCard({
   buttonLabel,
   swap,
+  active,
+  ...cardProps
 }: {
   buttonLabel: string
   active: string
   swap: UseSwap
-}) {
+} & CardProps) {
   return (
-    <Card
-      shadow="up"
-      maxW="450"
-      h={390}
-      px={10}
-      py={8}
-      gap={2}
-      bgGradient="linear(to-tr, secondary.150, secondary.100)"
-      padding="8"
-    >
-      <FromInput
+    <Card {...cardProps}>
+      <Input
         token={swap.from}
+        maxAmount={swap.from.maxAmount}
         onChangeValue={(amount) => {
           swap.setFrom({ ...swap.from, amount })
         }}
@@ -128,7 +54,7 @@ export function SwapCard({
           <ExpandArrowIcon />
         </Button>
       </Flex>
-      <ToInput
+      <Input
         token={swap.to}
         tokenOptions={swap.outputTokens}
         onChangeValue={(amount) => swap.setTo({ ...swap.to, amount })}
