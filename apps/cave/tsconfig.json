@@ -5,6 +5,5 @@
     "jsx": "preserve"
   },
   "include": ["."],
-  "exclude": ["dist", "build", "node_modules"],
-  "references": [{ "path": "../../libs/icons" }, { "path": "../../libs/ui" }]
+  "exclude": ["dist", "build", "node_modules"]
 }
