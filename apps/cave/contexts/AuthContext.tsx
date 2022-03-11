@@ -1,7 +1,7 @@
 import React, { createContext, useContext } from 'react'
 import { useMutation, useQuery } from 'react-query'
 import { SiweMessage } from 'siwe'
-import { useAccount, useNetwork, useSignMessage } from 'wagmi'
+import { Connector, useAccount, useConnect } from 'wagmi'
 
 const authFetch = (path: string, options?: RequestInit) =>
   fetch(`/api/session/${path}`, options).then((res) => res.json())
@@ -31,7 +31,7 @@ interface AuthValue {
     address: string
   }
   error?: any
-  signIn: () => Promise<any>
+  signIn: (connector: Connector) => Promise<any>
   signOut: () => Promise<any>
   isSignedIn: boolean
   isErrored: boolean
@@ -39,7 +39,7 @@ interface AuthValue {
 
 const AuthContext = createContext({} as AuthValue)
 
-const signIn = async ({ address, chainId, signMessage }) => {
+const siweSignIn = async ({ address, chainId, signMessage }) => {
   // Create message
   const message = await createSiweMessage(address, chainId)
 
@@ -53,11 +53,20 @@ const signIn = async ({ address, chainId, signMessage }) => {
 }
 
 export const AuthProvider: React.FC = ({ children }) => {
-  const [account, disconnect] = useAccount()
-  const [network] = useNetwork()
-  const [, signMessage] = useSignMessage()
+  const [, connect] = useConnect()
+  const [, disconnect] = useAccount()
 
-  const _signIn = useMutation(signIn)
+  const signIn = useMutation(async (connector: Connector) => {
+    const connection = await connect(connector)
+    if (!connection.data) throw connection.error ?? new Error('Something went wrong')
+
+    const signer = await connector.getSigner()
+    await siweSignIn({
+      address: connection.data.account,
+      chainId: connection.data.chain.id,
+      signMessage: signer.signMessage,
+    })
+  })
   const signOut = useMutation(() => {
     disconnect()
     return authFetch('logout')
@@ -65,19 +74,14 @@ export const AuthProvider: React.FC = ({ children }) => {
 
   const user = useQuery('me', () => authFetch('me'), { refetchOnWindowFocus: true })
 
-  const isSignedIn = _signIn.isSuccess
-  const error = user.error || _signIn.error || signOut.error
+  const isSignedIn = signIn.isSuccess
+  const error = user.error || signIn.error || signOut.error
 
   return (
     <AuthContext.Provider
       value={{
         signOut: signOut.mutateAsync,
-        signIn: () =>
-          _signIn.mutateAsync({
-            address: account.data?.address,
-            chainId: network.data.chain.id,
-            signMessage,
-          }),
+        signIn: signIn.mutateAsync,
         user: user.data,
         error,
         isSignedIn,

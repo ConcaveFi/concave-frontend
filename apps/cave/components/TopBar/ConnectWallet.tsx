@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button, Image, Menu, MenuButton, MenuItem, MenuList } from '@concave/ui'
-import { useAccount, useConnect } from 'wagmi'
-import { useAuth } from 'contexts/AuthProvider'
+import { useConnect } from 'wagmi'
+import { useAuth } from 'contexts/AuthContext'
 
 function miniAddy(address: string, length = 38): string {
   return address.replace(address.substring(6, length), '...')
@@ -25,8 +25,8 @@ const ConnectButton = () => {
     {
       data: { connectors },
     },
-    connect,
   ] = useConnect()
+  const { signIn } = useAuth()
   const injectedConnector = connectors.find((c) => c.id === 'injected')
   const walletConnectConnector = connectors.find((c) => c.id === 'walletConnect')
   return (
@@ -45,7 +45,7 @@ const ConnectButton = () => {
           {injectedConnector && (
             <MenuItem
               icon={<Image maxWidth="20px" src="/images/logo-metamask.png" alt="MetaMask" />}
-              onClick={() => connect(injectedConnector)}
+              onClick={() => signIn(injectedConnector)}
             >
               MetaMask
             </MenuItem>
@@ -54,7 +54,7 @@ const ConnectButton = () => {
             icon={
               <Image maxWidth="20px" src="/images/logo-walletconnect.svg" alt="WalletConnect" />
             }
-            onClick={() => connect(walletConnectConnector)}
+            onClick={() => signIn(walletConnectConnector)}
           >
             WalletConnect
           </MenuItem>
