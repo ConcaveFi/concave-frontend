@@ -38,7 +38,7 @@ interface LinkItemProps {
 }
 const LinkItems: Array<LinkItemProps> = [
   { name: 'Bonds', icon: FaBriefcase, link: 'bond' },
-  { name: 'Liquid Staking', icon: FaBatteryThreeQuarters, link: '/stake' },
+  { name: 'Liquid Staking', icon: FaBatteryThreeQuarters, link: 'liquidstaking' },
   { name: 'Marketplace', icon: FaShoppingCart, link: '/marketplace' },
   { name: 'Swap', icon: FaRandom, link: 'swap' },
 

@@ -46,6 +46,9 @@ export const TopBar = () => {
             {/* overflow hidden stop the navigation btns shadow blur from scaping top/bottom, 
               pr={1} makes last elem shadow visible (because of overflow hidden) */}
             <Logo />
+            <TopBarNavItem href="/liquidstaking" isActive={route === 'liquidstaking'}>
+              Liquid Staking
+            </TopBarNavItem>
             <TopBarNavItem href="/swap" isActive={route === 'amm'}>
               Get CNV
             </TopBarNavItem>
@@ -54,6 +57,9 @@ export const TopBar = () => {
             </TopBarNavItem>
             <TopBarNavItem href="/lending" isActive={route === 'lending'}>
               Lending and Borrowing
+            </TopBarNavItem>
+            <TopBarNavItem href="/marketplace" isActive={route === 'marketplace'}>
+              Liquid Staking
             </TopBarNavItem>
           </HStack>
 
