@@ -30,6 +30,7 @@ import { ReactText } from 'react'
 import { SwapCard } from 'components/Swap/SwapCard'
 import { useSwap } from 'components/Swap/useSwap'
 import { Image } from '@concave/ui'
+import { ConnectWallet } from 'components/ConnectWallet'
 
 interface LinkItemProps {
   name: string
@@ -102,6 +103,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         </Text>
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
+      <ConnectWallet />
       {LinkItems.map((link) => (
         <NavItem key={link.name} icon={link.icon} link={link.link}>
           {link.name}

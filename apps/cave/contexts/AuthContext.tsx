@@ -1,7 +1,7 @@
 import React, { createContext, useContext } from 'react'
 import { useMutation, useQuery } from 'react-query'
 import { SiweMessage } from 'siwe'
-import { Connector, useAccount, useConnect } from 'wagmi'
+import { Connector, useAccount, useConnect, useNetwork, useSignMessage } from 'wagmi'
 
 const authFetch = (path: string, options?: RequestInit) =>
   fetch(`/api/session/${path}`, options).then((res) => res.json())
@@ -11,7 +11,7 @@ const createSiweMessage = async (address: string, chainId: number) => {
   return new SiweMessage({
     domain: window.location.host,
     address,
-    statement: 'Sign in',
+    statement: 'Sign in to concave',
     uri: window.location.origin,
     version: '1',
     chainId,
@@ -27,13 +27,12 @@ const verifySignature = async (message: string, signature: string) =>
   })
 
 interface AuthValue {
-  user?: {
-    address: string
-  }
+  user?: { address: string }
   error?: any
-  signIn: (connector: Connector) => Promise<any>
+  signIn: () => Promise<any>
   signOut: () => Promise<any>
   isSignedIn: boolean
+  isConnected: boolean
   isErrored: boolean
 }
 
@@ -53,17 +52,14 @@ const siweSignIn = async ({ address, chainId, signMessage }) => {
 }
 
 export const AuthProvider: React.FC = ({ children }) => {
-  const [, connect] = useConnect()
-  const [, disconnect] = useAccount()
+  const [account, disconnect] = useAccount()
 
-  const signIn = useMutation(async (connector: Connector) => {
-    const connection = await connect(connector)
-    if (!connection.data) throw connection.error ?? new Error('Something went wrong')
-
+  const signIn = useMutation(async () => {
+    const connector = account.data.connector
     const signer = await connector.getSigner()
     await siweSignIn({
-      address: connection.data.account,
-      chainId: connection.data.chain.id,
+      address: await signer.getAddress(),
+      chainId: await connector.getChainId(),
       signMessage: signer.signMessage,
     })
   })
@@ -74,7 +70,8 @@ export const AuthProvider: React.FC = ({ children }) => {
 
   const user = useQuery('me', () => authFetch('me'), { refetchOnWindowFocus: true })
 
-  const isSignedIn = signIn.isSuccess
+  const isSignedIn = user.data || signIn.isSuccess
+  const isConnected = !account.loading && !!account.data?.address
   const error = user.error || signIn.error || signOut.error
 
   return (
@@ -85,6 +82,7 @@ export const AuthProvider: React.FC = ({ children }) => {
         user: user.data,
         error,
         isSignedIn,
+        isConnected,
         isErrored: !!error,
       }}
     >
