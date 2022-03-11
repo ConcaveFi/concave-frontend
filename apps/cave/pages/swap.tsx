@@ -8,7 +8,6 @@ import { SwapCard } from 'components/Swap/SwapCard'
 import { useSwap } from 'components/Swap/useSwap'
 
 function Swap() {
-  const { loading, error, data } = useQuery(QUERY_TEST)
   const swap = useSwap({
     inputTokens: ['XMR', 'ETH', 'DAI', 'FRAX'],
     outputTokens: ['XMR', 'ETH', 'DAI', 'FRAX'],
