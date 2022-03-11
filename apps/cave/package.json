@@ -7,7 +7,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "yarn fix-assets-symlink && next build",
+    "win": "yarn fix-assets-symlink-win",
     "fix-assets-symlink": "rimraf ./public/assets && syncdir ../../assets ./public/assets --copy",
+    "fix-assets-symlink-win": "xcopy /e \"../..//assets\" \"./public/assets\\\"",
     "start": "next start",
     "lint": "next lint --fix",
     "test-all": "yarn lint && yarn type-check && yarn test",
