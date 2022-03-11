@@ -1,6 +1,4 @@
 import type { AppProps } from 'next/app'
-import { ApolloProvider } from '@apollo/client'
-import { useApollo } from 'lib/apollo'
 import { ConcaveFonts, Image, ThemeProvider } from '@concave/ui'
 import { WagmiProvider } from 'contexts/WagmiProvider'
 import { AuthProvider } from 'contexts/AuthProvider'
@@ -33,25 +31,30 @@ type AppPropsWithLayout = AppProps & {
 }
 
 const App = ({ Component, pageProps }: AppPropsWithLayout) => {
-  const apolloClient = useApollo(pageProps.initialApolloProps)
   const [queryClient] = useState(() => new QueryClient())
   const Layout = Component.getLayout || DefaultLayout
   return (
-    <ApolloProvider client={apolloClient}>
-      <QueryClientProvider client={queryClient}>
-        <WagmiProvider>
-          <AuthProvider>
-            <ThemeProvider globalStyles={globalStyles} cookies={pageProps.cookies}>
-              <Image zIndex={-1} pos="absolute" inset={0} src="/background.jpg" alt="" />
-              <ConcaveFonts />
-              <Layout>
-                <Component {...pageProps} />
-              </Layout>
-            </ThemeProvider>
-          </AuthProvider>
-        </WagmiProvider>
-      </QueryClientProvider>
-    </ApolloProvider>
+    <QueryClientProvider client={queryClient}>
+      <WagmiProvider>
+        <AuthProvider>
+          <ThemeProvider globalStyles={globalStyles} cookies={pageProps.cookies}>
+            <Image
+              zIndex={-1}
+              pos="fixed"
+              top="-10px"
+              h="100vh"
+              w="100vw"
+              src="/background.jpg"
+              alt=""
+            />
+            <ConcaveFonts />
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </ThemeProvider>
+        </AuthProvider>
+      </WagmiProvider>
+    </QueryClientProvider>
   )
 }
 
