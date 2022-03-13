@@ -1,4 +1,4 @@
-import { Avatar, Box, Card, Container, Flex, Image, Stack, Text } from '@concave/ui'
+import { Avatar, Box, BaseModal, Card, Container, Flex, Image, Stack, Text } from '@concave/ui'
 import React from 'react'
 import GcnvTitle from 'components/GcnvTitle'
 import { text } from 'stream/consumers'
@@ -17,7 +17,7 @@ const InfoItem = ({ value, label, ...props }) => (
 
 const LiquidStakingInfo = ({ asset, vapr, stakedcnv, icon }) => {
   return (
-    <Card
+    <BaseModal
       bgGradient={''}
       px={0}
       borderRadius={40}
@@ -40,7 +40,7 @@ const LiquidStakingInfo = ({ asset, vapr, stakedcnv, icon }) => {
         <InfoItem value={''} label="vAPR" pl={7} />
         <InfoItem value={vapr.toUpperCase()} label="" pl={7} />
       </Flex>
-    </Card>
+    </BaseModal>
   )
 }
 
@@ -60,7 +60,7 @@ function LiquidStaking() {
         description="Lock CNV in a staking term and recieve a tradeable NFT representing the position. Stakers receive a share of profits from all Concave products and services: bonding revenue, investment returns and protocol fees."
       />
       <Flex direction="row" gap="1" position="relative">
-        <Card
+        <BaseModal
           w="220px"
           h="490px"
           borderWidth={0}
@@ -89,7 +89,7 @@ function LiquidStaking() {
           >
             Stake CNV
           </ButtonLink>
-        </Card>
+        </BaseModal>
       </Flex>
     </Container>
   )
