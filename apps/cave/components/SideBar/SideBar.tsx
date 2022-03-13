@@ -84,6 +84,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
     <Box
       bg={useColorModeValue('white', 'gray.900')}
       borderRight="1px"
+      bgGradient="linear(to-tr, secondary.150, secondary.100)"
       borderRightColor={useColorModeValue('gray.200', 'gray.700')}
       w={{ base: 'full', md: 60 }}
       // pos="fixed"
