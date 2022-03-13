@@ -14,7 +14,7 @@ import {
   useDisclosure,
   BoxProps,
   FlexProps,
-  HStack,
+  VStack,
 } from '@chakra-ui/react'
 import {
   FaDiscord,
@@ -29,11 +29,10 @@ import { FiMenu } from 'react-icons/fi'
 import { SiGitbook } from 'react-icons/si'
 import { IconType } from 'react-icons'
 import { ReactText } from 'react'
-import { SwapCard } from 'components/Swap/SwapCard'
-import { useSwap } from 'components/Swap/useSwap'
 import { Image } from '@concave/ui'
 import { ConnectWallet } from 'components/TopBar/ConnectWallet'
 import { ButtonLink } from 'components/ButtonLink'
+import { DownIcon } from '@concave/icons'
 
 interface LinkItemProps {
   name: string
@@ -95,15 +94,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       h="full"
       {...rest}
     >
-      <Box
-        pos="relative"
-        top="16px"
-        border-radius="16px"
-        background-color=""
-        box-shadow=""
-        w="220px"
-        h="257px"
-      >
+      <Box top="16px" border-radius="16px" background-color="" box-shadow="" w="220px" h="257px">
         <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
           <Image
             src={'/assets/concave-logo.png'}
@@ -116,9 +107,9 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
           </Text>
         </Flex>
 
-        <HStack gap="1">
+        <VStack gap="1" align="flex-end">
           <ButtonLink
-            href="/dashboard"
+            href="/treasury"
             variant="primary.outline"
             bgGradient="linear(to-tr, secondary.150, secondary.100)"
             w="200px"
@@ -127,8 +118,9 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
           >
             Dashboard
           </ButtonLink>
-        </HStack>
-        <ConnectWallet />
+
+          <ConnectWallet />
+        </VStack>
       </Box>
 
       <Flex>
