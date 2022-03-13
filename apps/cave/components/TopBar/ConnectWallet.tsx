@@ -1,37 +1,34 @@
 import React from 'react'
-import { Button, Image, Menu, MenuButton, MenuItem, MenuList } from '@concave/ui'
+import { Button, Image, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react'
 import { useAccount, useConnect } from 'wagmi'
-import { useAuth } from 'contexts/AuthProvider'
 
-function miniAddy(address: string, length = 38): string {
-  return address.replace(address.substring(6, length), '...')
-}
+import { useIsMounted } from 'hooks/useIsMounted'
+
+const miniAddress = (address) =>
+  `${address.substr(0, 6)}...${address.substr(address.length - 6, address.length)}`
 
 const DisconnectButton = () => {
-  const { user, signOut } = useAuth()
-  if (!user.address) return null
+  const [{ data, loading }, disconnect] = useAccount({ fetchEns: false })
   return (
     <Menu placement="bottom-end">
-      <MenuButton as={Button}>{miniAddy(user.address)}</MenuButton>
-      <MenuList>
-        <MenuItem onClick={signOut}>Disconnect</MenuItem>
+      <MenuButton as={Button} isLoading={loading} borderRadius="xl" variant="secondary">
+        {data.address && miniAddress(data.address)}
+      </MenuButton>
+      <MenuList bg="black.100" borderRadius="xl" px={1}>
+        <MenuItem borderRadius="lg" onClick={disconnect}>
+          Disconnect
+        </MenuItem>
       </MenuList>
     </Menu>
   )
 }
 
-const ConnectButton = () => {
-  const [
-    {
-      data: { connectors },
-    },
-    connect,
-  ] = useConnect()
-  const injectedConnector = connectors.find((c) => c.id === 'injected')
-  const walletConnectConnector = connectors.find((c) => c.id === 'walletConnect')
+const ConnectButton = ({ onError }: { onError: (e: Error) => void }) => {
+  const [{ data, error }, connect] = useConnect()
+  const isMounted = useIsMounted()
   return (
     <>
-      <Menu placement="bottom-end">
+      <Menu placement="bottom-end" isLazy>
         <MenuButton
           as={Button}
           variant="secondary"
@@ -39,33 +36,36 @@ const ConnectButton = () => {
           size="large"
           w={200}
         >
-          Connect your wallet
+          Connect wallet
         </MenuButton>
-        <MenuList>
-          {injectedConnector && (
-            <MenuItem
-              icon={<Image maxWidth="20px" src="/images/logo-metamask.png" alt="MetaMask" />}
-              onClick={() => connect(injectedConnector)}
-            >
-              MetaMask
-            </MenuItem>
-          )}
-          <MenuItem
-            icon={
-              <Image maxWidth="20px" src="/images/logo-walletconnect.svg" alt="WalletConnect" />
-            }
-            onClick={() => connect(walletConnectConnector)}
-          >
-            WalletConnect
-          </MenuItem>
+        <MenuList bg="black.100" borderRadius="xl" minW="min" px={1}>
+          {isMounted &&
+            data.connectors.map((connector) => {
+              if (!connector.ready) return null
+              // change image from using connector id to something else, injected can be metamask, coinbase, brave etc
+              return (
+                <MenuItem
+                  borderRadius="xl"
+                  icon={<Image maxWidth="20px" src={`/connectors/${connector.id}.png`} alt="" />}
+                  key={connector.id}
+                  onClick={() => connect(connector)}
+                >
+                  {connector.name}
+                </MenuItem>
+              )
+            })}
         </MenuList>
+        {/* <UnsuportedNetworkModal
+          isOpen={state === 'unsupportedNetwork'}
+          onClose={() => setState('idle')}
+        /> */}
       </Menu>
     </>
   )
 }
 
 export function ConnectWallet(): JSX.Element {
-  const { isSignedIn } = useAuth()
+  const [{ data }] = useConnect()
 
-  return isSignedIn ? <DisconnectButton /> : <ConnectButton />
+  return data.connected ? <DisconnectButton /> : <ConnectButton onError={(e) => console.log(e)} />
 }
