@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react'
+
 import {
   IconButton,
   Box,
@@ -13,6 +14,7 @@ import {
   useDisclosure,
   BoxProps,
   FlexProps,
+  HStack,
 } from '@chakra-ui/react'
 import {
   FaDiscord,
@@ -30,6 +32,8 @@ import { ReactText } from 'react'
 import { SwapCard } from 'components/Swap/SwapCard'
 import { useSwap } from 'components/Swap/useSwap'
 import { Image } from '@concave/ui'
+import { ConnectWallet } from 'components/TopBar/ConnectWallet'
+import { ButtonLink } from 'components/ButtonLink'
 
 interface LinkItemProps {
   name: string
@@ -84,29 +88,59 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
     <Box
       bg={useColorModeValue('white', 'gray.900')}
       borderRight="1px"
+      bgGradient="linear(to-tr, secondary.150, secondary.100)"
       borderRightColor={useColorModeValue('gray.200', 'gray.700')}
       w={{ base: 'full', md: 60 }}
       // pos="fixed"
       h="full"
       {...rest}
     >
-      <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <Image
-          src={'/assets/concave-logo.png'}
-          alt="concave logo"
-          maxWidth="52px"
-          position="relative"
-        />
-        <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-          Concave
-        </Text>
+      <Box
+        pos="relative"
+        top="16px"
+        border-radius="16px"
+        background-color=""
+        box-shadow=""
+        w="220px"
+        h="257px"
+      >
+        <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
+          <Image
+            src={'/assets/concave-logo.png'}
+            alt="concave logo"
+            maxWidth="52px"
+            position="relative"
+          />
+          <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
+            Concave
+          </Text>
+        </Flex>
+
+        <HStack gap="1">
+          <ButtonLink
+            href="/dashboard"
+            variant="primary.outline"
+            bgGradient="linear(to-tr, secondary.150, secondary.100)"
+            w="200px"
+            size="large"
+            borderRadius="2xl"
+          >
+            Dashboard
+          </ButtonLink>
+        </HStack>
+        <ConnectWallet />
+      </Box>
+
+      <Flex>
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
-      {LinkItems.map((link) => (
-        <NavItem key={link.name} icon={link.icon} link={link.link}>
-          {link.name}
-        </NavItem>
-      ))}
+      <Box>
+        {LinkItems.map((link) => (
+          <NavItem key={link.name} icon={link.icon} link={link.link}>
+            {link.name}
+          </NavItem>
+        ))}
+      </Box>
     </Box>
   )
 }
