@@ -15,40 +15,30 @@ const checkEquals = (prev: unknown, next: unknown) => {
   return JSON.stringify(prev) === JSON.stringify(next)
 }
 
-export const CandleStickCard = ({ from, to }: { from: string; to: string } & CardProps) => {
+export const CandleStickCard = ({
+  from,
+  to,
+  ...cardProps
+}: { from: string; to: string } & CardProps) => {
   const candleStickChart = useCandleStickChart(from, to)
   return (
-    <VStack>
-      <Card bgImage="/assets/blackboard.png" align="stretch">
-        <Stack
-          h={390}
-          w={568}
-          spacing={4}
-          px={8}
-          py={8}
-          borderRadius={'2xl'}
-          backdropFilter={'blur(5px)'}
-        >
-          <HStack mb={2} gap={2} justifyContent={'space-between'}>
-            <CandleStickTokenOptions from={from} to={to} />
-            <CandleStickTimeOptions
-              intervals={candleStickChart.avaliableIntervals}
-              defaultValue={candleStickChart.interval}
-              onChangeInteral={(interval) => {
-                candleStickChart.set({
-                  interval,
-                })
-              }}
-            />
-          </HStack>
-          {candleStickChart.loading ? (
-            <Text pt={8}>Loading Data...</Text>
-          ) : (
-            <CandleStickChart data={candleStickChart.data} />
-          )}
-        </Stack>
-      </Card>
-    </VStack>
+    <Card {...cardProps}>
+      <HStack justifyContent={'space-between'}>
+        <CandleStickTokenOptions from={from} to={to} />
+        <CandleStickTimeOptions
+          intervals={candleStickChart.avaliableIntervals}
+          defaultValue={candleStickChart.interval}
+          onChangeInteral={(interval) => {
+            candleStickChart.set({ interval })
+          }}
+        />
+      </HStack>
+      {candleStickChart.loading ? (
+        <Text pt={8}>Loading Data...</Text>
+      ) : (
+        <CandleStickChart data={candleStickChart.data} />
+      )}
+    </Card>
   )
 }
 

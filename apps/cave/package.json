@@ -7,7 +7,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "yarn fix-assets-symlink && next build",
+    "win": "yarn fix-assets-symlink-win",
     "fix-assets-symlink": "rimraf ./public/assets && syncdir ../../assets ./public/assets --copy",
+    "fix-assets-symlink-win": "xcopy /D /I /E /F /Y /H /R \"../..//assets\" \"./public/assets\\\"",
     "start": "next start",
     "lint": "next lint --fix",
     "test-all": "yarn lint && yarn type-check && yarn test",
@@ -38,6 +40,7 @@
     "@graphql-codegen/typescript": "^2.4.7",
     "@graphql-codegen/typescript-operations": "^2.3.4",
     "@types/node": "^17.0.21",
-    "@types/react": "^17.0.40"
+    "@types/react": "^17.0.40",
+    "@chakra-ui/react": "^1.8.6"
   }
 }
