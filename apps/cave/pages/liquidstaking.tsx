@@ -4,8 +4,14 @@ import GcnvTitle from 'components/GcnvTitle'
 import { text } from 'stream/consumers'
 import { ButtonLink } from 'components/ButtonLink'
 
-const InfoItem = ({ value, label, ...props }) => (
-  <Stack spacing={0} fontWeight="bold" textAlign="center" px={8} {...props}>
+const InfoItem = ({ value, label, fontWeight, ...props }) => (
+  <Stack
+    spacing={0}
+    fontWeight={fontWeight ? fontWeight : 'bold'}
+    textAlign="center"
+    px={8}
+    {...props}
+  >
     <Text fontSize="lg" fontFamily="heading">
       {value}
     </Text>
@@ -37,8 +43,8 @@ const LiquidStakingInfo = ({ asset, vapr, stakedcnv, icon }) => {
           maxWidth="180px"
           position="relative"
         />
-        <InfoItem value={''} label="vAPR" pl={7} />
-        <InfoItem value={vapr.toUpperCase()} label="" pl={7} />
+        <InfoItem value={''} label="vAPR" pl={7} fontWeight={'bold'} />
+        <InfoItem value={vapr.toUpperCase()} fontWeight={'bold'} label="" pl={7} />
       </Flex>
     </BaseModal>
   )
@@ -47,8 +53,8 @@ const LiquidStakingInfo = ({ asset, vapr, stakedcnv, icon }) => {
 const LiquidStakingCNV = ({ stakedcnv }) => {
   return (
     <Card bgGradient="" px="0" position="relative" direction="column" shadow="Medium Glow Up">
-      <InfoItem value={''} label="" pl={7} />
-      <InfoItem value={stakedcnv.toUpperCase()} label="" pl={7} />
+      <InfoItem value={''} label="" pl={7} fontWeight={'bold'} />
+      <InfoItem value={stakedcnv.toUpperCase()} fontWeight={'light'} label="" pl={7} />
     </Card>
   )
 }
@@ -72,20 +78,22 @@ function LiquidStaking() {
           gap={1}
         >
           <LiquidStakingInfo asset="12 Month" icon="" vapr="6,342%" stakedcnv="83,431 CNV" />
-          <Text ml={2} color="text.low">
-            Currently Staked Stake Cap
+          <Text ml={'17.5%'} color="text.low" fontSize={8}>
+            Currently Staked | Staking Cap
           </Text>
           <LiquidStakingCNV stakedcnv="83,431 CNV" />
 
           <ButtonLink
+            top={'4%'}
             href="/StakeCNV12"
+            fontWeight={'medium'}
             position={'relative'}
             variant="primary.outline"
             bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
-            w="190px"
+            w="92.5%"
             h="40px"
             size="large"
-            borderRadius="2xl"
+            borderRadius="3xl"
           >
             Stake CNV
           </ButtonLink>
