@@ -8,6 +8,7 @@ const authFetch = (path: string, options?: RequestInit) =>
 
 const createSiweMessage = async (address: string, chainId: number) => {
   const { nonce } = await authFetch('nonce')
+  console.log(nonce)
   return new SiweMessage({
     domain: window.location.host,
     address,
@@ -27,9 +28,8 @@ const verifySignature = async (message: string, signature: string) =>
   })
 
 interface AuthValue {
-  user?: { address: string }
   error?: any
-  signIn: () => Promise<any>
+  signIn: (connector: Connector) => Promise<any>
   signOut: () => Promise<any>
   isSignedIn: boolean
   isConnected: boolean
@@ -43,24 +43,31 @@ const siweSignIn = async ({ address, chainId, signMessage }) => {
   const message = await createSiweMessage(address, chainId)
 
   // Sign message
-  const signature = await signMessage({ message })
-  if (signature.error) throw signature.error
+  const signature = await signMessage(message)
+  // if (signature.error) throw signature.error
+
+  console.log(signature)
 
   // Verify signature
-  const verification = await verifySignature(message, signature.data)
+  const verification = await verifySignature(message, signature)
   if (!verification.ok) throw new Error('Error verifying message')
 }
 
 export const AuthProvider: React.FC = ({ children }) => {
   const [account, disconnect] = useAccount()
+  const [, connect] = useConnect()
 
-  const signIn = useMutation(async () => {
-    const connector = account.data.connector
+  const signIn = useMutation(async (connector: Connector) => {
+    // const connector = account.data.connector
+
+    const res = await connect(connector)
+    if (!res.data) throw res.error ?? new Error('Something went wrong')
+
     const signer = await connector.getSigner()
     await siweSignIn({
-      address: await signer.getAddress(),
-      chainId: await connector.getChainId(),
-      signMessage: signer.signMessage,
+      address: res.data.account,
+      chainId: res.data.chain.id,
+      signMessage: (m) => signer.signMessage(m),
     })
   })
   const signOut = useMutation(() => {
@@ -68,18 +75,15 @@ export const AuthProvider: React.FC = ({ children }) => {
     return authFetch('logout')
   })
 
-  const user = useQuery('me', () => authFetch('me'), { refetchOnWindowFocus: true })
-
-  const isSignedIn = user.data || signIn.isSuccess
+  const isSignedIn = signIn.isSuccess
   const isConnected = !account.loading && !!account.data?.address
-  const error = user.error || signIn.error || signOut.error
+  const error = signIn.error || signOut.error
 
   return (
     <AuthContext.Provider
       value={{
         signOut: signOut.mutateAsync,
         signIn: signIn.mutateAsync,
-        user: user.data,
         error,
         isSignedIn,
         isConnected,

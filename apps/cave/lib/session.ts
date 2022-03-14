@@ -1,18 +1,33 @@
 import type { IronSessionOptions } from 'iron-session'
 import { SiweMessage } from 'siwe'
+import aes256 from 'aes256'
+import { serialize } from 'cookie'
+import { NextApiRequest, NextApiResponse } from 'next'
 
 export const sessionOptions: IronSessionOptions = {
-  password: process.env.SECRET_COOKIE_PASSWORD as string,
+  password: process.env.SECRET_COOKIE_PASSWORD || ('H81HEAUISBNDKJAND1UNQWE8901HJDQNj' as string),
   cookieName: 'session',
   cookieOptions: {
     secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    httpOnly: true,
   },
 }
 
-// typings of req.session.*
-declare module 'iron-session' {
-  interface IronSessionData {
-    siwe: SiweMessage
-    nonce: string
-  }
+export const setSessionCookie = (req: NextApiRequest, res: NextApiResponse, cookie) => {
+  const currentSession = getSessionCookie(req)
+  const encryptedCookie = aes256.encrypt(
+    sessionOptions.password,
+    JSON.stringify({ ...cookie, ...currentSession }),
+  )
+
+  res.setHeader(
+    'Set-Cookie',
+    serialize(sessionOptions.cookieName, encryptedCookie, sessionOptions.cookieOptions),
+  )
+}
+
+export const getSessionCookie = (req: NextApiRequest) => {
+  if (req.cookies.session)
+    return JSON.parse(aes256.decrypt(sessionOptions.password, req.cookies.session))
 }
