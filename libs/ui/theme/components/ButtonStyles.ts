@@ -1,31 +1,30 @@
-import { ComponentSingleStyleConfig } from '@chakra-ui/react'
-import { gradientStroke } from '../utils/gradientStroke'
+import { ComponentSingleStyleConfig, cssVar, tokenToCSSVar } from '@chakra-ui/react'
+import { gradientBorder } from '../utils/gradientBorder'
 
 export const ButtonStyles: ComponentSingleStyleConfig = {
   baseStyle: {
     fontSize: '14px',
     lineHeight: 'initial',
     width: 'auto',
-    borderRadius: 0,
+    borderRadius: 'xl',
     maxHeight: 'unset',
   },
   sizes: {
     large: {
       height: 50,
       px: 8,
-      borderRadius: 'xl',
     },
   },
   variants: {
     'primary.outline': (props) => ({
-      ...gradientStroke({ ...props, borderWidth: 2 }),
+      ...gradientBorder({ borderRadius: 'xl', borderWidth: 2 }),
       shadow: 'up',
     }),
-    primary: (props) => ({
-      ...gradientStroke(props),
+    primary: {
+      ...gradientBorder({ borderRadius: 'xl' }),
       bgGradient: 'linear(to-r, primary.1, primary.2)',
       shadow: 'up',
-    }),
+    },
     secondary: {
       shadow: 'up',
     },

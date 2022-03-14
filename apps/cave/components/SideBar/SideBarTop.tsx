@@ -54,7 +54,6 @@ function SideBarTop() {
             bgGradient="linear(to-tr, secondary.150, secondary.100)"
             w="200px"
             size="large"
-            borderRadius="2xl"
           >
             <HStack gap="2">
               <MdOutlineDashboard fontSize="20px" />

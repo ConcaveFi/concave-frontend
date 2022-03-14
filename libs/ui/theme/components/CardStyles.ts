@@ -1,18 +1,20 @@
-import { ComponentMultiStyleConfig, theme } from '@chakra-ui/react'
-import { gradientStroke } from '../utils/gradientStroke'
+import { ComponentMultiStyleConfig, cssVar, theme } from '@chakra-ui/react'
+import { gradientBorder } from '../utils/gradientBorder'
+
+// const $borderRadius = cssVar('card-border-radius', '2xl')
 
 export const CardStyles: ComponentMultiStyleConfig = {
   parts: ['outerContainer', 'backgroundImage', 'innerContainer'],
-  baseStyle: (props) => ({
+  baseStyle: {
     outerContainer: {
       borderRadius: '2xl',
       maxW: '100%',
       w: 'fit-content',
-      ...gradientStroke({ ...props, borderRadius: '2xl' }),
+      ...gradientBorder({ borderRadius: '2xl', borderWidth: 1 }),
     },
     innerContainer: { borderRadius: '2xl' },
     backgroundImage: { src: '' },
-  }),
+  },
   sizes: {},
   variants: {
     primary: {
@@ -23,7 +25,7 @@ export const CardStyles: ComponentMultiStyleConfig = {
     secondary: {
       innerContainer: { blendMode: 'screen' },
       backgroundImage: {
-        src: '/assets/blackboard.png',
+        src: '/assets/textures/glass.png',
         blendMode: 'screen',
         backdropFilter: 'blur(16px)',
         filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
