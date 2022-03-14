@@ -1,4 +1,4 @@
-import { findUser, insertUser } from 'lib/admin_fetchUser'
+import { findUser, insertUser } from 'lib/hasura/admin'
 import { getSessionCookie, setSessionCookie } from 'lib/session'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { ErrorTypes, SiweMessage } from 'siwe'
