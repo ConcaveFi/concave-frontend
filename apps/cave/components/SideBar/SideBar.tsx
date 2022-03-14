@@ -47,11 +47,6 @@ const LinkItems: Array<LinkItemProps> = [
   { name: 'Liquid Staking', icon: FaBatteryThreeQuarters, link: 'liquidstaking' },
   { name: 'Marketplace', icon: FaShoppingCart, link: '/marketplace' },
   { name: 'Swap', icon: FaRandom, link: 'swap' },
-
-  { name: 'Discord', icon: FaDiscord, link: '/' },
-  { name: 'Twitter', icon: FaTwitter, link: 'https://twitter.com/ConcaveFi' },
-  { name: 'Twitch', icon: FaTwitch, link: '/' },
-  { name: 'Documentation', icon: SiGitbook, link: 'https://docs.concave.lol/introduction/' },
 ]
 
 export function SideBar() {
