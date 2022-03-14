@@ -23,7 +23,7 @@ const globalStyles: Styles = {
 }
 
 type NextPageWithLayout = NextPage & {
-  getLayout?: React.FC
+  Layout?: React.FC
 }
 
 type AppPropsWithLayout = AppProps & {
@@ -32,7 +32,7 @@ type AppPropsWithLayout = AppProps & {
 
 const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   const [queryClient] = useState(() => new QueryClient())
-  const Layout = Component.getLayout || DefaultLayout
+  const Layout = Component.Layout || DefaultLayout
   return (
     <QueryClientProvider client={queryClient}>
       <WagmiProvider>
