@@ -15,6 +15,7 @@ import {
   BoxProps,
   FlexProps,
   VStack,
+  HStack,
 } from '@chakra-ui/react'
 import {
   FaDiscord,
@@ -33,6 +34,7 @@ import { Image } from '@concave/ui'
 import { ConnectWallet } from 'components/TopBar/ConnectWallet'
 import { ButtonLink } from 'components/ButtonLink'
 import { DownIcon } from '@concave/icons'
+import SideBarTop from './SideBarTop'
 
 interface LinkItemProps {
   name: string
@@ -89,39 +91,14 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       borderRight="1px"
       bgGradient="linear(to-tr, secondary.150, secondary.100)"
       borderRightColor={useColorModeValue('gray.200', 'gray.700')}
+      px={2}
+      py={4}
       w={{ base: 'full', md: 60 }}
       // pos="fixed"
       h="full"
       {...rest}
     >
-      <Box top="16px" border-radius="16px" background-color="" box-shadow="" w="220px" h="257px">
-        <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-          <Image
-            src={'/assets/concave-logo.png'}
-            alt="concave logo"
-            maxWidth="52px"
-            position="relative"
-          />
-          <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-            Concave
-          </Text>
-        </Flex>
-
-        <VStack gap="1" align="flex-end">
-          <ButtonLink
-            href="/treasury"
-            variant="primary.outline"
-            bgGradient="linear(to-tr, secondary.150, secondary.100)"
-            w="200px"
-            size="large"
-            borderRadius="2xl"
-          >
-            Dashboard
-          </ButtonLink>
-
-          <ConnectWallet />
-        </VStack>
-      </Box>
+      <SideBarTop />
 
       <Flex>
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
