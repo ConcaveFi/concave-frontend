@@ -1,24 +1,30 @@
+import { findUser, insertUser } from 'lib/admin_fetchUser'
 import { getSessionCookie, setSessionCookie } from 'lib/session'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { ErrorTypes, SiweMessage } from 'siwe'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { method } = req
-  if (method !== 'POST') {
-    res.setHeader('Allow', ['POST']).status(405).end(`Method ${method} Not Allowed`)
-    return
-  }
+  if (method !== 'POST')
+    return res.setHeader('Allow', ['POST']).status(405).end(`Method ${method} Not Allowed`)
 
   try {
     const { message, signature } = req.body
+
     const siweMessage = new SiweMessage(message)
     const validatedSiwe = await siweMessage.validate(signature)
 
     const session = getSessionCookie(req)
+
     if (validatedSiwe.nonce !== session.nonce)
       return res.status(422).json({ message: 'Invalid nonce', ok: false })
 
-    setSessionCookie(req, res, { siwe: validatedSiwe })
+    const siwe = validatedSiwe
+
+    const address = siwe.address
+    const hasura = (await findUser(address)) || (await insertUser(address))
+
+    setSessionCookie(req, res, { siwe, hasura })
 
     res.json({ ok: true })
   } catch (e) {
@@ -29,6 +35,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (e === ErrorTypes.INVALID_SIGNATURE)
       return res.status(422).json({ message: e.message, ok: false })
 
+    console.log(e.message)
     res.status(500).json({ message: e.message, ok: false })
   }
 }

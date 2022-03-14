@@ -8,7 +8,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     return
   }
 
-  const { address } = getSessionCookie(req).siwe
+  const address = getSessionCookie(req)?.siwe?.address
   if (!address) {
     res.status(401).json({ message: `You're not connected` })
     return

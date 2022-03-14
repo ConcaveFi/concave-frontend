@@ -7,7 +7,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     res.setHeader('Allow', ['GET']).status(405).end(`Method ${method} Not Allowed`)
     return
   }
-  // req.session.destroy()
   setSessionCookie(req, res, { siwe: null, nonce: null })
   res.send({ ok: true })
 }

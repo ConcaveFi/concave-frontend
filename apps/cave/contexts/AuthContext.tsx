@@ -1,18 +1,17 @@
 import React, { createContext, useContext } from 'react'
-import { useMutation, useQuery } from 'react-query'
+import { useMutation } from 'react-query'
 import { SiweMessage } from 'siwe'
-import { Connector, useAccount, useConnect, useNetwork, useSignMessage } from 'wagmi'
+import { Connector, useAccount, useConnect } from 'wagmi'
 
 const authFetch = (path: string, options?: RequestInit) =>
   fetch(`/api/session/${path}`, options).then((res) => res.json())
 
 const createSiweMessage = async (address: string, chainId: number) => {
   const { nonce } = await authFetch('nonce')
-  console.log(nonce)
   return new SiweMessage({
     domain: window.location.host,
     address,
-    statement: 'Sign in to concave',
+    statement: `Sign in to Concave`,
     uri: window.location.origin,
     version: '1',
     chainId,
@@ -44,9 +43,6 @@ const siweSignIn = async ({ address, chainId, signMessage }) => {
 
   // Sign message
   const signature = await signMessage(message)
-  // if (signature.error) throw signature.error
-
-  console.log(signature)
 
   // Verify signature
   const verification = await verifySignature(message, signature)
@@ -70,6 +66,7 @@ export const AuthProvider: React.FC = ({ children }) => {
       signMessage: (m) => signer.signMessage(m),
     })
   })
+
   const signOut = useMutation(() => {
     disconnect()
     return authFetch('logout')

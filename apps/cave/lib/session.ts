@@ -14,6 +14,15 @@ export const sessionOptions: IronSessionOptions = {
   },
 }
 
+type Session = {
+  siwe: SiweMessage
+  nonce: string
+  hasura: { id: string; role: string }
+}
+
+export const decryptSession = (session): Session =>
+  JSON.parse(aes256.decrypt(sessionOptions.password, session))
+
 export const setSessionCookie = (req: NextApiRequest, res: NextApiResponse, cookie) => {
   const currentSession = getSessionCookie(req)
   const encryptedCookie = aes256.encrypt(
@@ -28,6 +37,5 @@ export const setSessionCookie = (req: NextApiRequest, res: NextApiResponse, cook
 }
 
 export const getSessionCookie = (req: NextApiRequest) => {
-  if (req.cookies.session)
-    return JSON.parse(aes256.decrypt(sessionOptions.password, req.cookies.session))
+  if (req.cookies.session) return decryptSession(req.cookies.session)
 }
