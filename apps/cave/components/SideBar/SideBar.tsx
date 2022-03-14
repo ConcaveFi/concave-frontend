@@ -35,6 +35,7 @@ import { ConnectWallet } from 'components/TopBar/ConnectWallet'
 import { ButtonLink } from 'components/ButtonLink'
 import { DownIcon } from '@concave/icons'
 import SideBarTop from './SideBarTop'
+import SideBarBottom from './SideBarBottom'
 
 interface LinkItemProps {
   name: string
@@ -98,17 +99,21 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       h="full"
       {...rest}
     >
+      <Flex position="absolute" right="10px">
+        <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} mb={5} />
+      </Flex>
       <SideBarTop />
 
-      <Flex>
-        <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
-      </Flex>
       <Box>
         {LinkItems.map((link) => (
           <NavItem key={link.name} icon={link.icon} link={link.link}>
             {link.name}
           </NavItem>
         ))}
+      </Box>
+
+      <Box mt={10}>
+        <SideBarBottom />
       </Box>
     </Box>
   )
@@ -176,10 +181,6 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       {...rest}
     >
       <IconButton variant="outline" onClick={onOpen} aria-label="open menu" icon={<FiMenu />} />
-
-      <Text fontSize="2xl" ml="8" fontFamily="monospace" fontWeight="bold">
-        Concave
-      </Text>
     </Flex>
   )
 }
