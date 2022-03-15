@@ -9,7 +9,6 @@ export const gradientBorder = ({
   borderWidth?: number
   borderRadius?: string
 } = {}): SystemStyleInterpolation => {
-  console.log(borderRadius)
   return {
     position: 'relative',
     '& > *': {
