@@ -39,7 +39,7 @@ const baseStyleTrack: SystemStyleFunction = (props) => {
 }
 
 const baseStyleThumb: SystemStyleObject = {
-  bg: 'black',
+  bg: 'transparent',
   border: '2px solid white',
   transitionProperty: 'transform',
   transitionDuration: 'normal',
@@ -48,6 +48,7 @@ const baseStyleThumb: SystemStyleObject = {
   height: [$height.reference],
   _checked: {
     border: '1px solid white',
+    bg: 'black',
     transform: `translateX(${$translateX.reference})`,
   },
 }

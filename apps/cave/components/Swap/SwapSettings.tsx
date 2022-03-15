@@ -1,4 +1,5 @@
-import { Button, Modal, ModalContent, ModalOverlay, useDisclosure } from '@chakra-ui/react'
+import { Button, useDisclosure } from '@chakra-ui/react'
+import { Modal } from '@concave/ui'
 
 export const SwapSettingsModal: React.FC = ({ children }: { children: React.FC[] }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -14,11 +15,18 @@ export const SwapSettingsModal: React.FC = ({ children }: { children: React.FC[]
       >
         {icon}
       </Button>
-      <Modal isCentered onClose={onClose} isOpen={isOpen} motionPreset="slideInBottom">
-        <ModalOverlay />
-        <ModalContent width={'255px'} borderRadius={'3xl'}>
-          {content}
-        </ModalContent>
+      <Modal
+        title=""
+        bluryOverlay
+        cardProps={{
+          variant: 'secondary',
+          w: 280,
+          h: 430,
+        }}
+        onClose={onClose}
+        isOpen={isOpen}
+      >
+        {content}
       </Modal>
     </>
   )

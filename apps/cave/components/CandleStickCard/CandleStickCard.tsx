@@ -1,9 +1,9 @@
-import { HStack, VStack, Stack } from '@chakra-ui/react'
-import React from 'react'
+import { Flex, HStack, useMediaQuery } from '@chakra-ui/react'
 import { Card, CardProps, Text } from '@concave/ui'
 import { CandleStickTimeOptions } from 'components/CandleStickCard/CandleStickTimeOptions'
-import dynamic from 'next/dynamic'
 import { useCandleStickChart } from 'components/CandleStickCard/useCandleStickChart'
+import dynamic from 'next/dynamic'
+import React from 'react'
 import { CandleStickTokenOptions } from './CandleStickTokenOptions'
 
 const CandleStickChart = dynamic(() => import('./CandleStickChart'), {
@@ -21,22 +21,36 @@ export const CandleStickCard = ({
   ...cardProps
 }: { from: string; to: string } & CardProps) => {
   const candleStickChart = useCandleStickChart(from, to)
+  const [isMobile] = useMediaQuery(['(max-width: 768px)'])
   return (
     <Card {...cardProps}>
-      <HStack justifyContent={'space-between'}>
+      <Flex justifyContent={isMobile ? 'center' : 'space-between'} minW={'100%'}>
         <CandleStickTokenOptions from={from} to={to} />
-        <CandleStickTimeOptions
-          intervals={candleStickChart.avaliableIntervals}
-          defaultValue={candleStickChart.interval}
-          onChangeInteral={(interval) => {
-            candleStickChart.set({ interval })
-          }}
-        />
-      </HStack>
+        {!isMobile && (
+          <CandleStickTimeOptions
+            intervals={candleStickChart.avaliableIntervals}
+            defaultValue={candleStickChart.interval}
+            onChangeInteral={(interval) => {
+              candleStickChart.set({ interval })
+            }}
+          />
+        )}
+      </Flex>
       {candleStickChart.loading ? (
         <Text pt={8}>Loading Data...</Text>
       ) : (
         <CandleStickChart data={candleStickChart.data} />
+      )}
+      {isMobile && (
+        <HStack justifyContent={'center'}>
+          <CandleStickTimeOptions
+            intervals={candleStickChart.avaliableIntervals}
+            defaultValue={candleStickChart.interval}
+            onChangeInteral={(interval) => {
+              candleStickChart.set({ interval })
+            }}
+          />{' '}
+        </HStack>
       )}
     </Card>
   )

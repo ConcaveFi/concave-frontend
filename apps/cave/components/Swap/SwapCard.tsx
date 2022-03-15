@@ -1,22 +1,12 @@
+import { ExpandArrowIcon, GasIcon, SwapSettingsIcon } from '@concave/icons'
+import { Button, Card, CardProps, Flex, HStack, StackDivider, Text } from '@concave/ui'
+import { useCurrency } from 'hooks/useCurrency'
+import { useGasPrice } from 'hooks/useGasPrice'
 import React from 'react'
-import {
-  Text,
-  Button,
-  HStack,
-  Flex,
-  StackDivider,
-  Card,
-  NumericInput,
-  CardProps,
-} from '@concave/ui'
-import { ExpandArrowIcon, SwapSettingsIcon } from '@concave/icons'
-import { GasIcon } from '@concave/icons'
+import { Input } from './Input'
 import { SwapSettingsModal } from './SwapSettings'
 import { SwapSettingsCard } from './SwapSettingsCard'
 import { UseSwap } from './useSwap'
-import { useCurrency } from 'hooks/useCurrency'
-import { useGasPrice } from 'hooks/useGasPrice'
-import { Input } from './Input'
 
 export function SwapCard({
   buttonLabel,
@@ -63,8 +53,20 @@ export function SwapCard({
         }}
       />
       <HStack
-        divider={<StackDivider boxShadow={'1px 0px 2px #101317'} />}
-        margin="1"
+        divider={
+          <StackDivider
+            border={'0px solid transparent'}
+            borderRadius={'3xl'}
+            style={{
+              marginTop: '4px',
+            }}
+            mt={8}
+            h={'32px'}
+            w={'2px'}
+            bgColor={'transparent'}
+            boxShadow={'1px 0px 2px #101317'}
+          />
+        }
         align="center"
         justify="center"
       >

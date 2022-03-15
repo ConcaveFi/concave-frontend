@@ -1,10 +1,10 @@
-import React from 'react'
-import { Text, Stack, Flex, NumericInput, FlexProps } from '@concave/ui'
-import { Select } from './Select'
-import { InputContainer } from './InputContainer'
-import { Token } from './useSwap'
+import { Flex, FlexProps, NumericInput, Stack, Text } from '@concave/ui'
 import { useCurrency } from 'hooks/useCurrency'
+import React from 'react'
+import { InputContainer } from './InputContainer'
 import { MaxAmount } from './MaxAmount'
+import { Select } from './Select'
+import { Token } from './useSwap'
 
 export function Input({
   token,
