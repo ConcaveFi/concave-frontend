@@ -9,6 +9,7 @@ import Card from './components/CardStyles'
 import BaseModal from './components/BaseStyles'
 import Switch from './components/SwitchStyles'
 import { fonts, shadows } from './foundations'
+import { ThemeContext } from '@emotion/react'
 
 const theme = extendTheme({
   config: { initialColorMode: 'dark', cssVarPrefix: 'concave' },
@@ -25,7 +26,7 @@ const theme = extendTheme({
     Modal,
     Card,
   },
-}) as ChakraTheme
+} as const) as ChakraTheme
 
 export type Theme = typeof theme
 export default theme
