@@ -5,13 +5,16 @@ import { gradientBorder } from '../utils/gradientBorder'
 
 export const CardStyles: ComponentMultiStyleConfig = {
   parts: ['container', 'texture'],
-  baseStyle: ({ borderWidth = 1 }) => ({
+  baseStyle: ({ borderWidth = 1, borderRadius = '2xl' }) => ({
     container: {
-      borderRadius: '2xl',
+      borderRadius,
       maxW: '100%',
       w: 'fit-content',
       h: 'fit-content',
-      ...gradientBorder({ borderRadius: '2xl', borderWidth }),
+      ...gradientBorder({ borderRadius, borderWidth }),
+    },
+    texture: {
+      userSelect: 'none',
     },
   }),
   sizes: {},
@@ -19,6 +22,14 @@ export const CardStyles: ComponentMultiStyleConfig = {
     primary: {
       container: {
         bgGradient: 'linear(to-tr, secondary.150, secondary.100)',
+      },
+      texture: {
+        src: '/assets/textures/metal.jpg',
+        width: 120,
+        height: 120,
+        blendMode: 'screen',
+        opacity: 0.15,
+        inset: 0,
       },
     },
     secondary: {
@@ -30,6 +41,7 @@ export const CardStyles: ComponentMultiStyleConfig = {
       texture: {
         src: '/assets/textures/glass.jpg',
         opacity: 0.45,
+        inset: 0,
       },
     },
   },

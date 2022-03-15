@@ -11,13 +11,17 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
   },
   sizes: {
     large: {
-      height: 50,
+      height: '50px',
       px: 8,
+    },
+    medium: {
+      height: '40px',
     },
   },
   variants: {
     'primary.outline': (props) => ({
-      ...gradientBorder({ borderRadius: 'xl', borderWidth: 2 }),
+      borderRadius: '2xl',
+      ...gradientBorder({ borderRadius: '2xl', borderWidth: 2 }),
       shadow: 'up',
     }),
     primary: {

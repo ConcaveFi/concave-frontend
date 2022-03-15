@@ -9,7 +9,6 @@ import Card from './components/CardStyles'
 import BaseModal from './components/BaseStyles'
 import Switch from './components/SwitchStyles'
 import { fonts, shadows } from './foundations'
-import { ThemeContext } from '@emotion/react'
 
 const theme = extendTheme({
   config: { initialColorMode: 'dark', cssVarPrefix: 'concave' },
