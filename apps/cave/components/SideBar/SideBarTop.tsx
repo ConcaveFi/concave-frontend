@@ -26,10 +26,7 @@ function SideBarTop() {
           w="full"
           leftIcon={<MdOutlineDashboard size="20px" />}
         >
-          <HStack gap="2">
-            <MdOutlineDashboard fontSize="20px" />
-            <Text fontSize="lg">Dashboard</Text>
-          </HStack>
+          Dashboard
         </ButtonLink>
         <ConnectWallet />
       </Stack>
