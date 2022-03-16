@@ -18,23 +18,44 @@ function SideBarTop() {
         box-shadow="lg"
         rounded="lg"
       >
-        <Image src="/assets/concave/logomark.svg" alt="concave logo" maxWidth="52px" />
-        <Image src="/assets/concave/logotype.svg" alt="concave logo" width="100px" ml={3} />
-      </Flex>
-
-      <Stack gap="1" align="flex-end" mt={7}>
-        <ButtonLink
-          href="/treasury"
-          variant="primary.outline"
-          size="medium"
-          w="full"
-          leftIcon={<MdOutlineDashboard size="20px" />}
+        {/* <Flex alignItems="center" mx={6}>
+          <Image
+            src={'/assets/sidebar/concave-logo.png'}
+            alt="concave logo"
+            maxWidth="58px"
+            position="relative"
+            ml={-2}
+          />
+          <Image src={'/assets/sidebar/concave-title.svg'} alt="concave logo" ml={-3} />
+        </Flex> */}
+        <Flex
+          alignItems="center"
+          justify="center"
+          my={4}
+          filter="drop-shadow(0px 0px 27px #81b3ff4f)"
         >
-          Dashboard
-        </ButtonLink>
-        <ConnectWallet />
-      </Stack>
-    </Stack>
+          <Image src="/assets/concave/logomark.svg" alt="concave logo" maxWidth="52px" />
+          <Image src="/assets/concave/logotype.svg" alt="concave logo" width="100px" ml={3} />
+        </Flex>
+
+        <VStack gap="1" align="flex-end" mt={7}>
+          <ButtonLink
+            href="/treasury"
+            variant="primary.outline"
+            bgGradient="linear(to-tr, secondary.150, secondary.100)"
+            w="200px"
+            size="large"
+            borderRadius="2xl"
+          >
+            <HStack gap="2">
+              <MdOutlineDashboard fontSize="20px" />
+              <Text fontSize="lg">Dashboard</Text>
+            </HStack>
+          </ButtonLink>
+          <ConnectWallet />
+        </VStack>
+      </Box>
+    </div>
   )
 }
 
