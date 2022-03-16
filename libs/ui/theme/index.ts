@@ -25,7 +25,7 @@ const theme = extendTheme({
     Modal,
     Card,
   },
-}) as ChakraTheme
+} as const) as ChakraTheme
 
 export type Theme = typeof theme
 export default theme

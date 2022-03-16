@@ -1,5 +1,4 @@
-import { withIronSessionApiRoute } from 'iron-session/next'
-import { sessionOptions } from 'lib/session'
+import { setSessionCookie } from 'lib/session'
 import { NextApiRequest, NextApiResponse } from 'next'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -8,8 +7,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     res.setHeader('Allow', ['GET']).status(405).end(`Method ${method} Not Allowed`)
     return
   }
-  req.session.destroy()
+  setSessionCookie(req, res, { siwe: null, nonce: null })
   res.send({ ok: true })
 }
 
-export default withIronSessionApiRoute(handler, sessionOptions)
+export default handler

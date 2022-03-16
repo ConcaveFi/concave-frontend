@@ -1,6 +1,8 @@
 import React from 'react'
-import { Button, Image, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react'
-import { useAccount, useConnect } from 'wagmi'
+import { Button, Image, Menu, MenuButton, MenuItem, MenuList } from '@concave/ui'
+import { useConnect } from 'wagmi'
+import { useAuth } from 'contexts/AuthContext'
+import { useUser } from 'contexts/UserContext'
 
 import { useIsMounted } from 'hooks/useIsMounted'
 
@@ -8,16 +10,14 @@ const miniAddress = (address) =>
   `${address.substr(0, 6)}...${address.substr(address.length - 6, address.length)}`
 
 const DisconnectButton = () => {
-  const [{ data, loading }, disconnect] = useAccount({ fetchEns: false })
+  const { signOut } = useAuth()
+  const { user, isSuccess } = useUser()
+  if (!isSuccess) return null
   return (
     <Menu placement="bottom-end">
-      <MenuButton as={Button} isLoading={loading} borderRadius="xl" variant="secondary">
-        {data.address && miniAddress(data.address)}
-      </MenuButton>
-      <MenuList bg="black.100" borderRadius="xl" px={1}>
-        <MenuItem borderRadius="lg" onClick={disconnect}>
-          Disconnect
-        </MenuItem>
+      <MenuButton as={Button}>{user.address}</MenuButton>
+      <MenuList>
+        <MenuItem onClick={signOut}>Disconnect</MenuItem>
       </MenuList>
     </Menu>
   )
@@ -25,6 +25,7 @@ const DisconnectButton = () => {
 
 const ConnectButton = ({ onError }: { onError: (e: Error) => void }) => {
   const [{ data, error }, connect] = useConnect()
+  const { signIn } = useAuth()
   const isMounted = useIsMounted()
   return (
     <>
@@ -48,7 +49,7 @@ const ConnectButton = ({ onError }: { onError: (e: Error) => void }) => {
                   borderRadius="xl"
                   icon={<Image maxWidth="20px" src={`/connectors/${connector.id}.png`} alt="" />}
                   key={connector.id}
-                  onClick={() => connect(connector)}
+                  onClick={() => signIn(connector)}
                 >
                   {connector.name}
                 </MenuItem>
@@ -65,7 +66,7 @@ const ConnectButton = ({ onError }: { onError: (e: Error) => void }) => {
 }
 
 export function ConnectWallet(): JSX.Element {
-  const [{ data }] = useConnect()
+  const { isSignedIn } = useAuth()
 
-  return data.connected ? <DisconnectButton /> : <ConnectButton onError={(e) => console.log(e)} />
+  return isSignedIn ? <DisconnectButton /> : <ConnectButton onError={(e) => console.log(e)} />
 }
