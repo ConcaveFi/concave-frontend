@@ -6,13 +6,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "yarn fix-assets-symlink && next build",
-    "win": "yarn fix-assets-symlink-win",
-    "fix-assets-symlink": "rimraf ./public/assets && syncdir ../../assets ./public/assets --copy",
-    "fix-assets-symlink-win": "xcopy /D /I /E /F /Y /H /R \"../..//assets\" \"./public/assets\\\"",
+    "build": "next build",
+    "vercel-build": "yarn hardlink-assets && next build",
     "start": "next start",
+    "symlink-assets": "globstar --node -- lnk \"../../assets/*\" ./public/assets",
+    "hardlink-assets": "rimraf ./public/shared-assets && syncdir ../../static/assets ./public/shared-assets --copy",
     "lint": "next lint --fix",
-    "test-all": "yarn lint && yarn type-check && yarn test",
     "gen": "DOTENV_CONFIG_PATH=./.env graphql-codegen --config codegen.yml -r dotenv/config"
   },
   "dependencies": {
@@ -22,9 +21,11 @@
     "aes256": "^1.1.0",
     "cookie": "^0.4.2",
     "ethers": "^5.6.0",
+    "globstar": "^1.0.0",
     "graphql": "^16.3.0",
     "graphql-request": "^4.1.0",
     "lightweight-charts": "^3.8.0",
+    "lnk-cli": "^1.0.1",
     "next": "^12.1.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -32,6 +33,7 @@
     "react-number-format": "^4.9.1",
     "react-query": "^3.34.16",
     "siwe": "^1.1.2",
+    "symlink-dir": "^5.0.1",
     "wagmi": "^0.2.18"
   },
   "devDependencies": {
