@@ -18,16 +18,6 @@ function SideBarTop() {
         box-shadow="lg"
         rounded="lg"
       >
-        {/* <Flex alignItems="center" mx={6}>
-          <Image
-            src={'/assets/sidebar/concave-logo.png'}
-            alt="concave logo"
-            maxWidth="58px"
-            position="relative"
-            ml={-2}
-          />
-          <Image src={'/assets/sidebar/concave-title.svg'} alt="concave logo" ml={-3} />
-        </Flex> */}
         <Flex
           alignItems="center"
           justify="center"
