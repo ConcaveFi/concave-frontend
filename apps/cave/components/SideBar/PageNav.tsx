@@ -84,7 +84,7 @@ function PageNav() {
                 Bonds
               </Button>
             </Link>
-            <Text fontSize="sm" fontWeight="thin" textColor="#5F7A99" textAlign="center" m={1}>
+            <Text fontSize="sm" fontWeight="thin" textColor="#5F7A99" textAlign="center" p={1}>
               5 days - 9% ROI
             </Text>
           </Box>
@@ -103,7 +103,7 @@ function PageNav() {
               h="45px"
               borderRadius="2xl"
               textColor="#5F7A99"
-              mt={16}
+              mt={4}
             >
               Liquid Staking
             </Button>
@@ -115,7 +115,7 @@ function PageNav() {
             _focus={{ boxShadow: 'none' }}
           >
             <Button
-              leftIcon={<Image src={'/assets/sidebar/page-bond.svg'} />}
+              leftIcon={<Image src={'/assets/sidebar/page-marketplace.svg'} />}
               iconSpacing={7}
               variant="primary.outline"
               bgGradient="linear(to-tr, secondary.150, secondary.100)"
@@ -123,7 +123,7 @@ function PageNav() {
               h="45px"
               borderRadius="2xl"
               textColor="#5F7A99"
-              mt={20}
+              mt={16}
             >
               Marketplace
             </Button>
@@ -131,7 +131,7 @@ function PageNav() {
 
           <Link href={'swap'} style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
             <Button
-              leftIcon={<Image src={'/assets/sidebar/page-bond.svg'} />}
+              leftIcon={<Image src={'/assets/sidebar/page-swap.svg'} />}
               iconSpacing={7}
               variant="primary.outline"
               bgGradient="linear(to-tr, secondary.150, secondary.100)"
