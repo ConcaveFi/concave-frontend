@@ -78,6 +78,8 @@ export const Card = forwardRef<CardProps, 'div'>(
                 Image={(p) => (
                   <Image
                     __css={styles.texture}
+                    role="presentation"
+                    loading="eager"
                     bgImage="none"
                     position="absolute"
                     zIndex={-1}
