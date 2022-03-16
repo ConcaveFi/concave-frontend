@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Flex, Text, VStack, HStack } from '@chakra-ui/react'
+import { Box, Flex, Text, VStack, HStack } from '@concave/ui'
 import { Image } from '@concave/ui'
 import { ConnectWallet } from 'components/ConnectWallet'
 import { ButtonLink } from 'components/ButtonLink'
@@ -8,13 +8,10 @@ import { MdOutlineDashboard } from 'react-icons/md'
 function SideBarTop() {
   return (
     <Box
-      top="16px"
-      border-radius="16px"
       shadow="down"
       bgGradient="linear(to-tr, secondary.150, secondary.100)"
       px={2}
       py={10}
-      box-shadow="lg"
       rounded="lg"
     >
       <Flex
