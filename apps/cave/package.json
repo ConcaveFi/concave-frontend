@@ -6,11 +6,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "vercel-build": "yarn hardlink-assets && next build",
+    "build": "yarn hardlink-assets && next build",
+    "local-build": "next build",
     "start": "next start",
     "symlink-assets": "globstar --node -- lnk \"../../assets/*\" ./public/assets",
-    "hardlink-assets": "rimraf ./public/shared-assets && syncdir ../../static/assets ./public/shared-assets --copy",
+    "hardlink-assets": "syncdir ../../assets ./public/assets --copy",
     "lint": "next lint --fix",
     "gen": "DOTENV_CONFIG_PATH=./.env graphql-codegen --config codegen.yml -r dotenv/config"
   },

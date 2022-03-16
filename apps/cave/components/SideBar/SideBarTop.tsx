@@ -1,5 +1,5 @@
 import React from 'react'
-import { Flex, Stack } from '@chakra-ui/react'
+import { Box, Flex, Text, Stack, HStack } from '@concave/ui'
 import { Image } from '@concave/ui'
 import { ConnectWallet } from 'components/ConnectWallet'
 import { ButtonLink } from 'components/ButtonLink'
@@ -7,11 +7,11 @@ import { MdOutlineDashboard } from 'react-icons/md'
 
 function SideBarTop() {
   return (
-    <Stack borderRadius="2xl" shadow="down" p={4}>
+    <Box shadow="down" px={2} py={10} rounded="2xl">
       <Flex
         alignItems="center"
         justify="center"
-        my={12}
+        my={4}
         filter="drop-shadow(0px 0px 27px #81b3ff4f)"
       >
         <Image src="/assets/concave/logomark.svg" alt="concave logo" maxWidth="52px" />
@@ -30,7 +30,7 @@ function SideBarTop() {
         </ButtonLink>
         <ConnectWallet />
       </Stack>
-    </Stack>
+    </Box>
   )
 }
 

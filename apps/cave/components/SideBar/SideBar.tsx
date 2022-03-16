@@ -37,18 +37,7 @@ import { ButtonLink } from 'components/ButtonLink'
 import { DownIcon } from '@concave/icons'
 import SideBarTop from './SideBarTop'
 import SideBarBottom from './SideBarBottom'
-
-interface LinkItemProps {
-  name: string
-  icon: IconType
-  link: string
-}
-const LinkItems: Array<LinkItemProps> = [
-  { name: 'Bonds', icon: FaBriefcase, link: 'bond' },
-  { name: 'Liquid Staking', icon: FaBatteryThreeQuarters, link: 'liquidstaking' },
-  { name: 'Marketplace', icon: FaShoppingCart, link: '/marketplace' },
-  { name: 'Swap', icon: FaRandom, link: 'swap' },
-]
+import PageNav from './PageNav'
 
 export function SideBar() {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -92,7 +81,6 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       px={2}
       py={4}
       w={{ base: 'full', md: 60 }}
-      // pos="fixed"
       h="full"
       {...rest}
     >
@@ -101,62 +89,13 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       </Flex>
       <SideBarTop />
 
-      <Box>
-        {LinkItems.map((link) => (
-          <NavItem key={link.name} icon={link.icon} link={link.link}>
-            {link.name}
-          </NavItem>
-        ))}
-      </Box>
-
       <Box mt={10}>
+        <PageNav />
+      </Box>
+      <Box mt={14}>
         <SideBarBottom />
       </Box>
     </Card>
-  )
-}
-
-interface NavItemProps extends FlexProps {
-  icon: IconType
-  link: string
-  children: ReactText
-}
-const NavItem = ({ icon, children, link, ...rest }: NavItemProps) => {
-  return (
-    <Link
-      href={link}
-      {...(link.startsWith('http')
-        ? { target: '_blank', rel: 'noopener noreferrer' }
-        : { replace: 'true' })}
-      style={{ textDecoration: 'none' }}
-      _focus={{ boxShadow: 'none' }}
-    >
-      <Flex
-        align="center"
-        p="4"
-        mx="4"
-        borderRadius="lg"
-        role="group"
-        cursor="pointer"
-        _hover={{
-          bg: 'cyan.400',
-          color: 'white',
-        }}
-        {...rest}
-      >
-        {icon && (
-          <Icon
-            mr="4"
-            fontSize="16"
-            _groupHover={{
-              color: 'white',
-            }}
-            as={icon}
-          />
-        )}
-        {children}
-      </Flex>
-    </Link>
   )
 }
 
