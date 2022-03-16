@@ -16,7 +16,8 @@ import {
   FlexProps,
   VStack,
   HStack,
-} from '@chakra-ui/react'
+  Card,
+} from '@concave/ui'
 import {
   FaDiscord,
   FaTwitter,
@@ -82,11 +83,12 @@ interface SidebarProps extends BoxProps {
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   return (
-    <Box
-      bg={useColorModeValue('white', 'gray.900')}
-      borderRight="1px"
-      bgGradient="linear(to-tr, secondary.150, secondary.100)"
-      borderRightColor={useColorModeValue('gray.200', 'gray.700')}
+    <Card
+      variant="primary"
+      bg="radial-gradient(248.94% 38.67% at 100% 27.33%, #19394C 25.26%, #0A161F 100%)"
+      borderWidth={0}
+      borderRadius={0}
+      borderRightRadius="2xl"
       px={2}
       py={4}
       w={{ base: 'full', md: 60 }}
@@ -110,7 +112,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       <Box mt={10}>
         <SideBarBottom />
       </Box>
-    </Box>
+    </Card>
   )
 }
 

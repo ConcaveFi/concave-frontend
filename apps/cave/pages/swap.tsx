@@ -1,4 +1,4 @@
-import { Container, Flex, HStack } from '@concave/ui'
+import { Container, Flex } from '@concave/ui'
 import React from 'react'
 import GcnvTitle from 'components/GcnvTitle'
 import { CandleStickCardMemo } from 'components/CandleStickCard'
@@ -6,7 +6,6 @@ import { SwapCard } from 'components/Swap/SwapCard'
 import { useSwap } from 'components/Swap/useSwap'
 
 const cardProps = {
-  shadow: 'up',
   h: [350, 400],
   gap: 2,
   p: 8,
@@ -26,19 +25,22 @@ function Swap() {
           <CandleStickCardMemo
             from={swap.from.symbol}
             to={swap.to.symbol}
+            variant="secondary"
             {...cardProps}
-            w={['100%', 410, 500, 500]}
-            bgImage="/assets/blackboard.png"
+            w="100%"
+            minW={410}
+            maxW={500}
             align="stretch"
-            backdropFilter={'blur(5px)'}
           />
           <SwapCard
             swap={swap}
             buttonLabel="Swap"
+            variant="primary"
             active="swap"
             {...cardProps}
-            w={['100%', 410, 500, 500, 400]}
-            bgGradient="linear(to-tr, secondary.150, secondary.100)"
+            w="100%"
+            minW={410}
+            maxW={500}
           />
         </Flex>
       </Flex>
