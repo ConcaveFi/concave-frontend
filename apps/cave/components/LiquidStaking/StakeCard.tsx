@@ -1,10 +1,8 @@
 import { Avatar, Box, BaseModal, Card, Container, Flex, Image, Stack, Text } from '@concave/ui'
-import React from 'react'
 import GcnvTitle from 'components/GcnvTitle'
 import { text } from 'stream/consumers'
 import { ButtonLink } from 'components/ButtonLink'
 import { Progress } from '@chakra-ui/react'
-import StakeCard from 'components/LiquidStaking/StakeCard'
 
 const InfoItem = ({ value, label, fontWeight, ...props }) => (
   <Stack
@@ -53,26 +51,45 @@ const LiquidStakingInfo = ({ asset, vapr, stakedcnv, icon }) => {
   )
 }
 
-const LiquidStakingCNV = ({ stakedcnv }) => {
+function StakeCard() {
   return (
-    <Card bgGradient="" px="0" position="relative" direction="column" shadow="Medium Glow Up">
-      <InfoItem value={''} label="" pl={7} fontWeight={'bold'} />
-      <InfoItem value={stakedcnv.toUpperCase()} fontWeight={'light'} label="" pl={7} />
-    </Card>
-  )
-}
-function LiquidStaking() {
-  return (
-    <Container maxW="container.lg" borderRadius={0} border="">
-      <GcnvTitle
-        title="Liquid Staking"
-        description="Lock CNV in a staking term and recieve a tradeable NFT representing the position. Stakers receive a share of profits from all Concave products and services: bonding revenue, investment returns and protocol fees."
-      />
-      <Flex direction="row" gap="1" position="relative" mt={16}>
-        <StakeCard />
-      </Flex>
-    </Container>
+    <div>
+      <BaseModal
+        w="220px"
+        h="450px"
+        borderWidth={0}
+        borderRadius={16}
+        px={6}
+        py={10}
+        shadow="up"
+        bgGradient="linear(to-tr, secondary.150, secondary.100)"
+        gap={1}
+      >
+        <LiquidStakingInfo asset="12 Month" icon="" vapr="6,342%" stakedcnv="83,431 CNV" />
+        <Text ml={'17.5%'} color="text.low" fontSize={8}>
+          Currently Staked | Staking Cap
+        </Text>
+        <Progress colorScheme="blue" size="lg" value={20} />
+
+        {/* <LiquidStakingCNV stakedcnv="83,431 CNV" /> */}
+
+        <ButtonLink
+          top={'4%'}
+          href="/StakeCNV12"
+          fontWeight={'medium'}
+          position={'relative'}
+          variant="primary.outline"
+          bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
+          w="92.5%"
+          h="40px"
+          size="large"
+          borderRadius="3xl"
+        >
+          Stake CNV
+        </ButtonLink>
+      </BaseModal>
+    </div>
   )
 }
 
-export default LiquidStaking
+export default StakeCard
