@@ -2,6 +2,7 @@ import React from 'react'
 import {
   IconButton,
   Box,
+  Button,
   CloseButton,
   Flex,
   Icon,
@@ -16,6 +17,8 @@ import {
   VStack,
   HStack,
 } from '@chakra-ui/react'
+import { EmailIcon } from '@chakra-ui/icons'
+import { MdSettings } from 'react-icons/md'
 import {
   FaDiscord,
   FaTwitter,
@@ -33,28 +36,101 @@ import { Image } from '@concave/ui'
 import { ConnectWallet } from 'components/TopBar/ConnectWallet'
 import { ButtonLink } from 'components/ButtonLink'
 import { DownIcon } from '@concave/icons'
-interface LinkItemProps {
+
+interface PageProps {
   name: string
   icon: IconType
   link: string
 }
-const LinkItems: Array<LinkItemProps> = [
+const PageItems: Array<PageProps> = [
   { name: 'Bonds', icon: FaBriefcase, link: 'bond' },
   { name: 'Liquid Staking', icon: FaBatteryThreeQuarters, link: 'liquidstaking' },
-  { name: 'Marketplace', icon: FaShoppingCart, link: '/marketplace' },
+  { name: 'Marketplace', icon: FaShoppingCart, link: 'marketplace' },
   { name: 'Swap', icon: FaRandom, link: 'swap' },
 ]
 
 function PageNav() {
   return (
     <div>
-      <Box>
-        {LinkItems.map((link) => (
-          <NavItem key={link.name} icon={link.icon} link={link.link}>
-            {link.name}
+      {/* <Box>
+        {PageItems.map((page) => (
+          <NavItem key={page.name} icon={page.icon} link={page.link}>
+            {page.name}
           </NavItem>
         ))}
-      </Box>
+      </Box> */}
+      <Flex>
+        <Image src={'/assets/sidebar/linkage.svg'} mt={4} ml={7} />
+        <Box ml={-2}>
+          <Button
+            leftIcon={<Image src={'/assets/sidebar/page-bond.svg'} />}
+            iconSpacing={7}
+            variant="primary.outline"
+            bgGradient="linear(to-tr, secondary.150, secondary.100)"
+            w="160px"
+            h="45px"
+            borderRadius="2xl"
+            textColor="#5F7A99"
+          >
+            Bonds
+          </Button>
+          <Link
+            href={'liquidstaking'}
+            style={{ textDecoration: 'none' }}
+            _focus={{ boxShadow: 'none' }}
+          >
+            <Button
+              leftIcon={<Image src={'/assets/sidebar/page-bond.svg'} />}
+              iconSpacing={7}
+              variant="primary.outline"
+              bgGradient="linear(to-tr, secondary.150, secondary.100)"
+              w="160px"
+              h="45px"
+              borderRadius="2xl"
+              textColor="#5F7A99"
+              mt={16}
+            >
+              Liquid Staking
+            </Button>
+          </Link>
+
+          <Link
+            href={'marketplace'}
+            style={{ textDecoration: 'none' }}
+            _focus={{ boxShadow: 'none' }}
+          >
+            <Button
+              leftIcon={<Image src={'/assets/sidebar/page-bond.svg'} />}
+              iconSpacing={7}
+              variant="primary.outline"
+              bgGradient="linear(to-tr, secondary.150, secondary.100)"
+              w="160px"
+              h="45px"
+              borderRadius="2xl"
+              textColor="#5F7A99"
+              mt={20}
+            >
+              Marketplace
+            </Button>
+          </Link>
+
+          <Link href={'swap'} style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
+            <Button
+              leftIcon={<Image src={'/assets/sidebar/page-bond.svg'} />}
+              iconSpacing={7}
+              variant="primary.outline"
+              bgGradient="linear(to-tr, secondary.150, secondary.100)"
+              w="160px"
+              h="45px"
+              borderRadius="2xl"
+              textColor="#5F7A99"
+              mt={10}
+            >
+              Swap
+            </Button>
+          </Link>
+        </Box>
+      </Flex>
     </div>
   )
 }
