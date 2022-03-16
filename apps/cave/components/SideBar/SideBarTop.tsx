@@ -7,13 +7,7 @@ import { MdOutlineDashboard } from 'react-icons/md'
 
 function SideBarTop() {
   return (
-    <Box
-      shadow="down"
-      bgGradient="linear(to-tr, secondary.150, secondary.100)"
-      px={2}
-      py={10}
-      rounded="lg"
-    >
+    <Box shadow="down" px={2} py={10} rounded="lg">
       <Flex
         alignItems="center"
         justify="center"
