@@ -3,6 +3,7 @@ import React from 'react'
 import GcnvTitle from 'components/GcnvTitle'
 import { text } from 'stream/consumers'
 import { ButtonLink } from 'components/ButtonLink'
+import { Progress } from '@chakra-ui/react'
 
 const InfoItem = ({ value, label, fontWeight = 'bold', ...props }) => (
   <Stack spacing={0} fontWeight={fontWeight} textAlign="center" px={8} {...props}>
@@ -22,7 +23,7 @@ const LiquidStakingInfo = ({ asset, vapr, stakedcnv, icon }) => {
       px={0}
       borderRadius={40}
       width={160}
-      height={326}
+      height={296}
       py={4}
       position="relative"
       direction="column"
@@ -32,10 +33,11 @@ const LiquidStakingInfo = ({ asset, vapr, stakedcnv, icon }) => {
         <InfoItem value={''} label="Stake Period" pl={7} />
         <InfoItem value={asset.toUpperCase()} label="" pl={7} />
         <Image
-          src={'/assets/concave-logo.png'}
+          src={'/assets/12m.png'}
           alt="concave logo"
           maxWidth="180px"
           position="relative"
+          background={''}
         />
         <InfoItem value={''} label="vAPR" pl={7} fontWeight={'bold'} />
         <InfoItem value={vapr.toUpperCase()} fontWeight={'bold'} label="" pl={7} />
@@ -62,7 +64,7 @@ function LiquidStaking() {
       <Flex direction="row" gap="1" position="relative">
         <BaseModal
           w="220px"
-          h="490px"
+          h="450px"
           borderWidth={0}
           borderRadius={16}
           px={6}
@@ -75,7 +77,9 @@ function LiquidStaking() {
           <Text ml={'17.5%'} color="text.low" fontSize={8}>
             Currently Staked | Staking Cap
           </Text>
-          <LiquidStakingCNV stakedcnv="83,431 CNV" />
+          <Progress colorScheme="blue" size="lg" value={20} />
+
+          {/* <LiquidStakingCNV stakedcnv="83,431 CNV" /> */}
 
           <ButtonLink
             top={'4%'}

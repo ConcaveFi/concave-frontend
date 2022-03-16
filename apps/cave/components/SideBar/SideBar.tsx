@@ -15,6 +15,7 @@ import {
   BoxProps,
   FlexProps,
   VStack,
+  HStack,
 } from '@chakra-ui/react'
 import {
   FaDiscord,
@@ -33,6 +34,8 @@ import { Image } from '@concave/ui'
 import { ConnectWallet } from 'components/ConnectWallet'
 import { ButtonLink } from 'components/ButtonLink'
 import { DownIcon } from '@concave/icons'
+import SideBarTop from './SideBarTop'
+import SideBarBottom from './SideBarBottom'
 
 interface LinkItemProps {
   name: string
@@ -44,11 +47,6 @@ const LinkItems: Array<LinkItemProps> = [
   { name: 'Liquid Staking', icon: FaBatteryThreeQuarters, link: 'liquidstaking' },
   { name: 'Marketplace', icon: FaShoppingCart, link: '/marketplace' },
   { name: 'Swap', icon: FaRandom, link: 'swap' },
-
-  { name: 'Discord', icon: FaDiscord, link: '/' },
-  { name: 'Twitter', icon: FaTwitter, link: 'https://twitter.com/ConcaveFi' },
-  { name: 'Twitch', icon: FaTwitch, link: '/' },
-  { name: 'Documentation', icon: SiGitbook, link: 'https://docs.concave.lol/introduction/' },
 ]
 
 export function SideBar() {
@@ -89,49 +87,28 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       borderRight="1px"
       bgGradient="linear(to-tr, secondary.150, secondary.100)"
       borderRightColor={useColorModeValue('gray.200', 'gray.700')}
+      px={2}
+      py={4}
       w={{ base: 'full', md: 60 }}
       // pos="fixed"
       h="full"
       {...rest}
     >
-      <Box top="16px" border-radius="16px" background-color="" box-shadow="" w="220px" h="257px">
-        <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-          <Image
-            src={'/assets/concave-logo.png'}
-            alt="concave logo"
-            maxWidth="52px"
-            position="relative"
-          />
-          <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-            Concave
-          </Text>
-        </Flex>
-
-        <VStack gap="1" align="flex-end">
-          <ButtonLink
-            href="/treasury"
-            variant="primary.outline"
-            bgGradient="linear(to-tr, secondary.150, secondary.100)"
-            w="200px"
-            size="large"
-            borderRadius="2xl"
-          >
-            Dashboard
-          </ButtonLink>
-
-          <ConnectWallet />
-        </VStack>
-      </Box>
-
-      <Flex>
-        <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
+      <Flex position="absolute" right="10px">
+        <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} mb={5} />
       </Flex>
+      <SideBarTop />
+
       <Box>
         {LinkItems.map((link) => (
           <NavItem key={link.name} icon={link.icon} link={link.link}>
             {link.name}
           </NavItem>
         ))}
+      </Box>
+
+      <Box mt={10}>
+        <SideBarBottom />
       </Box>
     </Box>
   )
@@ -199,10 +176,6 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       {...rest}
     >
       <IconButton variant="outline" onClick={onOpen} aria-label="open menu" icon={<FiMenu />} />
-
-      <Text fontSize="2xl" ml="8" fontFamily="monospace" fontWeight="bold">
-        Concave
-      </Text>
     </Flex>
   )
 }
