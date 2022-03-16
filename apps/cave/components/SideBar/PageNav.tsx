@@ -95,8 +95,8 @@ function PageNav() {
             _focus={{ boxShadow: 'none' }}
           >
             <Button
-              leftIcon={<Image src={'/assets/sidebar/page-bond.svg'} />}
-              iconSpacing={7}
+              leftIcon={<Image src={'/assets/sidebar/page-lstaking.svg'} />}
+              iconSpacing={2}
               variant="primary.outline"
               bgGradient="linear(to-tr, secondary.150, secondary.100)"
               w="160px"
