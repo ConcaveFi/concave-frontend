@@ -16,7 +16,8 @@ import {
   FlexProps,
   VStack,
   HStack,
-} from '@chakra-ui/react'
+  Card,
+} from '@concave/ui'
 import {
   FaDiscord,
   FaTwitter,
@@ -30,8 +31,8 @@ import { FiMenu } from 'react-icons/fi'
 import { SiGitbook } from 'react-icons/si'
 import { IconType } from 'react-icons'
 import { ReactText } from 'react'
-import { Card, Image } from '@concave/ui'
-import { ConnectWallet } from 'components/TopBar/ConnectWallet'
+import { Image } from '@concave/ui'
+import { ConnectWallet } from 'components/ConnectWallet'
 import { ButtonLink } from 'components/ButtonLink'
 import { DownIcon } from '@concave/icons'
 import SideBarTop from './SideBarTop'

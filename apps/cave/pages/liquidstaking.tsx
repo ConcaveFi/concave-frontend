@@ -5,14 +5,8 @@ import { text } from 'stream/consumers'
 import { ButtonLink } from 'components/ButtonLink'
 import { Progress } from '@chakra-ui/react'
 
-const InfoItem = ({ value, label, fontWeight, ...props }) => (
-  <Stack
-    spacing={0}
-    fontWeight={fontWeight ? fontWeight : 'bold'}
-    textAlign="center"
-    px={8}
-    {...props}
-  >
+const InfoItem = ({ value, label, fontWeight = 'bold', ...props }) => (
+  <Stack spacing={0} fontWeight={fontWeight} textAlign="center" px={8} {...props}>
     <Text fontSize="lg" fontFamily="heading">
       {value}
     </Text>
