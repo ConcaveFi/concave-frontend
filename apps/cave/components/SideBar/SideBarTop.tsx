@@ -17,7 +17,7 @@ import {
   HStack,
 } from '@chakra-ui/react'
 import { Image } from '@concave/ui'
-import { ConnectWallet } from 'components/TopBar/ConnectWallet'
+import { ConnectWallet } from 'components/ConnectWallet'
 import { ButtonLink } from 'components/ButtonLink'
 import { MdOutlineDashboard } from 'react-icons/md'
 
