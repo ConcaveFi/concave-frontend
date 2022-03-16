@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Flex, Text, VStack, HStack } from '@concave/ui'
+import { Box, Flex, Text, Stack, HStack } from '@concave/ui'
 import { Image } from '@concave/ui'
 import { ConnectWallet } from 'components/ConnectWallet'
 import { ButtonLink } from 'components/ButtonLink'
@@ -18,14 +18,13 @@ function SideBarTop() {
         <Image src="/assets/concave/logotype.svg" alt="concave logo" width="100px" ml={3} />
       </Flex>
 
-      <VStack gap="1" align="flex-end" mt={7}>
+      <Stack gap="1" align="flex-end" mt={7}>
         <ButtonLink
           href="/treasury"
           variant="primary.outline"
-          bgGradient="linear(to-tr, secondary.150, secondary.100)"
-          w="200px"
-          size="large"
-          borderRadius="2xl"
+          size="medium"
+          w="full"
+          leftIcon={<MdOutlineDashboard size="20px" />}
         >
           <HStack gap="2">
             <MdOutlineDashboard fontSize="20px" />
@@ -33,7 +32,7 @@ function SideBarTop() {
           </HStack>
         </ButtonLink>
         <ConnectWallet />
-      </VStack>
+      </Stack>
     </Box>
   )
 }
