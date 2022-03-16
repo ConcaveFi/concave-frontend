@@ -1,5 +1,4 @@
-import { withIronSessionApiRoute } from 'iron-session/next'
-import { sessionOptions } from 'lib/session'
+import { getSessionCookie } from 'lib/session'
 import { NextApiRequest, NextApiResponse } from 'next'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -9,7 +8,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     return
   }
 
-  const address = req.session.siwe?.address
+  const address = getSessionCookie(req)?.siwe?.address
   if (!address) {
     res.status(401).json({ message: `You're not connected` })
     return
@@ -17,7 +16,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   // const ens = await getEnsData(address)
 
-  res.send({ address })
+  res.json({ address })
 }
 
-export default withIronSessionApiRoute(handler, sessionOptions)
+export default handler

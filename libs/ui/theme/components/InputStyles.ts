@@ -12,6 +12,9 @@ export const InputStyles: ComponentMultiStyleConfig = {
     },
   },
   sizes: {
+    unset: {
+      field: {},
+    },
     small: {
       field: {
         height: '40px',

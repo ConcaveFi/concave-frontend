@@ -17,6 +17,7 @@ export const colors = {
     2: '#4DBEE1',
   },
   secondary: /* green */ {
+    50: '#19394C',
     100: '#1B3442',
     150: '#0A161F',
   },
