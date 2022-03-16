@@ -61,19 +61,34 @@ function PageNav() {
       </Box> */}
       <Flex>
         <Image src={'/assets/sidebar/linkage.svg'} mt={4} ml={7} />
-        <Box ml={-2}>
-          <Button
-            leftIcon={<Image src={'/assets/sidebar/page-bond.svg'} />}
-            iconSpacing={7}
-            variant="primary.outline"
+        <Box ml={-1}>
+          <Box
+            shadow="down"
             bgGradient="linear(to-tr, secondary.150, secondary.100)"
-            w="160px"
-            h="45px"
-            borderRadius="2xl"
-            textColor="#5F7A99"
+            p={1}
+            box-shadow="lg"
+            rounded="2xl"
           >
-            Bonds
-          </Button>
+            <Link href={'bond'} style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
+              <Button
+                leftIcon={<Image src={'/assets/sidebar/page-bond.svg'} />}
+                iconSpacing={7}
+                // variant="primary.outline"
+                bgGradient="linear(to-tr, secondary.150, secondary.100)"
+                w="160px"
+                h="45px"
+                borderRadius="lg"
+                shadow="up"
+                textColor="#5F7A99"
+              >
+                Bonds
+              </Button>
+            </Link>
+            <Text fontSize="sm" fontWeight="thin" textColor="#5F7A99" textAlign="center" m={1}>
+              5 days - 9% ROI
+            </Text>
+          </Box>
+
           <Link
             href={'liquidstaking'}
             style={{ textDecoration: 'none' }}
