@@ -1,24 +1,43 @@
-import { withIronSessionApiRoute } from 'iron-session/next'
-import { sessionOptions } from 'lib/session'
+import { findUser, insertUser } from 'lib/hasura/admin'
+import { getSessionCookie, setSessionCookie } from 'lib/session'
 import { NextApiRequest, NextApiResponse } from 'next'
-import { SiweMessage } from 'siwe'
+import { ErrorTypes, SiweMessage } from 'siwe'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { method } = req
-  if (method !== 'POST') {
-    res.setHeader('Allow', ['POST']).status(405).end(`Method ${method} Not Allowed`)
-    return
-  }
+  if (method !== 'POST')
+    return res.setHeader('Allow', ['POST']).status(405).end(`Method ${method} Not Allowed`)
+
   try {
     const { message, signature } = req.body
+
     const siweMessage = new SiweMessage(message)
-    const fields = await siweMessage.validate(signature)
-    req.session.siwe = fields
-    await req.session.save()
+    const validatedSiwe = await siweMessage.validate(signature)
+
+    const session = getSessionCookie(req)
+
+    if (validatedSiwe.nonce !== session.nonce)
+      return res.status(422).json({ message: 'Invalid nonce', ok: false })
+
+    const siwe = validatedSiwe
+
+    const address = siwe.address
+    const hasura = (await findUser(address)) || (await insertUser(address))
+
+    setSessionCookie(req, res, { siwe, hasura })
+
     res.json({ ok: true })
-  } catch (_error) {
-    res.json({ ok: false })
+  } catch (e) {
+    setSessionCookie(req, res, { siwe: null, nonce: null })
+
+    if (e === ErrorTypes.EXPIRED_MESSAGE)
+      return res.status(440).json({ message: e.message, ok: false })
+    if (e === ErrorTypes.INVALID_SIGNATURE)
+      return res.status(422).json({ message: e.message, ok: false })
+
+    console.log(e.message)
+    res.status(500).json({ message: e.message, ok: false })
   }
 }
 
-export default withIronSessionApiRoute(handler, sessionOptions)
+export default handler
