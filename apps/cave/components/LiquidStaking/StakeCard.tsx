@@ -1,6 +1,4 @@
-import { Avatar, Box, BaseModal, Card, Container, Flex, Image, Stack, Text } from '@concave/ui'
-import GcnvTitle from 'components/GcnvTitle'
-import { text } from 'stream/consumers'
+import { BaseModal, Flex, Image, Stack, Text } from '@concave/ui'
 import { ButtonLink } from 'components/ButtonLink'
 import { Progress } from '@chakra-ui/react'
 
@@ -51,7 +49,7 @@ const LiquidStakingInfo = ({ asset, vapr, stakedcnv, icon }) => {
   )
 }
 
-function StakeCard() {
+function StakeCard(props) {
   return (
     <div>
       <BaseModal
