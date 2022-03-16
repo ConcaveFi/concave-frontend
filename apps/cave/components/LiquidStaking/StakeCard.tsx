@@ -33,8 +33,8 @@ const LiquidStakingInfo = ({ asset, vapr, stakedcnv, icon }) => {
       shadow="Medium Glow Up"
     >
       <Flex direction="column" gap={1}>
-        <InfoItem value={''} label="Stake Period" pl={7} />
-        <InfoItem value={asset.toUpperCase()} label="" pl={7} />
+        <InfoItem value={''} label="Stake Period" pl={7} fontWeight="bold"/>
+        <InfoItem value={asset.toUpperCase()} label="" pl={7} fontWeight="bold"/>
         <Image
           src={'/assets/12m.png'}
           alt="concave logo"
