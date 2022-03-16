@@ -1,21 +1,5 @@
 import React from 'react'
-import {
-  IconButton,
-  Box,
-  CloseButton,
-  Flex,
-  Icon,
-  useColorModeValue,
-  Link,
-  Drawer,
-  DrawerContent,
-  Text,
-  useDisclosure,
-  BoxProps,
-  FlexProps,
-  VStack,
-  HStack,
-} from '@chakra-ui/react'
+import { Box, Flex, Text, VStack, HStack } from '@chakra-ui/react'
 import { Image } from '@concave/ui'
 import { ConnectWallet } from 'components/TopBar/ConnectWallet'
 import { ButtonLink } from 'components/ButtonLink'
@@ -27,8 +11,6 @@ function SideBarTop() {
       <Box
         top="16px"
         border-radius="16px"
-        // border="1px"
-        // background-color="rgba(156, 156, 156, 0.01);"
         shadow="down"
         bgGradient="linear(to-tr, secondary.150, secondary.100)"
         px={2}
