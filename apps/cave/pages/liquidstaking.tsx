@@ -49,7 +49,7 @@ function LiquidStaking() {
         title="Liquid Staking"
         description="Lock CNV in a staking term and recieve a tradeable NFT representing the position. Stakers receive a share of profits from all Concave products and services: bonding revenue, investment returns and protocol fees."
       />
-      <Flex direction="row" gap="1" position="relative" mt={16}>
+      <Flex direction="row" gap={3} position="relative" mt={16}>
         {StakingGroup.map((s) => (
           <StakeCard
             icon={s.icon}
@@ -60,7 +60,6 @@ function LiquidStaking() {
             key={s.period}
           />
         ))}
-        <StakeCard />
       </Flex>
     </Container>
   )
