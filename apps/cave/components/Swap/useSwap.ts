@@ -18,6 +18,7 @@ const defautValue = {
     amountUSD: 0,
     price: 0,
   },
+  priceImpact: -0.12,
   expertMode: false,
   multihops: true,
   valueInOutputToken: 0,
@@ -43,6 +44,7 @@ export type SwapStateProps = {
   valueInOutputToken: number
   transactionDeadLine: number
   slippageTolerance: number
+  priceImpact: number
   inputTokens: string[]
   outputTokens: string[]
 }

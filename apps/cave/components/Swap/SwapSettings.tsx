@@ -17,11 +17,11 @@ export const SwapSettingsModal: React.FC = ({ children }: { children: React.FC[]
       </Button>
       <Modal
         title=""
-        bluryOverlay
+        closeButton={false}
         cardProps={{
           variant: 'secondary',
           w: 280,
-          h: 430,
+          h: 390,
         }}
         onClose={onClose}
         isOpen={isOpen}

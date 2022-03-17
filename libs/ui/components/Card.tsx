@@ -1,13 +1,13 @@
 import {
-  StackProps,
-  Stack,
-  useMultiStyleConfig,
+  border,
+  Box,
   forwardRef,
   Image,
-  Box,
   space,
-  border,
+  Stack,
+  StackProps,
   useMergeRefs,
+  useMultiStyleConfig,
 } from '@chakra-ui/react'
 import { useRef } from 'react'
 

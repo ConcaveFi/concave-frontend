@@ -2,11 +2,11 @@ import { Flex, FlexProps, NumericInput, Stack, Text } from '@concave/ui'
 import { useCurrency } from 'hooks/useCurrency'
 import React from 'react'
 import { InputContainer } from './InputContainer'
-import { MaxAmount } from './MaxAmount'
 import { Select } from './Select'
 import { Token } from './useSwap'
 
 export function Input({
+  children,
   token,
   maxAmount,
   onChangeValue,
@@ -26,8 +26,11 @@ export function Input({
         <Stack justifyContent={'space-between'}>
           <NumericInput
             max={maxAmount}
+            decimalScale={5}
             value={token.amount}
-            onChangeValue={({ floatValue }) => {
+            onChangeValue={(value) => {
+              if (!value) return
+              const { floatValue } = value
               onChangeValue(floatValue)
             }}
           />
@@ -37,13 +40,7 @@ export function Input({
         </Stack>
         <Stack>
           <Select tokens={tokenOptions} onSelect={onSelectToken} selected={token.symbol} />
-          {maxAmount && (
-            <MaxAmount
-              label="Balance:"
-              max={token.maxAmount}
-              onClick={() => onChangeValue(token.maxAmount)}
-            />
-          )}
+          {children}
         </Stack>
       </InputContainer>
     </Flex>

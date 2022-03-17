@@ -16,6 +16,7 @@ import { UseSwap } from './useSwap'
 
 export const SwapSettingsCard = ({ swap }: { swap: UseSwap }) => {
   const { expertMode, multihops, slippageTolerance, transactionDeadLine } = swap
+
   return (
     <>
       <VStack

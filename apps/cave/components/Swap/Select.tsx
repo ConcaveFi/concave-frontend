@@ -25,8 +25,8 @@ export const Select = ({
   return (
     <Menu placement="bottom-end" autoSelect>
       <MenuButton
-        boxShadow={'outsideDown'}
-        _focus={{ boxShadow: 'outsideDown' }}
+        boxShadow={'Up Small'}
+        _focus={{ boxShadow: 'Up Small' }}
         p={2}
         as={Button}
         bgColor="rgba(156, 156, 156, 0.01);"
@@ -40,8 +40,9 @@ export const Select = ({
       <Modal
         cardProps={{
           h: '70%',
+          p: 6,
+          gap: 4,
           variant: 'primary',
-          gap: 1,
           justifyContent: 'space-between',
         }}
         bluryOverlay={true}
@@ -52,6 +53,7 @@ export const Select = ({
         <SelectToken
           onChange={(symbol) => {
             onSelect(symbol)
+            onClose()
           }}
           commonBases={tokens}
           selected={selected}

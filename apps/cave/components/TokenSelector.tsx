@@ -23,7 +23,7 @@ const TokenItem = ({ name, image, symbol }) => (
 )
 
 const TokensList = ({ tokens }: { tokens: Token[] }) => (
-  <Stack p={2} borderRadius="xl" shadow="down" bgColor="blackAlpha.300">
+  <Stack p={2} borderRadius="xl" shadow="Up Small" bgColor="blackAlpha.300">
     {tokens.map((token) => (
       <TokenItem key={token.address} {...token} />
     ))}
