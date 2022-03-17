@@ -32,7 +32,6 @@ create more shared libs as you feel necessary in `/libs`
 
 Prerequisites: [Node](https://nodejs.org/en/download/), [Yarn](https://classic.yarnpkg.com/en/docs/install/) and [Git](https://git-scm.com/downloads)
 
-
 > dev with hasura on localhost with docker-compose
 
 Please change `lib/hasura/admin.ts`

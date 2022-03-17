@@ -79,6 +79,7 @@ export const Card = forwardRef<CardProps, 'div'>(
                     __css={styles.texture}
                     role="presentation"
                     loading="eager"
+                    decoding="async"
                     bgImage="none"
                     position="absolute"
                     zIndex={0}

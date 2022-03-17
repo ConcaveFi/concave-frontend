@@ -24,7 +24,6 @@
     "lint-staged": "^12.3.5",
     "prettier": "^2.5.1",
     "rimraf": "^3.0.2",
-    "sync-directory": "^4.0.12",
     "turbo": "^1.1.5"
   },
   "engines": {
