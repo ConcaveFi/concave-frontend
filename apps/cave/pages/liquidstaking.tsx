@@ -27,7 +27,7 @@ const LiquidStakingInfo = ({ asset, vapr, stakedcnv, icon }) => {
       py={4}
       position="relative"
       direction="column"
-      shadow="Medium Glow Up"
+      shadow="Glow Up Medium"
     >
       <Flex direction="column" gap={1}>
         <InfoItem value={''} label="Stake Period" pl={7} />
@@ -48,7 +48,7 @@ const LiquidStakingInfo = ({ asset, vapr, stakedcnv, icon }) => {
 
 const LiquidStakingCNV = ({ stakedcnv }) => {
   return (
-    <Card bgGradient="" px="0" position="relative" direction="column" shadow="Medium Glow Up">
+    <Card bgGradient="" px="0" position="relative" direction="column" shadow="Glow Up Medium">
       <InfoItem value={''} label="" pl={7} fontWeight={'bold'} />
       <InfoItem value={stakedcnv.toUpperCase()} fontWeight={'light'} label="" pl={7} />
     </Card>

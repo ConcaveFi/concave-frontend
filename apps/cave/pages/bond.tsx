@@ -16,7 +16,7 @@ const InfoItem = ({ value, label, ...props }) => (
 
 const BondInfo = ({ asset, roi, vestingTerm, icon }) => {
   return (
-    <Card bg="none" px={3} py={4} direction="row" shadow="Medium Glow Up">
+    <Card bg="none" px={3} py={4} direction="row" shadow="Glow Up Medium">
       <Avatar src={icon} name="" mr={3} />
       <InfoItem value={asset.toUpperCase()} label="Asset" pl={3} />
       <Box w="1px" mx={-1} my={-4} bg="strokeReflection" />
@@ -42,7 +42,7 @@ function Bond() {
           borderWidth={3}
           px={6}
           py={20}
-          shadow="Inner Glow"
+          shadow="Glow Inner"
           gap={10}
         >
           <BondInfo asset="CNV" icon="" roi="9.4%" vestingTerm="5 days" />
