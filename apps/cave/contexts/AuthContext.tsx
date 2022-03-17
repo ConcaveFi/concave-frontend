@@ -1,10 +1,15 @@
+import { User } from 'lib/session'
 import React, { createContext, useContext } from 'react'
-import { useMutation } from 'react-query'
+import { useMutation, useQueryClient, useQuery } from 'react-query'
 import { SiweMessage } from 'siwe'
 import { Connector, useAccount, useConnect } from 'wagmi'
 
-const authFetch = (path: string, options?: RequestInit) =>
-  fetch(`/api/session/${path}`, options).then((res) => res.json())
+export const authFetch = (path: string, options?: RequestInit) =>
+  fetch(`/api/session/${path}`, options).then(async (res) => {
+    const data = await res.json()
+    if (res.status !== 200) throw data.message
+    return data
+  })
 
 const createSiweMessage = async (address: string, chainId: number) => {
   const { nonce } = await authFetch('nonce')
@@ -30,7 +35,7 @@ interface AuthValue {
   error?: any
   signIn: (connector: Connector) => Promise<any>
   signOut: () => Promise<any>
-  isSignedIn: boolean
+  user: User
   isConnected: boolean
   isErrored: boolean
 }
@@ -47,32 +52,56 @@ const siweSignIn = async ({ address, chainId, signMessage }) => {
   // Verify signature
   const verification = await verifySignature(message, signature)
   if (!verification.ok) throw new Error('Error verifying message')
+
+  return verification.user
 }
 
 export const AuthProvider: React.FC = ({ children }) => {
   const [account, disconnect] = useAccount()
   const [, connect] = useConnect()
 
-  const signIn = useMutation(async (connector: Connector) => {
-    // const connector = account.data.connector
+  const queryClient = useQueryClient()
 
-    const res = await connect(connector)
-    if (!res.data) throw res.error ?? new Error('Something went wrong')
+  const signIn = useMutation(
+    async (connector: Connector) => {
+      // const connector = account.data.connector
 
-    const signer = await connector.getSigner()
-    await siweSignIn({
-      address: res.data.account,
-      chainId: res.data.chain.id,
-      signMessage: (m) => signer.signMessage(m),
-    })
-  })
+      const res = await connect(connector)
+      if (!res.data) throw res.error ?? new Error('Something went wrong')
 
-  const signOut = useMutation(() => {
-    disconnect()
-    return authFetch('logout')
-  })
+      const signer = await connector.getSigner()
+      const address = res.data.account
+      const user = await siweSignIn({
+        address,
+        chainId: res.data.chain.id,
+        signMessage: (m) => signer.signMessage(m),
+      })
 
-  const isSignedIn = signIn.isSuccess
+      return user
+    },
+    {
+      onSuccess: (user) => {
+        queryClient.setQueryData('me', () => user)
+        queryClient.invalidateQueries('me')
+      },
+    },
+  )
+
+  const signOut = useMutation(
+    () => {
+      disconnect()
+      return authFetch('logout')
+    },
+    {
+      onSuccess: async () => {
+        await queryClient.cancelQueries('me')
+        queryClient.setQueryData('me', () => null)
+      },
+    },
+  )
+
+  const user = useQuery('me', () => authFetch('me'), { refetchOnWindowFocus: true })
+
   const isConnected = !account.loading && !!account.data?.address
   const error = signIn.error || signOut.error
 
@@ -81,8 +110,8 @@ export const AuthProvider: React.FC = ({ children }) => {
       value={{
         signOut: signOut.mutateAsync,
         signIn: signIn.mutateAsync,
+        user: user.data,
         error,
-        isSignedIn,
         isConnected,
         isErrored: !!error,
       }}

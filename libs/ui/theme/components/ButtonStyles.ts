@@ -1,6 +1,9 @@
 import { ComponentSingleStyleConfig, cssVar, tokenToCSSVar } from '@chakra-ui/react'
 import { gradientBorder } from '../utils/gradientBorder'
 
+const HoverRadialGradient =
+  'radial-gradient(97.48% 120.4% at 49.69% 76.45%, #3082E1 0%, #3D3786 31.18%, transparent 100%)'
+
 export const ButtonStyles: ComponentSingleStyleConfig = {
   baseStyle: {
     fontSize: '14px',
@@ -23,6 +26,7 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
       borderRadius: '2xl',
       ...gradientBorder({ borderRadius: '2xl', borderWidth: 2 }),
       shadow: 'up',
+      _hover: { bg: HoverRadialGradient, color: 'text.high' },
     }),
     primary: {
       ...gradientBorder({ borderRadius: 'xl' }),
@@ -38,7 +42,7 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
       borderColor: 'subtle',
       color: 'text.low',
       ...(props.isActive && {
-        color: 'text.medium',
+        color: 'text.high',
         textDecoration: 'underline',
       }),
       _even: {
@@ -51,8 +55,8 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
       },
       boxShadow: 'inset 1px 0px 2px 0px rgba(16, 19, 23, 1), 1px 0px 2px 0px rgba(16, 19, 23, 1)',
       bg: 'transparent',
-      _active: { bg: 'radialGradient' },
-      _hover: { bg: 'radialGradient' },
+      _active: { bg: HoverRadialGradient },
+      _hover: { bg: HoverRadialGradient },
     }),
   },
   defaultProps: {},

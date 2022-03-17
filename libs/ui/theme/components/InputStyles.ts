@@ -27,7 +27,7 @@ export const InputStyles: ComponentMultiStyleConfig = {
       field: {
         p: 3,
         borderRadius: 'xl',
-        shadow: 'Big Down',
+        shadow: 'Down Big',
         bgColor: 'blackAlpha.300',
       },
     },

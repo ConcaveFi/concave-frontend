@@ -68,21 +68,21 @@ export const Card = forwardRef<CardProps, 'div'>(
           __css={{ borderRadius: styles.container.borderRadius }}
           {...rest}
           pos="relative"
-          maxH="100%"
-          overflow="auto"
+          overflow="clip"
         >
           {children}
           {textureSrc && (
-            <Box pos="absolute" overflow="hidden" inset={0} zIndex={-1}>
+            <Box pos="absolute" overflow="clip" inset={0} zIndex={-1}>
               <Tiles
                 Image={(p) => (
                   <Image
                     __css={styles.texture}
                     role="presentation"
                     loading="eager"
+                    decoding="async"
                     bgImage="none"
                     position="absolute"
-                    zIndex={-1}
+                    zIndex={0}
                     src={textureSrc}
                     draggable={false}
                     alt=""

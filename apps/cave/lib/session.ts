@@ -14,17 +14,31 @@ export const sessionOptions = {
   } as CookieSerializeOptions,
 }
 
+export interface User {
+  id: string
+  role: string
+  address: string
+  chainId: number
+}
+
 type Session = {
   siwe: SiweMessage
   nonce: string
-  hasura: { id: string; role: string }
+  user: User
+}
+
+export const destroySession = (res: NextApiResponse) => {
+  res.setHeader(
+    'Set-Cookie',
+    serialize(sessionOptions.cookieName, '', sessionOptions.cookieOptions),
+  )
 }
 
 export const setSessionCookie = (req: NextApiRequest, res: NextApiResponse, cookie) => {
   const currentSession = getSessionCookie(req)
   const encryptedCookie = aes256.encrypt(
     sessionOptions.password,
-    JSON.stringify({ ...cookie, ...currentSession }),
+    JSON.stringify({ ...currentSession, ...cookie }),
   )
 
   res.setHeader(

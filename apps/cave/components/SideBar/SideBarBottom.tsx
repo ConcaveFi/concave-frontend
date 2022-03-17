@@ -1,34 +1,6 @@
 import React from 'react'
-import {
-  IconButton,
-  Box,
-  CloseButton,
-  Flex,
-  Icon,
-  useColorModeValue,
-  Link,
-  Drawer,
-  DrawerContent,
-  Text,
-  useDisclosure,
-  BoxProps,
-  FlexProps,
-  VStack,
-  HStack,
-} from '@chakra-ui/react'
+import { Box, Link, Text, VStack, HStack } from '@chakra-ui/react'
 import { Image } from '@concave/ui'
-import { ExternalLinkIcon } from '@chakra-ui/icons'
-import {
-  FaDiscord,
-  FaTwitter,
-  FaTwitch,
-  FaShoppingCart,
-  FaRandom,
-  FaBatteryThreeQuarters,
-  FaBriefcase,
-} from 'react-icons/fa'
-import { FiMenu } from 'react-icons/fi'
-import { SiGitbook } from 'react-icons/si'
 
 interface MediaProps {
   icon: string
@@ -69,8 +41,6 @@ function SideBarBottom() {
       <Box
         top="16px"
         border-radius="16px"
-        // border="1px"
-        // background-color="rgba(156, 156, 156, 0.01);"
         shadow="down"
         bgGradient="linear(to-tr, secondary.250, secondary.100)"
         px={12}

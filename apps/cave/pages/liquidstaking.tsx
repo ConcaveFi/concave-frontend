@@ -3,6 +3,7 @@ import React from 'react'
 import GcnvTitle from 'components/GcnvTitle'
 import StakeCard from 'components/LiquidStaking/StakeCard'
 
+
 interface StakingGroupProps {
   icon: string
   period: string
@@ -41,6 +42,20 @@ const StakingGroup: Array<StakingGroupProps> = [
     stakingLink: '',
   },
 ]
+
+
+const InfoItem = ({ value, label, fontWeight = 'bold', ...props }) => (
+  <Stack spacing={0} fontWeight={fontWeight} textAlign="center" px={8} {...props}>
+    <Text fontSize="lg" fontFamily="heading">
+      {value}
+    </Text>
+    <Text fontSize="sm" color="text.low">
+      {label}
+    </Text>
+  </Stack>
+)
+
+
 
 function LiquidStaking() {
   return (
