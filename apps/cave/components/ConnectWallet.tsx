@@ -2,7 +2,6 @@ import React from 'react'
 import { Button, Image, Menu, MenuButton, MenuItem, MenuList } from '@concave/ui'
 import { useConnect } from 'wagmi'
 import { useAuth } from 'contexts/AuthContext'
-import { useUser } from 'contexts/UserContext'
 
 import { useIsMounted } from 'hooks/useIsMounted'
 
@@ -10,12 +9,12 @@ const miniAddress = (address) =>
   `${address.substr(0, 6)}...${address.substr(address.length - 6, address.length)}`
 
 const DisconnectButton = () => {
-  const { signOut } = useAuth()
-  const { user, isSuccess } = useUser()
-  if (!isSuccess) return null
+  const { signOut, user } = useAuth()
+  console.log(user)
+  if (!user) return null
   return (
     <Menu placement="bottom-end">
-      <MenuButton as={Button}>{user.address}</MenuButton>
+      <MenuButton as={Button}>{miniAddress(user.address)}</MenuButton>
       <MenuList>
         <MenuItem onClick={signOut}>Disconnect</MenuItem>
       </MenuList>
@@ -24,7 +23,7 @@ const DisconnectButton = () => {
 }
 
 const ConnectButton = ({ onError }: { onError: (e: Error) => void }) => {
-  const [{ data, error }, connect] = useConnect()
+  const [{ data }] = useConnect()
   const { signIn } = useAuth()
   const isMounted = useIsMounted()
   return (
@@ -66,7 +65,7 @@ const ConnectButton = ({ onError }: { onError: (e: Error) => void }) => {
 }
 
 export function ConnectWallet(): JSX.Element {
-  const { isSignedIn } = useAuth()
+  const { user } = useAuth()
 
-  return isSignedIn ? <DisconnectButton /> : <ConnectButton onError={(e) => console.log(e)} />
+  return user ? <DisconnectButton /> : <ConnectButton onError={(e) => console.log(e)} />
 }
