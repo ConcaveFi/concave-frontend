@@ -22,11 +22,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const siwe = validatedSiwe
 
     const address = siwe.address
-    const hasura = (await findUser(address)) || (await insertUser(address))
+    const user = (await findUser(address)) || (await insertUser(address))
 
-    setSessionCookie(req, res, { siwe, hasura })
+    setSessionCookie(req, res, { siwe, user })
 
-    res.json({ ok: true })
+    res.json({ ok: true, user })
   } catch (e) {
     setSessionCookie(req, res, { siwe: null, nonce: null })
 

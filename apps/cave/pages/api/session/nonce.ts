@@ -10,10 +10,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   const nonce = generateNonce()
-
   setSessionCookie(req, res, { nonce })
-
-  // await req.session.save()
 
   res.send({ nonce })
 }

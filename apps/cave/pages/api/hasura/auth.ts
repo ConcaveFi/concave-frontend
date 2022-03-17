@@ -13,7 +13,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const session = decryptSession(encryptedSiwe)
   if (!session) return res.status(401).json({ message: `You're not connected` })
 
-  const { role, id } = session.hasura
+  const { role, id } = session.user
 
   res.json({
     'X-Hasura-Role': role || 'user',
