@@ -63,7 +63,7 @@ function StakeCard(props) {
         bgGradient="linear(to-tr, secondary.150, secondary.100)"
         gap={1}
       >
-        <LiquidStakingInfo asset="12 Month" icon="" vapr="6,342%" stakedcnv="83,431 CNV" />
+        <LiquidStakingInfo asset={props.period} icon="" vapr={props.vapr} stakedcnv={`${props.stakedCNV} CNV`} />
         <Text ml={'17.5%'} color="text.low" fontSize={8}>
           Currently Staked | Staking Cap
         </Text>
