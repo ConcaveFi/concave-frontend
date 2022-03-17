@@ -73,13 +73,14 @@ export const Card = forwardRef<CardProps, 'div'>(
         >
           {children}
           {textureSrc && (
-            <Box pos="absolute" overflow="hidden" inset={0} zIndex={-1}>
+            <Box pos="absolute" overflow="clip" inset={0} zIndex={-1}>
               <Tiles
                 Image={(p) => (
                   <Image
                     __css={styles.texture}
                     role="presentation"
                     loading="eager"
+                    decoding="async"
                     bgImage="none"
                     position="absolute"
                     zIndex={-1}

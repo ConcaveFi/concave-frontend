@@ -6,11 +6,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "yarn hardlink-assets && next build",
+    "build": "yarn resolve-assets-symlinks && next build",
     "local-build": "next build",
     "start": "next start",
     "symlink-assets": "globstar --node -- lnk \"../../assets/*\" ./public/assets",
-    "hardlink-assets": "syncdir ../../assets ./public/assets --copy",
+    "resolve-assets-symlinks": "find ./public/assets -lname '*' -delete && cp -a ../../assets/. ./public/assets",
     "lint": "next lint --fix",
     "gen": "DOTENV_CONFIG_PATH=./.env graphql-codegen --config codegen.yml -r dotenv/config"
   },
@@ -33,7 +33,6 @@
     "react-number-format": "^4.9.1",
     "react-query": "^3.34.16",
     "siwe": "^1.1.2",
-    "symlink-dir": "^5.0.1",
     "wagmi": "^0.2.18"
   },
   "devDependencies": {
