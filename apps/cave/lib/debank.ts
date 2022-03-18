@@ -75,8 +75,8 @@ export const fetchPortfolio = async (address: string, chain: DebankChain = 'eth'
   ])
 
   const totalUsd =
-    reduceTokensValue(tokens) +
-    protocols.reduce((total, protocol) => total + protocol.total_net_usd_value, 0)
+    reduceTokensValue(await tokens) +
+    (await protocols).reduce((total, protocol) => total + protocol.total_net_usd_value, 0)
 
   return {
     totalUsd,
