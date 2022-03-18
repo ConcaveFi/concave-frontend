@@ -10,7 +10,7 @@ const connectors = [
   new InjectedConnector({ chains: supportedChains }),
   new WalletConnectConnector({
     chains: supportedChains,
-    options: { infuraId: process.env.NEXT_PUBLIC_INFURA_ID, qrcode: false },
+    options: { infuraId: process.env.NEXT_PUBLIC_INFURA_ID, qrcode: true },
   }),
 ]
 

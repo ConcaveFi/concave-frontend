@@ -3,20 +3,13 @@ import { NextApiRequest, NextApiResponse } from 'next'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { method } = req
-  if (method !== 'GET') {
-    res.setHeader('Allow', ['GET']).status(405).end(`Method ${method} Not Allowed`)
-    return
-  }
+  if (method !== 'GET')
+    return res.setHeader('Allow', ['GET']).status(405).end(`Method ${method} Not Allowed`)
 
-  const address = getSessionCookie(req)?.siwe?.address
-  if (!address) {
-    res.status(401).json({ message: `You're not connected` })
-    return
-  }
+  const user = getSessionCookie(req)?.user
+  if (!user) return res.status(401).json({ message: `You're not connected` })
 
-  // const ens = await getEnsData(address)
-
-  res.json({ address })
+  res.json(user)
 }
 
 export default handler

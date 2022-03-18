@@ -22,15 +22,19 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
     },
   },
   variants: {
-    'primary.outline': (props) => ({
+    'primary.outline': {
       borderRadius: '2xl',
       ...gradientBorder({ borderRadius: '2xl', borderWidth: 2 }),
+      fontFamily: 'heading',
+      fontWeight: 'bold',
       shadow: 'up',
       _hover: { bg: HoverRadialGradient, color: 'text.high' },
-    }),
+    },
     primary: {
-      ...gradientBorder({ borderRadius: 'xl' }),
+      ...gradientBorder({ borderRadius: '2xl', borderWidth: 2 }),
       bgGradient: 'linear(to-r, primary.1, primary.2)',
+      fontFamily: 'heading',
+      fontWeight: 'bold',
       shadow: 'up',
     },
     secondary: {

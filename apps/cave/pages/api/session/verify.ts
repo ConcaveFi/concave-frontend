@@ -1,5 +1,5 @@
 import { findUser, insertUser } from 'lib/hasura/admin'
-import { getSessionCookie, setSessionCookie } from 'lib/session'
+import { destroySession, getSessionCookie, setSessionCookie } from 'lib/session'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { ErrorTypes, SiweMessage } from 'siwe'
 
@@ -28,7 +28,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     res.json({ ok: true, user })
   } catch (e) {
-    setSessionCookie(req, res, { siwe: null, nonce: null })
+    destroySession(res)
 
     if (e === ErrorTypes.EXPIRED_MESSAGE)
       return res.status(440).json({ message: e.message, ok: false })

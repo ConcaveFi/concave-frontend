@@ -18,9 +18,7 @@ export const gradientBorder = ({
 } = {}): SystemStyleInterpolation => {
   return {
     position: 'relative',
-    '& > *': {
-      zIndex: 1,
-    },
+    '& > *': { zIndex: 1 },
     ...(borderWidth && {
       '&::before': {
         content: '""',

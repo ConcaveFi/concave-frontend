@@ -1,5 +1,15 @@
 import React from 'react'
-import { Button, Image, Menu, MenuButton, MenuItem, MenuList } from '@concave/ui'
+import {
+  Text,
+  Portal,
+  Button,
+  Card,
+  Image,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+} from '@concave/ui'
 import { useConnect } from 'wagmi'
 import { useAuth } from 'contexts/AuthContext'
 
@@ -10,7 +20,7 @@ const miniAddress = (address) =>
 
 const DisconnectButton = () => {
   const { signOut, user } = useAuth()
-  console.log(user)
+
   if (!user) return null
   return (
     <Menu placement="bottom-end">
@@ -22,50 +32,78 @@ const DisconnectButton = () => {
   )
 }
 
-const ConnectButton = ({ onError }: { onError: (e: Error) => void }) => {
-  const [{ data }] = useConnect()
+const ConnectButton = () => {
+  const [{ data }, connect] = useConnect()
   const { signIn } = useAuth()
   const isMounted = useIsMounted()
   return (
     <>
-      <Menu placement="bottom-end" isLazy>
-        <MenuButton
-          as={Button}
-          variant="secondary"
-          bgGradient="linear(to-tr, secondary.150, secondary.100)"
-          size="large"
-          w={200}
-        >
-          Connect wallet
+      <Menu placement="right-start" isLazy>
+        <MenuButton as={Button} fontFamily="heading" variant="primary" size="medium" w="100%">
+          Connect Wallet
         </MenuButton>
-        <MenuList bg="black.100" borderRadius="xl" minW="min" px={1}>
-          {isMounted &&
-            data.connectors.map((connector) => {
-              if (!connector.ready) return null
-              // change image from using connector id to something else, injected can be metamask, coinbase, brave etc
-              return (
-                <MenuItem
-                  borderRadius="xl"
-                  icon={<Image maxWidth="20px" src={`/connectors/${connector.id}.png`} alt="" />}
-                  key={connector.id}
-                  onClick={() => signIn(connector)}
-                >
-                  {connector.name}
-                </MenuItem>
-              )
-            })}
-        </MenuList>
-        {/* <UnsuportedNetworkModal
-          isOpen={state === 'unsupportedNetwork'}
-          onClose={() => setState('idle')}
-        /> */}
+        <Portal>
+          <MenuList
+            minW="min"
+            bg="none"
+            border="none"
+            shadow="none"
+            p="0"
+            backdropFilter="blur(8px)"
+          >
+            <Card variant="secondary" borderRadius="xl" px={1} py={2} gap="1">
+              {isMounted &&
+                data.connectors.map((connector) => {
+                  if (!connector.ready) return null
+                  // change image from using connector id to something else, injected can be metamask, coinbase, brave etc
+                  return (
+                    <MenuItem
+                      borderRadius="xl"
+                      icon={
+                        <Image
+                          maxWidth="20px"
+                          src={`/assets/connectors/${connector.id}.png`}
+                          alt=""
+                        />
+                      }
+                      key={connector.id}
+                      onClick={() => connect(connector).then(signIn)}
+                    >
+                      {connector.name}
+                    </MenuItem>
+                  )
+                })}
+            </Card>
+          </MenuList>
+        </Portal>
       </Menu>
     </>
   )
 }
 
-export function ConnectWallet(): JSX.Element {
-  const { user } = useAuth()
+const SignInButton = () => {
+  const { signIn, isWaitingForSignature } = useAuth()
+  return (
+    <>
+      <Button
+        variant="primary"
+        size="medium"
+        w="100%"
+        onClick={signIn}
+        isLoading={isWaitingForSignature}
+        loadingText="Awaiting signature"
+      >
+        Sign In
+      </Button>
+    </>
+  )
+}
 
-  return user ? <DisconnectButton /> : <ConnectButton onError={(e) => console.log(e)} />
+export function ConnectWallet(): JSX.Element {
+  const { user, isConnected } = useAuth()
+
+  if (user) return <DisconnectButton />
+
+  if (isConnected && !user) return <SignInButton />
+  return <ConnectButton />
 }

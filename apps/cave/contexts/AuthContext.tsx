@@ -1,8 +1,9 @@
+import { Signer } from 'ethers'
 import { User } from 'lib/session'
 import React, { createContext, useContext } from 'react'
 import { useMutation, useQueryClient, useQuery } from 'react-query'
 import { SiweMessage } from 'siwe'
-import { Connector, useAccount, useConnect } from 'wagmi'
+import { useAccount } from 'wagmi'
 
 export const authFetch = (path: string, options?: RequestInit) =>
   fetch(`/api/session/${path}`, options).then(async (res) => {
@@ -33,21 +34,25 @@ const verifySignature = async (message: string, signature: string) =>
 
 interface AuthValue {
   error?: any
-  signIn: (connector: Connector) => Promise<any>
+  signIn: () => Promise<any>
   signOut: () => Promise<any>
   user: User
+  isWaitingForSignature: boolean
   isConnected: boolean
   isErrored: boolean
 }
 
 const AuthContext = createContext({} as AuthValue)
 
-const siweSignIn = async ({ address, chainId, signMessage }) => {
+const siweSignIn = async (signer: Signer) => {
+  const address = await signer.getAddress()
+  const chainId = await signer.getChainId()
+
   // Create message
   const message = await createSiweMessage(address, chainId)
 
   // Sign message
-  const signature = await signMessage(message)
+  const signature = await signer.signMessage(message)
 
   // Verify signature
   const verification = await verifySignature(message, signature)
@@ -58,24 +63,16 @@ const siweSignIn = async ({ address, chainId, signMessage }) => {
 
 export const AuthProvider: React.FC = ({ children }) => {
   const [account, disconnect] = useAccount()
-  const [, connect] = useConnect()
 
   const queryClient = useQueryClient()
 
   const signIn = useMutation(
-    async (connector: Connector) => {
-      // const connector = account.data.connector
-
-      const res = await connect(connector)
-      if (!res.data) throw res.error ?? new Error('Something went wrong')
+    async () => {
+      const connector = account.data?.connector
+      if (!account.data.connector) return
 
       const signer = await connector.getSigner()
-      const address = res.data.account
-      const user = await siweSignIn({
-        address,
-        chainId: res.data.chain.id,
-        signMessage: (m) => signer.signMessage(m),
-      })
+      const user = await siweSignIn(signer)
 
       return user
     },
@@ -112,6 +109,7 @@ export const AuthProvider: React.FC = ({ children }) => {
         signIn: signIn.mutateAsync,
         user: user.data,
         error,
+        isWaitingForSignature: signIn.isLoading,
         isConnected,
         isErrored: !!error,
       }}
