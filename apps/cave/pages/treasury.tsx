@@ -1,4 +1,4 @@
-import { Box, Container, Flex, Heading, Image, Spinner, Stack, Text } from '@concave/ui'
+import { Box, Card, Container, Flex, Heading, Image, Spinner, Stack, Text } from '@concave/ui'
 import { fetchPortfolio } from 'lib/debank'
 import { useQuery } from 'react-query'
 
@@ -17,15 +17,15 @@ const formatUsd = (value) => makeCurrencyFormat('en-US', 'USD').format(value)
 
 const Token = ({ img, name, value, balance = null, children = null }) => {
   return (
-    <Stack
+    <Card
+      variant="primary"
+      borderWidth={0}
       p={4}
-      w="100%"
-      maxW="450px"
-      borderRadius="xl"
-      bgGradient="linear(to-t, secondary.150, secondary.100)"
-      shadow="lg"
+      width={['100%', '400px', '450px']}
+      shadow="Up Big"
+      gap={4}
     >
-      <Stack direction="row" justifyContent="space-between" w="100%">
+      <Stack direction="row" justify="space-between" w="100%">
         <Stack direction="row" align="center">
           <Image src={img} maxW="28px" maxH="28px" alt="" />
           <Text fontWeight="bold">{name}</Text>
@@ -36,7 +36,7 @@ const Token = ({ img, name, value, balance = null, children = null }) => {
         </Stack>
       </Stack>
       {children}
-    </Stack>
+    </Card>
   )
 }
 
@@ -56,7 +56,7 @@ export default function Treasury() {
 
   return (
     <Container maxWidth="container.lg" pt={16}>
-      <Stack my={8} align="center">
+      <Stack w="100%" my={8} align="center">
         <Heading as="h1">Concave Treasury</Heading>
         <Heading as="h2" py={4} fontSize="2xl">
           Total Value {formatUsd(treasury.totalUsd)}

@@ -21,20 +21,22 @@ export const gradientBorder = ({
     '& > *': {
       zIndex: 1,
     },
-    '&::before': {
-      content: '""',
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      borderRadius: calc.add(theme.radii[borderRadius], toPx(borderWidth)),
-      m: `-${toPx(borderWidth)}`,
-      p: toPx(borderWidth),
-      bg: variants[variant],
-      WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-      WebkitMaskComposite: 'source-out',
-      maskComposite: 'exclude',
-    },
+    ...(borderWidth && {
+      '&::before': {
+        content: '""',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        borderRadius: calc.add(theme.radii[borderRadius], toPx(borderWidth)),
+        m: `-${toPx(borderWidth)}`,
+        p: toPx(borderWidth),
+        bg: variants[variant],
+        WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+        WebkitMaskComposite: 'source-out',
+        maskComposite: 'exclude',
+      },
+    }),
   }
 }
