@@ -69,8 +69,10 @@ const reduceTokensValue = (tokens) =>
   tokens.reduce((total, token) => total + token.amount * token.price, 0)
 
 export const fetchPortfolio = async (address: string, chain: DebankChain = 'eth') => {
-  const tokens = await fetchTokens(address, chain)
-  const protocols = await fetchProtocols(address, chain)
+  const [tokens, protocols] = await Promise.all([
+    fetchTokens(address, chain),
+    fetchProtocols(address, chain),
+  ])
 
   const totalUsd =
     reduceTokensValue(tokens) +
