@@ -1,4 +1,4 @@
-import { Popover, PopoverBody, PopoverContent, PopoverTrigger } from '@chakra-ui/react'
+import { Popover, PopoverBody, PopoverContent, PopoverTrigger, Stack } from '@chakra-ui/react'
 import { ExpandArrowIcon, GasIcon, SwapSettingsIcon } from '@concave/icons'
 import {
   Button,
@@ -145,28 +145,17 @@ export function SwapCard({
         title="Confirm Swap"
         isOpen={status.isOpen}
         onClose={status.onClose}
-        cardProps={{
-          w: 400,
-          h: 350,
-          justifyContent: 'center',
-          align: 'center',
-          variant: 'primary',
-          p: 6,
-        }}
+        sx={{ alignItems: 'center' }}
       >
         <TransactionStatus swap={swap} onClose={status.onClose}></TransactionStatus>
       </Modal>
 
       <Modal
-        cardProps={{
-          p: 6,
-          gap: 2,
-          variant: 'primary',
-        }}
         bluryOverlay={true}
         title="Confirm Swap"
         isOpen={isOpen}
         onClose={onClose}
+        sx={{ gap: 2 }}
       >
         <ConfirmSwap
           swap={swap}

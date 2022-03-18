@@ -9,8 +9,6 @@ export const CardStyles: ComponentMultiStyleConfig = {
     container: {
       borderRadius,
       maxW: '100%',
-      w: 'fit-content',
-      h: 'fit-content',
       ...gradientBorder({ borderRadius, borderWidth }),
     },
     texture: {
@@ -42,8 +40,6 @@ export const CardStyles: ComponentMultiStyleConfig = {
         src: '/assets/textures/glass.jpg',
         opacity: 0.45,
         inset: 0,
-        w: '100%',
-        h: '100%',
       },
     },
   },
