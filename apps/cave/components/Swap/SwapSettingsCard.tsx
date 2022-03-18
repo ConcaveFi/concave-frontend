@@ -14,7 +14,7 @@ import {
 import React from 'react'
 import { UseSwap } from './useSwap'
 
-export const SwapSettingsCard = ({ swap }: { swap: UseSwap }) => {
+export const SwapSettings = ({ swap }: { swap: UseSwap }) => {
   const { expertMode, multihops, slippageTolerance, transactionDeadLine } = swap
 
   return (

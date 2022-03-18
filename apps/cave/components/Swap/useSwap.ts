@@ -1,11 +1,10 @@
-import { useColorModePreference } from '@concave/ui'
 import { coingecko } from 'lib/coingecko.adapter'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 
 const defautValue = {
   from: {
-    symbol: 'DAI',
+    symbol: 'XMR',
     maxAmount: 1000,
     amountUSD: 0,
     amount: 0,

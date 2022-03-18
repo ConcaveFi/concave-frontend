@@ -10,6 +10,15 @@ export const colors = {
     high: '#fff',
     low: '#5f7a99',
   },
+  'Big Color Darker': 'linear-gradient(239.18deg, #19394C 27.18%, #0A161F 96.11%)',
+  stroke: {
+    // acent on figma
+    primary:
+      'linear-gradient(41.89deg, #53399B 0.69%, #7DE0FF 38.19%, #504179 72.85%, #84E2FF 100%)',
+    //medium on figma
+    secondary:
+      'linear-gradient(57deg, #171E27 -7.38%, #435F81 29.46%, #202D3D 71.39%, #93C5FF 107.62%)',
+  },
 
   primary: /* purple & blue */ {
     1: '#8671C0',
@@ -19,6 +28,9 @@ export const colors = {
     50: '#19394C',
     100: '#1B3442',
     150: '#0A161F',
+  },
+  teste: {
+    1: ';',
   },
 
   subtle: '#2A425F',

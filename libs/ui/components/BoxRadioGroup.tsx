@@ -1,6 +1,6 @@
 import { Box, useRadio, useRadioGroup, UseRadioProps } from '@chakra-ui/react'
-import { gradientBorder } from '../theme/utils/gradientBorder'
 import React, { useMemo } from 'react'
+import { gradientBorder } from '../theme/utils/gradientBorder'
 
 type BoxRadioGroup<T> = {
   defaultValue?: string
@@ -39,8 +39,7 @@ const RadioCard: React.FC = (props: UseRadioProps & { children: React.FC }) => {
     return {
       ...gradientBorder({ borderRadius: '2xl' }),
       borderRadius: '2xl',
-      boxShadow:
-        '0px 5px 14px rgba(0, 0, 0, 0.47), 4px -7px 15px rgba(174, 177, 255, 0.13), inset -1px 1px 2px rgba(128, 186, 255, 0.24)',
+      boxShadow: 'Up Big',
     }
   }, [])
   return (

@@ -1,4 +1,4 @@
-import { Popover, PopoverBody, PopoverContent, PopoverTrigger, Stack } from '@chakra-ui/react'
+import { Popover, PopoverBody, PopoverContent, PopoverTrigger, Portal } from '@chakra-ui/react'
 import { ExpandArrowIcon, GasIcon, SwapSettingsIcon } from '@concave/icons'
 import {
   Button,
@@ -17,7 +17,7 @@ import React from 'react'
 import { ConfirmSwap } from './ConfirmSwap'
 import { Input } from './Input'
 import { MaxAmount } from './MaxAmount'
-import { SwapSettingsCard } from './SwapSettingsCard'
+import { SwapSettings } from './SwapSettingsCard'
 import { TransactionStatus } from './TransactionStatus'
 import { UseSwap } from './useSwap'
 
@@ -31,7 +31,7 @@ export function SwapCard({
   active: string
   swap: UseSwap
 } & CardProps) {
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const confirm = useDisclosure()
   const status = useDisclosure()
   return (
     <Card {...cardProps}>
@@ -54,7 +54,6 @@ export function SwapCard({
         <Button
           shadow={'Up Small'}
           _focus={{ boxShadow: 'Up Small' }}
-          as={Button}
           padding={'4px 14px 4px 14px'}
           bgColor="rgba(156, 156, 156, 0.01);"
           minW="43"
@@ -87,16 +86,16 @@ export function SwapCard({
       <HStack
         divider={
           <StackDivider
-            border={'0px solid transparent'}
+            borderColor={'transparent'}
+            bg={'stroke.secondary'}
+            boxShadow={'1px 0px 2px #101317'}
             borderRadius={'3xl'}
             style={{
               marginTop: '4px',
             }}
             mt={8}
-            h={'32px'}
-            w={'2px'}
-            bgColor={'transparent'}
-            boxShadow={'1px 0px 2px #101317'}
+            h={8}
+            w={0.5}
           />
         }
         align="center"
@@ -119,25 +118,18 @@ export function SwapCard({
 
         <Popover>
           <PopoverTrigger>
-            <SwapSettingsIcon viewBox="0 0 20 25" cursor={'pointer'} />
+            <Button>
+              <SwapSettingsIcon viewBox="0 0 20 25" cursor={'pointer'} />
+            </Button>
           </PopoverTrigger>
-          <PopoverContent
-            backdropFilter={'blur(15px)'}
-            bg={'transparent'}
-            borderRadius={'2xl'}
-            h={400}
-            w={'300px'}
-          >
-            <PopoverBody as={Card} variant="secondary" h={400} w={'300px'}>
-              <SwapSettingsCard swap={swap}></SwapSettingsCard>
-            </PopoverBody>
-          </PopoverContent>
+          <Portal>
+            <PopoverContent backdropFilter={'blur(15px)'} bg={'transparent'} borderRadius={'2xl'}>
+              <PopoverBody id="b" as={Card} minH={'400'} h={400} variant="secondary">
+                <SwapSettings swap={swap} />
+              </PopoverBody>
+            </PopoverContent>
+          </Portal>
         </Popover>
-        {/* 
-        <SwapSettingsModal>
-          <SwapSettingsIcon viewBox="0 0 20 25" cursor={'pointer'} />
-          <SwapSettingsCard swap={swap}></SwapSettingsCard>
-        </SwapSettingsModal> */}
       </HStack>
 
       <Modal
@@ -145,7 +137,7 @@ export function SwapCard({
         title="Confirm Swap"
         isOpen={status.isOpen}
         onClose={status.onClose}
-        sx={{ alignItems: 'center' }}
+        sx={{ alignItems: 'center', gap: 1 }}
       >
         <TransactionStatus swap={swap} onClose={status.onClose}></TransactionStatus>
       </Modal>
@@ -153,29 +145,20 @@ export function SwapCard({
       <Modal
         bluryOverlay={true}
         title="Confirm Swap"
-        isOpen={isOpen}
-        onClose={onClose}
+        isOpen={confirm.isOpen}
+        onClose={confirm.onClose}
         sx={{ gap: 2 }}
       >
         <ConfirmSwap
           swap={swap}
           onConfirm={() => {
             status.onOpen()
-            onClose()
+            confirm.onClose()
           }}
         />
       </Modal>
 
-      <Button
-        shadow={
-          '20px -20px 39px rgba(120, 182, 255, 0.25), 0px 5px 14px rgba(0, 0, 0, 0.47), inset 0px -10px 20px rgba(117, 164, 255, 0.5);'
-        }
-        fontSize="2xl"
-        variant="primary"
-        size="large"
-        isFullWidth
-        onClick={onOpen}
-      >
+      <Button variant="Bright Button" size="large" isFullWidth onClick={confirm.onOpen}>
         {buttonLabel}
       </Button>
     </Card>

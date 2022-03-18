@@ -1,4 +1,4 @@
-import { Button, Flex } from '@chakra-ui/react'
+import { Box, Button, Flex } from '@chakra-ui/react'
 import { keyframes } from '@chakra-ui/system'
 import { SpinIcon } from '@concave/icons'
 import { Text } from '@concave/ui'
@@ -20,7 +20,8 @@ const spinnerStyles = {
 export const TransactionStatus = ({ swap, onClose }: { swap: UseSwap; onClose: () => void }) => {
   return (
     <>
-      <SpinIcon __css={spinnerStyles} w={10} mb={5} />
+      <Box></Box>
+      <SpinIcon __css={spinnerStyles} w={10} mb={5} mt={12} />
       <Text fontSize={'24px'} fontWeight={600}>
         Waiting For Confirmation
       </Text>
@@ -34,9 +35,7 @@ export const TransactionStatus = ({ swap, onClose }: { swap: UseSwap; onClose: (
         <Button
           onClick={onClose}
           borderRadius={'2xl'}
-          shadow={
-            '0px 5px 14px rgba(0, 0, 0, 0.47), 4px -7px 15px rgba(174, 177, 255, 0.13), inset -1px 1px 2px rgba(128, 186, 255, 0.24)'
-          }
+          shadow={'Up Big'}
           w={'180px'}
           h={'60px'}
           bg={'linear-gradient(265.73deg, #274C63 0%, #182F3E 100%)'}

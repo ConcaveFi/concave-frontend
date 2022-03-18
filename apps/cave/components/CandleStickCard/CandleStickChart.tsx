@@ -71,7 +71,7 @@ const CandleStickChart = (props: { data: (CandlestickData | WhitespaceData)[] })
     chart.current.timeScale().fitContent()
   }, [props.data, isMobile])
   return (
-    <Box mt={5}>
+    <Box mt={5} minW={['100%']}>
       <Box ref={chartContainerRef} className="chart-container" />
     </Box>
   )

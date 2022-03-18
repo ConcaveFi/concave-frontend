@@ -21,7 +21,7 @@ function Swap() {
   return (
     <Flex direction="column" gap={12}>
       {/* TODO: Solve bug on SwapStatus, i dont know why, but with the popover on settings swap */}
-      <SpinIcon></SpinIcon>
+      <SpinIcon visibility={'hidden'}></SpinIcon>
 
       <GcnvTitle title="Swap gCNV" description="Swap gCNV here" />
 
