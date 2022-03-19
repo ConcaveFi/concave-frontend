@@ -57,7 +57,14 @@ const ConnectButton = () => {
             p="0"
             backdropFilter="blur(8px)"
           >
-            <Card variant="secondary" borderRadius="xl" px={1} py={2} gap="1">
+            <Card
+              variant="secondary"
+              borderGradient="medium"
+              borderRadius="xl"
+              px={1}
+              py={2}
+              gap="1"
+            >
               {isMounted &&
                 data.connectors.map((connector) => {
                   if (!connector.ready) return null

@@ -7,15 +7,17 @@ const variants = {
   medium: 'linear-gradient(57deg, #171E27 -7.38%, #435F81 29.46%, #202D3D 71.39%, #93C5FF 107.62%)',
 }
 
+export interface GradientBorderStyleProps {
+  borderWidth?: number
+  borderRadius?: string
+  variant?: keyof typeof variants
+}
+
 export const gradientBorder = ({
   borderWidth = 1,
   borderRadius = '2xl',
   variant = 'accent',
-}: {
-  borderWidth?: number
-  borderRadius?: string
-  variant?: keyof typeof variants
-} = {}): SystemStyleInterpolation => {
+}: GradientBorderStyleProps = {}): SystemStyleInterpolation => {
   return {
     position: 'relative',
     '& > *': { zIndex: 1 },

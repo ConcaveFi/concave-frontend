@@ -97,7 +97,7 @@ export const AuthProvider: React.FC = ({ children }) => {
     },
   )
 
-  const user = useQuery('me', () => authFetch('me'), { refetchOnWindowFocus: true })
+  const user = useQuery('me', () => authFetch('me'), { retry: false, refetchOnWindowFocus: true })
 
   const isConnected = !account.loading && !!account.data?.address
   const error = signIn.error || signOut.error

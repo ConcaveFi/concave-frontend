@@ -3,11 +3,11 @@ import { gradientBorder } from '../utils/gradientBorder'
 
 export const CardStyles: ComponentMultiStyleConfig = {
   parts: ['container', 'texture'],
-  baseStyle: ({ borderWidth = 1, borderRadius = '2xl' }) => ({
+  baseStyle: ({ borderWidth = 1, borderRadius = '2xl', borderGradient }) => ({
     container: {
       borderRadius,
       maxW: '100%',
-      ...gradientBorder({ borderRadius, borderWidth }),
+      ...gradientBorder({ borderRadius, borderWidth, variant: borderGradient }),
     },
     texture: {
       userSelect: 'none',

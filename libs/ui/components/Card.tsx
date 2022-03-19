@@ -10,9 +10,11 @@ import {
   useMultiStyleConfig,
 } from '@chakra-ui/react'
 import { useRef } from 'react'
+import { GradientBorderStyleProps } from 'theme/utils/gradientBorder'
 
 export interface CardProps extends StackProps {
   variant?: 'primary' | 'secondary'
+  borderGradient?: GradientBorderStyleProps['variant']
 }
 
 const splitObj = (splitKeys: string[]) => (obj) => {
@@ -50,8 +52,13 @@ const Tiles = ({ tileWidth, tileHeight, clientWidth, clientHeight, Image }) => {
 }
 
 export const Card = forwardRef<CardProps, 'div'>(
-  ({ children, variant, borderWidth, borderRadius, ...props }, ref) => {
-    const styles = useMultiStyleConfig('Card', { variant, borderWidth, borderRadius })
+  ({ children, variant, borderWidth, borderRadius, borderGradient, ...props }, ref) => {
+    const styles = useMultiStyleConfig('Card', {
+      variant,
+      borderWidth,
+      borderRadius,
+      borderGradient,
+    })
     const internalRef = useRef(null)
     const textureSrc = (styles.texture as any).src
 
