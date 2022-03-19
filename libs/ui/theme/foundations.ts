@@ -9,6 +9,8 @@ export const shadows = {
   outline: '0 0 0 3px transparent',
   up: '4px -7px 15px 0px #AEB1FF21, 0px 5px 14px 0px #00000078, -1px 1px 2px 0px #80BAFF3D inset',
   down: '-1px 1px 3px 0px #7EA2FF42, -9px 12px 24px 0px #0D11177D inset, 0px -5px 5px 0px #FFFFFF05 inset',
+  'Up for Blocks':
+    '0px 4px 86px rgba(123, 129, 255, 0.3), 0px 20px 30px rgba(0, 0, 0, 0.47), inset -10px 10px 30px rgba(128, 156, 255, 0.1)',
   'Bright Button':
     '20px -20px 39px rgba(120, 182, 255, 0.25), 0px 5px 14px rgba(0, 0, 0, 0.47), inset 0px -10px 20px rgba(117, 164, 255, 0.5);',
   'Up Big':
