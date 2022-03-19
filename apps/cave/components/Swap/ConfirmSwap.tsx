@@ -59,7 +59,7 @@ export const MinExpectedOutput = ({ swap }: { swap: UseSwap }) => {
           Minimum received after slippage
         </Text>
         <Text whiteSpace={'nowrap'} fontWeight={700} textColor="text.low">
-          {(+swap.to.amount * (1 - swap.slippageTolerance / 100)).toFixed(5)} {swap.to.symbol}
+          {swap.minimumReceivedAfterSlippage} {swap.to.symbol}
         </Text>
       </Flex>
       <Flex fontSize={'14px'} w={'100%'} justifyContent={'space-between'}>

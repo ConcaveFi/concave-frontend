@@ -48,18 +48,6 @@ export type SwapStateProps = {
   outputTokens: string[]
 }
 
-const useToken = () => {
-  const [symbol, setSymbol] = useState('')
-  const [maxAmount, setMaxAmount] = useState(11320)
-  const [amount, setAmount] = useState(0)
-  const [price, setPrice] = useState(0)
-
-  return [
-    { symbol, maxAmount, amount, amountUSD, price },
-    { setSymbol, setMaxAmount, setAmount, setPrice },
-  ]
-}
-
 export type UseSwap = SwapStateProps & {
   swithTokens: () => void
   setFrom: (token: Token) => void
@@ -78,7 +66,6 @@ export const useSwap = (partialValues: Partial<SwapStateProps>): UseSwap => {
   const [swap, setSwap] = useState({ ...defautValue, ...partialValues })
   const fromPrice = usePrice(swap.from.symbol)
   const toPrice = usePrice(swap.to.symbol)
-  const teste = useToken()
 
   const set = (value: Partial<SwapStateProps>) => {
     setSwap((currentValue) => ({ ...currentValue, ...value }))
