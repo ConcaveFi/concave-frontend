@@ -1,4 +1,4 @@
-import { HStack, Text } from '@chakra-ui/react'
+import { HStack, Text } from '@concave/ui'
 import { TokenIcon } from '@concave/icons'
 import React from 'react'
 

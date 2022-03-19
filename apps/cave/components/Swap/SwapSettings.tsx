@@ -1,4 +1,4 @@
-import { Button, Modal, ModalContent, ModalOverlay, useDisclosure } from '@chakra-ui/react'
+import { Button, Modal, ModalContent, ModalOverlay, useDisclosure } from '@concave/ui'
 
 export const SwapSettingsModal: React.FC = ({ children }: { children: React.FC[] }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()

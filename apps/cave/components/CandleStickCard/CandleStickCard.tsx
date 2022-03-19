@@ -1,4 +1,4 @@
-import { HStack, VStack, Stack } from '@chakra-ui/react'
+import { HStack, VStack, Stack } from '@concave/ui'
 import React from 'react'
 import { Card, CardProps, Text } from '@concave/ui'
 import { CandleStickTimeOptions } from 'components/CandleStickCard/CandleStickTimeOptions'
