@@ -1,12 +1,14 @@
-import React, { useEffect, useRef } from 'react'
 import { CandlestickData, createChart, IChartApi, WhitespaceData } from 'lightweight-charts'
-import { Box } from '@concave/ui'
+import React, { useEffect, useRef } from 'react'
+import { Box, useMediaQuery } from '@concave/ui'
 
 const CandleStickChart = (props: { data: (CandlestickData | WhitespaceData)[] }) => {
   const chartContainerRef = useRef<HTMLDivElement>()
   const chart = useRef<IChartApi>()
+  const [isMobile] = useMediaQuery(['(max-width: 768px)'])
 
   useEffect(() => {
+    chart.current?.remove()
     chart.current = createChart(chartContainerRef.current, {
       width: chartContainerRef.current.clientWidth,
       height: 276,
@@ -27,7 +29,6 @@ const CandleStickChart = (props: { data: (CandlestickData | WhitespaceData)[] })
         borderVisible: false,
         visible: false,
       },
-
       timeScale: {
         timeVisible: true,
         secondsVisible: false,
@@ -48,7 +49,7 @@ const CandleStickChart = (props: { data: (CandlestickData | WhitespaceData)[] })
         },
         vertLine: {
           visible: true,
-          labelVisible: false,
+          labelVisible: true,
           style: 3,
         },
       },
@@ -66,12 +67,11 @@ const CandleStickChart = (props: { data: (CandlestickData | WhitespaceData)[] })
         minMove: 0.000001,
       },
     })
-
     candleSeries.setData(props.data)
     chart.current.timeScale().fitContent()
-  }, [props.data])
+  }, [props.data, isMobile])
   return (
-    <Box mt={5}>
+    <Box mt={5} minW={['100%']}>
       <Box ref={chartContainerRef} className="chart-container" />
     </Box>
   )

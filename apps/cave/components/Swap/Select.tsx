@@ -1,6 +1,8 @@
+import { useDisclosure } from '@chakra-ui/react'
 import { DownIcon, TokenIcon } from '@concave/icons'
-import { Button, Menu, MenuButton, MenuItem, MenuItemProps, MenuList, Text } from '@concave/ui'
+import { Button, Menu, MenuButton, Modal } from '@concave/ui'
 import React from 'react'
+import { SelectToken } from './SelectToken'
 
 const selectItemStyles = {
   borderRadius: 'full',
@@ -9,16 +11,6 @@ const selectItemStyles = {
   height: 'auto',
   fontWeight: 600,
 }
-
-const SelectItem = ({ name, ...props }: { name: string } & MenuItemProps) => (
-  <MenuItem sx={selectItemStyles} {...props}>
-    <TokenIcon size={'25px'} tokenName={name} />
-    <Text ml={2}>{name}</Text>
-  </MenuItem>
-)
-
-const bringToBeginning = (arr: string[], elem: string) =>
-  arr.sort((x, y) => (x == elem ? -1 : y == elem ? 1 : 0))
 
 export const Select = ({
   tokens,
@@ -29,26 +21,44 @@ export const Select = ({
   selected: typeof tokens[number]
   onSelect: (tokenName: string) => void
 }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <Menu placement="bottom-end" autoSelect>
       <MenuButton
-        boxShadow={'outsideDown'}
-        _focus={{ boxShadow: 'outsideDown' }}
+        boxShadow={'Up Small'}
+        _focus={{ boxShadow: 'Up Small' }}
         p={2}
-        w={'115px'}
         as={Button}
         bgColor="rgba(156, 156, 156, 0.01);"
         sx={selectItemStyles}
+        onClick={onOpen}
         leftIcon={<TokenIcon size="25px" tokenName={selected} />}
         rightIcon={<DownIcon />}
       >
-        {selected}
+        {selected.toUpperCase()}
       </MenuButton>
-      <MenuList borderRadius="2xl" minW="min" px={1}>
-        {bringToBeginning(tokens, selected).map((name) => (
-          <SelectItem key={name} name={name} onClick={() => onSelect(name)} />
-        ))}
-      </MenuList>
+      <Modal
+        cardProps={{
+          h: '70%',
+          p: 6,
+          gap: 4,
+          variant: 'primary',
+          justifyContent: 'space-between',
+        }}
+        bluryOverlay={true}
+        title="Select a Token"
+        isOpen={isOpen}
+        onClose={onClose}
+      >
+        <SelectToken
+          onChange={(symbol) => {
+            onSelect(symbol)
+            onClose()
+          }}
+          commonBases={tokens}
+          selected={selected}
+        ></SelectToken>
+      </Modal>
     </Menu>
   )
 }

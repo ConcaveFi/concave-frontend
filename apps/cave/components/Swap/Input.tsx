@@ -1,12 +1,12 @@
-import React from 'react'
-import { Text, Stack, Flex, NumericInput, FlexProps } from '@concave/ui'
-import { Select } from './Select'
-import { InputContainer } from './InputContainer'
-import { Token } from './useSwap'
+import { Flex, FlexProps, NumericInput, Stack, Text } from '@concave/ui'
 import { useCurrency } from 'hooks/useCurrency'
-import { MaxAmount } from './MaxAmount'
+import React from 'react'
+import { InputContainer } from './InputContainer'
+import { Select } from './Select'
+import { Token } from './useSwap'
 
 export function Input({
+  children,
   token,
   maxAmount,
   onChangeValue,
@@ -26,8 +26,11 @@ export function Input({
         <Stack justifyContent={'space-between'}>
           <NumericInput
             max={maxAmount}
+            decimalScale={5}
             value={token.amount}
-            onChangeValue={({ floatValue }) => {
+            onChangeValue={(value) => {
+              if (!value) return
+              const { floatValue } = value
               onChangeValue(floatValue)
             }}
           />
@@ -35,16 +38,10 @@ export function Input({
             {useCurrency(token.price * +token.amount)}
           </Text>
         </Stack>
-        <Stack>
+        <Flex direction={'column'} align={'flex-end'} w={300}>
           <Select tokens={tokenOptions} onSelect={onSelectToken} selected={token.symbol} />
-          {maxAmount && (
-            <MaxAmount
-              label="Balance:"
-              max={token.maxAmount}
-              onClick={() => onChangeValue(token.maxAmount)}
-            />
-          )}
-        </Stack>
+          {children}
+        </Flex>
       </InputContainer>
     </Flex>
   )

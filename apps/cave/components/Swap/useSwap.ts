@@ -7,17 +7,17 @@ const defautValue = {
   from: {
     symbol: 'DAI',
     maxAmount: 1000,
-    amountUSD: 0,
     amount: 0,
     price: 0,
   },
   to: {
-    symbol: 'ETH',
-    maxAmount: 10,
+    symbol: 'CNV',
+    maxAmount: 11320,
     amount: 0,
-    amountUSD: 0,
     price: 0,
   },
+  priceImpact: -0.12,
+  minimumReceivedAfterSlippage: 0,
   expertMode: false,
   multihops: true,
   valueInOutputToken: 0,
@@ -31,11 +31,11 @@ export type Token = {
   symbol: string
   maxAmount: number
   amount: number | string
-  amountUSD: number
   price: number
 }
 
 export type SwapStateProps = {
+  minimumReceivedAfterSlippage: number
   from: Token
   to: Token
   expertMode: boolean
@@ -43,6 +43,7 @@ export type SwapStateProps = {
   valueInOutputToken: number
   transactionDeadLine: number
   slippageTolerance: number
+  priceImpact: number
   inputTokens: string[]
   outputTokens: string[]
 }
@@ -62,53 +63,60 @@ export const usePrice = (symbol: string) => {
 }
 
 export const useSwap = (partialValues: Partial<SwapStateProps>): UseSwap => {
-  const [swapValue, setSwapValue] = useState({ ...defautValue, ...partialValues })
-
-  const fromPrice = usePrice(swapValue.from.symbol)
-  const toPrice = usePrice(swapValue.to.symbol)
+  const [swap, setSwap] = useState({ ...defautValue, ...partialValues })
+  const fromPrice = usePrice(swap.from.symbol)
+  const toPrice = usePrice(swap.to.symbol)
 
   const set = (value: Partial<SwapStateProps>) => {
-    setSwapValue((currentValue) => ({ ...currentValue, ...value }))
+    setSwap((currentValue) => ({ ...currentValue, ...value }))
   }
 
   const setFrom = async (token: Partial<Token>) => {
-    const from = { ...swapValue.from, ...token }
-    const to = swapValue.to
+    const from = { ...swap.from, ...token }
+    const to = swap.to
     to.amount = toPrecision((+token.amount * from.price) / to.price)
     set({ from, to })
   }
 
   const setTo = async (token: Partial<Token>) => {
-    const to = { ...swapValue.to, ...token }
-    const from = swapValue.from
+    const to = { ...swap.to, ...token }
+    const from = swap.from
     from.amount = toPrecision((+token.amount * to.price) / from.price)
     set({ to, from })
   }
 
   const swithTokens = () => {
     set({
-      from: { ...swapValue.to },
-      to: { ...swapValue.from },
+      from: { ...swap.to },
+      to: { ...swap.from },
     })
   }
 
   useEffect(() => {
-    setSwapValue(({ to, from, ...swap }) => {
+    setSwap(({ to, from, ...swap }) => {
       from.price = fromPrice
       to.amount = calcAmount(from, to)
       return { ...swap, to, from }
     })
-  }, [fromPrice, swapValue.from.symbol])
+  }, [fromPrice, swap.from.symbol])
 
   useEffect(() => {
-    setSwapValue(({ to, from, ...swap }) => {
+    setSwap(({ to, from, ...swap }) => {
       to.price = toPrice
       from.amount = calcAmount(to, from)
       return { ...swap, to, from }
     })
-  }, [toPrice, swapValue.to.symbol])
+  }, [toPrice, swap.to.symbol])
 
-  return { ...swapValue, swithTokens, setFrom, setTo, set }
+  useEffect(() => {
+    const minimumReceivedAfterSlippage = +swap.to.amount * (1 - swap.slippageTolerance / 100)
+    setSwap((old) => ({
+      ...old,
+      minimumReceivedAfterSlippage: toPrecision(minimumReceivedAfterSlippage, 5),
+    }))
+  }, [swap.to, swap.slippageTolerance])
+
+  return { ...swap, swithTokens, setFrom, setTo, set }
 }
 
 const calcAmount = (input: Token, target: Token) =>

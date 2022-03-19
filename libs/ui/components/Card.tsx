@@ -1,13 +1,13 @@
 import {
-  StackProps,
-  Stack,
-  useMultiStyleConfig,
+  border,
+  Box,
   forwardRef,
   Image,
-  Box,
   space,
-  border,
+  Stack,
+  StackProps,
   useMergeRefs,
+  useMultiStyleConfig,
 } from '@chakra-ui/react'
 import { useRef } from 'react'
 
@@ -32,7 +32,7 @@ const borderRadiusStyleKeys = Object.keys(border).filter((k) => k.endsWith('Radi
 const getBorderRadiusStyles = (props) => splitObj(borderRadiusStyleKeys)(props)[1]
 
 const Tiles = ({ tileWidth, tileHeight, clientWidth, clientHeight, Image }) => {
-  if (!tileHeight || !tileWidth) return <Image /> // eslint-disable-line jsx-a11y/alt-text
+  if (!tileHeight || !tileWidth || tileHeight === '100%' || tileWidth === '100%') return <Image /> // eslint-disable-line jsx-a11y/alt-text
 
   const repeatX = Math.ceil(clientWidth / tileWidth)
   const repeatY = Math.ceil(clientHeight / tileHeight)

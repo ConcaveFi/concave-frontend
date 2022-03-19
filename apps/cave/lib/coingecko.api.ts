@@ -31,18 +31,11 @@ const tokenPrice = async ({ ids, currency }: { ids: string; currency: string }) 
 
 export const fetchCandleStickData = async ({
   id,
-  interval,
+  days,
 }: {
   id: string
-  interval: CandleStickIntervalTypes
+  days: '1' | '7' | '14' | '30' | '90' | '180' | '365' | 'max'
 }): Promise<CandlestickData[]> => {
-  const days = {
-    '5m': '1',
-    '15m': '7',
-    '1H': '14',
-    '4H': '30',
-    '1D': '90',
-  }[interval]
   const urlInput = new URL(`/api/v3/coins/${id}/ohlc`, baseUrl)
   urlInput.search = new URLSearchParams({ vs_currency: 'usd', days }).toString()
   const inputResponse = await fetch(urlInput.toString())

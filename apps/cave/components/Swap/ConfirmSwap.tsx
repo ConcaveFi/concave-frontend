@@ -1,0 +1,122 @@
+import { ExpandArrowIcon, TokenIcon } from '@concave/icons'
+import { Box, Button, Flex, HStack, NumericInput, StackDivider, Text } from '@concave/ui'
+import { useCurrency } from 'hooks/useCurrency'
+import { useGasPrice } from 'hooks/useGasPrice'
+import React from 'react'
+import { Token, UseSwap } from './useSwap'
+
+const TokenInfo = ({ token, loss }: { token: Token; loss?: number }) => {
+  return (
+    <Flex
+      borderRadius={'3xl'}
+      justifyContent={'space-between'}
+      boxShadow={'Down Medium'}
+      px={5}
+      p={4}
+    >
+      <Box w={200}>
+        <NumericInput disabled fontSize={'32px'} decimalScale={5} value={token.amount} />
+        <Text fontWeight={700} fontSize={14} textColor="text.low">
+          {useCurrency(+token.amount * token.price)}
+          {loss && ` (-${loss}%)`}
+        </Text>
+      </Box>
+      <HStack>
+        <TokenIcon size="32px" tokenName={token.symbol} />
+        <Text fontSize={24} fontWeight={700}>
+          {token.symbol.toUpperCase()}
+        </Text>
+      </HStack>
+    </Flex>
+  )
+}
+
+const SwapButton = ({ swap }: { swap: UseSwap }) => (
+  <Flex justifyContent={'center'}>
+    <Button
+      w={10}
+      h={9}
+      m={-10}
+      bg={'Big Color Darker'}
+      _hover={{
+        bg: 'Big Color Darker',
+      }}
+      shadow={'Up Small'}
+      _focus={{ boxShadow: 'Up Small' }}
+      onClickCapture={swap.swithTokens}
+      borderRadius={'full'}
+    >
+      <ExpandArrowIcon />
+    </Button>
+  </Flex>
+)
+
+export const MinExpectedOutput = ({ swap }: { swap: UseSwap }) => {
+  return (
+    <Box>
+      <Flex fontSize={'14px'} w={'100%'} mb={2} justifyContent={'space-between'}>
+        <Text whiteSpace={'pre-wrap'} mr={8} fontWeight={700} textColor="text.low">
+          Minimum received after slippage
+        </Text>
+        <Text whiteSpace={'nowrap'} fontWeight={700} textColor="text.low">
+          {swap.minimumReceivedAfterSlippage} {swap.to.symbol}
+        </Text>
+      </Flex>
+      <Flex fontSize={'14px'} w={'100%'} justifyContent={'space-between'}>
+        <Text fontWeight={700} textColor="text.low">
+          Network Fee
+        </Text>
+        <Text fontWeight={700} textColor="text.low">
+          ~ {useGasPrice()}
+        </Text>
+      </Flex>
+    </Box>
+  )
+}
+export const ExpectedOutput = ({ swap }: { swap: UseSwap }) => {
+  return (
+    <Box>
+      <Flex fontSize={'18px'} w={'100%'} justifyContent={'space-between'}>
+        <Text whiteSpace={'pre-wrap'} mr={4} fontWeight={600}>
+          Expected Output
+        </Text>
+        <Text fontWeight={600}>
+          {(+swap.to.amount).toPrecision(5)} {swap.to.symbol}
+        </Text>
+      </Flex>
+      <Flex w={'100%'} justifyContent={'space-between'}>
+        <Text fontWeight={600}>Price Impact</Text>
+        <Text fontWeight={600}>-{swap.slippageTolerance}%</Text>
+      </Flex>
+    </Box>
+  )
+}
+
+export const ConfirmSwap = ({ swap, onConfirm }: { swap: UseSwap; onConfirm: () => void }) => {
+  return (
+    <>
+      <TokenInfo token={swap.from}></TokenInfo>
+      <SwapButton swap={swap} />
+      <TokenInfo token={swap.to} loss={0.26}></TokenInfo>
+
+      <HStack fontSize="14px" fontWeight={700} my={6} justifyContent={'center'} flexWrap={'wrap'}>
+        <Text>
+          1 {swap.to.symbol} = {(swap.to.price / swap.from.price).toFixed(4)} {swap.from.symbol}
+        </Text>
+        <Text paddingRight={2} textColor="text.low">
+          ({useCurrency(swap.to.price)})
+        </Text>
+      </HStack>
+
+      <Flex direction={'column'} borderRadius={'3xl'} mb={8} p={6} boxShadow={'Down Medium'}>
+        <ExpectedOutput swap={swap} />
+        <StackDivider borderRadius={'full'} mx={-4} my={4} h={0.5} bg={'stroke.secondary'} />
+        <MinExpectedOutput swap={swap} />
+      </Flex>
+
+      <Button variant="Bright Button" size="large" onClick={onConfirm} isFullWidth>
+        Confirm Swap
+      </Button>
+    </>
+  )
+}

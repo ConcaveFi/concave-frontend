@@ -1,4 +1,4 @@
-import { Button, Modal, ModalContent, ModalOverlay, useDisclosure } from '@concave/ui'
+import { Button, Modal, useDisclosure } from '@concave/ui'
 
 export const SwapSettingsModal: React.FC = ({ children }: { children: React.FC[] }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -14,11 +14,18 @@ export const SwapSettingsModal: React.FC = ({ children }: { children: React.FC[]
       >
         {icon}
       </Button>
-      <Modal isCentered onClose={onClose} isOpen={isOpen} motionPreset="slideInBottom">
-        <ModalOverlay />
-        <ModalContent width={'255px'} borderRadius={'3xl'}>
-          {content}
-        </ModalContent>
+      <Modal
+        title=""
+        closeButton={false}
+        cardProps={{
+          variant: 'secondary',
+          w: 280,
+          h: 390,
+        }}
+        onClose={onClose}
+        isOpen={isOpen}
+      >
+        {content}
       </Modal>
     </>
   )

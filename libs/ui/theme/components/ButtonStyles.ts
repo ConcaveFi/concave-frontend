@@ -42,6 +42,17 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
     secondary: {
       shadow: 'up',
     },
+    'Bright Button': {
+      ...gradientBorder({ borderRadius: 'xl' }),
+      bgGradient: 'linear(to-r, primary.1, primary.2)',
+      shadow: 'Bright Button',
+      _focus: {
+        shadow: 'Bright Button',
+      },
+      fontSize: '2xl',
+      size: 'large',
+    },
+
     navigation: (props) => ({
       height: '100%',
       borderX: 'solid 1px',

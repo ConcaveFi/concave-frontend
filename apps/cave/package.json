@@ -15,6 +15,7 @@
     "gen": "DOTENV_CONFIG_PATH=./.env graphql-codegen --config codegen.yml -r dotenv/config"
   },
   "dependencies": {
+    "@apollo/client": "^3.5.10",
     "@concave/icons": "*",
     "@concave/ui": "*",
     "@graphql-codegen/typescript-react-query": "^3.5.7",

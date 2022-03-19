@@ -1,30 +1,29 @@
-import React from 'react'
+import { CnvQuestionIcon } from '@concave/icons'
 import {
-  Text,
-  Button,
-  HStack,
-  Card,
-  VStack,
   Box,
-  InputGroup,
+  Button,
+  Card,
+  HStack,
   Input,
+  InputGroup,
   InputRightAddon,
   Switch,
+  Text,
+  VStack,
 } from '@concave/ui'
-
-import { CnvQuestionIcon } from '@concave/icons'
+import React from 'react'
 import { UseSwap } from './useSwap'
 
-export const SwapSettingsCard = ({ swap }: { swap: UseSwap }) => {
+export const SwapSettings = ({ swap }: { swap: UseSwap }) => {
   const { expertMode, multihops, slippageTolerance, transactionDeadLine } = swap
+
   return (
-    <Card id="find" bgImage="/assets/blackboard.png">
+    <>
       <VStack
         borderRadius="2xl"
         padding={4}
         gap={4}
         divider={<Box w="100%" h="2px" bg="strokeReflection" />}
-        backdropFilter="blur(3px)"
       >
         <Text fontSize={'18px'}>Transactions Settings</Text>
         <VStack gap={3} align={'flex-start'}>
@@ -105,7 +104,7 @@ export const SwapSettingsCard = ({ swap }: { swap: UseSwap }) => {
           </VStack>
         </VStack>
       </VStack>
-    </Card>
+    </>
   )
 }
 

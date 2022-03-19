@@ -1,20 +1,24 @@
 import {
+  CSSObject,
   Modal as ChakraModal,
-  ModalOverlay,
-  ModalContent,
   ModalBody,
   ModalCloseButton,
-  ModalProps as ChakraModalProps,
+  ModalContent,
   ModalHeader,
+  ModalOverlay,
+  ModalProps as ChakraModalProps,
 } from '@chakra-ui/react'
 import { ReactNode } from 'react'
-import { Card } from './Card'
+import { Card, CardProps } from './Card'
 
 export interface ModalProps extends ChakraModalProps {
   title: string
   bluryOverlay?: boolean
   titleAlign?: 'left' | 'center' | 'right'
+  closeButton?: boolean
+  cardProps?: CardProps
   children: ReactNode
+  sx?: CSSObject
 }
 
 export function Modal({
@@ -22,6 +26,8 @@ export function Modal({
   title,
   bluryOverlay = false,
   titleAlign = 'left',
+  closeButton,
+  sx,
   ...props
 }: ModalProps) {
   return (
@@ -30,9 +36,9 @@ export function Modal({
       <ModalContent>
         <ModalHeader textAlign={titleAlign}>{title}</ModalHeader>
         <ModalCloseButton />
-        <Card>
-          <ModalBody>{children}</ModalBody>
-        </Card>
+        <ModalBody as={Card} variant="primary" p="6" sx={sx}>
+          {children}
+        </ModalBody>
       </ModalContent>
     </ChakraModal>
   )
