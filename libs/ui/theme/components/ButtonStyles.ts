@@ -11,6 +11,7 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
     width: 'auto',
     borderRadius: 'xl',
     maxHeight: 'unset',
+    borderColor: 'transparent',
   },
   sizes: {
     large: {
@@ -31,7 +32,8 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
       _hover: { bg: HoverRadialGradient, color: 'text.high' },
     },
     primary: {
-      ...gradientBorder({ borderRadius: '2xl', borderWidth: 2 }),
+      borderRadius: '2xl',
+      ...gradientBorder({ borderRadius: '2xl' }),
       bgGradient: 'linear(to-r, primary.1, primary.2)',
       fontFamily: 'heading',
       fontWeight: 'bold',
