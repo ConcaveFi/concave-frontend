@@ -124,7 +124,11 @@ export function SwapCard({
         title="Confirm Swap"
         isOpen={status.isOpen}
         onClose={status.onClose}
-        sx={{ alignItems: 'center', gap: 1 }}
+        sx={{
+          alignItems: 'center',
+          gap: 1,
+          shadow: 'Up for Blocks',
+        }}
       >
         <TransactionStatus swap={swap} onClose={status.onClose}></TransactionStatus>
       </Modal>
@@ -134,7 +138,10 @@ export function SwapCard({
         title="Confirm Swap"
         isOpen={confirm.isOpen}
         onClose={confirm.onClose}
-        sx={{ gap: 2 }}
+        sx={{
+          gap: 2,
+          shadow: 'Up for Blocks',
+        }}
       >
         <ConfirmSwap
           swap={swap}

@@ -9,14 +9,13 @@ import {
   ModalProps as ChakraModalProps,
 } from '@chakra-ui/react'
 import { ReactNode } from 'react'
-import { Card, CardProps } from './Card'
+import { Card } from './Card'
 
 export interface ModalProps extends ChakraModalProps {
   title: string
   bluryOverlay?: boolean
   titleAlign?: 'left' | 'center' | 'right'
   closeButton?: boolean
-  cardProps?: CardProps
   children: ReactNode
   sx?: CSSObject
 }

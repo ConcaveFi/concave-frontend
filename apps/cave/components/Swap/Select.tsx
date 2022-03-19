@@ -38,10 +38,11 @@ export const Select = ({
         {selected.toUpperCase()}
       </MenuButton>
       <Modal
-        cardProps={{
+        sx={{
           h: '70%',
           p: 6,
           gap: 4,
+          shadow: 'Up for Blocks',
           variant: 'primary',
           justifyContent: 'space-between',
         }}
