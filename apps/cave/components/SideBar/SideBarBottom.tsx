@@ -1,6 +1,5 @@
 import React from 'react'
-import { Box, Link, Text, VStack, HStack } from '@chakra-ui/react'
-import { Image } from '@concave/ui'
+import { Box, Link, Text, VStack, HStack, Image } from '@concave/ui'
 
 interface MediaProps {
   icon: string

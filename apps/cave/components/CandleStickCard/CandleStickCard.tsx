@@ -1,9 +1,8 @@
-import { Flex, HStack, useMediaQuery } from '@chakra-ui/react'
-import { Card, CardProps, Text } from '@concave/ui'
+import React from 'react'
+import { HStack, Card, CardProps, Text, useMediaQuery, Flex } from '@concave/ui'
 import { CandleStickTimeOptions } from 'components/CandleStickCard/CandleStickTimeOptions'
 import { useCandleStickChart } from 'components/CandleStickCard/useCandleStickChart'
 import dynamic from 'next/dynamic'
-import React from 'react'
 import { CandleStickTokenOptions } from './CandleStickTokenOptions'
 
 const CandleStickChart = dynamic(() => import('./CandleStickChart'), {

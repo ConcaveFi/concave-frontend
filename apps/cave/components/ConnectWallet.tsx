@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  Text,
   Portal,
   Button,
   Card,
@@ -9,10 +8,10 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  gradientBorder,
 } from '@concave/ui'
 import { useConnect } from 'wagmi'
 import { useAuth } from 'contexts/AuthContext'
-
 import { useIsMounted } from 'hooks/useIsMounted'
 
 const miniAddress = (address) =>
@@ -39,7 +38,14 @@ const ConnectButton = () => {
   return (
     <>
       <Menu placement="right-start" isLazy>
-        <MenuButton as={Button} fontFamily="heading" variant="primary" size="medium" w="100%">
+        <MenuButton
+          as={Button}
+          sx={{ ...gradientBorder({ borderWidth: 2, borderRadius: '2xl' }) }}
+          fontFamily="heading"
+          variant="primary"
+          size="medium"
+          w="100%"
+        >
           Connect Wallet
         </MenuButton>
         <Portal>
@@ -89,6 +95,7 @@ const SignInButton = () => {
         variant="primary"
         size="medium"
         w="100%"
+        sx={{ ...gradientBorder({ borderWidth: 2, borderRadius: '2xl' }) }}
         onClick={signIn}
         isLoading={isWaitingForSignature}
         loadingText="Awaiting signature"

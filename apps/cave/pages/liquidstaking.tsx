@@ -1,9 +1,19 @@
-import { Avatar, Box, BaseModal, Card, Container, Flex, Image, Stack, Text } from '@concave/ui'
+import {
+  Avatar,
+  Box,
+  BaseModal,
+  Card,
+  Container,
+  Flex,
+  Image,
+  Stack,
+  Text,
+  Progress,
+} from '@concave/ui'
 import React from 'react'
 import GcnvTitle from 'components/GcnvTitle'
 import { text } from 'stream/consumers'
 import { ButtonLink } from 'components/ButtonLink'
-import { Progress } from '@chakra-ui/react'
 
 const InfoItem = ({ value, label, fontWeight = 'bold', ...props }) => (
   <Stack spacing={0} fontWeight={fontWeight} textAlign="center" px={8} {...props}>

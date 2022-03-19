@@ -1,5 +1,4 @@
-import { HStack, StackProps } from '@chakra-ui/react'
-import { BoxRadioGroup } from '@concave/ui'
+import { BoxRadioGroup, HStack, StackProps } from '@concave/ui'
 import { CandleStickIntervalTypes } from './useCandleStickChart'
 
 type OwnProps = StackProps & {

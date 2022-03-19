@@ -1,8 +1,7 @@
 import React from 'react'
-import { Box, Button, Flex, Icon, Link, Text, FlexProps } from '@chakra-ui/react'
+import { Box, Button, Flex, Icon, Link, Text, FlexProps, Image } from '@concave/ui'
 import { IconType } from 'react-icons'
 import { ReactText } from 'react'
-import { Image } from '@concave/ui'
 
 function PageNav() {
   return (
