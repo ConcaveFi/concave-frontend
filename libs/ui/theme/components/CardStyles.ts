@@ -1,8 +1,6 @@
 import { ComponentMultiStyleConfig, cssVar, theme } from '@chakra-ui/react'
 import { gradientBorder } from '../utils/gradientBorder'
 
-// const $borderRadius = cssVar('card-border-radius', '2xl')
-
 export const CardStyles: ComponentMultiStyleConfig = {
   parts: ['container', 'texture'],
   baseStyle: ({ borderWidth = 1, borderRadius = '2xl' }) => ({
@@ -40,6 +38,8 @@ export const CardStyles: ComponentMultiStyleConfig = {
         src: '/assets/textures/glass.jpg',
         opacity: 0.45,
         inset: 0,
+        w: '100%',
+        h: '100%',
       },
     },
   },
