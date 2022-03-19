@@ -1,6 +1,5 @@
-import { SpinIcon } from '@concave/icons'
 import { Flex } from '@concave/ui'
-import { CandleStickCardMemo } from 'components/CandleStickCard'
+import { CandleStickCard } from 'components/CandleStickCard'
 import GcnvTitle from 'components/GcnvTitle'
 import { SwapCard } from 'components/Swap/SwapCard'
 import { useSwap } from 'components/Swap/useSwap'
@@ -20,13 +19,9 @@ function Swap() {
 
   return (
     <Flex direction="column" gap={12}>
-      {/* TODO: Solve bug on SwapStatus, i dont know why, but with the popover on settings swap */}
-      <SpinIcon visibility={'hidden'}></SpinIcon>
-
       <GcnvTitle title="Swap gCNV" description="Swap gCNV here" />
-
       <Flex gap={4} flexWrap="wrap" justify="center">
-        <CandleStickCardMemo
+        <CandleStickCard
           from={swap.from.symbol}
           to={swap.to.symbol}
           variant="secondary"

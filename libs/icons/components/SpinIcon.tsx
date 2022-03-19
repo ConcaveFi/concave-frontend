@@ -4,13 +4,13 @@ export const SpinIcon = (props: IconProps) => (
   <Icon width="16" height="16" viewBox="0 0 64 64" fill="none" {...props}>
     <path
       d="M63 32A31 31 0 1 1 26.837 1.433"
-      stroke="url(#a)"
+      stroke="url(#linearGradientSpinIcon)"
       strokeWidth="2"
       strokeLinejoin="round"
     />
     <defs>
       <linearGradient
-        id="a"
+        id="linearGradientSpinIcon"
         x1=".937"
         y1="64"
         x2="60.865"

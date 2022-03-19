@@ -33,7 +33,7 @@ export const Select = ({
         sx={selectItemStyles}
         onClick={onOpen}
         leftIcon={<TokenIcon size="25px" tokenName={selected} />}
-        rightIcon={<DownIcon ml={6} />}
+        rightIcon={<DownIcon />}
       >
         {selected.toUpperCase()}
       </MenuButton>

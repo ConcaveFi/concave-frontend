@@ -38,10 +38,10 @@ export function Input({
             {useCurrency(token.price * +token.amount)}
           </Text>
         </Stack>
-        <Stack>
+        <Flex direction={'column'} align={'flex-end'} w={300}>
           <Select tokens={tokenOptions} onSelect={onSelectToken} selected={token.symbol} />
           {children}
-        </Stack>
+        </Flex>
       </InputContainer>
     </Flex>
   )

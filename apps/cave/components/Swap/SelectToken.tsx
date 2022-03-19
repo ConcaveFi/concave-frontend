@@ -100,8 +100,7 @@ export const SelectToken = ({
           sx={{
             '&::-webkit-scrollbar': {
               width: '12px',
-              boxShadow:
-                '-1px 1px 3px rgba(126, 162, 255, 0.26), inset 0px -5px 5px rgba(255, 255, 255, 0.02), inset -9px 12px 24px rgba(13, 17, 23, 0.49)',
+              boxShadow: 'Down Big',
               borderRadius: '8px',
               backgroundColor: `rgba(0, 0, 0, 0.05)`,
             },

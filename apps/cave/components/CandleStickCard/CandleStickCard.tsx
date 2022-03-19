@@ -1,5 +1,5 @@
-import React from 'react'
-import { HStack, Card, CardProps, Text, useMediaQuery, Flex } from '@concave/ui'
+import { Flex, useMediaQuery } from '@chakra-ui/react'
+import { Card, CardProps, Text } from '@concave/ui'
 import { CandleStickTimeOptions } from 'components/CandleStickCard/CandleStickTimeOptions'
 import { useCandleStickChart } from 'components/CandleStickCard/useCandleStickChart'
 import dynamic from 'next/dynamic'
@@ -10,10 +10,6 @@ const CandleStickChart = dynamic(() => import('./CandleStickChart'), {
   ssr: false,
 })
 
-const checkEquals = (prev: unknown, next: unknown) => {
-  return JSON.stringify(prev) === JSON.stringify(next)
-}
-
 export const CandleStickCard = ({
   from,
   to,
@@ -21,6 +17,7 @@ export const CandleStickCard = ({
 }: { from: string; to: string } & CardProps) => {
   const candleStickChart = useCandleStickChart(from, to)
   const [isMobile] = useMediaQuery(['(max-width: 768px)'])
+
   return (
     <Card {...cardProps}>
       <Flex justifyContent={isMobile ? 'center' : 'space-between'} minW={'100%'}>
@@ -41,7 +38,7 @@ export const CandleStickCard = ({
         <CandleStickChart data={candleStickChart.data} />
       )}
       {isMobile && (
-        <HStack justifyContent={'center'}>
+        <Flex justifyContent={'center'}>
           <CandleStickTimeOptions
             intervals={candleStickChart.avaliableIntervals}
             defaultValue={candleStickChart.interval}
@@ -49,10 +46,8 @@ export const CandleStickCard = ({
               candleStickChart.set({ interval })
             }}
           />{' '}
-        </HStack>
+        </Flex>
       )}
     </Card>
   )
 }
-
-export const CandleStickCardMemo = React.memo(CandleStickCard, checkEquals)

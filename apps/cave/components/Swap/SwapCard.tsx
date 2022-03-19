@@ -50,20 +50,7 @@ export function SwapCard({
           onClick={() => swap.setFrom({ ...swap.from, amount: swap.from.maxAmount })}
         />
       </Input>
-      <Flex align="center" justify="center">
-        <Button
-          shadow={'Up Small'}
-          _focus={{ boxShadow: 'Up Small' }}
-          padding={'4px 14px 4px 14px'}
-          bgColor="rgba(156, 156, 156, 0.01);"
-          minW="43"
-          maxH="26"
-          onClickCapture={swap.swithTokens}
-          borderRadius={'full'}
-        >
-          <ExpandArrowIcon />
-        </Button>
-      </Flex>
+      <Switch swap={swap} />
       <Input
         token={swap.to}
         tokenOptions={swap.outputTokens}
@@ -162,5 +149,24 @@ export function SwapCard({
         {buttonLabel}
       </Button>
     </Card>
+  )
+}
+
+const Switch = ({ swap }: { swap: UseSwap }) => {
+  return (
+    <Flex align="center" justify="center">
+      <Button
+        shadow={'Up Small'}
+        _focus={{ boxShadow: 'Up Small' }}
+        padding={'4px 14px 4px 14px'}
+        bgColor="rgba(156, 156, 156, 0.01);"
+        minW="43"
+        maxH="26"
+        onClickCapture={swap.swithTokens}
+        borderRadius={'full'}
+      >
+        <ExpandArrowIcon />
+      </Button>
+    </Flex>
   )
 }
