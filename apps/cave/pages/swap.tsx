@@ -33,6 +33,9 @@ function Swap() {
         <SwapCard
           swap={swap}
           buttonLabel="Swap"
+          shadow={
+            '0px 4px 86px rgba(123, 129, 255, 0.3), 0px 20px 30px rgba(0, 0, 0, 0.47), inset -10px 10px 30px rgba(128, 156, 255, 0.1)'
+          }
           variant="primary"
           active="swap"
           {...cardProps}
