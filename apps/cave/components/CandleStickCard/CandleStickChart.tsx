@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { CandlestickData, createChart, IChartApi, WhitespaceData } from 'lightweight-charts'
-import { Box } from '@chakra-ui/react'
+import { Box } from '@concave/ui'
 
 const CandleStickChart = (props: { data: (CandlestickData | WhitespaceData)[] }) => {
   const chartContainerRef = useRef<HTMLDivElement>()

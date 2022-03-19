@@ -36,7 +36,6 @@
     "wagmi": "^0.2.18"
   },
   "devDependencies": {
-    "@chakra-ui/react": "^1.8.6",
     "@graphql-codegen/cli": "^2.6.2",
     "@graphql-codegen/introspection": "^2.1.1",
     "@graphql-codegen/typescript": "^2.4.7",
