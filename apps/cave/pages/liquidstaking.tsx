@@ -1,5 +1,4 @@
-import { Container, Flex, Heading, HStack, Stack, Text } from '@concave/ui'
-import React from 'react'
+import { Container, Flex, Heading, HStack, Text } from '@concave/ui'
 import StakeCard from 'components/LiquidStaking/StakeCard'
 import GraphicGuide from 'components/LiquidStaking/GraphicGuide'
 
@@ -23,21 +22,21 @@ const StakingGroup: Array<StakingGroupProps> = [
     icon: '6m',
     period: '6 months',
     vapr: '1,002',
-    stakedCNV: '83,431',
+    stakedCNV: '42,690',
     stakingLink: '',
   },
   {
     icon: '3m',
     period: '3 months',
     vapr: '266',
-    stakedCNV: '83,431',
+    stakedCNV: '33,333',
     stakingLink: '',
   },
   {
     icon: '1m',
     period: '1 month',
     vapr: '17',
-    stakedCNV: '83,431',
+    stakedCNV: '690,420',
     stakingLink: '',
   },
 ]

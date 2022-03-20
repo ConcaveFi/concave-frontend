@@ -8,7 +8,7 @@ function StakeCard(props) {
 
   return (
     <div>
-      <Card variant="primary.outline" w="" px={4} py={6} shadow="up" gap={1}>
+      <Card variant="primary.outline" px={4} py={6} shadow="up" gap={1}>
         <Box mx="auto" py={5} w="full" h="333px" shadow="down" borderRadius="100px/90px">
           <Text color="text.low" fontSize="sm">
             Stake period
