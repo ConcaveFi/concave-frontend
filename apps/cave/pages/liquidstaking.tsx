@@ -3,17 +3,6 @@ import React from 'react'
 import GcnvTitle from 'components/GcnvTitle'
 import StakeCard from 'components/LiquidStaking/StakeCard'
 
-// const InfoItem = ({ value, label, fontWeight = 'bold', ...props }) => (
-//   <Stack spacing={0} fontWeight={fontWeight} textAlign="center" px={8} {...props}>
-//     <Text fontSize="lg" fontFamily="heading">
-//       {value}
-//     </Text>
-//     <Text fontSize="sm" color="text.low">
-//       {label}
-//     </Text>
-//   </Stack>
-// )
-
 interface StakingGroupProps {
   icon: string
   period: string
@@ -58,7 +47,7 @@ function LiquidStaking() {
     <Container maxW="container.lg" borderRadius={0} border="">
       <GcnvTitle
         title="Liquid Staking"
-        description="Lock CNV in a staking term and recieve a tradeable NFT representing the position. Stakers receive a share of profits from all Concave products and services: bonding revenue, investment returns and protocol fees."
+        description="Liquid Staking allows you to access your funds even when you're staking them. The funds remain in escrow, but aren't totally inaccessible. In this scenario, you are able to trade the locked-staking positions in the form of NFTs in the secondary marketplace."
       />
       <Flex direction="row" gap={3} position="relative" mt={16}>
         {StakingGroup.map((s) => (
