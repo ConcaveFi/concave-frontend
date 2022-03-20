@@ -1,6 +1,7 @@
-import { Container, Flex, Heading, Stack, Text } from '@concave/ui'
+import { Container, Flex, Heading, HStack, Stack, Text } from '@concave/ui'
 import React from 'react'
 import StakeCard from 'components/LiquidStaking/StakeCard'
+import GraphicGuide from 'components/LiquidStaking/GraphicGuide'
 
 interface StakingGroupProps {
   icon: string
@@ -47,13 +48,13 @@ function LiquidStaking() {
       <Heading as="h1" mt={24} mb={3} fontSize="5xl">
         Liquid Staking
       </Heading>
-      {/* <Stack isInline>
-        <Text maxW={520} textAlign="right" mt={8}>
+      <HStack mt={8} spacing={40}>
+        <Text maxW={520} textAlign="right">
           Liquid Staking allows you to access your funds
           <br />
-          even when you're staking them. The funds
+          even when you&apos;re staking them. The funds
           <br />
-          remain in escrow, but aren't totally inaccessible.
+          remain in escrow, but aren&apos;t totally inaccessible.
           <br />
           In this scenario, you are able to trade the
           <br />
@@ -61,7 +62,8 @@ function LiquidStaking() {
           <br />
           the secondary marketplace.
         </Text>
-      </Stack> */}
+        <GraphicGuide />
+      </HStack>
 
       <Flex direction="row" gap={3} position="relative" mt={16}>
         {StakingGroup.map((s) => (
