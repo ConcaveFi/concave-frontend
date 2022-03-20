@@ -26,6 +26,45 @@ const InfoItem = ({ value, label, fontWeight = 'bold', ...props }) => (
   </Stack>
 )
 
+interface StakingGroupProps {
+  icon: string
+  period: string
+  vapr: string
+  stakedCNV: string
+  stakingLink: string
+}
+
+const StakingGroup: Array<StakingGroupProps> = [
+  {
+    icon: '',
+    period: '12 months',
+    vapr: '6,342',
+    stakedCNV: '83,431',
+    stakingLink: '',
+  },
+  {
+    icon: '',
+    period: '6 months',
+    vapr: '1,002',
+    stakedCNV: '83,431',
+    stakingLink: '',
+  },
+  {
+    icon: '',
+    period: '3 months',
+    vapr: '266',
+    stakedCNV: '83,431',
+    stakingLink: '',
+  },
+  {
+    icon: '',
+    period: '1 month',
+    vapr: '17',
+    stakedCNV: '83,431',
+    stakingLink: '',
+  },
+]
+
 const LiquidStakingInfo = ({ asset, vapr, stakedcnv, icon }) => {
   return (
     <BaseModal
