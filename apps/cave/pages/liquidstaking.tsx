@@ -1,6 +1,5 @@
-import { Container, Flex } from '@concave/ui'
+import { Container, Flex, Heading, Stack, Text } from '@concave/ui'
 import React from 'react'
-import GcnvTitle from 'components/GcnvTitle'
 import StakeCard from 'components/LiquidStaking/StakeCard'
 
 interface StakingGroupProps {
@@ -44,11 +43,26 @@ const StakingGroup: Array<StakingGroupProps> = [
 
 function LiquidStaking() {
   return (
-    <Container maxW="container.lg" borderRadius={0} border="">
-      <GcnvTitle
-        title="Liquid Staking"
-        description="Liquid Staking allows you to access your funds even when you're staking them. The funds remain in escrow, but aren't totally inaccessible. In this scenario, you are able to trade the locked-staking positions in the form of NFTs in the secondary marketplace."
-      />
+    <Container maxW="container.lg" borderRadius={0} border="" textAlign="center">
+      <Heading as="h1" mt={24} mb={3} fontSize="5xl">
+        Liquid Staking
+      </Heading>
+      {/* <Stack isInline>
+        <Text maxW={520} textAlign="right" mt={8}>
+          Liquid Staking allows you to access your funds
+          <br />
+          even when you're staking them. The funds
+          <br />
+          remain in escrow, but aren't totally inaccessible.
+          <br />
+          In this scenario, you are able to trade the
+          <br />
+          locked-staking positions in the form of NFTs in
+          <br />
+          the secondary marketplace.
+        </Text>
+      </Stack> */}
+
       <Flex direction="row" gap={3} position="relative" mt={16}>
         {StakingGroup.map((s) => (
           <StakeCard
