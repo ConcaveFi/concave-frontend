@@ -53,7 +53,7 @@ function StakeCard(props) {
   return (
     <div>
       <Card
-        variant="primary"
+        variant="primary.outline"
         w="220px"
         h="450px"
         borderWidth={0}
