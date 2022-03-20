@@ -58,7 +58,7 @@ function LiquidStaking() {
         <GraphicGuide />
       </HStack>
 
-      <Flex direction="row" gap={3} position="relative" mt={16}>
+      <Flex direction="row" gap={6} position="relative" mt={16}>
         {StakingGroup.map((s) => (
           <StakeCard
             icon={s.icon}

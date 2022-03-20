@@ -36,7 +36,7 @@ const LiquidStakingInfo = ({ asset, vapr, stakedcnv, icon }) => {
         <InfoItem value={''} label="Stake Period" pl={7} fontWeight="bold" />
         <InfoItem value={asset.toUpperCase()} label="" pl={7} fontWeight="bold" />
         <Image
-          src={'/assets/12m.png'}
+          src={'/assets/liquidstaking/6-months-logo.svg'}
           alt="concave logo"
           maxWidth="180px"
           position="relative"
@@ -52,17 +52,7 @@ const LiquidStakingInfo = ({ asset, vapr, stakedcnv, icon }) => {
 function StakeCard(props) {
   return (
     <div>
-      <Card
-        variant="primary.outline"
-        w="220px"
-        h="450px"
-        borderWidth={0}
-        borderRadius={16}
-        px={6}
-        py={10}
-        shadow="up"
-        gap={1}
-      >
+      <Card variant="primary.outline" w="220px" h="450px" px={6} py={10} shadow="up" gap={1}>
         <LiquidStakingInfo
           asset={props.period}
           icon=""
