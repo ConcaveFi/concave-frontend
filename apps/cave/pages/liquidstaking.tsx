@@ -48,19 +48,12 @@ function LiquidStaking() {
       <Heading as="h1" mt={24} mb={3} fontSize="5xl">
         Liquid Staking
       </Heading>
-      <HStack mt={8} spacing={40}>
+      <HStack mt={8} spacing={14}>
         <Text maxW={520} textAlign="right">
-          Liquid Staking allows you to access your funds
-          <br />
-          even when you&apos;re staking them. The funds
-          <br />
-          remain in escrow, but aren&apos;t totally inaccessible.
-          <br />
-          In this scenario, you are able to trade the
-          <br />
-          locked-staking positions in the form of NFTs in
-          <br />
-          the secondary marketplace.
+          Liquid Staking allows you to access your funds even when you&apos;re staking them. The
+          funds remain in escrow, but aren&apos;t totally inaccessible. In this scenario, you are
+          able to trade the locked-staking positions in the form of NFTs in the secondary
+          marketplace.
         </Text>
         <GraphicGuide />
       </HStack>
