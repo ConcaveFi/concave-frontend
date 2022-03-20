@@ -53,12 +53,6 @@ function StakeCard(props) {
   return (
     <div>
       <Card variant="primary.outline" w="" px={4} py={6} shadow="up" gap={1}>
-        {/* <LiquidStakingInfo
-          asset={props.period}
-          icon=""
-          vapr={props.vapr}
-          stakedcnv={`${props.stakedCNV} CNV`}
-        /> */}
         <Box mx="auto" py={5} w="full" h="333px" shadow="down" borderRadius="100px/90px">
           <Text color="text.low" fontSize="sm">
             Stake period
@@ -83,21 +77,20 @@ function StakeCard(props) {
         <Text color="text.low" fontSize={11} textAlign="center" mt={3}>
           Currently Staked
         </Text>
-        {/* <Progress colorScheme="blue" size="lg" value={20} /> */}
-
-        {/* <LiquidStakin stakedcnv="83,431 CNV" /> */}
+        <Text shadow="down" py={1} borderRadius="2xl">
+          {props.stakedCNV} CNV
+        </Text>
 
         <ButtonLink
-          top={'4%'}
-          href="/StakeCNV12"
-          fontWeight={'medium'}
-          position={'relative'}
+          mt={5}
+          href={`/${props.stakingLink}`}
+          fontWeight="medium"
           variant="primary.outline"
           bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
           w="92.5%"
           h="40px"
           size="large"
-          borderRadius="3xl"
+          mx="auto"
         >
           Stake CNV
         </ButtonLink>
