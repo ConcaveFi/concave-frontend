@@ -1,4 +1,4 @@
-import { BaseModal, Flex, Image, Stack, Text } from '@concave/ui'
+import { BaseModal, Card, Flex, Image, Stack, Text } from '@concave/ui'
 import { ButtonLink } from 'components/ButtonLink'
 import { Progress } from '@chakra-ui/react'
 
@@ -52,7 +52,8 @@ const LiquidStakingInfo = ({ asset, vapr, stakedcnv, icon }) => {
 function StakeCard(props) {
   return (
     <div>
-      <BaseModal
+      <Card
+        variant="primary"
         w="220px"
         h="450px"
         borderWidth={0}
@@ -60,7 +61,6 @@ function StakeCard(props) {
         px={6}
         py={10}
         shadow="up"
-        bgGradient="linear(to-tr, secondary.150, secondary.100)"
         gap={1}
       >
         <LiquidStakingInfo
@@ -69,9 +69,13 @@ function StakeCard(props) {
           vapr={props.vapr}
           stakedcnv={`${props.stakedCNV} CNV`}
         />
-        <Text ml={'17.5%'} color="text.low" fontSize={8}>
+        {/* <Text ml={'17.5%'} color="text.low" fontSize={8}>
           Currently Staked | Staking Cap
-        </Text>
+        </Text> */}
+        <Stack color="text.low" fontSize={11} isInline justify="space-between">
+          <Text>Currently Staked</Text>
+          <Text>Staking Cap</Text>
+        </Stack>
         <Progress colorScheme="blue" size="lg" value={20} />
 
         {/* <LiquidStakin stakedcnv="83,431 CNV" /> */}
@@ -90,7 +94,7 @@ function StakeCard(props) {
         >
           Stake CNV
         </ButtonLink>
-      </BaseModal>
+      </Card>
     </div>
   )
 }
