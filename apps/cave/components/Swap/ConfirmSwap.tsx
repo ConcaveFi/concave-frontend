@@ -5,7 +5,15 @@ import { useGasPrice } from 'hooks/useGasPrice'
 import React from 'react'
 import { Token, UseSwap } from './useSwap'
 
-const TokenInfo = ({ token, loss }: { token: Token; loss?: number }) => {
+const TokenInfo = ({
+  token,
+  amount,
+  loss,
+}: {
+  token: Token
+  amount: string | number
+  loss?: number
+}) => {
   return (
     <Flex
       borderRadius={'3xl'}
@@ -15,9 +23,9 @@ const TokenInfo = ({ token, loss }: { token: Token; loss?: number }) => {
       p={4}
     >
       <Box w={200}>
-        <NumericInput disabled fontSize={'32px'} decimalScale={5} value={token.amount} />
+        <NumericInput disabled fontSize={'32px'} decimalScale={5} value={amount} />
         <Text fontWeight={700} fontSize={14} textColor="text.low">
-          {useCurrency(+token.amount * token.price)}
+          {useCurrency(+amount * token.price)}
           {loss && ` (-${loss}%)`}
         </Text>
       </Box>
@@ -59,7 +67,7 @@ export const MinExpectedOutput = ({ swap }: { swap: UseSwap }) => {
           Minimum received after slippage
         </Text>
         <Text whiteSpace={'nowrap'} fontWeight={700} textColor="text.low">
-          {swap.minimumReceivedAfterSlippage} {swap.to.symbol}
+          {swap.minimumReceivedAfterSlippage.toPrecision(4)} {swap.to.symbol}
         </Text>
       </Flex>
       <Flex fontSize={'14px'} w={'100%'} justifyContent={'space-between'}>
@@ -81,7 +89,7 @@ export const ExpectedOutput = ({ swap }: { swap: UseSwap }) => {
           Expected Output
         </Text>
         <Text fontWeight={600}>
-          {(+swap.to.amount).toPrecision(5)} {swap.to.symbol}
+          {(+swap.toAmount).toPrecision(5)} {swap.to.symbol}
         </Text>
       </Flex>
       <Flex w={'100%'} justifyContent={'space-between'}>
@@ -95,9 +103,9 @@ export const ExpectedOutput = ({ swap }: { swap: UseSwap }) => {
 export const ConfirmSwap = ({ swap, onConfirm }: { swap: UseSwap; onConfirm: () => void }) => {
   return (
     <>
-      <TokenInfo token={swap.from}></TokenInfo>
+      <TokenInfo token={swap.from} amount={swap.fromAmount}></TokenInfo>
       <SwapButton swap={swap} />
-      <TokenInfo token={swap.to} loss={0.26}></TokenInfo>
+      <TokenInfo token={swap.to} amount={swap.toAmount} loss={0.26}></TokenInfo>
 
       <HStack fontSize="14px" fontWeight={700} my={6} justifyContent={'center'} flexWrap={'wrap'}>
         <Text>

@@ -63,7 +63,6 @@ class CoingeckoApiProxy {
       return this.coins
     }
     const validSymbols = this.topTokens.slice(0, top)
-    console.log(validSymbols)
     return (await this.coins).filter((c) => {
       return validSymbols.includes(c.symbol.toUpperCase())
     })

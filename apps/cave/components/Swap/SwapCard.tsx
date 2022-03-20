@@ -36,28 +36,27 @@ export function SwapCard({
   return (
     <Card {...cardProps}>
       <Input
-        token={swap.from}
-        maxAmount={swap.from.maxAmount}
-        onChangeValue={(amount) => {
-          swap.setFrom({ ...swap.from, amount })
-        }}
+        value={'' + swap.fromAmount}
+        price={swap.from.price}
+        symbol={swap.from.symbol}
         tokenOptions={swap.inputTokens}
-        onSelectToken={(symbol) => swap.setFrom({ ...swap.from, symbol })}
+        onChangeValue={swap.setFromAmount}
+        onSelectToken={swap.setFromSymbol}
       >
         <MaxAmount
           label="Balance:"
-          max={swap.from.maxAmount}
-          onClick={() => swap.setFrom({ ...swap.from, amount: swap.from.maxAmount })}
+          max={+(+swap.from.balance?.formatted || 0).toPrecision(4)}
+          onClick={() => swap.setFromAmount(swap.from.balance?.formatted)}
         />
       </Input>
       <Switch swap={swap} />
       <Input
-        token={swap.to}
+        value={'' + swap.toAmount}
+        price={swap.to.price}
+        symbol={swap.to.symbol}
         tokenOptions={swap.outputTokens}
-        onChangeValue={(amount) => swap.setTo({ ...swap.to, amount })}
-        onSelectToken={(symbol) => {
-          swap.setTo({ ...swap.to, symbol })
-        }}
+        onChangeValue={swap.setToAmount}
+        onSelectToken={swap.setToSymbol}
       >
         <Text
           py={1}
@@ -67,7 +66,7 @@ export function SwapCard({
           textAlign={'right'}
           textColor="text.low"
         >
-          Balance: {swap.to.maxAmount}
+          Balance: {+(+swap.to.balance?.formatted || 0).toPrecision(4)}
         </Text>
       </Input>
       <HStack
@@ -169,7 +168,7 @@ const Switch = ({ swap }: { swap: UseSwap }) => {
         bgColor="rgba(156, 156, 156, 0.01);"
         minW="43"
         maxH="26"
-        onClickCapture={swap.swithTokens}
+        onClickCapture={swap.switchTokens}
         borderRadius={'full'}
       >
         <ExpandArrowIcon />
