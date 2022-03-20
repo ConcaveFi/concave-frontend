@@ -1,7 +1,11 @@
-import { Box, Card, Image, Text } from '@concave/ui'
+import { Box, Card, Image, Stack, Text } from '@concave/ui'
 import { ButtonLink } from 'components/ButtonLink'
+import { useState } from 'react'
 
 function StakeCard(props) {
+  const vaprText = props.icon === '12m' ? 'Non-Dilutive vAPR' : 'vAPR'
+  const [capPercentage, setCapPercentage] = useState('70')
+
   return (
     <div>
       <Card variant="primary.outline" w="" px={4} py={6} shadow="up" gap={1}>
@@ -14,24 +18,51 @@ function StakeCard(props) {
           </Text>
           <Image src={`/assets/liquidstaking/${props.icon}-logo.svg`} alt="stake period logo" />
           <Text color="text.low" fontSize="sm">
-            vAPR:
+            {vaprText}
           </Text>
           <Text fontSize="lg" fontWeight="bold">
             {props.vapr} %
           </Text>
         </Box>
 
-        {/* <Stack color="text.low" fontSize={11} isInline justify="space-between">
-          <Text>Currently Staked</Text>
-          <Text>Staking Cap</Text>
-        </Stack> */}
+        {props.icon === '12m' ? (
+          <Stack>
+            <Stack color="text.low" fontSize={12} isInline justify="space-between" mt={3}>
+              <Text>Currently Staked</Text>
+              <Text>Staking Cap</Text>
+            </Stack>
+            <Box shadow="down" borderRadius="2xl" p={1} position="relative">
+              <Text
+                shadow="up"
+                px={1}
+                py={1}
+                borderRadius="2xl"
+                textAlign="left"
+                bg="secondary.50"
+                w={`${capPercentage}%`}
+                fontSize="sm"
+              >
+                {props.stakedCNV} CNV
+              </Text>
+              <Text position="absolute" right="2" top="2" fontSize="sm">
+                90,000 CNV
+              </Text>
+            </Box>
+          </Stack>
+        ) : (
+          <Stack>
+            <Text color="text.low" fontSize={12} textAlign="center" mt={3}>
+              Currently Staked
+            </Text>
+            <Text shadow="down" py={1} borderRadius="2xl">
+              {props.stakedCNV} CNV
+            </Text>
+          </Stack>
+        )}
 
-        <Text color="text.low" fontSize={11} textAlign="center" mt={3}>
-          Currently Staked
-        </Text>
-        <Text shadow="down" py={1} borderRadius="2xl">
+        {/* <Text shadow="down" py={1} borderRadius="2xl">
           {props.stakedCNV} CNV
-        </Text>
+        </Text> */}
 
         <ButtonLink
           mt={5}
