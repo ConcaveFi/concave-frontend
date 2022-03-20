@@ -74,7 +74,7 @@ function StakeCard(props) {
         </Text>
         <Progress colorScheme="blue" size="lg" value={20} />
 
-        {/* <LiquidStakingCNV stakedcnv="83,431 CNV" /> */}
+        {/* <LiquidStakin stakedcnv="83,431 CNV" /> */}
 
         <ButtonLink
           top={'4%'}
