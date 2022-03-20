@@ -13,6 +13,7 @@ import {
 } from '@concave/ui'
 import { useCurrency } from 'hooks/useCurrency'
 import { useGasPrice } from 'hooks/useGasPrice'
+import { useRoundPrecision } from 'hooks/usePrecision'
 import React from 'react'
 import { ConfirmSwap } from './ConfirmSwap'
 import { Input } from './Input'
@@ -90,7 +91,8 @@ export function SwapCard({
         <HStack>
           <HStack justifyContent={'center'} flexWrap={'wrap'}>
             <Text fontSize="xs">
-              1 {swap.to.symbol} = {(swap.to.price / swap.from.price).toFixed(4)} {swap.from.symbol}
+              1 {swap.to.symbol} = {useRoundPrecision(swap.to.price / swap.from.price).formatted}{' '}
+              {swap.from.symbol}
             </Text>
             <Text paddingRight={2} fontSize="xs" textColor="text.low">
               ({useCurrency(swap.to.price)})
