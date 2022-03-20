@@ -3,7 +3,7 @@ import { coingecko } from 'lib/coingecko.adapter'
 import { useCallback, useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 
-const defautValue = {
+const defaultValue = {
   from: {
     symbol: 'DAI',
     maxAmount: 1000,
@@ -49,7 +49,7 @@ export type SwapStateProps = {
 }
 
 export type UseSwap = SwapStateProps & {
-  swithTokens: () => void
+  switchTokens: () => void
   setFrom: (token: Token) => void
   setTo: (token: Token) => void
   set: (swap: Partial<SwapStateProps>) => void
@@ -63,7 +63,7 @@ export const usePrice = (symbol: string) => {
 }
 
 export const useSwap = (partialValues: Partial<SwapStateProps>): UseSwap => {
-  const [swap, setSwap] = useState({ ...defautValue, ...partialValues })
+  const [swap, setSwap] = useState({ ...defaultValue, ...partialValues })
   const fromPrice = usePrice(swap.from.symbol)
   const toPrice = usePrice(swap.to.symbol)
 
@@ -85,11 +85,15 @@ export const useSwap = (partialValues: Partial<SwapStateProps>): UseSwap => {
     set({ to, from })
   }
 
-  const swithTokens = () => {
+  const switchTokens = () => {
     set({
       from: { ...swap.to },
       to: { ...swap.from },
     })
+  }
+
+  const setBalance = async (token: Partial<SwapStateProps>) => {
+    set({ from, to })
   }
 
   useEffect(() => {
@@ -116,7 +120,7 @@ export const useSwap = (partialValues: Partial<SwapStateProps>): UseSwap => {
     }))
   }, [swap.to, swap.slippageTolerance])
 
-  return { ...swap, swithTokens, setFrom, setTo, set }
+  return { ...swap, switchTokens, setFrom, setTo, set }
 }
 
 const calcAmount = (input: Token, target: Token) =>
