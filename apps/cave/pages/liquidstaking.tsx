@@ -13,28 +13,28 @@ interface StakingGroupProps {
 
 const StakingGroup: Array<StakingGroupProps> = [
   {
-    icon: '',
+    icon: '12m',
     period: '12 months',
     vapr: '6,342',
     stakedCNV: '83,431',
     stakingLink: '',
   },
   {
-    icon: '',
+    icon: '6m',
     period: '6 months',
     vapr: '1,002',
     stakedCNV: '83,431',
     stakingLink: '',
   },
   {
-    icon: '',
+    icon: '3m',
     period: '3 months',
     vapr: '266',
     stakedCNV: '83,431',
     stakingLink: '',
   },
   {
-    icon: '',
+    icon: '1m',
     period: '1 month',
     vapr: '17',
     stakedCNV: '83,431',
@@ -45,7 +45,7 @@ const StakingGroup: Array<StakingGroupProps> = [
 function LiquidStaking() {
   return (
     <Container maxW="container.lg" borderRadius={0} border="" textAlign="center">
-      <Heading as="h1" mt={24} mb={3} fontSize="5xl">
+      <Heading as="h1" mt={16} mb={3} fontSize="5xl">
         Liquid Staking
       </Heading>
       <HStack mt={8} spacing={14}>
@@ -58,7 +58,7 @@ function LiquidStaking() {
         <GraphicGuide />
       </HStack>
 
-      <Flex direction="row" gap={6} position="relative" mt={16}>
+      <Flex direction="row" gap={8} position="relative" mt={16}>
         {StakingGroup.map((s) => (
           <StakeCard
             icon={s.icon}

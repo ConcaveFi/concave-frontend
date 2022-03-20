@@ -1,4 +1,4 @@
-import { BaseModal, Card, Flex, Image, Stack, Text } from '@concave/ui'
+import { BaseModal, Box, Card, Flex, Image, Stack, Text } from '@concave/ui'
 import { ButtonLink } from 'components/ButtonLink'
 import { Progress } from '@chakra-ui/react'
 
@@ -36,7 +36,7 @@ const LiquidStakingInfo = ({ asset, vapr, stakedcnv, icon }) => {
         <InfoItem value={''} label="Stake Period" pl={7} fontWeight="bold" />
         <InfoItem value={asset.toUpperCase()} label="" pl={7} fontWeight="bold" />
         <Image
-          src={'/assets/liquidstaking/6-months-logo.svg'}
+          src={'/assets/liquidstaking/6m-logo.svg'}
           alt="concave logo"
           maxWidth="180px"
           position="relative"
@@ -52,21 +52,38 @@ const LiquidStakingInfo = ({ asset, vapr, stakedcnv, icon }) => {
 function StakeCard(props) {
   return (
     <div>
-      <Card variant="primary.outline" w="220px" h="450px" px={6} py={10} shadow="up" gap={1}>
-        <LiquidStakingInfo
+      <Card variant="primary.outline" w="" px={4} py={6} shadow="up" gap={1}>
+        {/* <LiquidStakingInfo
           asset={props.period}
           icon=""
           vapr={props.vapr}
           stakedcnv={`${props.stakedCNV} CNV`}
-        />
-        {/* <Text ml={'17.5%'} color="text.low" fontSize={8}>
-          Currently Staked | Staking Cap
-        </Text> */}
-        <Stack color="text.low" fontSize={11} isInline justify="space-between">
+        /> */}
+        <Box mx="auto" py={5} w="full" h="333px" shadow="down" borderRadius="100px/90px">
+          <Text color="text.low" fontSize="sm">
+            Stake period
+          </Text>
+          <Text fontSize="lg" fontWeight="bold">
+            {props.period}
+          </Text>
+          <Image src={`/assets/liquidstaking/${props.icon}-logo.svg`} alt="stake period logo" />
+          <Text color="text.low" fontSize="sm">
+            vAPR:
+          </Text>
+          <Text fontSize="lg" fontWeight="bold">
+            {props.vapr} %
+          </Text>
+        </Box>
+
+        {/* <Stack color="text.low" fontSize={11} isInline justify="space-between">
           <Text>Currently Staked</Text>
           <Text>Staking Cap</Text>
-        </Stack>
-        <Progress colorScheme="blue" size="lg" value={20} />
+        </Stack> */}
+
+        <Text color="text.low" fontSize={11} textAlign="center" mt={3}>
+          Currently Staked
+        </Text>
+        {/* <Progress colorScheme="blue" size="lg" value={20} /> */}
 
         {/* <LiquidStakin stakedcnv="83,431 CNV" /> */}
 
