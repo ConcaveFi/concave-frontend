@@ -1,53 +1,5 @@
-import { BaseModal, Box, Card, Flex, Image, Stack, Text } from '@concave/ui'
+import { Box, Card, Image, Text } from '@concave/ui'
 import { ButtonLink } from 'components/ButtonLink'
-import { Progress } from '@chakra-ui/react'
-
-const InfoItem = ({ value, label, fontWeight, ...props }) => (
-  <Stack
-    spacing={0}
-    fontWeight={fontWeight ? fontWeight : 'bold'}
-    textAlign="center"
-    px={8}
-    {...props}
-  >
-    <Text fontSize="lg" fontFamily="heading">
-      {value}
-    </Text>
-    <Text fontSize="sm" color="text.low">
-      {label}
-    </Text>
-  </Stack>
-)
-
-const LiquidStakingInfo = ({ asset, vapr, stakedcnv, icon }) => {
-  return (
-    <BaseModal
-      bgGradient={''}
-      px={0}
-      borderRadius={40}
-      width={160}
-      height={296}
-      py={4}
-      position="relative"
-      direction="column"
-      shadow="Medium Glow Up"
-    >
-      <Flex direction="column" gap={1}>
-        <InfoItem value={''} label="Stake Period" pl={7} fontWeight="bold" />
-        <InfoItem value={asset.toUpperCase()} label="" pl={7} fontWeight="bold" />
-        <Image
-          src={'/assets/liquidstaking/6m-logo.svg'}
-          alt="concave logo"
-          maxWidth="180px"
-          position="relative"
-          background={''}
-        />
-        <InfoItem value={''} label="vAPR" pl={7} fontWeight={'bold'} />
-        <InfoItem value={vapr.toUpperCase()} fontWeight={'bold'} label="" pl={7} />
-      </Flex>
-    </BaseModal>
-  )
-}
 
 function StakeCard(props) {
   return (
