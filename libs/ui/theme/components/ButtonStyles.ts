@@ -17,6 +17,7 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
     large: {
       height: '50px',
       px: 8,
+      fontSize: '2xl',
     },
     medium: {
       height: '40px',
@@ -37,20 +38,13 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
       bgGradient: 'linear(to-r, primary.1, primary.2)',
       fontFamily: 'heading',
       fontWeight: 'bold',
-      shadow: 'up',
-    },
-    secondary: {
-      shadow: 'up',
-    },
-    'Bright Button': {
-      ...gradientBorder({ borderRadius: 'xl' }),
-      bgGradient: 'linear(to-r, primary.1, primary.2)',
       shadow: 'Bright Button',
       _focus: {
         shadow: 'Bright Button',
       },
-      fontSize: '2xl',
-      size: 'large',
+    },
+    secondary: {
+      shadow: 'up',
     },
 
     navigation: (props) => ({

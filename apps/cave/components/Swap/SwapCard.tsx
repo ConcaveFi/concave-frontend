@@ -34,7 +34,7 @@ export function SwapCard({
   const confirm = useDisclosure()
   const status = useDisclosure()
   return (
-    <Card {...cardProps}>
+    <Card gap={2} p={6} h="fit-content" shadow="Block Up" {...cardProps}>
       <Input
         token={swap.from}
         maxAmount={swap.from.maxAmount}
@@ -152,7 +152,7 @@ export function SwapCard({
         />
       </Modal>
 
-      <Button variant="Bright Button" size="large" isFullWidth onClick={confirm.onOpen}>
+      <Button variant="primary" size="large" isFullWidth onClick={confirm.onOpen}>
         {buttonLabel}
       </Button>
     </Card>

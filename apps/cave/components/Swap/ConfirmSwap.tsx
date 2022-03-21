@@ -114,7 +114,7 @@ export const ConfirmSwap = ({ swap, onConfirm }: { swap: UseSwap; onConfirm: () 
         <MinExpectedOutput swap={swap} />
       </Flex>
 
-      <Button variant="Bright Button" size="large" onClick={onConfirm} isFullWidth>
+      <Button variant="primary" size="large" onClick={onConfirm} isFullWidth>
         Confirm Swap
       </Button>
     </>
