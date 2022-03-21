@@ -48,7 +48,7 @@ export function SwapCard({
       >
         <MaxAmount
           label="Balance:"
-          max={+(+swap.from.balance?.formatted || 0).toPrecision(4)}
+          max={+swap.from.balance?.formatted}
           onClick={() => swap.setFromAmount(swap.from.balance?.formatted)}
         />
       </Input>
@@ -69,7 +69,7 @@ export function SwapCard({
           textAlign={'right'}
           textColor="text.low"
         >
-          Balance: {+(+swap.to.balance?.formatted || 0).toPrecision(4)}
+          Balance: {useRoundPrecision(+swap.to.balance?.formatted).formatted}
         </Text>
       </Input>
       <HStack
