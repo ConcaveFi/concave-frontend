@@ -8,7 +8,7 @@ import { gql, GraphQLClient } from 'graphql-request'
 const HasuraUrl = process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT as string
 
 const admin = new GraphQLClient(HasuraUrl, {
-  headers: { 'X-Hasura-Admin-Secret': process.env['GRAPHQL_ADMIN_SECRET'] },
+  headers: { 'X-Hasura-Admin-Secret': process.env.GRAPHQL_ADMIN_SECRET },
 })
 
 export const findUser = async (address: string) => {
