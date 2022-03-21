@@ -40,6 +40,7 @@ function Swap() {
           }
           variant="primary"
           active="swap"
+          justifyContent={'space-between'}
           {...cardProps}
           h={['100%', 400]}
           w={['100%', '100%', 500, 567, 400]}
