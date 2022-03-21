@@ -89,7 +89,7 @@ const NothingToRedeem = () => {
   )
 }
 
-function Bond() {
+export default function Bond() {
   const swap = useSwap({
     inputTokens: ['WETH', 'BTC', 'WAVES', 'USDT', 'NEO', 'LINK', 'XMR', 'ETH', 'DAI'],
     outputTokens: ['XMR', 'ETH', 'DAI', 'FRAX'],
@@ -113,6 +113,8 @@ function Bond() {
               h="20px"
               w="72px"
               top="50%"
+              transform="auto"
+              translateY="-50%"
               left="calc(100% - 24px)"
               sx={{ ...gradientBorder({ borderWidth: 3, borderRadius: '0' }), pos: 'absolute' }}
             />
@@ -149,5 +151,3 @@ function Bond() {
     </Container>
   )
 }
-
-export default Bond
