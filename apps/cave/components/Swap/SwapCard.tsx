@@ -20,6 +20,7 @@ import { Input } from './Input'
 import { MaxAmount } from './MaxAmount'
 import { SwapSettings } from './SwapSettingsCard'
 import { TransactionStatus } from './TransactionStatus'
+import { TransactionSubmitted } from './TransactionSubmitted'
 import { UseSwap } from './useSwap'
 
 export function SwapCard({
@@ -34,6 +35,7 @@ export function SwapCard({
 } & CardProps) {
   const confirm = useDisclosure()
   const status = useDisclosure()
+  const submitted = useDisclosure()
   return (
     <Card {...cardProps}>
       <Input
@@ -131,7 +133,13 @@ export function SwapCard({
           shadow: 'Up for Blocks',
         }}
       >
-        <TransactionStatus swap={swap} onClose={status.onClose}></TransactionStatus>
+        <TransactionStatus
+          swap={swap}
+          onClose={() => {
+            status.onClose()
+            submitted.onOpen()
+          }}
+        ></TransactionStatus>
       </Modal>
 
       <Modal
@@ -149,6 +157,24 @@ export function SwapCard({
           onConfirm={() => {
             status.onOpen()
             confirm.onClose()
+          }}
+        />
+      </Modal>
+
+      <Modal
+        bluryOverlay={true}
+        title="Confirm Swap"
+        isOpen={submitted.isOpen}
+        onClose={submitted.onClose}
+        sx={{
+          alignItems: 'center',
+          shadow: 'Up for Blocks',
+        }}
+      >
+        <TransactionSubmitted
+          swap={swap}
+          onClose={() => {
+            submitted.onClose()
           }}
         />
       </Modal>
