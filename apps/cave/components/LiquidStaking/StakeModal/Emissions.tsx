@@ -3,12 +3,12 @@ import { Box, HStack, Image, Text } from '@concave/ui'
 
 function Emissions(props) {
   return (
-    <Box p={2}>
+    <Box py={2} px={5}>
       <Box
         mx="auto"
         pt={5}
         pb={3}
-        w="33%"
+        w="220px"
         h="full"
         shadow="down"
         borderRadius="full"

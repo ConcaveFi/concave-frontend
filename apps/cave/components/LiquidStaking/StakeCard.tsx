@@ -1,6 +1,18 @@
-import { Box, Button, Card, Image, Modal, Stack, Text, useDisclosure } from '@concave/ui'
+import {
+  Box,
+  Button,
+  Card,
+  HStack,
+  Image,
+  Modal,
+  Stack,
+  Text,
+  useDisclosure,
+  VStack,
+} from '@concave/ui'
 import { useState } from 'react'
 import Emissions from './StakeModal/Emissions'
+import StakeInfo from './StakeModal/StakeInfo'
 
 function StakeCard(props) {
   const vaprText = props.icon === '12m' ? 'Non-Dilutive vAPR' : 'vAPR'
@@ -88,12 +100,17 @@ function StakeCard(props) {
           size="2xl"
           isCentered
         >
-          <Emissions
-            period={props.period}
-            vaprText={vaprText}
-            icon={props.icon}
-            vapr={props.vapr}
-          />
+          <HStack>
+            <Emissions
+              period={props.period}
+              vaprText={vaprText}
+              icon={props.icon}
+              vapr={props.vapr}
+            />
+            <VStack>
+              <StakeInfo period={props.period} />
+            </VStack>
+          </HStack>
         </Modal>
       </Card>
     </div>
