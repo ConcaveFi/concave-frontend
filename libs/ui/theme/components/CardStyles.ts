@@ -27,6 +27,20 @@ export const CardStyles: ComponentMultiStyleConfig = {
         inset: 0,
       },
     },
+    'primary.outline': {
+      container: {
+        bgGradient: 'linear(to-tr, secondary.150, secondary.100)',
+        ...gradientBorder({ borderRadius: '2xl', borderWidth: 2 }),
+      },
+      texture: {
+        src: '/assets/textures/metal.jpg',
+        width: 120,
+        height: 120,
+        blendMode: 'screen',
+        opacity: 0.15,
+        inset: 0,
+      },
+    },
     secondary: {
       container: {
         blendMode: 'screen',
