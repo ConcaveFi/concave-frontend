@@ -1,5 +1,4 @@
 import { Box, Button, Card, Image, Modal, Stack, Text, useDisclosure } from '@concave/ui'
-import { ButtonLink } from 'components/ButtonLink'
 import { useState } from 'react'
 import Emissions from './StakeModal/Emissions'
 

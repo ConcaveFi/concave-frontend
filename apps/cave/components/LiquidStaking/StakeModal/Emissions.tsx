@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Card,
+  HStack,
   Image,
   Modal,
   ModalHeader,
@@ -18,7 +19,7 @@ function Emissions(props) {
         mx="auto"
         pt={5}
         pb={3}
-        w="30%"
+        w="33%"
         h="full"
         shadow="down"
         borderRadius="full"
@@ -48,10 +49,61 @@ function Emissions(props) {
           borderTopRadius="xl"
           borderBottomRadius="full"
           w="90%"
-          h="150px"
+          pt={4}
+          pb={10}
+          px={3}
           mx="auto"
           filter="drop-shadow(0px 0px 27px #81b3ff4f)"
-        ></Box>
+        >
+          <HStack>
+            <Image
+              mx="auto"
+              src={`/assets/liquidstaking/modal-moreinfo-logo.svg`}
+              h={5}
+              alt="more info logo"
+            />
+            <Text color="text.low" fontSize="sm">
+              Bonding Emissions:
+            </Text>
+          </HStack>
+          <Text fontSize="md" fontWeight="bold">
+            534%
+          </Text>
+          <Text color="text.low" fontSize="sm">
+            +
+          </Text>
+          <HStack>
+            <Image
+              mx="auto"
+              src={`/assets/liquidstaking/modal-moreinfo-logo.svg`}
+              h={5}
+              alt="more info logo"
+            />
+            <Text color="text.low" fontSize="sm">
+              Base Emissions:
+            </Text>
+          </HStack>
+          <Text fontSize="md" fontWeight="bold">
+            25% * 4 = 100%
+          </Text>
+          <Text color="text.low" fontSize="sm">
+            +
+          </Text>
+          <HStack>
+            <Image
+              mx="auto"
+              src={`/assets/liquidstaking/modal-moreinfo-logo.svg`}
+              h={5}
+              alt="more info logo"
+            />
+            <Text color="text.low" fontSize="sm">
+              Quarterly Dividends:
+            </Text>
+          </HStack>
+          <Text fontSize="md" fontWeight="bold">
+            X% * 4 = 4X%
+          </Text>
+        </Box>
       </Box>
     </Box>
   )
