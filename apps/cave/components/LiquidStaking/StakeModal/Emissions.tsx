@@ -1,16 +1,5 @@
 import React from 'react'
-import {
-  Box,
-  Button,
-  Card,
-  HStack,
-  Image,
-  Modal,
-  ModalHeader,
-  Stack,
-  Text,
-  useDisclosure,
-} from '@concave/ui'
+import { Box, HStack, Image, Text } from '@concave/ui'
 
 function Emissions(props) {
   return (

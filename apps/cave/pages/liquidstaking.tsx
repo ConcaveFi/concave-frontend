@@ -1,4 +1,4 @@
-import { Button, Container, Flex, Heading, HStack, Text } from '@concave/ui'
+import { Container, Flex, Heading, HStack, Text } from '@concave/ui'
 import StakeCard from 'components/LiquidStaking/StakeCard'
 import GraphicGuide from 'components/LiquidStaking/GraphicGuide'
 
@@ -42,8 +42,6 @@ const StakingGroup: Array<StakingGroupProps> = [
 ]
 
 function LiquidStaking() {
-  // const { isOpen, onOpen, onClose } = useDisclosure()
-
   return (
     <Container maxW="container.lg" borderRadius={0} border="" textAlign="center">
       <Heading as="h1" mt={16} mb={3} fontSize="5xl">
@@ -71,17 +69,6 @@ function LiquidStaking() {
           />
         ))}
       </Flex>
-      {/* <Modal
-        bluryOverlay={true}
-        title="Stake CNV"
-        isOpen={isOpen}
-        onClose={onClose}
-        sx={{
-          alignItems: 'center',
-          gap: 1,
-          shadow: 'Up for Blocks',
-        }}
-      ></Modal> */}
     </Container>
   )
 }
