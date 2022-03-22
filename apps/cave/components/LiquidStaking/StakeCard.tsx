@@ -11,6 +11,7 @@ import {
 } from '@concave/ui'
 import { ButtonLink } from 'components/ButtonLink'
 import { useState } from 'react'
+import Emissions from './StakeModal/Emissions'
 
 function StakeCard(props) {
   const vaprText = props.icon === '12m' ? 'Non-Dilutive vAPR' : 'vAPR'
@@ -71,10 +72,6 @@ function StakeCard(props) {
           </Stack>
         )}
 
-        {/* <Text shadow="down" py={1} borderRadius="2xl">
-          {props.stakedCNV} CNV
-        </Text> */}
-
         <Button
           mt={5}
           // href={`/${props.stakingLink}`}
@@ -103,14 +100,21 @@ function StakeCard(props) {
           size="2xl"
           isCentered
         >
-          <Box p={2}>
+          <Emissions
+            period={props.period}
+            vaprText={vaprText}
+            icon={props.icon}
+            vapr={props.vapr}
+          />
+          {/* <Box p={2}>
             <Box
               mx="auto"
-              py={5}
+              pt={5}
+              pb={3}
               w="30%"
-              h="500px"
+              h="full"
               shadow="down"
-              borderRadius="100px/110px"
+              borderRadius="full"
               textAlign="center"
               ml={-1}
             >
@@ -131,8 +135,22 @@ function StakeCard(props) {
               <Text fontSize="lg" fontWeight="bold">
                 {props.vapr} %
               </Text>
+              <Image
+                mx="auto"
+                src={`/assets/liquidstaking/modal-arrow-logo.svg`}
+                alt="arrow down logo"
+              />
+              <Box
+                shadow="down"
+                borderTopRadius="xl"
+                borderBottomRadius="full"
+                w="90%"
+                h="150px"
+                mx="auto"
+                filter="drop-shadow(0px 0px 27px #81b3ff4f)"
+              ></Box>
             </Box>
-          </Box>
+          </Box> */}
         </Modal>
       </Card>
     </div>
