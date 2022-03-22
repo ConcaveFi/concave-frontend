@@ -102,6 +102,7 @@ export const Card = forwardRef<CardProps, 'div'>(
                     zIndex={0}
                     src={textureSrc}
                     draggable={false}
+                    onError={(e) => ((e.target as any).style.display = 'none')}
                     alt=""
                     {...p}
                   />
