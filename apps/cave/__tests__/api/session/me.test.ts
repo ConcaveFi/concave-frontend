@@ -16,7 +16,7 @@ const session = {
 }
 
 describe('/api/session/me', () => {
-  it('retrieve user from cookie', async () => {
+  it('should retrieve user from cookie', async () => {
     const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
       cookies: { session: encryptSession(session) },
     })
@@ -27,7 +27,7 @@ describe('/api/session/me', () => {
     expect(res._getJSONData()).toEqual(session.user)
   })
 
-  it('errors when not logedin', async () => {
+  it('should error when not loged in', async () => {
     const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
       cookies: { session: encryptSession({ nonce: '312312' }) },
     })

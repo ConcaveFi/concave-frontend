@@ -26,7 +26,7 @@ describe('/api/session/verify', () => {
   afterAll(() => nock.enableNetConnect())
   afterEach(() => nock.cleanAll())
 
-  it('fails on wrong nonce', async () => {
+  it('should fail on wrong nonce', async () => {
     const wallet = ethers.Wallet.createRandom()
     const siweMessage = createSiweMessage({ address: wallet.address, nonce: '1asd31eaws' })
     const message = siweMessage.prepareMessage()
@@ -46,7 +46,7 @@ describe('/api/session/verify', () => {
     expect(res._getJSONData()).toEqual({ ok: false, message: InvalidNonceError.message })
   })
 
-  it('fails on wrong signature', async () => {
+  it('should fails on wrong signature', async () => {
     const wallet1 = ethers.Wallet.createRandom()
     const wallet2 = ethers.Wallet.createRandom()
     const siweMessage = createSiweMessage({ address: wallet1.address, nonce: '1asd31eaws' })
@@ -72,7 +72,7 @@ describe('/api/session/verify', () => {
     })
   })
 
-  it('return user and set session cookie when message, signature & nonce matches', async () => {
+  it('should return user and set session cookie when message, signature & nonce matches', async () => {
     const wallet = ethers.Wallet.createRandom()
     const siweMessage = createSiweMessage({ address: wallet.address, nonce: '1asd31eaws' })
     const message = siweMessage.prepareMessage()
@@ -98,7 +98,7 @@ describe('/api/session/verify', () => {
     expect(res._getJSONData()).toEqual({ ok: true, user })
   })
 
-  it('create user when it does not exist', async () => {
+  it('should create user when it does not exist', async () => {
     const wallet = ethers.Wallet.createRandom()
     const siweMessage = createSiweMessage({ address: wallet.address, nonce: '1asfa13eaws' })
     const message = siweMessage.prepareMessage()

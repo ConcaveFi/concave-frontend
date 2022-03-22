@@ -17,7 +17,7 @@ const session = {
 }
 
 describe('/api/session/logout', () => {
-  it('erase session cookie on GET request', async () => {
+  it('should erase session cookie on GET request', async () => {
     const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
       cookies: { session: encryptSession(session) },
     })

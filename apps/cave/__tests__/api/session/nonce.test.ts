@@ -5,7 +5,7 @@ import { parse } from 'cookie'
 import { decryptSession } from 'lib/session'
 
 describe('/api/session/nonce', () => {
-  it('return new nonce and set session cookie', async () => {
+  it('should return new nonce and set session cookie', async () => {
     const { req, res } = createMocks<NextApiRequest, NextApiResponse>()
 
     await nonceHandler(req, res)
