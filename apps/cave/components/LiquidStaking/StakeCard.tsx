@@ -98,7 +98,6 @@ function StakeCard(props) {
           //   shadow: 'Up for Blocks',
           // }}
           size="2xl"
-          isCentered
         >
           <HStack>
             <Emissions
@@ -108,7 +107,11 @@ function StakeCard(props) {
               vapr={props.vapr}
             />
             <VStack>
-              <StakeInfo period={props.period} />
+              <StakeInfo
+                period={props.period}
+                stakedCNV={props.stakedCNV}
+                capPercentage={capPercentage}
+              />
             </VStack>
           </HStack>
         </Modal>
