@@ -3,11 +3,10 @@ import { gradientBorder } from '../utils/gradientBorder'
 
 export const CardStyles: ComponentMultiStyleConfig = {
   parts: ['container', 'texture'],
-  baseStyle: ({ borderWidth = 1, borderRadius = '2xl', borderGradient }) => ({
+  baseStyle: ({ borderWidth = 1.1, borderRadius = '2xl', borderGradient, ...props }) => ({
     container: {
       borderRadius,
-      maxW: '100%',
-      ...gradientBorder({ borderRadius, borderWidth, variant: borderGradient }),
+      ...gradientBorder({ borderRadius, borderWidth, ...props, variant: borderGradient }),
     },
     texture: {
       userSelect: 'none',
@@ -45,7 +44,7 @@ export const CardStyles: ComponentMultiStyleConfig = {
     secondary: {
       container: {
         blendMode: 'screen',
-        backdropFilter: 'blur(15px)',
+        backdropFilter: 'blur(8px)', // it's technically blur(15px) on figma but visually 8px looks closer
         filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
       },
       texture: {

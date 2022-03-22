@@ -4,6 +4,9 @@ import { gradientBorder } from '../utils/gradientBorder'
 const HoverRadialGradient =
   'radial-gradient(97.48% 120.4% at 49.69% 76.45%, #3082E1 0%, #3D3786 31.18%, transparent 100%)'
 
+const PrimaryButtonShadow =
+  '20px -20px 39px rgba(120, 182, 255, 0.25), 0px 5px 14px rgba(0, 0, 0, 0.47), inset 0px -10px 20px rgba(117, 164, 255, 0.5)'
+
 export const ButtonStyles: ComponentSingleStyleConfig = {
   baseStyle: {
     fontSize: '14px',
@@ -17,6 +20,7 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
     large: {
       height: '50px',
       px: 8,
+      fontSize: '2xl',
     },
     medium: {
       height: '40px',
@@ -37,20 +41,11 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
       bgGradient: 'linear(to-r, primary.1, primary.2)',
       fontFamily: 'heading',
       fontWeight: 'bold',
-      shadow: 'up',
+      shadow: PrimaryButtonShadow,
+      _focus: { shadow: PrimaryButtonShadow },
     },
     secondary: {
       shadow: 'up',
-    },
-    'Bright Button': {
-      ...gradientBorder({ borderRadius: 'xl' }),
-      bgGradient: 'linear(to-r, primary.1, primary.2)',
-      shadow: 'Bright Button',
-      _focus: {
-        shadow: 'Bright Button',
-      },
-      fontSize: '2xl',
-      size: 'large',
     },
 
     navigation: (props) => ({
