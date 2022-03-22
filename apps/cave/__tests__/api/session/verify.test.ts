@@ -119,4 +119,25 @@ describe('/api/session/verify', () => {
     expect(res.statusCode).toBe(200)
     expect(res._getJSONData()).toEqual({ ok: true, user })
   })
+
+  it('should return at least user address if hasura is down', async () => {
+    const wallet = ethers.Wallet.createRandom()
+    const siweMessage = createSiweMessage({ address: wallet.address, nonce: '1asfa13eaws' })
+    const message = siweMessage.prepareMessage()
+    const signature = await wallet.signMessage(message)
+
+    const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
+      method: 'POST',
+      cookies: { session: encryptSession({ nonce: siweMessage.nonce }) },
+      body: { message, signature },
+    })
+
+    interceptHasura('UserByAddress').reply(500)
+    interceptHasura('InsertUser').reply(500)
+
+    await verifyHandler(req, res)
+
+    expect(res.statusCode).toBe(200)
+    expect(res._getJSONData()).toEqual({ ok: true, user: { address: wallet.address } })
+  })
 })
