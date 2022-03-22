@@ -9,10 +9,10 @@ export const concaveRPC = 'https://eth.concave.lol/'
 
 export const concaveProvider = (chainId: number) =>
   new providers.FallbackProvider([
-    // new providers.JsonRpcProvider(
-    //   { url: concaveRPC, headers: { 'x-api-key': concaveKey } },
-    //   chainId,
-    // ),
+    new providers.JsonRpcProvider(
+      { url: concaveRPC, headers: { 'x-api-key': concaveKey } },
+      chainId,
+    ),
     providers.getDefaultProvider(chainId, { alchemy, etherscan, infuraId }),
   ])
 
