@@ -2,10 +2,19 @@ import { ExpandArrowIcon, TokenIcon } from '@concave/icons'
 import { Box, Button, Flex, HStack, NumericInput, StackDivider, Text } from '@concave/ui'
 import { useCurrency } from 'hooks/useCurrency'
 import { useGasPrice } from 'hooks/useGasPrice'
+import { useFloorPrecision, useRoundPrecision } from 'hooks/usePrecision'
 import React from 'react'
 import { Token, UseSwap } from './useSwap'
 
-const TokenInfo = ({ token, loss }: { token: Token; loss?: number }) => {
+const TokenInfo = ({
+  token,
+  amount,
+  loss,
+}: {
+  token: Token
+  amount: string | number
+  loss?: number
+}) => {
   return (
     <Flex
       borderRadius={'3xl'}
@@ -15,9 +24,9 @@ const TokenInfo = ({ token, loss }: { token: Token; loss?: number }) => {
       p={4}
     >
       <Box w={200}>
-        <NumericInput disabled fontSize={'32px'} decimalScale={5} value={token.amount} />
+        <NumericInput disabled fontSize={'32px'} decimalScale={5} value={amount} />
         <Text fontWeight={700} fontSize={14} textColor="text.low">
-          {useCurrency(+token.amount * token.price)}
+          {useCurrency(+amount * token.price)}
           {loss && ` (-${loss}%)`}
         </Text>
       </Box>
@@ -43,7 +52,7 @@ const SwapButton = ({ swap }: { swap: UseSwap }) => (
       }}
       shadow={'Up Small'}
       _focus={{ boxShadow: 'Up Small' }}
-      onClickCapture={swap.swithTokens}
+      onClickCapture={swap.switchTokens}
       borderRadius={'full'}
     >
       <ExpandArrowIcon />
@@ -51,7 +60,7 @@ const SwapButton = ({ swap }: { swap: UseSwap }) => (
   </Flex>
 )
 
-export const MinExpectedOutput = ({ swap }: { swap: UseSwap }) => {
+const MinExpectedOutput = ({ swap }: { swap: UseSwap }) => {
   return (
     <Box>
       <Flex fontSize={'14px'} w={'100%'} mb={2} justifyContent={'space-between'}>
@@ -59,7 +68,7 @@ export const MinExpectedOutput = ({ swap }: { swap: UseSwap }) => {
           Minimum received after slippage
         </Text>
         <Text whiteSpace={'nowrap'} fontWeight={700} textColor="text.low">
-          {swap.minimumReceivedAfterSlippage} {swap.to.symbol}
+          {useFloorPrecision(swap.minimumReceivedAfterSlippage).formatted} {swap.to.symbol}
         </Text>
       </Flex>
       <Flex fontSize={'14px'} w={'100%'} justifyContent={'space-between'}>
@@ -73,7 +82,7 @@ export const MinExpectedOutput = ({ swap }: { swap: UseSwap }) => {
     </Box>
   )
 }
-export const ExpectedOutput = ({ swap }: { swap: UseSwap }) => {
+const ExpectedOutput = ({ swap }: { swap: UseSwap }) => {
   return (
     <Box>
       <Flex fontSize={'18px'} w={'100%'} justifyContent={'space-between'}>
@@ -81,7 +90,7 @@ export const ExpectedOutput = ({ swap }: { swap: UseSwap }) => {
           Expected Output
         </Text>
         <Text fontWeight={600}>
-          {(+swap.to.amount).toPrecision(5)} {swap.to.symbol}
+          {useRoundPrecision(swap.toAmount).formatted} {swap.to.symbol}
         </Text>
       </Flex>
       <Flex w={'100%'} justifyContent={'space-between'}>
@@ -95,13 +104,14 @@ export const ExpectedOutput = ({ swap }: { swap: UseSwap }) => {
 export const ConfirmSwap = ({ swap, onConfirm }: { swap: UseSwap; onConfirm: () => void }) => {
   return (
     <>
-      <TokenInfo token={swap.from}></TokenInfo>
+      <TokenInfo token={swap.from} amount={swap.fromAmount}></TokenInfo>
       <SwapButton swap={swap} />
-      <TokenInfo token={swap.to} loss={0.26}></TokenInfo>
+      <TokenInfo token={swap.to} amount={swap.toAmount} loss={0.26}></TokenInfo>
 
       <HStack fontSize="14px" fontWeight={700} my={6} justifyContent={'center'} flexWrap={'wrap'}>
         <Text>
-          1 {swap.to.symbol} = {(swap.to.price / swap.from.price).toFixed(4)} {swap.from.symbol}
+          1 {swap.to.symbol} = {useRoundPrecision(swap.to.price / swap.from.price).formatted}{' '}
+          {swap.from.symbol}
         </Text>
         <Text paddingRight={2} textColor="text.low">
           ({useCurrency(swap.to.price)})

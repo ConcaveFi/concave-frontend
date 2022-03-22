@@ -1,8 +1,8 @@
-import { Provider, defaultChains, chain } from 'wagmi'
+import { concaveProvider, concaveWSProvider } from 'lib/providers'
+import { ReactNode } from 'react'
+import { chain, defaultChains, Provider } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
-import { ReactNode } from 'react'
-import { concaveProvider, concaveWSProvider } from 'lib/providers'
 
 const supportedChains = [chain.mainnet]
 
