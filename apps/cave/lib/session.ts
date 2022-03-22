@@ -27,28 +27,24 @@ type Session = {
   user: User
 }
 
+export const serializeSession = (session) =>
+  serialize(sessionOptions.cookieName, session, sessionOptions.cookieOptions)
+
+export const encryptSession = (session) =>
+  aes256.encrypt(sessionOptions.password, JSON.stringify(session))
+
+export const decryptSession = (session): Session =>
+  JSON.parse(aes256.decrypt(sessionOptions.password, session))
+
 export const destroySession = (res: NextApiResponse) => {
-  res.setHeader(
-    'Set-Cookie',
-    serialize(sessionOptions.cookieName, '', sessionOptions.cookieOptions),
-  )
+  res.setHeader('Set-Cookie', serializeSession(''))
 }
 
 export const setSessionCookie = (req: NextApiRequest, res: NextApiResponse, cookie) => {
   const currentSession = getSessionCookie(req)
-  const encryptedCookie = aes256.encrypt(
-    sessionOptions.password,
-    JSON.stringify({ ...currentSession, ...cookie }),
-  )
-
-  res.setHeader(
-    'Set-Cookie',
-    serialize(sessionOptions.cookieName, encryptedCookie, sessionOptions.cookieOptions),
-  )
+  const encryptedCookie = encryptSession({ ...currentSession, ...cookie })
+  res.setHeader('Set-Cookie', serializeSession(encryptedCookie))
 }
-
-export const decryptSession = (session): Session =>
-  JSON.parse(aes256.decrypt(sessionOptions.password, session))
 
 export const getSessionCookie = (req: NextApiRequest) => {
   if (req.cookies.session) return decryptSession(req.cookies.session)

@@ -29,7 +29,9 @@ const splitObj = (splitKeys: string[]) => (obj) => {
 }
 
 const marginStyleKeys = Object.keys(space).filter((k) => k.startsWith('m'))
-const borderRadiusStyleKeys = Object.keys(border).filter((k) => k.endsWith('Radius'))
+const borderRadiusStyleKeys = Object.keys(border).filter(
+  (k) => k.endsWith('Radius') || k.startsWith('rounded'),
+)
 
 const getBorderRadiusStyles = (props) => splitObj(borderRadiusStyleKeys)(props)[1]
 
@@ -52,12 +54,12 @@ const Tiles = ({ tileWidth, tileHeight, clientWidth, clientHeight, Image }) => {
 }
 
 export const Card = forwardRef<CardProps, 'div'>(
-  ({ children, variant, borderWidth, borderRadius, borderGradient, ...props }, ref) => {
+  ({ children, variant, borderWidth, borderGradient, ...props }, ref) => {
     const styles = useMultiStyleConfig('Card', {
       variant,
       borderWidth,
-      borderRadius,
       borderGradient,
+      ...props,
     })
     const internalRef = useRef(null)
     const textureSrc = (styles.texture as any).src
@@ -67,17 +69,25 @@ export const Card = forwardRef<CardProps, 'div'>(
     return (
       <Box
         ref={useMergeRefs(internalRef, ref)}
-        __css={styles.container}
+        __css={{
+          ...styles.container,
+          width: props.w ?? props.width,
+          maxWidth: props.maxW ?? props.maxWidth,
+          minWidth: props.minW ?? props.minWidth,
+          height: props.h ?? props.height,
+          maxHeight: props.maxH ?? props.maxHeight,
+          minHeight: props.minH ?? props.minHeight,
+        }}
         {...marginStyles}
         {...getBorderRadiusStyles(props)}
       >
         <Stack
-          __css={{ borderRadius: styles.container.borderRadius }}
+          __css={{ ...getBorderRadiusStyles(styles.container) }}
           {...rest}
+          maxW="100%"
           pos="relative"
           overflow="clip"
         >
-          {children}
           {textureSrc && (
             <Box pos="absolute" overflow="clip" inset={0} zIndex={-1}>
               <Tiles
@@ -92,6 +102,7 @@ export const Card = forwardRef<CardProps, 'div'>(
                     zIndex={0}
                     src={textureSrc}
                     draggable={false}
+                    onError={(e) => ((e.target as any).style.display = 'none')}
                     alt=""
                     {...p}
                   />
@@ -103,6 +114,7 @@ export const Card = forwardRef<CardProps, 'div'>(
               />
             </Box>
           )}
+          {children}
         </Stack>
       </Box>
     )

@@ -59,7 +59,7 @@ const ConnectButton = () => {
           >
             <Card
               variant="secondary"
-              borderGradient="medium"
+              borderGradient="secondary"
               borderRadius="xl"
               px={1}
               py={2}

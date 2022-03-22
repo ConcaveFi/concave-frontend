@@ -37,7 +37,7 @@ export function SwapCard({
   const status = useDisclosure()
   const submitted = useDisclosure()
   return (
-    <Card {...cardProps}>
+    <Card gap={2} p={6} h="fit-content" shadow="Block Up" {...cardProps}>
       <Input
         value={'' + swap.fromAmount}
         price={swap.from.price}
@@ -179,7 +179,7 @@ export function SwapCard({
         />
       </Modal>
 
-      <Button variant="Bright Button" size="large" isFullWidth onClick={confirm.onOpen}>
+      <Button variant="primary" size="large" isFullWidth onClick={confirm.onOpen}>
         {buttonLabel}
       </Button>
     </Card>

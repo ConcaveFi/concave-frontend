@@ -22,10 +22,6 @@ const makeFontFaces = (familyName: string, weights: number[]) =>
 export const ConcaveFonts = () => (
   <Global
     styles={`
-      html {
-        -webkit-font-smoothing: auto;
-        -moz-osx-font-smoothing: auto;
-      }
       ${makeFontFaces('ProductSans', [900, 700, 500, 400])}
       ${makeFontFaces('SharpSans', [800, 700, 600, 500])}
     `}
