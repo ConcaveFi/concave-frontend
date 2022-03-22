@@ -1,14 +1,25 @@
-import { Box, Card, Image, Stack, Text } from '@concave/ui'
+import {
+  Box,
+  Button,
+  Card,
+  Image,
+  Modal,
+  ModalHeader,
+  Stack,
+  Text,
+  useDisclosure,
+} from '@concave/ui'
 import { ButtonLink } from 'components/ButtonLink'
 import { useState } from 'react'
 
 function StakeCard(props) {
   const vaprText = props.icon === '12m' ? 'Non-Dilutive vAPR' : 'vAPR'
   const [capPercentage, setCapPercentage] = useState('70')
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
     <div>
-      <Card variant="primary.outline" px={4} py={6} shadow="up" gap={1}>
+      <Card variant="primary" px={4} py={6} shadow="up" gap={1}>
         <Box mx="auto" py={5} w="full" h="333px" shadow="down" borderRadius="100px/90px">
           <Text color="text.low" fontSize="sm">
             Stake period
@@ -64,9 +75,10 @@ function StakeCard(props) {
           {props.stakedCNV} CNV
         </Text> */}
 
-        <ButtonLink
+        <Button
           mt={5}
-          href={`/${props.stakingLink}`}
+          // href={`/${props.stakingLink}`}
+          onClick={onOpen}
           fontWeight="medium"
           variant="primary.outline"
           bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
@@ -76,7 +88,52 @@ function StakeCard(props) {
           mx="auto"
         >
           Stake CNV
-        </ButtonLink>
+        </Button>
+
+        <Modal
+          bluryOverlay={true}
+          title="Stake CNV"
+          isOpen={isOpen}
+          onClose={onClose}
+          // sx={{
+          //   alignItems: 'center',
+          //   gap: 1,
+          //   shadow: 'Up for Blocks',
+          // }}
+          size="2xl"
+          isCentered
+        >
+          <Box p={2}>
+            <Box
+              mx="auto"
+              py={5}
+              w="30%"
+              h="500px"
+              shadow="down"
+              borderRadius="100px/110px"
+              textAlign="center"
+              ml={-1}
+            >
+              <Text color="text.low" fontSize="sm">
+                Stake period
+              </Text>
+              <Text fontSize="lg" fontWeight="bold">
+                {props.period}
+              </Text>
+              <Image
+                mx="auto"
+                src={`/assets/liquidstaking/${props.icon}-logo.svg`}
+                alt="stake period logo"
+              />
+              <Text color="text.low" fontSize="sm">
+                {vaprText}
+              </Text>
+              <Text fontSize="lg" fontWeight="bold">
+                {props.vapr} %
+              </Text>
+            </Box>
+          </Box>
+        </Modal>
       </Card>
     </div>
   )
