@@ -1,14 +1,29 @@
-import { Box, Card, Image, Stack, Text } from '@concave/ui'
-import { ButtonLink } from 'components/ButtonLink'
+import {
+  Box,
+  Button,
+  Card,
+  HStack,
+  Image,
+  Modal,
+  Stack,
+  Text,
+  useDisclosure,
+  VStack,
+} from '@concave/ui'
 import { useState } from 'react'
+import Emissions from './StakeModal/Emissions'
+import StakeDetails from './StakeModal/StakeDetails'
+import StakeInfo from './StakeModal/StakeInfo'
+import StakeInput from './StakeModal/StakeInput'
 
 function StakeCard(props) {
   const vaprText = props.icon === '12m' ? 'Non-Dilutive vAPR' : 'vAPR'
   const [capPercentage, setCapPercentage] = useState('70')
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
     <div>
-      <Card variant="primary.outline" px={4} py={6} shadow="up" gap={1}>
+      <Card variant="primary" px={4} py={6} shadow="up" gap={1}>
         <Box mx="auto" py={5} w="full" h="333px" shadow="down" borderRadius="100px/90px">
           <Text color="text.low" fontSize="sm">
             Stake period
@@ -60,14 +75,11 @@ function StakeCard(props) {
           </Stack>
         )}
 
-        {/* <Text shadow="down" py={1} borderRadius="2xl">
-          {props.stakedCNV} CNV
-        </Text> */}
-
-        <ButtonLink
+        <Button
           mt={5}
-          href={`/${props.stakingLink}`}
-          fontWeight="medium"
+          onClick={onOpen}
+          fontWeight="bold"
+          fontSize="md"
           variant="primary.outline"
           bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
           w="92.5%"
@@ -76,7 +88,39 @@ function StakeCard(props) {
           mx="auto"
         >
           Stake CNV
-        </ButtonLink>
+        </Button>
+
+        <Modal
+          bluryOverlay={true}
+          title="Stake CNV"
+          isOpen={isOpen}
+          onClose={onClose}
+          bodyProps={{
+            roundedLeft: '100px',
+            roundedRight: '20px',
+            shadow: 'Up for Blocks',
+          }}
+          titleAlign="center"
+          size="2xl"
+        >
+          <HStack>
+            <Emissions
+              period={props.period}
+              vaprText={vaprText}
+              icon={props.icon}
+              vapr={props.vapr}
+            />
+            <VStack spacing={8}>
+              <StakeInfo
+                period={props.period}
+                stakedCNV={props.stakedCNV}
+                capPercentage={capPercentage}
+              />
+              <StakeInput />
+              <StakeDetails vaprText={vaprText} vapr={props.vapr} />
+            </VStack>
+          </HStack>
+        </Modal>
       </Card>
     </div>
   )

@@ -127,7 +127,7 @@ export function SwapCard({
         title="Confirm Swap"
         isOpen={status.isOpen}
         onClose={status.onClose}
-        sx={{
+        bodyProps={{
           alignItems: 'center',
           gap: 1,
           shadow: 'Up for Blocks',
@@ -147,7 +147,7 @@ export function SwapCard({
         title="Confirm Swap"
         isOpen={confirm.isOpen}
         onClose={confirm.onClose}
-        sx={{
+        bodyProps={{
           gap: 2,
           shadow: 'Up for Blocks',
         }}
@@ -166,7 +166,7 @@ export function SwapCard({
         title="Confirm Swap"
         isOpen={submitted.isOpen}
         onClose={submitted.onClose}
-        sx={{
+        bodyProps={{
           alignItems: 'center',
           shadow: 'Up for Blocks',
         }}

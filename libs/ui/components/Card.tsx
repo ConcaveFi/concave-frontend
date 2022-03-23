@@ -65,7 +65,7 @@ export const Card = forwardRef<CardProps, 'div'>(
     const internalRef = useRef(null)
     const textureSrc = (styles.texture as any).src
 
-    const [rest, marginStyles] = splitObj(marginStyleKeys)(props)
+    const [propsWithoutMargins, marginStyles] = splitObj(marginStyleKeys)(props)
 
     return (
       <Box
@@ -84,7 +84,7 @@ export const Card = forwardRef<CardProps, 'div'>(
       >
         <Stack
           __css={{ ...getBorderRadiusStyles(styles.container) }}
-          {...rest}
+          {...propsWithoutMargins}
           maxW="100%"
           pos="relative"
           overflow="clip"
