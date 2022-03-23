@@ -13,6 +13,7 @@ import {
 import { useState } from 'react'
 import Emissions from './StakeModal/Emissions'
 import StakeInfo from './StakeModal/StakeInfo'
+import StakeInput from './StakeModal/StakeInput'
 
 function StakeCard(props) {
   const vaprText = props.icon === '12m' ? 'Non-Dilutive vAPR' : 'vAPR'
@@ -106,12 +107,13 @@ function StakeCard(props) {
               icon={props.icon}
               vapr={props.vapr}
             />
-            <VStack>
+            <VStack spacing={8}>
               <StakeInfo
                 period={props.period}
                 stakedCNV={props.stakedCNV}
                 capPercentage={capPercentage}
               />
+              <StakeInput />
             </VStack>
           </HStack>
         </Modal>
