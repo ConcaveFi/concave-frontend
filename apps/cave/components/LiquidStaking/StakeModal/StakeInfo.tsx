@@ -3,7 +3,7 @@ import React from 'react'
 
 function StakeInfo(props) {
   return (
-    <Box shadow="up" p={4} filter="drop-shadow(0px 0px 27px #81b3ff4f)">
+    <Box shadow="up" p={4} borderRadius="3xl" filter="drop-shadow(0px 0px 27px #81b3ff4f)">
       <Stack isInline spacing={6}>
         <Stack spacing="1px">
           <Text textAlign="left" fontSize="3xl" fontWeight="bold">
