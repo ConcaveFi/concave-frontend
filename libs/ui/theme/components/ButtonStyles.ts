@@ -32,7 +32,7 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
       ...gradientBorder({ borderRadius: '2xl', borderWidth: 2 }),
       fontFamily: 'heading',
       fontWeight: 'bold',
-      shadow: 'up',
+      shadow: 'Up Big',
       _hover: { bg: HoverRadialGradient, color: 'text.high' },
     },
     primary: {
@@ -45,7 +45,8 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
       _focus: { shadow: PrimaryButtonShadow },
     },
     secondary: {
-      shadow: 'up',
+      bgGradient: 'linear(to-r, secondary.125, secondary.50)',
+      shadow: 'Up Big',
     },
 
     navigation: (props) => ({

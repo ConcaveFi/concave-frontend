@@ -14,9 +14,12 @@ export const CardStyles: ComponentMultiStyleConfig = {
   }),
   sizes: {},
   variants: {
-    primary: {
+    primary: (props) => ({
       container: {
-        bgGradient: 'linear(to-tr, secondary.150, secondary.100)',
+        bgGradient:
+          props.colorScheme === 'brighter'
+            ? 'linear(to-r, secondary.125, secondary.50)'
+            : 'linear(to-tr, secondary.150, secondary.75)',
       },
       texture: {
         src: '/assets/textures/metal.jpg',
@@ -26,7 +29,7 @@ export const CardStyles: ComponentMultiStyleConfig = {
         opacity: 0.15,
         inset: 0,
       },
-    },
+    }),
     secondary: {
       container: {
         blendMode: 'screen',

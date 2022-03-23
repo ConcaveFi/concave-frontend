@@ -46,12 +46,9 @@ const SwapButton = ({ swap }: { swap: UseSwap }) => (
       w={10}
       h={9}
       m={-10}
-      bg={'Big Color Darker'}
-      _hover={{
-        bg: 'Big Color Darker',
-      }}
+      variant="secondary"
+      bgGradient="linear(to-l, secondary.75, secondary.150)"
       shadow={'Up Small'}
-      _focus={{ boxShadow: 'Up Small' }}
       onClickCapture={swap.switchTokens}
       borderRadius={'full'}
     >

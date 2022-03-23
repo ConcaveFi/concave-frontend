@@ -1,20 +1,6 @@
 import React from 'react'
-import {
-  Avatar,
-  Box,
-  Button,
-  Card,
-  CloseButton,
-  Container,
-  Flex,
-  gradientBorder,
-  Heading,
-  HStack,
-  Image,
-  Stack,
-  Text,
-} from '@concave/ui'
-import { ChevronDownIcon, CloseIcon } from '@concave/icons'
+import { Avatar, Button, Card, CloseButton, Flex, Heading, Text } from '@concave/ui'
+import { ChevronDownIcon } from '@concave/icons'
 
 const RewardsBanner = () => (
   <Card variant="secondary" p={4} gap={4}>

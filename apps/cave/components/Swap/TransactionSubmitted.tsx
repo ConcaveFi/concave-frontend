@@ -19,14 +19,10 @@ export const TransactionSubmitted = ({ swap, onClose }: { swap: UseSwap; onClose
         <Button
           onClick={onClose}
           borderRadius={'2xl'}
-          shadow={'Up Big'}
-          _focus={{
-            shadow: 'Up Big',
-          }}
+          variant="secondary"
           mt={4}
           w={'180px'}
           h={'60px'}
-          bg={'linear-gradient(265.73deg, #274C63 0%, #182F3E 100%)'}
         >
           <Text fontWeight={600} fontSize={'24px'}>
             Close

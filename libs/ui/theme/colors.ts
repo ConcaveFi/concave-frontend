@@ -11,8 +11,6 @@ export const colors = {
     low: '#5f7a99',
   },
 
-  'Big Color Darker': 'linear-gradient(239.18deg, #19394C 27.18%, #0A161F 96.11%)',
-
   stroke: {
     // accent on figma
     primary:
@@ -26,9 +24,12 @@ export const colors = {
     1: '#8671C0',
     2: '#4DBEE1',
   },
+
   secondary: /* green */ {
-    50: '#19394C',
+    50: '#274C63',
+    75: '#19394C',
     100: '#1B3442',
+    125: '#182F3E',
     150: '#0A161F',
   },
 

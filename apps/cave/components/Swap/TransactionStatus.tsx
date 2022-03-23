@@ -31,14 +31,7 @@ export const TransactionStatus = ({ swap, onClose }: { swap: UseSwap; onClose: (
         Confirm this transaction in your wallet
       </Text>
       <Flex>
-        <Button
-          onClick={onClose}
-          borderRadius={'2xl'}
-          shadow={'Up Big'}
-          w={'180px'}
-          h={'60px'}
-          bg={'linear-gradient(265.73deg, #274C63 0%, #182F3E 100%)'}
-        >
+        <Button onClick={onClose} variant="secondary" borderRadius={'2xl'} w={'180px'} h={'60px'}>
           <Text fontWeight={600} fontSize={'24px'}>
             Close
           </Text>
