@@ -12,6 +12,7 @@ import {
 } from '@concave/ui'
 import { useState } from 'react'
 import Emissions from './StakeModal/Emissions'
+import StakeDetails from './StakeModal/StakeDetails'
 import StakeInfo from './StakeModal/StakeInfo'
 import StakeInput from './StakeModal/StakeInput'
 
@@ -114,6 +115,7 @@ function StakeCard(props) {
                 capPercentage={capPercentage}
               />
               <StakeInput />
+              <StakeDetails vapr={props.vapr} />
             </VStack>
           </HStack>
         </Modal>
