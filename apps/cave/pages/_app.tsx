@@ -28,7 +28,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const Layout = Component.Layout || DefaultLayout
   return (
     <AppProviders globalStyles={globalStyles} cookies={pageProps?.cookies}>
-      <Image zIndex={-1} pos="fixed" top="-10px" h="100vh" w="100vw" src="/background.jpg" alt="" />
+      <Image zIndex={-1} pos="fixed" h="100vh" w="100vw" src="/background.jpg" alt="" />
       <ConcaveFonts />
       <Layout>
         <Component {...pageProps} />
