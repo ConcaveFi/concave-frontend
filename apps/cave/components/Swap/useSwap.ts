@@ -1,11 +1,11 @@
 import { BigNumber } from 'ethers'
-import { addresses } from 'lib/addresses'
-import { coingecko } from 'lib/coingecko.adapter'
+import { coinAdapter } from 'lib/coin.adapter'
+import { AvaliableCoins, coins, CoinType, DAI, FRAX } from 'lib/coins'
 import { useEffect, useState, useRef, useCallback } from 'react'
 import { useQuery } from 'react-query'
 import { chain, useBalance } from 'wagmi'
 
-const defaultValue = {
+const defaultValue: SwapStateProps = {
   priceImpact: -0.12,
   minimumReceivedAfterSlippage: 0,
   expertMode: false,
@@ -13,8 +13,8 @@ const defaultValue = {
   valueInOutputToken: 0,
   transactionDeadLine: 30,
   slippageTolerance: 0.3,
-  inputTokens: ['gCNV', 'XMR', 'ETH', 'DAI', 'FRAX'],
-  outputTokens: ['gCNV', 'XMR', 'ETH', 'DAI', 'FRAX'],
+  commonInputTokens: [DAI, FRAX],
+  commonOutputTokens: [DAI, FRAX],
 }
 
 export type SwapStateProps = {
@@ -25,12 +25,12 @@ export type SwapStateProps = {
   transactionDeadLine: number
   slippageTolerance: number
   priceImpact: number
-  inputTokens: string[]
-  outputTokens: string[]
+  commonInputTokens: CoinType[]
+  commonOutputTokens: CoinType[]
 }
 
-export type Token = {
-  readonly symbol: string
+export type Token = CoinType & {
+  readonly symbol: AvaliableCoins
   readonly price: number
   readonly balance: {
     decimals: number
@@ -47,22 +47,24 @@ export type UseSwap = SwapStateProps & {
   to: Token
   switchTokens: () => void
   set: (swap: Partial<SwapStateProps>) => void
-  setFromSymbol: (symbol: string) => void
+  setFromSymbol: (symbol: AvaliableCoins) => void
   setFromAmount: (amount: string | number) => void
-  setToSymbol: (symbol: string) => void
+  setToSymbol: (symbol: AvaliableCoins) => void
   setToAmount: (amount: string | number) => void
 }
 
-const useToken = (props: { userAddressOrName: string; symbol: string }) => {
-  const [symbol, setSymbol] = useState(props.symbol)
+const useToken = (props: { userAddressOrName: string; symbol: AvaliableCoins }) => {
+  const [symbol, setSymbol] = useState<AvaliableCoins>(props.symbol)
+  const coin = coins[symbol]
   const price = usePrice(symbol)
   const amount = useRef<number>()
   const [{ data: balance }] = useBalance({
     addressOrName: props.userAddressOrName,
-    token: addresses[chain.ropsten.id][symbol.toLowerCase()],
-    formatUnits: 18,
+    token: coins[symbol][chain.ropsten.id],
+    formatUnits: coin.decimals,
   })
   const token = {
+    ...coin,
     amount,
     symbol,
     balance,
@@ -72,8 +74,8 @@ const useToken = (props: { userAddressOrName: string; symbol: string }) => {
 }
 
 const USEPRICE = 'USEPRICE'
-export const usePrice = (symbol: string) => {
-  const { data } = useQuery([USEPRICE, symbol], () => coingecko.getTokenPrice(symbol))
+export const usePrice = (symbol: AvaliableCoins) => {
+  const { data } = useQuery([USEPRICE, symbol], () => coinAdapter.getTokenPrice(symbol))
   return data?.value
 }
 
@@ -133,9 +135,9 @@ export const useSwap = (
     fromAmount: from.amount.current,
     switchTokens,
     set,
-    setFromAmount,
     setToAmount,
-    setFromSymbol,
     setToSymbol,
+    setFromAmount,
+    setFromSymbol,
   }
 }
