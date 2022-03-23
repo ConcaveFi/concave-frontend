@@ -94,11 +94,11 @@ function StakeCard(props) {
           title="Stake CNV"
           isOpen={isOpen}
           onClose={onClose}
-          // sx={{
-          //   alignItems: 'center',
-          //   gap: 1,
-          //   shadow: 'Up for Blocks',
-          // }}
+          bodyProps={{
+            roundedLeft: '132px',
+            shadow: 'Up for Blocks',
+          }}
+          titleAlign="center"
           size="2xl"
         >
           <HStack>
