@@ -96,6 +96,7 @@ function StakeCard(props) {
           onClose={onClose}
           bodyProps={{
             roundedLeft: '100px',
+            roundedRight: '20px',
             shadow: 'Up for Blocks',
           }}
           titleAlign="center"
