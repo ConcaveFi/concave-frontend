@@ -3,11 +3,10 @@ import { gradientBorder } from '../utils/gradientBorder'
 
 export const CardStyles: ComponentMultiStyleConfig = {
   parts: ['container', 'texture'],
-  baseStyle: ({ borderWidth = 1, borderRadius = '2xl', borderGradient }) => ({
+  baseStyle: ({ borderWidth = 1.1, borderRadius = '2xl', borderGradient, ...props }) => ({
     container: {
       borderRadius,
-      maxW: '100%',
-      ...gradientBorder({ borderRadius, borderWidth, variant: borderGradient }),
+      ...gradientBorder({ borderRadius, borderWidth, ...props, variant: borderGradient }),
     },
     texture: {
       userSelect: 'none',
@@ -15,9 +14,12 @@ export const CardStyles: ComponentMultiStyleConfig = {
   }),
   sizes: {},
   variants: {
-    primary: {
+    primary: (props) => ({
       container: {
-        bgGradient: 'linear(to-tr, secondary.150, secondary.100)',
+        bgGradient:
+          props.colorScheme === 'brighter'
+            ? 'linear(to-r, secondary.125, secondary.50)'
+            : 'linear(to-tr, secondary.150, secondary.75)',
       },
       texture: {
         src: '/assets/textures/metal.jpg',
@@ -27,25 +29,11 @@ export const CardStyles: ComponentMultiStyleConfig = {
         opacity: 0.15,
         inset: 0,
       },
-    },
-    'primary.outline': {
-      container: {
-        bgGradient: 'linear(to-tr, secondary.150, secondary.100)',
-        ...gradientBorder({ borderRadius: '2xl', borderWidth: 2 }),
-      },
-      texture: {
-        src: '/assets/textures/metal.jpg',
-        width: 120,
-        height: 120,
-        blendMode: 'screen',
-        opacity: 0.15,
-        inset: 0,
-      },
-    },
+    }),
     secondary: {
       container: {
         blendMode: 'screen',
-        backdropFilter: 'blur(15px)',
+        backdropFilter: 'blur(8px)', // it's technically blur(15px) on figma but visually 8px looks closer
         filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
       },
       texture: {

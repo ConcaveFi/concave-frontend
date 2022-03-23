@@ -1,40 +1,17 @@
-import React, { ReactNode } from 'react'
-
 import {
   IconButton,
   Box,
   CloseButton,
   Flex,
-  Icon,
   useColorModeValue,
-  Link,
   Drawer,
   DrawerContent,
-  Text,
   useDisclosure,
   BoxProps,
   FlexProps,
-  VStack,
-  HStack,
   Card,
 } from '@concave/ui'
-import {
-  FaDiscord,
-  FaTwitter,
-  FaTwitch,
-  FaShoppingCart,
-  FaRandom,
-  FaBatteryThreeQuarters,
-  FaBriefcase,
-} from 'react-icons/fa'
 import { FiMenu } from 'react-icons/fi'
-import { SiGitbook } from 'react-icons/si'
-import { IconType } from 'react-icons'
-import { ReactText } from 'react'
-import { Image } from '@concave/ui'
-import { ConnectWallet } from 'components/ConnectWallet'
-import { ButtonLink } from 'components/ButtonLink'
-import { DownIcon } from '@concave/icons'
 import SideBarTop from './SideBarTop'
 import SideBarBottom from './SideBarBottom'
 import PageNav from './PageNav'
@@ -74,10 +51,11 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   return (
     <Card
       variant="primary"
-      bg="radial-gradient(248.94% 38.67% at 100% 27.33%, #19394C 25.26%, #0A161F 100%)"
+      bgGradient="radial(248.94% 38.67% at 100% 27.33%, secondary.75 25.26%, secondary.150 100%)"
       borderWidth={0}
       borderRadius={0}
       borderRightRadius="2xl"
+      shadow="Up Big"
       px={2}
       py={4}
       w={{ base: 'full', md: 60 }}

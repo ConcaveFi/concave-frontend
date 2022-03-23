@@ -3,31 +3,32 @@ import { useCurrency } from 'hooks/useCurrency'
 import React from 'react'
 import { InputContainer } from './InputContainer'
 import { Select } from './Select'
-import { Token } from './useSwap'
 
 export function Input({
   children,
-  token,
-  maxAmount,
-  onChangeValue,
+  value,
+  price,
+  symbol,
   tokenOptions,
+  onChangeValue,
   onSelectToken,
   ...flexProps
 }: {
-  token: Token
+  symbol: string
+  value: string
+  price: number
   tokenOptions: string[]
   onChangeValue: (value: number) => void
   onSelectToken: (token: string) => void
-  maxAmount?: number
 } & FlexProps) {
   return (
     <Flex direction="column" px={5} {...flexProps}>
       <InputContainer shadow="down" justifyContent={'space-between'}>
         <Stack justifyContent={'space-between'}>
           <NumericInput
-            max={maxAmount}
             decimalScale={5}
-            value={token.amount}
+            w={'100%'}
+            value={+value ? value : ''}
             onChangeValue={(value) => {
               if (!value) return
               const { floatValue } = value
@@ -35,11 +36,11 @@ export function Input({
             }}
           />
           <Text fontWeight={'bold'} textColor={'text.low'}>
-            {useCurrency(token.price * +token.amount)}
+            {useCurrency(price * +value)}
           </Text>
         </Stack>
-        <Flex direction={'column'} align={'flex-end'} w={300}>
-          <Select tokens={tokenOptions} onSelect={onSelectToken} selected={token.symbol} />
+        <Flex direction={'column'} align={'flex-end'} minW={'130px'} w={'auto'}>
+          <Select tokens={tokenOptions} onSelect={onSelectToken} selected={symbol} />
           {children}
         </Flex>
       </InputContainer>

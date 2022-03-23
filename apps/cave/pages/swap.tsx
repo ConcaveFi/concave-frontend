@@ -3,6 +3,7 @@ import { CandleStickCard } from 'components/CandleStickCard'
 import GcnvTitle from 'components/GcnvTitle'
 import { SwapCard } from 'components/Swap/SwapCard'
 import { useSwap } from 'components/Swap/useSwap'
+import { useAuth } from 'contexts/AuthContext'
 import React from 'react'
 
 const cardProps = {
@@ -12,7 +13,8 @@ const cardProps = {
 }
 
 function Swap() {
-  const swap = useSwap({
+  const { user, isConnected } = useAuth()
+  const swap = useSwap(isConnected ? user?.address : '', {
     inputTokens: ['WETH', 'BTC', 'WAVES', 'USDT', 'NEO', 'LINK', 'XMR', 'ETH', 'DAI'],
     outputTokens: ['XMR', 'ETH', 'DAI', 'FRAX'],
   })
@@ -38,6 +40,7 @@ function Swap() {
           }
           variant="primary"
           active="swap"
+          justifyContent={'space-between'}
           {...cardProps}
           h={['100%', 400]}
           w={['100%', '100%', 500, 567, 400]}

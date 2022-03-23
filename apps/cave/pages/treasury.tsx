@@ -18,8 +18,9 @@ const formatUsd = (value) => makeCurrencyFormat('en-US', 'USD').format(value)
 const Token = ({ img, name, value, balance = null, children = null }) => {
   return (
     <Card
-      variant="primary"
-      borderWidth={0}
+      variant="secondary"
+      borderGradient="secondary"
+      borderWidth={3}
       p={4}
       width={['100%', '400px', '450px']}
       shadow="Up Big"
@@ -56,7 +57,7 @@ export default function Treasury() {
 
   return (
     <Container maxWidth="container.lg" pt={16}>
-      <Stack w="100%" my={8} align="center">
+      <Stack w="100%" my={8} align="center" spacing={4}>
         <Heading as="h1">Concave Treasury</Heading>
         <Heading as="h2" py={4} fontSize="2xl">
           Total Value {formatUsd(treasury.totalUsd)}

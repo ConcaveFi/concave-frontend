@@ -1,21 +1,11 @@
-import { useColorModePreference } from '@concave/ui'
+import { BigNumber } from 'ethers'
+import { addresses } from 'lib/addresses'
 import { coingecko } from 'lib/coingecko.adapter'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
 import { useQuery } from 'react-query'
+import { chain, useBalance } from 'wagmi'
 
 const defaultValue = {
-  from: {
-    symbol: 'DAI',
-    maxAmount: 1000,
-    amount: 0,
-    price: 0,
-  },
-  to: {
-    symbol: 'CNV',
-    maxAmount: 11320,
-    amount: 0,
-    price: 0,
-  },
   priceImpact: -0.12,
   minimumReceivedAfterSlippage: 0,
   expertMode: false,
@@ -27,17 +17,8 @@ const defaultValue = {
   outputTokens: ['gCNV', 'XMR', 'ETH', 'DAI', 'FRAX'],
 }
 
-export type Token = {
-  symbol: string
-  maxAmount: number
-  amount: number | string
-  price: number
-}
-
 export type SwapStateProps = {
   minimumReceivedAfterSlippage: number
-  from: Token
-  to: Token
   expertMode: boolean
   multihops: boolean
   valueInOutputToken: number
@@ -48,83 +29,113 @@ export type SwapStateProps = {
   outputTokens: string[]
 }
 
+export type Token = {
+  readonly symbol: string
+  readonly price: number
+  readonly balance: {
+    decimals: number
+    formatted: string
+    symbol: string
+    value: BigNumber
+  }
+}
+
 export type UseSwap = SwapStateProps & {
+  fromAmount: number
+  from: Token
+  toAmount: number
+  to: Token
   switchTokens: () => void
-  setFrom: (token: Token) => void
-  setTo: (token: Token) => void
   set: (swap: Partial<SwapStateProps>) => void
+  setFromSymbol: (symbol: string) => void
+  setFromAmount: (amount: string | number) => void
+  setToSymbol: (symbol: string) => void
+  setToAmount: (amount: string | number) => void
+}
+
+const useToken = (props: { userAddressOrName: string; symbol: string }) => {
+  const [symbol, setSymbol] = useState(props.symbol)
+  const price = usePrice(symbol)
+  const amount = useRef<number>()
+  const [{ data: balance }] = useBalance({
+    addressOrName: props.userAddressOrName,
+    token: addresses[chain.ropsten.id][symbol.toLowerCase()],
+    formatUnits: 18,
+  })
+  const token = {
+    amount,
+    symbol,
+    balance,
+    price,
+  }
+  return [token, setSymbol] as const
 }
 
 const USEPRICE = 'USEPRICE'
-
 export const usePrice = (symbol: string) => {
   const { data } = useQuery([USEPRICE, symbol], () => coingecko.getTokenPrice(symbol))
   return data?.value
 }
 
-export const useSwap = (partialValues: Partial<SwapStateProps>): UseSwap => {
+export const useSwap = (
+  userAddressOrName: string,
+  partialValues: Partial<SwapStateProps>,
+): UseSwap => {
   const [swap, setSwap] = useState({ ...defaultValue, ...partialValues })
-  const fromPrice = usePrice(swap.from.symbol)
-  const toPrice = usePrice(swap.to.symbol)
+  const [from, setFromSymbol] = useToken({ userAddressOrName, symbol: 'DAI' })
+  const [to, setToSymbol] = useToken({ userAddressOrName, symbol: 'FRAX' })
+
+  const refreshSlippage = useCallback(() => {
+    const minimumReceivedAfterSlippage = +to.amount.current * (1 - swap.slippageTolerance / 100)
+    set({ minimumReceivedAfterSlippage })
+  }, [swap.slippageTolerance, to.amount])
 
   const set = (value: Partial<SwapStateProps>) => {
     setSwap((currentValue) => ({ ...currentValue, ...value }))
   }
 
-  const setFrom = async (token: Partial<Token>) => {
-    const from = { ...swap.from, ...token }
-    const to = swap.to
-    to.amount = toPrecision((+token.amount * from.price) / to.price)
-    set({ from, to })
-  }
-
-  const setTo = async (token: Partial<Token>) => {
-    const to = { ...swap.to, ...token }
-    const from = swap.from
-    from.amount = toPrecision((+token.amount * to.price) / from.price)
-    set({ to, from })
-  }
-
   const switchTokens = () => {
-    set({
-      from: { ...swap.to },
-      to: { ...swap.from },
-    })
+    const tmp = to.amount.current
+    to.amount.current = from.amount.current
+    from.amount.current = tmp
+    setFromSymbol(to.symbol)
+    setToSymbol(from.symbol)
   }
 
-  const setBalance = async (token: Partial<SwapStateProps>) => {
-    set({ from, to })
+  const setFromAmount = useCallback(
+    (value?: string) => {
+      if (!from.price || !to.price) return
+      from.amount.current = value ? +value : from.amount.current
+      to.amount.current = (+from.amount.current / to.price) * from.price
+      refreshSlippage()
+    },
+    [from.price, from.amount, refreshSlippage, to.price, to.amount],
+  )
+
+  const setToAmount = useCallback(
+    (value?: string) => {
+      if (!from.price || !to.price) return
+      to.amount.current = value ? +value : to.amount.current
+      from.amount.current = (+to.amount.current / from.price) * to.price
+      refreshSlippage()
+    },
+    [from.price, from.amount, refreshSlippage, to.price, to.amount],
+  )
+
+  useEffect(() => from.price && setFromAmount(), [from.price, setFromAmount])
+  useEffect(() => to.price && setToAmount(), [to.price, setToAmount])
+
+  return {
+    ...swap,
+    to,
+    from,
+    toAmount: to.amount.current,
+    fromAmount: from.amount.current,
+    switchTokens,
+    set,
+    setFromAmount,
+    setToAmount,
+    setFromSymbol,
+    setToSymbol,
   }
-
-  useEffect(() => {
-    setSwap(({ to, from, ...swap }) => {
-      from.price = fromPrice
-      to.amount = calcAmount(from, to)
-      return { ...swap, to, from }
-    })
-  }, [fromPrice, swap.from.symbol])
-
-  useEffect(() => {
-    setSwap(({ to, from, ...swap }) => {
-      to.price = toPrice
-      from.amount = calcAmount(to, from)
-      return { ...swap, to, from }
-    })
-  }, [toPrice, swap.to.symbol])
-
-  useEffect(() => {
-    const minimumReceivedAfterSlippage = +swap.to.amount * (1 - swap.slippageTolerance / 100)
-    setSwap((old) => ({
-      ...old,
-      minimumReceivedAfterSlippage: toPrecision(minimumReceivedAfterSlippage, 5),
-    }))
-  }, [swap.to, swap.slippageTolerance])
-
-  return { ...swap, switchTokens, setFrom, setTo, set }
 }
-
-const calcAmount = (input: Token, target: Token) =>
-  toPrecision(+input.amount * input.price) / target.price
-
-export const toPrecision = (n: number, precision = 10000) =>
-  Math.round((n || 0) * precision) / precision

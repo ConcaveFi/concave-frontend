@@ -1,6 +1,6 @@
+import { Box, useMediaQuery } from '@concave/ui'
 import { CandlestickData, createChart, IChartApi, WhitespaceData } from 'lightweight-charts'
 import React, { useEffect, useRef } from 'react'
-import { Box, useMediaQuery } from '@concave/ui'
 
 const CandleStickChart = (props: { data: (CandlestickData | WhitespaceData)[] }) => {
   const chartContainerRef = useRef<HTMLDivElement>()

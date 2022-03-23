@@ -13,12 +13,14 @@ import {
 } from '@concave/ui'
 import { useCurrency } from 'hooks/useCurrency'
 import { useGasPrice } from 'hooks/useGasPrice'
+import { useRoundPrecision } from 'hooks/usePrecision'
 import React from 'react'
 import { ConfirmSwap } from './ConfirmSwap'
 import { Input } from './Input'
 import { MaxAmount } from './MaxAmount'
 import { SwapSettings } from './SwapSettingsCard'
 import { TransactionStatus } from './TransactionStatus'
+import { TransactionSubmitted } from './TransactionSubmitted'
 import { UseSwap } from './useSwap'
 
 export function SwapCard({
@@ -33,31 +35,31 @@ export function SwapCard({
 } & CardProps) {
   const confirm = useDisclosure()
   const status = useDisclosure()
+  const submitted = useDisclosure()
   return (
-    <Card {...cardProps}>
+    <Card gap={2} p={6} h="fit-content" shadow="Block Up" {...cardProps}>
       <Input
-        token={swap.from}
-        maxAmount={swap.from.maxAmount}
-        onChangeValue={(amount) => {
-          swap.setFrom({ ...swap.from, amount })
-        }}
+        value={'' + swap.fromAmount}
+        price={swap.from.price}
+        symbol={swap.from.symbol}
         tokenOptions={swap.inputTokens}
-        onSelectToken={(symbol) => swap.setFrom({ ...swap.from, symbol })}
+        onChangeValue={swap.setFromAmount}
+        onSelectToken={swap.setFromSymbol}
       >
         <MaxAmount
           label="Balance:"
-          max={swap.from.maxAmount}
-          onClick={() => swap.setFrom({ ...swap.from, amount: swap.from.maxAmount })}
+          max={+swap.from.balance?.formatted}
+          onClick={() => swap.setFromAmount(swap.from.balance?.formatted)}
         />
       </Input>
       <Switch swap={swap} />
       <Input
-        token={swap.to}
+        value={'' + swap.toAmount}
+        price={swap.to.price}
+        symbol={swap.to.symbol}
         tokenOptions={swap.outputTokens}
-        onChangeValue={(amount) => swap.setTo({ ...swap.to, amount })}
-        onSelectToken={(symbol) => {
-          swap.setTo({ ...swap.to, symbol })
-        }}
+        onChangeValue={swap.setToAmount}
+        onSelectToken={swap.setToSymbol}
       >
         <Text
           py={1}
@@ -67,7 +69,7 @@ export function SwapCard({
           textAlign={'right'}
           textColor="text.low"
         >
-          Balance: {swap.to.maxAmount}
+          Balance: {useRoundPrecision(+swap.to.balance?.formatted).formatted}
         </Text>
       </Input>
       <HStack
@@ -91,7 +93,8 @@ export function SwapCard({
         <HStack>
           <HStack justifyContent={'center'} flexWrap={'wrap'}>
             <Text fontSize="xs">
-              1 {swap.to.symbol} = {(swap.to.price / swap.from.price).toFixed(4)} {swap.from.symbol}
+              1 {swap.to.symbol} = {useRoundPrecision(swap.to.price / swap.from.price).formatted}{' '}
+              {swap.from.symbol}
             </Text>
             <Text paddingRight={2} fontSize="xs" textColor="text.low">
               ({useCurrency(swap.to.price)})
@@ -130,7 +133,13 @@ export function SwapCard({
           shadow: 'Up for Blocks',
         }}
       >
-        <TransactionStatus swap={swap} onClose={status.onClose}></TransactionStatus>
+        <TransactionStatus
+          swap={swap}
+          onClose={() => {
+            status.onClose()
+            submitted.onOpen()
+          }}
+        ></TransactionStatus>
       </Modal>
 
       <Modal
@@ -152,7 +161,25 @@ export function SwapCard({
         />
       </Modal>
 
-      <Button variant="Bright Button" size="large" isFullWidth onClick={confirm.onOpen}>
+      <Modal
+        bluryOverlay={true}
+        title="Confirm Swap"
+        isOpen={submitted.isOpen}
+        onClose={submitted.onClose}
+        sx={{
+          alignItems: 'center',
+          shadow: 'Up for Blocks',
+        }}
+      >
+        <TransactionSubmitted
+          swap={swap}
+          onClose={() => {
+            submitted.onClose()
+          }}
+        />
+      </Modal>
+
+      <Button variant="primary" size="large" isFullWidth onClick={confirm.onOpen}>
         {buttonLabel}
       </Button>
     </Card>
@@ -169,7 +196,7 @@ const Switch = ({ swap }: { swap: UseSwap }) => {
         bgColor="rgba(156, 156, 156, 0.01);"
         minW="43"
         maxH="26"
-        onClickCapture={swap.swithTokens}
+        onClickCapture={swap.switchTokens}
         borderRadius={'full'}
       >
         <ExpandArrowIcon />
