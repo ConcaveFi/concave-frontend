@@ -35,9 +35,9 @@ export function Modal({
       <ModalContent>
         <ModalHeader textAlign={titleAlign}>{title}</ModalHeader>
         <ModalCloseButton />
-        <ModalBody as={Card} variant="primary" p="6" {...bodyProps}>
+        <Card variant="primary" p="6" {...bodyProps}>
           {children}
-        </ModalBody>
+        </Card>
       </ModalContent>
     </ChakraModal>
   )

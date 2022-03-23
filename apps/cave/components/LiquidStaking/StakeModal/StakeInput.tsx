@@ -24,6 +24,7 @@ function StakeInput() {
     <Card w="350px">
       <Input
         token={stakedCoin}
+        symbol={stakedCoin.symbol}
         maxAmount={stakedCoin.maxAmount}
         // onChangeValue={}
         tokenOptions={['CNV']}
