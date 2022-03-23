@@ -78,7 +78,8 @@ function StakeCard(props) {
         <Button
           mt={5}
           onClick={onOpen}
-          fontWeight="medium"
+          fontWeight="bold"
+          fontSize="md"
           variant="primary.outline"
           bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
           w="92.5%"

@@ -51,7 +51,8 @@ function StakeDetails(props) {
         <Button
           mt={5}
           //   onClick={}
-          fontWeight="medium"
+          fontWeight="bold"
+          fontSize="md"
           variant="primary.outline"
           bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
           w="100%"
