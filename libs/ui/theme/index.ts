@@ -6,8 +6,8 @@ import CloseButton from './components/CloseButtonStyles'
 import Input from './components/InputStyles'
 import Modal from './components/ModalStyles'
 import Card from './components/CardStyles'
-import BaseModal from './components/BaseStyles'
 import Switch from './components/SwitchStyles'
+import Accordion from './components/AccordionStyles'
 import { fonts, shadows } from './foundations'
 
 const theme = extendTheme({
@@ -17,13 +17,13 @@ const theme = extendTheme({
   shadows,
   components: {
     Input,
-    BaseModal,
     Button,
     Switch,
     Tooltip,
     CloseButton,
     Modal,
     Card,
+    Accordion,
   },
 } as const) as ChakraTheme
 

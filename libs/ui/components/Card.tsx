@@ -9,8 +9,8 @@ import {
   useMergeRefs,
   useMultiStyleConfig,
 } from '@chakra-ui/react'
-import { useRef } from 'react'
 import { GradientBorderStyleProps } from 'theme/utils/gradientBorder'
+import { useMeasure } from 'react-use'
 
 export interface CardProps extends StackProps {
   variant?: 'primary' | 'secondary'
@@ -62,7 +62,8 @@ export const Card = forwardRef<CardProps, 'div'>(
       borderGradient,
       ...props,
     })
-    const internalRef = useRef(null)
+    const [internalRef, { width, height }] = useMeasure()
+
     const textureSrc = (styles.texture as any).src
 
     const [propsWithoutMargins, marginStyles] = splitObj(marginStyleKeys)(props)
@@ -110,8 +111,8 @@ export const Card = forwardRef<CardProps, 'div'>(
                 )}
                 tileWidth={styles.texture.width}
                 tileHeight={styles.texture.height}
-                clientWidth={internalRef.current?.clientWidth || 1000}
-                clientHeight={internalRef.current?.clientHeight || 1000}
+                clientWidth={width || 1000}
+                clientHeight={height || 1000}
               />
             </Box>
           )}
