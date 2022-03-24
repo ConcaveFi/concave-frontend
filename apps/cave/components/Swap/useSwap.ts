@@ -1,6 +1,6 @@
 import { BigNumber } from 'ethers'
-import { coinAdapter } from 'lib/coin.adapter'
-import { AvaliableCoins, coins, CoinType, DAI, FRAX } from 'lib/coins'
+import { tokenService } from 'lib/token.service'
+import { AvailableTokens, availableTokens, TokenType, DAI, FRAX } from 'lib/tokens'
 import { useEffect, useState, useRef, useCallback } from 'react'
 import { useQuery } from 'react-query'
 import { chain, useBalance } from 'wagmi'
@@ -25,12 +25,12 @@ export type SwapStateProps = {
   transactionDeadLine: number
   slippageTolerance: number
   priceImpact: number
-  commonInputTokens: CoinType[]
-  commonOutputTokens: CoinType[]
+  commonInputTokens: TokenType[]
+  commonOutputTokens: TokenType[]
 }
 
-export type Token = CoinType & {
-  readonly symbol: AvaliableCoins
+export type Token = TokenType & {
+  readonly symbol: AvailableTokens
   readonly price: number
   readonly balance: {
     decimals: number
@@ -47,35 +47,37 @@ export type UseSwap = SwapStateProps & {
   to: Token
   switchTokens: () => void
   set: (swap: Partial<SwapStateProps>) => void
-  setFromSymbol: (symbol: AvaliableCoins) => void
+  setFromSymbol: (symbol: AvailableTokens) => void
   setFromAmount: (amount: string | number) => void
-  setToSymbol: (symbol: AvaliableCoins) => void
+  setToSymbol: (symbol: AvailableTokens) => void
   setToAmount: (amount: string | number) => void
 }
 
-const useToken = (props: { userAddressOrName: string; symbol: AvaliableCoins }) => {
-  const [symbol, setSymbol] = useState<AvaliableCoins>(props.symbol)
-  const coin = coins[symbol]
+const useToken = (props: { userAddressOrName: string; symbol: AvailableTokens }) => {
+  const [symbol, setSymbol] = useState<AvailableTokens>(props.symbol)
+  const token = availableTokens[symbol]
   const price = usePrice(symbol)
   const amount = useRef<number>()
   const [{ data: balance }] = useBalance({
     addressOrName: props.userAddressOrName,
-    token: coins[symbol][chain.ropsten.id],
-    formatUnits: coin.decimals,
+    token: availableTokens[symbol][chain.ropsten.id],
+    formatUnits: token.decimals,
   })
-  const token = {
-    ...coin,
-    amount,
-    symbol,
-    balance,
-    price,
-  }
-  return [token, setSymbol] as const
+  return [
+    {
+      ...token,
+      amount,
+      symbol,
+      balance,
+      price,
+    },
+    setSymbol,
+  ] as const
 }
 
 const USEPRICE = 'USEPRICE'
-export const usePrice = (symbol: AvaliableCoins) => {
-  const { data } = useQuery([USEPRICE, symbol], () => coinAdapter.getTokenPrice(symbol))
+export const usePrice = (symbol: AvailableTokens) => {
+  const { data } = useQuery([USEPRICE, symbol], () => tokenService.getTokenPrice(symbol))
   return data?.value
 }
 

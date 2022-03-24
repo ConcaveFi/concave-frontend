@@ -1,6 +1,7 @@
 import { useDisclosure } from '@chakra-ui/react'
 import { DownIcon, TokenIcon } from '@concave/icons'
 import { Button, Menu, MenuButton, Modal } from '@concave/ui'
+import { TokenType } from 'lib/tokens'
 import React from 'react'
 import { SelectToken } from './SelectToken'
 
@@ -13,12 +14,12 @@ const selectItemStyles = {
 }
 
 export const Select = ({
-  tokens,
+  commonBases,
   selected,
   onSelect,
 }: {
-  tokens: string[]
-  selected: typeof tokens[number]
+  commonBases: TokenType[]
+  selected: TokenType
   onSelect: (tokenName: string) => void
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -32,10 +33,10 @@ export const Select = ({
         bgColor="rgba(156, 156, 156, 0.01);"
         sx={selectItemStyles}
         onClick={onOpen}
-        leftIcon={<TokenIcon size="25px" tokenName={selected} />}
+        leftIcon={<TokenIcon size="25px" symbol={selected.symbol} logoURI={selected.logoURI} />}
         rightIcon={<DownIcon />}
       >
-        {selected.toUpperCase()}
+        {selected?.symbol}
       </MenuButton>
       <Modal
         sx={{
@@ -56,7 +57,7 @@ export const Select = ({
             onSelect(symbol)
             onClose()
           }}
-          commonBases={tokens}
+          commonBases={commonBases}
           selected={selected}
         ></SelectToken>
       </Modal>

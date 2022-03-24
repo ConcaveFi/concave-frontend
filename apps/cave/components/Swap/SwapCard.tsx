@@ -41,8 +41,8 @@ export function SwapCard({
       <Input
         value={'' + swap.fromAmount}
         price={swap.from.price}
-        symbol={swap.from.symbol}
-        tokenOptions={swap.inputTokens}
+        selected={swap.from}
+        commonBases={swap.commonInputTokens}
         onChangeValue={swap.setFromAmount}
         onSelectToken={swap.setFromSymbol}
       >
@@ -56,8 +56,8 @@ export function SwapCard({
       <Input
         value={'' + swap.toAmount}
         price={swap.to.price}
-        symbol={swap.to.symbol}
-        tokenOptions={swap.outputTokens}
+        selected={swap.to}
+        commonBases={swap.commonOutputTokens}
         onChangeValue={swap.setToAmount}
         onSelectToken={swap.setToSymbol}
       >

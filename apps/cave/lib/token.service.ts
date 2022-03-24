@@ -1,12 +1,10 @@
 import { CandleStickIntervalTypes } from 'components/CandleStickCard/useCandleStickChart'
 import { coingeckoApi } from './coingecko.api'
-import { AvaliableCoins, coins } from './coins'
+import { AvailableTokens, availableTokens } from './tokens'
 
-class CoinAdapter {
-  private tokens = Object.values(coins)
-  constructor() {}
-
-  async listCoins(search: { label?: string }) {
+class TokenService {
+  private tokens = Object.values(availableTokens)
+  async listTokens(search: { label?: string }) {
     if (!search) {
       return this.tokens
     }
@@ -20,12 +18,12 @@ class CoinAdapter {
       .sort()
   }
 
-  get(symbol: AvaliableCoins) {
-    return coins[symbol]
+  get(symbol: AvailableTokens) {
+    return availableTokens[symbol]
   }
 
-  async getTokenPrice(symbol: AvaliableCoins) {
-    const { coingecko } = coins[symbol]
+  async getTokenPrice(symbol: AvailableTokens) {
+    const { coingecko } = availableTokens[symbol]
     return Promise.resolve(
       coingeckoApi.tokenPrice({
         currency: 'usd',
@@ -38,7 +36,7 @@ class CoinAdapter {
     token,
     interval,
   }: {
-    token: AvaliableCoins
+    token: AvailableTokens
     interval: CandleStickIntervalTypes
   }) {
     const { coingecko } = this.get(token)
@@ -54,4 +52,4 @@ const daysOptions = {
   '4H': '30',
   '1D': '365',
 } as const
-export const coinAdapter = new CoinAdapter()
+export const tokenService = new TokenService()
