@@ -36,6 +36,7 @@ const borderRadiusStyleKeys = Object.keys(border).filter(
 
 const getBorderRadiusStyles = (props) => splitObj(borderRadiusStyleKeys)(props)[1]
 
+/** backgroundImage and background repeat deserve another shot here, but for now that works */
 const Tiles = ({ tileWidth, tileHeight, clientWidth, clientHeight, Image }) => {
   if (!tileHeight || !tileWidth || tileHeight === '100%' || tileWidth === '100%') return <Image /> // eslint-disable-line jsx-a11y/alt-text
 
