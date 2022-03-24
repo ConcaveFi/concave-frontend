@@ -8,6 +8,7 @@ Defining colors:
 export const colors = {
   text: /* contrast */ {
     high: '#fff',
+    medium: '#D7E9FF',
     low: '#5f7a99',
   },
 
