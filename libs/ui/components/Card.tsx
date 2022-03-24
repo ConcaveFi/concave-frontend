@@ -9,8 +9,8 @@ import {
   useMergeRefs,
   useMultiStyleConfig,
 } from '@chakra-ui/react'
-import { useRef } from 'react'
 import { GradientBorderStyleProps } from 'theme/utils/gradientBorder'
+import { useMeasure } from 'react-use'
 
 export interface CardProps extends StackProps {
   variant?: 'primary' | 'secondary'
@@ -36,6 +36,7 @@ const borderRadiusStyleKeys = Object.keys(border).filter(
 
 const getBorderRadiusStyles = (props) => splitObj(borderRadiusStyleKeys)(props)[1]
 
+/** backgroundImage and background repeat deserve another shot here, but for now that works */
 const Tiles = ({ tileWidth, tileHeight, clientWidth, clientHeight, Image }) => {
   if (!tileHeight || !tileWidth || tileHeight === '100%' || tileWidth === '100%') return <Image /> // eslint-disable-line jsx-a11y/alt-text
 
@@ -62,10 +63,11 @@ export const Card = forwardRef<CardProps, 'div'>(
       borderGradient,
       ...props,
     })
-    const internalRef = useRef(null)
+    const [internalRef, { width, height }] = useMeasure()
+
     const textureSrc = (styles.texture as any).src
 
-    const [rest, marginStyles] = splitObj(marginStyleKeys)(props)
+    const [propsWithoutMargins, marginStyles] = splitObj(marginStyleKeys)(props)
 
     return (
       <Box
@@ -84,7 +86,7 @@ export const Card = forwardRef<CardProps, 'div'>(
       >
         <Stack
           __css={{ ...getBorderRadiusStyles(styles.container) }}
-          {...rest}
+          {...propsWithoutMargins}
           maxW="100%"
           pos="relative"
           overflow="clip"
@@ -110,8 +112,8 @@ export const Card = forwardRef<CardProps, 'div'>(
                 )}
                 tileWidth={styles.texture.width}
                 tileHeight={styles.texture.height}
-                clientWidth={internalRef.current?.clientWidth || 1000}
-                clientHeight={internalRef.current?.clientHeight || 1000}
+                clientWidth={width || 1000}
+                clientHeight={height || 1000}
               />
             </Box>
           )}
