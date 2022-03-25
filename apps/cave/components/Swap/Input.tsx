@@ -1,5 +1,6 @@
 import { Flex, FlexProps, NumericInput, Stack, Text } from '@concave/ui'
 import { useCurrency } from 'hooks/useCurrency'
+import { TokenType } from 'lib/tokens'
 import React from 'react'
 import { InputContainer } from './InputContainer'
 import { Select } from './Select'
@@ -8,16 +9,16 @@ export function Input({
   children,
   value,
   price,
-  symbol,
-  tokenOptions,
+  selected,
+  commonBases,
   onChangeValue,
   onSelectToken,
   ...flexProps
 }: {
-  symbol: string
   value: string
   price: number
-  tokenOptions: string[]
+  selected: TokenType
+  commonBases: TokenType[]
   onChangeValue: (value: number) => void
   onSelectToken: (token: string) => void
 } & FlexProps) {
@@ -39,8 +40,8 @@ export function Input({
             {useCurrency(price * +value)}
           </Text>
         </Stack>
-        <Flex direction={'column'} align={'flex-end'} minW={'130px'} w={'auto'}>
-          <Select tokens={tokenOptions} onSelect={onSelectToken} selected={symbol} />
+        <Flex direction={'column'} justifyContent={'space-between'} minW={'130px'} w={'auto'}>
+          <Select commonBases={commonBases} onSelect={onSelectToken} selected={selected} />
           {children}
         </Flex>
       </InputContainer>

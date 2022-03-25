@@ -10,25 +10,23 @@ import {
   UnorderedList,
   VStack,
 } from '@concave/ui'
-import { coingecko } from 'lib/coingecko.adapter'
+import { tokenService } from 'lib/token.service'
+import { TokenType } from 'lib/tokens'
 import React, { useState } from 'react'
 import { useQuery } from 'react-query'
 
 export type TokenButton = {
   active?: boolean
-  symbol: string
+  token: TokenType
 } & FlexProps
 
-const TOKEN_INFO = 'TOKEN_INFO'
-
-const TokenButton = ({ symbol, active, ...flexProps }: TokenButton) => {
-  const { data: tokenInfo } = useQuery([TOKEN_INFO, symbol], () => coingecko.getTokenInfo(symbol))
+const TokenButton = ({ token, active, ...flexProps }: TokenButton) => {
   const shadow = active ? 'Down Big' : 'Up Small'
   return (
     <Flex p={2} cursor={'pointer'} borderRadius={'3xl'} boxShadow={shadow} {...flexProps}>
-      <TokenIcon size="30px" mr={2} tokenName={symbol} />
+      <TokenIcon size="30px" mr={2} symbol={token.symbol} logoURI={token.logoURI} />
       <Text lineHeight={'30px'} mr={2} fontSize={12} fontWeight={700}>
-        {tokenInfo?.symbol.toUpperCase()}
+        {token.symbol.toUpperCase()}
       </Text>
     </Flex>
   )
@@ -39,16 +37,16 @@ export const SelectToken = ({
   selected,
   onChange,
 }: {
-  commonBases: string[]
-  selected: string
+  commonBases: TokenType[]
+  selected: TokenType
   onChange: (token: string) => void
 }) => {
   const [search, setSearch] = useState('')
-  const { data } = useQuery(['LIST_TOKEN', '50'], () => coingecko.listCoins({ top: 50 }))
-  const tokens = data
-    ?.filter((d) => ~d.name.indexOf(search) || ~d.symbol.indexOf(search) || ~d.id.indexOf(search))
-    .filter((d) => !~d.id.indexOf('wormhole'))
-    .sort()
+  const { data: tokens } = useQuery(['LIST_TOKEN', search], () =>
+    tokenService.listTokens({
+      label: search,
+    }),
+  )
   return (
     <>
       <Flex>
@@ -62,16 +60,16 @@ export const SelectToken = ({
         />
       </Flex>
       <Flex gap={2} wrap={'wrap'}>
-        {commonBases.sort().map((symbol, key) => {
+        {commonBases.map((token, key, i) => {
           return (
             <TokenButton
-              title={symbol}
+              title={token.name}
               onClick={() => {
-                onChange(symbol)
+                onChange(token.symbol)
               }}
               key={key}
-              active={symbol === selected}
-              symbol={symbol}
+              active={token.symbol === selected.symbol}
+              token={token}
             />
           )
         })}
@@ -127,7 +125,7 @@ export const SelectToken = ({
                 }}
               >
                 <HStack m={2}>
-                  <TokenIcon size="40px" mr={1} tokenName={t.symbol} />
+                  <TokenIcon size="40px" mr={1} symbol={t.symbol} logoURI={t.logoURI} />
                   <VStack align={'baseline'}>
                     <Text fontWeight={700} lineHeight={'17px'} fontSize={'14px'}>
                       {t.symbol.toUpperCase()}
