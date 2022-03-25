@@ -39,7 +39,12 @@ export const Select = ({
         {selected?.symbol}
       </MenuButton>
       <Modal
-        sx={{
+        bluryOverlay={true}
+        title="Select a Token"
+        titleAlign="left"
+        isOpen={isOpen}
+        onClose={onClose}
+        bodyProps={{
           h: '70%',
           p: 6,
           gap: 4,
@@ -47,10 +52,6 @@ export const Select = ({
           variant: 'primary',
           justifyContent: 'space-between',
         }}
-        bluryOverlay={true}
-        title="Select a Token"
-        isOpen={isOpen}
-        onClose={onClose}
       >
         <SelectToken
           onChange={(symbol) => {
