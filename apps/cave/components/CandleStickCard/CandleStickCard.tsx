@@ -2,6 +2,7 @@ import { Flex, useMediaQuery } from '@chakra-ui/react'
 import { Card, CardProps, Text } from '@concave/ui'
 import { CandleStickTimeOptions } from 'components/CandleStickCard/CandleStickTimeOptions'
 import { useCandleStickChart } from 'components/CandleStickCard/useCandleStickChart'
+import { TokenType } from 'lib/tokens'
 import dynamic from 'next/dynamic'
 import { CandleStickTokenOptions } from './CandleStickTokenOptions'
 
@@ -14,8 +15,8 @@ export const CandleStickCard = ({
   from,
   to,
   ...cardProps
-}: { from: string; to: string } & CardProps) => {
-  const candleStickChart = useCandleStickChart(from, to)
+}: { from: TokenType; to: TokenType } & CardProps) => {
+  const candleStickChart = useCandleStickChart(from.symbol, to.symbol)
   const [isMobile] = useMediaQuery(['(max-width: 768px)'])
 
   return (

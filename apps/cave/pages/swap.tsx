@@ -4,6 +4,7 @@ import GcnvTitle from 'components/GcnvTitle'
 import { SwapCard } from 'components/Swap/SwapCard'
 import { useSwap } from 'components/Swap/useSwap'
 import { useAuth } from 'contexts/AuthContext'
+import { DAI, FRAX, USDT } from 'lib/tokens'
 import React from 'react'
 
 const cardProps = {
@@ -15,8 +16,8 @@ const cardProps = {
 function Swap() {
   const { user, isConnected } = useAuth()
   const swap = useSwap(isConnected ? user?.address : '', {
-    inputTokens: ['WETH', 'BTC', 'WAVES', 'USDT', 'NEO', 'LINK', 'XMR', 'ETH', 'DAI'],
-    outputTokens: ['XMR', 'ETH', 'DAI', 'FRAX'],
+    commonInputTokens: [USDT, DAI, FRAX],
+    commonOutputTokens: [DAI, FRAX],
   })
 
   return (
@@ -24,8 +25,8 @@ function Swap() {
       <GcnvTitle title="Swap gCNV" description="Swap gCNV here" />
       <Flex gap={4} flexWrap="wrap" justify="center">
         <CandleStickCard
-          from={swap.from.symbol}
-          to={swap.to.symbol}
+          from={swap.from}
+          to={swap.to}
           variant="secondary"
           {...cardProps}
           h={['100%', 470, 400]}

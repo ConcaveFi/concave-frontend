@@ -1,4 +1,5 @@
-import { coingecko } from 'lib/coingecko.adapter'
+import { tokenService } from 'lib/token.service'
+import { AvailableTokens } from 'lib/tokens'
 import { CandlestickData } from 'lightweight-charts'
 import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
@@ -23,7 +24,7 @@ export type CandleStickChartProps = {
 
 const ID = 'CANDLESTICK_TOKEN'
 
-export const useCandleStickChart = (inputToken: string, outputToken: string) => {
+export const useCandleStickChart = (inputToken: AvailableTokens, outputToken: AvailableTokens) => {
   const [candleStickData, setCandleStickData] = useState<CandleStickChartProps>({ ...defautValue })
 
   const set = (value: Partial<CandleStickChartProps>) => {
@@ -31,14 +32,14 @@ export const useCandleStickChart = (inputToken: string, outputToken: string) => 
   }
 
   const { data: inputData } = useQuery([ID, inputToken, candleStickData.interval], () =>
-    coingecko.fetchCandleStickData({
+    tokenService.fetchCandleStickData({
       token: inputToken,
       interval: candleStickData.interval,
     }),
   )
 
   const { data: outputData } = useQuery([ID, outputToken, candleStickData.interval], () =>
-    coingecko.fetchCandleStickData({
+    tokenService.fetchCandleStickData({
       token: outputToken,
       interval: candleStickData.interval,
     }),
