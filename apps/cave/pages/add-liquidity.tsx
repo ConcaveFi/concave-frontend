@@ -1,22 +1,29 @@
-import React from 'react'
+import { ExpandArrowIcon } from '@concave/icons'
 import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
   Avatar,
+  Box,
   Button,
   Card,
   CloseButton,
   Flex,
   Heading,
-  Text,
-  Accordion,
-  AccordionItem,
-  AccordionPanel,
-  Stack,
-  AccordionButton,
+  HStack,
+  IconButton,
   NumericInput,
-  AccordionIcon,
+  Stack,
+  Text,
 } from '@concave/ui'
 import { Pair } from '@uniswap/v2-sdk'
 import { BigNumberish } from 'ethers'
+import { usePrecision } from 'hooks/usePrecision'
+import { TokenType } from 'lib/tokens'
+import React, { useState } from 'react'
+import { Token, useToken } from '../components/Swap/useSwap'
 
 const RewardsBanner = () => (
   <Card variant="secondary" p={4} gap={4}>
@@ -38,10 +45,13 @@ const TokenIcon = ({ src, symbol, size = 'md' }) => (
   <Avatar src={src} name={symbol} size={size} bg="none" getInitials={(a) => a} />
 )
 
-const PositionInfoItem = ({ label, value }) => (
-  <Flex justify="space-between">
+const PositionInfoItem = ({ label, value, children = <></> }) => (
+  <Flex justify="space-between" align={'center'}>
     <Text>{label}</Text>
-    <Text>{value}</Text>
+    <HStack gap={2} align={'center'} alignContent={'center'}>
+      <Text>{value}</Text>
+      {children}
+    </HStack>
   </Flex>
 )
 
@@ -82,8 +92,12 @@ const LPPositionItem = ({ pair, ownedAmount }: LPPosition) => {
           spacing={4}
         >
           <PositionInfoItem label="Your total pool tokens:" value={ownedAmount.toString()} />
-          <PositionInfoItem label={`Pooled ${'XMR'}:`} value={'0.0001331'} />
-          <PositionInfoItem label={`Pooled ${'gCNV'}:`} value={'325.744'} />
+          <PositionInfoItem label={`Pooled ${'XMR'}:`} value={'0.0001331'}>
+            <TokenIcon size="sm" src="/assets/tokens/xmr.svg" symbol="XMR" />
+          </PositionInfoItem>
+          <PositionInfoItem label={`Pooled ${'gCNV'}:`} value={'325.744'}>
+            <TokenIcon size="sm" src="/assets/tokens/gcnv.svg" symbol="gCNV" />
+          </PositionInfoItem>
           <PositionInfoItem label="Your pool share:" value={'2.79%'} />
         </Stack>
         <Flex gap={5} justify="center" mt={6}>
@@ -100,8 +114,18 @@ const LPPositionItem = ({ pair, ownedAmount }: LPPosition) => {
 }
 
 const RemoveLiquidity = () => {
+  const [percentToRemove, setPercentToRemove] = useState(100)
+  const [tokenA, setTokenA] = useToken({ userAddressOrName: '', symbol: 'FRAX' })
+  const [tokenB, setTokenB] = useToken({ userAddressOrName: '', symbol: 'gCNV' })
+  const removeLiquidityState = useRemoveLiquidity({
+    tokenA,
+    tokenB,
+    amountTokenA: 0.0001331,
+    amountTokenB: 325.744,
+    percentToRemove,
+  })
   return (
-    <Flex maxW="container.md" direction="column" justifyContent="center" h="full" gap={6}>
+    <Flex w={645} maxW="container.md" direction="column" justifyContent="center" h="full" gap={6}>
       <Heading fontSize="2xl">Remove Liquidity</Heading>
       <Card
         variant="primary"
@@ -112,54 +136,167 @@ const RemoveLiquidity = () => {
         fontSize="lg"
         gap={6}
       >
-        <Flex
-          shadow="Up Big"
-          px={6}
-          py={3}
-          borderRadius="2xl"
-          justify="space-between"
-          align="center"
-        >
-          <Text>Amount to remove</Text>
-          <NumericInput
-            shadow="down"
-            borderRadius="2xl"
-            py={2}
-            px={4}
-            w="180px"
-            textAlign="right"
-            suffix=" %"
-            placeholder="0.0 %"
+        <AmountToRemove onChange={setPercentToRemove} />
+        <Flex justifyContent={'center'}>
+          <IconButton
+            variant="secondary"
+            shadow={'Up Small'}
+            borderRadius={'full'}
+            bgGradient="linear(to-l, secondary.75, secondary.150)"
+            w={'35px'}
+            h={'30px'}
+            my={-4}
+            aria-label="Search database"
+            icon={<ExpandArrowIcon h={'100%'} />}
           />
         </Flex>
-
-        <Flex
-          shadow="Up Big"
-          px={6}
-          py={3}
-          borderRadius="2xl"
-          justify="space-between"
-          align="center"
-        >
-          <Text>Amount to remove</Text>
-          <NumericInput
-            shadow="down"
-            borderRadius="2xl"
-            py={2}
-            px={4}
-            w="180px"
-            textAlign="right"
-            suffix=" %"
-            placeholder="0.0 %"
-          />
-        </Flex>
+        <YouWillReceive {...removeLiquidityState} />
+        <RemoveLiquidityActions />
+        <YourPosition {...removeLiquidityState} />
       </Card>
     </Flex>
   )
 }
 
+const AmountToRemove = ({ onChange }: { onChange: (n: number) => void }) => {
+  return (
+    <Flex shadow="Up Big" px={6} py={3} borderRadius="2xl" justify="space-between" align="center">
+      <Text>Amount to remove</Text>
+      <NumericInput
+        shadow="down"
+        onChangeValue={(val) => {
+          onChange(val.floatValue)
+        }}
+        borderRadius="2xl"
+        max={100}
+        py={2}
+        px={4}
+        w="180px"
+        textAlign="right"
+        suffix=" %"
+        placeholder="0.0 %"
+      />
+    </Flex>
+  )
+}
+
+const YouWillReceive = ({
+  tokenA,
+  tokenB,
+  amountAMin,
+  amountBMin,
+}: {
+  amountAMin: number
+  amountBMin: number
+  tokenA: TokenType
+  tokenB: TokenType
+}) => {
+  return (
+    <HStack gap={7} shadow="Up Big" px={6} py={3} borderRadius="2xl" align="center">
+      <Box>
+        <Text>You will receive:</Text>
+        <Text fontWeight={400} fontStyle={'md'} color={'#2E97E2'} fontSize={'14px'}>
+          You will receive:
+        </Text>
+      </Box>
+      <ReceiveBox amount={amountAMin} token={tokenA} />
+      <ReceiveBox amount={amountBMin} token={tokenB} />
+    </HStack>
+  )
+}
+
+const RemoveLiquidityActions = () => {
+  return (
+    <Flex gap={4} justifyContent={'center'}>
+      <Button w={250} variant={'primary'}>
+        Approve
+      </Button>
+      <Button disabled w={250} variant={'primary'}>
+        Confirm Withdrawal
+      </Button>
+    </Flex>
+  )
+}
+
+const YourPosition = ({ tokenA, tokenB }: { tokenA: TokenType; tokenB: TokenType }) => {
+  return (
+    <Flex gap={7} direction={'column'} shadow="Up Big" px={4} py={4} borderRadius="2xl">
+      <Text fontSize={'lg'}>Your Position</Text>
+      <Flex gap={2} align={'center'}>
+        <TokenIcon src={tokenA.logoURI} symbol={tokenA.symbol} />
+        <TokenIcon src={tokenB.logoURI} symbol={tokenB.symbol} />
+        <Text px={4}>
+          {tokenA.symbol}/{tokenB.symbol}
+        </Text>
+      </Flex>
+      <Stack
+        fontWeight="bold"
+        fontSize="lg"
+        color="text.medium"
+        borderRadius="2xl"
+        shadow="inset 0px -5px 10px rgba(134, 175, 255, 0.05), inset -9px 12px 24px rgba(13, 17, 23, 0.4)"
+        p={4}
+        spacing={3}
+      >
+        <PositionInfoItem label="Your pool share:" value={'2.79%'} />
+        <PositionInfoItem label={tokenA.symbol} value={'0.0001331'}>
+          <TokenIcon size="sm" src={tokenA.logoURI} symbol={tokenA.symbol} />
+        </PositionInfoItem>
+        <PositionInfoItem label={tokenB.symbol} value={'325.744'}>
+          <TokenIcon size="sm" src={tokenB.logoURI} symbol={tokenB.symbol} />
+        </PositionInfoItem>
+      </Stack>
+    </Flex>
+  )
+}
+
+const ReceiveBox = ({ amount, token }: { amount: number; token: TokenType }) => {
+  return (
+    <HStack shadow="down" borderRadius="2xl" p={3}>
+      <TokenIcon src={token.logoURI} symbol={token.symbol} />
+      <Box>
+        <Text fontFamily={'heading'} fontWeight={600}>
+          {usePrecision(amount, 7).formatted}
+        </Text>
+        <Text title={token.name} fontWeight={700} fontSize={'sm'} color={'text.low'}>
+          {token.symbol}
+        </Text>
+      </Box>
+    </HStack>
+  )
+}
+
+const useRemoveLiquidity = ({
+  tokenA,
+  amountTokenA,
+  tokenB,
+  amountTokenB,
+  percentToRemove,
+}: {
+  percentToRemove: number
+  tokenA: Token
+  amountTokenA: number
+  amountTokenB: number
+  tokenB: Token
+}) => {
+  const to = ''
+  const ratioToRemove = Math.min(percentToRemove, 100) / 100
+  const [liquidity, setLiquidity] = useState(0)
+  const amountAMin = amountTokenA * ratioToRemove
+  const amountBMin = amountTokenB * ratioToRemove
+  const [deadline, setDeadLine] = useState(new Date().getTime() / 1000 + 15 * 60)
+  return {
+    tokenA,
+    tokenB,
+    liquidity,
+    amountAMin,
+    amountBMin,
+    deadline,
+  }
+}
+
 export default function MyPositions() {
-  // return <RemoveLiquidity />
+  return <RemoveLiquidity />
   return (
     <Flex maxW="container.md" direction="column" justifyContent="center" h="full" gap={6}>
       <Heading fontSize="2xl">My Liquidity Position</Heading>
