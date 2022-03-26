@@ -32,8 +32,51 @@ const TokenButton = ({ token, active, ...flexProps }: TokenButton) => {
   )
 }
 
+const CommonBases = ({
+  options = [],
+  selected,
+  onChange,
+}: {
+  options: TokenType[]
+  selected: TokenType
+  onChange: (token: string) => void
+}) => {
+  if (!options?.length) {
+    return <></>
+  }
+  return (
+    <>
+      <Flex>
+        <Text fontWeight={600}>Common bases</Text>
+        <CnvQuestionIcon
+          filter="drop-shadow(-1px 1px 2px rgba(255, 255, 255, 0.25))"
+          height={'25px'}
+          width={'22px'}
+          viewBox="0 0 16 16"
+          ml={2}
+        />
+      </Flex>
+      <Flex gap={2} wrap={'wrap'}>
+        {options.map((token, key, i) => {
+          return (
+            <TokenButton
+              title={token.name}
+              onClick={() => {
+                onChange(token.symbol)
+              }}
+              key={key}
+              active={token.symbol === selected.symbol}
+              token={token}
+            />
+          )
+        })}
+      </Flex>
+    </>
+  )
+}
+
 export const SelectToken = ({
-  commonBases,
+  commonBases = [],
   selected,
   onChange,
 }: {
@@ -49,31 +92,7 @@ export const SelectToken = ({
   )
   return (
     <>
-      <Flex>
-        <Text fontWeight={600}>Common bases</Text>
-        <CnvQuestionIcon
-          filter="drop-shadow(-1px 1px 2px rgba(255, 255, 255, 0.25))"
-          height={'25px'}
-          width={'22px'}
-          viewBox="0 0 16 16"
-          ml={2}
-        />
-      </Flex>
-      <Flex gap={2} wrap={'wrap'}>
-        {commonBases.map((token, key, i) => {
-          return (
-            <TokenButton
-              title={token.name}
-              onClick={() => {
-                onChange(token.symbol)
-              }}
-              key={key}
-              active={token.symbol === selected.symbol}
-              token={token}
-            />
-          )
-        })}
-      </Flex>
+      <CommonBases options={commonBases} selected={selected} onChange={onChange}></CommonBases>
       <Input
         placeholder="Search name or past address"
         onChange={({ target }) => {
