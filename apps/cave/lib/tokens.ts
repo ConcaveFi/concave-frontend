@@ -5,8 +5,19 @@ export const DAI: TokenType = {
   symbol: 'DAI',
   name: 'Dai',
   decimals: 18,
-  logoURI: 'https://assets.coingecko.com/coins/images/9956/thumb/4943.png',
+  logoURI: 'https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/svg/icon/dai.svg',
+
   [chain.ropsten.id]: '0x7B731FFcf1b9C6E0868dA3F1312673A12Da28dc5',
+} as const
+
+export const MATIC: TokenType = {
+  coingecko: 'matic-network',
+  symbol: 'MATIC',
+  name: 'MATIC',
+  decimals: 18,
+  logoURI:
+    'https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/svg/icon/matic.svg',
+  [chain.ropsten.id]: '0x0D19826a842c03e9458D4270a5941b3F043fa5Db',
 } as const
 
 export const FRAX: TokenType = {
@@ -14,7 +25,7 @@ export const FRAX: TokenType = {
   name: 'Frax',
   symbol: 'FRAX',
   decimals: 18,
-  logoURI: 'https://assets.coingecko.com/coins/images/13422/thumb/frax_logo.png',
+  logoURI: '/assets/tokens/frax.svg',
   [chain.ropsten.id]: '0xE7E9F348202f6EDfFF2607025820beE92F51cdAA',
 } as const
 
@@ -32,8 +43,7 @@ export const bbtCNV: TokenType = {
   name: 'Concave Presale Token (BBT) (bbtCNV)',
   symbol: 'bbtCNV',
   decimals: 18,
-  logoURI:
-    'https://w7.pngwing.com/pngs/944/747/png-transparent-text-yellow-circle-icon-coin-trademark-number-code.png',
+  logoURI: '/assets/tokens/gcnv.svg',
   [chain.ropsten.id]: '0xC32BaEa7792bf39B8b89fa33A108d2064db43ee5',
 } as const
 
@@ -42,8 +52,16 @@ export const aCNV: TokenType = {
   name: 'Concave A Token (aCNV) (aCNV)',
   symbol: 'aCNV',
   decimals: 18,
-  logoURI:
-    'https://w7.pngwing.com/pngs/944/747/png-transparent-text-yellow-circle-icon-coin-trademark-number-code.png',
+  logoURI: '/assets/tokens/gcnv.svg',
+  [chain.ropsten.id]: '0x6c64efbbaea3ebec73588a8e20cf058344f5f1cf',
+}
+
+export const gCNV: TokenType = {
+  coingecko: 'concave',
+  name: 'Concave Token',
+  symbol: 'gCNV',
+  decimals: 18,
+  logoURI: '/assets/tokens/gcnv.svg',
   [chain.ropsten.id]: '0x6c64efbbaea3ebec73588a8e20cf058344f5f1cf',
 }
 
@@ -65,5 +83,5 @@ export type TokenType = {
   logoURI: string
   [chainId: number]: string
 }
-export const availableTokens = { aCNV, USDT, bbtCNV, FRAX, DAI, LINK } as const
+export const availableTokens = { aCNV, USDT, bbtCNV, FRAX, DAI, LINK, MATIC, gCNV } as const
 export type AvailableTokens = keyof typeof availableTokens
