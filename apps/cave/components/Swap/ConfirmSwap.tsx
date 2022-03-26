@@ -40,7 +40,7 @@ const TokenInfo = ({
         </Text>
       </Box>
       <HStack>
-        <TokenIcon size="32px" {...token} />
+        <TokenIcon size="sm" {...token} />
         <Text fontSize={24} fontWeight={700}>
           {token.symbol.toUpperCase()}
         </Text>
