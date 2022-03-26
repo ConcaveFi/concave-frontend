@@ -6,9 +6,9 @@ import React from 'react'
 export const CandleStickTokenOptions = ({ from, to }: { from: TokenType; to: TokenType }) => {
   return (
     <HStack p={2} borderRadius="2xl" shadow="Down Big">
-      <TokenIcon size="30px" {...from} />
+      <TokenIcon size="sm" {...from} />
       <Text>{from.symbol.toUpperCase()} /</Text>
-      <TokenIcon size="30px" {...to} />
+      <TokenIcon size="sm" {...to} />
       <Text paddingRight={1}>{from.symbol.toUpperCase()}</Text>
     </HStack>
   )

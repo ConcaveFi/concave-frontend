@@ -34,7 +34,7 @@ export const USDT: TokenType = {
   name: 'Tether',
   symbol: 'USDT',
   decimals: 6,
-  logoURI: 'https://assets.coingecko.com/coins/images/325/thumb/Tether-logo.png',
+  logoURI: 'https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/svg/icon/usdt.svg',
   [chain.ropsten.id]: '0x0736d0c130b2eAD47476cC262dbed90D7C4eeABD',
 } as const
 
@@ -72,7 +72,7 @@ export const LINK: TokenType = {
   name: 'Chainlink',
   symbol: 'LINK',
   decimals: 18,
-  logoURI: 'https://assets.coingecko.com/coins/images/877/thumb/chainlink-new-logo.png',
+  logoURI: 'https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/svg/icon/link.svg',
 } as const
 
 export type TokenType = {
