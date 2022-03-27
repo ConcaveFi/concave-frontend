@@ -3,8 +3,8 @@ import { CandleStickCard } from 'components/CandleStickCard'
 import GcnvTitle from 'components/GcnvTitle'
 import { SwapCard } from 'components/Swap/SwapCard'
 import { useSwap } from 'components/Swap/useSwap'
-import { usePriceInStable } from 'components/Swap/useBestTrade'
-import { INV } from 'constants/tokens'
+import { usePriceInStable } from 'hooks/useBestTrade'
+import { INV, WETH } from 'constants/tokens'
 import { useAuth } from 'contexts/AuthContext'
 import { DAI, FRAX, USDT } from 'lib/tokens'
 import React from 'react'
@@ -22,9 +22,7 @@ function Swap() {
     commonOutputTokens: [DAI, FRAX],
   })
 
-  const aaa = usePriceInStable(INV)
-
-  console.log(aaa)
+  const aaa = usePriceInStable(WETH)
 
   return (
     <Flex direction="column" gap={12}>
