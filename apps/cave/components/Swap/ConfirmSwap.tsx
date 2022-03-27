@@ -1,5 +1,14 @@
 import { ExpandArrowIcon, TokenIcon } from '@concave/icons'
-import { Box, Button, Flex, HStack, NumericInput, StackDivider, Text } from '@concave/ui'
+import {
+  Box,
+  Button,
+  Flex,
+  HStack,
+  IconButton,
+  NumericInput,
+  StackDivider,
+  Text,
+} from '@concave/ui'
 import { useCurrency } from 'hooks/useCurrency'
 import { useGasPrice } from 'hooks/useGasPrice'
 import { useFloorPrecision, useRoundPrecision } from 'hooks/usePrecision'
@@ -31,7 +40,7 @@ const TokenInfo = ({
         </Text>
       </Box>
       <HStack>
-        <TokenIcon size="32px" {...token} />
+        <TokenIcon size="sm" {...token} />
         <Text fontSize={24} fontWeight={700}>
           {token.symbol.toUpperCase()}
         </Text>
@@ -42,18 +51,18 @@ const TokenInfo = ({
 
 const SwapButton = ({ swap }: { swap: UseSwap }) => (
   <Flex justifyContent={'center'}>
-    <Button
-      w={10}
-      h={9}
-      m={-10}
+    <IconButton
       variant="secondary"
-      bgGradient="linear(to-l, secondary.75, secondary.150)"
       shadow={'Up Small'}
-      onClickCapture={swap.switchTokens}
       borderRadius={'full'}
-    >
-      <ExpandArrowIcon />
-    </Button>
+      bgGradient="linear(to-l, secondary.75, secondary.150)"
+      w={'35px'}
+      h={'30px'}
+      onClick={swap.switchTokens}
+      m={-8}
+      aria-label="Search database"
+      icon={<ExpandArrowIcon h={'100%'} />}
+    />
   </Flex>
 )
 

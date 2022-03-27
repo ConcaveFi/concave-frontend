@@ -53,7 +53,7 @@ export type UseSwap = SwapStateProps & {
   setToAmount: (amount: string | number) => void
 }
 
-const useToken = (props: { userAddressOrName: string; symbol: AvailableTokens }) => {
+export const useToken = (props: { userAddressOrName: string; symbol: AvailableTokens }) => {
   const [symbol, setSymbol] = useState<AvailableTokens>(props.symbol)
   const token = availableTokens[symbol]
   const price = usePrice(symbol)

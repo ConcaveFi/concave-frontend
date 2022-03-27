@@ -24,7 +24,7 @@ const TokenButton = ({ token, active, ...flexProps }: TokenButton) => {
   const shadow = active ? 'Down Big' : 'Up Small'
   return (
     <Flex p={2} cursor={'pointer'} borderRadius={'3xl'} boxShadow={shadow} {...flexProps}>
-      <TokenIcon size="30px" mr={2} symbol={token.symbol} logoURI={token.logoURI} />
+      <TokenIcon size="sm" mr={2} symbol={token.symbol} logoURI={token.logoURI} />
       <Text lineHeight={'30px'} mr={2} fontSize={12} fontWeight={700}>
         {token.symbol.toUpperCase()}
       </Text>
@@ -125,7 +125,7 @@ export const SelectToken = ({
                 }}
               >
                 <HStack m={2}>
-                  <TokenIcon size="40px" mr={1} symbol={t.symbol} logoURI={t.logoURI} />
+                  <TokenIcon size="md" mr={1} symbol={t.symbol} logoURI={t.logoURI} />
                   <VStack align={'baseline'}>
                     <Text fontWeight={700} lineHeight={'17px'} fontSize={'14px'}>
                       {t.symbol.toUpperCase()}

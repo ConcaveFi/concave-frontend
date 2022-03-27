@@ -33,7 +33,7 @@ export const Select = ({
         bgColor="rgba(156, 156, 156, 0.01);"
         sx={selectItemStyles}
         onClick={onOpen}
-        leftIcon={<TokenIcon size="25px" symbol={selected.symbol} logoURI={selected.logoURI} />}
+        leftIcon={<TokenIcon size="sm" symbol={selected.symbol} logoURI={selected.logoURI} />}
         rightIcon={<DownIcon />}
       >
         {selected?.symbol}
