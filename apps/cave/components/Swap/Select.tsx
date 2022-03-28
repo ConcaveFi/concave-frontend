@@ -1,17 +1,28 @@
-import { useDisclosure } from '@chakra-ui/react'
+import { MenuButton, useDisclosure } from '@chakra-ui/react'
 import { DownIcon, TokenIcon } from '@concave/icons'
-import { Button, Menu, MenuButton, Modal } from '@concave/ui'
+import { Button, Menu, Modal, Text } from '@concave/ui'
 import { TokenType } from 'lib/tokens'
 import React from 'react'
 import { SelectToken } from './SelectToken'
 
-const selectItemStyles = {
-  borderRadius: 'full',
-  py: 2,
-  px: 3,
-  height: 'auto',
-  fontWeight: 600,
-}
+const SelectTokenButton = ({ onClick }: { onClick: () => void }) => (
+  <Button
+    boxShadow={'Up Small'}
+    bg={'linear-gradient(90deg, #72639B 0%, #44B9DE 100%)'}
+    _hover={{
+      bg: 'linear-gradient(90deg, #72639B 0%, #44B9DE 100%)',
+    }}
+    py={0}
+    h={8}
+    px={2}
+    borderRadius={'full'}
+    fontSize={'lg'}
+    rightIcon={<DownIcon />}
+    onClick={onClick}
+  >
+    <Text>Select a token</Text>
+  </Button>
+)
 
 export const Select = ({
   commonBases,
@@ -19,25 +30,32 @@ export const Select = ({
   onSelect,
 }: {
   commonBases: TokenType[]
-  selected: TokenType
+  selected?: TokenType
   onSelect: (tokenName: string) => void
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
-    <Menu placement="bottom-end" autoSelect>
-      <MenuButton
-        boxShadow={'Up Small'}
-        _focus={{ boxShadow: 'Up Small' }}
-        p={2}
-        as={Button}
-        bgColor="rgba(156, 156, 156, 0.01);"
-        sx={selectItemStyles}
-        onClick={onOpen}
-        leftIcon={<TokenIcon size="sm" symbol={selected.symbol} logoURI={selected.logoURI} />}
-        rightIcon={<DownIcon />}
-      >
-        {selected?.symbol}
-      </MenuButton>
+    <Menu placement="bottom-end">
+      {!selected?.symbol && <SelectTokenButton onClick={onOpen} />}
+      {selected?.symbol && (
+        <MenuButton
+          as={Button}
+          boxShadow={'Up Small'}
+          _focus={{ boxShadow: 'Up Small' }}
+          bgColor="rgba(156, 156, 156, 0.01);"
+          borderRadius={'full'}
+          py={1}
+          px={2}
+          h={8}
+          height={'auto'}
+          fontWeight={600}
+          onClick={onOpen}
+          leftIcon={<TokenIcon size="xs" symbol={selected.symbol} logoURI={selected.logoURI} />}
+          rightIcon={<DownIcon />}
+        >
+          {selected?.symbol}
+        </MenuButton>
+      )}
       <Modal
         bluryOverlay={true}
         title="Select a Token"

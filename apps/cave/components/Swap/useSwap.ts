@@ -53,15 +53,15 @@ export type UseSwap = SwapStateProps & {
   setToAmount: (amount: string | number) => void
 }
 
-export const useToken = (props: { userAddressOrName: string; symbol: AvailableTokens }) => {
-  const [symbol, setSymbol] = useState<AvailableTokens>(props.symbol)
+export const useToken = (props: { userAddressOrName: string; symbol?: AvailableTokens }) => {
+  const [symbol, setSymbol] = useState<AvailableTokens>(props.symbol ?? null)
   const token = availableTokens[symbol]
   const price = usePrice(symbol)
   const amount = useRef<number>()
   const [{ data: balance }] = useBalance({
     addressOrName: props.userAddressOrName,
-    token: availableTokens[symbol][chain.ropsten.id],
-    formatUnits: token.decimals,
+    token: availableTokens[symbol]?.[chain.ropsten.id],
+    formatUnits: token?.decimals,
   })
   return [
     {

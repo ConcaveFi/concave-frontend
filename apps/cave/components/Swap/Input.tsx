@@ -1,4 +1,4 @@
-import { Flex, FlexProps, NumericInput, Stack, Text } from '@concave/ui'
+import { Flex, FlexProps, NumericInput, Stack, Text, VStack } from '@concave/ui'
 import { useCurrency } from 'hooks/useCurrency'
 import { TokenType } from 'lib/tokens'
 import React from 'react'
@@ -17,7 +17,7 @@ export function Input({
 }: {
   value: string
   price: number
-  selected: TokenType
+  selected?: TokenType
   commonBases: TokenType[]
   symbol: string
   maxAmount: number
@@ -43,10 +43,10 @@ export function Input({
             {useCurrency(price * +value)}
           </Text>
         </Stack>
-        <Flex direction={'column'} justifyContent={'space-between'} minW={'130px'} w={'auto'}>
+        <VStack justifyContent={'center'} align={'end'} minW={'130px'} w={'auto'}>
           <Select commonBases={commonBases} onSelect={onSelectToken} selected={selected} />
           {children}
-        </Flex>
+        </VStack>
       </InputContainer>
     </Flex>
   )

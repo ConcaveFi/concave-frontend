@@ -1,7 +1,5 @@
 import {
-  CSSObject,
   Modal as ChakraModal,
-  ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalHeader,
