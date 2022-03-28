@@ -1,7 +1,7 @@
 import React from 'react'
-import { Box, Button, Flex, Icon, Link, Text, FlexProps, Image } from '@concave/ui'
-import { IconType } from 'react-icons'
-import { ReactText } from 'react'
+import Link from 'next/link'
+import { Box, Button, Flex, Text, Image} from '@concave/ui'
+
 
 function PageNav() {
   return (
@@ -16,7 +16,7 @@ function PageNav() {
             box-shadow="lg"
             rounded="2xl"
           >
-            <Link href={'bond'} style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
+            <Link href={'bond'}>
               <Button
                 leftIcon={<Image src={'/assets/sidebar/page-bond.svg'} />}
                 iconSpacing={7}
@@ -38,8 +38,6 @@ function PageNav() {
 
           <Link
             href={'liquidstaking'}
-            style={{ textDecoration: 'none' }}
-            _focus={{ boxShadow: 'none' }}
           >
             <Button
               leftIcon={<Image src={'/assets/sidebar/page-lstaking.svg'} />}
@@ -58,8 +56,6 @@ function PageNav() {
 
           <Link
             href={'marketplace'}
-            style={{ textDecoration: 'none' }}
-            _focus={{ boxShadow: 'none' }}
           >
             <Button
               leftIcon={<Image src={'/assets/sidebar/page-marketplace.svg'} />}
@@ -76,7 +72,7 @@ function PageNav() {
             </Button>
           </Link>
 
-          <Link href={'swap'} style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
+          <Link href={'swap'}>
             <Button
               leftIcon={<Image src={'/assets/sidebar/page-swap.svg'} />}
               iconSpacing={7}
@@ -94,50 +90,6 @@ function PageNav() {
         </Box>
       </Flex>
     </div>
-  )
-}
-
-interface NavItemProps extends FlexProps {
-  icon: IconType
-  link: string
-  children: ReactText
-}
-const NavItem = ({ icon, children, link, ...rest }: NavItemProps) => {
-  return (
-    <Link
-      href={link}
-      {...(link.startsWith('http')
-        ? { target: '_blank', rel: 'noopener noreferrer' }
-        : { replace: 'true' })}
-      style={{ textDecoration: 'none' }}
-      _focus={{ boxShadow: 'none' }}
-    >
-      <Flex
-        align="center"
-        p="4"
-        mx="4"
-        borderRadius="lg"
-        role="group"
-        cursor="pointer"
-        _hover={{
-          bg: 'cyan.400',
-          color: 'white',
-        }}
-        {...rest}
-      >
-        {icon && (
-          <Icon
-            mr="4"
-            fontSize="16"
-            _groupHover={{
-              color: 'white',
-            }}
-            as={icon}
-          />
-        )}
-        {children}
-      </Flex>
-    </Link>
   )
 }
 
