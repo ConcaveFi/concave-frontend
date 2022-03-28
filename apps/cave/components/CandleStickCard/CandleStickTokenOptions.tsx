@@ -9,7 +9,7 @@ export const CandleStickTokenOptions = ({ from, to }: { from: TokenType; to: Tok
       <TokenIcon size="sm" {...from} />
       <Text>{from.symbol.toUpperCase()} /</Text>
       <TokenIcon size="sm" {...to} />
-      <Text paddingRight={1}>{from.symbol.toUpperCase()}</Text>
+      <Text paddingRight={1}>{to.symbol.toUpperCase()}</Text>
     </HStack>
   )
 }
