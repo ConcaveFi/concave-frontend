@@ -183,7 +183,7 @@ const AmountToRemove = ({ onChange }: { onChange: (n: number) => void }) => {
           onChange(val.floatValue)
         }}
         borderRadius="2xl"
-        max={100}
+        isAllowed={({ floatValue }) => !floatValue || (floatValue <= 100 && floatValue >= 0)}
         py={2}
         px={4}
         w="180px"
