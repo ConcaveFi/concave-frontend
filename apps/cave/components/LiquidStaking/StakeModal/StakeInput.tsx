@@ -23,7 +23,8 @@ function StakeInput() {
   return (
     <Card w="350px">
       <Input
-        token={stakedCoin}
+        // is this needed? interface is updated
+        // token={stakedCoin}
         symbol={stakedCoin.symbol}
         maxAmount={stakedCoin.maxAmount}
         // onChangeValue={}
