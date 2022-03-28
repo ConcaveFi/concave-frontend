@@ -9,7 +9,9 @@ import { Contract } from 'ethers'
 import { BASES_TO_CHECK_TRADES_AGAINST, INTERMEDIARY_PAIRS_FOR_MULTI_HOPS } from 'constants/routing'
 import { concaveProvider } from 'lib/providers'
 import { DAI } from 'constants/tokens'
+import { useMemo } from 'react'
 
+// TODO: Multicall?
 const fetchPair = async (tokenA, tokenB, provider = concaveProvider(chain.mainnet.id)) => {
   try {
     const pairAddress = Pair.getAddress(tokenA, tokenB)
@@ -35,9 +37,6 @@ const fetchPair = async (tokenA, tokenB, provider = concaveProvider(chain.mainne
  * but to start we don't yet know what's the best route (WETH -> DAI -> CNV)
  * for that we construct multiple pairs WETH/FRAX, WETH/DOLA, WETH/DAI and CNV/FRAX, CNV/DOLA, CNV/DAI
  * and check which one is the best to follow with the transaction
- *
- * if maxHops is 1 it will only try to route WETH -> CNV directly
- * if maxHops is more than 2, it will also check routes like WETH -> DAI -> USDC -> CNV
  */
 export const useBestTrade = (
   tokenIn: Currency,
@@ -45,20 +44,32 @@ export const useBestTrade = (
   desiredAmount: { in: number; out?: never } | { in?: never; out: number },
   { maxHops = 2, chainId = chain.mainnet.id }: { maxHops?: number; chainId?: number } = {},
 ) => {
-  if (!desiredAmount.in && !desiredAmount.out) throw new Error('Must specify desired amount')
+  const currencyPairs = useMemo(
+    () =>
+      [
+        // if maxHops is 1 it will only try to route tokenIn -> tokenOut directly
+        ...(maxHops === 1 ? [[tokenIn.wrapped, tokenOut.wrapped]] : []),
+        ...(maxHops > 1
+          ? BASES_TO_CHECK_TRADES_AGAINST[chainId]
+              .flatMap((baseToken) => [
+                [baseToken, tokenIn.wrapped],
+                [baseToken, tokenOut.wrapped],
+              ])
+              .filter(([a, b]) => !a.equals(b))
+          : []),
+        // if maxHops is more than 2, it will also check routes like tokenIn -> DAI -> WETH -> tokenOut
+        ...(maxHops > 2 ? INTERMEDIARY_PAIRS_FOR_MULTI_HOPS[chainId] : []),
+      ].filter(
+        ([t0, t1], i, otherPairs) =>
+          otherPairs.findIndex((otherPair) =>
+            otherPair.find((t) => t.equals(t0) || t.equals(t1)),
+          ) === i,
+      ) as [Token, Token][],
+    [tokenIn, tokenOut, maxHops, chainId],
+  )
+
   return useQuery(['bestTrade', tokenIn, tokenOut, maxHops], async () => {
-    const currencyPairs = [
-      ...(maxHops === 1 ? [[tokenIn.wrapped, tokenOut.wrapped]] : []),
-      ...(maxHops > 1
-        ? BASES_TO_CHECK_TRADES_AGAINST[chainId]
-            .flatMap((baseToken) => [
-              [baseToken, tokenIn.wrapped],
-              [baseToken, tokenOut.wrapped],
-            ])
-            .filter(([a, b]) => !a.equals(b))
-        : []),
-      ...(maxHops > 2 ? INTERMEDIARY_PAIRS_FOR_MULTI_HOPS[chainId] : []),
-    ] as [Token, Token][]
+    if (!desiredAmount.in && !desiredAmount.out) throw new Error('Must specify desired amount')
 
     /**
      * this will always check multiple hops, whitch may be slower than some alternative,
@@ -68,6 +79,8 @@ export const useBestTrade = (
     const pairs = (await Promise.all(currencyPairs.map(([a, b]) => fetchPair(a, b)))).filter(
       Boolean,
     )
+
+    if (!pairs) throw new Error('No valid pairs')
 
     const bestTrade = desiredAmount.in
       ? Trade.bestTradeExactIn(
@@ -91,7 +104,9 @@ export const useBestTrade = (
  * actually price in DAI for the moment, refactor to check multiple stables and find best trade
  */
 export const usePriceInStable = (token: Token) => {
-  const bestTrade = useBestTrade(token, DAI, { in: 1e18 })
+  const stable = DAI
+  const bestTrade = useBestTrade(token, stable, { in: 1e18 })
+  if (token.equals(stable)) return { status: 'success', price: 1 }
   return {
     isLoading: bestTrade.isLoading,
     isError: bestTrade.isError,
