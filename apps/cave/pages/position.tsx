@@ -29,6 +29,8 @@ import { AvailableTokens, DAI, FRAX, TokenType, USDT } from 'lib/tokens'
 import React, { useEffect, useState } from 'react'
 import { Token, useToken } from '../components/Swap/useSwap'
 import { useRouter } from 'next/router'
+import { useAuth } from 'contexts/AuthContext'
+import { useBalance } from 'wagmi'
 
 const RewardsBanner = () => (
   <Card variant="secondary" p={4} gap={4}>
@@ -66,11 +68,11 @@ const LPPositionItem = ({ pair, ownedAmount }: LPPosition) => {
   const removeLiquidity = useDisclosure()
   const router = useRouter()
   const { operation } = router.query
-  useEffect(() => {
-    if (operation == 'addLiquidity') {
-      addLiquidity.onOpen()
-    }
-  }, [operation])
+  const { user } = useAuth()
+  const [{ data, error, loading }, getBalance] = useBalance({
+    addressOrName: user.address,
+    skip: !user.address,
+  })
 
   // <RemoveLiquidity />
   // <AddLiquidity />
