@@ -326,8 +326,8 @@ const AddLiquidityModal = ({
   userAddress: string
 }) => {
   const [tokenA, setTokenA] = useToken({ userAddressOrName: userAddress, symbol: 'ETH' })
-  const [tokenB, setTokenB] = useToken({ userAddressOrName: '' })
-
+  const [tokenB, setTokenB] = useToken({ userAddressOrName: userAddress, symbol: 'DAI' })
+  console.log(tokenB)
   return (
     <Modal
       bluryOverlay={true}
@@ -385,7 +385,7 @@ const AddLiquidityModal = ({
           }}
         >
           {tokenB.symbol && (
-            <MaxAmount label="Balance:" max={+tokenA.balance?.formatted} onClick={console.log} />
+            <MaxAmount label="Balance:" max={+tokenB.balance?.formatted} onClick={console.log} />
           )}
         </TokenInput>
       </Flex>
