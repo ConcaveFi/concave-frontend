@@ -108,25 +108,7 @@ export const SelectToken = ({
         height={'100%'}
         boxShadow={'Down Big'}
       >
-        <Box
-          mx={2}
-          my={4}
-          w={380}
-          h={280}
-          overflowX={'hidden'}
-          sx={{
-            '&::-webkit-scrollbar': {
-              width: '12px',
-              boxShadow: 'Down Big',
-              borderRadius: '8px',
-              backgroundColor: `rgba(0, 0, 0, 0.05)`,
-            },
-            '&::-webkit-scrollbar-thumb': {
-              borderRadius: '8px',
-              backgroundColor: `#5F7A99`,
-            },
-          }}
-        >
+        <Box mx={2} my={4} w={380} h={280} overflowX={'hidden'} apply="scrollbar.secondary">
           <UnorderedList>
             {tokens?.map((t, key) => (
               <ListItem
