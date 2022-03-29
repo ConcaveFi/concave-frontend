@@ -19,9 +19,6 @@ export function Input({
   price: number
   selected?: TokenType
   commonBases: TokenType[]
-  symbol: string
-  maxAmount: number
-  tokenOptions: string[]
   onChangeValue: (value: number) => void
   onSelectToken: (token: string) => void
 } & FlexProps) {
