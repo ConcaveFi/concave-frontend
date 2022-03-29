@@ -1,13 +1,12 @@
 import React from 'react'
-import Link from 'next/link'
-import { Box, Button, Flex, Text, Image } from '@concave/ui'
+import { Box, Flex, Text, Image } from '@concave/ui'
 import { ButtonLink } from 'components/ButtonLink'
 
 function PageNav() {
   return (
     <div>
       <Flex>
-        <Image src={'/assets/sidebar/linkage.svg'} mt={4} ml={7} />
+        <Image src={'/assets/sidebar/linkage.svg'} ml={7} />
         <Box ml={-1}>
           <Box
             shadow="down"
@@ -19,7 +18,6 @@ function PageNav() {
             <ButtonLink
               leftIcon={<Image src={'/assets/sidebar/page-bond.svg'} />}
               iconSpacing={7}
-              // variant="primary.outline"
               bgGradient="linear(to-tr, secondary.150, secondary.100)"
               w="160px"
               h="45px"
@@ -44,7 +42,7 @@ function PageNav() {
             h="45px"
             borderRadius="2xl"
             textColor="#5F7A99"
-            mt={4}
+            mt={16}
             href={'liquidstaking'}
           >
             Liquid Staking
@@ -71,18 +69,17 @@ function PageNav() {
             p={1}
             box-shadow="lg"
             rounded="2xl"
-            mt={4}
+            mt={6}
           >
             <ButtonLink
               leftIcon={<Image src={'/assets/sidebar/page-swap.svg'} />}
               iconSpacing={7}
-              // variant="primary.outline"
               bgGradient="linear(to-tr, secondary.150, secondary.100)"
               w="160px"
               h="45px"
               borderRadius="lg"
               shadow="up"
-              textColor="#5F7A99"
+              textColor="text.low"
               href={'swap'}
             >
               Swap
@@ -91,6 +88,7 @@ function PageNav() {
               w="full"
               mt={2}
               size="sm"
+              bg="none"
               fontSize="sm"
               fontWeight="thin"
               textColor="text.low"
@@ -103,6 +101,7 @@ function PageNav() {
             <ButtonLink
               size="sm"
               w="full"
+              bg="none"
               fontSize="sm"
               fontWeight="thin"
               textColor="text.low"
