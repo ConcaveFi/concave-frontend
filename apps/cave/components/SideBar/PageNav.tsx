@@ -1,8 +1,31 @@
 import React from 'react'
 import Link from 'next/link'
 import { Box, Button, Flex, Stack, Text, Image } from '@concave/ui'
+import { useRouter } from 'next/dist/client/router'
 
 function PageNav() {
+  const router = useRouter()
+
+  const addLiquidity = () => {
+    // use router to pass parameters, parameters appear on link too so it's shareable
+    router.push({
+      pathname: '/position',
+      query: {
+        liquidityModal: true,
+      },
+    })
+  }
+
+  const showLiquidity = () => {
+    // use router to pass parameters, parameters appear on link too so it's shareable
+    router.push({
+      pathname: '/position',
+      query: {
+        liquidityModal: false,
+      },
+    })
+  }
+
   return (
     <div>
       <Flex>
@@ -67,33 +90,17 @@ function PageNav() {
             </Button>
           </Link>
 
-          {/* <Link href={'swap'}>
-            <Button
-              leftIcon={<Image src={'/assets/sidebar/page-swap.svg'} />}
-              iconSpacing={7}
-              variant="primary.outline"
-              bgGradient="linear(to-tr, secondary.150, secondary.100)"
-              w="160px"
-              h="45px"
-              borderRadius="2xl"
-              textColor="#5F7A99"
-              mt={10}
-            >
-              Swap
-            </Button>
-          </Link> */}
-          <Stack
+          <Box
             shadow="down"
             bgGradient="linear(to-tr, secondary.150, secondary.100)"
             p={1}
             box-shadow="lg"
             rounded="2xl"
             mt={4}
-            spacing={2}
           >
-            <Link href={'bond'}>
+            <Link href={'swap'}>
               <Button
-                leftIcon={<Image src={'/assets/sidebar/page-bond.svg'} />}
+                leftIcon={<Image src={'/assets/sidebar/page-swap.svg'} />}
                 iconSpacing={7}
                 // variant="primary.outline"
                 bgGradient="linear(to-tr, secondary.150, secondary.100)"
@@ -103,22 +110,34 @@ function PageNav() {
                 shadow="up"
                 textColor="#5F7A99"
               >
-                Bonds
+                Swap
               </Button>
             </Link>
-            <Link href={'bond'}>
-              <Button
-                w="full"
-                fontSize="sm"
-                fontWeight="thin"
-                textColor="#5F7A99"
-                textAlign="center"
-                p={1}
-              >
-                5 days - 9% ROI
-              </Button>
-            </Link>
-          </Stack>
+            <Button
+              w="full"
+              mt={2}
+              size="sm"
+              fontSize="sm"
+              fontWeight="thin"
+              textColor="#5F7A99"
+              textAlign="center"
+              p={1}
+              onClick={addLiquidity}
+            >
+              Add liquidity
+            </Button>
+            <Button
+              size="sm"
+              w="full"
+              fontSize="sm"
+              fontWeight="thin"
+              textColor="#5F7A99"
+              textAlign="center"
+              onClick={showLiquidity}
+            >
+              Your Pools
+            </Button>
+          </Box>
         </Box>
       </Flex>
     </div>
