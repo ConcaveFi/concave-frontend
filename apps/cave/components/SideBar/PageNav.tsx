@@ -1,31 +1,9 @@
 import React from 'react'
 import Link from 'next/link'
-import { Box, Button, Flex, Stack, Text, Image } from '@concave/ui'
-import { useRouter } from 'next/dist/client/router'
+import { Box, Button, Flex, Text, Image } from '@concave/ui'
+import { ButtonLink } from 'components/ButtonLink'
 
 function PageNav() {
-  const router = useRouter()
-
-  const addLiquidity = () => {
-    // use router to pass parameters, parameters appear on link too so it's shareable
-    router.push({
-      pathname: '/position',
-      query: {
-        liquidityModal: true,
-      },
-    })
-  }
-
-  const showLiquidity = () => {
-    // use router to pass parameters, parameters appear on link too so it's shareable
-    router.push({
-      pathname: '/position',
-      query: {
-        liquidityModal: false,
-      },
-    })
-  }
-
   return (
     <div>
       <Flex>
@@ -113,30 +91,30 @@ function PageNav() {
                 Swap
               </Button>
             </Link>
-            <Button
+            <ButtonLink
               w="full"
               mt={2}
               size="sm"
               fontSize="sm"
               fontWeight="thin"
-              textColor="#5F7A99"
+              textColor="text.low"
               textAlign="center"
               p={1}
-              onClick={addLiquidity}
+              href={'/position?operation=addLiquidity'}
             >
               Add liquidity
-            </Button>
-            <Button
+            </ButtonLink>
+            <ButtonLink
               size="sm"
               w="full"
               fontSize="sm"
               fontWeight="thin"
-              textColor="#5F7A99"
+              textColor="text.low"
               textAlign="center"
-              onClick={showLiquidity}
+              href={'/position?operation=showLiquidity'}
             >
               Your Pools
-            </Button>
+            </ButtonLink>
           </Box>
         </Box>
       </Flex>
