@@ -15,12 +15,12 @@ const getTokenLogoURI = (address: string) => {
 export const TokenIcon = ({ symbol, address, size = 'sm', logoURI, ...props }: TokenIconProps) => {
   return (
     <Avatar
+      {...props}
       src={logoURI ?? getTokenLogoURI(address)}
       name={symbol}
       size={size}
       bg="none"
       getInitials={(a) => a}
-      {...props}
     />
   )
 }
