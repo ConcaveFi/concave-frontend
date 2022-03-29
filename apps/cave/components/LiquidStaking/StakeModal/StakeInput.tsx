@@ -1,6 +1,7 @@
 import { Card } from '@concave/ui'
 import { Input } from 'components/Swap/Input'
 import { MaxAmount } from 'components/Swap/MaxAmount'
+import { gCNV } from 'lib/tokens'
 import React from 'react'
 
 interface Token {
@@ -23,19 +24,14 @@ function StakeInput() {
   return (
     <Card w="350px">
       <Input
-        // is this needed? interface is updated
-        // token={stakedCoin}
-        symbol={stakedCoin.symbol}
-        maxAmount={stakedCoin.maxAmount}
-        // onChangeValue={}
-        tokenOptions={['CNV']}
-        // onSelectToken={}
+        onSelectToken={console.log}
+        price={stakedCoin.price}
+        selected={gCNV}
+        value={stakedCoin.symbol}
+        onChangeValue={console.log}
+        commonBases={[]}
       >
-        <MaxAmount
-          label="Balance:"
-          max={stakedCoin.maxAmount}
-          // onClick={}
-        />
+        <MaxAmount label="Balance:" max={stakedCoin.maxAmount} onClick={console.log} />
       </Input>
     </Card>
   )
