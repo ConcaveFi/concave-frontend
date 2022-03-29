@@ -21,7 +21,7 @@ import {
   UseDisclosureReturn,
 } from '@concave/ui'
 import { Pair } from '@uniswap/v2-sdk'
-import { Input } from 'components/Swap/Input'
+import { TokenInput } from 'components/Swap/TokenInput'
 import { MaxAmount } from 'components/Swap/MaxAmount'
 import { BigNumberish } from 'ethers'
 import { usePrecision } from 'hooks/usePrecision'
@@ -345,7 +345,7 @@ const AddLiquidityModal = ({ disclosure }: { disclosure: UseDisclosureReturn }) 
         </Text>
       </Card>
       <Flex direction={'column'} p={4} gap={2}>
-        <Input
+        <TokenInput
           value={'' + 10}
           price={10}
           selected={tokenA}
@@ -356,7 +356,7 @@ const AddLiquidityModal = ({ disclosure }: { disclosure: UseDisclosureReturn }) 
           }}
         >
           <MaxAmount label="Balance:" max={+tokenA.balance?.formatted} onClick={console.log} />
-        </Input>
+        </TokenInput>
         <Flex align="center" justify="center">
           <Button
             shadow={'Up Small'}
@@ -370,7 +370,7 @@ const AddLiquidityModal = ({ disclosure }: { disclosure: UseDisclosureReturn }) 
             <PlusIcon />
           </Button>
         </Flex>
-        <Input
+        <TokenInput
           value={'' + 10}
           price={10}
           selected={tokenB}
@@ -383,7 +383,7 @@ const AddLiquidityModal = ({ disclosure }: { disclosure: UseDisclosureReturn }) 
           {tokenB.symbol && (
             <MaxAmount label="Balance:" max={+tokenA.balance?.formatted} onClick={console.log} />
           )}
-        </Input>
+        </TokenInput>
       </Flex>
       <Button
         h={'50px'}

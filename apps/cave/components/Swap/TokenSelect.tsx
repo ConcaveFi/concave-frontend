@@ -21,7 +21,7 @@ import React, { useState } from 'react'
 import { useQuery } from 'react-query'
 import { chain } from 'wagmi'
 
-type Token = {
+export type Token = {
   address: string
   name: string
   symbol: string

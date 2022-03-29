@@ -16,9 +16,9 @@ import { useGasPrice } from 'hooks/useGasPrice'
 import { useRoundPrecision } from 'hooks/usePrecision'
 import React from 'react'
 import { ConfirmSwap } from './ConfirmSwap'
-import { Input } from './Input'
+import { TokenInput } from './TokenInput'
 import { MaxAmount } from './MaxAmount'
-import { SwapSettings } from './SwapSettingsCard'
+import { SwapSettings } from './Settings'
 import { TransactionStatus } from './TransactionStatus'
 import { TransactionSubmitted } from './TransactionSubmitted'
 import { UseSwap } from './useSwap'
@@ -38,7 +38,7 @@ export function SwapCard({
   const submitted = useDisclosure()
   return (
     <Card gap={2} p={6} h="fit-content" shadow="Block Up" {...cardProps}>
-      <Input
+      <TokenInput
         value={'' + swap.fromAmount}
         price={swap.from.price}
         selected={swap.from}
@@ -50,9 +50,9 @@ export function SwapCard({
           max={+swap.from.balance?.formatted}
           onClick={() => swap.setFromAmount(swap.from.balance?.formatted)}
         />
-      </Input>
+      </TokenInput>
       <Switch swap={swap} />
-      <Input
+      <TokenInput
         value={'' + swap.toAmount}
         price={swap.to.price}
         selected={null}
@@ -69,7 +69,7 @@ export function SwapCard({
         >
           Balance: {useRoundPrecision(+swap.to.balance?.formatted).formatted}
         </Text>
-      </Input>
+      </TokenInput>
       <HStack
         divider={
           <StackDivider
