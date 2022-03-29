@@ -60,7 +60,7 @@ export const useToken = (props: { userAddressOrName: string; symbol?: AvailableT
   const amount = useRef<number>()
   const [{ data: balance }] = useBalance({
     addressOrName: props.userAddressOrName,
-    token: availableTokens[symbol]?.[chain.ropsten.id],
+    token: availableTokens[symbol]?.[chain.mainnet.id],
     formatUnits: token?.decimals,
   })
   return [

@@ -10,6 +10,16 @@ export const DAI: TokenType = {
   [chain.ropsten.id]: '0x7B731FFcf1b9C6E0868dA3F1312673A12Da28dc5',
 } as const
 
+export const ETH: TokenType = {
+  coingecko: 'eth',
+  symbol: 'ETH',
+  name: 'Eth',
+  decimals: 18,
+  logoURI: 'https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/svg/icon/eth.svg',
+
+  [chain.ropsten.id]: '0x7B731FFcf1b9C6E0868dA3F1312673A12Da28dc5',
+} as const
+
 export const MATIC: TokenType = {
   coingecko: 'matic-network',
   symbol: 'MATIC',
@@ -83,5 +93,5 @@ export type TokenType = {
   logoURI: string
   [chainId: number]: string
 }
-export const availableTokens = { aCNV, USDT, bbtCNV, FRAX, DAI, LINK, MATIC, gCNV } as const
+export const availableTokens = { aCNV, USDT, bbtCNV, ETH, FRAX, DAI, LINK, MATIC, gCNV } as const
 export type AvailableTokens = keyof typeof availableTokens

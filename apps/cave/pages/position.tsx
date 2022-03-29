@@ -69,10 +69,8 @@ const LPPositionItem = ({ pair, ownedAmount }: LPPosition) => {
   const router = useRouter()
   const { operation } = router.query
   const { user } = useAuth()
-  const [{ data, error, loading }, getBalance] = useBalance({
-    addressOrName: user.address,
-    skip: !user.address,
-  })
+  let userAddress
+  user ? (userAddress = user.address) : ''
 
   // <RemoveLiquidity />
   // <AddLiquidity />
@@ -128,7 +126,7 @@ const LPPositionItem = ({ pair, ownedAmount }: LPPosition) => {
         </AccordionPanel>
       </AccordionItem>
       <RemoveLiquidityModal disclosure={removeLiquidity} />
-      <AddLiquidityModal disclosure={addLiquidity} />
+      <AddLiquidityModal disclosure={addLiquidity} userAddress={userAddress} />
     </>
   )
 }
@@ -320,8 +318,14 @@ const useRemoveLiquidity = ({
   }
 }
 
-const AddLiquidityModal = ({ disclosure }: { disclosure: UseDisclosureReturn }) => {
-  const [tokenA, setTokenA] = useToken({ userAddressOrName: '', symbol: 'DAI' })
+const AddLiquidityModal = ({
+  disclosure,
+  userAddress,
+}: {
+  disclosure: UseDisclosureReturn
+  userAddress: string
+}) => {
+  const [tokenA, setTokenA] = useToken({ userAddressOrName: userAddress, symbol: 'ETH' })
   const [tokenB, setTokenB] = useToken({ userAddressOrName: '' })
 
   return (
@@ -394,9 +398,7 @@ const AddLiquidityModal = ({ disclosure }: { disclosure: UseDisclosureReturn }) 
         }}
         bg={'rgba(113, 113, 113, 0.01)'}
       >
-        <Text fontSize={'2xl'} onClick="addLiquidity">
-          Add Liquidity
-        </Text>
+        <Text fontSize={'2xl'}>Add Liquidity</Text>
       </Button>
     </Modal>
   )
