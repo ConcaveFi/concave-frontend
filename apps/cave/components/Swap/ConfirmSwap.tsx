@@ -131,7 +131,7 @@ export const ConfirmSwap = ({ swap, onConfirm }: { swap: UseSwap; onConfirm: () 
       </Flex>
 
       <Button variant="primary" size="large" onClick={onConfirm} isFullWidth>
-        Remove Liquidity
+        Confirm Swap
       </Button>
     </>
   )
