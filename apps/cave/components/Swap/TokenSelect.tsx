@@ -109,7 +109,6 @@ export const SelectTokenModal = ({
 }) => {
   const [search, setSearch] = useState('')
   const tokens = useTokenList()
-
   return (
     <Modal
       bluryOverlay
@@ -144,7 +143,7 @@ export const SelectTokenModal = ({
             spacing={4}
           >
             {tokens.data.map((token) => (
-              <TokenListItem key={token.address} {...token} />
+              <TokenListItem key={token.address} {...token} onClick={() => onSelect(token)} />
             ))}
           </UnorderedList>
         )}
