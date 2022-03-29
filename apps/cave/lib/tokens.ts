@@ -37,15 +37,17 @@ export const FRAX: TokenType = {
   decimals: 18,
   logoURI: '/assets/tokens/frax.svg',
   [chain.ropsten.id]: '0xE7E9F348202f6EDfFF2607025820beE92F51cdAA',
+  [chain.mainnet.id]: '0x853d955aCEf822Db058eb8505911ED77F175b99e',
 } as const
 
 export const USDT: TokenType = {
   coingecko: 'tether',
   name: 'Tether',
   symbol: 'USDT',
-  decimals: 6,
+  decimals: 18,
   logoURI: 'https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/svg/icon/usdt.svg',
   [chain.ropsten.id]: '0x0736d0c130b2eAD47476cC262dbed90D7C4eeABD',
+  [chain.mainnet.id]: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
 } as const
 
 export const bbtCNV: TokenType = {
