@@ -137,7 +137,7 @@ const RemoveLiquidityModal = ({ disclosure }: { disclosure: UseDisclosureReturn 
   return (
     <Modal
       bluryOverlay={true}
-      title="Confirm Swap"
+      title="Remove Liquidity"
       isOpen={disclosure.isOpen}
       onClose={disclosure.onClose}
       isCentered
@@ -384,7 +384,9 @@ const AddLiquidityModal = ({ disclosure }: { disclosure: UseDisclosureReturn }) 
         }}
         bg={'rgba(113, 113, 113, 0.01)'}
       >
-        <Text fontSize={'2xl'}>Invalid Pair</Text>
+        <Text fontSize={'2xl'} onClick="addLiquidity">
+          Add Liquidity
+        </Text>
       </Button>
     </Modal>
   )
