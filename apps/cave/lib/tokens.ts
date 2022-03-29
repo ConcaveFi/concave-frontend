@@ -6,7 +6,7 @@ export const DAI: TokenType = {
   name: 'Dai',
   decimals: 18,
   logoURI: 'https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/svg/icon/dai.svg',
-
+  [chain.mainnet.id]: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
   [chain.ropsten.id]: '0x7B731FFcf1b9C6E0868dA3F1312673A12Da28dc5',
 } as const
 
