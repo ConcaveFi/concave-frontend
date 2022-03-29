@@ -16,57 +16,54 @@ function PageNav() {
             box-shadow="lg"
             rounded="2xl"
           >
-            <Link href={'bond'}>
-              <Button
-                leftIcon={<Image src={'/assets/sidebar/page-bond.svg'} />}
-                iconSpacing={7}
-                // variant="primary.outline"
-                bgGradient="linear(to-tr, secondary.150, secondary.100)"
-                w="160px"
-                h="45px"
-                borderRadius="lg"
-                shadow="up"
-                textColor="#5F7A99"
-              >
-                Bonds
-              </Button>
-            </Link>
+            <ButtonLink
+              leftIcon={<Image src={'/assets/sidebar/page-bond.svg'} />}
+              iconSpacing={7}
+              // variant="primary.outline"
+              bgGradient="linear(to-tr, secondary.150, secondary.100)"
+              w="160px"
+              h="45px"
+              borderRadius="lg"
+              shadow="up"
+              textColor="#5F7A99"
+              href={'bond'}
+            >
+              Bonds
+            </ButtonLink>
             <Text fontSize="sm" fontWeight="thin" textColor="#5F7A99" textAlign="center" p={1}>
               5 days - 9% ROI
             </Text>
           </Box>
 
-          <Link href={'liquidstaking'}>
-            <Button
-              leftIcon={<Image src={'/assets/sidebar/page-lstaking.svg'} />}
-              iconSpacing={2}
-              variant="primary.outline"
-              bgGradient="linear(to-tr, secondary.150, secondary.100)"
-              w="160px"
-              h="45px"
-              borderRadius="2xl"
-              textColor="#5F7A99"
-              mt={4}
-            >
-              Liquid Staking
-            </Button>
-          </Link>
+          <ButtonLink
+            leftIcon={<Image src={'/assets/sidebar/page-lstaking.svg'} />}
+            iconSpacing={2}
+            variant="primary.outline"
+            bgGradient="linear(to-tr, secondary.150, secondary.100)"
+            w="160px"
+            h="45px"
+            borderRadius="2xl"
+            textColor="#5F7A99"
+            mt={4}
+            href={'liquidstaking'}
+          >
+            Liquid Staking
+          </ButtonLink>
 
-          <Link href={'marketplace'}>
-            <Button
-              leftIcon={<Image src={'/assets/sidebar/page-marketplace.svg'} />}
-              iconSpacing={7}
-              variant="primary.outline"
-              bgGradient="linear(to-tr, secondary.150, secondary.100)"
-              w="160px"
-              h="45px"
-              borderRadius="2xl"
-              textColor="#5F7A99"
-              mt={16}
-            >
-              Marketplace
-            </Button>
-          </Link>
+          <ButtonLink
+            leftIcon={<Image src={'/assets/sidebar/page-marketplace.svg'} />}
+            iconSpacing={7}
+            variant="primary.outline"
+            bgGradient="linear(to-tr, secondary.150, secondary.100)"
+            w="160px"
+            h="45px"
+            borderRadius="2xl"
+            textColor="#5F7A99"
+            mt={16}
+            href={'marketplace'}
+          >
+            Marketplace
+          </ButtonLink>
 
           <Box
             shadow="down"
@@ -76,21 +73,20 @@ function PageNav() {
             rounded="2xl"
             mt={4}
           >
-            <Link href={'swap'}>
-              <Button
-                leftIcon={<Image src={'/assets/sidebar/page-swap.svg'} />}
-                iconSpacing={7}
-                // variant="primary.outline"
-                bgGradient="linear(to-tr, secondary.150, secondary.100)"
-                w="160px"
-                h="45px"
-                borderRadius="lg"
-                shadow="up"
-                textColor="#5F7A99"
-              >
-                Swap
-              </Button>
-            </Link>
+            <ButtonLink
+              leftIcon={<Image src={'/assets/sidebar/page-swap.svg'} />}
+              iconSpacing={7}
+              // variant="primary.outline"
+              bgGradient="linear(to-tr, secondary.150, secondary.100)"
+              w="160px"
+              h="45px"
+              borderRadius="lg"
+              shadow="up"
+              textColor="#5F7A99"
+              href={'swap'}
+            >
+              Swap
+            </ButtonLink>
             <ButtonLink
               w="full"
               mt={2}
