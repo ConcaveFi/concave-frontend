@@ -10,7 +10,7 @@ export type TokenIconProps = {
 
 const getTokenLogoURI = (address: string) => {
   const networkName = 'ethereum'
-  return `https://raw.githubusercontent.com/Uniswap/assets/master/blockchains/${networkName}/assets/${address}/logo.png`
+  return `https://github.com/rainbow-me/assets/tree/master/blockchains/${networkName}/assets/${address}/logo.png`
 }
 export const TokenIcon = ({ symbol, address, size = 'sm', logoURI, ...props }: TokenIconProps) => {
   return (
