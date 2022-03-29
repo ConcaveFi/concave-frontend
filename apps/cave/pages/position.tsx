@@ -26,8 +26,9 @@ import { MaxAmount } from 'components/Swap/MaxAmount'
 import { BigNumberish } from 'ethers'
 import { usePrecision } from 'hooks/usePrecision'
 import { AvailableTokens, DAI, FRAX, TokenType, USDT } from 'lib/tokens'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Token, useToken } from '../components/Swap/useSwap'
+import { useRouter } from 'next/router'
 
 const RewardsBanner = () => (
   <Card variant="secondary" p={4} gap={4}>
@@ -63,6 +64,13 @@ interface LPPosition {
 const LPPositionItem = ({ pair, ownedAmount }: LPPosition) => {
   const addLiquidity = useDisclosure()
   const removeLiquidity = useDisclosure()
+  const router = useRouter()
+  const { operation } = router.query
+  useEffect(() => {
+    if (operation == 'addLiquidity') {
+      addLiquidity.onOpen()
+    }
+  }, [operation])
 
   // <RemoveLiquidity />
   // <AddLiquidity />
