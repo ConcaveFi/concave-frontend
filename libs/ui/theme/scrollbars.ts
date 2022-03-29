@@ -1,14 +1,14 @@
 const scrollbar = {
   secondary: {
     '&::-webkit-scrollbar': {
-      width: '12px',
+      width: '8px',
       boxShadow: 'Down Big',
       borderRadius: '8px',
       backgroundColor: `rgba(0, 0, 0, 0.05)`,
     },
     '&::-webkit-scrollbar-thumb': {
       borderRadius: '8px',
-      backgroundColor: `#5F7A99`,
+      backgroundColor: `text.low`,
     },
   },
 }

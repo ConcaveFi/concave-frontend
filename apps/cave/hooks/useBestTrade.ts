@@ -61,6 +61,7 @@ export const useBestTrade = (
         ...(maxHops > 2 ? INTERMEDIARY_PAIRS_FOR_MULTI_HOPS[chainId] : []),
       ].filter(
         ([t0, t1], i, otherPairs) =>
+          // filter repeated pairs
           otherPairs.findIndex((otherPair) =>
             otherPair.find((t) => t.equals(t0) || t.equals(t1)),
           ) === i,

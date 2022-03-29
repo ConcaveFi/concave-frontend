@@ -33,7 +33,7 @@ export function Modal({
       <ModalContent>
         <ModalHeader textAlign={titleAlign}>{title}</ModalHeader>
         <ModalCloseButton />
-        <Card variant="primary" p="6" {...bodyProps}>
+        <Card variant="primary" p="6" shadow="Up for Blocks" {...bodyProps}>
           {children}
         </Card>
       </ModalContent>

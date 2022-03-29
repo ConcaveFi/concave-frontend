@@ -1,11 +1,9 @@
-import { FormHelperText } from '@chakra-ui/react'
-
 export { SwapIcon } from './SwapIcon'
 export { DownIcon } from './DownIcon'
 export { GasIcon } from './GasIcon'
 export { SwapSettingsIcon } from './SwapSettingsIcon'
 export { CnvQuestionIcon } from './CnvQuestionIcon'
-export { TokenIcon } from './TokenIcon'
+export { TokenIcon } from '../../ui/components/TokenIcon'
 export { ExpandArrowIcon } from './ExpandArrowIcon'
 export { SpinIcon } from './SpinIcon'
 export { SubmittedIcon } from './SubmittedIcon'

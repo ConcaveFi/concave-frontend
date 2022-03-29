@@ -15,6 +15,9 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
     borderRadius: 'xl',
     maxHeight: 'unset',
     borderColor: 'transparent',
+    display: 'flex',
+    alignItems: 'center',
+    _active: { transform: 'scale(0.95)' },
   },
   sizes: {
     large: {
@@ -48,7 +51,6 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
       bgGradient: 'linear(to-r, secondary.125, secondary.50)',
       shadow: 'Up Big',
     },
-
     navigation: (props) => ({
       height: '100%',
       borderX: 'solid 1px',
@@ -72,7 +74,9 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
       _hover: { bg: HoverRadialGradient },
     }),
   },
-  defaultProps: {},
+  defaultProps: {
+    variant: null,
+  },
 }
 
 export default ButtonStyles

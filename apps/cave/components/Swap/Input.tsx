@@ -3,14 +3,13 @@ import { useCurrency } from 'hooks/useCurrency'
 import { TokenType } from 'lib/tokens'
 import React from 'react'
 import { InputContainer } from './InputContainer'
-import { Select } from './Select'
+import { TokenSelect } from './TokenSelect'
 
 export function Input({
   children,
   value,
   price,
   selected,
-  commonBases,
   onChangeValue,
   onSelectToken,
   ...flexProps
@@ -18,7 +17,6 @@ export function Input({
   value: string
   price: number
   selected?: TokenType
-  commonBases: TokenType[]
   onChangeValue: (value: number) => void
   onSelectToken: (token: string) => void
 } & FlexProps) {
@@ -41,7 +39,7 @@ export function Input({
           </Text>
         </Stack>
         <VStack justifyContent={'center'} align={'end'} minW={'130px'} w={'auto'}>
-          <Select commonBases={commonBases} onSelect={onSelectToken} selected={selected} />
+          <TokenSelect onSelect={onSelectToken} selected={selected} />
           {children}
         </VStack>
       </InputContainer>
