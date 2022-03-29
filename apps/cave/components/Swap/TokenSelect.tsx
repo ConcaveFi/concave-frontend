@@ -54,7 +54,7 @@ const CommonPairs = ({
             _focus={{ shadow: 'Up Small' }}
             _active={{ shadow: 'down' }}
             _selected={{ shadow: 'Down Big', color: 'text.low' }}
-            aria-selected={selected.address === token.address}
+            aria-selected={selected?.address === token.address}
             p={1}
             pr={3}
             fontSize="sm"
@@ -91,7 +91,9 @@ const TokenListItem = ({ symbol, logoURI, address, name, onClick }) => (
 
 const useTokenList = () =>
   useQuery('token-list', () =>
-    fetch('https://gateway.ipfs.io/ipns/tokens.uniswap.org')
+    fetch(
+      'https://raw.githubusercontent.com/ConcaveFi/concave-frontend/develop/assets/tokenlists/ethereum/concave.json?token=GHSAT0AAAAAABP22MUFL2A4E2TJGIFGACZIYSM2RBQ',
+    )
       .then((d) => d.json())
       .then((l) => l.tokens),
   )
