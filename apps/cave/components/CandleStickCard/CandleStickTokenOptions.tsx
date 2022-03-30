@@ -1,4 +1,4 @@
-import { TokenIcon } from '@concave/icons'
+import { TokenIcon } from '@concave/ui'
 import { HStack, Text } from '@concave/ui'
 import { TokenType } from 'lib/tokens'
 import React from 'react'
