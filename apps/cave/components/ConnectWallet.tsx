@@ -20,7 +20,6 @@ const miniAddress = (address) =>
 const DisconnectButton = () => {
   const { signOut, user } = useAuth()
 
-  if (!user) return null
   return (
     <Menu placement="right-start">
       <MenuButton as={Button} shadow="up" fontFamily="heading" size="medium" w="100%">
@@ -127,10 +126,10 @@ const SignInButton = () => {
 }
 
 export function ConnectWallet(): JSX.Element {
-  const { user, isConnected } = useAuth()
+  const { isSignedIn, isConnected } = useAuth()
 
-  if (user) return <DisconnectButton />
+  if (isSignedIn) return <DisconnectButton />
 
-  if (isConnected && !user) return <SignInButton />
+  if (isConnected && !isSignedIn) return <SignInButton />
   return <ConnectButton />
 }

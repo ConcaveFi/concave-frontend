@@ -38,6 +38,7 @@ interface AuthValue {
   signOut: () => Promise<any>
   user: User
   isWaitingForSignature: boolean
+  isSignedIn: boolean
   isConnected: boolean
   isErrored: boolean
 }
@@ -105,10 +106,12 @@ export const AuthProvider: React.FC = ({ children }) => {
       value={{
         signOut: signOut.mutateAsync,
         signIn: signIn.mutateAsync,
-        user: user.data,
+        // user can connect and not sign in, we want access to his addy thru here anyway
+        user: { ...user.data, address: user.data?.address || account.data?.address },
         error,
         isWaitingForSignature: signIn.isLoading,
         isConnected,
+        isSignedIn: !!user.data,
         isErrored: !!error,
       }}
     >
