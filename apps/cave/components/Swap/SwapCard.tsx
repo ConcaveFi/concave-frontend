@@ -55,7 +55,7 @@ export function SwapCard({
       <TokenInput
         value={'' + swap.toAmount}
         price={swap.to.price}
-        selected={null}
+        selected={swap.to}
         onChangeValue={swap.setToAmount}
         onSelectToken={swap.setToSymbol}
       >
