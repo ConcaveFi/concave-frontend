@@ -21,16 +21,19 @@ import {
   UseDisclosureReturn,
 } from '@concave/ui'
 import { Pair } from '@uniswap/v2-sdk'
-import { TokenInput } from 'components/Swap/TokenInput'
 import { MaxAmount } from 'components/Swap/MaxAmount'
-import { BigNumberish } from 'ethers'
-import { usePrecision } from 'hooks/usePrecision'
-import { AvailableTokens, DAI, FRAX, TokenType, USDT } from 'lib/tokens'
-import React, { useEffect, useState } from 'react'
-import { Token, useToken } from '../components/Swap/useSwap'
-import { useRouter } from 'next/router'
+import { TokenInput } from 'components/Swap/TokenInput'
 import { useAuth } from 'contexts/AuthContext'
-import { useBalance } from 'wagmi'
+import { BigNumberish, Contract } from 'ethers'
+import { parseUnits } from 'ethers/lib/utils'
+import { usePrecision } from 'hooks/usePrecision'
+import { contractABI } from 'lib/contractoABI'
+import { concaveProvider2 } from 'lib/providers'
+import { AvailableTokens, TokenType } from 'lib/tokens'
+import { useRouter } from 'next/router'
+import React, { useState } from 'react'
+import { chain, useSigner } from 'wagmi'
+import { useToken, WrapperTokenInfo } from '../components/Swap/useSwap'
 
 const RewardsBanner = () => (
   <Card variant="secondary" p={4} gap={4}>
@@ -133,11 +136,11 @@ const LPPositionItem = ({ pair, ownedAmount }: LPPosition) => {
 
 const RemoveLiquidityModal = ({ disclosure }: { disclosure: UseDisclosureReturn }) => {
   const [percentToRemove, setPercentToRemove] = useState(100)
-  const [tokenA, setTokenA] = useToken({ userAddressOrName: '', symbol: 'FRAX' })
-  const [tokenB, setTokenB] = useToken({ userAddressOrName: '', symbol: 'gCNV' })
+  const [wrapperTokenA, setTokenA] = useToken({ userAddressOrName: '', symbol: 'FRAX' })
+  const [wrapperTokenB, setTokenB] = useToken({ userAddressOrName: '', symbol: 'gCNV' })
   const removeLiquidityState = useRemoveLiquidity({
-    tokenA,
-    tokenB,
+    wrapperTokenA,
+    wrapperTokenB,
     amountTokenA: 0.0001331,
     amountTokenB: 325.744,
     percentToRemove,
@@ -204,15 +207,15 @@ const AmountToRemove = ({ onChange }: { onChange: (n: number) => void }) => {
 }
 
 const YouWillReceive = ({
-  tokenA,
-  tokenB,
+  wrapperTokenA,
+  wrapperTokenB,
   amountAMin,
   amountBMin,
 }: {
   amountAMin: number
   amountBMin: number
-  tokenA: TokenType
-  tokenB: TokenType
+  wrapperTokenA: WrapperTokenInfo
+  wrapperTokenB: WrapperTokenInfo
 }) => {
   return (
     <HStack gap={7} shadow="Up Big" px={6} py={3} borderRadius="2xl" align="center">
@@ -222,8 +225,8 @@ const YouWillReceive = ({
           You will receive:
         </Text>
       </Box>
-      <ReceiveBox amount={amountAMin} token={tokenA} />
-      <ReceiveBox amount={amountBMin} token={tokenB} />
+      <ReceiveBox amount={amountAMin} token={wrapperTokenA.token} />
+      <ReceiveBox amount={amountBMin} token={wrapperTokenB.token} />
     </HStack>
   )
 }
@@ -241,15 +244,21 @@ const RemoveLiquidityActions = () => {
   )
 }
 
-const YourPosition = ({ tokenA, tokenB }: { tokenA: TokenType; tokenB: TokenType }) => {
+const YourPosition = ({
+  wrapperTokenA,
+  wrapperTokenB,
+}: {
+  wrapperTokenA: WrapperTokenInfo
+  wrapperTokenB: WrapperTokenInfo
+}) => {
   return (
     <Flex gap={7} direction={'column'} shadow="Up Big" px={4} py={4} borderRadius="2xl">
       <Text fontSize={'lg'}>Your Position</Text>
       <Flex gap={2} align={'center'}>
-        <TokenIcon logoURI={tokenA.logoURI} symbol={tokenA.symbol} />
-        <TokenIcon logoURI={tokenB.logoURI} symbol={tokenB.symbol} />
+        <TokenIcon logoURI={wrapperTokenA.token?.logoURI} symbol={wrapperTokenA.token?.symbol} />
+        <TokenIcon logoURI={wrapperTokenB.token?.logoURI} symbol={wrapperTokenB.token?.symbol} />
         <Text px={4}>
-          {tokenA.symbol}/{tokenB.symbol}
+          {wrapperTokenA.token?.symbol}/{wrapperTokenB.token?.symbol}
         </Text>
       </Flex>
       <Stack
@@ -262,11 +271,19 @@ const YourPosition = ({ tokenA, tokenB }: { tokenA: TokenType; tokenB: TokenType
         spacing={3}
       >
         <PositionInfoItem label="Your pool share:" value={'2.79%'} />
-        <PositionInfoItem label={tokenA.symbol} value={'0.0001331'}>
-          <TokenIcon size="sm" logoURI={tokenA.logoURI} symbol={tokenA.symbol} />
+        <PositionInfoItem label={wrapperTokenA.token?.symbol} value={'0.0001331'}>
+          <TokenIcon
+            size="sm"
+            logoURI={wrapperTokenA.token?.logoURI}
+            symbol={wrapperTokenA.token?.symbol}
+          />
         </PositionInfoItem>
-        <PositionInfoItem label={tokenB.symbol} value={'325.744'}>
-          <TokenIcon size="sm" logoURI={tokenB.logoURI} symbol={tokenB.symbol} />
+        <PositionInfoItem label={wrapperTokenB.token?.symbol} value={'325.744'}>
+          <TokenIcon
+            size="sm"
+            logoURI={wrapperTokenB.token?.logoURI}
+            symbol={wrapperTokenB.token?.symbol}
+          />
         </PositionInfoItem>
       </Stack>
     </Flex>
@@ -290,17 +307,17 @@ const ReceiveBox = ({ amount, token }: { amount: number; token: TokenType }) => 
 }
 
 const useRemoveLiquidity = ({
-  tokenA,
+  wrapperTokenA,
   amountTokenA,
-  tokenB,
+  wrapperTokenB,
   amountTokenB,
   percentToRemove,
 }: {
   percentToRemove: number
-  tokenA: Token
+  wrapperTokenA: WrapperTokenInfo
   amountTokenA: number
   amountTokenB: number
-  tokenB: Token
+  wrapperTokenB: WrapperTokenInfo
 }) => {
   const to = ''
   const ratioToRemove = Math.min(percentToRemove, 100) / 100
@@ -309,8 +326,8 @@ const useRemoveLiquidity = ({
   const amountBMin = amountTokenB * ratioToRemove
   const [deadline, setDeadLine] = useState(new Date().getTime() / 1000 + 15 * 60)
   return {
-    tokenA,
-    tokenB,
+    wrapperTokenA,
+    wrapperTokenB,
     liquidity,
     amountAMin,
     amountBMin,
@@ -325,9 +342,6 @@ const AddLiquidityModal = ({
   disclosure: UseDisclosureReturn
   userAddress: string
 }) => {
-  const [tokenA, setTokenA] = useToken({ userAddressOrName: userAddress, symbol: 'ETH' })
-  const [tokenB, setTokenB] = useToken({ userAddressOrName: userAddress, symbol: 'DAI' })
-  console.log(tokenB)
   return (
     <Modal
       bluryOverlay={true}
@@ -341,6 +355,62 @@ const AddLiquidityModal = ({
         shadow: 'Up for Blocks',
       }}
     >
+      <AddLiquidityContent userAddress={userAddress} />
+    </Modal>
+  )
+}
+const AddLiquidityContent = ({ userAddress }: { userAddress: string }) => {
+  const [wrapperTokenA, setTokenA] = useToken({ userAddressOrName: userAddress, symbol: '' })
+  const [wrapperTokenB, setTokenB] = useToken({ userAddressOrName: userAddress, symbol: '' })
+  const [amountADesired, setAmountADesired] = useState<number>(null)
+  const [amountBDesired, setAmountBDesired] = useState<number>(null)
+  const [{ data, error, loading }, getSigner] = useSigner()
+
+  const addLiquidity = () => {
+    const contractInstance = new Contract(
+      '0xB11DDDf6F32eFc7d903802631CFc06EC400AB6e8',
+      contractABI,
+      concaveProvider2(chain.ropsten.id),
+    )
+    const contractSigner = contractInstance.connect(data)
+    const to = userAddress
+    const deadLine = new Date().getTime() + 30 * 60
+    const tokenA = wrapperTokenA.token.address
+    const tokenB = wrapperTokenB.token.address
+    const amountADesired = parseUnits('11', 18).toString()
+    const amountBDesired = parseUnits('11', 18).toString()
+    const amountAMin = parseUnits('10', 18).toString()
+    const amountBMin = parseUnits('10', 18).toString()
+    console.table({
+      tokenA,
+      tokenB,
+      amountADesired,
+      amountBDesired,
+      amountAMin,
+      amountBMin,
+      to,
+      deadLine,
+    })
+
+    contractSigner.addLiquidity(
+      tokenA,
+      tokenB,
+      amountADesired,
+      amountBDesired,
+      amountAMin,
+      amountBMin,
+      to,
+      deadLine,
+      {
+        gasLimit: 100000,
+        // nonce: nonce || undefined,
+      },
+    )
+  }
+  // TODO
+
+  return (
+    <>
       <Card variant="secondary" p={4} backgroundBlendMode={'screen'}>
         <Text fontSize="lg">
           Tip: When you add liquidity, you will receive pool tokens representing your position.
@@ -350,16 +420,24 @@ const AddLiquidityModal = ({
       </Card>
       <Flex direction={'column'} p={4} gap={2}>
         <TokenInput
-          value={'' + 10}
-          price={10}
-          selected={tokenA}
-          commonBases={[USDT, DAI, FRAX]}
-          onChangeValue={console.log}
+          value={'' + amountADesired}
+          price={wrapperTokenA.price}
+          selected={wrapperTokenA.token}
+          onChangeValue={(value) => {
+            setAmountADesired(value)
+          }}
           onSelectToken={(token) => {
-            setTokenA(token.symbol as AvailableTokens)
+            console.log(token)
+            setTokenA(token.symbol)
           }}
         >
-          <MaxAmount label="Balance:" max={+tokenA.balance?.formatted} onClick={console.log} />
+          <MaxAmount
+            label="Balance:"
+            max={+wrapperTokenA.balance?.formatted}
+            onClick={() => {
+              setAmountADesired(+wrapperTokenA.balance?.formatted)
+            }}
+          />
         </TokenInput>
         <Flex align="center" justify="center">
           <Button
@@ -375,17 +453,24 @@ const AddLiquidityModal = ({
           </Button>
         </Flex>
         <TokenInput
-          value={'' + 10}
-          price={10}
-          selected={tokenB}
-          commonBases={[USDT, DAI, FRAX]}
-          onChangeValue={(value) => {}}
+          value={'' + amountBDesired}
+          price={wrapperTokenB.price}
+          selected={wrapperTokenB.token}
+          onChangeValue={(value) => {
+            setAmountBDesired(value)
+          }}
           onSelectToken={(token) => {
             setTokenB(token.symbol as AvailableTokens)
           }}
         >
-          {tokenB.symbol && (
-            <MaxAmount label="Balance:" max={+tokenB.balance?.formatted} onClick={console.log} />
+          {wrapperTokenB.token?.symbol && (
+            <MaxAmount
+              label="Balance:"
+              max={+wrapperTokenB.balance?.formatted}
+              onClick={() => {
+                setAmountBDesired(+wrapperTokenB.balance?.formatted)
+              }}
+            />
           )}
         </TokenInput>
       </Flex>
@@ -398,21 +483,56 @@ const AddLiquidityModal = ({
         }}
         bg={'rgba(113, 113, 113, 0.01)'}
       >
-        <Text fontSize={'2xl'}>Add Liquidity</Text>
+        <Text
+          fontSize={'2xl'}
+          onClick={() => {
+            addLiquidity()
+          }}
+        >
+          Add Liquidity
+        </Text>
       </Button>
-    </Modal>
+    </>
   )
 }
+
 export default function MyPositions() {
+  const auth = useAuth()
+  const router = useRouter()
+  const { operation } = router.query
+  if (!auth.isConnected || !auth.user) {
+    return <Text>Please, connect</Text>
+  }
+
+  if (operation === 'addLiquidity') {
+    return (
+      <View title="Add liquidity">
+        <Card variant="primary" p={4} w={'500px'} gap={4} shadow={'Up for Blocks'}>
+          <AddLiquidityContent userAddress={auth.user.address} />
+        </Card>
+      </View>
+    )
+  }
+
+  return (
+    <View title="My Liquidity Position">
+      <>
+        <RewardsBanner />
+        <Card variant="primary" borderRadius="3xl" p={6} shadow="Up for Blocks">
+          <Accordion as={Stack} allowToggle gap={2}>
+            <LPPositionItem ownedAmount={'0.013'} />
+          </Accordion>
+        </Card>
+      </>
+    </View>
+  )
+}
+
+const View = ({ title, children }) => {
   return (
     <Flex maxW="container.md" direction="column" justifyContent="center" h="full" gap={6}>
-      <Heading fontSize="2xl">My Liquidity Position</Heading>
-      <RewardsBanner />
-      <Card variant="primary" borderRadius="3xl" p={6} shadow="Up for Blocks">
-        <Accordion as={Stack} allowToggle gap={2}>
-          <LPPositionItem ownedAmount={'0.013'} />
-        </Accordion>
-      </Card>
+      <Heading fontSize="2xl">{title}</Heading>
+      {children}
     </Flex>
   )
 }

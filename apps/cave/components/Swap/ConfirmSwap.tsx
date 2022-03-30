@@ -12,15 +12,18 @@ import {
 import { useCurrency } from 'hooks/useCurrency'
 import { useGasPrice } from 'hooks/useGasPrice'
 import { useFloorPrecision, useRoundPrecision } from 'hooks/usePrecision'
+import { TokenType } from 'lib/tokens'
 import React from 'react'
-import { Token, UseSwap } from './useSwap'
+import { UseSwap } from './useSwap'
 
 const TokenInfo = ({
   token,
   amount,
+  price,
   loss,
 }: {
-  token: Token
+  token: TokenType
+  price: number
   amount: string | number
   loss?: number
 }) => {
@@ -35,14 +38,14 @@ const TokenInfo = ({
       <Box w={200}>
         <NumericInput disabled fontSize={'32px'} decimalScale={5} value={amount} />
         <Text fontWeight={700} fontSize={14} textColor="text.low">
-          {useCurrency(+amount * token.price)}
+          {useCurrency(+amount * price)}
           {loss && ` (-${loss}%)`}
         </Text>
       </Box>
       <HStack>
         <TokenIcon size="sm" {...token} />
         <Text fontSize={24} fontWeight={700}>
-          {token.symbol.toUpperCase()}
+          {token.symbol?.toUpperCase()}
         </Text>
       </HStack>
     </Flex>
@@ -74,7 +77,7 @@ const MinExpectedOutput = ({ swap }: { swap: UseSwap }) => {
           Minimum received after slippage
         </Text>
         <Text whiteSpace={'nowrap'} fontWeight={700} textColor="text.low">
-          {useFloorPrecision(swap.minimumReceivedAfterSlippage).formatted} {swap.to.symbol}
+          {useFloorPrecision(swap.minimumReceivedAfterSlippage).formatted} {swap.to.token.symbol}
         </Text>
       </Flex>
       <Flex fontSize={'14px'} w={'100%'} justifyContent={'space-between'}>
@@ -96,7 +99,7 @@ const ExpectedOutput = ({ swap }: { swap: UseSwap }) => {
           Expected Output
         </Text>
         <Text fontWeight={600}>
-          {useRoundPrecision(swap.toAmount).formatted} {swap.to.symbol}
+          {useRoundPrecision(swap.toAmount).formatted} {swap.to.token.symbol}
         </Text>
       </Flex>
       <Flex w={'100%'} justifyContent={'space-between'}>
@@ -110,14 +113,23 @@ const ExpectedOutput = ({ swap }: { swap: UseSwap }) => {
 export const ConfirmSwap = ({ swap, onConfirm }: { swap: UseSwap; onConfirm: () => void }) => {
   return (
     <>
-      <TokenInfo token={swap.from} amount={swap.fromAmount}></TokenInfo>
+      <TokenInfo
+        token={swap.from.token}
+        price={swap.from.price}
+        amount={swap.fromAmount}
+      ></TokenInfo>
       <SwapButton swap={swap} />
-      <TokenInfo token={swap.to} amount={swap.toAmount} loss={0.26}></TokenInfo>
+      <TokenInfo
+        token={swap.to.token}
+        price={swap.to.price}
+        amount={swap.toAmount}
+        loss={0.26}
+      ></TokenInfo>
 
       <HStack fontSize="14px" fontWeight={700} my={6} justifyContent={'center'} flexWrap={'wrap'}>
         <Text>
-          1 {swap.to.symbol} = {useRoundPrecision(swap.to.price / swap.from.price).formatted}{' '}
-          {swap.from.symbol}
+          1 {swap.to.token.symbol} = {useRoundPrecision(swap.to.price / swap.from.price).formatted}{' '}
+          {swap.from.token.symbol}
         </Text>
         <Text paddingRight={2} textColor="text.low">
           ({useCurrency(swap.to.price)})

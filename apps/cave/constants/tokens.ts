@@ -16,6 +16,7 @@ export const DAI = new Token(
   'DAI',
   'Dai Stablecoin',
 )
+
 export const USDT = new Token(
   chain.mainnet.id,
   '0xdAC17F958D2ee523a2206206994597C13D831ec7',
