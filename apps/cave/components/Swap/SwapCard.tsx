@@ -16,9 +16,9 @@ import { useGasPrice } from 'hooks/useGasPrice'
 import { useRoundPrecision } from 'hooks/usePrecision'
 import React from 'react'
 import { ConfirmSwap } from './ConfirmSwap'
-import { TokenInput } from './TokenInput'
 import { MaxAmount } from './MaxAmount'
 import { SwapSettings } from './Settings'
+import { TokenInput } from './TokenInput'
 import { TransactionStatus } from './TransactionStatus'
 import { TransactionSubmitted } from './TransactionSubmitted'
 import { UseSwap } from './useSwap'
@@ -43,7 +43,7 @@ export function SwapCard({
         price={swap.from.price}
         selected={swap.from}
         onChangeValue={swap.setFromAmount}
-        onSelectToken={swap.setFromSymbol}
+        onSelectToken={(t) => swap.setFromSymbol(t.symbol)}
       >
         <MaxAmount
           label="Balance:"
@@ -57,7 +57,7 @@ export function SwapCard({
         price={swap.to.price}
         selected={swap.to}
         onChangeValue={swap.setToAmount}
-        onSelectToken={swap.setToSymbol}
+        onSelectToken={(t) => swap.setToSymbol(t.symbol)}
       >
         <Text
           py={1}
