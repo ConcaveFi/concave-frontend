@@ -13,6 +13,7 @@ export const STABLES = {
 // used to construct intermediary pairs for trading
 export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
   [chain.mainnet.id]: [WETH, ...STABLES[chain.mainnet.id]],
+  [chain.ropsten.id]: [],
 }
 
 const permutate = (tokenList: ChainTokenList[number]): [Token, Token][] =>

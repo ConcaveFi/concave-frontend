@@ -1,9 +1,12 @@
-import { BigNumber } from 'ethers'
 import { tokenService } from 'lib/token.service'
-import { AvailableTokens, availableTokens, TokenType, DAI, FRAX } from 'lib/tokens'
+import { AvailableTokens, TokenType } from 'lib/tokens'
 import { useEffect, useState, useRef, useCallback } from 'react'
 import { useQuery } from 'react-query'
 import { chain, useBalance } from 'wagmi'
+import { useTokenList } from './hooks/useTokenList'
+import { BigNumber } from 'ethers'
+
+const selectedChain = chain.ropsten
 
 const defaultValue: SwapStateProps = {
   priceImpact: -0.12,
@@ -13,8 +16,8 @@ const defaultValue: SwapStateProps = {
   valueInOutputToken: 0,
   transactionDeadLine: 30,
   slippageTolerance: 0.3,
-  commonInputTokens: [DAI, FRAX],
-  commonOutputTokens: [DAI, FRAX],
+  commonInputTokens: [],
+  commonOutputTokens: [],
 }
 
 export type SwapStateProps = {
@@ -25,12 +28,11 @@ export type SwapStateProps = {
   transactionDeadLine: number
   slippageTolerance: number
   priceImpact: number
-  commonInputTokens: TokenType[]
-  commonOutputTokens: TokenType[]
+  commonInputTokens: unknown[]
+  commonOutputTokens: unknown[]
 }
-
-export type Token = TokenType & {
-  readonly symbol: AvailableTokens
+export type WrapperTokenInfo = {
+  readonly token?: TokenType
   readonly price: number
   readonly balance: {
     decimals: number
@@ -39,12 +41,13 @@ export type Token = TokenType & {
     value: BigNumber
   }
 }
+export type Token = WrapperTokenInfo
 
 export type UseSwap = SwapStateProps & {
   fromAmount: number
-  from: Token
+  from?: WrapperTokenInfo
   toAmount: number
-  to: Token
+  to?: WrapperTokenInfo
   switchTokens: () => void
   set: (swap: Partial<SwapStateProps>) => void
   setFromSymbol: (symbol: AvailableTokens) => void
@@ -54,25 +57,26 @@ export type UseSwap = SwapStateProps & {
 }
 
 export const useToken = (props: { userAddressOrName: string; symbol?: AvailableTokens }) => {
+  const tokens = useTokenList(chain.ropsten.name)
   const [symbol, setSymbol] = useState<AvailableTokens>(props.symbol ?? null)
-  const token = availableTokens[symbol]
+  const [token, setToken] = useState<TokenType>(null)
   const price = usePrice(symbol)
   const amount = useRef<number>()
+
   const [{ data: balance }] = useBalance({
     addressOrName: props.userAddressOrName,
-    token: availableTokens[symbol]?.[chain.mainnet.id],
+    token: token?.address,
     formatUnits: token?.decimals,
   })
-  return [
-    {
-      ...token,
-      amount,
-      symbol,
-      balance,
-      price,
-    },
-    setSymbol,
-  ] as const
+
+  useEffect(() => {
+    if (!tokens.isSuccess) {
+      return
+    }
+    setToken(tokens.data.find((t) => t.symbol === symbol))
+  }, [symbol, tokens.data, tokens.isSuccess])
+
+  return [{ token, balance, price, amount }, setSymbol] as const
 }
 
 const USEPRICE = 'USEPRICE'
@@ -86,8 +90,8 @@ export const useSwap = (
   partialValues: Partial<SwapStateProps>,
 ): UseSwap => {
   const [swap, setSwap] = useState({ ...defaultValue, ...partialValues })
-  const [from, setFromSymbol] = useToken({ userAddressOrName, symbol: 'DAI' })
-  const [to, setToSymbol] = useToken({ userAddressOrName, symbol: 'FRAX' })
+  const [from, setFromSymbol] = useToken({ userAddressOrName, symbol: '' })
+  const [to, setToSymbol] = useToken({ userAddressOrName, symbol: '' })
 
   const refreshSlippage = useCallback(() => {
     const minimumReceivedAfterSlippage = +to.amount.current * (1 - swap.slippageTolerance / 100)
@@ -102,8 +106,8 @@ export const useSwap = (
     const tmp = to.amount.current
     to.amount.current = from.amount.current
     from.amount.current = tmp
-    setFromSymbol(to.symbol)
-    setToSymbol(from.symbol)
+    setFromSymbol(to.token.symbol)
+    setToSymbol(from.token.symbol)
   }
 
   const setFromAmount = useCallback(

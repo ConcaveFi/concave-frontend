@@ -1,5 +1,4 @@
 import { tokenService } from 'lib/token.service'
-import { AvailableTokens } from 'lib/tokens'
 import { CandlestickData } from 'lightweight-charts'
 import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
@@ -24,7 +23,7 @@ export type CandleStickChartProps = {
 
 const ID = 'CANDLESTICK_TOKEN'
 
-export const useCandleStickChart = (inputToken: AvailableTokens, outputToken: AvailableTokens) => {
+export const useCandleStickChart = (inputToken: string, outputToken: string) => {
   const [candleStickData, setCandleStickData] = useState<CandleStickChartProps>({ ...defautValue })
 
   const set = (value: Partial<CandleStickChartProps>) => {

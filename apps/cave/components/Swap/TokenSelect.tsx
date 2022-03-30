@@ -16,6 +16,7 @@ import {
 } from '@concave/ui'
 import { Token } from '@uniswap/sdk-core'
 import { BASES_TO_CHECK_TRADES_AGAINST } from 'constants/routing'
+import { TokenType } from 'lib/tokens'
 import React, { useState } from 'react'
 import { chain } from 'wagmi'
 import { useTokenList } from './hooks/useTokenList'
@@ -27,7 +28,10 @@ const CommonPairs = ({
   selected: Token
   onSelect: (token: Partial<Token>) => void
 }) => {
-  const tokens = BASES_TO_CHECK_TRADES_AGAINST[chain.mainnet.id]
+  const tokens = BASES_TO_CHECK_TRADES_AGAINST[chain.ropsten.id]
+  if (!tokens.length) {
+    return <></>
+  }
   return (
     <>
       <Heading size="sm">
@@ -58,7 +62,19 @@ const CommonPairs = ({
   )
 }
 
-const TokenListItem = ({ symbol, logoURI, address, name, onClick }) => (
+const TokenListItem = ({
+  symbol,
+  logoURI,
+  address,
+  name,
+  onClick,
+}: {
+  symbol?: string
+  logoURI: string
+  address: string
+  name: string
+  onClick: () => void
+}) => (
   <ListItem
     cursor="pointer"
     _hover={{ opacity: 0.7 }}
@@ -70,7 +86,7 @@ const TokenListItem = ({ symbol, logoURI, address, name, onClick }) => (
       <TokenIcon h="35px" w="35px" symbol={symbol} logoURI={logoURI} address={address} />
       <Stack spacing={0} justify="center">
         <Text fontWeight="bold" fontSize="md">
-          {symbol.toUpperCase()}
+          {symbol?.toUpperCase()}
         </Text>
         <Text color="text.low" fontSize="sm">
           {name}
@@ -127,7 +143,14 @@ export const SelectTokenModal = ({
             spacing={4}
           >
             {tokens.data.map((token) => (
-              <TokenListItem key={token.address} {...token} onClick={() => onSelect(token)} />
+              <TokenListItem
+                key={token.address}
+                symbol={token.symbol}
+                logoURI={token.logoURI}
+                address={token.address}
+                name={token.name}
+                onClick={() => onSelect(token)}
+              />
             ))}
           </UnorderedList>
         )}
@@ -156,8 +179,8 @@ export const TokenSelect = ({
   selected,
   onSelect,
 }: {
-  selected?: Token
-  onSelect: (token: Token) => void
+  selected?: TokenType
+  onSelect: (token: TokenType) => void
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
