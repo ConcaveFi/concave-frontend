@@ -1,11 +1,10 @@
 import { Flex } from '@concave/ui'
-import { CandleStickCard } from 'components/CandleStickCard'
 import GcnvTitle from 'components/GcnvTitle'
 import { SwapCard } from 'components/Swap/SwapCard'
 import { useSwap } from 'components/Swap/useSwap'
-import { usePriceInStable } from 'hooks/useBestTrade'
 import { WETH } from 'constants/tokens'
 import { useAuth } from 'contexts/AuthContext'
+import { usePriceInStable } from 'hooks/useBestTrade'
 import { DAI, FRAX, USDT } from 'lib/tokens'
 import React from 'react'
 
@@ -28,7 +27,7 @@ function Swap() {
     <Flex direction="column" gap={12}>
       <GcnvTitle title="Swap gCNV" description="Swap gCNV here" />
       <Flex gap={4} flexWrap="wrap" justify="center">
-        <CandleStickCard
+        {/* <CandleStickCard
           from={swap.from}
           to={swap.to}
           variant="secondary"
@@ -36,7 +35,7 @@ function Swap() {
           h={['100%', 470, 400]}
           w={['100%', '100%', 500, 567, 567]}
           align="stretch"
-        />
+        /> */}
         <SwapCard
           swap={swap}
           buttonLabel="Swap"
