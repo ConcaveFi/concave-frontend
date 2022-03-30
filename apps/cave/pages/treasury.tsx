@@ -1,4 +1,5 @@
 import { Box, Card, Container, Flex, Heading, Image, Spinner, Stack, Text } from '@concave/ui'
+import { ClaimCard } from 'components/Claim/ClaimCard'
 import { fetchPortfolio } from 'lib/debank'
 import { useQuery } from 'react-query'
 
@@ -47,6 +48,7 @@ export default function Treasury() {
   )
   if (!isSuccess)
     return (
+      
       <Container maxWidth="container.lg" pt={16}>
         <Stack my={8} align="center">
           <Heading as="h1">Concave Treasury</Heading>
@@ -57,11 +59,13 @@ export default function Treasury() {
 
   return (
     <Container maxWidth="container.lg" pt={16}>
-      <Stack w="100%" my={8} align="center" spacing={4}>
-        <Heading as="h1">Concave Treasury</Heading>
-        <Heading as="h2" py={4} fontSize="2xl">
-          Total Value {formatUsd(treasury.totalUsd)}
-        </Heading>
+      <Stack w="100%" my={0} align="left" spacing={2}>
+      <Heading as="h2">Claim CNV</Heading>
+      <ClaimCard userAddress={0}/>
+      </Stack>
+      <Stack w="100%" my={4} align="left" spacing={2}>
+        <Heading as="h1">Concave Treasury Value</Heading>
+        <Heading color="green">{formatUsd(treasury.totalUsd)}</Heading>
         <Heading as="h3" py={4} fontSize="2xl">
           Protocols
         </Heading>
