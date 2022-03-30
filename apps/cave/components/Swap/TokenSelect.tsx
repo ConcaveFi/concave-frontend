@@ -6,28 +6,19 @@ import {
   UnorderedList,
   ListItem,
   Stack,
-  Box,
   Button,
   Menu,
   Modal,
   Text,
   Flex,
-  FlexProps,
   Input,
   TokenIcon,
 } from '@concave/ui'
 import { BASES_TO_CHECK_TRADES_AGAINST } from 'constants/routing'
 import React, { useState } from 'react'
-import { useQuery } from 'react-query'
 import { chain } from 'wagmi'
-
-export type Token = {
-  address: string
-  name: string
-  symbol: string
-  decimals: number
-  logoURI: string
-}
+import { useTokenList } from './hooks/useTokenList'
+import { Token } from '@uniswap/sdk-core'
 
 const CommonPairs = ({
   selected,
@@ -88,15 +79,6 @@ const TokenListItem = ({ symbol, logoURI, address, name, onClick }) => (
     </Stack>
   </ListItem>
 )
-
-const useTokenList = () =>
-  useQuery('token-list', () =>
-    fetch(
-      'https://raw.githubusercontent.com/ConcaveFi/concave-frontend/develop/assets/tokenlists/ethereum/concave.json?token=GHSAT0AAAAAABP22MUFL2A4E2TJGIFGACZIYSM2RBQ',
-    )
-      .then((d) => d.json())
-      .then((l) => l.tokens),
-  )
 
 export const SelectTokenModal = ({
   selected,
