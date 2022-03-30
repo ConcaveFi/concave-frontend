@@ -2,7 +2,7 @@ import { useQuery } from 'react-query'
 import { chain } from 'wagmi'
 
 const concaveTokenList = (networkName: string) =>
-  `https://raw.githubusercontent.com/ConcaveFi/concave-frontend/develop/assets/tokenlists/${networkName.toLowerCase()}/concave.json?token=GHSAT0AAAAAABP22MUFL2A4E2TJGIFGACZIYSM2RBQ`
+  `/assets/tokenlists/${networkName.toLowerCase()}/concave.json`
 
 export const useTokenList = (networkName: string = chain.mainnet.name) => {
   const tokenList = concaveTokenList(networkName)
