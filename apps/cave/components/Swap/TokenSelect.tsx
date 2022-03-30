@@ -1,24 +1,24 @@
 import { MenuButton, useDisclosure } from '@chakra-ui/react'
 import { CnvQuestionIcon, DownIcon } from '@concave/icons'
 import {
-  Heading,
-  Spinner,
-  UnorderedList,
-  ListItem,
-  Stack,
   Button,
+  Flex,
+  Heading,
+  Input,
+  ListItem,
   Menu,
   Modal,
+  Spinner,
+  Stack,
   Text,
-  Flex,
-  Input,
   TokenIcon,
+  UnorderedList,
 } from '@concave/ui'
+import { Token } from '@uniswap/sdk-core'
 import { BASES_TO_CHECK_TRADES_AGAINST } from 'constants/routing'
 import React, { useState } from 'react'
 import { chain } from 'wagmi'
 import { useTokenList } from './hooks/useTokenList'
-import { Token } from '@uniswap/sdk-core'
 
 const CommonPairs = ({
   selected,
@@ -92,7 +92,7 @@ export const SelectTokenModal = ({
   onClose: () => void
 }) => {
   const [search, setSearch] = useState('')
-  const tokens = useTokenList()
+  const tokens = useTokenList(chain.ropsten.name)
   return (
     <Modal
       bluryOverlay
