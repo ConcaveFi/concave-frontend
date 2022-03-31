@@ -1,5 +1,4 @@
-import { Box, Center, Flex, Image, Stack, Text } from '@concave/ui'
-import React from 'react'
+import { Box, Flex, Image, Text } from '@concave/ui'
 
 function Placeholder({ text }) {
   return (
