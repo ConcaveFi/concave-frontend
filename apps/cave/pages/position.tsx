@@ -26,6 +26,7 @@ import { TokenInput } from 'components/Swap/TokenInput'
 import { useAuth } from 'contexts/AuthContext'
 import { BigNumberish, Contract } from 'ethers'
 import { parseUnits } from 'ethers/lib/utils'
+import { useAllowance } from 'hooks/useAllowance'
 import { usePrecision } from 'hooks/usePrecision'
 import { contractABI } from 'lib/contractoABI'
 import { concaveProvider2 } from 'lib/providers'
@@ -232,12 +233,45 @@ const YouWillReceive = ({
 }
 
 const RemoveLiquidityActions = () => {
+  const { user } = useAuth()
+  const [approved, setApproved] = useState(false)
+  const [{ data, error, loading }, getSigner] = useSigner()
+  // const userApproval = useAllowance(
+  //   user.address,
+  //   '0x95dDC411d31bBeDd37e9aaABb335b0951Bc2D25a',
+  //   'removeLiquidity',
+  // )
+  const removeAproval = async () => {
+    console.log('send approval to metamask')
+    // console.log('wait for approval....', userApproval)
+    const rm = () => {
+      const contractInstance = new Contract(
+        '0x95dDC411d31bBeDd37e9aaABb335b0951Bc2D25a',
+        contractABI,
+        concaveProvider2(chain.ropsten.id),
+      )
+      const contractSigner = contractInstance.connect(data)
+      console.log('signer rm', contractSigner)
+      return null
+    }
+    rm()
+    // setApproved(true)
+    // return console.log('removed approved!!!')
+  }
+
+  const confirmedWithdrawal = () => {
+    console.log('send tx to metamask')
+    // useRemoveLiquidity
+    // useRemoveLiquidity()
+    return console.log('confirmed Withdrawal!!!')
+  }
+
   return (
     <Flex gap={4} justifyContent={'center'}>
-      <Button w={250} variant={'primary'}>
+      <Button w={250} variant={'primary'} onClick={removeAproval}>
         Approve
       </Button>
-      <Button disabled w={250} variant={'primary'}>
+      <Button disabled={!approved} w={250} variant={'primary'} onclick={confirmedWithdrawal}>
         Confirm Withdrawal
       </Button>
     </Flex>
@@ -325,6 +359,7 @@ const useRemoveLiquidity = ({
   const amountAMin = amountTokenA * ratioToRemove
   const amountBMin = amountTokenB * ratioToRemove
   const [deadline, setDeadLine] = useState(new Date().getTime() / 1000 + 15 * 60)
+  // const [{ data, error, loading }, getSigner] = useSigner()
   return {
     wrapperTokenA,
     wrapperTokenB,
