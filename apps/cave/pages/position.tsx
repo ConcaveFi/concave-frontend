@@ -225,8 +225,8 @@ const YouWillReceive = ({
           You will receive:
         </Text>
       </Box>
-      <ReceiveBox amount={amountAMin} token={wrapperTokenA.token} />
-      <ReceiveBox amount={amountBMin} token={wrapperTokenB.token} />
+      <ReceiveBox amount={amountAMin} token={wrapperTokenA} />
+      <ReceiveBox amount={amountBMin} token={wrapperTokenB} />
     </HStack>
   )
 }
@@ -360,8 +360,8 @@ const AddLiquidityModal = ({
   )
 }
 const AddLiquidityContent = ({ userAddress }: { userAddress: string }) => {
-  const [wrapperTokenA, setTokenA] = useToken({ userAddressOrName: userAddress, symbol: '' })
-  const [wrapperTokenB, setTokenB] = useToken({ userAddressOrName: userAddress, symbol: '' })
+  const [wrapperTokenA, setTokenA] = useToken({ userAddressOrName: userAddress, symbol: 'DAI' })
+  const [wrapperTokenB, setTokenB] = useToken({ userAddressOrName: userAddress, symbol: 'FRAX' })
   const [amountADesired, setAmountADesired] = useState<number>(null)
   const [amountBDesired, setAmountBDesired] = useState<number>(null)
   const [{ data, error, loading }, getSigner] = useSigner()
@@ -427,7 +427,6 @@ const AddLiquidityContent = ({ userAddress }: { userAddress: string }) => {
             setAmountADesired(value)
           }}
           onSelectToken={(token) => {
-            console.log(token)
             setTokenA(token.symbol)
           }}
         >
@@ -460,7 +459,7 @@ const AddLiquidityContent = ({ userAddress }: { userAddress: string }) => {
             setAmountBDesired(value)
           }}
           onSelectToken={(token) => {
-            setTokenB(token.symbol as AvailableTokens)
+            setTokenB(token.symbol)
           }}
         >
           {wrapperTokenB.token?.symbol && (
