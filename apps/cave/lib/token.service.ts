@@ -10,6 +10,7 @@ class TokenService {
     if (this.networkName === chain.ropsten.name) {
       const values = {
         DAI: 1,
+        WETH: 3402,
         MATIC: 1.68,
         FRAX: 1,
         Tether: 1.2,

@@ -24,15 +24,14 @@ import { Pair } from '@uniswap/v2-sdk'
 import { MaxAmount } from 'components/Swap/MaxAmount'
 import { TokenInput } from 'components/Swap/TokenInput'
 import { useAuth } from 'contexts/AuthContext'
-import { BigNumberish, Contract } from 'ethers'
-import { parseUnits } from 'ethers/lib/utils'
+import { BigNumberish } from 'ethers'
+import { useAddLiquidity, UseAddLiquidityData } from 'hooks/useAddLiquidity'
+import { useApprovalWhenNeeded } from 'hooks/useAllowance'
 import { usePrecision } from 'hooks/usePrecision'
-import { contractABI } from 'lib/contractoABI'
-import { concaveProvider2 } from 'lib/providers'
-import { AvailableTokens, TokenType } from 'lib/tokens'
+import { TokenType } from 'lib/tokens'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
-import { chain, useSigner } from 'wagmi'
+import { chain } from 'wagmi'
 import { useToken, WrapperTokenInfo } from '../components/Swap/useSwap'
 
 const RewardsBanner = () => (
@@ -51,9 +50,9 @@ const RewardsBanner = () => (
   </Card>
 )
 
-const PositionInfoItem = ({ label, value, children = <></> }) => (
-  <Flex justify="space-between" align={'center'}>
-    <Text>{label}</Text>
+const PositionInfoItem = ({ color = '', label, value, mt = 0, children = <></> }) => (
+  <Flex justify="space-between" align={'center'} mt={mt}>
+    <Text color={color}>{label}</Text>
     <HStack gap={2} align={'center'} alignContent={'center'}>
       <Text>{value}</Text>
       {children}
@@ -69,15 +68,9 @@ interface LPPosition {
 const LPPositionItem = ({ pair, ownedAmount }: LPPosition) => {
   const addLiquidity = useDisclosure()
   const removeLiquidity = useDisclosure()
-  const router = useRouter()
-  const { operation } = router.query
   const { user } = useAuth()
   let userAddress
   user ? (userAddress = user.address) : ''
-
-  // <RemoveLiquidity />
-  // <AddLiquidity />
-
   return (
     <>
       <AccordionItem p={2} shadow="Up Big" borderRadius="2xl" alignItems="center">
@@ -359,55 +352,107 @@ const AddLiquidityModal = ({
     </Modal>
   )
 }
+
+const SupplyLiquidityModal = ({
+  disclosure,
+  data,
+  onConfirm = () => {},
+}: {
+  disclosure: UseDisclosureReturn
+  data: UseAddLiquidityData
+  onConfirm: () => void
+}) => {
+  const { wrapperTokenA, wrapperTokenB, amountADesired, amountBDesired, userAddress } = data
+
+  const [needsApproveA, requestApproveA, loadingApproveA] = useApprovalWhenNeeded(
+    wrapperTokenA.token,
+    chain.ropsten.id,
+    userAddress,
+    amountADesired,
+  )
+  console.log('loadingApproveA', loadingApproveA)
+  const [needsApproveB, requestApproveB, loadingApproveB] = useApprovalWhenNeeded(
+    wrapperTokenB.token,
+    chain.ropsten.id,
+    userAddress,
+    amountBDesired,
+  )
+
+  return (
+    <Modal
+      bluryOverlay={true}
+      title="Supply"
+      isOpen={disclosure.isOpen}
+      onClose={disclosure.onClose}
+      isCentered
+      size={'xl'}
+      bodyProps={{
+        gap: 6,
+        shadow: 'Up for Blocks',
+      }}
+    >
+      <Text fontSize="3xl">
+        {wrapperTokenA.token.symbol}/{wrapperTokenB.token.symbol} Pool Tokens
+      </Text>
+      <HStack justifyContent={'center'}>
+        <TokenIcon {...wrapperTokenA.token}></TokenIcon>
+        <TokenIcon {...wrapperTokenB.token}></TokenIcon>
+      </HStack>
+      <Box borderRadius={'2xl'} p={6} shadow={'down'}>
+        <PositionInfoItem
+          label="Rates"
+          value={`1  ${wrapperTokenA.token.symbol} =  ${
+            usePrecision(wrapperTokenA.price / wrapperTokenB.price).formatted
+          } ${wrapperTokenB.token.symbol}`}
+        />
+        <PositionInfoItem
+          label=""
+          value={`1  ${wrapperTokenB.token.symbol} =  ${
+            usePrecision(wrapperTokenB.price / wrapperTokenA.price).formatted
+          } ${wrapperTokenA.token.symbol}`}
+        />
+        <PositionInfoItem
+          mt={8}
+          color={'text.low'}
+          label={`${wrapperTokenA.token.symbol} Deposited`}
+          value={`${amountADesired} ${wrapperTokenA.token.symbol}`}
+        />
+        <PositionInfoItem
+          color={'text.low'}
+          label={`${wrapperTokenB.token.symbol} Deposited`}
+          value={`${usePrecision(amountBDesired).formatted} ${wrapperTokenB.token.symbol}`}
+        />
+        <PositionInfoItem color={'text.low'} label="Share Pool" value={'2.786%'} />
+      </Box>
+      {needsApproveA && (
+        <Button mt={2} p={6} fontSize={'2xl'} variant={'primary'} onClick={() => requestApproveA()}>
+          {!loadingApproveA
+            ? `Approve to use ${amountADesired} ${wrapperTokenA.token.symbol}`
+            : 'approving'}
+        </Button>
+      )}
+      {needsApproveB && (
+        <Button mt={2} p={6} fontSize={'2xl'} variant={'primary'} onClick={() => requestApproveB()}>
+          {!loadingApproveB
+            ? `Approve to use ${amountBDesired} ${wrapperTokenB.token.symbol}`
+            : 'approving'}
+        </Button>
+      )}
+      {!needsApproveA && !needsApproveA && (
+        <Button mt={2} p={6} fontSize={'2xl'} variant={'primary'} onClick={onConfirm}>
+          Confirm Supply
+        </Button>
+      )}
+    </Modal>
+  )
+}
+
 const AddLiquidityContent = ({ userAddress }: { userAddress: string }) => {
-  const [wrapperTokenA, setTokenA] = useToken({ userAddressOrName: userAddress, symbol: '' })
-  const [wrapperTokenB, setTokenB] = useToken({ userAddressOrName: userAddress, symbol: '' })
-  const [amountADesired, setAmountADesired] = useState<number>(null)
-  const [amountBDesired, setAmountBDesired] = useState<number>(null)
-  const [{ data, error, loading }, getSigner] = useSigner()
-
-  const addLiquidity = () => {
-    const contractInstance = new Contract(
-      '0xB11DDDf6F32eFc7d903802631CFc06EC400AB6e8',
-      contractABI,
-      concaveProvider2(chain.ropsten.id),
-    )
-    const contractSigner = contractInstance.connect(data)
-    const to = userAddress
-    const deadLine = new Date().getTime() + 30 * 60
-    const tokenA = wrapperTokenA.token.address
-    const tokenB = wrapperTokenB.token.address
-    const amountADesired = parseUnits('11', 18).toString()
-    const amountBDesired = parseUnits('11', 18).toString()
-    const amountAMin = parseUnits('10', 18).toString()
-    const amountBMin = parseUnits('10', 18).toString()
-    console.table({
-      tokenA,
-      tokenB,
-      amountADesired,
-      amountBDesired,
-      amountAMin,
-      amountBMin,
-      to,
-      deadLine,
-    })
-
-    contractSigner.addLiquidity(
-      tokenA,
-      tokenB,
-      amountADesired,
-      amountBDesired,
-      amountAMin,
-      amountBMin,
-      to,
-      deadLine,
-      {
-        gasLimit: 100000,
-        // nonce: nonce || undefined,
-      },
-    )
-  }
-  // TODO
+  const supplyLiquidityModal = useDisclosure()
+  const [data, setters, call] = useAddLiquidity(chain.ropsten.id, userAddress)
+  const { amountADesired, amountBDesired, wrapperTokenA, wrapperTokenB } = data
+  const { setAmountADesired, setTokenA, setTokenB, setAmountBDesired } = setters
+  const valid = wrapperTokenA.token && wrapperTokenB.token && amountADesired && amountBDesired
 
   return (
     <>
@@ -427,7 +472,6 @@ const AddLiquidityContent = ({ userAddress }: { userAddress: string }) => {
             setAmountADesired(value)
           }}
           onSelectToken={(token) => {
-            console.log(token)
             setTokenA(token.symbol)
           }}
         >
@@ -460,7 +504,7 @@ const AddLiquidityContent = ({ userAddress }: { userAddress: string }) => {
             setAmountBDesired(value)
           }}
           onSelectToken={(token) => {
-            setTokenB(token.symbol as AvailableTokens)
+            setTokenB(token.symbol)
           }}
         >
           {wrapperTokenB.token?.symbol && (
@@ -481,17 +525,24 @@ const AddLiquidityContent = ({ userAddress }: { userAddress: string }) => {
         _focus={{
           shadow: 'Up Small',
         }}
+        isDisabled={!valid}
         bg={'rgba(113, 113, 113, 0.01)'}
       >
         <Text
           fontSize={'2xl'}
           onClick={() => {
-            addLiquidity()
+            supplyLiquidityModal.onOpen()
           }}
         >
           Add Liquidity
         </Text>
       </Button>
+
+      {valid ? (
+        <SupplyLiquidityModal disclosure={supplyLiquidityModal} data={data} onConfirm={call} />
+      ) : (
+        <></>
+      )}
     </>
   )
 }
