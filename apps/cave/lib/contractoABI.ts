@@ -8,7 +8,6 @@ export const contractABI = [
     stateMutability: 'nonpayable',
     type: 'constructor',
   },
-  { inputs: [], name: 'NONEXISTENT_PAIR', type: 'error' },
   {
     inputs: [],
     name: 'WETH',
