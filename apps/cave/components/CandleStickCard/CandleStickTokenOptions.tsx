@@ -3,7 +3,15 @@ import { HStack, Text } from '@concave/ui'
 import { TokenType } from 'lib/tokens'
 import React from 'react'
 
-export const CandleStickTokenOptions = ({ from, to }: { from: TokenType; to: TokenType }) => {
+export const CandleStickTokenOptions = ({
+  from,
+  to,
+  address,
+}: {
+  address: string
+  from: TokenType
+  to: TokenType
+}) => {
   return (
     <HStack p={2} borderRadius="2xl" shadow="Down Big">
       <TokenIcon size="sm" {...from} />
