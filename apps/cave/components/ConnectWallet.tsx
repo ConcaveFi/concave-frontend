@@ -22,11 +22,24 @@ const DisconnectButton = () => {
 
   if (!user) return null
   return (
-    <Menu placement="bottom-end">
-      <MenuButton as={Button}>{miniAddress(user.address)}</MenuButton>
-      <MenuList>
-        <MenuItem onClick={signOut}>Disconnect</MenuItem>
-      </MenuList>
+    <Menu placement="right-start">
+      <MenuButton as={Button} shadow="up" fontFamily="heading" size="medium" w="100%">
+        {miniAddress(user.address)}
+      </MenuButton>
+      <Portal>
+        <MenuList minW="min" bg="none" border="none" shadow="none" p="0" backdropFilter="blur(8px)">
+          <Card
+            variant="secondary"
+            borderGradient="secondary"
+            borderRadius="xl"
+            px={1}
+            py={2}
+            gap="1"
+          >
+            <MenuItem onClick={signOut}>Disconnect</MenuItem>
+          </Card>
+        </MenuList>
+      </Portal>
     </Menu>
   )
 }
