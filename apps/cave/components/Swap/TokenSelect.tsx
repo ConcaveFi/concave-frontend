@@ -1,24 +1,26 @@
 import { useDisclosure } from '@chakra-ui/react'
 import { CnvQuestionIcon, DownIcon } from '@concave/icons'
 import {
-  Heading,
-  Spinner,
-  UnorderedList,
-  ListItem,
-  Stack,
   Button,
-  Modal,
-  Text,
   Flex,
+  Heading,
   Input,
+  ListItem,
+  Modal,
+  Spinner,
+  Stack,
+  Text,
   TokenIcon,
+  UnorderedList,
 } from '@concave/ui'
-import { Currency } from '@uniswap/sdk-core'
-import { BASES_TO_CHECK_TRADES_AGAINST } from 'constants/routing'
+import { Currency as UniswapCurrency } from '@uniswap/sdk-core'
+import { BASES_TO_CHECK_TRADES_AGAINST, Token } from 'constants/routing'
 import React, { useCallback, useState } from 'react'
-import { chain } from 'wagmi'
-import { Token, useTokenList } from './hooks/useTokenList'
+import { chain, useNetwork } from 'wagmi'
+import { useTokenList } from './hooks/useTokenList'
 import { useNativeCurrency } from './useSwap2'
+
+type Currency = UniswapCurrency & Pick<Token, 'logoURI'>
 
 const CommonTokens = ({
   selected,
@@ -104,6 +106,8 @@ export const SelectTokenModal = ({
   const [search, setSearch] = useState('')
   const nativeCurrency = useNativeCurrency()
   const tokens = useTokenList()
+  const [{ data: network }] = useNetwork()
+  const chainId = network?.chain.id === chain.ropsten.id ? chain.ropsten.id : chain.mainnet.id
   const selectAndClose = useCallback(
     (token: Token) => (onSelect(token), onClose()),
     [onSelect, onClose],
@@ -117,7 +121,7 @@ export const SelectTokenModal = ({
       bodyProps={{ gap: 4 }}
     >
       <CommonTokens
-        currencies={[nativeCurrency, ...BASES_TO_CHECK_TRADES_AGAINST[chain.mainnet.id]]}
+        currencies={[nativeCurrency, ...BASES_TO_CHECK_TRADES_AGAINST[chainId]]}
         selected={selected}
         onSelect={selectAndClose}
       />

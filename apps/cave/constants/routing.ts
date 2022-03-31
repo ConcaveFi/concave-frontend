@@ -1,18 +1,37 @@
-import { Currency, Token } from '@uniswap/sdk-core'
+import { Currency } from '@uniswap/sdk-core'
+import { Token as UniswapToken } from '@uniswap/sdk-core'
 
 import { chain } from 'wagmi'
 import { DAI, DOLA, USDC, FRAX, USDT, WETH } from './tokens'
+import { ROPSTEN_WETH, ROPSTEN_STABLES } from './ropstenTokens'
+
+export class Token extends UniswapToken {
+  readonly logoURI?: string
+  constructor(token: {
+    chainId: number
+    address: string
+    decimals: number
+    symbol?: string
+    name?: string
+    logoURI?: string
+  }) {
+    super(token.chainId, token.address, token.decimals, token.symbol, token.name)
+    this.logoURI = token.logoURI
+  }
+}
 
 type ChainTokenList = { readonly [chainId: number]: Token[] }
 type ChainCurrencyList = { readonly [chainId: number]: Currency[] }
 
 export const STABLES = {
   [chain.mainnet.id]: [DAI, DOLA, USDC, FRAX, USDT],
+  [chain.ropsten.id]: [...ROPSTEN_STABLES],
 }
 
 // used to construct intermediary pairs for trading
 export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
   [chain.mainnet.id]: [WETH, ...STABLES[chain.mainnet.id]],
+  [chain.ropsten.id]: [ROPSTEN_WETH, ...STABLES[chain.ropsten.id]],
 }
 
 const permutate = (tokenList: ChainTokenList[number]): [Token, Token][] =>

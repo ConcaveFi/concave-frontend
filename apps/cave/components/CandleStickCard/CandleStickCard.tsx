@@ -15,8 +15,8 @@ export const CandleStickCard = ({
   from,
   to,
   ...cardProps
-}: { from: TokenType; to: TokenType } & CardProps) => {
-  const candleStickChart = useCandleStickChart(from.symbol, to.symbol)
+}: { from?: TokenType; to?: TokenType } & CardProps) => {
+  const candleStickChart = useCandleStickChart(from?.symbol, to?.symbol)
   const [isMobile] = useMediaQuery(['(max-width: 768px)'])
 
   return (

@@ -1,15 +1,18 @@
 import { ExpandArrowIcon, GasIcon } from '@concave/icons'
-import { Button, Card, Flex, HStack, Text, useDisclosure, Spinner } from '@concave/ui'
+import { Button, Card, Flex, HStack, Spinner, Text, useDisclosure } from '@concave/ui'
 import React, { useState } from 'react'
+import { useFeeData } from 'wagmi'
 import { ConfirmSwap } from './ConfirmSwap'
 import { defaultSettings, Settings } from './Settings'
 import { TokenInput } from './TokenInput'
 import { TransactionStatusModal } from './TransactionStatus'
 import { TransactionSubmitted } from './TransactionSubmitted'
 import { useSwap } from './useSwap2'
-import { useFeeData } from 'wagmi'
 
-export const twoDecimals = (s: string) => (s.indexOf('.') > -1 ? s.slice(0, s.indexOf('.') + 3) : s)
+export const twoDecimals = (s: string | number) => {
+  const a = s.toString()
+  return a.indexOf('.') > -1 ? a.slice(0, a.indexOf('.') + 3) : a
+}
 
 const GasPrice = () => {
   const [{ data }] = useFeeData({ formatUnits: 'gwei', watch: true })
@@ -36,6 +39,75 @@ const LoadingBestTradeIndicator = () => {
   )
 }
 
+const SwapInputField = ({ amount, currency, stable, balance, setAmount, setCurrency }) => {
+  return (
+    <TokenInput
+      value={amount}
+      currency={currency}
+      onChangeValue={setAmount}
+      onChangeCurrency={setCurrency}
+    >
+      <HStack justify="space-between" textColor="text.low">
+        <Text isTruncated maxW="100px" fontWeight="bold" fontSize="sm">
+          {!!-stable && `$${twoDecimals(+stable * +amount)}`}
+        </Text>
+        {balance && (
+          <Button fontSize="xs" mr="auto" rightIcon={<Text textColor="#2E97E2">Max</Text>}>
+            Balance:{' '}
+            <Text isTruncated maxW="50px">
+              {balance}
+            </Text>
+          </Button>
+        )}
+      </HStack>
+    </TokenInput>
+  )
+}
+
+const SwapOutputField = ({ amount, currency, stable, balance, setAmount, setCurrency }) => {
+  return (
+    <TokenInput
+      value={amount}
+      currency={currency}
+      onChangeValue={setAmount}
+      onChangeCurrency={setCurrency}
+    >
+      <HStack justify="space-between" color="text.low">
+        <Text isTruncated maxW="100px" fontWeight="bold" fontSize="sm">
+          {!!-stable && `$${twoDecimals(+stable * +amount)}`}
+        </Text>
+        {balance && (
+          <Text fontSize="xs" mr="auto">
+            Balance:{' '}
+            <Text isTruncated maxW="50px">
+              {balance}
+            </Text>
+          </Text>
+        )}
+      </HStack>
+    </TokenInput>
+  )
+}
+
+const SwitchCurrencies = ({ onClick }) => {
+  return (
+    <Flex align="center" justify="center">
+      <Button
+        shadow="Up Small"
+        _focus={{ shadow: 'Up Small' }}
+        _hover={{ shadow: 'Up Big' }}
+        px={3.5}
+        py={2}
+        bgColor="blackAlpha.100"
+        rounded="3xl"
+        onClick={onClick}
+      >
+        <ExpandArrowIcon />
+      </Button>
+    </Flex>
+  )
+}
+
 export function SwapCard() {
   const [settings, setSettings] = useState(defaultSettings)
   const {
@@ -44,7 +116,7 @@ export function SwapCard() {
     setCurrencyIn,
     setCurrencyOut,
     switchCurrencies,
-    isLoadingBestTrade,
+    isFetchingPairs,
     swapingIn,
     swapingOut,
   } = useSwap(settings)
@@ -53,25 +125,12 @@ export function SwapCard() {
   return (
     <>
       <Card p={6} gap={2} variant="primary" h="fit-content" shadow="Block Up" w="100%" maxW="420px">
-        <TokenInput
-          value={swapingIn.amount}
-          currency={swapingIn.currency}
-          stableValue={+swapingIn.stable * +swapingIn.amount}
-          balance={swapingIn.balance}
-          onChangeValue={setAmountIn}
-          onChangeCurrency={setCurrencyIn}
-        />
+        <SwapInputField {...swapingIn} setAmount={setAmountIn} setCurrency={setCurrencyIn} />
         <SwitchCurrencies onClick={switchCurrencies} />
-        <TokenInput
-          value={swapingOut.amount}
-          currency={swapingOut.currency}
-          stableValue={+swapingOut.stable * +swapingOut.amount}
-          balance={swapingOut.balance}
-          onChangeValue={setAmountOut}
-          onChangeCurrency={setCurrencyOut}
-        />
+        <SwapInputField {...swapingOut} setAmount={setAmountOut} setCurrency={setCurrencyOut} />
+
         <HStack align="center" justify="end" py={5}>
-          {isLoadingBestTrade ? (
+          {isFetchingPairs ? (
             <LoadingBestTradeIndicator />
           ) : (
             swapingOut.relativePrice && (
@@ -101,24 +160,5 @@ export function SwapCard() {
 
       <TransactionSubmitted isOpen={false} onClose={() => null} />
     </>
-  )
-}
-
-const SwitchCurrencies = ({ onClick }) => {
-  return (
-    <Flex align="center" justify="center">
-      <Button
-        shadow="Up Small"
-        _focus={{ shadow: 'Up Small' }}
-        _hover={{ shadow: 'Up Big' }}
-        px={3.5}
-        py={2}
-        bgColor="blackAlpha.100"
-        rounded="3xl"
-        onClick={onClick}
-      >
-        <ExpandArrowIcon />
-      </Button>
-    </Flex>
   )
 }

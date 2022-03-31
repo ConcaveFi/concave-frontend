@@ -1,4 +1,3 @@
-import React from 'react'
 import {
   Box,
   Card,
@@ -10,9 +9,10 @@ import {
   Stack,
   Text,
 } from '@concave/ui'
-import { SwapCard } from 'components/Swap/SwapCard'
+import { SwapCardLegacy } from 'components/Swap/SwapCardLegacy'
 import { useSwap } from 'components/Swap/useSwap'
 import { useAuth } from 'contexts/AuthContext'
+import React from 'react'
 
 const InfoItem = ({ value, label, ...props }) => (
   <Flex
@@ -93,10 +93,7 @@ const NothingToRedeem = () => {
 
 export default function Bond() {
   const { user, isConnected } = useAuth()
-  const swap = useSwap(isConnected ? user?.address : '', {
-    inputTokens: ['WETH', 'BTC', 'WAVES', 'USDT', 'NEO', 'LINK', 'XMR', 'ETH', 'DAI'],
-    outputTokens: ['XMR', 'ETH', 'DAI', 'FRAX'],
-  })
+  const swap = useSwap(isConnected ? user?.address : '', {})
   return (
     <Container maxW="container.lg">
       <Flex direction="column" gap={20}>
@@ -142,11 +139,10 @@ export default function Bond() {
               <NothingToRedeem />
             </Card>
           </Box>
-          <SwapCard
+          <SwapCardLegacy
             swap={swap}
             buttonLabel="Buy with 5 days vesting"
             variant="primary"
-            active="swap"
             w="380px"
           />
         </Flex>

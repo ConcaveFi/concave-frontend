@@ -43,7 +43,7 @@ const TokenInfo = ({
       <HStack>
         <TokenIcon size="sm" {...token} />
         <Text fontSize={24} fontWeight={700}>
-          {token.symbol.toUpperCase()}
+          {token.token.symbol.toUpperCase()}
         </Text>
       </HStack>
     </Flex>
@@ -75,7 +75,7 @@ const MinExpectedOutput = ({ swap }: { swap: UseSwap }) => {
           Minimum received after slippage
         </Text>
         <Text whiteSpace={'nowrap'} fontWeight={700} textColor="text.low">
-          {useFloorPrecision(swap.minimumReceivedAfterSlippage).formatted} {swap.to.symbol}
+          {useFloorPrecision(swap.minimumReceivedAfterSlippage).formatted} {swap.to.token.symbol}
         </Text>
       </Flex>
       <Flex fontSize={'14px'} w={'100%'} justifyContent={'space-between'}>
@@ -97,7 +97,7 @@ const ExpectedOutput = ({ swap }: { swap: UseSwap }) => {
           Expected Output
         </Text>
         <Text fontWeight={600}>
-          {useRoundPrecision(swap.toAmount).formatted} {swap.to.symbol}
+          {useRoundPrecision(swap.toAmount).formatted} {swap.to.token.symbol}
         </Text>
       </Flex>
       <Flex w={'100%'} justifyContent={'space-between'}>

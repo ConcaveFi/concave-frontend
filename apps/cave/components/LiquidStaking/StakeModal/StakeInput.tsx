@@ -1,36 +1,29 @@
 import { Card } from '@concave/ui'
+import { TokenBalance } from 'components/Swap/TokenBalance'
 import { TokenInput } from 'components/Swap/TokenInput'
-import { MaxAmount } from 'components/Swap/MaxAmount'
-import { gCNV } from 'lib/tokens'
+import { Token } from 'constants/routing'
 import React from 'react'
+import { chain } from 'wagmi'
 
-interface Token {
-  symbol: string
-  maxAmount: number
-  amount: number | string
-  price: number
-}
-
-const stakedCoin: Token = {
+export const stakedCoin = new Token({
+  chainId: chain.ropsten.id,
+  address: '0x2b8e79cbd58418ce9aeb720baf6b93825b93ef1f',
+  decimals: 18,
+  logoURI: '/assets/tokens/gcnv.svg',
+  name: 'Concave',
   symbol: 'CNV',
-  maxAmount: 42690,
-  amount: 333,
-  price: 69,
-}
-
-const stakedOptions: Token[] = [stakedCoin]
+})
 
 function StakeInput() {
   return (
     <Card w="350px">
       <TokenInput
-        onSelectToken={console.log}
-        price={stakedCoin.price}
-        selected={gCNV}
+        onChangeCurrency={console.log}
+        currency={stakedCoin}
         value={stakedCoin.symbol}
         onChangeValue={console.log}
       >
-        <MaxAmount label="Balance:" max={stakedCoin.maxAmount} onClick={console.log} />
+        <TokenBalance value={'42690'} onClick={console.log} />
       </TokenInput>
     </Card>
   )
