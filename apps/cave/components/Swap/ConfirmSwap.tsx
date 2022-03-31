@@ -5,6 +5,7 @@ import {
   Flex,
   HStack,
   IconButton,
+  Modal,
   NumericInput,
   StackDivider,
   Text,
@@ -107,10 +108,19 @@ const ExpectedOutput = ({ swap }: { swap: UseSwap }) => {
   )
 }
 
-export const ConfirmSwap = ({ swap, onConfirm }: { swap: UseSwap; onConfirm: () => void }) => {
+export const ConfirmSwap = ({ isOpen, onClose }) => {
   return (
-    <>
-      <TokenInfo token={swap.from} amount={swap.fromAmount}></TokenInfo>
+    <Modal
+      bluryOverlay={true}
+      title="Confirm Swap"
+      isOpen={isOpen}
+      onClose={onClose}
+      bodyProps={{
+        gap: 2,
+        shadow: 'Up for Blocks',
+      }}
+    >
+      {/* <TokenInfo token={swap.from} amount={swap.fromAmount}></TokenInfo>
       <SwapButton swap={swap} />
       <TokenInfo token={swap.to} amount={swap.toAmount} loss={0.26}></TokenInfo>
 
@@ -132,7 +142,7 @@ export const ConfirmSwap = ({ swap, onConfirm }: { swap: UseSwap; onConfirm: () 
 
       <Button variant="primary" size="large" onClick={onConfirm} isFullWidth>
         Confirm Swap
-      </Button>
-    </>
+      </Button> */}
+    </Modal>
   )
 }

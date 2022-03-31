@@ -1,9 +1,8 @@
 import { Button, Flex } from '@chakra-ui/react'
 import { keyframes } from '@chakra-ui/system'
 import { SpinIcon } from '@concave/icons'
-import { Text } from '@concave/ui'
+import { Modal, Text } from '@concave/ui'
 import React from 'react'
-import { UseSwap } from './useSwap'
 
 const spin = keyframes({
   '0%': {
@@ -17,9 +16,16 @@ const spin = keyframes({
 const spinnerStyles = {
   animation: `${spin} 2s linear infinite`,
 }
-export const TransactionStatus = ({ swap, onClose }: { swap: UseSwap; onClose: () => void }) => {
+
+export const TransactionStatusModal = ({ isOpen, onClose }) => {
   return (
-    <>
+    <Modal
+      bluryOverlay={true}
+      title="Confirm Swap"
+      isOpen={isOpen}
+      onClose={onClose}
+      bodyProps={{ alignItems: 'center', gap: 1 }}
+    >
       <SpinIcon __css={spinnerStyles} w={10} mb={5} mt={12} />
       <Text fontSize={'24px'} fontWeight={600}>
         Waiting For Confirmation
@@ -37,6 +43,6 @@ export const TransactionStatus = ({ swap, onClose }: { swap: UseSwap; onClose: (
           </Text>
         </Button>
       </Flex>
-    </>
+    </Modal>
   )
 }

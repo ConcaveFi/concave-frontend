@@ -353,11 +353,8 @@ const AddLiquidityModal = ({
           value={'' + 10}
           price={10}
           selected={tokenA}
-          commonBases={[USDT, DAI, FRAX]}
           onChangeValue={console.log}
-          onSelectToken={(token) => {
-            setTokenA(token.symbol as AvailableTokens)
-          }}
+          onSelectToken={setTokenA}
         >
           <MaxAmount label="Balance:" max={+tokenA.balance?.formatted} onClick={console.log} />
         </TokenInput>
@@ -380,9 +377,7 @@ const AddLiquidityModal = ({
           selected={tokenB}
           commonBases={[USDT, DAI, FRAX]}
           onChangeValue={(value) => {}}
-          onSelectToken={(token) => {
-            setTokenB(token.symbol as AvailableTokens)
-          }}
+          onSelectToken={setTokenB}
         >
           {tokenB.symbol && (
             <MaxAmount label="Balance:" max={+tokenB.balance?.formatted} onClick={console.log} />

@@ -1,201 +1,121 @@
-import { Popover, PopoverBody, PopoverContent, PopoverTrigger, Portal } from '@chakra-ui/react'
-import { ExpandArrowIcon, GasIcon, SwapSettingsIcon } from '@concave/icons'
-import {
-  Button,
-  Card,
-  CardProps,
-  Flex,
-  HStack,
-  Modal,
-  StackDivider,
-  Text,
-  useDisclosure,
-} from '@concave/ui'
-import { useCurrency } from 'hooks/useCurrency'
-import { useGasPrice } from 'hooks/useGasPrice'
-import { useRoundPrecision } from 'hooks/usePrecision'
-import React from 'react'
+import { ExpandArrowIcon, GasIcon } from '@concave/icons'
+import { Button, Card, Flex, HStack, Text, useDisclosure, Spinner } from '@concave/ui'
+import React, { useState } from 'react'
 import { ConfirmSwap } from './ConfirmSwap'
+import { defaultSettings, Settings } from './Settings'
 import { TokenInput } from './TokenInput'
-import { MaxAmount } from './MaxAmount'
-import { SwapSettings } from './Settings'
-import { TransactionStatus } from './TransactionStatus'
+import { TransactionStatusModal } from './TransactionStatus'
 import { TransactionSubmitted } from './TransactionSubmitted'
-import { UseSwap } from './useSwap'
+import { useSwap } from './useSwap2'
+import { useFeeData } from 'wagmi'
 
-export function SwapCard({
-  buttonLabel,
-  swap,
-  active,
-  ...cardProps
-}: {
-  buttonLabel: string
-  active: string
-  swap: UseSwap
-} & CardProps) {
-  const confirm = useDisclosure()
-  const status = useDisclosure()
-  const submitted = useDisclosure()
+export const twoDecimals = (s: string) => (s.indexOf('.') > -1 ? s.slice(0, s.indexOf('.') + 3) : s)
+
+const GasPrice = () => {
+  const [{ data }] = useFeeData({ formatUnits: 'gwei', watch: true })
   return (
-    <Card gap={2} p={6} h="fit-content" shadow="Block Up" {...cardProps}>
-      <TokenInput
-        value={'' + swap.fromAmount}
-        price={swap.from.price}
-        selected={swap.from}
-        onChangeValue={swap.setFromAmount}
-        onSelectToken={swap.setFromSymbol}
-      >
-        <MaxAmount
-          label="Balance:"
-          max={+swap.from.balance?.formatted}
-          onClick={() => swap.setFromAmount(swap.from.balance?.formatted)}
-        />
-      </TokenInput>
-      <Switch swap={swap} />
-      <TokenInput
-        value={'' + swap.toAmount}
-        price={swap.to.price}
-        selected={null}
-        onChangeValue={swap.setToAmount}
-        onSelectToken={swap.setToSymbol}
-      >
-        <Text
-          py={1}
-          px={3}
-          fontWeight={400}
-          fontSize={'xs'}
-          textAlign={'right'}
-          textColor="text.low"
-        >
-          Balance: {useRoundPrecision(+swap.to.balance?.formatted).formatted}
+    <>
+      <GasIcon viewBox="0 0 16 16" />
+      {data ? (
+        <Text fontSize="xs" color="text.low" fontWeight="medium">
+          {twoDecimals(data?.formatted.gasPrice)} gwei
         </Text>
-      </TokenInput>
-      <HStack
-        divider={
-          <StackDivider
-            borderColor={'transparent'}
-            bg={'stroke.secondary'}
-            boxShadow={'1px 0px 2px #101317'}
-            borderRadius={'3xl'}
-            style={{
-              marginTop: '4px',
-            }}
-            mt={8}
-            h={8}
-            w={0.5}
-          />
-        }
-        align="center"
-        justify="center"
-      >
-        <HStack>
-          <HStack justifyContent={'center'} flexWrap={'wrap'}>
-            <Text fontSize="xs">
-              1 {swap.to.symbol} = {useRoundPrecision(swap.to.price / swap.from.price).formatted}{' '}
-              {swap.from.symbol}
-            </Text>
-            <Text paddingRight={2} fontSize="xs" textColor="text.low">
-              ({useCurrency(swap.to.price)})
-            </Text>
-          </HStack>
-          <GasIcon viewBox="0 0 16 16" />
-          <Text fontSize="xs" textColor="text.low">
-            {useGasPrice()}
-          </Text>
-        </HStack>
-
-        <Popover>
-          <PopoverTrigger>
-            <Button>
-              <SwapSettingsIcon viewBox="0 0 20 25" cursor={'pointer'} />
-            </Button>
-          </PopoverTrigger>
-          <Portal>
-            <PopoverContent backdropFilter={'blur(15px)'} bg={'transparent'} borderRadius={'2xl'}>
-              <PopoverBody id="b" as={Card} minH={'400'} h={400} variant="secondary">
-                <SwapSettings swap={swap} />
-              </PopoverBody>
-            </PopoverContent>
-          </Portal>
-        </Popover>
-      </HStack>
-
-      <Modal
-        bluryOverlay={true}
-        title="Confirm Swap"
-        isOpen={status.isOpen}
-        onClose={status.onClose}
-        bodyProps={{
-          alignItems: 'center',
-          gap: 1,
-          shadow: 'Up for Blocks',
-        }}
-      >
-        <TransactionStatus
-          swap={swap}
-          onClose={() => {
-            status.onClose()
-            submitted.onOpen()
-          }}
-        ></TransactionStatus>
-      </Modal>
-
-      <Modal
-        bluryOverlay={true}
-        title="Confirm Swap"
-        isOpen={confirm.isOpen}
-        onClose={confirm.onClose}
-        bodyProps={{
-          gap: 2,
-          shadow: 'Up for Blocks',
-        }}
-      >
-        <ConfirmSwap
-          swap={swap}
-          onConfirm={() => {
-            status.onOpen()
-            confirm.onClose()
-          }}
-        />
-      </Modal>
-
-      <Modal
-        bluryOverlay={true}
-        title="Confirm Swap"
-        isOpen={submitted.isOpen}
-        onClose={submitted.onClose}
-        bodyProps={{
-          alignItems: 'center',
-          shadow: 'Up for Blocks',
-        }}
-      >
-        <TransactionSubmitted
-          swap={swap}
-          onClose={() => {
-            submitted.onClose()
-          }}
-        />
-      </Modal>
-
-      <Button variant="primary" size="large" isFullWidth onClick={confirm.onOpen}>
-        {buttonLabel}
-      </Button>
-    </Card>
+      ) : (
+        <Spinner size="xs" color="text.low" />
+      )}
+    </>
   )
 }
 
-const Switch = ({ swap }: { swap: UseSwap }) => {
+const LoadingBestTradeIndicator = () => {
+  return (
+    <Flex mr="auto" gap={2} align="center" color="text.low">
+      <Spinner size="xs" />
+      <Text fontSize="xs">Searching for best trade route</Text>
+    </Flex>
+  )
+}
+
+export function SwapCard() {
+  const [settings, setSettings] = useState(defaultSettings)
+  const {
+    setAmountIn,
+    setAmountOut,
+    setCurrencyIn,
+    setCurrencyOut,
+    switchCurrencies,
+    isLoadingBestTrade,
+    swapingIn,
+    swapingOut,
+  } = useSwap(settings)
+
+  const confirm = useDisclosure()
+  return (
+    <>
+      <Card p={6} gap={2} variant="primary" h="fit-content" shadow="Block Up" w="100%" maxW="420px">
+        <TokenInput
+          value={swapingIn.amount}
+          currency={swapingIn.currency}
+          stableValue={+swapingIn.stable * +swapingIn.amount}
+          balance={swapingIn.balance}
+          onChangeValue={setAmountIn}
+          onChangeCurrency={setCurrencyIn}
+        />
+        <SwitchCurrencies onClick={switchCurrencies} />
+        <TokenInput
+          value={swapingOut.amount}
+          currency={swapingOut.currency}
+          stableValue={+swapingOut.stable * +swapingOut.amount}
+          balance={swapingOut.balance}
+          onChangeValue={setAmountOut}
+          onChangeCurrency={setCurrencyOut}
+        />
+        <HStack align="center" justify="end" py={5}>
+          {isLoadingBestTrade ? (
+            <LoadingBestTradeIndicator />
+          ) : (
+            swapingOut.relativePrice && (
+              <Flex flexWrap="wrap" fontSize="xs" fontWeight="medium" mr="auto">
+                <Text>
+                  1 {swapingOut.currency.symbol} = {swapingOut.relativePrice}
+                  {swapingIn.currency.symbol}
+                </Text>
+                <Text ml={1} textColor="text.low">
+                  (${swapingOut.stable})
+                </Text>
+              </Flex>
+            )
+          )}
+          <GasPrice />
+          <Settings onClose={setSettings} />
+        </HStack>
+
+        <Button variant="primary" size="large" isFullWidth onClick={confirm.onOpen}>
+          Swap
+        </Button>
+      </Card>
+
+      <ConfirmSwap isOpen={false} onClose={() => null} />
+
+      <TransactionStatusModal isOpen={false} onClose={() => null} />
+
+      <TransactionSubmitted isOpen={false} onClose={() => null} />
+    </>
+  )
+}
+
+const SwitchCurrencies = ({ onClick }) => {
   return (
     <Flex align="center" justify="center">
       <Button
-        shadow={'Up Small'}
-        _focus={{ boxShadow: 'Up Small' }}
-        padding={'4px 14px 4px 14px'}
-        bgColor="rgba(156, 156, 156, 0.01);"
-        minW="43"
-        maxH="26"
-        onClickCapture={swap.switchTokens}
-        borderRadius={'full'}
+        shadow="Up Small"
+        _focus={{ shadow: 'Up Small' }}
+        _hover={{ shadow: 'Up Big' }}
+        px={3.5}
+        py={2}
+        bgColor="blackAlpha.100"
+        rounded="3xl"
+        onClick={onClick}
       >
         <ExpandArrowIcon />
       </Button>

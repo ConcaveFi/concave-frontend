@@ -1,28 +1,26 @@
 import { Button, ButtonProps, Text } from '@concave/ui'
-import { useRoundPrecision } from 'hooks/usePrecision'
 
 export const MaxAmount = ({
   max,
   label,
   ...props
-}: { max?: number; label: string } & ButtonProps) => (
+}: { max?: string; label: string } & ButtonProps) => (
   <Button
     borderRadius="full"
     py={1}
     px={3}
     gap={1}
-    fontSize={'xs'}
-    fontWeight={400}
+    fontSize="xs"
     backgroundColor="transparent"
     height="auto"
     whiteSpace="nowrap"
+    textColor="text.low"
     {...props}
   >
-    <Text fontSize={'xs'} textColor={'text.low'}>
-      {label} {useRoundPrecision(max).formatted}
+    <Text>{label}</Text>
+    <Text isTruncated maxW="50px">
+      {max}
     </Text>
-    <Text fontSize={'xs'} textColor={'#2E97E2'}>
-      Max
-    </Text>
+    <Text textColor="#2E97E2">Max</Text>
   </Button>
 )
