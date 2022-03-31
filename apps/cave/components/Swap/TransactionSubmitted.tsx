@@ -2,8 +2,16 @@ import { Button, Flex } from '@chakra-ui/react'
 import { SubmittedIcon } from '@concave/icons'
 import { Modal, Text } from '@concave/ui'
 import React from 'react'
+import { UseSwap } from './useSwap'
 
-export const TransactionSubmitted = ({ isOpen, onClose }) => {
+export const TransactionSubmitted = ({
+  isOpen,
+  onClose,
+}: {
+  isOpen: boolean
+  onClose: () => void
+  swap?: UseSwap
+}) => {
   return (
     <Modal
       bluryOverlay={true}

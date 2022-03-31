@@ -110,7 +110,7 @@ export const useSwap = (settings: SwapSettings = {}) => {
     setCurrencyIn: setOrSwitchCurrency(currencyOut, setCurrencyIn),
     setCurrencyOut: setOrSwitchCurrency(currencyIn, setCurrencyOut),
     switchCurrencies,
-    isLoadingBestTrade: pairs.isLoading,
+    isFetchingPairs: pairs.isLoading,
     swapingIn: {
       currency: currencyIn,
       amount: amountIn,
