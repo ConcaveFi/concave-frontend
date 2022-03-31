@@ -26,14 +26,14 @@
       "address": "0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4",
       "symbol": "tDAI",
       "decimals": 18,
-      "logoURI": ""
+      "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x6B175474E89094C44Da98b954EedeAC495271d0F/logo.png"
     },
     {
       "name": "Concave",
       "address": "0x2b8e79cbd58418ce9aeb720baf6b93825b93ef1f",
       "symbol": "tCNV",
       "decimals": 18,
-      "logoURI": ""
+      "logoURI": "/assets/tokens/gcnv.svg"
     },
     {
       "name": "MATIC",

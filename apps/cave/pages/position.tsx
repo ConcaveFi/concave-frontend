@@ -20,7 +20,7 @@ import {
   useDisclosure,
   UseDisclosureReturn,
 } from '@concave/ui'
-import { Pair } from '@uniswap/v2-sdk'
+import { useTokenList } from 'components/Swap/hooks/useTokenList'
 import { MaxAmount } from 'components/Swap/MaxAmount'
 import { TokenInput } from 'components/Swap/TokenInput'
 import { useAuth } from 'contexts/AuthContext'
@@ -30,7 +30,7 @@ import { useApprovalWhenNeeded } from 'hooks/useAllowance'
 import { usePrecision } from 'hooks/usePrecision'
 import { TokenType } from 'lib/tokens'
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { chain } from 'wagmi'
 import { useToken, WrapperTokenInfo } from '../components/Swap/useSwap'
 
@@ -61,24 +61,39 @@ const PositionInfoItem = ({ color = '', label, value, mt = 0, children = <></> }
 )
 
 interface LPPosition {
-  pair?: Pair
+  //  pair?: Pair
+  pair?: { tokenA: string; tokenB: string; liquidityAddress: string }
   ownedAmount: BigNumberish
 }
 
 const LPPositionItem = ({ pair, ownedAmount }: LPPosition) => {
+  const tokens = useTokenList(chain.ropsten.name)
+  const [tokenA, setTokenA] = useState<TokenType>(null)
+  const [tokenB, setTokenB] = useState<TokenType>(null)
+
+  useEffect(() => {
+    if (!tokens.isSuccess) {
+      return
+    }
+    setTokenA(tokens.data.find((t) => t.address.toLowerCase() === pair?.tokenA.toLowerCase()))
+    setTokenB(tokens.data.find((t) => t.address.toLowerCase() === pair?.tokenB.toLowerCase()))
+  }, [pair, pair?.tokenA, pair.tokenB, tokens.data, tokens.isSuccess])
+
   const addLiquidity = useDisclosure()
   const removeLiquidity = useDisclosure()
-  const { user } = useAuth()
-  let userAddress
-  user ? (userAddress = user.address) : ''
+  const { user, isConnected } = useAuth()
+  if (!tokenA || !tokenB || !isConnected) {
+    return <></>
+  }
+
   return (
     <>
       <AccordionItem p={2} shadow="Up Big" borderRadius="2xl" alignItems="center">
         <AccordionButton>
-          <TokenIcon logoURI="/assets/tokens/gcnv.svg" symbol="CNV" />
-          <TokenIcon logoURI="/assets/tokens/xmr.svg" symbol="XMR" />
+          <TokenIcon {...tokenA} />
+          <TokenIcon {...tokenB} />
           <Text ml="24px" fontWeight="semibold" fontSize="lg">
-            XMR/gCNV
+            {tokenA.symbol}/{tokenB.symbol}
           </Text>
           <Button
             variant="secondary"
@@ -103,11 +118,11 @@ const LPPositionItem = ({ pair, ownedAmount }: LPPosition) => {
             spacing={4}
           >
             <PositionInfoItem label="Your total pool tokens:" value={ownedAmount.toString()} />
-            <PositionInfoItem label={`Pooled ${'XMR'}:`} value={'0.0001331'}>
-              <TokenIcon size="sm" logoURI="/assets/tokens/xmr.svg" symbol="XMR" />
+            <PositionInfoItem label={`Pooled ${tokenA.symbol}:`} value={'0.0001331'}>
+              <TokenIcon size="sm" {...tokenA} />
             </PositionInfoItem>
-            <PositionInfoItem label={`Pooled ${'gCNV'}:`} value={'325.744'}>
-              <TokenIcon size="sm" logoURI="/assets/tokens/gcnv.svg" symbol="gCNV" />
+            <PositionInfoItem label={`Pooled ${tokenB.symbol}:`} value={'325.744'}>
+              <TokenIcon size="sm" {...tokenB} />
             </PositionInfoItem>
             <PositionInfoItem label="Your pool share:" value={'2.79%'} />
           </Stack>
@@ -121,16 +136,31 @@ const LPPositionItem = ({ pair, ownedAmount }: LPPosition) => {
           </Flex>
         </AccordionPanel>
       </AccordionItem>
-      <RemoveLiquidityModal disclosure={removeLiquidity} />
-      <AddLiquidityModal disclosure={addLiquidity} userAddress={userAddress} />
+      <RemoveLiquidityModal
+        userAddressOrName={user.address}
+        disclosure={removeLiquidity}
+        tokenA={tokenA}
+        tokenB={tokenB}
+      />
+      <AddLiquidityModal disclosure={addLiquidity} userAddress={user.address} />
     </>
   )
 }
 
-const RemoveLiquidityModal = ({ disclosure }: { disclosure: UseDisclosureReturn }) => {
-  const [percentToRemove, setPercentToRemove] = useState(100)
-  const [wrapperTokenA, setTokenA] = useToken({ userAddressOrName: '', symbol: 'FRAX' })
-  const [wrapperTokenB, setTokenB] = useToken({ userAddressOrName: '', symbol: 'gCNV' })
+const RemoveLiquidityModal = ({
+  disclosure,
+  userAddressOrName,
+  tokenA,
+  tokenB,
+}: {
+  userAddressOrName: string
+  tokenA: TokenType
+  tokenB: TokenType
+  disclosure: UseDisclosureReturn
+}) => {
+  const [percentToRemove, setPercentToRemove] = useState(0)
+  const [wrapperTokenA, setTokenA] = useToken({ userAddressOrName, symbol: tokenA.symbol })
+  const [wrapperTokenB, setTokenB] = useToken({ userAddressOrName, symbol: tokenB.symbol })
   const removeLiquidityState = useRemoveLiquidity({
     wrapperTokenA,
     wrapperTokenB,
@@ -286,13 +316,13 @@ const YourPosition = ({
 const ReceiveBox = ({ amount, token }: { amount: number; token: TokenType }) => {
   return (
     <HStack shadow="down" borderRadius="2xl" p={3}>
-      <TokenIcon logoURI={token.logoURI} symbol={token.symbol} />
+      <TokenIcon logoURI={token?.logoURI} symbol={token?.symbol} />
       <Box>
         <Text fontFamily={'heading'} fontWeight={600}>
           {usePrecision(amount, 7).formatted}
         </Text>
-        <Text title={token.name} fontWeight={700} fontSize={'sm'} color={'text.low'}>
-          {token.symbol}
+        <Text title={token?.name} fontWeight={700} fontSize={'sm'} color={'text.low'}>
+          {token?.symbol}
         </Text>
       </Box>
     </HStack>
@@ -555,6 +585,14 @@ export default function MyPositions() {
     return <Text>Please, connect</Text>
   }
 
+  const pairs = [
+    {
+      tokenA: '0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4',
+      tokenB: '0x2b8e79cbd58418ce9aeb720baf6b93825b93ef1f',
+      liquidityAddress: '0xb14d541123a7f7276F01A22798caDa7eE1D7F57f',
+    },
+  ]
+
   if (operation === 'addLiquidity') {
     return (
       <View title="Add liquidity">
@@ -571,7 +609,9 @@ export default function MyPositions() {
         <RewardsBanner />
         <Card variant="primary" borderRadius="3xl" p={6} shadow="Up for Blocks">
           <Accordion as={Stack} allowToggle gap={2}>
-            <LPPositionItem ownedAmount={'0.013'} />
+            {pairs.map((p, i) => {
+              return <LPPositionItem key={i} pair={p} ownedAmount={'0.013'} />
+            })}
           </Accordion>
         </Card>
       </>
