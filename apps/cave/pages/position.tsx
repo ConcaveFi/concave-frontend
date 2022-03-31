@@ -26,7 +26,7 @@ import { TokenInput } from 'components/Swap/TokenInput'
 import { useAuth } from 'contexts/AuthContext'
 import { BigNumberish, Contract } from 'ethers'
 import { parseUnits } from 'ethers/lib/utils'
-import { useAllowance, useApprovalWhenNeeded } from 'hooks/useAllowance'
+import { useAllowance, useApproval, useApprovalWhenNeeded } from 'hooks/useAllowance'
 import { useAddLiquidity, UseAddLiquidityData } from 'hooks/useAddLiquidity'
 import { usePrecision } from 'hooks/usePrecision'
 import { TokenType } from 'lib/tokens'
@@ -34,6 +34,8 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { chain } from 'wagmi'
 import { useToken, WrapperTokenInfo } from '../components/Swap/useSwap'
+import { concaveProvider2 } from 'lib/providers'
+import { contractABI } from 'lib/contractoABI'
 
 const RewardsBanner = () => (
   <Card variant="secondary" p={4} gap={4}>
@@ -258,34 +260,15 @@ const YouWillReceive = ({
 const RemoveLiquidityActions = () => {
   const { user } = useAuth()
   const [approved, setApproved] = useState(false)
-  const [{ data, error, loading }, getSigner] = useSigner()
-  // const userApproval = useAllowance(
-  //   user.address,
-  //   '0x95dDC411d31bBeDd37e9aaABb335b0951Bc2D25a',
-  //   'removeLiquidity',
-  // )
   const removeAproval = async () => {
     console.log('send approval to metamask')
     // console.log('wait for approval....', userApproval)
-    const rm = () => {
-      const contractInstance = new Contract(
-        '0x95dDC411d31bBeDd37e9aaABb335b0951Bc2D25a',
-        contractABI,
-        concaveProvider2(chain.ropsten.id),
-      )
-      const contractSigner = contractInstance.connect(data)
-      console.log('signer rm', contractSigner)
-      return null
-    }
-    rm()
     // setApproved(true)
     // return console.log('removed approved!!!')
   }
 
   const confirmedWithdrawal = () => {
     console.log('send tx to metamask')
-    // useRemoveLiquidity
-    // useRemoveLiquidity()
     return console.log('confirmed Withdrawal!!!')
   }
 
