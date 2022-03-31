@@ -18,8 +18,6 @@ function Swap() {
   const { user, isConnected } = useAuth()
   const swap = useSwap(isConnected ? user?.address : '', {})
 
-  const aaa = usePriceInStable(WETH)
-
   return (
     <Flex direction="column" gap={12}>
       <GcnvTitle title="Swap gCNV" description="Swap gCNV here" />

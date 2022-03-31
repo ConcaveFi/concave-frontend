@@ -57,7 +57,7 @@ export type UseSwap = SwapStateProps & {
 }
 
 export const useToken = (props: { userAddressOrName: string; symbol?: AvailableTokens }) => {
-  const tokens = useTokenList(chain.ropsten.name)
+  const tokens = useTokenList(chain.ropsten)
   const [symbol, setSymbol] = useState<AvailableTokens>(props.symbol ?? null)
   const [token, setToken] = useState<TokenType>(null)
   const price = usePrice(symbol)

@@ -1,110 +1,208 @@
-import { CnvQuestionIcon } from '@concave/icons'
+import { CnvQuestionIcon, SwapSettingsIcon } from '@concave/icons'
 import {
   Box,
   Button,
   Card,
+  Heading,
   HStack,
-  Input,
+  IconButton,
   InputGroup,
   InputRightAddon,
+  NumericInput,
+  Popover,
+  PopoverBody,
+  PopoverContent,
+  PopoverTrigger,
+  Portal,
+  Stack,
   Switch,
   Text,
-  VStack,
+  useBoolean,
 } from '@concave/ui'
-import React from 'react'
-import { UseSwap } from './useSwap'
+import React, { useMemo, useState } from 'react'
 
-export const SwapSettings = ({ swap }: { swap: UseSwap }) => {
-  const { expertMode, multihops, slippageTolerance, transactionDeadLine } = swap
+const SlippageTolerance = ({ value, onValueChange, onClickAuto }) => {
+  return (
+    <Stack align="flex-start">
+      <Text fontSize="sm">
+        Slippage tolerance <QuestionIcon />
+      </Text>
+      <HStack>
+        <Card shadow="Down Big" borderRadius="xl">
+          <InputGroup px={3} variant="unstyled" size="sm">
+            <NumericInput
+              value={value}
+              isNumericString
+              placeholder="0.50"
+              size="medium"
+              variant="unstyled"
+              max={50}
+              onValueChange={onValueChange}
+            />
+            <InputRightAddon color="text.low" fontWeight="semibold">
+              %
+            </InputRightAddon>
+          </InputGroup>
+        </Card>
+
+        <Button
+          onClick={onClickAuto}
+          variant="primary.outline"
+          backgroundColor="whiteAlpha.200"
+          p={3}
+          fontSize="sm"
+        >
+          Auto
+        </Button>
+      </HStack>
+
+      {value < 0.05 && value > 0 && (
+        <Text fontSize="sm" color="text.low">
+          The transaction may fail
+        </Text>
+      )}
+      {value > 2 && (
+        <Text fontSize="sm" color="text.low">
+          The transaction may be frontrun
+        </Text>
+      )}
+    </Stack>
+  )
+}
+
+const Deadline = ({ value, onValueChange }) => {
+  return (
+    <Stack align="start">
+      <Text fontSize="sm">
+        Transaction deadline <QuestionIcon />
+      </Text>
+      <Card shadow="Down Big" borderRadius="xl">
+        <InputGroup px={3} variant="unstyled" size="sm">
+          <NumericInput
+            value={value}
+            isNumericString
+            placeholder="30"
+            size="medium"
+            variant="unstyled"
+            onValueChange={onValueChange}
+          />
+          <InputRightAddon fontFamily="body" color="text.low" fontWeight="semibold">
+            minutes
+          </InputRightAddon>
+        </InputGroup>
+      </Card>
+    </Stack>
+  )
+}
+
+const ToggleExpertMode = ({ isChecked, onToggle }) => {
+  return (
+    <HStack justifyContent="space-between" width="100%">
+      <Text fontSize="sm">
+        Expert Mode <QuestionIcon />
+      </Text>
+      <Switch size="sm" isChecked={isChecked} onChange={onToggle} />
+    </HStack>
+  )
+}
+
+const ToggleMultihops = ({ isChecked, onToggle }) => {
+  return (
+    <HStack justifyContent="space-between" width="100%">
+      <Text fontSize="sm">
+        Multihops
+        <QuestionIcon />
+      </Text>
+      <Switch size="sm" isChecked={isChecked} onChange={onToggle} />
+    </HStack>
+  )
+}
+
+export const defaultSettings = {
+  deadline: 30,
+  slippageTolerance: 0.5,
+  expertMode: false,
+  mulhops: true,
+}
+
+const useSettings = () => {
+  const [deadline, setDeadline] = useState(defaultSettings.deadline)
+  const [slippageTolerance, setSlippageTolerance] = useState(defaultSettings.slippageTolerance)
+  const [multihops, { toggle: toggleMultihops }] = useBoolean(defaultSettings.mulhops)
+  const [expertMode, { toggle: toggleExpertMode }] = useBoolean(defaultSettings.expertMode)
+
+  return useMemo(
+    () => ({
+      deadline,
+      slippageTolerance,
+      multihops,
+      expertMode,
+      setDeadline,
+      setSlippageTolerance,
+      toggleMultihops,
+      toggleExpertMode,
+    }),
+    [deadline, slippageTolerance, multihops, expertMode, toggleMultihops, toggleExpertMode],
+  )
+}
+
+export const Settings = ({ onClose }) => {
+  const {
+    deadline,
+    slippageTolerance,
+    multihops,
+    expertMode,
+    setDeadline,
+    setSlippageTolerance,
+    toggleMultihops,
+    toggleExpertMode,
+  } = useSettings()
 
   return (
-    <>
-      <VStack
-        borderRadius="2xl"
-        padding={4}
-        gap={4}
-        divider={<Box w="100%" h="2px" bg="strokeReflection" />}
-      >
-        <Text fontSize={'18px'}>Transactions Settings</Text>
-        <VStack gap={3} align={'flex-start'}>
-          <HStack align={'end'}>
-            <VStack align={'flex-start'}>
-              <Text fontSize={'sm'}>
-                Slippage tolerance <QuestionIcon />
-              </Text>
-              <HStack>
-                <Card boxShadow={'-1px 1px 5px rgba(255, 255, 255, 0.3)'}>
-                  <InputGroup p={3} variant={'unstyled'} size="sm">
-                    <Input
-                      type="number"
-                      value={slippageTolerance}
-                      onChange={({ target }) => swap.set({ slippageTolerance: +target.value })}
-                    />
-                    <InputRightAddon>%</InputRightAddon>
-                  </InputGroup>
-                </Card>
-                <Button
-                  variant="primary.outline"
-                  borderRadius={'2xl'}
-                  height={'45px'}
-                  backgroundColor={'whiteAlpha.200'}
-                  padding={5}
-                  margin={3}
-                  size="xs"
-                >
-                  Auto
-                </Button>
-              </HStack>
-            </VStack>
-          </HStack>
-
-          <HStack>
-            <VStack align={'flex-start'}>
-              <Text fontSize={'sm'}>
-                Transaction deadline <QuestionIcon />
-              </Text>
-              <Card boxShadow={'-1px 1px 5px rgba(255, 255, 255, 0.3)'}>
-                <InputGroup p={3} variant={'unstyled'} size="sm">
-                  <Input
-                    type="number"
-                    value={`${transactionDeadLine}`}
-                    onChange={({ target }) => swap.set({ transactionDeadLine: +target.value })}
-                  />
-                  <InputRightAddon>minutes</InputRightAddon>
-                </InputGroup>
-              </Card>
-            </VStack>
-          </HStack>
-
-          <VStack align={'flex-start'} width={'100%'}>
-            <Text fontWeight={'bold'} fontSize={'sm'}>
-              Interface Settings
-            </Text>
-            <HStack justifyContent={'space-between'} width={'100%'}>
-              <Text fontSize={'sm'}>
-                Expert Mode <QuestionIcon />
-              </Text>
-              <Switch
-                size="sm"
-                isChecked={expertMode}
-                onChange={() => swap.set({ expertMode: !expertMode })}
+    <Popover
+      placement="top"
+      onClose={() => onClose({ deadline, slippageTolerance, multihops, expertMode })}
+    >
+      <PopoverTrigger>
+        <IconButton
+          px={2}
+          icon={<SwapSettingsIcon viewBox="0 0 20 25" cursor={'pointer'} />}
+          aria-label="swap settings"
+        />
+      </PopoverTrigger>
+      <Portal>
+        <PopoverContent w="256px" backdropFilter="blur(15px)" bg="transparent" borderRadius="2xl">
+          <PopoverBody
+            as={Card}
+            variant="secondary"
+            p={4}
+            gap={2}
+            fontFamily="heading"
+            fontWeight="semibold"
+          >
+            <Heading textAlign="center" size="sm">
+              Transactions Settings
+            </Heading>
+            <Box h="1px" w="full" bg="stroke.primary" my={2} />
+            <Stack gap={3} align="flex-start">
+              <SlippageTolerance
+                value={slippageTolerance}
+                onValueChange={({ value }) => setSlippageTolerance(value)}
+                onClickAuto={() => setSlippageTolerance(defaultSettings.slippageTolerance)}
               />
-            </HStack>
-            <HStack justifyContent={'space-between'} width={'100%'}>
-              <Text fontSize={'sm'}>
-                Multihops
-                <QuestionIcon />
-              </Text>
-              <Switch
-                size="sm"
-                isChecked={multihops}
-                onChange={() => swap.set({ multihops: !multihops })}
-              />
-            </HStack>
-          </VStack>
-        </VStack>
-      </VStack>
-    </>
+              <Deadline value={deadline} onValueChange={({ value }) => setDeadline(value)} />
+              <Stack gap={1} w="full">
+                <Text fontWeight="bold" fontSize="sm">
+                  Interface Settings
+                </Text>
+                <ToggleExpertMode isChecked={expertMode} onToggle={toggleExpertMode} />
+                <ToggleMultihops isChecked={multihops} onToggle={toggleMultihops} />
+              </Stack>
+            </Stack>
+          </PopoverBody>
+        </PopoverContent>
+      </Portal>
+    </Popover>
   )
 }
 

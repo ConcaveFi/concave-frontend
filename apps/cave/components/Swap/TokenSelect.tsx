@@ -1,60 +1,66 @@
-import { MenuButton, useDisclosure } from '@chakra-ui/react'
+import { useDisclosure } from '@chakra-ui/react'
 import { CnvQuestionIcon, DownIcon } from '@concave/icons'
 import {
-  Button,
-  Flex,
   Heading,
-  Input,
-  ListItem,
-  Menu,
-  Modal,
   Spinner,
-  Stack,
-  Text,
-  TokenIcon,
   UnorderedList,
+  ListItem,
+  Stack,
+  Button,
+  Modal,
+  Text,
+  Flex,
+  Input,
+  TokenIcon,
 } from '@concave/ui'
-import { Token } from '@uniswap/sdk-core'
+import { Currency } from '@uniswap/sdk-core'
 import { BASES_TO_CHECK_TRADES_AGAINST } from 'constants/routing'
-import { TokenType } from 'lib/tokens'
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { chain } from 'wagmi'
-import { useTokenList } from './hooks/useTokenList'
+import { Token, useTokenList } from './hooks/useTokenList'
+import { useNativeCurrency } from './useSwap2'
 
-const CommonPairs = ({
+const CommonTokens = ({
   selected,
   onSelect,
+  currencies,
 }: {
-  selected: Token
-  onSelect: (token: Partial<Token>) => void
+  selected: Currency
+  onSelect: (currency: Currency) => void
+  currencies: Currency[]
 }) => {
-  const tokens = BASES_TO_CHECK_TRADES_AGAINST[chain.ropsten.id]
-  if (!tokens.length) {
-    return <></>
-  }
   return (
     <>
       <Heading size="sm">
         Common pairs <CnvQuestionIcon w="22px" h="22px" ml={2} />
       </Heading>
       <Flex gap={2} wrap="wrap">
-        {tokens.map((token) => (
+        {currencies.map((currency) => (
           <Button
-            key={token.address}
-            onClick={() => onSelect(token)}
+            key={currency.isToken ? currency.address : currency.symbol}
+            onClick={() => onSelect(currency)}
             rounded="full"
-            leftIcon={<TokenIcon {...token} />}
+            leftIcon={
+              <TokenIcon
+                symbol={currency.symbol}
+                address={currency.isToken ? currency.address : currency.symbol}
+              />
+            }
             shadow="Up Small"
             _hover={{ shadow: 'Up Small' }}
             _focus={{ shadow: 'Up Small' }}
             _active={{ shadow: 'down' }}
             _selected={{ shadow: 'Down Big', color: 'text.low' }}
-            aria-selected={selected?.address === token.address}
+            aria-selected={
+              selected?.isToken && currency?.isToken
+                ? currency.address === selected?.address
+                : currency.symbol === selected?.symbol
+            }
             p={1}
             pr={3}
             fontSize="sm"
           >
-            {token.symbol.toUpperCase()}
+            {currency.symbol.toUpperCase()}
           </Button>
         ))}
       </Flex>
@@ -62,19 +68,7 @@ const CommonPairs = ({
   )
 }
 
-const TokenListItem = ({
-  symbol,
-  logoURI,
-  address,
-  name,
-  onClick,
-}: {
-  symbol?: string
-  logoURI: string
-  address: string
-  name: string
-  onClick: () => void
-}) => (
+const TokenListItem = ({ token, onClick }) => (
   <ListItem
     cursor="pointer"
     _hover={{ opacity: 0.7 }}
@@ -83,13 +77,13 @@ const TokenListItem = ({
     onClick={onClick}
   >
     <Stack direction="row" spacing={3} align="center">
-      <TokenIcon h="35px" w="35px" symbol={symbol} logoURI={logoURI} address={address} />
+      <TokenIcon h="35px" w="35px" symbol={token.symbol} address={token.address} />
       <Stack spacing={0} justify="center">
         <Text fontWeight="bold" fontSize="md">
-          {symbol?.toUpperCase()}
+          {token.symbol.toUpperCase()}
         </Text>
         <Text color="text.low" fontSize="sm">
-          {name}
+          {token.name}
         </Text>
       </Stack>
     </Stack>
@@ -102,13 +96,18 @@ export const SelectTokenModal = ({
   isOpen,
   onClose,
 }: {
-  selected: Token
-  onSelect: (token: Token) => void
+  selected: Currency
+  onSelect: (token: Currency) => void
   isOpen: boolean
   onClose: () => void
 }) => {
   const [search, setSearch] = useState('')
-  const tokens = useTokenList(chain.ropsten.name)
+  const nativeCurrency = useNativeCurrency()
+  const tokens = useTokenList()
+  const selectAndClose = useCallback(
+    (token: Token) => (onSelect(token), onClose()),
+    [onSelect, onClose],
+  )
   return (
     <Modal
       bluryOverlay
@@ -117,7 +116,11 @@ export const SelectTokenModal = ({
       onClose={onClose}
       bodyProps={{ gap: 4 }}
     >
-      <CommonPairs selected={selected} onSelect={onSelect} />
+      <CommonTokens
+        currencies={[nativeCurrency, ...BASES_TO_CHECK_TRADES_AGAINST[chain.mainnet.id]]}
+        selected={selected}
+        onSelect={selectAndClose}
+      />
       <Input
         placeholder="Search name or paste address"
         onChange={({ target }) => setSearch(target.value)}
@@ -145,11 +148,8 @@ export const SelectTokenModal = ({
             {tokens.data.map((token) => (
               <TokenListItem
                 key={token.address}
-                symbol={token.symbol}
-                logoURI={token.logoURI}
-                address={token.address}
-                name={token.name}
-                onClick={() => onSelect(token)}
+                token={token}
+                onClick={() => selectAndClose(token)}
               />
             ))}
           </UnorderedList>
@@ -163,9 +163,10 @@ const SelectTokenButton = ({ onClick }: { onClick: () => void }) => (
   <Button
     shadow="Up Small"
     bgGradient="linear(to-r, primary.1, primary.2)"
-    py={0}
+    py={1.5}
     px={3}
-    h={8}
+    h="auto"
+    w="min"
     rounded="full"
     fontSize="lg"
     rightIcon={<DownIcon />}
@@ -179,35 +180,40 @@ export const TokenSelect = ({
   selected,
   onSelect,
 }: {
-  selected?: TokenType
-  onSelect: (token: TokenType) => void
+  selected?: Currency
+  onSelect: (token: Currency) => void
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
-    <Menu placement="bottom-end">
+    <>
       {!selected?.symbol ? (
         <SelectTokenButton onClick={onOpen} />
       ) : (
-        <MenuButton
-          as={Button}
+        <Button
           shadow="Up Small"
-          _focus={{ shadow: 'Up Small' }}
           bgColor="blackAlpha.100"
           rounded="full"
-          py={1}
-          px={2}
-          h={8}
-          height="auto"
-          fontWeight="semibold"
+          py={1.5}
+          px={3}
+          h="auto"
+          alignSelf="end"
+          w="min"
+          fontWeight="bold"
           onClick={onOpen}
-          leftIcon={<TokenIcon size="xs" symbol={selected.symbol} logoURI={selected.logoURI} />}
+          leftIcon={
+            <TokenIcon
+              size="xs"
+              symbol={selected.symbol}
+              address={selected.isToken ? selected.address : selected.symbol}
+            />
+          }
           rightIcon={<DownIcon />}
         >
           {selected?.symbol}
-        </MenuButton>
+        </Button>
       )}
       <SelectTokenModal isOpen={isOpen} onClose={onClose} selected={selected} onSelect={onSelect} />
-    </Menu>
+    </>
   )
 }

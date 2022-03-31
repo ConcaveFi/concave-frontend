@@ -1,12 +1,20 @@
 import { Button, Flex } from '@chakra-ui/react'
 import { SubmittedIcon } from '@concave/icons'
-import { Text } from '@concave/ui'
+import { Modal, Text } from '@concave/ui'
 import React from 'react'
-import { UseSwap } from './useSwap'
 
-export const TransactionSubmitted = ({ swap, onClose }: { swap: UseSwap; onClose: () => void }) => {
+export const TransactionSubmitted = ({ isOpen, onClose }) => {
   return (
-    <>
+    <Modal
+      bluryOverlay={true}
+      title="Confirm Swap"
+      isOpen={isOpen}
+      onClose={onClose}
+      bodyProps={{
+        alignItems: 'center',
+        shadow: 'Up for Blocks',
+      }}
+    >
       <SubmittedIcon w={10} mb={5} mt={12} />
       <Text align={'center'} fontSize={'24px'} fontWeight={600}>
         Transaction Submitted
@@ -29,6 +37,6 @@ export const TransactionSubmitted = ({ swap, onClose }: { swap: UseSwap; onClose
           </Text>
         </Button>
       </Flex>
-    </>
+    </Modal>
   )
 }

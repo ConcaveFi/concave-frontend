@@ -76,6 +76,7 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
   },
   defaultProps: {
     variant: null,
+    size: null,
   },
 }
 

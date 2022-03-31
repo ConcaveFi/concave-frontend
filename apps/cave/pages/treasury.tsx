@@ -1,4 +1,4 @@
-import { Box, Card, Container, Flex, Heading, Image, Spinner, Stack, Text } from '@concave/ui'
+import { Card, Container, Flex, Heading, Image, Spinner, Stack, Text } from '@concave/ui'
 import { ClaimCard } from 'components/Claim/ClaimCard'
 import { fetchPortfolio } from 'lib/debank'
 import { useQuery } from 'react-query'

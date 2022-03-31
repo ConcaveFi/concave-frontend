@@ -1,29 +1,17 @@
 import { ExpandArrowIcon, TokenIcon } from '@concave/icons'
-import {
-  Box,
-  Button,
-  Flex,
-  HStack,
-  IconButton,
-  NumericInput,
-  StackDivider,
-  Text,
-} from '@concave/ui'
+import { Box, Flex, HStack, IconButton, Modal, NumericInput, Text } from '@concave/ui'
 import { useCurrency } from 'hooks/useCurrency'
 import { useGasPrice } from 'hooks/useGasPrice'
 import { useFloorPrecision, useRoundPrecision } from 'hooks/usePrecision'
-import { TokenType } from 'lib/tokens'
 import React from 'react'
-import { UseSwap } from './useSwap'
+import { Token, UseSwap } from './useSwap'
 
 const TokenInfo = ({
   token,
   amount,
-  price,
   loss,
 }: {
-  token: TokenType
-  price: number
+  token: Token
   amount: string | number
   loss?: number
 }) => {
@@ -38,14 +26,14 @@ const TokenInfo = ({
       <Box w={200}>
         <NumericInput disabled fontSize={'32px'} decimalScale={5} value={amount} />
         <Text fontWeight={700} fontSize={14} textColor="text.low">
-          {useCurrency(+amount * price)}
+          {useCurrency(+amount * token.price)}
           {loss && ` (-${loss}%)`}
         </Text>
       </Box>
       <HStack>
         <TokenIcon size="sm" {...token} />
         <Text fontSize={24} fontWeight={700}>
-          {token.symbol?.toUpperCase()}
+          {token.token.symbol.toUpperCase()}
         </Text>
       </HStack>
     </Flex>
@@ -110,26 +98,26 @@ const ExpectedOutput = ({ swap }: { swap: UseSwap }) => {
   )
 }
 
-export const ConfirmSwap = ({ swap, onConfirm }: { swap: UseSwap; onConfirm: () => void }) => {
+export const ConfirmSwap = ({ isOpen, onClose }) => {
   return (
-    <>
-      <TokenInfo
-        token={swap.from.token}
-        price={swap.from.price}
-        amount={swap.fromAmount}
-      ></TokenInfo>
+    <Modal
+      bluryOverlay={true}
+      title="Confirm Swap"
+      isOpen={isOpen}
+      onClose={onClose}
+      bodyProps={{
+        gap: 2,
+        shadow: 'Up for Blocks',
+      }}
+    >
+      {/* <TokenInfo token={swap.from} amount={swap.fromAmount}></TokenInfo>
       <SwapButton swap={swap} />
-      <TokenInfo
-        token={swap.to.token}
-        price={swap.to.price}
-        amount={swap.toAmount}
-        loss={0.26}
-      ></TokenInfo>
+      <TokenInfo token={swap.to} amount={swap.toAmount} loss={0.26}></TokenInfo>
 
       <HStack fontSize="14px" fontWeight={700} my={6} justifyContent={'center'} flexWrap={'wrap'}>
         <Text>
-          1 {swap.to.token.symbol} = {useRoundPrecision(swap.to.price / swap.from.price).formatted}{' '}
-          {swap.from.token.symbol}
+          1 {swap.to.symbol} = {useRoundPrecision(swap.to.price / swap.from.price).formatted}{' '}
+          {swap.from.symbol}
         </Text>
         <Text paddingRight={2} textColor="text.low">
           ({useCurrency(swap.to.price)})
@@ -144,7 +132,7 @@ export const ConfirmSwap = ({ swap, onConfirm }: { swap: UseSwap; onConfirm: () 
 
       <Button variant="primary" size="large" onClick={onConfirm} isFullWidth>
         Confirm Swap
-      </Button>
-    </>
+      </Button> */}
+    </Modal>
   )
 }
