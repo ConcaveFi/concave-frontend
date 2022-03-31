@@ -25,14 +25,15 @@ import { MaxAmount } from 'components/Swap/MaxAmount'
 import { TokenInput } from 'components/Swap/TokenInput'
 import { useAuth } from 'contexts/AuthContext'
 import { BigNumberish, Contract } from 'ethers'
-import { parseUnits } from 'ethers/lib/utils'
-import { useAllowance, useApprovalWhenNeeded } from 'hooks/useAllowance'
 import { useAddLiquidity, UseAddLiquidityData } from 'hooks/useAddLiquidity'
+import { useApprovalWhenNeeded } from 'hooks/useAllowance'
 import { usePrecision } from 'hooks/usePrecision'
+import { contractABI } from 'lib/contractoABI'
+import { concaveProvider2 } from 'lib/providers'
 import { TokenType } from 'lib/tokens'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import { chain } from 'wagmi'
+import { chain, useSigner } from 'wagmi'
 import { useToken, WrapperTokenInfo } from '../components/Swap/useSwap'
 
 const RewardsBanner = () => (
@@ -294,7 +295,7 @@ const RemoveLiquidityActions = () => {
       <Button w={250} variant={'primary'} onClick={removeAproval}>
         Approve
       </Button>
-      <Button disabled={!approved} w={250} variant={'primary'} onclick={confirmedWithdrawal}>
+      <Button disabled={!approved} w={250} variant={'primary'} onClick={confirmedWithdrawal}>
         Confirm Withdrawal
       </Button>
     </Flex>

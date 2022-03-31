@@ -6,7 +6,6 @@ import { useSwap } from 'components/Swap/useSwap'
 import { WETH } from 'constants/tokens'
 import { useAuth } from 'contexts/AuthContext'
 import { usePriceInStable } from 'hooks/useBestTrade'
-import { DAI, FRAX, USDT } from 'lib/tokens'
 import React from 'react'
 
 const cardProps = {
@@ -17,10 +16,7 @@ const cardProps = {
 
 function Swap() {
   const { user, isConnected } = useAuth()
-  const swap = useSwap(isConnected ? user?.address : '', {
-    commonInputTokens: [USDT, DAI, FRAX],
-    commonOutputTokens: [DAI, FRAX],
-  })
+  const swap = useSwap(isConnected ? user?.address : '', {})
 
   const aaa = usePriceInStable(WETH)
 

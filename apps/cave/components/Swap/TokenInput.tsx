@@ -1,7 +1,8 @@
 import { Flex, FlexProps, NumericInput, Stack, Text, useMultiStyleConfig } from '@concave/ui'
 import { useCurrency } from 'hooks/useCurrency'
+import { TokenType } from 'lib/tokens'
 import React from 'react'
-import { Token, TokenSelect } from './TokenSelect'
+import { TokenSelect } from './TokenSelect'
 
 export function TokenInput({
   children,
@@ -13,9 +14,9 @@ export function TokenInput({
 }: {
   value: string
   price: number
-  selected?: Token
+  selected?: TokenType
   onChangeValue: (value: number) => void
-  onSelectToken: (token: Token) => void
+  onSelectToken: (token: TokenType) => void
 } & FlexProps) {
   const styles = useMultiStyleConfig('Input', { variant: 'primary', size: 'unset' })
 
