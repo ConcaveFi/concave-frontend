@@ -3,7 +3,7 @@ import { SubmittedIcon } from '@concave/icons'
 import { Modal, Text } from '@concave/ui'
 import React from 'react'
 
-export const TransactionSubmitted = ({ isOpen, onClose }) => {
+export const TransactionSubmittedModal = ({ isOpen, onClose }) => {
   return (
     <Modal
       bluryOverlay={true}

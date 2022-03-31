@@ -65,7 +65,7 @@ export const Card = forwardRef<CardProps, 'div'>(
     })
     const [internalRef, { width, height }] = useMeasure()
 
-    const textureSrc = (styles.texture as any).src
+    const textureSrc = (styles.texture as any)?.src
 
     const [propsWithoutMargins, marginStyles] = splitObj(marginStyleKeys)(props)
 

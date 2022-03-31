@@ -1,24 +1,54 @@
-import { FlexProps, HStack, NumericInput, Stack, useMultiStyleConfig } from '@concave/ui'
+import {
+  Text,
+  Button,
+  FlexProps,
+  HStack,
+  NumericInput,
+  Stack,
+  useMultiStyleConfig,
+} from '@concave/ui'
 import { Currency } from '@uniswap/sdk-core'
 import React from 'react'
+import { twoDecimals } from './SwapCard'
 import { TokenSelect } from './TokenSelect'
+
+const Balance = ({ value, onClick }) => (
+  <Button
+    fontSize="xs"
+    ml="auto"
+    onClick={onClick}
+    rightIcon={!!onClick && <Text textColor="#2E97E2">Max</Text>}
+    leftIcon={<Text>Balance:</Text>}
+    iconSpacing={1}
+  >
+    <Text isTruncated maxW="50px">
+      {value}
+    </Text>
+  </Button>
+)
 
 export function TokenInput({
   value,
   currency,
+  balance,
+  stable,
   onChangeValue,
   onChangeCurrency,
+  onClickMaxBalance,
 }: {
-  children: React.ReactNode
   value: string
   currency?: Currency
+  balance: string
+  stable: string
   onChangeValue: (value: string) => void
   onChangeCurrency: (token: Currency) => void
+  onClickMaxBalance?: (value: string) => void
 } & FlexProps) {
   const styles = useMultiStyleConfig('Input', { variant: 'primary', size: 'large' })
+  const stableValue = +stable * +value
 
   return (
-    <Stack sx={{ ...styles.field, bg: 'none' }} align="start" spacing={0}>
+    <Stack sx={{ ...styles.field, bg: 'none' }} justify="space-between" spacing={0}>
       <HStack justify="space-between" align="start">
         <NumericInput
           decimalScale={5}
@@ -30,7 +60,12 @@ export function TokenInput({
         />
         <TokenSelect onSelect={onChangeCurrency} selected={currency} />
       </HStack>
-      {children}
+      <HStack justify="space-between" align="center" textColor="text.low" w="full">
+        <Text isTruncated maxW="100px" fontWeight="bold" fontSize="sm">
+          {!!+stableValue && `$${twoDecimals(stableValue)}`}
+        </Text>
+        {balance && <Balance value={balance} onClick={onClickMaxBalance} />}
+      </HStack>
     </Stack>
   )
 }

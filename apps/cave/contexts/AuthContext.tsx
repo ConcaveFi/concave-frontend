@@ -1,9 +1,11 @@
+import { useDisclosure } from '@concave/ui'
+import { ConnectWalletModal } from 'components/ConnectWallet'
 import { Signer } from 'ethers'
 import { User } from 'lib/session'
-import React, { createContext, useContext } from 'react'
+import React, { createContext, useCallback, useContext } from 'react'
 import { useMutation, useQueryClient, useQuery } from 'react-query'
 import { SiweMessage } from 'siwe'
-import { useAccount } from 'wagmi'
+import { useAccount, useConnect } from 'wagmi'
 
 export const authFetch = (path: string, options?: RequestInit) =>
   fetch(`/api/session/${path}`, options).then(async (res) => {
@@ -36,6 +38,8 @@ interface AuthValue {
   error?: any
   signIn: () => Promise<any>
   signOut: () => Promise<any>
+  /** pops up a modal with connector providers */
+  connectWithModal: () => void
   user: User
   isWaitingForSignature: boolean
   isSignedIn: boolean
@@ -101,11 +105,14 @@ export const AuthProvider: React.FC = ({ children }) => {
   const isConnected = !account.loading && !!account.data?.address
   const error = signIn.error || signOut.error
 
+  const connectModal = useDisclosure()
+
   return (
     <AuthContext.Provider
       value={{
         signOut: signOut.mutateAsync,
         signIn: signIn.mutateAsync,
+        connectWithModal: () => connectModal.onOpen(),
         // user can connect and not sign in, we want access to his addy thru here anyway
         user: { ...user.data, address: user.data?.address || account.data?.address },
         error,
@@ -115,6 +122,7 @@ export const AuthProvider: React.FC = ({ children }) => {
         isErrored: !!error,
       }}
     >
+      <ConnectWalletModal isOpen={connectModal.isOpen} onClose={connectModal.onClose} />
       {children}
     </AuthContext.Provider>
   )

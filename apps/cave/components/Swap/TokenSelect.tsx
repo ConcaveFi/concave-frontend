@@ -107,7 +107,7 @@ export const SelectTokenModal = ({
   const nativeCurrency = useNativeCurrency()
   const tokens = useTokenList()
   const [{ data: network }] = useNetwork()
-  const chainId = network?.chain.id === chain.ropsten.id ? chain.ropsten.id : chain.mainnet.id
+  const chainId = network?.chain?.id === chain.ropsten.id ? chain.ropsten.id : chain.mainnet.id
   const selectAndClose = useCallback(
     (token: Token) => (onSelect(token), onClose()),
     [onSelect, onClose],
@@ -163,20 +163,32 @@ export const SelectTokenModal = ({
   )
 }
 
-const SelectTokenButton = ({ onClick }: { onClick: () => void }) => (
+const SelectTokenButton = ({ selected, onClick }: { selected: Currency; onClick: () => void }) => (
   <Button
     shadow="Up Small"
-    bgGradient="linear(to-r, primary.1, primary.2)"
+    sx={{ ...(!selected?.symbol && { bgGradient: 'linear(to-r, primary.1, primary.2)' }) }}
+    bgColor="blackAlpha.100"
     py={1.5}
     px={3}
     h="auto"
     w="min"
     rounded="full"
+    fontWeight="bold"
+    alignSelf="end"
     fontSize="lg"
     rightIcon={<DownIcon />}
+    leftIcon={
+      selected?.symbol && (
+        <TokenIcon
+          size="xs"
+          symbol={selected.symbol}
+          address={selected.isToken ? selected.address : selected.symbol}
+        />
+      )
+    }
     onClick={onClick}
   >
-    Select a token
+    {selected?.symbol || `Select a token`}
   </Button>
 )
 
@@ -191,32 +203,7 @@ export const TokenSelect = ({
 
   return (
     <>
-      {!selected?.symbol ? (
-        <SelectTokenButton onClick={onOpen} />
-      ) : (
-        <Button
-          shadow="Up Small"
-          bgColor="blackAlpha.100"
-          rounded="full"
-          py={1.5}
-          px={3}
-          h="auto"
-          alignSelf="end"
-          w="min"
-          fontWeight="bold"
-          onClick={onOpen}
-          leftIcon={
-            <TokenIcon
-              size="xs"
-              symbol={selected.symbol}
-              address={selected.isToken ? selected.address : selected.symbol}
-            />
-          }
-          rightIcon={<DownIcon />}
-        >
-          {selected?.symbol}
-        </Button>
-      )}
+      <SelectTokenButton selected={selected} onClick={onOpen} />
       <SelectTokenModal isOpen={isOpen} onClose={onClose} selected={selected} onSelect={onSelect} />
     </>
   )

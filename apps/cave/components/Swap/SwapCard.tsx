@@ -1,13 +1,15 @@
 import { ExpandArrowIcon, GasIcon } from '@concave/icons'
 import { Button, Card, Flex, HStack, Spinner, Text, useDisclosure } from '@concave/ui'
+import { ConnectWalletModal } from 'components/ConnectWallet'
+import { useAuth } from 'contexts/AuthContext'
 import React, { useState } from 'react'
-import { useFeeData } from 'wagmi'
-import { ConfirmSwap } from './ConfirmSwap'
+import { useConnect, useFeeData } from 'wagmi'
+import { ConfirmSwapModal } from './ConfirmSwap'
 import { defaultSettings, Settings } from './Settings'
 import { TokenInput } from './TokenInput'
 import { TransactionStatusModal } from './TransactionStatus'
-import { TransactionSubmitted } from './TransactionSubmitted'
-import { useSwap } from './useSwap2'
+import { TransactionSubmittedModal } from './TransactionSubmitted'
+import { useNativeCurrency, useSwap } from './useSwap2'
 
 export const twoDecimals = (s: string | number) => {
   const a = s.toString()
@@ -39,56 +41,6 @@ const LoadingBestTradeIndicator = () => {
   )
 }
 
-const SwapInputField = ({ amount, currency, stable, balance, setAmount, setCurrency }) => {
-  return (
-    <TokenInput
-      value={amount}
-      currency={currency}
-      onChangeValue={setAmount}
-      onChangeCurrency={setCurrency}
-    >
-      <HStack justify="space-between" textColor="text.low">
-        <Text isTruncated maxW="100px" fontWeight="bold" fontSize="sm">
-          {!!-stable && `$${twoDecimals(+stable * +amount)}`}
-        </Text>
-        {balance && (
-          <Button fontSize="xs" mr="auto" rightIcon={<Text textColor="#2E97E2">Max</Text>}>
-            Balance:{' '}
-            <Text isTruncated maxW="50px">
-              {balance}
-            </Text>
-          </Button>
-        )}
-      </HStack>
-    </TokenInput>
-  )
-}
-
-const SwapOutputField = ({ amount, currency, stable, balance, setAmount, setCurrency }) => {
-  return (
-    <TokenInput
-      value={amount}
-      currency={currency}
-      onChangeValue={setAmount}
-      onChangeCurrency={setCurrency}
-    >
-      <HStack justify="space-between" color="text.low">
-        <Text isTruncated maxW="100px" fontWeight="bold" fontSize="sm">
-          {!!-stable && `$${twoDecimals(+stable * +amount)}`}
-        </Text>
-        {balance && (
-          <Text fontSize="xs" mr="auto">
-            Balance:{' '}
-            <Text isTruncated maxW="50px">
-              {balance}
-            </Text>
-          </Text>
-        )}
-      </HStack>
-    </TokenInput>
-  )
-}
-
 const SwitchCurrencies = ({ onClick }) => {
   return (
     <Flex align="center" justify="center">
@@ -108,6 +60,14 @@ const SwitchCurrencies = ({ onClick }) => {
   )
 }
 
+/**
+
+  TODO
+    - switch tokens
+    - eth -> weth
+
+ */
+
 export function SwapCard() {
   const [settings, setSettings] = useState(defaultSettings)
   const {
@@ -121,13 +81,35 @@ export function SwapCard() {
     swapingOut,
   } = useSwap(settings)
 
+  const nativeCurrency = useNativeCurrency()
+
+  const { isConnected, connectWithModal } = useAuth()
+
   const confirm = useDisclosure()
   return (
     <>
       <Card p={6} gap={2} variant="primary" h="fit-content" shadow="Block Up" w="100%" maxW="420px">
-        <SwapInputField {...swapingIn} setAmount={setAmountIn} setCurrency={setCurrencyIn} />
+        <TokenInput
+          value={swapingIn.amount}
+          currency={swapingIn.currency}
+          stable={swapingIn.stable}
+          balance={swapingIn.balance}
+          onChangeValue={setAmountIn}
+          onChangeCurrency={setCurrencyIn}
+          onClickMaxBalance={() => {
+            if (swapingIn.currency.equals(nativeCurrency)) setAmountIn(+swapingIn.balance * 0.8)
+            else setAmountIn(swapingIn.balance)
+          }}
+        />
         <SwitchCurrencies onClick={switchCurrencies} />
-        <SwapInputField {...swapingOut} setAmount={setAmountOut} setCurrency={setCurrencyOut} />
+        <TokenInput
+          value={swapingOut.amount}
+          currency={swapingOut.currency}
+          stable={swapingOut.stable}
+          balance={swapingOut.balance}
+          onChangeValue={setAmountOut}
+          onChangeCurrency={setCurrencyOut}
+        />
 
         <HStack align="center" justify="end" py={5}>
           {isFetchingPairs ? (
@@ -149,16 +131,22 @@ export function SwapCard() {
           <Settings onClose={setSettings} />
         </HStack>
 
-        <Button variant="primary" size="large" isFullWidth onClick={confirm.onOpen}>
-          Swap
-        </Button>
+        {!isConnected ? (
+          <Button variant="primary" size="large" onClick={connectWithModal}>
+            Connect Wallet
+          </Button>
+        ) : (
+          <Button variant="primary" size="large" isFullWidth onClick={confirm.onOpen}>
+            Swap
+          </Button>
+        )}
       </Card>
 
-      <ConfirmSwap isOpen={false} onClose={() => null} />
+      <ConfirmSwapModal isOpen={false} onClose={() => null} />
 
       <TransactionStatusModal isOpen={false} onClose={() => null} />
 
-      <TransactionSubmitted isOpen={false} onClose={() => null} />
+      <TransactionSubmittedModal isOpen={false} onClose={() => null} />
     </>
   )
 }

@@ -108,7 +108,7 @@ const ExpectedOutput = ({ swap }: { swap: UseSwap }) => {
   )
 }
 
-export const ConfirmSwap = ({ isOpen, onClose }) => {
+export const ConfirmSwapModal = ({ isOpen, onClose }) => {
   return (
     <Modal
       bluryOverlay={true}
