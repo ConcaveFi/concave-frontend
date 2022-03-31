@@ -1,4 +1,5 @@
 import { Flex } from '@concave/ui'
+import { CandleStickCard } from 'components/CandleStickCard'
 import GcnvTitle from 'components/GcnvTitle'
 import { SwapCard } from 'components/Swap/SwapCard'
 import { useSwap } from 'components/Swap/useSwap'
@@ -27,15 +28,15 @@ function Swap() {
     <Flex direction="column" gap={12}>
       <GcnvTitle title="Swap gCNV" description="Swap gCNV here" />
       <Flex gap={4} flexWrap="wrap" justify="center">
-        {/* <CandleStickCard
-          from={swap.from}
-          to={swap.to}
+        <CandleStickCard
+          from={swap.from.token}
+          to={swap.to.token}
           variant="secondary"
           {...cardProps}
           h={['100%', 470, 400]}
           w={['100%', '100%', 500, 567, 567]}
           align="stretch"
-        /> */}
+        />
         <SwapCard
           swap={swap}
           buttonLabel="Swap"

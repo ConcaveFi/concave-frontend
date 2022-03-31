@@ -90,8 +90,8 @@ export const useSwap = (
   partialValues: Partial<SwapStateProps>,
 ): UseSwap => {
   const [swap, setSwap] = useState({ ...defaultValue, ...partialValues })
-  const [from, setFromSymbol] = useToken({ userAddressOrName, symbol: '' })
-  const [to, setToSymbol] = useToken({ userAddressOrName, symbol: '' })
+  const [from, setFromSymbol] = useToken({ userAddressOrName, symbol: 'DAI' })
+  const [to, setToSymbol] = useToken({ userAddressOrName, symbol: 'FRAX' })
 
   const refreshSlippage = useCallback(() => {
     const minimumReceivedAfterSlippage = +to.amount.current * (1 - swap.slippageTolerance / 100)
