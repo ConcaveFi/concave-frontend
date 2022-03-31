@@ -71,10 +71,8 @@ export const AuthProvider: React.FC = ({ children }) => {
     async () => {
       const connector = account.data?.connector
       if (!account.data.connector) return
-
       const signer = await connector.getSigner()
       const user = await siweSignIn(signer)
-
       return user
     },
     {

@@ -41,9 +41,12 @@ export function SwapCard({
       <TokenInput
         value={'' + swap.fromAmount}
         price={swap.from.price}
-        selected={swap.from}
+        selected={swap.from.token}
         onChangeValue={swap.setFromAmount}
-        onSelectToken={(t) => swap.setFromSymbol(t.symbol)}
+        onSelectToken={(t) => {
+          console.log(t)
+          swap.setFromSymbol(t.symbol)
+        }}
       >
         <MaxAmount
           label="Balance:"
@@ -55,7 +58,7 @@ export function SwapCard({
       <TokenInput
         value={'' + swap.toAmount}
         price={swap.to.price}
-        selected={swap.to}
+        selected={swap.to.token}
         onChangeValue={swap.setToAmount}
         onSelectToken={(t) => swap.setToSymbol(t.symbol)}
       >
@@ -91,8 +94,9 @@ export function SwapCard({
         <HStack>
           <HStack justifyContent={'center'} flexWrap={'wrap'}>
             <Text fontSize="xs">
-              1 {swap.to.symbol} = {useRoundPrecision(swap.to.price / swap.from.price).formatted}{' '}
-              {swap.from.symbol}
+              1 {swap.to.token?.symbol} ={' '}
+              {useRoundPrecision(swap.to.price / swap.from.price).formatted}{' '}
+              {swap.from.token?.symbol}
             </Text>
             <Text paddingRight={2} fontSize="xs" textColor="text.low">
               ({useCurrency(swap.to.price)})

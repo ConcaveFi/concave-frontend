@@ -20,17 +20,21 @@ import {
   useDisclosure,
   UseDisclosureReturn,
 } from '@concave/ui'
-import { Pair } from '@uniswap/v2-sdk'
-import { TokenInput } from 'components/Swap/TokenInput'
+import { useTokenList } from 'components/Swap/hooks/useTokenList'
 import { MaxAmount } from 'components/Swap/MaxAmount'
-import { BigNumberish } from 'ethers'
-import { usePrecision } from 'hooks/usePrecision'
-import { AvailableTokens, DAI, FRAX, TokenType, USDT } from 'lib/tokens'
-import React, { useEffect, useState } from 'react'
-import { Token, useToken } from '../components/Swap/useSwap'
-import { useRouter } from 'next/router'
+import { TokenInput } from 'components/Swap/TokenInput'
 import { useAuth } from 'contexts/AuthContext'
-import { useBalance } from 'wagmi'
+import { BigNumberish, Contract } from 'ethers'
+import { useAddLiquidity, UseAddLiquidityData } from 'hooks/useAddLiquidity'
+import { useApprovalWhenNeeded } from 'hooks/useAllowance'
+import { usePrecision } from 'hooks/usePrecision'
+import { contractABI } from 'lib/contractoABI'
+import { concaveProvider2 } from 'lib/providers'
+import { TokenType } from 'lib/tokens'
+import { useRouter } from 'next/router'
+import React, { useEffect, useState } from 'react'
+import { chain, useSigner } from 'wagmi'
+import { useToken, WrapperTokenInfo } from '../components/Swap/useSwap'
 
 const RewardsBanner = () => (
   <Card variant="secondary" p={4} gap={4}>
@@ -48,9 +52,9 @@ const RewardsBanner = () => (
   </Card>
 )
 
-const PositionInfoItem = ({ label, value, children = <></> }) => (
-  <Flex justify="space-between" align={'center'}>
-    <Text>{label}</Text>
+const PositionInfoItem = ({ color = '', label, value, mt = 0, children = <></> }) => (
+  <Flex justify="space-between" align={'center'} mt={mt}>
+    <Text color={color}>{label}</Text>
     <HStack gap={2} align={'center'} alignContent={'center'}>
       <Text>{value}</Text>
       {children}
@@ -59,30 +63,39 @@ const PositionInfoItem = ({ label, value, children = <></> }) => (
 )
 
 interface LPPosition {
-  pair?: Pair
+  //  pair?: Pair
+  pair?: { tokenA: string; tokenB: string; liquidityAddress: string }
   ownedAmount: BigNumberish
 }
 
 const LPPositionItem = ({ pair, ownedAmount }: LPPosition) => {
+  const tokens = useTokenList(chain.ropsten.name)
+  const [tokenA, setTokenA] = useState<TokenType>(null)
+  const [tokenB, setTokenB] = useState<TokenType>(null)
+
+  useEffect(() => {
+    if (!tokens.isSuccess) {
+      return
+    }
+    setTokenA(tokens.data.find((t) => t.address.toLowerCase() === pair?.tokenA.toLowerCase()))
+    setTokenB(tokens.data.find((t) => t.address.toLowerCase() === pair?.tokenB.toLowerCase()))
+  }, [pair, pair?.tokenA, pair.tokenB, tokens.data, tokens.isSuccess])
+
   const addLiquidity = useDisclosure()
   const removeLiquidity = useDisclosure()
-  const router = useRouter()
-  const { operation } = router.query
-  const { user } = useAuth()
-  let userAddress
-  user ? (userAddress = user.address) : ''
-
-  // <RemoveLiquidity />
-  // <AddLiquidity />
+  const { user, isConnected } = useAuth()
+  if (!tokenA || !tokenB || !isConnected) {
+    return <></>
+  }
 
   return (
     <>
       <AccordionItem p={2} shadow="Up Big" borderRadius="2xl" alignItems="center">
         <AccordionButton>
-          <TokenIcon logoURI="/assets/tokens/gcnv.svg" symbol="CNV" />
-          <TokenIcon logoURI="/assets/tokens/xmr.svg" symbol="XMR" />
+          <TokenIcon {...tokenA} />
+          <TokenIcon {...tokenB} />
           <Text ml="24px" fontWeight="semibold" fontSize="lg">
-            XMR/gCNV
+            {tokenA.symbol}/{tokenB.symbol}
           </Text>
           <Button
             variant="secondary"
@@ -107,11 +120,11 @@ const LPPositionItem = ({ pair, ownedAmount }: LPPosition) => {
             spacing={4}
           >
             <PositionInfoItem label="Your total pool tokens:" value={ownedAmount.toString()} />
-            <PositionInfoItem label={`Pooled ${'XMR'}:`} value={'0.0001331'}>
-              <TokenIcon size="sm" logoURI="/assets/tokens/xmr.svg" symbol="XMR" />
+            <PositionInfoItem label={`Pooled ${tokenA.symbol}:`} value={'0.0001331'}>
+              <TokenIcon size="sm" {...tokenA} />
             </PositionInfoItem>
-            <PositionInfoItem label={`Pooled ${'gCNV'}:`} value={'325.744'}>
-              <TokenIcon size="sm" logoURI="/assets/tokens/gcnv.svg" symbol="gCNV" />
+            <PositionInfoItem label={`Pooled ${tokenB.symbol}:`} value={'325.744'}>
+              <TokenIcon size="sm" {...tokenB} />
             </PositionInfoItem>
             <PositionInfoItem label="Your pool share:" value={'2.79%'} />
           </Stack>
@@ -125,19 +138,34 @@ const LPPositionItem = ({ pair, ownedAmount }: LPPosition) => {
           </Flex>
         </AccordionPanel>
       </AccordionItem>
-      <RemoveLiquidityModal disclosure={removeLiquidity} />
-      <AddLiquidityModal disclosure={addLiquidity} userAddress={userAddress} />
+      <RemoveLiquidityModal
+        userAddressOrName={user.address}
+        disclosure={removeLiquidity}
+        tokenA={tokenA}
+        tokenB={tokenB}
+      />
+      <AddLiquidityModal disclosure={addLiquidity} userAddress={user.address} />
     </>
   )
 }
 
-const RemoveLiquidityModal = ({ disclosure }: { disclosure: UseDisclosureReturn }) => {
-  const [percentToRemove, setPercentToRemove] = useState(100)
-  const [tokenA, setTokenA] = useToken({ userAddressOrName: '', symbol: 'FRAX' })
-  const [tokenB, setTokenB] = useToken({ userAddressOrName: '', symbol: 'gCNV' })
+const RemoveLiquidityModal = ({
+  disclosure,
+  userAddressOrName,
+  tokenA,
+  tokenB,
+}: {
+  userAddressOrName: string
+  tokenA: TokenType
+  tokenB: TokenType
+  disclosure: UseDisclosureReturn
+}) => {
+  const [percentToRemove, setPercentToRemove] = useState(0)
+  const [wrapperTokenA, setTokenA] = useToken({ userAddressOrName, symbol: tokenA.symbol })
+  const [wrapperTokenB, setTokenB] = useToken({ userAddressOrName, symbol: tokenB.symbol })
   const removeLiquidityState = useRemoveLiquidity({
-    tokenA,
-    tokenB,
+    wrapperTokenA,
+    wrapperTokenB,
     amountTokenA: 0.0001331,
     amountTokenB: 325.744,
     percentToRemove,
@@ -204,15 +232,15 @@ const AmountToRemove = ({ onChange }: { onChange: (n: number) => void }) => {
 }
 
 const YouWillReceive = ({
-  tokenA,
-  tokenB,
+  wrapperTokenA,
+  wrapperTokenB,
   amountAMin,
   amountBMin,
 }: {
   amountAMin: number
   amountBMin: number
-  tokenA: TokenType
-  tokenB: TokenType
+  wrapperTokenA: WrapperTokenInfo
+  wrapperTokenB: WrapperTokenInfo
 }) => {
   return (
     <HStack gap={7} shadow="Up Big" px={6} py={3} borderRadius="2xl" align="center">
@@ -222,34 +250,73 @@ const YouWillReceive = ({
           You will receive:
         </Text>
       </Box>
-      <ReceiveBox amount={amountAMin} token={tokenA} />
-      <ReceiveBox amount={amountBMin} token={tokenB} />
+      <ReceiveBox amount={amountAMin} token={wrapperTokenA.token} />
+      <ReceiveBox amount={amountBMin} token={wrapperTokenB.token} />
     </HStack>
   )
 }
 
 const RemoveLiquidityActions = () => {
+  const { user } = useAuth()
+  const [approved, setApproved] = useState(false)
+  const [{ data, error, loading }, getSigner] = useSigner()
+  // const userApproval = useAllowance(
+  //   user.address,
+  //   '0x95dDC411d31bBeDd37e9aaABb335b0951Bc2D25a',
+  //   'removeLiquidity',
+  // )
+  const removeAproval = async () => {
+    console.log('send approval to metamask')
+    // console.log('wait for approval....', userApproval)
+    const rm = () => {
+      const contractInstance = new Contract(
+        '0x95dDC411d31bBeDd37e9aaABb335b0951Bc2D25a',
+        contractABI,
+        concaveProvider2(chain.ropsten.id),
+      )
+      const contractSigner = contractInstance.connect(data)
+      console.log('signer rm', contractSigner)
+      return null
+    }
+    rm()
+    // setApproved(true)
+    // return console.log('removed approved!!!')
+  }
+
+  const confirmedWithdrawal = () => {
+    console.log('send tx to metamask')
+    // useRemoveLiquidity
+    // useRemoveLiquidity()
+    return console.log('confirmed Withdrawal!!!')
+  }
+
   return (
     <Flex gap={4} justifyContent={'center'}>
-      <Button w={250} variant={'primary'}>
+      <Button w={250} variant={'primary'} onClick={removeAproval}>
         Approve
       </Button>
-      <Button disabled w={250} variant={'primary'}>
+      <Button disabled={!approved} w={250} variant={'primary'} onClick={confirmedWithdrawal}>
         Confirm Withdrawal
       </Button>
     </Flex>
   )
 }
 
-const YourPosition = ({ tokenA, tokenB }: { tokenA: TokenType; tokenB: TokenType }) => {
+const YourPosition = ({
+  wrapperTokenA,
+  wrapperTokenB,
+}: {
+  wrapperTokenA: WrapperTokenInfo
+  wrapperTokenB: WrapperTokenInfo
+}) => {
   return (
     <Flex gap={7} direction={'column'} shadow="Up Big" px={4} py={4} borderRadius="2xl">
       <Text fontSize={'lg'}>Your Position</Text>
       <Flex gap={2} align={'center'}>
-        <TokenIcon logoURI={tokenA.logoURI} symbol={tokenA.symbol} />
-        <TokenIcon logoURI={tokenB.logoURI} symbol={tokenB.symbol} />
+        <TokenIcon logoURI={wrapperTokenA.token?.logoURI} symbol={wrapperTokenA.token?.symbol} />
+        <TokenIcon logoURI={wrapperTokenB.token?.logoURI} symbol={wrapperTokenB.token?.symbol} />
         <Text px={4}>
-          {tokenA.symbol}/{tokenB.symbol}
+          {wrapperTokenA.token?.symbol}/{wrapperTokenB.token?.symbol}
         </Text>
       </Flex>
       <Stack
@@ -262,11 +329,19 @@ const YourPosition = ({ tokenA, tokenB }: { tokenA: TokenType; tokenB: TokenType
         spacing={3}
       >
         <PositionInfoItem label="Your pool share:" value={'2.79%'} />
-        <PositionInfoItem label={tokenA.symbol} value={'0.0001331'}>
-          <TokenIcon size="sm" logoURI={tokenA.logoURI} symbol={tokenA.symbol} />
+        <PositionInfoItem label={wrapperTokenA.token?.symbol} value={'0.0001331'}>
+          <TokenIcon
+            size="sm"
+            logoURI={wrapperTokenA.token?.logoURI}
+            symbol={wrapperTokenA.token?.symbol}
+          />
         </PositionInfoItem>
-        <PositionInfoItem label={tokenB.symbol} value={'325.744'}>
-          <TokenIcon size="sm" logoURI={tokenB.logoURI} symbol={tokenB.symbol} />
+        <PositionInfoItem label={wrapperTokenB.token?.symbol} value={'325.744'}>
+          <TokenIcon
+            size="sm"
+            logoURI={wrapperTokenB.token?.logoURI}
+            symbol={wrapperTokenB.token?.symbol}
+          />
         </PositionInfoItem>
       </Stack>
     </Flex>
@@ -276,13 +351,13 @@ const YourPosition = ({ tokenA, tokenB }: { tokenA: TokenType; tokenB: TokenType
 const ReceiveBox = ({ amount, token }: { amount: number; token: TokenType }) => {
   return (
     <HStack shadow="down" borderRadius="2xl" p={3}>
-      <TokenIcon logoURI={token.logoURI} symbol={token.symbol} />
+      <TokenIcon logoURI={token?.logoURI} symbol={token?.symbol} />
       <Box>
         <Text fontFamily={'heading'} fontWeight={600}>
           {usePrecision(amount, 7).formatted}
         </Text>
-        <Text title={token.name} fontWeight={700} fontSize={'sm'} color={'text.low'}>
-          {token.symbol}
+        <Text title={token?.name} fontWeight={700} fontSize={'sm'} color={'text.low'}>
+          {token?.symbol}
         </Text>
       </Box>
     </HStack>
@@ -290,17 +365,17 @@ const ReceiveBox = ({ amount, token }: { amount: number; token: TokenType }) => 
 }
 
 const useRemoveLiquidity = ({
-  tokenA,
+  wrapperTokenA,
   amountTokenA,
-  tokenB,
+  wrapperTokenB,
   amountTokenB,
   percentToRemove,
 }: {
   percentToRemove: number
-  tokenA: Token
+  wrapperTokenA: WrapperTokenInfo
   amountTokenA: number
   amountTokenB: number
-  tokenB: Token
+  wrapperTokenB: WrapperTokenInfo
 }) => {
   const to = ''
   const ratioToRemove = Math.min(percentToRemove, 100) / 100
@@ -308,9 +383,10 @@ const useRemoveLiquidity = ({
   const amountAMin = amountTokenA * ratioToRemove
   const amountBMin = amountTokenB * ratioToRemove
   const [deadline, setDeadLine] = useState(new Date().getTime() / 1000 + 15 * 60)
+  // const [{ data, error, loading }, getSigner] = useSigner()
   return {
-    tokenA,
-    tokenB,
+    wrapperTokenA,
+    wrapperTokenB,
     liquidity,
     amountAMin,
     amountBMin,
@@ -325,9 +401,6 @@ const AddLiquidityModal = ({
   disclosure: UseDisclosureReturn
   userAddress: string
 }) => {
-  const [tokenA, setTokenA] = useToken({ userAddressOrName: userAddress, symbol: 'ETH' })
-  const [tokenB, setTokenB] = useToken({ userAddressOrName: userAddress, symbol: 'DAI' })
-  console.log(tokenB)
   return (
     <Modal
       bluryOverlay={true}
@@ -341,6 +414,114 @@ const AddLiquidityModal = ({
         shadow: 'Up for Blocks',
       }}
     >
+      <AddLiquidityContent userAddress={userAddress} />
+    </Modal>
+  )
+}
+
+const SupplyLiquidityModal = ({
+  disclosure,
+  data,
+  onConfirm = () => {},
+}: {
+  disclosure: UseDisclosureReturn
+  data: UseAddLiquidityData
+  onConfirm: () => void
+}) => {
+  const { wrapperTokenA, wrapperTokenB, amountADesired, amountBDesired, userAddress } = data
+
+  const [needsApproveA, requestApproveA, loadingApproveA] = useApprovalWhenNeeded(
+    wrapperTokenA.token,
+    chain.ropsten.id,
+    userAddress,
+    amountADesired,
+  )
+  console.log('loadingApproveA', loadingApproveA)
+  const [needsApproveB, requestApproveB, loadingApproveB] = useApprovalWhenNeeded(
+    wrapperTokenB.token,
+    chain.ropsten.id,
+    userAddress,
+    amountBDesired,
+  )
+
+  return (
+    <Modal
+      bluryOverlay={true}
+      title="Supply"
+      isOpen={disclosure.isOpen}
+      onClose={disclosure.onClose}
+      isCentered
+      size={'xl'}
+      bodyProps={{
+        gap: 6,
+        shadow: 'Up for Blocks',
+      }}
+    >
+      <Text fontSize="3xl">
+        {wrapperTokenA.token.symbol}/{wrapperTokenB.token.symbol} Pool Tokens
+      </Text>
+      <HStack justifyContent={'center'}>
+        <TokenIcon {...wrapperTokenA.token}></TokenIcon>
+        <TokenIcon {...wrapperTokenB.token}></TokenIcon>
+      </HStack>
+      <Box borderRadius={'2xl'} p={6} shadow={'down'}>
+        <PositionInfoItem
+          label="Rates"
+          value={`1  ${wrapperTokenA.token.symbol} =  ${
+            usePrecision(wrapperTokenA.price / wrapperTokenB.price).formatted
+          } ${wrapperTokenB.token.symbol}`}
+        />
+        <PositionInfoItem
+          label=""
+          value={`1  ${wrapperTokenB.token.symbol} =  ${
+            usePrecision(wrapperTokenB.price / wrapperTokenA.price).formatted
+          } ${wrapperTokenA.token.symbol}`}
+        />
+        <PositionInfoItem
+          mt={8}
+          color={'text.low'}
+          label={`${wrapperTokenA.token.symbol} Deposited`}
+          value={`${amountADesired} ${wrapperTokenA.token.symbol}`}
+        />
+        <PositionInfoItem
+          color={'text.low'}
+          label={`${wrapperTokenB.token.symbol} Deposited`}
+          value={`${usePrecision(amountBDesired).formatted} ${wrapperTokenB.token.symbol}`}
+        />
+        <PositionInfoItem color={'text.low'} label="Share Pool" value={'2.786%'} />
+      </Box>
+      {needsApproveA && (
+        <Button mt={2} p={6} fontSize={'2xl'} variant={'primary'} onClick={() => requestApproveA()}>
+          {!loadingApproveA
+            ? `Approve to use ${amountADesired} ${wrapperTokenA.token.symbol}`
+            : 'approving'}
+        </Button>
+      )}
+      {needsApproveB && (
+        <Button mt={2} p={6} fontSize={'2xl'} variant={'primary'} onClick={() => requestApproveB()}>
+          {!loadingApproveB
+            ? `Approve to use ${amountBDesired} ${wrapperTokenB.token.symbol}`
+            : 'approving'}
+        </Button>
+      )}
+      {!needsApproveA && !needsApproveA && (
+        <Button mt={2} p={6} fontSize={'2xl'} variant={'primary'} onClick={onConfirm}>
+          Confirm Supply
+        </Button>
+      )}
+    </Modal>
+  )
+}
+
+const AddLiquidityContent = ({ userAddress }: { userAddress: string }) => {
+  const supplyLiquidityModal = useDisclosure()
+  const [data, setters, call] = useAddLiquidity(chain.ropsten.id, userAddress)
+  const { amountADesired, amountBDesired, wrapperTokenA, wrapperTokenB } = data
+  const { setAmountADesired, setTokenA, setTokenB, setAmountBDesired } = setters
+  const valid = wrapperTokenA.token && wrapperTokenB.token && amountADesired && amountBDesired
+
+  return (
+    <>
       <Card variant="secondary" p={4} backgroundBlendMode={'screen'}>
         <Text fontSize="lg">
           Tip: When you add liquidity, you will receive pool tokens representing your position.
@@ -350,16 +531,23 @@ const AddLiquidityModal = ({
       </Card>
       <Flex direction={'column'} p={4} gap={2}>
         <TokenInput
-          value={'' + 10}
-          price={10}
-          selected={tokenA}
-          commonBases={[USDT, DAI, FRAX]}
-          onChangeValue={console.log}
+          value={'' + amountADesired}
+          price={wrapperTokenA.price}
+          selected={wrapperTokenA.token}
+          onChangeValue={(value) => {
+            setAmountADesired(value)
+          }}
           onSelectToken={(token) => {
-            setTokenA(token.symbol as AvailableTokens)
+            setTokenA(token.symbol)
           }}
         >
-          <MaxAmount label="Balance:" max={+tokenA.balance?.formatted} onClick={console.log} />
+          <MaxAmount
+            label="Balance:"
+            max={+wrapperTokenA.balance?.formatted}
+            onClick={() => {
+              setAmountADesired(+wrapperTokenA.balance?.formatted)
+            }}
+          />
         </TokenInput>
         <Flex align="center" justify="center">
           <Button
@@ -375,17 +563,24 @@ const AddLiquidityModal = ({
           </Button>
         </Flex>
         <TokenInput
-          value={'' + 10}
-          price={10}
-          selected={tokenB}
-          commonBases={[USDT, DAI, FRAX]}
-          onChangeValue={(value) => {}}
+          value={'' + amountBDesired}
+          price={wrapperTokenB.price}
+          selected={wrapperTokenB.token}
+          onChangeValue={(value) => {
+            setAmountBDesired(value)
+          }}
           onSelectToken={(token) => {
-            setTokenB(token.symbol as AvailableTokens)
+            setTokenB(token.symbol)
           }}
         >
-          {tokenB.symbol && (
-            <MaxAmount label="Balance:" max={+tokenB.balance?.formatted} onClick={console.log} />
+          {wrapperTokenB.token?.symbol && (
+            <MaxAmount
+              label="Balance:"
+              max={+wrapperTokenB.balance?.formatted}
+              onClick={() => {
+                setAmountBDesired(+wrapperTokenB.balance?.formatted)
+              }}
+            />
           )}
         </TokenInput>
       </Flex>
@@ -396,23 +591,75 @@ const AddLiquidityModal = ({
         _focus={{
           shadow: 'Up Small',
         }}
+        isDisabled={!valid}
         bg={'rgba(113, 113, 113, 0.01)'}
       >
-        <Text fontSize={'2xl'}>Add Liquidity</Text>
+        <Text
+          fontSize={'2xl'}
+          onClick={() => {
+            supplyLiquidityModal.onOpen()
+          }}
+        >
+          Add Liquidity
+        </Text>
       </Button>
-    </Modal>
+
+      {valid ? (
+        <SupplyLiquidityModal disclosure={supplyLiquidityModal} data={data} onConfirm={call} />
+      ) : (
+        <></>
+      )}
+    </>
   )
 }
+
 export default function MyPositions() {
+  const auth = useAuth()
+  const router = useRouter()
+  const { operation } = router.query
+  if (!auth.isConnected || !auth.user) {
+    return <Text>Please, connect</Text>
+  }
+
+  const pairs = [
+    {
+      tokenA: '0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4',
+      tokenB: '0x2b8e79cbd58418ce9aeb720baf6b93825b93ef1f',
+      liquidityAddress: '0xb14d541123a7f7276F01A22798caDa7eE1D7F57f',
+    },
+  ]
+
+  if (operation === 'addLiquidity') {
+    return (
+      <View title="Add liquidity">
+        <Card variant="primary" p={4} w={'500px'} gap={4} shadow={'Up for Blocks'}>
+          <AddLiquidityContent userAddress={auth.user.address} />
+        </Card>
+      </View>
+    )
+  }
+
+  return (
+    <View title="My Liquidity Position">
+      <>
+        <RewardsBanner />
+        <Card variant="primary" borderRadius="3xl" p={6} shadow="Up for Blocks">
+          <Accordion as={Stack} allowToggle gap={2}>
+            {pairs.map((p, i) => {
+              return <LPPositionItem key={i} pair={p} ownedAmount={'0.013'} />
+            })}
+          </Accordion>
+        </Card>
+      </>
+    </View>
+  )
+}
+
+const View = ({ title, children }) => {
   return (
     <Flex maxW="container.md" direction="column" justifyContent="center" h="full" gap={6}>
-      <Heading fontSize="2xl">My Liquidity Position</Heading>
-      <RewardsBanner />
-      <Card variant="primary" borderRadius="3xl" p={6} shadow="Up for Blocks">
-        <Accordion as={Stack} allowToggle gap={2}>
-          <LPPositionItem ownedAmount={'0.013'} />
-        </Accordion>
-      </Card>
+      <Heading fontSize="2xl">{title}</Heading>
+      {children}
     </Flex>
   )
 }
