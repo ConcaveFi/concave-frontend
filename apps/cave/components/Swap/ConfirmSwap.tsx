@@ -1,21 +1,7 @@
 import { ExpandArrowIcon, TokenIcon } from '@concave/icons'
-import {
-  Box,
-  Button,
-  Flex,
-  HStack,
-  IconButton,
-  Modal,
-  NumericInput,
-  StackDivider,
-  Text,
-} from '@concave/ui'
+import { Box, Button, Flex, HStack, Modal, NumericInput, StackDivider, Text } from '@concave/ui'
 import { Percent } from '@uniswap/sdk-core'
-import { useCurrency } from 'hooks/useCurrency'
-import { useGasPrice } from 'hooks/useGasPrice'
-import { useFloorPrecision, useRoundPrecision } from 'hooks/usePrecision'
 import React from 'react'
-import { Token, UseSwap } from './useSwap'
 import { TradeInfo } from './useSwap2'
 
 const TokenInfo = ({
