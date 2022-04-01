@@ -3,7 +3,6 @@ import { Chain, chain } from 'wagmi'
 import { Token as UniswapToken } from 'gemswap-sdk'
 import { utils } from 'ethers'
 
-
 const concaveTokenList = (networkName: string) =>
   `https://raw.githubusercontent.com/ConcaveFi/assets/main/networks/${networkName.toLowerCase()}/tokenlist.json`
 
