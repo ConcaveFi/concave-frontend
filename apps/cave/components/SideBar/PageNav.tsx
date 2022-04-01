@@ -51,7 +51,8 @@ function PageNav() {
           <ButtonLink
             leftIcon={<Image src={'/assets/sidebar/page-marketplace.svg'} />}
             iconSpacing={7}
-            // variant="primary.outline"
+            shadow="up"
+            _focus={{ shadow: 'down' }}
             bgGradient="linear(to-tr, secondary.150, secondary.100)"
             w="160px"
             h="45px"
