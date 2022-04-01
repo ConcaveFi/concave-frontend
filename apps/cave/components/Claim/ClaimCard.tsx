@@ -1,12 +1,9 @@
-import { Button, Card, Center, Stack, Text } from "@concave/ui";
-import { TokenAmount } from "@uniswap/sdk";
-import { useState } from "react";
-
+import { Button, Card, Stack, Text } from '@concave/ui'
+import { useState } from 'react'
 
 export function ClaimCard({ userAddress }: { userAddress: string }) {
-  const [balance, redeem] = useState(
-  ) 
-    return (
+  const [balance, redeem] = useState()
+  return (
     <Card
       variant="secondary"
       borderGradient="secondary"
@@ -15,10 +12,8 @@ export function ClaimCard({ userAddress }: { userAddress: string }) {
       width={['100%', '400px', '450px']}
       shadow="Up Big"
       gap={2}
-      
     >
-        <Stack align="center"  direction="row" justify="space-between" w="80%">
-        
+      <Stack align="center" direction="row" justify="space-between" w="80%">
         <Button
           mt={5}
           fontWeight="bold"
@@ -30,13 +25,13 @@ export function ClaimCard({ userAddress }: { userAddress: string }) {
           size="large"
           mx="moz-initial"
         >
-         Redeem aCNV
+          Redeem aCNV
         </Button>
         <Text color="text.low">aCNV Balance: 50</Text>
-        </Stack>
+      </Stack>
 
-//       <Stack align="center" direction="row" justify="space-between" w="80%" >
-//      <Button
+      <Stack align="center" direction="row" justify="space-between" w="80%">
+        <Button
           mt={5}
           fontWeight="bold"
           fontSize="md"
@@ -46,12 +41,11 @@ export function ClaimCard({ userAddress }: { userAddress: string }) {
           h="30px"
           size="large"
           mx="moz-initial"
-          
         >
-         Redeem bbtCNV
+          Redeem bbtCNV
         </Button>
         <Text color="text.low">bbtCNV Balance: 200</Text>
-        </Stack>
-      </Card>
-    )
+      </Stack>
+    </Card>
+  )
 }
