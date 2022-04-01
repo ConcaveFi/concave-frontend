@@ -6,7 +6,6 @@ import { useAuth } from 'contexts/AuthContext'
 import { Trade } from '@uniswap/v2-sdk'
 import { defaultSettings } from './Settings'
 // import { debounce } from 'debounce'
-import JSBI from 'jsbi'
 
 const useCurrencyBalance = (currency: Currency, userAddress: string) =>
   useBalance({
@@ -119,6 +118,7 @@ export const useSwap = () => {
       switchCurrencies,
       setSettings,
       isFetchingPairs: pairs.isLoading || pairs.isRefetching || pairs.isFetching,
+      isErrored: pairs.isError,
       isTradeReady: !!tradeInfo.current?.trade?.executionPrice,
       swapingIn: {
         currency: currencyIn,

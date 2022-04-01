@@ -60,6 +60,12 @@ const SwitchCurrencies = ({ onClick }) => {
   )
 }
 
+const PairsError = () => (
+  <Text fontSize="xs" color="text.low">
+    Error Fetching Pairs
+  </Text>
+)
+
 /**
 
   TODO
@@ -78,6 +84,7 @@ export function SwapCard() {
     setSettings,
     tradeInfo,
     isTradeReady,
+    isErrored,
     isFetchingPairs,
     swapingIn,
     swapingOut,
@@ -116,6 +123,8 @@ export function SwapCard() {
         <HStack align="center" justify="end" py={5}>
           {isFetchingPairs ? (
             <LoadingBestTradeIndicator />
+          ) : isErrored ? (
+            <PairsError />
           ) : (
             swapingOut.relativePrice && (
               <Flex flexWrap="wrap" fontSize="xs" fontWeight="medium" mr="auto">
