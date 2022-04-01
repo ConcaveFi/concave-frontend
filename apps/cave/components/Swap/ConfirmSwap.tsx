@@ -149,7 +149,7 @@ export const ConfirmSwapModal = ({
         <ExpectedOutput
           value={expectedOutput}
           symbol={currencyOut.symbol}
-          slippage={maxSlippagePercentage.toSignificant(2)}
+          slippage={maxSlippagePercentage.toSignificant(2)} // TODO: maxSlippage is not the price impact
         />
         <StackDivider borderRadius="full" mx={-4} my={4} h={0.5} bg="stroke.secondary" />
         <MinExpectedOutput
