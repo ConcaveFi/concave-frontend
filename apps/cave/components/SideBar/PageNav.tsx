@@ -95,7 +95,7 @@ function PageNav() {
               textColor="text.low"
               textAlign="center"
               p={1}
-              href={'/position?operation=addLiquidity'}
+              href={'/addliquidity'}
             >
               Add liquidity
             </ButtonLink>
@@ -107,7 +107,7 @@ function PageNav() {
               fontWeight="thin"
               textColor="text.low"
               textAlign="center"
-              href={'/position?operation=showLiquidity'}
+              href={'/pools'}
             >
               Your Pools
             </ButtonLink>
