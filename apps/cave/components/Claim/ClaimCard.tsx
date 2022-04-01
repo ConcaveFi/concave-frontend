@@ -30,7 +30,7 @@ export function ClaimCard() {
 
   const redeemAncv = () => {
     setRedeeming(loading ? true : false)
-    setRedeemText(loading ? 'Redeeming' : 'Redeemed')
+    setRedeemText(loading ? 'Redeeming' : 'Nothing to Redeem')
     write()
   }
   return (
