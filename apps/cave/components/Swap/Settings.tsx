@@ -81,7 +81,7 @@ const Deadline = ({ value, onValueChange }) => {
             value={value}
             isNumericString
             placeholder="30"
-            size="medium"
+            // size="medium"
             variant="unstyled"
             onValueChange={onValueChange}
           />
