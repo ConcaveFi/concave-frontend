@@ -122,13 +122,13 @@ export const defaultSettings = {
   deadline: 30,
   slippageTolerance: 0.5,
   expertMode: false,
-  mulhops: true,
+  multihops: true,
 }
 
 const useSettings = () => {
   const [deadline, setDeadline] = useState(defaultSettings.deadline)
   const [slippageTolerance, setSlippageTolerance] = useState(defaultSettings.slippageTolerance)
-  const [multihops, { toggle: toggleMultihops }] = useBoolean(defaultSettings.mulhops)
+  const [multihops, { toggle: toggleMultihops }] = useBoolean(defaultSettings.multihops)
   const [expertMode, { toggle: toggleExpertMode }] = useBoolean(defaultSettings.expertMode)
 
   return useMemo(

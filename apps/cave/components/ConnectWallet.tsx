@@ -55,7 +55,7 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
       onClose={onClose}
       isCentered
       motionPreset="slideInBottom"
-      bodyProps={{ alignItems: 'center', gap: 3, maxW: '350px' }}
+      bodyProps={{ alignItems: 'center', gap: 3, w: '100', maxW: '350px' }}
     >
       {isMounted &&
         data.connectors.map((connector) => {
@@ -72,7 +72,7 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
                 <Image maxWidth="20px" src={`/assets/connectors/${connector.id}.png`} alt="" />
               }
               key={connector.id}
-              onClick={() => connect(connector)}
+              onClick={() => connect(connector).then(onClose)}
             >
               {connector.name}
             </Button>

@@ -24,7 +24,7 @@ export function Modal({
   bluryOverlay = false,
   titleAlign = 'left',
   closeButton,
-  bodyProps,
+  bodyProps = {},
   ...props
 }: ModalProps) {
   return (

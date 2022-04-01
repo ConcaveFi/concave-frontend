@@ -1,16 +1,12 @@
 import { CurrencyAmount, Currency, TradeType, Ether } from '@uniswap/sdk-core'
 import { findBestTrade, usePairs, useQuote } from 'hooks/useBestTrade'
-import { useEffect, useState, useCallback, useMemo } from 'react'
+import { useEffect, useState, useCallback, useMemo, useRef } from 'react'
 import { chain, useBalance, useNetwork } from 'wagmi'
 import { useAuth } from 'contexts/AuthContext'
+import { Trade } from '@uniswap/v2-sdk'
+import { defaultSettings } from './Settings'
 // import { debounce } from 'debounce'
-
-type SwapSettings = {
-  expertMode?: boolean
-  multihops?: boolean
-  deadline?: number
-  slippageTolerance?: number
-}
+import JSBI from 'jsbi'
 
 const useCurrencyBalance = (currency: Currency, userAddress: string) =>
   useBalance({
@@ -29,8 +25,16 @@ export const useNativeCurrency = () => {
   )
 }
 
-export const useSwap = (settings: SwapSettings = {}) => {
+export type TradeInfo = {
+  trade:
+    | Trade<Currency, Currency, TradeType.EXACT_INPUT>
+    | Trade<Currency, Currency, TradeType.EXACT_OUTPUT>
+  settings: typeof defaultSettings
+}
+
+export const useSwap = () => {
   const nativeCurrency = useNativeCurrency()
+  const [settings, setSettings] = useState(defaultSettings)
 
   const [currencyIn, setCurrencyIn] = useState<Currency>(nativeCurrency)
   const [currencyOut, setCurrencyOut] = useState<Currency>()
@@ -50,17 +54,17 @@ export const useSwap = (settings: SwapSettings = {}) => {
 
   const pairs = usePairs(currencyIn?.wrapped, currencyOut?.wrapped, settings.multihops ? 3 : 1)
 
-  const [tradeType, setTradeType] = useState(TradeType.EXACT_INPUT)
+  const tradeType = useRef(TradeType.EXACT_INPUT)
+  const tradeInfo = useRef<TradeInfo>()
 
   useEffect(() => {
-    if (!pairs.data || pairs.isLoading) return
-
     const [desiredExactCurrency, amount, otherCurrency, setOtherFieldAmount] =
-      tradeType === TradeType.EXACT_INPUT
+      tradeType.current === TradeType.EXACT_INPUT
         ? [currencyIn, amountIn, currencyOut, setAmountOut]
         : [currencyOut, amountOut, currencyIn, setAmountIn]
 
-    if (!amount || !otherCurrency) return
+    setOtherFieldAmount('')
+    if (!amount || !otherCurrency || !pairs.data || pairs.isLoading) return
 
     const desiredExactCurrencyAmount = CurrencyAmount.fromRawAmount(
       desiredExactCurrency,
@@ -70,20 +74,21 @@ export const useSwap = (settings: SwapSettings = {}) => {
       pairs.data,
       desiredExactCurrencyAmount,
       otherCurrency,
-      tradeType,
+      tradeType.current,
       { maxHops: settings.multihops ? 3 : 1 },
     )
 
-    setOtherFieldAmount(
-      bestTrade?.executionPrice.quote(desiredExactCurrencyAmount).toSignificant(6),
-    )
+    const quote = bestTrade?.executionPrice?.quote(desiredExactCurrencyAmount)
+    setOtherFieldAmount(quote.toSignificant(6))
+
+    tradeInfo.current = { trade: bestTrade, settings }
   }, [currencyIn, currencyOut, pairs, tradeType, amountIn, amountOut, settings])
 
   const updateField = useCallback(
     (fieldTradeType: TradeType) => (amount) => {
       const setFieldAmount = fieldTradeType === TradeType.EXACT_INPUT ? setAmountIn : setAmountOut
       setFieldAmount(amount)
-      setTradeType(fieldTradeType)
+      tradeType.current = fieldTradeType
     },
     [],
   )
@@ -93,36 +98,60 @@ export const useSwap = (settings: SwapSettings = {}) => {
     setCurrencyOut(currencyIn)
     setAmountIn(amountOut)
     setAmountOut(amountIn)
-    setTradeType(
-      tradeType === TradeType.EXACT_INPUT ? TradeType.EXACT_OUTPUT : TradeType.EXACT_INPUT,
-    )
-  }, [amountIn, amountOut, currencyIn, currencyOut, tradeType])
+    tradeType.current =
+      tradeType.current === TradeType.EXACT_INPUT ? TradeType.EXACT_OUTPUT : TradeType.EXACT_INPUT
+  }, [currencyIn, currencyOut, amountOut, amountIn, tradeType])
 
   const setOrSwitchCurrency = useCallback(
     (otherCurrency: Currency, setCurrency) => (currency: Currency) =>
-      otherCurrency?.equals(currency) ? switchCurrencies() : setCurrency(currency),
-    [switchCurrencies],
+      otherCurrency?.equals(currency)
+        ? (setCurrencyIn(currencyOut), setCurrencyOut(currencyIn))
+        : setCurrency(currency),
+    [currencyIn, currencyOut],
   )
 
-  return {
-    setAmountIn: updateField(TradeType.EXACT_INPUT),
-    setAmountOut: updateField(TradeType.EXACT_OUTPUT),
-    setCurrencyIn: setOrSwitchCurrency(currencyOut, setCurrencyIn),
-    setCurrencyOut: setOrSwitchCurrency(currencyIn, setCurrencyOut),
-    switchCurrencies,
-    isFetchingPairs: pairs.isLoading,
-    swapingIn: {
-      currency: currencyIn,
-      amount: amountIn,
-      balance: currencyInBalance?.formatted,
-      stable: currencyInUsdPrice,
-    },
-    swapingOut: {
-      currency: currencyOut,
-      amount: amountOut,
-      balance: currencyOutBalance?.formatted,
-      stable: currencyOutUsdPrice,
+  return useMemo(
+    () => ({
+      setAmountIn: updateField(TradeType.EXACT_INPUT),
+      setAmountOut: updateField(TradeType.EXACT_OUTPUT),
+      setCurrencyIn: setOrSwitchCurrency(currencyOut, setCurrencyIn),
+      setCurrencyOut: setOrSwitchCurrency(currencyIn, setCurrencyOut),
+      switchCurrencies,
+      setSettings,
+      isFetchingPairs: pairs.isLoading || pairs.isRefetching || pairs.isFetching,
+      isTradeReady: !!tradeInfo.current?.trade?.executionPrice,
+      swapingIn: {
+        currency: currencyIn,
+        amount: amountIn,
+        balance: currencyInBalance?.formatted,
+        stable: currencyInUsdPrice,
+      },
+      swapingOut: {
+        currency: currencyOut,
+        amount: amountOut,
+        balance: currencyOutBalance?.formatted,
+        stable: currencyOutUsdPrice,
+        relativePrice,
+      },
+      settings,
+      tradeInfo: tradeInfo.current,
+    }),
+    [
+      currencyIn,
+      currencyOut,
+      amountIn,
+      amountOut,
+      currencyInBalance,
+      currencyOutBalance,
+      currencyInUsdPrice,
+      currencyOutUsdPrice,
       relativePrice,
-    },
-  }
+      pairs,
+      settings,
+      tradeInfo,
+      updateField,
+      setOrSwitchCurrency,
+      switchCurrencies,
+    ],
+  )
 }

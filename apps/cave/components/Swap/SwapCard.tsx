@@ -69,17 +69,19 @@ const SwitchCurrencies = ({ onClick }) => {
  */
 
 export function SwapCard() {
-  const [settings, setSettings] = useState(defaultSettings)
   const {
     setAmountIn,
     setAmountOut,
     setCurrencyIn,
     setCurrencyOut,
     switchCurrencies,
+    setSettings,
+    tradeInfo,
+    isTradeReady,
     isFetchingPairs,
     swapingIn,
     swapingOut,
-  } = useSwap(settings)
+  } = useSwap()
 
   const nativeCurrency = useNativeCurrency()
 
@@ -121,9 +123,11 @@ export function SwapCard() {
                   1 {swapingOut.currency.symbol} = {swapingOut.relativePrice}
                   {swapingIn.currency.symbol}
                 </Text>
-                <Text ml={1} textColor="text.low">
-                  (${swapingOut.stable})
-                </Text>
+                {swapingOut.stable && (
+                  <Text ml={1} textColor="text.low">
+                    (${swapingOut.stable})
+                  </Text>
+                )}
               </Flex>
             )
           )}
@@ -136,13 +140,25 @@ export function SwapCard() {
             Connect Wallet
           </Button>
         ) : (
-          <Button variant="primary" size="large" isFullWidth onClick={confirm.onOpen}>
+          <Button
+            isDisabled={!isTradeReady}
+            variant="primary"
+            size="large"
+            isFullWidth
+            onClick={confirm.onOpen}
+          >
             Swap
           </Button>
         )}
       </Card>
 
-      <ConfirmSwapModal isOpen={false} onClose={() => null} />
+      <ConfirmSwapModal
+        swapingIn={swapingIn as any}
+        swapingOut={swapingOut as any}
+        tradeInfo={tradeInfo}
+        isOpen={confirm.isOpen}
+        onClose={confirm.onClose}
+      />
 
       <TransactionStatusModal isOpen={false} onClose={() => null} />
 
