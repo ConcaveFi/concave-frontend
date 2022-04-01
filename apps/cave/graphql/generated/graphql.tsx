@@ -238,7 +238,7 @@ export type User = {
 export type User_Aggregate = {
   __typename?: 'user_aggregate'
   aggregate?: Maybe<User_Aggregate_Fields>
-  nodes: Array<User>
+  Node: Array<User>
 }
 
 /** aggregate fields of "user" */
