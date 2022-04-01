@@ -43,9 +43,7 @@ export function initializeApollo(initialState = null) {
       // combine arrays using object equality (like in sets)
       arrayMerge: (destinationArray, sourceArray) => [
         ...sourceArray,
-        ...destinationArray.filter((d) =>
-          sourceArray.every((s) => !isEqual(d, s))
-        ),
+        ...destinationArray.filter((d) => sourceArray.every((s) => !isEqual(d, s))),
       ],
     })
 
