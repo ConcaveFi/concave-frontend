@@ -71,7 +71,7 @@ export const useToken = (props: { userAddressOrName: string; symbol?: AvailableT
     if (!tokens.isSuccess) {
       return
     }
-    setToken(tokens.data.find((t) => t.symbol === symbol))
+    // setToken(tokens.data.find((t) => t.symbol === symbol))
   }, [symbol, tokens.data, tokens.isSuccess])
 
   return [{ token, balance, price, amount }, setSymbol] as const
