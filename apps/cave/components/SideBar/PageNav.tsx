@@ -29,7 +29,7 @@ function PageNav() {
               Bonds
             </ButtonLink>
             <Text fontSize="sm" fontWeight="thin" textColor="#5F7A99" textAlign="center" p={1}>
-              Coming Soon
+              5 days - 9% ROI
             </Text>
           </Box>
 
@@ -51,8 +51,7 @@ function PageNav() {
           <ButtonLink
             leftIcon={<Image src={'/assets/sidebar/page-marketplace.svg'} />}
             iconSpacing={7}
-            shadow="up"
-            _focus={{ shadow: 'down' }}
+            variant="primary.outline"
             bgGradient="linear(to-tr, secondary.150, secondary.100)"
             w="160px"
             h="45px"

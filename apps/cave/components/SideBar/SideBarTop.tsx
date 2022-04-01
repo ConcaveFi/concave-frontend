@@ -5,18 +5,16 @@ import { ConnectWallet } from 'components/ConnectWallet'
 import { ButtonLink } from 'components/ButtonLink'
 import { MdOutlineDashboard } from 'react-icons/md'
 import { useBalance } from 'wagmi'
-import { useAuth } from 'contexts/AuthContext'
 
 function SideBarTop() {
-  const { user } = useAuth()
-  const [{ data, error, loading }, getCNVBalance] = useBalance({
-    addressOrName: user.address,
-    // token: '0x2B8E79CBD58418CE9aeB720BAf6B93825B93eF1F', // INSERT CNV ADDRESS
+  const [{ data, error, loading }, getBalance] = useBalance({
+    addressOrName: '0x9D588E7A18b1c7354066617e89326607988364A7',
+    // token: '0x7B731FFcf1b9C6E0868dA3F1312673A12Da28dc5', // INSERT CNV ADDRESS
   })
 
   useEffect(() => {
-    console.log(`error:${error}`)
-  })
+    console.log(data)
+  }, [data])
 
   return (
     <Box shadow="down" px={2} pt={10} pb={3} rounded="2xl">
@@ -32,7 +30,7 @@ function SideBarTop() {
 
       <Stack gap="1" align="flex-end" mt={7}>
         <ButtonLink
-          href="treasury"
+          href="/treasury"
           variant="primary.outline"
           size="medium"
           w="full"
@@ -47,7 +45,7 @@ function SideBarTop() {
               Your CNV Balance
             </Text>
             <Text color="text.low" fontWeight="bold" fontSize="md" lineHeight="100%">
-              {loading ? 0 : data?.formatted} CNV
+              0 CNV
             </Text>
           </Flex>
         </Box>
