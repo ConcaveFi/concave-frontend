@@ -22,8 +22,9 @@ function Swap() {
 
   return (
     <Flex direction="column" gap={12}>
-      <GcnvTitle title="Swap gCNV" description="Swap gCNV here" />
+      <GcnvTitle title="" description="" />
       <Flex gap={4} flexWrap="wrap" justify="center">
+      
         <CandleStickCard
           from={swap.from.token}
           to={swap.to.token}
@@ -46,6 +47,7 @@ function Swap() {
           h={['100%', 400]}
           w={['100%', '100%', 500, 567, 400]}
         />
+
       </Flex>
     </Flex>
   )

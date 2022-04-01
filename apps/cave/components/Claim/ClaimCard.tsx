@@ -1,11 +1,23 @@
 import { Button, Card, Center, Stack, Text } from "@concave/ui";
-import { TokenAmount } from "@uniswap/sdk";
-import { useState } from "react";
+import { useAuth } from "contexts/AuthContext";
+import { gaEvent } from "lib/analytics";
+import { useEffect } from "react";
+import { useBalance } from "wagmi";
 
 
-export function ClaimCard({ userAddress }: { userAddress: string }) {
-  const [balance, redeem] = useState(
-  ) 
+
+export function ClaimCard(){
+const { user } = useAuth()
+const [{ data, error, loading }, getCNVBalance] = useBalance({
+  addressOrName: user.address,
+  token: '0x2B8E79CBD58418CE9aeB720BAf6B93825B93eF1F', // INSERT aCNV ADDRESS
+})
+
+
+
+useEffect(() => {
+  console.log(`error:${error}`)
+})
     return (
     <Card
       variant="secondary"
@@ -32,7 +44,7 @@ export function ClaimCard({ userAddress }: { userAddress: string }) {
         >
          Redeem aCNV
         </Button>
-        <Text color="text.low">aCNV Balance: 50</Text>
+        <Text color="text.low">aCNV Balance: {getCNVBalance} {loading ? 0 : data?.formatted}</Text>
         </Stack>
 
        {/* <Stack align="center" direction="row" justify="space-between" w="80%" >
