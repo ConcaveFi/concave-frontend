@@ -3,10 +3,9 @@ import {
   Card,
   Container,
   Flex,
-  gradientBorder,
-  Heading,
+  // gradientBorder,
+  // Heading,
   Image,
-  Stack,
   Text,
 } from '@concave/ui'
 import GcnvTitle from 'components/GcnvTitle'

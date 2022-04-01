@@ -541,6 +541,8 @@ const AddLiquidityContent = ({ userAddress }: { userAddress: string }) => {
           onChangeCurrency={(token) => {
             setTokenA(token.symbol)
           }}
+          balance={''}
+          stable={''}
         >
           <TokenBalance
             value={wrapperTokenA.balance?.formatted}
@@ -571,6 +573,8 @@ const AddLiquidityContent = ({ userAddress }: { userAddress: string }) => {
           onChangeCurrency={(token) => {
             setTokenB(token.symbol)
           }}
+          balance={''}
+          stable={''}
         >
           {wrapperTokenB.token?.symbol && (
             <TokenBalance
