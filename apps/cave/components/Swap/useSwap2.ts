@@ -129,7 +129,8 @@ export const useSwap = () => {
       // feeOnTransfer?: boolean;
     })
     swap(methodName, { args, overrides: { value } })
-  }, [settings.deadline, swap, user.address])
+  }, [swap, user.address])
+  // settings.deadline, swap, user.address
 
   const updateField = useCallback(
     (fieldTradeType: TradeType) => (amount) => {

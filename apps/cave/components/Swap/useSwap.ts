@@ -2,7 +2,7 @@ import { tokenService } from 'lib/token.service'
 import { AvailableTokens, TokenType } from 'lib/tokens'
 import { useEffect, useState, useRef, useCallback } from 'react'
 import { useQuery } from 'react-query'
-import { chain, useBalance } from 'wagmi'
+import { useBalance } from 'wagmi'
 import { useTokenList } from './hooks/useTokenList'
 import { BigNumber } from 'ethers'
 

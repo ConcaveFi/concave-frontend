@@ -18,7 +18,7 @@ function Placeholder({ text }) {
           Coming Soon
         </Text>
         <Flex justifyContent="center">
-          <Image src="/assets/concave/concaveLogo.gif" h={28} w={28} />
+          <Image src="/assets/concave/concaveLogo.gif" alt="concave-logo" h={28} w={28} />
         </Flex>
       </Box>
     </Box>
