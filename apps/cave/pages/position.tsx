@@ -337,20 +337,20 @@ const YourPosition = ({
         spacing={3}
       >
         <PositionInfoItem label="Your pool share:" value={'2.79%'} />
-        <PositionInfoItem label={wrapperTokenA.token?.symbol} value={'0.0001331'}>
-          {/* <TokenIcon
+        {/* <PositionInfoItem label={wrapperTokenA.token?.symbol} value={'0.0001331'}> */}
+        {/* <TokenIcon
             size={'sm'}
             logoURI={wrapperTokenA.token?.logoURI}
             symbol={wrapperTokenA.token?.symbol}
           /> */}
-        </PositionInfoItem>
-        <PositionInfoItem label={wrapperTokenB.token?.symbol} value={'325.744'}>
-          {/* <TokenIcon
+        {/* </PositionInfoItem> */}
+        {/* <PositionInfoItem label={wrapperTokenB.token?.symbol} value={'325.744'}> */}
+        {/* <TokenIcon
             size={'sm'}
             logoURI={wrapperTokenB.token?.logoURI}
             symbol={wrapperTokenB.token?.symbol}
           /> */}
-        </PositionInfoItem>
+        {/* </PositionInfoItem> */}
       </Stack>
     </Flex>
   )
@@ -475,7 +475,7 @@ const SupplyLiquidityModal = ({
         <TokenIcon {...wrapperTokenB.token}></TokenIcon> */}
       </HStack>
       <Box borderRadius={'2xl'} p={6} shadow={'down'}>
-        <PositionInfoItem
+        {/* <PositionInfoItem
           label="Rates"
           value={`1  ${wrapperTokenA.token.symbol} =  ${
             usePrecision(wrapperTokenA.price / wrapperTokenB.price).formatted
@@ -498,7 +498,7 @@ const SupplyLiquidityModal = ({
           label={`${wrapperTokenB.token.symbol} Deposited`}
           value={`${usePrecision(amountBDesired).formatted} ${wrapperTokenB.token.symbol}`}
         />
-        <PositionInfoItem color={'text.low'} label="Share Pool" value={'2.786%'} />
+        <PositionInfoItem color={'text.low'} label="Share Pool" value={'2.786%'} /> */}
       </Box>
       {needsApproveA && (
         <Button mt={2} p={6} fontSize={'2xl'} variant={'primary'} onClick={() => requestApproveA()}>
