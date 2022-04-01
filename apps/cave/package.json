@@ -18,6 +18,7 @@
   "dependencies": {
     "@0xsequence/multicall": "^0.36.8",
     "@apollo/client": "^3.5.10",
+    "@chakra-ui/cli": "^1.9.0",
     "@concave/icons": "*",
     "@concave/ui": "*",
     "@graphql-codegen/typescript-react-query": "^3.5.9",
