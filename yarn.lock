@@ -5884,6 +5884,19 @@ gemswap-sdk@^1.0.8:
     tiny-warning "^1.0.3"
     wagmi "^0.2.24"
 
+gemswap-sdk@^1.0.9:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/gemswap-sdk/-/gemswap-sdk-1.0.9.tgz#85fad4badc668edee7c2ec22f1ca8131c727dc38"
+  integrity sha512-n4sJu3vu+WFhMrRJGM9e8RCj9DvnpdWy6YQc9Mvygo7IcGKHjDBZDnjbGb7jY3rkB6+AFRQTm66J+BPJjh5CVw==
+  dependencies:
+    "@ethersproject/address" "^5.0.0"
+    "@ethersproject/solidity" "^5.0.0"
+    "@uniswap/sdk-core" "^3.0.0-alpha.3"
+    mocha "^9.2.2"
+    tiny-invariant "^1.1.0"
+    tiny-warning "^1.0.3"
+    wagmi "^0.2.24"
+
 gensync@^1.0.0-beta.2:
   version "1.0.0-beta.2"
   resolved "https://registry.yarnpkg.com/gensync/-/gensync-1.0.0-beta.2.tgz#32a6ee76c3d7f52d46b2b1ae5d93fea8580a25e0"
