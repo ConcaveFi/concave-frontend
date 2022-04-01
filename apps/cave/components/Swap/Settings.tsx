@@ -34,7 +34,6 @@ const SlippageTolerance = ({ value, onValueChange, onClickAuto }) => {
               value={value}
               isNumericString
               placeholder="0.50"
-              size="medium"
               variant="unstyled"
               max={50}
               onValueChange={onValueChange}
