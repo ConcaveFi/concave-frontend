@@ -1,19 +1,21 @@
 import { Button, Card, Center, Stack, Text } from '@concave/ui'
 import { useAuth } from 'contexts/AuthContext'
-import { gaEvent } from 'lib/analytics'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useBalance } from 'wagmi'
 
 export function ClaimCard() {
   const { user } = useAuth()
-  const [{ data, error, loading }, getCNVBalance] = useBalance({
+  const [{ data, error, loading }, getaCNVBalance] = useBalance({
     addressOrName: user.address,
-    token: '0x2B8E79CBD58418CE9aeB720BAf6B93825B93eF1F', // INSERT aCNV ADDRESS
+    // token: '0x2B8E79CBD58418CE9aeB720BAf6B93825B93eF1F', // INSERT aCNV ADDRESS
   })
+  const [redeemText, setRedeemText] = useState('Redeem aCNV')
+  const [redeeming, setRedeeming] = useState(false)
 
   useEffect(() => {
     console.log(`error:${error}`)
-  })
+  }, [error])
+
   return (
     <Card
       variant="secondary"
@@ -24,9 +26,8 @@ export function ClaimCard() {
       shadow="Up Big"
       gap={2}
     >
-      <Stack align="center" direction="row" justify="space-between" w="80%">
+      <Stack align="center" direction="row" justify="space-between" w="80%" alignItems="center">
         <Button
-          mt={5}
           fontWeight="bold"
           fontSize="md"
           variant="primary.outline"
@@ -35,12 +36,13 @@ export function ClaimCard() {
           h="30px"
           size="large"
           mx="moz-initial"
+          isLoading={redeeming}
+          loadingText="Redeeming"
+          onClick={() => setRedeeming(true)}
         >
-          Redeem aCNV
+          {redeemText}
         </Button>
-        <Text color="text.low">
-          aCNV Balance: {getCNVBalance} {loading ? 0 : data?.formatted}
-        </Text>
+        <Text color="text.low">aCNV Balance: {loading ? 0 : data?.formatted}</Text>
       </Stack>
 
       {/* <Stack align="center" direction="row" justify="space-between" w="80%" >
