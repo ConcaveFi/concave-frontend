@@ -1,21 +1,38 @@
 import { Button, Card, Center, Stack, Text } from '@concave/ui'
 import { useAuth } from 'contexts/AuthContext'
 import { useEffect, useState } from 'react'
-import { useBalance } from 'wagmi'
+import { useBalance, useContractWrite } from 'wagmi'
+import { aCNVredeemabi } from 'lib/contractoABI'
 
 export function ClaimCard() {
   const { user } = useAuth()
-  const [{ data, error, loading }, getaCNVBalance] = useBalance({
-    addressOrName: user.address,
-    // token: '0x2B8E79CBD58418CE9aeB720BAf6B93825B93eF1F', // INSERT aCNV ADDRESS
-  })
+  // const [{ data, error, loading }, getaCNVBalance] = useBalance({
+  //   addressOrName: user.address,
+  //   token: '0x2A6bb78490c2221E0D36d931192296BE4b3A01F1', // INSERT aCNV ADDRESS
+  // })
+  const [{ data, error, loading }, write] = useContractWrite(
+    {
+      addressOrName: '0x3bc60dc5936fa22f23656f1fe8b7831e51faa65c',
+      contractInterface: aCNVredeemabi,
+    },
+    'redeem',
+    {
+      args: [user.address],
+    },
+  )
   const [redeemText, setRedeemText] = useState('Redeem aCNV')
   const [redeeming, setRedeeming] = useState(false)
 
   useEffect(() => {
+    console.log(`data:${data}`)
     console.log(`error:${error}`)
-  }, [error])
+  }, [data, error])
 
+  const redeemAncv = () => {
+    setRedeeming(loading ? true : false)
+    setRedeemText(loading ? 'Redeeming' : 'Redeemed')
+    write()
+  }
   return (
     <Card
       variant="secondary"
@@ -38,11 +55,11 @@ export function ClaimCard() {
           mx="moz-initial"
           isLoading={redeeming}
           loadingText="Redeeming"
-          onClick={() => setRedeeming(true)}
+          onClick={redeemAncv}
         >
           {redeemText}
         </Button>
-        <Text color="text.low">aCNV Balance: {loading ? 0 : data?.formatted}</Text>
+        {/* <Text color="text.low">aCNV Balance: {loading ? 0 : data?.formatted}</Text> */}
       </Stack>
 
       {/* <Stack align="center" direction="row" justify="space-between" w="80%" >
