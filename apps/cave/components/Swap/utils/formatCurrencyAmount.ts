@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, Fraction, Price } from '@uniswap/sdk-core'
+import { Currency, CurrencyAmount, Fraction, Price } from 'gemswap-sdk'
 import JSBI from 'jsbi'
 
 export function formatCurrencyAmount(

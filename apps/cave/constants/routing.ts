@@ -24,7 +24,7 @@ type ChainTokenList = { readonly [chainId: number]: Token[] }
 type ChainCurrencyList = { readonly [chainId: number]: Currency[] }
 
 export const STABLES = {
-  [chain.mainnet.id]: [DAI, DOLA, USDC, FRAX, USDT],
+  [chain.mainnet.id]: [DAI /* DOLA, USDC, FRAX, USDT */],
   [chain.ropsten.id]: [...ROPSTEN_STABLES],
 }
 

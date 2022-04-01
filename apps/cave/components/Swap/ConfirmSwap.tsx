@@ -1,9 +1,8 @@
 import { ExpandArrowIcon, TokenIcon } from '@concave/icons'
 import { Box, Button, Flex, HStack, Modal, NumericInput, StackDivider, Text } from '@concave/ui'
-import { Percent } from '@uniswap/sdk-core'
 import React from 'react'
+import { twoDecimals } from './SwapCard'
 import { TradeInfo } from './useSwap2'
-
 const TokenInfo = ({
   price,
   address,
@@ -25,11 +24,11 @@ const TokenInfo = ({
       px={5}
       p={4}
     >
-      <Box w={200}>
+      <Box w={200} h="69px">
         <NumericInput disabled fontSize={'32px'} decimalScale={5} value={amount} />
         <Text fontWeight={700} fontSize={14} textColor="text.low">
-          {price}
-          {loss && ` (-${loss}%)`}
+          {!!price ? `$${twoDecimals(price)}` : ``}
+          {/* {loss && ` (-${loss}%)`} */}
         </Text>
       </Box>
       <HStack>
@@ -58,7 +57,7 @@ const InOutArrow = () => {
   )
 }
 
-const MinExpectedOutput = ({ value, symbol, estimatedFee }) => {
+const MinExpectedOutput = ({ value, symbol }) => {
   return (
     <Box>
       <Flex fontSize={'14px'} w={'100%'} mb={2} justifyContent={'space-between'}>
@@ -69,18 +68,18 @@ const MinExpectedOutput = ({ value, symbol, estimatedFee }) => {
           {value} {symbol}
         </Text>
       </Flex>
-      <Flex fontSize={'14px'} w={'100%'} justifyContent={'space-between'}>
+      {/* <Flex fontSize={'14px'} w={'100%'} justifyContent={'space-between'}>
         <Text fontWeight={700} textColor="text.low">
           Network Fee
         </Text>
         <Text fontWeight={700} textColor="text.low">
           ~ {estimatedFee}
         </Text>
-      </Flex>
+      </Flex> */}
     </Box>
   )
 }
-const ExpectedOutput = ({ value, symbol, slippage }) => {
+const ExpectedOutput = ({ value, symbol, priceImpact }) => {
   return (
     <Box>
       <Flex fontSize={'18px'} w={'100%'} justifyContent={'space-between'}>
@@ -93,7 +92,7 @@ const ExpectedOutput = ({ value, symbol, slippage }) => {
       </Flex>
       <Flex w={'100%'} justifyContent={'space-between'}>
         <Text fontWeight={600}>Price Impact</Text>
-        <Text fontWeight={600}>-{slippage}%</Text>
+        <Text fontWeight={600}>{priceImpact}%</Text>
       </Flex>
     </Box>
   )
@@ -101,65 +100,68 @@ const ExpectedOutput = ({ value, symbol, slippage }) => {
 
 export const ConfirmSwapModal = ({
   tradeInfo,
-  swapingOut,
-  swapingIn,
+  tokenInUsdPrice,
+  tokenOutUsdPrice,
+  tokenInRelativePriceToTokenOut,
   isOpen,
   onClose,
+  onConfirm,
 }: {
   tradeInfo: TradeInfo
-  swapingOut: { stable: number; relativePrice: number }
-  swapingIn: { stable: number }
+  tokenInUsdPrice: string
+  tokenOutUsdPrice: string
+  tokenInRelativePriceToTokenOut: string
   isOpen: boolean
   onClose: () => void
+  onConfirm: () => void
 }) => {
   if (!tradeInfo) return null
-  const { trade, settings } = tradeInfo
+  const { trade, meta } = tradeInfo
+
   const currencyIn = trade.inputAmount.currency
   const currencyOut = trade.outputAmount.currency
-  const expectedOutput = trade.executionPrice.toSignificant(6)
-  const maxSlippagePercentage = new Percent(settings.slippageTolerance * 100, 100_000)
-  const worstExecutionPrice = trade.worstExecutionPrice(maxSlippagePercentage).toSignificant(6)
+
   return (
     <Modal bluryOverlay={true} title="Confirm Swap" isOpen={isOpen} onClose={onClose}>
       <TokenInfo
         address={currencyIn.isToken ? currencyIn.address : currencyIn.symbol}
         symbol={currencyIn.symbol}
         amount={trade.inputAmount.toSignificant(3)}
-        price={+trade.inputAmount.toSignificant(6) * swapingIn.stable}
+        price={+trade.inputAmount.toSignificant(6) * +tokenInUsdPrice}
       />
       <InOutArrow />
       <TokenInfo
         address={currencyOut.isToken ? currencyOut.address : currencyOut.symbol}
         symbol={currencyOut.symbol}
         amount={trade.outputAmount.toSignificant(3)}
-        price={+trade.outputAmount.toSignificant(6) * swapingOut.stable}
+        price={+trade.outputAmount.toSignificant(6) * +tokenOutUsdPrice}
       />
 
       <Flex fontSize="sm" fontWeight="bold" my={6} justify="center" flexWrap="wrap">
         <Text>
-          1 {currencyOut.symbol} = {swapingOut.relativePrice}
+          1 {currencyOut.symbol} = {tokenInRelativePriceToTokenOut}
           {currencyIn.symbol}
         </Text>
         <Text ml={1} textColor="text.low">
-          (${swapingOut.stable})
+          (${tokenOutUsdPrice})
         </Text>
       </Flex>
 
       <Flex direction="column" borderRadius="3xl" mb={8} p={6} shadow="Down Medium">
         <ExpectedOutput
-          value={expectedOutput}
+          value={meta.expectedOutput}
           symbol={currencyOut.symbol}
-          slippage={maxSlippagePercentage.toSignificant(2)} // TODO: maxSlippage is not the price impact
+          priceImpact={trade.priceImpact.toSignificant(2)}
         />
         <StackDivider borderRadius="full" mx={-4} my={4} h={0.5} bg="stroke.secondary" />
         <MinExpectedOutput
-          value={worstExecutionPrice}
+          value={meta.worstExecutionPrice}
           symbol={currencyOut.symbol}
-          estimatedFee={'11'}
+          // estimatedFee={'11'}
         />
       </Flex>
 
-      <Button variant="primary" size="large" onClick={() => null} isFullWidth>
+      <Button variant="primary" size="large" onClick={onConfirm} isFullWidth>
         Confirm Swap
       </Button>
     </Modal>

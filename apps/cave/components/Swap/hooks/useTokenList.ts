@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query'
 import { Chain, chain } from 'wagmi'
-import { Token as UniswapToken } from '@uniswap/sdk-core'
+import { Token as UniswapToken } from 'gemswap-sdk'
 import { utils } from 'ethers'
 
 const concaveTokenList = `https://raw.githubusercontent.com/ConcaveFi/assets/main/networks/mainnet/tokenlist.json`

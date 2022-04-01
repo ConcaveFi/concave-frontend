@@ -13,12 +13,14 @@ import {
   TokenIcon,
   UnorderedList,
 } from '@concave/ui'
-import { Currency as UniswapCurrency } from '@uniswap/sdk-core'
+import { Currency as UniswapCurrency } from 'gemswap-sdk'
 import { BASES_TO_CHECK_TRADES_AGAINST, Token } from 'constants/routing'
 import React, { useCallback, useState } from 'react'
 import { chain, useNetwork } from 'wagmi'
 import { useTokenList } from './hooks/useTokenList'
 import { useNativeCurrency } from './useSwap2'
+import { DAI, CNV } from 'constants/tokens'
+import { ROPSTEN_DAI, ROPSTEN_CNV } from 'constants/ropstenTokens'
 
 type Currency = UniswapCurrency & Pick<Token, 'logoURI'>
 
@@ -118,14 +120,16 @@ export const SelectTokenModal = ({
       title="Select a Token"
       isOpen={isOpen}
       onClose={onClose}
-      bodyProps={{ gap: 4 }}
+      bodyProps={{ gap: 4, w: '350px' }}
     >
       <CommonTokens
-        currencies={[nativeCurrency, ...BASES_TO_CHECK_TRADES_AGAINST[chainId]]}
+        currencies={
+          network?.chain?.id === chain.ropsten.id ? [ROPSTEN_DAI, ROPSTEN_CNV] : [DAI, CNV]
+        } //[nativeCurrency, ...BASES_TO_CHECK_TRADES_AGAINST[chainId]]}
         selected={selected}
         onSelect={selectAndClose}
       />
-      <Input
+      {/* <Input
         placeholder="Search name or paste address"
         onChange={({ target }) => setSearch(target.value)}
       />
@@ -158,7 +162,7 @@ export const SelectTokenModal = ({
             ))}
           </UnorderedList>
         )}
-      </Flex>
+      </Flex> */}
     </Modal>
   )
 }

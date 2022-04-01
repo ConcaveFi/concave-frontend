@@ -1,9 +1,21 @@
-import { Button, Flex } from '@chakra-ui/react'
+import { Button, Flex, Link, Modal, Text } from '@concave/ui'
 import { SubmittedIcon } from '@concave/icons'
-import { Modal, Text } from '@concave/ui'
+import { ethers } from 'ethers'
 import React from 'react'
 
-export const TransactionSubmittedModal = ({ isOpen, onClose }) => {
+export const TransactionSubmittedModal = ({
+  receipt,
+  isOpen,
+  onClose,
+}: {
+  receipt: {
+    data: ethers.providers.TransactionReceipt
+    error: Error
+    loading: boolean
+  }
+  isOpen: boolean
+  onClose: () => void
+}) => {
   return (
     <Modal
       bluryOverlay={true}
@@ -18,23 +30,19 @@ export const TransactionSubmittedModal = ({ isOpen, onClose }) => {
       <SubmittedIcon w={10} mb={5} mt={12} />
       <Text align={'center'} fontSize={'24px'} fontWeight={600}>
         Transaction Submitted
-        <Text fontWeight={400} fontSize={'18px'} textColor={'Highlight'}>
+        <Link
+          href={`https://etherscan.io/tx/${receipt?.data?.transactionHash}`}
+          fontWeight={400}
+          fontSize={'18px'}
+          textColor={'Highlight'}
+        >
           View on Explorer
-        </Text>
+        </Link>
       </Text>
 
       <Flex>
-        <Button
-          onClick={onClose}
-          borderRadius={'2xl'}
-          variant="secondary"
-          mt={4}
-          w={'180px'}
-          h={'60px'}
-        >
-          <Text fontWeight={600} fontSize={'24px'}>
-            Close
-          </Text>
+        <Button onClick={onClose} variant="secondary" size="large" mt={4} w="180px">
+          Close
         </Button>
       </Flex>
     </Modal>

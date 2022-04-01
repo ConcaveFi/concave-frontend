@@ -1,11 +1,14 @@
-import { CurrencyAmount, Currency, TradeType, Ether } from '@uniswap/sdk-core'
+import { CurrencyAmount, Currency, TradeType, Ether, Percent, Trade, Router } from 'gemswap-sdk'
 import { findBestTrade, usePairs, useQuote } from 'hooks/useBestTrade'
 import { useEffect, useState, useCallback, useMemo, useRef } from 'react'
 import { chain, useBalance, useNetwork } from 'wagmi'
 import { useAuth } from 'contexts/AuthContext'
-import { Trade } from '@uniswap/v2-sdk'
 import { defaultSettings } from './Settings'
 // import { debounce } from 'debounce'
+import { RouterABI } from './routerABI'
+import { useContractWrite } from './hooks/useContractWrite'
+import { CNV, DAI } from 'constants/tokens'
+import { ROPSTEN_CNV, ROPSTEN_DAI } from 'constants/ropstenTokens'
 
 const useCurrencyBalance = (currency: Currency, userAddress: string) =>
   useBalance({
@@ -24,19 +27,28 @@ export const useNativeCurrency = () => {
   )
 }
 
+export const ROUTER_CONTRACT = {
+  [chain.mainnet.id]: '0x0a3e1c20b5384eb97d2ccff9a96bc91f0c77e7db',
+  [chain.ropsten.id]: '0x95dDC411d31bBeDd37e9aaABb335b0951Bc2D25a',
+}
+
 export type TradeInfo = {
-  trade:
-    | Trade<Currency, Currency, TradeType.EXACT_INPUT>
-    | Trade<Currency, Currency, TradeType.EXACT_OUTPUT>
-  settings: typeof defaultSettings
+  trade: Trade<Currency, Currency, TradeType>
+  meta: {
+    allowedSlippage: Percent
+    expectedOutput: string
+    worstExecutionPrice: string
+  }
 }
 
 export const useSwap = () => {
-  const nativeCurrency = useNativeCurrency()
+  const [{ data: network }] = useNetwork()
+
   const [settings, setSettings] = useState(defaultSettings)
 
-  const [currencyIn, setCurrencyIn] = useState<Currency>(nativeCurrency)
-  const [currencyOut, setCurrencyOut] = useState<Currency>()
+  const isRopsten = network?.chain?.id === chain.ropsten.id
+  const [currencyIn, setCurrencyIn] = useState<Currency>(isRopsten ? ROPSTEN_CNV : CNV)
+  const [currencyOut, setCurrencyOut] = useState<Currency>(isRopsten ? ROPSTEN_DAI : DAI)
 
   const [amountIn, setAmountIn] = useState<string>()
   const [amountOut, setAmountOut] = useState<string>()
@@ -63,7 +75,7 @@ export const useSwap = () => {
         : [currencyOut, amountOut, currencyIn, setAmountIn]
 
     setOtherFieldAmount('')
-    if (!amount || !otherCurrency || !pairs.data || pairs.isLoading) return
+    if (!amount || !otherCurrency || !desiredExactCurrency || !pairs.data || pairs.isLoading) return
 
     const desiredExactCurrencyAmount = CurrencyAmount.fromRawAmount(
       desiredExactCurrency,
@@ -74,14 +86,45 @@ export const useSwap = () => {
       desiredExactCurrencyAmount,
       otherCurrency,
       tradeType.current,
-      { maxHops: settings.multihops ? 3 : 1 },
+      { maxHops: 1 },
     )
 
     const quote = bestTrade?.executionPrice?.quote(desiredExactCurrencyAmount)
     setOtherFieldAmount(quote.toSignificant(6))
 
-    tradeInfo.current = { trade: bestTrade, settings }
+    const allowedSlippage = new Percent(settings.slippageTolerance * 100, 100_000)
+    const expectedOutput = bestTrade.executionPrice
+      .quote(desiredExactCurrencyAmount)
+      .toSignificant(6)
+    const worstExecutionPrice = bestTrade
+      .worstExecutionPrice(allowedSlippage)
+      .quote(desiredExactCurrencyAmount)
+      .toSignificant(6)
+
+    tradeInfo.current = {
+      trade: bestTrade as any,
+      meta: {
+        allowedSlippage,
+        expectedOutput,
+        worstExecutionPrice,
+      },
+    }
   }, [currencyIn, currencyOut, pairs, tradeType, amountIn, amountOut, settings])
+
+  const [swapTransaction, swap] = useContractWrite({
+    addressOrName: ROUTER_CONTRACT[isRopsten ? chain.ropsten.id : chain.mainnet.id],
+    contractInterface: RouterABI,
+  })
+
+  const confirmSwap = useCallback(async () => {
+    const { methodName, args, value } = Router.swapCallParameters(tradeInfo.current.trade, {
+      allowedSlippage: tradeInfo.current.meta.allowedSlippage,
+      ttl: settings.deadline,
+      recipient: user.address,
+      // feeOnTransfer?: boolean;
+    })
+    swap(methodName, { args, overrides: { value } })
+  }, [settings.deadline, swap, user.address])
 
   const updateField = useCallback(
     (fieldTradeType: TradeType) => (amount) => {
@@ -92,14 +135,14 @@ export const useSwap = () => {
     [],
   )
 
-  const switchCurrencies = useCallback(() => {
-    setCurrencyIn(currencyOut)
-    setCurrencyOut(currencyIn)
-    setAmountIn(amountOut)
-    setAmountOut(amountIn)
-    tradeType.current =
-      tradeType.current === TradeType.EXACT_INPUT ? TradeType.EXACT_OUTPUT : TradeType.EXACT_INPUT
-  }, [currencyIn, currencyOut, amountOut, amountIn, tradeType])
+  // const switchCurrencies = useCallback(() => {
+  //   setCurrencyIn(currencyOut)
+  //   setCurrencyOut(currencyIn)
+  //   setAmountIn(amountOut)
+  //   setAmountOut(amountIn)
+  //   tradeType.current =
+  //     tradeType.current === TradeType.EXACT_INPUT ? TradeType.EXACT_OUTPUT : TradeType.EXACT_INPUT
+  // }, [currencyIn, currencyOut, amountOut, amountIn, tradeType])
 
   const setOrSwitchCurrency = useCallback(
     (otherCurrency: Currency, setCurrency) => (currency: Currency) =>
@@ -115,11 +158,16 @@ export const useSwap = () => {
       setAmountOut: updateField(TradeType.EXACT_OUTPUT),
       setCurrencyIn: setOrSwitchCurrency(currencyOut, setCurrencyIn),
       setCurrencyOut: setOrSwitchCurrency(currencyIn, setCurrencyOut),
-      switchCurrencies,
+      switchCurrencies: () => {
+        setCurrencyIn(currencyOut)
+        setCurrencyOut(currencyIn)
+      },
       setSettings,
       isFetchingPairs: pairs.isLoading || pairs.isRefetching || pairs.isFetching,
       isErrored: pairs.isError,
-      isTradeReady: !!tradeInfo.current?.trade?.executionPrice,
+      isTradeReady: !!tradeInfo.current?.trade.executionPrice,
+      swapTransaction,
+      confirmSwap,
       swapingIn: {
         currency: currencyIn,
         amount: amountIn,
@@ -149,9 +197,11 @@ export const useSwap = () => {
       pairs,
       settings,
       tradeInfo,
+      swapTransaction,
+      confirmSwap,
       updateField,
       setOrSwitchCurrency,
-      switchCurrencies,
+      // switchCurrencies,
     ],
   )
 }

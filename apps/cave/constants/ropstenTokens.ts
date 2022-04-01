@@ -29,7 +29,7 @@ export const ROPSTEN_WETH = new Token({
 export const ROPSTEN_DAI = new Token({
   chainId: chain.ropsten.id,
   name: 'Dai Stablecoin',
-  address: '0x7B731FFcf1b9C6E0868dA3F1312673A12Da28dc5',
+  address: '0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4',
   symbol: 'DAI',
   decimals: 18,
   logoURI:
@@ -44,5 +44,18 @@ export const ROPSTEN_FRAX = new Token({
   logoURI: '/assets/tokens/frax.svg',
   chainId: chain.ropsten.id,
 })
+
+export const ROPSTEN_CNV = new Token({
+  chainId: chain.ropsten.id,
+  address: '0x2b8e79cbd58418ce9aeb720baf6b93825b93ef1f',
+  decimals: 18,
+  symbol: 'CNV',
+  name: 'Concave',
+  logoURI: '/assets/tokens/frax.svg',
+})
+
+// tokenA: '0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4',
+// tokenB: '0x2b8e79cbd58418ce9aeb720baf6b93825b93ef1f',
+// liquidityAddress: '0xb14d541123a7f7276F01A22798caDa7eE1D7F57f',
 
 export const ROPSTEN_STABLES = [ROPSTEN_DAI, ROPSTEN_FRAX]

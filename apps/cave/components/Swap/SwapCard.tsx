@@ -1,15 +1,16 @@
 import { ExpandArrowIcon, GasIcon } from '@concave/icons'
 import { Button, Card, Flex, HStack, Spinner, Text, useDisclosure } from '@concave/ui'
-import { ConnectWalletModal } from 'components/ConnectWallet'
 import { useAuth } from 'contexts/AuthContext'
-import React, { useState } from 'react'
-import { useConnect, useFeeData } from 'wagmi'
+import { useApproval, useApprovalWhenNeeded } from 'hooks/useAllowance'
+import { TokenType } from 'lib/tokens'
+import React from 'react'
+import { useFeeData, useWaitForTransaction } from 'wagmi'
 import { ConfirmSwapModal } from './ConfirmSwap'
-import { defaultSettings, Settings } from './Settings'
+import { Settings } from './Settings'
 import { TokenInput } from './TokenInput'
 import { TransactionStatusModal } from './TransactionStatus'
 import { TransactionSubmittedModal } from './TransactionSubmitted'
-import { useNativeCurrency, useSwap } from './useSwap2'
+import { ROUTER_CONTRACT, useNativeCurrency, useSwap } from './useSwap2'
 
 export const twoDecimals = (s: string | number) => {
   const a = s.toString()
@@ -36,7 +37,7 @@ const LoadingBestTradeIndicator = () => {
   return (
     <Flex mr="auto" gap={2} align="center" color="text.low">
       <Spinner size="xs" />
-      <Text fontSize="xs">Searching for best trade route</Text>
+      <Text fontSize="sm">Fetching pair data</Text>
     </Flex>
   )
 }
@@ -61,7 +62,7 @@ const SwitchCurrencies = ({ onClick }) => {
 }
 
 const PairsError = () => (
-  <Text fontSize="xs" color="text.low">
+  <Text mr="auto" fontSize="sm" color="#c32417" fontWeight="medium">
     Error Fetching Pairs
   </Text>
 )
@@ -82,6 +83,8 @@ export function SwapCard() {
     setCurrencyOut,
     switchCurrencies,
     setSettings,
+    confirmSwap,
+    swapTransaction,
     tradeInfo,
     isTradeReady,
     isErrored,
@@ -92,9 +95,24 @@ export function SwapCard() {
 
   const nativeCurrency = useNativeCurrency()
 
-  const { isConnected, connectWithModal } = useAuth()
+  const { user, isConnected, connectWithModal } = useAuth()
 
-  const confirm = useDisclosure()
+  const confirmModal = useDisclosure()
+  const transactionStatusModal = useDisclosure()
+  const receiptModal = useDisclosure()
+
+  const [swapReceipt] = useWaitForTransaction({
+    hash: swapTransaction.data?.hash,
+    skip: !swapTransaction.data?.hash,
+  })
+
+  const [needsApproval, approve, isApproving] = useApprovalWhenNeeded(
+    swapingIn.currency.wrapped as TokenType,
+    ROUTER_CONTRACT[1],
+    user.address,
+    +swapingIn?.balance,
+  )
+
   return (
     <>
       <Card p={6} gap={2} variant="primary" h="fit-content" shadow="Block Up" w="100%" maxW="420px">
@@ -144,17 +162,29 @@ export function SwapCard() {
           <Settings onClose={setSettings} />
         </HStack>
 
+        {needsApproval && (
+          <Button
+            isLoading={isApproving}
+            variant="primary"
+            size="large"
+            isFullWidth
+            onClick={() => approve()}
+          >
+            Approve {swapingIn.currency.symbol}
+          </Button>
+        )}
+
         {!isConnected ? (
           <Button variant="primary" size="large" onClick={connectWithModal}>
             Connect Wallet
           </Button>
         ) : (
           <Button
-            isDisabled={!isTradeReady}
+            isDisabled={!isTradeReady || needsApproval}
             variant="primary"
             size="large"
             isFullWidth
-            onClick={confirm.onOpen}
+            onClick={confirmModal.onOpen}
           >
             Swap
           </Button>
@@ -162,16 +192,30 @@ export function SwapCard() {
       </Card>
 
       <ConfirmSwapModal
-        swapingIn={swapingIn as any}
-        swapingOut={swapingOut as any}
         tradeInfo={tradeInfo}
-        isOpen={confirm.isOpen}
-        onClose={confirm.onClose}
+        tokenInUsdPrice={swapingIn.stable}
+        tokenOutUsdPrice={swapingOut.stable}
+        tokenInRelativePriceToTokenOut={swapingOut.relativePrice}
+        isOpen={confirmModal.isOpen}
+        onClose={confirmModal.onClose}
+        onConfirm={() => confirmSwap()}
       />
 
-      <TransactionStatusModal isOpen={false} onClose={() => null} />
+      <TransactionStatusModal
+        inAmount={swapingIn?.amount}
+        outAmount={tradeInfo?.meta.expectedOutput}
+        inSymbol={swapingIn?.currency?.symbol}
+        outSymbol={swapingOut?.currency?.symbol}
+        status={swapTransaction}
+        isOpen={!!swapTransaction?.data}
+        onClose={transactionStatusModal.onClose}
+      />
 
-      <TransactionSubmittedModal isOpen={false} onClose={() => null} />
+      <TransactionSubmittedModal
+        receipt={swapReceipt}
+        isOpen={!!swapReceipt?.data}
+        onClose={receiptModal.onClose}
+      />
     </>
   )
 }

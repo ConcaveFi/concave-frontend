@@ -2,12 +2,12 @@ import { Token } from '@uniswap/sdk-core'
 
 import { chain } from 'wagmi'
 
-export const WETH = new Token(
+export const CNV = new Token(
   chain.mainnet.id,
-  '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+  '0x000000007a58f5f58e697e51ab0357bc9e260a04',
   18,
-  'WETH',
-  'Wrapped Ether',
+  'CNV',
+  'Concave',
 )
 export const DAI = new Token(
   chain.mainnet.id,
@@ -17,6 +17,13 @@ export const DAI = new Token(
   'Dai Stablecoin',
 )
 
+export const WETH = new Token(
+  chain.mainnet.id,
+  '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+  18,
+  'WETH',
+  'Wrapped Ether',
+)
 export const USDT = new Token(
   chain.mainnet.id,
   '0xdAC17F958D2ee523a2206206994597C13D831ec7',
