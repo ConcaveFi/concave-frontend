@@ -1,0 +1,27 @@
+{
+  "name": "@concave/icons",
+  "version": "0.0.0",
+  "description": "Concave icon library",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "dist/**"
+  ],
+  "scripts": {
+    "build": "tsup index.tsx --format esm,cjs --dts --external react --inject inject-react.js",
+    "dev": "tsup index.tsx --format esm,cjs --watch --dts --external react --inject inject-react.js"
+  },
+  "devDependencies": {
+    "@types/react": "^17.0.40",
+    "@types/react-dom": "^17.0.13",
+    "react": "^17.0.2",
+    "typescript": "^4.6.2"
+  },
+  "dependencies": {
+    "@chakra-ui/icons": "^1.1.7",
+    "@chakra-ui/react": "^1.8.6"
+  }
+}

@@ -1,0 +1,22 @@
+overwrite: true
+schema: '${NEXT_PUBLIC_GRAPHQL_ENDPOINT}'
+headers:
+  x-hasura-admin-secret: '${NEXT_PUBLIC_GRAPHQL_ADMIN_SECRET}'
+  content-type: application/json
+documents: 'graphql/**/*.gql'
+generates:
+  graphql/generated/graphql.tsx:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-query
+    config:
+      skipTypename: false
+      withHooks: true
+      withHOC: false
+      withComponent: false
+      fetcher:
+        endpoint: '${NEXT_PUBLIC_GRAPHQL_ENDPOINT}'
+  graphql/graphql.schema.json:
+    plugins:
+      - "introspection"
