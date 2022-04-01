@@ -313,8 +313,16 @@ const YourPosition = ({
     <Flex gap={7} direction={'column'} shadow="Up Big" px={4} py={4} borderRadius="2xl">
       <Text fontSize={'lg'}>Your Position</Text>
       <Flex gap={2} align={'center'}>
-        <TokenIcon logoURI={wrapperTokenA.token?.logoURI} symbol={wrapperTokenA.token?.symbol} />
-        <TokenIcon logoURI={wrapperTokenB.token?.logoURI} symbol={wrapperTokenB.token?.symbol} />
+        <TokenIcon
+          size={'sm'}
+          logoURI={wrapperTokenA.token?.logoURI}
+          symbol={wrapperTokenA.token?.symbol}
+        />
+        <TokenIcon
+          size={'sm'}
+          logoURI={wrapperTokenB.token?.logoURI}
+          symbol={wrapperTokenB.token?.symbol}
+        />
         <Text px={4}>
           {wrapperTokenA.token?.symbol}/{wrapperTokenB.token?.symbol}
         </Text>
@@ -331,14 +339,14 @@ const YourPosition = ({
         <PositionInfoItem label="Your pool share:" value={'2.79%'} />
         <PositionInfoItem label={wrapperTokenA.token?.symbol} value={'0.0001331'}>
           <TokenIcon
-            size="sm"
+            size={'sm'}
             logoURI={wrapperTokenA.token?.logoURI}
             symbol={wrapperTokenA.token?.symbol}
           />
         </PositionInfoItem>
         <PositionInfoItem label={wrapperTokenB.token?.symbol} value={'325.744'}>
           <TokenIcon
-            size="sm"
+            size={'sm'}
             logoURI={wrapperTokenB.token?.logoURI}
             symbol={wrapperTokenB.token?.symbol}
           />
