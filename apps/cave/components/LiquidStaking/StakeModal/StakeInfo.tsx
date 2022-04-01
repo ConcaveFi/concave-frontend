@@ -1,7 +1,7 @@
 import { Box, Text, Stack } from '@concave/ui'
 import React from 'react'
 
-function StakeInfo(props) {
+function StakeInfo(props: any) {
   return (
     <Box shadow="up" p={4} borderRadius="3xl" filter="drop-shadow(0px 0px 27px #81b3ff4f)">
       <Stack isInline spacing={6}>

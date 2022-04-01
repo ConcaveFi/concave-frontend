@@ -1,6 +1,6 @@
 import { Card } from '@concave/ui'
-import { TokenBalance } from 'components/Swap/TokenBalance'
-import { TokenInput } from 'components/Swap/TokenInput'
+// import { TokenBalance } from 'components/Swap/TokenBalance'
+// import { TokenInput } from 'components/Swap/TokenInput'
 import { Token } from 'constants/routing'
 import React from 'react'
 import { chain } from 'wagmi'

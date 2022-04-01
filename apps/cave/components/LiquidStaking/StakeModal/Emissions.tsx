@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, HStack, Image, Text } from '@concave/ui'
 
-function Emissions(props) {
+function Emissions(props: any) {
   return (
     <Box py={2} px={5}>
       <Box

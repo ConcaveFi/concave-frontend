@@ -1,7 +1,7 @@
-import { Button, Card, Center, Stack, Text } from '@concave/ui'
+import { Button, Card, Stack } from '@concave/ui'
 import { useAuth } from 'contexts/AuthContext'
 import { useEffect, useState } from 'react'
-import { useBalance, useContractWrite } from 'wagmi'
+import { useContractWrite } from 'wagmi'
 import { aCNVredeemabi } from 'lib/contractoABI'
 
 export function ClaimCard() {

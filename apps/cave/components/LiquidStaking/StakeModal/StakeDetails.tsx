@@ -1,7 +1,7 @@
 import { Box, Button, SimpleGrid, Text } from '@concave/ui'
 import React from 'react'
 
-function StakeDetails(props) {
+function StakeDetails(props: any) {
   return (
     <Box
       shadow="down"

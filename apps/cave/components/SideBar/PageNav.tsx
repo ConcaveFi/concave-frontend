@@ -6,7 +6,7 @@ function PageNav() {
   return (
     <div>
       <Flex>
-        <Image src={'/assets/sidebar/linkage.svg'} ml={7} />
+        <Image src={'/assets/sidebar/linkage.svg'} ml={7} alt="linkage" />
         <Box ml={-1}>
           <Box
             shadow="down"
@@ -16,7 +16,7 @@ function PageNav() {
             rounded="2xl"
           >
             <ButtonLink
-              leftIcon={<Image src={'/assets/sidebar/page-bond.svg'} />}
+              leftIcon={<Image alt="bond" src={'/assets/sidebar/page-bond.svg'} />}
               iconSpacing={7}
               bgGradient="linear(to-tr, secondary.150, secondary.100)"
               w="160px"
@@ -34,7 +34,7 @@ function PageNav() {
           </Box>
 
           <ButtonLink
-            leftIcon={<Image src={'/assets/sidebar/page-lstaking.svg'} />}
+            leftIcon={<Image alt="lStaking" src={'/assets/sidebar/page-lstaking.svg'} />}
             iconSpacing={2}
             variant="primary.outline"
             bgGradient="linear(to-tr, secondary.150, secondary.100)"
@@ -49,7 +49,7 @@ function PageNav() {
           </ButtonLink>
 
           <ButtonLink
-            leftIcon={<Image src={'/assets/sidebar/page-marketplace.svg'} />}
+            leftIcon={<Image alt="MarketPlace" src={'/assets/sidebar/page-marketplace.svg'} />}
             iconSpacing={7}
             shadow="up"
             _focus={{ shadow: 'down' }}
@@ -73,7 +73,7 @@ function PageNav() {
             mt={6}
           >
             <ButtonLink
-              leftIcon={<Image src={'/assets/sidebar/page-swap.svg'} />}
+              leftIcon={<Image alt="Swap" src={'/assets/sidebar/page-swap.svg'} />}
               iconSpacing={7}
               bgGradient="linear(to-tr, secondary.150, secondary.100)"
               w="160px"

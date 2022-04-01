@@ -432,14 +432,16 @@ const SupplyLiquidityModal = ({
 
   const [needsApproveA, requestApproveA, loadingApproveA] = useApprovalWhenNeeded(
     wrapperTokenA.token,
-    chain.ropsten.id,
+    '', // TODO who is the spender ??
+    // chain.ropsten.id,
     userAddress,
     amountADesired,
   )
   console.log('loadingApproveA', loadingApproveA)
   const [needsApproveB, requestApproveB, loadingApproveB] = useApprovalWhenNeeded(
     wrapperTokenB.token,
-    chain.ropsten.id,
+    '', // TODO who is the spender ??
+    // chain.ropsten.id,
     userAddress,
     amountBDesired,
   )

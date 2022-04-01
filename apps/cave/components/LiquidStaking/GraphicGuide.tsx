@@ -1,4 +1,4 @@
-import { Box, HStack, Image, Stack, Text } from '@concave/ui'
+import { HStack, Image, Stack, Text } from '@concave/ui'
 import { ChevronRightIcon } from '@concave/icons'
 import React from 'react'
 
@@ -13,9 +13,9 @@ function GraphicGuide() {
         <Text>NFT Marketplace</Text>
       </HStack>
       <HStack spacing={16} pt={6}>
-        <Image src="/assets/liquidstaking/coins-logo.svg" />
-        <Image src="/assets/liquidstaking/nft-logo.svg" />
-        <Image src="/assets/liquidstaking/marketplace-logo.svg" pl={8} />
+        <Image alt="" src="/assets/liquidstaking/coins-logo.svg" />
+        <Image alt="" src="/assets/liquidstaking/nft-logo.svg" />
+        <Image alt="" src="/assets/liquidstaking/marketplace-logo.svg" pl={8} />
       </HStack>
     </Stack>
   )

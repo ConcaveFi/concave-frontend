@@ -2,10 +2,10 @@ import { useDisclosure } from '@concave/ui'
 import { ConnectWalletModal } from 'components/ConnectWallet'
 import { Signer } from 'ethers'
 import { User } from 'lib/session'
-import React, { createContext, useCallback, useContext, useMemo } from 'react'
+import React, { createContext, useContext, useMemo } from 'react'
 import { useMutation, useQueryClient, useQuery } from 'react-query'
 import { SiweMessage } from 'siwe'
-import { useAccount, useConnect } from 'wagmi'
+import { useAccount } from 'wagmi'
 
 export const authFetch = (path: string, options?: RequestInit) =>
   fetch(`/api/session/${path}`, options).then(async (res) => {
