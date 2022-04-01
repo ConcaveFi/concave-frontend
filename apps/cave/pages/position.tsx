@@ -382,7 +382,7 @@ const useRemoveLiquidity = ({
   const [liquidity, setLiquidity] = useState(0)
   const amountAMin = amountTokenA * ratioToRemove
   const amountBMin = amountTokenB * ratioToRemove
-  const [deadline, setDeadLine] = useState(new Date().getTime() / 1000 + 15 * 60)
+  const [deadline] = useState(new Date().getTime() / 1000 + 15 * 60)
   // const [{ data, error, loading }, getSigner] = useSigner()
   return {
     wrapperTokenA,
