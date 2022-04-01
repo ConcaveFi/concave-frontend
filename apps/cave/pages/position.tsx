@@ -359,7 +359,7 @@ const YourPosition = ({
 const ReceiveBox = ({ amount, token }: { amount: number; token: TokenType }) => {
   return (
     <HStack shadow="down" borderRadius="2xl" p={3}>
-      <TokenIcon logoURI={token?.logoURI} symbol={token?.symbol} />
+      {/* <TokenIcon logoURI={token?.logoURI} symbol={token?.symbol} /> */}
       <Box>
         <Text fontFamily={'heading'} fontWeight={600}>
           {usePrecision(amount, 7).formatted}
