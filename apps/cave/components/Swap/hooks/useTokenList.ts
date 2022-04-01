@@ -7,22 +7,25 @@ const concaveTokenList = (networkName: string) =>
   `https://raw.githubusercontent.com/ConcaveFi/assets/main/networks/${networkName.toLowerCase()}/tokenlist.json`
 
 export const useTokenList = (networkName: string = chain.mainnet.name) => {
-  return useQuery('token-list', () =>
-    fetch(concaveTokenList(networkName))
-      .then((d) => d.json())
-      .then((l) => l.tokens as TokenType[])
-      .then((list) =>
-        list.map((token) => {
-          const t = new Token(
-            chain.ropsten.id,
-            token.address,
-            token.decimals,
-            token.symbol,
-            token.name,
-          )
-          return { ...t, logoURI: token.logoURI } as TokenType
-        }),
-      ),
+  // probably not used!!!
+  return useQuery(
+    'token-list',
+    () => null,
+    // fetch(concaveTokenList(networkName))
+    // .then((d) => d.json())
+    // .then((l) => l.tokens as any) //TokenType[])
+    // .then((list) =>
+    //   // list.map((token ) => {
+    //   //   const t = new Token(
+    //   //     chain.ropsten.id,
+    //   //     // token.address,
+    //   //     // token.decimals,
+    //   //     // token.symbol,
+    //   //     // token.name,
+    //   //   )
+    //   //   return { ...t, logoURI: token.logoURI } as any
+    //   // }),
+    // ),
   )
 }
 
