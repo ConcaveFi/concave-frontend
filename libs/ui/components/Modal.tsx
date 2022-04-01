@@ -24,13 +24,13 @@ export function Modal({
   bluryOverlay = false,
   titleAlign = 'left',
   closeButton,
-  bodyProps,
+  bodyProps = {},
   ...props
 }: ModalProps) {
   return (
     <ChakraModal {...props}>
       <ModalOverlay backdropBlur={bluryOverlay ? '16px' : '0px'} />
-      <ModalContent>
+      <ModalContent w="auto">
         <ModalHeader textAlign={titleAlign}>{title}</ModalHeader>
         <ModalCloseButton />
         <Card variant="primary" p="6" shadow="Up for Blocks" {...bodyProps}>

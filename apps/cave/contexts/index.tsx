@@ -7,14 +7,12 @@ import { ThemeProvider } from '@concave/ui'
 export const AppProviders = ({ children, globalStyles, cookies }) => {
   const [queryClient] = useState(() => new QueryClient())
   return (
-    <QueryClientProvider client={queryClient}>
-      <WagmiProvider>
-        <AuthProvider>
-          <ThemeProvider globalStyles={globalStyles} cookies={cookies}>
-            {children}
-          </ThemeProvider>
-        </AuthProvider>
-      </WagmiProvider>
-    </QueryClientProvider>
+    <ThemeProvider globalStyles={globalStyles} cookies={cookies}>
+      <QueryClientProvider client={queryClient}>
+        <WagmiProvider>
+          <AuthProvider>{children}</AuthProvider>
+        </WagmiProvider>
+      </QueryClientProvider>
+    </ThemeProvider>
   )
 }

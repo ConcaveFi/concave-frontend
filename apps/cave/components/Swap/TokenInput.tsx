@@ -1,54 +1,71 @@
-import { Flex, FlexProps, NumericInput, Stack, Text, useMultiStyleConfig } from '@concave/ui'
-import { useCurrency } from 'hooks/useCurrency'
-import { TokenType } from 'lib/tokens'
+import {
+  Text,
+  Button,
+  FlexProps,
+  HStack,
+  NumericInput,
+  Stack,
+  useMultiStyleConfig,
+} from '@concave/ui'
+import { Currency } from '@uniswap/sdk-core'
 import React from 'react'
+import { twoDecimals } from './SwapCard'
 import { TokenSelect } from './TokenSelect'
 
+const Balance = ({ value, onClick }) => (
+  <Button
+    fontSize="xs"
+    ml="auto"
+    onClick={onClick}
+    rightIcon={!!onClick && <Text textColor="#2E97E2">Max</Text>}
+    leftIcon={<Text>Balance:</Text>}
+    iconSpacing={1}
+  >
+    <Text isTruncated maxW="50px">
+      {value}
+    </Text>
+  </Button>
+)
+
 export function TokenInput({
-  children,
   value,
-  price,
-  selected,
+  currency,
+  balance,
+  stable,
   onChangeValue,
-  onSelectToken,
+  onChangeCurrency,
+  onClickMaxBalance,
 }: {
   value: string
-  price: number
-  selected?: TokenType
-  onChangeValue: (value: number) => void
-  onSelectToken: (token: TokenType) => void
+  currency?: Currency
+  balance: string
+  stable: string
+  onChangeValue: (value: string) => void
+  onChangeCurrency: (token: Currency) => void
+  onClickMaxBalance?: (value: string) => void
 } & FlexProps) {
-  const styles = useMultiStyleConfig('Input', { variant: 'primary', size: 'unset' })
+  const styles = useMultiStyleConfig('Input', { variant: 'primary', size: 'large' })
+  const stableValue = +stable * +value
 
   return (
-    <Flex
-      sx={{ ...styles.field }}
-      px={5}
-      py={3}
-      rounded="2xl"
-      w="auto"
-      shadow="down"
-      justify="space-between"
-    >
-      <Stack justify="space-between">
+    <Stack sx={{ ...styles.field, bg: 'none' }} justify="space-between" spacing={0}>
+      <HStack justify="space-between" align="start">
         <NumericInput
           decimalScale={5}
           w="100%"
-          value={+value ? value : ''}
-          onChangeValue={(value) => {
-            if (!value) return
-            const { floatValue } = value
-            onChangeValue(floatValue)
-          }}
+          value={value}
+          onValueChange={({ value }, eventSrc) =>
+            eventSrc.source === 'event' && onChangeValue(value)
+          }
         />
-        <Text fontWeight="bold" color="text.low">
-          {useCurrency(price * +value)}
+        <TokenSelect onSelect={onChangeCurrency} selected={currency} />
+      </HStack>
+      <HStack justify="space-between" align="center" textColor="text.low" w="full">
+        <Text isTruncated maxW="100px" fontWeight="bold" fontSize="sm">
+          {!!+stableValue && `$${twoDecimals(stableValue)}`}
         </Text>
-      </Stack>
-      <Stack justify="center" align="end" minW="130px" w="auto">
-        <TokenSelect onSelect={onSelectToken} selected={selected} />
-        {children}
-      </Stack>
-    </Flex>
+        {balance && <Balance value={balance} onClick={onClickMaxBalance} />}
+      </HStack>
+    </Stack>
   )
 }

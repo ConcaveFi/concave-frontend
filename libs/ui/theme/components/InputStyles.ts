@@ -19,16 +19,34 @@ export const InputStyles: ComponentMultiStyleConfig = {
       field: {
         height: '40px',
         fontSize: 'sm',
+        p: 3,
+        borderRadius: 'xl',
+      },
+    },
+    medium: {
+      field: {
+        fontWeight: 'semibold',
+        fontSize: 'md',
+        p: 3,
+        borderRadius: 'xl',
+      },
+    },
+    large: {
+      field: {
+        height: '90px',
+        fontWeight: 'semibold',
+        fontSize: '2xl',
+        px: 4,
+        py: 3,
+        borderRadius: '2xl',
       },
     },
   },
   variants: {
     primary: {
       field: {
-        p: 3,
-        borderRadius: 'xl',
         shadow: 'Down Big',
-        bgColor: 'blackAlpha.300',
+        bg: 'blackAlpha.300',
       },
     },
   },

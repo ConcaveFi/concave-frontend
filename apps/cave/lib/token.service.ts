@@ -22,7 +22,7 @@ class TokenService {
       }
     }
 
-    const coingecko = symbol.toLowerCase()
+    const coingecko = symbol?.toLowerCase()
     return Promise.resolve(
       coingeckoApi.tokenPrice({
         currency: 'usd',
@@ -38,7 +38,7 @@ class TokenService {
     token: AvailableTokens
     interval: CandleStickIntervalTypes
   }) {
-    const coingecko = token.toLowerCase()
+    const coingecko = token?.toLowerCase()
     const days = daysOptions[interval]
     return coingeckoApi.fetchCandleStickData({ id: coingecko, days })
   }

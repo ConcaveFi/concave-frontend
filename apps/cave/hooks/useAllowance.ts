@@ -7,20 +7,12 @@ import { erc20ABI, useContractWrite, useContractRead, chain, useWaitForTransacti
 
 export const useApprovalWhenNeeded = (
   token: TokenType,
-  chainId = chain.ropsten.id,
+  spender: string,
   userAddress: string,
   amount: number,
 ) => {
-  const [allowanceTokenA, syncAllowance] = useAllowance(
-    token,
-    ContractAddress[chainId],
-    userAddress,
-  )
-  const [approvalTokenA, requestApprove] = useApproval(
-    token,
-    ContractAddress[chain.ropsten.id],
-    amount,
-  )
+  const [allowanceTokenA, syncAllowance] = useAllowance(token, spender, userAddress)
+  const [approvalTokenA, requestApprove] = useApproval(token, spender, amount)
 
   const [approveAConfirmation] = useWaitForTransaction({ wait: approvalTokenA.data?.wait })
   useEffect(() => {
@@ -57,6 +49,14 @@ export const useAllowance = (token: TokenType, spender: string, userAddress: str
 }
 
 export const useApproval = (token: TokenType, spender: string, amountToApprove: BigNumberish) =>
-  useContractWrite({ addressOrName: token.address, contractInterface: erc20ABI }, 'approve', {
-    args: [spender, parseUnits(amountToApprove.toString(), token.decimals)],
-  })
+  useContractWrite(
+    { addressOrName: token.address, contractInterface: erc20ABI },
+    'approve',
+    useMemo(
+      () => ({
+        skip: !token.address || !amountToApprove || !spender,
+        args: amountToApprove && [spender, parseUnits(amountToApprove.toString(), token.decimals)],
+      }),
+      [spender, token, amountToApprove],
+    ),
+  )

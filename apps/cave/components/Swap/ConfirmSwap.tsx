@@ -1,29 +1,18 @@
 import { ExpandArrowIcon, TokenIcon } from '@concave/icons'
-import {
-  Box,
-  Button,
-  Flex,
-  HStack,
-  IconButton,
-  NumericInput,
-  StackDivider,
-  Text,
-} from '@concave/ui'
-import { useCurrency } from 'hooks/useCurrency'
-import { useGasPrice } from 'hooks/useGasPrice'
-import { useFloorPrecision, useRoundPrecision } from 'hooks/usePrecision'
-import { TokenType } from 'lib/tokens'
+import { Box, Button, Flex, HStack, Modal, NumericInput, StackDivider, Text } from '@concave/ui'
 import React from 'react'
-import { UseSwap } from './useSwap'
-
+import { twoDecimals } from './SwapCard'
+import { TradeInfo } from './useSwap2'
 const TokenInfo = ({
-  token,
-  amount,
   price,
+  address,
+  symbol,
+  amount,
   loss,
 }: {
-  token: TokenType
-  price: number
+  price: string | number
+  address: string
+  symbol: string
   amount: string | number
   loss?: number
 }) => {
@@ -35,41 +24,40 @@ const TokenInfo = ({
       px={5}
       p={4}
     >
-      <Box w={200}>
+      <Box w={200} h="69px">
         <NumericInput disabled fontSize={'32px'} decimalScale={5} value={amount} />
         <Text fontWeight={700} fontSize={14} textColor="text.low">
-          {useCurrency(+amount * price)}
-          {loss && ` (-${loss}%)`}
+          {!!price ? `$${twoDecimals(price)}` : ``}
+          {/* {loss && ` (-${loss}%)`} */}
         </Text>
       </Box>
       <HStack>
-        <TokenIcon size="sm" {...token} />
+        <TokenIcon size="sm" address={address} symbol={symbol} />
         <Text fontSize={24} fontWeight={700}>
-          {token.symbol?.toUpperCase()}
+          {symbol.toUpperCase()}
         </Text>
       </HStack>
     </Flex>
   )
 }
 
-const SwapButton = ({ swap }: { swap: UseSwap }) => (
-  <Flex justifyContent={'center'}>
-    <IconButton
-      variant="secondary"
-      shadow={'Up Small'}
-      borderRadius={'full'}
-      bgGradient="linear(to-l, secondary.75, secondary.150)"
-      w={'35px'}
-      h={'30px'}
-      onClick={swap.switchTokens}
-      m={-8}
-      aria-label="Search database"
-      icon={<ExpandArrowIcon h={'100%'} />}
-    />
-  </Flex>
-)
+const InOutArrow = () => {
+  return (
+    <Flex align="center" justify="center" mt={-3}>
+      <Box
+        shadow="Up Small"
+        px={3}
+        py={1}
+        bgGradient="linear(to-tr, blackAlpha.500 1%, transparent 90%)"
+        rounded="3xl"
+      >
+        <ExpandArrowIcon w="18px" h="18px" />
+      </Box>
+    </Flex>
+  )
+}
 
-const MinExpectedOutput = ({ swap }: { swap: UseSwap }) => {
+const MinExpectedOutput = ({ value, symbol }) => {
   return (
     <Box>
       <Flex fontSize={'14px'} w={'100%'} mb={2} justifyContent={'space-between'}>
@@ -77,21 +65,21 @@ const MinExpectedOutput = ({ swap }: { swap: UseSwap }) => {
           Minimum received after slippage
         </Text>
         <Text whiteSpace={'nowrap'} fontWeight={700} textColor="text.low">
-          {useFloorPrecision(swap.minimumReceivedAfterSlippage).formatted} {swap.to.token.symbol}
+          {value} {symbol}
         </Text>
       </Flex>
-      <Flex fontSize={'14px'} w={'100%'} justifyContent={'space-between'}>
+      {/* <Flex fontSize={'14px'} w={'100%'} justifyContent={'space-between'}>
         <Text fontWeight={700} textColor="text.low">
           Network Fee
         </Text>
         <Text fontWeight={700} textColor="text.low">
-          ~ {useGasPrice()}
+          ~ {estimatedFee}
         </Text>
-      </Flex>
+      </Flex> */}
     </Box>
   )
 }
-const ExpectedOutput = ({ swap }: { swap: UseSwap }) => {
+const ExpectedOutput = ({ value, symbol, priceImpact }) => {
   return (
     <Box>
       <Flex fontSize={'18px'} w={'100%'} justifyContent={'space-between'}>
@@ -99,52 +87,83 @@ const ExpectedOutput = ({ swap }: { swap: UseSwap }) => {
           Expected Output
         </Text>
         <Text fontWeight={600}>
-          {useRoundPrecision(swap.toAmount).formatted} {swap.to.token.symbol}
+          {value} {symbol}
         </Text>
       </Flex>
       <Flex w={'100%'} justifyContent={'space-between'}>
         <Text fontWeight={600}>Price Impact</Text>
-        <Text fontWeight={600}>-{swap.slippageTolerance}%</Text>
+        <Text fontWeight={600}>{priceImpact}%</Text>
       </Flex>
     </Box>
   )
 }
 
-export const ConfirmSwap = ({ swap, onConfirm }: { swap: UseSwap; onConfirm: () => void }) => {
+export const ConfirmSwapModal = ({
+  tradeInfo,
+  tokenInUsdPrice,
+  tokenOutUsdPrice,
+  tokenInRelativePriceToTokenOut,
+  isOpen,
+  onClose,
+  onConfirm,
+}: {
+  tradeInfo: TradeInfo
+  tokenInUsdPrice: string
+  tokenOutUsdPrice: string
+  tokenInRelativePriceToTokenOut: string
+  isOpen: boolean
+  onClose: () => void
+  onConfirm: () => void
+}) => {
+  if (!tradeInfo) return null
+  const { trade, meta } = tradeInfo
+
+  const currencyIn = trade.inputAmount.currency
+  const currencyOut = trade.outputAmount.currency
+
   return (
-    <>
+    <Modal bluryOverlay={true} title="Confirm Swap" isOpen={isOpen} onClose={onClose}>
       <TokenInfo
-        token={swap.from.token}
-        price={swap.from.price}
-        amount={swap.fromAmount}
-      ></TokenInfo>
-      <SwapButton swap={swap} />
+        address={currencyIn.isToken ? currencyIn.address : currencyIn.symbol}
+        symbol={currencyIn.symbol}
+        amount={trade.inputAmount.toSignificant(3)}
+        price={+trade.inputAmount.toSignificant(6) * +tokenInUsdPrice}
+      />
+      <InOutArrow />
       <TokenInfo
-        token={swap.to.token}
-        price={swap.to.price}
-        amount={swap.toAmount}
-        loss={0.26}
-      ></TokenInfo>
+        address={currencyOut.isToken ? currencyOut.address : currencyOut.symbol}
+        symbol={currencyOut.symbol}
+        amount={trade.outputAmount.toSignificant(3)}
+        price={+trade.outputAmount.toSignificant(6) * +tokenOutUsdPrice}
+      />
 
-      <HStack fontSize="14px" fontWeight={700} my={6} justifyContent={'center'} flexWrap={'wrap'}>
+      <Flex fontSize="sm" fontWeight="bold" my={6} justify="center" flexWrap="wrap">
         <Text>
-          1 {swap.to.token.symbol} = {useRoundPrecision(swap.to.price / swap.from.price).formatted}{' '}
-          {swap.from.token.symbol}
+          1 {currencyOut.symbol} = {tokenInRelativePriceToTokenOut}
+          {currencyIn.symbol}
         </Text>
-        <Text paddingRight={2} textColor="text.low">
-          ({useCurrency(swap.to.price)})
+        <Text ml={1} textColor="text.low">
+          (${tokenOutUsdPrice})
         </Text>
-      </HStack>
+      </Flex>
 
-      <Flex direction={'column'} borderRadius={'3xl'} mb={8} p={6} boxShadow={'Down Medium'}>
-        <ExpectedOutput swap={swap} />
-        <StackDivider borderRadius={'full'} mx={-4} my={4} h={0.5} bg={'stroke.secondary'} />
-        <MinExpectedOutput swap={swap} />
+      <Flex direction="column" borderRadius="3xl" mb={8} p={6} shadow="Down Medium">
+        <ExpectedOutput
+          value={meta.expectedOutput}
+          symbol={currencyOut.symbol}
+          priceImpact={trade.priceImpact.toSignificant(2)}
+        />
+        <StackDivider borderRadius="full" mx={-4} my={4} h={0.5} bg="stroke.secondary" />
+        <MinExpectedOutput
+          value={meta.worstExecutionPrice}
+          symbol={currencyOut.symbol}
+          // estimatedFee={'11'}
+        />
       </Flex>
 
       <Button variant="primary" size="large" onClick={onConfirm} isFullWidth>
         Confirm Swap
       </Button>
-    </>
+    </Modal>
   )
 }

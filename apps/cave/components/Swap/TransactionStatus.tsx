@@ -1,9 +1,9 @@
-import { Button, Flex } from '@chakra-ui/react'
+import { Button, Flex, Link } from '@chakra-ui/react'
 import { keyframes } from '@chakra-ui/system'
 import { SpinIcon } from '@concave/icons'
-import { Text } from '@concave/ui'
+import { Modal, Text } from '@concave/ui'
 import React from 'react'
-import { UseSwap } from './useSwap'
+import { ethers } from 'siwe/node_modules/ethers'
 
 const spin = keyframes({
   '0%': {
@@ -17,26 +17,57 @@ const spin = keyframes({
 const spinnerStyles = {
   animation: `${spin} 2s linear infinite`,
 }
-export const TransactionStatus = ({ swap, onClose }: { swap: UseSwap; onClose: () => void }) => {
+
+export const TransactionStatusModal = ({
+  status,
+  inAmount,
+  inSymbol,
+  outAmount,
+  outSymbol,
+  isOpen,
+  onClose,
+}: {
+  status: {
+    data: ethers.providers.TransactionResponse
+    error: Error
+    loading: boolean
+  }
+  inAmount: string
+  inSymbol: string
+  outAmount: string
+  outSymbol: string
+  isOpen: boolean
+  onClose: () => void
+}) => {
   return (
-    <>
+    <Modal
+      bluryOverlay={true}
+      title="Transaction Status"
+      isOpen={isOpen}
+      onClose={onClose}
+      bodyProps={{ alignItems: 'center', gap: 1 }}
+    >
       <SpinIcon __css={spinnerStyles} w={10} mb={5} mt={12} />
-      <Text fontSize={'24px'} fontWeight={600}>
+      <Text fontSize="lg" fontWeight="medium">
         Waiting For Confirmation
       </Text>
-      <Text fontWeight={400} fontSize={'18px'} textColor={'Highlight'}>
-        Supplying 160.062 DAI.e and 2 AVAX
+      <Text fontSize="md" textColor="Highlight">
+        Swaping {inAmount} {inSymbol} for {outAmount} {outSymbol}
       </Text>
-      <Text mt={5} mb={5} fontWeight={400} textColor={'#5F7A99'} fontSize={'18px'}>
+      <Link
+        href={`https://etherscan.io/tx/${status?.data?.hash}`}
+        my={5}
+        fontWeight="semibold"
+        textColor="#5F7A99"
+        fontSize="md"
+      >
         Confirm this transaction in your wallet
-      </Text>
+      </Link>
       <Flex>
-        <Button onClick={onClose} variant="secondary" borderRadius={'2xl'} w={'180px'} h={'60px'}>
-          <Text fontWeight={600} fontSize={'24px'}>
-            Close
-          </Text>
+        <Button onClick={onClose} variant="secondary" size="large" w="180px">
+          Close
         </Button>
       </Flex>
-    </>
+    </Modal>
   )
 }

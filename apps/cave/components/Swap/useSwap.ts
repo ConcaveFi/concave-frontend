@@ -6,8 +6,6 @@ import { chain, useBalance } from 'wagmi'
 import { useTokenList } from './hooks/useTokenList'
 import { BigNumber } from 'ethers'
 
-const selectedChain = chain.ropsten
-
 const defaultValue: SwapStateProps = {
   priceImpact: -0.12,
   minimumReceivedAfterSlippage: 0,
@@ -57,7 +55,7 @@ export type UseSwap = SwapStateProps & {
 }
 
 export const useToken = (props: { userAddressOrName: string; symbol?: AvailableTokens }) => {
-  const tokens = useTokenList(chain.ropsten.name)
+  const tokens = useTokenList()
   const [symbol, setSymbol] = useState<AvailableTokens>(props.symbol ?? null)
   const [token, setToken] = useState<TokenType>(null)
   const price = usePrice(symbol)

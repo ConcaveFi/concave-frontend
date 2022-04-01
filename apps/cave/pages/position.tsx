@@ -21,7 +21,7 @@ import {
   UseDisclosureReturn,
 } from '@concave/ui'
 import { useTokenList } from 'components/Swap/hooks/useTokenList'
-import { MaxAmount } from 'components/Swap/MaxAmount'
+import { TokenBalance } from 'components/Swap/TokenBalance'
 import { TokenInput } from 'components/Swap/TokenInput'
 import { useAuth } from 'contexts/AuthContext'
 import { BigNumberish, Contract } from 'ethers'
@@ -69,7 +69,7 @@ interface LPPosition {
 }
 
 const LPPositionItem = ({ pair, ownedAmount }: LPPosition) => {
-  const tokens = useTokenList(chain.ropsten.name)
+  const tokens = useTokenList()
   const [tokenA, setTokenA] = useState<TokenType>(null)
   const [tokenB, setTokenB] = useState<TokenType>(null)
 
@@ -215,9 +215,9 @@ const AmountToRemove = ({ onChange }: { onChange: (n: number) => void }) => {
       <Text>Amount to remove</Text>
       <NumericInput
         shadow="down"
-        onChangeValue={(val) => {
-          onChange(val.floatValue)
-        }}
+        onValueChange={({ floatValue }, eventSrc) =>
+          eventSrc.source === 'event' && onChange(floatValue)
+        }
         borderRadius="2xl"
         isAllowed={({ floatValue }) => !floatValue || (floatValue <= 100 && floatValue >= 0)}
         py={2}
@@ -532,18 +532,16 @@ const AddLiquidityContent = ({ userAddress }: { userAddress: string }) => {
       <Flex direction={'column'} p={4} gap={2}>
         <TokenInput
           value={'' + amountADesired}
-          price={wrapperTokenA.price}
-          selected={wrapperTokenA.token}
+          currency={wrapperTokenA.token}
           onChangeValue={(value) => {
-            setAmountADesired(value)
+            setAmountADesired(+value)
           }}
-          onSelectToken={(token) => {
+          onChangeCurrency={(token) => {
             setTokenA(token.symbol)
           }}
         >
-          <MaxAmount
-            label="Balance:"
-            max={+wrapperTokenA.balance?.formatted}
+          <TokenBalance
+            value={wrapperTokenA.balance?.formatted}
             onClick={() => {
               setAmountADesired(+wrapperTokenA.balance?.formatted)
             }}
@@ -564,19 +562,17 @@ const AddLiquidityContent = ({ userAddress }: { userAddress: string }) => {
         </Flex>
         <TokenInput
           value={'' + amountBDesired}
-          price={wrapperTokenB.price}
-          selected={wrapperTokenB.token}
+          currency={wrapperTokenB.token}
           onChangeValue={(value) => {
-            setAmountBDesired(value)
+            setAmountBDesired(+value)
           }}
-          onSelectToken={(token) => {
+          onChangeCurrency={(token) => {
             setTokenB(token.symbol)
           }}
         >
           {wrapperTokenB.token?.symbol && (
-            <MaxAmount
-              label="Balance:"
-              max={+wrapperTokenB.balance?.formatted}
+            <TokenBalance
+              value={wrapperTokenB.balance?.formatted}
               onClick={() => {
                 setAmountBDesired(+wrapperTokenB.balance?.formatted)
               }}

@@ -24,7 +24,7 @@ function PageNav() {
               borderRadius="lg"
               shadow="up"
               textColor="#5F7A99"
-              href={'bond'}
+              href="/bond"
             >
               Bonds
             </ButtonLink>

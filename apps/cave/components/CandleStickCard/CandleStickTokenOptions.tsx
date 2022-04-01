@@ -3,6 +3,7 @@ import { TokenType } from 'lib/tokens'
 import React from 'react'
 
 export const CandleStickTokenOptions = ({ from, to }: { from: TokenType; to: TokenType }) => {
+  console.log(from, to)
   return (
     <HStack p={2} borderRadius="2xl" shadow="Down Big">
       <TokenIcon size="sm" {...(from || {})} />

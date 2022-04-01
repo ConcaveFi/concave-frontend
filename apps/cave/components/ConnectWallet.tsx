@@ -9,6 +9,7 @@ import {
   MenuItem,
   MenuList,
   gradientBorder,
+  Modal,
 } from '@concave/ui'
 import { useConnect } from 'wagmi'
 import { useAuth } from 'contexts/AuthContext'
@@ -40,6 +41,44 @@ const DisconnectButton = () => {
         </MenuList>
       </Portal>
     </Menu>
+  )
+}
+
+export const ConnectWalletModal = ({ isOpen, onClose }) => {
+  const [{ data }, connect] = useConnect()
+  const isMounted = useIsMounted()
+  return (
+    <Modal
+      bluryOverlay={true}
+      title="Connect Wallet"
+      isOpen={isOpen}
+      onClose={onClose}
+      isCentered
+      motionPreset="slideInBottom"
+      bodyProps={{ alignItems: 'center', gap: 3, w: '100', maxW: '350px' }}
+    >
+      {isMounted &&
+        data.connectors.map((connector) => {
+          if (!connector.ready) return null
+          return (
+            <Button
+              w="100%"
+              shadow="Up Small"
+              _hover={{ shadow: 'Up Big' }}
+              _active={{ shadow: 'down' }}
+              _focus={{ shadow: 'Up Big' }}
+              size="large"
+              leftIcon={
+                <Image maxWidth="20px" src={`/assets/connectors/${connector.id}.png`} alt="" />
+              }
+              key={connector.id}
+              onClick={() => connect(connector).then(onClose)}
+            >
+              {connector.name}
+            </Button>
+          )
+        })}
+    </Modal>
   )
 }
 

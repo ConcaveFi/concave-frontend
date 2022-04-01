@@ -46,6 +46,11 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
       fontWeight: 'bold',
       shadow: PrimaryButtonShadow,
       _focus: { shadow: PrimaryButtonShadow },
+      _disabled: {
+        _hover: {
+          bgGradient: 'linear(to-r, primary.1, primary.2)',
+        },
+      },
     },
     secondary: {
       bgGradient: 'linear(to-r, secondary.125, secondary.50)',
@@ -76,6 +81,7 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
   },
   defaultProps: {
     variant: null,
+    size: null,
   },
 }
 
