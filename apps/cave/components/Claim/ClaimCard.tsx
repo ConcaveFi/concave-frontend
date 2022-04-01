@@ -12,7 +12,7 @@ export function ClaimCard() {
   // })
   const [{ data, error, loading }, write] = useContractWrite(
     {
-      addressOrName: '0x3bc60dc5936fa22f23656f1fe8b7831e51faa65c',
+      addressOrName: '0x38baBedCb1f226B49b2089DA0b84e52b6181Ca59',
       contractInterface: aCNVredeemabi,
     },
     'redeem',

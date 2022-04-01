@@ -20,7 +20,7 @@ const Media: Array<MediaProps> = [
   {
     icon: 'discord',
     name: 'Discord',
-    link: '',
+    link: 'https://discord.com/invite/concave',
   },
   {
     icon: 'twitter',
@@ -30,7 +30,7 @@ const Media: Array<MediaProps> = [
   {
     icon: 'blog',
     name: 'Blog',
-    link: '',
+    link: 'https://concave.lol/blog/',
   },
 ]
 
