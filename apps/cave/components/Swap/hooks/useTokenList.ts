@@ -3,18 +3,27 @@ import { Chain, chain } from 'wagmi'
 import { Token as UniswapToken } from 'gemswap-sdk'
 import { utils } from 'ethers'
 
-const concaveTokenList = `https://raw.githubusercontent.com/ConcaveFi/assets/main/networks/mainnet/tokenlist.json`
 
-export const useTokenList = (network: Chain = chain.mainnet) => {
-  return useQuery(
-    'token-list',
-    async () => {
-      const tokenList = await fetch(concaveTokenList).then((d) => d.json())
-      return tokenList.tokens
-        .filter((token) => utils.isAddress(token.address) && token.chainId === network.id)
-        .map((token) => new Token(token))
-    },
-    { staleTime: Infinity },
+const concaveTokenList = (networkName: string) =>
+  `https://raw.githubusercontent.com/ConcaveFi/assets/main/networks/${networkName.toLowerCase()}/tokenlist.json`
+
+export const useTokenList = (networkName: string = chain.mainnet.name) => {
+  return useQuery('token-list', () =>
+    fetch(concaveTokenList(networkName))
+      .then((d) => d.json())
+      .then((l) => l.tokens as TokenType[])
+      .then((list) =>
+        list.map((token) => {
+          const t = new Token(
+            chain.ropsten.id,
+            token.address,
+            token.decimals,
+            token.symbol,
+            token.name,
+          )
+          return { ...t, logoURI: token.logoURI } as TokenType
+        }),
+      ),
   )
 }
 
