@@ -77,8 +77,8 @@ const LPPositionItem = ({ pair, ownedAmount }: LPPosition) => {
     if (!tokens.isSuccess) {
       return
     }
-    setTokenA(tokens.data.find((t) => t.address.toLowerCase() === pair?.tokenA.toLowerCase()))
-    setTokenB(tokens.data.find((t) => t.address.toLowerCase() === pair?.tokenB.toLowerCase()))
+    setTokenA(tokens.data.find((t: any) => t.address.toLowerCase() === pair?.tokenA.toLowerCase()))
+    setTokenB(tokens.data.find((t: any) => t.address.toLowerCase() === pair?.tokenB.toLowerCase()))
   }, [pair, pair?.tokenA, pair.tokenB, tokens.data, tokens.isSuccess])
 
   const addLiquidity = useDisclosure()
@@ -92,8 +92,8 @@ const LPPositionItem = ({ pair, ownedAmount }: LPPosition) => {
     <>
       <AccordionItem p={2} shadow="Up Big" borderRadius="2xl" alignItems="center">
         <AccordionButton>
-          <TokenIcon {...tokenA} />
-          <TokenIcon {...tokenB} />
+          {/* <TokenIcon {...tokenA} />
+          <TokenIcon {...tokenB} /> */}
           <Text ml="24px" fontWeight="semibold" fontSize="lg">
             {tokenA.symbol}/{tokenB.symbol}
           </Text>
@@ -161,8 +161,8 @@ const RemoveLiquidityModal = ({
   disclosure: UseDisclosureReturn
 }) => {
   const [percentToRemove, setPercentToRemove] = useState(0)
-  const [wrapperTokenA, setTokenA] = useToken({ userAddressOrName, symbol: tokenA.symbol })
-  const [wrapperTokenB, setTokenB] = useToken({ userAddressOrName, symbol: tokenB.symbol })
+  const [wrapperTokenA] = useToken({ userAddressOrName, symbol: tokenA.symbol })
+  const [wrapperTokenB] = useToken({ userAddressOrName, symbol: tokenB.symbol })
   const removeLiquidityState = useRemoveLiquidity({
     wrapperTokenA,
     wrapperTokenB,
@@ -257,9 +257,9 @@ const YouWillReceive = ({
 }
 
 const RemoveLiquidityActions = () => {
-  const { user } = useAuth()
-  const [approved, setApproved] = useState(false)
-  const [{ data, error, loading }, getSigner] = useSigner()
+  // const { user } = useAuth()
+  const [approved] = useState(false)
+  const [{ data }] = useSigner()
   // const userApproval = useAllowance(
   //   user.address,
   //   '0x95dDC411d31bBeDd37e9aaABb335b0951Bc2D25a',
