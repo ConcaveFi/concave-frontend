@@ -1,55 +1,33 @@
-import { ComponentSingleStyleConfig, cssVar, tokenToCSSVar } from '@chakra-ui/react'
-import { gradientBorder } from '../utils/gradientBorder'
-
-const HoverRadialGradient =
-  'radial-gradient(97.48% 120.4% at 49.69% 76.45%, #3082E1 0%, #3D3786 31.18%, transparent 100%)'
-
-const PrimaryButtonShadow =
-  '20px -20px 39px rgba(120, 182, 255, 0.25), 0px 5px 14px rgba(0, 0, 0, 0.47), inset 0px -10px 20px rgba(117, 164, 255, 0.5)'
+import { ComponentSingleStyleConfig } from '@chakra-ui/react'
+import { gradientStroke } from '../utils/gradientStroke'
 
 export const ButtonStyles: ComponentSingleStyleConfig = {
   baseStyle: {
     fontSize: '14px',
     lineHeight: 'initial',
     width: 'auto',
-    borderRadius: 'xl',
+    borderRadius: 0,
     maxHeight: 'unset',
-    borderColor: 'transparent',
-    display: 'flex',
-    alignItems: 'center',
-    _active: { transform: 'scale(0.95)' },
   },
   sizes: {
     large: {
-      height: '50px',
+      height: 50,
       px: 8,
-      fontSize: '2xl',
-    },
-    medium: {
-      height: '40px',
+      borderRadius: 'xl',
     },
   },
   variants: {
-    'primary.outline': {
-      borderRadius: '2xl',
-      ...gradientBorder({ borderRadius: '2xl', borderWidth: 2 }),
-      fontFamily: 'heading',
-      fontWeight: 'bold',
-      shadow: 'Up Big',
-      _hover: { bg: HoverRadialGradient, color: 'text.high' },
-    },
-    primary: {
-      borderRadius: '2xl',
-      ...gradientBorder({ borderRadius: '2xl' }),
+    'primary.outline': (props) => ({
+      ...gradientStroke({ ...props, borderWidth: 2 }),
+      shadow: 'up',
+    }),
+    primary: (props) => ({
+      ...gradientStroke(props),
       bgGradient: 'linear(to-r, primary.1, primary.2)',
-      fontFamily: 'heading',
-      fontWeight: 'bold',
-      shadow: PrimaryButtonShadow,
-      _focus: { shadow: PrimaryButtonShadow },
-    },
+      shadow: 'up',
+    }),
     secondary: {
-      bgGradient: 'linear(to-r, secondary.125, secondary.50)',
-      shadow: 'Up Big',
+      shadow: 'up',
     },
     navigation: (props) => ({
       height: '100%',
@@ -57,7 +35,7 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
       borderColor: 'subtle',
       color: 'text.low',
       ...(props.isActive && {
-        color: 'text.high',
+        color: 'text.medium',
         textDecoration: 'underline',
       }),
       _even: {
@@ -70,14 +48,11 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
       },
       boxShadow: 'inset 1px 0px 2px 0px rgba(16, 19, 23, 1), 1px 0px 2px 0px rgba(16, 19, 23, 1)',
       bg: 'transparent',
-      _active: { bg: HoverRadialGradient },
-      _hover: { bg: HoverRadialGradient },
+      _active: { bg: 'radialGradient' },
+      _hover: { bg: 'radialGradient' },
     }),
   },
-  defaultProps: {
-    variant: null,
-    size: null,
-  },
+  defaultProps: {},
 }
 
 export default ButtonStyles

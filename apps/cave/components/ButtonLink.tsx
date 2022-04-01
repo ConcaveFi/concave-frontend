@@ -1,5 +1,5 @@
-import { Button, ButtonProps } from '@concave/ui'
 import Link, { LinkProps } from 'next/link'
+import { Button, ButtonProps } from '@concave/ui'
 
 export type ButtonLinkProps = ButtonProps & LinkProps
 

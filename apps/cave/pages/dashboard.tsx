@@ -1,8 +1,13 @@
 import { Container } from '@concave/ui'
 import React from 'react'
+import { Page } from '../components/Page'
 
 function dashboardf() {
-  return <Container maxW="container.lg">DEBANK DASH COMING FROM GREGS(ref debank)</Container>
+  return (
+    <Page>
+      <Container maxW="container.lg">dashboard test, current positions etc? some graphs?</Container>
+    </Page>
+  )
 }
 
 export default dashboardf

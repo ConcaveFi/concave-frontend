@@ -11,17 +11,17 @@
     "dist/**"
   ],
   "scripts": {
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "build": "tsup index.tsx --format esm,cjs --dts --external react --inject inject-react.js",
     "dev": "tsup index.tsx --format esm,cjs --watch --dts --external react --inject inject-react.js"
   },
   "devDependencies": {
-    "@types/react": "^17.0.40",
-    "@types/react-dom": "^17.0.13",
+    "@types/react": "^17.0.39",
+    "@types/react-dom": "^17.0.11",
     "react": "^17.0.2",
-    "typescript": "^4.6.2"
+    "typescript": "^4.5.5"
   },
   "dependencies": {
-    "@chakra-ui/icons": "^1.1.7",
-    "@chakra-ui/react": "^1.8.6"
+    "@chakra-ui/icons": "^1.1.7"
   }
 }

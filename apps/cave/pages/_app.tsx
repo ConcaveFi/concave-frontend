@@ -1,42 +1,31 @@
 import type { AppProps } from 'next/app'
-import { ConcaveFonts, Image, ThemeProvider } from '@concave/ui'
-import { Styles } from '@chakra-ui/theme-tools'
-import { NextPage } from 'next'
-import { DefaultLayout } from 'components/Layout'
-import { AppProviders } from 'contexts'
-
-const globalStyles: Styles = {
-  global: {
-    html: {
-      fontFamily: 'body',
-      color: 'text.high',
-      lineHeight: 'base',
-      colorScheme: 'dark',
-    },
-  },
-}
-
-type NextPageWithLayout = NextPage & {
-  Layout?: React.FC
-}
-
-type AppPropsWithLayout = AppProps & {
-  Component: NextPageWithLayout
-}
-
-export default function App({ Component, pageProps }: AppPropsWithLayout) {
-  const Layout = Component.Layout || DefaultLayout
-  return (
-    <AppProviders globalStyles={globalStyles} cookies={pageProps?.cookies}>
-      <Image zIndex={-1} pos="fixed" h="100vh" w="100vw" src="/background.jpg" alt="" />
-      <ConcaveFonts />
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-    </AppProviders>
-  )
-}
+import { ApolloProvider } from '@apollo/client'
+import { useApollo } from 'lib/apollo'
+import { ConcaveFonts, ThemeProvider } from '@concave/ui'
+import { WagmiProvider } from 'components/WagmiProvider'
+import { QueryClient, QueryClientProvider } from 'react-query'
+import { useState } from 'react'
 
 export function getServerSideProps({ req }) {
   return { props: { cookies: req.headers.cookie ?? '' } }
 }
+
+const App = ({ Component, pageProps }: AppProps) => {
+  // load Apollo
+  const apolloClient = useApollo(pageProps.initialApolloProps)
+  const [queryClient] = useState(() => new QueryClient())
+  return (
+    <ApolloProvider client={apolloClient}>
+      <QueryClientProvider client={queryClient}>
+        <WagmiProvider>
+          <ThemeProvider cookies={pageProps.cookies}>
+            <ConcaveFonts />
+            <Component {...pageProps} />
+          </ThemeProvider>
+        </WagmiProvider>
+      </QueryClientProvider>
+    </ApolloProvider>
+  )
+}
+
+export default App

@@ -12,8 +12,9 @@ export interface MetaProps {
   type?: string
 }
 
-export const MetaHead = ({ customMeta }: { customMeta?: MetaProps }): JSX.Element => {
+export const Head = ({ customMeta }: { customMeta?: MetaProps }): JSX.Element => {
   const router = useRouter()
+  router.basePath
   const meta: MetaProps = {
     title: 'Concave',
     description: '🥄 Spooonnn',

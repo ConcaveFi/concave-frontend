@@ -12,24 +12,25 @@
   ],
   "scripts": {
     "gen:theme-typings": "chakra-cli tokens ./theme/index.ts",
-    "postinstall": "yarn gen:theme-typings",
+    "postinstall": "npm run gen:theme-typings",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "build": "tsup index.tsx --format esm,cjs --dts --external react --inject inject-react.js",
     "dev": "tsup index.tsx --format esm,cjs --watch --dts --external react --inject inject-react.js",
     "prepack": "yarn gen:theme-typings && yarn build",
     "publish": "yarn npm publish"
   },
   "devDependencies": {
-    "@chakra-ui/cli": "^1.9.0",
-    "@types/react": "^17.0.40",
-    "@types/react-dom": "^17.0.13",
+    "@chakra-ui/cli": "^1.8.2",
+    "@types/react": "^17.0.39",
+    "@types/react-dom": "^17.0.11",
     "react": "^17.0.2",
-    "tsup": "^5.12.0",
-    "typescript": "^4.6.2"
+    "tsup": "^5.11.13",
+    "typescript": "^4.5.5"
   },
   "dependencies": {
-    "@chakra-ui/react": "^1.8.6",
-    "@emotion/react": "^11.8.2",
+    "@chakra-ui/react": "^1.8.5",
+    "@emotion/react": "^11.8.1",
     "@emotion/styled": "^11.8.1",
-    "framer-motion": "^6.2.8"
+    "framer-motion": "^6.2.7"
   }
 }
