@@ -35,8 +35,8 @@ export function ClaimCard({ userAddress }: { userAddress: string }) {
         <Text color="text.low">aCNV Balance: 50</Text>
         </Stack>
 
-//       <Stack align="center" direction="row" justify="space-between" w="80%" >
-//      <Button
+       {/* <Stack align="center" direction="row" justify="space-between" w="80%" >
+      <Button
           mt={5}
           fontWeight="bold"
           fontSize="md"
@@ -51,7 +51,7 @@ export function ClaimCard({ userAddress }: { userAddress: string }) {
          Redeem bbtCNV
         </Button>
         <Text color="text.low">bbtCNV Balance: 200</Text>
-        </Stack>
+        </Stack> */}
       </Card>
     )
 }
