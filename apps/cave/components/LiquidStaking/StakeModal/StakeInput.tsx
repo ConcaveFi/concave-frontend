@@ -17,14 +17,14 @@ export const stakedCoin = new Token({
 function StakeInput() {
   return (
     <Card w="350px">
-      <TokenInput
+      {/* <TokenInput
         onChangeCurrency={console.log}
         currency={stakedCoin}
         value={stakedCoin.symbol}
         onChangeValue={console.log}
       >
         <TokenBalance value={'42690'} onClick={console.log} />
-      </TokenInput>
+      </TokenInput> */}
     </Card>
   )
 }
