@@ -15,7 +15,7 @@ export interface ModalProps extends ChakraModalProps {
   titleAlign?: 'left' | 'center' | 'right'
   closeButton?: boolean
   children: ReactNode
-  bodyProps: CardProps
+  bodyProps?: CardProps
 }
 
 export function Modal({
