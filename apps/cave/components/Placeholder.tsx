@@ -7,6 +7,7 @@ function Placeholder({ text }) {
       borderStyle="dashed"
       borderWidth={2}
       borderColor="#84E2FF"
+      borderRadius="3xl"
       px={20}
       py={16}
       w="max-content"

@@ -1,5 +1,19 @@
 import { Button, Card, Center, Stack, Text } from '@concave/ui'
-export function ClaimCard({ userAddress: string }) {
+import { useAuth } from 'contexts/AuthContext'
+import { gaEvent } from 'lib/analytics'
+import { useEffect } from 'react'
+import { useBalance } from 'wagmi'
+
+export function ClaimCard() {
+  const { user } = useAuth()
+  const [{ data, error, loading }, getCNVBalance] = useBalance({
+    addressOrName: user.address,
+    token: '0x2B8E79CBD58418CE9aeB720BAf6B93825B93eF1F', // INSERT aCNV ADDRESS
+  })
+
+  useEffect(() => {
+    console.log(`error:${error}`)
+  })
   return (
     <Card
       variant="secondary"
@@ -24,10 +38,13 @@ export function ClaimCard({ userAddress: string }) {
         >
           Redeem aCNV
         </Button>
-        <Text color="text.low">aCNV Balance: 50</Text>
+        <Text color="text.low">
+          aCNV Balance: {getCNVBalance} {loading ? 0 : data?.formatted}
+        </Text>
       </Stack>
-      <Stack align="center" direction="row" justify="space-between" w="80%">
-        <Button
+
+      {/* <Stack align="center" direction="row" justify="space-between" w="80%" >
+      <Button
           mt={5}
           fontWeight="bold"
           fontSize="md"
@@ -37,11 +54,12 @@ export function ClaimCard({ userAddress: string }) {
           h="30px"
           size="large"
           mx="moz-initial"
+          
         >
-          Redeem bbtCNV
+         Redeem bbtCNV
         </Button>
         <Text color="text.low">bbtCNV Balance: 200</Text>
-      </Stack>
+        </Stack> */}
     </Card>
   )
 }
