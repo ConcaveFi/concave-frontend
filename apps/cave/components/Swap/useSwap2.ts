@@ -9,6 +9,7 @@ import { RouterABI } from './routerABI'
 import { useContractWrite } from './hooks/useContractWrite'
 import { CNV, DAI } from 'constants/tokens'
 import { ROPSTEN_CNV, ROPSTEN_DAI } from 'constants/ropstenTokens'
+import { concaveProvider } from 'lib/providers'
 
 const useCurrencyBalance = (currency: Currency, userAddress: string) =>
   useBalance({
@@ -120,10 +121,10 @@ export const useSwap = () => {
     const provider = concaveProvider(chain.ropsten.id)
     const currentBlockNumber = await provider.getBlockNumber()
     const { timestamp } = await provider.getBlock(currentBlockNumber)
-    const deadLine = timestamp + 86400
+    const deadLine = timestamp + 1
     const { methodName, args, value } = Router.swapCallParameters(tradeInfo.current.trade, {
       allowedSlippage: tradeInfo.current.meta.allowedSlippage,
-      ttl: settings.deadline,
+      ttl: deadLine,
       recipient: user.address,
       // feeOnTransfer?: boolean;
     })
