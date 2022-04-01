@@ -100,7 +100,7 @@ export default function Bond() {
   return (
     <Container maxW="container.lg">
       <GcnvTitle title="Bonds" description="" />
-      <Placeholder text="Tiered Rewards" />
+      <Placeholder text="Bond Offerings" />
     </Container>
     // <Container maxW="container.lg">
     //   <Flex direction="column" gap={20}>
