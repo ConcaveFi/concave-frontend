@@ -119,14 +119,14 @@ const LPPositionItem = ({ pair, ownedAmount }: LPPosition) => {
             p={4}
             spacing={4}
           >
-            <PositionInfoItem label="Your total pool tokens:" value={ownedAmount.toString()} />
-            <PositionInfoItem label={`Pooled ${tokenA.symbol}:`} value={'0.0001331'}>
-              <TokenIcon size="sm" {...tokenA} />
+            {/* <PositionInfoItem label="Your total pool tokens:" value={ownedAmount.toString()} /> */}
+            {/* <PositionInfoItem label={`Pooled ${tokenA.symbol}:`} value={'0.0001331'}>
+              <TokenIcon size={'sm'} {...tokenA} />
             </PositionInfoItem>
             <PositionInfoItem label={`Pooled ${tokenB.symbol}:`} value={'325.744'}>
               <TokenIcon size="sm" {...tokenB} />
             </PositionInfoItem>
-            <PositionInfoItem label="Your pool share:" value={'2.79%'} />
+            <PositionInfoItem label="Your pool share:" value={'2.79%'} /> */}
           </Stack>
           <Flex gap={5} justify="center" mt={6}>
             <Button onClick={addLiquidity.onOpen} variant="primary" h={12} w={40} fontSize="lg">
