@@ -1,6 +1,6 @@
 import { Global } from '@emotion/react'
 
-const concaveFontsSrc = 'https://concave.lol/assets/fonts'
+const concaveFontsSrc = '/assets/fonts'
 
 const makeFontFaces = (familyName: string, weights: number[]) =>
   weights
@@ -17,14 +17,14 @@ const makeFontFaces = (familyName: string, weights: number[]) =>
 }
 `,
     )
-    .join()
+    .join(' ')
 
 export const ConcaveFonts = () => (
   <Global
     styles={`
-         ${makeFontFaces('ProductSans', [900, 700, 500, 400])}
-    ${makeFontFaces('SharpSans', [900, 800, 700, 600, 500])}
-  `}
+      ${makeFontFaces('ProductSans', [900, 700, 500, 400])}
+      ${makeFontFaces('SharpSans', [800, 700, 600, 500])}
+    `}
   />
 )
 

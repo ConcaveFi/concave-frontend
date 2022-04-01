@@ -12,7 +12,7 @@
     "dev": {
       "cache": false
     },
-    "clean": {
+    "postinstall": {
       "cache": false
     }
   },
