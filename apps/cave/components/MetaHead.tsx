@@ -16,7 +16,8 @@ export const MetaHead = ({ customMeta }: { customMeta?: MetaProps }): JSX.Elemen
   const router = useRouter()
   const meta: MetaProps = {
     title: 'Concave | Exchange (AMM)',
-    description: 'A capital efficient, low slippage and high liquidity AMM, Concave Exchange offers traders deeper liquidity and allows liquidity providers to earn more with less capital investment.',
+    description:
+      'A capital efficient, low slippage and high liquidity AMM, Concave Exchange offers traders deeper liquidity and allows liquidity providers to earn more with less capital investment.',
     image: `${HOST_URL}/assets/concave/ConcavePreview.png`,
     type: 'website',
     ...customMeta,
