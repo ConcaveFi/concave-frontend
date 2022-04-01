@@ -11,7 +11,7 @@ function SideBarTop() {
   const { user } = useAuth()
   const [{ data, error, loading }, getCNVBalance] = useBalance({
     addressOrName: user.address,
-    token: '0x2B8E79CBD58418CE9aeB720BAf6B93825B93eF1F', // INSERT CNV ADDRESS
+    // token: '0x2B8E79CBD58418CE9aeB720BAf6B93825B93eF1F', // INSERT CNV ADDRESS
   })
 
   useEffect(() => {
