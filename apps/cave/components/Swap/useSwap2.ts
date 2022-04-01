@@ -117,6 +117,10 @@ export const useSwap = () => {
   })
 
   const confirmSwap = useCallback(async () => {
+    const provider = concaveProvider(chain.ropsten.id)
+    const currentBlockNumber = await provider.getBlockNumber()
+    const { timestamp } = await provider.getBlock(currentBlockNumber)
+    const deadLine = timestamp + 86400
     const { methodName, args, value } = Router.swapCallParameters(tradeInfo.current.trade, {
       allowedSlippage: tradeInfo.current.meta.allowedSlippage,
       ttl: settings.deadline,
