@@ -451,7 +451,7 @@ const SupplyLiquidityModal = ({
       isOpen={disclosure.isOpen}
       onClose={disclosure.onClose}
       isCentered
-      size={'xl'}
+      size={'3xl'}
       bodyProps={{
         gap: 6,
         shadow: 'Up for Blocks',
@@ -531,6 +531,8 @@ const AddLiquidityContent = ({ userAddress }: { userAddress: string }) => {
       </Card>
       <Flex direction={'column'} p={4} gap={2}>
         <TokenInput
+          balance={wrapperTokenA.balance?.formatted}
+          stable={'10'}
           value={'' + amountADesired}
           currency={wrapperTokenA.token}
           onChangeValue={(value) => {
@@ -562,6 +564,8 @@ const AddLiquidityContent = ({ userAddress }: { userAddress: string }) => {
         </Flex>
         <TokenInput
           value={'' + amountBDesired}
+          balance={wrapperTokenB.balance?.formatted}
+          stable={'10'}
           currency={wrapperTokenB.token}
           onChangeValue={(value) => {
             setAmountBDesired(+value)

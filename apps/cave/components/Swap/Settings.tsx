@@ -1,23 +1,23 @@
 import { CnvQuestionIcon, SwapSettingsIcon } from '@concave/icons'
 import {
-  Heading,
+  Box,
   Button,
   Card,
+  Heading,
   HStack,
+  IconButton,
   InputGroup,
   InputRightAddon,
-  Switch,
-  Text,
-  Stack,
+  NumericInput,
   Popover,
   PopoverBody,
   PopoverContent,
   PopoverTrigger,
   Portal,
-  IconButton,
-  NumericInput,
+  Stack,
+  Switch,
+  Text,
   useBoolean,
-  Box,
 } from '@concave/ui'
 import React, { useMemo, useState } from 'react'
 
@@ -34,7 +34,6 @@ const SlippageTolerance = ({ value, onValueChange, onClickAuto }) => {
               value={value}
               isNumericString
               placeholder="0.50"
-              size="medium"
               variant="unstyled"
               max={50}
               onValueChange={onValueChange}
@@ -82,7 +81,6 @@ const Deadline = ({ value, onValueChange }) => {
             value={value}
             isNumericString
             placeholder="30"
-            size="medium"
             variant="unstyled"
             onValueChange={onValueChange}
           />

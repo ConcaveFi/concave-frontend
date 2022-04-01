@@ -9,7 +9,7 @@ import {
   Stack,
   Text,
 } from '@concave/ui'
-import { SwapCardLegacy } from 'components/Swap/SwapCardLegacy'
+import { SwapCard } from 'components/Swap/SwapCard'
 import { useSwap } from 'components/Swap/useSwap'
 import { useAuth } from 'contexts/AuthContext'
 import React from 'react'
@@ -139,11 +139,11 @@ export default function Bond() {
               <NothingToRedeem />
             </Card>
           </Box>
-          <SwapCardLegacy
-            swap={swap}
-            buttonLabel="Buy with 5 days vesting"
-            variant="primary"
-            w="380px"
+          <SwapCard
+          // swap={swap}
+          // buttonLabel="Buy with 5 days vesting"
+          // variant="primary"
+          // w="380px"
           />
         </Flex>
       </Flex>

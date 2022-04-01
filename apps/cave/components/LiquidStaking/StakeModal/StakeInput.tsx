@@ -18,6 +18,8 @@ function StakeInput() {
   return (
     <Card w="350px">
       <TokenInput
+        balance={'42690'}
+        stable={'10'}
         onChangeCurrency={console.log}
         currency={stakedCoin}
         value={stakedCoin.symbol}

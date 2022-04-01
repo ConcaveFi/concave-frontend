@@ -1,19 +1,19 @@
-import React from 'react'
 import {
-  Portal,
   Button,
   Card,
+  gradientBorder,
   Image,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
-  gradientBorder,
   Modal,
+  Portal,
 } from '@concave/ui'
-import { useConnect } from 'wagmi'
 import { useAuth } from 'contexts/AuthContext'
 import { useIsMounted } from 'hooks/useIsMounted'
+import React from 'react'
+import { useConnect } from 'wagmi'
 
 const miniAddress = (address) =>
   `${address.substr(0, 6)}...${address.substr(address.length - 6, address.length)}`
@@ -53,6 +53,7 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
       title="Connect Wallet"
       isOpen={isOpen}
       onClose={onClose}
+      size="xs"
       isCentered
       motionPreset="slideInBottom"
       bodyProps={{ alignItems: 'center', gap: 3, maxW: '350px' }}
