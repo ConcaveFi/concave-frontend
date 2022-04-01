@@ -29,7 +29,7 @@ export const TransactionSubmittedModal = ({
     >
       <SubmittedIcon w={10} mb={5} mt={12} />
       <Text align={'center'} fontSize={'24px'} fontWeight={600}>
-        Transaction Submitted
+        Transaction Submitted <br />
         <Link
           href={`https://etherscan.io/tx/${receipt?.data?.transactionHash}`}
           fontWeight={400}
