@@ -3,7 +3,7 @@ import { Button, Card, Flex, HStack, Spinner, Text, useDisclosure } from '@conca
 import { useAuth } from 'contexts/AuthContext'
 import { useApprovalWhenNeeded } from 'hooks/useAllowance'
 import { TokenType } from 'lib/tokens'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useFeeData, useWaitForTransaction } from 'wagmi'
 import { ConfirmSwapModal } from './ConfirmSwap'
 import { Settings } from './Settings'
@@ -100,12 +100,11 @@ export function SwapCard() {
   const confirmModal = useDisclosure()
   const transactionStatusModal = useDisclosure()
   const receiptModal = useDisclosure()
-
   const [swapReceipt] = useWaitForTransaction({
     hash: swapTransaction.data?.hash,
     skip: !swapTransaction.data?.hash,
   })
-
+  const [modalCanBeVisible, setModalCanBeVisible] = useState(true)
   const [needsApproval, approve, isApproving] = useApprovalWhenNeeded(
     swapingIn.currency.wrapped as TokenType,
     ROUTER_CONTRACT[1],
@@ -113,6 +112,9 @@ export function SwapCard() {
     +swapingIn?.balance,
   )
 
+  useEffect(() => {
+    setModalCanBeVisible(true)
+  }, [swapReceipt])
   return (
     <>
       <Card p={6} gap={2} variant="primary" h="fit-content" shadow="Block Up" w="100%" maxW="420px">
@@ -214,13 +216,13 @@ export function SwapCard() {
         inSymbol={swapingIn?.currency?.symbol}
         outSymbol={swapingOut?.currency?.symbol}
         status={swapTransaction}
-        isOpen={!!swapTransaction?.data}
+        isOpen={!!swapTransaction?.data && modalCanBeVisible}
         onClose={transactionStatusModal.onClose}
       />
 
       <TransactionSubmittedModal
         receipt={swapReceipt}
-        isOpen={!!swapReceipt?.data}
+        isOpen={!!swapReceipt?.data && modalCanBeVisible}
         onClose={receiptModal.onClose}
       />
     </>

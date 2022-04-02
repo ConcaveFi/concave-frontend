@@ -1,7 +1,7 @@
 import { SubmittedIcon } from '@concave/icons'
 import { Button, Flex, Link, Modal, Text } from '@concave/ui'
 import { ethers } from 'ethers'
-import React, { useState } from 'react'
+import React from 'react'
 
 export const TransactionSubmittedModal = ({
   receipt,
@@ -16,12 +16,11 @@ export const TransactionSubmittedModal = ({
   isOpen: boolean
   onClose: () => void
 }) => {
-  const [show, setShow] = useState(true)
   return (
     <Modal
       bluryOverlay={true}
       title="Confirm Swap"
-      isOpen={isOpen && show}
+      isOpen={isOpen}
       onClose={onClose}
       bodyProps={{
         alignItems: 'center',
@@ -42,16 +41,7 @@ export const TransactionSubmittedModal = ({
       </Text>
 
       <Flex>
-        <Button
-          onClick={() => {
-            setShow(false)
-            onClose()
-          }}
-          variant="secondary"
-          size="large"
-          mt={4}
-          w="180px"
-        >
+        <Button onClick={onClose} variant="secondary" size="large" mt={4} w="180px">
           Close
         </Button>
       </Flex>
