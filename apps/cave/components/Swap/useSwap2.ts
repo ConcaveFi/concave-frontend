@@ -86,7 +86,7 @@ export const useSwap = () => {
       pairs.data,
       desiredExactCurrencyAmount,
       otherCurrency,
-      tradeType.current,
+      TradeType.EXACT_INPUT, // We are reverting on line 74, so, we need use EXACT_INPUT always
       { maxHops: 1 },
     )
 
