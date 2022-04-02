@@ -10,6 +10,7 @@ export function ClaimCard() {
   //   addressOrName: user.address,
   //   token: '0x2A6bb78490c2221E0D36d931192296BE4b3A01F1', // INSERT aCNV ADDRESS
   // })
+  //
   const [{ data, error, loading }, write] = useContractWrite(
     {
       addressOrName: '0x38baBedCb1f226B49b2089DA0b84e52b6181Ca59',
