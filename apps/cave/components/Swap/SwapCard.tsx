@@ -108,7 +108,7 @@ export function SwapCard() {
     user.address,
     +swapingIn?.amount,
   )
-
+  //
   useEffect(() => {
     setModalCanBeVisible(true)
   }, [swapReceipt])
