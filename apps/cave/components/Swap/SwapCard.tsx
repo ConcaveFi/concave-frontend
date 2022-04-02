@@ -1,7 +1,7 @@
 import { ExpandArrowIcon, GasIcon } from '@concave/icons'
 import { Button, Card, Flex, HStack, Spinner, Text, useDisclosure } from '@concave/ui'
 import { useAuth } from 'contexts/AuthContext'
-import { useApproval, useApprovalWhenNeeded } from 'hooks/useAllowance'
+import { useApprovalWhenNeeded } from 'hooks/useAllowance'
 import { TokenType } from 'lib/tokens'
 import React from 'react'
 import { useFeeData, useWaitForTransaction } from 'wagmi'
@@ -121,7 +121,10 @@ export function SwapCard() {
           currency={swapingIn.currency}
           stable={swapingIn.stable}
           balance={swapingIn.balance}
-          onChangeValue={setAmountIn}
+          onChangeValue={(v) => {
+            const numberValue = v.replace('-', '')
+            numberValue && setAmountIn(v)
+          }}
           onChangeCurrency={setCurrencyIn}
           onClickMaxBalance={() => {
             if (swapingIn.currency.equals(nativeCurrency)) setAmountIn(+swapingIn.balance * 0.8)
@@ -134,7 +137,10 @@ export function SwapCard() {
           currency={swapingOut.currency}
           stable={swapingOut.stable}
           balance={swapingOut.balance}
-          onChangeValue={setAmountOut}
+          onChangeValue={(v) => {
+            const numberValue = v.replace('-', '')
+            numberValue && setAmountOut(v)
+          }}
           onChangeCurrency={setCurrencyOut}
         />
 
