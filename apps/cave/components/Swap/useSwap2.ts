@@ -48,8 +48,8 @@ export const useSwap = () => {
   const [settings, setSettings] = useState(defaultSettings)
 
   const isRopsten = network?.chain?.id === chain.ropsten.id
-  const [currencyIn, setCurrencyIn] = useState<Currency>(isRopsten ? ROPSTEN_CNV : CNV)
-  const [currencyOut, setCurrencyOut] = useState<Currency>(isRopsten ? ROPSTEN_DAI : DAI)
+  const [currencyOut, setCurrencyOut] = useState<Currency>(isRopsten ? ROPSTEN_CNV : CNV)
+  const [currencyIn, setCurrencyIn] = useState<Currency>(isRopsten ? ROPSTEN_DAI : DAI)
 
   const [amountIn, setAmountIn] = useState<string>()
   const [amountOut, setAmountOut] = useState<string>()
