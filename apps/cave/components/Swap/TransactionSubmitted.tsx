@@ -1,5 +1,5 @@
-import { Button, Flex, Link, Modal, Text } from '@concave/ui'
 import { SubmittedIcon } from '@concave/icons'
+import { Button, Flex, Link, Modal, Text } from '@concave/ui'
 import { ethers } from 'ethers'
 import React from 'react'
 

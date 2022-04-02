@@ -1,9 +1,9 @@
 import { ExpandArrowIcon, GasIcon } from '@concave/icons'
 import { Button, Card, Flex, HStack, Spinner, Text, useDisclosure } from '@concave/ui'
 import { useAuth } from 'contexts/AuthContext'
-import { useApproval, useApprovalWhenNeeded } from 'hooks/useAllowance'
+import { useApprovalWhenNeeded } from 'hooks/useAllowance'
 import { TokenType } from 'lib/tokens'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useFeeData, useWaitForTransaction } from 'wagmi'
 import { ConfirmSwapModal } from './ConfirmSwap'
 import { Settings } from './Settings'
@@ -68,13 +68,10 @@ const PairsError = () => (
 )
 
 /**
-
   TODO
     - switch tokens
     - eth -> weth
-
- */
-
+*/
 export function SwapCard() {
   const {
     setAmountIn,
@@ -100,12 +97,11 @@ export function SwapCard() {
   const confirmModal = useDisclosure()
   const transactionStatusModal = useDisclosure()
   const receiptModal = useDisclosure()
-
   const [swapReceipt] = useWaitForTransaction({
     hash: swapTransaction.data?.hash,
     skip: !swapTransaction.data?.hash,
   })
-
+  const [modalCanBeVisible, setModalCanBeVisible] = useState(true)
   const [needsApproval, approve, isApproving] = useApprovalWhenNeeded(
     swapingIn.currency.wrapped as TokenType,
     ROUTER_CONTRACT[1],
@@ -113,6 +109,9 @@ export function SwapCard() {
     +swapingIn?.amount,
   )
 
+  useEffect(() => {
+    setModalCanBeVisible(true)
+  }, [swapReceipt])
   return (
     <>
       <Card p={6} gap={2} variant="primary" h="fit-content" shadow="Block Up" w="100%" maxW="420px">
@@ -121,7 +120,7 @@ export function SwapCard() {
           currency={swapingIn.currency}
           stable={swapingIn.stable}
           balance={swapingIn.balance}
-          onChangeValue={setAmountIn}
+          onChangeValue={(v) => !isNaN(+v) && setAmountIn(v)}
           onChangeCurrency={setCurrencyIn}
           onClickMaxBalance={() => {
             if (swapingIn.currency.equals(nativeCurrency)) setAmountIn(+swapingIn.balance * 0.8)
@@ -134,7 +133,7 @@ export function SwapCard() {
           currency={swapingOut.currency}
           stable={swapingOut.stable}
           balance={swapingOut.balance}
-          onChangeValue={setAmountOut}
+          onChangeValue={(v) => !isNaN(+v) && setAmountOut(v)}
           onChangeCurrency={setCurrencyOut}
         />
 
@@ -174,13 +173,14 @@ export function SwapCard() {
           </Button>
         )}
 
-        {!isConnected ? (
-          <Button variant="primary" size="large" onClick={connectWithModal}>
-            Connect Wallet
-          </Button>
+        {!isConnected && false ? (
+          // <Button variant="primary" size="large" disabled onClick={connectWithModal}>
+          //   Connect Wallet
+          // </Button>
+          <></>
         ) : (
           <Button
-            isDisabled={!isTradeReady || needsApproval}
+            isDisabled={!isTradeReady || needsApproval || !isConnected}
             variant="primary"
             size="large"
             isFullWidth
@@ -207,14 +207,20 @@ export function SwapCard() {
         inSymbol={swapingIn?.currency?.symbol}
         outSymbol={swapingOut?.currency?.symbol}
         status={swapTransaction}
-        isOpen={!!swapTransaction?.data}
-        onClose={transactionStatusModal.onClose}
+        isOpen={!!swapTransaction?.data && modalCanBeVisible}
+        onClose={() => {
+          setModalCanBeVisible(false)
+          transactionStatusModal.onClose()
+        }}
       />
 
       <TransactionSubmittedModal
         receipt={swapReceipt}
-        isOpen={!!swapReceipt?.data}
-        onClose={receiptModal.onClose}
+        isOpen={!!swapReceipt?.data && modalCanBeVisible}
+        onClose={() => {
+          setModalCanBeVisible(false)
+          receiptModal.onClose
+        }}
       />
     </>
   )

@@ -31,7 +31,7 @@ const webSocketProvider = ({ chainId }) =>
 
 export const WagmiProvider = ({ children }: { children: ReactNode }) => (
   <Provider
-    // autoConnect
+    autoConnect
     connectorStorageKey="concave"
     connectors={connectors}
     provider={provider}
