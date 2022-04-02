@@ -174,13 +174,14 @@ export function SwapCard() {
           </Button>
         )}
 
-        {!isConnected ? (
-          <Button variant="primary" size="large" onClick={connectWithModal}>
-            Connect Wallet
-          </Button>
+        {!isConnected && false ? (
+          // <Button variant="primary" size="large" disabled onClick={connectWithModal}>
+          //   Connect Wallet
+          // </Button>
+          <></>
         ) : (
           <Button
-            isDisabled={!isTradeReady || needsApproval}
+            isDisabled={!isTradeReady || needsApproval || !isConnected}
             variant="primary"
             size="large"
             isFullWidth
