@@ -43,29 +43,21 @@ export type TradeInfo = {
 }
 
 export const useSwap = () => {
+  const { user } = useAuth()
   const [{ data: network }] = useNetwork()
 
   const [settings, setSettings] = useState(defaultSettings)
-
   const isRopsten = network?.chain?.id === chain.ropsten.id
   const [currencyOut, setCurrencyOut] = useState<Currency>(isRopsten ? ROPSTEN_CNV : CNV)
   const [currencyIn, setCurrencyIn] = useState<Currency>(isRopsten ? ROPSTEN_DAI : DAI)
-
   const [amountIn, setAmountIn] = useState<string>()
   const [amountOut, setAmountOut] = useState<string>()
-
-  const { user } = useAuth()
-
   const [{ data: currencyInBalance }] = useCurrencyBalance(currencyIn, user?.address)
   const [{ data: currencyOutBalance }] = useCurrencyBalance(currencyOut, user?.address)
-
   const { price: currencyInUsdPrice } = useQuote(currencyIn, 1)
   const { price: currencyOutUsdPrice } = useQuote(currencyOut, 1)
-
   const { price: relativePrice } = useQuote(currencyOut?.wrapped, 1, currencyIn?.wrapped)
-
   const pairs = usePairs(currencyIn?.wrapped, currencyOut?.wrapped, settings.multihops ? 3 : 1)
-
   const tradeType = useRef(TradeType.EXACT_INPUT)
   const tradeInfo = useRef<TradeInfo>()
 
@@ -74,7 +66,9 @@ export const useSwap = () => {
       tradeType.current === TradeType.EXACT_INPUT
         ? [currencyIn, amountIn, currencyOut, setAmountOut]
         : [currencyOut, amountOut, currencyIn, setAmountIn]
-
+    if (+amount <= 0 || isNaN(+amount)) {
+      return
+    }
     setOtherFieldAmount('')
     if (!amount || !otherCurrency || !desiredExactCurrency || !pairs.data || pairs.isLoading) return
 
@@ -82,24 +76,37 @@ export const useSwap = () => {
       desiredExactCurrency,
       +amount * 10 ** desiredExactCurrency.decimals,
     )
-    const bestTrade = findBestTrade(
+    const quote = findBestTrade(
       pairs.data,
       desiredExactCurrencyAmount,
       otherCurrency,
-      TradeType.EXACT_INPUT, // We are reverting on line 74, so, we need use EXACT_INPUT always
+      TradeType.EXACT_INPUT,
+      { maxHops: 1 },
+    )?.executionPrice?.quote(desiredExactCurrencyAmount)
+    if (!quote) {
+      // Zero value
+      return
+    }
+    setOtherFieldAmount(quote.toSignificant(6))
+    const desiredExactCurrencyAmountG = CurrencyAmount.fromRawAmount(
+      currencyIn,
+      +amountIn * 10 ** currencyIn.decimals,
+    )
+    const bestTrade = findBestTrade(
+      pairs.data,
+      desiredExactCurrencyAmountG,
+      currencyOut,
+      TradeType.EXACT_INPUT,
       { maxHops: 1 },
     )
 
-    const quote = bestTrade?.executionPrice?.quote(desiredExactCurrencyAmount)
-    setOtherFieldAmount(quote.toSignificant(6))
-
     const allowedSlippage = new Percent(settings.slippageTolerance * 100, 100_000)
     const expectedOutput = bestTrade.executionPrice
-      .quote(desiredExactCurrencyAmount)
+      .quote(desiredExactCurrencyAmountG)
       .toSignificant(6)
     const worstExecutionPrice = bestTrade
       .worstExecutionPrice(allowedSlippage)
-      .quote(desiredExactCurrencyAmount)
+      .quote(desiredExactCurrencyAmountG)
       .toSignificant(6)
 
     tradeInfo.current = {
