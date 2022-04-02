@@ -120,7 +120,10 @@ export function SwapCard() {
           currency={swapingIn.currency}
           stable={swapingIn.stable}
           balance={swapingIn.balance}
-          onChangeValue={(v) => !isNaN(+v) && setAmountIn(v)}
+          onChangeValue={(v) => {
+            const numberValue = v.replace('-', '')
+            numberValue && setAmountIn(v)
+          }}
           onChangeCurrency={setCurrencyIn}
           onClickMaxBalance={() => {
             if (swapingIn.currency.equals(nativeCurrency)) setAmountIn(+swapingIn.balance * 0.8)
