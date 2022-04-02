@@ -89,7 +89,7 @@ export const useSwap = () => {
       TradeType.EXACT_INPUT, // We are reverting on line 74, so, we need use EXACT_INPUT always
       { maxHops: 1 },
     )
-
+    //
     const quote = bestTrade?.executionPrice?.quote(desiredExactCurrencyAmount)
     setOtherFieldAmount(quote.toSignificant(6))
 
