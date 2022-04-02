@@ -68,13 +68,10 @@ const PairsError = () => (
 )
 
 /**
-
   TODO
     - switch tokens
     - eth -> weth
-
- */
-
+*/
 export function SwapCard() {
   const {
     setAmountIn,
@@ -123,10 +120,7 @@ export function SwapCard() {
           currency={swapingIn.currency}
           stable={swapingIn.stable}
           balance={swapingIn.balance}
-          onChangeValue={(v) => {
-            const numberValue = v.replace('-', '')
-            numberValue && setAmountIn(v)
-          }}
+          onChangeValue={(v) => !isNaN(+v) && setAmountIn(v)}
           onChangeCurrency={setCurrencyIn}
           onClickMaxBalance={() => {
             if (swapingIn.currency.equals(nativeCurrency)) setAmountIn(+swapingIn.balance * 0.8)
@@ -139,10 +133,7 @@ export function SwapCard() {
           currency={swapingOut.currency}
           stable={swapingOut.stable}
           balance={swapingOut.balance}
-          onChangeValue={(v) => {
-            const numberValue = v.replace('-', '')
-            numberValue && setAmountOut(v)
-          }}
+          onChangeValue={(v) => !isNaN(+v) && setAmountOut(v)}
           onChangeCurrency={setCurrencyOut}
         />
 
