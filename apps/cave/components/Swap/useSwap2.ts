@@ -43,29 +43,21 @@ export type TradeInfo = {
 }
 
 export const useSwap = () => {
+  const { user } = useAuth()
   const [{ data: network }] = useNetwork()
 
   const [settings, setSettings] = useState(defaultSettings)
-
   const isRopsten = network?.chain?.id === chain.ropsten.id
   const [currencyOut, setCurrencyOut] = useState<Currency>(isRopsten ? ROPSTEN_CNV : CNV)
   const [currencyIn, setCurrencyIn] = useState<Currency>(isRopsten ? ROPSTEN_DAI : DAI)
-
   const [amountIn, setAmountIn] = useState<string>()
   const [amountOut, setAmountOut] = useState<string>()
-
-  const { user } = useAuth()
-
   const [{ data: currencyInBalance }] = useCurrencyBalance(currencyIn, user?.address)
   const [{ data: currencyOutBalance }] = useCurrencyBalance(currencyOut, user?.address)
-
   const { price: currencyInUsdPrice } = useQuote(currencyIn, 1)
   const { price: currencyOutUsdPrice } = useQuote(currencyOut, 1)
-
   const { price: relativePrice } = useQuote(currencyOut?.wrapped, 1, currencyIn?.wrapped)
-
   const pairs = usePairs(currencyIn?.wrapped, currencyOut?.wrapped, settings.multihops ? 3 : 1)
-
   const tradeType = useRef(TradeType.EXACT_INPUT)
   const tradeInfo = useRef<TradeInfo>()
 
