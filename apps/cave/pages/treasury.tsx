@@ -1,7 +1,9 @@
 import { Card, Container, Flex, Heading, Image, Spinner, Stack, Text } from '@concave/ui'
 import { ClaimCard } from 'components/Claim/ClaimCard'
+import { useLPInfo } from 'hooks/useLPInfo'
 import { fetchPortfolio } from 'lib/debank'
 import { useQuery } from 'react-query'
+import { chain } from 'wagmi'
 
 const TREASURY_ADDRESS = '0x226e7AF139a0F34c6771DeB252F9988876ac1Ced'
 
@@ -43,10 +45,15 @@ const Token = ({ img, name, value, balance = null, children = null }) => {
 }
 
 export default function Treasury() {
+  const [CNV_LP, loadingCNV_LP] = useLPInfo(
+    chain.mainnet.id,
+    '0x84d53CBA013d0163BB07D65d5123D1634bc2a575',
+  )
+
   const { data: treasury, isSuccess } = useQuery(['portfolio', TREASURY_ADDRESS], () =>
     fetchPortfolio(TREASURY_ADDRESS),
   )
-  if (!isSuccess)
+  if (!isSuccess || loadingCNV_LP)
     return (
       <Container maxWidth="container.lg" pt={16}>
         <Stack my={8} align="center">
@@ -64,7 +71,7 @@ export default function Treasury() {
       </Stack>
       <Stack w="100%" my={4} align="left" spacing={2}>
         <Heading as="h1">Concave Treasury Value</Heading>
-        <Heading color="green">{formatUsd(treasury.totalUsd)}</Heading>
+        <Heading color="green">{formatUsd(+treasury.totalUsd + CNV_LP.valueInUSD)}</Heading>
         <Heading as="h3" py={4} fontSize="2xl">
           Protocols
         </Heading>
