@@ -110,7 +110,7 @@ export function SwapCard() {
     swapingIn.currency.wrapped as TokenType,
     ROUTER_CONTRACT[1],
     user.address,
-    +swapingIn?.balance,
+    +swapingIn?.amount,
   )
 
   return (
