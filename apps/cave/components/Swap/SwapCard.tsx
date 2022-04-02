@@ -208,13 +208,19 @@ export function SwapCard() {
         outSymbol={swapingOut?.currency?.symbol}
         status={swapTransaction}
         isOpen={!!swapTransaction?.data && modalCanBeVisible}
-        onClose={transactionStatusModal.onClose}
+        onClose={() => {
+          setModalCanBeVisible(false)
+          transactionStatusModal.onClose()
+        }}
       />
 
       <TransactionSubmittedModal
         receipt={swapReceipt}
         isOpen={!!swapReceipt?.data && modalCanBeVisible}
-        onClose={receiptModal.onClose}
+        onClose={() => {
+          setModalCanBeVisible(false)
+          receiptModal.onClose
+        }}
       />
     </>
   )
