@@ -10,6 +10,7 @@ import { useContractWrite } from './hooks/useContractWrite'
 import { CNV, DAI } from 'constants/tokens'
 import { ROPSTEN_CNV, ROPSTEN_DAI } from 'constants/ropstenTokens'
 import { concaveProvider } from 'lib/providers'
+import { usePrecision } from 'hooks/usePrecision'
 
 const useCurrencyBalance = (currency: Currency, userAddress: string) =>
   useBalance({
@@ -75,18 +76,21 @@ export const useSwap = () => {
         ? [currencyIn, amountIn, currencyOut, setAmountOut]
         : [currencyOut, amountOut, currencyIn, setAmountIn]
 
+    if (+amount <= 0 || isNaN(+amount)) {
+      return
+    }
+
     setOtherFieldAmount('')
     if (!amount || !otherCurrency || !desiredExactCurrency || !pairs.data || pairs.isLoading) return
-
     const desiredExactCurrencyAmount = CurrencyAmount.fromRawAmount(
       desiredExactCurrency,
-      +amount * 10 ** desiredExactCurrency.decimals,
+      Math.round(+amount * 10 ** desiredExactCurrency.decimals), //The number 1100000000000000.1 cannot be converted to BigInt because it is not an integer
     )
     const bestTrade = findBestTrade(
       pairs.data,
       desiredExactCurrencyAmount,
       otherCurrency,
-      TradeType.EXACT_INPUT, // We are reverting on line 74, so, we need use EXACT_INPUT always
+      tradeType.current,
       { maxHops: 1 },
     )
 
