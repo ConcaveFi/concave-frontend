@@ -41,7 +41,7 @@ export function TokenInput({
   currency?: Currency
   balance: string
   stable: string
-  disabled: boolean
+  disabled?: boolean
   onChangeValue: (value: string) => void
   onChangeCurrency: (token: Currency) => void
   onClickMaxBalance?: (value: string) => void
