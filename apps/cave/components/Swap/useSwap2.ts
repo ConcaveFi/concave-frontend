@@ -4,13 +4,11 @@ import { useEffect, useState, useCallback, useMemo, useRef } from 'react'
 import { chain, useBalance, useNetwork } from 'wagmi'
 import { useAuth } from 'contexts/AuthContext'
 import { defaultSettings } from './Settings'
-// import { debounce } from 'debounce'
 import { RouterABI } from './routerABI'
 import { useContractWrite } from './hooks/useContractWrite'
 import { CNV, DAI } from 'constants/tokens'
 import { ROPSTEN_CNV, ROPSTEN_DAI } from 'constants/ropstenTokens'
 import { concaveProvider } from 'lib/providers'
-import { usePrecision } from 'hooks/usePrecision'
 
 const useCurrencyBalance = (currency: Currency, userAddress: string) =>
   useBalance({
