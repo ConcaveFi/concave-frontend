@@ -106,6 +106,7 @@ export const ConfirmSwapModal = ({
   isOpen,
   onClose,
   onConfirm,
+  exactInOrExactOut,
 }: {
   tradeInfo: TradeInfo
   tokenInUsdPrice: string
@@ -114,6 +115,7 @@ export const ConfirmSwapModal = ({
   isOpen: boolean
   onClose: () => void
   onConfirm: () => void
+  exactInOrExactOut: boolean
 }) => {
   if (!tradeInfo) return null
   const { trade, meta } = tradeInfo
@@ -123,19 +125,41 @@ export const ConfirmSwapModal = ({
 
   return (
     <Modal bluryOverlay={true} title="Confirm Swap" isOpen={isOpen} onClose={onClose}>
-      <TokenInfo
-        address={currencyIn.isToken ? currencyIn.address : currencyIn.symbol}
-        symbol={currencyIn.symbol}
-        amount={trade.inputAmount.toSignificant(3)}
-        price={+trade.inputAmount.toSignificant(6) * +tokenInUsdPrice}
-      />
-      <InOutArrow />
-      <TokenInfo
-        address={currencyOut.isToken ? currencyOut.address : currencyOut.symbol}
-        symbol={currencyOut.symbol}
-        amount={trade.outputAmount.toSignificant(3)}
-        price={+trade.outputAmount.toSignificant(6) * +tokenOutUsdPrice}
-      />
+      {exactInOrExactOut ? (
+        <div>
+          {' '}
+          <TokenInfo
+            address={currencyIn.isToken ? currencyIn.address : currencyIn.symbol}
+            symbol={currencyIn.symbol}
+            amount={trade.inputAmount.toSignificant(3)}
+            price={+trade.inputAmount.toSignificant(6) * +tokenInUsdPrice}
+          />
+          <InOutArrow />
+          <TokenInfo
+            address={currencyOut.isToken ? currencyOut.address : currencyOut.symbol}
+            symbol={currencyOut.symbol}
+            amount={trade.outputAmount.toSignificant(3)}
+            price={+trade.outputAmount.toSignificant(6) * +tokenOutUsdPrice}
+          />
+        </div>
+      ) : (
+        <div>
+          {' '}
+          <TokenInfo
+            address={currencyOut.isToken ? currencyOut.address : currencyOut.symbol}
+            symbol={currencyOut.symbol}
+            amount={trade.outputAmount.toSignificant(3)}
+            price={+trade.outputAmount.toSignificant(6) * +tokenOutUsdPrice}
+          />
+          <InOutArrow />
+          <TokenInfo
+            address={currencyIn.isToken ? currencyIn.address : currencyIn.symbol}
+            symbol={currencyIn.symbol}
+            amount={trade.inputAmount.toSignificant(3)}
+            price={+trade.inputAmount.toSignificant(6) * +tokenInUsdPrice}
+          />
+        </div>
+      )}
 
       <Flex fontSize="sm" fontWeight="bold" my={6} justify="center" flexWrap="wrap">
         <Text>

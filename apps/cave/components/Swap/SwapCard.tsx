@@ -102,6 +102,8 @@ export function SwapCard() {
     skip: !swapTransaction.data?.hash,
   })
   const [modalCanBeVisible, setModalCanBeVisible] = useState(true)
+  const [inOrOut, setInOrOut] = useState(Boolean)
+
   const [needsApproval, approve, isApproving] = useApprovalWhenNeeded(
     swapingIn.currency.wrapped as TokenType,
     ROUTER_CONTRACT[1],
@@ -121,6 +123,7 @@ export function SwapCard() {
           stable={swapingIn.stable}
           balance={swapingIn.balance}
           onChangeValue={(v) => {
+            setInOrOut(true)
             const numberValue = v.replace('-', '')
             numberValue && setAmountIn(v)
           }}
@@ -136,7 +139,10 @@ export function SwapCard() {
           currency={swapingOut.currency}
           stable={swapingOut.stable}
           balance={swapingOut.balance}
-          onChangeValue={(v) => !isNaN(+v) && setAmountOut(v)}
+          onChangeValue={(v) => {
+            setInOrOut(false)
+            !isNaN(+v) && setAmountOut(v)
+          }}
           onChangeCurrency={setCurrencyOut}
         />
 
@@ -202,6 +208,7 @@ export function SwapCard() {
         isOpen={confirmModal.isOpen}
         onClose={confirmModal.onClose}
         onConfirm={() => confirmSwap()}
+        exactInOrExactOut={inOrOut}
       />
 
       <TransactionStatusModal
