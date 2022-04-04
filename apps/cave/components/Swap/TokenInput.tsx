@@ -1,10 +1,10 @@
 import {
-  Text,
   Button,
   FlexProps,
   HStack,
   NumericInput,
   Stack,
+  Text,
   useMultiStyleConfig,
 } from '@concave/ui'
 import { Currency } from '@uniswap/sdk-core'
@@ -32,6 +32,7 @@ export function TokenInput({
   currency,
   balance,
   stable,
+  disabled = false,
   onChangeValue,
   onChangeCurrency,
   onClickMaxBalance,
@@ -40,6 +41,7 @@ export function TokenInput({
   currency?: Currency
   balance: string
   stable: string
+  disabled?: boolean
   onChangeValue: (value: string) => void
   onChangeCurrency: (token: Currency) => void
   onClickMaxBalance?: (value: string) => void
@@ -52,6 +54,7 @@ export function TokenInput({
       <HStack justify="space-between" align="start">
         <NumericInput
           decimalScale={5}
+          disabled={disabled}
           w="100%"
           value={value}
           onValueChange={({ value }, eventSrc) =>

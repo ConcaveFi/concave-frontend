@@ -4,7 +4,6 @@ import { useEffect, useState, useCallback, useMemo, useRef } from 'react'
 import { chain, useBalance, useNetwork } from 'wagmi'
 import { useAuth } from 'contexts/AuthContext'
 import { defaultSettings } from './Settings'
-// import { debounce } from 'debounce'
 import { RouterABI } from './routerABI'
 import { useContractWrite } from './hooks/useContractWrite'
 import { CNV, DAI } from 'constants/tokens'
@@ -75,7 +74,12 @@ export const useSwap = () => {
         ? [currencyIn, amountIn, currencyOut, setAmountOut]
         : [currencyOut, amountOut, currencyIn, setAmountIn]
 
+    if (+amount <= 0 || isNaN(+amount)) {
+      return
+    }
+
     setOtherFieldAmount('')
+
     if (
       !amount ||
       Number(amount) === 0 ||
@@ -88,13 +92,13 @@ export const useSwap = () => {
 
     const desiredExactCurrencyAmount = CurrencyAmount.fromRawAmount(
       desiredExactCurrency,
-      +amount * 10 ** desiredExactCurrency.decimals,
+      Math.round(+amount * 10 ** desiredExactCurrency.decimals), //The number 1100000000000000.1 cannot be converted to BigInt because it is not an integer
     )
     const bestTrade = findBestTrade(
       pairs.data,
       desiredExactCurrencyAmount,
       otherCurrency,
-      TradeType.EXACT_INPUT, // We are reverting on line 74, so, we need use EXACT_INPUT always
+      tradeType.current,
       { maxHops: 1 },
     )
     //

@@ -135,6 +135,7 @@ export function SwapCard() {
         />
         <SwitchCurrencies onClick={switchCurrencies} />
         <TokenInput
+          disabled={true}
           value={swapingOut.amount}
           currency={swapingOut.currency}
           stable={swapingOut.stable}
