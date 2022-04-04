@@ -29,7 +29,7 @@ import { useAddLiquidity, UseAddLiquidityData } from 'hooks/useAddLiquidity'
 import { useApprovalWhenNeeded } from 'hooks/useAllowance'
 import { usePrecision } from 'hooks/usePrecision'
 import { contractABI } from 'lib/contractoABI'
-import { concaveProvider2 } from 'lib/providers'
+import { concaveProvider } from 'lib/providers'
 import { TokenType } from 'lib/tokens'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
@@ -272,7 +272,7 @@ const RemoveLiquidityActions = () => {
       const contractInstance = new Contract(
         '0x95dDC411d31bBeDd37e9aaABb335b0951Bc2D25a',
         contractABI,
-        concaveProvider2(chain.ropsten.id),
+        concaveProvider(chain.ropsten.id),
       )
       const contractSigner = contractInstance.connect(data)
       console.log('signer rm', contractSigner)

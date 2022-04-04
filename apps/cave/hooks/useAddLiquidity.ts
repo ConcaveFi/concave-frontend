@@ -2,7 +2,7 @@ import { ethers } from 'ethers'
 import { parseUnits } from 'ethers/lib/utils'
 import { ContractAddress } from 'lib/contractAddress'
 import { contractABI } from 'lib/contractoABI'
-import { concaveProvider2, concaveProvider } from 'lib/providers'
+import { concaveProvider } from 'lib/providers'
 import { useState } from 'react'
 import { chain, useSigner } from 'wagmi'
 import { useToken, WrapperTokenInfo } from '../components/Swap/useSwap'
@@ -19,7 +19,7 @@ export const useAddLiquidity = (chainId = chain.ropsten.id, userAddress) => {
   const contractInstance = new ethers.Contract(
     ContractAddress[chainId],
     contractABI,
-    concaveProvider2(chainId),
+    concaveProvider(chainId),
   )
 
   const call = async () => {

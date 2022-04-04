@@ -1,7 +1,7 @@
 import { ethers } from 'ethers'
 import { formatUnits } from 'ethers/lib/utils'
 import { liquidityContractABI } from 'lib/liquidityContractABI'
-import { concaveProvider2 } from 'lib/providers'
+import { concaveProvider } from 'lib/providers'
 import { useEffect } from 'react'
 import { useMemo } from 'react'
 import { useState } from 'react'
@@ -9,7 +9,7 @@ import { chain } from 'wagmi'
 
 export const useLPInfo = (chainId = chain.mainnet.id, LPAddress: string) => {
   const contractInstance = useMemo(() => {
-    return new ethers.Contract(LPAddress, liquidityContractABI, concaveProvider2(chainId))
+    return new ethers.Contract(LPAddress, liquidityContractABI, concaveProvider(chainId))
   }, [LPAddress, chainId])
   const [isLoading, setLoading] = useState<boolean>(true)
   const [amount0, setAmount0] = useState('0')
