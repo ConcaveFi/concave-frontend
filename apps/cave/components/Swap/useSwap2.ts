@@ -76,7 +76,15 @@ export const useSwap = () => {
         : [currencyOut, amountOut, currencyIn, setAmountIn]
 
     setOtherFieldAmount('')
-    if (!amount || !otherCurrency || !desiredExactCurrency || !pairs.data || pairs.isLoading) return
+    if (
+      !amount ||
+      Number(amount) === 0 ||
+      !otherCurrency ||
+      !desiredExactCurrency ||
+      !pairs.data ||
+      pairs.isLoading
+    )
+      return
 
     const desiredExactCurrencyAmount = CurrencyAmount.fromRawAmount(
       desiredExactCurrency,
