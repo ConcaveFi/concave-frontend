@@ -79,7 +79,17 @@ export const useSwap = () => {
     }
 
     setOtherFieldAmount('')
-    if (!amount || !otherCurrency || !desiredExactCurrency || !pairs.data || pairs.isLoading) return
+
+    if (
+      !amount ||
+      Number(amount) === 0 ||
+      !otherCurrency ||
+      !desiredExactCurrency ||
+      !pairs.data ||
+      pairs.isLoading
+    )
+      return
+
     const desiredExactCurrencyAmount = CurrencyAmount.fromRawAmount(
       desiredExactCurrency,
       Math.round(+amount * 10 ** desiredExactCurrency.decimals), //The number 1100000000000000.1 cannot be converted to BigInt because it is not an integer
