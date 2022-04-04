@@ -40,7 +40,7 @@ interface AuthValue {
   signOut: () => Promise<any>
   /** pops up a modal with connector providers */
   connectWithModal: () => void
-  user: User
+  user: {address: string}
   isWaitingForSignature: boolean
   isSignedIn: boolean
   isConnected: boolean
@@ -100,7 +100,7 @@ export const AuthProvider: React.FC = ({ children }) => {
     },
   )
 
-  const user = useQuery('me', () => authFetch('me'), { retry: false, refetchOnWindowFocus: true })
+  // const user = useQuery('me', () => authFetch('me'), { retry: false, refetchOnWindowFocus: true })
 
   const connectModal = useDisclosure()
 
@@ -112,14 +112,15 @@ export const AuthProvider: React.FC = ({ children }) => {
           signIn: signIn.mutateAsync,
           connectWithModal: () => connectModal.onOpen(),
           // user can connect and not sign in, we want access to his addy thru here anyway
-          user: { ...user.data, address: user.data?.address || account.data?.address },
+          // user: { ...user.data, address: user.data?.address || account.data?.address },
+          user: {address: account.data?.address},
           isWaitingForSignature: signIn.isLoading,
           isConnected: !account.loading && !!account.data?.address,
-          isSignedIn: !!user.data,
+          isSignedIn: false, //user.data,
           error: signIn.error || signOut.error,
           isErrored: !!(signIn.error || signOut.error),
         }),
-        [user, account, signIn, signOut, connectModal],
+        [account, signIn, signOut, connectModal],
       )}
     >
       <ConnectWalletModal isOpen={connectModal.isOpen} onClose={connectModal.onClose} />

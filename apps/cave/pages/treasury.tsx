@@ -66,8 +66,8 @@ export default function Treasury() {
   return (
     <Container maxWidth="container.lg" pt={16}>
       <Stack w="100%" my={0} align="left" spacing={2}>
-        <Heading as="h2">Claim CNV</Heading>
-        <ClaimCard />
+        {/* <Heading as="h2">Claim CNV</Heading>
+        <ClaimCard /> */}
       </Stack>
       <Stack w="100%" my={4} align="left" spacing={2}>
         <Heading as="h1">Concave Treasury Value</Heading>

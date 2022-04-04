@@ -1,6 +1,9 @@
 import { ExpandArrowIcon, GasIcon } from '@concave/icons'
 import { Button, Card, Flex, HStack, Spinner, Text, useDisclosure } from '@concave/ui'
+import { MAX_SAFE_INTEGER } from '@uniswap/sdk-core/dist/utils/sqrt'
 import { useAuth } from 'contexts/AuthContext'
+import { ethers } from 'ethers'
+import { MaxUint256 } from 'gemswap-sdk'
 import { useApprovalWhenNeeded } from 'hooks/useAllowance'
 import { TokenType } from 'lib/tokens'
 import React, { useEffect, useState } from 'react'
@@ -103,12 +106,13 @@ export function SwapCard() {
   })
   const [modalCanBeVisible, setModalCanBeVisible] = useState(true)
   const [inOrOut, setInOrOut] = useState(Boolean)
-
   const [needsApproval, approve, isApproving] = useApprovalWhenNeeded(
     swapingIn.currency.wrapped as TokenType,
     ROUTER_CONTRACT[1],
     user.address,
-    +swapingIn?.amount,
+    // MaxUint256.toString(),
+    swapingIn.amount,
+    
   )
   //
   useEffect(() => {

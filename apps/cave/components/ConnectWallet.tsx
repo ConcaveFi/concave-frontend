@@ -131,7 +131,7 @@ const ConnectButton = () => {
                         />
                       }
                       key={connector.id}
-                      onClick={() => connect(connector).then(signIn)}
+                      onClick={() => connect(connector)}
                     >
                       {connector.name}
                     </MenuItem>
@@ -145,30 +145,30 @@ const ConnectButton = () => {
   )
 }
 
-const SignInButton = () => {
-  const { signIn, isWaitingForSignature } = useAuth()
-  return (
-    <>
-      <Button
-        variant="primary"
-        size="medium"
-        w="100%"
-        sx={{ ...gradientBorder({ borderWidth: 2, borderRadius: '2xl' }) }}
-        onClick={signIn}
-        isLoading={isWaitingForSignature}
-        loadingText="Awaiting signature"
-      >
-        Sign In
-      </Button>
-    </>
-  )
-}
+// const SignInButton = () => {
+//   const { signIn, isWaitingForSignature } = useAuth()
+//   return (
+//     <>
+//       <Button
+//         variant="primary"
+//         size="medium"
+//         w="100%"
+//         sx={{ ...gradientBorder({ borderWidth: 2, borderRadius: '2xl' }) }}
+//         onClick={signIn}
+//         isLoading={isWaitingForSignature}
+//         loadingText="Awaiting signature"
+//       >
+//         Sign In
+//       </Button>
+//     </>
+//   )
+// }
 
 export function ConnectWallet(): JSX.Element {
   const { isSignedIn, isConnected } = useAuth()
 
-  if (isSignedIn) return <DisconnectButton />
+  if (isConnected) return <DisconnectButton />
 
-  if (isConnected && !isSignedIn) return <SignInButton />
+  // if (isConnected && !isSignedIn) return
   return <ConnectButton />
 }
