@@ -17,7 +17,8 @@ const Balance = ({ value, onClick }) => (
     fontSize="xs"
     ml="auto"
     onClick={onClick}
-    rightIcon={!!onClick && <Text textColor="#2E97E2">Max</Text>}
+    // many bugs need to be resolved with this button
+    // rightIcon={!!onClick && <Text textColor="#2E97E2">Max</Text>}
     leftIcon={<Text>Balance:</Text>}
     iconSpacing={1}
   >
