@@ -1,5 +1,4 @@
-import { Icon } from '@chakra-ui/icons'
-import { IconProps } from '@chakra-ui/react'
+import { Icon, IconProps } from '@chakra-ui/icons'
 
 export const GasIcon = (props: IconProps) => (
   <Icon width="15" height="17" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
