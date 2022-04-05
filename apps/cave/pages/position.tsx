@@ -443,7 +443,7 @@ const SupplyLiquidityModal = ({
     '', // TODO who is the spender ??
     // chain.ropsten.id,
     userAddress,
-    amountADesired,
+    amountADesired.toString(),
   )
   console.log('loadingApproveA', loadingApproveA)
   const [needsApproveB, requestApproveB, loadingApproveB] = useApprovalWhenNeeded(
@@ -451,7 +451,7 @@ const SupplyLiquidityModal = ({
     '', // TODO who is the spender ??
     // chain.ropsten.id,
     userAddress,
-    amountBDesired,
+    amountBDesired.toString(),
   )
   //
   return (
