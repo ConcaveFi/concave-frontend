@@ -133,10 +133,11 @@ export function SwapCard() {
             numberValue && setAmountIn(v)
           }}
           onChangeCurrency={setCurrencyIn}
-          onClickMaxBalance={() => {
-            if (swapingIn.currency.equals(nativeCurrency)) setAmountIn(+swapingIn.balance * 0.8)
-            else setAmountIn(swapingIn.balance)
-          }}
+          // bug: fails to execute tx when clicked before hitting swap
+          // onClickMaxBalance={() => {
+          //   if (swapingIn.currency.equals(nativeCurrency)) setAmountIn(+swapingIn.balance * 0.8)
+          //   else setAmountIn(swapingIn.balance)
+          // }}
         />
         <SwitchCurrencies onClick={switchCurrencies} />
         <TokenInput
@@ -195,13 +196,18 @@ export function SwapCard() {
           <></>
         ) : (
           <Button
-            isDisabled={!isTradeReady || needsApproval || !isConnected}
+            isDisabled={
+              !isTradeReady ||
+              needsApproval ||
+              !isConnected ||
+              +swapingIn.balance < +swapingIn.amount
+            }
             variant="primary"
             size="large"
             isFullWidth
             onClick={confirmModal.onOpen}
           >
-            Swap
+            {+swapingIn.balance < +swapingIn.amount ? 'Insufficient Funds' : 'Swap'}
           </Button>
         )}
       </Card>

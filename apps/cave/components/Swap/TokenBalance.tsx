@@ -22,6 +22,5 @@ export const TokenBalance = ({
     <Text isTruncated maxW="50px">
       {value}
     </Text>
-    {!!onClick && <Text textColor="#2E97E2">Max</Text>}
   </Button>
 )
