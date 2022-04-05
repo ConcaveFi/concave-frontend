@@ -104,19 +104,21 @@ export function SwapCard() {
     hash: swapTransaction.data?.hash,
     skip: !swapTransaction.data?.hash,
   })
-  const [modalCanBeVisible, setModalCanBeVisible] = useState(true)
   const [inOrOut, setInOrOut] = useState(Boolean)
   const [needsApproval, approve, isApproving] = useApprovalWhenNeeded(
     swapingIn.currency.wrapped as TokenType,
     ROUTER_CONTRACT[1],
     user.address,
     // MaxUint256.toString(),
-    swapingIn.amount,
+    +swapingIn.amount,
   )
-  //
   useEffect(() => {
-    setModalCanBeVisible(true)
-  }, [swapReceipt])
+    if (swapReceipt.loading) {
+      receiptModal.onOpen()
+      transactionStatusModal.onClose()
+    }
+    // antipattern??
+  }, [swapReceipt.loading])
   return (
     <>
       <Card p={6} gap={2} variant="primary" h="fit-content" shadow="Block Up" w="100%" maxW="420px">
@@ -215,25 +217,23 @@ export function SwapCard() {
         exactInOrExactOut={inOrOut}
       />
 
-      <TransactionStatusModal
+      {/* <TransactionStatusModal
         inAmount={swapingIn?.amount}
         outAmount={tradeInfo?.meta.expectedOutput}
         inSymbol={swapingIn?.currency?.symbol}
         outSymbol={swapingOut?.currency?.symbol}
         status={swapTransaction}
-        isOpen={!!swapTransaction?.data && modalCanBeVisible}
+        isOpen={transactionStatusModal.isOpen}
         onClose={() => {
-          setModalCanBeVisible(false)
           transactionStatusModal.onClose()
         }}
-      />
+      /> */}
 
       <TransactionSubmittedModal
         receipt={swapReceipt}
-        isOpen={!!swapReceipt?.data && modalCanBeVisible}
+        isOpen={receiptModal.isOpen}
         onClose={() => {
-          setModalCanBeVisible(false)
-          receiptModal.onClose
+          receiptModal.onClose()
         }}
       />
     </>
