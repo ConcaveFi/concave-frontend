@@ -40,7 +40,7 @@ interface AuthValue {
   signOut: () => Promise<any>
   /** pops up a modal with connector providers */
   connectWithModal: () => void
-  user: {address: string}
+  user: { address: string }
   isWaitingForSignature: boolean
   isSignedIn: boolean
   isConnected: boolean
@@ -113,7 +113,7 @@ export const AuthProvider: React.FC = ({ children }) => {
           connectWithModal: () => connectModal.onOpen(),
           // user can connect and not sign in, we want access to his addy thru here anyway
           // user: { ...user.data, address: user.data?.address || account.data?.address },
-          user: {address: account.data?.address},
+          user: { address: account.data?.address },
           isWaitingForSignature: signIn.isLoading,
           isConnected: !account.loading && !!account.data?.address,
           isSignedIn: false, //user.data,

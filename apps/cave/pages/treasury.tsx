@@ -1,5 +1,4 @@
 import { Card, Container, Flex, Heading, Image, Spinner, Stack, Text } from '@concave/ui'
-import { ClaimCard } from 'components/Claim/ClaimCard'
 import { useLPInfo } from 'hooks/useLPInfo'
 import { fetchPortfolio } from 'lib/debank'
 import { useQuery } from 'react-query'

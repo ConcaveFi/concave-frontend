@@ -10,16 +10,58 @@ import {
   BoxProps,
   FlexProps,
   Card,
+  Button,
+  Modal,
+  Image,
 } from '@concave/ui'
 import { FiMenu } from 'react-icons/fi'
 import SideBarTop from './SideBarTop'
 import SideBarBottom from './SideBarBottom'
 import PageNav from './PageNav'
+import { useNetwork } from 'wagmi'
+import { useEffect } from 'react'
 
 export function SideBar() {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const [{ data, error, loading }, switchNetwork] = useNetwork()
+  const networkModal = useDisclosure()
+
+  useEffect(() => {
+    if (data.chain?.name && data.chain?.name !== 'Mainnet') {
+      networkModal.onOpen()
+    } else {
+      networkModal.onClose()
+    }
+  }, [data])
+  // console.log(data.chain?.name ?? 'Not connected')
+  // console.log(data.chain?.unsupported && '(unsupported)')
+
   return (
     <Box minH="100vh">
+      <Modal
+        bluryOverlay={true}
+        title=""
+        isOpen={networkModal.isOpen}
+        onClose={networkModal.onClose}
+        bodyProps={{
+          shadow: 'Up for Blocks',
+        }}
+        titleAlign="center"
+      >
+        {switchNetwork &&
+          data.chains.map((x) =>
+            x.id === data.chain?.id ? null : (
+              <Button
+                rightIcon={<Image maxWidth="20px" src={`/assets/tokens/eth.svg`} alt="" />}
+                key={x.id}
+                onClick={() => switchNetwork(x.id)}
+              >
+                Connect to {x.name}
+              </Button>
+            ),
+          )}
+      </Modal>
+
       <SidebarContent onClose={() => onClose} display={{ base: 'none', md: 'block' }} />
       <Drawer
         autoFocus={false}
