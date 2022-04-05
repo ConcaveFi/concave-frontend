@@ -119,8 +119,6 @@ export function SwapCard() {
     }
     // antipattern??
   }, [swapReceipt.loading])
-  console.table(swapingIn)
-  console.log(+swapingIn.balance > +swapingIn.amount)
   return (
     <>
       <Card p={6} gap={2} variant="primary" h="fit-content" shadow="Block Up" w="100%" maxW="420px">
