@@ -3,13 +3,16 @@ import {
   Card,
   Container,
   Flex,
+  gradientBorder,
+  Heading,
   // gradientBorder,
-  // Heading,
   Image,
+  Stack,
   Text,
 } from '@concave/ui'
 import GcnvTitle from 'components/GcnvTitle'
 import Placeholder from 'components/Placeholder'
+import { SwapCard } from 'components/Swap/SwapCard'
 // import { SwapCardLegacy } from 'components/Swap/SwapCardLegacy'
 
 import { useSwap } from 'components/Swap/useSwap'
@@ -55,7 +58,6 @@ const SelectedBondType = ({ bondType }) => {
       variant="primary"
       colorScheme="brighter"
       shadow="Magic Big"
-      bgGradient="linear(to-b, secondary.75, secondary.100)"
       direction="row"
       mt={-20}
       py={1}
@@ -101,112 +103,60 @@ export default function Bond() {
       <GcnvTitle title="Bonds" description="" />
       <Placeholder text="Composable Bonds" />
     </Container>
-    // <Container maxW="container.lg">
-    //   <Flex direction="column" gap={20}>
-    //     <Stack mt={20} align="center" textAlign="center">
-    //       <Heading as="h1" mb={3} fontSize="5xl">
-    //         Dynamic Bond Market
-    //       </Heading>
-    //       <Text maxW={280}>
-    //         Get your gCNV that will grow internal CNV number your gCNV that will grow number or smth
-    //         idk lol Get your gCNV that will grow internal CNV number or smth idk lol
-    //       </Text>
-    //     </Stack>
+  )
+  return (
+    <Container maxW="container.lg">
+      <Flex direction="column" gap={20}>
+        <Stack mt={20} align="center" textAlign="center">
+          <Heading as="h1" mb={3} fontSize="5xl">
+            Dynamic Bond Market
+          </Heading>
+          <Text maxW={280}>
+            Get your gCNV that will grow internal CNV number your gCNV that will grow number or smth
+            idk lol Get your gCNV that will grow internal CNV number or smth idk lol
+          </Text>
+        </Stack>
 
-    //     <Flex gap={10}>
-    //       <Box pos="relative" h="fit-content">
-    //         <Box
-    //           h="20px"
-    //           w="72px"
-    //           top="50%"
-    //           transform="auto"
-    //           translateY="-50%"
-    //           left="calc(100% - 24px)"
-    //           sx={{ ...gradientBorder({ borderWidth: 3, borderRadius: '0' }), pos: 'absolute' }}
-    //         />
-    //         <Card
-    //           variant="secondary"
-    //           w="430px"
-    //           maxW="430px"
-    //           borderWidth={3}
-    //           px={5}
-    //           py={20}
-    //           shadow="Glow Inner"
-    //           gap={10}
-    //           align="center"
-    //         >
-    //           <SelectedBondType bondType="Classic" />
-    //           <BondInfo
-    //             asset="CNV"
-    //             icon="/assets/tokens/gcnv.svg"
-    //             roi="9.4%"
-    //             vestingTerm="5 days"
-    //           />
-    //           <NothingToRedeem />
-    //         </Card>
-    //       </Box>
-    //       <SwapCardLegacy
-    //         swap={swap}
-    //         buttonLabel="Buy with 5 days vesting"
-    //         variant="primary"
-    //         w="380px"
-    //       />
-    //     </Flex>
-    //   </Flex>
-    // </Container>
-    // <Container maxW="container.lg">
-    //   <Flex direction="column" gap={20}>
-    //     <Stack mt={20} align="center" textAlign="center">
-    //       <Heading as="h1" mb={3} fontSize="5xl">
-    //         Dynamic Bond Market
-    //       </Heading>
-    //       <Text maxW={280}>
-    //         Get your gCNV that will grow internal CNV number your gCNV that will grow number or smth
-    //         idk lol Get your gCNV that will grow internal CNV number or smth idk lol
-    //       </Text>
-    //     </Stack>
-
-    //     <Flex gap={10}>
-    //       <Box pos="relative" h="fit-content">
-    //         <Box
-    //           h="20px"
-    //           w="72px"
-    //           top="50%"
-    //           transform="auto"
-    //           translateY="-50%"
-    //           left="calc(100% - 24px)"
-    //           sx={{ ...gradientBorder({ borderWidth: 3, borderRadius: '0' }), pos: 'absolute' }}
-    //         />
-    //         <Card
-    //           variant="secondary"
-    //           w="430px"
-    //           maxW="430px"
-    //           borderWidth={3}
-    //           px={5}
-    //           py={20}
-    //           shadow="Glow Inner"
-    //           gap={10}
-    //           align="center"
-    //         >
-    //           <SelectedBondType bondType="Classic" />
-    //           <BondInfo
-    //             asset="CNV"
-    //             icon="/assets/tokens/gcnv.svg"
-    //             roi="9.4%"
-    //             vestingTerm="5 days"
-    //           />
-    //           <NothingToRedeem />
-    //         </Card>
-    //       </Box>
-    //       <SwapCard
-    //         swap={swap}
-    //         buttonLabel="Buy with 5 days vesting"
-    //         variant="primary"
-    //         active="swap"
-    //         w="380px"
-    //       />
-    //     </Flex>
-    //   </Flex>
-    // </Container>
+        <Flex gap={10}>
+          <Box pos="relative" h="fit-content">
+            <Box
+              h="20px"
+              w="72px"
+              top="50%"
+              transform="auto"
+              translateY="-50%"
+              left="calc(100% - 24px)"
+              sx={{ ...gradientBorder({ borderWidth: 3, borderRadius: '0' }), pos: 'absolute' }}
+            />
+            <Card
+              variant="secondary"
+              w="430px"
+              maxW="430px"
+              borderWidth={3}
+              px={5}
+              py={20}
+              shadow="Glow Inner"
+              gap={10}
+              align="center"
+            >
+              <SelectedBondType bondType="Classic" />
+              <BondInfo
+                asset="CNV"
+                icon="/assets/tokens/gcnv.svg"
+                roi="9.4%"
+                vestingTerm="5 days"
+              />
+              <NothingToRedeem />
+            </Card>
+          </Box>
+          <SwapCard
+          // swap={swap}
+          // buttonLabel="Buy with 5 days vesting"
+          // variant="primary"
+          // w="380px"
+          />
+        </Flex>
+      </Flex>
+    </Container>
   )
 }

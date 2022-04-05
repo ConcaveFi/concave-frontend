@@ -43,6 +43,7 @@ export const gradientBorder = ({
         WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
         WebkitMaskComposite: 'source-out',
         maskComposite: 'exclude',
+        pointerEvents: 'none',
         ...borderRadiusStyles,
         ...variants[variant],
       },

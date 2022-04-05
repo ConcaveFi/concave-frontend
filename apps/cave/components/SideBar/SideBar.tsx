@@ -93,7 +93,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   return (
     <Card
       variant="primary"
-      bgGradient="radial(248.94% 38.67% at 100% 27.33%, secondary.75 25.26%, secondary.150 100%)"
+      apply="background.sidebar"
       borderWidth={0}
       borderRadius={0}
       borderRightRadius="2xl"

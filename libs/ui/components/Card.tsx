@@ -1,16 +1,5 @@
-import {
-  border,
-  Box,
-  forwardRef,
-  Image,
-  space,
-  Stack,
-  StackProps,
-  useMergeRefs,
-  useMultiStyleConfig,
-} from '@chakra-ui/react'
+import { border, Box, forwardRef, space, Stack, StackProps, useStyleConfig } from '@chakra-ui/react'
 import { GradientBorderStyleProps } from 'theme/utils/gradientBorder'
-import { useMeasure } from 'react-use'
 
 export interface CardProps extends StackProps {
   variant?: 'primary' | 'secondary'
@@ -36,44 +25,22 @@ const borderRadiusStyleKeys = Object.keys(border).filter(
 
 const getBorderRadiusStyles = (props) => splitObj(borderRadiusStyleKeys)(props)[1]
 
-/** backgroundImage and background repeat deserve another shot here, but for now that works */
-const Tiles = ({ tileWidth, tileHeight, clientWidth, clientHeight, Image }) => {
-  if (!tileHeight || !tileWidth || tileHeight === '100%' || tileWidth === '100%') return <Image /> // eslint-disable-line jsx-a11y/alt-text
-
-  const repeatX = Math.ceil(clientWidth / tileWidth)
-  const repeatY = Math.ceil(clientHeight / tileHeight)
-
-  return (
-    <>
-      {Array.from('y'.repeat(repeatY)).map((_, y) => {
-        const top = y * tileHeight
-        return Array.from('x'.repeat(repeatX)).map((_, x) => (
-          <Image key={`${top}-${x}`} left={x * tileWidth} top={top} /> // eslint-disable-line react/jsx-key, jsx-a11y/alt-text
-        ))
-      })}
-    </>
-  )
-}
-
 export const Card = forwardRef<CardProps, 'div'>(
   ({ children, variant, borderWidth, borderGradient, ...props }, ref) => {
-    const styles = useMultiStyleConfig('Card', {
+    const styles = useStyleConfig('Card', {
       variant,
       borderWidth,
       borderGradient,
       ...props,
     })
-    const [internalRef, { width, height }] = useMeasure()
-
-    const textureSrc = (styles.texture as any)?.src
 
     const [propsWithoutMargins, marginStyles] = splitObj(marginStyleKeys)(props)
 
     return (
       <Box
-        ref={useMergeRefs(internalRef, ref)}
+        ref={ref}
         __css={{
-          ...styles.container,
+          ...styles,
           width: props.w ?? props.width,
           maxWidth: props.maxW ?? props.maxWidth,
           minWidth: props.minW ?? props.minWidth,
@@ -85,38 +52,11 @@ export const Card = forwardRef<CardProps, 'div'>(
         {...getBorderRadiusStyles(props)}
       >
         <Stack
-          __css={{ ...getBorderRadiusStyles(styles.container) }}
+          __css={{ ...getBorderRadiusStyles(styles) }}
           {...propsWithoutMargins}
           maxW="100%"
-          pos="relative"
           overflow="clip"
         >
-          {textureSrc && (
-            <Box pos="absolute" overflow="clip" inset={0} zIndex={-1}>
-              <Tiles
-                Image={(p) => (
-                  <Image
-                    __css={styles.texture}
-                    role="presentation"
-                    loading="eager"
-                    decoding="async"
-                    bgImage="none"
-                    position="absolute"
-                    zIndex={0}
-                    src={textureSrc}
-                    draggable={false}
-                    onError={(e) => ((e.target as any).style.display = 'none')}
-                    alt=""
-                    {...p}
-                  />
-                )}
-                tileWidth={styles.texture.width}
-                tileHeight={styles.texture.height}
-                clientWidth={width || 1000}
-                clientHeight={height || 1000}
-              />
-            </Box>
-          )}
           {children}
         </Stack>
       </Box>

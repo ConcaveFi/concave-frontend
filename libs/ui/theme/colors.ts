@@ -13,10 +13,8 @@ export const colors = {
   },
 
   stroke: {
-    // accent on figma
     primary:
       'linear-gradient(41.89deg, #53399B 0.69%, #7DE0FF 38.19%, #504179 72.85%, #84E2FF 100%)',
-    // medium on figma
     secondary:
       'linear-gradient(57deg, #171E27 -7.38%, #435F81 29.46%, #202D3D 71.39%, #93C5FF 107.62%)',
   },
