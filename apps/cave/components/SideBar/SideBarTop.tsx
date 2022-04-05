@@ -14,10 +14,6 @@ function SideBarTop() {
     token: '0x000000007a58f5f58E697e51Ab0357BC9e260A04',
   })
 
-  useEffect(() => {
-    console.log(`error:${error}`)
-  })
-
   return (
     <Box shadow="down" px={2} pt={10} pb={3} rounded="2xl">
       <Flex

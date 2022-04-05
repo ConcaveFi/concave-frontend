@@ -24,11 +24,6 @@ export function ClaimCard() {
   const [redeemText, setRedeemText] = useState('Redeem aCNV')
   const [redeeming, setRedeeming] = useState(false)
 
-  useEffect(() => {
-    console.log(`data:${data}`)
-    console.log(`error:${error}`)
-  }, [data, error])
-
   const redeemAncv = () => {
     setRedeeming(loading ? true : false)
     setRedeemText(loading ? 'Redeeming' : 'Nothing to Redeem')

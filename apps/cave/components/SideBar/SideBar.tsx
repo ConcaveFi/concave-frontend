@@ -10,16 +10,32 @@ import {
   BoxProps,
   FlexProps,
   Card,
+  Button,
 } from '@concave/ui'
 import { FiMenu } from 'react-icons/fi'
 import SideBarTop from './SideBarTop'
 import SideBarBottom from './SideBarBottom'
 import PageNav from './PageNav'
+import { useNetwork } from 'wagmi'
+import { useEffect } from 'react'
 
 export function SideBar() {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const [{ data, error, loading }, switchNetwork] = useNetwork()
+  // console.log(data.chain?.name ?? 'Not connected')
+  // console.log(data.chain?.unsupported && '(unsupported)')
+
   return (
     <Box minH="100vh">
+      {switchNetwork &&
+        data.chains.map((x) =>
+          x.id === data.chain?.id ? null : (
+            <Button key={x.id} onClick={() => switchNetwork(x.id)}>
+              Switch to {x.name}
+            </Button>
+          ),
+        )}
+
       <SidebarContent onClose={() => onClose} display={{ base: 'none', md: 'block' }} />
       <Drawer
         autoFocus={false}
