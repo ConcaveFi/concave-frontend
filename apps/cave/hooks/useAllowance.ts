@@ -7,14 +7,13 @@ import { erc20ABI, useContractWrite, useContractRead, chain, useWaitForTransacti
 import { MaxUint256 } from 'gemswap-sdk'
 
 export const useApprovalWhenNeeded = (
-  
   token: TokenType,
   spender: string,
   userAddress: string,
   amount = MaxUint256.toString(),
 ) => {
   const [allowanceTokenA, syncAllowance] = useAllowance(token, spender, userAddress)
-  const [approvalTokenA, requestApprove] = useApproval(token, spender, (amount))
+  const [approvalTokenA, requestApprove] = useApproval(token, spender, amount)
 
   const [approveAConfirmation] = useWaitForTransaction({ wait: approvalTokenA.data?.wait })
   useEffect(() => {
@@ -50,7 +49,7 @@ export const useAllowance = (token: TokenType, spender: string, userAddress: str
   )
 }
 
-export const useApproval = (token: TokenType, spender: string, amountToApprove: BigNumberish ) =>
+export const useApproval = (token: TokenType, spender: string, amountToApprove: BigNumberish) =>
   useContractWrite(
     { addressOrName: token.address, contractInterface: erc20ABI },
     'approve',
