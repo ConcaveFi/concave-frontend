@@ -29,12 +29,13 @@ const SlippageTolerance = ({ value, onValueChange, onClickAuto }) => {
       </Text>
       <HStack>
         <Card shadow="Down Big" borderRadius="xl">
-          <InputGroup px={3} variant="unstyled" size="sm">
+          <InputGroup px={3} variant="unstyled" size="sm" h="full">
             <NumericInput
               value={value}
               isNumericString
               placeholder="0.50"
               variant="unstyled"
+              size="medium"
               max={50}
               onValueChange={onValueChange}
             />
@@ -81,7 +82,7 @@ const Deadline = ({ value, onValueChange }) => {
             value={value}
             isNumericString
             placeholder="30"
-            // size="medium"
+            size="medium"
             variant="unstyled"
             onValueChange={onValueChange}
           />
