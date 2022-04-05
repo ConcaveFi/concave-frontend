@@ -1,4 +1,13 @@
-import { CurrencyAmount, Currency, TradeType, Ether, Percent, Trade, Router } from 'gemswap-sdk'
+import { Pair, Trade, Router } from '@uniswap/v2-sdk'
+import {
+  Currency,
+  CurrencyAmount,
+  Token,
+  TradeType,
+  BigintIsh,
+  Ether,
+  Percent,
+} from '@uniswap/sdk-core'
 import { findBestTrade, usePairs, useQuote } from 'hooks/useBestTrade'
 import { useEffect, useState, useCallback, useMemo, useRef } from 'react'
 import { chain, useBalance, useNetwork } from 'wagmi'

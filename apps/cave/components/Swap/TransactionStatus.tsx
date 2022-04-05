@@ -3,7 +3,7 @@ import { keyframes } from '@chakra-ui/system'
 import { SpinIcon } from '@concave/icons'
 import { Modal, Text } from '@concave/ui'
 import React from 'react'
-import { ethers } from 'siwe/node_modules/ethers'
+import { ethers } from 'ethers'
 
 const spin = keyframes({
   '0%': {
