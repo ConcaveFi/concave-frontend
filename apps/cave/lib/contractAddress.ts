@@ -1,5 +1,5 @@
 import { chain } from 'wagmi'
 
 export const ContractAddress = {
-  [chain.ropsten.id]: '0x95dDC411d31bBeDd37e9aaABb335b0951Bc2D25a',
+  [chain.ropsten.id]: '0xc9c07a4526915014bc60791fca2eef51975a3694',
 }

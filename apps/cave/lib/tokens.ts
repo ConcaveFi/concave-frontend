@@ -1,16 +1,7 @@
-import { Token as GemswapToken } from 'gemswap-sdk'
+import { Token } from '@uniswap/sdk-core'
 
-export class Token extends GemswapToken {
-  public readonly logoURI?: string
-  constructor(
-    chainId: number,
-    address: string,
-    decimals: number,
-    symbol?: string,
-    name?: string,
-    logoURI?: string,
-  ) {
-    super(chainId, address, decimals, symbol, name)
-    this.logoURI = logoURI
-  }
+
+export type TokenType = Token & {
+  logoURI: string
 }
+  export type AvailableTokens = string
