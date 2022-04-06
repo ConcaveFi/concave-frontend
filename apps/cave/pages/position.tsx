@@ -30,11 +30,25 @@ import { useApprovalWhenNeeded } from 'hooks/useAllowance'
 import { usePrecision } from 'hooks/usePrecision'
 import { contractABI } from 'lib/contractoABI'
 import { concaveProvider } from 'lib/providers'
-import { TokenType } from 'lib/tokens'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { chain, useSigner } from 'wagmi'
 import { useToken, WrapperTokenInfo } from '../components/Swap/useSwap'
+import { Token as GemswapToken } from 'gemswap-sdk'
+class Token extends GemswapToken {
+  public readonly logoURI?: string
+  constructor(
+    chainId: number,
+    address: string,
+    decimals: number,
+    symbol?: string,
+    name?: string,
+    logoURI?: string,
+  ) {
+    super(chainId, address, decimals, symbol, name)
+    this.logoURI = logoURI
+  }
+}
 
 const RewardsBanner = () => (
   <Card variant="secondary" p={4} gap={4}>
