@@ -1,18 +1,17 @@
-import { BigNumberish } from 'ethers'
-import { formatUnits, parseUnits } from 'ethers/lib/utils'
-import { ContractAddress } from 'lib/contractAddress'
+import { formatUnits } from 'ethers/lib/utils'
 import { TokenType } from 'lib/tokens'
 import { useEffect, useMemo } from 'react'
-import { erc20ABI, useContractWrite, useContractRead, chain, useWaitForTransaction } from 'wagmi'
+import { erc20ABI, useContractWrite, useContractRead, useWaitForTransaction } from 'wagmi'
+import { MaxUint256 } from '@ethersproject/constants'
 
 export const useApprovalWhenNeeded = (
   token: TokenType,
   spender: string,
   userAddress: string,
-  amount: number,
+  amount: string,
 ) => {
   const [allowanceTokenA, syncAllowance] = useAllowance(token, spender, userAddress)
-  const [approvalTokenA, requestApprove] = useApproval(token, spender, amount)
+  const [approvalTokenA, requestApprove] = useApproval(token, spender)
 
   const [approveAConfirmation] = useWaitForTransaction({ wait: approvalTokenA.data?.wait })
   useEffect(() => {
@@ -20,7 +19,7 @@ export const useApprovalWhenNeeded = (
   }, [approveAConfirmation.data, syncAllowance])
   const formattedAllowance =
     allowanceTokenA.data && parseFloat(formatUnits(allowanceTokenA.data, token.decimals))
-  const needsApprove: boolean = formattedAllowance < amount
+  const needsApprove: boolean = formattedAllowance < +amount
   const isBusy = allowanceTokenA.loading || approvalTokenA.loading
   return [needsApprove, requestApprove, isBusy] as const
 }
@@ -48,15 +47,22 @@ export const useAllowance = (token: TokenType, spender: string, userAddress: str
   )
 }
 
-export const useApproval = (token: TokenType, spender: string, amountToApprove: BigNumberish) =>
+export const useApproval = (token: TokenType, spender: string) =>
   useContractWrite(
     { addressOrName: token.address, contractInterface: erc20ABI },
     'approve',
-    useMemo(
-      () => ({
-        skip: !token.address || !amountToApprove || !spender,
-        args: amountToApprove && [spender, parseUnits(amountToApprove.toString(), token.decimals)],
-      }),
-      [spender, token, amountToApprove],
-    ),
+    { args: [spender, MaxUint256] }
   )
+
+// export const useApproval = (token: TokenType, spender: string, amountToApprove: BigNumberish) =>
+//   useContractWrite(
+//     { addressOrName: token.address, contractInterface: erc20ABI },
+//     'approve',
+//     useMemo(
+//       () => ({
+//         skip: !token.address || !amountToApprove || !spender,
+//         args: amountToApprove && [spender, parseUnits(amountToApprove.toString(), token.decimals)],
+//       }),
+//       [spender, token, amountToApprove],
+//     ),
+//   )
