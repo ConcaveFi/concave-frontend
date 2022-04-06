@@ -10,19 +10,17 @@ import {
   Spinner,
   Stack,
   Text,
-  TokenIcon,
   UnorderedList,
 } from '@concave/ui'
-import { Currency as UniswapCurrency } from 'gemswap-sdk'
-import { BASES_TO_CHECK_TRADES_AGAINST, Token } from 'constants/routing'
+import { CurrencyIcon } from 'components/CurrencyIcon'
+import { Currency } from 'c-sdk'
+import { Token } from 'constants/routing'
 import React, { useCallback, useState } from 'react'
 import { chain, useNetwork } from 'wagmi'
 import { useTokenList } from './hooks/useTokenList'
 import { useNativeCurrency } from './useSwap2'
 import { DAI, CNV } from 'constants/tokens'
 import { ROPSTEN_DAI, ROPSTEN_CNV } from 'constants/ropstenTokens'
-
-type Currency = UniswapCurrency & Pick<Token, 'logoURI'>
 
 const CommonTokens = ({
   selected,
@@ -44,22 +42,13 @@ const CommonTokens = ({
             key={currency.isToken ? currency.address : currency.symbol}
             onClick={() => onSelect(currency)}
             rounded="full"
-            leftIcon={
-              <TokenIcon
-                symbol={currency.symbol}
-                address={currency.isToken ? currency.address : currency.symbol}
-              />
-            }
+            leftIcon={<CurrencyIcon currency={currency} />}
             shadow="Up Small"
             _hover={{ shadow: 'Up Small' }}
             _focus={{ shadow: 'Up Small' }}
             _active={{ shadow: 'down' }}
             _selected={{ shadow: 'Down Big', color: 'text.low' }}
-            aria-selected={
-              selected?.isToken && currency?.isToken
-                ? currency.address === selected?.address
-                : currency.symbol === selected?.symbol
-            }
+            aria-selected={selected.equals(currency)}
             p={1}
             pr={3}
             fontSize="sm"
@@ -72,7 +61,7 @@ const CommonTokens = ({
   )
 }
 
-const TokenListItem = ({ token, onClick }) => (
+const TokenListItem = ({ currency, onClick }: { currency: Currency; onClick: () => void }) => (
   <ListItem
     cursor="pointer"
     _hover={{ opacity: 0.7 }}
@@ -81,13 +70,13 @@ const TokenListItem = ({ token, onClick }) => (
     onClick={onClick}
   >
     <Stack direction="row" spacing={3} align="center">
-      <TokenIcon h="35px" w="35px" symbol={token.symbol} address={token.address} />
+      <CurrencyIcon h="35px" w="35px" currency={currency} />
       <Stack spacing={0} justify="center">
         <Text fontWeight="bold" fontSize="md">
-          {token.symbol.toUpperCase()}
+          {currency.symbol.toUpperCase()}
         </Text>
         <Text color="text.low" fontSize="sm">
-          {token.name}
+          {currency.name}
         </Text>
       </Stack>
     </Stack>
@@ -181,15 +170,7 @@ const SelectTokenButton = ({ selected, onClick }: { selected: Currency; onClick:
     alignSelf="end"
     fontSize="lg"
     rightIcon={<DownIcon />}
-    leftIcon={
-      selected?.symbol && (
-        <TokenIcon
-          size="xs"
-          symbol={selected.symbol}
-          address={selected.isToken ? selected.address : selected.symbol}
-        />
-      )
-    }
+    leftIcon={selected?.symbol && <CurrencyIcon size="xs" currency={selected} />}
     onClick={onClick}
   >
     {selected?.symbol || `Select a token`}

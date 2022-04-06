@@ -1,4 +1,4 @@
-import { ExpandArrowIcon, TokenIcon } from '@concave/icons'
+import { ExpandArrowIcon, CurrencyIcon } from '@concave/icons'
 import { Box, Button, Flex, HStack, Modal, NumericInput, StackDivider, Text } from '@concave/ui'
 import React from 'react'
 import { twoDecimals } from './SwapCard'
@@ -32,7 +32,7 @@ const TokenInfo = ({
         </Text>
       </Box>
       <HStack>
-        <TokenIcon size="sm" address={address} symbol={symbol} />
+        <CurrencyIcon size="sm" address={address} symbol={symbol} />
         <Text fontSize={24} fontWeight={700}>
           {symbol.toUpperCase()}
         </Text>

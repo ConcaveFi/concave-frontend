@@ -1,4 +1,4 @@
-import { ExpandArrowIcon, PlusIcon, TokenIcon } from '@concave/icons'
+import { ExpandArrowIcon, PlusIcon, CurrencyIcon } from '@concave/icons'
 import {
   Accordion,
   AccordionButton,
@@ -92,8 +92,8 @@ const LPPositionItem = ({ pair, ownedAmount }: LPPosition) => {
     <>
       <AccordionItem p={2} shadow="Up Big" borderRadius="2xl" alignItems="center">
         <AccordionButton>
-          {/* <TokenIcon {...tokenA} />
-          <TokenIcon {...tokenB} /> */}
+          {/* <CurrencyIcon {...tokenA} />
+          <CurrencyIcon {...tokenB} /> */}
           <Text ml="24px" fontWeight="semibold" fontSize="lg">
             {tokenA.symbol}/{tokenB.symbol}
           </Text>
@@ -121,10 +121,10 @@ const LPPositionItem = ({ pair, ownedAmount }: LPPosition) => {
           >
             {/* <PositionInfoItem label="Your total pool tokens:" value={ownedAmount.toString()} /> */}
             {/* <PositionInfoItem label={`Pooled ${tokenA.symbol}:`} value={'0.0001331'}>
-              <TokenIcon size={'sm'} {...tokenA} />
+              <CurrencyIcon size={'sm'} {...tokenA} />
             </PositionInfoItem>
             <PositionInfoItem label={`Pooled ${tokenB.symbol}:`} value={'325.744'}>
-              <TokenIcon size="sm" {...tokenB} />
+              <CurrencyIcon size="sm" {...tokenB} />
             </PositionInfoItem>
             <PositionInfoItem label="Your pool share:" value={'2.79%'} /> */}
           </Stack>
@@ -313,12 +313,12 @@ const YourPosition = ({
     <Flex gap={7} direction={'column'} shadow="Up Big" px={4} py={4} borderRadius="2xl">
       <Text fontSize={'lg'}>Your Position</Text>
       <Flex gap={2} align={'center'}>
-        {/* <TokenIcon
+        {/* <CurrencyIcon
           size={'sm'}
           logoURI={wrapperTokenA.token?.logoURI}
           symbol={wrapperTokenA.token?.symbol}
         />
-        <TokenIcon
+        <CurrencyIcon
           size={'sm'}
           logoURI={wrapperTokenB.token?.logoURI}
           symbol={wrapperTokenB.token?.symbol}
@@ -338,14 +338,14 @@ const YourPosition = ({
       >
         <PositionInfoItem label="Your pool share:" value={'2.79%'} />
         {/* <PositionInfoItem label={wrapperTokenA.token?.symbol} value={'0.0001331'}> */}
-        {/* <TokenIcon
+        {/* <CurrencyIcon
             size={'sm'}
             logoURI={wrapperTokenA.token?.logoURI}
             symbol={wrapperTokenA.token?.symbol}
           /> */}
         {/* </PositionInfoItem> */}
         {/* <PositionInfoItem label={wrapperTokenB.token?.symbol} value={'325.744'}> */}
-        {/* <TokenIcon
+        {/* <CurrencyIcon
             size={'sm'}
             logoURI={wrapperTokenB.token?.logoURI}
             symbol={wrapperTokenB.token?.symbol}
@@ -359,7 +359,7 @@ const YourPosition = ({
 const ReceiveBox = ({ amount, token }: { amount: number; token: TokenType }) => {
   return (
     <HStack shadow="down" borderRadius="2xl" p={3}>
-      {/* <TokenIcon logoURI={token?.logoURI} symbol={token?.symbol} /> */}
+      {/* <CurrencyIcon logoURI={token?.logoURI} symbol={token?.symbol} /> */}
       <Box>
         <Text fontFamily={'heading'} fontWeight={600}>
           {usePrecision(amount, 7).formatted}
@@ -471,8 +471,8 @@ const SupplyLiquidityModal = ({
         {wrapperTokenA.token.symbol}/{wrapperTokenB.token.symbol} Pool Tokens
       </Text>
       <HStack justifyContent={'center'}>
-        {/* <TokenIcon {...wrapperTokenA.token}></TokenIcon>
-        <TokenIcon {...wrapperTokenB.token}></TokenIcon> */}
+        {/* <CurrencyIcon {...wrapperTokenA.token}></CurrencyIcon>
+        <CurrencyIcon {...wrapperTokenB.token}></CurrencyIcon> */}
       </HStack>
       <Box borderRadius={'2xl'} p={6} shadow={'down'}>
         {/* <PositionInfoItem

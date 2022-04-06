@@ -1,167 +1,85 @@
-import { Pair, Trade, Router } from '@uniswap/v2-sdk'
-import {
-  Currency,
-  CurrencyAmount,
-  Token,
-  TradeType,
-  BigintIsh,
-  Ether,
-  Percent,
-} from '@uniswap/sdk-core'
-import { findBestTrade, usePairs, useQuote } from 'hooks/useBestTrade'
 import { useEffect, useState, useCallback, useMemo, useRef } from 'react'
-import { chain, useBalance, useNetwork } from 'wagmi'
+import { chain, useContract, useContractWrite, useNetwork } from 'wagmi'
 import { useAuth } from 'contexts/AuthContext'
-import { defaultSettings } from './Settings'
-import { RouterABI } from './routerABI'
-import { useContractWrite } from './hooks/useContractWrite'
-import { CNV, DAI } from 'constants/tokens'
-import { ROPSTEN_CNV, ROPSTEN_DAI } from 'constants/ropstenTokens'
+import { defaultSettings, SwapSettings } from './Settings'
 import { concaveProvider } from 'lib/providers'
+import { usePairs } from './hooks/usePair'
+import {
+  RouterABI,
+  ROUTER_ADDRESS,
+  CurrencyAmount,
+  Router,
+  Currency,
+  TradeType,
+  Trade,
+  CNV,
+  DAI,
+} from 'c-sdk'
+import { useTrade } from './hooks/useTrade'
+import swap from 'pages/swap'
+import { useQuery } from 'react-query'
+import { Contract } from 'ethers'
 
-const useCurrencyBalance = (currency: Currency, userAddress: string) =>
-  useBalance({
-    addressOrName: userAddress,
-    token: currency?.isToken && currency?.address,
-    formatUnits: currency?.decimals,
-    skip: !currency || !userAddress,
-  })
-
-export const useNativeCurrency = () => {
+const useCurrentNetworkId = () => {
   const [{ data: network }] = useNetwork()
-  return useMemo(
-    () =>
-      Ether.onChain(network?.chain?.id === chain.ropsten.id ? chain.ropsten.id : chain.mainnet.id),
-    [network],
-  )
-}
-
-export const ROUTER_CONTRACT = {
-  [chain.mainnet.id]: '0x0a3e1c20b5384eb97d2ccff9a96bc91f0c77e7db',
-  [chain.ropsten.id]: '0x95dDC411d31bBeDd37e9aaABb335b0951Bc2D25a',
-}
-
-export type TradeInfo = {
-  trade: Trade<Currency, Currency, TradeType>
-  meta: {
-    allowedSlippage: Percent
-    expectedOutput: string
-    worstExecutionPrice: string
-  }
-}
-
-export const useSwap = () => {
-  const [{ data: network }] = useNetwork()
-
-  const [settings, setSettings] = useState(defaultSettings)
-
   const isRopsten = network?.chain?.id === chain.ropsten.id
-  const [currencyOut, setCurrencyOut] = useState<Currency>(isRopsten ? ROPSTEN_CNV : CNV)
-  const [currencyIn, setCurrencyIn] = useState<Currency>(isRopsten ? ROPSTEN_DAI : DAI)
+  // we only support mainnet rn, so unless we testing in ropsten, default to gather data from mainnet
+  return isRopsten ? chain.ropsten.id : chain.mainnet.id
+}
 
-  const [amountIn, setAmountIn] = useState<string>()
-  const [amountOut, setAmountOut] = useState<string>()
+// export default function useTransactionDeadline(): BigNumber | undefined {
+//   const ttl =
 
-  const { user } = useAuth()
+//   const blockTimestamp = useCurrentBlockTimestamp()
+//   // console.log({ ttl, blockTimestamp })
+//   return useMemo(() => {
+//     if (blockTimestamp && ttl) return blockTimestamp.add(ttl)
+//     return undefined
+//   }, [blockTimestamp, ttl])
+// }
 
-  const [{ data: currencyInBalance }] = useCurrencyBalance(currencyIn, user?.address)
-  const [{ data: currencyOutBalance }] = useCurrencyBalance(currencyOut, user?.address)
+export const useSwapTransaction = (
+  trade: Trade<Currency, Currency, TradeType>,
+  recipient: string,
+  settings: SwapSettings,
+) => {
+  const [{ data: network }] = useNetwork()
 
-  const { price: currencyInUsdPrice } = useQuote(currencyIn, 1)
-  const { price: currencyOutUsdPrice } = useQuote(currencyOut, 1)
+  const [swap, estimateSwapGas] = useMemo(() => {
+    const routerContract = new Contract(ROUTER_ADDRESS[network.chain.id], RouterABI)
+    const { methodName, args, value } = Router.swapCallParameters(trade, {
+      allowedSlippage: settings.slippageTolerance,
+      ttl: settings.deadline,
+      recipient,
+    })
+    return [
+      () => routerContract[methodName]({ args, overrides: { value } }),
+      () => routerContract.estimateGas[methodName]({ args, overrides: { value } }),
+    ]
+  }, [network.chain.id, recipient, settings.slippageTolerance, settings.deadline, trade])
 
-  const { price: relativePrice } = useQuote(currencyOut?.wrapped, 1, currencyIn?.wrapped)
-
-  const pairs = usePairs(currencyIn?.wrapped, currencyOut?.wrapped, settings.multihops ? 3 : 1)
-
-  const tradeType = useRef(TradeType.EXACT_INPUT)
-  const tradeInfo = useRef<TradeInfo>()
-
-  useEffect(() => {
-    const [desiredExactCurrency, amount, otherCurrency, setOtherFieldAmount] =
-      tradeType.current === TradeType.EXACT_INPUT
-        ? [currencyIn, amountIn, currencyOut, setAmountOut]
-        : [currencyOut, amountOut, currencyIn, setAmountIn]
-
-    if (+amount <= 0 || isNaN(+amount)) {
-      return
-    }
-
-    setOtherFieldAmount('')
-
-    if (!amount || !otherCurrency || !desiredExactCurrency || !pairs.data || pairs.isLoading) return
-
-    const desiredExactCurrencyAmount = CurrencyAmount.fromRawAmount(
-      desiredExactCurrency,
-      Math.round(+amount * 10 ** desiredExactCurrency.decimals), //The number 1100000000000000.1 cannot be converted to BigInt because it is not an integer
-    )
-    const bestTrade = findBestTrade(
-      pairs.data,
-      desiredExactCurrencyAmount,
-      otherCurrency,
-      tradeType.current,
-      { maxHops: 1 },
-    )
-    //
-    const quote = bestTrade?.executionPrice?.quote(desiredExactCurrencyAmount)
-    setOtherFieldAmount(quote.toSignificant(6))
-
-    const allowedSlippage = new Percent(settings.slippageTolerance * 100, 100_000)
-    const expectedOutput = bestTrade.executionPrice
-      .quote(desiredExactCurrencyAmount)
-      .toSignificant(6)
-    const worstExecutionPrice = bestTrade
-      .worstExecutionPrice(allowedSlippage)
-      .quote(desiredExactCurrencyAmount)
-      .toSignificant(6)
-
-    tradeInfo.current = {
-      trade: bestTrade as any,
-      meta: {
-        allowedSlippage,
-        expectedOutput,
-        worstExecutionPrice,
-      },
-    }
-  }, [currencyIn, currencyOut, pairs, tradeType, amountIn, amountOut, settings])
-
-  const [swapTransaction, swap] = useContractWrite({
-    addressOrName: ROUTER_CONTRACT[isRopsten ? chain.ropsten.id : chain.mainnet.id],
-    contractInterface: RouterABI,
+  const { refetch, ...swapTransaction } = useQuery(['swap', recipient, trade, settings], swap, {
+    enabled: false,
   })
 
-  const confirmSwap = useCallback(async () => {
-    const provider = concaveProvider(chain.ropsten.id)
-    const currentBlockNumber = await provider.getBlockNumber()
-    const { timestamp } = await provider.getBlock(currentBlockNumber)
-    const deadLine = timestamp + 1
-    const { methodName, args, value } = Router.swapCallParameters(tradeInfo.current.trade, {
-      allowedSlippage: tradeInfo.current.meta.allowedSlippage,
-      ttl: deadLine,
-      recipient: user.address,
-      // feeOnTransfer?: boolean;
-    })
-    swap(methodName, { args, overrides: { value } })
-  }, [swap, user.address])
-  // settings.deadline, swap, user.address
+  return [estimateSwapGas, swapTransaction, refetch]
+}
 
-  const updateField = useCallback(
-    (fieldTradeType: TradeType) => (amount) => {
-      const setFieldAmount = fieldTradeType === TradeType.EXACT_INPUT ? setAmountIn : setAmountOut
-      setFieldAmount(amount)
-      tradeType.current = fieldTradeType
-    },
-    [],
-  )
+export const useSwapActions = () => {
+  const { tradeType, currencyIn, currencyOut, setCurrencyIn, setCurrencyOut, setExactValue } =
+    useSwapContext()
 
-  // const switchCurrencies = useCallback(() => {
-  //   setCurrencyIn(currencyOut)
-  //   setCurrencyOut(currencyIn)
-  //   setAmountIn(amountOut)
-  //   setAmountOut(amountIn)
-  //   tradeType.current =
-  //     tradeType.current === TradeType.EXACT_INPUT ? TradeType.EXACT_OUTPUT : TradeType.EXACT_INPUT
-  // }, [currencyIn, currencyOut, amountOut, amountIn, tradeType])
+  const updateField = (fieldTradeType: TradeType) => (amount) => {
+    setExactValue(amount)
+    tradeType.current = fieldTradeType
+  }
+
+  const switchCurrencies = useCallback(() => {
+    setCurrencyIn(currencyOut)
+    setCurrencyOut(currencyIn)
+    tradeType.current =
+      tradeType.current === TradeType.EXACT_INPUT ? TradeType.EXACT_OUTPUT : TradeType.EXACT_INPUT
+  }, [currencyIn, currencyOut])
 
   const setOrSwitchCurrency = useCallback(
     (otherCurrency: Currency, setCurrency) => (currency: Currency) =>
@@ -177,50 +95,29 @@ export const useSwap = () => {
       setAmountOut: updateField(TradeType.EXACT_OUTPUT),
       setCurrencyIn: setOrSwitchCurrency(currencyOut, setCurrencyIn),
       setCurrencyOut: setOrSwitchCurrency(currencyIn, setCurrencyOut),
-      switchCurrencies: () => {
-        setCurrencyIn(currencyOut)
-        setCurrencyOut(currencyIn)
-      },
-      setSettings,
-      isFetchingPairs: pairs.isLoading || pairs.isRefetching || pairs.isFetching,
-      isErrored: pairs.isError,
-      isTradeReady: !!tradeInfo.current?.trade.executionPrice,
-      swapTransaction,
-      confirmSwap,
-      swapingIn: {
-        currency: currencyIn,
-        amount: amountIn,
-        balance: currencyInBalance?.formatted,
-        stable: currencyInUsdPrice,
-      },
-      swapingOut: {
-        currency: currencyOut,
-        amount: amountOut,
-        balance: currencyOutBalance?.formatted,
-        stable: currencyOutUsdPrice,
-        relativePrice,
-      },
-      settings,
-      tradeInfo: tradeInfo.current,
+      switchCurrencies,
     }),
-    [
-      currencyIn,
-      currencyOut,
-      amountIn,
-      amountOut,
-      currencyInBalance,
-      currencyOutBalance,
-      currencyInUsdPrice,
-      currencyOutUsdPrice,
-      relativePrice,
-      pairs,
-      settings,
-      tradeInfo,
-      swapTransaction,
-      confirmSwap,
-      updateField,
-      setOrSwitchCurrency,
-      // switchCurrencies,
-    ],
+    [currencyIn, currencyOut, setCurrencyIn, setCurrencyOut, switchCurrencies],
   )
+}
+
+export const useSwap = () => {
+  const networkId = useCurrentNetworkId()
+
+  const [settings, setSettings] = useState(defaultSettings)
+  const [currencyIn, setCurrencyIn] = useState<Currency>(DAI[networkId])
+  const [currencyOut, setCurrencyOut] = useState<Currency>(CNV[networkId])
+  const [exactValue, setExactValue] = useState<string>('')
+
+  const pairs = usePairs(currencyIn?.wrapped, currencyOut?.wrapped, settings.multihops ? 3 : 1)
+
+  const tradeType = useRef(TradeType.EXACT_INPUT)
+  const [exactCurrency, otherCurrency] =
+    TradeType.EXACT_INPUT === tradeType.current
+      ? [currencyIn, currencyOut]
+      : [currencyOut, currencyIn]
+  const trade = useTrade(CurrencyAmount.fromRawAmount(exactCurrency, exactValue), otherCurrency, {
+    tradeType: tradeType.current,
+    maxHops: 1,
+  })
 }

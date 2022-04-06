@@ -13,7 +13,7 @@ import { Settings } from './Settings'
 import { TokenInput } from './TokenInput'
 import { TransactionStatusModal } from './TransactionStatus'
 import { TransactionSubmittedModal } from './TransactionSubmitted'
-import { ROUTER_CONTRACT, useNativeCurrency, useSwap } from './useSwap2'
+import { useSwap } from './useSwap2'
 
 export const twoDecimals = (s: string | number) => {
   const a = s.toString()
@@ -70,11 +70,6 @@ const PairsError = () => (
   </Text>
 )
 
-/**
-  TODO
-    - switch tokens
-    - eth -> weth
-*/
 export function SwapCard() {
   const {
     setAmountIn,
@@ -92,8 +87,6 @@ export function SwapCard() {
     swapingIn,
     swapingOut,
   } = useSwap()
-
-  const nativeCurrency = useNativeCurrency()
 
   const { user, isConnected, connectWithModal } = useAuth()
 

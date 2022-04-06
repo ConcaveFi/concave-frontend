@@ -19,7 +19,9 @@ import {
   useBoolean,
   Box,
 } from '@concave/ui'
-import React, { useMemo, useState } from 'react'
+import { Percent } from 'gemswap-sdk'
+import React, { useMemo, useReducer, useState } from 'react'
+import ms from 'ms'
 
 const SlippageTolerance = ({ value, onValueChange, onClickAuto }) => {
   return (
@@ -118,17 +120,36 @@ const ToggleMultihops = ({ isChecked, onToggle }) => {
   )
 }
 
-export const defaultSettings = {
-  deadline: 30,
-  slippageTolerance: 0.5,
+const toPercent = (input: string) => new Percent(Math.floor(Number.parseFloat(input) * 100), 10_000)
+
+export type SwapSettings = {
+  deadline: number
+  slippageTolerance: Percent
+  expertMode: boolean
+  multihops: boolean
+}
+
+const ONE_MINUTE_IN_SECONDS = 60
+
+export const defaultSettings: SwapSettings = {
+  deadline: 30 * ONE_MINUTE_IN_SECONDS,
+  slippageTolerance: toPercent('0.5'),
   expertMode: false,
-  multihops: true,
+  multihops: false,
 }
 
 const useSettings = () => {
-  const [deadline, setDeadline] = useState(defaultSettings.deadline)
-  const [slippageTolerance, setSlippageTolerance] = useState(defaultSettings.slippageTolerance)
+  const [deadline, setDeadline] = useReducer(
+    (_, newState) => +newState * ONE_MINUTE_IN_SECONDS,
+    defaultSettings.deadline,
+  )
+  const [slippageTolerance, setSlippageTolerance] = useReducer(
+    (oldState, newState) => toPercent(newState) || oldState,
+    defaultSettings.slippageTolerance,
+  )
   const [multihops, { toggle: toggleMultihops }] = useBoolean(defaultSettings.multihops)
+
+  // check wtf expert mode means
   const [expertMode, { toggle: toggleExpertMode }] = useBoolean(defaultSettings.expertMode)
 
   return useMemo(
