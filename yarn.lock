@@ -5845,10 +5845,10 @@ gauge@~1.2.0:
     lodash.padend "^4.1.0"
     lodash.padstart "^4.1.0"
 
-gemswap-sdk@1.0.8:
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/gemswap-sdk/-/gemswap-sdk-1.0.8.tgz#863a6b06753cfe8392a83a7753f5fbb0058619f8"
-  integrity sha512-1v1sfUUooPTt1RyKh7ettWKDtKOkmmW2BEBRlesZlVaZKut+OxUTcUJiBIHQeQorFSjEyTy8nIO+fLJ5ZSR2Ig==
+gemswap-sdk@1.0.9:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/gemswap-sdk/-/gemswap-sdk-1.0.9.tgz#85fad4badc668edee7c2ec22f1ca8131c727dc38"
+  integrity sha512-n4sJu3vu+WFhMrRJGM9e8RCj9DvnpdWy6YQc9Mvygo7IcGKHjDBZDnjbGb7jY3rkB6+AFRQTm66J+BPJjh5CVw==
   dependencies:
     "@ethersproject/address" "^5.0.0"
     "@ethersproject/solidity" "^5.0.0"

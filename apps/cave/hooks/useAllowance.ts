@@ -1,17 +1,18 @@
-import { formatUnits } from 'ethers/lib/utils'
-import { TokenType } from 'lib/tokens'
+import { BigNumber, BigNumberish, ethers } from 'ethers'
+import { formatUnits, parseUnits } from 'ethers/lib/utils'
+import { Token } from 'gemswap-sdk'
 import { useEffect, useMemo } from 'react'
-import { erc20ABI, useContractWrite, useContractRead, useWaitForTransaction } from 'wagmi'
-import { MaxUint256 } from '@ethersproject/constants'
+import { erc20ABI, useContractWrite, useContractRead, chain, useWaitForTransaction } from 'wagmi'
+import { MaxUint256 } from 'gemswap-sdk'
 
 export const useApprovalWhenNeeded = (
-  token: TokenType,
+  token: Token,
   spender: string,
   userAddress: string,
-  amount: string,
+  amount = MaxUint256.toString(),
 ) => {
   const [allowanceTokenA, syncAllowance] = useAllowance(token, spender, userAddress)
-  const [approvalTokenA, requestApprove] = useApproval(token, spender)
+  const [approvalTokenA, requestApprove] = useApproval(token, spender, amount)
 
   const [approveAConfirmation] = useWaitForTransaction({ wait: approvalTokenA.data?.wait })
   useEffect(() => {
@@ -31,7 +32,7 @@ export const useApprovalWhenNeeded = (
  * @param userAddress address of wallet
  * @returns
  */
-export const useAllowance = (token: TokenType, spender: string, userAddress: string) => {
+export const useAllowance = (token: Token, spender: string, userAddress: string) => {
   return useContractRead(
     { addressOrName: token.address, contractInterface: erc20ABI },
     'allowance',
@@ -47,20 +48,15 @@ export const useAllowance = (token: TokenType, spender: string, userAddress: str
   )
 }
 
-export const useApproval = (token: TokenType, spender: string) =>
-  useContractWrite({ addressOrName: token.address, contractInterface: erc20ABI }, 'approve', {
-    args: [spender, MaxUint256],
-  })
-
-// export const useApproval = (token: TokenType, spender: string, amountToApprove: BigNumberish) =>
-//   useContractWrite(
-//     { addressOrName: token.address, contractInterface: erc20ABI },
-//     'approve',
-//     useMemo(
-//       () => ({
-//         skip: !token.address || !amountToApprove || !spender,
-//         args: amountToApprove && [spender, parseUnits(amountToApprove.toString(), token.decimals)],
-//       }),
-//       [spender, token, amountToApprove],
-//     ),
-//   )
+export const useApproval = (token: Token, spender: string, amountToApprove: BigNumberish) =>
+  useContractWrite(
+    { addressOrName: token.address, contractInterface: erc20ABI },
+    'approve',
+    useMemo(
+      () => ({
+        skip: !token.address || !amountToApprove || !spender,
+        args: amountToApprove && [spender, parseUnits(amountToApprove.toString(), token.decimals)],
+      }),
+      [spender, token],
+    ),
+  )

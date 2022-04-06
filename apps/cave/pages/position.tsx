@@ -1,10 +1,6 @@
 import { ExpandArrowIcon, PlusIcon, TokenIcon } from '@concave/icons'
 import {
   Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
   Box,
   Button,
   Card,
@@ -20,19 +16,20 @@ import {
   useDisclosure,
   UseDisclosureReturn,
 } from '@concave/ui'
-import { useTokenList } from 'components/Swap/hooks/useTokenList'
+import { useAddressTokenList, useTokenList } from 'components/Swap/hooks/useTokenList'
 import { TokenBalance } from 'components/Swap/TokenBalance'
 import { TokenInput } from 'components/Swap/TokenInput'
 import { useAuth } from 'contexts/AuthContext'
 import { BigNumberish, Contract } from 'ethers'
 import { useAddLiquidity, UseAddLiquidityData } from 'hooks/useAddLiquidity'
 import { useApprovalWhenNeeded } from 'hooks/useAllowance'
+import { useLiquidityInfo } from 'hooks/useLiquidityInfo'
 import { usePrecision } from 'hooks/usePrecision'
 import { contractABI } from 'lib/contractoABI'
-import { concaveProvider2 } from 'lib/providers'
-import { TokenType } from 'lib/tokens'
+import { concaveProvider } from 'lib/providers'
+import { Token } from 'lib/tokens'
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { chain, useSigner } from 'wagmi'
 import { useToken, WrapperTokenInfo } from '../components/Swap/useSwap'
 
@@ -64,110 +61,136 @@ const PositionInfoItem = ({ color = '', label, value, mt = 0, children = <></> }
 
 interface LPPosition {
   //  pair?: Pair
-  pair?: { tokenA: string; tokenB: string; liquidityAddress: string }
   ownedAmount: BigNumberish
+  liquidityPoolToken: Token
 }
 
-const LPPositionItem = ({ pair, ownedAmount }: LPPosition) => {
-  const tokens = useTokenList()
-  const [tokenA, setTokenA] = useState<TokenType>(null)
-  const [tokenB, setTokenB] = useState<TokenType>(null)
+const LPPositionItem = ({ ownedAmount, liquidityPoolToken }: LPPosition) => {
+  const tokens = useTokenList(chain.ropsten.name)
+  const [{ pair, token }, loading, error] = useLiquidityInfo(liquidityPoolToken)
+  return <p>teste</p>
+  // console.log(loading, pair, error)
+  // const [tokenA, setTokenA] = useState<Token>()
+  // const [tokenB, setTokenB] = useState<Token>()
 
-  useEffect(() => {
-    if (!tokens.isSuccess) {
-      return
-    }
-    setTokenA(tokens.data.find((t: any) => t.address.toLowerCase() === pair?.tokenA.toLowerCase()))
-    setTokenB(tokens.data.find((t: any) => t.address.toLowerCase() === pair?.tokenB.toLowerCase()))
-  }, [pair, pair?.tokenA, pair.tokenB, tokens.data, tokens.isSuccess])
+  // useEffect(() => {
+  //   if (tokens.isLoading || !pair) {
+  //     return
+  //   }
+  //   setTokenA(
+  //     tokens.data.find((t) => t.address.toLowerCase() === pair.token0.address.toLowerCase()),
+  //   )
+  //   setTokenB(
+  //     tokens.data.find((t) => t.address.toLowerCase() === pair.token1.address.toLowerCase()),
+  //   )
+  // }, [pair, tokens.data, tokens.isLoading])
 
-  const addLiquidity = useDisclosure()
-  const removeLiquidity = useDisclosure()
-  const { user, isConnected } = useAuth()
-  if (!tokenA || !tokenB || !isConnected) {
-    return <></>
-  }
-
-  return (
-    <>
-      <AccordionItem p={2} shadow="Up Big" borderRadius="2xl" alignItems="center">
-        <AccordionButton>
-          {/* <TokenIcon {...tokenA} />
-          <TokenIcon {...tokenB} /> */}
-          <Text ml="24px" fontWeight="semibold" fontSize="lg">
-            {tokenA.symbol}/{tokenB.symbol}
-          </Text>
-          <Button
-            variant="secondary"
-            borderRadius="full"
-            px={4}
-            fontSize="lg"
-            rightIcon={<AccordionIcon h="28px" w="auto" />}
-            iconSpacing={0}
-            ml="auto"
-          >
-            Manage
-          </Button>
-        </AccordionButton>
-        <AccordionPanel>
-          <Stack
-            fontWeight="bold"
-            fontSize="lg"
-            color="text.medium"
-            borderRadius="2xl"
-            shadow="down"
-            p={4}
-            spacing={4}
-          >
-            {/* <PositionInfoItem label="Your total pool tokens:" value={ownedAmount.toString()} /> */}
-            {/* <PositionInfoItem label={`Pooled ${tokenA.symbol}:`} value={'0.0001331'}>
-              <TokenIcon size={'sm'} {...tokenA} />
-            </PositionInfoItem>
-            <PositionInfoItem label={`Pooled ${tokenB.symbol}:`} value={'325.744'}>
-              <TokenIcon size="sm" {...tokenB} />
-            </PositionInfoItem>
-            <PositionInfoItem label="Your pool share:" value={'2.79%'} /> */}
-          </Stack>
-          <Flex gap={5} justify="center" mt={6}>
-            <Button onClick={addLiquidity.onOpen} variant="primary" h={12} w={40} fontSize="lg">
-              Add
-            </Button>
-            <Button onClick={removeLiquidity.onOpen} variant="primary" h={12} w={40} fontSize="lg">
-              Remove
-            </Button>
-          </Flex>
-        </AccordionPanel>
-      </AccordionItem>
-      <RemoveLiquidityModal
-        userAddressOrName={user.address}
-        disclosure={removeLiquidity}
-        tokenA={tokenA}
-        tokenB={tokenB}
-      />
-      <AddLiquidityModal disclosure={addLiquidity} userAddress={user.address} />
-    </>
-  )
+  // const addLiquidity = useDisclosure()
+  // const removeLiquidity = useDisclosure()
+  // const { user, isConnected } = useAuth()
+  // if (!tokenA) {
+  //   return <p>Loading Token A {pair?.token0?.address}</p>
+  // }
+  // if (!tokenB) {
+  //   return <p>Loading Token B{pair?.token1?.address}</p>
+  // }
+  // if (!pair) {
+  //   return <p>Loading Pair</p>
+  // }
+  // console.log(pair)
+  // return (
+  //   <>
+  //     <AccordionItem p={2} shadow="Up Big" borderRadius="2xl" alignItems="center">
+  //       <AccordionButton>
+  //         <TokenIcon logoURI={tokenA.logoURI} symbol={tokenA.symbol} />
+  //         <TokenIcon logoURI={tokenB.logoURI} symbol={tokenB.symbol} />
+  //         <Text ml="24px" fontWeight="semibold" fontSize="lg">
+  //           {tokenA.symbol}/{tokenB.symbol}{' '}
+  //           <a
+  //             target={'_blank'}
+  //             href={`https://ropsten.etherscan.io/address/${token.address}#readContract}`}
+  //             rel="noreferrer"
+  //           >
+  //             token
+  //           </a>
+  //         </Text>
+  //         <Button
+  //           variant="secondary"
+  //           borderRadius="full"
+  //           px={4}
+  //           fontSize="lg"
+  //           rightIcon={<AccordionIcon h="28px" w="auto" />}
+  //           iconSpacing={0}
+  //           ml="auto"
+  //         >
+  //           Manage
+  //         </Button>
+  //       </AccordionButton>
+  //       <AccordionPanel>
+  //         <Stack
+  //           fontWeight="bold"
+  //           fontSize="lg"
+  //           color="text.medium"
+  //           borderRadius="2xl"
+  //           shadow="down"
+  //           p={4}
+  //           spacing={4}
+  //         >
+  //           <PositionInfoItem label="Your total pool tokens:" value={ownedAmount.toString()} />
+  //           <PositionInfoItem label={`Pooled ${tokenA.symbol}:`} value={pair.reserve0.toFixed(2)}>
+  //             <TokenIcon size="sm" {...tokenA} />
+  //           </PositionInfoItem>
+  //           <PositionInfoItem label={`Pooled ${tokenB.symbol}:`} value={pair.reserve1.toFixed(2)}>
+  //             <TokenIcon size="sm" {...tokenB} />
+  //           </PositionInfoItem>
+  //           <PositionInfoItem label="Your pool share:" value={'2.79%'} />
+  //         </Stack>
+  //         <Flex gap={5} justify="center" mt={6}>
+  //           <Button onClick={addLiquidity.onOpen} variant="primary" h={12} w={40} fontSize="lg">
+  //             Add
+  //           </Button>
+  //           <Button onClick={removeLiquidity.onOpen} variant="primary" h={12} w={40} fontSize="lg">
+  //             Remove
+  //           </Button>
+  //         </Flex>
+  //       </AccordionPanel>
+  //     </AccordionItem>
+  //     {/* <RemoveLiquidityModal
+  //       userAddressOrName={user.address}
+  //       disclosure={removeLiquidity}
+  //       token0={tokenA}
+  //       amount0={pair.amount0}
+  //       token1={tokenB}
+  //       amount1={pair.amount1}
+  //     /> */}
+  //     <AddLiquidityModal disclosure={addLiquidity} userAddress={user.address} />
+  //   </>
+  // )
 }
 
 const RemoveLiquidityModal = ({
   disclosure,
   userAddressOrName,
-  tokenA,
-  tokenB,
+  token0,
+  amount0,
+  token1,
+  amount1,
 }: {
   userAddressOrName: string
-  tokenA: TokenType
-  tokenB: TokenType
+  token0: Token
+  amount0: string
+  token1: Token
+  amount1: string
   disclosure: UseDisclosureReturn
 }) => {
   const [percentToRemove, setPercentToRemove] = useState(0)
-  const [wrapperTokenA] = useToken({ userAddressOrName, symbol: tokenA.symbol })
-  const [wrapperTokenB] = useToken({ userAddressOrName, symbol: tokenB.symbol })
+  const [wrapperTokenA, setTokenA] = useToken({ userAddressOrName, symbol: token0.symbol })
+  const [wrapperTokenB, setTokenB] = useToken({ userAddressOrName, symbol: token1.symbol })
   const removeLiquidityState = useRemoveLiquidity({
     wrapperTokenA,
     wrapperTokenB,
-    amountTokenA: 0.0001331,
-    amountTokenB: 325.744,
+    amountTokenA: +amount0,
+    amountTokenB: +amount1,
     percentToRemove,
   })
   return (
@@ -257,9 +280,9 @@ const YouWillReceive = ({
 }
 
 const RemoveLiquidityActions = () => {
-  // const { user } = useAuth()
-  const [approved] = useState(false)
-  const [{ data }] = useSigner()
+  const { user } = useAuth()
+  const [approved, setApproved] = useState(false)
+  const [{ data, error, loading }, getSigner] = useSigner()
   // const userApproval = useAllowance(
   //   user.address,
   //   '0x95dDC411d31bBeDd37e9aaABb335b0951Bc2D25a',
@@ -272,7 +295,7 @@ const RemoveLiquidityActions = () => {
       const contractInstance = new Contract(
         '0x95dDC411d31bBeDd37e9aaABb335b0951Bc2D25a',
         contractABI,
-        concaveProvider2(chain.ropsten.id),
+        concaveProvider(chain.ropsten.id),
       )
       const contractSigner = contractInstance.connect(data)
       console.log('signer rm', contractSigner)
@@ -313,16 +336,8 @@ const YourPosition = ({
     <Flex gap={7} direction={'column'} shadow="Up Big" px={4} py={4} borderRadius="2xl">
       <Text fontSize={'lg'}>Your Position</Text>
       <Flex gap={2} align={'center'}>
-        {/* <TokenIcon
-          size={'sm'}
-          logoURI={wrapperTokenA.token?.logoURI}
-          symbol={wrapperTokenA.token?.symbol}
-        />
-        <TokenIcon
-          size={'sm'}
-          logoURI={wrapperTokenB.token?.logoURI}
-          symbol={wrapperTokenB.token?.symbol}
-        /> */}
+        <TokenIcon logoURI={wrapperTokenA.token?.logoURI} symbol={wrapperTokenA.token?.symbol} />
+        <TokenIcon logoURI={wrapperTokenB.token?.logoURI} symbol={wrapperTokenB.token?.symbol} />
         <Text px={4}>
           {wrapperTokenA.token?.symbol}/{wrapperTokenB.token?.symbol}
         </Text>
@@ -337,29 +352,29 @@ const YourPosition = ({
         spacing={3}
       >
         <PositionInfoItem label="Your pool share:" value={'2.79%'} />
-        {/* <PositionInfoItem label={wrapperTokenA.token?.symbol} value={'0.0001331'}> */}
-        {/* <TokenIcon
-            size={'sm'}
+        <PositionInfoItem label={wrapperTokenA.token?.symbol} value={'0.0001331'}>
+          <TokenIcon
+            size="sm"
             logoURI={wrapperTokenA.token?.logoURI}
             symbol={wrapperTokenA.token?.symbol}
-          /> */}
-        {/* </PositionInfoItem> */}
-        {/* <PositionInfoItem label={wrapperTokenB.token?.symbol} value={'325.744'}> */}
-        {/* <TokenIcon
-            size={'sm'}
+          />
+        </PositionInfoItem>
+        <PositionInfoItem label={wrapperTokenB.token?.symbol} value={'325.744'}>
+          <TokenIcon
+            size="sm"
             logoURI={wrapperTokenB.token?.logoURI}
             symbol={wrapperTokenB.token?.symbol}
-          /> */}
-        {/* </PositionInfoItem> */}
+          />
+        </PositionInfoItem>
       </Stack>
     </Flex>
   )
 }
 
-const ReceiveBox = ({ amount, token }: { amount: number; token: TokenType }) => {
+const ReceiveBox = ({ amount, token }: { amount: number; token: Token }) => {
   return (
     <HStack shadow="down" borderRadius="2xl" p={3}>
-      {/* <TokenIcon logoURI={token?.logoURI} symbol={token?.symbol} /> */}
+      <TokenIcon logoURI={token?.logoURI} symbol={token?.symbol} />
       <Box>
         <Text fontFamily={'heading'} fontWeight={600}>
           {usePrecision(amount, 7).formatted}
@@ -390,7 +405,7 @@ const useRemoveLiquidity = ({
   const [liquidity, setLiquidity] = useState(0)
   const amountAMin = amountTokenA * ratioToRemove
   const amountBMin = amountTokenB * ratioToRemove
-  const [deadline] = useState(new Date().getTime() / 1000 + 15 * 60)
+  const [deadline, setDeadLine] = useState(new Date().getTime() / 1000 + 15 * 60)
   // const [{ data, error, loading }, getSigner] = useSigner()
   return {
     wrapperTokenA,
@@ -400,6 +415,31 @@ const useRemoveLiquidity = ({
     amountBMin,
     deadline,
   }
+}
+
+const useViewLiquidity = async ({
+  userAddress,
+  percentToRemove,
+}: {
+  percentToRemove: number
+  userAddress: string
+}) => {
+  // const provider = concaveProvider(chain.ropsten.id)
+  // const gemFactory = new ethers.Contract(
+  //   ContractAddress['ropstenFactory'],
+  //   gemFactoryABI,
+  //   provider,
+  // )
+  // let length = await gemFactory.allPairsLength().catch((e) => {
+  //   console.log(e)
+  // })
+  // let parse = typeof length == 'object' ? length.toString() : 0
+  // for (let i = 0; i < parse; i++) {
+  //   const pairAddress = await gemFactory.allPairs(i).catch(() => {})
+  //   // pairAddress
+  //   // provider.getBalance(userAddress, )
+  // }
+  // return {}
 }
 
 const AddLiquidityModal = ({
@@ -440,20 +480,14 @@ const SupplyLiquidityModal = ({
 
   const [needsApproveA, requestApproveA, loadingApproveA] = useApprovalWhenNeeded(
     wrapperTokenA.token,
-    '', // TODO who is the spender ??
-    // chain.ropsten.id,
     userAddress,
-    `${amountADesired}`,
+    amountADesired.toString(),
   )
-  console.log('loadingApproveA', loadingApproveA)
   const [needsApproveB, requestApproveB, loadingApproveB] = useApprovalWhenNeeded(
     wrapperTokenB.token,
-    '', // TODO who is the spender ??
-    // chain.ropsten.id,
     userAddress,
-    `${amountBDesired}`,
+    amountBDesired.toString(),
   )
-  //
   return (
     <Modal
       bluryOverlay={true}
@@ -471,11 +505,11 @@ const SupplyLiquidityModal = ({
         {wrapperTokenA.token.symbol}/{wrapperTokenB.token.symbol} Pool Tokens
       </Text>
       <HStack justifyContent={'center'}>
-        {/* <TokenIcon {...wrapperTokenA.token}></TokenIcon>
-        <TokenIcon {...wrapperTokenB.token}></TokenIcon> */}
+        <TokenIcon {...wrapperTokenA.token}></TokenIcon>
+        <TokenIcon {...wrapperTokenB.token}></TokenIcon>
       </HStack>
       <Box borderRadius={'2xl'} p={6} shadow={'down'}>
-        {/* <PositionInfoItem
+        <PositionInfoItem
           label="Rates"
           value={`1  ${wrapperTokenA.token.symbol} =  ${
             usePrecision(wrapperTokenA.price / wrapperTokenB.price).formatted
@@ -498,7 +532,7 @@ const SupplyLiquidityModal = ({
           label={`${wrapperTokenB.token.symbol} Deposited`}
           value={`${usePrecision(amountBDesired).formatted} ${wrapperTokenB.token.symbol}`}
         />
-        <PositionInfoItem color={'text.low'} label="Share Pool" value={'2.786%'} /> */}
+        <PositionInfoItem color={'text.low'} label="Share Pool" value={'2.786%'} />
       </Box>
       {needsApproveA && (
         <Button mt={2} p={6} fontSize={'2xl'} variant={'primary'} onClick={() => requestApproveA()}>
@@ -541,6 +575,8 @@ const AddLiquidityContent = ({ userAddress }: { userAddress: string }) => {
       </Card>
       <Flex direction={'column'} p={4} gap={2}>
         <TokenInput
+          balance={'1'}
+          stable={'1'}
           value={'' + amountADesired}
           currency={wrapperTokenA.token}
           onChangeValue={(value) => {
@@ -549,8 +585,6 @@ const AddLiquidityContent = ({ userAddress }: { userAddress: string }) => {
           onChangeCurrency={(token) => {
             setTokenA(token.symbol)
           }}
-          balance={'1'}
-          stable={'1'}
         >
           <TokenBalance
             value={wrapperTokenA.balance?.formatted}
@@ -573,6 +607,8 @@ const AddLiquidityContent = ({ userAddress }: { userAddress: string }) => {
           </Button>
         </Flex>
         <TokenInput
+          balance={'1'}
+          stable={'1'}
           value={'' + amountBDesired}
           currency={wrapperTokenB.token}
           onChangeValue={(value) => {
@@ -581,14 +617,12 @@ const AddLiquidityContent = ({ userAddress }: { userAddress: string }) => {
           onChangeCurrency={(token) => {
             setTokenB(token.symbol)
           }}
-          balance={'1'}
-          stable={'1'}
         >
           {wrapperTokenB.token?.symbol && (
             <TokenBalance
               value={wrapperTokenB.balance?.formatted}
               onClick={() => {
-                setAmountBDesired(+wrapperTokenB.balance?.formatted)
+                setAmountADesired(+wrapperTokenB.balance?.formatted)
               }}
             />
           )}
@@ -623,21 +657,43 @@ const AddLiquidityContent = ({ userAddress }: { userAddress: string }) => {
   )
 }
 
-export default function MyPositions() {
+const MyPositions = () => {
+  const { user, isConnected } = useAuth()
+  const userTokens = useAddressTokenList(user.address)
+  const liquidityPoolTokens = (userTokens.data || []).filter((p) => {
+    return p.name == 'Concave LP'
+  })
+  if (!liquidityPoolTokens.length) {
+    return <p>loading pools</p>
+  }
+  console.log(liquidityPoolTokens)
+  return (
+    <>
+      <RewardsBanner />
+      <Card variant="primary" borderRadius="3xl" p={6} shadow="Up for Blocks">
+        <Accordion as={Stack} allowToggle gap={2}>
+          {liquidityPoolTokens.map((liquidityPoolToken) => {
+            return (
+              <LPPositionItem
+                key={liquidityPoolToken.address}
+                liquidityPoolToken={liquidityPoolToken}
+                ownedAmount={'0.013'}
+              />
+            )
+          })}
+        </Accordion>
+      </Card>
+    </>
+  )
+}
+
+export default function PositionsView() {
   const auth = useAuth()
   const router = useRouter()
   const { operation } = router.query
   if (!auth.isConnected || !auth.user) {
     return <Text>Please, connect</Text>
   }
-
-  const pairs = [
-    {
-      tokenA: '0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4',
-      tokenB: '0x2b8e79cbd58418ce9aeb720baf6b93825b93ef1f',
-      liquidityAddress: '0xb14d541123a7f7276F01A22798caDa7eE1D7F57f',
-    },
-  ]
 
   if (operation === 'addLiquidity') {
     return (
@@ -651,16 +707,7 @@ export default function MyPositions() {
 
   return (
     <View title="My Liquidity Position">
-      <>
-        <RewardsBanner />
-        <Card variant="primary" borderRadius="3xl" p={6} shadow="Up for Blocks">
-          <Accordion as={Stack} allowToggle gap={2}>
-            {pairs.map((p, i) => {
-              return <LPPositionItem key={i} pair={p} ownedAmount={'0.013'} />
-            })}
-          </Accordion>
-        </Card>
-      </>
+      <MyPositions />
     </View>
   )
 }
