@@ -60,6 +60,7 @@ export const TransactionStatusModal = ({
         fontWeight="semibold"
         textColor="#5F7A99"
         fontSize="md"
+        isExternal
       >
         Confirm this transaction in your wallet
       </Link>

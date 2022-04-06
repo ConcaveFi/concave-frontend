@@ -9,7 +9,7 @@ export const TransactionSubmittedModal = ({
   onClose,
 }: {
   receipt: {
-    data: ethers.providers.TransactionReceipt
+    data: ethers.providers.TransactionResponse
     error: Error
     loading: boolean
   }
@@ -31,10 +31,11 @@ export const TransactionSubmittedModal = ({
       <Text align={'center'} fontSize={'24px'} fontWeight={600}>
         Transaction Submitted <br />
         <Link
-          href={`https://etherscan.io/tx/${receipt?.data?.transactionHash}`}
+          href={`https://etherscan.io/tx/${receipt?.data?.hash}`}
           fontWeight={400}
           fontSize={'18px'}
           textColor={'Highlight'}
+          isExternal
         >
           View on Explorer
         </Link>
