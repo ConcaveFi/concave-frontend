@@ -110,7 +110,7 @@ export function SwapCard() {
     ROUTER_CONTRACT[1],
     user.address,
     // MaxUint256.toString(),
-    +swapingIn.amount,
+    swapingIn.amount,
   )
   useEffect(() => {
     if (swapReceipt.loading) {
