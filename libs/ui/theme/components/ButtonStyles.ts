@@ -18,6 +18,12 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
     display: 'flex',
     alignItems: 'center',
     _active: { transform: 'scale(0.95)' },
+    _hover: {
+      _disabled: {
+        cursor: 'default',
+        bg: null,
+      },
+    },
   },
   sizes: {
     large: {
@@ -46,11 +52,6 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
       fontWeight: 'bold',
       shadow: PrimaryButtonShadow,
       _focus: { shadow: PrimaryButtonShadow },
-      _disabled: {
-        _hover: {
-          bgGradient: 'linear(to-r, primary.1, primary.2)',
-        },
-      },
     },
     secondary: {
       bgGradient: 'linear(to-r, secondary.125, secondary.50)',
