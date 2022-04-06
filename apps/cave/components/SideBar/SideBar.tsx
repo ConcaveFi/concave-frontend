@@ -27,7 +27,7 @@ export function SideBar() {
   const networkModal = useDisclosure()
 
   useEffect(() => {
-    if (data.chain?.name && data.chain?.name !== 'Mainnet') {
+    if (data.chain?.name && data.chain?.name !== 'Mainnet' && data.chain?.name !== 'Ropsten') {
       networkModal.onOpen()
     } else {
       networkModal.onClose()
