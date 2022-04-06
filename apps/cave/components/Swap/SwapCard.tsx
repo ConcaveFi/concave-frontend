@@ -236,7 +236,7 @@ export function SwapCard() {
       /> */}
 
       <TransactionSubmittedModal
-        receipt={swapReceipt}
+        receipt={swapTransaction}
         isOpen={receiptModal.isOpen}
         onClose={() => {
           receiptModal.onClose()
