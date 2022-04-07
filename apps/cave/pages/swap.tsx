@@ -5,7 +5,7 @@ import React from 'react'
 
 function Swap() {
   return (
-    <Flex direction="column" justify="center" align="center" h="100%" gap={12}>
+    <Flex direction="column-reverse" justify="center" align="center" h="100%" gap={12}>
       <Flex gap={4} flexWrap="wrap" justify="center">
         <SwapCard />
       </Flex>
