@@ -10,6 +10,7 @@ import {
   Stack,
   Text,
 } from '@concave/ui'
+import BondBuyCard from 'components/Bond/BondBuyCard'
 import GcnvTitle from 'components/GcnvTitle'
 import Placeholder from 'components/Placeholder'
 import { SwapCard } from 'components/Swap/SwapCard'
@@ -18,6 +19,7 @@ import { SwapCard } from 'components/Swap/SwapCard'
 import { useSwap } from 'components/Swap/useSwap'
 import { useAuth } from 'contexts/AuthContext'
 import React from 'react'
+
 
 const InfoItem = ({ value, label, ...props }) => (
   <Flex
@@ -98,12 +100,7 @@ const NothingToRedeem = () => {
 export default function Bond() {
   const { user, isConnected } = useAuth()
   const swap = useSwap(isConnected ? user?.address : '', {})
-  return (
-    <Container maxW="container.lg">
-      <GcnvTitle title="Bonds" description="" />
-      <Placeholder text="Composable Bonds" />
-    </Container>
-  )
+
   return (
     <Container maxW="container.lg">
       <Flex direction="column" gap={20}>
@@ -117,7 +114,7 @@ export default function Bond() {
           </Text>
         </Stack>
 
-        <Flex gap={10}>
+        <Flex gap={10} direction="row">
           <Box pos="relative" h="fit-content">
             <Box
               h="20px"
@@ -148,15 +145,13 @@ export default function Bond() {
               />
               <NothingToRedeem />
             </Card>
+           
           </Box>
-          <SwapCard
-          // swap={swap}
-          // buttonLabel="Buy with 5 days vesting"
-          // variant="primary"
-          // w="380px"
-          />
+          <BondBuyCard />
         </Flex>
+       
       </Flex>
+      <Placeholder text="More Bonds" />
     </Container>
   )
 }
