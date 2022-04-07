@@ -1,4 +1,3 @@
-import { TokenType } from '../../../lib/tokens'
 import { useQuery, UseQueryResult } from 'react-query'
 import { chain, useNetwork } from 'wagmi'
 import { Token } from 'gemswap-sdk'
@@ -28,7 +27,7 @@ export const useTokenList = (networkName: string = chain.mainnet.name) => {
 //PUT IN .ENV
 const MORALIS_TOKEN = '10NauNE7btm4qS8AbMv1ojkXhxsgh1FTJiSwH7SctkCSGKCCXPzwZpswmnNDmmrd'
 const headers = { 'x-api-key': MORALIS_TOKEN }
-export const useAddressTokenList: (address?: string) => UseQueryResult<TokenType[], unknown> = (
+export const useAddressTokenList: (address?: string) => UseQueryResult<Token[], unknown> = (
   address: string,
 ) => {
   const [{ data: network }] = useNetwork()

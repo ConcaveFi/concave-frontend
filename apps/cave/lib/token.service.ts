@@ -1,12 +1,11 @@
 import { CandleStickIntervalTypes } from 'components/CandleStickCard/useCandleStickChart'
 import { chain } from 'wagmi'
 import { coingeckoApi } from './coingecko.api'
-import { AvailableTokens } from './tokens'
 
 class TokenService {
   constructor(private networkName: string = chain.mainnet.name) {}
 
-  async getTokenPrice(symbol: AvailableTokens) {
+  async getTokenPrice(symbol: string) {
     if (this.networkName === chain.ropsten.name) {
       const values = {
         DAI: 1,
@@ -35,7 +34,7 @@ class TokenService {
     token,
     interval,
   }: {
-    token: AvailableTokens
+    token: string
     interval: CandleStickIntervalTypes
   }) {
     const coingecko = token?.toLowerCase() === 'cnv' ? 'concave' : token?.toLowerCase()

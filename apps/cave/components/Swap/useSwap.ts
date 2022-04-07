@@ -1,10 +1,10 @@
 import { tokenService } from 'lib/token.service'
-import { AvailableTokens, TokenType } from 'lib/tokens'
 import { useEffect, useState, useRef, useCallback } from 'react'
 import { useQuery } from 'react-query'
 import { useBalance } from 'wagmi'
 import { useTokenList } from './hooks/useTokenList'
 import { BigNumber } from 'ethers'
+import { Token } from 'gemswap-sdk'
 
 const defaultValue: SwapStateProps = {
   priceImpact: -0.12,
@@ -30,7 +30,7 @@ export type SwapStateProps = {
   commonOutputTokens: unknown[]
 }
 export type WrapperTokenInfo = {
-  readonly token?: TokenType
+  readonly token?: Token
   readonly price: number
   readonly balance: {
     decimals: number
@@ -39,7 +39,6 @@ export type WrapperTokenInfo = {
     value: BigNumber
   }
 }
-export type Token = WrapperTokenInfo
 
 export type UseSwap = SwapStateProps & {
   fromAmount: number
@@ -48,16 +47,16 @@ export type UseSwap = SwapStateProps & {
   to?: WrapperTokenInfo
   switchTokens: () => void
   set: (swap: Partial<SwapStateProps>) => void
-  setFromSymbol: (symbol: AvailableTokens) => void
+  setFromSymbol: (symbol: string) => void
   setFromAmount: (amount: string | number) => void
-  setToSymbol: (symbol: AvailableTokens) => void
+  setToSymbol: (symbol: string) => void
   setToAmount: (amount: string | number) => void
 }
 
-export const useToken = (props: { userAddressOrName: string; symbol?: AvailableTokens }) => {
+export const useToken = (props: { userAddressOrName: string; symbol?: string }) => {
   const tokens = useTokenList()
-  const [symbol, setSymbol] = useState<AvailableTokens>(props.symbol ?? null)
-  const [token, setToken] = useState<TokenType>(null)
+  const [symbol, setSymbol] = useState<string>(props.symbol ?? null)
+  const [token, setToken] = useState<Token>(null)
   const price = usePrice(symbol)
   const amount = useRef<number>()
 
@@ -71,14 +70,14 @@ export const useToken = (props: { userAddressOrName: string; symbol?: AvailableT
     if (!tokens.isSuccess) {
       return
     }
-    // setToken(tokens.data.find((t) => t.symbol === symbol))
+    setToken(tokens.data.find((t) => t.symbol === symbol))
   }, [symbol, tokens.data, tokens.isSuccess])
 
   return [{ token, balance, price, amount }, setSymbol] as const
 }
 
 const USEPRICE = 'USEPRICE'
-export const usePrice = (symbol: AvailableTokens) => {
+export const usePrice = (symbol: string) => {
   const { data } = useQuery([USEPRICE, symbol], () => tokenService.getTokenPrice(symbol))
   return data?.value
 }
