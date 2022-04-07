@@ -39,7 +39,9 @@ export const fetchCandleStickData = async ({
   const urlInput = new URL(`/api/v3/coins/${id}/ohlc`, baseUrl)
   urlInput.search = new URLSearchParams({ vs_currency: 'usd', days }).toString()
   const inputResponse = await fetch(urlInput.toString())
-  return await inputResponse.json().then((result) => result.map(mapOHLCData))
+  const result = await inputResponse.json()
+  const clean = result.map(mapOHLCData)
+  return clean
 }
 
 const mapOHLCData = (value: number[]): CandlestickData => {
