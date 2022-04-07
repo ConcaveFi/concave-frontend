@@ -1,6 +1,10 @@
 import { ExpandArrowIcon, PlusIcon, TokenIcon } from '@concave/icons'
 import {
   Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
   Box,
   Button,
   Card,
@@ -29,7 +33,7 @@ import { contractABI } from 'lib/contractoABI'
 import { concaveProvider } from 'lib/providers'
 import { Token } from 'lib/tokens'
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { chain, useSigner } from 'wagmi'
 import { useToken, WrapperTokenInfo } from '../components/Swap/useSwap'
 
@@ -68,104 +72,106 @@ interface LPPosition {
 const LPPositionItem = ({ ownedAmount, liquidityPoolToken }: LPPosition) => {
   const tokens = useTokenList(chain.ropsten.name)
   const [{ pair, token }, loading, error] = useLiquidityInfo(liquidityPoolToken)
-  return <p>teste</p>
-  // console.log(loading, pair, error)
-  // const [tokenA, setTokenA] = useState<Token>()
-  // const [tokenB, setTokenB] = useState<Token>()
+  const [tokenA, setTokenA] = useState<Token>()
+  const [tokenB, setTokenB] = useState<Token>()
 
-  // useEffect(() => {
-  //   if (tokens.isLoading || !pair) {
-  //     return
-  //   }
-  //   setTokenA(
-  //     tokens.data.find((t) => t.address.toLowerCase() === pair.token0.address.toLowerCase()),
-  //   )
-  //   setTokenB(
-  //     tokens.data.find((t) => t.address.toLowerCase() === pair.token1.address.toLowerCase()),
-  //   )
-  // }, [pair, tokens.data, tokens.isLoading])
+  useEffect(() => {
+    if (tokens.isLoading || !pair) {
+      return
+    }
+    setTokenA(
+      (tokens.data || []).find(
+        (t) => t.address.toLowerCase() === pair.token0.address.toLowerCase(),
+      ),
+    )
+    setTokenB(
+      (tokens.data || []).find(
+        (t) => t.address.toLowerCase() === pair.token1.address.toLowerCase(),
+      ),
+    )
+  }, [pair, tokens.data, tokens.isLoading])
 
-  // const addLiquidity = useDisclosure()
-  // const removeLiquidity = useDisclosure()
-  // const { user, isConnected } = useAuth()
-  // if (!tokenA) {
-  //   return <p>Loading Token A {pair?.token0?.address}</p>
-  // }
-  // if (!tokenB) {
-  //   return <p>Loading Token B{pair?.token1?.address}</p>
-  // }
-  // if (!pair) {
-  //   return <p>Loading Pair</p>
-  // }
-  // console.log(pair)
-  // return (
-  //   <>
-  //     <AccordionItem p={2} shadow="Up Big" borderRadius="2xl" alignItems="center">
-  //       <AccordionButton>
-  //         <TokenIcon logoURI={tokenA.logoURI} symbol={tokenA.symbol} />
-  //         <TokenIcon logoURI={tokenB.logoURI} symbol={tokenB.symbol} />
-  //         <Text ml="24px" fontWeight="semibold" fontSize="lg">
-  //           {tokenA.symbol}/{tokenB.symbol}{' '}
-  //           <a
-  //             target={'_blank'}
-  //             href={`https://ropsten.etherscan.io/address/${token.address}#readContract}`}
-  //             rel="noreferrer"
-  //           >
-  //             token
-  //           </a>
-  //         </Text>
-  //         <Button
-  //           variant="secondary"
-  //           borderRadius="full"
-  //           px={4}
-  //           fontSize="lg"
-  //           rightIcon={<AccordionIcon h="28px" w="auto" />}
-  //           iconSpacing={0}
-  //           ml="auto"
-  //         >
-  //           Manage
-  //         </Button>
-  //       </AccordionButton>
-  //       <AccordionPanel>
-  //         <Stack
-  //           fontWeight="bold"
-  //           fontSize="lg"
-  //           color="text.medium"
-  //           borderRadius="2xl"
-  //           shadow="down"
-  //           p={4}
-  //           spacing={4}
-  //         >
-  //           <PositionInfoItem label="Your total pool tokens:" value={ownedAmount.toString()} />
-  //           <PositionInfoItem label={`Pooled ${tokenA.symbol}:`} value={pair.reserve0.toFixed(2)}>
-  //             <TokenIcon size="sm" {...tokenA} />
-  //           </PositionInfoItem>
-  //           <PositionInfoItem label={`Pooled ${tokenB.symbol}:`} value={pair.reserve1.toFixed(2)}>
-  //             <TokenIcon size="sm" {...tokenB} />
-  //           </PositionInfoItem>
-  //           <PositionInfoItem label="Your pool share:" value={'2.79%'} />
-  //         </Stack>
-  //         <Flex gap={5} justify="center" mt={6}>
-  //           <Button onClick={addLiquidity.onOpen} variant="primary" h={12} w={40} fontSize="lg">
-  //             Add
-  //           </Button>
-  //           <Button onClick={removeLiquidity.onOpen} variant="primary" h={12} w={40} fontSize="lg">
-  //             Remove
-  //           </Button>
-  //         </Flex>
-  //       </AccordionPanel>
-  //     </AccordionItem>
-  //     {/* <RemoveLiquidityModal
-  //       userAddressOrName={user.address}
-  //       disclosure={removeLiquidity}
-  //       token0={tokenA}
-  //       amount0={pair.amount0}
-  //       token1={tokenB}
-  //       amount1={pair.amount1}
-  //     /> */}
-  //     <AddLiquidityModal disclosure={addLiquidity} userAddress={user.address} />
-  //   </>
-  // )
+  const addLiquidity = useDisclosure()
+  const removeLiquidity = useDisclosure()
+  const { user, isConnected } = useAuth()
+  if (!tokenA) {
+    return <p>Loading Token A {pair?.token0?.address}</p>
+  }
+  if (!tokenB) {
+    return <p>Loading Token B{pair?.token1?.address}</p>
+  }
+  if (!pair) {
+    return <p>Loading Pair</p>
+  }
+  return (
+    <>
+      <AccordionItem p={2} shadow="Up Big" borderRadius="2xl" alignItems="center">
+        <AccordionButton>
+          {/* //TODO https://github.com/ConcaveFi/concave-frontend/issues/118 */}
+          <TokenIcon h={'32px'} logoURI={tokenA.logoURI} symbol={tokenA.symbol} />
+          <TokenIcon h={'32px'} logoURI={tokenB.logoURI} symbol={tokenB.symbol} />
+          <Text ml="24px" fontWeight="semibold" fontSize="lg">
+            {tokenA.symbol}/{tokenB.symbol}{' '}
+            <a
+              target={'_blank'}
+              href={`https://ropsten.etherscan.io/address/${token.address}#readContract}`}
+              rel="noreferrer"
+            >
+              token
+            </a>
+          </Text>
+          <Button
+            variant="secondary"
+            borderRadius="full"
+            px={4}
+            fontSize="lg"
+            rightIcon={<AccordionIcon h="28px" w="auto" />}
+            iconSpacing={0}
+            ml="auto"
+          >
+            Manage
+          </Button>
+        </AccordionButton>
+        <AccordionPanel>
+          <Stack
+            fontWeight="bold"
+            fontSize="lg"
+            color="text.medium"
+            borderRadius="2xl"
+            shadow="down"
+            p={4}
+            spacing={4}
+          >
+            <PositionInfoItem label="Your total pool tokens:" value={ownedAmount.toString()} />
+            <PositionInfoItem label={`Pooled ${tokenA.symbol}:`} value={pair.reserve0.toFixed(2)}>
+              <TokenIcon h={'32px'} size="sm" {...tokenA} />
+            </PositionInfoItem>
+            <PositionInfoItem label={`Pooled ${tokenB.symbol}:`} value={pair.reserve1.toFixed(2)}>
+              <TokenIcon h={'32px'} size="sm" {...tokenB} />
+            </PositionInfoItem>
+            <PositionInfoItem label="Your pool share:" value={'2.79%'} />
+          </Stack>
+          <Flex gap={5} justify="center" mt={6}>
+            <Button onClick={addLiquidity.onOpen} variant="primary" h={12} w={40} fontSize="lg">
+              Add
+            </Button>
+            <Button onClick={removeLiquidity.onOpen} variant="primary" h={12} w={40} fontSize="lg">
+              Remove
+            </Button>
+          </Flex>
+        </AccordionPanel>
+      </AccordionItem>
+      {/* <RemoveLiquidityModal
+        userAddressOrName={user.address}
+        disclosure={removeLiquidity}
+        token0={tokenA}
+        amount0={pair.amount0}
+        token1={tokenB}
+        amount1={pair.amount1}
+      /> */}
+      <AddLiquidityModal disclosure={addLiquidity} userAddress={user.address} />
+    </>
+  )
 }
 
 const RemoveLiquidityModal = ({
@@ -336,8 +342,16 @@ const YourPosition = ({
     <Flex gap={7} direction={'column'} shadow="Up Big" px={4} py={4} borderRadius="2xl">
       <Text fontSize={'lg'}>Your Position</Text>
       <Flex gap={2} align={'center'}>
-        <TokenIcon logoURI={wrapperTokenA.token?.logoURI} symbol={wrapperTokenA.token?.symbol} />
-        <TokenIcon logoURI={wrapperTokenB.token?.logoURI} symbol={wrapperTokenB.token?.symbol} />
+        <TokenIcon
+          size="sm"
+          logoURI={wrapperTokenA.token?.logoURI}
+          symbol={wrapperTokenA.token?.symbol}
+        />
+        <TokenIcon
+          size="sm"
+          logoURI={wrapperTokenB.token?.logoURI}
+          symbol={wrapperTokenB.token?.symbol}
+        />
         <Text px={4}>
           {wrapperTokenA.token?.symbol}/{wrapperTokenB.token?.symbol}
         </Text>
@@ -374,7 +388,7 @@ const YourPosition = ({
 const ReceiveBox = ({ amount, token }: { amount: number; token: Token }) => {
   return (
     <HStack shadow="down" borderRadius="2xl" p={3}>
-      <TokenIcon logoURI={token?.logoURI} symbol={token?.symbol} />
+      <TokenIcon size="sm" logoURI={token?.logoURI} symbol={token?.symbol} />
       <Box>
         <Text fontFamily={'heading'} fontWeight={600}>
           {usePrecision(amount, 7).formatted}
@@ -563,7 +577,7 @@ const AddLiquidityContent = ({ userAddress }: { userAddress: string }) => {
   const { amountADesired, amountBDesired, wrapperTokenA, wrapperTokenB } = data
   const { setAmountADesired, setTokenA, setTokenB, setAmountBDesired } = setters
   const valid = wrapperTokenA.token && wrapperTokenB.token && amountADesired && amountBDesired
-
+  console.log(data)
   return (
     <>
       <Card variant="secondary" p={4} backgroundBlendMode={'screen'}>
@@ -666,7 +680,6 @@ const MyPositions = () => {
   if (!liquidityPoolTokens.length) {
     return <p>loading pools</p>
   }
-  console.log(liquidityPoolTokens)
   return (
     <>
       <RewardsBanner />
