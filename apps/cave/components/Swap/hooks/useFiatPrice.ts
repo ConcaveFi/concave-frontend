@@ -1,15 +1,14 @@
-import { Price, DAI, CurrencyAmount, Currency, TradeType } from 'c-sdk'
+import { Price, DAI, CurrencyAmount, Currency, TradeType } from 'gemswap-sdk'
 import { useMemo } from 'react'
-import { useCurrentSupportedNetworkId } from '../useSwap2'
 import { useTrade } from './useTrade'
 
-export default function useDAIPrice(currency?: Currency) {
-  const networkId = useCurrentSupportedNetworkId()
-
-  const stablecoin = DAI[networkId]
+export function useFiatPrice(currency?: Currency) {
+  // using dai for now, but we can change based on user preferences later
+  // e.g. use some stable pegged to EUR
+  const stablecoin = DAI[currency?.chainId || 1]
 
   // The amount is large enough to filter low liquidity pairs.
-  const amountOut = CurrencyAmount.fromRawAmount(stablecoin, +`50000e${stablecoin.decimals}`)
+  const amountOut = CurrencyAmount.fromRawAmount(stablecoin, 50_000) // +`50000e${stablecoin.decimals}`
 
   const { trade, isLoading } = useTrade(amountOut, currency, {
     maxHops: 2,

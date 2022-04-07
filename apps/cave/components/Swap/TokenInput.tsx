@@ -7,9 +7,11 @@ import {
   Text,
   useMultiStyleConfig,
 } from '@concave/ui'
-import { Currency } from '@uniswap/sdk-core'
+import { Currency, CurrencyAmount } from 'gemswap-sdk'
+import { useCurrencyFormatter } from 'hooks/useCurrencyFormatter'
 import React from 'react'
-import { twoDecimals } from './SwapCard'
+import { useCurrencyBalance } from './hooks/useCurrencyBalance'
+import { useFiatPrice } from './hooks/useFiatPrice'
 import { TokenSelect } from './TokenSelect'
 
 const Balance = ({ value, onClick }) => (
@@ -28,26 +30,23 @@ const Balance = ({ value, onClick }) => (
 )
 
 export function TokenInput({
-  value,
-  currency,
-  balance,
-  stable,
+  currencyAmount,
   disabled = false,
   onChangeValue,
-  onChangeCurrency,
-  onClickMaxBalance,
+  onSelectCurrency,
 }: {
-  value: string
-  currency?: Currency
-  balance: string
-  stable: string
+  currencyAmount: CurrencyAmount<Currency>
   disabled?: boolean
   onChangeValue: (value: string) => void
-  onChangeCurrency: (token: Currency) => void
-  onClickMaxBalance?: (value: string) => void
+  onSelectCurrency: (token: Currency) => void
 } & FlexProps) {
   const styles = useMultiStyleConfig('Input', { variant: 'primary', size: 'large' })
-  const stableValue = +stable * +value
+  const currencyFormater = useCurrencyFormatter()
+
+  const priceInFiat = useFiatPrice(currencyAmount?.currency)
+  const fiatValue = priceInFiat.price?.quote(currencyAmount)
+
+  const [{ data: currencyBalance }] = useCurrencyBalance(currencyAmount?.currency)
 
   return (
     <Stack sx={{ ...styles.field, bg: 'none' }} justify="space-between" spacing={0}>
@@ -56,18 +55,21 @@ export function TokenInput({
           decimalScale={5}
           disabled={disabled}
           w="100%"
-          value={value}
-          onValueChange={({ value }, eventSrc) =>
-            eventSrc.source === 'event' && onChangeValue(value)
-          }
+          value={currencyAmount?.toSignificant(6)}
+          onValueChange={({ value }, { source }) => source === 'event' && onChangeValue(value)}
         />
-        <TokenSelect onSelect={onChangeCurrency} selected={currency} />
+        <TokenSelect onSelect={onSelectCurrency} selected={currencyAmount?.currency} />
       </HStack>
       <HStack justify="space-between" align="center" textColor="text.low" w="full">
         <Text isTruncated maxW="100px" fontWeight="bold" fontSize="sm">
-          {!!+stableValue && `$${twoDecimals(stableValue)}`}
+          {!!fiatValue && `$${fiatValue.toFixed(2)}`}
         </Text>
-        {balance && <Balance value={balance} onClick={onClickMaxBalance} />}
+        {currencyBalance && (
+          <Balance
+            value={currencyFormater.format(+currencyBalance.formatted)}
+            onClick={() => onChangeValue(currencyBalance.formatted)}
+          />
+        )}
       </HStack>
     </Stack>
   )

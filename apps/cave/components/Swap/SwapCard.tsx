@@ -15,11 +15,6 @@ import { TransactionStatusModal } from './TransactionStatus'
 import { TransactionSubmittedModal } from './TransactionSubmitted'
 import { useSwapState } from './useSwap2'
 
-export const twoDecimals = (s: string | number) => {
-  const a = s.toString()
-  return a.indexOf('.') > -1 ? a.slice(0, a.indexOf('.') + 3) : a
-}
-
 const GasPrice = () => {
   const [{ data }] = useFeeData({ formatUnits: 'gwei', watch: true })
   return (
@@ -27,7 +22,7 @@ const GasPrice = () => {
       <GasIcon viewBox="0 0 16 16" />
       {data ? (
         <Text fontSize="xs" color="text.low" fontWeight="medium">
-          {twoDecimals(data?.formatted.gasPrice)} gwei
+          {Number(data?.formatted.gasPrice).toFixed(2)} gwei
         </Text>
       ) : (
         <Spinner size="xs" color="text.low" />
@@ -73,10 +68,8 @@ const PairsError = () => (
 export function SwapCard() {
   const {
     tradeStatus,
-    currencyIn,
-    currencyOut,
-    inputValue,
-    outputValue,
+    currencyAmountIn,
+    currencyAmountOut,
     updateInputValue,
     updateOutputValue,
     updateCurrencyIn,
@@ -88,27 +81,15 @@ export function SwapCard() {
     <>
       <Card p={6} gap={2} variant="primary" h="fit-content" shadow="Block Up" w="100%" maxW="420px">
         <TokenInput
-          value={inputValue}
-          currency={currencyIn}
-          stable={''}
-          balance={''}
+          currencyAmount={currencyAmountIn}
           onChangeValue={updateInputValue}
-          onChangeCurrency={updateCurrencyIn}
-          // bug: fails to execute tx when clicked before hitting swap
-          // onClickMaxBalance={() => {
-          //   if (swapingIn.currency.equals(nativeCurrency)) setAmountIn(+swapingIn.balance * 0.8)
-          //   else setAmountIn(swapingIn.balance)
-          // }}
+          onSelectCurrency={updateCurrencyIn}
         />
         <SwitchCurrencies onClick={switchCurrencies} />
         <TokenInput
-          disabled={true}
-          value={outputValue}
-          currency={currencyOut}
-          stable={''}
-          balance={''}
+          currencyAmount={currencyAmountOut}
           onChangeValue={updateOutputValue}
-          onChangeCurrency={updateCurrencyOut}
+          onSelectCurrency={updateCurrencyOut}
         />
 
         <HStack align="center" justify="end" py={5}>

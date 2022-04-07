@@ -13,8 +13,7 @@ import {
   UnorderedList,
 } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
-import { Currency, DAI, CNV } from 'c-sdk'
-import { Token } from 'constants/routing'
+import { Currency, DAI, CNV } from 'gemswap-sdk'
 import React, { useCallback, useState } from 'react'
 import { chain, useNetwork } from 'wagmi'
 import { useCurrentSupportedNetworkId } from './useSwap2'
@@ -24,7 +23,7 @@ const CommonTokens = ({
   onSelect,
   currencies,
 }: {
-  selected: Currency
+  selected?: Currency
   onSelect: (currency: Currency) => void
   currencies: Currency[]
 }) => {
@@ -45,7 +44,7 @@ const CommonTokens = ({
             _focus={{ shadow: 'Up Small' }}
             _active={{ shadow: 'down' }}
             _selected={{ shadow: 'Down Big', color: 'text.low' }}
-            aria-selected={selected.equals(currency)}
+            aria-selected={!!selected?.equals(currency)}
             p={1}
             pr={3}
             fontSize="sm"
@@ -94,7 +93,7 @@ export const SelectTokenModal = ({
   const [search, setSearch] = useState('')
   const networkId = useCurrentSupportedNetworkId()
   const selectAndClose = useCallback(
-    (token: Token) => (onSelect(token), onClose()),
+    (token: Currency) => (onSelect(token), onClose()),
     [onSelect, onClose],
   )
   return (

@@ -1,5 +1,5 @@
 import { useNetwork } from 'wagmi'
-import { Trade, Currency, CurrencyAmount, TradeType } from 'c-sdk'
+import { Trade, Currency, CurrencyAmount, TradeType } from 'gemswap-sdk'
 
 import { useMemo } from 'react'
 import { usePairs } from './usePair'
@@ -12,13 +12,7 @@ export const useTrade = (
   otherCurrency?: Currency,
   { tradeType = TradeType.EXACT_INPUT, maxHops = MAX_HOPS } = {},
 ) => {
-  const networkId = useCurrentSupportedNetworkId()
-  const pairs = usePairs(
-    exactCurrency?.currency.wrapped,
-    otherCurrency?.wrapped,
-    maxHops,
-    networkId,
-  )
+  const pairs = usePairs(exactCurrency?.currency.wrapped, otherCurrency?.wrapped, maxHops)
 
   const trade = useMemo(() => {
     if (!pairs.data || pairs.data.length === 0) return

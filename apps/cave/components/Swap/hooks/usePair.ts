@@ -1,8 +1,8 @@
 import { useQuery } from 'react-query'
-import { chain } from 'wagmi'
+import { useBlockNumber } from 'wagmi'
 import { concaveProvider } from 'lib/providers'
 import { useMemo } from 'react'
-import { Token, ChainId, Fetcher } from 'c-sdk'
+import { Token, Fetcher } from 'gemswap-sdk'
 import { BASES_TO_CHECK_TRADES_AGAINST, INTERMEDIARY_PAIRS_FOR_MULTI_HOPS } from 'constants/routing'
 
 const filterRepatedPairs = (pairs: [Token, Token][]) =>
@@ -22,9 +22,11 @@ const buildPairs = (base: Token[], token0: Token, token1: Token) =>
     ])
     .filter(([a, b]) => !a.equals(b))
 
-const useAllPossiblePairs = (token0: Token, token1: Token, maxHops: number, chainId: ChainId) => {
+const useAllPossiblePairs = (token0: Token, token1: Token, maxHops: number) => {
+  const chainId = token0.chainId
   // the order does not matter, we don't want to update it if it's the same tokens, so we sort the tokens before building the pairs
-  const [tokenA, tokenB] = token0?.sortsBefore(token1) ? [token0, token1] : [token1, token0]
+  const [tokenA, tokenB] =
+    token0 && token1 && token0?.sortsBefore(token1) ? [token0, token1] : [token1, token0]
   return useMemo(
     () =>
       tokenA &&
@@ -40,22 +42,20 @@ const useAllPossiblePairs = (token0: Token, token1: Token, maxHops: number, chai
   )
 }
 
-export const usePairs = (
-  tokenA?: Token,
-  tokenB?: Token,
-  maxHops = 3,
-  chainId = chain.mainnet.id,
-) => {
-  const pairsMap = useAllPossiblePairs(tokenA, tokenB, maxHops, chainId)
+export const usePairs = (tokenA?: Token, tokenB?: Token, maxHops = 3) => {
+  const pairsMap = useAllPossiblePairs(tokenA, tokenB, maxHops)
+
+  // update pair data every block
+  const [{ data: block }] = useBlockNumber({ watch: true }) // onSuccess refetch pairs
 
   return useQuery(
-    ['pairs', tokenA, tokenB, maxHops, chainId],
+    ['pairs', tokenA, tokenB, maxHops, block],
     async () => {
       if (tokenA.equals(tokenB)) return null
       const pairs = (
         await Promise.all(
           pairsMap.map(([a, b]) =>
-            Fetcher.fetchPairData(a.wrapped, b.wrapped, concaveProvider(chainId)),
+            Fetcher.fetchPairData(a.wrapped, b.wrapped, concaveProvider(tokenA.chainId)),
           ),
         )
       ).filter(Boolean)
@@ -66,5 +66,4 @@ export const usePairs = (
   )
 }
 
-export const usePair = (tokenA: Token, tokenB: Token, chainId = chain.mainnet.id) =>
-  usePairs(tokenA, tokenB, 1, chainId)
+export const usePair = (tokenA: Token, tokenB: Token) => usePairs(tokenA, tokenB, 1)

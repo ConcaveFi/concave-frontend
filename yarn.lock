@@ -5876,18 +5876,18 @@ gemswap-sdk@1.0.8:
     tiny-warning "^1.0.3"
     wagmi "^0.2.24"
 
-gemswap-sdk@^1.0.10:
-  version "1.0.10"
-  resolved "https://registry.yarnpkg.com/gemswap-sdk/-/gemswap-sdk-1.0.10.tgz#db67abaed1c45b837924995782c1a53715aca488"
-  integrity sha512-RY6lHw3j1ngffEeKy9lPT7UzRNxMnXqlGeCWJKi9l3dbA+PWO0Rc3FlL/wyNT/9lDCcSxJ3zGgvoQxsCBjnPSg==
+gemswap-sdk@^1.0.11:
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/gemswap-sdk/-/gemswap-sdk-1.0.11.tgz#f1010456e58127336284f6e71bbe5497496745fc"
+  integrity sha512-5YfQN3VdgQkYrlQdDbCuiPPvITu0TqjC79V3EuWf6mdsyJ6lI53anhWHSUZYl0TCft3mKsb7pIgGEQqI2tx2/w==
   dependencies:
     "@ethersproject/address" "^5.4.0"
     "@ethersproject/bignumber" "^5.4.0"
+    "@ethersproject/contracts" "^5.6.0"
     "@ethersproject/providers" "^5.4.0"
     "@ethersproject/solidity" "^5.4.0"
     big.js "^6.1.1"
     decimal.js-light "^2.5.0"
-    ethers "^5.6.2"
     jsbi "^4.1.0"
     prettier "^2.6.2"
     tiny-invariant "^1.1.0"

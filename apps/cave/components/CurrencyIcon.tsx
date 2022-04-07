@@ -1,5 +1,5 @@
 import { Avatar, AvatarProps } from '@chakra-ui/react'
-import { Currency, CHAIN_NAME, CNV } from 'c-sdk'
+import { Currency, CHAIN_NAME, CNV } from 'gemswap-sdk'
 
 export type CurrencyIconProps = {
   size?: string

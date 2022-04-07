@@ -14,7 +14,7 @@ import {
   Trade,
   CNV,
   DAI,
-} from 'c-sdk'
+} from 'gemswap-sdk'
 import { useTrade } from './hooks/useTrade'
 import swap from 'pages/swap'
 import { useQuery } from 'react-query'
@@ -159,20 +159,21 @@ export const useSwapState = () => {
   const [exactCurrency, otherCurrency] =
     tradeType === TradeType.EXACT_INPUT ? [currencyIn, currencyOut] : [currencyOut, currencyIn]
   const parsedExactAmount = tryParseAmount(exactValue, exactCurrency)
-  const trade = useTrade(parsedExactAmount, otherCurrency, { tradeType, maxHops: 1 })
+  const { trade, status: tradeStatus } = useTrade(parsedExactAmount, otherCurrency, {
+    tradeType,
+    maxHops: 1,
+  })
 
-  const [inputValue, outputValue] =
+  const [currencyAmountIn, currencyAmountOut] =
     tradeType === TradeType.EXACT_INPUT
-      ? [exactValue, trade.trade?.outputAmount.toSignificant(6)]
-      : [trade.trade?.inputAmount.toSignificant(6), exactValue]
+      ? [parsedExactAmount, trade?.outputAmount]
+      : [trade?.inputAmount, parsedExactAmount]
 
   return useMemo(
     () => ({
-      tradeStatus: trade.status,
-      currencyIn,
-      currencyOut,
-      inputValue,
-      outputValue,
+      tradeStatus: tradeStatus,
+      currencyAmountIn,
+      currencyAmountOut,
       recipient,
       tradeType,
       updateInputValue: updateField(TradeType.EXACT_INPUT),
@@ -183,14 +184,14 @@ export const useSwapState = () => {
       setRecipient,
     }),
     [
+      currencyAmountIn,
+      currencyAmountOut,
       currencyIn,
       currencyOut,
-      inputValue,
-      outputValue,
       recipient,
       setOrSwitchCurrency,
       switchCurrencies,
-      trade.status,
+      tradeStatus,
       tradeType,
     ],
   )
