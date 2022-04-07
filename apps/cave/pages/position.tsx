@@ -25,6 +25,7 @@ import { TokenBalance } from 'components/Swap/TokenBalance'
 import { TokenInput } from 'components/Swap/TokenInput'
 import { useAuth } from 'contexts/AuthContext'
 import { BigNumberish, Contract } from 'ethers'
+import { Token as GemswapToken } from 'gemswap-sdk'
 import { useAddLiquidity, UseAddLiquidityData } from 'hooks/useAddLiquidity'
 import { useApprovalWhenNeeded } from 'hooks/useAllowance'
 import { useLiquidityInfo } from 'hooks/useLiquidityInfo'
@@ -36,8 +37,6 @@ import React, { useEffect, useState } from 'react'
 import { chain, useSigner } from 'wagmi'
 import { useToken, WrapperTokenInfo } from '../components/Swap/useSwap'
 
-import { Token as GemswapToken } from 'gemswap-sdk'
-import { TokenType } from 'lib/tokens'
 class Token extends GemswapToken {
   public readonly logoURI?: string
   constructor(
@@ -358,16 +357,8 @@ const YourPosition = ({
     <Flex gap={7} direction={'column'} shadow="Up Big" px={4} py={4} borderRadius="2xl">
       <Text fontSize={'lg'}>Your Position</Text>
       <Flex gap={2} align={'center'}>
-        <TokenIcon
-          size="sm"
-          logoURI={wrapperTokenA.token?.logoURI}
-          symbol={wrapperTokenA.token?.symbol}
-        />
-        <TokenIcon
-          size="sm"
-          logoURI={wrapperTokenB.token?.logoURI}
-          symbol={wrapperTokenB.token?.symbol}
-        />
+        <TokenIcon size="sm" logoURI={''} symbol={wrapperTokenA.token?.symbol} />
+        <TokenIcon size="sm" logoURI={''} symbol={wrapperTokenB.token?.symbol} />
         <Text px={4}>
           {wrapperTokenA.token?.symbol}/{wrapperTokenB.token?.symbol}
         </Text>
@@ -383,18 +374,10 @@ const YourPosition = ({
       >
         <PositionInfoItem label="Your pool share:" value={'2.79%'} />
         <PositionInfoItem label={wrapperTokenA.token?.symbol} value={'0.0001331'}>
-          <TokenIcon
-            size="sm"
-            logoURI={wrapperTokenA.token?.logoURI}
-            symbol={wrapperTokenA.token?.symbol}
-          />
+          <TokenIcon size="sm" logoURI={''} symbol={wrapperTokenA.token?.symbol} />
         </PositionInfoItem>
         <PositionInfoItem label={wrapperTokenB.token?.symbol} value={'325.744'}>
-          <TokenIcon
-            size="sm"
-            logoURI={wrapperTokenB.token?.logoURI}
-            symbol={wrapperTokenB.token?.symbol}
-          />
+          <TokenIcon size="sm" logoURI={''} symbol={wrapperTokenB.token?.symbol} />
         </PositionInfoItem>
       </Stack>
     </Flex>

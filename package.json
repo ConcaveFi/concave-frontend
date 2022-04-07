@@ -33,6 +33,6 @@
   },
   "packageManager": "yarn@1.22.0",
   "dependencies": {
-    "gemswap-sdk": "1.0.8"
+    "gemswap-sdk": "1.0.11"
   }
 }

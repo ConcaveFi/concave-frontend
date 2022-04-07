@@ -1,20 +1,15 @@
 import { ExpandArrowIcon, GasIcon } from '@concave/icons'
 import { Button, Card, Flex, HStack, Spinner, Text, useDisclosure } from '@concave/ui'
-import { MAX_SAFE_INTEGER } from '@uniswap/sdk-core/dist/utils/sqrt'
+import { CandleStickCard } from 'components/CandleStickCard'
 import { useAuth } from 'contexts/AuthContext'
-import { ethers } from 'ethers'
-import { MaxUint256 } from 'gemswap-sdk'
 import { useApprovalWhenNeeded } from 'hooks/useAllowance'
-import { TokenType } from 'lib/tokens'
 import React, { useEffect, useState } from 'react'
 import { useFeeData, useWaitForTransaction } from 'wagmi'
 import { ConfirmSwapModal } from './ConfirmSwap'
 import { Settings } from './Settings'
 import { TokenInput } from './TokenInput'
-import { TransactionStatusModal } from './TransactionStatus'
 import { TransactionSubmittedModal } from './TransactionSubmitted'
 import { ROUTER_CONTRACT, useNativeCurrency, useSwap } from './useSwap2'
-import { CandleStickCard } from 'components/CandleStickCard'
 
 export const twoDecimals = (s: string | number) => {
   const a = s.toString()
@@ -107,7 +102,7 @@ export function SwapCard() {
   })
   const [inOrOut, setInOrOut] = useState(Boolean)
   const [needsApproval, approve, isApproving] = useApprovalWhenNeeded(
-    swapingIn.currency.wrapped as TokenType,
+    swapingIn.currency.wrapped,
     ROUTER_CONTRACT[1],
     user.address,
     // MaxUint256.toString(),
