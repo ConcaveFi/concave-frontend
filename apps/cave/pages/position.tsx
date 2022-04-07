@@ -37,6 +37,24 @@ import React, { useEffect, useState } from 'react'
 import { chain, useSigner } from 'wagmi'
 import { useToken, WrapperTokenInfo } from '../components/Swap/useSwap'
 
+import { Token as GemswapToken } from 'gemswap-sdk'
+import { TokenType } from 'lib/tokens'
+class Token extends GemswapToken {
+  public readonly logoURI?: string
+  constructor(
+    chainId: number,
+    address: string,
+    decimals: number,
+    symbol?: string,
+    name?: string,
+    logoURI?: string,
+  ) {
+    super(chainId, address, decimals, symbol, name)
+    this.logoURI = logoURI
+  }
+}
+
+
 const RewardsBanner = () => (
   <Card variant="secondary" p={4} gap={4}>
     <Flex justify="space-between">
@@ -291,7 +309,7 @@ const RemoveLiquidityActions = () => {
   const [{ data, error, loading }, getSigner] = useSigner()
   // const userApproval = useAllowance(
   //   user.address,
-  //   '0x95dDC411d31bBeDd37e9aaABb335b0951Bc2D25a',
+  //   '0xc9c07a4526915014bc60791fca2eef51975a3694',
   //   'removeLiquidity',
   // )
   const removeAproval = async () => {
@@ -299,7 +317,7 @@ const RemoveLiquidityActions = () => {
     // console.log('wait for approval....', userApproval)
     const rm = () => {
       const contractInstance = new Contract(
-        '0x95dDC411d31bBeDd37e9aaABb335b0951Bc2D25a',
+        '0xc9c07a4526915014bc60791fca2eef51975a3694',
         contractABI,
         concaveProvider(chain.ropsten.id),
       )

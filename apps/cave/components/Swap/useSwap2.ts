@@ -38,7 +38,7 @@ export const useNativeCurrency = () => {
 
 export const ROUTER_CONTRACT = {
   [chain.mainnet.id]: '0x0a3e1c20b5384eb97d2ccff9a96bc91f0c77e7db',
-  [chain.ropsten.id]: '0x95dDC411d31bBeDd37e9aaABb335b0951Bc2D25a',
+  [chain.ropsten.id]: '0xc9c07a4526915014bc60791fca2eef51975a3694',
 }
 
 export type TradeInfo = {
