@@ -13,14 +13,11 @@ import {
   UnorderedList,
 } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
-import { Currency } from 'c-sdk'
+import { Currency, DAI, CNV } from 'c-sdk'
 import { Token } from 'constants/routing'
 import React, { useCallback, useState } from 'react'
 import { chain, useNetwork } from 'wagmi'
-import { useTokenList } from './hooks/useTokenList'
-import { useNativeCurrency } from './useSwap2'
-import { DAI, CNV } from 'constants/tokens'
-import { ROPSTEN_DAI, ROPSTEN_CNV } from 'constants/ropstenTokens'
+import { useCurrentSupportedNetworkId } from './useSwap2'
 
 const CommonTokens = ({
   selected,
@@ -95,10 +92,7 @@ export const SelectTokenModal = ({
   onClose: () => void
 }) => {
   const [search, setSearch] = useState('')
-  const nativeCurrency = useNativeCurrency()
-  const tokens = useTokenList()
-  const [{ data: network }] = useNetwork()
-  const chainId = network?.chain?.id === chain.ropsten.id ? chain.ropsten.id : chain.mainnet.id
+  const networkId = useCurrentSupportedNetworkId()
   const selectAndClose = useCallback(
     (token: Token) => (onSelect(token), onClose()),
     [onSelect, onClose],
@@ -112,9 +106,7 @@ export const SelectTokenModal = ({
       bodyProps={{ gap: 4, w: '350px' }}
     >
       <CommonTokens
-        currencies={
-          network?.chain?.id === chain.ropsten.id ? [ROPSTEN_DAI, ROPSTEN_CNV] : [DAI, CNV]
-        } //[nativeCurrency, ...BASES_TO_CHECK_TRADES_AGAINST[chainId]]}
+        currencies={[DAI[networkId], CNV[networkId]]} //[nativeCurrency, ...BASES_TO_CHECK_TRADES_AGAINST[chainId]]}
         selected={selected}
         onSelect={selectAndClose}
       />

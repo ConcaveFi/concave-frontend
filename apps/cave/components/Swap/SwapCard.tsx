@@ -13,7 +13,7 @@ import { Settings } from './Settings'
 import { TokenInput } from './TokenInput'
 import { TransactionStatusModal } from './TransactionStatus'
 import { TransactionSubmittedModal } from './TransactionSubmitted'
-import { useSwap } from './useSwap2'
+import { useSwapState } from './useSwap2'
 
 export const twoDecimals = (s: string | number) => {
   const a = s.toString()
@@ -72,60 +72,28 @@ const PairsError = () => (
 
 export function SwapCard() {
   const {
-    setAmountIn,
-    setAmountOut,
-    setCurrencyIn,
-    setCurrencyOut,
+    tradeStatus,
+    currencyIn,
+    currencyOut,
+    inputValue,
+    outputValue,
+    updateInputValue,
+    updateOutputValue,
+    updateCurrencyIn,
+    updateCurrencyOut,
     switchCurrencies,
-    setSettings,
-    confirmSwap,
-    swapTransaction,
-    tradeInfo,
-    isTradeReady,
-    isErrored,
-    isFetchingPairs,
-    swapingIn,
-    swapingOut,
-  } = useSwap()
+  } = useSwapState()
 
-  const { user, isConnected, connectWithModal } = useAuth()
-
-  const confirmModal = useDisclosure()
-  const transactionStatusModal = useDisclosure()
-  const receiptModal = useDisclosure()
-  const [swapReceipt] = useWaitForTransaction({
-    hash: swapTransaction.data?.hash,
-    skip: !swapTransaction.data?.hash,
-  })
-  const [inOrOut, setInOrOut] = useState(Boolean)
-  const [needsApproval, approve, isApproving] = useApprovalWhenNeeded(
-    swapingIn.currency.wrapped as TokenType,
-    ROUTER_CONTRACT[1],
-    user.address,
-    // MaxUint256.toString(),
-    swapingIn.amount,
-  )
-  useEffect(() => {
-    if (swapReceipt.loading) {
-      receiptModal.onOpen()
-      transactionStatusModal.onClose()
-    }
-    // antipattern??
-  }, [swapReceipt.loading])
   return (
     <>
       <Card p={6} gap={2} variant="primary" h="fit-content" shadow="Block Up" w="100%" maxW="420px">
         <TokenInput
-          value={swapingIn.amount}
-          currency={swapingIn.currency}
-          stable={swapingIn.stable}
-          balance={swapingIn.balance}
-          onChangeValue={(v) => {
-            setInOrOut(true)
-            const numberValue = v.replace('-', '')
-            numberValue && setAmountIn(v)
-          }}
-          onChangeCurrency={setCurrencyIn}
+          value={inputValue}
+          currency={currencyIn}
+          stable={''}
+          balance={''}
+          onChangeValue={updateInputValue}
+          onChangeCurrency={updateCurrencyIn}
           // bug: fails to execute tx when clicked before hitting swap
           // onClickMaxBalance={() => {
           //   if (swapingIn.currency.equals(nativeCurrency)) setAmountIn(+swapingIn.balance * 0.8)
@@ -135,41 +103,37 @@ export function SwapCard() {
         <SwitchCurrencies onClick={switchCurrencies} />
         <TokenInput
           disabled={true}
-          value={swapingOut.amount}
-          currency={swapingOut.currency}
-          stable={swapingOut.stable}
-          balance={swapingOut.balance}
-          onChangeValue={(v) => {
-            setInOrOut(false)
-            !isNaN(+v) && setAmountOut(v)
-          }}
-          onChangeCurrency={setCurrencyOut}
+          value={outputValue}
+          currency={currencyOut}
+          stable={''}
+          balance={''}
+          onChangeValue={updateOutputValue}
+          onChangeCurrency={updateCurrencyOut}
         />
 
         <HStack align="center" justify="end" py={5}>
-          {isFetchingPairs ? (
-            <LoadingBestTradeIndicator />
-          ) : isErrored ? (
-            <PairsError />
-          ) : (
-            swapingOut.relativePrice && (
-              <Flex flexWrap="wrap" fontSize="xs" fontWeight="medium" mr="auto">
-                <Text>
-                  1 {swapingOut.currency.symbol} = {swapingOut.relativePrice}
-                  {swapingIn.currency.symbol}
-                </Text>
-                {swapingOut.stable && (
-                  <Text ml={1} textColor="text.low">
-                    (${swapingOut.stable})
-                  </Text>
-                )}
-              </Flex>
-            )
-          )}
+          {tradeStatus === 'loading' && <LoadingBestTradeIndicator />}
+          {tradeStatus === 'error' && <PairsError />}
+          {
+            // : (
+            //   swapingOut.relativePrice && (
+            //     <Flex flexWrap="wrap" fontSize="xs" fontWeight="medium" mr="auto">
+            //       <Text>
+            //         1 {swapingOut.currency.symbol} = {swapingOut.relativePrice}
+            //         {swapingIn.currency.symbol}
+            //       </Text>
+            //       {swapingOut.stable && (
+            //         <Text ml={1} textColor="text.low">
+            //           (${swapingOut.stable})
+            //         </Text>
+            //       )}
+            //     </Flex>
+            //   )
+          }
           <GasPrice />
-          <Settings onClose={setSettings} />
+          {/* <Settings onClose={() => null} /> */}
         </HStack>
-
+        {/*
         {needsApproval && (
           <Button
             isLoading={isApproving}
@@ -202,9 +166,9 @@ export function SwapCard() {
           >
             {+swapingIn.balance < +swapingIn.amount ? 'Insufficient Funds' : 'Swap'}
           </Button>
-        )}
+        )} */}
       </Card>
-
+      {/* 
       <ConfirmSwapModal
         tradeInfo={tradeInfo}
         tokenInUsdPrice={swapingIn.stable}
@@ -228,13 +192,13 @@ export function SwapCard() {
         }}
       /> */}
 
-      <TransactionSubmittedModal
+      {/* <TransactionSubmittedModal
         receipt={swapReceipt}
         isOpen={receiptModal.isOpen}
         onClose={() => {
           receiptModal.onClose()
         }}
-      />
+      />  */}
     </>
   )
 }

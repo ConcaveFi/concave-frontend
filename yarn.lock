@@ -3923,10 +3923,10 @@ bundle-require@^3.0.2:
   dependencies:
     load-tsconfig "^0.2.0"
 
-c-sdk@^1.0.16:
-  version "1.0.16"
-  resolved "https://registry.yarnpkg.com/c-sdk/-/c-sdk-1.0.16.tgz#e0537f8806f084f1ef081ea7e69a38c6f037e66e"
-  integrity sha512-R8QT+19ehaF5MzN4TYG2cIKF2SOsaQwMtH7l0fvqBFYthrBXfVj2RfKmz4uXlDeRIqEDLXGAHvXMyzSRVweN/Q==
+c-sdk@^1.0.18:
+  version "1.0.18"
+  resolved "https://registry.yarnpkg.com/c-sdk/-/c-sdk-1.0.18.tgz#0d5a5870344ef9f8542ec491687a66ad1754d48a"
+  integrity sha512-ywlWQ0zAm5xAZmTj17TM3hEA5vbQfXH2gKxKuetaYkyD19s4o8i9BZ2WTwxA8Jfs+qr+U/8tsOU3AZExheO3QQ==
   dependencies:
     "@ethersproject/address" "^5.4.0"
     "@ethersproject/bignumber" "^5.4.0"

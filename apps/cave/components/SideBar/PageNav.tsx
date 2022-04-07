@@ -43,7 +43,7 @@ function PageNav() {
             borderRadius="2xl"
             textColor="#5F7A99"
             mt={16}
-            href={'liquidstaking'}
+            href={'/liquidstaking'}
           >
             Liquid Staking
           </ButtonLink>
@@ -59,7 +59,7 @@ function PageNav() {
             borderRadius="2xl"
             textColor="#5F7A99"
             mt={16}
-            href={'marketplace'}
+            href={'/marketplace'}
           >
             Marketplace
           </ButtonLink>
@@ -81,7 +81,7 @@ function PageNav() {
               borderRadius="lg"
               shadow="up"
               textColor="text.low"
-              href={'swap'}
+              href={'/swap'}
             >
               Swap
             </ButtonLink>

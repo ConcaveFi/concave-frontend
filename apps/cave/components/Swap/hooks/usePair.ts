@@ -24,9 +24,11 @@ const buildPairs = (base: Token[], token0: Token, token1: Token) =>
 
 const useAllPossiblePairs = (token0: Token, token1: Token, maxHops: number, chainId: ChainId) => {
   // the order does not matter, we don't want to update it if it's the same tokens, so we sort the tokens before building the pairs
-  const [tokenA, tokenB] = token0.sortsBefore(token1) ? [token0, token1] : [token1, token0]
+  const [tokenA, tokenB] = token0?.sortsBefore(token1) ? [token0, token1] : [token1, token0]
   return useMemo(
     () =>
+      tokenA &&
+      tokenB &&
       filterRepatedPairs([
         // if maxHops is 1 it will only try to route tokenIn -> tokenOut directly
         ...(maxHops === 1 ? [[tokenA.wrapped, tokenB.wrapped]] : []),
@@ -38,7 +40,12 @@ const useAllPossiblePairs = (token0: Token, token1: Token, maxHops: number, chai
   )
 }
 
-export const usePairs = (tokenA: Token, tokenB: Token, maxHops = 3, chainId = chain.mainnet.id) => {
+export const usePairs = (
+  tokenA?: Token,
+  tokenB?: Token,
+  maxHops = 3,
+  chainId = chain.mainnet.id,
+) => {
   const pairsMap = useAllPossiblePairs(tokenA, tokenB, maxHops, chainId)
 
   return useQuery(

@@ -3,20 +3,21 @@ import { Trade, Currency, CurrencyAmount, TradeType } from 'c-sdk'
 
 import { useMemo } from 'react'
 import { usePairs } from './usePair'
+import { useCurrentSupportedNetworkId } from '../useSwap2'
 
 const MAX_HOPS = 3
 
 export const useTrade = (
-  exactCurrency: CurrencyAmount<Currency>,
-  otherCurrency: Currency,
+  exactCurrency?: CurrencyAmount<Currency>,
+  otherCurrency?: Currency,
   { tradeType = TradeType.EXACT_INPUT, maxHops = MAX_HOPS } = {},
 ) => {
-  const [{ data: network }] = useNetwork()
+  const networkId = useCurrentSupportedNetworkId()
   const pairs = usePairs(
-    exactCurrency.currency.wrapped,
-    otherCurrency.wrapped,
+    exactCurrency?.currency.wrapped,
+    otherCurrency?.wrapped,
     maxHops,
-    network.chain.id,
+    networkId,
   )
 
   const trade = useMemo(() => {
