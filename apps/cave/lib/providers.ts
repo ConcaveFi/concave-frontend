@@ -16,5 +16,13 @@ export const concaveProvider = (chainId: number) =>
     ]),
   )
 
+// TODO: https://github.com/ConcaveFi/concave-frontend/issues/120
+export const concaveProvider2 = (chainId: number) =>
+  new multicallProvider.MulticallProvider(
+    new providers.FallbackProvider([
+      providers.getDefaultProvider(chainId, { alchemy, etherscan, infuraId }),
+    ]),
+  )
+
 export const concaveWSProvider = (chainId: number) =>
   new providers.InfuraWebSocketProvider(chainId, infuraId)

@@ -1,9 +1,9 @@
-import { Token } from '../../../lib/tokens'
+import { Token } from 'lib/tokens'
 import { useQuery, UseQueryResult } from 'react-query'
 import { chain, useNetwork } from 'wagmi'
 
 const concaveTokenList = (networkName: string) =>
-  `https://raw.githubusercontent.com/ConcaveFi/assets/main/networks/${networkName.toLowerCase()}/tokenlist.json`
+  `/assets/tokenlists/${networkName.toLowerCase()}/concave.json`
 
 export const useTokenList = (networkName: string = chain.mainnet.name) => {
   return useQuery('token-list', () =>

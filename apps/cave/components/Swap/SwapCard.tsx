@@ -14,6 +14,7 @@ import { TokenInput } from './TokenInput'
 import { TransactionStatusModal } from './TransactionStatus'
 import { TransactionSubmittedModal } from './TransactionSubmitted'
 import { ROUTER_CONTRACT, useNativeCurrency, useSwap } from './useSwap2'
+import { CandleStickCard } from 'components/CandleStickCard'
 
 export const twoDecimals = (s: string | number) => {
   const a = s.toString()
@@ -241,6 +242,16 @@ export function SwapCard() {
         onClose={() => {
           receiptModal.onClose()
         }}
+      />
+      <CandleStickCard
+        from={swapingIn.currency}
+        to={swapingOut.currency}
+        variant="secondary"
+        gap={2}
+        p={6}
+        h={['100%', 470, 400]}
+        w={['100%', '100%', 500, 567, 567]}
+        align="stretch"
       />
     </>
   )

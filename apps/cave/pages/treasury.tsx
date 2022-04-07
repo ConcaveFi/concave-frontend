@@ -1,5 +1,6 @@
 import { Card, Container, Flex, Heading, Image, Spinner, Stack, Text } from '@concave/ui'
-import { useLPInfo } from 'hooks/useLPInfo'
+import { Token } from 'gemswap-sdk'
+import { useLiquidityInfo } from 'hooks/useLiquidityInfo'
 import { fetchPortfolio } from 'lib/debank'
 import { useQuery } from 'react-query'
 import { chain } from 'wagmi'
@@ -17,7 +18,7 @@ const makeCurrencyFormat = (language, currency) =>
 
 const formatUsd = (value) => makeCurrencyFormat('en-US', 'USD').format(value)
 
-const Token = ({ img, name, value, balance = null, children = null }) => {
+const TokenCard = ({ img, name, value, balance = null, children = null }) => {
   return (
     <Card
       variant="secondary"
@@ -44,15 +45,18 @@ const Token = ({ img, name, value, balance = null, children = null }) => {
 }
 
 export default function Treasury() {
-  const [CNV_LP, loadingCNV_LP] = useLPInfo(
+  const liquidityToken = new Token(
     chain.mainnet.id,
     '0x84d53CBA013d0163BB07D65d5123D1634bc2a575',
+    18,
+    'CNV-LP',
+    'Concave LP',
   )
-
+  const [{ pair, token }, isLoading] = useLiquidityInfo(liquidityToken)
   const { data: treasury, isSuccess } = useQuery(['portfolio', TREASURY_ADDRESS], () =>
     fetchPortfolio(TREASURY_ADDRESS),
   )
-  if (!isSuccess || loadingCNV_LP)
+  if (!isSuccess || isLoading)
     return (
       <Container maxWidth="container.lg" pt={16}>
         <Stack my={8} align="center">
@@ -70,12 +74,14 @@ export default function Treasury() {
       </Stack>
       <Stack w="100%" my={4} align="left" spacing={2}>
         <Heading as="h1">Concave Treasury Value</Heading>
-        <Heading color="green">{formatUsd(+treasury.totalUsd + CNV_LP.valueInUSD)}</Heading>
+        <Heading color="green">
+          {formatUsd(+treasury.totalUsd + +pair.reserve0.toFixed(2) * 2)}
+        </Heading>
         <Heading as="h3" py={4} fontSize="2xl">
           Protocols
         </Heading>
         {treasury.protocols.map((protocol) => (
-          <Token
+          <TokenCard
             key={protocol.id}
             img={protocol.logo_url}
             name={protocol.name}
@@ -100,7 +106,7 @@ export default function Treasury() {
                   </Stack>
                 ),
             )}
-          </Token>
+          </TokenCard>
         ))}
         <Heading as="h3" py={4} fontSize="2xl">
           Tokens
@@ -108,7 +114,7 @@ export default function Treasury() {
         {treasury.tokens.map(
           (token) =>
             Number(token.amount.toFixed(2)) > 0 && (
-              <Token
+              <TokenCard
                 key={token.id}
                 img={token.logo_url}
                 name={token.name}

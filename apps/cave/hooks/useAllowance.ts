@@ -1,13 +1,12 @@
 import { BigNumber, BigNumberish, ethers } from 'ethers'
 import { formatUnits, parseUnits } from 'ethers/lib/utils'
-import { ContractAddress } from 'lib/contractAddress'
-import { TokenType } from 'lib/tokens'
+import { Token } from 'gemswap-sdk'
 import { useEffect, useMemo } from 'react'
 import { erc20ABI, useContractWrite, useContractRead, chain, useWaitForTransaction } from 'wagmi'
 import { MaxUint256 } from 'gemswap-sdk'
 
 export const useApprovalWhenNeeded = (
-  token: TokenType,
+  token: Token,
   spender: string,
   userAddress: string,
   amount = MaxUint256.toString(),
@@ -33,7 +32,7 @@ export const useApprovalWhenNeeded = (
  * @param userAddress address of wallet
  * @returns
  */
-export const useAllowance = (token: TokenType, spender: string, userAddress: string) => {
+export const useAllowance = (token: Token, spender: string, userAddress: string) => {
   return useContractRead(
     { addressOrName: token.address, contractInterface: erc20ABI },
     'allowance',
@@ -49,7 +48,7 @@ export const useAllowance = (token: TokenType, spender: string, userAddress: str
   )
 }
 
-export const useApproval = (token: TokenType, spender: string, amountToApprove: BigNumberish) =>
+export const useApproval = (token: Token, spender: string, amountToApprove: BigNumberish) =>
   useContractWrite(
     { addressOrName: token.address, contractInterface: erc20ABI },
     'approve',
