@@ -184,7 +184,7 @@ const SelectTokenButton = ({ selected, onClick }: { selected: Currency; onClick:
     leftIcon={
       selected?.symbol && (
         <TokenIcon
-          size="xs"
+          size="sm"
           symbol={selected.symbol}
           address={selected.isToken ? selected.address : selected.symbol}
         />

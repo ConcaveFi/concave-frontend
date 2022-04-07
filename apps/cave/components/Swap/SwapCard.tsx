@@ -122,6 +122,17 @@ export function SwapCard() {
   }, [swapReceipt.loading])
   return (
     <>
+    <Flex direction="row" justify="center" align="center" h="100%" gap={10}>
+          <CandleStickCard
+        from={swapingIn.currency}
+        to={swapingOut.currency}
+        variant="secondary"
+        gap={2}
+        p={6}
+        h={['100%', 470, 400]}
+        w={['100%', '100%', 500, 567, 567]}
+        align="stretch"
+      />
       <Card p={6} gap={2} variant="primary" h="fit-content" shadow="Block Up" w="100%" maxW="420px">
         <TokenInput
           value={swapingIn.amount}
@@ -212,7 +223,7 @@ export function SwapCard() {
           </Button>
         )}
       </Card>
-
+      </Flex>
       <ConfirmSwapModal
         tradeInfo={tradeInfo}
         tokenInUsdPrice={swapingIn.stable}
@@ -243,16 +254,7 @@ export function SwapCard() {
           receiptModal.onClose()
         }}
       />
-      <CandleStickCard
-        from={swapingIn.currency}
-        to={swapingOut.currency}
-        variant="secondary"
-        gap={2}
-        p={6}
-        h={['100%', 470, 400]}
-        w={['100%', '100%', 500, 567, 567]}
-        align="stretch"
-      />
+
     </>
   )
 }
