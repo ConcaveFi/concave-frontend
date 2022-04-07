@@ -1,6 +1,7 @@
-import { Token } from 'lib/tokens'
+import { TokenType } from '../../../lib/tokens'
 import { useQuery, UseQueryResult } from 'react-query'
 import { chain, useNetwork } from 'wagmi'
+import { Token } from 'gemswap-sdk'
 
 const concaveTokenList = (networkName: string) =>
   `/assets/tokenlists/${networkName.toLowerCase()}/concave.json`
@@ -18,7 +19,6 @@ export const useTokenList = (networkName: string = chain.mainnet.name) => {
             token.decimals,
             token.symbol,
             token.name,
-            token.logoURI,
           )
         }),
       ),
@@ -28,7 +28,7 @@ export const useTokenList = (networkName: string = chain.mainnet.name) => {
 //PUT IN .ENV
 const MORALIS_TOKEN = '10NauNE7btm4qS8AbMv1ojkXhxsgh1FTJiSwH7SctkCSGKCCXPzwZpswmnNDmmrd'
 const headers = { 'x-api-key': MORALIS_TOKEN }
-export const useAddressTokenList: (address?: string) => UseQueryResult<Token[], unknown> = (
+export const useAddressTokenList: (address?: string) => UseQueryResult<TokenType[], unknown> = (
   address: string,
 ) => {
   const [{ data: network }] = useNetwork()
@@ -48,7 +48,6 @@ export const useAddressTokenList: (address?: string) => UseQueryResult<Token[], 
               +token.decimals,
               token.symbol,
               token.name,
-              token.logo ?? '',
             ),
         ),
       )
