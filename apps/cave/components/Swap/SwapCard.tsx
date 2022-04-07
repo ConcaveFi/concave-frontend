@@ -123,7 +123,7 @@ export function SwapCard() {
   return (
     <>
       <Flex
-        direction={{ sm: 'column-reverse', md: 'row' }}
+        direction={{ base: 'column-reverse', lg: 'row' }}
         justify="center"
         align="center"
         h="100%"
