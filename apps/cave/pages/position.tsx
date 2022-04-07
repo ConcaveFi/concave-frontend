@@ -29,26 +29,12 @@ import { useAddLiquidity, UseAddLiquidityData } from 'hooks/useAddLiquidity'
 import { useApprovalWhenNeeded } from 'hooks/useAllowance'
 import { usePrecision } from 'hooks/usePrecision'
 import { contractABI } from 'lib/contractoABI'
-import { concaveProvider } from 'lib/providers'
+import { concaveProvider2 } from 'lib/providers'
+import { TokenType } from 'lib/tokens'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { chain, useSigner } from 'wagmi'
 import { useToken, WrapperTokenInfo } from '../components/Swap/useSwap'
-import { Token as GemswapToken } from 'gemswap-sdk'
-class Token extends GemswapToken {
-  public readonly logoURI?: string
-  constructor(
-    chainId: number,
-    address: string,
-    decimals: number,
-    symbol?: string,
-    name?: string,
-    logoURI?: string,
-  ) {
-    super(chainId, address, decimals, symbol, name)
-    this.logoURI = logoURI
-  }
-}
 
 const RewardsBanner = () => (
   <Card variant="secondary" p={4} gap={4}>
@@ -286,7 +272,7 @@ const RemoveLiquidityActions = () => {
       const contractInstance = new Contract(
         '0x95dDC411d31bBeDd37e9aaABb335b0951Bc2D25a',
         contractABI,
-        concaveProvider(chain.ropsten.id),
+        concaveProvider2(chain.ropsten.id),
       )
       const contractSigner = contractInstance.connect(data)
       console.log('signer rm', contractSigner)
@@ -457,7 +443,7 @@ const SupplyLiquidityModal = ({
     '', // TODO who is the spender ??
     // chain.ropsten.id,
     userAddress,
-    amountADesired.toString(),
+    `${amountADesired}`,
   )
   console.log('loadingApproveA', loadingApproveA)
   const [needsApproveB, requestApproveB, loadingApproveB] = useApprovalWhenNeeded(
@@ -465,7 +451,7 @@ const SupplyLiquidityModal = ({
     '', // TODO who is the spender ??
     // chain.ropsten.id,
     userAddress,
-    amountBDesired.toString(),
+    `${amountBDesired}`,
   )
   //
   return (
