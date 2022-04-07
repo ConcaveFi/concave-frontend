@@ -31,7 +31,6 @@ import { useLiquidityInfo } from 'hooks/useLiquidityInfo'
 import { usePrecision } from 'hooks/usePrecision'
 import { contractABI } from 'lib/contractoABI'
 import { concaveProvider } from 'lib/providers'
-import { Token } from 'lib/tokens'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { chain, useSigner } from 'wagmi'
@@ -53,7 +52,6 @@ class Token extends GemswapToken {
     this.logoURI = logoURI
   }
 }
-
 
 const RewardsBanner = () => (
   <Card variant="secondary" p={4} gap={4}>
