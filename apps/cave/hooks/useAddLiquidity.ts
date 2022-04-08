@@ -1,5 +1,6 @@
-import { ethers } from 'ethers'
+import { BigNumber, ethers } from 'ethers'
 import { parseUnits } from 'ethers/lib/utils'
+import { BigintIsh } from 'gemswap-sdk'
 import { ContractAddress } from 'lib/contractAddress'
 import { contractABI } from 'lib/contractoABI'
 import { concaveProvider } from 'lib/providers'
@@ -9,10 +10,10 @@ import { useToken, WrapperTokenInfo } from '../components/Swap/useSwap'
 
 export const useAddLiquidity = (chainId = chain.ropsten.id, userAddress) => {
   const [wrapperTokenA, setTokenA] = useToken({ userAddressOrName: userAddress, symbol: '' })
-  const [amountADesired, setAmountADesired] = useState<number>(null)
+  const [amountADesired, setAmountADesired] = useState<BigNumber>(null)
 
   const [wrapperTokenB, setTokenB] = useToken({ userAddressOrName: userAddress, symbol: '' })
-  const [amountBDesired, setAmountBDesired] = useState<number>(null)
+  const [amountBDesired, setAmountBDesired] = useState<BigNumber>(null)
   const [{ data, error, loading }, getSigner] = useSigner()
   const [transacion, setTransaction] = useState<Promise<unknown>>(null)
 
@@ -69,7 +70,7 @@ export const useAddLiquidity = (chainId = chain.ropsten.id, userAddress) => {
 export type UseAddLiquidityData = {
   wrapperTokenA: WrapperTokenInfo
   wrapperTokenB: WrapperTokenInfo
-  amountADesired: number
-  amountBDesired: number
+  amountADesired: BigNumber
+  amountBDesired: BigNumber
   userAddress: string
 }
