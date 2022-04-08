@@ -21,14 +21,5 @@ export const useTrade = (
     return bestTrade[0]
   }, [pairs.data, exactCurrency, otherCurrency, tradeType, maxHops])
 
-  return useMemo(
-    () => ({
-      isLoading: pairs.isLoading,
-      isError: pairs.isError,
-      isSuccess: pairs.isSuccess,
-      status: pairs.status,
-      trade,
-    }),
-    [pairs, trade],
-  )
+  return { ...pairs, trade }
 }

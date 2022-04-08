@@ -12,7 +12,9 @@ export const concaveProvider = (chainId: number) =>
   new multicallProvider.MulticallProvider(
     new providers.FallbackProvider([
       { provider: new providers.JsonRpcProvider(concaveRPC, chainId), priority: 0 },
-      providers.getDefaultProvider(chainId, { alchemy, etherscan, infuraId }),
+      { provider: new providers.AlchemyProvider(chainId, alchemy), priority: 1 },
+      { provider: new providers.InfuraProvider(chainId, infuraId), priority: 1 },
+      // providers.getDefaultProvider(chainId, { alchemy, etherscan, infuraId }),
     ]),
   )
 

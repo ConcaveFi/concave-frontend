@@ -83,7 +83,7 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
 }
 
 const ConnectButton = () => {
-  const { connectors, connect, isConnecting } = useConnect()
+  const { connectors, connect } = useConnect()
   const isMounted = useIsMounted()
   return (
     <>
@@ -95,7 +95,6 @@ const ConnectButton = () => {
           variant="primary"
           size="medium"
           w="100%"
-          isLoading={isConnecting}
         >
           Connect Wallet
         </MenuButton>

@@ -18,21 +18,18 @@ import { FiMenu } from 'react-icons/fi'
 import SideBarTop from './SideBarTop'
 import SideBarBottom from './SideBarBottom'
 import PageNav from './PageNav'
-import { useNetwork } from 'wagmi'
+import { chain, useNetwork } from 'wagmi'
 import { useEffect } from 'react'
 
 export function SideBar() {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { activeChain, chains, switchNetwork } = useNetwork()
-  const networkModal = useDisclosure()
 
-  useEffect(() => {
-    if (activeChain?.name && activeChain?.name !== 'Mainnet') {
-      networkModal.onOpen()
-    } else {
-      networkModal.onClose()
-    }
-  }, [activeChain])
+  const networkModal = useDisclosure()
+  const { activeChain, chains, switchNetwork } = useNetwork({
+    onSuccess: ({ id }) => {
+      if (id !== chain.mainnet.id) networkModal.onOpen()
+    },
+  })
   // console.log(data.chain?.name ?? 'Not connected')
   // console.log(data.chain?.unsupported && '(unsupported)')
 
@@ -40,12 +37,9 @@ export function SideBar() {
     <Box minH="100vh">
       <Modal
         bluryOverlay={true}
-        title=""
+        title="Change Network"
         isOpen={networkModal.isOpen}
         onClose={networkModal.onClose}
-        bodyProps={{
-          shadow: 'Up for Blocks',
-        }}
         titleAlign="center"
       >
         {switchNetwork &&

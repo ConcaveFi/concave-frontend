@@ -1,12 +1,9 @@
-import { useEffect, useState, useCallback, useMemo, useRef } from 'react'
-import { chain, useContract, useContractWrite, useNetwork } from 'wagmi'
-import { defaultSettings, SwapSettings } from './Settings'
-import { concaveProvider } from 'lib/providers'
-import { usePairs } from './hooks/usePair'
+import { useState, useCallback, useMemo } from 'react'
+import { chain, useNetwork } from 'wagmi'
+import { SwapSettings } from './Settings'
 import {
   RouterABI,
   ROUTER_ADDRESS,
-  CurrencyAmount,
   Router,
   Currency,
   TradeType,
@@ -15,7 +12,6 @@ import {
   DAI,
 } from 'gemswap-sdk'
 import { useTrade } from './hooks/useTrade'
-import swap from 'pages/swap'
 import { useQuery } from 'react-query'
 import { Contract } from 'ethers'
 import { tryParseAmount } from './utils/parseInputAmount'
@@ -98,7 +94,7 @@ export const useSwapState = () => {
   const [exactCurrency, otherCurrency] =
     tradeType === TradeType.EXACT_INPUT ? [currencyIn, currencyOut] : [currencyOut, currencyIn]
   const parsedExactAmount = tryParseAmount(exactValue, exactCurrency)
-  const { trade, status: tradeStatus } = useTrade(parsedExactAmount, otherCurrency, {
+  const { trade, ...tradeStatus } = useTrade(parsedExactAmount, otherCurrency, {
     tradeType,
     maxHops: 1,
   })
@@ -110,7 +106,10 @@ export const useSwapState = () => {
 
   return useMemo(
     () => ({
-      tradeStatus: tradeStatus,
+      trade,
+      tradeStatus,
+      currencyIn,
+      currencyOut,
       currencyAmountIn,
       currencyAmountOut,
       recipient,
@@ -123,6 +122,7 @@ export const useSwapState = () => {
       setRecipient,
     }),
     [
+      trade,
       currencyAmountIn,
       currencyAmountOut,
       currencyIn,

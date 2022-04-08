@@ -4,7 +4,6 @@ import { chain, defaultChains, Provider, createClient } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
-import { queryClient } from './ReactQueryContext'
 
 const chains = [chain.mainnet, chain.ropsten] // app supported chains
 
@@ -37,7 +36,6 @@ const webSocketProvider = ({ chainId }) =>
 const client = createClient({
   autoConnect: true,
   connectors,
-  queryClient,
   provider,
   webSocketProvider,
 })

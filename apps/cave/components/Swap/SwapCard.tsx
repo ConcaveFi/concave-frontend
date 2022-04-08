@@ -1,13 +1,13 @@
 import { ExpandArrowIcon, GasIcon } from '@concave/icons'
 import { Button, Card, Flex, HStack, Spinner, Text, useDisclosure } from '@concave/ui'
-import { MAX_SAFE_INTEGER } from '@uniswap/sdk-core/dist/utils/sqrt'
-import { ethers } from 'ethers'
-import { MaxUint256 } from 'gemswap-sdk'
+import { CurrencyAmount, Token, Percent, JSBI } from 'gemswap-sdk'
 import { useApprovalWhenNeeded } from 'hooks/useAllowance'
 import { TokenType } from 'lib/tokens'
 import React, { useEffect, useState } from 'react'
 import { useFeeData, useWaitForTransaction } from 'wagmi'
 import { ConfirmSwapModal } from './ConfirmSwap'
+import { useCurrencyBalance } from './hooks/useCurrencyBalance'
+import { useFiatPrice, useFiatValue } from './hooks/useFiatPrice'
 import { Settings } from './Settings'
 import { TokenInput } from './TokenInput'
 import { TransactionStatusModal } from './TransactionStatus'
@@ -30,11 +30,11 @@ const GasPrice = () => {
   )
 }
 
-const LoadingBestTradeIndicator = () => {
+const LoadingIndicator = ({ label }) => {
   return (
     <Flex mr="auto" gap={2} align="center" color="text.low">
       <Spinner size="xs" />
-      <Text fontSize="sm">Fetching pair data</Text>
+      <Text fontSize="sm">{label}</Text>
     </Flex>
   )
 }
@@ -64,9 +64,53 @@ const PairsError = () => (
   </Text>
 )
 
+const Balance = ({ value, onClick }: { value: string; onClick?: () => void }) => (
+  <Button
+    fontSize="xs"
+    ml="auto"
+    onClick={onClick}
+    rightIcon={!!onClick && <Text textColor="#2E97E2">Max</Text>}
+    leftIcon={<Text>Balance:</Text>}
+    iconSpacing={1}
+  >
+    <Text isTruncated maxW="50px">
+      {value}
+    </Text>
+  </Button>
+)
+
+// export function calculateSlippageAmount(
+//   value: CurrencyAmount<Currency>,
+//   slippage: Percent,
+// ): [JSBI, JSBI] {
+//   if (slippage.lessThan(0) || slippage.greaterThan(ONE)) throw new Error('Unexpected slippage')
+//   return [
+//     value.multiply(ONE.subtract(slippage)).quotient,
+//     value.multiply(ONE.add(slippage)).quotient,
+//   ]
+// }
+
+export const ZERO_PERCENT = new Percent('0')
+
+export const ONE_HUNDRED_PERCENT = new Percent('1')
+
+export function computeFiatValuePriceImpact(
+  fiatValueInput: CurrencyAmount<Token> | undefined | null,
+  fiatValueOutput: CurrencyAmount<Token> | undefined | null,
+): Percent | undefined {
+  if (!fiatValueOutput || !fiatValueInput) return undefined
+  if (!fiatValueInput.currency.equals(fiatValueOutput.currency)) return undefined
+  if (JSBI.equal(fiatValueInput.quotient, JSBI.BigInt(0))) return undefined
+  const pct = ONE_HUNDRED_PERCENT.subtract(fiatValueOutput.divide(fiatValueInput))
+  return new Percent(pct.numerator, pct.denominator)
+}
+
 export function SwapCard() {
   const {
     tradeStatus,
+    trade,
+    currencyIn,
+    currencyOut,
     currencyAmountIn,
     currencyAmountOut,
     updateInputValue,
@@ -76,40 +120,70 @@ export function SwapCard() {
     switchCurrencies,
   } = useSwapState()
 
+  const outputFiat = useFiatValue(trade?.outputAmount)
+  const inputFiat = useFiatValue(trade?.inputAmount)
+
+  const priceImpact = computeFiatValuePriceImpact(outputFiat?.value, inputFiat?.value)
+
+  const { data: inputCurrencyBalance } = useCurrencyBalance(currencyIn)
+  const { data: outputCurrencyBalance } = useCurrencyBalance(currencyOut)
+
   return (
     <>
       <Card p={6} gap={2} variant="primary" h="fit-content" shadow="Block Up" w="100%" maxW="420px">
         <TokenInput
+          currency={currencyIn}
           currencyAmount={currencyAmountIn}
           onChangeValue={updateInputValue}
           onSelectCurrency={updateCurrencyIn}
-        />
+        >
+          <HStack justify="space-between" align="center" textColor="text.low" w="full">
+            <Text isTruncated maxW="100px" fontWeight="bold" fontSize="sm">
+              {!!inputFiat.isSuccess && `$${inputFiat.value.toFixed(2)}`}
+            </Text>
+            {inputCurrencyBalance && (
+              <Balance
+                value={inputCurrencyBalance.formatted}
+                onClick={() => updateInputValue(inputCurrencyBalance.formatted)}
+              />
+            )}
+          </HStack>
+        </TokenInput>
+
         <SwitchCurrencies onClick={switchCurrencies} />
+
         <TokenInput
+          currency={currencyOut}
           currencyAmount={currencyAmountOut}
           onChangeValue={updateOutputValue}
           onSelectCurrency={updateCurrencyOut}
-        />
+        >
+          <HStack justify="space-between" align="center" textColor="text.low" w="full">
+            <Text isTruncated maxW="100px" fontWeight="bold" fontSize="sm">
+              {!!outputFiat.isSuccess &&
+                `$${outputFiat.value.toFixed(2)} (${priceImpact.toFixed(2)})`}
+            </Text>
+            {outputCurrencyBalance && <Balance value={outputCurrencyBalance.formatted} />}
+          </HStack>
+        </TokenInput>
 
         <HStack align="center" justify="end" py={5}>
-          {tradeStatus === 'loading' && <LoadingBestTradeIndicator />}
-          {tradeStatus === 'error' && <PairsError />}
-          {
-            // : (
-            //   swapingOut.relativePrice && (
-            //     <Flex flexWrap="wrap" fontSize="xs" fontWeight="medium" mr="auto">
-            //       <Text>
-            //         1 {swapingOut.currency.symbol} = {swapingOut.relativePrice}
-            //         {swapingIn.currency.symbol}
-            //       </Text>
-            //       {swapingOut.stable && (
-            //         <Text ml={1} textColor="text.low">
-            //           (${swapingOut.stable})
-            //         </Text>
-            //       )}
-            //     </Flex>
-            //   )
-          }
+          {tradeStatus.isLoading && <LoadingIndicator label="Loading prices" />}
+          {tradeStatus.isError && <PairsError />}
+          {tradeStatus.isRefetching && <LoadingIndicator label="Updating prices" />}
+          {tradeStatus.isSuccess && (
+            <Flex flexWrap="wrap" fontSize="xs" fontWeight="medium" mr="auto">
+              <Text>
+                1 {trade.inputAmount.currency.symbol} = {trade.route.midPrice.toSignificant(3)}{' '}
+                {trade.outputAmount.currency.symbol}
+              </Text>
+              {outputFiat.price && (
+                <Text ml={1} textColor="text.low">
+                  (${outputFiat.price})
+                </Text>
+              )}
+            </Flex>
+          )}
           <GasPrice />
           {/* <Settings onClose={() => null} /> */}
         </HStack>

@@ -1,11 +1,10 @@
 import { useQuery } from 'react-query'
-import { useBlockNumber } from 'wagmi'
 import { concaveProvider } from 'lib/providers'
-import { useMemo } from 'react'
+import ms from 'ms'
 import { Token, Fetcher } from 'gemswap-sdk'
 import { BASES_TO_CHECK_TRADES_AGAINST, INTERMEDIARY_PAIRS_FOR_MULTI_HOPS } from 'constants/routing'
 
-const filterRepatedPairs = (pairs: [Token, Token][]) =>
+const filterRepeatedPairs = (pairs: [Token, Token][]) =>
   pairs.filter(
     ([t0, t1], i, otherPairs) =>
       otherPairs.findIndex(
@@ -22,33 +21,27 @@ const buildPairs = (base: Token[], token0: Token, token1: Token) =>
     ])
     .filter(([a, b]) => !a.equals(b))
 
-const useAllPossiblePairs = (token0: Token, token1: Token, maxHops: number) => {
-  const chainId = token0?.chainId
-  // the order does not matter, we don't want to update it if it's the same tokens, so we sort the tokens before building the pairs
-  const [tokenA, tokenB] =
-    token0 && token1 && token0?.sortsBefore(token1) ? [token0, token1] : [token1, token0]
-  return useMemo(
-    () =>
-      tokenA &&
-      tokenB &&
-      filterRepatedPairs([
-        // if maxHops is 1 it will only try to route tokenIn -> tokenOut directly
-        ...(maxHops === 1 ? [[tokenA.wrapped, tokenB.wrapped]] : []),
-        ...(maxHops > 1 ? buildPairs(BASES_TO_CHECK_TRADES_AGAINST[chainId], tokenA, tokenB) : []),
-        // if maxHops is more than 2, it will also check routes like tokenIn -> DAI -> WETH -> tokenOut
-        ...(maxHops > 2 ? INTERMEDIARY_PAIRS_FOR_MULTI_HOPS[chainId] : []),
-      ] as [Token, Token][]),
-    [tokenA, tokenB, maxHops, chainId],
-  )
-}
+const getAllCommonPairs = (
+  tokenA: Token,
+  tokenB: Token,
+  maxHops: number,
+  chainId = tokenA?.chainId,
+) =>
+  filterRepeatedPairs([
+    // if maxHops is 1 it will only try to route tokenIn -> tokenOut directly
+    ...(maxHops === 1 ? [[tokenA.wrapped, tokenB.wrapped]] : []),
+    ...(maxHops > 1 ? buildPairs(BASES_TO_CHECK_TRADES_AGAINST[chainId], tokenA, tokenB) : []),
+    // if maxHops is more than 2, it will also check routes like tokenIn -> DAI -> WETH -> tokenOut
+    ...(maxHops > 2 ? INTERMEDIARY_PAIRS_FOR_MULTI_HOPS[chainId] : []),
+  ] as [Token, Token][])
 
 export const usePairs = (tokenA?: Token, tokenB?: Token, maxHops = 3) => {
-  const pairsMap = useAllPossiblePairs(tokenA, tokenB, maxHops)
-
   const { refetch, ...pairs } = useQuery(
-    ['pairs', tokenA, tokenB, maxHops],
+    ['pairs', tokenA?.address, tokenB?.address, maxHops],
     async () => {
-      if (tokenA.equals(tokenB)) return null
+      if (!tokenA || !tokenB) return null
+      const pairsMap = getAllCommonPairs(tokenA, tokenB, maxHops)
+      console.log(pairsMap)
       const pairs = (
         await Promise.all(
           pairsMap.map(([a, b]) =>
@@ -59,17 +52,8 @@ export const usePairs = (tokenA?: Token, tokenB?: Token, maxHops = 3) => {
       if (!pairs || pairs.length === 0) throw new Error('No valid pairs')
       return pairs
     },
-    { enabled: false },
+    { enabled: Boolean(tokenA?.address && tokenB?.address), refetchInterval: ms('15s') },
   )
-
-  // update pair data every block
-  useBlockNumber({
-    watch: true,
-    onSuccess: () => {
-      console.log('new block, refetching pairs')
-      refetch()
-    },
-  })
 
   return pairs
 }
