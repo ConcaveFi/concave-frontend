@@ -24,8 +24,8 @@ export const useLiquidityInfo = (token: Token) => {
   useEffect(() => {
     liquidityContract.getReserves().then((reserves) => {
       Promise.all([
-        reserves._quoteReserves as BigNumber,
         reserves._baseReserves as BigNumber,
+        reserves._quoteReserves as BigNumber,
         liquidityContract.token0().then((t: string) => getToken(selectedChain, t)),
         liquidityContract.token1().then((t: string) => getToken(selectedChain, t)),
       ])
@@ -38,6 +38,7 @@ export const useLiquidityInfo = (token: Token) => {
             token1,
             amount1.toString(),
           )
+          console.log(token.address, amount0.toString(), amount1.toString())
           if (tokenA && tokenB) {
             //@ts-ignore
             setPair(new Pair(tokenB, tokenA))

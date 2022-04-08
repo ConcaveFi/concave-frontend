@@ -21,10 +21,9 @@ import {
   UseDisclosureReturn,
 } from '@concave/ui'
 import { useAddressTokenList, useTokenList } from 'components/Swap/hooks/useTokenList'
-import { TokenBalance } from 'components/Swap/TokenBalance'
 import { TokenInput } from 'components/Swap/TokenInput'
 import { useAuth } from 'contexts/AuthContext'
-import { BigNumberish, Contract } from 'ethers'
+import { BigNumber, BigNumberish, Contract } from 'ethers'
 import { Token as GemswapToken } from 'gemswap-sdk'
 import { useAddLiquidity, UseAddLiquidityData } from 'hooks/useAddLiquidity'
 import { useApprovalWhenNeeded } from 'hooks/useAllowance'
@@ -34,7 +33,7 @@ import { contractABI } from 'lib/contractoABI'
 import { concaveProvider } from 'lib/providers'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import { chain, useSigner } from 'wagmi'
+import { chain, useBalance, useSigner } from 'wagmi'
 import { useToken, WrapperTokenInfo } from '../components/Swap/useSwap'
 
 class Token extends GemswapToken {
@@ -132,7 +131,7 @@ const LPPositionItem = ({ ownedAmount, liquidityPoolToken }: LPPosition) => {
               href={`https://ropsten.etherscan.io/address/${token.address}#readContract}`}
               rel="noreferrer"
             >
-              token
+              {token.address}
             </a>
           </Text>
           <Button
@@ -490,17 +489,19 @@ const SupplyLiquidityModal = ({
   onConfirm: () => void
 }) => {
   const { wrapperTokenA, wrapperTokenB, amountADesired, amountBDesired, userAddress } = data
-
   const [needsApproveA, requestApproveA, loadingApproveA] = useApprovalWhenNeeded(
-    wrapperTokenA.token,
+    wrapperTokenA.token.wrapped,
+    '0xc9c07a4526915014bc60791fca2eef51975a3694',
     userAddress,
-    amountADesired.toString(),
+    amountADesired,
   )
   const [needsApproveB, requestApproveB, loadingApproveB] = useApprovalWhenNeeded(
-    wrapperTokenB.token,
+    wrapperTokenB.token.wrapped,
+    '0xc9c07a4526915014bc60791fca2eef51975a3694',
     userAddress,
-    amountBDesired.toString(),
+    amountBDesired,
   )
+
   return (
     <Modal
       bluryOverlay={true}
@@ -538,26 +539,26 @@ const SupplyLiquidityModal = ({
           mt={8}
           color={'text.low'}
           label={`${wrapperTokenA.token.symbol} Deposited`}
-          value={`${amountADesired} ${wrapperTokenA.token.symbol}`}
+          value={`${amountADesired.toString()} ${wrapperTokenA.token.symbol}`}
         />
         <PositionInfoItem
           color={'text.low'}
           label={`${wrapperTokenB.token.symbol} Deposited`}
-          value={`${usePrecision(amountBDesired).formatted} ${wrapperTokenB.token.symbol}`}
+          value={`${amountBDesired.toString()} ${wrapperTokenB.token.symbol}`}
         />
         <PositionInfoItem color={'text.low'} label="Share Pool" value={'2.786%'} />
       </Box>
       {needsApproveA && (
         <Button mt={2} p={6} fontSize={'2xl'} variant={'primary'} onClick={() => requestApproveA()}>
           {!loadingApproveA
-            ? `Approve to use ${amountADesired} ${wrapperTokenA.token.symbol}`
+            ? `Approve to use ${amountADesired.toString()} ${wrapperTokenA.token.symbol}`
             : 'approving'}
         </Button>
       )}
       {needsApproveB && (
         <Button mt={2} p={6} fontSize={'2xl'} variant={'primary'} onClick={() => requestApproveB()}>
           {!loadingApproveB
-            ? `Approve to use ${amountBDesired} ${wrapperTokenB.token.symbol}`
+            ? `Approve to use ${amountBDesired.toString()} ${wrapperTokenB.token.symbol}`
             : 'approving'}
         </Button>
       )}
@@ -576,7 +577,17 @@ const AddLiquidityContent = ({ userAddress }: { userAddress: string }) => {
   const { amountADesired, amountBDesired, wrapperTokenA, wrapperTokenB } = data
   const { setAmountADesired, setTokenA, setTokenB, setAmountBDesired } = setters
   const valid = wrapperTokenA.token && wrapperTokenB.token && amountADesired && amountBDesired
-  console.log(data)
+  const [{ data: balanceA }] = useBalance({
+    addressOrName: userAddress,
+    token: wrapperTokenA.token?.address,
+    formatUnits: wrapperTokenA.token?.decimals,
+  })
+  const [{ data: balanceB }] = useBalance({
+    addressOrName: userAddress,
+    token: wrapperTokenB.token?.address,
+    formatUnits: wrapperTokenB.token?.decimals,
+  })
+
   return (
     <>
       <Card variant="secondary" p={4} backgroundBlendMode={'screen'}>
@@ -588,24 +599,20 @@ const AddLiquidityContent = ({ userAddress }: { userAddress: string }) => {
       </Card>
       <Flex direction={'column'} p={4} gap={2}>
         <TokenInput
-          balance={'1'}
+          balance={balanceA?.formatted}
           stable={'1'}
           value={'' + amountADesired}
           currency={wrapperTokenA.token}
           onChangeValue={(value) => {
-            setAmountADesired(+value)
+            setAmountADesired(BigNumber.from(value))
+          }}
+          onClickMaxBalance={() => {
+            setAmountADesired(wrapperTokenA.balance?.value)
           }}
           onChangeCurrency={(token) => {
             setTokenA(token.symbol)
           }}
-        >
-          <TokenBalance
-            value={wrapperTokenA.balance?.formatted}
-            onClick={() => {
-              setAmountADesired(+wrapperTokenA.balance?.formatted)
-            }}
-          />
-        </TokenInput>
+        ></TokenInput>
         <Flex align="center" justify="center">
           <Button
             shadow={'Up Small'}
@@ -620,26 +627,20 @@ const AddLiquidityContent = ({ userAddress }: { userAddress: string }) => {
           </Button>
         </Flex>
         <TokenInput
-          balance={'1'}
+          balance={balanceB?.formatted}
           stable={'1'}
           value={'' + amountBDesired}
           currency={wrapperTokenB.token}
           onChangeValue={(value) => {
-            setAmountBDesired(+value)
+            setAmountBDesired(BigNumber.from(value))
+          }}
+          onClickMaxBalance={() => {
+            setAmountBDesired(wrapperTokenB.balance?.value)
           }}
           onChangeCurrency={(token) => {
             setTokenB(token.symbol)
           }}
-        >
-          {wrapperTokenB.token?.symbol && (
-            <TokenBalance
-              value={wrapperTokenB.balance?.formatted}
-              onClick={() => {
-                setAmountADesired(+wrapperTokenB.balance?.formatted)
-              }}
-            />
-          )}
-        </TokenInput>
+        ></TokenInput>
       </Flex>
       <Button
         h={'50px'}

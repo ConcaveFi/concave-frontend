@@ -1,15 +1,16 @@
-import { BigNumber, BigNumberish, ethers } from 'ethers'
+import { BigNumberish, ethers } from 'ethers'
 import { formatUnits, parseUnits } from 'ethers/lib/utils'
 import { Token } from 'gemswap-sdk'
 import { useEffect, useMemo } from 'react'
 import { erc20ABI, useContractWrite, useContractRead, chain, useWaitForTransaction } from 'wagmi'
 import { MaxUint256 } from 'gemswap-sdk'
+import { BigintIsh } from '@uniswap/sdk'
 
 export const useApprovalWhenNeeded = (
   token: Token,
   spender: string,
   userAddress: string,
-  amount = MaxUint256.toString(),
+  amount: BigNumberish = MaxUint256.toString(),
 ) => {
   const [allowanceTokenA, syncAllowance] = useAllowance(token, spender, userAddress)
   const [approvalTokenA, requestApprove] = useApproval(token, spender, amount)
@@ -20,7 +21,8 @@ export const useApprovalWhenNeeded = (
   }, [approveAConfirmation.data, syncAllowance])
   const formattedAllowance =
     allowanceTokenA.data && parseFloat(formatUnits(allowanceTokenA.data, token.decimals))
-  const needsApprove: boolean = formattedAllowance < +amount
+  console.log(formattedAllowance, amount)
+  const needsApprove = formattedAllowance < amount
   const isBusy = allowanceTokenA.loading || approvalTokenA.loading
   return [needsApprove, requestApprove, isBusy] as const
 }

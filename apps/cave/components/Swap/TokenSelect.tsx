@@ -1,26 +1,14 @@
-import { useDisclosure } from '@chakra-ui/react'
+import { Input, Spinner, UnorderedList, useDisclosure } from '@chakra-ui/react'
 import { CnvQuestionIcon, DownIcon } from '@concave/icons'
-import {
-  Button,
-  Flex,
-  Heading,
-  Input,
-  ListItem,
-  Modal,
-  Spinner,
-  Stack,
-  Text,
-  TokenIcon,
-  UnorderedList,
-} from '@concave/ui'
+import { Button, Flex, Heading, ListItem, Modal, Stack, Text, TokenIcon } from '@concave/ui'
+import { ROPSTEN_CNV, ROPSTEN_DAI } from 'constants/ropstenTokens'
+import { Token } from 'constants/routing'
+import { CNV, DAI } from 'constants/tokens'
 import { Currency as UniswapCurrency } from 'gemswap-sdk'
-import { BASES_TO_CHECK_TRADES_AGAINST, Token } from 'constants/routing'
 import React, { useCallback, useState } from 'react'
 import { chain, useNetwork } from 'wagmi'
 import { useTokenList } from './hooks/useTokenList'
 import { useNativeCurrency } from './useSwap2'
-import { DAI, CNV } from 'constants/tokens'
-import { ROPSTEN_DAI, ROPSTEN_CNV } from 'constants/ropstenTokens'
 
 type Currency = UniswapCurrency & Pick<Token, 'logoURI'>
 
@@ -64,7 +52,7 @@ const CommonTokens = ({
             pr={3}
             fontSize="sm"
           >
-            {currency.symbol.toUpperCase()}
+            {currency.name.toUpperCase()}
           </Button>
         ))}
       </Flex>
@@ -105,11 +93,11 @@ export const SelectTokenModal = ({
   isOpen: boolean
   onClose: () => void
 }) => {
+  const [{ data: network, loading }] = useNetwork()
   const [search, setSearch] = useState('')
   const nativeCurrency = useNativeCurrency()
-  const tokens = useTokenList()
-  const [{ data: network }] = useNetwork()
-  const chainId = network?.chain?.id === chain.ropsten.id ? chain.ropsten.id : chain.mainnet.id
+  const currentChain = network?.chain
+  const { data: tokens, isLoading, isSuccess } = useTokenList(currentChain.name)
   const selectAndClose = useCallback(
     (token: Token) => (onSelect(token), onClose()),
     [onSelect, onClose],
@@ -123,13 +111,11 @@ export const SelectTokenModal = ({
       bodyProps={{ gap: 4, w: '350px' }}
     >
       <CommonTokens
-        currencies={
-          network?.chain?.id === chain.ropsten.id ? [ROPSTEN_DAI, ROPSTEN_CNV] : [DAI, CNV]
-        } //[nativeCurrency, ...BASES_TO_CHECK_TRADES_AGAINST[chainId]]}
+        currencies={currentChain?.id === chain.ropsten.id ? [ROPSTEN_DAI, ROPSTEN_CNV] : [DAI, CNV]} //[nativeCurrency, ...BASES_TO_CHECK_TRADES_AGAINST[chainId]]}
         selected={selected}
         onSelect={selectAndClose}
       />
-      {/* <Input
+      <Input
         placeholder="Search name or paste address"
         onChange={({ target }) => setSearch(target.value)}
       />
@@ -142,7 +128,7 @@ export const SelectTokenModal = ({
         shadow="Down Big"
         p={3}
       >
-        {!tokens.isSuccess ? (
+        {!isSuccess ? (
           <Spinner />
         ) : (
           <UnorderedList
@@ -153,7 +139,7 @@ export const SelectTokenModal = ({
             overflowX="hidden"
             spacing={4}
           >
-            {tokens.data.map((token) => (
+            {tokens.map((token) => (
               <TokenListItem
                 key={token.address}
                 token={token}
@@ -162,7 +148,7 @@ export const SelectTokenModal = ({
             ))}
           </UnorderedList>
         )}
-      </Flex> */}
+      </Flex>
     </Modal>
   )
 }
