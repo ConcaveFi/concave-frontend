@@ -6,20 +6,24 @@ import { usePairs } from './usePair'
 const MAX_HOPS = 3
 
 export const useTrade = (
-  exactCurrency?: CurrencyAmount<Currency>,
+  exactCurrencyAmount?: CurrencyAmount<Currency>,
   otherCurrency?: Currency,
   { tradeType = TradeType.EXACT_INPUT, maxHops = MAX_HOPS } = {},
 ) => {
-  const pairs = usePairs(exactCurrency?.currency.wrapped, otherCurrency?.wrapped, maxHops)
+  const pairs = usePairs(exactCurrencyAmount?.currency.wrapped, otherCurrency?.wrapped, maxHops)
 
-  const trade = useMemo(() => {
-    if (!pairs.data || pairs.data.length === 0) return
+  return useMemo(() => {
+    if (!pairs.isSuccess || exactCurrencyAmount.toExact() === '0')
+      return { trade: undefined, ...pairs }
+
     const bestTrade =
       tradeType === TradeType.EXACT_INPUT
-        ? Trade.bestTradeExactIn(pairs.data, exactCurrency, otherCurrency, { maxHops })
-        : Trade.bestTradeExactOut(pairs.data, otherCurrency, exactCurrency, { maxHops })
-    return bestTrade[0]
-  }, [pairs.data, exactCurrency, otherCurrency, tradeType, maxHops])
+        ? Trade.bestTradeExactIn(pairs.data, exactCurrencyAmount, otherCurrency, { maxHops })
+        : Trade.bestTradeExactOut(pairs.data, otherCurrency, exactCurrencyAmount, { maxHops })
 
-  return { ...pairs, trade }
+    return {
+      trade: bestTrade[0],
+      ...pairs,
+    }
+  }, [pairs, tradeType, exactCurrencyAmount, otherCurrency, maxHops])
 }

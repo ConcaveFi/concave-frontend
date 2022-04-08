@@ -94,6 +94,7 @@ export const useSwapState = () => {
   const [exactCurrency, otherCurrency] =
     tradeType === TradeType.EXACT_INPUT ? [currencyIn, currencyOut] : [currencyOut, currencyIn]
   const parsedExactAmount = tryParseAmount(exactValue, exactCurrency)
+
   const { trade, ...tradeStatus } = useTrade(parsedExactAmount, otherCurrency, {
     tradeType,
     maxHops: 1,

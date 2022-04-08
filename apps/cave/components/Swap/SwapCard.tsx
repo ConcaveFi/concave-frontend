@@ -167,11 +167,11 @@ export function SwapCard() {
           </HStack>
         </TokenInput>
 
-        <HStack align="center" justify="end" py={5}>
-          {tradeStatus.isLoading && <LoadingIndicator label="Loading prices" />}
+        {/* <HStack align="center" justify="end" py={5}>
+          {tradeStatus.isFetching && <Spinner size="xs" />}
+          {tradeStatus.isLoading && <Text fontSize="sm">Updating prices</Text>}
           {tradeStatus.isError && <PairsError />}
-          {tradeStatus.isRefetching && <LoadingIndicator label="Updating prices" />}
-          {tradeStatus.isSuccess && (
+          {tradeStatus.isSuccess && trade && (
             <Flex flexWrap="wrap" fontSize="xs" fontWeight="medium" mr="auto">
               <Text>
                 1 {trade.inputAmount.currency.symbol} = {trade.route.midPrice.toSignificant(3)}{' '}
@@ -183,10 +183,10 @@ export function SwapCard() {
                 </Text>
               )}
             </Flex>
-          )}
-          <GasPrice />
-          {/* <Settings onClose={() => null} /> */}
-        </HStack>
+          )} */}
+        {/* <GasPrice /> */}
+        {/* <Settings onClose={() => null} /> */}
+        {/* </HStack> */}
         {/*
         {needsApproval && (
           <Button
