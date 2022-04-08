@@ -1,7 +1,6 @@
 import { ExpandArrowIcon, GasIcon } from '@concave/icons'
 import { Button, Card, Flex, HStack, Spinner, Text, useDisclosure } from '@concave/ui'
 import { MAX_SAFE_INTEGER } from '@uniswap/sdk-core/dist/utils/sqrt'
-import { useAuth } from 'contexts/AuthContext'
 import { ethers } from 'ethers'
 import { MaxUint256 } from 'gemswap-sdk'
 import { useApprovalWhenNeeded } from 'hooks/useAllowance'
@@ -16,17 +15,17 @@ import { TransactionSubmittedModal } from './TransactionSubmitted'
 import { useSwapState } from './useSwap2'
 
 const GasPrice = () => {
-  const [{ data }] = useFeeData({ formatUnits: 'gwei', watch: true })
+  const { data, isSuccess, isLoading, isError } = useFeeData({ formatUnits: 'gwei', watch: true })
+  if (isError) return null
   return (
     <>
       <GasIcon viewBox="0 0 16 16" />
-      {data ? (
+      {isSuccess && (
         <Text fontSize="xs" color="text.low" fontWeight="medium">
           {Number(data?.formatted.gasPrice).toFixed(2)} gwei
         </Text>
-      ) : (
-        <Spinner size="xs" color="text.low" />
       )}
+      {isLoading && <Spinner size="xs" color="text.low" />}
     </>
   )
 }

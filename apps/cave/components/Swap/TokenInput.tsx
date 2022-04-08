@@ -46,7 +46,7 @@ export function TokenInput({
   const priceInFiat = useFiatPrice(currencyAmount?.currency)
   const fiatValue = priceInFiat.price?.quote(currencyAmount)
 
-  const [{ data: currencyBalance }] = useCurrencyBalance(currencyAmount?.currency)
+  const { data: currencyBalance } = useCurrencyBalance(currencyAmount?.currency)
 
   return (
     <Stack sx={{ ...styles.field, bg: 'none' }} justify="space-between" spacing={0}>

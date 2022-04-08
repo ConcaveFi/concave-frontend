@@ -23,7 +23,6 @@ import {
 import { useTokenList } from 'components/Swap/hooks/useTokenList'
 import { TokenBalance } from 'components/Swap/TokenBalance'
 import { TokenInput } from 'components/Swap/TokenInput'
-import { useAuth } from 'contexts/AuthContext'
 import { BigNumberish, Contract } from 'ethers'
 import { useAddLiquidity, UseAddLiquidityData } from 'hooks/useAddLiquidity'
 import { useApprovalWhenNeeded } from 'hooks/useAllowance'
@@ -259,7 +258,7 @@ const YouWillReceive = ({
 const RemoveLiquidityActions = () => {
   // const { user } = useAuth()
   const [approved] = useState(false)
-  const [{ data }] = useSigner()
+  const { data } = useSigner()
   // const userApproval = useAllowance(
   //   user.address,
   //   '0x95dDC411d31bBeDd37e9aaABb335b0951Bc2D25a',

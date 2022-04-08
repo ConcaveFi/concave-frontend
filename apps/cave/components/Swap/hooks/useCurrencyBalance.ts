@@ -1,13 +1,12 @@
-import { useAuth } from 'contexts/AuthContext'
 import { Currency } from 'gemswap-sdk'
-import { useBalance } from 'wagmi'
+import { useAccount, useBalance } from 'wagmi'
 
 export const useCurrencyBalance = (currency: Currency) => {
-  const { user } = useAuth()
+  const { data: account } = useAccount()
   return useBalance({
-    addressOrName: user.address,
+    addressOrName: account?.address,
     token: currency?.isToken && currency?.address, // if it's not a token, it's native, n we don't need to pass the address
     formatUnits: currency?.decimals,
-    skip: !currency || !user.address,
+    enabled: !currency || !account?.address,
   })
 }

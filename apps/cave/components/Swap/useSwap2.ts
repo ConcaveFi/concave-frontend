@@ -1,6 +1,5 @@
 import { useEffect, useState, useCallback, useMemo, useRef } from 'react'
 import { chain, useContract, useContractWrite, useNetwork } from 'wagmi'
-import { useAuth } from 'contexts/AuthContext'
 import { defaultSettings, SwapSettings } from './Settings'
 import { concaveProvider } from 'lib/providers'
 import { usePairs } from './hooks/usePair'
@@ -22,9 +21,9 @@ import { Contract } from 'ethers'
 import { tryParseAmount } from './utils/parseInputAmount'
 
 export const useCurrentSupportedNetworkId = () => {
-  const [{ data: network }] = useNetwork()
-  const isRopsten = network?.chain?.id === chain.ropsten.id
-  // we only support mainnet rn, so unless we testing in ropsten, default to gather data from mainnet
+  const { activeChain } = useNetwork()
+  const isRopsten = activeChain?.id === chain.ropsten.id
+  // we only support mainnet rn, so unless we testing in ropsten, default to mainnet
   return isRopsten ? chain.ropsten.id : chain.mainnet.id
 }
 
@@ -65,66 +64,6 @@ export const useSwapTransaction = (
 
   return [estimateSwapGas, swapTransaction, refetch]
 }
-
-// type SwapState = {
-//   recipient: string
-//   [Field.Input]: Currency
-//   [Field.Output]: Currency
-//   exactField: Field
-//   exactAmount: string
-//   // trade: Trade<Currency, Currency, TradeType>,
-//   // settings: SwapSettings,
-// }
-
-// const enum Field {
-//   Input,
-//   Output,
-// }
-
-// type SwapAction =
-//   | { type: 'user_input'; field: Field; value: string }
-//   | { type: 'select_currency'; field: Field; currency: Currency }
-//   | { type: 'switch_currencies' }
-//   | { type: 'set_recipient'; recipient: string }
-
-// const swapReducer = (state: SwapState, action: SwapAction) => {
-//   switch (action.type) {
-//     case 'user_input':
-//       return {
-//         ...state,
-//         exactField: action.field,
-//         exactAmount: action.value,
-//       }
-//     case 'select_currency': {
-//       const otherField = action.field === Field.Input ? Field.Input : Field.Output
-//       if (action.currency === state[otherField])
-//         return {
-//           ...state,
-//           [action.field]: action.currency,
-//           [otherField]: state[action.field],
-//         }
-//       return { ...state, [action.field]: action.currency }
-//     }
-//     case 'switch_currencies':
-//       return {
-//         ...state,
-//         exactField: state.exactField === Field.Input ? Field.Output : Field.Input,
-//         [Field.Input]: state[Field.Output],
-//         [Field.Output]: state[Field.Input],
-//       }
-//     case 'set_recipient':
-//       return { ...state, recipient: action.recipient }
-//   }
-// }
-
-//   const [exactCurrency, otherCurrency] =
-//     TradeType.EXACT_INPUT === tradeType.current
-//       ? [currencyIn, currencyOut]
-//       : [currencyOut, currencyIn]
-//   const trade = useTrade(CurrencyAmount.fromRawAmount(exactCurrency, exactValue), otherCurrency, {
-//     tradeType: tradeType.current,
-//     maxHops: 1,
-//   })
 
 export const useSwapState = () => {
   const networkId = useCurrentSupportedNetworkId()

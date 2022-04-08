@@ -15,8 +15,6 @@ import Placeholder from 'components/Placeholder'
 import { SwapCard } from 'components/Swap/SwapCard'
 // import { SwapCardLegacy } from 'components/Swap/SwapCardLegacy'
 
-import { useSwap } from 'components/Swap/useSwap'
-import { useAuth } from 'contexts/AuthContext'
 import React from 'react'
 
 const InfoItem = ({ value, label, ...props }) => (
@@ -96,8 +94,6 @@ const NothingToRedeem = () => {
 }
 
 export default function Bond() {
-  const { user, isConnected } = useAuth()
-  const swap = useSwap(isConnected ? user?.address : '', {})
   return (
     <Container maxW="container.lg">
       <GcnvTitle title="Bonds" description="" />

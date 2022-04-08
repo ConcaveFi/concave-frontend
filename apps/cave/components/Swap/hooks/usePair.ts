@@ -23,7 +23,7 @@ const buildPairs = (base: Token[], token0: Token, token1: Token) =>
     .filter(([a, b]) => !a.equals(b))
 
 const useAllPossiblePairs = (token0: Token, token1: Token, maxHops: number) => {
-  const chainId = token0.chainId
+  const chainId = token0?.chainId
   // the order does not matter, we don't want to update it if it's the same tokens, so we sort the tokens before building the pairs
   const [tokenA, tokenB] =
     token0 && token1 && token0?.sortsBefore(token1) ? [token0, token1] : [token1, token0]
@@ -45,11 +45,8 @@ const useAllPossiblePairs = (token0: Token, token1: Token, maxHops: number) => {
 export const usePairs = (tokenA?: Token, tokenB?: Token, maxHops = 3) => {
   const pairsMap = useAllPossiblePairs(tokenA, tokenB, maxHops)
 
-  // update pair data every block
-  const [{ data: block }] = useBlockNumber({ watch: true }) // onSuccess refetch pairs
-
-  return useQuery(
-    ['pairs', tokenA, tokenB, maxHops, block],
+  const { refetch, ...pairs } = useQuery(
+    ['pairs', tokenA, tokenB, maxHops],
     async () => {
       if (tokenA.equals(tokenB)) return null
       const pairs = (
@@ -62,8 +59,19 @@ export const usePairs = (tokenA?: Token, tokenB?: Token, maxHops = 3) => {
       if (!pairs || pairs.length === 0) throw new Error('No valid pairs')
       return pairs
     },
-    { enabled: !!pairsMap },
+    { enabled: false },
   )
+
+  // update pair data every block
+  useBlockNumber({
+    watch: true,
+    onSuccess: () => {
+      console.log('new block, refetching pairs')
+      refetch()
+    },
+  })
+
+  return pairs
 }
 
 export const usePair = (tokenA: Token, tokenB: Token) => usePairs(tokenA, tokenB, 1)

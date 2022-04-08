@@ -33,7 +33,7 @@
     "cookie": "^0.4.2",
     "debounce": "^1.2.1",
     "ethers": "^5.6.2",
-    "gemswap-sdk": "^1.0.11",
+    "gemswap-sdk": "^1.0.13",
     "globstar": "^1.0.0",
     "graphql": "^16.3.0",
     "graphql-request": "^4.2.0",
@@ -51,7 +51,8 @@
     "react-query": "^3.34.19",
     "react-use": "^17.3.2",
     "siwe": "^1.1.6",
-    "wagmi": "^0.2.24"
+    "wagmi": "^0.3.0-next.13",
+    "zustand": "^3.7.2"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^2.6.2",

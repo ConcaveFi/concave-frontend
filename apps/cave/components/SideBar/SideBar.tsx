@@ -23,16 +23,16 @@ import { useEffect } from 'react'
 
 export function SideBar() {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [{ data, error, loading }, switchNetwork] = useNetwork()
+  const { activeChain, chains, switchNetwork } = useNetwork()
   const networkModal = useDisclosure()
 
   useEffect(() => {
-    if (data.chain?.name && data.chain?.name !== 'Mainnet') {
+    if (activeChain?.name && activeChain?.name !== 'Mainnet') {
       networkModal.onOpen()
     } else {
       networkModal.onClose()
     }
-  }, [data])
+  }, [activeChain])
   // console.log(data.chain?.name ?? 'Not connected')
   // console.log(data.chain?.unsupported && '(unsupported)')
 
@@ -49,8 +49,8 @@ export function SideBar() {
         titleAlign="center"
       >
         {switchNetwork &&
-          data.chains.map((x) =>
-            x.id === data.chain?.id ? null : (
+          chains.map((x) =>
+            x.id === activeChain?.id ? null : (
               <Button
                 rightIcon={<Image maxWidth="20px" src={`/assets/tokens/eth.svg`} alt="" />}
                 key={x.id}

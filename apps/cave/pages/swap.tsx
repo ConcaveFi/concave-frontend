@@ -1,7 +1,5 @@
 import { Flex } from '@concave/ui'
-import { CandleStickCard } from 'components/CandleStickCard'
 import { SwapCard } from 'components/Swap/SwapCard'
-import { useAuth } from 'contexts/AuthContext'
 import React from 'react'
 
 function Swap() {

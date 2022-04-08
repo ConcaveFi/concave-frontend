@@ -1,9 +1,7 @@
-import { useNetwork } from 'wagmi'
 import { Trade, Currency, CurrencyAmount, TradeType } from 'gemswap-sdk'
 
 import { useMemo } from 'react'
 import { usePairs } from './usePair'
-import { useCurrentSupportedNetworkId } from '../useSwap2'
 
 const MAX_HOPS = 3
 
