@@ -10,7 +10,7 @@ import {
   Stack,
   Text,
 } from '@concave/ui'
-import BondBuyCard from 'components/Bond/BondBuyCard'
+import { BondBuyCard } from 'components/Bond/BondBuyCard'
 import GcnvTitle from 'components/GcnvTitle'
 import Placeholder from 'components/Placeholder'
 import { SwapCard } from 'components/Swap/SwapCard'
@@ -108,10 +108,7 @@ export default function Bond() {
           <Heading as="h1" mb={3} fontSize="5xl">
             Dynamic Bond Market
           </Heading>
-          <Text maxW={280}>
-            Get your gCNV that will grow internal CNV number your gCNV that will grow number or smth
-            idk lol Get your gCNV that will grow internal CNV number or smth idk lol
-          </Text>
+
         </Stack>
 
         <Flex gap={10} direction="row">
