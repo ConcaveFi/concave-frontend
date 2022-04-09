@@ -23,12 +23,13 @@ import {
 import { useAddressTokenList, useTokenList } from 'components/Swap/hooks/useTokenList'
 import { TokenInput } from 'components/Swap/TokenInput'
 import { useAuth } from 'contexts/AuthContext'
-import { BigNumber, BigNumberish, Contract } from 'ethers'
+import { BigNumber, Contract } from 'ethers'
+import { formatUnits } from 'ethers/lib/utils'
 import { Token as GemswapToken } from 'gemswap-sdk'
 import { useAddLiquidity, UseAddLiquidityData } from 'hooks/useAddLiquidity'
 import { useApprovalWhenNeeded } from 'hooks/useAllowance'
 import { useLiquidityInfo } from 'hooks/useLiquidityInfo'
-import { usePrecision } from 'hooks/usePrecision'
+import { precision, usePrecision } from 'hooks/usePrecision'
 import { contractABI } from 'lib/contractoABI'
 import { concaveProvider } from 'lib/providers'
 import { useRouter } from 'next/router'
@@ -79,15 +80,20 @@ const PositionInfoItem = ({ color = '', label, value, mt = 0, children = <></> }
 
 interface LPPosition {
   //  pair?: Pair
-  ownedAmount: BigNumberish
+  userAddress: string
   liquidityPoolToken: Token
 }
 
-const LPPositionItem = ({ ownedAmount, liquidityPoolToken }: LPPosition) => {
+const LPPositionItem = ({ userAddress, liquidityPoolToken }: LPPosition) => {
   const tokens = useTokenList(chain.ropsten.name)
-  const [{ pair, token }, loading, error] = useLiquidityInfo(liquidityPoolToken)
+  const [{ pair, token, totalSupply }, loading, error] = useLiquidityInfo(liquidityPoolToken)
   const [tokenA, setTokenA] = useState<Token>()
   const [tokenB, setTokenB] = useState<Token>()
+  const [userBalance] = useBalance({
+    addressOrName: userAddress,
+    token: token?.address,
+    formatUnits: token?.decimals,
+  })
 
   useEffect(() => {
     if (tokens.isLoading || !pair) {
@@ -117,6 +123,12 @@ const LPPositionItem = ({ ownedAmount, liquidityPoolToken }: LPPosition) => {
   if (!pair) {
     return <p>Loading Pair</p>
   }
+  if (userBalance.loading) {
+    return <p>Loading user Balance</p>
+  }
+  const percentage =
+    +formatUnits(userBalance.data.value, userBalance.data.decimals) /
+    +formatUnits(totalSupply, token.decimals)
   return (
     <>
       <AccordionItem p={2} shadow="Up Big" borderRadius="2xl" alignItems="center">
@@ -156,14 +168,17 @@ const LPPositionItem = ({ ownedAmount, liquidityPoolToken }: LPPosition) => {
             p={4}
             spacing={4}
           >
-            <PositionInfoItem label="Your total pool tokens:" value={ownedAmount.toString()} />
+            <PositionInfoItem label="Your total pool tokens:" value={userBalance.data.formatted} />
             <PositionInfoItem label={`Pooled ${tokenA.symbol}:`} value={pair.reserve0.toFixed(2)}>
               <TokenIcon h={'32px'} size="sm" {...tokenA} />
             </PositionInfoItem>
             <PositionInfoItem label={`Pooled ${tokenB.symbol}:`} value={pair.reserve1.toFixed(2)}>
               <TokenIcon h={'32px'} size="sm" {...tokenB} />
             </PositionInfoItem>
-            <PositionInfoItem label="Your pool share:" value={'2.79%'} />
+            <PositionInfoItem
+              label="Your pool share:"
+              value={`${precision(percentage * 100, 2).formatted}%`}
+            />
           </Stack>
           <Flex gap={5} justify="center" mt={6}>
             <Button onClick={addLiquidity.onOpen} variant="primary" h={12} w={40} fontSize="lg">
@@ -690,7 +705,7 @@ const MyPositions = () => {
               <LPPositionItem
                 key={liquidityPoolToken.address}
                 liquidityPoolToken={liquidityPoolToken}
-                ownedAmount={'0.013'}
+                userAddress={user.address}
               />
             )
           })}

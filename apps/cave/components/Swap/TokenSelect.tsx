@@ -97,7 +97,7 @@ export const SelectTokenModal = ({
   const [search, setSearch] = useState('')
   const nativeCurrency = useNativeCurrency()
   const currentChain = network?.chain
-  const { data: tokens, isLoading, isSuccess } = useTokenList()
+  const { data: tokens, isLoading, isSuccess } = useTokenList(currentChain.name)
   const selectAndClose = useCallback(
     (token: Token) => (onSelect(token), onClose()),
     [onSelect, onClose],
@@ -106,6 +106,7 @@ export const SelectTokenModal = ({
     <Modal
       bluryOverlay
       title="Select a Token"
+      size={'sm'}
       isOpen={isOpen}
       onClose={onClose}
       bodyProps={{ gap: 4, w: '350px' }}
