@@ -15,17 +15,17 @@ import { TransactionSubmittedModal } from './TransactionSubmitted'
 import { useSwapState } from './useSwap2'
 
 const GasPrice = () => {
-  const { data, isSuccess, isLoading, isError } = useFeeData({ formatUnits: 'gwei', watch: true })
-  if (isError) return null
+  const [{ data, error, loading }] = useFeeData({ formatUnits: 'gwei', watch: true })
+  if (error) return null
   return (
     <>
       <GasIcon viewBox="0 0 16 16" />
-      {isSuccess && (
+      {data && (
         <Text fontSize="xs" color="text.low" fontWeight="medium">
           {Number(data?.formatted.gasPrice).toFixed(2)} gwei
         </Text>
       )}
-      {isLoading && <Spinner size="xs" color="text.low" />}
+      {loading && <Spinner size="xs" color="text.low" />}
     </>
   )
 }
@@ -120,13 +120,13 @@ export function SwapCard() {
     switchCurrencies,
   } = useSwapState()
 
-  const outputFiat = useFiatValue(trade?.outputAmount)
   const inputFiat = useFiatValue(trade?.inputAmount)
+  const outputFiat = useFiatValue(trade?.outputAmount)
 
   const priceImpact = computeFiatValuePriceImpact(outputFiat?.value, inputFiat?.value)
 
-  const { data: inputCurrencyBalance } = useCurrencyBalance(currencyIn)
-  const { data: outputCurrencyBalance } = useCurrencyBalance(currencyOut)
+  const [{ data: inputCurrencyBalance }] = useCurrencyBalance(currencyIn)
+  const [{ data: outputCurrencyBalance }] = useCurrencyBalance(currencyOut)
 
   return (
     <>
@@ -139,7 +139,7 @@ export function SwapCard() {
         >
           <HStack justify="space-between" align="center" textColor="text.low" w="full">
             <Text isTruncated maxW="100px" fontWeight="bold" fontSize="sm">
-              {!!inputFiat.isSuccess && `$${inputFiat.value.toFixed(2)}`}
+              {!!inputFiat.value && `$${inputFiat.value.toFixed(2)}`}
             </Text>
             {inputCurrencyBalance && (
               <Balance
@@ -159,34 +159,37 @@ export function SwapCard() {
           onSelectCurrency={updateCurrencyOut}
         >
           <HStack justify="space-between" align="center" textColor="text.low" w="full">
-            <Text isTruncated maxW="100px" fontWeight="bold" fontSize="sm">
-              {!!outputFiat.isSuccess &&
-                `$${outputFiat.value.toFixed(2)} (${priceImpact.toFixed(2)})`}
+            <Text isTruncated maxW="120px" fontWeight="bold" fontSize="sm">
+              {!!outputFiat.value &&
+                `$${outputFiat.value.toFixed(2)} ${priceImpact && `(${priceImpact.toFixed(2)}%)`}`}
             </Text>
             {outputCurrencyBalance && <Balance value={outputCurrencyBalance.formatted} />}
           </HStack>
         </TokenInput>
 
-        {/* <HStack align="center" justify="end" py={5}>
-          {tradeStatus.isFetching && <Spinner size="xs" />}
-          {tradeStatus.isLoading && <Text fontSize="sm">Updating prices</Text>}
-          {tradeStatus.isError && <PairsError />}
-          {tradeStatus.isSuccess && trade && (
-            <Flex flexWrap="wrap" fontSize="xs" fontWeight="medium" mr="auto">
-              <Text>
-                1 {trade.inputAmount.currency.symbol} = {trade.route.midPrice.toSignificant(3)}{' '}
-                {trade.outputAmount.currency.symbol}
-              </Text>
-              {outputFiat.price && (
-                <Text ml={1} textColor="text.low">
-                  (${outputFiat.price})
+        <HStack align="center" justify="end" py={5}>
+          <HStack flexWrap="wrap" align="center" fontSize="xs" fontWeight="medium" mr="auto">
+            {tradeStatus.isFetching && <Spinner size="xs" />}
+            {tradeStatus.isLoading && <Text fontSize="sm">Updating prices</Text>}
+            {tradeStatus.isError && <PairsError />}
+            {tradeStatus.isSuccess && trade && (
+              <>
+                <Text>
+                  1 {trade.outputAmount.currency.symbol} ={' '}
+                  {trade.route.midPrice.invert().toSignificant(3)}{' '}
+                  {trade.inputAmount.currency.symbol}
                 </Text>
-              )}
-            </Flex>
-          )} */}
-        {/* <GasPrice /> */}
-        {/* <Settings onClose={() => null} /> */}
-        {/* </HStack> */}
+                {outputFiat.price && (
+                  <Text ml={1} textColor="text.low">
+                    (${outputFiat.price.toFixed(2)})
+                  </Text>
+                )}
+              </>
+            )}
+          </HStack>
+          <GasPrice />
+          {/* <Settings onClose={() => null} /> */}
+        </HStack>
         {/*
         {needsApproval && (
           <Button

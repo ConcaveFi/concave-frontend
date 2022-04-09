@@ -10,17 +10,21 @@ import {
   Trade,
   CNV,
   DAI,
+  Pair,
+  CurrencyAmount,
 } from 'gemswap-sdk'
 import { useTrade } from './hooks/useTrade'
 import { useQuery } from 'react-query'
 import { Contract } from 'ethers'
 import { tryParseAmount } from './utils/parseInputAmount'
+import { usePair, usePairs } from './hooks/usePair'
 
 export const useCurrentSupportedNetworkId = () => {
-  const { activeChain } = useNetwork()
-  const isRopsten = activeChain?.id === chain.ropsten.id
-  // we only support mainnet rn, so unless we testing in ropsten, default to mainnet
-  return isRopsten ? chain.ropsten.id : chain.mainnet.id
+  return 1
+  // const { activeChain } = useNetwork()
+  // const isRopsten = activeChain?.id === chain.ropsten.id
+  // // we only support mainnet rn, so unless we testing in ropsten, default to mainnet
+  // return isRopsten ? chain.ropsten.id : chain.mainnet.id
 }
 
 // export default function useTransactionDeadline(): BigNumber | undefined {
@@ -68,7 +72,7 @@ export const useSwapState = () => {
   const [currencyOut, setCurrencyOut] = useState<Currency>(CNV[networkId])
   const [exactValue, setExactValue] = useState<string>('')
   const [tradeType, setTradeType] = useState<TradeType>(TradeType.EXACT_INPUT)
-  const [recipient, setRecipient] = useState<string>('')
+  // const [recipient, setRecipient] = useState<string>('')
 
   const updateField = (fieldTradeType: TradeType) => (amount) => {
     setExactValue(amount)
@@ -91,19 +95,20 @@ export const useSwapState = () => {
     [currencyIn, currencyOut],
   )
 
-  const [exactCurrency, otherCurrency] =
-    tradeType === TradeType.EXACT_INPUT ? [currencyIn, currencyOut] : [currencyOut, currencyIn]
-  const parsedExactAmount = tryParseAmount(exactValue, exactCurrency)
+  const [exactCurrencyAmount, otherCurrency] =
+    tradeType === TradeType.EXACT_INPUT
+      ? [tryParseAmount(exactValue, currencyIn), currencyOut]
+      : [tryParseAmount(exactValue, currencyOut), currencyIn]
 
-  const { trade, ...tradeStatus } = useTrade(parsedExactAmount, otherCurrency, {
+  const { trade, ...tradeStatus } = useTrade(exactCurrencyAmount, otherCurrency.wrapped, {
     tradeType,
-    maxHops: 1,
+    maxHops: 3,
   })
 
   const [currencyAmountIn, currencyAmountOut] =
     tradeType === TradeType.EXACT_INPUT
-      ? [parsedExactAmount, trade?.outputAmount]
-      : [trade?.inputAmount, parsedExactAmount]
+      ? [exactCurrencyAmount, trade?.outputAmount]
+      : [trade?.inputAmount, exactCurrencyAmount]
 
   return useMemo(
     () => ({
@@ -113,25 +118,25 @@ export const useSwapState = () => {
       currencyOut,
       currencyAmountIn,
       currencyAmountOut,
-      recipient,
+      // recipient,
       tradeType,
       updateInputValue: updateField(TradeType.EXACT_INPUT),
       updateOutputValue: updateField(TradeType.EXACT_OUTPUT),
       updateCurrencyIn: setOrSwitchCurrency(currencyOut, setCurrencyIn),
       updateCurrencyOut: setOrSwitchCurrency(currencyIn, setCurrencyOut),
       switchCurrencies,
-      setRecipient,
+      // setRecipient,
     }),
     [
       trade,
+      tradeStatus,
       currencyAmountIn,
       currencyAmountOut,
       currencyIn,
       currencyOut,
-      recipient,
+      // recipient,
       setOrSwitchCurrency,
       switchCurrencies,
-      tradeStatus,
       tradeType,
     ],
   )

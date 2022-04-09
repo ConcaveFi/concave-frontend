@@ -18,18 +18,21 @@ import { FiMenu } from 'react-icons/fi'
 import SideBarTop from './SideBarTop'
 import SideBarBottom from './SideBarBottom'
 import PageNav from './PageNav'
-import { chain, useNetwork } from 'wagmi'
+import { useNetwork } from 'wagmi'
 import { useEffect } from 'react'
 
 export function SideBar() {
   const { isOpen, onOpen, onClose } = useDisclosure()
-
+  const [{ data, error, loading }, switchNetwork] = useNetwork()
   const networkModal = useDisclosure()
-  const { activeChain, chains, switchNetwork } = useNetwork({
-    onSuccess: ({ id }) => {
-      if (id !== chain.mainnet.id) networkModal.onOpen()
-    },
-  })
+
+  useEffect(() => {
+    if (data.chain?.name && data.chain?.name !== 'Mainnet' && data.chain?.name !== 'Ropsten') {
+      networkModal.onOpen()
+    } else {
+      networkModal.onClose()
+    }
+  }, [data])
   // console.log(data.chain?.name ?? 'Not connected')
   // console.log(data.chain?.unsupported && '(unsupported)')
 
@@ -37,14 +40,17 @@ export function SideBar() {
     <Box minH="100vh">
       <Modal
         bluryOverlay={true}
-        title="Change Network"
+        title=""
         isOpen={networkModal.isOpen}
         onClose={networkModal.onClose}
+        bodyProps={{
+          shadow: 'Up for Blocks',
+        }}
         titleAlign="center"
       >
         {switchNetwork &&
-          chains.map((x) =>
-            x.id === activeChain?.id ? null : (
+          data.chains.map((x) =>
+            x.id === data.chain?.id ? null : (
               <Button
                 rightIcon={<Image maxWidth="20px" src={`/assets/tokens/eth.svg`} alt="" />}
                 key={x.id}

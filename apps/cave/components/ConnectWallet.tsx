@@ -11,15 +11,14 @@ import {
   gradientBorder,
   Modal,
 } from '@concave/ui'
-import { useAccount, useConnect, useDisconnect } from 'wagmi'
+import { useAccount, useConnect } from 'wagmi'
 import { useIsMounted } from 'hooks/useIsMounted'
 
 const miniAddress = (address) =>
   `${address.substr(0, 6)}...${address.substr(address.length - 6, address.length)}`
 
 const DisconnectButton = () => {
-  const { data: account } = useAccount()
-  const { disconnect } = useDisconnect()
+  const [{ data: account }, disconnect] = useAccount()
 
   return (
     <Menu placement="right-start">
@@ -45,7 +44,7 @@ const DisconnectButton = () => {
 }
 
 export const ConnectWalletModal = ({ isOpen, onClose }) => {
-  const { connectors, connectAsync } = useConnect()
+  const [{ data }, connect] = useConnect()
   const isMounted = useIsMounted()
   return (
     <Modal
@@ -58,7 +57,7 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
       bodyProps={{ alignItems: 'center', gap: 3, w: '100', maxW: '350px' }}
     >
       {isMounted &&
-        connectors.map((connector) => {
+        data.connectors.map((connector) => {
           if (!connector.ready) return null
           return (
             <Button
@@ -72,7 +71,7 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
                 <Image maxWidth="20px" src={`/assets/connectors/${connector.id}.png`} alt="" />
               }
               key={connector.id}
-              onClick={() => connectAsync(connector).then(onClose)}
+              onClick={() => connect(connector).then(onClose)}
             >
               {connector.name}
             </Button>
@@ -83,7 +82,7 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
 }
 
 const ConnectButton = () => {
-  const { connectors, connect } = useConnect()
+  const [{ data }, connect] = useConnect()
   const isMounted = useIsMounted()
   return (
     <>
@@ -116,7 +115,7 @@ const ConnectButton = () => {
               gap="1"
             >
               {isMounted &&
-                connectors.map((connector) => {
+                data.connectors.map((connector) => {
                   if (!connector.ready) return null
                   // change image from using connector id to something else, injected can be metamask, coinbase, brave etc
                   return (
@@ -145,9 +144,9 @@ const ConnectButton = () => {
 }
 
 export function ConnectWallet(): JSX.Element {
-  const { isConnected } = useConnect()
+  const [{ data }] = useConnect()
 
-  if (isConnected) return <DisconnectButton />
+  if (data.connected) return <DisconnectButton />
 
   // if (isConnected && !isSignedIn) return
   return <ConnectButton />

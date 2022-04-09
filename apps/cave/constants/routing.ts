@@ -1,4 +1,4 @@
-import { Token, Currency } from 'gemswap-sdk'
+import { Token, Currency } from 'c-sdk'
 
 import { chain } from 'wagmi'
 import { DAI, DOLA, USDC, FRAX, USDT, WETH } from './tokens'

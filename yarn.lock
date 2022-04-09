@@ -1249,25 +1249,6 @@
   dependencies:
     "@chakra-ui/utils" "1.10.4"
 
-"@coinbase/wallet-sdk@^3.0.1":
-  version "3.0.5"
-  resolved "https://registry.yarnpkg.com/@coinbase/wallet-sdk/-/wallet-sdk-3.0.5.tgz#d9eb49b482570e93ef9fd0bfe15c5582e28b3063"
-  integrity sha512-MsPhgS9b9DpNQdbuYEFDZToPVhh8OQZFkLH59LpYHXRxRIjQDsGGjXcLC50jfW06ElBbtB9adl5RlJTmXb9KbA==
-  dependencies:
-    "@metamask/safe-event-emitter" "2.0.0"
-    bind-decorator "^1.0.11"
-    bn.js "^5.1.1"
-    clsx "^1.1.0"
-    eth-block-tracker "4.4.3"
-    eth-json-rpc-filters "4.2.2"
-    eth-rpc-errors "4.0.2"
-    js-sha256 "0.9.0"
-    json-rpc-engine "6.1.0"
-    keccak "^3.0.1"
-    preact "^10.5.9"
-    rxjs "^6.6.3"
-    stream-browserify "^3.0.0"
-
 "@cspotcode/source-map-consumer@0.8.0":
   version "0.8.0"
   resolved "https://registry.yarnpkg.com/@cspotcode/source-map-consumer/-/source-map-consumer-0.8.0.tgz#33bf4b7b39c178821606f669bbc447a6a629786b"
@@ -3000,14 +2981,6 @@
     "@uniswap/sdk-core" "^3.0.0-alpha.3"
     tiny-invariant "^1.1.0"
     tiny-warning "^1.0.3"
-
-"@wagmi/core@0.2.0-next.11":
-  version "0.2.0-next.11"
-  resolved "https://registry.yarnpkg.com/@wagmi/core/-/core-0.2.0-next.11.tgz#92bfc974d3f27e8405401b10c9adf0f2408ada04"
-  integrity sha512-rX9Mdy8wEdEHJ82/329xw2zS3+N4XB0D0ceMLLb+5gMxq1k0FRaGcWtj5U2wgFNAeBdipgR/RmcwFBRK5rH2Iw==
-  dependencies:
-    eventemitter3 "^4.0.7"
-    zustand "^3.7.0"
 
 "@walletconnect/browser-utils@^1.7.5":
   version "1.7.5"
@@ -8859,7 +8832,7 @@ react-number-format@^4.9.1:
   dependencies:
     prop-types "^15.7.2"
 
-react-query@^3.34.16, react-query@^3.34.19:
+react-query@^3.34.19:
   version "3.34.19"
   resolved "https://registry.yarnpkg.com/react-query/-/react-query-3.34.19.tgz#0ff049b6e0d2ed148e9abfdd346625d0e88dc229"
   integrity sha512-JO0Ymi58WKmvnhgg6bGIrYIeKb64KsKaPWo8JcGnmK2jJxAs2XmMBzlP75ZepSU7CHzcsWtIIyhMrLbX3pb/3w==
@@ -10432,15 +10405,23 @@ w3c-xmlserializer@^2.0.0:
   dependencies:
     xml-name-validator "^3.0.0"
 
-wagmi@^0.3.0-next.13:
-  version "0.3.0-next.13"
-  resolved "https://registry.yarnpkg.com/wagmi/-/wagmi-0.3.0-next.13.tgz#d7987a67dc204bb2e0860224dab5971c63d135da"
-  integrity sha512-+yB5Gd1GadHsD1mCBLLGz2zfZfXbIWsl/2n98wZOurL4yieFymb54JsuZiCTNpIBuCnd0I2eCJNScb0J5aMvnA==
+wagmi-core@0.1.19:
+  version "0.1.19"
+  resolved "https://registry.yarnpkg.com/wagmi-core/-/wagmi-core-0.1.19.tgz#829a6fd0ab9a8306eac3d61b15d822d1f7e8c475"
+  integrity sha512-pqtN/8OcNAinAHZEG9c6V0SxMVM7sT0nVeaz+WVKEwEjd9BQntHo++qMvMdnivVfsJIoGz7gSFNvjvXRnlY3Ww==
   dependencies:
-    "@coinbase/wallet-sdk" "^3.0.1"
-    "@wagmi/core" "0.2.0-next.11"
+    "@ethersproject/providers" "^5.5.1"
+    eventemitter3 "^4.0.7"
+
+wagmi@^0.2.25:
+  version "0.2.25"
+  resolved "https://registry.yarnpkg.com/wagmi/-/wagmi-0.2.25.tgz#43346739292b7f173f74bff051762380c9fc0961"
+  integrity sha512-RGfpcyUSGlelCaEajhpDIF/IlFl4kqxQX5Pztuk6iAkwKwxMWzj+OeIwMbcdUeOE/b4iKjHNsPH96AhGBlB04Q==
+  dependencies:
+    "@ethersproject/providers" "^5.5.1"
     "@walletconnect/ethereum-provider" "1.7.5"
-    react-query "^3.34.16"
+    wagmi-core "0.1.19"
+    walletlink "^2.5.0"
 
 walker@^1.0.7:
   version "1.0.8"
@@ -10448,6 +10429,25 @@ walker@^1.0.7:
   integrity sha512-ts/8E8l5b7kY0vlWLewOkDXMmPdLcVV4GmOQLyxuSswIJsweeFZtAsMF7k1Nszz+TYBQrlYRmzOnr398y1JemQ==
   dependencies:
     makeerror "1.0.12"
+
+walletlink@^2.5.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/walletlink/-/walletlink-2.5.0.tgz#b8db10f4d9f124084feb16d1e2b2d08ba8c20d21"
+  integrity sha512-PBJmK5tZmonwKPABBI2/optaZ11O4kKmkmnU5eLKhk4XRlal5qJ1igZ4U5j3w6w8wxxdhCWpLMHzGWt3n/p7mw==
+  dependencies:
+    "@metamask/safe-event-emitter" "2.0.0"
+    bind-decorator "^1.0.11"
+    bn.js "^5.1.1"
+    clsx "^1.1.0"
+    eth-block-tracker "4.4.3"
+    eth-json-rpc-filters "4.2.2"
+    eth-rpc-errors "4.0.2"
+    js-sha256 "0.9.0"
+    json-rpc-engine "6.1.0"
+    keccak "^3.0.1"
+    preact "^10.5.9"
+    rxjs "^6.6.3"
+    stream-browserify "^3.0.0"
 
 warning@^4.0.3:
   version "4.0.3"
@@ -10810,7 +10810,7 @@ zen-observable@0.8.15:
   resolved "https://registry.yarnpkg.com/zen-observable/-/zen-observable-0.8.15.tgz#96415c512d8e3ffd920afd3889604e30b9eaac15"
   integrity sha512-PQ2PC7R9rslx84ndNBZB/Dkv8V8fZEpk83RLgXtYd0fwUgEjseMn1Dgajh2x6S8QbZAFa9p2qVCEuYZNgve0dQ==
 
-zustand@^3.7.0, zustand@^3.7.2:
+zustand@^3.7.2:
   version "3.7.2"
   resolved "https://registry.yarnpkg.com/zustand/-/zustand-3.7.2.tgz#7b44c4f4a5bfd7a8296a3957b13e1c346f42514d"
   integrity sha512-PIJDIZKtokhof+9+60cpockVOq05sJzHCriyvaLBmEJixseQ1a5Kdov6fWZfWOu5SK9c+FhH1jU0tntLxRJYMA==

@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query'
 import { concaveProvider } from 'lib/providers'
-import { Token, Fetcher } from 'gemswap-sdk'
+import { Token, Fetcher, DAI, Pair } from 'gemswap-sdk'
 import { BASES_TO_CHECK_TRADES_AGAINST, INTERMEDIARY_PAIRS_FOR_MULTI_HOPS } from 'constants/routing'
 
 const filterRepeatedPairs = (pairs: [Token, Token][]) =>
@@ -35,7 +35,7 @@ const getAllCommonPairs = (
   ] as [Token, Token][])
 
 export const usePairs = (tokenA?: Token, tokenB?: Token, maxHops = 3) => {
-  const { refetch, ...pairs } = useQuery(
+  return useQuery(
     ['pairs', tokenA?.address, tokenB?.address, maxHops],
     async () => {
       if (!tokenA || !tokenB || tokenA.equals(tokenB)) throw new Error('Invalid token pair')
@@ -43,19 +43,24 @@ export const usePairs = (tokenA?: Token, tokenB?: Token, maxHops = 3) => {
       const commonPairs = getAllCommonPairs(tokenA, tokenB, maxHops)
       const pairs = (
         await Promise.all(
-          commonPairs.map(([a, b]) => Fetcher.fetchPairData(a, b, concaveProvider(a.chainId))),
+          commonPairs.map(async ([a, b]) => {
+            try {
+              return await Fetcher.fetchPairData(a, b, concaveProvider(a.chainId))
+            } catch (error) {
+              return null
+            }
+          }),
         )
       ).filter(Boolean)
 
-      console.log(pairs[0].token0) // undefined
-
       if (!pairs || pairs.length === 0) throw new Error('No valid pairs')
+
       return pairs
     },
-    { enabled: tokenA?.address && tokenB?.address && !tokenA.equals(tokenB) },
+    { enabled: !!tokenA?.address && !!tokenB?.address },
   )
 
-  return pairs
+  // return pairsQuery
 }
 
 export const usePair = (tokenA: Token, tokenB: Token) => usePairs(tokenA, tokenB, 1)

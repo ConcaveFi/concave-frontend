@@ -10,29 +10,28 @@ export const useFiatPrice = (currency?: Currency) => {
   // The amount is large enough to filter low liquidity pairs.
   const amountOut = CurrencyAmount.fromRawAmount(stablecoin, 50_000) // +`50000e${stablecoin.decimals}`
 
-  const { trade, isLoading, isError, isSuccess, isRefetching } = useTrade(amountOut, currency, {
+  const { trade, isLoading, isError, isRefetching } = useTrade(amountOut, currency, {
     maxHops: 2,
     tradeType: TradeType.EXACT_OUTPUT,
   })
 
   return useMemo(() => {
-    const status = { isLoading, isError, isSuccess, isRefetching }
+    const status = { isLoading, isError, isRefetching }
     if (!currency) return { ...status, price: undefined }
 
-    if (stablecoin.equals(currency))
-      return { price: new Price(stablecoin, stablecoin, '1', '1'), ...status }
+    if (stablecoin.equals(currency)) return { price: new Price(stablecoin, stablecoin, '1', '1') }
 
     if (!trade) return { ...status, price: undefined }
 
     const { numerator, denominator } = trade.route.midPrice
     return { price: new Price(currency, stablecoin, denominator, numerator), ...status }
-  }, [currency, isError, isLoading, isRefetching, isSuccess, stablecoin, trade])
+  }, [currency, isError, isLoading, isRefetching, stablecoin, trade])
 }
 
 export const useFiatValue = (currencyAmount?: CurrencyAmount<Currency>) => {
   const fiatPrice = useFiatPrice(currencyAmount?.currency)
   return useMemo(() => {
-    if (!fiatPrice.isSuccess) return { value: undefined, ...fiatPrice }
-    return { value: fiatPrice.price.quote(currencyAmount), ...fiatPrice }
+    if (!fiatPrice.price) return { value: undefined, ...fiatPrice }
+    return { value: fiatPrice.price.quote(currencyAmount.wrapped), ...fiatPrice }
   }, [currencyAmount, fiatPrice])
 }
