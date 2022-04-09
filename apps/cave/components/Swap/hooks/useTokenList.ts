@@ -6,7 +6,7 @@ const concaveTokenList = (networkName: string) =>
   `/assets/tokenlists/${networkName.toLowerCase()}/concave.json`
 
 export const useTokenList = (networkName: string = chain.mainnet.name) => {
-  return useQuery('token-list', () =>
+  return useQuery(['token-list', networkName], () =>
     fetch(concaveTokenList(networkName))
       .then((d) => d.json() as Promise<ConcaveTokenList>)
       .then((l) => l.tokens)

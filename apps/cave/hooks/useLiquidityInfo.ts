@@ -16,6 +16,7 @@ export const useLiquidityInfo = (token: Token) => {
   const selectedChain = token.chainId === chain.ropsten.id ? chain.ropsten : chain.mainnet
   const [isLoading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<unknown>()
+  const [totalSupply, setTotalSupply] = useState<BigNumber>(BigNumber.from('0'))
   const liquidityContract = useMemo(() => {
     return new Contract(token.address, liquidityContractABI, concaveProvider2(selectedChain.id))
   }, [token.address, selectedChain])
@@ -28,8 +29,9 @@ export const useLiquidityInfo = (token: Token) => {
         reserves._quoteReserves as BigNumber,
         liquidityContract.token0().then((t: string) => getToken(selectedChain, t)),
         liquidityContract.token1().then((t: string) => getToken(selectedChain, t)),
+        liquidityContract.totalSupply(),
       ])
-        .then(([amount0, amount1, token0, token1]) => {
+        .then(([amount0, amount1, token0, token1, totalSupply]) => {
           const tokenA: CurrencyAmount<Token> = CurrencyAmount.fromRawAmount(
             token0,
             amount0.toString(),
@@ -38,16 +40,17 @@ export const useLiquidityInfo = (token: Token) => {
             token1,
             amount1.toString(),
           )
-          console.log(token.address, amount0.toString(), amount1.toString())
+          setTotalSupply(totalSupply)
           if (tokenA && tokenB) {
             //@ts-ignore
             setPair(new Pair(tokenB, tokenA))
           }
+          setTotalSupply(totalSupply)
           setLoading(false)
         })
         .catch(setError)
     })
   }, [liquidityContract, selectedChain])
 
-  return [{ pair, token }, isLoading, error] as const
+  return [{ pair, token, totalSupply }, isLoading, error] as const
 }
