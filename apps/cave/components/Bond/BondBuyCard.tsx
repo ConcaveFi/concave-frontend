@@ -8,7 +8,7 @@ import { BondOutput } from './BondOutput'
 import { BondInput } from './BondInput'
 
 export function BondBuyCard() {
-  const { currencyIn, exactValue, userAddress, isConnected, balance } = useBondState()
+  const { currencyIn, currencyOut, exactValue, userAddress, isConnected, balance } = useBondState()
 
   const [amountIn, setAmountIn] = useState<string>('0')
   const [amountOut, setAmountOut] = useState<string>('0')
@@ -49,7 +49,7 @@ export function BondBuyCard() {
       <DownwardIcon />
       <BondOutput
         disabled={true}
-        currency={currencyIn}
+        currency={currencyOut}
         value={amountOut}
         // onChangeValue={(v) => {
         //   !isNaN(+v) && setAmountOut(v)
@@ -81,7 +81,7 @@ export function BondBuyCard() {
           isFullWidth
           onClick={confirmModal.onOpen}
         >
-          {+userBalance < +amountIn ? 'Insufficient Funds' : 'Buy with 5 days vesting'}
+          {+userBalance < +amountIn ? 'Insufficient Funds' : 'Buy'}
         </Button>
       )}
     </Card>
