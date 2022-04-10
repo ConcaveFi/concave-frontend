@@ -32,7 +32,7 @@
     "cookie": "^0.4.2",
     "debounce": "^1.2.1",
     "ethers": "^5.6.2",
-    "gemswap-sdk": "^1.0.10",
+    "gemswap-sdk": "^1.0.13",
     "globstar": "^1.0.0",
     "graphql": "^16.3.0",
     "graphql-request": "^4.2.0",
