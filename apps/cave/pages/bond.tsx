@@ -20,7 +20,6 @@ import { useSwap } from 'components/Swap/useSwap'
 import { useAuth } from 'contexts/AuthContext'
 import React from 'react'
 
-
 const InfoItem = ({ value, label, ...props }) => (
   <Flex
     direction="column"
@@ -108,7 +107,10 @@ export default function Bond() {
           <Heading as="h1" mb={3} fontSize="5xl">
             Dynamic Bond Market
           </Heading>
-
+          <Text maxW={280}>
+            Get your gCNV that will grow internal CNV number your gCNV that will grow number or smth
+            idk lol Get your gCNV that will grow internal CNV number or smth idk lol
+          </Text>
         </Stack>
 
         <Flex gap={10} direction="row">
@@ -142,11 +144,10 @@ export default function Bond() {
               />
               <NothingToRedeem />
             </Card>
-           
           </Box>
+
           <BondBuyCard />
         </Flex>
-       
       </Flex>
       <Placeholder text="More Bonds" />
     </Container>
