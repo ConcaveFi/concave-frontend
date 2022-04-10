@@ -1,9 +1,11 @@
-import { TokenInput } from 'components/Swap/TokenInput'
-import { Button, Card, useDisclosure } from '@concave/ui'
+import { Button, Card, useDisclosure, Flex } from '@concave/ui'
 import { useApprovalWhenNeeded } from 'hooks/useAllowance'
 import React, { useEffect, useState } from 'react'
 import { useBondState } from './BondState'
-import { BOND_ADDRESS } from './BondingAddress'
+import { BOND_ADDRESS } from '../../contracts/BondingAddress'
+import { DownwardIcon } from './DownwardIcon'
+import { BondOutput } from './BondOutput'
+import { BondInput } from './BondInput'
 
 export function BondBuyCard() {
   const { currencyIn, exactValue, userAddress, isConnected, balance } = useBondState()
@@ -29,7 +31,7 @@ export function BondBuyCard() {
 
   return (
     <Card p={6} gap={2} variant="primary" h="fit-content" shadow="Block Up" w="100%" maxW="420px">
-      <TokenInput
+      <BondInput
         value={amountIn}
         currency={currencyIn}
         balance={userBalance}
@@ -44,12 +46,14 @@ export function BondBuyCard() {
         //   else setAmountIn(swapingIn.balance)
         // }}
       />
-      <TokenInput
+      <DownwardIcon />
+      <BondOutput
         disabled={true}
+        currency={currencyIn}
         value={amountOut}
-        onChangeValue={(v) => {
-          !isNaN(+v) && setAmountOut(v)
-        }}
+        // onChangeValue={(v) => {
+        //   !isNaN(+v) && setAmountOut(v)
+        // }}
       />
 
       {needsApproval && (
