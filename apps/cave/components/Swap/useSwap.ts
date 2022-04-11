@@ -1,7 +1,7 @@
 import { tokenService } from 'lib/token.service'
 import { useEffect, useState, useRef, useCallback } from 'react'
 import { useQuery } from 'react-query'
-import { useBalance } from 'wagmi'
+import { chain, Chain, useBalance, useNetwork } from 'wagmi'
 import { useTokenList } from './hooks/useTokenList'
 import { BigNumber } from 'ethers'
 import { Token } from 'gemswap-sdk'
@@ -53,8 +53,12 @@ export type UseSwap = SwapStateProps & {
   setToAmount: (amount: string | number) => void
 }
 
-export const useToken = (props: { userAddressOrName: string; symbol?: string }) => {
-  const tokens = useTokenList()
+export const useToken = (props: {
+  userAddressOrName: string
+  symbol?: string
+  selectedChain: Chain
+}) => {
+  const tokens = useTokenList(props.selectedChain.name)
   const [symbol, setSymbol] = useState<string>(props.symbol ?? null)
   const [token, setToken] = useState<Token>(null)
   const price = usePrice(symbol)
@@ -86,9 +90,11 @@ export const useSwap = (
   userAddressOrName: string,
   partialValues: Partial<SwapStateProps>,
 ): UseSwap => {
+  const [{ data }] = useNetwork()
+  const selectedChain = data?.chain.id === chain.ropsten.id ? chain.ropsten : chain.mainnet
   const [swap, setSwap] = useState({ ...defaultValue, ...partialValues })
-  const [from, setFromSymbol] = useToken({ userAddressOrName, symbol: 'DAI' })
-  const [to, setToSymbol] = useToken({ userAddressOrName, symbol: 'FRAX' })
+  const [from, setFromSymbol] = useToken({ userAddressOrName, symbol: 'DAI', selectedChain })
+  const [to, setToSymbol] = useToken({ userAddressOrName, symbol: 'FRAX', selectedChain })
 
   const refreshSlippage = useCallback(() => {
     const minimumReceivedAfterSlippage = +to.amount.current * (1 - swap.slippageTolerance / 100)
