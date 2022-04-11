@@ -91,7 +91,7 @@ export const useSwap = (
   partialValues: Partial<SwapStateProps>,
 ): UseSwap => {
   const [{ data }] = useNetwork()
-  const selectedChain = data?.chain.id === chain.ropsten.id ? chain.ropsten : chain.mainnet
+  const selectedChain = data?.chain?.id === chain.ropsten.id ? chain.ropsten : chain.mainnet
   const [swap, setSwap] = useState({ ...defaultValue, ...partialValues })
   const [from, setFromSymbol] = useToken({ userAddressOrName, symbol: 'DAI', selectedChain })
   const [to, setToSymbol] = useToken({ userAddressOrName, symbol: 'FRAX', selectedChain })
