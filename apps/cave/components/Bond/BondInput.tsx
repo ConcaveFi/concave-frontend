@@ -7,7 +7,7 @@ import {
   Text,
   useMultiStyleConfig,
 } from '@concave/ui'
-import { Currency } from '@uniswap/sdk-core'
+import { Currency } from 'gemswap-sdk'
 import React from 'react'
 import { TokenSelect } from '../Swap/TokenSelect'
 
@@ -31,7 +31,6 @@ export function BondInput({
   value,
   currency,
   balance,
-  stable,
   disabled = false,
   onChangeValue,
   onChangeCurrency,
@@ -40,14 +39,12 @@ export function BondInput({
   value: string
   currency?: Currency
   balance: string
-  stable: string
   disabled?: boolean
   onChangeValue: (value: string) => void
   onChangeCurrency: (token: Currency) => void
   onClickMaxBalance?: (value: string) => void
 } & FlexProps) {
   const styles = useMultiStyleConfig('Input', { variant: 'primary', size: 'large' })
-  const stableValue = +stable * +value
 
   return (
     <Stack sx={{ ...styles.field, bg: 'none' }} justify="space-between" spacing={0}>

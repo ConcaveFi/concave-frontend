@@ -1,4 +1,4 @@
-import { Button, Card, useDisclosure, Flex } from '@concave/ui'
+import { Button, Card, useDisclosure } from '@concave/ui'
 import { useApprovalWhenNeeded } from 'hooks/useAllowance'
 import React, { useEffect, useState } from 'react'
 import { useBondState } from './BondState'
@@ -6,12 +6,16 @@ import { BOND_ADDRESS } from '../../contracts/BondingAddress'
 import { DownwardIcon } from './DownwardIcon'
 import { BondOutput } from './BondOutput'
 import { BondInput } from './BondInput'
+import { ConfirmBondModal } from './ConfirmBond'
+import { Currency } from 'gemswap-sdk'
 
 export function BondBuyCard() {
   const { currencyIn, currencyOut, exactValue, userAddress, isConnected, balance } = useBondState()
 
   const [amountIn, setAmountIn] = useState<string>('0')
   const [amountOut, setAmountOut] = useState<string>('0')
+  const [currenctCurrencyIn, setCurrencyIn] = useState<Currency>()
+
   const [userBalance, setBalance] = useState<string>('0')
   const confirmModal = useDisclosure()
   const transactionStatusModal = useDisclosure()
@@ -39,7 +43,7 @@ export function BondBuyCard() {
           const numberValue = v.replace('-', '')
           numberValue && setAmountIn(v)
         }}
-        // onChangeCurrency={setCurrencyIn}
+        onChangeCurrency={() => {setCurrencyIn(currencyIn)}}
         // bug: fails to execute tx when clicked before hitting swap
         // onClickMaxBalance={() => {
         //   if (swapingIn.currency.equals(nativeCurrency)) setAmountIn(+swapingIn.balance * 0.8)
@@ -84,6 +88,36 @@ export function BondBuyCard() {
           {+userBalance < +amountIn ? 'Insufficient Funds' : 'Buy'}
         </Button>
       )}
+      <ConfirmBondModal
+        currencyIn={currencyIn}
+        currencyOut={currencyOut}
+        tokenInUsdPrice={'currencyIn'}
+        tokenOutUsdPrice={''}
+        tokenInRelativePriceToTokenOut={''}
+        isOpen={confirmModal.isOpen}
+        onClose={confirmModal.onClose}
+        onConfirm={() => {}}
+      />
+
+      {/* <TransactionStatusModal
+        inAmount={swapingIn?.amount}
+        outAmount={tradeInfo?.meta.expectedOutput}
+        inSymbol={swapingIn?.currency?.symbol}
+        outSymbol={swapingOut?.currency?.symbol}
+        status={swapTransaction}
+        isOpen={transactionStatusModal.isOpen}
+        onClose={() => {
+          transactionStatusModal.onClose()
+        }}
+      /> */}
+
+      {/* <TransactionSubmittedModal
+        receipt={swapTransaction}
+        isOpen={receiptModal.isOpen}
+        onClose={() => {
+          receiptModal.onClose()
+        }}
+      /> */}
     </Card>
   )
 }
