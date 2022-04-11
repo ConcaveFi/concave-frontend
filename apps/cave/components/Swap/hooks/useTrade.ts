@@ -19,6 +19,9 @@ export const getBestTrade = (
       ? Trade.bestTradeExactIn(pairs, exactAmount, otherCurrency, options)
       : Trade.bestTradeExactOut(pairs, otherCurrency, exactAmount, options)
 
+  // happens when there is not enough liquidity, like the trade would literally empty all reserves
+  if (!bestTrade[0]) throw new Error('Invalid Trade')
+
   return bestTrade[0]
 }
 
