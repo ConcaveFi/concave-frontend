@@ -56,7 +56,7 @@ export type UseSwap = SwapStateProps & {
 export const useToken = (props: {
   userAddressOrName: string
   symbol?: string
-  selectedChain: Chain
+  selectedChain?: Chain
 }) => {
   const tokens = useTokenList(props.selectedChain.name)
   const [symbol, setSymbol] = useState<string>(props.symbol ?? null)
