@@ -97,12 +97,6 @@ const NothingToRedeem = () => {
 export default function Bond() {
   return (
     <Container maxW="container.lg">
-      <GcnvTitle title="Bonds" description="" />
-      <Placeholder text="Composable Bonds" />
-    </Container>
-  )
-  return (
-    <Container maxW="container.lg">
       <Flex direction="column" gap={20}>
         <Stack mt={20} align="center" textAlign="center">
           <Heading as="h1" mb={3} fontSize="5xl">

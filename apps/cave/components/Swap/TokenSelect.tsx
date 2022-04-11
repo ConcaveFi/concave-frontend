@@ -1,6 +1,6 @@
-import { Input, Spinner, UnorderedList, useDisclosure } from '@chakra-ui/react'
 import { CnvQuestionIcon, DownIcon } from '@concave/icons'
 import {
+  useDisclosure,
   Button,
   Flex,
   Heading,
@@ -124,7 +124,7 @@ export const SelectTokenModal = ({
         shadow="Down Big"
         p={3}
       >
-        {!isSuccess ? (
+        {/* {!isSuccess ? (
           <Spinner />
         ) : (
           <UnorderedList
@@ -143,7 +143,7 @@ export const SelectTokenModal = ({
               />
             ))}
           </UnorderedList>
-        )}
+        )} */}
       </Flex>
     </Modal>
   )
