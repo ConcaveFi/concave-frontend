@@ -1,12 +1,11 @@
 import { useState, useMemo } from 'react'
-import { chain, useNetwork, useBalance } from 'wagmi'
+import { chain, useNetwork, useBalance, useAccount } from 'wagmi'
 import { useQuery } from 'react-query'
 import { BigNumberish, Contract } from 'ethers'
 import { DAI, CNV } from 'gemswap-sdk'
 import { BOND_ADDRESS } from '../../contracts/BondingAddress'
 import { BOND_ABI } from '../../contracts/BondABI'
 import { Token, Currency } from 'gemswap-sdk'
-import { useAuth } from 'contexts/AuthContext'
 
 const useCurrencyBalance = (currency: Currency, userAddress: string) =>
   useBalance({
@@ -41,15 +40,15 @@ export const useBondTransaction = (recipient: string) => {
 }
 
 export const useBondState = () => {
-  const { user, isConnected } = useAuth()
+  const [{ data: account }] = useAccount()
   const networkId = useCurrentSupportedNetworkId()
   const [currencyIn, setCurrencyIn] = useState<Token>(DAI[networkId])
   const [currencyOut, setCurrencyOut] = useState<Token>(CNV[networkId])
 
   const [recipient, setRecipient] = useState<string>('')
   const [exactValue, setExactValue] = useState<BigNumberish>(0)
-  const balance = useCurrencyBalance(currencyIn, user.address)
-  const userAddress = user.address
+  const balance = useCurrencyBalance(currencyIn, account?.address)
+  const userAddress = account?.address
   const updateField = () => (amount) => {
     setExactValue(amount)
   }
@@ -62,9 +61,8 @@ export const useBondState = () => {
       exactValue,
       setRecipient,
       userAddress,
-      isConnected,
       balance,
     }),
-    [balance, currencyIn, exactValue, isConnected, recipient, userAddress],
+    [balance, currencyIn, exactValue, recipient, userAddress],
   )
 }
