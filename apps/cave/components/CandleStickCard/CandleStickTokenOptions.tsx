@@ -1,8 +1,8 @@
-import { HStack, Text, CurrencyIcon } from '@concave/ui'
-import { TokenType } from 'lib/tokens'
+import { HStack, Text, TokenIcon } from '@concave/ui'
+import { Currency } from 'gemswap-sdk'
 import React from 'react'
 
-export const CandleStickTokenOptions = ({ from, to }: { from: TokenType; to: TokenType }) => {
+export const CandleStickTokenOptions = ({ from, to }: { from: Currency; to: Currency }) => {
   console.log(from, to)
   return (
     <HStack p={2} borderRadius="2xl" shadow="Down Big">

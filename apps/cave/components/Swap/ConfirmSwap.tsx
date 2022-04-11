@@ -1,8 +1,8 @@
 import { ExpandArrowIcon, CurrencyIcon } from '@concave/icons'
 import { Box, Button, Flex, HStack, Modal, NumericInput, StackDivider, Text } from '@concave/ui'
 import React from 'react'
-import { twoDecimals } from './SwapCard'
 import { TradeInfo } from './useSwap2'
+
 const TokenInfo = ({
   price,
   address,
@@ -27,7 +27,7 @@ const TokenInfo = ({
       <Box w={200} h="69px">
         <NumericInput disabled fontSize={'32px'} decimalScale={5} value={amount} />
         <Text fontWeight={700} fontSize={14} textColor="text.low">
-          {!!price ? `$${twoDecimals(price)}` : ``}
+          {!!price ? `$${price}` : ``}
           {/* {loss && ` (-${loss}%)`} */}
         </Text>
       </Box>

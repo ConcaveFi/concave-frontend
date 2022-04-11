@@ -9,7 +9,6 @@ export const usePosition = ({
   symbolB,
   liquidityAddress,
 }) => {
-  console.log(symbolA)
   const [wrapperTokenA, setTokenA] = useToken({ userAddressOrName: userAddress, symbol: symbolA })
   const [wrapperTokenB, setTokenB] = useToken({ userAddressOrName: userAddress, symbol: symbolB })
   const [amountPooledA, setAmontPooledA] = useState(100)

@@ -29,7 +29,7 @@ function PageNav() {
               Bonds
             </ButtonLink>
             <Text fontSize="sm" fontWeight="thin" textColor="#5F7A99" textAlign="center" p={1}>
-              Coming Soon
+              CNV-DAI ROI 9.8%
             </Text>
           </Box>
 
@@ -86,6 +86,7 @@ function PageNav() {
               Swap
             </ButtonLink>
             <ButtonLink
+            variant="ghost"
               w="full"
               mt={2}
               size="sm"
@@ -100,6 +101,7 @@ function PageNav() {
               Add liquidity
             </ButtonLink>
             <ButtonLink
+            variant="ghost"
               size="sm"
               w="full"
               bg="none"

@@ -10,6 +10,7 @@ import {
   Stack,
   Text,
 } from '@concave/ui'
+import { BondBuyCard } from 'components/Bond/BondBuyCard'
 import GcnvTitle from 'components/GcnvTitle'
 import Placeholder from 'components/Placeholder'
 import { SwapCard } from 'components/Swap/SwapCard'
@@ -113,7 +114,7 @@ export default function Bond() {
           </Text>
         </Stack>
 
-        <Flex gap={10}>
+        <Flex gap={10} direction="row">
           <Box pos="relative" h="fit-content">
             <Box
               h="20px"
@@ -145,14 +146,11 @@ export default function Bond() {
               <NothingToRedeem />
             </Card>
           </Box>
-          <SwapCard
-          // swap={swap}
-          // buttonLabel="Buy with 5 days vesting"
-          // variant="primary"
-          // w="380px"
-          />
+
+          <BondBuyCard />
         </Flex>
       </Flex>
+      <Placeholder text="More Bonds" />
     </Container>
   )
 }
