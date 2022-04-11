@@ -86,7 +86,7 @@ function PageNav() {
               Swap
             </ButtonLink>
             <ButtonLink
-            variant="ghost"
+              variant="ghost"
               w="full"
               mt={2}
               size="sm"
@@ -101,7 +101,7 @@ function PageNav() {
               Add liquidity
             </ButtonLink>
             <ButtonLink
-            variant="ghost"
+              variant="ghost"
               size="sm"
               w="full"
               bg="none"

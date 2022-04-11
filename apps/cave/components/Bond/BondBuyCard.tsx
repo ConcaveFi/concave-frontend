@@ -43,7 +43,9 @@ export function BondBuyCard() {
           const numberValue = v.replace('-', '')
           numberValue && setAmountIn(v)
         }}
-        onChangeCurrency={() => {setCurrencyIn(currencyIn)}}
+        onChangeCurrency={() => {
+          setCurrencyIn(currencyIn)
+        }}
         // bug: fails to execute tx when clicked before hitting swap
         // onClickMaxBalance={() => {
         //   if (swapingIn.currency.equals(nativeCurrency)) setAmountIn(+swapingIn.balance * 0.8)
