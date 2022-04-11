@@ -1,4 +1,4 @@
-import { ExpandArrowIcon, PlusIcon, CurrencyIcon } from '@concave/icons'
+import { ExpandArrowIcon, PlusIcon } from '@concave/icons'
 import {
   Accordion,
   AccordionButton,
@@ -20,6 +20,7 @@ import {
   useDisclosure,
   UseDisclosureReturn,
 } from '@concave/ui'
+import { CurrencyIcon } from 'components/CurrencyIcon'
 import { useAddressTokenList, useTokenList } from 'components/Swap/hooks/useTokenList'
 import { TokenInput } from 'components/Swap/TokenInput'
 import { TransactionSubmittedModal } from 'components/Swap/TransactionSubmittedModal'
@@ -135,8 +136,8 @@ const LPPositionItem = ({ userAddress, liquidityPoolToken }: LPPosition) => {
       <AccordionItem p={2} shadow="Up Big" borderRadius="2xl" alignItems="center">
         <AccordionButton>
           {/* //TODO https://github.com/ConcaveFi/concave-frontend/issues/118 */}
-          <TokenIcon h={'32px'} logoURI={tokenA.logoURI} symbol={tokenA.symbol} />
-          <TokenIcon h={'32px'} logoURI={tokenB.logoURI} symbol={tokenB.symbol} />
+          <CurrencyIcon h={'32px'} currency={tokenA} />
+          <CurrencyIcon h={'32px'} currency={tokenB} />
           <Text ml="24px" fontWeight="semibold" fontSize="lg">
             {tokenA.symbol}/{tokenB.symbol}{' '}
             <a
@@ -171,10 +172,10 @@ const LPPositionItem = ({ userAddress, liquidityPoolToken }: LPPosition) => {
           >
             <PositionInfoItem label="Your total pool tokens:" value={userBalance.data.formatted} />
             <PositionInfoItem label={`Pooled ${tokenA.symbol}:`} value={pair.reserve0.toFixed(2)}>
-              <TokenIcon h={'32px'} size="sm" {...tokenA} />
+              <CurrencyIcon h={'32px'} size="sm" currency={tokenA} />
             </PositionInfoItem>
             <PositionInfoItem label={`Pooled ${tokenB.symbol}:`} value={pair.reserve1.toFixed(2)}>
-              <TokenIcon h={'32px'} size="sm" {...tokenB} />
+              <CurrencyIcon h={'32px'} size="sm" currency={tokenB} />
             </PositionInfoItem>
             <PositionInfoItem
               label="Your pool share:"
@@ -380,8 +381,8 @@ const YourPosition = ({
     <Flex gap={7} direction={'column'} shadow="Up Big" px={4} py={4} borderRadius="2xl">
       <Text fontSize={'lg'}>Your Position</Text>
       <Flex gap={2} align={'center'}>
-        <TokenIcon size="sm" logoURI={''} symbol={wrapperTokenA.token?.symbol} />
-        <TokenIcon size="sm" logoURI={''} symbol={wrapperTokenB.token?.symbol} />
+        <CurrencyIcon size="sm" currency={wrapperTokenA.token} />
+        <CurrencyIcon size="sm" currency={wrapperTokenB.token} />
         <Text px={4}>
           {wrapperTokenA.token?.symbol}/{wrapperTokenB.token?.symbol}
         </Text>
@@ -397,10 +398,10 @@ const YourPosition = ({
       >
         <PositionInfoItem label="Your pool share:" value={'2.79%'} />
         <PositionInfoItem label={wrapperTokenA.token?.symbol} value={'0.0001331'}>
-          <TokenIcon size="sm" logoURI={''} symbol={wrapperTokenA.token?.symbol} />
+          <CurrencyIcon size="sm" currency={wrapperTokenA.token} />
         </PositionInfoItem>
         <PositionInfoItem label={wrapperTokenB.token?.symbol} value={'325.744'}>
-          <TokenIcon size="sm" logoURI={''} symbol={wrapperTokenB.token?.symbol} />
+          <CurrencyIcon size="sm" currency={wrapperTokenB.token} />
         </PositionInfoItem>
       </Stack>
     </Flex>
@@ -410,7 +411,7 @@ const YourPosition = ({
 const ReceiveBox = ({ amount, token }: { amount: number; token: Token }) => {
   return (
     <HStack shadow="down" borderRadius="2xl" p={3}>
-      <TokenIcon size="sm" logoURI={token?.logoURI} symbol={token?.symbol} />
+      <CurrencyIcon size="sm" currency={token} />
       <Box>
         <Text fontFamily={'heading'} fontWeight={600}>
           {usePrecision(amount, 7).formatted}
@@ -543,8 +544,8 @@ const SupplyLiquidityModal = ({
         {wrapperTokenA.token.symbol}/{wrapperTokenB.token.symbol} Pool Tokens
       </Text>
       <HStack justifyContent={'center'}>
-        <TokenIcon {...wrapperTokenA.token}></TokenIcon>
-        <TokenIcon {...wrapperTokenB.token}></TokenIcon>
+        <CurrencyIcon currency={wrapperTokenA.token} />
+        <CurrencyIcon currency={wrapperTokenB.token} />
       </HStack>
       <Box borderRadius={'2xl'} p={6} shadow={'down'}>
         <PositionInfoItem

@@ -1,16 +1,15 @@
-import { ExpandArrowIcon, TokenIcon } from '@concave/icons'
+import { ExpandArrowIcon } from '@concave/icons'
 import { Box, Button, Flex, HStack, Modal, NumericInput, StackDivider, Text } from '@concave/ui'
 import React from 'react'
 import { Currency } from 'gemswap-sdk'
+import { CurrencyIcon } from 'components/CurrencyIcon'
 
 const TokenInfo = ({
-  address,
-  symbol,
+  currency,
   amount,
 }: {
   price: string | number
-  address: string
-  symbol: string
+  currency: Currency
   amount: string | number
   loss?: number
 }) => {
@@ -24,13 +23,12 @@ const TokenInfo = ({
     >
       <Box w={200} h="69px">
         <NumericInput disabled fontSize={'32px'} decimalScale={5} value={amount} />
-        <Text fontWeight={700} fontSize={14} textColor="text.low">
-        </Text>
+        <Text fontWeight={700} fontSize={14} textColor="text.low"></Text>
       </Box>
       <HStack>
-        <TokenIcon height={'40px'} address={address} symbol={symbol} />
+        <CurrencyIcon height={'40px'} currency={currency} />
         <Text fontSize={24} fontWeight={700}>
-          {symbol.toUpperCase()}
+          {currency.symbol.toUpperCase()}
         </Text>
       </HStack>
     </Flex>
@@ -104,8 +102,8 @@ export const ConfirmBondModal = ({
   onClose,
   onConfirm,
 }: {
-  currencyIn: Currency,
-  currencyOut: Currency,
+  currencyIn: Currency
+  currencyOut: Currency
   tokenInUsdPrice: string
   tokenOutUsdPrice: string
   tokenInRelativePriceToTokenOut: string
@@ -113,26 +111,13 @@ export const ConfirmBondModal = ({
   onClose: () => void
   onConfirm: () => void
 }) => {
-
   return (
     <Modal bluryOverlay={true} title="Confirm Swap" isOpen={isOpen} onClose={onClose}>
-        <div>
-          {' '}
-          <TokenInfo
-            address={'currencyIn'}
-            symbol={currencyIn.symbol}
-            amount={''}
-            price={''}
-          />
-          <InOutArrow />
-          <TokenInfo
-            address={currencyOut.isToken ? currencyOut.address : currencyOut.symbol}
-            symbol={currencyOut.symbol}
-            amount={''}
-            price={''}
-          />
-        </div>
-      
+      <div>
+        <TokenInfo currency={currencyIn} amount={''} price={''} />
+        <InOutArrow />
+        <TokenInfo currency={currencyOut} amount={''} price={''} />
+      </div>
 
       <Flex fontSize="sm" fontWeight="bold" my={6} justify="center" flexWrap="wrap">
         <Text>
