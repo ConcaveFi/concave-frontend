@@ -35,7 +35,7 @@ export function TokenInput({
           decimalScale={5}
           disabled={disabled}
           w="100%"
-          value={currencyAmount?.toSignificant(6)}
+          value={currencyAmount?.toSignificant(6) || ''}
           onValueChange={({ value }, { source }) => source === 'event' && onChangeValue(value)}
         />
         <TokenSelect onSelect={onSelectCurrency} selected={currency} />
