@@ -46,9 +46,6 @@ export function BondOutput({
           disabled={disabled}
           w="100%"
           value={value}
-          onValueChange={({ value }, eventSrc) =>
-            eventSrc.source === 'event' && onChangeValue(value)
-          }
         />
         <BondOutputSelect selected={currency} />
       </HStack>
