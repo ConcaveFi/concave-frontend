@@ -97,7 +97,7 @@ export const SelectTokenModal = ({
   const [search, setSearch] = useState('')
   const nativeCurrency = useNativeCurrency()
   const currentChain = network?.chain
-  const { data: tokens, isLoading, isSuccess } = useTokenList(currentChain.name)
+  const { data: tokens, isLoading, isSuccess } = useTokenList(currentChain?.name)
   const selectAndClose = useCallback(
     (token: Token) => (onSelect(token), onClose()),
     [onSelect, onClose],

@@ -22,6 +22,7 @@ import {
 } from '@concave/ui'
 import { useAddressTokenList, useTokenList } from 'components/Swap/hooks/useTokenList'
 import { TokenInput } from 'components/Swap/TokenInput'
+import { TransactionSubmittedModal } from 'components/Swap/TransactionSubmittedModal'
 import { useAuth } from 'contexts/AuthContext'
 import { BigNumber, Contract } from 'ethers'
 import { formatUnits } from 'ethers/lib/utils'
@@ -219,8 +220,16 @@ const RemoveLiquidityModal = ({
   disclosure: UseDisclosureReturn
 }) => {
   const [percentToRemove, setPercentToRemove] = useState(0)
-  const [wrapperTokenA, setTokenA] = useToken({ userAddressOrName, symbol: token0.symbol })
-  const [wrapperTokenB, setTokenB] = useToken({ userAddressOrName, symbol: token1.symbol })
+  const [wrapperTokenA, setTokenA] = useToken({
+    userAddressOrName,
+    symbol: token0.symbol,
+    selectedChain: chain.ropsten,
+  })
+  const [wrapperTokenB, setTokenB] = useToken({
+    userAddressOrName,
+    symbol: token1.symbol,
+    selectedChain: chain.ropsten,
+  })
   const removeLiquidityState = useRemoveLiquidity({
     wrapperTokenA,
     wrapperTokenB,
@@ -588,7 +597,7 @@ const SupplyLiquidityModal = ({
 
 const AddLiquidityContent = ({ userAddress }: { userAddress: string }) => {
   const supplyLiquidityModal = useDisclosure()
-  const [data, setters, call] = useAddLiquidity(chain.ropsten.id, userAddress)
+  const [data, setters, call, clear] = useAddLiquidity(chain.ropsten, userAddress)
   const { amountADesired, amountBDesired, wrapperTokenA, wrapperTokenB } = data
   const { setAmountADesired, setTokenA, setTokenB, setAmountBDesired } = setters
   const valid = wrapperTokenA.token && wrapperTokenB.token && amountADesired && amountBDesired
@@ -679,6 +688,15 @@ const AddLiquidityContent = ({ userAddress }: { userAddress: string }) => {
 
       {valid ? (
         <SupplyLiquidityModal disclosure={supplyLiquidityModal} data={data} onConfirm={call} />
+      ) : (
+        <></>
+      )}
+      {data?.hash ? (
+        <TransactionSubmittedModal
+          disclosure={supplyLiquidityModal}
+          hash={data.hash}
+          onClose={clear}
+        />
       ) : (
         <></>
       )}

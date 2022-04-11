@@ -4,25 +4,39 @@ import { BigintIsh } from 'gemswap-sdk'
 import { ContractAddress } from 'lib/contractAddress'
 import { contractABI } from 'lib/contractoABI'
 import { concaveProvider } from 'lib/providers'
-import { useState } from 'react'
-import { chain, useSigner } from 'wagmi'
+import { useEffect, useState } from 'react'
+import { chain, useSigner, useWaitForTransaction } from 'wagmi'
 import { useToken, WrapperTokenInfo } from '../components/Swap/useSwap'
 
-export const useAddLiquidity = (chainId = chain.ropsten.id, userAddress) => {
-  const [wrapperTokenA, setTokenA] = useToken({ userAddressOrName: userAddress, symbol: '' })
+export const useAddLiquidity = (selectedChain = chain.ropsten, userAddress) => {
+  const [wrapperTokenA, setTokenA] = useToken({
+    userAddressOrName: userAddress,
+    symbol: '',
+    selectedChain,
+  })
   const [amountADesired, setAmountADesired] = useState<BigNumber>(null)
 
-  const [wrapperTokenB, setTokenB] = useToken({ userAddressOrName: userAddress, symbol: '' })
+  const [wrapperTokenB, setTokenB] = useToken({
+    userAddressOrName: userAddress,
+    symbol: '',
+    selectedChain,
+  })
   const [amountBDesired, setAmountBDesired] = useState<BigNumber>(null)
   const [{ data, error, loading }, getSigner] = useSigner()
-  const [transacion, setTransaction] = useState<Promise<unknown>>(null)
-
+  const [hash, setHash] = useState<string>(null)
   const contractInstance = new ethers.Contract(
-    ContractAddress[chainId],
+    ContractAddress[selectedChain.id],
     contractABI,
-    concaveProvider(chainId),
+    concaveProvider(selectedChain.id),
   )
 
+  const clear = () => {
+    setTokenA(null)
+    setTokenB(null)
+    setAmountADesired(null)
+    setAmountBDesired(null)
+    setHash('')
+  }
   const call = async () => {
     const contractSigner = contractInstance.connect(data)
     const to = userAddress
@@ -32,8 +46,8 @@ export const useAddLiquidity = (chainId = chain.ropsten.id, userAddress) => {
     const deadLine = timestamp + 86400
     const tokenA = wrapperTokenA.token.address
     const tokenB = wrapperTokenB.token.address
-    setTransaction(
-      contractSigner.addLiquidity(
+    contractSigner
+      .addLiquidity(
         tokenA,
         tokenB,
         parseUnits(`${amountADesired}`, wrapperTokenA.token.decimals),
@@ -45,8 +59,11 @@ export const useAddLiquidity = (chainId = chain.ropsten.id, userAddress) => {
         {
           gasLimit: 500000,
         },
-      ),
-    )
+      )
+      .then((r) => {
+        setHash(r.hash)
+        return r
+      })
   }
 
   return [
@@ -56,6 +73,7 @@ export const useAddLiquidity = (chainId = chain.ropsten.id, userAddress) => {
       amountADesired,
       amountBDesired,
       userAddress,
+      hash,
     },
     {
       setTokenA,
@@ -64,7 +82,7 @@ export const useAddLiquidity = (chainId = chain.ropsten.id, userAddress) => {
       setAmountBDesired,
     },
     call,
-    transacion,
+    clear,
   ] as const
 }
 export type UseAddLiquidityData = {
