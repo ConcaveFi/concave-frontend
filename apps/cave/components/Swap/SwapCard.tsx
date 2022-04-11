@@ -1,19 +1,21 @@
 import { ExpandArrowIcon, GasIcon } from '@concave/icons'
 import { Button, Card, Flex, HStack, Spinner, Text, useDisclosure } from '@concave/ui'
-import { CurrencyAmount, Token, Percent, JSBI } from 'gemswap-sdk'
+import { CurrencyAmount, Token, Percent, JSBI, Currency, computePriceImpact } from 'gemswap-sdk'
 import { useApprovalWhenNeeded } from 'hooks/useAllowance'
 import React, { useEffect, useState } from 'react'
 import { useFeeData, useWaitForTransaction } from 'wagmi'
 import { ConfirmSwapModal } from './ConfirmSwap'
 import { useCurrencyBalance } from './hooks/useCurrencyBalance'
 import { useFiatPrice, useFiatValue } from './hooks/useFiatPrice'
+import { usePrice } from './hooks/usePrice'
 import { Settings } from './Settings'
 import { TokenInput } from './TokenInput'
 import { TransactionSubmittedModal } from './TransactionSubmitted'
 import { useSwapState } from './useSwap2'
+import { computeFiatValuePriceImpact } from './utils/computeFiatValuePriceImpact'
 
 const GasPrice = () => {
-  const [{ data, error, loading }] = useFeeData({ formatUnits: 'gwei', watch: true })
+  const [{ data, error }] = useFeeData({ formatUnits: 'gwei', watch: true })
   if (error) return null
   return (
     <>
@@ -23,17 +25,11 @@ const GasPrice = () => {
           {Number(data?.formatted.gasPrice).toFixed(2)} gwei
         </Text>
       )}
-      {loading && <Spinner size="xs" color="text.low" />}
+      {
+        // only show spinner on the first time
+        !data && <Spinner size="xs" color="text.low" />
+      }
     </>
-  )
-}
-
-const LoadingIndicator = ({ label }) => {
-  return (
-    <Flex mr="auto" gap={2} align="center" color="text.low">
-      <Spinner size="xs" />
-      <Text fontSize="sm">{label}</Text>
-    </Flex>
   )
 }
 
@@ -88,25 +84,10 @@ const Balance = ({ value, onClick }: { value: string; onClick?: () => void }) =>
 //   ]
 // }
 
-export const ZERO_PERCENT = new Percent('0')
-
-export const ONE_HUNDRED_PERCENT = new Percent('1')
-
-export function computeFiatValuePriceImpact(
-  fiatValueInput: CurrencyAmount<Token> | undefined | null,
-  fiatValueOutput: CurrencyAmount<Token> | undefined | null,
-): Percent | undefined {
-  if (!fiatValueOutput || !fiatValueInput) return undefined
-  if (!fiatValueInput.currency.equals(fiatValueOutput.currency)) return undefined
-  if (JSBI.equal(fiatValueInput.quotient, JSBI.BigInt(0))) return undefined
-  const pct = ONE_HUNDRED_PERCENT.subtract(fiatValueOutput.divide(fiatValueInput))
-  return new Percent(pct.numerator, pct.denominator)
-}
-
 export function SwapCard() {
   const {
-    tradeStatus,
     trade,
+    tradeStatus,
     currencyIn,
     currencyOut,
     currencyAmountIn,
@@ -118,10 +99,15 @@ export function SwapCard() {
     switchCurrencies,
   } = useSwapState()
 
-  const inputFiat = useFiatValue(trade?.inputAmount)
-  const outputFiat = useFiatValue(trade?.outputAmount)
+  const relativePrice = usePrice(currencyIn.wrapped, currencyOut.wrapped)
 
-  const priceImpact = computeFiatValuePriceImpact(outputFiat?.value, inputFiat?.value)
+  const inputFiat = useFiatPrice(currencyIn.wrapped)
+  const outputFiat = useFiatPrice(currencyOut.wrapped)
+
+  const inputFiatValue = currencyAmountIn && inputFiat.price?.quote(currencyAmountIn)
+  const outputFiatValue = currencyAmountOut && outputFiat.price?.quote(currencyAmountOut)
+
+  const priceImpact = computeFiatValuePriceImpact(inputFiatValue, outputFiatValue)
 
   const [{ data: inputCurrencyBalance }] = useCurrencyBalance(currencyIn)
   const [{ data: outputCurrencyBalance }] = useCurrencyBalance(currencyOut)
@@ -137,7 +123,7 @@ export function SwapCard() {
         >
           <HStack justify="space-between" align="center" textColor="text.low" w="full">
             <Text isTruncated maxW="100px" fontWeight="bold" fontSize="sm">
-              {!!inputFiat.value && `$${inputFiat.value.toFixed(2)}`}
+              {!!inputFiatValue && `$${inputFiatValue.toFixed(2, { groupSeparator: ',' })}`}
             </Text>
             {inputCurrencyBalance && (
               <Balance
@@ -158,8 +144,10 @@ export function SwapCard() {
         >
           <HStack justify="space-between" align="center" textColor="text.low" w="full">
             <Text isTruncated maxW="120px" fontWeight="bold" fontSize="sm">
-              {!!outputFiat.value &&
-                `$${outputFiat.value.toFixed(2)} ${priceImpact && `(${priceImpact.toFixed(2)}%)`}`}
+              {!!outputFiatValue &&
+                `$${outputFiatValue.toFixed(2, { groupSeparator: ',' })} ${
+                  priceImpact && `(${priceImpact.toFixed(2)}%)`
+                }`}
             </Text>
             {outputCurrencyBalance && <Balance value={outputCurrencyBalance.formatted} />}
           </HStack>
@@ -167,26 +155,26 @@ export function SwapCard() {
 
         <HStack align="center" justify="end" py={5}>
           <HStack flexWrap="wrap" align="center" fontSize="xs" fontWeight="medium" mr="auto">
-            {tradeStatus.isFetching && <Spinner size="xs" />}
-            {tradeStatus.isLoading && <Text fontSize="sm">Updating prices</Text>}
-            {tradeStatus.isError && <PairsError />}
-            {tradeStatus.isSuccess && trade && (
+            {relativePrice.isFetching && <Spinner size="xs" />}
+            {relativePrice.isLoading && <Text fontSize="sm">Updating prices</Text>}
+            {relativePrice.isError && <PairsError />}
+            {relativePrice.price && (
               <>
                 <Text>
-                  1 {trade.outputAmount.currency.symbol} ={' '}
-                  {trade.route.midPrice.invert().toSignificant(3)}{' '}
-                  {trade.inputAmount.currency.symbol}
+                  1 {relativePrice.price?.baseCurrency.symbol} ={' '}
+                  {relativePrice.price?.invert().toSignificant(3)}{' '}
+                  {relativePrice.price?.quoteCurrency.symbol}
                 </Text>
                 {outputFiat.price && (
                   <Text ml={1} textColor="text.low">
-                    (${outputFiat.price.toFixed(2)})
+                    (${outputFiat.price.toFixed(2, { groupSeparator: ',' })})
                   </Text>
                 )}
               </>
             )}
           </HStack>
           <GasPrice />
-          {/* <Settings onClose={() => null} /> */}
+          <Settings onClose={() => null} />
         </HStack>
         {/*
         {needsApproval && (
