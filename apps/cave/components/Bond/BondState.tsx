@@ -24,20 +24,20 @@ export const useCurrentSupportedNetworkId = () => {
 
 export const useBondTransaction = (recipient: string) => {
   const networkId = useCurrentSupportedNetworkId()
-  const { user } = useAuth()
   const [bond, estimateBondGas] = useMemo(() => {
     const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI)
     return [
-      () => bondingContract['bond']({ args, overrides: { value } }),
-      () => bondingContract.estimateGas['']({ args, overrides: { value } }),
+      // { args, overrides: { value } }
+      () => bondingContract['bond'](),
+      () => bondingContract.estimateGas[''](),
     ]
   }, [networkId])
 
-  const { refetch, ...swapTransaction } = useQuery(['bond', recipient], bond, {
+  const { refetch, ...bondTransaction } = useQuery(['bond', recipient], bond, {
     enabled: false,
   })
 
-  return [estimateSwapGas, swapTransaction, refetch]
+  return [estimateBondGas, bondTransaction, refetch]
 }
 
 export const useBondState = () => {
