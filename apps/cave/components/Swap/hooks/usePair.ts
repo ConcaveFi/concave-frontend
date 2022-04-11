@@ -1,7 +1,8 @@
-import { useQuery } from 'react-query'
+import { QueryKey, QueryOptions, useQuery, UseQueryOptions } from 'react-query'
 import { concaveProvider } from 'lib/providers'
 import { Token, Fetcher, DAI, Pair } from 'gemswap-sdk'
 import { BASES_TO_CHECK_TRADES_AGAINST, INTERMEDIARY_PAIRS_FOR_MULTI_HOPS } from 'constants/routing'
+import { AVERAGE_BLOCK_TIME } from 'constants/blockchain'
 
 const filterRepeatedPairs = (pairs: [Token, Token][]) =>
   pairs.filter(
@@ -34,22 +35,23 @@ const getAllCommonPairs = (
     ...(maxHops > 2 ? INTERMEDIARY_PAIRS_FOR_MULTI_HOPS[chainId] : []),
   ] as [Token, Token][])
 
-export const usePairs = (tokenA?: Token, tokenB?: Token, maxHops = 3) => {
+export type UsePairsQueryOptions<T> = UseQueryOptions<Pair[], any, T>
+
+export const usePairs = <T = Pair[]>(
+  tokenA?: Token,
+  tokenB?: Token,
+  maxHops = 3,
+  queryOptions?: UsePairsQueryOptions<T>,
+) => {
   return useQuery(
     ['pairs', tokenA?.address, tokenB?.address, maxHops],
     async () => {
-      if (!tokenA || !tokenB || tokenA.equals(tokenB)) throw new Error('Invalid token pair')
-
       const commonPairs = getAllCommonPairs(tokenA, tokenB, maxHops)
-      const pairs = (
+      const pairs: Pair[] = (
         await Promise.all(
-          commonPairs.map(async ([a, b]) => {
-            try {
-              return await Fetcher.fetchPairData(a, b, concaveProvider(a.chainId))
-            } catch (error) {
-              return null
-            }
-          }),
+          commonPairs.map(([a, b]) =>
+            Fetcher.fetchPairData(a, b, concaveProvider(a.chainId)).catch(() => null),
+          ),
         )
       ).filter(Boolean)
 
@@ -57,10 +59,13 @@ export const usePairs = (tokenA?: Token, tokenB?: Token, maxHops = 3) => {
 
       return pairs
     },
-    { enabled: !!tokenA?.address && !!tokenB?.address },
+    {
+      enabled: !!tokenA?.address && !!tokenB?.address && !tokenA.equals(tokenB),
+      refetchInterval: AVERAGE_BLOCK_TIME[tokenA?.chainId],
+      notifyOnChangeProps: 'tracked',
+      ...queryOptions,
+    },
   )
-
-  // return pairsQuery
 }
 
 export const usePair = (tokenA: Token, tokenB: Token) => usePairs(tokenA, tokenB, 1)

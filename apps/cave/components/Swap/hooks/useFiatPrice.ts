@@ -1,31 +1,13 @@
-import { Price, DAI, CurrencyAmount, Currency, TradeType } from 'gemswap-sdk'
+import { DAI, CurrencyAmount, Currency } from 'gemswap-sdk'
 import { useMemo } from 'react'
-import { useTrade } from './useTrade'
+import { usePrice } from './usePrice'
 
 export const useFiatPrice = (currency?: Currency) => {
   // using dai for now, but we can change based on user preferences later
   // e.g. use some stable pegged to EUR
-  const stablecoin = DAI[currency?.chainId || 1]
+  const stablecoin = DAI[currency?.chainId]
 
-  // The amount is large enough to filter low liquidity pairs.
-  const amountOut = CurrencyAmount.fromRawAmount(stablecoin, 50_000) // +`50000e${stablecoin.decimals}`
-
-  const { trade, isLoading, isError, isRefetching } = useTrade(amountOut, currency, {
-    maxHops: 2,
-    tradeType: TradeType.EXACT_OUTPUT,
-  })
-
-  return useMemo(() => {
-    const status = { isLoading, isError, isRefetching }
-    if (!currency) return { ...status, price: undefined }
-
-    if (stablecoin.equals(currency)) return { price: new Price(stablecoin, stablecoin, '1', '1') }
-
-    if (!trade) return { ...status, price: undefined }
-
-    const { numerator, denominator } = trade.route.midPrice
-    return { price: new Price(currency, stablecoin, denominator, numerator), ...status }
-  }, [currency, isError, isLoading, isRefetching, stablecoin, trade])
+  return usePrice(currency, stablecoin)
 }
 
 export const useFiatValue = (currencyAmount?: CurrencyAmount<Currency>) => {
