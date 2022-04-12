@@ -115,7 +115,7 @@ export const ConfirmBondModal = ({
 }) => {
 
   return (
-    <Modal bluryOverlay={true}  isOpen={isOpen} onClose={onClose}>
+    <Modal bluryOverlay={true} title=""  isOpen={isOpen} onClose={onClose}>
         <div>
           {' '}
           <TokenInfo
