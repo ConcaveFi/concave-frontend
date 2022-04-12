@@ -54,7 +54,7 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
       onClose={onClose}
       isCentered
       motionPreset="slideInBottom"
-      bodyProps={{ alignItems: 'center', gap: 3, w: '100', maxW: '350px' }}
+      bodyProps={{ alignItems: 'center', gap: 3, w: '100%', maxW: '350px' }}
     >
       {isMounted &&
         data.connectors.map((connector) => {
