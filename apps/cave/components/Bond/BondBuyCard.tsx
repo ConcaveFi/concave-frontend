@@ -46,7 +46,7 @@ export function BondBuyCard() {
         balance={userBalance}
         onChangeValue={(v) => {
           const numberValue = v.replace('-', '')
-          numberValue && setAmountIn(+v)
+          numberValue && setAmountIn(v)
         }}
         onChangeCurrency={() => {setCurrencyIn(currencyIn)}}
         // bug: fails to execute tx when clicked before hitting swap
