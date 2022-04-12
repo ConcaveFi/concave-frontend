@@ -170,7 +170,7 @@ const SelectTokenButton = ({ selected, onClick }: { selected: Currency; onClick:
   </Button>
 )
 
-export const TokenSelect = ({
+export const SelectCurrency = ({
   selected,
   onSelect,
 }: {

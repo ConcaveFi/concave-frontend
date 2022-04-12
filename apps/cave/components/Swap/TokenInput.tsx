@@ -9,7 +9,7 @@ import {
 } from '@concave/ui'
 import { Currency, CurrencyAmount } from 'gemswap-sdk'
 import React, { ReactNode } from 'react'
-import { TokenSelect } from './TokenSelect'
+import { SelectCurrency } from './SelectCurrency'
 
 export function TokenInput({
   children,
@@ -38,7 +38,7 @@ export function TokenInput({
           value={currencyAmount?.toSignificant(6) || ''}
           onValueChange={({ value }, { source }) => source === 'event' && onChangeValue(value)}
         />
-        <TokenSelect onSelect={onSelectCurrency} selected={currency} />
+        <SelectCurrency onSelect={onSelectCurrency} selected={currency} />
       </HStack>
       {children}
     </Stack>
