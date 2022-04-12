@@ -1,5 +1,5 @@
 import { Input, Spinner, UnorderedList, useDisclosure } from '@chakra-ui/react'
-import { CnvQuestionIcon, DownIcon } from '@concave/icons'
+import { CnvQuestionIcon } from '@concave/icons'
 import { Button, Flex, Heading, ListItem, Modal, Stack, Text, TokenIcon } from '@concave/ui'
 import { ROPSTEN_CNV, ROPSTEN_DAI } from 'constants/ropstenTokens'
 import { Token } from 'constants/routing'
@@ -110,7 +110,7 @@ export const SelectTokenModal = ({
       bodyProps={{ gap: 4, w: '350px' }}
     >
       <CommonTokens
-        currencies={currentChain?.id === chain.ropsten.id ? [ROPSTEN_DAI, ROPSTEN_CNV] : [DAI, CNV]} //[nativeCurrency, ...BASES_TO_CHECK_TRADES_AGAINST[chainId]]}
+        currencies={currentChain?.id === chain.ropsten.id ? [ROPSTEN_DAI, ROPSTEN_CNV] : [DAI, CNV]}
         selected={selected}
         onSelect={selectAndClose}
       />
