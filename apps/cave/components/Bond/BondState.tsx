@@ -1,10 +1,9 @@
 import { useState, useMemo } from 'react'
 import { chain, useNetwork, useBalance } from 'wagmi'
-import { useQuery } from 'react-query'
 import { BigNumberish, Contract } from 'ethers'
 import { DAI, CNV } from 'gemswap-sdk'
-import { BOND_ADDRESS } from '../../contracts/BondingAddress'
-import { BOND_ABI } from '../../contracts/BondABI'
+import { BOND_ADDRESS } from '../../contracts/Bond/BondingAddress'
+import { BOND_ABI } from '../../contracts/Bond/BondABI'
 import { Token, Currency } from 'gemswap-sdk'
 import { useAuth } from 'contexts/AuthContext'
 
@@ -24,20 +23,22 @@ export const useCurrentSupportedNetworkId = () => {
 
 export const useBondTransaction = (recipient: string) => {
   const networkId = useCurrentSupportedNetworkId()
-  const [bond, estimateBondGas] = useMemo(() => {
     const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI)
     return [
       // { args, overrides: { value } }
       () => bondingContract['bond'](),
       () => bondingContract.estimateGas[''](),
     ]
-  }, [networkId])
-
-  const { refetch, ...bondTransaction } = useQuery(['bond', recipient], bond, {
-    enabled: false,
-  })
-
-  return [estimateBondGas, bondTransaction, refetch]
+}
+export const useBondGetAmountOut = (recipient: string) => {
+  const networkId = useCurrentSupportedNetworkId()
+    const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI)
+    console.log(bondingContract)
+    // return [
+    //   // { args, overrides: { value } }
+    //   () => bondingContract['getA'](),
+    //   () => bondingContract.estimateGas[''](),
+    // ]
 }
 
 export const useBondState = () => {

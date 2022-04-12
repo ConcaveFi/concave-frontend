@@ -2,7 +2,7 @@ import { Button, Card, useDisclosure } from '@concave/ui'
 import { useApprovalWhenNeeded } from 'hooks/useAllowance'
 import React, { useEffect, useState } from 'react'
 import { useBondState } from './BondState'
-import { BOND_ADDRESS } from '../../contracts/BondingAddress'
+import { BOND_ADDRESS } from '../../contracts/Bond/BondingAddress'
 import { DownwardIcon } from './DownwardIcon'
 import { BondOutput } from './BondOutput'
 import { BondInput } from './BondInput'
@@ -27,11 +27,18 @@ export function BondBuyCard() {
     userAddress,
     exactValue,
   )
+  // in the same use effect, when DAI changes,
+  // make a call for getAmountOut to CNV
   useEffect(() => {
     if (balance[0].data) {
       setBalance(balance[0].data.formatted)
     }
-  }, [balance])
+    setAmountOut(amountIn)
+    // getAmountOut(amountIn)
+    // bring in the hook from the other file which 
+    // abstracts a function to getAmountOut
+    // Update setAmountOut to getAmountOut
+  }, [balance, setAmountIn])
 
   return (
     <Card p={6} gap={2} variant="primary" h="fit-content" shadow="Block Up" w="100%" maxW="420px">
@@ -42,6 +49,8 @@ export function BondBuyCard() {
         onChangeValue={(v) => {
           const numberValue = v.replace('-', '')
           numberValue && setAmountIn(v)
+          // set Amount out here, update teh bottom according
+          // to getAmountOut?
         }}
         onChangeCurrency={() => {setCurrencyIn(currencyIn)}}
         // bug: fails to execute tx when clicked before hitting swap
