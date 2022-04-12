@@ -1,16 +1,14 @@
-import { Token } from 'gemswap-sdk'
-
-import { chain } from 'wagmi'
+import { Token, ChainId } from 'gemswap-sdk'
 
 export const CNV = new Token(
-  chain.mainnet.id,
-  '0x000000007a58f5f58e697e51ab0357bc9e260a04',
+  ChainId.ETHEREUM,
+  '0x000000007a58f5f58E697e51Ab0357BC9e260A04',
   18,
   'CNV',
   'Concave',
 )
 export const DAI = new Token(
-  chain.mainnet.id,
+  ChainId.ETHEREUM,
   '0x6B175474E89094C44Da98b954EedeAC495271d0F',
   18,
   'DAI',
@@ -18,49 +16,49 @@ export const DAI = new Token(
 )
 
 export const WETH = new Token(
-  chain.mainnet.id,
-  '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+  ChainId.ETHEREUM,
+  '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
   18,
   'WETH',
   'Wrapped Ether',
 )
 export const USDT = new Token(
-  chain.mainnet.id,
+  ChainId.ETHEREUM,
   '0xdAC17F958D2ee523a2206206994597C13D831ec7',
   6,
   'USDT',
   'Tether USD',
 )
 export const USDC = new Token(
-  chain.mainnet.id,
-  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+  ChainId.ETHEREUM,
+  '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
   6,
   'USDC',
   'USD Coin',
 )
 export const DOLA = new Token(
-  chain.mainnet.id,
-  '0x865377367054516e17014ccded1e7d814edc9ce4',
+  ChainId.ETHEREUM,
+  '0x865377367054516e17014CcdED1e7d814EDC9ce4',
   18,
   'DOLA',
   'Dola USD Stablecoin',
 )
 export const INV = new Token(
-  chain.mainnet.id,
-  '0x41d5d79431a913c4ae7d69a668ecdfe5ff9dfb68',
+  ChainId.ETHEREUM,
+  '0x41D5D79431A913C4aE7d69a668ecdfE5fF9DFB68',
   18,
   'INV',
   'Inverse DAO',
 )
 export const FXS = new Token(
-  chain.mainnet.id,
+  ChainId.ETHEREUM,
   '0x3432B6A60D23Ca0dFCa7761B7ab56459D9C964D0',
   18,
   'FXS',
   'Frax Share',
 )
 export const FRAX = new Token(
-  chain.mainnet.id,
+  ChainId.ETHEREUM,
   '0x853d955aCEf822Db058eb8505911ED77F175b99e',
   18,
   'FRAX',

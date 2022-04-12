@@ -1,20 +1,19 @@
-import { Token, Currency } from 'gemswap-sdk'
+import { Token, Currency, DAI, WETH9, ChainId, NATIVE } from 'gemswap-sdk'
 
-import { chain } from 'wagmi'
-import { DAI, DOLA, USDC, FRAX, USDT, WETH } from './tokens'
+import * as Ethereum from './tokens'
 
 type ChainTokenList = { readonly [chainId: number]: Token[] }
 type ChainCurrencyList = { readonly [chainId: number]: Currency[] }
 
 export const STABLES = {
-  [chain.mainnet.id]: [DAI /* DOLA, USDC, FRAX, USDT */],
-  // [chain.ropsten.id]: [DAI],
+  [ChainId.ETHEREUM]: [Ethereum.DAI /* DOLA, USDC, FRAX, USDT */],
+  [ChainId.ROPSTEN]: [DAI[ChainId.ROPSTEN]],
 }
 
 // used to construct intermediary pairs for trading
 export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
-  [chain.mainnet.id]: [WETH, ...STABLES[chain.mainnet.id]],
-  // [chain.ropsten.id]: [ROPSTEN_WETH, ...STABLES[chain.ropsten.id]],
+  [ChainId.ETHEREUM]: [Ethereum.WETH, ...STABLES[ChainId.ETHEREUM]],
+  [ChainId.ROPSTEN]: [WETH9[ChainId.ROPSTEN], ...STABLES[ChainId.ROPSTEN]],
 }
 
 const permutate = (tokenList: ChainTokenList[number]): [Token, Token][] =>
@@ -23,17 +22,32 @@ const permutate = (tokenList: ChainTokenList[number]): [Token, Token][] =>
   )
 
 export const INTERMEDIARY_PAIRS_FOR_MULTI_HOPS = {
-  [chain.mainnet.id]: permutate(BASES_TO_CHECK_TRADES_AGAINST[chain.mainnet.id]),
+  [ChainId.ETHEREUM]: permutate(BASES_TO_CHECK_TRADES_AGAINST[ChainId.ETHEREUM]),
 }
 
 /**
  * Shows up in the currency select for swap and add liquidity
  */
 export const COMMON_BASES: ChainCurrencyList = {
-  [chain.mainnet.id]: [WETH, DAI, USDC, DOLA, FRAX, USDT],
+  [ChainId.ETHEREUM]: [
+    NATIVE[ChainId.ETHEREUM],
+    Ethereum.WETH,
+    Ethereum.DAI,
+    Ethereum.USDC,
+    Ethereum.DOLA,
+    Ethereum.FRAX,
+    Ethereum.USDT,
+  ],
 }
 
 // used to construct the list of all pairs we consider by default in the frontend
 export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
-  [chain.mainnet.id]: [WETH, DAI, USDC, DOLA, FRAX, USDT],
+  [ChainId.ETHEREUM]: [
+    Ethereum.WETH,
+    Ethereum.DAI,
+    Ethereum.USDC,
+    Ethereum.DOLA,
+    Ethereum.FRAX,
+    Ethereum.USDT,
+  ],
 }
