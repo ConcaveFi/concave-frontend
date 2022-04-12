@@ -8,36 +8,34 @@ import { BondOutput } from './BondOutput'
 import { BondInput } from './BondInput'
 import { ConfirmBondModal } from './ConfirmBond'
 import { Currency } from 'gemswap-sdk'
+import { useBondGetAmountOut } from './BondState'
 
 export function BondBuyCard() {
-  const { currencyIn, currencyOut, exactValue, userAddress, isConnected, balance } = useBondState()
-
-  const [amountIn, setAmountIn] = useState<string>('0')
-  const [amountOut, setAmountOut] = useState<string>('0')
+  
+  const { currencyIn, currencyOut, userAddress, isConnected, balance } = useBondState()
+  const [userBalance, setBalance] = useState<string>()
+  const [amountIn, setAmountIn] = useState<string>()
+  const [amountOut, setAmountOut] = useState<string>()
   const [currenctCurrencyIn, setCurrencyIn] = useState<Currency>()
-
-  const [userBalance, setBalance] = useState<string>('0')
   const confirmModal = useDisclosure()
-  const transactionStatusModal = useDisclosure()
   const receiptModal = useDisclosure()
 
   const [needsApproval, approve, isApproving] = useApprovalWhenNeeded(
     currencyIn,
     BOND_ADDRESS[1],
     userAddress,
-    exactValue,
+    amountIn,
   )
-  // in the same use effect, when DAI changes,
-  // make a call for getAmountOut to CNV
+
   useEffect(() => {
     if (balance[0].data) {
       setBalance(balance[0].data.formatted)
     }
-    setAmountOut(amountIn)
-    // getAmountOut(amountIn)
-    // bring in the hook from the other file which 
-    // abstracts a function to getAmountOut
-    // Update setAmountOut to getAmountOut
+    if(amountIn) {
+    useBondGetAmountOut(currencyOut.address, currencyOut.decimals, 3, amountIn).then((amountOut) => {
+      setAmountOut(amountOut)
+      })
+    }
   }, [balance, setAmountIn])
 
   return (
@@ -48,9 +46,7 @@ export function BondBuyCard() {
         balance={userBalance}
         onChangeValue={(v) => {
           const numberValue = v.replace('-', '')
-          numberValue && setAmountIn(v)
-          // set Amount out here, update teh bottom according
-          // to getAmountOut?
+          numberValue && setAmountIn(+v)
         }}
         onChangeCurrency={() => {setCurrencyIn(currencyIn)}}
         // bug: fails to execute tx when clicked before hitting swap
@@ -64,9 +60,6 @@ export function BondBuyCard() {
         disabled={true}
         currency={currencyOut}
         value={amountOut}
-        // onChangeValue={(v) => {
-        //   !isNaN(+v) && setAmountOut(v)
-        // }}
       />
 
       {needsApproval && (
@@ -107,18 +100,6 @@ export function BondBuyCard() {
         onClose={confirmModal.onClose}
         onConfirm={() => {}}
       />
-
-      {/* <TransactionStatusModal
-        inAmount={swapingIn?.amount}
-        outAmount={tradeInfo?.meta.expectedOutput}
-        inSymbol={swapingIn?.currency?.symbol}
-        outSymbol={swapingOut?.currency?.symbol}
-        status={swapTransaction}
-        isOpen={transactionStatusModal.isOpen}
-        onClose={() => {
-          transactionStatusModal.onClose()
-        }}
-      /> */}
 
       {/* <TransactionSubmittedModal
         receipt={swapTransaction}
