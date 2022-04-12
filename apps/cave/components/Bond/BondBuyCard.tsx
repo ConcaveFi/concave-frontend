@@ -31,12 +31,7 @@ export function BondBuyCard() {
     if (balance[0].data) {
       setBalance(balance[0].data.formatted)
     }
-    if(amountIn) {
-    useBondGetAmountOut(currencyOut.address, currencyOut.decimals, 3, amountIn).then((amountOut) => {
-      setAmountOut(amountOut)
-      })
-    }
-  }, [balance, setAmountIn])
+  }, [balance])
 
   return (
     <Card p={6} gap={2} variant="primary" h="fit-content" shadow="Block Up" w="100%" maxW="420px">
@@ -47,6 +42,9 @@ export function BondBuyCard() {
         onChangeValue={(v) => {
           const numberValue = v.replace('-', '')
           numberValue && setAmountIn(v)
+          useBondGetAmountOut(currencyOut.address, currencyOut.decimals, 3, v).then((amountOut) => {
+            setAmountOut(amountOut)
+            })
         }}
         onChangeCurrency={() => {setCurrencyIn(currencyIn)}}
         // bug: fails to execute tx when clicked before hitting swap
