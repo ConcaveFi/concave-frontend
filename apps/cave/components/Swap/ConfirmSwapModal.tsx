@@ -1,7 +1,8 @@
-import { ExpandArrowIcon, CurrencyIcon } from '@concave/icons'
+import { ExpandArrowIcon } from '@concave/icons'
 import { Box, Button, Flex, HStack, Modal, NumericInput, StackDivider, Text } from '@concave/ui'
+import { CurrencyIcon } from 'components/CurrencyIcon'
 import React from 'react'
-import { TradeInfo } from './useSwap2'
+import { TradeInfo } from './hooks/useSwapTransaction'
 
 const TokenInfo = ({
   price,
