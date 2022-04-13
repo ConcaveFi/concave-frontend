@@ -19,7 +19,6 @@ import {
   useBoolean,
   Box,
 } from '@concave/ui'
-import { Percent } from 'gemswap-sdk'
 import React, { useMemo, useState } from 'react'
 
 const SlippageTolerance = ({ value, onValueChange, onClickAuto }) => {
@@ -119,20 +118,16 @@ const ToggleMultihops = ({ isChecked, onToggle }) => {
   )
 }
 
-const toPercent = (input: string) => new Percent(Math.floor(Number.parseFloat(input) * 100), 10_000)
-
 export type SwapSettings = {
-  deadline: number
-  slippageTolerance: number
+  deadline: string
+  slippageTolerance: string
   expertMode: boolean
   multihops: boolean
 }
 
-const ONE_MINUTE_IN_SECONDS = 60
-
 export const defaultSettings: SwapSettings = {
-  deadline: 30,
-  slippageTolerance: 0.5,
+  deadline: '30',
+  slippageTolerance: '0.5',
   expertMode: false,
   multihops: false,
 }
@@ -158,7 +153,7 @@ const useSettings = () => {
   )
 }
 
-export const Settings = ({ onClose }) => {
+export const Settings = ({ onClose }: { onClose: (settings: SwapSettings) => void }) => {
   const {
     deadline,
     slippageTolerance,
