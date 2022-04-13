@@ -4,15 +4,15 @@ import { ethers } from 'ethers'
 import React from 'react'
 
 export const BondReceiptModal = ({
-  receipt,
+  // receipt,
   isOpen,
   onClose,
 }: {
-  receipt: {
-    data: ethers.providers.TransactionResponse
-    error: Error
-    loading: boolean
-  }
+  // receipt: {
+  //   data: ethers.providers.TransactionResponse
+  //   error: Error
+  //   loading: false
+  // }
   isOpen: boolean
   onClose: () => void
 }) => {
@@ -31,7 +31,8 @@ export const BondReceiptModal = ({
       <Text align={'center'} fontSize={'24px'} fontWeight={600}>
         Transaction Submitted <br />
         <Link
-          href={`https://etherscan.io/tx/${receipt?.data?.hash}`}
+          // href={`https://etherscan.io/tx/${receipt?.data?.hash}`}
+          href={'https://etherscan.io/tx/'}
           fontWeight={400}
           fontSize={'18px'}
           textColor={'Highlight'}
