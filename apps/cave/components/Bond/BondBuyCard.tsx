@@ -9,9 +9,9 @@ import { BondInput } from './BondInput'
 import { ConfirmBondModal } from './ConfirmBond'
 import { Currency } from 'gemswap-sdk'
 import { useBondGetAmountOut } from './BondState'
+import { BondReceiptModal } from './BondReceipt'
 
 export function BondBuyCard() {
-  
   const { currencyIn, currencyOut, userAddress, isConnected, balance } = useBondState()
   const [userBalance, setBalance] = useState<string>()
   const [amountIn, setAmountIn] = useState<string>()
@@ -42,11 +42,14 @@ export function BondBuyCard() {
         onChangeValue={(v) => {
           const numberValue = v.replace('-', '')
           numberValue && setAmountIn(v)
+          // eslint-disable-next-line react-hooks/rules-of-hooks
           useBondGetAmountOut(currencyOut.address, currencyOut.decimals, 3, v).then((amountOut) => {
             setAmountOut(amountOut)
-            })
+          })
         }}
-        onChangeCurrency={() => {setCurrencyIn(currencyIn)}}
+        onChangeCurrency={() => {
+          setCurrencyIn(currencyIn)
+        }}
         // bug: fails to execute tx when clicked before hitting swap
         // onClickMaxBalance={() => {
         //   if (swapingIn.currency.equals(nativeCurrency)) setAmountIn(+swapingIn.balance * 0.8)
@@ -54,11 +57,7 @@ export function BondBuyCard() {
         // }}
       />
       <DownwardIcon />
-      <BondOutput
-        disabled={true}
-        currency={currencyOut}
-        value={amountOut}
-      />
+      <BondOutput disabled={true} currency={currencyOut} value={amountOut} />
 
       {needsApproval && (
         <Button
@@ -96,16 +95,18 @@ export function BondBuyCard() {
         tokenInRelativePriceToTokenOut={''}
         isOpen={confirmModal.isOpen}
         onClose={confirmModal.onClose}
-        onConfirm={() => {}}
+        onConfirm={() => {
+          receiptModal.onOpen()
+        }}
       />
 
-      {/* <TransactionSubmittedModal
-        receipt={swapTransaction}
+      <BondReceiptModal
+        // receipt={}
         isOpen={receiptModal.isOpen}
         onClose={() => {
           receiptModal.onClose()
         }}
-      /> */}
+      />
     </Card>
   )
 }

@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { chain, useNetwork, useBalance } from 'wagmi'
+import { chain, useNetwork, useBalance, useContractWrite } from 'wagmi'
 import { BigNumberish, Contract, ethers } from 'ethers'
 import { DAI, CNV } from 'gemswap-sdk'
 import { BOND_ADDRESS } from '../../contracts/Bond/BondingAddress'
@@ -8,7 +8,7 @@ import { Token, Currency } from 'gemswap-sdk'
 import { useAuth } from 'contexts/AuthContext'
 
 // testing only, flip to prod
-let providers = new ethers.providers.InfuraProvider("ropsten", '3270f483eb9e484ba6d9f472557f4350');
+let providers = new ethers.providers.InfuraProvider('ropsten', '3270f483eb9e484ba6d9f472557f4350')
 
 const useCurrencyBalance = (currency: Currency, userAddress: string) =>
   useBalance({
@@ -24,15 +24,20 @@ export const useCurrentSupportedNetworkId = () => {
   return chainId ? chain.ropsten.id : chain.mainnet.id
 }
 
-export const useBondGetAmountOut = async (quoteAddress: string, decimals: number, networkId: number, input: string) => {
-    const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, providers)
-    const ROPSTEN_CNV = '0x2b8e79cbd58418ce9aeb720baf6b93825b93ef1f'
-    // pass decimals argument where 18 is hardcoded
-    const formattedInput = ethers.utils.parseUnits(input.toString(), 18)
-    const amountOut = await bondingContract.getAmountOut(ROPSTEN_CNV, formattedInput)
-    const ethValue = ethers.utils.formatEther(amountOut);
-    const cleanedOutput = parseFloat(ethValue).toFixed(6)
-    return cleanedOutput
+export const useBondGetAmountOut = async (
+  quoteAddress: string,
+  decimals: number,
+  networkId: number,
+  input: string,
+) => {
+  const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, providers)
+  const ROPSTEN_DAI = '0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4'
+  // pass decimals argument where 18 is hardcoded
+  const formattedInput = ethers.utils.parseUnits(input.toString(), 18)
+  const amountOut = await bondingContract.getAmountOut(ROPSTEN_DAI, formattedInput)
+  const ethValue = ethers.utils.formatEther(amountOut)
+  const cleanedOutput = parseFloat(ethValue).toFixed(6)
+  return cleanedOutput
 }
 
 export const useBondState = () => {
@@ -44,7 +49,10 @@ export const useBondState = () => {
   const [exactValue, setExactValue] = useState<BigNumberish>(0)
   const balance = useCurrencyBalance(currencyIn, user.address)
   const userAddress = user.address
-
+  // const [swapTransaction, swap] = useContractWrite({
+  //   addressOrName: ROUTER_CONTRACT[isRopsten ? chain.ropsten.id : chain.mainnet.id],
+  //   contractInterface: RouterABI,
+  // })
   return useMemo(
     () => ({
       currencyIn,
@@ -55,7 +63,7 @@ export const useBondState = () => {
       userAddress,
       isConnected,
       balance,
-      networkId
+      networkId,
     }),
     [balance, currencyIn, exactValue, isConnected, recipient, userAddress],
   )
