@@ -1,6 +1,6 @@
-import { QueryKey, QueryOptions, useQuery, UseQueryOptions } from 'react-query'
+import { useQuery, UseQueryOptions } from 'react-query'
 import { concaveProvider } from 'lib/providers'
-import { Token, Fetcher, DAI, Pair } from 'gemswap-sdk'
+import { Token, Fetcher, Pair } from 'gemswap-sdk'
 import { BASES_TO_CHECK_TRADES_AGAINST, INTERMEDIARY_PAIRS_FOR_MULTI_HOPS } from 'constants/routing'
 import { AVERAGE_BLOCK_TIME } from 'constants/blockchain'
 
@@ -13,7 +13,7 @@ const filterRepeatedPairs = (pairs: [Token, Token][]) =>
       ) === i,
   )
 
-const buildPairs = (base: Token[], token0: Token, token1: Token) =>
+const buildPairs = (base: Token[] = [], token0: Token, token1: Token) =>
   base
     .flatMap((baseToken) => [
       [baseToken, token0],
@@ -32,10 +32,12 @@ const getAllCommonPairs = (
     ...(maxHops === 1 ? [[tokenA.wrapped, tokenB.wrapped]] : []),
     ...(maxHops > 1 ? buildPairs(BASES_TO_CHECK_TRADES_AGAINST[chainId], tokenA, tokenB) : []),
     // if maxHops is more than 2, it will also check routes like tokenIn -> DAI -> WETH -> tokenOut
-    ...(maxHops > 2 ? INTERMEDIARY_PAIRS_FOR_MULTI_HOPS[chainId] : []),
+    ...(maxHops > 2 ? INTERMEDIARY_PAIRS_FOR_MULTI_HOPS[chainId] || [] : []),
   ] as [Token, Token][])
 
 export type UsePairsQueryOptions<T> = UseQueryOptions<Pair[], any, T>
+
+export const NoValidPairsError = new Error('No valid pairs found')
 
 export const usePairs = <T = Pair[]>(
   tokenA?: Token,
@@ -55,7 +57,7 @@ export const usePairs = <T = Pair[]>(
         )
       ).filter(Boolean)
 
-      if (!pairs || pairs.length === 0) throw new Error('No valid pairs')
+      if (!pairs || pairs.length === 0) throw NoValidPairsError
 
       return pairs
     },
