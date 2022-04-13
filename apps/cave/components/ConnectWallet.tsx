@@ -67,9 +67,7 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
               _active={{ shadow: 'down' }}
               _focus={{ shadow: 'Up Big' }}
               size="large"
-              leftIcon={
-                <Image maxWidth="20px" src={`/assets/connectors/${connector.id}.png`} alt="" />
-              }
+              leftIcon={<Image w="20px" src={`/assets/connectors/${connector.id}.png`} alt="" />}
               key={connector.id}
               onClick={() => connect(connector).then(onClose)}
             >
