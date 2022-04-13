@@ -69,7 +69,7 @@ const PairsError = () => (
     Error Fetching Pairs
   </Text>
 )
-
+//
 /**
   TODO
     - switch tokens
