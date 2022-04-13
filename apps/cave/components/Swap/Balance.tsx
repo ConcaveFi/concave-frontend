@@ -1,4 +1,5 @@
 import { Button, Text } from '@concave/ui'
+import { commify } from 'ethers/lib/utils'
 
 export const Balance = ({ value, onClick }: { value: string; onClick?: () => void }) => (
   <Button
@@ -6,11 +7,12 @@ export const Balance = ({ value, onClick }: { value: string; onClick?: () => voi
     ml="auto"
     onClick={onClick}
     rightIcon={!!onClick && +value && <Text textColor="#2E97E2">Max</Text>}
+    _focus={{ transform: 'scale(1.02)' }}
     leftIcon={<Text>Balance:</Text>}
     iconSpacing={1}
   >
-    <Text isTruncated maxW="50px">
-      {(+value).toFixed(2)}
+    <Text isTruncated maxW="100px">
+      {commify(value)}
     </Text>
   </Button>
 )
