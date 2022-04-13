@@ -20,7 +20,7 @@ export const OutputField = ({
 
   const priceImpact = computeFiatValuePriceImpact(inputFiatValue, outputFiatValue)
 
-  const [{ data: outputCurrencyBalance }] = useCurrencyBalance(currencyOut)
+  const balance = useCurrencyBalance(currencyOut)
 
   return (
     <TokenInput
@@ -38,7 +38,7 @@ export const OutputField = ({
             {priceImpact && `(${priceImpact?.toFixed(2)}%)`}{' '}
           </Text>
         </Flex>
-        {outputCurrencyBalance && <Balance value={outputCurrencyBalance.formatted} />}
+        {balance.isSuccess && <Balance value={balance.data.formatted} />}
       </HStack>
     </TokenInput>
   )

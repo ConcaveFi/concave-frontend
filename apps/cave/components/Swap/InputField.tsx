@@ -12,7 +12,7 @@ export const InputField = ({
 }) => {
   const inputFiat = useFiatPrice(currencyIn.wrapped)
   const inputFiatValue = currencyAmountIn && inputFiat.price?.quote(currencyAmountIn)
-  const [{ data: inputCurrencyBalance }] = useCurrencyBalance(currencyIn)
+  const balance = useCurrencyBalance(currencyIn)
 
   return (
     <TokenInput
@@ -25,10 +25,10 @@ export const InputField = ({
         <Text isTruncated fontWeight="bold" fontSize="sm" mr={2}>
           {!!inputFiatValue && `$${inputFiatValue.toFixed(2, { groupSeparator: ',' })}`}
         </Text>
-        {inputCurrencyBalance && (
+        {balance.isSuccess && (
           <Balance
-            value={inputCurrencyBalance.formatted}
-            onClick={() => updateInputValue(inputCurrencyBalance.formatted)}
+            value={balance.data.formatted}
+            onClick={() => updateInputValue(balance.data.formatted)}
           />
         )}
       </HStack>
