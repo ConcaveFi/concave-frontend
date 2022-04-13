@@ -11,12 +11,15 @@ export const concaveRPC = `https://api.concave.lol/node/${concaveKey}`
 export const concaveProvider = (chainId: number) =>
   new multicallProvider.MulticallProvider(
     new providers.FallbackProvider([
-      { provider: new providers.JsonRpcProvider(concaveRPC, chainId), priority: 0 },
-      { provider: new providers.AlchemyProvider(chainId, alchemy), priority: 1 },
-      { provider: new providers.InfuraProvider(chainId, infuraId), priority: 1 },
+      // { provider: new providers.JsonRpcProvider(concaveRPC, chainId), priority: 1 },
+      { provider: new providers.AlchemyProvider(chainId, alchemy), priority: 2 },
+      { provider: new providers.InfuraProvider(chainId, infuraId), priority: 2 },
       // providers.getDefaultProvider(chainId, { alchemy, etherscan, infuraId }),
     ]),
   )
+
+// export const concaveProvider = (chainId: number) =>
+//   new providers.JsonRpcProvider(concaveRPC, chainId)
 
 export const concaveWSProvider = (chainId: number) =>
   new providers.InfuraWebSocketProvider(chainId, infuraId)
