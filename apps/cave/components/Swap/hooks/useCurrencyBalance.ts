@@ -7,7 +7,7 @@ export const useCurrencyBalance = (currency: Currency) => {
     addressOrName: account?.address,
     token: currency?.isToken && currency?.address, // if it's not a token, it's native, n we don't need to pass the address
     formatUnits: currency?.decimals,
-    skip: !currency || !account?.address,
+    skip: !currency?.wrapped?.address || !account?.address,
   })
 
   return {
