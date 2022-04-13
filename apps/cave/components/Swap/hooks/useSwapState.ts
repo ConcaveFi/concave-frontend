@@ -3,17 +3,25 @@ import { Currency, TradeType, CNV, DAI } from 'gemswap-sdk'
 import { useTrade } from './useTrade'
 import { parseInputAmount } from '../utils/parseInputAmount'
 import { useCurrentSupportedNetworkId } from './useCurrentSupportedNetworkId'
+import { useEffect } from 'react'
 
 export const useSwapState = () => {
   const networkId = useCurrentSupportedNetworkId()
 
   const [currencyIn, setCurrencyIn] = useState<Currency>(DAI[networkId])
   const [currencyOut, setCurrencyOut] = useState<Currency>(CNV[networkId])
+
+  useEffect(() => {
+    setCurrencyIn(DAI[networkId])
+    setCurrencyOut(CNV[networkId])
+  }, [networkId])
+
   /*
     we only need the value of the input the user typed in, 
     the other input value is then derived from it, simulating the trade
   */
   const [exactValue, setExactValue] = useState<string>('')
+
   /*
     when user type in the input field, we set TradeType to Exact Input
     on the output field we set TradeType to Exact Output
@@ -58,7 +66,7 @@ export const useSwapState = () => {
       ? [parseInputAmount(exactValue, currencyIn), currencyOut]
       : [parseInputAmount(exactValue, currencyOut), currencyIn]
 
-  const { data: trade } = useTrade(exactCurrencyAmount, otherCurrency.wrapped, {
+  const { data: trade, error: tradeError } = useTrade(exactCurrencyAmount, otherCurrency.wrapped, {
     tradeType,
     maxHops: 3,
   })
@@ -75,6 +83,7 @@ export const useSwapState = () => {
   return useMemo(
     () => ({
       trade,
+      tradeError,
       currencyIn,
       currencyOut,
       currencyAmountIn,
@@ -88,6 +97,7 @@ export const useSwapState = () => {
     }),
     [
       trade,
+      tradeError,
       currencyAmountIn,
       currencyAmountOut,
       currencyIn,
