@@ -178,6 +178,8 @@ export const Settings = ({ onClose }) => {
       <PopoverTrigger>
         <IconButton
           px={2}
+          _focus={{ transform: 'scale(1.12)', filter: 'drop-shadow(-1px 1px 2px #ffffff20)' }}
+          _hover={{ transform: 'scale(1.06)', filter: 'drop-shadow(-1px 1px 2px #ffffff20)' }}
           icon={<SwapSettingsIcon viewBox="0 0 20 25" cursor={'pointer'} />}
           aria-label="swap settings"
         />
@@ -220,7 +222,7 @@ export const Settings = ({ onClose }) => {
 
 export const QuestionIcon = () => (
   <CnvQuestionIcon
-    filter="drop-shadow(-1px 1px 2px rgba(255, 255, 255, 0.25))"
+    filter="drop-shadow(-1px 1px 2px #ffffff40)"
     height={'18px'}
     width={'18px'}
     viewBox="0 0 16 16"

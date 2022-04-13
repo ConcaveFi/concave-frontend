@@ -152,6 +152,9 @@ export const SelectTokenModal = ({
 const SelectTokenButton = ({ selected, onClick }: { selected: Currency; onClick: () => void }) => (
   <Button
     shadow="Up Small"
+    _focus={{ shadow: 'Up Big' }}
+    _hover={{ shadow: 'Up Big' }}
+    _active={{ shadow: 'down' }}
     sx={{ ...(!selected?.symbol && { bgGradient: 'linear(to-r, primary.1, primary.2)' }) }}
     bgColor="blackAlpha.100"
     py={1.5}
