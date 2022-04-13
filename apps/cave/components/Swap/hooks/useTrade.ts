@@ -1,7 +1,6 @@
 import { Trade, Currency, CurrencyAmount, TradeType, Pair, BestTradeOptions } from 'gemswap-sdk'
-import { useCallback } from 'react'
 
-import { usePairs, UsePairsQueryOptions } from './usePair'
+import { usePairs } from './usePair'
 
 const MAX_HOPS = 3
 
@@ -19,7 +18,7 @@ export const getBestTrade = (
       ? Trade.bestTradeExactIn(pairs, exactAmount, otherCurrency, options)
       : Trade.bestTradeExactOut(pairs, otherCurrency, exactAmount, options)
 
-  // happens when there is not enough liquidity, like the trade would literally empty all reserves
+  // happens when there is not enough liquidity
   if (!bestTrade[0]) throw new Error('Invalid Trade')
 
   return bestTrade[0]
