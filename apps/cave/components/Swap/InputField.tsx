@@ -21,7 +21,7 @@ export const InputField = ({
       onChangeValue={updateInputValue}
       onSelectCurrency={updateCurrencyIn}
     >
-      <HStack justify="space-between" align="center" textColor="text.low" w="full">
+      <HStack justify="space-between" align="end" textColor="text.low" w="full">
         <Text isTruncated fontWeight="bold" fontSize="sm" mr={2}>
           {!!inputFiatValue && `$${inputFiatValue.toFixed(2, { groupSeparator: ',' })}`}
         </Text>

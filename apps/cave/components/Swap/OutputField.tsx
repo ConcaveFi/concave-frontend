@@ -29,7 +29,7 @@ export const OutputField = ({
       onChangeValue={updateOutputValue}
       onSelectCurrency={updateCurrencyOut}
     >
-      <HStack justify="space-between" align="center" textColor="text.low" w="full">
+      <HStack justify="space-between" align="end" textColor="text.low" w="full">
         <Flex mr={2} align="center">
           <Text isTruncated fontWeight="bold" fontSize="sm" mr={1}>
             {!!outputFiatValue && `$${outputFiatValue.toFixed(2, { groupSeparator: ',' })}`}
