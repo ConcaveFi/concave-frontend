@@ -1,41 +1,37 @@
 import { ExpandArrowIcon } from '@concave/icons'
-import { Box, Button, Flex, HStack, Modal, NumericInput, StackDivider, Text } from '@concave/ui'
+import { Box, Button, Flex, Heading, HStack, Modal, Stack, StackDivider, Text } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
+import { Currency, CurrencyAmount, Percent, Trade, TradeType } from 'gemswap-sdk'
 import React from 'react'
-import { TradeInfo } from './hooks/useSwapTransaction'
+import { useFiatValue } from './hooks/useFiatPrice'
+import { usePrice } from './hooks/usePrice'
+import { SwapSettings } from './Settings'
+import { computeFiatValuePriceImpact } from './utils/computeFiatValuePriceImpact'
 
-const TokenInfo = ({
-  price,
-  address,
-  symbol,
-  amount,
-  loss,
-}: {
-  price: string | number
-  address: string
-  symbol: string
-  amount: string | number
-  loss?: number
-}) => {
+type TradeCurrencyInfoProps = {
+  currencyAmount: CurrencyAmount<Currency>
+  fiatValue: CurrencyAmount<Currency>
+  priceImpact?: Percent
+}
+
+const TradeCurrencyInfo = ({ currencyAmount, fiatValue, priceImpact }: TradeCurrencyInfoProps) => {
   return (
-    <Flex
-      borderRadius={'3xl'}
-      justifyContent={'space-between'}
-      boxShadow={'Down Medium'}
-      px={5}
-      p={4}
-    >
-      <Box w={200} h="69px">
-        <NumericInput disabled fontSize={'32px'} decimalScale={5} value={amount} />
-        <Text fontWeight={700} fontSize={14} textColor="text.low">
-          {!!price ? `$${price}` : ``}
-          {/* {loss && ` (-${loss}%)`} */}
-        </Text>
-      </Box>
+    <Flex rounded="2xl" justify="space-between" shadow="Down Medium" px={5} py={4}>
+      <Stack spacing={1} direction="column" h="100%">
+        <Heading fontSize="2xl">{currencyAmount.toSignificant(2, { groupSeparator: ',' })}</Heading>
+        <Flex fontWeight="bold" color="text.low" align="center">
+          <Text fontSize="sm" mr={1}>
+            $ {fiatValue.toFixed(2, { groupSeparator: ',' })}
+          </Text>
+          <Text fontSize="xs" opacity={0.7}>
+            {priceImpact && `(${priceImpact?.toFixed(2)}%)`}
+          </Text>
+        </Flex>
+      </Stack>
       <HStack>
-        <CurrencyIcon size="sm" address={address} symbol={symbol} />
-        <Text fontSize={24} fontWeight={700}>
-          {symbol.toUpperCase()}
+        <CurrencyIcon size="sm" currency={currencyAmount.currency} />
+        <Text fontSize={24} fontWeight={700} casing="uppercase">
+          {currencyAmount.currency.symbol}
         </Text>
       </HStack>
     </Flex>
@@ -44,37 +40,42 @@ const TokenInfo = ({
 
 const InOutArrow = () => {
   return (
-    <Flex align="center" justify="center" mt={-3}>
-      <Box
-        shadow="Up Small"
-        px={3}
-        py={1}
-        bgGradient="linear(to-tr, blackAlpha.500 1%, transparent 90%)"
-        rounded="3xl"
-      >
+    <Flex align="center" justify="center" mt={-3} mb={-1}>
+      <Box shadow="Up Small" px={3} py={1} apply="background.metal" opacity={0.8} rounded="3xl">
         <ExpandArrowIcon w="18px" h="18px" />
       </Box>
     </Flex>
   )
 }
 
-const MinExpectedOutput = ({ value, symbol }) => {
+const MinExpectedOutput = ({
+  trade,
+  slippageTolerance,
+}: {
+  trade: Trade<Currency, Currency, TradeType>
+  slippageTolerance: { value: string; percent: Percent }
+}) => {
+  const isExactInput = trade.tradeType === TradeType.EXACT_INPUT
+  const amount = isExactInput
+    ? trade.minimumAmountOut(slippageTolerance.percent)
+    : trade.maximumAmountIn(slippageTolerance.percent)
   return (
     <Box>
-      <Flex fontSize={'14px'} w={'100%'} mb={2} justifyContent={'space-between'}>
-        <Text whiteSpace={'pre-wrap'} mr={8} fontWeight={700} textColor="text.low">
-          Minimum received after slippage
+      <Flex fontSize="sm" w="100%" mb={3} justify="space-between" align="center">
+        <Text maxW="200px" fontWeight="bold" textColor="text.low" mr={4}>
+          {isExactInput ? `Minimum received` : `Maximum sent`} after slippage (
+          {slippageTolerance.value}%)
         </Text>
-        <Text whiteSpace={'nowrap'} fontWeight={700} textColor="text.low">
-          {value} {symbol}
+        <Text fontWeight="bold" textColor="text.low">
+          {amount.toSignificant(4, { groupSeparator: ',' })} {amount.currency.symbol}
         </Text>
       </Flex>
-      {/* <Flex fontSize={'14px'} w={'100%'} justifyContent={'space-between'}>
-        <Text fontWeight={700} textColor="text.low">
+      {/* <Flex fontSize="sm" w="100%" justify="space-between">
+        <Text fontWeight="bold" textColor="text.low">
           Network Fee
         </Text>
         <Text fontWeight={700} textColor="text.low">
-          ~ {estimatedFee}
+          {estimatedFee && `~ ${estimatedFee} wei`}
         </Text>
       </Flex> */}
     </Box>
@@ -82,113 +83,104 @@ const MinExpectedOutput = ({ value, symbol }) => {
 }
 const ExpectedOutput = ({ value, symbol, priceImpact }) => {
   return (
-    <Box>
-      <Flex fontSize={'18px'} w={'100%'} justifyContent={'space-between'}>
-        <Text whiteSpace={'pre-wrap'} mr={4} fontWeight={600}>
+    <Stack fontWeight="bold" fontSize="md" w="100%">
+      <Flex justify="space-between">
+        <Text whiteSpace={'pre-wrap'} mr={4}>
           Expected Output
         </Text>
-        <Text fontWeight={600}>
+        <Text>
           {value} {symbol}
         </Text>
       </Flex>
-      <Flex w={'100%'} justifyContent={'space-between'}>
-        <Text fontWeight={600}>Price Impact</Text>
-        <Text fontWeight={600}>{priceImpact}%</Text>
+      <Flex justify="space-between">
+        <Text>Price Impact</Text>
+        <Text>{priceImpact}%</Text>
       </Flex>
-    </Box>
+    </Stack>
   )
 }
 
-export const ConfirmSwapModal = ({
-  tradeInfo,
-  tokenInUsdPrice,
-  tokenOutUsdPrice,
-  tokenInRelativePriceToTokenOut,
-  isOpen,
-  onClose,
+const ConfirmSwap = ({
+  trade,
+  settings,
   onConfirm,
-  exactInOrExactOut,
 }: {
-  tradeInfo: TradeInfo
-  tokenInUsdPrice: string
-  tokenOutUsdPrice: string
-  tokenInRelativePriceToTokenOut: string
-  isOpen: boolean
-  onClose: () => void
+  trade: Trade<Currency, Currency, TradeType>
+  settings: SwapSettings
   onConfirm: () => void
-  exactInOrExactOut: boolean
 }) => {
-  if (!tradeInfo) return null
-  const { trade, meta } = tradeInfo
-
   const currencyIn = trade.inputAmount.currency
   const currencyOut = trade.outputAmount.currency
 
-  return (
-    <Modal bluryOverlay={true} title="Confirm Swap" isOpen={isOpen} onClose={onClose}>
-      {exactInOrExactOut ? (
-        <div>
-          {' '}
-          <TokenInfo
-            address={currencyIn.isToken ? currencyIn.address : currencyIn.symbol}
-            symbol={currencyIn.symbol}
-            amount={trade.inputAmount.toSignificant(3)}
-            price={+trade.inputAmount.toSignificant(6) * +tokenInUsdPrice}
-          />
-          <InOutArrow />
-          <TokenInfo
-            address={currencyOut.isToken ? currencyOut.address : currencyOut.symbol}
-            symbol={currencyOut.symbol}
-            amount={trade.outputAmount.toSignificant(3)}
-            price={+trade.outputAmount.toSignificant(6) * +tokenOutUsdPrice}
-          />
-        </div>
-      ) : (
-        <div>
-          {' '}
-          <TokenInfo
-            address={currencyOut.isToken ? currencyOut.address : currencyOut.symbol}
-            symbol={currencyOut.symbol}
-            amount={trade.outputAmount.toSignificant(3)}
-            price={+trade.outputAmount.toSignificant(6) * +tokenOutUsdPrice}
-          />
-          <InOutArrow />
-          <TokenInfo
-            address={currencyIn.isToken ? currencyIn.address : currencyIn.symbol}
-            symbol={currencyIn.symbol}
-            amount={trade.inputAmount.toSignificant(3)}
-            price={+trade.inputAmount.toSignificant(6) * +tokenInUsdPrice}
-          />
-        </div>
-      )}
+  const inputFiat = useFiatValue(trade.inputAmount)
+  const outputFiat = useFiatValue(trade.outputAmount)
 
-      <Flex fontSize="sm" fontWeight="bold" my={6} justify="center" flexWrap="wrap">
+  const relativePrice = usePrice(currencyIn.wrapped, currencyOut.wrapped)
+
+  const fiatPriceImpact = computeFiatValuePriceImpact(inputFiat.value, outputFiat.value)
+
+  return (
+    <>
+      <TradeCurrencyInfo currencyAmount={trade.inputAmount} fiatValue={inputFiat.value} />
+      <InOutArrow />
+      <TradeCurrencyInfo
+        currencyAmount={trade.outputAmount}
+        fiatValue={outputFiat.value}
+        priceImpact={fiatPriceImpact}
+      />
+
+      <Flex fontSize="sm" fontWeight="bold" align="center" justify="center" py={4}>
         <Text>
-          1 {currencyOut.symbol} = {tokenInRelativePriceToTokenOut}
-          {currencyIn.symbol}
+          1 {relativePrice.price?.quoteCurrency.symbol} ={' '}
+          {relativePrice.price?.invert().toSignificant(3)}{' '}
+          {relativePrice.price?.baseCurrency.symbol}
         </Text>
-        <Text ml={1} textColor="text.low">
-          (${tokenOutUsdPrice})
-        </Text>
+        {outputFiat.price && (
+          <Text ml={1} textColor="text.low">
+            (${outputFiat.price.toFixed(2, { groupSeparator: ',' })})
+          </Text>
+        )}
       </Flex>
 
-      <Flex direction="column" borderRadius="3xl" mb={8} p={6} shadow="Down Medium">
+      <Flex direction="column" rounded="2xl" mb={6} p={6} shadow="Down Medium">
         <ExpectedOutput
-          value={meta.expectedOutput}
+          value={trade.outputAmount.toSignificant(4)}
           symbol={currencyOut.symbol}
-          priceImpact={trade.priceImpact.toSignificant(2)}
+          priceImpact={trade.priceImpact.toSignificant(3)}
         />
         <StackDivider borderRadius="full" mx={-4} my={4} h={0.5} bg="stroke.secondary" />
-        <MinExpectedOutput
-          value={meta.worstExecutionPrice}
-          symbol={currencyOut.symbol}
-          // estimatedFee={'11'}
-        />
+        <MinExpectedOutput trade={trade} slippageTolerance={settings.slippageTolerance} />
       </Flex>
 
       <Button variant="primary" size="large" onClick={onConfirm} isFullWidth>
         Confirm Swap
       </Button>
+    </>
+  )
+}
+
+export const ConfirmSwapModal = ({
+  trade,
+  settings,
+  isOpen,
+  onClose,
+  onConfirm,
+}: {
+  isOpen: boolean
+  onClose: () => void
+  trade: Trade<Currency, Currency, TradeType>
+  settings: SwapSettings
+  onConfirm: () => void
+}) => {
+  return (
+    <Modal
+      bluryOverlay={true}
+      title="Confirm Swap"
+      isOpen={isOpen}
+      onClose={onClose}
+      bodyProps={{ w: '400px' }}
+    >
+      <ConfirmSwap trade={trade} settings={settings} onConfirm={onConfirm} />
     </Modal>
   )
 }
