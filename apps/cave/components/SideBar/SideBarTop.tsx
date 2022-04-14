@@ -8,12 +8,12 @@ import { useAccount, useBalance } from 'wagmi'
 import { ChainId, CNV } from 'gemswap-sdk'
 
 function SideBarTop() {
-  const { data: account } = useAccount()
-  const { data, isLoading } = useBalance({
+  const [{ data: account }] = useAccount()
+  const [{ data, loading }] = useBalance({
     addressOrName: account?.address,
     token: CNV[ChainId.ETHEREUM].address,
     formatUnits: CNV[ChainId.ETHEREUM].decimals,
-    enabled: !!account?.address,
+    skip: !account?.address,
   })
 
   return (
@@ -45,7 +45,7 @@ function SideBarTop() {
               Your CNV Balance
             </Text>
             <Text color="text.low" fontWeight="bold" fontSize="md" lineHeight="100%">
-              {isLoading ? 0 : Number(data?.formatted).toFixed(2)} CNV
+              {loading ? 0 : Number(data?.formatted).toFixed(2)} CNV
             </Text>
           </Flex>
         </Box>
