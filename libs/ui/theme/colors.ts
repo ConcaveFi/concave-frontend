@@ -10,6 +10,7 @@ export const colors = {
     high: '#fff',
     medium: '#D7E9FF',
     low: '#5f7a99',
+    accent: '#2E97E2',
   },
 
   stroke: {
