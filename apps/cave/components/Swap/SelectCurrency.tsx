@@ -49,7 +49,7 @@ const CommonTokens = ({
             pr={3}
             fontSize="sm"
           >
-            {currency.name.toUpperCase()}
+            {currency.symbol.toUpperCase()}
           </Button>
         ))}
       </Flex>
@@ -101,7 +101,7 @@ export const SelectTokenModal = ({
     <Modal
       bluryOverlay
       title="Select a Token"
-      size={'sm'}
+      size="sm"
       isOpen={isOpen}
       onClose={onClose}
       bodyProps={{ gap: 4, w: '350px' }}
@@ -111,7 +111,7 @@ export const SelectTokenModal = ({
         selected={selected}
         onSelect={selectAndClose}
       />
-      <Input
+      {/* <Input
         placeholder="Search name or paste address"
         onChange={({ target }) => setSearch(target.value)}
       />
@@ -124,7 +124,7 @@ export const SelectTokenModal = ({
         shadow="Down Big"
         p={3}
       >
-        {/* {!isSuccess ? (
+         {!isSuccess ? (
           <Spinner />
         ) : (
           <UnorderedList
@@ -143,8 +143,8 @@ export const SelectTokenModal = ({
               />
             ))}
           </UnorderedList>
-        )} */}
-      </Flex>
+        )}
+      </Flex> */}
     </Modal>
   )
 }
