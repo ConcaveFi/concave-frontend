@@ -4,26 +4,21 @@ import { useAccount } from 'wagmi'
 import { useModals } from 'contexts/ModalsContext'
 import { useApprove } from 'hooks/useApprove'
 import { usePermit } from 'hooks/usePermit'
-import { SwapSettings } from '../Settings'
 import { useCurrencyBalance } from './useCurrencyBalance'
 import { NoValidPairsError } from './usePair'
-import { useSwapTransaction } from './useSwapTransaction'
 
 export const useSwapButtonState = ({
   currencyIn,
   trade,
   tradeError,
-  settings,
-  onOpenSwapConfirmationModal,
+  onSwapClick,
 }: {
   currencyIn: Currency
   trade: Trade<Currency, Currency, TradeType>
   tradeError: string
-  settings: SwapSettings
-  onOpenSwapConfirmationModal: () => void
+  onSwapClick: () => void
 }): ButtonProps => {
   const [{ data: account }] = useAccount()
-
   const currencyInBalance = useCurrencyBalance(currencyIn)
 
   const [token, spender] = [currencyIn.wrapped, ROUTER_ADDRESS[currencyIn?.chainId]]
@@ -31,8 +26,6 @@ export const useSwapButtonState = ({
   const { allowance, ...approve } = useApprove(token, spender)
 
   const { connectModal } = useModals()
-
-  const swapTx = useSwapTransaction(trade, settings)
 
   const inputAmount = trade?.inputAmount
   const outputAmount = trade?.outputAmount
@@ -43,13 +36,13 @@ export const useSwapButtonState = ({
   if (tradeError === NoValidPairsError.message)
     return {
       isDisabled: true,
-      children: (
-        <Stack>
-          <Text fontSize="sm">{`Insufficient liquidity for this trade`}</Text>
-          {/* {!settings.multihops && `Try enabling multi-hop trades`} */}
-        </Stack>
-      ),
+      children: `Insufficient liquidity`, // Try enabling multi-hop trades
     }
+
+  /*
+    Enter an amount
+  */
+  if (!inputAmount) return { isDisabled: true, children: 'Enter an amount' }
 
   /*
     Not Connected
@@ -67,12 +60,15 @@ export const useSwapButtonState = ({
     Insufficient Funds
   */
   if (inputAmount?.greaterThan(currencyInBalance.data?.value.toString()))
-    return { children: `Insufficient ${trade.inputAmount.currency.symbol} balance` }
+    return {
+      children: `Insufficient ${trade.inputAmount.currency.symbol} balance`,
+      isDisabled: true,
+    }
 
   /*
     Permit / Approve
   */
-  if (approve.isWaitingUserConfirmation)
+  if (approve.isWaitingForConfirmation)
     return { loadingText: 'Approve in your wallet', isLoading: true }
   if (approve.isWaitingTransactionReceipt)
     return { loadingText: 'Waiting block confirmation', isLoading: true }
@@ -80,15 +76,19 @@ export const useSwapButtonState = ({
 
   const permitErroredOrWasNotInitializedYet = permit.isError || permit.isIdle
   const allowanceIsNotEnough =
-    !!allowance.value && !!inputAmount?.greaterThan(allowance.value.toString())
+    allowance.isSuccess && !!inputAmount?.greaterThan(allowance.value.toString())
 
-  if ((permitErroredOrWasNotInitializedYet && allowanceIsNotEnough) || allowanceIsNotEnough)
+  if (
+    (permitErroredOrWasNotInitializedYet && allowanceIsNotEnough) ||
+    allowanceIsNotEnough ||
+    allowance.value.isZero()
+  )
     return !permit.isSupported || permit.isError
       ? { children: `Approve ${currencyIn.symbol}`, onClick: () => approve.sendApproveTx() }
       : { children: `Permit ${currencyIn.symbol}`, onClick: () => permit.signPermit() }
 
   /* 
-    Wrap / Unwrap, ETH -> WETH
+    Wrap / Unwrap, ETH <-> WETH
   */
   const currencyOut = outputAmount?.currency
   if (currencyIn.isNative && currencyIn.wrapped.equals(currencyOut)) return { children: 'Wrap' }
@@ -99,9 +99,6 @@ export const useSwapButtonState = ({
   */
   return {
     children: 'Swap',
-    onClick: () => {
-      if (settings.expertMode) swapTx.sendSwapTx()
-      else onOpenSwapConfirmationModal()
-    },
+    onClick: onSwapClick,
   }
 }
