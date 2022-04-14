@@ -1,32 +1,59 @@
-import { Button, Card, useDisclosure } from '@concave/ui'
+import { Button, Card, HStack, Spinner, Text, useDisclosure } from '@concave/ui'
 import { useApprovalWhenNeeded } from 'hooks/useAllowance'
 import React, { useEffect, useState } from 'react'
 import { useBondState } from './BondState'
-import { BOND_ADDRESS } from '../../contracts/BondingAddress'
+import { BOND_ADDRESS } from '../../contracts/Bond/BondingAddress'
 import { DownwardIcon } from './DownwardIcon'
 import { BondOutput } from './BondOutput'
 import { BondInput } from './BondInput'
 import { ConfirmBondModal } from './ConfirmBond'
 import { Currency } from 'gemswap-sdk'
+import { useBondGetAmountOut } from './BondState'
+import { BondReceiptModal } from './BondReceipt'
+import { ethers } from 'ethers'
+import { useFeeData, useWaitForTransaction } from 'wagmi'
+import { GasIcon } from '@concave/icons'
+
+export const twoDecimals = (s: string | number) => {
+  const a = s.toString()
+  return a.indexOf('.') > -1 ? a.slice(0, a.indexOf('.') + 3) : a
+}
+
+const GasPrice = () => {
+  const [{ data }] = useFeeData({ formatUnits: 'gwei', watch: true })
+  return (
+    <>
+      <GasIcon viewBox="0 0 16 16" />
+      {data ? (
+        <Text fontSize="xs" color="text.low" fontWeight="medium">
+          {twoDecimals(data?.formatted.gasPrice)} gwei
+        </Text>
+      ) : (
+        <Spinner size="xs" color="text.low" />
+      )}
+    </>
+  )
+}
 
 export function BondBuyCard() {
-  const { currencyIn, currencyOut, exactValue, userAddress, isConnected, balance } = useBondState()
+  const { currencyIn, currencyOut, userAddress, balance } = useBondState()
+  const [userBalance, setBalance] = useState<string>()
+  const [amountIn, setAmountIn] = useState<string>()
+  const [amountOut, setAmountOut] = useState<string>()
+  const [bondReceipt] = useState<any>()
+  const [bondTransaction] = useState({})
 
-  const [amountIn, setAmountIn] = useState<string>('0')
-  const [amountOut, setAmountOut] = useState<string>('0')
   const [currenctCurrencyIn, setCurrencyIn] = useState<Currency>()
-
-  const [userBalance, setBalance] = useState<string>('0')
   const confirmModal = useDisclosure()
-  const transactionStatusModal = useDisclosure()
   const receiptModal = useDisclosure()
 
   const [needsApproval, approve, isApproving] = useApprovalWhenNeeded(
     currencyIn,
     BOND_ADDRESS[1],
     userAddress,
-    exactValue,
+    amountIn,
   )
+
   useEffect(() => {
     if (balance[0].data) {
       setBalance(balance[0].data.formatted)
@@ -42,6 +69,10 @@ export function BondBuyCard() {
         onChangeValue={(v) => {
           const numberValue = v.replace('-', '')
           numberValue && setAmountIn(v)
+          // eslint-disable-next-line react-hooks/rules-of-hooks
+          useBondGetAmountOut(currencyOut.address, currencyOut.decimals, 3, v).then((amountOut) => {
+            setAmountOut(amountOut)
+          })
         }}
         onChangeCurrency={() => {
           setCurrencyIn(currencyIn)
@@ -53,15 +84,11 @@ export function BondBuyCard() {
         // }}
       />
       <DownwardIcon />
-      <BondOutput
-        disabled={true}
-        currency={currencyOut}
-        value={amountOut}
-        // onChangeValue={(v) => {
-        //   !isNaN(+v) && setAmountOut(v)
-        // }}
-      />
 
+      <BondOutput disabled={true} currency={currencyOut} value={amountOut} />
+      <HStack align="center" justify="end" py={1}>
+        <GasPrice />
+      </HStack>
       {needsApproval && (
         <Button
           isLoading={isApproving}
@@ -98,28 +125,18 @@ export function BondBuyCard() {
         tokenInRelativePriceToTokenOut={''}
         isOpen={confirmModal.isOpen}
         onClose={confirmModal.onClose}
-        onConfirm={() => {}}
+        onConfirm={() => {
+          receiptModal.onOpen()
+        }}
       />
 
-      {/* <TransactionStatusModal
-        inAmount={swapingIn?.amount}
-        outAmount={tradeInfo?.meta.expectedOutput}
-        inSymbol={swapingIn?.currency?.symbol}
-        outSymbol={swapingOut?.currency?.symbol}
-        status={swapTransaction}
-        isOpen={transactionStatusModal.isOpen}
-        onClose={() => {
-          transactionStatusModal.onClose()
-        }}
-      /> */}
-
-      {/* <TransactionSubmittedModal
-        receipt={swapTransaction}
+      <BondReceiptModal
+        // receipt={bondTransaction}
         isOpen={receiptModal.isOpen}
         onClose={() => {
           receiptModal.onClose()
         }}
-      /> */}
+      />
     </Card>
   )
 }

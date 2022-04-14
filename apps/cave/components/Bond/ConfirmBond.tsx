@@ -122,7 +122,8 @@ export const ConfirmBondModal = ({
       <Flex fontSize="sm" fontWeight="bold" my={6} justify="center" flexWrap="wrap">
         <Text>
           {/* 1 {currencyOut.symbol} = {tokenInRelativePriceToTokenOut}
-          {currencyIn.symbol} */}
+          {currencyIn.symbol} */}{' '}
+          Bond Price -
         </Text>
         <Text ml={1} textColor="text.low">
           (${tokenOutUsdPrice})
@@ -135,6 +136,9 @@ export const ConfirmBondModal = ({
           symbol={currencyOut.symbol}
           priceImpact={trade.priceImpact.toSignificant(2)}
         /> */}
+        <Text align="center" fontSize="sm" fontWeight="bold">
+          ROI - 9.8%
+        </Text>
         <StackDivider borderRadius="full" mx={-4} my={4} h={0.5} bg="stroke.secondary" />
         {/* <MinExpectedOutput
           value={meta.worstExecutionPrice}

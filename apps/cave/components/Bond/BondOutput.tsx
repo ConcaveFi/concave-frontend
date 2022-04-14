@@ -11,22 +11,6 @@ import { Currency } from '@uniswap/sdk-core'
 import React from 'react'
 import { BondOutputSelect } from './BondOutputSelect'
 
-const Balance = ({ value, onClick }) => (
-  <Button
-    fontSize="xs"
-    ml="auto"
-    onClick={onClick}
-    // many bugs need to be resolved with this button
-    // rightIcon={!!onClick && <Text textColor="#2E97E2">Max</Text>}
-    leftIcon={<Text>Balance:</Text>}
-    iconSpacing={1}
-  >
-    <Text isTruncated maxW="50px">
-      {value}
-    </Text>
-  </Button>
-)
-
 export function BondOutput({
   currency,
   disabled = true,
