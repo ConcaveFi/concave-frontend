@@ -1,42 +1,23 @@
-import { ExpandArrowIcon } from '@concave/icons'
-import { Button, Card, Flex, HStack } from '@concave/ui'
-import { ROUTER_ADDRESS } from 'gemswap-sdk'
-import { ConfirmSwapModal } from './ConfirmSwapModal'
-import { useCurrencyBalance } from './hooks/useCurrencyBalance'
-import { Settings } from './Settings'
-import { TokenInput } from './TokenInput'
-import { TransactionSubmittedModal } from './TransactionSubmittedModal'
+import { useState } from 'react'
+import { useAccount } from 'wagmi'
+import { Button, Card, HStack, useDisclosure } from '@concave/ui'
 import { useSwapState } from './hooks/useSwapState'
-import { useUserApprove } from 'hooks/useApprove'
-import { useModals } from 'contexts/ModalsContext'
+import { useSwapTransaction } from './hooks/useSwapTransaction'
+import { useSwapButtonState } from './hooks/useSwapButtonState'
+import { defaultSettings, Settings, SwapSettings } from './Settings'
 import { InputField } from './InputField'
 import { OutputField } from './OutputField'
 import { RelativePrice } from './RelativePrice'
 import { GasPrice } from './GasPrice'
-
-const SwitchCurrencies = ({ onClick }) => {
-  return (
-    <Flex align="center" justify="center">
-      <Button
-        shadow="Up Small"
-        _focus={{ shadow: 'Up Small' }}
-        _hover={{ shadow: 'Up Big' }}
-        px={3.5}
-        py={2}
-        bgColor="blackAlpha.100"
-        rounded="3xl"
-        onClick={onClick}
-      >
-        <ExpandArrowIcon />
-      </Button>
-    </Flex>
-  )
-}
+import { SwitchCurrencies } from './SwitchCurrencies'
+import { ConfirmSwapModal } from './ConfirmSwapModal'
+import { TransactionSubmittedDialog } from './TransactionSubmittedDialog'
+import { WaitingConfirmationDialog } from './WaitingConfirmationDialog'
 
 export function SwapCard() {
   const {
     trade,
-    // tradeStatus,
+    tradeError,
     currencyIn,
     currencyOut,
     currencyAmountIn,
@@ -48,16 +29,23 @@ export function SwapCard() {
     switchCurrencies,
   } = useSwapState()
 
-  const { allowance, approve } = useUserApprove(
-    currencyIn.wrapped,
-    ROUTER_ADDRESS[currencyIn.chainId],
-  )
+  const [settings, setSettings] = useState<SwapSettings>(defaultSettings)
 
-  const { connectModal } = useModals()
+  const [{ data: account }] = useAccount()
+  const swapTx = useSwapTransaction(trade, settings, account?.address)
+
+  const confirmationModal = useDisclosure()
+
+  const swapButton = useSwapButtonState({
+    currencyIn,
+    trade,
+    tradeError,
+    onSwapClick: settings.expertMode ? swapTx.submit : confirmationModal.onOpen,
+  })
 
   return (
     <>
-      <Card p={6} gap={2} variant="primary" h="fit-content" shadow="Block Up" w="100%" maxW="420px">
+      <Card p={7} gap={2} variant="primary" h="fit-content" shadow="Block Up" w="100%" maxW="420px">
         <InputField
           currencyIn={currencyIn}
           currencyAmountIn={currencyAmountIn}
@@ -78,73 +66,31 @@ export function SwapCard() {
         <HStack align="center" justify="end" py={5}>
           <RelativePrice currencyIn={currencyIn} currencyOut={currencyOut} />
           <GasPrice />
-          <Settings onClose={() => null} />
+          <Settings onClose={setSettings} />
         </HStack>
 
-        <Button
-          variant="primary"
-          size="large"
-          isFullWidth
-          isLoading={false}
-          onClick={() => connectModal.onOpen()}
-        >
-          Connect Wallet
-        </Button>
-
-        <Button
-          variant="primary"
-          size="large"
-          isFullWidth
-          isLoading={false}
-          onClick={() => approve()}
-        >
-          Approve {currencyIn.symbol}
-        </Button>
-
-        {/* 
-          <Button
-            isDisabled={!isTradeReady || needsApproval || !isConnected || +swapingIn.balance < +swapingIn.amount}
-            variant="primary"
-            size="large"
-            isFullWidth
-            onClick={confirmModal.onOpen}
-          >
-            {+swapingIn.balance < +swapingIn.amount ? 'Insufficient Funds' : 'Swap'}
-          </Button>
-        */}
+        <Button variant="primary" size="large" isFullWidth {...swapButton} />
       </Card>
 
-      {/* 
       <ConfirmSwapModal
-        tradeInfo={tradeInfo}
-        tokenInUsdPrice={swapingIn.stable}
-        tokenOutUsdPrice={swapingOut.stable}
-        tokenInRelativePriceToTokenOut={swapingOut.relativePrice}
-        isOpen={confirmModal.isOpen}
-        onClose={confirmModal.onClose}
-        onConfirm={() => confirmSwap()}
-        exactInOrExactOut={inOrOut}
+        trade={trade}
+        settings={settings}
+        isOpen={confirmationModal.isOpen}
+        onClose={confirmationModal.onClose}
+        onConfirm={() => {
+          confirmationModal.onClose()
+          swapTx.submit()
+          updateInputValue('')
+        }}
       />
 
-      {/* <TransactionStatusModal
-        inAmount={swapingIn?.amount}
-        outAmount={tradeInfo?.meta.expectedOutput}
-        inSymbol={swapingIn?.currency?.symbol}
-        outSymbol={swapingOut?.currency?.symbol}
-        status={swapTransaction}
-        isOpen={transactionStatusModal.isOpen}
-        onClose={() => {
-          transactionStatusModal.onClose()
-        }}
-      /> */}
+      <WaitingConfirmationDialog
+        amountIn={swapTx.trade?.inputAmount}
+        amountOut={swapTx.trade?.outputAmount}
+        isOpen={swapTx.isWaitingForConfirmation}
+      />
 
-      {/* <TransactionSubmittedModal
-        receipt={swapReceipt}
-        isOpen={receiptModal.isOpen}
-        onClose={() => {
-          receiptModal.onClose()
-        }}
-      />  */}
+      <TransactionSubmittedDialog tx={swapTx.data} isOpen={swapTx.isTransactionSent} />
     </>
   )
 }
