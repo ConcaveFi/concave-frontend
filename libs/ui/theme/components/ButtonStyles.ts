@@ -54,7 +54,7 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
       _focus: { shadow: PrimaryButtonShadow },
     },
     secondary: {
-      bgGradient: 'linear(to-r, secondary.125, secondary.50)',
+      apply: 'background.metalBrighter',
       shadow: 'Up Big',
     },
     navigation: (props) => ({
