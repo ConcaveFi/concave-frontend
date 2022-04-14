@@ -19,7 +19,9 @@ import {
   useBoolean,
   Box,
 } from '@concave/ui'
+import { Percent } from 'gemswap-sdk'
 import React, { useMemo, useState } from 'react'
+import { useReducer } from 'react'
 
 const SlippageTolerance = ({ value, onValueChange, onClickAuto }) => {
   return (
@@ -32,11 +34,11 @@ const SlippageTolerance = ({ value, onValueChange, onClickAuto }) => {
           <InputGroup px={3} variant="unstyled" size="sm" h="full">
             <NumericInput
               value={value}
-              isNumericString
               placeholder="0.50"
               variant="unstyled"
+              decimalScale={4}
+              maxLength={7}
               size="medium"
-              max={50}
               onValueChange={onValueChange}
             />
             <InputRightAddon color="text.low" fontWeight="semibold">
@@ -82,6 +84,8 @@ const Deadline = ({ value, onValueChange }) => {
             value={value}
             isNumericString
             placeholder="30"
+            decimalScale={4}
+            maxLength={7}
             size="medium"
             variant="unstyled"
             onValueChange={onValueChange}
@@ -118,23 +122,39 @@ const ToggleMultihops = ({ isChecked, onToggle }) => {
   )
 }
 
+const toPercent = (input: string) => new Percent(Math.floor(+input * 100), 10_000)
+
 export type SwapSettings = {
   deadline: string
-  slippageTolerance: string
+  slippageTolerance: {
+    value: string
+    percent: Percent
+  }
   expertMode: boolean
   multihops: boolean
 }
 
 export const defaultSettings: SwapSettings = {
   deadline: '30',
-  slippageTolerance: '0.5',
+  slippageTolerance: {
+    value: '0.5',
+    percent: toPercent('0.5'),
+  },
   expertMode: false,
-  multihops: false,
+  multihops: true,
 }
+
+const MAX_SLIPPAGE = 50
 
 const useSettings = () => {
   const [deadline, setDeadline] = useState(defaultSettings.deadline)
-  const [slippageTolerance, setSlippageTolerance] = useState(defaultSettings.slippageTolerance)
+  const [slippageTolerance, setSlippageTolerance] = useReducer(
+    (oldValue, value: string) => ({
+      value: +value > MAX_SLIPPAGE ? oldValue.value : value,
+      percent: toPercent(value),
+    }),
+    defaultSettings.slippageTolerance,
+  )
   const [multihops, { toggle: toggleMultihops }] = useBoolean(defaultSettings.multihops)
   const [expertMode, { toggle: toggleExpertMode }] = useBoolean(defaultSettings.expertMode)
 
@@ -195,9 +215,9 @@ export const Settings = ({ onClose }: { onClose: (settings: SwapSettings) => voi
             <Box h="1px" w="full" bg="stroke.primary" my={2} />
             <Stack gap={3} align="flex-start">
               <SlippageTolerance
-                value={slippageTolerance}
+                value={slippageTolerance.value}
                 onValueChange={({ value }) => setSlippageTolerance(value)}
-                onClickAuto={() => setSlippageTolerance(defaultSettings.slippageTolerance)}
+                onClickAuto={() => setSlippageTolerance(defaultSettings.slippageTolerance.value)}
               />
               <Deadline value={deadline} onValueChange={({ value }) => setDeadline(value)} />
               <Stack gap={1} w="full">
