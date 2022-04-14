@@ -5,15 +5,14 @@ import {
   Flex,
   gradientBorder,
   Heading,
-  // gradientBorder,
   Image,
   Stack,
   Text,
 } from '@concave/ui'
 import { BondBuyCard } from 'components/Bond/BondBuyCard'
-import GcnvTitle from 'components/GcnvTitle'
 import Placeholder from 'components/Placeholder'
-import { SwapCard } from 'components/Swap/SwapCard'
+import { useBondGetTermLength } from 'components/Bond/BondState'
+import { useState } from 'react'
 // import { SwapCardLegacy } from 'components/Swap/SwapCardLegacy'
 
 import { useSwap } from 'components/Swap/useSwap'
@@ -99,6 +98,10 @@ const NothingToRedeem = () => {
 export default function Bond() {
   const { user, isConnected } = useAuth()
   const swap = useSwap(isConnected ? user?.address : '', {})
+  const [termLength, setTermLength] = useState<number>()
+  useBondGetTermLength(3).then((termLength) => {
+    setTermLength(termLength)
+  })
 
   return (
     <Container maxW="container.lg">
@@ -107,10 +110,6 @@ export default function Bond() {
           <Heading as="h1" mb={3} fontSize="5xl">
             Dynamic Bond Market
           </Heading>
-          <Text maxW={280}>
-            Get your gCNV that will grow internal CNV number your gCNV that will grow number or smth
-            idk lol Get your gCNV that will grow internal CNV number or smth idk lol
-          </Text>
         </Stack>
 
         <Flex gap={10} direction="row">
@@ -140,7 +139,7 @@ export default function Bond() {
                 asset="CNV"
                 icon="/assets/tokens/gcnv.svg"
                 roi="9.4%"
-                vestingTerm="5 days"
+                vestingTerm={`${termLength} Days`}
               />
               <NothingToRedeem />
             </Card>

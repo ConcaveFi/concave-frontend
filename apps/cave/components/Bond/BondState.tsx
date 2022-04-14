@@ -40,6 +40,40 @@ export const useBondGetAmountOut = async (
   return cleanedOutput
 }
 
+export const useBondGetTermLength = async (networkId: number) => {
+  const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, providers)
+  const termLength = await bondingContract.term()
+  const formattedTermLength = termLength.toString()
+  return formattedTermLength / 60 / 60 / 24
+}
+
+// export const useBondCalculateROI = async (
+//   quoteAddress: string,
+//   decimals: number,
+//   networkId: number,
+//   input: string,
+// ) => {
+
+// }
+
+// export const purchaseBond = async (
+//   quoteAddress: string,
+//   decimals: number,
+//   networkId: number,
+//   input: string,
+// ) => {
+
+// }
+
+// export const redeemBond = async (
+//   quoteAddress: string,
+//   decimals: number,
+//   networkId: number,
+//   input: string,
+// ) => {
+
+// }
+
 export const useBondState = () => {
   const { user, isConnected } = useAuth()
   const networkId = useCurrentSupportedNetworkId()
