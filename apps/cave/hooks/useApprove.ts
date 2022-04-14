@@ -47,7 +47,7 @@ export const useContractApprove = (
   const [{ data: signer }] = useSigner()
   const {
     data: tx,
-    isLoading: isWaitingUserConfirmation,
+    isLoading: isWaitingForConfirmation,
     isSuccess: isTransactionSent,
     refetch: sendApproveTx,
   } = useQuery<TransactionResponse>(
@@ -65,7 +65,7 @@ export const useContractApprove = (
   )
 
   return {
-    isWaitingUserConfirmation,
+    isWaitingForConfirmation,
     isWaitingTransactionReceipt,
     isTransactionSent,
     tx,
