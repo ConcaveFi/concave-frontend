@@ -4,6 +4,7 @@ import { BigNumberish, Contract, ethers } from 'ethers'
 import { DAI, CNV } from 'gemswap-sdk'
 import { BOND_ADDRESS } from '../../contracts/Bond/BondingAddress'
 import { BOND_ABI } from '../../contracts/Bond/BondABI'
+import { ROPSTEN_DAI_ABI } from 'contracts/Bond/DaiABI'
 import { Token, Currency } from 'gemswap-sdk'
 import { useAuth } from 'contexts/AuthContext'
 
@@ -52,6 +53,7 @@ export const getBondSpotPrice = async (networkId: number, tokenAddress: string) 
   const ROPSTEN_DAI = '0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4'
   const spotPrice = await bondingContract.getSpotPrice(ROPSTEN_DAI)
   const formatted = ethers.utils.formatEther(spotPrice)
+  console.log(formatted)
   return formatted
 }
 
@@ -61,7 +63,15 @@ export const getBondSpotPrice = async (networkId: number, tokenAddress: string) 
 //   networkId: number,
 //   input: string,
 // ) => {
-
+//   const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, providers)
+//   const ROPSTEN_DAI = '0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4'
+//   const signer = providers.getSigner();
+//   const signersAddress = await signer.getAddress();
+//   let contract = new ethers.Contract('0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4', ROPSTEN_DAI_ABI, providers)
+//   await contract.approve('0xE9Ffe05f55697A4D8A95BB046E5A8b150A49687e', 10000000000000000000000)
+//   // const formatted = ethers.utils.formatEther(spotPrice)
+//   // console.log(formatted)
+//   return formatted
 // }
 
 // export const redeemBond = async (
