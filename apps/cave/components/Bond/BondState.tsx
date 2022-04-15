@@ -9,7 +9,7 @@ import { Token, Currency } from 'gemswap-sdk'
 import { useAuth } from 'contexts/AuthContext'
 
 // testing only, flip to prod
-let providers = new ethers.providers.InfuraProvider('ropsten', '3270f483eb9e484ba6d9f472557f4350')
+let providers = new ethers.providers.InfuraProvider('ropsten', '5ad069733a1a48a897180e66a5fb8846')
 
 const useCurrencyBalance = (currency: Currency, userAddress: string) =>
   useBalance({
@@ -44,6 +44,7 @@ export const useBondGetAmountOut = async (
 export const useBondGetTermLength = async (networkId: number) => {
   const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, providers)
   const termLength = await bondingContract.term()
+  console.log(termLength)
   const formattedTermLength = termLength.toString()
   return formattedTermLength / 60 / 60 / 24
 }
@@ -53,7 +54,6 @@ export const getBondSpotPrice = async (networkId: number, tokenAddress: string) 
   const ROPSTEN_DAI = '0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4'
   const spotPrice = await bondingContract.getSpotPrice(ROPSTEN_DAI)
   const formatted = ethers.utils.formatEther(spotPrice)
-  console.log(formatted)
   return formatted
 }
 
