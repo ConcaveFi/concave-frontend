@@ -85,7 +85,6 @@ export function BondBuyCard() {
         // }}
       />
       <DownwardIcon />
-
       <BondOutput disabled={true} currency={currencyOut} value={amountOut} />
       <HStack align="center" justify="end" py={1}>
         <GasPrice />
@@ -101,24 +100,16 @@ export function BondBuyCard() {
           Approve {currencyIn.symbol}
         </Button>
       )}
-
-      {!isConnected && false ? (
-        // <Button variant="primary" size="large" disabled onClick={connectWithModal}>
-        //   Connect Wallet
-        // </Button>
-        <></>
-      ) : (
-        <Button
-          isDisabled={needsApproval || +userBalance < +amountIn}
-          variant="primary"
-          size="large"
-          isFullWidth
-          onClick={confirmModal.onOpen}
-        >
-          {+userBalance < +amountIn ? 'Insufficient Funds' : 'Buy'}
-        </Button>
-      )}
-      {/* pass state as props to display */}
+      <Button
+        isDisabled={needsApproval || +userBalance < +amountIn}
+        variant="primary"
+        size="large"
+        isFullWidth
+        onClick={confirmModal.onOpen}
+      >
+        {+userBalance < +amountIn ? 'Insufficient Funds' : 'Buy'}
+      </Button>
+      )
       <ConfirmBondModal
         currencyIn={currencyIn}
         currencyOut={currencyOut}
@@ -133,7 +124,6 @@ export function BondBuyCard() {
           receiptModal.onOpen()
         }}
       />
-
       <BondReceiptModal
         // receipt={bondTransaction}
         isOpen={receiptModal.isOpen}
