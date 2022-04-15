@@ -1,15 +1,14 @@
-import { ExpandArrowIcon, TokenIcon } from '@concave/icons'
+import { ExpandArrowIcon } from '@concave/icons'
 import { Box, Button, Flex, HStack, Modal, NumericInput, StackDivider, Text } from '@concave/ui'
 import React from 'react'
 import { Currency } from 'gemswap-sdk'
+import { CurrencyIcon } from 'components/CurrencyIcon'
 const TokenInfo = ({
-  address,
-  symbol,
+  currency,
   amount,
 }: {
   price: string | number
-  address: string
-  symbol: string
+  currency: Currency
   amount: string | number
   loss?: number
 }) => {
@@ -26,9 +25,9 @@ const TokenInfo = ({
         <Text fontWeight={700} fontSize={14} textColor="text.low"></Text>
       </Box>
       <HStack>
-        <TokenIcon height={'40px'} address={address} symbol={symbol} />
+        <CurrencyIcon height={'40px'} currency={currency} />
         <Text fontSize={24} fontWeight={700}>
-          {symbol.toUpperCase()}
+          {currency.symbol.toUpperCase()}
         </Text>
       </HStack>
     </Flex>
@@ -106,8 +105,10 @@ export const ConfirmBondModal = ({
 }: {
   currencyIn: Currency
   currencyOut: Currency
+
   amountIn: string
   amountOut: string
+
   tokenInUsdPrice: string
   tokenOutUsdPrice: string
   tokenInRelativePriceToTokenOut: string
@@ -116,6 +117,7 @@ export const ConfirmBondModal = ({
   onConfirm: () => void
 }) => {
   return (
+
     <Modal bluryOverlay={true} title="" isOpen={isOpen} onClose={onClose}>
       <div>
         {' '}
@@ -132,6 +134,7 @@ export const ConfirmBondModal = ({
           amount={amountOut}
           price={amountOut}
         />
+
       </div>
 
       <Flex fontSize="sm" fontWeight="bold" my={6} justify="center" flexWrap="wrap">

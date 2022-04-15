@@ -1,8 +1,8 @@
-import { useQuery } from 'react-query'
+import { useQuery, UseQueryOptions } from 'react-query'
 import { concaveProvider } from 'lib/providers'
-import ms from 'ms'
-import { Token, Fetcher } from 'gemswap-sdk'
+import { Token, Fetcher, Pair } from 'gemswap-sdk'
 import { BASES_TO_CHECK_TRADES_AGAINST, INTERMEDIARY_PAIRS_FOR_MULTI_HOPS } from 'constants/routing'
+import { AVERAGE_BLOCK_TIME } from 'constants/blockchain'
 
 const filterRepeatedPairs = (pairs: [Token, Token][]) =>
   pairs.filter(
@@ -13,7 +13,7 @@ const filterRepeatedPairs = (pairs: [Token, Token][]) =>
       ) === i,
   )
 
-const buildPairs = (base: Token[], token0: Token, token1: Token) =>
+const buildPairs = (base: Token[] = [], token0: Token, token1: Token) =>
   base
     .flatMap((baseToken) => [
       [baseToken, token0],
@@ -32,29 +32,42 @@ const getAllCommonPairs = (
     ...(maxHops === 1 ? [[tokenA.wrapped, tokenB.wrapped]] : []),
     ...(maxHops > 1 ? buildPairs(BASES_TO_CHECK_TRADES_AGAINST[chainId], tokenA, tokenB) : []),
     // if maxHops is more than 2, it will also check routes like tokenIn -> DAI -> WETH -> tokenOut
-    ...(maxHops > 2 ? INTERMEDIARY_PAIRS_FOR_MULTI_HOPS[chainId] : []),
+    ...(maxHops > 2 ? INTERMEDIARY_PAIRS_FOR_MULTI_HOPS[chainId] || [] : []),
   ] as [Token, Token][])
 
-export const usePairs = (tokenA?: Token, tokenB?: Token, maxHops = 3) => {
-  const { refetch, ...pairs } = useQuery(
+export type UsePairsQueryOptions<T> = UseQueryOptions<Pair[], any, T>
+
+export const NoValidPairsError = new Error('No valid pairs found')
+
+export const usePairs = <T = Pair[]>(
+  tokenA?: Token,
+  tokenB?: Token,
+  maxHops = 3,
+  queryOptions?: UsePairsQueryOptions<T>,
+) => {
+  return useQuery(
     ['pairs', tokenA?.address, tokenB?.address, maxHops],
     async () => {
-      if (!tokenA || !tokenB) return null
-      const pairsMap = getAllCommonPairs(tokenA, tokenB, maxHops)
-      console.log(pairsMap)
-      const pairs = (
+      const commonPairs = getAllCommonPairs(tokenA, tokenB, maxHops)
+      const pairs: Pair[] = (
         await Promise.all(
-          pairsMap.map(([a, b]) =>
-            Fetcher.fetchPairData(a.wrapped, b.wrapped, concaveProvider(tokenA.chainId)),
+          commonPairs.map(([a, b]) =>
+            Fetcher.fetchPairData(a, b, concaveProvider(a.chainId)).catch(() => null),
           ),
         )
       ).filter(Boolean)
-      if (!pairs || pairs.length === 0) throw new Error('No valid pairs')
+
+      if (!pairs || pairs.length === 0) throw NoValidPairsError
+
       return pairs
     },
-    { enabled: Boolean(tokenA?.address && tokenB?.address), refetchInterval: ms('15s') },
+    {
+      enabled: !!tokenA?.address && !!tokenB?.address && !tokenA.equals(tokenB),
+      refetchInterval: AVERAGE_BLOCK_TIME[tokenA?.chainId],
+      notifyOnChangeProps: 'tracked',
+      ...queryOptions,
+    },
   )
-  return pairs
 }
 
 export const usePair = (tokenA: Token, tokenB: Token) => usePairs(tokenA, tokenB, 1)

@@ -1,23 +1,29 @@
-import { Input, Spinner, UnorderedList, useDisclosure } from '@chakra-ui/react'
 import { CnvQuestionIcon, DownIcon } from '@concave/icons'
-import { Button, Flex, Heading, ListItem, Modal, Stack, Text, TokenIcon } from '@concave/ui'
-import { ROPSTEN_CNV, ROPSTEN_DAI } from 'constants/ropstenTokens'
-import { Token } from 'constants/routing'
-import { CNV, DAI } from 'constants/tokens'
-import { Currency as UniswapCurrency } from 'gemswap-sdk'
+import {
+  useDisclosure,
+  Button,
+  Flex,
+  Heading,
+  Input,
+  ListItem,
+  Modal,
+  Spinner,
+  Stack,
+  Text,
+  UnorderedList,
+} from '@concave/ui'
+import { CurrencyIcon } from 'components/CurrencyIcon'
+import { Currency, DAI, CNV } from 'gemswap-sdk'
 import React, { useCallback, useState } from 'react'
 import { chain, useNetwork } from 'wagmi'
-import { useTokenList } from './hooks/useTokenList'
-import { useNativeCurrency } from './useSwap2'
-
-type Currency = UniswapCurrency & Pick<Token, 'logoURI'>
+import { useCurrentSupportedNetworkId } from './hooks/useCurrentSupportedNetworkId'
 
 const CommonTokens = ({
   selected,
   onSelect,
   currencies,
 }: {
-  selected: Currency
+  selected?: Currency
   onSelect: (currency: Currency) => void
   currencies: Currency[]
 }) => {
@@ -32,27 +38,18 @@ const CommonTokens = ({
             key={currency.isToken ? currency.address : currency.symbol}
             onClick={() => onSelect(currency)}
             rounded="full"
-            leftIcon={
-              <TokenIcon
-                symbol={currency.symbol}
-                address={currency.isToken ? currency.address : currency.symbol}
-              />
-            }
+            leftIcon={<CurrencyIcon currency={currency} />}
             shadow="Up Small"
             _hover={{ shadow: 'Up Small' }}
             _focus={{ shadow: 'Up Small' }}
             _active={{ shadow: 'down' }}
             _selected={{ shadow: 'Down Big', color: 'text.low' }}
-            aria-selected={
-              selected?.isToken && currency?.isToken
-                ? currency.address === selected?.address
-                : currency.symbol === selected?.symbol
-            }
+            aria-selected={!!selected?.equals(currency)}
             p={1}
             pr={3}
             fontSize="sm"
           >
-            {currency.name.toUpperCase()}
+            {currency.symbol.toUpperCase()}
           </Button>
         ))}
       </Flex>
@@ -60,7 +57,7 @@ const CommonTokens = ({
   )
 }
 
-const TokenListItem = ({ token, onClick }) => (
+const TokenListItem = ({ currency, onClick }: { currency: Currency; onClick: () => void }) => (
   <ListItem
     cursor="pointer"
     _hover={{ opacity: 0.7 }}
@@ -69,13 +66,13 @@ const TokenListItem = ({ token, onClick }) => (
     onClick={onClick}
   >
     <Stack direction="row" spacing={3} align="center">
-      <TokenIcon h="35px" w="35px" symbol={token.symbol} address={token.address} />
+      <CurrencyIcon h="35px" w="35px" currency={currency} />
       <Stack spacing={0} justify="center">
         <Text fontWeight="bold" fontSize="md">
-          {token.symbol.toUpperCase()}
+          {currency.symbol.toUpperCase()}
         </Text>
         <Text color="text.low" fontSize="sm">
-          {token.name}
+          {currency.name}
         </Text>
       </Stack>
     </Stack>
@@ -95,28 +92,26 @@ export const SelectTokenModal = ({
 }) => {
   const [{ data: network, loading }] = useNetwork()
   const [search, setSearch] = useState('')
-  const nativeCurrency = useNativeCurrency()
-  const currentChain = network?.chain
-  const { data: tokens, isLoading, isSuccess } = useTokenList(currentChain?.name)
+  const networkId = useCurrentSupportedNetworkId()
   const selectAndClose = useCallback(
-    (token: Token) => (onSelect(token), onClose()),
+    (token: Currency) => (onSelect(token), onClose()),
     [onSelect, onClose],
   )
   return (
     <Modal
       bluryOverlay
       title="Select a Token"
-      size={'sm'}
+      size="sm"
       isOpen={isOpen}
       onClose={onClose}
       bodyProps={{ gap: 4, w: '350px' }}
     >
       <CommonTokens
-        currencies={currentChain?.id === chain.ropsten.id ? [ROPSTEN_DAI, ROPSTEN_CNV] : [DAI, CNV]} //[nativeCurrency, ...BASES_TO_CHECK_TRADES_AGAINST[chainId]]}
+        currencies={[DAI[networkId], CNV[networkId]]} //[nativeCurrency, ...BASES_TO_CHECK_TRADES_AGAINST[chainId]]}
         selected={selected}
         onSelect={selectAndClose}
       />
-      <Input
+      {/* <Input
         placeholder="Search name or paste address"
         onChange={({ target }) => setSearch(target.value)}
       />
@@ -129,7 +124,7 @@ export const SelectTokenModal = ({
         shadow="Down Big"
         p={3}
       >
-        {!isSuccess ? (
+         {!isSuccess ? (
           <Spinner />
         ) : (
           <UnorderedList
@@ -149,7 +144,7 @@ export const SelectTokenModal = ({
             ))}
           </UnorderedList>
         )}
-      </Flex>
+      </Flex> */}
     </Modal>
   )
 }
@@ -157,6 +152,9 @@ export const SelectTokenModal = ({
 const SelectTokenButton = ({ selected, onClick }: { selected: Currency; onClick: () => void }) => (
   <Button
     shadow="Up Small"
+    _focus={{ shadow: 'Up Big' }}
+    _hover={{ shadow: 'Up Big' }}
+    _active={{ shadow: 'down' }}
     sx={{ ...(!selected?.symbol && { bgGradient: 'linear(to-r, primary.1, primary.2)' }) }}
     bgColor="blackAlpha.100"
     py={1.5}
@@ -168,22 +166,14 @@ const SelectTokenButton = ({ selected, onClick }: { selected: Currency; onClick:
     alignSelf="end"
     fontSize="lg"
     rightIcon={<DownIcon />}
-    leftIcon={
-      selected?.symbol && (
-        <TokenIcon
-          size="sm"
-          symbol={selected.symbol}
-          address={selected.isToken ? selected.address : selected.symbol}
-        />
-      )
-    }
+    leftIcon={selected?.symbol && <CurrencyIcon size="xs" currency={selected} />}
     onClick={onClick}
   >
     {selected?.symbol || `Select a token`}
   </Button>
 )
 
-export const TokenSelect = ({
+export const SelectCurrency = ({
   selected,
   onSelect,
 }: {

@@ -1,17 +1,19 @@
-import React, { useEffect } from 'react'
-import { Box, Flex, Text, Stack, HStack } from '@concave/ui'
+import React from 'react'
+import { Box, Flex, Text, Stack } from '@concave/ui'
 import { Image } from '@concave/ui'
 import { ConnectWallet } from 'components/ConnectWallet'
 import { ButtonLink } from 'components/ButtonLink'
 import { MdOutlineDashboard } from 'react-icons/md'
-import { useBalance } from 'wagmi'
-import { useAuth } from 'contexts/AuthContext'
+import { useAccount, useBalance } from 'wagmi'
+import { ChainId, CNV } from 'gemswap-sdk'
 
 function SideBarTop() {
-  const { user } = useAuth()
-  const [{ data, error, loading }, getCNVBalance] = useBalance({
-    addressOrName: user.address,
-    token: '0x000000007a58f5f58E697e51Ab0357BC9e260A04',
+  const [{ data: account }] = useAccount()
+  const [{ data, loading }] = useBalance({
+    addressOrName: account?.address,
+    token: CNV[ChainId.ETHEREUM].address,
+    formatUnits: CNV[ChainId.ETHEREUM].decimals,
+    skip: !account?.address,
   })
 
   return (
@@ -28,7 +30,7 @@ function SideBarTop() {
 
       <Stack gap="1" align="flex-end" mt={7}>
         <ButtonLink
-          href="treasury"
+          href="/treasury"
           variant="primary.outline"
           size="medium"
           w="full"

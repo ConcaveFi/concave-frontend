@@ -1,12 +1,11 @@
 import { useState, useMemo } from 'react'
-import { chain, useNetwork, useBalance, useContractWrite } from 'wagmi'
+import { chain, useNetwork, useBalance, useContractWrite, useAccount } from 'wagmi'
 import { BigNumberish, Contract, ethers } from 'ethers'
 import { DAI, CNV } from 'gemswap-sdk'
 import { BOND_ADDRESS } from '../../contracts/Bond/BondingAddress'
 import { BOND_ABI } from '../../contracts/Bond/BondABI'
 import { ROPSTEN_DAI_ABI } from 'contracts/Bond/DaiABI'
 import { Token, Currency } from 'gemswap-sdk'
-import { useAuth } from 'contexts/AuthContext'
 
 // testing only, flip to prod
 let providers = new ethers.providers.InfuraProvider('ropsten', '5ad069733a1a48a897180e66a5fb8846')
@@ -84,14 +83,14 @@ export const getBondSpotPrice = async (networkId: number, tokenAddress: string) 
 // }
 
 export const useBondState = () => {
-  const { user, isConnected } = useAuth()
+  const [{ data: account }] = useAccount()
   const networkId = useCurrentSupportedNetworkId()
   const [currencyIn, setCurrencyIn] = useState<Token>(DAI[networkId])
   const [currencyOut, setCurrencyOut] = useState<Token>(CNV[networkId])
   const [recipient, setRecipient] = useState<string>('')
   const [exactValue, setExactValue] = useState<BigNumberish>(0)
-  const balance = useCurrencyBalance(currencyIn, user.address)
-  const userAddress = user.address
+  const balance = useCurrencyBalance(currencyIn, account.address)
+  const userAddress = account.address
   // const [swapTransaction, swap] = useContractWrite({
   //   addressOrName: ROUTER_CONTRACT[isRopsten ? chain.ropsten.id : chain.mainnet.id],
   //   contractInterface: RouterABI,
@@ -104,10 +103,9 @@ export const useBondState = () => {
       exactValue,
       setRecipient,
       userAddress,
-      isConnected,
       balance,
       networkId,
     }),
-    [balance, currencyIn, exactValue, isConnected, recipient, userAddress],
+    [balance, currencyIn, exactValue, recipient, userAddress],
   )
 }

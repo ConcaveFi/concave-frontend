@@ -38,7 +38,7 @@ export const gradientBorder = ({
         content: '""',
         position: 'absolute',
         inset: 0,
-        m: calc.negate(toPx(borderWidth)),
+        m: calc.negate(toPx(borderWidth + 0.1)),
         p: toPx(borderWidth),
         WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
         WebkitMaskComposite: 'source-out',

@@ -5,7 +5,7 @@ import { User } from 'lib/session'
 import React, { createContext, useContext, useMemo } from 'react'
 import { useMutation, useQueryClient, useQuery } from 'react-query'
 import { SiweMessage } from 'siwe'
-import { useAccount } from 'wagmi'
+import { useAccount, useDisconnect } from 'wagmi'
 
 export const authFetch = (path: string, options?: RequestInit) =>
   fetch(`/api/session/${path}`, options).then(async (res) => {
@@ -67,14 +67,15 @@ const siweSignIn = async (signer: Signer) => {
 }
 
 export const AuthProvider: React.FC = ({ children }) => {
-  const [account, disconnect] = useAccount()
+  const { data: account } = useAccount()
+  const { disconnect } = useDisconnect()
 
   const queryClient = useQueryClient()
 
   const signIn = useMutation(
     async () => {
-      const connector = account.data?.connector
-      if (!account.data.connector) return
+      const connector = account?.connector
+      if (!account.connector) return
       const signer = await connector.getSigner()
       const user = await siweSignIn(signer)
       return user
@@ -113,9 +114,9 @@ export const AuthProvider: React.FC = ({ children }) => {
           connectWithModal: () => connectModal.onOpen(),
           // user can connect and not sign in, we want access to his addy thru here anyway
           // user: { ...user.data, address: user.data?.address || account.data?.address },
-          user: { address: account.data?.address },
+          user: { address: account?.address },
           isWaitingForSignature: signIn.isLoading,
-          isConnected: !account.loading && !!account.data?.address,
+          isConnected: !!account?.address,
           isSignedIn: false, //user.data,
           error: signIn.error || signOut.error,
           isErrored: !!(signIn.error || signOut.error),

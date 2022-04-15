@@ -7,48 +7,26 @@ import {
   Text,
   useMultiStyleConfig,
 } from '@concave/ui'
-import { Currency } from '@uniswap/sdk-core'
-import React from 'react'
-import { twoDecimals } from './SwapCard'
-import { TokenSelect } from './TokenSelect'
-
-const Balance = ({ value, onClick }) => (
-  <Button
-    fontSize="xs"
-    ml="auto"
-    onClick={onClick}
-    // many bugs need to be resolved with this button
-    // rightIcon={!!onClick && <Text textColor="#2E97E2">Max</Text>}
-    leftIcon={<Text>Balance:</Text>}
-    iconSpacing={1}
-  >
-    <Text isTruncated maxW="50px">
-      {value}
-    </Text>
-  </Button>
-)
+import { Currency, CurrencyAmount } from 'gemswap-sdk'
+import React, { ReactNode } from 'react'
+import { SelectCurrency } from './SelectCurrency'
 
 export function TokenInput({
-  value,
+  children,
   currency,
-  balance,
-  stable,
+  currencyAmount,
   disabled = false,
   onChangeValue,
-  onChangeCurrency,
-  onClickMaxBalance,
+  onSelectCurrency,
 }: {
-  value: string
-  currency?: Currency
-  balance: string
-  stable: string
+  children: ReactNode
+  currency: Currency
+  currencyAmount: CurrencyAmount<Currency>
   disabled?: boolean
   onChangeValue: (value: string) => void
-  onChangeCurrency: (token: Currency) => void
-  onClickMaxBalance?: (value: string) => void
+  onSelectCurrency: (token: Currency) => void
 } & FlexProps) {
   const styles = useMultiStyleConfig('Input', { variant: 'primary', size: 'large' })
-  const stableValue = +stable * +value
 
   return (
     <Stack sx={{ ...styles.field, bg: 'none' }} justify="space-between" spacing={0}>
@@ -57,19 +35,12 @@ export function TokenInput({
           decimalScale={5}
           disabled={disabled}
           w="100%"
-          value={value}
-          onValueChange={({ value }, eventSrc) =>
-            eventSrc.source === 'event' && onChangeValue(value)
-          }
+          value={currencyAmount?.toSignificant(6) || ''}
+          onValueChange={({ value }, { source }) => source === 'event' && onChangeValue(value)}
         />
-        <TokenSelect onSelect={onChangeCurrency} selected={currency} />
+        <SelectCurrency onSelect={onSelectCurrency} selected={currency} />
       </HStack>
-      <HStack justify="space-between" align="center" textColor="text.low" w="full">
-        <Text isTruncated maxW="100px" fontWeight="bold" fontSize="sm">
-          {!!+stableValue && `$${twoDecimals(stableValue)}`}
-        </Text>
-        {balance && <Balance value={balance} onClick={onClickMaxBalance} />}
-      </HStack>
+      {children}
     </Stack>
   )
 }

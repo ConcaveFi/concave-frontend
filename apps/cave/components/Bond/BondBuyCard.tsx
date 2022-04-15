@@ -36,7 +36,7 @@ const GasPrice = () => {
 }
 
 export function BondBuyCard() {
-  const { currencyIn, currencyOut, userAddress, isConnected, balance } = useBondState()
+  const { currencyIn, currencyOut, userAddress, balance } = useBondState()
   const [userBalance, setBalance] = useState<string>()
   const [amountIn, setAmountIn] = useState<string>('0')
   const [amountOut, setAmountOut] = useState<string>()

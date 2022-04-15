@@ -1,18 +1,21 @@
 import { WagmiProvider } from 'contexts/WagmiContext'
-import { AuthProvider } from 'contexts/AuthContext'
-import { QueryClient, QueryClientProvider } from 'react-query'
-import { useState } from 'react'
 import { ThemeProvider } from '@concave/ui'
+import { ReactQueryProvider } from './ReactQueryContext'
+import { ModalsProvider } from './ModalsContext'
+// import { AuthProvider } from 'contexts/AuthContext'
 
 export const AppProviders = ({ children, globalStyles, cookies }) => {
-  const [queryClient] = useState(() => new QueryClient())
   return (
     <ThemeProvider globalStyles={globalStyles} cookies={cookies}>
-      <QueryClientProvider client={queryClient}>
+      <ReactQueryProvider>
         <WagmiProvider>
-          <AuthProvider>{children}</AuthProvider>
+          <ModalsProvider>
+            {/* <AuthProvider> */}
+            {children}
+            {/* </AuthProvider> */}
+          </ModalsProvider>
         </WagmiProvider>
-      </QueryClientProvider>
+      </ReactQueryProvider>
     </ThemeProvider>
   )
 }

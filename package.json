@@ -31,8 +31,5 @@
     "yarn": ">=1.22.0",
     "npm": "please-use-yarn"
   },
-  "packageManager": "yarn@1.22.0",
-  "dependencies": {
-    "gemswap-sdk": "1.0.11"
-  }
+  "packageManager": "yarn@1.22.0"
 }

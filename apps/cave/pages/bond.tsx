@@ -11,6 +11,8 @@ import {
 } from '@concave/ui'
 import { BondBuyCard } from 'components/Bond/BondBuyCard'
 import Placeholder from 'components/Placeholder'
+import { SwapCard } from 'components/Swap/SwapCard'
+import { SwapCardLegacy } from 'components/Swap/SwapCardLegacy'
 import { useBondGetTermLength, getBondSpotPrice } from 'components/Bond/BondState'
 import { useEffect, useState } from 'react'
 import { useAuth } from 'contexts/AuthContext'
@@ -94,6 +96,7 @@ const NothingToRedeem = () => {
 }
 
 export default function Bond() {
+
   const { user, isConnected } = useAuth()
   const [termLength, setTermLength] = useState<number>(0)
   const [bondSpotPrice, setBondSpotPrice] = useState<string>('0')
@@ -113,6 +116,7 @@ export default function Bond() {
       setTermLength(termLength)
     })
   }, [cnvMarketPrice])
+
 
   return (
     <Container maxW="container.lg">
