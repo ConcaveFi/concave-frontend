@@ -1,8 +1,23 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+
 import { Box, Flex, Text, Image } from '@concave/ui'
 import { ButtonLink } from 'components/ButtonLink'
+import { getBondSpotPrice } from '../Bond/BondState'
+import { useFetchApi } from 'hooks/cnvData'
 
 function PageNav() {
+  const [bondSpotPrice, setBondSpotPrice] = useState<string>('0')
+  const [cnvMarketPrice, setCnvMarketPrice] = useState<number>(0)
+  const { data } = useFetchApi('/api/cnv')
+
+  if (cnvMarketPrice === 0 && !!data) {
+    setCnvMarketPrice(data.cnv)
+  }
+  useEffect(() => {
+    getBondSpotPrice(3, '').then((bondSpotPrice) => {
+      setBondSpotPrice(bondSpotPrice)
+    })
+  }, [cnvMarketPrice])
   return (
     <div>
       <Flex>
@@ -29,7 +44,12 @@ function PageNav() {
               Bonds
             </ButtonLink>
             <Text fontSize="sm" fontWeight="thin" textColor="#5F7A99" textAlign="center" p={1}>
-              CNV-DAI ROI 9.8%
+              CNV-DAI ROI{' '}
+              {`${
+                cnvMarketPrice > 0
+                  ? ((cnvMarketPrice / +bondSpotPrice - 1) * 100).toFixed(2)
+                  : '---'
+              }%`}
             </Text>
           </Box>
 

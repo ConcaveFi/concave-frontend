@@ -38,7 +38,7 @@ const GasPrice = () => {
 export function BondBuyCard() {
   const { currencyIn, currencyOut, userAddress, balance } = useBondState()
   const [userBalance, setBalance] = useState<string>()
-  const [amountIn, setAmountIn] = useState<string>()
+  const [amountIn, setAmountIn] = useState<string>('0')
   const [amountOut, setAmountOut] = useState<string>()
   const [bondReceipt] = useState<any>()
   const [bondTransaction] = useState({})
@@ -68,6 +68,7 @@ export function BondBuyCard() {
         balance={userBalance}
         onChangeValue={(v) => {
           const numberValue = v.replace('-', '')
+          if (!numberValue) return setAmountIn('')
           numberValue && setAmountIn(v)
           // eslint-disable-next-line react-hooks/rules-of-hooks
           useBondGetAmountOut(currencyOut.address, currencyOut.decimals, 3, v).then((amountOut) => {
@@ -117,9 +118,12 @@ export function BondBuyCard() {
           {+userBalance < +amountIn ? 'Insufficient Funds' : 'Buy'}
         </Button>
       )}
+      {/* pass state as props to display */}
       <ConfirmBondModal
         currencyIn={currencyIn}
         currencyOut={currencyOut}
+        amountIn={amountIn}
+        amountOut={amountOut}
         tokenInUsdPrice={'currencyIn'}
         tokenOutUsdPrice={''}
         tokenInRelativePriceToTokenOut={''}

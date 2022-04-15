@@ -5,17 +5,18 @@ import {
   Flex,
   gradientBorder,
   Heading,
-  // gradientBorder,
   Image,
   Stack,
   Text,
 } from '@concave/ui'
 import { BondBuyCard } from 'components/Bond/BondBuyCard'
-import GcnvTitle from 'components/GcnvTitle'
 import Placeholder from 'components/Placeholder'
 import { SwapCard } from 'components/Swap/SwapCard'
-// import { SwapCardLegacy } from 'components/Swap/SwapCardLegacy'
-
+import { SwapCardLegacy } from 'components/Swap/SwapCardLegacy'
+import { useBondGetTermLength, getBondSpotPrice } from 'components/Bond/BondState'
+import { useEffect, useState } from 'react'
+import { useAuth } from 'contexts/AuthContext'
+import { useFetchApi } from 'hooks/cnvData'
 import React from 'react'
 
 const InfoItem = ({ value, label, ...props }) => (
@@ -55,7 +56,7 @@ const SelectedBondType = ({ bondType }) => {
   return (
     <Card
       variant="primary"
-      colorScheme="brighter"
+      colorscheme="brighter"
       shadow="Magic Big"
       direction="row"
       mt={-20}
@@ -95,6 +96,28 @@ const NothingToRedeem = () => {
 }
 
 export default function Bond() {
+
+  const { user, isConnected } = useAuth()
+  const [termLength, setTermLength] = useState<number>(0)
+  const [bondSpotPrice, setBondSpotPrice] = useState<string>('0')
+  const [cnvMarketPrice, setCnvMarketPrice] = useState<number>(0)
+  const { data } = useFetchApi('/api/cnv')
+
+  if (cnvMarketPrice === 0 && !!data) {
+    setCnvMarketPrice(data.cnv)
+  }
+
+  useEffect(() => {
+    getBondSpotPrice(3, '').then((bondSpotPrice) => {
+      setBondSpotPrice(bondSpotPrice)
+    })
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useBondGetTermLength(3).then((termLength) => {
+      setTermLength(termLength)
+    })
+  }, [cnvMarketPrice])
+
+
   return (
     <Container maxW="container.lg">
       <Flex direction="column" gap={20}>
@@ -102,10 +125,6 @@ export default function Bond() {
           <Heading as="h1" mb={3} fontSize="5xl">
             Dynamic Bond Market
           </Heading>
-          <Text maxW={280}>
-            Get your gCNV that will grow internal CNV number your gCNV that will grow number or smth
-            idk lol Get your gCNV that will grow internal CNV number or smth idk lol
-          </Text>
         </Stack>
 
         <Flex gap={10} direction="row">
@@ -134,8 +153,12 @@ export default function Bond() {
               <BondInfo
                 asset="CNV"
                 icon="/assets/tokens/gcnv.svg"
-                roi="9.4%"
-                vestingTerm="5 days"
+                roi={`${
+                  cnvMarketPrice > 0
+                    ? ((cnvMarketPrice / +bondSpotPrice - 1) * 100).toFixed(2)
+                    : 'Loading...'
+                }%`}
+                vestingTerm={`${termLength} Days`}
               />
               <NothingToRedeem />
             </Card>

@@ -5732,6 +5732,26 @@ gemswap-sdk@^1.0.14:
     tiny-warning "^1.0.0"
     toformat "^2.0.0"
 
+
+gemswap-sdk@^1.0.13:
+  version "1.0.14"
+  resolved "https://registry.yarnpkg.com/gemswap-sdk/-/gemswap-sdk-1.0.14.tgz#6fa0d73833b0d472da755e294fe1750d22e2ca98"
+  integrity sha512-s4sNt9uBPNDtrJ7sE/QVKL9mgETfc7uIjn4kkFsHw79orA47Ec/bOMHiSPY1zYvaghBzqj8tFXuyHIczjmB9Fg==
+  dependencies:
+    "@ethersproject/address" "^5.4.0"
+    "@ethersproject/bignumber" "^5.4.0"
+    "@ethersproject/contracts" "^5.6.0"
+    "@ethersproject/providers" "^5.4.0"
+    "@ethersproject/solidity" "^5.4.0"
+    big.js "^6.1.1"
+    decimal.js-light "^2.5.0"
+    jsbi "^4.1.0"
+    prettier "^2.6.2"
+    tiny-invariant "^1.1.0"
+    tiny-warning "^1.0.0"
+    toformat "^2.0.0"
+
+
 gensync@^1.0.0-beta.2:
   version "1.0.0-beta.2"
   resolved "https://registry.yarnpkg.com/gensync/-/gensync-1.0.0-beta.2.tgz#32a6ee76c3d7f52d46b2b1ae5d93fea8580a25e0"

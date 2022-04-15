@@ -3,7 +3,6 @@ import { Box, Button, Flex, HStack, Modal, NumericInput, StackDivider, Text } fr
 import React from 'react'
 import { Currency } from 'gemswap-sdk'
 import { CurrencyIcon } from 'components/CurrencyIcon'
-
 const TokenInfo = ({
   currency,
   amount,
@@ -95,6 +94,8 @@ const InOutArrow = () => {
 export const ConfirmBondModal = ({
   currencyIn,
   currencyOut,
+  amountIn,
+  amountOut,
   tokenInUsdPrice,
   tokenOutUsdPrice,
   tokenInRelativePriceToTokenOut,
@@ -104,6 +105,10 @@ export const ConfirmBondModal = ({
 }: {
   currencyIn: Currency
   currencyOut: Currency
+
+  amountIn: string
+  amountOut: string
+
   tokenInUsdPrice: string
   tokenOutUsdPrice: string
   tokenInRelativePriceToTokenOut: string
@@ -112,11 +117,24 @@ export const ConfirmBondModal = ({
   onConfirm: () => void
 }) => {
   return (
-    <Modal bluryOverlay={true} title="Confirm Swap" isOpen={isOpen} onClose={onClose}>
+
+    <Modal bluryOverlay={true} title="" isOpen={isOpen} onClose={onClose}>
       <div>
-        <TokenInfo currency={currencyIn} amount={''} price={''} />
+        {' '}
+        <TokenInfo
+          address={currencyIn.isToken ? currencyIn.address : currencyIn.symbol}
+          symbol={currencyIn.symbol}
+          amount={amountIn}
+          price={amountIn}
+        />
         <InOutArrow />
-        <TokenInfo currency={currencyOut} amount={''} price={''} />
+        <TokenInfo
+          address={currencyOut.isToken ? currencyOut.address : currencyOut.symbol}
+          symbol={currencyOut.symbol}
+          amount={amountOut}
+          price={amountOut}
+        />
+
       </div>
 
       <Flex fontSize="sm" fontWeight="bold" my={6} justify="center" flexWrap="wrap">

@@ -21,7 +21,6 @@ export const useApprovalWhenNeeded = (
   }, [approveAConfirmation.data, syncAllowance])
   const formattedAllowance =
     allowanceTokenA.data && parseFloat(formatUnits(allowanceTokenA.data, token.decimals))
-  console.log(formattedAllowance, amount)
   const needsApprove = formattedAllowance < amount
   const isBusy = allowanceTokenA.loading || approvalTokenA.loading
   return [needsApprove, requestApprove, isBusy] as const

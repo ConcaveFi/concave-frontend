@@ -4,7 +4,7 @@ import { GradientBorderStyleProps } from 'theme/utils/gradientBorder'
 export interface CardProps extends StackProps {
   variant?: 'primary' | 'secondary'
   borderGradient?: GradientBorderStyleProps['variant']
-  colorScheme?: 'brighter' | 'default'
+  colorscheme?: 'brighter' | 'default'
 }
 
 const splitObj = (splitKeys: string[]) => (obj) => {
