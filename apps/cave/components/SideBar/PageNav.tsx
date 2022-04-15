@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 import { Box, Flex, Text, Image } from '@concave/ui'
 import { ButtonLink } from 'components/ButtonLink'
-import { useBondGetTermLength, getBondSpotPrice } from '../Bond/BondState'
+import { getBondSpotPrice } from '../Bond/BondState'
 import { useFetchApi } from 'hooks/cnvData'
 
 function PageNav() {

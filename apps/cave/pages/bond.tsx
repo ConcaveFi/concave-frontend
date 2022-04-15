@@ -103,12 +103,14 @@ export default function Bond() {
   if (cnvMarketPrice === 0 && !!data) {
     setCnvMarketPrice(data.cnv)
   }
-  useBondGetTermLength(3).then((termLength) => {
-    setTermLength(termLength)
-  })
+
   useEffect(() => {
     getBondSpotPrice(3, '').then((bondSpotPrice) => {
       setBondSpotPrice(bondSpotPrice)
+    })
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useBondGetTermLength(3).then((termLength) => {
+      setTermLength(termLength)
     })
   }, [cnvMarketPrice])
 
