@@ -25,12 +25,7 @@ export function BondOutput({
   return (
     <Stack sx={{ ...styles.field, bg: 'none' }} align="end" justify="space-between" spacing={0}>
       <HStack justify="space-between" align="start">
-        <NumericInput
-          decimalScale={5}
-          disabled={disabled}
-          w="100%"
-          value={value}
-        />
+        <NumericInput decimalScale={5} disabled={disabled} w="100%" value={value} />
         <BondOutputSelect selected={currency} />
       </HStack>
     </Stack>
