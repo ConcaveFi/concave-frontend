@@ -54,7 +54,7 @@ const SelectedBondType = ({ bondType }) => {
   return (
     <Card
       variant="primary"
-      colorScheme="brighter"
+      colorscheme="brighter"
       shadow="Magic Big"
       direction="row"
       mt={-20}

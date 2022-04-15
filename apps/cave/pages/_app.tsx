@@ -11,7 +11,7 @@ const globalStyles: Styles = {
       fontFamily: 'body',
       color: 'text.high',
       lineHeight: 'base',
-      colorScheme: 'dark',
+      colorscheme: 'dark',
     },
   },
 }
