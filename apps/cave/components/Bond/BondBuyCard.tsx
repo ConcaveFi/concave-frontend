@@ -122,6 +122,8 @@ export function BondBuyCard() {
       <ConfirmBondModal
         currencyIn={currencyIn}
         currencyOut={currencyOut}
+        amountIn={amountIn}
+        amountOut={amountOut}
         tokenInUsdPrice={'currencyIn'}
         tokenOutUsdPrice={''}
         tokenInRelativePriceToTokenOut={''}

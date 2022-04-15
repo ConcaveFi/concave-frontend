@@ -2,7 +2,6 @@ import { ExpandArrowIcon, TokenIcon } from '@concave/icons'
 import { Box, Button, Flex, HStack, Modal, NumericInput, StackDivider, Text } from '@concave/ui'
 import React from 'react'
 import { Currency } from 'gemswap-sdk'
-
 const TokenInfo = ({
   address,
   symbol,
@@ -96,6 +95,8 @@ const InOutArrow = () => {
 export const ConfirmBondModal = ({
   currencyIn,
   currencyOut,
+  amountIn,
+  amountOut,
   tokenInUsdPrice,
   tokenOutUsdPrice,
   tokenInRelativePriceToTokenOut,
@@ -105,6 +106,8 @@ export const ConfirmBondModal = ({
 }: {
   currencyIn: Currency
   currencyOut: Currency
+  amountIn: string
+  amountOut: string
   tokenInUsdPrice: string
   tokenOutUsdPrice: string
   tokenInRelativePriceToTokenOut: string
@@ -119,15 +122,15 @@ export const ConfirmBondModal = ({
         <TokenInfo
           address={currencyIn.isToken ? currencyIn.address : currencyIn.symbol}
           symbol={currencyIn.symbol}
-          amount={currencyIn.decimals}
-          price={currencyIn.decimals}
+          amount={amountIn}
+          price={amountIn}
         />
         <InOutArrow />
         <TokenInfo
           address={currencyOut.isToken ? currencyOut.address : currencyOut.symbol}
           symbol={currencyOut.symbol}
-          amount={currencyOut.decimals}
-          price={currencyOut.decimals}
+          amount={amountOut}
+          price={amountOut}
         />
       </div>
 
