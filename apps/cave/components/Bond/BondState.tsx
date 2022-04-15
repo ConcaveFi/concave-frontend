@@ -47,14 +47,13 @@ export const useBondGetTermLength = async (networkId: number) => {
   return formattedTermLength / 60 / 60 / 24
 }
 
-// export const useBondCalculateROI = async (
-//   quoteAddress: string,
-//   decimals: number,
-//   networkId: number,
-//   input: string,
-// ) => {
-
-// }
+export const getBondSpotPrice = async (networkId: number, tokenAddress: string) => {
+  const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, providers)
+  const ROPSTEN_DAI = '0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4'
+  const spotPrice = await bondingContract.getSpotPrice(ROPSTEN_DAI)
+  const formatted = ethers.utils.formatEther(spotPrice)
+  return formatted
+}
 
 // export const purchaseBond = async (
 //   quoteAddress: string,

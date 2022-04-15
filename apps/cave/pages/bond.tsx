@@ -11,12 +11,10 @@ import {
 } from '@concave/ui'
 import { BondBuyCard } from 'components/Bond/BondBuyCard'
 import Placeholder from 'components/Placeholder'
-import { useBondGetTermLength } from 'components/Bond/BondState'
-import { useState } from 'react'
-// import { SwapCardLegacy } from 'components/Swap/SwapCardLegacy'
-
-import { useSwap } from 'components/Swap/useSwap'
+import { useBondGetTermLength, getBondSpotPrice } from 'components/Bond/BondState'
+import { useEffect, useState } from 'react'
 import { useAuth } from 'contexts/AuthContext'
+import { useFetchApi } from 'hooks/cnvData'
 import React from 'react'
 
 const InfoItem = ({ value, label, ...props }) => (
@@ -97,11 +95,22 @@ const NothingToRedeem = () => {
 
 export default function Bond() {
   const { user, isConnected } = useAuth()
-  const swap = useSwap(isConnected ? user?.address : '', {})
-  const [termLength, setTermLength] = useState<number>()
+  const [termLength, setTermLength] = useState<number>(0)
+  const [bondSpotPrice, setBondSpotPrice] = useState<string>('0')
+  const [cnvMarketPrice, setCnvMarketPrice] = useState<number>(0)
+  const { data } = useFetchApi('/api/cnv')
+
+  if (cnvMarketPrice === 0 && !!data) {
+    setCnvMarketPrice(data.cnv)
+  }
   useBondGetTermLength(3).then((termLength) => {
     setTermLength(termLength)
   })
+  useEffect(() => {
+    getBondSpotPrice(3, '').then((bondSpotPrice) => {
+      setBondSpotPrice(bondSpotPrice)
+    })
+  }, [cnvMarketPrice])
 
   return (
     <Container maxW="container.lg">
@@ -138,7 +147,11 @@ export default function Bond() {
               <BondInfo
                 asset="CNV"
                 icon="/assets/tokens/gcnv.svg"
-                roi="9.4%"
+                roi={`${
+                  cnvMarketPrice > 0
+                    ? ((cnvMarketPrice / +bondSpotPrice - 1) * 100).toFixed(2)
+                    : 'Loading...'
+                }%`}
                 vestingTerm={`${termLength} Days`}
               />
               <NothingToRedeem />
