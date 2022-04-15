@@ -24,8 +24,7 @@ const TokenInfo = ({
     >
       <Box w={200} h="69px">
         <NumericInput disabled fontSize={'32px'} decimalScale={5} value={amount} />
-        <Text fontWeight={700} fontSize={14} textColor="text.low">
-        </Text>
+        <Text fontWeight={700} fontSize={14} textColor="text.low"></Text>
       </Box>
       <HStack>
         <TokenIcon height={'40px'} address={address} symbol={symbol} />
@@ -104,8 +103,8 @@ export const ConfirmBondModal = ({
   onClose,
   onConfirm,
 }: {
-  currencyIn: Currency,
-  currencyOut: Currency,
+  currencyIn: Currency
+  currencyOut: Currency
   tokenInUsdPrice: string
   tokenOutUsdPrice: string
   tokenInRelativePriceToTokenOut: string
@@ -113,31 +112,30 @@ export const ConfirmBondModal = ({
   onClose: () => void
   onConfirm: () => void
 }) => {
-
   return (
-    <Modal bluryOverlay={true} title=""  isOpen={isOpen} onClose={onClose}>
-        <div>
-          {' '}
-          <TokenInfo
-            address={currencyIn.isToken ? currencyIn.address : currencyIn.symbol}
-            symbol={currencyIn.symbol}
-            amount={currencyIn.decimals}
-            price={currencyIn.decimals}
-          />
-          <InOutArrow />
-          <TokenInfo
-            address={currencyOut.isToken ? currencyOut.address : currencyOut.symbol}
-            symbol={currencyOut.symbol}
-            amount={currencyOut.decimals}
-            price={currencyOut.decimals}
-          />
-        </div>
-      
+    <Modal bluryOverlay={true} title="" isOpen={isOpen} onClose={onClose}>
+      <div>
+        {' '}
+        <TokenInfo
+          address={currencyIn.isToken ? currencyIn.address : currencyIn.symbol}
+          symbol={currencyIn.symbol}
+          amount={currencyIn.decimals}
+          price={currencyIn.decimals}
+        />
+        <InOutArrow />
+        <TokenInfo
+          address={currencyOut.isToken ? currencyOut.address : currencyOut.symbol}
+          symbol={currencyOut.symbol}
+          amount={currencyOut.decimals}
+          price={currencyOut.decimals}
+        />
+      </div>
 
       <Flex fontSize="sm" fontWeight="bold" my={6} justify="center" flexWrap="wrap">
         <Text>
           {/* 1 {currencyOut.symbol} = {tokenInRelativePriceToTokenOut}
-          {currencyIn.symbol} */} Bond Price - 
+          {currencyIn.symbol} */}{' '}
+          Bond Price -
         </Text>
         <Text ml={1} textColor="text.low">
           (${tokenOutUsdPrice})

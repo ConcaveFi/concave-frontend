@@ -15,25 +15,25 @@ import { useFeeData, useWaitForTransaction } from 'wagmi'
 import { GasIcon } from '@concave/icons'
 
 export const twoDecimals = (s: string | number) => {
-    const a = s.toString()
-    return a.indexOf('.') > -1 ? a.slice(0, a.indexOf('.') + 3) : a
-  }
+  const a = s.toString()
+  return a.indexOf('.') > -1 ? a.slice(0, a.indexOf('.') + 3) : a
+}
 
 const GasPrice = () => {
-    const [{ data }] = useFeeData({ formatUnits: 'gwei', watch: true })
-    return (
-      <>
-        <GasIcon viewBox="0 0 16 16" />
-        {data ? (
-          <Text fontSize="xs" color="text.low" fontWeight="medium">
-            {twoDecimals(data?.formatted.gasPrice)} gwei
-          </Text>
-        ) : (
-          <Spinner size="xs" color="text.low" />
-        )}
-      </>
-    )
-  }
+  const [{ data }] = useFeeData({ formatUnits: 'gwei', watch: true })
+  return (
+    <>
+      <GasIcon viewBox="0 0 16 16" />
+      {data ? (
+        <Text fontSize="xs" color="text.low" fontWeight="medium">
+          {twoDecimals(data?.formatted.gasPrice)} gwei
+        </Text>
+      ) : (
+        <Spinner size="xs" color="text.low" />
+      )}
+    </>
+  )
+}
 
 export function BondBuyCard() {
   const { currencyIn, currencyOut, userAddress, isConnected, balance } = useBondState()
@@ -41,18 +41,11 @@ export function BondBuyCard() {
   const [amountIn, setAmountIn] = useState<string>()
   const [amountOut, setAmountOut] = useState<string>()
   const [bondReceipt] = useState<any>()
-  const [bondTransaction] = useState(
-{
-
-} )
-
-
+  const [bondTransaction] = useState({})
 
   const [currenctCurrencyIn, setCurrencyIn] = useState<Currency>()
   const confirmModal = useDisclosure()
   const receiptModal = useDisclosure()
-
-
 
   const [needsApproval, approve, isApproving] = useApprovalWhenNeeded(
     currencyIn,
@@ -94,7 +87,7 @@ export function BondBuyCard() {
 
       <BondOutput disabled={true} currency={currencyOut} value={amountOut} />
       <HStack align="center" justify="end" py={1}>
-      <GasPrice />
+        <GasPrice />
       </HStack>
       {needsApproval && (
         <Button
