@@ -1,8 +1,8 @@
 import { Signer } from 'ethers'
 import { useSigner } from 'wagmi'
-import { signPermitAllowed, signPermitAmount } from 'lib/permit'
 import { CNV, DAI, Token } from 'gemswap-sdk'
 import { useQuery } from 'react-query'
+import { signPermitAllowed, signPermitAmount } from './permit'
 
 const signPermit = async (signer: Signer, token: Token, spenderAddress: string) => {
   if (token.equals(DAI[token.chainId])) {
