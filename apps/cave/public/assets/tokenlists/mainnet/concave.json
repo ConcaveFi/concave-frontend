@@ -7,7 +7,7 @@
     "patch": 0
   },
   "tags": {},
-  "logoURI": "https://raw.githubusercontent.com/ConcaveFi/concave-frontend/c74472356a060b01d892a3208175625e3dc9a57f/assets/tokens/gcnv.svg?token=ABPRVGKZSVUTQGJ3SV3EAVTCIOMTO",
+  "logoURI": "https://raw.githubusercontent.com/ConcaveFi/concave-frontend/c74472356a060b01d892a3208175625e3dc9a57f/assets/tokens/scnv.svg?token=ABPRVGKZSVUTQGJ3SV3EAVTCIOMTO",
   "keywords": [
     "concave"
   ],
@@ -18,7 +18,7 @@
       "name": "Concave",
       "symbol": "CNV",
       "decimals": 18,
-      "logoURI": "https://raw.githubusercontent.com/ConcaveFi/concave-frontend/c74472356a060b01d892a3208175625e3dc9a57f/assets/tokens/gcnv.svg?token=ABPRVGKZSVUTQGJ3SV3EAVTCIOMTO"
+      "logoURI": "https://raw.githubusercontent.com/ConcaveFi/concave-frontend/c74472356a060b01d892a3208175625e3dc9a57f/assets/tokens/cnv.svg?token=ABPRVGKZSVUTQGJ3SV3EAVTCIOMTO"
     },
     {
       "chainId": 1,

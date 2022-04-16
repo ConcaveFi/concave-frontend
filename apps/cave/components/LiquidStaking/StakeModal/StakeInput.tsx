@@ -9,7 +9,7 @@ export const stakedCoin = new Token({
   chainId: chain.ropsten.id,
   address: '0x2b8e79cbd58418ce9aeb720baf6b93825b93ef1f',
   decimals: 18,
-  logoURI: '/assets/tokens/gcnv.svg',
+  logoURI: '/assets/tokens/cnv.svg',
   name: 'Concave',
   symbol: 'CNV',
 })

@@ -64,3 +64,19 @@ export const FRAX = new Token(
   'FRAX',
   'Frax',
 )
+
+export const ROPSTEN_CNV = new Token(
+  ChainId.ROPSTEN,
+  '0x2B8E79CBD58418CE9aeB720BAf6B93825B93eF1F',
+  18,
+  'CNV',
+  'Concave',
+)
+
+export const ROPSTEN_DAI = new Token(
+  ChainId.ROPSTEN,
+  '0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4',
+  18,
+  'DAI',
+  'Dai Stablecoin',
+)

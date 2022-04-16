@@ -152,7 +152,7 @@ export default function Bond() {
               <SelectedBondType bondType="Classic" />
               <BondInfo
                 asset="CNV"
-                icon="/assets/tokens/gcnv.svg"
+                icon="/assets/tokens/cnv.svg"
                 roi={`${
                   cnvMarketPrice > 0
                     ? ((cnvMarketPrice / +bondSpotPrice - 1) * 100).toFixed(2)

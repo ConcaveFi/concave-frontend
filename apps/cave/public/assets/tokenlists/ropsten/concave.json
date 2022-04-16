@@ -3,7 +3,7 @@
   "timestamp": "2022-03-28T22:48:08Z",
   "version": { "major": 1, "minor": 0, "patch": 0 },
   "tags": {},
-  "logoURI": "https://raw.githubusercontent.com/ConcaveFi/concave-frontend/c74472356a060b01d892a3208175625e3dc9a57f/assets/tokens/gcnv.svg?token=ABPRVGKZSVUTQGJ3SV3EAVTCIOMTO",
+  "logoURI": "https://raw.githubusercontent.com/ConcaveFi/concave-frontend/c74472356a060b01d892a3208175625e3dc9a57f/assets/tokens/cnv.svg?token=ABPRVGKZSVUTQGJ3SV3EAVTCIOMTO",
   "keywords": ["concave"],
   "tokens": [
     {
@@ -33,7 +33,7 @@
       "address": "0x2b8e79cbd58418ce9aeb720baf6b93825b93ef1f",
       "symbol": "tCNV",
       "decimals": 18,
-      "logoURI": "/assets/tokens/gcnv.svg"
+      "logoURI": "/assets/tokens/cnv.svg"
     },
     {
       "name": "MATIC",
