@@ -96,7 +96,6 @@ const NothingToRedeem = () => {
 }
 
 export default function Bond() {
-
   const { user, isConnected } = useAuth()
   const [termLength, setTermLength] = useState<number>(0)
   const [bondSpotPrice, setBondSpotPrice] = useState<string>('0')
@@ -116,7 +115,6 @@ export default function Bond() {
       setTermLength(termLength)
     })
   }, [cnvMarketPrice])
-
 
   return (
     <Container maxW="container.lg">
