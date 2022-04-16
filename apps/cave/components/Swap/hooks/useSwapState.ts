@@ -2,7 +2,7 @@ import { useState, useCallback, useMemo } from 'react'
 import { Currency, TradeType, CNV, DAI } from 'gemswap-sdk'
 import { useTrade } from './useTrade'
 import { parseInputAmount } from '../utils/parseInputAmount'
-import { useCurrentSupportedNetworkId } from './useCurrentSupportedNetworkId'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useEffect } from 'react'
 
 export const useSwapState = () => {

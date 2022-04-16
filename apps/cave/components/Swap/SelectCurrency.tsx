@@ -15,8 +15,8 @@ import {
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { Currency, DAI, CNV } from 'gemswap-sdk'
 import React, { useCallback, useState } from 'react'
-import { chain, useNetwork } from 'wagmi'
-import { useCurrentSupportedNetworkId } from './hooks/useCurrentSupportedNetworkId'
+import { useNetwork } from 'wagmi'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 
 const CommonTokens = ({
   selected,
