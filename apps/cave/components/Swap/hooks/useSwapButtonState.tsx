@@ -31,6 +31,11 @@ export const useSwapButtonState = ({
   const outputAmount = trade?.outputAmount
 
   /*
+    Not Connected
+  */
+  if (!account?.address) return { children: 'Connect Wallet', onClick: connectModal.onOpen }
+
+  /*
     Trade Error
   */
   if (tradeError === NoValidPairsError.message)
@@ -40,21 +45,16 @@ export const useSwapButtonState = ({
     }
 
   /*
-    Enter an amount
-  */
-  if (!inputAmount) return { isDisabled: true, children: 'Enter an amount' }
-
-  /*
-    Not Connected
-  */
-  if (!account?.address) return { children: 'Connect Wallet', onClick: connectModal.onOpen }
-
-  /*
     Fetching user data (Allowance & Balance)
   */
   if (allowance.isLoading || currencyInBalance.isLoading) return { isLoading: true }
   if (allowance.isError || currencyInBalance.isError)
     return { children: `Error fetching account data`, isDisabled: true }
+
+  /*
+    Enter an amount
+  */
+  if (!inputAmount) return { isDisabled: true, children: 'Enter an amount' }
 
   /*
     Insufficient Funds
