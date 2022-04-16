@@ -1,14 +1,13 @@
 import { Button, Card, HStack, Spinner, Text, useDisclosure } from '@concave/ui'
 import { useApprovalWhenNeeded } from 'hooks/useAllowance'
 import React, { useEffect, useState } from 'react'
-import { useBondState } from './BondState'
 import { BOND_ADDRESS } from '../../contracts/Bond/BondingAddress'
 import { DownwardIcon } from './DownwardIcon'
 import { BondOutput } from './BondOutput'
 import { BondInput } from './BondInput'
 import { ConfirmBondModal } from './ConfirmBond'
 import { Currency } from 'gemswap-sdk'
-import { useBondGetAmountOut } from './BondState'
+import { useBondGetAmountOut, useBondState, purchaseBond } from './BondState'
 import { BondReceiptModal } from './BondReceipt'
 import { ethers } from 'ethers'
 import { useFeeData, useWaitForTransaction } from 'wagmi'
@@ -36,7 +35,7 @@ const GasPrice = () => {
 }
 
 export function BondBuyCard() {
-  const { currencyIn, currencyOut, userAddress, balance } = useBondState()
+  const { currencyIn, currencyOut, userAddress, balance, signer } = useBondState()
   const [userBalance, setBalance] = useState<string>()
   const [amountIn, setAmountIn] = useState<string>('0')
   const [amountOut, setAmountOut] = useState<string>()
@@ -121,7 +120,10 @@ export function BondBuyCard() {
         isOpen={confirmModal.isOpen}
         onClose={confirmModal.onClose}
         onConfirm={() => {
-          receiptModal.onOpen()
+          // receiptModal.onOpen()
+          purchaseBond(3, amountIn, amountOut, userAddress, signer).then((tx) => {
+            console.log(tx)
+          })
         }}
       />
       <BondReceiptModal

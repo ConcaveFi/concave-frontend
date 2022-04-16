@@ -100,19 +100,15 @@ export const ConfirmBondModal = ({
   currencyOut,
   amountIn,
   amountOut,
-  tokenInUsdPrice,
   tokenOutUsdPrice,
-  tokenInRelativePriceToTokenOut,
   isOpen,
   onClose,
   onConfirm,
 }: {
   currencyIn: Currency
   currencyOut: Currency
-
   amountIn: string
   amountOut: string
-
   tokenInUsdPrice: string
   tokenOutUsdPrice: string
   tokenInRelativePriceToTokenOut: string
