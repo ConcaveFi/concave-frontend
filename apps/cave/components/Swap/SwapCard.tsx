@@ -46,7 +46,7 @@ export function SwapCard() {
 
   return (
     <>
-          <Flex
+      <Flex
         direction={{ base: 'column-reverse', lg: 'row' }}
         justify="center"
         align="center"
@@ -64,33 +64,41 @@ export function SwapCard() {
           align="stretch"
         />
 
-      <Card p={7} gap={2} variant="primary" h="fit-content" shadow="Block Up" w="100%" maxW="420px">
-        <InputField
-          currencyIn={currencyIn}
-          currencyAmountIn={currencyAmountIn}
-          updateInputValue={updateInputValue}
-          updateCurrencyIn={updateCurrencyIn}
-        />
+        <Card
+          p={7}
+          gap={2}
+          variant="primary"
+          h="fit-content"
+          shadow="Block Up"
+          w="100%"
+          maxW="420px"
+        >
+          <InputField
+            currencyIn={currencyIn}
+            currencyAmountIn={currencyAmountIn}
+            updateInputValue={updateInputValue}
+            updateCurrencyIn={updateCurrencyIn}
+          />
 
-        <SwitchCurrencies onClick={switchCurrencies} />
+          <SwitchCurrencies onClick={switchCurrencies} />
 
-        <OutputField
-          currencyAmountIn={currencyAmountIn}
-          currencyOut={currencyOut}
-          currencyAmountOut={currencyAmountOut}
-          updateOutputValue={updateOutputValue}
-          updateCurrencyOut={updateCurrencyOut}
-        />
+          <OutputField
+            currencyAmountIn={currencyAmountIn}
+            currencyOut={currencyOut}
+            currencyAmountOut={currencyAmountOut}
+            updateOutputValue={updateOutputValue}
+            updateCurrencyOut={updateCurrencyOut}
+          />
 
-        <HStack align="center" justify="end" py={5}>
-          <RelativePrice currencyIn={currencyIn} currencyOut={currencyOut} />
-          <GasPrice />
-          <Settings onClose={setSettings} />
-        </HStack>
+          <HStack align="center" justify="end" py={5}>
+            <RelativePrice currencyIn={currencyIn} currencyOut={currencyOut} />
+            <GasPrice />
+            <Settings onClose={setSettings} />
+          </HStack>
 
-        <Button variant="primary" size="large" isFullWidth {...swapButton} />
-      </Card>
-    </Flex>
+          <Button variant="primary" size="large" isFullWidth {...swapButton} />
+        </Card>
+      </Flex>
       <ConfirmSwapModal
         trade={trade}
         settings={settings}

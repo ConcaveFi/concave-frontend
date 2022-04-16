@@ -62,7 +62,7 @@ const CandleStickChart = (props: { data: (CandlestickData | WhitespaceData)[] })
       borderUpColor: '#4bffb5',
       wickDownColor: '#838ca1',
       wickUpColor: '#838ca1',
-      priceLineColor: 'green',
+      priceLineColor: 'white',
       priceFormat: {
         minMove: 0.000001,
       },

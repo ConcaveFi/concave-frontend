@@ -6,6 +6,7 @@ import { BOND_ADDRESS } from '../../contracts/Bond/BondingAddress'
 import { BOND_ABI } from '../../contracts/Bond/BondABI'
 import { ROPSTEN_DAI_ABI } from '../../contracts/Bond/ROPSTEN_DAI_ABI'
 import { Token, Currency } from 'gemswap-sdk'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 
 // testing only, flip to prod
 let providers = new ethers.providers.InfuraProvider('ropsten', '5ad069733a1a48a897180e66a5fb8846')
@@ -18,12 +19,6 @@ const useCurrencyBalance = (currency: Currency, userAddress: string) =>
     skip: !currency || !userAddress,
   })
   
-
-export const useCurrentSupportedNetworkId = () => {
-  const [{ data }] = useNetwork()
-  const chainId = data?.chain?.id === chain.ropsten.id
-  return chainId ? chain.ropsten.id : chain.mainnet.id
-}
 
 export const useBondGetAmountOut = async (
   quoteAddress: string,

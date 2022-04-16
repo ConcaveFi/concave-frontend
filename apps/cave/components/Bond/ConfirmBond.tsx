@@ -117,7 +117,6 @@ export const ConfirmBondModal = ({
   onConfirm: () => void
 }) => {
   return (
-
     <Modal bluryOverlay={true} title="" isOpen={isOpen} onClose={onClose}>
       <div>
         {' '}
@@ -136,7 +135,6 @@ export const ConfirmBondModal = ({
           amount={amountOut}
           price={amountOut}
         />
-
       </div>
 
       <Flex fontSize="sm" fontWeight="bold" my={6} justify="center" flexWrap="wrap">

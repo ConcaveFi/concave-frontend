@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { SwapSettings } from '../Settings'
 import { RouterABI, ROUTER_ADDRESS, Router, Currency, TradeType, Trade } from 'gemswap-sdk'
 import { Contract } from 'ethers'
-import { useCurrentSupportedNetworkId } from './useCurrentSupportedNetworkId'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useContract, useSigner } from 'wagmi'
 import { useState } from 'react'
 
