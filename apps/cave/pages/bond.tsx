@@ -10,9 +10,9 @@ import {
   Text,
 } from '@concave/ui'
 import { BondBuyCard } from 'components/Bond/BondBuyCard'
-import Placeholder from 'components/Placeholder'
-import { SwapCard } from 'components/Swap/SwapCard'
-import { SwapCardLegacy } from 'components/Swap/SwapCardLegacy'
+// import Placeholder from 'components/Placeholder'
+// import { SwapCard } from 'components/Swap/SwapCard'
+// import { SwapCardLegacy } from 'components/Swap/SwapCardLegacy'
 import { useBondGetTermLength, getBondSpotPrice } from 'components/Bond/BondState'
 import { useEffect, useState } from 'react'
 import { useAuth } from 'contexts/AuthContext'
