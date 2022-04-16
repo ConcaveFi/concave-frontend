@@ -33,6 +33,7 @@ function PageNav() {
             <ButtonLink
               leftIcon={<Image alt="bond" src={'/assets/sidebar/page-bond.svg'} />}
               iconSpacing={7}
+              variant="primary.outline"
               bgGradient="linear(to-tr, secondary.150, secondary.100)"
               w="160px"
               h="45px"
@@ -70,7 +71,8 @@ function PageNav() {
 
           <ButtonLink
             leftIcon={<Image alt="MarketPlace" src={'/assets/sidebar/page-marketplace.svg'} />}
-            iconSpacing={7}
+            iconSpacing={2}
+            variant="primary.outline"
             shadow="up"
             _focus={{ shadow: 'down' }}
             bgGradient="linear(to-tr, secondary.150, secondary.100)"
@@ -95,6 +97,7 @@ function PageNav() {
             <ButtonLink
               leftIcon={<Image alt="Swap" src={'/assets/sidebar/page-swap.svg'} />}
               iconSpacing={7}
+              variant="primary.outline"
               bgGradient="linear(to-tr, secondary.150, secondary.100)"
               w="160px"
               h="45px"
