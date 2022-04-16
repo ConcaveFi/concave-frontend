@@ -65,6 +65,8 @@ export const FRAX = new Token(
   'Frax',
 )
 
+// Testnet addresses under here
+
 export const ROPSTEN_CNV = new Token(
   ChainId.ROPSTEN,
   '0x2B8E79CBD58418CE9aeB720BAf6B93825B93eF1F',

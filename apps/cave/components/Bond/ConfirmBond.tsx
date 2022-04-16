@@ -3,10 +3,14 @@ import { Box, Button, Flex, HStack, Modal, NumericInput, StackDivider, Text } fr
 import React from 'react'
 import { Currency } from 'gemswap-sdk'
 import { CurrencyIcon } from 'components/CurrencyIcon'
+import { Token } from 'gemswap-sdk'
+import { CurrencyAmount } from 'gemswap-sdk'
 const TokenInfo = ({
   currency,
   amount,
 }: {
+  address: string
+  symbol: string
   price: string | number
   currency: Currency
   amount: string | number
@@ -122,6 +126,7 @@ export const ConfirmBondModal = ({
       <div>
         {' '}
         <TokenInfo
+          currency={currencyIn}
           address={currencyIn.isToken ? currencyIn.address : currencyIn.symbol}
           symbol={currencyIn.symbol}
           amount={amountIn}
@@ -129,6 +134,7 @@ export const ConfirmBondModal = ({
         />
         <InOutArrow />
         <TokenInfo
+          currency={currencyOut}
           address={currencyOut.isToken ? currencyOut.address : currencyOut.symbol}
           symbol={currencyOut.symbol}
           amount={amountOut}

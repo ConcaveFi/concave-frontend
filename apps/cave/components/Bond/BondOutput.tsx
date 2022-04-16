@@ -7,7 +7,7 @@ import {
   Text,
   useMultiStyleConfig,
 } from '@concave/ui'
-import { Currency } from '@uniswap/sdk-core'
+import { Currency } from 'gemswap-sdk'
 import React from 'react'
 import { BondOutputSelect } from './BondOutputSelect'
 
