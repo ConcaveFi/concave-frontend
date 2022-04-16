@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useAccount } from 'wagmi'
-import { Button, Card, HStack, useDisclosure } from '@concave/ui'
+import { Button, Card, Flex, HStack, useDisclosure } from '@concave/ui'
 import { useSwapState } from './hooks/useSwapState'
 import { useSwapTransaction } from './hooks/useSwapTransaction'
 import { useSwapButtonState } from './hooks/useSwapButtonState'
@@ -13,6 +13,7 @@ import { SwitchCurrencies } from './SwitchCurrencies'
 import { ConfirmSwapModal } from './ConfirmSwapModal'
 import { TransactionSubmittedDialog } from './TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from './WaitingConfirmationDialog'
+import { CandleStickCard } from 'components/CandleStickCard'
 
 export function SwapCard() {
   const {
@@ -45,6 +46,24 @@ export function SwapCard() {
 
   return (
     <>
+          <Flex
+        direction={{ base: 'column-reverse', lg: 'row' }}
+        justify="center"
+        align="center"
+        h="100%"
+        gap={10}
+      >
+        <CandleStickCard
+          from={currencyIn}
+          to={currencyOut}
+          variant="secondary"
+          gap={2}
+          p={6}
+          h={['100%', 470, 400]}
+          w={['100%', '100%', 500, 567, 567]}
+          align="stretch"
+        />
+
       <Card p={7} gap={2} variant="primary" h="fit-content" shadow="Block Up" w="100%" maxW="420px">
         <InputField
           currencyIn={currencyIn}
@@ -71,7 +90,7 @@ export function SwapCard() {
 
         <Button variant="primary" size="large" isFullWidth {...swapButton} />
       </Card>
-
+    </Flex>
       <ConfirmSwapModal
         trade={trade}
         settings={settings}
