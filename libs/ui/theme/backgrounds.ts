@@ -25,6 +25,7 @@ export const backgrounds: CSSObject = {
   glass: {
     pos: 'relative',
     '::after': {
+      borderRadius: 'inherit',
       content: '""',
       bg: `${textures.glass}`,
       opacity: 0.45,
@@ -33,9 +34,8 @@ export const backgrounds: CSSObject = {
       zIndex: -1,
       bgSize: '100%, auto',
       pointerEvents: 'none',
-      //   bgPos: '50% 50%, 0px 0px',
     },
-    backdropFilter: 'blur(8px)', // it's technically blur(15px) on figma but visually 8px looks closer
+    backdropFilter: 'blur(8px)', // it's technically blur(15px) on figma but visually 8px looks better
     filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
   },
 }
