@@ -99,30 +99,7 @@ const Deadline = ({ value, onValueChange }) => {
   )
 }
 
-const ToggleExpertMode = ({ isChecked, onToggle }) => {
-  return (
-    <HStack justifyContent="space-between" width="100%">
-      <Text fontSize="sm">
-        Expert Mode <QuestionIcon />
-      </Text>
-      <Switch size="sm" isChecked={isChecked} onChange={onToggle} />
-    </HStack>
-  )
-}
-
-const ToggleMultihops = ({ isChecked, onToggle }) => {
-  return (
-    <HStack justifyContent="space-between" width="100%">
-      <Text fontSize="sm">
-        Multihops
-        <QuestionIcon />
-      </Text>
-      <Switch size="sm" isChecked={isChecked} onChange={onToggle} />
-    </HStack>
-  )
-}
-
-const toPercent = (input: string) => new Percent(Math.floor(+input * 100), 10_000)
+const toPercent = (input: string) => new Percent(+input * 100, 10_000)
 
 export type BondSettings = {
   deadline: string
@@ -135,8 +112,8 @@ export type BondSettings = {
 export const defaultSettings: BondSettings = {
   deadline: '30',
   slippageTolerance: {
-    value: '1',
-    percent: toPercent('1'),
+    value: '1.0',
+    percent: toPercent('1.0'),
   },
 }
 

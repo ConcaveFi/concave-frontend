@@ -10,9 +10,9 @@ import {
   Text,
 } from '@concave/ui'
 import { BondBuyCard } from 'components/Bond/BondBuyCard'
-// import Placeholder from 'components/Placeholder'
-// import { SwapCard } from 'components/Swap/SwapCard'
-// import { SwapCardLegacy } from 'components/Swap/SwapCardLegacy'
+import Placeholder from 'components/Placeholder'
+import { SwapCard } from 'components/Swap/SwapCard'
+import { SwapCardLegacy } from 'components/Swap/SwapCardLegacy'
 import { useBondGetTermLength, getBondSpotPrice } from 'components/Bond/BondState'
 import { useEffect, useState } from 'react'
 import { useAuth } from 'contexts/AuthContext'
@@ -109,11 +109,13 @@ export default function Bond() {
   useEffect(() => {
     getBondSpotPrice(3, '').then((bondSpotPrice) => {
       setBondSpotPrice(bondSpotPrice)
+      console.log(bondSpotPrice)
     })
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useBondGetTermLength(3).then((termLength) => {
       setTermLength(termLength)
     })
+    console.log(cnvMarketPrice)
   }, [cnvMarketPrice])
 
   return (
@@ -150,7 +152,7 @@ export default function Bond() {
               <SelectedBondType bondType="Classic" />
               <BondInfo
                 asset="CNV"
-                icon="/assets/tokens/cnv.svg"
+                icon="/assets/tokens/gcnv.svg"
                 roi={`${
                   cnvMarketPrice > 0
                     ? ((cnvMarketPrice / +bondSpotPrice - 1) * 100).toFixed(2)
@@ -165,7 +167,7 @@ export default function Bond() {
           <BondBuyCard />
         </Flex>
       </Flex>
-      {/* <Placeholder text="More Bonds" /> */}
+      <Placeholder text="More Bonds" />
     </Container>
   )
 }

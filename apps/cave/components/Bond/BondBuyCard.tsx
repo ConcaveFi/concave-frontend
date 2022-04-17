@@ -58,8 +58,7 @@ export function BondBuyCard() {
     if (balance[0].data) {
       setBalance(balance[0].data.formatted)
     }
-    console.log(settings)
-  }, [balance, settings])
+  }, [balance])
 
   return (
     <Card p={6} gap={2} variant="primary" h="fit-content" shadow="Block Up" w="100%" maxW="420px">
@@ -125,9 +124,9 @@ export function BondBuyCard() {
         isOpen={confirmModal.isOpen}
         onClose={confirmModal.onClose}
         onConfirm={() => {
-          // receiptModal.onOpen()
-          purchaseBond(3, amountIn, userAddress, signer, '1').then((tx) => {
+          purchaseBond(3, amountIn, userAddress, signer, settings, amountOut).then((tx) => {
             console.log(tx)
+            receiptModal.onOpen()
           })
         }}
       />
