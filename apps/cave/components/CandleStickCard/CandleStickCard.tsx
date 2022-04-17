@@ -1,5 +1,4 @@
-import { Flex, useMediaQuery } from '@chakra-ui/react'
-import { Card, CardProps, Text } from '@concave/ui'
+import { Flex, useMediaQuery, Box, Card, CardProps, Text } from '@concave/ui'
 import { CandleStickTimeOptions } from 'components/CandleStickCard/CandleStickTimeOptions'
 import { useCandleStickChart } from 'components/CandleStickCard/useCandleStickChart'
 import { Currency } from 'gemswap-sdk'
@@ -21,7 +20,7 @@ export const CandleStickCard = ({
 
   return (
     <Card {...cardProps}>
-      <Flex justifyContent={isMobile ? 'center' : 'space-between'} minW={'100%'}>
+      <Flex justifyContent="space-between" w="100%">
         <CandleStickTokenOptions from={from} to={to} />
         {!isMobile && (
           <CandleStickTimeOptions
@@ -33,11 +32,13 @@ export const CandleStickCard = ({
           />
         )}
       </Flex>
-      {candleStickChart.loading ? (
-        <Text pt={8}>Loading Data...</Text>
-      ) : (
-        <CandleStickChart data={candleStickChart.data} />
-      )}
+      <Box mt={5} h={276}>
+        {candleStickChart.loading ? (
+          <Text pt={8}>Loading Data...</Text>
+        ) : (
+          <CandleStickChart data={candleStickChart.data} />
+        )}
+      </Box>
       {isMobile && (
         <Flex justifyContent={'center'}>
           <CandleStickTimeOptions
@@ -46,7 +47,7 @@ export const CandleStickCard = ({
             onChangeInteral={(interval) => {
               candleStickChart.set({ interval })
             }}
-          />{' '}
+          />
         </Flex>
       )}
     </Card>

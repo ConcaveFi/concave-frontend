@@ -12,7 +12,7 @@ type ModalsDisclosure = Record<
 >
 const ModalsContext = createContext({} as ModalsDisclosure)
 
-export const ModalsProvider: React.FC = ({ children }) => {
+export const ModalsProvider: React.FC<React.PropsWithChildren<unknown>> = ({ children }) => {
   const connectModal = useDisclosure()
 
   return (

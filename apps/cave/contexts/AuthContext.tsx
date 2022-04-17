@@ -5,7 +5,7 @@ import { User } from 'lib/session'
 import React, { createContext, useContext, useMemo } from 'react'
 import { useMutation, useQueryClient, useQuery } from 'react-query'
 import { SiweMessage } from 'siwe'
-import { useAccount, useDisconnect } from 'wagmi'
+import { useAccount } from 'wagmi'
 
 export const authFetch = (path: string, options?: RequestInit) =>
   fetch(`/api/session/${path}`, options).then(async (res) => {
@@ -66,9 +66,8 @@ const siweSignIn = async (signer: Signer) => {
   return verification.user
 }
 
-export const AuthProvider: React.FC = ({ children }) => {
-  const { data: account } = useAccount()
-  const { disconnect } = useDisconnect()
+export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({ children }) => {
+  const [{ data: account }, disconnect] = useAccount()
 
   const queryClient = useQueryClient()
 

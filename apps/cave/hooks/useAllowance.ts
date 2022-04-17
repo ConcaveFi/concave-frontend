@@ -1,10 +1,9 @@
-import { BigNumberish, ethers } from 'ethers'
+import { BigNumberish } from 'ethers'
 import { formatUnits, parseUnits } from 'ethers/lib/utils'
 import { Token } from 'gemswap-sdk'
 import { useEffect, useMemo } from 'react'
 import { erc20ABI, useContractWrite, useContractRead, chain, useWaitForTransaction } from 'wagmi'
 import { MaxUint256 } from 'gemswap-sdk'
-import { BigintIsh } from '@uniswap/sdk'
 
 export const useApprovalWhenNeeded = (
   token: Token,

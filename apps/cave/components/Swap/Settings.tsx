@@ -190,6 +190,8 @@ export const Settings = ({ onClose }: { onClose: (settings: SwapSettings) => voi
       placement="top"
       onClose={() => onClose({ deadline, slippageTolerance, multihops, expertMode })}
     >
+      {/* Chakra type bug, related to just released react 18, should be fixed soon 
+       // @ts-ignore  */}
       <PopoverTrigger>
         <IconButton
           px={2}

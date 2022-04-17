@@ -13,5 +13,6 @@ export const ReactQueryProvider = ({ children }) => {
         },
       }),
   )
+  // @ts-ignore
   return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
 }

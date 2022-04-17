@@ -12,6 +12,8 @@ const globalStyles: Styles = {
       color: 'text.high',
       lineHeight: 'base',
       colorscheme: 'dark',
+      bgImage: 'url(/background.jpg)',
+      bgColor: '#121115',
     },
   },
 }
@@ -28,7 +30,6 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const Layout = Component.Layout || DefaultLayout
   return (
     <AppProviders globalStyles={globalStyles} cookies={pageProps?.cookies}>
-      <Image zIndex={-1} pos="fixed" h="auto" w="100vw" src="/background.jpg" alt="" />
       <ConcaveFonts />
       <Layout>
         <Component {...pageProps} />

@@ -1,6 +1,6 @@
-import { Pair } from '@uniswap/v2-sdk'
+import { Pair } from 'gemswap-sdk'
 import { liquidityContractABI } from 'lib/liquidityContractABI'
-import { concaveProvider2 } from 'lib/providers'
+import { concaveProvider } from 'lib/providers'
 import { useEffect } from 'react'
 import { useMemo } from 'react'
 import { useState } from 'react'
@@ -18,7 +18,7 @@ export const useLiquidityInfo = (token: Token) => {
   const [error, setError] = useState<unknown>()
   const [totalSupply, setTotalSupply] = useState<BigNumber>(BigNumber.from('0'))
   const liquidityContract = useMemo(() => {
-    return new Contract(token.address, liquidityContractABI, concaveProvider2(selectedChain.id))
+    return new Contract(token.address, liquidityContractABI, concaveProvider(selectedChain.id))
   }, [token.address, selectedChain])
   const [pair, setPair] = useState<Pair>(null)
 
