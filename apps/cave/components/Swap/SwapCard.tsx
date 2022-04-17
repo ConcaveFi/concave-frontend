@@ -46,22 +46,16 @@ export function SwapCard() {
 
   return (
     <>
-      <Flex
-        direction={{ base: 'column-reverse', lg: 'row' }}
-        justify="center"
-        align="center"
-        h="100%"
-        gap={10}
-      >
+      <Flex wrap="wrap" justify="center" align="center" w="100%" gap={10}>
         <CandleStickCard
           from={currencyIn}
           to={currencyOut}
           variant="secondary"
           gap={2}
           p={6}
-          h={['100%', 470, 400]}
-          w={['100%', '100%', 500, 567, 567]}
-          align="stretch"
+          w="100%"
+          minW="430px"
+          maxW="567px"
         />
 
         <Card
@@ -71,6 +65,7 @@ export function SwapCard() {
           h="fit-content"
           shadow="Block Up"
           w="100%"
+          minW="400px"
           maxW="420px"
         >
           <InputField

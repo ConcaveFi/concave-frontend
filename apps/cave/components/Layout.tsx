@@ -8,7 +8,7 @@ export const DefaultLayout = ({ children }) => {
     <Box as="main" display="flex">
       <MetaHead />
       <SideBar />
-      <Container maxWidth="container.lg">{children}</Container>
+      <Container maxWidth="container.xl">{children}</Container>
     </Box>
   )
 }
