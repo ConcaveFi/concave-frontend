@@ -7,7 +7,6 @@ import { BOND_ABI } from '../../contracts/Bond/BondABI'
 import { ROPSTEN_DAI_ABI } from '../../contracts/Bond/ROPSTEN_DAI_ABI'
 import { Token, Currency } from 'gemswap-sdk'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-
 // testing only, flip to prod
 let providers = new ethers.providers.InfuraProvider('ropsten', '5ad069733a1a48a897180e66a5fb8846')
 
@@ -54,23 +53,32 @@ export const getBondSpotPrice = async (networkId: number, tokenAddress: string) 
 export const purchaseBond = async (
   networkId: number,
   input: string,
-  getAmountOut: string,
   address: string,
-  signer: ethers.Signer
+  signer: ethers.Signer,
+  minOutput: string
 ) => {
-  const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, providers)
-  const formattedInput = ethers.utils.parseUnits(input.toString(), 18)
-  const formattedMinOutput = ethers.utils.parseUnits('1', 18)
+    //todo
+    // slippage as a percent of input by default []
+    // bring slippage component in from swap []
+    // sign with permit, remove need for approval []
   const ROPSTEN_DAI_ADDRESS = '0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4'  
   const ROPSTEN_DAI_CONTRACT = new ethers.Contract(ROPSTEN_DAI_ADDRESS, ROPSTEN_DAI_ABI, signer)
+  const formattedInput = ethers.utils.parseUnits(input.toString(), 18)
+  const formattedMinOutput = ethers.utils.parseUnits(minOutput, 18)
+  const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, signer)
+  const estimatedGas = bondingContract.estimateGas.purchaseBond(address, ROPSTEN_DAI_ADDRESS, formattedInput, 1)
   const currentAllowance = await ROPSTEN_DAI_CONTRACT.allowance(address, BOND_ADDRESS[networkId])
   const formattedAllowance = ethers.utils.formatEther(currentAllowance)
   const intParseInput = +input
   const intParseAllowance = +formattedAllowance
   if(intParseInput > intParseAllowance) {
     await ROPSTEN_DAI_CONTRACT.approve('0xE9Ffe05f55697A4D8A95BB046E5A8b150A49687e', formattedInput)
+  } else {
+    bondingContract.purchaseBond(address, ROPSTEN_DAI_ADDRESS, formattedInput, 1, {
+      gasLimit: estimatedGas
+    })
   }
-  // console.log(bondingContract.purchaseBond(address, ROPSTEN_DAI, formattedInput, formattedMinOutput)
+
 
   // const formatted = ethers.utils.formatEther(spotPrice)
   // console.log(formatted)
