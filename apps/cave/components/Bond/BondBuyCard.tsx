@@ -9,9 +9,9 @@ import { ConfirmBondModal } from './ConfirmBond'
 import { Currency } from 'gemswap-sdk'
 import { useBondGetAmountOut, useBondState, purchaseBond } from './BondState'
 import { BondReceiptModal } from './BondReceipt'
-import { ethers } from 'ethers'
 import { useFeeData, useWaitForTransaction } from 'wagmi'
 import { GasIcon } from '@concave/icons'
+import { Settings, BondSettings, defaultSettings } from './Settings'
 
 export const twoDecimals = (s: string | number) => {
   const a = s.toString()
@@ -36,6 +36,7 @@ const GasPrice = () => {
 
 export function BondBuyCard() {
   const { currencyIn, currencyOut, userAddress, balance, signer } = useBondState()
+  const [settings, setSettings] = useState<BondSettings>(defaultSettings)
   const [userBalance, setBalance] = useState<string>()
   const [amountIn, setAmountIn] = useState<string>('0')
   const [amountOut, setAmountOut] = useState<string>()
@@ -57,7 +58,8 @@ export function BondBuyCard() {
     if (balance[0].data) {
       setBalance(balance[0].data.formatted)
     }
-  }, [balance])
+    console.log(settings)
+  }, [balance, settings])
 
   return (
     <Card p={6} gap={2} variant="primary" h="fit-content" shadow="Block Up" w="100%" maxW="420px">
@@ -87,6 +89,9 @@ export function BondBuyCard() {
       <BondOutput disabled={true} currency={currencyOut} value={amountOut} />
       <HStack align="center" justify="end" py={1}>
         <GasPrice />
+        <HStack align="center" justify="end" py={5}>
+          <Settings onClose={setSettings} />
+        </HStack>
       </HStack>
       {needsApproval && (
         <Button
