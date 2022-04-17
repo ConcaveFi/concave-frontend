@@ -4,13 +4,13 @@ import { useAccount, useContractWrite } from 'wagmi'
 import { aCNVredeemabi } from 'lib/contractoABI'
 
 export function ClaimCard() {
-  const { data: account } = useAccount()
+  const [{ data: account }] = useAccount()
   // const [{ data, error, loading }, getaCNVBalance] = useBalance({
   //   addressOrName: user.address,
   //   token: '0x2A6bb78490c2221E0D36d931192296BE4b3A01F1', // INSERT aCNV ADDRESS
   // })
   //
-  const { data, isError, isLoading, write } = useContractWrite(
+  const [{ data, error, loading }, write] = useContractWrite(
     {
       addressOrName: '0x38baBedCb1f226B49b2089DA0b84e52b6181Ca59',
       contractInterface: aCNVredeemabi,
@@ -24,8 +24,8 @@ export function ClaimCard() {
   const [redeeming, setRedeeming] = useState(false)
 
   const redeemAncv = () => {
-    setRedeeming(isLoading ? true : false)
-    setRedeemText(isLoading ? 'Redeeming' : 'Nothing to Redeem')
+    setRedeeming(loading ? true : false)
+    setRedeemText(loading ? 'Redeeming' : 'Nothing to Redeem')
     write()
   }
   return (
