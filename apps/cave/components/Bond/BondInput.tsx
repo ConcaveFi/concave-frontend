@@ -56,7 +56,7 @@ export function BondInput({
             eventSrc.source === 'event' && onChangeValue(value)
           }
         />
-        <SelectCurrency selected={currency} />
+        <SelectCurrency selected={currency} onSelect={(token: Currency) => currency} />
       </HStack>
       <HStack justify="space-between" align="center" textColor="text.low" w="full">
         <Text isTruncated maxW="100px" fontWeight="bold" fontSize="sm"></Text>
