@@ -3,7 +3,7 @@ import {
   Box,
   CloseButton,
   Flex,
-  useColorModeValue,
+  Text,
   Drawer,
   DrawerContent,
   useDisclosure,
@@ -19,48 +19,41 @@ import { FiMenu } from 'react-icons/fi'
 import SideBarTop from './SideBarTop'
 import SideBarBottom from './SideBarBottom'
 import PageNav from './PageNav'
-import { useNetwork } from 'wagmi'
-import { useEffect } from 'react'
+import { chain, useNetwork } from 'wagmi'
 
 export function SideBar() {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [{ data, error, loading }, switchNetwork] = useNetwork()
-  const networkModal = useDisclosure()
-
-  useEffect(() => {
-    if (data.chain?.name && data.chain?.name !== 'Mainnet' && data.chain?.name !== 'Ropsten') {
-      networkModal.onOpen()
-    } else {
-      networkModal.onClose()
-    }
-  }, [data])
-  // console.log(data.chain?.name ?? 'Not connected')
-  // console.log(data.chain?.unsupported && '(unsupported)')
+  const [{ data }, switchNetwork] = useNetwork()
 
   return (
     <Box minH="100vh">
       <Modal
         bluryOverlay={true}
-        title=""
-        isOpen={networkModal.isOpen}
-        onClose={networkModal.onClose}
-        bodyProps={{
-          shadow: 'Up for Blocks',
-        }}
+        title="Unsupported Network"
         titleAlign="center"
+        isOpen={data.chain?.id && ![chain.mainnet.id, chain.ropsten.id].includes(data.chain?.id)}
+        onClose={() => {}}
+        bodyProps={{ w: '350px', gap: 2 }}
+        hideClose
       >
-        {switchNetwork &&
-          data.chains.map((x) =>
-            x.id === data.chain?.id ? null : (
-              <Button
-                rightIcon={<Image maxWidth="20px" src={`/assets/tokens/eth.svg`} alt="" />}
-                key={x.id}
-                onClick={() => switchNetwork(x.id)}
-              >
-                Connect to {x.name}
-              </Button>
-            ),
-          )}
+        <Text fontWeight="bold">Please switch to Ethereum</Text>
+        <Button
+          leftIcon={<Image w="20px" src={`/assets/tokens/eth.svg`} alt="" />}
+          onClick={() => switchNetwork?.(chain.mainnet.id)}
+          isDisabled={!switchNetwork}
+          variant="secondary"
+          p={3}
+        >
+          Connect to Ethereum
+        </Button>
+        {!switchNetwork && (
+          <Text color="text.low" textAlign="center" fontWeight="medium" fontSize="sm">
+            Looks like your wallet is locked, or it {`doesn't`} support programatically switching
+            networks
+            <br />
+            Try switching directly in your wallet.
+          </Text>
+        )}
       </Modal>
 
       <SidebarContent onClose={() => onClose} display={{ base: 'none', md: 'block' }} />
@@ -108,7 +101,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} mb={5} />
       </Flex>
       <SideBarTop />
-      <Stack spacing="50px" mt="50px" align="end" mr={-3}>
+      <Stack spacing="50px" mt="50px" align="end" mr={-3} pb={8}>
         <PageNav />
         <SideBarBottom />
       </Stack>

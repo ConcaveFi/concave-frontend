@@ -13,6 +13,7 @@ const NavButton = (props: ButtonLinkProps) => {
       iconSpacing={2}
       px={4}
       variant="secondary"
+      color="text.low"
       w="183px"
       borderRightRadius={0}
       h="50px"
@@ -27,13 +28,14 @@ const NavButton = (props: ButtonLinkProps) => {
   )
 }
 
-const SubnavButton = (props: ButtonLinkProps) => {
+const SubnavButton = ({ children, ...props }: ButtonLinkProps) => {
   return (
     <ButtonLink
       px={4}
       py={3}
       _odd={{ mt: -3 }}
       w="full"
+      color="text.low"
       variant="secondary"
       bg="none"
       shadow="none"
@@ -43,7 +45,7 @@ const SubnavButton = (props: ButtonLinkProps) => {
       {...props}
     >
       <Flex w="100%" align="center" justify="center">
-        {props.children}
+        {children}
       </Flex>
     </ButtonLink>
   )

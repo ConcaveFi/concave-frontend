@@ -16,6 +16,7 @@ export interface ModalProps extends ChakraModalProps {
   closeButton?: boolean
   children: ReactNode
   bodyProps?: CardProps
+  hideClose?: boolean
 }
 
 export function Modal({
@@ -25,6 +26,7 @@ export function Modal({
   titleAlign = 'left',
   closeButton,
   bodyProps = {},
+  hideClose,
   ...props
 }: ModalProps) {
   return (
@@ -32,7 +34,7 @@ export function Modal({
       <ModalOverlay backdropBlur={bluryOverlay ? '16px' : '0px'} />
       <ModalContent w="auto">
         <ModalHeader textAlign={titleAlign}>{title}</ModalHeader>
-        <ModalCloseButton />
+        {!hideClose && <ModalCloseButton />}
         <Card variant="primary" p="6" shadow="Up for Blocks" {...bodyProps}>
           {children}
         </Card>
