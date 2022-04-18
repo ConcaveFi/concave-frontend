@@ -50,7 +50,7 @@ export function SwapPage() {
 
   return (
     <>
-      <Flex wrap="wrap" justify="center" align="center" h="100%" w="100%" gap={10}>
+      <Flex wrap="wrap" justify="center" align="center" my="auto" w="100%" gap={10}>
         <CandleStickCard
           from={currencyIn}
           to={currencyOut}
