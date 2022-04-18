@@ -18,6 +18,8 @@ import {
   WaitingConfirmationDialog,
   CandleStickCard,
 } from 'components/AMM'
+import { STABLES } from 'constants/routing'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 
 export function SwapPage() {
   const {
@@ -48,12 +50,21 @@ export function SwapPage() {
     onSwapClick: settings.expertMode ? swapTx.submit : confirmationModal.onOpen,
   })
 
+  /*
+    if one of the currencies are a stable, we want the chart to always display the other relative to the stable
+    (stable always the `to`)
+  */
+  const networkId = useCurrentSupportedNetworkId() as 1 | 3
+  const [chartFrom, chartTo] = STABLES[networkId].some((s) => s.equals(currencyIn))
+    ? [currencyOut, currencyIn]
+    : [currencyIn, currencyOut]
+
   return (
     <>
       <Flex wrap="wrap" justify="center" align="center" my="auto" w="100%" gap={10}>
         <CandleStickCard
-          from={currencyIn}
-          to={currencyOut}
+          from={chartFrom}
+          to={chartTo}
           variant="secondary"
           gap={2}
           p={6}
