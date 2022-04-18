@@ -5,6 +5,7 @@ import { Currency } from 'gemswap-sdk'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { Token } from 'gemswap-sdk'
 import { CurrencyAmount } from 'gemswap-sdk'
+
 const TokenInfo = ({
   currency,
   amount,
@@ -100,21 +101,25 @@ export const ConfirmBondModal = ({
   currencyOut,
   amountIn,
   amountOut,
-  tokenOutUsdPrice,
   isOpen,
   onClose,
   onConfirm,
+  bondPrice,
+  minimumAmountOut,
+  slippage,
 }: {
   currencyIn: Currency
   currencyOut: Currency
   amountIn: string
   amountOut: string
   tokenInUsdPrice: string
-  tokenOutUsdPrice: string
   tokenInRelativePriceToTokenOut: string
   isOpen: boolean
   onClose: () => void
   onConfirm: () => void
+  bondPrice: string
+  minimumAmountOut: string
+  slippage: string
 }) => {
   return (
     <Modal bluryOverlay={true} title="" isOpen={isOpen} onClose={onClose}>
@@ -141,10 +146,10 @@ export const ConfirmBondModal = ({
         <Text>
           {/* 1 {currencyOut.symbol} = {tokenInRelativePriceToTokenOut}
           {currencyIn.symbol} */}{' '}
-          Bond Price -
+          Bond Price CNV:
         </Text>
         <Text ml={1} textColor="text.low">
-          (${tokenOutUsdPrice})
+          (${parseFloat(bondPrice).toFixed(2)})
         </Text>
       </Flex>
 
@@ -155,7 +160,7 @@ export const ConfirmBondModal = ({
           priceImpact={trade.priceImpact.toSignificant(2)}
         /> */}
         <Text align="center" fontSize="sm" fontWeight="bold">
-          ROI - 9.8%
+          Min CNV Out: {minimumAmountOut}
         </Text>
         <StackDivider borderRadius="full" mx={-4} my={4} h={0.5} bg="stroke.secondary" />
         {/* <MinExpectedOutput
@@ -163,6 +168,9 @@ export const ConfirmBondModal = ({
           symbol={currencyOut.symbol}
           // estimatedFee={'11'}
         /> */}
+        <Text align="center" fontSize="sm" fontWeight="bold">
+          Slippage: {slippage}%
+        </Text>
       </Flex>
 
       <Button variant="primary" size="large" onClick={onConfirm} isFullWidth>

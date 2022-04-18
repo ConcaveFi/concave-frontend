@@ -6,8 +6,7 @@ import { DownwardIcon } from './DownwardIcon'
 import { BondOutput } from './BondOutput'
 import { BondInput } from './BondInput'
 import { ConfirmBondModal } from './ConfirmBond'
-import { Currency } from 'gemswap-sdk'
-import { useBondGetAmountOut, useBondState, purchaseBond } from './BondState'
+import { useBondGetAmountOut, useBondState, purchaseBond, getBondSpotPrice } from './BondState'
 import { BondReceiptModal } from './BondReceipt'
 import { useFeeData, useWaitForTransaction } from 'wagmi'
 import { GasIcon } from '@concave/icons'
@@ -42,8 +41,7 @@ export function BondBuyCard() {
   const [amountOut, setAmountOut] = useState<string>()
   const [bondReceipt] = useState<any>()
   const [bondTransaction] = useState({})
-
-  const [currenctCurrencyIn, setCurrencyIn] = useState<Currency>()
+  const [bondSpotPrice, setBondSpotPrice] = useState<string>()
   const confirmModal = useDisclosure()
   const receiptModal = useDisclosure()
 
@@ -53,7 +51,9 @@ export function BondBuyCard() {
     userAddress,
     amountIn,
   )
-
+  getBondSpotPrice(3, '0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4').then((bondSpotPrice) => {
+    setBondSpotPrice(bondSpotPrice)
+  })
   useEffect(() => {
     if (balance[0].data) {
       setBalance(balance[0].data.formatted)
@@ -74,9 +74,6 @@ export function BondBuyCard() {
           useBondGetAmountOut(currencyOut.address, currencyOut.decimals, 3, v).then((amountOut) => {
             setAmountOut(amountOut)
           })
-        }}
-        onChangeCurrency={() => {
-          setCurrencyIn(currencyIn)
         }}
         // bug: fails to execute tx when clicked before hitting swap
         // onClickMaxBalance={() => {
@@ -119,7 +116,6 @@ export function BondBuyCard() {
         amountIn={amountIn}
         amountOut={amountOut}
         tokenInUsdPrice={'currencyIn'}
-        tokenOutUsdPrice={''}
         tokenInRelativePriceToTokenOut={''}
         isOpen={confirmModal.isOpen}
         onClose={confirmModal.onClose}
@@ -129,6 +125,12 @@ export function BondBuyCard() {
             receiptModal.onOpen()
           })
         }}
+        bondPrice={bondSpotPrice}
+        minimumAmountOut={(
+          +amountOut -
+          (+settings.slippageTolerance.value / 100) * +amountOut
+        ).toFixed(3)}
+        slippage={settings.slippageTolerance.value}
       />
       <BondReceiptModal
         // receipt={bondTransaction}

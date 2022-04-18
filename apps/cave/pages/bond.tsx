@@ -11,8 +11,6 @@ import {
 } from '@concave/ui'
 import { BondBuyCard } from 'components/Bond/BondBuyCard'
 import Placeholder from 'components/Placeholder'
-import { SwapCard } from 'components/Swap/SwapCard'
-import { SwapCardLegacy } from 'components/Swap/SwapCardLegacy'
 import { useBondGetTermLength, getBondSpotPrice } from 'components/Bond/BondState'
 import { useEffect, useState } from 'react'
 import { useAuth } from 'contexts/AuthContext'
@@ -115,7 +113,6 @@ export default function Bond() {
     useBondGetTermLength(3).then((termLength) => {
       setTermLength(termLength)
     })
-    console.log(cnvMarketPrice)
   }, [cnvMarketPrice])
 
   return (
@@ -152,7 +149,7 @@ export default function Bond() {
               <SelectedBondType bondType="Classic" />
               <BondInfo
                 asset="CNV"
-                icon="/assets/tokens/gcnv.svg"
+                icon="/assets/tokens/cnv.svg"
                 roi={`${
                   cnvMarketPrice > 0
                     ? ((cnvMarketPrice / +bondSpotPrice - 1) * 100).toFixed(2)

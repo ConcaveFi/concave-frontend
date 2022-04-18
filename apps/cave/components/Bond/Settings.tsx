@@ -27,7 +27,9 @@ const SlippageTolerance = ({ value, onValueChange, onClickAuto }) => {
   return (
     <Stack align="flex-start">
       <Text fontSize="sm">
-        Slippage tolerance <QuestionIcon />
+        Slippage tolerance
+        {/* set description */}
+        {/* <QuestionIcon /> */}
       </Text>
       <HStack>
         <Card shadow="Down Big" borderRadius="xl">
@@ -76,7 +78,8 @@ const Deadline = ({ value, onValueChange }) => {
   return (
     <Stack align="start">
       <Text fontSize="sm">
-        Transaction deadline <QuestionIcon />
+        Transaction deadline
+        {/* <QuestionIcon /> */}
       </Text>
       <Card shadow="Down Big" borderRadius="xl">
         <InputGroup px={3} variant="unstyled" size="sm">
@@ -112,8 +115,8 @@ export type BondSettings = {
 export const defaultSettings: BondSettings = {
   deadline: '30',
   slippageTolerance: {
-    value: '1.0',
-    percent: toPercent('1.0'),
+    value: '0.5',
+    percent: toPercent('0.5'),
   },
 }
 

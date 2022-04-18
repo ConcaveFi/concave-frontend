@@ -9,7 +9,7 @@ import {
 } from '@concave/ui'
 import { Currency } from 'gemswap-sdk'
 import React from 'react'
-import { SelectCurrency } from '../Swap/SelectCurrency'
+import { SelectCurrency } from './SelectCurrency'
 
 const Balance = ({ value, onClick }) => (
   <Button
@@ -33,7 +33,6 @@ export function BondInput({
   balance,
   disabled = false,
   onChangeValue,
-  onChangeCurrency,
   onClickMaxBalance,
 }: {
   value: string
@@ -41,7 +40,6 @@ export function BondInput({
   balance: string
   disabled?: boolean
   onChangeValue: (value: string) => void
-  onChangeCurrency: (token: Currency) => void
   onClickMaxBalance?: (value: string) => void
 } & FlexProps) {
   const styles = useMultiStyleConfig('Input', { variant: 'primary', size: 'large' })
@@ -58,7 +56,7 @@ export function BondInput({
             eventSrc.source === 'event' && onChangeValue(value)
           }
         />
-        <SelectCurrency onSelect={onChangeCurrency} selected={currency} />
+        <SelectCurrency selected={currency} />
       </HStack>
       <HStack justify="space-between" align="center" textColor="text.low" w="full">
         <Text isTruncated maxW="100px" fontWeight="bold" fontSize="sm"></Text>
