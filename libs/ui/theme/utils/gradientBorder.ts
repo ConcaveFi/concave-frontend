@@ -25,7 +25,7 @@ export const gradientBorder = ({
     Object.entries(props)
       .filter(([k, v]) => k.endsWith('Radius') || k.startsWith('rounded'))
       .map(([k, v]) => {
-        const radius = theme.radii[v] ?? v
+        const radius = theme.radii[v] ?? toPx(v)
         const gradientBorderRadius = radius !== '0' ? calc.add(radius, toPx(borderWidth)) : 0
         return [k, gradientBorderRadius]
       }),

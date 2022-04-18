@@ -13,7 +13,7 @@ export const backgrounds: CSSObject = {
     bgSize: '120px, auto',
   },
   metalBrighter: {
-    bg: `${textures.metal}, linear-gradient(to bottom left, ${colors.secondary[125]} 0%, ${colors.secondary[50]} 100%)`,
+    bg: `${textures.metal}, linear-gradient(to bottom right, ${colors.secondary[125]} 0%, ${colors.secondary[50]} 100%)`,
     bgPos: '50% 50%, 0px 0px',
     bgSize: '120px, auto',
   },

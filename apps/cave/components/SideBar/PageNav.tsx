@@ -1,9 +1,53 @@
 import React, { useEffect, useState } from 'react'
 
 import { Box, Flex, Text, Image } from '@concave/ui'
-import { ButtonLink } from 'components/ButtonLink'
+import { ButtonLink, ButtonLinkProps } from 'components/ButtonLink'
 import { getBondSpotPrice } from '../Bond/BondState'
 import { useFetchApi } from 'hooks/cnvData'
+import { useRouter } from 'next/router'
+
+const NavButton = (props: ButtonLinkProps) => {
+  const router = useRouter()
+  return (
+    <ButtonLink
+      iconSpacing={2}
+      px={4}
+      variant="secondary"
+      w="183px"
+      borderRightRadius={0}
+      h="50px"
+      rightIcon={<Box roundedLeft="lg" shadow="Up Big" mr={-5} w="16px" h="36px" />}
+      isActive={router.route === props.href}
+      {...props}
+    >
+      <Flex w="100%" align="center" justify="center">
+        {props.children}
+      </Flex>
+    </ButtonLink>
+  )
+}
+
+const SubnavButton = (props: ButtonLinkProps) => {
+  return (
+    <ButtonLink
+      px={4}
+      py={3}
+      _odd={{ mt: -3 }}
+      w="full"
+      variant="secondary"
+      bg="none"
+      shadow="none"
+      borderRightRadius={0}
+      borderRadius="xl"
+      fontSize="xs"
+      {...props}
+    >
+      <Flex w="100%" align="center" justify="center">
+        {props.children}
+      </Flex>
+    </ButtonLink>
+  )
+}
 
 function PageNav() {
   const [bondSpotPrice, setBondSpotPrice] = useState<string>('0')
@@ -19,127 +63,52 @@ function PageNav() {
     })
   }, [cnvMarketPrice])
   return (
-    <div>
-      <Flex>
-        <Image src={'/assets/sidebar/linkage.svg'} ml={7} alt="linkage" />
-        <Box ml={-1}>
-          <Box
-            shadow="down"
-            bgGradient="linear(to-tr, secondary.150, secondary.100)"
-            p={1}
-            box-shadow="lg"
-            rounded="2xl"
-          >
-            <ButtonLink
-              leftIcon={<Image alt="bond" src={'/assets/sidebar/page-bond.svg'} />}
-              iconSpacing={7}
-              variant="primary.outline"
-              bgGradient="linear(to-tr, secondary.150, secondary.100)"
-              w="160px"
-              h="45px"
-              borderRadius="lg"
-              shadow="up"
-              textColor="#5F7A99"
-              href="/bond"
-            >
-              Bonds
-            </ButtonLink>
-            <Text fontSize="sm" fontWeight="thin" textColor="#5F7A99" textAlign="center" p={1}>
-              CNV-DAI ROI{' '}
-              {`${
-                cnvMarketPrice > 0
-                  ? ((cnvMarketPrice / +bondSpotPrice - 1) * 100).toFixed(2)
-                  : '---'
-              }%`}
-            </Text>
-          </Box>
+    <Flex direction="column" position="relative" justify="right" w="fit-content">
+      <Image src={'/assets/sidebar/linkage.svg'} alt="" position="absolute" left={-6} top={6} />
+      <Box shadow="Down Big" roundedLeft="2xl">
+        <NavButton
+          leftIcon={<Image alt="bond" src={'/assets/sidebar/page-bond.svg'} />}
+          href="/bond"
+        >
+          Bonds
+        </NavButton>
+        <Text fontSize="xs" fontWeight="bold" textColor="text.low" textAlign="center" py={2}>
+          CNV-DAI ROI{' '}
+          {`${
+            cnvMarketPrice > 0 ? ((cnvMarketPrice / +bondSpotPrice - 1) * 100).toFixed(2) : '---'
+          }%`}
+        </Text>
+      </Box>
 
-          <ButtonLink
-            leftIcon={<Image alt="lStaking" src={'/assets/sidebar/page-lstaking.svg'} />}
-            iconSpacing={2}
-            variant="primary.outline"
-            bgGradient="linear(to-tr, secondary.150, secondary.100)"
-            w="160px"
-            h="45px"
-            borderRadius="2xl"
-            textColor="#5F7A99"
-            mt={16}
-            href={'/liquidstaking'}
-          >
-            Liquid Staking
-          </ButtonLink>
+      <NavButton
+        leftIcon={<Image alt="Staking" src={'/assets/sidebar/page-lstaking.svg'} />}
+        href={'/liquidstaking'}
+        outlined
+        mt="26px"
+      >
+        Liquid Staking
+      </NavButton>
 
-          <ButtonLink
-            leftIcon={<Image alt="MarketPlace" src={'/assets/sidebar/page-marketplace.svg'} />}
-            iconSpacing={2}
-            variant="primary.outline"
-            shadow="up"
-            _focus={{ shadow: 'down' }}
-            bgGradient="linear(to-tr, secondary.150, secondary.100)"
-            w="160px"
-            h="45px"
-            borderRadius="2xl"
-            textColor="#5F7A99"
-            mt={16}
-            href={'/marketplace'}
-          >
-            Marketplace
-          </ButtonLink>
+      <NavButton
+        leftIcon={<Image alt="MarketPlace" src={'/assets/sidebar/page-marketplace.svg'} />}
+        href={'/marketplace'}
+        mt="60px"
+      >
+        Marketplace
+      </NavButton>
 
-          <Box
-            shadow="down"
-            bgGradient="linear(to-tr, secondary.150, secondary.100)"
-            p={1}
-            box-shadow="lg"
-            rounded="2xl"
-            mt={6}
-          >
-            <ButtonLink
-              leftIcon={<Image alt="Swap" src={'/assets/sidebar/page-swap.svg'} />}
-              iconSpacing={7}
-              variant="primary.outline"
-              bgGradient="linear(to-tr, secondary.150, secondary.100)"
-              w="160px"
-              h="45px"
-              borderRadius="lg"
-              shadow="up"
-              textColor="text.low"
-              href={'/swap'}
-            >
-              Swap
-            </ButtonLink>
-            <ButtonLink
-              variant="ghost"
-              w="full"
-              mt={2}
-              size="sm"
-              bg="none"
-              fontSize="sm"
-              fontWeight="thin"
-              textColor="text.low"
-              textAlign="center"
-              p={1}
-              href={'/position?operation=addLiquidity'}
-            >
-              Add liquidity
-            </ButtonLink>
-            <ButtonLink
-              variant="ghost"
-              size="sm"
-              w="full"
-              bg="none"
-              fontSize="sm"
-              fontWeight="thin"
-              textColor="text.low"
-              textAlign="center"
-              href={'/position?operation=showLiquidity'}
-            >
-              Your Pools
-            </ButtonLink>
-          </Box>
-        </Box>
-      </Flex>
-    </div>
+      <Box shadow="Down Big" roundedLeft="2xl" mt="28px">
+        <NavButton
+          leftIcon={<Image alt="Swap" src={'/assets/sidebar/page-swap.svg'} />}
+          href={'/swap'}
+          mb={'1px'}
+        >
+          Swap
+        </NavButton>
+        <SubnavButton href={'/position?operation=addLiquidity'}>Add liquidity</SubnavButton>
+        <SubnavButton href={'/position?operation=showLiquidity'}>Your Pools</SubnavButton>
+      </Box>
+    </Flex>
   )
 }
 

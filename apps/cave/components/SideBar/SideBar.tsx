@@ -13,6 +13,7 @@ import {
   Button,
   Modal,
   Image,
+  Stack,
 } from '@concave/ui'
 import { FiMenu } from 'react-icons/fi'
 import SideBarTop from './SideBarTop'
@@ -98,8 +99,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       borderRadius={0}
       borderRightRadius="2xl"
       shadow="Up Big"
-      px={2}
-      py={4}
+      p={3}
       w={{ base: 'full', md: 60 }}
       h="full"
       {...rest}
@@ -108,13 +108,10 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} mb={5} />
       </Flex>
       <SideBarTop />
-
-      <Box mt={10}>
+      <Stack spacing="50px" mt="50px" align="end" mr={-3}>
         <PageNav />
-      </Box>
-      <Box mt={14}>
         <SideBarBottom />
-      </Box>
+      </Stack>
     </Card>
   )
 }
@@ -130,9 +127,6 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       px={{ base: 4, md: 24 }}
       height="20"
       alignItems="center"
-      bg={useColorModeValue('white', 'gray.900')}
-      borderBottomWidth="1px"
-      borderBottomColor={useColorModeValue('gray.200', 'gray.700')}
       justifyContent="flex-start"
       {...rest}
     >
