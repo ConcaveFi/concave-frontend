@@ -133,4 +133,11 @@ export function SwapPage() {
   )
 }
 
+SwapPage.Meta = {
+  title: 'Concave | Exchange (AMM)',
+  description: `A capital efficient, low slippage and high liquidity AMM, 
+    Concave Exchange offers traders deeper liquidity and allows 
+    liquidity providers to earn more with less capital investment.`,
+}
+
 export default SwapPage
