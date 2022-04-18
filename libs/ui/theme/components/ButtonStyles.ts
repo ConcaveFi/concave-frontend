@@ -58,7 +58,6 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
       apply: 'background.metalBrighter',
       shadow: 'Up Big',
       borderRadius: '2xl',
-      color: 'text.low',
       ...(props.outlined && gradientBorder({ borderRadius: '2xl', ...props, variant: 'primary' })),
       _active: {
         bg: HoverRadialGradient,

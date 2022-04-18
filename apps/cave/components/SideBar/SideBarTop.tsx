@@ -1,6 +1,5 @@
 import React from 'react'
-import { Box, Flex, Text, Stack } from '@concave/ui'
-import { Image } from '@concave/ui'
+import { Box, Flex, Text, Stack, Image } from '@concave/ui'
 import { ConnectWallet } from 'components/ConnectWallet'
 import { ButtonLink } from 'components/ButtonLink'
 import { MdOutlineDashboard } from 'react-icons/md'
@@ -9,7 +8,7 @@ import { ChainId, CNV } from 'gemswap-sdk'
 
 function SideBarTop() {
   const [{ data: account }] = useAccount()
-  const [{ data, loading }] = useBalance({
+  const [{ data }] = useBalance({
     addressOrName: account?.address,
     token: CNV[ChainId.ETHEREUM].address,
     formatUnits: CNV[ChainId.ETHEREUM].decimals,
@@ -40,14 +39,16 @@ function SideBarTop() {
         </ButtonLink>
         <Box shadow="down" w="full" p={2} rounded="2xl">
           <ConnectWallet />
-          <Flex justifyContent="space-between" p={2} mt={2}>
-            <Text color="text.low" fontWeight="bold" fontSize="md" lineHeight="100%">
-              Your CNV Balance
-            </Text>
-            <Text color="text.low" fontWeight="bold" fontSize="md" lineHeight="100%">
-              {loading ? 0 : Number(data?.formatted).toFixed(2)} CNV
-            </Text>
-          </Flex>
+          {data?.formatted && (
+            <Flex justifyContent="space-between" p={2} mt={2}>
+              <Text color="text.low" fontWeight="bold" fontSize="md" lineHeight="100%">
+                Your CNV Balance
+              </Text>
+              <Text color="text.low" fontWeight="bold" fontSize="md" lineHeight="100%">
+                {(+data?.formatted).toFixed(2)} CNV
+              </Text>
+            </Flex>
+          )}
         </Box>
       </Stack>
     </Box>
