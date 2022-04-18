@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   Portal,
   Button,
@@ -27,15 +27,10 @@ const DisconnectButton = () => {
       </MenuButton>
       <Portal>
         <MenuList minW="min" bg="none" border="none" shadow="none" p="0" backdropFilter="blur(8px)">
-          <Card
-            variant="secondary"
-            borderGradient="secondary"
-            borderRadius="xl"
-            px={1}
-            py={2}
-            gap="1"
-          >
-            <MenuItem onClick={() => disconnect()}>Disconnect</MenuItem>
+          <Card variant="secondary" borderGradient="secondary" borderRadius="xl" px={1} py={2}>
+            <MenuItem borderRadius="lg" onClick={() => disconnect()}>
+              Disconnect
+            </MenuItem>
           </Card>
         </MenuList>
       </Portal>

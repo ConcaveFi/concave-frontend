@@ -3,7 +3,6 @@ import { gradientBorder } from '../utils/gradientBorder'
 
 const HoverRadialGradient =
   'radial-gradient(80% 232.61% at 52.27% 160%, #578CF2C4 0%, #895FFF1C 100%)'
-// 'linear-gradient(357.48deg, rgba(87, 140, 242, 0.77) 1.93%, rgba(137, 95, 255, 0.11) 97.72%)'
 
 const PrimaryButtonShadow =
   '20px -20px 39px rgba(120, 182, 255, 0.25), 0px 5px 14px rgba(0, 0, 0, 0.47), inset 0px -10px 20px rgba(117, 164, 255, 0.5)'
@@ -18,10 +17,14 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
     borderColor: 'transparent',
     display: 'flex',
     alignItems: 'center',
-    _active: { transform: 'scale(0.95)' },
+    _active: { transform: 'scale(0.96)' },
+    _disabled: {
+      cursor: 'default',
+      _active: { transform: 'scale(1)' },
+    },
     _hover: {
       _disabled: {
-        cursor: 'default',
+        opacity: 0.5,
         bg: null,
       },
     },
