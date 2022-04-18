@@ -1,9 +1,9 @@
 import { Flex, useMediaQuery, Box, Card, CardProps, Text } from '@concave/ui'
-import { CandleStickTimeOptions } from 'components/CandleStickCard/CandleStickTimeOptions'
-import { useCandleStickChart } from 'components/CandleStickCard/useCandleStickChart'
 import { Currency } from 'gemswap-sdk'
 import dynamic from 'next/dynamic'
 import { CandleStickTokenOptions } from './CandleStickTokenOptions'
+import { CandleStickTimeOptions } from './CandleStickTimeOptions'
+import { useCandleStickChart } from './useCandleStickChart'
 
 const CandleStickChart = dynamic(() => import('./CandleStickChart'), {
   loading: () => <p>Loading ...</p>,

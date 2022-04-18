@@ -1,13 +1,125 @@
-import { Flex } from '@concave/ui'
-import { SwapCard } from 'components/Swap/SwapCard'
-import React from 'react'
+import { useState } from 'react'
+import { useAccount } from 'wagmi'
+import { Button, Card, Flex, HStack, useDisclosure } from '@concave/ui'
+import {
+  useSwapState,
+  useSwapTransaction,
+  useSwapButtonState,
+  defaultSettings,
+  Settings,
+  SwapSettings,
+  InputField,
+  OutputField,
+  RelativePrice,
+  GasPrice,
+  SwitchCurrencies,
+  ConfirmSwapModal,
+  TransactionSubmittedDialog,
+  WaitingConfirmationDialog,
+  CandleStickCard,
+} from 'components/AMM'
 
-function Swap() {
+export function SwapPage() {
+  const {
+    trade,
+    tradeError,
+    currencyIn,
+    currencyOut,
+    currencyAmountIn,
+    currencyAmountOut,
+    updateInputValue,
+    updateOutputValue,
+    updateCurrencyIn,
+    updateCurrencyOut,
+    switchCurrencies,
+  } = useSwapState()
+
+  const [settings, setSettings] = useState<SwapSettings>(defaultSettings)
+
+  const [{ data: account }] = useAccount()
+  const swapTx = useSwapTransaction(trade, settings, account?.address)
+
+  const confirmationModal = useDisclosure()
+
+  const swapButton = useSwapButtonState({
+    currencyIn,
+    trade,
+    tradeError,
+    onSwapClick: settings.expertMode ? swapTx.submit : confirmationModal.onOpen,
+  })
+
   return (
-    <Flex justify="center" align="center" h="100%" w="100%">
-      <SwapCard />
-    </Flex>
+    <>
+      <Flex wrap="wrap" justify="center" align="center" h="100%" w="100%" gap={10}>
+        <CandleStickCard
+          from={currencyIn}
+          to={currencyOut}
+          variant="secondary"
+          gap={2}
+          p={6}
+          w="100%"
+          minW="430px"
+          maxW="567px"
+        />
+
+        <Card
+          p={7}
+          gap={2}
+          variant="primary"
+          h="fit-content"
+          shadow="Block Up"
+          w="100%"
+          minW="400px"
+          maxW="420px"
+        >
+          <InputField
+            currencyIn={currencyIn}
+            currencyAmountIn={currencyAmountIn}
+            updateInputValue={updateInputValue}
+            updateCurrencyIn={updateCurrencyIn}
+          />
+
+          <SwitchCurrencies onClick={switchCurrencies} />
+
+          <OutputField
+            currencyAmountIn={currencyAmountIn}
+            currencyOut={currencyOut}
+            currencyAmountOut={currencyAmountOut}
+            updateOutputValue={updateOutputValue}
+            updateCurrencyOut={updateCurrencyOut}
+          />
+
+          <HStack align="center" justify="end" py={5}>
+            <RelativePrice currencyIn={currencyIn} currencyOut={currencyOut} />
+            <GasPrice />
+            <Settings onClose={setSettings} />
+          </HStack>
+
+          <Button variant="primary" size="large" isFullWidth {...swapButton} />
+        </Card>
+      </Flex>
+
+      <ConfirmSwapModal
+        trade={trade}
+        settings={settings}
+        isOpen={confirmationModal.isOpen}
+        onClose={confirmationModal.onClose}
+        onConfirm={() => {
+          confirmationModal.onClose()
+          swapTx.submit()
+          updateInputValue('')
+        }}
+      />
+
+      <WaitingConfirmationDialog
+        amountIn={swapTx.trade?.inputAmount}
+        amountOut={swapTx.trade?.outputAmount}
+        isOpen={swapTx.isWaitingForConfirmation}
+      />
+
+      <TransactionSubmittedDialog tx={swapTx.data} isOpen={swapTx.isTransactionSent} />
+    </>
   )
 }
 
-export default Swap
+export default SwapPage

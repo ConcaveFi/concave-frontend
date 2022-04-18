@@ -1,4 +1,4 @@
-import { CandleStickIntervalTypes } from 'components/CandleStickCard/useCandleStickChart'
+import { CandleStickIntervalTypes } from 'components/AMM/CandleStickCard/useCandleStickChart'
 import { chain } from 'wagmi'
 import { coingeckoApi } from './coingecko.api'
 

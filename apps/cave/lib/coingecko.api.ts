@@ -1,4 +1,3 @@
-import { CandleStickIntervalTypes } from 'components/CandleStickCard/useCandleStickChart'
 import { CandlestickData, UTCTimestamp } from 'lightweight-charts'
 
 const baseUrl = 'https://api.coingecko.com/'
