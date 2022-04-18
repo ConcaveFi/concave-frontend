@@ -1,8 +1,8 @@
-import { ComponentSingleStyleConfig, cssVar, tokenToCSSVar } from '@chakra-ui/react'
+import { ComponentSingleStyleConfig, ButtonProps } from '@chakra-ui/react'
 import { gradientBorder } from '../utils/gradientBorder'
 
 const HoverRadialGradient =
-  'radial-gradient(97.48% 120.4% at 49.69% 76.45%, #3082E1 0%, #3D3786 31.18%, transparent 100%)'
+  'radial-gradient(80% 232.61% at 52.27% 160%, #578CF2C4 0%, #895FFF1C 100%)'
 
 const PrimaryButtonShadow =
   '20px -20px 39px rgba(120, 182, 255, 0.25), 0px 5px 14px rgba(0, 0, 0, 0.47), inset 0px -10px 20px rgba(117, 164, 255, 0.5)'
@@ -17,7 +17,17 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
     borderColor: 'transparent',
     display: 'flex',
     alignItems: 'center',
-    _active: { transform: 'scale(0.95)' },
+    _active: { transform: 'scale(0.96)' },
+    _disabled: {
+      cursor: 'default',
+      _active: { transform: 'scale(1)' },
+    },
+    _hover: {
+      _disabled: {
+        opacity: 0.5,
+        bg: null,
+      },
+    },
   },
   sizes: {
     large: {
@@ -46,37 +56,28 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
       fontWeight: 'bold',
       shadow: PrimaryButtonShadow,
       _focus: { shadow: PrimaryButtonShadow },
-      _disabled: {
-        _hover: {
-          bgGradient: 'linear(to-r, primary.1, primary.2)',
-        },
-      },
     },
-    secondary: {
-      bgGradient: 'linear(to-r, secondary.125, secondary.50)',
+    secondary: (props) => ({
+      apply: 'background.metalBrighter',
       shadow: 'Up Big',
-    },
-    navigation: (props) => ({
-      height: '100%',
-      borderX: 'solid 1px',
-      borderColor: 'subtle',
-      color: 'text.low',
-      ...(props.isActive && {
+      borderRadius: '2xl',
+      ...(props.outlined && gradientBorder({ borderRadius: '2xl', ...props, variant: 'primary' })),
+      _active: {
+        bg: HoverRadialGradient,
         color: 'text.high',
-        textDecoration: 'underline',
-      }),
-      _even: {
-        border: 'unset', // prevent double border when side by side
+        transform: 'scale(1)',
+        ...gradientBorder({ borderRadius: '2xl', ...props, variant: 'primary' }),
       },
-      _last: {
-        // doesn't matter if last is even, must have border
-        borderX: 'solid 1px',
-        borderColor: 'subtle',
+      _focus: {
+        bg: HoverRadialGradient,
+        color: 'text.high',
+        ...gradientBorder({ borderRadius: '2xl', ...props, variant: 'primary' }),
       },
-      boxShadow: 'inset 1px 0px 2px 0px rgba(16, 19, 23, 1), 1px 0px 2px 0px rgba(16, 19, 23, 1)',
-      bg: 'transparent',
-      _active: { bg: HoverRadialGradient },
-      _hover: { bg: HoverRadialGradient },
+      _hover: {
+        bg: HoverRadialGradient,
+        color: 'text.high',
+        ...gradientBorder({ borderRadius: '2xl', ...props, variant: 'primary' }),
+      },
     }),
   },
   defaultProps: {
@@ -85,4 +86,7 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
   },
 }
 
+type _ButtonProps = ButtonProps & { outlined?: boolean }
+
+export type { _ButtonProps as ButtonProps }
 export default ButtonStyles

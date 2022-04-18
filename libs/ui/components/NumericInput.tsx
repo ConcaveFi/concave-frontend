@@ -1,8 +1,8 @@
 import { Input as ChakraInput, InputProps } from '@chakra-ui/react'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import NumberFormat, { NumberFormatProps } from 'react-number-format'
 
-export type NumericInputProps = InputProps & NumberFormatProps
+export type NumericInputProps = NumberFormatProps<InputProps>
 export const NumericInput = (props: NumericInputProps) => {
   return (
     <ChakraInput

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   Portal,
   Button,
@@ -11,32 +11,26 @@ import {
   gradientBorder,
   Modal,
 } from '@concave/ui'
-import { useConnect } from 'wagmi'
-import { useAuth } from 'contexts/AuthContext'
+import { useAccount, useConnect } from 'wagmi'
 import { useIsMounted } from 'hooks/useIsMounted'
 
 const miniAddress = (address) =>
   `${address.substr(0, 6)}...${address.substr(address.length - 6, address.length)}`
 
 const DisconnectButton = () => {
-  const { signOut, user } = useAuth()
+  const [{ data: account }, disconnect] = useAccount()
 
   return (
     <Menu placement="right-start">
       <MenuButton as={Button} shadow="up" fontFamily="heading" size="medium" w="100%">
-        {miniAddress(user.address)}
+        {miniAddress(account.address)}
       </MenuButton>
       <Portal>
         <MenuList minW="min" bg="none" border="none" shadow="none" p="0" backdropFilter="blur(8px)">
-          <Card
-            variant="secondary"
-            borderGradient="secondary"
-            borderRadius="xl"
-            px={1}
-            py={2}
-            gap="1"
-          >
-            <MenuItem onClick={signOut}>Disconnect</MenuItem>
+          <Card variant="secondary" borderGradient="secondary" borderRadius="xl" px={1} py={2}>
+            <MenuItem borderRadius="lg" onClick={() => disconnect()}>
+              Disconnect
+            </MenuItem>
           </Card>
         </MenuList>
       </Portal>
@@ -55,7 +49,7 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
       onClose={onClose}
       isCentered
       motionPreset="slideInBottom"
-      bodyProps={{ alignItems: 'center', gap: 3, w: '100', maxW: '350px' }}
+      bodyProps={{ alignItems: 'center', gap: 3, w: '100%', maxW: '350px' }}
     >
       {isMounted &&
         data.connectors.map((connector) => {
@@ -68,9 +62,7 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
               _active={{ shadow: 'down' }}
               _focus={{ shadow: 'Up Big' }}
               size="large"
-              leftIcon={
-                <Image maxWidth="20px" src={`/assets/connectors/${connector.id}.png`} alt="" />
-              }
+              leftIcon={<Image w="20px" src={`/assets/connectors/${connector.id}.png`} alt="" />}
               key={connector.id}
               onClick={() => connect(connector).then(onClose)}
             >
@@ -84,7 +76,6 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
 
 const ConnectButton = () => {
   const [{ data }, connect] = useConnect()
-  const { signIn } = useAuth()
   const isMounted = useIsMounted()
   return (
     <>
@@ -131,7 +122,7 @@ const ConnectButton = () => {
                         />
                       }
                       key={connector.id}
-                      onClick={() => connect(connector).then(signIn)}
+                      onClick={() => connect(connector)}
                     >
                       {connector.name}
                     </MenuItem>
@@ -145,30 +136,11 @@ const ConnectButton = () => {
   )
 }
 
-const SignInButton = () => {
-  const { signIn, isWaitingForSignature } = useAuth()
-  return (
-    <>
-      <Button
-        variant="primary"
-        size="medium"
-        w="100%"
-        sx={{ ...gradientBorder({ borderWidth: 2, borderRadius: '2xl' }) }}
-        onClick={signIn}
-        isLoading={isWaitingForSignature}
-        loadingText="Awaiting signature"
-      >
-        Sign In
-      </Button>
-    </>
-  )
-}
-
 export function ConnectWallet(): JSX.Element {
-  const { isSignedIn, isConnected } = useAuth()
+  const [{ data }] = useConnect()
 
-  if (isSignedIn) return <DisconnectButton />
+  if (data.connected) return <DisconnectButton />
 
-  if (isConnected && !isSignedIn) return <SignInButton />
+  // if (isConnected && !isSignedIn) return
   return <ConnectButton />
 }

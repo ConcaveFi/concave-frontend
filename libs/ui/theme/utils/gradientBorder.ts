@@ -17,7 +17,7 @@ export interface GradientBorderStyleProps extends BoxProps {
 }
 
 export const gradientBorder = ({
-  borderWidth = 1.1,
+  borderWidth = 1,
   variant = 'primary',
   ...props
 }: GradientBorderStyleProps = {}): SystemStyleInterpolation => {
@@ -25,12 +25,13 @@ export const gradientBorder = ({
     Object.entries(props)
       .filter(([k, v]) => k.endsWith('Radius') || k.startsWith('rounded'))
       .map(([k, v]) => {
-        const radius = theme.radii[v] ?? v
+        const radius = theme.radii[v] ?? toPx(v)
         const gradientBorderRadius = radius !== '0' ? calc.add(radius, toPx(borderWidth)) : 0
         return [k, gradientBorderRadius]
       }),
   )
   return {
+    willChange: 'transform', // idk why this fixes it, but, fixes the issue of the border being larger on one side of the component sometimes
     position: 'relative',
     '& > *': { zIndex: 1 },
     ...(borderWidth && {
@@ -43,6 +44,7 @@ export const gradientBorder = ({
         WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
         WebkitMaskComposite: 'source-out',
         maskComposite: 'exclude',
+        pointerEvents: 'none',
         ...borderRadiusStyles,
         ...variants[variant],
       },

@@ -8,9 +8,9 @@ function Placeholder({ text }) {
       borderWidth={2}
       borderColor="#84E2FF"
       borderRadius="3xl"
-      px={20}
+      // px={20}
       py={16}
-      w="max-content"
+      w="500px"
     >
       <Box textAlign="center">
         <Text color="text.low" fontSize="4xl" fontWeight="bold">

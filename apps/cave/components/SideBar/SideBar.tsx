@@ -3,23 +3,59 @@ import {
   Box,
   CloseButton,
   Flex,
-  useColorModeValue,
+  Text,
   Drawer,
   DrawerContent,
   useDisclosure,
   BoxProps,
   FlexProps,
   Card,
+  Button,
+  Modal,
+  Image,
+  Stack,
 } from '@concave/ui'
 import { FiMenu } from 'react-icons/fi'
 import SideBarTop from './SideBarTop'
 import SideBarBottom from './SideBarBottom'
 import PageNav from './PageNav'
+import { chain, useNetwork } from 'wagmi'
 
 export function SideBar() {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const [{ data }, switchNetwork] = useNetwork()
+
   return (
     <Box minH="100vh">
+      <Modal
+        bluryOverlay={true}
+        title="Unsupported Network"
+        titleAlign="center"
+        isOpen={data.chain?.id && ![chain.mainnet.id, chain.ropsten.id].includes(data.chain?.id)}
+        onClose={() => {}}
+        bodyProps={{ w: '350px', gap: 2 }}
+        hideClose
+      >
+        <Text fontWeight="bold">Please switch to Ethereum</Text>
+        <Button
+          leftIcon={<Image w="20px" src={`/assets/tokens/eth.svg`} alt="" />}
+          onClick={() => switchNetwork?.(chain.mainnet.id)}
+          isDisabled={!switchNetwork}
+          variant="secondary"
+          p={3}
+        >
+          Connect to Ethereum
+        </Button>
+        {!switchNetwork && (
+          <Text color="text.low" textAlign="center" fontWeight="medium" fontSize="sm">
+            Looks like your wallet is locked, or it {`doesn't`} support programatically switching
+            networks
+            <br />
+            Try switching directly in your wallet.
+          </Text>
+        )}
+      </Modal>
+
       <SidebarContent onClose={() => onClose} display={{ base: 'none', md: 'block' }} />
       <Drawer
         autoFocus={false}
@@ -51,13 +87,12 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   return (
     <Card
       variant="primary"
-      bgGradient="radial(248.94% 38.67% at 100% 27.33%, secondary.75 25.26%, secondary.150 100%)"
+      apply="background.sidebar"
       borderWidth={0}
       borderRadius={0}
       borderRightRadius="2xl"
       shadow="Up Big"
-      px={2}
-      py={4}
+      p={3}
       w={{ base: 'full', md: 60 }}
       h="full"
       {...rest}
@@ -66,13 +101,10 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} mb={5} />
       </Flex>
       <SideBarTop />
-
-      <Box mt={10}>
+      <Stack spacing="50px" mt="50px" align="end" mr={-3} pb={8}>
         <PageNav />
-      </Box>
-      <Box mt={14}>
         <SideBarBottom />
-      </Box>
+      </Stack>
     </Card>
   )
 }
@@ -88,9 +120,6 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       px={{ base: 4, md: 24 }}
       height="20"
       alignItems="center"
-      bg={useColorModeValue('white', 'gray.900')}
-      borderBottomWidth="1px"
-      borderBottomColor={useColorModeValue('gray.200', 'gray.700')}
       justifyContent="flex-start"
       {...rest}
     >

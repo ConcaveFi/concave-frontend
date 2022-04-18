@@ -1,5 +1,4 @@
-import { Icon } from '@chakra-ui/icons'
-import { IconProps } from '@chakra-ui/react'
+import { Icon, IconProps } from '@chakra-ui/icons'
 
 export const DownIcon = (props: IconProps) => (
   <Icon viewBox="0 0 15 9" {...props}>

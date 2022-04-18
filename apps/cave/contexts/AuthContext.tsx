@@ -40,7 +40,7 @@ interface AuthValue {
   signOut: () => Promise<any>
   /** pops up a modal with connector providers */
   connectWithModal: () => void
-  user: User
+  user: { address: string }
   isWaitingForSignature: boolean
   isSignedIn: boolean
   isConnected: boolean
@@ -66,15 +66,15 @@ const siweSignIn = async (signer: Signer) => {
   return verification.user
 }
 
-export const AuthProvider: React.FC = ({ children }) => {
-  const [account, disconnect] = useAccount()
+export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({ children }) => {
+  const [{ data: account }, disconnect] = useAccount()
 
   const queryClient = useQueryClient()
 
   const signIn = useMutation(
     async () => {
-      const connector = account.data?.connector
-      if (!account.data.connector) return
+      const connector = account?.connector
+      if (!account.connector) return
       const signer = await connector.getSigner()
       const user = await siweSignIn(signer)
       return user
@@ -100,7 +100,7 @@ export const AuthProvider: React.FC = ({ children }) => {
     },
   )
 
-  const user = useQuery('me', () => authFetch('me'), { retry: false, refetchOnWindowFocus: true })
+  // const user = useQuery('me', () => authFetch('me'), { retry: false, refetchOnWindowFocus: true })
 
   const connectModal = useDisclosure()
 
@@ -112,14 +112,15 @@ export const AuthProvider: React.FC = ({ children }) => {
           signIn: signIn.mutateAsync,
           connectWithModal: () => connectModal.onOpen(),
           // user can connect and not sign in, we want access to his addy thru here anyway
-          user: { ...user.data, address: user.data?.address || account.data?.address },
+          // user: { ...user.data, address: user.data?.address || account.data?.address },
+          user: { address: account?.address },
           isWaitingForSignature: signIn.isLoading,
-          isConnected: !account.loading && !!account.data?.address,
-          isSignedIn: !!user.data,
+          isConnected: !!account?.address,
+          isSignedIn: false, //user.data,
           error: signIn.error || signOut.error,
           isErrored: !!(signIn.error || signOut.error),
         }),
-        [user, account, signIn, signOut, connectModal],
+        [account, signIn, signOut, connectModal],
       )}
     >
       <ConnectWalletModal isOpen={connectModal.isOpen} onClose={connectModal.onClose} />
