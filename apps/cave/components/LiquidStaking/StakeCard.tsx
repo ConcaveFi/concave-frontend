@@ -18,7 +18,10 @@ import StakeInput from './StakeModal/StakeInput'
 
 function StakeCard(props) {
   const vaprText = props.icon === '12m' ? 'Non-Dilutive vAPR' : 'vAPR'
-  const [capPercentage, setCapPercentage] = useState('70')
+  const [capPercentage, setCapPercentage] = useState(
+    String((+props.stakedCNV / +props.CNVCap) * 100),
+  )
+  console.log(capPercentage)
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
@@ -47,7 +50,7 @@ function StakeCard(props) {
             <Text>Staking Cap</Text>
           </Stack>
           <Box shadow="down" borderRadius="2xl" p={1} position="relative">
-            <Text
+            <Box
               shadow="up"
               px={1}
               py={1}
@@ -57,10 +60,10 @@ function StakeCard(props) {
               w={`${capPercentage}%`}
               fontSize="sm"
             >
-              {props.stakedCNV} CNV
-            </Text>
+              <Text w="150px">{props.stakedCNV} CNV</Text>
+            </Box>
             <Text position="absolute" right="2" top="2" fontSize="sm">
-              90,000 CNV
+              {props.CNVCap} CNV
             </Text>
           </Box>
         </Stack>
