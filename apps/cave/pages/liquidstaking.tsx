@@ -14,29 +14,29 @@ interface StakingGroupProps {
 
 const StakingGroup: Array<StakingGroupProps> = [
   {
-    icon: '12m',
-    period: '12 months',
+    icon: '360d',
+    period: '360 days',
     vapr: '6,342',
     stakedCNV: '83,431',
     stakingLink: '',
   },
   {
-    icon: '6m',
-    period: '6 months',
+    icon: '180d',
+    period: '180 days',
     vapr: '1,002',
     stakedCNV: '42,690',
     stakingLink: '',
   },
   {
-    icon: '3m',
-    period: '3 months',
+    icon: '90d',
+    period: '90 days',
     vapr: '266',
     stakedCNV: '33,333',
     stakingLink: '',
   },
   {
-    icon: '1m',
-    period: '1 month',
+    icon: '45d',
+    period: '45 days',
     vapr: '17',
     stakedCNV: '690,420',
     stakingLink: '',
