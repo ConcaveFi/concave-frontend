@@ -21,7 +21,6 @@ function StakeCard(props) {
   const [capPercentage, setCapPercentage] = useState(
     String((+props.stakedCNV / +props.CNVCap) * 100),
   )
-  console.log(capPercentage)
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
