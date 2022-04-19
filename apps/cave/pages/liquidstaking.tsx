@@ -2,7 +2,7 @@ import { Container, Flex, Heading, HStack, Text } from '@concave/ui'
 import StakeCard from 'components/LiquidStaking/StakeCard'
 import GraphicGuide from 'components/LiquidStaking/GraphicGuide'
 import Placeholder from 'components/Placeholder'
-import GcnvTitle from 'components/GcnvTitle'
+import { useEffect, useState } from 'react'
 
 interface StakingGroupProps {
   icon: string
@@ -44,33 +44,45 @@ const StakingGroup: Array<StakingGroupProps> = [
 ]
 
 function LiquidStaking() {
+  const [isFetching, setIsFetching] = useState(true)
+
+  useEffect(() => {
+    setIsFetching(false)
+  }, [])
+
   return (
     <Container maxW="container.lg" borderRadius={0} border="" textAlign="center">
       <Heading as="h1" mt={16} mb={3} fontSize="5xl">
         Liquid Staking
       </Heading>
-      <HStack mt={8} spacing={14}>
-        <Text maxW={520} textAlign="right">
-          Liquid Staking allows you to access your funds even when you&apos;re staking them. The
-          funds remain in escrow, but aren&apos;t totally inaccessible. In this scenario, you are
-          able to trade the locked-staking positions in the form of NFTs in the secondary
-          marketplace.
-        </Text>
-        <GraphicGuide />
-      </HStack>
+      {isFetching ? (
+        <Placeholder text="Fetching Staking Cap" description="" />
+      ) : (
+        <div>
+          <HStack mt={8} spacing={14}>
+            <Text maxW={520} textAlign="right">
+              Liquid Staking allows you to access your funds even when you&apos;re staking them. The
+              funds remain in escrow, but aren&apos;t totally inaccessible. In this scenario, you
+              are able to trade the locked-staking positions in the form of NFTs in the secondary
+              marketplace.
+            </Text>
+            <GraphicGuide />
+          </HStack>
 
-      <Flex direction="row" gap={8} position="relative" mt={16}>
-        {StakingGroup.map((s) => (
-          <StakeCard
-            icon={s.icon}
-            period={s.period}
-            vapr={s.vapr}
-            stakedCNV={s.stakedCNV}
-            stakingLink={s.stakingLink}
-            key={s.period}
-          />
-        ))}
-      </Flex>
+          <Flex direction="row" gap={8} position="relative" mt={16}>
+            {StakingGroup.map((s) => (
+              <StakeCard
+                icon={s.icon}
+                period={s.period}
+                vapr={s.vapr}
+                stakedCNV={s.stakedCNV}
+                stakingLink={s.stakingLink}
+                key={s.period}
+              />
+            ))}
+          </Flex>
+        </div>
+      )}
     </Container>
   )
 }

@@ -40,31 +40,31 @@ function StakeCard(props) {
           </Text>
         </Box>
 
-        {props.icon === '12m' ? (
-          <Stack>
-            <Stack color="text.low" fontSize={12} isInline justify="space-between" mt={3}>
-              <Text>Currently Staked</Text>
-              <Text>Staking Cap</Text>
-            </Stack>
-            <Box shadow="down" borderRadius="2xl" p={1} position="relative">
-              <Text
-                shadow="up"
-                px={1}
-                py={1}
-                borderRadius="2xl"
-                textAlign="left"
-                bg="secondary.50"
-                w={`${capPercentage}%`}
-                fontSize="sm"
-              >
-                {props.stakedCNV} CNV
-              </Text>
-              <Text position="absolute" right="2" top="2" fontSize="sm">
-                90,000 CNV
-              </Text>
-            </Box>
+        {/* {props.icon === '360d' ? ( */}
+        <Stack>
+          <Stack color="text.low" fontSize={12} isInline justify="space-between" mt={3}>
+            <Text>Currently Staked</Text>
+            <Text>Staking Cap</Text>
           </Stack>
-        ) : (
+          <Box shadow="down" borderRadius="2xl" p={1} position="relative">
+            <Text
+              shadow="up"
+              px={1}
+              py={1}
+              borderRadius="2xl"
+              textAlign="left"
+              bg="secondary.50"
+              w={`${capPercentage}%`}
+              fontSize="sm"
+            >
+              {props.stakedCNV} CNV
+            </Text>
+            <Text position="absolute" right="2" top="2" fontSize="sm">
+              90,000 CNV
+            </Text>
+          </Box>
+        </Stack>
+        {/* ) : (
           <Stack>
             <Text color="text.low" fontSize={12} textAlign="center" mt={3}>
               Currently Staked
@@ -73,7 +73,7 @@ function StakeCard(props) {
               {props.stakedCNV} CNV
             </Text>
           </Stack>
-        )}
+        )} */}
 
         <Button
           mt={5}

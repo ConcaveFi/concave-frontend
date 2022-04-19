@@ -7,7 +7,7 @@ function marketplace() {
   return (
     <Container maxW="container.lg">
       <GcnvTitle title="Marketplace" description="" />
-      <Placeholder text="NFT Marketplace" />
+      <Placeholder text="NFT Marketplace" description="Coming Soon" />
     </Container>
   )
 }
