@@ -1,6 +1,13 @@
 import { Box, Text, Stack } from '@concave/ui'
 import React from 'react'
 
+const periodToBondRevenueMapping = {
+  '360 days': '100%',
+  '180 days': '75%',
+  '90 days': '50%',
+  '45 days': '25%',
+}
+
 function StakeInfo(props: any) {
   return (
     <Box shadow="up" p={4} borderRadius="3xl" filter="drop-shadow(0px 0px 27px #81b3ff4f)">
@@ -15,7 +22,7 @@ function StakeInfo(props: any) {
         </Stack>
         <Stack spacing="1px">
           <Text textAlign="left" fontSize="3xl" fontWeight="bold">
-            100%
+            {periodToBondRevenueMapping[`${props.period}`]}
           </Text>
           <Text color="text.low" fontSize="sm">
             Share of Bonding Revenue

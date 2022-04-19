@@ -56,7 +56,8 @@ function Emissions(props: any) {
             </Text>
           </HStack>
           <Text fontSize="md" fontWeight="bold">
-            534%
+            {/* 534% */}
+            Coming Soon
           </Text>
           <Text color="text.low" fontSize="sm">
             +
@@ -73,7 +74,8 @@ function Emissions(props: any) {
             </Text>
           </HStack>
           <Text fontSize="md" fontWeight="bold">
-            25% * 4 = 100%
+            {/* 25% * 4 = 100% */}
+            Coming Soon
           </Text>
           <Text color="text.low" fontSize="sm">
             +
@@ -90,7 +92,8 @@ function Emissions(props: any) {
             </Text>
           </HStack>
           <Text fontSize="md" fontWeight="bold">
-            X% * 4 = 4X%
+            {/* X% * 4 = 4X% */}
+            Coming Soon
           </Text>
         </Box>
       </Box>
