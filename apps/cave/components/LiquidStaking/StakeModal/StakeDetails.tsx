@@ -1,6 +1,19 @@
 import { Box, Button, SimpleGrid, Text } from '@concave/ui'
 import React from 'react'
 
+function addDays(date, days) {
+  var result = new Date(date)
+  result.setDate(result.getDate() + days)
+  return result
+}
+
+const periodToDaysMapping = {
+  '360 days': 360,
+  '180 days': 180,
+  '90 days': 90,
+  '45 days': 45,
+}
+
 function StakeDetails(props: any) {
   return (
     <Box
@@ -25,7 +38,7 @@ function StakeDetails(props: any) {
             Redeem Date:
           </Text>
           <Text textAlign="left" fontSize="lg" fontWeight="bold">
-            23-09-2023
+            {addDays(Date(), periodToDaysMapping[`${props.period}`]).toISOString().slice(0, 10)}
           </Text>
         </Box>
 

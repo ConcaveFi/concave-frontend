@@ -34,31 +34,32 @@ function StakeInfo(props: any) {
         Staking terms: Lorem ipsum dolor sit amet,consectetur adipiscing elit
       </Text>
 
-      {props.period === '12 months' ? (
-        <Stack mt={4}>
-          <Stack color="text.low" fontSize={12} isInline justify="space-between" mt={3}>
-            <Text>Currently Staked</Text>
-            <Text>Staking Cap</Text>
-          </Stack>
-          <Box shadow="down" borderRadius="2xl" p={1} position="relative">
-            <Text
-              shadow="up"
-              px={1}
-              py={1}
-              borderRadius="2xl"
-              textAlign="left"
-              bg="secondary.50"
-              w={`${props.capPercentage}%`}
-              fontSize="sm"
-            >
-              {props.stakedCNV} CNV
-            </Text>
-            <Text position="absolute" right="2" top="2" fontSize="sm">
-              90,000 CNV
-            </Text>
-          </Box>
+      {/* {props.period === '12 months' ? ( */}
+      <Stack mt={4}>
+        <Stack color="text.low" fontSize={12} isInline justify="space-between" mt={3}>
+          <Text>Currently Staked</Text>
+          <Text>Staking Cap</Text>
         </Stack>
-      ) : (
+        <Box shadow="down" borderRadius="2xl" p={1} position="relative">
+          <Box
+            shadow="up"
+            px={1}
+            py={1}
+            borderRadius="2xl"
+            textAlign="left"
+            bg="secondary.50"
+            w={`${props.capPercentage}%`}
+            fontSize="sm"
+          >
+            <Text w="150px">{props.stakedCNV} CNV</Text>
+          </Box>
+
+          <Text position="absolute" right="2" top="2" fontSize="sm">
+            {props.CNVCap} CNV
+          </Text>
+        </Box>
+      </Stack>
+      {/* ) : (
         <Stack mt={4}>
           <Text color="text.low" fontSize={12} mt={3}>
             Currently Staked
@@ -67,7 +68,7 @@ function StakeInfo(props: any) {
             {props.stakedCNV} CNV
           </Text>
         </Stack>
-      )}
+      )} */}
     </Box>
   )
 }

@@ -117,10 +117,11 @@ function StakeCard(props) {
               <StakeInfo
                 period={props.period}
                 stakedCNV={props.stakedCNV}
+                CNVCap={props.CNVCap}
                 capPercentage={capPercentage}
               />
               <StakeInput />
-              <StakeDetails vaprText={vaprText} vapr={props.vapr} />
+              <StakeDetails period={props.period} vaprText={vaprText} vapr={props.vapr} />
             </VStack>
           </HStack>
         </Modal>
