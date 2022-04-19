@@ -7,6 +7,7 @@ import { useState } from 'react'
 import { chain } from 'wagmi'
 import { BigNumber, Contract } from 'ethers'
 import { CurrencyAmount, Token } from 'gemswap-sdk'
+import { findTokenByAddress } from 'components/AMM/hooks/useTokenList'
 
 const getToken = (selectedChain, address: string) => {
   return new Token(selectedChain.id, address, 18, 'symbol', 'name')
@@ -21,17 +22,20 @@ export const useLiquidityInfo = (token: Token) => {
     return new Contract(token.address, liquidityContractABI, concaveProvider(selectedChain.id))
   }, [token.address, selectedChain])
   const [pair, setPair] = useState<Pair>(null)
-
   useEffect(() => {
     liquidityContract.getReserves().then((reserves) => {
       Promise.all([
         reserves._baseReserves as BigNumber,
         reserves._quoteReserves as BigNumber,
-        liquidityContract.token0().then((t: string) => getToken(selectedChain, t)),
-        liquidityContract.token1().then((t: string) => getToken(selectedChain, t)),
+        findTokenByAddress(selectedChain, liquidityContract.token0()),
+        findTokenByAddress(selectedChain, liquidityContract.token1()),
         liquidityContract.totalSupply(),
       ])
         .then(([amount0, amount1, token0, token1, totalSupply]) => {
+          console.table({
+            token0: token0.address,
+            token1: token1.address,
+          })
           const tokenA: CurrencyAmount<Token> = CurrencyAmount.fromRawAmount(
             token0,
             amount0.toString(),
@@ -42,15 +46,14 @@ export const useLiquidityInfo = (token: Token) => {
           )
           setTotalSupply(totalSupply)
           if (tokenA && tokenB) {
-            //@ts-ignore
-            setPair(new Pair(tokenB, tokenA))
+            setPair(new Pair(tokenB, tokenA, token.address))
           }
           setTotalSupply(totalSupply)
           setLoading(false)
         })
         .catch(setError)
     })
-  }, [liquidityContract, selectedChain])
+  }, [liquidityContract, selectedChain, token.address])
 
   return [{ pair, token, totalSupply }, isLoading, error] as const
 }

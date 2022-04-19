@@ -1,5 +1,5 @@
 import { useQuery, UseQueryResult } from 'react-query'
-import { chain, useNetwork } from 'wagmi'
+import { Chain, chain, useNetwork } from 'wagmi'
 import { Token } from 'gemswap-sdk'
 
 const concaveTokenList = (networkName: string) =>
@@ -22,6 +22,23 @@ export const useTokenList = (networkName: string = chain.mainnet.name) => {
         }),
       ),
   )
+}
+
+export const findTokenByAddress = async (
+  selectedChain: Chain = chain.mainnet,
+  address: Promise<string>,
+) => {
+  const tokenAddress = await address
+  return fetch(concaveTokenList(selectedChain.name))
+    .then((d) => d.json() as Promise<ConcaveTokenList>)
+    .then((l) => l.tokens)
+    .then((list) =>
+      list.find((token) => token.address.toLowerCase() === tokenAddress.toLowerCase()),
+    )
+    .then((token) => {
+      if (!token) throw new Error(`Token ${tokenAddress} not found`)
+      return new Token(chain.ropsten.id, token.address, token.decimals, token.symbol, token.name)
+    })
 }
 
 //PUT IN .ENV

@@ -8,7 +8,7 @@ import { chain, useSigner, useWaitForTransaction } from 'wagmi'
 // import { useToken, WrapperTokenInfo } from '../components/Swap/useSwap'
 // import { useAllowance, useApproval } from './useAllowance'
 
-export const useRemoveLiquidity = (chainId = chain.ropsten.id, userAddress) => {}
+// export const useRemoveLiquidity = (chainId = chain.ropsten.id, userAddress) => {}
 
 // export const useRemoveLiquidity = (chainId = chain.ropsten.id, userAddress) => {
 //   const [wrapperTokenA, setTokenA] = useToken({ userAddressOrName: userAddress, symbol: '' })
