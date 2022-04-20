@@ -1,5 +1,6 @@
 import { useDisclosure } from '@concave/ui'
 import { ConnectWalletModal } from 'components/ConnectWallet'
+import { UnsupportedNetworkModal } from 'components/UnsupportedNetworkModal'
 import React, { createContext, useContext } from 'react'
 
 type ModalsDisclosure = Record<
@@ -17,6 +18,7 @@ export const ModalsProvider: React.FC<React.PropsWithChildren<unknown>> = ({ chi
 
   return (
     <ModalsContext.Provider value={{ connectModal }}>
+      <UnsupportedNetworkModal />
       <ConnectWalletModal isOpen={connectModal.isOpen} onClose={connectModal.onClose} />
       {children}
     </ModalsContext.Provider>
