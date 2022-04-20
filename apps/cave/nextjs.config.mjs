@@ -7,7 +7,7 @@ const nextConfig = {
     formats: ['image/avif', 'image/webp'],
   },
   async redirects() {
-    return [{ source: '/', destination: '/swap', permanent: true }]
+    return [{ source: '', destination: '/swap', permanent: true }]
   },
 }
 
