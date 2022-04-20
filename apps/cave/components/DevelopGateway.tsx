@@ -2,7 +2,7 @@ import { Text, Modal, Input } from '@concave/ui'
 import dynamic from 'next/dynamic'
 import { useLocalStorage } from 'react-use'
 
-const isDevEnv = process.env.VERCEL_ENV === 'development'
+const isDevEnv = process.env.VERCEL_ENV === 'preview'
 const password = process.env.DEV_PASSWORD || 'aaaa'
 
 export const DevelopGateway = dynamic(
