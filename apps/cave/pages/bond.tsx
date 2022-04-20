@@ -56,7 +56,7 @@ const BondInfo = ({ asset, roi, vestingTerm, icon }) => {
   )
 }
 
-const UserBondPositionInfo = ({ bondInfo }) => {
+const UserBondPositionInfo = ({asset, roi, vestingTerm, bondInfo }) => {
   return (
     <Card bg="none" py={3} w="100%" direction="row" shadow="Glass Up Medium">
       <Flex justify="center" pl={4} pr={7}>
