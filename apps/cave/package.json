@@ -48,6 +48,7 @@
     "react-icons": "^4.3.1",
     "react-number-format": "^4.9.1",
     "react-query": "^3.35.0",
+    "react-swipeable": "^6.2.1",
     "react-use": "^17.3.2",
     "siwe": "^1.1.6",
     "wagmi": "^0.2.26"
