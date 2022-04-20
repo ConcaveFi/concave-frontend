@@ -92,27 +92,39 @@ export const purchaseBond = async (
   return
 }
 
-export const redeemBond = async (
+// export const redeemBond = async (
+//   networkId: number,
+//   positionID: string,
+//   address: string,
+//   signer: ethers.Signer,
+// ) => {
+//   const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, signer)
+//   const formattedPositionID = ethers.utils.parseUnits(positionID.toString(), 18)
+//   const estimatedGas = bondingContract.estimateGas.redeemBond(
+//     address,
+//     positionID,
+//   )
+//   await bondingContract.redeemBond(
+//     address,
+//     formattedPositionID,
+//     {
+//       gasLimit: estimatedGas,
+//     },
+//   )
+
+//   return
+// }
+
+export const getUserBondPositions = async (
   networkId: number,
-  input: string,
+  positionID: string,
   address: string,
   signer: ethers.Signer,
 ) => {
-  // const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, signer)
-  // const formattedInput = ethers.utils.parseUnits(input.toString(), 18)
-  // const estimatedGas = bondingContract.estimateGas.redeemBond(address, ROPSTEN_DAI_ADDRESS)
-
-  // await bondingContract.purchaseBond(
-  //   address,
-  //   ROPSTEN_DAI_ADDRESS,
-  //   formattedInput,
-  //   formattedMinOutput,
-  //   {
-  //     gasLimit: estimatedGas,
-  //   },
-  // )
-
-  return
+  const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, providers)
+  const formattedPositionID = ethers.utils.parseUnits(positionID, 18)
+  const positionData = await bondingContract.positions(address, formattedPositionID)
+  return positionData
 }
 
 export const useBondState = () => {
