@@ -79,7 +79,7 @@ const ConnectButton = () => {
   const isMounted = useIsMounted()
   return (
     <>
-      <Menu placement="right-start" isLazy>
+      <Menu placement="auto-end" isLazy>
         <MenuButton
           as={Button}
           sx={{ ...gradientBorder({ borderWidth: 2, borderRadius: '2xl' }) }}
@@ -115,11 +115,7 @@ const ConnectButton = () => {
                     <MenuItem
                       borderRadius="xl"
                       icon={
-                        <Image
-                          maxWidth="20px"
-                          src={`/assets/connectors/${connector.id}.png`}
-                          alt=""
-                        />
+                        <Image w="20px" src={`/assets/connectors/${connector.id}.png`} alt="" />
                       }
                       key={connector.id}
                       onClick={() => connect(connector)}

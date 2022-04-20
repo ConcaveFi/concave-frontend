@@ -1,14 +1,14 @@
-import { Container } from '@concave/ui'
 import React from 'react'
 import GcnvTitle from 'components/GcnvTitle'
 import Placeholder from 'components/Placeholder'
+import { Stack } from '@concave/ui'
 
 function marketplace() {
   return (
-    <Container maxW="container.lg">
+    <Stack w="full">
       <GcnvTitle title="Marketplace" description="" />
       <Placeholder text="NFT Marketplace" />
-    </Container>
+    </Stack>
   )
 }
 
