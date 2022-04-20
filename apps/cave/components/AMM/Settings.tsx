@@ -10,7 +10,6 @@ import {
   Text,
   Stack,
   Popover,
-  PopoverBody,
   PopoverContent,
   PopoverTrigger,
   Portal,
@@ -36,8 +35,8 @@ const SlippageTolerance = ({ value, onValueChange, onClickAuto }) => {
               value={value}
               placeholder="0.50"
               variant="unstyled"
-              decimalScale={4}
-              maxLength={7}
+              decimalScale={2}
+              maxLength={4}
               size="medium"
               onValueChange={onValueChange}
             />
@@ -149,10 +148,10 @@ const MAX_SLIPPAGE = 50
 const useSettings = () => {
   const [deadline, setDeadline] = useState(defaultSettings.deadline)
   const [slippageTolerance, setSlippageTolerance] = useReducer(
-    (oldValue, value: string) => ({
-      value: +value > MAX_SLIPPAGE ? oldValue.value : value,
-      percent: toPercent(value),
-    }),
+    (oldValue, value: string) =>
+      +value < MAX_SLIPPAGE && +value > 0
+        ? { value, percent: +value && toPercent(value) }
+        : oldValue,
     defaultSettings.slippageTolerance,
   )
   const [multihops, { toggle: toggleMultihops }] = useBoolean(defaultSettings.multihops)
@@ -187,7 +186,8 @@ export const Settings = ({ onClose }: { onClose: (settings: SwapSettings) => voi
 
   return (
     <Popover
-      placement="top"
+      placement="top-end"
+      offset={[20, 5]}
       onClose={() => onClose({ deadline, slippageTolerance, multihops, expertMode })}
     >
       {/* Chakra type bug, related to just released react 18, should be fixed soon 
@@ -202,15 +202,8 @@ export const Settings = ({ onClose }: { onClose: (settings: SwapSettings) => voi
         />
       </PopoverTrigger>
       <Portal>
-        <PopoverContent w="256px" backdropFilter="blur(15px)" bg="transparent" borderRadius="2xl">
-          <PopoverBody
-            as={Card}
-            variant="secondary"
-            p={4}
-            gap={2}
-            fontFamily="heading"
-            fontWeight="semibold"
-          >
+        <PopoverContent border="none" w="256px" bg="transparent" borderRadius="2xl">
+          <Card variant="secondary" p={4} gap={2} fontFamily="heading" fontWeight="semibold">
             <Heading textAlign="center" size="sm">
               Transactions Settings
             </Heading>
@@ -230,7 +223,7 @@ export const Settings = ({ onClose }: { onClose: (settings: SwapSettings) => voi
                 <ToggleMultihops isChecked={multihops} onToggle={toggleMultihops} />
               </Stack>
             </Stack>
-          </PopoverBody>
+          </Card>
         </PopoverContent>
       </Portal>
     </Popover>

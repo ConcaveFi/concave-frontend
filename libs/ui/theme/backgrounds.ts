@@ -32,7 +32,7 @@ export const backgrounds: CSSObject = {
       inset: 0,
       pos: 'absolute',
       zIndex: -1,
-      bgSize: '100%, auto',
+      bgSize: 'cover',
       pointerEvents: 'none',
     },
     backdropFilter: 'blur(8px)', // it's technically blur(15px) on figma but visually 8px looks better

@@ -7,6 +7,38 @@ const HoverRadialGradient =
 const PrimaryButtonShadow =
   '20px -20px 39px rgba(120, 182, 255, 0.25), 0px 5px 14px rgba(0, 0, 0, 0.47), inset 0px -10px 20px rgba(117, 164, 255, 0.5)'
 
+const ButtonPrimaryTheme = (props) => ({
+  borderRadius: '2xl',
+  ...gradientBorder({ borderRadius: '2xl' }),
+  bgGradient: 'linear(to-r, primary.1, primary.2)',
+  fontFamily: 'heading',
+  fontWeight: 'bold',
+  shadow: PrimaryButtonShadow,
+  _focus: { shadow: PrimaryButtonShadow },
+})
+
+const ButtonSecondaryTheme = (props) => ({
+  apply: 'background.metalBrighter',
+  shadow: 'Up Big',
+  borderRadius: '2xl',
+  _active: {
+    bg: HoverRadialGradient,
+    color: 'text.high',
+    transform: 'scale(1)',
+    ...gradientBorder({ borderRadius: '2xl', ...props, variant: 'primary' }),
+  },
+  _focus: {
+    bg: HoverRadialGradient,
+    color: 'text.high',
+    ...gradientBorder({ borderRadius: '2xl', ...props, variant: 'primary' }),
+  },
+  _hover: {
+    bg: HoverRadialGradient,
+    color: 'text.high',
+    ...gradientBorder({ borderRadius: '2xl', ...props, variant: 'primary' }),
+  },
+})
+
 export const ButtonStyles: ComponentSingleStyleConfig = {
   baseStyle: {
     fontSize: '14px',
@@ -40,44 +72,19 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
     },
   },
   variants: {
-    'primary.outline': {
-      borderRadius: '2xl',
+    primary: ButtonPrimaryTheme,
+    'primary.outline': (props) => ({
+      ...ButtonPrimaryTheme(props),
       ...gradientBorder({ borderRadius: '2xl', borderWidth: 2 }),
-      fontFamily: 'heading',
+      bg: 'none',
       fontWeight: 'bold',
       shadow: 'Up Big',
       _hover: { bg: HoverRadialGradient, color: 'text.high' },
-    },
-    primary: {
-      borderRadius: '2xl',
-      ...gradientBorder({ borderRadius: '2xl' }),
-      bgGradient: 'linear(to-r, primary.1, primary.2)',
-      fontFamily: 'heading',
-      fontWeight: 'bold',
-      shadow: PrimaryButtonShadow,
-      _focus: { shadow: PrimaryButtonShadow },
-    },
-    secondary: (props) => ({
-      apply: 'background.metalBrighter',
-      shadow: 'Up Big',
-      borderRadius: '2xl',
-      ...(props.outlined && gradientBorder({ borderRadius: '2xl', ...props, variant: 'primary' })),
-      _active: {
-        bg: HoverRadialGradient,
-        color: 'text.high',
-        transform: 'scale(1)',
-        ...gradientBorder({ borderRadius: '2xl', ...props, variant: 'primary' }),
-      },
-      _focus: {
-        bg: HoverRadialGradient,
-        color: 'text.high',
-        ...gradientBorder({ borderRadius: '2xl', ...props, variant: 'primary' }),
-      },
-      _hover: {
-        bg: HoverRadialGradient,
-        color: 'text.high',
-        ...gradientBorder({ borderRadius: '2xl', ...props, variant: 'primary' }),
-      },
+    }),
+    secondary: ButtonSecondaryTheme,
+    'secondary.outline': (props) => ({
+      ...ButtonSecondaryTheme(props),
+      ...gradientBorder({ borderRadius: '2xl', ...props, variant: 'primary' }),
     }),
   },
   defaultProps: {
@@ -86,7 +93,4 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
   },
 }
 
-type _ButtonProps = ButtonProps & { outlined?: boolean }
-
-export type { _ButtonProps as ButtonProps }
 export default ButtonStyles
