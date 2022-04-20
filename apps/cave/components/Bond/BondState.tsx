@@ -92,14 +92,28 @@ export const purchaseBond = async (
   return
 }
 
-// export const redeemBond = async (
-//   quoteAddress: string,
-//   decimals: number,
-//   networkId: number,
-//   input: string,
-// ) => {
+export const redeemBond = async (
+  networkId: number,
+  input: string,
+  address: string,
+  signer: ethers.Signer,
+) => {
+  const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, signer)
+  const formattedInput = ethers.utils.parseUnits(input.toString(), 18)
+  const estimatedGas = bondingContract.estimateGas.redeemBond(address, ROPSTEN_DAI_ADDRESS)
 
-// }
+  await bondingContract.purchaseBond(
+    address,
+    ROPSTEN_DAI_ADDRESS,
+    formattedInput,
+    formattedMinOutput,
+    {
+      gasLimit: estimatedGas,
+    },
+  )
+
+  return
+}
 
 export const useBondState = () => {
   const [{ data: account }] = useAccount()
