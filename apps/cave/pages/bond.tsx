@@ -1,14 +1,14 @@
-import { Container } from '@concave/ui'
+import { Stack } from '@concave/ui'
 import React from 'react'
 import GcnvTitle from 'components/GcnvTitle'
 import Placeholder from 'components/Placeholder'
 
 function bond() {
   return (
-    <Container maxW="container.lg">
+    <Stack w="full">
       <GcnvTitle title="Dynamic Bond Market" description="" />
       <Placeholder text="Bonds" />
-    </Container>
+    </Stack>
   )
 }
 
