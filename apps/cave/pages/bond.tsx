@@ -15,11 +15,13 @@ import {
   useBondGetTermLength,
   getBondSpotPrice,
   getUserBondPositions,
+  useBondState,
 } from 'components/Bond/BondState'
 import { useEffect, useState } from 'react'
 import { useAuth } from 'contexts/AuthContext'
 import { useFetchApi } from 'hooks/cnvData'
 import React from 'react'
+import { utils } from 'ethers'
 
 const InfoItem = ({ value, label, ...props }) => (
   <Flex
@@ -54,20 +56,38 @@ const BondInfo = ({ asset, roi, vestingTerm, icon }) => {
   )
 }
 
-const UserBondPositionInfo = ({ asset, claimable, pending, ttv }) => {
+const UserBondPositionInfo = ({ bondInfo }) => {
   return (
     <Card bg="none" py={3} w="100%" direction="row" shadow="Glass Up Medium">
       <Flex justify="center" pl={4} pr={7}>
-        <InfoItem value="TTV" label="Fully Vested" />
+        <InfoItem
+          value={`${
+            bondInfo?.creation ? +utils.formatEther(bondInfo?.creation.toString()) : 'Loading'
+          }`}
+          label="Fully Vested"
+        />
       </Flex>
       <Box w="1px" mx={-1} my={-4} bg="stroke.primary" />
-      <InfoItem value={`AMOUNT HERE:${asset}`} label="Pending" flexGrow={1} />
+      <InfoItem
+        value={`${
+          bondInfo?.owed
+            ? (+utils.formatEther(bondInfo?.owed) - +utils.formatEther(bondInfo?.redeemed)).toFixed(
+                2,
+              )
+            : 'Loading'
+        }`}
+        label="Pending"
+        flexGrow={1}
+      />
       <Box w="1px" mx={-1} my={-4} bg="stroke.primary" />
-      <InfoItem value={`AMOUNT HERE:${asset}`} label="Claimable" px={5} />
+      <InfoItem
+        value={`${bondInfo?.owed ? (+utils.formatEther(bondInfo?.owed)).toFixed(2) : 'Loading'}`}
+        label="Claimable"
+        px={5}
+      />
     </Card>
   )
 }
-
 const SelectedBondType = ({ bondType }) => {
   return (
     <Card
@@ -112,11 +132,11 @@ const NothingToRedeem = () => {
 }
 
 export default function Bond() {
-  const { user, isConnected } = useAuth()
+  const { userAddress, signer } = useBondState()
   const [termLength, setTermLength] = useState<number>(0)
   const [bondSpotPrice, setBondSpotPrice] = useState<string>('0')
   const [cnvMarketPrice, setCnvMarketPrice] = useState<number>(0)
-  const [userBondPositions, setUserBondPositions] = useState<Object>({})
+  const [userBondPositions, setUserBondPositions] = useState([])
 
   const { data } = useFetchApi('/api/cnv')
   // create function which grabs amount of positions, and sets the state
@@ -128,6 +148,13 @@ export default function Bond() {
   }
 
   useEffect(() => {
+    if (userAddress) {
+      getUserBondPositions(3, '0', userAddress, signer).then((userPositionInfo) => {
+        // setUserBondPositions(userPositionInfo)
+        userBondPositions.push(userPositionInfo)
+        console.log(userBondPositions)
+      })
+    }
     getBondSpotPrice(3, '').then((bondSpotPrice) => {
       setBondSpotPrice(bondSpotPrice)
       console.log(bondSpotPrice)
@@ -136,7 +163,7 @@ export default function Bond() {
     useBondGetTermLength(3).then((termLength) => {
       setTermLength(termLength)
     })
-  }, [cnvMarketPrice])
+  }, [cnvMarketPrice, signer, userAddress, userBondPositions])
 
   return (
     <Container maxW="container.lg">
@@ -184,13 +211,13 @@ export default function Bond() {
               {}
               <UserBondPositionInfo
                 asset="CNV"
-                icon="/assets/tokens/cnv.svg"
                 roi={`${
                   cnvMarketPrice > 0
                     ? ((cnvMarketPrice / +bondSpotPrice - 1) * 100).toFixed(2)
                     : 'Loading...'
                 }%`}
                 vestingTerm={`${termLength} Days`}
+                bondInfo={userBondPositions[0]}
               />
               <NothingToRedeem />
             </Card>
