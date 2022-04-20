@@ -47,6 +47,7 @@ export const Card = forwardRef<CardProps, 'div'>(
           height: props.h ?? props.height,
           maxHeight: props.maxH ?? props.maxHeight,
           minHeight: props.minH ?? props.minHeight,
+          display: props.display,
         }}
         {...marginStyles}
         {...getBorderRadiusStyles(props)}
@@ -55,7 +56,7 @@ export const Card = forwardRef<CardProps, 'div'>(
           __css={{ ...getBorderRadiusStyles(styles) }}
           {...propsWithoutMargins}
           maxW="100%"
-          overflow="clip"
+          overflow="hidden"
         >
           {children}
         </Stack>

@@ -37,7 +37,7 @@ function SideBarTop() {
         >
           Dashboard
         </ButtonLink>
-        <Box shadow="down" w="full" p={2} rounded="2xl">
+        <Box shadow="down" w="full" p={1} rounded="2xl">
           <ConnectWallet />
           {data?.formatted && (
             <Flex justifyContent="space-between" p={2} mt={2}>
