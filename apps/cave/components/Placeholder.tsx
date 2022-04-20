@@ -10,7 +10,8 @@ function Placeholder({ text }) {
       borderRadius="3xl"
       // px={20}
       py={16}
-      w="500px"
+      w="100%"
+      maxW="500px"
     >
       <Box textAlign="center">
         <Text color="text.low" fontSize="4xl" fontWeight="bold">

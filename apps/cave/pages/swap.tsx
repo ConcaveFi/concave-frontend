@@ -69,7 +69,6 @@ export function SwapPage() {
           gap={2}
           p={6}
           w="100%"
-          minW="430px"
           maxW="567px"
         />
 
@@ -80,7 +79,6 @@ export function SwapPage() {
           h="fit-content"
           shadow="Block Up"
           w="100%"
-          minW="400px"
           maxW="420px"
         >
           <InputField
