@@ -8,6 +8,7 @@ import { ROPSTEN_DAI_ABI } from '../../contracts/Bond/ROPSTEN_DAI_ABI'
 import { Token, Currency } from 'gemswap-sdk'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { BondSettings } from './Settings'
+import { position } from '@concave/ui'
 // testing only, flip to prod
 let providers = new ethers.providers.InfuraProvider('ropsten', '5ad069733a1a48a897180e66a5fb8846')
 
@@ -117,14 +118,18 @@ export const purchaseBond = async (
 
 export const getUserBondPositions = async (
   networkId: number,
-  positionID: string,
+  positionID: number,
   address: string,
   signer: ethers.Signer,
 ) => {
+  let positionArray = []
   const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, providers)
-  const formattedPositionID = ethers.utils.parseUnits(positionID, 18)
-  const positionData = await bondingContract.positions(address, formattedPositionID)
-  return positionData
+  for (let i = 0; i < 10; i++) {
+    const positionData = await bondingContract.positions(address, i)
+    positionArray.push(positionData)
+  }
+  console.log(positionArray)
+  return positionArray
 }
 
 export const useBondState = () => {

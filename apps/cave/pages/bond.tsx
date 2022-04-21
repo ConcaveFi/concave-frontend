@@ -146,15 +146,15 @@ export default function Bond() {
   }
 
   useEffect(() => {
-    if (userBondPositions.length === 0)
-      getUserBondPositions(3, '0', userAddress, signer)
+    if (userAddress && userBondPositions.length === 0)
+      getUserBondPositions(3, 2, userAddress, signer)
         .then((userPositionInfo) => {
-          userBondPositions.push(userPositionInfo)
+          setUserBondPositions(userPositionInfo)
         })
         .catch((e) => {
-          console.log('get position info failed')
+          console.log('get position info failed', e)
         })
-  }, [signer])
+  }, [signer, userAddress, userBondPositions])
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
