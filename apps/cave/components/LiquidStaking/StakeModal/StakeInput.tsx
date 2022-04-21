@@ -4,7 +4,7 @@ import { useFetchApi } from 'hooks/cnvData'
 // import { TokenInput } from 'components/Swap/TokenInput'
 // import { Token } from 'constants/routing'
 import React, { useEffect, useState } from 'react'
-import { chain } from 'wagmi'
+import { chain, useAccount, useBalance } from 'wagmi'
 // export const stakedCoin = new Token({
 //   chainId: chain.ropsten.id,
 //   address: '0x2b8e79cbd58418ce9aeb720baf6b93825b93ef1f',
@@ -15,15 +15,19 @@ import { chain } from 'wagmi'
 // })
 
 function StakeInput() {
-  const { data } = useFetchApi('/api/cnv')
+  const cnvPrice = useFetchApi('/api/cnv')
   const [stakeInput, setStakeInput] = useState(0)
-  // console.log(data)
-  // console.log('hello')
+  const [{ data: account }] = useAccount()
 
-  useEffect(() => {
-    console.log(data)
-    console.log(stakeInput)
-  }, [stakeInput])
+  const [cnvBalance, getBalance] = useBalance({
+    addressOrName: account?.address,
+    token: '0x2B8E79CBD58418CE9aeB720BAf6B93825B93eF1F', // Change to MAINNET address
+  })
+
+  const setMax = () => {
+    setStakeInput(+cnvBalance.data?.formatted)
+  }
+
   return (
     <Card w="350px" px={4} py={5}>
       <Flex justify="space-between" alignItems="center">
@@ -35,7 +39,6 @@ function StakeInput() {
           w="60%"
           bg="none"
           fontSize="xl"
-          // placeholder="0.0"
         />
         <Flex shadow="up" borderRadius="3xl" px={4} py={1} alignItems="center">
           <Image src="/assets/tokens/cnv.svg" alt="concave-logo" h={8} w={8} />
@@ -46,13 +49,15 @@ function StakeInput() {
       </Flex>
       <Flex mt={2} justify="space-between" px={2}>
         <Text color="text.low" fontSize="md" fontWeight="bold">{`$${(
-          stakeInput * data?.cnv
+          stakeInput * cnvPrice.data?.cnv
         ).toFixed(2)}`}</Text>
         <HStack spacing={2}>
           <Text color="text.low" fontSize="sm" fontWeight="bold">
-            Balance: {`435.12`} CNV
+            Balance: {(+cnvBalance.data?.formatted).toFixed(2)} CNV
           </Text>
-          <Button textColor="blue.500">Max</Button>
+          <Button textColor="blue.500" onClick={setMax}>
+            Max
+          </Button>
         </HStack>
       </Flex>
       {/* <TokenInput
