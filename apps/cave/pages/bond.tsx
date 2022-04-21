@@ -61,9 +61,7 @@ const UserBondPositionInfo = ({ asset, roi, vestingTerm, bondInfo }) => {
     <Card bg="none" py={3} w="100%" direction="row" shadow="Glass Up Medium">
       <Flex justify="center" pl={4} pr={7}>
         <InfoItem
-          value={`${
-            bondInfo?.creation ? +utils.formatEther(bondInfo?.creation.toString()) : 'Loading'
-          }`}
+          value={`${bondInfo?.creation ? new Date(bondInfo.creation * 1000) : 'Loading'}`}
           label="Fully Vested"
         />
       </Flex>
@@ -71,9 +69,7 @@ const UserBondPositionInfo = ({ asset, roi, vestingTerm, bondInfo }) => {
       <InfoItem
         value={`${
           bondInfo?.owed
-            ? (+utils.formatEther(bondInfo?.owed) - +utils.formatEther(bondInfo?.redeemed)).toFixed(
-                2,
-              )
+            ? (+utils.formatEther(bondInfo.owed) - +utils.formatEther(bondInfo.redeemed)).toFixed(2)
             : 'Loading'
         }`}
         label="Pending"
