@@ -81,7 +81,11 @@ const UserBondPositionInfo = ({ bondInfo }) => {
       />
       <Box w="1px" mx={-1} my={-4} bg="stroke.primary" />
       <InfoItem
-        value={`${bondInfo?.owed ? (+utils.formatEther(bondInfo?.owed)).toFixed(2) : 'Loading'}`}
+        value={`${
+          bondInfo?.owed
+            ? (+utils.formatEther(bondInfo.owed) - +utils.formatEther(bondInfo.redeemed)).toFixed(2)
+            : 'Loading'
+        }`}
         label="Claimable"
         px={5}
       />
@@ -137,6 +141,7 @@ export default function Bond() {
   const [bondSpotPrice, setBondSpotPrice] = useState<string>('0')
   const [cnvMarketPrice, setCnvMarketPrice] = useState<number>(0)
   const [userBondPositions, setUserBondPositions] = useState([])
+  const [userBondRedeemablePositionIDs, setUserBondRedeemablePositionIDs] = useState([])
   const [userBondPositionsLength, setUserBondPositionsLength] = useState<number>(4)
 
   const { data } = useFetchApi('/api/cnv')
@@ -149,7 +154,8 @@ export default function Bond() {
     if (userAddress && userBondPositions.length === 0)
       getUserBondPositions(3, 2, userAddress, signer)
         .then((userPositionInfo) => {
-          setUserBondPositions(userPositionInfo)
+          setUserBondPositions(userPositionInfo.positionArray)
+          setUserBondRedeemablePositionIDs(userPositionInfo.redeemablePositions)
         })
         .catch((e) => {
           console.log('get position info failed', e)
@@ -177,7 +183,8 @@ export default function Bond() {
 
         <Flex gap={10} direction="row">
           <Box pos="relative" h="fit-content">
-            <Box
+            {/* make bar dynamic */}
+            {/* <Box
               h="20px"
               w="72px"
               top="50%"
@@ -185,7 +192,7 @@ export default function Bond() {
               translateY="-50%"
               left="calc(100% - 24px)"
               sx={{ ...gradientBorder({ borderWidth: 3, borderRadius: '0' }), pos: 'absolute' }}
-            />
+            /> */}
             <Card
               variant="secondary"
               w="430px"

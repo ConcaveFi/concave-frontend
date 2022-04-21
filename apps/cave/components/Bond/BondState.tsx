@@ -123,13 +123,15 @@ export const getUserBondPositions = async (
   signer: ethers.Signer,
 ) => {
   let positionArray = []
+  let redeemablePositions = []
   const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, providers)
   for (let i = 0; i < 10; i++) {
     const positionData = await bondingContract.positions(address, i)
-    positionArray.push(positionData)
+    // revisit this, dont push if owed is not greater than 0
+    if (positionData.owed > 600000000000000000) positionArray.push(positionData)
+    redeemablePositions.push(i)
   }
-  console.log(positionArray)
-  return positionArray
+  return { positionArray, redeemablePositions }
 }
 
 export const useBondState = () => {
