@@ -56,9 +56,9 @@ const BondInfo = ({ asset, roi, vestingTerm, icon }) => {
   )
 }
 
-const UserBondPositionInfo = ({ bondInfo, key }) => {
+const UserBondPositionInfo = ({ bondInfo }) => {
   return (
-    <Card key={key} bg="none" py={3} w="100%" direction="row" shadow="Glass Up Medium">
+    <Card bg="none" py={3} w="100%" direction="row" shadow="Glass Up Medium">
       <Flex justify="center" pl={4} pr={7}>
         <InfoItem
           value={`${
@@ -154,7 +154,7 @@ export default function Bond() {
         .catch((e) => {
           console.log('get position info failed', e)
         })
-  }, [signer, userAddress, userBondPositions])
+  }, [signer])
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -209,7 +209,11 @@ export default function Bond() {
                 vestingTerm={`${termLength} Days`}
               />
               {userBondPositions.map((position, i) => {
-                return <UserBondPositionInfo bondInfo={position} key={`${i}`} />
+                return (
+                  <React.Fragment key={i}>
+                    <UserBondPositionInfo bondInfo={position} />
+                  </React.Fragment>
+                )
               })}
 
               <NothingToRedeem />
