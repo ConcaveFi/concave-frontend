@@ -60,6 +60,12 @@ export function BondBuyCard() {
     }
   }, [balance])
 
+  useEffect(() => {
+    getBondSpotPrice(3, '0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4').then((bondSpotPrice) => {
+      setBondSpotPrice(bondSpotPrice)
+    })
+  }, [])
+
   return (
     <Card p={6} gap={2} variant="primary" h="fit-content" shadow="Block Up" w="100%" maxW="420px">
       <BondInput

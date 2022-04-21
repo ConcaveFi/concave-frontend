@@ -146,10 +146,7 @@ export const ConfirmBondModal = ({
         <Text>
           {/* 1 {currencyOut.symbol} = {tokenInRelativePriceToTokenOut}
           {currencyIn.symbol} */}{' '}
-          Bond Price CNV:
-        </Text>
-        <Text ml={1} textColor="text.low">
-          (${parseFloat(bondPrice).toFixed(2)})
+          Bond Price CNV: ${parseFloat(bondPrice).toFixed(2)}
         </Text>
       </Flex>
 
