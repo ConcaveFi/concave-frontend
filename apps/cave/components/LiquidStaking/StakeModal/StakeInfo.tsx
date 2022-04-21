@@ -7,6 +7,14 @@ const periodToBondRevenueMapping = {
   '90 days': '50%',
   '45 days': '25%',
 }
+
+const periodToDaysMapping = {
+  '360 days': 360,
+  '180 days': 180,
+  '90 days': 90,
+  '45 days': 45,
+}
+
 const periodToRewardsBoost = {
   '360 days': '2x',
   '180 days': '1.75x',
@@ -14,11 +22,11 @@ const periodToRewardsBoost = {
   '45 days': '1.25x',
 }
 
-const periodToDaysMapping = {
-  '360 days': 360,
-  '180 days': 180,
-  '90 days': 90,
-  '45 days': 45,
+const periodToPoolParameter = {
+  '360 days': 0,
+  '180 days': 1,
+  '90 days': 2,
+  '45 days': 3,
 }
 
 function addDays(date, days) {

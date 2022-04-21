@@ -1,10 +1,10 @@
 import { Box, Button, Card, Flex, HStack, Image, Input, Text } from '@concave/ui'
+import { useFetchApi } from 'hooks/cnvData'
 // import { TokenBalance } from 'components/Swap/TokenBalance'
 // import { TokenInput } from 'components/Swap/TokenInput'
 // import { Token } from 'constants/routing'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { chain } from 'wagmi'
-
 // export const stakedCoin = new Token({
 //   chainId: chain.ropsten.id,
 //   address: '0x2b8e79cbd58418ce9aeb720baf6b93825b93ef1f',
@@ -15,17 +15,27 @@ import { chain } from 'wagmi'
 // })
 
 function StakeInput() {
+  const { data } = useFetchApi('/api/cnv')
+  const [stakeInput, setStakeInput] = useState(0)
+  // console.log(data)
+  // console.log('hello')
+
+  useEffect(() => {
+    console.log(data)
+    console.log(stakeInput)
+  }, [stakeInput])
   return (
     <Card w="350px" px={4} py={5}>
       <Flex justify="space-between" alignItems="center">
         <Input
+          value={stakeInput}
+          onChange={(e) => setStakeInput(Number(e.target.value))}
           ml={-1}
           shadow="none"
           w="60%"
           bg="none"
           fontSize="xl"
-          placeholder="0.0"
-          onChange={() => console.log('input')}
+          // placeholder="0.0"
         />
         <Flex shadow="up" borderRadius="3xl" px={4} py={1} alignItems="center">
           <Image src="/assets/tokens/cnv.svg" alt="concave-logo" h={8} w={8} />
@@ -35,10 +45,12 @@ function StakeInput() {
         </Flex>
       </Flex>
       <Flex mt={2} justify="space-between" px={2}>
-        <Text color="text.low" fontSize="md" fontWeight="bold">{`$900.3`}</Text>
+        <Text color="text.low" fontSize="md" fontWeight="bold">{`$${(
+          stakeInput * data?.cnv
+        ).toFixed(2)}`}</Text>
         <HStack spacing={2}>
-          <Text color="text.low" fontSize="md" fontWeight="bold">
-            Balance: {`435.12`}
+          <Text color="text.low" fontSize="sm" fontWeight="bold">
+            Balance: {`435.12`} CNV
           </Text>
           <Button textColor="blue.500">Max</Button>
         </HStack>
