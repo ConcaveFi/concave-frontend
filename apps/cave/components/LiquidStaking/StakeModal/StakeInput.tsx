@@ -24,7 +24,7 @@ function StakeInput() {
           w="60%"
           bg="none"
           fontSize="xl"
-          placeholder="Stake Amount"
+          placeholder="0.0"
           onChange={() => console.log('input')}
         />
         <Flex shadow="up" borderRadius="3xl" px={4} py={1} alignItems="center">

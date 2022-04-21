@@ -7,6 +7,25 @@ const periodToBondRevenueMapping = {
   '90 days': '50%',
   '45 days': '25%',
 }
+const periodToRewardsBoost = {
+  '360 days': '2x',
+  '180 days': '1.75x',
+  '90 days': '1.5x',
+  '45 days': '1.25x',
+}
+
+const periodToDaysMapping = {
+  '360 days': 360,
+  '180 days': 180,
+  '90 days': 90,
+  '45 days': 45,
+}
+
+function addDays(date, days) {
+  var result = new Date(date)
+  result.setDate(result.getDate() + days)
+  return result
+}
 
 function StakeInfo(props: any) {
   return (
@@ -15,7 +34,8 @@ function StakeInfo(props: any) {
         <Stack isInline spacing={6}>
           <Stack spacing="1px">
             <Text textAlign="left" fontSize="3xl" fontWeight="bold">
-              {props.period}
+              {/* {props.period} */}
+              {periodToRewardsBoost[`${props.period}`]}
             </Text>
             <Text color="text.low" fontSize="sm">
               Rewards Boost
@@ -33,6 +53,11 @@ function StakeInfo(props: any) {
 
         <Text mt={6} color="text.low" fontSize="sm">
           Staking terms: Lorem ipsum dolor sit amet,consectetur adipiscing elit
+        </Text>
+
+        <Text mt={5} color="text.low" fontSize="sm" fontWeight="semibold">
+          Redeem Date:{' '}
+          {addDays(Date(), periodToDaysMapping[`${props.period}`]).toISOString().slice(0, 10)}
         </Text>
       </Box>
 
