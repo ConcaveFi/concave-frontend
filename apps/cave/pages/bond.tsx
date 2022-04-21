@@ -32,7 +32,7 @@ const InfoItem = ({ value, label, ...props }) => (
     textAlign="center"
     {...props}
   >
-    <Text fontSize="lg" fontFamily="heading">
+    <Text fontSize="sm" fontFamily="heading">
       {value}
     </Text>
     <Text fontSize="sm" color="text.low">
@@ -61,7 +61,11 @@ const UserBondPositionInfo = ({ asset, roi, vestingTerm, bondInfo }) => {
     <Card bg="none" py={3} w="100%" direction="row" shadow="Glass Up Medium">
       <Flex justify="center" pl={4} pr={7}>
         <InfoItem
-          value={`${bondInfo?.creation ? new Date(bondInfo.creation * 1000) : 'Loading'}`}
+          value={`${
+            bondInfo?.creation
+              ? new Date(bondInfo.creation * 1000).toString().slice(0, 21)
+              : 'Loading'
+          }`}
           label="Fully Vested"
         />
       </Flex>
