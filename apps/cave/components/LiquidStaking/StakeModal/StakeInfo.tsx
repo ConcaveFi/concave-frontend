@@ -64,8 +64,8 @@ function StakeInfo(props: any) {
       {/* {props.period === '12 months' ? ( */}
       <Stack mt={4}>
         <Stack px={4} color="text.low" fontSize={12} isInline justify="space-between" mt={3}>
-          <Text>Currently Staked</Text>
-          <Text>Staking Cap</Text>
+          <Text fontSize="sm">Currently Staked</Text>
+          <Text fontSize="sm">Staking Cap</Text>
         </Stack>
         <Box shadow="down" borderRadius="2xl" p={1} position="relative">
           <Box

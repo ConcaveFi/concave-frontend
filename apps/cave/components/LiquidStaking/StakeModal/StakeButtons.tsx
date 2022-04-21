@@ -62,7 +62,7 @@ function StakeButtons(props: any) {
 
       <Box px={3}>
         <Button
-          //   onClick={}
+          onClick={() => console.log('Approve')}
           fontWeight="bold"
           fontSize="md"
           variant="primary.outline"
@@ -77,7 +77,7 @@ function StakeButtons(props: any) {
 
         <Button
           mt={5}
-          //   onClick={}
+          onClick={() => console.log('Stake CNV')}
           fontWeight="bold"
           fontSize="md"
           variant="primary.outline"
