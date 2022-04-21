@@ -51,12 +51,12 @@ export function BondBuyCard() {
     userAddress,
     amountIn,
   )
-  getBondSpotPrice(3, '0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4').then((bondSpotPrice) => {
-    setBondSpotPrice(bondSpotPrice)
-  })
   useEffect(() => {
     if (balance[0].data) {
       setBalance(balance[0].data.formatted)
+      getBondSpotPrice(3, '0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4').then((bondSpotPrice) => {
+        setBondSpotPrice(bondSpotPrice)
+      })
     }
   }, [balance])
 
