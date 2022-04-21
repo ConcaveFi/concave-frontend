@@ -9,7 +9,7 @@ import { Token, Currency } from 'gemswap-sdk'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { BondSettings } from './Settings'
 // testing only, flip to prod
-let providers = new ethers.providers.InfuraProvider('ropsten', '3270f483eb9e484ba6d9f472557f4350')
+let providers = new ethers.providers.InfuraProvider('ropsten', '5ad069733a1a48a897180e66a5fb8846')
 
 const useCurrencyBalance = (currency: Currency, userAddress: string) =>
   useBalance({

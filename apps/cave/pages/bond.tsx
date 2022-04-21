@@ -140,23 +140,21 @@ export default function Bond() {
   const [userBondPositionsLength, setUserBondPositionsLength] = useState<number>(4)
 
   const { data } = useFetchApi('/api/cnv')
-  // create function which grabs amount of positions, and sets the state
-  // to equal an array filled with objects, each containing
-  // information pertaining to that position
 
   if (cnvMarketPrice === 0 && !!data) {
     setCnvMarketPrice(data.cnv)
   }
 
   useEffect(() => {
-    if (userAddress) {
-      getUserBondPositions(3, '0', userAddress, signer).then((userPositionInfo) => {
-        // setUserBondPositions(userPositionInfo)
-
-        console.log(userBondPositions)
-      })
-    }
-  }, [cnvMarketPrice, signer, userAddress, userBondPositions])
+    if (userBondPositions.length === 0)
+      getUserBondPositions(3, '0', userAddress, signer)
+        .then((userPositionInfo) => {
+          userBondPositions.push(userPositionInfo)
+        })
+        .catch((e) => {
+          console.log('get position info failed')
+        })
+  }, [signer])
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -211,7 +209,7 @@ export default function Bond() {
                 vestingTerm={`${termLength} Days`}
               />
               {userBondPositions.map((position, i) => {
-                return <UserBondPositionInfo key={i} bondInfo={position} />
+                return <UserBondPositionInfo bondInfo={position} key={`${i}`} />
               })}
 
               <NothingToRedeem />
