@@ -43,7 +43,6 @@ function StakeCard(props) {
           </Text>
         </Box>
 
-        {/* {props.icon === '360d' ? ( */}
         <Stack>
           <Stack color="text.low" fontSize={12} isInline justify="space-between" mt={3}>
             <Text>Currently Staked</Text>
@@ -67,16 +66,6 @@ function StakeCard(props) {
             </Text>
           </Box>
         </Stack>
-        {/* ) : (
-          <Stack>
-            <Text color="text.low" fontSize={12} textAlign="center" mt={3}>
-              Currently Staked
-            </Text>
-            <Text shadow="down" py={1} borderRadius="2xl">
-              {props.stakedCNV} CNV
-            </Text>
-          </Stack>
-        )} */}
 
         <Button
           mt={5}

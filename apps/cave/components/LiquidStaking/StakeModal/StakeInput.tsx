@@ -43,7 +43,7 @@ function StakeInput() {
           </Text>
           <HStack spacing={2}>
             <Text color="text.low" fontSize="sm" fontWeight="bold">
-              Balance: {(+cnvBalance.data?.formatted).toFixed(2)} CNV
+              Balance: {(+cnvBalance.data?.formatted).toFixed(2)}
             </Text>
             <Button textColor="blue.500" onClick={setMax}>
               Max

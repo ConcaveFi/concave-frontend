@@ -69,7 +69,6 @@ function StakeInfo(props: any) {
         </Text>
       </Box>
 
-      {/* {props.period === '12 months' ? ( */}
       <Stack mt={4}>
         <Stack px={4} color="text.low" fontSize={12} isInline justify="space-between" mt={3}>
           <Text fontSize="sm">Currently Staked</Text>
@@ -94,16 +93,6 @@ function StakeInfo(props: any) {
           </Text>
         </Box>
       </Stack>
-      {/* ) : (
-        <Stack mt={4}>
-          <Text color="text.low" fontSize={12} mt={3}>
-            Currently Staked
-          </Text>
-          <Text shadow="down" py={1} textAlign="center" borderRadius="2xl">
-            {props.stakedCNV} CNV
-          </Text>
-        </Stack>
-      )} */}
     </Box>
   )
 }

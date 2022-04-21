@@ -1,8 +1,6 @@
 import { Container, Flex, Heading, HStack, Text } from '@concave/ui'
 import StakeCard from 'components/LiquidStaking/StakeCard'
 import GraphicGuide from 'components/LiquidStaking/GraphicGuide'
-import Placeholder from 'components/Placeholder'
-import GcnvTitle from 'components/GcnvTitle'
 
 interface StakingGroupProps {
   icon: string
