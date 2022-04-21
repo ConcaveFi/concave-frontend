@@ -56,9 +56,9 @@ const BondInfo = ({ asset, roi, vestingTerm, icon }) => {
   )
 }
 
-const UserBondPositionInfo = ({ asset, roi, vestingTerm, bondInfo }) => {
+const UserBondPositionInfo = ({ bondInfo, key }) => {
   return (
-    <Card bg="none" py={3} w="100%" direction="row" shadow="Glass Up Medium">
+    <Card key={key} bg="none" py={3} w="100%" direction="row" shadow="Glass Up Medium">
       <Flex justify="center" pl={4} pr={7}>
         <InfoItem
           value={`${
@@ -137,6 +137,7 @@ export default function Bond() {
   const [bondSpotPrice, setBondSpotPrice] = useState<string>('0')
   const [cnvMarketPrice, setCnvMarketPrice] = useState<number>(0)
   const [userBondPositions, setUserBondPositions] = useState([])
+  const [userBondPositionsLength, setUserBondPositionsLength] = useState<number>(4)
 
   const { data } = useFetchApi('/api/cnv')
   // create function which grabs amount of positions, and sets the state
@@ -151,20 +152,22 @@ export default function Bond() {
     if (userAddress) {
       getUserBondPositions(3, '0', userAddress, signer).then((userPositionInfo) => {
         // setUserBondPositions(userPositionInfo)
-        userBondPositions.push(userPositionInfo)
+
         console.log(userBondPositions)
       })
     }
-    getBondSpotPrice(3, '').then((bondSpotPrice) => {
-      setBondSpotPrice(bondSpotPrice)
-      console.log(bondSpotPrice)
-    })
+  }, [cnvMarketPrice, signer, userAddress, userBondPositions])
+
+  useEffect(() => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useBondGetTermLength(3).then((termLength) => {
       setTermLength(termLength)
     })
-  }, [cnvMarketPrice, signer, userAddress, userBondPositions])
-
+    getBondSpotPrice(3, '').then((bondSpotPrice) => {
+      setBondSpotPrice(bondSpotPrice)
+      console.log(bondSpotPrice)
+    })
+  }, [])
   return (
     <Container maxW="container.lg">
       <Flex direction="column" gap={20}>
@@ -207,18 +210,10 @@ export default function Bond() {
                 }%`}
                 vestingTerm={`${termLength} Days`}
               />
-              {/* after position, for every position, loop and pass values in this component */}
-              {}
-              <UserBondPositionInfo
-                asset="CNV"
-                roi={`${
-                  cnvMarketPrice > 0
-                    ? ((cnvMarketPrice / +bondSpotPrice - 1) * 100).toFixed(2)
-                    : 'Loading...'
-                }%`}
-                vestingTerm={`${termLength} Days`}
-                bondInfo={userBondPositions[0]}
-              />
+              {userBondPositions.map((position, i) => {
+                return <UserBondPositionInfo key={i} bondInfo={position} />
+              })}
+
               <NothingToRedeem />
             </Card>
           </Box>
