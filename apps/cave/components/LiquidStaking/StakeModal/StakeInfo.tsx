@@ -22,13 +22,6 @@ const periodToRewardsBoost = {
   '45 days': '1.25x',
 }
 
-const periodToPoolParameter = {
-  '360 days': 0,
-  '180 days': 1,
-  '90 days': 2,
-  '45 days': 3,
-}
-
 function addDays(date, days) {
   var result = new Date(date)
   result.setDate(result.getDate() + days)
