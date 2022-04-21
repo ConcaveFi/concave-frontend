@@ -121,7 +121,7 @@ function StakeCard(props) {
                 capPercentage={capPercentage}
               />
               <StakeInput />
-              <StakeButtons period={props.period} vaprText={vaprText} vapr={props.vapr} />
+              {/* <StakeButtons period={props.period} vaprText={vaprText} vapr={props.vapr} /> */}
             </VStack>
           </HStack>
         </Modal>
