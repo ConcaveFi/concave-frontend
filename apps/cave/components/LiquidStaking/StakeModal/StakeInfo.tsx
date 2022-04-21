@@ -10,40 +10,42 @@ const periodToBondRevenueMapping = {
 
 function StakeInfo(props: any) {
   return (
-    <Box shadow="up" p={4} borderRadius="3xl" filter="drop-shadow(0px 0px 27px #81b3ff4f)">
-      <Stack isInline spacing={6}>
-        <Stack spacing="1px">
-          <Text textAlign="left" fontSize="3xl" fontWeight="bold">
-            {props.period}
-          </Text>
-          <Text color="text.low" fontSize="sm">
-            Rewards Boost
-          </Text>
+    <Box shadow="up" px={2} py={4} borderRadius="3xl" filter="drop-shadow(0px 0px 27px #81b3ff4f)">
+      <Box px={4}>
+        <Stack isInline spacing={6}>
+          <Stack spacing="1px">
+            <Text textAlign="left" fontSize="3xl" fontWeight="bold">
+              {props.period}
+            </Text>
+            <Text color="text.low" fontSize="sm">
+              Rewards Boost
+            </Text>
+          </Stack>
+          <Stack spacing="1px">
+            <Text textAlign="left" fontSize="3xl" fontWeight="bold">
+              {periodToBondRevenueMapping[`${props.period}`]}
+            </Text>
+            <Text color="text.low" fontSize="sm">
+              Share of Bonding Revenue
+            </Text>
+          </Stack>
         </Stack>
-        <Stack spacing="1px">
-          <Text textAlign="left" fontSize="3xl" fontWeight="bold">
-            {periodToBondRevenueMapping[`${props.period}`]}
-          </Text>
-          <Text color="text.low" fontSize="sm">
-            Share of Bonding Revenue
-          </Text>
-        </Stack>
-      </Stack>
 
-      <Text mt={6} color="text.low" fontSize="sm">
-        Staking terms: Lorem ipsum dolor sit amet,consectetur adipiscing elit
-      </Text>
+        <Text mt={6} color="text.low" fontSize="sm">
+          Staking terms: Lorem ipsum dolor sit amet,consectetur adipiscing elit
+        </Text>
+      </Box>
 
       {/* {props.period === '12 months' ? ( */}
       <Stack mt={4}>
-        <Stack color="text.low" fontSize={12} isInline justify="space-between" mt={3}>
+        <Stack px={4} color="text.low" fontSize={12} isInline justify="space-between" mt={3}>
           <Text>Currently Staked</Text>
           <Text>Staking Cap</Text>
         </Stack>
         <Box shadow="down" borderRadius="2xl" p={1} position="relative">
           <Box
             shadow="up"
-            px={1}
+            px={4}
             py={1}
             borderRadius="2xl"
             textAlign="left"
@@ -54,7 +56,7 @@ function StakeInfo(props: any) {
             <Text w="150px">{props.stakedCNV} CNV</Text>
           </Box>
 
-          <Text position="absolute" right="2" top="2" fontSize="sm">
+          <Text position="absolute" right="4" top="2" fontSize="sm">
             {props.CNVCap} CNV
           </Text>
         </Box>

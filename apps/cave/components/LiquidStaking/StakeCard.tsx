@@ -38,7 +38,8 @@ function StakeCard(props) {
             {vaprText}
           </Text>
           <Text fontSize="lg" fontWeight="bold">
-            {props.vapr} %
+            {/* {props.vapr} % */}
+            Calculating
           </Text>
         </Box>
 

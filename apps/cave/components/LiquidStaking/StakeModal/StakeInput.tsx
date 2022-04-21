@@ -19,11 +19,12 @@ function StakeInput() {
     <Card w="350px" px={4} py={5}>
       <Flex justify="space-between" alignItems="center">
         <Input
+          ml={-1}
           shadow="none"
           w="60%"
           bg="none"
           fontSize="xl"
-          placeholder="Amount to Stake"
+          placeholder="Stake Amount"
           onChange={() => console.log('input')}
         />
         <Flex shadow="up" borderRadius="3xl" px={4} py={1} alignItems="center">

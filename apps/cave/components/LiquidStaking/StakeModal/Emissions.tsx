@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, HStack, Image, Text } from '@concave/ui'
-
+import { QuestionOutlineIcon } from '@chakra-ui/icons'
 function Emissions(props: any) {
   return (
     <Box py={2} px={5}>
@@ -30,7 +30,8 @@ function Emissions(props: any) {
           {props.vaprText}
         </Text>
         <Text fontSize="lg" fontWeight="bold">
-          {props.vapr} %
+          {/* {props.vapr} % */}
+          Calculating
         </Text>
         <Image mx="auto" src={`/assets/liquidstaking/modal-arrow-logo.svg`} alt="arrow down logo" />
         <Box
@@ -45,17 +46,17 @@ function Emissions(props: any) {
           filter="drop-shadow(0px 0px 27px #81b3ff4f)"
         >
           <HStack>
-            <Image
-              mx="auto"
+            {/* <Image
               src={`/assets/liquidstaking/modal-moreinfo-logo.svg`}
               h={5}
+              w={5}
               alt="more info logo"
-            />
-            <Text color="text.low" fontSize="sm">
+            /> */}
+            <Text mx="auto" color="text.low" fontSize="sm">
               Bonding Emissions:
             </Text>
           </HStack>
-          <Text fontSize="md" fontWeight="bold">
+          <Text mx="auto" fontSize="md" fontWeight="bold">
             {/* 534% */}
             Coming Soon
           </Text>
@@ -63,17 +64,18 @@ function Emissions(props: any) {
             +
           </Text>
           <HStack>
-            <Image
-              mx="auto"
+            {/* <Image
+              // mx="auto"
+              ml={6}
               src={`/assets/liquidstaking/modal-moreinfo-logo.svg`}
               h={5}
               alt="more info logo"
-            />
-            <Text color="text.low" fontSize="sm">
+            /> */}
+            <Text mx="auto" color="text.low" fontSize="sm">
               Base Emissions:
             </Text>
           </HStack>
-          <Text fontSize="md" fontWeight="bold">
+          <Text mx="auto" fontSize="md" fontWeight="bold">
             {/* 25% * 4 = 100% */}
             Coming Soon
           </Text>
@@ -81,13 +83,13 @@ function Emissions(props: any) {
             +
           </Text>
           <HStack>
-            <Image
+            {/* <Image
               mx="auto"
               src={`/assets/liquidstaking/modal-moreinfo-logo.svg`}
               h={5}
               alt="more info logo"
-            />
-            <Text color="text.low" fontSize="sm">
+            /> */}
+            <Text mx="auto" color="text.low" fontSize="sm">
               Quarterly Dividends:
             </Text>
           </HStack>
