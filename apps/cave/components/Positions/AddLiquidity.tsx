@@ -10,7 +10,7 @@ import {
   useDisclosure,
   UseDisclosureReturn,
 } from '@concave/ui'
-import { InputField, OutputField } from 'components/AMM'
+import { InputField } from 'components/AMM'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { TransactionSubmittedModal } from 'components/TransactionSubmittedModal'
 import { BigNumber } from 'ethers'
@@ -19,7 +19,7 @@ import { useAddLiquidity, UseAddLiquidityData } from 'hooks/useAddLiquidity'
 import { useApprovalWhenNeeded } from 'hooks/useAllowance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import React from 'react'
-import { chain, useBalance } from 'wagmi'
+import { chain } from 'wagmi'
 
 export const AddLiquidityContent = ({ userAddress }: { userAddress: string }) => {
   const supplyLiquidityModal = useDisclosure()
@@ -28,17 +28,6 @@ export const AddLiquidityContent = ({ userAddress }: { userAddress: string }) =>
   const { updateInputValue, updateOutputValue, updateTokenA, updateTokenB, setTokenA, setTokenB } =
     setters
   const valid = tokenA && tokenB && amountADesired && amountBDesired
-  const [{ data: balanceA }] = useBalance({
-    addressOrName: userAddress,
-    token: tokenA?.address,
-    formatUnits: tokenA?.decimals,
-  })
-  const [{ data: balanceB }] = useBalance({
-    addressOrName: userAddress,
-    token: tokenB?.address,
-    formatUnits: tokenB?.decimals,
-  })
-
   return (
     <>
       <Card variant="secondary" p={4} backgroundBlendMode={'screen'}>
@@ -129,15 +118,14 @@ const SupplyLiquidityModal = ({
     tokenA,
     ROUTER_ADDRESS[networkId],
     userAddress,
-    BigNumber.from(10000000000),
+    BigNumber.from(100000000000000),
   )
   const [needsApproveB, requestApproveB, approveStatusB] = useApprovalWhenNeeded(
     tokenB,
     ROUTER_ADDRESS[networkId],
     userAddress,
-    BigNumber.from(10000000000),
+    BigNumber.from(10000000000000),
   )
-  console.log(approveStatusA.loading)
   return (
     <Modal
       bluryOverlay={true}

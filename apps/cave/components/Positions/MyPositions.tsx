@@ -232,11 +232,11 @@ const RemoveLiquidityActions = ({
 }: {
   removeLiquidityState: RemoveLiquidityState
 }) => {
-  const [approved, setApproved] = useState(true)
+  const networkId = useCurrentSupportedNetworkId()
   const [{ data: account }] = useAccount()
-  const [needsApproveA, requestApproveA, approveStatusA] = useApprovalWhenNeeded(
+  const [needsApprove, requestApproveA, approveStatusA] = useApprovalWhenNeeded(
     removeLiquidityState.token,
-    '0xc9c07a4526915014bc60791fca2eef51975a3694',
+    ROUTER_ADDRESS[networkId],
     account.address,
     BigNumber.from(10000),
   )
@@ -246,17 +246,25 @@ const RemoveLiquidityActions = ({
   }
 
   const confirmedWithdrawal = () => {
-    console.log('send tx to metamask')
     removeLiquidityState.call()
-    return console.log('confirmed Withdrawal!!!')
   }
 
   return (
     <Flex gap={4} h={45} justifyContent={'center'}>
-      <Button w={250} variant={'primary'} onClick={removeAproval}>
+      <Button
+        disabled={!needsApprove || !removeLiquidityState.percentToRemove}
+        w={250}
+        variant={'primary'}
+        onClick={removeAproval}
+      >
         Approve
       </Button>
-      <Button disabled={!approved} w={250} variant={'primary'} onClick={confirmedWithdrawal}>
+      <Button
+        disabled={needsApprove || !removeLiquidityState.percentToRemove}
+        w={250}
+        variant={'primary'}
+        onClick={confirmedWithdrawal}
+      >
         Confirm Withdrawal
       </Button>
     </Flex>
@@ -369,9 +377,6 @@ const useRemoveLiquidity = ({ liquidityInfo }: { liquidityInfo: LiquidityInfoDat
   const [{ data: account }] = useAccount()
   const tokenA = liquidityInfo.pair.token0
   const tokenB = liquidityInfo.pair.token1
-  const liquidity = BigNumber.from(100)
-  console.log(liquidityInfo.userBalance.data.formatted)
-  console.log(BigNumber.from(liquidityInfo.userBalance.data.value))
 
   const [percentToRemove, setPercentToRemove] = useState(0)
   const ratioToRemove = Math.min(percentToRemove, 100) / 100
@@ -396,23 +401,11 @@ const useRemoveLiquidity = ({ liquidityInfo }: { liquidityInfo: LiquidityInfoDat
     const currentBlockNumber = await provider.getBlockNumber()
     const { timestamp } = await provider.getBlock(currentBlockNumber)
     const deadLine = timestamp + 86400
-    console.table([
-      tokenA.address,
-      tokenB.address,
-      liquidityInfo.userBalance.data.value,
-      parseUnits(`0`, tokenA.decimals),
-      parseUnits(`0`, tokenB.decimals),
-      to,
-      deadLine,
-      {
-        gasLimit: 500000,
-      },
-    ])
     contractSigner
       .removeLiquidity(
         tokenA.address,
         tokenB.address,
-        liquidityInfo.userBalance.data.value,
+        liquidityInfo.userBalance.data.value.mul(percentToRemove).div(100),
         parseUnits(`0`, tokenA.decimals),
         parseUnits(`0`, tokenB.decimals),
         to,
@@ -432,6 +425,7 @@ const useRemoveLiquidity = ({ liquidityInfo }: { liquidityInfo: LiquidityInfoDat
     amountBMin,
     deadline,
     ...liquidityInfo,
+    percentToRemove,
     setPercentToRemove,
     call,
   }
