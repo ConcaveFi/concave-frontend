@@ -36,7 +36,7 @@ const GasPrice = () => {
 export function BondBuyCard() {
   const { currencyIn, currencyOut, userAddress, balance, signer } = useBondState()
   const [settings, setSettings] = useState<BondSettings>(defaultSettings)
-  const [userBalance, setBalance] = useState<string>()
+  const userBalance = balance.data?.formatted
   const [amountIn, setAmountIn] = useState<string>('0')
   const [amountOut, setAmountOut] = useState<string>()
   const [bondReceipt] = useState<any>()
@@ -44,21 +44,12 @@ export function BondBuyCard() {
   const [bondSpotPrice, setBondSpotPrice] = useState<string>()
   const confirmModal = useDisclosure()
   const receiptModal = useDisclosure()
-
   const [needsApproval, approve, isApproving] = useApprovalWhenNeeded(
     currencyIn,
     BOND_ADDRESS[1],
     userAddress,
     amountIn,
   )
-  useEffect(() => {
-    if (balance[0].data) {
-      setBalance(balance[0].data.formatted)
-      // getBondSpotPrice(3, '0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4').then((bondSpotPrice) => {
-      //   setBondSpotPrice(bondSpotPrice)
-      // })
-    }
-  }, [balance])
 
   useEffect(() => {
     getBondSpotPrice(3, '0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4').then((bondSpotPrice) => {
