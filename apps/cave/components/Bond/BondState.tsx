@@ -8,7 +8,7 @@ import { ROPSTEN_DAI_ABI } from '../../contracts/Bond/ROPSTEN_DAI_ABI'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { BondSettings } from './Settings'
-
+import { utils } from 'ethers'
 // testing only, flip to prod
 let providers = new ethers.providers.InfuraProvider('ropsten', '5ad069733a1a48a897180e66a5fb8846')
 
@@ -117,16 +117,19 @@ export const getUserBondPositions = async (
   networkId: number,
   positionID: number,
   address: string,
-  signer: ethers.Signer,
+  currentBlockTimestamp: string,
 ) => {
   let positionArray = []
   let redeemablePositions = []
+  let totalPending
   const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, providers)
   for (let i = 0; i < 24; i++) {
     const positionData = await bondingContract.positions(address, i)
     // revisit this, dont push if owed is not greater than 0
-    if (positionData.owed > 600000000000000000) positionArray.push(positionData)
-    redeemablePositions.push(i)
+    if (positionData.owed > 600000000000000000) redeemablePositions.push(i)
+    positionArray.push(positionData)
+    // let elapsed = currentBlockTimestamp > positionData.creation ? 1 : +currentBlockTimestamp / positionData.creation
+    // totalPending += +(+(utils.formatEther(positionData.owed))).toFixed(2) * elapsed - +(+(utils.formatEther(positionData.redeemed))).toFixed(2)
   }
   return { positionArray, redeemablePositions }
 }
@@ -134,17 +137,11 @@ export const getUserBondPositions = async (
 export const useBondState = () => {
   const [{ data: account }] = useAccount()
   const [{ data: signer }] = useSigner()
-
-  const networkId = useCurrentSupportedNetworkId()
-
-  const [currencyIn, setCurrencyIn] = useState<Token>(DAI[networkId])
-  const [currencyOut, setCurrencyOut] = useState<Token>(CNV[networkId])
-
   const [recipient, setRecipient] = useState<string>('')
-  const [exactValue, setExactValue] = useState<BigNumberish>(0)
-
+  const networkId = useCurrentSupportedNetworkId()
+  const currencyIn = DAI[networkId]
+  const currencyOut = CNV[networkId]
   const balance = useCurrencyBalance(currencyIn)
-
   const userAddress = account?.address
 
   return useMemo(
@@ -153,12 +150,11 @@ export const useBondState = () => {
       currencyIn,
       currencyOut,
       recipient,
-      exactValue,
       setRecipient,
       userAddress,
       balance,
       networkId,
     }),
-    [signer, currencyIn, currencyOut, recipient, exactValue, userAddress, balance, networkId],
+    [signer, currencyIn, currencyOut, recipient, userAddress, balance, networkId],
   )
 }

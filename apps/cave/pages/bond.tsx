@@ -176,7 +176,7 @@ export default function Bond() {
 
   useEffect(() => {
     if (userAddress && userBondPositions.length === 0)
-      getUserBondPositions(3, 2, userAddress, signer)
+      getUserBondPositions(3, 2, userAddress, currentBlockTs.toString())
         .then((userPositionInfo) => {
           setUserBondPositions(userPositionInfo.positionArray)
           setUserBondRedeemablePositionIDs(userPositionInfo.redeemablePositions)
