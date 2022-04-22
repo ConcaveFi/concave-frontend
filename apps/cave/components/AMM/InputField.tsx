@@ -18,7 +18,7 @@ export const InputField = ({
   updateInputValue,
   updateCurrencyIn,
 }: InputFieldProps) => {
-  const inputFiat = useFiatPrice(currencyIn.wrapped)
+  const inputFiat = useFiatPrice(currencyIn?.wrapped)
   const inputFiatValue = currencyAmountIn && inputFiat.price?.quote(currencyAmountIn)
   const balance = useCurrencyBalance(currencyIn)
 

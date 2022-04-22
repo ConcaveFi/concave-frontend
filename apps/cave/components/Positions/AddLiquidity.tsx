@@ -68,13 +68,11 @@ export const AddLiquidityContent = ({ userAddress }: { userAddress: string }) =>
             <PlusIcon />
           </Button>
         </Flex>
-        <OutputField
-          currencyAmountIn={amountADesired}
-          currencyOut={tokenB}
-          currencyAmountOut={amountBDesired}
-          updateOutputValue={updateOutputValue}
-          updateCurrencyOut={updateTokenB}
-          dontUseImpact
+        <InputField
+          currencyIn={tokenB}
+          currencyAmountIn={amountBDesired}
+          updateInputValue={updateOutputValue}
+          updateCurrencyIn={updateTokenB}
         />
       </Flex>
       <Button
