@@ -11,6 +11,7 @@ export const useApprovalWhenNeeded = (
   userAddress: string,
   amount: BigNumberish = MaxUint256.toString(),
 ) => {
+  const [approveInYourWallet, setApproveInYourWallet] = useState(false)
   const [allowanceTokenA, syncAllowance] = useAllowance(token, spender, userAddress)
   const [approvalTokenA, requestApprove] = useApproval(token, spender, amount)
   const [approveAConfirmation] = useWaitForTransaction({ wait: approvalTokenA.data?.wait })
@@ -19,22 +20,38 @@ export const useApprovalWhenNeeded = (
     hash,
     skip: !hash,
   })
+
+  const label = (() => {
+    if (approveStatus.loading) return 'Waiting block confirmation'
+
+    if (approveStatus.error) return 'Error on request'
+
+    if (approveStatus.data) return 'Approved'
+
+    if (approveInYourWallet) {
+      return 'Approve in your wallet'
+    }
+    return `Approve to use ${token.symbol}`
+  })()
+
   useEffect(() => {
     if (approveAConfirmation.data) syncAllowance()
   }, [approveAConfirmation.data, syncAllowance])
 
   const formattedAllowance =
     allowanceTokenA.data && parseFloat(formatUnits(allowanceTokenA.data, token.decimals))
-  console.table({ formattedAllowance, amount })
   const needsApprove = formattedAllowance < amount
   return [
     needsApprove,
-    () =>
+    () => {
+      setApproveInYourWallet(true)
       requestApprove().then((tx) => {
         setHash(tx.data.hash)
         return tx
-      }),
+      })
+    },
     approveStatus,
+    label,
   ] as const
 }
 

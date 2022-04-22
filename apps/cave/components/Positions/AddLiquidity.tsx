@@ -114,13 +114,13 @@ const SupplyLiquidityModal = ({
 }) => {
   const { tokenA, tokenB, amountADesired, amountBDesired, userAddress } = data
   const networkId = useCurrentSupportedNetworkId()
-  const [needsApproveA, requestApproveA, approveStatusA] = useApprovalWhenNeeded(
+  const [needsApproveA, requestApproveA, approveStatusA, approveLabel] = useApprovalWhenNeeded(
     tokenA,
     ROUTER_ADDRESS[networkId],
     userAddress,
     BigNumber.from(100000000000000),
   )
-  const [needsApproveB, requestApproveB, approveStatusB] = useApprovalWhenNeeded(
+  const [needsApproveB, requestApproveB, approveStatusB, approveLabelB] = useApprovalWhenNeeded(
     tokenB,
     ROUTER_ADDRESS[networkId],
     userAddress,
@@ -163,27 +163,23 @@ const SupplyLiquidityModal = ({
           mt={8}
           color={'text.low'}
           label={`${tokenA.symbol} Deposited`}
-          value={`${amountADesired.toExact()} ${tokenA.symbol}`}
+          value={`${amountADesired.toSignificant()} ${tokenA.symbol}`}
         />
         <PositionInfoItem
           color={'text.low'}
           label={`${tokenB.symbol} Deposited`}
-          value={`${amountBDesired.toExact()} ${tokenB.symbol}`}
+          value={`${amountBDesired.toSignificant()} ${tokenB.symbol}`}
         />
         <PositionInfoItem color={'text.low'} label="Share Pool" value={'2.786%'} />
       </Box>
       {needsApproveA && (
         <Button mt={2} p={6} fontSize={'2xl'} variant={'primary'} onClick={() => requestApproveA()}>
-          {!approveStatusA.loading
-            ? `Approve to use ${amountADesired.toExact()} ${tokenA.symbol}`
-            : 'approving'}
+          {approveLabel}
         </Button>
       )}
       {needsApproveB && (
         <Button mt={2} p={6} fontSize={'2xl'} variant={'primary'} onClick={() => requestApproveB()}>
-          {!approveStatusB.loading
-            ? `Approve to use ${amountBDesired.toExact()} ${tokenB.symbol}`
-            : 'approving'}
+          {approveLabelB}
         </Button>
       )}
       {!needsApproveA && !needsApproveA && (

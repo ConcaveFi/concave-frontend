@@ -103,13 +103,6 @@ const LPPositionItem = ({ userAddress, liquidityPoolToken }: LPPosition) => {
           <CurrencyIcon h={'32px'} currency={pair.token1} mx={1} />
           <Text ml="24px" fontWeight="semibold" fontSize="lg">
             {pair.token0.symbol}/{pair.token1.symbol}{' '}
-            <a
-              target={'_blank'}
-              href={`https://ropsten.etherscan.io/address/${token.address}#readContract}`}
-              rel="noreferrer"
-            >
-              link to etherscan
-            </a>
           </Text>
           <Button
             variant="secondary"
@@ -153,17 +146,16 @@ const LPPositionItem = ({ userAddress, liquidityPoolToken }: LPPosition) => {
             />
           </Stack>
           <Flex gap={5} justify="center" mt={6}>
-            <Button onClick={addLiquidity.onOpen} variant="primary" h={12} w={40} fontSize="lg">
+            {/* <Button onClick={addLiquidity.onOpen} variant="primary" h={12} w={40} fontSize="lg">
               Add
-            </Button>
+            </Button> */}
             <Button onClick={removeLiquidity.onOpen} variant="primary" h={12} w={40} fontSize="lg">
-              Remove
+              Withdraw
             </Button>
           </Flex>
         </AccordionPanel>
       </AccordionItem>
       <RemoveLiquidityModal disclosure={removeLiquidity} liquidityInfo={liquidityInfo} />
-      {/* <AddLiquidityModal disclosure={addLiquidity} userAddress={user.address} /> */}
     </>
   )
 }
@@ -234,7 +226,7 @@ const RemoveLiquidityActions = ({
 }) => {
   const networkId = useCurrentSupportedNetworkId()
   const [{ data: account }] = useAccount()
-  const [needsApprove, requestApproveA, approveStatusA] = useApprovalWhenNeeded(
+  const [needsApprove, requestApproveA, approveStatusA, approveLabel] = useApprovalWhenNeeded(
     removeLiquidityState.token,
     ROUTER_ADDRESS[networkId],
     account.address,
@@ -257,7 +249,7 @@ const RemoveLiquidityActions = ({
         variant={'primary'}
         onClick={removeAproval}
       >
-        Approve
+        {approveLabel}
       </Button>
       <Button
         disabled={needsApprove || !removeLiquidityState.percentToRemove}
