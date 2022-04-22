@@ -70,4 +70,5 @@ export const usePairs = <T = Pair[]>(
   )
 }
 
-export const usePair = (tokenA: Token, tokenB: Token) => usePairs(tokenA, tokenB, 1)
+export const usePair = (tokenA: Token, tokenB: Token) =>
+  usePairs(tokenA, tokenB, 1, { select: (pairs) => pairs[0] })
