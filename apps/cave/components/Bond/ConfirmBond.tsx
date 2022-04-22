@@ -116,7 +116,7 @@ export const ConfirmBondModal = ({
   tokenInRelativePriceToTokenOut: string
   isOpen: boolean
   onClose: () => void
-  onConfirm: () => void
+  onConfirm: () => {}
   bondPrice: string
   minimumAmountOut: string
   slippage: string

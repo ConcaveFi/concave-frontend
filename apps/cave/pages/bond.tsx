@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Card,
   Container,
   Flex,
@@ -58,7 +59,6 @@ const BondInfo = ({ asset, roi, vestingTerm, icon }) => {
 }
 
 const UserBondPositionInfo = ({ bondInfo, currentBlockTimestamp }) => {
-  const currentBlockTime = currentBlockTimestamp
   const elapsed =
     currentBlockTimestamp > bondInfo.creation ? 1 : currentBlockTimestamp / bondInfo.creation
   return (
@@ -138,6 +138,23 @@ const NothingToRedeem = () => {
       <Text color="text.low" align="center">
         Nothing to redeem
       </Text>
+    </Card>
+  )
+}
+
+const Redeem = ({ onConfirm }: { onConfirm: () => void }) => {
+  return (
+    <Card
+      // shadow="Up Big"
+      mb={-20}
+      fontWeight="bold"
+      fontSize="lg"
+      borderBottomRadius="0"
+      w="250px"
+    >
+      <Button variant="primary" size="lg" isFullWidth onClick={onConfirm}>
+        {UserBondPositionInfo.length < 1 ? 'Redeem' : 'Batch Redeem'}
+      </Button>
     </Card>
   )
 }
@@ -226,8 +243,19 @@ export default function Bond() {
                   </React.Fragment>
                 )
               })}
-
-              <NothingToRedeem />
+              {userBondPositions.length > 0 ? (
+                <Redeem
+                  onConfirm={() => {
+                    // make call here for a mass redeem...
+                    // inherit id of known redeemable positions
+                    // load up those arguments into the batch redemption
+                    console.log('test')
+                    //
+                  }}
+                ></Redeem>
+              ) : (
+                <NothingToRedeem />
+              )}
             </Card>
           </Box>
 
