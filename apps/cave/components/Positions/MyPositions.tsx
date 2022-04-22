@@ -24,12 +24,11 @@ import { useAddressTokenList } from 'components/AMM/hooks/useTokenList'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { BigNumber, ethers } from 'ethers'
 import { parseUnits } from 'ethers/lib/utils'
-import { Pair, Token } from 'gemswap-sdk'
+import { Pair, ROUTER_ADDRESS, Token } from 'gemswap-sdk'
 import { useApprovalWhenNeeded } from 'hooks/useAllowance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { LiquidityInfoData, useLiquidityInfo } from 'hooks/useLiquidityInfo'
 import { precision, usePrecision } from 'hooks/usePrecision'
-import { ContractAddress } from 'lib/contractAddress'
 import { contractABI } from 'lib/contractoABI'
 import { concaveProvider } from 'lib/providers'
 import React, { useState } from 'react'
@@ -384,7 +383,7 @@ const useRemoveLiquidity = ({ liquidityInfo }: { liquidityInfo: LiquidityInfoDat
   const [hash, setHash] = useState<string>(null)
 
   const contractInstance = new ethers.Contract(
-    ContractAddress[networkId],
+    ROUTER_ADDRESS[networkId],
     contractABI,
     concaveProvider(networkId),
   )

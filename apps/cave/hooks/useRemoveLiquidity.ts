@@ -1,7 +1,6 @@
 import { ethers } from 'ethers'
 import { parseUnits } from 'ethers/lib/utils'
-import { CNV, Token, DAI, CurrencyAmount } from 'gemswap-sdk'
-import { ContractAddress } from 'lib/contractAddress'
+import { CNV, Token, DAI, CurrencyAmount, ROUTER_ADDRESS } from 'gemswap-sdk'
 import { contractABI } from 'lib/contractoABI'
 import { concaveProvider } from 'lib/providers'
 import { useState } from 'react'
@@ -17,7 +16,7 @@ export const useRemoveLiquidity = (selectedChain = chain.ropsten, userAddress) =
   const [{ data, error, loading }, getSigner] = useSigner()
   const [hash, setHash] = useState<string>(null)
   const contractInstance = new ethers.Contract(
-    ContractAddress[selectedChain.id],
+    ROUTER_ADDRESS[selectedChain.id],
     contractABI,
     concaveProvider(selectedChain.id),
   )
@@ -29,6 +28,7 @@ export const useRemoveLiquidity = (selectedChain = chain.ropsten, userAddress) =
     setAmountBDesired(null)
     setHash('')
   }
+
   const call = async () => {
     const contractSigner = contractInstance.connect(data)
     const to = userAddress

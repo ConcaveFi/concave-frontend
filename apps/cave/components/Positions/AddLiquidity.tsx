@@ -15,8 +15,10 @@ import { parseInputAmount } from 'components/AMM/utils/parseInputAmount'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { TransactionSubmittedModal } from 'components/TransactionSubmittedModal'
 import { BigNumber } from 'ethers'
+import { ROUTER_ADDRESS } from 'gemswap-sdk'
 import { useAddLiquidity, UseAddLiquidityData } from 'hooks/useAddLiquidity'
 import { useApprovalWhenNeeded } from 'hooks/useAllowance'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import React from 'react'
 import { chain, useBalance } from 'wagmi'
 
@@ -134,15 +136,16 @@ const SupplyLiquidityModal = ({
   onConfirm: () => void
 }) => {
   const { tokenA, tokenB, amountADesired, amountBDesired, userAddress } = data
+  const networkId = useCurrentSupportedNetworkId()
   const [needsApproveA, requestApproveA, approveStatusA] = useApprovalWhenNeeded(
     tokenA,
-    '0xc9c07a4526915014bc60791fca2eef51975a3694',
+    ROUTER_ADDRESS[networkId],
     userAddress,
     BigNumber.from(10000000000),
   )
   const [needsApproveB, requestApproveB, approveStatusB] = useApprovalWhenNeeded(
     tokenB,
-    '0xc9c07a4526915014bc60791fca2eef51975a3694',
+    ROUTER_ADDRESS[networkId],
     userAddress,
     BigNumber.from(10000000000),
   )
