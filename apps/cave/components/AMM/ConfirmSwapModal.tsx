@@ -3,6 +3,7 @@ import { Box, Button, Flex, Heading, HStack, Modal, Stack, StackDivider, Text } 
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { Currency, CurrencyAmount, Percent, Trade, TradeType } from 'gemswap-sdk'
 import React from 'react'
+import { usePreviousDistinct } from 'react-use'
 import { useFiatValue } from './hooks/useFiatPrice'
 import { usePrice } from './hooks/usePrice'
 import { SwapSettings } from './Settings'
@@ -100,6 +101,14 @@ const ExpectedOutput = ({ value, symbol, priceImpact }) => {
   )
 }
 
+const getExactTradeAmountAfterSlippage = (
+  trade: Trade<Currency, Currency, TradeType>,
+  settings: SwapSettings,
+) =>
+  trade.tradeType === TradeType.EXACT_INPUT
+    ? trade.minimumAmountOut(settings.slippageTolerance.percent)
+    : trade.maximumAmountIn(settings.slippageTolerance.percent)
+
 const ConfirmSwap = ({
   trade,
   settings,
@@ -109,6 +118,14 @@ const ConfirmSwap = ({
   settings: SwapSettings
   onConfirm: () => void
 }) => {
+  const outdatedTrade = usePreviousDistinct(trade, (a, b) =>
+    getExactTradeAmountAfterSlippage(a, settings).equalTo(
+      getExactTradeAmountAfterSlippage(b, settings),
+    ),
+  )
+
+  const isTradePricesOutdated = !!outdatedTrade
+
   const currencyIn = trade.inputAmount.currency
   const currencyOut = trade.outputAmount.currency
 
@@ -152,7 +169,22 @@ const ConfirmSwap = ({
         <MinExpectedOutput trade={trade} slippageTolerance={settings.slippageTolerance} />
       </Flex>
 
-      <Button variant="primary" size="large" onClick={onConfirm} isFullWidth>
+      {isTradePricesOutdated && (
+        <Flex p={3} shadow="down" justify="space-between">
+          <Text fontSize="sm" textColor="text.high">
+            Prices Updated
+          </Text>
+          <Button variant="secondary">Confirm</Button>
+        </Flex>
+      )}
+
+      <Button
+        isDisabled={isTradePricesOutdated}
+        variant="primary"
+        size="large"
+        onClick={onConfirm}
+        isFullWidth
+      >
         Confirm Swap
       </Button>
     </>
