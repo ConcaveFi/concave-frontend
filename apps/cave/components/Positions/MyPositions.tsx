@@ -22,21 +22,30 @@ import {
 } from '@concave/ui'
 import { useAddressTokenList } from 'components/AMM/hooks/useTokenList'
 import { CurrencyIcon } from 'components/CurrencyIcon'
-import { formatUnits } from 'ethers/lib/utils'
-import { Pair, Token } from 'gemswap-sdk'
-import { useLiquidityInfo } from 'hooks/useLiquidityInfo'
+import { BigNumber, ethers } from 'ethers'
+import { parseUnits } from 'ethers/lib/utils'
+import { Pair, ROUTER_ADDRESS, Token } from 'gemswap-sdk'
+import { useApprovalWhenNeeded } from 'hooks/useAllowance'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import { LiquidityInfoData, useLiquidityInfo } from 'hooks/useLiquidityInfo'
 import { precision, usePrecision } from 'hooks/usePrecision'
+import { contractABI } from 'lib/contractoABI'
+import { concaveProvider } from 'lib/providers'
 import React, { useState } from 'react'
-import { useBalance } from 'wagmi'
+import { useAccount, useSigner } from 'wagmi'
 
 export const MyPositions = ({ account }) => {
-  const userTokens = useAddressTokenList(account.address)
-  const liquidityPoolTokens = (userTokens.data || []).filter((p) => {
+  const { data: tokens, isLoading } = useAddressTokenList(account.address)
+  if (isLoading) {
+    return <p>loading pools</p>
+  }
+  const liquidityPoolTokens = tokens.filter((p) => {
     return p.name == 'Concave LP'
   })
   if (!liquidityPoolTokens.length) {
-    return <p>loading pools</p>
+    return <p>{"You don't have pools"}</p>
   }
+
   return (
     <>
       <RewardsBanner />
@@ -78,23 +87,13 @@ interface LPPosition {
   liquidityPoolToken: Token
 }
 const LPPositionItem = ({ userAddress, liquidityPoolToken }: LPPosition) => {
-  const [{ pair, token, totalSupply }, loading, error] = useLiquidityInfo(liquidityPoolToken)
-  const [userBalance] = useBalance({
-    addressOrName: userAddress,
-    token: token?.address,
-    formatUnits: token?.decimals,
-  })
+  const [liquidityInfo, isLoading] = useLiquidityInfo(liquidityPoolToken)
   const addLiquidity = useDisclosure()
   const removeLiquidity = useDisclosure()
-  if (!pair) {
-    return <p>Loading Pair</p>
+  if (isLoading) {
+    return <p>Loading Info</p>
   }
-  if (userBalance.loading) {
-    return <p>Loading user Balance</p>
-  }
-  const percentage =
-    +formatUnits(userBalance.data.value, userBalance.data.decimals) /
-    +formatUnits(totalSupply, token.decimals)
+  const { pair, token, userBalance, userPoolShare } = liquidityInfo
   return (
     <>
       <AccordionItem p={2} shadow="Up Big" borderRadius="2xl" alignItems="center">
@@ -150,7 +149,7 @@ const LPPositionItem = ({ userAddress, liquidityPoolToken }: LPPosition) => {
             </PositionInfoItem>
             <PositionInfoItem
               label="Your pool share:"
-              value={`${precision(percentage * 100, 2).formatted}%`}
+              value={`${precision(userPoolShare * 100, 2).formatted}%`}
             />
           </Stack>
           <Flex gap={5} justify="center" mt={6}>
@@ -163,11 +162,7 @@ const LPPositionItem = ({ userAddress, liquidityPoolToken }: LPPosition) => {
           </Flex>
         </AccordionPanel>
       </AccordionItem>
-      <RemoveLiquidityModal
-        userAddressOrName={userAddress}
-        disclosure={removeLiquidity}
-        pair={pair}
-      />
+      <RemoveLiquidityModal disclosure={removeLiquidity} liquidityInfo={liquidityInfo} />
       {/* <AddLiquidityModal disclosure={addLiquidity} userAddress={user.address} /> */}
     </>
   )
@@ -185,17 +180,13 @@ const PositionInfoItem = ({ color = '', label, value, mt = 0, children = <></> }
 
 const RemoveLiquidityModal = ({
   disclosure,
-  userAddressOrName,
-  pair,
+  liquidityInfo,
 }: {
-  userAddressOrName: string
-  pair: Pair
+  liquidityInfo: LiquidityInfoData
   disclosure: UseDisclosureReturn
 }) => {
-  const [percentToRemove, setPercentToRemove] = useState(0)
   const removeLiquidityState = useRemoveLiquidity({
-    pair,
-    percentToRemove,
+    liquidityInfo,
   })
   return (
     <Modal
@@ -215,7 +206,7 @@ const RemoveLiquidityModal = ({
         gap: 6,
       }}
     >
-      <AmountToRemove onChange={setPercentToRemove} />
+      <AmountToRemove onChange={removeLiquidityState.setPercentToRemove} />
       <Flex justifyContent={'center'}>
         <IconButton
           variant="secondary"
@@ -230,23 +221,38 @@ const RemoveLiquidityModal = ({
         />
       </Flex>
       <YouWillReceive {...removeLiquidityState} />
-      <RemoveLiquidityActions />
+      <RemoveLiquidityActions removeLiquidityState={removeLiquidityState} />
       <YourPosition {...removeLiquidityState} />
     </Modal>
   )
 }
 
-const RemoveLiquidityActions = () => {
-  const [approved, setApproved] = useState(false)
-  const removeAproval = async () => {}
+const RemoveLiquidityActions = ({
+  removeLiquidityState,
+}: {
+  removeLiquidityState: RemoveLiquidityState
+}) => {
+  const [approved, setApproved] = useState(true)
+  const [{ data: account }] = useAccount()
+  const [needsApproveA, requestApproveA, approveStatusA] = useApprovalWhenNeeded(
+    removeLiquidityState.token,
+    '0xc9c07a4526915014bc60791fca2eef51975a3694',
+    account.address,
+    BigNumber.from(10000),
+  )
+
+  const removeAproval = async () => {
+    requestApproveA()
+  }
 
   const confirmedWithdrawal = () => {
     console.log('send tx to metamask')
+    removeLiquidityState.call()
     return console.log('confirmed Withdrawal!!!')
   }
 
   return (
-    <Flex gap={4} justifyContent={'center'}>
+    <Flex gap={4} h={45} justifyContent={'center'}>
       <Button w={250} variant={'primary'} onClick={removeAproval}>
         Approve
       </Button>
@@ -257,7 +263,7 @@ const RemoveLiquidityActions = () => {
   )
 }
 
-const YourPosition = ({ pair }: { pair: Pair }) => {
+const YourPosition = ({ pair, userPoolShare }: LiquidityInfoData) => {
   return (
     <Flex gap={7} direction={'column'} shadow="Up Big" px={4} py={4} borderRadius="2xl">
       <Text fontSize={'lg'}>Your Position</Text>
@@ -277,11 +283,20 @@ const YourPosition = ({ pair }: { pair: Pair }) => {
         p={4}
         spacing={3}
       >
-        <PositionInfoItem label="Your pool share:" value={'2.79%'} />
-        <PositionInfoItem label={pair.token0.symbol} value={'0.0001331'}>
+        <PositionInfoItem
+          label="Your pool share:"
+          value={`${precision(userPoolShare * 100, 2).formatted}%`}
+        />
+        <PositionInfoItem
+          label={pair.token0.symbol}
+          value={precision(+pair.reserve0.toExact() * userPoolShare).formatted}
+        >
           <CurrencyIcon size="sm" currency={pair.token0} />
         </PositionInfoItem>
-        <PositionInfoItem label={pair.token1.symbol} value={'325.744'}>
+        <PositionInfoItem
+          label={pair.token1.symbol}
+          value={precision(+pair.reserve1.toExact() * userPoolShare).formatted}
+        >
           <CurrencyIcon size="sm" currency={pair.token1} />
         </PositionInfoItem>
       </Stack>
@@ -349,19 +364,76 @@ const AmountToRemove = ({ onChange }: { onChange: (n: number) => void }) => {
   )
 }
 
-const useRemoveLiquidity = ({ pair, percentToRemove }: { percentToRemove: number; pair: Pair }) => {
-  const to = ''
+const useRemoveLiquidity = ({ liquidityInfo }: { liquidityInfo: LiquidityInfoData }) => {
+  const networkId = useCurrentSupportedNetworkId()
+  const [{ data: account }] = useAccount()
+  const tokenA = liquidityInfo.pair.token0
+  const tokenB = liquidityInfo.pair.token1
+  const liquidity = BigNumber.from(100)
+  console.log(liquidityInfo.userBalance.data.formatted)
+  console.log(BigNumber.from(liquidityInfo.userBalance.data.value))
+
+  const [percentToRemove, setPercentToRemove] = useState(0)
   const ratioToRemove = Math.min(percentToRemove, 100) / 100
-  const [liquidity, setLiquidity] = useState(0)
-  const amountAMin = +pair.reserve0.toExact() * ratioToRemove
-  const amountBMin = +pair.reserve1.toExact() * ratioToRemove
+  const amountAMin =
+    +liquidityInfo.pair.reserve0.toExact() * liquidityInfo.userPoolShare * ratioToRemove
+  const amountBMin =
+    +liquidityInfo.pair.reserve1.toExact() * liquidityInfo.userPoolShare * ratioToRemove
   const [deadline, setDeadLine] = useState(new Date().getTime() / 1000 + 15 * 60)
-  // const [{ data, error, loading }, getSigner] = useSigner()
+  const [hash, setHash] = useState<string>(null)
+
+  const contractInstance = new ethers.Contract(
+    ROUTER_ADDRESS[networkId],
+    contractABI,
+    concaveProvider(networkId),
+  )
+  const [{ data, error, loading }, getSigner] = useSigner()
+
+  const call = async () => {
+    const contractSigner = contractInstance.connect(data)
+    const to = account.address
+    const provider = concaveProvider(networkId)
+    const currentBlockNumber = await provider.getBlockNumber()
+    const { timestamp } = await provider.getBlock(currentBlockNumber)
+    const deadLine = timestamp + 86400
+    console.table([
+      tokenA.address,
+      tokenB.address,
+      liquidityInfo.userBalance.data.value,
+      parseUnits(`0`, tokenA.decimals),
+      parseUnits(`0`, tokenB.decimals),
+      to,
+      deadLine,
+      {
+        gasLimit: 500000,
+      },
+    ])
+    contractSigner
+      .removeLiquidity(
+        tokenA.address,
+        tokenB.address,
+        liquidityInfo.userBalance.data.value,
+        parseUnits(`0`, tokenA.decimals),
+        parseUnits(`0`, tokenB.decimals),
+        to,
+        deadLine,
+        {
+          gasLimit: 500000,
+        },
+      )
+      .then((r) => {
+        setHash(r.hash)
+        return r
+      })
+  }
+
   return {
-    liquidity,
-    pair,
     amountAMin,
     amountBMin,
     deadline,
+    ...liquidityInfo,
+    setPercentToRemove,
+    call,
   }
 }
+export type RemoveLiquidityState = ReturnType<typeof useRemoveLiquidity>

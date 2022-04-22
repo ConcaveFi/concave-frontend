@@ -1,81 +1,95 @@
-// import { ethers, Contract } from 'ethers'
-// import { formatUnits, parseUnits } from 'ethers/lib/utils'
-// import { ContractAddress } from 'lib/contractAddress'
-// import { contractABI } from 'lib/contractoABI'
-// import { concaveProvider } from 'lib/providers'
-// import { useEffect, useState } from 'react'
-import { chain, useSigner, useWaitForTransaction } from 'wagmi'
-// import { useToken, WrapperTokenInfo } from '../components/Swap/useSwap'
-// import { useAllowance, useApproval } from './useAllowance'
+import { ethers } from 'ethers'
+import { parseUnits } from 'ethers/lib/utils'
+import { CNV, Token, DAI, CurrencyAmount, ROUTER_ADDRESS } from 'gemswap-sdk'
+import { contractABI } from 'lib/contractoABI'
+import { concaveProvider } from 'lib/providers'
+import { useState } from 'react'
+import { chain, useSigner } from 'wagmi'
+import { useCurrentSupportedNetworkId } from './useCurrentSupportedNetworkId'
 
-// export const useRemoveLiquidity = (chainId = chain.ropsten.id, userAddress) => {}
+export const useRemoveLiquidity = (selectedChain = chain.ropsten, userAddress) => {
+  const networkId = useCurrentSupportedNetworkId()
+  const [tokenA, setTokenA] = useState<Token>(DAI[networkId])
+  const [tokenB, setTokenB] = useState<Token>(CNV[networkId])
+  const [amountADesired, setAmountADesired] = useState<CurrencyAmount<Token>>(null)
+  const [amountBDesired, setAmountBDesired] = useState<CurrencyAmount<Token>>(null)
+  const [{ data, error, loading }, getSigner] = useSigner()
+  const [hash, setHash] = useState<string>(null)
+  const contractInstance = new ethers.Contract(
+    ROUTER_ADDRESS[selectedChain.id],
+    contractABI,
+    concaveProvider(selectedChain.id),
+  )
 
-// export const useRemoveLiquidity = (chainId = chain.ropsten.id, userAddress) => {
-//   const [wrapperTokenA, setTokenA] = useToken({ userAddressOrName: userAddress, symbol: '' })
-//   const [wrapperTokenB, setTokenB] = useToken({ userAddressOrName: userAddress, symbol: '' })
-//   const [lpRemoveAmount, setLpRemoveAmount] = useState<number>(null)
-//   // GRAB FACTORY ADDRESS,
-//   const [{ data, error, loading }, getSigner] = useSigner()
+  const clear = () => {
+    setTokenA(null)
+    setTokenB(null)
+    setAmountADesired(null)
+    setAmountBDesired(null)
+    setHash('')
+  }
 
-//   const contractInstance = new ethers.Contract(
-//     ContractAddress[chainId],
-//     contractABI,
-//     concaveProvider(chainId),
-//   )
+  const call = async () => {
+    const contractSigner = contractInstance.connect(data)
+    const to = userAddress
+    const provider = concaveProvider(chain.ropsten.id)
+    const currentBlockNumber = await provider.getBlockNumber()
+    const { timestamp } = await provider.getBlock(currentBlockNumber)
+    const deadLine = timestamp + 86400
+    console.table([
+      tokenA.address,
+      tokenB.address,
+      parseUnits(`100`, tokenA.decimals),
+      parseUnits(`0`, tokenA.decimals),
+      parseUnits(`0`, tokenB.decimals),
+      to,
+      deadLine,
+      {
+        gasLimit: 500000,
+      },
+    ])
+    contractSigner
+      .removeLiquidity(
+        tokenA.address,
+        tokenB.address,
+        parseUnits(`100`, tokenA.decimals),
+        parseUnits(`0`, tokenA.decimals),
+        parseUnits(`0`, tokenB.decimals),
+        to,
+        deadLine,
+        {
+          gasLimit: 500000,
+        },
+      )
+      .then((r) => {
+        setHash(r.hash)
+        return r
+      })
+  }
 
-//   const call = async () => {
-//     const contractSigner = contractInstance.connect(data)
-//     const to = userAddress
-//     const provider = concaveProvider(chain.ropsten.id)
-//     const currentBlockNumber = await provider.getBlockNumber()
-//     const { timestamp } = await provider.getBlock(currentBlockNumber)
-//     const deadLine = timestamp + 86400
-//     const gasPrice = await provider.getGasPrice()
-//     const tokenA = wrapperTokenA.token.address
-//     const tokenB = wrapperTokenB.token.address
-//     contractSigner.removeLiquidity(
-//       tokenA,
-//       tokenB,
-//       // LIQUIDITY GOES HERE
-//       parseUnits(`0`, wrapperTokenA.token.decimals),
-//       parseUnits(`0`, wrapperTokenB.token.decimals),
-//       to,
-//       deadLine,
-//       {
-//         gasLimit: gasPrice,
-//       },
-//     )
-//   }
-
-//   return [
-//     {
-//       wrapperTokenA,
-//       wrapperTokenB,
-//       userAddress,
-//       lpRemoveAmount,
-//     },
-//     {
-//       setTokenA,
-//       setTokenB,
-//       lpRemoveAmount,
-//     },
-//     call,
-//   ] as const
-// }
-// export type UseAddLiquidityData = {
-//   wrapperTokenA: WrapperTokenInfo
-//   wrapperTokenB: WrapperTokenInfo
-//   liquidity: number
-//   userAddress: string
-// }
-
-// // console.table({
-// //   tokenA,
-// //   tokenB,
-// //   amountADesired: parseUnits(`${amountADesired}`, wrapperTokenA.token.decimals).toString(),
-// //   amountBDesired: parseUnits(`${amountBDesired}`, wrapperTokenB.token.decimals).toString(),
-// //   amountAMin: parseUnits(`0`, wrapperTokenA.token.decimals).toString(),
-// //   amountBMin: parseUnits(`0`, wrapperTokenB.token.decimals).toString(),
-// //   to,
-// //   deadLine,
-// // })
+  return [
+    {
+      tokenA,
+      tokenB,
+      amountADesired,
+      amountBDesired,
+      userAddress,
+      hash,
+    },
+    {
+      setTokenA,
+      setTokenB,
+      setAmountADesired,
+      setAmountBDesired,
+    },
+    call,
+    clear,
+  ] as const
+}
+export type UseAddLiquidityData = {
+  tokenA: Token
+  tokenB: Token
+  amountADesired: CurrencyAmount<Token>
+  amountBDesired: CurrencyAmount<Token>
+  userAddress: string
+}

@@ -13,8 +13,11 @@ import {
 import { InputField, OutputField } from 'components/AMM'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { TransactionSubmittedModal } from 'components/TransactionSubmittedModal'
+import { BigNumber } from 'ethers'
+import { ROUTER_ADDRESS } from 'gemswap-sdk'
 import { useAddLiquidity, UseAddLiquidityData } from 'hooks/useAddLiquidity'
 import { useApprovalWhenNeeded } from 'hooks/useAllowance'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import React from 'react'
 import { chain, useBalance } from 'wagmi'
 
@@ -123,19 +126,20 @@ const SupplyLiquidityModal = ({
   onConfirm: () => void
 }) => {
   const { tokenA, tokenB, amountADesired, amountBDesired, userAddress } = data
-  const [needsApproveA, requestApproveA, loadingApproveA] = useApprovalWhenNeeded(
+  const networkId = useCurrentSupportedNetworkId()
+  const [needsApproveA, requestApproveA, approveStatusA] = useApprovalWhenNeeded(
     tokenA,
-    '0xc9c07a4526915014bc60791fca2eef51975a3694',
+    ROUTER_ADDRESS[networkId],
     userAddress,
-    amountADesired.toExact(),
+    BigNumber.from(10000000000),
   )
-  const [needsApproveB, requestApproveB, loadingApproveB] = useApprovalWhenNeeded(
+  const [needsApproveB, requestApproveB, approveStatusB] = useApprovalWhenNeeded(
     tokenB,
-    '0xc9c07a4526915014bc60791fca2eef51975a3694',
+    ROUTER_ADDRESS[networkId],
     userAddress,
-    amountBDesired.toExact(),
+    BigNumber.from(10000000000),
   )
-
+  console.log(approveStatusA.loading)
   return (
     <Modal
       bluryOverlay={true}
@@ -184,14 +188,14 @@ const SupplyLiquidityModal = ({
       </Box>
       {needsApproveA && (
         <Button mt={2} p={6} fontSize={'2xl'} variant={'primary'} onClick={() => requestApproveA()}>
-          {!loadingApproveA
+          {!approveStatusA.loading
             ? `Approve to use ${amountADesired.toExact()} ${tokenA.symbol}`
             : 'approving'}
         </Button>
       )}
       {needsApproveB && (
         <Button mt={2} p={6} fontSize={'2xl'} variant={'primary'} onClick={() => requestApproveB()}>
-          {!loadingApproveB
+          {!approveStatusB.loading
             ? `Approve to use ${amountBDesired.toExact()} ${tokenB.symbol}`
             : 'approving'}
         </Button>

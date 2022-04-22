@@ -4,8 +4,7 @@ import { parseInputAmount } from 'components/AMM/utils/parseInputAmount'
 import { Hash } from 'crypto'
 import { ethers } from 'ethers'
 import { parseUnits } from 'ethers/lib/utils'
-import { CNV, Token, DAI, CurrencyAmount, Currency, TradeType, Trade, Pair, CNV_ADDRESS } from 'gemswap-sdk'
-import { ContractAddress } from 'lib/contractAddress'
+import { CNV, Token, DAI, CurrencyAmount, ROUTER_ADDRESS, Currency } from 'gemswap-sdk'
 import { contractABI } from 'lib/contractoABI'
 import { concaveProvider } from 'lib/providers'
 import { useCallback, useEffect, useState } from 'react'
@@ -30,7 +29,7 @@ export const useAddLiquidity = ( selectedChain = chain.ropsten, userAddress ) =>
   const [ exactValue, setExactValue ] = useState<string>( '' )
   const [ fieldType, setFieldType ] = useState<FieldType>( FieldType.INPUT )
   const contractInstance = new ethers.Contract(
-    ContractAddress[ selectedChain.id ],
+    ROUTER_ADDRESS[ selectedChain.id ],
     contractABI,
     concaveProvider( selectedChain.id ),
   )
