@@ -149,7 +149,6 @@ const Redeem = ({ onConfirm }: { onConfirm: () => void }) => {
       mb={-20}
       fontWeight="bold"
       fontSize="lg"
-      borderBottomRadius="0"
       w="250px"
     >
       <Button variant="primary" size="lg" isFullWidth onClick={onConfirm}>
@@ -210,7 +209,24 @@ export default function Bond() {
         </Stack>
 
         <Flex gap={10} direction="row">
-          <Box pos="relative" h="fit-content">
+          <Box
+            pos="relative"
+            h="fit-content"
+            overflowY={'auto'}
+            maxHeight={'500px'}
+            css={{
+              '&::-webkit-scrollbar': {
+                width: '1px',
+              },
+              '&::-webkit-scrollbar-track': {
+                width: '1px',
+              },
+              '&::-webkit-scrollbar-thumb': {
+                borderRadius: '10px',
+                background: 'white',
+              },
+            }}
+          >
             <Card
               variant="secondary"
               w="430px"
@@ -233,36 +249,36 @@ export default function Bond() {
                 }%`}
                 vestingTerm={`${termLength} Days`}
               />
-              {userBondPositions.map((position, i) => {
-                return (
-                  <React.Fragment key={i}>
-                    <UserBondPositionInfo
-                      bondInfo={position}
-                      currentBlockTimestamp={currentBlockTs}
-                    />
-                  </React.Fragment>
-                )
-              })}
-              {userBondPositions.length > 0 ? (
-                <Redeem
-                  onConfirm={() => {
-                    // make call here for a mass redeem...
-                    // inherit id of known redeemable positions
-                    // load up those arguments into the batch redemption
-                    console.log('test')
-                    //
-                  }}
-                ></Redeem>
-              ) : (
-                <NothingToRedeem />
-              )}
             </Card>
+            {userBondPositions.map((position, i) => {
+              return (
+                <React.Fragment key={i}>
+                  <UserBondPositionInfo
+                    bondInfo={position}
+                    currentBlockTimestamp={currentBlockTs}
+                  />
+                </React.Fragment>
+              )
+            })}
           </Box>
 
           <BondBuyCard />
         </Flex>
       </Flex>
-      <Placeholder text="More Bonds" />
+      {userBondPositions.length > 0 ? (
+        <Redeem
+          onConfirm={() => {
+            // make call here for a mass redeem...
+            // inherit id of known redeemable positions
+            // load up those arguments into the batch redemption
+            console.log('test')
+            //
+          }}
+        ></Redeem>
+      ) : (
+        <NothingToRedeem />
+      )}
+      {/* <Placeholder text="More Bonds" /> */}
     </Container>
   )
 }
