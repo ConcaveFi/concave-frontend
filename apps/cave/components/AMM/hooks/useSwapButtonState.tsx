@@ -1,10 +1,10 @@
-import { ButtonProps, Stack, Text } from '@concave/ui'
+import { ButtonProps } from '@concave/ui'
 import { Currency, ROUTER_ADDRESS, Trade, TradeType } from 'gemswap-sdk'
 import { useAccount } from 'wagmi'
 import { useModals } from 'contexts/ModalsContext'
 import { useApprove } from 'hooks/useApprove'
 import { usePermit } from 'hooks/usePermit'
-import { useCurrencyBalance } from './useCurrencyBalance'
+import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { NoValidPairsError } from './usePair'
 
 export const useSwapButtonState = ({

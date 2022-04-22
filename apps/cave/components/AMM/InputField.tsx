@@ -1,5 +1,5 @@
 import { HStack, Text } from '@concave/ui'
-import { useCurrencyBalance } from './hooks/useCurrencyBalance'
+import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useFiatPrice } from './hooks/useFiatPrice'
 import { Balance } from './Balance'
 import { TokenInput } from './TokenInput'
