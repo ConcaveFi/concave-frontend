@@ -6,7 +6,7 @@ import { DownwardIcon } from './DownwardIcon'
 import { BondOutput } from './BondOutput'
 import { BondInput } from './BondInput'
 import { ConfirmBondModal } from './ConfirmBond'
-import { useBondGetAmountOut, useBondState, purchaseBond, getBondSpotPrice } from './BondState'
+import { getBondAmountOut, useBondState, purchaseBond, getBondSpotPrice } from './BondState'
 import { BondReceiptModal } from './BondReceipt'
 import { useFeeData, useWaitForTransaction } from 'wagmi'
 import { GasIcon } from '@concave/icons'
@@ -77,7 +77,7 @@ export function BondBuyCard() {
           if (!numberValue) return setAmountIn('')
           numberValue && setAmountIn(v)
           // eslint-disable-next-line react-hooks/rules-of-hooks
-          useBondGetAmountOut(currencyOut.address, currencyOut.decimals, 3, v).then((amountOut) => {
+          getBondAmountOut(currencyOut.address, currencyOut.decimals, 3, v).then((amountOut) => {
             setAmountOut(amountOut)
           })
         }}
