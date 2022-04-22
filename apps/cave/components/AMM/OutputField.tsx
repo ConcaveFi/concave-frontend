@@ -1,7 +1,7 @@
 import { Flex, HStack, Text } from '@concave/ui'
 import { Currency, CurrencyAmount } from 'gemswap-sdk'
 import { Balance } from './Balance'
-import { useCurrencyBalance } from './hooks/useCurrencyBalance'
+import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useFiatPrice } from './hooks/useFiatPrice'
 import { TokenInput } from './TokenInput'
 import { computeFiatValuePriceImpact } from './utils/computeFiatValuePriceImpact'
