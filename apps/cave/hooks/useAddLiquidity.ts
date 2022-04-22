@@ -1,59 +1,90 @@
+import { usePair, usePairs } from 'components/AMM/hooks/usePair'
+import { useTrade } from 'components/AMM/hooks/useTrade'
+import { parseInputAmount } from 'components/AMM/utils/parseInputAmount'
+import { Hash } from 'crypto'
 import { ethers } from 'ethers'
 import { parseUnits } from 'ethers/lib/utils'
-import { CNV, Token, DAI, CurrencyAmount } from 'gemswap-sdk'
+import { CNV, Token, DAI, CurrencyAmount, Currency, TradeType, Trade, Pair, CNV_ADDRESS } from 'gemswap-sdk'
 import { ContractAddress } from 'lib/contractAddress'
 import { contractABI } from 'lib/contractoABI'
 import { concaveProvider } from 'lib/providers'
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { UseQueryResult } from 'react-query'
 import { chain, useSigner } from 'wagmi'
+import { useConversion } from './useConversion'
 import { useCurrentSupportedNetworkId } from './useCurrentSupportedNetworkId'
 
-export const useAddLiquidity = (selectedChain = chain.ropsten, userAddress) => {
+export enum FieldType
+{
+  INPUT, OUTPUT
+}
+
+export const useAddLiquidity = ( selectedChain = chain.ropsten, userAddress ) =>
+{
   const networkId = useCurrentSupportedNetworkId()
-  const [tokenA, setTokenA] = useState<Token>(DAI[networkId])
-  const [tokenB, setTokenB] = useState<Token>(CNV[networkId])
-  const [amountADesired, setAmountADesired] = useState<CurrencyAmount<Token>>(null)
-  const [amountBDesired, setAmountBDesired] = useState<CurrencyAmount<Token>>(null)
-  const [{ data, error, loading }, getSigner] = useSigner()
-  const [hash, setHash] = useState<string>(null)
+  const [ tokenA, setTokenA ] = useState<Token>( DAI[ networkId ] )
+  const [ tokenB, setTokenB ] = useState<Token>( CNV[ networkId ] )
+  const [ { data, error, loading }, getSigner ] = useSigner()
+  const [ hash, setHash ] = useState<string>( null )
+  const [ tradeType, setTradeType ] = useState( FieldType.INPUT )
+  const [ exactValue, setExactValue ] = useState<string>( '' )
+  const [ fieldType, setFieldType ] = useState<FieldType>( FieldType.INPUT )
   const contractInstance = new ethers.Contract(
-    ContractAddress[selectedChain.id],
+    ContractAddress[ selectedChain.id ],
     contractABI,
-    concaveProvider(selectedChain.id),
+    concaveProvider( selectedChain.id ),
   )
 
-  const clear = () => {
-    setTokenA(null)
-    setTokenB(null)
-    setAmountADesired(null)
-    setAmountBDesired(null)
-    setHash('')
+  const setOrSwitchCurrency = useCallback(
+    ( otherCurrency: Currency, setCurrency ) => ( currency: Currency ) =>
+      otherCurrency?.equals( currency )
+        ? ( setTokenA( tokenB ), setTokenB( tokenA ) )
+        : setCurrency( currency ),
+    [ tokenA, tokenB ],
+  )
+
+  const updateField = ( fieldInputType: FieldType ) => ( value: string ) =>
+  {
+    setFieldType( fieldInputType )
+    setExactValue( value )
   }
-  const call = async () => {
-    const contractSigner = contractInstance.connect(data)
+
+  const { amountADesired, amountBDesired } = useConversion( tokenA, tokenB, exactValue, fieldType )
+
+
+  const clear = () =>
+  {
+    setTokenA( null )
+    setTokenB( null )
+    setHash( '' )
+  }
+  const call = async () =>
+  {
+    const contractSigner = contractInstance.connect( data )
     const to = userAddress
-    const provider = concaveProvider(chain.ropsten.id)
+    const provider = concaveProvider( chain.ropsten.id )
     const currentBlockNumber = await provider.getBlockNumber()
-    const { timestamp } = await provider.getBlock(currentBlockNumber)
+    const { timestamp } = await provider.getBlock( currentBlockNumber )
     const deadLine = timestamp + 86400
     contractSigner
       .addLiquidity(
         tokenA.address,
         tokenB.address,
-        parseUnits(amountADesired.toFixed(tokenA.decimals)),
-        parseUnits(amountBDesired.toFixed(tokenB.decimals)),
-        parseUnits(`0`, tokenA.decimals),
-        parseUnits(`0`, tokenB.decimals),
+        parseUnits( amountADesired.toFixed( tokenA.decimals ) ),
+        parseUnits( amountBDesired.toFixed( tokenB.decimals ) ),
+        parseUnits( `0`, tokenA.decimals ),
+        parseUnits( `0`, tokenB.decimals ),
         to,
         deadLine,
         {
           gasLimit: 500000,
         },
       )
-      .then((r) => {
-        setHash(r.hash)
+      .then( ( r ) =>
+      {
+        setHash( r.hash )
         return r
-      })
+      } )
   }
 
   return [
@@ -68,17 +99,22 @@ export const useAddLiquidity = (selectedChain = chain.ropsten, userAddress) => {
     {
       setTokenA,
       setTokenB,
-      setAmountADesired,
-      setAmountBDesired,
+      updateInputValue: updateField( FieldType.INPUT ),
+      updateOutputValue: updateField( FieldType.OUTPUT ),
+      updateTokenA: setOrSwitchCurrency( tokenB, setTokenA ),
+      updateTokenB: setOrSwitchCurrency( tokenA, setTokenB ),
     },
     call,
     clear,
   ] as const
 }
-export type UseAddLiquidityData = {
+
+export interface UseAddLiquidityData
+{
   tokenA: Token
   tokenB: Token
-  amountADesired: CurrencyAmount<Token>
-  amountBDesired: CurrencyAmount<Token>
+  amountADesired: any
+  amountBDesired: any
   userAddress: string
 }
+

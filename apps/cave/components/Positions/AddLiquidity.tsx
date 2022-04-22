@@ -10,8 +10,7 @@ import {
   useDisclosure,
   UseDisclosureReturn,
 } from '@concave/ui'
-import { TokenInput } from 'components/AMM/TokenInput'
-import { parseInputAmount } from 'components/AMM/utils/parseInputAmount'
+import { InputField, OutputField } from 'components/AMM'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { TransactionSubmittedModal } from 'components/TransactionSubmittedModal'
 import { useAddLiquidity, UseAddLiquidityData } from 'hooks/useAddLiquidity'
@@ -23,7 +22,8 @@ export const AddLiquidityContent = ({ userAddress }: { userAddress: string }) =>
   const supplyLiquidityModal = useDisclosure()
   const [data, setters, call, clear] = useAddLiquidity(chain.ropsten, userAddress)
   const { amountADesired, amountBDesired, tokenA, tokenB } = data
-  const { setAmountADesired, setTokenA, setTokenB, setAmountBDesired } = setters
+  const { updateInputValue, updateOutputValue, updateTokenA, updateTokenB, setTokenA, setTokenB } =
+    setters
   const valid = tokenA && tokenB && amountADesired && amountBDesired
   const [{ data: balanceA }] = useBalance({
     addressOrName: userAddress,
@@ -46,18 +46,12 @@ export const AddLiquidityContent = ({ userAddress }: { userAddress: string }) =>
         </Text>
       </Card>
       <Flex direction={'column'} p={4} gap={2}>
-        <TokenInput
-          currencyAmount={amountADesired}
-          currency={tokenA}
-          onChangeValue={(value) => {
-            setAmountADesired(parseInputAmount(value, tokenA))
-          }}
-          onSelectCurrency={(token) => {
-            setTokenA(token)
-          }}
-        >
-          <HStack></HStack>
-        </TokenInput>
+        <InputField
+          currencyIn={tokenA}
+          currencyAmountIn={amountADesired}
+          updateInputValue={updateInputValue}
+          updateCurrencyIn={updateTokenA}
+        />
         <Flex align="center" justify="center">
           <Button
             shadow={'Up Small'}
@@ -71,18 +65,14 @@ export const AddLiquidityContent = ({ userAddress }: { userAddress: string }) =>
             <PlusIcon />
           </Button>
         </Flex>
-        <TokenInput
-          currencyAmount={amountBDesired}
-          currency={tokenB}
-          onChangeValue={(value) => {
-            setAmountBDesired(parseInputAmount(value, tokenB))
-          }}
-          onSelectCurrency={(token) => {
-            setTokenB(token)
-          }}
-        >
-          <HStack></HStack>
-        </TokenInput>
+        <OutputField
+          currencyAmountIn={amountADesired}
+          currencyOut={tokenB}
+          currencyAmountOut={amountBDesired}
+          updateOutputValue={updateOutputValue}
+          updateCurrencyOut={updateTokenB}
+          dontUseImpact
+        />
       </Flex>
       <Button
         h={'50px'}
