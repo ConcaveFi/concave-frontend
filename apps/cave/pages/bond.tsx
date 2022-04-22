@@ -14,6 +14,7 @@ import Placeholder from 'components/Placeholder'
 import {
   useBondGetTermLength,
   getBondSpotPrice,
+  getCurrentBlockTimestamp,
   getUserBondPositions,
   useBondState,
 } from 'components/Bond/BondState'
@@ -56,14 +57,17 @@ const BondInfo = ({ asset, roi, vestingTerm, icon }) => {
   )
 }
 
-const UserBondPositionInfo = ({ bondInfo }) => {
+const UserBondPositionInfo = ({ bondInfo, currentBlockTimestamp }) => {
+  const currentBlockTime = currentBlockTimestamp
+  const elapsed =
+    currentBlockTimestamp > bondInfo.creation ? 1 : currentBlockTimestamp / bondInfo.creation
   return (
     <Card bg="none" py={3} w="100%" direction="row" shadow="Glass Up Medium">
       <Flex justify="center" pl={4} pr={7}>
         <InfoItem
           value={`${
             bondInfo?.creation
-              ? new Date(bondInfo.creation * 1000).toString().slice(0, 21)
+              ? new Date(bondInfo.creation * 1000 + 432000000).toString().slice(0, 21)
               : 'Loading'
           }`}
           label="Fully Vested"
@@ -73,7 +77,10 @@ const UserBondPositionInfo = ({ bondInfo }) => {
       <InfoItem
         value={`${
           bondInfo?.owed
-            ? (+utils.formatEther(bondInfo.owed) - +utils.formatEther(bondInfo.redeemed)).toFixed(2)
+            ? elapsed
+              ? (+utils.formatEther(bondInfo.owed)).toFixed(2)
+              : +(+utils.formatEther(bondInfo.owed)).toFixed(2) * elapsed -
+                +(+utils.formatEther(bondInfo.redeemed)).toFixed(2)
             : 'Loading'
         }`}
         label="Pending"
@@ -143,6 +150,7 @@ export default function Bond() {
   const [userBondPositions, setUserBondPositions] = useState([])
   const [userBondRedeemablePositionIDs, setUserBondRedeemablePositionIDs] = useState([])
   const [userBondPositionsLength, setUserBondPositionsLength] = useState<number>(4)
+  const [currentBlockTs, setCurrentBlockTs] = useState<number>()
 
   const { data } = useFetchApi('/api/cnv')
 
@@ -160,6 +168,9 @@ export default function Bond() {
         .catch((e) => {
           console.log('get position info failed', e)
         })
+    getCurrentBlockTimestamp().then((x) => {
+      setCurrentBlockTs(x)
+    })
   }, [signer])
 
   useEffect(() => {
@@ -183,16 +194,6 @@ export default function Bond() {
 
         <Flex gap={10} direction="row">
           <Box pos="relative" h="fit-content">
-            {/* make bar dynamic */}
-            {/* <Box
-              h="20px"
-              w="72px"
-              top="50%"
-              transform="auto"
-              translateY="-50%"
-              left="calc(100% - 24px)"
-              sx={{ ...gradientBorder({ borderWidth: 3, borderRadius: '0' }), pos: 'absolute' }}
-            /> */}
             <Card
               variant="secondary"
               w="430px"
@@ -218,7 +219,10 @@ export default function Bond() {
               {userBondPositions.map((position, i) => {
                 return (
                   <React.Fragment key={i}>
-                    <UserBondPositionInfo bondInfo={position} />
+                    <UserBondPositionInfo
+                      bondInfo={position}
+                      currentBlockTimestamp={currentBlockTs}
+                    />
                   </React.Fragment>
                 )
               })}

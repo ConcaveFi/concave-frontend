@@ -93,6 +93,11 @@ export const purchaseBond = async (
   return
 }
 
+export async function getCurrentBlockTimestamp() {
+  const getBlock = providers.getBlockNumber()
+  const timestamp = (await providers.getBlock(getBlock)).timestamp
+  return timestamp
+}
 // export const redeemBond = async (
 //   networkId: number,
 //   positionID: string,
@@ -125,7 +130,7 @@ export const getUserBondPositions = async (
   let positionArray = []
   let redeemablePositions = []
   const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, providers)
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 24; i++) {
     const positionData = await bondingContract.positions(address, i)
     // revisit this, dont push if owed is not greater than 0
     if (positionData.owed > 600000000000000000) positionArray.push(positionData)
@@ -145,10 +150,7 @@ export const useBondState = () => {
   const [exactValue, setExactValue] = useState<BigNumberish>(0)
   const balance = useCurrencyBalance(currencyIn, account?.address)
   const userAddress = account?.address
-  // const [swapTransaction, swap] = useContractWrite({
-  //   addressOrName: ROUTER_CONTRACT[isRopsten ? chain.ropsten.id : chain.mainnet.id],
-  //   contractInterface: RouterABI,
-  // })
+
   return useMemo(
     () => ({
       signer,
