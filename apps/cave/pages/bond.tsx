@@ -166,7 +166,7 @@ export default function Bond() {
   const [userBondPositions, setUserBondPositions] = useState([])
   const [userBondRedeemablePositionIDs, setUserBondRedeemablePositionIDs] = useState([])
   const [userBondPositionsLength, setUserBondPositionsLength] = useState<number>(4)
-  const [currentBlockTs, setCurrentBlockTs] = useState<number>()
+  const [currentBlockTs, setCurrentBlockTs] = useState<number>(0)
 
   const { data } = useFetchApi('/api/cnv')
 

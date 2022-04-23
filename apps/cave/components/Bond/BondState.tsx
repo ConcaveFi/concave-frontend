@@ -121,17 +121,23 @@ export const getUserBondPositions = async (
 ) => {
   let positionArray = []
   let redeemablePositions = []
-  let totalPending
+  let totalPending = 0
   const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, providers)
   for (let i = 0; i < 24; i++) {
     const positionData = await bondingContract.positions(address, i)
     // revisit this, dont push if owed is not greater than 0
     if (positionData.owed > 600000000000000000) redeemablePositions.push(i)
     positionArray.push(positionData)
-    // let elapsed = currentBlockTimestamp > positionData.creation ? 1 : +currentBlockTimestamp / positionData.creation
-    // totalPending += +(+(utils.formatEther(positionData.owed))).toFixed(2) * elapsed - +(+(utils.formatEther(positionData.redeemed))).toFixed(2)
+    let elapsed =
+      currentBlockTimestamp > positionData.creation
+        ? 1
+        : +currentBlockTimestamp / positionData.creation
+    totalPending +=
+      +(+utils.formatEther(positionData.owed)).toFixed(2) * elapsed -
+      +(+utils.formatEther(positionData.redeemed)).toFixed(2)
+    console.log(totalPending)
   }
-  return { positionArray, redeemablePositions }
+  return { positionArray, redeemablePositions, totalPending }
 }
 
 export const useBondState = () => {
