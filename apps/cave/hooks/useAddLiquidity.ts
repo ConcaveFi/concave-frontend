@@ -17,8 +17,8 @@ export enum FieldType {
 
 export const useAddLiquidity = (selectedChain = chain.ropsten, userAddress) => {
   const networkId = useCurrentSupportedNetworkId()
-  const [tokenA, setTokenA] = useState<Token>(DAI[networkId])
-  const [tokenB, setTokenB] = useState<Token>(CNV[networkId])
+  const [tokenA, setTokenA] = useState<Token>()
+  const [tokenB, setTokenB] = useState<Token>()
   const [{ data, error, loading }, getSigner] = useSigner()
   const [hash, setHash] = useState<string>(null)
   const [exactValue, setExactValue] = useState<string>('')
