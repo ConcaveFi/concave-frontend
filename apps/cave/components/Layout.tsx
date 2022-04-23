@@ -1,16 +1,14 @@
-import { Box, Container } from '@concave/ui'
+import { Flex, Container } from '@concave/ui'
 import React from 'react'
-import { MetaHead } from './MetaHead'
 import { SideBar } from './SideBar/SideBar'
 
 export const DefaultLayout = ({ children }) => {
   return (
-    <Box as="main" display="flex">
-      <MetaHead />
+    <Flex as="main" direction={{ base: 'column', md: 'row' }}>
       <SideBar />
-      <Container display="flex" maxWidth="container.xl">
+      <Container display="flex" h={{ base: '150vh', md: '100vh' }} maxWidth="container.xl">
         {children}
       </Container>
-    </Box>
+    </Flex>
   )
 }

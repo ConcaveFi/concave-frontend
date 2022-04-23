@@ -1,25 +1,18 @@
 import { useState, useMemo } from 'react'
 import { chain, useNetwork, useBalance, useContractWrite, useAccount, useSigner } from 'wagmi'
 import { BigNumberish, Contract, ethers } from 'ethers'
-import { DAI, CNV } from 'gemswap-sdk'
+import { DAI, CNV, Token, Currency } from 'gemswap-sdk'
 import { BOND_ADDRESS } from '../../contracts/Bond/BondingAddress'
 import { BOND_ABI } from '../../contracts/Bond/BondABI'
 import { ROPSTEN_DAI_ABI } from '../../contracts/Bond/ROPSTEN_DAI_ABI'
-import { Token, Currency } from 'gemswap-sdk'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { BondSettings } from './Settings'
+import { utils } from 'ethers'
 // testing only, flip to prod
-let providers = new ethers.providers.InfuraProvider('ropsten', '3270f483eb9e484ba6d9f472557f4350')
+let providers = new ethers.providers.InfuraProvider('ropsten', '5ad069733a1a48a897180e66a5fb8846')
 
-const useCurrencyBalance = (currency: Currency, userAddress: string) =>
-  useBalance({
-    addressOrName: userAddress,
-    token: currency?.isToken && currency?.address,
-    formatUnits: currency?.decimals,
-    skip: !currency || !userAddress,
-  })
-
-export const useBondGetAmountOut = async (
+export const getBondAmountOut = async (
   quoteAddress: string,
   decimals: number,
   networkId: number,
@@ -92,42 +85,76 @@ export const purchaseBond = async (
   return
 }
 
+export async function getCurrentBlockTimestamp() {
+  const getBlock = providers.getBlockNumber()
+  const timestamp = (await providers.getBlock(getBlock)).timestamp
+  return timestamp
+}
 // export const redeemBond = async (
-//   quoteAddress: string,
-//   decimals: number,
 //   networkId: number,
-//   input: string,
+//   positionID: string,
+//   address: string,
+//   signer: ethers.Signer,
 // ) => {
+//   const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, signer)
+//   const formattedPositionID = ethers.utils.parseUnits(positionID.toString(), 18)
+//   const estimatedGas = bondingContract.estimateGas.redeemBond(
+//     address,
+//     positionID,
+//   )
+//   await bondingContract.redeemBond(
+//     address,
+//     formattedPositionID,
+//     {
+//       gasLimit: estimatedGas,
+//     },
+//   )
 
+//   return
 // }
+
+export const getUserBondPositions = async (
+  networkId: number,
+  positionID: number,
+  address: string,
+  currentBlockTimestamp: string,
+) => {
+  let positionArray = []
+  let redeemablePositions = []
+  let totalPending
+  const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, providers)
+  for (let i = 0; i < 24; i++) {
+    const positionData = await bondingContract.positions(address, i)
+    // revisit this, dont push if owed is not greater than 0
+    if (positionData.owed > 600000000000000000) redeemablePositions.push(i)
+    positionArray.push(positionData)
+    // let elapsed = currentBlockTimestamp > positionData.creation ? 1 : +currentBlockTimestamp / positionData.creation
+    // totalPending += +(+(utils.formatEther(positionData.owed))).toFixed(2) * elapsed - +(+(utils.formatEther(positionData.redeemed))).toFixed(2)
+  }
+  return { positionArray, redeemablePositions }
+}
 
 export const useBondState = () => {
   const [{ data: account }] = useAccount()
   const [{ data: signer }] = useSigner()
-
-  const networkId = useCurrentSupportedNetworkId()
-  const [currencyIn, setCurrencyIn] = useState<Token>(DAI[networkId])
-  const [currencyOut, setCurrencyOut] = useState<Token>(CNV[networkId])
   const [recipient, setRecipient] = useState<string>('')
-  const [exactValue, setExactValue] = useState<BigNumberish>(0)
-  const balance = useCurrencyBalance(currencyIn, account?.address)
+  const networkId = useCurrentSupportedNetworkId()
+  const currencyIn = DAI[networkId]
+  const currencyOut = CNV[networkId]
+  const balance = useCurrencyBalance(currencyIn)
   const userAddress = account?.address
-  // const [swapTransaction, swap] = useContractWrite({
-  //   addressOrName: ROUTER_CONTRACT[isRopsten ? chain.ropsten.id : chain.mainnet.id],
-  //   contractInterface: RouterABI,
-  // })
+
   return useMemo(
     () => ({
       signer,
       currencyIn,
       currencyOut,
       recipient,
-      exactValue,
       setRecipient,
       userAddress,
       balance,
       networkId,
     }),
-    [signer, currencyIn, currencyOut, recipient, exactValue, userAddress, balance, networkId],
+    [signer, currencyIn, currencyOut, recipient, userAddress, balance, networkId],
   )
 }

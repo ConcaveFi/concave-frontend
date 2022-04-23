@@ -14,7 +14,7 @@ const NavButton = (props: ButtonLinkProps) => {
       px={4}
       variant="secondary"
       color="text.low"
-      w="183px"
+      w="full"
       borderRightRadius={0}
       h="50px"
       rightIcon={<Box roundedLeft="lg" shadow="Up Big" mr={-5} w="16px" h="36px" />}
@@ -51,49 +51,60 @@ const SubnavButton = ({ children, ...props }: ButtonLinkProps) => {
   )
 }
 
-function PageNav() {
-  const [bondSpotPrice, setBondSpotPrice] = useState<string>('0')
-  const [cnvMarketPrice, setCnvMarketPrice] = useState<number>(0)
-  const { data } = useFetchApi('/api/cnv')
+const NotInteractableImage = ({ src, ...props }) => (
+  <Image alt="" src={src} userSelect="none" draggable="false" pointerEvents="none" {...props} />
+)
 
-  if (cnvMarketPrice === 0 && !!data) {
-    setCnvMarketPrice(data.cnv)
-  }
-  useEffect(() => {
-    getBondSpotPrice(3, '').then((bondSpotPrice) => {
-      setBondSpotPrice(bondSpotPrice)
-    })
-  }, [cnvMarketPrice])
+function PageNav() {
+  // const [bondSpotPrice, setBondSpotPrice] = useState<string>('0')
+  // const [cnvMarketPrice, setCnvMarketPrice] = useState<number>(0)
+  // const { data } = useFetchApi('/api/cnv')
+
+  // if (cnvMarketPrice === 0 && !!data) {
+  //   setCnvMarketPrice(data.cnv)
+  // }
+  // useEffect(() => {
+  //   getBondSpotPrice(3, '').then((bondSpotPrice) => {
+  //     setBondSpotPrice(bondSpotPrice)
+  //   })
+  // }, [cnvMarketPrice])
   return (
-    <Flex direction="column" position="relative" justify="right" w="fit-content">
-      <Image src={'/assets/sidebar/linkage.svg'} alt="" position="absolute" left={-6} top={6} />
+    <Flex direction="column" position="relative" mr="-2px">
+      <NotInteractableImage
+        src="/assets/sidebar/linkage.svg"
+        alt=""
+        position="absolute"
+        left={-6}
+        top={6}
+      />
       <Box shadow="Down Big" roundedLeft="2xl">
         <NavButton
-          leftIcon={<Image alt="bond" src={'/assets/sidebar/page-bond.svg'} />}
+          leftIcon={<NotInteractableImage src="/assets/sidebar/page-bond.svg" />}
           href="/bond"
         >
           Bonds
         </NavButton>
         <Text fontSize="xs" fontWeight="bold" textColor="text.low" textAlign="center" py={2}>
-          CNV-DAI ROI{' '}
+          Coming Soon
+          {/* CNV-DAI ROI{' '}
           {`${
             cnvMarketPrice > 0 ? ((cnvMarketPrice / +bondSpotPrice - 1) * 100).toFixed(2) : '---'
-          }%`}
+          }%`} */}
         </Text>
       </Box>
 
       <NavButton
-        leftIcon={<Image alt="Staking" src={'/assets/sidebar/page-lstaking.svg'} />}
-        href={'/liquidstaking'}
-        outlined
+        leftIcon={<NotInteractableImage src="/assets/sidebar/page-lstaking.svg" />}
+        href="/liquidstaking"
+        variant="secondary.outline"
         mt="26px"
       >
         Liquid Staking
       </NavButton>
 
       <NavButton
-        leftIcon={<Image alt="MarketPlace" src={'/assets/sidebar/page-marketplace.svg'} />}
-        href={'/marketplace'}
+        leftIcon={<NotInteractableImage src="/assets/sidebar/page-marketplace.svg" />}
+        href="/marketplace"
         mt="60px"
       >
         Marketplace
@@ -101,14 +112,14 @@ function PageNav() {
 
       <Box shadow="Down Big" roundedLeft="2xl" mt="28px">
         <NavButton
-          leftIcon={<Image alt="Swap" src={'/assets/sidebar/page-swap.svg'} />}
-          href={'/swap'}
-          mb={'1px'}
+          leftIcon={<NotInteractableImage src="/assets/sidebar/page-swap.svg" />}
+          href="/swap"
+          mb="1px"
         >
           Swap
         </NavButton>
-        <SubnavButton href={'/position?operation=addLiquidity'}>Add liquidity</SubnavButton>
-        <SubnavButton href={'/position?operation=showLiquidity'}>Your Pools</SubnavButton>
+        <SubnavButton href="/addliquidity">Add liquidity</SubnavButton>
+        <SubnavButton href="/pools">Your Pools</SubnavButton>
       </Box>
     </Flex>
   )

@@ -7,7 +7,7 @@ import { BOND_ADDRESS } from '../../contracts/Bond/BondingAddress'
 import { BondInput } from './BondInput'
 import { BondOutput } from './BondOutput'
 import { BondReceiptModal } from './BondReceipt'
-import { getBondSpotPrice, purchaseBond, useBondGetAmountOut, useBondState } from './BondState'
+import { getBondAmountOut, getBondSpotPrice, purchaseBond, useBondState } from './BondState'
 import { ConfirmBondModal } from './ConfirmBond'
 import { DownwardIcon } from './DownwardIcon'
 import { BondSettings, defaultSettings, Settings } from './Settings'
@@ -36,7 +36,7 @@ const GasPrice = () => {
 export function BondBuyCard() {
   const { currencyIn, currencyOut, userAddress, balance, signer } = useBondState()
   const [settings, setSettings] = useState<BondSettings>(defaultSettings)
-  const [userBalance, setBalance] = useState<string>()
+  const userBalance = balance.data?.formatted
   const [amountIn, setAmountIn] = useState<string>('0')
   const [amountOut, setAmountOut] = useState<string>()
   const [bondReceipt] = useState<any>()
@@ -44,20 +44,17 @@ export function BondBuyCard() {
   const [bondSpotPrice, setBondSpotPrice] = useState<string>()
   const confirmModal = useDisclosure()
   const receiptModal = useDisclosure()
-
-  const [needsApproval, approve, isApproving] = useApprovalWhenNeeded(
+  const [needsApproval, approve, approveLabel] = useApprovalWhenNeeded(
     currencyIn,
     BOND_ADDRESS[1],
     amountIn,
   )
-  getBondSpotPrice(3, '0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4').then((bondSpotPrice) => {
-    setBondSpotPrice(bondSpotPrice)
-  })
+
   useEffect(() => {
-    if (balance[0].data) {
-      setBalance(balance[0].data.formatted)
-    }
-  }, [balance])
+    getBondSpotPrice(3, '0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4').then((bondSpotPrice) => {
+      setBondSpotPrice(bondSpotPrice)
+    })
+  }, [])
 
   return (
     <Card p={6} gap={2} variant="primary" h="fit-content" shadow="Block Up" w="100%" maxW="420px">
@@ -70,7 +67,7 @@ export function BondBuyCard() {
           if (!numberValue) return setAmountIn('')
           numberValue && setAmountIn(v)
           // eslint-disable-next-line react-hooks/rules-of-hooks
-          useBondGetAmountOut(currencyOut.address, currencyOut.decimals, 3, v).then((amountOut) => {
+          getBondAmountOut(currencyOut.address, currencyOut.decimals, 3, v).then((amountOut) => {
             setAmountOut(amountOut)
           })
         }}
@@ -96,7 +93,7 @@ export function BondBuyCard() {
           isFullWidth
           onClick={() => approve()}
         >
-          {isApproving}
+          {approveLabel}
         </Button>
       )}
       <Button
@@ -120,7 +117,6 @@ export function BondBuyCard() {
         onClose={confirmModal.onClose}
         onConfirm={() => {
           purchaseBond(3, amountIn, userAddress, signer, settings, amountOut).then((tx) => {
-            console.log(tx)
             receiptModal.onOpen()
           })
         }}

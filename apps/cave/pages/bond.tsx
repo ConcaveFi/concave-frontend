@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Card,
   Container,
   Flex,
@@ -11,11 +12,18 @@ import {
 } from '@concave/ui'
 import { BondBuyCard } from 'components/Bond/BondBuyCard'
 import Placeholder from 'components/Placeholder'
-import { useBondGetTermLength, getBondSpotPrice } from 'components/Bond/BondState'
+import {
+  useBondGetTermLength,
+  getBondSpotPrice,
+  getCurrentBlockTimestamp,
+  getUserBondPositions,
+  useBondState,
+} from 'components/Bond/BondState'
 import { useEffect, useState } from 'react'
 import { useAuth } from 'contexts/AuthContext'
 import { useFetchApi } from 'hooks/cnvData'
 import React from 'react'
+import { utils } from 'ethers'
 
 const InfoItem = ({ value, label, ...props }) => (
   <Flex
@@ -26,7 +34,7 @@ const InfoItem = ({ value, label, ...props }) => (
     textAlign="center"
     {...props}
   >
-    <Text fontSize="lg" fontFamily="heading">
+    <Text fontSize="sm" fontFamily="heading">
       {value}
     </Text>
     <Text fontSize="sm" color="text.low">
@@ -50,6 +58,47 @@ const BondInfo = ({ asset, roi, vestingTerm, icon }) => {
   )
 }
 
+const UserBondPositionInfo = ({ bondInfo, currentBlockTimestamp }) => {
+  const elapsed =
+    currentBlockTimestamp > bondInfo.creation ? 1 : currentBlockTimestamp / bondInfo.creation
+  return (
+    <Card bg="none" py={3} w="100%" direction="row" shadow="Glass Up Medium">
+      <Flex justify="center" pl={4} pr={7}>
+        <InfoItem
+          value={`${
+            bondInfo?.creation
+              ? new Date(bondInfo.creation * 1000 + 432000000).toString().slice(0, 21)
+              : 'Loading'
+          }`}
+          label="Fully Vested"
+        />
+      </Flex>
+      <Box w="1px" mx={-1} my={-4} bg="stroke.primary" />
+      <InfoItem
+        value={`${
+          bondInfo?.owed
+            ? elapsed
+              ? (+utils.formatEther(bondInfo.owed)).toFixed(2)
+              : +(+utils.formatEther(bondInfo.owed)).toFixed(2) * elapsed -
+                +(+utils.formatEther(bondInfo.redeemed)).toFixed(2)
+            : 'Loading'
+        }`}
+        label="Pending"
+        flexGrow={1}
+      />
+      <Box w="1px" mx={-1} my={-4} bg="stroke.primary" />
+      <InfoItem
+        value={`${
+          bondInfo?.owed
+            ? (+utils.formatEther(bondInfo.owed) - +utils.formatEther(bondInfo.redeemed)).toFixed(2)
+            : 'Loading'
+        }`}
+        label="Claimable"
+        px={5}
+      />
+    </Card>
+  )
+}
 const SelectedBondType = ({ bondType }) => {
   return (
     <Card
@@ -93,11 +142,32 @@ const NothingToRedeem = () => {
   )
 }
 
+const Redeem = ({ onConfirm }: { onConfirm: () => void }) => {
+  return (
+    <Card
+      // shadow="Up Big"
+      mb={-20}
+      fontWeight="bold"
+      fontSize="lg"
+      w="250px"
+    >
+      <Button variant="primary" size="lg" isFullWidth onClick={onConfirm}>
+        {UserBondPositionInfo.length < 1 ? 'Redeem' : 'Batch Redeem'}
+      </Button>
+    </Card>
+  )
+}
+
 export default function Bond() {
-  const { user, isConnected } = useAuth()
+  const { userAddress, signer } = useBondState()
   const [termLength, setTermLength] = useState<number>(0)
   const [bondSpotPrice, setBondSpotPrice] = useState<string>('0')
   const [cnvMarketPrice, setCnvMarketPrice] = useState<number>(0)
+  const [userBondPositions, setUserBondPositions] = useState([])
+  const [userBondRedeemablePositionIDs, setUserBondRedeemablePositionIDs] = useState([])
+  const [userBondPositionsLength, setUserBondPositionsLength] = useState<number>(4)
+  const [currentBlockTs, setCurrentBlockTs] = useState<number>()
+
   const { data } = useFetchApi('/api/cnv')
 
   if (cnvMarketPrice === 0 && !!data) {
@@ -105,16 +175,30 @@ export default function Bond() {
   }
 
   useEffect(() => {
-    getBondSpotPrice(3, '').then((bondSpotPrice) => {
-      setBondSpotPrice(bondSpotPrice)
-      console.log(bondSpotPrice)
+    if (userAddress && userBondPositions.length === 0)
+      getUserBondPositions(3, 2, userAddress, currentBlockTs.toString())
+        .then((userPositionInfo) => {
+          setUserBondPositions(userPositionInfo.positionArray)
+          setUserBondRedeemablePositionIDs(userPositionInfo.redeemablePositions)
+        })
+        .catch((e) => {
+          console.log('get position info failed', e)
+        })
+    getCurrentBlockTimestamp().then((x) => {
+      setCurrentBlockTs(x)
     })
+  }, [signer])
+
+  useEffect(() => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useBondGetTermLength(3).then((termLength) => {
       setTermLength(termLength)
     })
-  }, [cnvMarketPrice])
-
+    getBondSpotPrice(3, '').then((bondSpotPrice) => {
+      setBondSpotPrice(bondSpotPrice)
+      console.log(bondSpotPrice)
+    })
+  }, [])
   return (
     <Container maxW="container.lg">
       <Flex direction="column" gap={20}>
@@ -125,16 +209,24 @@ export default function Bond() {
         </Stack>
 
         <Flex gap={10} direction="row">
-          <Box pos="relative" h="fit-content">
-            <Box
-              h="20px"
-              w="72px"
-              top="50%"
-              transform="auto"
-              translateY="-50%"
-              left="calc(100% - 24px)"
-              sx={{ ...gradientBorder({ borderWidth: 3, borderRadius: '0' }), pos: 'absolute' }}
-            />
+          <Box
+            pos="relative"
+            h="fit-content"
+            overflowY={'auto'}
+            maxHeight={'500px'}
+            css={{
+              '&::-webkit-scrollbar': {
+                width: '1px',
+              },
+              '&::-webkit-scrollbar-track': {
+                width: '1px',
+              },
+              '&::-webkit-scrollbar-thumb': {
+                borderRadius: '10px',
+                background: 'white',
+              },
+            }}
+          >
             <Card
               variant="secondary"
               w="430px"
@@ -157,14 +249,36 @@ export default function Bond() {
                 }%`}
                 vestingTerm={`${termLength} Days`}
               />
-              <NothingToRedeem />
             </Card>
+            {userBondPositions.map((position, i) => {
+              return (
+                <React.Fragment key={i}>
+                  <UserBondPositionInfo
+                    bondInfo={position}
+                    currentBlockTimestamp={currentBlockTs}
+                  />
+                </React.Fragment>
+              )
+            })}
           </Box>
 
           <BondBuyCard />
         </Flex>
       </Flex>
-      <Placeholder text="More Bonds" />
+      {userBondPositions.length > 0 ? (
+        <Redeem
+          onConfirm={() => {
+            // make call here for a mass redeem...
+            // inherit id of known redeemable positions
+            // load up those arguments into the batch redemption
+            console.log('test')
+            //
+          }}
+        ></Redeem>
+      ) : (
+        <NothingToRedeem />
+      )}
+      {/* <Placeholder text="More Bonds" /> */}
     </Container>
   )
 }

@@ -71,9 +71,9 @@ const candlestickSeries = ({
   wickDownColor: color,
   wickUpColor: color,
   priceLineColor: color,
-  priceFormat: {
-    minMove: 0.0001,
-  },
+  // priceFormat: {
+  //   minMove: 0.01,
+  // },
 })
 
 export const CandleStickChart = ({ data }: { data: (CandlestickData | WhitespaceData)[] }) => {

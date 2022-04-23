@@ -55,47 +55,6 @@ const InOutArrow = () => {
   )
 }
 
-// const MinExpectedOutput = ({ value, symbol }) => {
-//   return (
-//     <Box>
-//       <Flex fontSize={'14px'} w={'100%'} mb={2} justifyContent={'space-between'}>
-//         <Text whiteSpace={'pre-wrap'} mr={8} fontWeight={700} textColor="text.low">
-//           Minimum received after slippage
-//         </Text>
-//         <Text whiteSpace={'nowrap'} fontWeight={700} textColor="text.low">
-//           {value} {symbol}
-//         </Text>
-//       </Flex>
-//       {/* <Flex fontSize={'14px'} w={'100%'} justifyContent={'space-between'}>
-//         <Text fontWeight={700} textColor="text.low">
-//           Network Fee
-//         </Text>
-//         <Text fontWeight={700} textColor="text.low">
-//           ~ {estimatedFee}
-//         </Text>
-//       </Flex> */}
-//     </Box>
-//   )
-// }
-// const ExpectedOutput = ({ value, symbol, priceImpact }) => {
-//   return (
-//     <Box>
-//       <Flex fontSize={'18px'} w={'100%'} justifyContent={'space-between'}>
-//         <Text whiteSpace={'pre-wrap'} mr={4} fontWeight={600}>
-//           Expected Output
-//         </Text>
-//         <Text fontWeight={600}>
-//           {value} {symbol}
-//         </Text>
-//       </Flex>
-//       <Flex w={'100%'} justifyContent={'space-between'}>
-//         <Text fontWeight={600}>Price Impact</Text>
-//         <Text fontWeight={600}>{priceImpact}%</Text>
-//       </Flex>
-//     </Box>
-//   )
-// }
-
 export const ConfirmBondModal = ({
   currencyIn,
   currencyOut,
@@ -146,10 +105,7 @@ export const ConfirmBondModal = ({
         <Text>
           {/* 1 {currencyOut.symbol} = {tokenInRelativePriceToTokenOut}
           {currencyIn.symbol} */}{' '}
-          Bond Price CNV:
-        </Text>
-        <Text ml={1} textColor="text.low">
-          (${parseFloat(bondPrice).toFixed(2)})
+          Bond Price CNV: ${parseFloat(bondPrice).toFixed(2)}
         </Text>
       </Flex>
 

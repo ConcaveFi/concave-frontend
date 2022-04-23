@@ -9,8 +9,13 @@ export const NumericInput = (props: NumericInputProps) => {
       as={NumberFormat}
       thousandSeparator
       variant="unstyled"
+      inputMode="decimal"
       size="unset"
       placeholder="0.0"
+      allowedDecimalSeparators={['.', ',']}
+      allowLeadingZeros
+      allowNegative={false}
+      isNumericString
       fontFamily="heading"
       fontWeight="bold"
       _placeholder={{ color: 'text.low' }}
