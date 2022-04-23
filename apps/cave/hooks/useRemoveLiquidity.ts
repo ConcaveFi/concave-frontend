@@ -1,45 +1,46 @@
 import { ethers } from 'ethers'
 import { parseUnits } from 'ethers/lib/utils'
-import { CNV, Token, DAI, CurrencyAmount, ROUTER_ADDRESS } from 'gemswap-sdk'
+import { ROUTER_ADDRESS, Token } from 'gemswap-sdk'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import { LiquidityInfoData } from 'hooks/useLiquidityInfo'
 import { contractABI } from 'lib/contractoABI'
 import { concaveProvider } from 'lib/providers'
 import { useState } from 'react'
-import { chain, useSigner } from 'wagmi'
-import { useCurrentSupportedNetworkId } from './useCurrentSupportedNetworkId'
+import { useAccount, useSigner } from 'wagmi'
 
-export const useRemoveLiquidity = (selectedChain = chain.ropsten, userAddress) => {
+export const useRemoveLiquidity = ({ liquidityInfo }: { liquidityInfo: LiquidityInfoData }) => {
   const networkId = useCurrentSupportedNetworkId()
-  const [tokenA, setTokenA] = useState<Token>(DAI[networkId])
-  const [tokenB, setTokenB] = useState<Token>(CNV[networkId])
-  const [amountADesired, setAmountADesired] = useState<CurrencyAmount<Token>>(null)
-  const [amountBDesired, setAmountBDesired] = useState<CurrencyAmount<Token>>(null)
-  const [{ data, error, loading }, getSigner] = useSigner()
-  const [hash, setHash] = useState<string>(null)
-  const contractInstance = new ethers.Contract(
-    ROUTER_ADDRESS[selectedChain.id],
-    contractABI,
-    concaveProvider(selectedChain.id),
-  )
+  const [{ data: account }] = useAccount()
+  const tokenA = liquidityInfo.pair.token0
+  const tokenB = liquidityInfo.pair.token1
 
-  const clear = () => {
-    setTokenA(null)
-    setTokenB(null)
-    setAmountADesired(null)
-    setAmountBDesired(null)
-    setHash('')
-  }
+  const [percentToRemove, setPercentToRemove] = useState(0)
+  const ratioToRemove = Math.min(percentToRemove, 100) / 100
+  const amountAMin =
+    +liquidityInfo.pair.reserve0.toExact() * liquidityInfo.userPoolShare * ratioToRemove
+  const amountBMin =
+    +liquidityInfo.pair.reserve1.toExact() * liquidityInfo.userPoolShare * ratioToRemove
+  const [deadline, setDeadLine] = useState(new Date().getTime() / 1000 + 15 * 60)
+  const [hash, setHash] = useState<string>(null)
+
+  const contractInstance = new ethers.Contract(
+    ROUTER_ADDRESS[networkId],
+    contractABI,
+    concaveProvider(networkId),
+  )
+  const [{ data, error, loading }, getSigner] = useSigner()
 
   const call = async () => {
     const contractSigner = contractInstance.connect(data)
-    const to = userAddress
-    const provider = concaveProvider(chain.ropsten.id)
+    const to = account.address
+    const provider = concaveProvider(networkId)
     const currentBlockNumber = await provider.getBlockNumber()
     const { timestamp } = await provider.getBlock(currentBlockNumber)
     const deadLine = timestamp + 86400
-    console.table([
+    const transaction = await contractSigner.removeLiquidity(
       tokenA.address,
       tokenB.address,
-      parseUnits(`100`, tokenA.decimals),
+      liquidityInfo.userBalance.data.value.mul(percentToRemove).div(100),
       parseUnits(`0`, tokenA.decimals),
       parseUnits(`0`, tokenB.decimals),
       to,
@@ -47,49 +48,18 @@ export const useRemoveLiquidity = (selectedChain = chain.ropsten, userAddress) =
       {
         gasLimit: 500000,
       },
-    ])
-    contractSigner
-      .removeLiquidity(
-        tokenA.address,
-        tokenB.address,
-        parseUnits(`100`, tokenA.decimals),
-        parseUnits(`0`, tokenA.decimals),
-        parseUnits(`0`, tokenB.decimals),
-        to,
-        deadLine,
-        {
-          gasLimit: 500000,
-        },
-      )
-      .then((r) => {
-        setHash(r.hash)
-        return r
-      })
+    )
+    setHash(transaction.hash)
   }
-
-  return [
-    {
-      tokenA,
-      tokenB,
-      amountADesired,
-      amountBDesired,
-      userAddress,
-      hash,
-    },
-    {
-      setTokenA,
-      setTokenB,
-      setAmountADesired,
-      setAmountBDesired,
-    },
+  return {
+    amountAMin,
+    amountBMin,
+    deadline,
+    ...liquidityInfo,
+    percentToRemove,
+    setPercentToRemove,
     call,
-    clear,
-  ] as const
+    hash,
+  }
 }
-export type UseAddLiquidityData = {
-  tokenA: Token
-  tokenB: Token
-  amountADesired: CurrencyAmount<Token>
-  amountBDesired: CurrencyAmount<Token>
-  userAddress: string
-}
+export type RemoveLiquidityState = ReturnType<typeof useRemoveLiquidity>

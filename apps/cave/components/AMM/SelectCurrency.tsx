@@ -64,6 +64,7 @@ const TokenListItem = ({ currency, onClick }: { currency: Currency; onClick: () 
     borderRadius="2xl"
     listStyleType="none"
     onClick={onClick}
+    title={currency.wrapped.address}
   >
     <Stack direction="row" spacing={3} align="center">
       <CurrencyIcon h="35px" w="35px" currency={currency} />
@@ -91,7 +92,15 @@ export const SelectTokenModal = ({
   onClose: () => void
 }) => {
   const [search, setSearch] = useState('')
-  const { data: tokens, isLoading, isSuccess } = useTokenList()
+  const { data, isLoading, isSuccess } = useTokenList()
+  const tokens = (data || []).filter((t) => {
+    return (
+      !search ||
+      t.address.toLowerCase() === search.toLowerCase() ||
+      t.name.toLowerCase().includes(search.toLowerCase()) ||
+      t.symbol.toLowerCase().includes(search.toLowerCase())
+    )
+  })
   const networkId = useCurrentSupportedNetworkId()
   const selectAndClose = useCallback(
     (token: Currency) => {
@@ -103,10 +112,10 @@ export const SelectTokenModal = ({
     <Modal
       bluryOverlay
       title="Select a Token"
-      size="sm"
+      size="md"
       isOpen={isOpen}
       onClose={onClose}
-      bodyProps={{ gap: 4, w: '350px' }}
+      bodyProps={{ gap: 4 }}
     >
       <CommonTokens
         currencies={[DAI[networkId], CNV[networkId]]} //[nativeCurrency, ...BASES_TO_CHECK_TRADES_AGAINST[chainId]]}
@@ -137,12 +146,8 @@ export const SelectTokenModal = ({
             overflowX="hidden"
             spacing={4}
           >
-            {(tokens || []).map((token) => (
-              <TokenListItem
-                key={token.address}
-                currency={token}
-                onClick={() => selectAndClose(token)}
-              />
+            {tokens.map((token, i) => (
+              <TokenListItem key={i} currency={token} onClick={() => selectAndClose(token)} />
             ))}
           </UnorderedList>
         )}
