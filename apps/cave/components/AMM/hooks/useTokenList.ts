@@ -41,7 +41,6 @@ export const findTokenByAddress = async (
     })
 }
 
-//PUT IN .ENV
 const headers = { 'x-api-key': process.env.NEXT_PUBLIC_MORALIS_TOKEN }
 export const useAddressTokenList: (address?: string) => UseQueryResult<Token[], unknown> = (
   address: string,
@@ -50,7 +49,6 @@ export const useAddressTokenList: (address?: string) => UseQueryResult<Token[], 
   const chainName =
     network?.chain?.id === chain.ropsten.id ? chain.ropsten.name : chain.mainnet.name
   const url = `https://deep-index.moralis.io/api/v2/${address}/erc20?chain=${chainName}`
-  console.log(url)
   return useQuery(['LISTTOKENS', address], () => {
     return fetch(url, { headers })
       .then((r) => r.json())

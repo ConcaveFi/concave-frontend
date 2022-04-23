@@ -22,18 +22,18 @@ import React from 'react'
 import { chain } from 'wagmi'
 
 export const AddLiquidityContent = ({ userAddress }: { userAddress: string }) => {
-  const supplyLiquidityModal = useDisclosure()
+  const supplyLiquidityDisclosure = useDisclosure()
   const transactionStatusDisclosure = useDisclosure()
   const [data, setters, call, clear] = useAddLiquidity(chain.ropsten, userAddress)
   const { amountADesired, amountBDesired, tokenA, tokenB } = data
   const { updateInputValue, updateOutputValue, updateTokenA, updateTokenB, setTokenA, setTokenB } =
     setters
   const valid = tokenA && tokenB && amountADesired && amountBDesired
-
   const onSubmit = () => {
     transactionStatusDisclosure.onOpen()
     call()
   }
+
   return (
     <>
       <Card variant="secondary" p={4} backgroundBlendMode={'screen'}>
@@ -79,26 +79,19 @@ export const AddLiquidityContent = ({ userAddress }: { userAddress: string }) =>
         }}
         onClick={() => {
           console.log('open modal')
-          supplyLiquidityModal.onOpen()
+          supplyLiquidityDisclosure.onOpen()
         }}
         isDisabled={!valid}
         bg={'rgba(113, 113, 113, 0.01)'}
       >
         <Text fontSize={'2xl'}>Add Liquidity</Text>
       </Button>
-
-      {valid ? (
-        <SupplyLiquidityModal
-          disclosure={supplyLiquidityModal}
-          data={data}
-          onConfirm={() => {
-            transactionStatusDisclosure.onOpen()
-            call()
-          }}
-        />
-      ) : (
-        <></>
-      )}
+      <SupplyLiquidityModal
+        isVisible={!!valid}
+        disclosure={supplyLiquidityDisclosure}
+        data={data}
+        onConfirm={onSubmit}
+      />
       <TransactionSubmittedModal
         disclosure={transactionStatusDisclosure}
         hash={data.hash}
@@ -109,28 +102,19 @@ export const AddLiquidityContent = ({ userAddress }: { userAddress: string }) =>
 }
 
 const SupplyLiquidityModal = ({
+  isVisible,
   disclosure,
   data,
   onConfirm = () => {},
 }: {
+  isVisible: boolean
   disclosure: UseDisclosureReturn
   data: UseAddLiquidityData
   onConfirm: () => void
 }) => {
-  const { tokenA, tokenB, amountADesired, amountBDesired } = data
-  const networkId = useCurrentSupportedNetworkId()
-  const [needsApproveA, requestApproveA, approveLabel] = useApprovalWhenNeeded(
-    tokenA,
-    ROUTER_ADDRESS[networkId],
-    parseUnits(amountADesired.toFixed(tokenA.decimals)),
-  )
-  const [needsApproveB, requestApproveB, approveLabelB] = useApprovalWhenNeeded(
-    tokenB,
-    ROUTER_ADDRESS[networkId],
-    parseUnits(amountBDesired.toFixed(tokenB.decimals)),
-  )
-  const differenceBetweenAandB = +amountADesired?.toExact() / +amountBDesired?.toExact()
-  const differenceBetweenBandA = +amountBDesired?.toExact() / +amountADesired?.toExact()
+  if (!isVisible) {
+    return <></>
+  }
   return (
     <Modal
       bluryOverlay={true}
@@ -144,6 +128,33 @@ const SupplyLiquidityModal = ({
         shadow: 'Up for Blocks',
       }}
     >
+      <SupplyLiquidityContent data={data} onConfirm={onConfirm} />
+    </Modal>
+  )
+}
+const SupplyLiquidityContent = ({
+  data,
+  onConfirm = () => {},
+}: {
+  data: UseAddLiquidityData
+  onConfirm: () => void
+}) => {
+  const networkId = useCurrentSupportedNetworkId()
+  const { tokenA, tokenB, amountADesired, amountBDesired } = data
+  const [needsApproveA, requestApproveA, approveLabel] = useApprovalWhenNeeded(
+    tokenA,
+    ROUTER_ADDRESS[networkId],
+    parseUnits(amountADesired.toFixed(tokenA.decimals)),
+  )
+  const [needsApproveB, requestApproveB, approveLabelB] = useApprovalWhenNeeded(
+    tokenB,
+    ROUTER_ADDRESS[networkId],
+    parseUnits(amountBDesired.toFixed(tokenB.decimals)),
+  )
+  const differenceBetweenAandB = +amountADesired?.toExact() / +amountBDesired?.toExact()
+  const differenceBetweenBandA = +amountBDesired?.toExact() / +amountADesired?.toExact()
+  return (
+    <>
       <Text fontSize="3xl">
         {tokenA.symbol}/{tokenB.symbol} Pool Tokens
       </Text>
@@ -189,7 +200,7 @@ const SupplyLiquidityModal = ({
           Confirm Supply
         </Button>
       )}
-    </Modal>
+    </>
   )
 }
 const PositionInfoItem = ({ color = '', label, value, mt = 0, children = <></> }) => (
