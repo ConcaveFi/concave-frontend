@@ -77,18 +77,14 @@ export const AddLiquidityContent = ({ userAddress }: { userAddress: string }) =>
         _focus={{
           shadow: 'Up Small',
         }}
+        onClick={() => {
+          console.log('open modal')
+          supplyLiquidityModal.onOpen()
+        }}
         isDisabled={!valid}
         bg={'rgba(113, 113, 113, 0.01)'}
       >
-        <Text
-          fontSize={'2xl'}
-          onClick={() => {
-            console.log('open modal')
-            supplyLiquidityModal.onOpen()
-          }}
-        >
-          Add Liquidity
-        </Text>
+        <Text fontSize={'2xl'}>Add Liquidity</Text>
       </Button>
 
       {valid ? (
