@@ -42,8 +42,7 @@ export const findTokenByAddress = async (
 }
 
 //PUT IN .ENV
-const MORALIS_TOKEN = '10NauNE7btm4qS8AbMv1ojkXhxsgh1FTJiSwH7SctkCSGKCCXPzwZpswmnNDmmrd'
-const headers = { 'x-api-key': MORALIS_TOKEN }
+const headers = { 'x-api-key': process.env.MORALIS_TOKEN }
 export const useAddressTokenList: (address?: string) => UseQueryResult<Token[], unknown> = (
   address: string,
 ) => {
