@@ -15,7 +15,7 @@ function MarketplaceStakeCard(props) {
           h="283px"
         >
 
-<Text> test </Text>
+<Text> </Text>
 
         </Card>
         </div>
