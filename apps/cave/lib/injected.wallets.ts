@@ -14,11 +14,11 @@ export const getWalletType = () => {
 export const renderProviderText = (userWallet: string) => {
   if (userWallet !== undefined) {
     const providerTextList = {
-      Metamask: { text: 'to Metamask', img: '/assets/connectors/injected.png' },
+      Metamask: { text: 'to Metamask', img: '/assets/connectors/metamask.png' },
       Brave: { text: 'to Brave Wallet', img: '/assets/connectors/brave.png' },
       Frame: { text: 'to Frame', img: '/assets/connectors/frame.png' },
       Tally: { text: 'to Tally', img: '/assets/connectors/tally.png' },
-      Wallet: { text: 'to Wallet', img: '/assets/connectors/wallet.png' },
+      Wallet: { text: 'to Wallet', img: '/assets/connectors/injected.png' },
     }
     return (providerTextList as any)[getWalletType()]
   } else {

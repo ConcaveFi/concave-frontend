@@ -54,6 +54,7 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
       {isMounted &&
         data.connectors.map((connector) => {
           if (!connector.ready) return null
+          console.log('`wallet png', connector.name)
           return (
             <Button
               w="100%"
@@ -62,7 +63,13 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
               _active={{ shadow: 'down' }}
               _focus={{ shadow: 'Up Big' }}
               size="large"
-              leftIcon={<Image w="20px" src={`/assets/connectors/${connector.id}.png`} alt="" />}
+              leftIcon={
+                <Image
+                  w="20px"
+                  src={`/assets/connectors/${connector.name.toLowerCase().replace(' ', '-')}.png`}
+                  alt={connector.name}
+                />
+              }
               key={connector.id}
               onClick={() => connect(connector).then(onClose)}
             >
@@ -115,7 +122,13 @@ const ConnectButton = () => {
                     <MenuItem
                       borderRadius="xl"
                       icon={
-                        <Image w="20px" src={`/assets/connectors/${connector.id}.png`} alt="" />
+                        <Image
+                          w="20px"
+                          src={`/assets/connectors/${connector.name
+                            .toLowerCase()
+                            .replace(' ', '-')}.png`}
+                          alt={connector.name}
+                        />
                       }
                       key={connector.id}
                       onClick={() => connect(connector)}
