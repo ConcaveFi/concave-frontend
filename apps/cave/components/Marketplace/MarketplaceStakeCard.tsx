@@ -2,7 +2,6 @@ import { Box, Card, Text } from "@concave/ui"
 
 
 function MarketplaceStakeCard(props) {
-    const vaprText = props.icon === '12m' ? 'Non-Dilutive vAPR' : 'vAPR'
 
 
     return (

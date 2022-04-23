@@ -2,7 +2,7 @@ import { Box, Card, Text } from "@concave/ui"
 
 
 function MarketplaceSearchCard(props) {
-    const vaprText = props.icon === '12m' ? 'Non-Dilutive vAPR' : 'vAPR'
+
 
 
     return (
