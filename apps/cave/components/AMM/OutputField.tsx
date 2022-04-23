@@ -22,7 +22,7 @@ export const OutputField = ({
   updateCurrencyOut,
 }: OutputFieldProps) => {
   const inputFiat = useFiatPrice(currencyAmountIn?.currency.wrapped)
-  const outputFiat = useFiatPrice(currencyOut?.wrapped)
+  const outputFiat = useFiatPrice(currencyOut.wrapped)
 
   const inputFiatValue = currencyAmountIn && inputFiat.price?.quote(currencyAmountIn)
   const outputFiatValue = currencyAmountOut && outputFiat.price?.quote(currencyAmountOut)
