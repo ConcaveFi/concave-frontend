@@ -249,35 +249,35 @@ export default function Bond() {
                 }%`}
                 vestingTerm={`${termLength} Days`}
               />
+              {userBondPositions.map((position, i) => {
+                return (
+                  <React.Fragment key={i}>
+                    <UserBondPositionInfo
+                      bondInfo={position}
+                      currentBlockTimestamp={currentBlockTs}
+                    />
+                  </React.Fragment>
+                )
+              })}
+              {userBondPositions.length > 0 ? (
+                <Redeem
+                  onConfirm={() => {
+                    // make call here for a mass redeem...
+                    // inherit id of known redeemable positions
+                    // load up those arguments into the batch redemption
+                    console.log('test')
+                    //
+                  }}
+                ></Redeem>
+              ) : (
+                ''
+              )}
             </Card>
-            {userBondPositions.map((position, i) => {
-              return (
-                <React.Fragment key={i}>
-                  <UserBondPositionInfo
-                    bondInfo={position}
-                    currentBlockTimestamp={currentBlockTs}
-                  />
-                </React.Fragment>
-              )
-            })}
           </Box>
 
           <BondBuyCard />
         </Flex>
       </Flex>
-      {userBondPositions.length > 0 ? (
-        <Redeem
-          onConfirm={() => {
-            // make call here for a mass redeem...
-            // inherit id of known redeemable positions
-            // load up those arguments into the batch redemption
-            console.log('test')
-            //
-          }}
-        ></Redeem>
-      ) : (
-        <NothingToRedeem />
-      )}
       {/* <Placeholder text="More Bonds" /> */}
     </Container>
   )
