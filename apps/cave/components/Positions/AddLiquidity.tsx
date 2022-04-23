@@ -133,6 +133,8 @@ const SupplyLiquidityModal = ({
     ROUTER_ADDRESS[networkId],
     BigNumber.from(10000000000000),
   )
+  const differenceBetweenAandB = +amountADesired?.toExact() / +amountBDesired?.toExact()
+  const differenceBetweenBandA = +amountBDesired?.toExact() / +amountADesired?.toExact()
   return (
     <Modal
       bluryOverlay={true}
@@ -156,15 +158,12 @@ const SupplyLiquidityModal = ({
       <Box borderRadius={'2xl'} p={6} shadow={'down'}>
         <PositionInfoItem
           label="Rates"
-          value={`1  ${tokenA.symbol} =  ${
-            1 // usePrecision(wrapperTokenA.price / wrapperTokenB.price).formatted
-          } ${tokenB.symbol}`}
+          value={`1  ${tokenA.symbol} = ${differenceBetweenAandB.toFixed(5)}
+          ${tokenB.symbol}`}
         />
         <PositionInfoItem
           label=""
-          value={`1  ${tokenB.symbol} =  ${
-            1 // usePrecision(wrapperTokenB.price / wrapperTokenA.price).formatted
-          } ${tokenA.symbol}`}
+          value={`1  ${tokenB.symbol} = ${differenceBetweenBandA.toFixed(5)}  ${tokenA.symbol}`}
         />
         <PositionInfoItem
           mt={8}
