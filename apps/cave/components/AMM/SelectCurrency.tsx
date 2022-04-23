@@ -1,6 +1,5 @@
 import { CnvQuestionIcon, DownIcon } from '@concave/icons'
 import {
-  useDisclosure,
   Button,
   Flex,
   Heading,
@@ -11,12 +10,13 @@ import {
   Stack,
   Text,
   UnorderedList,
+  useDisclosure,
 } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
-import { Currency, DAI, CNV } from 'gemswap-sdk'
-import React, { useCallback, useState } from 'react'
-import { useNetwork } from 'wagmi'
+import { CNV, Currency, DAI } from 'gemswap-sdk'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import React, { useCallback, useState } from 'react'
+import { useTokenList } from './hooks/useTokenList'
 
 const CommonTokens = ({
   selected,
@@ -90,11 +90,13 @@ export const SelectTokenModal = ({
   isOpen: boolean
   onClose: () => void
 }) => {
-  const [{ data: network, loading }] = useNetwork()
   const [search, setSearch] = useState('')
+  const { data: tokens, isLoading, isSuccess } = useTokenList()
   const networkId = useCurrentSupportedNetworkId()
   const selectAndClose = useCallback(
-    (token: Currency) => (onSelect(token), onClose()),
+    (token: Currency) => {
+      onSelect(token), onClose()
+    },
     [onSelect, onClose],
   )
   return (
@@ -111,7 +113,7 @@ export const SelectTokenModal = ({
         selected={selected}
         onSelect={selectAndClose}
       />
-      {/* <Input
+      <Input
         placeholder="Search name or paste address"
         onChange={({ target }) => setSearch(target.value)}
       />
@@ -124,7 +126,7 @@ export const SelectTokenModal = ({
         shadow="Down Big"
         p={3}
       >
-         {!isSuccess ? (
+        {isLoading ? (
           <Spinner />
         ) : (
           <UnorderedList
@@ -135,16 +137,16 @@ export const SelectTokenModal = ({
             overflowX="hidden"
             spacing={4}
           >
-            {tokens.map((token) => (
+            {(tokens || []).map((token) => (
               <TokenListItem
                 key={token.address}
-                token={token}
+                currency={token}
                 onClick={() => selectAndClose(token)}
               />
             ))}
           </UnorderedList>
         )}
-      </Flex> */}
+      </Flex>
     </Modal>
   )
 }

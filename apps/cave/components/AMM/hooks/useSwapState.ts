@@ -17,7 +17,7 @@ export const useSwapState = () => {
 
   /*
     we only need the value of the input the user typed in, 
-    the other input value is then derived from it, simulating the trade
+    the other input value is then derived from it, simulating the 'trade'
   */
   const [exactValue, setExactValue] = useState<string>('')
 

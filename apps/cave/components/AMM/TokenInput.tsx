@@ -1,17 +1,9 @@
-import {
-  Button,
-  FlexProps,
-  HStack,
-  NumericInput,
-  Stack,
-  Text,
-  useMultiStyleConfig,
-} from '@concave/ui'
+import { FlexProps, HStack, NumericInput, Stack, useMultiStyleConfig } from '@concave/ui'
 import { Currency, CurrencyAmount } from 'gemswap-sdk'
 import React, { ReactNode } from 'react'
 import { SelectCurrency } from './SelectCurrency'
 
-export function TokenInput({
+export function TokenInput<T extends Currency>({
   children,
   currency,
   currencyAmount,
@@ -20,11 +12,11 @@ export function TokenInput({
   onSelectCurrency,
 }: {
   children: ReactNode
-  currency: Currency
-  currencyAmount: CurrencyAmount<Currency>
+  currency: T
+  currencyAmount: CurrencyAmount<T>
   disabled?: boolean
   onChangeValue: (value: string) => void
-  onSelectCurrency: (token: Currency) => void
+  onSelectCurrency: (token: T) => void
 } & FlexProps) {
   const styles = useMultiStyleConfig('Input', { variant: 'primary', size: 'large' })
 

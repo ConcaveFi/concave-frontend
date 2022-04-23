@@ -1,16 +1,16 @@
+import { GasIcon } from '@concave/icons'
 import { Button, Card, HStack, Spinner, Text, useDisclosure } from '@concave/ui'
 import { useApprovalWhenNeeded } from 'hooks/useAllowance'
 import React, { useEffect, useState } from 'react'
+import { useFeeData } from 'wagmi'
 import { BOND_ADDRESS } from '../../contracts/Bond/BondingAddress'
-import { DownwardIcon } from './DownwardIcon'
-import { BondOutput } from './BondOutput'
 import { BondInput } from './BondInput'
-import { ConfirmBondModal } from './ConfirmBond'
-import { getBondAmountOut, useBondState, purchaseBond, getBondSpotPrice } from './BondState'
+import { BondOutput } from './BondOutput'
 import { BondReceiptModal } from './BondReceipt'
-import { useFeeData, useWaitForTransaction } from 'wagmi'
-import { GasIcon } from '@concave/icons'
-import { Settings, BondSettings, defaultSettings } from './Settings'
+import { getBondAmountOut, getBondSpotPrice, purchaseBond, useBondState } from './BondState'
+import { ConfirmBondModal } from './ConfirmBond'
+import { DownwardIcon } from './DownwardIcon'
+import { BondSettings, defaultSettings, Settings } from './Settings'
 
 export const twoDecimals = (s: string | number) => {
   const a = s.toString()
@@ -44,10 +44,9 @@ export function BondBuyCard() {
   const [bondSpotPrice, setBondSpotPrice] = useState<string>()
   const confirmModal = useDisclosure()
   const receiptModal = useDisclosure()
-  const [needsApproval, approve, isApproving] = useApprovalWhenNeeded(
+  const [needsApproval, approve, approveLabel] = useApprovalWhenNeeded(
     currencyIn,
     BOND_ADDRESS[1],
-    userAddress,
     amountIn,
   )
 
@@ -88,13 +87,13 @@ export function BondBuyCard() {
       </HStack>
       {needsApproval && (
         <Button
-          isLoading={isApproving}
+          isLoading={false}
           variant="primary"
           size="large"
           isFullWidth
           onClick={() => approve()}
         >
-          Approve {currencyIn.symbol}
+          {approveLabel}
         </Button>
       )}
       <Button
