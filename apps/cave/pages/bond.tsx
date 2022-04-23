@@ -175,6 +175,9 @@ export default function Bond() {
   }
 
   useEffect(() => {
+    getCurrentBlockTimestamp().then((x) => {
+      setCurrentBlockTs(x)
+    })
     if (userAddress && userBondPositions.length === 0)
       getUserBondPositions(3, 2, userAddress, currentBlockTs.toString())
         .then((userPositionInfo) => {
@@ -184,9 +187,6 @@ export default function Bond() {
         .catch((e) => {
           console.log('get position info failed', e)
         })
-    getCurrentBlockTimestamp().then((x) => {
-      setCurrentBlockTs(x)
-    })
   }, [signer])
 
   useEffect(() => {
