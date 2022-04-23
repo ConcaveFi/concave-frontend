@@ -5,20 +5,20 @@ import { Token } from 'gemswap-sdk'
 const concaveTokenList = (networkName: string) =>
   `/assets/tokenlists/${networkName.toLowerCase()}/concave.json`
 
-export const useTokenList = (networkName: string = chain.mainnet.name) => {
-  return useQuery(['token-list', networkName], () =>
-    fetch(concaveTokenList(networkName))
+export const useTokenList = () => {
+  const [
+    {
+      data: { chain },
+    },
+  ] = useNetwork()
+
+  return useQuery(['token-list', chain?.name], () =>
+    fetch(concaveTokenList(chain.name))
       .then((d) => d.json() as Promise<ConcaveTokenList>)
       .then((l) => l.tokens)
       .then((list) =>
         list.map((token) => {
-          return new Token(
-            chain.ropsten.id,
-            token.address,
-            token.decimals,
-            token.symbol,
-            token.name,
-          )
+          return new Token(token.chainId, token.address, token.decimals, token.symbol, token.name)
         }),
       ),
   )

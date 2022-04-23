@@ -22,6 +22,7 @@ import {
 } from '@concave/ui'
 import { useAddressTokenList } from 'components/AMM/hooks/useTokenList'
 import { CurrencyIcon } from 'components/CurrencyIcon'
+import { TransactionSubmittedModal } from 'components/TransactionSubmittedModal'
 import { BigNumber, ethers } from 'ethers'
 import { parseUnits } from 'ethers/lib/utils'
 import { Pair, ROUTER_ADDRESS, Token } from 'gemswap-sdk'
@@ -226,10 +227,10 @@ const RemoveLiquidityActions = ({
 }) => {
   const networkId = useCurrentSupportedNetworkId()
   const [{ data: account }] = useAccount()
-  const [needsApprove, requestApproveA, approveStatusA, approveLabel] = useApprovalWhenNeeded(
+  const transactionStatusDisclosure = useDisclosure()
+  const [needsApprove, requestApproveA, approveLabel] = useApprovalWhenNeeded(
     removeLiquidityState.token,
     ROUTER_ADDRESS[networkId],
-    account.address,
     BigNumber.from(10000),
   )
 
@@ -239,6 +240,7 @@ const RemoveLiquidityActions = ({
 
   const confirmedWithdrawal = () => {
     removeLiquidityState.call()
+    transactionStatusDisclosure.onOpen()
   }
 
   return (
@@ -259,6 +261,14 @@ const RemoveLiquidityActions = ({
       >
         Confirm Withdrawal
       </Button>
+
+      <TransactionSubmittedModal
+        disclosure={transactionStatusDisclosure}
+        hash={removeLiquidityState.hash}
+        onClose={() => {
+          console.log('close')
+        }}
+      />
     </Flex>
   )
 }
@@ -420,6 +430,7 @@ const useRemoveLiquidity = ({ liquidityInfo }: { liquidityInfo: LiquidityInfoDat
     percentToRemove,
     setPercentToRemove,
     call,
+    hash,
   }
 }
 export type RemoveLiquidityState = ReturnType<typeof useRemoveLiquidity>

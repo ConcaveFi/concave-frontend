@@ -23,11 +23,17 @@ import { chain } from 'wagmi'
 
 export const AddLiquidityContent = ({ userAddress }: { userAddress: string }) => {
   const supplyLiquidityModal = useDisclosure()
+  const transactionStatusDisclosure = useDisclosure()
   const [data, setters, call, clear] = useAddLiquidity(chain.ropsten, userAddress)
   const { amountADesired, amountBDesired, tokenA, tokenB } = data
   const { updateInputValue, updateOutputValue, updateTokenA, updateTokenB, setTokenA, setTokenB } =
     setters
   const valid = tokenA && tokenB && amountADesired && amountBDesired
+
+  const onSubmit = () => {
+    transactionStatusDisclosure.onOpen()
+    call()
+  }
   return (
     <>
       <Card variant="secondary" p={4} backgroundBlendMode={'screen'}>
@@ -86,19 +92,22 @@ export const AddLiquidityContent = ({ userAddress }: { userAddress: string }) =>
       </Button>
 
       {valid ? (
-        <SupplyLiquidityModal disclosure={supplyLiquidityModal} data={data} onConfirm={call} />
-      ) : (
-        <></>
-      )}
-      {data?.hash ? (
-        <TransactionSubmittedModal
+        <SupplyLiquidityModal
           disclosure={supplyLiquidityModal}
-          hash={data.hash}
-          onClose={clear}
+          data={data}
+          onConfirm={() => {
+            transactionStatusDisclosure.onOpen()
+            call()
+          }}
         />
       ) : (
         <></>
       )}
+      <TransactionSubmittedModal
+        disclosure={transactionStatusDisclosure}
+        hash={data.hash}
+        onClose={clear}
+      />
     </>
   )
 }
@@ -114,16 +123,14 @@ const SupplyLiquidityModal = ({
 }) => {
   const { tokenA, tokenB, amountADesired, amountBDesired, userAddress } = data
   const networkId = useCurrentSupportedNetworkId()
-  const [needsApproveA, requestApproveA, approveStatusA, approveLabel] = useApprovalWhenNeeded(
+  const [needsApproveA, requestApproveA, approveLabel] = useApprovalWhenNeeded(
     tokenA,
     ROUTER_ADDRESS[networkId],
-    userAddress,
     BigNumber.from(100000000000000),
   )
-  const [needsApproveB, requestApproveB, approveStatusB, approveLabelB] = useApprovalWhenNeeded(
+  const [needsApproveB, requestApproveB, approveLabelB] = useApprovalWhenNeeded(
     tokenB,
     ROUTER_ADDRESS[networkId],
-    userAddress,
     BigNumber.from(10000000000000),
   )
   return (

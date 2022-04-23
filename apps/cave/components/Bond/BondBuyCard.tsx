@@ -1,16 +1,16 @@
+import { GasIcon } from '@concave/icons'
 import { Button, Card, HStack, Spinner, Text, useDisclosure } from '@concave/ui'
 import { useApprovalWhenNeeded } from 'hooks/useAllowance'
 import React, { useEffect, useState } from 'react'
+import { useFeeData } from 'wagmi'
 import { BOND_ADDRESS } from '../../contracts/Bond/BondingAddress'
-import { DownwardIcon } from './DownwardIcon'
-import { BondOutput } from './BondOutput'
 import { BondInput } from './BondInput'
-import { ConfirmBondModal } from './ConfirmBond'
-import { useBondGetAmountOut, useBondState, purchaseBond, getBondSpotPrice } from './BondState'
+import { BondOutput } from './BondOutput'
 import { BondReceiptModal } from './BondReceipt'
-import { useFeeData, useWaitForTransaction } from 'wagmi'
-import { GasIcon } from '@concave/icons'
-import { Settings, BondSettings, defaultSettings } from './Settings'
+import { getBondSpotPrice, purchaseBond, useBondGetAmountOut, useBondState } from './BondState'
+import { ConfirmBondModal } from './ConfirmBond'
+import { DownwardIcon } from './DownwardIcon'
+import { BondSettings, defaultSettings, Settings } from './Settings'
 
 export const twoDecimals = (s: string | number) => {
   const a = s.toString()
@@ -48,7 +48,6 @@ export function BondBuyCard() {
   const [needsApproval, approve, isApproving] = useApprovalWhenNeeded(
     currencyIn,
     BOND_ADDRESS[1],
-    userAddress,
     amountIn,
   )
   getBondSpotPrice(3, '0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4').then((bondSpotPrice) => {
@@ -91,13 +90,13 @@ export function BondBuyCard() {
       </HStack>
       {needsApproval && (
         <Button
-          isLoading={isApproving}
+          isLoading={false}
           variant="primary"
           size="large"
           isFullWidth
           onClick={() => approve()}
         >
-          Approve {currencyIn.symbol}
+          {isApproving}
         </Button>
       )}
       <Button
