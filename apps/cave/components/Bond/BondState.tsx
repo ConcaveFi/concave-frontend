@@ -61,7 +61,7 @@ export const purchaseBond = async (
   const formattedInput = ethers.utils.parseUnits(input.toString(), 18)
   const formattedMinOutput = ethers.utils.parseUnits(minOutput.toString(), 18)
   const formattedAllowance = ethers.utils.formatEther(currentAllowance)
-  const estimatedGas = bondingContract.estimateGas.purchaseBond(
+  const estimatedGas = await bondingContract.estimateGas.purchaseBond(
     address,
     ROPSTEN_DAI_ADDRESS,
     formattedInput,
