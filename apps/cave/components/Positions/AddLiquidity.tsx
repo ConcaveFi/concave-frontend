@@ -13,7 +13,7 @@ import {
 import { InputField } from 'components/AMM'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { TransactionSubmittedModal } from 'components/TransactionSubmittedModal'
-import { BigNumber } from 'ethers'
+import { parseUnits } from 'ethers/lib/utils'
 import { ROUTER_ADDRESS } from 'gemswap-sdk'
 import { useAddLiquidity, UseAddLiquidityData } from 'hooks/useAddLiquidity'
 import { useApprovalWhenNeeded } from 'hooks/useAllowance'
@@ -117,17 +117,17 @@ const SupplyLiquidityModal = ({
   data: UseAddLiquidityData
   onConfirm: () => void
 }) => {
-  const { tokenA, tokenB, amountADesired, amountBDesired, userAddress } = data
+  const { tokenA, tokenB, amountADesired, amountBDesired } = data
   const networkId = useCurrentSupportedNetworkId()
   const [needsApproveA, requestApproveA, approveLabel] = useApprovalWhenNeeded(
     tokenA,
     ROUTER_ADDRESS[networkId],
-    BigNumber.from(100000000000000),
+    parseUnits(amountADesired.toFixed(tokenA.decimals)),
   )
   const [needsApproveB, requestApproveB, approveLabelB] = useApprovalWhenNeeded(
     tokenB,
     ROUTER_ADDRESS[networkId],
-    BigNumber.from(10000000000000),
+    parseUnits(amountBDesired.toFixed(tokenB.decimals)),
   )
   const differenceBetweenAandB = +amountADesired?.toExact() / +amountBDesired?.toExact()
   const differenceBetweenBandA = +amountBDesired?.toExact() / +amountADesired?.toExact()
