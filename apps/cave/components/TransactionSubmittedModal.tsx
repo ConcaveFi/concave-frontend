@@ -4,12 +4,16 @@ import React, { useMemo } from 'react'
 import { useNetwork, useWaitForTransaction } from 'wagmi'
 
 type TransactionStatusProps = {
+  title: string
+  label: string
   hash: string
   disclosure: UseDisclosureReturn
   onClose: () => void
 }
 
 export const TransactionSubmittedModal = ({
+  title,
+  label,
   hash,
   disclosure,
   onClose,
@@ -20,18 +24,18 @@ export const TransactionSubmittedModal = ({
   })
   const content = useMemo(() => {
     if (!hash) {
-      return <WaitingWalletContent disclosure={disclosure} hash={hash} label="Add liquidity" />
+      return <WaitingWalletContent disclosure={disclosure} hash={hash} label={label} />
     }
     if (swapReceipt.loading) {
-      return <WaitingBlockContent disclosure={disclosure} hash={hash} label="Add liquidity" />
+      return <WaitingBlockContent disclosure={disclosure} hash={hash} label={label} />
     }
     return <ConfirmContent disclosure={disclosure} hash={hash} onClose={onClose} />
-  }, [disclosure, hash, onClose, swapReceipt.loading])
+  }, [disclosure, hash, label, onClose, swapReceipt.loading])
 
   return (
     <Modal
       bluryOverlay={true}
-      title="Confirm Swap"
+      title={title}
       isOpen={disclosure.isOpen}
       onClose={disclosure.onClose}
       bodyProps={{

@@ -39,9 +39,14 @@ export const AddLiquidityContent = ({ userAddress }: { userAddress: string }) =>
   const { updateInputValue, updateOutputValue, updateTokenA, updateTokenB, setTokenA, setTokenB } =
     setters
   const valid = tokenA && tokenB && amountADesired && amountBDesired
-  const onSubmit = () => {
-    transactionStatusDisclosure.onOpen()
-    call()
+  const onSubmit = async () => {
+    try {
+      transactionStatusDisclosure.onOpen()
+      await call()
+    } catch (err) {
+      console.warn(err)
+      transactionStatusDisclosure.onClose()
+    }
   }
 
   return (
@@ -97,6 +102,8 @@ export const AddLiquidityContent = ({ userAddress }: { userAddress: string }) =>
         onConfirm={onSubmit}
       />
       <TransactionSubmittedModal
+        title="Supply"
+        label="Supply values"
         disclosure={transactionStatusDisclosure}
         hash={data.hash}
         onClose={clear}

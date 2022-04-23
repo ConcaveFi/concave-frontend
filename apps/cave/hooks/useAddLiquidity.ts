@@ -69,24 +69,20 @@ export const useAddLiquidity = (selectedChain = chain.ropsten, userAddress) => {
     const currentBlockNumber = await provider.getBlockNumber()
     const { timestamp } = await provider.getBlock(currentBlockNumber)
     const deadLine = timestamp + 86400
-    contractSigner
-      .addLiquidity(
-        tokenA.address,
-        tokenB.address,
-        parseUnits(amountADesired.toFixed(tokenA.decimals)),
-        parseUnits(amountBDesired.toFixed(tokenB.decimals)),
-        parseUnits(`0`, tokenA.decimals),
-        parseUnits(`0`, tokenB.decimals),
-        to,
-        deadLine,
-        {
-          gasLimit: 500000,
-        },
-      )
-      .then((r) => {
-        setHash(r.hash)
-        return r
-      })
+    const tx = await contractSigner.addLiquidity(
+      tokenA.address,
+      tokenB.address,
+      parseUnits(amountADesired.toFixed(tokenA.decimals)),
+      parseUnits(amountBDesired.toFixed(tokenB.decimals)),
+      parseUnits(`0`, tokenA.decimals),
+      parseUnits(`0`, tokenB.decimals),
+      to,
+      deadLine,
+      {
+        gasLimit: 500000,
+      },
+    )
+    setHash(tx.hash)
   }
 
   return [

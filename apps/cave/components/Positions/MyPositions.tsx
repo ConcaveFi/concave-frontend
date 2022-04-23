@@ -281,6 +281,8 @@ const RemoveLiquidityActions = ({
       </Button>
 
       <TransactionSubmittedModal
+        title="Withdraw"
+        label="Withdraw values"
         disclosure={transactionStatusDisclosure}
         hash={removeLiquidityState.hash}
         onClose={() => {
