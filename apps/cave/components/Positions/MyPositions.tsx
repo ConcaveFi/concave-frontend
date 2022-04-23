@@ -1,4 +1,4 @@
-import { ExpandArrowIcon } from '@concave/icons'
+import { ExpandArrowIcon, SpinIcon } from '@concave/icons'
 import {
   Accordion,
   AccordionButton,
@@ -12,6 +12,7 @@ import {
   Heading,
   HStack,
   IconButton,
+  keyframes,
   Modal,
   NumericInput,
   Stack,
@@ -82,6 +83,19 @@ const RewardsBanner = () => (
   </Card>
 )
 
+const spin = keyframes({
+  '0%': {
+    transform: 'rotate(0deg)',
+  },
+  '100%': {
+    transform: 'rotate(360deg)',
+  },
+})
+
+const spinnerStyles = {
+  animation: `${spin} 2s linear infinite`,
+}
+
 interface LPPosition {
   userAddress: string
   liquidityPoolToken: Token
@@ -90,7 +104,11 @@ const LPPositionItem = ({ userAddress, liquidityPoolToken }: LPPosition) => {
   const [liquidityInfo, isLoading] = useLiquidityInfo(liquidityPoolToken)
   const removeLiquidity = useDisclosure()
   if (isLoading) {
-    return <p>Loading Info</p>
+    return (
+      <Flex justifyContent={'center'}>
+        <SpinIcon __css={spinnerStyles} width="8" height="16" viewBox="0 0 64 64" />
+      </Flex>
+    )
   }
   const { pair, token, userBalance, userPoolShare } = liquidityInfo
   return (
@@ -356,6 +374,7 @@ const AmountToRemove = ({ onChange }: { onChange: (n: number) => void }) => {
     <Flex shadow="Up Big" px={6} py={3} borderRadius="2xl" justify="space-between" align="center">
       <Text>Amount to remove</Text>
       <NumericInput
+        autoFocus={true}
         shadow="down"
         onValueChange={({ floatValue }, eventSrc) =>
           eventSrc.source === 'event' && onChange(floatValue)
