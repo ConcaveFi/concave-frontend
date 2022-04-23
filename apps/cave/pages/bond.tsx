@@ -208,11 +208,11 @@ export default function Bond() {
           </Heading>
         </Stack>
 
-        <Flex gap={10} direction="row">
+        <Flex gap={10} direction={{ base: 'column', lg: 'row' }}>
           <Box
             pos="relative"
             h="fit-content"
-            overflowY={'auto'}
+            // overflowY={'auto'}
             maxHeight={'500px'}
             css={{
               '&::-webkit-scrollbar': {
