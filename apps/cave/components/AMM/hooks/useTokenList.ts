@@ -42,7 +42,7 @@ export const findTokenByAddress = async (
 }
 
 //PUT IN .ENV
-const headers = { 'x-api-key': process.env.MORALIS_TOKEN }
+const headers = { 'x-api-key': process.env.NEXT_PUBLIC_MORALIS_TOKEN }
 export const useAddressTokenList: (address?: string) => UseQueryResult<Token[], unknown> = (
   address: string,
 ) => {
