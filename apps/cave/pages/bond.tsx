@@ -9,6 +9,7 @@ import {
   Image,
   Stack,
   Text,
+  useMediaQuery,
 } from '@concave/ui'
 import { BondBuyCard } from 'components/Bond/BondBuyCard'
 import Placeholder from 'components/Placeholder'
@@ -199,6 +200,9 @@ export default function Bond() {
       console.log(bondSpotPrice)
     })
   }, [])
+
+  const [isLargerThan1200] = useMediaQuery('(min-width: 1200px)')
+
   return (
     <Container maxW="container.lg">
       <Flex direction="column" gap={20}>
@@ -208,11 +212,14 @@ export default function Bond() {
           </Heading>
         </Stack>
 
-        <Flex gap={10} direction={{ base: 'column', lg: 'row' }}>
+        <Flex
+          gap={10}
+          direction={isLargerThan1200 ? 'row' : 'column'}
+          align={isLargerThan1200 ? 'start' : 'center'}
+        >
           <Box
             pos="relative"
             h="fit-content"
-            // overflowY={'auto'}
             maxHeight={'500px'}
             css={{
               '&::-webkit-scrollbar': {
