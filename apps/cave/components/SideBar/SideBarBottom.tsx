@@ -3,6 +3,7 @@ import { Link, Text, VStack, HStack, Image } from '@concave/ui'
 import useAddTokenToWallet, { injectedTokenResponse } from 'hooks/useAddTokenToWallet'
 import { getWalletType, renderProviderText } from 'lib/injected.wallets'
 import { useIsMounted } from 'hooks/useIsMounted'
+import { CNV } from 'constants/tokens'
 
 interface MediaProps {
   icon: string
@@ -40,10 +41,8 @@ const Media: Array<MediaProps> = [
 function SideBarBottom() {
   const isMounted = useIsMounted()
   const { loading: loadingtoWallet, addingToWallet }: injectedTokenResponse = useAddTokenToWallet({
-    tokenAddress: '0x2B8E79CBD58418CE9aeB720BAf6B93825B93eF1F',
-    tokenChainId: 3,
-    tokenImage:
-      'https://raw.githubusercontent.com/ConcaveFi/assets/master/blockchains/ethereum/assets/0x000000007a58f5f58E697e51Ab0357BC9e260A04/logo.png',
+    tokenAddress: CNV.address,
+    tokenChainId: CNV.chainId,
   })
 
   return (

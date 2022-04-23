@@ -2,6 +2,7 @@ import { ERC20_ABI } from 'constants/abi'
 import { Contract } from 'ethers'
 import { concaveProvider } from 'lib/providers'
 import { useState, useEffect } from 'react'
+import { CHAIN_NAME } from 'gemswap-sdk'
 
 interface injectedToken {
   tokenAddress: string
@@ -27,6 +28,7 @@ export const toHex = (num: number) => {
  * useAddToken({injectedToken}) to let the user add a token to his wallet.
  * You need to triger the onClick with "adding" and provide an object of injectedToken
  * it will check on chain the tokenAddress/tokenchainId to get symbol/decimals.
+ * will also check for token image on ConcaveFi/assets from blochain/token-address
  */
 const useAddTokenToWallet = ({ tokenAddress, tokenChainId, tokenImage }: injectedToken) => {
   const [data, setData] = useState(false)
@@ -76,6 +78,8 @@ const useAddTokenToWallet = ({ tokenAddress, tokenChainId, tokenImage }: injecte
             })
           }
 
+          const image = `https://raw.githubusercontent.com/ConcaveFi/assets/master/blockchains/${CHAIN_NAME[tokenChainId]}/assets/${tokenAddress}/logo.png`
+
           const addToWallet = async (symbol: string, decimals: number) => {
             await window.ethereum?.request({
               method: 'wallet_watchAsset',
@@ -85,7 +89,7 @@ const useAddTokenToWallet = ({ tokenAddress, tokenChainId, tokenImage }: injecte
                   address: tokenAddress,
                   symbol,
                   decimals,
-                  image: tokenImage,
+                  image,
                 },
               },
             })
