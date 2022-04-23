@@ -36,7 +36,7 @@ export const findTokenByAddress = async (
       list.find((token) => token.address.toLowerCase() === tokenAddress.toLowerCase()),
     )
     .then((token) => {
-      if (!token) throw new Error(`Token ${tokenAddress} not found`)
+      if (!token) return new Token(chain.ropsten.id, tokenAddress, 18, 'NA', 'Not Found Token')
       return new Token(chain.ropsten.id, token.address, token.decimals, token.symbol, token.name)
     })
 }

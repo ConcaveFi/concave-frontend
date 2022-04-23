@@ -2,7 +2,6 @@ import { ExpandArrowIcon } from '@concave/icons'
 import {
   Accordion,
   AccordionButton,
-  AccordionIcon,
   AccordionItem,
   AccordionPanel,
   Box,
@@ -89,7 +88,6 @@ interface LPPosition {
 }
 const LPPositionItem = ({ userAddress, liquidityPoolToken }: LPPosition) => {
   const [liquidityInfo, isLoading] = useLiquidityInfo(liquidityPoolToken)
-  const addLiquidity = useDisclosure()
   const removeLiquidity = useDisclosure()
   if (isLoading) {
     return <p>Loading Info</p>
@@ -99,13 +97,15 @@ const LPPositionItem = ({ userAddress, liquidityPoolToken }: LPPosition) => {
     <>
       <AccordionItem p={2} shadow="Up Big" borderRadius="2xl" alignItems="center">
         <AccordionButton>
-          {/* //TODO https://github.com/ConcaveFi/concave-frontend/issues/118 */}
-          <CurrencyIcon h={'32px'} currency={pair.token0} mx={1} />
-          <CurrencyIcon h={'32px'} currency={pair.token1} mx={1} />
-          <Text ml="24px" fontWeight="semibold" fontSize="lg">
-            {pair.token0.symbol}/{pair.token1.symbol}{' '}
-          </Text>
-          <Button
+          <HStack>
+            {/* //TODO https://github.com/ConcaveFi/concave-frontend/issues/118 */}
+            <CurrencyIcon h={'32px'} currency={pair.token0} />
+            <CurrencyIcon h={'32px'} currency={pair.token1} />
+            <Text ml="24px" fontWeight="semibold" fontSize="lg">
+              {token.name} {pair.token0.symbol}/{pair.token1.symbol}
+            </Text>
+          </HStack>
+          {/* <Button
             variant="secondary"
             borderRadius="full"
             pl={3}
@@ -116,7 +116,7 @@ const LPPositionItem = ({ userAddress, liquidityPoolToken }: LPPosition) => {
             ml="auto"
           >
             Manage
-          </Button>
+          </Button> */}
         </AccordionButton>
         <AccordionPanel>
           <Stack

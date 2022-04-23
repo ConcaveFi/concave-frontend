@@ -16,13 +16,12 @@ export const useConversion = (
   const [TokenB, setTokenB] = useState(null)
 
   const { data: pair } = usePair(currencyIn, currencyOut)
-
   useEffect(() => {
     if (pair !== undefined) {
-      setReserveA(pair[0].reserve0.toExact())
-      setReserveB(pair[0].reserve1.toExact())
-      setTokenA(pair[0].token0)
-      setTokenB(pair[0].token1)
+      setReserveA(pair.reserve0.toExact())
+      setReserveB(pair.reserve1.toExact())
+      setTokenA(pair.token0)
+      setTokenB(pair.token1)
     }
   }, [pair])
 

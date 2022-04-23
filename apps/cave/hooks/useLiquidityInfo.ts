@@ -7,8 +7,8 @@ import { chain } from 'wagmi'
 import { BigNumber, Contract } from 'ethers'
 import { CurrencyAmount, Token } from 'gemswap-sdk'
 import { findTokenByAddress } from 'components/AMM/hooks/useTokenList'
-import { useCurrencyBalance } from 'components/AMM/hooks/useCurrencyBalance'
 import { formatUnits } from 'ethers/lib/utils'
+import { useCurrencyBalance } from './useCurrencyBalance'
 
 export const useLiquidityInfo = (token: Token) => {
   const selectedChain = token.chainId === chain.ropsten.id ? chain.ropsten : chain.mainnet
@@ -55,7 +55,10 @@ export const useLiquidityInfo = (token: Token) => {
           )
           setLoading(false)
         })
-        .catch(setError)
+        .catch((e) => {
+          console.error(e)
+          setError(e)
+        })
     })
   }, [selectedChain, token.address, token.decimals, userBalance.data, userBalance.isSuccess])
 
