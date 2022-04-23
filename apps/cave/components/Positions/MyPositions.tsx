@@ -226,7 +226,6 @@ const RemoveLiquidityActions = ({
   removeLiquidityState: RemoveLiquidityState
 }) => {
   const networkId = useCurrentSupportedNetworkId()
-  const [{ data: account }] = useAccount()
   const transactionStatusDisclosure = useDisclosure()
   const [needsApprove, requestApproveA, approveLabel] = useApprovalWhenNeeded(
     removeLiquidityState.token,

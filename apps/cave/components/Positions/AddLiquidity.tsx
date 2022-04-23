@@ -21,6 +21,16 @@ import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId
 import React from 'react'
 import { chain } from 'wagmi'
 
+const LiquidityTip = () => (
+  <Card variant="secondary" p={4} backgroundBlendMode={'screen'}>
+    <Text fontSize="lg">
+      Tip: When you add liquidity, you will receive pool tokens representing your position. These
+      tokens automatically earn fees proportional to your share of the pool, and can be redeemed at
+      any time.
+    </Text>
+  </Card>
+)
+
 export const AddLiquidityContent = ({ userAddress }: { userAddress: string }) => {
   const supplyLiquidityDisclosure = useDisclosure()
   const transactionStatusDisclosure = useDisclosure()
@@ -36,13 +46,7 @@ export const AddLiquidityContent = ({ userAddress }: { userAddress: string }) =>
 
   return (
     <>
-      <Card variant="secondary" p={4} backgroundBlendMode={'screen'}>
-        <Text fontSize="lg">
-          Tip: When you add liquidity, you will receive pool tokens representing your position.
-          These tokens automatically earn fees proportional to your share of the pool, and can be
-          redeemed at any time.
-        </Text>
-      </Card>
+      <LiquidityTip />
       <Flex direction={'column'} p={4} gap={2}>
         <InputField
           currencyIn={tokenA}
