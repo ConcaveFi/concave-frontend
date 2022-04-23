@@ -154,12 +154,12 @@ const SupplyLiquidityModal = ({
       <Box borderRadius={'2xl'} p={6} shadow={'down'}>
         <PositionInfoItem
           label="Rates"
-          value={`1  ${tokenA.symbol} = ${differenceBetweenAandB.toFixed(5)}
+          value={`1  ${tokenA.symbol} = ${differenceBetweenBandA.toPrecision(5)}
           ${tokenB.symbol}`}
         />
         <PositionInfoItem
           label=""
-          value={`1  ${tokenB.symbol} = ${differenceBetweenBandA.toFixed(5)}  ${tokenA.symbol}`}
+          value={`1  ${tokenB.symbol} = ${differenceBetweenAandB.toPrecision(5)}  ${tokenA.symbol}`}
         />
         <PositionInfoItem
           mt={8}
