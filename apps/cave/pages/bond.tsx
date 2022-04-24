@@ -6,7 +6,6 @@ import {
   Flex,
   Heading,
   Image,
-  position,
   Stack,
   Text,
   useMediaQuery,
@@ -60,7 +59,7 @@ const UserBondPositionInfo = (bondSigma) => {
   const parse = bondSigma?.bondSigma
   const oldestBond = parse?.parseOldest
   const totalOwed = parse?.totalOwed
-  const totalPending = parse?.totalPending
+  const totalPending = parse?.totalPending.toFixed(2)
 
   return (
     <Card bg="none" py={3} w="100%" direction="row" shadow="Glass Up Medium">
@@ -122,22 +121,24 @@ export default function Bond() {
   const { userAddress, signer } = useBondState()
   const [termLength, setTermLength] = useState<number>(0)
   const [bondSpotPrice, setBondSpotPrice] = useState<string>('0')
-  const [cnvMarketPrice, setCnvMarketPrice] = useState<number>(0)
+  const [cnvMarketPrice, setCnvMarketPrice] = useState<Object>()
   const [currentBlockTs, setCurrentBlockTs] = useState<number>(0)
   const [bondSigma, setBondSigma] = useState<any>()
 
-  const { data } = useFetchApi('/api/cnv')
-
-  if (cnvMarketPrice === 0 && !!data) {
-    setCnvMarketPrice(data.cnv)
-  }
+  useFetchApi('/api/cnv').then((data) => {
+    console.log(data)
+    if (data) {
+      setCnvMarketPrice(data.cnv)
+      console.log(cnvMarketPrice)
+    }
+  })
 
   useEffect(() => {
     getCurrentBlockTimestamp().then((x) => {
       setCurrentBlockTs(x)
     })
     if (userAddress)
-      getUserBondPositions(3, userAddress, currentBlockTs.toString())
+      getUserBondPositions(3, userAddress, currentBlockTs)
         .then((x) => {
           setBondSigma(x)
         })
@@ -157,7 +158,7 @@ export default function Bond() {
     })
   }, [])
 
-  const [isLargerThan1200] = useMediaQuery('(max-width: 1200px)')
+  const [isLargerThan1200] = useMediaQuery('(min-width: 1200px)')
 
   return (
     <Container maxW="container.lg">
@@ -170,8 +171,8 @@ export default function Bond() {
 
         <Flex
           gap={10}
-          direction={isLargerThan1200 ? 'column' : 'row'}
-          align={isLargerThan1200 ? 'center' : 'start'}
+          direction={isLargerThan1200 ? 'row' : 'column'}
+          align={isLargerThan1200 ? 'start' : 'center'}
         >
           <Box
             pos="relative"
