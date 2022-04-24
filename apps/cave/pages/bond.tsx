@@ -4,15 +4,14 @@ import {
   Card,
   Container,
   Flex,
-  gradientBorder,
   Heading,
   Image,
+  position,
   Stack,
   Text,
   useMediaQuery,
 } from '@concave/ui'
 import { BondBuyCard } from 'components/Bond/BondBuyCard'
-import Placeholder from 'components/Placeholder'
 import {
   useBondGetTermLength,
   getBondSpotPrice,
@@ -21,10 +20,8 @@ import {
   useBondState,
 } from 'components/Bond/BondState'
 import { useEffect, useState } from 'react'
-import { useAuth } from 'contexts/AuthContext'
 import { useFetchApi } from 'hooks/cnvData'
 import React from 'react'
-import { utils } from 'ethers'
 
 const InfoItem = ({ value, label, ...props }) => (
   <Flex
@@ -59,47 +56,29 @@ const BondInfo = ({ asset, roi, vestingTerm, icon }) => {
   )
 }
 
-const UserBondPositionInfo = ({ bondInfo, currentBlockTimestamp }) => {
-  const elapsed =
-    currentBlockTimestamp > bondInfo.creation ? 1 : currentBlockTimestamp / bondInfo.creation
+const UserBondPositionInfo = (bondSigma) => {
+  const parse = bondSigma?.bondSigma
+  const oldestBond = parse?.parseOldest
+  const totalOwed = parse?.totalOwed
+  const totalPending = parse?.totalPending
+
   return (
     <Card bg="none" py={3} w="100%" direction="row" shadow="Glass Up Medium">
       <Flex justify="center" pl={4} pr={7}>
-        <InfoItem
-          value={`${
-            bondInfo?.creation
-              ? new Date(bondInfo.creation * 1000 + 432000000).toString().slice(0, 21)
-              : 'Loading'
-          }`}
-          label="Fully Vested"
-        />
+        <InfoItem value={oldestBond} label={oldestBond ? 'Fully Vested' : ''} />
       </Flex>
       <Box w="1px" mx={-1} my={-4} bg="stroke.primary" />
       <InfoItem
-        value={`${
-          bondInfo?.owed
-            ? elapsed
-              ? (+utils.formatEther(bondInfo.owed)).toFixed(2)
-              : +(+utils.formatEther(bondInfo.owed)).toFixed(2) * elapsed -
-                +(+utils.formatEther(bondInfo.redeemed)).toFixed(2)
-            : 'Loading'
-        }`}
-        label="Pending"
+        value={totalOwed}
+        label={totalOwed ? 'Claimable' : 'No Bonds to Claim'}
         flexGrow={1}
       />
       <Box w="1px" mx={-1} my={-4} bg="stroke.primary" />
-      <InfoItem
-        value={`${
-          bondInfo?.owed
-            ? (+utils.formatEther(bondInfo.owed) - +utils.formatEther(bondInfo.redeemed)).toFixed(2)
-            : 'Loading'
-        }`}
-        label="Claimable"
-        px={5}
-      />
+      <InfoItem value={totalPending} label={totalPending ? 'Owed' : ''} px={5} />
     </Card>
   )
 }
+
 const SelectedBondType = ({ bondType }) => {
   return (
     <Card
@@ -124,37 +103,17 @@ const SelectedBondType = ({ bondType }) => {
   )
 }
 
-const NothingToRedeem = () => {
+const Redeem = ({ onConfirm, bondSigma }: { onConfirm: () => void; bondSigma }) => {
+  const display = !!bondSigma ? 1 : 0
   return (
-    <Card
-      shadow="Up Big"
-      mb={-20}
-      px={8}
-      py={1}
-      fontWeight="bold"
-      fontSize="sm"
-      borderBottomRadius="0"
-      w="250px"
-    >
-      <Text color="text.low" align="center">
-        Nothing to redeem
-      </Text>
-    </Card>
-  )
-}
-
-const Redeem = ({ onConfirm }: { onConfirm: () => void }) => {
-  return (
-    <Card
-      // shadow="Up Big"
-      mb={-20}
-      fontWeight="bold"
-      fontSize="lg"
-      w="250px"
-    >
-      <Button variant="primary" size="lg" isFullWidth onClick={onConfirm}>
-        {UserBondPositionInfo.length < 1 ? 'Redeem' : 'Batch Redeem'}
-      </Button>
+    <Card mb={-20} fontWeight="bold" fontSize="lg" w="250px">
+      {display ? (
+        <Button variant="primary" size="lg" isFullWidth onClick={onConfirm}>
+          Redeem
+        </Button>
+      ) : (
+        ''
+      )}
     </Card>
   )
 }
@@ -164,10 +123,8 @@ export default function Bond() {
   const [termLength, setTermLength] = useState<number>(0)
   const [bondSpotPrice, setBondSpotPrice] = useState<string>('0')
   const [cnvMarketPrice, setCnvMarketPrice] = useState<number>(0)
-  const [userBondPositions, setUserBondPositions] = useState([])
-  const [userBondRedeemablePositionIDs, setUserBondRedeemablePositionIDs] = useState([])
-  const [userBondPositionsLength, setUserBondPositionsLength] = useState<number>(4)
   const [currentBlockTs, setCurrentBlockTs] = useState<number>(0)
+  const [bondSigma, setBondSigma] = useState<any>()
 
   const { data } = useFetchApi('/api/cnv')
 
@@ -179,11 +136,10 @@ export default function Bond() {
     getCurrentBlockTimestamp().then((x) => {
       setCurrentBlockTs(x)
     })
-    if (userAddress && userBondPositions.length === 0)
-      getUserBondPositions(3, 2, userAddress, currentBlockTs.toString())
-        .then((userPositionInfo) => {
-          setUserBondPositions(userPositionInfo.positionArray)
-          setUserBondRedeemablePositionIDs(userPositionInfo.redeemablePositions)
+    if (userAddress)
+      getUserBondPositions(3, userAddress, currentBlockTs.toString())
+        .then((x) => {
+          setBondSigma(x)
         })
         .catch((e) => {
           console.log('get position info failed', e)
@@ -256,32 +212,19 @@ export default function Bond() {
                 }%`}
                 vestingTerm={`${termLength} Days`}
               />
-              {userBondPositions.map((position, i) => {
-                return (
-                  <React.Fragment key={i}>
-                    <UserBondPositionInfo
-                      bondInfo={position}
-                      currentBlockTimestamp={currentBlockTs}
-                    />
-                  </React.Fragment>
-                )
-              })}
-              {userBondPositions.length > 0 ? (
-                <Redeem
-                  onConfirm={() => {
-                    // make call here for a mass redeem...
-                    // inherit id of known redeemable positions
-                    // load up those arguments into the batch redemption
-                    console.log('test')
-                    //
-                  }}
-                ></Redeem>
-              ) : (
-                ''
-              )}
+              <UserBondPositionInfo bondSigma={bondSigma} />
+              <Redeem
+                bondSigma={bondSigma}
+                onConfirm={() => {
+                  // make call here for a mass redeem...
+                  // inherit id of known redeemable positions
+                  // load up those arguments into the batch redemption
+                  console.log('test')
+                  //
+                }}
+              ></Redeem>
             </Card>
           </Box>
-
           <BondBuyCard />
         </Flex>
       </Flex>
