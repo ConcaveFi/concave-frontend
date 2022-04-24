@@ -157,7 +157,7 @@ export default function Bond() {
     })
   }, [])
 
-  const [isLargerThan1200] = useMediaQuery('(min-width: 1200px)')
+  const [isLargerThan1200] = useMediaQuery('(max-width: 1200px)')
 
   return (
     <Container maxW="container.lg">
@@ -170,8 +170,8 @@ export default function Bond() {
 
         <Flex
           gap={10}
-          direction={isLargerThan1200 ? 'row' : 'column'}
-          align={isLargerThan1200 ? 'start' : 'center'}
+          direction={isLargerThan1200 ? 'column' : 'row'}
+          align={isLargerThan1200 ? 'center' : 'start'}
         >
           <Box
             pos="relative"

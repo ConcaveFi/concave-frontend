@@ -2,7 +2,7 @@ import { GasIcon } from '@concave/icons'
 import { Button, Card, HStack, Spinner, Text, useDisclosure } from '@concave/ui'
 import { useApprovalWhenNeeded } from 'hooks/useAllowance'
 import React, { useEffect, useState } from 'react'
-import { useFeeData } from 'wagmi'
+import { useBalance, useFeeData } from 'wagmi'
 import { BOND_ADDRESS } from '../../contracts/Bond/BondingAddress'
 import { BondInput } from './BondInput'
 import { BondOutput } from './BondOutput'
@@ -37,7 +37,7 @@ export function BondBuyCard() {
   const { currencyIn, currencyOut, userAddress, balance, signer } = useBondState()
   const [settings, setSettings] = useState<BondSettings>(defaultSettings)
   const userBalance = balance.data?.formatted
-  const [amountIn, setAmountIn] = useState<string>('0')
+  const [amountIn, setAmountIn] = useState<string>('1')
   const [amountOut, setAmountOut] = useState<string>()
   const [bondReceipt] = useState<any>()
   const [bondTransaction] = useState({})
@@ -72,10 +72,10 @@ export function BondBuyCard() {
           })
         }}
         // bug: fails to execute tx when clicked before hitting swap
-        // onClickMaxBalance={() => {
-        //   if (swapingIn.currency.equals(nativeCurrency)) setAmountIn(+swapingIn.balance * 0.8)
-        //   else setAmountIn(swapingIn.balance)
-        // }}
+        onClickMaxBalance={() => {
+          // if (swapingIn.currency.equals(nativeCurrency)) setAmountIn(+swapingIn.balance * 0.8)
+          // else setAmountIn(swapingIn.balance)
+        }}
       />
       <DownwardIcon />
       <BondOutput disabled={true} currency={currencyOut} value={amountOut} />

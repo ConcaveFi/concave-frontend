@@ -7,7 +7,9 @@ export const useApprovalWhenNeeded = (token: Token, spender: string, amount: Big
   const label = (() => {
     if (approve.isWaitingTransactionReceipt) return 'Waiting block confirmation'
 
-    if (allowance.isError) return 'Error on request'
+    if (allowance.isError) {
+      return 'Error on request'
+    }
 
     if (allowance?.value?.gte(amount)) {
       return 'Approved'
