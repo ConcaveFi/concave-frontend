@@ -1,5 +1,5 @@
 import { GasIcon } from "@concave/icons"
-import { Box, Card, Flex, Text } from "@concave/ui"
+import { Box, Card, Flex, HStack, Image, Text, VStack } from "@concave/ui"
 
 
 function MarketplaceSearchCard(props) {
@@ -7,7 +7,7 @@ function MarketplaceSearchCard(props) {
 
 
     return (
-        <div>
+
 <Card
           
           p={3}
@@ -122,7 +122,7 @@ function MarketplaceSearchCard(props) {
                             /* 1/Up (Small) */
                         shadow='down' 
 >
-<Flex direction="column" gap={6} justify="center" mt={2}>
+
         <Box
                         pos="relative"
                         w="570px"
@@ -134,6 +134,7 @@ function MarketplaceSearchCard(props) {
                             background: 'rgba(113, 113, 113, 0.01)'}}
                             /* 1/Up (Small) */
                         shadow='up' >
+            <Flex direction="row" gap={6} justify="center" mt={2}>          
             <Box
                  pos="relative"
                 w="177px"
@@ -152,14 +153,43 @@ function MarketplaceSearchCard(props) {
                     6 Month
                     </Text>
                     {/* Stake Period Position Logo here */}
+
+
             </Box>
-            
+            <VStack>
+                    <Text color="text.low" fontSize="sm">
+              Redeem In:
+            </Text>
+            <Text fontSize="md" fontWeight="bold">
+            143 Days
+          </Text>
+          </VStack>
+          <VStack>
+                    <Text color="text.low" fontSize="sm">
+              Price:
+            </Text>
+            <Text fontSize="md" fontWeight="bold">
+            605 CNV
+          </Text>
+          </VStack>
+          <VStack>
+                    <Text color="text.low" fontSize="sm">
+              Discount:
+            </Text>
+            <Text fontSize="md" fontWeight="bold">
+            2.3%
+          </Text>
+          </VStack>
+          
+            <Image mx="auto" src={`/assets/liquidstaking/modal-arrow-logo.svg`} alt="arrow down logo" />
+            </Flex>
         </Box>
-</Flex>
+        
+
 </Box>
 
         </Card>
-        </div>
+
     )  
 }
 
