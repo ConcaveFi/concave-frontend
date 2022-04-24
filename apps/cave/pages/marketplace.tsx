@@ -5,9 +5,8 @@ import MarketplaceSearchCard from 'components/Marketplace/MarketplaceSearchCard'
 import MarketplaceStakeCard from 'components/Marketplace/MarketplaceStakeCard'
 import MarketplaceActivityCard from 'components/Marketplace/MarketplaceActivityCard'
 
-function marketplace() {
+const marketplace = () => {
   return (
-
     <Container maxW="container.lg" borderRadius={0} border="" textAlign="center">
       <Heading as="h1" mt={16} mb={3} fontSize="5xl">
         Marketplace
@@ -21,6 +20,7 @@ function marketplace() {
         </Text>
         <GraphicGuide />
       </HStack>
+
     <Flex direction="row" gap={8} position="relative" mt={16}>
         <MarketplaceSearchCard />
     <Flex direction="column" gap={8} position="relative" mt={16}>
