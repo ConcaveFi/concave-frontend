@@ -1,4 +1,4 @@
-import { Box, Card, Flex, HStack, Image, Text, VStack } from "@concave/ui"
+import { Box, Flex, HStack, Image, Text, VStack } from "@concave/ui"
 
 const NftPositionCard = () => {
     console.log("ok")
@@ -20,7 +20,7 @@ const NftPositionCard = () => {
             <Flex direction="row" gap={4} justify="center" mt={2}>
                 <Box
                     pos="relative"
-                    border={"1px solid green"}
+                    // border={"1px solid green"}
                     w="202px"
                     h="62px"
                     overflowY={'auto'}

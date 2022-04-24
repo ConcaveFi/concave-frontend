@@ -1,5 +1,5 @@
-import { GasIcon } from "@concave/icons"
-import { Box, Card, Flex, HStack, Image, Text, VStack } from "@concave/ui"
+
+import { Box, Card, Flex, Text } from "@concave/ui"
 import SearchFilterCard from "./SearchFilterCard";
 import NftPositionCard from "./NftPositionCard";
 
