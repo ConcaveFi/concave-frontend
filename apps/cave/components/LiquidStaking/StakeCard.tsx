@@ -60,10 +60,20 @@ function StakeCard(props) {
   useEffect(() => {
     if (!pool.loading && !stakingCap.loading && pool.data && stakingCap.data) {
       setFetchingData(false)
-      setCapPercentage(String())
+      setCapPercentage(
+        String(
+          (Number(ethers.utils.formatEther(pool.data?.balance)) /
+            Number(
+              +ethers.utils.formatEther(pool.data?.balance) +
+                +ethers.utils.formatEther(stakingCap.data),
+            )) *
+            100,
+        ),
+      )
     } else {
       setFetchingData(true)
     }
+    console.log(capPercentage)
     // console.log(fetchingData)
   }, [pool, stakingCap])
 
@@ -118,9 +128,7 @@ function StakeCard(props) {
             >
               <Text w="150px">
                 {pool.data
-                  ? `${Number(ethers.utils.formatEther(pool.data ? pool.data?.balance : 0)).toFixed(
-                      1,
-                    )} CNV`
+                  ? `${Number(ethers.utils.formatEther(pool.data?.balance)).toFixed(1)} CNV`
                   : 'Fetching...'}
               </Text>
             </Box>
