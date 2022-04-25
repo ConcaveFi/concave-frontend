@@ -1,32 +1,47 @@
 import { useQuery, UseQueryResult } from 'react-query'
-import { chain, useNetwork } from 'wagmi'
+import { Chain, chain, useNetwork } from 'wagmi'
 import { Token } from 'gemswap-sdk'
 
 const concaveTokenList = (networkName: string) =>
   `/assets/tokenlists/${networkName.toLowerCase()}/concave.json`
 
-export const useTokenList = (networkName: string = chain.mainnet.name) => {
-  return useQuery(['token-list', networkName], () =>
-    fetch(concaveTokenList(networkName))
+export const useTokenList = () => {
+  const [
+    {
+      data: { chain },
+    },
+  ] = useNetwork()
+
+  return useQuery(['token-list', chain?.name], () =>
+    fetch(concaveTokenList(chain.name))
       .then((d) => d.json() as Promise<ConcaveTokenList>)
       .then((l) => l.tokens)
       .then((list) =>
         list.map((token) => {
-          return new Token(
-            chain.ropsten.id,
-            token.address,
-            token.decimals,
-            token.symbol,
-            token.name,
-          )
+          return new Token(token.chainId, token.address, token.decimals, token.symbol, token.name)
         }),
       ),
   )
 }
 
-//PUT IN .ENV
-const MORALIS_TOKEN = '10NauNE7btm4qS8AbMv1ojkXhxsgh1FTJiSwH7SctkCSGKCCXPzwZpswmnNDmmrd'
-const headers = { 'x-api-key': MORALIS_TOKEN }
+export const findTokenByAddress = async (
+  selectedChain: Chain = chain.mainnet,
+  address: Promise<string>,
+) => {
+  const tokenAddress = await address
+  return fetch(concaveTokenList(selectedChain.name))
+    .then((d) => d.json() as Promise<ConcaveTokenList>)
+    .then((l) => l.tokens)
+    .then((list) =>
+      list.find((token) => token.address.toLowerCase() === tokenAddress.toLowerCase()),
+    )
+    .then((token) => {
+      if (!token) return new Token(chain.ropsten.id, tokenAddress, 18, 'NA', 'Not Found Token')
+      return new Token(chain.ropsten.id, token.address, token.decimals, token.symbol, token.name)
+    })
+}
+
+const headers = { 'x-api-key': process.env.NEXT_PUBLIC_MORALIS_TOKEN }
 export const useAddressTokenList: (address?: string) => UseQueryResult<Token[], unknown> = (
   address: string,
 ) => {
@@ -34,7 +49,6 @@ export const useAddressTokenList: (address?: string) => UseQueryResult<Token[], 
   const chainName =
     network?.chain?.id === chain.ropsten.id ? chain.ropsten.name : chain.mainnet.name
   const url = `https://deep-index.moralis.io/api/v2/${address}/erc20?chain=${chainName}`
-  console.log(url)
   return useQuery(['LISTTOKENS', address], () => {
     return fetch(url, { headers })
       .then((r) => r.json())

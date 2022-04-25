@@ -3,6 +3,7 @@ import { concaveProvider } from 'lib/providers'
 import { Token, Fetcher, Pair } from 'gemswap-sdk'
 import { BASES_TO_CHECK_TRADES_AGAINST, INTERMEDIARY_PAIRS_FOR_MULTI_HOPS } from 'constants/routing'
 import { AVERAGE_BLOCK_TIME } from 'constants/blockchain'
+import { useState } from 'react'
 
 const filterRepeatedPairs = (pairs: [Token, Token][]) =>
   pairs.filter(
@@ -70,4 +71,5 @@ export const usePairs = <T = Pair[]>(
   )
 }
 
-export const usePair = (tokenA: Token, tokenB: Token) => usePairs(tokenA, tokenB, 1)
+export const usePair = (tokenA: Token, tokenB: Token) =>
+  usePairs(tokenA, tokenB, 1, { select: (pairs) => pairs[0] })

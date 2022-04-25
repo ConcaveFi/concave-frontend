@@ -28,8 +28,7 @@ export const RelativePrice = ({
         <>
           <Text>
             1 {relativePrice.price?.quoteCurrency.symbol} ={' '}
-            {relativePrice.price?.invert().toSignificant(3)}{' '}
-            {relativePrice.price?.baseCurrency.symbol}
+            {relativePrice.price?.invert().toFixed(2)} {relativePrice.price?.baseCurrency.symbol}
           </Text>
           {outputFiat.price && (
             <Text ml={1} textColor="text.low">

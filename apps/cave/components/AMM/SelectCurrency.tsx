@@ -1,6 +1,5 @@
 import { CnvQuestionIcon, DownIcon } from '@concave/icons'
 import {
-  useDisclosure,
   Button,
   Flex,
   Heading,
@@ -11,12 +10,13 @@ import {
   Stack,
   Text,
   UnorderedList,
+  useDisclosure,
 } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
-import { Currency, DAI, CNV } from 'gemswap-sdk'
-import React, { useCallback, useState } from 'react'
-import { useNetwork } from 'wagmi'
+import { CNV, Currency, DAI } from 'gemswap-sdk'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import React, { useCallback, useState } from 'react'
+import { useTokenList } from './hooks/useTokenList'
 
 const CommonTokens = ({
   selected,
@@ -64,6 +64,7 @@ const TokenListItem = ({ currency, onClick }: { currency: Currency; onClick: () 
     borderRadius="2xl"
     listStyleType="none"
     onClick={onClick}
+    title={currency.wrapped.address}
   >
     <Stack direction="row" spacing={3} align="center">
       <CurrencyIcon h="35px" w="35px" currency={currency} />
@@ -90,28 +91,38 @@ export const SelectTokenModal = ({
   isOpen: boolean
   onClose: () => void
 }) => {
-  const [{ data: network, loading }] = useNetwork()
   const [search, setSearch] = useState('')
+  const { data, isLoading, isSuccess } = useTokenList()
+  const tokens = (data || []).filter((t) => {
+    return (
+      !search ||
+      t.address.toLowerCase() === search.toLowerCase() ||
+      t.name.toLowerCase().includes(search.toLowerCase()) ||
+      t.symbol.toLowerCase().includes(search.toLowerCase())
+    )
+  })
   const networkId = useCurrentSupportedNetworkId()
   const selectAndClose = useCallback(
-    (token: Currency) => (onSelect(token), onClose()),
+    (token: Currency) => {
+      onSelect(token), onClose()
+    },
     [onSelect, onClose],
   )
   return (
     <Modal
       bluryOverlay
       title="Select a Token"
-      size="sm"
+      size="md"
       isOpen={isOpen}
       onClose={onClose}
-      bodyProps={{ gap: 4, w: '350px' }}
+      bodyProps={{ gap: 4 }}
     >
       <CommonTokens
         currencies={[DAI[networkId], CNV[networkId]]} //[nativeCurrency, ...BASES_TO_CHECK_TRADES_AGAINST[chainId]]}
         selected={selected}
         onSelect={selectAndClose}
       />
-      {/* <Input
+      <Input
         placeholder="Search name or paste address"
         onChange={({ target }) => setSearch(target.value)}
       />
@@ -124,7 +135,7 @@ export const SelectTokenModal = ({
         shadow="Down Big"
         p={3}
       >
-         {!isSuccess ? (
+        {isLoading ? (
           <Spinner />
         ) : (
           <UnorderedList
@@ -135,16 +146,12 @@ export const SelectTokenModal = ({
             overflowX="hidden"
             spacing={4}
           >
-            {tokens.map((token) => (
-              <TokenListItem
-                key={token.address}
-                token={token}
-                onClick={() => selectAndClose(token)}
-              />
+            {tokens.map((token, i) => (
+              <TokenListItem key={i} currency={token} onClick={() => selectAndClose(token)} />
             ))}
           </UnorderedList>
         )}
-      </Flex> */}
+      </Flex>
     </Modal>
   )
 }

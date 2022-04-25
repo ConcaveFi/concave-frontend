@@ -19,4 +19,4 @@ generates:
         endpoint: '${NEXT_PUBLIC_GRAPHQL_ENDPOINT}'
   graphql/graphql.schema.json:
     plugins:
-      - "introspection"
+      - 'introspection'

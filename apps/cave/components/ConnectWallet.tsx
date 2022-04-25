@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import {
   Portal,
   Button,
@@ -14,8 +14,18 @@ import {
 import { useAccount, useConnect } from 'wagmi'
 import { useIsMounted } from 'hooks/useIsMounted'
 
-const miniAddress = (address) =>
-  `${address.substr(0, 6)}...${address.substr(address.length - 6, address.length)}`
+// const miniAddress = (address) =>
+//   `${address.substr(0, 6)}...${address.substr(address.length - 6, address.length)}`
+
+/** Transform a wallet address
+ *  {6first keys}{...}{4 keys}
+ */
+export function ellipseAddress(hash: string, length = 38): string {
+  if (!hash) {
+    return ''
+  }
+  return hash.replace(hash.substring(6, length), '...')
+}
 
 const DisconnectButton = () => {
   const [{ data: account }, disconnect] = useAccount()
@@ -23,7 +33,7 @@ const DisconnectButton = () => {
   return (
     <Menu placement="right-start">
       <MenuButton as={Button} shadow="up" fontFamily="heading" size="medium" w="100%">
-        {miniAddress(account.address)}
+        {ellipseAddress(account.address)}
       </MenuButton>
       <Portal>
         <MenuList minW="min" bg="none" border="none" shadow="none" p="0" backdropFilter="blur(8px)">
@@ -54,6 +64,7 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
       {isMounted &&
         data.connectors.map((connector) => {
           if (!connector.ready) return null
+          console.log('`wallet png', connector.name)
           return (
             <Button
               w="100%"
@@ -62,7 +73,13 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
               _active={{ shadow: 'down' }}
               _focus={{ shadow: 'Up Big' }}
               size="large"
-              leftIcon={<Image w="20px" src={`/assets/connectors/${connector.id}.png`} alt="" />}
+              leftIcon={
+                <Image
+                  w="20px"
+                  src={`/assets/connectors/${connector.name.toLowerCase().replace(' ', '-')}.png`}
+                  alt={connector.name}
+                />
+              }
               key={connector.id}
               onClick={() => connect(connector).then(onClose)}
             >
@@ -115,7 +132,13 @@ const ConnectButton = () => {
                     <MenuItem
                       borderRadius="xl"
                       icon={
-                        <Image w="20px" src={`/assets/connectors/${connector.id}.png`} alt="" />
+                        <Image
+                          w="20px"
+                          src={`/assets/connectors/${connector.name
+                            .toLowerCase()
+                            .replace(' ', '-')}.png`}
+                          alt={connector.name}
+                        />
                       }
                       key={connector.id}
                       onClick={() => connect(connector)}
