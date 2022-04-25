@@ -1,41 +1,30 @@
-import { Box, Card, Flex, HStack, Image, Text, VStack } from '@concave/ui'
+import {Card, Flex } from '@concave/ui'
+import StakeAprCard from './StakeAprCard'
 
-function MarketplaceStakeCard(props) {
-  const vaprText = props.icon === '12m' ? 'Non-Dilutive vAPR' : 'vAPR'
+
+function MarketplaceStakeCard(props: any) {
+  const filters = [
+    { title: '12 Month', length: '12m', marketvapr: '6342%', image: '/assets/marketplace/12mposition.png', diluted: true },
+    { title: '6 Month', length: '6m', marketvapr: '1002%', image: '/assets/marketplace/6mposition.png', diluted: false },
+    { title: '3 Month', length: '3m', marketvapr: '266%', image: '/assets/marketplace/3mposition.png', diluted: false },
+    { title: '1 Month', length: '1m', marketvapr: '17%', image: '/assets/marketplace/1mposition.png', diluted: false },
+  ]
+
 
   return (
     <Card
       p={7}
       gap={2}
-      // variant=""
       shadow="Block Up"
       w="300px"
       h="283px"
+      style={{alignContent: 'center', justifyContent: "center"}}
     >
-      <Box pos="relative" border={'1px solid green'}>
-        <Flex direction="row" gap={6} mt={2}>
-          <VStack>
-            <Text color="text.low" fontSize="sm">
-              Stake period
-            </Text>
-            <Text fontSize="lg" fontWeight="bold">
-              {props.period} 12 month
-            </Text>
-          </VStack>
-          <Box w={'45%'}>
-            <Image sizes="100px" src={`/assets/marketplace/12mposition.png`} alt="stake period" />
-          </Box>
-          {/* <Image src={`/assets/marketplace/${props.icon}position.png`} alt="stake period" /> */}
-          <VStack>
-            <Text color="text.low" fontSize="sm">
-              {props.vaprText} vAPR
-            </Text>
-            <Text fontSize="lg" fontWeight="bold">
-              {props.vapr} 6,342%
-            </Text>
-          </VStack>
-        </Flex>
-      </Box>
+      <Flex direction="column" gap={-10} position="relative" mt={-2}>
+        {filters.map((e, k) => {
+          return <StakeAprCard key={k} title={e.title} length={e.length} image={e.image} text={e.marketvapr} diluted={e.diluted} />
+        })}
+      </Flex>
     </Card>
   )
 }

@@ -1,8 +1,8 @@
-import { Box, Text, VStack, HStack, Flex } from '@concave/ui'
+import { Text, VStack, HStack, Flex } from '@concave/ui'
 import { GasIcon, RedeemIcon, LinesIcon, DiscountIcon, PriceIcon, StakeIcon } from '@concave/icons'
 
 const SearchFilterCard = (props: any) => {
-  const { title, icon } = props // dont forget to import them here too :) <3
+  const { title, icon } = props
   return (
     <Flex
       flex={1}
@@ -16,7 +16,6 @@ const SearchFilterCard = (props: any) => {
       borderRadius="16px"
       overflow={'hidden'}
       css={{
-        // boxShadow: '-1px 1px 2px 0 #80BAFF',
         boxShadow:
           '0px 4px 4px 0px rgba(0, 0, 0, 0.25) , inset -1px 1px 2px rgba(128, 186, 255, 0.05)',
         background: 'rgba(113, 113, 113, 0.01)',

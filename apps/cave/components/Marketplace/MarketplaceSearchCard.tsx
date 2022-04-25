@@ -1,17 +1,22 @@
-import { Box, Card, Flex, Text } from '@concave/ui'
+import { Box, Card, Flex } from '@concave/ui'
 import SearchFilterCard from './SearchFilterCard'
 import NftPositionCard from './NftPositionCard'
-import { AddIcon, SearchIcon } from '@concave/icons'
+import {  SearchIcon } from '@concave/icons'
 import { Dispatch, SetStateAction, useState } from 'react'
+interface MarketplaceSearchCardProps {
+  active?: boolean
+  onClick?: (any: Dispatch<SetStateAction<boolean>>) => void
+}
 
-const MarketplaceSearchCard = () => {
-  // const {v, g, t, data} = props;
+const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => { 
   const filters = [
     { title: 'Redeem In', icon: 'RedeemIcon' },
     { title: 'Price', icon: 'PriceIcon' },
     { title: 'Discount', icon: 'DiscountIcon' },
     { title: 'Stake Period', icon: 'StakeIcon' },
   ]
+
+  const [active, setActive] = useState(false)
   return (
     <Card p={3} gap={2} variant="primary" h="945px" shadow="down" w="640px">
       <Flex justify="center">
@@ -38,19 +43,16 @@ const MarketplaceSearchCard = () => {
             // filter="drop-shadow(0px 0px 27px #81b3ff4f)"
           >
             <SearchIcon height={6} />
-            {/* <Text fontSize="xs" color="text.low" fontWeight="medium" justifyItems={'end'} flex={1}>
-              Search
-            </Text> */}
           </Flex>
           <Flex direction="row" gap={4} position="relative" mt={4}>
-            {filters.map((e) => {
-              return <SearchFilterCard title={e.title} icon={e.icon} />
+            {filters.map((e, k) => {
+              return <SearchFilterCard key={k} title={e.title} icon={e.icon} />
             })}
           </Flex>
+
         </Box>
       </Flex>
       <Box
-        // border={"1px solid red"}
         pos="relative"
         h="100%"
         overflowY={'auto'}

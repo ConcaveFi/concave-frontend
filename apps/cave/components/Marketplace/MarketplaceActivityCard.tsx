@@ -1,6 +1,18 @@
-import { Box, Card, Flex, Text } from '@concave/ui'
+import {useState} from 'react'
+import { Box, Card, Flex, Text, Button } from '@concave/ui'
+import NewActivityCard from './MarketplaceTransactionCard'
+import MarketplaceTransactionCard from './MarketplaceTransactionCard'
 
-function MarketplaceActivityCard(props) {
+
+const MarketplaceActivityCard = (props) => {
+
+const [data, setData] = useState("")
+
+  const handleClick = () => {
+    setData("test")
+    console.log("tx: ", data)
+  }
+
   return (
     <div>
       <Card
@@ -14,54 +26,28 @@ function MarketplaceActivityCard(props) {
         background={''} // glass png here
         backdropFilter="blur(15px)"
       >
-        <Flex direction="row" gap={1} justify="center" mt={2}>
-          <Flex
-            grow={1}
-            alignItems="center"
-            justifyContent={'center'}
-            minWidth="90px"
-            minHeight="37px"
-            shadow="down"
-            borderRadius="16px"
-            boxShadow={'up'}
-          >
-            <Text fontSize="14px" color="white" fontWeight="bold" textColor={'#5F7A99'}>
+        <Flex direction="row" gap={6} justify="center" mt={2}>
+          <Box mx="auto" py={5} w="90px" h="37px" shadow="down" borderRadius="16px">
+            <Button onClick={handleClick}  fontSize="s" color="white" fontWeight="bold">
               All
-            </Text>
-          </Flex>
-          <Flex
-            grow={1}
-            alignItems="center"
-            justifyContent={'center'}
-            minWidth="90px"
-            minHeight="37px"
-            shadow="down"
-            borderRadius="16px"
-            boxShadow={'up'}
-          >
-            <Text fontSize="14px" color="white" fontWeight="bold" textColor={'#5F7A99'}>
+            </Button>
+          </Box>
+          <Box mx="auto" py={5} w="90px" h="37px" shadow="down" borderRadius="16px">
+            <Button onClick={handleClick}  fontSize="s" color="white" fontWeight="bold">
               Listing
-            </Text>
-          </Flex>
-          <Flex
-            grow={1}
-            alignItems="center"
-            justifyContent={'center'}
-            minWidth="90px"
-            minHeight="37px"
-            shadow="down"
-            borderRadius="16px"
-            boxShadow={'up'}
-          >
-            <Text fontSize="14px" color="white" fontWeight="bold" textColor={'#5F7A99'}>
+            </Button>
+          </Box>
+          <Box mx="auto" py={5} w="90px" h="37px" shadow="down" borderRadius="16px">
+            <Button onClick={handleClick} fontSize="s" color="white" fontWeight="bold">
               Sale
-            </Text>
-          </Flex>
-        </Flex>
-        <Flex>
-          <Box mx="auto" py={5} w="250px" h="100px" shadow="up" borderRadius="16px"></Box>
+            </Button>
+          </Box>
         </Flex>
       </Card>
+       {/* render Transaction cards from click value */}
+
+{data && <MarketplaceTransactionCard />}
+
     </div>
   )
 }
