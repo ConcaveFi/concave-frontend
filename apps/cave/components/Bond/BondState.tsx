@@ -117,7 +117,7 @@ export async function getCurrentBlockTimestamp() {
 export const getUserBondPositions = async (
   networkId: number,
   address: string,
-  currentBlockTimestamp: string,
+  currentBlockTimestamp: number,
 ) => {
   let batchRedeemArray = []
   let totalPending = 0
@@ -132,8 +132,9 @@ export const getUserBondPositions = async (
     if (+positionData.creation > oldest) {
       oldest = +positionData.creation
     }
+    let fullyVestedTimestamp = +positionData.creation * 1000 + 432000000
     let elapsed =
-      currentBlockTimestamp >= positionData.creation
+      currentBlockTimestamp >= fullyVestedTimestamp
         ? 1
         : +currentBlockTimestamp / positionData.creation
     totalPending +=
@@ -141,7 +142,7 @@ export const getUserBondPositions = async (
       +(+utils.formatEther(positionData.redeemed)).toFixed(2)
     totalOwed += +(+utils.formatEther(positionData.owed)).toFixed(2)
   }
-  const parseOldest = new Date(oldest * 1000 + 432000000).toString().slice(0, 21)
+  const parseOldest = new Date(oldest * 1000 + 432000000).toString().slice(4, 21)
 
   return { parseOldest, totalOwed, totalPending, batchRedeemArray }
 }
