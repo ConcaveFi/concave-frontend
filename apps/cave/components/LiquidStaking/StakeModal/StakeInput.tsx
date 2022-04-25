@@ -1,12 +1,38 @@
 import { Box, Button, Card, Flex, HStack, Image, Input, Text } from '@concave/ui'
 import { useFetchApi } from 'hooks/cnvData'
 import React, { useEffect, useState } from 'react'
-import { useAccount, useBalance } from 'wagmi'
+import { useAccount, useBalance, useContractWrite, useNetwork } from 'wagmi'
+import { CNV } from 'gemswap-sdk'
+import { useApprove } from 'hooks/useApprove'
+import { STAKING_CONTRACT } from 'constants/address'
+import { StakingV1Abi } from 'contracts/LiquidStaking/LiquidStakingAbi'
+import { ethers } from 'ethers'
 
-function StakeInput() {
+const periodToPoolParameter = {
+  '360 days': 0,
+  '180 days': 1,
+  '90 days': 2,
+  '45 days': 3,
+}
+
+function StakeInput(props) {
   const cnvPrice = useFetchApi('/api/cnv')
   const [stakeInput, setStakeInput] = useState(0)
   const [{ data: account }] = useAccount()
+  const [{ data }] = useNetwork()
+  const { allowance, ...approve } = useApprove(CNV[data.chain.id], STAKING_CONTRACT[data.chain.id])
+  const [approveButtonText, setApproveButtonText] = useState('Approve CNV')
+  const [allowanceEnough, setAllowanceEnough] = useState(false)
+  // console.log(allowance.formatted)
+  // approve.sendApproveTx()
+
+  useEffect(() => {
+    if (allowance && +allowance.formatted > stakeInput) {
+      setAllowanceEnough(true)
+    } else {
+      setAllowanceEnough(false)
+    }
+  }, [allowance, stakeInput])
 
   const [cnvBalance, getBalance] = useBalance({
     addressOrName: account?.address,
@@ -17,6 +43,26 @@ function StakeInput() {
   const setMax = () => {
     setStakeInput(+cnvBalance.data?.formatted)
   }
+
+  const approveCNV = () => {
+    approve.sendApproveTx()
+    setApproveButtonText('Pending...')
+  }
+
+  const [lockData, lockCNV] = useContractWrite(
+    {
+      addressOrName: '0x2B7Ea66d564399246Da8e3D6265dB8F89af834C8',
+      contractInterface: StakingV1Abi,
+    },
+    'lock',
+    {
+      args: [
+        account.address,
+        ethers.utils.parseEther(String(stakeInput)),
+        periodToPoolParameter[`${props.period}`],
+      ],
+    },
+  )
 
   return (
     <Box>
@@ -53,35 +99,43 @@ function StakeInput() {
         </Flex>
       </Card>
 
-      <Box mt={5} px={3} width="350px">
-        <Button
-          onClick={() => console.log('Approve')}
-          fontWeight="bold"
-          fontSize="md"
-          variant="primary.outline"
-          bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
-          w="100%"
-          h="40px"
-          size="large"
-          mx="auto"
-        >
-          Approve
-        </Button>
+      <Box mt={10} px={3} width="350px">
+        {!allowanceEnough && (
+          <Button
+            onClick={approveCNV}
+            fontWeight="bold"
+            fontSize="md"
+            variant="primary.outline"
+            bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
+            w="100%"
+            h="40px"
+            size="large"
+            mx="auto"
+            disabled={stakeInput > +cnvBalance.data?.formatted}
+          >
+            {approveButtonText}
+          </Button>
+        )}
 
-        <Button
-          mt={5}
-          onClick={() => console.log('Stake CNV')}
-          fontWeight="bold"
-          fontSize="md"
-          variant="primary.outline"
-          bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
-          w="100%"
-          h="40px"
-          size="large"
-          mx="auto"
-        >
-          Stake CNV
-        </Button>
+        {allowanceEnough && (
+          <Button
+            mt={5}
+            onClick={() => lockCNV()}
+            fontWeight="bold"
+            fontSize="md"
+            variant="primary.outline"
+            bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
+            w="100%"
+            h="40px"
+            size="large"
+            mx="auto"
+            disabled={
+              stakeInput == 0 || stakeInput > +cnvBalance.data?.formatted || lockData.loading
+            }
+          >
+            Stake CNV
+          </Button>
+        )}
       </Box>
     </Box>
   )

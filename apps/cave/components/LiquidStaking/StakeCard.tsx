@@ -31,9 +31,6 @@ function StakeCard(props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [fetchingData, setFetchingData] = useState(true)
   const [capPercentage, setCapPercentage] = useState('100')
-  // const [capPercentage, setCapPercentage] = useState(
-  //   fetchingData ? '0' : String((+props.stakedCNV / +props.CNVCap) * 100),
-  // )
 
   const [pool, getPool] = useContractRead(
     {
@@ -73,7 +70,7 @@ function StakeCard(props) {
     } else {
       setFetchingData(true)
     }
-    console.log(capPercentage)
+    // console.log(capPercentage)
     // console.log(fetchingData)
   }, [pool, stakingCap])
 
@@ -85,10 +82,10 @@ function StakeCard(props) {
   // console.log(ethers.utils.formatEther(pool.data ? pool.data?.balance : 0))
   // console.log(ethers.utils.formatEther(stakingCap.data?.toString()))
   // console.log(pool.data?.balance.toString())
-  console.log(
-    +ethers.utils.formatEther(pool.data ? pool.data?.balance : 0) +
-      +ethers.utils.formatEther(stakingCap.data ? stakingCap.data : 0),
-  )
+  // console.log(
+  //   +ethers.utils.formatEther(pool.data ? pool.data?.balance : 0) +
+  //     +ethers.utils.formatEther(stakingCap.data ? stakingCap.data : 0),
+  // )
 
   return (
     <div>
@@ -188,13 +185,13 @@ function StakeCard(props) {
                   pool.data && stakingCap.data
                     ? `${Number(
                         +ethers.utils.formatEther(pool.data?.balance) +
-                          +ethers.utils.formatEther(stakingCap.data),
-                      ).toFixed(2)}`
+                          +ethers.utils.formatEther(stakingCap?.data),
+                      ).toFixed(1)}`
                     : '0'
                 }
                 capPercentage={capPercentage}
               />
-              <StakeInput />
+              <StakeInput period={props.period} />
               {/* <StakeButtons period={props.period} vaprText={vaprText} vapr={props.vapr} /> */}
             </VStack>
           </HStack>
