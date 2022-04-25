@@ -10,8 +10,8 @@ import {
   useDisclosure,
   VStack,
 } from '@concave/ui'
-import { LiquidStakingAbi } from 'contracts/LiquidStaking/LiquidStakingAbi'
-import { useState } from 'react'
+import { CNVMintAbi, StakingV1Abi } from 'contracts/LiquidStaking/LiquidStakingAbi'
+import { useEffect, useState } from 'react'
 import { useContractRead } from 'wagmi'
 import Emissions from './StakeModal/Emissions'
 import StakeButtons from './StakeModal/StakeButtons'
@@ -31,13 +31,17 @@ function StakeCard(props) {
     String((+props.stakedCNV / +props.CNVCap) * 100),
   )
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [stakingCap, read] = useContractRead(
-    {
-      addressOrName: '0xecb504d39723b0be0e3a9aa33d646642d1051ee1',
-      contractInterface: LiquidStakingAbi,
-    },
-    'viewStakingCap',
-  )
+  // const [stakingCap, read] = useContractRead(
+  //   {
+  //     addressOrName: '0x2B8E79CBD58418CE9aeB720BAf6B93825B93eF1F',
+  //     contractInterface: CNVMintAbi,
+  //   },
+  //   'totalSupply',
+  // )
+  // useEffect(() => {
+  //   console.log(stakingCap.error)
+  // }, [stakingCap])
+  // console.log(read())
 
   return (
     <div>
