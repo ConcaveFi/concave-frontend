@@ -16,6 +16,10 @@ const globalStyles: Styles = {
       bgImage: 'url(/background.jpg)',
       bgColor: '#121115',
     },
+    '::selection': {
+      bgColor: '#080c0fad',
+      color: 'text.high',
+    },
   },
 }
 
