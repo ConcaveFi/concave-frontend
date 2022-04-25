@@ -74,10 +74,10 @@ function LiquidStaking() {
       addressOrName: '0x2B7Ea66d564399246Da8e3D6265dB8F89af834C8',
       contractInterface: StakingV1Abi,
     },
-    'totalSupply',
-    // {
-    //   args: '0xA0Cf798816D4b9b9866b5330EEa46a18382f251e',
-    // },
+    'viewStakingCap',
+    {
+      args: [1],
+    },
   )
   console.log(result.error)
   useEffect(() => {
