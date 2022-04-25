@@ -76,6 +76,7 @@ function StakeInput(props) {
             w="60%"
             bg="none"
             fontSize="xl"
+            type="number"
           />
           <Flex shadow="up" borderRadius="3xl" px={4} py={1} alignItems="center">
             <Image src="/assets/tokens/cnv.svg" alt="concave-logo" h={8} w={8} />
