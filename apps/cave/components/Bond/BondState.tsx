@@ -125,10 +125,12 @@ export const getUserBondPositions = async (
   let oldest = 0
   const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, providers)
   // TODO: Get bond position length
-  for (let i = 0; i < 21; i++) {
+  for (let i = 0; i < 1; i++) {
     const positionData = await bondingContract.positions(address, i)
     // revisit this, dont push if owed is not greater than 0
-    if (positionData.owed > 100000000000000000) batchRedeemArray.push(i)
+    console.log(positionData)
+    if (positionData.owed > 1) 
+    batchRedeemArray.push(i)
     if (+positionData.creation > oldest) {
       oldest = +positionData.creation
     }
