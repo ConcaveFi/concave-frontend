@@ -41,7 +41,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const isProduction = process.env.NODE_ENV === 'production'
 
   useEffect(() => {
-    const handleRouteChange = (url: string) => {
+    const handleRouteChange = (url: URL) => {
       if (isProduction) gtag.trackPageview(url)
     }
     router.events.on('routeChangeComplete', handleRouteChange)

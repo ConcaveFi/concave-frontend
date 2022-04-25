@@ -11,7 +11,7 @@ type GTagEvent = {
  *
  * Google Analytics for NextJs, tracking pageViews
  */
-export const trackPageview = (url: string): void => {
+export const trackPageview = (url: URL): void => {
   window.gtag('config', GA_TRACKING_ID, {
     // page_location: url,
     page_path: url,
