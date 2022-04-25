@@ -124,14 +124,12 @@ export default function Bond() {
   const [cnvMarketPrice, setCnvMarketPrice] = useState<Object>()
   const [currentBlockTs, setCurrentBlockTs] = useState<number>(0)
   const [bondSigma, setBondSigma] = useState<any>()
+  const [fetchLoading, setFetchLoading] = useState<boolean>(true)
 
-  useFetchApi('/api/cnv').then((data) => {
-    console.log(data)
-    if (data) {
-      setCnvMarketPrice(data.cnv)
-      console.log(cnvMarketPrice)
-    }
-  })
+
+  if(fetchLoading === true) {
+  }
+
 
   useEffect(() => {
     getCurrentBlockTimestamp().then((x) => {
@@ -154,7 +152,16 @@ export default function Bond() {
     })
     getBondSpotPrice(3, '').then((bondSpotPrice) => {
       setBondSpotPrice(bondSpotPrice)
-      console.log(bondSpotPrice)
+    })
+    fetch('/api/cnv')
+    .then((j) => j.json())
+    .then((data) => {
+      if(data?.data) {
+        setCnvMarketPrice(data.data.last)
+      }
+    })
+    .catch((e) => {
+      throw e
     })
   }, [])
 

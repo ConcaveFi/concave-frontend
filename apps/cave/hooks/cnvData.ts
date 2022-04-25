@@ -11,9 +11,10 @@ export const useFetchApi = (url: string) => {
           ticker: data.data.ticker,
         })
       if (data.data && url !== '/api/cnv') setData(data.data)
+      return { data }
+
     })
     .catch((e) => {
       throw e
     })
-  return { data }
 }
