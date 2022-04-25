@@ -12,7 +12,6 @@ export const useFetchApi = (url: string) => {
         })
       if (data.data && url !== '/api/cnv') setData(data.data)
       return { data }
-
     })
     .catch((e) => {
       throw e

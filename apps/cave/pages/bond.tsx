@@ -126,10 +126,8 @@ export default function Bond() {
   const [bondSigma, setBondSigma] = useState<any>()
   const [fetchLoading, setFetchLoading] = useState<boolean>(true)
 
-
-  if(fetchLoading === true) {
+  if (fetchLoading === true) {
   }
-
 
   useEffect(() => {
     getCurrentBlockTimestamp().then((x) => {
@@ -154,15 +152,15 @@ export default function Bond() {
       setBondSpotPrice(bondSpotPrice)
     })
     fetch('/api/cnv')
-    .then((j) => j.json())
-    .then((data) => {
-      if(data?.data) {
-        setCnvMarketPrice(data.data.last)
-      }
-    })
-    .catch((e) => {
-      throw e
-    })
+      .then((j) => j.json())
+      .then((data) => {
+        if (data?.data) {
+          setCnvMarketPrice(data.data.last)
+        }
+      })
+      .catch((e) => {
+        throw e
+      })
   }, [])
 
   const [isLargerThan1200] = useMediaQuery('(min-width: 1200px)')
