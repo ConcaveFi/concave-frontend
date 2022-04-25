@@ -4,18 +4,37 @@ import NewActivityCard from './MarketplaceTransactionCard'
 import MarketplaceTransactionCard from './MarketplaceTransactionCard'
 
 
-const MarketplaceActivityCard = (props) => {
+const MarketplaceActivityCard = () => {
+  const [data, setData] = useState(null)
+  const filters = [{name: "all"},{name: "Listing"},{name: "Sale"} ]
 
-const [data, setData] = useState("")
-
-  const handleClick = () => {
-    setData("test")
-    console.log("tx: ", data)
+  // TODO create types for data later on 
+  const handleClick = (trigger: string) => {
+    // fetch with the trigger filter and setData
+    setData([{
+      type: trigger,
+      date: 1650615494,
+      event: "listed",
+      cnv: 700,
+      link: `https://etherscan.com/`
+    },{
+      type: trigger,
+      date: 1650615494,
+      event: "sold",
+      cnv: 200,
+      link: `https://etherscan.com/`
+    },{
+      type: trigger,
+      date: 1650615494,
+      event: "listed",
+      cnv: 340,
+      link: `https://etherscan.com/`
+    }])
   }
 
   return (
-    <div>
-      <Card
+    <>
+      <Box
         p={7}
         gap={6}
         h="642px" // h="fit-content"
@@ -27,28 +46,23 @@ const [data, setData] = useState("")
         backdropFilter="blur(15px)"
       >
         <Flex direction="row" gap={6} justify="center" mt={2}>
-          <Box mx="auto" py={5} w="90px" h="37px" shadow="down" borderRadius="16px">
-            <Button onClick={handleClick}  fontSize="s" color="white" fontWeight="bold">
-              All
+          {filters.map((e,k) => {
+            return (
+          <Box key={k} mx="auto" py={5} w="90px" h="37px" shadow="down" borderRadius="16px">
+            <Button onClick={()=> handleClick(e.name)}  fontSize="s" color="white" fontWeight="bold">
+              {e.name}
             </Button>
           </Box>
-          <Box mx="auto" py={5} w="90px" h="37px" shadow="down" borderRadius="16px">
-            <Button onClick={handleClick}  fontSize="s" color="white" fontWeight="bold">
-              Listing
-            </Button>
-          </Box>
-          <Box mx="auto" py={5} w="90px" h="37px" shadow="down" borderRadius="16px">
-            <Button onClick={handleClick} fontSize="s" color="white" fontWeight="bold">
-              Sale
-            </Button>
-          </Box>
+            )
+          })}
         </Flex>
-      </Card>
-       {/* render Transaction cards from click value */}
-
-{data && <MarketplaceTransactionCard />}
-
-    </div>
+        {/* render Transaction cards from click value */}
+        <div>
+          <span>list</span>
+          {data && data.map((e:any, k) => <MarketplaceTransactionCard key={k} filter={e} />)}
+        </div>
+      </Box>
+    </>
   )
 }
 
