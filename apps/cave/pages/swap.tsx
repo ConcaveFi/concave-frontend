@@ -23,21 +23,18 @@ import { STABLES } from 'constants/routing'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 
 export function SwapPage() {
+  const [settings, setSettings] = useState<SwapSettings>(defaultSettings)
+
   const {
     trade,
     tradeError,
     currencyIn,
     currencyOut,
-    currencyAmountIn,
-    currencyAmountOut,
-    updateInputValue,
-    updateOutputValue,
+    onChangeAmount,
     updateCurrencyIn,
     updateCurrencyOut,
     switchCurrencies,
-  } = useSwapState()
-
-  const [settings, setSettings] = useState<SwapSettings>(defaultSettings)
+  } = useSwapState(settings)
 
   const [{ data: account }] = useAccount()
   const swapTx = useSwapTransaction(trade, settings, account?.address)
@@ -84,18 +81,18 @@ export function SwapPage() {
         >
           <InputField
             currencyIn={currencyIn}
-            currencyAmountIn={currencyAmountIn}
-            updateInputValue={updateInputValue}
+            currencyAmountIn={trade?.inputAmount}
+            updateInputValue={onChangeAmount}
             updateCurrencyIn={updateCurrencyIn}
           />
 
           <SwitchCurrencies onClick={switchCurrencies} />
 
           <OutputField
-            currencyAmountIn={currencyAmountIn}
+            currencyAmountIn={trade?.inputAmount}
             currencyOut={currencyOut}
-            currencyAmountOut={currencyAmountOut}
-            updateOutputValue={updateOutputValue}
+            currencyAmountOut={trade?.outputAmount}
+            updateOutputValue={onChangeAmount}
             updateCurrencyOut={updateCurrencyOut}
           />
 
@@ -117,7 +114,7 @@ export function SwapPage() {
         onConfirm={() => {
           confirmationModal.onClose()
           swapTx.submit()
-          updateInputValue('')
+          onChangeAmount(null)
         }}
       />
 
