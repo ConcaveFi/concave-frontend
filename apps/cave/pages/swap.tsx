@@ -14,7 +14,8 @@ import {
   GasPrice,
   SwitchCurrencies,
   ConfirmSwapModal,
-  TransactionSubmittedDialog,
+  TxSubmittedDialog,
+  TxErrorDialog,
   WaitingConfirmationDialog,
   CandleStickCard,
 } from 'components/AMM'
@@ -126,7 +127,9 @@ export function SwapPage() {
         isOpen={swapTx.isWaitingForConfirmation}
       />
 
-      <TransactionSubmittedDialog tx={swapTx.data} isOpen={swapTx.isTransactionSent} />
+      <TxSubmittedDialog tx={swapTx.data} isOpen={swapTx.isTransactionSent} />
+
+      <TxErrorDialog error={swapTx.error?.message} isOpen={swapTx.isError} />
     </>
   )
 }
