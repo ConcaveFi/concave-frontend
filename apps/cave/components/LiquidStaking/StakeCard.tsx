@@ -17,6 +17,7 @@ import Emissions from './StakeModal/Emissions'
 import StakeButtons from './StakeModal/StakeButtons'
 import StakeInfo from './StakeModal/StakeInfo'
 import StakeInput from './StakeModal/StakeInput'
+import { ethers } from 'ethers'
 
 const periodToPoolParameter = {
   '360 days': 0,
@@ -27,21 +28,23 @@ const periodToPoolParameter = {
 
 function StakeCard(props) {
   const vaprText = props.icon === '12m' ? 'Non-Dilutive vAPR' : 'vAPR'
-  const [capPercentage, setCapPercentage] = useState(
-    String((+props.stakedCNV / +props.CNVCap) * 100),
-  )
   const { isOpen, onOpen, onClose } = useDisclosure()
-  // const [stakingCap, read] = useContractRead(
-  //   {
-  //     addressOrName: '0x2B8E79CBD58418CE9aeB720BAf6B93825B93eF1F',
-  //     contractInterface: CNVMintAbi,
-  //   },
-  //   'totalSupply',
+  const [fetchingData, setFetchingData] = useState(true)
+  const [capPercentage, setCapPercentage] = useState('100')
+  // const [capPercentage, setCapPercentage] = useState(
+  //   fetchingData ? '0' : String((+props.stakedCNV / +props.CNVCap) * 100),
   // )
-  // useEffect(() => {
-  //   console.log(stakingCap.error)
-  // }, [stakingCap])
-  // console.log(read())
+
+  const [pool, getPool] = useContractRead(
+    {
+      addressOrName: '0x2B7Ea66d564399246Da8e3D6265dB8F89af834C8',
+      contractInterface: StakingV1Abi,
+    },
+    'pools',
+    {
+      args: [periodToPoolParameter[`${props.period}`]],
+    },
+  )
 
   const [stakingCap, getStakingCap] = useContractRead(
     {
@@ -54,7 +57,23 @@ function StakeCard(props) {
     },
   )
 
-  console.log(stakingCap.data)
+  useEffect(() => {
+    if (!pool.loading && !stakingCap.loading && pool.data && stakingCap.data) {
+      setFetchingData(false)
+    } else {
+      setFetchingData(true)
+    }
+    console.log(fetchingData)
+  }, [pool, stakingCap])
+
+  // const [capPercentage, setCapPercentage] = useState(
+  //   fetchingData ? '0' : String((+props.stakedCNV / +props.CNVCap) * 100),
+  // )
+
+  // console.log(ethers.utils.parseEther('1'))
+  console.log(ethers.utils.formatEther(pool.data ? pool.data?.balance : 0))
+  // console.log(ethers.utils.formatEther(stakingCap.data?.toString()))
+  // console.log(pool.data?.balance.toString())
 
   return (
     <div>
@@ -92,7 +111,13 @@ function StakeCard(props) {
               w={`${capPercentage}%`}
               fontSize="sm"
             >
-              <Text w="150px">{props.stakedCNV} CNV</Text>
+              <Text w="150px">
+                {pool.data
+                  ? `${Number(ethers.utils.formatEther(pool.data ? pool.data?.balance : 0)).toFixed(
+                      2,
+                    )} CNV`
+                  : 'Fetching...'}
+              </Text>
             </Box>
             <Text position="absolute" right="2" top="2" fontSize="sm">
               {props.CNVCap} CNV
