@@ -7,8 +7,6 @@ export const infuraId = process.env.NEXT_PUBLIC_INFURA_ID as string
 const concaveKey = process.env.NEXT_PUBLIC_CONCAVE_RPC_KEY
 
 export const concaveRPC = `https://api.concave.lol/node/${concaveKey}`
-// let providers = new ethers.providers.InfuraProvider('ropsten', '5ad069733a1a48a897180e66a5fb8846')
-// export const concaveRPC = 'https://ropsten.infura.io/v3/5ad069733a1a48a897180e66a5fb8846'
 
 export const concaveProvider = (chainId: number) =>
   new multicallProvider.MulticallProvider(

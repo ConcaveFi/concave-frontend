@@ -43,6 +43,19 @@ function StakeCard(props) {
   // }, [stakingCap])
   // console.log(read())
 
+  const [stakingCap, getStakingCap] = useContractRead(
+    {
+      addressOrName: '0x2B7Ea66d564399246Da8e3D6265dB8F89af834C8',
+      contractInterface: StakingV1Abi,
+    },
+    'viewStakingCap',
+    {
+      args: [periodToPoolParameter[`${props.period}`]],
+    },
+  )
+
+  console.log(stakingCap.data)
+
   return (
     <div>
       <Card variant="primary" px={4} py={6} shadow="up" gap={1}>

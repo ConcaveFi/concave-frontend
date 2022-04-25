@@ -30,14 +30,14 @@ const StakingGroup: Array<StakingGroupProps> = [
     CNVCap: '90000',
     stakingLink: '',
   },
-  // {
-  //   icon: '180d',
-  //   period: '180 days',
-  //   vapr: '1,002',
-  //   stakedCNV: '42690',
-  //   CNVCap: '60000',
-  //   stakingLink: '',
-  // },
+  {
+    icon: '180d',
+    period: '180 days',
+    vapr: '1,002',
+    stakedCNV: '42690',
+    CNVCap: '60000',
+    stakingLink: '',
+  },
   // {
   //   icon: '90d',
   //   period: '90 days',
@@ -57,35 +57,22 @@ const StakingGroup: Array<StakingGroupProps> = [
 ]
 
 function LiquidStaking() {
-  // const [stakingCap, read] = useContractRead(
+  // const [result, read] = useContractRead(
   //   {
-  //     addressOrName: '0x2B8E79CBD58418CE9aeB720BAf6B93825B93eF1F',
-  //     contractInterface: CNVMintAbi,
+  //     addressOrName: '0x2B7Ea66d564399246Da8e3D6265dB8F89af834C8',
+  //     contractInterface: StakingV1Abi,
   //   },
-  //   'totalSupply',
+  //   'viewStakingCap',
+  //   {
+  //     args: [0],
+  //   },
   // )
+  // console.log(result.error)
   // useEffect(() => {
-  //   console.log(stakingCap.error)
-  // }, [stakingCap])
-  // const [{ data: account }] = useAccount()
-
-  const [result, read] = useContractRead(
-    {
-      addressOrName: '0x2B7Ea66d564399246Da8e3D6265dB8F89af834C8',
-      contractInterface: StakingV1Abi,
-    },
-    'viewStakingCap',
-    {
-      args: [1],
-    },
-  )
-  console.log(result.error)
-  useEffect(() => {
-    console.log(result.loading)
-    console.log(result.error)
-    console.log(result.data)
-  }, [result])
-  console.log(result.data)
+  //   console.log(result.loading)
+  //   console.log(result.error)
+  //   console.log(result.data)
+  // }, [result])
 
   return (
     <Container maxW="container.lg" borderRadius={0} border="" textAlign="center">
