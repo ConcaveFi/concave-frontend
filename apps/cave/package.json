@@ -60,6 +60,7 @@
     "@graphql-codegen/typescript": "^2.4.8",
     "@graphql-codegen/typescript-operations": "^2.3.5",
     "@graphql-codegen/typescript-react-query": "^3.5.9",
+    "@types/gtag.js": "^0.0.10",
     "@types/node": "^17.0.23",
     "@types/react": "^17.0.43"
   }
