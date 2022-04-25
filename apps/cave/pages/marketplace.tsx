@@ -13,24 +13,22 @@ const marketplace = () => {
       </Heading>
       <HStack mt={8} spacing={14}>
         <Text maxW={520} textAlign="right">
-        The Concave Marketplace is where you are able to 
-        buy and/or sell your locked-staked NFT positions.
-        Most of the positions will has a discount but 12 month stakes,
-        because it has a limited supply.
+          The Concave Marketplace is where you are able to buy and/or sell your locked-staked NFT
+          positions. Most of the positions will has a discount but 12 month stakes, because it has a
+          limited supply.
         </Text>
         <GraphicGuide />
       </HStack>
 
-    <Flex direction="row" gap={8} position="relative" mt={16}>
+      <Flex direction="column" float={'left'} mr="6" gap={8} position="relative" mt={16}>
         <MarketplaceSearchCard />
-    <Flex direction="column" gap={8} position="relative" mt={16}>
+      </Flex>
+      <Flex direction="column" gap={5} position="relative" mt={16}>
         <MarketplaceStakeCard />
         <MarketplaceActivityCard />
-    </Flex>
-    </Flex>
-  </Container>
+      </Flex>
+    </Container>
   )
 }
-
 
 export default marketplace
