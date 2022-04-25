@@ -16,8 +16,8 @@ interface StakingGroupProps {
   icon: string
   period: string
   vapr: string
-  stakedCNV: string
-  CNVCap: string
+  // stakedCNV: string
+  // CNVCap: string
   stakingLink: string
 }
 
@@ -26,54 +26,37 @@ const StakingGroup: Array<StakingGroupProps> = [
     icon: '360d',
     period: '360 days',
     vapr: '6,342',
-    stakedCNV: '89999',
-    CNVCap: '90000',
+    // stakedCNV: '89999',
+    // CNVCap: '90000',
     stakingLink: '',
   },
   {
     icon: '180d',
     period: '180 days',
     vapr: '1,002',
-    stakedCNV: '42690',
-    CNVCap: '60000',
+    // stakedCNV: '42690',
+    // CNVCap: '60000',
     stakingLink: '',
   },
-  // {
-  //   icon: '90d',
-  //   period: '90 days',
-  //   vapr: '266',
-  //   stakedCNV: '13333',
-  //   CNVCap: '80000',
-  //   stakingLink: '',
-  // },
-  // {
-  //   icon: '45d',
-  //   period: '45 days',
-  //   vapr: '17',
-  //   stakedCNV: '69420',
-  //   CNVCap: '90000',
-  //   stakingLink: '',
-  // },
+  {
+    icon: '90d',
+    period: '90 days',
+    vapr: '266',
+    // stakedCNV: '13333',
+    // CNVCap: '80000',
+    stakingLink: '',
+  },
+  {
+    icon: '45d',
+    period: '45 days',
+    vapr: '17',
+    // stakedCNV: '69420',
+    // CNVCap: '90000',
+    stakingLink: '',
+  },
 ]
 
 function LiquidStaking() {
-  // const [result, read] = useContractRead(
-  //   {
-  //     addressOrName: '0x2B7Ea66d564399246Da8e3D6265dB8F89af834C8',
-  //     contractInterface: StakingV1Abi,
-  //   },
-  //   'viewStakingCap',
-  //   {
-  //     args: [0],
-  //   },
-  // )
-  // console.log(result.error)
-  // useEffect(() => {
-  //   console.log(result.loading)
-  //   console.log(result.error)
-  //   console.log(result.data)
-  // }, [result])
-
   return (
     <Container maxW="container.lg" borderRadius={0} border="" textAlign="center">
       <Heading as="h1" mt={16} mb={3} fontSize="5xl">
@@ -95,8 +78,8 @@ function LiquidStaking() {
             icon={s.icon}
             period={s.period}
             vapr={s.vapr}
-            stakedCNV={s.stakedCNV}
-            CNVCap={s.CNVCap}
+            // stakedCNV={s.stakedCNV}
+            // CNVCap={s.CNVCap}
             stakingLink={s.stakingLink}
             key={s.period}
           />

@@ -60,10 +60,11 @@ function StakeCard(props) {
   useEffect(() => {
     if (!pool.loading && !stakingCap.loading && pool.data && stakingCap.data) {
       setFetchingData(false)
+      setCapPercentage(String())
     } else {
       setFetchingData(true)
     }
-    console.log(fetchingData)
+    // console.log(fetchingData)
   }, [pool, stakingCap])
 
   // const [capPercentage, setCapPercentage] = useState(
@@ -71,9 +72,13 @@ function StakeCard(props) {
   // )
 
   // console.log(ethers.utils.parseEther('1'))
-  console.log(ethers.utils.formatEther(pool.data ? pool.data?.balance : 0))
+  // console.log(ethers.utils.formatEther(pool.data ? pool.data?.balance : 0))
   // console.log(ethers.utils.formatEther(stakingCap.data?.toString()))
   // console.log(pool.data?.balance.toString())
+  console.log(
+    +ethers.utils.formatEther(pool.data ? pool.data?.balance : 0) +
+      +ethers.utils.formatEther(stakingCap.data ? stakingCap.data : 0),
+  )
 
   return (
     <div>
@@ -114,13 +119,19 @@ function StakeCard(props) {
               <Text w="150px">
                 {pool.data
                   ? `${Number(ethers.utils.formatEther(pool.data ? pool.data?.balance : 0)).toFixed(
-                      2,
+                      1,
                     )} CNV`
                   : 'Fetching...'}
               </Text>
             </Box>
             <Text position="absolute" right="2" top="2" fontSize="sm">
-              {props.CNVCap} CNV
+              {pool.data && stakingCap.data
+                ? `${Number(
+                    +ethers.utils.formatEther(pool.data?.balance) +
+                      +ethers.utils.formatEther(stakingCap.data),
+                  ).toFixed(1)} CNV`
+                : 'Fetching...'}
+              {/* {props.CNVCap} CNV */}
             </Text>
           </Box>
         </Stack>
@@ -136,6 +147,7 @@ function StakeCard(props) {
           h="40px"
           size="large"
           mx="auto"
+          disabled={fetchingData}
         >
           Stake CNV
         </Button>
@@ -163,8 +175,15 @@ function StakeCard(props) {
             <VStack spacing={8}>
               <StakeInfo
                 period={props.period}
-                stakedCNV={props.stakedCNV}
-                CNVCap={props.CNVCap}
+                stakedCNV={pool.data ? ethers.utils.formatEther(pool.data?.balance) : '0'}
+                CNVCap={
+                  pool.data && stakingCap.data
+                    ? `${Number(
+                        +ethers.utils.formatEther(pool.data?.balance) +
+                          +ethers.utils.formatEther(stakingCap.data),
+                      ).toFixed(2)}`
+                    : '0'
+                }
                 capPercentage={capPercentage}
               />
               <StakeInput />
