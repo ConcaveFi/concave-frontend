@@ -37,7 +37,7 @@ const ETHFaucet = () => {
     refetch: sendEth,
   } = useQuery('send eth', () => sendSomeEth(account?.address), { enabled: false })
 
-  if (ethBalance?.formatted)
+  if (!ethBalance?.value.isZero())
     return (
       <Stack fontWeight="bold" rounded="2xl" shadow="down" py={3} fontSize="sm" spacing={0}>
         <Text>Nice you already got {(+ethBalance.formatted).toFixed(2)} ETH</Text>
