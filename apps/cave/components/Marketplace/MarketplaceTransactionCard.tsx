@@ -1,15 +1,10 @@
-import { Box, Flex, HStack, Image, Text, VStack } from '@concave/ui'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Box, HStack, Image, Text, VStack } from '@concave/ui'
 import { format } from 'date-fns'
-import fromUnixTime from 'date-fns/fromUnixTime'
+// import fromUnixTime from 'date-fns/fromUnixTime'
 
 const MarketplaceTransactionCard = (props: any) => {
   const {filter} = props;
-  console.log("filter: ", filter)
-
-  const unixTime = fromUnixTime(filter.date)
-  const cleanDate =  format(new Date(unixTime), 'PPpp');
-
+  const cleanDate =  format(new Date(filter.date), 'PPpp');
   return (
 <Box mx="auto" py={5} w="auto" h="auto" shadow="down" borderRadius="16px">   
   <HStack>
