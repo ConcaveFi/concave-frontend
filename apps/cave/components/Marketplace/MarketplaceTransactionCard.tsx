@@ -1,6 +1,7 @@
 import { Box, Flex, HStack, Image, Text, VStack } from '@concave/ui'
 import { Dispatch, SetStateAction, useState } from 'react'
-import { format, fromUnixTime } from 'date-fns';
+import { format } from 'date-fns'
+import fromUnixTime from 'date-fns/fromUnixTime'
 
 const MarketplaceTransactionCard = (props: any) => {
   const {filter} = props;

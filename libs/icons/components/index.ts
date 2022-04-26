@@ -13,3 +13,5 @@ export { PriceIcon } from './PriceIcon'
 export { DiscountIcon } from './DiscountIcon'
 export { SearchIcon } from './SearchIcon'
 export { StakeIcon } from './StakeIcon'
+export { TransactionIcon } from './TransactionIcon'
+
