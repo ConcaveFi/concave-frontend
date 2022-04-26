@@ -18,9 +18,17 @@ export const InputField = ({
   updateInputValue,
   updateCurrencyIn,
 }: InputFieldProps) => {
-  const inputFiat = useFiatPrice(currencyIn)
-  const inputFiatValue = currencyAmountIn && inputFiat.price?.quote(currencyAmountIn)
   const balance = useCurrencyBalance(currencyIn)
+  const inputFiat = useFiatPrice(currencyIn)
+  const isEqual = inputFiat.price?.baseCurrency['address'] === currencyAmountIn?.currency['address']
+  let inputFiatValue
+  try {
+    inputFiatValue = currencyAmountIn && !isEqual && inputFiat.price?.quote(currencyAmountIn)
+  } catch (e) {
+    console.log(currencyAmountIn.currency)
+    console.log(currencyAmountIn.currency)
+    console.error(e)
+  }
 
   return (
     <TokenInput

@@ -24,10 +24,14 @@ export const TransactionSubmittedModal = ({
   })
   const content = useMemo(() => {
     if (!hash) {
-      return <WaitingWalletContent disclosure={disclosure} hash={hash} label={label} />
+      return (
+        <WaitingWalletContent disclosure={disclosure} onClose={onClose} hash={hash} label={label} />
+      )
     }
     if (swapReceipt.loading) {
-      return <WaitingBlockContent disclosure={disclosure} hash={hash} label={label} />
+      return (
+        <WaitingBlockContent disclosure={disclosure} onClose={onClose} hash={hash} label={label} />
+      )
     }
     return <ConfirmContent disclosure={disclosure} hash={hash} onClose={onClose} />
   }, [disclosure, hash, label, onClose, swapReceipt.loading])
@@ -39,6 +43,10 @@ export const TransactionSubmittedModal = ({
       isOpen={disclosure.isOpen}
       onClose={disclosure.onClose}
       bodyProps={{
+        h: '350px',
+        p: 12,
+        pt: 16,
+        justifyContent: 'space-between',
         alignItems: 'center',
         shadow: 'Up for Blocks',
       }}
@@ -48,7 +56,7 @@ export const TransactionSubmittedModal = ({
   )
 }
 
-const ConfirmContent = ({
+export const ConfirmContent = ({
   hash,
   disclosure,
   onClose,
@@ -62,12 +70,12 @@ const ConfirmContent = ({
       data: { chain },
     },
   ] = useNetwork()
-  const subdomain = chain.id === 1 ? '' : chain.name + '.'
+  const subdomain = chain?.id === 1 ? '' : chain?.name + '.'
   const url = `https://${subdomain}etherscan.io/tx/${hash}`
 
   return (
     <>
-      <SubmittedIcon w={10} mb={5} mt={12} />
+      <SubmittedIcon w={10} />
       <Text align={'center'} fontSize={'24px'} fontWeight={600}>
         Transaction Submitted <br />
         <Link href={url} fontWeight={400} fontSize={'18px'} textColor={'Highlight'} isExternal>
@@ -93,38 +101,47 @@ const ConfirmContent = ({
   )
 }
 
-const WaitingWalletContent = ({
+export const WaitingWalletContent = ({
   hash,
   disclosure,
   label,
+  onClose,
 }: {
   label: string
   hash: string
   disclosure: UseDisclosureReturn
+  onClose: () => void
 }) => {
   const [
     {
       data: { chain },
     },
   ] = useNetwork()
-  const subdomain = chain.id === 1 ? '' : chain.name + '.'
-  const url = `https://${subdomain}etherscan.io/tx/${hash}`
 
   return (
     <>
       {' '}
-      <SpinIcon __css={spinnerStyles} w={10} mb={5} mt={12} />
+      <SpinIcon __css={spinnerStyles} w={10} />
       <Text fontSize="lg" fontWeight="medium">
         Waiting For Confirmation
       </Text>
       <Text fontSize="md" textColor="Highlight">
         {label}
       </Text>
-      <Link href={url} my={5} fontWeight="semibold" textColor="#5F7A99" fontSize="md" isExternal>
+      <Link href={'url'} fontWeight={400} fontSize={'18px'} textColor={'Highlight'} isExternal>
         Confirm this transaction in your wallet
       </Link>
       <Flex>
-        <Button mt={4} onClick={disclosure.onClose} variant="secondary" size="large" w="180px">
+        <Button
+          mt={4}
+          onClick={() => {
+            disclosure.onClose()
+            onClose()
+          }}
+          variant="secondary"
+          size="large"
+          w="180px"
+        >
           Close
         </Button>
       </Flex>
@@ -132,26 +149,28 @@ const WaitingWalletContent = ({
   )
 }
 
-const WaitingBlockContent = ({
+export const WaitingBlockContent = ({
   hash,
   disclosure,
   label,
+  onClose,
 }: {
   label: string
   hash: string
   disclosure: UseDisclosureReturn
+  onClose: () => void
 }) => {
   const [
     {
       data: { chain },
     },
   ] = useNetwork()
-  const subdomain = chain.id === 1 ? '' : chain.name + '.'
+  const subdomain = chain?.id === 1 ? '' : chain?.name + '.'
   const url = `https://${subdomain}etherscan.io/tx/${hash}`
 
   return (
     <>
-      <SpinIcon __css={spinnerStyles} w={10} mb={5} mt={12} />
+      <SpinIcon __css={spinnerStyles} w={10} />
       <Text fontSize="lg" fontWeight="medium">
         Waiting For Block Confirmation
       </Text>

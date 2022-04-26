@@ -1,19 +1,38 @@
-import { usePair, usePairs } from 'components/AMM/hooks/usePair'
+import { usePair } from 'components/AMM/hooks/usePair'
 import { parseInputAmount } from 'components/AMM/utils/parseInputAmount'
 import { ethers } from 'ethers'
 import { parseUnits } from 'ethers/lib/utils'
-import { CNV, Token, DAI, CurrencyAmount, ROUTER_ADDRESS, Currency } from 'gemswap-sdk'
+import { Token, CurrencyAmount, ROUTER_ADDRESS, Currency, Pair } from 'gemswap-sdk'
 import { contractABI } from 'lib/contractoABI'
 import { concaveProvider } from 'lib/providers'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { chain, useSigner } from 'wagmi'
-import { useConversion } from './useConversion'
 import { useCurrentSupportedNetworkId } from './useCurrentSupportedNetworkId'
 
 export enum FieldType {
   INPUT,
   INPUT2,
 }
+
+export const useAddLiquidityState = () => {
+  const [tokenA, setTokenA] = useState<Token>()
+  const [tokenB, setTokenB] = useState<Token>()
+  const [inputA, setInputA] = useState('')
+  const [inputB, setInputB] = useState('')
+  return {
+    inputA,
+    inputB,
+    tokenA,
+    tokenB,
+    setInputA,
+    setInputB,
+    setTokenA,
+    setTokenB,
+  }
+}
+
+let amountADesired: CurrencyAmount<Token> = null
+let amountBDesired: CurrencyAmount<Token> = null
 
 export const useAddLiquidity = (selectedChain = chain.ropsten, userAddress) => {
   const networkId = useCurrentSupportedNetworkId()
@@ -23,6 +42,8 @@ export const useAddLiquidity = (selectedChain = chain.ropsten, userAddress) => {
   const [hash, setHash] = useState<string>(null)
   const [exactValue, setExactValue] = useState<string>('')
   const [fieldType, setFieldType] = useState<FieldType>(FieldType.INPUT)
+  const { data: pair } = usePair(tokenA, tokenB)
+
   const contractInstance = new ethers.Contract(
     ROUTER_ADDRESS[selectedChain.id],
     contractABI,
@@ -46,16 +67,20 @@ export const useAddLiquidity = (selectedChain = chain.ropsten, userAddress) => {
     fieldType === FieldType.INPUT
       ? [parseInputAmount(exactValue, tokenA), tokenA]
       : [parseInputAmount(exactValue, tokenB), tokenB]
+  try {
+    const otherCurrencyAmount =
+      exactCurrencyAmount && pair?.priceOf(otherCurrency)?.quote(exactCurrencyAmount)
 
-  const { data: pair } = usePair(tokenA, tokenB)
+    const [tempA, tempB] =
+      fieldType == FieldType.INPUT
+        ? [exactCurrencyAmount, otherCurrencyAmount]
+        : [otherCurrencyAmount, exactCurrencyAmount]
 
-  const otherCurrencyAmount =
-    exactCurrencyAmount && pair?.priceOf(otherCurrency)?.quote(exactCurrencyAmount)
-
-  const [amountADesired, amountBDesired] =
-    fieldType == FieldType.INPUT
-      ? [exactCurrencyAmount, otherCurrencyAmount]
-      : [otherCurrencyAmount, exactCurrencyAmount]
+    amountADesired = tempA || amountADesired
+    amountBDesired = tempB || amountBDesired
+  } catch (e) {
+    console.error(e)
+  }
 
   const clear = () => {
     setTokenA(null)
@@ -87,6 +112,7 @@ export const useAddLiquidity = (selectedChain = chain.ropsten, userAddress) => {
 
   return [
     {
+      pair,
       tokenA,
       tokenB,
       amountADesired,
@@ -108,6 +134,7 @@ export const useAddLiquidity = (selectedChain = chain.ropsten, userAddress) => {
 }
 
 export interface UseAddLiquidityData {
+  pair: Pair
   tokenA: Token
   tokenB: Token
   amountADesired: CurrencyAmount<Token>

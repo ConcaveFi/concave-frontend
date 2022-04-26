@@ -10,7 +10,7 @@ export const useApprovalWhenNeeded = (token: Token, spender: string, amount: Big
     if (allowance.isError) return 'Error on request'
 
     if (allowance?.value?.gte(amount)) {
-      return 'Approved'
+      return 'Indexing'
     }
     if (approve.isWaitingForConfirmation) {
       return 'Approve in your wallet'

@@ -35,7 +35,7 @@ export const AddLiquidityContent = ({ userAddress }: { userAddress: string }) =>
   const supplyLiquidityDisclosure = useDisclosure()
   const transactionStatusDisclosure = useDisclosure()
   const [data, setters, call, clear] = useAddLiquidity(chain.ropsten, userAddress)
-  const { amountADesired, amountBDesired, tokenA, tokenB } = data
+  const { amountADesired, amountBDesired, tokenA, tokenB, pair } = data
   const { updateInputValue, updateOutputValue, updateTokenA, updateTokenB, setTokenA, setTokenB } =
     setters
   const valid = tokenA && tokenB && amountADesired && amountBDesired
@@ -86,14 +86,11 @@ export const AddLiquidityContent = ({ userAddress }: { userAddress: string }) =>
         _focus={{
           shadow: 'Up Small',
         }}
-        onClick={() => {
-          console.log('open modal')
-          supplyLiquidityDisclosure.onOpen()
-        }}
+        onClick={supplyLiquidityDisclosure.onOpen}
         isDisabled={!valid}
         bg={'rgba(113, 113, 113, 0.01)'}
       >
-        <Text fontSize={'2xl'}>Add Liquidity</Text>
+        <Text fontSize={'2xl'}>{pair ? 'Add Liquidity' : 'Create Liquidity'}</Text>
       </Button>
       <SupplyLiquidityModal
         isVisible={!!valid}
@@ -164,6 +161,8 @@ const SupplyLiquidityContent = ({
   )
   const differenceBetweenAandB = +amountADesired?.toExact() / +amountBDesired?.toExact()
   const differenceBetweenBandA = +amountBDesired?.toExact() / +amountADesired?.toExact()
+
+  console.log(needsApproveA, needsApproveB)
   return (
     <>
       <Text fontSize="3xl">
@@ -206,7 +205,7 @@ const SupplyLiquidityContent = ({
           {approveLabelB}
         </Button>
       )}
-      {!needsApproveA && !needsApproveA && (
+      {!needsApproveA && !needsApproveB && (
         <Button mt={2} p={6} fontSize={'2xl'} variant={'primary'} onClick={onConfirm}>
           Confirm Supply
         </Button>
