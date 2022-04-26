@@ -5,24 +5,29 @@ import { useLocalStorage } from 'react-use'
 const isDevEnv = process.env.NEXT_PUBLIC_VERCEL_ENV !== 'production'
 const password = process.env.DEV_PASSWORD || 'aaaa'
 
+export const useWorthyUser = () => {
+  const [value, setValue] = useLocalStorage('can enter?', false)
+  return { isUserWorthy: value, setWorthyUser: () => setValue(true) }
+}
+
 export const DevelopGateway = dynamic(
   () =>
     Promise.resolve(() => {
-      const [value, setValue] = useLocalStorage('can enter?', false)
+      const { isUserWorthy, setWorthyUser } = useWorthyUser()
 
       if (!isDevEnv) return null
       return (
         <Modal
           bluryOverlay={true}
-          title="Show your worth"
+          title="Are you worthy?"
           titleAlign="center"
-          isOpen={value !== true}
+          isOpen={isUserWorthy !== true}
           onClose={() => {}}
           bodyProps={{ w: '350px', gap: 2 }}
           hideClose
         >
-          <Text fontWeight="bold">Enter the pass phrase below</Text>
-          <Input onChange={(e) => e.target.value === password && setValue(true)} />
+          <Text fontWeight="bold">Do you know the cave secret?</Text>
+          <Input onChange={(e) => e.target.value === password && setWorthyUser()} />
         </Modal>
       )
     }),

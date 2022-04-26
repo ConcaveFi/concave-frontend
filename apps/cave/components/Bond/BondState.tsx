@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
-import { chain, useNetwork, useBalance, useContractWrite, useAccount, useSigner } from 'wagmi'
-import { BigNumberish, Contract, ethers } from 'ethers'
-import { DAI, CNV, Token, Currency } from 'gemswap-sdk'
+import { useAccount, useSigner } from 'wagmi'
+import { Contract, ethers } from 'ethers'
+import { DAI, CNV } from 'gemswap-sdk'
 import { BOND_ADDRESS } from '../../contracts/Bond/BondingAddress'
 import { BOND_ABI } from '../../contracts/Bond/BondABI'
 import { ROPSTEN_DAI_ABI } from '../../contracts/Bond/ROPSTEN_DAI_ABI'
@@ -9,6 +9,7 @@ import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { BondSettings } from './Settings'
 import { utils } from 'ethers'
+import { position } from '@concave/ui'
 // testing only, flip to prod
 let providers = new ethers.providers.InfuraProvider('ropsten', '5ad069733a1a48a897180e66a5fb8846')
 
@@ -61,7 +62,7 @@ export const purchaseBond = async (
   const formattedInput = ethers.utils.parseUnits(input.toString(), 18)
   const formattedMinOutput = ethers.utils.parseUnits(minOutput.toString(), 18)
   const formattedAllowance = ethers.utils.formatEther(currentAllowance)
-  const estimatedGas = bondingContract.estimateGas.purchaseBond(
+  const estimatedGas = await bondingContract.estimateGas.purchaseBond(
     address,
     ROPSTEN_DAI_ADDRESS,
     formattedInput,
@@ -115,23 +116,37 @@ export async function getCurrentBlockTimestamp() {
 
 export const getUserBondPositions = async (
   networkId: number,
-  positionID: number,
   address: string,
-  currentBlockTimestamp: string,
+  currentBlockTimestamp: number,
 ) => {
-  let positionArray = []
-  let redeemablePositions = []
-  let totalPending
+  let batchRedeemArray = []
+  let totalPending = 0
+  let totalOwed = 0
+  let oldest = 0
   const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, providers)
-  for (let i = 0; i < 24; i++) {
+  // TODO: Get bond position length
+  for (let i = 0; i < 1; i++) {
     const positionData = await bondingContract.positions(address, i)
     // revisit this, dont push if owed is not greater than 0
-    if (positionData.owed > 600000000000000000) redeemablePositions.push(i)
-    positionArray.push(positionData)
-    // let elapsed = currentBlockTimestamp > positionData.creation ? 1 : +currentBlockTimestamp / positionData.creation
-    // totalPending += +(+(utils.formatEther(positionData.owed))).toFixed(2) * elapsed - +(+(utils.formatEther(positionData.redeemed))).toFixed(2)
+    console.log(positionData)
+    if (positionData.owed > 1) 
+    batchRedeemArray.push(i)
+    if (+positionData.creation > oldest) {
+      oldest = +positionData.creation
+    }
+    let fullyVestedTimestamp = +positionData.creation * 1000 + 432000000
+    let elapsed =
+      currentBlockTimestamp >= fullyVestedTimestamp
+        ? 1
+        : +currentBlockTimestamp / positionData.creation
+    totalPending +=
+      +(+utils.formatEther(positionData.owed)).toFixed(2) * elapsed -
+      +(+utils.formatEther(positionData.redeemed)).toFixed(2)
+    totalOwed += +(+utils.formatEther(positionData.owed)).toFixed(2)
   }
-  return { positionArray, redeemablePositions }
+  const parseOldest = new Date(oldest * 1000 + 432000000).toString().slice(4, 21)
+
+  return { parseOldest, totalOwed, totalPending, batchRedeemArray }
 }
 
 export const useBondState = () => {
