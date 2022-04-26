@@ -1,22 +1,60 @@
-import { Box, Card, Flex } from '@concave/ui'
+import {
+  Box,
+  Button,
+  Card,
+  Collapse,
+  Flex,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  Portal,
+} from '@concave/ui'
 import SearchFilterCard from './SearchFilterCard'
 import NftPositionCard from './NftPositionCard'
-import {  SearchIcon } from '@concave/icons'
+import { SearchIcon, SwapSettingsIcon } from '@concave/icons'
 import { Dispatch, SetStateAction, useState } from 'react'
+import StakePeriodCard from './StakePeriodCard'
+import PriceCard from './PriceCard'
+import RedeemCard from './RedeemCard'
+import DiscountCard from './DiscountCard'
 interface MarketplaceSearchCardProps {
   active?: boolean
   onClick?: (any: Dispatch<SetStateAction<boolean>>) => void
 }
 
-const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => { 
+const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
   const filters = [
-    { title: 'Redeem In', icon: 'RedeemIcon' },
-    { title: 'Price', icon: 'PriceIcon' },
-    { title: 'Discount', icon: 'DiscountIcon' },
-    { title: 'Stake Period', icon: 'StakeIcon' },
+    { title: 'Redeem In', icon: 'RedeemIcon', card: <RedeemCard />, offsetX: 0 },
+    { title: 'Price', icon: 'PriceIcon', card: <PriceCard />, offsetX: -120 },
+    { title: 'Discount', icon: 'DiscountIcon', card: <DiscountCard />, offsetX: 0 },
+    {
+      title: 'Stake Period',
+      icon: 'StakeIcon',
+      card: <StakePeriodCard />,
+      offsetX: -100,
+    },
   ]
+  const filterCards = filters.map((e, k) => {
+    return (
+      <Popover offset={[e.offsetX, 10]}>
+        {/* Chakra type bug, related to just released react 18, should be fixed soon 
+        // @ts-ignore  */}
+        <PopoverTrigger>
+          <Button>
+            <SearchFilterCard key={k} title={e.title} icon={e.icon}></SearchFilterCard>
+          </Button>
+        </PopoverTrigger>
+        <Portal>
+          <PopoverContent width={160} border={'none'}>
+            {e.card}
+          </PopoverContent>
+        </Portal>
+      </Popover>
+    )
+  })
 
   const [active, setActive] = useState(false)
+  function onClose(): void {}
   return (
     <Card p={3} gap={2} variant="primary" h="945px" shadow="down" w="640px">
       <Flex justify="center">
@@ -45,11 +83,8 @@ const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
             <SearchIcon height={6} />
           </Flex>
           <Flex direction="row" gap={4} position="relative" mt={4}>
-            {filters.map((e, k) => {
-              return <SearchFilterCard key={k} title={e.title} icon={e.icon} />
-            })}
+            {filterCards}
           </Flex>
-
         </Box>
       </Flex>
       <Box

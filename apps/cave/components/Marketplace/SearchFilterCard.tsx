@@ -1,11 +1,15 @@
-import { Text, VStack, HStack, Flex } from '@concave/ui'
+import { Text, VStack, HStack, Flex, Button } from '@concave/ui'
 import { GasIcon, RedeemIcon, LinesIcon, DiscountIcon, PriceIcon, StakeIcon } from '@concave/icons'
 
-const SearchFilterCard = (props: any) => {
+interface SearchFilterCardProps {
+  title: string
+  icon: string
+}
+
+const SearchFilterCard = (props: SearchFilterCardProps) => {
   const { title, icon } = props
   return (
     <Flex
-      flex={1}
       justify="center"
       align={'center'}
       w="80px"
