@@ -56,7 +56,8 @@ export const AddLiquidityContent = ({ userAddress }: { userAddress: string }) =>
         <InputField
           currencyIn={tokenA}
           currencyAmountIn={amountADesired}
-          updateInputValue={updateInputValue}
+          // updateInputValue={updateInputValue}
+          updateInputValue={updateInputValue => 'void'}
           updateCurrencyIn={updateTokenA}
         />
         <Flex align="center" justify="center">
@@ -75,7 +76,8 @@ export const AddLiquidityContent = ({ userAddress }: { userAddress: string }) =>
         <InputField
           currencyIn={tokenB}
           currencyAmountIn={amountBDesired}
-          updateInputValue={updateOutputValue}
+          // updateInputValue={updateOutputValue}
+          updateInputValue={updateOutputValue=> 'void'}
           updateCurrencyIn={updateTokenB}
         />
       </Flex>
