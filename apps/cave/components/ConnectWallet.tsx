@@ -12,7 +12,7 @@ import {
   Modal,
 } from '@concave/ui'
 import { Signer } from 'ethers'
-import { signIn, signOut, useSession, getCsrfToken, SessionContextValue } from 'next-auth/react'
+import { signIn, signOut, useSession, getCsrfToken } from 'next-auth/react'
 import { useAccount, useConnect, useNetwork } from 'wagmi'
 import { SiweMessage } from 'siwe'
 import { useIsMounted } from 'hooks/useIsMounted'
@@ -90,8 +90,6 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
   const [, disconnect] = useAccount()
   const [{ data: connectData, error, loading }, connect] = useConnect()
   const [{ data: networkData, error: switchNetworkError }, switchNetwork] = useNetwork()
-  const { data: session, status } = useSession()
-  // console.log('session : ', session)
 
   const handleLogin = async () => {
     try {
@@ -170,11 +168,16 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
               }
               key={connector.id}
               onClick={async () => {
-                console.log('connect with modal')
                 await connect(connector), await handleLogin().then(onClose)
               }}
             >
-              {connector.name}
+              {connector.id === 'injected'
+                ? isMounted
+                  ? connector.name
+                  : connector.id
+                : connector.name}
+              {loading && connector.name === connectData.connector?.name && ' ✅'}
+              {error && connector.name === connectData.connector?.name && ' ❎'}
             </Button>
           )
         })}
@@ -257,7 +260,9 @@ const ConnectButton = () => {
           size="medium"
           w="100%"
         >
-          Connect Wallet
+          {loading && 'loading...'}
+          {error && 'Error on SignIn'}
+          {!error && !loading && 'Connect Wallet'}
         </MenuButton>
         <Portal>
           <MenuList
@@ -293,7 +298,6 @@ const ConnectButton = () => {
                       }
                       key={connector.id}
                       onClick={async () => {
-                        console.log('do we have a party here?')
                         await connect(connector), await handleLogin()
                       }}
                     >
