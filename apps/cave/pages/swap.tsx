@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useAccount } from 'wagmi'
+import { useSession } from 'next-auth/react'
 import { Button, Card, Flex, HStack, useDisclosure } from '@concave/ui'
 import {
   useSwapState,
@@ -36,8 +36,8 @@ export function SwapPage() {
     switchCurrencies,
   } = useSwapState(settings)
 
-  const [{ data: account }] = useAccount()
-  const swapTx = useSwapTransaction(trade, settings, account?.address)
+  const { data: session, status } = useSession()
+  const swapTx = useSwapTransaction(trade, settings, 'session.user.ens.address')
 
   const confirmationModal = useDisclosure()
 
@@ -97,8 +97,10 @@ export function SwapPage() {
           />
 
           <HStack align="center" justify="end" py={5}>
-            <RelativePrice currencyIn={currencyIn} currencyOut={currencyOut} />
-            <GasPrice />
+            {status === 'authenticated' && (
+              <RelativePrice currencyIn={currencyIn} currencyOut={currencyOut} />
+            )}
+            {status === 'authenticated' && <GasPrice />}
             <Settings onClose={setSettings} />
           </HStack>
 

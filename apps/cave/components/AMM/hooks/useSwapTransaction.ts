@@ -40,11 +40,10 @@ export const useSwapTransaction = (
     error: errorEstimatingGas,
   } = useQuery(
     ['swap estimated gas fee', callParameters],
-    () => {
+    async () => {
       const { methodName, args, value } = callParameters
-      return routerContract.estimateGas[methodName](...args, { value }).then((estimatedGasFee) =>
-        formatUnits(estimatedGasFee, 'wei'),
-      )
+      const estimatedGasFee = await routerContract.estimateGas[methodName](...args, { value })
+      return formatUnits(estimatedGasFee, 'wei')
     },
     {
       enabled: !!callParameters && !!routerContract.signer,

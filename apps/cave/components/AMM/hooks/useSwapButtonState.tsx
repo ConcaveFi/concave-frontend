@@ -1,6 +1,6 @@
 import { ButtonProps } from '@concave/ui'
 import { Currency, ROUTER_ADDRESS, Trade, TradeType } from 'gemswap-sdk'
-import { useAccount } from 'wagmi'
+import { useSession } from 'next-auth/react'
 import { useModals } from 'contexts/ModalsContext'
 import { useApprove } from 'hooks/useApprove'
 import { usePermit } from 'hooks/usePermit'
@@ -18,7 +18,7 @@ export const useSwapButtonState = ({
   tradeError: string
   onSwapClick: () => void
 }): ButtonProps => {
-  const [{ data: account }] = useAccount()
+  const { data: session, status } = useSession()
   const currencyInBalance = useCurrencyBalance(currencyIn)
 
   const [token, spender] = [currencyIn.wrapped, ROUTER_ADDRESS[currencyIn?.chainId]]
@@ -33,7 +33,7 @@ export const useSwapButtonState = ({
   /*
     Not Connected
   */
-  if (!account?.address) return { children: 'Connect Wallet', onClick: connectModal.onOpen }
+  if (!session?.user.address) return { children: 'Connect Wallet', onClick: connectModal.onOpen }
 
   /*
     Trade Error

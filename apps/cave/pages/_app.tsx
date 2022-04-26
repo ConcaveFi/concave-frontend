@@ -2,12 +2,14 @@ import { useEffect } from 'react'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import type { AppProps } from 'next/app'
+import { SessionProvider } from 'next-auth/react'
 import { ConcaveFonts } from '@concave/ui'
 import { Styles } from '@chakra-ui/theme-tools'
 import { DefaultLayout } from 'components/Layout'
 import { AppProviders } from 'contexts'
 import { MetaHead, MetaProps } from 'components/MetaHead'
 import * as gtag from '../lib/analytics'
+import { NODE_ENV } from 'lib/env.conf'
 
 const globalStyles: Styles = {
   global: {
@@ -38,7 +40,7 @@ type AppPropsWithLayout = AppProps & {
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const Layout = Component.Layout || DefaultLayout
   const router = useRouter()
-  const isProduction = process.env.NODE_ENV === 'production'
+  const isProduction = NODE_ENV === 'production'
 
   useEffect(() => {
     const handleRouteChange = (url: URL) => {
@@ -54,13 +56,15 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   }, [router.events])
 
   return (
-    <AppProviders globalStyles={globalStyles} cookies={pageProps?.cookies}>
-      <ConcaveFonts />
-      <MetaHead meta={Component.Meta} />
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-    </AppProviders>
+    <SessionProvider session={pageProps.session} refetchInterval={0}>
+      <AppProviders globalStyles={globalStyles} cookies={pageProps?.cookies}>
+        <ConcaveFonts />
+        <MetaHead meta={Component.Meta} />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </AppProviders>
+    </SessionProvider>
   )
 }
 
