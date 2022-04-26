@@ -37,7 +37,7 @@ const MarketplaceTransactionCard = (props: any) => {
         </Text>
       </Box>
       <Box>
-        <a href={`https://etherscan.io/tx/${filter.link}`} target="_blank">
+        <a href={`https://etherscan.io/tx/${filter.link}`} target="_blank" rel="noreferrer">
           <Text color="blue.400" as='u'>Transaction</Text>
         </a>
       </Box>
