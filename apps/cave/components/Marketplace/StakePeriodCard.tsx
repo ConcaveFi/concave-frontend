@@ -118,18 +118,13 @@ const Periods = () => {
     >
       <Text px={2.5}>Stake period:</Text>
       {periodButtonsComp}
-      {/* <ToggleButton title="None" width={105} />
-      <ToggleButton title="12 month" width={105} />
-      <ToggleButton title="6 month" width={105} active />
-      <ToggleButton title="3 month" width={105} />
-      <ToggleButton title="1 month" width={105} /> */}
     </Flex>
   )
 }
 
 const Choose = () => {
   return (
-    <Flex height={'73px'} justifyContent="center" alignItems={'end'} gap="3">
+    <Flex height={'83.5px'} justifyContent="center" alignItems={'end'} gap="3">
       <ChooseButton title="Reset" />
       <ChooseButton title="Apply" backgroundType="blue" />
     </Flex>

@@ -1,4 +1,6 @@
 import { Box, Flex, Input, Text } from '@concave/ui'
+import { timeEnd } from 'console'
+import { version } from 'os'
 import { useEffect, useState } from 'react'
 import ChooseButton from './ChooseButton'
 import ToggleButton from './ToggleButton'
@@ -61,21 +63,38 @@ export default function PriceCard() {
           CNV Price Range :
         </Text>
         <Flex gap={1} alignItems="center">
-          <Flex justifyContent="center" alignItems={'center'}>
-            <Text position={'absolute'}>from</Text>
-            <Input width="90px" height="30px" borderRadius={'2xl'} />
-          </Flex>
+          <PriceInputValue title="From" />
           <Box width={2.5} height={1} shadow="down"></Box>
-          <Flex justifyContent="center" alignItems={'center'}>
-            <Text position={'absolute'}>to</Text>
-            <Input width="90px" height="30px" borderRadius={'2xl'} />
-          </Flex>
+          <PriceInputValue title="To" />
         </Flex>
       </Flex>
-      <Flex height={'65px'} justifyContent="center" alignItems={'end'} gap="2">
+      <Flex height={'69px'} justifyContent="center" alignItems={'end'} gap="2">
         <ChooseButton title="Reset" />
         <ChooseButton title="Apply" backgroundType="blue" />
       </Flex>
     </Box>
   )
+
+  interface PriceInputValueProps {
+    title: string
+  }
+
+  function PriceInputValue(props: PriceInputValueProps) {
+    const { title } = props
+    const [value, setValue] = useState('')
+    const emptyValue = value === ''
+    const label = emptyValue ? title : ''
+    return (
+      <Flex justifyContent="center" alignItems={'center'}>
+        <Text position={'absolute'}>{label}</Text>
+        <Input
+          value={value}
+          onChange={(v) => setValue(v.target.value)}
+          width="90px"
+          height="30px"
+          borderRadius={'2xl'}
+        />
+      </Flex>
+    )
+  }
 }

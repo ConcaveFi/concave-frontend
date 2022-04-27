@@ -1,8 +1,21 @@
-import { border, Box, Text } from '@concave/ui'
+import {
+  border,
+  Box,
+  BoxRadioGroup,
+  Button,
+  Card,
+  Flex,
+  Radio,
+  RadioGroup,
+  Stack,
+  Text,
+} from '@concave/ui'
 import { Dispatch, SetStateAction, useState } from 'react'
 
 const highLightedBorder = {
   border: '2px solid #7DE0FF',
+  // borderImageSource:
+  //   'linear-gradient(41.89deg, #53399B 0.69%, #7DE0FF 38.19%, #504179 72.85%, #84E2FF 100%)',
 }
 const testBorder = {
   border: '2px solid transparent',
@@ -21,11 +34,35 @@ interface ToggleButtonProps {
 export default function ToggleButton(props: ToggleButtonProps) {
   const { title, height, width, flexGrow } = props
   const active = !!props.active
+  const boxProps = { width: width ? width : 110, py: 1, shadow: UpSmall }
 
   const textColor = active ? 'white' : '#5F7A99'
 
+  const variant = active ? 'primary.outline' : 'secondary'
   return (
-    <Box
+    <Flex
+      _hover={{
+        transform: 'scale(1.1)',
+      }}
+      transition={'all'}
+      transitionDuration={'.3s'}
+      direction="row"
+      cursor={'pointer'}
+      onClick={() => (props.onClick ? props.onClick(props) : '')}
+      fontSize={14}
+      fontWeight={700}
+      alignItems="center"
+      textColor={textColor}
+    >
+      <Button {...boxProps} rounded="2xl" variant={variant}>
+        <Text textAlign={'center'}>{title}</Text>
+      </Button>
+    </Flex>
+  )
+}
+
+{
+  /* <Card
       _hover={{
         transform: 'scale(1.1)',
       }}
@@ -39,11 +76,9 @@ export default function ToggleButton(props: ToggleButtonProps) {
       width={width ? width : {}}
       py={1}
       px={4}
-      rounded="2xl"
       shadow={UpSmall}
       css={active ? highLightedBorder : testBorder}
     >
       <Text>{title}</Text>
-    </Box>
-  )
+    </Card> */
 }

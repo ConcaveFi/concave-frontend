@@ -2,12 +2,16 @@ import { Box, Flex, HStack, Image, Text, VStack } from '@concave/ui'
 import { Dispatch, SetStateAction, useState } from 'react'
 
 interface NftPositionCardProps {
+  stakePeriod: number
+  redeemIn: number
+  price: number
+  discount: number
   active?: boolean
   onClick?: (any: Dispatch<SetStateAction<boolean>>) => void
 }
 
 const NftPositionCard = (props: NftPositionCardProps) => {
-
+  const { stakePeriod, discount, price, redeemIn } = props
   const [active, setActive] = useState(false)
   return (
     <Box
@@ -50,7 +54,7 @@ const NftPositionCard = (props: NftPositionCardProps) => {
                 Stake Period
               </Text>
               <Text fontSize="s" color="white" fontWeight="bold">
-                6 Month
+                {stakePeriod} Month
               </Text>
             </Flex>
             <Box w={'45%'}>
@@ -64,7 +68,7 @@ const NftPositionCard = (props: NftPositionCardProps) => {
             Redeem In:
           </Text>
           <Text fontSize="md" fontWeight="bold">
-            143 Days
+            {redeemIn} Days
           </Text>
         </Flex>
         <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
@@ -72,7 +76,7 @@ const NftPositionCard = (props: NftPositionCardProps) => {
             Price:
           </Text>
           <Text fontSize="md" fontWeight="bold">
-            605 CNV
+            {price} CNV
           </Text>
         </Flex>
         <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
@@ -80,7 +84,7 @@ const NftPositionCard = (props: NftPositionCardProps) => {
             Discount:
           </Text>
           <Text fontSize="md" fontWeight="bold">
-            2.3%
+            {discount}%
           </Text>
         </Flex>
         <Image mx="auto" src={`/assets/liquidstaking/modal-arrow-logo.svg`} alt="arrow down logo" />

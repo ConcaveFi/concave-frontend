@@ -34,6 +34,26 @@ const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
       offsetX: -100,
     },
   ]
+  const nftPositions = [
+    { stakePeriod: 1, price: 102, redeemIn: 20, discount: 2.1 },
+    { stakePeriod: 12, price: 12, redeemIn: 1, discount: 20 },
+    { stakePeriod: 2, price: 50, redeemIn: 12, discount: 1.2 },
+    { stakePeriod: 10, price: 229, redeemIn: 4, discount: 14 },
+    { stakePeriod: 23, price: 112, redeemIn: 7, discount: 12 },
+    { stakePeriod: 5, price: 522, redeemIn: 12, discount: 5 },
+  ]
+
+  const nftPositionsComp = nftPositions
+    .sort(sortByStakePeriod)
+    .map((value, index) => (
+      <NftPositionCard
+        price={value.price}
+        redeemIn={value.redeemIn}
+        stakePeriod={value.stakePeriod}
+        discount={value.discount}
+      />
+    ))
+
   const filterCards = filters.map((e, k) => {
     return (
       <Popover offset={[e.offsetX, 10]}>
@@ -78,7 +98,6 @@ const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
             px="-10"
             borderRadius="2xl"
             zIndex={2}
-            // filter="drop-shadow(0px 0px 27px #81b3ff4f)"
           >
             <SearchIcon height={6} />
           </Flex>
@@ -113,21 +132,27 @@ const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
           },
         }}
       >
-        <NftPositionCard />
-        <NftPositionCard />
-        <NftPositionCard />
-        <NftPositionCard />
-        <NftPositionCard />
-        <NftPositionCard />
-        <NftPositionCard />
-        <NftPositionCard />
-        <NftPositionCard />
-        <NftPositionCard />
-        <NftPositionCard />
-        <NftPositionCard />
+        {nftPositionsComp}
       </Box>
     </Card>
   )
+}
+
+const sortByDiscount = (current, before) => {
+  if (current.discount > before.discount) return 1
+  else return -1
+}
+const sortByPrice = (current, before) => {
+  if (current.price > before.price) return 1
+  else return -1
+}
+const sortByRedeenIn = (current, before) => {
+  if (current.redeemIn > before.redeemIn) return 1
+  else return -1
+}
+const sortByStakePeriod = (current, before) => {
+  if (current.stakePeriod > before.stakePeriod) return 1
+  else return -1
 }
 
 export default MarketplaceSearchCard
