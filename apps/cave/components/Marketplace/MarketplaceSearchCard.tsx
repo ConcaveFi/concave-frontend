@@ -12,7 +12,7 @@ import {
 import SearchFilterCard from './SearchFilterCard'
 import NftPositionCard from './NftPositionCard'
 import { SearchIcon, SwapSettingsIcon } from '@concave/icons'
-import { Dispatch, SetStateAction, useState } from 'react'
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import StakePeriodCard from './StakePeriodCard'
 import PriceCard from './PriceCard'
 import RedeemCard from './RedeemCard'
@@ -23,9 +23,24 @@ interface MarketplaceSearchCardProps {
 }
 
 const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
+  const [sortType, setSortType] = useState(SortType.NONE)
+  const [activeRedeemButton, setActiveRedeemButton] = useState(0)
+  const [activePriceButton, setActivePriceButton] = useState(0)
+  const sortFunctionType = sortByType(sortType)
+
   const filters = [
-    { title: 'Redeem In', icon: 'RedeemIcon', card: <RedeemCard />, offsetX: 0 },
-    { title: 'Price', icon: 'PriceIcon', card: <PriceCard />, offsetX: -120 },
+    {
+      title: 'Redeem In',
+      icon: 'RedeemIcon',
+      card: <RedeemCard initialActive={activeRedeemButton} onChange={switchRedeemButtons} />,
+      offsetX: 0,
+    },
+    {
+      title: 'Price',
+      icon: 'PriceIcon',
+      card: <PriceCard activeButton={activePriceButton} onChange={switchPriceButtons} />,
+      offsetX: -120,
+    },
     { title: 'Discount', icon: 'DiscountIcon', card: <DiscountCard />, offsetX: 0 },
     {
       title: 'Stake Period',
@@ -44,9 +59,10 @@ const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
   ]
 
   const nftPositionsComp = nftPositions
-    .sort(sortByStakePeriod)
+    .sort(sortFunctionType)
     .map((value, index) => (
       <NftPositionCard
+        key={index}
         price={value.price}
         redeemIn={value.redeemIn}
         stakePeriod={value.stakePeriod}
@@ -72,9 +88,14 @@ const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
       </Popover>
     )
   })
-
-  const [active, setActive] = useState(false)
-  function onClose(): void {}
+  function switchRedeemButtons(clickedButton: number, sortType: SortType) {
+    setActiveRedeemButton(clickedButton)
+    setSortType(sortType)
+  }
+  function switchPriceButtons(clickedButton: number, sortType: SortType) {
+    setActivePriceButton(clickedButton)
+    setSortType(sortType)
+  }
   return (
     <Card p={3} gap={2} variant="primary" h="945px" shadow="down" w="640px">
       <Flex justify="center">
@@ -138,16 +159,36 @@ const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
   )
 }
 
+export enum SortType {
+  NONE,
+  REDEEMIN_LOWEST_FIRST,
+  REDEEMIN_HIGHEST_FIRST,
+}
+const sortByType = (sortType: SortType) => {
+  switch (sortType) {
+    case SortType.REDEEMIN_HIGHEST_FIRST:
+      return sortByRedeemIn('highest')
+    case SortType.REDEEMIN_LOWEST_FIRST:
+      return sortByRedeemIn('lowest')
+    default:
+      return (current, before) => {
+        return -1
+      }
+  }
+}
+
 const sortByDiscount = (current, before) => {
   if (current.discount > before.discount) return 1
   else return -1
 }
-const sortByPrice = (current, before) => {
-  if (current.price > before.price) return 1
+const sortByPrice = (type: 'lowest' | 'highest') => (current, before) => {
+  if (current.price < before.price && type === 'highest') return 1
+  else if (current.price > before.price && type === 'lowest') return 1
   else return -1
 }
-const sortByRedeenIn = (current, before) => {
-  if (current.redeemIn > before.redeemIn) return 1
+const sortByRedeemIn = (type: 'lowest' | 'highest') => (current, before) => {
+  if (current.redeemIn < before.redeemIn && type === 'highest') return 1
+  else if (current.redeemIn > before.redeemIn && type === 'lowest') return 1
   else return -1
 }
 const sortByStakePeriod = (current, before) => {

@@ -1,15 +1,4 @@
-import {
-  border,
-  Box,
-  BoxRadioGroup,
-  Button,
-  Card,
-  Flex,
-  Radio,
-  RadioGroup,
-  Stack,
-  Text,
-} from '@concave/ui'
+import { Box, Button, Card, Flex, Stack, Text, VStack } from '@concave/ui'
 import { Dispatch, SetStateAction, useState } from 'react'
 
 const highLightedBorder = {
@@ -37,13 +26,16 @@ export default function ToggleButton(props: ToggleButtonProps) {
   const boxProps = { width: width ? width : 110, py: 1, shadow: UpSmall }
 
   const textColor = active ? 'white' : '#5F7A99'
+  const backgroundBorder = 'linear-gradient(43deg, #72639B 0%, #44B9DE 100%)'
+  const defaultBackground = 'none'
 
-  const variant = active ? 'primary.outline' : 'secondary'
+  const variant = active ? 'primary' : 'secondary'
   return (
     <Flex
       _hover={{
         transform: 'scale(1.1)',
       }}
+      position="relative"
       transition={'all'}
       transitionDuration={'.3s'}
       direction="row"
@@ -53,10 +45,20 @@ export default function ToggleButton(props: ToggleButtonProps) {
       fontWeight={700}
       alignItems="center"
       textColor={textColor}
+      rounded="2xl"
+      background={active ? backgroundBorder : ''}
     >
-      <Button {...boxProps} rounded="2xl" variant={variant}>
+      <Flex
+        background={'linear-gradient(200.73deg, #274C63 20%, #182F3E 100%)'}
+        minWidth={50}
+        m={'2px'}
+        py={0.5}
+        px={3}
+        rounded="2xl"
+        shadow={UpSmall}
+      >
         <Text textAlign={'center'}>{title}</Text>
-      </Button>
+      </Flex>
     </Flex>
   )
 }

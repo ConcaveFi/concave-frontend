@@ -3,15 +3,19 @@ import { timeEnd } from 'console'
 import { version } from 'os'
 import { useEffect, useState } from 'react'
 import ChooseButton from './ChooseButton'
+import { SortType } from './MarketplaceSearchCard'
 import ToggleButton from './ToggleButton'
 
-export default function PriceCard() {
+interface PriceCard {
+  activeButton: number
+  onChange?: (clickedButton: number, sortType: SortType) => void
+}
+
+export default function PriceCard(props: PriceCard) {
   const toggleButons = [{ title: 'None' }, { title: 'Lowest First' }, { title: 'Highest First' }]
 
-  const [currentButton, setCurrentButton] = useState(0)
+  const currentButton = props.activeButton
   const [toggleButtonsComp, setToggleButonsComp] = useState(null)
-
-  const onChange = (index: number) => setCurrentButton(index)
 
   useEffect(() => {
     setToggleButonsComp(
@@ -20,7 +24,7 @@ export default function PriceCard() {
           <ToggleButton
             key={index}
             title={button.title}
-            onClick={() => onChange(index)}
+            onClick={() => props.onChange(index, index)}
             active={index === currentButton}
           />
         )
@@ -74,6 +78,16 @@ export default function PriceCard() {
       </Flex>
     </Box>
   )
+  function getSortTypeByIndex(index: number) {
+    switch (index) {
+      case 0:
+        return SortType.NONE
+      case 1:
+        return SortType.NONE
+      case 2:
+        return SortType.NONE
+    }
+  }
 
   interface PriceInputValueProps {
     title: string

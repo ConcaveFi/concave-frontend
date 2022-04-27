@@ -1,5 +1,6 @@
 import { Box, Flex, Text } from '@concave/ui'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { SortType } from './MarketplaceSearchCard'
 import ToggleButton from './ToggleButton'
 
 const highLightedBorder = {
@@ -7,13 +8,30 @@ const highLightedBorder = {
 }
 const UpSmall = `0px 4px 4px rgba(0, 0, 0, 0.25), inset -1px 1px 2px rgba(128, 186, 255, 0.05)`
 
-function RedeemCard() {
+interface RedeemCardProps {
+  onChange?: (clickedButton: number, type: SortType) => void
+  initialActive?: number
+}
+
+function RedeemCard(props: RedeemCardProps) {
   const buttons = [{ title: 'None' }, { title: 'Lowest First' }, { title: 'Highest First' }]
 
-  const [curButton, setCurButton] = useState(0)
+  // const [curButton, setCurButton] = useState(props.initialActive)
 
+  const curButton = props.initialActive
   const onClick = (clickedButton: number) => {
-    setCurButton(clickedButton)
+    switch (clickedButton) {
+      case 0:
+        props.onChange(clickedButton, SortType.NONE)
+        break
+      case 1:
+        props.onChange(clickedButton, SortType.REDEEMIN_LOWEST_FIRST)
+        break
+      case 2:
+        props.onChange(clickedButton, SortType.REDEEMIN_HIGHEST_FIRST)
+        break
+    }
+    // setCurButton(clickedButton)
   }
   const [toggleButons, setToggleButtons] = useState(null)
 
