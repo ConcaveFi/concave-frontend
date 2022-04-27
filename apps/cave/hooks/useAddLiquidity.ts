@@ -1,6 +1,6 @@
 import { usePair } from 'components/AMM/hooks/usePair'
-import { parseInputAmount } from 'components/AMM/utils/parseInputAmount'
-import { Token, CurrencyAmount, ROUTER_ADDRESS, Currency, Pair } from 'gemswap-sdk'
+import { parseAmount } from 'components/AMM/utils/parseAmount'
+import { Token, CurrencyAmount, Currency, Pair } from 'gemswap-sdk'
 
 import { Router } from 'lib/Router'
 import { useCallback, useRef, useState } from 'react'
@@ -38,8 +38,8 @@ export const useAddLiquidity = (selectedChain = chain.ropsten, userAddress) => {
 
   const [exactCurrencyAmount, otherCurrency] =
     fieldType === FieldType.INPUT
-      ? [parseInputAmount(exactValue, tokenA), tokenA]
-      : [parseInputAmount(exactValue, tokenB), tokenB]
+      ? [parseAmount(exactValue, tokenA), tokenA]
+      : [parseAmount(exactValue, tokenB), tokenB]
 
   const otherCurrencyAmount =
     exactCurrencyAmount && pair?.priceOf(otherCurrency)?.quote(exactCurrencyAmount)
