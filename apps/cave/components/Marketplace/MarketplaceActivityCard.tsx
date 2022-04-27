@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Box, Card, Flex, Text, Button } from '@concave/ui'
 import NewActivityCard from './MarketplaceTransactionCard'
 import MarketplaceTransactionCard from './MarketplaceTransactionCard'
@@ -8,6 +8,10 @@ const MarketplaceActivityCard = () => {
   const [data, setData] = useState(null)
   const [error, setError] = useState(false)
   const filters = [{ name: 'All' }, { name: 'Listing' }, { name: 'Sale' }]
+
+  useEffect(() => {
+    handleClick("all")
+  },[])
 
   // TODO create types for data later on
   const handleClick = (trigger: string) => {
@@ -73,7 +77,7 @@ const MarketplaceActivityCard = () => {
                   color="white"
                   fontWeight="bold"
                 >
-                  {e.name}
+                  <Text color={e.name === "All" && 'blue'}>{e.name}</Text>
                 </Button>
               </Box>
             )

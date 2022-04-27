@@ -1,4 +1,5 @@
-import { Box, HStack, Image, Text, VStack } from '@concave/ui'
+import { TransactionIcon } from '@concave/icons'
+import { Box, Flex, HStack, Image, Text, VStack } from '@concave/ui'
 import { format } from 'date-fns'
 // import fromUnixTime from 'date-fns/fromUnixTime'
 
@@ -16,7 +17,7 @@ const MarketplaceTransactionCard = (props: any) => {
               {filter.event}
             </Text>
           </Box>
-          <Image src={'/assets/marketplace/6mposition.png'} alt={filter.date} />
+          <Image h="70px" w="70px" src={'/assets/marketplace/1mposition.png'} alt={filter.date} />
         </VStack>
 
         <VStack>
@@ -32,13 +33,16 @@ const MarketplaceTransactionCard = (props: any) => {
             </Text>
             <Text as="b">{`${filter.cnv} CNV`}</Text>
           </Box>
+          <Flex>
           <Box>
             <a href={`https://etherscan.io/tx/${filter.link}`} target="_blank" rel="noreferrer">
-              <Text color="blue.400" as="u">
-                Transaction
+              <Text  color="blue.400" as="u">
+                Transaction 
               </Text>
+              <TransactionIcon viewBox="0 0 30 30"/> 
             </a>
           </Box>
+          </Flex>
         </VStack>
       </HStack>
     </Box>
