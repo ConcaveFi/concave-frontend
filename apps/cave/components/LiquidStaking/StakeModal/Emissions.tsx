@@ -1,6 +1,5 @@
 import React from 'react'
 import { Box, HStack, Image, Text } from '@concave/ui'
-import { QuestionOutlineIcon } from '@chakra-ui/icons'
 function Emissions(props: any) {
   return (
     <Box py={2} px={5}>
@@ -57,7 +56,6 @@ function Emissions(props: any) {
             </Text>
           </HStack>
           <Text mx="auto" fontSize="md" fontWeight="bold">
-            {/* 534% */}
             Coming Soon
           </Text>
           <Text color="text.low" fontSize="sm">
@@ -76,7 +74,6 @@ function Emissions(props: any) {
             </Text>
           </HStack>
           <Text mx="auto" fontSize="md" fontWeight="bold">
-            {/* 25% * 4 = 100% */}
             Coming Soon
           </Text>
           <Text color="text.low" fontSize="sm">
@@ -94,7 +91,6 @@ function Emissions(props: any) {
             </Text>
           </HStack>
           <Text fontSize="md" fontWeight="bold">
-            {/* X% * 4 = 4X% */}
             Coming Soon
           </Text>
         </Box>

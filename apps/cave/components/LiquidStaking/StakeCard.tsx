@@ -10,11 +10,10 @@ import {
   useDisclosure,
   VStack,
 } from '@concave/ui'
-import { CNVMintAbi, StakingV1Abi } from 'contracts/LiquidStaking/LiquidStakingAbi'
+import { StakingV1Abi } from 'contracts/LiquidStaking/LiquidStakingAbi'
 import { useEffect, useState } from 'react'
 import { useContractRead } from 'wagmi'
 import Emissions from './StakeModal/Emissions'
-import StakeButtons from './StakeModal/StakeButtons'
 import StakeInfo from './StakeModal/StakeInfo'
 import StakeInput from './StakeModal/StakeInput'
 import { ethers } from 'ethers'
@@ -70,22 +69,7 @@ function StakeCard(props) {
     } else {
       setFetchingData(true)
     }
-    // console.log(capPercentage)
-    // console.log(fetchingData)
   }, [pool, stakingCap])
-
-  // const [capPercentage, setCapPercentage] = useState(
-  //   fetchingData ? '0' : String((+props.stakedCNV / +props.CNVCap) * 100),
-  // )
-
-  // console.log(ethers.utils.parseEther('1'))
-  // console.log(ethers.utils.formatEther(pool.data ? pool.data?.balance : 0))
-  // console.log(ethers.utils.formatEther(stakingCap.data?.toString()))
-  // console.log(pool.data?.balance.toString())
-  // console.log(
-  //   +ethers.utils.formatEther(pool.data ? pool.data?.balance : 0) +
-  //     +ethers.utils.formatEther(stakingCap.data ? stakingCap.data : 0),
-  // )
 
   return (
     <div>
@@ -136,7 +120,6 @@ function StakeCard(props) {
                       +ethers.utils.formatEther(stakingCap.data),
                   ).toFixed(1)} CNV`
                 : 'Fetching...'}
-              {/* {props.CNVCap} CNV */}
             </Text>
           </Box>
         </Stack>
@@ -192,7 +175,6 @@ function StakeCard(props) {
                 capPercentage={capPercentage}
               />
               <StakeInput period={props.period} />
-              {/* <StakeButtons period={props.period} vaprText={vaprText} vapr={props.vapr} /> */}
             </VStack>
           </HStack>
         </Modal>

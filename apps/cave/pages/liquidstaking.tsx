@@ -1,23 +1,11 @@
 import { Container, Flex, Heading, HStack, Text } from '@concave/ui'
 import StakeCard from 'components/LiquidStaking/StakeCard'
 import GraphicGuide from 'components/LiquidStaking/GraphicGuide'
-import { useEffect, useState } from 'react'
-import {
-  CNVMintAbi,
-  StakingV1Abi,
-  testABI,
-  testCNVABI,
-  wagmigotchiABI,
-} from 'contracts/LiquidStaking/LiquidStakingAbi'
-import { Provider, useAccount, useContractRead, useProvider } from 'wagmi'
-import { providers } from 'ethers'
 
 interface StakingGroupProps {
   icon: string
   period: string
   vapr: string
-  // stakedCNV: string
-  // CNVCap: string
   stakingLink: string
 }
 
@@ -26,32 +14,24 @@ const StakingGroup: Array<StakingGroupProps> = [
     icon: '360d',
     period: '360 days',
     vapr: '6,342',
-    // stakedCNV: '89999',
-    // CNVCap: '90000',
     stakingLink: '',
   },
   {
     icon: '180d',
     period: '180 days',
     vapr: '1,002',
-    // stakedCNV: '42690',
-    // CNVCap: '60000',
     stakingLink: '',
   },
   {
     icon: '90d',
     period: '90 days',
     vapr: '266',
-    // stakedCNV: '13333',
-    // CNVCap: '80000',
     stakingLink: '',
   },
   {
     icon: '45d',
     period: '45 days',
     vapr: '17',
-    // stakedCNV: '69420',
-    // CNVCap: '90000',
     stakingLink: '',
   },
 ]
@@ -78,8 +58,6 @@ function LiquidStaking() {
             icon={s.icon}
             period={s.period}
             vapr={s.vapr}
-            // stakedCNV={s.stakedCNV}
-            // CNVCap={s.CNVCap}
             stakingLink={s.stakingLink}
             key={s.period}
           />
