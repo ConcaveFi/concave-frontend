@@ -10,16 +10,66 @@ import {
   useDisclosure,
   VStack,
 } from '@concave/ui'
-import { useState } from 'react'
+import { StakingV1Abi } from 'contracts/LiquidStaking/LiquidStakingAbi'
+import { useEffect, useState } from 'react'
+import { useContractRead } from 'wagmi'
 import Emissions from './StakeModal/Emissions'
-import StakeDetails from './StakeModal/StakeDetails'
 import StakeInfo from './StakeModal/StakeInfo'
 import StakeInput from './StakeModal/StakeInput'
+import { ethers } from 'ethers'
+
+const periodToPoolParameter = {
+  '360 days': 0,
+  '180 days': 1,
+  '90 days': 2,
+  '45 days': 3,
+}
 
 function StakeCard(props) {
   const vaprText = props.icon === '12m' ? 'Non-Dilutive vAPR' : 'vAPR'
-  const [capPercentage, setCapPercentage] = useState('70')
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const [fetchingData, setFetchingData] = useState(true)
+  const [capPercentage, setCapPercentage] = useState('100')
+
+  const [pool, getPool] = useContractRead(
+    {
+      addressOrName: '0x2B7Ea66d564399246Da8e3D6265dB8F89af834C8',
+      contractInterface: StakingV1Abi,
+    },
+    'pools',
+    {
+      args: [periodToPoolParameter[`${props.period}`]],
+    },
+  )
+
+  const [stakingCap, getStakingCap] = useContractRead(
+    {
+      addressOrName: '0x2B7Ea66d564399246Da8e3D6265dB8F89af834C8',
+      contractInterface: StakingV1Abi,
+    },
+    'viewStakingCap',
+    {
+      args: [periodToPoolParameter[`${props.period}`]],
+    },
+  )
+
+  useEffect(() => {
+    if (!pool.loading && !stakingCap.loading && pool.data && stakingCap.data) {
+      setFetchingData(false)
+      setCapPercentage(
+        String(
+          (Number(ethers.utils.formatEther(pool.data?.balance)) /
+            Number(
+              +ethers.utils.formatEther(pool.data?.balance) +
+                +ethers.utils.formatEther(stakingCap.data),
+            )) *
+            100,
+        ),
+      )
+    } else {
+      setFetchingData(true)
+    }
+  }, [pool, stakingCap])
 
   return (
     <div>
@@ -36,44 +86,43 @@ function StakeCard(props) {
             {vaprText}
           </Text>
           <Text fontSize="lg" fontWeight="bold">
-            {props.vapr} %
+            {/* {props.vapr} % */}
+            Calculating
           </Text>
         </Box>
 
-        {props.icon === '12m' ? (
-          <Stack>
-            <Stack color="text.low" fontSize={12} isInline justify="space-between" mt={3}>
-              <Text>Currently Staked</Text>
-              <Text>Staking Cap</Text>
-            </Stack>
-            <Box shadow="down" borderRadius="2xl" p={1} position="relative">
-              <Text
-                shadow="up"
-                px={1}
-                py={1}
-                borderRadius="2xl"
-                textAlign="left"
-                bg="secondary.50"
-                w={`${capPercentage}%`}
-                fontSize="sm"
-              >
-                {props.stakedCNV} CNV
-              </Text>
-              <Text position="absolute" right="2" top="2" fontSize="sm">
-                90,000 CNV
+        <Stack>
+          <Stack color="text.low" fontSize={12} isInline justify="space-between" mt={3}>
+            <Text>Currently Staked</Text>
+            <Text>Staking Cap</Text>
+          </Stack>
+          <Box shadow="down" borderRadius="2xl" p={1} position="relative">
+            <Box
+              shadow="up"
+              px={1}
+              py={1}
+              borderRadius="2xl"
+              textAlign="left"
+              bg="secondary.50"
+              w={`${capPercentage}%`}
+              fontSize="sm"
+            >
+              <Text w="150px">
+                {pool.data
+                  ? `${Number(ethers.utils.formatEther(pool.data?.balance)).toFixed(1)} CNV`
+                  : 'Fetching...'}
               </Text>
             </Box>
-          </Stack>
-        ) : (
-          <Stack>
-            <Text color="text.low" fontSize={12} textAlign="center" mt={3}>
-              Currently Staked
+            <Text position="absolute" right="2" top="2" fontSize="sm">
+              {pool.data && stakingCap.data
+                ? `${Number(
+                    +ethers.utils.formatEther(pool.data?.balance) +
+                      +ethers.utils.formatEther(stakingCap.data),
+                  ).toFixed(1)} CNV`
+                : 'Fetching...'}
             </Text>
-            <Text shadow="down" py={1} borderRadius="2xl">
-              {props.stakedCNV} CNV
-            </Text>
-          </Stack>
-        )}
+          </Box>
+        </Stack>
 
         <Button
           mt={5}
@@ -86,6 +135,7 @@ function StakeCard(props) {
           h="40px"
           size="large"
           mx="auto"
+          disabled={fetchingData}
         >
           Stake CNV
         </Button>
@@ -113,11 +163,18 @@ function StakeCard(props) {
             <VStack spacing={8}>
               <StakeInfo
                 period={props.period}
-                stakedCNV={props.stakedCNV}
+                stakedCNV={pool.data ? ethers.utils.formatEther(pool.data?.balance) : '0'}
+                CNVCap={
+                  pool.data && stakingCap.data
+                    ? `${Number(
+                        +ethers.utils.formatEther(pool.data?.balance) +
+                          +ethers.utils.formatEther(stakingCap?.data),
+                      ).toFixed(1)}`
+                    : '0'
+                }
                 capPercentage={capPercentage}
               />
-              <StakeInput />
-              <StakeDetails vaprText={vaprText} vapr={props.vapr} />
+              <StakeInput period={props.period} />
             </VStack>
           </HStack>
         </Modal>

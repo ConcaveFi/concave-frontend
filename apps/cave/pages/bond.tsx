@@ -234,7 +234,6 @@ export default function Bond() {
           <BondBuyCard />
         </Flex>
       </Flex>
-      {/* <Placeholder text="More Bonds" /> */}
     </Container>
   )
 }
