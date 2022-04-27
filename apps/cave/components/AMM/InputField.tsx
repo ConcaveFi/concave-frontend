@@ -3,48 +3,34 @@ import { Currency, CurrencyAmount } from 'gemswap-sdk'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { Balance } from './Balance'
 import { useFiatValue } from './hooks/useFiatPrice'
-import { TokenInput } from './TokenInput'
-import { parseInputAmount } from './utils/parseInputAmount'
+import { CurrencyAmountField } from './CurrencyAmountField'
+import { parseAmount } from './utils/parseAmount'
 
 type InputFieldProps = {
-  currencyIn: Currency
   currencyAmountIn: CurrencyAmount<Currency>
   updateInputValue: (value: CurrencyAmount<Currency>) => void
-  updateCurrencyIn: (currency: Currency) => void
 }
 
-export const InputField = ({
-  currencyIn,
-  currencyAmountIn,
-  updateInputValue,
-  updateCurrencyIn,
-}: InputFieldProps) => {
+export const InputField = ({ currencyAmountIn, updateInputValue }: InputFieldProps) => {
   const inputFiat = useFiatValue(currencyAmountIn)
-  const balance = useCurrencyBalance(currencyIn)
-  const isEqual = inputFiat.price?.baseCurrency['address'] === currencyAmountIn?.currency['address']
-  let inputFiatValue
-  try {
-    inputFiatValue = currencyAmountIn && !isEqual && inputFiat.price?.quote(currencyAmountIn)
-  } catch (e) {}
+  const balance = useCurrencyBalance(currencyAmountIn?.currency)
 
   return (
-    <TokenInput
-      currency={currencyIn}
-      currencyAmount={currencyAmountIn}
-      onChangeAmount={updateInputValue}
-      onSelectCurrency={updateCurrencyIn}
-    >
+    <CurrencyAmountField currencyAmount={currencyAmountIn} onChangeAmount={updateInputValue}>
       <HStack justify="space-between" align="end" textColor="text.low" w="full">
         <Text isTruncated fontWeight="bold" fontSize="sm" mr={2}>
-          {!!inputFiat.value && `$${inputFiat.value.toFixed(2, { groupSeparator: ',' })}`}
+          {!!inputFiat.value?.greaterThan(0) &&
+            `$${inputFiat.value.toFixed(2, { groupSeparator: ',' })}`}
         </Text>
         {balance.isSuccess && (
           <Balance
             value={balance.data.formatted}
-            onClick={() => updateInputValue(parseInputAmount(balance.data.formatted, currencyIn))}
+            onClick={() =>
+              updateInputValue(parseAmount(balance.data.formatted, currencyAmountIn.currency))
+            }
           />
         )}
       </HStack>
-    </TokenInput>
+    </CurrencyAmountField>
   )
 }

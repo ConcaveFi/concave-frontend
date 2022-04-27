@@ -2,6 +2,7 @@ export { useSwapState } from './hooks/useSwapState'
 export { useSwapTransaction } from './hooks/useSwapTransaction'
 export { useSwapButtonState } from './hooks/useSwapButtonState'
 
+export { CurrencyAmountField, useLinkedCurrencyAmountFields } from './CurrencyAmountField'
 export { InputField } from './InputField'
 export { OutputField } from './OutputField'
 export { RelativePrice } from './RelativePrice'
