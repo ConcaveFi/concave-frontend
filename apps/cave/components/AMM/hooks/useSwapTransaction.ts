@@ -21,7 +21,7 @@ export const useSwapTransaction = (
   })
 
   const callParameters = useMemo(() => {
-    if (!trade || !recipient) return
+    if (!trade || !recipient || !trade.route) return
     return Router.swapCallParameters(trade, {
       allowedSlippage: settings.slippageTolerance.percent,
       ttl: +settings.deadline * 60,
@@ -34,25 +34,25 @@ export const useSwapTransaction = (
     gas estimation can fail when for between other reasons 
     the user don't have a balance or has not approved the input token yet
   */
-  const {
-    data: estimatedGasFee,
-    isLoading: isEstimatingGas,
-    error: errorEstimatingGas,
-  } = useQuery(
-    ['swap estimated gas fee', callParameters],
-    () => {
-      const { methodName, args, value } = callParameters
-      return routerContract.estimateGas[methodName](...args, { value }).then((estimatedGasFee) =>
-        formatUnits(estimatedGasFee, 'wei'),
-      )
-    },
-    {
-      enabled: !!callParameters && !!routerContract.signer,
-      retry: false,
-      onError: (e) => console.log(e),
-      onSuccess: (d) => console.log(d),
-    },
-  )
+  // const {
+  //   data: estimatedGasFee,
+  //   isLoading: isEstimatingGas,
+  //   error: errorEstimatingGas,
+  // } = useQuery(
+  //   ['swap estimated gas fee', callParameters],
+  //   () => {
+  //     const { methodName, args, value } = callParameters
+  //     return routerContract.estimateGas[methodName](...args, { value }).then((estimatedGasFee) =>
+  //       formatUnits(estimatedGasFee, 'wei'),
+  //     )
+  //   },
+  //   {
+  //     enabled: !!callParameters && !!routerContract.signer,
+  //     retry: false,
+  //     onError: (e) => console.log(e),
+  //     onSuccess: (d) => console.log(d),
+  //   },
+  // )
 
   const [state, setState] = useState({
     isWaitingForConfirmation: false,
@@ -82,5 +82,5 @@ export const useSwapTransaction = (
     }
   }
 
-  return { submit, ...state, estimatedGasFee }
+  return { submit, ...state }
 }
