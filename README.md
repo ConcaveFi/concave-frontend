@@ -32,7 +32,6 @@ create more shared libs as you feel necessary in `/libs`
 
 Prerequisites: [Node](https://nodejs.org/en/download/), [Yarn](https://classic.yarnpkg.com/en/docs/install/) and [Git](https://git-scm.com/downloads)
 
-
 ```bash
 git clone https://github.com/ConcaveFi/concave-frontend.git
 
@@ -43,6 +42,6 @@ cp -i apps/cave/.env.example apps/cave/.env
 # Install dependencies
 yarn
 
-# Start and watch 
+# Start and watch
 yarn dev:cave
 ```
