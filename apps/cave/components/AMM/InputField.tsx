@@ -25,12 +25,7 @@ export const InputField = ({
   let inputFiatValue
   try {
     inputFiatValue = currencyAmountIn && !isEqual && inputFiat.price?.quote(currencyAmountIn)
-  } catch (e) {
-    console.log(currencyAmountIn.currency)
-    console.log(currencyAmountIn.currency)
-    console.error(e)
-  }
-
+  } catch (e) {}
   return (
     <TokenInput
       currency={currencyIn}

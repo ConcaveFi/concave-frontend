@@ -1,14 +1,14 @@
 import { Box, Card, Flex } from '@concave/ui'
 import SearchFilterCard from './SearchFilterCard'
 import NftPositionCard from './NftPositionCard'
-import {  SearchIcon } from '@concave/icons'
+import { SearchIcon } from '@concave/icons'
 import { Dispatch, SetStateAction, useState } from 'react'
 interface MarketplaceSearchCardProps {
   active?: boolean
   onClick?: (any: Dispatch<SetStateAction<boolean>>) => void
 }
 
-const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => { 
+const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
   const filters = [
     { title: 'Redeem In', icon: 'RedeemIcon' },
     { title: 'Price', icon: 'PriceIcon' },
@@ -49,7 +49,6 @@ const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
               return <SearchFilterCard key={k} title={e.title} icon={e.icon} />
             })}
           </Flex>
-
         </Box>
       </Flex>
       <Box
