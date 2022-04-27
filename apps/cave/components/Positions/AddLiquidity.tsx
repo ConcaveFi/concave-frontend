@@ -19,7 +19,7 @@ import { useAddLiquidity, UseAddLiquidityData } from 'hooks/useAddLiquidity'
 import { useApprovalWhenNeeded } from 'hooks/useAllowance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { precision } from 'hooks/usePrecision'
-import React from 'react'
+import React, { useState } from 'react'
 import { chain } from 'wagmi'
 
 const LiquidityTip = () => (
@@ -37,9 +37,10 @@ export const AddLiquidityContent = ({ userAddress }: { userAddress: string }) =>
   const transactionStatusDisclosure = useDisclosure()
   const [data, setters, call, clear] = useAddLiquidity(chain.ropsten, userAddress)
   const { amountADesired, amountBDesired, tokenA, tokenB, pair } = data
-  const { updateInputValue, updateOutputValue, updateTokenA, updateTokenB, setTokenA, setTokenB } =
-    setters
+  const { updateInputValue, updateOutputValue, updateTokenA, updateTokenB } = setters
   const valid = tokenA && tokenB && amountADesired && amountBDesired
+  const [overflowA, setOverflowA] = useState(false)
+  const [overflowB, setOverflowB] = useState(false)
   const onSubmit = async () => {
     try {
       transactionStatusDisclosure.onOpen()
@@ -56,6 +57,7 @@ export const AddLiquidityContent = ({ userAddress }: { userAddress: string }) =>
         <InputField
           currencyIn={tokenA}
           currencyAmountIn={amountADesired}
+          overflowBalance={setOverflowA}
           updateInputValue={(value) => {
             if (value?.toExact()) {
               updateInputValue('' + value.toExact())
@@ -79,6 +81,7 @@ export const AddLiquidityContent = ({ userAddress }: { userAddress: string }) =>
         <InputField
           currencyIn={tokenB}
           currencyAmountIn={amountBDesired}
+          overflowBalance={setOverflowB}
           updateInputValue={(value) => {
             if (value?.toExact()) {
               updateOutputValue('' + value.toExact())
@@ -96,7 +99,7 @@ export const AddLiquidityContent = ({ userAddress }: { userAddress: string }) =>
         }}
         variant="primary"
         onClick={supplyLiquidityDisclosure.onOpen}
-        isDisabled={!valid}
+        isDisabled={!valid || overflowA || overflowB}
       >
         <Text fontSize={'2xl'}>{pair ? 'Add Liquidity' : 'Create Liquidity'}</Text>
       </Button>
