@@ -15,7 +15,7 @@ const UserPositionCard = (props) => {
       maxHeight={'300px'}
       borderRadius="16px"
       w="720px"
-      h="300px"
+      h="285px"
       mt={1}
       cursor="pointer"
       css={{

@@ -1,4 +1,4 @@
-import { Box, Flex, Text } from '@concave/ui'
+import { Box, Button, Flex, Text } from '@concave/ui'
 import { useState } from 'react'
 
 // interface Props {
@@ -60,9 +60,20 @@ const UserDividendCard = (props) => {
             </Text>
         </Flex>
         <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
-            <Text color="text.low" fontSize="sm">
-                Redeem button here
-            </Text>
+        <Button
+          mt={5}
+        //   onClick={'s'}
+          fontWeight="bold"
+          fontSize="md"
+          variant="primary.outline"
+        //   bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
+          w="160px"
+          h="40px"
+          size="large"
+          mx="auto"
+        >
+          Redeem
+        </Button>
         </Flex>
         </Flex>
     </Box>
