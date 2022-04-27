@@ -18,6 +18,7 @@ import { ROUTER_ADDRESS } from 'gemswap-sdk'
 import { useAddLiquidity, UseAddLiquidityData } from 'hooks/useAddLiquidity'
 import { useApprovalWhenNeeded } from 'hooks/useAllowance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import { precision } from 'hooks/usePrecision'
 import React from 'react'
 import { chain } from 'wagmi'
 
@@ -93,9 +94,9 @@ export const AddLiquidityContent = ({ userAddress }: { userAddress: string }) =>
         _focus={{
           shadow: 'Up Small',
         }}
+        variant="primary"
         onClick={supplyLiquidityDisclosure.onOpen}
         isDisabled={!valid}
-        bg={'rgba(113, 113, 113, 0.01)'}
       >
         <Text fontSize={'2xl'}>{pair ? 'Add Liquidity' : 'Create Liquidity'}</Text>
       </Button>
@@ -168,7 +169,6 @@ const SupplyLiquidityContent = ({
   )
   const differenceBetweenAandB = +amountADesired?.toExact() / +amountBDesired?.toExact()
   const differenceBetweenBandA = +amountBDesired?.toExact() / +amountADesired?.toExact()
-
   const userPool =
     pair && amountADesired
       ? (100 / +pair.reserveOf(tokenA).add(amountADesired).toFixed()) * +amountADesired.toFixed()
@@ -185,12 +185,14 @@ const SupplyLiquidityContent = ({
       <Box borderRadius={'2xl'} p={6} shadow={'down'}>
         <PositionInfoItem
           label="Rates"
-          value={`1  ${tokenA.symbol} = ${differenceBetweenBandA.toPrecision(5)}
+          value={`1  ${tokenA.symbol} = ${precision(differenceBetweenBandA, 5).formatted}
           ${tokenB.symbol}`}
         />
         <PositionInfoItem
           label=""
-          value={`1  ${tokenB.symbol} = ${differenceBetweenAandB.toPrecision(5)}  ${tokenA.symbol}`}
+          value={`1  ${tokenB.symbol} = ${precision(differenceBetweenAandB, 5).formatted}  ${
+            tokenA.symbol
+          }`}
         />
         <PositionInfoItem
           mt={8}

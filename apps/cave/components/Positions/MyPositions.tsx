@@ -1,4 +1,4 @@
-import { ExpandArrowIcon, SpinIcon } from '@concave/icons'
+import { SpinIcon } from '@concave/icons'
 import {
   Accordion,
   AccordionButton,
@@ -11,7 +11,6 @@ import {
   Flex,
   Heading,
   HStack,
-  IconButton,
   keyframes,
   Modal,
   NumericInput,
@@ -117,7 +116,7 @@ const LPPositionItem = ({ userAddress, liquidityPoolToken }: LPPosition) => {
             <CurrencyIcon h={'32px'} currency={pair.token0} />
             <CurrencyIcon h={'32px'} currency={pair.token1} />
             <Text ml="24px" fontWeight="semibold" fontSize="lg">
-              {token.name} {pair.token0.symbol}/{pair.token1.symbol}
+              {pair.token0.symbol}/{pair.token1.symbol}
             </Text>
           </HStack>
           {/* <Button
@@ -215,19 +214,6 @@ const RemoveLiquidityModal = ({
       }}
     >
       <AmountToRemove onChange={removeLiquidityState.setPercentToRemove} />
-      <Flex justifyContent={'center'}>
-        <IconButton
-          variant="secondary"
-          shadow={'Up Small'}
-          borderRadius={'full'}
-          bgGradient="linear(to-l, secondary.75, secondary.150)"
-          w={'35px'}
-          h={'30px'}
-          my={-4}
-          aria-label="Search database"
-          icon={<ExpandArrowIcon h={'100%'} />}
-        />
-      </Flex>
       <YouWillReceive {...removeLiquidityState} />
       <RemoveLiquidityActions removeLiquidityState={removeLiquidityState} />
       <YourPosition {...removeLiquidityState} />
