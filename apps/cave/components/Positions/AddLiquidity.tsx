@@ -48,7 +48,6 @@ export const AddLiquidityContent = ({ userAddress }: { userAddress: string }) =>
       transactionStatusDisclosure.onClose()
     }
   }
-
   return (
     <>
       <LiquidityTip />
@@ -56,8 +55,11 @@ export const AddLiquidityContent = ({ userAddress }: { userAddress: string }) =>
         <InputField
           currencyIn={tokenA}
           currencyAmountIn={amountADesired}
-          // updateInputValue={updateInputValue}
-          updateInputValue={updateInputValue => 'void'}
+          updateInputValue={(value) => {
+            if (value?.toExact()) {
+              updateInputValue('' + value.toExact())
+            }
+          }}
           updateCurrencyIn={updateTokenA}
         />
         <Flex align="center" justify="center">
@@ -76,8 +78,11 @@ export const AddLiquidityContent = ({ userAddress }: { userAddress: string }) =>
         <InputField
           currencyIn={tokenB}
           currencyAmountIn={amountBDesired}
-          // updateInputValue={updateOutputValue}
-          updateInputValue={updateOutputValue=> 'void'}
+          updateInputValue={(value) => {
+            if (value?.toExact()) {
+              updateOutputValue('' + value.toExact())
+            }
+          }}
           updateCurrencyIn={updateTokenB}
         />
       </Flex>
@@ -150,7 +155,7 @@ const SupplyLiquidityContent = ({
   onConfirm: () => void
 }) => {
   const networkId = useCurrentSupportedNetworkId()
-  const { tokenA, tokenB, amountADesired, amountBDesired } = data
+  const { pair, tokenA, tokenB, amountADesired, amountBDesired } = data
   const [needsApproveA, requestApproveA, approveLabel] = useApprovalWhenNeeded(
     tokenA,
     ROUTER_ADDRESS[networkId],
@@ -164,7 +169,10 @@ const SupplyLiquidityContent = ({
   const differenceBetweenAandB = +amountADesired?.toExact() / +amountBDesired?.toExact()
   const differenceBetweenBandA = +amountBDesired?.toExact() / +amountADesired?.toExact()
 
-  console.log(needsApproveA, needsApproveB)
+  const userPool =
+    pair && amountADesired
+      ? (100 / +pair.reserveOf(tokenA).add(amountADesired).toFixed()) * +amountADesired.toFixed()
+      : 100
   return (
     <>
       <Text fontSize="3xl">
@@ -195,7 +203,7 @@ const SupplyLiquidityContent = ({
           label={`${tokenB.symbol} Deposited`}
           value={`${amountBDesired.toSignificant()} ${tokenB.symbol}`}
         />
-        <PositionInfoItem color={'text.low'} label="Share Pool" value={'2.786%'} />
+        <PositionInfoItem color={'text.low'} label="Share Pool" value={`${userPool.toFixed(3)}%`} />
       </Box>
       {needsApproveA && (
         <Button mt={2} p={6} fontSize={'2xl'} variant={'primary'} onClick={() => requestApproveA()}>
