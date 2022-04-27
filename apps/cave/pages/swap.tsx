@@ -21,33 +21,27 @@ import { STABLES } from 'constants/routing'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useState } from 'react'
 import { useAccount } from 'wagmi'
+import { parseAmount } from 'components/AMM/utils/parseAmount'
 
 export function SwapPage() {
   const [settings, setSettings] = useState<SwapSettings>(defaultSettings)
 
-  const {
-    trade,
-    tradeError,
-    currencyIn,
-    currencyOut,
-    onChangeAmount,
-    updateCurrencyIn,
-    updateCurrencyOut,
-    switchCurrencies,
-  } = useSwapState(settings)
+  const { trade, onChangeInput, onChangeOutput, switchCurrencies } = useSwapState(settings)
 
   const [{ data: account }] = useAccount()
-  const swapTx = useSwapTransaction(trade, settings, account?.address)
+  const swapTx = useSwapTransaction(trade.data, settings, account?.address)
 
   const confirmationModal = useDisclosure()
 
   const swapButton = useSwapButtonState({
-    currencyIn,
     trade,
-    tradeError,
     onSwapClick: settings.expertMode ? swapTx.submit : confirmationModal.onOpen,
   })
 
+  const [currencyIn, currencyOut] = [
+    trade.data.inputAmount.currency,
+    trade.data.outputAmount.currency,
+  ]
   /*
     if one of the currencies are a stable, we want the chart to always display the other relative to the stable
     (stable always the `to`)
@@ -79,21 +73,14 @@ export function SwapPage() {
           w="100%"
           maxW="420px"
         >
-          <InputField
-            currencyIn={currencyIn}
-            currencyAmountIn={trade?.inputAmount}
-            updateInputValue={onChangeAmount}
-            updateCurrencyIn={updateCurrencyIn}
-          />
+          <InputField currencyAmountIn={trade.data.inputAmount} updateInputValue={onChangeInput} />
 
           <SwitchCurrencies onClick={switchCurrencies} />
 
           <OutputField
-            currencyAmountIn={trade?.inputAmount}
-            currencyOut={currencyOut}
-            currencyAmountOut={trade?.outputAmount}
-            updateOutputValue={onChangeAmount}
-            updateCurrencyOut={updateCurrencyOut}
+            currencyAmountOut={trade.data.outputAmount}
+            currencyAmountIn={trade.data.inputAmount}
+            updateOutputValue={onChangeOutput}
           />
 
           <HStack align="center" justify="end" py={5}>
@@ -107,14 +94,14 @@ export function SwapPage() {
       </Flex>
 
       <ConfirmSwapModal
-        trade={trade}
+        trade={trade.data}
         settings={settings}
         isOpen={confirmationModal.isOpen}
         onClose={confirmationModal.onClose}
         onConfirm={() => {
           confirmationModal.onClose()
           swapTx.submit()
-          onChangeAmount(null)
+          onChangeInput(parseAmount('0', trade.data.inputAmount.currency))
         }}
       />
 

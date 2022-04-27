@@ -1,69 +1,65 @@
-import { useState, useCallback, useMemo, useEffect } from 'react'
-import { Currency, TradeType, CNV, DAI, CurrencyAmount } from 'gemswap-sdk'
-import { useTrade } from './useTrade'
+import { useState, useMemo, useEffect } from 'react'
+import { Currency, TradeType, CNV, DAI, CurrencyAmount, Trade } from 'gemswap-sdk'
+import { useTrade, UseTradeResult } from './useTrade'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { SwapSettings } from '../Settings'
+import { parseAmount } from '../utils/parseAmount'
+import { useLinkedCurrencyAmountFields } from '../CurrencyAmountField'
+import { UseQueryResult } from 'react-query'
+
+const makeCurrencyFields = (networkId) => ({
+  first: DAI[networkId],
+  second: CNV[networkId],
+})
 
 export const useSwapState = ({ multihops }: SwapSettings) => {
   const networkId = useCurrentSupportedNetworkId()
+  const initialCurrencyFields = useMemo(() => makeCurrencyFields(networkId), [networkId])
 
-  const [currencyIn, setCurrencyIn] = useState<Currency>(DAI[networkId])
-  const [currencyOut, setCurrencyOut] = useState<Currency>(CNV[networkId])
+  // the input user typed in, the other input value is then derived from it
+  const [exactAmount, setExactAmount] = useState<CurrencyAmount<Currency>>(
+    parseAmount('0', initialCurrencyFields.first),
+  )
+
+  const { onChangeFieldAmount, setFieldCurrency, switchCurrencies, fieldCurrency } =
+    useLinkedCurrencyAmountFields(
+      initialCurrencyFields,
+      (field) => (newAmount) => setExactAmount(newAmount),
+    )
 
   useEffect(() => {
-    setCurrencyIn(DAI[networkId])
-    setCurrencyOut(CNV[networkId])
-  }, [networkId])
+    setFieldCurrency(initialCurrencyFields)
+    setExactAmount(parseAmount('0', initialCurrencyFields.first))
+  }, [initialCurrencyFields, setFieldCurrency])
 
-  /*
-    we only need the value of the input the user typed in, 
-    the other input value is then derived from it, simulating the 'trade'
-  */
-  const [exactAmount, setExactAmount] = useState<CurrencyAmount<Currency>>()
+  const isExactIn = exactAmount?.currency.equals(fieldCurrency.first)
+  const otherCurrency = fieldCurrency[isExactIn ? 'second' : 'first']
 
-  const isExactIn = exactAmount?.currency.equals(currencyIn)
-  const otherCurrency = isExactIn ? currencyOut : currencyIn
-
-  const { data: trade, error: tradeError } = useTrade(exactAmount, otherCurrency.wrapped, {
+  const trade = useTrade(exactAmount, otherCurrency.wrapped, {
     tradeType: isExactIn ? TradeType.EXACT_INPUT : TradeType.EXACT_OUTPUT,
     maxHops: multihops ? 3 : 1,
   })
 
-  /*
-    if shouldKeepValue, we only change the currency, if false we 'send' input value to output
-  */
-  const switchCurrencies = useCallback(
-    (shouldKeepValues = false) => {
-      setCurrencyIn(currencyOut)
-      setCurrencyOut(currencyIn)
-      if (shouldKeepValues)
-        setExactAmount(
-          CurrencyAmount.fromRawAmount(
-            isExactIn ? currencyOut : currencyIn,
-            isExactIn ? trade.inputAmount.quotient : trade.outputAmount.quotient,
-          ),
-        )
-    },
-    [currencyIn, currencyOut, isExactIn, trade?.inputAmount.quotient, trade?.outputAmount.quotient],
-  )
-
-  const setOrSwitchCurrency = useCallback(
-    (otherCurrency: Currency, setCurrency) => (currency: Currency) =>
-      otherCurrency?.equals(currency) ? switchCurrencies(true) : setCurrency(currency),
-    [switchCurrencies],
+  // return this partial just to show some data while loading (like currencies icons) if needed
+  const partialTradeData = useMemo(
+    () =>
+      (isExactIn
+        ? { inputAmount: exactAmount, outputAmount: parseAmount('0', otherCurrency) }
+        : { inputAmount: parseAmount('0', otherCurrency), outputAmount: exactAmount }) as Trade<
+        Currency,
+        Currency,
+        TradeType
+      >,
+    [exactAmount, isExactIn, otherCurrency],
   )
 
   return useMemo(
     () => ({
-      trade,
-      tradeError,
-      currencyIn,
-      currencyOut,
-      onChangeAmount: setExactAmount,
-      updateCurrencyIn: setOrSwitchCurrency(currencyOut, setCurrencyIn),
-      updateCurrencyOut: setOrSwitchCurrency(currencyIn, setCurrencyOut),
-      switchCurrencies: () => switchCurrencies(false),
+      trade: trade.data ? trade : ({ ...trade, data: partialTradeData } as UseTradeResult),
+      onChangeInput: onChangeFieldAmount('first'),
+      onChangeOutput: onChangeFieldAmount('second'),
+      switchCurrencies,
     }),
-    [trade, tradeError, currencyIn, currencyOut, setOrSwitchCurrency, switchCurrencies],
+    [trade, partialTradeData, switchCurrencies, onChangeFieldAmount],
   )
 }

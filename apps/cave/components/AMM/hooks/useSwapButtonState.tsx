@@ -6,19 +6,22 @@ import { useApprove } from 'hooks/useApprove'
 import { usePermit } from 'hooks/usePermit'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { NoValidPairsError } from './usePair'
+import { UseQueryResult } from 'react-query'
+import { UseTradeResult } from './useTrade'
 
 export const useSwapButtonState = ({
-  currencyIn,
   trade,
-  tradeError,
   onSwapClick,
 }: {
-  currencyIn: Currency
-  trade: Trade<Currency, Currency, TradeType>
-  tradeError: string
+  trade: UseTradeResult
   onSwapClick: () => void
 }): ButtonProps => {
   const [{ data: account }] = useAccount()
+
+  const inputAmount = trade.data.inputAmount
+  const outputAmount = trade.data.outputAmount
+
+  const currencyIn = inputAmount.currency
   const currencyInBalance = useCurrencyBalance(currencyIn)
 
   const [token, spender] = [currencyIn.wrapped, ROUTER_ADDRESS[currencyIn?.chainId]]
@@ -27,21 +30,23 @@ export const useSwapButtonState = ({
 
   const { connectModal } = useModals()
 
-  const inputAmount = trade?.inputAmount
-  const outputAmount = trade?.outputAmount
-
   /*
     Not Connected
   */
   if (!account?.address) return { children: 'Connect Wallet', onClick: connectModal.onOpen }
 
   /*
+    Trade loaded
+  */
+  if (trade.isLoading) return { isLoading: true }
+
+  /*
     Trade Error
   */
-  if (tradeError === NoValidPairsError.message)
+  if (trade.error === NoValidPairsError)
     return {
       isDisabled: true,
-      children: `Insufficient liquidity`, // Try enabling multi-hop trades
+      children: `No liquidity`, // Try enabling multi-hop trades
     }
 
   /*
@@ -61,7 +66,7 @@ export const useSwapButtonState = ({
   */
   if (inputAmount?.greaterThan(currencyInBalance.data?.value.toString()))
     return {
-      children: `Insufficient ${trade.inputAmount.currency.symbol} balance`,
+      children: `Insufficient ${inputAmount.currency.symbol} balance`,
       isDisabled: true,
     }
 
