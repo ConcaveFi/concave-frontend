@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   Card,
-  Collapse,
   Flex,
   Popover,
   PopoverContent,
@@ -26,6 +25,8 @@ const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
   const [sortType, setSortType] = useState(SortType.NONE)
   const [activeRedeemButton, setActiveRedeemButton] = useState(0)
   const [activePriceButton, setActivePriceButton] = useState(0)
+  const [activeDiscountButton, setActiveDiscountButton] = useState(0)
+  const [activeStakeSortButton, setActiveStakeSortButton] = useState(0)
   const sortFunctionType = sortByType(sortType)
 
   const filters = [
@@ -33,19 +34,30 @@ const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
       title: 'Redeem In',
       icon: 'RedeemIcon',
       card: <RedeemCard initialActive={activeRedeemButton} onChange={switchRedeemButtons} />,
+      hasFilter: activeRedeemButton !== 0,
       offsetX: 0,
     },
     {
       title: 'Price',
       icon: 'PriceIcon',
       card: <PriceCard activeButton={activePriceButton} onChange={switchPriceButtons} />,
+      hasFilter: activePriceButton !== 0,
       offsetX: -120,
     },
-    { title: 'Discount', icon: 'DiscountIcon', card: <DiscountCard />, offsetX: 0 },
+    {
+      title: 'Discount',
+      icon: 'DiscountIcon',
+      hasFilter: activeDiscountButton !== 0,
+      card: <DiscountCard activeButton={activeDiscountButton} onChange={switchDiscountButtons} />,
+      offsetX: 0,
+    },
     {
       title: 'Stake Period',
       icon: 'StakeIcon',
-      card: <StakePeriodCard />,
+      hasFilter: activeStakeSortButton !== 0,
+      card: (
+        <StakePeriodCard activeSortButton={activeStakeSortButton} onChange={switchStakeButtons} />
+      ),
       offsetX: -100,
     },
   ]
@@ -77,7 +89,12 @@ const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
         // @ts-ignore  */}
         <PopoverTrigger>
           <Button>
-            <SearchFilterCard key={k} title={e.title} icon={e.icon}></SearchFilterCard>
+            <SearchFilterCard
+              hasFilter={e.hasFilter}
+              key={k}
+              title={e.title}
+              icon={e.icon}
+            ></SearchFilterCard>
           </Button>
         </PopoverTrigger>
         <Portal>
@@ -91,10 +108,28 @@ const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
   function switchRedeemButtons(clickedButton: number, sortType: SortType) {
     setActiveRedeemButton(clickedButton)
     setSortType(sortType)
+    wipeAnotherButtons('redeem')
   }
   function switchPriceButtons(clickedButton: number, sortType: SortType) {
     setActivePriceButton(clickedButton)
     setSortType(sortType)
+    wipeAnotherButtons('price')
+  }
+  function switchDiscountButtons(clickedButton: number, sortType: SortType) {
+    setActiveDiscountButton(clickedButton)
+    setSortType(sortType)
+    wipeAnotherButtons('discount')
+  }
+  function switchStakeButtons(clickedButton: number, sortType: SortType) {
+    setActiveStakeSortButton(clickedButton)
+    setSortType(sortType)
+    wipeAnotherButtons('stake')
+  }
+  function wipeAnotherButtons(except: 'redeem' | 'price' | 'discount' | 'stake') {
+    if (except !== 'redeem') setActiveRedeemButton(0)
+    if (except !== 'price') setActivePriceButton(0)
+    if (except !== 'discount') setActiveDiscountButton(0)
+    if (except !== 'stake') setActiveStakeSortButton(0)
   }
   return (
     <Card p={3} gap={2} variant="primary" h="945px" shadow="down" w="640px">
@@ -163,6 +198,12 @@ export enum SortType {
   NONE,
   REDEEMIN_LOWEST_FIRST,
   REDEEMIN_HIGHEST_FIRST,
+  PRICE_LOWEST_FIRST,
+  PRICE_HIGHEST_FIRST,
+  DISCOUNT_HIGHEST_FIRST,
+  DISCOUNT_LOWEST_FIRST,
+  STAKE_HIGHEST_FIRST,
+  STAKE_LOWEST_FIRST,
 }
 const sortByType = (sortType: SortType) => {
   switch (sortType) {
@@ -170,6 +211,18 @@ const sortByType = (sortType: SortType) => {
       return sortByRedeemIn('highest')
     case SortType.REDEEMIN_LOWEST_FIRST:
       return sortByRedeemIn('lowest')
+    case SortType.PRICE_LOWEST_FIRST:
+      return sortByPrice('lowest')
+    case SortType.PRICE_HIGHEST_FIRST:
+      return sortByPrice('highest')
+    case SortType.DISCOUNT_HIGHEST_FIRST:
+      return sortByDiscount('highest')
+    case SortType.DISCOUNT_LOWEST_FIRST:
+      return sortByDiscount('lowest')
+    case SortType.STAKE_HIGHEST_FIRST:
+      return sortByStakePeriod('highest')
+    case SortType.STAKE_LOWEST_FIRST:
+      return sortByStakePeriod('lowest')
     default:
       return (current, before) => {
         return -1
@@ -177,8 +230,9 @@ const sortByType = (sortType: SortType) => {
   }
 }
 
-const sortByDiscount = (current, before) => {
-  if (current.discount > before.discount) return 1
+const sortByDiscount = (type: 'lowest' | 'highest') => (current, before) => {
+  if (current.discount < before.discount && type === 'highest') return 1
+  else if (current.discount > before.discount && type === 'lowest') return 1
   else return -1
 }
 const sortByPrice = (type: 'lowest' | 'highest') => (current, before) => {
@@ -191,8 +245,9 @@ const sortByRedeemIn = (type: 'lowest' | 'highest') => (current, before) => {
   else if (current.redeemIn > before.redeemIn && type === 'lowest') return 1
   else return -1
 }
-const sortByStakePeriod = (current, before) => {
-  if (current.stakePeriod > before.stakePeriod) return 1
+const sortByStakePeriod = (type: 'lowest' | 'highest') => (current, before) => {
+  if (current.stakePeriod < before.stakePeriod && type === 'highest') return 1
+  else if (current.stakePeriod > before.stakePeriod && type === 'lowest') return 1
   else return -1
 }
 

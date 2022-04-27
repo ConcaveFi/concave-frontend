@@ -1,20 +1,16 @@
-import { Box, Flex, Text } from '@concave/ui'
+import { Box, Flex, propNames, Text } from '@concave/ui'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { SortType } from './MarketplaceSearchCard'
 import ToggleButton from './ToggleButton'
 
-const highLightedBorder = {
-  border: '2px solid #7DE0FF',
+interface DiscountCard {
+  activeButton: number
+  onChange: (clickedButton: number, sortType: SortType) => void
 }
-const UpSmall = `0px 4px 4px rgba(0, 0, 0, 0.25), inset -1px 1px 2px rgba(128, 186, 255, 0.05)`
 
-function DiscountCard() {
+function DiscountCard(props: DiscountCard) {
   const buttons = [{ title: 'None' }, { title: 'Lowest First' }, { title: 'Highest First' }]
-
-  const [curButton, setCurButton] = useState(0)
-
-  const onClick = (clickedButton: number) => {
-    setCurButton(clickedButton)
-  }
+  const curButton = props.activeButton
   const [toggleButons, setToggleButtons] = useState(null)
 
   useEffect(() => {
@@ -23,7 +19,7 @@ function DiscountCard() {
         return (
           <ToggleButton
             key={index}
-            onClick={() => onClick(index)}
+            onClick={() => props.onChange(index, getSortTypeByIndex(index))}
             title={button.title}
             active={index === curButton}
           />
@@ -42,7 +38,7 @@ function DiscountCard() {
       alignItems={'center'}
       direction="column"
       gap={1}
-      shadow="up"
+      shadow={'up'}
     >
       <Text fontSize={14} fontWeight={700} textColor={'#5F7A99'}>
         Sort:
@@ -50,6 +46,17 @@ function DiscountCard() {
       {toggleButons}
     </Flex>
   )
+}
+
+function getSortTypeByIndex(index: number) {
+  switch (index) {
+    case 0:
+      return SortType.NONE
+    case 1:
+      return SortType.DISCOUNT_LOWEST_FIRST
+    case 2:
+      return SortType.DISCOUNT_HIGHEST_FIRST
+  }
 }
 
 export default DiscountCard

@@ -23,13 +23,8 @@ interface ToggleButtonProps {
 export default function ToggleButton(props: ToggleButtonProps) {
   const { title, height, width, flexGrow } = props
   const active = !!props.active
-  const boxProps = { width: width ? width : 110, py: 1, shadow: UpSmall }
-
   const textColor = active ? 'white' : '#5F7A99'
   const backgroundBorder = 'linear-gradient(43deg, #72639B 0%, #44B9DE 100%)'
-  const defaultBackground = 'none'
-
-  const variant = active ? 'primary' : 'secondary'
   return (
     <Flex
       _hover={{
@@ -52,35 +47,17 @@ export default function ToggleButton(props: ToggleButtonProps) {
         background={'linear-gradient(200.73deg, #274C63 20%, #182F3E 100%)'}
         minWidth={50}
         m={'2px'}
-        py={0.5}
-        px={3}
+        py={1}
         rounded="2xl"
+        wrap={'nowrap'}
         shadow={UpSmall}
+        width={width ? width : {}}
+        px={4}
       >
-        <Text textAlign={'center'}>{title}</Text>
+        <Text width={'full'} textAlign={'center'}>
+          {title}
+        </Text>
       </Flex>
     </Flex>
   )
-}
-
-{
-  /* <Card
-      _hover={{
-        transform: 'scale(1.1)',
-      }}
-      transition={'all'}
-      transitionDuration={'.3s'}
-      onClick={() => (props.onClick ? props.onClick(props) : '')}
-      fontSize={14}
-      fontWeight={700}
-      textColor={textColor}
-      cursor={'pointer'}
-      width={width ? width : {}}
-      py={1}
-      px={4}
-      shadow={UpSmall}
-      css={active ? highLightedBorder : testBorder}
-    >
-      <Text>{title}</Text>
-    </Card> */
 }

@@ -1,6 +1,4 @@
 import { Box, Flex, Input, Text } from '@concave/ui'
-import { timeEnd } from 'console'
-import { version } from 'os'
 import { useEffect, useState } from 'react'
 import ChooseButton from './ChooseButton'
 import { SortType } from './MarketplaceSearchCard'
@@ -18,18 +16,7 @@ export default function PriceCard(props: PriceCard) {
   const [toggleButtonsComp, setToggleButonsComp] = useState(null)
 
   useEffect(() => {
-    setToggleButonsComp(
-      toggleButons.map((button, index) => {
-        return (
-          <ToggleButton
-            key={index}
-            title={button.title}
-            onClick={() => props.onChange(index, index)}
-            active={index === currentButton}
-          />
-        )
-      }),
-    )
+    setToggleButonsComp(renderButtons())
   }, [currentButton])
 
   return (
@@ -64,7 +51,7 @@ export default function PriceCard(props: PriceCard) {
           fontWeight={700}
           textColor={'#5F7A99'}
         >
-          CNV Price Range :
+          CNV Price Range:
         </Text>
         <Flex gap={1} alignItems="center">
           <PriceInputValue title="From" />
@@ -72,20 +59,33 @@ export default function PriceCard(props: PriceCard) {
           <PriceInputValue title="To" />
         </Flex>
       </Flex>
-      <Flex height={'69px'} justifyContent="center" alignItems={'end'} gap="2">
+      <Flex height={'65px'} justifyContent="center" alignItems={'end'} gap="2">
         <ChooseButton title="Reset" />
         <ChooseButton title="Apply" backgroundType="blue" />
       </Flex>
     </Box>
   )
+  function renderButtons() {
+    return toggleButons.map((button, index) => {
+      return (
+        <ToggleButton
+          key={index}
+          title={button.title}
+          onClick={() => props.onChange(index, getSortTypeByIndex(index))}
+          active={index === currentButton}
+        />
+      )
+    })
+  }
+
   function getSortTypeByIndex(index: number) {
     switch (index) {
       case 0:
         return SortType.NONE
       case 1:
-        return SortType.NONE
+        return SortType.PRICE_LOWEST_FIRST
       case 2:
-        return SortType.NONE
+        return SortType.PRICE_HIGHEST_FIRST
     }
   }
 
