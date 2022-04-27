@@ -1,4 +1,4 @@
-import { Box, Flex, HStack, Image, Text, VStack } from '@concave/ui'
+import { Box, Button, Flex, HStack, Image, Text, VStack } from '@concave/ui'
 import { Dispatch, SetStateAction, useState } from 'react'
 
 // interface NftPositionCardProps {
@@ -105,7 +105,112 @@ const UserPositionCard = (props) => {
         </Flex>
       </Flex>
     </Box>
+    <Flex direction="row" gap={4} alignItems="center" justify="center" m={2}>
+        <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
+            <Text color="text.low" fontSize="sm">
+                Current Value:
+            </Text>
+            <Text fontSize="md" fontWeight="bold">
+                612.42 CNV
+            </Text>
+        </Flex>
+        <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
+            <Text color="text.low" fontSize="sm">
+                Gained:
+            </Text>
+            <Text fontSize="md" fontWeight="bold">
+                12.42 CNV
+            </Text>
+        </Flex>
+        <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
+            <Text color="text.low" fontSize="sm">
+                Initial:
+            </Text>
+            <Text fontSize="md" fontWeight="bold">
+                600 CNV
+            </Text>
+        </Flex>
+        <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
+        <Button
+          mt={5}
+        //   onClick={'s'}
+          fontWeight="bold"
+          fontSize="md"
+          variant="primary"
+        //   bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
+          w="160px"
+          h="40px"
+          size="large"
+          mx="auto"
+        >
+          Redeem
+        </Button>
+        </Flex>
+        </Flex>
+    <Box
+      pos="relative"
+      overflowY={'auto'}
+      maxHeight={'500px'}
+      borderRadius="16px"
+      mt={1}
+      cursor="pointer"
+      css={{
+            background: 'rgba(113, 113, 113, 0.01)',
+        boxShadow:
+        'inset 0px -5px 10px rgba(134, 175, 255, 0.05), inset -9px 12px 24px rgba(13, 17, 23, 0.4)',
+      }}
+    >
+    <Flex justify="left">
+        <Text color="text.low" fontSize="lg" as='b'>
+            Your Marketplace Listing
+        </Text>
+    </Flex>
+        <Flex direction="row" gap={4} alignItems="center" justify="center" m={2}>
+        <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
+            <Text color="text.low" fontSize="sm">
+                List Price:
+            </Text>
+            <Text fontSize="md" fontWeight="bold">
+                600 CNV
+            </Text>
+        </Flex>
+        <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
+            <Text color="text.low" fontSize="sm">
+                Discount:
+            </Text>
+            <Text fontSize="md" fontWeight="bold">
+                2.4%
+            </Text>
+        </Flex>
+        <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
+            <Text color="text.low" fontSize="sm">
+                Expiration Date:
+            </Text>
+            <Text fontSize="md" fontWeight="bold">
+                14.11.22
+            </Text>
+        </Flex>
+        <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
+        <Button
+          mt={5}
+        //   onClick={'s'}
+          fontWeight="bold"
+          fontSize="md"
+          variant="primary.outline"
+        //   bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
+          w="160px"
+          h="40px"
+          size="large"
+          mx="auto"
+        >
+          Unlist
+        </Button>
+        </Flex>
+        </Flex>
     </Box>
+    </Box>
+
+
     </Box>
   )
 }

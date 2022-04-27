@@ -1,11 +1,10 @@
-import { Box, Flex, HStack, Image, Text, VStack } from '@concave/ui'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Box, Flex, Text } from '@concave/ui'
+import { useState } from 'react'
 
-// interface NftPositionCardProps {
+// interface Props {
 //   active?: boolean
 //   onClick?: (any: Dispatch<SetStateAction<boolean>>) => void
 // }
-
 const UserDividendCard = (props) => {
   const [active, setActive] = useState(false)
   return (
@@ -27,47 +26,45 @@ const UserDividendCard = (props) => {
             Your Dividends Share
         </Text>
     </Flex>
-    <Flex direction="row" gap={4} alignItems="center" justify="center" m={2}>
-
-
+        <Flex direction="row" gap={4} alignItems="center" justify="center" m={2}>
         <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
-          <Text color="text.low" fontSize="sm">
-            Total Locked:
-          </Text>
-          <Text fontSize="md" fontWeight="bold">
-            6132.42 CNV
-          </Text>
+            <Text color="text.low" fontSize="sm">
+                Total Locked:
+            </Text>
+            <Text fontSize="md" fontWeight="bold">
+                6132.42 CNV
+            </Text>
         </Flex>
         <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
-          <Text color="text.low" fontSize="sm">
-            Your Dividends Share:
-          </Text>
-          <Text fontSize="md" fontWeight="bold">
-            0.00323%
-          </Text>
+            <Text color="text.low" fontSize="sm">
+                Your Dividends Share:
+            </Text>
+            <Text fontSize="md" fontWeight="bold">
+                0.00323%
+            </Text>
         </Flex>
         <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
-          <Text color="text.low" fontSize="sm">
-            Next Dividend Date:
-          </Text>
-          <Text fontSize="md" fontWeight="bold">
-            04.06.2022
-          </Text>
+            <Text color="text.low" fontSize="sm">
+                Next Dividend Date:
+            </Text>
+            <Text fontSize="md" fontWeight="bold">
+                04.06.2022
+            </Text>
         </Flex>
         <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
-          <Text color="text.low" fontSize="sm">
-            Available Dividends:
-          </Text>
-          <Text fontSize="md" fontWeight="bold">
-            0.0
-          </Text>
+            <Text color="text.low" fontSize="sm">
+                Available Dividends:
+            </Text>
+            <Text fontSize="md" fontWeight="bold">
+                0.0
+            </Text>
         </Flex>
         <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
-          <Text color="text.low" fontSize="sm">
-            Redeem
-          </Text>
+            <Text color="text.low" fontSize="sm">
+                Redeem button here
+            </Text>
         </Flex>
-      </Flex>
+        </Flex>
     </Box>
   )
 }
