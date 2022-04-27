@@ -11,7 +11,7 @@ export { ConfirmSwapModal } from './ConfirmSwapModal'
 export { TxSubmittedDialog } from './TxSubmittedDialog'
 export { TxErrorDialog } from './TxErrorDialog'
 export { WaitingConfirmationDialog } from './WaitingConfirmationDialog'
-export { CandleStickCard } from './CandleStickCard'
+export { CandleStickCard } from './Chart'
 export { defaultSettings, Settings } from './Settings'
 
 export type { SwapSettings } from './Settings'
