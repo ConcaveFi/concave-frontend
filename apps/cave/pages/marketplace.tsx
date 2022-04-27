@@ -1,9 +1,21 @@
 import React from 'react'
-import { Container, Flex, Heading, HStack, Stack, Text } from '@concave/ui'
+import {
+  Button,
+  Container,
+  Flex,
+  Heading,
+  HStack,
+  Popover,
+  PopoverTrigger,
+  Portal,
+  Stack,
+  Text,
+} from '@concave/ui'
 import GraphicGuide from 'components/LiquidStaking/GraphicGuide'
 import MarketplaceSearchCard from 'components/Marketplace/MarketplaceSearchCard'
 import MarketplaceStakeCard from 'components/Marketplace/MarketplaceStakeCard'
 import MarketplaceActivityCard from 'components/Marketplace/MarketplaceActivityCard'
+import StakePeriodCard from 'components/Marketplace/StakePeriodCard'
 
 const marketplace = () => {
   return (
