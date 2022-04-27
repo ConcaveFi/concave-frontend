@@ -9,6 +9,8 @@ export const usePrice = (currencyIn?: Currency, currencyOut?: Currency) => {
     isLoading,
     isError,
     isFetching,
+    isSuccess,
+    error,
   } = useTrade(
     // amount large enough to filter low liquidity pairs.
     currencyOut && CurrencyAmount.fromRawAmount(currencyOut, 50_000),
@@ -19,8 +21,14 @@ export const usePrice = (currencyIn?: Currency, currencyOut?: Currency) => {
 
   return useMemo(() => {
     if (currencyIn?.equals(currencyOut))
-      return { price: new Price(currencyIn, currencyIn, '1', '1'), isLoading, isError, isFetching }
+      return {
+        price: new Price(currencyIn, currencyIn, '1', '1'),
+        isLoading: false,
+        isError: false,
+        isFetching: false,
+        isSuccess: true,
+      }
 
-    return { price, isLoading, isError, isFetching }
-  }, [currencyIn, currencyOut, isError, isFetching, isLoading, price])
+    return { price, error, isLoading, isError, isFetching, isSuccess }
+  }, [currencyIn, currencyOut, isError, error, isFetching, isLoading, isSuccess, price])
 }
