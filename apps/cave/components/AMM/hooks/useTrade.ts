@@ -1,4 +1,6 @@
 import { Trade, Currency, CurrencyAmount, TradeType, Pair, BestTradeOptions } from 'gemswap-sdk'
+import { UseQueryResult } from 'react-query'
+import { parseAmount } from '../utils/parseAmount'
 
 import { usePairs } from './usePair'
 
@@ -11,17 +13,25 @@ export const getBestTrade = (
   otherCurrency: Currency,
   options: BestTradeOptions,
 ) => {
-  if (!pairs || !exactAmount?.currency || !otherCurrency) return
+  if (!pairs || pairs.length === 0 || !exactAmount?.currency || !otherCurrency) return
+
+  // if the exact amount is 0, we search for the best route with some arbitrary amount
+  const searchableTradeAmount = exactAmount.equalTo(0)
+    ? parseAmount('50000', exactAmount.currency)
+    : exactAmount
 
   const bestTrade =
     tradeType === TradeType.EXACT_INPUT
-      ? Trade.bestTradeExactIn(pairs, exactAmount, otherCurrency, options)
-      : Trade.bestTradeExactOut(pairs, otherCurrency, exactAmount, options)
+      ? Trade.bestTradeExactIn(pairs, searchableTradeAmount, otherCurrency, options)[0]
+      : Trade.bestTradeExactOut(pairs, otherCurrency, searchableTradeAmount, options)[0]
 
-  // happens when there is not enough liquidity
-  if (!bestTrade[0]) throw new Error('Invalid Trade')
+  // may happen when there is not enough liquidity
+  if (!bestTrade) throw new Error('Invalid Trade')
 
-  return bestTrade[0]
+  // when exactAmount is 0 return the same best trade route found but the with the correct amount
+  if (exactAmount.equalTo(0)) return new Trade(bestTrade.route, exactAmount, bestTrade.tradeType)
+
+  return bestTrade
 }
 
 export const useTrade = <T = Trade<Currency, Currency, TradeType>>(
@@ -31,9 +41,18 @@ export const useTrade = <T = Trade<Currency, Currency, TradeType>>(
   { select }: { select?: (data: Trade<Currency, Currency, typeof tradeType>) => T } = {
     select: (d) => d as any,
   },
-) => {
-  return usePairs<T>(exactCurrencyAmount?.currency.wrapped, otherCurrency?.wrapped, maxHops, {
-    select: (pairs) =>
-      select(getBestTrade(pairs, tradeType, exactCurrencyAmount, otherCurrency, { maxHops })),
-  })
+): UseQueryResult<T> => {
+  const trade = usePairs<T>(
+    exactCurrencyAmount?.currency.wrapped,
+    otherCurrency?.wrapped,
+    maxHops,
+    {
+      select: (pairs) =>
+        select(getBestTrade(pairs, tradeType, exactCurrencyAmount, otherCurrency, { maxHops })),
+    },
+  )
+
+  return trade
 }
+
+export type UseTradeResult<T = Trade<Currency, Currency, TradeType>> = UseQueryResult<T>
