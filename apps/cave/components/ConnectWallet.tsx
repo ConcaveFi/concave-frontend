@@ -194,13 +194,15 @@ const ConnectButton = () => {
   // console.log('session : ', session) // session.token can be verifiy with AUTH_PRIVATE_KEY
 
   // ! trigger a signout if the user changed account on Metamsk
-  useEffect(() => {
-    if (typeof window.ethereum?.on === 'undefined') return
-    // TODO check if user account address is the same then return;
-    window.ethereum.on('accountsChanged', async function () {
-      await signOut() // comment this out if you want nothing to happend
-    })
-  }, [])
+  // ! if you activate this useEffect it will re render the page on first signup
+  // ! and you will not be able to connect and sign the the message in 1 step
+  // useEffect(() => {
+  //   if (typeof window.ethereum?.on === 'undefined') return
+  //   // TODO check if user account address is the same then return;
+  //   window.ethereum.on('accountsChanged', async function () {
+  //     await signOut() // comment this out if you want nothing to happend
+  //   })
+  // }, [])
 
   const handleLogin = async () => {
     try {

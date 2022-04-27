@@ -37,7 +37,11 @@ export function SwapPage() {
   } = useSwapState(settings)
 
   const { data: session, status } = useSession()
-  const swapTx = useSwapTransaction(trade, settings, 'session.user.ens.address')
+  const swapTx = useSwapTransaction(
+    trade,
+    settings,
+    status === 'authenticated' && session.user.address,
+  )
 
   const confirmationModal = useDisclosure()
 

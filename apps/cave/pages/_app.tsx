@@ -40,11 +40,10 @@ type AppPropsWithLayout = AppProps & {
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const Layout = Component.Layout || DefaultLayout
   const router = useRouter()
-  const isProduction = NODE_ENV === 'production'
 
   useEffect(() => {
     const handleRouteChange = (url: URL) => {
-      if (isProduction) gtag.trackPageview(url)
+      if (NODE_ENV === 'production') gtag.trackPageview(url)
     }
     router.events.on('routeChangeComplete', handleRouteChange)
     router.events.on('hashChangeComplete', handleRouteChange)
