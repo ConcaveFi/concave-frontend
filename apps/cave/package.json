@@ -18,6 +18,7 @@
   "dependencies": {
     "@0xsequence/multicall": "^0.36.11",
     "@apollo/client": "^3.5.10",
+    "@badrap/bar-of-progress": "^0.1.2",
     "@chakra-ui/cli": "^1.9.0",
     "@concave/icons": "*",
     "@concave/ui": "*",

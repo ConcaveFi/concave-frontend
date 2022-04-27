@@ -1,6 +1,4 @@
 import { Box, Card, Flex } from '@concave/ui'
-
-import { SearchIcon } from '@concave/icons'
 import { useState } from 'react'
 import UserPositionCard from './UserPositionCard'
 import UserDividendCard from './UserDividendCard'
