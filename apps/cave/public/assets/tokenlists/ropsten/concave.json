@@ -1,20 +1,27 @@
 {
   "name": "Concave List",
   "timestamp": "2022-03-28T22:48:08Z",
-  "version": { "major": 1, "minor": 0, "patch": 0 },
+  "version": {
+    "major": 1,
+    "minor": 0,
+    "patch": 0
+  },
   "tags": {},
   "logoURI": "https://raw.githubusercontent.com/ConcaveFi/concave-frontend/c74472356a060b01d892a3208175625e3dc9a57f/assets/tokens/cnv.svg?token=ABPRVGKZSVUTQGJ3SV3EAVTCIOMTO",
-  "keywords": ["concave"],
+  "keywords": [
+    "concave"
+  ],
   "tokens": [
     {
       "name": "Wrapped Ether",
       "address": "0xc778417e063141139fce010982780140aa0cd5ab",
       "symbol": "WETH",
       "decimals": 18,
-      "chainId": 1,
+      "chainId": 3,
       "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png"
     },
     {
+      "chainId": 3,
       "name": "Dai Stablecoin",
       "address": "0x7B731FFcf1b9C6E0868dA3F1312673A12Da28dc5",
       "symbol": "DAI",
@@ -23,6 +30,7 @@
     },
     {
       "name": "Dai Stablecoin",
+      "chainId": 3,
       "address": "0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4",
       "symbol": "tDAI",
       "decimals": 18,
@@ -33,6 +41,7 @@
       "address": "0x2b8e79cbd58418ce9aeb720baf6b93825b93ef1f",
       "symbol": "tCNV",
       "decimals": 18,
+      "chainId": 3,
       "logoURI": "/assets/tokens/cnv.svg"
     },
     {
@@ -40,6 +49,7 @@
       "address": "0x0D19826a842c03e9458D4270a5941b3F043fa5Db",
       "symbol": "MATIC",
       "decimals": 18,
+      "chainId": 3,
       "logoURI": "https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/svg/icon/matic.svg"
     },
     {
@@ -47,6 +57,7 @@
       "address": "0xE7E9F348202f6EDfFF2607025820beE92F51cdAA",
       "symbol": "FRAX",
       "decimals": 18,
+      "chainId": 3,
       "logoURI": "/assets/tokens/frax.svg"
     },
     {
@@ -54,6 +65,7 @@
       "address": "0x0736d0c130b2eAD47476cC262dbed90D7C4eeABD",
       "symbol": "Tether",
       "decimals": 18,
+      "chainId": 3,
       "logoURI": "https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/svg/icon/usdt.svg"
     }
   ]

@@ -1,15 +1,17 @@
 import { HStack, Text } from '@concave/ui'
-import { useCurrencyBalance } from './hooks/useCurrencyBalance'
-import { useFiatPrice } from './hooks/useFiatPrice'
-import { Balance } from './Balance'
-import { TokenInput } from './TokenInput'
 import { Currency, CurrencyAmount } from 'gemswap-sdk'
+import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
+import { Balance } from './Balance'
+import { useFiatValue } from './hooks/useFiatPrice'
+import { TokenInput } from './TokenInput'
+import { parseInputAmount } from './utils/parseInputAmount'
 
 type InputFieldProps = {
   currencyIn: Currency
   currencyAmountIn: CurrencyAmount<Currency>
-  updateInputValue: (value: string) => void
+  updateInputValue: (value: CurrencyAmount<Currency>) => void
   updateCurrencyIn: (currency: Currency) => void
+  overflowBalance?: (overflow: boolean) => void
 }
 
 export const InputField = ({
@@ -17,26 +19,32 @@ export const InputField = ({
   currencyAmountIn,
   updateInputValue,
   updateCurrencyIn,
+  overflowBalance,
 }: InputFieldProps) => {
-  const inputFiat = useFiatPrice(currencyIn.wrapped)
-  const inputFiatValue = currencyAmountIn && inputFiat.price?.quote(currencyAmountIn)
+  const inputFiat = useFiatValue(currencyAmountIn)
   const balance = useCurrencyBalance(currencyIn)
+  const isEqual = inputFiat.price?.baseCurrency['address'] === currencyAmountIn?.currency['address']
+  let inputFiatValue
+  try {
+    inputFiatValue = currencyAmountIn && !isEqual && inputFiat.price?.quote(currencyAmountIn)
+  } catch (e) {}
+  overflowBalance?.(+balance?.data?.formatted < +currencyAmountIn?.toExact())
 
   return (
     <TokenInput
       currency={currencyIn}
       currencyAmount={currencyAmountIn}
-      onChangeValue={updateInputValue}
+      onChangeAmount={updateInputValue}
       onSelectCurrency={updateCurrencyIn}
     >
       <HStack justify="space-between" align="end" textColor="text.low" w="full">
         <Text isTruncated fontWeight="bold" fontSize="sm" mr={2}>
-          {!!inputFiatValue && `$${inputFiatValue.toFixed(2, { groupSeparator: ',' })}`}
+          {!!inputFiat.value && `$${inputFiat.value.toFixed(2, { groupSeparator: ',' })}`}
         </Text>
         {balance.isSuccess && (
           <Balance
             value={balance.data.formatted}
-            onClick={() => updateInputValue(balance.data.formatted)}
+            onClick={() => updateInputValue(parseInputAmount(balance.data.formatted, currencyIn))}
           />
         )}
       </HStack>

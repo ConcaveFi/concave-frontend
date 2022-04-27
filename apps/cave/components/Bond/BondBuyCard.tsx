@@ -1,16 +1,15 @@
+import { GasIcon } from '@concave/icons'
 import { Button, Card, HStack, Spinner, Text, useDisclosure } from '@concave/ui'
 import { useApprovalWhenNeeded } from 'hooks/useAllowance'
 import React, { useEffect, useState } from 'react'
-import { BOND_ADDRESS } from '../../contracts/Bond/BondingAddress'
-import { DownwardIcon } from './DownwardIcon'
-import { BondOutput } from './BondOutput'
+import { useFeeData } from 'wagmi'
 import { BondInput } from './BondInput'
-import { ConfirmBondModal } from './ConfirmBond'
-import { useBondGetAmountOut, useBondState, purchaseBond, getBondSpotPrice } from './BondState'
+import { BondOutput } from './BondOutput'
 import { BondReceiptModal } from './BondReceipt'
-import { useFeeData, useWaitForTransaction } from 'wagmi'
-import { GasIcon } from '@concave/icons'
-import { Settings, BondSettings, defaultSettings } from './Settings'
+import { getBondAmountOut, getBondSpotPrice, purchaseBond, useBondState } from './BondState'
+import { ConfirmBondModal } from './ConfirmBond'
+import { DownwardIcon } from './DownwardIcon'
+import { BondSettings, defaultSettings, Settings } from './Settings'
 
 export const twoDecimals = (s: string | number) => {
   const a = s.toString()
@@ -36,29 +35,25 @@ const GasPrice = () => {
 export function BondBuyCard() {
   const { currencyIn, currencyOut, userAddress, balance, signer } = useBondState()
   const [settings, setSettings] = useState<BondSettings>(defaultSettings)
-  const [userBalance, setBalance] = useState<string>()
-  const [amountIn, setAmountIn] = useState<string>('0')
+  const userBalance = balance.data?.formatted
+  const [amountIn, setAmountIn] = useState<number>(0)
   const [amountOut, setAmountOut] = useState<string>()
   const [bondReceipt] = useState<any>()
   const [bondTransaction] = useState({})
   const [bondSpotPrice, setBondSpotPrice] = useState<string>()
   const confirmModal = useDisclosure()
   const receiptModal = useDisclosure()
-
-  const [needsApproval, approve, isApproving] = useApprovalWhenNeeded(
+  const [needsApproval, approve, approveLabel] = useApprovalWhenNeeded(
     currencyIn,
-    BOND_ADDRESS[1],
-    userAddress,
+    '0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4',
     amountIn,
   )
-  getBondSpotPrice(3, '0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4').then((bondSpotPrice) => {
-    setBondSpotPrice(bondSpotPrice)
-  })
+
   useEffect(() => {
-    if (balance[0].data) {
-      setBalance(balance[0].data.formatted)
-    }
-  }, [balance])
+    getBondSpotPrice(3, '0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4').then((bondSpotPrice) => {
+      setBondSpotPrice(bondSpotPrice)
+    })
+  }, [])
 
   return (
     <Card p={6} gap={2} variant="primary" h="fit-content" shadow="Block Up" w="100%" maxW="420px">
@@ -68,18 +63,18 @@ export function BondBuyCard() {
         balance={userBalance}
         onChangeValue={(v) => {
           const numberValue = v.replace('-', '')
-          if (!numberValue) return setAmountIn('')
-          numberValue && setAmountIn(v)
+          if (!numberValue) return
+          numberValue && setAmountIn(+v)
           // eslint-disable-next-line react-hooks/rules-of-hooks
-          useBondGetAmountOut(currencyOut.address, currencyOut.decimals, 3, v).then((amountOut) => {
+          getBondAmountOut(currencyOut.address, currencyOut.decimals, 3, v).then((amountOut) => {
             setAmountOut(amountOut)
           })
         }}
         // bug: fails to execute tx when clicked before hitting swap
-        // onClickMaxBalance={() => {
-        //   if (swapingIn.currency.equals(nativeCurrency)) setAmountIn(+swapingIn.balance * 0.8)
-        //   else setAmountIn(swapingIn.balance)
-        // }}
+        onClickMaxBalance={() => {
+          // if (swapingIn.currency.equals(nativeCurrency)) setAmountIn(+swapingIn.balance * 0.8)
+          // else setAmountIn(swapingIn.balance)
+        }}
       />
       <DownwardIcon />
       <BondOutput disabled={true} currency={currencyOut} value={amountOut} />
@@ -91,13 +86,13 @@ export function BondBuyCard() {
       </HStack>
       {needsApproval && (
         <Button
-          isLoading={isApproving}
+          isLoading={false}
           variant="primary"
           size="large"
           isFullWidth
           onClick={() => approve()}
         >
-          Approve {currencyIn.symbol}
+          {approveLabel}
         </Button>
       )}
       <Button
@@ -121,7 +116,6 @@ export function BondBuyCard() {
         onClose={confirmModal.onClose}
         onConfirm={() => {
           purchaseBond(3, amountIn, userAddress, signer, settings, amountOut).then((tx) => {
-            console.log(tx)
             receiptModal.onOpen()
           })
         }}

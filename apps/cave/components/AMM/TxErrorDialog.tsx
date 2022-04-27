@@ -4,23 +4,17 @@ import { Transaction } from 'ethers'
 import { ChainId } from 'gemswap-sdk'
 import { useState, useEffect } from 'react'
 
-export const getTxExplorer = (tx: Transaction) => {
-  const { hash, chainId } = tx
-  const explorer = {
-    [ChainId.ETHEREUM]: `https://etherscan.io/tx/${hash}`,
-    [ChainId.ROPSTEN]: `https://ropsten.etherscan.io/tx/${hash}`,
-  }
-  return explorer[chainId]
-}
-
-const TransactionSubmitted = ({ tx, onClose }: { tx: Transaction; onClose: () => void }) => (
+const TxError = ({ error, onClose }: { error: string; onClose: () => void }) => (
   <>
     <SubmittedIcon w={10} my={6} />
-    <Text align="center" fontSize="md" fontWeight="bold">
-      Transaction Submitted <br />
-      <Link href={getTxExplorer(tx)} fontSize="sm" color="text.accent" isExternal>
-        View on Explorer
-      </Link>
+    <Text
+      align="center"
+      whiteSpace="break-spaces"
+      wordBreak="break-all"
+      fontSize="md"
+      fontWeight="bold"
+    >
+      {error}
     </Text>
 
     <Flex>
@@ -31,11 +25,11 @@ const TransactionSubmitted = ({ tx, onClose }: { tx: Transaction; onClose: () =>
   </>
 )
 
-export const TransactionSubmittedDialog = ({
-  tx,
+export const TxErrorDialog = ({
+  error,
   isOpen: isOpenProp,
 }: {
-  tx: Transaction
+  error: string
   isOpen: boolean
 }) => {
   const [isOpen, setIsOpen] = useState(isOpenProp)
@@ -46,12 +40,12 @@ export const TransactionSubmittedDialog = ({
   return (
     <Modal
       bluryOverlay={true}
-      title="Success"
+      title="Error"
       isOpen={isOpen}
       onClose={onClose}
       bodyProps={{ align: 'center', w: '300px' }}
     >
-      <TransactionSubmitted tx={tx} onClose={onClose} />
+      <TxError error={error} onClose={onClose} />
     </Modal>
   )
 }

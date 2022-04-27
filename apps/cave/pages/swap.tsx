@@ -1,42 +1,40 @@
-import { useState } from 'react'
-import { useAccount } from 'wagmi'
 import { Button, Card, Flex, HStack, useDisclosure } from '@concave/ui'
 import {
-  useSwapState,
-  useSwapTransaction,
-  useSwapButtonState,
+  CandleStickCard,
+  ConfirmSwapModal,
   defaultSettings,
-  Settings,
-  SwapSettings,
+  GasPrice,
   InputField,
   OutputField,
   RelativePrice,
-  GasPrice,
+  Settings,
+  SwapSettings,
   SwitchCurrencies,
-  ConfirmSwapModal,
-  TransactionSubmittedDialog,
+  TxErrorDialog,
+  TxSubmittedDialog,
+  useSwapButtonState,
+  useSwapState,
+  useSwapTransaction,
   WaitingConfirmationDialog,
-  CandleStickCard,
 } from 'components/AMM'
 import { STABLES } from 'constants/routing'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import { useState } from 'react'
+import { useAccount } from 'wagmi'
 
 export function SwapPage() {
+  const [settings, setSettings] = useState<SwapSettings>(defaultSettings)
+
   const {
     trade,
     tradeError,
     currencyIn,
     currencyOut,
-    currencyAmountIn,
-    currencyAmountOut,
-    updateInputValue,
-    updateOutputValue,
+    onChangeAmount,
     updateCurrencyIn,
     updateCurrencyOut,
     switchCurrencies,
-  } = useSwapState()
-
-  const [settings, setSettings] = useState<SwapSettings>(defaultSettings)
+  } = useSwapState(settings)
 
   const [{ data: account }] = useAccount()
   const swapTx = useSwapTransaction(trade, settings, account?.address)
@@ -69,7 +67,6 @@ export function SwapPage() {
           gap={2}
           p={6}
           w="100%"
-          minW="430px"
           maxW="567px"
         />
 
@@ -80,23 +77,22 @@ export function SwapPage() {
           h="fit-content"
           shadow="Block Up"
           w="100%"
-          minW="400px"
           maxW="420px"
         >
           <InputField
             currencyIn={currencyIn}
-            currencyAmountIn={currencyAmountIn}
-            updateInputValue={updateInputValue}
+            currencyAmountIn={trade?.inputAmount}
+            updateInputValue={onChangeAmount}
             updateCurrencyIn={updateCurrencyIn}
           />
 
           <SwitchCurrencies onClick={switchCurrencies} />
 
           <OutputField
-            currencyAmountIn={currencyAmountIn}
+            currencyAmountIn={trade?.inputAmount}
             currencyOut={currencyOut}
-            currencyAmountOut={currencyAmountOut}
-            updateOutputValue={updateOutputValue}
+            currencyAmountOut={trade?.outputAmount}
+            updateOutputValue={onChangeAmount}
             updateCurrencyOut={updateCurrencyOut}
           />
 
@@ -118,7 +114,7 @@ export function SwapPage() {
         onConfirm={() => {
           confirmationModal.onClose()
           swapTx.submit()
-          updateInputValue('')
+          onChangeAmount(null)
         }}
       />
 
@@ -127,8 +123,8 @@ export function SwapPage() {
         amountOut={swapTx.trade?.outputAmount}
         isOpen={swapTx.isWaitingForConfirmation}
       />
-
-      <TransactionSubmittedDialog tx={swapTx.data} isOpen={swapTx.isTransactionSent} />
+      <TxSubmittedDialog tx={swapTx.data} isOpen={swapTx.isTransactionSent} />
+      <TxErrorDialog error={swapTx.error?.message} isOpen={swapTx.isError} />
     </>
   )
 }

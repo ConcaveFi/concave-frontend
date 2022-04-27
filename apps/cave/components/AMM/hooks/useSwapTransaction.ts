@@ -1,10 +1,11 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { SwapSettings } from '../Settings'
 import { RouterABI, ROUTER_ADDRESS, Router, Currency, TradeType, Trade } from 'gemswap-sdk'
 import { Contract } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useContract, useSigner } from 'wagmi'
-import { useState } from 'react'
+import { useQuery } from 'react-query'
+import { formatUnits } from 'ethers/lib/utils'
 
 export const useSwapTransaction = (
   trade: Trade<Currency, Currency, TradeType>,
@@ -18,35 +19,45 @@ export const useSwapTransaction = (
     contractInterface: RouterABI,
     signerOrProvider: signer,
   })
-  const txTrade = useMemo(
-    () => trade && new Trade(trade.route, trade.inputAmount, TradeType.EXACT_INPUT),
-    [trade],
-  )
 
   const callParameters = useMemo(() => {
-    if (!txTrade || !recipient) return
-    return Router.swapCallParameters(txTrade, {
+    if (!trade || !recipient) return
+    return Router.swapCallParameters(trade, {
       allowedSlippage: settings.slippageTolerance.percent,
       ttl: +settings.deadline * 60,
-      feeOnTransfer: txTrade.tradeType === TradeType.EXACT_INPUT,
+      feeOnTransfer: trade.tradeType === TradeType.EXACT_INPUT,
       recipient,
     })
-  }, [recipient, settings.slippageTolerance, settings.deadline, txTrade])
+  }, [recipient, settings.slippageTolerance, settings.deadline, trade])
 
-  // const { data: estimatedGasFee } = useQuery(
-  //   ['swap estimated gas fee', callParameters],
-  //   () => {
-  //     const { methodName, args, value } = callParameters
-  //     return routerContract.estimateGas[methodName](...args, { value }).then((estimatedGasFee) =>
-  //       formatUnits(estimatedGasFee, 'wei'),
-  //     )
-  //   },
-  //   { enabled: !!callParameters && !!routerContract.signer, retry: false },
-  // )
+  /*
+    gas estimation can fail when for between other reasons 
+    the user don't have a balance or has not approved the input token yet
+  */
+  const {
+    data: estimatedGasFee,
+    isLoading: isEstimatingGas,
+    error: errorEstimatingGas,
+  } = useQuery(
+    ['swap estimated gas fee', callParameters],
+    () => {
+      const { methodName, args, value } = callParameters
+      return routerContract.estimateGas[methodName](...args, { value }).then((estimatedGasFee) =>
+        formatUnits(estimatedGasFee, 'wei'),
+      )
+    },
+    {
+      enabled: !!callParameters && !!routerContract.signer,
+      retry: false,
+      onError: (e) => console.log(e),
+      onSuccess: (d) => console.log(d),
+    },
+  )
 
   const [state, setState] = useState({
     isWaitingForConfirmation: false,
     isError: false,
+    error: undefined,
     isTransactionSent: false,
     data: undefined,
     trade,
@@ -54,7 +65,7 @@ export const useSwapTransaction = (
   const submit = async () => {
     setState((s) => ({
       ...s,
-      trade: txTrade, // locks the tx trade
+      trade, // locks the tx trade
       isWaitingForConfirmation: true,
     }))
     const { methodName, args, value } = callParameters
@@ -71,5 +82,5 @@ export const useSwapTransaction = (
     }
   }
 
-  return { submit, ...state }
+  return { submit, ...state, estimatedGasFee }
 }

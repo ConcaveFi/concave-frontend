@@ -1,19 +1,24 @@
 import {
   Box,
+  Button,
   Card,
   Container,
   Flex,
-  gradientBorder,
   Heading,
   Image,
   Stack,
   Text,
+  useMediaQuery,
 } from '@concave/ui'
 import { BondBuyCard } from 'components/Bond/BondBuyCard'
-import Placeholder from 'components/Placeholder'
-import { useBondGetTermLength, getBondSpotPrice } from 'components/Bond/BondState'
+import {
+  useBondGetTermLength,
+  getBondSpotPrice,
+  getCurrentBlockTimestamp,
+  getUserBondPositions,
+  useBondState,
+} from 'components/Bond/BondState'
 import { useEffect, useState } from 'react'
-import { useAuth } from 'contexts/AuthContext'
 import { useFetchApi } from 'hooks/cnvData'
 import React from 'react'
 
@@ -26,7 +31,7 @@ const InfoItem = ({ value, label, ...props }) => (
     textAlign="center"
     {...props}
   >
-    <Text fontSize="lg" fontFamily="heading">
+    <Text fontSize="sm" fontFamily="heading">
       {value}
     </Text>
     <Text fontSize="sm" color="text.low">
@@ -46,6 +51,29 @@ const BondInfo = ({ asset, roi, vestingTerm, icon }) => {
       <InfoItem value={roi} label="ROI" flexGrow={1} />
       <Box w="1px" mx={-1} my={-4} bg="stroke.primary" />
       <InfoItem value={vestingTerm} label="Vesting Term" px={5} />
+    </Card>
+  )
+}
+
+const UserBondPositionInfo = (bondSigma) => {
+  const parse = bondSigma?.bondSigma
+  const oldestBond = parse?.parseOldest
+  const totalOwed = parse?.totalOwed
+  const totalPending = parse?.totalPending.toFixed(2)
+
+  return (
+    <Card bg="none" py={3} w="100%" direction="row" shadow="Glass Up Medium">
+      <Flex justify="center" pl={4} pr={7}>
+        <InfoItem value={oldestBond} label={oldestBond ? 'Fully Vested' : ''} />
+      </Flex>
+      <Box w="1px" mx={-1} my={-4} bg="stroke.primary" />
+      <InfoItem
+        value={totalOwed}
+        label={totalOwed ? 'Claimable' : 'No Bonds to Claim'}
+        flexGrow={1}
+      />
+      <Box w="1px" mx={-1} my={-4} bg="stroke.primary" />
+      <InfoItem value={totalPending} label={totalPending ? 'Owed' : ''} px={5} />
     </Card>
   )
 }
@@ -74,46 +102,68 @@ const SelectedBondType = ({ bondType }) => {
   )
 }
 
-const NothingToRedeem = () => {
+const Redeem = ({ onConfirm, bondSigma }: { onConfirm: () => void; bondSigma }) => {
+  const display = !!bondSigma ? 1 : 0
   return (
-    <Card
-      shadow="Up Big"
-      mb={-20}
-      px={8}
-      py={1}
-      fontWeight="bold"
-      fontSize="sm"
-      borderBottomRadius="0"
-      w="250px"
-    >
-      <Text color="text.low" align="center">
-        Nothing to redeem
-      </Text>
+    <Card mb={-20} fontWeight="bold" fontSize="lg" w="250px">
+      {display ? (
+        <Button variant="primary" size="lg" isFullWidth onClick={onConfirm}>
+          Redeem
+        </Button>
+      ) : (
+        ''
+      )}
     </Card>
   )
 }
 
 export default function Bond() {
-  const { user, isConnected } = useAuth()
+  const { userAddress, signer } = useBondState()
   const [termLength, setTermLength] = useState<number>(0)
   const [bondSpotPrice, setBondSpotPrice] = useState<string>('0')
-  const [cnvMarketPrice, setCnvMarketPrice] = useState<number>(0)
-  const { data } = useFetchApi('/api/cnv')
+  const [cnvMarketPrice, setCnvMarketPrice] = useState<Object>()
+  const [currentBlockTs, setCurrentBlockTs] = useState<number>(0)
+  const [bondSigma, setBondSigma] = useState<any>()
+  const [fetchLoading, setFetchLoading] = useState<boolean>(true)
 
-  if (cnvMarketPrice === 0 && !!data) {
-    setCnvMarketPrice(data.cnv)
+  if (fetchLoading === true) {
   }
 
   useEffect(() => {
-    getBondSpotPrice(3, '').then((bondSpotPrice) => {
-      setBondSpotPrice(bondSpotPrice)
-      console.log(bondSpotPrice)
+    getCurrentBlockTimestamp().then((x) => {
+      setCurrentBlockTs(x)
     })
+    if (userAddress)
+      getUserBondPositions(3, userAddress, currentBlockTs)
+        .then((x) => {
+          setBondSigma(x)
+        })
+        .catch((e) => {
+          console.log('get position info failed', e)
+        })
+  }, [signer])
+
+  useEffect(() => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useBondGetTermLength(3).then((termLength) => {
       setTermLength(termLength)
     })
-  }, [cnvMarketPrice])
+    getBondSpotPrice(3, '').then((bondSpotPrice) => {
+      setBondSpotPrice(bondSpotPrice)
+    })
+    fetch('/api/cnv')
+      .then((j) => j.json())
+      .then((data) => {
+        if (data?.data) {
+          setCnvMarketPrice(data.data.last)
+        }
+      })
+      .catch((e) => {
+        throw e
+      })
+  }, [])
+
+  const [isLargerThan1200] = useMediaQuery('(min-width: 1200px)')
 
   return (
     <Container maxW="container.lg">
@@ -124,17 +174,28 @@ export default function Bond() {
           </Heading>
         </Stack>
 
-        <Flex gap={10} direction="row">
-          <Box pos="relative" h="fit-content">
-            <Box
-              h="20px"
-              w="72px"
-              top="50%"
-              transform="auto"
-              translateY="-50%"
-              left="calc(100% - 24px)"
-              sx={{ ...gradientBorder({ borderWidth: 3, borderRadius: '0' }), pos: 'absolute' }}
-            />
+        <Flex
+          gap={10}
+          direction={isLargerThan1200 ? 'row' : 'column'}
+          align={isLargerThan1200 ? 'start' : 'center'}
+        >
+          <Box
+            pos="relative"
+            h="fit-content"
+            maxHeight={'500px'}
+            css={{
+              '&::-webkit-scrollbar': {
+                width: '1px',
+              },
+              '&::-webkit-scrollbar-track': {
+                width: '1px',
+              },
+              '&::-webkit-scrollbar-thumb': {
+                borderRadius: '10px',
+                background: 'white',
+              },
+            }}
+          >
             <Card
               variant="secondary"
               w="430px"
@@ -152,19 +213,27 @@ export default function Bond() {
                 icon="/assets/tokens/cnv.svg"
                 roi={`${
                   cnvMarketPrice > 0
-                    ? ((cnvMarketPrice / +bondSpotPrice - 1) * 100).toFixed(2)
+                    ? ((+cnvMarketPrice / +bondSpotPrice - 1) * 100).toFixed(2)
                     : 'Loading...'
                 }%`}
                 vestingTerm={`${termLength} Days`}
               />
-              <NothingToRedeem />
+              <UserBondPositionInfo bondSigma={bondSigma} />
+              <Redeem
+                bondSigma={bondSigma}
+                onConfirm={() => {
+                  // make call here for a mass redeem...
+                  // inherit id of known redeemable positions
+                  // load up those arguments into the batch redemption
+                  console.log('test')
+                  //
+                }}
+              ></Redeem>
             </Card>
           </Box>
-
           <BondBuyCard />
         </Flex>
       </Flex>
-      <Placeholder text="More Bonds" description="Coming Soon" />
     </Container>
   )
 }

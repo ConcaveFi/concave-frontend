@@ -18,3 +18,5 @@ export const useCurrencyBalance = (currency: Currency) => {
     isSuccess: balance.data && !balance.loading,
   }
 }
+
+export type UseCurrencyBalanceData = ReturnType<typeof useCurrencyBalance>
