@@ -203,7 +203,11 @@ const SupplyLiquidityContent = ({
           label={`${tokenB.symbol} Deposited`}
           value={`${amountBDesired.toSignificant()} ${tokenB.symbol}`}
         />
-        <PositionInfoItem color={'text.low'} label="Share Pool" value={`${userPool.toFixed(3)}%`} />
+        <PositionInfoItem
+          color={'text.low'}
+          label="Share Pool"
+          value={`${userPool.toPrecision(3)}%`}
+        />
       </Box>
       {needsApproveA && (
         <Button mt={2} p={6} fontSize={'2xl'} variant={'primary'} onClick={() => requestApproveA()}>
