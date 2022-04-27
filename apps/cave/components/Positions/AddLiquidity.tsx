@@ -18,7 +18,8 @@ import { ROUTER_ADDRESS } from 'gemswap-sdk'
 import { useAddLiquidity, UseAddLiquidityData } from 'hooks/useAddLiquidity'
 import { useApprovalWhenNeeded } from 'hooks/useAllowance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import React from 'react'
+import { precision } from 'hooks/usePrecision'
+import React, { useState } from 'react'
 import { chain } from 'wagmi'
 
 const LiquidityTip = () => (
@@ -35,10 +36,11 @@ export const AddLiquidityContent = ({ userAddress }: { userAddress: string }) =>
   const supplyLiquidityDisclosure = useDisclosure()
   const transactionStatusDisclosure = useDisclosure()
   const [data, setters, call, clear] = useAddLiquidity(chain.ropsten, userAddress)
-  const { amountADesired, amountBDesired, tokenA, tokenB } = data
-  const { updateInputValue, updateOutputValue, updateTokenA, updateTokenB, setTokenA, setTokenB } =
-    setters
+  const { amountADesired, amountBDesired, tokenA, tokenB, pair } = data
+  const { updateInputValue, updateOutputValue, updateTokenA, updateTokenB } = setters
   const valid = tokenA && tokenB && amountADesired && amountBDesired
+  const [overflowA, setOverflowA] = useState(false)
+  const [overflowB, setOverflowB] = useState(false)
   const onSubmit = async () => {
     try {
       transactionStatusDisclosure.onOpen()
@@ -48,7 +50,6 @@ export const AddLiquidityContent = ({ userAddress }: { userAddress: string }) =>
       transactionStatusDisclosure.onClose()
     }
   }
-
   return (
     <>
       <LiquidityTip />
@@ -56,7 +57,12 @@ export const AddLiquidityContent = ({ userAddress }: { userAddress: string }) =>
         <InputField
           currencyIn={tokenA}
           currencyAmountIn={amountADesired}
-          updateInputValue={updateInputValue}
+          overflowBalance={setOverflowA}
+          updateInputValue={(value) => {
+            if (value?.toExact()) {
+              updateInputValue('' + value.toExact())
+            }
+          }}
           updateCurrencyIn={updateTokenA}
         />
         <Flex align="center" justify="center">
@@ -75,7 +81,12 @@ export const AddLiquidityContent = ({ userAddress }: { userAddress: string }) =>
         <InputField
           currencyIn={tokenB}
           currencyAmountIn={amountBDesired}
-          updateInputValue={updateOutputValue}
+          overflowBalance={setOverflowB}
+          updateInputValue={(value) => {
+            if (value?.toExact()) {
+              updateOutputValue('' + value.toExact())
+            }
+          }}
           updateCurrencyIn={updateTokenB}
         />
       </Flex>
@@ -86,14 +97,11 @@ export const AddLiquidityContent = ({ userAddress }: { userAddress: string }) =>
         _focus={{
           shadow: 'Up Small',
         }}
-        onClick={() => {
-          console.log('open modal')
-          supplyLiquidityDisclosure.onOpen()
-        }}
-        isDisabled={!valid}
-        bg={'rgba(113, 113, 113, 0.01)'}
+        variant="primary"
+        onClick={supplyLiquidityDisclosure.onOpen}
+        isDisabled={!valid || overflowA || overflowB}
       >
-        <Text fontSize={'2xl'}>Add Liquidity</Text>
+        <Text fontSize={'2xl'}>{pair ? 'Add Liquidity' : 'Create Liquidity'}</Text>
       </Button>
       <SupplyLiquidityModal
         isVisible={!!valid}
@@ -151,7 +159,7 @@ const SupplyLiquidityContent = ({
   onConfirm: () => void
 }) => {
   const networkId = useCurrentSupportedNetworkId()
-  const { tokenA, tokenB, amountADesired, amountBDesired } = data
+  const { pair, tokenA, tokenB, amountADesired, amountBDesired } = data
   const [needsApproveA, requestApproveA, approveLabel] = useApprovalWhenNeeded(
     tokenA,
     ROUTER_ADDRESS[networkId],
@@ -164,6 +172,10 @@ const SupplyLiquidityContent = ({
   )
   const differenceBetweenAandB = +amountADesired?.toExact() / +amountBDesired?.toExact()
   const differenceBetweenBandA = +amountBDesired?.toExact() / +amountADesired?.toExact()
+  const userPool =
+    pair && amountADesired
+      ? (100 / +pair.reserveOf(tokenA).add(amountADesired).toFixed()) * +amountADesired.toFixed()
+      : 100
   return (
     <>
       <Text fontSize="3xl">
@@ -176,12 +188,14 @@ const SupplyLiquidityContent = ({
       <Box borderRadius={'2xl'} p={6} shadow={'down'}>
         <PositionInfoItem
           label="Rates"
-          value={`1  ${tokenA.symbol} = ${differenceBetweenBandA.toPrecision(5)}
+          value={`1  ${tokenA.symbol} = ${precision(differenceBetweenBandA, 5).formatted}
           ${tokenB.symbol}`}
         />
         <PositionInfoItem
           label=""
-          value={`1  ${tokenB.symbol} = ${differenceBetweenAandB.toPrecision(5)}  ${tokenA.symbol}`}
+          value={`1  ${tokenB.symbol} = ${precision(differenceBetweenAandB, 5).formatted}  ${
+            tokenA.symbol
+          }`}
         />
         <PositionInfoItem
           mt={8}
@@ -194,7 +208,11 @@ const SupplyLiquidityContent = ({
           label={`${tokenB.symbol} Deposited`}
           value={`${amountBDesired.toSignificant()} ${tokenB.symbol}`}
         />
-        <PositionInfoItem color={'text.low'} label="Share Pool" value={'2.786%'} />
+        <PositionInfoItem
+          color={'text.low'}
+          label="Share Pool"
+          value={`${userPool.toPrecision(3)}%`}
+        />
       </Box>
       {needsApproveA && (
         <Button mt={2} p={6} fontSize={'2xl'} variant={'primary'} onClick={() => requestApproveA()}>
@@ -206,7 +224,7 @@ const SupplyLiquidityContent = ({
           {approveLabelB}
         </Button>
       )}
-      {!needsApproveA && !needsApproveA && (
+      {!needsApproveA && !needsApproveB && (
         <Button mt={2} p={6} fontSize={'2xl'} variant={'primary'} onClick={onConfirm}>
           Confirm Supply
         </Button>

@@ -2,8 +2,7 @@ import { GasIcon } from '@concave/icons'
 import { Button, Card, HStack, Spinner, Text, useDisclosure } from '@concave/ui'
 import { useApprovalWhenNeeded } from 'hooks/useAllowance'
 import React, { useEffect, useState } from 'react'
-import { useBalance, useFeeData } from 'wagmi'
-import { BOND_ADDRESS } from '../../contracts/Bond/BondingAddress'
+import { useFeeData } from 'wagmi'
 import { BondInput } from './BondInput'
 import { BondOutput } from './BondOutput'
 import { BondReceiptModal } from './BondReceipt'
@@ -37,7 +36,7 @@ export function BondBuyCard() {
   const { currencyIn, currencyOut, userAddress, balance, signer } = useBondState()
   const [settings, setSettings] = useState<BondSettings>(defaultSettings)
   const userBalance = balance.data?.formatted
-  const [amountIn, setAmountIn] = useState<string>('1')
+  const [amountIn, setAmountIn] = useState<number>(0)
   const [amountOut, setAmountOut] = useState<string>()
   const [bondReceipt] = useState<any>()
   const [bondTransaction] = useState({})
@@ -64,8 +63,8 @@ export function BondBuyCard() {
         balance={userBalance}
         onChangeValue={(v) => {
           const numberValue = v.replace('-', '')
-          if (!numberValue) return setAmountIn('')
-          numberValue && setAmountIn(v)
+          if (!numberValue) return
+          numberValue && setAmountIn(+v)
           // eslint-disable-next-line react-hooks/rules-of-hooks
           getBondAmountOut(currencyOut.address, currencyOut.decimals, 3, v).then((amountOut) => {
             setAmountOut(amountOut)

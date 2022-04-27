@@ -11,6 +11,7 @@ type InputFieldProps = {
   currencyAmountIn: CurrencyAmount<Currency>
   updateInputValue: (value: CurrencyAmount<Currency>) => void
   updateCurrencyIn: (currency: Currency) => void
+  overflowBalance?: (overflow: boolean) => void
 }
 
 export const InputField = ({
@@ -18,9 +19,16 @@ export const InputField = ({
   currencyAmountIn,
   updateInputValue,
   updateCurrencyIn,
+  overflowBalance,
 }: InputFieldProps) => {
   const inputFiat = useFiatValue(currencyAmountIn)
   const balance = useCurrencyBalance(currencyIn)
+  const isEqual = inputFiat.price?.baseCurrency['address'] === currencyAmountIn?.currency['address']
+  let inputFiatValue
+  try {
+    inputFiatValue = currencyAmountIn && !isEqual && inputFiat.price?.quote(currencyAmountIn)
+  } catch (e) {}
+  overflowBalance?.(+balance?.data?.formatted < +currencyAmountIn?.toExact())
 
   return (
     <TokenInput
