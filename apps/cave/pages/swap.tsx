@@ -1,26 +1,26 @@
-import { useState } from 'react'
-import { useAccount } from 'wagmi'
 import { Button, Card, Flex, HStack, useDisclosure } from '@concave/ui'
 import {
-  useSwapState,
-  useSwapTransaction,
-  useSwapButtonState,
+  CandleStickCard,
+  ConfirmSwapModal,
   defaultSettings,
-  Settings,
-  SwapSettings,
+  GasPrice,
   InputField,
   OutputField,
   RelativePrice,
-  GasPrice,
+  Settings,
+  SwapSettings,
   SwitchCurrencies,
-  ConfirmSwapModal,
-  TxSubmittedDialog,
   TxErrorDialog,
+  TxSubmittedDialog,
+  useSwapButtonState,
+  useSwapState,
+  useSwapTransaction,
   WaitingConfirmationDialog,
-  CandleStickCard,
 } from 'components/AMM'
 import { STABLES } from 'constants/routing'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import { useState } from 'react'
+import { useAccount } from 'wagmi'
 
 export function SwapPage() {
   const [settings, setSettings] = useState<SwapSettings>(defaultSettings)
@@ -123,9 +123,7 @@ export function SwapPage() {
         amountOut={swapTx.trade?.outputAmount}
         isOpen={swapTx.isWaitingForConfirmation}
       />
-
       <TxSubmittedDialog tx={swapTx.data} isOpen={swapTx.isTransactionSent} />
-
       <TxErrorDialog error={swapTx.error?.message} isOpen={swapTx.isError} />
     </>
   )

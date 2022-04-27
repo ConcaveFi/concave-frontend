@@ -12,7 +12,7 @@ export const useApprovalWhenNeeded = (token: Token, spender: string, amount: Big
     }
 
     if (allowance?.value?.gte(amount)) {
-      return 'Indexing'
+      return 'Approved'
     }
     if (approve.isWaitingForConfirmation) {
       return 'Approve in your wallet'

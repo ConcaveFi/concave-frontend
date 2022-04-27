@@ -1,24 +1,17 @@
 import { Box, Card, Flex } from '@concave/ui'
-import SearchFilterCard from './SearchFilterCard'
-import NftPositionCard from './NftPositionCard'
-import { SearchIcon } from '@concave/icons'
-import { Dispatch, SetStateAction, useState } from 'react'
-interface MarketplaceSearchCardProps {
-  active?: boolean
-  onClick?: (any: Dispatch<SetStateAction<boolean>>) => void
-}
 
-const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
-  const filters = [
-    { title: 'Redeem In', icon: 'RedeemIcon' },
-    { title: 'Price', icon: 'PriceIcon' },
-    { title: 'Discount', icon: 'DiscountIcon' },
-    { title: 'Stake Period', icon: 'StakeIcon' },
-  ]
+import { SearchIcon } from '@concave/icons'
+import { useState } from 'react'
+import UserPositionCard from './UserPositionCard'
+import UserDividendCard from './UserDividendCard'
+
+
+const UserDashboardCard = (props: any) => {
+
 
   const [active, setActive] = useState(false)
   return (
-    <Card p={3} gap={2} variant="primary" h="945px" shadow="down" w="640px">
+    <Card p={3} gap={2} variant="primary" h="945px" shadow="down" w="780px">
       <Flex justify="center">
         <Box
           pos="relative"
@@ -29,25 +22,12 @@ const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
           overflowY={'auto'}
           maxHeight={'500px'}
         >
-          <Flex
-            grow={1}
-            direction="row"
-            pos="relative"
-            w="380px"
-            h="30px"
-            shadow="down"
-            py={2}
-            px="-10"
-            borderRadius="2xl"
-            zIndex={2}
-            // filter="drop-shadow(0px 0px 27px #81b3ff4f)"
-          >
-            <SearchIcon height={6} />
-          </Flex>
           <Flex direction="row" gap={4} position="relative" mt={4}>
-            {filters.map((e, k) => {
+              {/* here iam */}
+              <UserDividendCard />
+            {/* {filters.map((e, k) => {
               return <SearchFilterCard key={k} title={e.title} icon={e.icon} />
-            })}
+            })} */}
           </Flex>
         </Box>
       </Flex>
@@ -77,21 +57,13 @@ const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
           },
         }}
       >
-        <NftPositionCard />
-        <NftPositionCard />
-        <NftPositionCard />
-        <NftPositionCard />
-        <NftPositionCard />
-        <NftPositionCard />
-        <NftPositionCard />
-        <NftPositionCard />
-        <NftPositionCard />
-        <NftPositionCard />
-        <NftPositionCard />
-        <NftPositionCard />
+          <UserPositionCard />
+          <UserPositionCard />
+          <UserPositionCard />
+          <UserPositionCard />
       </Box>
     </Card>
   )
 }
 
-export default MarketplaceSearchCard
+export default UserDashboardCard

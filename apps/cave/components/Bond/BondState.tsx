@@ -129,8 +129,7 @@ export const getUserBondPositions = async (
     const positionData = await bondingContract.positions(address, i)
     // revisit this, dont push if owed is not greater than 0
     console.log(positionData)
-    if (positionData.owed > 1) 
-    batchRedeemArray.push(i)
+    if (positionData.owed > 1) batchRedeemArray.push(i)
     if (+positionData.creation > oldest) {
       oldest = +positionData.creation
     }
