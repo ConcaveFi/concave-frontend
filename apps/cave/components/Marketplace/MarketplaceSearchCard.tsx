@@ -64,10 +64,16 @@ const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
   const nftPositions = [
     { stakePeriod: 1, price: 102, redeemIn: 20, discount: 2.1 },
     { stakePeriod: 12, price: 12, redeemIn: 1, discount: 20 },
-    { stakePeriod: 2, price: 50, redeemIn: 12, discount: 1.2 },
-    { stakePeriod: 10, price: 229, redeemIn: 4, discount: 14 },
-    { stakePeriod: 23, price: 112, redeemIn: 7, discount: 12 },
-    { stakePeriod: 5, price: 522, redeemIn: 12, discount: 5 },
+    { stakePeriod: 3, price: 50, redeemIn: 12, discount: 1.2 },
+    { stakePeriod: 12, price: 229, redeemIn: 4, discount: 14 },
+    { stakePeriod: 3, price: 112, redeemIn: 7, discount: 12 },
+    { stakePeriod: 6, price: 522, redeemIn: 12, discount: 5 },
+    { stakePeriod: 3, price: 102, redeemIn: 20, discount: 2.1 },
+    { stakePeriod: 6, price: 12, redeemIn: 1, discount: 20 },
+    { stakePeriod: 3, price: 50, redeemIn: 12, discount: 1.2 },
+    { stakePeriod: 12, price: 229, redeemIn: 4, discount: 14 },
+    { stakePeriod: 12, price: 112, redeemIn: 7, discount: 12 },
+    { stakePeriod: 1, price: 522, redeemIn: 12, discount: 5 },
   ]
 
   const nftPositionsComp = nftPositions
@@ -84,14 +90,13 @@ const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
 
   const filterCards = filters.map((e, k) => {
     return (
-      <Popover offset={[e.offsetX, 10]}>
+      <Popover offset={[e.offsetX, 10]} key={k} >
         {/* Chakra type bug, related to just released react 18, should be fixed soon 
         // @ts-ignore  */}
         <PopoverTrigger>
           <Button>
             <SearchFilterCard
               hasFilter={e.hasFilter}
-              key={k}
               title={e.title}
               icon={e.icon}
             ></SearchFilterCard>

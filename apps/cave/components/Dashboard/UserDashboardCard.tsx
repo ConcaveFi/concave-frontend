@@ -2,10 +2,9 @@ import { Box, Card, Flex } from '@concave/ui'
 import { useState } from 'react'
 import UserPositionCard from './UserPositionCard'
 import UserDividendCard from './UserDividendCard'
-
+import { ButtonLink } from 'components/ButtonLink'
 
 const UserDashboardCard = (props: any) => {
-
 
   const [active, setActive] = useState(false)
   return (
@@ -20,8 +19,18 @@ const UserDashboardCard = (props: any) => {
           overflowY={'auto'}
           maxHeight={'500px'}
         >
+                    <ButtonLink
+          href="/treasury"
+          variant="primary.outline"
+          size="large"
+          w="full"
+          
+        >
+        View Treasury
+        </ButtonLink>
           <Flex direction="row" gap={4} position="relative" mt={4}>
               {/* here iam */}
+              
               <UserDividendCard />
             {/* {filters.map((e, k) => {
               return <SearchFilterCard key={k} title={e.title} icon={e.icon} />
