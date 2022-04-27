@@ -7,7 +7,6 @@ interface NftPositionCardProps {
 }
 
 const NftPositionCard = (props: NftPositionCardProps) => {
-
   const [active, setActive] = useState(false)
   return (
     <Box
