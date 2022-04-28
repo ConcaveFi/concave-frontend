@@ -1,4 +1,4 @@
-import { ethers } from 'ethers'
+import { BigNumber, ethers } from 'ethers'
 import { CurrencyAmount, ROUTER_ADDRESS, Token } from 'gemswap-sdk'
 import { concaveProvider } from 'lib/providers'
 import { contractABI } from 'lib/contractoABI'
@@ -32,6 +32,30 @@ export class Router {
         parseUnits(amountA.toFixed(amountA.currency.decimals)),
         parseUnits('0', amountA.currency.decimals),
         parseUnits('0', amountA.currency.decimals),
+        to,
+        deadLine,
+        extra,
+      )
+  }
+
+  public async removeLiquidity(
+    tokenA: Token,
+    tokenB: Token,
+    percentToRemove: BigNumber,
+    to: string,
+    extra: {
+      gasLimit?: number
+    } = {},
+  ): Promise<ethers.Transaction> {
+    const deadLine = Math.round(Date.now() / 1000) + 86400
+    return this.contract
+      .connect(this.singer)
+      .removeLiquidity(
+        tokenA.address,
+        tokenB.address,
+        percentToRemove,
+        parseUnits(`0`, tokenA.decimals),
+        parseUnits(`0`, tokenB.decimals),
         to,
         deadLine,
         extra,
