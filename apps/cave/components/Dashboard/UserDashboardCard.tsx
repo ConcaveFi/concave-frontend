@@ -3,6 +3,7 @@ import { useState } from 'react'
 import UserPositionCard from './UserPositionCard'
 import UserDividendCard from './UserDividendCard'
 import { ButtonLink } from 'components/ButtonLink'
+import UserListPositionCard from './UserListPositionCard'
 
 const UserDashboardCard = (props: any) => {
   const [active, setActive] = useState(false)

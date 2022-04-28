@@ -43,7 +43,7 @@ const UserPositionCard = (props) => {
             
           >
             <Text width={'full'} pl={6}>
-              Your Staking Retaking
+              Your Staking Rewards
             </Text>
             <Text color="text.low" fontSize="sm">
             Just Now:
