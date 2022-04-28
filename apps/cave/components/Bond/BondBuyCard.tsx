@@ -6,7 +6,14 @@ import { useFeeData } from 'wagmi'
 import { BondInput } from './BondInput'
 import { BondOutput } from './BondOutput'
 import { BondReceiptModal } from './BondReceipt'
-import { getCurrentBlockTimestamp, getBondAmountOut, getBondSpotPrice, getUserBondPositions, purchaseBond, useBondState } from './BondState'
+import {
+  getCurrentBlockTimestamp,
+  getBondAmountOut,
+  getBondSpotPrice,
+  getUserBondPositions,
+  purchaseBond,
+  useBondState,
+} from './BondState'
 import { ConfirmBondModal } from './ConfirmBond'
 import { DownwardIcon } from './DownwardIcon'
 import { BondSettings, defaultSettings, Settings } from './Settings'
@@ -45,10 +52,7 @@ export function BondBuyCard(onConfirm) {
   const [bondSpotPrice, setBondSpotPrice] = useState<string>()
   const confirmModal = useDisclosure()
   const receiptModal = useDisclosure()
-  const {
-   allowance,
-   sendApproveTx
-  } = useApprove(
+  const { allowance, sendApproveTx } = useApprove(
     currencyIn,
     '0x5C2bDbdb14E2f6b6A443B0f2FfF34F269e5DE81d',
   )
@@ -123,12 +127,14 @@ export function BondBuyCard(onConfirm) {
         isOpen={confirmModal.isOpen}
         onClose={confirmModal.onClose}
         onConfirm={() => {
-          purchaseBond(3, amountIn.toString(), userAddress, signer, settings, amountOut).then((x) => {
-            console.log(x)
-            receiptModal.onOpen()
-          }).catch((e) => {
-            console.log('get position info failed', e)
-          })
+          purchaseBond(3, amountIn.toString(), userAddress, signer, settings, amountOut)
+            .then((x) => {
+              console.log(x)
+              receiptModal.onOpen()
+            })
+            .catch((e) => {
+              console.log('get position info failed', e)
+            })
         }}
         bondPrice={bondSpotPrice}
         minimumAmountOut={(

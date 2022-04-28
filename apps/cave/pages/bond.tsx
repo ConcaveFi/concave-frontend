@@ -140,17 +140,18 @@ export default function Bond() {
 
     const interval = setInterval(() => {
       return new Promise((resolve) => {
-          getUserBondPositions(3, userAddress, currentBlockTs)
+        getUserBondPositions(3, userAddress, currentBlockTs)
           .then((x) => {
             setBondSigma(x)
             resolve(null)
-          }).catch(() => {})
-    }) 
-  }, 5000)
-  if(intervalID !== interval) {
-    clearTimeout(intervalID)
-    setIntervalID(interval)
-  }
+          })
+          .catch(() => {})
+      })
+    }, 5000)
+    if (intervalID !== interval) {
+      clearTimeout(intervalID)
+      setIntervalID(interval)
+    }
   }, [userAddress])
 
   useEffect(() => {
@@ -225,7 +226,7 @@ export default function Bond() {
                 icon="/assets/tokens/cnv.svg"
                 roi={`${
                   cnvMarketPrice > 0
-                    ? ( 1-(+bondSpotPrice / +cnvMarketPrice * 100)).toFixed(2)
+                    ? (1 - (+bondSpotPrice / +cnvMarketPrice) * 100).toFixed(2)
                     : 'Loading...'
                 }%`}
                 vestingTerm={`${termLength} Days`}
@@ -240,7 +241,7 @@ export default function Bond() {
               ></Redeem>
             </Card>
           </Box>
-          <BondBuyCard onConfirm={() => {}}/>
+          <BondBuyCard onConfirm={() => {}} />
         </Flex>
       </Flex>
     </Container>
