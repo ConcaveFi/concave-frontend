@@ -84,7 +84,7 @@ export function BondBuyCard() {
           <Settings onClose={setSettings} />
         </HStack>
       </HStack>
-      {needsApproval && (
+      {/* {needsApproval && (
         <Button
           isLoading={false}
           variant="primary"
@@ -94,9 +94,9 @@ export function BondBuyCard() {
         >
           {approveLabel}
         </Button>
-      )}
+      )} */}
       <Button
-        isDisabled={needsApproval || +userBalance < +amountIn}
+        // isDisabled={needsApproval || +userBalance < +amountIn}
         variant="primary"
         size="large"
         isFullWidth
