@@ -5,7 +5,6 @@ import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId
 import { SwapSettings } from '../Settings'
 import { parseAmount } from '../utils/parseAmount'
 import { useLinkedCurrencyAmountFields } from '../CurrencyAmountField'
-import { UseQueryResult } from 'react-query'
 
 const makeCurrencyFields = (networkId) => ({
   first: DAI[networkId],
@@ -41,15 +40,11 @@ export const useSwapState = ({ multihops }: SwapSettings) => {
   })
 
   // return this partial just to show some data while loading (like currencies icons) if needed
-  const partialTradeData = useMemo(
+  const partialTradeData: Partial<Trade<Currency, Currency, TradeType>> = useMemo(
     () =>
-      (isExactIn
+      isExactIn
         ? { inputAmount: exactAmount, outputAmount: parseAmount('0', otherCurrency) }
-        : { inputAmount: parseAmount('0', otherCurrency), outputAmount: exactAmount }) as Trade<
-        Currency,
-        Currency,
-        TradeType
-      >,
+        : { inputAmount: parseAmount('0', otherCurrency), outputAmount: exactAmount },
     [exactAmount, isExactIn, otherCurrency],
   )
 
