@@ -49,6 +49,7 @@ const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
       icon: 'PriceIcon',
       card: (
         <PriceCard
+          onReset={() => onReset('price')}
           onApply={(from, to) => onApplyFilterPrice(from, to)}
           activeButton={activePriceButton}
           onChange={switchPriceButtons}
@@ -67,9 +68,15 @@ const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
     {
       title: 'Stake Period',
       icon: 'StakeIcon',
-      hasFilter: activeStakeSortButton !== 0,
+      hasFilter:
+        activeStakeSortButton !== 0 ||
+        filter12Month ||
+        filter6Month ||
+        filter3Month ||
+        filter1Month,
       card: (
         <StakePeriodCard
+          onReset={() => onReset('period')}
           onApply={onApplyStakePeriod}
           activeSortButton={activeStakeSortButton}
           onChange={switchStakeButtons}
@@ -147,6 +154,16 @@ const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
       </Popover>
     )
   })
+  function onReset(type: 'period' | 'price') {
+    if (type === 'period') {
+      setFilter12Month(false)
+      setFilter6Month(false)
+      setFilter3Month(false)
+      setFilter1Month(false)
+    } else {
+      setFilterByPrice(false)
+    }
+  }
   function switchRedeemButtons(clickedButton: number, sortType: SortType) {
     setActiveRedeemButton(clickedButton)
     setSortType(sortType)
@@ -180,8 +197,8 @@ const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
     setTo(to)
   }
   function onApplyStakePeriod(
-    filter12month: boolean,
-    filter6month: boolean,
+    filter12Month: boolean,
+    filter6Month: boolean,
     filter3Month: boolean,
     filter1Month: boolean,
   ) {

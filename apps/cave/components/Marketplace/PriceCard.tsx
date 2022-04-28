@@ -9,6 +9,7 @@ interface PriceCard {
   activeButton: number
   onChange?: (clickedButton: number, sortType: SortType) => void
   onApply: (from: number, to: number) => void
+  onReset: () => void
 }
 
 export default function PriceCard(props: PriceCard) {
@@ -35,6 +36,11 @@ export default function PriceCard(props: PriceCard) {
     const higherNumber = fromValue > toValue ? +fromValue : +toValue
     const smallerNumber = fromValue < toValue ? +fromValue : +toValue
     props.onApply(smallerNumber, higherNumber)
+  }
+  const onReset = () => {
+    setFromValue('')
+    setToValue('')
+    props.onReset()
   }
 
   return (
@@ -100,8 +106,8 @@ export default function PriceCard(props: PriceCard) {
         </Flex>
       </Flex>
       <Flex height={'65px'} justifyContent="center" alignItems={'end'} gap="2">
-        <ChooseButton onClick={() => {}} title="Reset" />
-        <ChooseButton onClick={() => onApply()} title="Apply" backgroundType="blue" />
+        <ChooseButton onClick={onReset} title="Reset" />
+        <ChooseButton onClick={onApply} title="Apply" backgroundType="blue" />
       </Flex>
     </Box>
   )

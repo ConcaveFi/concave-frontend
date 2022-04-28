@@ -19,6 +19,7 @@ interface StakePeriodCardProps {
     filter3month: boolean,
     filter1month: boolean,
   ) => void
+  onReset: () => void
 }
 
 export default function StakePeriodCard(props: StakePeriodCardProps) {
@@ -35,7 +36,7 @@ export default function StakePeriodCard(props: StakePeriodCardProps) {
     >
       <Box position={'relative'} width={'full'} height={100}>
         <Sort activeButton={activeSortButton} onChange={onChange} />
-        <Periods onApply={props.onApply} />
+        <Periods onReset={props.onReset} onApply={props.onApply} />
       </Box>
     </Flex>
   )
@@ -107,26 +108,45 @@ interface PeriodsProps {
   onApply: (
     filter12month: boolean,
     filter6month: boolean,
-    filter3month: boolean,
-    filter1month: boolean,
+    filter3Month: boolean,
+    filter1Month: boolean,
   ) => void
+  onReset: () => void
 }
 
 const Periods = (props: PeriodsProps) => {
-  const [filter12Month, setFilter12Month] = useState(false)
-  const [filter6Month, setFilter6Month] = useState(false)
-  const [filter3Month, setFilter3Month] = useState(false)
-  const [filter1Month, setFilter1Month] = useState(false)
+  const [curButton, setCurButton] = useState(0)
 
-  const noFilter = !filter12Month && !filter6Month && !filter3Month && !filter1Month
-  const wipeSelections = () => {
-    setFilter12Month(false)
-    setFilter6Month(false)
-    setFilter3Month(false)
-    setFilter1Month(false)
-  }
+  const periodButtons = [
+    { title: 'None' },
+    { title: '12Month' },
+    { title: '6Month' },
+    { title: '3Month' },
+    { title: '1Month' },
+  ]
+
+  const periodButtonsComp = periodButtons.map((value, index) => {
+    return (
+      <ToggleButton
+        key={index}
+        title={value.title}
+        onClick={() => setCurButton(index)}
+        active={curButton === index}
+        width={100}
+      />
+    )
+  })
+  const filter12month = curButton === 1
+  const filter6month = curButton === 2
+  const filter3month = curButton === 3
+  const filter1month = curButton === 4
+
   const onApply = () => {
-    props.onApply(filter12Month, filter6Month, filter3Month, filter1Month)
+    props.onApply(filter12month, filter6month, filter3month, filter1month)
+  }
+  const onReset = () => {
+    setCurButton(0)
+    props.onReset()
   }
   return (
     <>
@@ -141,35 +161,10 @@ const Periods = (props: PeriodsProps) => {
         gap="2"
       >
         <Text px={2.5}>Stake period:</Text>
-        {/* {periodButtonsComp} */}
-        <ToggleButton title={'None'} onClick={wipeSelections} active={noFilter} width={100} />
-        <ToggleButton
-          title={'12 Month'}
-          onClick={() => setFilter12Month(!filter12Month)}
-          active={filter12Month}
-          width={100}
-        />
-        <ToggleButton
-          title={'6 Month'}
-          onClick={() => setFilter6Month(!filter6Month)}
-          active={filter6Month}
-          width={100}
-        />
-        <ToggleButton
-          title={'3 Month'}
-          onClick={() => setFilter3Month(!filter3Month)}
-          active={filter3Month}
-          width={100}
-        />
-        <ToggleButton
-          title={'1 Month'}
-          onClick={() => setFilter1Month(!filter1Month)}
-          active={filter1Month}
-          width={100}
-        />
+        {periodButtonsComp}
       </Flex>
       <Flex height={'73px'} justifyContent="center" alignItems={'end'} gap="3">
-        <ChooseButton onClick={() => {}} title="Reset" />
+        <ChooseButton onClick={onReset} title="Reset" />
         <ChooseButton onClick={onApply} title="Apply" backgroundType="blue" />
       </Flex>
     </>
