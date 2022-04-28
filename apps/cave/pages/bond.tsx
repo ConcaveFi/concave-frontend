@@ -104,6 +104,10 @@ const SelectedBondType = ({ bondType }) => {
 
 const Redeem = ({ onConfirm, bondSigma }: { onConfirm: () => void; bondSigma }) => {
   const display = !!bondSigma ? 1 : 0
+  const parse = bondSigma?.bondSigma
+  const batchRedeemIDArray = parse?.batchRedeemArray
+  console.log('ARRAY OF REDEEMABLE ARRAYS')
+  console.log(batchRedeemIDArray)
   return (
     <Card mb={-20} fontWeight="bold" fontSize="lg" w="250px">
       {display ? (
@@ -124,10 +128,6 @@ export default function Bond() {
   const [cnvMarketPrice, setCnvMarketPrice] = useState<Object>()
   const [currentBlockTs, setCurrentBlockTs] = useState<number>(0)
   const [bondSigma, setBondSigma] = useState<any>()
-  const [fetchLoading, setFetchLoading] = useState<boolean>(true)
-
-  if (fetchLoading === true) {
-  }
 
   useEffect(() => {
     getCurrentBlockTimestamp().then((x) => {
