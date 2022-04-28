@@ -1,7 +1,8 @@
 import { Flex } from '@concave/ui'
 
 interface ChooseButtonProps {
-  title?: string
+  title: string
+  onClick: () => void
   backgroundType?: 'default' | 'blue'
 }
 
@@ -11,6 +12,7 @@ export default function ChooseButton(props: ChooseButtonProps) {
     backgroundType == 'blue' ? 'linear-gradient(90deg, #72639B 0%, #44B9DE 100%)' : ''
   return (
     <Flex
+      onClick={() => props.onClick()}
       background={background}
       fontWeight={700}
       fontSize={14}

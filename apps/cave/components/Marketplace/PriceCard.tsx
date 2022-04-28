@@ -1,4 +1,5 @@
 import { Box, Flex, Input, Text } from '@concave/ui'
+import { printIntrospectionSchema } from 'graphql'
 import { useEffect, useState } from 'react'
 import ChooseButton from './ChooseButton'
 import { SortType } from './MarketplaceSearchCard'
@@ -7,6 +8,7 @@ import ToggleButton from './ToggleButton'
 interface PriceCard {
   activeButton: number
   onChange?: (clickedButton: number, sortType: SortType) => void
+  onApply: (from: number, to: number) => void
 }
 
 export default function PriceCard(props: PriceCard) {
@@ -15,9 +17,25 @@ export default function PriceCard(props: PriceCard) {
   const currentButton = props.activeButton
   const [toggleButtonsComp, setToggleButonsComp] = useState(null)
 
+  // INPUT 1
+  const [fromValue, setFromValue] = useState('')
+  const emptyFrom = fromValue === ''
+  const fromLabel = emptyFrom ? 'From' : ''
+
+  // INPUT 2
+  const [toValue, setToValue] = useState('')
+  const emptyToValue = toValue === ''
+  const toLabel = emptyToValue ? 'To' : ''
+
   useEffect(() => {
     setToggleButonsComp(renderButtons())
   }, [currentButton])
+
+  const onApply = () => {
+    const higherNumber = fromValue > toValue ? +fromValue : +toValue
+    const smallerNumber = fromValue < toValue ? +fromValue : +toValue
+    props.onApply(smallerNumber, higherNumber)
+  }
 
   return (
     <Box
@@ -54,14 +72,36 @@ export default function PriceCard(props: PriceCard) {
           CNV Price Range:
         </Text>
         <Flex gap={1} alignItems="center">
-          <PriceInputValue title="From" />
+          <Flex justifyContent="center" alignItems={'center'}>
+            <Text position={'absolute'}>{fromLabel}</Text>
+            <Input
+              value={fromValue}
+              onChange={(v) => {
+                setFromValue(v.target.value)
+              }}
+              width="90px"
+              height="30px"
+              borderRadius={'2xl'}
+            />
+          </Flex>
           <Box width={2.5} height={1} shadow="down"></Box>
-          <PriceInputValue title="To" />
+          <Flex justifyContent="center" alignItems={'center'}>
+            <Text position={'absolute'}>{toLabel}</Text>
+            <Input
+              value={toValue}
+              onChange={(v) => {
+                setToValue(v.target.value)
+              }}
+              width="90px"
+              height="30px"
+              borderRadius={'2xl'}
+            />
+          </Flex>
         </Flex>
       </Flex>
       <Flex height={'65px'} justifyContent="center" alignItems={'end'} gap="2">
-        <ChooseButton title="Reset" />
-        <ChooseButton title="Apply" backgroundType="blue" />
+        <ChooseButton onClick={() => {}} title="Reset" />
+        <ChooseButton onClick={() => onApply()} title="Apply" backgroundType="blue" />
       </Flex>
     </Box>
   )
@@ -87,28 +127,5 @@ export default function PriceCard(props: PriceCard) {
       case 2:
         return SortType.PRICE_HIGHEST_FIRST
     }
-  }
-
-  interface PriceInputValueProps {
-    title: string
-  }
-
-  function PriceInputValue(props: PriceInputValueProps) {
-    const { title } = props
-    const [value, setValue] = useState('')
-    const emptyValue = value === ''
-    const label = emptyValue ? title : ''
-    return (
-      <Flex justifyContent="center" alignItems={'center'}>
-        <Text position={'absolute'}>{label}</Text>
-        <Input
-          value={value}
-          onChange={(v) => setValue(v.target.value)}
-          width="90px"
-          height="30px"
-          borderRadius={'2xl'}
-        />
-      </Flex>
-    )
   }
 }
