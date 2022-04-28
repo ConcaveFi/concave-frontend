@@ -130,7 +130,7 @@ export const getUserBondPositions = async (
   for (let i = 0; i < +getUserPositionsLength; i++) {
     const positionData = await bondingContract.positions(address, i)
     // revisit this, dont push if owed is not greater than 0
-    if (positionData.owed > 1) batchRedeemArray.push(i)
+    if (positionData.owed > 1) batchRedeemArray.push(+i)
     if (+positionData.creation > oldest) {
       oldest = +positionData.creation
     }
@@ -142,10 +142,10 @@ export const getUserBondPositions = async (
     totalPending +=
       +(+utils.formatEther(positionData.owed)).toFixed(2) * elapsed -
       +(+utils.formatEther(positionData.redeemed)).toFixed(2)
+      console.log(totalPending)
     totalOwed += +(+utils.formatEther(positionData.owed)).toFixed(2)
   }
   const parseOldest = new Date(oldest * 1000 + 432000000).toString().slice(4, 21)
-
   return { parseOldest, totalOwed, totalPending, batchRedeemArray }
 }
 
