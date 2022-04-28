@@ -1,6 +1,6 @@
 import { GasIcon } from '@concave/icons'
 import { Button, Card, HStack, Spinner, Text, useDisclosure } from '@concave/ui'
-import { useApprovalWhenNeeded } from 'hooks/useAllowance'
+import { useApprove } from 'hooks/useApprove'
 import React, { useEffect, useState } from 'react'
 import { useFeeData } from 'wagmi'
 import { BondInput } from './BondInput'
@@ -36,18 +36,21 @@ export function BondBuyCard() {
   const { currencyIn, currencyOut, userAddress, balance, signer } = useBondState()
   const [settings, setSettings] = useState<BondSettings>(defaultSettings)
   const userBalance = balance.data?.formatted
-  const [amountIn, setAmountIn] = useState<number>(0)
+  const [amountIn, setAmountIn] = useState<string>('0')
   const [amountOut, setAmountOut] = useState<string>()
   const [bondReceipt] = useState<any>()
   const [bondTransaction] = useState({})
   const [bondSpotPrice, setBondSpotPrice] = useState<string>()
   const confirmModal = useDisclosure()
   const receiptModal = useDisclosure()
-  const [needsApproval, approve, approveLabel] = useApprovalWhenNeeded(
+  const {
+   allowance,
+   sendApproveTx
+  } = useApprove(
     currencyIn,
-    '0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4',
-    amountIn,
+    '0x5C2bDbdb14E2f6b6A443B0f2FfF34F269e5DE81d',
   )
+  const allowanceIsNotEnough = !!allowance.value?.lt(amountIn)
 
   useEffect(() => {
     getBondSpotPrice(3, '0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4').then((bondSpotPrice) => {
@@ -84,19 +87,19 @@ export function BondBuyCard() {
           <Settings onClose={setSettings} />
         </HStack>
       </HStack>
-      {/* {needsApproval && (
+      {allowanceIsNotEnough && (
         <Button
           isLoading={false}
           variant="primary"
           size="large"
           isFullWidth
-          onClick={() => approve()}
+          onClick={() => sendApproveTx()}
         >
-          {approveLabel}
+          Approve
         </Button>
-      )} */}
+      )}
       <Button
-        // isDisabled={needsApproval || +userBalance < +amountIn}
+        isDisabled={allowanceIsNotEnough || +userBalance < +amountIn}
         variant="primary"
         size="large"
         isFullWidth
