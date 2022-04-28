@@ -10,8 +10,8 @@ const MarketplaceActivityCard = () => {
   const filters = [{ name: 'All' }, { name: 'Listing' }, { name: 'Sale' }]
 
   useEffect(() => {
-    handleClick("all")
-  },[])
+    handleClick('all')
+  }, [])
 
   // TODO create types for data later on
   const handleClick = (trigger: string) => {
@@ -77,7 +77,7 @@ const MarketplaceActivityCard = () => {
                   color="white"
                   fontWeight="bold"
                 >
-                  <Text color={e.name === "All" && 'blue'}>{e.name}</Text>
+                  <Text color={e.name === 'All' && 'blue'}>{e.name}</Text>
                 </Button>
               </Box>
             )

@@ -34,14 +34,14 @@ const MarketplaceTransactionCard = (props: any) => {
             <Text as="b">{`${filter.cnv} CNV`}</Text>
           </Box>
           <Flex>
-          <Box>
-            <a href={`https://etherscan.io/tx/${filter.link}`} target="_blank" rel="noreferrer">
-              <Text  color="blue.400" as="u">
-                Transaction 
-              </Text>
-              <TransactionIcon viewBox="0 0 30 30"/> 
-            </a>
-          </Box>
+            <Box>
+              <a href={`https://etherscan.io/tx/${filter.link}`} target="_blank" rel="noreferrer">
+                <Text color="blue.400" as="u">
+                  Transaction
+                </Text>
+                <TransactionIcon viewBox="0 0 30 30" />
+              </a>
+            </Box>
           </Flex>
         </VStack>
       </HStack>

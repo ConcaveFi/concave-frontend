@@ -17,9 +17,10 @@ import { parseUnits } from 'ethers/lib/utils'
 import { ROUTER_ADDRESS } from 'gemswap-sdk'
 import { useAddLiquidity, UseAddLiquidityData } from 'hooks/useAddLiquidity'
 import { useApprovalWhenNeeded } from 'hooks/useAllowance'
+import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { precision } from 'hooks/usePrecision'
-import React, { useState } from 'react'
+import React from 'react'
 import { chain } from 'wagmi'
 
 const LiquidityTip = () => (
@@ -35,18 +36,20 @@ const LiquidityTip = () => (
 export const AddLiquidityContent = ({ userAddress }: { userAddress: string }) => {
   const supplyLiquidityDisclosure = useDisclosure()
   const transactionStatusDisclosure = useDisclosure()
-  const [data, setters, call, clear] = useAddLiquidity(chain.ropsten, userAddress)
+  const [data, setters, addLiquidity, clear] = useAddLiquidity(chain.ropsten, userAddress)
   const { amountADesired, amountBDesired, tokenA, tokenB, pair } = data
   const { updateInputValue, updateOutputValue, updateTokenA, updateTokenB } = setters
   const valid = tokenA && tokenB && amountADesired && amountBDesired
-  const [overflowA, setOverflowA] = useState(false)
-  const [overflowB, setOverflowB] = useState(false)
+  const balanceA = useCurrencyBalance(tokenA)
+  const balanceB = useCurrencyBalance(tokenB)
+  const overflowA = amountADesired?.greaterThan(balanceA.data?.value.toString())
+  const overflowB = amountBDesired?.greaterThan(balanceB.data?.value.toString())
+
   const onSubmit = async () => {
     try {
       transactionStatusDisclosure.onOpen()
-      await call()
+      await addLiquidity()
     } catch (err) {
-      console.warn(err)
       transactionStatusDisclosure.onClose()
     }
   }
@@ -57,7 +60,6 @@ export const AddLiquidityContent = ({ userAddress }: { userAddress: string }) =>
         <InputField
           currencyIn={tokenA}
           currencyAmountIn={amountADesired}
-          overflowBalance={setOverflowA}
           updateInputValue={(value) => {
             if (value?.toExact()) {
               updateInputValue('' + value.toExact())
@@ -81,7 +83,6 @@ export const AddLiquidityContent = ({ userAddress }: { userAddress: string }) =>
         <InputField
           currencyIn={tokenB}
           currencyAmountIn={amountBDesired}
-          overflowBalance={setOverflowB}
           updateInputValue={(value) => {
             if (value?.toExact()) {
               updateOutputValue('' + value.toExact())

@@ -90,7 +90,6 @@ const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
 
   const filterCards = filters.map((e, k) => {
     return (
-
       <Popover offset={[e.offsetX, 10]} key={k}>
         {/* Chakra type bug, related to just released react 18, should be fixed soon 
         // @ts-ignore  */}
