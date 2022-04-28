@@ -7,7 +7,7 @@ interface NftPositionBoxProps {
   price: number
   discount: number
   active?: boolean
-  onClick?: (any: Dispatch<SetStateAction<boolean>>) => void
+  onClick?: () => void
 }
 
 const NftPositionBox = (props: NftPositionBoxProps) => {
@@ -75,6 +75,8 @@ const NftPositionBox = (props: NftPositionBoxProps) => {
           height={'60px'}
           src={`/assets/liquidstaking/modal-arrow-logo.svg`}
           alt="arrow down logo"
+          cursor={'pointer'}
+          onClick={props.onClick}
         />
       </Flex>
     </Flex>
@@ -92,25 +94,18 @@ const NftPositionCard = (props: NftPositionBoxProps) => {
       bg={active ? backgroundBorder : 'rgb(0,0,0,0)'}
       rounded={'2xl'}
       justifyContent="center"
-      cursor={'pointer'}
       my={active ? 6 : 0}
       transition="all"
       transitionDuration={'0.3s'}
     >
-      <Flex
-        direction="column"
-        grow={1}
-        m={'2px'}
-        bg={defaultBg}
-        rounded={'2xl'}
-        onClick={() => setActive(!active)}
-      >
+      <Flex direction="column" grow={1} m={'2px'} bg={defaultBg} rounded={'2xl'} onClick={() => {}}>
         <NftPositionBox
           active={active}
           discount={discount}
           price={price}
           redeemIn={redeemIn}
           stakePeriod={stakePeriod}
+          onClick={() => setActive(!active)}
         />
         <Collapse in={active}>
           <HStack height="100px" justifyContent="start" alignItems={'center'} width={'full'}>
