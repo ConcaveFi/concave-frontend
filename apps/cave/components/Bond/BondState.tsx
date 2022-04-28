@@ -127,14 +127,10 @@ export const getUserBondPositions = async (
   let oldest = 0
   const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, providers)
   const getUserPositionsLength = await bondingContract.getUserPositionCount(address)
-  console.log(getUserPositionsLength.toString())
-  // TODO: Get bond position length
   for (let i = 0; i < +getUserPositionsLength; i++) {
     const positionData = await bondingContract.positions(address, i)
-    console.log(positionData)
     // revisit this, dont push if owed is not greater than 0
-    console.log(positionData)
-    // if (positionData.owed > 1) batchRedeemArray.push(i)
+    if (positionData.owed > 1) batchRedeemArray.push(i)
     if (+positionData.creation > oldest) {
       oldest = +positionData.creation
     }

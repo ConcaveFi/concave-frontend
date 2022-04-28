@@ -222,15 +222,9 @@ export default function Bond() {
                 bondSigma={bondSigma}
                 onConfirm={(bondSigma) => {
                   const parse = bondSigma?.bondSigma
-                  console.log(parse)
                   const batchRedeemIDArray = parse?.batchRedeemArray
-                  //pass actual batch redeem id
+                  console.log(batchRedeemIDArray)
                   redeemBondBatch(3, [0,1,2], userAddress, signer)
-                  // make call here for a mass redeem...
-                  // inherit id of known redeemable positions
-                  // load up those arguments into the batch redemption
-                  console.log('test')
-                  //
                 }}
               ></Redeem>
             </Card>
