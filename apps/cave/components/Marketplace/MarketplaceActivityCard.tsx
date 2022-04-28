@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Box, Card, Flex, Text, Button } from '@concave/ui'
+import { Box, Card, Flex, Text, Button, Image } from '@concave/ui'
 import NewActivityCard from './MarketplaceTransactionCard'
 import MarketplaceTransactionCard from './MarketplaceTransactionCard'
 
@@ -64,7 +64,6 @@ const MarketplaceActivityCard = () => {
         w="300px" // w= "100%"
         maxW="420px"
         backgroundBlendMode={'screen'}
-        background={'/assets/textures/glass.jpg'} // glass png here
         backdropFilter="blur(15px)"
       >
         <Flex direction="row" gap={6} justify="center" mt={2}>

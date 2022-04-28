@@ -17,7 +17,7 @@ import {
   getCurrentBlockTimestamp,
   getUserBondPositions,
   useBondState,
-  redeemBondBatch
+  redeemBondBatch,
 } from 'components/Bond/BondState'
 import { useEffect, useState } from 'react'
 import React from 'react'
@@ -125,8 +125,7 @@ export default function Bond() {
   const [bondSpotPrice, setBondSpotPrice] = useState<string>('0')
   const [cnvMarketPrice, setCnvMarketPrice] = useState<Object>()
   const [currentBlockTs, setCurrentBlockTs] = useState<number>(0)
-  const [bondSigma, setBondSigma] = useState<any>()
-  
+  const [bondSigma, setBondSigma] = useState<any>(0)
 
   useEffect(() => {
     getCurrentBlockTimestamp().then((x) => {
@@ -224,7 +223,7 @@ export default function Bond() {
                   const parse = bondSigma?.bondSigma
                   const batchRedeemIDArray = parse?.batchRedeemArray
                   console.log(batchRedeemIDArray)
-                  redeemBondBatch(3, [0,1,2], userAddress, signer)
+                  redeemBondBatch(3, [0, 1, 2], userAddress, signer)
                 }}
               ></Redeem>
             </Card>
