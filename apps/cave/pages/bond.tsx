@@ -5,6 +5,7 @@ import {
   Container,
   Flex,
   Heading,
+  HStack,
   Image,
   Stack,
   Text,
@@ -17,7 +18,7 @@ import {
   getCurrentBlockTimestamp,
   getUserBondPositions,
   useBondState,
-  redeemBondBatch
+  redeemBondBatch,
 } from 'components/Bond/BondState'
 import { useEffect, useState } from 'react'
 import React from 'react'
@@ -64,7 +65,10 @@ const UserBondPositionInfo = (bondSigma) => {
   return (
     <Card bg="none" py={3} w="100%" direction="row" shadow="Glass Up Medium">
       <Flex justify="center" pl={4} pr={7}>
-        <InfoItem value={totalOwed > 0 ? oldestBond : 'N/A'} label={oldestBond ? 'Fully Vested' : ''} />
+        <InfoItem
+          value={totalOwed > 0 ? oldestBond : 'N/A'}
+          label={oldestBond ? 'Fully Vested' : ''}
+        />
       </Flex>
       <Box w="1px" mx={-1} my={-4} bg="stroke.primary" />
       <InfoItem
@@ -126,8 +130,7 @@ export default function Bond() {
   const [cnvMarketPrice, setCnvMarketPrice] = useState<Object>()
   const [currentBlockTs, setCurrentBlockTs] = useState<number>(0)
   const [bondSigma, setBondSigma] = useState<any>()
-  
-
+  const [isLargerThan1200] = useMediaQuery('(min-width: 1280px)')
   useEffect(() => {
     getCurrentBlockTimestamp().then((x) => {
       setCurrentBlockTs(x)
@@ -162,7 +165,13 @@ export default function Bond() {
       })
   }, [])
 
-  const [isLargerThan1200] = useMediaQuery('(min-width: 1200px)')
+  const [direction, setDirection] = useState<'row' | 'column'>('row')
+  const [align, setAlign] = useState<'start' | 'center'>('start')
+
+  useEffect(() => {
+    setDirection(isLargerThan1200 ? 'row' : 'column')
+    setAlign(isLargerThan1200 ? 'start' : 'center')
+  }, [isLargerThan1200])
 
   return (
     <Container maxW="container.lg">
@@ -173,11 +182,7 @@ export default function Bond() {
           </Heading>
         </Stack>
 
-        <Flex
-          gap={10}
-          direction={isLargerThan1200 ? 'row' : 'column'}
-          align={isLargerThan1200 ? 'start' : 'center'}
-        >
+        <Flex gap={10} direction={direction} align={align}>
           <Box
             pos="relative"
             h="fit-content"
