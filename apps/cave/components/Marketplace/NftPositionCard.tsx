@@ -1,4 +1,4 @@
-import { Box, Collapse, Flex, HStack, Image, Text, VStack } from '@concave/ui'
+import { Box, Button, Collapse, Flex, HStack, Image, Text, VStack } from '@concave/ui'
 import { Dispatch, SetStateAction, useState } from 'react'
 
 interface NftPositionBoxProps {
@@ -7,7 +7,7 @@ interface NftPositionBoxProps {
   price: number
   discount: number
   active?: boolean
-  onClick?: (any: Dispatch<SetStateAction<boolean>>) => void
+  onClick?: () => void
 }
 
 const NftPositionBox = (props: NftPositionBoxProps) => {
@@ -43,7 +43,7 @@ const NftPositionBox = (props: NftPositionBoxProps) => {
         </HStack>
       </Flex>
 
-      <Flex flex={1} justifyContent="center" direction={'column'} textAlign={'start'} ml="2">
+      <Flex flex={1} justifyContent="center" direction={'column'} textAlign={'start'} ml="6">
         <Text color="text.low" fontSize="sm">
           Redeem In:
         </Text>
@@ -51,7 +51,7 @@ const NftPositionBox = (props: NftPositionBoxProps) => {
           {redeemIn} Days
         </Text>
       </Flex>
-      <Flex flex={1} justifyContent="center" direction={'column'} textAlign={'start'} ml="2">
+      <Flex flex={1} justifyContent="center" direction={'column'} textAlign={'start'} ml="6">
         <Text color="text.low" fontSize="sm">
           Price:
         </Text>
@@ -59,7 +59,7 @@ const NftPositionBox = (props: NftPositionBoxProps) => {
           {price} CNV
         </Text>
       </Flex>
-      <Flex flex={1} justifyContent="center" direction={'column'} textAlign={'start'} ml="2">
+      <Flex flex={1} justifyContent="center" direction={'column'} textAlign={'start'} ml="6">
         <Text color="text.low" fontSize="sm">
           Discount:
         </Text>
@@ -75,6 +75,8 @@ const NftPositionBox = (props: NftPositionBoxProps) => {
           height={'60px'}
           src={`/assets/liquidstaking/modal-arrow-logo.svg`}
           alt="arrow down logo"
+          cursor={'pointer'}
+          onClick={props.onClick}
         />
       </Flex>
     </Flex>
@@ -92,31 +94,87 @@ const NftPositionCard = (props: NftPositionBoxProps) => {
       bg={active ? backgroundBorder : 'rgb(0,0,0,0)'}
       rounded={'2xl'}
       justifyContent="center"
-      cursor={'pointer'}
       my={active ? 6 : 0}
       transition="all"
       transitionDuration={'0.3s'}
     >
-      <Flex
-        direction="column"
-        grow={1}
-        m={'2px'}
-        bg={defaultBg}
-        rounded={'2xl'}
-        onClick={() => setActive(!active)}
-      >
+      <Flex direction="column" grow={1} m={'2px'} bg={defaultBg} rounded={'2xl'} onClick={() => {}}>
         <NftPositionBox
           active={active}
           discount={discount}
           price={price}
           redeemIn={redeemIn}
           stakePeriod={stakePeriod}
+          onClick={() => setActive(!active)}
         />
         <Collapse in={active}>
-          <Flex height="100px"></Flex>
+          <HStack height="100px" justifyContent="start" alignItems={'center'} width={'full'}>
+            <Flex
+              direction={'column'}
+              justifyContent="center"
+              alignItems={'center'}
+              width={'200px'}
+            >
+              <Text color={'text.low'} fontSize="sm">
+                Last sold by 0x43fs... for
+              </Text>
+              <Flex justifyContent={'center'} alignItems="center">
+                <Text fontWeight={500}>600 CNV</Text>
+                <Text color={'text.low'} fontSize="sm" pl={1}>
+                  (3 days ago)
+                </Text>
+              </Flex>
+            </Flex>
+            <Flex
+              pl={3}
+              direction={'column'}
+              justifyContent="center"
+              alignItems={'center'}
+              textAlign="start"
+            >
+              <Text width={'full'} color={'text.low'} fontSize="sm">
+                Redeem date:
+              </Text>
+              <Text width={'full'} fontWeight={500}>
+                12.07.22
+              </Text>
+            </Flex>
+            <Flex textAlign={'start'} pl={1} direction={'column'} justifyContent="center">
+              <Text color={'text.low'} fontSize="sm">
+                Current value
+              </Text>
+              <Flex justifyContent={'center'} alignItems="center">
+                <Text width={'full'} fontWeight={500}>
+                  12.07.22
+                </Text>
+              </Flex>
+            </Flex>
+            <BuyButton />
+          </HStack>
         </Collapse>
       </Flex>
     </Flex>
+  )
+}
+
+const BuyButton = () => {
+  return (
+    <Button>
+      <Flex
+        boxShadow={
+          '20px -20px 39px rgba(120, 182, 255, 0.25), 0px 5px 14px rgba(0, 0, 0, 0.47), inset 0px -10px 20px rgba(117, 164, 255, 0.5)'
+        }
+        background="linear-gradient(90deg, #72639B 0%, #44B9DE 100%)"
+        height={38}
+        width={143}
+        rounded="2xl"
+        justifyContent={'center'}
+        alignItems="center"
+        ml={2}
+      >
+        <Text>Buy</Text>
+      </Flex>
+    </Button>
   )
 }
 
