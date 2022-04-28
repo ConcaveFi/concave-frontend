@@ -64,16 +64,16 @@ const UserBondPositionInfo = (bondSigma) => {
   return (
     <Card bg="none" py={3} w="100%" direction="row" shadow="Glass Up Medium">
       <Flex justify="center" pl={4} pr={7}>
-        <InfoItem value={oldestBond} label={oldestBond ? 'Fully Vested' : ''} />
+        <InfoItem value={totalOwed > 0 ? oldestBond : 'N/A'} label={oldestBond ? 'Fully Vested' : ''} />
       </Flex>
       <Box w="1px" mx={-1} my={-4} bg="stroke.primary" />
       <InfoItem
         value={totalOwed}
-        label={totalOwed ? 'Claimable' : 'No Bonds to Claim'}
+        label={totalOwed ? 'Purchased' : 'No Bonds to Claim'}
         flexGrow={1}
       />
       <Box w="1px" mx={-1} my={-4} bg="stroke.primary" />
-      <InfoItem value={totalPending} label={totalPending ? 'Owed' : ''} px={5} />
+      <InfoItem value={totalPending} label={totalPending ? 'Redeemed' : ''} px={5} />
     </Card>
   )
 }
