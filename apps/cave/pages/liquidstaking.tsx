@@ -37,8 +37,7 @@ const StakingGroup: Array<StakingGroupProps> = [
 ]
 
 function LiquidStaking() {
-  const [isLargerThan1200] = useMediaQuery('(min-width: 1300px)')
-  const [isLargerThan950] = useMediaQuery('(min-width: 950px)')
+  const [isLargerThan1100] = useMediaQuery('(min-width: 1100px)')
   return (
     <Container maxW="container.lg" borderRadius={0} border="" textAlign="center">
       <Heading as="h1" mt={16} mb={3} fontSize="5xl">
@@ -54,14 +53,15 @@ function LiquidStaking() {
         <GraphicGuide />
       </HStack>
 
-      <Flex
-        alignItems="start"
-        bg={'black'}
-        justifyContent="center"
-        border=" 2px solid  white"
-        height="700"
-      >
-        <Flex justifyContent="center" alignItems="center" bg={'yellow'} m={2} wrap="wrap">
+      <Flex mt={16} alignItems="start" justifyContent="center" height="700">
+        <Flex
+          gap={isLargerThan1100 ? 6 : 1}
+          justifyContent="center"
+          alignItems="center"
+          m={2}
+          wrap={isLargerThan1100 ? 'nowrap' : 'wrap'}
+          width={isLargerThan1100 ? '' : 500}
+        >
           {StakingGroup.map((s) => (
             <StakeCard
               icon={s.icon}
