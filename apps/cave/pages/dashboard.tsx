@@ -4,7 +4,6 @@ import { Container, Flex, Heading, HStack, Stack, Text } from '@concave/ui'
 import MarketplaceSearchCard from 'components/Marketplace/MarketplaceSearchCard'
 import UserDashboardCard from 'components/Dashboard/UserDashboardCard'
 
-
 const dashboard = () => {
   return (
     <Container maxW="container.lg" borderRadius={0} border="" textAlign="center">
@@ -15,15 +14,13 @@ const dashboard = () => {
         <Text maxW={520} textAlign="center">
           This is the user dashboard to claim divdends and manage your liquid NFT positions.
         </Text>
-
       </HStack>
 
       <Flex mr="6" gap={8} position="relative" mt={16}>
-        <UserDashboardCard/>
+        <UserDashboardCard />
       </Flex>
     </Container>
   )
 }
 
 export default dashboard
-
