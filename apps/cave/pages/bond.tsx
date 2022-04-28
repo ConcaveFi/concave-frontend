@@ -17,9 +17,9 @@ import {
   getCurrentBlockTimestamp,
   getUserBondPositions,
   useBondState,
+  redeemBondBatch
 } from 'components/Bond/BondState'
 import { useEffect, useState } from 'react'
-import { useFetchApi } from 'hooks/cnvData'
 import React from 'react'
 
 const InfoItem = ({ value, label, ...props }) => (
@@ -104,6 +104,8 @@ const SelectedBondType = ({ bondType }) => {
 
 const Redeem = ({ onConfirm, bondSigma }: { onConfirm: () => void; bondSigma }) => {
   const display = !!bondSigma ? 1 : 0
+  const parse = bondSigma?.bondSigma
+  const batchRedeemIDArray = parse?.batchRedeemArray
   return (
     <Card mb={-20} fontWeight="bold" fontSize="lg" w="250px">
       {display ? (
@@ -124,10 +126,7 @@ export default function Bond() {
   const [cnvMarketPrice, setCnvMarketPrice] = useState<Object>()
   const [currentBlockTs, setCurrentBlockTs] = useState<number>(0)
   const [bondSigma, setBondSigma] = useState<any>()
-  const [fetchLoading, setFetchLoading] = useState<boolean>(true)
-
-  if (fetchLoading === true) {
-  }
+  
 
   useEffect(() => {
     getCurrentBlockTimestamp().then((x) => {
@@ -221,12 +220,11 @@ export default function Bond() {
               <UserBondPositionInfo bondSigma={bondSigma} />
               <Redeem
                 bondSigma={bondSigma}
-                onConfirm={() => {
-                  // make call here for a mass redeem...
-                  // inherit id of known redeemable positions
-                  // load up those arguments into the batch redemption
-                  console.log('test')
-                  //
+                onConfirm={(bondSigma) => {
+                  const parse = bondSigma?.bondSigma
+                  const batchRedeemIDArray = parse?.batchRedeemArray
+                  console.log(batchRedeemIDArray)
+                  redeemBondBatch(3, [0,1,2], userAddress, signer)
                 }}
               ></Redeem>
             </Card>

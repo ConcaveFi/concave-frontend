@@ -87,7 +87,8 @@ function StakeInput(props) {
         </Flex>
         <Flex mt={2} justify="space-between" px={2}>
           <Text color="text.low" fontSize="md" fontWeight="bold">
-            {cnvPrice.data ? `$${(stakeInput * cnvPrice.data?.cnv).toFixed(2)}` : 'Loading price'}
+            Loading Price
+            {/* {cnvPrice.data ?`$${(stakeInput * cnvPrice.data?.cnv).toFixed(2)}` : 'Loading price'} */}
           </Text>
           <HStack spacing={2}>
             <Text color="text.low" fontSize="sm" fontWeight="bold">

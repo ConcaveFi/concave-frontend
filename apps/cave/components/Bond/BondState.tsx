@@ -70,8 +70,10 @@ export const purchaseBond = async (
   )
   const intParseInput = +input
   const intParseAllowance = +formattedAllowance
+  console.log(intParseInput)
+  console.log(intParseAllowance)
   if (intParseInput > intParseAllowance) {
-    await ROPSTEN_DAI_CONTRACT.approve('0xE9Ffe05f55697A4D8A95BB046E5A8b150A49687e', formattedInput)
+    await ROPSTEN_DAI_CONTRACT.approve('0x5C2bDbdb14E2f6b6A443B0f2FfF34F269e5DE81d', formattedInput)
   } else {
     await bondingContract.purchaseBond(
       address,
@@ -91,28 +93,28 @@ export async function getCurrentBlockTimestamp() {
   const timestamp = (await providers.getBlock(getBlock)).timestamp
   return timestamp
 }
-// export const redeemBond = async (
-//   networkId: number,
-//   positionID: string,
-//   address: string,
-//   signer: ethers.Signer,
-// ) => {
-//   const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, signer)
-//   const formattedPositionID = ethers.utils.parseUnits(positionID.toString(), 18)
-//   const estimatedGas = bondingContract.estimateGas.redeemBond(
-//     address,
-//     positionID,
-//   )
-//   await bondingContract.redeemBond(
-//     address,
-//     formattedPositionID,
-//     {
-//       gasLimit: estimatedGas,
-//     },
-//   )
 
-//   return
-// }
+export async function redeemBondBatch (
+  networkId: number,
+  positionIDArray: Array<any>,
+  address: string,
+  signer: ethers.Signer,
+)  {
+  console.log(positionIDArray)
+  const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, signer)
+  const estimatedGas = bondingContract.estimateGas.redeemBondBatch(
+    address,
+    positionIDArray,
+  )
+  await bondingContract.redeemBondBatch(
+    address,
+    positionIDArray,
+    {
+      gasLimit: estimatedGas,
+    },
+  )
+  return
+}
 
 export const getUserBondPositions = async (
   networkId: number,
@@ -124,11 +126,10 @@ export const getUserBondPositions = async (
   let totalOwed = 0
   let oldest = 0
   const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, providers)
-  // TODO: Get bond position length
-  for (let i = 0; i < 1; i++) {
+  const getUserPositionsLength = await bondingContract.getUserPositionCount(address)
+  for (let i = 0; i < +getUserPositionsLength; i++) {
     const positionData = await bondingContract.positions(address, i)
     // revisit this, dont push if owed is not greater than 0
-    console.log(positionData)
     if (positionData.owed > 1) batchRedeemArray.push(i)
     if (+positionData.creation > oldest) {
       oldest = +positionData.creation

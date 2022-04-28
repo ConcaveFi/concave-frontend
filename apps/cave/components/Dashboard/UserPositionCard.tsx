@@ -40,13 +40,26 @@ const UserPositionCard = (props) => {
             ml={'70px'}
             fontSize={'15px'}
             fontWeight={'700'}
+            
           >
             <Text width={'full'} pl={6}>
               Your Staking Retaking
             </Text>
+            <Text color="text.low" fontSize="sm">
+            Just Now:
+            </Text>
+            <Text color="text.low" fontSize="sm">
+            last 8 hours:
+            </Text>
+            <Text color="text.low" fontSize="sm">
+            last 24 hours:
+            </Text>
           </Flex>
+          
         </Flex>
+        
       </Flex>
+      
       <Box
         pos={'relative'}
         height={'full'}

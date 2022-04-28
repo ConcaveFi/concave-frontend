@@ -35,7 +35,7 @@ export function BondInput({
   onChangeValue,
   onClickMaxBalance,
 }: {
-  value: string
+  value: number
   currency?: Currency
   balance: string
   disabled?: boolean

@@ -13,14 +13,6 @@
   ],
   "tokens": [
     {
-      "name": "Wrapped Ether",
-      "address": "0xc778417e063141139fce010982780140aa0cd5ab",
-      "symbol": "WETH",
-      "decimals": 18,
-      "chainId": 3,
-      "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png"
-    },
-    {
       "chainId": 3,
       "name": "Dai Stablecoin",
       "address": "0x7B731FFcf1b9C6E0868dA3F1312673A12Da28dc5",

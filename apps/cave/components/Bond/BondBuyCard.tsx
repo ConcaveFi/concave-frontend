@@ -115,7 +115,7 @@ export function BondBuyCard() {
         isOpen={confirmModal.isOpen}
         onClose={confirmModal.onClose}
         onConfirm={() => {
-          purchaseBond(3, amountIn, userAddress, signer, settings, amountOut).then((tx) => {
+          purchaseBond(3, amountIn.toString(), userAddress, signer, settings, amountOut).then((tx) => {
             receiptModal.onOpen()
           })
         }}
