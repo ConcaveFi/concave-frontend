@@ -1,4 +1,4 @@
-import { Box, Button, Flex, gradientBorder, HStack, Text } from '@concave/ui'
+import { Box, Button, Flex, gradientBorder, HStack, propNames, Text } from '@concave/ui'
 import { isActive } from 'nock/types'
 import { useEffect, useState } from 'react'
 import ChooseButton from './ChooseButton'
@@ -13,6 +13,13 @@ const UpSmall = `0px 4px 4px rgba(0, 0, 0, 0.25), inset -1px 1px 2px rgba(128, 1
 interface StakePeriodCardProps {
   activeSortButton: number
   onChange: (clickedButton: number, sortType: SortType) => void
+  onApply: (
+    filter12month: boolean,
+    filter6month: boolean,
+    filter3month: boolean,
+    filter1month: boolean,
+  ) => void
+  onReset: () => void
 }
 
 export default function StakePeriodCard(props: StakePeriodCardProps) {
@@ -29,8 +36,7 @@ export default function StakePeriodCard(props: StakePeriodCardProps) {
     >
       <Box position={'relative'} width={'full'} height={100}>
         <Sort activeButton={activeSortButton} onChange={onChange} />
-        <Periods />
-        <Choose />
+        <Periods onReset={props.onReset} onApply={props.onApply} />
       </Box>
     </Flex>
   )
@@ -98,55 +104,69 @@ function getSortTypeByIndex(index: number) {
       return SortType.STAKE_HIGHEST_FIRST
   }
 }
-
-const Periods = () => {
-  const periodButtons = [
-    { title: 'None' },
-    { title: '12 month' },
-    { title: '6 month' },
-    { title: '3 month' },
-    { title: '1 month' },
-  ]
-  const [currentButton, setCurrentButton] = useState(0)
-
-  const [periodButtonsComp, setPeriodButtonsComp] = useState(null)
-  useEffect(() => {
-    setPeriodButtonsComp(
-      periodButtons.map((button, index) => {
-        return (
-          <ToggleButton
-            title={button.title}
-            key={index}
-            onClick={() => setCurrentButton(index)}
-            active={index == currentButton}
-            width={100}
-          />
-        )
-      }),
-    )
-  }, [currentButton])
-  return (
-    <Flex
-      fontWeight={700}
-      fontSize={14}
-      textColor={'#5F7A99'}
-      wrap={'wrap'}
-      justifyContent="center"
-      mx="3"
-      alignItems={'center'}
-      gap="2"
-    >
-      <Text px={2.5}>Stake period:</Text>
-      {periodButtonsComp}
-    </Flex>
-  )
+interface PeriodsProps {
+  onApply: (
+    filter12month: boolean,
+    filter6month: boolean,
+    filter3Month: boolean,
+    filter1Month: boolean,
+  ) => void
+  onReset: () => void
 }
 
-const Choose = () => {
+const Periods = (props: PeriodsProps) => {
+  const [curButton, setCurButton] = useState(0)
+
+  const periodButtons = [
+    { title: 'None' },
+    { title: '12Month' },
+    { title: '6Month' },
+    { title: '3Month' },
+    { title: '1Month' },
+  ]
+
+  const periodButtonsComp = periodButtons.map((value, index) => {
+    return (
+      <ToggleButton
+        key={index}
+        title={value.title}
+        onClick={() => setCurButton(index)}
+        active={curButton === index}
+        width={100}
+      />
+    )
+  })
+  const filter12month = curButton === 1
+  const filter6month = curButton === 2
+  const filter3month = curButton === 3
+  const filter1month = curButton === 4
+
+  const onApply = () => {
+    props.onApply(filter12month, filter6month, filter3month, filter1month)
+  }
+  const onReset = () => {
+    setCurButton(0)
+    props.onReset()
+  }
   return (
-    <Flex height={'73px'} justifyContent="center" alignItems={'end'} gap="3">
-      <ChooseButton title="Reset" />
-      <ChooseButton title="Apply" backgroundType="blue" />
-    </Flex>
+    <>
+      <Flex
+        fontWeight={700}
+        fontSize={14}
+        textColor={'#5F7A99'}
+        wrap={'wrap'}
+        justifyContent="center"
+        mx="3"
+        alignItems={'center'}
+        gap="2"
+      >
+        <Text px={2.5}>Stake period:</Text>
+        {periodButtonsComp}
+      </Flex>
+      <Flex height={'73px'} justifyContent="center" alignItems={'end'} gap="3">
+        <ChooseButton onClick={onReset} title="Reset" />
+        <ChooseButton onClick={onApply} title="Apply" backgroundType="blue" />
+      </Flex>
+    </>
   )
 }

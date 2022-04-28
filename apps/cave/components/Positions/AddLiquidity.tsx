@@ -162,12 +162,12 @@ const SupplyLiquidityContent = ({
   const networkId = useCurrentSupportedNetworkId()
   const { pair, tokenA, tokenB, amountADesired, amountBDesired } = data
   const [needsApproveA, requestApproveA, approveLabel] = useApprovalWhenNeeded(
-    tokenA,
+    tokenA?.wrapped,
     ROUTER_ADDRESS[networkId],
     parseUnits(amountADesired.toFixed(tokenA.decimals)),
   )
   const [needsApproveB, requestApproveB, approveLabelB] = useApprovalWhenNeeded(
-    tokenB,
+    tokenB?.wrapped,
     ROUTER_ADDRESS[networkId],
     parseUnits(amountBDesired.toFixed(tokenB.decimals)),
   )

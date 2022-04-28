@@ -13,7 +13,7 @@ import {
   useDisclosure,
 } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
-import { CNV, Currency, DAI } from 'gemswap-sdk'
+import { CNV, Currency, DAI, NATIVE } from 'gemswap-sdk'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import React, { useCallback, useState } from 'react'
 import { useTokenList } from './hooks/useTokenList'
@@ -118,7 +118,7 @@ export const SelectTokenModal = ({
       bodyProps={{ gap: 4 }}
     >
       <CommonTokens
-        currencies={[DAI[networkId], CNV[networkId]]} //[nativeCurrency, ...BASES_TO_CHECK_TRADES_AGAINST[chainId]]}
+        currencies={[DAI[networkId], CNV[networkId], NATIVE[networkId]]} //[nativeCurrency, ...BASES_TO_CHECK_TRADES_AGAINST[chainId]]}
         selected={selected}
         onSelect={selectAndClose}
       />
