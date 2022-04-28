@@ -62,19 +62,17 @@ export const purchaseBond = async (
   const formattedInput = ethers.utils.parseUnits(input.toString(), 18)
   const formattedMinOutput = ethers.utils.parseUnits(minOutput.toString(), 18)
   const formattedAllowance = ethers.utils.formatEther(currentAllowance)
-  const estimatedGas = await bondingContract.estimateGas.purchaseBond(
-    address,
-    ROPSTEN_DAI_ADDRESS,
-    formattedInput,
-    formattedMinOutput,
-  )
   const intParseInput = +input
   const intParseAllowance = +formattedAllowance
-  console.log(intParseInput)
-  console.log(intParseAllowance)
   if (intParseInput > intParseAllowance) {
     await ROPSTEN_DAI_CONTRACT.approve('0x5C2bDbdb14E2f6b6A443B0f2FfF34F269e5DE81d', formattedInput)
   } else {
+    const estimatedGas = await bondingContract.estimateGas.purchaseBond(
+      address,
+      ROPSTEN_DAI_ADDRESS,
+      formattedInput,
+      formattedMinOutput,
+    )
     await bondingContract.purchaseBond(
       address,
       ROPSTEN_DAI_ADDRESS,
