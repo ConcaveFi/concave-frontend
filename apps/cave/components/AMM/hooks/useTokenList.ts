@@ -8,20 +8,24 @@ const concaveTokenList = (networkName: string) =>
 export const useTokenList = () => {
   const [
     {
-      data: { chain },
+      data: { chain: selectedChain },
+      loading,
     },
   ] = useNetwork()
-
-  return useQuery(['token-list', chain?.name], () =>
-    fetch(concaveTokenList(chain.name))
+  const chainName = (selectedChain || chain.mainnet)?.name
+  return useQuery(['token-list', chainName], () => {
+    if (loading) {
+      return []
+    }
+    return fetch(concaveTokenList(chainName))
       .then((d) => d.json() as Promise<ConcaveTokenList>)
       .then((l) => l.tokens)
       .then((list) =>
         list.map((token) => {
           return new Token(token.chainId, token.address, token.decimals, token.symbol, token.name)
         }),
-      ),
-  )
+      )
+  })
 }
 
 export const findTokenByAddress = async (
