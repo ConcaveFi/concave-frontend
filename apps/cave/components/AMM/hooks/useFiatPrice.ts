@@ -11,7 +11,7 @@ export const useFiatPrice = (currency?: Currency) => {
 }
 
 export const useFiatValue = (currencyAmount?: CurrencyAmount<Currency>) => {
-  const fiatPrice = useFiatPrice(currencyAmount?.currency)
+  const fiatPrice = useFiatPrice(currencyAmount?.currency.wrapped)
   return useMemo(() => {
     if (!fiatPrice.price) return { value: undefined, ...fiatPrice }
     return { value: fiatPrice.price.quote(currencyAmount.wrapped), ...fiatPrice }
