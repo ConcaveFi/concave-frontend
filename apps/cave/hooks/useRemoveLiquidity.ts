@@ -19,7 +19,7 @@ export const useRemoveLiquidity = ({ liquidityInfo }: { liquidityInfo: Liquidity
   const [hash, setHash] = useState<string>(null)
   const [{ data }] = useSigner()
 
-  const call = async () => {
+  const removeLiquidity = async () => {
     const router = new Router(networkId, data)
     const transaction = await router.removeLiquidity(
       tokenA,
@@ -35,7 +35,7 @@ export const useRemoveLiquidity = ({ liquidityInfo }: { liquidityInfo: Liquidity
     ...liquidityInfo,
     percentToRemove,
     setPercentToRemove,
-    call,
+    removeLiquidity,
     hash,
   }
 }
