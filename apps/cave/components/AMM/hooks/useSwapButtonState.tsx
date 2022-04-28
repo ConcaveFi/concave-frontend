@@ -1,12 +1,11 @@
 import { ButtonProps } from '@concave/ui'
-import { Currency, ROUTER_ADDRESS, Trade, TradeType } from 'gemswap-sdk'
+import { ROUTER_ADDRESS } from 'gemswap-sdk'
 import { useAccount } from 'wagmi'
 import { useModals } from 'contexts/ModalsContext'
 import { useApprove } from 'hooks/useApprove'
 import { usePermit } from 'hooks/usePermit'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { NoValidPairsError } from './usePair'
-import { UseQueryResult } from 'react-query'
 import { UseTradeResult } from './useTrade'
 
 export const useSwapButtonState = ({
@@ -64,7 +63,7 @@ export const useSwapButtonState = ({
   /*
     Insufficient Funds
   */
-  if (inputAmount?.greaterThan(currencyInBalance.data?.value.toString()))
+  if (currencyInBalance.data?.value.lt(inputAmount?.toExact()))
     return {
       children: `Insufficient ${inputAmount.currency.symbol} balance`,
       isDisabled: true,
@@ -80,8 +79,7 @@ export const useSwapButtonState = ({
   if (permit.isLoading) return { loadingText: 'Sign in your wallet', isLoading: true }
 
   const permitErroredOrWasNotInitializedYet = permit.isError || permit.isIdle
-  const allowanceIsNotEnough =
-    allowance.isSuccess && !!inputAmount?.greaterThan(allowance.value.toString())
+  const allowanceIsNotEnough = allowance.isSuccess && !!allowance.value.lt(inputAmount.toExact())
 
   if (
     (permitErroredOrWasNotInitializedYet && allowanceIsNotEnough) ||
