@@ -137,10 +137,10 @@ export const getUserBondPositions = async (
       currentBlockTimestamp >= fullyVestedTimestamp
         ? 1
         : +currentBlockTimestamp / positionData.creation
-    totalPending +=
-      +(+utils.formatEther(positionData.owed)).toFixed(2) * elapsed -
-      +(+utils.formatEther(positionData.redeemed)).toFixed(2)
-      console.log(totalPending)
+    totalPending += +(+utils.formatEther(positionData.redeemed)).toFixed(2)
+      // +(+utils.formatEther(positionData.owed)).toFixed(2) * elapsed -
+      // +(+utils.formatEther(positionData.redeemed)).toFixed(2)
+      // console.log(totalPending)
     totalOwed += +(+utils.formatEther(positionData.owed)).toFixed(2)
   }
   const parseOldest = new Date(oldest * 1000 + 432000000).toString().slice(4, 21)
