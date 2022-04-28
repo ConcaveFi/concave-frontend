@@ -220,11 +220,9 @@ export default function Bond() {
               <UserBondPositionInfo bondSigma={bondSigma} />
               <Redeem
                 bondSigma={bondSigma}
-                onConfirm={(bondSigma) => {
-                  const parse = bondSigma?.bondSigma
-                  const batchRedeemIDArray = parse?.batchRedeemArray
-                  console.log(batchRedeemIDArray)
-                  redeemBondBatch(3, [0,1,2], userAddress, signer)
+                onConfirm={() => {
+                  const batchRedeemIDArray = bondSigma.batchRedeemArray
+                  redeemBondBatch(3, batchRedeemIDArray, userAddress, signer)
                 }}
               ></Redeem>
             </Card>
