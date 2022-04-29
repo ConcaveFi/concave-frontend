@@ -29,37 +29,49 @@ const UserPositionCard = (props) => {
         shadow="down"
         justifyContent={'end'}
       >
-        <Flex width={'228px'} height={'300px'} rounded={'2xl'}>
+        <Flex width={'228px'} height={'320px'} rounded={'2xl'} textAlign="start">
           <Flex
-            flex={1}
+            grow={1}
             direction="column"
-            justifyContent="center"
-            maxHeight={90}
+            height={'320px'}
             alignItems="center"
             textAlign={'start'}
             ml={'70px'}
             fontSize={'15px'}
             fontWeight={'700'}
-            
           >
-            <Text width={'full'} pl={6}>
-              Your Staking Rewards
-            </Text>
-            <Text color="text.low" fontSize="sm">
-            Just Now:
-            </Text>
-            <Text color="text.low" fontSize="sm">
-            last 8 hours:
-            </Text>
-            <Text color="text.low" fontSize="sm">
-            last 24 hours:
-            </Text>
+            <Flex direction={'column'} width={'full'} justify="center" height={'90px'}>
+              <Text width={'full'}>Your Staking</Text>
+              <Text width={'full'}>Rewards</Text>
+            </Flex>
+            <Flex direction={'column'} width={'full'} justify="center" pt={6}>
+              <Text w={'full'} color="text.low" fontSize="sm">
+                Just Now:
+              </Text>
+              <Text w={'full'} color="#65a6f0" fontSize="md" fontWeight={'700'}>
+                +0.0011 CNV
+              </Text>
+            </Flex>
+            <Flex direction={'column'} width={'full'} justify="center" pt={6}>
+              <Text w={'full'} color="text.low" fontSize="sm">
+                6 hours ago:
+              </Text>
+              <Text w={'full'} color="#5788be" fontSize="md" fontWeight={'700'}>
+                +0.0092 CNV
+              </Text>
+            </Flex>
+            <Flex direction={'column'} width={'full'} justify="center" pt={6}>
+              <Text w={'full'} color="text.low" fontSize="sm">
+                24 hours ago:
+              </Text>
+              <Text w={'full'} color="#3d6a9e" fontSize="md" fontWeight={'700'}>
+                +0.0042 CNV
+              </Text>
+            </Flex>
           </Flex>
-          
         </Flex>
-        
       </Flex>
-      
+
       <Box
         pos={'relative'}
         height={'full'}
