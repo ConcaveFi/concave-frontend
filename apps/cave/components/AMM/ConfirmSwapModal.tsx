@@ -14,6 +14,8 @@ type TradeCurrencyInfoProps = {
   priceImpact?: Percent
 }
 
+console.log('Hi Barron')
+
 const TradeCurrencyInfo = ({ currencyAmount, fiatValue, priceImpact }: TradeCurrencyInfoProps) => {
   return (
     <Flex rounded="2xl" justify="space-between" shadow="Down Medium" px={5} py={4}>
