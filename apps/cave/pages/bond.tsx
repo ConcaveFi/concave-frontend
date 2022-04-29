@@ -59,7 +59,7 @@ const BondInfo = ({ asset, roi, vestingTerm, icon }) => {
 const UserBondPositionInfo = (bondSigma) => {
   const parse = bondSigma?.bondSigma
   const oldestBond = parse?.parseOldest
-  const totalOwed = parse?.totalOwed
+  const totalOwed = parse?.totalOwed.toFixed(2)
   const totalPending = parse?.totalPending.toFixed(2)
 
   return (
@@ -131,19 +131,27 @@ export default function Bond() {
   const [currentBlockTs, setCurrentBlockTs] = useState<number>(0)
   const [bondSigma, setBondSigma] = useState<any>()
   const [isLargerThan1200] = useMediaQuery('(min-width: 1280px)')
+  const [intervalID, setIntervalID] = useState<any>()
+
   useEffect(() => {
     getCurrentBlockTimestamp().then((x) => {
       setCurrentBlockTs(x)
     })
-    if (userAddress)
-      getUserBondPositions(3, userAddress, currentBlockTs)
-        .then((x) => {
-          setBondSigma(x)
-        })
-        .catch((e) => {
-          console.log('get position info failed', e)
-        })
-  }, [signer])
+
+    const interval = setInterval(() => {
+      return new Promise((resolve) => {
+          getUserBondPositions(3, userAddress, currentBlockTs)
+          .then((x) => {
+            setBondSigma(x)
+            resolve(null)
+          }).catch(() => {})
+    }) 
+  }, 5000)
+  if(intervalID !== interval) {
+    clearTimeout(intervalID)
+    setIntervalID(interval)
+  }
+  }, [userAddress])
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -232,7 +240,7 @@ export default function Bond() {
               ></Redeem>
             </Card>
           </Box>
-          <BondBuyCard />
+          <BondBuyCard onConfirm={() => {}}/>
         </Flex>
       </Flex>
     </Container>
