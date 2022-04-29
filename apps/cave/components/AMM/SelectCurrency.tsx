@@ -95,9 +95,11 @@ export const SelectTokenModal = ({
 }) => {
   const networkId = useCurrentSupportedNetworkId()
   const [search, setSearch] = useState('')
-  const { data, isLoading } = useTokenList()
+  const { data, ...tokensInfo } = useTokenList()
   const provider = concaveProvider(networkId)
-  const tokenByAddress = useQuery(['token', search], () => Fetcher.fetchTokenData(search, provider))
+  const { data: token, ...tokenInfo } = useQuery(['token', search], () =>
+    Fetcher.fetchTokenData(search, provider),
+  )
   const tokens = (data || []).filter((t) => {
     return (
       !search ||
@@ -139,7 +141,7 @@ export const SelectTokenModal = ({
         shadow="Down Big"
         p={3}
       >
-        {isLoading ? (
+        {tokensInfo.isLoading || (!tokens.length && tokenInfo.isLoading) ? (
           <Spinner />
         ) : (
           <UnorderedList
@@ -153,11 +155,8 @@ export const SelectTokenModal = ({
             {tokens.map((token, i) => (
               <TokenListItem key={i} currency={token} onClick={() => selectAndClose(token)} />
             ))}
-            {tokenByAddress.isSuccess && (
-              <TokenListItem
-                currency={tokenByAddress.data}
-                onClick={() => selectAndClose(tokenByAddress.data)}
-              />
+            {tokenInfo.isSuccess && (
+              <TokenListItem currency={token} onClick={() => selectAndClose(token)} />
             )}
           </UnorderedList>
         )}

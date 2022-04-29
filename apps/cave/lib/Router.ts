@@ -43,14 +43,22 @@ export class Router {
     } = {},
   ): Promise<ethers.Transaction> {
     const deadLine = Math.round(Date.now() / 1000) + 86400
-    if (amountA.currency.isNative)
+    if (amountA.currency.isNative) {
       return this.addLiquidityETH(
         parseUnits(amountA.toFixed(amountA.currency.wrapped.decimals)),
         amountB,
         to,
         extra,
       )
-    console.log(amountB.currency.isNative)
+    }
+    if (amountB.currency.isNative) {
+      return this.addLiquidityETH(
+        parseUnits(amountB.toFixed(amountB.currency.wrapped.decimals)),
+        amountA,
+        to,
+        extra,
+      )
+    }
     return this.contract
       .connect(this.singer)
       .addLiquidity(
@@ -67,6 +75,30 @@ export class Router {
   }
 
   public async removeLiquidity(
+    tokenA: Token,
+    tokenB: Token,
+    percentToRemove: BigNumber,
+    to: string,
+    extra: {
+      gasLimit?: number
+    } = {},
+  ): Promise<ethers.Transaction> {
+    const deadLine = Math.round(Date.now() / 1000) + 86400
+    return this.contract
+      .connect(this.singer)
+      .removeLiquidity(
+        tokenA.address,
+        tokenB.address,
+        percentToRemove,
+        parseUnits(`0`, tokenA.decimals),
+        parseUnits(`0`, tokenB.decimals),
+        to,
+        deadLine,
+        extra,
+      )
+  }
+
+  public async removeLiquidityETH(
     tokenA: Token,
     tokenB: Token,
     percentToRemove: BigNumber,
