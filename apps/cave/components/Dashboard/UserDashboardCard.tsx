@@ -59,8 +59,8 @@ const UserDashboardCard = (props: any) => {
         }}
       >
         <UserPositionCard />
-        <UserPositionCard />
-        <UserPositionCard />
+        <UserPositionCard unlisted />
+        <UserPositionCard unlisted popup />
         <UserPositionCard />
       </Box>
     </Card>
