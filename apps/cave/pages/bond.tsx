@@ -225,7 +225,7 @@ export default function Bond() {
                 icon="/assets/tokens/cnv.svg"
                 roi={`${
                   cnvMarketPrice > 0
-                    ? ((+cnvMarketPrice / +bondSpotPrice - 1) * 100).toFixed(2)
+                    ? ( 1-(+bondSpotPrice / +cnvMarketPrice * 100)).toFixed(2)
                     : 'Loading...'
                 }%`}
                 vestingTerm={`${termLength} Days`}
