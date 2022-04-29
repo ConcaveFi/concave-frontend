@@ -86,18 +86,18 @@ const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
     },
   ]
   const nftPositions = [
-    { stakePeriod: 1, price: 102, redeemIn: 20, discount: 2.1 },
-    { stakePeriod: 12, price: 12, redeemIn: 1, discount: 20 },
-    { stakePeriod: 3, price: 50, redeemIn: 12, discount: 1.2 },
-    { stakePeriod: 12, price: 229, redeemIn: 4, discount: 14 },
-    { stakePeriod: 3, price: 112, redeemIn: 7, discount: 12 },
-    { stakePeriod: 6, price: 522, redeemIn: 12, discount: 5 },
-    { stakePeriod: 3, price: 102, redeemIn: 20, discount: 2.1 },
-    { stakePeriod: 6, price: 12, redeemIn: 1, discount: 20 },
-    { stakePeriod: 3, price: 50, redeemIn: 12, discount: 1.2 },
-    { stakePeriod: 12, price: 229, redeemIn: 4, discount: 14 },
-    { stakePeriod: 12, price: 112, redeemIn: 7, discount: 12 },
-    { stakePeriod: 1, price: 522, redeemIn: 12, discount: 5 },
+    { stakePeriod: 45, price: 102, redeemIn: 20, discount: 2.1 },
+    { stakePeriod: 360, price: 12, redeemIn: 1, discount: 20 },
+    { stakePeriod: 90, price: 50, redeemIn: 12, discount: 1.2 },
+    { stakePeriod: 360, price: 229, redeemIn: 4, discount: 14 },
+    { stakePeriod: 90, price: 112, redeemIn: 7, discount: 12 },
+    { stakePeriod: 180, price: 522, redeemIn: 12, discount: 5 },
+    { stakePeriod: 90, price: 102, redeemIn: 20, discount: 2.1 },
+    { stakePeriod: 180, price: 12, redeemIn: 1, discount: 20 },
+    { stakePeriod: 90, price: 50, redeemIn: 12, discount: 1.2 },
+    { stakePeriod: 360, price: 229, redeemIn: 4, discount: 14 },
+    { stakePeriod: 360, price: 112, redeemIn: 7, discount: 12 },
+    { stakePeriod: 45, price: 522, redeemIn: 12, discount: 5 },
   ]
     .filter((value) => {
       if (!filterByPrice) return true
@@ -105,19 +105,19 @@ const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
     })
     .filter((value) => {
       if (!filter12Month) return value
-      else if (value.stakePeriod == 12) return value
+      else if (value.stakePeriod == 360) return value
     })
     .filter((value) => {
       if (!filter6Month) return true
-      else return value.stakePeriod == 6
+      else return value.stakePeriod == 180
     })
     .filter((value) => {
       if (!filter3Month) return true
-      else return value.stakePeriod == 3
+      else return value.stakePeriod == 90
     })
     .filter((value) => {
       if (!filter1Month) return true
-      else return value.stakePeriod == 1
+      else return value.stakePeriod == 45
     })
 
   const nftPositionsComp = nftPositions
