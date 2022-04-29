@@ -13,9 +13,11 @@ import {
   useDisclosure,
 } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
-import { CNV, Currency, DAI, NATIVE } from 'gemswap-sdk'
+import { CNV, Currency, DAI, Fetcher, NATIVE } from 'gemswap-sdk'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import { concaveProvider } from 'lib/providers'
 import React, { useCallback, useState } from 'react'
+import { useQuery } from 'react-query'
 import { useTokenList } from './hooks/useTokenList'
 
 const CommonTokens = ({
@@ -91,8 +93,11 @@ export const SelectTokenModal = ({
   isOpen: boolean
   onClose: () => void
 }) => {
+  const networkId = useCurrentSupportedNetworkId()
   const [search, setSearch] = useState('')
-  const { data, isLoading, isSuccess } = useTokenList()
+  const { data, isLoading } = useTokenList()
+  const provider = concaveProvider(networkId)
+  const tokenByAddress = useQuery(['token', search], () => Fetcher.fetchTokenData(search, provider))
   const tokens = (data || []).filter((t) => {
     return (
       !search ||
@@ -101,7 +106,6 @@ export const SelectTokenModal = ({
       t.symbol.toLowerCase().includes(search.toLowerCase())
     )
   })
-  const networkId = useCurrentSupportedNetworkId()
   const selectAndClose = useCallback(
     (token: Currency) => {
       onSelect(token), onClose()
@@ -149,6 +153,12 @@ export const SelectTokenModal = ({
             {tokens.map((token, i) => (
               <TokenListItem key={i} currency={token} onClick={() => selectAndClose(token)} />
             ))}
+            {tokenByAddress.isSuccess && (
+              <TokenListItem
+                currency={tokenByAddress.data}
+                onClick={() => selectAndClose(tokenByAddress.data)}
+              />
+            )}
           </UnorderedList>
         )}
       </Flex>
