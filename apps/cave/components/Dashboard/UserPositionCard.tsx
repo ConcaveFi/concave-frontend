@@ -1,12 +1,27 @@
-import { Box, Button, Flex, HStack, Image, Text, VStack } from '@concave/ui'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Modal, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay } from '@chakra-ui/modal'
+import {
+  Box,
+  Button,
+  Flex,
+  HStack,
+  Image,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  Portal,
+  Text,
+  useDisclosure,
+  VStack,
+} from '@concave/ui'
+import { useState } from 'react'
+import UserListPositionCard from './UserListPositionCard'
 
-// interface NftPositionCardProps {
-//   active?: boolean
-//   onClick?: (any: Dispatch<SetStateAction<boolean>>) => void
-// }
+interface NftPositionCardProps {
+  unlisted?: boolean
+  popup?: boolean
+}
 
-const UserPositionCard = (props) => {
+const UserPositionCard = (props: NftPositionCardProps) => {
   const [active, setActive] = useState(false)
   return (
     <Box
@@ -29,30 +44,45 @@ const UserPositionCard = (props) => {
         shadow="down"
         justifyContent={'end'}
       >
-        <Flex width={'228px'} height={'300px'} rounded={'2xl'}>
+        <Flex width={'228px'} height={'320px'} rounded={'2xl'} textAlign="start">
           <Flex
-            flex={1}
+            grow={1}
             direction="column"
-            justifyContent="center"
-            maxHeight={90}
+            height={'320px'}
             alignItems="center"
             textAlign={'start'}
             ml={'70px'}
             fontSize={'15px'}
             fontWeight={'700'}
           >
-            <Text width={'full'} pl={6}>
-              Your Staking Retaking
-            </Text>
-            <Text color="text.low" fontSize="sm">
-              Just Now:
-            </Text>
-            <Text color="text.low" fontSize="sm">
-              last 8 hours:
-            </Text>
-            <Text color="text.low" fontSize="sm">
-              last 24 hours:
-            </Text>
+            <Flex direction={'column'} width={'full'} justify="center" height={'90px'}>
+              <Text width={'full'}>Your Staking</Text>
+              <Text width={'full'}>Rewards</Text>
+            </Flex>
+            <Flex direction={'column'} width={'full'} justify="center" pt={6}>
+              <Text w={'full'} color="text.low" fontSize="sm">
+                Just Now:
+              </Text>
+              <Text w={'full'} color="#65a6f0" fontSize="md" fontWeight={'700'}>
+                +0.0011 CNV
+              </Text>
+            </Flex>
+            <Flex direction={'column'} width={'full'} justify="center" pt={6}>
+              <Text w={'full'} color="text.low" fontSize="sm">
+                6 hours ago:
+              </Text>
+              <Text w={'full'} color="#5788be" fontSize="md" fontWeight={'700'}>
+                +0.0092 CNV
+              </Text>
+            </Flex>
+            <Flex direction={'column'} width={'full'} justify="center" pt={6}>
+              <Text w={'full'} color="text.low" fontSize="sm">
+                24 hours ago:
+              </Text>
+              <Text w={'full'} color="#3d6a9e" fontSize="md" fontWeight={'700'}>
+                +0.0042 CNV
+              </Text>
+            </Flex>
           </Flex>
         </Flex>
       </Flex>
@@ -66,7 +96,7 @@ const UserPositionCard = (props) => {
       >
         <NftPositionViewer active={false} />
         <RedeemCardViewer />
-        <ListCardViewer />
+        <ListCardViewer popup={props.popup} unlisted={props.unlisted} />
       </Box>
     </Box>
   )
@@ -106,21 +136,29 @@ const RedeemCardViewer = () => {
           //   onClick={'s'}
           fontWeight="bold"
           fontSize="md"
-          variant="primary"
           //   bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
           w="160px"
           h="40px"
           size="large"
           mx="auto"
+          shadow="down"
         >
-          Redeem
+        <Text color="text.low" fontSize="sm">
+          Not redeemable
+          </Text>
         </Button>
       </Flex>
     </Flex>
   )
 }
+interface ListCardViewerProps {
+  unlisted?: boolean
+  popup?: boolean
+}
 
-const ListCardViewer = () => {
+const ListCardViewer = (props: ListCardViewerProps) => {
+  const { unlisted } = props
+  const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <Box
       pos="relative"
@@ -136,6 +174,15 @@ const ListCardViewer = () => {
           'inset 0px -5px 10px rgba(134, 175, 255, 0.05), inset -9px 12px 24px rgba(13, 17, 23, 0.4)',
       }}
     >
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <ModalOverlay bg={'none'} backdropBlur="4px" />
+        <ModalContent>
+          <Flex>
+            <UserListPositionCard />
+          </Flex>
+        </ModalContent>
+      </Modal>
+
       <Flex justify="left">
         <Text pl="6" mt={2} pt="3" color="text.low" fontSize="lg" as="b">
           Your Marketplace Listing
@@ -147,7 +194,7 @@ const ListCardViewer = () => {
             List Price:
           </Text>
           <Text fontSize="md" fontWeight="bold">
-            600 CNV
+            {unlisted ? '--------' : '600 CNV'}
           </Text>
         </Flex>
         <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
@@ -155,7 +202,7 @@ const ListCardViewer = () => {
             Discount:
           </Text>
           <Text fontSize="md" fontWeight="bold">
-            2.4%
+            {unlisted ? '--------' : '2.4%'}
           </Text>
         </Flex>
         <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
@@ -163,24 +210,53 @@ const ListCardViewer = () => {
             Expiration Date:
           </Text>
           <Text fontSize="md" fontWeight="bold">
-            14.11.22
+            {unlisted ? '---.---.--' : '14.11.22'}
           </Text>
         </Flex>
         <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
-          <Button
-            mt={5}
-            //   onClick={'s'}
-            fontWeight="bold"
-            fontSize="md"
-            variant="primary.outline"
-            //   bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
-            w="160px"
-            h="40px"
-            size="large"
-            mx="auto"
-          >
-            Unlist
-          </Button>
+          {!props.popup ? (
+            <Button
+              mt={5}
+              onClick={() => {
+                if (unlisted) onOpen()
+              }}
+              fontWeight="bold"
+              fontSize="md"
+              variant={unlisted ? 'primary' : 'primary.outline'}
+              //   bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
+              w="160px"
+              h="40px"
+              size="large"
+              mx="auto"
+            >
+              {!!unlisted ? 'Coming Soon' : 'Unlist'}
+            </Button>
+          ) : (
+            <Popover>
+              {/*@ts-ignore */}
+              <PopoverTrigger>
+                <Button
+                  mt={5}
+                  // onClick={}
+                  fontWeight="bold"
+                  fontSize="md"
+                  variant={unlisted ? 'primary' : 'primary.outline'}
+                  //   bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
+                  w="160px"
+                  h="40px"
+                  size="large"
+                  mx="auto"
+                >
+                  {!!unlisted ? 'List for sale' : 'Unlist'}
+                </Button>
+              </PopoverTrigger>
+              <Portal>
+                <PopoverContent border={'none'}>
+                  <UserListPositionCard />
+                </PopoverContent>
+              </Portal>
+            </Popover>
+          )}
         </Flex>
       </Flex>
     </Box>
@@ -188,10 +264,11 @@ const ListCardViewer = () => {
 }
 interface NftPositionViewerProps {
   active: boolean
+  unlisted?: boolean
 }
 
 const NftPositionViewer = (props: NftPositionViewerProps) => {
-  const { active } = props
+  const { active, unlisted } = props
   return (
     <Box
       pos="relative"
@@ -232,7 +309,7 @@ const NftPositionViewer = (props: NftPositionViewerProps) => {
                 Stake Period
               </Text>
               <Text fontSize="s" color="white" fontWeight="bold">
-                6 Month
+                180 Days
               </Text>
             </Flex>
             <Box w={'45%'}>
@@ -269,28 +346,3 @@ const NftPositionViewer = (props: NftPositionViewerProps) => {
     </Box>
   )
 }
-// <Box
-//   pos="relative"
-//   overflowY={'auto'}
-//   maxHeight={'300px'}
-//   borderRadius="16px"
-//   w="720px"
-//   h="300px"
-//   mt={1}
-//   cursor="pointer"
-//   css={{
-//     background:
-//       'url(Rectangle 110 (00000).jpg), linear-gradient(265.73deg, #274C63 0%, #182F3E 100%)',
-//     boxShadow: !active
-//       ? `0px 5px 14px rgba(0, 0, 0, 0.47),
-//         4px -7px 15px rgba(174, 177, 255, 0.13),
-//         inset -1px 1px 2px rgba(128, 186, 255, 0.24)`
-//       : 'only-test',
-//   }}
-// >
-//   <Flex direction={'column'} pos="relative" w="570px" h="full">
-//     <NftPositionViewer active={false} />
-//     <RedeemCardViewer />
-//     <ListCardViewer />
-//   </Flex>
-// </Box>

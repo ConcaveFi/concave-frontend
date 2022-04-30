@@ -14,14 +14,73 @@ const UserDividendCard = (props) => {
       maxHeight={'500px'}
       borderRadius="16px"
       mt={1}
-      cursor="pointer"
-      css={{
-        background: 'rgba(113, 113, 113, 0.01)',
-        boxShadow:
-          'inset 0px -5px 10px rgba(134, 175, 255, 0.05), inset -9px 12px 24px rgba(13, 17, 23, 0.4)',
-      }}
+      shadow={'Down Big'}
+      width={'800px'}
+      height={'136px'}
     >
-      <Flex justify="left">
+      <Flex m={6} flex={1}>
+        <Text textColor={'text.low'} fontSize={'18px'} fontWeight="700">
+          Your Dividends Share
+        </Text>
+      </Flex>
+      <Flex>
+        <Flex direction={'column'} alignItems="start" ml={6}>
+          <Text fontSize={'11px'} fontWeight={600} textColor={'text.low'}>
+            Total locked:
+          </Text>
+          <Text fontSize={'17px'} fontWeight={700}>
+            6122.42 CNV
+          </Text>
+        </Flex>
+        {/* <Flex direction={'column'} alignItems="start" ml={6}>
+          <Text fontSize={'11px'} fontWeight={600} textColor={'text.low'}>
+            Your Dividends Share:
+          </Text>
+          <Text fontSize={'17px'} fontWeight={700}>
+            0.00323%
+          </Text>
+        </Flex> */}
+        <Flex direction={'column'} alignItems="start" ml={6}>
+          <Text fontSize={'11px'} fontWeight={600} textColor={'text.low'}>
+            Next Dividend Date:
+          </Text>
+          <Text fontSize={'17px'} fontWeight={700}>
+            04.06.2022
+          </Text>
+        </Flex>
+        <Flex direction={'column'} alignItems="start" ml={6}>
+          <Text fontSize={'11px'} fontWeight={600} textColor={'text.low'}>
+            Available Dividends:
+          </Text>
+          <Text fontSize={'17px'} fontWeight={700}>
+            0.0
+          </Text>
+        </Flex>{' '}
+        <Flex flex={1} direction={'column'} textAlign={'start'}>
+          <Button
+            //   onClick={'s'}
+            fontWeight="bold"
+            fontSize="md"
+            variant="secondary.outline"
+            w="160px"
+            h="40px"
+            size="large"
+            mx="auto"
+            shadow="down"
+          >
+            <Text color="text.low" fontSize="sm">
+            Redeem
+            </Text>
+          </Button>
+        </Flex>
+      </Flex>
+    </Box>
+  )
+}
+export default UserDividendCard
+
+{
+  /* <Flex justify="left">
         <Text color="text.low" fontSize="lg" as="b">
           Your Dividends Share
         </Text>
@@ -75,8 +134,5 @@ const UserDividendCard = (props) => {
             Redeem
           </Button>
         </Flex>
-      </Flex>
-    </Box>
-  )
+      </Flex> */
 }
-export default UserDividendCard

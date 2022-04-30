@@ -3,6 +3,7 @@ import { useState } from 'react'
 import UserPositionCard from './UserPositionCard'
 import UserDividendCard from './UserDividendCard'
 import { ButtonLink } from 'components/ButtonLink'
+import UserListPositionCard from './UserListPositionCard'
 
 const UserDashboardCard = (props: any) => {
   const [active, setActive] = useState(false)
@@ -57,10 +58,11 @@ const UserDashboardCard = (props: any) => {
           },
         }}
       >
-        <UserPositionCard />
-        <UserPositionCard />
-        <UserPositionCard />
-        <UserPositionCard />
+        <UserPositionCard unlisted />
+        <UserPositionCard unlisted />
+        <UserPositionCard unlisted />
+        {/* <UserPositionCard unlisted popup /> */}
+        {/* <UserPositionCard /> */}
       </Box>
     </Card>
   )
