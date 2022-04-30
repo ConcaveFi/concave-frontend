@@ -73,12 +73,11 @@ const fetchTokenOrNativeData = (addressOrSymbol: string, chainId: ChainId) => {
 }
 
 export const fetchCurrenciesFromQuery = async (query) => {
-  const { token0, token1, chainId } = query
+  const { token0, token1, chainId = 1 } = query
 
-  const _chainId = [1, 3].includes(chainId) ? chainId : 1
   const [_token0, _token1] = await Promise.all([
-    fetchTokenOrNativeData(token0, _chainId),
-    fetchTokenOrNativeData(token1, _chainId),
+    fetchTokenOrNativeData(token0, chainId),
+    fetchTokenOrNativeData(token1, chainId),
   ])
 
   return [currencyToJson(_token0), currencyToJson(_token1)]
