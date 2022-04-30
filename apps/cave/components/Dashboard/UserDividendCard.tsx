@@ -32,14 +32,14 @@ const UserDividendCard = (props) => {
             6122.42 CNV
           </Text>
         </Flex>
-        <Flex direction={'column'} alignItems="start" ml={6}>
+        {/* <Flex direction={'column'} alignItems="start" ml={6}>
           <Text fontSize={'11px'} fontWeight={600} textColor={'text.low'}>
             Your Dividends Share:
           </Text>
           <Text fontSize={'17px'} fontWeight={700}>
             0.00323%
           </Text>
-        </Flex>
+        </Flex> */}
         <Flex direction={'column'} alignItems="start" ml={6}>
           <Text fontSize={'11px'} fontWeight={600} textColor={'text.low'}>
             Next Dividend Date:
@@ -61,13 +61,16 @@ const UserDividendCard = (props) => {
             //   onClick={'s'}
             fontWeight="bold"
             fontSize="md"
-            variant="primary.outline"
+            variant="secondary.outline"
             w="160px"
             h="40px"
             size="large"
             mx="auto"
+            shadow="down"
           >
+            <Text color="text.low" fontSize="sm">
             Redeem
+            </Text>
           </Button>
         </Flex>
       </Flex>

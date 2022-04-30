@@ -136,14 +136,16 @@ const RedeemCardViewer = () => {
           //   onClick={'s'}
           fontWeight="bold"
           fontSize="md"
-          variant="primary"
           //   bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
           w="160px"
           h="40px"
           size="large"
           mx="auto"
+          shadow="down"
         >
-          Redeem
+        <Text color="text.low" fontSize="sm">
+          Not redeemable
+          </Text>
         </Button>
       </Flex>
     </Flex>
@@ -227,7 +229,7 @@ const ListCardViewer = (props: ListCardViewerProps) => {
               size="large"
               mx="auto"
             >
-              {!!unlisted ? 'List for sale' : 'Unlist'}
+              {!!unlisted ? 'Coming Soon' : 'Unlist'}
             </Button>
           ) : (
             <Popover>
