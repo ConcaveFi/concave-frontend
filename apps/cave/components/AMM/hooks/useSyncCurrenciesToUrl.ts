@@ -3,6 +3,7 @@ import { ChainId, Currency, Fetcher, NATIVE, Token } from 'gemswap-sdk'
 import { concaveProvider } from 'lib/providers'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
+import { useNetwork } from 'wagmi'
 
 const getAddressOrSymbol = (currency: Currency) => {
   if (!currency) return undefined
@@ -15,15 +16,15 @@ const getAddressOrSymbol = (currency: Currency) => {
   token1=<address or symbol if native>
   chainId=<like 1 for mainnet 3 for ropsten...>
 */
-export const useCurrenciesFromUrl = (currency0: Currency, currency1: Currency) => {
+export const useSyncCurrenciesToUrl = (currency0: Currency, currency1: Currency) => {
   const router = useRouter()
+  const [{ data: network }] = useNetwork()
   useEffect(() => {
-    const chainId = currency0?.chainId || currency1?.chainId
     router.replace({
       query: {
-        token0: getAddressOrSymbol(currency0),
-        token1: getAddressOrSymbol(currency1),
-        chainId,
+        ...(currency0 && { token0: getAddressOrSymbol(currency0) }),
+        ...(currency1 && { token1: getAddressOrSymbol(currency1) }),
+        chainId: network.chain?.id || 1,
       },
     })
   })

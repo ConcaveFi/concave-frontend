@@ -1,6 +1,11 @@
 import { Currency, CurrencyAmount } from 'gemswap-sdk'
 import { useCallback, useState } from 'react'
 
+const isCurrencyEqual = (currency1: Currency, currency2: Currency) => {
+  if (currency1.isNative && currency2.isNative) return currency1.chainId === currency2.chainId
+  return currency1.isToken && currency1.equals(currency2)
+}
+
 export const useLinkedFields = (
   onChangeFieldAmount: (
     field: keyof typeof initialFields,
@@ -15,13 +20,13 @@ export const useLinkedFields = (
 
   const onChangeField = useCallback(
     (field: keyof typeof fieldCurrency) => (newAmount: CurrencyAmount<Currency>) => {
-      if (fieldCurrency[field]?.equals(newAmount.currency))
+      if (isCurrencyEqual(fieldCurrency[field], newAmount.currency))
         return onChangeFieldAmount(field)(newAmount)
 
       const newCurrency = newAmount.currency
       const otherField = field === 'first' ? 'second' : 'first'
 
-      if (fieldCurrency[otherField]?.equals(newCurrency))
+      if (isCurrencyEqual(fieldCurrency[otherField], newCurrency))
         return setFieldCurrency({ first: fieldCurrency.second, second: fieldCurrency.first })
 
       setFieldCurrency({ ...fieldCurrency, [field]: newCurrency })

@@ -17,8 +17,8 @@ import { useAddLiquidityButtonProps } from 'components/AMM/AddLiquidity/useAddLi
 import {
   currencyFromJson,
   fetchCurrenciesFromQuery,
-  useCurrenciesFromUrl,
-} from 'components/AMM/hooks/useCurrenciesFromUrl'
+  useSyncCurrenciesToUrl,
+} from 'components/AMM/hooks/useSyncCurrenciesToUrl'
 
 const LiquidityTip = () => (
   <Card variant="secondary" p={4} backgroundBlendMode={'screen'}>
@@ -64,7 +64,7 @@ export default function AddLiquidity({ token0, token1 }) {
   const { pair, firstFieldAmount, secondFieldAmount, onChangeFirstField, onChangeSecondField } =
     useAddLiquidityState(initialTokens)
 
-  useCurrenciesFromUrl(firstFieldAmount?.currency, secondFieldAmount?.currency)
+  useSyncCurrenciesToUrl(firstFieldAmount?.currency, secondFieldAmount?.currency)
 
   const addLPTx = useAddLiquidityTransaction(firstFieldAmount, secondFieldAmount)
 

@@ -3,12 +3,14 @@ import { usePair } from 'components/AMM/hooks/usePair'
 import { parseAmount } from 'components/AMM/utils/parseAmount'
 import { Currency, CurrencyAmount, NATIVE, Pair } from 'gemswap-sdk'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
-const makeCurrencyFields = (initialTokens = [], networkId) => ({
-  first: initialTokens[0] || NATIVE[networkId],
-  second: initialTokens[1],
-})
+const makeCurrencyFields = (initialTokens = [], networkId) => {
+  return {
+    first: initialTokens[0]?.chainId === networkId ? initialTokens[0] : NATIVE[networkId],
+    second: initialTokens[1]?.chainId === networkId && initialTokens[1],
+  }
+}
 
 const deriveAmount = (
   pair: Pair,
@@ -38,10 +40,15 @@ export const useAddLiquidityState = (initialTokens) => {
     parseAmount('0', initialCurrencyFields.first),
   )
 
-  const { onChangeField, fieldCurrency } = useLinkedFields(
+  const { onChangeField, fieldCurrency, setFieldCurrency } = useLinkedFields(
     (field) => (newAmount) => setExactAmount(newAmount),
     initialCurrencyFields,
   )
+
+  useEffect(() => {
+    setFieldCurrency(initialCurrencyFields)
+    setExactAmount(parseAmount('0', initialCurrencyFields.first))
+  }, [initialCurrencyFields, setFieldCurrency])
 
   const isExactFirst = fieldCurrency.first && exactAmount?.currency.equals(fieldCurrency.first)
   const otherCurrency = fieldCurrency[isExactFirst ? 'second' : 'first']
