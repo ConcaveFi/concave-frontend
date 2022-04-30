@@ -8,15 +8,15 @@ import { parseAmount } from './utils/parseAmount'
 
 type InputFieldProps = {
   currencyAmountIn: CurrencyAmount<Currency>
-  updateInputValue: (value: CurrencyAmount<Currency>) => void
+  onChangeAmount: (value: CurrencyAmount<Currency>) => void
 }
 
-export const InputField = ({ currencyAmountIn, updateInputValue }: InputFieldProps) => {
+export const InputField = ({ currencyAmountIn, onChangeAmount }: InputFieldProps) => {
   const inputFiat = useFiatValue(currencyAmountIn)
   const balance = useCurrencyBalance(currencyAmountIn?.currency)
 
   return (
-    <CurrencyAmountField currencyAmount={currencyAmountIn} onChangeAmount={updateInputValue}>
+    <CurrencyAmountField currencyAmount={currencyAmountIn} onChangeAmount={onChangeAmount}>
       <HStack justify="space-between" align="end" textColor="text.low" w="full">
         <Text isTruncated fontWeight="bold" fontSize="sm" mr={2}>
           {!!inputFiat.value?.greaterThan(0) &&
@@ -26,7 +26,7 @@ export const InputField = ({ currencyAmountIn, updateInputValue }: InputFieldPro
           <Balance
             value={balance.data.formatted}
             onClick={() =>
-              updateInputValue(parseAmount(balance.data.formatted, currencyAmountIn.currency))
+              onChangeAmount(parseAmount(balance.data.formatted, currencyAmountIn.currency))
             }
           />
         )}

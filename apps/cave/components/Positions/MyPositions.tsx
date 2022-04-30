@@ -21,8 +21,8 @@ import {
 } from '@concave/ui'
 import { useAddressTokenList } from 'components/AMM/hooks/useTokenList'
 import { CurrencyIcon } from 'components/CurrencyIcon'
-import { TransactionSubmittedModal } from 'components/TransactionSubmittedModal'
-import { BigNumber } from 'ethers'
+import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
+import { BigNumber, Transaction } from 'ethers'
 import { Pair, ROUTER_ADDRESS, Token } from 'gemswap-sdk'
 import { useApprovalWhenNeeded } from 'hooks/useAllowance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
@@ -267,14 +267,11 @@ const RemoveLiquidityActions = ({
         Confirm Withdrawal
       </Button>
 
-      <TransactionSubmittedModal
+      <TransactionSubmittedDialog
         title="Withdraw"
-        label="Withdraw values"
-        disclosure={transactionStatusDisclosure}
-        hash={removeLiquidityState.hash}
-        onClose={() => {
-          console.log('close')
-        }}
+        subtitle="Withdraw values"
+        tx={{ hash: removeLiquidityState.hash } as Transaction}
+        isOpen={!!removeLiquidityState.hash}
       />
     </Flex>
   )
