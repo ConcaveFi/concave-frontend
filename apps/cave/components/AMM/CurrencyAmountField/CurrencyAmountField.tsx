@@ -36,7 +36,7 @@ export function CurrencyAmountField({
   }
 
   const onSelectCurrency = (newCurrency: Currency) => {
-    onChangeAmount(parseAmount(internalAmount?.quotient.toString() || '0', newCurrency))
+    onChangeAmount(parseAmount(internalAmount?.numerator.toString() || '0', newCurrency))
   }
 
   return (
