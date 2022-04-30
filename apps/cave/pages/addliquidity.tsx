@@ -53,18 +53,18 @@ export type LiquidityPool = {
   amount1: CurrencyAmount<Currency>
 }
 
-export const getServerSideProps = async (ctx) => {
-  const [token0, token1] = await fetchCurrenciesFromQuery(ctx.query)
-  return { props: { token0, token1 } }
-}
+// export const getServerSideProps = async (ctx) => {
+//   const [token0, token1] = await fetchCurrenciesFromQuery(ctx.query)
+//   return { props: { token0, token1 } }
+// }
 
-export default function AddLiquidity({ token0, token1 }) {
-  const initialTokens = [currencyFromJson(token0), currencyFromJson(token1)]
+export default function AddLiquidity() {
+  // const initialTokens = [currencyFromJson(token0), currencyFromJson(token1)]
 
   const { pair, firstFieldAmount, secondFieldAmount, onChangeFirstField, onChangeSecondField } =
-    useAddLiquidityState(initialTokens)
+    useAddLiquidityState()
 
-  useSyncCurrenciesToUrl(firstFieldAmount?.currency, secondFieldAmount?.currency)
+  // useSyncCurrenciesToUrl(firstFieldAmount?.currency, secondFieldAmount?.currency)
 
   const addLPTx = useAddLiquidityTransaction(firstFieldAmount, secondFieldAmount)
 

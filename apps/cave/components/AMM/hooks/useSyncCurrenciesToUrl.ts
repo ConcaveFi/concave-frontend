@@ -27,7 +27,7 @@ export const useSyncCurrenciesToUrl = (currency0: Currency, currency1: Currency)
         chainId: network.chain?.id || 1,
       },
     })
-  })
+  }, [currency0, currency1, network.chain?.id, router])
 }
 
 type JsonCurrency = {

@@ -25,6 +25,8 @@ export const useAddLiquidityButtonProps = (
 
   if (!amount0 || !amount1) return { isDisabled: true, children: `Select a second token` }
 
+  if (pair.isLoading) return { isLoading: true, loadingText: `Fetching pair` }
+
   /*
     Invalid Pair
   */
@@ -41,12 +43,12 @@ export const useAddLiquidityButtonProps = (
   /*
     Insufficient Funds
   */
-  if (currency0Balance.data?.value.lt(amount0?.toExact()))
+  if (currency0Balance.data.value?.lt(amount0.numerator.toString()))
     return {
       children: `Insufficient ${amount0.currency.symbol} balance`,
       isDisabled: true,
     }
-  if (currency1Balance.data?.value.lt(amount1?.toExact()))
+  if (currency1Balance.data.value?.lt(amount1.numerator.toString()))
     return {
       children: `Insufficient ${amount1.currency.symbol} balance`,
       isDisabled: true,
