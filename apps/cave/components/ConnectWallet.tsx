@@ -190,19 +190,6 @@ const ConnectButton = () => {
   const [, disconnect] = useAccount()
   const [{ data: connectData, error, loading }, connect] = useConnect()
   const [{ data: networkData, error: switchNetworkError }, switchNetwork] = useNetwork()
-  // const { data: session, status } = useSession()
-  // console.log('session : ', session) // session.token can be verifiy with AUTH_PRIVATE_KEY
-
-  // ! trigger a signout if the user changed account on Metamsk
-  // ! if you activate this useEffect it will re render the page on first signup
-  // ! and you will not be able to connect and sign the the message in 1 step
-  // useEffect(() => {
-  //   if (typeof window.ethereum?.on === 'undefined') return
-  //   // TODO check if user account address is the same then return;
-  //   window.ethereum.on('accountsChanged', async function () {
-  //     await signOut() // comment this out if you want nothing to happend
-  //   })
-  // }, [])
 
   const handleLogin = async () => {
     try {
@@ -317,7 +304,27 @@ const ConnectButton = () => {
 
 export function ConnectWallet(): JSX.Element {
   const { data: session, status } = useSession()
-  if (status === 'authenticated') {
+  const [{ data: accountData }] = useAccount()
+
+  // ! trigger a signout if the user changed account on Metamsk
+  // ! if you activate this useEffect it will re render the page on first signup
+  // ! and you will not be able to connect and sign the the message in 1 step
+  // useEffect(() => {
+  //   if (typeof window.ethereum?.on === 'undefined') return
+  //   // TODO check if user account address is the same then return;
+  //   window.ethereum.on('accountsChanged', async function () {
+  //     // await signOut() // comment this out if you want nothing to happend
+  //     // console.log('EFFECT user', session)
+  //     // console.log('EFFECT account', accountData)
+  //     if (status === 'authenticated' && accountData?.address !== session?.user?.address) {
+  //       window.location.reload()
+  //       console.log(accountData?.address, session?.user?.address)
+  //       console.log('huston we have a problem')
+  //     }
+  //   })
+  // }, [accountData, session, status])
+
+  if (status === 'authenticated' && accountData !== undefined) {
     console.log('user', session)
     return <DisconnectButton session={session} />
   }
