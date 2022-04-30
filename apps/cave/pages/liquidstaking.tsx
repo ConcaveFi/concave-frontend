@@ -39,32 +39,47 @@ const StakingGroup: Array<StakingGroupProps> = [
 
 function LiquidStaking() {
   const [isLargerThan1100] = useMediaQuery('(min-width: 1100px)')
-  const [gap, setGap] = useState(6)
+  const [stakingGap, setStakingGap] = useState(6)
   const [wrap, setWrap] = useState<'wrap' | 'nowrap'>('nowrap')
   const [width, setWidth] = useState('')
+  const [direction, setDirection] = useState<'row' | 'column'>('row')
+  const [marginTop, setMarginTop] = useState(8)
+  const [textAlign, setTextAlign] = useState<'right' | 'center'>('right')
+  const [guideGap, setGuideGap] = useState(14)
 
   useEffect(() => {
-    setGap(isLargerThan1100 ? 6 : 3)
+    setStakingGap(isLargerThan1100 ? 6 : 3)
     setWrap(isLargerThan1100 ? 'nowrap' : 'wrap')
     setWidth(isLargerThan1100 ? '' : '530px')
+    setDirection(isLargerThan1100 ? 'row' : 'column')
+    setMarginTop(isLargerThan1100 ? 8 : 0)
+    setTextAlign(isLargerThan1100 ? 'right' : 'center')
+    setGuideGap(isLargerThan1100 ? 14 : 7)
   }, [isLargerThan1100])
   return (
     <Container maxW="container.lg" borderRadius={0} border="" textAlign="center">
       <Heading as="h1" mt={16} mb={3} fontSize="5xl">
         Liquid Staking
       </Heading>
-      <HStack mt={8} spacing={14}>
-        <Text maxW={520} textAlign="right">
+      <Flex align={'center'} direction={direction} mt={marginTop} gap={guideGap}>
+        <Text maxW={520} textAlign={textAlign}>
           Liquid Staking allows you to access your funds even when you&apos;re staking them. The
           funds remain in escrow, but aren&apos;t totally inaccessible. In this scenario, you are
           able to trade the locked-staking positions in the form of NFTs in the secondary
           marketplace.
         </Text>
         <GraphicGuide />
-      </HStack>
+      </Flex>
 
-      <Flex mt={16} alignItems="start" justifyContent="center" height="700">
-        <Flex gap={gap} justifyContent="center" alignItems="center" m={2} wrap={wrap} width={width}>
+      <Flex mt={8} alignItems="start" justifyContent="center" height="700">
+        <Flex
+          gap={stakingGap}
+          justifyContent="center"
+          alignItems="center"
+          m={2}
+          wrap={wrap}
+          width={width}
+        >
           {StakingGroup.map((s) => (
             <StakeCard
               icon={s.icon}
