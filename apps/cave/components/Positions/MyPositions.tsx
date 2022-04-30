@@ -116,7 +116,7 @@ const LPPositionItem = ({ userAddress, liquidityPoolToken }: LPPosition) => {
             <CurrencyIcon h={'32px'} currency={pair.token0} />
             <CurrencyIcon h={'32px'} currency={pair.token1} />
             <Text ml="24px" fontWeight="semibold" fontSize="lg">
-              {pair.token0.symbol}/{pair.token1.symbol}
+              {pair.token0.symbol}/{pair.token1.symbol} {token.address}
             </Text>
           </HStack>
           {/* <Button
@@ -239,6 +239,7 @@ const RemoveLiquidityActions = ({
   }
 
   const confirmedWithdrawal = async () => {
+    console.log('withDraw')
     try {
       transactionStatusDisclosure.onOpen()
       await removeLiquidityState.removeLiquidity()
