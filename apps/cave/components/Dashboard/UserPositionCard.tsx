@@ -200,7 +200,7 @@ const ListCardViewer = (props: ListCardViewerProps) => {
             Discount:
           </Text>
           <Text fontSize="md" fontWeight="bold">
-            {unlisted ? '--------' : '2,4%'}
+            {unlisted ? '--------' : '2.4%'}
           </Text>
         </Flex>
         <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
@@ -307,7 +307,7 @@ const NftPositionViewer = (props: NftPositionViewerProps) => {
                 Stake Period
               </Text>
               <Text fontSize="s" color="white" fontWeight="bold">
-                6 Month
+                180 Days
               </Text>
             </Flex>
             <Box w={'45%'}>
