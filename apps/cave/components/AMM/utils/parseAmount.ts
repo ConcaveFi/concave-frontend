@@ -13,7 +13,7 @@ export const parseAmount = <T extends Currency>(
     return CurrencyAmount.fromRawAmount(currency, JSBI.BigInt(typedValueParsed))
   } catch (error) {
     // should fail if the user specifies too many decimal places of precision (or maybe exceed max uint?)
-    console.debug(`Failed to parse amount: "${value}"`, error)
+    // console.debug(`Failed to parse amount: "${value}"`, error)
     return CurrencyAmount.fromRawAmount(currency, 0)
   }
 }
