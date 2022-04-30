@@ -1,4 +1,4 @@
-import { useQuery, UseQueryOptions } from 'react-query'
+import { useQuery, UseQueryOptions, UseQueryResult } from 'react-query'
 import { concaveProvider } from 'lib/providers'
 import { Token, Fetcher, Pair } from 'gemswap-sdk'
 import { BASES_TO_CHECK_TRADES_AGAINST, INTERMEDIARY_PAIRS_FOR_MULTI_HOPS } from 'constants/routing'
@@ -83,3 +83,6 @@ export const usePairs = <T = Pair[]>(
 
 export const usePair = (tokenA: Token, tokenB: Token) =>
   usePairs(tokenA, tokenB, 1, { select: (pairs) => pairs[0] })
+
+export type UsePairResult = UseQueryResult<Pair>
+export type UsePairsResult = UseQueryResult<Pair[]>
