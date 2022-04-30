@@ -5,10 +5,10 @@ import { useModals } from 'contexts/ModalsContext'
 import { useApprove } from 'hooks/useApprove'
 import { usePermit } from 'hooks/usePermit'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
-import { NoValidPairsError } from './usePair'
-import { UseTradeResult } from './useTrade'
+import { NoValidPairsError } from '../hooks/usePair'
+import { UseTradeResult } from '../hooks/useTrade'
 
-export const useSwapButtonState = ({
+export const useSwapButtonProps = ({
   trade,
   onSwapClick,
 }: {
@@ -72,23 +72,25 @@ export const useSwapButtonState = ({
   /*
     Permit / Approve
   */
-  if (approve.isWaitingForConfirmation)
-    return { loadingText: 'Approve in your wallet', isLoading: true }
-  if (approve.isWaitingTransactionReceipt)
-    return { loadingText: 'Waiting block confirmation', isLoading: true }
-  if (permit.isLoading) return { loadingText: 'Sign in your wallet', isLoading: true }
+  if (currencyIn.isToken) {
+    if (approve.isWaitingForConfirmation)
+      return { loadingText: 'Approve in your wallet', isLoading: true }
+    if (approve.isWaitingTransactionReceipt)
+      return { loadingText: 'Waiting block confirmation', isLoading: true }
+    if (permit.isLoading) return { loadingText: 'Sign in your wallet', isLoading: true }
 
-  const permitErroredOrWasNotInitializedYet = permit.isError || permit.isIdle
-  const allowanceIsNotEnough = allowance.isSuccess && !!allowance.value.lt(inputAmount.toExact())
+    const permitErroredOrWasNotInitializedYet = permit.isError || permit.isIdle
+    const allowanceIsNotEnough = allowance.isSuccess && !!allowance.value.lt(inputAmount.toExact())
 
-  if (
-    (permitErroredOrWasNotInitializedYet && allowanceIsNotEnough) ||
-    allowanceIsNotEnough ||
-    allowance.value.isZero()
-  )
-    return !permit.isSupported || permit.isError
-      ? { children: `Approve ${currencyIn.symbol}`, onClick: () => approve.sendApproveTx() }
-      : { children: `Permit ${currencyIn.symbol}`, onClick: () => permit.signPermit() }
+    if (
+      (permitErroredOrWasNotInitializedYet && allowanceIsNotEnough) ||
+      allowanceIsNotEnough ||
+      allowance.value.isZero()
+    )
+      return !permit.isSupported || permit.isError
+        ? { children: `Approve ${currencyIn.symbol}`, onClick: () => approve.sendApproveTx() }
+        : { children: `Permit ${currencyIn.symbol}`, onClick: () => permit.signPermit() }
+  }
 
   /* 
     Wrap / Unwrap, ETH <-> WETH

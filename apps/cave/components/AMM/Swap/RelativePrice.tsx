@@ -1,8 +1,8 @@
 import { HStack, Spinner, Text } from '@concave/ui'
 import { Currency } from 'gemswap-sdk'
-import { useFiatPrice } from './hooks/useFiatPrice'
-import { usePrice } from './hooks/usePrice'
-import { NoValidPairsError } from './hooks/usePair'
+import { useFiatPrice } from '../hooks/useFiatPrice'
+import { usePrice } from '../hooks/usePrice'
+import { NoValidPairsError } from '../hooks/usePair'
 
 const PairsError = ({ error }) => {
   return (

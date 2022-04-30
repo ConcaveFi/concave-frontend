@@ -1,10 +1,10 @@
 import { useState, useMemo, useEffect } from 'react'
 import { Currency, TradeType, CNV, DAI, CurrencyAmount, Trade } from 'gemswap-sdk'
-import { useTrade, UseTradeResult } from './useTrade'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import { useTrade, UseTradeResult } from '../hooks/useTrade'
 import { SwapSettings } from '../Settings'
 import { parseAmount } from '../utils/parseAmount'
-import { useLinkedCurrencyAmountFields } from '../CurrencyAmountField'
+import { useLinkedFields } from '../CurrencyAmountField'
 
 const makeCurrencyFields = (networkId) => ({
   first: DAI[networkId],
@@ -20,11 +20,10 @@ export const useSwapState = ({ multihops }: SwapSettings) => {
     parseAmount('0', initialCurrencyFields.first),
   )
 
-  const { onChangeFieldAmount, setFieldCurrency, switchCurrencies, fieldCurrency } =
-    useLinkedCurrencyAmountFields(
-      initialCurrencyFields,
-      (field) => (newAmount) => setExactAmount(newAmount),
-    )
+  const { onChangeField, setFieldCurrency, switchCurrencies, fieldCurrency } = useLinkedFields(
+    (field) => (newAmount) => setExactAmount(newAmount),
+    initialCurrencyFields,
+  )
 
   useEffect(() => {
     setFieldCurrency(initialCurrencyFields)
@@ -51,10 +50,10 @@ export const useSwapState = ({ multihops }: SwapSettings) => {
   return useMemo(
     () => ({
       trade: trade.data ? trade : ({ ...trade, data: partialTradeData } as UseTradeResult),
-      onChangeInput: onChangeFieldAmount('first'),
-      onChangeOutput: onChangeFieldAmount('second'),
+      onChangeInput: onChangeField('first'),
+      onChangeOutput: onChangeField('second'),
       switchCurrencies,
     }),
-    [trade, partialTradeData, switchCurrencies, onChangeFieldAmount],
+    [trade, partialTradeData, switchCurrencies, onChangeField],
   )
 }
