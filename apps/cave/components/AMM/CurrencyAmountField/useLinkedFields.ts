@@ -1,11 +1,11 @@
 import { Currency, CurrencyAmount } from 'gemswap-sdk'
 import { useCallback, useState } from 'react'
 
-export const useLinkedCurrencyAmountFields = (
-  initialFields: { first: Currency; second: Currency },
-  onChangeFieldAmountValue: (
+export const useLinkedFields = (
+  onChangeFieldAmount: (
     field: keyof typeof initialFields,
   ) => (amount: CurrencyAmount<Currency>) => void,
+  initialFields: { first: Currency; second: Currency },
 ) => {
   const [fieldCurrency, setFieldCurrency] = useState(initialFields)
 
@@ -13,25 +13,25 @@ export const useLinkedCurrencyAmountFields = (
     setFieldCurrency({ first: fieldCurrency.second, second: fieldCurrency.first })
   }, [fieldCurrency])
 
-  const onChangeFieldAmount = useCallback(
+  const onChangeField = useCallback(
     (field: keyof typeof fieldCurrency) => (newAmount: CurrencyAmount<Currency>) => {
-      if (newAmount.currency.equals(fieldCurrency[field]))
-        return onChangeFieldAmountValue(field)(newAmount)
+      if (fieldCurrency[field]?.equals(newAmount.currency))
+        return onChangeFieldAmount(field)(newAmount)
 
       const newCurrency = newAmount.currency
       const otherField = field === 'first' ? 'second' : 'first'
 
-      if (newCurrency.equals(fieldCurrency[otherField]))
+      if (fieldCurrency[otherField]?.equals(newCurrency))
         return setFieldCurrency({ first: fieldCurrency.second, second: fieldCurrency.first })
 
       setFieldCurrency({ ...fieldCurrency, [field]: newCurrency })
-      onChangeFieldAmountValue(field)(newAmount)
+      onChangeFieldAmount(field)(newAmount)
     },
-    [fieldCurrency, onChangeFieldAmountValue],
+    [fieldCurrency, onChangeFieldAmount],
   )
 
   return {
-    onChangeFieldAmount,
+    onChangeField,
     switchCurrencies,
     setFieldCurrency,
     fieldCurrency,
