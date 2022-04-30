@@ -13,11 +13,19 @@ export const getTxExplorer = (tx: Transaction) => {
   return explorer[chainId]
 }
 
-const TxSubmitted = ({ tx, onClose }: { tx: Transaction; onClose: () => void }) => (
+const TxSubmitted = ({
+  title,
+  tx,
+  onClose,
+}: {
+  title: string
+  tx: Transaction
+  onClose: () => void
+}) => (
   <>
     <SubmittedIcon w={10} my={6} />
     <Text align="center" fontSize="md" fontWeight="bold">
-      Transaction Submitted <br />
+      {title || `Transaction Submitted`} <br />
       <Link href={getTxExplorer(tx)} fontSize="sm" color="text.accent" isExternal>
         View on Explorer
       </Link>
@@ -31,10 +39,14 @@ const TxSubmitted = ({ tx, onClose }: { tx: Transaction; onClose: () => void }) 
   </>
 )
 
-export const TxSubmittedDialog = ({
+export const TransactionSubmittedDialog = ({
+  title,
+  subtitle,
   tx,
   isOpen: isOpenProp,
 }: {
+  title?: string
+  subtitle?: string
   tx: Transaction
   isOpen: boolean
 }) => {
@@ -46,12 +58,12 @@ export const TxSubmittedDialog = ({
   return (
     <Modal
       bluryOverlay={true}
-      title="Success"
+      title={title || 'Success'}
       isOpen={isOpen}
       onClose={onClose}
       bodyProps={{ align: 'center', w: '300px' }}
     >
-      <TxSubmitted tx={tx} onClose={onClose} />
+      <TxSubmitted title={subtitle} tx={tx} onClose={onClose} />
     </Modal>
   )
 }

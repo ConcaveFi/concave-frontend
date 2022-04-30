@@ -1,10 +1,8 @@
 import { SubmittedIcon } from '@concave/icons'
-import { Button, Flex, Link, Modal, Text } from '@concave/ui'
-import { Transaction } from 'ethers'
-import { ChainId } from 'gemswap-sdk'
+import { Button, Flex, Modal, Text } from '@concave/ui'
 import { useState, useEffect } from 'react'
 
-const TxError = ({ error, onClose }: { error: string; onClose: () => void }) => (
+const TransactionError = ({ error, onClose }: { error: string; onClose: () => void }) => (
   <>
     <SubmittedIcon w={10} my={6} />
     <Text
@@ -25,7 +23,7 @@ const TxError = ({ error, onClose }: { error: string; onClose: () => void }) => 
   </>
 )
 
-export const TxErrorDialog = ({
+export const TransactionErrorDialog = ({
   error,
   isOpen: isOpenProp,
 }: {
@@ -45,7 +43,7 @@ export const TxErrorDialog = ({
       onClose={onClose}
       bodyProps={{ align: 'center', w: '300px' }}
     >
-      <TxError error={error} onClose={onClose} />
+      <TransactionError error={error} onClose={onClose} />
     </Modal>
   )
 }

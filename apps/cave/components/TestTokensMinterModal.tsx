@@ -6,7 +6,7 @@ import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { concaveProvider } from 'lib/providers'
 import { useNetwork, useAccount, useContractWrite } from 'wagmi'
 import { useQuery } from 'react-query'
-import { getTxExplorer } from './AMM/TxSubmittedDialog'
+import { getTxExplorer } from './TransactionSubmittedDialog'
 import { useEffect, useState } from 'react'
 import { useWorthyUser } from './DevelopGateway'
 
