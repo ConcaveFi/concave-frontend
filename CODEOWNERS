@@ -1,0 +1,39 @@
+# *        @casuwu @gregs @NUnicorn2860 @Schrammel @shanghigh @rrobrms @21Chani
+
+
+# Bonds UI: @greg-schrammel
+# Bonds contract-integeration: @casuwu
+apps/cave/components/Bond @greg-schrammel @casuwu
+
+
+# LiquidStaking UI: @NUnicorn2860 @casuwu
+# LiquidStaking contract-integration: @NUnicorn2860
+apps/cave/components/LiquidStaking  @NUnicorn2860 @casuwu
+
+# Marketplace UI: @shanghigh @21Chani
+# Marketplace contract-integration:
+apps/cave/components/Marketplace  @shanghigh @21Chani
+
+# Swap UI: @greg-schrammel
+# Swap contract-integration: @greg-schrammel @casuwu
+apps/cave/components/AMM @greg-schrammel @casuwu
+
+# Add/Remove Liquidity UI: @Schrammel
+# Add/Remove Liquidity contract-integration: @Schrammel @casuwu
+apps/cave/components/Positions @Schrammel @casuwu
+
+# Dashboard UI: @greg-schrammel @shanghigh 
+# Dashboard contract-integration: @greg-schrammel
+apps/cave/components/Dashboard @greg-schrammel @shanghigh
+
+# Sidebar UI: @NUnicorn2860 
+# Sidebar contract-integration: @NUnicorn2860
+apps/cave/components/Sidebar @NUnicorn2860
+
+# GraphQL and Hasura @rrobrms
+apps/cave/graphql @rrobrms
+apps/cave/lib/hasura @rrobrms
+
+# Concave UI libraries and hooks: @greg-schrammel
+libs @greg-schrammel
+apps/cave/hooks @greg-schrammel

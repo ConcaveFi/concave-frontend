@@ -7,6 +7,7 @@ import { useApprove } from 'hooks/useApprove'
 import { STAKING_CONTRACT } from 'constants/address'
 import { StakingV1Abi } from 'contracts/LiquidStaking/LiquidStakingAbi'
 import { ethers } from 'ethers'
+import { useRouter } from 'next/router'
 
 const periodToPoolParameter = {
   '360 days': 0,
@@ -64,6 +65,8 @@ function StakeInput(props) {
     },
   )
 
+  const router = useRouter()
+
   return (
     <Box>
       <Card w="350px" px={4} py={5}>
@@ -87,8 +90,10 @@ function StakeInput(props) {
         </Flex>
         <Flex mt={2} justify="space-between" px={2}>
           <Text color="text.low" fontSize="md" fontWeight="bold">
-            Loading Price
-            {/* {cnvPrice.data ?`$${(stakeInput * cnvPrice.data?.cnv).toFixed(2)}` : 'Loading price'} */}
+            {/* Loading Price */}
+            {(cnvPrice as any)?.data
+              ? `$${(stakeInput * (cnvPrice as any)?.data.cnv).toFixed(2)}`
+              : 'Loading price'}
           </Text>
           <HStack spacing={2}>
             <Text color="text.low" fontSize="sm" fontWeight="bold">
@@ -138,6 +143,21 @@ function StakeInput(props) {
             Stake CNV
           </Button>
         )}
+
+        <Button
+          mt={5}
+          onClick={() => router.push('/dashboard')}
+          fontWeight="bold"
+          fontSize="md"
+          variant="primary.outline"
+          bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
+          w="100%"
+          h="40px"
+          size="large"
+          mx="auto"
+        >
+          Check position
+        </Button>
       </Box>
     </Box>
   )

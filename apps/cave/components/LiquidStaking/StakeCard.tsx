@@ -109,7 +109,7 @@ function StakeCard(props) {
             >
               <Text w="150px">
                 {pool.data
-                  ? `${Number(ethers.utils.formatEther(pool.data?.balance)).toFixed(1)} CNV`
+                  ? `${Number(ethers.utils.formatEther(pool.data?.balance)).toFixed(1)}`
                   : 'Fetching...'}
               </Text>
             </Box>
@@ -118,7 +118,7 @@ function StakeCard(props) {
                 ? `${Number(
                     +ethers.utils.formatEther(pool.data?.balance) +
                       +ethers.utils.formatEther(stakingCap.data),
-                  ).toFixed(1)} CNV`
+                  ).toFixed(1)}`
                 : 'Fetching...'}
             </Text>
           </Box>

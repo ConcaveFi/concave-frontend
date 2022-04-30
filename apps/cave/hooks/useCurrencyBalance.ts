@@ -1,4 +1,4 @@
-import { Currency } from 'gemswap-sdk'
+import { Currency, CurrencyAmount } from 'gemswap-sdk'
 import { useAccount, useBalance } from 'wagmi'
 
 export const useCurrencyBalance = (currency: Currency) => {
@@ -12,6 +12,8 @@ export const useCurrencyBalance = (currency: Currency) => {
 
   return {
     data: balance.data,
+    amount:
+      balance.data?.value && CurrencyAmount.fromRawAmount(currency, balance.data.value.toString()),
     isError: !!balance.error,
     error: balance.error,
     isLoading: balance.loading,

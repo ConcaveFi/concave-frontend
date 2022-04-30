@@ -1,4 +1,4 @@
-import { Button, Card, Flex, HStack, useDisclosure } from '@concave/ui'
+import { Text, Button, Card, Flex, HStack, useDisclosure } from '@concave/ui'
 import {
   CandleStickCard,
   ConfirmSwapModal,
@@ -10,44 +10,39 @@ import {
   Settings,
   SwapSettings,
   SwitchCurrencies,
-  TxErrorDialog,
-  TxSubmittedDialog,
-  useSwapButtonState,
+  useSwapButtonProps,
   useSwapState,
   useSwapTransaction,
-  WaitingConfirmationDialog,
 } from 'components/AMM'
 import { STABLES } from 'constants/routing'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useState } from 'react'
 import { useAccount } from 'wagmi'
+import { parseAmount } from 'components/AMM/utils/parseAmount'
+
+import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
+import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
+import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 
 export function SwapPage() {
   const [settings, setSettings] = useState<SwapSettings>(defaultSettings)
 
-  const {
-    trade,
-    tradeError,
-    currencyIn,
-    currencyOut,
-    onChangeAmount,
-    updateCurrencyIn,
-    updateCurrencyOut,
-    switchCurrencies,
-  } = useSwapState(settings)
+  const { trade, onChangeInput, onChangeOutput, switchCurrencies } = useSwapState(settings)
 
   const [{ data: account }] = useAccount()
-  const swapTx = useSwapTransaction(trade, settings, account?.address)
+  const swapTx = useSwapTransaction(trade.data, settings, account?.address)
 
   const confirmationModal = useDisclosure()
 
-  const swapButton = useSwapButtonState({
-    currencyIn,
+  const swapButton = useSwapButtonProps({
     trade,
-    tradeError,
     onSwapClick: settings.expertMode ? swapTx.submit : confirmationModal.onOpen,
   })
 
+  const [currencyIn, currencyOut] = [
+    trade.data.inputAmount.currency,
+    trade.data.outputAmount.currency,
+  ]
   /*
     if one of the currencies are a stable, we want the chart to always display the other relative to the stable
     (stable always the `to`)
@@ -79,21 +74,14 @@ export function SwapPage() {
           w="100%"
           maxW="420px"
         >
-          <InputField
-            currencyIn={currencyIn}
-            currencyAmountIn={trade?.inputAmount}
-            updateInputValue={onChangeAmount}
-            updateCurrencyIn={updateCurrencyIn}
-          />
+          <InputField currencyAmountIn={trade.data.inputAmount} onChangeAmount={onChangeInput} />
 
           <SwitchCurrencies onClick={switchCurrencies} />
 
           <OutputField
-            currencyAmountIn={trade?.inputAmount}
-            currencyOut={currencyOut}
-            currencyAmountOut={trade?.outputAmount}
-            updateOutputValue={onChangeAmount}
-            updateCurrencyOut={updateCurrencyOut}
+            currencyAmountOut={trade.data.outputAmount}
+            currencyAmountIn={trade.data.inputAmount}
+            updateOutputValue={onChangeOutput}
           />
 
           <HStack align="center" justify="end" py={5}>
@@ -107,24 +95,28 @@ export function SwapPage() {
       </Flex>
 
       <ConfirmSwapModal
-        trade={trade}
+        trade={trade.data}
         settings={settings}
         isOpen={confirmationModal.isOpen}
         onClose={confirmationModal.onClose}
         onConfirm={() => {
           confirmationModal.onClose()
           swapTx.submit()
-          onChangeAmount(null)
+          onChangeInput(parseAmount('0', trade.data.inputAmount.currency))
         }}
       />
 
-      <WaitingConfirmationDialog
-        amountIn={swapTx.trade?.inputAmount}
-        amountOut={swapTx.trade?.outputAmount}
-        isOpen={swapTx.isWaitingForConfirmation}
-      />
-      <TxSubmittedDialog tx={swapTx.data} isOpen={swapTx.isTransactionSent} />
-      <TxErrorDialog error={swapTx.error?.message} isOpen={swapTx.isError} />
+      <WaitingConfirmationDialog isOpen={swapTx.isWaitingForConfirmation}>
+        <Text fontSize="lg" color="text.accent">
+          Swaping {swapTx.trade?.inputAmount.toSignificant(6, { groupSeparator: ',' })}{' '}
+          {swapTx.trade?.inputAmount.currency.symbol} for{' '}
+          {swapTx.trade?.outputAmount.toSignificant(6, { groupSeparator: ',' })}{' '}
+          {swapTx.trade?.outputAmount.currency.symbol}
+        </Text>
+      </WaitingConfirmationDialog>
+
+      <TransactionSubmittedDialog tx={swapTx.data} isOpen={swapTx.isTransactionSent} />
+      <TransactionErrorDialog error={swapTx.error?.message} isOpen={swapTx.isError} />
     </>
   )
 }

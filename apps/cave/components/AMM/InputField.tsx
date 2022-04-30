@@ -1,50 +1,45 @@
 import { HStack, Text } from '@concave/ui'
-import { Currency, CurrencyAmount } from 'gemswap-sdk'
+import { Currency, CurrencyAmount, JSBI } from 'gemswap-sdk'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { Balance } from './Balance'
 import { useFiatValue } from './hooks/useFiatPrice'
-import { TokenInput } from './TokenInput'
-import { parseInputAmount } from './utils/parseInputAmount'
+import { CurrencyAmountField } from './CurrencyAmountField'
+import { parseAmount } from './utils/parseAmount'
 
 type InputFieldProps = {
-  currencyIn: Currency
   currencyAmountIn: CurrencyAmount<Currency>
-  updateInputValue: (value: CurrencyAmount<Currency>) => void
-  updateCurrencyIn: (currency: Currency) => void
+  onChangeAmount: (value: CurrencyAmount<Currency>) => void
 }
 
-export const InputField = ({
-  currencyIn,
-  currencyAmountIn,
-  updateInputValue,
-  updateCurrencyIn,
-}: InputFieldProps) => {
+const MIN_FOR_GAS = '0.01'
+const maxAmount = (userBalance: CurrencyAmount<Currency>) => {
+  if (userBalance.currency.isNative) {
+    const gasAmount = parseAmount(MIN_FOR_GAS, userBalance.currency)
+    return userBalance.greaterThan(gasAmount)
+      ? userBalance.subtract(gasAmount)
+      : parseAmount('0', userBalance.currency)
+  }
+  return userBalance
+}
+
+export const InputField = ({ currencyAmountIn, onChangeAmount }: InputFieldProps) => {
   const inputFiat = useFiatValue(currencyAmountIn)
-  const balance = useCurrencyBalance(currencyIn)
-  const isEqual = inputFiat.price?.baseCurrency['address'] === currencyAmountIn?.currency['address']
-  let inputFiatValue
-  try {
-    inputFiatValue = currencyAmountIn && !isEqual && inputFiat.price?.quote(currencyAmountIn)
-  } catch (e) {}
+  const balance = useCurrencyBalance(currencyAmountIn?.currency)
 
   return (
-    <TokenInput
-      currency={currencyIn}
-      currencyAmount={currencyAmountIn}
-      onChangeAmount={updateInputValue}
-      onSelectCurrency={updateCurrencyIn}
-    >
+    <CurrencyAmountField currencyAmount={currencyAmountIn} onChangeAmount={onChangeAmount}>
       <HStack justify="space-between" align="end" textColor="text.low" w="full">
         <Text isTruncated fontWeight="bold" fontSize="sm" mr={2}>
-          {!!inputFiat.value && `$${inputFiat.value.toFixed(2, { groupSeparator: ',' })}`}
+          {!!inputFiat.value?.greaterThan(0) &&
+            `$${inputFiat.value.toFixed(2, { groupSeparator: ',' })}`}
         </Text>
         {balance.isSuccess && (
           <Balance
             value={balance.data.formatted}
-            onClick={() => updateInputValue(parseInputAmount(balance.data.formatted, currencyIn))}
+            onClick={() => onChangeAmount(maxAmount(balance.amount))}
           />
         )}
       </HStack>
-    </TokenInput>
+    </CurrencyAmountField>
   )
 }

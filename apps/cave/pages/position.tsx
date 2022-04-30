@@ -1,5 +1,4 @@
 import { Card, Flex, Heading, Text } from '@concave/ui'
-import { AddLiquidityContent } from 'components/Positions/AddLiquidity'
 import { MyPositions } from 'components/Positions/MyPositions'
 import { useRouter } from 'next/router'
 import React from 'react'
@@ -13,15 +12,15 @@ export default function PositionsView() {
     return <Text>Please, login</Text>
   }
 
-  if (operation === 'addLiquidity') {
-    return (
-      <View title="Add liquidity">
-        <Card variant="primary" p={4} w={'500px'} gap={4} shadow={'Up for Blocks'}>
-          <AddLiquidityContent userAddress={account.address} />
-        </Card>
-      </View>
-    )
-  }
+  // if (operation === 'addLiquidity') {
+  //   return (
+  //     <View title="Add liquidity">
+  //       <Card variant="primary" p={4} w={'500px'} gap={4} shadow={'Up for Blocks'}>
+  //         <AddLiquidityContent userAddress={account.address} />
+  //       </Card>
+  //     </View>
+  //   )
+  // }
 
   return (
     <View title="My Liquidity Position">

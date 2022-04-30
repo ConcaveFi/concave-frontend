@@ -1,24 +1,26 @@
 import { ButtonProps } from '@concave/ui'
-import { Currency, ROUTER_ADDRESS, Trade, TradeType } from 'gemswap-sdk'
+import { ROUTER_ADDRESS } from 'gemswap-sdk'
 import { useAccount } from 'wagmi'
 import { useModals } from 'contexts/ModalsContext'
 import { useApprove } from 'hooks/useApprove'
 import { usePermit } from 'hooks/usePermit'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
-import { NoValidPairsError } from './usePair'
+import { NoValidPairsError } from '../hooks/usePair'
+import { UseTradeResult } from '../hooks/useTrade'
 
-export const useSwapButtonState = ({
-  currencyIn,
+export const useSwapButtonProps = ({
   trade,
-  tradeError,
   onSwapClick,
 }: {
-  currencyIn: Currency
-  trade: Trade<Currency, Currency, TradeType>
-  tradeError: string
+  trade: UseTradeResult
   onSwapClick: () => void
 }): ButtonProps => {
   const [{ data: account }] = useAccount()
+
+  const inputAmount = trade.data.inputAmount
+  const outputAmount = trade.data.outputAmount
+
+  const currencyIn = inputAmount.currency
   const currencyInBalance = useCurrencyBalance(currencyIn)
 
   const [token, spender] = [currencyIn.wrapped, ROUTER_ADDRESS[currencyIn?.chainId]]
@@ -27,21 +29,23 @@ export const useSwapButtonState = ({
 
   const { connectModal } = useModals()
 
-  const inputAmount = trade?.inputAmount
-  const outputAmount = trade?.outputAmount
-
   /*
     Not Connected
   */
   if (!account?.address) return { children: 'Connect Wallet', onClick: connectModal.onOpen }
 
   /*
+    Trade loaded
+  */
+  if (trade.isLoading) return { isLoading: true }
+
+  /*
     Trade Error
   */
-  if (tradeError === NoValidPairsError.message)
+  if (trade.error === NoValidPairsError)
     return {
       isDisabled: true,
-      children: `Insufficient liquidity`, // Try enabling multi-hop trades
+      children: `No liquidity`, // Try enabling multi-hop trades
     }
 
   /*
@@ -59,33 +63,34 @@ export const useSwapButtonState = ({
   /*
     Insufficient Funds
   */
-  if (inputAmount?.greaterThan(currencyInBalance.data?.value.toString()))
+  if (currencyInBalance.data?.value.lt(inputAmount?.toExact()))
     return {
-      children: `Insufficient ${trade.inputAmount.currency.symbol} balance`,
+      children: `Insufficient ${inputAmount.currency.symbol} balance`,
       isDisabled: true,
     }
 
   /*
     Permit / Approve
   */
-  if (approve.isWaitingForConfirmation)
-    return { loadingText: 'Approve in your wallet', isLoading: true }
-  if (approve.isWaitingTransactionReceipt)
-    return { loadingText: 'Waiting block confirmation', isLoading: true }
-  if (permit.isLoading) return { loadingText: 'Sign in your wallet', isLoading: true }
+  if (currencyIn.isToken) {
+    if (approve.isWaitingForConfirmation)
+      return { loadingText: 'Approve in your wallet', isLoading: true }
+    if (approve.isWaitingTransactionReceipt)
+      return { loadingText: 'Waiting block confirmation', isLoading: true }
+    if (permit.isLoading) return { loadingText: 'Sign in your wallet', isLoading: true }
 
-  const permitErroredOrWasNotInitializedYet = permit.isError || permit.isIdle
-  const allowanceIsNotEnough =
-    allowance.isSuccess && !!inputAmount?.greaterThan(allowance.value.toString())
+    const permitErroredOrWasNotInitializedYet = permit.isError || permit.isIdle
+    const allowanceIsNotEnough = allowance.isSuccess && !!allowance.value.lt(inputAmount.toExact())
 
-  if (
-    (permitErroredOrWasNotInitializedYet && allowanceIsNotEnough) ||
-    allowanceIsNotEnough ||
-    allowance.value.isZero()
-  )
-    return !permit.isSupported || permit.isError
-      ? { children: `Approve ${currencyIn.symbol}`, onClick: () => approve.sendApproveTx() }
-      : { children: `Permit ${currencyIn.symbol}`, onClick: () => permit.signPermit() }
+    if (
+      (permitErroredOrWasNotInitializedYet && allowanceIsNotEnough) ||
+      allowanceIsNotEnough ||
+      allowance.value.isZero()
+    )
+      return !permit.isSupported || permit.isError
+        ? { children: `Approve ${currencyIn.symbol}`, onClick: () => approve.sendApproveTx() }
+        : { children: `Permit ${currencyIn.symbol}`, onClick: () => permit.signPermit() }
+  }
 
   /* 
     Wrap / Unwrap, ETH <-> WETH

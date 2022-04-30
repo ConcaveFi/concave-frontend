@@ -13,7 +13,7 @@ export const useTokenList = () => {
     },
   ] = useNetwork()
   const chainName = (selectedChain || chain.mainnet)?.name
-  return useQuery(['token-list', chainName], () => {
+  return useQuery(['token-list', chainName], async () => {
     if (loading) {
       return []
     }

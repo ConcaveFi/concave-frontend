@@ -1,157 +1,68 @@
 import {
   Box,
-  Button,
   Card,
   Container,
   Flex,
   Heading,
-  HStack,
-  Image,
   Stack,
-  Text,
   useMediaQuery,
 } from '@concave/ui'
-import { BondBuyCard } from 'components/Bond/BondBuyCard'
 import {
-  useBondGetTermLength,
+  getBondTermLength,
   getBondSpotPrice,
   getCurrentBlockTimestamp,
   getUserBondPositions,
   useBondState,
   redeemBondBatch,
 } from 'components/Bond/BondState'
+import { BondBuyCard } from 'components/Bond/BondBuyCard'
+import { SelectedBondType } from 'components/Bond/SelectedBondType'
+import { Redeem } from 'components/Bond/Redeem'
+import { BondInfo, UserBondPositionInfo } from 'components/Bond/BondInfo'
 import { useEffect, useState } from 'react'
 import React from 'react'
 
-const InfoItem = ({ value, label, ...props }) => (
-  <Flex
-    direction="column"
-    py={0.5}
-    justify="space-between"
-    fontWeight="bold"
-    textAlign="center"
-    {...props}
-  >
-    <Text fontSize="sm" fontFamily="heading">
-      {value}
-    </Text>
-    <Text fontSize="sm" color="text.low">
-      {label}
-    </Text>
-  </Flex>
-)
-
-const BondInfo = ({ asset, roi, vestingTerm, icon }) => {
-  return (
-    <Card bg="none" py={3} w="100%" direction="row" shadow="Glass Up Medium">
-      <Flex justify="center" pl={4} pr={7}>
-        <Image src={icon} alt="" w="55px" h="55px" mr={3} />
-        <InfoItem value={asset.toUpperCase()} label="Asset" />
-      </Flex>
-      <Box w="1px" mx={-1} my={-4} bg="stroke.primary" />
-      <InfoItem value={roi} label="ROI" flexGrow={1} />
-      <Box w="1px" mx={-1} my={-4} bg="stroke.primary" />
-      <InfoItem value={vestingTerm} label="Vesting Term" px={5} />
-    </Card>
-  )
-}
-
-const UserBondPositionInfo = (bondSigma) => {
-  const parse = bondSigma?.bondSigma
-  const oldestBond = parse?.parseOldest
-  const totalOwed = parse?.totalOwed
-  const totalPending = parse?.totalPending.toFixed(2)
-
-  return (
-    <Card bg="none" py={3} w="100%" direction="row" shadow="Glass Up Medium">
-      <Flex justify="center" pl={4} pr={7}>
-        <InfoItem
-          value={totalOwed > 0 ? oldestBond : 'N/A'}
-          label={oldestBond ? 'Fully Vested' : ''}
-        />
-      </Flex>
-      <Box w="1px" mx={-1} my={-4} bg="stroke.primary" />
-      <InfoItem
-        value={totalOwed}
-        label={totalOwed ? 'Purchased' : 'No Bonds to Claim'}
-        flexGrow={1}
-      />
-      <Box w="1px" mx={-1} my={-4} bg="stroke.primary" />
-      <InfoItem value={totalPending} label={totalPending ? 'Redeemed' : ''} px={5} />
-    </Card>
-  )
-}
-
-const SelectedBondType = ({ bondType }) => {
-  return (
-    <Card
-      variant="primary"
-      colorscheme="brighter"
-      shadow="Magic Big"
-      direction="row"
-      mt={-20}
-      py={1}
-      fontWeight="bold"
-      fontSize="sm"
-      borderTopRadius="0"
-      justify="center"
-      gap={1}
-      w="250px"
-    >
-      <Text>Selected</Text>
-      <Text mx={1}>|</Text>
-      <Text color="text.low">Bond Type:</Text>
-      <Text>{bondType}</Text>
-    </Card>
-  )
-}
-
-const Redeem = ({ onConfirm, bondSigma }: { onConfirm: () => void; bondSigma }) => {
-  const display = !!bondSigma ? 1 : 0
-  const parse = bondSigma?.bondSigma
-  const batchRedeemIDArray = parse?.batchRedeemArray
-  return (
-    <Card mb={-20} fontWeight="bold" fontSize="lg" w="250px">
-      {display ? (
-        <Button variant="primary" size="lg" isFullWidth onClick={onConfirm}>
-          Redeem
-        </Button>
-      ) : (
-        ''
-      )}
-    </Card>
-  )
-}
-
 export default function Bond() {
-  const { userAddress, signer } = useBondState()
+  const { userAddress, signer, networkId } = useBondState()
   const [termLength, setTermLength] = useState<number>(0)
   const [bondSpotPrice, setBondSpotPrice] = useState<string>('0')
   const [cnvMarketPrice, setCnvMarketPrice] = useState<Object>()
   const [currentBlockTs, setCurrentBlockTs] = useState<number>(0)
   const [bondSigma, setBondSigma] = useState<any>()
   const [isLargerThan1200] = useMediaQuery('(min-width: 1280px)')
+  const [intervalID, setIntervalID] = useState<any>()
+  const [direction, setDirection] = useState<'row' | 'column'>('row')
+  const [align, setAlign] = useState<'start' | 'center'>('start')
+  
   useEffect(() => {
     getCurrentBlockTimestamp().then((x) => {
       setCurrentBlockTs(x)
     })
-    if (userAddress)
-      getUserBondPositions(3, userAddress, currentBlockTs)
-        .then((x) => {
-          setBondSigma(x)
-        })
-        .catch((e) => {
-          console.log('get position info failed', e)
-        })
-  }, [signer])
+    const interval = setInterval(() => {
+      return new Promise((resolve) => {
+            getUserBondPositions(networkId, userAddress, currentBlockTs)
+            .then((x) => {
+              setBondSigma(x)
+              resolve(null)
+            }).catch(() => {})
+      }) 
+    }, 5000)
+    if(intervalID !== interval) {
+      clearTimeout(intervalID)
+      setIntervalID(interval)
+    }
+  }, [userAddress])
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useBondGetTermLength(3).then((termLength) => {
+    getBondTermLength(networkId).then((termLength) => {
       setTermLength(termLength)
+    }).catch(e => {
+      console.log(e)
     })
-    getBondSpotPrice(3, '').then((bondSpotPrice) => {
+    getBondSpotPrice(networkId, '').then((bondSpotPrice) => {
       setBondSpotPrice(bondSpotPrice)
+    }).catch(e => {
+      console.log(e)
     })
     fetch('/api/cnv')
       .then((j) => j.json())
@@ -163,10 +74,7 @@ export default function Bond() {
       .catch((e) => {
         throw e
       })
-  }, [])
-
-  const [direction, setDirection] = useState<'row' | 'column'>('row')
-  const [align, setAlign] = useState<'start' | 'center'>('start')
+  }, [networkId])
 
   useEffect(() => {
     setDirection(isLargerThan1200 ? 'row' : 'column')
@@ -187,18 +95,6 @@ export default function Bond() {
             pos="relative"
             h="fit-content"
             maxHeight={'500px'}
-            css={{
-              '&::-webkit-scrollbar': {
-                width: '1px',
-              },
-              '&::-webkit-scrollbar-track': {
-                width: '1px',
-              },
-              '&::-webkit-scrollbar-thumb': {
-                borderRadius: '10px',
-                background: 'white',
-              },
-            }}
           >
             <Card
               variant="secondary"
@@ -217,7 +113,7 @@ export default function Bond() {
                 icon="/assets/tokens/cnv.svg"
                 roi={`${
                   cnvMarketPrice > 0
-                    ? ((+cnvMarketPrice / +bondSpotPrice - 1) * 100).toFixed(2)
+                    ? ( 1-(+bondSpotPrice / +cnvMarketPrice * 100)).toFixed(2)
                     : 'Loading...'
                 }%`}
                 vestingTerm={`${termLength} Days`}
@@ -227,12 +123,12 @@ export default function Bond() {
                 bondSigma={bondSigma}
                 onConfirm={() => {
                   const batchRedeemIDArray = bondSigma.batchRedeemArray
-                  redeemBondBatch(3, batchRedeemIDArray, userAddress, signer)
+                  redeemBondBatch(networkId, batchRedeemIDArray, userAddress, signer)
                 }}
               ></Redeem>
             </Card>
           </Box>
-          <BondBuyCard />
+          <BondBuyCard/>
         </Flex>
       </Flex>
     </Container>

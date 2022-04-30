@@ -119,10 +119,10 @@ const Periods = (props: PeriodsProps) => {
 
   const periodButtons = [
     { title: 'None' },
-    { title: '12Month' },
-    { title: '6Month' },
-    { title: '3Month' },
-    { title: '1Month' },
+    { title: '360 Days' },
+    { title: '180 Days' },
+    { title: '90 Days' },
+    { title: '45 Days' },
   ]
 
   const periodButtonsComp = periodButtons.map((value, index) => {

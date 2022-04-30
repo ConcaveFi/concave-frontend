@@ -3,10 +3,10 @@ import { Box, Button, Flex, Heading, HStack, Modal, Stack, StackDivider, Text } 
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { Currency, CurrencyAmount, Percent, Trade, TradeType } from 'gemswap-sdk'
 import React from 'react'
-import { useFiatValue } from './hooks/useFiatPrice'
-import { usePrice } from './hooks/usePrice'
-import { SwapSettings } from './Settings'
-import { computeFiatValuePriceImpact } from './utils/computeFiatValuePriceImpact'
+import { useFiatValue } from '../hooks/useFiatPrice'
+import { usePrice } from '../hooks/usePrice'
+import { SwapSettings } from '../Settings'
+import { computeFiatValuePriceImpact } from '../utils/computeFiatValuePriceImpact'
 
 type TradeCurrencyInfoProps = {
   currencyAmount: CurrencyAmount<Currency>

@@ -9,7 +9,6 @@ import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { BondSettings } from './Settings'
 import { utils } from 'ethers'
-import { position } from '@concave/ui'
 // testing only, flip to prod
 let providers = new ethers.providers.InfuraProvider('ropsten', '5ad069733a1a48a897180e66a5fb8846')
 
@@ -29,7 +28,7 @@ export const getBondAmountOut = async (
   return cleanedOutput
 }
 
-export const useBondGetTermLength = async (networkId: number) => {
+export const getBondTermLength = async (networkId: number) => {
   const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, providers)
   const termLength = await bondingContract.term()
   const formattedTermLength = termLength.toString()
@@ -92,25 +91,18 @@ export async function getCurrentBlockTimestamp() {
   return timestamp
 }
 
-export async function redeemBondBatch (
+export async function redeemBondBatch(
   networkId: number,
   positionIDArray: Array<any>,
   address: string,
   signer: ethers.Signer,
-)  {
+) {
   console.log(positionIDArray)
   const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, signer)
-  const estimatedGas = bondingContract.estimateGas.redeemBondBatch(
-    address,
-    positionIDArray,
-  )
-  await bondingContract.redeemBondBatch(
-    address,
-    positionIDArray,
-    {
-      gasLimit: estimatedGas,
-    },
-  )
+  const estimatedGas = bondingContract.estimateGas.redeemBondBatch(address, positionIDArray)
+  await bondingContract.redeemBondBatch(address, positionIDArray, {
+    gasLimit: estimatedGas,
+  })
   return
 }
 
@@ -138,9 +130,9 @@ export const getUserBondPositions = async (
         ? 1
         : +currentBlockTimestamp / positionData.creation
     totalPending += +(+utils.formatEther(positionData.redeemed)).toFixed(2)
-      // +(+utils.formatEther(positionData.owed)).toFixed(2) * elapsed -
-      // +(+utils.formatEther(positionData.redeemed)).toFixed(2)
-      // console.log(totalPending)
+    // +(+utils.formatEther(positionData.owed)).toFixed(2) * elapsed -
+    // +(+utils.formatEther(positionData.redeemed)).toFixed(2)
+    // console.log(totalPending)
     totalOwed += +(+utils.formatEther(positionData.owed)).toFixed(2)
   }
   const parseOldest = new Date(oldest * 1000 + 432000000).toString().slice(4, 21)

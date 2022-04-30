@@ -34,7 +34,7 @@ const NftPositionBox = (props: NftPositionBoxProps) => {
               Stake Period
             </Text>
             <Text fontSize="s" color="white" fontWeight="bold">
-              {stakePeriod} Month
+              {stakePeriod} Days
             </Text>
           </Flex>
           <Box w={'45%'}>

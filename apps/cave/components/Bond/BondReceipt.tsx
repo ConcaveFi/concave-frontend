@@ -30,7 +30,8 @@ export const BondReceiptModal = ({
       <SubmittedIcon w={10} mb={5} mt={12} />
       <Text align={'center'} fontSize={'24px'} fontWeight={600}>
         Transaction Submitted <br />
-        <Link
+        {/* FIX THIS */}
+        {/* <Link
           // href={`https://etherscan.io/tx/${receipt?.data?.hash}`}
           href={'https://etherscan.io/tx/'}
           fontWeight={400}
@@ -39,7 +40,7 @@ export const BondReceiptModal = ({
           isExternal
         >
           View on Explorer
-        </Link>
+        </Link> */}
       </Text>
 
       <Flex>

@@ -6,7 +6,14 @@ import { useFeeData } from 'wagmi'
 import { BondInput } from './BondInput'
 import { BondOutput } from './BondOutput'
 import { BondReceiptModal } from './BondReceipt'
-import { getBondAmountOut, getBondSpotPrice, purchaseBond, useBondState } from './BondState'
+import {
+  getCurrentBlockTimestamp,
+  getBondAmountOut,
+  getBondSpotPrice,
+  getUserBondPositions,
+  purchaseBond,
+  useBondState,
+} from './BondState'
 import { ConfirmBondModal } from './ConfirmBond'
 import { DownwardIcon } from './DownwardIcon'
 import { BondSettings, defaultSettings, Settings } from './Settings'
@@ -32,8 +39,10 @@ const GasPrice = () => {
   )
 }
 
-export function BondBuyCard() {
+export function BondBuyCard(onConfirm) {
   const { currencyIn, currencyOut, userAddress, balance, signer } = useBondState()
+  const [currentBlockTs, setCurrentBlockTs] = useState<number>(0)
+  const [bondSigma, setBondSigma] = useState<any>()
   const [settings, setSettings] = useState<BondSettings>(defaultSettings)
   const userBalance = balance.data?.formatted
   const [amountIn, setAmountIn] = useState<string>('0')
@@ -43,10 +52,7 @@ export function BondBuyCard() {
   const [bondSpotPrice, setBondSpotPrice] = useState<string>()
   const confirmModal = useDisclosure()
   const receiptModal = useDisclosure()
-  const {
-   allowance,
-   sendApproveTx
-  } = useApprove(
+  const { allowance, sendApproveTx } = useApprove(
     currencyIn,
     '0x5C2bDbdb14E2f6b6A443B0f2FfF34F269e5DE81d',
   )
@@ -56,18 +62,21 @@ export function BondBuyCard() {
     getBondSpotPrice(3, '0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4').then((bondSpotPrice) => {
       setBondSpotPrice(bondSpotPrice)
     })
+    getCurrentBlockTimestamp().then((x) => {
+      setCurrentBlockTs(x)
+    })
   }, [])
 
   return (
     <Card p={6} gap={2} variant="primary" h="fit-content" shadow="Block Up" w="100%" maxW="420px">
       <BondInput
-        value={amountIn}
+        value={+amountIn}
         currency={currencyIn}
         balance={userBalance}
         onChangeValue={(v) => {
           const numberValue = v.replace('-', '')
           if (!numberValue) return
-          numberValue && setAmountIn(+v)
+          numberValue && setAmountIn(v)
           // eslint-disable-next-line react-hooks/rules-of-hooks
           getBondAmountOut(currencyOut.address, currencyOut.decimals, 3, v).then((amountOut) => {
             setAmountOut(amountOut)
@@ -118,9 +127,14 @@ export function BondBuyCard() {
         isOpen={confirmModal.isOpen}
         onClose={confirmModal.onClose}
         onConfirm={() => {
-          purchaseBond(3, amountIn.toString(), userAddress, signer, settings, amountOut).then((tx) => {
-            receiptModal.onOpen()
-          })
+          purchaseBond(3, amountIn.toString(), userAddress, signer, settings, amountOut)
+            .then((x) => {
+              console.log(x)
+              receiptModal.onOpen()
+            })
+            .catch((e) => {
+              console.log('get position info failed', e)
+            })
         }}
         bondPrice={bondSpotPrice}
         minimumAmountOut={(
