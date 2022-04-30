@@ -4,6 +4,7 @@ import { useModals } from 'contexts/ModalsContext'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { Currency, CurrencyAmount } from 'gemswap-sdk'
 import { NoValidPairsError, UsePairResult } from '../hooks/usePair'
+import { currencyAmountToBigNumber } from 'lib/util'
 
 export const useAddLiquidityButtonProps = (
   pair: UsePairResult,
@@ -43,12 +44,13 @@ export const useAddLiquidityButtonProps = (
   /*
     Insufficient Funds
   */
-  if (currency0Balance.data.value?.lt(amount0.numerator.toString()))
+  if (currency0Balance.data.value?.lt(currencyAmountToBigNumber(amount0)))
     return {
       children: `Insufficient ${amount0.currency.symbol} balance`,
       isDisabled: true,
     }
-  if (currency1Balance.data.value?.lt(amount1.numerator.toString()))
+
+  if (currency1Balance.data.value?.lt(currencyAmountToBigNumber(amount1)))
     return {
       children: `Insufficient ${amount1.currency.symbol} balance`,
       isDisabled: true,
