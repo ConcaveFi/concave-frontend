@@ -1,6 +1,7 @@
-import { Container, Flex, Heading, HStack, Text, useMediaQuery } from '@concave/ui'
+import { Container, Flex, Heading, HStack, ResponsiveValue, Text, useMediaQuery } from '@concave/ui'
 import StakeCard from 'components/LiquidStaking/StakeCard'
 import GraphicGuide from 'components/LiquidStaking/GraphicGuide'
+import { useEffect, useState } from 'react'
 
 interface StakingGroupProps {
   icon: string
@@ -38,6 +39,15 @@ const StakingGroup: Array<StakingGroupProps> = [
 
 function LiquidStaking() {
   const [isLargerThan1100] = useMediaQuery('(min-width: 1100px)')
+  const [gap, setGap] = useState(6)
+  const [wrap, setWrap] = useState<'wrap' | 'nowrap'>('nowrap')
+  const [width, setWidth] = useState('')
+
+  useEffect(() => {
+    setGap(isLargerThan1100 ? 6 : 3)
+    setWrap(isLargerThan1100 ? 'nowrap' : 'wrap')
+    setWidth(isLargerThan1100 ? '' : '530px')
+  }, [isLargerThan1100])
   return (
     <Container maxW="container.lg" borderRadius={0} border="" textAlign="center">
       <Heading as="h1" mt={16} mb={3} fontSize="5xl">
@@ -54,14 +64,7 @@ function LiquidStaking() {
       </HStack>
 
       <Flex mt={16} alignItems="start" justifyContent="center" height="700">
-        <Flex
-          gap={isLargerThan1100 ? 6 : 1}
-          justifyContent="center"
-          alignItems="center"
-          m={2}
-          wrap={isLargerThan1100 ? 'nowrap' : 'wrap'}
-          width={isLargerThan1100 ? '' : 500}
-        >
+        <Flex gap={gap} justifyContent="center" alignItems="center" m={2} wrap={wrap} width={width}>
           {StakingGroup.map((s) => (
             <StakeCard
               icon={s.icon}
