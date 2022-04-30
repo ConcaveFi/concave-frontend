@@ -68,28 +68,30 @@ const SupplyLiquidityContent = ({
           value={`${poolShare.percent.toSignificant(4)}%`}
         />
       </Box>
-      {amount0.currency.isToken && token0AllowanceData.allowance.value?.lt(amount0.toExact()) && (
-        <Button
-          mt={2}
-          p={6}
-          fontSize="2xl"
-          variant="primary"
-          onClick={() => token0AllowanceData.sendApproveTx()}
-        >
-          Approve {amount0.currency.symbol}
-        </Button>
-      )}
-      {amount1.currency.isToken && token1AllowanceData?.allowance.value.lt(amount1.toExact()) && (
-        <Button
-          mt={2}
-          p={6}
-          fontSize="2xl"
-          variant={'primary'}
-          onClick={() => token1AllowanceData.sendApproveTx()}
-        >
-          Approve {amount1.currency.symbol}
-        </Button>
-      )}
+      {amount0.currency.isToken &&
+        token0AllowanceData.allowance.value?.lt(amount0.numerator.toString()) && (
+          <Button
+            mt={2}
+            p={6}
+            fontSize="2xl"
+            variant="primary"
+            onClick={() => token0AllowanceData.sendApproveTx()}
+          >
+            Approve {amount0.currency.symbol}
+          </Button>
+        )}
+      {amount1.currency.isToken &&
+        token1AllowanceData.allowance.value?.lt(amount1.numerator.toString()) && (
+          <Button
+            mt={2}
+            p={6}
+            fontSize="2xl"
+            variant={'primary'}
+            onClick={() => token1AllowanceData.sendApproveTx()}
+          >
+            Approve {amount1.currency.symbol}
+          </Button>
+        )}
       {/* {!needsApproveA && !needsApproveB && (
         <Button mt={2} p={6} fontSize={'2xl'} variant={'primary'} onClick={onConfirm}>
           Confirm Supply
