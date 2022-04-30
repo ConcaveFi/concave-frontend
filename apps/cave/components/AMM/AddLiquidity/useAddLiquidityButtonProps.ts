@@ -26,17 +26,17 @@ export const useAddLiquidityButtonProps = (
   if (!amount0 || !amount1) return { isDisabled: true, children: `Select a second token` }
 
   /*
+    Invalid Pair
+  */
+  if (!pair.data) return { children: 'Invalid Pair', isDisabled: true }
+
+  /*
     Enter an amount
   */
   if (amount0.equalTo(0))
     return { isDisabled: true, children: `Enter an ${amount0.currency.symbol} amount` }
   if (amount1.equalTo(0))
     return { isDisabled: true, children: `Enter an ${amount1.currency.symbol} amount` }
-
-  /*
-    Invalid Pair
-  */
-  if (!pair.data) return { children: 'Invalid Pair', isDisabled: true }
 
   /*
     Insufficient Funds
