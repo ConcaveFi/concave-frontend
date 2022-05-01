@@ -39,7 +39,7 @@ export default function Bond() {
           })
           .catch(() => {})
       })
-    }, 4000)
+    }, 3000)
     if (intervalID !== interval) {
       clearTimeout(intervalID)
       setIntervalID(interval)
@@ -111,7 +111,7 @@ export default function Bond() {
                 }%`}
                 vestingTerm={`${termLength} Days`}
               />
-              <UserBondPositionInfo bondSigma={bondSigma} />
+              <UserBondPositionInfo bondSigma={bondSigma} userAddress={userAddress} />
               <Redeem
                 bondSigma={bondSigma}
                 onConfirm={() => {

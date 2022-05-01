@@ -39,7 +39,7 @@ export const BondInfo = ({ asset, roi, vestingTerm, icon }) => {
   )
 }
 
-export const UserBondPositionInfo = (bondSigma) => {
+export const UserBondPositionInfo = (bondSigma, userAddress) => {
   const spinnerStyles = { animation: `${spin} 2s linear infinite`, size: 'sm' }
   const parse = bondSigma?.bondSigma
   const oldestBond = parse?.parseOldest
@@ -49,29 +49,30 @@ export const UserBondPositionInfo = (bondSigma) => {
   return (
     <>
       {claimed ? (
-        'Open bond positions are displayed here'
+        'You have no open positions'
       ) : totalOwed > 0 ? (
         <Card bg="none" py={3} w="100%" direction="row" shadow="Glass Up Medium">
           <Flex justify="center" pl={4} pr={7}>
             <InfoItem
-              value={totalOwed > 0 ? oldestBond : 'N/A'}
+              value={totalOwed > 0 ? oldestBond.replace('2022', '22') : 'N/A'}
               label={oldestBond ? 'Fully Vested' : ''}
             />
           </Flex>
-          <Box w="1px" mx={-1} my={-4} bg="stroke.primary" />
+          <Box w="1px" mx={-2} my={-4} bg="stroke.primary" />
           <InfoItem
             value={totalOwed}
-            label={totalOwed ? 'Purchased' : 'No Bonds to Claim'}
+            label={totalOwed ? 'Bought' : 'No Bonds to Claim'}
             flexGrow={1}
           />
-          <Box w="1px" mx={-1} my={-4} bg="stroke.primary" />
+          <Box w="1px" mx={1} my={-4} bg="stroke.primary" />
           <InfoItem value={totalPending} label={totalPending ? 'Redeemed' : ''} px={5} />
         </Card>
-      ) : (
+      ) : !!userAddress ? (
         <>
-          <text>Checking Positions</text>
           <SpinIcon __css={spinnerStyles} width={'10'} height={'10'} />
         </>
+      ) : (
+        'You have no open positions'
       )}
     </>
   )
