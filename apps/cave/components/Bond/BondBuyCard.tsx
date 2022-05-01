@@ -6,6 +6,7 @@ import { useFeeData } from 'wagmi'
 import { BondInput } from './BondInput'
 import { BondOutput } from './BondOutput'
 import { BondReceiptModal } from './BondReceipt'
+import { BOND_ADDRESS } from 'contracts/Bond/BondingAddress'
 import {
   getCurrentBlockTimestamp,
   getBondAmountOut,
@@ -39,10 +40,8 @@ const GasPrice = () => {
   )
 }
 
-export function BondBuyCard(onConfirm) {
-  const { currencyIn, currencyOut, userAddress, balance, signer } = useBondState()
-  const [currentBlockTs, setCurrentBlockTs] = useState<number>(0)
-  const [bondSigma, setBondSigma] = useState<any>()
+export function BondBuyCard() {
+  const { currencyIn, currencyOut, userAddress, balance, signer, networkId } = useBondState()
   const [settings, setSettings] = useState<BondSettings>(defaultSettings)
   const userBalance = balance.data?.formatted
   const [amountIn, setAmountIn] = useState<string>('0')
@@ -52,20 +51,18 @@ export function BondBuyCard(onConfirm) {
   const [bondSpotPrice, setBondSpotPrice] = useState<string>()
   const confirmModal = useDisclosure()
   const receiptModal = useDisclosure()
-  const { allowance, sendApproveTx } = useApprove(
-    currencyIn,
-    '0x5C2bDbdb14E2f6b6A443B0f2FfF34F269e5DE81d',
-  )
+  const { allowance, sendApproveTx } = useApprove(currencyIn, BOND_ADDRESS[networkId])
   const allowanceIsNotEnough = !!allowance.value?.lt(amountIn)
 
   useEffect(() => {
-    getBondSpotPrice(3, '0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4').then((bondSpotPrice) => {
-      setBondSpotPrice(bondSpotPrice)
-    })
-    getCurrentBlockTimestamp().then((x) => {
-      setCurrentBlockTs(x)
-    })
-  }, [])
+    getBondSpotPrice(networkId, BOND_ADDRESS[networkId])
+      .then((bondSpotPrice) => {
+        setBondSpotPrice(bondSpotPrice)
+      })
+      .catch((e) => {
+        console.log(e)
+      })
+  }, [userAddress])
 
   return (
     <Card p={6} gap={2} variant="primary" h="fit-content" shadow="Block Up" w="100%" maxW="420px">
@@ -77,10 +74,11 @@ export function BondBuyCard(onConfirm) {
           const numberValue = v.replace('-', '')
           if (!numberValue) return
           numberValue && setAmountIn(v)
-          // eslint-disable-next-line react-hooks/rules-of-hooks
-          getBondAmountOut(currencyOut.address, currencyOut.decimals, 3, v).then((amountOut) => {
-            setAmountOut(amountOut)
-          })
+          getBondAmountOut(currencyOut.address, currencyOut.decimals, networkId, v).then(
+            (amountOut) => {
+              setAmountOut(amountOut)
+            },
+          )
         }}
         // bug: fails to execute tx when clicked before hitting swap
         onClickMaxBalance={() => {
@@ -127,7 +125,7 @@ export function BondBuyCard(onConfirm) {
         isOpen={confirmModal.isOpen}
         onClose={confirmModal.onClose}
         onConfirm={() => {
-          purchaseBond(3, amountIn.toString(), userAddress, signer, settings, amountOut)
+          purchaseBond(networkId, amountIn.toString(), userAddress, signer, settings, amountOut)
             .then((x) => {
               console.log(x)
               receiptModal.onOpen()
