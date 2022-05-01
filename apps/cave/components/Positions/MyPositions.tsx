@@ -29,7 +29,7 @@ import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId
 import { LiquidityInfoData, useLiquidityInfo } from 'hooks/useLiquidityInfo'
 import { precision, usePrecision } from 'hooks/usePrecision'
 import { RemoveLiquidityState, useRemoveLiquidity } from 'hooks/useRemoveLiquidity'
-import React from 'react'
+import React, { useState } from 'react'
 
 export const MyPositions = ({ account }) => {
   const { data: tokens, isLoading } = useAddressTokenList(account.address)
@@ -63,21 +63,31 @@ export const MyPositions = ({ account }) => {
   )
 }
 
-const RewardsBanner = () => (
-  <Card variant="secondary" p={4} gap={4}>
-    <Flex justify="space-between">
-      <Heading as="h2" fontSize="lg">
-        Liquidity Provider Rewards
-      </Heading>
-      <CloseButton blendMode="multiply" _hover={{ blendMode: 'normal' }} />
-    </Flex>
-    <Text fontSize="lg">
-      Liquidity providers earn a 0.25% fee on all trades proportional to their share of the pool.
-      Fees are added to the pool, accrue in real time and can be claimed by withdrawing your
-      liquidity.
-    </Text>
-  </Card>
-)
+const RewardsBanner = () => {
+  const [visible, setVisible] = useState(true)
+  if (!visible) {
+    return <></>
+  }
+  return (
+    <Card variant="secondary" p={4} gap={4}>
+      <Flex justify="space-between">
+        <Heading as="h2" fontSize="lg">
+          Liquidity Provider Rewards
+        </Heading>
+        <CloseButton
+          blendMode="multiply"
+          _hover={{ blendMode: 'normal' }}
+          onClick={() => setVisible(!visible)}
+        />
+      </Flex>
+      <Text fontSize="lg">
+        Liquidity providers earn a 0.25% fee on all trades proportional to their share of the pool.
+        Fees are added to the pool, accrue in real time and can be claimed by withdrawing your
+        liquidity.
+      </Text>
+    </Card>
+  )
+}
 
 const spin = keyframes({
   '0%': {
