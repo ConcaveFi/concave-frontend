@@ -115,12 +115,15 @@ export const getUserBondPositions = async (
   let totalPending = 0
   let totalOwed = 0
   let oldest = 0
+  let claimed = false
   const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, providers)
   const getUserPositionsLength = await bondingContract.getUserPositionCount(address)
   for (let i = 0; i < +getUserPositionsLength; i++) {
     const positionData = await bondingContract.positions(address, i)
     // revisit this, dont push if owed is not greater than 0
-    if (positionData.owed > 1) batchRedeemArray.push(+i)
+    if (positionData.owed > 1 && positionData.owed !== positionData.redeemed) {
+      batchRedeemArray.push(+i)
+    }
     if (+positionData.creation > oldest) {
       oldest = +positionData.creation
     }
@@ -135,8 +138,9 @@ export const getUserBondPositions = async (
     // console.log(totalPending)
     totalOwed += +(+utils.formatEther(positionData.owed)).toFixed(2)
   }
+  if (totalPending === totalOwed) claimed = true
   const parseOldest = new Date(oldest * 1000 + 432000000).toString().slice(4, 21)
-  return { parseOldest, totalOwed, totalPending, batchRedeemArray }
+  return { parseOldest, totalOwed, totalPending, batchRedeemArray, claimed }
 }
 
 export const useBondState = () => {
