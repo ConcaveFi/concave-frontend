@@ -3,7 +3,7 @@ import { usePair } from 'components/AMM/hooks/usePair'
 import { parseAmount } from 'components/AMM/utils/parseAmount'
 import { Currency, CurrencyAmount, NATIVE, Pair } from 'gemswap-sdk'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 const makeCurrencyFields = (initialTokens = [], networkId) => {
   return {
@@ -46,6 +46,8 @@ export const useAddLiquidityState = () => {
     setFieldCurrency(initialCurrencyFields)
     setExactAmount(parseAmount('0', initialCurrencyFields.first))
   }, [initialCurrencyFields, setFieldCurrency])
+  const firstFieldAmount = useRef<CurrencyAmount<Currency>>()
+  const secondFieldAmount = useRef<CurrencyAmount<Currency>>()
 
   const isExactFirst = fieldCurrency.first && exactAmount?.currency.equals(fieldCurrency.first)
   const otherCurrency = fieldCurrency[isExactFirst ? 'second' : 'first']
@@ -53,15 +55,14 @@ export const useAddLiquidityState = () => {
   const pair = usePair(exactAmount?.currency.wrapped, otherCurrency?.wrapped)
 
   const derivedAmount = deriveAmount(pair.data, exactAmount, otherCurrency)
-
-  const [firstFieldAmount, secondFieldAmount] = isExactFirst
-    ? [exactAmount, derivedAmount]
-    : [derivedAmount, exactAmount]
+  const inputs = isExactFirst ? [exactAmount, derivedAmount] : [derivedAmount, exactAmount]
+  firstFieldAmount.current = pair.data || isExactFirst ? inputs[0] : firstFieldAmount.current
+  secondFieldAmount.current = pair.data || !isExactFirst ? inputs[1] : secondFieldAmount.current
 
   return {
-    firstFieldAmount,
-    secondFieldAmount,
-    pair,
+    firstFieldAmount: firstFieldAmount.current,
+    secondFieldAmount: secondFieldAmount.current,
+    pair: pair,
     onChangeFirstField: onChangeField('first'),
     onChangeSecondField: onChangeField('second'),
   }

@@ -29,12 +29,7 @@ export const useAddLiquidityButtonProps = (
   if (pair.isLoading) return { isLoading: true, loadingText: `Fetching pair` }
 
   /*
-    Invalid Pair
-  */
-  if (!pair.data) return { children: 'Invalid Pair', isDisabled: true }
-
-  /*
-    Enter an amount
+  Enter an amount
   */
   if (amount0.equalTo(0))
     return { isDisabled: true, children: `Enter an ${amount0.currency.symbol} amount` }
@@ -57,8 +52,14 @@ export const useAddLiquidityButtonProps = (
     }
 
   /*
+      Create Pair
+    */
+  if (!pair.data)
+    return { children: 'Create a Pair', isDisabled: false, onClick: onAddLiquidityClick }
+
+  /*
     Add Liquidity
-  */
+    */
   return {
     children: pair.error === NoValidPairsError ? 'Create Liquidity' : 'Add Liquidity',
     onClick: onAddLiquidityClick,
