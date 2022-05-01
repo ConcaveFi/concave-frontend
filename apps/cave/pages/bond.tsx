@@ -1,12 +1,4 @@
-import {
-  Box,
-  Card,
-  Container,
-  Flex,
-  Heading,
-  Stack,
-  useMediaQuery,
-} from '@concave/ui'
+import { Box, Card, Container, Flex, Heading, Stack, useMediaQuery } from '@concave/ui'
 import {
   getBondTermLength,
   getBondSpotPrice,
@@ -33,37 +25,42 @@ export default function Bond() {
   const [intervalID, setIntervalID] = useState<any>()
   const [direction, setDirection] = useState<'row' | 'column'>('row')
   const [align, setAlign] = useState<'start' | 'center'>('start')
-  
+
   useEffect(() => {
     getCurrentBlockTimestamp().then((x) => {
       setCurrentBlockTs(x)
     })
     const interval = setInterval(() => {
       return new Promise((resolve) => {
-            getUserBondPositions(networkId, userAddress, currentBlockTs)
-            .then((x) => {
-              setBondSigma(x)
-              resolve(null)
-            }).catch(() => {})
-      }) 
+        getUserBondPositions(networkId, userAddress, currentBlockTs)
+          .then((x) => {
+            setBondSigma(x)
+            resolve(null)
+          })
+          .catch(() => {})
+      })
     }, 5000)
-    if(intervalID !== interval) {
+    if (intervalID !== interval) {
       clearTimeout(intervalID)
       setIntervalID(interval)
     }
   }, [userAddress])
 
   useEffect(() => {
-    getBondTermLength(networkId).then((termLength) => {
-      setTermLength(termLength)
-    }).catch(e => {
-      console.log(e)
-    })
-    getBondSpotPrice(networkId, '').then((bondSpotPrice) => {
-      setBondSpotPrice(bondSpotPrice)
-    }).catch(e => {
-      console.log(e)
-    })
+    getBondTermLength(networkId)
+      .then((termLength) => {
+        setTermLength(termLength)
+      })
+      .catch((e) => {
+        console.log(e)
+      })
+    getBondSpotPrice(networkId, '')
+      .then((bondSpotPrice) => {
+        setBondSpotPrice(bondSpotPrice)
+      })
+      .catch((e) => {
+        console.log(e)
+      })
     fetch('/api/cnv')
       .then((j) => j.json())
       .then((data) => {
@@ -91,11 +88,7 @@ export default function Bond() {
         </Stack>
 
         <Flex gap={10} direction={direction} align={align}>
-          <Box
-            pos="relative"
-            h="fit-content"
-            maxHeight={'500px'}
-          >
+          <Box pos="relative" h="fit-content" maxHeight={'500px'}>
             <Card
               variant="secondary"
               w="430px"
@@ -113,7 +106,7 @@ export default function Bond() {
                 icon="/assets/tokens/cnv.svg"
                 roi={`${
                   cnvMarketPrice > 0
-                    ? ( 1-(+bondSpotPrice / +cnvMarketPrice * 100)).toFixed(2)
+                    ? (1 - (+bondSpotPrice / +cnvMarketPrice) * 100).toFixed(2)
                     : 'Loading...'
                 }%`}
                 vestingTerm={`${termLength} Days`}
@@ -128,7 +121,7 @@ export default function Bond() {
               ></Redeem>
             </Card>
           </Box>
-          <BondBuyCard/>
+          <BondBuyCard />
         </Flex>
       </Flex>
     </Container>
