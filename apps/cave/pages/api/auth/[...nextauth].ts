@@ -125,7 +125,7 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse<any
 
         if (user) {
           token.sub
-          token.ens = JSON.parse(user.ens as string)
+          token.ens = JSON.parse(user.ens as unknown as string)
 
           // ! get User ID from Hasura and add it to token.id
           const isKnownUser = await hasuaFindUser(token.sub as string)
@@ -146,17 +146,16 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse<any
         // console.log("session callback", { session, token });
 
         session.user = {
-          name: token.id,
+          id: token.id,
           address: token.sub,
           ens: token.ens,
-        } as any
+        }
 
-        const encodedToken = jwt.sign(token, AUTH_PRIVATE_KEY, {
-          algorithm: 'HS512',
-        })
-        session.id = token.id
-        session.token = encodedToken
-        // console.log("the session", session);
+        // const encodedToken = jwt.sign(token, AUTH_PRIVATE_KEY, {
+        //   algorithm: 'HS512',
+        // })
+        // session.id = token.id
+        // session.token = encodedToken
         return session
       },
     },
