@@ -9,8 +9,7 @@ import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { BondSettings } from './Settings'
 import { utils } from 'ethers'
-// testing only, flip to prod
-let providers = new ethers.providers.InfuraProvider('ropsten', '5ad069733a1a48a897180e66a5fb8846')
+import { rawProvider as providers } from 'lib/providers'
 
 export const getBondAmountOut = async (
   quoteAddress: string,
@@ -97,7 +96,6 @@ export async function redeemBondBatch(
   address: string,
   signer: ethers.Signer,
 ) {
-  console.log(positionIDArray)
   const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, signer)
   const estimatedGas = bondingContract.estimateGas.redeemBondBatch(address, positionIDArray)
   await bondingContract.redeemBondBatch(address, positionIDArray, {
