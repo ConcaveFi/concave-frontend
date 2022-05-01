@@ -1,10 +1,9 @@
 import { Box, Button, Flex, HStack, Modal, Text } from '@concave/ui'
-import React from 'react'
 import { CurrencyIcon } from 'components/CurrencyIcon'
-import { PoolShare } from './usePoolShare'
-import { useApprove } from 'hooks/useApprove'
-import { ROUTER_ADDRESS } from 'gemswap-sdk'
+import { ApproveButton, useApproval } from 'hooks/useAllowance'
 import { LiquidityPool } from 'pages/addliquidity'
+import React from 'react'
+import { PoolShare } from './usePoolShare'
 
 const PositionInfoItem = ({ color = '', label = '', value, mt = 0, children = <></> }) => (
   <Flex justify="space-between" align={'center'} mt={mt}>
@@ -25,9 +24,8 @@ const SupplyLiquidityContent = ({
   poolShare: PoolShare
   onConfirm: () => void
 }) => {
-  const chainId = pair.token0.chainId
-  const token0AllowanceData = useApprove(amount0.currency.wrapped, ROUTER_ADDRESS[chainId])
-  const token1AllowanceData = useApprove(amount1.currency.wrapped, ROUTER_ADDRESS[chainId])
+  const [needsApprove0, approve0, label0] = useApproval(amount0.wrapped)
+  const [needsApprove1, approve1, label1] = useApproval(amount1.wrapped)
 
   return (
     <>
@@ -42,12 +40,12 @@ const SupplyLiquidityContent = ({
       <Box borderRadius={'2xl'} p={6} shadow={'down'}>
         <PositionInfoItem
           label="Rates"
-          value={`1  ${pair.token0.symbol} = ${pair.token1Price.toSignificant(6, {
+          value={`1  ${pair.token0.symbol} = ${pair.token0Price.toSignificant(6, {
             groupSeparator: ',',
           })} ${pair.token1.symbol}`}
         />
         <PositionInfoItem
-          value={`1  ${pair.token1.symbol} = ${pair.token0Price.toSignificant(6, {
+          value={`1  ${pair.token1.symbol} = ${pair.token1Price.toSignificant(6, {
             groupSeparator: ',',
           })}  ${pair.token0.symbol}`}
         />
@@ -68,35 +66,13 @@ const SupplyLiquidityContent = ({
           value={`${poolShare.percent.toSignificant(4)}%`}
         />
       </Box>
-      {amount0.currency.isToken &&
-        token0AllowanceData.allowance.value?.lt(amount0.numerator.toString()) && (
-          <Button
-            mt={2}
-            p={6}
-            fontSize="2xl"
-            variant="primary"
-            onClick={() => token0AllowanceData.sendApproveTx()}
-          >
-            Approve {amount0.currency.symbol}
-          </Button>
-        )}
-      {amount1.currency.isToken &&
-        token1AllowanceData.allowance.value?.lt(amount1.numerator.toString()) && (
-          <Button
-            mt={2}
-            p={6}
-            fontSize="2xl"
-            variant={'primary'}
-            onClick={() => token1AllowanceData.sendApproveTx()}
-          >
-            Approve {amount1.currency.symbol}
-          </Button>
-        )}
-      {/* {!needsApproveA && !needsApproveB && (
+      <ApproveButton useApproveInfo={[needsApprove0, approve0, label0]} />
+      <ApproveButton useApproveInfo={[needsApprove1, approve1, label1]} />
+      {!needsApprove0 && !needsApprove1 && (
         <Button mt={2} p={6} fontSize={'2xl'} variant={'primary'} onClick={onConfirm}>
           Confirm Supply
         </Button>
-      )} */}
+      )}
     </>
   )
 }
