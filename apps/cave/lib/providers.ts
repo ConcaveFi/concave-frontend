@@ -1,25 +1,24 @@
 import { providers } from 'ethers'
 import { providers as multicallProvider } from '@0xsequence/multicall'
+import {
+  NEXT_PUBLIC_ALCHEMY_ID,
+  NEXT_PUBLIC_CONCAVE_RPC_KEY,
+  NEXT_PUBLIC_INFURA_ID,
+} from './env.conf'
 
-const alchemy = process.env.NEXT_PUBLIC_ALCHEMY_ID as string
-const etherscan = process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY as string
-export const infuraId = process.env.NEXT_PUBLIC_INFURA_ID as string
-const concaveKey = process.env.NEXT_PUBLIC_CONCAVE_RPC_KEY
-
-export const concaveRPC = `https://api.concave.lol/node/${concaveKey}`
+export const infuraId = NEXT_PUBLIC_INFURA_ID
+export const concaveRPC = `https://rpc.concave.lol/v1/${NEXT_PUBLIC_CONCAVE_RPC_KEY}`
+export const concaveWSS = `wss://rpc.concave.lol/ws/v1/${NEXT_PUBLIC_CONCAVE_RPC_KEY}`
 
 export const concaveProvider = (chainId: number) =>
   new multicallProvider.MulticallProvider(
     new providers.FallbackProvider([
-      // { provider: new providers.JsonRpcProvider(concaveRPC, chainId), priority: 1 },
-      { provider: new providers.AlchemyProvider(chainId, alchemy), priority: 2 },
-      { provider: new providers.InfuraProvider(chainId, infuraId), priority: 2 },
-      // providers.getDefaultProvider(chainId, { alchemy, etherscan, infuraId }),
+      { provider: new providers.JsonRpcProvider(concaveRPC, chainId), priority: 1 },
+      { provider: new providers.AlchemyProvider(chainId, NEXT_PUBLIC_ALCHEMY_ID), priority: 2 },
+      // { provider: new providers.InfuraProvider(chainId, infuraId), priority: 2 },
+      // providers.getDefaultProvider(chainId, { NEXT_PUBLIC_ALCHEMY_ID, NEXT_PUBLIC_ETHERSCAN_API_KEY, infuraId }),
     ]),
   )
 
-// export const concaveProvider = (chainId: number) =>
-//   new providers.JsonRpcProvider(concaveRPC, chainId)
-
 export const concaveWSProvider = (chainId: number) =>
-  new providers.InfuraWebSocketProvider(chainId, infuraId)
+  new providers.WebSocketProvider(concaveWSS, chainId)
