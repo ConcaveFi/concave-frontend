@@ -13,7 +13,7 @@ const addLiquidity = async (
   tokenAmountB: CurrencyAmount<Currency>,
   routerContract: Contract,
   recipient: string,
-  deadline = ms('30min'),
+  deadline = Math.round(Date.now() / 1000) * 60 * 30,
 ) => {
   /*
     Add with ETH
