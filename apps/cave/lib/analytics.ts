@@ -1,4 +1,4 @@
-export const GA_TRACKING_ID = process.env.NEXT_PUBLIC_UNIVERSAL_GA
+import { GA_TRACKING_ID } from './env.conf'
 
 type GTagEvent = {
   action: string
