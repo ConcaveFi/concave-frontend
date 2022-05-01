@@ -29,10 +29,13 @@ export function CurrencyAmountField({
     internalAmount?.serialize(),
   ])
 
-  const handleChange = ({ value: _value }, { source }) => {
+  const handleChange = ({ value }, { source }) => {
     if (source === 'prop') return // if the value changed from props, ignore it, only update on user typing
-    if (!_value) onChangeAmount(parseAmount('0', internalAmount.currency)) // clear all inputs instantly on empty input (don't wait for debounce)
-    setInternalAmount(parseAmount(_value, internalAmount.currency))
+    if (!+value) {
+      return
+    }
+    onChangeAmount(parseAmount('0', internalAmount.currency)) // clear all inputs instantly on empty input (don't wait for debounce)
+    setInternalAmount(parseAmount(value, internalAmount.currency))
   }
 
   const onSelectCurrency = (newCurrency: Currency) => {
