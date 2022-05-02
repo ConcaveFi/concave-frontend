@@ -29,7 +29,7 @@ export const useAddLiquidityButtonProps = (
   if (pair.isLoading) return { isLoading: true, loadingText: `Fetching pair` }
 
   /*
-  Enter an amount
+    Enter an amount
   */
   if (amount0.equalTo(0))
     return { isDisabled: true, children: `Enter an ${amount0.currency.symbol} amount` }
