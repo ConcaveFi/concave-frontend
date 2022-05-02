@@ -128,7 +128,7 @@ const LPPositionItem = ({ userAddress, liquidityPoolToken }: LPPosition) => {
             <CurrencyIcon h={'32px'} currency={pair.token0} />
             <CurrencyIcon h={'32px'} currency={pair.token1} />
             <Text ml="24px" fontWeight="semibold" fontSize="lg">
-              {pair.token0.symbol}/{pair.token1.symbol} {token.address}
+              {pair.token0.symbol}/{pair.token1.symbol}
             </Text>
           </HStack>
           {/* <Button
