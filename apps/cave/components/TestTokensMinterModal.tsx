@@ -4,7 +4,7 @@ import { parseEther, hexlify, parseUnits } from 'ethers/lib/utils'
 import { ChainId, DAI, NATIVE } from 'gemswap-sdk'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { concaveProvider } from 'lib/providers'
-import { useNetwork, useAccount, useContractWrite } from 'wagmi'
+import { useNetwork, useAccount, useContractWrite, chain } from 'wagmi'
 import { useQuery } from 'react-query'
 import { getTxExplorer } from './TransactionSubmittedDialog'
 import { useEffect, useState } from 'react'
@@ -59,7 +59,7 @@ const ETHFaucet = () => {
       {ethSentSuccess && (
         <Stack fontWeight="bold" rounded="2xl" shadow="down" py={2} fontSize="sm" spacing={0}>
           <Text>0.2 ETH Sent!</Text>
-          <Link href={getTxExplorer(sentEthTx)} fontSize="sm" color="text.accent" isExternal>
+          <Link href={getTxExplorer(sentEthTx,chain?.rinkeby)} fontSize="sm" color="text.accent" isExternal>
             check on explorer
           </Link>
         </Stack>
@@ -84,7 +84,7 @@ const DAIMinter = () => {
     return (
       <Stack fontWeight="bold" rounded="2xl" shadow="down" py={2} fontSize="sm" spacing={0}>
         <Text>69420 tDAI tx sent!</Text>
-        <Link href={getTxExplorer(mintDaiTx)} fontSize="sm" color="text.accent" isExternal>
+        <Link href={getTxExplorer(mintDaiTx,chain?.rinkeby)} fontSize="sm" color="text.accent" isExternal>
           check on explorer
         </Link>
       </Stack>
