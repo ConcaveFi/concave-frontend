@@ -53,10 +53,8 @@ export const useLiquidityInfo = (token: Token) => {
             setPair(new Pair(tokenB, tokenA, token.address))
           }
           setTotalSupply(totalSupply)
-          setUserPoolShare(
-            +formatUnits(userBalance.data.value, userBalance.data.decimals) /
-              +formatUnits(totalSupply, token.decimals),
-          )
+          const totalAmount = CurrencyAmount.fromRawAmount(token, totalSupply.toString())
+          setUserPoolShare(+totalAmount.toExact() / +userBalance.data.toExact())
           setLoading(false)
         })
         .catch((e) => {
@@ -64,7 +62,7 @@ export const useLiquidityInfo = (token: Token) => {
           setError(e)
         })
     })
-  }, [selectedChain, token.address, token.decimals, userBalance.data, userBalance.isSuccess])
+  }, [selectedChain, token, userBalance.data, userBalance.isSuccess])
 
   return [{ pair, token, totalSupply, userPoolShare, userBalance }, isLoading, error] as const
 }

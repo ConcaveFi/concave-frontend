@@ -154,7 +154,10 @@ const LPPositionItem = ({ userAddress, liquidityPoolToken }: LPPosition) => {
             p={4}
             spacing={4}
           >
-            <PositionInfoItem label="Your total pool tokens:" value={userBalance.data.formatted} />
+            <PositionInfoItem
+              label="Your total pool tokens:"
+              value={userBalance.data.toSignificant()}
+            />
             <PositionInfoItem
               label={`Pooled ${pair.token0.symbol}:`}
               value={pair.reserve0.toFixed(2)}

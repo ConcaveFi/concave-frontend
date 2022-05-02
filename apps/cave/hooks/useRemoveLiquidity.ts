@@ -1,9 +1,14 @@
-import { WETH9_ADDRESS } from 'gemswap-sdk'
+import { parseUnits } from 'ethers/lib/utils'
+import { Currency, CurrencyAmount, Percent, WETH9_ADDRESS } from 'gemswap-sdk'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { LiquidityInfoData } from 'hooks/useLiquidityInfo'
 import { Router } from 'lib/Router'
 import { useState } from 'react'
 import { useAccount, useSigner } from 'wagmi'
+
+const currencyAmountToBigNumber = (currency: CurrencyAmount<Currency>) => {
+  return parseUnits(currency.toFixed(currency.currency.decimals))
+}
 
 export const useRemoveLiquidity = ({ liquidityInfo }: { liquidityInfo: LiquidityInfoData }) => {
   const networkId = useCurrentSupportedNetworkId()
@@ -28,7 +33,9 @@ export const useRemoveLiquidity = ({ liquidityInfo }: { liquidityInfo: Liquidity
     if (receiveInNativeToken && (tokenAIsNativeWrapper || tokenBIsNativeWrapper)) {
       const transaction = await router.removeLiquidityETH(
         tokenAIsNativeWrapper ? tokenB : tokenA,
-        liquidityInfo.userBalance.data.value.mul(percentToRemove).div(100),
+        currencyAmountToBigNumber(
+          liquidityInfo.userBalance.data.multiply(new Percent(percentToRemove, 100)),
+        ),
         account.address,
       )
       setHash(transaction.hash)
@@ -37,7 +44,9 @@ export const useRemoveLiquidity = ({ liquidityInfo }: { liquidityInfo: Liquidity
     const transaction = await router.removeLiquidity(
       tokenA,
       tokenB,
-      liquidityInfo.userBalance.data.value.mul(percentToRemove).div(100),
+      currencyAmountToBigNumber(
+        liquidityInfo.userBalance.data.multiply(percentToRemove).divide(100),
+      ),
       account.address,
     )
     setHash(transaction.hash)
