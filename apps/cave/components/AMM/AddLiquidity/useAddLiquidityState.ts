@@ -1,8 +1,11 @@
 import { useLinkedFields } from 'components/AMM'
 import { usePair } from 'components/AMM/hooks/usePair'
 import { parseAmount } from 'components/AMM/utils/parseAmount'
-import { Currency, CurrencyAmount, NATIVE, Pair } from 'gemswap-sdk'
+import { BigNumber } from 'ethers'
+import { formatUnits } from 'ethers/lib/utils'
+import { Currency, CurrencyAmount, NATIVE, Pair, Price } from 'gemswap-sdk'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import { currencyAmountToBigNumber } from 'lib/util'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
 const makeCurrencyFields = (initialTokens = [], networkId) => {
@@ -16,15 +19,20 @@ const deriveAmount = (
   pair: Pair,
   exactAmount: CurrencyAmount<Currency>,
   otherCurrency: Currency,
+  defaultValue: CurrencyAmount<Currency>,
 ) => {
-  try {
-    const quoteAmount = pair.priceOf(exactAmount.currency.wrapped).quote(exactAmount.wrapped)
-    if (otherCurrency.isNative)
-      return CurrencyAmount.fromRawAmount(otherCurrency, quoteAmount.numerator)
-    return quoteAmount
-  } catch {
-    return parseAmount('0', otherCurrency)
+  if (!pair) {
+    return defaultValue
   }
+  const price = pair.priceOf(exactAmount.currency.wrapped)
+  const quoteAmount = price.quote(exactAmount.wrapped)
+
+  if (otherCurrency.isNative)
+    return CurrencyAmount.fromRawAmount(
+      otherCurrency,
+      currencyAmountToBigNumber(quoteAmount).toString(),
+    )
+  return quoteAmount
 }
 
 export const useAddLiquidityState = () => {
@@ -53,8 +61,8 @@ export const useAddLiquidityState = () => {
   const otherCurrency = fieldCurrency[isExactFirst ? 'second' : 'first']
 
   const pair = usePair(exactAmount?.currency.wrapped, otherCurrency?.wrapped)
-
-  const derivedAmount = deriveAmount(pair.data, exactAmount, otherCurrency)
+  const otherAmount = isExactFirst ? firstFieldAmount.current : secondFieldAmount.current
+  const derivedAmount = deriveAmount(pair.data, exactAmount, otherCurrency, otherAmount)
   const inputs = isExactFirst ? [exactAmount, derivedAmount] : [derivedAmount, exactAmount]
   firstFieldAmount.current = pair.data || isExactFirst ? inputs[0] : firstFieldAmount.current
   secondFieldAmount.current = pair.data || !isExactFirst ? inputs[1] : secondFieldAmount.current
