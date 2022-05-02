@@ -21,7 +21,6 @@ export const OutputField = ({
   const outputFiat = useFiatValue(currencyAmountOut)
 
   const fiatPriceImpact = computeFiatValuePriceImpact(inputFiat.value, outputFiat.value)
-  const isPriceImpactNegative = fiatPriceImpact && inputFiat.value.greaterThan(outputFiat.value)
 
   const balance = useCurrencyBalance(currencyAmountOut?.currency)
 
@@ -34,7 +33,7 @@ export const OutputField = ({
               `$${outputFiat.value.toFixed(2, { groupSeparator: ',' })}`}
           </Text>
           <Text fontSize="xs" opacity={0.7}>
-            {fiatPriceImpact && `(${isPriceImpactNegative && '-'}${fiatPriceImpact?.toFixed(2)}%)`}{' '}
+            {fiatPriceImpact && `(${fiatPriceImpact?.toFixed(2, { groupSeparator: ',' })}%)`}{' '}
           </Text>
         </Flex>
         {balance.isSuccess && <Balance value={balance.data.formatted} />}
