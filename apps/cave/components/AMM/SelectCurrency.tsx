@@ -121,7 +121,7 @@ export const SelectTokenModal = ({
       size="md"
       isOpen={isOpen}
       onClose={onClose}
-      bodyProps={{ gap: 4 }}
+      bodyProps={{ gap: 4, w: ['350px', '400px'] }}
     >
       <CommonTokens
         currencies={[DAI[networkId], CNV[networkId], NATIVE[networkId]]} //[nativeCurrency, ...BASES_TO_CHECK_TRADES_AGAINST[chainId]]}
