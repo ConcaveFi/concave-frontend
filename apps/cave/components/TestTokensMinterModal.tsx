@@ -59,7 +59,7 @@ const ETHFaucet = () => {
       {ethSentSuccess && (
         <Stack fontWeight="bold" rounded="2xl" shadow="down" py={2} fontSize="sm" spacing={0}>
           <Text>0.2 ETH Sent!</Text>
-          <Link href={getTxExplorer(sentEthTx,chain?.rinkeby)} fontSize="sm" color="text.accent" isExternal>
+          <Link href={getTxExplorer(sentEthTx,chain?.ropsten)} fontSize="sm" color="text.accent" isExternal>
             check on explorer
           </Link>
         </Stack>
@@ -84,7 +84,7 @@ const DAIMinter = () => {
     return (
       <Stack fontWeight="bold" rounded="2xl" shadow="down" py={2} fontSize="sm" spacing={0}>
         <Text>69420 tDAI tx sent!</Text>
-        <Link href={getTxExplorer(mintDaiTx,chain?.rinkeby)} fontSize="sm" color="text.accent" isExternal>
+        <Link href={getTxExplorer(mintDaiTx,chain?.ropsten)} fontSize="sm" color="text.accent" isExternal>
           check on explorer
         </Link>
       </Stack>
