@@ -35,8 +35,8 @@ export const InputField = ({ currencyAmountIn, onChangeAmount }: InputFieldProps
         </Text>
         {balance.isSuccess && (
           <Balance
-            value={balance.data.formatted}
-            onClick={() => onChangeAmount(maxAmount(balance.amount))}
+            value={balance.data.toFixed(2, { groupSeparator: ',' })}
+            onMax={() => onChangeAmount(maxAmount(balance.data))}
           />
         )}
       </HStack>

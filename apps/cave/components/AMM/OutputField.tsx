@@ -40,7 +40,7 @@ export const OutputField = ({
                 `(${fiatPriceImpact?.toFixed(2, { groupSeparator: ',' })}%)`)}{' '}
           </Text>
         </Flex>
-        {balance.isSuccess && <Balance value={balance.data.formatted} />}
+        {balance.isSuccess && <Balance value={balance.data.toFixed(2, { groupSeparator: ',' })} />}
       </HStack>
     </CurrencyAmountField>
   )
