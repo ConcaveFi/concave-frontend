@@ -15,14 +15,14 @@ export const rawProvider = new ethers.providers.InfuraProvider('ropsten', infura
 export const concaveProvider = (chainId: number) =>
   new multicallProvider.MulticallProvider(
     new providers.FallbackProvider([
-      { provider: new providers.JsonRpcProvider(concaveRPC, chainId), priority: 1 },
-      // { provider: new providers.AlchemyProvider(chainId, NEXT_PUBLIC_ALCHEMY_ID), priority: 2 },
-      // { provider: new providers.InfuraProvider(chainId, infuraId), priority: 2 },
-      providers.getDefaultProvider(chainId, {
-        NEXT_PUBLIC_ALCHEMY_ID,
-        // NEXT_PUBLIC_ETHERSCAN_API_KEY,
-        infuraId,
-      }),
+      // { provider: new providers.JsonRpcProvider(concaveRPC, chainId), priority: 1 },
+      { provider: new providers.AlchemyProvider(chainId, NEXT_PUBLIC_ALCHEMY_ID), priority: 2 },
+      { provider: new providers.InfuraProvider(chainId, infuraId), priority: 2 },
+      // providers.getDefaultProvider(chainId, {
+      //   alchemy: NEXT_PUBLIC_ALCHEMY_ID,
+      //   // NEXT_PUBLIC_ETHERSCAN_API_KEY,
+      //   infuraId,
+      // }),
     ]),
   )
 
