@@ -160,13 +160,13 @@ const LPPositionItem = ({ userAddress, liquidityPoolToken }: LPPosition) => {
             />
             <PositionInfoItem
               label={`Pooled ${pair.token0.symbol}:`}
-              value={pair.reserve0.toFixed(2)}
+              value={pair.reserve0.toFixed(3)}
             >
               <CurrencyIcon h={'32px'} size="sm" currency={pair.token0} />
             </PositionInfoItem>
             <PositionInfoItem
               label={`Pooled ${pair.token1.symbol}:`}
-              value={pair.reserve1.toFixed(2)}
+              value={pair.reserve1.toFixed(3)}
             >
               <CurrencyIcon h={'32px'} size="sm" currency={pair.token1} />
             </PositionInfoItem>

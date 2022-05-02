@@ -3,6 +3,10 @@ import { RouterABI, ROUTER_ADDRESS, Currency, CurrencyAmount, Percent } from 'ge
 import { Contract } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useContract, useSigner } from 'wagmi'
+import { parseUnits } from 'ethers/lib/utils'
+const currencyAmountToBigNumber = (currency: CurrencyAmount<Currency>) => {
+  return parseUnits(currency.toFixed(currency.currency.decimals))
+}
 
 const getMinAmountParam = (amount: CurrencyAmount<Currency>) =>
   amount.multiply(new Percent(98, 100)) // amount -2%
@@ -24,9 +28,9 @@ const addLiquidity = async (
 
     return routerContract.addLiquidityETH(
       notNativeAmount.currency.wrapped.address,
-      notNativeAmount.numerator.toString(),
-      getMinAmountParam(notNativeAmount).numerator.toString(),
-      getMinAmountParam(nativeAmount).numerator.toString(),
+      currencyAmountToBigNumber(notNativeAmount),
+      currencyAmountToBigNumber(getMinAmountParam(notNativeAmount)),
+      currencyAmountToBigNumber(getMinAmountParam(nativeAmount)),
       recipient,
       deadline,
       { value: nativeAmount.numerator.toString() },
@@ -39,10 +43,10 @@ const addLiquidity = async (
   return routerContract.addLiquidity(
     tokenAmountA.currency.wrapped.address,
     tokenAmountB.currency.wrapped.address,
-    tokenAmountA.numerator.toString(),
-    tokenAmountB.numerator.toString(),
-    getMinAmountParam(tokenAmountA).numerator.toString(),
-    getMinAmountParam(tokenAmountB).numerator.toString(),
+    currencyAmountToBigNumber(tokenAmountA),
+    currencyAmountToBigNumber(tokenAmountB),
+    currencyAmountToBigNumber(getMinAmountParam(tokenAmountA)),
+    currencyAmountToBigNumber(getMinAmountParam(tokenAmountB)),
     recipient,
     deadline,
   )
