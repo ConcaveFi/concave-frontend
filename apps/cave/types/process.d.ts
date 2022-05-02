@@ -7,9 +7,9 @@ declare namespace NodeJS {
     NEXT_PUBLIC_INFURA_ID: string
     NEXT_PUBLIC_ALCHEMY_ID: string
     NEXT_PUBLIC_ETHERSCAN_API_KEY: string
-    NEXT_PUBLIC_GRAPHQL_ENDPOINT: URL
+    NEXT_PUBLIC_GRAPHQL_ENDPOINT: string
     GRAPHQL_ADMIN_SECRET: string
-    LIVE_URL: URL
+    LIVE_URL: string
     NODE_ENV: 'development' | 'production' | 'test'
     NEXTAUTH_SECRET: string
     AUTH_PRIVATE_KEY: string
