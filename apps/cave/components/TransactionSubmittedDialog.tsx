@@ -2,15 +2,16 @@ import { SubmittedIcon } from '@concave/icons'
 import { Button, Flex, Link, Modal, Text } from '@concave/ui'
 import { Transaction } from 'ethers'
 import { ChainId } from 'gemswap-sdk'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { useNetwork } from 'wagmi'
 
-export const getTxExplorer = (tx: Transaction) => {
+export const getTxExplorer = (tx: Transaction, chain: { id: number }) => {
   const { hash, chainId } = tx
   const explorer = {
     [ChainId.ETHEREUM]: `https://etherscan.io/tx/${hash}`,
     [ChainId.ROPSTEN]: `https://ropsten.etherscan.io/tx/${hash}`,
   }
-  return explorer[chainId]
+  return explorer[chainId || chain?.id]
 }
 
 const TxSubmitted = ({
@@ -21,23 +22,30 @@ const TxSubmitted = ({
   title: string
   tx: Transaction
   onClose: () => void
-}) => (
-  <>
-    <SubmittedIcon w={10} my={6} />
-    <Text align="center" fontSize="md" fontWeight="bold">
-      {title || `Transaction Submitted`} <br />
-      <Link href={getTxExplorer(tx)} fontSize="sm" color="text.accent" isExternal>
-        View on Explorer
-      </Link>
-    </Text>
+}) => {
+  const [
+    {
+      data: { chain },
+    },
+  ] = useNetwork()
+  return (
+    <>
+      <SubmittedIcon w={10} my={6} />
+      <Text align="center" fontSize="md" fontWeight="bold">
+        {title || `Transaction Submitted`} <br />
+        <Link href={getTxExplorer(tx, chain)} fontSize="sm" color="text.accent" isExternal>
+          View on Explorer
+        </Link>
+      </Text>
 
-    <Flex>
-      <Button onClick={onClose} variant="secondary" size="large" mt={4} w="180px">
-        Close
-      </Button>
-    </Flex>
-  </>
-)
+      <Flex>
+        <Button onClick={onClose} variant="secondary" size="large" mt={4} w="180px">
+          Close
+        </Button>
+      </Flex>
+    </>
+  )
+}
 
 export const TransactionSubmittedDialog = ({
   title,
