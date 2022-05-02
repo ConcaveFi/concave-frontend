@@ -4,7 +4,6 @@ import { ROUTER_ADDRESS } from 'gemswap-sdk'
 import { useApprove } from 'hooks/useApprove'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { usePermit } from 'hooks/usePermit'
-import { currencyAmountToBigNumber } from 'lib/util'
 import { useAccount } from 'wagmi'
 import { NoValidPairsError } from '../hooks/usePair'
 import { UseTradeResult } from '../hooks/useTrade'
@@ -65,7 +64,7 @@ export const useSwapButtonProps = ({
   /*
     Insufficient Funds
   */
-  if (currencyInBalance.data?.value.lt(currencyAmountToBigNumber(inputAmount)))
+  if (currencyInBalance.amount.lessThan(inputAmount))
     return {
       children: `Insufficient ${inputAmount.currency.symbol} balance`,
       isDisabled: true,
@@ -83,7 +82,7 @@ export const useSwapButtonProps = ({
 
     const permitErroredOrWasNotInitializedYet = permit.isError || permit.isIdle
     const allowanceIsNotEnough =
-      allowance.isSuccess && !!allowance.value.lt(currencyAmountToBigNumber(inputAmount))
+      allowance.isSuccess && !!allowance.value.lt(inputAmount.numerator.toString())
 
     if (
       (permitErroredOrWasNotInitializedYet && allowanceIsNotEnough) ||

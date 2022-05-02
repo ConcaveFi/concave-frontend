@@ -1,11 +1,8 @@
 import { useLinkedFields } from 'components/AMM'
 import { usePair } from 'components/AMM/hooks/usePair'
 import { parseAmount } from 'components/AMM/utils/parseAmount'
-import { BigNumber } from 'ethers'
-import { formatUnits } from 'ethers/lib/utils'
-import { Currency, CurrencyAmount, NATIVE, Pair, Price } from 'gemswap-sdk'
+import { Currency, CurrencyAmount, NATIVE, Pair } from 'gemswap-sdk'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { currencyAmountToBigNumber } from 'lib/util'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
 const makeCurrencyFields = (initialTokens = [], networkId) => {
@@ -28,10 +25,7 @@ const deriveAmount = (
   const quoteAmount = price.quote(exactAmount.wrapped)
 
   if (otherCurrency.isNative)
-    return CurrencyAmount.fromRawAmount(
-      otherCurrency,
-      currencyAmountToBigNumber(quoteAmount).toString(),
-    )
+    return CurrencyAmount.fromRawAmount(otherCurrency, quoteAmount.numerator)
   return quoteAmount
 }
 

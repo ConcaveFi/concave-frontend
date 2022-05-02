@@ -1,12 +1,11 @@
 import { useState } from 'react'
-import { RouterABI, ROUTER_ADDRESS, Currency, CurrencyAmount } from 'gemswap-sdk'
+import { RouterABI, ROUTER_ADDRESS, Currency, CurrencyAmount, Percent } from 'gemswap-sdk'
 import { Contract } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useContract, useSigner } from 'wagmi'
-import { currencyAmountToBigNumber } from 'lib/util'
 
 const getMinAmountParam = (amount: CurrencyAmount<Currency>) =>
-  currencyAmountToBigNumber(amount).div(100).mul(98) // amount -2%
+  amount.multiply(new Percent(98, 100)) // amount -2%
 
 const addLiquidity = async (
   tokenAmountA: CurrencyAmount<Currency>,
@@ -25,12 +24,12 @@ const addLiquidity = async (
 
     return routerContract.addLiquidityETH(
       notNativeAmount.currency.wrapped.address,
-      currencyAmountToBigNumber(notNativeAmount),
-      getMinAmountParam(notNativeAmount),
-      getMinAmountParam(nativeAmount),
+      notNativeAmount.numerator.toString(),
+      getMinAmountParam(notNativeAmount).numerator.toString(),
+      getMinAmountParam(nativeAmount).numerator.toString(),
       recipient,
       deadline,
-      { value: currencyAmountToBigNumber(nativeAmount.wrapped) },
+      { value: nativeAmount.numerator.toString() },
     )
   }
 
@@ -40,10 +39,10 @@ const addLiquidity = async (
   return routerContract.addLiquidity(
     tokenAmountA.currency.wrapped.address,
     tokenAmountB.currency.wrapped.address,
-    currencyAmountToBigNumber(tokenAmountA),
-    currencyAmountToBigNumber(tokenAmountB),
-    getMinAmountParam(tokenAmountA),
-    getMinAmountParam(tokenAmountB),
+    tokenAmountA.numerator.toString(),
+    tokenAmountB.numerator.toString(),
+    getMinAmountParam(tokenAmountA).numerator.toString(),
+    getMinAmountParam(tokenAmountB).numerator.toString(),
     recipient,
     deadline,
   )

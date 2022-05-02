@@ -1,14 +1,13 @@
 import { Button, ButtonProps } from '@concave/ui'
 import { BigNumberish } from 'ethers'
 import { CurrencyAmount, ROUTER_ADDRESS, Token } from 'gemswap-sdk'
-import { currencyAmountToBigNumber } from 'lib/util'
 import { useApprove } from './useApprove'
 
 export const useApproval = (currencyAmount: CurrencyAmount<Token>) => {
   return useApprovalWhenNeeded(
     currencyAmount.currency,
     ROUTER_ADDRESS[currencyAmount.currency.chainId],
-    currencyAmountToBigNumber(currencyAmount),
+    currencyAmount.numerator.toString(),
   )
 }
 
