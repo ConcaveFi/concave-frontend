@@ -1,5 +1,6 @@
 import { Price, Currency, TradeType, CurrencyAmount } from 'gemswap-sdk'
 import { useMemo } from 'react'
+import { parseAmount } from '../utils/parseAmount'
 import { useTrade } from './useTrade'
 
 // return price of currencyIn relative to currencyOut
@@ -13,7 +14,7 @@ export const usePrice = (currencyIn?: Currency, currencyOut?: Currency) => {
     error,
   } = useTrade(
     // amount large enough to filter low liquidity pairs.
-    currencyOut && CurrencyAmount.fromRawAmount(currencyOut, 50_000),
+    currencyOut && parseAmount('50000', currencyOut),
     currencyIn,
     { maxHops: 3, tradeType: TradeType.EXACT_OUTPUT },
     { select: (trade) => trade.route.midPrice },
