@@ -17,6 +17,7 @@ export const gradientBorder = ({
   variant = 'primary',
 }: GradientBorderStyleProps = {}): SystemStyleInterpolation => {
   return {
+    willChange: 'transform', // idk why this fixes it, but, fixes the issue of the border being larger on one side of the component sometimes
     position: 'relative',
     '& > *': { zIndex: 1 },
     ...(borderWidth && {
