@@ -14,9 +14,9 @@ export const usePrice = (currencyIn?: Currency, currencyOut?: Currency) => {
     error,
   } = useTrade(
     // amount large enough to filter low liquidity pairs.
-    currencyOut && parseAmount('50000', currencyOut),
-    currencyIn,
-    { maxHops: 3, tradeType: TradeType.EXACT_OUTPUT },
+    currencyIn && parseAmount('50000', currencyIn),
+    currencyOut,
+    { maxHops: 3, tradeType: TradeType.EXACT_INPUT },
     { select: (trade) => trade.route.midPrice },
   )
 
