@@ -38,13 +38,13 @@ export const useAddLiquidityButtonProps = (
   /*
     Insufficient Funds
   */
-  if (currency0Balance.amount?.lessThan(amount0))
+  if (currency0Balance.data?.lessThan(amount0))
     return {
       children: `Insufficient ${amount0.currency.symbol} balance`,
       isDisabled: true,
     }
 
-  if (currency1Balance.amount?.lessThan(amount1))
+  if (currency1Balance.data?.lessThan(amount1))
     return {
       children: `Insufficient ${amount1.currency.symbol} balance`,
       isDisabled: true,
