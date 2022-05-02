@@ -8,11 +8,11 @@ const concaveTokenList = (networkName: string) =>
 export const useTokenList = () => {
   const [
     {
-      data: { chain: selectedChain },
+      data: { chain: selectedChain = chain.mainnet },
       loading,
     },
   ] = useNetwork()
-  const chainName = (selectedChain || chain.mainnet)?.name
+  const chainName = selectedChain.name
   return useQuery(['token-list', chainName], async () => {
     if (loading) {
       return []
@@ -21,9 +21,11 @@ export const useTokenList = () => {
       .then((d) => d.json() as Promise<ConcaveTokenList>)
       .then((l) => l.tokens)
       .then((list) =>
-        list.map((token) => {
-          return new Token(token.chainId, token.address, token.decimals, token.symbol, token.name)
-        }),
+        list
+          .filter((t) => t.chainId === selectedChain.id)
+          .map((token) => {
+            return new Token(token.chainId, token.address, token.decimals, token.symbol, token.name)
+          }),
       )
   })
 }
