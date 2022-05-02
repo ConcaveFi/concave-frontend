@@ -48,7 +48,7 @@ export const usePairs = <T = Pair[]>(
 ) => {
   const [isValidPair, setValidPair] = useState(true)
   return useQuery(
-    ['pairs', tokenA?.address, tokenB?.address, maxHops],
+    ['pairs', tokenA?.address, tokenB?.address, maxHops, tokenA.chainId],
     async () => {
       const commonPairs = getAllCommonPairs(tokenA, tokenB, maxHops)
       const pairs: Pair[] = (
@@ -61,8 +61,8 @@ export const usePairs = <T = Pair[]>(
 
       if (
         !pairs ||
-        pairs.length === 0 ||
-        !pairs.find((pair) => pair.involvesToken(tokenA) && pair.involvesToken(tokenB))
+        pairs.length === 0
+        // !pairs.find((pair) => pair.involvesToken(tokenA) && pair.involvesToken(tokenB))
       )
         throw NoValidPairsError
 
