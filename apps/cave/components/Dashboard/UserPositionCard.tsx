@@ -143,8 +143,8 @@ const RedeemCardViewer = () => {
           mx="auto"
           shadow="down"
         >
-        <Text color="text.low" fontSize="sm">
-          Not redeemable
+          <Text color="text.low" fontSize="sm">
+            Not redeemable
           </Text>
         </Button>
       </Flex>
