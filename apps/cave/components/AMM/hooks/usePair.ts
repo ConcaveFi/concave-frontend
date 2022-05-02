@@ -48,7 +48,7 @@ export const usePairs = <T = Pair[]>(
 ) => {
   const [isValidPair, setValidPair] = useState(true)
   return useQuery(
-    ['pairs', tokenA?.address, tokenB?.address, maxHops, tokenA.chainId],
+    ['pairs', tokenA?.address, tokenB?.address, maxHops, tokenA?.chainId],
     async () => {
       const commonPairs = getAllCommonPairs(tokenA, tokenB, maxHops)
       const pairs: Pair[] = (
