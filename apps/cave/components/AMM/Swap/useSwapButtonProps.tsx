@@ -59,7 +59,8 @@ export const useSwapButtonProps = ({
   /*
     Enter an amount
   */
-  if (!inputAmount) return { isDisabled: true, children: 'Enter an amount' }
+  if (!inputAmount || inputAmount?.equalTo(0))
+    return { isDisabled: true, children: 'Enter an amount' }
 
   /*
     Insufficient Funds
