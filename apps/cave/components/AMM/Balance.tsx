@@ -13,7 +13,7 @@ export const Balance = ({ value, onClick }: { value: string; onClick?: () => voi
     iconSpacing={1}
   >
     <Text isTruncated maxW="100px">
-      {commify(value)}
+      {commify((+value).toFixed(2))}
     </Text>
   </Button>
 )
