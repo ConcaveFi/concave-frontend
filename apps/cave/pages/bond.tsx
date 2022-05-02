@@ -27,9 +27,6 @@ export default function Bond() {
   const [align, setAlign] = useState<'start' | 'center'>('start')
 
   useEffect(() => {
-    getCurrentBlockTimestamp().then((x) => {
-      setCurrentBlockTs(x)
-    })
     const interval = setInterval(() => {
       return new Promise((resolve) => {
         getUserBondPositions(networkId, userAddress, currentBlockTs)
@@ -61,6 +58,9 @@ export default function Bond() {
       .catch((e) => {
         console.log(e)
       })
+    getCurrentBlockTimestamp().then((x) => {
+      setCurrentBlockTs(x)
+    })
     fetch('/api/cnv')
       .then((j) => j.json())
       .then((data) => {
