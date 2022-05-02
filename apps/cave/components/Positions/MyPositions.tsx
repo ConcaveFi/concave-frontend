@@ -46,18 +46,20 @@ export const MyPositions = ({ account }) => {
   return (
     <>
       <RewardsBanner />
-      <Card variant="primary" borderRadius="3xl" p={6} shadow="Up for Blocks">
-        <Accordion as={Stack} allowToggle gap={2}>
-          {liquidityPoolTokens.map((liquidityPoolToken) => {
-            return (
-              <LPPositionItem
-                key={liquidityPoolToken.address}
-                liquidityPoolToken={liquidityPoolToken}
-                userAddress={account.address}
-              />
-            )
-          })}
-        </Accordion>
+      <Card variant="primary" borderRadius="3xl" h={'auto'} pr={6} py={4} shadow="Up for Blocks">
+        <Box p={6} apply="scrollbar.secondary" overflowY={'auto'}>
+          <Accordion as={Stack} allowToggle gap={2}>
+            {liquidityPoolTokens.map((liquidityPoolToken) => {
+              return (
+                <LPPositionItem
+                  key={liquidityPoolToken.address}
+                  liquidityPoolToken={liquidityPoolToken}
+                  userAddress={account.address}
+                />
+              )
+            })}
+          </Accordion>
+        </Box>
       </Card>
     </>
   )
