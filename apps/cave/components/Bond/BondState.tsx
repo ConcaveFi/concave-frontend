@@ -9,7 +9,8 @@ import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { BondSettings } from './Settings'
 import { utils } from 'ethers'
-import { rawProvider as providers } from 'lib/providers'
+import { concaveProvider as providers } from 'lib/providers'
+import { rawProvider } from 'lib/providers'
 
 export const getBondAmountOut = async (
   quoteAddress: string,
@@ -17,7 +18,7 @@ export const getBondAmountOut = async (
   networkId: number,
   input: string,
 ) => {
-  const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, providers)
+  const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, providers(networkId))
   const ROPSTEN_DAI = '0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4'
   // pass decimals argument where 18 is hardcoded
   const formattedInput = ethers.utils.parseUnits(input.toString(), 18)
@@ -28,14 +29,14 @@ export const getBondAmountOut = async (
 }
 
 export const getBondTermLength = async (networkId: number) => {
-  const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, providers)
+  const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, providers(networkId))
   const termLength = await bondingContract.term()
   const formattedTermLength = termLength.toString()
   return formattedTermLength / 60 / 60 / 24
 }
 
 export const getBondSpotPrice = async (networkId: number, tokenAddress: string) => {
-  const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, providers)
+  const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, providers(networkId))
   const ROPSTEN_DAI = '0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4'
   const spotPrice = await bondingContract.getSpotPrice(ROPSTEN_DAI)
   const formatted = ethers.utils.formatEther(spotPrice)
@@ -85,8 +86,8 @@ export const purchaseBond = async (
 }
 
 export async function getCurrentBlockTimestamp() {
-  const getBlock = providers.getBlockNumber()
-  const timestamp = (await providers.getBlock(getBlock)).timestamp
+  const getBlock = rawProvider.getBlockNumber()
+  const timestamp = (await rawProvider.getBlock(getBlock)).timestamp
   return timestamp
 }
 
@@ -114,7 +115,7 @@ export const getUserBondPositions = async (
   let totalOwed = 0
   let oldest = 0
   let claimed = false
-  const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, providers)
+  const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, providers(networkId))
   const getUserPositionsLength = await bondingContract.getUserPositionCount(address)
   for (let i = 0; i < +getUserPositionsLength; i++) {
     const positionData = await bondingContract.positions(address, i)
@@ -125,11 +126,15 @@ export const getUserBondPositions = async (
     if (+positionData.creation > oldest) {
       oldest = +positionData.creation
     }
-    let fullyVestedTimestamp = +positionData.creation * 1000 + 432000000
+    let fullyVestedTimestamp = +positionData.creation + 432000000
+    // console.log(fullyVestedTimestamp / +positionData.creation)
+    // console.log(fullyVestedTimestamp)
+    // console.log(+positionData.creation)
     let elapsed =
       currentBlockTimestamp >= fullyVestedTimestamp
         ? 1
-        : +currentBlockTimestamp / positionData.creation
+        : positionData.creation + 432000000 / +currentBlockTimestamp
+
     totalPending += +(+utils.formatEther(positionData.redeemed)).toFixed(2)
     // +(+utils.formatEther(positionData.owed)).toFixed(2) * elapsed -
     // +(+utils.formatEther(positionData.redeemed)).toFixed(2)
