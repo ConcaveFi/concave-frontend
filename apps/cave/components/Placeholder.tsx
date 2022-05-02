@@ -1,15 +1,6 @@
 import { Box, Flex, Text } from '@concave/ui'
 import Lottie from 'react-lottie'
-import * as loaderAnimationData from 'public/assets/concave/loader.json'
 
-const defaultOptions = {
-  loop: true,
-  autoplay: true,
-  animationData: loaderAnimationData,
-  rendererSettings: {
-    preserveAspectRatio: 'xMidYMid slice',
-  },
-}
 
 function Placeholder({ text, description }) {
   return (
@@ -30,7 +21,6 @@ function Placeholder({ text, description }) {
         </Text>
         <Flex justifyContent="center">
           <Box borderRadius="30px" overflow="hidden">
-            <Lottie options={defaultOptions} height={64} width={64} style={{ cursor: 'default' }} />
           </Box>
           {/* <Image src="/assets/concave/concaveLogo.gif" alt="concave-logo" h={28} w={28} /> */}
         </Flex>

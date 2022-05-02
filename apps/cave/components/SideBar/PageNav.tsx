@@ -104,7 +104,7 @@ function PageNav() {
 
       <NavButton
         leftIcon={<NotInteractableImage src="/assets/sidebar/page-marketplace.svg" />}
-        href="/marketplace"
+        href="/placeholder"
         mt="60px"
       >
         Marketplace
@@ -118,8 +118,8 @@ function PageNav() {
         >
           Swap
         </NavButton>
-        <SubnavButton href="/addliquidity">Add liquidity</SubnavButton>
-        <SubnavButton href="/pools">Your Pools</SubnavButton>
+        <SubnavButton href="/placeholder">Add liquidity</SubnavButton>
+        <SubnavButton href="/placeholder">Your Pools</SubnavButton>
       </Box>
     </Flex>
   )

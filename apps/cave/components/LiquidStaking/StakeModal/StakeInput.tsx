@@ -146,7 +146,7 @@ function StakeInput(props) {
 
         <Button
           mt={5}
-          onClick={() => router.push('/dashboard')}
+          onClick={() => router.push('/placeholder')}
           fontWeight="bold"
           fontSize="md"
           variant="primary.outline"
