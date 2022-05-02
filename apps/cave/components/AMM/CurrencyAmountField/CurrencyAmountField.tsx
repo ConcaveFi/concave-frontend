@@ -22,7 +22,7 @@ export function CurrencyAmountField({
 
   const isFocused = useRef(false)
   useEffect(() => {
-    if (!isFocused.current) setInternalValue(currencyAmount.toSignificant(6))
+    if (!isFocused.current) setInternalValue(currencyAmount?.toExact())
   }, [currencyAmount])
 
   // useDebounce(() => isFocused.current && onChangeAmount(internalAmount), 300, [
@@ -41,9 +41,9 @@ export function CurrencyAmountField({
 
   const inputValue = isFocused.current
     ? internalValue || ''
-    : currencyAmount.equalTo(0)
-    ? ''
-    : currencyAmount?.toSignificant(6)
+    : currencyAmount?.greaterThan(0)
+    ? currencyAmount.toExact()
+    : ''
 
   return (
     <Stack sx={{ ...styles.field, bg: 'none' }} justify="space-between" spacing={0}>
