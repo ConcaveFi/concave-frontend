@@ -5,6 +5,7 @@ import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId
 import { useEffect, useState } from 'react'
 import { useAccount } from 'wagmi'
 import { createAlchemyWeb3, Nft } from '@alch/alchemy-web3'
+import { nftContract } from 'components/Dashboard/UserPositionCard'
 const providers = new ethers.providers.InfuraProvider('ropsten', '545e522b4c0e45078a25b86f3b646a9b')
 
 export async function getAllUsersPositionsID(address: string, netWorkId: number) {
@@ -56,15 +57,7 @@ export const useDashBoardState = () => {
       })
   }, [account])
 
-  const totalLocked = userContracts
-    ? userContracts
-        ?.map((contract) => {
-          const { shares } = contract
-          if (shares === undefined || shares === null) return 0
-          return parseInt(shares?._hex, 16) / 1000000000000000000
-        })
-        .reduce((last, current) => last + current)
-    : undefined
+  const totalLocked = getTotalLocked(userContracts)
 
   return {
     totalLocked,
@@ -73,4 +66,14 @@ export const useDashBoardState = () => {
     userContracts,
     setUserContracts,
   }
+}
+
+function getTotalLocked(contract: nftContract[]) {
+  if (!contract) return undefined
+  const lockeds = contract?.map((current) => {
+    if (current?.shares === undefined) return 0
+    const { shares } = current
+    return parseInt(shares?._hex, 16) / 1000000000000000000
+  })
+  const totalLocked = lockeds.reduce((last, current) => last + current)
 }

@@ -14,7 +14,7 @@ import {
 } from '@concave/ui'
 import UserListPositionCard from './UserListPositionCard'
 
-type nftContract = {
+export type nftContract = {
   maturity: number
   poolID: number
   shares: { _hex: string; _isBigNumber: boolean }
@@ -230,30 +230,19 @@ const ListCardViewer = (props: ListCardViewerProps) => {
           </Text>
         </Flex>
         <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
-          <Popover>
-            {/*@ts-ignore */}
-            <PopoverTrigger>
-              <Button
-                mt={5}
-                // onClick={}
-                fontWeight="bold"
-                fontSize="md"
-                variant={'primary'}
-                //   bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
-                w="160px"
-                h="40px"
-                size="large"
-                mx="auto"
-              >
-                List for sale
-              </Button>
-            </PopoverTrigger>
-            <Portal>
-              <PopoverContent border={'none'}>
-                <UserListPositionCard />
-              </PopoverContent>
-            </Portal>
-          </Popover>
+          <Button
+            mt={5}
+            onClick={onOpen}
+            fontWeight="bold"
+            fontSize="md"
+            variant={'primary'}
+            w="160px"
+            h="40px"
+            size="large"
+            mx="auto"
+          >
+            List for sale
+          </Button>
         </Flex>
       </Flex>
     </Box>
