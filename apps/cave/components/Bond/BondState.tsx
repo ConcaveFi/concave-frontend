@@ -117,35 +117,42 @@ export const getUserBondPositions = async (
   let rawPending = 0
   let rawOwed = 0
   let oldest = 0
+  let oldestCreationTimestamp = 0
   let claimed = false
   const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, providers(networkId))
   const getUserPositionsLength = await bondingContract.getUserPositionCount(address)
+  const termData = await bondingContract.term()
   for (let i = 0; i < +getUserPositionsLength; i++) {
     const positionData = await bondingContract.positions(address, i)
+
     rawPending += +positionData.redeemed
     rawOwed += +positionData.owed
     batchRedeemArray.push(+i)
     if (i === getUserPositionsLength - 1) {
       oldest += +positionData.creation
-      console.log(oldest)
+      oldestCreationTimestamp += +positionData.creation
     }
-    totalPending += +(+utils.formatEther(positionData.redeemed)).toFixed(2)
+    totalPending += +(+utils.formatEther(positionData.redeemed))
     totalOwed += +(+utils.formatEther(positionData.owed))
-
-    // +(+utils.formatEther(positionData.owed)).toFixed(2) * elapsed -
-    // +(+utils.formatEther(positionData.redeemed)).toFixed(2)
-    // console.log(totalPending)
   }
-  let fullyVestedTimestamp = oldest * 1000 + 86400000
-  let elapsed =
-    currentBlockTimestamp >= fullyVestedTimestamp
-      ? 1
-      : fullyVestedTimestamp / +currentBlockTimestamp
+  // position.debt * (block.timestamp - position.creation) / ps.term - position.redeemed;
+  const fullyVestedTimestamp = oldest * 1000 + 86400000
+  const msCurrentBlockTimestamp = currentBlockTimestamp * 1000
+  // const delta = fullyVestedTimestamp - msCurrentBlockTimestamp
+  // let elapsed =
+  //   msCurrentBlockTimestamp >= fullyVestedTimestamp
+  //     ? 1
+  //     : +msCurrentBlockTimestamp / fullyVestedTimestamp
+  const delta = +currentBlockTimestamp - +oldestCreationTimestamp
+  const scaleDown = delta / termData > 1 ? 1 : termData / delta
+  let currentlyOwed = +rawOwed * scaleDown
+  console.log(rawPending)
+  console.log('delta', currentlyOwed.toString())
+
   const parseOldest = new Date(fullyVestedTimestamp).toString().slice(4, 21)
   // const parsePending = utils.formatEther(totalPending)
-  console.log('fullyVestedTimestamp', fullyVestedTimestamp)
-  console.log('parseOldest', parseOldest)
-
+  console.log(totalPending)
+  console.log(totalOwed)
   if (totalPending === totalOwed) claimed = true
   return { parseOldest, totalOwed, totalPending, batchRedeemArray, claimed }
 }

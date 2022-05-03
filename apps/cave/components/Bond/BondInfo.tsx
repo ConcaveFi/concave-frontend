@@ -50,7 +50,7 @@ export const UserBondPositionInfo = (bondSigma, userAddress) => {
     <>
       {claimed ? (
         'You have no open positions'
-      ) : totalOwed > 0 ? (
+      ) : totalOwed > 0 && totalPending < totalOwed ? (
         <Card bg="none" py={3} w="100%" direction="row" shadow="Glass Up Medium">
           <Flex justify="center" pl={4} pr={7}>
             <InfoItem
