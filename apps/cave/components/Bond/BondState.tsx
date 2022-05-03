@@ -23,6 +23,7 @@ export const getBondAmountOut = async (
   // pass decimals argument where 18 is hardcoded
   const formattedInput = ethers.utils.parseUnits(input.toString(), 18)
   const amountOut = await bondingContract.getAmountOut(ROPSTEN_DAI, formattedInput)
+  console.log(amountOut)
   const ethValue = ethers.utils.formatEther(amountOut)
   const cleanedOutput = parseFloat(ethValue).toFixed(6)
   return cleanedOutput
@@ -119,31 +120,29 @@ export const getUserBondPositions = async (
   const getUserPositionsLength = await bondingContract.getUserPositionCount(address)
   for (let i = 0; i < +getUserPositionsLength; i++) {
     const positionData = await bondingContract.positions(address, i)
-    // revisit this, dont push if owed is not greater than 0
-    if (positionData.owed > 1 && positionData.owed !== positionData.redeemed) {
+    totalPending += +positionData.redeemed
+    totalOwed += +positionData.owed
+    if (+positionData.owed !== +positionData.redeemed) {
       batchRedeemArray.push(+i)
     }
     if (+positionData.creation > oldest) {
       oldest = +positionData.creation
     }
-    totalPending += +(+utils.formatEther(positionData.redeemed)).toFixed(2)
+    totalPending += +(+utils.formatEther(positionData.redeemed))
     // +(+utils.formatEther(positionData.owed)).toFixed(2) * elapsed -
     // +(+utils.formatEther(positionData.redeemed)).toFixed(2)
     // console.log(totalPending)
-    totalOwed += +(+utils.formatEther(positionData.owed)).toFixed(2)
   }
-  let elapsed = currentBlockTimestamp >= oldest ? 1 : oldest + 864000 / +currentBlockTimestamp
-  console.log(elapsed)
   let fullyVestedTimestamp = oldest + 864000
-  console.log('fullyVestedTimestamp', fullyVestedTimestamp)
-  console.log('currentBlockTimestamp', currentBlockTimestamp)
-  console.log(
-    'fullyVestedTimestamp / currentBlockTimestamp',
-    fullyVestedTimestamp / currentBlockTimestamp,
-  )
+  let elapsed =
+    currentBlockTimestamp >= fullyVestedTimestamp
+      ? 1
+      : fullyVestedTimestamp / +currentBlockTimestamp
+
+  const parseOldest = new Date(oldest * 1000 + 864000).toString().slice(4, 21)
+  // const parsePending = utils.formatEther(totalPending)
 
   if (totalPending === totalOwed) claimed = true
-  const parseOldest = new Date(oldest * 1000 + 864000).toString().slice(4, 21)
   return { parseOldest, totalOwed, totalPending, batchRedeemArray, claimed }
 }
 

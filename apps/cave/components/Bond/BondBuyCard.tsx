@@ -3,23 +3,17 @@ import { Button, Card, HStack, Spinner, Text, useDisclosure } from '@concave/ui'
 import { useApprove } from 'hooks/useApprove'
 import React, { useEffect, useState } from 'react'
 import { useFeeData } from 'wagmi'
-import { InputField as BondInput } from '../AMM/InputField'
+// import { InputField as BondInput } from '../AMM/InputField'
+import { BondInput } from './BondInput'
 import { BondOutput } from './BondOutput'
 import { BondReceiptModal } from './BondReceipt'
 import { BOND_ADDRESS } from 'contracts/Bond/BondingAddress'
-import {
-  getCurrentBlockTimestamp,
-  getBondAmountOut,
-  getBondSpotPrice,
-  getUserBondPositions,
-  purchaseBond,
-  useBondState,
-} from './BondState'
+import { getBondAmountOut, getBondSpotPrice, purchaseBond, useBondState } from './BondState'
 import { ConfirmBondModal } from './ConfirmBond'
 import { DownwardIcon } from './DownwardIcon'
 import { BondSettings, defaultSettings, Settings } from './Settings'
-import { CurrencyAmount, Currency, DAI } from 'gemswap-sdk'
-import { parseAmount } from 'components/AMM/utils/parseAmount'
+import { DAI } from 'gemswap-sdk'
+// import { parseAmount } from 'components/AMM/utils/parseAmount'
 
 export const twoDecimals = (s: string | number) => {
   const a = s.toString()
@@ -46,16 +40,18 @@ export function BondBuyCard() {
   const { currencyIn, currencyOut, userAddress, balance, signer, networkId } = useBondState()
   const [settings, setSettings] = useState<BondSettings>(defaultSettings)
   const userBalance = balance.data?.formatted
-  const [amountIn, setAmountIn] = useState<CurrencyAmount<Currency>>(
-    parseAmount('0', DAI[networkId]),
-  )
+  // const [amountIn, setAmountIn] = useState<CurrencyAmount<Currency>>(
+  //   parseAmount('0', DAI[networkId]),
+  //)
+  const [amountIn, setAmountIn] = useState<number>(0)
 
   const [amountOut, setAmountOut] = useState<string>()
   const [bondSpotPrice, setBondSpotPrice] = useState<string>()
   const confirmModal = useDisclosure()
   const receiptModal = useDisclosure()
   const { allowance, sendApproveTx } = useApprove(currencyIn, BOND_ADDRESS[networkId])
-  const allowanceIsNotEnough = !!allowance.value?.lt(amountIn.numerator.toString())
+  //amountIn.numerator.toString()
+  const allowanceIsNotEnough = !!allowance.value?.lt(amountIn)
 
   useEffect(() => {
     getBondSpotPrice(networkId, BOND_ADDRESS[networkId])
@@ -70,18 +66,17 @@ export function BondBuyCard() {
   return (
     <Card p={6} gap={2} variant="primary" h="fit-content" shadow="Block Up" w="100%" maxW="420px">
       <BondInput
-        currencyAmountIn={amountIn}
-        onChangeAmount={(v) => {
-          setAmountIn(v)
-          getBondAmountOut(
-            currencyOut.address,
-            currencyOut.decimals,
-            networkId,
-            v.numerator.toString(),
-          ).then((amountOut) => {
-            setAmountOut(amountOut)
-          })
+        currency={currencyIn}
+        onChangeValue={(v) => {
+          setAmountIn(+v)
+          getBondAmountOut(currencyOut.address, currencyOut.decimals, networkId, v).then(
+            (amountOut) => {
+              console.log(amountOut)
+              setAmountOut(amountOut)
+            },
+          )
         }}
+        onClickMaxBalance={() => {}}
       />
       <DownwardIcon />
       <BondOutput disabled={true} currency={currencyOut} value={amountOut} />
@@ -115,7 +110,8 @@ export function BondBuyCard() {
       <ConfirmBondModal
         currencyIn={currencyIn}
         currencyOut={currencyOut}
-        amountIn={amountIn.numerator.toString()}
+        //amountIn.numerator.toString
+        amountIn={amountIn}
         amountOut={amountOut}
         tokenInUsdPrice={'currencyIn'}
         tokenInRelativePriceToTokenOut={''}
