@@ -3,7 +3,7 @@ import { Currency, CurrencyAmount, JSBI } from 'gemswap-sdk'
 
 // try to parse a user entered amount for a given token
 export const parseAmount = <T extends Currency>(
-  value: string,
+  value: string = '0',
   currency: T,
 ): CurrencyAmount<T> | undefined => {
   if (!currency) return undefined

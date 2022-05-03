@@ -9,7 +9,7 @@ export default function PositionsView() {
     return <Text>Please, login</Text>
   }
   return (
-    <Flex maxW="container.md" direction="column" justifyContent="center" h="full" gap={6}>
+    <Flex direction="column" mt={8} gap={6}>
       <Heading fontSize="2xl">My Liquidity Position</Heading>
       <MyPositions account={account} />
     </Flex>

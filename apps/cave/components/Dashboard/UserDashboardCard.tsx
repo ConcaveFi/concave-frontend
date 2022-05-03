@@ -23,6 +23,7 @@ const UserDashboardCard = () => {
         <Box
           pos="relative"
           h="fit-content"
+          w="fit-content"
           px={4}
           pb="4"
           pt="1"
@@ -40,6 +41,7 @@ const UserDashboardCard = () => {
       <Box
         pos="relative"
         h="100%"
+        w="fit-content"
         overflowY={'auto'}
         maxHeight={'100%'}
         borderRadius="12px"

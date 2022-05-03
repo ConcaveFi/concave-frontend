@@ -23,13 +23,13 @@ import { useAddressTokenList } from 'components/AMM/hooks/useTokenList'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { BigNumber, Transaction } from 'ethers'
-import { Pair, ROUTER_ADDRESS, Token } from 'gemswap-sdk'
+import { NATIVE, ROUTER_ADDRESS, Token } from 'gemswap-sdk'
 import { useApprovalWhenNeeded } from 'hooks/useAllowance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { LiquidityInfoData, useLiquidityInfo } from 'hooks/useLiquidityInfo'
-import { precision, usePrecision } from 'hooks/usePrecision'
+import { precision } from 'hooks/usePrecision'
 import { RemoveLiquidityState, useRemoveLiquidity } from 'hooks/useRemoveLiquidity'
-import React from 'react'
+import React, { useState } from 'react'
 
 export const MyPositions = ({ account }) => {
   const { data: tokens, isLoading } = useAddressTokenList(account.address)
@@ -46,38 +46,50 @@ export const MyPositions = ({ account }) => {
   return (
     <>
       <RewardsBanner />
-      <Card variant="primary" borderRadius="3xl" p={6} shadow="Up for Blocks">
-        <Accordion as={Stack} allowToggle gap={2}>
-          {liquidityPoolTokens.map((liquidityPoolToken) => {
-            return (
-              <LPPositionItem
-                key={liquidityPoolToken.address}
-                liquidityPoolToken={liquidityPoolToken}
-                userAddress={account.address}
-              />
-            )
-          })}
-        </Accordion>
+      <Card variant="primary" borderRadius="3xl" h={'auto'} pr={6} py={4} shadow="Up for Blocks">
+        <Box p={6} apply="scrollbar.secondary" overflowY={'auto'}>
+          <Accordion as={Stack} allowToggle gap={2}>
+            {liquidityPoolTokens.map((liquidityPoolToken) => {
+              return (
+                <LPPositionItem
+                  key={liquidityPoolToken.address}
+                  liquidityPoolToken={liquidityPoolToken}
+                  userAddress={account.address}
+                />
+              )
+            })}
+          </Accordion>
+        </Box>
       </Card>
     </>
   )
 }
 
-const RewardsBanner = () => (
-  <Card variant="secondary" p={4} gap={4}>
-    <Flex justify="space-between">
-      <Heading as="h2" fontSize="lg">
-        Liquidity Provider Rewards
-      </Heading>
-      <CloseButton blendMode="multiply" _hover={{ blendMode: 'normal' }} />
-    </Flex>
-    <Text fontSize="lg">
-      Liquidity providers earn a 0.25% fee on all trades proportional to their share of the pool.
-      Fees are added to the pool, accrue in real time and can be claimed by withdrawing your
-      liquidity.
-    </Text>
-  </Card>
-)
+const RewardsBanner = () => {
+  const [visible, setVisible] = useState(true)
+  if (!visible) {
+    return <></>
+  }
+  return (
+    <Card variant="secondary" p={4} gap={4}>
+      <Flex justify="space-between">
+        <Heading as="h2" fontSize="lg">
+          Liquidity Provider Rewards
+        </Heading>
+        <CloseButton
+          blendMode="multiply"
+          _hover={{ blendMode: 'normal' }}
+          onClick={() => setVisible(!visible)}
+        />
+      </Flex>
+      <Text fontSize="lg">
+        Liquidity providers earn a 0.25% fee on all trades proportional to their share of the pool.
+        Fees are added to the pool, accrue in real time and can be claimed by withdrawing your
+        liquidity.
+      </Text>
+    </Card>
+  )
+}
 
 const spin = keyframes({
   '0%': {
@@ -116,7 +128,7 @@ const LPPositionItem = ({ userAddress, liquidityPoolToken }: LPPosition) => {
             <CurrencyIcon h={'32px'} currency={pair.token0} />
             <CurrencyIcon h={'32px'} currency={pair.token1} />
             <Text ml="24px" fontWeight="semibold" fontSize="lg">
-              {pair.token0.symbol}/{pair.token1.symbol} {token.address}
+              {pair.token0.symbol}/{pair.token1.symbol}
             </Text>
           </HStack>
           {/* <Button
@@ -142,16 +154,19 @@ const LPPositionItem = ({ userAddress, liquidityPoolToken }: LPPosition) => {
             p={4}
             spacing={4}
           >
-            <PositionInfoItem label="Your total pool tokens:" value={userBalance.data.formatted} />
+            <PositionInfoItem
+              label="Your total pool tokens:"
+              value={userBalance.data.toSignificant()}
+            />
             <PositionInfoItem
               label={`Pooled ${pair.token0.symbol}:`}
-              value={pair.reserve0.toFixed(2)}
+              value={pair.reserve0.toFixed(3)}
             >
               <CurrencyIcon h={'32px'} size="sm" currency={pair.token0} />
             </PositionInfoItem>
             <PositionInfoItem
               label={`Pooled ${pair.token1.symbol}:`}
-              value={pair.reserve1.toFixed(2)}
+              value={pair.reserve1.toFixed(3)}
             >
               <CurrencyIcon h={'32px'} size="sm" currency={pair.token1} />
             </PositionInfoItem>
@@ -322,35 +337,57 @@ const YouWillReceive = ({
   pair,
   amountAMin,
   amountBMin,
-}: {
-  amountAMin: number
-  amountBMin: number
-  pair: Pair
-}) => {
+  hasNativeToken,
+  receiveInNativeToken,
+  tokenAIsNativeWrapper,
+  tokenBIsNativeWrapper,
+  handleNativeToken,
+}: RemoveLiquidityState) => {
   return (
     <HStack gap={7} shadow="Up Big" px={6} py={3} borderRadius="2xl" align="center">
       <Box>
         <Text>You will receive:</Text>
-        <Text fontWeight={400} fontStyle={'md'} color={'#2E97E2'} fontSize={'14px'}>
-          You will receive:
-        </Text>
+        {hasNativeToken && (
+          <Button onClick={handleNativeToken}>
+            <Text fontWeight={400} fontStyle={'md'} color={'#2E97E2'} fontSize={'14px'}>
+              Change to {receiveInNativeToken ? 'WETH' : 'ETH'}
+            </Text>
+          </Button>
+        )}
       </Box>
-      <ReceiveBox amount={amountAMin} token={pair.token0} />
-      <ReceiveBox amount={amountBMin} token={pair.token1} />
+      <ReceiveBox
+        receiveInNative={tokenAIsNativeWrapper && receiveInNativeToken}
+        amount={amountAMin}
+        token={pair.token0}
+      />
+      <ReceiveBox
+        receiveInNative={tokenBIsNativeWrapper && receiveInNativeToken}
+        amount={amountBMin}
+        token={pair.token1}
+      />
     </HStack>
   )
 }
 
-const ReceiveBox = ({ amount, token }: { amount: number; token: Token }) => {
+const ReceiveBox = ({
+  amount,
+  token,
+  receiveInNative,
+}: {
+  amount: number
+  token: Token
+  receiveInNative?: boolean
+}) => {
+  const currency = receiveInNative ? NATIVE[token.chainId] : token
   return (
     <HStack shadow="down" borderRadius="2xl" p={3}>
-      <CurrencyIcon size="sm" currency={token} />
+      <CurrencyIcon size="sm" currency={currency} />
       <Box>
         <Text fontFamily={'heading'} fontWeight={600}>
-          {usePrecision(amount, 7).formatted}
+          {precision(amount, 4).formatted}
         </Text>
-        <Text title={token?.name} fontWeight={700} fontSize={'sm'} color={'text.low'}>
-          {token?.symbol}
+        <Text title={currency?.name} fontWeight={700} fontSize={'sm'} color={'text.low'}>
+          {currency?.symbol}
         </Text>
       </Box>
     </HStack>

@@ -3,7 +3,7 @@ import { usePair } from 'components/AMM/hooks/usePair'
 import { parseAmount } from 'components/AMM/utils/parseAmount'
 import { Currency, CurrencyAmount, NATIVE, Pair } from 'gemswap-sdk'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 const makeCurrencyFields = (initialTokens = [], networkId) => {
   return {
@@ -16,15 +16,17 @@ const deriveAmount = (
   pair: Pair,
   exactAmount: CurrencyAmount<Currency>,
   otherCurrency: Currency,
+  defaultValue: CurrencyAmount<Currency>,
 ) => {
-  try {
-    const quoteAmount = pair.priceOf(exactAmount.currency.wrapped).quote(exactAmount.wrapped)
-    if (otherCurrency.isNative)
-      return CurrencyAmount.fromRawAmount(otherCurrency, quoteAmount.numerator)
-    return quoteAmount
-  } catch {
-    return parseAmount('0', otherCurrency)
+  if (!pair) {
+    return defaultValue
   }
+  const price = pair.priceOf(exactAmount.currency.wrapped)
+  const quoteAmount = price.quote(exactAmount.wrapped)
+
+  if (otherCurrency.isNative)
+    return CurrencyAmount.fromRawAmount(otherCurrency, quoteAmount.numerator)
+  return quoteAmount
 }
 
 export const useAddLiquidityState = () => {
@@ -46,22 +48,23 @@ export const useAddLiquidityState = () => {
     setFieldCurrency(initialCurrencyFields)
     setExactAmount(parseAmount('0', initialCurrencyFields.first))
   }, [initialCurrencyFields, setFieldCurrency])
+  const firstFieldAmount = useRef<CurrencyAmount<Currency>>()
+  const secondFieldAmount = useRef<CurrencyAmount<Currency>>()
 
   const isExactFirst = fieldCurrency.first && exactAmount?.currency.equals(fieldCurrency.first)
   const otherCurrency = fieldCurrency[isExactFirst ? 'second' : 'first']
 
   const pair = usePair(exactAmount?.currency.wrapped, otherCurrency?.wrapped)
-
-  const derivedAmount = deriveAmount(pair.data, exactAmount, otherCurrency)
-
-  const [firstFieldAmount, secondFieldAmount] = isExactFirst
-    ? [exactAmount, derivedAmount]
-    : [derivedAmount, exactAmount]
+  const otherAmount = isExactFirst ? firstFieldAmount.current : secondFieldAmount.current
+  const derivedAmount = deriveAmount(pair.data, exactAmount, otherCurrency, otherAmount)
+  const inputs = isExactFirst ? [exactAmount, derivedAmount] : [derivedAmount, exactAmount]
+  firstFieldAmount.current = pair.data || isExactFirst ? inputs[0] : firstFieldAmount.current
+  secondFieldAmount.current = pair.data || !isExactFirst ? inputs[1] : secondFieldAmount.current
 
   return {
-    firstFieldAmount,
-    secondFieldAmount,
-    pair,
+    firstFieldAmount: firstFieldAmount.current,
+    secondFieldAmount: secondFieldAmount.current,
+    pair: pair,
     onChangeFirstField: onChangeField('first'),
     onChangeSecondField: onChangeField('second'),
   }

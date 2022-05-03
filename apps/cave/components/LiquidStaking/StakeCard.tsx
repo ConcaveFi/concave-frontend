@@ -8,6 +8,7 @@ import {
   Stack,
   Text,
   useDisclosure,
+  useMediaQuery,
   VStack,
 } from '@concave/ui'
 import { StakingV1Abi } from 'contracts/LiquidStaking/LiquidStakingAbi'
@@ -30,7 +31,9 @@ function StakeCard(props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [fetchingData, setFetchingData] = useState(true)
   const [capPercentage, setCapPercentage] = useState('100')
+  const [isLargerThan600] = useMediaQuery('(min-width: 600px)')
 
+  const [stakeWidth, setStakeWidth] = useState<'' | '200px'>('')
   const [pool, getPool] = useContractRead(
     {
       addressOrName: '0x2B7Ea66d564399246Da8e3D6265dB8F89af834C8',
@@ -71,9 +74,13 @@ function StakeCard(props) {
     }
   }, [pool, stakingCap])
 
+  useEffect(() => {
+    setStakeWidth(isLargerThan600 ? '' : '200px')
+  }, [isLargerThan600])
+
   return (
     <div>
-      <Card variant="primary" px={4} py={6} shadow="up" gap={1}>
+      <Card width={stakeWidth} variant="primary" px={4} py={6} shadow="up" gap={1}>
         <Box mx="auto" py={5} w="full" h="333px" shadow="down" borderRadius="100px/90px">
           <Text color="text.low" fontSize="sm">
             Stake period

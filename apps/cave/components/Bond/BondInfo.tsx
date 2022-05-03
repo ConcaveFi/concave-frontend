@@ -1,4 +1,10 @@
 import { Box, Card, Flex, Text, Image } from '@concave/ui'
+import { SpinIcon } from '@concave/icons'
+import { keyframes } from '@chakra-ui/system'
+const spin = keyframes({
+  '0%': { transform: 'rotate(0deg)' },
+  '100%': { transform: 'rotate(360deg)' },
+})
 
 export const InfoItem = ({ value, label, ...props }) => (
   <Flex
@@ -33,33 +39,40 @@ export const BondInfo = ({ asset, roi, vestingTerm, icon }) => {
   )
 }
 
-export const UserBondPositionInfo = (bondSigma) => {
+export const UserBondPositionInfo = (bondSigma, userAddress) => {
+  const spinnerStyles = { animation: `${spin} 2s linear infinite`, size: 'sm' }
   const parse = bondSigma?.bondSigma
   const oldestBond = parse?.parseOldest
+  const claimed = parse?.claimed
   const totalOwed = parse?.totalOwed.toFixed(2)
   const totalPending = parse?.totalPending.toFixed(2)
-
   return (
     <>
-      {parse ? (
+      {claimed ? (
+        'You have no open positions'
+      ) : totalOwed > 0 && totalPending < totalOwed ? (
         <Card bg="none" py={3} w="100%" direction="row" shadow="Glass Up Medium">
           <Flex justify="center" pl={4} pr={7}>
             <InfoItem
-              value={totalOwed > 0 ? oldestBond : 'N/A'}
+              value={totalOwed > 0 ? oldestBond.replace('2022', '22') : 'N/A'}
               label={oldestBond ? 'Fully Vested' : ''}
             />
           </Flex>
-          <Box w="1px" mx={-1} my={-4} bg="stroke.primary" />
+          <Box w="1px" mx={-2} my={-4} bg="stroke.primary" />
           <InfoItem
             value={totalOwed}
-            label={totalOwed ? 'Purchased' : 'No Bonds to Claim'}
+            label={totalOwed ? 'Bought' : 'No Bonds to Claim'}
             flexGrow={1}
           />
-          <Box w="1px" mx={-1} my={-4} bg="stroke.primary" />
+          <Box w="1px" mx={1} my={-4} bg="stroke.primary" />
           <InfoItem value={totalPending} label={totalPending ? 'Redeemed' : ''} px={5} />
         </Card>
+      ) : !!userAddress ? (
+        <>
+          <SpinIcon __css={spinnerStyles} width={'10'} height={'10'} />
+        </>
       ) : (
-        ''
+        'You have no open positions'
       )}
     </>
   )

@@ -9,11 +9,7 @@ export const AppProviders = ({ children, globalStyles, cookies }) => {
     <ThemeProvider globalStyles={globalStyles} cookies={cookies}>
       <ReactQueryProvider>
         <WagmiProvider>
-          <ModalsProvider>
-            {/* <AuthProvider> */}
-            {children}
-            {/* </AuthProvider> */}
-          </ModalsProvider>
+          <ModalsProvider>{children}</ModalsProvider>
         </WagmiProvider>
       </ReactQueryProvider>
     </ThemeProvider>

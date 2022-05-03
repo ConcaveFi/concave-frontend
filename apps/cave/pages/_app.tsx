@@ -9,6 +9,7 @@ import { AppProviders } from 'contexts'
 import { MetaHead, MetaProps } from 'components/MetaHead'
 import ProgressBar from '@badrap/bar-of-progress'
 import Router from 'next/router'
+import { NODE_ENV } from 'lib/env.conf'
 import * as gtag from '../lib/analytics'
 
 const globalStyles: Styles = {
@@ -51,11 +52,10 @@ type AppPropsWithLayout = AppProps & {
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const Layout = Component.Layout || DefaultLayout
   const router = useRouter()
-  const isProduction = process.env.NODE_ENV === 'production'
 
   useEffect(() => {
     const handleRouteChange = (url: URL) => {
-      if (isProduction) gtag.trackPageview(url)
+      if (NODE_ENV === 'production') gtag.trackPageview(url)
     }
     router.events.on('routeChangeComplete', handleRouteChange)
     router.events.on('hashChangeComplete', handleRouteChange)

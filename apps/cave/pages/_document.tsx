@@ -1,6 +1,6 @@
 import NextDocument, { Html, Head, Main, NextScript } from 'next/document'
 import { ThemeFontsPreload, ColorModeScript } from '@concave/ui'
-import { GA_TRACKING_ID } from 'lib/analytics'
+import { GA_TRACKING_ID } from 'lib/env.conf'
 
 export default class Document extends NextDocument {
   render() {

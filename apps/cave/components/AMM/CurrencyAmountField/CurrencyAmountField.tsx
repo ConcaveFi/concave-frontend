@@ -1,6 +1,6 @@
 import { FlexProps, HStack, NumericInput, Stack, useMultiStyleConfig } from '@concave/ui'
 import { Currency, CurrencyAmount } from 'gemswap-sdk'
-import React, { ReactNode, useRef, useState } from 'react'
+import React, { ReactNode, useEffect, useRef, useState } from 'react'
 import { useDebounce } from 'react-use'
 import { SelectCurrency } from '../SelectCurrency'
 import { parseAmount } from '../utils/parseAmount'
@@ -18,26 +18,32 @@ export function CurrencyAmountField({
 } & FlexProps) {
   const styles = useMultiStyleConfig('Input', { variant: 'primary', size: 'large' })
 
-  const [internalAmount, setInternalAmount] = useState<CurrencyAmount<Currency>>(currencyAmount)
+  const [internalValue, setInternalValue] = useState('')
 
   const isFocused = useRef(false)
+  useEffect(() => {
+    if (!isFocused.current) setInternalValue(currencyAmount?.toExact())
+  }, [currencyAmount])
 
-  if (!isFocused.current && currencyAmount?.serialize() !== internalAmount?.serialize())
-    setInternalAmount(currencyAmount)
+  // useDebounce(() => isFocused.current && onChangeAmount(internalAmount), 300, [
+  //   internalAmount?.serialize(),
+  // ])
 
-  useDebounce(() => isFocused.current && onChangeAmount(internalAmount), 300, [
-    internalAmount?.serialize(),
-  ])
-
-  const handleChange = ({ value: _value }, { source }) => {
+  const handleChange = ({ value }, { source }) => {
     if (source === 'prop') return // if the value changed from props, ignore it, only update on user typing
-    if (!_value) onChangeAmount(parseAmount('0', internalAmount.currency)) // clear all inputs instantly on empty input (don't wait for debounce)
-    setInternalAmount(parseAmount(_value, internalAmount.currency))
+    setInternalValue(value)
+    onChangeAmount(parseAmount(value, currencyAmount.currency))
   }
 
   const onSelectCurrency = (newCurrency: Currency) => {
-    onChangeAmount(parseAmount(internalAmount?.toExact() || '0', newCurrency))
+    onChangeAmount(parseAmount(internalValue, newCurrency))
   }
+
+  const inputValue = isFocused.current
+    ? internalValue || ''
+    : currencyAmount?.greaterThan(0)
+    ? currencyAmount.toExact()
+    : ''
 
   return (
     <Stack sx={{ ...styles.field, bg: 'none' }} justify="space-between" spacing={0}>
@@ -48,10 +54,10 @@ export function CurrencyAmountField({
           w="100%"
           onFocus={() => (isFocused.current = true)}
           onBlur={() => (isFocused.current = false)}
-          value={!internalAmount?.equalTo(0) ? internalAmount?.toSignificant(12) : ''}
+          value={inputValue}
           onValueChange={handleChange}
         />
-        <SelectCurrency onSelect={onSelectCurrency} selected={internalAmount?.currency} />
+        <SelectCurrency onSelect={onSelectCurrency} selected={currencyAmount?.currency} />
       </HStack>
       {children}
     </Stack>

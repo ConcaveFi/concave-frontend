@@ -1,24 +1,16 @@
-import React from 'react'
-
 import { PlusIcon } from '@concave/icons'
 import { Button, Card, Flex, Heading, Text, useDisclosure } from '@concave/ui'
-import { Currency, CurrencyAmount, Pair } from 'gemswap-sdk'
-
-import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
-import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
-import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
-
 import { InputField } from 'components/AMM'
-import { useAddLiquidityTransaction } from 'components/AMM/AddLiquidity/useAddLiquidityTransaction'
-import { useAddLiquidityState } from 'components/AMM/AddLiquidity/useAddLiquidityState'
-import { usePoolShare } from 'components/AMM/AddLiquidity/usePoolShare'
 import { SupplyLiquidityModal } from 'components/AMM/AddLiquidity/SupplyLiquidityModal'
 import { useAddLiquidityButtonProps } from 'components/AMM/AddLiquidity/useAddLiquidityButtonProps'
-import {
-  currencyFromJson,
-  fetchCurrenciesFromQuery,
-  useSyncCurrenciesToUrl,
-} from 'components/AMM/hooks/useSyncCurrenciesToUrl'
+import { useAddLiquidityState } from 'components/AMM/AddLiquidity/useAddLiquidityState'
+import { useAddLiquidityTransaction } from 'components/AMM/AddLiquidity/useAddLiquidityTransaction'
+import { usePoolShare } from 'components/AMM/AddLiquidity/usePoolShare'
+import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
+import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
+import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
+import { Currency, CurrencyAmount, Pair } from 'gemswap-sdk'
+import React from 'react'
 
 const LiquidityTip = () => (
   <Card variant="secondary" p={4} backgroundBlendMode={'screen'}>
@@ -68,14 +60,23 @@ export default function AddLiquidity() {
 
   const addLPTx = useAddLiquidityTransaction(firstFieldAmount, secondFieldAmount)
 
-  const poolShare = usePoolShare(pair.data, firstFieldAmount, secondFieldAmount)
-
   const addLiquidityButtonProps = useAddLiquidityButtonProps(
     pair,
     firstFieldAmount,
     secondFieldAmount,
     () => supplyLiquidityDisclosure.onOpen(),
   )
+
+  const fixedPair =
+    firstFieldAmount && secondFieldAmount && !pair.data
+      ? new Pair(
+          firstFieldAmount?.wrapped,
+          secondFieldAmount?.wrapped,
+          firstFieldAmount.wrapped.currency.address,
+        )
+      : pair.data
+
+  const poolShare = usePoolShare(fixedPair, firstFieldAmount, secondFieldAmount)
 
   const supplyLiquidityDisclosure = useDisclosure()
 
@@ -105,7 +106,7 @@ export default function AddLiquidity() {
       </Flex>
 
       <SupplyLiquidityModal
-        lp={{ pair: pair.data, amount0: firstFieldAmount, amount1: secondFieldAmount }}
+        lp={{ pair: fixedPair, amount0: firstFieldAmount, amount1: secondFieldAmount }}
         poolShare={poolShare}
         isOpen={supplyLiquidityDisclosure.isOpen}
         onClose={supplyLiquidityDisclosure.onClose}

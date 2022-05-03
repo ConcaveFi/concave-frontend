@@ -74,6 +74,23 @@ export default function Bond() {
   }, [networkId])
 
   useEffect(() => {
+    const interval = setInterval(() => {
+      return new Promise((resolve) => {
+        getUserBondPositions(networkId, userAddress, currentBlockTs)
+          .then((x) => {
+            setBondSigma(x)
+            resolve(null)
+          })
+          .catch(() => {})
+      })
+    }, 3000)
+    if (intervalID !== interval) {
+      clearTimeout(intervalID)
+      setIntervalID(interval)
+    }
+  }, [userAddress])
+
+  useEffect(() => {
     setDirection(isLargerThan1200 ? 'row' : 'column')
     setAlign(isLargerThan1200 ? 'start' : 'center')
   }, [isLargerThan1200])
@@ -108,10 +125,11 @@ export default function Bond() {
                   cnvMarketPrice > 0
                     ? (1 - (+bondSpotPrice / +cnvMarketPrice) * 100).toFixed(2)
                     : 'Loading...'
+
                 }%`}
                 vestingTerm={`${termLength} Days`}
               />
-              <UserBondPositionInfo bondSigma={bondSigma} />
+              <UserBondPositionInfo bondSigma={bondSigma} userAddress={userAddress} />
               <Redeem
                 bondSigma={bondSigma}
                 onConfirm={() => {

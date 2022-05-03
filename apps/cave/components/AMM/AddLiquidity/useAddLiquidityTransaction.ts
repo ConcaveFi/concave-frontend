@@ -1,19 +1,22 @@
 import { useState } from 'react'
-import { RouterABI, ROUTER_ADDRESS, Currency, CurrencyAmount } from 'gemswap-sdk'
+import { RouterABI, ROUTER_ADDRESS, Currency, CurrencyAmount, Percent } from 'gemswap-sdk'
 import { Contract } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useContract, useSigner } from 'wagmi'
-import ms from 'ms'
+import { parseUnits } from 'ethers/lib/utils'
+const currencyAmountToBigNumber = (currency: CurrencyAmount<Currency>) => {
+  return parseUnits(currency.toFixed(currency.currency.decimals))
+}
 
 const getMinAmountParam = (amount: CurrencyAmount<Currency>) =>
-  amount.multiply(0.98).numerator.toString() // amount -2%
+  amount.multiply(new Percent(98, 100)) // amount -2%
 
 const addLiquidity = async (
   tokenAmountA: CurrencyAmount<Currency>,
   tokenAmountB: CurrencyAmount<Currency>,
   routerContract: Contract,
   recipient: string,
-  deadline = ms('30min'),
+  deadline = Math.round(Date.now() / 1000) * 60 * 30,
 ) => {
   /*
     Add with ETH
@@ -25,12 +28,12 @@ const addLiquidity = async (
 
     return routerContract.addLiquidityETH(
       notNativeAmount.currency.wrapped.address,
-      notNativeAmount.numerator.toString(),
-      getMinAmountParam(notNativeAmount).toString(),
-      getMinAmountParam(nativeAmount).toString(),
+      currencyAmountToBigNumber(notNativeAmount),
+      currencyAmountToBigNumber(getMinAmountParam(notNativeAmount)),
+      currencyAmountToBigNumber(getMinAmountParam(nativeAmount)),
       recipient,
       deadline,
-      { value: nativeAmount.numerator },
+      { value: nativeAmount.numerator.toString() },
     )
   }
 
@@ -40,10 +43,10 @@ const addLiquidity = async (
   return routerContract.addLiquidity(
     tokenAmountA.currency.wrapped.address,
     tokenAmountB.currency.wrapped.address,
-    tokenAmountA.numerator,
-    tokenAmountB.numerator,
-    getMinAmountParam(tokenAmountA),
-    getMinAmountParam(tokenAmountB),
+    currencyAmountToBigNumber(tokenAmountA),
+    currencyAmountToBigNumber(tokenAmountB),
+    currencyAmountToBigNumber(getMinAmountParam(tokenAmountA)),
+    currencyAmountToBigNumber(getMinAmountParam(tokenAmountB)),
     recipient,
     deadline,
   )

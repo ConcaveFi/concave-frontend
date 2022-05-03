@@ -1,5 +1,5 @@
 import { Flex, HStack, Text } from '@concave/ui'
-import { Currency, CurrencyAmount } from 'gemswap-sdk'
+import { Currency, CurrencyAmount, Fraction, Percent } from 'gemswap-sdk'
 import { Balance } from './Balance'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useFiatValue } from './hooks/useFiatPrice'
@@ -12,6 +12,8 @@ type OutputFieldProps = {
   updateOutputValue: (value: CurrencyAmount<Currency>) => void
 }
 
+const _01 = new Percent(1, 10000) // 0.01%
+
 export const OutputField = ({
   currencyAmountIn,
   currencyAmountOut,
@@ -21,7 +23,6 @@ export const OutputField = ({
   const outputFiat = useFiatValue(currencyAmountOut)
 
   const fiatPriceImpact = computeFiatValuePriceImpact(inputFiat.value, outputFiat.value)
-  const isPriceImpactNegative = fiatPriceImpact && inputFiat.value.greaterThan(outputFiat.value)
 
   const balance = useCurrencyBalance(currencyAmountOut?.currency)
 
@@ -34,10 +35,12 @@ export const OutputField = ({
               `$${outputFiat.value.toFixed(2, { groupSeparator: ',' })}`}
           </Text>
           <Text fontSize="xs" opacity={0.7}>
-            {fiatPriceImpact && `(${isPriceImpactNegative && '-'}${fiatPriceImpact?.toFixed(2)}%)`}{' '}
+            {fiatPriceImpact?.greaterThan(_01) ||
+              (fiatPriceImpact?.lessThan(_01.multiply(-1)) &&
+                `(${fiatPriceImpact?.toFixed(2, { groupSeparator: ',' })}%)`)}{' '}
           </Text>
         </Flex>
-        {balance.isSuccess && <Balance value={balance.data.formatted} />}
+        {balance.isSuccess && <Balance value={balance.data.toFixed(2, { groupSeparator: ',' })} />}
       </HStack>
     </CurrencyAmountField>
   )

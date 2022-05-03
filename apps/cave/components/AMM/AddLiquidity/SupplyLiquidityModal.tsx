@@ -1,10 +1,9 @@
 import { Box, Button, Flex, HStack, Modal, Text } from '@concave/ui'
-import React from 'react'
 import { CurrencyIcon } from 'components/CurrencyIcon'
-import { PoolShare } from './usePoolShare'
-import { useApprove } from 'hooks/useApprove'
-import { ROUTER_ADDRESS } from 'gemswap-sdk'
+import { ApproveButton, useApproval } from 'hooks/useAllowance'
 import { LiquidityPool } from 'pages/addliquidity'
+import React from 'react'
+import { PoolShare } from './usePoolShare'
 
 const PositionInfoItem = ({ color = '', label = '', value, mt = 0, children = <></> }) => (
   <Flex justify="space-between" align={'center'} mt={mt}>
@@ -18,49 +17,55 @@ const PositionInfoItem = ({ color = '', label = '', value, mt = 0, children = <>
 
 const SupplyLiquidityContent = ({
   onConfirm = () => {},
-  lp: { amount0, amount1, pair },
+  lp,
   poolShare,
 }: {
   lp: LiquidityPool
   poolShare: PoolShare
   onConfirm: () => void
 }) => {
-  const chainId = pair.token0.chainId
-  const token0AllowanceData = useApprove(amount0.currency.wrapped, ROUTER_ADDRESS[chainId])
-  const token1AllowanceData = useApprove(amount1.currency.wrapped, ROUTER_ADDRESS[chainId])
+  const [amount0, amount1] =
+    lp.pair.token0.address === lp.amount0.currency.wrapped.address
+      ? [lp.amount0, lp.amount1]
+      : [lp.amount1, lp.amount0]
+  const [needsApprove0, approve0, label0] = useApproval(amount0.wrapped)
+  const [needsApprove1, approve1, label1] = useApproval(amount1.wrapped)
+  const token0 = amount0.currency
+  const token1 = amount1.currency
+  const pair = lp.pair
 
   return (
     <>
       <Text fontSize="3xl">
-        {poolShare.amount.toSignificant(6, { groupSeparator: ',' })} {pair.token0.symbol}/
-        {pair.token1.symbol} Pool Tokens
+        {poolShare && poolShare.amount.toSignificant(6, { groupSeparator: ',' })}{' '}
+        {amount0.currency.symbol}/{amount1.currency.symbol} Pool Tokens
       </Text>
       <HStack justifyContent={'center'}>
-        <CurrencyIcon currency={pair.token0} />
-        <CurrencyIcon currency={pair.token1} />
+        <CurrencyIcon currency={amount0.currency} />
+        <CurrencyIcon currency={amount1.currency} />
       </HStack>
       <Box borderRadius={'2xl'} p={6} shadow={'down'}>
         <PositionInfoItem
           label="Rates"
-          value={`1  ${pair.token0.symbol} = ${pair.token1Price.toSignificant(6, {
+          value={`1  ${token0.symbol} = ${pair.token0Price.toSignificant(6, {
             groupSeparator: ',',
-          })} ${pair.token1.symbol}`}
+          })} ${token1.symbol}`}
         />
         <PositionInfoItem
-          value={`1  ${pair.token1.symbol} = ${pair.token0Price.toSignificant(6, {
+          value={`1  ${token1.symbol} = ${pair.token1Price.toSignificant(6, {
             groupSeparator: ',',
-          })}  ${pair.token0.symbol}`}
+          })}  ${token0.symbol}`}
         />
         <PositionInfoItem
           mt={8}
           color={'text.low'}
-          label={`${pair.token0.symbol} Deposited`}
-          value={`${amount0.toSignificant(8, { groupSeparator: ',' })} ${pair.token0.symbol}`}
+          label={`${token0.symbol} Deposited`}
+          value={`${amount0.toSignificant(8, { groupSeparator: ',' })} ${token0.symbol}`}
         />
         <PositionInfoItem
           color={'text.low'}
-          label={`${pair.token1.symbol} Deposited`}
-          value={`${amount1.toSignificant(8, { groupSeparator: ',' })} ${pair.token1.symbol}`}
+          label={`${token1.symbol} Deposited`}
+          value={`${amount1.toSignificant(8, { groupSeparator: ',' })} ${token1.symbol}`}
         />
         <PositionInfoItem
           color={'text.low'}
@@ -68,35 +73,13 @@ const SupplyLiquidityContent = ({
           value={`${poolShare.percent.toSignificant(4)}%`}
         />
       </Box>
-      {amount0.currency.isToken &&
-        token0AllowanceData.allowance.value?.lt(amount0.numerator.toString()) && (
-          <Button
-            mt={2}
-            p={6}
-            fontSize="2xl"
-            variant="primary"
-            onClick={() => token0AllowanceData.sendApproveTx()}
-          >
-            Approve {amount0.currency.symbol}
-          </Button>
-        )}
-      {amount1.currency.isToken &&
-        token1AllowanceData.allowance.value?.lt(amount1.numerator.toString()) && (
-          <Button
-            mt={2}
-            p={6}
-            fontSize="2xl"
-            variant={'primary'}
-            onClick={() => token1AllowanceData.sendApproveTx()}
-          >
-            Approve {amount1.currency.symbol}
-          </Button>
-        )}
-      {/* {!needsApproveA && !needsApproveB && (
+      <ApproveButton useApproveInfo={[needsApprove0, approve0, label0]} />
+      <ApproveButton useApproveInfo={[needsApprove1, approve1, label1]} />
+      {!needsApprove0 && !needsApprove1 && (
         <Button mt={2} p={6} fontSize={'2xl'} variant={'primary'} onClick={onConfirm}>
           Confirm Supply
         </Button>
-      )} */}
+      )}
     </>
   )
 }

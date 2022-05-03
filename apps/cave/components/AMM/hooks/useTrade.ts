@@ -6,6 +6,8 @@ import { usePairs } from './usePair'
 
 const MAX_HOPS = 3
 
+export const InvalidTradeError = 'Invalid Trade'
+
 export const getBestTrade = (
   pairs: Pair[],
   tradeType: TradeType,
@@ -26,9 +28,9 @@ export const getBestTrade = (
       : Trade.bestTradeExactOut(pairs, otherCurrency, searchableTradeAmount, options)[0]
 
   // may happen when there is not enough liquidity
-  if (!bestTrade) throw new Error('Invalid Trade')
+  if (!bestTrade) throw InvalidTradeError
 
-  // when exactAmount is 0 return the same best trade route found but the with the correct amount
+  // when exactAmount is 0 return the same best trade route found but with the correct 0 amount
   if (exactAmount.equalTo(0)) return new Trade(bestTrade.route, exactAmount, bestTrade.tradeType)
 
   return bestTrade

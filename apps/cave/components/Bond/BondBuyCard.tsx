@@ -3,20 +3,17 @@ import { Button, Card, HStack, Spinner, Text, useDisclosure } from '@concave/ui'
 import { useApprove } from 'hooks/useApprove'
 import React, { useEffect, useState } from 'react'
 import { useFeeData } from 'wagmi'
+// import { InputField as BondInput } from '../AMM/InputField'
 import { BondInput } from './BondInput'
 import { BondOutput } from './BondOutput'
 import { BondReceiptModal } from './BondReceipt'
-import {
-  getCurrentBlockTimestamp,
-  getBondAmountOut,
-  getBondSpotPrice,
-  getUserBondPositions,
-  purchaseBond,
-  useBondState,
-} from './BondState'
+import { BOND_ADDRESS } from 'contracts/Bond/BondingAddress'
+import { getBondAmountOut, getBondSpotPrice, purchaseBond, useBondState } from './BondState'
 import { ConfirmBondModal } from './ConfirmBond'
 import { DownwardIcon } from './DownwardIcon'
 import { BondSettings, defaultSettings, Settings } from './Settings'
+import { DAI } from 'gemswap-sdk'
+// import { parseAmount } from 'components/AMM/utils/parseAmount'
 
 export const twoDecimals = (s: string | number) => {
   const a = s.toString()
@@ -39,54 +36,47 @@ const GasPrice = () => {
   )
 }
 
-export function BondBuyCard(onConfirm) {
-  const { currencyIn, currencyOut, userAddress, balance, signer } = useBondState()
-  const [currentBlockTs, setCurrentBlockTs] = useState<number>(0)
-  const [bondSigma, setBondSigma] = useState<any>()
+export function BondBuyCard() {
+  const { currencyIn, currencyOut, userAddress, balance, signer, networkId } = useBondState()
   const [settings, setSettings] = useState<BondSettings>(defaultSettings)
   const userBalance = balance.data?.formatted
-  const [amountIn, setAmountIn] = useState<string>('0')
+  // const [amountIn, setAmountIn] = useState<CurrencyAmount<Currency>>(
+  //   parseAmount('0', DAI[networkId]),
+  //)
+  const [amountIn, setAmountIn] = useState<number>(0)
+
   const [amountOut, setAmountOut] = useState<string>()
-  const [bondReceipt] = useState<any>()
-  const [bondTransaction] = useState({})
   const [bondSpotPrice, setBondSpotPrice] = useState<string>()
   const confirmModal = useDisclosure()
   const receiptModal = useDisclosure()
-  const { allowance, sendApproveTx } = useApprove(
-    currencyIn,
-    '0x5C2bDbdb14E2f6b6A443B0f2FfF34F269e5DE81d',
-  )
+  const { allowance, sendApproveTx } = useApprove(currencyIn, BOND_ADDRESS[networkId])
+  //amountIn.numerator.toString()
   const allowanceIsNotEnough = !!allowance.value?.lt(amountIn)
 
   useEffect(() => {
-    getBondSpotPrice(3, '0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4').then((bondSpotPrice) => {
-      setBondSpotPrice(bondSpotPrice)
-    })
-    getCurrentBlockTimestamp().then((x) => {
-      setCurrentBlockTs(x)
-    })
-  }, [])
+    getBondSpotPrice(networkId, BOND_ADDRESS[networkId])
+      .then((bondSpotPrice) => {
+        setBondSpotPrice(bondSpotPrice)
+      })
+      .catch((e) => {
+        console.log(e)
+      })
+  }, [userAddress])
 
   return (
     <Card p={6} gap={2} variant="primary" h="fit-content" shadow="Block Up" w="100%" maxW="420px">
       <BondInput
-        value={+amountIn}
         currency={currencyIn}
-        balance={userBalance}
         onChangeValue={(v) => {
-          const numberValue = v.replace('-', '')
-          if (!numberValue) return
-          numberValue && setAmountIn(v)
-          // eslint-disable-next-line react-hooks/rules-of-hooks
-          getBondAmountOut(currencyOut.address, currencyOut.decimals, 3, v).then((amountOut) => {
-            setAmountOut(amountOut)
-          })
+          setAmountIn(+v)
+          getBondAmountOut(currencyOut.address, currencyOut.decimals, networkId, v).then(
+            (amountOut) => {
+              console.log(amountOut)
+              setAmountOut(amountOut)
+            },
+          )
         }}
-        // bug: fails to execute tx when clicked before hitting swap
-        onClickMaxBalance={() => {
-          // if (swapingIn.currency.equals(nativeCurrency)) setAmountIn(+swapingIn.balance * 0.8)
-          // else setAmountIn(swapingIn.balance)
-        }}
+        onClickMaxBalance={() => {}}
       />
       <DownwardIcon />
       <BondOutput disabled={true} currency={currencyOut} value={amountOut} />
@@ -120,6 +110,7 @@ export function BondBuyCard(onConfirm) {
       <ConfirmBondModal
         currencyIn={currencyIn}
         currencyOut={currencyOut}
+        //amountIn.numerator.toString
         amountIn={amountIn}
         amountOut={amountOut}
         tokenInUsdPrice={'currencyIn'}
@@ -127,7 +118,7 @@ export function BondBuyCard(onConfirm) {
         isOpen={confirmModal.isOpen}
         onClose={confirmModal.onClose}
         onConfirm={() => {
-          purchaseBond(3, amountIn.toString(), userAddress, signer, settings, amountOut)
+          purchaseBond(networkId, amountIn.toString(), userAddress, signer, settings, amountOut)
             .then((x) => {
               console.log(x)
               receiptModal.onOpen()

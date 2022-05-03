@@ -3,12 +3,14 @@ import { Currency } from 'gemswap-sdk'
 import { useFiatPrice } from '../hooks/useFiatPrice'
 import { usePrice } from '../hooks/usePrice'
 import { NoValidPairsError } from '../hooks/usePair'
+import { InvalidTradeError } from '../hooks/useTrade'
 
 const PairsError = ({ error }) => {
   return (
     <Text mr="auto" fontSize="sm" color="#c32417" fontWeight="medium">
       {{
         [NoValidPairsError]: `No liquidity in pair`,
+        [InvalidTradeError]: `Not enough liquidity in pair`,
       }[error] || 'Error Fetching Pairs'}
     </Text>
   )

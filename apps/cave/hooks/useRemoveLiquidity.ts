@@ -1,9 +1,14 @@
-import { Ether, WETH9, WETH9_ADDRESS } from 'gemswap-sdk'
+import { parseUnits } from 'ethers/lib/utils'
+import { Currency, CurrencyAmount, Percent, WETH9_ADDRESS } from 'gemswap-sdk'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { LiquidityInfoData } from 'hooks/useLiquidityInfo'
 import { Router } from 'lib/Router'
 import { useState } from 'react'
 import { useAccount, useSigner } from 'wagmi'
+
+const currencyAmountToBigNumber = (currency: CurrencyAmount<Currency>) => {
+  return parseUnits(currency.toFixed(currency.currency.decimals))
+}
 
 export const useRemoveLiquidity = ({ liquidityInfo }: { liquidityInfo: LiquidityInfoData }) => {
   const networkId = useCurrentSupportedNetworkId()
@@ -18,18 +23,19 @@ export const useRemoveLiquidity = ({ liquidityInfo }: { liquidityInfo: Liquidity
     +liquidityInfo.pair.reserve1.toExact() * liquidityInfo.userPoolShare * ratioToRemove
   const [hash, setHash] = useState<string>(null)
   const [{ data }] = useSigner()
-  const [toETH, setToETH] = useState(true)
+  const [receiveInNativeToken, setReceiveInNativeToken] = useState(true)
+  const tokenAIsNativeWrapper = tokenA.address === WETH9_ADDRESS[networkId]
+  const tokenBIsNativeWrapper = tokenB.address === WETH9_ADDRESS[networkId]
+  const hasNativeToken = tokenAIsNativeWrapper || tokenBIsNativeWrapper
 
   const removeLiquidity = async () => {
-    const tokenAIsEth = tokenA.address === WETH9_ADDRESS[networkId]
-    const tokenBIsEth = tokenB.address === WETH9_ADDRESS[networkId]
-    console.log({ tokenAIsEth, tokenBIsEth })
     const router = new Router(networkId, data)
-    if (toETH && (tokenAIsEth || tokenBIsEth)) {
-      console.log('ETH')
+    if (receiveInNativeToken && (tokenAIsNativeWrapper || tokenBIsNativeWrapper)) {
       const transaction = await router.removeLiquidityETH(
-        tokenAIsEth ? tokenB : tokenA,
-        liquidityInfo.userBalance.data.value.mul(percentToRemove).div(100),
+        tokenAIsNativeWrapper ? tokenB : tokenA,
+        currencyAmountToBigNumber(
+          liquidityInfo.userBalance.data.multiply(new Percent(percentToRemove, 100)),
+        ),
         account.address,
       )
       setHash(transaction.hash)
@@ -38,7 +44,9 @@ export const useRemoveLiquidity = ({ liquidityInfo }: { liquidityInfo: Liquidity
     const transaction = await router.removeLiquidity(
       tokenA,
       tokenB,
-      liquidityInfo.userBalance.data.value.mul(percentToRemove).div(100),
+      currencyAmountToBigNumber(
+        liquidityInfo.userBalance.data.multiply(percentToRemove).divide(100),
+      ),
       account.address,
     )
     setHash(transaction.hash)
@@ -52,6 +60,11 @@ export const useRemoveLiquidity = ({ liquidityInfo }: { liquidityInfo: Liquidity
     setPercentToRemove,
     removeLiquidity,
     hash,
+    tokenAIsNativeWrapper,
+    tokenBIsNativeWrapper,
+    hasNativeToken,
+    receiveInNativeToken,
+    handleNativeToken: () => setReceiveInNativeToken(!receiveInNativeToken),
   }
 }
 export type RemoveLiquidityState = ReturnType<typeof useRemoveLiquidity>
