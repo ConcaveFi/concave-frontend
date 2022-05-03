@@ -60,7 +60,8 @@ const UserDividendCard = (props: UserDividendCardProps) => {
             //   onClick={'s'}
             fontWeight="bold"
             fontSize="md"
-            variant="secondary.outline"
+            variant="secondary"
+            border="stroke.primary"
             w="160px"
             h="40px"
             size="large"

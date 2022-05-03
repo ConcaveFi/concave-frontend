@@ -1,11 +1,12 @@
 import { PlusIcon } from '@concave/icons'
 import { Button, Card, Flex, Heading, Text, useDisclosure } from '@concave/ui'
-import { InputField } from 'components/AMM'
+import { CurrencyInputField } from 'components/AMM'
 import { SupplyLiquidityModal } from 'components/AMM/AddLiquidity/SupplyLiquidityModal'
 import { useAddLiquidityButtonProps } from 'components/AMM/AddLiquidity/useAddLiquidityButtonProps'
 import { useAddLiquidityState } from 'components/AMM/AddLiquidity/useAddLiquidityState'
 import { useAddLiquidityTransaction } from 'components/AMM/AddLiquidity/useAddLiquidityTransaction'
 import { usePoolShare } from 'components/AMM/AddLiquidity/usePoolShare'
+import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
@@ -89,9 +90,17 @@ export default function AddLiquidity() {
         <Card variant="primary" p={4} w="500px" gap={4} shadow="Up for Blocks">
           <LiquidityTip />
           <Flex direction="column" p={4} gap={2}>
-            <InputField currencyAmountIn={firstFieldAmount} onChangeAmount={onChangeFirstField} />
+            <CurrencyInputField
+              currencyAmountIn={firstFieldAmount}
+              onChangeAmount={onChangeFirstField}
+              CurrencySelector={SelectAMMCurrency}
+            />
             <AddSymbol />
-            <InputField currencyAmountIn={secondFieldAmount} onChangeAmount={onChangeSecondField} />
+            <CurrencyInputField
+              currencyAmountIn={secondFieldAmount}
+              onChangeAmount={onChangeSecondField}
+              CurrencySelector={SelectAMMCurrency}
+            />
           </Flex>
 
           <Button
