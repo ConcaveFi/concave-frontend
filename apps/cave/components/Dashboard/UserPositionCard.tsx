@@ -110,7 +110,7 @@ const UserPositionCard = (props: NftPositionCardProps) => {
         background="linear-gradient(265.73deg, #274C63 0%, #182F3E 100%)"
       >
         <NftPositionViewer stakeType={poolID} redeemIn={redeemIn} />
-        <RedeemCardViewer gained={gained} initial={sharesDecimals} />
+        <RedeemCardViewer gained={gained} redeemIn={redeemIn} initial={sharesDecimals} />
         <ListCardViewer />
       </Box>
     </Box>
@@ -121,9 +121,11 @@ export default UserPositionCard
 interface RedeemCardViewerProps {
   initial: number
   gained: number
+  redeemIn: number
 }
 const RedeemCardViewer = (props: RedeemCardViewerProps) => {
-  const { initial, gained } = props
+  const { initial, gained, redeemIn } = props
+
   return (
     <Flex height={90} direction="row" gap={4} alignItems="center" justify="center" m={2}>
       <Flex grow={1} direction={'column'} textAlign={'start'} ml="2">
@@ -159,10 +161,11 @@ const RedeemCardViewer = (props: RedeemCardViewerProps) => {
           h="40px"
           size="large"
           mx="auto"
-          shadow="down"
+          variant={redeemIn > 0 ? '' : 'primary'}
+          shadow={redeemIn > 0 ? 'down' : 'up'}
         >
-          <Text color="text.low" fontSize="sm">
-            Not redeemable
+          <Text color={redeemIn > 0 ? 'text.low' : 'white'} fontSize="sm">
+            {redeemIn > 0 ? 'Not redeemable' : 'Redeem'}
           </Text>
         </Button>
       </Flex>
