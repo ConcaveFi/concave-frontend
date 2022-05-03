@@ -326,7 +326,7 @@ const NftPositionViewer = (props: NftPositionViewerProps) => {
             143 Days
           </Text>
         </Flex>
-        <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
+        {/* <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
           <Text color="text.low" fontSize="sm">
             Price:
           </Text>
@@ -341,7 +341,7 @@ const NftPositionViewer = (props: NftPositionViewerProps) => {
           <Text fontSize="md" fontWeight="bold">
             2.3%
           </Text>
-        </Flex>
+        </Flex> */}
       </Flex>
     </Box>
   )

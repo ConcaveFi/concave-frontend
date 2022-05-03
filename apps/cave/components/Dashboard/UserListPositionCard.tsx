@@ -105,7 +105,7 @@ const UserListPositionCard = () => {
             fontWeight={'700'}
             pl={'4'}
           >
-            2,4%
+            2.4%
           </Flex>
         </Flex>
         <Flex grow={1} justifyContent="center" alignItems={'end'} gap="2">
