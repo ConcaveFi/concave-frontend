@@ -205,7 +205,7 @@ const ListCardViewer = (props: ListCardViewerProps) => {
             List Price:
           </Text>
           <Text fontSize="md" fontWeight="bold">
-            600 CNV
+            -------
           </Text>
         </Flex>
         <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
@@ -213,7 +213,7 @@ const ListCardViewer = (props: ListCardViewerProps) => {
             Discount:
           </Text>
           <Text fontSize="md" fontWeight="bold">
-            2.4%
+            ----
           </Text>
         </Flex>
         <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
@@ -221,7 +221,7 @@ const ListCardViewer = (props: ListCardViewerProps) => {
             Expiration Date:
           </Text>
           <Text fontSize="md" fontWeight="bold">
-            14.11.22
+            --.--.--
           </Text>
         </Flex>
         <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
