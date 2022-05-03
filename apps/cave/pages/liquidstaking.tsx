@@ -1,4 +1,13 @@
-import { Container, Flex, Heading, HStack, ResponsiveValue, Text, useMediaQuery } from '@concave/ui'
+import {
+  Box,
+  Container,
+  Flex,
+  Heading,
+  HStack,
+  ResponsiveValue,
+  Text,
+  useMediaQuery,
+} from '@concave/ui'
 import StakeCard from 'components/LiquidStaking/StakeCard'
 import GraphicGuide from 'components/LiquidStaking/GraphicGuide'
 import { useEffect, useState } from 'react'
@@ -39,6 +48,7 @@ const StakingGroup: Array<StakingGroupProps> = [
 
 function LiquidStaking() {
   const [isLargerThan1100] = useMediaQuery('(min-width: 1100px)')
+  const [isLargerThan600] = useMediaQuery('(min-width: 600px)')
   const [stakingGap, setStakingGap] = useState(6)
   const [wrap, setWrap] = useState<'wrap' | 'nowrap'>('nowrap')
   const [width, setWidth] = useState('')
@@ -46,6 +56,7 @@ function LiquidStaking() {
   const [marginTop, setMarginTop] = useState(8)
   const [textAlign, setTextAlign] = useState<'right' | 'center'>('right')
   const [guideGap, setGuideGap] = useState(14)
+  const [containerHeight, setConteinerHeight] = useState('1000px')
 
   useEffect(() => {
     setStakingGap(isLargerThan1100 ? 6 : 3)
@@ -55,13 +66,22 @@ function LiquidStaking() {
     setMarginTop(isLargerThan1100 ? 8 : 0)
     setTextAlign(isLargerThan1100 ? 'right' : 'center')
     setGuideGap(isLargerThan1100 ? 14 : 7)
+    setConteinerHeight(isLargerThan600 ? '1000px' : '1550px')
   }, [isLargerThan1100])
+
   return (
-    <Container maxW="container.lg" borderRadius={0} border="" textAlign="center">
+    <Box
+      width={'full'}
+      maxWidth="container.lg"
+      overflow={'hidden'}
+      height={containerHeight}
+      m={0}
+      textAlign="center"
+    >
       <Heading as="h1" mt={16} mb={3} fontSize="5xl">
         Liquid Staking
       </Heading>
-      <Flex align={'center'} direction={direction} mt={marginTop} gap={guideGap}>
+      <Flex align={'center'} justify="center" direction={direction} mt={marginTop} gap={guideGap}>
         <Text maxW={520} textAlign={textAlign}>
           Liquid Staking allows you to access your funds even when you&apos;re staking them. The
           funds remain in escrow, but aren&apos;t totally inaccessible. In this scenario, you are
@@ -91,7 +111,7 @@ function LiquidStaking() {
           ))}
         </Flex>
       </Flex>
-    </Container>
+    </Box>
   )
 }
 
