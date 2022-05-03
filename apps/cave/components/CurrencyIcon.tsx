@@ -1,5 +1,6 @@
 import { Avatar, AvatarProps } from '@chakra-ui/react'
 import { CHAIN_NAME, Currency } from 'gemswap-sdk'
+import { useReducer } from 'react'
 
 export type CurrencyIconProps = {
   size?: string
@@ -18,14 +19,18 @@ const getCurrencyLogoURI = (currency: Currency) => {
 }
 
 export const CurrencyIcon = ({ currency, size = 'sm', ...props }: CurrencyIconProps) => {
+  const [isBadSrc, setBadSrc] = useReducer(() => true, false)
   return (
     <Avatar
       {...props}
       src={getCurrencyLogoURI(currency)}
       name={currency.symbol}
       size={size}
-      bg="text.low"
+      bg={isBadSrc ? 'text.low' : 'none'}
+      onError={setBadSrc}
       getInitials={(a) => a}
+      draggable={false}
+      userSelect="none"
     />
   )
 }
