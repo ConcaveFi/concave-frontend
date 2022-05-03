@@ -114,33 +114,37 @@ export const getUserBondPositions = async (
   let batchRedeemArray = []
   let totalPending = 0
   let totalOwed = 0
+  let rawPending = 0
+  let rawOwed = 0
   let oldest = 0
   let claimed = false
   const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, providers(networkId))
   const getUserPositionsLength = await bondingContract.getUserPositionCount(address)
   for (let i = 0; i < +getUserPositionsLength; i++) {
     const positionData = await bondingContract.positions(address, i)
-    totalPending += +positionData.redeemed
-    totalOwed += +positionData.owed
-    if (+positionData.owed !== +positionData.redeemed) {
-      batchRedeemArray.push(+i)
+    rawPending += +positionData.redeemed
+    rawOwed += +positionData.owed
+    batchRedeemArray.push(+i)
+    if (i === getUserPositionsLength - 1) {
+      oldest += +positionData.creation
+      console.log(oldest)
     }
-    if (+positionData.creation > oldest) {
-      oldest = +positionData.creation
-    }
-    totalPending += +(+utils.formatEther(positionData.redeemed))
+    totalPending += +(+utils.formatEther(positionData.redeemed)).toFixed(2)
+    totalOwed += +(+utils.formatEther(positionData.owed))
+
     // +(+utils.formatEther(positionData.owed)).toFixed(2) * elapsed -
     // +(+utils.formatEther(positionData.redeemed)).toFixed(2)
     // console.log(totalPending)
   }
-  let fullyVestedTimestamp = oldest + 864000
+  let fullyVestedTimestamp = oldest * 1000 + 86400000
   let elapsed =
     currentBlockTimestamp >= fullyVestedTimestamp
       ? 1
       : fullyVestedTimestamp / +currentBlockTimestamp
-
-  const parseOldest = new Date(oldest * 1000 + 864000).toString().slice(4, 21)
+  const parseOldest = new Date(fullyVestedTimestamp).toString().slice(4, 21)
   // const parsePending = utils.formatEther(totalPending)
+  console.log('fullyVestedTimestamp', fullyVestedTimestamp)
+  console.log('parseOldest', parseOldest)
 
   if (totalPending === totalOwed) claimed = true
   return { parseOldest, totalOwed, totalPending, batchRedeemArray, claimed }
