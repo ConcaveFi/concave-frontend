@@ -4,6 +4,7 @@ import { useFiatPrice } from '../hooks/useFiatPrice'
 import { usePrice } from '../hooks/usePrice'
 import { NoValidPairsError } from '../hooks/usePair'
 import { InvalidTradeError } from '../hooks/useTrade'
+import { useReducer } from 'react'
 
 const PairsError = ({ error }) => {
   return (
@@ -23,11 +24,21 @@ export const RelativePrice = ({
   currencyIn: Currency
   currencyOut: Currency
 }) => {
-  const relativePrice = usePrice(currencyIn.wrapped, currencyOut.wrapped)
-  const outputFiat = useFiatPrice(currencyOut.wrapped)
+  const [flipped, flip] = useReducer((s) => !s, false)
+  const [base, quote] = flipped ? [currencyIn, currencyOut] : [currencyOut, currencyIn]
+
+  const relativePrice = usePrice(base, quote)
+  const outputFiat = useFiatPrice(quote)
 
   return (
-    <HStack flexWrap="wrap" align="center" fontSize="xs" fontWeight="medium" mr="auto">
+    <HStack
+      onClick={(e) => (e.stopPropagation(), flip())}
+      flexWrap="wrap"
+      align="center"
+      fontSize="xs"
+      fontWeight="medium"
+      mr="auto"
+    >
       {relativePrice.isFetching && <Spinner size="xs" />}
       {relativePrice.isLoading && <Text fontSize="sm">Searching trade routes</Text>}
       {relativePrice.isError && <PairsError error={relativePrice.error} />}

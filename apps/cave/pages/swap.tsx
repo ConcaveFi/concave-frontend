@@ -1,11 +1,11 @@
-import { Text, Button, Card, Flex, HStack, useDisclosure } from '@concave/ui'
+import { Text, Button, Card, Flex, HStack, useDisclosure, Stack, Collapse } from '@concave/ui'
 import {
   CandleStickCard,
   ConfirmSwapModal,
   defaultSettings,
   GasPrice,
-  InputField,
-  OutputField,
+  CurrencyInputField,
+  CurrencyOutputField,
   RelativePrice,
   Settings,
   SwapSettings,
@@ -13,16 +13,35 @@ import {
   useSwapButtonProps,
   useSwapState,
   useSwapTransaction,
+  CustomRecipient,
 } from 'components/AMM'
-import { STABLES } from 'constants/routing'
-import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { useState } from 'react'
+import { useEffect, useReducer, useState } from 'react'
 import { useAccount } from 'wagmi'
-import { parseAmount } from 'components/AMM/utils/parseAmount'
+import { toAmount } from 'utils/toAmount'
 
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
+
+import { ExpectedOutput, MinExpectedOutput } from 'components/AMM/Swap/ExpectedOutput'
+import { TradeRoute } from 'components/AMM/Swap/TradeRoute'
+import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
+import { Currency, Trade, TradeType } from 'gemswap-sdk'
+
+const TradeDetails = ({
+  trade,
+  settings,
+}: {
+  trade: Trade<Currency, Currency, TradeType>
+  settings: SwapSettings
+}) =>
+  trade.route && (
+    <Stack mb={4} p={4} w="full" shadow="Down Big" rounded="2xl">
+      <ExpectedOutput outputAmount={trade.outputAmount} priceImpact={trade.priceImpact} />
+      <MinExpectedOutput trade={trade} slippageTolerance={settings.slippageTolerance} />
+      <TradeRoute route={trade.route} />
+    </Stack>
+  )
 
 export function SwapPage() {
   const [settings, setSettings] = useState<SwapSettings>(defaultSettings)
@@ -30,12 +49,18 @@ export function SwapPage() {
   const { trade, onChangeInput, onChangeOutput, switchCurrencies } = useSwapState(settings)
 
   const [{ data: account }] = useAccount()
-  const swapTx = useSwapTransaction(trade.data, settings, account?.address)
+  const [recipient, setRecipient] = useState('')
+  const swapTx = useSwapTransaction(trade.data, settings, recipient || account?.address)
+  useEffect(() => {
+    // clear input when transaction is sent
+    if (swapTx.isTransactionSent) onChangeInput(toAmount(0, trade.data.inputAmount.currency))
+  }, [swapTx.isTransactionSent, onChangeInput, trade.data.inputAmount.currency])
 
   const confirmationModal = useDisclosure()
 
   const swapButton = useSwapButtonProps({
     trade,
+    recipient,
     onSwapClick: settings.expertMode ? swapTx.submit : confirmationModal.onOpen,
   })
 
@@ -43,25 +68,31 @@ export function SwapPage() {
     trade.data.inputAmount.currency,
     trade.data.outputAmount.currency,
   ]
-  /*
-    if one of the currencies are a stable, we want the chart to always display the other relative to the stable
-    (stable always the `to`)
-  */
-  const networkId = useCurrentSupportedNetworkId() as 1 | 3
-  const [chartFrom, chartTo] = STABLES[networkId].some((s) => s.equals(currencyIn))
-    ? [currencyOut, currencyIn]
-    : [currencyIn, currencyOut]
+
+  const hasDetails = !!trade.data.route && trade.data.outputAmount.greaterThan(0)
+  const [isDetailsOpen, toggleDetails] = useReducer((s) => hasDetails && !s, false)
+  useEffect(() => {
+    !hasDetails && toggleDetails()
+  }, [hasDetails])
 
   return (
     <>
-      <Flex wrap="wrap" justify="center" align="center" my="auto" w="100%" gap={10}>
+      <Flex
+        wrap="wrap"
+        alignContent="start"
+        justify="center"
+        mt={['10vh', '25vh']}
+        w="100%"
+        gap={10}
+      >
         <CandleStickCard
-          from={chartFrom}
-          to={chartTo}
+          from={currencyIn}
+          to={currencyOut}
           variant="secondary"
           gap={2}
           p={6}
           w="100%"
+          h="min"
           maxW="567px"
         />
 
@@ -74,21 +105,39 @@ export function SwapPage() {
           w="100%"
           maxW="420px"
         >
-          <InputField currencyAmountIn={trade.data.inputAmount} onChangeAmount={onChangeInput} />
+          <CurrencyInputField
+            currencyAmountIn={trade.data.inputAmount}
+            onChangeAmount={onChangeInput}
+            CurrencySelector={SelectAMMCurrency}
+          />
 
           <SwitchCurrencies onClick={switchCurrencies} />
 
-          <OutputField
+          <CurrencyOutputField
             currencyAmountOut={trade.data.outputAmount}
             currencyAmountIn={trade.data.inputAmount}
             updateOutputValue={onChangeOutput}
           />
 
-          <HStack align="center" justify="end" py={5}>
+          {settings.expertMode && <CustomRecipient onChangeRecipient={setRecipient} />}
+
+          <HStack
+            onClick={toggleDetails}
+            sx={hasDetails && { cursor: 'pointer', _hover: { bg: 'blackAlpha.200' } }}
+            justify="center"
+            align="center"
+            py={2}
+            px={3}
+            rounded="xl"
+          >
             <RelativePrice currencyIn={currencyIn} currencyOut={currencyOut} />
             <GasPrice />
-            <Settings onClose={setSettings} />
+            <Settings onChange={setSettings} />
           </HStack>
+
+          <Collapse style={{ overflow: 'visible' }} in={isDetailsOpen} animateOpacity>
+            <TradeDetails trade={trade.data} settings={settings} />
+          </Collapse>
 
           <Button variant="primary" size="large" isFullWidth {...swapButton} />
         </Card>
@@ -102,7 +151,6 @@ export function SwapPage() {
         onConfirm={() => {
           confirmationModal.onClose()
           swapTx.submit()
-          onChangeInput(parseAmount('0', trade.data.inputAmount.currency))
         }}
       />
 

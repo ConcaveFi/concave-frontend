@@ -1,6 +1,6 @@
-import { useLinkedFields } from 'components/AMM'
+import { useLinkedFields } from 'components/CurrencyAmountField'
 import { usePair } from 'components/AMM/hooks/usePair'
-import { parseAmount } from 'components/AMM/utils/parseAmount'
+import { toAmount } from 'utils/toAmount'
 import { Currency, CurrencyAmount, NATIVE, Pair } from 'gemswap-sdk'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -36,7 +36,7 @@ export const useAddLiquidityState = () => {
 
   // the input user typed in, the other input value is then derived from it
   const [exactAmount, setExactAmount] = useState<CurrencyAmount<Currency>>(
-    parseAmount('0', initialCurrencyFields.first),
+    toAmount('0', initialCurrencyFields.first),
   )
 
   const { onChangeField, fieldCurrency, setFieldCurrency } = useLinkedFields(
@@ -46,7 +46,7 @@ export const useAddLiquidityState = () => {
 
   useEffect(() => {
     setFieldCurrency(initialCurrencyFields)
-    setExactAmount(parseAmount('0', initialCurrencyFields.first))
+    setExactAmount(toAmount('0', initialCurrencyFields.first))
   }, [initialCurrencyFields, setFieldCurrency])
   const firstFieldAmount = useRef<CurrencyAmount<Currency>>()
   const secondFieldAmount = useRef<CurrencyAmount<Currency>>()

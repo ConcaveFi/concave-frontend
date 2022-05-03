@@ -1,20 +1,24 @@
 import { FlexProps, HStack, NumericInput, Stack, useMultiStyleConfig } from '@concave/ui'
+import { CurrencySelectorComponent } from 'components/CurrencySelector/CurrencySelector'
 import { Currency, CurrencyAmount } from 'gemswap-sdk'
-import React, { ReactNode, useEffect, useRef, useState } from 'react'
+import React, { ReactNode, useEffect, useRef, useState, FC } from 'react'
 import { useDebounce } from 'react-use'
-import { SelectCurrency } from '../SelectCurrency'
-import { parseAmount } from '../utils/parseAmount'
+import { toAmount } from '../../utils/toAmount'
 
 export function CurrencyAmountField({
   children,
   currencyAmount,
   disabled = false,
   onChangeAmount,
+  debounce = 150,
+  CurrencySelector,
 }: {
   children?: ReactNode
   currencyAmount: CurrencyAmount<Currency>
   disabled?: boolean
   onChangeAmount: (value: CurrencyAmount<Currency>) => void
+  debounce?: number
+  CurrencySelector: CurrencySelectorComponent
 } & FlexProps) {
   const styles = useMultiStyleConfig('Input', { variant: 'primary', size: 'large' })
 
@@ -25,18 +29,20 @@ export function CurrencyAmountField({
     if (!isFocused.current) setInternalValue(currencyAmount?.toExact())
   }, [currencyAmount])
 
-  // useDebounce(() => isFocused.current && onChangeAmount(internalAmount), 300, [
-  //   internalAmount?.serialize(),
-  // ])
+  useDebounce(
+    () => isFocused.current && onChangeAmount(toAmount(internalValue, currencyAmount.currency)),
+    debounce,
+    [internalValue],
+  )
 
   const handleChange = ({ value }, { source }) => {
     if (source === 'prop') return // if the value changed from props, ignore it, only update on user typing
     setInternalValue(value)
-    onChangeAmount(parseAmount(value, currencyAmount.currency))
+    onChangeAmount(toAmount(value, currencyAmount.currency))
   }
 
   const onSelectCurrency = (newCurrency: Currency) => {
-    onChangeAmount(parseAmount(internalValue, newCurrency))
+    onChangeAmount(toAmount(internalValue, newCurrency))
   }
 
   const inputValue = isFocused.current
@@ -57,7 +63,7 @@ export function CurrencyAmountField({
           value={inputValue}
           onValueChange={handleChange}
         />
-        <SelectCurrency onSelect={onSelectCurrency} selected={currencyAmount?.currency} />
+        <CurrencySelector onSelect={onSelectCurrency} selected={currencyAmount?.currency} />
       </HStack>
       {children}
     </Stack>

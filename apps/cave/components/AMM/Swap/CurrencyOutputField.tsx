@@ -1,12 +1,13 @@
 import { Flex, HStack, Text } from '@concave/ui'
-import { Currency, CurrencyAmount, Fraction, Percent } from 'gemswap-sdk'
-import { Balance } from './Balance'
+import { Currency, CurrencyAmount, Percent } from 'gemswap-sdk'
+import { Balance } from '../../CurrencyAmountField/Balance'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
-import { useFiatValue } from './hooks/useFiatPrice'
-import { CurrencyAmountField } from './CurrencyAmountField'
-import { computeFiatValuePriceImpact } from './utils/computeFiatValuePriceImpact'
+import { useFiatValue } from '../hooks/useFiatPrice'
+import { CurrencyAmountField } from '../../CurrencyAmountField'
+import { computeFiatValuePriceImpact } from './computeFiatValuePriceImpact'
+import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
 
-type OutputFieldProps = {
+type CurrencyOutputFieldProps = {
   currencyAmountIn: CurrencyAmount<Currency>
   currencyAmountOut: CurrencyAmount<Currency>
   updateOutputValue: (value: CurrencyAmount<Currency>) => void
@@ -14,11 +15,11 @@ type OutputFieldProps = {
 
 const _01 = new Percent(1, 10000) // 0.01%
 
-export const OutputField = ({
+export const CurrencyOutputField = ({
   currencyAmountIn,
   currencyAmountOut,
   updateOutputValue,
-}: OutputFieldProps) => {
+}: CurrencyOutputFieldProps) => {
   const inputFiat = useFiatValue(currencyAmountIn)
   const outputFiat = useFiatValue(currencyAmountOut)
 
@@ -27,7 +28,11 @@ export const OutputField = ({
   const balance = useCurrencyBalance(currencyAmountOut?.currency)
 
   return (
-    <CurrencyAmountField currencyAmount={currencyAmountOut} onChangeAmount={updateOutputValue}>
+    <CurrencyAmountField
+      currencyAmount={currencyAmountOut}
+      onChangeAmount={updateOutputValue}
+      CurrencySelector={SelectAMMCurrency}
+    >
       <HStack justify="space-between" align="end" textColor="text.low" w="full">
         <Flex mr={2} align="center">
           <Text isTruncated fontWeight="bold" fontSize="sm" mr={1}>

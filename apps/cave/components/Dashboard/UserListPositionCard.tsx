@@ -1,6 +1,27 @@
 import { Box, Flex, Input, Text } from '@concave/ui'
 import ChooseButton from 'components/Marketplace/ChooseButton'
 import { useState } from 'react'
+import { STAKING_CONTRACT } from 'constants/address'
+import { StakingV1Abi } from 'contracts/LiquidStaking/LiquidStakingAbi'
+import { useAccount, useBalance, useContractWrite, useNetwork } from 'wagmi'
+import { CNV } from 'gemswap-sdk'
+import { useFetchApi } from 'hooks/cnvData'
+import { useRouter } from 'next/router'
+
+// const [lockData, lockCNV] = useContractRead(
+//   {
+//     addressOrName: '0x2B7Ea66d564399246Da8e3D6265dB8F89af834C8',
+//     contractInterface: StakingV1Abi,
+//   },
+//   'lock',
+//   {
+//     args: [
+//       account.address,
+//       ethers.utils.parseEther(String(stakeInput)),
+//       periodToPoolParameter[`${props.period}`],
+//     ],
+//   },
+// )
 
 const UserListPositionCard = () => {
   const [expirationDate, setExpirationDate] = useState('')
@@ -84,7 +105,7 @@ const UserListPositionCard = () => {
             fontWeight={'700'}
             pl={'4'}
           >
-            2,4%
+            2.4%
           </Flex>
         </Flex>
         <Flex grow={1} justifyContent="center" alignItems={'end'} gap="2">

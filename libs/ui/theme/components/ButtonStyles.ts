@@ -39,8 +39,25 @@ const ButtonSecondaryTheme = (props) => ({
   },
 })
 
+const ButtonSelectTheme = (props) => ({
+  borderRadius: 'full',
+  h: 'auto',
+  w: 'min',
+  fontFamily: 'heading',
+  fontWeight: 'bold',
+  rounded: 'full',
+  shadow: 'Up Small',
+  _hover: { shadow: 'Up Big', _disabled: { shadow: 'Up Small', opacity: 1 } },
+  _focus: { shadow: 'Up Big' },
+  _active: { shadow: 'down' },
+  _selected: { shadow: 'Down Big', color: 'text.low', _hover: { bg: 'blackAlpha.100' } },
+  _disabled: { shadow: 'Up Small' },
+  p: 1,
+  fontSize: 'sm',
+})
+
 export const ButtonStyles: ComponentSingleStyleConfig = {
-  baseStyle: {
+  baseStyle: (props) => ({
     fontSize: '14px',
     lineHeight: 'initial',
     width: 'auto',
@@ -53,6 +70,7 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
     _disabled: {
       cursor: 'default',
       _active: { transform: 'scale(1)' },
+      opacity: 1,
     },
     _hover: {
       _disabled: {
@@ -60,7 +78,11 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
         bg: null,
       },
     },
-  },
+    ...{
+      primary: gradientBorder({ ...props, variant: 'primary' }),
+      secondary: gradientBorder({ ...props, variant: 'secondary' }),
+    }[props.border],
+  }),
   sizes: {
     large: {
       height: '50px',
@@ -82,10 +104,7 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
       _hover: { bg: HoverRadialGradient, color: 'text.high' },
     }),
     secondary: ButtonSecondaryTheme,
-    'secondary.outline': (props) => ({
-      ...ButtonSecondaryTheme(props),
-      ...gradientBorder({ borderRadius: '2xl', ...props, variant: 'primary' }),
-    }),
+    select: ButtonSelectTheme,
   },
   defaultProps: {
     variant: null,

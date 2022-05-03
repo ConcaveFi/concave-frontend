@@ -27,13 +27,26 @@ export default function Bond() {
   const [align, setAlign] = useState<'start' | 'center'>('start')
 
   useEffect(() => {
-    getCurrentBlockTimestamp()
-      .then((x) => {
-        setCurrentBlockTs(x)
+    getCurrentBlockTimestamp().then((x) => {
+      setCurrentBlockTs(x)
+    })
+    const interval = setInterval(() => {
+      return new Promise((resolve) => {
+        getUserBondPositions(networkId, userAddress, currentBlockTs)
+          .then((x) => {
+            setBondSigma(x)
+            resolve(null)
+          })
+          .catch(() => {})
       })
-      .catch((e) => {
-        console.log(e)
-      })
+    }, 5000)
+    if (intervalID !== interval) {
+      clearTimeout(intervalID)
+      setIntervalID(interval)
+    }
+  }, [userAddress])
+
+  useEffect(() => {
     getBondTermLength(networkId)
       .then((termLength) => {
         setTermLength(termLength)
@@ -111,7 +124,8 @@ export default function Bond() {
                 roi={`${
                   cnvMarketPrice > 0
                     ? (1 - (+bondSpotPrice / +cnvMarketPrice) * 100).toFixed(2)
-                    : '-'
+                    : 'Loading...'
+
                 }%`}
                 vestingTerm={`${termLength} Days`}
               />

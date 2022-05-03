@@ -1,5 +1,6 @@
 import { ButtonProps } from '@concave/ui'
 import { useModals } from 'contexts/ModalsContext'
+import { isAddress } from 'ethers/lib/utils'
 import { ROUTER_ADDRESS } from 'gemswap-sdk'
 import { useApprove } from 'hooks/useApprove'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
@@ -10,9 +11,11 @@ import { UseTradeResult } from '../hooks/useTrade'
 
 export const useSwapButtonProps = ({
   trade,
+  recipient,
   onSwapClick,
 }: {
   trade: UseTradeResult
+  recipient: string
   onSwapClick: () => void
 }): ButtonProps => {
   const [{ data: account }] = useAccount()
@@ -93,6 +96,8 @@ export const useSwapButtonProps = ({
         ? { children: `Approve ${currencyIn.symbol}`, onClick: () => approve.sendApproveTx() }
         : { children: `Permit ${currencyIn.symbol}`, onClick: () => permit.signPermit() }
   }
+
+  if (recipient && !isAddress(recipient)) return { children: 'Invalid recipient', isDisabled: true }
 
   /* 
     Wrap / Unwrap, ETH <-> WETH

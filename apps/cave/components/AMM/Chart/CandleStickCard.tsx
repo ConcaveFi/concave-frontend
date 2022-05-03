@@ -4,6 +4,8 @@ import dynamic from 'next/dynamic'
 import { CandleStickTokenOptions } from './CandleStickTokenOptions'
 import { CandleStickTimeOptions } from './CandleStickTimeOptions'
 import { useCandleStickChart } from './useCandleStickChart'
+import { STABLES } from 'constants/routing'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 
 const CandleStickChart = dynamic(() => import('./CandleStickChart'), {
   loading: () => <p>Loading ...</p>,
@@ -11,10 +13,17 @@ const CandleStickChart = dynamic(() => import('./CandleStickChart'), {
 })
 
 export const CandleStickCard = ({
-  from,
-  to,
+  from: _from,
+  to: _to,
   ...cardProps
 }: { from?: Currency; to?: Currency } & CardProps) => {
+  /*
+    if one of the currencies are a stable, we want the chart to always display the other relative to the stable
+    (stable is always the `to`)
+  */
+  const networkId = useCurrentSupportedNetworkId()
+  const [from, to] = STABLES[networkId].some((s) => s.equals(_from)) ? [_to, _from] : [_from, _to]
+
   const candleStickChart = useCandleStickChart(from?.symbol, to?.symbol)
 
   return (

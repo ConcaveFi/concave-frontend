@@ -4,8 +4,7 @@ import { RouterABI, ROUTER_ADDRESS, Router, Currency, TradeType, Trade } from 'g
 import { Contract } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useContract, useSigner } from 'wagmi'
-import { useQuery } from 'react-query'
-import { formatUnits } from 'ethers/lib/utils'
+import { isAddress } from 'ethers/lib/utils'
 
 export const useSwapTransaction = (
   trade: Trade<Currency, Currency, TradeType>,
@@ -21,7 +20,7 @@ export const useSwapTransaction = (
   })
 
   const callParameters = useMemo(() => {
-    if (!trade || !recipient || !trade.route) return
+    if (!trade || !isAddress(recipient) || !trade.route || !+settings.deadline) return
     return Router.swapCallParameters(trade, {
       allowedSlippage: settings.slippageTolerance.percent,
       ttl: +settings.deadline * 60,

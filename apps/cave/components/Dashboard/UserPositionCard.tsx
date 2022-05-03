@@ -11,18 +11,33 @@ import {
   Portal,
   Text,
   useDisclosure,
-  VStack,
 } from '@concave/ui'
-import { useState } from 'react'
 import UserListPositionCard from './UserListPositionCard'
 
+type nftContract = {
+  maturity: number
+  poolID: number
+  shares: { _hex: string; _isBigNumber: boolean }
+  rewardDebt: { _hex: string; _isBigNumber: boolean }
+}
+
 interface NftPositionCardProps {
-  unlisted?: boolean
-  popup?: boolean
+  contract: nftContract
 }
 
 const UserPositionCard = (props: NftPositionCardProps) => {
-  const [active, setActive] = useState(false)
+  const { contract } = props
+  const { poolID, shares, rewardDebt, maturity } = contract
+
+  const sharesDecimals = parseInt(shares._hex, 16) / 1000000000000000000
+  const gained = parseInt(rewardDebt._hex, 16) / 1000000000000000000
+
+  const dateToRedeem = epochConverter(maturity)
+  const currentData = new Date()
+  const redeemIn = dateToRedeem.getTime() - currentData.getTime()
+
+  // console.log(d)
+
   return (
     <Box
       pos={'relative'}
@@ -94,16 +109,23 @@ const UserPositionCard = (props: NftPositionCardProps) => {
         maxWidth={'500'}
         background="linear-gradient(265.73deg, #274C63 0%, #182F3E 100%)"
       >
-        <NftPositionViewer active={false} />
-        <RedeemCardViewer />
-        <ListCardViewer popup={props.popup} unlisted={props.unlisted} />
+        <NftPositionViewer stakeType={poolID} redeemIn={redeemIn} />
+        <RedeemCardViewer gained={gained} redeemIn={redeemIn} initial={sharesDecimals} />
+        <ListCardViewer />
       </Box>
     </Box>
   )
 }
 export default UserPositionCard
 
-const RedeemCardViewer = () => {
+interface RedeemCardViewerProps {
+  initial: number
+  gained: number
+  redeemIn: number
+}
+const RedeemCardViewer = (props: RedeemCardViewerProps) => {
+  const { initial, gained, redeemIn } = props
+
   return (
     <Flex height={90} direction="row" gap={4} alignItems="center" justify="center" m={2}>
       <Flex grow={1} direction={'column'} textAlign={'start'} ml="2">
@@ -111,7 +133,7 @@ const RedeemCardViewer = () => {
           Current Value:
         </Text>
         <Text fontSize="md" fontWeight="bold">
-          612.42 CNV
+          {initial + gained} CNV
         </Text>
       </Flex>
       <Flex grow={1} direction={'column'} textAlign={'start'} ml="1">
@@ -119,7 +141,7 @@ const RedeemCardViewer = () => {
           Gained:
         </Text>
         <Text fontSize="md" fontWeight="bold">
-          12.42 CNV
+          {gained.toFixed()} CNV
         </Text>
       </Flex>
       <Flex grow={1} direction={'column'} textAlign={'start'} ml="1">
@@ -127,37 +149,32 @@ const RedeemCardViewer = () => {
           Initial:
         </Text>
         <Text fontSize="md" fontWeight="bold">
-          600 CNV
+          {initial} CNV
         </Text>
       </Flex>
       <Flex grow={1} direction={'column'} textAlign={'start'} ml="1">
         <Button
           mt={5}
-          //   onClick={'s'}
           fontWeight="bold"
           fontSize="md"
-          //   bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
           w="160px"
           h="40px"
           size="large"
           mx="auto"
-          shadow="down"
+          variant={redeemIn > 0 ? '' : 'primary'}
+          shadow={redeemIn > 0 ? 'down' : 'up'}
         >
-          <Text color="text.low" fontSize="sm">
-            Not redeemable
+          <Text color={redeemIn > 0 ? 'text.low' : 'white'} fontSize="sm">
+            {redeemIn > 0 ? 'Not redeemable' : 'Redeem'}
           </Text>
         </Button>
       </Flex>
     </Flex>
   )
 }
-interface ListCardViewerProps {
-  unlisted?: boolean
-  popup?: boolean
-}
+interface ListCardViewerProps {}
 
 const ListCardViewer = (props: ListCardViewerProps) => {
-  const { unlisted } = props
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <Box
@@ -167,7 +184,6 @@ const ListCardViewer = (props: ListCardViewerProps) => {
       height={'120px'}
       borderRadius="16px"
       mt={1}
-      cursor="pointer"
       css={{
         background: 'rgba(113, 113, 113, 0.01)',
         boxShadow:
@@ -194,7 +210,7 @@ const ListCardViewer = (props: ListCardViewerProps) => {
             List Price:
           </Text>
           <Text fontSize="md" fontWeight="bold">
-            {unlisted ? '--------' : '600 CNV'}
+            -------
           </Text>
         </Flex>
         <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
@@ -202,7 +218,7 @@ const ListCardViewer = (props: ListCardViewerProps) => {
             Discount:
           </Text>
           <Text fontSize="md" fontWeight="bold">
-            {unlisted ? '--------' : '2.4%'}
+            ----
           </Text>
         </Flex>
         <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
@@ -210,65 +226,54 @@ const ListCardViewer = (props: ListCardViewerProps) => {
             Expiration Date:
           </Text>
           <Text fontSize="md" fontWeight="bold">
-            {unlisted ? '---.---.--' : '14.11.22'}
+            --.--.--
           </Text>
         </Flex>
         <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
-          {!props.popup ? (
-            <Button
-              mt={5}
-              onClick={() => {
-                if (unlisted) onOpen()
-              }}
-              fontWeight="bold"
-              fontSize="md"
-              variant={unlisted ? 'primary' : 'primary.outline'}
-              //   bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
-              w="160px"
-              h="40px"
-              size="large"
-              mx="auto"
-            >
-              {!!unlisted ? 'Coming Soon' : 'Unlist'}
-            </Button>
-          ) : (
-            <Popover>
-              {/*@ts-ignore */}
-              <PopoverTrigger>
-                <Button
-                  mt={5}
-                  // onClick={}
-                  fontWeight="bold"
-                  fontSize="md"
-                  variant={unlisted ? 'primary' : 'primary.outline'}
-                  //   bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
-                  w="160px"
-                  h="40px"
-                  size="large"
-                  mx="auto"
-                >
-                  {!!unlisted ? 'List for sale' : 'Unlist'}
-                </Button>
-              </PopoverTrigger>
-              <Portal>
-                <PopoverContent border={'none'}>
-                  <UserListPositionCard />
-                </PopoverContent>
-              </Portal>
-            </Popover>
-          )}
+          <Popover>
+            {/*@ts-ignore */}
+            <PopoverTrigger>
+              <Button
+                mt={5}
+                // onClick={}
+                fontWeight="bold"
+                fontSize="md"
+                variant={'primary'}
+                //   bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
+                w="160px"
+                h="40px"
+                size="large"
+                mx="auto"
+              >
+                List for sale
+              </Button>
+            </PopoverTrigger>
+            <Portal>
+              <PopoverContent border={'none'}>
+                <UserListPositionCard />
+              </PopoverContent>
+            </Portal>
+          </Popover>
         </Flex>
       </Flex>
     </Box>
   )
 }
 interface NftPositionViewerProps {
-  active: boolean
-  unlisted?: boolean
+  stakeType: number
+  redeemIn: number
 }
 
 const NftPositionViewer = (props: NftPositionViewerProps) => {
-  const { active, unlisted } = props
+  const { stakeType, redeemIn } = props
+  const redeemInDays = (redeemIn / (1000 * 3600 * 24)).toFixed()
+  const periodToPoolParameter = {
+    0: '360 Days',
+    1: '180 Days',
+    2: '90 Days',
+    3: '45 Days',
+  }
+  const period = periodToPoolParameter[stakeType]
   return (
     <Box
       pos="relative"
@@ -276,15 +281,7 @@ const NftPositionViewer = (props: NftPositionViewerProps) => {
       maxHeight={'100px'}
       borderRadius="16px"
       cursor="pointer"
-      css={{
-        background:
-          'url(Rectangle 110 (00000).jpg), linear-gradient(265.73deg, #274C63 0%, #182F3E 100%)',
-        boxShadow: !active
-          ? `0px 5px 14px rgba(0, 0, 0, 0.47),
-            4px -7px 15px rgba(174, 177, 255, 0.13),
-            inset -1px 1px 2px rgba(128, 186, 255, 0.24)`
-          : 'only-test',
-      }}
+      boxShadow={'up'}
     >
       <Flex direction="row" gap={4} alignItems="center" justify="center" m={2}>
         <Flex
@@ -294,13 +291,7 @@ const NftPositionViewer = (props: NftPositionViewerProps) => {
           left={1}
           overflowY={'hidden'}
           borderRadius="16px"
-          css={{
-            background: 'rgba(113, 113, 113, 0.01)',
-          }}
-          __css={{
-            boxShadow:
-              'inset 0px -5px 10px rgba(134, 175, 255, 0.05), inset -9px 12px 24px rgba(13, 17, 23, 0.4)',
-          }}
+          boxShadow={'Down Medium'}
           px={2}
         >
           <HStack>
@@ -309,7 +300,7 @@ const NftPositionViewer = (props: NftPositionViewerProps) => {
                 Stake Period
               </Text>
               <Text fontSize="s" color="white" fontWeight="bold">
-                180 Days
+                {period}
               </Text>
             </Flex>
             <Box w={'45%'}>
@@ -323,10 +314,10 @@ const NftPositionViewer = (props: NftPositionViewerProps) => {
             Redeem In:
           </Text>
           <Text fontSize="md" fontWeight="bold">
-            143 Days
+            {redeemInDays} Days
           </Text>
         </Flex>
-        <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
+        {/* <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
           <Text color="text.low" fontSize="sm">
             Price:
           </Text>
@@ -341,8 +332,14 @@ const NftPositionViewer = (props: NftPositionViewerProps) => {
           <Text fontSize="md" fontWeight="bold">
             2.3%
           </Text>
-        </Flex>
+        </Flex> */}
       </Flex>
     </Box>
   )
+}
+
+const epochConverter = (epoch: number) => {
+  const timeInMillis = epoch * 1000
+  const dateFromEpoch = new Date(timeInMillis)
+  return dateFromEpoch
 }

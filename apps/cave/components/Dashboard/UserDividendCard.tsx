@@ -1,11 +1,10 @@
 import { Box, Button, Flex, Text } from '@concave/ui'
 import { useState } from 'react'
 
-// interface Props {
-//   active?: boolean
-//   onClick?: (any: Dispatch<SetStateAction<boolean>>) => void
-// }
-const UserDividendCard = (props) => {
+interface UserDividendCardProps {
+  totalLocked: string
+}
+const UserDividendCard = (props: UserDividendCardProps) => {
   const [active, setActive] = useState(false)
   return (
     <Box
@@ -29,7 +28,7 @@ const UserDividendCard = (props) => {
             Total locked:
           </Text>
           <Text fontSize={'17px'} fontWeight={700}>
-            6122.42 CNV
+            {props.totalLocked}
           </Text>
         </Flex>
         {/* <Flex direction={'column'} alignItems="start" ml={6}>
@@ -45,7 +44,7 @@ const UserDividendCard = (props) => {
             Next Dividend Date:
           </Text>
           <Text fontSize={'17px'} fontWeight={700}>
-            04.06.2022
+            07.04.2022
           </Text>
         </Flex>
         <Flex direction={'column'} alignItems="start" ml={6}>
@@ -61,7 +60,8 @@ const UserDividendCard = (props) => {
             //   onClick={'s'}
             fontWeight="bold"
             fontSize="md"
-            variant="secondary.outline"
+            variant="secondary"
+            border="stroke.primary"
             w="160px"
             h="40px"
             size="large"
