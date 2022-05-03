@@ -27,6 +27,40 @@ export default function Bond() {
   const [align, setAlign] = useState<'start' | 'center'>('start')
 
   useEffect(() => {
+    getCurrentBlockTimestamp()
+      .then((x) => {
+        setCurrentBlockTs(x)
+      })
+      .catch((e) => {
+        console.log(e)
+      })
+    getBondTermLength(networkId)
+      .then((termLength) => {
+        setTermLength(termLength)
+      })
+      .catch((e) => {
+        console.log(e)
+      })
+    getBondSpotPrice(networkId, '')
+      .then((bondSpotPrice) => {
+        setBondSpotPrice(bondSpotPrice)
+      })
+      .catch((e) => {
+        console.log(e)
+      })
+    fetch('/api/cnv')
+      .then((j) => j.json())
+      .then((data) => {
+        if (data?.data) {
+          setCnvMarketPrice(data.data.last)
+        }
+      })
+      .catch((e) => {
+        throw e
+      })
+  }, [networkId])
+
+  useEffect(() => {
     const interval = setInterval(() => {
       return new Promise((resolve) => {
         getUserBondPositions(networkId, userAddress, currentBlockTs)
@@ -42,36 +76,6 @@ export default function Bond() {
       setIntervalID(interval)
     }
   }, [userAddress])
-
-  useEffect(() => {
-    getBondTermLength(networkId)
-      .then((termLength) => {
-        setTermLength(termLength)
-      })
-      .catch((e) => {
-        console.log(e)
-      })
-    getBondSpotPrice(networkId, '')
-      .then((bondSpotPrice) => {
-        setBondSpotPrice(bondSpotPrice)
-      })
-      .catch((e) => {
-        console.log(e)
-      })
-    getCurrentBlockTimestamp().then((x) => {
-      setCurrentBlockTs(x)
-    })
-    fetch('/api/cnv')
-      .then((j) => j.json())
-      .then((data) => {
-        if (data?.data) {
-          setCnvMarketPrice(data.data.last)
-        }
-      })
-      .catch((e) => {
-        throw e
-      })
-  }, [networkId])
 
   useEffect(() => {
     setDirection(isLargerThan1200 ? 'row' : 'column')

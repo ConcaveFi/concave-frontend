@@ -86,7 +86,7 @@ export const purchaseBond = async (
 }
 
 export async function getCurrentBlockTimestamp() {
-  const getBlock = rawProvider.getBlockNumber()
+  const getBlock = await rawProvider.getBlockNumber()
   const timestamp = (await rawProvider.getBlock(getBlock)).timestamp
   return timestamp
 }
@@ -126,23 +126,24 @@ export const getUserBondPositions = async (
     if (+positionData.creation > oldest) {
       oldest = +positionData.creation
     }
-    let fullyVestedTimestamp = +positionData.creation + 432000000
-    // console.log(fullyVestedTimestamp / +positionData.creation)
-    // console.log(fullyVestedTimestamp)
-    // console.log(+positionData.creation)
-    let elapsed =
-      currentBlockTimestamp >= fullyVestedTimestamp
-        ? 1
-        : positionData.creation + 432000000 / +currentBlockTimestamp
-
     totalPending += +(+utils.formatEther(positionData.redeemed)).toFixed(2)
     // +(+utils.formatEther(positionData.owed)).toFixed(2) * elapsed -
     // +(+utils.formatEther(positionData.redeemed)).toFixed(2)
     // console.log(totalPending)
     totalOwed += +(+utils.formatEther(positionData.owed)).toFixed(2)
   }
+  let elapsed = currentBlockTimestamp >= oldest ? 1 : oldest + 864000 / +currentBlockTimestamp
+  console.log(elapsed)
+  let fullyVestedTimestamp = oldest + 864000
+  console.log('fullyVestedTimestamp', fullyVestedTimestamp)
+  console.log('currentBlockTimestamp', currentBlockTimestamp)
+  console.log(
+    'fullyVestedTimestamp / currentBlockTimestamp',
+    fullyVestedTimestamp / currentBlockTimestamp,
+  )
+
   if (totalPending === totalOwed) claimed = true
-  const parseOldest = new Date(oldest * 1000 + 432000000).toString().slice(4, 21)
+  const parseOldest = new Date(oldest * 1000 + 864000).toString().slice(4, 21)
   return { parseOldest, totalOwed, totalPending, batchRedeemArray, claimed }
 }
 
