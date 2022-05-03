@@ -146,13 +146,7 @@ export const getUserBondPositions = async (
   const delta = +currentBlockTimestamp - +oldestCreationTimestamp
   const scaleDown = delta / termData > 1 ? 1 : termData / delta
   let currentlyOwed = +rawOwed * scaleDown
-  console.log(rawPending)
-  console.log('delta', currentlyOwed.toString())
-
   const parseOldest = new Date(fullyVestedTimestamp).toString().slice(4, 21)
-  // const parsePending = utils.formatEther(totalPending)
-  console.log(totalPending)
-  console.log(totalOwed)
   if (totalPending === totalOwed) claimed = true
   return { parseOldest, totalOwed, totalPending, batchRedeemArray, claimed }
 }

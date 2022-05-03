@@ -35,11 +35,11 @@ export function BondInput({
   onChangeValue,
   onClickMaxBalance,
 }: {
-  value: string
+  value?: string
   currency?: Currency
-  balance: string
+  balance?: string
   disabled?: boolean
-  onChangeValue: (value: string) => void
+  onChangeValue?: (value: string) => void
   onClickMaxBalance?: (value: string) => void
 } & FlexProps) {
   const styles = useMultiStyleConfig('Input', { variant: 'primary', size: 'large' })
