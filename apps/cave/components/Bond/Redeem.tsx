@@ -15,6 +15,5 @@ export const Redeem = ({ onConfirm, bondSigma }: { onConfirm: () => void; bondSi
         ''
       )}
     </>
-
   )
 }

@@ -125,7 +125,6 @@ export default function Bond() {
                   cnvMarketPrice > 0
                     ? (1 - (+bondSpotPrice / +cnvMarketPrice) * 100).toFixed(2)
                     : 'Loading...'
-
                 }%`}
                 vestingTerm={`${termLength} Days`}
               />
