@@ -98,10 +98,15 @@ export default function Bond() {
   return (
     <Container maxW="container.lg">
       <Flex direction="column" gap={20}>
-        <Stack mt={20} align="center" textAlign="center">
+        <Stack mt={20} maxW={550} align="center" textAlign="center">
           <Heading as="h1" mb={3} fontSize="5xl">
             Dynamic Bond Market
           </Heading>
+          <Flex align={'center'} justify="center" direction={direction}>
+            Bonds allow new CNV supply to be minted at a discount. All funds raised through bonds
+            are added to the Concave treasury and invested to generate returns for quarterly
+            dividends.
+          </Flex>
         </Stack>
 
         <Flex gap={10} direction={direction} align={align}>
@@ -125,7 +130,6 @@ export default function Bond() {
                   cnvMarketPrice > 0
                     ? (1 - (+bondSpotPrice / +cnvMarketPrice) * 100).toFixed(2)
                     : 'Loading...'
-
                 }%`}
                 vestingTerm={`${termLength} Days`}
               />
