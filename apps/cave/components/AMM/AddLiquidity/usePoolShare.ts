@@ -2,7 +2,7 @@ import { Currency, CurrencyAmount, Pair, Percent, Token } from 'gemswap-sdk'
 import { useQuery } from 'react-query'
 import { Contract } from 'ethers'
 import { erc20ABI, useProvider } from 'wagmi'
-import { parseAmount } from 'components/AMM/utils/parseAmount'
+import { toAmount } from 'utils/toAmount'
 
 export type PoolShare = {
   amount: CurrencyAmount<Token>
@@ -23,7 +23,7 @@ export const usePoolShare = (
         erc20ABI,
         provider,
       ).totalSupply()
-      return parseAmount(totalSupply.toString(), pair.liquidityToken)
+      return toAmount(totalSupply.toString(), pair.liquidityToken)
     },
     { enabled: !!pair },
   )

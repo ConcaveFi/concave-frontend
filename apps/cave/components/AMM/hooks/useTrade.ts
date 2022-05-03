@@ -1,6 +1,6 @@
 import { Trade, Currency, CurrencyAmount, TradeType, Pair, BestTradeOptions } from 'gemswap-sdk'
 import { UseQueryResult } from 'react-query'
-import { parseAmount } from '../utils/parseAmount'
+import { toAmount } from '../../../utils/toAmount'
 
 import { usePairs } from './usePair'
 
@@ -19,7 +19,7 @@ export const getBestTrade = (
 
   // if the exact amount is 0, we search for the best route with some arbitrary amount
   const searchableTradeAmount = exactAmount.equalTo(0)
-    ? parseAmount('50000', exactAmount.currency)
+    ? toAmount(50000, exactAmount.currency)
     : exactAmount
 
   const bestTrade =

@@ -3,8 +3,8 @@ import { Currency, TradeType, CNV, DAI, CurrencyAmount, Trade } from 'gemswap-sd
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useTrade, UseTradeResult } from '../hooks/useTrade'
 import { SwapSettings } from '../Settings'
-import { parseAmount } from '../utils/parseAmount'
-import { useLinkedFields } from '../CurrencyAmountField'
+import { toAmount } from '../../../utils/toAmount'
+import { useLinkedFields } from '../../CurrencyAmountField'
 
 const makeCurrencyFields = (networkId) => ({
   first: DAI[networkId],
@@ -17,7 +17,7 @@ export const useSwapState = ({ multihops }: SwapSettings) => {
 
   // the input user typed in, the other input value is then derived from it
   const [exactAmount, setExactAmount] = useState<CurrencyAmount<Currency>>(
-    parseAmount('0', initialCurrencyFields.first),
+    toAmount('0', initialCurrencyFields.first),
   )
 
   const { onChangeField, setFieldCurrency, switchCurrencies, fieldCurrency } = useLinkedFields(
@@ -27,7 +27,7 @@ export const useSwapState = ({ multihops }: SwapSettings) => {
 
   useEffect(() => {
     setFieldCurrency(initialCurrencyFields)
-    setExactAmount(parseAmount('0', initialCurrencyFields.first))
+    setExactAmount(toAmount('0', initialCurrencyFields.first))
   }, [initialCurrencyFields, setFieldCurrency])
 
   const isExactIn = exactAmount?.currency.equals(fieldCurrency.first)
@@ -42,8 +42,8 @@ export const useSwapState = ({ multihops }: SwapSettings) => {
   const partialTradeData: Partial<Trade<Currency, Currency, TradeType>> = useMemo(
     () =>
       isExactIn
-        ? { inputAmount: exactAmount, outputAmount: parseAmount('0', otherCurrency) }
-        : { inputAmount: parseAmount('0', otherCurrency), outputAmount: exactAmount },
+        ? { inputAmount: exactAmount, outputAmount: toAmount('0', otherCurrency) }
+        : { inputAmount: toAmount('0', otherCurrency), outputAmount: exactAmount },
     [exactAmount, isExactIn, otherCurrency],
   )
 
