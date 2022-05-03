@@ -1,4 +1,4 @@
-import { useLinkedFields } from 'components/AMM'
+import { useLinkedFields } from 'components/CurrencyAmountField'
 import { usePair } from 'components/AMM/hooks/usePair'
 import { toAmount } from 'utils/toAmount'
 import { Currency, CurrencyAmount, NATIVE, Pair } from 'gemswap-sdk'
