@@ -23,7 +23,6 @@ import { useRouter } from 'next/router'
 //   },
 // )
 
-
 const UserListPositionCard = () => {
   const [expirationDate, setExpirationDate] = useState('')
   const [listingDate, setListingDate] = useState('')

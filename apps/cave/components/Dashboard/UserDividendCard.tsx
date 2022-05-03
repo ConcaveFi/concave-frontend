@@ -69,7 +69,7 @@ const UserDividendCard = (props) => {
             shadow="down"
           >
             <Text color="text.low" fontSize="sm">
-            Redeem
+              Redeem
             </Text>
           </Button>
         </Flex>

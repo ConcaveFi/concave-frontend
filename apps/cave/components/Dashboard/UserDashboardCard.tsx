@@ -1,12 +1,30 @@
 import { Box, Card, Flex } from '@concave/ui'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import UserPositionCard from './UserPositionCard'
 import UserDividendCard from './UserDividendCard'
 import { ButtonLink } from 'components/ButtonLink'
 import UserListPositionCard from './UserListPositionCard'
+import { getUserPositions } from 'contracts/DashBoard/DashBoardState'
+import { useAccount } from 'wagmi'
 
 const UserDashboardCard = (props: any) => {
-  const [active, setActive] = useState(false)
+  const [{ data: account }] = useAccount()
+  const [userContracts, setUserContracts] = useState(null)
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (account?.address && userContracts === null)
+        getUserPositions(account.address).then(setUserContracts)
+    }, 2500)
+  }, [account])
+
+  const userPosComps =
+    userContracts !== null
+      ? userContracts.map((contract, index) => <UserPositionCard key={index} contract={contract} />)
+      : ''
+
+  if (userContracts) console.log(userContracts)
+
   return (
     <Card p={3} gap={2} variant="primary" h="945px" shadow="down" w="780px">
       <Flex justify="center">
@@ -58,11 +76,7 @@ const UserDashboardCard = (props: any) => {
           },
         }}
       >
-        <UserPositionCard unlisted />
-        <UserPositionCard unlisted />
-        <UserPositionCard unlisted />
-        {/* <UserPositionCard unlisted popup /> */}
-        {/* <UserPositionCard /> */}
+        {userPosComps}
       </Box>
     </Card>
   )
