@@ -12,10 +12,7 @@ import {
   Text,
   useDisclosure,
 } from '@concave/ui'
-import { type } from 'os'
-import { useState } from 'react'
 import UserListPositionCard from './UserListPositionCard'
-import { format } from 'date-fns'
 
 type nftContract = {
   maturity: number
@@ -30,11 +27,17 @@ interface NftPositionCardProps {
 
 const UserPositionCard = (props: NftPositionCardProps) => {
   const { contract } = props
-  const { poolID, shares } = contract
-  const sharesDecimals = parseInt(shares._hex, 16) / 1000000000000000000
+  const { poolID, shares, rewardDebt, maturity } = contract
 
-  const types = ['45 Days', '90 Days', '180 Days', '360 Days']
-  contract
+  const sharesDecimals = parseInt(shares._hex, 16) / 1000000000000000000
+  const gained = parseInt(rewardDebt._hex, 16) / 1000000000000000000
+
+  const dateToRedeem = epochConverter(maturity)
+  const currentData = new Date()
+  const redeemIn = dateToRedeem.getTime() - currentData.getTime()
+
+  // console.log(d)
+
   return (
     <Box
       pos={'relative'}
@@ -106,8 +109,8 @@ const UserPositionCard = (props: NftPositionCardProps) => {
         maxWidth={'500'}
         background="linear-gradient(265.73deg, #274C63 0%, #182F3E 100%)"
       >
-        <NftPositionViewer stakeType={poolID} active={false} />
-        <RedeemCardViewer initial={sharesDecimals} />
+        <NftPositionViewer stakeType={poolID} redeemIn={redeemIn} />
+        <RedeemCardViewer gained={gained} initial={sharesDecimals} />
         <ListCardViewer />
       </Box>
     </Box>
@@ -117,9 +120,10 @@ export default UserPositionCard
 
 interface RedeemCardViewerProps {
   initial: number
+  gained: number
 }
 const RedeemCardViewer = (props: RedeemCardViewerProps) => {
-  const { initial } = props
+  const { initial, gained } = props
   return (
     <Flex height={90} direction="row" gap={4} alignItems="center" justify="center" m={2}>
       <Flex grow={1} direction={'column'} textAlign={'start'} ml="2">
@@ -127,7 +131,7 @@ const RedeemCardViewer = (props: RedeemCardViewerProps) => {
           Current Value:
         </Text>
         <Text fontSize="md" fontWeight="bold">
-          612.42 CNV
+          {initial + gained} CNV
         </Text>
       </Flex>
       <Flex grow={1} direction={'column'} textAlign={'start'} ml="1">
@@ -135,7 +139,7 @@ const RedeemCardViewer = (props: RedeemCardViewerProps) => {
           Gained:
         </Text>
         <Text fontSize="md" fontWeight="bold">
-          12.42 CNV
+          {gained.toFixed()} CNV
         </Text>
       </Flex>
       <Flex grow={1} direction={'column'} textAlign={'start'} ml="1">
@@ -149,10 +153,8 @@ const RedeemCardViewer = (props: RedeemCardViewerProps) => {
       <Flex grow={1} direction={'column'} textAlign={'start'} ml="1">
         <Button
           mt={5}
-          //   onClick={'s'}
           fontWeight="bold"
           fontSize="md"
-          //   bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
           w="160px"
           h="40px"
           size="large"
@@ -179,7 +181,6 @@ const ListCardViewer = (props: ListCardViewerProps) => {
       height={'120px'}
       borderRadius="16px"
       mt={1}
-      cursor="pointer"
       css={{
         background: 'rgba(113, 113, 113, 0.01)',
         boxShadow:
@@ -256,13 +257,13 @@ const ListCardViewer = (props: ListCardViewerProps) => {
   )
 }
 interface NftPositionViewerProps {
-  active: boolean
   stakeType: number
-  redeemIn?: number
+  redeemIn: number
 }
 
 const NftPositionViewer = (props: NftPositionViewerProps) => {
-  const { active, stakeType } = props
+  const { stakeType, redeemIn } = props
+  const redeemInDays = (redeemIn / (1000 * 3600 * 24)).toFixed()
   const periodToPoolParameter = {
     0: '360 Days',
     1: '180 Days',
@@ -277,15 +278,7 @@ const NftPositionViewer = (props: NftPositionViewerProps) => {
       maxHeight={'100px'}
       borderRadius="16px"
       cursor="pointer"
-      css={{
-        background:
-          'url(Rectangle 110 (00000).jpg), linear-gradient(265.73deg, #274C63 0%, #182F3E 100%)',
-        boxShadow: !active
-          ? `0px 5px 14px rgba(0, 0, 0, 0.47),
-            4px -7px 15px rgba(174, 177, 255, 0.13),
-            inset -1px 1px 2px rgba(128, 186, 255, 0.24)`
-          : 'only-test',
-      }}
+      boxShadow={'up'}
     >
       <Flex direction="row" gap={4} alignItems="center" justify="center" m={2}>
         <Flex
@@ -295,13 +288,7 @@ const NftPositionViewer = (props: NftPositionViewerProps) => {
           left={1}
           overflowY={'hidden'}
           borderRadius="16px"
-          css={{
-            background: 'rgba(113, 113, 113, 0.01)',
-          }}
-          __css={{
-            boxShadow:
-              'inset 0px -5px 10px rgba(134, 175, 255, 0.05), inset -9px 12px 24px rgba(13, 17, 23, 0.4)',
-          }}
+          boxShadow={'Down Medium'}
           px={2}
         >
           <HStack>
@@ -324,7 +311,7 @@ const NftPositionViewer = (props: NftPositionViewerProps) => {
             Redeem In:
           </Text>
           <Text fontSize="md" fontWeight="bold">
-            143 Days
+            {redeemInDays} Days
           </Text>
         </Flex>
         {/* <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
@@ -346,4 +333,10 @@ const NftPositionViewer = (props: NftPositionViewerProps) => {
       </Flex>
     </Box>
   )
+}
+
+const epochConverter = (epoch: number) => {
+  const timeInMillis = epoch * 1000
+  const dateFromEpoch = new Date(timeInMillis)
+  return dateFromEpoch
 }

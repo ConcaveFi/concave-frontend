@@ -3,30 +3,19 @@ import { useEffect, useState } from 'react'
 import UserPositionCard from './UserPositionCard'
 import UserDividendCard from './UserDividendCard'
 import { ButtonLink } from 'components/ButtonLink'
-import UserListPositionCard from './UserListPositionCard'
-import { getUserPositions } from 'contracts/DashBoard/DashBoardState'
+import { getUserPositions, useDashBoardState } from 'contracts/DashBoard/DashBoardState'
 import { useAccount } from 'wagmi'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 
-const UserDashboardCard = (props: any) => {
-  const [{ data: account }] = useAccount()
-  const netWorkId = useCurrentSupportedNetworkId()
-  const [userContracts, setUserContracts] = useState(null)
-
-  useEffect(() => {
-    if (account?.address && userContracts === null)
-      getUserPositions(account.address).then((value) => {
-        console.log(value)
-        setUserContracts(value)
-      })
-  }, [account])
+const UserDashboardCard = () => {
+  const { account, netWorkId, setUserContracts, userContracts, totalLocked } = useDashBoardState()
 
   const userPosComps =
     userContracts !== null
       ? userContracts.map((contract, index) => <UserPositionCard key={index} contract={contract} />)
       : ''
 
-  if (userContracts) console.log(userContracts)
+  const total = totalLocked ? totalLocked + ' CNV' : 'Loading...'
 
   return (
     <Card p={3} gap={2} variant="primary" h="945px" shadow="down" w="780px">
@@ -44,12 +33,7 @@ const UserDashboardCard = (props: any) => {
             View Treasury
           </ButtonLink>
           <Flex direction="row" gap={4} position="relative" mt={4}>
-            {/* here iam */}
-
-            <UserDividendCard />
-            {/* {filters.map((e, k) => {
-              return <SearchFilterCard key={k} title={e.title} icon={e.icon} />
-            })} */}
+            <UserDividendCard totalLocked={total} />
           </Flex>
         </Box>
       </Flex>
@@ -58,7 +42,6 @@ const UserDashboardCard = (props: any) => {
         h="100%"
         overflowY={'auto'}
         maxHeight={'100%'}
-        width="fit-content"
         borderRadius="12px"
         px={'0.5rem'}
         py={'0.5rem'}
