@@ -55,6 +55,7 @@ const UserDashboardCard = (props: any) => {
         h="100%"
         overflowY={'auto'}
         maxHeight={'100%'}
+        width="fit-content"
         borderRadius="12px"
         px={'0.5rem'}
         py={'0.5rem'}
