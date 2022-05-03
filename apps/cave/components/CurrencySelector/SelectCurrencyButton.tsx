@@ -21,7 +21,7 @@ export const SelectCurrencyButton = ({
     fontWeight="bold"
     alignSelf="end"
     fontSize="lg"
-    rightIcon={<DownIcon w="16px" />}
+    rightIcon={!props.isDisabled && <DownIcon w="16px" />}
     leftIcon={selected?.symbol && <CurrencyIcon size="xs" currency={selected} />}
     onClick={onClick}
     {...props}
