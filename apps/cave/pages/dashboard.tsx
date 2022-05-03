@@ -10,12 +10,11 @@ const dashboard = () => {
       <Heading as="h1" mt={16} mb={3} fontSize="5xl">
         My Dashboard
       </Heading>
-      <HStack mt={8} spacing={14}>
+      
         <Text maxW={520} textAlign="center">
           This is the user dashboard to claim divdends and manage your liquid NFT positions.
         </Text>
-      </HStack>
-
+    
       <Flex mr="6" gap={8} position="relative" mt={16}>
         <UserDashboardCard />
       </Flex>

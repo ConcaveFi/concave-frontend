@@ -4,28 +4,28 @@ import StakeAprCard from './StakeAprCard'
 function MarketplaceStakeCard(props: any) {
   const filters = [
     {
-      title: '12 Month',
+      title: '360 Days',
       length: '12m',
       marketvapr: 'Calculating',
       image: '/assets/marketplace/12mposition.png',
       diluted: true,
     },
     {
-      title: '6 Month',
+      title: '180 Days',
       length: '6m',
       marketvapr: 'Calculating',
       image: '/assets/marketplace/6mposition.png',
       diluted: false,
     },
     {
-      title: '3 Month',
+      title: '180 Days',
       length: '3m',
       marketvapr: 'Calculating',
       image: '/assets/marketplace/3mposition.png',
       diluted: false,
     },
     {
-      title: '1 Month',
+      title: '45 Days',
       length: '1m',
       marketvapr: 'Calculating',
       image: '/assets/marketplace/1mposition.png',
