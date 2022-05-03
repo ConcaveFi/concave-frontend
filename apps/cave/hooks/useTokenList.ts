@@ -14,18 +14,17 @@ export const useTokenList = () => {
   ] = useNetwork()
   const chainName = selectedChain.name
   return useQuery(['token-list', chainName], async () => {
-    if (loading) {
-      return []
-    }
+    if (loading) return []
     return fetch(concaveTokenList(chainName))
       .then((d) => d.json() as Promise<ConcaveTokenList>)
       .then((l) => l.tokens)
       .then((list) =>
         list
           .filter((t) => t.chainId === selectedChain.id)
-          .map((token) => {
-            return new Token(token.chainId, token.address, token.decimals, token.symbol, token.name)
-          }),
+          .map(
+            (token) =>
+              new Token(token.chainId, token.address, token.decimals, token.symbol, token.name),
+          ),
       )
   })
 }
