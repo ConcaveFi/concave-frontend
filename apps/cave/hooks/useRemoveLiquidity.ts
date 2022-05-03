@@ -1,65 +1,70 @@
-import { ethers } from 'ethers'
 import { parseUnits } from 'ethers/lib/utils'
-import { ROUTER_ADDRESS, Token } from 'gemswap-sdk'
+import { Currency, CurrencyAmount, Percent, WETH9_ADDRESS } from 'gemswap-sdk'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { LiquidityInfoData } from 'hooks/useLiquidityInfo'
-import { contractABI } from 'lib/contractoABI'
-import { concaveProvider } from 'lib/providers'
+import { Router } from 'lib/Router'
 import { useState } from 'react'
 import { useAccount, useSigner } from 'wagmi'
+
+const currencyAmountToBigNumber = (currency: CurrencyAmount<Currency>) => {
+  return parseUnits(currency.toFixed(currency.currency.decimals))
+}
 
 export const useRemoveLiquidity = ({ liquidityInfo }: { liquidityInfo: LiquidityInfoData }) => {
   const networkId = useCurrentSupportedNetworkId()
   const [{ data: account }] = useAccount()
   const tokenA = liquidityInfo.pair.token0
   const tokenB = liquidityInfo.pair.token1
-
   const [percentToRemove, setPercentToRemove] = useState(0)
   const ratioToRemove = Math.min(percentToRemove, 100) / 100
   const amountAMin =
     +liquidityInfo.pair.reserve0.toExact() * liquidityInfo.userPoolShare * ratioToRemove
   const amountBMin =
     +liquidityInfo.pair.reserve1.toExact() * liquidityInfo.userPoolShare * ratioToRemove
-  const [deadline, setDeadLine] = useState(new Date().getTime() / 1000 + 15 * 60)
   const [hash, setHash] = useState<string>(null)
+  const [{ data }] = useSigner()
+  const [receiveInNativeToken, setReceiveInNativeToken] = useState(true)
+  const tokenAIsNativeWrapper = tokenA.address === WETH9_ADDRESS[networkId]
+  const tokenBIsNativeWrapper = tokenB.address === WETH9_ADDRESS[networkId]
+  const hasNativeToken = tokenAIsNativeWrapper || tokenBIsNativeWrapper
 
-  const contractInstance = new ethers.Contract(
-    ROUTER_ADDRESS[networkId],
-    contractABI,
-    concaveProvider(networkId),
-  )
-  const [{ data, error, loading }, getSigner] = useSigner()
-
-  const call = async () => {
-    const contractSigner = contractInstance.connect(data)
-    const to = account.address
-    const provider = concaveProvider(networkId)
-    const currentBlockNumber = await provider.getBlockNumber()
-    const { timestamp } = await provider.getBlock(currentBlockNumber)
-    const deadLine = timestamp + 86400
-    const transaction = await contractSigner.removeLiquidity(
-      tokenA.address,
-      tokenB.address,
-      liquidityInfo.userBalance.data.value.mul(percentToRemove).div(100),
-      parseUnits(`0`, tokenA.decimals),
-      parseUnits(`0`, tokenB.decimals),
-      to,
-      deadLine,
-      {
-        gasLimit: 500000,
-      },
+  const removeLiquidity = async () => {
+    const router = new Router(networkId, data)
+    if (receiveInNativeToken && (tokenAIsNativeWrapper || tokenBIsNativeWrapper)) {
+      const transaction = await router.removeLiquidityETH(
+        tokenAIsNativeWrapper ? tokenB : tokenA,
+        currencyAmountToBigNumber(
+          liquidityInfo.userBalance.data.multiply(new Percent(percentToRemove, 100)),
+        ),
+        account.address,
+      )
+      setHash(transaction.hash)
+      return
+    }
+    const transaction = await router.removeLiquidity(
+      tokenA,
+      tokenB,
+      currencyAmountToBigNumber(
+        liquidityInfo.userBalance.data.multiply(percentToRemove).divide(100),
+      ),
+      account.address,
     )
     setHash(transaction.hash)
   }
+
   return {
     amountAMin,
     amountBMin,
-    deadline,
     ...liquidityInfo,
     percentToRemove,
     setPercentToRemove,
-    call,
+    removeLiquidity,
     hash,
+    tokenAIsNativeWrapper,
+    tokenBIsNativeWrapper,
+    hasNativeToken,
+    receiveInNativeToken,
+    handleNativeToken: () => setReceiveInNativeToken(!receiveInNativeToken),
   }
 }
 export type RemoveLiquidityState = ReturnType<typeof useRemoveLiquidity>

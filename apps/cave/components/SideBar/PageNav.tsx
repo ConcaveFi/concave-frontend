@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
 import { Box, Flex, Text, Image } from '@concave/ui'
 import { ButtonLink, ButtonLinkProps } from 'components/ButtonLink'
-import { getBondSpotPrice } from '../Bond/BondState'
-import { useFetchApi } from 'hooks/cnvData'
 import { useRouter } from 'next/router'
 
 const NavButton = (props: ButtonLinkProps) => {
@@ -96,7 +94,8 @@ function PageNav() {
       <NavButton
         leftIcon={<NotInteractableImage src="/assets/sidebar/page-lstaking.svg" />}
         href="/liquidstaking"
-        variant="secondary.outline"
+        variant="secondary"
+        border="primary"
         mt="26px"
       >
         Liquid Staking

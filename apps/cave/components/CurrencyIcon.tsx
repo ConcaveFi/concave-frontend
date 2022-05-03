@@ -1,5 +1,6 @@
 import { Avatar, AvatarProps } from '@chakra-ui/react'
-import { Currency, CHAIN_NAME } from 'gemswap-sdk'
+import { CHAIN_NAME, Currency } from 'gemswap-sdk'
+import { useReducer } from 'react'
 
 export type CurrencyIconProps = {
   size?: string
@@ -9,20 +10,27 @@ export type CurrencyIconProps = {
 const concaveAssetsSrc = 'https://raw.githubusercontent.com/concavefi/assets/master/blockchains'
 const getCurrencyLogoURI = (currency: Currency) => {
   const networkName = CHAIN_NAME[currency.chainId]
+  if (networkName === 'ropsten') {
+    return `/assets/tokens/${currency.symbol.toLowerCase()}.svg`
+  }
 
   if (currency.isNative) return `${concaveAssetsSrc}/${networkName}/info/logo.png`
   return `${concaveAssetsSrc}/${networkName}/assets/${currency.wrapped.address}/logo.png`
 }
 
 export const CurrencyIcon = ({ currency, size = 'sm', ...props }: CurrencyIconProps) => {
+  const [isBadSrc, setBadSrc] = useReducer(() => true, false)
   return (
     <Avatar
       {...props}
       src={getCurrencyLogoURI(currency)}
       name={currency.symbol}
       size={size}
-      bg="text.low"
+      bg={isBadSrc ? 'text.low' : 'none'}
+      onError={setBadSrc}
       getInitials={(a) => a}
+      draggable={false}
+      userSelect="none"
     />
   )
 }

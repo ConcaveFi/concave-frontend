@@ -23,6 +23,7 @@ export function SideBar() {
 
   return (
     <>
+      {/* show on bigger screens like not mobile lol */}
       <SidebarContent display={{ base: 'none', md: 'flex' }} />
 
       {/* show on small devices (mobile) */}
@@ -79,6 +80,7 @@ const SidebarContent = forwardRef<CardProps, 'div'>((props, ref) => {
       shadow="Up Big"
       p={3}
       w={{ base: '250px', md: '250px' }}
+      minW="250px"
       overflow="auto"
       {...props}
     >

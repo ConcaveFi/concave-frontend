@@ -7,7 +7,7 @@ import {
 import { Styles } from '@chakra-ui/theme-tools'
 import { ReactNode } from 'react'
 
-import theme from 'theme'
+import theme from '../theme'
 
 export const ThemeProvider = ({
   cookies,

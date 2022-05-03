@@ -1,4 +1,4 @@
-import { useQuery, UseQueryOptions } from 'react-query'
+import { useQuery, UseQueryOptions, UseQueryResult } from 'react-query'
 import { concaveProvider } from 'lib/providers'
 import { Token, Fetcher, Pair } from 'gemswap-sdk'
 import { BASES_TO_CHECK_TRADES_AGAINST, INTERMEDIARY_PAIRS_FOR_MULTI_HOPS } from 'constants/routing'
@@ -38,7 +38,7 @@ const getAllCommonPairs = (
 
 export type UsePairsQueryOptions<T> = UseQueryOptions<Pair[], any, T>
 
-export const NoValidPairsError = new Error('No valid pairs found')
+export const NoValidPairsError = 'No valid pairs found'
 
 export const usePairs = <T = Pair[]>(
   tokenA?: Token,
@@ -46,8 +46,9 @@ export const usePairs = <T = Pair[]>(
   maxHops = 3,
   queryOptions?: UsePairsQueryOptions<T>,
 ) => {
+  const [isValidPair, setValidPair] = useState(true)
   return useQuery(
-    ['pairs', tokenA?.address, tokenB?.address, maxHops],
+    ['pairs', tokenA?.address, tokenB?.address, maxHops, tokenA?.chainId],
     async () => {
       const commonPairs = getAllCommonPairs(tokenA, tokenB, maxHops)
       const pairs: Pair[] = (
@@ -58,14 +59,23 @@ export const usePairs = <T = Pair[]>(
         )
       ).filter(Boolean)
 
-      if (!pairs || pairs.length === 0) throw NoValidPairsError
+      if (
+        !pairs ||
+        pairs.length === 0
+        // !pairs.find((pair) => pair.involvesToken(tokenA) && pair.involvesToken(tokenB))
+      )
+        throw NoValidPairsError
 
       return pairs
     },
     {
-      enabled: !!tokenA?.address && !!tokenB?.address && !tokenA.equals(tokenB),
+      enabled: isValidPair && !!tokenA?.address && !!tokenB?.address && !tokenA.equals(tokenB),
       refetchInterval: AVERAGE_BLOCK_TIME[tokenA?.chainId],
       notifyOnChangeProps: 'tracked',
+      retry: false,
+      onError: (e) => {
+        if (e === NoValidPairsError) setValidPair(false) // stop refetching if pair has no liquidity
+      },
       ...queryOptions,
     },
   )
@@ -73,3 +83,6 @@ export const usePairs = <T = Pair[]>(
 
 export const usePair = (tokenA: Token, tokenB: Token) =>
   usePairs(tokenA, tokenB, 1, { select: (pairs) => pairs[0] })
+
+export type UsePairResult = UseQueryResult<Pair>
+export type UsePairsResult = UseQueryResult<Pair[]>

@@ -64,7 +64,6 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
       {isMounted &&
         data.connectors.map((connector) => {
           if (!connector.ready) return null
-          console.log('`wallet png', connector.name)
           return (
             <Button
               w="100%"

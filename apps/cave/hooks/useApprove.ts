@@ -56,7 +56,7 @@ export const useContractApprove = (
       const tokenContract = new Contract(token.address, erc20ABI, signer)
       return await tokenContract.approve(spender, amountToApprove)
     },
-    { enabled: false },
+    { enabled: false, retry: false },
   )
   const { data: receipt, isLoading: isWaitingTransactionReceipt } = useQuery<TransactionReceipt>(
     ['receipt', tx?.hash],
