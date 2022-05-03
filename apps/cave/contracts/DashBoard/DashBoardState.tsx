@@ -5,7 +5,7 @@ import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId
 import { useState } from 'react'
 import { useAccount } from 'wagmi'
 import { createAlchemyWeb3, Nft } from '@alch/alchemy-web3'
-const providers = new ethers.providers.InfuraProvider('ropsten', '5ad069733a1a48a897180e66a5fb8846')
+const providers = new ethers.providers.InfuraProvider('ropsten', '545e522b4c0e45078a25b86f3b646a9b')
 
 // ------------------------------------------------------------
 // Using 3 as ropsten network, later has to change to netWorkId
@@ -27,7 +27,6 @@ export async function getAllUserNfts(address: string) {
   })
   return nft.ownedNfts
 }
-
 export async function getUserPosition(address: string, index: number) {
   const stakingContract = new Contract(LIQUID_STAKING_ADDRESS[3], StakingV1Abi, providers)
   const userPositions = await getAllUsersPositionsID(address)

@@ -6,16 +6,19 @@ import { ButtonLink } from 'components/ButtonLink'
 import UserListPositionCard from './UserListPositionCard'
 import { getUserPositions } from 'contracts/DashBoard/DashBoardState'
 import { useAccount } from 'wagmi'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 
 const UserDashboardCard = (props: any) => {
   const [{ data: account }] = useAccount()
+  const netWorkId = useCurrentSupportedNetworkId()
   const [userContracts, setUserContracts] = useState(null)
 
   useEffect(() => {
-    setTimeout(() => {
-      if (account?.address && userContracts === null)
-        getUserPositions(account.address).then(setUserContracts)
-    }, 2500)
+    if (account?.address && userContracts === null)
+      getUserPositions(account.address).then((value) => {
+        console.log(value)
+        setUserContracts(value)
+      })
   }, [account])
 
   const userPosComps =
