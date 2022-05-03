@@ -19,7 +19,7 @@ import {
   useDisclosure,
   UseDisclosureReturn,
 } from '@concave/ui'
-import { useAddressTokenList } from 'components/AMM/hooks/useTokenList'
+import { useAddressTokenList } from 'hooks/useTokenList'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { BigNumber, Transaction } from 'ethers'

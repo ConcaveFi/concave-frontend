@@ -7,7 +7,6 @@ import { Token } from 'gemswap-sdk'
 import { Currency } from 'gemswap-sdk'
 import React, { useCallback, useState } from 'react'
 import { chain, useNetwork } from 'wagmi'
-import { useTokenList } from 'components/AMM/hooks/useTokenList'
 
 const CommonTokens = ({
   selected,
