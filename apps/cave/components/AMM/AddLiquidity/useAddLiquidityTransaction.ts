@@ -61,6 +61,7 @@ export const useAddLiquidityTransaction = (
   const [{ data: signer }] = useSigner()
   const routerContract = useContract<Contract>({
     addressOrName: ROUTER_ADDRESS[networkId],
+    // @ts-ignore
     contractInterface: RouterABI,
     signerOrProvider: signer,
   })

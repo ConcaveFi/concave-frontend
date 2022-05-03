@@ -1,15 +1,7 @@
-import {
-  Button,
-  FlexProps,
-  HStack,
-  NumericInput,
-  Stack,
-  Text,
-  useMultiStyleConfig,
-} from '@concave/ui'
+import { FlexProps, HStack, NumericInput, Stack, useMultiStyleConfig } from '@concave/ui'
+import { SelectCurrencyButton } from 'components/CurrencySelector/SelectCurrencyButton'
 import { Currency } from 'gemswap-sdk'
 import React from 'react'
-import { BondOutputSelect } from './BondOutputSelect'
 
 export function BondOutput({
   currency,
@@ -26,7 +18,7 @@ export function BondOutput({
     <Stack sx={{ ...styles.field, bg: 'none' }} align="end" justify="space-between" spacing={0}>
       <HStack justify="space-between" align="start">
         <NumericInput decimalScale={5} disabled={disabled} w="100%" value={value} />
-        <BondOutputSelect selected={currency} />
+        <SelectCurrencyButton selected={currency} onClick={() => null} isDisabled />
       </HStack>
     </Stack>
   )
