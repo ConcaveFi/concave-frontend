@@ -66,11 +66,10 @@ function LiquidStaking() {
     setMarginTop(isLargerThan1100 ? 8 : 0)
     setTextAlign(isLargerThan1100 ? 'right' : 'center')
     setGuideGap(isLargerThan1100 ? 14 : 7)
-    setConteinerHeight(isLargerThan600 ? '' : '1500px')
+    setConteinerHeight(isLargerThan1100 ? '' : '1550px')
     console.log('teste')
-  }, [isLargerThan1100, isLargerThan600])
+  }, [isLargerThan1100])
 
-  useEffect(() => {}, [isLargerThan600])
   return (
     <Box
       flex={1}
