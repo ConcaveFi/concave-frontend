@@ -11,7 +11,7 @@ const defaultOptions = {
   },
 }
 
-function Placeholder({ text }) {
+function Placeholder({ text, description }) {
   return (
     <Box
       mt={16}
@@ -26,7 +26,7 @@ function Placeholder({ text }) {
       <Box textAlign="center">
         <Text color="text.low" fontSize="4xl" fontWeight="bold">
           {text} <br />
-          Coming Soon
+          {description}
         </Text>
         <Flex justifyContent="center">
           <Box borderRadius="30px" overflow="hidden">

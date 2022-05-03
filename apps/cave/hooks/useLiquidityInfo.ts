@@ -1,4 +1,4 @@
-import { Pair } from 'gemswap-sdk'
+import { Fetcher, Pair } from 'gemswap-sdk'
 import { liquidityContractABI } from 'lib/liquidityContractABI'
 import { concaveProvider } from 'lib/providers'
 import { useEffect } from 'react'
@@ -6,7 +6,6 @@ import { useState } from 'react'
 import { chain } from 'wagmi'
 import { BigNumber, Contract } from 'ethers'
 import { CurrencyAmount, Token } from 'gemswap-sdk'
-import { findTokenByAddress } from 'components/AMM/hooks/useTokenList'
 import { formatUnits } from 'ethers/lib/utils'
 import { useCurrencyBalance } from './useCurrencyBalance'
 
@@ -18,6 +17,7 @@ export const useLiquidityInfo = (token: Token) => {
   const [pair, setPair] = useState<Pair>(null)
   const userBalance = useCurrencyBalance(token)
   const [userPoolShare, setUserPoolShare] = useState(0)
+
   useEffect(() => {
     if (!userBalance.isSuccess) {
       return
@@ -32,8 +32,12 @@ export const useLiquidityInfo = (token: Token) => {
       Promise.all([
         reserves._baseReserves as BigNumber,
         reserves._quoteReserves as BigNumber,
-        findTokenByAddress(selectedChain, liquidityContract.token0()),
-        findTokenByAddress(selectedChain, liquidityContract.token1()),
+        liquidityContract
+          .token0()
+          .then((address) => Fetcher.fetchTokenData(address, concaveProvider(selectedChain.id))),
+        liquidityContract
+          .token1()
+          .then((address) => Fetcher.fetchTokenData(address, concaveProvider(selectedChain.id))),
         liquidityContract.totalSupply(),
       ])
         .then(([amount0, amount1, token0, token1, totalSupply]) => {
@@ -49,10 +53,8 @@ export const useLiquidityInfo = (token: Token) => {
             setPair(new Pair(tokenB, tokenA, token.address))
           }
           setTotalSupply(totalSupply)
-          setUserPoolShare(
-            +formatUnits(userBalance.data.value, userBalance.data.decimals) /
-              +formatUnits(totalSupply, token.decimals),
-          )
+          const totalAmount = CurrencyAmount.fromRawAmount(token, totalSupply.toString())
+          setUserPoolShare(+totalAmount.toExact() / +userBalance.data.toExact())
           setLoading(false)
         })
         .catch((e) => {
@@ -60,7 +62,7 @@ export const useLiquidityInfo = (token: Token) => {
           setError(e)
         })
     })
-  }, [selectedChain, token.address, token.decimals, userBalance.data, userBalance.isSuccess])
+  }, [selectedChain, token, userBalance.data, userBalance.isSuccess])
 
   return [{ pair, token, totalSupply, userPoolShare, userBalance }, isLoading, error] as const
 }

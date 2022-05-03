@@ -3,12 +3,8 @@ import { SystemStyleInterpolation } from '@chakra-ui/theme-tools'
 import { toPx } from './toPx'
 
 const variants = {
-  primary: {
-    bg: 'stroke.primary',
-  },
-  secondary: {
-    bg: 'stroke.secondary',
-  },
+  primary: { bg: 'stroke.primary' },
+  secondary: { bg: 'stroke.secondary' },
 }
 
 export interface GradientBorderStyleProps extends BoxProps {

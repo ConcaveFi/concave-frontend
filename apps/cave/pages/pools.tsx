@@ -1,15 +1,17 @@
-import { Stack } from '@concave/ui'
+import { Flex, Heading, Text } from '@concave/ui'
+import { MyPositions } from 'components/Positions/MyPositions'
 import React from 'react'
-import GcnvTitle from 'components/GcnvTitle'
-import Placeholder from 'components/Placeholder'
+import { useAccount } from 'wagmi'
 
-function marketplace() {
+export default function PositionsView() {
+  const [{ data: account }] = useAccount()
+  if (!account) {
+    return <Text>Please, login</Text>
+  }
   return (
-    <Stack w="full">
-      <GcnvTitle title="Pools" description="" />
-      <Placeholder text="Pool Positions" />
-    </Stack>
+    <Flex direction="column" mt={8} gap={6}>
+      <Heading fontSize="2xl">My Liquidity Position</Heading>
+      <MyPositions account={account} />
+    </Flex>
   )
 }
-
-export default marketplace

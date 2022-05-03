@@ -19,7 +19,7 @@ import {
   Box,
 } from '@concave/ui'
 import { Percent } from 'gemswap-sdk'
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useReducer } from 'react'
 
 const SlippageTolerance = ({ value, onValueChange, onClickAuto }) => {
@@ -172,7 +172,7 @@ const useSettings = () => {
   )
 }
 
-export const Settings = ({ onClose }: { onClose: (settings: SwapSettings) => void }) => {
+export const Settings = ({ onChange }: { onChange: (settings: SwapSettings) => void }) => {
   const {
     deadline,
     slippageTolerance,
@@ -183,17 +183,17 @@ export const Settings = ({ onClose }: { onClose: (settings: SwapSettings) => voi
     toggleMultihops,
     toggleExpertMode,
   } = useSettings()
+  useEffect(() => {
+    onChange({ deadline, slippageTolerance, multihops, expertMode })
+  }, [onChange, deadline, slippageTolerance, multihops, expertMode])
 
   return (
-    <Popover
-      placement="top-end"
-      offset={[20, 5]}
-      onClose={() => onClose({ deadline, slippageTolerance, multihops, expertMode })}
-    >
+    <Popover placement="top-end" offset={[20, 5]}>
       {/* Chakra type bug, related to just released react 18, should be fixed soon 
        // @ts-ignore  */}
       <PopoverTrigger>
         <IconButton
+          onClick={(e) => e.stopPropagation()}
           px={2}
           _focus={{ transform: 'scale(1.12)', filter: 'drop-shadow(-1px 1px 2px #ffffff20)' }}
           _hover={{ transform: 'scale(1.06)', filter: 'drop-shadow(-1px 1px 2px #ffffff20)' }}

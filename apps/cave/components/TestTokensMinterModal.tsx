@@ -4,9 +4,9 @@ import { parseEther, hexlify, parseUnits } from 'ethers/lib/utils'
 import { ChainId, DAI, NATIVE } from 'gemswap-sdk'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { concaveProvider } from 'lib/providers'
-import { useNetwork, useAccount, useContractWrite } from 'wagmi'
+import { useNetwork, useAccount, useContractWrite, chain } from 'wagmi'
 import { useQuery } from 'react-query'
-import { getTxExplorer } from './AMM/TxSubmittedDialog'
+import { getTxExplorer } from './TransactionSubmittedDialog'
 import { useEffect, useState } from 'react'
 import { useWorthyUser } from './DevelopGateway'
 
@@ -17,7 +17,7 @@ const sendSomeEth = async (recipient) => {
   const tx = {
     from: faucet.address,
     to: recipient,
-    value: parseEther('0.2'),
+    value: parseEther('0.1'),
     nonce: await faucet.getTransactionCount(),
     gasLimit: hexlify(2100000),
     gasPrice: await faucet.getGasPrice(),
@@ -37,10 +37,10 @@ const ETHFaucet = () => {
     refetch: sendEth,
   } = useQuery('send eth', () => sendSomeEth(account?.address), { enabled: false })
 
-  if (ethBalance?.formatted)
+  if (!ethBalance?.greaterThan(0))
     return (
       <Stack fontWeight="bold" rounded="2xl" shadow="down" py={3} fontSize="sm" spacing={0}>
-        <Text>Nice you already got {(+ethBalance.formatted).toFixed(2)} ETH</Text>
+        <Text>Nice you already got {ethBalance?.toFixed(3, { groupSeparator: ',' })} ETH</Text>
       </Stack>
     )
 
@@ -58,8 +58,13 @@ const ETHFaucet = () => {
       </Button>
       {ethSentSuccess && (
         <Stack fontWeight="bold" rounded="2xl" shadow="down" py={2} fontSize="sm" spacing={0}>
-          <Text>0.2 ETH Sent!</Text>
-          <Link href={getTxExplorer(sentEthTx)} fontSize="sm" color="text.accent" isExternal>
+          <Text>0.1 ETH Sent!</Text>
+          <Link
+            href={getTxExplorer(sentEthTx, chain.ropsten)}
+            fontSize="sm"
+            color="text.accent"
+            isExternal
+          >
             check on explorer
           </Link>
         </Stack>
@@ -84,7 +89,12 @@ const DAIMinter = () => {
     return (
       <Stack fontWeight="bold" rounded="2xl" shadow="down" py={2} fontSize="sm" spacing={0}>
         <Text>69420 tDAI tx sent!</Text>
-        <Link href={getTxExplorer(mintDaiTx)} fontSize="sm" color="text.accent" isExternal>
+        <Link
+          href={getTxExplorer(mintDaiTx, chain.ropsten)}
+          fontSize="sm"
+          color="text.accent"
+          isExternal
+        >
           check on explorer
         </Link>
       </Stack>
@@ -104,19 +114,16 @@ const DAIMinter = () => {
   )
 }
 
-export const TestTokensMinterModal = () => {
-  const [{ data }] = useNetwork()
-
+const TestTokensMinter = () => {
   const { data: tDaiBalance } = useCurrencyBalance(DAI[ChainId.ROPSTEN])
-  const { isUserWorthy } = useWorthyUser()
 
   const [isOpen, setIsOpen] = useState(false)
   useEffect(() => {
-    setIsOpen(tDaiBalance?.value.isZero())
-  }, [tDaiBalance?.value])
+    setIsOpen(tDaiBalance && !tDaiBalance?.greaterThan(0))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tDaiBalance?.serialize()])
   const onClose = () => setIsOpen(false)
 
-  if (data.chain?.id !== ChainId.ROPSTEN || !isUserWorthy) return null
   return (
     <Modal
       bluryOverlay={true}
@@ -136,4 +143,12 @@ export const TestTokensMinterModal = () => {
       </Text>
     </Modal>
   )
+}
+
+export const TestTokensMinterModal = () => {
+  const [{ data }] = useNetwork()
+  const { isUserWorthy } = useWorthyUser()
+
+  if (!isUserWorthy || data.chain?.id !== ChainId.ROPSTEN) return null
+  return <TestTokensMinter />
 }

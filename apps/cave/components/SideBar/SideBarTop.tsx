@@ -29,7 +29,7 @@ function SideBarTop() {
 
       <Stack gap="1" align="flex-end" mt={7}>
         <ButtonLink
-          href="/treasury"
+          href="/dashboard"
           variant="primary.outline"
           size="medium"
           w="full"
