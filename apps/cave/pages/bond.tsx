@@ -83,7 +83,7 @@ export default function Bond() {
           })
           .catch(() => {})
       })
-    }, 3000)
+    }, 6000)
     if (intervalID !== interval) {
       clearTimeout(intervalID)
       setIntervalID(interval)
