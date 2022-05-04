@@ -30,8 +30,7 @@ const SubnavButton = ({ children, ...props }: ButtonLinkProps) => {
   return (
     <ButtonLink
       px={4}
-      py={3}
-      _odd={{ mt: -3 }}
+      py={'10px'}
       w="full"
       color="text.low"
       variant="secondary"
