@@ -85,7 +85,7 @@ export const useAddLiquidityTransaction = (
         isWaitingForConfirmation: false,
       }))
     } catch (error) {
-      if (error === UserRejectedRequestError)
+      if (error.message === 'User rejected the transaction')
         return setState((s) => ({ ...s, isWaitingForConfirmation: false }))
 
       setState((s) => ({ ...s, isError: true, error, isWaitingForConfirmation: false }))
