@@ -50,11 +50,9 @@ export function SwapPage() {
 
   const [{ data: account }] = useAccount()
   const [recipient, setRecipient] = useState('')
-  const swapTx = useSwapTransaction(trade.data, settings, recipient || account?.address)
-  useEffect(() => {
-    // clear input when transaction is sent
-    if (swapTx.isTransactionSent) onChangeInput(toAmount(0, trade.data.inputAmount.currency))
-  }, [swapTx.isTransactionSent, onChangeInput, trade.data.inputAmount.currency])
+  const swapTx = useSwapTransaction(trade.data, settings, recipient || account?.address, {
+    onTransactionSent: () => onChangeInput(toAmount(0, trade.data.inputAmount.currency)),
+  })
 
   const confirmationModal = useDisclosure()
 
