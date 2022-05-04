@@ -15,7 +15,7 @@ export const useLiquidityInfo = (token: Token) => {
   const [error, setError] = useState<unknown>()
   const [totalSupply, setTotalSupply] = useState<BigNumber>(BigNumber.from('0'))
   const [pair, setPair] = useState<Pair>(null)
-  const userBalance = useCurrencyBalance(token)
+  const userBalance = useCurrencyBalance(token, { watch: true })
   const [userPoolShare, setUserPoolShare] = useState(0)
 
   useEffect(() => {

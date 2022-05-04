@@ -25,7 +25,7 @@ export const CurrencyOutputField = ({
 
   const fiatPriceImpact = computeFiatValuePriceImpact(inputFiat.value, outputFiat.value)
 
-  const balance = useCurrencyBalance(currencyAmountOut?.currency)
+  const balance = useCurrencyBalance(currencyAmountOut?.currency, { watch: true })
 
   return (
     <CurrencyAmountField
