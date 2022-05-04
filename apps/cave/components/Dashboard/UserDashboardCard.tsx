@@ -69,7 +69,7 @@ const UserDashboardCard = () => {
             onClick={() => router.push('liquidstaking')}
           >
             <Flex fontSize={'16px'} fontWeight="700" grow={1} justify="center">
-              Let's buy some!
+              Lets buy some!
             </Flex>
           </Button>
         </Flex>
