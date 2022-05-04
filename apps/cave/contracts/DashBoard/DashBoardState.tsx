@@ -49,19 +49,21 @@ export const useDashBoardState = () => {
   const [{ data: account }] = useAccount()
   const netWorkId = useCurrentSupportedNetworkId()
   const [userContracts, setUserContracts] = useState(null)
+  const [totalLocked, setTotalLocked] = useState(undefined)
 
   useEffect(() => {
     if (account?.address && userContracts === null)
       getUserPositions(account.address, netWorkId)
-        .then((value) => {
-          setUserContracts(value)
+        .then((contract) => {
+          if (!contract) setTotalLocked(0)
+          setUserContracts(contract)
+          setTotalLocked(getTotalLocked(contract))
         })
-        .catch((error) => {
-          console.log('An error has occurred.')
+        .catch(() => {
+          setUserContracts(null)
+          setTotalLocked('0')
         })
   }, [account])
-
-  const totalLocked = getTotalLocked(userContracts)
 
   return {
     totalLocked,
@@ -74,11 +76,10 @@ export const useDashBoardState = () => {
 
 function getTotalLocked(contract: nftContract[]) {
   if (!contract) return undefined
-  const lockeds = contract?.map((current) => {
+  const totalLocked = contract?.map((current) => {
     if (current?.shares === undefined) return 0
     const { shares } = current
     return parseInt(shares?._hex, 16) / 1000000000000000000
   })
-  console.log(lockeds)
-  // const totalLocked = lockeds.reduce((last, current) => last + current)
+  return totalLocked?.reduce((last, current) => last + current)
 }

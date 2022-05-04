@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Text } from '@concave/ui'
+import { Box, Button, Flex, Spinner, Text } from '@concave/ui'
 import { useState } from 'react'
 
 interface UserDividendCardProps {
@@ -6,6 +6,7 @@ interface UserDividendCardProps {
 }
 const UserDividendCard = (props: UserDividendCardProps) => {
   const [active, setActive] = useState(false)
+  const isLoading = props.totalLocked === 'Loading'
   return (
     <Box
       pos="relative"
@@ -27,9 +28,12 @@ const UserDividendCard = (props: UserDividendCardProps) => {
           <Text fontSize={'11px'} fontWeight={600} textColor={'text.low'}>
             Total locked:
           </Text>
-          <Text fontSize={'17px'} fontWeight={700}>
-            {props.totalLocked}
-          </Text>
+          <Flex>
+            <Text fontSize={'17px'} fontWeight={700}>
+              {props.totalLocked}
+            </Text>
+            {isLoading && <Spinner height={'20px'} width={'20px'} ml={1} />}
+          </Flex>
         </Flex>
         {/* <Flex direction={'column'} alignItems="start" ml={6}>
           <Text fontSize={'11px'} fontWeight={600} textColor={'text.low'}>
