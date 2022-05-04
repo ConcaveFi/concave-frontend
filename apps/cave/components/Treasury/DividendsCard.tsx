@@ -2,37 +2,35 @@ import { Button, Card, Flex, Text, Image } from '@concave/ui'
 
 export default function DividendsCard() {
   return (
-    <Flex height={'full'} width="full" justify={'center'} align="center">
-      <Card
-        width={'900px'}
-        height="400px"
-        bg={'rgba(113, 113, 113, 0.01)'}
-        backdropFilter="blur(15px)"
-        shadow={'0px 4px 4px rgba(0, 0, 0, 0.25), inset 0px 0px 20px rgba(87, 124, 255, 0.3)'}
-        direction="row"
+    <Card
+      width={'900px'}
+      height="400px"
+      bg={'rgba(113, 113, 113, 0.01)'}
+      backdropFilter="blur(15px)"
+      shadow={'0px 4px 4px rgba(0, 0, 0, 0.25), inset 0px 0px 20px rgba(87, 124, 255, 0.3)'}
+      direction="row"
+    >
+      <Flex direction={'column'} maxWidth="360px" height={'full'}>
+        <DividendsInfo />
+        <Flex flex={1} justify="center" align={'end'}>
+          <PerformanceButton />
+        </Flex>
+      </Flex>
+      <Flex
+        direction={'column'}
+        flex={1}
+        justify="center"
+        align={'center'}
+        gap="20px"
+        height={'full'}
       >
-        <Flex direction={'column'} maxWidth="360px" height={'full'}>
-          <DividendsInfo />
-          <Flex flex={1} justify="center" align={'end'}>
-            <PerformanceButton />
-          </Flex>
+        <Flex gap={'20px'}>
+          <MonthCard />
+          <DividendsViewerCard />
         </Flex>
-        <Flex
-          direction={'column'}
-          flex={1}
-          justify="center"
-          align={'center'}
-          gap="20px"
-          height={'full'}
-        >
-          <Flex gap={'20px'}>
-            <MonthCard />
-            <DividendsViewerCard />
-          </Flex>
-          <PeriodsCards />
-        </Flex>
-      </Card>
-    </Flex>
+        <PeriodsCards />
+      </Flex>
+    </Card>
   )
 }
 const DividendsViewerCard = () => {

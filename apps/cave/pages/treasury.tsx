@@ -1,5 +1,6 @@
 import { Box, Card, Container, Flex, Heading, Image, Spinner, Stack, Text } from '@concave/ui'
 import DividendsCard from 'components/Treasury/DividendsCard'
+import TreasuryManagementCard from 'components/Treasury/TreasuryManagementCard'
 import { Token } from 'gemswap-sdk'
 import { useLiquidityInfo } from 'hooks/useLiquidityInfo'
 import { fetchPortfolio } from 'lib/debank'
@@ -57,7 +58,13 @@ export default function Treasury() {
   const { data: treasury, isSuccess } = useQuery(['portfolio', TREASURY_ADDRESS], () =>
     fetchPortfolio(TREASURY_ADDRESS),
   )
-  return <DividendsCard />
+  return (
+    <Flex height={'full'} width="full" justify={'center'} align="center">
+      <TreasuryManagementCard onChange={() => {}} />
+      {/* <DividendsCard /> */}
+    </Flex>
+  )
+  // <DividendsCard />
   // if (!isSuccess || isLoading)
   //   return (
   //     <Container maxWidth="container.lg" pt={16}>
