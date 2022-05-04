@@ -76,7 +76,6 @@ export function BondBuyCard() {
         }}
         CurrencySelector={SelectBondCurrency}
       />
-      <DownwardIcon />
       <BondOutput disabled={true} currency={currencyOut} value={amountOut} />
       <HStack align="center" justify="end" py={1}>
         <GasPrice />
