@@ -4,7 +4,7 @@ import { Button, Flex } from '@concave/ui'
 export const DownwardIcon = ({}) => {
   return (
     <Flex align="center" justify="center">
-      <Button
+      {/* <Button
         shadow="Up Small"
         _focus={{ shadow: 'Up Small' }}
         _hover={{ shadow: 'Up Big' }}
@@ -14,7 +14,7 @@ export const DownwardIcon = ({}) => {
         rounded="3xl"
       >
         <ExpandArrowIcon />
-      </Button>
+      </Button> */}
     </Flex>
   )
 }
