@@ -45,22 +45,17 @@ export function CurrencyAmountField({
     onChangeAmount(toAmount(internalValue, newCurrency))
   }
 
-  const inputValue = isFocused.current
-    ? internalValue || ''
-    : currencyAmount?.greaterThan(0)
-    ? currencyAmount.toExact()
-    : ''
+  const inputValue = isFocused.current ? internalValue : currencyAmount?.toExact()
 
   return (
     <Stack sx={{ ...styles.field, bg: 'none' }} justify="space-between" spacing={0}>
       <HStack justify="space-between" align="start">
         <NumericInput
-          decimalScale={5}
           disabled={disabled}
           w="100%"
           onFocus={() => (isFocused.current = true)}
           onBlur={() => (isFocused.current = false)}
-          value={inputValue}
+          value={+inputValue === 0 ? '' : inputValue}
           onValueChange={handleChange}
         />
         <CurrencySelector onSelect={onSelectCurrency} selected={currencyAmount?.currency} />
