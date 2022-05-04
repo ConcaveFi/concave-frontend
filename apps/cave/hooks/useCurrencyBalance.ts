@@ -2,7 +2,7 @@ import { AVERAGE_BLOCK_TIME } from 'constants/blockchain'
 import { BigNumber, Contract } from 'ethers'
 import { Currency, CurrencyAmount, NATIVE } from 'gemswap-sdk'
 import { useQuery } from 'react-query'
-import { erc20ABI, useAccount, useNetwork, useProvider, useSigner } from 'wagmi'
+import { erc20ABI, useAccount, useNetwork, useSigner } from 'wagmi'
 
 export const useCurrencyBalance = (currency: Currency) => {
   const [{ data: account }] = useAccount()
@@ -10,9 +10,8 @@ export const useCurrencyBalance = (currency: Currency) => {
   const [{ data: network }] = useNetwork()
   const chainId = network.chain?.id
   return useQuery(
-    ['balance', currency?.symbol, currency?.wrapped.address || null],
+    ['balance', currency?.symbol, currency?.wrapped.address],
     async () => {
-      console.log('fetching balance', currency.symbol, currency.wrapped.address)
       if (currency.isNative) {
         const b = (await signer.getBalance()) as BigNumber
         return CurrencyAmount.fromRawAmount(NATIVE[chainId], b.toString())
