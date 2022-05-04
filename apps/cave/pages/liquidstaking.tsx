@@ -48,7 +48,6 @@ const StakingGroup: Array<StakingGroupProps> = [
 
 function LiquidStaking() {
   const [isLargerThan1100] = useMediaQuery('(min-width: 1100px)')
-  const [isLargerThan600] = useMediaQuery('(min-width: 600px)')
   const [stakingGap, setStakingGap] = useState(6)
   const [wrap, setWrap] = useState<'wrap' | 'nowrap'>('nowrap')
   const [width, setWidth] = useState('')
