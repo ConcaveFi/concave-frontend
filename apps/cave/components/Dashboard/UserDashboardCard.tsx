@@ -15,7 +15,7 @@ const UserDashboardCard = () => {
       ? userContracts.map((contract, index) => <UserPositionCard key={index} contract={contract} />)
       : ''
 
-  const total = totalLocked ? totalLocked + ' CNV' : 'Loading...'
+  const total = totalLocked ? totalLocked + ' CNV' : '-'
 
   return (
     <Card p={3} gap={2} variant="primary" h="945px" shadow="down" w="780px">
