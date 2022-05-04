@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { RouterABI, ROUTER_ADDRESS, Currency, CurrencyAmount, Percent } from 'gemswap-sdk'
 import { Contract } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { useContract, useSigner } from 'wagmi'
+import { useContract, UserRejectedRequestError, useSigner } from 'wagmi'
 import { parseUnits } from 'ethers/lib/utils'
 const currencyAmountToBigNumber = (currency: CurrencyAmount<Currency>) => {
   return parseUnits(currency.toFixed(currency.currency.decimals))
@@ -85,6 +85,9 @@ export const useAddLiquidityTransaction = (
         isWaitingForConfirmation: false,
       }))
     } catch (error) {
+      if (error === UserRejectedRequestError)
+        return setState((s) => ({ ...s, isWaitingForConfirmation: false }))
+
       setState((s) => ({ ...s, isError: true, error, isWaitingForConfirmation: false }))
     }
   }
