@@ -75,5 +75,6 @@ function getTotalLocked(contract: nftContract[]) {
     const { shares } = current
     return parseInt(shares?._hex, 16) / 1000000000000000000
   })
-  const totalLocked = lockeds.reduce((last, current) => last + current)
+  // This line crashing app, does it do anything?
+  // const totalLocked = lockeds.reduce((last, current) => last + current)
 }
