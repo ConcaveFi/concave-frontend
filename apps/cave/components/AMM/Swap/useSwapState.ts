@@ -25,6 +25,7 @@ export const useSwapState = ({ multihops }: SwapSettings) => {
     initialCurrencyFields,
   )
 
+  // TODO: shouldn't be using useEffect for this, replace with a onNetworkChange handler or something, after updating wagmi
   useEffect(() => {
     setFieldCurrency(initialCurrencyFields)
     setExactAmount(toAmount(0, initialCurrencyFields.first))
