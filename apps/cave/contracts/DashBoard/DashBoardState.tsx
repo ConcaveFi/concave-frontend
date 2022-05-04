@@ -52,9 +52,13 @@ export const useDashBoardState = () => {
 
   useEffect(() => {
     if (account?.address && userContracts === null)
-      getUserPositions(account.address, netWorkId).then((value) => {
-        setUserContracts(value)
-      })
+      getUserPositions(account.address, netWorkId)
+        .then((value) => {
+          setUserContracts(value)
+        })
+        .catch((error) => {
+          console.log('An error has occurred.')
+        })
   }, [account])
 
   const totalLocked = getTotalLocked(userContracts)
