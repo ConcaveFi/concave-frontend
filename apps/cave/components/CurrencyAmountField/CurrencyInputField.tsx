@@ -11,6 +11,7 @@ type CurrencyInputFieldProps = {
   currencyAmountIn: CurrencyAmount<Currency>
   onChangeAmount: (value: CurrencyAmount<Currency>) => void
   CurrencySelector: CurrencySelectorComponent
+  debounce?: number
 }
 
 const MIN_FOR_GAS = '0.01'
@@ -28,6 +29,7 @@ export const CurrencyInputField = ({
   currencyAmountIn,
   onChangeAmount,
   CurrencySelector,
+  debounce,
 }: CurrencyInputFieldProps) => {
   const inputFiat = useFiatValue(currencyAmountIn)
   const balance = useCurrencyBalance(currencyAmountIn?.currency, { watch: true })
@@ -37,6 +39,7 @@ export const CurrencyInputField = ({
       currencyAmount={currencyAmountIn}
       onChangeAmount={onChangeAmount}
       CurrencySelector={CurrencySelector}
+      debounce={debounce}
     >
       <HStack justify="space-between" align="end" textColor="text.low" w="full">
         <Text isTruncated fontWeight="bold" fontSize="sm" mr={2}>
