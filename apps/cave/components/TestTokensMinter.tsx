@@ -45,8 +45,6 @@ const ETHFaucet = () => {
 
   const { data: faucetBalance } = useQuery('faucet balance', () => faucet.getBalance())
 
-  const { data: faucetBalance } = useQuery('faucet balance', () => faucet.getBalance())
-
   const {
     data: sentEthTx,
     isSuccess: ethSentSuccess,
