@@ -53,7 +53,11 @@ function StakeInfo(props: any) {
         </Stack>
 
         <Text mt={6} color="text.low" fontSize="sm">
-          Staking terms: Lorem ipsum dolor sit amet,consectetur adipiscing elit
+          The ${props.period} staking term will accrue CNV from Bond Emissions by capturing $
+          {periodToBondRevenueMapping[`${props.period}`]} of the growth generated from purchased
+          bonds every 8 hours. Additionally, the ${props.period} term receives a $
+          {periodToRewardsBoost[`${props.period}`]} boost on Base CNV Emissions and the Quarterly
+          Dividend derived from Protocol profits in Non CNV assets.
         </Text>
 
         <Text mt={5} color="text.low" fontSize="sm" fontWeight="semibold">

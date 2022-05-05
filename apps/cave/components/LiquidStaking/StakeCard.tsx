@@ -90,7 +90,7 @@ function StakeCard(props) {
       <Card width={stakeWidth} variant="primary" px={4} py={6} shadow="up" gap={1}>
         <Box mx="auto" py={5} w="full" h="333px" shadow="down" borderRadius="100px/90px">
           <Text color="text.low" fontSize="sm">
-            Stake period
+            Stake Period
           </Text>
           <Text fontSize="lg" fontWeight="bold">
             {props.period}
@@ -123,7 +123,7 @@ function StakeCard(props) {
             >
               <Text w="150px">
                 {pool.data
-                  ? `${Number(ethers.utils.formatEther(pool.data?.balance)).toFixed(1)}`
+                  ? `${Number(ethers.utils.formatEther(pool.data?.balance)).toFixed(0)}`
                   : 'Fetching...'}
               </Text>
             </Box>
@@ -132,7 +132,7 @@ function StakeCard(props) {
                 ? `${Number(
                     +ethers.utils.formatEther(pool.data?.balance) +
                       +ethers.utils.formatEther(stakingCap.data),
-                  ).toFixed(1)}`
+                  ).toFixed(0)}`
                 : 'Fetching...'}
             </Text>
           </Box>
@@ -177,13 +177,15 @@ function StakeCard(props) {
             <VStack spacing={8}>
               <StakeInfo
                 period={props.period}
-                stakedCNV={pool.data ? ethers.utils.formatEther(pool.data?.balance) : '0'}
+                stakedCNV={
+                  pool.data ? Number(ethers.utils.formatEther(pool.data?.balance)).toFixed(0) : '0'
+                }
                 CNVCap={
                   pool.data && stakingCap.data
                     ? `${Number(
                         +ethers.utils.formatEther(pool.data?.balance) +
                           +ethers.utils.formatEther(stakingCap?.data),
-                      ).toFixed(1)}`
+                      ).toFixed(0)}`
                     : '0'
                 }
                 capPercentage={capPercentage}

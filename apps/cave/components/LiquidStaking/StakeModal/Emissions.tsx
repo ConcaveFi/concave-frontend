@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Flex, HStack, Image, Text, useMediaQuery } from '@concave/ui'
+import { Box, Flex, HStack, Image, Text, Tooltip, useMediaQuery } from '@concave/ui'
 function Emissions(props: any) {
   const [isLargerThan700] = useMediaQuery('(min-width: 700px)')
 
@@ -29,12 +29,18 @@ function Emissions(props: any) {
           mt={isLargerThan700 ? 0 : 8}
         >
           <HStack>
-            {/* <Image
-              src={`/assets/liquidstaking/modal-moreinfo-logo.svg`}
-              h={5}
-              w={5}
-              alt="more info logo"
-            /> */}
+            <Tooltip
+              label="Anti-dilutive bond emissions ensure staking positions are rewarded with a share of any new supply minted from bonds that are purchased. Staking positions recieve a share of this growth compounded at 8hr intervals."
+              bg="gray.900"
+              color="white"
+              placement="left-start"
+            >
+              <Image
+                mx="auto"
+                src={`/assets/liquidstaking/modal-moreinfo-logo.svg`}
+                alt="arrow down logo"
+              />
+            </Tooltip>
             <Text mx={margin} color="text.low" fontSize="sm">
               Bonding Emissions:
             </Text>
@@ -46,13 +52,18 @@ function Emissions(props: any) {
             +
           </Text>
           <HStack>
-            {/* <Image
-              // 
-              ml={6}
-              src={`/assets/liquidstaking/modal-moreinfo-logo.svg`}
-              h={5}
-              alt="more info logo"
-            /> */}
+            <Tooltip
+              label="Base emissions ensure that staking positions receive continuous CNV rewards throughout the term. Staking positions receive a boost in base emissions as a function of term length."
+              bg="gray.900"
+              color="white"
+              placement="left-start"
+            >
+              <Image
+                mx="auto"
+                src={`/assets/liquidstaking/modal-moreinfo-logo.svg`}
+                alt="arrow down logo"
+              />
+            </Tooltip>
             <Text mx={margin} color="text.low" fontSize="sm">
               Base Emissions:
             </Text>
@@ -64,11 +75,18 @@ function Emissions(props: any) {
             +
           </Text>
           <HStack>
-            {/* <Image              
-              src={`/assets/liquidstaking/modal-moreinfo-logo.svg`}
-              h={5}
-              alt="more info logo"
-            /> */}
+            <Tooltip
+              label="Quarterly dividends ensure that stakers  receive a share of profits in non CNV assets from all yield bearing products and services. Staking positions receive a boost in dividend as a function of term length."
+              bg="gray.900"
+              color="white"
+              placement="left-start"
+            >
+              <Image
+                mx="auto"
+                src={`/assets/liquidstaking/modal-moreinfo-logo.svg`}
+                alt="arrow down logo"
+              />
+            </Tooltip>
             <Text mx={margin} color="text.low" fontSize="sm">
               Quarterly Dividends:
             </Text>
@@ -112,10 +130,22 @@ function Emissions(props: any) {
           <Text color="text.low" fontSize="sm">
             {props.vaprText}
           </Text>
-          <Text fontSize="lg" fontWeight="bold">
+          <Text fontSize="lg" fontWeight="bold" mb="2">
             {/* {props.vapr} % */}
             Calculating
           </Text>
+          <Tooltip
+            label="Total vAPR aggregates rewards associated with each staking position including rewards from bonding activity, base emissions and the quarterly dividend."
+            color="white"
+            bg="gray.800"
+            placement="left-start"
+          >
+            <Image
+              mx="auto"
+              src={`/assets/liquidstaking/modal-moreinfo-logo.svg`}
+              alt="arrow down logo"
+            />
+          </Tooltip>
           {isLargerThan700 && (
             <Image
               mx="auto"
@@ -125,6 +155,7 @@ function Emissions(props: any) {
           )}
           {isLargerThan700 && informations()}
         </Flex>
+
         {!isLargerThan700 && (
           <Image
             mx="auto"

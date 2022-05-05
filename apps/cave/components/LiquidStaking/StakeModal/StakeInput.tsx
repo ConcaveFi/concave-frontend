@@ -69,7 +69,7 @@ function StakeInput(props) {
 
   return (
     <Box>
-      <Card w="350px" px={4} py={5}>
+      <Card shadow="down" w="350px" px={4} py={5}>
         <Flex justify="space-between" alignItems="center">
           <Input
             value={stakeInput}
@@ -144,7 +144,7 @@ function StakeInput(props) {
           </Button>
         )}
 
-        <Button
+        {/* <Button
           mt={5}
           onClick={() => router.push('/dashboard')}
           fontWeight="bold"
@@ -157,7 +157,7 @@ function StakeInput(props) {
           mx="auto"
         >
           Check position
-        </Button>
+        </Button> */}
       </Box>
     </Box>
   )
