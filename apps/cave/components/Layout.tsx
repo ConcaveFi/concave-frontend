@@ -6,7 +6,7 @@ export const DefaultLayout = ({ children }) => {
   return (
     <Flex as="main" direction={{ base: 'column', md: 'row' }}>
       <SideBar />
-      <Container display="flex" h={{ base: '150vh', md: '100vh' }} maxWidth="container.xl">
+      <Container display="flex" mb="25vh" maxWidth="container.xl">
         {children}
       </Container>
     </Flex>
