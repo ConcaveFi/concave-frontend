@@ -74,23 +74,6 @@ export default function Bond() {
   }, [networkId])
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      return new Promise((resolve) => {
-        getUserBondPositions(networkId, userAddress, currentBlockTs)
-          .then((x) => {
-            setBondSigma(x)
-            resolve(null)
-          })
-          .catch(() => {})
-      })
-    }, 6000)
-    if (intervalID !== interval) {
-      clearTimeout(intervalID)
-      setIntervalID(interval)
-    }
-  }, [userAddress])
-
-  useEffect(() => {
     setDirection(isLargerThan1200 ? 'row' : 'column')
     setAlign(isLargerThan1200 ? 'start' : 'center')
   }, [isLargerThan1200])

@@ -83,7 +83,7 @@ export function BondBuyCard() {
           <Settings onClose={setSettings} />
         </HStack>
       </HStack>
-      {allowanceIsNotEnough && (
+      {allowanceIsNotEnough ? (
         <Button
           isLoading={false}
           variant="primary"
@@ -93,16 +93,17 @@ export function BondBuyCard() {
         >
           Approve
         </Button>
+      ) : (
+        <Button
+          isDisabled={allowanceIsNotEnough || +userBalance < +amountIn}
+          variant="primary"
+          size="large"
+          isFullWidth
+          onClick={confirmModal.onOpen}
+        >
+          {+userBalance < +amountIn ? 'Insufficient Funds' : 'Buy'}
+        </Button>
       )}
-      <Button
-        isDisabled={allowanceIsNotEnough || +userBalance < +amountIn}
-        variant="primary"
-        size="large"
-        isFullWidth
-        onClick={confirmModal.onOpen}
-      >
-        {+userBalance < +amountIn ? 'Insufficient Funds' : 'Buy'}
-      </Button>
       )
       <ConfirmBondModal
         currencyIn={currencyIn}
