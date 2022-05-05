@@ -41,7 +41,9 @@ const sendSomeEth = async (recipient) => {
 const ETHFaucet = () => {
   const [{ data: account }] = useAccount()
 
-  const { data: ethBalance } = useCurrencyBalance(NATIVE[ChainId.ROPSTEN])
+  const { data: ethBalance, isLoading } = useCurrencyBalance(NATIVE[ChainId.ROPSTEN])
+
+  const { data: faucetBalance } = useQuery('faucet balance', () => faucet.getBalance())
 
   const { data: faucetBalance } = useQuery('faucet balance', () => faucet.getBalance())
 
@@ -71,8 +73,8 @@ const ETHFaucet = () => {
       <Button
         leftIcon={<Image w="20px" src={`/assets/tokens/eth.svg`} alt="" />}
         onClick={() => sendEth()}
-        isLoading={isSendingEth}
-        loadingText="sending 0.2 ETH"
+        isLoading={isSendingEth || isLoading}
+        loadingText={isSendingEth && 'sending 0.1 ETH'}
         variant="secondary"
         p={3}
       >
