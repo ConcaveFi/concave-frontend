@@ -18,7 +18,7 @@ const periodToPoolParameter = {
 
 function StakeInput(props) {
   const cnvPrice = useFetchApi('/api/cnv')
-  const [stakeInput, setStakeInput] = useState(0)
+  const [stakeInput, setStakeInput] = useState('0')
   const [{ data: account }] = useAccount()
   const [{ data }] = useNetwork()
   const { allowance, ...approve } = useApprove(CNV[data.chain.id], STAKING_CONTRACT[data.chain.id])
@@ -28,11 +28,12 @@ function StakeInput(props) {
   // approve.sendApproveTx()
 
   useEffect(() => {
-    if (allowance && +allowance.formatted > stakeInput) {
+    if (allowance && +allowance.formatted > +stakeInput) {
       setAllowanceEnough(true)
     } else {
       setAllowanceEnough(false)
     }
+    if (stakeInput === '') setStakeInput('0')
   }, [allowance, stakeInput])
 
   const [cnvBalance, getBalance] = useBalance({
@@ -42,7 +43,7 @@ function StakeInput(props) {
   })
 
   const setMax = () => {
-    setStakeInput(+cnvBalance.data?.formatted)
+    setStakeInput(cnvBalance.data?.formatted)
   }
 
   const approveCNV = () => {
@@ -59,7 +60,7 @@ function StakeInput(props) {
     {
       args: [
         account.address,
-        ethers.utils.parseEther(String(stakeInput)),
+        ethers.utils.parseEther(String(+stakeInput)),
         periodToPoolParameter[`${props.period}`],
       ],
     },
@@ -73,7 +74,7 @@ function StakeInput(props) {
         <Flex justify="space-between" alignItems="center">
           <Input
             value={stakeInput}
-            onChange={(e) => setStakeInput(Number(e.target.value))}
+            onChange={(e) => setStakeInput(String(+e.target.value))}
             ml={-1}
             shadow="none"
             w="60%"
@@ -92,7 +93,7 @@ function StakeInput(props) {
           <Text color="text.low" fontSize="md" fontWeight="bold">
             {/* Loading Price */}
             {(cnvPrice as any)?.data
-              ? `$${(stakeInput * (cnvPrice as any)?.data.cnv).toFixed(2)}`
+              ? `$${(+stakeInput * (cnvPrice as any)?.data.cnv).toFixed(2)}`
               : 'Loading price'}
           </Text>
           <HStack spacing={2}>
@@ -118,7 +119,7 @@ function StakeInput(props) {
             h="40px"
             size="large"
             mx="auto"
-            disabled={stakeInput > +cnvBalance.data?.formatted}
+            disabled={+stakeInput > +cnvBalance.data?.formatted}
           >
             {approveButtonText}
           </Button>
@@ -137,7 +138,7 @@ function StakeInput(props) {
             size="large"
             mx="auto"
             disabled={
-              stakeInput == 0 || stakeInput > +cnvBalance.data?.formatted || lockData.loading
+              +stakeInput == 0 || +stakeInput > +cnvBalance.data?.formatted || lockData.loading
             }
           >
             Stake CNV
