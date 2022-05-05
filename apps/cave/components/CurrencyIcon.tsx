@@ -1,5 +1,5 @@
 import { Avatar, AvatarProps } from '@chakra-ui/react'
-import { CHAIN_NAME, Currency } from 'gemswap-sdk'
+import { CHAIN_NAME, Currency } from '@concave/gemswap-sdk'
 import { useReducer } from 'react'
 
 export type CurrencyIconProps = {

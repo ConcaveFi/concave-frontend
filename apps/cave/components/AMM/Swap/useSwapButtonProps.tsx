@@ -1,7 +1,7 @@
+import { ROUTER_ADDRESS } from '@concave/gemswap-sdk'
 import { ButtonProps } from '@concave/ui'
 import { useModals } from 'contexts/ModalsContext'
 import { isAddress } from 'ethers/lib/utils'
-import { ROUTER_ADDRESS } from 'gemswap-sdk'
 import { useApprove } from 'hooks/useApprove'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { usePermit } from 'hooks/usePermit'

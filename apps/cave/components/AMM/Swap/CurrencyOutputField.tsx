@@ -1,11 +1,11 @@
+import { Currency, CurrencyAmount, Percent } from '@concave/gemswap-sdk'
 import { Flex, HStack, Text } from '@concave/ui'
-import { Currency, CurrencyAmount, Percent } from 'gemswap-sdk'
-import { Balance } from '../../CurrencyAmountField/Balance'
-import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
-import { useFiatValue } from '../hooks/useFiatPrice'
-import { CurrencyAmountField } from '../../CurrencyAmountField'
-import { computeFiatValuePriceImpact } from './computeFiatValuePriceImpact'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
+import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
+import { CurrencyAmountField } from '../../CurrencyAmountField'
+import { Balance } from '../../CurrencyAmountField/Balance'
+import { useFiatValue } from '../hooks/useFiatPrice'
+import { computeFiatValuePriceImpact } from './computeFiatValuePriceImpact'
 
 type CurrencyOutputFieldProps = {
   currencyAmountIn: CurrencyAmount<Currency>

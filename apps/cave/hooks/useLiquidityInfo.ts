@@ -1,11 +1,11 @@
-import { Fetcher, Pair } from 'gemswap-sdk'
+import { Fetcher, Pair } from '@concave/gemswap-sdk'
 import { liquidityContractABI } from 'lib/liquidityContractABI'
 import { concaveProvider } from 'lib/providers'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import { chain } from 'wagmi'
 import { BigNumber, Contract } from 'ethers'
-import { CurrencyAmount, Token } from 'gemswap-sdk'
+import { CurrencyAmount, Token } from '@concave/gemswap-sdk'
 import { formatUnits } from 'ethers/lib/utils'
 import { useCurrencyBalance } from './useCurrencyBalance'
 

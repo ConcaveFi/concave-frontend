@@ -1,6 +1,6 @@
 import { useQuery, UseQueryResult } from 'react-query'
 import { Chain, chain, useNetwork } from 'wagmi'
-import { Token } from 'gemswap-sdk'
+import { Token } from '@concave/gemswap-sdk'
 
 const concaveTokenList = (networkName: string) =>
   `/assets/tokenlists/${networkName.toLowerCase()}/concave.json`

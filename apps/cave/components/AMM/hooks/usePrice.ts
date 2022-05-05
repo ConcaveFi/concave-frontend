@@ -1,4 +1,4 @@
-import { Price, Currency, TradeType } from 'gemswap-sdk'
+import { Price, Currency, TradeType } from '@concave/gemswap-sdk'
 import { useMemo } from 'react'
 import { toAmount } from 'utils/toAmount'
 import { useTrade } from './useTrade'

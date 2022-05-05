@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, JSBI, Percent } from 'gemswap-sdk'
+import { Currency, CurrencyAmount, JSBI, Percent } from '@concave/gemswap-sdk'
 
 export const ONE_HUNDRED_PERCENT = new Percent('1')
 

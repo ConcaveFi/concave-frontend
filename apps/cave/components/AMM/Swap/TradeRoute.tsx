@@ -1,6 +1,6 @@
+import { Currency, Route } from '@concave/gemswap-sdk'
 import { Box, Flex, HStack, Stack, Text } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
-import { Currency, Route } from 'gemswap-sdk'
 
 export const TradeRoute = ({ route }: { route: Route<Currency, Currency> }) => {
   return (

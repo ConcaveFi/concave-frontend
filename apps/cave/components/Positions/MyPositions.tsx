@@ -1,3 +1,4 @@
+import { NATIVE, ROUTER_ADDRESS, Token } from '@concave/gemswap-sdk'
 import { SpinIcon } from '@concave/icons'
 import {
   Accordion,
@@ -19,16 +20,15 @@ import {
   useDisclosure,
   UseDisclosureReturn,
 } from '@concave/ui'
-import { useAddressTokenList } from 'hooks/useTokenList'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { BigNumber, Transaction } from 'ethers'
-import { NATIVE, ROUTER_ADDRESS, Token } from 'gemswap-sdk'
 import { useApprovalWhenNeeded } from 'hooks/useAllowance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { LiquidityInfoData, useLiquidityInfo } from 'hooks/useLiquidityInfo'
 import { precision } from 'hooks/usePrecision'
 import { RemoveLiquidityState, useRemoveLiquidity } from 'hooks/useRemoveLiquidity'
+import { useAddressTokenList } from 'hooks/useTokenList'
 import React, { useState } from 'react'
 
 export const MyPositions = ({ account }) => {

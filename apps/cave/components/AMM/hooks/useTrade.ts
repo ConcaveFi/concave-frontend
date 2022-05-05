@@ -1,4 +1,11 @@
-import { Trade, Currency, CurrencyAmount, TradeType, Pair, BestTradeOptions } from 'gemswap-sdk'
+import {
+  Trade,
+  Currency,
+  CurrencyAmount,
+  TradeType,
+  Pair,
+  BestTradeOptions,
+} from '@concave/gemswap-sdk'
 import { UseQueryResult } from 'react-query'
 import { toAmount } from '../../../utils/toAmount'
 

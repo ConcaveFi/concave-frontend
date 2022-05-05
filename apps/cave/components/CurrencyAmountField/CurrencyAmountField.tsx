@@ -1,7 +1,7 @@
+import { Currency, CurrencyAmount } from '@concave/gemswap-sdk'
 import { FlexProps, HStack, NumericInput, Stack, useMultiStyleConfig } from '@concave/ui'
 import { CurrencySelectorComponent } from 'components/CurrencySelector/CurrencySelector'
-import { Currency, CurrencyAmount } from 'gemswap-sdk'
-import React, { ReactNode, useEffect, useRef, useState, FC } from 'react'
+import React, { ReactNode, useEffect, useRef, useState } from 'react'
 import { useDebounce } from 'react-use'
 import { toAmount } from '../../utils/toAmount'
 

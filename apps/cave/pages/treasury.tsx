@@ -1,5 +1,5 @@
+import { Token } from '@concave/gemswap-sdk'
 import { Card, Container, Flex, Heading, Image, Spinner, Stack, Text } from '@concave/ui'
-import { Token } from 'gemswap-sdk'
 import { useLiquidityInfo } from 'hooks/useLiquidityInfo'
 import { fetchPortfolio } from 'lib/debank'
 import { useQuery } from 'react-query'

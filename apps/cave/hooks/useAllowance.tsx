@@ -1,6 +1,6 @@
+import { CurrencyAmount, ROUTER_ADDRESS, Token } from '@concave/gemswap-sdk'
 import { Button, ButtonProps } from '@concave/ui'
 import { BigNumberish } from 'ethers'
-import { CurrencyAmount, ROUTER_ADDRESS, Token } from 'gemswap-sdk'
 import { useApprove } from './useApprove'
 
 export const useApproval = (currencyAmount: CurrencyAmount<Token>) => {
