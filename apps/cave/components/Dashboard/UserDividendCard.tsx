@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Text } from '@concave/ui'
+import { Box, Button, Flex, Spinner, Text } from '@concave/ui'
 import { useState } from 'react'
 
 interface UserDividendCardProps {
@@ -6,6 +6,7 @@ interface UserDividendCardProps {
 }
 const UserDividendCard = (props: UserDividendCardProps) => {
   const [active, setActive] = useState(false)
+  const isLoading = props.totalLocked === 'Loading'
   return (
     <Box
       pos="relative"
@@ -27,24 +28,19 @@ const UserDividendCard = (props: UserDividendCardProps) => {
           <Text fontSize={'11px'} fontWeight={600} textColor={'text.low'}>
             Total locked:
           </Text>
-          <Text fontSize={'17px'} fontWeight={700}>
-            {props.totalLocked}
-          </Text>
+          <Flex>
+            <Text fontSize={'17px'} fontWeight={700}>
+              {props.totalLocked}
+            </Text>
+            {isLoading && <Spinner height={'20px'} width={'20px'} ml={1} />}
+          </Flex>
         </Flex>
-        {/* <Flex direction={'column'} alignItems="start" ml={6}>
-          <Text fontSize={'11px'} fontWeight={600} textColor={'text.low'}>
-            Your Dividends Share:
-          </Text>
-          <Text fontSize={'17px'} fontWeight={700}>
-            0.00323%
-          </Text>
-        </Flex> */}
         <Flex direction={'column'} alignItems="start" ml={6}>
           <Text fontSize={'11px'} fontWeight={600} textColor={'text.low'}>
             Next Dividend Date:
           </Text>
           <Text fontSize={'17px'} fontWeight={700}>
-            07.04.2022
+            07/04/2022
           </Text>
         </Flex>
         <Flex direction={'column'} alignItems="start" ml={6}>
@@ -55,7 +51,7 @@ const UserDividendCard = (props: UserDividendCardProps) => {
             0.0
           </Text>
         </Flex>{' '}
-        <Flex flex={1} direction={'column'} textAlign={'start'}>
+        <Flex direction={'row'} flex="1" justify="end">
           <Button
             //   onClick={'s'}
             fontWeight="bold"
@@ -65,8 +61,8 @@ const UserDividendCard = (props: UserDividendCardProps) => {
             w="160px"
             h="40px"
             size="large"
-            mx="auto"
             shadow="down"
+            mx={6}
           >
             <Text color="text.low" fontSize="sm">
               Redeem
@@ -78,6 +74,17 @@ const UserDividendCard = (props: UserDividendCardProps) => {
   )
 }
 export default UserDividendCard
+
+{
+  /* <Flex direction={'column'} alignItems="start" ml={6}>
+          <Text fontSize={'11px'} fontWeight={600} textColor={'text.low'}>
+            Your Dividends Share:
+          </Text>
+          <Text fontSize={'17px'} fontWeight={700}>
+            0.00323%
+          </Text>
+        </Flex> */
+}
 
 {
   /* <Flex justify="left">

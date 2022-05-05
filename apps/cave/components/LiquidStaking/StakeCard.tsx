@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Card,
+  Flex,
   HStack,
   Image,
   Modal,
@@ -32,7 +33,13 @@ function StakeCard(props) {
   const [fetchingData, setFetchingData] = useState(true)
   const [capPercentage, setCapPercentage] = useState('100')
   const [isLargerThan600] = useMediaQuery('(min-width: 600px)')
+  const [isLargerThan700] = useMediaQuery('(min-width: 700px)')
 
+  const [modalDirection, setModalDirection] = useState<'column' | 'row'>('row')
+
+  useEffect(() => {
+    setModalDirection(isLargerThan700 ? 'row' : 'column')
+  }, [isLargerThan700])
   const [stakeWidth, setStakeWidth] = useState<'' | '200px'>('')
   const [pool, getPool] = useContractRead(
     {
@@ -160,7 +167,7 @@ function StakeCard(props) {
           titleAlign="center"
           size="2xl"
         >
-          <HStack>
+          <Flex direction={modalDirection}>
             <Emissions
               period={props.period}
               vaprText={vaprText}
@@ -183,7 +190,7 @@ function StakeCard(props) {
               />
               <StakeInput period={props.period} />
             </VStack>
-          </HStack>
+          </Flex>
         </Modal>
       </Card>
     </div>

@@ -69,6 +69,7 @@ export const UserBondPositionInfo = (bondSigma, userAddress) => {
         </Card>
       ) : !!userAddress ? (
         <>
+          Checking wallet...
           <SpinIcon __css={spinnerStyles} width={'10'} height={'10'} />
         </>
       ) : (

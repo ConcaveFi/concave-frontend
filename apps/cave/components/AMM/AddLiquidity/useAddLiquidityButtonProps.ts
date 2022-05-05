@@ -13,8 +13,8 @@ export const useAddLiquidityButtonProps = (
 ): ButtonProps => {
   const [{ data: account }] = useAccount()
 
-  const currency0Balance = useCurrencyBalance(amount0?.currency)
-  const currency1Balance = useCurrencyBalance(amount1?.currency)
+  const currency0Balance = useCurrencyBalance(amount0?.currency, { watch: true })
+  const currency1Balance = useCurrencyBalance(amount1?.currency, { watch: true })
 
   const { connectModal } = useModals()
 

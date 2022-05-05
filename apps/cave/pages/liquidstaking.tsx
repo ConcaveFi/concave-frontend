@@ -48,7 +48,6 @@ const StakingGroup: Array<StakingGroupProps> = [
 
 function LiquidStaking() {
   const [isLargerThan1100] = useMediaQuery('(min-width: 1100px)')
-  const [isLargerThan600] = useMediaQuery('(min-width: 600px)')
   const [stakingGap, setStakingGap] = useState(6)
   const [wrap, setWrap] = useState<'wrap' | 'nowrap'>('nowrap')
   const [width, setWidth] = useState('')
@@ -56,7 +55,7 @@ function LiquidStaking() {
   const [marginTop, setMarginTop] = useState(8)
   const [textAlign, setTextAlign] = useState<'right' | 'center'>('right')
   const [guideGap, setGuideGap] = useState(14)
-  const [containerHeight, setConteinerHeight] = useState('1000px')
+  const [containerHeight, setConteinerHeight] = useState('')
 
   useEffect(() => {
     setStakingGap(isLargerThan1100 ? 6 : 3)
@@ -66,17 +65,20 @@ function LiquidStaking() {
     setMarginTop(isLargerThan1100 ? 8 : 0)
     setTextAlign(isLargerThan1100 ? 'right' : 'center')
     setGuideGap(isLargerThan1100 ? 14 : 7)
-    setConteinerHeight(isLargerThan600 ? '1000px' : '1550px')
+    setConteinerHeight(isLargerThan1100 ? '' : '1550px')
+    console.log('teste')
   }, [isLargerThan1100])
 
   return (
     <Box
-      width={'full'}
+      flex={1}
+      width={'600px'}
       maxWidth="container.lg"
       overflow={'hidden'}
-      height={containerHeight}
-      m={0}
+      m={'auto'}
+      alignItems={'center'}
       textAlign="center"
+      height={containerHeight}
     >
       <Heading as="h1" mt={16} mb={3} fontSize="5xl">
         Liquid Staking

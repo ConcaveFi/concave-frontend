@@ -49,6 +49,42 @@ const InOutArrow = () => {
   )
 }
 
+const PricesUpdated = ({
+  prevTrade,
+  currentTrade,
+}: {
+  prevTrade: Trade<Currency, Currency, TradeType>
+  currentTrade: Trade<Currency, Currency, TradeType>
+}) => {
+  return (
+    <Flex
+      py={3}
+      px={4}
+      mb={6}
+      shadow="up"
+      apply="background.metalBrighter"
+      rounded="xl"
+      align="center"
+      justify="space-between"
+    >
+      <Stack fontWeight="medium" spacing={0}>
+        <Text fontWeight="bold" fontSize="md" textColor="text.high">
+          Prices Updated
+        </Text>
+        <Text fontSize="sm" textColor="text.low">
+          Expected Output
+        </Text>
+        <Text fontSize="sm" textColor="text.low">
+          {currentTrade.outputAmount.toSignificant(6, { groupSeparator: ',' })}
+        </Text>
+      </Stack>
+      <Button variant="secondary" px={4} py={2} alignSelf="start">
+        Accept new prices
+      </Button>
+    </Flex>
+  )
+}
+
 const ConfirmSwap = ({
   trade,
   settings,
@@ -95,32 +131,6 @@ const ConfirmSwap = ({
         <ExpectedOutput outputAmount={trade.outputAmount} priceImpact={trade.priceImpact} />
         <StackDivider borderRadius="full" mx={-4} my={4} h={0.5} bg="stroke.secondary" />
         <MinExpectedOutput trade={trade} slippageTolerance={settings.slippageTolerance} />
-      </Flex>
-
-      <Flex
-        py={3}
-        px={4}
-        mb={6}
-        shadow="up"
-        apply="background.metalBrighter"
-        rounded="xl"
-        align="center"
-        justify="space-between"
-      >
-        <Stack fontWeight="medium" spacing={0}>
-          <Text fontWeight="bold" fontSize="md" textColor="text.high">
-            Prices Updated
-          </Text>
-          <Text fontSize="sm" textColor="text.low">
-            Expected Output
-          </Text>
-          <Text fontSize="sm" textColor="text.low">
-            {trade.outputAmount.toSignificant(6, { groupSeparator: ',' })}
-          </Text>
-        </Stack>
-        <Button variant="secondary" px={4} py={2} alignSelf="start">
-          Accept new prices
-        </Button>
       </Flex>
 
       <Button variant="primary" size="large" onClick={onConfirm} isFullWidth>

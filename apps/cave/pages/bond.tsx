@@ -83,7 +83,7 @@ export default function Bond() {
           })
           .catch(() => {})
       })
-    }, 3000)
+    }, 6000)
     if (intervalID !== interval) {
       clearTimeout(intervalID)
       setIntervalID(interval)
@@ -129,7 +129,7 @@ export default function Bond() {
                 roi={`${
                   cnvMarketPrice > 0
                     ? (1 - (+bondSpotPrice / +cnvMarketPrice) * 100).toFixed(2)
-                    : 'Loading...'
+                    : '-'
                 }%`}
                 vestingTerm={`${termLength} Days`}
               />

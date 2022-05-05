@@ -24,7 +24,7 @@ export const useSwapButtonProps = ({
   const outputAmount = trade.data.outputAmount
 
   const currencyIn = inputAmount.currency
-  const currencyInBalance = useCurrencyBalance(currencyIn)
+  const currencyInBalance = useCurrencyBalance(currencyIn, { watch: true })
 
   const [token, spender] = [currencyIn.wrapped, ROUTER_ADDRESS[currencyIn?.chainId]]
   const permit = usePermit(token, spender)
