@@ -44,8 +44,10 @@ export const UserBondPositionInfo = (bondSigma, userAddress) => {
   const parse = bondSigma?.bondSigma
   const oldestBond = parse?.parseOldest
   const claimed = parse?.claimed
-  const totalOwed = parse?.totalOwed.toFixed(2)
+  const redeemable = parse?.parseRedeemable.toFixed(2)
   const totalPending = parse?.totalPending.toFixed(2)
+  const totalOwed = parse?.totalOwed.toFixed(2)
+
   return (
     <>
       {claimed ? (
@@ -65,9 +67,9 @@ export const UserBondPositionInfo = (bondSigma, userAddress) => {
             flexGrow={1}
           />
           <Box w="1px" mx={1} my={-4} bg="stroke.primary" />
-          <InfoItem value={totalPending} label={totalPending ? 'Redeemed' : ''} px={5} />
+          <InfoItem value={redeemable > 0 ? redeemable : '0'} label={'Available'} px={5} />
         </Card>
-      ) : !!userAddress ? (
+      ) : !claimed ? (
         <>
           Checking wallet...
           <SpinIcon __css={spinnerStyles} width={'10'} height={'10'} />

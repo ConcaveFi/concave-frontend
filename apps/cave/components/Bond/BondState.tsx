@@ -129,21 +129,17 @@ export const getUserBondPositions = async (
       oldest += +positionData.creation
       oldestCreationTimestamp += +positionData.creation
     }
-    console.log(termData.toString())
     let length = currentBlockTimestamp - positionData.creation
     let elapsed = length / termData > 1 ? 1 : length / termData
-    console.log('elapsed', elapsed)
     redeemable += positionData.owed * elapsed - positionData.redeemed
-    console.log('currently redeemable', redeemable)
-    console.log(utils.formatEther(redeemable.toString()))
     totalPending += +(+utils.formatEther(positionData.redeemed))
     totalOwed += +(+utils.formatEther(positionData.owed))
   }
   const fullyVestedTimestamp = oldest * 1000 + 86400000
   const parseOldest = new Date(fullyVestedTimestamp).toString().slice(4, 21)
-  console.log('redeemable', redeemable)
+  const parseRedeemable = +utils.formatEther(redeemable.toString())
   if (totalPending === totalOwed) claimed = true
-  return { parseOldest, totalOwed, totalPending, batchRedeemArray, claimed }
+  return { parseOldest, totalOwed, totalPending, batchRedeemArray, claimed, parseRedeemable }
 }
 
 export const useBondState = () => {
