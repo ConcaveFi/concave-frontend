@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic'
 import { useLocalStorage } from 'react-use'
 
 const isDevEnv = process.env.NEXT_PUBLIC_VERCEL_ENV !== 'production'
-const password = process.env.DEV_PASSWORD || 'aaaa'
+const password = process.env.DEV_PASSWORD || 'buycnv'
 
 export const useWorthyUser = () => {
   const [value, setValue] = useLocalStorage('can enter?', false)
@@ -26,7 +26,7 @@ export const DevelopGateway = dynamic(
           bodyProps={{ w: '350px', gap: 2 }}
           hideClose
         >
-          <Text fontWeight="bold">Do you know the cave secret?</Text>
+          <Text fontWeight="bold">Do you know the cave secret anon?</Text>
           <Input onChange={(e) => e.target.value === password && setWorthyUser()} />
         </Modal>
       )
