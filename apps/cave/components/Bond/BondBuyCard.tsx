@@ -118,7 +118,8 @@ export function BondBuyCard() {
         onConfirm={() => {
           purchaseBond(networkId, amountIn.toFixed(), userAddress, signer, settings, amountOut)
             .then((x) => {
-              console.log(x)
+              // console.log(x)
+              confirmModal.onClose()
               receiptModal.onOpen()
             })
             .catch((e) => {
