@@ -116,7 +116,7 @@ function PageNav() {
             border="primary"
             mt="2px"
           >
-            Liquid Staking
+            Stake
           </NavButton>
           <Collapse in={liquidStakingHover || liquidStakingPage}>
             <SubnavButton href="/dashboard">Your Positions</SubnavButton>
