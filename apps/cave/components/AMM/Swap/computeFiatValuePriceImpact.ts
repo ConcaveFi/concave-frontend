@@ -7,7 +7,7 @@ export function computeFiatValuePriceImpact(
   fiatValueOutput: CurrencyAmount<Currency> | undefined | null,
 ): Percent | undefined {
   if (!fiatValueOutput || !fiatValueInput) return undefined
-  if (!fiatValueInput.currency.equals(fiatValueOutput.currency)) return undefined
+  if (!fiatValueInput.currency.wrapped.equals(fiatValueOutput.currency.wrapped)) return undefined
   if (JSBI.equal(fiatValueInput.quotient, JSBI.BigInt(0))) return undefined
   const pct = ONE_HUNDRED_PERCENT.subtract(fiatValueOutput.divide(fiatValueInput))
   return new Percent(pct.numerator, pct.denominator).multiply(-1)
