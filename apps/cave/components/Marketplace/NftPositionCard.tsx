@@ -145,7 +145,7 @@ const NftPositionCard = (props: NftPositionBoxProps) => {
               </Text>
               <Flex justifyContent={'center'} alignItems="center">
                 <Text width={'full'} fontWeight={500}>
-                  12.07.22
+                  612.42 CNV
                 </Text>
               </Flex>
             </Flex>
