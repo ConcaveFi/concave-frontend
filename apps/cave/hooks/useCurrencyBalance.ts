@@ -10,7 +10,7 @@ export const useCurrencyBalance = (currency: Currency, { watch = false } = {}) =
   const [{ data: network }] = useNetwork()
   const chainId = network.chain?.id
   return useQuery(
-    ['balance', currency?.symbol, currency?.wrapped.address],
+    ['balance', currency?.symbol, currency?.wrapped.address, account?.address],
     async () => {
       if (currency.isNative) {
         const b = (await signer.getBalance()) as BigNumber
