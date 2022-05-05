@@ -79,7 +79,7 @@ function PageNav() {
           leftIcon={<NotInteractableImage src="/assets/sidebar/page-bond.svg" />}
           href="/bond"
         >
-          Bonds
+          Bond
         </NavButton>
         <Text fontSize="xs" fontWeight="bold" textColor="text.low" textAlign="center" py={2}>
           CNV-DAI
@@ -97,7 +97,7 @@ function PageNav() {
           border="primary"
           mt="2px"
         >
-          Liquid Staking
+          Stake
         </NavButton>
         <SubnavButton href="/dashboard">Your Positions</SubnavButton>
       </Box>
