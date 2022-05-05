@@ -29,10 +29,7 @@ const UserDashboardCard = () => {
           overflowY={'auto'}
           maxHeight={'500px'}
         >
-          <ButtonLink href="/treasury" variant="primary.outline" size="large" w="full">
-            View Treasury
-          </ButtonLink>
-          <Flex direction="row" gap={4} position="relative" mt={4}>
+          <Flex direction="row" gap={4} position="relative" mt={1}>
             <UserDividendCard totalLocked={total} />
           </Flex>
         </Box>
