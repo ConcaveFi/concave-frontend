@@ -127,32 +127,39 @@ const RedeemCardViewer = (props: RedeemCardViewerProps) => {
   const { initial, gained, redeemIn } = props
 
   return (
-    <Flex height={90} direction="row" gap={4} alignItems="center" justify="center" m={2}>
-      <Flex grow={1} direction={'column'} textAlign={'start'} ml="2">
-        <Text color="text.low" fontSize="sm">
+    <Flex height={70} direction="row" alignItems="center" justify="center" m={2}>
+      <Flex
+        width={'110px'}
+        maxWidth="110px"
+        direction={'column'}
+        overflow="hidden"
+        textAlign={'center'}
+        ml="2"
+      >
+        <Text color="text.low" fontSize="sm" lineHeight={'15px'} isTruncated>
           Current Value:
         </Text>
-        <Text fontSize="md" fontWeight="bold">
-          {initial + gained} CNV
+        <Text fontSize="md" fontWeight="bold" isTruncated>
+          {+parseFloat((initial + gained).toFixed(3))} CNV
         </Text>
       </Flex>
-      <Flex grow={1} direction={'column'} textAlign={'start'} ml="1">
-        <Text color="text.low" fontSize="sm">
+      <Flex width={'110px'} maxWidth="110px" direction={'column'} textAlign={'center'} ml="1">
+        <Text color="text.low" fontSize="sm" lineHeight={'15px'}>
           Gained:
         </Text>
-        <Text fontSize="md" fontWeight="bold">
-          {gained.toFixed()} CNV
+        <Text fontSize="md" fontWeight="bold" isTruncated>
+          {+parseFloat(gained.toFixed(3))} CNV
         </Text>
       </Flex>
-      <Flex grow={1} direction={'column'} textAlign={'start'} ml="1">
-        <Text color="text.low" fontSize="sm">
+      <Flex width={'110px'} maxWidth="110px" direction={'column'} textAlign={'center'} ml="1">
+        <Text color="text.low" fontSize="sm" lineHeight={'15px'}>
           Initial:
         </Text>
-        <Text fontSize="md" fontWeight="bold">
-          {initial} CNV
+        <Text fontSize="md" fontWeight="bold" isTruncated>
+          {+parseFloat(initial.toFixed(3))} CNV
         </Text>
       </Flex>
-      <Flex grow={1} direction={'column'} textAlign={'start'} ml="1">
+      <Flex height="full" textAlign={'center'} ml="1">
         <Button
           mt={5}
           fontWeight="bold"
@@ -161,6 +168,7 @@ const RedeemCardViewer = (props: RedeemCardViewerProps) => {
           h="40px"
           size="large"
           mx="auto"
+          my={'auto'}
           variant={redeemIn > 0 ? '' : 'primary'}
           shadow={redeemIn > 0 ? 'down' : 'up'}
         >

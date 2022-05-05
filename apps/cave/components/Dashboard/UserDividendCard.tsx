@@ -7,6 +7,7 @@ interface UserDividendCardProps {
 const UserDividendCard = (props: UserDividendCardProps) => {
   const [active, setActive] = useState(false)
   const isLoading = props.totalLocked === 'Loading'
+  const totalLocked = isLoading ? 0 : +props.totalLocked.split(' ')[0]
   return (
     <Box
       pos="relative"
@@ -29,9 +30,14 @@ const UserDividendCard = (props: UserDividendCardProps) => {
             Total locked:
           </Text>
           <Flex>
-            <Text fontSize={'17px'} fontWeight={700}>
-              {props.totalLocked}
-            </Text>
+            {!isLoading ? (
+              <Text fontSize={'17px'} fontWeight={700}>
+                {+parseFloat(totalLocked.toFixed(3)) + ' CNV'}
+              </Text>
+            ) : (
+              'Loading'
+            )}
+
             {isLoading && <Spinner height={'20px'} width={'20px'} ml={1} />}
           </Flex>
         </Flex>
