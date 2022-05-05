@@ -6,7 +6,7 @@ export const Redeem = ({ onConfirm, bondSigma }: { onConfirm: () => void; bondSi
   return (
     <>
       {totalOwed ? (
-        <Card mb={-20} fontWeight="bold" fontSize="lg" w="250px">
+        <Card mb={-12} bottom={-3} fontWeight="bold" fontSize="lg" w="100%">
           <Button variant="primary" size="lg" isFullWidth onClick={onConfirm}>
             {redeemable < 0.1 ? 'Nothing to redeem' : 'Redeem'}
           </Button>
