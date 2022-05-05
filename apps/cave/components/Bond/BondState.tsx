@@ -158,7 +158,7 @@ export const useBondState = () => {
   const networkId = useCurrentSupportedNetworkId()
   const currencyIn = DAI[networkId]
   const currencyOut = CNV[networkId]
-  const balance = useCurrencyBalance(currencyIn)
+  const balance = useCurrencyBalance(currencyIn, { watch: true })
   const userAddress = account?.address
 
   return useMemo(

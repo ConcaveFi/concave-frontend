@@ -22,8 +22,8 @@ export const useAllowance = (token: Token, spender: string, userAddress: string)
       return await tokenContract.allowance(userAddress, spender)
     },
     {
-      enabled: !!token.address && !!userAddress,
-      retry: 3,
+      enabled: !!token.address && !!userAddress && !!spender,
+      retry: false,
       refetchInterval: AVERAGE_BLOCK_TIME[token.chainId],
     },
   )

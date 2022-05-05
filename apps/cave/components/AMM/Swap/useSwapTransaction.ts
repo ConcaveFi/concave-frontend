@@ -1,15 +1,16 @@
 import { useMemo, useState } from 'react'
 import { SwapSettings } from '../Settings'
 import { RouterABI, ROUTER_ADDRESS, Router, Currency, TradeType, Trade } from 'gemswap-sdk'
-import { Contract } from 'ethers'
+import { Contract, ethers, Transaction } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { useContract, useSigner } from 'wagmi'
+import { useContract, UserRejectedRequestError, useSigner } from 'wagmi'
 import { isAddress } from 'ethers/lib/utils'
 
 export const useSwapTransaction = (
   trade: Trade<Currency, Currency, TradeType>,
   settings: SwapSettings,
   recipient: string,
+  { onTransactionSent }: { onTransactionSent?: (tx: Transaction) => void },
 ) => {
   const networkId = useCurrentSupportedNetworkId()
   const [{ data: signer }] = useSigner()
@@ -77,7 +78,11 @@ export const useSwapTransaction = (
         data: tx,
         isWaitingForConfirmation: false,
       }))
+      onTransactionSent(tx)
     } catch (error) {
+      if (error === UserRejectedRequestError)
+        return setState((s) => ({ ...s, isWaitingForConfirmation: false }))
+
       setState((s) => ({ ...s, isError: true, error, isWaitingForConfirmation: false }))
     }
   }

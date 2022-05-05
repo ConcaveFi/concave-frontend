@@ -12,7 +12,7 @@ export const CustomRecipient = ({ onChangeRecipient }) => {
           variant="select"
           px={3}
           py={1}
-          mb={1}
+          mb={2}
         >
           <ExpandArrowIcon w="12px" />
         </Button>

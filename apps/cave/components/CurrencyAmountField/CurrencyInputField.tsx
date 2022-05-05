@@ -30,7 +30,7 @@ export const CurrencyInputField = ({
   CurrencySelector,
 }: CurrencyInputFieldProps) => {
   const inputFiat = useFiatValue(currencyAmountIn)
-  const balance = useCurrencyBalance(currencyAmountIn?.currency)
+  const balance = useCurrencyBalance(currencyAmountIn?.currency, { watch: true })
 
   return (
     <CurrencyAmountField
