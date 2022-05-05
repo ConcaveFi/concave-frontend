@@ -35,11 +35,13 @@ export default function Bond() {
         getUserBondPositions(networkId, userAddress, currentBlockTs)
           .then((x) => {
             setBondSigma(x)
-            resolve(null)
           })
-          .catch(() => {})
+          .catch((e) => {
+            console.log('user bond fail', e)
+          })
+        resolve(null)
       })
-    }, 5000)
+    }, 6000)
     if (intervalID !== interval) {
       clearTimeout(intervalID)
       setIntervalID(interval)
