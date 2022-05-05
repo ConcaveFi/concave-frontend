@@ -7,17 +7,12 @@ interface StakeAprCardProps {
   text: string
   image: string
   diluted: boolean
+  isLargerThan1200: boolean
 }
 const StakeAprCard = (props: StakeAprCardProps) => {
-  const [isLargerThan1200] = useMediaQuery('(min-width: 1200px)')
-  const { title, length, text, image, diluted } = props
-  const [direction, setDirection] = useState<'row' | 'column'>('column')
+  const { isLargerThan1200 } = props
 
-  useEffect(() => {
-    setDirection(isLargerThan1200 ? 'row' : 'column')
-  }, [isLargerThan1200])
-
-  return !isLargerThan1200 ? <MobileLayout props={props} /> : <DefaultLayout props={props} />
+  return isLargerThan1200 ? <DefaultLayout props={props} /> : <MobileLayout props={props} />
 }
 
 interface MobileLayoutProps {

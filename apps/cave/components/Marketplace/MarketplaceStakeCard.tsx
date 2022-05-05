@@ -44,6 +44,26 @@ function MarketplaceStakeCard(props: any) {
     },
   ]
 
+  const [periods, setPeriods] = useState(null)
+
+  useEffect(() => {
+    setPeriods(
+      filters.map((e, k) => {
+        return (
+          <StakeAprCard
+            isLargerThan1200={isLargerThan1200}
+            key={k}
+            title={e.title}
+            length={e.length}
+            image={e.image}
+            text={e.marketvapr}
+            diluted={e.diluted}
+          />
+        )
+      }),
+    )
+  }, [isLargerThan1200])
+
   return (
     <Card
       p={7}
@@ -55,18 +75,7 @@ function MarketplaceStakeCard(props: any) {
       variant="secondary"
     >
       <Flex direction={direction} gap={-10} position="relative" mt={-2}>
-        {filters.map((e, k) => {
-          return (
-            <StakeAprCard
-              key={k}
-              title={e.title}
-              length={e.length}
-              image={e.image}
-              text={e.marketvapr}
-              diluted={e.diluted}
-            />
-          )
-        })}
+        {periods}
       </Flex>
     </Card>
   )

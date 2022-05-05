@@ -100,7 +100,14 @@ const NftPositionBox = (props: NftPositionBoxProps) => {
             {discount}%
           </Text>
         </Flex>
-        <Flex flex={1.3} justifyContent="center" alignItems={'center'}>
+        <Flex
+          flex={1.3}
+          justifyContent="center"
+          width={'60px'}
+          height="60px"
+          alignItems={'center'}
+          zIndex={3}
+        >
           <Image
             transition={'all'}
             transitionDuration="0.3s"
