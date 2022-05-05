@@ -7,7 +7,7 @@ import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { usePermit } from 'hooks/usePermit'
 import { useAccount } from 'wagmi'
 import { NoValidPairsError } from '../hooks/usePair'
-import { UseTradeResult } from '../hooks/useTrade'
+import { InsufficientLiquidityError, UseTradeResult } from '../hooks/useTrade'
 
 export const useSwapButtonProps = ({
   trade,
@@ -50,6 +50,9 @@ export const useSwapButtonProps = ({
       isDisabled: true,
       children: `No liquidity`, // Try enabling multi-hop trades
     }
+
+  if (trade.error === InsufficientLiquidityError)
+    return { children: `Not enough liquidity`, isDisabled: true }
 
   /*
     Fetching user data (Allowance & Balance)

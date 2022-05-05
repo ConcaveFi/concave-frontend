@@ -4,10 +4,10 @@ import { Box, Button, Flex, Heading, HStack, Modal, Stack, StackDivider, Text } 
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import React from 'react'
 import { useFiatValue } from '../hooks/useFiatPrice'
-import { usePrice } from '../hooks/usePrice'
 import { SwapSettings } from '../Settings'
 import { computeFiatValuePriceImpact } from './computeFiatValuePriceImpact'
 import { ExpectedOutput, MinExpectedOutput } from './ExpectedOutput'
+import { RelativePrice } from './RelativePrice'
 
 type TradeCurrencyInfoProps = {
   currencyAmount: CurrencyAmount<Currency>
@@ -17,7 +17,14 @@ type TradeCurrencyInfoProps = {
 
 const TradeCurrencyInfo = ({ currencyAmount, fiatValue, priceImpact }: TradeCurrencyInfoProps) => {
   return (
-    <Flex rounded="2xl" justify="space-between" shadow="Down Medium" px={5} py={4}>
+    <Flex
+      rounded="2xl"
+      justify="space-between"
+      shadow="Down Medium"
+      px={5}
+      py={4}
+      bg="blackAlpha.100"
+    >
       <Stack spacing={1} direction="column" h="100%">
         <Heading fontSize="2xl">{currencyAmount.toSignificant(2, { groupSeparator: ',' })}</Heading>
         <Flex fontWeight="bold" color="text.low" align="center">
@@ -42,7 +49,7 @@ const TradeCurrencyInfo = ({ currencyAmount, fiatValue, priceImpact }: TradeCurr
 const InOutArrow = () => {
   return (
     <Flex align="center" justify="center" mt={-3} mb={-1}>
-      <Box shadow="Up Small" px={3} py={1} apply="background.metal" opacity={0.8} rounded="3xl">
+      <Box shadow="Up Small" px={3} py={1} apply="background.metal" opacity={0.9} rounded="3xl">
         <ExpandArrowIcon w="18px" h="18px" />
       </Box>
     </Flex>
@@ -94,13 +101,8 @@ const ConfirmSwap = ({
   settings: SwapSettings
   onConfirm: () => void
 }) => {
-  const currencyIn = trade.inputAmount.currency
-  const currencyOut = trade.outputAmount.currency
-
   const inputFiat = useFiatValue(trade.inputAmount)
   const outputFiat = useFiatValue(trade.outputAmount)
-
-  const relativePrice = usePrice(currencyIn.wrapped, currencyOut.wrapped)
 
   const fiatPriceImpact = computeFiatValuePriceImpact(inputFiat.value, outputFiat.value)
 
@@ -114,20 +116,15 @@ const ConfirmSwap = ({
         priceImpact={fiatPriceImpact}
       />
 
-      <Flex fontSize="sm" fontWeight="bold" align="center" justify="center" py={4}>
-        <Text>
-          1 {relativePrice.price?.quoteCurrency.symbol} ={' '}
-          {relativePrice.price?.invert().toSignificant(3)}{' '}
-          {relativePrice.price?.baseCurrency.symbol}
-        </Text>
-        {outputFiat.price && (
-          <Text ml={1} textColor="text.low">
-            (${outputFiat.price.toFixed(2, { groupSeparator: ',' })})
-          </Text>
-        )}
-      </Flex>
+      <RelativePrice
+        currency0={trade.inputAmount.currency}
+        currency1={trade.outputAmount.currency}
+        indicators="minimal"
+        justify="center"
+        p={3}
+      />
 
-      <Flex direction="column" rounded="2xl" mb={6} p={6} shadow="Down Medium">
+      <Flex direction="column" rounded="2xl" mb={6} p={6} shadow="Down Medium" bg="blackAlpha.100">
         <ExpectedOutput outputAmount={trade.outputAmount} priceImpact={trade.priceImpact} />
         <StackDivider borderRadius="full" mx={-4} my={4} h={0.5} bg="stroke.secondary" />
         <MinExpectedOutput trade={trade} slippageTolerance={settings.slippageTolerance} />

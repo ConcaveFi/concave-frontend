@@ -201,7 +201,13 @@ export const Settings = ({ onChange }: { onChange: (settings: SwapSettings) => v
         />
       </PopoverTrigger>
       <Portal>
-        <PopoverContent border="none" w="256px" bg="transparent" borderRadius="2xl">
+        <PopoverContent
+          border="none"
+          w="256px"
+          bg="transparent"
+          borderRadius="2xl"
+          onClick={(e) => e.stopPropagation()}
+        >
           <Card variant="secondary" p={4} gap={2} fontFamily="heading" fontWeight="semibold">
             <Heading textAlign="center" size="sm">
               Transactions Settings
