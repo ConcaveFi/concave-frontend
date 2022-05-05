@@ -47,12 +47,11 @@ export const UserBondPositionInfo = (bondSigma, userAddress) => {
   const redeemable = parse?.parseRedeemable.toFixed(2)
   const totalPending = parse?.totalPending.toFixed(2)
   const totalOwed = parse?.totalOwed.toFixed(2)
-
   return (
     <>
       {claimed ? (
         'You have no open positions'
-      ) : totalOwed > 0 && totalPending < totalOwed ? (
+      ) : totalPending !== totalOwed ? (
         <Card bg="none" py={3} w="100%" direction="row" shadow="Glass Up Medium">
           <Flex justify="center" pl={4} pr={7}>
             <InfoItem
@@ -67,9 +66,9 @@ export const UserBondPositionInfo = (bondSigma, userAddress) => {
             flexGrow={1}
           />
           <Box w="1px" mx={1} my={-4} bg="stroke.primary" />
-          <InfoItem value={redeemable > 0 ? redeemable : '0'} label={'Available'} px={5} />
+          <InfoItem value={redeemable > 0 ? redeemable : '0'} label={'Redeem'} px={5} />
         </Card>
-      ) : !claimed ? (
+      ) : !!userAddress ? (
         <>
           Checking wallet...
           <SpinIcon __css={spinnerStyles} width={'10'} height={'10'} />
