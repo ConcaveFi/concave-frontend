@@ -3,7 +3,7 @@ import { Button, Card, Flex, Text } from '@concave/ui'
 interface TreasuryCardProps {
   onChange: () => void
 }
-export default function TreasuryManagementCard({ onChange }: TreasuryCardProps) {
+export default function TreasuryManagementCard(props: TreasuryCardProps) {
   return (
     <Card
       direction={'column'}
@@ -21,7 +21,7 @@ export default function TreasuryManagementCard({ onChange }: TreasuryCardProps) 
           <FeesViewer title="POL Fees" />
         </Flex>
       </Flex>
-      <BackButton onClick={onChange} />
+      <BackButton onClick={() => props.onChange()} />
     </Card>
   )
 }
@@ -29,7 +29,7 @@ interface BackButtonProps {
   onClick: () => void
 }
 
-const BackButton = ({ onClick }: BackButtonProps) => {
+const BackButton = (props: BackButtonProps) => {
   return (
     <Button
       rounded={'16px 16px 0px 0px'}
@@ -38,7 +38,7 @@ const BackButton = ({ onClick }: BackButtonProps) => {
       width={'279px'}
       height="49px"
       _focus={{}}
-      onClick={onClick}
+      onClick={() => props.onClick()}
     >
       <Flex grow={1} justify="center" align={'center'}>
         <Text fontSize={'18px'} fontWeight="700">

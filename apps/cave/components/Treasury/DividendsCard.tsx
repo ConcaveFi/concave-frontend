@@ -1,6 +1,10 @@
 import { Button, Card, Flex, Text, Image } from '@concave/ui'
 
-export default function DividendsCard() {
+interface DividendsCardProps {
+  onChange: () => void
+}
+
+export default function DividendsCard({ onChange }: DividendsCardProps) {
   return (
     <Card
       width={'900px'}
@@ -13,7 +17,7 @@ export default function DividendsCard() {
       <Flex direction={'column'} maxWidth="360px" height={'full'}>
         <DividendsInfo />
         <Flex flex={1} justify="center" align={'end'}>
-          <PerformanceButton />
+          <PerformanceButton onClick={() => onChange()} />
         </Flex>
       </Flex>
       <Flex
@@ -108,10 +112,13 @@ const StakePeriodCard = ({ month, multiply, src }: StakePeriodCardProps) => {
     </Flex>
   )
 }
+interface PerformanceButtonProps {
+  onClick: () => void
+}
 
-const PerformanceButton = () => {
+const PerformanceButton = ({ onClick }: PerformanceButtonProps) => {
   return (
-    <Button>
+    <Button onClick={() => onClick()}>
       <Flex
         justify={'center'}
         bg="linear-gradient(90deg, #72639B 0%, #44B9DE 100%)"

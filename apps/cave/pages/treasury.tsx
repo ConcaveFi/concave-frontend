@@ -1,9 +1,23 @@
-import { Box, Card, Container, Flex, Heading, Image, Spinner, Stack, Text } from '@concave/ui'
+import {
+  Box,
+  Card,
+  Collapse,
+  Container,
+  Fade,
+  Flex,
+  Heading,
+  Image,
+  ScaleFade,
+  Spinner,
+  Stack,
+  Text,
+} from '@concave/ui'
 import DividendsCard from 'components/Treasury/DividendsCard'
 import TreasuryManagementCard from 'components/Treasury/TreasuryManagementCard'
 import { Token } from 'gemswap-sdk'
 import { useLiquidityInfo } from 'hooks/useLiquidityInfo'
 import { fetchPortfolio } from 'lib/debank'
+import { useState } from 'react'
 import { useQuery } from 'react-query'
 import { chain } from 'wagmi'
 
@@ -47,6 +61,8 @@ const TokenCard = ({ img, name, value, balance = null, children = null }) => {
 }
 
 export default function Treasury() {
+  const [isOnDividens, setIsOnDividends] = useState(true)
+  const [dividendOpacity, setDividendOpacity] = useState(1)
   const liquidityToken = new Token(
     chain.mainnet.id,
     '0x84d53CBA013d0163BB07D65d5123D1634bc2a575',
@@ -58,12 +74,22 @@ export default function Treasury() {
   const { data: treasury, isSuccess } = useQuery(['portfolio', TREASURY_ADDRESS], () =>
     fetchPortfolio(TREASURY_ADDRESS),
   )
+
   return (
-    <Flex height={'full'} width="full" justify={'center'} align="center">
-      <TreasuryManagementCard onChange={() => {}} />
-      {/* <DividendsCard /> */}
+    <Flex height={'full'} width="full" justify={'center'} align="center" position={'relative'}>
+      <Flex position={'absolute'}>
+        <Collapse in={!isOnDividens}>
+          <TreasuryManagementCard onChange={() => setIsOnDividends(true)} />
+        </Collapse>
+      </Flex>
+      <Flex position={'absolute'}>
+        <Collapse in={isOnDividens}>
+          <DividendsCard onChange={() => setIsOnDividends(false)} />
+        </Collapse>
+      </Flex>
     </Flex>
   )
+
   // <DividendsCard />
   // if (!isSuccess || isLoading)
   //   return (
