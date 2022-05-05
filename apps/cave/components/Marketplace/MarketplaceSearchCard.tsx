@@ -35,6 +35,7 @@ const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
   const [filter6Month, setFilter6Month] = useState(false)
   const [filter3Month, setFilter3Month] = useState(false)
   const [filter1Month, setFilter1Month] = useState(false)
+  const [isLargerThan770] = useMediaQuery('(min-width: 770px)')
   const sortFunctionType = sortByType(sortType)
 
   const filtersButton = [
@@ -83,7 +84,7 @@ const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
           onChange={switchStakeButtons}
         />
       ),
-      offsetX: -100,
+      offsetX: isLargerThan770 ? -100 : -200,
     },
   ]
   const nftPositions = [
@@ -208,7 +209,7 @@ const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
     setFilter3Month(filter3Month)
     setFilter1Month(filter1Month)
   }
-  const [isLargerThan770] = useMediaQuery('(min-width: 770px)')
+
   const [cardWidth, setCardWidth] = useState('640px')
 
   useEffect(() => {

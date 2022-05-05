@@ -66,6 +66,7 @@ function MarketplaceStakeCard(props: any) {
 
   return (
     <Card
+      zIndex={2}
       p={7}
       gap={2}
       shadow="Block Up"
