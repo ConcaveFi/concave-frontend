@@ -93,7 +93,7 @@ export function SwapPage() {
         />
 
         <Card
-          p={7}
+          p={6}
           gap={2}
           variant="primary"
           h="fit-content"
@@ -126,7 +126,7 @@ export function SwapPage() {
             px={3}
             rounded="xl"
           >
-            <RelativePrice currencyIn={currencyIn} currencyOut={currencyOut} />
+            <RelativePrice currency0={currencyIn} currency1={currencyOut} mr="auto" />
             <GasPrice />
             <Settings onChange={setSettings} />
           </HStack>

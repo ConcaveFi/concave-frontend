@@ -1,31 +1,41 @@
 import { Currency } from '@concave/gemswap-sdk'
-import { HStack, Spinner, Text } from '@concave/ui'
+import { HStack, Spinner, Text, StackProps } from '@concave/ui'
 import { useReducer } from 'react'
 import { useFiatPrice } from '../hooks/useFiatPrice'
 import { NoValidPairsError } from '../hooks/usePair'
 import { usePrice } from '../hooks/usePrice'
-import { InvalidTradeError } from '../hooks/useTrade'
+import { InsufficientLiquidityError } from '../hooks/useTrade'
 
 const PairsError = ({ error }) => {
   return (
     <Text mr="auto" fontSize="sm" color="#c32417" fontWeight="medium">
       {{
         [NoValidPairsError]: `No liquidity in pair`,
-        [InvalidTradeError]: `Not enough liquidity in pair`,
+        [InsufficientLiquidityError]: `Very little liquidity in pair`,
       }[error] || 'Error Fetching Pairs'}
     </Text>
   )
 }
 
+const StatusIndicators = ({ query: { isFetching, isLoading, isError, error } }) => {
+  if (isFetching) return <Spinner size="xs" />
+  if (isLoading) return <Text fontSize="sm">Searching trade routes</Text>
+  if (isError) return <PairsError error={error} />
+  return null
+}
+
 export const RelativePrice = ({
-  currencyIn,
-  currencyOut,
+  currency0,
+  currency1,
+  indicators = 'all',
+  ...props
 }: {
-  currencyIn: Currency
-  currencyOut: Currency
-}) => {
+  currency0: Currency
+  currency1: Currency
+  indicators?: 'all' | 'minimal'
+} & StackProps) => {
   const [flipped, flip] = useReducer((s) => !s, false)
-  const [base, quote] = flipped ? [currencyIn, currencyOut] : [currencyOut, currencyIn]
+  const [base, quote] = flipped ? [currency0, currency1] : [currency1, currency0]
 
   const relativePrice = usePrice(base, quote)
   const outputFiat = useFiatPrice(quote)
@@ -37,11 +47,9 @@ export const RelativePrice = ({
       align="center"
       fontSize="xs"
       fontWeight="medium"
-      mr="auto"
+      {...props}
     >
-      {relativePrice.isFetching && <Spinner size="xs" />}
-      {relativePrice.isLoading && <Text fontSize="sm">Searching trade routes</Text>}
-      {relativePrice.isError && <PairsError error={relativePrice.error} />}
+      {indicators === 'all' && <StatusIndicators query={relativePrice} />}
       {relativePrice.isSuccess && (
         <>
           <Text>
