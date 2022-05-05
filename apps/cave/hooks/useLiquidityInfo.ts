@@ -54,7 +54,7 @@ export const useLiquidityInfo = (token: Token) => {
           }
           setTotalSupply(totalSupply)
           const totalAmount = CurrencyAmount.fromRawAmount(token, totalSupply.toString())
-          setUserPoolShare(+totalAmount.toExact() / +userBalance.data.toExact())
+          setUserPoolShare(+userBalance.data.toExact() / +totalAmount.toExact())
           setLoading(false)
         })
         .catch((e) => {
