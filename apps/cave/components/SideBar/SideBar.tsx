@@ -81,6 +81,8 @@ const SidebarContent = forwardRef<CardProps, 'div'>((props, ref) => {
       p={3}
       w={{ base: '250px', md: '250px' }}
       minW="250px"
+      overflowY="auto"
+      overflowX="hidden"
       {...props}
     >
       <SideBarTop />
