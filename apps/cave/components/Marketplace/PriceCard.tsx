@@ -1,5 +1,4 @@
 import { Box, Flex, Input, Text } from '@concave/ui'
-import { printIntrospectionSchema } from 'graphql'
 import { useEffect, useState } from 'react'
 import ChooseButton from './ChooseButton'
 import { SortType } from './MarketplaceSearchCard'
