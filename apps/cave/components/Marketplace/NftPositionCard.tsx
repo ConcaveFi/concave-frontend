@@ -126,12 +126,16 @@ const NftPositionCard = (props: NftPositionBoxProps) => {
 
   const [maxWidth, setMaxWidth] = useState('')
   const [direction, setDirection] = useState<'column' | 'row'>('row')
-  const [height, setHeight] = useState('')
+  const [width, setWidth] = useState('')
+  const [justify, setJustify] = useState<'' | 'space-around'>('')
+  const [padding, setPadding] = useState(6)
 
   useEffect(() => {
     setMaxWidth(isLargerThan770 ? '' : '500px')
     setDirection(isLargerThan770 ? 'row' : 'column')
-    setHeight(isLargerThan770 ? '' : '140px')
+    setWidth(isLargerThan770 ? '200px' : '')
+    setJustify(isLargerThan770 ? '' : 'space-around')
+    setPadding(isLargerThan770 ? 6 : 0)
   }, [isLargerThan770])
   return (
     <Flex
@@ -142,9 +146,17 @@ const NftPositionCard = (props: NftPositionBoxProps) => {
       my={active ? 6 : 0}
       transition="all"
       transitionDuration={'0.3s'}
-      maxWidth={maxWidth}
+      maxH={'250px'}
     >
-      <Flex direction="column" grow={1} m={'2px'} bg={defaultBg} rounded={'2xl'} onClick={() => {}}>
+      <Flex
+        direction={'column'}
+        height="full"
+        m={'2px'}
+        bg={defaultBg}
+        rounded={'2xl'}
+        onClick={() => {}}
+        flex={1}
+      >
         <NftPositionBox
           isLargerThan770={isLargerThan770}
           active={active}
@@ -155,19 +167,14 @@ const NftPositionCard = (props: NftPositionBoxProps) => {
           onClick={() => setActive(!active)}
         />
         <Collapse in={active}>
-          <Flex
-            direction={direction}
-            height={height}
-            justifyContent="start"
-            alignItems={'center'}
-            width={'full'}
-          >
-            <Flex>
+          <Flex direction={direction} justifyContent="start" alignItems={'center'} width="full">
+            <Flex width={'full'} justify={justify}>
               <Flex
+                pl={padding}
                 direction={'column'}
                 justifyContent="center"
-                alignItems={'center'}
-                width={'200px'}
+                alignItems={'start'}
+                width={width}
               >
                 <Text color={'text.low'} fontSize="sm">
                   Last sold by 0x43fs... for
@@ -204,25 +211,32 @@ const NftPositionCard = (props: NftPositionBoxProps) => {
                 </Flex>
               </Flex>
             </Flex>
-            <BuyButton />
+            <BuyButton padding={padding} isLargerThan770={isLargerThan770} />
           </Flex>
         </Collapse>
       </Flex>
     </Flex>
   )
 }
+interface BuyButtonProps {
+  padding: number
+  isLargerThan770: boolean
+}
 
-const BuyButton = () => {
+const BuyButton = ({ isLargerThan770, padding }: BuyButtonProps) => {
+  const [rounded, setRounded] = useState('2xl')
+
+  useEffect(() => {
+    setRounded(isLargerThan770 ? '2xl' : '16px 16px 0px 0px')
+  }, [isLargerThan770])
   return (
-    <Button>
+    <Button pr={padding}>
       <Flex
-        boxShadow={
-          '20px -20px 39px rgba(120, 182, 255, 0.25), 0px 5px 14px rgba(0, 0, 0, 0.47), inset 0px -10px 20px rgba(117, 164, 255, 0.5)'
-        }
+        boxShadow={'Up Big'}
         background="linear-gradient(90deg, #72639B 0%, #44B9DE 100%)"
         height={38}
         width={143}
-        rounded="2xl"
+        rounded={rounded}
         justifyContent={'center'}
         alignItems="center"
         ml={2}
