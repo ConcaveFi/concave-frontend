@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, Pair, Percent, Token } from 'gemswap-sdk'
+import { Currency, CurrencyAmount, Pair, Percent, Token } from '@concave/gemswap-sdk'
 import { useQuery } from 'react-query'
 import { Contract } from 'ethers'
 import { erc20ABI, useProvider } from 'wagmi'

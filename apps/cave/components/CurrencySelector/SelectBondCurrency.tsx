@@ -1,4 +1,4 @@
-import { Currency } from 'gemswap-sdk'
+import { Currency } from '@concave/gemswap-sdk'
 import React from 'react'
 import { CurrencySelector } from './CurrencySelector'
 

@@ -1,26 +1,25 @@
+import { Percent } from '@concave/gemswap-sdk'
 import { CnvQuestionIcon, SwapSettingsIcon } from '@concave/icons'
 import {
-  Heading,
+  Box,
   Button,
   Card,
+  Heading,
   HStack,
+  IconButton,
   InputGroup,
   InputRightAddon,
-  Switch,
-  Text,
-  Stack,
+  NumericInput,
   Popover,
   PopoverContent,
   PopoverTrigger,
   Portal,
-  IconButton,
-  NumericInput,
+  Stack,
+  Switch,
+  Text,
   useBoolean,
-  Box,
 } from '@concave/ui'
-import { Percent } from 'gemswap-sdk'
-import React, { useEffect, useMemo, useState } from 'react'
-import { useReducer } from 'react'
+import React, { useEffect, useMemo, useReducer, useState } from 'react'
 
 const SlippageTolerance = ({ value, onValueChange, onClickAuto }) => {
   return (

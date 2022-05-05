@@ -1,12 +1,6 @@
 import { Box, Flex, Input, Text } from '@concave/ui'
 import ChooseButton from 'components/Marketplace/ChooseButton'
 import { useState } from 'react'
-import { STAKING_CONTRACT } from 'constants/address'
-import { StakingV1Abi } from 'contracts/LiquidStaking/LiquidStakingAbi'
-import { useAccount, useBalance, useContractWrite, useNetwork } from 'wagmi'
-import { CNV } from 'gemswap-sdk'
-import { useFetchApi } from 'hooks/cnvData'
-import { useRouter } from 'next/router'
 
 // const [lockData, lockCNV] = useContractRead(
 //   {

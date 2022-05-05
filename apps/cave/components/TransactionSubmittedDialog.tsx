@@ -1,7 +1,7 @@
+import { ChainId } from '@concave/gemswap-sdk'
 import { SubmittedIcon } from '@concave/icons'
 import { Button, Flex, Link, Modal, Text } from '@concave/ui'
 import { Transaction } from 'ethers'
-import { ChainId } from 'gemswap-sdk'
 import { useEffect, useState } from 'react'
 import { useNetwork } from 'wagmi'
 

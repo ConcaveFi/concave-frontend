@@ -1,3 +1,4 @@
+import { Currency, CurrencyAmount, Pair } from '@concave/gemswap-sdk'
 import { PlusIcon } from '@concave/icons'
 import { Button, Card, Flex, Heading, Text, useDisclosure } from '@concave/ui'
 import { CurrencyInputField } from 'components/AMM'
@@ -10,7 +11,6 @@ import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
-import { Currency, CurrencyAmount, Pair } from 'gemswap-sdk'
 import React from 'react'
 
 const LiquidityTip = () => (

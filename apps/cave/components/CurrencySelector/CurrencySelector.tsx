@@ -1,5 +1,5 @@
+import { Currency } from '@concave/gemswap-sdk'
 import { useDisclosure } from '@concave/ui'
-import { Currency } from 'gemswap-sdk'
 import React, { FC } from 'react'
 import { SelectCurrencyButton } from './SelectCurrencyButton'
 

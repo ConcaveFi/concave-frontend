@@ -1,11 +1,11 @@
+import { Currency, Fetcher, Token } from '@concave/gemswap-sdk'
 import { Flex, Input, ListItem, Spinner, Stack, Text, UnorderedList } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { isAddress } from 'ethers/lib/utils'
-import { Currency, Fetcher, Token } from 'gemswap-sdk'
+import { useTokenList } from 'hooks/useTokenList'
 import React, { useState } from 'react'
 import { useQuery } from 'react-query'
 import { useProvider } from 'wagmi'
-import { useTokenList } from 'hooks/useTokenList'
 
 const TokenListItem = ({ currency, onClick }: { currency: Currency; onClick: () => void }) => (
   <ListItem

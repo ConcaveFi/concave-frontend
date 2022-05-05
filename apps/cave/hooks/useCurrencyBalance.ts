@@ -1,6 +1,6 @@
 import { AVERAGE_BLOCK_TIME } from 'constants/blockchain'
 import { BigNumber, Contract } from 'ethers'
-import { Currency, CurrencyAmount, NATIVE } from 'gemswap-sdk'
+import { Currency, CurrencyAmount, NATIVE } from '@concave/gemswap-sdk'
 import { useQuery } from 'react-query'
 import { erc20ABI, useAccount, useNetwork, useSigner } from 'wagmi'
 

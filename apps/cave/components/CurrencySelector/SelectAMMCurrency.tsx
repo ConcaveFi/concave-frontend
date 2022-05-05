@@ -1,7 +1,7 @@
+import { CNV, Currency, DAI, NATIVE } from '@concave/gemswap-sdk'
 import { CnvQuestionIcon } from '@concave/icons'
 import { Button, Flex, Heading, Modal } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
-import { CNV, Currency, DAI, NATIVE } from 'gemswap-sdk'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import React from 'react'
 import { CurrencySelector } from './CurrencySelector'

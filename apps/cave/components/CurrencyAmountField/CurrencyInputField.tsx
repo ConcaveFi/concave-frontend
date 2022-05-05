@@ -1,11 +1,11 @@
+import { Currency, CurrencyAmount } from '@concave/gemswap-sdk'
 import { HStack, Text } from '@concave/ui'
-import { Currency, CurrencyAmount } from 'gemswap-sdk'
-import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
-import { Balance } from './Balance'
 import { useFiatValue } from 'components/AMM/hooks/useFiatPrice'
-import { CurrencyAmountField } from '../CurrencyAmountField'
-import { toAmount } from 'utils/toAmount'
 import { CurrencySelectorComponent } from 'components/CurrencySelector/CurrencySelector'
+import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
+import { toAmount } from 'utils/toAmount'
+import { CurrencyAmountField } from '../CurrencyAmountField'
+import { Balance } from './Balance'
 
 type CurrencyInputFieldProps = {
   currencyAmountIn: CurrencyAmount<Currency>

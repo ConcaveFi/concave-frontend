@@ -1,14 +1,14 @@
-import { Text, Button, Modal, Image, Stack, Link } from '@concave/ui'
+import { ChainId, DAI, NATIVE } from '@concave/gemswap-sdk'
+import { Button, Image, Link, Modal, Stack, Text } from '@concave/ui'
 import { Wallet } from 'ethers'
-import { parseEther, hexlify, parseUnits } from 'ethers/lib/utils'
-import { ChainId, DAI, NATIVE } from 'gemswap-sdk'
+import { hexlify, parseEther, parseUnits } from 'ethers/lib/utils'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { concaveProvider } from 'lib/providers'
-import { useNetwork, useAccount, useContractWrite, chain } from 'wagmi'
-import { useQuery } from 'react-query'
-import { getTxExplorer } from './TransactionSubmittedDialog'
 import { useEffect, useState } from 'react'
+import { useQuery } from 'react-query'
+import { chain, useAccount, useContractWrite, useNetwork } from 'wagmi'
 import { useWorthyUser } from './DevelopGateway'
+import { getTxExplorer } from './TransactionSubmittedDialog'
 
 const faucetKey = process.env.NEXT_PUBLIC_FAUCET_PK
 const faucet = faucetKey && new Wallet(faucetKey, concaveProvider(ChainId.ROPSTEN))

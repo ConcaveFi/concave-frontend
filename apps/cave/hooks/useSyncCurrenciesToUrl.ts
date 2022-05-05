@@ -1,5 +1,5 @@
 import { isAddress } from 'ethers/lib/utils'
-import { ChainId, Currency, Fetcher, NATIVE, Token } from 'gemswap-sdk'
+import { ChainId, Currency, Fetcher, NATIVE, Token } from '@concave/gemswap-sdk'
 import { concaveProvider } from 'lib/providers'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'

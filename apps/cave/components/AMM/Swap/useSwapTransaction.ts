@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { SwapSettings } from '../Settings'
-import { RouterABI, ROUTER_ADDRESS, Router, Currency, TradeType, Trade } from 'gemswap-sdk'
+import { RouterABI, ROUTER_ADDRESS, Router, Currency, TradeType, Trade } from '@concave/gemswap-sdk'
 import { Contract, ethers, Transaction } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useContract, UserRejectedRequestError, useSigner } from 'wagmi'

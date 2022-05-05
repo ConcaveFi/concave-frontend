@@ -1,10 +1,10 @@
+import { Currency } from '@concave/gemswap-sdk'
 import { HStack, Spinner, Text } from '@concave/ui'
-import { Currency } from 'gemswap-sdk'
-import { useFiatPrice } from '../hooks/useFiatPrice'
-import { usePrice } from '../hooks/usePrice'
-import { NoValidPairsError } from '../hooks/usePair'
-import { InvalidTradeError } from '../hooks/useTrade'
 import { useReducer } from 'react'
+import { useFiatPrice } from '../hooks/useFiatPrice'
+import { NoValidPairsError } from '../hooks/usePair'
+import { usePrice } from '../hooks/usePrice'
+import { InvalidTradeError } from '../hooks/useTrade'
 
 const PairsError = ({ error }) => {
   return (

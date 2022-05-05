@@ -1,7 +1,7 @@
+import { Currency, CurrencyAmount, Percent, Trade, TradeType } from '@concave/gemswap-sdk'
 import { ExpandArrowIcon } from '@concave/icons'
 import { Box, Button, Flex, Heading, HStack, Modal, Stack, StackDivider, Text } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
-import { Currency, CurrencyAmount, Percent, Trade, TradeType } from 'gemswap-sdk'
 import React from 'react'
 import { useFiatValue } from '../hooks/useFiatPrice'
 import { usePrice } from '../hooks/usePrice'
