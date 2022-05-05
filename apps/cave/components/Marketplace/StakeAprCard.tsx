@@ -1,7 +1,61 @@
-import { Text, VStack, HStack, Flex, Image } from '@concave/ui'
+import { Text, VStack, HStack, Flex, Image, useMediaQuery, Box } from '@concave/ui'
+import { useEffect, useState } from 'react'
 
-const StakeAprCard = (props: any) => {
+interface StakeAprCardProps {
+  title: string
+  length: string
+  text: string
+  image: string
+  diluted: boolean
+}
+const StakeAprCard = (props: StakeAprCardProps) => {
+  const [isLargerThan1200] = useMediaQuery('(min-width: 1200px)')
   const { title, length, text, image, diluted } = props
+  const [direction, setDirection] = useState<'row' | 'column'>('column')
+
+  useEffect(() => {
+    setDirection(isLargerThan1200 ? 'row' : 'column')
+  }, [isLargerThan1200])
+
+  return !isLargerThan1200 ? <MobileLayout props={props} /> : <DefaultLayout props={props} />
+}
+
+interface MobileLayoutProps {
+  props: StakeAprCardProps
+}
+
+const MobileLayout = (props: MobileLayoutProps) => {
+  const { title, length, text, image, diluted } = props.props
+
+  return (
+    <Flex direction={'column'} align="center" justify={'center'} flex={1} position="relative">
+      <Text fontSize="xs" color="text.low" fontWeight="medium">
+        Stake Period
+      </Text>
+      <Text fontSize="s" color="white" fontWeight="bold">
+        {title}
+      </Text>
+      <Flex position={'relative'} height="40px" width={'full'} align="center">
+        <Flex position={'absolute'} width="full">
+          <Image h="70px" w="70px" src={image} alt={`stake-period-${length}`} mx="auto" />
+        </Flex>
+      </Flex>
+      <Text fontSize="xs" color="text.low" fontWeight="medium">
+        {!diluted && 'v'}APR
+      </Text>
+
+      <Text fontSize="s" color="white" fontWeight="bold">
+        {text}
+      </Text>
+    </Flex>
+  )
+}
+interface DefaultLayoutProps {
+  props: StakeAprCardProps
+}
+
+const DefaultLayout = (props: DefaultLayoutProps) => {
+  const { title, length, text, image, diluted } = props.props
   return (
     <Flex>
       <VStack>
@@ -30,4 +84,5 @@ const StakeAprCard = (props: any) => {
     </Flex>
   )
 }
+
 export default StakeAprCard

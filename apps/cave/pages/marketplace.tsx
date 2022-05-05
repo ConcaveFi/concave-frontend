@@ -48,15 +48,8 @@ const Marketplace = () => {
         <GraphicGuide />
       </Flex>
 
-      <Flex direction={columnDirection} justify="center" align={'center'} width="full">
-        <Flex
-          direction="column"
-          float={'left'}
-          mr="6"
-          gap={8}
-          position="relative"
-          mt={searchCardMT}
-        >
+      <Flex direction={columnDirection} justify="center" align={'center'} gap={4} width="full">
+        <Flex direction="column" float={'left'} gap={8} position="relative" mt={searchCardMT}>
           <MarketplaceSearchCard />
         </Flex>
         <Flex direction="column" gap={5} position="relative" mt={searchCardMT}>
