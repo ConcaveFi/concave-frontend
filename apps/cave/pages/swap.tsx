@@ -68,7 +68,7 @@ export function SwapPage() {
   const hasDetails = !!trade.data.route && trade.data.outputAmount.greaterThan(0)
   const [isDetailsOpen, toggleDetails] = useReducer((s) => hasDetails && !s, false)
   useEffect(() => {
-    !hasDetails && toggleDetails()
+    !hasDetails && toggleDetails() // lol that's a hackyish way of doing that
   }, [hasDetails])
 
   return (
@@ -152,7 +152,7 @@ export function SwapPage() {
 
       <WaitingConfirmationDialog isOpen={swapTx.isWaitingForConfirmation}>
         <Text fontSize="lg" color="text.accent">
-          Swaping {swapTx.trade?.inputAmount.toSignificant(6, { groupSeparator: ',' })}{' '}
+          Swapping {swapTx.trade?.inputAmount.toSignificant(6, { groupSeparator: ',' })}{' '}
           {swapTx.trade?.inputAmount.currency.symbol} for{' '}
           {swapTx.trade?.outputAmount.toSignificant(6, { groupSeparator: ',' })}{' '}
           {swapTx.trade?.outputAmount.currency.symbol}
