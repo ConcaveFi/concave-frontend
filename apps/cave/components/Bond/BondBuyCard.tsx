@@ -48,7 +48,7 @@ export function BondBuyCard() {
   const confirmModal = useDisclosure()
   const receiptModal = useDisclosure()
   const { allowance, sendApproveTx } = useApprove(currencyIn, BOND_ADDRESS[networkId])
-  const allowanceIsNotEnough = !!allowance.value?.lt(amountIn.toExact())
+  const allowanceIsNotEnough = !!allowance.value < amountIn.toExact()
 
   useEffect(() => {
     getBondSpotPrice(networkId, BOND_ADDRESS[networkId])
