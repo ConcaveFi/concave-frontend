@@ -82,28 +82,30 @@ function PageNav() {
           Bonds
         </NavButton>
         <Text fontSize="xs" fontWeight="bold" textColor="text.low" textAlign="center" py={2}>
-          Coming Soon
+          CNV-DAI 
           {/* CNV-DAI ROI{' '}
           {`${
             cnvMarketPrice > 0 ? ((cnvMarketPrice / +bondSpotPrice - 1) * 100).toFixed(2) : '---'
           }%`} */}
         </Text>
       </Box>
-
+      <Box shadow="Down Big" roundedLeft="2xl" mt="24px">
       <NavButton
         leftIcon={<NotInteractableImage src="/assets/sidebar/page-lstaking.svg" />}
         href="/liquidstaking"
         variant="secondary"
         border="primary"
-        mt="26px"
+        mt="2px"
       >
         Liquid Staking
       </NavButton>
+      <SubnavButton href="/dashboard">Your Positions</SubnavButton>
+      </Box>
 
       <NavButton
         leftIcon={<NotInteractableImage src="/assets/sidebar/page-marketplace.svg" />}
         href="/marketplace"
-        mt="60px"
+        mt="26px"
       >
         Marketplace
       </NavButton>

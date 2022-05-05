@@ -29,13 +29,13 @@ function SideBarTop() {
 
       <Stack gap="1" align="flex-end" mt={7}>
         <ButtonLink
-          href="/dashboard"
+          href="/treasury"
           variant="primary.outline"
           size="medium"
           w="full"
           leftIcon={<MdOutlineDashboard size="20px" />}
         >
-          Dashboard
+          Treasury
         </ButtonLink>
         <Box shadow="down" w="full" p={1} rounded="2xl">
           <ConnectWallet />
