@@ -9,8 +9,7 @@ export default function TreasuryManagementCard(props: TreasuryCardProps) {
       direction={'column'}
       width={'900px'}
       height="400px"
-      bg={'rgba(113, 113, 113, 0.01)'}
-      backdropFilter="blur(15px)"
+      bg={'#111e'}
       shadow={'0px 4px 4px rgba(0, 0, 0, 0.25), inset 0px 0px 20px rgba(87, 124, 255, 0.3)'}
     >
       <Flex direction={'row'} flex={1} m={'20px'} alignItems="start" gap={5}>
