@@ -100,7 +100,7 @@ const useAddTokenToWallet = ({ tokenAddress, tokenChainId, tokenImage }: injecte
 
           setLoading(false)
           setData(true)
-        } catch (error: any) {
+        } catch (error) {
           setLoading(false)
           setError(!!error)
           setData(false)
