@@ -54,7 +54,7 @@ export const ExpectedOutput = ({
       </Flex>
       <Flex justify="space-between">
         <Text>Price Impact</Text>
-        <Text>{priceImpact.toSignificant(6, { groupSeparator: ',' })}%</Text>
+        <Text>{priceImpact.toFixed(2, { groupSeparator: ',' })}%</Text>
       </Flex>
     </Stack>
   )

@@ -156,6 +156,8 @@ export class Fraction {
     invariant(Number.isInteger(decimalPlaces), `${decimalPlaces} is not an integer.`)
     invariant(decimalPlaces >= 0, `${decimalPlaces} is negative.`)
 
+    if (this.numerator.toString() === ZERO.toString()) return '0'
+
     Big.DP = decimalPlaces
     Big.RM = toFixedRounding[rounding]
     return new Big(this.numerator.toString())

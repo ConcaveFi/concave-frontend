@@ -1,4 +1,5 @@
 import { CNV, DAI } from '@concave/gemswap-sdk'
+import { position } from '@concave/ui'
 import { Contract, ethers, utils } from 'ethers'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
@@ -112,41 +113,33 @@ export const getUserBondPositions = async (
   let batchRedeemArray = []
   let totalPending = 0
   let totalOwed = 0
-  let rawPending = 0
   let rawOwed = 0
   let oldest = 0
   let oldestCreationTimestamp = 0
   let claimed = false
+  let redeemable = 0
   const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, providers(networkId))
   const getUserPositionsLength = await bondingContract.getUserPositionCount(address)
   const termData = await bondingContract.term()
   for (let i = 0; i < +getUserPositionsLength; i++) {
-    const positionData = await bondingContract.positions(address, i)
-
-    rawPending += +positionData.redeemed
-    rawOwed += +positionData.owed
     batchRedeemArray.push(+i)
+    const positionData = await bondingContract.positions(address, i)
+    rawOwed += +positionData.owed
     if (i === getUserPositionsLength - 1) {
       oldest += +positionData.creation
       oldestCreationTimestamp += +positionData.creation
     }
+    let length = currentBlockTimestamp - positionData.creation
+    let elapsed = length / termData > 1 ? 1 : length / termData
+    redeemable += positionData.owed * elapsed - positionData.redeemed
     totalPending += +(+utils.formatEther(positionData.redeemed))
     totalOwed += +(+utils.formatEther(positionData.owed))
   }
-  // position.debt * (block.timestamp - position.creation) / ps.term - position.redeemed;
   const fullyVestedTimestamp = oldest * 1000 + 86400000
-  const msCurrentBlockTimestamp = currentBlockTimestamp * 1000
-  // const delta = fullyVestedTimestamp - msCurrentBlockTimestamp
-  // let elapsed =
-  //   msCurrentBlockTimestamp >= fullyVestedTimestamp
-  //     ? 1
-  //     : +msCurrentBlockTimestamp / fullyVestedTimestamp
-  const delta = +currentBlockTimestamp - +oldestCreationTimestamp
-  const scaleDown = delta / termData > 1 ? 1 : termData / delta
-  let currentlyOwed = +rawOwed * scaleDown
   const parseOldest = new Date(fullyVestedTimestamp).toString().slice(4, 21)
+  const parseRedeemable = +utils.formatEther(redeemable.toString())
   if (totalPending === totalOwed) claimed = true
-  return { parseOldest, totalOwed, totalPending, batchRedeemArray, claimed }
+  return { parseOldest, totalOwed, totalPending, batchRedeemArray, claimed, parseRedeemable }
 }
 
 export const useBondState = () => {
