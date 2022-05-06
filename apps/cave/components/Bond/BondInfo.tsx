@@ -50,7 +50,7 @@ export const UserBondPositionInfo = (bondSigma, userAddress) => {
     <>
       {claimed ? (
         'You have no open positions'
-      ) : !!redeemable ? (
+      ) : redeemable ? (
         <Card bg="none" py={3} w="100%" direction="row" shadow="Glass Up Medium">
           <Flex justify="center" pl={4} pr={7}>
             <InfoItem
@@ -77,7 +77,7 @@ export const UserBondPositionInfo = (bondSigma, userAddress) => {
           <SpinIcon __css={spinnerStyles} width={'10'} height={'10'} />
         </>
       ) : (
-        'You have no open positions'
+        ''
       )}
     </>
   )
