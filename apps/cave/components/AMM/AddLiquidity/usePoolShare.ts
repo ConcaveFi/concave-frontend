@@ -1,8 +1,4 @@
 import { Currency, CurrencyAmount, Pair, Percent, Token } from '@concave/gemswap-sdk'
-import { useQuery } from 'react-query'
-import { Contract } from 'ethers'
-import { erc20ABI, useProvider } from 'wagmi'
-import { toAmount } from 'utils/toAmount'
 
 export type PoolShare = {
   amount: CurrencyAmount<Token>
@@ -19,9 +15,8 @@ export const usePoolShare = (
     amount0?.greaterThan(0) &&
     amount1?.greaterThan(0) &&
     pair?.getLiquidityMinted(pair.liquidityToken.totalSupply, amount0.wrapped, amount1.wrapped)
-
-  console.log(pair?.liquidityToken?.totalSupply?.numerator.toString())
   if (!poolShareAmount) return undefined
+  console.log(poolShareAmount.toExact())
   return {
     amount: poolShareAmount.divide(poolShareAmount.decimalScale),
     percent: new Percent(poolShareAmount.numerator, pair.liquidityToken.totalSupply.numerator),
