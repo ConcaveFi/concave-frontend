@@ -1,4 +1,4 @@
-import { CurrencyAmount, Price, Token } from '../../src/entities'
+import { CurrencyAmount, Price, Token } from '../../src'
 
 describe('Price', () => {
   const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000'

@@ -12,7 +12,8 @@
   ],
   "scripts": {
     "build": "tsup index.tsx --format esm,cjs --dts",
-    "dev": "tsup index.tsx --format esm,cjs --watch --dts"
+    "dev": "tsup index.tsx --format esm,cjs --watch --dts",
+    "test": "tsdx test --passWithNoTests"
   },
   "dependencies": {
     "@ethersproject/address": "^5.4.0",

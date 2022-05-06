@@ -246,9 +246,10 @@ export class Pair {
   public static createVirtualPair(
     currencyAmount1: CurrencyAmount<Currency>,
     currencyAmount2: CurrencyAmount<Currency>,
+    address?: string,
   ) {
     try {
-      const virtualAddress = '0x0000000000000000000000000000000000000001'
+      const virtualAddress = address || '0x0000000000000000000000000000000000000001'
       const liquidityToken = new Token(
         currencyAmount1.currency.chainId,
         virtualAddress,

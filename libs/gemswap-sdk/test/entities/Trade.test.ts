@@ -20,39 +20,39 @@ describe('Trade', () => {
   const token2 = new Token(1, '0x0000000000000000000000000000000000000003', 18, 't2')
   const token3 = new Token(1, '0x0000000000000000000000000000000000000004', 18, 't3')
 
-  const pair_0_1 = new Pair(
+  const pair_0_1 = Pair.createVirtualPair(
     CurrencyAmount.fromRawAmount(token0, JSBI.BigInt(1000)),
     CurrencyAmount.fromRawAmount(token1, JSBI.BigInt(1000)),
     '0x1111111111111111111111111111111111111101',
   )
-  const pair_0_2 = new Pair(
+  const pair_0_2 = Pair.createVirtualPair(
     CurrencyAmount.fromRawAmount(token0, JSBI.BigInt(1000)),
     CurrencyAmount.fromRawAmount(token2, JSBI.BigInt(1100)),
     '0x1111111111111111111111111111111111111102',
   )
-  const pair_0_3 = new Pair(
+  const pair_0_3 = Pair.createVirtualPair(
     CurrencyAmount.fromRawAmount(token0, JSBI.BigInt(1000)),
     CurrencyAmount.fromRawAmount(token3, JSBI.BigInt(900)),
     '0x1111111111111111111111111111111111111103',
   )
-  const pair_1_2 = new Pair(
+  const pair_1_2 = Pair.createVirtualPair(
     CurrencyAmount.fromRawAmount(token1, JSBI.BigInt(1200)),
     CurrencyAmount.fromRawAmount(token2, JSBI.BigInt(1000)),
     '0x1111111111111111111111111111111111111112',
   )
-  const pair_1_3 = new Pair(
+  const pair_1_3 = Pair.createVirtualPair(
     CurrencyAmount.fromRawAmount(token1, JSBI.BigInt(1200)),
     CurrencyAmount.fromRawAmount(token3, JSBI.BigInt(1300)),
     '0x1111111111111111111111111111111111111113',
   )
 
-  const pair_weth_0 = new Pair(
+  const pair_weth_0 = Pair.createVirtualPair(
     CurrencyAmount.fromRawAmount(WETH9[1], JSBI.BigInt(1000)),
     CurrencyAmount.fromRawAmount(token0, JSBI.BigInt(1000)),
     '0x1111111111111111111111111111111111111110',
   )
 
-  const empty_pair_0_1 = new Pair(
+  const empty_pair_0_1 = Pair.createVirtualPair(
     CurrencyAmount.fromRawAmount(token0, JSBI.BigInt(0)),
     CurrencyAmount.fromRawAmount(token1, JSBI.BigInt(0)),
     '0x1111111111111111111111111111111111111100',

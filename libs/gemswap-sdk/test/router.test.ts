@@ -18,13 +18,13 @@ describe('Router', () => {
   const token0 = new Token(1, '0x0000000000000000000000000000000000000001', 18, 't0')
   const token1 = new Token(1, '0x0000000000000000000000000000000000000002', 18, 't1')
 
-  const pair_0_1 = new Pair(
+  const pair_0_1 = Pair.createVirtualPair(
     CurrencyAmount.fromRawAmount(token0, JSBI.BigInt(1000)),
     CurrencyAmount.fromRawAmount(token1, JSBI.BigInt(1000)),
     '0x1111111111111111111111111111111111111111',
   )
 
-  const pair_weth_0 = new Pair(
+  const pair_weth_0 = Pair.createVirtualPair(
     CurrencyAmount.fromRawAmount(WETH9[1], '1000'),
     CurrencyAmount.fromRawAmount(token0, '1000'),
     '0x1111111111111111111111111111111111111111',

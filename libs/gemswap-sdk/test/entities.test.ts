@@ -36,17 +36,17 @@ describe('entities', () => {
       let pairs: Pair[]
       it('Pair', () => {
         pairs = [
-          new Pair(
+          Pair.createVirtualPair(
             CurrencyAmount.fromRawAmount(tokens[0], decimalize(1, tokens[0].decimals)),
             CurrencyAmount.fromRawAmount(tokens[1], decimalize(1, tokens[1].decimals)),
             '0x1111111111111111111111111111111111111111',
           ),
-          new Pair(
+          Pair.createVirtualPair(
             CurrencyAmount.fromRawAmount(tokens[1], decimalize(1, tokens[1].decimals)),
             CurrencyAmount.fromRawAmount(tokens[2], decimalize(1, tokens[2].decimals)),
             '0x1111111111111111111111111111111111111111',
           ),
-          new Pair(
+          Pair.createVirtualPair(
             CurrencyAmount.fromRawAmount(tokens[2], decimalize(1, tokens[2].decimals)),
             CurrencyAmount.fromRawAmount(WETH9, decimalize(1234, WETH9.decimals)),
             '0x1111111111111111111111111111111111111111',
@@ -97,7 +97,7 @@ describe('entities', () => {
         it('TradeType.EXACT_INPUT', () => {
           route = new Route(
             [
-              new Pair(
+              Pair.createVirtualPair(
                 CurrencyAmount.fromRawAmount(tokens[1], decimalize(5, tokens[1].decimals)),
                 CurrencyAmount.fromRawAmount(WETH9, decimalize(10, WETH9.decimals)),
                 '0x1111111111111111111111111111111111111111',
@@ -157,7 +157,7 @@ describe('entities', () => {
           if ([9, 18].includes(tokens[1].decimals)) {
             const route = new Route(
               [
-                new Pair(
+                Pair.createVirtualPair(
                   CurrencyAmount.fromRawAmount(tokens[1], decimalize(1, tokens[1].decimals)),
                   CurrencyAmount.fromRawAmount(
                     WETH9,

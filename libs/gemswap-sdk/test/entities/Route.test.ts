@@ -7,17 +7,17 @@ describe('Route', () => {
   const token0 = new Token(1, '0x0000000000000000000000000000000000000001', 18, 't0')
   const token1 = new Token(1, '0x0000000000000000000000000000000000000002', 18, 't1')
   const weth = WETH9[1]
-  const pair_0_1 = new Pair(
+  const pair_0_1 = Pair.createVirtualPair(
     CurrencyAmount.fromRawAmount(token0, '100'),
     CurrencyAmount.fromRawAmount(token1, '200'),
     '0x1111111111111111111111111111111111111111',
   )
-  const pair_0_weth = new Pair(
+  const pair_0_weth = Pair.createVirtualPair(
     CurrencyAmount.fromRawAmount(token0, '100'),
     CurrencyAmount.fromRawAmount(weth, '100'),
     '0x1111111111111111111111111111111111111111',
   )
-  const pair_1_weth = new Pair(
+  const pair_1_weth = Pair.createVirtualPair(
     CurrencyAmount.fromRawAmount(token1, '175'),
     CurrencyAmount.fromRawAmount(weth, '100'),
     '0x1111111111111111111111111111111111111111',

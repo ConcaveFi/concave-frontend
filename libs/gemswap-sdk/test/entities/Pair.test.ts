@@ -69,13 +69,12 @@ describe('Pair', () => {
 
   describe('constructor', () => {
     it('cannot be used for tokens on different chains', () => {
-      expect(
-        () =>
-          new Pair(
-            CurrencyAmount.fromRawAmount(USDC, '100'),
-            CurrencyAmount.fromRawAmount(WETH9[3], '100'),
-            '0x1111111111111111111111111111111111111111',
-          ),
+      expect(() =>
+        Pair.createVirtualPair(
+          CurrencyAmount.fromRawAmount(USDC, '100'),
+          CurrencyAmount.fromRawAmount(WETH9[3], '100'),
+          '0x1111111111111111111111111111111111111111',
+        ),
       ).toThrow('CHAIN_IDS')
     })
   })
@@ -89,14 +88,14 @@ describe('Pair', () => {
   describe('#token0', () => {
     it('always is the token that sorts before', () => {
       expect(
-        new Pair(
+        Pair.createVirtualPair(
           CurrencyAmount.fromRawAmount(USDC, '100'),
           CurrencyAmount.fromRawAmount(DAI, '100'),
           '0x1111111111111111111111111111111111111111',
         ).token0,
       ).toEqual(DAI)
       expect(
-        new Pair(
+        Pair.createVirtualPair(
           CurrencyAmount.fromRawAmount(DAI, '100'),
           CurrencyAmount.fromRawAmount(USDC, '100'),
           '0x1111111111111111111111111111111111111111',
@@ -107,14 +106,14 @@ describe('Pair', () => {
   describe('#token1', () => {
     it('always is the token that sorts after', () => {
       expect(
-        new Pair(
+        Pair.createVirtualPair(
           CurrencyAmount.fromRawAmount(USDC, '100'),
           CurrencyAmount.fromRawAmount(DAI, '100'),
           '0x1111111111111111111111111111111111111111',
         ).token1,
       ).toEqual(USDC)
       expect(
-        new Pair(
+        Pair.createVirtualPair(
           CurrencyAmount.fromRawAmount(DAI, '100'),
           CurrencyAmount.fromRawAmount(USDC, '100'),
           '0x1111111111111111111111111111111111111111',
@@ -125,14 +124,14 @@ describe('Pair', () => {
   describe('#reserve0', () => {
     it('always comes from the token that sorts before', () => {
       expect(
-        new Pair(
+        Pair.createVirtualPair(
           CurrencyAmount.fromRawAmount(USDC, '100'),
           CurrencyAmount.fromRawAmount(DAI, '101'),
           '0x1111111111111111111111111111111111111111',
         ).reserve0,
       ).toEqual(CurrencyAmount.fromRawAmount(DAI, '101'))
       expect(
-        new Pair(
+        Pair.createVirtualPair(
           CurrencyAmount.fromRawAmount(DAI, '101'),
           CurrencyAmount.fromRawAmount(USDC, '100'),
           '0x1111111111111111111111111111111111111111',
@@ -143,14 +142,14 @@ describe('Pair', () => {
   describe('#reserve1', () => {
     it('always comes from the token that sorts after', () => {
       expect(
-        new Pair(
+        Pair.createVirtualPair(
           CurrencyAmount.fromRawAmount(USDC, '100'),
           CurrencyAmount.fromRawAmount(DAI, '101'),
           '0x1111111111111111111111111111111111111111',
         ).reserve1,
       ).toEqual(CurrencyAmount.fromRawAmount(USDC, '100'))
       expect(
-        new Pair(
+        Pair.createVirtualPair(
           CurrencyAmount.fromRawAmount(DAI, '101'),
           CurrencyAmount.fromRawAmount(USDC, '100'),
           '0x1111111111111111111111111111111111111111',
@@ -162,14 +161,14 @@ describe('Pair', () => {
   describe('#token0Price', () => {
     it('returns price of token0 in terms of token1', () => {
       expect(
-        new Pair(
+        Pair.createVirtualPair(
           CurrencyAmount.fromRawAmount(USDC, '101'),
           CurrencyAmount.fromRawAmount(DAI, '100'),
           '0x1111111111111111111111111111111111111111',
         ).token0Price,
       ).toEqual(new Price(DAI, USDC, '100', '101'))
       expect(
-        new Pair(
+        Pair.createVirtualPair(
           CurrencyAmount.fromRawAmount(DAI, '100'),
           CurrencyAmount.fromRawAmount(USDC, '101'),
           '0x1111111111111111111111111111111111111111',
@@ -181,14 +180,14 @@ describe('Pair', () => {
   describe('#token1Price', () => {
     it('returns price of token1 in terms of token0', () => {
       expect(
-        new Pair(
+        Pair.createVirtualPair(
           CurrencyAmount.fromRawAmount(USDC, '101'),
           CurrencyAmount.fromRawAmount(DAI, '100'),
           '0x1111111111111111111111111111111111111111',
         ).token1Price,
       ).toEqual(new Price(USDC, DAI, '101', '100'))
       expect(
-        new Pair(
+        Pair.createVirtualPair(
           CurrencyAmount.fromRawAmount(DAI, '100'),
           CurrencyAmount.fromRawAmount(USDC, '101'),
           '0x1111111111111111111111111111111111111111',
@@ -198,7 +197,7 @@ describe('Pair', () => {
   })
 
   describe('#priceOf', () => {
-    const pair = new Pair(
+    const pair = Pair.createVirtualPair(
       CurrencyAmount.fromRawAmount(USDC, '101'),
       CurrencyAmount.fromRawAmount(DAI, '100'),
       '0x1111111111111111111111111111111111111111',
@@ -216,14 +215,14 @@ describe('Pair', () => {
   describe('#reserveOf', () => {
     it('returns reserves of the given token', () => {
       expect(
-        new Pair(
+        Pair.createVirtualPair(
           CurrencyAmount.fromRawAmount(USDC, '100'),
           CurrencyAmount.fromRawAmount(DAI, '101'),
           '0x1111111111111111111111111111111111111111',
         ).reserveOf(USDC),
       ).toEqual(CurrencyAmount.fromRawAmount(USDC, '100'))
       expect(
-        new Pair(
+        Pair.createVirtualPair(
           CurrencyAmount.fromRawAmount(DAI, '101'),
           CurrencyAmount.fromRawAmount(USDC, '100'),
           '0x1111111111111111111111111111111111111111',
@@ -233,7 +232,7 @@ describe('Pair', () => {
 
     it('throws if not in the pair', () => {
       expect(() =>
-        new Pair(
+        Pair.createVirtualPair(
           CurrencyAmount.fromRawAmount(DAI, '101'),
           CurrencyAmount.fromRawAmount(USDC, '100'),
           '0x1111111111111111111111111111111111111111',
@@ -245,14 +244,14 @@ describe('Pair', () => {
   describe('#chainId', () => {
     it('returns the token0 chainId', () => {
       expect(
-        new Pair(
+        Pair.createVirtualPair(
           CurrencyAmount.fromRawAmount(USDC, '100'),
           CurrencyAmount.fromRawAmount(DAI, '100'),
           '0x1111111111111111111111111111111111111111',
         ).chainId,
       ).toEqual(1)
       expect(
-        new Pair(
+        Pair.createVirtualPair(
           CurrencyAmount.fromRawAmount(DAI, '100'),
           CurrencyAmount.fromRawAmount(USDC, '100'),
           '0x1111111111111111111111111111111111111111',
@@ -262,21 +261,21 @@ describe('Pair', () => {
   })
   describe('#involvesToken', () => {
     expect(
-      new Pair(
+      Pair.createVirtualPair(
         CurrencyAmount.fromRawAmount(USDC, '100'),
         CurrencyAmount.fromRawAmount(DAI, '100'),
         '0x1111111111111111111111111111111111111111',
       ).involvesToken(USDC),
     ).toEqual(true)
     expect(
-      new Pair(
+      Pair.createVirtualPair(
         CurrencyAmount.fromRawAmount(USDC, '100'),
         CurrencyAmount.fromRawAmount(DAI, '100'),
         '0x1111111111111111111111111111111111111111',
       ).involvesToken(DAI),
     ).toEqual(true)
     expect(
-      new Pair(
+      Pair.createVirtualPair(
         CurrencyAmount.fromRawAmount(USDC, '100'),
         CurrencyAmount.fromRawAmount(DAI, '100'),
         '0x1111111111111111111111111111111111111111',
@@ -287,7 +286,7 @@ describe('Pair', () => {
     it('getLiquidityMinted:0', async () => {
       const tokenA = new Token(3, '0x0000000000000000000000000000000000000001', 18)
       const tokenB = new Token(3, '0x0000000000000000000000000000000000000002', 18)
-      const pair = new Pair(
+      const pair = Pair.createVirtualPair(
         CurrencyAmount.fromRawAmount(tokenA, '0'),
         CurrencyAmount.fromRawAmount(tokenB, '0'),
         '0x1111111111111111111111111111111111111111',
@@ -321,7 +320,7 @@ describe('Pair', () => {
     it('getLiquidityMinted:!0', async () => {
       const tokenA = new Token(3, '0x0000000000000000000000000000000000000001', 18)
       const tokenB = new Token(3, '0x0000000000000000000000000000000000000002', 18)
-      const pair = new Pair(
+      const pair = Pair.createVirtualPair(
         CurrencyAmount.fromRawAmount(tokenA, '10000'),
         CurrencyAmount.fromRawAmount(tokenB, '10000'),
         '0x1111111111111111111111111111111111111111',
@@ -341,7 +340,7 @@ describe('Pair', () => {
     it('getLiquidityValue:!feeOn', async () => {
       const tokenA = new Token(3, '0x0000000000000000000000000000000000000001', 18)
       const tokenB = new Token(3, '0x0000000000000000000000000000000000000002', 18)
-      const pair = new Pair(
+      const pair = Pair.createVirtualPair(
         CurrencyAmount.fromRawAmount(tokenA, '1000'),
         CurrencyAmount.fromRawAmount(tokenB, '1000'),
         '0x1111111111111111111111111111111111111111',
@@ -386,7 +385,7 @@ describe('Pair', () => {
     it('getLiquidityValue:feeOn', async () => {
       const tokenA = new Token(3, '0x0000000000000000000000000000000000000001', 18)
       const tokenB = new Token(3, '0x0000000000000000000000000000000000000002', 18)
-      const pair = new Pair(
+      const pair = Pair.createVirtualPair(
         CurrencyAmount.fromRawAmount(tokenA, '1000'),
         CurrencyAmount.fromRawAmount(tokenB, '1000'),
         '0x1111111111111111111111111111111111111111',
