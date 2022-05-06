@@ -9,6 +9,7 @@ import { Token } from './token'
 import invariant from 'tiny-invariant'
 import { sqrt } from '../functions/math'
 import { Currency } from './'
+import { Percent } from './percent'
 
 export class Pair {
   public readonly liquidityToken: Token
@@ -260,6 +261,23 @@ export class Pair {
       return new Pair(currencyAmount1.wrapped, currencyAmount2.wrapped, liquidityToken)
     } catch {
       return undefined
+    }
+  }
+
+  public calculatePoolShare(amount0: CurrencyAmount<Currency>, amount1: CurrencyAmount<Currency>) {
+    const poolShareAmount =
+      this.liquidityToken.totalSupply &&
+      amount0?.greaterThan(0) &&
+      amount1?.greaterThan(0) &&
+      this.getLiquidityMinted(this.liquidityToken.totalSupply, amount0.wrapped, amount1.wrapped)
+    if (!poolShareAmount) return undefined
+    const mewTotalSuppy = this.liquidityToken.totalSupply.add(poolShareAmount)
+    return {
+      amount: poolShareAmount,
+      percent: new Percent(poolShareAmount.numerator, mewTotalSuppy.numerator),
+    } as {
+      amount: CurrencyAmount<Token>
+      percent: Percent
     }
   }
 }
