@@ -4,18 +4,15 @@ import { ethers } from 'ethers'
 import React from 'react'
 
 export const BondReceiptModal = ({
-  // receipt,
+  receipt,
   isOpen,
   onClose,
 }: {
-  // receipt: {
-  //   data: ethers.providers.TransactionResponse
-  //   error: Error
-  //   loading: false
-  // }
+  receipt: ethers.providers.TransactionResponse
   isOpen: boolean
   onClose: () => void
 }) => {
+  console.log('receipt tx within modal', receipt)
   return (
     <Modal
       bluryOverlay={true}
@@ -31,16 +28,15 @@ export const BondReceiptModal = ({
       <Text align={'center'} fontSize={'24px'} fontWeight={600}>
         Transaction Submitted <br />
         {/* FIX THIS */}
-        {/* <Link
-          // href={`https://etherscan.io/tx/${receipt?.data?.hash}`}
-          href={'https://etherscan.io/tx/'}
+        <Link
+          href={`https://etherscan.io/tx/${receipt?.hash}`}
           fontWeight={400}
           fontSize={'18px'}
           textColor={'Highlight'}
           isExternal
         >
           View on Explorer
-        </Link> */}
+        </Link>
       </Text>
 
       <Flex>

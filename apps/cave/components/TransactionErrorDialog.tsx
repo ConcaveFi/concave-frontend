@@ -11,7 +11,8 @@ const TransactionError = ({ error, onClose }: { error: string; onClose: () => vo
       wordBreak="break-word"
       fontSize="md"
       fontWeight="bold"
-      maxH="50vh"
+      maxH="40vh"
+      overflow="auto"
     >
       {error}
     </Text>

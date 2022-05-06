@@ -52,37 +52,28 @@ export const purchaseBond = async (
   amountOut: string,
 ) => {
   const ROPSTEN_DAI_ADDRESS = '0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4'
-  const ROPSTEN_DAI_CONTRACT = new ethers.Contract(ROPSTEN_DAI_ADDRESS, ROPSTEN_DAI_ABI, signer)
-  const currentAllowance = await ROPSTEN_DAI_CONTRACT.allowance(address, BOND_ADDRESS[networkId])
   const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, signer)
   const minOutput = +(+amountOut - (+settings.slippageTolerance.value / 100) * +amountOut).toFixed(
     2,
   )
-  const formattedInput = ethers.utils.parseUnits(input.toString(), 18)
-  const formattedMinOutput = ethers.utils.parseUnits(minOutput.toString(), 18)
-  const formattedAllowance = ethers.utils.formatEther(currentAllowance)
-  const intParseInput = +input
-  const intParseAllowance = +formattedAllowance
-  if (intParseInput > intParseAllowance) {
-    await ROPSTEN_DAI_CONTRACT.approve('0x5C2bDbdb14E2f6b6A443B0f2FfF34F269e5DE81d', formattedInput)
-  } else {
-    const estimatedGas = await bondingContract.estimateGas.purchaseBond(
-      address,
-      ROPSTEN_DAI_ADDRESS,
-      formattedInput,
-      formattedMinOutput,
-    )
-    await bondingContract.purchaseBond(
-      address,
-      ROPSTEN_DAI_ADDRESS,
-      formattedInput,
-      formattedMinOutput,
-      {
-        gasLimit: estimatedGas,
-      },
-    )
-  }
-  return
+  1
+  const formattedInput = utils.parseUnits(input.toString(), 18)
+  const formattedMinOutput = utils.parseUnits(minOutput.toString(), 18)
+  const estimatedGas = await bondingContract.estimateGas.purchaseBond(
+    address,
+    ROPSTEN_DAI_ADDRESS,
+    formattedInput,
+    formattedMinOutput,
+  )
+  return await bondingContract.purchaseBond(
+    address,
+    ROPSTEN_DAI_ADDRESS,
+    formattedInput,
+    formattedMinOutput,
+    {
+      gasLimit: estimatedGas,
+    },
+  )
 }
 
 export async function getCurrentBlockTimestamp() {
@@ -139,7 +130,6 @@ export const getUserBondPositions = async (
       positionData.owed * elapsed < positionData.redeemed
         ? 0
         : positionData.owed * elapsed - positionData.redeemed
-
     totalPending += +(+utils.formatEther(positionData.redeemed))
     totalOwed += +(+utils.formatEther(positionData.owed))
   }

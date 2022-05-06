@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { Box, Flex, Text, Image, Collapse } from '@concave/ui'
 import { ButtonLink, ButtonLinkProps } from 'components/ButtonLink'
 import { useRouter } from 'next/router'
+import { getBondSpotPrice } from 'components/Bond/BondState'
 
 const NavButton = (props: ButtonLinkProps) => {
   const router = useRouter()
@@ -31,7 +32,7 @@ const SubnavButton = ({ children, ...props }: ButtonLinkProps) => {
     <ButtonLink
       px={4}
       py={'10px'}
-      w="full"
+      w="175px"
       color="text.low"
       variant="secondary"
       bg="none"
@@ -53,18 +54,23 @@ const NotInteractableImage = ({ src, ...props }) => (
 )
 
 function PageNav() {
-  // const [bondSpotPrice, setBondSpotPrice] = useState<string>('0')
-  // const [cnvMarketPrice, setCnvMarketPrice] = useState<number>(0)
-  // const { data } = useFetchApi('/api/cnv')
-
-  // if (cnvMarketPrice === 0 && !!data) {
-  //   setCnvMarketPrice(data.cnv)
-  // }
-  // useEffect(() => {
-  //   getBondSpotPrice(3, '').then((bondSpotPrice) => {
-  //     setBondSpotPrice(bondSpotPrice)
-  //   })
-  // }, [cnvMarketPrice])
+  const [bondSpotPrice, setBondSpotPrice] = useState<string>('0')
+  const [cnvMarketPrice, setCnvMarketPrice] = useState<number>(0)
+  useEffect(() => {
+    getBondSpotPrice(3, '').then((bondSpotPrice) => {
+      setBondSpotPrice(bondSpotPrice)
+    })
+    fetch('/api/cnv')
+      .then((j) => j.json())
+      .then((data) => {
+        if (data?.data) {
+          setCnvMarketPrice(data.data.last)
+        }
+      })
+      .catch((e) => {
+        throw e
+      })
+  }, [cnvMarketPrice])
   const router = useRouter()
 
   const [liquidStakingHover, setLiquidStakingHover] = useState(false)
@@ -92,11 +98,10 @@ function PageNav() {
           Bond
         </NavButton>
         <Text fontSize="xs" fontWeight="bold" textColor="text.low" textAlign="center" py={2}>
-          CNV-DAI
-          {/* CNV-DAI ROI{' '}
+          CNV-DAI{' '}
           {`${
-            cnvMarketPrice > 0 ? ((cnvMarketPrice / +bondSpotPrice - 1) * 100).toFixed(2) : '---'
-          }%`} */}
+            cnvMarketPrice > 0 ? (1 - +(+cnvMarketPrice / +bondSpotPrice).toFixed(2)) * 100 : '-'
+          }%`}
         </Text>
       </Box>
       <Box height={'110px'}>
@@ -119,7 +124,9 @@ function PageNav() {
             Stake
           </NavButton>
           <Collapse in={liquidStakingHover || liquidStakingPage}>
-            <SubnavButton href="/dashboard" mt="1px">Your Positions</SubnavButton>
+            <SubnavButton href="/dashboard" mt="1px">
+              Your Positions
+            </SubnavButton>
           </Collapse>
         </Box>
       </Box>

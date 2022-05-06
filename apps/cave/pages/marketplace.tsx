@@ -7,11 +7,6 @@ import {
   Container,
   Flex,
   Heading,
-  HStack,
-  Popover,
-  PopoverTrigger,
-  Portal,
-  Stack,
   Text,
   useMediaQuery,
 } from '@concave/ui'
@@ -19,16 +14,18 @@ import GraphicGuide from 'components/LiquidStaking/GraphicGuide'
 import MarketplaceSearchCard from 'components/Marketplace/MarketplaceSearchCard'
 import MarketplaceStakeCard from 'components/Marketplace/MarketplaceStakeCard'
 import MarketplaceActivityCard from 'components/Marketplace/MarketplaceActivityCard'
-import StakePeriodCard from 'components/Marketplace/StakePeriodCard'
 
 const Marketplace = () => {
   const [isMoreThan1200] = useMediaQuery('(min-width: 1200px)')
+  const [isMoreThan470] = useMediaQuery('(min-width: 470px)')
   const [columnDirection, setColumnDirection] = useState<'row' | 'column-reverse'>('row')
   const [headerDirection, setHeaderDirection] = useState<'row' | 'column'>('row')
   const [searchCardMT, setSearchCardMT] = useState(16)
   const [display, setDisplay] = useState<'flex' | 'none'>('flex')
   const [textAlign, setTextAlign] = useState<'right' | 'center'>('right')
   const [gap, setGap] = useState(8)
+  const [width, setWidth] = useState('')
+  const [pr, setPr] = useState(0)
 
   const [viewTransactios, setViewTransactions] = useState(false)
 
@@ -42,14 +39,33 @@ const Marketplace = () => {
     if (isMoreThan1200 && viewTransactios == true) setViewTransactions(false)
   }, [isMoreThan1200])
 
+  useEffect(() => {
+    setWidth(isMoreThan470 ? 'full' : '')
+    setPr(isMoreThan470 ? 0 : 5)
+  }, [isMoreThan470])
   return (
-    <Container maxW="container.lg" borderRadius={0} border="" textAlign="center">
+    <Flex
+      align={'center'}
+      borderRadius={0}
+      textAlign="center"
+      direction="column"
+      width={width}
+      pr={pr}
+    >
       {!viewTransactios ? (
         <>
           <Heading as="h1" mt={16} mb={3} fontSize="5xl">
             {'Marketplace'}
           </Heading>
-          <Flex direction={headerDirection} mt={0} align="center" gap={10} justify="center">
+          <Flex
+            direction={headerDirection}
+            mt={0}
+            align="center"
+            gap={10}
+            width="full"
+            justify="center"
+            alignItems={'center'}
+          >
             <Text maxW={520} textAlign={textAlign}>
               The Concave Marketplace is where you are able to buy and/or sell your locked-staked
               NFT positions. Most of the positions will has a discount but 12 month stakes, because
@@ -59,7 +75,15 @@ const Marketplace = () => {
           </Flex>
 
           <Flex direction={columnDirection} justify="center" align={'center'} gap={5} width="full">
-            <Flex direction="column" float={'left'} gap={8} position="relative" mt={searchCardMT}>
+            <Flex
+              direction="column"
+              float={'left'}
+              position="relative"
+              justify={'center'}
+              align="center"
+              mt={searchCardMT}
+              // pl={pl}
+            >
               <MarketplaceSearchCard />
             </Flex>
             <Flex direction="column" gap={gap} align="center" position="relative" mt={searchCardMT}>
@@ -78,10 +102,10 @@ const Marketplace = () => {
           </Flex>
         </>
       ) : (
-        <Flex direction={'column'} justify="center" align={'center'} gap={4} width="full">
-          <Flex width={'full'} height="100px" position="relative">
-            <Flex mt={20} grow={1} justify="center" align={'center'}>
-              <Text fontWeight={700} fontSize="4xl">
+        <Flex direction={'column'} justify="center" align={'center'} gap={4} px={10}>
+          <Flex height="120px" position="relative">
+            <Flex mt={20} grow={1} justify="center" align={'center'} isTruncated>
+              <Text fontWeight={700} fontSize="3xl">
                 {'<- Marketplace '}
               </Text>
               <Text fontSize="2xl" textColor={'gray.300'} pl="3" pt={2}>
@@ -89,7 +113,7 @@ const Marketplace = () => {
               </Text>
             </Flex>
           </Flex>
-          <Flex mt={12} direction={'column'} justify="center" align={'center'}>
+          <Flex mt={2} direction={'column'} justify="center" align={'center'}>
             <SwitchView
               title="Back to Marketplace"
               px="80px"
@@ -101,7 +125,7 @@ const Marketplace = () => {
           </Flex>
         </Flex>
       )}
-    </Container>
+    </Flex>
   )
 }
 

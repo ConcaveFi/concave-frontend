@@ -14,7 +14,7 @@ import { getBondAmountOut, getBondSpotPrice, purchaseBond, useBondState } from '
 import { ConfirmBondModal } from './ConfirmBond'
 import { DownwardIcon } from './DownwardIcon'
 import { BondSettings, defaultSettings, Settings } from './Settings'
-
+import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 export const twoDecimals = (s: string | number) => {
   const a = s.toString()
   return a.indexOf('.') > -1 ? a.slice(0, a.indexOf('.') + 3) : a
@@ -38,6 +38,7 @@ const GasPrice = () => {
 
 export function BondBuyCard() {
   const { currencyIn, currencyOut, userAddress, balance, signer, networkId } = useBondState()
+  const [bondTransaction, setBondTransaction] = useState()
   const [settings, setSettings] = useState<BondSettings>(defaultSettings)
   const userBalance = balance.data?.toFixed()
   const [amountIn, setAmountIn] = useState<CurrencyAmount<Currency>>(toAmount('0', DAI[networkId]))
@@ -115,9 +116,8 @@ export function BondBuyCard() {
         onConfirm={() => {
           purchaseBond(networkId, amountIn.toFixed(), userAddress, signer, settings, amountOut)
             .then((x) => {
-              // console.log(x)
+              setBondTransaction(x)
               confirmModal.onClose()
-              receiptModal.onOpen()
             })
             .catch((e) => {
               console.log('get position info failed', e)
@@ -130,13 +130,7 @@ export function BondBuyCard() {
         ).toFixed(3)}
         slippage={settings.slippageTolerance.value}
       />
-      <BondReceiptModal
-        // receipt={bondTransaction}
-        isOpen={receiptModal.isOpen}
-        onClose={() => {
-          receiptModal.onClose()
-        }}
-      />
+      <TransactionSubmittedDialog tx={bondTransaction} isOpen={bondTransaction} />
     </Card>
   )
 }

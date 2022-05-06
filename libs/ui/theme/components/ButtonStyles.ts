@@ -15,6 +15,13 @@ const ButtonPrimaryTheme = (props) => ({
   fontWeight: 'bold',
   shadow: PrimaryButtonShadow,
   _focus: { shadow: PrimaryButtonShadow },
+  _hover: { _disabled: { opacity: 1 } },
+  _disabled: {
+    apply: 'background.metalBrighter',
+    ...gradientBorder({ borderRadius: '2xl', variant: 'secondary' }),
+    shadow: 'Up Big',
+    color: 'text.low',
+  },
 })
 
 const ButtonSecondaryTheme = (props) => ({
