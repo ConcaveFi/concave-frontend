@@ -39,22 +39,22 @@ const StakingGroup: Array<StakingGroupProps> = [
 
 function LiquidStaking() {
   const [isLargerThan1100] = useMediaQuery('(min-width: 1100px)')
-  const [stakingGap, setStakingGap] = useState(6)
+  const [stakingGap, setStakingGap] = useState(8)
   const [wrap, setWrap] = useState<'wrap' | 'nowrap'>('nowrap')
   const [width, setWidth] = useState('')
   const [direction, setDirection] = useState<'row' | 'column'>('row')
   const [marginTop, setMarginTop] = useState(8)
-  const [textAlign, setTextAlign] = useState<'left' | 'center'>('left')
+  const [textAlign, setTextAlign] = useState<'justify' | 'center'>('justify')
   const [guideGap, setGuideGap] = useState(24)
   const [containerHeight, setConteinerHeight] = useState('')
 
   useEffect(() => {
-    setStakingGap(isLargerThan1100 ? 6 : 3)
+    setStakingGap(isLargerThan1100 ? 8 : 3)
     setWrap(isLargerThan1100 ? 'nowrap' : 'wrap')
     setWidth(isLargerThan1100 ? '' : '530px')
     setDirection(isLargerThan1100 ? 'row' : 'column')
     setMarginTop(isLargerThan1100 ? 8 : 0)
-    setTextAlign(isLargerThan1100 ? 'left' : 'center')
+    setTextAlign(isLargerThan1100 ? 'justify' : 'center')
     setGuideGap(isLargerThan1100 ? 24 : 7)
     setConteinerHeight(isLargerThan1100 ? '' : '1550px')
     console.log('teste')
@@ -71,7 +71,7 @@ function LiquidStaking() {
       textAlign="center"
       height={containerHeight}
     >
-      <Heading as="h1" mt={2} fontSize="5xl">
+      <Heading as="h1" mt={16} fontSize="5xl">
         Liquid Staking
       </Heading>
       <Flex align={'center'} justify="center" direction={direction} mt={marginTop} gap={guideGap}>

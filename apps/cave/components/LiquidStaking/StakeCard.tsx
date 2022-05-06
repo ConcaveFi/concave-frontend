@@ -141,7 +141,7 @@ function StakeCard(props) {
           onClick={onOpen}
           fontWeight="bold"
           fontSize="md"
-          variant="primary.outline"
+          variant="primary"
           bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
           w="92.5%"
           h="40px"
@@ -172,7 +172,7 @@ function StakeCard(props) {
               icon={props.icon}
               vapr={props.vapr}
             />
-            <VStack spacing={8}>
+            <VStack mt={8} spacing={8}>
               <StakeInfo
                 period={props.period}
                 stakedCNV={

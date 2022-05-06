@@ -37,7 +37,7 @@ const NftPositionBox = (props: NftPositionBoxProps) => {
   useEffect(() => {
     setMaxHeight(isLargerThan770 ? '80px' : '140px')
     setDirecton(isLargerThan770 ? 'row' : 'column')
-    setImgSize(isLargerThan770 ? '45%' : '30%')
+    setImgSize(isLargerThan770 ? '45%' : '25%')
     setContainerSize(isLargerThan770 ? '177px' : 'full')
     setSpacing(isLargerThan770 ? 0 : 14)
     setLowFontSize(isLargerThan770 ? 'sm' : '12px')

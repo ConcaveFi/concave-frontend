@@ -21,24 +21,24 @@ function StakeInput(props) {
   const [stakeInput, setStakeInput] = useState('')
   const [{ data: account }] = useAccount()
   const [{ data }] = useNetwork()
-  const { allowance, ...approve } = useApprove(CNV[data.chain.id], STAKING_CONTRACT[data.chain.id])
+  // const { allowance, ...approve } = useApprove(CNV[data.chain.id], STAKING_CONTRACT[data.chain.id])
   const [approveButtonText, setApproveButtonText] = useState('Approve CNV')
   const [allowanceEnough, setAllowanceEnough] = useState(false)
   // console.log(allowance.formatted)
   // approve.sendApproveTx()
 
-  useEffect(() => {
-    if (allowance && +allowance.formatted > +stakeInput) {
-      setAllowanceEnough(true)
-    } else {
-      setAllowanceEnough(false)
-    }
-    if (stakeInput === '') setStakeInput('')
-  }, [allowance, stakeInput])
+  // useEffect(() => {
+  //   if (allowance && +allowance.formatted > +stakeInput) {
+  //     setAllowanceEnough(true)
+  //   } else {
+  //     setAllowanceEnough(false)
+  //   }
+  //   if (stakeInput === '') setStakeInput('')
+  // }, [allowance, stakeInput])
 
   const [cnvBalance, getBalance] = useBalance({
     addressOrName: account?.address,
-    token: '0x265271970C6E13a942F0F75c9d619fFe5ca2872e ',
+    token: '0x265271970C6E13a942F0F75c9d619fFe5ca2872e',
     // token: '0x000000007a58f5f58E697e51Ab0357BC9e260A04',
   })
 
@@ -55,13 +55,13 @@ function StakeInput(props) {
   }
 
   const approveCNV = () => {
-    approve.sendApproveTx()
+    // approve.sendApproveTx()
     setApproveButtonText('Pending...')
   }
 
   const [lockData, lockCNV] = useContractWrite(
     {
-      addressOrName: '0x265271970C6E13a942F0F75c9d619fFe5ca2872e ',
+      addressOrName: '0x265271970C6E13a942F0F75c9d619fFe5ca2872e',
       contractInterface: StakingV1Abi,
     },
     'lock',
@@ -116,16 +116,16 @@ function StakeInput(props) {
         </Flex>
       </Card>
 
-      <Box mt={10} px={3} width="350px">
+      <Box mt={10} width="350px">
         {!allowanceEnough && (
           <Button
             onClick={approveCNV}
             fontWeight="bold"
             fontSize="md"
-            variant="primary.outline"
+            variant="primary"
             bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
             w="100%"
-            h="40px"
+            h="50px"
             size="large"
             mx="auto"
             disabled={+stakeInput > +cnvBalance.data?.formatted}
@@ -140,10 +140,10 @@ function StakeInput(props) {
             onClick={() => lockCNV()}
             fontWeight="bold"
             fontSize="md"
-            variant="primary.outline"
+            variant="primary"
             bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
             w="100%"
-            h="40px"
+            h="50px"
             size="large"
             mx="auto"
             disabled={
