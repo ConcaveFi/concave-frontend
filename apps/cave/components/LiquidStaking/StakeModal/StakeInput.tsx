@@ -45,7 +45,6 @@ function StakeInput(props) {
   const setSafeStakeInputValue = (value: string) => {
     let currentValue = value
     if (Number(currentValue) > Number.MAX_SAFE_INTEGER) {
-      console.log('true case', currentValue)
       currentValue = String(Number.MAX_SAFE_INTEGER)
     }
     setStakeInput(String(currentValue))
