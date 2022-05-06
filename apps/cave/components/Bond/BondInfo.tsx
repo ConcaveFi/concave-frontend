@@ -51,20 +51,20 @@ export const UserBondPositionInfo = (bondSigma, userAddress) => {
       {claimed ? (
         'You have no open positions'
       ) : redeemable ? (
-        <Card bg="none" py={3} w="100%" direction="row" shadow="Glass Up Medium">
-          <Flex justify="center" pl={4}>
+        <Card bg="none" py={4} w="100%" direction="row" shadow="Glass Up Medium">
+          <Flex justify="center" pl={4} mx={2.5}>
             <InfoItem
               value={totalOwed > 0 ? oldestBond.replace('2022', '') : 'N/A'}
               label={oldestBond ? 'Fully Vested' : ''}
             />
           </Flex>
-          <Box w="1px" mx={3} my={-12} bg="stroke.primary" />
+          <Box w="1px" mx={30} my={-4} bg="stroke.primary" />
           <InfoItem
             value={totalOwed}
             label={totalOwed ? 'Bought' : 'No Bonds to Claim'}
             flexGrow={1}
           />
-          <Box w="1px" mx={3} my={-4} bg="stroke.primary" />
+          <Box w="1px" mx={30} my={-4} bg="stroke.primary" />
           <InfoItem
             value={Math.sign(redeemable) === -1 ? '0' : redeemable}
             label={'Available'}

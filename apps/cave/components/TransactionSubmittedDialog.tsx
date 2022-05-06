@@ -21,7 +21,7 @@ const TxSubmitted = ({
 }: {
   title: string
   tx: Transaction
-  onClose: () => void
+  onClose?: () => void
 }) => {
   const [
     {
