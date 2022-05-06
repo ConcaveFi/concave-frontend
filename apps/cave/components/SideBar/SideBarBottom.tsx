@@ -49,7 +49,6 @@ function SideBarBottom() {
     <VStack
       w="186px"
       borderRadius="2xl"
-      borderRightRadius={0}
       shadow="Down Big"
       py={7}
       pl={6}
