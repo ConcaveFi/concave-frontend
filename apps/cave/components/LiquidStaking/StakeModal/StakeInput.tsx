@@ -18,7 +18,7 @@ const periodToPoolParameter = {
 
 function StakeInput(props) {
   const cnvPrice = useFetchApi('/api/cnv')
-  const [stakeInput, setStakeInput] = useState('0')
+  const [stakeInput, setStakeInput] = useState('')
   const [{ data: account }] = useAccount()
   const [{ data }] = useNetwork()
   const { allowance, ...approve } = useApprove(CNV[data.chain.id], STAKING_CONTRACT[data.chain.id])
@@ -33,7 +33,7 @@ function StakeInput(props) {
     } else {
       setAllowanceEnough(false)
     }
-    if (stakeInput === '') setStakeInput('0')
+    if (stakeInput === '') setStakeInput('')
   }, [allowance, stakeInput])
 
   const [cnvBalance, getBalance] = useBalance({
@@ -73,8 +73,9 @@ function StakeInput(props) {
       <Card shadow="down" w="350px" px={4} py={5}>
         <Flex justify="space-between" alignItems="center">
           <Input
+            placeholder="0.00"
             value={stakeInput}
-            onChange={(e) => setStakeInput(String(+e.target.value))}
+            onChange={(e) => setStakeInput(String(e.target.value))}
             ml={-1}
             shadow="none"
             w="60%"
