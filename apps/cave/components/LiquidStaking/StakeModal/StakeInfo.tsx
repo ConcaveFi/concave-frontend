@@ -51,19 +51,18 @@ function StakeInfo(props: any) {
             </Text>
           </Stack>
         </Stack>
-
         <Text mt={6} color="text.low" fontSize="sm">
-          The ${props.period} staking term will accrue CNV from Bond Emissions by capturing $
-          {periodToBondRevenueMapping[`${props.period}`]} of the growth generated from purchased
-          bonds every 8 hours. Additionally, the ${props.period} term receives a $
-          {periodToRewardsBoost[`${props.period}`]} boost on Base CNV Emissions and the Quarterly
-          Dividend derived from Protocol profits in Non CNV assets.
+          The {props.period} staking term will accrue CNV from bond emissions by capturing{` `}
+          {periodToBondRevenueMapping[props.period]} of the growth generated from purchased
+          bonds every 8 hours. Additionally, the {props.period} term receives a{` `}
+          {periodToRewardsBoost[props.period]} boost on base CNV emissions and the quarterly
+          dividend derived from protocol profits in non CNV assets.
         </Text>
 
         <Text mt={5} color="text.low" fontSize="sm" fontWeight="semibold">
-          Redeem Date:{' '}
-          {addDays(Date(), periodToDaysMapping[`${props.period}`]).toISOString().slice(0, 10)}
+          Redeem Date: {props.period}
         </Text>
+         {/* {addDays(Date(), periodToDaysMapping[`${props.period}`]).toISOString().slice(0, 10)} */}
       </Box>
 
       <Stack mt={4}>
