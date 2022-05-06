@@ -2,10 +2,10 @@ import { Currency, CurrencyAmount, Percent } from '@concave/gemswap-sdk'
 import { Flex, HStack, Text } from '@concave/ui'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
-import { CurrencyAmountField } from '../../CurrencyAmountField'
-import { Balance } from '../../CurrencyAmountField/Balance'
+import { CurrencyAmountField } from 'components/CurrencyAmountField'
+import { Balance } from 'components/CurrencyAmountField/Balance'
 import { useFiatValue } from '../hooks/useFiatPrice'
-import { computeFiatValuePriceImpact } from './computeFiatValuePriceImpact'
+import { percentDifference } from 'utils/percentDifference'
 
 type CurrencyOutputFieldProps = {
   currencyAmountIn: CurrencyAmount<Currency>
@@ -23,7 +23,7 @@ export const CurrencyOutputField = ({
   const inputFiat = useFiatValue(currencyAmountIn)
   const outputFiat = useFiatValue(currencyAmountOut)
 
-  const fiatPriceImpact = computeFiatValuePriceImpact(inputFiat.value, outputFiat.value)
+  const fiatPriceImpact = percentDifference(inputFiat.value, outputFiat.value)
 
   const balance = useCurrencyBalance(currencyAmountOut?.currency, { watch: true })
 
