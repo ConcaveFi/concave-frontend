@@ -247,14 +247,18 @@ export class Pair {
     currencyAmount1: CurrencyAmount<Currency>,
     currencyAmount2: CurrencyAmount<Currency>,
   ) {
-    const virtualAddress = '0x0000000000000000000000000000000000000001'
-    const liquidityToken = new Token(
-      currencyAmount1.currency.chainId,
-      virtualAddress,
-      18,
-      `Gemswap | ${currencyAmount1[0].currency.symbol}-${currencyAmount2[1].currency.symbol}`,
-      `Gemswap Pair ${currencyAmount1[0].currency.symbol}-${currencyAmount2[1].currency.symbol}`,
-    )
-    return new Pair(currencyAmount1.wrapped, currencyAmount2.wrapped, liquidityToken)
+    try {
+      const virtualAddress = '0x0000000000000000000000000000000000000001'
+      const liquidityToken = new Token(
+        currencyAmount1.currency.chainId,
+        virtualAddress,
+        18,
+        `Gemswap | ${currencyAmount1.currency.symbol}-${currencyAmount2.currency.symbol}`,
+        `Gemswap Pair ${currencyAmount1.currency.symbol}-${currencyAmount2.currency.symbol}`,
+      )
+      return new Pair(currencyAmount1.wrapped, currencyAmount2.wrapped, liquidityToken)
+    } catch {
+      return undefined
+    }
   }
 }

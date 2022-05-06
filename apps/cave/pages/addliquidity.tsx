@@ -67,18 +67,8 @@ export default function AddLiquidity() {
     secondFieldAmount,
     () => supplyLiquidityDisclosure.onOpen(),
   )
-
-  const fixedPair =
-    firstFieldAmount && secondFieldAmount && !pair.data
-      ? new Pair(
-          firstFieldAmount?.wrapped,
-          secondFieldAmount?.wrapped,
-          firstFieldAmount.wrapped.currency.address,
-        )
-      : pair.data
-
+  const fixedPair = pair.data ?? Pair.createVirtualPair(firstFieldAmount, secondFieldAmount)
   const poolShare = usePoolShare(fixedPair, firstFieldAmount, secondFieldAmount)
-
   const supplyLiquidityDisclosure = useDisclosure()
 
   return (

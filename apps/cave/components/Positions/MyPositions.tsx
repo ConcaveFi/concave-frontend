@@ -254,7 +254,6 @@ const RemoveLiquidityActions = ({
   }
 
   const confirmedWithdrawal = async () => {
-    console.log('withDraw')
     try {
       transactionStatusDisclosure.onOpen()
       await removeLiquidityState.removeLiquidity()

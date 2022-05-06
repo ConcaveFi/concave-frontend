@@ -50,7 +50,7 @@ export const useLiquidityInfo = (token: Token) => {
             amount1.toString(),
           )
           if (tokenA && tokenB) {
-            setPair(new Pair(tokenB, tokenA, token.address))
+            setPair(new Pair(tokenB, tokenA, token))
           }
           setTotalSupply(totalSupply)
           const totalAmount = CurrencyAmount.fromRawAmount(token, totalSupply.toString())
