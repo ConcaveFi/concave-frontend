@@ -7,8 +7,8 @@ export const useFetchApi = (url: string) => {
     .then((data) => {
       if (url === '/api/cnv')
         setData({
-          cnv: data.data.last,
-          ticker: data.data.ticker,
+          cnv: data?.data?.last,
+          ticker: data?.data?.ticker,
         })
       if (data.data && url !== '/api/cnv') setData(data.data)
       return { data }

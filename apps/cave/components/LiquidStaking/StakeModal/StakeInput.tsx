@@ -18,7 +18,7 @@ const periodToPoolParameter = {
 
 function StakeInput(props) {
   const cnvPrice = useFetchApi('/api/cnv')
-  const [stakeInput, setStakeInput] = useState('0')
+  const [stakeInput, setStakeInput] = useState('')
   const [{ data: account }] = useAccount()
   const [{ data }] = useNetwork()
   const { allowance, ...approve } = useApprove(CNV[data.chain.id], STAKING_CONTRACT[data.chain.id])
@@ -33,7 +33,7 @@ function StakeInput(props) {
     } else {
       setAllowanceEnough(false)
     }
-    if (stakeInput === '') setStakeInput('0')
+    if (stakeInput === '') setStakeInput('')
   }, [allowance, stakeInput])
 
   const [cnvBalance, getBalance] = useBalance({
@@ -41,6 +41,14 @@ function StakeInput(props) {
     token: '0x2B8E79CBD58418CE9aeB720BAf6B93825B93eF1F',
     // token: '0x000000007a58f5f58E697e51Ab0357BC9e260A04',
   })
+
+  const setSafeStakeInputValue = (value: string) => {
+    let currentValue = value
+    if (Number(currentValue) > Number.MAX_SAFE_INTEGER) {
+      currentValue = String(Number.MAX_SAFE_INTEGER)
+    }
+    setStakeInput(String(currentValue))
+  }
 
   const setMax = () => {
     setStakeInput(cnvBalance.data?.formatted)
@@ -73,8 +81,9 @@ function StakeInput(props) {
       <Card shadow="down" w="350px" px={4} py={5}>
         <Flex justify="space-between" alignItems="center">
           <Input
+            placeholder="0.00"
             value={stakeInput}
-            onChange={(e) => setStakeInput(String(+e.target.value))}
+            onChange={(e) => setSafeStakeInputValue(e.target.value)}
             ml={-1}
             shadow="none"
             w="60%"
