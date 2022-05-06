@@ -11,20 +11,24 @@ export const useApproval = (currencyAmount: CurrencyAmount<Token>) => {
   )
 }
 
-type UseApprovalType = ReturnType<typeof useApproval>
+type UseApprovalReturnType = ReturnType<typeof useApproval>
 
 export const ApproveButton = ({
-  useApproveInfo: [needsApprove, approve, label],
+  useApproveInfo: [needsApprove, approve, label, isLoading],
   ...buttonProps
 }: {
-  useApproveInfo: UseApprovalType
+  useApproveInfo: UseApprovalReturnType
 } & ButtonProps) => {
+  if (isLoading) {
+    return <></>
+  }
+
   if (!needsApprove) {
     return <></>
   }
 
   return (
-    <Button mt={2} p={6} fontSize="2xl" variant={'primary'} {...buttonProps} onClick={approve}>
+    <Button fontSize="2xl" {...buttonProps} onClick={approve}>
       {label}
     </Button>
   )
@@ -49,10 +53,11 @@ export const useApprovalWhenNeeded = (token: Token, spender: string, amount: Big
   })()
 
   return [
-    !allowance.isSuccess || allowance?.value.toString() === '0',
+    !allowance.isSuccess || approve.isLoading || allowance?.value.toString() === '0',
     () => {
       approve.sendApproveTx()
     },
     label,
+    approve.isLoading,
   ] as const
 }

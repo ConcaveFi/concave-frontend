@@ -4,7 +4,7 @@ import { Button, Card, HStack, Spinner, Text, useDisclosure } from '@concave/ui'
 import { CurrencyInputField as BondInput } from 'components/CurrencyAmountField'
 import { SelectBondCurrency } from 'components/CurrencySelector/SelectBondCurrency'
 import { BOND_ADDRESS } from 'contracts/Bond/BondingAddress'
-import { useApprove } from 'hooks/useApprove'
+import { ApproveButton, useApprovalWhenNeeded } from 'hooks/useAllowance'
 import React, { useEffect, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
 import { useFeeData } from 'wagmi'
@@ -47,8 +47,13 @@ export function BondBuyCard() {
   const [bondSpotPrice, setBondSpotPrice] = useState<string>()
   const confirmModal = useDisclosure()
   const receiptModal = useDisclosure()
-  const { allowance, sendApproveTx } = useApprove(currencyIn, BOND_ADDRESS[networkId])
-  const allowanceIsNotEnough = !!allowance.value < amountIn
+
+  const aproveInfo = useApprovalWhenNeeded(
+    currencyIn,
+    BOND_ADDRESS[networkId],
+    amountIn.denominator,
+  )
+  const [needsApprove] = aproveInfo
 
   useEffect(() => {
     getBondSpotPrice(networkId, BOND_ADDRESS[networkId])
@@ -83,19 +88,11 @@ export function BondBuyCard() {
           <Settings onClose={setSettings} />
         </HStack>
       </HStack>
-      {allowanceIsNotEnough ? (
+
+      <ApproveButton variant="primary" size="large" isFullWidth useApproveInfo={aproveInfo} />
+      {!needsApprove && (
         <Button
-          isLoading={false}
-          variant="primary"
-          size="large"
-          isFullWidth
-          onClick={() => sendApproveTx()}
-        >
-          Approve
-        </Button>
-      ) : (
-        <Button
-          isDisabled={allowanceIsNotEnough || +userBalance < +amountIn}
+          isDisabled={needsApprove || +userBalance < +amountIn}
           variant="primary"
           size="large"
           isFullWidth
@@ -104,7 +101,7 @@ export function BondBuyCard() {
           {+userBalance < +amountIn ? 'Insufficient Funds' : 'Buy'}
         </Button>
       )}
-      )
+
       <ConfirmBondModal
         currencyIn={currencyIn}
         currencyOut={currencyOut}
