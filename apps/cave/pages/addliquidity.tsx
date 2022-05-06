@@ -6,7 +6,6 @@ import { SupplyLiquidityModal } from 'components/AMM/AddLiquidity/SupplyLiquidit
 import { useAddLiquidityButtonProps } from 'components/AMM/AddLiquidity/useAddLiquidityButtonProps'
 import { useAddLiquidityState } from 'components/AMM/AddLiquidity/useAddLiquidityState'
 import { useAddLiquidityTransaction } from 'components/AMM/AddLiquidity/useAddLiquidityTransaction'
-import { usePoolShare } from 'components/AMM/AddLiquidity/usePoolShare'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
@@ -52,7 +51,6 @@ export type LiquidityPool = {
 // }
 
 export default function AddLiquidity() {
-  console.log('AddLiquidity')
   // const initialTokens = [currencyFromJson(token0), currencyFromJson(token1)]
 
   const { pair, firstFieldAmount, secondFieldAmount, onChangeFirstField, onChangeSecondField } =
@@ -69,8 +67,7 @@ export default function AddLiquidity() {
     () => supplyLiquidityDisclosure.onOpen(),
   )
   const fixedPair = pair.data ?? Pair.createVirtualPair(firstFieldAmount, secondFieldAmount)
-  const poolShare = usePoolShare(fixedPair, firstFieldAmount, secondFieldAmount)
-  console.log(poolShare)
+  const poolShare = fixedPair.calculatePoolShare(firstFieldAmount, secondFieldAmount)
   const supplyLiquidityDisclosure = useDisclosure()
 
   return (
