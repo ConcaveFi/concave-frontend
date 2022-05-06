@@ -13,9 +13,16 @@ import { Redeem } from 'components/Bond/Redeem'
 import { BondInfo, UserBondPositionInfo } from 'components/Bond/BondInfo'
 import { useEffect, useState } from 'react'
 import React from 'react'
+import { keyframes } from '@chakra-ui/system'
+const spin = keyframes({
+  '0%': { transform: 'rotate(0deg)' },
+  '100%': { transform: 'rotate(360deg)' },
+})
+import { SpinIcon } from '@concave/icons'
 
 export default function Bond() {
   const { userAddress, signer, networkId } = useBondState()
+  const spinnerStyles = { animation: `${spin} 2s linear infinite`, size: 'sm' }
   const [termLength, setTermLength] = useState<number>(0)
   const [bondSpotPrice, setBondSpotPrice] = useState<string>('0')
   const [cnvMarketPrice, setCnvMarketPrice] = useState<Object>()
@@ -118,6 +125,14 @@ export default function Bond() {
                 }%`}
                 vestingTerm={`${termLength} Days`}
               />
+              {!bondSigma ? (
+                <>
+                  Checking wallet...
+                  <SpinIcon __css={spinnerStyles} width={'10'} height={'10'} />
+                </>
+              ) : (
+                ''
+              )}
               <Collapse in={bondSigma}>
                 <UserBondPositionInfo bondSigma={bondSigma} userAddress={userAddress} />
               </Collapse>
