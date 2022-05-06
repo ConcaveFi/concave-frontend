@@ -2,12 +2,18 @@ import { Box, Button, Flex, Spinner, Text } from '@concave/ui'
 import { useState } from 'react'
 
 interface UserDividendCardProps {
-  totalLocked: string
+  totalLocked: number
+  statusData: { isLoading; success; notConnected }
 }
 const UserDividendCard = (props: UserDividendCardProps) => {
-  const [active, setActive] = useState(false)
-  const isLoading = props.totalLocked === 'Loading'
-  const totalLocked = isLoading ? 0 : +props.totalLocked.split(' ')[0]
+  const { statusData } = props
+  const { isLoading, success, notConnected } = statusData
+
+  let totalLocked = notConnected
+    ? '--.--.--.--'
+    : isLoading
+    ? 'loading'
+    : +parseFloat(props.totalLocked.toFixed(3))
   return (
     <Box
       pos="relative"
@@ -30,13 +36,9 @@ const UserDividendCard = (props: UserDividendCardProps) => {
             Total locked:
           </Text>
           <Flex>
-            {!isLoading ? (
-              <Text fontSize={'17px'} fontWeight={700}>
-                {+parseFloat(totalLocked.toFixed(3)) + ' CNV'}
-              </Text>
-            ) : (
-              'Loading'
-            )}
+            <Text fontSize={'17px'} fontWeight={700}>
+              {totalLocked}
+            </Text>
 
             {isLoading && <Spinner height={'20px'} width={'20px'} ml={1} />}
           </Flex>
@@ -80,72 +82,3 @@ const UserDividendCard = (props: UserDividendCardProps) => {
   )
 }
 export default UserDividendCard
-
-{
-  /* <Flex direction={'column'} alignItems="start" ml={6}>
-          <Text fontSize={'11px'} fontWeight={600} textColor={'text.low'}>
-            Your Dividends Share:
-          </Text>
-          <Text fontSize={'17px'} fontWeight={700}>
-            0.00323%
-          </Text>
-        </Flex> */
-}
-
-{
-  /* <Flex justify="left">
-        <Text color="text.low" fontSize="lg" as="b">
-          Your Dividends Share
-        </Text>
-      </Flex>
-      <Flex direction="row" gap={4} alignItems="center" justify="center" m={2}>
-        <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
-          <Text color="text.low" fontSize="sm">
-            Total Locked:
-          </Text>
-          <Text fontSize="md" fontWeight="bold">
-            6132.42 CNV
-          </Text>
-        </Flex>
-        <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
-          <Text color="text.low" fontSize="sm">
-            Your Dividends Share:
-          </Text>
-          <Text fontSize="md" fontWeight="bold">
-            0.00323%
-          </Text>
-        </Flex>
-        <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
-          <Text color="text.low" fontSize="sm">
-            Next Dividend Date:
-          </Text>
-          <Text fontSize="md" fontWeight="bold">
-            04.06.2022
-          </Text>
-        </Flex>
-        <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
-          <Text color="text.low" fontSize="sm">
-            Available Dividends:
-          </Text>
-          <Text fontSize="md" fontWeight="bold">
-            0.0
-          </Text>
-        </Flex>
-        <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
-          <Button
-            mt={5}
-            //   onClick={'s'}
-            fontWeight="bold"
-            fontSize="md"
-            variant="primary.outline"
-            //   bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
-            w="160px"
-            h="40px"
-            size="large"
-            mx="auto"
-          >
-            Redeem
-          </Button>
-        </Flex>
-      </Flex> */
-}
