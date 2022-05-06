@@ -42,6 +42,15 @@ function StakeInput(props) {
     // token: '0x000000007a58f5f58E697e51Ab0357BC9e260A04',
   })
 
+  const setSafeStakeInputValue = (value: string) => {
+    let currentValue = value
+    if (Number(currentValue) > Number.MAX_SAFE_INTEGER) {
+      console.log('true case', currentValue)
+      currentValue = String(Number.MAX_SAFE_INTEGER)
+    }
+    setStakeInput(String(currentValue))
+  }
+
   const setMax = () => {
     setStakeInput(cnvBalance.data?.formatted)
   }
@@ -75,7 +84,7 @@ function StakeInput(props) {
           <Input
             placeholder="0.00"
             value={stakeInput}
-            onChange={(e) => setStakeInput(String(e.target.value))}
+            onChange={(e) => setSafeStakeInputValue(e.target.value)}
             ml={-1}
             shadow="none"
             w="60%"
