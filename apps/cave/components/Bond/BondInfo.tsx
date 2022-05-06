@@ -65,7 +65,11 @@ export const UserBondPositionInfo = (bondSigma, userAddress) => {
             flexGrow={1}
           />
           <Box w="1px" mx={1} my={-4} bg="stroke.primary" />
-          <InfoItem value={redeemable > 0 ? redeemable : '0'} label={'Available'} px={5} />
+          <InfoItem
+            value={Math.sign(redeemable) === -1 ? '0' : redeemable}
+            label={'Available'}
+            px={5}
+          />
         </Card>
       ) : !!userAddress ? (
         <>
