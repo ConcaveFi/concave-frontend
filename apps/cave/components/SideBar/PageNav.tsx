@@ -32,7 +32,7 @@ const SubnavButton = ({ children, ...props }: ButtonLinkProps) => {
     <ButtonLink
       px={4}
       py={'10px'}
-      w="full"
+      w="175px"
       color="text.low"
       variant="secondary"
       bg="none"
