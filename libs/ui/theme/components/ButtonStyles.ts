@@ -112,4 +112,7 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
   },
 }
 
+type _ButtonProps = ButtonProps & { outlined?: boolean }
+
+export type { _ButtonProps as ButtonProps }
 export default ButtonStyles
