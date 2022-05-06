@@ -72,18 +72,18 @@ export abstract class Fetcher {
 
     const token0Address = pairContract.token0()
     const token1Address = pairContract.token1()
-
-    const [token0, token1, [reserves0, reserves1]] = await Promise.all([
+    const [token0, token1, [reserves0, reserves1], liquidityToken] = await Promise.all([
       Fetcher.fetchTokenData(await token0Address, provider),
       Fetcher.fetchTokenData(await token1Address, provider),
       pairContract.getReserves(),
+      Fetcher.fetchTokenData(pairAddress, provider),
     ])
 
     const reserves = token0.sortsBefore(token1) ? [reserves0, reserves1] : [reserves1, reserves0]
     return new Pair(
       CurrencyAmount.fromRawAmount(token0, reserves[0]),
       CurrencyAmount.fromRawAmount(token1, reserves[1]),
-      pairAddress,
+      liquidityToken,
     )
   }
 

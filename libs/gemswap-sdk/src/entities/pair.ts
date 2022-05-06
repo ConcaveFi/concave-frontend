@@ -16,18 +16,12 @@ export class Pair {
   public constructor(
     currencyAmountA: CurrencyAmount<Token>,
     currencyAmountB: CurrencyAmount<Token>,
-    pairAddress: string,
+    liquidityToken: Token,
   ) {
     const currencyAmounts = currencyAmountA.currency.sortsBefore(currencyAmountB.currency) // does safety checks
       ? [currencyAmountA, currencyAmountB]
       : [currencyAmountB, currencyAmountA]
-    this.liquidityToken = new Token(
-      currencyAmounts[0].currency.chainId,
-      pairAddress,
-      18,
-      `Gemswap | ${currencyAmounts[0].currency.symbol}-${currencyAmounts[1].currency.symbol}`,
-      `Gemswap Pair ${currencyAmounts[0].currency.symbol}-${currencyAmounts[1].currency.symbol}`,
-    )
+    this.liquidityToken = liquidityToken
     this.tokenAmounts = currencyAmounts as [CurrencyAmount<Token>, CurrencyAmount<Token>]
   }
 
