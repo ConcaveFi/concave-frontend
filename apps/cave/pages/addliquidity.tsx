@@ -52,6 +52,7 @@ export type LiquidityPool = {
 // }
 
 export default function AddLiquidity() {
+  console.log('AddLiquidity')
   // const initialTokens = [currencyFromJson(token0), currencyFromJson(token1)]
 
   const { pair, firstFieldAmount, secondFieldAmount, onChangeFirstField, onChangeSecondField } =
