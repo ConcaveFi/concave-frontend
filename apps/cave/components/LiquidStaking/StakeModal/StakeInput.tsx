@@ -38,7 +38,7 @@ function StakeInput(props) {
 
   const [cnvBalance, getBalance] = useBalance({
     addressOrName: account?.address,
-    token: '0x265271970C6E13a942F0F75c9d619fFe5ca2872e ',
+    token: '0x265271970C6E13a942F0F75c9d619fFe5ca2872e',
     // token: '0x000000007a58f5f58E697e51Ab0357BC9e260A04',
   })
 
@@ -61,7 +61,7 @@ function StakeInput(props) {
 
   const [lockData, lockCNV] = useContractWrite(
     {
-      addressOrName: '0x265271970C6E13a942F0F75c9d619fFe5ca2872e ',
+      addressOrName: '0x265271970C6E13a942F0F75c9d619fFe5ca2872e',
       contractInterface: StakingV1Abi,
     },
     'lock',
