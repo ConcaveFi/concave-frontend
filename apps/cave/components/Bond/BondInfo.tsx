@@ -55,7 +55,7 @@ export const UserBondPositionInfo = (bondSigma, userAddress) => {
         <Card bg="none" py={4} w="100%" direction="row" shadow="Glass Up Medium">
           <Flex justify="center" pl={4} mx={2.5}>
             <InfoItem
-              value={totalOwed > 0 ? oldestBond.replace('2022', '') : 'N/A'}
+              value={totalOwed ? oldestBond.replace('2022', '') : 'N/A'}
               label={oldestBond ? 'Fully Vested' : ''}
             />
           </Flex>
