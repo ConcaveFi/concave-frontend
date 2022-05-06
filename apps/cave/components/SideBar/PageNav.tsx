@@ -100,7 +100,7 @@ function PageNav() {
         <Text fontSize="xs" fontWeight="bold" textColor="text.low" textAlign="center" py={2}>
           CNV-DAI{' '}
           {`${
-            cnvMarketPrice > 0 ? (1 - +(+cnvMarketPrice / +bondSpotPrice).toFixed(2)) * 100 : '-'
+            cnvMarketPrice > 0 ? (1 - (+cnvMarketPrice / +bondSpotPrice) * 100).toFixed(2) : '-'
           }%`}
         </Text>
       </Box>
