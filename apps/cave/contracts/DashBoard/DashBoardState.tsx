@@ -52,7 +52,6 @@ export const useDashBoardState = () => {
   const [userContracts, setUserContracts] = useState(null)
   const [totalLocked, setTotalLocked] = useState(undefined)
   const [status, setStatus] = useState<'loading' | 'notConnected' | 'success'>('loading')
-  const [count, setCount] = useState(0)
 
   useEffect(() => {
     if (wallet.connected && userContracts === null)
@@ -64,6 +63,7 @@ export const useDashBoardState = () => {
           setStatus('success')
         })
         .catch(() => {
+          setStatus('success')
           setUserContracts(null)
           setTotalLocked(0)
         })
