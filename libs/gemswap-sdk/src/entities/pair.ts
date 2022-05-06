@@ -8,6 +8,7 @@ import { Price } from './price'
 import { Token } from './token'
 import invariant from 'tiny-invariant'
 import { sqrt } from '../functions/math'
+import { Currency } from './'
 
 export class Pair {
   public readonly liquidityToken: Token
@@ -110,7 +111,7 @@ export class Pair {
       new Pair(
         inputReserve.add(inputAmount),
         outputReserve.subtract(outputAmount),
-        this.liquidityToken.address,
+        this.liquidityToken,
       ),
     ]
   }
@@ -146,7 +147,7 @@ export class Pair {
       new Pair(
         inputReserve.add(inputAmount),
         outputReserve.subtract(outputAmount),
-        this.liquidityToken.address,
+        this.liquidityToken,
       ),
     ]
   }
@@ -240,5 +241,20 @@ export class Pair {
         totalSupplyAdjusted.quotient,
       ),
     )
+  }
+
+  public static createVirtualPair(
+    currencyAmount1: CurrencyAmount<Currency>,
+    currencyAmount2: CurrencyAmount<Currency>,
+  ) {
+    const virtualAddress = '0x0000000000000000000000000000000000000001'
+    const liquidityToken = new Token(
+      currencyAmount1.currency.chainId,
+      virtualAddress,
+      18,
+      `Gemswap | ${currencyAmount1[0].currency.symbol}-${currencyAmount2[1].currency.symbol}`,
+      `Gemswap Pair ${currencyAmount1[0].currency.symbol}-${currencyAmount2[1].currency.symbol}`,
+    )
+    return new Pair(currencyAmount1.wrapped, currencyAmount2.wrapped, liquidityToken)
   }
 }
