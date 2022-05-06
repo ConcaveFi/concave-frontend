@@ -86,9 +86,13 @@ export const purchaseBond = async (
 }
 
 export async function getCurrentBlockTimestamp() {
-  const getBlock = await rawProvider.getBlockNumber()
-  const timestamp = (await rawProvider.getBlock(getBlock)).timestamp
-  return timestamp
+  try {
+    const getBlock = await rawProvider.getBlockNumber()
+    const timestamp = (await rawProvider.getBlock(getBlock)).timestamp
+    return timestamp
+  } catch (e) {
+    return
+  }
 }
 
 export async function redeemBondBatch(
