@@ -128,6 +128,22 @@ const RedeemCardViewer = (props: RedeemCardViewerProps) => {
 
   return (
     <Flex height={70} direction="row" alignItems="center" justify="center" m={2}>
+      <Flex width={'110px'} maxWidth="110px" direction={'column'} textAlign={'center'} ml="1">
+        <Text color="text.low" fontSize="sm" lineHeight={'15px'}>
+          Principal:
+        </Text>
+        <Text fontSize="md" fontWeight="bold" isTruncated>
+          {+parseFloat(initial.toFixed(3))} CNV
+        </Text>
+      </Flex>
+      <Flex width={'110px'} maxWidth="110px" direction={'column'} textAlign={'center'} ml="1">
+        <Text color="text.low" fontSize="sm" lineHeight={'15px'}>
+          Accrued:
+        </Text>
+        <Text fontSize="md" fontWeight="bold" isTruncated>
+          {+parseFloat(gained.toFixed(3))} CNV
+        </Text>
+      </Flex>
       <Flex
         width={'110px'}
         maxWidth="110px"
@@ -137,26 +153,10 @@ const RedeemCardViewer = (props: RedeemCardViewerProps) => {
         ml="2"
       >
         <Text color="text.low" fontSize="sm" lineHeight={'15px'} isTruncated>
-          Current Value:
+          Total Value:
         </Text>
         <Text fontSize="md" fontWeight="bold" isTruncated>
           {+parseFloat((initial + gained).toFixed(3))} CNV
-        </Text>
-      </Flex>
-      <Flex width={'110px'} maxWidth="110px" direction={'column'} textAlign={'center'} ml="1">
-        <Text color="text.low" fontSize="sm" lineHeight={'15px'}>
-          Gained:
-        </Text>
-        <Text fontSize="md" fontWeight="bold" isTruncated>
-          {+parseFloat(gained.toFixed(3))} CNV
-        </Text>
-      </Flex>
-      <Flex width={'110px'} maxWidth="110px" direction={'column'} textAlign={'center'} ml="1">
-        <Text color="text.low" fontSize="sm" lineHeight={'15px'}>
-          Initial:
-        </Text>
-        <Text fontSize="md" fontWeight="bold" isTruncated>
-          {+parseFloat(initial.toFixed(3))} CNV
         </Text>
       </Flex>
       <Flex height="full" textAlign={'center'} ml="1">
