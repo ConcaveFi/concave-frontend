@@ -1,5 +1,5 @@
+import { Currency, CurrencyAmount, Percent, Trade, TradeType } from '@concave/gemswap-sdk'
 import { Box, Flex, Stack, Text } from '@concave/ui'
-import { Currency, CurrencyAmount, Percent, Trade, TradeType } from 'gemswap-sdk'
 
 export const MinExpectedOutput = ({
   trade,
@@ -54,7 +54,7 @@ export const ExpectedOutput = ({
       </Flex>
       <Flex justify="space-between">
         <Text>Price Impact</Text>
-        <Text>{priceImpact.toSignificant(6, { groupSeparator: ',' })}%</Text>
+        <Text>{priceImpact.toFixed(2, { groupSeparator: ',' })}%</Text>
       </Flex>
     </Stack>
   )

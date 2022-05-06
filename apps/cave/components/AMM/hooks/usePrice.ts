@@ -1,4 +1,4 @@
-import { Price, Currency, TradeType } from 'gemswap-sdk'
+import { Price, Currency, TradeType } from '@concave/gemswap-sdk'
 import { useMemo } from 'react'
 import { toAmount } from 'utils/toAmount'
 import { useTrade } from './useTrade'
@@ -21,13 +21,14 @@ export const usePrice = (currencyIn?: Currency, currencyOut?: Currency) => {
   )
 
   return useMemo(() => {
-    if (currencyIn?.equals(currencyOut))
+    if (currencyIn?.wrapped.equals(currencyOut.wrapped))
       return {
         price: new Price(currencyIn, currencyIn, 1, 1),
         isLoading: false,
         isError: false,
         isFetching: false,
         isSuccess: true,
+        error,
       }
 
     return { price, error, isLoading, isError, isFetching, isSuccess }

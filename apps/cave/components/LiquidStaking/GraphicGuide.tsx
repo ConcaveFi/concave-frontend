@@ -6,11 +6,11 @@ function GraphicGuide() {
   return (
     <Stack>
       <HStack spacing={6}>
-        <Text>CNV</Text>
+        <Text fontWeight="extrabold">CNV</Text>
         <ChevronRightIcon boxSize={6} />
-        <Text>Mint NFT</Text>
+        <Text fontWeight="extrabold">Mint NFT</Text>
         <ChevronRightIcon boxSize={6} />
-        <Text>NFT Marketplace</Text>
+        <Text fontWeight="extrabold">NFT Marketplace</Text>
       </HStack>
       <HStack spacing={16} pt={6}>
         <Image alt="" src="/assets/liquidstaking/coins-logo.svg" />

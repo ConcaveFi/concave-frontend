@@ -7,6 +7,7 @@ import {
   PopoverContent,
   PopoverTrigger,
   Portal,
+  useMediaQuery,
 } from '@concave/ui'
 import SearchFilterCard from './SearchFilterCard'
 import NftPositionCard from './NftPositionCard'
@@ -34,6 +35,7 @@ const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
   const [filter6Month, setFilter6Month] = useState(false)
   const [filter3Month, setFilter3Month] = useState(false)
   const [filter1Month, setFilter1Month] = useState(false)
+  const [isLargerThan770] = useMediaQuery('(min-width: 770px)')
   const sortFunctionType = sortByType(sortType)
 
   const filtersButton = [
@@ -82,7 +84,7 @@ const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
           onChange={switchStakeButtons}
         />
       ),
-      offsetX: -100,
+      offsetX: isLargerThan770 ? -100 : -200,
     },
   ]
   const nftPositions = [
@@ -207,8 +209,15 @@ const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
     setFilter3Month(filter3Month)
     setFilter1Month(filter1Month)
   }
+
+  const [cardWidth, setCardWidth] = useState('640px')
+
+  useEffect(() => {
+    setCardWidth(isLargerThan770 ? '640px' : '460px')
+  })
+
   return (
-    <Card p={3} gap={2} variant="primary" h="945px" shadow="down" w="640px">
+    <Card p={3} gap={2} variant="primary" h="945px" shadow="down" w={cardWidth}>
       <Flex justify="center">
         <Box
           pos="relative"
@@ -250,19 +259,7 @@ const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
           background: 'rgba(113, 113, 113, 0.01)',
         }}
         shadow="down"
-        __css={{
-          '&::-webkit-scrollbar': {
-            width: '20px',
-            boxShadow: `-1px 1px 3px rgba(126, 162, 255, 0.26), inset 0px -5px 5px rgba(255, 255, 255, 0.02), inset -9px 12px 24px rgba(13, 17, 23, 0.49)`,
-            borderRadius: '10px',
-          },
-          '&::-webkit-scrollbar-thumb': {
-            background: 'linear-gradient(239.18deg, #19394C 27.18%, #0A161F 96.11%)',
-            boxShadow:
-              '0px 5px 14px rgba(0, 0, 0, 0.47), 4px -7px 15px rgba(174, 177, 255, 0.13), inset -1px 1px 2px rgba(128, 186, 255, 0.24)',
-            rounded: 'lg',
-          },
-        }}
+        __css={scrollBar}
       >
         {nftPositionsComp}
       </Box>
@@ -325,6 +322,20 @@ const sortByStakePeriod = (type: 'lowest' | 'highest') => (current, before) => {
   if (current.stakePeriod < before.stakePeriod && type === 'highest') return 1
   else if (current.stakePeriod > before.stakePeriod && type === 'lowest') return 1
   else return -1
+}
+
+const scrollBar = {
+  '&::-webkit-scrollbar': {
+    width: '20px',
+    boxShadow: `-1px 1px 3px rgba(126, 162, 255, 0.26), inset 0px -5px 5px rgba(255, 255, 255, 0.02), inset -9px 12px 24px rgba(13, 17, 23, 0.49)`,
+    borderRadius: '10px',
+  },
+  '&::-webkit-scrollbar-thumb': {
+    background: 'linear-gradient(239.18deg, #19394C 27.18%, #0A161F 96.11%)',
+    boxShadow:
+      '0px 5px 14px rgba(0, 0, 0, 0.47), 4px -7px 15px rgba(174, 177, 255, 0.13), inset -1px 1px 2px rgba(128, 186, 255, 0.24)',
+    rounded: 'lg',
+  },
 }
 
 export default MarketplaceSearchCard

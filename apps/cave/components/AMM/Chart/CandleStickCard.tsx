@@ -1,11 +1,11 @@
-import { Flex, Box, Card, CardProps, Text } from '@concave/ui'
-import { Currency } from 'gemswap-sdk'
-import dynamic from 'next/dynamic'
-import { CandleStickTokenOptions } from './CandleStickTokenOptions'
-import { CandleStickTimeOptions } from './CandleStickTimeOptions'
-import { useCandleStickChart } from './useCandleStickChart'
+import { Currency } from '@concave/gemswap-sdk'
+import { Box, Card, CardProps, Flex, Text } from '@concave/ui'
 import { STABLES } from 'constants/routing'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import dynamic from 'next/dynamic'
+import { CandleStickTimeOptions } from './CandleStickTimeOptions'
+import { CandleStickTokenOptions } from './CandleStickTokenOptions'
+import { useCandleStickChart } from './useCandleStickChart'
 
 const CandleStickChart = dynamic(() => import('./CandleStickChart'), {
   loading: () => <p>Loading ...</p>,

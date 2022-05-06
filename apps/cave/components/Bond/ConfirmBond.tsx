@@ -1,10 +1,8 @@
+import { Currency } from '@concave/gemswap-sdk'
 import { ExpandArrowIcon } from '@concave/icons'
 import { Box, Button, Flex, HStack, Modal, NumericInput, StackDivider, Text } from '@concave/ui'
-import React from 'react'
-import { Currency } from 'gemswap-sdk'
 import { CurrencyIcon } from 'components/CurrencyIcon'
-import { Token } from 'gemswap-sdk'
-import { CurrencyAmount } from 'gemswap-sdk'
+import React from 'react'
 
 const TokenInfo = ({
   currency,

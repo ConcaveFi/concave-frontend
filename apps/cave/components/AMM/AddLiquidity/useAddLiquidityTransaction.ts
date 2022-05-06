@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { RouterABI, ROUTER_ADDRESS, Currency, CurrencyAmount, Percent } from 'gemswap-sdk'
+import { RouterABI, ROUTER_ADDRESS, Currency, CurrencyAmount, Percent } from '@concave/gemswap-sdk'
 import { Contract } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useContract, UserRejectedRequestError, useSigner } from 'wagmi'
@@ -85,7 +85,7 @@ export const useAddLiquidityTransaction = (
         isWaitingForConfirmation: false,
       }))
     } catch (error) {
-      if (error === UserRejectedRequestError)
+      if (error.message === 'User rejected the transaction')
         return setState((s) => ({ ...s, isWaitingForConfirmation: false }))
 
       setState((s) => ({ ...s, isError: true, error, isWaitingForConfirmation: false }))

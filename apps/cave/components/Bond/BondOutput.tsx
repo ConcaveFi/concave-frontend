@@ -1,6 +1,6 @@
+import { Currency } from '@concave/gemswap-sdk'
 import { FlexProps, HStack, NumericInput, Stack, useMultiStyleConfig } from '@concave/ui'
 import { SelectCurrencyButton } from 'components/CurrencySelector/SelectCurrencyButton'
-import { Currency } from 'gemswap-sdk'
 import React from 'react'
 
 export function BondOutput({

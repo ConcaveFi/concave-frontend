@@ -1,68 +1,37 @@
-import { Fetcher, Pair } from 'gemswap-sdk'
-import { liquidityContractABI } from 'lib/liquidityContractABI'
+import { Fetcher } from '@concave/gemswap-sdk'
 import { concaveProvider } from 'lib/providers'
 import { useEffect } from 'react'
 import { useState } from 'react'
-import { chain } from 'wagmi'
-import { BigNumber, Contract } from 'ethers'
-import { CurrencyAmount, Token } from 'gemswap-sdk'
-import { formatUnits } from 'ethers/lib/utils'
+import { BigNumber } from 'ethers'
+import { CurrencyAmount, Token } from '@concave/gemswap-sdk'
 import { useCurrencyBalance } from './useCurrencyBalance'
+import { useQuery } from 'react-query'
 
 export const useLiquidityInfo = (token: Token) => {
-  const selectedChain = token.chainId === chain.ropsten.id ? chain.ropsten : chain.mainnet
+  const { data: pair } = useQuery(['fetchPairFromAddress', token.address], () =>
+    Fetcher.fetchPairFromAddress(token.address, concaveProvider(token.chainId)),
+  )
   const [isLoading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<unknown>()
   const [totalSupply, setTotalSupply] = useState<BigNumber>(BigNumber.from('0'))
-  const [pair, setPair] = useState<Pair>(null)
-  const userBalance = useCurrencyBalance(token, { watch: true })
+  const userBalance = useCurrencyBalance(token)
   const [userPoolShare, setUserPoolShare] = useState(0)
 
   useEffect(() => {
-    if (!userBalance.isSuccess) {
+    if (!userBalance.data) {
       return
     }
-    const liquidityContract = new Contract(
-      token.address,
-      liquidityContractABI,
-      concaveProvider(selectedChain.id),
+    if (!pair) {
+      return
+    }
+    setTotalSupply(BigNumber.from(pair.liquidityToken.totalSupply.numerator.toString()))
+    const totalAmount = CurrencyAmount.fromRawAmount(
+      token,
+      pair.liquidityToken.totalSupply.numerator.toString(),
     )
-
-    liquidityContract.getReserves().then((reserves) => {
-      Promise.all([
-        reserves._baseReserves as BigNumber,
-        reserves._quoteReserves as BigNumber,
-        liquidityContract
-          .token0()
-          .then((address) => Fetcher.fetchTokenData(address, concaveProvider(selectedChain.id))),
-        liquidityContract
-          .token1()
-          .then((address) => Fetcher.fetchTokenData(address, concaveProvider(selectedChain.id))),
-        liquidityContract.totalSupply(),
-      ])
-        .then(([amount0, amount1, token0, token1, totalSupply]) => {
-          const tokenA: CurrencyAmount<Token> = CurrencyAmount.fromRawAmount(
-            token0,
-            amount0.toString(),
-          )
-          const tokenB: CurrencyAmount<Token> = CurrencyAmount.fromRawAmount(
-            token1,
-            amount1.toString(),
-          )
-          if (tokenA && tokenB) {
-            setPair(new Pair(tokenB, tokenA, token.address))
-          }
-          setTotalSupply(totalSupply)
-          const totalAmount = CurrencyAmount.fromRawAmount(token, totalSupply.toString())
-          setUserPoolShare(+totalAmount.toExact() / +userBalance.data.toExact())
-          setLoading(false)
-        })
-        .catch((e) => {
-          console.error(e)
-          setError(e)
-        })
-    })
-  }, [selectedChain, token, userBalance.data, userBalance.isSuccess])
+    setUserPoolShare(+userBalance.data.toExact() / +totalAmount.toExact())
+    setLoading(false)
+  }, [pair, token, userBalance.data])
 
   return [{ pair, token, totalSupply, userPoolShare, userBalance }, isLoading, error] as const
 }

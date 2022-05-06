@@ -18,7 +18,10 @@ import { useContractRead } from 'wagmi'
 import Emissions from './StakeModal/Emissions'
 import StakeInfo from './StakeModal/StakeInfo'
 import StakeInput from './StakeModal/StakeInput'
-import { ethers } from 'ethers'
+import { Contract, ethers } from 'ethers'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import { LIQUID_STAKING_ADDRESS } from 'contracts/LiquidStaking/LiquidStakingAddress'
+const providers = new ethers.providers.InfuraProvider('ropsten', '545e522b4c0e45078a25b86f3b646a9b')
 
 const periodToPoolParameter = {
   '360 days': 0,
@@ -28,6 +31,7 @@ const periodToPoolParameter = {
 }
 
 function StakeCard(props) {
+  const netWorkdId = 3
   const vaprText = props.icon === '12m' ? 'Non-Dilutive vAPR' : 'vAPR'
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [fetchingData, setFetchingData] = useState(true)
@@ -41,37 +45,32 @@ function StakeCard(props) {
     setModalDirection(isLargerThan700 ? 'row' : 'column')
   }, [isLargerThan700])
   const [stakeWidth, setStakeWidth] = useState<'' | '200px'>('')
-  const [pool, getPool] = useContractRead(
-    {
-      addressOrName: '0x2B7Ea66d564399246Da8e3D6265dB8F89af834C8',
-      contractInterface: StakingV1Abi,
-    },
-    'pools',
-    {
-      args: [periodToPoolParameter[`${props.period}`]],
-    },
-  )
 
-  const [stakingCap, getStakingCap] = useContractRead(
-    {
-      addressOrName: '0x2B7Ea66d564399246Da8e3D6265dB8F89af834C8',
-      contractInterface: StakingV1Abi,
-    },
-    'viewStakingCap',
-    {
-      args: [periodToPoolParameter[`${props.period}`]],
-    },
-  )
+  const [pools, setPools] = useState(null)
+  const [stakingCap, setStakingCap] = useState(null)
 
   useEffect(() => {
-    if (!pool.loading && !stakingCap.loading && pool.data && stakingCap.data) {
+    if (pools === null)
+      getPools(netWorkdId, periodToPoolParameter[`${props.period}`])
+        .then(setPools)
+        .catch((error) => {})
+    if (stakingCap === null)
+      getViewStakingCap(netWorkdId, periodToPoolParameter[`${props.period}`])
+        .then(setStakingCap)
+        .catch((error) => {})
+  })
+
+  const isPoolsLoading = pools === null
+  const isStakingLoading = stakingCap === null
+
+  useEffect(() => {
+    if (!isPoolsLoading && !isStakingLoading && pools && stakingCap) {
       setFetchingData(false)
       setCapPercentage(
         String(
-          (Number(ethers.utils.formatEther(pool.data?.balance)) /
+          (Number(ethers.utils.formatEther(pools?.balance)) /
             Number(
-              +ethers.utils.formatEther(pool.data?.balance) +
-                +ethers.utils.formatEther(stakingCap.data),
+              +ethers.utils.formatEther(pools?.balance) + +ethers.utils.formatEther(stakingCap),
             )) *
             100,
         ),
@@ -79,18 +78,17 @@ function StakeCard(props) {
     } else {
       setFetchingData(true)
     }
-  }, [pool, stakingCap])
+  })
 
   useEffect(() => {
     setStakeWidth(isLargerThan600 ? '' : '200px')
   }, [isLargerThan600])
-
   return (
     <div>
       <Card width={stakeWidth} variant="primary" px={4} py={6} shadow="up" gap={1}>
         <Box mx="auto" py={5} w="full" h="333px" shadow="down" borderRadius="100px/90px">
           <Text color="text.low" fontSize="sm">
-            Stake period
+            Stake Period
           </Text>
           <Text fontSize="lg" fontWeight="bold">
             {props.period}
@@ -122,17 +120,17 @@ function StakeCard(props) {
               fontSize="sm"
             >
               <Text w="150px">
-                {pool.data
-                  ? `${Number(ethers.utils.formatEther(pool.data?.balance)).toFixed(1)}`
+                {pools
+                  ? `${Number(ethers.utils.formatEther(pools?.balance)).toFixed(0)}`
                   : 'Fetching...'}
               </Text>
             </Box>
             <Text position="absolute" right="2" top="2" fontSize="sm">
-              {pool.data && stakingCap.data
+              {pools && stakingCap
                 ? `${Number(
-                    +ethers.utils.formatEther(pool.data?.balance) +
-                      +ethers.utils.formatEther(stakingCap.data),
-                  ).toFixed(1)}`
+                    +ethers.utils.formatEther(pools?.balance) +
+                      +ethers.utils.formatEther(stakingCap),
+                  ).toFixed(0)}`
                 : 'Fetching...'}
             </Text>
           </Box>
@@ -177,13 +175,15 @@ function StakeCard(props) {
             <VStack spacing={8}>
               <StakeInfo
                 period={props.period}
-                stakedCNV={pool.data ? ethers.utils.formatEther(pool.data?.balance) : '0'}
+                stakedCNV={
+                  pools ? Number(ethers.utils.formatEther(pools?.balance)).toFixed(0) : '0'
+                }
                 CNVCap={
-                  pool.data && stakingCap.data
+                  pools && stakingCap
                     ? `${Number(
-                        +ethers.utils.formatEther(pool.data?.balance) +
-                          +ethers.utils.formatEther(stakingCap?.data),
-                      ).toFixed(1)}`
+                        +ethers.utils.formatEther(pools?.balance) +
+                          +ethers.utils.formatEther(stakingCap),
+                      ).toFixed(0)}`
                     : '0'
                 }
                 capPercentage={capPercentage}
@@ -197,4 +197,16 @@ function StakeCard(props) {
   )
 }
 
+async function getPools(netWorkdId: number, index: string) {
+  const stakingContract = new Contract(LIQUID_STAKING_ADDRESS[netWorkdId], StakingV1Abi, providers)
+  const pools = await stakingContract.pools(index).catch((error) => {})
+  return pools
+}
+
+async function getViewStakingCap(netWorkdId: number, index: string) {
+  const stakingContract = new Contract(LIQUID_STAKING_ADDRESS[netWorkdId], StakingV1Abi, providers)
+  const stakingCap = await stakingContract.viewStakingCap(1).catch((error) => {})
+
+  return stakingCap
+}
 export default StakeCard

@@ -1,3 +1,4 @@
+import { Currency, CurrencyAmount, Pair } from '@concave/gemswap-sdk'
 import { PlusIcon } from '@concave/icons'
 import { Button, Card, Flex, Heading, Text, useDisclosure } from '@concave/ui'
 import { CurrencyInputField } from 'components/AMM'
@@ -10,7 +11,6 @@ import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
-import { Currency, CurrencyAmount, Pair } from 'gemswap-sdk'
 import React from 'react'
 
 const LiquidityTip = () => (
@@ -52,6 +52,7 @@ export type LiquidityPool = {
 // }
 
 export default function AddLiquidity() {
+  console.log('AddLiquidity')
   // const initialTokens = [currencyFromJson(token0), currencyFromJson(token1)]
 
   const { pair, firstFieldAmount, secondFieldAmount, onChangeFirstField, onChangeSecondField } =
@@ -67,18 +68,9 @@ export default function AddLiquidity() {
     secondFieldAmount,
     () => supplyLiquidityDisclosure.onOpen(),
   )
-
-  const fixedPair =
-    firstFieldAmount && secondFieldAmount && !pair.data
-      ? new Pair(
-          firstFieldAmount?.wrapped,
-          secondFieldAmount?.wrapped,
-          firstFieldAmount.wrapped.currency.address,
-        )
-      : pair.data
-
+  const fixedPair = pair.data ?? Pair.createVirtualPair(firstFieldAmount, secondFieldAmount)
   const poolShare = usePoolShare(fixedPair, firstFieldAmount, secondFieldAmount)
-
+  console.log(poolShare)
   const supplyLiquidityDisclosure = useDisclosure()
 
   return (

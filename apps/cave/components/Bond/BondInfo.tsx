@@ -38,34 +38,39 @@ export const BondInfo = ({ asset, roi, vestingTerm, icon }) => {
     </Card>
   )
 }
-
+// commit
 export const UserBondPositionInfo = (bondSigma, userAddress) => {
   const spinnerStyles = { animation: `${spin} 2s linear infinite`, size: 'sm' }
   const parse = bondSigma?.bondSigma
   const oldestBond = parse?.parseOldest
   const claimed = parse?.claimed
+  const redeemable = parse?.parseRedeemable.toFixed(2)
   const totalOwed = parse?.totalOwed.toFixed(2)
-  const totalPending = parse?.totalPending.toFixed(2)
   return (
     <>
       {claimed ? (
         'You have no open positions'
-      ) : totalOwed > 0 && totalPending < totalOwed ? (
+      ) : redeemable ? (
         <Card bg="none" py={3} w="100%" direction="row" shadow="Glass Up Medium">
-          <Flex justify="center" pl={4} pr={7}>
+          <Flex justify="center" pl={4}>
             <InfoItem
-              value={totalOwed > 0 ? oldestBond.replace('2022', '22') : 'N/A'}
+              value={totalOwed > 0 ? oldestBond.replace('2022', '') : 'N/A'}
               label={oldestBond ? 'Fully Vested' : ''}
             />
           </Flex>
-          <Box w="1px" mx={-2} my={-4} bg="stroke.primary" />
+          <Box w="1px" mx={3} my={-12} bg="stroke.primary" />
           <InfoItem
             value={totalOwed}
             label={totalOwed ? 'Bought' : 'No Bonds to Claim'}
             flexGrow={1}
           />
-          <Box w="1px" mx={1} my={-4} bg="stroke.primary" />
-          <InfoItem value={totalPending} label={totalPending ? 'Redeemed' : ''} px={5} />
+          <Box w="1px" mx={3} my={-4} bg="stroke.primary" />
+          <InfoItem
+            value={Math.sign(redeemable) === -1 ? '0' : redeemable}
+            label={'Available'}
+            px={5}
+            pl={2}
+          />
         </Card>
       ) : !!userAddress ? (
         <>
@@ -73,7 +78,7 @@ export const UserBondPositionInfo = (bondSigma, userAddress) => {
           <SpinIcon __css={spinnerStyles} width={'10'} height={'10'} />
         </>
       ) : (
-        'You have no open positions'
+        ''
       )}
     </>
   )

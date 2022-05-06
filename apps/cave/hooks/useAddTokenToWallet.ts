@@ -2,7 +2,7 @@ import { ERC20_ABI } from 'constants/abi'
 import { Contract } from 'ethers'
 import { concaveProvider } from 'lib/providers'
 import { useState, useEffect } from 'react'
-import { CHAIN_NAME } from 'gemswap-sdk'
+import { CHAIN_NAME } from '@concave/gemswap-sdk'
 
 interface injectedToken {
   tokenAddress: string
@@ -100,7 +100,7 @@ const useAddTokenToWallet = ({ tokenAddress, tokenChainId, tokenImage }: injecte
 
           setLoading(false)
           setData(true)
-        } catch (error: any) {
+        } catch (error) {
           setLoading(false)
           setError(!!error)
           setData(false)

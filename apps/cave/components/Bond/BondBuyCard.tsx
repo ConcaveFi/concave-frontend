@@ -1,20 +1,19 @@
+import { Currency, CurrencyAmount, DAI } from '@concave/gemswap-sdk'
 import { GasIcon } from '@concave/icons'
 import { Button, Card, HStack, Spinner, Text, useDisclosure } from '@concave/ui'
-import { useApprove } from 'hooks/useApprove'
-import React, { useEffect, useState } from 'react'
-import { useFeeData } from 'wagmi'
 import { CurrencyInputField as BondInput } from 'components/CurrencyAmountField'
 import { SelectBondCurrency } from 'components/CurrencySelector/SelectBondCurrency'
-import { Currency, CurrencyAmount } from 'gemswap-sdk'
+import { BOND_ADDRESS } from 'contracts/Bond/BondingAddress'
+import { ApproveButton, useApprovalWhenNeeded } from 'hooks/useAllowance'
+import React, { useEffect, useState } from 'react'
+import { toAmount } from 'utils/toAmount'
+import { useFeeData } from 'wagmi'
 import { BondOutput } from './BondOutput'
 import { BondReceiptModal } from './BondReceipt'
-import { BOND_ADDRESS } from 'contracts/Bond/BondingAddress'
 import { getBondAmountOut, getBondSpotPrice, purchaseBond, useBondState } from './BondState'
 import { ConfirmBondModal } from './ConfirmBond'
 import { DownwardIcon } from './DownwardIcon'
 import { BondSettings, defaultSettings, Settings } from './Settings'
-import { DAI } from 'gemswap-sdk'
-import { toAmount } from 'utils/toAmount'
 
 export const twoDecimals = (s: string | number) => {
   const a = s.toString()
@@ -48,8 +47,13 @@ export function BondBuyCard() {
   const [bondSpotPrice, setBondSpotPrice] = useState<string>()
   const confirmModal = useDisclosure()
   const receiptModal = useDisclosure()
-  const { allowance, sendApproveTx } = useApprove(currencyIn, BOND_ADDRESS[networkId])
-  const allowanceIsNotEnough = !!allowance.value?.lt(amountIn.toExact())
+
+  const aproveInfo = useApprovalWhenNeeded(
+    currencyIn,
+    BOND_ADDRESS[networkId],
+    amountIn.denominator,
+  )
+  const [needsApprove] = aproveInfo
 
   useEffect(() => {
     getBondSpotPrice(networkId, BOND_ADDRESS[networkId])
@@ -84,27 +88,20 @@ export function BondBuyCard() {
           <Settings onClose={setSettings} />
         </HStack>
       </HStack>
-      {allowanceIsNotEnough && (
+
+      <ApproveButton variant="primary" size="large" isFullWidth useApproveInfo={aproveInfo} />
+      {!needsApprove && (
         <Button
-          isLoading={false}
+          isDisabled={needsApprove || +userBalance < +amountIn}
           variant="primary"
           size="large"
           isFullWidth
-          onClick={() => sendApproveTx()}
+          onClick={confirmModal.onOpen}
         >
-          Approve
+          {+userBalance < +amountIn ? 'Insufficient Funds' : 'Buy'}
         </Button>
       )}
-      <Button
-        isDisabled={allowanceIsNotEnough || +userBalance < +amountIn}
-        variant="primary"
-        size="large"
-        isFullWidth
-        onClick={confirmModal.onOpen}
-      >
-        {+userBalance < +amountIn ? 'Insufficient Funds' : 'Buy'}
-      </Button>
-      )
+
       <ConfirmBondModal
         currencyIn={currencyIn}
         currencyOut={currencyOut}
@@ -118,7 +115,8 @@ export function BondBuyCard() {
         onConfirm={() => {
           purchaseBond(networkId, amountIn.toFixed(), userAddress, signer, settings, amountOut)
             .then((x) => {
-              console.log(x)
+              // console.log(x)
+              confirmModal.onClose()
               receiptModal.onOpen()
             })
             .catch((e) => {

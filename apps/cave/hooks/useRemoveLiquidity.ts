@@ -1,5 +1,5 @@
 import { parseUnits } from 'ethers/lib/utils'
-import { Currency, CurrencyAmount, Percent, WETH9_ADDRESS } from 'gemswap-sdk'
+import { Currency, CurrencyAmount, Percent, WETH9_ADDRESS } from '@concave/gemswap-sdk'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { LiquidityInfoData } from 'hooks/useLiquidityInfo'
 import { Router } from 'lib/Router'

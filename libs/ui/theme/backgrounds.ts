@@ -28,7 +28,7 @@ export const backgrounds: CSSObject = {
       borderRadius: 'inherit',
       content: '""',
       bg: `${textures.glass}`,
-      opacity: 0.45,
+      opacity: 0.3,
       inset: 0,
       pos: 'absolute',
       zIndex: -1,

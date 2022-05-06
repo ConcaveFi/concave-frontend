@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react'
-import { Currency, TradeType, CNV, DAI, CurrencyAmount, Trade } from 'gemswap-sdk'
+import { Currency, TradeType, CNV, DAI, CurrencyAmount, Trade } from '@concave/gemswap-sdk'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useTrade, UseTradeResult } from '../hooks/useTrade'
 import { SwapSettings } from '../Settings'

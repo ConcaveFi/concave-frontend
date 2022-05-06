@@ -1,3 +1,4 @@
+import { NATIVE, ROUTER_ADDRESS, Token } from '@concave/gemswap-sdk'
 import { SpinIcon } from '@concave/icons'
 import {
   Accordion,
@@ -19,16 +20,15 @@ import {
   useDisclosure,
   UseDisclosureReturn,
 } from '@concave/ui'
-import { useAddressTokenList } from 'hooks/useTokenList'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { BigNumber, Transaction } from 'ethers'
-import { NATIVE, ROUTER_ADDRESS, Token } from 'gemswap-sdk'
 import { useApprovalWhenNeeded } from 'hooks/useAllowance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { LiquidityInfoData, useLiquidityInfo } from 'hooks/useLiquidityInfo'
 import { precision } from 'hooks/usePrecision'
 import { RemoveLiquidityState, useRemoveLiquidity } from 'hooks/useRemoveLiquidity'
+import { useAddressTokenList } from 'hooks/useTokenList'
 import React, { useState } from 'react'
 
 export const MyPositions = ({ account }) => {
@@ -121,7 +121,7 @@ const LPPositionItem = ({ userAddress, liquidityPoolToken }: LPPosition) => {
   const { pair, token, userBalance, userPoolShare } = liquidityInfo
   return (
     <>
-      <AccordionItem p={2} shadow="Up Big" borderRadius="2xl" alignItems="center">
+      <AccordionItem p={2} minW={'xl'} shadow="Up Big" borderRadius="2xl" alignItems="center">
         <AccordionButton>
           <HStack>
             {/* //TODO https://github.com/ConcaveFi/concave-frontend/issues/118 */}
@@ -254,7 +254,6 @@ const RemoveLiquidityActions = ({
   }
 
   const confirmedWithdrawal = async () => {
-    console.log('withDraw')
     try {
       transactionStatusDisclosure.onOpen()
       await removeLiquidityState.removeLiquidity()

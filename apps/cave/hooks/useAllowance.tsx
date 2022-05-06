@@ -1,6 +1,6 @@
+import { CurrencyAmount, ROUTER_ADDRESS, Token } from '@concave/gemswap-sdk'
 import { Button, ButtonProps } from '@concave/ui'
 import { BigNumberish } from 'ethers'
-import { CurrencyAmount, ROUTER_ADDRESS, Token } from 'gemswap-sdk'
 import { useApprove } from './useApprove'
 
 export const useApproval = (currencyAmount: CurrencyAmount<Token>) => {
@@ -11,20 +11,24 @@ export const useApproval = (currencyAmount: CurrencyAmount<Token>) => {
   )
 }
 
-type UseApprovalType = ReturnType<typeof useApproval>
+type UseApprovalReturnType = ReturnType<typeof useApproval>
 
 export const ApproveButton = ({
-  useApproveInfo: [needsApprove, approve, label],
+  useApproveInfo: [needsApprove, approve, label, isLoading],
   ...buttonProps
 }: {
-  useApproveInfo: UseApprovalType
+  useApproveInfo: UseApprovalReturnType
 } & ButtonProps) => {
+  if (isLoading) {
+    return <></>
+  }
+
   if (!needsApprove) {
     return <></>
   }
 
   return (
-    <Button mt={2} p={6} fontSize="2xl" variant={'primary'} {...buttonProps} onClick={approve}>
+    <Button fontSize="2xl" {...buttonProps} onClick={approve}>
       {label}
     </Button>
   )
@@ -54,5 +58,6 @@ export const useApprovalWhenNeeded = (token: Token, spender: string, amount: Big
       approve.sendApproveTx()
     },
     label,
+    allowance.isLoading,
   ] as const
 }

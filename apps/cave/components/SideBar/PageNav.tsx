@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-import { Box, Flex, Text, Image } from '@concave/ui'
+import { Box, Flex, Text, Image, Collapse } from '@concave/ui'
 import { ButtonLink, ButtonLinkProps } from 'components/ButtonLink'
 import { useRouter } from 'next/router'
 
@@ -65,6 +65,16 @@ function PageNav() {
   //     setBondSpotPrice(bondSpotPrice)
   //   })
   // }, [cnvMarketPrice])
+  const router = useRouter()
+
+  const [liquidStakingHover, setLiquidStakingHover] = useState(false)
+  const [swapHover, setSwapStakingHover] = useState(false)
+
+  const liquidStakingPage = router.pathname === '/liquidstaking' || router.pathname === '/dashboard'
+  const swapPage =
+    router.pathname === '/swap' ||
+    router.pathname === '/pools' ||
+    router.pathname === '/addliquidity'
   return (
     <Flex direction="column" position="relative" mr="-2px">
       <NotInteractableImage
@@ -79,27 +89,39 @@ function PageNav() {
           leftIcon={<NotInteractableImage src="/assets/sidebar/page-bond.svg" />}
           href="/bond"
         >
-          Bonds
+          Bond
         </NavButton>
         <Text fontSize="xs" fontWeight="bold" textColor="text.low" textAlign="center" py={2}>
-          CNV-DAI 
+          CNV-DAI
           {/* CNV-DAI ROI{' '}
           {`${
             cnvMarketPrice > 0 ? ((cnvMarketPrice / +bondSpotPrice - 1) * 100).toFixed(2) : '---'
           }%`} */}
         </Text>
       </Box>
-      <Box shadow="Down Big" roundedLeft="2xl" mt="24px">
-      <NavButton
-        leftIcon={<NotInteractableImage src="/assets/sidebar/page-lstaking.svg" />}
-        href="/liquidstaking"
-        variant="secondary"
-        border="primary"
-        mt="2px"
-      >
-        Liquid Staking
-      </NavButton>
-      <SubnavButton href="/dashboard">Your Positions</SubnavButton>
+      <Box height={'110px'}>
+        <Box
+          shadow="Down Big"
+          roundedLeft="2xl"
+          mt="24px"
+          transition={'all'}
+          transitionDuration="0.5s"
+          onMouseEnter={() => setLiquidStakingHover(true)}
+          onMouseLeave={() => setLiquidStakingHover(false)}
+        >
+          <NavButton
+            leftIcon={<NotInteractableImage src="/assets/sidebar/page-lstaking.svg" />}
+            href="/liquidstaking"
+            variant="secondary"
+            border="primary"
+            mt="2px"
+          >
+            Stake
+          </NavButton>
+          <Collapse in={liquidStakingHover || liquidStakingPage}>
+            <SubnavButton href="/dashboard" mt="1px">Your Positions</SubnavButton>
+          </Collapse>
+        </Box>
       </Box>
 
       <NavButton
@@ -110,16 +132,27 @@ function PageNav() {
         Marketplace
       </NavButton>
 
-      <Box shadow="Down Big" roundedLeft="2xl" mt="28px">
-        <NavButton
-          leftIcon={<NotInteractableImage src="/assets/sidebar/page-swap.svg" />}
-          href="/swap"
-          mb="1px"
+      <Box height={'120px'}>
+        <Box
+          shadow="Down Big"
+          roundedLeft="2xl"
+          mt="28px"
+          onMouseEnter={() => setSwapStakingHover(true)}
+          onMouseLeave={() => setSwapStakingHover(false)}
         >
-          Swap
-        </NavButton>
-        <SubnavButton href="/addliquidity">Add liquidity</SubnavButton>
-        <SubnavButton href="/pools">Your Pools</SubnavButton>
+          <NavButton
+            leftIcon={<NotInteractableImage src="/assets/sidebar/page-swap.svg" />}
+            href="/swap"
+            mb="1px"
+          >
+            Swap
+          </NavButton>
+
+          <Collapse in={swapHover || swapPage}>
+            <SubnavButton href="/addliquidity">Add liquidity</SubnavButton>
+            <SubnavButton href="/pools">Your Pools</SubnavButton>
+          </Collapse>
+        </Box>
       </Box>
     </Flex>
   )

@@ -1,11 +1,13 @@
-import { Text, Button, Card, Flex, HStack, useDisclosure, Stack, Collapse } from '@concave/ui'
+import { Currency, Trade, TradeType } from '@concave/gemswap-sdk'
+import { Button, Card, Collapse, Flex, HStack, Stack, Text, useDisclosure } from '@concave/ui'
 import {
   CandleStickCard,
   ConfirmSwapModal,
-  defaultSettings,
-  GasPrice,
   CurrencyInputField,
   CurrencyOutputField,
+  CustomRecipient,
+  defaultSettings,
+  GasPrice,
   RelativePrice,
   Settings,
   SwapSettings,
@@ -13,20 +15,16 @@ import {
   useSwapButtonProps,
   useSwapState,
   useSwapTransaction,
-  CustomRecipient,
 } from 'components/AMM'
-import { useEffect, useReducer, useState } from 'react'
-import { useAccount } from 'wagmi'
-import { toAmount } from 'utils/toAmount'
-
-import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
-import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
-import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
-
 import { ExpectedOutput, MinExpectedOutput } from 'components/AMM/Swap/ExpectedOutput'
 import { TradeRoute } from 'components/AMM/Swap/TradeRoute'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
-import { Currency, Trade, TradeType } from 'gemswap-sdk'
+import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
+import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
+import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
+import { useEffect, useReducer, useState } from 'react'
+import { toAmount } from 'utils/toAmount'
+import { useAccount } from 'wagmi'
 
 const TradeDetails = ({
   trade,
@@ -70,7 +68,7 @@ export function SwapPage() {
   const hasDetails = !!trade.data.route && trade.data.outputAmount.greaterThan(0)
   const [isDetailsOpen, toggleDetails] = useReducer((s) => hasDetails && !s, false)
   useEffect(() => {
-    !hasDetails && toggleDetails()
+    !hasDetails && toggleDetails() // lol that's a hackyish way of doing that
   }, [hasDetails])
 
   return (
@@ -95,7 +93,7 @@ export function SwapPage() {
         />
 
         <Card
-          p={7}
+          p={6}
           gap={2}
           variant="primary"
           h="fit-content"
@@ -128,7 +126,7 @@ export function SwapPage() {
             px={3}
             rounded="xl"
           >
-            <RelativePrice currencyIn={currencyIn} currencyOut={currencyOut} />
+            <RelativePrice currency0={currencyIn} currency1={currencyOut} mr="auto" />
             <GasPrice />
             <Settings onChange={setSettings} />
           </HStack>
@@ -154,7 +152,7 @@ export function SwapPage() {
 
       <WaitingConfirmationDialog isOpen={swapTx.isWaitingForConfirmation}>
         <Text fontSize="lg" color="text.accent">
-          Swaping {swapTx.trade?.inputAmount.toSignificant(6, { groupSeparator: ',' })}{' '}
+          Swapping {swapTx.trade?.inputAmount.toSignificant(6, { groupSeparator: ',' })}{' '}
           {swapTx.trade?.inputAmount.currency.symbol} for{' '}
           {swapTx.trade?.outputAmount.toSignificant(6, { groupSeparator: ',' })}{' '}
           {swapTx.trade?.outputAmount.currency.symbol}

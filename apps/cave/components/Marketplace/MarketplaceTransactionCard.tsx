@@ -1,6 +1,7 @@
 import { TransactionIcon } from '@concave/icons'
-import { Box, Flex, HStack, Image, Link, Text, VStack } from '@concave/ui'
+import { Box, Flex, HStack, Image, Link, Text, useMediaQuery, VStack } from '@concave/ui'
 import { format } from 'date-fns'
+import { useEffect, useState } from 'react'
 // import fromUnixTime from 'date-fns/fromUnixTime'
 
 interface MarketplaceTransactionCardProps {
@@ -10,13 +11,28 @@ interface MarketplaceTransactionCardProps {
 
 const MarketplaceTransactionCard = (props: MarketplaceTransactionCardProps) => {
   const { filter, type } = props
-  // const unixTime = fromUnixTime(filter.date);
-  // const cleanDate =  format(new Date(unixTime), 'PPpp');
   const cleanDate = format(new Date(filter.date), 'PPpp')
   const labelType = type === 'sale' ? 'sale' : 'listing'
   const labelColor = type === 'sale' ? '#7AF0CD' : '#2E97E2'
+
+  const [isLargerThan770] = useMediaQuery('(min-width: 770px)')
+
+  const [width, setWidth] = useState('0')
+
+  useEffect(() => {
+    setWidth(isLargerThan770 ? '' : '180px')
+  })
+
   return (
-    <Flex width={'full'} height="100" rounded="2xl" mb={2} shadow="up">
+    <Flex
+      width={'full'}
+      height="100"
+      rounded="2xl"
+      mb={2}
+      shadow="Up Small"
+      justify={'space-between'}
+      bg="#33333309"
+    >
       <Flex direction={'column'} width={'83px'} justify="end">
         <VStack height={'full'} mt={2}>
           <Text position={'absolute'} fontWeight={700} textColor={labelColor}>
@@ -26,7 +42,7 @@ const MarketplaceTransactionCard = (props: MarketplaceTransactionCardProps) => {
         <Image sizes="100%" src={'/assets/marketplace/3mposition.png'} alt="position" />
       </Flex>
       <Flex
-        flex={1}
+        width={width}
         height="full"
         direction={'column'}
         textAlign="center"
@@ -58,7 +74,7 @@ const MarketplaceTransactionCard = (props: MarketplaceTransactionCardProps) => {
             href={`https://etherscan.io/tx/${filter.link}`}
             target="_blank"
             rel="noreferrer"
-            textColor={'#2E97E2'}
+            textColor={'blue.300'}
             textDecoration="underline"
           >
             Transaction
@@ -67,43 +83,6 @@ const MarketplaceTransactionCard = (props: MarketplaceTransactionCardProps) => {
         </Flex>
       </Flex>
     </Flex>
-    // <Box mx="auto" py={5} w="auto" h="auto" shadow="down" borderRadius="16px">
-    //   <HStack>
-    //     <VStack>
-    //       <Box>
-    //         <Text color="blue.400" as="b">
-    //           {filter.event}
-    //         </Text>
-    //       </Box>
-    //       <Image h="70px" w="70px" src={'/assets/marketplace/1mposition.png'} alt={filter.date} />
-    //     </VStack>
-
-    //     <VStack>
-    //       <Box>
-    //         <Text fontSize="xs" color="text.low" fontWeight="medium">
-    //           {cleanDate}
-    //         </Text>
-    //       </Box>
-    //       <Box>
-    //         <Text as="b">{`${filter.length} `}</Text>
-    //         <Text fontSize="s" color="text.low" fontWeight="light">
-    //           {`position of `}
-    //         </Text>
-    //         <Text as="b">{`${filter.cnv} CNV`}</Text>
-    //       </Box>
-    //       <Flex>
-    //         <Box>
-    //           <a href={`https://etherscan.io/tx/${filter.link}`} target="_blank" rel="noreferrer">
-    //             <Text color="blue.400" as="u">
-    //               Transaction
-    //             </Text>
-    //             <TransactionIcon viewBox="0 0 30 30" />
-    //           </a>
-    //         </Box>
-    //       </Flex>
-    //     </VStack>
-    //   </HStack>
-    // </Box>
   )
 }
 export default MarketplaceTransactionCard

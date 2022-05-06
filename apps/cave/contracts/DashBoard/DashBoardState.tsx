@@ -3,7 +3,7 @@ import { LIQUID_STAKING_ADDRESS } from 'contracts/LiquidStaking/LiquidStakingAdd
 import { Contract, ethers } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useEffect, useState } from 'react'
-import { useAccount } from 'wagmi'
+import { useAccount, useConnect } from 'wagmi'
 import { createAlchemyWeb3, Nft } from '@alch/alchemy-web3'
 import { nftContract } from 'components/Dashboard/UserPositionCard'
 const providers = new ethers.providers.InfuraProvider('ropsten', '545e522b4c0e45078a25b86f3b646a9b')
@@ -46,26 +46,47 @@ export async function getUserPositions(address: string, netWorkId: number) {
 }
 
 export const useDashBoardState = () => {
-  const [{ data: account }] = useAccount()
+  const [{ data: wallet, loading }, connect] = useConnect()
+  const [{ data: account, error }] = useAccount()
   const netWorkId = useCurrentSupportedNetworkId()
   const [userContracts, setUserContracts] = useState(null)
   const [totalLocked, setTotalLocked] = useState(undefined)
+  const [status, setStatus] = useState<'loading' | 'notConnected' | 'success'>('loading')
+  const [count, setCount] = useState(0)
 
   useEffect(() => {
-    if (account?.address && userContracts === null)
+    if (wallet.connected && userContracts === null)
       getUserPositions(account.address, netWorkId)
         .then((contract) => {
           if (!contract) setTotalLocked(0)
           setUserContracts(contract)
           setTotalLocked(getTotalLocked(contract))
+          setStatus('success')
         })
         .catch(() => {
           setUserContracts(null)
-          setTotalLocked('0')
+          setTotalLocked(0)
         })
   }, [account])
 
+  useEffect(() => {
+    if (!loading) {
+      if (!wallet.connected) setStatus('notConnected')
+    }
+  }, [loading])
+
+  const isLoading = status === 'loading'
+  const notConnected = status === 'notConnected'
+  const success = status === 'success'
+
+  const statusData = {
+    isLoading,
+    notConnected,
+    success,
+  }
+
   return {
+    statusData,
     totalLocked,
     account,
     netWorkId,

@@ -6,16 +6,14 @@ import { useDashBoardState } from 'contracts/DashBoard/DashBoardState'
 import { useRouter } from 'next/router'
 
 const UserDashboardCard = () => {
-  const { account, netWorkId, setUserContracts, userContracts, totalLocked } = useDashBoardState()
-  const router = useRouter()
+  const { userContracts, totalLocked, statusData } = useDashBoardState()
+  const { isLoading, success, notConnected } = statusData
 
   const userPosComps =
     userContracts &&
     userContracts.map((contract, index) => <UserPositionCard key={index} contract={contract} />)
 
-  const total = !!totalLocked ? `${totalLocked} CNV` : 'Loading'
   const hasPositions = userContracts !== null
-
   return (
     <Card p={3} gap={2} variant="primary" maxHeight="945px" shadow="down" w="780px">
       <Flex justify="center">
@@ -30,7 +28,7 @@ const UserDashboardCard = () => {
           maxHeight={'500px'}
         >
           <Flex direction="row" gap={4} position="relative" mt={1}>
-            <UserDividendCard totalLocked={total} />
+            <UserDividendCard statusData={statusData} totalLocked={totalLocked} />
           </Flex>
         </Box>
       </Flex>
@@ -52,36 +50,71 @@ const UserDashboardCard = () => {
           {userPosComps}
         </Box>
       </Collapse>
-      <Collapse in={!hasPositions && total !== 'Loading'}>
-        <Flex direction={'column'} align="center">
-          <Text textColor={'gray.300'} fontWeight={'700'} fontSize="3xl">
-            You do not have any positions
-          </Text>
-          <Button
-            bg={'linear-gradient(90deg, #72639B 0%, #44B9DE 100%)'}
-            boxShadow="up"
-            height="40px"
-            px={4}
-            my="4"
-            rounded={'2xl'}
-            onClick={() => router.push('liquidstaking')}
-          >
-            <Flex fontSize={'16px'} fontWeight="700" grow={1} justify="center">
-              Lets buy some!
-            </Flex>
-          </Button>
-        </Flex>
-      </Collapse>
-      <Collapse in={total === 'Loading'}>
-        <Text textColor={'gray.300'} fontWeight={'700'} fontSize="3xl">
-          Loading your positions
-        </Text>
-        <Spinner height={'30px'} width={'30px'} />
-      </Collapse>
+
+      <LoadingPositions in={isLoading} />
+      <ItsNotConected in={notConnected} />
+      <HasNoPositions in={!hasPositions && !isLoading && !notConnected} />
     </Card>
   )
 }
 
+interface ItsNotConectedProps {
+  in?: boolean
+}
+
+const ItsNotConected = (props: ItsNotConectedProps) => {
+  return (
+    <Collapse in={props.in}>
+      <Text pb={6} textColor={'gray.300'} fontWeight={'700'} fontSize="3xl">
+        You are not connected
+      </Text>
+    </Collapse>
+  )
+}
+
+interface LoadingPositionsProps {
+  in?: boolean
+}
+
+const LoadingPositions = (props: LoadingPositionsProps) => {
+  return (
+    <Collapse in={props.in}>
+      <Text textColor={'gray.300'} fontWeight={'700'} fontSize="3xl">
+        Loading your positions
+      </Text>
+      <Spinner height={'30px'} width={'30px'} />
+    </Collapse>
+  )
+}
+
+interface HasNoPositionsprops {
+  in?: boolean
+}
+const HasNoPositions = (props: HasNoPositionsprops) => {
+  const router = useRouter()
+  return (
+    <Collapse in={props.in}>
+      <Flex direction={'column'} align="center">
+        <Text textColor={'gray.300'} fontWeight={'700'} fontSize="3xl">
+          You do not have any positions
+        </Text>
+        <Button
+          bg={'linear-gradient(90deg, #72639B 0%, #44B9DE 100%)'}
+          boxShadow="up"
+          height="40px"
+          px={4}
+          my="4"
+          rounded={'2xl'}
+          onClick={() => router.push('liquidstaking')}
+        >
+          <Flex fontSize={'16px'} fontWeight="700" grow={1} justify="center">
+            Lets buy some!
+          </Flex>
+        </Button>
+      </Flex>
+    </Collapse>
+  )
+}
 export default UserDashboardCard
 
 const scrollBar = {

@@ -1,26 +1,25 @@
+import { Percent } from '@concave/gemswap-sdk'
 import { CnvQuestionIcon, SwapSettingsIcon } from '@concave/icons'
 import {
-  Heading,
+  Box,
   Button,
   Card,
+  Heading,
   HStack,
+  IconButton,
   InputGroup,
   InputRightAddon,
-  Switch,
-  Text,
-  Stack,
+  NumericInput,
   Popover,
   PopoverContent,
   PopoverTrigger,
   Portal,
-  IconButton,
-  NumericInput,
+  Stack,
+  Switch,
+  Text,
   useBoolean,
-  Box,
 } from '@concave/ui'
-import { Percent } from 'gemswap-sdk'
-import React, { useEffect, useMemo, useState } from 'react'
-import { useReducer } from 'react'
+import React, { useEffect, useMemo, useReducer, useState } from 'react'
 
 const SlippageTolerance = ({ value, onValueChange, onClickAuto }) => {
   return (
@@ -202,7 +201,13 @@ export const Settings = ({ onChange }: { onChange: (settings: SwapSettings) => v
         />
       </PopoverTrigger>
       <Portal>
-        <PopoverContent border="none" w="256px" bg="transparent" borderRadius="2xl">
+        <PopoverContent
+          border="none"
+          w="256px"
+          bg="transparent"
+          borderRadius="2xl"
+          onClick={(e) => e.stopPropagation()}
+        >
           <Card variant="secondary" p={4} gap={2} fontFamily="heading" fontWeight="semibold">
             <Heading textAlign="center" size="sm">
               Transactions Settings

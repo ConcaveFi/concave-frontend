@@ -1,5 +1,5 @@
 import { parseUnits } from '@ethersproject/units'
-import { Currency, CurrencyAmount, JSBI } from 'gemswap-sdk'
+import { Currency, CurrencyAmount, JSBI } from '@concave/gemswap-sdk'
 
 // try to parse a user entered amount for a given token
 export const toAmount = <T extends Currency>(
