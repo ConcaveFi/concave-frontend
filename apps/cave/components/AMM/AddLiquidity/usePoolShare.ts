@@ -14,29 +14,16 @@ export const usePoolShare = (
   amount0: CurrencyAmount<Currency>,
   amount1: CurrencyAmount<Currency>,
 ) => {
-  const provider = useProvider()
-  const { data: lpTotalSupply } = useQuery(
-    [pair?.liquidityToken.address, pair?.liquidityToken.chainId],
-    async () => {
-      const totalSupply = await new Contract(
-        pair.liquidityToken.address,
-        erc20ABI,
-        provider,
-      ).totalSupply()
-      return toAmount(totalSupply.toString(), pair.liquidityToken)
-    },
-    { enabled: !!pair },
-  )
-
   const poolShareAmount =
-    lpTotalSupply &&
+    pair?.liquidityToken.totalSupply &&
     amount0?.greaterThan(0) &&
     amount1?.greaterThan(0) &&
-    pair?.getLiquidityMinted(lpTotalSupply, amount0.wrapped, amount1.wrapped)
+    pair?.getLiquidityMinted(pair.liquidityToken.totalSupply, amount0.wrapped, amount1.wrapped)
 
+  console.log(pair?.liquidityToken?.totalSupply?.numerator.toString())
   if (!poolShareAmount) return undefined
   return {
     amount: poolShareAmount.divide(poolShareAmount.decimalScale),
-    percent: new Percent(poolShareAmount.numerator, lpTotalSupply.numerator),
+    percent: new Percent(poolShareAmount.numerator, pair.liquidityToken.totalSupply.numerator),
   } as PoolShare
 }

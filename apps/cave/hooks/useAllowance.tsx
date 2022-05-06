@@ -53,11 +53,11 @@ export const useApprovalWhenNeeded = (token: Token, spender: string, amount: Big
   })()
 
   return [
-    !allowance.isSuccess || approve.isLoading || allowance?.value.toString() === '0',
+    !allowance.isSuccess || allowance?.value.toString() === '0',
     () => {
       approve.sendApproveTx()
     },
     label,
-    approve.isLoading,
+    allowance.isLoading,
   ] as const
 }

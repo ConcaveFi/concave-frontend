@@ -112,11 +112,12 @@ export abstract class Fetcher {
       provider,
     ).getReserves()
 
+    const liquidityToken = await Fetcher.fetchTokenData(pairAddress, provider)
     const reserves = tokenA.sortsBefore(tokenB) ? [reserves0, reserves1] : [reserves1, reserves0]
     return new Pair(
       CurrencyAmount.fromRawAmount(tokenA, reserves[0]),
       CurrencyAmount.fromRawAmount(tokenB, reserves[1]),
-      pairAddress,
+      liquidityToken,
     )
   }
 }

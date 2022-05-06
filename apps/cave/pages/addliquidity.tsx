@@ -69,6 +69,7 @@ export default function AddLiquidity() {
   )
   const fixedPair = pair.data ?? Pair.createVirtualPair(firstFieldAmount, secondFieldAmount)
   const poolShare = usePoolShare(fixedPair, firstFieldAmount, secondFieldAmount)
+  console.log(poolShare)
   const supplyLiquidityDisclosure = useDisclosure()
 
   return (

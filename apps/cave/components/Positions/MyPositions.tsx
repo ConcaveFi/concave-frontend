@@ -121,7 +121,7 @@ const LPPositionItem = ({ userAddress, liquidityPoolToken }: LPPosition) => {
   const { pair, token, userBalance, userPoolShare } = liquidityInfo
   return (
     <>
-      <AccordionItem p={2} shadow="Up Big" borderRadius="2xl" alignItems="center">
+      <AccordionItem p={2} minW={'xl'} shadow="Up Big" borderRadius="2xl" alignItems="center">
         <AccordionButton>
           <HStack>
             {/* //TODO https://github.com/ConcaveFi/concave-frontend/issues/118 */}

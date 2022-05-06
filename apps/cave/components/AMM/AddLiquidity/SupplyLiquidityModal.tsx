@@ -28,8 +28,10 @@ const SupplyLiquidityContent = ({
     lp.pair.token0.address === lp.amount0.currency.wrapped.address
       ? [lp.amount0, lp.amount1]
       : [lp.amount1, lp.amount0]
-  const [needsApprove0, approve0, label0] = useApproval(amount0.wrapped)
-  const [needsApprove1, approve1, label1] = useApproval(amount1.wrapped)
+  const approval0 = useApproval(amount0.wrapped)
+  const approval1 = useApproval(amount1.wrapped)
+  const [needsApprove0] = approval0
+  const [needsApprove1] = approval1
   const token0 = amount0.currency
   const token1 = amount1.currency
   const pair = lp.pair
@@ -70,11 +72,11 @@ const SupplyLiquidityContent = ({
         <PositionInfoItem
           color={'text.low'}
           label="Share Pool"
-          value={`${poolShare.percent.toSignificant(4)}%`}
+          value={`${poolShare?.percent?.toSignificant(4)}%`}
         />
       </Box>
-      <ApproveButton useApproveInfo={[needsApprove0, approve0, label0]} />
-      <ApproveButton useApproveInfo={[needsApprove1, approve1, label1]} />
+      <ApproveButton useApproveInfo={approval0} />
+      <ApproveButton useApproveInfo={approval1} />
       {!needsApprove0 && !needsApprove1 && (
         <Button mt={2} p={6} fontSize={'2xl'} variant={'primary'} onClick={onConfirm}>
           Confirm Supply
