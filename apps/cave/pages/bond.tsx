@@ -1,4 +1,4 @@
-import { Box, Card, Container, Flex, Heading, Stack, useMediaQuery } from '@concave/ui'
+import { Box, Card, Collapse, Container, Flex, Heading, Stack, useMediaQuery } from '@concave/ui'
 import {
   getBondTermLength,
   getBondSpotPrice,
@@ -118,7 +118,9 @@ export default function Bond() {
                 }%`}
                 vestingTerm={`${termLength} Days`}
               />
-              <UserBondPositionInfo bondSigma={bondSigma} userAddress={userAddress} />
+              <Collapse in={bondSigma}>
+                <UserBondPositionInfo bondSigma={bondSigma} userAddress={userAddress} />
+              </Collapse>
               <Redeem
                 bondSigma={bondSigma}
                 onConfirm={() => {

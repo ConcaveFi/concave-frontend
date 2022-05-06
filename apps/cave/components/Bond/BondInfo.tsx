@@ -58,7 +58,7 @@ export const UserBondPositionInfo = (bondSigma, userAddress) => {
               label={oldestBond ? 'Fully Vested' : ''}
             />
           </Flex>
-          <Box w="1px" mx={-2} my={-4} bg="stroke.primary" />
+          <Box w="1px" mx={-2} my={-12} bg="stroke.primary" />
           <InfoItem
             value={totalOwed}
             label={totalOwed ? 'Bought' : 'No Bonds to Claim'}
