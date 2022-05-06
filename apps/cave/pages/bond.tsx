@@ -118,7 +118,11 @@ export default function Bond() {
               <BondInfo
                 asset="CNV"
                 icon="/assets/tokens/cnv.svg"
-                roi={`${cnvMarketPrice > 0 ? (+cnvMarketPrice / +bondSpotPrice).toFixed(2) : '-'}%`}
+                roi={`${
+                  cnvMarketPrice > 0
+                    ? (1 - +(+cnvMarketPrice / +bondSpotPrice).toFixed(2)) * 100
+                    : '-'
+                }%`}
                 vestingTerm={`${termLength} Days`}
               />
               {!bondSigma ? (

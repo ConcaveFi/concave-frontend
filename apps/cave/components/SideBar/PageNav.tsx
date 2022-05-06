@@ -98,7 +98,10 @@ function PageNav() {
           Bond
         </NavButton>
         <Text fontSize="xs" fontWeight="bold" textColor="text.low" textAlign="center" py={2}>
-          CNV-DAI {`${cnvMarketPrice > 0 ? (cnvMarketPrice / +bondSpotPrice).toFixed(2) : '---'}%`}
+          CNV-DAI{' '}
+          {`${
+            cnvMarketPrice > 0 ? (1 - +(+cnvMarketPrice / +bondSpotPrice).toFixed(2)) * 100 : '-'
+          }%`}
         </Text>
       </Box>
       <Box height={'110px'}>

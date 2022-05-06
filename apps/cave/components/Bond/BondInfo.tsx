@@ -47,7 +47,6 @@ export const UserBondPositionInfo = (bondSigma, userAddress) => {
   const redeemable = parse?.parseRedeemable.toFixed(2)
   const totalOwed = parse?.totalOwed.toFixed(2)
   const totalPending = parse?.totalPending.toFixed(2)
-  console.log(redeemable)
   return (
     <>
       {claimed ? (
