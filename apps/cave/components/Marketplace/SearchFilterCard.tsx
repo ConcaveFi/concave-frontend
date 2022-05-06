@@ -21,8 +21,17 @@ const SearchFilterCard = (props: SearchFilterCardProps) => {
       rounded="2xl"
       shadow={UpSmall}
     >
-      <VStack gap={0} background={defaultBackground} rounded="2xl" m={'2px'} flex="1">
-        <HStack gap={0} mt={1} alignItems="end">
+      <Flex
+        direction={'column'}
+        align="center"
+        justify={'center'}
+        gap={1}
+        background={defaultBackground}
+        rounded="2xl"
+        m={'2px'}
+        flex="1"
+      >
+        <Flex gap={0} mt={1} alignItems="end">
           <>
             {icon === 'GasIcon' && <GasIcon viewBox="0 0 16 16" />}
             {icon === 'RedeemIcon' && <RedeemIcon viewBox="0 0 16 16" />}
@@ -31,46 +40,12 @@ const SearchFilterCard = (props: SearchFilterCardProps) => {
             {icon === 'StakeIcon' && <StakeIcon viewBox="0 0 16 16" />}
           </>
           <LinesIcon viewBox="0 0 16 16" mr={1} />
-        </HStack>
+        </Flex>
         <Text fontSize="xs" textAlign={'center'} color="text.low" fontWeight="medium">
           {title}
         </Text>
-      </VStack>
+      </Flex>
     </Flex>
-    // <Flex
-    //   m={'2px'}
-    //   justify="center"
-    //   align={'center'}
-    //   w="80px"
-    //   h="53px"
-    //   overflowY={'auto'}
-    //   maxHeight={'500px'}
-    //   borderRadius="16px"
-    //   overflow={'hidden'}
-    //   css={{
-    //     boxShadow:
-    //       '0px 4px 4px 0px rgba(0, 0, 0, 0.25) , inset -1px 1px 2px rgba(128, 186, 255, 0.05)',
-    //     background: 'rgba(113, 113, 113, 0.01)',
-    //   }}
-    //   zIndex={2}
-    //   shadow="up"
-    // >
-    //   <VStack>
-    //     <HStack>
-    //       <>
-    //         {icon === 'GasIcon' && <GasIcon viewBox="0 0 16 16" />}
-    //         {icon === 'RedeemIcon' && <RedeemIcon viewBox="0 0 16 16" />}
-    //         {icon === 'DiscountIcon' && <DiscountIcon viewBox="0 0 16 16" />}
-    //         {icon === 'PriceIcon' && <PriceIcon viewBox="0 0 16 16" />}
-    //         {icon === 'StakeIcon' && <StakeIcon viewBox="0 0 16 16" />}
-    //       </>
-    //       <LinesIcon viewBox="0 0 16 16" mr={1} />
-    //     </HStack>
-    //     <Text fontSize="xs" color="text.low" fontWeight="medium">
-    //       {title}
-    //     </Text>
-    //   </VStack>
-    // </Flex>
   )
 }
 export default SearchFilterCard

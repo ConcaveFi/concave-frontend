@@ -228,7 +228,7 @@ const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
           overflowY={'auto'}
           maxHeight={'500px'}
         >
-          <Flex
+          {/* <Flex
             grow={1}
             direction="row"
             pos="relative"
@@ -241,8 +241,8 @@ const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
             zIndex={2}
           >
             <SearchIcon height={6} />
-          </Flex>
-          <Flex direction="row" gap={4} position="relative" mt={4}>
+          </Flex> */}
+          <Flex justify={'center'} direction="row" gap={4} position="relative" mt={4}>
             {filterCards}
           </Flex>
         </Box>
