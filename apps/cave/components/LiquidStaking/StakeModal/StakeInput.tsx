@@ -21,24 +21,24 @@ function StakeInput(props) {
   const [stakeInput, setStakeInput] = useState('')
   const [{ data: account }] = useAccount()
   const [{ data }] = useNetwork()
-  const { allowance, ...approve } = useApprove(CNV[data.chain.id], STAKING_CONTRACT[data.chain.id])
+  // const { allowance, ...approve } = useApprove(CNV[data.chain.id], STAKING_CONTRACT[data.chain.id])
   const [approveButtonText, setApproveButtonText] = useState('Approve CNV')
   const [allowanceEnough, setAllowanceEnough] = useState(false)
   // console.log(allowance.formatted)
   // approve.sendApproveTx()
 
-  useEffect(() => {
-    if (allowance && +allowance.formatted > +stakeInput) {
-      setAllowanceEnough(true)
-    } else {
-      setAllowanceEnough(false)
-    }
-    if (stakeInput === '') setStakeInput('')
-  }, [allowance, stakeInput])
+  // useEffect(() => {
+  //   if (allowance && +allowance.formatted > +stakeInput) {
+  //     setAllowanceEnough(true)
+  //   } else {
+  //     setAllowanceEnough(false)
+  //   }
+  //   if (stakeInput === '') setStakeInput('')
+  // }, [allowance, stakeInput])
 
   const [cnvBalance, getBalance] = useBalance({
     addressOrName: account?.address,
-    token: '0x2B8E79CBD58418CE9aeB720BAf6B93825B93eF1F',
+    token: '0x265271970C6E13a942F0F75c9d619fFe5ca2872e',
     // token: '0x000000007a58f5f58E697e51Ab0357BC9e260A04',
   })
 
@@ -55,7 +55,7 @@ function StakeInput(props) {
   }
 
   const approveCNV = () => {
-    approve.sendApproveTx()
+    // approve.sendApproveTx()
     setApproveButtonText('Pending...')
   }
 
