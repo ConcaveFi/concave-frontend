@@ -50,7 +50,7 @@ const Marketplace = () => {
       textAlign="center"
       direction="column"
       width={width}
-      pr={5}
+      pr={pr}
     >
       {!viewTransactios ? (
         <>
