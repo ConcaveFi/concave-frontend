@@ -125,7 +125,8 @@ export const StakingV1Abi = [
     inputs: [
       { indexed: true, internalType: 'uint256', name: '_amount', type: 'uint256' },
       { indexed: true, internalType: 'uint256', name: '_poolID', type: 'uint256' },
-      { indexed: true, internalType: 'address', name: '_sender', type: 'address' },
+      { indexed: true, internalType: 'uint256', name: '_tokenId', type: 'uint256' },
+      { indexed: false, internalType: 'address', name: '_sender', type: 'address' },
     ],
     name: 'Lock',
     type: 'event',
@@ -422,6 +423,13 @@ export const StakingV1Abi = [
     type: 'function',
   },
   {
+    inputs: [],
+    name: 'lockedExcessRewards',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [
       { internalType: 'uint256', name: 'poolID', type: 'uint256' },
       { internalType: 'uint64', name: '_term', type: 'uint64' },
@@ -508,6 +516,7 @@ export const StakingV1Abi = [
       { internalType: 'uint224', name: 'shares', type: 'uint224' },
       { internalType: 'uint32', name: 'maturity', type: 'uint32' },
       { internalType: 'uint224', name: 'rewardDebt', type: 'uint224' },
+      { internalType: 'uint256', name: 'deposit', type: 'uint256' },
     ],
     stateMutability: 'view',
     type: 'function',
