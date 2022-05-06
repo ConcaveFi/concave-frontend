@@ -56,22 +56,23 @@ export const purchaseBond = async (
   const minOutput = +(+amountOut - (+settings.slippageTolerance.value / 100) * +amountOut).toFixed(
     2,
   )
+  1
   const formattedInput = utils.parseUnits(input.toString(), 18)
   const formattedMinOutput = utils.parseUnits(minOutput.toString(), 18)
-  // const estimatedGas = await bondingContract.estimateGas.purchaseBond(
-  //   address,
-  //   ROPSTEN_DAI_ADDRESS,
-  //   formattedInput,
-  //   formattedMinOutput,
-  // )
+  const estimatedGas = await bondingContract.estimateGas.purchaseBond(
+    address,
+    ROPSTEN_DAI_ADDRESS,
+    formattedInput,
+    formattedMinOutput,
+  )
   return await bondingContract.purchaseBond(
     address,
     ROPSTEN_DAI_ADDRESS,
     formattedInput,
     formattedMinOutput,
-    // {
-    //   gasLimit: estimatedGas,
-    // },
+    {
+      gasLimit: estimatedGas,
+    },
   )
 }
 
@@ -129,12 +130,9 @@ export const getUserBondPositions = async (
       positionData.owed * elapsed < positionData.redeemed
         ? 0
         : positionData.owed * elapsed - positionData.redeemed
-
     totalPending += +(+utils.formatEther(positionData.redeemed))
-    console.log(totalPending)
     totalOwed += +(+utils.formatEther(positionData.owed))
   }
-  console.log(totalPending)
   const fullyVestedTimestamp = oldest * 1000 + 86400000
   const parseOldest = new Date(fullyVestedTimestamp).toString().slice(4, 21)
   const formattedRedeemable = +utils.formatEther(redeemable.toString())

@@ -46,11 +46,13 @@ export const UserBondPositionInfo = (bondSigma, userAddress) => {
   const claimed = parse?.claimed
   const redeemable = parse?.parseRedeemable.toFixed(2)
   const totalOwed = parse?.totalOwed.toFixed(2)
+  const totalPending = parse?.totalPending.toFixed(2)
+  console.log(redeemable)
   return (
     <>
       {claimed ? (
         'You have no open positions'
-      ) : redeemable ? (
+      ) : totalOwed ? (
         <Card bg="none" py={4} w="100%" direction="row" shadow="Glass Up Medium">
           <Flex justify="center" pl={4} mx={2.5}>
             <InfoItem
@@ -60,8 +62,8 @@ export const UserBondPositionInfo = (bondSigma, userAddress) => {
           </Flex>
           <Box w="1px" mx={30} my={-4} bg="stroke.primary" />
           <InfoItem
-            value={totalOwed}
-            label={totalOwed ? 'Bought' : 'No Bonds to Claim'}
+            value={(totalOwed - totalPending).toFixed(2)}
+            label={totalOwed ? 'Pending' : 'No Bonds to Claim'}
             flexGrow={1}
           />
           <Box w="1px" mx={30} my={-4} bg="stroke.primary" />
