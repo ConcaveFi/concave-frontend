@@ -1,12 +1,22 @@
-import { Box, Button, Card, Collapse, Flex, Spinner, Text } from '@concave/ui'
+import { Box, Button, Card, Collapse, Flex, FlexProps, Spinner, Text } from '@concave/ui'
 import UserPositionCard from './UserPositionCard'
 import UserDividendCard from './UserDividendCard'
 import { ButtonLink } from 'components/ButtonLink'
 import { useDashBoardState } from 'contracts/DashBoard/DashBoardState'
 import { useRouter } from 'next/router'
 
-const UserDashboardCard = () => {
-  const { userContracts, totalLocked, statusData } = useDashBoardState()
+interface UserDashBoardCardProps extends FlexProps {
+  userContracts: any
+  totalLocked: any
+  statusData: {
+    isLoading: boolean
+    notConnected: boolean
+    success: boolean
+  }
+}
+
+const UserDashboardCard: React.FC<UserDashBoardCardProps> = ({ ...props }) => {
+  const { userContracts, totalLocked, statusData } = props
   const { isLoading, success, notConnected } = statusData
 
   const userPosComps =
@@ -15,7 +25,7 @@ const UserDashboardCard = () => {
 
   const hasPositions = userContracts !== null
   return (
-    <Flex position={'absolute'}>
+    <Flex position={'absolute'} {...props}>
       <Card
         p={3}
         gap={2}
