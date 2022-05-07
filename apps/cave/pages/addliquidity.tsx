@@ -1,6 +1,6 @@
 import { Currency, CurrencyAmount, Pair } from '@concave/gemswap-sdk'
 import { PlusIcon } from '@concave/icons'
-import { Button, Card, Flex, Heading, Text, useDisclosure } from '@concave/ui'
+import { Button, ButtonProps, Card, Flex, Heading, Modal, Text, useDisclosure } from '@concave/ui'
 import { CurrencyInputField } from 'components/AMM'
 import { SupplyLiquidityModal } from 'components/AMM/AddLiquidity/SupplyLiquidityModal'
 import { useAddLiquidityButtonProps } from 'components/AMM/AddLiquidity/useAddLiquidityButtonProps'
@@ -50,12 +50,18 @@ export type LiquidityPool = {
 //   return { props: { token0, token1 } }
 // }
 
-export default function AddLiquidity() {
+export function AddLiquidityContent({
+  currency0,
+  currency1,
+}: {
+  currency0?: Currency
+  currency1?: Currency
+} = {}) {
   // const initialTokens = [currencyFromJson(token0), currencyFromJson(token1)]
 
   const { pair, firstFieldAmount, secondFieldAmount, onChangeFirstField, onChangeSecondField } =
-    useAddLiquidityState()
-
+    useAddLiquidityState({ currency0, currency1 })
+  console.log(firstFieldAmount, secondFieldAmount)
   // useSyncCurrenciesToUrl(firstFieldAmount?.currency, secondFieldAmount?.currency)
 
   const addLPTx = useAddLiquidityTransaction(firstFieldAmount, secondFieldAmount)
@@ -71,36 +77,29 @@ export default function AddLiquidity() {
 
   return (
     <>
-      <Flex direction="column" justify="center" align="center" w="100%" h="full" gap={6}>
-        <Heading fontSize="3xl" w="500px">
-          Add liquidity
-        </Heading>
-        <Card variant="primary" p={4} w="500px" gap={4} shadow="Up for Blocks">
-          <LiquidityTip />
-          <Flex direction="column" p={4} gap={2}>
-            <CurrencyInputField
-              currencyAmountIn={firstFieldAmount}
-              onChangeAmount={onChangeFirstField}
-              CurrencySelector={SelectAMMCurrency}
-            />
-            <AddSymbol />
-            <CurrencyInputField
-              currencyAmountIn={secondFieldAmount}
-              onChangeAmount={onChangeSecondField}
-              CurrencySelector={SelectAMMCurrency}
-            />
-          </Flex>
-
-          <Button
-            h="50px"
-            p={4}
-            shadow="Up Small"
-            size="large"
-            variant="primary"
-            {...addLiquidityButtonProps}
-          />
-        </Card>
+      <LiquidityTip />
+      <Flex direction="column" p={4} gap={2}>
+        <CurrencyInputField
+          currencyAmountIn={firstFieldAmount}
+          onChangeAmount={onChangeFirstField}
+          CurrencySelector={SelectAMMCurrency}
+        />
+        <AddSymbol />
+        <CurrencyInputField
+          currencyAmountIn={secondFieldAmount}
+          onChangeAmount={onChangeSecondField}
+          CurrencySelector={SelectAMMCurrency}
+        />
       </Flex>
+
+      <Button
+        h="50px"
+        p={4}
+        shadow="Up Small"
+        size="large"
+        variant="primary"
+        {...addLiquidityButtonProps}
+      />
 
       <SupplyLiquidityModal
         lp={{ pair: fixedPair, amount0: firstFieldAmount, amount1: secondFieldAmount }}
@@ -112,6 +111,63 @@ export default function AddLiquidity() {
       <WaitingConfirmationDialog isOpen={addLPTx.isWaitingForConfirmation} />
       <TransactionSubmittedDialog tx={addLPTx.data} isOpen={addLPTx.isTransactionSent} />
       <TransactionErrorDialog error={addLPTx.error?.message} isOpen={addLPTx.isError} />
+    </>
+  )
+}
+
+export default function AddLiquidity() {
+  return (
+    <>
+      <Flex direction="column" justify="center" align="center" w="100%" h="full" gap={6}>
+        <Heading fontSize="3xl" w="500px">
+          Add liquidity
+        </Heading>
+        <Card variant="primary" p={4} w="500px" gap={4} shadow="Up for Blocks">
+          <AddLiquidityContent />
+        </Card>
+      </Flex>
+    </>
+  )
+}
+0
+export const AddLiquidityModalButton = ({
+  pair,
+  label = 'Add liquidity',
+  ...buttonProps
+}: { label?: string; pair?: Pair } & ButtonProps) => {
+  const addLiquidityDisclosure = useDisclosure()
+  return (
+    <>
+      <Button
+        onClick={addLiquidityDisclosure.onOpen}
+        variant="primary"
+        h={12}
+        w={40}
+        fontSize="lg"
+        {...buttonProps}
+      >
+        {label}
+      </Button>
+
+      <Modal
+        bluryOverlay={true}
+        title="Add Liquidity"
+        isOpen={addLiquidityDisclosure.isOpen}
+        onClose={addLiquidityDisclosure.onClose}
+        isCentered
+        size={'lg'}
+        bodyProps={{
+          variant: 'primary',
+          borderRadius: '3xl',
+          p: 6,
+          shadow: 'Up for Blocks',
+          fontWeight: 'bold',
+          fontSize: 'lg',
+          gap: 6,
+        }}
+      >
+        <AddLiquidityContent currency0={pair?.token0} currency1={pair?.token1} />
+      </Modal>
     </>
   )
 }
