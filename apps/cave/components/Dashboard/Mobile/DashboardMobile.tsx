@@ -1,10 +1,12 @@
 import { Card, Flex } from '@concave/ui'
-import { DividendsShareMobile } from './Utils/DividendsShare'
+import { DividendsShareMobile } from './Components/DividendsShare'
+import { NftPositionViewer } from './Components/UserDashBoardCard/NftPositionViewer'
 
 export default function DashboardMobile() {
   return (
-    <Flex>
+    <Flex direction={'column'}>
       <DividendsShareMobile />
+      <NftPositionViewer />
     </Flex>
   )
 }
