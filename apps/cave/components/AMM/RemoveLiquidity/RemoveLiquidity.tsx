@@ -1,4 +1,4 @@
-import { NATIVE, Pair, ROUTER_ADDRESS, Token } from '@concave/gemswap-sdk'
+import { Currency, CurrencyAmount, NATIVE, Pair, ROUTER_ADDRESS, Token } from '@concave/gemswap-sdk'
 import {
   Box,
   Button,
@@ -13,7 +13,7 @@ import {
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { PositionInfoItem } from 'components/Positions/MyPositions'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
-import { BigNumber, Transaction } from 'ethers'
+import { Transaction } from 'ethers'
 import { useApprovalWhenNeeded } from 'hooks/useAllowance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { precision } from 'hooks/usePrecision'
@@ -29,11 +29,14 @@ export const RemoveLiquidityModalButton = ({
   liquidityInfo: {
     pair: Pair
     userPoolShare: number
-    userBalance: any //QueryObserverSuccessResult<CurrencyAmount<Currency>, unknown>
+    userBalance: CurrencyAmount<Currency>
   }
 }) => {
   const removeLiquidityDisclosure = useDisclosure()
   const removeLiquidityState = useRemoveLiquidity(liquidityInfo)
+  if (!liquidityInfo.userBalance.greaterThan(0)) {
+    return <></>
+  }
   return (
     <>
       <Button
@@ -166,7 +169,6 @@ const RemoveLiquidityActions = ({
   const [needsApprove, requestApproveA, approveLabel] = useApprovalWhenNeeded(
     removeLiquidityState.pair.liquidityToken,
     ROUTER_ADDRESS[networkId],
-    BigNumber.from(10000),
   )
 
   const removeAproval = async () => {

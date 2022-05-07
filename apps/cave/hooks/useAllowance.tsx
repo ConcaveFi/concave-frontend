@@ -1,4 +1,4 @@
-import { CurrencyAmount, ROUTER_ADDRESS, Token } from '@concave/gemswap-sdk'
+import { CurrencyAmount, MaxUint256, ROUTER_ADDRESS, Token } from '@concave/gemswap-sdk'
 import { Button, ButtonProps } from '@concave/ui'
 import { useModals } from 'contexts/ModalsContext'
 import { BigNumberish } from 'ethers'
@@ -46,7 +46,11 @@ export const ApproveButton = ({
   )
 }
 
-export const useApprovalWhenNeeded = (token: Token, spender: string, amount: BigNumberish) => {
+export const useApprovalWhenNeeded = (
+  token: Token,
+  spender: string,
+  amount: BigNumberish = MaxUint256.toString(),
+) => {
   const { allowance, ...approve } = useApprove(token, spender)
   const label = (() => {
     if (approve.isWaitingTransactionReceipt) return 'Waiting block confirmation'

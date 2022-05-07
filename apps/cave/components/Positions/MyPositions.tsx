@@ -227,9 +227,9 @@ const LPPositionItem = ({ userAddress, pair }: LPPosition) => {
           </Stack>
           <Flex gap={5} justify="center" mt={6}>
             <AddLiquidityModalButton pair={pair} />
-            {balance.greaterThan(0) && (
-              <RemoveLiquidityModalButton liquidityInfo={{ pair, userPoolShare, userBalance }} />
-            )}
+            <RemoveLiquidityModalButton
+              liquidityInfo={{ pair, userPoolShare, userBalance: balance }}
+            />
           </Flex>
         </AccordionPanel>
       </AccordionItem>

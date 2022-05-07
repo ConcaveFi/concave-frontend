@@ -10,7 +10,15 @@ const currencyAmountToBigNumber = (currency: CurrencyAmount<Currency>) => {
   return parseUnits(currency.toFixed(currency.currency.decimals))
 }
 
-export const useRemoveLiquidity = ({ pair, userPoolShare, userBalance }) => {
+export const useRemoveLiquidity = ({
+  pair,
+  userPoolShare,
+  userBalance,
+}: {
+  pair: Pair
+  userPoolShare: number
+  userBalance: CurrencyAmount<Currency>
+}) => {
   const networkId = useCurrentSupportedNetworkId()
   const [{ data: account }] = useAccount()
   const tokenA = pair.token0
@@ -31,7 +39,7 @@ export const useRemoveLiquidity = ({ pair, userPoolShare, userBalance }) => {
     if (receiveInNativeToken && (tokenAIsNativeWrapper || tokenBIsNativeWrapper)) {
       const transaction = await router.removeLiquidityETH(
         tokenAIsNativeWrapper ? tokenB : tokenA,
-        currencyAmountToBigNumber(userBalance.data.multiply(new Percent(percentToRemove, 100))),
+        currencyAmountToBigNumber(userBalance.multiply(new Percent(percentToRemove, 100))),
         account.address,
       )
       setHash(transaction.hash)
@@ -40,7 +48,7 @@ export const useRemoveLiquidity = ({ pair, userPoolShare, userBalance }) => {
     const transaction = await router.removeLiquidity(
       tokenA,
       tokenB,
-      currencyAmountToBigNumber(userBalance.data.multiply(percentToRemove).divide(100)),
+      currencyAmountToBigNumber(userBalance.multiply(percentToRemove).divide(100)),
       account.address,
     )
     setHash(transaction.hash)
