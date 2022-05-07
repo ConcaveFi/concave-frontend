@@ -14,7 +14,7 @@ function SideBarTop() {
     formatUnits: CNV[ChainId.ETHEREUM].decimals,
     skip: !account?.address,
   })
-// commit
+
   return (
     <Box shadow="down" px={2} pt={10} pb={3} rounded="2xl">
       <Flex
