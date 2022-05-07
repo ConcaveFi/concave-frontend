@@ -24,17 +24,17 @@ const Pools = () => {
           </Text>
         </Flex>
 
-        <Flex justify="center" align={'center'} gap={5} width="full">
-          <Flex
-            direction="column"
-            float={'left'}
-            position="relative"
-            justify={'center'}
-            align="center"
-            p={4}
-          >
-            <MyPositions />
-          </Flex>
+        <Flex
+          direction="column"
+          float={'left'}
+          position="relative"
+          justify={'center'}
+          align="center"
+          width="full"
+          gap={5}
+          p={4}
+        >
+          <MyPositions />
         </Flex>
       </>
     </Flex>

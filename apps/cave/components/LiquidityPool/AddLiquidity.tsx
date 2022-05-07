@@ -78,7 +78,6 @@ function AddLiquidityContent({
 
   return (
     <>
-      <LiquidityTip />
       <Flex direction="column" p={4} gap={2}>
         <CurrencyInputField
           currencyAmountIn={firstFieldAmount}
