@@ -47,3 +47,45 @@ yarn dev:cave
 ```
 
 running dev this way will build and watch dependencies, this means you can edit `@concave/ui` working on `apps/cave` and it will just work
+
+# Graphql Concave-api
+
+> Schema crafted with Hasura on frontend using Codegen + React-Query
+
+## Schema on Hasura
+The graphql schema got different sources (see on concave-api)
+  - POSTGRES ex: creating a table on postgres, Hasura will crafted for you the graphql
+  - LAMBDA ex: create a lambda bind this one in Hasura Action to be a part of the schema
+
+## Import the Queries/Mutations into the frontend
+  - Create your Query/Mutation on Hasura
+  - Close concave-fontend (not running locally)
+  - Copie them into the appropriate file inside `apps/cave/graphql` as a `.gql` file
+  - Then enter in your terminal
+  
+```sh
+cd app/cave
+yarn gen
+```
+
+> You don't need to "gen" at build time, but only when a new Query is in
+> This will generate or update 2 files inside `apps/cave/graphql/generated` 
+> This is specific for React-Query (see config `codegen.yml`) with his own fetcher for Hasura
+> You can now import generated Hooks, Query or Mutation from `graphql/generated/graphql`
+
+## Summary for graphql
+
+- Craft you query on hasura
+- Import the query inside `apps/cave/graphql` as a `.gql` file or inside an other one
+- Do `yarn gen` from `app/cave`
+
+Example for a react-query hook on frontend
+
+```js
+import {useGet_Stackingv1_Last100_EventsQuery} from 'graphql/generated/graphql'
+
+...
+
+const { status, data, error, isFetching } = useGet_Stackingv1_Last100_EventsQuery()
+console.log('react query', status, data, error, isFetching)
+```
