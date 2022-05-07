@@ -37,6 +37,14 @@
       "logoURI": "/assets/tokens/cnv.svg"
     },
     {
+      "name": "ChainLink",
+      "address": "0x9f61da7a5d768db22737e47ea203c2657213b190",
+      "symbol": "LINK",
+      "decimals": 18,
+      "chainId": 3,
+      "logoURI": "https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/svg/icon/matic.svg"
+    },
+    {
       "name": "MATIC",
       "address": "0x0D19826a842c03e9458D4270a5941b3F043fa5Db",
       "symbol": "MATIC",
