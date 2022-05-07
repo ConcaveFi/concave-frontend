@@ -31,8 +31,8 @@ export default function Bond() {
   const [isLargerThan1200] = useMediaQuery('(min-width: 1280px)')
   const [intervalID, setIntervalID] = useState<any>()
   const [direction, setDirection] = useState<'row' | 'column'>('row')
-  const [align, setAlign] = useState<'start' | 'center'>('start')
-
+  // const [align, setAlign] = useState<'start' | 'center'>('center')
+  const align = 'center'
   useEffect(() => {
     getCurrentBlockTimestamp().then((x) => {
       setCurrentBlockTs(x)
@@ -84,7 +84,7 @@ export default function Bond() {
 
   useEffect(() => {
     setDirection(isLargerThan1200 ? 'row' : 'column')
-    setAlign(isLargerThan1200 ? 'start' : 'center')
+    // setAlign(isLargerThan1200 ? 'start' : 'center')
   }, [isLargerThan1200])
 
   return (
