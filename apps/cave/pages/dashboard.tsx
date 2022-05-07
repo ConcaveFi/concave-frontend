@@ -4,13 +4,10 @@ import DashboardMobile from 'components/Dashboard/Mobile/DashboardMobile'
 import UserDashboardCard from 'components/Dashboard/UserDashboardCard'
 import React from 'react'
 import { useEffect, useState } from 'react'
-import { setCommentRange } from 'typescript'
 export default function Dashboard() {
   const [isLargerThan380] = useMediaQuery('(min-width: 380px)')
   const [isLargerThan980] = useMediaQuery('(min-width: 980px)')
   const [scale, setScale] = useState('scale(1)')
-
-  const [userDashLayout, setUserDashLayout] = useState(<UserDashboardCard />)
 
   useEffect(() => {
     setScale(isLargerThan380 ? 'scale(1)' : `scale(${window.innerWidth / 380})`)
@@ -20,18 +17,13 @@ export default function Dashboard() {
     function handleResize() {
       setScale(isLargerThan380 ? 'scale(1)' : `scale(${window.innerWidth / 380})`)
     }
-
     window.addEventListener('resize', handleResize)
   })
 
-  useEffect(() => {
-    setUserDashLayout(isLargerThan980 ? <UserDashboardCard /> : <DashboardMobile />)
-  }, [isLargerThan980])
-
   return (
     <Flex align={'center'} justify="start" direction={'column'} width={'full'} textAlign="center">
-      <DashboardMobile transform={scale} />
-      {/* <Heading as="h1" mt={8} mb={3} fontSize="5xl">
+      {/* <DashboardMobile transform={scale} /> */}
+      <Heading as="h1" mt={8} mb={3} fontSize="5xl">
         My Dashboard
       </Heading>
       <Flex my={3} justify={'center'} maxWidth={{ sm: '358px', lg: '1000px' }}>
@@ -40,9 +32,9 @@ export default function Dashboard() {
         </Text>
       </Flex>
 
-      <Flex border={'2pxx solid white'} justify={'start'} position="relative">
-        {userDashLayout}
-      </Flex> */}
+      <Flex justify={'center'} position="relative">
+        <UserDashboardCard />
+      </Flex>
     </Flex>
   )
 }

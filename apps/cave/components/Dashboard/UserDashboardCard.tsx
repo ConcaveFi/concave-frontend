@@ -15,53 +15,55 @@ const UserDashboardCard = () => {
 
   const hasPositions = userContracts !== null
   return (
-    <Card
-      p={3}
-      gap={2}
-      variant="primary"
-      maxHeight="535px"
-      shadow="down"
-      maxW={{ lg: '780px', md: '680px' }}
-      justify="center"
-    >
-      <Flex justify="center">
-        <Box
-          pos="relative"
-          h="fit-content"
-          w="fit-content"
-          px={4}
-          pb="4"
-          pt="1"
-          overflowY={'auto'}
-          maxHeight={'500px'}
-        >
-          <Flex direction="row" gap={4} position="relative" mt={1}>
-            <UserDividendCard statusData={statusData} totalLocked={totalLocked} />
-          </Flex>
-        </Box>
-      </Flex>
+    <Flex position={'absolute'}>
+      <Card
+        p={3}
+        gap={2}
+        variant="primary"
+        maxHeight="770px"
+        shadow="down"
+        maxW={{ lg: '760px', md: '580px' }}
+        justify="center"
+      >
+        <Flex justify="center" position={'relative'}>
+          <Box
+            pos="relative"
+            h="fit-content"
+            w="fit-content"
+            px={4}
+            pb="4"
+            pt="1"
+            overflowY={'auto'}
+            maxHeight={'500px'}
+          >
+            <Flex direction="row" gap={4} position="relative" mt={1}>
+              <UserDividendCard statusData={statusData} totalLocked={totalLocked} />
+            </Flex>
+          </Box>
+        </Flex>
 
-      <Collapse in={userContracts !== null}>
-        <Box
-          pos="relative"
-          h="100%"
-          overflowY={'scroll'}
-          overflowX="hidden"
-          maxHeight={'100%'}
-          borderRadius="12px"
-          px={'0.5rem'}
-          py={'0.5rem'}
-          shadow="down"
-          __css={scrollBar}
-        >
-          {userPosComps}
-        </Box>
-      </Collapse>
+        <Collapse in={userContracts !== null}>
+          <Box
+            pos="relative"
+            h="100%"
+            overflowY={'scroll'}
+            overflowX="hidden"
+            maxHeight={'100%'}
+            borderRadius="12px"
+            px={'0.5rem'}
+            py={'0.5rem'}
+            shadow="down"
+            __css={scrollBar}
+          >
+            {userPosComps}
+          </Box>
+        </Collapse>
 
-      <LoadingPositions in={isLoading} />
-      <ItsNotConected in={notConnected} />
-      <HasNoPositions in={!hasPositions && !isLoading && !notConnected} />
-    </Card>
+        <LoadingPositions in={isLoading} />
+        <ItsNotConected in={notConnected} />
+        <HasNoPositions in={!hasPositions && !isLoading && !notConnected} />
+      </Card>
+    </Flex>
   )
 }
 
@@ -126,7 +128,7 @@ export default UserDashboardCard
 
 const scrollBar = {
   '&::-webkit-scrollbar': {
-    width: '20px',
+    width: '15px',
     boxShadow: `-1px 1px 3px rgba(126, 162, 255, 0.26), inset 0px -5px 5px rgba(255, 255, 255, 0.02), inset -9px 12px 24px rgba(13, 17, 23, 0.49)`,
     borderRadius: '10px',
   },
