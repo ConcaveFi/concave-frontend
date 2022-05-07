@@ -74,7 +74,8 @@ export const MyPositions = () => {
       variant="primary"
       borderRadius="3xl"
       h={'auto'}
-      w={'2xl'}
+      maxW={'2xl'}
+      w={'full'}
       p={6}
       shadow="Up for Blocks"
     >

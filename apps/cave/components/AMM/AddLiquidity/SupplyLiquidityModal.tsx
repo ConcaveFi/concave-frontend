@@ -113,7 +113,7 @@ export const SupplyLiquidityModal = ({
       onClose={onClose}
       isCentered
       size="xl"
-      bodyProps={{ gap: 6 }}
+      bodyProps={{ gap: 6, borderWidth: 2 }}
     >
       <SupplyLiquidityContent lp={lp} onConfirm={onConfirm} />
     </Modal>

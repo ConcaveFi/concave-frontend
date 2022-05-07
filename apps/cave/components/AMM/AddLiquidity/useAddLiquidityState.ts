@@ -56,7 +56,10 @@ export const useAddLiquidityState = ({
   useEffect(() => {
     setFieldCurrency(initialCurrencyFields)
     setExactAmount(toAmount('0', initialCurrencyFields.first))
-  }, [initialCurrencyFields, setFieldCurrency])
+    if (currency1) {
+      secondFieldAmount.current = toAmount('0', currency1)
+    }
+  }, [currency1, initialCurrencyFields, setFieldCurrency])
   const firstFieldAmount = useRef<CurrencyAmount<Currency>>()
   const secondFieldAmount = useRef<CurrencyAmount<Currency>>()
 
