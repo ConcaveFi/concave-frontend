@@ -14,7 +14,7 @@ export async function getAllUsersPositionsID(address: string, netWorkId: number)
 }
 
 const filterByContract = (contractAddress: string) => (nft: Nft) => {
-  return contractAddress === nft.contract.address
+  return contractAddress.toUpperCase() === nft.contract.address.toUpperCase()
 }
 const mapToTokenId = (nft: Nft) => nft.id.tokenId
 
@@ -54,7 +54,7 @@ export const useDashBoardState = () => {
   const [status, setStatus] = useState<'loading' | 'notConnected' | 'success'>('loading')
 
   useEffect(() => {
-    if (wallet.connected && userContracts === null)
+    if (wallet.connected && userContracts === null) {
       getUserPositions(account.address, netWorkId)
         .then((contract) => {
           if (!contract) setTotalLocked(0)
@@ -67,6 +67,7 @@ export const useDashBoardState = () => {
           setUserContracts(null)
           setTotalLocked(0)
         })
+    }
   }, [account])
 
   useEffect(() => {
