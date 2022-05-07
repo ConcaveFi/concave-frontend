@@ -3,11 +3,10 @@ import { utils } from 'ethers'
 
 export const Redeem = ({ onConfirm, bondSigma }: { onConfirm: () => void; bondSigma }) => {
   const redeemable = bondSigma?.parseRedeemable
-  const formatRedeemable = redeemable ? (+utils.formatEther(redeemable.toString())).toFixed(2) : 0
-
+  console.log(redeemable)
   return (
     <>
-      {formatRedeemable ? (
+      {Math.sign(redeemable) === 1 ? (
         <Card mb={-12} bottom={-3} fontWeight="bold" fontSize="lg" w="100%">
           <Button variant="primary" size="lg" isFullWidth onClick={onConfirm}>
             Redeem

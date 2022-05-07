@@ -48,7 +48,7 @@ export const UserBondPositionInfo = (bondSigma, userAddress) => {
   const redeemable = parse?.parseRedeemable
   const totalOwed = parse?.totalOwed.toFixed(2)
   const totalPending = parse?.totalPending.toFixed(2)
-  const formatRedeemable = redeemable ? (+utils.formatEther(redeemable.toString())).toFixed(2) : 0
+  const formatRedeemable = redeemable ? (+utils.formatEther(BigInt(redeemable))).toFixed(2) : 0
 
   return (
     <>
