@@ -67,7 +67,6 @@ export default function AddLiquidity() {
     () => supplyLiquidityDisclosure.onOpen(),
   )
   const fixedPair = pair.data ?? Pair.createVirtualPair(firstFieldAmount, secondFieldAmount)
-  const poolShare = fixedPair.calculatePoolShare(firstFieldAmount, secondFieldAmount)
   const supplyLiquidityDisclosure = useDisclosure()
 
   return (
@@ -105,7 +104,6 @@ export default function AddLiquidity() {
 
       <SupplyLiquidityModal
         lp={{ pair: fixedPair, amount0: firstFieldAmount, amount1: secondFieldAmount }}
-        poolShare={poolShare}
         isOpen={supplyLiquidityDisclosure.isOpen}
         onClose={supplyLiquidityDisclosure.onClose}
         onConfirm={addLPTx.submit}
