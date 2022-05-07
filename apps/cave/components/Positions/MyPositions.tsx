@@ -8,9 +8,7 @@ import {
   Box,
   Button,
   Card,
-  CloseButton,
   Flex,
-  Heading,
   HStack,
   keyframes,
   Modal,
@@ -21,6 +19,7 @@ import {
   UseDisclosureReturn,
   VStack,
 } from '@concave/ui'
+import { ConnectWallet } from 'components/ConnectWallet'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { BigNumber, Transaction } from 'ethers'
@@ -80,6 +79,7 @@ export const MyPositions = () => {
   return (
     <Card
       gap={4}
+      borderWidth={2}
       variant="primary"
       borderRadius="3xl"
       h={'auto'}
@@ -129,11 +129,18 @@ interface PairsAccordionProps {
 }
 const PairsAccordion = ({ userAddress, pairs }: PairsAccordionProps) => {
   if (!pairs.length) {
+    const { label, Button } = userAddress
+      ? {
+          label: 'You dont have pools on your wallet.',
+          Button: <AddLiquidityModalButton />,
+        }
+      : { label: 'You are disconnected.', Button: <ConnectWallet /> }
+
     return (
       <Box borderRadius={'2xl'} p={6} shadow={'down'}>
         <Flex gap={4} direction={'column'} justify="center" align={'center'}>
-          <Text>You dont have pools on your wallet</Text>
-          <AddLiquidityModalButton />
+          <Text>{label}</Text>
+          {Button}
         </Flex>
       </Box>
     )
@@ -152,32 +159,6 @@ const PairsAccordion = ({ userAddress, pairs }: PairsAccordionProps) => {
         })}
       </Accordion>
     </Box>
-  )
-}
-
-const RewardsBanner = () => {
-  const [visible, setVisible] = useState(true)
-  if (!visible) {
-    return <></>
-  }
-  return (
-    <Card variant="secondary" p={4} gap={4}>
-      <Flex justify="space-between">
-        <Heading as="h2" fontSize="lg">
-          Liquidity Provider Rewards
-        </Heading>
-        <CloseButton
-          blendMode="multiply"
-          _hover={{ blendMode: 'normal' }}
-          onClick={() => setVisible(!visible)}
-        />
-      </Flex>
-      <Text fontSize="lg">
-        Liquidity providers earn a 0.25% fee on all trades proportional to their share of the pool.
-        Fees are added to the pool, accrue in real time and can be claimed by withdrawing your
-        liquidity.
-      </Text>
-    </Card>
   )
 }
 
@@ -262,9 +243,9 @@ const LPPositionItem = ({ userAddress, pair }: LPPosition) => {
               <Button
                 onClick={removeLiquidity.onOpen}
                 variant="primary"
-                h={12}
-                w={40}
-                fontSize="lg"
+                size="medium"
+                fontFamily="heading"
+                w="100%"
               >
                 Withdraw
               </Button>

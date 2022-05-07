@@ -6,11 +6,13 @@ import { SupplyLiquidityModal } from 'components/AMM/AddLiquidity/SupplyLiquidit
 import { useAddLiquidityButtonProps } from 'components/AMM/AddLiquidity/useAddLiquidityButtonProps'
 import { useAddLiquidityState } from 'components/AMM/AddLiquidity/useAddLiquidityState'
 import { useAddLiquidityTransaction } from 'components/AMM/AddLiquidity/useAddLiquidityTransaction'
+import { ConnectWallet } from 'components/ConnectWallet'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import React from 'react'
+import { useAccount } from 'wagmi'
 
 const LiquidityTip = () => (
   <Card variant="secondary" p={4} backgroundBlendMode={'screen'}>
@@ -61,7 +63,6 @@ export function AddLiquidityContent({
 
   const { pair, firstFieldAmount, secondFieldAmount, onChangeFirstField, onChangeSecondField } =
     useAddLiquidityState({ currency0, currency1 })
-  console.log(firstFieldAmount, secondFieldAmount)
   // useSyncCurrenciesToUrl(firstFieldAmount?.currency, secondFieldAmount?.currency)
 
   const addLPTx = useAddLiquidityTransaction(firstFieldAmount, secondFieldAmount)
@@ -135,15 +136,19 @@ export const AddLiquidityModalButton = ({
   label = 'Add liquidity',
   ...buttonProps
 }: { label?: string; pair?: Pair } & ButtonProps) => {
+  const [{ data: account }] = useAccount()
   const addLiquidityDisclosure = useDisclosure()
+  if (!account?.address) {
+    return <ConnectWallet />
+  }
   return (
     <>
       <Button
         onClick={addLiquidityDisclosure.onOpen}
         variant="primary"
-        h={12}
-        w={40}
-        fontSize="lg"
+        size="medium"
+        fontFamily="heading"
+        w="100%"
         {...buttonProps}
       >
         {label}
@@ -159,6 +164,7 @@ export const AddLiquidityModalButton = ({
         bodyProps={{
           variant: 'primary',
           borderRadius: '3xl',
+          borderWidth: 2,
           p: 6,
           shadow: 'Up for Blocks',
           fontWeight: 'bold',
