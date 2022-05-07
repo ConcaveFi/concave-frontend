@@ -90,11 +90,11 @@ export default function Bond() {
   return (
     <Container maxW="container.lg">
       <Flex direction="column" gap={20}>
-        <Stack mt={20} maxW={550} align="center" textAlign="center">
+        <Stack mt={20} maxW="100%" align="center" textAlign="center">
           <Heading as="h1" mb={3} fontSize="5xl">
             Dynamic Bond Market
           </Heading>
-          <Flex align={'center'} justify="center" direction={direction}>
+          <Flex align={'center'} justify="center" direction={direction} maxW={550}>
             Bonds allow new CNV supply to be minted at a discount. All funds raised through bonds
             are added to the Concave treasury and invested to generate returns for quarterly
             dividends.
