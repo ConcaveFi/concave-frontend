@@ -24,7 +24,7 @@ export default function PositionsView() {
 
   return (
     <View title="My Liquidity Position">
-      <MyPositions account={account} />
+      <MyPositions />
     </View>
   )
 }
