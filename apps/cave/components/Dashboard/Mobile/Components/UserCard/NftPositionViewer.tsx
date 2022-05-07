@@ -2,7 +2,7 @@ import { Box, Button, ButtonProps, Card, Flex, Image, Text, TextProps, VStack } 
 
 export const NftPositionViewer = () => {
   return (
-    <Card variant="primary" height={'176px'} width="358px">
+    <Flex height={'176px'} width="358px" direction="column" rounded={'2xl'} shadow={'Up Big'}>
       <Flex
         height={'92px'}
         width="334px"
@@ -22,28 +22,18 @@ export const NftPositionViewer = () => {
       <Flex align={'center'} h={'120px'} maxH="120px">
         <VStack justify={'center'} spacing={0} flex={1}>
           <LowText>Stake Data</LowText>
-          <HighText>612.42CNV</HighText>
+          <HighText>12/07/22</HighText>
         </VStack>
         <VStack justify={'center'} spacing={0} flex={1}>
-          <LowText>Gained</LowText>
-          <HighText>12.032 CNV</HighText>
+          <LowText>Redeem in</LowText>
+          <HighText>143 days</HighText>
         </VStack>
         <VStack justify={'center'} spacing={0} flex={1}>
-          <LowText>Initial</LowText>
-          <HighText>600.10CNV</HighText>
+          <LowText>Redeem date</LowText>
+          <HighText>12/07/22</HighText>
         </VStack>
       </Flex>
-    </Card>
-  )
-}
-
-const RedeemButton: React.FC<ButtonProps> = ({ ...props }, onClick?: () => void) => {
-  return (
-    <Button _focus={{}} shadow="Down Big" {...props}>
-      <Flex width={'326px'} height="48px" justify={'center'} align="center">
-        <LowText fontSize={'20px'}>Not redeemable</LowText>
-      </Flex>
-    </Button>
+    </Flex>
   )
 }
 
