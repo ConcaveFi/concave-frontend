@@ -20,7 +20,7 @@ const UserDashboardCard = () => {
         p={3}
         gap={2}
         variant="primary"
-        maxHeight="770px"
+        maxHeight="775px"
         shadow="down"
         maxW={{ lg: '760px', md: '580px' }}
         justify="center"

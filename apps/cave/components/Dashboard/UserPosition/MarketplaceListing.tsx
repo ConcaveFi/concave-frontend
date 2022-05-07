@@ -33,7 +33,7 @@ const MarketplaceListing = (props: MarketplaceListingProps) => {
         </ModalContent>
       </Modal>
 
-      <Flex justify={{ lg: 'right', md: 'center' }}>
+      <Flex justify={{ lg: 'left', md: 'center' }}>
         <Text pl="6" my={1} pt="3" color="text.low" fontSize="lg" as="b">
           Your Marketplace Listing
         </Text>

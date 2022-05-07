@@ -2,72 +2,45 @@ import { Flex, Text } from '@concave/ui'
 
 const DividendsShare = () => {
   return (
-    <Flex width={'full'} bg="white" height={'full'}>
-      <Flex></Flex>
+    <Flex flex={1} ml={{ lg: 6, md: 3 }} direction="column">
+      <Flex
+        direction={'column'}
+        maxH={'90px'}
+        flex={1}
+        textAlign="start"
+        justify={'center'}
+        textColor="gray.00"
+      >
+        <Text fontWeight={'700'}>Your Staking </Text>
+        <Text fontWeight={'700'}>Rewards</Text>
+      </Flex>
+      <Flex direction={'column'} flex={1} gap={{ lg: 4, md: 8 }} mt={{ md: 4 }}>
+        <Flex direction={'column'} textAlign="start" justify={'center'}>
+          <Text fontSize={'13px'} textColor="text.low">
+            Just now
+          </Text>
+          <Text fontSize={'16px'} textColor="text.accent" fontWeight={700}>
+            +0.0013 CNV
+          </Text>
+        </Flex>
+        <Flex direction={'column'} textAlign="start" justify={'center'}>
+          <Text fontSize={'13px'} textColor="text.low">
+            8 hours ago
+          </Text>
+          <Text opacity={0.8} fontSize={'16px'} textColor="text.accent" fontWeight={700}>
+            +0.0091 CNV
+          </Text>
+        </Flex>
+        <Flex direction={'column'} textAlign="start" justify={'center'}>
+          <Text fontSize={'13px'} textColor="text.low">
+            24 hours ago
+          </Text>
+          <Text opacity={0.6} fontSize={'16px'} textColor="text.accent" fontWeight={700}>
+            +0.00356 CNV
+          </Text>
+        </Flex>
+      </Flex>
     </Flex>
-    // <Flex
-    //   grow={1}
-    //   direction="column"
-    //   height={'320px'}
-    //   alignItems="center"
-    //   textAlign={'start'}
-    //   ml={{ lg: '70px', md: '140px' }}
-    //   fontSize={'15px'}
-    //   fontWeight={'700'}
-    // >
-    //   <Flex
-    //     direction={'column'}
-    //     justify="center"
-    //     textAlign={{ lg: 'center', md: 'start' }}
-    //     height={'90px'}
-    //     width="full"
-    //   >
-    //     <Text width={'full'}>Your Staking</Text>
-    //     <Text width={'full'}>Rewards</Text>
-    //   </Flex>
-    //   <Flex
-    //     direction={'column'}
-    //     justify="center"
-    //     textAlign={{ lg: 'center', md: 'start' }}
-    //     pt={6}
-    //     width="full"
-    //   >
-    //     <Text w={'full'} color="text.low" fontSize="sm">
-    //       Just Now:
-    //     </Text>
-    //     <Text w={'full'} color="#65a6f0" fontSize="md" fontWeight={'700'}>
-    //       +0.0011 CNV
-    //     </Text>
-    //   </Flex>
-    //   <Flex
-    //     width="full"
-    //     direction={'column'}
-    //     justify="center"
-    //     textAlign={{ lg: 'center', md: 'start' }}
-    //     pt={6}
-    //   >
-    //     <Text w={'full'} color="text.low" fontSize="sm">
-    //       6 hours ago:
-    //     </Text>
-    //     <Text w={'full'} color="#5788be" fontSize="md" fontWeight={'700'}>
-    //       +0.0092 CNV
-    //     </Text>
-    //   </Flex>
-    //   <Flex
-    //     width="full"
-    //     direction={'column'}
-    //     justify="center"
-    //     textAlign={{ lg: 'center', md: 'start' }}
-    //     pt={6}
-    //   >
-    //     <Text w={'full'} color="text.low" fontSize="sm">
-    //       24 hours ago:
-    //     </Text>
-    //     <Text w={'full'} color="#3d6a9e" fontSize="md" fontWeight={'700'}>
-    //       +0.0042 CNV
-    //     </Text>
-    //   </Flex>
-    // </Flex>
   )
 }
 

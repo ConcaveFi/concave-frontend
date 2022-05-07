@@ -5,6 +5,7 @@ import UserListPositionCard from './UserListPositionCard'
 import DividendsShare from './UserPosition/DividendsShare'
 import MarketplaceListing from './UserPosition/MarketplaceListing'
 import NftPositionContainer from './UserPosition/NftPositionContainer'
+import RedeemCardViewer from './UserPosition/RedeemViewer'
 
 export type nftContract = {
   maturity: number
@@ -54,12 +55,12 @@ const UserPositionCard = (props: NftPositionCardProps) => {
           >
             <Flex direction={'column'}>
               <NftPositionContainer stakeType={poolID} redeemIn={redeemIn} />
-              {/* <RedeemCardViewer gained={gained} redeemIn={redeemIn} initial={sharesDecimals} /> */}
+              <RedeemCardViewer gained={gained} redeemIn={redeemIn} initial={sharesDecimals} />
               <MarketplaceListing />
             </Flex>
-            <DividendsShare />
           </Flex>
         </Box>
+        <DividendsShare />
       </Flex>
     </Box>
   )
