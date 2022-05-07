@@ -33,6 +33,7 @@ export default function Bond() {
   const [direction, setDirection] = useState<'row' | 'column'>('row')
   // const [align, setAlign] = useState<'start' | 'center'>('center')
   const align = 'center'
+  const [showUserPosition, setShowUserPosition] = useState(false)
   useEffect(() => {
     getCurrentBlockTimestamp().then((x) => {
       setCurrentBlockTs(x)
@@ -87,6 +88,11 @@ export default function Bond() {
     // setAlign(isLargerThan1200 ? 'start' : 'center')
   }, [isLargerThan1200])
 
+  useEffect(() => {
+    if (bondSigma) {
+      setShowUserPosition(true)
+    }
+  }, [bondSigma])
   return (
     <Container maxW="container.lg">
       <Flex direction="column" gap={20}>
@@ -133,9 +139,11 @@ export default function Bond() {
               ) : (
                 <></>
               )}
-              <Collapse in={bondSigma}>
-                <UserBondPositionInfo bondSigma={bondSigma} userAddress={userAddress} />
-              </Collapse>
+              <Box w="100%">
+                <Collapse in={showUserPosition}>
+                  <UserBondPositionInfo bondSigma={bondSigma} userAddress={userAddress} />
+                </Collapse>
+              </Box>
               <Redeem
                 bondSigma={bondSigma}
                 onConfirm={() => {
