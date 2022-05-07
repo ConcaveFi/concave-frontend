@@ -79,6 +79,7 @@ const SidebarContent = forwardRef<CardProps, 'div'>((props, ref) => {
       borderRightRadius="2xl"
       shadow="Up Big"
       p={3}
+      pb="5vh"
       w={{ base: '250px', md: '250px' }}
       minW="250px"
       overflowY="auto"

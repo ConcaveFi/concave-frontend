@@ -11,7 +11,7 @@ export const DefaultLayout = ({ children }) => {
   return (
     <Flex as="main" direction={{ base: 'column', md: 'row' }}>
       <SideBar />
-      <Container display="flex" mb="25vh" maxWidth="container.xl">
+      <Container display="flex" maxWidth="container.xl">
         <TestnetIndicator />
         {children}
       </Container>
