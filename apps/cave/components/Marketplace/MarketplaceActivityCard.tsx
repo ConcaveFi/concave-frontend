@@ -98,6 +98,7 @@ const MarketplaceActivityCard = () => {
         <TransactionButton label="Sale" />
       </Flex>
       <Box
+        backdropFilter="blur(8px)"
         pos="relative"
         h="100%"
         overflowY={'auto'}

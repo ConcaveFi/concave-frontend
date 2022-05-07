@@ -3,7 +3,6 @@ import { CurrencyIcon } from 'components/CurrencyIcon'
 import { ApproveButton, useApproval } from 'hooks/useAllowance'
 import { LiquidityPool } from 'pages/addliquidity'
 import React from 'react'
-import { PoolShare } from './usePoolShare'
 
 const PositionInfoItem = ({ color = '', label = '', value, mt = 0, children = <></> }) => (
   <Flex justify="space-between" align={'center'} mt={mt}>
@@ -18,10 +17,8 @@ const PositionInfoItem = ({ color = '', label = '', value, mt = 0, children = <>
 const SupplyLiquidityContent = ({
   onConfirm = () => {},
   lp,
-  poolShare,
 }: {
   lp: LiquidityPool
-  poolShare: PoolShare
   onConfirm: () => void
 }) => {
   const [amount0, amount1] =
@@ -35,17 +32,28 @@ const SupplyLiquidityContent = ({
   const token0 = amount0.currency
   const token1 = amount1.currency
   const pair = lp.pair
+  const poolShare = pair.calculatePoolShare(amount0, amount1)
 
   return (
     <>
-      <Text fontSize="3xl">
-        {poolShare && poolShare.amount.toSignificant(6, { groupSeparator: ',' })}{' '}
-        {amount0.currency.symbol}/{amount1.currency.symbol} Pool Tokens
-      </Text>
-      <HStack justifyContent={'center'}>
-        <CurrencyIcon currency={amount0.currency} />
-        <CurrencyIcon currency={amount1.currency} />
+      <Text fontSize="2xl"> You will receive</Text>
+      <HStack>
+        <Text fontWeight={'bold'} lineHeight={'48px'} fontSize={32}>
+          {poolShare.amount.toSignificant(6, { groupSeparator: ',' })}
+        </Text>
+        <CurrencyIcon h={10} w={10} currency={amount0.currency} />
+        <CurrencyIcon h={10} w={10} currency={amount1.currency} />
       </HStack>
+      <HStack>
+        <Text fontSize="2xl">{`${amount0.currency.symbol}/${amount1.currency.symbol} Pool Tokens`}</Text>
+      </HStack>
+      <Text
+        fontStyle={'italic'}
+        fontSize={14}
+        textColor={'#5F7A99'}
+      >{`Output is estimated. You will receive approximately ${poolShare.amount.toSignificant(6, {
+        groupSeparator: ',',
+      })} ${pair.liquidityToken.symbol} or the transaction will revert.`}</Text>
       <Box borderRadius={'2xl'} p={6} shadow={'down'}>
         <PositionInfoItem
           label="Rates"
@@ -75,10 +83,10 @@ const SupplyLiquidityContent = ({
           value={`${poolShare?.percent?.toSignificant(4)}%`}
         />
       </Box>
-      <ApproveButton useApproveInfo={approval0} />
-      <ApproveButton useApproveInfo={approval1} />
+      <ApproveButton size="large" isFullWidth variant={'primary'} useApproveInfo={approval0} />
+      <ApproveButton size="large" isFullWidth variant={'primary'} useApproveInfo={approval1} />
       {!needsApprove0 && !needsApprove1 && (
-        <Button mt={2} p={6} fontSize={'2xl'} variant={'primary'} onClick={onConfirm}>
+        <Button size="large" isFullWidth fontSize="2xl" variant={'primary'} onClick={onConfirm}>
           Confirm Supply
         </Button>
       )}
@@ -90,10 +98,8 @@ export const SupplyLiquidityModal = ({
   onConfirm = () => {},
   isOpen,
   onClose,
-  poolShare,
   lp,
 }: {
-  poolShare: PoolShare
   lp: LiquidityPool
   isOpen: boolean
   onClose: () => void
@@ -109,7 +115,7 @@ export const SupplyLiquidityModal = ({
       size="xl"
       bodyProps={{ gap: 6 }}
     >
-      <SupplyLiquidityContent lp={lp} poolShare={poolShare} onConfirm={onConfirm} />
+      <SupplyLiquidityContent lp={lp} onConfirm={onConfirm} />
     </Modal>
   )
 }

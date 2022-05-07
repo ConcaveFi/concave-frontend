@@ -5,6 +5,7 @@ const spin = keyframes({
   '0%': { transform: 'rotate(0deg)' },
   '100%': { transform: 'rotate(360deg)' },
 })
+import { utils } from 'ethers'
 
 export const InfoItem = ({ value, label, ...props }) => (
   <Flex
@@ -44,9 +45,14 @@ export const UserBondPositionInfo = (bondSigma, userAddress) => {
   const parse = bondSigma?.bondSigma
   const oldestBond = parse?.parseOldest
   const claimed = parse?.claimed
-  const redeemable = parse?.parseRedeemable.toFixed(2)
+  const redeemable = parse?.parseRedeemable
   const totalOwed = parse?.totalOwed.toFixed(2)
   const totalPending = parse?.totalPending.toFixed(2)
+  // const bigIntRedeemable = BigInt(redeemable)
+
+  const formatRedeemable =
+    Math.sign(redeemable) === 1 ? (+utils.formatEther(BigInt(+redeemable))).toFixed(2) : 0
+
   return (
     <>
       {claimed ? (
@@ -66,7 +72,7 @@ export const UserBondPositionInfo = (bondSigma, userAddress) => {
             flexGrow={1}
           />
           <Box w="1px" mx={30} my={-4} bg="stroke.primary" />
-          <InfoItem value={redeemable} label={'Available'} px={5} pl={2} />
+          <InfoItem value={formatRedeemable} label={'Available'} px={5} pl={2} />
         </Card>
       ) : !!userAddress ? (
         <>

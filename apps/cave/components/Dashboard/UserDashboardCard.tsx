@@ -15,7 +15,15 @@ const UserDashboardCard = () => {
 
   const hasPositions = userContracts !== null
   return (
-    <Card p={3} gap={2} variant="primary" maxHeight="945px" shadow="down" w="780px">
+    <Card
+      p={3}
+      gap={2}
+      variant="primary"
+      maxHeight="945px"
+      shadow="down"
+      maxW={{ lg: '780px', md: '680px' }}
+      justify="center"
+    >
       <Flex justify="center">
         <Box
           pos="relative"

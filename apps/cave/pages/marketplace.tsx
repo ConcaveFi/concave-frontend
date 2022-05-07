@@ -7,6 +7,8 @@ import {
   Container,
   Flex,
   Heading,
+  Modal,
+  ModalFooter,
   Text,
   useMediaQuery,
 } from '@concave/ui'
@@ -14,8 +16,10 @@ import GraphicGuide from 'components/LiquidStaking/GraphicGuide'
 import MarketplaceSearchCard from 'components/Marketplace/MarketplaceSearchCard'
 import MarketplaceStakeCard from 'components/Marketplace/MarketplaceStakeCard'
 import MarketplaceActivityCard from 'components/Marketplace/MarketplaceActivityCard'
+import { useRouter } from 'next/router'
 
 const Marketplace = () => {
+  const router = useRouter()
   const [isMoreThan1200] = useMediaQuery('(min-width: 1200px)')
   const [isMoreThan470] = useMediaQuery('(min-width: 470px)')
   const [columnDirection, setColumnDirection] = useState<'row' | 'column-reverse'>('row')
@@ -45,6 +49,7 @@ const Marketplace = () => {
   }, [isMoreThan470])
   return (
     <Flex
+    
       align={'center'}
       borderRadius={0}
       textAlign="center"
@@ -95,7 +100,7 @@ const Marketplace = () => {
                 onClick={() => setViewTransactions(true)}
                 active={!isMoreThan1200}
               />
-              <Box display={display}>
+              <Box display={display} >
                 <MarketplaceActivityCard />
               </Box>
             </Flex>
@@ -123,8 +128,24 @@ const Marketplace = () => {
             />
             <MarketplaceActivityCard />
           </Flex>
+          
         </Flex>
       )}
+      <Flex mt={2} direction={'column'} justify="center" align={'center'}>
+    <Modal
+      bluryOverlay={true}
+      title="Marketplace"
+      isOpen={true}
+      onClose={() => router.push('swap')}
+      isCentered
+      motionPreset="slideInBottom"
+      hideClose={true}
+      bodyProps={{ alignItems: 'center', gap: 3, w: '100%', maxW: '350px' }}>
+        <ModalFooter>
+Coming Soon!
+        </ModalFooter>
+      </Modal>
+      </Flex>
     </Flex>
   )
 }

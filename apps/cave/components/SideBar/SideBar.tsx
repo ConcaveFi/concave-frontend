@@ -88,11 +88,10 @@ const SidebarContent = forwardRef<CardProps, 'div'>((props, ref) => {
       <SideBarTop />
       <Stack spacing="50px" mt="50px" mr={-3} ml="auto" pb={8} w="max">
         <PageNav />
-
       </Stack>
       <Flex ml="4" mt="20px">
         <SideBarBottom />
-        </Flex>
+      </Flex>
       {/* <Flex         
       align="center">
         <SideBarBottom />

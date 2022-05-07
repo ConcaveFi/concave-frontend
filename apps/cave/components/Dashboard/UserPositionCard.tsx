@@ -1,17 +1,5 @@
-import { Modal, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay } from '@chakra-ui/modal'
-import {
-  Box,
-  Button,
-  Flex,
-  HStack,
-  Image,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  Portal,
-  Text,
-  useDisclosure,
-} from '@concave/ui'
+import { Modal, ModalContent, ModalOverlay } from '@chakra-ui/modal'
+import { Box, Button, Flex, HStack, Image, Text, useDisclosure } from '@concave/ui'
 import UserListPositionCard from './UserListPositionCard'
 
 export type nftContract = {
@@ -36,14 +24,12 @@ const UserPositionCard = (props: NftPositionCardProps) => {
   const currentData = new Date()
   const redeemIn = dateToRedeem.getTime() - currentData.getTime()
 
-  // console.log(d)
-
   return (
     <Box
       pos={'relative'}
       maxHeight="320px"
       borderRadius={'2xl'}
-      width="690px"
+      width={{ lg: '690px', md: '590px' }}
       height={'320px'}
       shadow="up"
       maxWidth={'690px'}
@@ -59,22 +45,40 @@ const UserPositionCard = (props: NftPositionCardProps) => {
         shadow="down"
         justifyContent={'end'}
       >
-        <Flex width={'228px'} height={'320px'} rounded={'2xl'} textAlign="start">
+        <Flex
+          border="2px solid white"
+          width={'268px'}
+          height={'320px'}
+          rounded={'2xl'}
+          textAlign="start"
+        >
           <Flex
             grow={1}
             direction="column"
             height={'320px'}
             alignItems="center"
             textAlign={'start'}
-            ml={'70px'}
+            ml={{ lg: '70px', md: '140px' }}
             fontSize={'15px'}
             fontWeight={'700'}
           >
-            <Flex direction={'column'} width={'full'} justify="center" height={'90px'}>
+            <Flex
+              direction={'column'}
+              justify="center"
+              textAlign={{ lg: 'center', md: 'start' }}
+              height={'90px'}
+              width="full"
+            >
               <Text width={'full'}>Your Staking</Text>
               <Text width={'full'}>Rewards</Text>
             </Flex>
-            <Flex direction={'column'} width={'full'} justify="center" pt={6}>
+            <Flex
+              direction={'column'}
+              justify="center"
+              textAlign={{ lg: 'center', md: 'start' }}
+              pt={6}
+              width="full"
+            >
               <Text w={'full'} color="text.low" fontSize="sm">
                 Just Now:
               </Text>
@@ -82,7 +86,13 @@ const UserPositionCard = (props: NftPositionCardProps) => {
                 +0.0011 CNV
               </Text>
             </Flex>
-            <Flex direction={'column'} width={'full'} justify="center" pt={6}>
+            <Flex
+              width="full"
+              direction={'column'}
+              justify="center"
+              textAlign={{ lg: 'center', md: 'start' }}
+              pt={6}
+            >
               <Text w={'full'} color="text.low" fontSize="sm">
                 6 hours ago:
               </Text>
@@ -90,7 +100,13 @@ const UserPositionCard = (props: NftPositionCardProps) => {
                 +0.0092 CNV
               </Text>
             </Flex>
-            <Flex direction={'column'} width={'full'} justify="center" pt={6}>
+            <Flex
+              width="full"
+              direction={'column'}
+              justify="center"
+              textAlign={{ lg: 'center', md: 'start' }}
+              pt={6}
+            >
               <Text w={'full'} color="text.low" fontSize="sm">
                 24 hours ago:
               </Text>
@@ -106,7 +122,7 @@ const UserPositionCard = (props: NftPositionCardProps) => {
         pos={'relative'}
         height={'full'}
         rounded="2xl"
-        maxWidth={'500'}
+        maxWidth={{ lg: '500px', md: '440px' }}
         background="linear-gradient(265.73deg, #274C63 0%, #182F3E 100%)"
       >
         <NftPositionViewer stakeType={poolID} redeemIn={redeemIn} />
@@ -317,22 +333,6 @@ const NftPositionViewer = (props: NftPositionViewerProps) => {
             {redeemInDays} Days
           </Text>
         </Flex>
-        {/* <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
-          <Text color="text.low" fontSize="sm">
-            Price:
-          </Text>
-          <Text fontSize="md" fontWeight="bold">
-            605 CNV
-          </Text>
-        </Flex>
-        <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
-          <Text color="text.low" fontSize="sm">
-            Discount:
-          </Text>
-          <Text fontSize="md" fontWeight="bold">
-            2.3%
-          </Text>
-        </Flex> */}
       </Flex>
     </Box>
   )

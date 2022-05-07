@@ -135,8 +135,7 @@ export const getUserBondPositions = async (
   }
   const fullyVestedTimestamp = oldest * 1000 + 86400000
   const parseOldest = new Date(fullyVestedTimestamp).toString().slice(4, 21)
-  const formattedRedeemable = +utils.formatEther(redeemable.toString())
-  const parseRedeemable = Math.sign(redeemable) === -1 ? 0 : formattedRedeemable
+  const parseRedeemable = Math.sign(redeemable) === -1 ? 0 : +redeemable
   if (totalPending === totalOwed) claimed = true
   return { parseOldest, totalOwed, totalPending, batchRedeemArray, claimed, parseRedeemable }
 }

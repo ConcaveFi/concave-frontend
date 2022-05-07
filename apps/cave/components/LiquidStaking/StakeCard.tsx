@@ -205,7 +205,7 @@ async function getPools(netWorkdId: number, index: string) {
 
 async function getViewStakingCap(netWorkdId: number, index: string) {
   const stakingContract = new Contract(LIQUID_STAKING_ADDRESS[netWorkdId], StakingV1Abi, providers)
-  const stakingCap = await stakingContract.viewStakingCap(1).catch((error) => {})
+  const stakingCap = await stakingContract.viewStakingCap(index).catch((error) => {})
 
   return stakingCap
 }
