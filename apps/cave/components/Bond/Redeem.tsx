@@ -1,14 +1,16 @@
 import { Card, Button } from '@concave/ui'
+import { utils } from 'ethers'
 
 export const Redeem = ({ onConfirm, bondSigma }: { onConfirm: () => void; bondSigma }) => {
-  const totalOwed = bondSigma?.totalOwed
-  const redeemable = bondSigma?.redeemable
+  const redeemable = bondSigma?.parseRedeemable
+  const formatRedeemable = redeemable ? (+utils.formatEther(redeemable.toString())).toFixed(2) : 0
+
   return (
     <>
-      {totalOwed ? (
+      {formatRedeemable ? (
         <Card mb={-12} bottom={-3} fontWeight="bold" fontSize="lg" w="100%">
           <Button variant="primary" size="lg" isFullWidth onClick={onConfirm}>
-            {redeemable ? 'Nothing to redeem' : 'Redeem'}
+            Redeem
           </Button>
         </Card>
       ) : (
