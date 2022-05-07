@@ -46,7 +46,7 @@ const UserPositionCard = (props: NftPositionCardProps) => {
         justifyContent={'end'}
       >
         <Flex
-          border="2px solid white"
+          
           width={'268px'}
           height={'320px'}
           rounded={'2xl'}
@@ -256,7 +256,6 @@ const ListCardViewer = (props: ListCardViewerProps) => {
         <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
           <Button
             mt={5}
-            onClick={onOpen}
             fontWeight="bold"
             fontSize="md"
             variant={'primary'}
@@ -265,8 +264,9 @@ const ListCardViewer = (props: ListCardViewerProps) => {
             size="large"
             mx="auto"
           >
-            List for sale
+            Coming Soon!
           </Button>
+          {/* onClick={onOpen} */}
         </Flex>
       </Flex>
     </Box>

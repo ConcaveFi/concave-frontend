@@ -8,7 +8,6 @@ export default function Dashboard() {
     <Flex
       align={'center'}
       justify="start"
-      border="solid 2px white"
       direction={'column'}
       width={'full'}
       maxW="container.lg"
