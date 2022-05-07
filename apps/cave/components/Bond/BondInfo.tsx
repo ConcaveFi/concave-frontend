@@ -80,7 +80,7 @@ export const UserBondPositionInfo = (bondSigma, userAddress) => {
           <SpinIcon __css={spinnerStyles} width={'10'} height={'10'} />
         </>
       ) : (
-        ''
+        <></>
       )}
     </>
   )

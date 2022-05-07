@@ -131,7 +131,7 @@ export default function Bond() {
                   <SpinIcon __css={spinnerStyles} width={'10'} height={'10'} />
                 </>
               ) : (
-                ''
+                <></>
               )}
               <Collapse in={bondSigma}>
                 <UserBondPositionInfo bondSigma={bondSigma} userAddress={userAddress} />
