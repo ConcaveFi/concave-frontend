@@ -1,13 +1,16 @@
-import { Card, Flex } from '@concave/ui'
+import { Card, Flex, FlexProps } from '@concave/ui'
 import { DividendsShareMobile } from './Components/DividendsShare'
 import { NftPositionViewer } from './Components/UserCard/NftPositionViewer'
 import UserDashBoardCardMobile from './Components/UserDashBoardCard'
 
-export default function DashboardMobile() {
+const DashboardMobile: React.FC<FlexProps> = ({ ...props }) => {
   return (
-    <Flex direction={'column'}>
+    <Flex direction={'column'} {...props}>
       <DividendsShareMobile />
+      <UserDashBoardCardMobile my={3} />
       <UserDashBoardCardMobile />
     </Flex>
   )
 }
+
+export default DashboardMobile
