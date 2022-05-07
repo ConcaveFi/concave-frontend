@@ -8,4 +8,3 @@ export { gradientBorder } from './theme/utils/gradientBorder'
 export { ThemeProvider, ColorModeScript, Modal } from './components'
 
 export type { ModalProps } from './components'
-export type { ButtonProps } from './theme/components/ButtonStyles'

@@ -19,7 +19,7 @@ const UserDashboardCard = () => {
       p={3}
       gap={2}
       variant="primary"
-      maxHeight="945px"
+      maxHeight="535px"
       shadow="down"
       maxW={{ lg: '780px', md: '680px' }}
       justify="center"
@@ -41,7 +41,6 @@ const UserDashboardCard = () => {
         </Box>
       </Flex>
 
-{/* commit */}
       <Collapse in={userContracts !== null}>
         <Box
           pos="relative"

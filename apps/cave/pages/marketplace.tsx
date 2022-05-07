@@ -134,7 +134,7 @@ const Marketplace = () => {
       <Flex mt={2} direction={'column'} justify="center" align={'center'}>
     <Modal
       bluryOverlay={true}
-      title="Marketplace"
+      title=""
       isOpen={true}
       onClose={() => router.push('swap')}
       isCentered
@@ -142,7 +142,9 @@ const Marketplace = () => {
       hideClose={true}
       bodyProps={{ alignItems: 'center', gap: 3, w: '100%', maxW: '350px' }}>
         <ModalFooter>
-Coming Soon!
+
+<Text fontSize="2xl" textColor={'gray.300'} pl="3" pt={2}>Coming Soon!
+</Text>
         </ModalFooter>
       </Modal>
       </Flex>
