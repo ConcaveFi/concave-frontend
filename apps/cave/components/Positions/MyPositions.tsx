@@ -14,9 +14,9 @@ import {
   Text,
   VStack,
 } from '@concave/ui'
+import { AddLiquidityModalButton } from 'components/AMM/AddLiquidity/AddLiquidity'
 import { ConnectWallet } from 'components/ConnectWallet'
 import { CurrencyIcon } from 'components/CurrencyIcon'
-import { AddLiquidityModalButton } from 'components/LiquidityPool/AddLiquidity'
 import { RemoveLiquidityModalButton } from 'components/LiquidityPool/RemoveLiquidity'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { precision } from 'hooks/usePrecision'

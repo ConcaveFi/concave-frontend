@@ -1,5 +1,5 @@
 import { Flex, Heading, Text } from '@concave/ui'
-import { AddLiquidityCard } from 'components/LiquidityPool/AddLiquidity'
+import { AddLiquidityCard } from 'components/AMM/AddLiquidity/AddLiquidity'
 import React from 'react'
 
 export default function AddLiquidity() {

@@ -1,7 +1,7 @@
 import { Box, Button, Flex, HStack, Modal, Text } from '@concave/ui'
+import { LiquidityPool } from 'components/AMM/AddLiquidity/AddLiquidity'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { ApproveButton, useApproval } from 'hooks/useAllowance'
-import { LiquidityPool } from 'pages/addliquidity'
 import React from 'react'
 
 const PositionInfoItem = ({ color = '', label = '', value, mt = 0, children = <></> }) => (
