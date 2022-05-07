@@ -108,12 +108,11 @@ export default function Bond() {
         </Stack>
 
         <Flex gap={10} direction={direction} align={align}>
-          <Box pos="relative" h="fit-content" maxHeight={'500px'}>
+          <Box pos="relative" h="fit-content">
             <Card
               variant="secondary"
               w="430px"
-              maxW="430px"
-              borderWidth={3}
+              borderWidth={1}
               px={5}
               py={20}
               shadow="Glow Inner"
