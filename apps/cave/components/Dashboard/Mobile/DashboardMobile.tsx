@@ -7,8 +7,9 @@ const DashboardMobile: React.FC<FlexProps> = ({ ...props }) => {
   return (
     <Flex direction={'column'} {...props}>
       <DividendsShareMobile />
-      <UserDashBoardCardMobile my={3} />
-      <UserDashBoardCardMobile />
+      <Flex>
+        <UserDashBoardCardMobile />
+      </Flex>
     </Flex>
   )
 }

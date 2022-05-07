@@ -45,13 +45,7 @@ const UserPositionCard = (props: NftPositionCardProps) => {
         shadow="down"
         justifyContent={'end'}
       >
-        <Flex
-          
-          width={'268px'}
-          height={'320px'}
-          rounded={'2xl'}
-          textAlign="start"
-        >
+        <Flex width={'268px'} height={'320px'} rounded={'2xl'} textAlign="start">
           <Flex
             grow={1}
             direction="column"

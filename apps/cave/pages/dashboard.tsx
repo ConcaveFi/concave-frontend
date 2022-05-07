@@ -30,7 +30,8 @@ export default function Dashboard() {
 
   return (
     <Flex align={'center'} justify="start" direction={'column'} width={'full'} textAlign="center">
-      <Heading as="h1" mt={16} mb={3} fontSize="5xl">
+      <DashboardMobile transform={scale} />
+      {/* <Heading as="h1" mt={8} mb={3} fontSize="5xl">
         My Dashboard
       </Heading>
       <Flex my={3} justify={'center'} maxWidth={{ sm: '358px', lg: '1000px' }}>
@@ -38,11 +39,10 @@ export default function Dashboard() {
           This is the user dashboard to claim divdends and manage your liquid NFT positions.
         </Text>
       </Flex>
-      {/* <DashboardMobile transform={scale} /> */}
 
-      <Flex justify={' center'} gap={8} position="relative" mt={6}>
+      <Flex border={'2pxx solid white'} justify={'start'} position="relative">
         {userDashLayout}
-      </Flex>
+      </Flex> */}
     </Flex>
   )
 }

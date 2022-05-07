@@ -49,7 +49,6 @@ const Marketplace = () => {
   }, [isMoreThan470])
   return (
     <Flex
-    
       align={'center'}
       borderRadius={0}
       textAlign="center"
@@ -100,7 +99,7 @@ const Marketplace = () => {
                 onClick={() => setViewTransactions(true)}
                 active={!isMoreThan1200}
               />
-              <Box display={display} >
+              <Box display={display}>
                 <MarketplaceActivityCard />
               </Box>
             </Flex>
@@ -128,25 +127,25 @@ const Marketplace = () => {
             />
             <MarketplaceActivityCard />
           </Flex>
-          
         </Flex>
       )}
       <Flex mt={2} direction={'column'} justify="center" align={'center'}>
-    <Modal
-      bluryOverlay={true}
-      title=""
-      isOpen={true}
-      onClose={() => router.push('swap')}
-      isCentered
-      motionPreset="slideInBottom"
-      hideClose={true}
-      bodyProps={{ alignItems: 'center', gap: 3, w: '100%', maxW: '350px' }}>
-        <ModalFooter>
-
-<Text fontSize="2xl" textColor={'gray.300'} pl="3" pt={2}>Coming Soon!
-</Text>
-        </ModalFooter>
-      </Modal>
+        <Modal
+          bluryOverlay={true}
+          title=""
+          isOpen={true}
+          onClose={() => router.push('swap')}
+          isCentered
+          motionPreset="slideInBottom"
+          hideClose={true}
+          bodyProps={{ alignItems: 'center', gap: 3, w: '100%', maxW: '350px' }}
+        >
+          <ModalFooter>
+            <Text fontSize="2xl" textColor={'gray.300'} pl="3" pt={2}>
+              Coming Soon!
+            </Text>
+          </ModalFooter>
+        </Modal>
       </Flex>
     </Flex>
   )
