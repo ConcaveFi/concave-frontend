@@ -1,0 +1,11 @@
+query GET_TREASURY {
+  treasury {
+    updated_at
+    contract
+    chainId
+    name
+    amount
+    value
+    total
+  }
+}
