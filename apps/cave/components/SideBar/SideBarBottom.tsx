@@ -55,7 +55,7 @@ function SideBarBottom() {
       textColor="text.low"
       fontSize="sm"
     >
-      <button disabled={loadingtoWallet} onClick={addingToWallet}>
+      {/* <button disabled={loadingtoWallet} onClick={addingToWallet}>
         <HStack spacing="2px" textAlign="left" w="150px" gap={2}>
           {isMounted && (
             <Image
@@ -71,7 +71,7 @@ function SideBarBottom() {
             Add CNV to wallet
           </Text>
         </HStack>
-      </button>
+      </button> */}
 
       {Media.map((m) => (
         <Link href={m.link} isExternal key={m.name}>
