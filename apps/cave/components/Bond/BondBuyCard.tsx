@@ -64,7 +64,7 @@ export function BondBuyCard() {
       .catch((e) => {
         console.log(e)
       })
-  }, [userAddress])
+  }, [networkId, userAddress])
 
   return (
     <Card p={6} gap={2} variant="primary" h="fit-content" shadow="Block Up" w="100%" maxW="420px">
@@ -74,7 +74,6 @@ export function BondBuyCard() {
           setAmountIn(v)
           getBondAmountOut(currencyOut.address, currencyOut.decimals, networkId, v.toExact()).then(
             (amountOut) => {
-              console.log(amountOut)
               setAmountOut(amountOut)
             },
           )

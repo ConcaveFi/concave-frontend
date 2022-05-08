@@ -54,7 +54,7 @@ export default function Bond() {
       clearTimeout(intervalID)
       setIntervalID(interval)
     }
-  }, [userAddress])
+  }, [currentBlockTs, userAddress])
 
   useEffect(() => {
     getBondTermLength(networkId)
