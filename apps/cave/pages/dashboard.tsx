@@ -7,31 +7,32 @@ import { useDashBoardState } from 'contracts/DashBoard/DashBoardState'
 import React from 'react'
 import { useEffect, useState } from 'react'
 export default function Dashboard() {
-  const [isLargerThan380] = useMediaQuery('(min-width: 380px)')
+  const [isLargerThan350] = useMediaQuery('(min-width: 350px)')
   const [isLargerThan850] = useMediaQuery('(min-width: 850px)')
   const [scale, setScale] = useState('scale(1)')
   const [defaultDisplay, setDefaultDisplay] = useState('flex')
   const [mobileDisplay, setMobileDisplay] = useState('none')
-
-  useEffect(() => {
-    setScale(isLargerThan380 ? 'scale(1)' : `scale(${window.innerWidth / 380})`)
-  }, [isLargerThan380])
-
-  useEffect(() => {
-    function handleResize() {
-      setScale(isLargerThan380 ? 'scale(1)' : `scale(${window.innerWidth / 380})`)
-    }
-    window.addEventListener('resize', handleResize)
-  })
+  const [mobileScale, setMobileScale] = useState('')
 
   useEffect(() => {
     setDefaultDisplay(isLargerThan850 ? 'flex' : 'none')
     setMobileDisplay(isLargerThan850 ? 'none' : 'flex')
   }, [isLargerThan850])
-  const { userContracts, totalLocked, statusData } = useDashBoardState()
 
+  useEffect(() => {
+    setMobileScale(isLargerThan350 ? '' : 'scale(0.8) translateY(-90px)')
+  }, [isLargerThan350])
+
+  const { userContracts, totalLocked, statusData } = useDashBoardState()
   return (
-    <Flex align={'center'} justify="start" direction={'column'} width={'full'} textAlign="center">
+    <Flex
+      transform={mobileScale}
+      align={'center'}
+      justify="start"
+      direction={'column'}
+      width={'full'}
+      textAlign="center"
+    >
       {/* <DashboardMobile transform={scale} /> */}
       <Heading as="h1" mt={8} mb={3} fontSize="5xl">
         My Dashboard
@@ -49,7 +50,12 @@ export default function Dashboard() {
           userContracts={userContracts}
           display={defaultDisplay}
         />
-        <DashboardMobile display={mobileDisplay} />
+        <DashboardMobile
+          statusData={statusData}
+          totalLocked={totalLocked}
+          userContracts={userContracts}
+          display={mobileDisplay}
+        />
       </Flex>
     </Flex>
   )

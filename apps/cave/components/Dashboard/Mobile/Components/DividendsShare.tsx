@@ -1,6 +1,17 @@
-import { Button, Card, Flex, Text } from '@concave/ui'
+import { Button, Card, Flex, FlexProps, Spinner, Text } from '@concave/ui'
 
-export function DividendsShareMobile() {
+interface DividendsShareMobileProps extends FlexProps {
+  totalLocked: number
+  statusData: { isLoading; success; notConnected }
+}
+const DividendsShareMobile: React.FC<DividendsShareMobileProps> = ({ ...props }) => {
+  const { statusData } = props
+  const { isLoading, success, notConnected } = statusData
+  const totalLocked = notConnected
+    ? '--.--.--.--'
+    : isLoading
+    ? 'loading'
+    : +parseFloat(props.totalLocked.toFixed(3))
   return (
     <Flex
       rounded={'2xl'}
@@ -19,22 +30,25 @@ export function DividendsShareMobile() {
         </Flex>
         <Flex height={'60px'} justify="space-around" textAlign="center">
           <Flex direction={'column'}>
-            <LowText label="Total Locked" />
-            <HighText label="6132.42 CNV" />
+            <LowText label="Total Locked:" />
+            <Flex justify={'center'}>
+              <HighText label={totalLocked} />
+              {isLoading && <Spinner height={'20px'} width={'20px'} ml={1} />}
+            </Flex>
           </Flex>
           <Flex direction={'column'}>
-            <LowText label="Total Locked" />
-            <HighText label="6132.42 CNV" />
+            <LowText label="Your dividends share:" />
+            <HighText label="--.--" />
           </Flex>
         </Flex>
         <Flex height={'60px'} justify="space-around" textAlign="center">
           <Flex direction={'column'}>
-            <LowText label="Total Locked" />
-            <HighText label="6132.42 CNV" />
+            <LowText label="Next devidend date:" />
+            <HighText label="07/04/2022" />
           </Flex>
           <Flex direction={'column'}>
-            <LowText label="Total Locked" />
-            <HighText label="6132.42 CNV" />
+            <LowText label="Available dividends:" />
+            <HighText label="0.0" />
           </Flex>
         </Flex>
         <Flex
@@ -66,7 +80,7 @@ export function DividendsShareMobile() {
   )
 }
 
-const LowText = (props: { label: string }) => {
+const LowText = (props: { label: string | number }) => {
   return (
     <Text textColor={'text.low'} fontSize="12px" fontWeight={'700'}>
       {props.label}
@@ -74,10 +88,11 @@ const LowText = (props: { label: string }) => {
   )
 }
 
-const HighText = (props: { label: string }) => {
+const HighText = (props: { label: string | number }) => {
   return (
     <Text textColor={'text.high'} fontSize="15px" fontWeight={'700'}>
       {props.label}
     </Text>
   )
 }
+export default DividendsShareMobile
