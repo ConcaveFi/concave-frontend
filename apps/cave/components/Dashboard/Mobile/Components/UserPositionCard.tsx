@@ -1,13 +1,26 @@
 import { Card, CardProps, Flex, Text } from '@concave/ui'
-import { DividendsShareMobile } from './DividendsShare'
+import { nftContract } from 'components/Dashboard/UserPositionCard'
 import MarketPlaceListingMobile from './UserCard/MarketPlaceListing'
 import { NftPositionViewer } from './UserCard/NftPositionViewer'
 import RedeemContainer from './UserCard/RedeemContainer'
 import StakingRewardMobile from './UserCard/StakingReward'
 
-const UserPositionCardMobile: React.FC<CardProps> = ({ ...props }) => {
+interface NftPositionCardMobileProps {
+  contract: nftContract
+}
+
+const UserPositionCardMobile = (props: NftPositionCardMobileProps) => {
+  const { contract } = props
+  const { poolID, shares, rewardDebt, maturity } = contract
+
+  const sharesDecimals = parseInt(shares._hex, 16) / 1000000000000000000
+  const gained = parseInt(rewardDebt._hex, 16) / 1000000000000000000
+
+  const dateToRedeem = epochConverter(maturity)
+  const currentData = new Date()
+  const redeemIn = dateToRedeem.getTime() - currentData.getTime()
   return (
-    <Card width={'358px'} variant="secondary" height={'660px'} {...props}>
+    <Card width={'358px'} variant="secondary" height={'660px'}>
       <Flex direction={'column'} bg={'#31293011'} width="full" flex={1}>
         <Flex
           bg={'linear-gradient(223.18deg, #19394C 27.18%, #0A161F 96.11%)'}
@@ -21,8 +34,8 @@ const UserPositionCardMobile: React.FC<CardProps> = ({ ...props }) => {
             bg="url(assets/textures/metal.png)"
             bgSize={'30% 30%'}
           >
-            <NftPositionViewer />
-            <RedeemContainer />
+            <NftPositionViewer redeemIn={redeemIn} stakeType={poolID} />
+            <RedeemContainer gained={gained} initial={sharesDecimals} />
             <MarketPlaceListingMobile />
             <Flex
               direction={'column'}
@@ -42,3 +55,8 @@ const UserPositionCardMobile: React.FC<CardProps> = ({ ...props }) => {
 }
 
 export default UserPositionCardMobile
+const epochConverter = (epoch: number) => {
+  const timeInMillis = epoch * 1000
+  const dateFromEpoch = new Date(timeInMillis)
+  return dateFromEpoch
+}

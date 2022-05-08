@@ -28,25 +28,25 @@ const DividendsShareMobile: React.FC<DividendsShareMobileProps> = ({ ...props })
             Your Dividends Share
           </Text>
         </Flex>
-        <Flex height={'60px'} justify="space-around" textAlign="center">
-          <Flex direction={'column'}>
+        <Flex height={'60px'} justify={'space-around'} textAlign="center">
+          <Flex flex={1} direction={'column'}>
             <LowText label="Total Locked:" />
             <Flex justify={'center'}>
               <HighText label={totalLocked} />
               {isLoading && <Spinner height={'20px'} width={'20px'} ml={1} />}
             </Flex>
           </Flex>
-          <Flex direction={'column'}>
+          <Flex flex={1} direction={'column'}>
             <LowText label="Your dividends share:" />
             <HighText label="--.--" />
           </Flex>
         </Flex>
-        <Flex height={'60px'} justify="space-around" textAlign="center">
-          <Flex direction={'column'}>
+        <Flex height={'60px'} justify={'space-around'} textAlign="center">
+          <Flex flex={1} direction={'column'}>
             <LowText label="Next devidend date:" />
             <HighText label="07/04/2022" />
           </Flex>
-          <Flex direction={'column'}>
+          <Flex flex={1} direction={'column'}>
             <LowText label="Available dividends:" />
             <HighText label="0.0" />
           </Flex>

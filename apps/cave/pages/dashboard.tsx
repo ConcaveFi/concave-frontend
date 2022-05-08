@@ -10,7 +10,7 @@ export default function Dashboard() {
   const [isLargerThan350] = useMediaQuery('(min-width: 350px)')
   const [isLargerThan850] = useMediaQuery('(min-width: 850px)')
   const [scale, setScale] = useState('scale(1)')
-  const [defaultDisplay, setDefaultDisplay] = useState('flex')
+  const [defaultDisplay, setDefaultDisplay] = useState('none')
   const [mobileDisplay, setMobileDisplay] = useState('none')
   const [mobileScale, setMobileScale] = useState('')
 
@@ -45,15 +45,15 @@ export default function Dashboard() {
 
       <Flex justify={'center'} position="relative">
         <UserDashboardCard
-          statusData={statusData}
-          totalLocked={totalLocked}
-          userContracts={userContracts}
+          statusdata={statusData}
+          totallocked={totalLocked}
+          usercontract={userContracts}
           display={defaultDisplay}
         />
         <DashboardMobile
-          statusData={statusData}
-          totalLocked={totalLocked}
-          userContracts={userContracts}
+          statusdata={statusData}
+          totallocked={totalLocked}
+          usercontract={userContracts}
           display={mobileDisplay}
         />
       </Flex>

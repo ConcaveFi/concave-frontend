@@ -6,9 +6,9 @@ import { useDashBoardState } from 'contracts/DashBoard/DashBoardState'
 import { useRouter } from 'next/router'
 
 interface UserDashBoardCardProps extends FlexProps {
-  userContracts: any
-  totalLocked: any
-  statusData: {
+  usercontract: any
+  totallocked: any
+  statusdata: {
     isLoading: boolean
     notConnected: boolean
     success: boolean
@@ -16,14 +16,14 @@ interface UserDashBoardCardProps extends FlexProps {
 }
 
 const UserDashboardCard: React.FC<UserDashBoardCardProps> = ({ ...props }) => {
-  const { userContracts, totalLocked, statusData } = props
-  const { isLoading, success, notConnected } = statusData
+  const { usercontract, totallocked, statusdata } = props
+  const { isLoading, success, notConnected } = statusdata
 
   const userPosComps =
-    userContracts &&
-    userContracts.map((contract, index) => <UserPositionCard key={index} contract={contract} />)
+    usercontract &&
+    usercontract.map((contract, index) => <UserPositionCard key={index} contract={contract} />)
 
-  const hasPositions = userContracts !== null
+  const hasPositions = usercontract !== null
   return (
     <Flex position={'absolute'} {...props}>
       <Card
@@ -47,12 +47,12 @@ const UserDashboardCard: React.FC<UserDashBoardCardProps> = ({ ...props }) => {
             maxHeight={'500px'}
           >
             <Flex direction="row" gap={4} position="relative" mt={1}>
-              <UserDividendCard statusData={statusData} totalLocked={totalLocked} />
+              <UserDividendCard statusData={statusdata} totalLocked={totallocked} />
             </Flex>
           </Box>
         </Flex>
 
-        <Collapse in={userContracts !== null}>
+        <Collapse in={usercontract !== null}>
           <Box
             pos="relative"
             h="100%"

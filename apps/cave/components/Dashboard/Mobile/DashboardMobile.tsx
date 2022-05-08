@@ -1,12 +1,12 @@
-import { Box, Card, Flex, FlexProps } from '@concave/ui'
+import { Box, Card, Collapse, Flex, FlexProps } from '@concave/ui'
 import DividendsShareMobile from './Components/DividendsShare'
 import { NftPositionViewer } from './Components/UserCard/NftPositionViewer'
-import UserDashBoardCardMobile from './Components/UserPositionCard'
+import UserPositionCardMobile from './Components/UserPositionCard'
 
 interface DashboardMobileProps extends FlexProps {
-  userContracts: any
-  totalLocked: any
-  statusData: {
+  usercontract: any
+  totallocked: any
+  statusdata: {
     isLoading: boolean
     notConnected: boolean
     success: boolean
@@ -14,12 +14,18 @@ interface DashboardMobileProps extends FlexProps {
 }
 
 const DashboardMobile: React.FC<DashboardMobileProps> = ({ ...props }) => {
-  const { userContracts, totalLocked, statusData } = props
-  const { isLoading, notConnected, success } = statusData
+  const { usercontract, totallocked, statusdata } = props
+  const { isLoading, notConnected, success } = statusdata
+
+  const userPosComps =
+    usercontract &&
+    usercontract.map((contract, index) => (
+      <UserPositionCardMobile key={index} contract={contract} />
+    ))
 
   return (
     <Flex direction={'column'} align="center" {...props}>
-      <DividendsShareMobile statusData={statusData} totalLocked={totalLocked} />
+      <DividendsShareMobile statusData={statusdata} totalLocked={totallocked} />
       <Box
         maxHeight={'660px'}
         overflowY="auto"
@@ -32,10 +38,11 @@ const DashboardMobile: React.FC<DashboardMobileProps> = ({ ...props }) => {
         rounded={'3xl'}
         gap={4}
       >
-        <Flex rounded={'3xl'} direction={'column'} gap={4} width="full" align={'center'}>
-          <UserDashBoardCardMobile />
-          <UserDashBoardCardMobile />
-        </Flex>
+        <Collapse in={success}>
+          <Flex rounded={'3xl'} direction={'column'} gap={4} width="full" align={'center'}>
+            {userPosComps}
+          </Flex>
+        </Collapse>
       </Box>
     </Flex>
   )

@@ -20,9 +20,9 @@ const RedeemCardViewer = (props: RedeemCardViewerProps) => {
       gap={{ lg: 0, md: 2 }}
     >
       <Flex gap={{ lg: 0, md: 4 }}>
-        <Info label="Current Value" value={+parseFloat((initial + gained).toFixed(3))} />
-        <Info label="Gained" value={gained} />
-        <Info label="Initial" value={initial} />
+        <Info label="Current Value" value={initial + gained} />
+        <Info label="Gained" value={+parseFloat(gained.toFixed(3))} />
+        <Info label="Initial" value={+parseFloat(initial.toFixed(3))} />
       </Flex>
       <Button
         w={{ lg: '140px', md: '170px' }}

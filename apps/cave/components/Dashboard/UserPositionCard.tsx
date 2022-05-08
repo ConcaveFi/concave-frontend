@@ -1,6 +1,5 @@
 import { Modal, ModalContent, ModalOverlay } from '@chakra-ui/modal'
 import { Box, Button, Flex, HStack, Image, Text, useDisclosure } from '@concave/ui'
-import { DividendsShareMobile } from './Mobile/Components/DividendsShare'
 import UserListPositionCard from './UserListPositionCard'
 import DividendsShare from './UserPosition/StakingRewards'
 import MarketplaceListing from './UserPosition/MarketplaceListing'

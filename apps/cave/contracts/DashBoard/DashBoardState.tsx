@@ -58,6 +58,7 @@ export const useDashBoardState = () => {
       getUserPositions(account.address, netWorkId)
         .then((contract) => {
           if (!contract) setTotalLocked(0)
+
           setUserContracts(contract)
           setTotalLocked(getTotalLocked(contract))
           setStatus('success')
