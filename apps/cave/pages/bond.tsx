@@ -31,8 +31,9 @@ export default function Bond() {
   const [isLargerThan1200] = useMediaQuery('(min-width: 1280px)')
   const [intervalID, setIntervalID] = useState<any>()
   const [direction, setDirection] = useState<'row' | 'column'>('row')
-  const [align, setAlign] = useState<'start' | 'center'>('start')
-
+  // const [align, setAlign] = useState<'start' | 'center'>('center')
+  const align = 'center'
+  const [showUserPosition, setShowUserPosition] = useState(false)
   useEffect(() => {
     getCurrentBlockTimestamp().then((x) => {
       setCurrentBlockTs(x)
@@ -84,17 +85,22 @@ export default function Bond() {
 
   useEffect(() => {
     setDirection(isLargerThan1200 ? 'row' : 'column')
-    setAlign(isLargerThan1200 ? 'start' : 'center')
+    // setAlign(isLargerThan1200 ? 'start' : 'center')
   }, [isLargerThan1200])
 
+  useEffect(() => {
+    if (bondSigma) {
+      setShowUserPosition(true)
+    }
+  }, [bondSigma])
   return (
     <Container maxW="container.lg">
       <Flex direction="column" gap={20}>
-        <Stack mt={20} maxW={550} align="center" textAlign="center">
+        <Stack mt={20} maxW="100%" align="center" textAlign="center">
           <Heading as="h1" mb={3} fontSize="5xl">
             Dynamic Bond Market
           </Heading>
-          <Flex align={'center'} justify="center" direction={direction}>
+          <Flex align={'center'} justify="center" direction={direction} maxW={550}>
             Bonds allow new CNV supply to be minted at a discount. All funds raised through bonds
             are added to the Concave treasury and invested to generate returns for quarterly
             dividends.
@@ -102,12 +108,11 @@ export default function Bond() {
         </Stack>
 
         <Flex gap={10} direction={direction} align={align}>
-          <Box pos="relative" h="fit-content" maxHeight={'500px'}>
+          <Box pos="relative" h="fit-content">
             <Card
               variant="secondary"
               w="430px"
-              maxW="430px"
-              borderWidth={3}
+              borderWidth={1}
               px={5}
               py={20}
               shadow="Glow Inner"
@@ -131,11 +136,13 @@ export default function Bond() {
                   <SpinIcon __css={spinnerStyles} width={'10'} height={'10'} />
                 </>
               ) : (
-                ''
+                <></>
               )}
-              <Collapse in={bondSigma}>
-                <UserBondPositionInfo bondSigma={bondSigma} userAddress={userAddress} />
-              </Collapse>
+              <Box w="100%">
+                <Collapse in={showUserPosition}>
+                  <UserBondPositionInfo bondSigma={bondSigma} userAddress={userAddress} />
+                </Collapse>
+              </Box>
               <Redeem
                 bondSigma={bondSigma}
                 onConfirm={() => {

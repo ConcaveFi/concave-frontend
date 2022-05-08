@@ -11,7 +11,7 @@ export const InfoItem = ({ value, label, ...props }) => (
   <Flex
     direction="column"
     py={0.5}
-    justify="space-between"
+    justify="center"
     fontWeight="bold"
     textAlign="center"
     {...props}
@@ -28,14 +28,14 @@ export const InfoItem = ({ value, label, ...props }) => (
 export const BondInfo = ({ asset, roi, vestingTerm, icon }) => {
   return (
     <Card bg="none" py={3} w="100%" direction="row" shadow="Glass Up Medium">
-      <Flex justify="center" pl={4} pr={7}>
+      <Flex justify="center" flexBasis="40%">
         <Image src={icon} alt="" w="55px" h="55px" mr={3} />
         <InfoItem value={asset.toUpperCase()} label="Asset" />
       </Flex>
-      <Box w="1px" mx={-1} my={-4} bg="stroke.primary" />
-      <InfoItem value={roi} label="ROI" flexGrow={1} />
-      <Box w="1px" mx={-1} my={-4} bg="stroke.primary" />
-      <InfoItem value={vestingTerm} label="Vesting Term" px={5} />
+      <Box w="1px" mx={0} my={-4} bg="stroke.primary" />
+      <InfoItem value={roi} label="ROI" flexGrow={1} pl={3} pr={3} flexBasis="25%" />
+      <Box w="1px" mx={0} my={-4} bg="stroke.primary" />
+      <InfoItem value={vestingTerm} label="Vesting Term" px={5} flexBasis="35%" />
     </Card>
   )
 }
@@ -59,20 +59,23 @@ export const UserBondPositionInfo = (bondSigma, userAddress) => {
         'You have no open positions'
       ) : totalOwed ? (
         <Card bg="none" py={4} w="100%" direction="row" shadow="Glass Up Medium">
-          <Flex justify="center" pl={4} mx={2.5}>
+          <Flex justify="center" flexBasis="40%">
             <InfoItem
               value={totalOwed ? oldestBond.replace('2022', '') : 'N/A'}
               label={oldestBond ? 'Fully Vested' : ''}
             />
           </Flex>
-          <Box w="1px" mx={30} my={-4} bg="stroke.primary" />
+          <Box w="1px" mx={0} my={-4} bg="stroke.primary" />
           <InfoItem
             value={(totalOwed - totalPending).toFixed(2)}
             label={totalOwed ? 'Pending' : 'No Bonds to Claim'}
             flexGrow={1}
+            pl={3}
+            pr={3}
+            flexBasis="25%"
           />
-          <Box w="1px" mx={30} my={-4} bg="stroke.primary" />
-          <InfoItem value={formatRedeemable} label={'Available'} px={5} pl={2} />
+          <Box w="1px" mx={0} my={-4} bg="stroke.primary" />
+          <InfoItem value={formatRedeemable} label={'Available'} px={5} pl={2} flexBasis="35%" />
         </Card>
       ) : !!userAddress ? (
         <>
@@ -80,7 +83,7 @@ export const UserBondPositionInfo = (bondSigma, userAddress) => {
           <SpinIcon __css={spinnerStyles} width={'10'} height={'10'} />
         </>
       ) : (
-        ''
+        <></>
       )}
     </>
   )
