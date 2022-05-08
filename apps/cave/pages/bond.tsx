@@ -54,7 +54,7 @@ export default function Bond() {
       clearTimeout(intervalID)
       setIntervalID(interval)
     }
-  }, [currentBlockTs, userAddress])
+  }, [userAddress])
 
   useEffect(() => {
     getBondTermLength(networkId)
@@ -73,9 +73,10 @@ export default function Bond() {
       })
     fetch('/api/cnv')
       .then((j) => j.json())
-      .then((data) => {
-        if (data?.data) {
-          setCnvMarketPrice(data.data.last)
+      .then((data) => JSON.parse(data))
+      .then((object) => {
+        if (object) {
+          setCnvMarketPrice(object?.data?.last)
         }
       })
       .catch((e) => {
