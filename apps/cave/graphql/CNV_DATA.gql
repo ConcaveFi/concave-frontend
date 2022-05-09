@@ -1,0 +1,8 @@
+query GET_AMM_CNV_PRICE {
+  cnvData {
+    data {
+      last
+      ticker
+    }
+  }
+}

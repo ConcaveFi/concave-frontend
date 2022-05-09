@@ -1,7 +1,7 @@
+import { Currency } from '@concave/gemswap-sdk'
 import { DownIcon } from '@concave/icons'
 import { Button, ButtonProps } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
-import { Currency } from 'gemswap-sdk'
 import React from 'react'
 
 export const SelectCurrencyButton = ({

@@ -1,10 +1,10 @@
-import React from 'react'
-import { Box, Flex, Text, Stack, Image } from '@concave/ui'
-import { ConnectWallet } from 'components/ConnectWallet'
+import { ChainId, CNV } from '@concave/gemswap-sdk'
+import { Box, Flex, Image, Stack, Text } from '@concave/ui'
 import { ButtonLink } from 'components/ButtonLink'
+import { ConnectWallet } from 'components/ConnectWallet'
+import React from 'react'
 import { MdOutlineDashboard } from 'react-icons/md'
 import { useAccount, useBalance } from 'wagmi'
-import { ChainId, CNV } from 'gemswap-sdk'
 
 function SideBarTop() {
   const [{ data: account }] = useAccount()
@@ -29,13 +29,13 @@ function SideBarTop() {
 
       <Stack gap="1" align="flex-end" mt={7}>
         <ButtonLink
-          href="/dashboard"
+          href="/treasury"
           variant="primary.outline"
           size="medium"
           w="full"
           leftIcon={<MdOutlineDashboard size="20px" />}
         >
-          Dashboard
+          Treasury
         </ButtonLink>
         <Box shadow="down" w="full" p={1} rounded="2xl">
           <ConnectWallet />

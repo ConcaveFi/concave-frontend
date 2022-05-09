@@ -1,13 +1,4 @@
-import {
-  Box,
-  Container,
-  Flex,
-  Heading,
-  HStack,
-  ResponsiveValue,
-  Text,
-  useMediaQuery,
-} from '@concave/ui'
+import { Box, Flex, Heading, Text, useMediaQuery } from '@concave/ui'
 import StakeCard from 'components/LiquidStaking/StakeCard'
 import GraphicGuide from 'components/LiquidStaking/GraphicGuide'
 import { useEffect, useState } from 'react'
@@ -48,23 +39,23 @@ const StakingGroup: Array<StakingGroupProps> = [
 
 function LiquidStaking() {
   const [isLargerThan1100] = useMediaQuery('(min-width: 1100px)')
-  const [stakingGap, setStakingGap] = useState(6)
+  const [stakingGap, setStakingGap] = useState(8)
   const [wrap, setWrap] = useState<'wrap' | 'nowrap'>('nowrap')
   const [width, setWidth] = useState('')
   const [direction, setDirection] = useState<'row' | 'column'>('row')
   const [marginTop, setMarginTop] = useState(8)
-  const [textAlign, setTextAlign] = useState<'right' | 'center'>('right')
-  const [guideGap, setGuideGap] = useState(14)
+  const [textAlign, setTextAlign] = useState<'justify' | 'center'>('justify')
+  const [guideGap, setGuideGap] = useState(24)
   const [containerHeight, setConteinerHeight] = useState('')
 
   useEffect(() => {
-    setStakingGap(isLargerThan1100 ? 6 : 3)
+    setStakingGap(isLargerThan1100 ? 8 : 3)
     setWrap(isLargerThan1100 ? 'nowrap' : 'wrap')
     setWidth(isLargerThan1100 ? '' : '530px')
     setDirection(isLargerThan1100 ? 'row' : 'column')
     setMarginTop(isLargerThan1100 ? 8 : 0)
-    setTextAlign(isLargerThan1100 ? 'right' : 'center')
-    setGuideGap(isLargerThan1100 ? 14 : 7)
+    setTextAlign(isLargerThan1100 ? 'justify' : 'center')
+    setGuideGap(isLargerThan1100 ? 24 : 7)
     setConteinerHeight(isLargerThan1100 ? '' : '1550px')
     console.log('teste')
   }, [isLargerThan1100])
@@ -80,20 +71,21 @@ function LiquidStaking() {
       textAlign="center"
       height={containerHeight}
     >
-      <Heading as="h1" mt={16} mb={3} fontSize="5xl">
+      <Heading as="h1" mt={16} fontSize="5xl">
         Liquid Staking
       </Heading>
       <Flex align={'center'} justify="center" direction={direction} mt={marginTop} gap={guideGap}>
         <Text maxW={520} textAlign={textAlign}>
-          Liquid Staking allows you to access your funds even when you&apos;re staking them. The
-          funds remain in escrow, but aren&apos;t totally inaccessible. In this scenario, you are
-          able to trade the locked-staking positions in the form of NFTs in the secondary
-          marketplace.
+          Stakers receive daily rewards to grow their <br /> CNV holdings and quarterly dividends
+          <br />
+          from Concave profits. Staking positions <br /> are represented by NFTs that are tradable
+          <br />
+          in Concave&apos;s native Marketplace.
         </Text>
         <GraphicGuide />
       </Flex>
 
-      <Flex mt={8} alignItems="start" justifyContent="center" height="700">
+      <Flex mt={14} alignItems="start" justifyContent="center" height="700">
         <Flex
           gap={stakingGap}
           justifyContent="center"

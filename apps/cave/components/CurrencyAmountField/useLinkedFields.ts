@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount } from 'gemswap-sdk'
+import { Currency, CurrencyAmount } from '@concave/gemswap-sdk'
 import { useCallback, useState } from 'react'
 
 const isCurrencyEqual = (currency1: Currency, currency2: Currency) => {

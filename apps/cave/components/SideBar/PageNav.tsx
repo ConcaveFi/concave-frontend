@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 
-import { Box, Flex, Text, Image } from '@concave/ui'
+import { Box, Flex, Text, Image, Collapse } from '@concave/ui'
 import { ButtonLink, ButtonLinkProps } from 'components/ButtonLink'
 import { useRouter } from 'next/router'
+import { getBondSpotPrice } from 'components/Bond/BondState'
 
 const NavButton = (props: ButtonLinkProps) => {
   const router = useRouter()
@@ -12,7 +13,7 @@ const NavButton = (props: ButtonLinkProps) => {
       px={4}
       variant="secondary"
       color="text.low"
-      w="full"
+      w="175px"
       borderRightRadius={0}
       h="50px"
       rightIcon={<Box roundedLeft="lg" shadow="Up Big" mr={-5} w="16px" h="36px" />}
@@ -30,9 +31,8 @@ const SubnavButton = ({ children, ...props }: ButtonLinkProps) => {
   return (
     <ButtonLink
       px={4}
-      py={3}
-      _odd={{ mt: -3 }}
-      w="full"
+      py={'10px'}
+      w="175px"
       color="text.low"
       variant="secondary"
       bg="none"
@@ -54,18 +54,34 @@ const NotInteractableImage = ({ src, ...props }) => (
 )
 
 function PageNav() {
-  // const [bondSpotPrice, setBondSpotPrice] = useState<string>('0')
-  // const [cnvMarketPrice, setCnvMarketPrice] = useState<number>(0)
-  // const { data } = useFetchApi('/api/cnv')
+  const [bondSpotPrice, setBondSpotPrice] = useState<string>('0')
+  const [cnvMarketPrice, setCnvMarketPrice] = useState<number>(0)
+  useEffect(() => {
+    getBondSpotPrice(3, '').then((bondSpotPrice) => {
+      setBondSpotPrice(bondSpotPrice)
+    })
+    fetch('/api/cnv')
+      .then((j) => j.json())
+      .then((data) => JSON.parse(data))
+      .then((data) => {
+        if (data?.data) {
+          setCnvMarketPrice(data.data.last)
+        }
+      })
+      .catch((e) => {
+        throw e
+      })
+  }, [cnvMarketPrice])
+  const router = useRouter()
 
-  // if (cnvMarketPrice === 0 && !!data) {
-  //   setCnvMarketPrice(data.cnv)
-  // }
-  // useEffect(() => {
-  //   getBondSpotPrice(3, '').then((bondSpotPrice) => {
-  //     setBondSpotPrice(bondSpotPrice)
-  //   })
-  // }, [cnvMarketPrice])
+  const [liquidStakingHover, setLiquidStakingHover] = useState(false)
+  const [swapHover, setSwapStakingHover] = useState(false)
+
+  const liquidStakingPage = router.pathname === '/liquidstaking' || router.pathname === '/dashboard'
+  const swapPage =
+    router.pathname === '/swap' ||
+    router.pathname === '/pools' ||
+    router.pathname === '/addliquidity'
   return (
     <Flex direction="column" position="relative" mr="-2px">
       <NotInteractableImage
@@ -80,45 +96,71 @@ function PageNav() {
           leftIcon={<NotInteractableImage src="/assets/sidebar/page-bond.svg" />}
           href="/bond"
         >
-          Bonds
+          Bond
         </NavButton>
         <Text fontSize="xs" fontWeight="bold" textColor="text.low" textAlign="center" py={2}>
-          Coming Soon
-          {/* CNV-DAI ROI{' '}
+          CNV-DAI{' '}
           {`${
-            cnvMarketPrice > 0 ? ((cnvMarketPrice / +bondSpotPrice - 1) * 100).toFixed(2) : '---'
-          }%`} */}
+            cnvMarketPrice > 0 ? (1 - (+cnvMarketPrice / +bondSpotPrice) * 100).toFixed(2) : '-'
+          }%`}
         </Text>
       </Box>
-
-      <NavButton
-        leftIcon={<NotInteractableImage src="/assets/sidebar/page-lstaking.svg" />}
-        href="/liquidstaking"
-        variant="secondary"
-        border="primary"
-        mt="26px"
-      >
-        Liquid Staking
-      </NavButton>
+      <Box height={'110px'}>
+        <Box
+          shadow="Down Big"
+          roundedLeft="2xl"
+          mt="24px"
+          transition={'all'}
+          transitionDuration="0.5s"
+          onMouseEnter={() => setLiquidStakingHover(true)}
+          onMouseLeave={() => setLiquidStakingHover(false)}
+        >
+          <NavButton
+            leftIcon={<NotInteractableImage src="/assets/sidebar/page-lstaking.svg" />}
+            href="/liquidstaking"
+            variant="secondary"
+            border="primary"
+            mt="2px"
+          >
+            Stake
+          </NavButton>
+          <Collapse in={liquidStakingHover || liquidStakingPage}>
+            <SubnavButton href="/dashboard" mt="1px">
+              Your Positions
+            </SubnavButton>
+          </Collapse>
+        </Box>
+      </Box>
 
       <NavButton
         leftIcon={<NotInteractableImage src="/assets/sidebar/page-marketplace.svg" />}
         href="/marketplace"
-        mt="60px"
+        mt="26px"
       >
         Marketplace
       </NavButton>
 
-      <Box shadow="Down Big" roundedLeft="2xl" mt="28px">
-        <NavButton
-          leftIcon={<NotInteractableImage src="/assets/sidebar/page-swap.svg" />}
-          href="/swap"
-          mb="1px"
+      <Box height={'120px'}>
+        <Box
+          shadow="Down Big"
+          roundedLeft="2xl"
+          mt="28px"
+          onMouseEnter={() => setSwapStakingHover(true)}
+          onMouseLeave={() => setSwapStakingHover(false)}
         >
-          Swap
-        </NavButton>
-        <SubnavButton href="/addliquidity">Add liquidity</SubnavButton>
-        <SubnavButton href="/pools">Your Pools</SubnavButton>
+          <NavButton
+            leftIcon={<NotInteractableImage src="/assets/sidebar/page-swap.svg" />}
+            href="/swap"
+            mb="1px"
+          >
+            Swap
+          </NavButton>
+
+          <Collapse in={swapHover || swapPage}>
+            <SubnavButton href="/addliquidity">Add liquidity</SubnavButton>
+            <SubnavButton href="/pools">Your Pools</SubnavButton>
+          </Collapse>
+        </Box>
       </Box>
     </Flex>
   )

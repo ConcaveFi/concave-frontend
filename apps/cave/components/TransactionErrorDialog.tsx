@@ -8,10 +8,10 @@ const TransactionError = ({ error, onClose }: { error: string; onClose: () => vo
     <Text
       align="center"
       whiteSpace="break-spaces"
-      wordBreak="break-all"
+      wordBreak="break-word"
       fontSize="md"
       fontWeight="bold"
-      maxH="50vh"
+      maxH="40vh"
       overflow="auto"
     >
       {error}

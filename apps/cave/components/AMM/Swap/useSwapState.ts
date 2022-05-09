@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react'
-import { Currency, TradeType, CNV, DAI, CurrencyAmount, Trade } from 'gemswap-sdk'
+import { Currency, TradeType, CNV, DAI, CurrencyAmount, Trade } from '@concave/gemswap-sdk'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useTrade, UseTradeResult } from '../hooks/useTrade'
 import { SwapSettings } from '../Settings'
@@ -25,6 +25,7 @@ export const useSwapState = ({ multihops }: SwapSettings) => {
     initialCurrencyFields,
   )
 
+  // TODO: shouldn't be using useEffect for this, replace with a onNetworkChange handler or something, after updating wagmi
   useEffect(() => {
     setFieldCurrency(initialCurrencyFields)
     setExactAmount(toAmount(0, initialCurrencyFields.first))

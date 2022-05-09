@@ -1,4 +1,4 @@
-import { DAI, CurrencyAmount, Currency } from 'gemswap-sdk'
+import { DAI, CurrencyAmount, Currency } from '@concave/gemswap-sdk'
 import { useMemo } from 'react'
 import { usePrice } from './usePrice'
 

@@ -1,4 +1,4 @@
-import { Token, Currency, DAI, WETH9, ChainId, NATIVE } from 'gemswap-sdk'
+import { Token, Currency, DAI, WETH9, ChainId, NATIVE } from '@concave/gemswap-sdk'
 
 import * as Ethereum from './tokens'
 

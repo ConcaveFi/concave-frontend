@@ -1,4 +1,5 @@
-import { useMutation, UseMutationOptions, useQuery, UseQueryOptions } from 'react-query'
+import { RQ_HASURA_ENDPOINT, RQ_HASURA_PARAMS } from 'lib/hasura.rq'
+import { useQuery, UseQueryOptions } from 'react-query'
 export type Maybe<T> = T | null
 export type InputMaybe<T> = Maybe<T>
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] }
@@ -7,8 +8,9 @@ export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Mayb
 
 function fetcher<TData, TVariables>(query: string, variables?: TVariables) {
   return async (): Promise<TData> => {
-    const res = await fetch('https://concave.hasura.app/v1/graphql', {
+    const res = await fetch(RQ_HASURA_ENDPOINT as string, {
       method: 'POST',
+      ...RQ_HASURA_PARAMS,
       body: JSON.stringify({ query, variables }),
     })
 
@@ -32,7 +34,19 @@ export type Scalars = {
   Float: number
   numeric: any
   timestamptz: any
-  uuid: any
+}
+
+/** Boolean expression to compare columns of type "Boolean". All fields are combined with logical 'AND'. */
+export type Boolean_Comparison_Exp = {
+  _eq?: InputMaybe<Scalars['Boolean']>
+  _gt?: InputMaybe<Scalars['Boolean']>
+  _gte?: InputMaybe<Scalars['Boolean']>
+  _in?: InputMaybe<Array<Scalars['Boolean']>>
+  _is_null?: InputMaybe<Scalars['Boolean']>
+  _lt?: InputMaybe<Scalars['Boolean']>
+  _lte?: InputMaybe<Scalars['Boolean']>
+  _neq?: InputMaybe<Scalars['Boolean']>
+  _nin?: InputMaybe<Array<Scalars['Boolean']>>
 }
 
 /** Boolean expression to compare columns of type "String". All fields are combined with logical 'AND'. */
@@ -68,57 +82,96 @@ export type String_Comparison_Exp = {
   _similar?: InputMaybe<Scalars['String']>
 }
 
-/** mutation root */
-export type Mutation_Root = {
-  __typename?: 'mutation_root'
-  /** delete data from the table: "user" */
-  delete_user?: Maybe<User_Mutation_Response>
-  /** delete single row from the table: "user" */
-  delete_user_by_pk?: Maybe<User>
-  /** insert data into the table: "user" */
-  insert_user?: Maybe<User_Mutation_Response>
-  /** insert a single row into the table: "user" */
-  insert_user_one?: Maybe<User>
-  /** update data of the table: "user" */
-  update_user?: Maybe<User_Mutation_Response>
-  /** update single row of the table: "user" */
-  update_user_by_pk?: Maybe<User>
+export type CnvData = {
+  __typename?: 'cnvData'
+  baseVolume?: Maybe<Scalars['String']>
+  blockchain?: Maybe<Scalars['String']>
+  circulatingSupply?: Maybe<Scalars['Float']>
+  high24hr?: Maybe<Scalars['String']>
+  highestBid?: Maybe<Scalars['String']>
+  isFrozen?: Maybe<Scalars['String']>
+  last?: Maybe<Scalars['Float']>
+  low24hr?: Maybe<Scalars['String']>
+  lowestAsk?: Maybe<Scalars['String']>
+  marketCap?: Maybe<Scalars['Float']>
+  name?: Maybe<Scalars['String']>
+  percentChange?: Maybe<Scalars['String']>
+  quoteVolume?: Maybe<Scalars['String']>
+  removedTokens?: Maybe<Scalars['Float']>
+  ticker?: Maybe<Scalars['String']>
+  totalSupply?: Maybe<Scalars['Float']>
 }
 
-/** mutation root */
-export type Mutation_RootDelete_UserArgs = {
-  where: User_Bool_Exp
+export type CnvDataOutput = {
+  __typename?: 'cnvDataOutput'
+  code?: Maybe<Scalars['Int']>
+  data?: Maybe<CnvData>
+  msg?: Maybe<Scalars['String']>
 }
 
-/** mutation root */
-export type Mutation_RootDelete_User_By_PkArgs = {
-  id: Scalars['uuid']
+/** history of block with events */
+export type LogStakingV1 = {
+  __typename?: 'logStakingV1'
+  amountLocked: Scalars['numeric']
+  blockNumber?: Maybe<Scalars['numeric']>
+  from?: Maybe<Scalars['String']>
+  lockedUntil?: Maybe<Scalars['numeric']>
+  poolID: Scalars['numeric']
+  sold?: Maybe<Scalars['Boolean']>
+  to?: Maybe<Scalars['String']>
+  tokenID: Scalars['numeric']
+  txHash: Scalars['String']
 }
 
-/** mutation root */
-export type Mutation_RootInsert_UserArgs = {
-  objects: Array<User_Insert_Input>
-  on_conflict?: InputMaybe<User_On_Conflict>
+/** Boolean expression to filter rows from the table "logStakingV1". All fields are combined with a logical 'AND'. */
+export type LogStakingV1_Bool_Exp = {
+  _and?: InputMaybe<Array<LogStakingV1_Bool_Exp>>
+  _not?: InputMaybe<LogStakingV1_Bool_Exp>
+  _or?: InputMaybe<Array<LogStakingV1_Bool_Exp>>
+  amountLocked?: InputMaybe<Numeric_Comparison_Exp>
+  blockNumber?: InputMaybe<Numeric_Comparison_Exp>
+  from?: InputMaybe<String_Comparison_Exp>
+  lockedUntil?: InputMaybe<Numeric_Comparison_Exp>
+  poolID?: InputMaybe<Numeric_Comparison_Exp>
+  sold?: InputMaybe<Boolean_Comparison_Exp>
+  to?: InputMaybe<String_Comparison_Exp>
+  tokenID?: InputMaybe<Numeric_Comparison_Exp>
+  txHash?: InputMaybe<String_Comparison_Exp>
 }
 
-/** mutation root */
-export type Mutation_RootInsert_User_OneArgs = {
-  object: User_Insert_Input
-  on_conflict?: InputMaybe<User_On_Conflict>
+/** Ordering options when selecting data from "logStakingV1". */
+export type LogStakingV1_Order_By = {
+  amountLocked?: InputMaybe<Order_By>
+  blockNumber?: InputMaybe<Order_By>
+  from?: InputMaybe<Order_By>
+  lockedUntil?: InputMaybe<Order_By>
+  poolID?: InputMaybe<Order_By>
+  sold?: InputMaybe<Order_By>
+  to?: InputMaybe<Order_By>
+  tokenID?: InputMaybe<Order_By>
+  txHash?: InputMaybe<Order_By>
 }
 
-/** mutation root */
-export type Mutation_RootUpdate_UserArgs = {
-  _inc?: InputMaybe<User_Inc_Input>
-  _set?: InputMaybe<User_Set_Input>
-  where: User_Bool_Exp
-}
-
-/** mutation root */
-export type Mutation_RootUpdate_User_By_PkArgs = {
-  _inc?: InputMaybe<User_Inc_Input>
-  _set?: InputMaybe<User_Set_Input>
-  pk_columns: User_Pk_Columns_Input
+/** select columns of table "logStakingV1" */
+export enum LogStakingV1_Select_Column {
+  /** column name */
+  AmountLocked = 'amountLocked',
+  /** column name */
+  BlockNumber = 'blockNumber',
+  /** column name */
+  From = 'from',
+  /** column name */
+  LockedUntil = 'lockedUntil',
+  /** column name */
+  PoolId = 'poolID',
+  /** column name */
+  Sold = 'sold',
+  /** column name */
+  To = 'to',
+  /** column name */
+  TokenId = 'tokenID',
+  /** column name */
+  TxHash = 'txHash',
 }
 
 /** Boolean expression to compare columns of type "numeric". All fields are combined with logical 'AND'. */
@@ -152,62 +205,63 @@ export enum Order_By {
 
 export type Query_Root = {
   __typename?: 'query_root'
-  /** fetch data from the table: "user" */
-  user: Array<User>
-  /** fetch aggregated fields from the table: "user" */
-  user_aggregate: User_Aggregate
-  /** fetch data from the table: "user" using primary key columns */
-  user_by_pk?: Maybe<User>
+  cnvData?: Maybe<CnvDataOutput>
+  /** fetch data from the table: "logStakingV1" */
+  logStakingV1: Array<LogStakingV1>
+  /** fetch data from the table: "logStakingV1" using primary key columns */
+  logStakingV1_by_pk?: Maybe<LogStakingV1>
+  /** fetch data from the table: "treasury" */
+  treasury: Array<Treasury>
 }
 
-export type Query_RootUserArgs = {
-  distinct_on?: InputMaybe<Array<User_Select_Column>>
+export type Query_RootLogStakingV1Args = {
+  distinct_on?: InputMaybe<Array<LogStakingV1_Select_Column>>
   limit?: InputMaybe<Scalars['Int']>
   offset?: InputMaybe<Scalars['Int']>
-  order_by?: InputMaybe<Array<User_Order_By>>
-  where?: InputMaybe<User_Bool_Exp>
+  order_by?: InputMaybe<Array<LogStakingV1_Order_By>>
+  where?: InputMaybe<LogStakingV1_Bool_Exp>
 }
 
-export type Query_RootUser_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<User_Select_Column>>
+export type Query_RootLogStakingV1_By_PkArgs = {
+  txHash: Scalars['String']
+}
+
+export type Query_RootTreasuryArgs = {
+  distinct_on?: InputMaybe<Array<Treasury_Select_Column>>
   limit?: InputMaybe<Scalars['Int']>
   offset?: InputMaybe<Scalars['Int']>
-  order_by?: InputMaybe<Array<User_Order_By>>
-  where?: InputMaybe<User_Bool_Exp>
-}
-
-export type Query_RootUser_By_PkArgs = {
-  id: Scalars['uuid']
+  order_by?: InputMaybe<Array<Treasury_Order_By>>
+  where?: InputMaybe<Treasury_Bool_Exp>
 }
 
 export type Subscription_Root = {
   __typename?: 'subscription_root'
-  /** fetch data from the table: "user" */
-  user: Array<User>
-  /** fetch aggregated fields from the table: "user" */
-  user_aggregate: User_Aggregate
-  /** fetch data from the table: "user" using primary key columns */
-  user_by_pk?: Maybe<User>
+  /** fetch data from the table: "logStakingV1" */
+  logStakingV1: Array<LogStakingV1>
+  /** fetch data from the table: "logStakingV1" using primary key columns */
+  logStakingV1_by_pk?: Maybe<LogStakingV1>
+  /** fetch data from the table: "treasury" */
+  treasury: Array<Treasury>
 }
 
-export type Subscription_RootUserArgs = {
-  distinct_on?: InputMaybe<Array<User_Select_Column>>
+export type Subscription_RootLogStakingV1Args = {
+  distinct_on?: InputMaybe<Array<LogStakingV1_Select_Column>>
   limit?: InputMaybe<Scalars['Int']>
   offset?: InputMaybe<Scalars['Int']>
-  order_by?: InputMaybe<Array<User_Order_By>>
-  where?: InputMaybe<User_Bool_Exp>
+  order_by?: InputMaybe<Array<LogStakingV1_Order_By>>
+  where?: InputMaybe<LogStakingV1_Bool_Exp>
 }
 
-export type Subscription_RootUser_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<User_Select_Column>>
+export type Subscription_RootLogStakingV1_By_PkArgs = {
+  txHash: Scalars['String']
+}
+
+export type Subscription_RootTreasuryArgs = {
+  distinct_on?: InputMaybe<Array<Treasury_Select_Column>>
   limit?: InputMaybe<Scalars['Int']>
   offset?: InputMaybe<Scalars['Int']>
-  order_by?: InputMaybe<Array<User_Order_By>>
-  where?: InputMaybe<User_Bool_Exp>
-}
-
-export type Subscription_RootUser_By_PkArgs = {
-  id: Scalars['uuid']
+  order_by?: InputMaybe<Array<Treasury_Order_By>>
+  where?: InputMaybe<Treasury_Bool_Exp>
 }
 
 /** Boolean expression to compare columns of type "timestamptz". All fields are combined with logical 'AND'. */
@@ -223,286 +277,235 @@ export type Timestamptz_Comparison_Exp = {
   _nin?: InputMaybe<Array<Scalars['timestamptz']>>
 }
 
-/** columns and relationships of "user" */
-export type User = {
-  __typename?: 'user'
-  address?: Maybe<Scalars['String']>
-  chainId?: Maybe<Scalars['numeric']>
-  created_at: Scalars['timestamptz']
-  id: Scalars['uuid']
-  role?: Maybe<Scalars['String']>
+/** concave treasury assets */
+export type Treasury = {
+  __typename?: 'treasury'
+  amount?: Maybe<Scalars['numeric']>
+  chainId: Scalars['String']
+  contract: Scalars['String']
+  name: Scalars['String']
+  rewards?: Maybe<Scalars['numeric']>
+  total?: Maybe<Scalars['numeric']>
   updated_at: Scalars['timestamptz']
+  value?: Maybe<Scalars['numeric']>
 }
 
-/** aggregated selection of "user" */
-export type User_Aggregate = {
-  __typename?: 'user_aggregate'
-  aggregate?: Maybe<User_Aggregate_Fields>
-  Node: Array<User>
-}
-
-/** aggregate fields of "user" */
-export type User_Aggregate_Fields = {
-  __typename?: 'user_aggregate_fields'
-  avg?: Maybe<User_Avg_Fields>
-  count: Scalars['Int']
-  max?: Maybe<User_Max_Fields>
-  min?: Maybe<User_Min_Fields>
-  stddev?: Maybe<User_Stddev_Fields>
-  stddev_pop?: Maybe<User_Stddev_Pop_Fields>
-  stddev_samp?: Maybe<User_Stddev_Samp_Fields>
-  sum?: Maybe<User_Sum_Fields>
-  var_pop?: Maybe<User_Var_Pop_Fields>
-  var_samp?: Maybe<User_Var_Samp_Fields>
-  variance?: Maybe<User_Variance_Fields>
-}
-
-/** aggregate fields of "user" */
-export type User_Aggregate_FieldsCountArgs = {
-  columns?: InputMaybe<Array<User_Select_Column>>
-  distinct?: InputMaybe<Scalars['Boolean']>
-}
-
-/** aggregate avg on columns */
-export type User_Avg_Fields = {
-  __typename?: 'user_avg_fields'
-  chainId?: Maybe<Scalars['Float']>
-}
-
-/** Boolean expression to filter rows from the table "user". All fields are combined with a logical 'AND'. */
-export type User_Bool_Exp = {
-  _and?: InputMaybe<Array<User_Bool_Exp>>
-  _not?: InputMaybe<User_Bool_Exp>
-  _or?: InputMaybe<Array<User_Bool_Exp>>
-  address?: InputMaybe<String_Comparison_Exp>
-  chainId?: InputMaybe<Numeric_Comparison_Exp>
-  created_at?: InputMaybe<Timestamptz_Comparison_Exp>
-  id?: InputMaybe<Uuid_Comparison_Exp>
-  role?: InputMaybe<String_Comparison_Exp>
+/** Boolean expression to filter rows from the table "treasury". All fields are combined with a logical 'AND'. */
+export type Treasury_Bool_Exp = {
+  _and?: InputMaybe<Array<Treasury_Bool_Exp>>
+  _not?: InputMaybe<Treasury_Bool_Exp>
+  _or?: InputMaybe<Array<Treasury_Bool_Exp>>
+  amount?: InputMaybe<Numeric_Comparison_Exp>
+  chainId?: InputMaybe<String_Comparison_Exp>
+  contract?: InputMaybe<String_Comparison_Exp>
+  name?: InputMaybe<String_Comparison_Exp>
+  rewards?: InputMaybe<Numeric_Comparison_Exp>
+  total?: InputMaybe<Numeric_Comparison_Exp>
   updated_at?: InputMaybe<Timestamptz_Comparison_Exp>
+  value?: InputMaybe<Numeric_Comparison_Exp>
 }
 
-/** unique or primary key constraints on table "user" */
-export enum User_Constraint {
-  /** unique or primary key constraint */
-  UserPkey = 'user_pkey',
-}
-
-/** input type for incrementing numeric columns in table "user" */
-export type User_Inc_Input = {
-  chainId?: InputMaybe<Scalars['numeric']>
-}
-
-/** input type for inserting data into table "user" */
-export type User_Insert_Input = {
-  address?: InputMaybe<Scalars['String']>
-  chainId?: InputMaybe<Scalars['numeric']>
-  created_at?: InputMaybe<Scalars['timestamptz']>
-  id?: InputMaybe<Scalars['uuid']>
-  role?: InputMaybe<Scalars['String']>
-  updated_at?: InputMaybe<Scalars['timestamptz']>
-}
-
-/** aggregate max on columns */
-export type User_Max_Fields = {
-  __typename?: 'user_max_fields'
-  address?: Maybe<Scalars['String']>
-  chainId?: Maybe<Scalars['numeric']>
-  created_at?: Maybe<Scalars['timestamptz']>
-  id?: Maybe<Scalars['uuid']>
-  role?: Maybe<Scalars['String']>
-  updated_at?: Maybe<Scalars['timestamptz']>
-}
-
-/** aggregate min on columns */
-export type User_Min_Fields = {
-  __typename?: 'user_min_fields'
-  address?: Maybe<Scalars['String']>
-  chainId?: Maybe<Scalars['numeric']>
-  created_at?: Maybe<Scalars['timestamptz']>
-  id?: Maybe<Scalars['uuid']>
-  role?: Maybe<Scalars['String']>
-  updated_at?: Maybe<Scalars['timestamptz']>
-}
-
-/** response of any mutation on the table "user" */
-export type User_Mutation_Response = {
-  __typename?: 'user_mutation_response'
-  /** number of rows affected by the mutation */
-  affected_rows: Scalars['Int']
-  /** data from the rows affected by the mutation */
-  returning: Array<User>
-}
-
-/** on_conflict condition type for table "user" */
-export type User_On_Conflict = {
-  constraint: User_Constraint
-  update_columns?: Array<User_Update_Column>
-  where?: InputMaybe<User_Bool_Exp>
-}
-
-/** Ordering options when selecting data from "user". */
-export type User_Order_By = {
-  address?: InputMaybe<Order_By>
+/** Ordering options when selecting data from "treasury". */
+export type Treasury_Order_By = {
+  amount?: InputMaybe<Order_By>
   chainId?: InputMaybe<Order_By>
-  created_at?: InputMaybe<Order_By>
-  id?: InputMaybe<Order_By>
-  role?: InputMaybe<Order_By>
+  contract?: InputMaybe<Order_By>
+  name?: InputMaybe<Order_By>
+  rewards?: InputMaybe<Order_By>
+  total?: InputMaybe<Order_By>
   updated_at?: InputMaybe<Order_By>
+  value?: InputMaybe<Order_By>
 }
 
-/** primary key columns input for table: user */
-export type User_Pk_Columns_Input = {
-  id: Scalars['uuid']
-}
-
-/** select columns of table "user" */
-export enum User_Select_Column {
+/** select columns of table "treasury" */
+export enum Treasury_Select_Column {
   /** column name */
-  Address = 'address',
+  Amount = 'amount',
   /** column name */
   ChainId = 'chainId',
   /** column name */
-  CreatedAt = 'created_at',
+  Contract = 'contract',
   /** column name */
-  Id = 'id',
+  Name = 'name',
   /** column name */
-  Role = 'role',
+  Rewards = 'rewards',
   /** column name */
-  UpdatedAt = 'updated_at',
-}
-
-/** input type for updating data in table "user" */
-export type User_Set_Input = {
-  address?: InputMaybe<Scalars['String']>
-  chainId?: InputMaybe<Scalars['numeric']>
-  created_at?: InputMaybe<Scalars['timestamptz']>
-  id?: InputMaybe<Scalars['uuid']>
-  role?: InputMaybe<Scalars['String']>
-  updated_at?: InputMaybe<Scalars['timestamptz']>
-}
-
-/** aggregate stddev on columns */
-export type User_Stddev_Fields = {
-  __typename?: 'user_stddev_fields'
-  chainId?: Maybe<Scalars['Float']>
-}
-
-/** aggregate stddev_pop on columns */
-export type User_Stddev_Pop_Fields = {
-  __typename?: 'user_stddev_pop_fields'
-  chainId?: Maybe<Scalars['Float']>
-}
-
-/** aggregate stddev_samp on columns */
-export type User_Stddev_Samp_Fields = {
-  __typename?: 'user_stddev_samp_fields'
-  chainId?: Maybe<Scalars['Float']>
-}
-
-/** aggregate sum on columns */
-export type User_Sum_Fields = {
-  __typename?: 'user_sum_fields'
-  chainId?: Maybe<Scalars['numeric']>
-}
-
-/** update columns of table "user" */
-export enum User_Update_Column {
-  /** column name */
-  Address = 'address',
-  /** column name */
-  ChainId = 'chainId',
-  /** column name */
-  CreatedAt = 'created_at',
-  /** column name */
-  Id = 'id',
-  /** column name */
-  Role = 'role',
+  Total = 'total',
   /** column name */
   UpdatedAt = 'updated_at',
+  /** column name */
+  Value = 'value',
 }
 
-/** aggregate var_pop on columns */
-export type User_Var_Pop_Fields = {
-  __typename?: 'user_var_pop_fields'
-  chainId?: Maybe<Scalars['Float']>
-}
+export type Get_Amm_Cnv_PriceQueryVariables = Exact<{ [key: string]: never }>
 
-/** aggregate var_samp on columns */
-export type User_Var_Samp_Fields = {
-  __typename?: 'user_var_samp_fields'
-  chainId?: Maybe<Scalars['Float']>
-}
-
-/** aggregate variance on columns */
-export type User_Variance_Fields = {
-  __typename?: 'user_variance_fields'
-  chainId?: Maybe<Scalars['Float']>
-}
-
-/** Boolean expression to compare columns of type "uuid". All fields are combined with logical 'AND'. */
-export type Uuid_Comparison_Exp = {
-  _eq?: InputMaybe<Scalars['uuid']>
-  _gt?: InputMaybe<Scalars['uuid']>
-  _gte?: InputMaybe<Scalars['uuid']>
-  _in?: InputMaybe<Array<Scalars['uuid']>>
-  _is_null?: InputMaybe<Scalars['Boolean']>
-  _lt?: InputMaybe<Scalars['uuid']>
-  _lte?: InputMaybe<Scalars['uuid']>
-  _neq?: InputMaybe<Scalars['uuid']>
-  _nin?: InputMaybe<Array<Scalars['uuid']>>
-}
-
-export type InsertUserMutationVariables = Exact<{
-  address: Scalars['String']
-}>
-
-export type InsertUserMutation = {
-  __typename?: 'mutation_root'
-  insert_user_one?: { __typename?: 'user'; id: any; address?: string | null } | null
-}
-
-export type UserByAddressQueryVariables = Exact<{
-  address: Scalars['String']
-}>
-
-export type UserByAddressQuery = {
+export type Get_Amm_Cnv_PriceQuery = {
   __typename?: 'query_root'
-  user: Array<{ __typename?: 'user'; id: any; address?: string | null; chainId?: any | null }>
+  cnvData?: {
+    __typename?: 'cnvDataOutput'
+    data?: { __typename?: 'cnvData'; last?: number | null; ticker?: string | null } | null
+  } | null
 }
 
-export const InsertUserDocument = `
-    mutation InsertUser($address: String!) {
-  insert_user_one(object: {address: $address}) {
-    id
-    address
+export type Get_Stackingv1_Last100_EventsQueryVariables = Exact<{ [key: string]: never }>
+
+export type Get_Stackingv1_Last100_EventsQuery = {
+  __typename?: 'query_root'
+  logStakingV1: Array<{
+    __typename?: 'logStakingV1'
+    blockNumber?: any | null
+    txHash: string
+    poolID: any
+    tokenID: any
+    sold?: boolean | null
+    from?: string | null
+    to?: string | null
+    amountLocked: any
+    lockedUntil?: any | null
+  }>
+}
+
+export type Get_Stackingv1_By_Pool_IdQueryVariables = Exact<{
+  poolID?: InputMaybe<Numeric_Comparison_Exp>
+}>
+
+export type Get_Stackingv1_By_Pool_IdQuery = {
+  __typename?: 'query_root'
+  logStakingV1: Array<{
+    __typename?: 'logStakingV1'
+    blockNumber?: any | null
+    txHash: string
+    poolID: any
+    tokenID: any
+    sold?: boolean | null
+    from?: string | null
+    to?: string | null
+    amountLocked: any
+    lockedUntil?: any | null
+  }>
+}
+
+export type Get_TreasuryQueryVariables = Exact<{ [key: string]: never }>
+
+export type Get_TreasuryQuery = {
+  __typename?: 'query_root'
+  treasury: Array<{
+    __typename?: 'treasury'
+    updated_at: any
+    contract: string
+    chainId: string
+    name: string
+    amount?: any | null
+    value?: any | null
+    total?: any | null
+  }>
+}
+
+export const Get_Amm_Cnv_PriceDocument = `
+    query GET_AMM_CNV_PRICE {
+  cnvData {
+    data {
+      last
+      ticker
+    }
   }
 }
     `
-export const useInsertUserMutation = <TError = unknown, TContext = unknown>(
-  options?: UseMutationOptions<InsertUserMutation, TError, InsertUserMutationVariables, TContext>,
+export const useGet_Amm_Cnv_PriceQuery = <TData = Get_Amm_Cnv_PriceQuery, TError = unknown>(
+  variables?: Get_Amm_Cnv_PriceQueryVariables,
+  options?: UseQueryOptions<Get_Amm_Cnv_PriceQuery, TError, TData>,
 ) =>
-  useMutation<InsertUserMutation, TError, InsertUserMutationVariables, TContext>(
-    ['InsertUser'],
-    (variables?: InsertUserMutationVariables) =>
-      fetcher<InsertUserMutation, InsertUserMutationVariables>(InsertUserDocument, variables)(),
+  useQuery<Get_Amm_Cnv_PriceQuery, TError, TData>(
+    variables === undefined ? ['GET_AMM_CNV_PRICE'] : ['GET_AMM_CNV_PRICE', variables],
+    fetcher<Get_Amm_Cnv_PriceQuery, Get_Amm_Cnv_PriceQueryVariables>(
+      Get_Amm_Cnv_PriceDocument,
+      variables,
+    ),
     options,
   )
-export const UserByAddressDocument = `
-    query UserByAddress($address: String!) {
-  user(where: {address: {_eq: $address}}) {
-    id
-    address
-    chainId
+export const Get_Stackingv1_Last100_EventsDocument = `
+    query GET_STACKINGV1_LAST100_EVENTS {
+  logStakingV1(order_by: {blockNumber: desc}, limit: 100) {
+    blockNumber
+    txHash
+    poolID
+    tokenID
+    sold
+    from
+    to
+    amountLocked
+    lockedUntil
   }
 }
     `
-export const useUserByAddressQuery = <TData = UserByAddressQuery, TError = unknown>(
-  variables: UserByAddressQueryVariables,
-  options?: UseQueryOptions<UserByAddressQuery, TError, TData>,
+export const useGet_Stackingv1_Last100_EventsQuery = <
+  TData = Get_Stackingv1_Last100_EventsQuery,
+  TError = unknown,
+>(
+  variables?: Get_Stackingv1_Last100_EventsQueryVariables,
+  options?: UseQueryOptions<Get_Stackingv1_Last100_EventsQuery, TError, TData>,
 ) =>
-  useQuery<UserByAddressQuery, TError, TData>(
-    ['UserByAddress', variables],
-    fetcher<UserByAddressQuery, UserByAddressQueryVariables>(UserByAddressDocument, variables),
+  useQuery<Get_Stackingv1_Last100_EventsQuery, TError, TData>(
+    variables === undefined
+      ? ['GET_STACKINGV1_LAST100_EVENTS']
+      : ['GET_STACKINGV1_LAST100_EVENTS', variables],
+    fetcher<Get_Stackingv1_Last100_EventsQuery, Get_Stackingv1_Last100_EventsQueryVariables>(
+      Get_Stackingv1_Last100_EventsDocument,
+      variables,
+    ),
+    options,
+  )
+export const Get_Stackingv1_By_Pool_IdDocument = `
+    query GET_STACKINGV1_BY_POOL_ID($poolID: numeric_comparison_exp) {
+  logStakingV1(order_by: {blockNumber: desc}, where: {poolID: $poolID}, limit: 10) {
+    blockNumber
+    txHash
+    poolID
+    tokenID
+    sold
+    from
+    to
+    amountLocked
+    lockedUntil
+  }
+}
+    `
+export const useGet_Stackingv1_By_Pool_IdQuery = <
+  TData = Get_Stackingv1_By_Pool_IdQuery,
+  TError = unknown,
+>(
+  variables?: Get_Stackingv1_By_Pool_IdQueryVariables,
+  options?: UseQueryOptions<Get_Stackingv1_By_Pool_IdQuery, TError, TData>,
+) =>
+  useQuery<Get_Stackingv1_By_Pool_IdQuery, TError, TData>(
+    variables === undefined
+      ? ['GET_STACKINGV1_BY_POOL_ID']
+      : ['GET_STACKINGV1_BY_POOL_ID', variables],
+    fetcher<Get_Stackingv1_By_Pool_IdQuery, Get_Stackingv1_By_Pool_IdQueryVariables>(
+      Get_Stackingv1_By_Pool_IdDocument,
+      variables,
+    ),
+    options,
+  )
+export const Get_TreasuryDocument = `
+    query GET_TREASURY {
+  treasury {
+    updated_at
+    contract
+    chainId
+    name
+    amount
+    value
+    total
+  }
+}
+    `
+export const useGet_TreasuryQuery = <TData = Get_TreasuryQuery, TError = unknown>(
+  variables?: Get_TreasuryQueryVariables,
+  options?: UseQueryOptions<Get_TreasuryQuery, TError, TData>,
+) =>
+  useQuery<Get_TreasuryQuery, TError, TData>(
+    variables === undefined ? ['GET_TREASURY'] : ['GET_TREASURY', variables],
+    fetcher<Get_TreasuryQuery, Get_TreasuryQueryVariables>(Get_TreasuryDocument, variables),
     options,
   )

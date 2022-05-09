@@ -1,13 +1,13 @@
+import { CNV } from '@concave/gemswap-sdk'
 import { Box, Button, Card, Flex, HStack, Image, Input, Text } from '@concave/ui'
-import { useFetchApi } from 'hooks/cnvData'
-import React, { useEffect, useState } from 'react'
-import { useAccount, useBalance, useContractWrite, useNetwork } from 'wagmi'
-import { CNV } from 'gemswap-sdk'
-import { useApprove } from 'hooks/useApprove'
 import { STAKING_CONTRACT } from 'constants/address'
 import { StakingV1Abi } from 'contracts/LiquidStaking/LiquidStakingAbi'
 import { ethers } from 'ethers'
+import { useFetchApi } from 'hooks/cnvData'
+import { useApprove } from 'hooks/useApprove'
 import { useRouter } from 'next/router'
+import React, { useEffect, useState } from 'react'
+import { useAccount, useBalance, useContractWrite, useNetwork } from 'wagmi'
 
 const periodToPoolParameter = {
   '360 days': 0,
@@ -18,7 +18,7 @@ const periodToPoolParameter = {
 
 function StakeInput(props) {
   const cnvPrice = useFetchApi('/api/cnv')
-  const [stakeInput, setStakeInput] = useState(0)
+  const [stakeInput, setStakeInput] = useState('')
   const [{ data: account }] = useAccount()
   const [{ data }] = useNetwork()
   const { allowance, ...approve } = useApprove(CNV[data.chain.id], STAKING_CONTRACT[data.chain.id])
@@ -28,11 +28,12 @@ function StakeInput(props) {
   // approve.sendApproveTx()
 
   useEffect(() => {
-    if (allowance && +allowance.formatted > stakeInput) {
+    if (allowance && +allowance.formatted > +stakeInput) {
       setAllowanceEnough(true)
     } else {
       setAllowanceEnough(false)
     }
+    if (stakeInput === '') setStakeInput('')
   }, [allowance, stakeInput])
 
   const [cnvBalance, getBalance] = useBalance({
@@ -41,8 +42,16 @@ function StakeInput(props) {
     // token: '0x000000007a58f5f58E697e51Ab0357BC9e260A04',
   })
 
+  const setSafeStakeInputValue = (value: string) => {
+    let currentValue = value
+    if (Number(currentValue) > Number.MAX_SAFE_INTEGER) {
+      currentValue = String(Number.MAX_SAFE_INTEGER)
+    }
+    setStakeInput(String(currentValue))
+  }
+
   const setMax = () => {
-    setStakeInput(+cnvBalance.data?.formatted)
+    setStakeInput(cnvBalance.data?.formatted)
   }
 
   const approveCNV = () => {
@@ -52,14 +61,14 @@ function StakeInput(props) {
 
   const [lockData, lockCNV] = useContractWrite(
     {
-      addressOrName: '0x2B7Ea66d564399246Da8e3D6265dB8F89af834C8',
+      addressOrName: '0x265271970c6e13a942f0f75c9d619ffe5ca2872e',
       contractInterface: StakingV1Abi,
     },
     'lock',
     {
       args: [
         account.address,
-        ethers.utils.parseEther(String(stakeInput)),
+        ethers.utils.parseEther(String(+stakeInput)),
         periodToPoolParameter[`${props.period}`],
       ],
     },
@@ -69,11 +78,12 @@ function StakeInput(props) {
 
   return (
     <Box>
-      <Card w="350px" px={4} py={5}>
+      <Card shadow="down" w="350px" px={4} py={5}>
         <Flex justify="space-between" alignItems="center">
           <Input
+            placeholder="0.00"
             value={stakeInput}
-            onChange={(e) => setStakeInput(Number(e.target.value))}
+            onChange={(e) => setSafeStakeInputValue(e.target.value)}
             ml={-1}
             shadow="none"
             w="60%"
@@ -92,7 +102,7 @@ function StakeInput(props) {
           <Text color="text.low" fontSize="md" fontWeight="bold">
             {/* Loading Price */}
             {(cnvPrice as any)?.data
-              ? `$${(stakeInput * (cnvPrice as any)?.data.cnv).toFixed(2)}`
+              ? `$${(+stakeInput * (cnvPrice as any)?.data.cnv).toFixed(2)}`
               : 'Loading price'}
           </Text>
           <HStack spacing={2}>
@@ -106,19 +116,19 @@ function StakeInput(props) {
         </Flex>
       </Card>
 
-      <Box mt={10} px={3} width="350px">
+      <Box mt={10} width="350px">
         {!allowanceEnough && (
           <Button
             onClick={approveCNV}
             fontWeight="bold"
             fontSize="md"
-            variant="primary.outline"
+            variant="primary"
             bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
             w="100%"
-            h="40px"
+            h="50px"
             size="large"
             mx="auto"
-            disabled={stakeInput > +cnvBalance.data?.formatted}
+            disabled={+stakeInput > +cnvBalance.data?.formatted}
           >
             {approveButtonText}
           </Button>
@@ -130,21 +140,21 @@ function StakeInput(props) {
             onClick={() => lockCNV()}
             fontWeight="bold"
             fontSize="md"
-            variant="primary.outline"
+            variant="primary"
             bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
             w="100%"
-            h="40px"
+            h="50px"
             size="large"
             mx="auto"
             disabled={
-              stakeInput == 0 || stakeInput > +cnvBalance.data?.formatted || lockData.loading
+              +stakeInput == 0 || +stakeInput > +cnvBalance.data?.formatted || lockData.loading
             }
           >
             Stake CNV
           </Button>
         )}
 
-        <Button
+        {/* <Button
           mt={5}
           onClick={() => router.push('/dashboard')}
           fontWeight="bold"
@@ -157,7 +167,7 @@ function StakeInput(props) {
           mx="auto"
         >
           Check position
-        </Button>
+        </Button> */}
       </Box>
     </Box>
   )

@@ -1,6 +1,6 @@
 import { useQuery, UseQueryResult } from 'react-query'
 import { Chain, chain, useNetwork } from 'wagmi'
-import { Token } from 'gemswap-sdk'
+import { Token } from '@concave/gemswap-sdk'
 
 const concaveTokenList = (networkName: string) =>
   `/assets/tokenlists/${networkName.toLowerCase()}/concave.json`
@@ -12,7 +12,7 @@ export const useTokenList = () => {
       loading,
     },
   ] = useNetwork()
-  const chainName = selectedChain.name
+  const chainName = selectedChain.name || 'mainnet'
   return useQuery(['token-list', chainName], async () => {
     if (loading) return []
     return fetch(concaveTokenList(chainName))
@@ -55,10 +55,13 @@ export const useAddressTokenList: (address?: string) => UseQueryResult<Token[], 
     network?.chain?.id === chain.ropsten.id ? chain.ropsten.name : chain.mainnet.name
   const url = `https://deep-index.moralis.io/api/v2/${address}/erc20?chain=${chainName}`
   return useQuery(['LISTTOKENS', address], () => {
+    if (!address) {
+      return []
+    }
     return fetch(url, { headers })
       .then((r) => r.json())
       .then((tokens) =>
-        tokens.map(
+        (tokens || []).map(
           (token: MoralisERC20Token) =>
             new Token(
               chain.ropsten.id,

@@ -1,12 +1,11 @@
 overwrite: true
 schema: '${NEXT_PUBLIC_GRAPHQL_ENDPOINT}'
-headers:
-  x-hasura-admin-secret: '${NEXT_PUBLIC_GRAPHQL_ADMIN_SECRET}'
-  content-type: application/json
 documents: 'graphql/**/*.gql'
 generates:
   graphql/generated/graphql.tsx:
     plugins:
+      - add:
+          content: "import { RQ_HASURA_ENDPOINT, RQ_HASURA_PARAMS } from 'lib/hasura.rq'"
       - typescript
       - typescript-operations
       - typescript-react-query
@@ -16,7 +15,8 @@ generates:
       withHOC: false
       withComponent: false
       fetcher:
-        endpoint: '${NEXT_PUBLIC_GRAPHQL_ENDPOINT}'
-  graphql/graphql.schema.json:
+        endpoint: RQ_HASURA_ENDPOINT
+        fetchParams: RQ_HASURA_PARAMS
+  graphql/generated/graphql.schema.json:
     plugins:
       - 'introspection'

@@ -1,13 +1,26 @@
-import { ExpandArrowIcon } from '@concave/icons'
-import { Box, Button, Flex, Heading, HStack, Modal, Stack, StackDivider, Text } from '@concave/ui'
+import { Currency, CurrencyAmount, Percent, Trade, TradeType } from '@concave/gemswap-sdk'
+import { ExpandArrowIcon, WarningTwoIcon } from '@concave/icons'
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  HStack,
+  Modal,
+  SlideFade,
+  Stack,
+  StackDivider,
+  StatArrow,
+  Text,
+} from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
-import { Currency, CurrencyAmount, Percent, Trade, TradeType } from 'gemswap-sdk'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { usePreviousDistinct } from 'react-use'
 import { useFiatValue } from '../hooks/useFiatPrice'
-import { usePrice } from '../hooks/usePrice'
 import { SwapSettings } from '../Settings'
-import { computeFiatValuePriceImpact } from './computeFiatValuePriceImpact'
+import { percentDifference } from 'utils/percentDifference'
 import { ExpectedOutput, MinExpectedOutput } from './ExpectedOutput'
+import { RelativePrice } from './RelativePrice'
 
 type TradeCurrencyInfoProps = {
   currencyAmount: CurrencyAmount<Currency>
@@ -17,7 +30,14 @@ type TradeCurrencyInfoProps = {
 
 const TradeCurrencyInfo = ({ currencyAmount, fiatValue, priceImpact }: TradeCurrencyInfoProps) => {
   return (
-    <Flex rounded="2xl" justify="space-between" shadow="Down Medium" px={5} py={4}>
+    <Flex
+      rounded="2xl"
+      justify="space-between"
+      shadow="Down Medium"
+      px={5}
+      py={4}
+      bg="blackAlpha.100"
+    >
       <Stack spacing={1} direction="column" h="100%">
         <Heading fontSize="2xl">{currencyAmount.toSignificant(2, { groupSeparator: ',' })}</Heading>
         <Flex fontWeight="bold" color="text.low" align="center">
@@ -42,12 +62,69 @@ const TradeCurrencyInfo = ({ currencyAmount, fiatValue, priceImpact }: TradeCurr
 const InOutArrow = () => {
   return (
     <Flex align="center" justify="center" mt={-3} mb={-1}>
-      <Box shadow="Up Small" px={3} py={1} apply="background.metal" opacity={0.8} rounded="3xl">
+      <Box shadow="Up Small" px={3} py={1} apply="background.metal" opacity={0.9} rounded="3xl">
         <ExpandArrowIcon w="18px" h="18px" />
       </Box>
     </Flex>
   )
 }
+
+const PricesUpdated = ({
+  prevTrade,
+  currentTrade,
+  onAccept,
+}: {
+  prevTrade: Trade<Currency, Currency, TradeType>
+  currentTrade: Trade<Currency, Currency, TradeType>
+  onAccept: () => void
+}) => {
+  if (!prevTrade) return null
+  const difference = percentDifference(prevTrade.outputAmount, currentTrade.outputAmount)
+  return (
+    <Flex
+      py={3}
+      px={4}
+      mb={6}
+      shadow="up"
+      apply="background.metalBrighter"
+      rounded="xl"
+      align="center"
+      justify="space-between"
+    >
+      <Stack fontWeight="bold" spacing={0} w="full">
+        <Flex align="start">
+          <Flex alignItems="center">
+            <WarningTwoIcon h="14px" w="14px" verticalAlign="baseline" color="#d8a760" mr={1} />
+            <Text fontSize="lg" textColor="text.high">
+              Prices changed
+            </Text>
+          </Flex>
+        </Flex>
+
+        <Text fontSize="sm" textColor="text.low">
+          Accept new expected output
+        </Text>
+        <HStack fontSize="sm" textColor="text.low" alignItems="center" spacing={1}>
+          <Text fontWeight="bold" color="text.medium" opacity={0.6} textDecor="line-through">
+            {prevTrade.outputAmount.toSignificant(4, { groupSeparator: ',' })}
+          </Text>
+          <Text fontWeight="black" color="text.high">
+            {currentTrade.outputAmount.toSignificant(4, { groupSeparator: ',' })}
+          </Text>
+          <StatArrow w="10px" type={difference?.greaterThan(0) ? 'increase' : 'decrease'} />
+          <Text fontWeight="black" fontSize="xs">
+            {difference && `${difference?.toFixed(2)}%`}
+          </Text>
+        </HStack>
+      </Stack>
+      <Button onClick={onAccept} variant="secondary" px={4} py={2} alignSelf="start">
+        Accept
+      </Button>
+    </Flex>
+  )
+}
+
+const twoPercent = new Percent(2, 100) // 2%
 
 const ConfirmSwap = ({
   trade,
@@ -58,15 +135,20 @@ const ConfirmSwap = ({
   settings: SwapSettings
   onConfirm: () => void
 }) => {
-  const currencyIn = trade.inputAmount.currency
-  const currencyOut = trade.outputAmount.currency
-
   const inputFiat = useFiatValue(trade.inputAmount)
   const outputFiat = useFiatValue(trade.outputAmount)
 
-  const relativePrice = usePrice(currencyIn.wrapped, currencyOut.wrapped)
+  const fiatPriceImpact = percentDifference(inputFiat.value, outputFiat.value)
 
-  const fiatPriceImpact = computeFiatValuePriceImpact(inputFiat.value, outputFiat.value)
+  const prevTrade = usePreviousDistinct(trade, (t) => {
+    const diff = percentDifference(t.outputAmount, trade.outputAmount)
+    return diff && diff.lessThan(twoPercent) && diff.greaterThan(twoPercent.multiply(-1))
+  })
+
+  const [hasAcceptedNewPrices, setAcceptedNewPrices] = useState(true)
+  useEffect(() => {
+    if (prevTrade?.outputAmount && hasAcceptedNewPrices) setAcceptedNewPrices(false)
+  }, [prevTrade?.outputAmount])
 
   return (
     <>
@@ -78,53 +160,36 @@ const ConfirmSwap = ({
         priceImpact={fiatPriceImpact}
       />
 
-      <Flex fontSize="sm" fontWeight="bold" align="center" justify="center" py={4}>
-        <Text>
-          1 {relativePrice.price?.quoteCurrency.symbol} ={' '}
-          {relativePrice.price?.invert().toSignificant(3)}{' '}
-          {relativePrice.price?.baseCurrency.symbol}
-        </Text>
-        {outputFiat.price && (
-          <Text ml={1} textColor="text.low">
-            (${outputFiat.price.toFixed(2, { groupSeparator: ',' })})
-          </Text>
-        )}
-      </Flex>
+      <RelativePrice
+        currency0={trade.inputAmount.currency}
+        currency1={trade.outputAmount.currency}
+        indicators="minimal"
+        justify="center"
+        p={3}
+      />
 
-      <Flex direction="column" rounded="2xl" mb={6} p={6} shadow="Down Medium">
+      <Flex direction="column" rounded="2xl" mb={6} p={6} shadow="Down Medium" bg="blackAlpha.100">
         <ExpectedOutput outputAmount={trade.outputAmount} priceImpact={trade.priceImpact} />
         <StackDivider borderRadius="full" mx={-4} my={4} h={0.5} bg="stroke.secondary" />
         <MinExpectedOutput trade={trade} slippageTolerance={settings.slippageTolerance} />
       </Flex>
 
-      <Flex
-        py={3}
-        px={4}
-        mb={6}
-        shadow="up"
-        apply="background.metalBrighter"
-        rounded="xl"
-        align="center"
-        justify="space-between"
-      >
-        <Stack fontWeight="medium" spacing={0}>
-          <Text fontWeight="bold" fontSize="md" textColor="text.high">
-            Prices Updated
-          </Text>
-          <Text fontSize="sm" textColor="text.low">
-            Expected Output
-          </Text>
-          <Text fontSize="sm" textColor="text.low">
-            {trade.outputAmount.toSignificant(6, { groupSeparator: ',' })}
-          </Text>
-        </Stack>
-        <Button variant="secondary" px={4} py={2} alignSelf="start">
-          Accept new prices
-        </Button>
-      </Flex>
+      <SlideFade in={prevTrade && !hasAcceptedNewPrices} offsetY={-20} unmountOnExit>
+        <PricesUpdated
+          prevTrade={prevTrade}
+          currentTrade={trade}
+          onAccept={() => setAcceptedNewPrices(true)}
+        />
+      </SlideFade>
 
-      <Button variant="primary" size="large" onClick={onConfirm} isFullWidth>
-        Confirm Swap
+      <Button
+        isDisabled={!hasAcceptedNewPrices}
+        variant="primary"
+        size="large"
+        onClick={onConfirm}
+        isFullWidth
+      >
+        {hasAcceptedNewPrices ? 'Confirm Swap' : 'Accept new prices first'}
       </Button>
     </>
   )

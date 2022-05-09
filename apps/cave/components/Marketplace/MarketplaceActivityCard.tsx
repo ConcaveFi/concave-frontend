@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Box, Card, Flex, Text, Button, Image } from '@concave/ui'
+import { Box, Card, Flex, Text, Button, Image, useMediaQuery } from '@concave/ui'
 import NewActivityCard from './MarketplaceTransactionCard'
 import MarketplaceTransactionCard from './MarketplaceTransactionCard'
 
@@ -76,16 +76,29 @@ const MarketplaceActivityCard = () => {
     ])
     setLoading(false)
   }
+  const [isLargerThan1200] = useMediaQuery('(min-width: 1200px)')
 
+  const [width, setWidth] = useState('300px')
+
+  useEffect(() => {
+    setWidth(isLargerThan1200 ? '300px' : '360px')
+  }, [isLargerThan1200])
   return (
-    <Card width={300} shadow="Block Up" height={642} position="relative" rounded="2xl">
-      <Flex justify={'center'} align="center" height={'90px'} gap={1}>
+    <Card
+      width={width}
+      shadow="Block Up"
+      height={642}
+      position="relative"
+      rounded="2xl"
+      variant="secondary"
+    >
+      <Flex justify={'center'} align="center" height={'70px'} gap={1}>
         <TransactionButton active label="All" />
         <TransactionButton label="Listing" />
         <TransactionButton label="Sale" />
       </Flex>
       <Box
-        mt={2}
+        backdropFilter="blur(8px)"
         pos="relative"
         h="100%"
         overflowY={'auto'}
@@ -95,24 +108,9 @@ const MarketplaceActivityCard = () => {
         borderRadius="12px"
         px={'0.5rem'}
         py={'0.5rem'}
-        css={{
-          background: 'rgba(113, 113, 113, 0.01)',
-        }}
-        __css={{
-          '&::-webkit-scrollbar': {
-            width: '20px',
-            boxShadow: `-1px 1px 3px rgba(126, 162, 255, 0.26), inset 0px -5px 5px rgba(255, 255, 255, 0.02), inset -9px 12px 24px rgba(13, 17, 23, 0.49)`,
-            borderRadius: '10px',
-          },
-          '&::-webkit-scrollbar-thumb': {
-            background: 'linear-gradient(239.18deg, #19394C 27.18%, #0A161F 96.11%)',
-            boxShadow:
-              '0px 5px 14px rgba(0, 0, 0, 0.47), 4px -7px 15px rgba(174, 177, 255, 0.13), inset -1px 1px 2px rgba(128, 186, 255, 0.24)',
-            rounded: 'lg',
-          },
-        }}
+        __css={scrollBar}
+        pt={4}
       >
-        {/* render Transaction cards from click value */}
         <div>
           {loading && <span>loading...</span>}
           {data &&
@@ -123,71 +121,9 @@ const MarketplaceActivityCard = () => {
         </div>
       </Box>
     </Card>
-    // <>
-    //   <Box
-    //     p={7}
-    //     gap={6}
-    //     h="642px" // h="fit-content"
-    //     shadow="Block Up"
-    //     w="300px" // w= "100%"
-    //     maxW="420px"
-    //     backgroundBlendMode={'screen'}
-    //     backdropFilter="blur(15px)"
-    //   >
-    //     <Flex direction="row" gap={6} justify="center" mt={2}>
-    //       {filters.map((e, k) => {
-    //         return (
-    //           <Box key={k} mx="auto" py={5} w="90px" h="37px" shadow="down" borderRadius="16px">
-    //             <Button
-    //               onClick={() => handleClick(e.name)}
-    //               fontSize="s"
-    //               color="white"
-    //               fontWeight="bold"
-    //             >
-    //               <Text color={e.name === 'All' && 'blue'}>{e.name}</Text>
-    //             </Button>
-    //           </Box>
-    //         )
-    //       })}
-    //     </Flex>
-    //     <Box
-    //       pos="relative"
-    //       h="100%"
-    //       overflowY={'auto'}
-    //       width={250}
-    //       borderRadius="12px"
-    //       px={'0.5rem'}
-    //       py={'0.5rem'}
-    //       css={{
-    //         background: 'rgba(113, 113, 113, 0.01)',
-    //       }}
-    //       shadow="down"
-    //       __css={{
-    //         '&::-webkit-scrollbar': {
-    //           width: '20px',
-    //           boxShadow: `-1px 1px 3px rgba(126, 162, 255, 0.26), inset 0px -5px 5px rgba(255, 255, 255, 0.02), inset -9px 12px 24px rgba(13, 17, 23, 0.49)`,
-    //           borderRadius: '10px',
-    //         },
-    //         '&::-webkit-scrollbar-thumb': {
-    //           background: 'linear-gradient(239.18deg, #19394C 27.18%, #0A161F 96.11%)',
-    //           boxShadow:
-    //             '0px 5px 14px rgba(0, 0, 0, 0.47), 4px -7px 15px rgba(174, 177, 255, 0.13), inset -1px 1px 2px rgba(128, 186, 255, 0.24)',
-    //           rounded: 'lg',
-    //         },
-    //       }}
-    //     >
-    //       {/* render Transaction cards from click value */}
-    //       <div>
-    //         {loading && <span>loading...</span>}
-    //         {data &&
-    //           !error &&
-    //           data.map((e: any, k) => <MarketplaceTransactionCard key={k} filter={e} />)}
-    //       </div>
-    //     </Box>
-    //   </Box>
-    // </>
   )
 }
+
 interface TransactionButtonProps {
   label: string
   active?: boolean
@@ -218,3 +154,18 @@ const TransactionButton = (props: TransactionButtonProps) => {
 }
 
 export default MarketplaceActivityCard
+
+const scrollBar = {
+  '&::-webkit-scrollbar': {
+    width: '20px',
+    boxShadow: `-1px 1px 3px rgba(126, 162, 255, 0.26), inset 0px -5px 5px rgba(255, 255, 255, 0.02), inset -9px 12px 24px rgba(13, 17, 23, 0.49)`,
+    borderRadius: '10px',
+    mt: '30px',
+  },
+  '&::-webkit-scrollbar-thumb': {
+    background: 'linear-gradient(239.18deg, #19394C 27.18%, #0A161F 96.11%)',
+    boxShadow:
+      '0px 5px 14px rgba(0, 0, 0, 0.47), 4px -7px 15px rgba(174, 177, 255, 0.13), inset -1px 1px 2px rgba(128, 186, 255, 0.24)',
+    rounded: 'lg',
+  },
+}

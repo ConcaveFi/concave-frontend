@@ -1,13 +1,13 @@
+import { ROUTER_ADDRESS } from '@concave/gemswap-sdk'
 import { ButtonProps } from '@concave/ui'
 import { useModals } from 'contexts/ModalsContext'
 import { isAddress } from 'ethers/lib/utils'
-import { ROUTER_ADDRESS } from 'gemswap-sdk'
 import { useApprove } from 'hooks/useApprove'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { usePermit } from 'hooks/usePermit'
 import { useAccount } from 'wagmi'
 import { NoValidPairsError } from '../hooks/usePair'
-import { UseTradeResult } from '../hooks/useTrade'
+import { InsufficientLiquidityError, UseTradeResult } from '../hooks/useTrade'
 
 export const useSwapButtonProps = ({
   trade,
@@ -24,7 +24,7 @@ export const useSwapButtonProps = ({
   const outputAmount = trade.data.outputAmount
 
   const currencyIn = inputAmount.currency
-  const currencyInBalance = useCurrencyBalance(currencyIn)
+  const currencyInBalance = useCurrencyBalance(currencyIn, { watch: true })
 
   const [token, spender] = [currencyIn.wrapped, ROUTER_ADDRESS[currencyIn?.chainId]]
   const permit = usePermit(token, spender)
@@ -50,6 +50,9 @@ export const useSwapButtonProps = ({
       isDisabled: true,
       children: `No liquidity`, // Try enabling multi-hop trades
     }
+
+  if (trade.error === InsufficientLiquidityError)
+    return { children: `Not enough liquidity`, isDisabled: true }
 
   /*
     Fetching user data (Allowance & Balance)

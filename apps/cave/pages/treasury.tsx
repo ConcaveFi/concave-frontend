@@ -1,20 +1,6 @@
-import {
-  Box,
-  Card,
-  Collapse,
-  Container,
-  Fade,
-  Flex,
-  Heading,
-  Image,
-  ScaleFade,
-  Spinner,
-  Stack,
-  Text,
-} from '@concave/ui'
-import DividendsCard from 'components/Treasury/DividendsCard'
-import TreasuryManagementCard from 'components/Treasury/TreasuryManagementCard'
-import { Token } from 'gemswap-sdk'
+
+import { Token } from '@concave/gemswap-sdk'
+import { Card, Container, Flex, Heading, Image, Spinner, Stack, Text } from '@concave/ui'
 import { useLiquidityInfo } from 'hooks/useLiquidityInfo'
 import { fetchPortfolio } from 'lib/debank'
 import { useState } from 'react'

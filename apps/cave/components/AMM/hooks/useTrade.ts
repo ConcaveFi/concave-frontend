@@ -1,12 +1,20 @@
-import { Trade, Currency, CurrencyAmount, TradeType, Pair, BestTradeOptions } from 'gemswap-sdk'
+import {
+  Trade,
+  Currency,
+  CurrencyAmount,
+  TradeType,
+  Pair,
+  BestTradeOptions,
+} from '@concave/gemswap-sdk'
 import { UseQueryResult } from 'react-query'
-import { toAmount } from '../../../utils/toAmount'
+import { toAmount } from 'utils/toAmount'
 
 import { usePairs } from './usePair'
 
 const MAX_HOPS = 3
 
-export const InvalidTradeError = 'Invalid Trade'
+export const InsufficientLiquidityError = 'Insufficient liquidity'
+export const InvalidTradeError = 'Invalid trade'
 
 export const getBestTrade = (
   pairs: Pair[],
@@ -27,8 +35,11 @@ export const getBestTrade = (
       ? Trade.bestTradeExactIn(pairs, searchableTradeAmount, otherCurrency, options)[0]
       : Trade.bestTradeExactOut(pairs, otherCurrency, searchableTradeAmount, options)[0]
 
-  // may happen when there is not enough liquidity
-  if (!bestTrade) throw InvalidTradeError
+  if (!bestTrade) {
+    // TODO: Handle input too low
+    if (exactAmount.greaterThan(0)) throw InsufficientLiquidityError
+    throw InvalidTradeError
+  }
 
   // when exactAmount is 0 return the same best trade route found but with the correct 0 amount
   if (exactAmount.equalTo(0)) return new Trade(bestTrade.route, exactAmount, bestTrade.tradeType)

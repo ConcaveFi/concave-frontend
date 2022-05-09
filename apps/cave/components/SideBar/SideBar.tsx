@@ -79,16 +79,24 @@ const SidebarContent = forwardRef<CardProps, 'div'>((props, ref) => {
       borderRightRadius="2xl"
       shadow="Up Big"
       p={3}
+      pb="5vh"
       w={{ base: '250px', md: '250px' }}
       minW="250px"
-      overflow="auto"
+      overflowY="auto"
+      overflowX="hidden"
       {...props}
     >
       <SideBarTop />
-      <Stack spacing="50px" mt="50px" mr={-3} ml="auto" pb={8} w="min">
+      <Stack spacing="50px" mt="50px" mr={-3} ml="auto" pb={8} w="max">
         <PageNav />
-        <SideBarBottom />
       </Stack>
+      <Flex ml="4" mt="20px">
+        <SideBarBottom />
+      </Flex>
+      {/* <Flex         
+      align="center">
+        <SideBarBottom />
+      </Flex> */}
     </Card>
   )
 })
