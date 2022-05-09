@@ -20,7 +20,7 @@ const TokenListItem = ({ currency, onClick }: { currency: Currency; onClick: () 
       <CurrencyIcon h="35px" w="35px" currency={currency} />
       <Stack spacing={0} justify="center">
         <Text fontWeight="bold" fontSize="md">
-          {currency.symbol.toUpperCase()}
+          {currency.symbol}
         </Text>
         <Text color="text.low" fontSize="sm">
           {currency.name}
