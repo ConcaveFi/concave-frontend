@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 import { useAccount, useConnect } from 'wagmi'
 import { createAlchemyWeb3, Nft } from '@alch/alchemy-web3'
 import { nftContract } from 'components/Dashboard/UserPositionCard'
-const providers = new ethers.providers.InfuraProvider('ropsten', '545e522b4c0e45078a25b86f3b646a9b')
+import { concaveProvider as providers, rawProvider } from 'lib/providers'
 
 export async function getAllUsersPositionsID(address: string, netWorkId: number) {
   const usersNft = await getAllUserNfts(address, netWorkId)
@@ -18,26 +18,37 @@ const filterByContract = (contractAddress: string) => (nft: Nft) => {
 }
 const mapToTokenId = (nft: Nft) => nft.id.tokenId
 
-// By default it's using the ropsten network, in a real scene
-// It's necessary change line 23 with the correct network.
 export async function getAllUserNfts(address: string, netWorkId: number) {
   const network = netWorkId === 1 ? 'mainnet' : 'ropsten'
   const web3 = createAlchemyWeb3(`https://eth-${network}.alchemyapi.io/v2/demo`)
   const nft = await web3.alchemy.getNfts({
     owner: address,
   })
-  if (nft.ownedNfts.length == 0) return undefined
-  return nft.ownedNfts
+
+  if (nft.ownedNfts.length == 0) {
+    return undefined
+  } else {
+    return nft.ownedNfts
+  }
 }
+
 export async function getUserPosition(address: string, index: number, netWorkId: number) {
-  const stakingContract = new Contract(LIQUID_STAKING_ADDRESS[1], StakingV1Abi, providers)
+  const stakingContract = new Contract(
+    LIQUID_STAKING_ADDRESS[netWorkId],
+    StakingV1Abi,
+    providers(netWorkId),
+  )
   const userPositions = await getAllUsersPositionsID(address, netWorkId)
   const tokenIndexId = +userPositions[index]
   return await stakingContract.positions(tokenIndexId.toString()).catch((error) => {})
 }
 
 export async function getUserPositions(address: string, netWorkId: number) {
-  const stakingContract = new Contract(LIQUID_STAKING_ADDRESS[3], StakingV1Abi, providers)
+  const stakingContract = new Contract(
+    LIQUID_STAKING_ADDRESS[netWorkId],
+    StakingV1Abi,
+    providers(netWorkId),
+  )
   const userPositions = []
   const userPositionsLength = await stakingContract.balanceOf(address).catch((error) => {})
   for (let index = 0; index < userPositionsLength; index++) {
