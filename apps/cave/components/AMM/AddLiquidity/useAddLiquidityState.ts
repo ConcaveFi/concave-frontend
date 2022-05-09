@@ -29,10 +29,19 @@ const deriveAmount = (
   return quoteAmount
 }
 
-export const useAddLiquidityState = () => {
+export const useAddLiquidityState = ({
+  currency0,
+  currency1,
+}: {
+  currency0: Currency
+  currency1: Currency
+}) => {
   const networkId = useCurrentSupportedNetworkId()
 
-  const initialCurrencyFields = useMemo(() => makeCurrencyFields([], networkId), [networkId])
+  const initialCurrencyFields = useMemo(
+    () => makeCurrencyFields([currency0, currency1], networkId),
+    [currency0, currency1, networkId],
+  )
 
   // the input user typed in, the other input value is then derived from it
   const [exactAmount, setExactAmount] = useState<CurrencyAmount<Currency>>(
@@ -47,7 +56,10 @@ export const useAddLiquidityState = () => {
   useEffect(() => {
     setFieldCurrency(initialCurrencyFields)
     setExactAmount(toAmount('0', initialCurrencyFields.first))
-  }, [initialCurrencyFields, setFieldCurrency])
+    if (currency1) {
+      secondFieldAmount.current = toAmount('0', currency1)
+    }
+  }, [currency1, initialCurrencyFields, setFieldCurrency])
   const firstFieldAmount = useRef<CurrencyAmount<Currency>>()
   const secondFieldAmount = useRef<CurrencyAmount<Currency>>()
 

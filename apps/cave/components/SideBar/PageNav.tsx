@@ -62,6 +62,7 @@ function PageNav() {
     })
     fetch('/api/cnv')
       .then((j) => j.json())
+      .then((data) => JSON.parse(data))
       .then((data) => {
         if (data?.data) {
           setCnvMarketPrice(data.data.last)

@@ -1,0 +1,27 @@
+query GET_STACKINGV1_LAST100_EVENTS {
+  logStakingV1(order_by: { blockNumber: desc }, limit: 100) {
+    blockNumber
+    txHash
+    poolID
+    tokenID
+    sold
+    from
+    to
+    amountLocked
+    lockedUntil
+  }
+}
+
+query GET_STACKINGV1_BY_POOL_ID($poolID: numeric_comparison_exp) {
+  logStakingV1(order_by: { blockNumber: desc }, where: { poolID: $poolID }, limit: 10) {
+    blockNumber
+    txHash
+    poolID
+    tokenID
+    sold
+    from
+    to
+    amountLocked
+    lockedUntil
+  }
+}

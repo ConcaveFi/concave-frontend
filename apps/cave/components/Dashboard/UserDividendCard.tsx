@@ -9,7 +9,7 @@ const UserDividendCard = (props: UserDividendCardProps) => {
   const { statusData } = props
   const { isLoading, success, notConnected } = statusData
 
-  let totalLocked = notConnected
+  const totalLocked = notConnected
     ? '--.--.--.--'
     : isLoading
     ? 'loading'
