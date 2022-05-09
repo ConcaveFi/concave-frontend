@@ -1,7 +1,8 @@
 import { isAddress } from 'ethers/lib/utils'
 import { ChainId, Currency, Fetcher, NATIVE, Token } from '@concave/gemswap-sdk'
 import { concaveProvider } from 'lib/providers'
-import { queryTypes, useQueryStates } from 'next-usequerystate'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 
 const getAddressOrSymbol = (currency: Currency) => {
   if (!currency) return undefined
@@ -44,32 +45,23 @@ export const fetchCurrenciesFromQuery = async (query) => {
   return [_token0, _token1].map(currencyToJson)
 }
 
+const stringSerializeCurrency = (currency: Currency) =>
+  currency.isNative ? `${currency.symbol}-${currency.chainId}` : currency.wrapped.address
+
 /*
   keeps track of two tokens using the url query params
   currency0=<address or symbol if native>
   currency1=<address or symbol if native>
   chainId=<1 for mainnet 3 for ropsten...>
 */
-export const useQueryCurrencies = (initialCurrencies: [Currency, Currency]) => {
-  const [query, setQuery] = useQueryStates({
-    chainId: queryTypes.integer.withDefault(1),
-    currencies: {
-      parse: () => null,
-      serialize: (currencies) => {
-        console.log(currencies)
-        return currencies.map(getAddressOrSymbol)
-      },
-      defaultValue: initialCurrencies.map(currencyFromJson),
-    },
-  })
+export const useSyncQueryCurrencies = (currencies: [Currency, Currency]) => {
+  const router = useRouter()
 
-  const onChangeCurrencies = (currencies: [Currency, Currency]) => {
-    console.log(currencies)
-    const chainId = [ChainId.ETHEREUM, ChainId.ROPSTEN].includes(currencies[0].chainId)
-      ? currencies[0].chainId
-      : ChainId.ETHEREUM
-    setQuery({ chainId, currencies }, { shallow: true })
-  }
-
-  return { currencies: query.currencies, onChangeCurrencies }
+  useEffect(() => {
+    console.log('replace')
+    const query = { chainId: currencies[0].chainId || currencies[1].chainId } as any
+    if (currencies[0]) query.currency0 = getAddressOrSymbol(currencies[0])
+    if (currencies[1]) query.currency1 = getAddressOrSymbol(currencies[1])
+    router.replace({ query }, undefined, { shallow: true })
+  }, [stringSerializeCurrency(currencies[0]), stringSerializeCurrency(currencies[1])])
 }
