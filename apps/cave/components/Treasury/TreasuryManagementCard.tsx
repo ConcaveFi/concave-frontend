@@ -15,19 +15,37 @@ export default function TreasuryManagementCard(props: TreasuryCardProps) {
       <Flex width={'full'} justify="center">
         <TreasyAssetsTitle />
       </Flex>
+      <FarmingViewer />
     </Card>
   )
 }
 
 const FarmingViewer = () => {
   return (
-    <Flex
-      rounded="0px 0px 16px 16px"
-      bg={'linear-gradient(90deg, #72639B 0%, #44B9DE 100%)'}
-      width={'397px'}
-      minH="62px"
-      boxShadow={'up'}
-    ></Flex>
+    <GlassPanel width={'477px'} height="157px" rounded={'2xl'}>
+      <Flex>
+        <GlassPanel my="auto" minWidth={'244px'} height="131px" rounded={'2xl'}></GlassPanel>
+        <Flex
+          direction={'column'}
+          my="auto"
+          width={'160px'}
+          height="131px"
+          justify={'center'}
+          align="start"
+          ml={10}
+        >
+          <Text fontWeight={'700'} fontSize="18px">
+            Farming:
+          </Text>
+          <Text fontWeight={'700'} fontSize="16px">
+            UST: $6,527,873
+          </Text>
+          <Text fontWeight={'700'} fontSize="16px">
+            3Crv: $5,237,468
+          </Text>
+        </Flex>
+      </Flex>
+    </GlassPanel>
   )
 }
 
