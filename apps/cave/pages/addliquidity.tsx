@@ -1,117 +1,47 @@
-import { Currency, CurrencyAmount, Pair } from '@concave/gemswap-sdk'
-import { PlusIcon } from '@concave/icons'
-import { Button, Card, Flex, Heading, Text, useDisclosure } from '@concave/ui'
-import { CurrencyInputField } from 'components/AMM'
-import { SupplyLiquidityModal } from 'components/AMM/AddLiquidity/SupplyLiquidityModal'
-import { useAddLiquidityButtonProps } from 'components/AMM/AddLiquidity/useAddLiquidityButtonProps'
-import { useAddLiquidityState } from 'components/AMM/AddLiquidity/useAddLiquidityState'
-import { useAddLiquidityTransaction } from 'components/AMM/AddLiquidity/useAddLiquidityTransaction'
-import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
-import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
-import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
-import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
+import { Flex, Heading, Text } from '@concave/ui'
+import { AddLiquidityCard } from 'components/AMM/AddLiquidity/AddLiquidity'
 import React from 'react'
 
-const LiquidityTip = () => (
-  <Card variant="secondary" p={4} backgroundBlendMode={'screen'}>
-    <Text fontSize="lg">
-      Tip: When you add liquidity, you will receive pool tokens representing your position. These
-      tokens automatically earn fees proportional to your share of the pool, and can be redeemed at
-      any time.
-    </Text>
-  </Card>
-)
-
-const AddSymbol = () => (
-  <Flex align="center" justify="center">
-    <Flex
-      shadow="Up Small"
-      borderRadius="full"
-      apply="background.metal"
-      h={30}
-      w={34}
-      bgColor="blackAlpha.100"
-      align="center"
-      justify="center"
-    >
-      <PlusIcon />
-    </Flex>
-  </Flex>
-)
-
-export type LiquidityPool = {
-  pair: Pair
-  amount0: CurrencyAmount<Currency>
-  amount1: CurrencyAmount<Currency>
-}
-
-// export const getServerSideProps = async (ctx) => {
-//   const [token0, token1] = await fetchCurrenciesFromQuery(ctx.query)
-//   return { props: { token0, token1 } }
-// }
-
 export default function AddLiquidity() {
-  // const initialTokens = [currencyFromJson(token0), currencyFromJson(token1)]
-
-  const { pair, firstFieldAmount, secondFieldAmount, onChangeFirstField, onChangeSecondField } =
-    useAddLiquidityState()
-
-  // useSyncCurrenciesToUrl(firstFieldAmount?.currency, secondFieldAmount?.currency)
-
-  const addLPTx = useAddLiquidityTransaction(firstFieldAmount, secondFieldAmount)
-
-  const addLiquidityButtonProps = useAddLiquidityButtonProps(
-    pair,
-    firstFieldAmount,
-    secondFieldAmount,
-    () => supplyLiquidityDisclosure.onOpen(),
-  )
-  const fixedPair = pair.data ?? Pair.createVirtualPair(firstFieldAmount, secondFieldAmount)
-  const supplyLiquidityDisclosure = useDisclosure()
-
   return (
     <>
-      <Flex direction="column" justify="center" align="center" w="100%" h="full" gap={6}>
-        <Heading fontSize="3xl" w="500px">
-          Add liquidity
+      <Flex
+        align={'center'}
+        w={'100%'}
+        borderRadius={0}
+        gap={4}
+        textAlign="center"
+        direction="column"
+      >
+        <Heading as="h1" mt={16} mb={3} fontSize="5xl">
+          Add Liquidity Pools
         </Heading>
-        <Card variant="primary" p={4} w="500px" gap={4} shadow="Up for Blocks">
-          <LiquidityTip />
-          <Flex direction="column" p={4} gap={2}>
-            <CurrencyInputField
-              currencyAmountIn={firstFieldAmount}
-              onChangeAmount={onChangeFirstField}
-              CurrencySelector={SelectAMMCurrency}
-            />
-            <AddSymbol />
-            <CurrencyInputField
-              currencyAmountIn={secondFieldAmount}
-              onChangeAmount={onChangeSecondField}
-              CurrencySelector={SelectAMMCurrency}
-            />
-          </Flex>
-
-          <Button
-            h="50px"
-            p={4}
-            shadow="Up Small"
-            size="large"
+        <Flex mt={0} align="center" gap={10} width="full" justify="center" alignItems={'center'}>
+          <Text maxW={520} textAlign={'center'}>
+            Tip: When you add liquidity, you will receive pool tokens representing your position.
+            These tokens automatically earn fees proportional to your share of the pool, and can be
+            redeemed at any time.
+          </Text>
+        </Flex>
+        <Flex
+          direction="column"
+          float={'left'}
+          position="relative"
+          justify={'center'}
+          align="center"
+          width="full"
+          p={4}
+        >
+          <AddLiquidityCard
+            borderWidth={2}
             variant="primary"
-            {...addLiquidityButtonProps}
+            p={4}
+            w="500px"
+            gap={6}
+            shadow="Up for Blocks"
           />
-        </Card>
+        </Flex>
       </Flex>
-
-      <SupplyLiquidityModal
-        lp={{ pair: fixedPair, amount0: firstFieldAmount, amount1: secondFieldAmount }}
-        isOpen={supplyLiquidityDisclosure.isOpen}
-        onClose={supplyLiquidityDisclosure.onClose}
-        onConfirm={addLPTx.submit}
-      />
-
-      <WaitingConfirmationDialog isOpen={addLPTx.isWaitingForConfirmation} />
-      <TransactionSubmittedDialog tx={addLPTx.data} isOpen={addLPTx.isTransactionSent} />
-      <TransactionErrorDialog error={addLPTx.error?.message} isOpen={addLPTx.isError} />
     </>
   )
 }

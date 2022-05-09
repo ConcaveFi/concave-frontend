@@ -1,5 +1,5 @@
 import { parseUnits } from 'ethers/lib/utils'
-import { Currency, CurrencyAmount, Percent, WETH9_ADDRESS } from '@concave/gemswap-sdk'
+import { Currency, CurrencyAmount, Pair, Percent, WETH9_ADDRESS } from '@concave/gemswap-sdk'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { LiquidityInfoData } from 'hooks/useLiquidityInfo'
 import { Router } from 'lib/Router'
@@ -10,17 +10,23 @@ const currencyAmountToBigNumber = (currency: CurrencyAmount<Currency>) => {
   return parseUnits(currency.toFixed(currency.currency.decimals))
 }
 
-export const useRemoveLiquidity = ({ liquidityInfo }: { liquidityInfo: LiquidityInfoData }) => {
+export const useRemoveLiquidity = ({
+  pair,
+  userPoolShare,
+  userBalance,
+}: {
+  pair: Pair
+  userPoolShare: number
+  userBalance: CurrencyAmount<Currency>
+}) => {
   const networkId = useCurrentSupportedNetworkId()
   const [{ data: account }] = useAccount()
-  const tokenA = liquidityInfo.pair.token0
-  const tokenB = liquidityInfo.pair.token1
+  const tokenA = pair.token0
+  const tokenB = pair.token1
   const [percentToRemove, setPercentToRemove] = useState(0)
   const ratioToRemove = Math.min(percentToRemove, 100) / 100
-  const amountAMin =
-    +liquidityInfo.pair.reserve0.toExact() * liquidityInfo.userPoolShare * ratioToRemove
-  const amountBMin =
-    +liquidityInfo.pair.reserve1.toExact() * liquidityInfo.userPoolShare * ratioToRemove
+  const amountAMin = +pair.reserve0.toExact() * userPoolShare * ratioToRemove
+  const amountBMin = +pair.reserve1.toExact() * userPoolShare * ratioToRemove
   const [hash, setHash] = useState<string>(null)
   const [{ data }] = useSigner()
   const [receiveInNativeToken, setReceiveInNativeToken] = useState(true)
@@ -33,9 +39,7 @@ export const useRemoveLiquidity = ({ liquidityInfo }: { liquidityInfo: Liquidity
     if (receiveInNativeToken && (tokenAIsNativeWrapper || tokenBIsNativeWrapper)) {
       const transaction = await router.removeLiquidityETH(
         tokenAIsNativeWrapper ? tokenB : tokenA,
-        currencyAmountToBigNumber(
-          liquidityInfo.userBalance.data.multiply(new Percent(percentToRemove, 100)),
-        ),
+        currencyAmountToBigNumber(userBalance.multiply(new Percent(percentToRemove, 100))),
         account.address,
       )
       setHash(transaction.hash)
@@ -44,9 +48,7 @@ export const useRemoveLiquidity = ({ liquidityInfo }: { liquidityInfo: Liquidity
     const transaction = await router.removeLiquidity(
       tokenA,
       tokenB,
-      currencyAmountToBigNumber(
-        liquidityInfo.userBalance.data.multiply(percentToRemove).divide(100),
-      ),
+      currencyAmountToBigNumber(userBalance.multiply(percentToRemove).divide(100)),
       account.address,
     )
     setHash(transaction.hash)
@@ -55,7 +57,7 @@ export const useRemoveLiquidity = ({ liquidityInfo }: { liquidityInfo: Liquidity
   return {
     amountAMin,
     amountBMin,
-    ...liquidityInfo,
+    pair,
     percentToRemove,
     setPercentToRemove,
     removeLiquidity,

@@ -120,4 +120,33 @@ export abstract class Fetcher {
       liquidityToken,
     )
   }
+
+  /**
+   * Fetches information about a pair and constructs a pair from the given two tokens.
+   * @param tokenA first token
+   * @param tokenB second token
+   * @param provider the provider to use to fetch the data
+   */
+  public static async fetchPairs(
+    chainId = 1,
+    provider = getDefaultProvider(chainId),
+  ): Promise<Pair[]> {
+    const pairContract = await new Contract(
+      FACTORY_ADDRESS[chainId],
+      [
+        'function allPairs(uint256 index) external view returns (address)',
+        'function allPairsLength() external view returns (uint256)',
+      ],
+      provider,
+    )
+    const promiseAddress = []
+    const index = await pairContract.allPairsLength()
+    for (let i = 0; i < index; i++) {
+      const LPPromise = pairContract
+        .allPairs(i)
+        .then((add: string) => Fetcher.fetchPairFromAddress(add, provider))
+      promiseAddress.push(LPPromise)
+    }
+    return await Promise.all(promiseAddress)
+  }
 }

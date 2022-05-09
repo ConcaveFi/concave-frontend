@@ -62,6 +62,7 @@ export const TransactionSubmittedDialog = ({
   useEffect(() => {
     setIsOpen(isOpenProp)
   }, [isOpenProp])
+
   const onClose = () => setIsOpen(false)
   return (
     <Modal

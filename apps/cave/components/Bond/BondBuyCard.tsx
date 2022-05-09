@@ -9,7 +9,6 @@ import React, { useEffect, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
 import { useFeeData } from 'wagmi'
 import { BondOutput } from './BondOutput'
-import { BondReceiptModal } from './BondReceipt'
 import { getBondAmountOut, getBondSpotPrice, purchaseBond, useBondState } from './BondState'
 import { ConfirmBondModal } from './ConfirmBond'
 import { DownwardIcon } from './DownwardIcon'
@@ -64,7 +63,7 @@ export function BondBuyCard() {
       .catch((e) => {
         console.log(e)
       })
-  }, [userAddress])
+  }, [networkId, userAddress])
 
   return (
     <Card p={6} gap={2} variant="primary" h="fit-content" shadow="Block Up" w="100%" maxW="420px">
@@ -74,7 +73,6 @@ export function BondBuyCard() {
           setAmountIn(v)
           getBondAmountOut(currencyOut.address, currencyOut.decimals, networkId, v.toExact()).then(
             (amountOut) => {
-              console.log(amountOut)
               setAmountOut(amountOut)
             },
           )
@@ -114,6 +112,8 @@ export function BondBuyCard() {
         isOpen={confirmModal.isOpen}
         onClose={confirmModal.onClose}
         onConfirm={() => {
+          console.log('onConfirm')
+
           purchaseBond(networkId, amountIn.toFixed(), userAddress, signer, settings, amountOut)
             .then((x) => {
               setBondTransaction(x)

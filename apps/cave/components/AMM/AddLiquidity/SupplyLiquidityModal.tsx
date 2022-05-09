@@ -1,7 +1,7 @@
 import { Box, Button, Flex, HStack, Modal, Text } from '@concave/ui'
+import { LiquidityPool } from 'components/AMM/AddLiquidity/AddLiquidity'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { ApproveButton, useApproval } from 'hooks/useAllowance'
-import { LiquidityPool } from 'pages/addliquidity'
 import React from 'react'
 
 const PositionInfoItem = ({ color = '', label = '', value, mt = 0, children = <></> }) => (
@@ -39,7 +39,7 @@ const SupplyLiquidityContent = ({
       <Text fontSize="2xl"> You will receive</Text>
       <HStack>
         <Text fontWeight={'bold'} lineHeight={'48px'} fontSize={32}>
-          {poolShare.amount.toSignificant(6, { groupSeparator: ',' })}
+          {poolShare?.amount.toSignificant(6, { groupSeparator: ',' })}
         </Text>
         <CurrencyIcon h={10} w={10} currency={amount0.currency} />
         <CurrencyIcon h={10} w={10} currency={amount1.currency} />
@@ -51,7 +51,7 @@ const SupplyLiquidityContent = ({
         fontStyle={'italic'}
         fontSize={14}
         textColor={'#5F7A99'}
-      >{`Output is estimated. You will receive approximately ${poolShare.amount.toSignificant(6, {
+      >{`Output is estimated. You will receive approximately ${poolShare?.amount.toSignificant(6, {
         groupSeparator: ',',
       })} ${pair.liquidityToken.symbol} or the transaction will revert.`}</Text>
       <Box borderRadius={'2xl'} p={6} shadow={'down'}>
@@ -113,7 +113,7 @@ export const SupplyLiquidityModal = ({
       onClose={onClose}
       isCentered
       size="xl"
-      bodyProps={{ gap: 6 }}
+      bodyProps={{ gap: 6, borderWidth: 2 }}
     >
       <SupplyLiquidityContent lp={lp} onConfirm={onConfirm} />
     </Modal>
