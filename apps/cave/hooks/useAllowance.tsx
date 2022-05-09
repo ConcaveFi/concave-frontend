@@ -65,7 +65,7 @@ export const useApprovalWhenNeeded = (
     if (approve.isWaitingForConfirmation) {
       return 'Approve in your wallet'
     }
-    return `Approve to use ${token.symbol}`
+    return `Approve ${token.symbol}`
   })()
 
   return [
