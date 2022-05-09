@@ -52,7 +52,7 @@ export const UserBondPositionInfo = (bondSigma, userAddress) => {
 
   const formatRedeemable =
     Math.sign(parseInt(redeemable)) === 1
-      ? (+utils.formatEther(parseInt(redeemable))).toFixed(2)
+      ? (+utils.formatEther(BigInt(parseInt(redeemable)))).toFixed(2)
       : 0
 
   return (
