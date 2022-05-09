@@ -9,7 +9,7 @@ import { nftContract } from 'components/Dashboard/UserPositionCard'
 const providers = new ethers.providers.InfuraProvider('ropsten', '545e522b4c0e45078a25b86f3b646a9b')
 
 export async function getAllUsersPositionsID(address: string, netWorkId: number) {
-  const usersNft = await getAllUserNfts(address)
+  const usersNft = await getAllUserNfts(address, netWorkId)
   return usersNft.filter(filterByContract(LIQUID_STAKING_ADDRESS[netWorkId])).map(mapToTokenId)
 }
 
@@ -20,8 +20,9 @@ const mapToTokenId = (nft: Nft) => nft.id.tokenId
 
 // By default it's using the ropsten network, in a real scene
 // It's necessary change line 23 with the correct network.
-export async function getAllUserNfts(address: string) {
-  const web3 = createAlchemyWeb3('https://eth-ropsten.alchemyapi.io/v2/demo')
+export async function getAllUserNfts(address: string, netWorkId: number) {
+  const network = netWorkId === 1 ? 'mainnet' : 'ropsten'
+  const web3 = createAlchemyWeb3(`https://eth-${network}.alchemyapi.io/v2/demo`)
   const nft = await web3.alchemy.getNfts({
     owner: address,
   })
