@@ -97,7 +97,7 @@ export function BondBuyCard() {
           isFullWidth
           onClick={confirmModal.onOpen}
         >
-          {+userBalance < +amountIn ? 'Insufficient Funds' : 'Purchase Bond'}
+          {+userBalance < +amountIn ? 'Insufficient Funds' : 'Bond'}
         </Button>
       )}
 
