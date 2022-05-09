@@ -4,6 +4,7 @@ import { concaveProvider } from 'lib/providers'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { useNetwork } from 'wagmi'
+import { useQueryState } from 'next-usequerystate'
 
 const getAddressOrSymbol = (currency: Currency) => {
   if (!currency) return undefined
@@ -16,17 +17,23 @@ const getAddressOrSymbol = (currency: Currency) => {
   token1=<address or symbol if native>
   chainId=<like 1 for mainnet 3 for ropsten...>
 */
-export const useSyncCurrenciesToUrl = (currency0: Currency, currency1: Currency) => {
+export const useQueryCurrencies = (currency0: Currency, currency1: Currency) => {
   const router = useRouter()
+  // const [currencies, setCurrencies] = useQueryState('currencies', {  })
+  // const [chainId, setChainId] = useQueryState('chainId', {  })
   const [{ data: network }] = useNetwork()
   useEffect(() => {
-    router.replace({
-      query: {
-        ...(currency0 && { token0: getAddressOrSymbol(currency0) }),
-        ...(currency1 && { token1: getAddressOrSymbol(currency1) }),
-        chainId: network.chain?.id || 1,
+    router.replace(
+      {
+        query: {
+          ...(currency0 && { token0: getAddressOrSymbol(currency0) }),
+          ...(currency1 && { token1: getAddressOrSymbol(currency1) }),
+          chainId: network.chain?.id || 1,
+        },
       },
-    })
+      undefined,
+      { shallow: true },
+    )
   }, [currency0, currency1, network.chain?.id, router])
 }
 
