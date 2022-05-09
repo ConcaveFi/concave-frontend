@@ -32,14 +32,10 @@ export function CurrencyAmountField({
     [internalValue],
   )
 
-  const handleChange = useCallback(
-    ({ value }, { source }) => {
-      if (source === 'prop') return // if the value changed from props, ignore it, only update on user typing
-      setInternalValue(value)
-      onChangeAmount(toAmount(value, currencyAmount.currency))
-    },
-    [currencyAmount, onChangeAmount],
-  )
+  const handleChange = useCallback(({ value }, { source }) => {
+    if (source === 'prop') return // if the value changed from props, ignore it, only update on user typing
+    setInternalValue(value)
+  }, [])
 
   const onSelectCurrency = useCallback(
     (newCurrency: Currency) => onChangeAmount(toAmount(internalValue, newCurrency)),
