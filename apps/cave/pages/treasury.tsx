@@ -1,4 +1,3 @@
-
 import { Token } from '@concave/gemswap-sdk'
 import { Card, Collapse, Container, Flex, Heading, Image, Spinner, Stack, Text } from '@concave/ui'
 import DividendsCard from 'components/Treasury/DividendsCard'
@@ -66,95 +65,11 @@ export default function Treasury() {
   )
 
   return (
-    
-
     <Flex height={'full'} width="full" justify={'center'} align="center" position={'relative'}>
       <Flex direction="row">
-    <TreasuryRedeemCard />
-    <TreasuryRevenueCard />
-    </Flex>
-      <Flex position={'relative'}>
-        <Collapse in={!isOnDividens}>
-          <TreasuryManagementCard onChange={() => setIsOnDividends(true)} />
-        </Collapse>
-      </Flex>
-      <Flex position={'relative'}>
-        <Collapse in={isOnDividens}>
-          <DividendsCard onChange={() => setIsOnDividends(false)} />
-        </Collapse>
+        <TreasuryRedeemCard />
+        <TreasuryRevenueCard />
       </Flex>
     </Flex>
   )
-
-  // <DividendsCard />
-  // if (!isSuccess || isLoading)
-  //   return (
-  //     <Container maxWidth="container.lg" pt={16}>
-  //       <Stack my={8} align="center">
-  //         <Heading as="h1">Concave Treasury</Heading>
-  //         <Spinner />
-  //       </Stack>
-  //     </Container>
-  //   )
-
-  // return (
-  //   <Container maxWidth="container.lg" pt={16}>
-  //     <Stack w="100%" my={0} align="left" spacing={2}>
-  //       {/* <Heading as="h2">Claim CNV</Heading>
-  //       <ClaimCard /> */}
-  //     </Stack>
-  //     <Stack w="100%" my={4} align="left" spacing={2}>
-  //       <Heading as="h1">Concave Treasury Value</Heading>
-  //       <Heading color="green">
-  //         {formatUsd(+treasury.totalUsd + +pair.reserve0.toFixed(2) * 2)}
-  //       </Heading>
-  //       <Heading as="h3" py={4} fontSize="2xl">
-  //         Protocols
-  //       </Heading>
-  //       {treasury.protocols.map((protocol) => (
-  //         <TokenCard
-  //           key={protocol.id}
-  //           img={protocol.logo_url}
-  //           name={protocol.name}
-  //           value={formatUsd(protocol.total_net_usd_value)}
-  //         >
-  //           {protocol.portfolio_item_list.map(
-  //             (item) =>
-  //               Number(item.stats.net_usd_value.toFixed(2)) > 0 && (
-  //                 <Stack align="row" key={item.name}>
-  //                   <Text fontWeight="bold">{item.name}</Text>
-  //                   {item.detail.supply_token_list.map((token) => (
-  //                     <Stack key={token.id} spacing={0}>
-  //                       <Flex>
-  //                         <Text fontWeight="bold">{token.symbol}:</Text>
-  //                         <Text ml={1}>{formatUsd(token.amount * token.price)}</Text>
-  //                       </Flex>
-  //                       <Text ml={2} color="text.low">
-  //                         {token.amount.toFixed(2)}
-  //                       </Text>
-  //                     </Stack>
-  //                   ))}
-  //                 </Stack>
-  //               ),
-  //           )}
-  //         </TokenCard>
-  //       ))}
-  //       <Heading as="h3" py={4} fontSize="2xl">
-  //         Tokens
-  //       </Heading>
-  //       {treasury.tokens.map(
-  //         (token) =>
-  //           Number(token.amount.toFixed(2)) > 0 && (
-  //             <TokenCard
-  //               key={token.id}
-  //               img={token.logo_url}
-  //               name={token.name}
-  //               value={formatUsd(token.amount * token.price)}
-  //               balance={token.amount.toFixed(2)}
-  //             />
-  //           ),
-  //       )}
-  //     </Stack>
-  //   </Container>
-  // )
 }
