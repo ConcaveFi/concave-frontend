@@ -27,7 +27,7 @@ export const getBestTrade = (
 
   // if the exact amount is 0, we search for the best route with some arbitrary amount
   const searchableTradeAmount = exactAmount.equalTo(0)
-    ? toAmount(50000, exactAmount.currency)
+    ? toAmount(500, exactAmount.currency)
     : exactAmount
 
   const bestTrade =
