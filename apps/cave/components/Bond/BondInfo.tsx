@@ -50,11 +50,9 @@ export const UserBondPositionInfo = (bondSigma, userAddress) => {
   const totalPending = parse?.totalPending.toFixed(2)
   // const bigIntRedeemable = BigInt(redeemable)
 
-  console.log('typeof redeemable', typeof redeemable)
-
   const formatRedeemable =
     Math.sign(parseInt(redeemable)) === 1
-      ? (+utils.formatEther(parseInt(redeemable))).toFixed(2)
+      ? (+utils.formatEther(BigInt(parseInt(redeemable)))).toFixed(2)
       : 0
 
   return (
