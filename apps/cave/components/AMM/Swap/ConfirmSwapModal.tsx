@@ -148,7 +148,7 @@ const ConfirmSwap = ({
   const [hasAcceptedNewPrices, setAcceptedNewPrices] = useState(true)
   useEffect(() => {
     if (prevTrade?.outputAmount && hasAcceptedNewPrices) setAcceptedNewPrices(false)
-  }, [prevTrade?.outputAmount])
+  }, [hasAcceptedNewPrices, prevTrade?.outputAmount])
 
   return (
     <>
