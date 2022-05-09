@@ -1,6 +1,10 @@
 
 import { Token } from '@concave/gemswap-sdk'
-import { Card, Container, Flex, Heading, Image, Spinner, Stack, Text } from '@concave/ui'
+import { Card, Collapse, Container, Flex, Heading, Image, Spinner, Stack, Text } from '@concave/ui'
+import DividendsCard from 'components/Treasury/DividendsCard'
+import TreasuryManagementCard from 'components/Treasury/TreasuryManagementCard'
+import TreasuryRedeemCard from 'components/Treasury/TreasuryRedeemCard'
+import TreasuryRevenueCard from 'components/Treasury/TreasuryRevenueCard'
 import { useLiquidityInfo } from 'hooks/useLiquidityInfo'
 import { fetchPortfolio } from 'lib/debank'
 import { useState } from 'react'
@@ -62,13 +66,19 @@ export default function Treasury() {
   )
 
   return (
+    
+
     <Flex height={'full'} width="full" justify={'center'} align="center" position={'relative'}>
-      <Flex position={'absolute'}>
+      <Flex direction="row">
+    <TreasuryRedeemCard />
+    <TreasuryRevenueCard />
+    </Flex>
+      <Flex position={'relative'}>
         <Collapse in={!isOnDividens}>
           <TreasuryManagementCard onChange={() => setIsOnDividends(true)} />
         </Collapse>
       </Flex>
-      <Flex position={'absolute'}>
+      <Flex position={'relative'}>
         <Collapse in={isOnDividens}>
           <DividendsCard onChange={() => setIsOnDividends(false)} />
         </Collapse>
