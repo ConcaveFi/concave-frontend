@@ -60,7 +60,6 @@ const FarmingViewer = () => {
     <GlassPanel width={'477px'} height="157px" rounded={'2xl'} justify="center" align={'center'}>
       <Flex>
         <GlassPanel
-          my="auto"
           minWidth={'244px'}
           height="131px"
           rounded={'2xl'}
@@ -71,7 +70,7 @@ const FarmingViewer = () => {
           <GlassPanel
             height={'48%'}
             width="full"
-            rounded={'2xl'}
+            rounded={'14px'}
             boxShadow="Up Big"
             justify={'center'}
             align="center"
