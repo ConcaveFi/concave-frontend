@@ -18,10 +18,13 @@ const PairsError = ({ error }) => {
 }
 
 const StatusIndicators = ({ query: { isFetching, isLoading, isError, error } }) => {
-  if (isFetching) return <Spinner size="xs" />
-  if (isLoading) return <Text fontSize="sm">Searching trade routes</Text>
-  if (isError) return <PairsError error={error} />
-  return null
+  return (
+    <>
+      {isFetching && <Spinner size="xs" />}
+      {isLoading && <Text fontSize="sm">Searching trade routes</Text>}
+      {isError && <PairsError error={error} />}
+    </>
+  )
 }
 
 export const RelativePrice = ({
