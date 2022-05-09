@@ -4,7 +4,7 @@ import UserDividendCard from './UserDividendCard'
 import { ButtonLink } from 'components/ButtonLink'
 import { useDashBoardState } from 'contracts/DashBoard/DashBoardState'
 import { useRouter } from 'next/router'
-// commit
+
 const UserDashboardCard = () => {
   const { userContracts, totalLocked, statusData } = useDashBoardState()
   const { isLoading, success, notConnected } = statusData
