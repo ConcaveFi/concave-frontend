@@ -65,11 +65,16 @@ export default function Treasury() {
   )
 
   return (
-    <Flex height={'full'} width="full" justify={'center'} align="center" position={'relative'}>
-      <Flex direction="row">
-        <TreasuryRedeemCard />
-        <TreasuryRevenueCard />
+    <Flex height={'full'} width="full" align={'center'} justify="center" position={'relative'}>
+      <Flex direction={'column'} maxWidth={'900px'} height="" gap={6}>
+        <Flex direction="row" width={'full'} justify={'space-around'}>
+          <TreasuryRevenueCard />
+          <TreasuryRedeemCard />
+        </Flex>
+        <TreasuryManagementCard onChange={() => {}} />
+        <DividendsCard onChange={() => {}} />
       </Flex>
     </Flex>
+    // </Flex>
   )
 }
