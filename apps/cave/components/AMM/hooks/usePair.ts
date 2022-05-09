@@ -59,12 +59,7 @@ export const usePairs = <T = Pair[]>(
         )
       ).filter(Boolean)
 
-      if (
-        !pairs ||
-        pairs.length === 0
-        // !pairs.find((pair) => pair.involvesToken(tokenA) && pair.involvesToken(tokenB))
-      )
-        throw NoValidPairsError
+      if (!pairs || pairs.length === 0) throw NoValidPairsError
 
       return pairs
     },
