@@ -11,7 +11,7 @@ const PairsError = ({ error }) => {
     <Text mr="auto" fontSize="sm" color="#c32417" fontWeight="medium">
       {{
         [NoValidPairsError]: `No liquidity in pair`,
-        [InsufficientLiquidityError]: `Very little liquidity in pair`,
+        [InsufficientLiquidityError]: `No liquidity in pair`,
       }[error] || 'Error Fetching Pairs'}
     </Text>
   )
