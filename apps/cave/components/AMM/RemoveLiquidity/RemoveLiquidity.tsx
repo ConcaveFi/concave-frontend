@@ -166,14 +166,10 @@ const RemoveLiquidityActions = ({
 }) => {
   const networkId = useCurrentSupportedNetworkId()
   const transactionStatusDisclosure = useDisclosure()
-  const [needsApprove, requestApproveA, approveLabel] = useApprovalWhenNeeded(
+  const [needsApprove, requestApprove, approveLabel] = useApprovalWhenNeeded(
     removeLiquidityState.pair.liquidityToken,
     ROUTER_ADDRESS[networkId],
   )
-
-  const removeAproval = async () => {
-    requestApproveA()
-  }
 
   const confirmedWithdrawal = async () => {
     try {
@@ -190,7 +186,7 @@ const RemoveLiquidityActions = ({
         disabled={!needsApprove || !removeLiquidityState.percentToRemove}
         w={250}
         variant={'primary'}
-        onClick={removeAproval}
+        onClick={requestApprove}
       >
         {approveLabel}
       </Button>

@@ -1,6 +1,6 @@
 import { Currency, CurrencyAmount, Pair } from '@concave/gemswap-sdk'
 import { PlusIcon } from '@concave/icons'
-import { Button, ButtonProps, Card, CardProps, Flex, Modal, Text, useDisclosure } from '@concave/ui'
+import { Button, ButtonProps, Card, CardProps, Flex, Modal, useDisclosure } from '@concave/ui'
 import { CurrencyInputField } from 'components/AMM'
 import { SupplyLiquidityModal } from 'components/AMM/AddLiquidity/SupplyLiquidityModal'
 import { useAddLiquidityButtonProps } from 'components/AMM/AddLiquidity/useAddLiquidityButtonProps'
@@ -13,16 +13,6 @@ import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialo
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import React from 'react'
 import { useAccount } from 'wagmi'
-
-const LiquidityTip = () => (
-  <Card variant="secondary" p={4} backgroundBlendMode={'screen'}>
-    <Text fontSize="lg">
-      Tip: When you add liquidity, you will receive pool tokens representing your position. These
-      tokens automatically earn fees proportional to your share of the pool, and can be redeemed at
-      any time.
-    </Text>
-  </Card>
-)
 
 const AddSymbol = () => (
   <Flex align="center" justify="center">
