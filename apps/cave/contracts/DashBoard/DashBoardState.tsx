@@ -26,6 +26,7 @@ export async function getAllUserNfts(address: string, netWorkId: number) {
   const nft = await web3.alchemy.getNfts({
     owner: address,
   })
+  if (nft.ownedNfts.length == 0) return undefined
   return nft.ownedNfts
 }
 export async function getUserPosition(address: string, index: number, netWorkId: number) {

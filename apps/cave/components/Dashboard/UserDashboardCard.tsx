@@ -19,8 +19,6 @@ const UserDashboardCard: React.FC<UserDashBoardCardProps> = ({ ...props }) => {
   const { usercontract, totallocked, statusdata } = props
   const { isLoading, success, notConnected } = statusdata
 
-  console.log(usercontract)
-
   const userPosComps =
     usercontract &&
     usercontract.map((contract, index) => <UserPositionCard key={index} contract={contract} />)
