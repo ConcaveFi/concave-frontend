@@ -13,24 +13,30 @@ const UserDividendCard = (props: UserDividendCardProps) => {
     ? '--.--.--.--'
     : isLoading
     ? 'loading'
-    : +parseFloat(props.totalLocked.toFixed(3))
+    : +parseFloat(props.totalLocked.toFixed(3)) + ' CNV'
   return (
     <Box
       pos="relative"
-      overflowY={'auto'}
-      maxHeight={'500px'}
+      overflowY={'hidden'}
       borderRadius="16px"
       mt={1}
       shadow={'Down Big'}
       width={'800px'}
-      height={'136px'}
+      height={{ lg: '136px', md: '160px' }}
     >
-      <Flex m={6} flex={1}>
-        <Text textColor={'text.low'} fontSize={'18px'} fontWeight="700">
+      <Flex
+        m={6}
+        flex={1}
+        justify={{ lg: 'start', md: 'center' }}
+        align="center"
+        gap={{ md: 10, lg: 0 }}
+      >
+        <Text ml={{ lg: 3, md: 0 }} textColor={'text.low'} fontSize={'18px'} fontWeight="700">
           Your Dividends Share
         </Text>
+        <RedeemButton display={{ lg: 'none', md: 'flex' }} />
       </Flex>
-      <Flex>
+      <Flex justify={{ md: 'center' }} gap={{ md: 10 }}>
         <Flex direction={'column'} alignItems="start" ml={6}>
           <Text fontSize={'11px'} fontWeight={600} textColor={'text.low'}>
             Total locked:
@@ -39,7 +45,6 @@ const UserDividendCard = (props: UserDividendCardProps) => {
             <Text fontSize={'17px'} fontWeight={700}>
               {totalLocked}
             </Text>
-
             {isLoading && <Spinner height={'20px'} width={'20px'} ml={1} />}
           </Flex>
         </Flex>
@@ -58,27 +63,33 @@ const UserDividendCard = (props: UserDividendCardProps) => {
           <Text fontSize={'17px'} fontWeight={700}>
             0.0
           </Text>
-        </Flex>{' '}
-        <Flex direction={'row'} flex="1" justify="end">
-          <Button
-            //   onClick={'s'}
-            fontWeight="bold"
-            fontSize="md"
-            variant="secondary"
-            border="stroke.primary"
-            w="160px"
-            h="40px"
-            size="large"
-            shadow="down"
-            mx={6}
-          >
-            <Text color="text.low" fontSize="sm">
-              Redeem
-            </Text>
-          </Button>
+        </Flex>
+        <Flex direction={'row'} justify="end">
+          <RedeemButton display={{ lg: 'flex', md: 'none' }} />
         </Flex>
       </Flex>
     </Box>
   )
 }
 export default UserDividendCard
+
+const RedeemButton = ({ ...props }) => {
+  return (
+    <Button
+      fontWeight="bold"
+      fontSize="md"
+      variant="secondary"
+      border="stroke.primary"
+      w="160px"
+      h="40px"
+      size="large"
+      shadow="down"
+      mx={6}
+      {...props}
+    >
+      <Text color="text.low" fontSize="sm">
+        Redeem
+      </Text>
+    </Button>
+  )
+}
