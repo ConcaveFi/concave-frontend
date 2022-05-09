@@ -1,6 +1,4 @@
-import { Modal, ModalContent, ModalOverlay } from '@chakra-ui/modal'
-import { Box, Button, Flex, HStack, Image, Text, useDisclosure } from '@concave/ui'
-import UserListPositionCard from './UserListPositionCard'
+import { Box, Flex } from '@concave/ui'
 import DividendsShare from './UserPosition/StakingRewards'
 import MarketplaceListing from './UserPosition/MarketplaceListing'
 import NftPositionContainer from './UserPosition/NftPositionContainer'
@@ -19,10 +17,13 @@ interface NftPositionCardProps {
 
 const UserPositionCard = (props: NftPositionCardProps) => {
   const { contract } = props
-  const { poolID, shares, rewardDebt, maturity } = contract
+  const maturity = contract && contract.maturity
+  const poolID = contract && contract.poolID
+  const shares = contract && contract.shares
+  const rewardDebt = contract && contract.rewardDebt
 
-  const sharesDecimals = parseInt(shares._hex, 16) / 1000000000000000000
-  const gained = parseInt(rewardDebt._hex, 16) / 1000000000000000000
+  const sharesDecimals = parseInt(shares?._hex, 16) / 1000000000000000000
+  const gained = parseInt(rewardDebt?._hex, 16) / 1000000000000000000
 
   const dateToRedeem = epochConverter(maturity)
   const currentData = new Date()

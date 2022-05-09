@@ -28,7 +28,7 @@ export async function getAllUserNfts(address: string) {
   return nft.ownedNfts
 }
 export async function getUserPosition(address: string, index: number, netWorkId: number) {
-  const stakingContract = new Contract(LIQUID_STAKING_ADDRESS[3], StakingV1Abi, providers)
+  const stakingContract = new Contract(LIQUID_STAKING_ADDRESS[1], StakingV1Abi, providers)
   const userPositions = await getAllUsersPositionsID(address, netWorkId)
   const tokenIndexId = +userPositions[index]
   return await stakingContract.positions(tokenIndexId.toString()).catch((error) => {})

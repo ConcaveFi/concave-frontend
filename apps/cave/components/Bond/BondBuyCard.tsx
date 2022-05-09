@@ -112,6 +112,8 @@ export function BondBuyCard() {
         isOpen={confirmModal.isOpen}
         onClose={confirmModal.onClose}
         onConfirm={() => {
+          console.log('onConfirm')
+
           purchaseBond(networkId, amountIn.toFixed(), userAddress, signer, settings, amountOut)
             .then((x) => {
               setBondTransaction(x)
