@@ -3,10 +3,7 @@ import { Box, Button, Card, Flex, FlexProps, Image, Text } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { CNV, DAI } from 'constants/tokens'
 
-interface TreasuryCardProps {
-  onChange: () => void
-}
-export default function TreasuryManagementCard(props: TreasuryCardProps) {
+export default function TreasuryManagementCard() {
   return (
     <Card
       direction={'column'}

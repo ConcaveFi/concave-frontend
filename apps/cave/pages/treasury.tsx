@@ -71,8 +71,8 @@ export default function Treasury() {
           <TreasuryRevenueCard />
           <TreasuryRedeemCard />
         </Flex>
-        <TreasuryManagementCard onChange={() => {}} />
-        <DividendsCard onChange={() => {}} />
+        <TreasuryManagementCard />
+        <DividendsCard />
       </Flex>
     </Flex>
     // </Flex>
