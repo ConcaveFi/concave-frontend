@@ -131,7 +131,7 @@ export default function Bond() {
                 }%`}
                 vestingTerm={`${termLength} Days`}
               />
-              {!userAddress ? (
+              {!userAddress && !bondSigma ? (
                 <>Wallet not connected</>
               ) : !bondSigma ? (
                 <>
