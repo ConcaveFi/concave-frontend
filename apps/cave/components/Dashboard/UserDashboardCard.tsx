@@ -4,6 +4,7 @@ import UserDividendCard from './UserDividendCard'
 import { ButtonLink } from 'components/ButtonLink'
 import { useDashBoardState } from 'contracts/DashBoard/DashBoardState'
 import { useRouter } from 'next/router'
+import { useState } from 'react'
 
 interface UserDashBoardCardProps extends FlexProps {
   usercontract: any

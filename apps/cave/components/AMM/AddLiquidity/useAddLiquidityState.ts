@@ -23,9 +23,8 @@ const deriveAmount = (
   }
   const price = pair.priceOf(exactAmount.currency.wrapped)
   const quoteAmount = price.quote(exactAmount.wrapped)
-
   if (otherCurrency.isNative)
-    return CurrencyAmount.fromRawAmount(otherCurrency, quoteAmount.numerator)
+    return CurrencyAmount.fromRawAmount(otherCurrency, quoteAmount.quotient)
   return quoteAmount
 }
 

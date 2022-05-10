@@ -58,7 +58,9 @@ export const UserBondPositionInfo = (bondSigma, userAddress) => {
   return (
     <>
       {claimed ? (
-        'You have no open positions'
+        <Box marginLeft={'25%'} justifyContent="center">
+          You have no open positions
+        </Box>
       ) : totalOwed ? (
         <Card bg="none" py={4} w="100%" direction="row" shadow="Glass Up Medium">
           <Flex justify="center" flexBasis="40%">
@@ -85,7 +87,7 @@ export const UserBondPositionInfo = (bondSigma, userAddress) => {
           <SpinIcon __css={spinnerStyles} width={'10'} height={'10'} />
         </>
       ) : (
-        <></>
+        ''
       )}
     </>
   )

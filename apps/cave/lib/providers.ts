@@ -9,8 +9,11 @@ import {
 export const infuraId = NEXT_PUBLIC_INFURA_ID
 export const concaveRPC = `https://rpc.concave.lol/v1/${NEXT_PUBLIC_CONCAVE_RPC_KEY}`
 export const concaveWSS = `wss://rpc.concave.lol/ws/v1/${NEXT_PUBLIC_CONCAVE_RPC_KEY}`
+// var p = new providers.JsonRpcProvider('http://MY_RPC_PUBLIC_IP:8545', false, 5);
 
-export const rawProvider = new ethers.providers.InfuraProvider('ropsten', infuraId)
+export const rawProvider = new ethers.providers.JsonRpcProvider(
+  `https://rpc.concave.lol/v1/${NEXT_PUBLIC_CONCAVE_RPC_KEY}`,
+)
 
 export const concaveProvider = (chainId: number) =>
   new multicallProvider.MulticallProvider(

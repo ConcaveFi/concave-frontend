@@ -31,7 +31,7 @@ const Marketplace = () => {
   const [width, setWidth] = useState('')
   const [pr, setPr] = useState(0)
 
-  const [viewTransactios, setViewTransactions] = useState(false)
+  const [viewTransactions, setViewTransactions] = useState(false)
 
   useEffect(() => {
     setColumnDirection(isMoreThan1200 ? 'row' : 'column-reverse')
@@ -40,7 +40,7 @@ const Marketplace = () => {
     setSearchCardMT(isMoreThan1200 ? 16 : 6)
     setTextAlign(isMoreThan1200 ? 'right' : 'center')
     setGap(isMoreThan1200 ? 8 : 0)
-    if (isMoreThan1200 && viewTransactios == true) setViewTransactions(false)
+    if (isMoreThan1200 && viewTransactions == true) setViewTransactions(false)
   }, [isMoreThan1200])
 
   useEffect(() => {
@@ -56,7 +56,7 @@ const Marketplace = () => {
       width={width}
       pr={pr}
     >
-      {!viewTransactios ? (
+      {!viewTransactions ? (
         <>
           <Heading as="h1" mt={16} mb={3} fontSize="5xl">
             {'Marketplace'}

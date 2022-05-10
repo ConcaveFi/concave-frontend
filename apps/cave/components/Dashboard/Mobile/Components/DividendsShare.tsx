@@ -1,17 +1,24 @@
-import { Button, Card, Flex, FlexProps, Spinner, Text } from '@concave/ui'
+import { SpinIcon, SpinnerIcon } from '@concave/icons'
+import { Button, Card, Flex, FlexProps, keyframes, Spinner, Text } from '@concave/ui'
 
 interface DividendsShareMobileProps extends FlexProps {
   totalLocked: number
   statusData: { isLoading; success; notConnected }
 }
+
+const spin = keyframes({
+  '0%': { transform: 'rotate(0deg)' },
+  '100%': { transform: 'rotate(360deg)' },
+})
 const DividendsShareMobile: React.FC<DividendsShareMobileProps> = ({ ...props }) => {
+  const spinnerStyles = { animation: `${spin} 2s linear infinite`, size: 'sm' }
   const { statusData } = props
   const { isLoading, success, notConnected } = statusData
   const totalLocked = notConnected
     ? '--.--.--.--'
     : isLoading
     ? 'loading'
-    : +parseFloat(props.totalLocked.toFixed(3))
+    : +parseFloat(props.totalLocked.toFixed(3)) + ' CNV'
   return (
     <Flex
       rounded={'2xl'}
@@ -33,7 +40,9 @@ const DividendsShareMobile: React.FC<DividendsShareMobileProps> = ({ ...props })
             <LowText label="Total Locked:" />
             <Flex justify={'center'}>
               <HighText label={totalLocked} />
-              {isLoading && <Spinner height={'20px'} width={'20px'} ml={1} />}
+              {isLoading && (
+                <SpinnerIcon css={spinnerStyles} height={'15px'} width={'15px'} ml={1} my="auto" />
+              )}
             </Flex>
           </Flex>
           <Flex flex={1} direction={'column'}>

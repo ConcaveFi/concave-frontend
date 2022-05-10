@@ -1,11 +1,15 @@
-import { Box, Flex, HStack, Image, Text } from '@concave/ui'
+import { ArrowBackIcon, ArrowUpDownIcon } from '@concave/icons'
+import { Box, Card, Flex, HStack, Image, Text } from '@concave/ui'
+import { useState } from 'react'
 
 interface NftPositionContainerProps {
+  onChange: () => void
   stakeType: number
   redeemIn: number
 }
 
 const NftPositionContainer = (props: NftPositionContainerProps) => {
+  const [active, setActive] = useState(false)
   const { stakeType, redeemIn } = props
   const redeemInDays = (redeemIn / (1000 * 3600 * 24)).toFixed()
   const periodToPoolParameter = {
@@ -18,14 +22,13 @@ const NftPositionContainer = (props: NftPositionContainerProps) => {
   return (
     <Box
       pos="relative"
-      overflowY={'auto'}
+      overflow={'hidden'}
       maxHeight={'100px'}
       borderRadius="16px"
-      cursor="pointer"
       boxShadow={'up'}
       width={{ lg: '540px', md: '380px' }}
     >
-      <Flex direction="row" gap={4} alignItems="center" justify="center" m={2}>
+      <Flex direction="row" gap={4} alignItems="center" justify="center" m={2} position="relative">
         <Flex
           pos="relative"
           w="177px"
@@ -57,6 +60,24 @@ const NftPositionContainer = (props: NftPositionContainerProps) => {
           <Text fontSize="md" fontWeight="bold">
             {redeemInDays} Days
           </Text>
+        </Flex>
+        <Flex width={'full'} height="50px" position={'absolute'} justify="end" align={'center'}>
+          <Flex width={'80px'}>
+            <Image
+              userSelect={'none'}
+              transition={'all'}
+              transitionDuration="0.3s"
+              transform={!active ? 'rotate(180deg)' : ''}
+              height={'80px'}
+              src={`/assets/liquidstaking/modal-arrow-logo.svg`}
+              alt="arrow down logo"
+              cursor={'pointer'}
+              onClick={() => {
+                props.onChange()
+                setActive(!active)
+              }}
+            />
+          </Flex>
         </Flex>
       </Flex>
     </Box>
