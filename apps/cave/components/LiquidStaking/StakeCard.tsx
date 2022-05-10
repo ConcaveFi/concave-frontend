@@ -98,7 +98,6 @@ function StakeCard(props) {
             {vaprText}
           </Text>
           <Text fontSize="lg" fontWeight="bold">
-            {/* {props.vapr} % */}
             Calculating
           </Text>
         </Box>
@@ -170,7 +169,7 @@ function StakeCard(props) {
               period={props.period}
               vaprText={vaprText}
               icon={props.icon}
-              vapr={props.vapr}
+              vapr={props.vAPR}
             />
             <VStack mt={8} spacing={8}>
               <StakeInfo

@@ -107,7 +107,7 @@ const PairsAccordion = ({ userAddress, pairs }: PairsAccordionProps) => {
   if (!pairs.length) {
     const { label, Button } = userAddress
       ? {
-          label: 'You dont have pools on your wallet.',
+          label: 'You are not in any pools',
           Button: <AddLiquidityModalButton />,
         }
       : { label: 'You are disconnected.', Button: <ConnectWallet /> }

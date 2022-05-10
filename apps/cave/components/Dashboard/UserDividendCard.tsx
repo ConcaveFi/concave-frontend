@@ -3,14 +3,14 @@ import { useState } from 'react'
 
 interface UserDividendCardProps {
   totalLocked: number
-  statusData: { isLoading; success; notConnected }
+  status: { isLoading; notConnected }
 }
 const UserDividendCard = (props: UserDividendCardProps) => {
-  const { statusData } = props
-  const { isLoading, success, notConnected } = statusData
+  const { status } = props
+  const { isLoading, notConnected } = status
 
   const totalLocked = notConnected
-    ? '--.--.--.--'
+    ? '--.--.--'
     : isLoading
     ? 'loading'
     : +parseFloat(props.totalLocked.toFixed(3)) + ' CNV'

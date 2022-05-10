@@ -113,14 +113,179 @@ export type CnvDataOutput = {
 export type LogStakingV1 = {
   __typename?: 'logStakingV1'
   amountLocked: Scalars['numeric']
-  blockNumber?: Maybe<Scalars['numeric']>
-  from?: Maybe<Scalars['String']>
-  lockedUntil?: Maybe<Scalars['numeric']>
+  blockNumber: Scalars['numeric']
+  from: Scalars['String']
+  lockedUntil: Scalars['numeric']
   poolID: Scalars['numeric']
-  sold?: Maybe<Scalars['Boolean']>
-  to?: Maybe<Scalars['String']>
+  sold: Scalars['Boolean']
+  to: Scalars['String']
   tokenID: Scalars['numeric']
   txHash: Scalars['String']
+}
+
+/** Lock events of Staking V1 */
+export type LogStakingV1_Lock = {
+  __typename?: 'logStakingV1_Lock'
+  amount: Scalars['String']
+  deposit: Scalars['String']
+  maturity: Scalars['numeric']
+  poolBalance: Scalars['String']
+  poolExcessRatio: Scalars['numeric']
+  poolG: Scalars['numeric']
+  poolID: Scalars['numeric']
+  poolRewardsPerShare: Scalars['String']
+  poolSupply: Scalars['String']
+  poolTerm: Scalars['numeric']
+  positionID: Scalars['numeric']
+  rewardDebt: Scalars['String']
+  shares: Scalars['String']
+  timestamp?: Maybe<Scalars['numeric']>
+  to: Scalars['String']
+  txBlockNumber: Scalars['numeric']
+  txHash: Scalars['String']
+}
+
+/** Boolean expression to filter rows from the table "logStakingV1_Lock". All fields are combined with a logical 'AND'. */
+export type LogStakingV1_Lock_Bool_Exp = {
+  _and?: InputMaybe<Array<LogStakingV1_Lock_Bool_Exp>>
+  _not?: InputMaybe<LogStakingV1_Lock_Bool_Exp>
+  _or?: InputMaybe<Array<LogStakingV1_Lock_Bool_Exp>>
+  amount?: InputMaybe<String_Comparison_Exp>
+  deposit?: InputMaybe<String_Comparison_Exp>
+  maturity?: InputMaybe<Numeric_Comparison_Exp>
+  poolBalance?: InputMaybe<String_Comparison_Exp>
+  poolExcessRatio?: InputMaybe<Numeric_Comparison_Exp>
+  poolG?: InputMaybe<Numeric_Comparison_Exp>
+  poolID?: InputMaybe<Numeric_Comparison_Exp>
+  poolRewardsPerShare?: InputMaybe<String_Comparison_Exp>
+  poolSupply?: InputMaybe<String_Comparison_Exp>
+  poolTerm?: InputMaybe<Numeric_Comparison_Exp>
+  positionID?: InputMaybe<Numeric_Comparison_Exp>
+  rewardDebt?: InputMaybe<String_Comparison_Exp>
+  shares?: InputMaybe<String_Comparison_Exp>
+  timestamp?: InputMaybe<Numeric_Comparison_Exp>
+  to?: InputMaybe<String_Comparison_Exp>
+  txBlockNumber?: InputMaybe<Numeric_Comparison_Exp>
+  txHash?: InputMaybe<String_Comparison_Exp>
+}
+
+/** Ordering options when selecting data from "logStakingV1_Lock". */
+export type LogStakingV1_Lock_Order_By = {
+  amount?: InputMaybe<Order_By>
+  deposit?: InputMaybe<Order_By>
+  maturity?: InputMaybe<Order_By>
+  poolBalance?: InputMaybe<Order_By>
+  poolExcessRatio?: InputMaybe<Order_By>
+  poolG?: InputMaybe<Order_By>
+  poolID?: InputMaybe<Order_By>
+  poolRewardsPerShare?: InputMaybe<Order_By>
+  poolSupply?: InputMaybe<Order_By>
+  poolTerm?: InputMaybe<Order_By>
+  positionID?: InputMaybe<Order_By>
+  rewardDebt?: InputMaybe<Order_By>
+  shares?: InputMaybe<Order_By>
+  timestamp?: InputMaybe<Order_By>
+  to?: InputMaybe<Order_By>
+  txBlockNumber?: InputMaybe<Order_By>
+  txHash?: InputMaybe<Order_By>
+}
+
+/** select columns of table "logStakingV1_Lock" */
+export enum LogStakingV1_Lock_Select_Column {
+  /** column name */
+  Amount = 'amount',
+  /** column name */
+  Deposit = 'deposit',
+  /** column name */
+  Maturity = 'maturity',
+  /** column name */
+  PoolBalance = 'poolBalance',
+  /** column name */
+  PoolExcessRatio = 'poolExcessRatio',
+  /** column name */
+  PoolG = 'poolG',
+  /** column name */
+  PoolId = 'poolID',
+  /** column name */
+  PoolRewardsPerShare = 'poolRewardsPerShare',
+  /** column name */
+  PoolSupply = 'poolSupply',
+  /** column name */
+  PoolTerm = 'poolTerm',
+  /** column name */
+  PositionId = 'positionID',
+  /** column name */
+  RewardDebt = 'rewardDebt',
+  /** column name */
+  Shares = 'shares',
+  /** column name */
+  Timestamp = 'timestamp',
+  /** column name */
+  To = 'to',
+  /** column name */
+  TxBlockNumber = 'txBlockNumber',
+  /** column name */
+  TxHash = 'txHash',
+}
+
+/** get all staking V1 PoolRewarded events */
+export type LogStakingV1_PoolRewarded = {
+  __typename?: 'logStakingV1_PoolRewarded'
+  balance: Scalars['String']
+  baseObligation: Scalars['String']
+  base_vAPR: Scalars['numeric']
+  excessObligation: Scalars['String']
+  poolID: Scalars['numeric']
+  to: Scalars['String']
+  txBlockNumber: Scalars['numeric']
+  txHash: Scalars['String']
+}
+
+/** Boolean expression to filter rows from the table "logStakingV1_PoolRewarded". All fields are combined with a logical 'AND'. */
+export type LogStakingV1_PoolRewarded_Bool_Exp = {
+  _and?: InputMaybe<Array<LogStakingV1_PoolRewarded_Bool_Exp>>
+  _not?: InputMaybe<LogStakingV1_PoolRewarded_Bool_Exp>
+  _or?: InputMaybe<Array<LogStakingV1_PoolRewarded_Bool_Exp>>
+  balance?: InputMaybe<String_Comparison_Exp>
+  baseObligation?: InputMaybe<String_Comparison_Exp>
+  base_vAPR?: InputMaybe<Numeric_Comparison_Exp>
+  excessObligation?: InputMaybe<String_Comparison_Exp>
+  poolID?: InputMaybe<Numeric_Comparison_Exp>
+  to?: InputMaybe<String_Comparison_Exp>
+  txBlockNumber?: InputMaybe<Numeric_Comparison_Exp>
+  txHash?: InputMaybe<String_Comparison_Exp>
+}
+
+/** Ordering options when selecting data from "logStakingV1_PoolRewarded". */
+export type LogStakingV1_PoolRewarded_Order_By = {
+  balance?: InputMaybe<Order_By>
+  baseObligation?: InputMaybe<Order_By>
+  base_vAPR?: InputMaybe<Order_By>
+  excessObligation?: InputMaybe<Order_By>
+  poolID?: InputMaybe<Order_By>
+  to?: InputMaybe<Order_By>
+  txBlockNumber?: InputMaybe<Order_By>
+  txHash?: InputMaybe<Order_By>
+}
+
+/** select columns of table "logStakingV1_PoolRewarded" */
+export enum LogStakingV1_PoolRewarded_Select_Column {
+  /** column name */
+  Balance = 'balance',
+  /** column name */
+  BaseObligation = 'baseObligation',
+  /** column name */
+  BaseVApr = 'base_vAPR',
+  /** column name */
+  ExcessObligation = 'excessObligation',
+  /** column name */
+  PoolId = 'poolID',
+  /** column name */
+  To = 'to',
+  /** column name */
+  TxBlockNumber = 'txBlockNumber',
+  /** column name */
+  TxHash = 'txHash',
 }
 
 /** Boolean expression to filter rows from the table "logStakingV1". All fields are combined with a logical 'AND'. */
@@ -208,6 +373,12 @@ export type Query_Root = {
   cnvData?: Maybe<CnvDataOutput>
   /** fetch data from the table: "logStakingV1" */
   logStakingV1: Array<LogStakingV1>
+  /** fetch data from the table: "logStakingV1_Lock" */
+  logStakingV1_Lock: Array<LogStakingV1_Lock>
+  /** fetch data from the table: "logStakingV1_Lock" using primary key columns */
+  logStakingV1_Lock_by_pk?: Maybe<LogStakingV1_Lock>
+  /** fetch data from the table: "logStakingV1_PoolRewarded" */
+  logStakingV1_PoolRewarded: Array<LogStakingV1_PoolRewarded>
   /** fetch data from the table: "logStakingV1" using primary key columns */
   logStakingV1_by_pk?: Maybe<LogStakingV1>
   /** fetch data from the table: "treasury" */
@@ -220,6 +391,26 @@ export type Query_RootLogStakingV1Args = {
   offset?: InputMaybe<Scalars['Int']>
   order_by?: InputMaybe<Array<LogStakingV1_Order_By>>
   where?: InputMaybe<LogStakingV1_Bool_Exp>
+}
+
+export type Query_RootLogStakingV1_LockArgs = {
+  distinct_on?: InputMaybe<Array<LogStakingV1_Lock_Select_Column>>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  order_by?: InputMaybe<Array<LogStakingV1_Lock_Order_By>>
+  where?: InputMaybe<LogStakingV1_Lock_Bool_Exp>
+}
+
+export type Query_RootLogStakingV1_Lock_By_PkArgs = {
+  txHash: Scalars['String']
+}
+
+export type Query_RootLogStakingV1_PoolRewardedArgs = {
+  distinct_on?: InputMaybe<Array<LogStakingV1_PoolRewarded_Select_Column>>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  order_by?: InputMaybe<Array<LogStakingV1_PoolRewarded_Order_By>>
+  where?: InputMaybe<LogStakingV1_PoolRewarded_Bool_Exp>
 }
 
 export type Query_RootLogStakingV1_By_PkArgs = {
@@ -238,6 +429,12 @@ export type Subscription_Root = {
   __typename?: 'subscription_root'
   /** fetch data from the table: "logStakingV1" */
   logStakingV1: Array<LogStakingV1>
+  /** fetch data from the table: "logStakingV1_Lock" */
+  logStakingV1_Lock: Array<LogStakingV1_Lock>
+  /** fetch data from the table: "logStakingV1_Lock" using primary key columns */
+  logStakingV1_Lock_by_pk?: Maybe<LogStakingV1_Lock>
+  /** fetch data from the table: "logStakingV1_PoolRewarded" */
+  logStakingV1_PoolRewarded: Array<LogStakingV1_PoolRewarded>
   /** fetch data from the table: "logStakingV1" using primary key columns */
   logStakingV1_by_pk?: Maybe<LogStakingV1>
   /** fetch data from the table: "treasury" */
@@ -250,6 +447,26 @@ export type Subscription_RootLogStakingV1Args = {
   offset?: InputMaybe<Scalars['Int']>
   order_by?: InputMaybe<Array<LogStakingV1_Order_By>>
   where?: InputMaybe<LogStakingV1_Bool_Exp>
+}
+
+export type Subscription_RootLogStakingV1_LockArgs = {
+  distinct_on?: InputMaybe<Array<LogStakingV1_Lock_Select_Column>>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  order_by?: InputMaybe<Array<LogStakingV1_Lock_Order_By>>
+  where?: InputMaybe<LogStakingV1_Lock_Bool_Exp>
+}
+
+export type Subscription_RootLogStakingV1_Lock_By_PkArgs = {
+  txHash: Scalars['String']
+}
+
+export type Subscription_RootLogStakingV1_PoolRewardedArgs = {
+  distinct_on?: InputMaybe<Array<LogStakingV1_PoolRewarded_Select_Column>>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  order_by?: InputMaybe<Array<LogStakingV1_PoolRewarded_Order_By>>
+  where?: InputMaybe<LogStakingV1_PoolRewarded_Bool_Exp>
 }
 
 export type Subscription_RootLogStakingV1_By_PkArgs = {
@@ -277,11 +494,11 @@ export type Timestamptz_Comparison_Exp = {
   _nin?: InputMaybe<Array<Scalars['timestamptz']>>
 }
 
-/** concave treasury assets */
+/** list of assets where value are updated with cronjob */
 export type Treasury = {
   __typename?: 'treasury'
   amount?: Maybe<Scalars['numeric']>
-  chainId: Scalars['String']
+  chainId?: Maybe<Scalars['String']>
   contract: Scalars['String']
   name: Scalars['String']
   rewards?: Maybe<Scalars['numeric']>
@@ -337,6 +554,22 @@ export enum Treasury_Select_Column {
   Value = 'value',
 }
 
+export type Get_Last_Base_VaprQueryVariables = Exact<{ [key: string]: never }>
+
+export type Get_Last_Base_VaprQuery = {
+  __typename?: 'query_root'
+  logStakingV1_PoolRewarded: Array<{ __typename?: 'logStakingV1_PoolRewarded'; base_vAPR: any }>
+}
+
+export type Get_Last_Poolid_VaprQueryVariables = Exact<{
+  poolID?: InputMaybe<Scalars['numeric']>
+}>
+
+export type Get_Last_Poolid_VaprQuery = {
+  __typename?: 'query_root'
+  logStakingV1_PoolRewarded: Array<{ __typename?: 'logStakingV1_PoolRewarded'; base_vAPR: any }>
+}
+
 export type Get_Amm_Cnv_PriceQueryVariables = Exact<{ [key: string]: never }>
 
 export type Get_Amm_Cnv_PriceQuery = {
@@ -353,15 +586,15 @@ export type Get_Stackingv1_Last100_EventsQuery = {
   __typename?: 'query_root'
   logStakingV1: Array<{
     __typename?: 'logStakingV1'
-    blockNumber?: any | null
+    blockNumber: any
     txHash: string
     poolID: any
     tokenID: any
-    sold?: boolean | null
-    from?: string | null
-    to?: string | null
+    sold: boolean
+    from: string
+    to: string
     amountLocked: any
-    lockedUntil?: any | null
+    lockedUntil: any
   }>
 }
 
@@ -373,15 +606,30 @@ export type Get_Stackingv1_By_Pool_IdQuery = {
   __typename?: 'query_root'
   logStakingV1: Array<{
     __typename?: 'logStakingV1'
-    blockNumber?: any | null
+    blockNumber: any
     txHash: string
     poolID: any
     tokenID: any
-    sold?: boolean | null
-    from?: string | null
-    to?: string | null
+    sold: boolean
+    from: string
+    to: string
     amountLocked: any
-    lockedUntil?: any | null
+    lockedUntil: any
+  }>
+}
+
+export type Get_Stakingv1_Last100_LockQueryVariables = Exact<{ [key: string]: never }>
+
+export type Get_Stakingv1_Last100_LockQuery = {
+  __typename?: 'query_root'
+  logStakingV1_Lock: Array<{
+    __typename?: 'logStakingV1_Lock'
+    txHash: string
+    txBlockNumber: any
+    poolID: any
+    positionID: any
+    to: string
+    amount: string
   }>
 }
 
@@ -393,7 +641,7 @@ export type Get_TreasuryQuery = {
     __typename?: 'treasury'
     updated_at: any
     contract: string
-    chainId: string
+    chainId?: string | null
     name: string
     amount?: any | null
     value?: any | null
@@ -401,6 +649,48 @@ export type Get_TreasuryQuery = {
   }>
 }
 
+export const Get_Last_Base_VaprDocument = `
+    query GET_LAST_BASE_VAPR {
+  logStakingV1_PoolRewarded {
+    base_vAPR
+  }
+}
+    `
+export const useGet_Last_Base_VaprQuery = <TData = Get_Last_Base_VaprQuery, TError = unknown>(
+  variables?: Get_Last_Base_VaprQueryVariables,
+  options?: UseQueryOptions<Get_Last_Base_VaprQuery, TError, TData>,
+) =>
+  useQuery<Get_Last_Base_VaprQuery, TError, TData>(
+    variables === undefined ? ['GET_LAST_BASE_VAPR'] : ['GET_LAST_BASE_VAPR', variables],
+    fetcher<Get_Last_Base_VaprQuery, Get_Last_Base_VaprQueryVariables>(
+      Get_Last_Base_VaprDocument,
+      variables,
+    ),
+    options,
+  )
+export const Get_Last_Poolid_VaprDocument = `
+    query GET_LAST_POOLID_VAPR($poolID: numeric) {
+  logStakingV1_PoolRewarded(
+    where: {poolID: {_eq: $poolID}}
+    order_by: {txBlockNumber: desc}
+    limit: 1
+  ) {
+    base_vAPR
+  }
+}
+    `
+export const useGet_Last_Poolid_VaprQuery = <TData = Get_Last_Poolid_VaprQuery, TError = unknown>(
+  variables?: Get_Last_Poolid_VaprQueryVariables,
+  options?: UseQueryOptions<Get_Last_Poolid_VaprQuery, TError, TData>,
+) =>
+  useQuery<Get_Last_Poolid_VaprQuery, TError, TData>(
+    variables === undefined ? ['GET_LAST_POOLID_VAPR'] : ['GET_LAST_POOLID_VAPR', variables],
+    fetcher<Get_Last_Poolid_VaprQuery, Get_Last_Poolid_VaprQueryVariables>(
+      Get_Last_Poolid_VaprDocument,
+      variables,
+    ),
+    options,
+  )
 export const Get_Amm_Cnv_PriceDocument = `
     query GET_AMM_CNV_PRICE {
   cnvData {
@@ -483,6 +773,35 @@ export const useGet_Stackingv1_By_Pool_IdQuery = <
       : ['GET_STACKINGV1_BY_POOL_ID', variables],
     fetcher<Get_Stackingv1_By_Pool_IdQuery, Get_Stackingv1_By_Pool_IdQueryVariables>(
       Get_Stackingv1_By_Pool_IdDocument,
+      variables,
+    ),
+    options,
+  )
+export const Get_Stakingv1_Last100_LockDocument = `
+    query GET_STAKINGV1_LAST100_LOCK {
+  logStakingV1_Lock {
+    txHash
+    txBlockNumber
+    poolID
+    positionID
+    to
+    amount
+  }
+}
+    `
+export const useGet_Stakingv1_Last100_LockQuery = <
+  TData = Get_Stakingv1_Last100_LockQuery,
+  TError = unknown,
+>(
+  variables?: Get_Stakingv1_Last100_LockQueryVariables,
+  options?: UseQueryOptions<Get_Stakingv1_Last100_LockQuery, TError, TData>,
+) =>
+  useQuery<Get_Stakingv1_Last100_LockQuery, TError, TData>(
+    variables === undefined
+      ? ['GET_STAKINGV1_LAST100_LOCK']
+      : ['GET_STAKINGV1_LAST100_LOCK', variables],
+    fetcher<Get_Stakingv1_Last100_LockQuery, Get_Stakingv1_Last100_LockQueryVariables>(
+      Get_Stakingv1_Last100_LockDocument,
       variables,
     ),
     options,

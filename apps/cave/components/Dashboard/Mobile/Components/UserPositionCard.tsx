@@ -11,10 +11,7 @@ interface NftPositionCardMobileProps {
 
 const UserPositionCardMobile = (props: NftPositionCardMobileProps) => {
   const { contract } = props
-  const maturity = contract && contract.maturity
-  const poolID = contract && contract.poolID
-  const shares = contract && contract.shares
-  const rewardDebt = contract && contract.rewardDebt
+  const { maturity, poolID, shares, rewardDebt } = contract
 
   const sharesDecimals = parseInt(shares?._hex, 16) / 1000000000000000000
   const gained = parseInt(rewardDebt?._hex, 16) / 1000000000000000000
@@ -23,7 +20,7 @@ const UserPositionCardMobile = (props: NftPositionCardMobileProps) => {
   const currentData = new Date()
   const redeemIn = dateToRedeem.getTime() - currentData.getTime()
   return (
-    <Card width={'358px'} variant="secondary" height={'660px'}>
+    <Card maxWidth={'358px'} variant="secondary" height={'660px'}>
       <Flex direction={'column'} bg={'#31293011'} width="full" flex={1}>
         <Flex
           bg={'linear-gradient(223.18deg, #19394C 27.18%, #0A161F 96.11%)'}

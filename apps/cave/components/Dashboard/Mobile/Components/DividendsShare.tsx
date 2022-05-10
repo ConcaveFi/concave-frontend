@@ -1,19 +1,19 @@
 import { SpinIcon, SpinnerIcon } from '@concave/icons'
 import { Button, Card, Flex, FlexProps, keyframes, Spinner, Text } from '@concave/ui'
 
-interface DividendsShareMobileProps extends FlexProps {
+interface DividendsShareMobileProps {
   totalLocked: number
-  statusData: { isLoading; success; notConnected }
+  status: { isLoading; notConnected }
 }
 
 const spin = keyframes({
   '0%': { transform: 'rotate(0deg)' },
   '100%': { transform: 'rotate(360deg)' },
 })
-const DividendsShareMobile: React.FC<DividendsShareMobileProps> = ({ ...props }) => {
+const DividendsShareMobile = (props: DividendsShareMobileProps) => {
   const spinnerStyles = { animation: `${spin} 2s linear infinite`, size: 'sm' }
-  const { statusData } = props
-  const { isLoading, success, notConnected } = statusData
+  const { status } = props
+  const { isLoading, notConnected } = status
   const totalLocked = notConnected
     ? '--.--.--.--'
     : isLoading

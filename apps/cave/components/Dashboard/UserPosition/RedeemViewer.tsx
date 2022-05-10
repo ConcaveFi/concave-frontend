@@ -11,7 +11,7 @@ const RedeemCardViewer = (props: RedeemCardViewerProps) => {
   return (
     <Flex
       flex={1}
-      height={'50px'}
+      height={{ lg: '50px', md: '90px' }}
       maxHeight="100px"
       direction={{ lg: 'row', md: 'column' }}
       alignItems="center"
