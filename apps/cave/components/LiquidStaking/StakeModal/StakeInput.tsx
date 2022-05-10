@@ -109,7 +109,7 @@ function StakeInput(props) {
             <Text color="text.low" fontSize="sm" fontWeight="bold">
               Balance: {(+cnvBalance.data?.formatted).toFixed(2)}
             </Text>
-            <Button textColor="blue.500" onClick={setMax}>
+            <Button textColor="blue.500" onClick={setMax} disabled={!cnvBalance.data}>
               Max
             </Button>
           </HStack>

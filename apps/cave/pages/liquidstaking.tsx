@@ -57,7 +57,6 @@ function LiquidStaking() {
     setTextAlign(isLargerThan1100 ? 'justify' : 'center')
     setGuideGap(isLargerThan1100 ? 24 : 7)
     setConteinerHeight(isLargerThan1100 ? '' : '1550px')
-    console.log('teste')
   }, [isLargerThan1100])
 
   return (

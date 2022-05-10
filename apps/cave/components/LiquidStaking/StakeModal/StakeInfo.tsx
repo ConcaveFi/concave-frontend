@@ -60,9 +60,10 @@ function StakeInfo(props: any) {
         </Text>
 
         <Text mt={5} color="text.low" fontSize="sm" fontWeight="semibold">
-          Redeem Date: {props.period}
+          {/* Redeem Date: {props.period} */}
+          Redeem Date:{' '}
+          {addDays(Date(), periodToDaysMapping[`${props.period}`]).toISOString().slice(0, 10)}
         </Text>
-        {/* {addDays(Date(), periodToDaysMapping[`${props.period}`]).toISOString().slice(0, 10)} */}
       </Box>
 
       <Stack mt={4}>
