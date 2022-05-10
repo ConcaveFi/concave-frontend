@@ -3,11 +3,11 @@ import { useState } from 'react'
 
 interface UserDividendCardProps {
   totalLocked: number
-  statusData: { isLoading; notConnected }
+  status: { isLoading; notConnected }
 }
 const UserDividendCard = (props: UserDividendCardProps) => {
-  const { statusData } = props
-  const { isLoading, notConnected } = statusData
+  const { status } = props
+  const { isLoading, notConnected } = status
 
   const totalLocked = notConnected
     ? '--.--.--'

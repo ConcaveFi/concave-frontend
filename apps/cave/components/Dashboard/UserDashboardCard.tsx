@@ -2,28 +2,35 @@ import { Box, Button, Card, Collapse, Flex, FlexProps, Spinner, Text } from '@co
 import UserPositionCard from './UserPositionCard'
 import { useRouter } from 'next/router'
 import UserDividendCard from './UserDividendCard'
+import { Connector } from 'wagmi'
 
-interface UserDashBoardCardProps extends FlexProps {
-  positions: any
-  totallocked: any
-  statusdata: {
-    isLoading: boolean
-    notConnected: boolean
+interface UserDashBoardCardProps {
+  data: {
+    status: {
+      isLoading: boolean
+      notConnected: boolean
+    }
+    positions: {
+      totalLocked: number
+      userPositions: any[]
+    }
   }
 }
 
-const UserDashboardCard: React.FC<UserDashBoardCardProps> = ({ ...props }) => {
-  const { positions, totallocked, statusdata } = props
-  const { isLoading, notConnected } = statusdata
+const UserDashboardCard = (props: UserDashBoardCardProps) => {
+  const { data } = props
+  const { positions, status } = data
+  const { userPositions, totalLocked } = positions
+  const { isLoading, notConnected } = status
 
-  const userPositionsComponent = positions.map((contract, index) => (
+  const userPositionsComponent = userPositions.map((contract, index) => (
     <UserPositionCard key={index} contract={contract} />
   ))
 
-  const hasPositions = positions.length !== 0
+  const hasPositions = userPositions.length !== 0
 
   return (
-    <Flex {...props}>
+    <Flex display={{ lg: 'flex', md: 'flex', sm: 'none', base: 'none' }}>
       <Card
         p={3}
         gap={2}
@@ -45,7 +52,7 @@ const UserDashboardCard: React.FC<UserDashBoardCardProps> = ({ ...props }) => {
             maxHeight={'500px'}
           >
             <Flex direction="row" gap={4} position="relative" mt={1}>
-              <UserDividendCard statusData={statusdata} totalLocked={totallocked} />
+              <UserDividendCard status={status} totalLocked={totalLocked} />
             </Flex>
           </Box>
         </Flex>

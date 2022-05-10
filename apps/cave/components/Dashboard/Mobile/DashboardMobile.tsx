@@ -10,29 +10,34 @@ const spin = keyframes({
   '100%': { transform: 'rotate(360deg)' },
 })
 
-interface DashboardMobileProps extends FlexProps {
-  usercontract: any
-  totallocked: any
-  statusdata: {
-    isLoading: boolean
-    notConnected: boolean
+interface DashboardMobileProps {
+  data: {
+    status: {
+      isLoading: boolean
+      notConnected: boolean
+    }
+    positions: {
+      totalLocked: number
+      userPositions: any[]
+    }
   }
 }
 
-const DashboardMobile: React.FC<DashboardMobileProps> = ({ ...props }) => {
-  const { usercontract, totallocked, statusdata } = props
-  const { isLoading, notConnected } = statusdata
-  const [isAnimating, setIsAnimating] = useState(false)
+const DashboardMobile = (props: DashboardMobileProps) => {
+  const { data } = props
+  const { status, positions } = data
+  const { isLoading, notConnected } = status
+  const { userPositions, totalLocked } = positions
 
   const userPosComps =
-    usercontract &&
-    usercontract.map((contract, index) => (
+    userPositions &&
+    userPositions.map((contract, index) => (
       <UserPositionCardMobile key={index} contract={contract} />
     ))
 
   return (
-    <Flex direction={'column'} align="center" {...props}>
-      <DividendsShareMobile statusData={statusdata} totalLocked={totallocked} />
+    <Flex direction={'column'} align="center" display={{ lg: 'none', md: 'none', sm: 'flex' }}>
+      <DividendsShareMobile status={status} totalLocked={totalLocked} />
       <Box
         maxHeight={'660px'}
         overflowY="auto"
@@ -45,19 +50,11 @@ const DashboardMobile: React.FC<DashboardMobileProps> = ({ ...props }) => {
         rounded={!isLoading && '3xl'}
         gap={4}
       >
-        <Collapse in={!isLoading && !isAnimating}>
+        <Collapse in={!isLoading}>
           <VStack>{userPosComps}</VStack>
         </Collapse>
-        <LoadingPositions
-          in={isLoading && !isAnimating}
-          onStart={() => setIsAnimating(true)}
-          onComplete={() => setIsAnimating(false)}
-        />
-        <NotConnected
-          in={notConnected && !isAnimating}
-          onStart={() => setIsAnimating(true)}
-          onComplete={() => setIsAnimating(false)}
-        />
+        <LoadingPositions in={isLoading} />
+        <NotConnected in={notConnected} />
       </Box>
     </Flex>
   )
@@ -81,18 +78,12 @@ const scrollBar = {
 
 interface LoadingPositionsProps {
   in: boolean
-  onStart: () => void
-  onComplete: () => void
 }
 const LoadingPositions = (props: LoadingPositionsProps) => {
   const spinnerStyles = { animation: `${spin} 2s linear infinite`, size: 'sm' }
 
   return (
-    <Collapse
-      in={props.in}
-      onAnimationStart={() => props.onStart()}
-      onAnimationComplete={() => props.onComplete()}
-    >
+    <Collapse in={props.in}>
       <Box
         height={'140px'}
         width="360px"
@@ -120,16 +111,10 @@ const LoadingPositions = (props: LoadingPositionsProps) => {
 }
 interface NotConnectedProps {
   in: boolean
-  onStart: () => void
-  onComplete: () => void
 }
 const NotConnected = (props: NotConnectedProps) => {
   return (
-    <Collapse
-      in={props.in}
-      onAnimationStart={() => props.onStart()}
-      onAnimationComplete={() => props.onComplete()}
-    >
+    <Collapse in={props.in}>
       <Box
         height={'140px'}
         width="360px"
