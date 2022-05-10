@@ -3,3 +3,13 @@ query GET_LAST_BASE_VAPR {
     base_vAPR
   }
 }
+
+query GET_LAST_POOLID_VAPR($poolID: numeric) {
+  logStakingV1_PoolRewarded(
+    where: { poolID: { _eq: $poolID } }
+    order_by: { txBlockNumber: desc }
+    limit: 1
+  ) {
+    base_vAPR
+  }
+}
