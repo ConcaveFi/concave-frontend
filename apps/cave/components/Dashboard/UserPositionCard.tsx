@@ -32,9 +32,8 @@ const UserPositionCard = (props: NftPositionCardProps) => {
     <Box
       pos={'relative'}
       borderRadius={'2xl'}
-      width={{ lg: '700px', md: '520px' }}
+      // width={{ lg: '700px', md: '520px' }}
       maxHeight={{ lg: '300px', md: '400px' }}
-      maxWidth={'714px'}
       bg={'linear-gradient(223.18deg, #19394C 27.18%, #0A161F 96.11%)'}
       mr={1}
       mb={3}
