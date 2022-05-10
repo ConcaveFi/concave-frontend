@@ -7,24 +7,24 @@ import { useRouter } from 'next/router'
 import { useState } from 'react'
 
 interface UserDashBoardCardProps extends FlexProps {
-  usercontract: any
+  positions: any
   totallocked: any
   statusdata: {
     isLoading: boolean
     notConnected: boolean
-    success: boolean
   }
 }
 
 const UserDashboardCard: React.FC<UserDashBoardCardProps> = ({ ...props }) => {
-  const { usercontract, totallocked, statusdata } = props
-  const { isLoading, success, notConnected } = statusdata
+  const { positions, totallocked, statusdata } = props
+  const { isLoading, notConnected } = statusdata
 
-  const userPosComps =
-    usercontract &&
-    usercontract.map((contract, index) => <UserPositionCard key={index} contract={contract} />)
+  const userPositionsComponent = positions.map((contract, index) => (
+    <UserPositionCard key={index} contract={contract} />
+  ))
 
-  const hasPositions = usercontract !== null
+  const hasPositions = positions.length !== 0
+
   return (
     <Flex position={'absolute'} {...props}>
       <Card
@@ -53,7 +53,7 @@ const UserDashboardCard: React.FC<UserDashBoardCardProps> = ({ ...props }) => {
           </Box>
         </Flex>
 
-        <Collapse in={usercontract !== null}>
+        <Collapse in={hasPositions}>
           <Box
             pos="relative"
             h="100%"
@@ -66,7 +66,7 @@ const UserDashboardCard: React.FC<UserDashBoardCardProps> = ({ ...props }) => {
             shadow="down"
             __css={scrollBar}
           >
-            {userPosComps}
+            {userPositionsComponent}
           </Box>
         </Collapse>
 

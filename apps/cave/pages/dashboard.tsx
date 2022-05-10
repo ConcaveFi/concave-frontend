@@ -23,7 +23,8 @@ export default function Dashboard() {
     setMobileScale(isLargerThan350 ? '' : 'scale(0.8) translateY(-90px)')
   }, [isLargerThan350])
 
-  const { userContracts, totalLocked, statusData } = useDashBoardState()
+  const { positions, status } = useDashBoardState()
+  const { userPositions, totalLocked } = positions
   return (
     <Flex
       transform={mobileScale}
@@ -45,15 +46,15 @@ export default function Dashboard() {
 
       <Flex justify={'center'} position="relative">
         <UserDashboardCard
-          statusdata={statusData}
+          statusdata={status}
           totallocked={totalLocked}
-          usercontract={userContracts}
+          positions={userPositions}
           display={defaultDisplay}
         />
         <DashboardMobile
-          statusdata={statusData}
+          statusdata={status}
           totallocked={totalLocked}
-          usercontract={userContracts}
+          usercontract={userPositions}
           display={mobileDisplay}
         />
       </Flex>

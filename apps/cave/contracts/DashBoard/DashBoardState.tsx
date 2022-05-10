@@ -60,58 +60,52 @@ export async function getUserPositions(address: string, netWorkId: number) {
 
 export const useDashBoardState = () => {
   const [{ data: wallet, loading }, connect] = useConnect()
-  const [{ data: account, error }] = useAccount()
+  const [{ data: account, error: accountError }] = useAccount()
+
   const netWorkId = useCurrentSupportedNetworkId()
-  const [userContracts, setUserContracts] = useState(null)
-  const [totalLocked, setTotalLocked] = useState(undefined)
-  const [status, setStatus] = useState<'loading' | 'notConnected' | 'success'>('loading')
+
+  const [userPositions, setUserPositions] = useState([])
+  const [totalLocked, setTotalLocked] = useState(0)
+  const [status, setStatus] = useState<'loading' | 'notConnected' | 'loaded'>('loading')
 
   useEffect(() => {
-    if (wallet.connected && userContracts === null) {
-      getUserPositions(account.address, netWorkId)
+    setStatus('loading')
+    if (wallet.connected) {
+      getUserPositions(account?.address, netWorkId)
         .then((contract) => {
-          if (!contract) setTotalLocked(0)
-
-          setUserContracts(contract)
+          setStatus('loaded')
+          setUserPositions(contract)
           setTotalLocked(getTotalLocked(contract))
-          setStatus('success')
         })
-        .catch(() => {
-          setStatus('success')
-          setUserContracts(null)
-          setTotalLocked(0)
-        })
+        .catch(() => {})
     }
-  }, [account])
-
-  useEffect(() => {
     if (!loading) {
       if (!wallet.connected) setStatus('notConnected')
     }
-  }, [loading])
+  }, [loading, netWorkId])
 
   const isLoading = status === 'loading'
   const notConnected = status === 'notConnected'
-  const success = status === 'success'
 
   const statusData = {
     isLoading,
     notConnected,
-    success,
   }
 
   return {
-    statusData,
-    totalLocked,
+    status: statusData,
+    positions: {
+      totalLocked,
+      userPositions,
+    },
     account,
     netWorkId,
-    userContracts,
-    setUserContracts,
+    setUserPositions,
   }
 }
 
 function getTotalLocked(contract: nftContract[]) {
-  if (!contract) return undefined
+  if (!contract) return 0
   const totalLocked = contract?.map((current) => {
     if (current?.shares === undefined) return 0
     const { shares } = current

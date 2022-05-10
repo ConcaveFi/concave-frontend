@@ -18,10 +18,7 @@ interface NftPositionCardProps {
 
 const UserPositionCard = (props: NftPositionCardProps) => {
   const { contract } = props
-  const maturity = contract && contract.maturity
-  const poolID = contract && contract.poolID
-  const shares = contract && contract.shares
-  const rewardDebt = contract && contract.rewardDebt
+  const { maturity, poolID, shares, rewardDebt } = contract
 
   const sharesDecimals = parseInt(shares?._hex, 16) / 1000000000000000000
   const gained = parseInt(rewardDebt?._hex, 16) / 1000000000000000000
@@ -30,8 +27,6 @@ const UserPositionCard = (props: NftPositionCardProps) => {
   const currentData = new Date()
   const redeemIn = dateToRedeem.getTime() - currentData.getTime()
   const [active, setActive] = useState(true)
-  const [inAnimation, setInAnimation] = useState(false)
-  console.log(inAnimation)
 
   return (
     <Box

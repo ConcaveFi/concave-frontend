@@ -3,7 +3,7 @@ import { Button, Card, Flex, FlexProps, keyframes, Spinner, Text } from '@concav
 
 interface DividendsShareMobileProps extends FlexProps {
   totalLocked: number
-  statusData: { isLoading; success; notConnected }
+  statusData: { isLoading; notConnected }
 }
 
 const spin = keyframes({
@@ -13,7 +13,7 @@ const spin = keyframes({
 const DividendsShareMobile: React.FC<DividendsShareMobileProps> = ({ ...props }) => {
   const spinnerStyles = { animation: `${spin} 2s linear infinite`, size: 'sm' }
   const { statusData } = props
-  const { isLoading, success, notConnected } = statusData
+  const { isLoading, notConnected } = statusData
   const totalLocked = notConnected
     ? '--.--.--.--'
     : isLoading

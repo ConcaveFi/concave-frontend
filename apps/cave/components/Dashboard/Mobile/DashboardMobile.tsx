@@ -16,13 +16,12 @@ interface DashboardMobileProps extends FlexProps {
   statusdata: {
     isLoading: boolean
     notConnected: boolean
-    success: boolean
   }
 }
 
 const DashboardMobile: React.FC<DashboardMobileProps> = ({ ...props }) => {
   const { usercontract, totallocked, statusdata } = props
-  const { isLoading, notConnected, success } = statusdata
+  const { isLoading, notConnected } = statusdata
   const [isAnimating, setIsAnimating] = useState(false)
 
   const userPosComps =
@@ -30,8 +29,6 @@ const DashboardMobile: React.FC<DashboardMobileProps> = ({ ...props }) => {
     usercontract.map((contract, index) => (
       <UserPositionCardMobile key={index} contract={contract} />
     ))
-
-  console.log(success)
 
   return (
     <Flex direction={'column'} align="center" {...props}>
@@ -43,12 +40,12 @@ const DashboardMobile: React.FC<DashboardMobileProps> = ({ ...props }) => {
         position="relative"
         css={scrollBar}
         mt={3}
-        borderBottom={success && '4px solid skyblue'}
-        borderTop={success && '4px solid skyblue'}
-        rounded={success && '3xl'}
+        borderBottom={!isLoading && '4px solid skyblue'}
+        borderTop={!isLoading && '4px solid skyblue'}
+        rounded={!isLoading && '3xl'}
         gap={4}
       >
-        <Collapse in={success && !isAnimating}>
+        <Collapse in={!isLoading && !isAnimating}>
           <VStack>{userPosComps}</VStack>
         </Collapse>
         <LoadingPositions
