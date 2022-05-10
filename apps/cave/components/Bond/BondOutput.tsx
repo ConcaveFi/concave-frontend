@@ -12,10 +12,18 @@ export function BondOutput({
   currency?: Currency
   disabled?: true
 } & FlexProps) {
-  const styles = useMultiStyleConfig('Input', { variant: 'primary', size: 'large' })
+  const styles = useMultiStyleConfig('Input', {
+    variant: 'primary',
+    size: 'large',
+  })
 
   return (
-    <Stack sx={{ ...styles.field, bg: 'none' }} align="end" justify="space-between" spacing={0}>
+    <Stack
+      sx={{ ...styles.field, bg: 'none', shadow: 'Up Big' }}
+      align="end"
+      justify="space-between"
+      spacing={0}
+    >
       <HStack justify="space-between" align="start">
         <NumericInput decimalScale={5} disabled={disabled} w="100%" value={value} />
         <SelectCurrencyButton selected={currency} onClick={() => null} isDisabled />
