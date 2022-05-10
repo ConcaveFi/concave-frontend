@@ -131,13 +131,15 @@ export default function Bond() {
                 }%`}
                 vestingTerm={`${termLength} Days`}
               />
-              {!bondSigma ? (
+              {!userAddress ? (
+                <>Wallet not connected</>
+              ) : !bondSigma ? (
                 <>
-                  Checking wallet...
+                  Checking positions...
                   <SpinIcon __css={spinnerStyles} width={'10'} height={'10'} />
                 </>
               ) : (
-                <></>
+                ''
               )}
               <Box w="100%">
                 <Collapse in={showUserPosition}>
