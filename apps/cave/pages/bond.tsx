@@ -114,7 +114,7 @@ export default function Bond() {
             <Card
               variant="secondary"
               borderWidth={1}
-              px={5}
+              px={6}
               py={20}
               shadow="Glow Inner"
               gap={10}
@@ -154,6 +154,8 @@ export default function Bond() {
                   const batchRedeemIDArray = bondSigma.batchRedeemArray
                   redeemBondBatch(networkId, batchRedeemIDArray, userAddress, signer)
                 }}
+                largeFont
+                setBottom
               ></Redeem>
             </Card>
           </Box>
