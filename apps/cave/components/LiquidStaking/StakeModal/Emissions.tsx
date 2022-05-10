@@ -131,8 +131,7 @@ function Emissions(props: any) {
             {props.vaprText}
           </Text>
           <Text fontSize="lg" fontWeight="bold" mb="2">
-            {/* {props.vapr} % */}
-            Calculating
+            {props.vapr.toFixed(2)} %
           </Text>
           <Tooltip
             label="Total vAPR aggregates rewards associated with each staking position including rewards from bonding activity, base emissions and the quarterly dividend."
