@@ -156,6 +156,7 @@ export default function Bond() {
                 }}
                 largeFont
                 setBottom
+                customHeight
               ></Redeem>
             </Card>
           </Box>
