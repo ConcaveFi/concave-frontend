@@ -25,3 +25,14 @@ query GET_STACKINGV1_BY_POOL_ID($poolID: numeric_comparison_exp) {
     lockedUntil
   }
 }
+
+query GET_STAKINGV1_LAST100_LOCK {
+  logStakingV1_Lock {
+    txHash
+    txBlockNumber
+    poolID
+    positionID
+    to
+    amount
+  }
+}

@@ -4,7 +4,7 @@ import { concaveProvider } from 'lib/providers'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { useNetwork } from 'wagmi'
-import { useQueryState } from 'next-usequerystate'
+// import { useQueryState } from 'next-usequerystate'
 
 const getAddressOrSymbol = (currency: Currency) => {
   if (!currency) return undefined
