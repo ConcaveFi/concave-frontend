@@ -29,11 +29,9 @@ const DashboardMobile = (props: DashboardMobileProps) => {
   const { isLoading, notConnected } = status
   const { userPositions, totalLocked } = positions
 
-  const userPosComps =
-    userPositions &&
-    userPositions.map((contract, index) => (
-      <UserPositionCardMobile key={index} contract={contract} />
-    ))
+  const userPosComps = userPositions.map((contract, index) => (
+    <UserPositionCardMobile key={index} contract={contract} />
+  ))
 
   return (
     <Flex direction={'column'} align="center" display={{ lg: 'none', md: 'none', sm: 'flex' }}>
