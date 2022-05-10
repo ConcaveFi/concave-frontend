@@ -1,7 +1,7 @@
 import { isAddress } from 'ethers/lib/utils'
 import { ChainId, Currency, Fetcher, NATIVE, Token } from '@concave/gemswap-sdk'
 import { concaveProvider } from 'lib/providers'
-import { useRouter } from 'next/router'
+import Router from 'next/router'
 import { useEffect } from 'react'
 
 const getAddressOrSymbol = (currency: Currency) => {
@@ -9,7 +9,7 @@ const getAddressOrSymbol = (currency: Currency) => {
   return currency.isNative ? currency.symbol : currency.wrapped.address
 }
 
-const currencyToJson = ({ chainId, wrapped, decimals, symbol, name, isNative }: Currency) =>
+export const currencyToJson = ({ chainId, wrapped, decimals, symbol, name, isNative }: Currency) =>
   chainId && {
     chainId,
     wrapped: {
@@ -21,7 +21,14 @@ const currencyToJson = ({ chainId, wrapped, decimals, symbol, name, isNative }: 
     isNative,
   }
 
-const currencyFromJson = ({ chainId, wrapped, decimals, symbol, name, isNative }: Currency) => {
+export const currencyFromJson = ({
+  chainId,
+  wrapped,
+  decimals,
+  symbol,
+  name,
+  isNative,
+}: Currency) => {
   if (isNative) return NATIVE[chainId]
   return new Token(chainId, wrapped.address, decimals, symbol, name)
 }
@@ -34,19 +41,19 @@ const fetchTokenOrNativeData = (addressOrSymbol: string, chainId: ChainId) => {
 }
 
 export const fetchCurrenciesFromQuery = async (query) => {
-  const { token0, token1, chainId = 1 } = query
-  const _chainId: ChainId = [ChainId.ETHEREUM, ChainId.ROPSTEN].includes(chainId) ? chainId : 1
+  const { currency0, currency1, chainId = 1 } = query
+  const _chainId: ChainId = [ChainId.ETHEREUM, ChainId.ROPSTEN].includes(+chainId) ? chainId : 1
 
-  const [_token0, _token1] = await Promise.all([
-    fetchTokenOrNativeData(token0, _chainId),
-    fetchTokenOrNativeData(token1, _chainId),
+  const [_currency0, _currency1] = await Promise.all([
+    fetchTokenOrNativeData(currency0, _chainId),
+    fetchTokenOrNativeData(currency1, _chainId),
   ])
 
-  return [_token0, _token1].map(currencyToJson)
+  return [_currency0, _currency1]
 }
 
-const stringSerializeCurrency = (currency: Currency) =>
-  currency.isNative ? `${currency.symbol}-${currency.chainId}` : currency.wrapped.address
+export const stringSerializeCurrencies = (currencies: Currency[]) =>
+  currencies.reduce((a, c) => a + (c.isNative ? `${c.symbol}-${c.chainId}` : c.wrapped.address), '')
 
 /*
   keeps track of two tokens using the url query params
@@ -55,13 +62,13 @@ const stringSerializeCurrency = (currency: Currency) =>
   chainId=<1 for mainnet 3 for ropsten...>
 */
 export const useSyncQueryCurrencies = (currencies: [Currency, Currency]) => {
-  const router = useRouter()
+  // const router = useRouter()
 
   useEffect(() => {
-    console.log('replace')
     const query = { chainId: currencies[0].chainId || currencies[1].chainId } as any
     if (currencies[0]) query.currency0 = getAddressOrSymbol(currencies[0])
     if (currencies[1]) query.currency1 = getAddressOrSymbol(currencies[1])
-    router.replace({ query }, undefined, { shallow: true })
-  }, [stringSerializeCurrency(currencies[0]), stringSerializeCurrency(currencies[1])])
+    Router.replace({ query }, undefined, { shallow: true })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stringSerializeCurrencies(currencies)])
 }
