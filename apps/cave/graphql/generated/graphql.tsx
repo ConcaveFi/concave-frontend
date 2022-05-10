@@ -571,6 +571,13 @@ export type Get_Last_Base_VaprQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type Get_Last_Base_VaprQuery = { __typename?: 'query_root', logStakingV1_PoolRewarded: Array<{ __typename?: 'logStakingV1_PoolRewarded', base_vAPR: any }> };
 
+export type Get_Last_Poolid_VaprQueryVariables = Exact<{
+  poolID?: InputMaybe<Scalars['numeric']>;
+}>;
+
+
+export type Get_Last_Poolid_VaprQuery = { __typename?: 'query_root', logStakingV1_PoolRewarded: Array<{ __typename?: 'logStakingV1_PoolRewarded', base_vAPR: any }> };
+
 export type Get_Amm_Cnv_PriceQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -616,6 +623,29 @@ export const useGet_Last_Base_VaprQuery = <
     useQuery<Get_Last_Base_VaprQuery, TError, TData>(
       variables === undefined ? ['GET_LAST_BASE_VAPR'] : ['GET_LAST_BASE_VAPR', variables],
       fetcher<Get_Last_Base_VaprQuery, Get_Last_Base_VaprQueryVariables>(Get_Last_Base_VaprDocument, variables),
+      options
+    );
+export const Get_Last_Poolid_VaprDocument = `
+    query GET_LAST_POOLID_VAPR($poolID: numeric) {
+  logStakingV1_PoolRewarded(
+    where: {poolID: {_eq: $poolID}}
+    order_by: {txBlockNumber: desc}
+    limit: 1
+  ) {
+    base_vAPR
+  }
+}
+    `;
+export const useGet_Last_Poolid_VaprQuery = <
+      TData = Get_Last_Poolid_VaprQuery,
+      TError = unknown
+    >(
+      variables?: Get_Last_Poolid_VaprQueryVariables,
+      options?: UseQueryOptions<Get_Last_Poolid_VaprQuery, TError, TData>
+    ) =>
+    useQuery<Get_Last_Poolid_VaprQuery, TError, TData>(
+      variables === undefined ? ['GET_LAST_POOLID_VAPR'] : ['GET_LAST_POOLID_VAPR', variables],
+      fetcher<Get_Last_Poolid_VaprQuery, Get_Last_Poolid_VaprQueryVariables>(Get_Last_Poolid_VaprDocument, variables),
       options
     );
 export const Get_Amm_Cnv_PriceDocument = `
