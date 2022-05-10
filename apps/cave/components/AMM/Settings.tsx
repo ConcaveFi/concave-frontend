@@ -146,13 +146,12 @@ const MAX_SLIPPAGE = 50
 
 const useSettings = () => {
   const [deadline, setDeadline] = useState(defaultSettings.deadline)
-  const [slippageTolerance, setSlippageTolerance] = useReducer(
-    (oldValue, value: string) =>
-      +value < MAX_SLIPPAGE && +value > 0
-        ? { value, percent: +value && toPercent(value) }
-        : oldValue,
-    defaultSettings.slippageTolerance,
-  )
+  const [slippageTolerance, setSlippageTolerance] = useReducer((oldValue, value: string) => {
+    if (!value) return { value: '', percent: toPercent('0') }
+    return +value < MAX_SLIPPAGE && +value > 0
+      ? { value, percent: +value && toPercent(value) }
+      : { ...oldValue }
+  }, defaultSettings.slippageTolerance)
   const [multihops, { toggle: toggleMultihops }] = useBoolean(defaultSettings.multihops)
   const [expertMode, { toggle: toggleExpertMode }] = useBoolean(defaultSettings.expertMode)
 
