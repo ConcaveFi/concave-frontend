@@ -1,0 +1,5 @@
+query GET_LAST_BASE_VAPR {
+  logStakingV1_PoolRewarded {
+    base_vAPR
+  }
+}
