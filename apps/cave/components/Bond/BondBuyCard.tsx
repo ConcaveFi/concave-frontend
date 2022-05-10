@@ -66,7 +66,16 @@ export function BondBuyCard() {
   }, [networkId, userAddress])
 
   return (
-    <Card p={6} gap={2} variant="primary" h="fit-content" shadow="Block Up" w="100%" maxW="420px">
+    <Card
+      p={6}
+      gap={2}
+      variant="primary"
+      h="fit-content"
+      shadow="Block Up"
+      w="100%"
+      maxW="430px"
+      height="386px"
+    >
       <BondInput
         currencyAmountIn={amountIn}
         onChangeAmount={(v) => {
