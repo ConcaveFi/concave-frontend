@@ -1,0 +1,14 @@
+version: 2
+updates:
+  - package-ecosystem: 'yarn'
+    directory: '/'
+    open-pull-requests-limit: 3
+    reviewers:
+      - 'ConcaveFi/frontend'
+    schedule:
+      interval: 'daily'
+      time: '04:00'
+    labels:
+      - "yarn"
+      - "dependencies"
+    target-branch: 'develop'
