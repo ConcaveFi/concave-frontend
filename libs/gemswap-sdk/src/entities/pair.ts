@@ -183,14 +183,6 @@ export class Pair {
         this.reserve1.quotient,
       )
       liquidity = JSBI.lessThanOrEqual(amount0, amount1) ? amount0 : amount1
-
-      console.log({
-        amount0: amount0.toString(),
-        amount1: amount1.toString(),
-        liquidity: liquidity.toString(),
-        totalSupply: totalSupply.quotient.toString(),
-        kLast: sqrt(JSBI.multiply(this.tokenAmounts[0].quotient, this.tokenAmounts[1].quotient)),
-      })
     }
     if (!JSBI.greaterThan(liquidity, ZERO)) {
       throw new InsufficientInputAmountError()
@@ -255,8 +247,8 @@ export class Pair {
         currencyAmount1.currency.chainId,
         virtualAddress,
         18,
-        `Gemswap | ${currencyAmount1.currency.symbol}-${currencyAmount2.currency.symbol}`,
-        `Gemswap Pair ${currencyAmount1.currency.symbol}-${currencyAmount2.currency.symbol}`,
+        `Concave LP`,
+        `Concave LP | ${currencyAmount1.currency.symbol}-${currencyAmount2.currency.symbol}`,
       )
       return new Pair(currencyAmount1.wrapped, currencyAmount2.wrapped, liquidityToken)
     } catch {
