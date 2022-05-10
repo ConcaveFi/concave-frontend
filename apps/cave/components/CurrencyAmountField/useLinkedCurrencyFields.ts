@@ -14,17 +14,18 @@ export const useLinkedCurrencyFields = (
 
   const onChangeField = useCallback(
     (field: keyof typeof initialFields) => (newAmount: CurrencyAmount<Currency>) => {
-      if (newAmount.currency.equals(currencies[field])) return onChangeAmount(newAmount, field)
+      if (currencies[field]?.equals(newAmount.currency)) return onChangeAmount(newAmount, field)
 
       const otherField = field === 'first' ? 'second' : 'first'
 
       // switch currencies not amounts (1 ETH : 200 DAI -> 1 DAI : 200 ETH)
-      if (currencies[otherField].equals(newAmount.currency)) {
-        onChangeAmount(toAmount(newAmount.toExact(), currencies[otherField]), field)
+      if (currencies[otherField]?.equals(newAmount.currency)) {
         setCurrencies({ first: currencies.second, second: currencies.first })
+        onChangeAmount(toAmount(newAmount.toExact(), currencies[otherField]), field)
         return
       }
 
+      // change the currency of this field
       setCurrencies({ ...currencies, [field]: newAmount.currency })
       onChangeAmount(newAmount, field)
     },
