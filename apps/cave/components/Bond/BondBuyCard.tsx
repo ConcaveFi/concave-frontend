@@ -48,12 +48,12 @@ export function BondBuyCard() {
   const confirmModal = useDisclosure()
   const receiptModal = useDisclosure()
 
-  const aproveInfo = useApprovalWhenNeeded(
+  const approveInfo = useApprovalWhenNeeded(
     currencyIn,
     BOND_ADDRESS[networkId],
     amountIn.denominator,
   )
-  const [needsApprove] = aproveInfo
+  const [needsApprove] = approveInfo
 
   useEffect(() => {
     getBondSpotPrice(networkId, BOND_ADDRESS[networkId])
@@ -66,7 +66,16 @@ export function BondBuyCard() {
   }, [networkId, userAddress])
 
   return (
-    <Card p={6} gap={2} variant="primary" h="fit-content" shadow="Block Up" w="100%" maxW="420px">
+    <Card
+      p={6}
+      gap={2}
+      variant="primary"
+      h="fit-content"
+      shadow="Block Up"
+      w="100%"
+      maxW="430px"
+      height="386px"
+    >
       <BondInput
         currencyAmountIn={amountIn}
         onChangeAmount={(v) => {
@@ -88,7 +97,7 @@ export function BondBuyCard() {
         </HStack>
       </HStack>
 
-      <ApproveButton variant="primary" size="large" isFullWidth useApproveInfo={aproveInfo} />
+      <ApproveButton variant="primary" size="large" isFullWidth useApproveInfo={approveInfo} />
       {!needsApprove && (
         <Button
           isDisabled={needsApprove || +userBalance < +amountIn}

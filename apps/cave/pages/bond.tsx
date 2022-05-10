@@ -34,6 +34,7 @@ export default function Bond() {
   // const [align, setAlign] = useState<'start' | 'center'>('center')
   const align = 'center'
   const [showUserPosition, setShowUserPosition] = useState(false)
+
   useEffect(() => {
     getCurrentBlockTimestamp().then((x) => {
       setCurrentBlockTs(x)
@@ -108,17 +109,18 @@ export default function Bond() {
           </Flex>
         </Stack>
 
-        <Flex gap={10} direction={direction} align={align}>
+        <Flex gap={10} direction={direction} align={align} justifyContent={'center'}>
           <Box pos="relative" h="fit-content">
             <Card
               variant="secondary"
-              w="430px"
               borderWidth={1}
-              px={5}
+              px={6}
               py={20}
               shadow="Glow Inner"
               gap={10}
               align="center"
+              w="430px"
+              height="386px"
             >
               <SelectedBondType bondType="Classic" />
               <BondInfo
@@ -152,6 +154,9 @@ export default function Bond() {
                   const batchRedeemIDArray = bondSigma.batchRedeemArray
                   redeemBondBatch(networkId, batchRedeemIDArray, userAddress, signer)
                 }}
+                largeFont
+                setBottom
+                customHeight
               ></Redeem>
             </Card>
           </Box>
