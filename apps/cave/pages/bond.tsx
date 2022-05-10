@@ -133,7 +133,7 @@ export default function Bond() {
               />
               {!bondSigma ? (
                 <>
-                  Checking wallet...
+                  No wallet connected...
                   <SpinIcon __css={spinnerStyles} width={'10'} height={'10'} />
                 </>
               ) : (
