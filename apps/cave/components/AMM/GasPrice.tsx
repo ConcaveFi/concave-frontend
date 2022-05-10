@@ -9,7 +9,7 @@ export const GasPrice = () => {
     <Flex>
       <GasIcon viewBox="0 0 16 16" mr={2} />
       {data && (
-        <Text fontSize="xs" color="text.low" fontWeight="medium">
+        <Text fontSize="xs" color="text.low" fontWeight="medium" whiteSpace="nowrap">
           {Number(data?.formatted.gasPrice).toFixed(2)} gwei
         </Text>
       )}

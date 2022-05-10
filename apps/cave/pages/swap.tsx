@@ -1,4 +1,4 @@
-import { Currency, Trade, TradeType } from '@concave/gemswap-sdk'
+import { ChainId, CNV, Currency, DAI, Trade, TradeType } from '@concave/gemswap-sdk'
 import { Button, Card, Collapse, Flex, HStack, Stack, Text, useDisclosure } from '@concave/ui'
 import {
   CandleStickCard,
@@ -22,7 +22,16 @@ import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
-import { useEffect, useReducer, useState } from 'react'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import {
+  currencyToJson,
+  currencyFromJson,
+  fetchCurrenciesFromQuery,
+  useSyncQueryCurrencies,
+} from 'hooks/useSyncQueryCurrencies'
+import { GetServerSideProps } from 'next'
+import Router from 'next/router'
+import { useCallback, useEffect, useMemo, useReducer, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
 import { useAccount } from 'wagmi'
 
@@ -41,10 +50,41 @@ const TradeDetails = ({
     </Stack>
   )
 
-export function SwapPage() {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const [currency0, currency1] = await fetchCurrenciesFromQuery(ctx.query).catch(() => [])
+
+  const chainId = currency0?.chainId || currency1?.chainId || ctx.query.chainId || 1
+  const currencies = [currency0 || DAI[chainId], currency1 || CNV[chainId]]
+  const setCurrencies = !currency0?.equals(currency1) ? currencies : [currencies[0]]
+
+  return { props: { currencies: setCurrencies.map(currencyToJson) } }
+}
+
+export function SwapPage({ currencies }) {
   const [settings, setSettings] = useState<SwapSettings>(defaultSettings)
 
-  const { trade, onChangeInput, onChangeOutput, switchCurrencies } = useSwapState(settings)
+  const initialCurrencies = useMemo(
+    () => ({
+      first: currencyFromJson(currencies[0]),
+      second: currencyFromJson(currencies[1]),
+    }),
+    [currencies],
+  )
+  const { trade, onChangeInput, onChangeOutput, switchCurrencies } = useSwapState(
+    settings,
+    initialCurrencies,
+  )
+
+  useSyncQueryCurrencies([trade.data.inputAmount.currency, trade.data.outputAmount.currency])
+  /*
+    reload page on network change, with default dai-cnv swap
+  */
+  useCurrentSupportedNetworkId(
+    useCallback((chainId: ChainId) => {
+      if (+Router.query.chainId !== chainId)
+        Router.replace({ query: { chainId } }, undefined, { scroll: false })
+    }, []),
+  )
 
   const [{ data: account }] = useAccount()
   const [recipient, setRecipient] = useState('')
@@ -68,7 +108,7 @@ export function SwapPage() {
   const hasDetails = !!trade.data.route && trade.data.outputAmount.greaterThan(0)
   const [isDetailsOpen, toggleDetails] = useReducer((s) => hasDetails && !s, false)
   useEffect(() => {
-    !hasDetails && toggleDetails() // lol that's a hackyish way of doing that
+    if (!hasDetails) toggleDetails()
   }, [hasDetails])
 
   return (
@@ -78,6 +118,7 @@ export function SwapPage() {
         alignContent="start"
         justify="center"
         mt={['10vh', '25vh']}
+        mb={['25vh', 'none']}
         w="100%"
         gap={10}
       >
