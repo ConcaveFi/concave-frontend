@@ -1,8 +1,9 @@
-import { Box, Flex } from '@concave/ui'
+import { Box, Collapse, Flex, useDisclosure } from '@concave/ui'
 import DividendsShare from './UserPosition/StakingRewards'
 import MarketplaceListing from './UserPosition/MarketplaceListing'
 import NftPositionContainer from './UserPosition/NftPositionContainer'
 import RedeemCardViewer from './UserPosition/RedeemViewer'
+import { useState } from 'react'
 
 export type nftContract = {
   maturity: number
@@ -28,6 +29,9 @@ const UserPositionCard = (props: NftPositionCardProps) => {
   const dateToRedeem = epochConverter(maturity)
   const currentData = new Date()
   const redeemIn = dateToRedeem.getTime() - currentData.getTime()
+  const [active, setActive] = useState(true)
+  const [inAnimation, setInAnimation] = useState(false)
+  console.log(inAnimation)
 
   return (
     <Box
@@ -46,21 +50,23 @@ const UserPositionCard = (props: NftPositionCardProps) => {
           rounded="2xl"
           maxWidth={{ lg: '550px', md: '380px' }}
         >
-          <Flex
-            height={{ lg: '275px' }}
-            bgSize="20% 30%"
-            bgImage={'/assets/textures/metal.png'}
-            shadow={'up'}
-            rounded="2xl"
-          >
+          <Flex bgSize="20% 30%" bgImage={'/assets/textures/metal.png'} shadow={'up'} rounded="2xl">
             <Flex direction={'column'}>
-              <NftPositionContainer stakeType={poolID} redeemIn={redeemIn} />
-              <RedeemCardViewer gained={gained} redeemIn={redeemIn} initial={sharesDecimals} />
-              <MarketplaceListing />
+              <NftPositionContainer
+                onChange={() => setActive(!active)}
+                stakeType={poolID}
+                redeemIn={redeemIn}
+              />
+              <Collapse in={active}>
+                <RedeemCardViewer gained={gained} redeemIn={redeemIn} initial={sharesDecimals} />
+                <MarketplaceListing />
+              </Collapse>
             </Flex>
           </Flex>
         </Box>
-        <DividendsShare />
+        <Collapse in={active}>
+          <DividendsShare />
+        </Collapse>
       </Flex>
     </Box>
   )

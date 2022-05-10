@@ -17,7 +17,7 @@ const MarketplaceListing = (props: MarketplaceListingProps) => {
   return (
     <Box
       mx={2}
-      shadow="Down Medium"
+      shadow="down"
       height={{ lg: '100px', md: '145px' }}
       borderRadius="16px"
       mt={{ lg: 1, md: 0 }}
