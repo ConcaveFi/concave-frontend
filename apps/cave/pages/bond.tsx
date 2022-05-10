@@ -19,6 +19,7 @@ const spin = keyframes({
   '100%': { transform: 'rotate(360deg)' },
 })
 import { SpinIcon } from '@concave/icons'
+import BondBuyCardContainer from 'components/Bond/BondBuyCardContainer'
 
 export default function Bond() {
   const { userAddress, signer, networkId } = useBondState()
@@ -160,7 +161,7 @@ export default function Bond() {
               ></Redeem>
             </Card>
           </Box>
-          <BondBuyCard />
+          <BondBuyCardContainer />
         </Flex>
       </Flex>
     </Container>

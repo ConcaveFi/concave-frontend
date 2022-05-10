@@ -1,19 +1,20 @@
 import { Currency, CurrencyAmount, DAI } from '@concave/gemswap-sdk'
 import { GasIcon } from '@concave/icons'
-import { Button, Card, HStack, Spinner, Text, useDisclosure } from '@concave/ui'
+import { Button, Card, HStack, Spinner, Stack, Text, useDisclosure, useToast } from '@concave/ui'
 import { CurrencyInputField as BondInput } from 'components/CurrencyAmountField'
 import { SelectBondCurrency } from 'components/CurrencySelector/SelectBondCurrency'
 import { BOND_ADDRESS } from 'contracts/Bond/BondingAddress'
 import { ApproveButton, useApprovalWhenNeeded } from 'hooks/useAllowance'
 import React, { useEffect, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
-import { useFeeData } from 'wagmi'
+import { useFeeData, useWaitForTransaction } from 'wagmi'
 import { BondOutput } from './BondOutput'
 import { getBondAmountOut, getBondSpotPrice, purchaseBond, useBondState } from './BondState'
 import { ConfirmBondModal } from './ConfirmBond'
 import { DownwardIcon } from './DownwardIcon'
 import { BondSettings, defaultSettings, Settings } from './Settings'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
+
 export const twoDecimals = (s: string | number) => {
   const a = s.toString()
   return a.indexOf('.') > -1 ? a.slice(0, a.indexOf('.') + 3) : a
@@ -35,9 +36,11 @@ const GasPrice = () => {
   )
 }
 
-export function BondBuyCard() {
+export function BondBuyCard(props: any) {
+  const { bondTransaction, setBondTransaction } = props
+
   const { currencyIn, currencyOut, userAddress, balance, signer, networkId } = useBondState()
-  const [bondTransaction, setBondTransaction] = useState()
+  // const [bondTransaction, setBondTransaction] = useState()
   const [settings, setSettings] = useState<BondSettings>(defaultSettings)
   const userBalance = balance.data?.toFixed()
   const [amountIn, setAmountIn] = useState<CurrencyAmount<Currency>>(toAmount('0', DAI[networkId]))
@@ -45,6 +48,7 @@ export function BondBuyCard() {
 
   const [amountOut, setAmountOut] = useState<string>()
   const [bondSpotPrice, setBondSpotPrice] = useState<string>()
+
   const confirmModal = useDisclosure()
   const receiptModal = useDisclosure()
 
@@ -121,11 +125,9 @@ export function BondBuyCard() {
         isOpen={confirmModal.isOpen}
         onClose={confirmModal.onClose}
         onConfirm={() => {
-          console.log('onConfirm')
-
           purchaseBond(networkId, amountIn.toFixed(), userAddress, signer, settings, amountOut)
-            .then((x) => {
-              setBondTransaction(x)
+            .then((tx) => {
+              setBondTransaction(tx)
               confirmModal.onClose()
             })
             .catch((e) => {
