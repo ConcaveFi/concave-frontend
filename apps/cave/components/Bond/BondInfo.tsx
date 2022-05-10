@@ -57,7 +57,9 @@ export const UserBondPositionInfo = (bondSigma, userAddress) => {
 
   return (
     <>
-      {totalOwed ? (
+      {claimed ? (
+        ''
+      ) : totalOwed ? (
         <Card bg="none" py={4} w="100%" direction="row" shadow="Glass Up Medium">
           <Flex justify="center" flexBasis="40%">
             <InfoItem
