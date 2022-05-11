@@ -7,7 +7,6 @@ import {
   useBondState,
   redeemBondBatch,
 } from 'components/Bond/BondState'
-import { BondBuyCard } from 'components/Bond/BondBuyCard'
 import { SelectedBondType } from 'components/Bond/SelectedBondType'
 import { Redeem } from 'components/Bond/Redeem'
 import { BondInfo, UserBondPositionInfo } from 'components/Bond/BondInfo'
@@ -20,7 +19,6 @@ const spin = keyframes({
 })
 import { SpinIcon } from '@concave/icons'
 import BondBuyCardContainer from 'components/Bond/BondBuyCardContainer'
-import BondToastCard from 'components/Bond/BondToastCard'
 
 export default function Bond() {
   const { userAddress, signer, networkId } = useBondState()
@@ -165,7 +163,6 @@ export default function Bond() {
           <BondBuyCardContainer />
         </Flex>
       </Flex>
-      <BondToastCard link="" title="" type="info" />
     </Container>
   )
 }
