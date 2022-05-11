@@ -165,7 +165,7 @@ export default function Bond() {
           <BondBuyCardContainer />
         </Flex>
       </Flex>
-      <BondToastCard type="warning" />
+      <BondToastCard type="successful" />
     </Container>
   )
 }
