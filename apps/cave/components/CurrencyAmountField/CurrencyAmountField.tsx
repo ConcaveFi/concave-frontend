@@ -32,10 +32,14 @@ export function CurrencyAmountField({
     [internalValue],
   )
 
-  const handleChange = useCallback(({ value }, { source }) => {
-    if (source === 'prop') return // if the value changed from props, ignore it, only update on user typing
-    setInternalValue(value)
-  }, [])
+  const handleChange = useCallback(
+    ({ value }, { source }) => {
+      if (source === 'prop') return // if the value changed from props, ignore it, only update on user typing
+      if (value === '') onChangeAmount(toAmount('0', currencyAmount.currency))
+      setInternalValue(value)
+    },
+    [currencyAmount.currency, onChangeAmount],
+  )
 
   const onSelectCurrency = useCallback(
     (newCurrency: Currency) => onChangeAmount(toAmount(internalValue, newCurrency)),
@@ -57,7 +61,7 @@ export function CurrencyAmountField({
         />
         <CurrencySelector onSelect={onSelectCurrency} selected={currencyAmount?.currency} />
       </HStack>
-      {children}
+      <Stack onClick={() => (isFocused.current = false)}>{children}</Stack>
     </Stack>
   )
 }
