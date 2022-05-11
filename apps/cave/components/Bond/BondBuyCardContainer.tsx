@@ -7,13 +7,19 @@ import BondToastCard from './BondToastCard'
 export default function BondBuyCardContainer(props: any) {
   const toast = useToast()
   const [bondTransaction, setBondTransaction] = useState<any>()
-  const [amountInOut, setAmountInAndOut] = useState<any>()
+  const [amountInOut, setAmountInAndOut] = useState<{ in: number; out: number }>()
 
   const [{ data, error, loading }, wait] = useWaitForTransaction({ hash: bondTransaction?.hash })
   let currentStatus
   let currentHash
 
   console.log(loading)
+
+  function closeToast() {
+    if (toast.isActive(currentHash)) {
+      toast.close(currentHash)
+    }
+  }
 
   function addToast() {
     if (typeof currentStatus !== 'undefined' && !toast.isActive(currentHash)) {
@@ -27,7 +33,17 @@ export default function BondBuyCardContainer(props: any) {
         description: ``,
         status: currentStatus,
         isClosable: true,
-        render: () => <BondToastCard type={currentStatus} title={title} link={link} />,
+        // duration: null,
+        duration: 10000,
+        render: () => (
+          <BondToastCard
+            type={currentStatus}
+            title={title}
+            tx={currentHash}
+            amountInOut={amountInOut}
+            link={link}
+          />
+        ),
       })
     }
     currentStatus = undefined

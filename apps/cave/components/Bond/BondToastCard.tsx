@@ -8,9 +8,11 @@ const spin = keyframes({
 interface BondToastCardProps {
   type: 'info' | 'error' | 'success' | 'warning'
   title: string
+  tx: string
   link: string
+  amountInOut: { in: number; out: number }
 }
-const BondToastCard = ({ type, title, link }: BondToastCardProps) => {
+const BondToastCard = ({ type, title, tx, amountInOut, link }: BondToastCardProps) => {
   const [bgColor, setBgColor] = useState<any>()
   const [deg, setDeg] = useState(0)
 
@@ -67,8 +69,11 @@ const BondToastCard = ({ type, title, link }: BondToastCardProps) => {
           <Text ml={5} mt={2} fontSize={'18px'} fontWeight="700">
             {title}
           </Text>
+          <Text ml={5} fontSize={'14px'} fontWeight="700" textColor={'text.medium'}>
+            Bonding {amountInOut.in} DAI for {amountInOut.out} CNV.
+          </Text>
           <Text ml={5} fontSize={'14px'} fontWeight="700" textColor={'text.low'}>
-            <Link href={link}>View on explorer.</Link>
+            <Link href={link}>View txn on explorer.</Link>
           </Text>
         </Flex>
       </Flex>

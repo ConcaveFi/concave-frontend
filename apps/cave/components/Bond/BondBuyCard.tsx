@@ -127,7 +127,10 @@ export function BondBuyCard({ bondTransaction, setBondTransaction, setAmountInAn
             .then((tx) => {
               setBondTransaction(tx)
               confirmModal.onClose()
-              setAmountInAndOut({ amountIn: amountIn.toFixed(), amountOut: amountOut })
+              setAmountInAndOut({
+                in: parseFloat(String(amountIn.toFixed())).toFixed(2),
+                out: parseInt(amountOut).toFixed(2),
+              })
             })
             .catch((e) => {
               console.log('get position info failed', e)
