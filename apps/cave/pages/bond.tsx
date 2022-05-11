@@ -97,7 +97,7 @@ export default function Bond() {
   }, [bondSigma])
   return (
     <Container maxW="container.lg">
-      <Flex direction="column" gap={20}>
+      <Flex direction="column" gap={isLargerThan1200 ? 20 : '20px'}>
         <Stack mt={20} maxW="100%" align="center" textAlign="center">
           <Heading as="h1" mb={3} fontSize="5xl">
             Dynamic Bond Market
@@ -109,7 +109,12 @@ export default function Bond() {
           </Flex>
         </Stack>
 
-        <Flex gap={10} direction={direction} align={align} justifyContent={'center'}>
+        <Flex
+          gap={isLargerThan1200 ? 10 : '20px'}
+          direction={direction}
+          align={align}
+          justifyContent={'center'}
+        >
           <Box pos="relative" h="fit-content">
             <Card
               variant="secondary"

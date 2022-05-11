@@ -36,6 +36,9 @@ export default function BondBuyCardContainer(props: any) {
 
   useEffect(() => {
     console.log('bondTx useEffect')
+    if (typeof currentHash === 'undefined') {
+      currentStatus = 'info'
+    }
     if (typeof bondTransaction !== 'undefined') {
       console.log('bondTx in condition', currentHash)
       currentHash = bondTransaction?.hash
@@ -46,17 +49,13 @@ export default function BondBuyCardContainer(props: any) {
   useEffect(() => {
     console.log(data, loading, error)
     if (loading) {
-      console.log('is loading', loading)
+      // console.log('is loading', loading)
       currentStatus = 'info'
-      // addToast()
-    }
-    if (data) {
-      console.log(data)
+    } else if (data) {
+      // console.log(data)
       currentStatus = 'success'
-      // addToast()
-    }
-    if (error) {
-      console.log(error)
+    } else if (error) {
+      // console.log(error)
       currentStatus = 'error'
     }
     addToast()
