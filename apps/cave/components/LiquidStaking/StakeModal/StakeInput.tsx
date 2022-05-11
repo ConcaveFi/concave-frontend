@@ -1,7 +1,7 @@
 import { CNV, Currency, CurrencyAmount, toHex } from '@concave/gemswap-sdk'
 import { Box, Button, Card, Flex, HStack, Image, Input, Text } from '@concave/ui'
 import { CurrencyInputField } from 'components/CurrencyAmountField'
-import { SelectBondCurrency } from 'components/CurrencySelector/SelectBondCurrency'
+// import { SelectBondCurrency } from 'components/CurrencySelector/SelectBondCurrency'
 import { STAKING_CONTRACT } from 'constants/address'
 import { StakingV1Abi } from 'contracts/LiquidStaking/LiquidStakingAbi'
 import { ethers } from 'ethers'
@@ -104,7 +104,7 @@ function StakeInput(props: any) {
           <CurrencyInputField
             currencyAmountIn={stakeInput}
             onChangeAmount={setStakeInput}
-            CurrencySelector={SelectBondCurrency}
+            // CurrencySelector={SelectBondCurrency}
           />
         </Flex>
       </Card>
