@@ -1,4 +1,4 @@
-import { Box, Card, Flex, keyframes, Text } from '@concave/ui'
+import { Box, Card, Flex, keyframes, Link, Text } from '@concave/ui'
 import { useEffect, useState } from 'react'
 
 const spin = keyframes({
@@ -7,9 +7,10 @@ const spin = keyframes({
 })
 interface BondToastCardProps {
   type: 'info' | 'error' | 'successful' | 'warning'
+  title: string
+  link: string
 }
-const BondToastCard = (props: BondToastCardProps) => {
-  const { type } = props
+const BondToastCard = ({ type, title, link }: BondToastCardProps) => {
   const [bgColor, setBgColor] = useState<any>()
   const [deg, setDeg] = useState(0)
   const orangeGradient = { animation: `${spin} 0.3s linear infinite` }
@@ -52,10 +53,10 @@ const BondToastCard = (props: BondToastCardProps) => {
       >
         <Flex direction={'column'} bg={'#21293066'} height="full" width={'full'} rounded="inherit">
           <Text ml={5} mt={2} fontSize={'18px'} fontWeight="700">
-            Transaction:
+            {title}
           </Text>
           <Text ml={5} fontSize={'14px'} fontWeight="700" textColor={'text.low'}>
-            Informations here........
+            <Link href={link}>View on explorer.</Link>
           </Text>
         </Flex>
       </Flex>

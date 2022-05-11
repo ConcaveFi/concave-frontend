@@ -37,7 +37,7 @@ const GasPrice = () => {
 }
 
 export function BondBuyCard(props: any) {
-  const { bondTransaction, setBondTransaction } = props
+  const { bondTransaction, setBondTransaction, setAmountInAndOut } = props
 
   const { currencyIn, currencyOut, userAddress, balance, signer, networkId } = useBondState()
   // const [bondTransaction, setBondTransaction] = useState()
@@ -128,6 +128,7 @@ export function BondBuyCard(props: any) {
           purchaseBond(networkId, amountIn.toFixed(), userAddress, signer, settings, amountOut)
             .then((tx) => {
               setBondTransaction(tx)
+              setAmountInAndOut({ amountIn: amountIn.toFixed(), amountOut: amountOut })
               confirmModal.onClose()
             })
             .catch((e) => {
