@@ -40,9 +40,8 @@ export const CurrencyOutputField = ({
               `$${outputFiat.value.toFixed(2, { groupSeparator: ',' })}`}
           </Text>
           <Text fontSize="xs" opacity={0.7}>
-            {fiatPriceImpact?.greaterThan(_01) ||
-              (fiatPriceImpact?.lessThan(_01.multiply(-1)) &&
-                `(${fiatPriceImpact?.toFixed(2, { groupSeparator: ',' })}%)`)}{' '}
+            {(fiatPriceImpact?.greaterThan(_01) || fiatPriceImpact?.lessThan(_01.multiply(-1))) &&
+              `(${fiatPriceImpact?.toFixed(2, { groupSeparator: ',' })}%)`}{' '}
           </Text>
         </Flex>
         {balance.isSuccess && <Balance value={balance.data.toFixed(2, { groupSeparator: ',' })} />}
