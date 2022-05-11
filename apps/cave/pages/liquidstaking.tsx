@@ -49,27 +49,6 @@ const StakingGroup: Array<StakingGroupProps> = [
 ]
 
 function LiquidStaking() {
-  const [isLargerThan1100] = useMediaQuery('(min-width: 1100px)')
-  const [stakingGap, setStakingGap] = useState(8)
-  const [wrap, setWrap] = useState<'wrap' | 'nowrap'>('nowrap')
-  const [width, setWidth] = useState('')
-  const [direction, setDirection] = useState<'row' | 'column'>('row')
-  const [marginTop, setMarginTop] = useState(8)
-  const [textAlign, setTextAlign] = useState<'justify' | 'center'>('justify')
-  const [guideGap, setGuideGap] = useState(24)
-  const [containerHeight, setConteinerHeight] = useState('')
-
-  useEffect(() => {
-    setStakingGap(isLargerThan1100 ? 8 : 3)
-    setWrap(isLargerThan1100 ? 'nowrap' : 'wrap')
-    setWidth(isLargerThan1100 ? '' : '530px')
-    setDirection(isLargerThan1100 ? 'row' : 'column')
-    setMarginTop(isLargerThan1100 ? 8 : 0)
-    setTextAlign(isLargerThan1100 ? 'justify' : 'center')
-    setGuideGap(isLargerThan1100 ? 24 : 7)
-    setConteinerHeight(isLargerThan1100 ? '' : '1550px')
-  }, [isLargerThan1100])
-
   return (
     <Box
       flex={1}
@@ -79,13 +58,19 @@ function LiquidStaking() {
       m={'auto'}
       alignItems={'center'}
       textAlign="center"
-      height={containerHeight}
+      height={{ lg: '', md: '1700px' }}
     >
       <Heading as="h1" mt={16} fontSize="5xl">
         Liquid Staking
       </Heading>
-      <Flex align={'center'} justify="center" direction={direction} mt={marginTop} gap={guideGap}>
-        <Text maxW={520} textAlign={textAlign}>
+      <Flex
+        align={'center'}
+        justify="center"
+        direction={{ lg: 'row', base: 'column' }}
+        mt={{ lg: 8, base: 0 }}
+        gap={{ lg: 24, base: 7 }}
+      >
+        <Text maxW={520} textAlign={{ lg: 'justify', base: 'center' }}>
           Stakers receive daily rewards to grow their <br /> CNV holdings and quarterly dividends
           <br />
           from Concave profits. Staking positions <br /> are represented by NFTs that are tradable
@@ -94,14 +79,14 @@ function LiquidStaking() {
         </Text>
         <GraphicGuide />
       </Flex>
-      <Flex alignItems="start" justifyContent="center" height="550">
+      <Flex alignItems="start" justifyContent="center" height={{ lg: '550', base: '1100px' }}>
         <Flex
-          gap={stakingGap}
+          gap={{ lg: 8, base: 3 }}
           justifyContent="center"
           alignItems="center"
           m={2}
-          wrap={wrap}
-          width={width}
+          wrap={{ lg: 'nowrap', md: 'wrap', base: 'wrap' }}
+          width={{ lg: '', base: '530px' }}
         >
           {StakingGroup.map((i) => {
             return (
@@ -109,7 +94,6 @@ function LiquidStaking() {
                 icon={i.icon}
                 period={i.period}
                 poolId={i.poolID}
-                // vAPR={status === 'success' && data.logStakingV1_PoolRewarded[0].base_vAPR}
                 stakingLink={i.stakingLink}
                 key={i.period}
               />
