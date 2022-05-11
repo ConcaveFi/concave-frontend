@@ -1,7 +1,7 @@
 import { Currency, CurrencyAmount } from '@concave/gemswap-sdk'
 import { FlexProps, HStack, NumericInput, Stack, useMultiStyleConfig } from '@concave/ui'
 import { CurrencySelectorComponent } from 'components/CurrencySelector/CurrencySelector'
-import React, { ReactNode, useRef, useCallback, useState } from 'react'
+import React, { ReactNode, useCallback, useRef, useState } from 'react'
 import { useDebounce } from 'react-use'
 import { toAmount } from 'utils/toAmount'
 
@@ -38,7 +38,7 @@ export function CurrencyAmountField({
       if (value === '') onChangeAmount(toAmount('0', currencyAmount.currency))
       setInternalValue(value)
     },
-    [currencyAmount.currency, onChangeAmount],
+    [currencyAmount?.currency, onChangeAmount],
   )
 
   const onSelectCurrency = useCallback(

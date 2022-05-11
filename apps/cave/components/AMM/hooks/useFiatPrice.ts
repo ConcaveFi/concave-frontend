@@ -19,5 +19,5 @@ export const useFiatValue = (currencyAmount?: CurrencyAmount<Currency>) => {
     if (fiatPrice) return { value: fiatPrice.price.quote(currencyAmount.wrapped), ...fiatPrice }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currencyAmount.serialize(), fiatPrice.price])
+  }, [currencyAmount?.serialize(), fiatPrice.price])
 }
