@@ -1,4 +1,4 @@
-import { CNV, toHex } from '@concave/gemswap-sdk'
+import { CNV, Currency, CurrencyAmount, toHex } from '@concave/gemswap-sdk'
 import { Box, Button, Card, Flex, HStack, Image, Input, Text } from '@concave/ui'
 import { CurrencyInputField } from 'components/CurrencyAmountField'
 import { SelectBondCurrency } from 'components/CurrencySelector/SelectBondCurrency'
@@ -25,9 +25,12 @@ function StakeInput(props: any) {
   const [{ data: account }] = useAccount()
   const [{ data }] = useNetwork()
   // const [stakeInput, setStakeInput] = useState(toAmount(0, CNV[data?.chain.id]))
-  const [stakeInput, setStakeInput] = useState<any>(toAmount(0, CNV[3]))
-  useCurrentSupportedNetworkId((chainId) => setStakeInput(toAmount(3, CNV[chainId])))
-  const { allowance, ...approve } = useApprove(stakeInput?.currency, stakeInput?.currency.id)
+  const [stakeInput, setStakeInput] = useState<CurrencyAmount<Currency>>(toAmount(0, CNV[3]))
+  useCurrentSupportedNetworkId((chainId) => setStakeInput(toAmount(0, CNV[chainId])))
+  const { allowance, ...approve } = useApprove(
+    stakeInput.currency.wrapped,
+    STAKING_CONTRACT[stakeInput.currency.chainId],
+  )
   const [approveButtonText, setApproveButtonText] = useState('Approve CNV')
   const [allowanceEnough, setAllowanceEnough] = useState(false)
   // console.log(allowance.formatted)
@@ -152,7 +155,7 @@ function StakeInput(props: any) {
             mt={5}
             onClick={() => {
               lockCNV().then((r) => {
-                setSafeStakeInputValue('')
+                setStakeInput(toAmount(0, stakeInput.currency))
                 setTimeout(() => {
                   props.onClose()
                 }, 300)
