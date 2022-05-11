@@ -3,7 +3,7 @@ import { position } from '@concave/ui'
 import { Contract, ethers, utils } from 'ethers'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { concaveProvider as providers, rawProvider } from 'lib/providers'
+import { concaveProvider, concaveProvider as providers } from 'lib/providers'
 import { useMemo, useState } from 'react'
 import { useAccount, useSigner } from 'wagmi'
 import { BOND_ABI } from '../../contracts/Bond/BondABI'
@@ -76,10 +76,11 @@ export const purchaseBond = async (
   )
 }
 
-export async function getCurrentBlockTimestamp() {
+export async function getCurrentBlockTimestamp(networkId) {
   try {
-    const getBlock = await rawProvider.getBlockNumber()
-    const timestamp = (await rawProvider.getBlock(getBlock)).timestamp
+    const provider = concaveProvider(networkId)
+    const getBlock = await provider.getBlockNumber()
+    const timestamp = (await provider.getBlock(getBlock)).timestamp
     return timestamp
   } catch (e) {
     return

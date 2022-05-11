@@ -1,6 +1,13 @@
 import { Box, Button, Collapse, Flex, Text } from '@concave/ui'
-import { Get_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql'
+import { BOND_ADDRESS } from 'contracts/Bond/BondingAddress'
+import { formatDistance, formatDistanceStrict } from 'date-fns'
+import {
+  Get_Accrualbondv1_Last10_SoldQuery,
+  useGet_Amm_Cnv_PriceQuery,
+} from 'graphql/generated/graphql'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useEffect, useState } from 'react'
+import { getBondSpotPrice } from './BondState'
 
 interface BoldSoldsCardProps {
   active: boolean
@@ -8,8 +15,11 @@ interface BoldSoldsCardProps {
 }
 
 const BoldSoldsCard = (props: BoldSoldsCardProps) => {
+  const netWorkdId = useCurrentSupportedNetworkId()
   const { data, active } = props
+  const AMMData = useGet_Amm_Cnv_PriceQuery()
   const [solds, setSolds] = useState([])
+  const [bondSpotPrice, setBondSpotPrice] = useState('0')
 
   useEffect(() => {
     if (data) {
@@ -17,9 +27,16 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
     }
   }, [data])
 
+  useEffect(() => {
+    if (bondSpotPrice === '0')
+      getBondSpotPrice(netWorkdId, BOND_ADDRESS[netWorkdId])
+        .then(setBondSpotPrice)
+        .catch((error) => {})
+  })
+
   const relatives = solds.map((value, index) => (
     <Text key={index} opacity={1 - (active ? index / 10 : (index / 10) * 3)}>
-      {epochToRelative(value.timestamp)}
+      {formatDistanceStrict(value.timestamp * 1000, new Date().getTime()) + ' ago'}
     </Text>
   ))
   const purchases = solds.map((value, index) => (
@@ -36,7 +53,7 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
               Current Price:
             </Text>
             <Text mr={3} ml={1} fontWeight={'700'}>
-              249,1$
+              ${AMMData?.data?.cnvData?.data?.last?.toFixed(3)}
             </Text>
           </Flex>
 
@@ -45,7 +62,7 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
               Bond Price:
             </Text>
             <Text mr={3} ml={1} fontWeight={'700'}>
-              249,1$
+              {parseFloat(bondSpotPrice).toFixed(5)}
             </Text>
           </Flex>
         </Flex>
@@ -90,29 +107,3 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
 }
 
 export default BoldSoldsCard
-
-const epochToRelative = (epoch: number) => {
-  const msPerMinute = 60 * 1000
-  const msPerHour = msPerMinute * 60
-  const msPerDay = msPerHour * 24
-  const msPerMonth = msPerDay * 30
-  const msPerYear = msPerDay * 365
-
-  const timeNow = new Date().getTime()
-  const epochInMillis = epoch * 1000
-  const elapsed = timeNow - epochInMillis
-
-  if (elapsed < msPerMinute) {
-    return Math.round(elapsed / 1000) + ' seconds ago'
-  } else if (elapsed < msPerHour) {
-    return Math.round(elapsed / msPerMinute) + ' minutes ago'
-  } else if (elapsed < msPerDay) {
-    return Math.round(elapsed / msPerHour) + ' hours ago'
-  } else if (elapsed < msPerMonth) {
-    return Math.round(elapsed / msPerDay) + ' days ago'
-  } else if (elapsed < msPerYear) {
-    return Math.round(elapsed / msPerMonth) + ' months ago'
-  } else {
-    return Math.round(elapsed / msPerYear) + ' years ago'
-  }
-}

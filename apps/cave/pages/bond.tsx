@@ -46,7 +46,7 @@ export default function Bond() {
   const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
-    getCurrentBlockTimestamp().then((x) => {
+    getCurrentBlockTimestamp(networkId).then((x) => {
       setCurrentBlockTs(x)
     })
     const interval = setInterval(() => {
@@ -127,7 +127,7 @@ export default function Bond() {
           justifyContent={'center'}
         >
           <Box pos="relative" h="fit-content">
-            <Card variant="secondary">
+            <Card variant="secondary" maxW={430}>
               <Card
                 variant="secondary"
                 borderWidth={1}
