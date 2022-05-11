@@ -69,7 +69,7 @@ export function BondBuyCard({ bondTransaction, setBondTransaction, setAmountInAn
 
   return (
     <Card
-      p={6}
+      p={5}
       gap={2}
       variant="primary"
       h="fit-content"

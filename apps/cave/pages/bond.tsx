@@ -119,7 +119,7 @@ export default function Bond() {
             <Card
               variant="secondary"
               borderWidth={1}
-              px={6}
+              px={5}
               py={20}
               shadow="Glow Inner"
               gap={10}
