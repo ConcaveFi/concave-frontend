@@ -56,6 +56,7 @@ function LiquidStaking() {
       maxWidth="container.lg"
       overflow={'hidden'}
       m={'auto'}
+      mt={0}
       alignItems={'center'}
       textAlign="center"
       maxHeight={{ lg: '1200px', base: '1700px' }}
