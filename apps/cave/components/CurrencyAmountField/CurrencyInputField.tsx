@@ -1,7 +1,10 @@
 import { Currency, CurrencyAmount } from '@concave/gemswap-sdk'
 import { HStack, Text } from '@concave/ui'
 import { useFiatValue } from 'components/AMM/hooks/useFiatPrice'
-import { CurrencySelectorComponent } from 'components/CurrencySelector/CurrencySelector'
+import {
+  CurrencySelectorComponent,
+  CurrencySelector as DisabledCurrencySelector,
+} from 'components/CurrencySelector/CurrencySelector'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { toAmount } from 'utils/toAmount'
 import { CurrencyAmountField } from '../CurrencyAmountField'
@@ -10,8 +13,7 @@ import { Balance } from './Balance'
 type CurrencyInputFieldProps = {
   currencyAmountIn: CurrencyAmount<Currency>
   onChangeAmount: (value: CurrencyAmount<Currency>) => void
-  CurrencySelector: CurrencySelectorComponent
-  disableCurrencySelector?: boolean
+  CurrencySelector?: CurrencySelectorComponent
   debounce?: number
 }
 
@@ -29,8 +31,7 @@ const maxAmount = (userBalance: CurrencyAmount<Currency>) => {
 export const CurrencyInputField = ({
   currencyAmountIn,
   onChangeAmount,
-  CurrencySelector,
-  disableCurrencySelector,
+  CurrencySelector = DisabledCurrencySelector,
   debounce,
 }: CurrencyInputFieldProps) => {
   const inputFiat = useFiatValue(currencyAmountIn)
@@ -41,7 +42,6 @@ export const CurrencyInputField = ({
       currencyAmount={currencyAmountIn}
       onChangeAmount={onChangeAmount}
       CurrencySelector={CurrencySelector}
-      disableCurrencySelector={disableCurrencySelector}
       debounce={debounce}
     >
       <HStack justify="space-between" align="end" textColor="text.low" w="full">

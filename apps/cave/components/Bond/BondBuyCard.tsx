@@ -2,7 +2,6 @@ import { Currency, CurrencyAmount, DAI } from '@concave/gemswap-sdk'
 import { GasIcon } from '@concave/icons'
 import { Button, Card, HStack, Spinner, Text, useDisclosure } from '@concave/ui'
 import { CurrencyInputField as BondInput } from 'components/CurrencyAmountField'
-import { SelectBondCurrency } from 'components/CurrencySelector/SelectBondCurrency'
 import { BOND_ADDRESS } from 'contracts/Bond/BondingAddress'
 import { ApproveButton, useApprovalWhenNeeded } from 'hooks/useAllowance'
 import React, { useEffect, useState } from 'react'
@@ -86,7 +85,6 @@ export function BondBuyCard() {
             },
           )
         }}
-        CurrencySelector={SelectBondCurrency}
       />
       <DownwardIcon />
       <BondOutput disabled={true} currency={currencyOut} value={amountOut} />
