@@ -1,5 +1,5 @@
 import { useQuery, UseQueryResult } from 'react-query'
-import { chain, useNetwork } from 'wagmi'
+import { chain, useNetwork, useProvider } from 'wagmi'
 import { Fetcher, Token } from '@concave/gemswap-sdk'
 import { concaveProvider } from 'lib/providers'
 
@@ -13,7 +13,7 @@ export const useTokenList = () => {
       loading,
     },
   ] = useNetwork()
-  const provider = concaveProvider(chain.ropsten.id)
+  const provider = useProvider()
   return useQuery(['token-list', selectedChain.name], async () => {
     if (loading) return []
     return fetch(concaveTokenList(selectedChain.name))
