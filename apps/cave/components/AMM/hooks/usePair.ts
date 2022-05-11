@@ -46,7 +46,14 @@ export const usePairs = <T = Pair[]>(
   queryOptions?: UsePairsQueryOptions<T>,
 ) => {
   return useQuery(
-    ['pairs', tokenA?.address, tokenB?.address, maxHops, tokenA?.chainId],
+    [
+      'pairs',
+      tokenB?.address !== tokenA?.address && tokenA?.sortsBefore(tokenB)
+        ? [tokenA?.address, tokenB?.address]
+        : [tokenB?.address, tokenA?.address],
+      maxHops,
+      tokenA?.chainId,
+    ],
     async () => {
       const commonPairs = getAllCommonPairs(tokenA, tokenB, maxHops)
       const pairs: Pair[] = (
@@ -64,6 +71,7 @@ export const usePairs = <T = Pair[]>(
     {
       enabled: !!tokenA?.address && !!tokenB?.address && !tokenA.equals(tokenB),
       refetchInterval: AVERAGE_BLOCK_TIME[tokenA?.chainId],
+      refetchOnWindowFocus: false,
       notifyOnChangeProps: 'tracked',
       retry: false,
       ...queryOptions,

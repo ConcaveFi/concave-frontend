@@ -9,6 +9,8 @@ import { CurrencyAmount } from './entities'
 
 const TOKENS_CACHE: { [chainId: number]: { [address: string]: Token } } = {}
 
+const PAIR_ADDRESSES_CACHE: { [tokenAddresses: string]: string } = {}
+
 /**
  * Contains methods for constructing instances of pairs and tokens from on-chain data.
  */
@@ -48,7 +50,14 @@ export abstract class Fetcher {
       tokenContract.totalSupply(),
     ])
 
-    return new Token(chainId, address, decimals, symbol, name, totalSupply)
+    const token = new Token(chainId, address, decimals, symbol, name, totalSupply)
+
+    TOKENS_CACHE[chainId] = {
+      ...TOKENS_CACHE[chainId],
+      [address]: token,
+    }
+
+    return token
   }
 
   /**
@@ -99,12 +108,22 @@ export abstract class Fetcher {
     provider = getDefaultProvider(getNetwork(tokenA.chainId)),
   ): Promise<Pair> {
     invariant(tokenA.chainId === tokenB.chainId, 'CHAIN_ID')
+    const addresses = tokenA.sortsBefore(tokenB)
+      ? `${tokenA.address}-${tokenB.address}`
+      : `${tokenB.address}-${tokenA.address}`
 
-    const pairAddress = await new Contract(
-      FACTORY_ADDRESS[tokenA.chainId],
-      ['function getPair(address tokenA, address tokenB) external view returns (address)'],
-      provider,
-    ).getPair(tokenA.address, tokenB.address)
+    if (PAIR_ADDRESSES_CACHE[addresses] === `0x0000000000000000000000000000000000000000`) return
+
+    const pairAddress =
+      PAIR_ADDRESSES_CACHE[addresses] ||
+      (await new Contract(
+        FACTORY_ADDRESS[tokenA.chainId],
+        ['function getPair(address tokenA, address tokenB) external view returns (address)'],
+        provider,
+      ).getPair(tokenA.address, tokenB.address))
+    PAIR_ADDRESSES_CACHE[addresses] = pairAddress
+
+    if (pairAddress === `0x0000000000000000000000000000000000000000`) return
 
     const [reserves0, reserves1] = await new Contract(
       pairAddress,
@@ -114,6 +133,7 @@ export abstract class Fetcher {
 
     const liquidityToken = await Fetcher.fetchTokenData(pairAddress, provider)
     const reserves = tokenA.sortsBefore(tokenB) ? [reserves0, reserves1] : [reserves1, reserves0]
+
     return new Pair(
       CurrencyAmount.fromRawAmount(tokenA, reserves[0]),
       CurrencyAmount.fromRawAmount(tokenB, reserves[1]),
