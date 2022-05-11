@@ -1,7 +1,7 @@
 import { Currency, Token } from '@concave/gemswap-sdk'
 import { Box, Button, Card, Flex, FlexProps, Image, Text } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
-import { CNV, DAI } from 'constants/tokens'
+import { CNV, DAI, WETH } from 'constants/tokens'
 
 export default function TreasuryManagementCard() {
   return (
@@ -19,9 +19,9 @@ export default function TreasuryManagementCard() {
       <Flex gap={'inherit'} justify="center" align={'center'} my="20px">
         <FarmingViewer />
         <Flex direction={'column'} gap={3}>
-          <TokenInfo tokenName="DAI" token={DAI} value="$67,325" />
-          <TokenInfo tokenName="CNV" token={CNV} value="$67,325" />
-          <TokenInfo tokenName="DAI" token={DAI} value="$67,325" />
+          <TokenInfo tokenName="DAI" token={DAI} value="$162,919" />
+          <TokenInfo tokenName="CNV" token={CNV} value="$367,245" />
+          <TokenInfo tokenName="ETH" token={WETH} value="$63,793" />
         </Flex>
       </Flex>
     </Card>
@@ -124,7 +124,7 @@ const TreasyAssetsTitle = () => {
       align="center"
     >
       <Text fontSize={'20px'} fontWeight="700">
-        Treasury Asstets and Activity
+        Treasury Assets and Activity
       </Text>
     </GlassPanel>
   )

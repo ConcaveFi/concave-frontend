@@ -33,19 +33,25 @@ function TreasuryRedeemCard() {
       </Flex>
       <Flex mt={5} direction="column" gap={2}>
         <GlassPanel width={'182px'} height={'40px'} rounded="2xl" mx={'auto'} justify={'center'}>
+          <Button>
           <Text fontSize={'18px'} fontWeight="700" my={'auto'}>
-            aCNV - 2455.12
+            aCNV - 500
           </Text>
+          </Button>
         </GlassPanel>
         <GlassPanel width={'182px'} height={'40px'} rounded="2xl" mx={'auto'} justify={'center'}>
+          <Button>
           <Text fontSize={'18px'} fontWeight="700" my={'auto'}>
-            pCNV - 0
+            pCNV - 3200
           </Text>
+          </Button>
         </GlassPanel>
         <GlassPanel width={'182px'} height={'40px'} rounded="2xl" mx={'auto'} justify={'center'}>
+          <Button>
           <Text fontSize={'18px'} fontWeight="700" my={'auto'}>
-            BBTCNV - 0
+            BBTCNV - 100
           </Text>
+          </Button>
         </GlassPanel>
       </Flex>
 
