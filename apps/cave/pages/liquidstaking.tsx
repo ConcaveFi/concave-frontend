@@ -104,7 +104,8 @@ function LiquidStaking() {
           wrap={wrap}
           width={width}
         >
-          {/* {StakingGroup.map((i) => {
+          {StakingGroup.map((i) => {
+            //eslint-disable-next-line
             const { status, data, error, isFetching } = useGet_Last_Poolid_VaprQuery({
               poolID: i.poolID,
             })
@@ -117,7 +118,7 @@ function LiquidStaking() {
                 key={i.period}
               />
             )
-          })} */}
+          })}
         </Flex>
       </Flex>
     </Box>

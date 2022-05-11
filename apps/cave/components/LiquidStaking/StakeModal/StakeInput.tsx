@@ -88,12 +88,12 @@ function StakeInput(props: any) {
 
   return (
     <Box>
-      <Card shadow="down" w="350px" px={4} py={5}>
+      <Card shadow="down" w="350px" px={0} py={0}>
         <Flex justify="space-between" alignItems="center">
           {/* <Input
             placeholder="0.00"
-            value={stakeInput}
-            onChange={(e) => setSafeStakeInputValue(e.target.value)}
+            value={''}
+            onChange={null}
             ml={-1}
             shadow="none"
             w="60%"
@@ -106,34 +106,11 @@ function StakeInput(props: any) {
             onChangeAmount={setStakeInput}
             CurrencySelector={SelectBondCurrency}
           />
-          {/* <Flex shadow="up" borderRadius="3xl" px={4} py={1} alignItems="center">
-            <Image src="/assets/tokens/cnv.svg" alt="concave-logo" h={8} w={8} />
-            <Text ml={2} color="text.medium" fontSize="xl" fontWeight="bold">
-              CNV
-            </Text>
-          </Flex> */}
-        </Flex>
-        <Flex mt={2} justify="space-between" px={2}>
-          <Text color="text.low" fontSize="md" fontWeight="bold">
-            {/* Loading Price */}
-            {(cnvPrice as any)?.data
-              ? `$${(+stakeInput * (cnvPrice as any)?.data.cnv).toFixed(2)}`
-              : 'Loading price'}
-          </Text>
-          <HStack spacing={2}>
-            {/* <Text color="text.low" fontSize="sm" fontWeight="bold"> */}
-            {/* Balance: {(+cnvBalance.data?.formatted).toFixed(2)} */}
-            {/* Balance: {cnvBalance.data?.formatted.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0]} */}
-            {/* </Text>
-            <Button textColor="blue.500" onClick={setMax} disabled={!cnvBalance.data}>
-              Max
-            </Button> */}
-          </HStack>
         </Flex>
       </Card>
 
       <Box mt={10} width="350px">
-        {!allowanceEnough && (
+        {allowance.value < stakeInput.numerator.toString() && (
           <Button
             onClick={approveCNV}
             fontWeight="bold"
@@ -150,7 +127,7 @@ function StakeInput(props: any) {
           </Button>
         )}
 
-        {allowanceEnough && (
+        {allowance.value >= stakeInput.numerator.toString() && (
           <Button
             mt={5}
             onClick={() => {
