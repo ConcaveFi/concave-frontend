@@ -1,4 +1,5 @@
 import { Box, Button, Collapse, Flex, Text } from '@concave/ui'
+import { formatDistance, formatDistanceStrict } from 'date-fns'
 import { Get_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql'
 import { useEffect, useState } from 'react'
 
@@ -19,7 +20,7 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
 
   const relatives = solds.map((value, index) => (
     <Text key={index} opacity={1 - (active ? index / 10 : (index / 10) * 3)}>
-      {epochToRelative(value.timestamp)}
+      {formatDistanceStrict(value.timestamp * 1000, new Date().getTime()) + ' ago'}
     </Text>
   ))
   const purchases = solds.map((value, index) => (
@@ -90,29 +91,3 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
 }
 
 export default BoldSoldsCard
-
-const epochToRelative = (epoch: number) => {
-  const msPerMinute = 60 * 1000
-  const msPerHour = msPerMinute * 60
-  const msPerDay = msPerHour * 24
-  const msPerMonth = msPerDay * 30
-  const msPerYear = msPerDay * 365
-
-  const timeNow = new Date().getTime()
-  const epochInMillis = epoch * 1000
-  const elapsed = timeNow - epochInMillis
-
-  if (elapsed < msPerMinute) {
-    return Math.round(elapsed / 1000) + ' seconds ago'
-  } else if (elapsed < msPerHour) {
-    return Math.round(elapsed / msPerMinute) + ' minutes ago'
-  } else if (elapsed < msPerDay) {
-    return Math.round(elapsed / msPerHour) + ' hours ago'
-  } else if (elapsed < msPerMonth) {
-    return Math.round(elapsed / msPerDay) + ' days ago'
-  } else if (elapsed < msPerYear) {
-    return Math.round(elapsed / msPerMonth) + ' months ago'
-  } else {
-    return Math.round(elapsed / msPerYear) + ' years ago'
-  }
-}
