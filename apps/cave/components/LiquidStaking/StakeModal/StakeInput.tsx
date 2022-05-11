@@ -16,7 +16,7 @@ const periodToPoolParameter = {
   '45 days': 3,
 }
 
-function StakeInput(props) {
+function StakeInput(props: any) {
   const cnvPrice = useFetchApi('/api/cnv')
   const [stakeInput, setStakeInput] = useState('')
   const [{ data: account }] = useAccount()
@@ -137,7 +137,14 @@ function StakeInput(props) {
         {allowanceEnough && (
           <Button
             mt={5}
-            onClick={() => lockCNV()}
+            onClick={() => {
+              lockCNV().then((r) => {
+                setSafeStakeInputValue('')
+                setTimeout(() => {
+                  props.onClose()
+                }, 300)
+              })
+            }}
             fontWeight="bold"
             fontSize="md"
             variant="primary"
