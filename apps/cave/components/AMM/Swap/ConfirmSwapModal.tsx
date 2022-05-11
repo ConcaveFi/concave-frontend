@@ -39,7 +39,9 @@ const TradeCurrencyInfo = ({ currencyAmount, fiatValue, priceImpact }: TradeCurr
       bg="blackAlpha.100"
     >
       <Stack spacing={1} direction="column" h="100%">
-        <Heading fontSize="2xl">{currencyAmount.toSignificant(2, { groupSeparator: ',' })}</Heading>
+        <Heading isTruncated maxW="200px" fontSize="2xl">
+          {currencyAmount.toExact({ groupSeparator: ',' })}
+        </Heading>
         <Flex fontWeight="bold" color="text.low" align="center">
           <Text fontSize="sm" mr={1}>
             $ {fiatValue.toFixed(2, { groupSeparator: ',' })}

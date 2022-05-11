@@ -1,7 +1,7 @@
 import { Currency, CurrencyAmount } from '@concave/gemswap-sdk'
 import { FlexProps, HStack, NumericInput, Stack, useMultiStyleConfig } from '@concave/ui'
 import { CurrencySelectorComponent } from 'components/CurrencySelector/CurrencySelector'
-import React, { ReactNode, useRef, useCallback, useState } from 'react'
+import React, { ReactNode, useCallback, useRef, useState } from 'react'
 import { useDebounce } from 'react-use'
 import { toAmount } from 'utils/toAmount'
 
@@ -32,10 +32,14 @@ export function CurrencyAmountField({
     [internalValue],
   )
 
-  const handleChange = useCallback(({ value }, { source }) => {
-    if (source === 'prop') return // if the value changed from props, ignore it, only update on user typing
-    setInternalValue(value)
-  }, [])
+  const handleChange = useCallback(
+    ({ value }, { source }) => {
+      if (source === 'prop') return // if the value changed from props, ignore it, only update on user typing
+      if (value === '') onChangeAmount(toAmount('0', currencyAmount.currency))
+      setInternalValue(value)
+    },
+    [currencyAmount?.currency, onChangeAmount],
+  )
 
   const onSelectCurrency = useCallback(
     (newCurrency: Currency) => onChangeAmount(toAmount(internalValue, newCurrency)),
@@ -57,7 +61,7 @@ export function CurrencyAmountField({
         />
         <CurrencySelector onSelect={onSelectCurrency} selected={currencyAmount?.currency} />
       </HStack>
-      {children}
+      <Stack onClick={() => (isFocused.current = false)}>{children}</Stack>
     </Stack>
   )
 }

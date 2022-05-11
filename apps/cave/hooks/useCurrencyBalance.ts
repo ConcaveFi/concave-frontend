@@ -24,6 +24,7 @@ export const useCurrencyBalance = (currency: Currency, { watch = false } = {}) =
       refetchInterval: watch ? AVERAGE_BLOCK_TIME[chainId] : false,
       enabled: !!currency && !!chainId && !!account?.address && !!signer,
       notifyOnChangeProps: 'tracked',
+      refetchOnWindowFocus: false,
       retry: false,
     },
   )
