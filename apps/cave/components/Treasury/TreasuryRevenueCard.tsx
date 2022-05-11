@@ -121,24 +121,25 @@ export default function TreasuryRevenueCard(props) {
       height="330px"
       bg={'#111e'}
       shadow={'0px 4px 4px rgba(0, 0, 0, 0.25), inset 0px 0px 20px rgba(87, 124, 255, 0.3)'}
+      textShadow="0px 0px 27px rgba(129, 179, 255, 0.41)"
     >
       <Flex direction={'row'} flex={1} alignItems="start" gap={5}>
         <Flex direction={'column'} gap={5}>
           <TreasuryInfo
             box1="Market Cap"
-            box1b={cnv.cnvData.data.marketCap}
+            box1b={'$' + cnv.cnvData.data.marketCap.toFixed(2)}
             box2="CNV Price"
-            box2b={cnv.cnvData.data.last}
+            box2b={'$' + cnv.cnvData.data.last.toFixed(2)}
             box3="Treasury value per CNV"
-            box3b={total / cnv.cnvData.data.last}
+            box3b={'$' + (total / cnv.cnvData.data.last).toFixed(2)}
           />
           <TreasuryInfo
             box1="Treasury Revenue 24h"
             box1b="+$23,832.3"
             box2="Treasury Value"
-            box2b={total}
+            box2b={'$' + total.toFixed(2)}
             box3="Concave total Supply"
-            box3b={cnv.cnvData.data.totalSupply}
+            box3b={'$' + cnv.cnvData.data.totalSupply.toFixed(2)}
           />
           <BondInfo
             bondbox1="Just now"

@@ -42,20 +42,20 @@ interface TokenInfoProps {
 }
 const TokenInfo = (props: TokenInfoProps) => {
   return (
-    <Card rounded={'2xl'} width={'271px'} height="52px" direction={'row'}>
-      <GlassPanel width={'131px'} height="52px" rounded={'2xl'}>
-        <Flex width={'50%'} justify="center" align={'center'}>
+    <Card rounded={'2xl'} width={'340px'} height="52px" direction={'row'}>
+      <GlassPanel width={'180px'} height="52px" rounded={'2xl'}>
+        <Flex width={'40%'} justify="center" align={'center'}>
           {/* <CurrencyIcon currency={props.token} /> */}
         </Flex>
-        <Flex width={'50%'} justify="start" align={'center'}>
-          <Text fontWeight={'700'} fontSize="21px">
+        <Flex width={'60%'} justify="start" align={'center'}>
+          <Text fontWeight={'700'} fontSize="18px" isTruncated>
             {props.tokenName}
           </Text>
         </Flex>
       </GlassPanel>
-      <Flex flex={1} justify="center" align={'center'}>
+      <Flex flex={1} justify="start" align={'center'} ml={4}>
         <Text fontWeight={'700'} fontSize="18px">
-          {props.value}
+          {'$' + parseFloat(props.value).toFixed(3)}
         </Text>
       </Flex>
     </Card>
@@ -129,6 +129,7 @@ const TreasyAssetsTitle = () => {
       rounded={'0px 0px 16px 16px'}
       justify="center"
       align="center"
+      textShadow={'0px 0px 27px rgba(129, 179, 255, 0.31)'}
     >
       <Text fontSize={'20px'} fontWeight="700">
         Treasury Assets and Activity
