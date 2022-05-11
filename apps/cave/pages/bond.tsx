@@ -136,7 +136,7 @@ export default function Bond() {
                     ? (1 - (+cnvMarketPrice / +bondSpotPrice) * 100).toFixed(2)
                     : '-'
                 }%`}
-                vestingTerm={`${termLength} Days`}
+                vestingTerm={`${termLength} ${termLength > 1 ? 'days' : 'day'}`}
               />
               {!userAddress && !bondSigma ? (
                 <>Wallet not connected</>
