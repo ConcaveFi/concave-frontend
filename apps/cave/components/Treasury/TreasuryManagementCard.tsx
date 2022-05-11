@@ -2,8 +2,12 @@ import { Currency, Token } from '@concave/gemswap-sdk'
 import { Box, Button, Card, Flex, FlexProps, Image, Text } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { CNV, DAI, WETH } from 'constants/tokens'
+import { Key } from 'react'
 
-export default function TreasuryManagementCard() {
+export default function TreasuryManagementCard(props: { assets: any }) {
+  const { assets } = props
+  console.log('assets', assets.treasury)
+
   return (
     <Card
       direction={'column'}
@@ -19,9 +23,12 @@ export default function TreasuryManagementCard() {
       <Flex gap={'inherit'} justify="center" align={'center'} my="20px">
         <FarmingViewer />
         <Flex direction={'column'} gap={3}>
-          <TokenInfo tokenName="DAI" token={DAI} value="$162,919" />
-          <TokenInfo tokenName="CNV" token={CNV} value="$367,245" />
-          <TokenInfo tokenName="ETH" token={WETH} value="$63,793" />
+          {assets.treasury.map(
+            (i: { name: string; total: string }, k: Key) =>
+              i.total > '1' && (
+                <TokenInfo key={k} tokenName={i.name} token={i.name} value={i.total} />
+              ),
+          )}
         </Flex>
       </Flex>
     </Card>
@@ -29,7 +36,7 @@ export default function TreasuryManagementCard() {
 }
 
 interface TokenInfoProps {
-  token: Currency
+  token: string
   tokenName: string
   value: string
 }
@@ -38,7 +45,7 @@ const TokenInfo = (props: TokenInfoProps) => {
     <Card rounded={'2xl'} width={'271px'} height="52px" direction={'row'}>
       <GlassPanel width={'131px'} height="52px" rounded={'2xl'}>
         <Flex width={'50%'} justify="center" align={'center'}>
-          <CurrencyIcon currency={props.token} />
+          {/* <CurrencyIcon currency={props.token} /> */}
         </Flex>
         <Flex width={'50%'} justify="start" align={'center'}>
           <Text fontWeight={'700'} fontSize="21px">

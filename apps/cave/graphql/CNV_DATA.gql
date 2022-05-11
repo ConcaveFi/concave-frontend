@@ -6,3 +6,14 @@ query GET_AMM_CNV_PRICE {
     }
   }
 }
+
+query GET_AMM_CNV_INFOS {
+  cnvData {
+    data {
+      last
+      marketCap
+      totalSupply
+      circulatingSupply
+    }
+  }
+}
