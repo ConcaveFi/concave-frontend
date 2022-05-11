@@ -6,7 +6,7 @@ const spin = keyframes({
   '100%': { transform: 'rotate(360deg)' },
 })
 interface BondToastCardProps {
-  type: 'info' | 'error' | 'successful' | 'warning'
+  type: 'info' | 'error' | 'success' | 'warning'
   title: string
   link: string
 }
@@ -18,7 +18,7 @@ const BondToastCard = ({ type, title, link }: BondToastCardProps) => {
 
   useEffect(() => {
     switch (type) {
-      case 'successful':
+      case 'success':
         setBgColor(greenGradient)
         break
       case 'error':
