@@ -36,3 +36,13 @@ query GET_STAKINGV1_LAST100_LOCK {
     amount
   }
 }
+
+query GET_ACCRUALBONDV1_LAST10_SOLD {
+  logAccrualBondsV1_BondSold(order_by: { txBlockNumber: desc }, limit: 10) {
+    timestamp
+    inputToken
+    inputaAmount
+    method
+    output
+  }
+}
