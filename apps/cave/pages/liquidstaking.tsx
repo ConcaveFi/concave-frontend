@@ -58,7 +58,7 @@ function LiquidStaking() {
       m={'auto'}
       alignItems={'center'}
       textAlign="center"
-      height={{ lg: '', md: '1700px' }}
+      maxHeight={{ lg: '1200px', base: '1700px' }}
     >
       <Heading as="h1" mt={16} fontSize="5xl">
         Liquid Staking
@@ -79,7 +79,7 @@ function LiquidStaking() {
         </Text>
         <GraphicGuide />
       </Flex>
-      <Flex alignItems="start" justifyContent="center" height={{ lg: '550', base: '1100px' }}>
+      <Flex alignItems="start" justifyContent="center" height={{ lg: '550px', base: '1100px' }}>
         <Flex
           gap={{ lg: 8, base: 3 }}
           justifyContent="center"
