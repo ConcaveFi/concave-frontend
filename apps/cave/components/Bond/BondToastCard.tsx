@@ -1,4 +1,4 @@
-import { Box, Card, Flex, keyframes, Link, Text } from '@concave/ui'
+import { Flex, keyframes, Link, Text } from '@concave/ui'
 import { useEffect, useState } from 'react'
 
 const spin = keyframes({
