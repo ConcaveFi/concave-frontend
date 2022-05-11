@@ -107,7 +107,8 @@ function StakeInput(props: any) {
           </Text>
           <HStack spacing={2}>
             <Text color="text.low" fontSize="sm" fontWeight="bold">
-              Balance: {(+cnvBalance.data?.formatted).toFixed(2)}
+              {/* Balance: {(+cnvBalance.data?.formatted).toFixed(2)} */}
+              Balance: {cnvBalance.data?.formatted.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0]}
             </Text>
             <Button textColor="blue.500" onClick={setMax} disabled={!cnvBalance.data}>
               Max
