@@ -719,6 +719,7 @@ export type Get_Stakingv1_Last100_LockQuery = {
     txHash: string
     txBlockNumber: any
     poolID: any
+    timestamp?: any | null
     positionID: any
     to: string
     amount: string
@@ -889,6 +890,7 @@ export const Get_Stakingv1_Last100_LockDocument = `
     txHash
     txBlockNumber
     poolID
+    timestamp
     positionID
     to
     amount

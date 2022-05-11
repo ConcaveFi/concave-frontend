@@ -21,6 +21,7 @@ import StakeInput from './StakeModal/StakeInput'
 import { Contract, ethers } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { LIQUID_STAKING_ADDRESS } from 'contracts/LiquidStaking/LiquidStakingAddress'
+import { useGet_Last_Poolid_VaprQuery } from 'graphql/generated/graphql'
 const providers = new ethers.providers.InfuraProvider('ropsten', '545e522b4c0e45078a25b86f3b646a9b')
 
 const periodToPoolParameter = {
@@ -38,7 +39,9 @@ function StakeCard(props) {
   const [capPercentage, setCapPercentage] = useState('100')
   const [isLargerThan600] = useMediaQuery('(min-width: 600px)')
   const [isLargerThan700] = useMediaQuery('(min-width: 700px)')
-
+  const { status, data, error, isFetching } = useGet_Last_Poolid_VaprQuery({
+    poolID: props.poolId,
+  })
   const [modalDirection, setModalDirection] = useState<'column' | 'row'>('row')
 
   useEffect(() => {
@@ -169,7 +172,8 @@ function StakeCard(props) {
               period={props.period}
               vaprText={vaprText}
               icon={props.icon}
-              vapr={props.vAPR}
+              vapr={data?.logStakingV1_PoolRewarded[0].base_vAPR}
+              // vapr={props.vAPR}
             />
             <VStack mt={8} spacing={8}>
               <StakeInfo

@@ -94,7 +94,6 @@ function LiquidStaking() {
         </Text>
         <GraphicGuide />
       </Flex>
-      <LiquidLocksCards />
       <Flex alignItems="start" justifyContent="center" height="550">
         <Flex
           gap={stakingGap}
@@ -104,22 +103,21 @@ function LiquidStaking() {
           wrap={wrap}
           width={width}
         >
-          {/* {StakingGroup.map((i) => {
-            const { status, data, error, isFetching } = useGet_Last_Poolid_VaprQuery({
-              poolID: i.poolID,
-            })
+          {StakingGroup.map((i) => {
             return (
               <StakeCard
                 icon={i.icon}
                 period={i.period}
-                vAPR={status === 'success' && data.logStakingV1_PoolRewarded[0].base_vAPR}
+                poolId={i.poolID}
+                // vAPR={status === 'success' && data.logStakingV1_PoolRewarded[0].base_vAPR}
                 stakingLink={i.stakingLink}
                 key={i.period}
               />
             )
-          })} */}
+          })}
         </Flex>
       </Flex>
+      <LiquidLocksCards />
     </Box>
   )
 }
