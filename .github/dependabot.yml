@@ -1,6 +1,6 @@
 version: 2
 updates:
-  - package-ecosystem: 'yarn'
+  - package-ecosystem: 'npm'
     directory: '/'
     open-pull-requests-limit: 3
     reviewers:
@@ -9,6 +9,6 @@ updates:
       interval: 'daily'
       time: '04:00'
     labels:
-      - "yarn"
+      - "dependabot"
       - "dependencies"
     target-branch: 'develop'
