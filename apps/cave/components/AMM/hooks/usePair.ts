@@ -48,7 +48,7 @@ export const usePairs = <T = Pair[]>(
   return useQuery(
     [
       'pairs',
-      tokenB?.address !== tokenA?.address && tokenA?.sortsBefore(tokenB)
+      tokenB && tokenB?.address !== tokenA?.address && tokenA?.sortsBefore(tokenB)
         ? [tokenA?.address, tokenB?.address]
         : [tokenB?.address, tokenA?.address],
       maxHops,
