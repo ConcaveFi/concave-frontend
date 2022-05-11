@@ -24,8 +24,8 @@ const BondToastCard = ({ type, title, link }: BondToastCardProps) => {
       case 'error':
         setBgColor(redGradient)
         break
-      case 'successful':
-        setBgColor(greenGradient)
+      case 'info':
+        setBgColor(defaultGradient)
         break
       case 'warning':
         setBgColor(orangeGradient)
@@ -34,8 +34,7 @@ const BondToastCard = ({ type, title, link }: BondToastCardProps) => {
   }, [type])
   return (
     <Flex
-      transition={'all'}
-      transitionDuration="2s"
+      animation={''}
       height={'80px'}
       width="260px"
       rounded="2xl"
@@ -50,8 +49,8 @@ const BondToastCard = ({ type, title, link }: BondToastCardProps) => {
           position={'absolute'}
           css={rotate}
           bg={bgColor}
-          height="600px"
-          width={'600px'}
+          height="400px"
+          width={'300px'}
           zIndex={1}
         />
       </Flex>
@@ -80,6 +79,7 @@ const BondToastCard = ({ type, title, link }: BondToastCardProps) => {
 export default BondToastCard
 
 const greenGradient = 'linear-gradient(45deg, #48D89A 50%, #328E5D 10%, #259E59 100%)'
-const redGradient = 'linear-gradient(45deg, #F56060, red, #AE0A0A)'
-const grayGradient = 'linear-gradient(90deg, #72639B 0%, #44B9DE 100%)'
+const redGradient = 'linear-gradient(45deg, #A54747 50%, #F79494 40%,red 100%)'
+const defaultGradient =
+  'linear-gradient(41.89deg, #53399B 0.69%, #7DE0FF 38.19%, #504179 72.85%, #84E2FF 100%)'
 const orangeGradient = 'linear-gradient(50deg, #707773 50%, white 10%, #F98E13 100% )'
