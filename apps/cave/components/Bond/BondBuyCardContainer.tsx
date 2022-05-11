@@ -20,7 +20,6 @@ export default function BondBuyCardContainer(props: any) {
       const capitalizedStatus = currentStatus[0].toUpperCase() + currentStatus.slice(1)
       const title = `Transaction ${capitalizedStatus}`
       const link = `https://ropsten.etherscan.io/tx/${currentHash}`
-      console.log('amountInOut', amountInOut)
       toast({
         id: currentHash,
         title: capitalizedStatus,
@@ -48,17 +47,22 @@ export default function BondBuyCardContainer(props: any) {
 
   useEffect(() => {
     console.log(data, loading, error)
-    if (loading) {
-      // console.log('is loading', loading)
-      currentStatus = 'info'
-    } else if (data) {
+    let showToast = false
+    // if (loading) {
+    // console.log('is loading', loading)
+    // currentStatus = 'info'
+    // showToast = true
+    // } else
+    if (data) {
       // console.log(data)
       currentStatus = 'success'
+      showToast = true
     } else if (error) {
       // console.log(error)
       currentStatus = 'error'
+      showToast = true
     }
-    addToast()
+    showToast && addToast()
   }, [data, loading, error])
 
   const parentProps = {
@@ -68,7 +72,7 @@ export default function BondBuyCardContainer(props: any) {
   }
   return (
     <>
-      <TxToast />
+      {/* <TxToast /> */}
       <BondBuyCard {...props} {...parentProps} />
     </>
   )
