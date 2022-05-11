@@ -6,6 +6,15 @@ import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId
 import { useContract, useSigner } from 'wagmi'
 import { isAddress } from 'ethers/lib/utils'
 
+const initialState = {
+  isWaitingForConfirmation: false,
+  isError: false,
+  error: undefined,
+  isTransactionSent: false,
+  data: undefined,
+  trade: undefined,
+}
+
 export const useSwapTransaction = (
   trade: Trade<Currency, Currency, TradeType>,
   settings: SwapSettings,
@@ -55,35 +64,19 @@ export const useSwapTransaction = (
   //   },
   // )
 
-  const [state, setState] = useState({
-    isWaitingForConfirmation: false,
-    isError: false,
-    error: undefined,
-    isTransactionSent: false,
-    data: undefined,
-    trade,
-  })
+  const [state, setState] = useState(initialState)
   const submit = async () => {
-    setState((s) => ({
-      ...s,
-      trade, // locks the tx trade
-      isWaitingForConfirmation: true,
-    }))
-    const { methodName, args, value } = callParameters
+    setState({ ...initialState, trade, isWaitingForConfirmation: true })
     try {
+      const { methodName, args, value } = callParameters
       const tx = await routerContract[methodName](...args, { value })
-      setState((s) => ({
-        ...s,
-        isTransactionSent: true,
-        data: tx,
-        isWaitingForConfirmation: false,
-      }))
+      setState({ ...initialState, trade, isTransactionSent: true, data: tx })
       onTransactionSent(tx)
     } catch (error) {
       if (error.message === 'User rejected the transaction')
-        return setState((s) => ({ ...s, isWaitingForConfirmation: false }))
+        return setState({ ...initialState, trade, isWaitingForConfirmation: false })
 
-      setState((s) => ({ ...s, isError: true, error, isWaitingForConfirmation: false }))
+      setState({ ...initialState, trade, isError: true, error })
     }
   }
 
