@@ -178,7 +178,7 @@ export default function Bond() {
               </Card>
               <BondSoldsCard active={isOpen} data={last10SoldsData} />
             </Card>
-            {/* <ViewSoldsButton onClick={() => setIsOpen(!isOpen)} active={isOpen} /> */}
+            <ViewSoldsButton onClick={() => setIsOpen(!isOpen)} active={isOpen} />
           </Box>
           <BondBuyCard />
         </Flex>
