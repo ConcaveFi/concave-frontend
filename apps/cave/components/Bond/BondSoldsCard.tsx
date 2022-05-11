@@ -53,7 +53,7 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
               Current Price:
             </Text>
             <Text mr={3} ml={1} fontWeight={'700'}>
-              ${(AMMData?.data.cnvData.data.last).toFixed(3)}
+              ${AMMData?.data?.cnvData?.data?.last?.toFixed(3)}
             </Text>
           </Flex>
 
