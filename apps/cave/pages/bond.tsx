@@ -46,7 +46,7 @@ export default function Bond() {
   const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
-    getCurrentBlockTimestamp(networkId).then((x) => {
+    getCurrentBlockTimestamp().then((x) => {
       setCurrentBlockTs(x)
     })
     const interval = setInterval(() => {
@@ -127,7 +127,7 @@ export default function Bond() {
           justifyContent={'center'}
         >
           <Box pos="relative" h="fit-content">
-            <Card variant="secondary" maxW={430}>
+            <Card variant="secondary">
               <Card
                 variant="secondary"
                 borderWidth={1}
@@ -145,7 +145,7 @@ export default function Bond() {
                   icon="/assets/tokens/cnv.svg"
                   roi={`${
                     cnvMarketPrice > 0
-                      ? (1 - (+cnvMarketPrice / +bondSpotPrice) * 100).toFixed(2)
+                      ? ((1 - +bondSpotPrice / +cnvMarketPrice) * 100).toFixed(2)
                       : '-'
                   }%`}
                   vestingTerm={`${termLength} Days`}
