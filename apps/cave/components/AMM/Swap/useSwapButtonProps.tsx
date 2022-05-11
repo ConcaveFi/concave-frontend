@@ -87,8 +87,7 @@ export const useSwapButtonProps = ({
     if (permit.isLoading) return { loadingText: 'Sign in your wallet', isLoading: true }
 
     const permitErroredOrWasNotInitializedYet = permit.isError || permit.isIdle
-    const allowanceIsNotEnough =
-      allowance.isSuccess && !!allowance.value.lt(inputAmount.numerator.toString())
+    const allowanceIsNotEnough = allowance.isSuccess && !!allowance.amount?.lessThan(inputAmount)
 
     if (
       (permitErroredOrWasNotInitializedYet && allowanceIsNotEnough) ||

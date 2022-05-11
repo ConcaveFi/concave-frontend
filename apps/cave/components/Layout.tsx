@@ -3,9 +3,7 @@ import dynamic from 'next/dynamic'
 import React from 'react'
 import { SideBar } from './SideBar/SideBar'
 
-const TestnetIndicator = dynamic(() =>
-  import('./TestTokensMinter').then((module) => module.TestnetIndicator),
-)
+const TestnetIndicator = dynamic(() => import('./Faucet').then((module) => module.TestnetIndicator))
 
 export const DefaultLayout = ({ children }) => {
   return (

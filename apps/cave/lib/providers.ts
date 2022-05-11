@@ -16,7 +16,7 @@ const NoProviderKeyError = `Concave Provider
 const getFallbackProviders = (chainId: number) => {
   const fallbackProviderConfigs = []
 
-  if (NEXT_PUBLIC_CONCAVE_RPC_KEY)
+  if (NEXT_PUBLIC_CONCAVE_RPC_KEY && chainId === 1)
     fallbackProviderConfigs.push({
       provider: new providers.JsonRpcProvider(concaveRPC, chainId),
       priority: 1,

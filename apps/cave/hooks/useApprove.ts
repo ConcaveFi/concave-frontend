@@ -1,6 +1,6 @@
 import { BigNumber, BigNumberish, Contract } from 'ethers'
 import { formatUnits } from 'ethers/lib/utils'
-import { Token } from '@concave/gemswap-sdk'
+import { CurrencyAmount, Token } from '@concave/gemswap-sdk'
 import { erc20ABI, useAccount, useProvider, useSigner } from 'wagmi'
 import { MaxUint256 } from '@concave/gemswap-sdk'
 import { useQuery } from 'react-query'
@@ -34,6 +34,7 @@ export const useAllowance = (token: Token, spender: string, userAddress: string)
     isSuccess,
     value,
     formatted: value && formatUnits(value, token?.decimals),
+    amount: value && CurrencyAmount.fromRawAmount(token, value.toString()),
     refetch,
   }
 }
