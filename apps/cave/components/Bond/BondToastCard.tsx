@@ -1,25 +1,18 @@
-import { Box, Card, Flex, Text } from '@concave/ui'
+import { Box, Card, Flex, keyframes, Text } from '@concave/ui'
 import { useEffect, useState } from 'react'
 
-const BondToastCard = () => {
-  return (
-    <Flex direction={'column'}>
-      <CardExample1 type="error" />
-      <CardExample1 type="successful" />
-      <CardExample1 type="info" />
-    </Flex>
-  )
+const spin = keyframes({
+  '0%': { backgroundImage: 'linear-gradient(0deg, #707773 0%, orange, #707773 )' },
+  '100%': { backgroundImage: 'linear-gradient(180deg, #707773 0%, orange, #707773 )' },
+})
+interface BondToastCardProps {
+  type: 'info' | 'error' | 'successful' | 'warning'
 }
-
-export default BondToastCard
-
-interface CardExample1Props {
-  type: 'info' | 'error' | 'successful'
-}
-
-const CardExample1 = (props: CardExample1Props) => {
+const BondToastCard = (props: BondToastCardProps) => {
   const { type } = props
-  const [bgColor, setBgColor] = useState('')
+  const [bgColor, setBgColor] = useState<any>()
+  const [deg, setDeg] = useState(0)
+  const orangeGradient = { animation: `${spin} 0.3s linear infinite` }
 
   useEffect(() => {
     switch (type) {
@@ -29,15 +22,21 @@ const CardExample1 = (props: CardExample1Props) => {
       case 'error':
         setBgColor(redGradient)
         break
-      default:
-        setBgColor(defaultGradient)
+      case 'successful':
+        setBgColor(greenGradient)
+        break
+      case 'warning':
+        setBgColor(orangeGradient)
+        break
     }
   }, [type])
-
   return (
     <Flex
-      bg={bgColor}
+      bg={orangeGradient}
+      transition={'all'}
+      transitionDuration="2s"
       p={'1px'}
+      css={orangeGradient}
       height={'80px'}
       width="260px"
       rounded="2xl"
@@ -64,6 +63,8 @@ const CardExample1 = (props: CardExample1Props) => {
   )
 }
 
+export default BondToastCard
+
 const greenGradient = 'linear-gradient(45deg, #48D89A, green, #259E59)'
 const redGradient = 'linear-gradient(45deg, #F56060, red, #AE0A0A)'
-const defaultGradient = 'linear-gradient(90deg, #72639B 0%, #44B9DE 100%)'
+const grayGradient = 'linear-gradient(90deg, #72639B 0%, #44B9DE 100%)'
