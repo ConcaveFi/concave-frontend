@@ -1,5 +1,5 @@
 import { useQuery, UseQueryResult } from 'react-query'
-import { chain, useNetwork, useProvider } from 'wagmi'
+import { chain, useNetwork } from 'wagmi'
 import { Fetcher, Token } from '@concave/gemswap-sdk'
 import { concaveProvider } from 'lib/providers'
 
@@ -13,12 +13,13 @@ export const useTokenList = () => {
       loading,
     },
   ] = useNetwork()
-  const provider = useProvider()
+  const provider = concaveProvider(selectedChain.id)
   return useQuery(['token-list', selectedChain.name], async () => {
     if (loading) return []
     return fetch(concaveTokenList(selectedChain.name))
       .then((d) => d.json() as Promise<ConcaveTokenList>)
       .then((l) => l.tokens)
+      .then((list) => list.filter((t) => t.chainId === selectedChain.id))
       .then((list) => list.map((token) => Fetcher.fetchTokenData(token.address, provider)))
       .then((tokens) => Promise.all(tokens))
   })
