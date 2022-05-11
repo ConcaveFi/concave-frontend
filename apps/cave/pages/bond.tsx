@@ -127,7 +127,7 @@ export default function Bond() {
           justifyContent={'center'}
         >
           <Box pos="relative" h="fit-content">
-            <Card variant="secondary">
+            <Card variant="secondary" maxW={430}>
               <Card
                 variant="secondary"
                 borderWidth={1}

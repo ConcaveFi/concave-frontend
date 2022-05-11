@@ -1,7 +1,13 @@
 import { Box, Button, Collapse, Flex, Text } from '@concave/ui'
+import { BOND_ADDRESS } from 'contracts/Bond/BondingAddress'
 import { formatDistance, formatDistanceStrict } from 'date-fns'
-import { Get_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql'
+import {
+  Get_Accrualbondv1_Last10_SoldQuery,
+  useGet_Amm_Cnv_PriceQuery,
+} from 'graphql/generated/graphql'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useEffect, useState } from 'react'
+import { getBondSpotPrice } from './BondState'
 
 interface BoldSoldsCardProps {
   active: boolean
@@ -9,14 +15,24 @@ interface BoldSoldsCardProps {
 }
 
 const BoldSoldsCard = (props: BoldSoldsCardProps) => {
+  const netWorkdId = useCurrentSupportedNetworkId()
   const { data, active } = props
+  const AMMData = useGet_Amm_Cnv_PriceQuery()
   const [solds, setSolds] = useState([])
+  const [bondSpotPrice, setBondSpotPrice] = useState('0')
 
   useEffect(() => {
     if (data) {
       setSolds(data.logAccrualBondsV1_BondSold)
     }
   }, [data])
+
+  useEffect(() => {
+    if (bondSpotPrice === '0')
+      getBondSpotPrice(netWorkdId, BOND_ADDRESS[netWorkdId])
+        .then(setBondSpotPrice)
+        .catch((error) => {})
+  })
 
   const relatives = solds.map((value, index) => (
     <Text key={index} opacity={1 - (active ? index / 10 : (index / 10) * 3)}>
@@ -37,7 +53,7 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
               Current Price:
             </Text>
             <Text mr={3} ml={1} fontWeight={'700'}>
-              249,1$
+              ${(AMMData?.data.cnvData.data.last).toFixed(3)}
             </Text>
           </Flex>
 
@@ -46,7 +62,7 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
               Bond Price:
             </Text>
             <Text mr={3} ml={1} fontWeight={'700'}>
-              249,1$
+              {parseFloat(bondSpotPrice).toFixed(5)}
             </Text>
           </Flex>
         </Flex>
