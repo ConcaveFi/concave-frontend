@@ -46,7 +46,7 @@ export default function Bond() {
   const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
-    getCurrentBlockTimestamp().then((x) => {
+    getCurrentBlockTimestamp(networkId).then((x) => {
       setCurrentBlockTs(x)
     })
     const interval = setInterval(() => {

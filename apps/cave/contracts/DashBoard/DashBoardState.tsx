@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 import { useAccount, useConnect } from 'wagmi'
 import { createAlchemyWeb3, Nft } from '@alch/alchemy-web3'
 import { nftContract } from 'components/Dashboard/UserPositionCard'
-import { concaveProvider as providers, rawProvider } from 'lib/providers'
+import { concaveProvider as providers } from 'lib/providers'
 
 export async function getAllUsersPositionsID(address: string, netWorkId: number) {
   const usersNft = await getAllUserNfts(address, netWorkId)
