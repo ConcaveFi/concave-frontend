@@ -36,9 +36,7 @@ const GasPrice = () => {
   )
 }
 
-export function BondBuyCard(props: any) {
-  const { bondTransaction, setBondTransaction, setAmountInAndOut } = props
-
+export function BondBuyCard({ bondTransaction, setBondTransaction, setAmountInAndOut }: any) {
   const { currencyIn, currencyOut, userAddress, balance, signer, networkId } = useBondState()
   // const [bondTransaction, setBondTransaction] = useState()
   const [settings, setSettings] = useState<BondSettings>(defaultSettings)
