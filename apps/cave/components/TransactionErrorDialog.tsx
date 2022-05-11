@@ -14,7 +14,7 @@ const TransactionError = ({ error, onClose }: { error: string; onClose: () => vo
       maxH="40vh"
       overflow="auto"
     >
-      {error}
+      {error || 'An unexpected error occured'}
     </Text>
 
     <Flex>
