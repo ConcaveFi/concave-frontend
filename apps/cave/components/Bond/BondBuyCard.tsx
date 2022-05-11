@@ -48,7 +48,7 @@ export function BondBuyCard({ bondTransaction, setBondTransaction, setAmountInAn
   const [bondSpotPrice, setBondSpotPrice] = useState<string>()
 
   const confirmModal = useDisclosure()
-  const receiptModal = useDisclosure()
+  // const receiptModal = useDisclosure()
 
   const approveInfo = useApprovalWhenNeeded(
     currencyIn,
@@ -126,8 +126,8 @@ export function BondBuyCard({ bondTransaction, setBondTransaction, setAmountInAn
           purchaseBond(networkId, amountIn.toFixed(), userAddress, signer, settings, amountOut)
             .then((tx) => {
               setBondTransaction(tx)
-              setAmountInAndOut({ amountIn: amountIn.toFixed(), amountOut: amountOut })
               confirmModal.onClose()
+              setAmountInAndOut({ amountIn: amountIn.toFixed(), amountOut: amountOut })
             })
             .catch((e) => {
               console.log('get position info failed', e)
