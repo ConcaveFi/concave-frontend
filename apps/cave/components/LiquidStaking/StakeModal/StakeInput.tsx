@@ -44,8 +44,8 @@ function StakeInput(props: any) {
 
   const setSafeStakeInputValue = (value: string) => {
     let currentValue = value
-    if (Number(currentValue) > Number.MAX_SAFE_INTEGER) {
-      currentValue = String(Number.MAX_SAFE_INTEGER)
+    if (Number(currentValue) >= +cnvBalance.data?.formatted) {
+      currentValue = String(+cnvBalance.data?.formatted)
     }
     setStakeInput(String(currentValue))
   }
