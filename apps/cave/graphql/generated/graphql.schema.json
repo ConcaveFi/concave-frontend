@@ -1601,7 +1601,7 @@
         "description": "columns and relationships of \"logAccrualBondsV1_BondSold\"",
         "fields": [
           {
-            "name": "inputToken",
+            "name": "inputAmount",
             "description": null,
             "args": [],
             "type": {
@@ -1617,7 +1617,7 @@
             "deprecationReason": null
           },
           {
-            "name": "inputaAmount",
+            "name": "inputToken",
             "description": null,
             "args": [],
             "type": {
@@ -1785,7 +1785,7 @@
             "deprecationReason": null
           },
           {
-            "name": "inputToken",
+            "name": "inputAmount",
             "description": null,
             "type": {
               "kind": "INPUT_OBJECT",
@@ -1797,7 +1797,7 @@
             "deprecationReason": null
           },
           {
-            "name": "inputaAmount",
+            "name": "inputToken",
             "description": null,
             "type": {
               "kind": "INPUT_OBJECT",
@@ -1892,7 +1892,7 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "inputToken",
+            "name": "inputAmount",
             "description": null,
             "type": {
               "kind": "ENUM",
@@ -1904,7 +1904,7 @@
             "deprecationReason": null
           },
           {
-            "name": "inputaAmount",
+            "name": "inputToken",
             "description": null,
             "type": {
               "kind": "ENUM",
@@ -2001,13 +2001,13 @@
         "interfaces": null,
         "enumValues": [
           {
-            "name": "inputToken",
+            "name": "inputAmount",
             "description": "column name",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "inputaAmount",
+            "name": "inputToken",
             "description": "column name",
             "isDeprecated": false,
             "deprecationReason": null

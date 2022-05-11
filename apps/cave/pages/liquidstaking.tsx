@@ -1,8 +1,13 @@
-import { Box, Flex, Heading, Text, useMediaQuery } from '@concave/ui'
+import { Box, Card, Flex, Heading, Text, useMediaQuery } from '@concave/ui'
 import StakeCard from 'components/LiquidStaking/StakeCard'
 import GraphicGuide from 'components/LiquidStaking/GraphicGuide'
 import { useEffect, useState } from 'react'
-import { useGet_Last_Poolid_VaprQuery } from 'graphql/generated/graphql'
+import {
+  useGet_Last_Poolid_VaprQuery,
+  useGet_Stakingv1_Last100_LockQuery,
+} from 'graphql/generated/graphql'
+import { formatEther } from 'ethers/lib/utils'
+import LiquidLocksCards from 'components/LiquidStaking/LiquidLocksCards'
 
 interface StakingGroupProps {
   icon: string
@@ -89,8 +94,8 @@ function LiquidStaking() {
         </Text>
         <GraphicGuide />
       </Flex>
-
-      <Flex mt={14} alignItems="start" justifyContent="center" height="700">
+      <LiquidLocksCards />
+      <Flex alignItems="start" justifyContent="center" height="550">
         <Flex
           gap={stakingGap}
           justifyContent="center"
@@ -99,7 +104,7 @@ function LiquidStaking() {
           wrap={wrap}
           width={width}
         >
-          {StakingGroup.map((i) => {
+          {/* {StakingGroup.map((i) => {
             const { status, data, error, isFetching } = useGet_Last_Poolid_VaprQuery({
               poolID: i.poolID,
             })
@@ -112,7 +117,7 @@ function LiquidStaking() {
                 key={i.period}
               />
             )
-          })}
+          })} */}
         </Flex>
       </Flex>
     </Box>
@@ -120,30 +125,3 @@ function LiquidStaking() {
 }
 
 export default LiquidStaking
-
-{
-  /* <Flex
-          direction={'row'}
-          gap={8}
-          position="relative"
-          mt={isLargerThan950 ? 16 : 0}
-          border=" 2px solid  white"
-          maxWidth={!isLargerThan950 ? 700 : {}}
-          wrap={isLargerThan1200 ? 'nowrap' : 'wrap'}
-          transform={!isLargerThan1200 ? 'scale(0.7)' : ''}
-          transition="all"
-          transitionDuration={'0.4s'}
-          justifyContent="center"
-          alignItems={'start'}
-        >
-          {StakingGroup.map((s) => (
-            <StakeCard
-              icon={s.icon}
-              period={s.period}
-              vapr={s.vapr}
-              stakingLink={s.stakingLink}
-              key={s.period}
-            />
-          ))}
-        </Flex> */
-}
