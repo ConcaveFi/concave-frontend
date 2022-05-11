@@ -25,3 +25,24 @@ query GET_STACKINGV1_BY_POOL_ID($poolID: numeric_comparison_exp) {
     lockedUntil
   }
 }
+
+query GET_STAKINGV1_LAST100_LOCK {
+  logStakingV1_Lock {
+    txHash
+    txBlockNumber
+    poolID
+    positionID
+    to
+    amount
+  }
+}
+
+query GET_ACCRUALBONDV1_LAST10_SOLD {
+  logAccrualBondsV1_BondSold(order_by: { txBlockNumber: desc }, limit: 10) {
+    timestamp
+    inputToken
+    inputAmount
+    method
+    output
+  }
+}

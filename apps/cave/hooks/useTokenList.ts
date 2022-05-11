@@ -1,6 +1,7 @@
 import { useQuery, UseQueryResult } from 'react-query'
-import { Chain, chain, useNetwork } from 'wagmi'
-import { Token } from '@concave/gemswap-sdk'
+import { chain, useNetwork } from 'wagmi'
+import { Fetcher, Token } from '@concave/gemswap-sdk'
+import { concaveProvider } from 'lib/providers'
 
 const concaveTokenList = (networkName: string) =>
   `/assets/tokenlists/${networkName.toLowerCase()}/concave.json`
@@ -12,38 +13,22 @@ export const useTokenList = () => {
       loading,
     },
   ] = useNetwork()
-  const chainName = selectedChain.name || 'mainnet'
-  return useQuery(['token-list', chainName], async () => {
+  const provider = concaveProvider(selectedChain.id)
+  return useQuery(['token-list', selectedChain.name], async () => {
     if (loading) return []
-    return fetch(concaveTokenList(chainName))
+    return fetch(concaveTokenList(selectedChain.name))
       .then((d) => d.json() as Promise<ConcaveTokenList>)
       .then((l) => l.tokens)
-      .then((list) =>
-        list
-          .filter((t) => t.chainId === selectedChain.id)
-          .map(
-            (token) =>
-              new Token(token.chainId, token.address, token.decimals, token.symbol, token.name),
-          ),
-      )
+      .then((list) => list.filter((t) => t.chainId === selectedChain.id))
+      .then((list) => list.map((token) => Fetcher.fetchTokenData(token.address, provider)))
+      .then((tokens) => Promise.all(tokens))
   })
 }
 
-export const findTokenByAddress = async (
-  selectedChain: Chain = chain.mainnet,
-  address: Promise<string>,
-) => {
-  const tokenAddress = await address
-  return fetch(concaveTokenList(selectedChain.name))
-    .then((d) => d.json() as Promise<ConcaveTokenList>)
-    .then((l) => l.tokens)
-    .then((list) =>
-      list.find((token) => token.address.toLowerCase() === tokenAddress.toLowerCase()),
-    )
-    .then((token) => {
-      if (!token) return new Token(chain.ropsten.id, tokenAddress, 18, 'NA', 'Not Found Token')
-      return new Token(chain.ropsten.id, token.address, token.decimals, token.symbol, token.name)
-    })
+export const useFetchTokenData = (chainID: number, address: string) => {
+  return useQuery(['fetchToken', address, chainID], () => {
+    return Fetcher.fetchTokenData(address, concaveProvider(chainID))
+  })
 }
 
 const headers = { 'x-api-key': process.env.NEXT_PUBLIC_MORALIS_TOKEN }

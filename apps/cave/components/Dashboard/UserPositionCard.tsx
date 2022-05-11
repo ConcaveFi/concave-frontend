@@ -1,8 +1,9 @@
-import { Box, Flex } from '@concave/ui'
+import { Box, Collapse, Flex, useDisclosure } from '@concave/ui'
 import DividendsShare from './UserPosition/StakingRewards'
 import MarketplaceListing from './UserPosition/MarketplaceListing'
 import NftPositionContainer from './UserPosition/NftPositionContainer'
 import RedeemCardViewer from './UserPosition/RedeemViewer'
+import { useState } from 'react'
 
 export type nftContract = {
   maturity: number
@@ -17,10 +18,7 @@ interface NftPositionCardProps {
 
 const UserPositionCard = (props: NftPositionCardProps) => {
   const { contract } = props
-  const maturity = contract && contract.maturity
-  const poolID = contract && contract.poolID
-  const shares = contract && contract.shares
-  const rewardDebt = contract && contract.rewardDebt
+  const { maturity, poolID, shares, rewardDebt } = contract
 
   const sharesDecimals = parseInt(shares?._hex, 16) / 1000000000000000000
   const gained = parseInt(rewardDebt?._hex, 16) / 1000000000000000000
@@ -28,14 +26,13 @@ const UserPositionCard = (props: NftPositionCardProps) => {
   const dateToRedeem = epochConverter(maturity)
   const currentData = new Date()
   const redeemIn = dateToRedeem.getTime() - currentData.getTime()
+  const [active, setActive] = useState(true)
 
   return (
     <Box
       pos={'relative'}
       borderRadius={'2xl'}
-      width={{ lg: '700px', md: '520px' }}
       maxHeight={{ lg: '300px', md: '400px' }}
-      maxWidth={'714px'}
       bg={'linear-gradient(223.18deg, #19394C 27.18%, #0A161F 96.11%)'}
       mr={1}
       mb={3}
@@ -46,21 +43,23 @@ const UserPositionCard = (props: NftPositionCardProps) => {
           rounded="2xl"
           maxWidth={{ lg: '550px', md: '380px' }}
         >
-          <Flex
-            height={{ lg: '275px' }}
-            bgSize="20% 30%"
-            bgImage={'/assets/textures/metal.png'}
-            shadow={'up'}
-            rounded="2xl"
-          >
+          <Flex bgSize="20% 30%" bgImage={'/assets/textures/metal.png'} shadow={'up'} rounded="2xl">
             <Flex direction={'column'}>
-              <NftPositionContainer stakeType={poolID} redeemIn={redeemIn} />
-              <RedeemCardViewer gained={gained} redeemIn={redeemIn} initial={sharesDecimals} />
-              <MarketplaceListing />
+              <NftPositionContainer
+                onChange={() => setActive(!active)}
+                stakeType={poolID}
+                redeemIn={redeemIn}
+              />
+              <Collapse in={active}>
+                <RedeemCardViewer gained={gained} redeemIn={redeemIn} initial={sharesDecimals} />
+                <MarketplaceListing />
+              </Collapse>
             </Flex>
           </Flex>
         </Box>
-        <DividendsShare />
+        <Collapse in={active}>
+          <DividendsShare />
+        </Collapse>
       </Flex>
     </Box>
   )

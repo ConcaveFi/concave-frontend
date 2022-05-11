@@ -1,5 +1,4 @@
 import { CurrencyAmount, Fetcher, Pair } from '@concave/gemswap-sdk'
-import { SpinIcon } from '@concave/icons'
 import {
   Accordion,
   AccordionButton,
@@ -9,15 +8,14 @@ import {
   Card,
   Flex,
   HStack,
-  keyframes,
   Stack,
   Text,
-  VStack,
 } from '@concave/ui'
 import { AddLiquidityModalButton } from 'components/AMM/AddLiquidity/AddLiquidity'
 import { RemoveLiquidityModalButton } from 'components/AMM/RemoveLiquidity/RemoveLiquidity'
 import { ConnectWallet } from 'components/ConnectWallet'
 import { CurrencyIcon } from 'components/CurrencyIcon'
+import { Loading } from 'components/Loading'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { precision } from 'hooks/usePrecision'
 import { useAddressTokenList } from 'hooks/useTokenList'
@@ -35,34 +33,20 @@ export const MyPositions = () => {
     return Fetcher.fetchPairs(chainId, provider)
   })
   const [{ data: account }] = useAccount()
-  const { data: tokens, isLoading } = useAddressTokenList(account?.address)
+  const { data: tokens, isLoading: userPoolsLoading } = useAddressTokenList(account?.address)
 
+  if (userPoolsLoading) {
+    return <Loading size="lg" label="Loading user pools" />
+  }
   if (allPairs.isLoading) {
-    return (
-      <Flex justifyContent={'center'}>
-        <VStack gap={1}>
-          <SpinIcon __css={spinnerStyles} width="16" height="16" viewBox="0 0 64 64" />
-          <Text>Loading pools</Text>
-        </VStack>
-      </Flex>
-    )
+    return <Loading size="lg" label="Loading pools" />
   }
   if (allPairs.error) {
     return <p>Error to get Pairs</p>
   }
 
-  if (isLoading) {
-    return (
-      <Flex justifyContent={'center'}>
-        <VStack gap={1}>
-          <SpinIcon __css={spinnerStyles} width="16" height="16" viewBox="0 0 64 64" />
-          <Text>Loading user pools</Text>
-        </VStack>
-      </Flex>
-    )
-  }
   const userPairs = allPairs.data.filter((p) => {
-    return (tokens || []).find((t) => p.liquidityToken.address === t.address)
+    return tokens.find((t) => p.liquidityToken.address === t.address)
   })
 
   const pairs = view === 'user' ? userPairs : allPairs.data
@@ -123,7 +107,7 @@ const PairsAccordion = ({ userAddress, pairs }: PairsAccordionProps) => {
   if (!pairs.length) {
     const { label, Button } = userAddress
       ? {
-          label: 'You dont have pools on your wallet.',
+          label: 'You are not in any pools',
           Button: <AddLiquidityModalButton />,
         }
       : { label: 'You are disconnected.', Button: <ConnectWallet /> }
@@ -154,19 +138,6 @@ const PairsAccordion = ({ userAddress, pairs }: PairsAccordionProps) => {
   )
 }
 
-const spin = keyframes({
-  '0%': {
-    transform: 'rotate(0deg)',
-  },
-  '100%': {
-    transform: 'rotate(360deg)',
-  },
-})
-
-const spinnerStyles = {
-  animation: `${spin} 2s linear infinite`,
-}
-
 interface LPPosition {
   userAddress: string
   pair: Pair
@@ -175,9 +146,12 @@ const LPPositionItem = ({ userAddress, pair }: LPPosition) => {
   const userBalance = useCurrencyBalance(pair.liquidityToken)
   if (userBalance.isLoading) {
     return (
-      <Flex justifyContent={'center'}>
-        <SpinIcon __css={spinnerStyles} width="8" height="16" viewBox="0 0 64 64" />
-      </Flex>
+      <AccordionItem p={2} shadow="Up Big" borderRadius="2xl" alignItems="center">
+        <AccordionButton disabled={true}>
+          <Loading size="sm" rLabel="Loading pair info" />
+        </AccordionButton>
+        <AccordionPanel></AccordionPanel>
+      </AccordionItem>
     )
   }
   if (userBalance.error) {
@@ -190,8 +164,8 @@ const LPPositionItem = ({ userAddress, pair }: LPPosition) => {
       <AccordionItem p={2} shadow="Up Big" borderRadius="2xl" alignItems="center">
         <AccordionButton>
           <HStack>
-            <CurrencyIcon h={'32px'} currency={pair.token0} />
-            <CurrencyIcon h={'32px'} currency={pair.token1} />
+            <CurrencyIcon size={'sm'} currency={pair.token0} />
+            <CurrencyIcon size={'sm'} currency={pair.token1} />
             <Text ml="24px" fontWeight="semibold" fontSize="lg">
               {pair.token0.symbol}/{pair.token1.symbol}
             </Text>

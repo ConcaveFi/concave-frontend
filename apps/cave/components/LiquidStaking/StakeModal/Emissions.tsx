@@ -46,7 +46,7 @@ function Emissions(props: any) {
             </Text>
           </HStack>
           <Text mx={margin} fontSize="md" fontWeight="bold">
-            Coming Soon
+            Calculating
           </Text>
           <Text mx={margin} color="text.low" fontSize="sm">
             +
@@ -65,12 +65,9 @@ function Emissions(props: any) {
               />
             </Tooltip>
             <Text mx={margin} color="text.low" fontSize="sm">
-              Base Emissions:
+              Base Emissions: {props.vapr.toFixed(2)} %
             </Text>
           </HStack>
-          <Text mx={margin} fontSize="md" fontWeight="bold">
-            Coming Soon
-          </Text>
           <Text mx={margin} color="text.low" fontSize="sm">
             +
           </Text>
@@ -92,7 +89,7 @@ function Emissions(props: any) {
             </Text>
           </HStack>
           <Text mx={margin} fontSize="md" fontWeight="bold">
-            Coming Soon
+            Calculating
           </Text>
         </Flex>
       </Box>
@@ -130,10 +127,7 @@ function Emissions(props: any) {
           <Text color="text.low" fontSize="sm">
             {props.vaprText}
           </Text>
-          <Text fontSize="lg" fontWeight="bold" mb="2">
-            {/* {props.vapr} % */}
-            Calculating
-          </Text>
+          <Text fontSize="lg" fontWeight="bold" mb="2"></Text>
           <Tooltip
             label="Total vAPR aggregates rewards associated with each staking position including rewards from bonding activity, base emissions and the quarterly dividend."
             color="white"

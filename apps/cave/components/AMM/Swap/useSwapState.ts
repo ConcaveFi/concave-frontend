@@ -1,40 +1,31 @@
-import { useState, useMemo, useEffect } from 'react'
-import { Currency, TradeType, CNV, DAI, CurrencyAmount, Trade } from '@concave/gemswap-sdk'
-import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import { useState, useMemo, useCallback } from 'react'
+import { Currency, TradeType, CurrencyAmount, Trade } from '@concave/gemswap-sdk'
 import { useTrade, UseTradeResult } from '../hooks/useTrade'
 import { SwapSettings } from '../Settings'
 import { toAmount } from 'utils/toAmount'
-import { useLinkedFields } from 'components/CurrencyAmountField'
+import { useLinkedCurrencyFields } from 'components/CurrencyAmountField'
+import { useUpdateEffect } from '@concave/ui'
 
-const makeCurrencyFields = (networkId) => ({
-  first: DAI[networkId],
-  second: CNV[networkId],
-})
-
-export const useSwapState = ({ multihops }: SwapSettings) => {
-  const networkId = useCurrentSupportedNetworkId()
-  const initialCurrencyFields = useMemo(() => makeCurrencyFields(networkId), [networkId])
-
+export const useSwapState = ({ multihops }: SwapSettings, initialCurrencies) => {
   // the input user typed in, the other input value is then derived from it
   const [exactAmount, setExactAmount] = useState<CurrencyAmount<Currency>>(
-    toAmount('0', initialCurrencyFields.first),
+    toAmount(0, initialCurrencies.first),
   )
 
-  const { onChangeField, setFieldCurrency, switchCurrencies, fieldCurrency } = useLinkedFields(
-    (field) => (newAmount) => setExactAmount(newAmount),
-    initialCurrencyFields,
+  const { onChangeField, switchCurrencies, setCurrencies, currencies } = useLinkedCurrencyFields(
+    initialCurrencies,
+    useCallback((newAmount, field) => setExactAmount(newAmount), []),
   )
 
-  // TODO: shouldn't be using useEffect for this, replace with a onNetworkChange handler or something, after updating wagmi
-  useEffect(() => {
-    setFieldCurrency(initialCurrencyFields)
-    setExactAmount(toAmount(0, initialCurrencyFields.first))
-  }, [initialCurrencyFields, setFieldCurrency])
+  useUpdateEffect(() => {
+    setCurrencies(initialCurrencies)
+    setExactAmount(toAmount(0, initialCurrencies.first))
+  }, [initialCurrencies])
 
-  const isExactIn = exactAmount?.currency.equals(fieldCurrency.first)
-  const otherCurrency = fieldCurrency[isExactIn ? 'second' : 'first']
+  const isExactIn = exactAmount?.currency.equals(currencies.first)
+  const otherCurrency = currencies[isExactIn ? 'second' : 'first']
 
-  const trade = useTrade(exactAmount, otherCurrency.wrapped, {
+  const trade = useTrade(exactAmount, otherCurrency, {
     tradeType: isExactIn ? TradeType.EXACT_INPUT : TradeType.EXACT_OUTPUT,
     maxHops: multihops ? 3 : 1,
   })
@@ -50,7 +41,7 @@ export const useSwapState = ({ multihops }: SwapSettings) => {
 
   return useMemo(
     () => ({
-      trade: trade.data ? trade : ({ ...trade, data: partialTradeData } as UseTradeResult),
+      trade: trade.isSuccess ? trade : ({ ...trade, data: partialTradeData } as UseTradeResult),
       onChangeInput: onChangeField('first'),
       onChangeOutput: onChangeField('second'),
       switchCurrencies,

@@ -3,7 +3,6 @@ import { concaveProvider } from 'lib/providers'
 import { Token, Fetcher, Pair } from '@concave/gemswap-sdk'
 import { BASES_TO_CHECK_TRADES_AGAINST, INTERMEDIARY_PAIRS_FOR_MULTI_HOPS } from 'constants/routing'
 import { AVERAGE_BLOCK_TIME } from 'constants/blockchain'
-import { useState } from 'react'
 
 const filterRepeatedPairs = (pairs: [Token, Token][]) =>
   pairs.filter(
@@ -46,9 +45,15 @@ export const usePairs = <T = Pair[]>(
   maxHops = 3,
   queryOptions?: UsePairsQueryOptions<T>,
 ) => {
-  const [isValidPair, setValidPair] = useState(true)
   return useQuery(
-    ['pairs', tokenA?.address, tokenB?.address, maxHops, tokenA?.chainId],
+    [
+      'pairs',
+      tokenB && tokenB?.address !== tokenA?.address && tokenA?.sortsBefore(tokenB)
+        ? [tokenA?.address, tokenB?.address]
+        : [tokenB?.address, tokenA?.address],
+      maxHops,
+      tokenA?.chainId,
+    ],
     async () => {
       const commonPairs = getAllCommonPairs(tokenA, tokenB, maxHops)
       const pairs: Pair[] = (
@@ -59,23 +64,16 @@ export const usePairs = <T = Pair[]>(
         )
       ).filter(Boolean)
 
-      if (
-        !pairs ||
-        pairs.length === 0
-        // !pairs.find((pair) => pair.involvesToken(tokenA) && pair.involvesToken(tokenB))
-      )
-        throw NoValidPairsError
+      if (!pairs || pairs.length === 0) throw NoValidPairsError
 
       return pairs
     },
     {
-      enabled: isValidPair && !!tokenA?.address && !!tokenB?.address && !tokenA.equals(tokenB),
+      enabled: !!tokenA?.address && !!tokenB?.address && !tokenA.equals(tokenB),
       refetchInterval: AVERAGE_BLOCK_TIME[tokenA?.chainId],
+      refetchOnWindowFocus: false,
       notifyOnChangeProps: 'tracked',
       retry: false,
-      onError: (e) => {
-        if (e === NoValidPairsError) setValidPair(false) // stop refetching if pair has no liquidity
-      },
       ...queryOptions,
     },
   )

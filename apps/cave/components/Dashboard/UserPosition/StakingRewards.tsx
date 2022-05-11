@@ -1,8 +1,8 @@
 import { Flex, Text } from '@concave/ui'
 
-const DividendsShare = () => {
+const DividendsShare = ({ ...props }) => {
   return (
-    <Flex flex={1} ml={{ lg: 6, md: 3 }} direction="column">
+    <Flex mt={6} ml={{ lg: 6, md: 3 }} direction="column" {...props}>
       <Flex
         direction={'column'}
         maxH={'90px'}

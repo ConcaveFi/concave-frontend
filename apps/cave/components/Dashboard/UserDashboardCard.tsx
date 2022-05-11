@@ -1,31 +1,36 @@
 import { Box, Button, Card, Collapse, Flex, FlexProps, Spinner, Text } from '@concave/ui'
 import UserPositionCard from './UserPositionCard'
-import UserDividendCard from './UserDividendCard'
-import { ButtonLink } from 'components/ButtonLink'
-import { useDashBoardState } from 'contracts/DashBoard/DashBoardState'
 import { useRouter } from 'next/router'
+import UserDividendCard from './UserDividendCard'
+import { Connector } from 'wagmi'
 
-interface UserDashBoardCardProps extends FlexProps {
-  usercontract: any
-  totallocked: any
-  statusdata: {
-    isLoading: boolean
-    notConnected: boolean
-    success: boolean
+interface UserDashBoardCardProps {
+  data: {
+    status: {
+      isLoading: boolean
+      notConnected: boolean
+    }
+    positions: {
+      totalLocked: number
+      userPositions: any[]
+    }
   }
 }
 
-const UserDashboardCard: React.FC<UserDashBoardCardProps> = ({ ...props }) => {
-  const { usercontract, totallocked, statusdata } = props
-  const { isLoading, success, notConnected } = statusdata
+const UserDashboardCard = (props: UserDashBoardCardProps) => {
+  const { data } = props
+  const { positions, status } = data
+  const { userPositions, totalLocked } = positions
+  const { isLoading, notConnected } = status
 
-  const userPosComps =
-    usercontract &&
-    usercontract.map((contract, index) => <UserPositionCard key={index} contract={contract} />)
+  const userPositionsComponent = userPositions.map((contract, index) => (
+    <UserPositionCard key={index} contract={contract} />
+  ))
 
-  const hasPositions = usercontract !== null
+  const hasPositions = userPositions.length !== 0
+
   return (
-    <Flex position={'absolute'} {...props}>
+    <Flex display={{ lg: 'flex', md: 'flex', sm: 'none', base: 'none' }}>
       <Card
         p={3}
         gap={2}
@@ -47,12 +52,12 @@ const UserDashboardCard: React.FC<UserDashBoardCardProps> = ({ ...props }) => {
             maxHeight={'500px'}
           >
             <Flex direction="row" gap={4} position="relative" mt={1}>
-              <UserDividendCard statusData={statusdata} totalLocked={totallocked} />
+              <UserDividendCard status={status} totalLocked={totalLocked} />
             </Flex>
           </Box>
         </Flex>
 
-        <Collapse in={usercontract !== null}>
+        <Collapse in={hasPositions}>
           <Box
             pos="relative"
             h="100%"
@@ -65,7 +70,7 @@ const UserDashboardCard: React.FC<UserDashBoardCardProps> = ({ ...props }) => {
             shadow="down"
             __css={scrollBar}
           >
-            {userPosComps}
+            {userPositionsComponent}
           </Box>
         </Collapse>
 

@@ -2,12 +2,14 @@ import { Box, Flex, Heading, Text, useMediaQuery } from '@concave/ui'
 import StakeCard from 'components/LiquidStaking/StakeCard'
 import GraphicGuide from 'components/LiquidStaking/GraphicGuide'
 import { useEffect, useState } from 'react'
+import { useGet_Last_Poolid_VaprQuery } from 'graphql/generated/graphql'
 
 interface StakingGroupProps {
   icon: string
   period: string
   vapr: string
   stakingLink: string
+  poolID: number
 }
 
 const StakingGroup: Array<StakingGroupProps> = [
@@ -16,24 +18,28 @@ const StakingGroup: Array<StakingGroupProps> = [
     period: '360 days',
     vapr: '6,342',
     stakingLink: '',
+    poolID: 0,
   },
   {
     icon: '180d',
     period: '180 days',
     vapr: '1,002',
     stakingLink: '',
+    poolID: 1,
   },
   {
     icon: '90d',
     period: '90 days',
     vapr: '266',
     stakingLink: '',
+    poolID: 2,
   },
   {
     icon: '45d',
     period: '45 days',
     vapr: '17',
     stakingLink: '',
+    poolID: 3,
   },
 ]
 
@@ -57,7 +63,6 @@ function LiquidStaking() {
     setTextAlign(isLargerThan1100 ? 'justify' : 'center')
     setGuideGap(isLargerThan1100 ? 24 : 7)
     setConteinerHeight(isLargerThan1100 ? '' : '1550px')
-    console.log('teste')
   }, [isLargerThan1100])
 
   return (
@@ -94,15 +99,20 @@ function LiquidStaking() {
           wrap={wrap}
           width={width}
         >
-          {StakingGroup.map((s) => (
-            <StakeCard
-              icon={s.icon}
-              period={s.period}
-              vapr={s.vapr}
-              stakingLink={s.stakingLink}
-              key={s.period}
-            />
-          ))}
+          {StakingGroup.map((i) => {
+            const { status, data, error, isFetching } = useGet_Last_Poolid_VaprQuery({
+              poolID: i.poolID,
+            })
+            return (
+              <StakeCard
+                icon={i.icon}
+                period={i.period}
+                vAPR={status === 'success' && data.logStakingV1_PoolRewarded[0].base_vAPR}
+                stakingLink={i.stakingLink}
+                key={i.period}
+              />
+            )
+          })}
         </Flex>
       </Flex>
     </Box>
