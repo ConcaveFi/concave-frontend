@@ -20,6 +20,7 @@ const spin = keyframes({
 })
 import { SpinIcon } from '@concave/icons'
 import BondBuyCardContainer from 'components/Bond/BondBuyCardContainer'
+import BondToastCard from 'components/Bond/BondToastCard'
 
 export default function Bond() {
   const { userAddress, signer, networkId } = useBondState()
@@ -164,6 +165,7 @@ export default function Bond() {
           <BondBuyCardContainer />
         </Flex>
       </Flex>
+      <BondToastCard />
     </Container>
   )
 }
