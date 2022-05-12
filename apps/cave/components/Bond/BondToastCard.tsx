@@ -34,6 +34,7 @@ const BondToastCard = ({ type, title, tx, amountInOut, link }: BondToastCardProp
         break
     }
   }, [type])
+
   return (
     <Flex
       animation={''}
