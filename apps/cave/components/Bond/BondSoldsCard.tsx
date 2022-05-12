@@ -37,18 +37,9 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
 
   useEffect(() => {
     if (data) {
-      setSolds(data.logAccrualbondsv1_BondSold)
+      setSolds(data.logAccrualBondsV1_BondSold)
     }
   }, [data])
-
-  useEffect(() => {
-    if (bondSpotPrice === '0')
-      getBondSpotPrice(netWorkdId, BOND_ADDRESS[netWorkdId])
-        .then(setBondSpotPrice)
-        .catch((e) => {
-          // console.log(e)
-        })
-  })
 
   const relatives = solds.map((value, index) => (
     <Text key={index} opacity={1 - (isOpen ? index / 10 : (index / 10) * 3)}>
@@ -62,11 +53,9 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
   ))
   const inputAmounts = solds.map((value, index) => (
     <Text key={index} opacity={1 - (isOpen ? index / 10 : (index / 10) * 3)}>
-      {+parseFloat(value.inputaAmount).toFixed(3) + ' CNV'}
+      {+parseFloat(value.inputAmount).toFixed(3) + ' CNV'}
     </Text>
   ))
-
-  console.log()
 
   return (
     <Flex width="full" direction="column">
