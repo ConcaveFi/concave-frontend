@@ -2,6 +2,8 @@ import { useLinkedCurrencyFields } from 'components/CurrencyAmountField'
 import { usePair } from 'components/AMM/hooks/usePair'
 import { Currency, CurrencyAmount, Pair } from '@concave/gemswap-sdk'
 import { useEffect, useRef, useState } from 'react'
+import { useRouter } from 'next/router'
+import { getAddressOrSymbol } from 'hooks/useSyncQueryCurrencies'
 
 const deriveAmount = (
   pair: Pair,
@@ -28,11 +30,23 @@ export const useAddLiquidityState = (props: CurrencyAmountFields) => {
   const lastField = useRef<keyof typeof amounts>()
   const { first, second } = amounts
   const pair = usePair(first?.currency.wrapped, second?.currency.wrapped)
-
+  const router = useRouter()
   const { onChangeField } = useLinkedCurrencyFields({}, (amount, field) => {
     const otherField = field === 'first' ? 'second' : 'first'
     lastField.current = field
     const otherAmount = amounts[otherField]
+    router.replace(
+      {
+        query: {
+          ...router.query,
+          chainId: amount.currency.chainId,
+          [field === 'first' ? 'currency0' : 'currency1']: getAddressOrSymbol(amount.currency),
+        },
+      },
+      undefined,
+      { shallow: true },
+    )
+
     return setFields((old) => {
       if (amount.currency.wrapped.address === otherAmount?.currency.wrapped.address) {
         return { [field]: amount, [otherField]: old[field] }

@@ -47,7 +47,7 @@ export default function AddLiquidity() {
           width="full"
           p={4}
         >
-          {!currency0.isLoading && !currency1.isLoading && router.isReady ? (
+          {!currency0?.isLoading && !currency1?.isLoading && router.isReady ? (
             <AddLiquidityCard
               borderWidth={2}
               variant="primary"
