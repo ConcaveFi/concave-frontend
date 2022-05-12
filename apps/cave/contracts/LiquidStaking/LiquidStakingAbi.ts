@@ -1,4 +1,4 @@
-export const TransparentUpgradeableProxy = [
+export const StakingV1Abi = [
   {
     anonymous: false,
     inputs: [
