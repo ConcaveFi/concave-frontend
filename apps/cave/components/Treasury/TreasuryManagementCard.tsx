@@ -84,7 +84,7 @@ const FarmingViewer = () => {
             gap={4}
           >
             <Flex height={'30px'} width="30px">
-              <Image src="https://static.debank.com/image/eth_token/logo_url/0x4e3fbd56cd56c3e72c1403e103b45db9da5b9d2b/be2a9b05a223d6dfca3dc88b1838fcd4.png" />
+              <Image alt="logo" src="https://static.debank.com/image/eth_token/logo_url/0x4e3fbd56cd56c3e72c1403e103b45db9da5b9d2b/be2a9b05a223d6dfca3dc88b1838fcd4.png" />
             </Flex>
             <Flex>
               <Text fontWeight={700} fontSize="24px">

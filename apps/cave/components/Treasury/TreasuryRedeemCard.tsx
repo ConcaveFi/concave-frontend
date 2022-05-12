@@ -4,6 +4,44 @@ import useAddTokenToWallet, { injectedTokenResponse } from 'hooks/useAddTokenToW
 import { useIsMounted } from 'hooks/useIsMounted'
 import { getWalletType, renderProviderText } from 'lib/injected.wallets'
 import { GlassPanel } from './TreasuryManagementCard'
+import { useEffect, useState } from 'react'
+import { useAccount, useContractWrite } from 'wagmi'
+import { aCNVredeemabi } from 'lib/contractoABI'
+
+function ClaimAcnvButton() {
+  const [{ data: account }] = useAccount()
+  const [{ data, error, loading }, write] = useContractWrite(
+    {
+      addressOrName: '0x38baBedCb1f226B49b2089DA0b84e52b6181Ca59',
+      contractInterface: aCNVredeemabi,
+    },
+    'redeem',
+    {
+      args: [account.address],
+    },
+  )
+  const [redeemText, setRedeemText] = useState('Redeem aCNV')
+  const [redeeming, setRedeeming] = useState(false)
+
+  const redeemAncv = () => {
+    setRedeeming(loading ? true : false)
+    setRedeemText(loading ? 'Redeeming' : 'Nothing to Redeem')
+    write()
+  }
+  return (
+
+        <Button
+        fontSize={'18px'} fontWeight="700" my={'auto'}
+          size="large"
+          mx="moz-initial"
+          isLoading={redeeming}
+          loadingText="Redeeming"
+          onClick={redeemAncv}
+        >
+          {redeemText}
+        </Button>
+  )
+}
 
 function TreasuryRedeemCard() {
   const isMounted = useIsMounted()
@@ -33,24 +71,20 @@ function TreasuryRedeemCard() {
       </Flex>
       <Flex mt={5} direction="column" gap={2}>
         <GlassPanel width={'182px'} height={'40px'} rounded="2xl" mx={'auto'} justify={'center'}>
+          <ClaimAcnvButton />
+        </GlassPanel>
+        <GlassPanel width={'182px'} height={'40px'} rounded="2xl" mx={'auto'} justify={'center'}>
           <Button>
-            <Text fontSize={'18px'} fontWeight="700" my={'auto'}>
-              aCNV - 500
-            </Text>
+          <Text fontSize={'18px'} fontWeight="700" my={'auto'}>
+            pCNV - 3200
+          </Text>
           </Button>
         </GlassPanel>
         <GlassPanel width={'182px'} height={'40px'} rounded="2xl" mx={'auto'} justify={'center'}>
           <Button>
-            <Text fontSize={'18px'} fontWeight="700" my={'auto'}>
-              pCNV - 3200
-            </Text>
-          </Button>
-        </GlassPanel>
-        <GlassPanel width={'182px'} height={'40px'} rounded="2xl" mx={'auto'} justify={'center'}>
-          <Button>
-            <Text fontSize={'18px'} fontWeight="700" my={'auto'}>
-              BBTCNV - 100
-            </Text>
+          <Text fontSize={'18px'} fontWeight="700" my={'auto'}>
+            BBTCNV - 100
+          </Text>
           </Button>
         </GlassPanel>
       </Flex>
