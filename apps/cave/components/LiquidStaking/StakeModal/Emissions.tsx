@@ -65,7 +65,7 @@ function Emissions(props: any) {
               />
             </Tooltip>
             <Text mx={margin} color="text.low" fontSize="sm">
-              Base Emissions: {props.vapr.toFixed(2)} %
+              Base Emissions: {props.vapr?.toFixed(2)} %
             </Text>
           </HStack>
           <Text mx={margin} color="text.low" fontSize="sm">

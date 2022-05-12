@@ -19,6 +19,7 @@ export function CurrencyAmountField({
   onChangeAmount: (value: CurrencyAmount<Currency>) => void
   debounce?: number
   CurrencySelector: CurrencySelectorComponent
+  disableCurrencySelector?: boolean
 } & FlexProps) {
   const styles = useMultiStyleConfig('Input', { variant: 'primary', size: 'large' })
 

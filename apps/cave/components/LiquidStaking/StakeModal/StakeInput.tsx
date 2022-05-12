@@ -1,12 +1,15 @@
-import { CNV } from '@concave/gemswap-sdk'
+import { CNV, Currency, CurrencyAmount, toHex } from '@concave/gemswap-sdk'
 import { Box, Button, Card, Flex, HStack, Image, Input, Text } from '@concave/ui'
+import { CurrencyInputField } from 'components/CurrencyAmountField'
+// import { SelectBondCurrency } from 'components/CurrencySelector/SelectBondCurrency'
 import { STAKING_CONTRACT } from 'constants/address'
 import { StakingV1Abi } from 'contracts/LiquidStaking/LiquidStakingAbi'
-import { ethers } from 'ethers'
 import { useFetchApi } from 'hooks/cnvData'
 import { useApprove } from 'hooks/useApprove'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
+import { toAmount } from 'utils/toAmount'
 import { useAccount, useBalance, useContractWrite, useNetwork } from 'wagmi'
 
 const periodToPoolParameter = {
@@ -16,25 +19,30 @@ const periodToPoolParameter = {
   '45 days': 3,
 }
 
-function StakeInput(props) {
+function StakeInput(props: any) {
   const cnvPrice = useFetchApi('/api/cnv')
-  const [stakeInput, setStakeInput] = useState('')
   const [{ data: account }] = useAccount()
   const [{ data }] = useNetwork()
-  const { allowance, ...approve } = useApprove(CNV[data.chain.id], STAKING_CONTRACT[data.chain.id])
+  // const [stakeInput, setStakeInput] = useState(toAmount(0, CNV[data?.chain.id]))
+  const [stakeInput, setStakeInput] = useState<CurrencyAmount<Currency>>(toAmount(0, CNV[3]))
+  useCurrentSupportedNetworkId((chainId) => setStakeInput(toAmount(0, CNV[chainId])))
+  const { allowance, ...approve } = useApprove(
+    stakeInput.currency.wrapped,
+    STAKING_CONTRACT[stakeInput.currency.chainId],
+  )
   const [approveButtonText, setApproveButtonText] = useState('Approve CNV')
   const [allowanceEnough, setAllowanceEnough] = useState(false)
   // console.log(allowance.formatted)
   // approve.sendApproveTx()
 
-  useEffect(() => {
-    if (allowance && +allowance.formatted > +stakeInput) {
-      setAllowanceEnough(true)
-    } else {
-      setAllowanceEnough(false)
-    }
-    if (stakeInput === '') setStakeInput('')
-  }, [allowance, stakeInput])
+  // useEffect(() => {
+  //   if (allowance && +allowance.formatted > +stakeInput) {
+  //     setAllowanceEnough(true)
+  //   } else {
+  //     setAllowanceEnough(false)
+  //   }
+  //   if (stakeInput === '') setStakeInput('')
+  // }, [allowance, stakeInput])
 
   const [cnvBalance, getBalance] = useBalance({
     addressOrName: account?.address,
@@ -42,17 +50,17 @@ function StakeInput(props) {
     // token: '0x000000007a58f5f58E697e51Ab0357BC9e260A04',
   })
 
-  const setSafeStakeInputValue = (value: string) => {
-    let currentValue = value
-    if (Number(currentValue) > Number.MAX_SAFE_INTEGER) {
-      currentValue = String(Number.MAX_SAFE_INTEGER)
-    }
-    setStakeInput(String(currentValue))
-  }
+  // const setSafeStakeInputValue = (value: string) => {
+  //   let currentValue = value
+  //   if (Number(currentValue) >= +cnvBalance.data?.formatted) {
+  //     currentValue = String(+cnvBalance.data?.formatted)
+  //   }
+  //   setStakeInput(String(currentValue))
+  // }
 
-  const setMax = () => {
-    setStakeInput(cnvBalance.data?.formatted)
-  }
+  // const setMax = () => {
+  //   setStakeInput(cnvBalance.data?.formatted)
+  // }
 
   const approveCNV = () => {
     approve.sendApproveTx()
@@ -67,8 +75,9 @@ function StakeInput(props) {
     'lock',
     {
       args: [
-        account.address,
-        ethers.utils.parseEther(String(+stakeInput)),
+        account?.address,
+        toHex(stakeInput),
+        // ethers.utils.parseEther(String(+stakeInput)),
         periodToPoolParameter[`${props.period}`],
       ],
     },
@@ -78,46 +87,29 @@ function StakeInput(props) {
 
   return (
     <Box>
-      <Card shadow="down" w="350px" px={4} py={5}>
+      <Card shadow="down" w="350px" px={0} py={0}>
         <Flex justify="space-between" alignItems="center">
-          <Input
+          {/* <Input
             placeholder="0.00"
-            value={stakeInput}
-            onChange={(e) => setSafeStakeInputValue(e.target.value)}
+            value={''}
+            onChange={null}
             ml={-1}
             shadow="none"
             w="60%"
             bg="none"
             fontSize="xl"
             type="number"
+          /> */}
+          <CurrencyInputField
+            currencyAmountIn={stakeInput}
+            onChangeAmount={setStakeInput}
+            // CurrencySelector={SelectBondCurrency}
           />
-          <Flex shadow="up" borderRadius="3xl" px={4} py={1} alignItems="center">
-            <Image src="/assets/tokens/cnv.svg" alt="concave-logo" h={8} w={8} />
-            <Text ml={2} color="text.medium" fontSize="xl" fontWeight="bold">
-              CNV
-            </Text>
-          </Flex>
-        </Flex>
-        <Flex mt={2} justify="space-between" px={2}>
-          <Text color="text.low" fontSize="md" fontWeight="bold">
-            {/* Loading Price */}
-            {(cnvPrice as any)?.data
-              ? `$${(+stakeInput * (cnvPrice as any)?.data.cnv).toFixed(2)}`
-              : 'Loading price'}
-          </Text>
-          <HStack spacing={2}>
-            <Text color="text.low" fontSize="sm" fontWeight="bold">
-              Balance: {(+cnvBalance.data?.formatted).toFixed(2)}
-            </Text>
-            <Button textColor="blue.500" onClick={setMax} disabled={!cnvBalance.data}>
-              Max
-            </Button>
-          </HStack>
         </Flex>
       </Card>
 
       <Box mt={10} width="350px">
-        {!allowanceEnough && (
+        {allowance.value < stakeInput.numerator.toString() && (
           <Button
             onClick={approveCNV}
             fontWeight="bold"
@@ -134,10 +126,17 @@ function StakeInput(props) {
           </Button>
         )}
 
-        {allowanceEnough && (
+        {allowance.value >= stakeInput.numerator.toString() && (
           <Button
             mt={5}
-            onClick={() => lockCNV()}
+            onClick={() => {
+              lockCNV().then((r) => {
+                setStakeInput(toAmount(0, stakeInput.currency))
+                setTimeout(() => {
+                  props.onClose()
+                }, 300)
+              })
+            }}
             fontWeight="bold"
             fontSize="md"
             variant="primary"

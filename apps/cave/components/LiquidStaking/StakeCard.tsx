@@ -191,7 +191,7 @@ function StakeCard(props) {
                 }
                 capPercentage={capPercentage}
               />
-              <StakeInput period={props.period} />
+              <StakeInput period={props.period} onClose={onClose} />
             </VStack>
           </Flex>
         </Modal>
