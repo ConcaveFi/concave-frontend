@@ -1,5 +1,6 @@
 import { Box, Button, Card, Flex, Image, Text } from '@concave/ui'
 import { InfoItem } from 'components/Bond/BondInfo'
+import useAddTokenToWallet from 'hooks/useAddTokenToWallet'
 
 interface TreasuryRevenueCardProps {}
 export const TreasuryInfoItem = ({ label, amount, ...props }) => (
@@ -135,7 +136,7 @@ export default function TreasuryRevenueCard(props) {
           />
           <TreasuryInfo
             box1="Treasury Revenue 24h"
-            box1b="+$23,832.3"
+            box1b="+$0"
             box2="Treasury Value"
             box2b={'$' + total.toFixed(2)}
             box3="Concave total Supply"

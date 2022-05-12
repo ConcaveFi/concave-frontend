@@ -130,7 +130,7 @@ const Marketplace = () => {
         </Flex>
       )}
       <Flex mt={2} direction={'column'} justify="center" align={'center'}>
-        <Modal
+        {/* <Modal
           bluryOverlay={true}
           title=""
           isOpen={true}
@@ -145,7 +145,7 @@ const Marketplace = () => {
               Coming Soon!
             </Text>
           </ModalFooter>
-        </Modal>
+        </Modal> */}
       </Flex>
     </Flex>
   )
