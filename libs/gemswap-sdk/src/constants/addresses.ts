@@ -3,7 +3,7 @@ import { ChainId } from '../enums'
 
 export const CNV_ADDRESS: AddressMap = {
   [ChainId.ETHEREUM]: '0x000000007a58f5f58E697e51Ab0357BC9e260A04',
-  [ChainId.ROPSTEN]: '0x2B8E79CBD58418CE9aeB720BAf6B93825B93eF1F',
+  [ChainId.ROPSTEN]: '0xb9ced3eb5ce9d40a735ca3345978ab62eca0c4d0',
 }
 
 export const USDC_ADDRESS: AddressMap = {
