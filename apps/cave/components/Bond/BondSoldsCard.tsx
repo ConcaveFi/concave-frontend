@@ -1,6 +1,6 @@
-import { Box, Button, Collapse, Flex, Text } from '@concave/ui'
+import { Box, Collapse, Flex, Text } from '@concave/ui'
 import { BOND_ADDRESS } from 'contracts/Bond/BondingAddress'
-import { formatDistance, formatDistanceStrict } from 'date-fns'
+import { formatDistanceStrict } from 'date-fns'
 import {
   Get_Accrualbondv1_Last10_SoldQuery,
   useGet_Amm_Cnv_PriceQuery,
@@ -15,7 +15,7 @@ interface BoldSoldsCardProps {
 }
 
 const BoldSoldsCard = (props: BoldSoldsCardProps) => {
-  const netWorkdId = useCurrentSupportedNetworkId()
+  const netWorkId = useCurrentSupportedNetworkId()
   const { data, active } = props
   const AMMData = useGet_Amm_Cnv_PriceQuery()
   const [solds, setSolds] = useState([])
@@ -29,9 +29,11 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
 
   useEffect(() => {
     if (bondSpotPrice === '0')
-      getBondSpotPrice(netWorkdId, BOND_ADDRESS[netWorkdId])
+      getBondSpotPrice(netWorkId, BOND_ADDRESS[netWorkId])
         .then(setBondSpotPrice)
-        .catch((error) => {})
+        .catch((e) => {
+          // console.log(e)
+        })
   })
 
   const relatives = solds.map((value, index) => (
