@@ -22,8 +22,8 @@ import { Contract, ethers } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { LIQUID_STAKING_ADDRESS } from 'contracts/LiquidStaking/LiquidStakingAddress'
 import { useGet_Last_Poolid_VaprQuery } from 'graphql/generated/graphql'
-const providers = new ethers.providers.InfuraProvider('ropsten', '545e522b4c0e45078a25b86f3b646a9b')
-import { concaveProvider } from 'lib/providers'
+// const providers = new ethers.providers.InfuraProvider('ropsten', '545e522b4c0e45078a25b86f3b646a9b')
+import { concaveProvider, concaveProvider as providers } from 'lib/providers'
 const periodToPoolParameter = {
   '360 days': 0,
   '180 days': 1,
@@ -204,15 +204,13 @@ async function getPools(netWorkdId: number, index: string) {
   const stakingContract = new Contract(
     LIQUID_STAKING_ADDRESS[netWorkdId],
     StakingV1Abi,
-    concaveProvider(3),
+    providers(3),
   )
-  const pools = await stakingContract.pools(0).catch((error) => {
-    console.log(error)
+  console.log('test')
+  stakingContract.pools(0).then((data) => {
+    console.log(data)
+    return data
   })
-  const name = await stakingContract.name()
-  console.log(name)
-
-  console.log(pools)
   return pools
 }
 
@@ -220,11 +218,9 @@ async function getViewStakingCap(netWorkdId: number, index: string) {
   const stakingContract = new Contract(
     LIQUID_STAKING_ADDRESS[netWorkdId],
     StakingV1Abi,
-    concaveProvider(3),
+    providers(3),
   )
-  console.log(stakingContract)
   const stakingCap = await stakingContract.viewStakingCap(index).catch((error) => {})
-
   return stakingCap
 }
 export default StakeCard

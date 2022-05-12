@@ -22,7 +22,6 @@ const LiquidLocksCards = () => {
 
   const amounts = stakingLocks
     .filter((value, index) => {
-      console.log(value.txHash)
       if (index < 10) return 1
     })
     .map((value, index) => (
