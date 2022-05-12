@@ -15,7 +15,6 @@ export const Redeem = ({
   customHeight?: boolean
 }) => {
   const redeemable = bondSigma?.parseRedeemable
-  console.log(redeemable)
   const fontSize = largeFont ? '2xl' : 'xl'
   const customHeightSetting = customHeight ? { height: '51.35px' } : {} // 51.35px comes out to 50px?
   const bottom = setBottom ? '1px' : -3
