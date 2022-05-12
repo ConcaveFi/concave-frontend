@@ -63,50 +63,32 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
         in={isOpen}
         startingHeight={isLoading ? '50px' : solds.length == 0 ? '36px' : '100px'}
       >
-        <Flex width={'full'} height="full" flex={1}>
-          <Flex
-            flex={1.3}
-            direction="column"
-            align={'center'}
-            fontWeight={500}
-            textColor="text.accent"
-            textShadow={'0px 0px 27px rgba(129, 179, 255, 0.31)'}
-            my={'6px'}
-            fontSize="14px"
-          >
-            <Text fontSize="16px" textColor={'white'}>
-              Amount
-            </Text>
-            {inputAmounts}
-          </Flex>
-          <Box w="1px" mt={0} bg="stroke.primary" />
-          <Flex
-            flex={0.8}
-            direction="column"
-            align={'center'}
-            fontWeight={500}
-            textColor="text.accent"
-            textShadow={'0px 0px 27px rgba(129, 179, 255, 0.31)'}
-            my={'6px'}
-            fontSize="14px"
-          >
+        <Flex
+          width={'full'}
+          height="full"
+          flex={1}
+          textShadow={'0px 0px 27px rgba(129, 179, 255, 0.31)'}
+          textColor="text.accent"
+          fontWeight={500}
+          my={2}
+        >
+          <Flex flex={1.2} direction="column" align={'center'} fontSize="14px">
             <Text fontSize="16px" textColor={'white'}>
               Timeline
             </Text>
             {relatives}
           </Flex>
-          <Box w="1px" mt={0} bg="stroke.primary" />
+          <Box w="1px" my={-2} bg="stroke.primary" />
+          <Flex flex={1.3} direction="column" align={'center'} fontSize="14px">
+            <Text fontSize="16px" textColor={'white'}>
+              Amount
+            </Text>
+            {inputAmounts}
+          </Flex>
+
+          <Box w="1px" my={-2} bg="stroke.primary" />
           <Flex flex={1.3}>
-            <Flex
-              flex={0.9}
-              direction="column"
-              align={'center'}
-              textColor="text.accent"
-              textShadow={'0px 0px 27px rgba(129, 179, 255, 0.31)'}
-              my={'6px'}
-              fontSize="14px"
-              fontWeight={500}
-            >
+            <Flex flex={0.9} direction="column" align={'center'} fontSize="14px">
               <Text fontSize="16px" textColor={'white'}>
                 Purchase
               </Text>
