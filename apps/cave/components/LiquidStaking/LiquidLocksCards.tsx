@@ -1,4 +1,4 @@
-import { Box, Card, Flex, Text } from '@concave/ui'
+import { Box, Card, Collapse, Flex, Text, useDisclosure } from '@concave/ui'
 import { formatDistanceStrict } from 'date-fns'
 import { formatEther } from 'ethers/lib/utils'
 import { useGet_Stakingv1_Last100_LockQuery } from 'graphql/generated/graphql'
@@ -7,87 +7,95 @@ import { useEffect, useState } from 'react'
 
 const LiquidLocksCards = () => {
   const [stakingLocks, setStakingLocks] = useState([])
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   const stakingData = useGet_Stakingv1_Last100_LockQuery()
   useEffect(() => {
     if (stakingData?.data?.logStakingV1_Lock) {
-      setStakingLocks(stakingData?.data?.logStakingV1_Lock)
+      setStakingLocks(
+        stakingData?.data?.logStakingV1_Lock.sort((current, before) => {
+          if (current.timestamp > before.timestamp) return 1
+        }),
+      )
     }
   }, [stakingData])
 
   const amounts = stakingLocks
     .filter((value, index) => {
-      if (index < 3) return 1
+      console.log(value.txHash)
+      if (index < 10) return 1
     })
     .map((value, index) => (
-      <Text opacity={1 - (index / 10) * 3} key={index}>
+      <Text opacity={1 - (index / 10) * (isOpen ? 1 : 3)} key={index}>
         {formatEther(BigInt(value.amount)) + ' CNV'}
       </Text>
     ))
 
   const poolIds = stakingLocks
     .filter((value, index) => {
-      if (index < 3) return 1
+      if (index < 10) return 1
     })
     .map((value, index) => (
-      <Text opacity={1 - (index / 10) * 3} key={index}>
+      <Text opacity={1 - (index / 10) * (isOpen ? 1 : 3)} key={index}>
         {value.poolID}
       </Text>
     ))
 
   const relativeTime = stakingLocks
     .filter((value, index) => {
-      if (index < 3) return 1
+      if (index < 10) return 1
     })
     .map((value, index) => (
-      <Text opacity={1 - (index / 10) * 3} key={index}>
-        {formatDistanceStrict(value.timestamp * 1000, new Date().getTime())}
+      <Text opacity={1 - (index / 10) * (isOpen ? 1 : 3)} key={index}>
+        {formatDistanceStrict(value.timestamp * 1000, new Date().getTime()) + ' ago'}
       </Text>
     ))
   return (
     <Card
       my={4}
       mx={'auto'}
-      height={'140px'}
-      maxHeight={'160px'}
+      // height={'140px'}
       maxWidth={400}
       variant="secondary"
       direction={'column'}
       textShadow={'0px 0px 27px rgba(129, 179, 255, 0.31)'}
     >
-      <Flex fontWeight="700" width={'full'} flex={1}>
-        <Flex direction={'column'} flex={0.4} justify="start" mt={2}>
-          <Text>Pool id</Text>
-          <Flex direction={'column'} textColor="text.low" fontSize={'14px'}>
-            {poolIds}
+      <Collapse startingHeight={'100px'} in={isOpen}>
+        <Flex fontWeight="700" width={'full'} flex={1}>
+          <Flex direction={'column'} flex={0.4} justify="start" mt={2}>
+            <Text>Pool id</Text>
+            <Flex direction={'column'} textColor="text.low" fontSize={'14px'}>
+              {poolIds}
+            </Flex>
+          </Flex>
+          <Box w="1px" bg="stroke.primary" />
+          <Flex direction={'column'} flex={0.5} justify="start" mt={2}>
+            <Text>Amount locked</Text>
+            <Flex direction={'column'} textColor="text.accent" fontSize={'14px'}>
+              {amounts}
+            </Flex>
+          </Flex>
+          <Box w="1px" bg="stroke.primary" />
+          <Flex direction={'column'} flex={0.5} justify="start" mt={2}>
+            <Text>Timeline</Text>
+            <Flex direction={'column'} textColor="text.accent" fontSize={'14px'}>
+              {relativeTime}
+            </Flex>
           </Flex>
         </Flex>
-        <Box w="1px" bg="stroke.primary" />
-        <Flex direction={'column'} flex={0.5} justify="start" mt={2}>
-          <Text>Amount locked</Text>
-          <Flex direction={'column'} textColor="text.accent" fontSize={'14px'}>
-            {amounts}
-          </Flex>
-        </Flex>
-        <Box w="1px" bg="stroke.primary" />
-        <Flex direction={'column'} flex={0.5} justify="start" mt={2}>
-          <Text>Timeline</Text>
-          <Flex direction={'column'} textColor="text.accent" fontSize={'14px'}>
-            {relativeTime}
-          </Flex>
-        </Flex>
-      </Flex>
+      </Collapse>
       <Card height={'35px'} width="full" rounded={'0px 0px 16px 16px'} justify="center">
-        <Text fontWeight={700} cursor="pointer">
-          Show more
-        </Text>
+        {isOpen ? (
+          <Text fontWeight={700} cursor="pointer" onClick={onClose}>
+            Show less
+          </Text>
+        ) : (
+          <Text fontWeight={700} cursor="pointer" onClick={onOpen}>
+            Show more
+          </Text>
+        )}
       </Card>
     </Card>
   )
 }
-
-interface ViewOnExplorerProps {
-  txHash: string
-}
-
 export default LiquidLocksCards
