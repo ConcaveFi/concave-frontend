@@ -11,7 +11,7 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
 import { useAccount, useBalance, useContractWrite, useNetwork } from 'wagmi'
-
+import { LIQUID_STAKING_ADDRESS } from 'contracts/LiquidStaking/LiquidStakingAddress'
 const periodToPoolParameter = {
   '360 days': 0,
   '180 days': 1,
@@ -46,7 +46,7 @@ function StakeInput(props: any) {
 
   const [cnvBalance, getBalance] = useBalance({
     addressOrName: account?.address,
-    token: '0x2B8E79CBD58418CE9aeB720BAf6B93825B93eF1F',
+    token: LIQUID_STAKING_ADDRESS[data?.chain?.id],
     // token: '0x000000007a58f5f58E697e51Ab0357BC9e260A04',
   })
 
@@ -69,7 +69,7 @@ function StakeInput(props: any) {
 
   const [lockData, lockCNV] = useContractWrite(
     {
-      addressOrName: '0x265271970c6e13a942f0f75c9d619ffe5ca2872e',
+      addressOrName: LIQUID_STAKING_ADDRESS[data?.chain?.id],
       contractInterface: StakingV1Abi,
     },
     'lock',

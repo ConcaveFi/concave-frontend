@@ -149,7 +149,7 @@ function StakeCard(props) {
           h="40px"
           size="large"
           mx="auto"
-          disabled={fetchingData}
+          disabled={false}
         >
           Stake CNV
         </Button>
@@ -206,11 +206,7 @@ async function getPools(netWorkdId: number, index: string) {
     StakingV1Abi,
     providers(3),
   )
-  console.log('test')
-  stakingContract.pools(0).then((data) => {
-    console.log(data)
-    return data
-  })
+  const pools = await stakingContract.pools(parseInt(index))
   return pools
 }
 
@@ -220,7 +216,9 @@ async function getViewStakingCap(netWorkdId: number, index: string) {
     StakingV1Abi,
     providers(3),
   )
-  const stakingCap = await stakingContract.viewStakingCap(index).catch((error) => {})
+  const stakingCap = await stakingContract.viewStakingCap(parseInt(index)).catch((error) => {})
+  console.log('stakingcap')
+  console.log(stakingCap)
   return stakingCap
 }
 export default StakeCard
