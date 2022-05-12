@@ -31,8 +31,8 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
   const netWorkdId = useCurrentSupportedNetworkId()
   const { data, loading: isLoading, error } = props
   const AMMData = useGet_Amm_Cnv_PriceQuery()
-  const [solds, setSolds] = useState([])
   const [bondSpotPrice, setBondSpotPrice] = useState('0')
+  const [solds, setSolds] = useState([])
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   useEffect(() => {
