@@ -1,14 +1,4 @@
-import {
-  Box,
-  Card,
-  Collapse,
-  Container,
-  Flex,
-  Heading,
-  Stack,
-  Text,
-  useMediaQuery,
-} from '@concave/ui'
+import { Box, Card, Collapse, Container, Flex, Heading, Stack } from '@concave/ui'
 import {
   getBondTermLength,
   getBondSpotPrice,
@@ -17,6 +7,7 @@ import {
   useBondState,
   redeemBondBatch,
 } from 'components/Bond/BondState'
+import { BondBuyCard } from 'components/Bond/BondBuyCard'
 import { SelectedBondType } from 'components/Bond/SelectedBondType'
 import { Redeem } from 'components/Bond/Redeem'
 import { BondInfo, UserBondPositionInfo } from 'components/Bond/BondInfo'
@@ -28,7 +19,6 @@ const spin = keyframes({
   '100%': { transform: 'rotate(360deg)' },
 })
 import { SpinIcon } from '@concave/icons'
-import BondBuyCardContainer from 'components/Bond/BondBuyCardContainer'
 import { useGet_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql'
 import BondSoldsCard from 'components/Bond/BondSoldsCard'
 
@@ -42,11 +32,10 @@ export default function Bond() {
   const [bondSigma, setBondSigma] = useState<any>()
   const [intervalID, setIntervalID] = useState<any>()
   const [showUserPosition, setShowUserPosition] = useState(false)
-  const { data: last10SoldsData } = useGet_Accrualbondv1_Last10_SoldQuery()
-  const [isOpen, setIsOpen] = useState(false)
+  const { data: last10SoldsData, isLoading, error } = useGet_Accrualbondv1_Last10_SoldQuery()
 
   useEffect(() => {
-    getCurrentBlockTimestamp().then((x) => {
+    getCurrentBlockTimestamp(networkId).then((x) => {
       setCurrentBlockTs(x)
     })
     const interval = setInterval(() => {
@@ -103,8 +92,8 @@ export default function Bond() {
 
   return (
     <Container maxW="container.lg">
-      <Flex direction="column" gap={20}>
-        <Stack mt={20} maxW="100%" align="center" textAlign="center">
+      <Flex direction="column" gap={10}>
+        <Stack mt={10} maxW="100%" align="center" textAlign="center">
           <Heading as="h1" mb={3} fontSize="5xl">
             Dynamic Bond Market
           </Heading>
@@ -176,36 +165,13 @@ export default function Bond() {
                   customHeight
                 ></Redeem>
               </Card>
-              <BondSoldsCard active={isOpen} data={last10SoldsData} />
+              <BondSoldsCard loading={isLoading} error={error} data={last10SoldsData} />
             </Card>
-            <ViewSoldsButton onClick={() => setIsOpen(!isOpen)} active={isOpen} />
+            {/* <ViewSoldsButton onClick={() => setIsOpen(!isOpen)} active={isOpen} /> */}
           </Box>
-          <BondBuyCardContainer />
+          <BondBuyCard />
         </Flex>
       </Flex>
     </Container>
-  )
-}
-
-interface ViewSoldsButtonProps {
-  onClick: () => void
-  active: boolean
-}
-const ViewSoldsButton = (props: ViewSoldsButtonProps) => {
-  const { onClick, active } = props
-  return (
-    <Card
-      cursor={'pointer'}
-      onClick={() => onClick()}
-      height={'30px'}
-      width="70%"
-      mx={'auto'}
-      variant="secondary"
-      rounded={'0px 0px 16px 16px'}
-      justify="center"
-      align={'center'}
-    >
-      <Text fontWeight={700}> {active ? 'Retract' : 'Expand'}</Text>
-    </Card>
   )
 }

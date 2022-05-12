@@ -2,21 +2,6 @@ import { Box, Flex, Input, Text } from '@concave/ui'
 import ChooseButton from 'components/Marketplace/ChooseButton'
 import { useState } from 'react'
 
-// const [lockData, lockCNV] = useContractRead(
-//   {
-//     addressOrName: '0x2B7Ea66d564399246Da8e3D6265dB8F89af834C8',
-//     contractInterface: StakingV1Abi,
-//   },
-//   'lock',
-//   {
-//     args: [
-//       account.address,
-//       ethers.utils.parseEther(String(stakeInput)),
-//       periodToPoolParameter[`${props.period}`],
-//     ],
-//   },
-// )
-
 const UserListPositionCard = () => {
   const [expirationDate, setExpirationDate] = useState('')
   const [listingDate, setListingDate] = useState('')

@@ -25,7 +25,7 @@ const MarketplaceListing = (props: MarketplaceListingProps) => {
     >
       {/* @ts-ignore */}
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
-        <ModalOverlay bg={'none'} backdropBlur="4px" />
+        <ModalOverlay bg={'none'} backdropBlur="4px" zIndex={0} />
         <ModalContent>
           <Flex>
             <UserListPositionCard />
@@ -81,10 +81,16 @@ const MarketplaceListing = (props: MarketplaceListingProps) => {
           </Flex>
         </Flex>
         <Flex direction={'column'} flex={1} textAlign={{ lg: 'start', md: 'center' }} ml="2">
-          <Button fontWeight="bold" fontSize="md" variant={'primary'} w="150px" h="40px">
+          <Button
+            // onClick={onOpen}
+            fontWeight="bold"
+            fontSize="md"
+            variant={'primary'}
+            w="150px"
+            h="40px"
+          >
             Coming Soon!
           </Button>
-          {/* onClick={onOpen} */}
         </Flex>
       </Flex>
     </Box>
