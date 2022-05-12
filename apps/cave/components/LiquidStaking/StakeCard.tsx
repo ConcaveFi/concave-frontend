@@ -206,7 +206,7 @@ async function getPools(netWorkdId: number, index: string) {
     StakingV1Abi,
     providers(3),
   )
-  const pools = await stakingContract.pools(parseInt(index))
+  const pools = await stakingContract.pools(index).catch((e) => {})
   return pools
 }
 

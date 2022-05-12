@@ -48,7 +48,7 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
   ))
   const purchases = solds.map((value, index) => (
     <Text key={index} opacity={1 - (isOpen ? index / 10 : (index / 10) * 3)}>
-      {'+ ' + +parseFloat(value.output).toFixed(3) + ' CNV'}
+      {'+ ' + +parseFloat(value.output).toFixed(3) + ' DAI'}
     </Text>
   ))
   const inputAmounts = solds.map((value, index) => (

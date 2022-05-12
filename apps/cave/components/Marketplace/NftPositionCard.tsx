@@ -204,7 +204,7 @@ const NftPositionCard = (props: NftPositionBoxProps) => {
                   Redeem date:
                 </Text>
                 <Text width={'full'} fontWeight={500}>
-                  612.42 CNV
+                  12.07.22
                 </Text>
               </Flex>
               <Flex textAlign={'start'} ml={4} direction={'column'} justifyContent="center">
@@ -213,7 +213,7 @@ const NftPositionCard = (props: NftPositionBoxProps) => {
                 </Text>
                 <Flex justifyContent={'center'} alignItems="center">
                   <Text width={'full'} fontWeight={500}>
-                    12.07.22
+                    612.42 CNV
                   </Text>
                 </Flex>
               </Flex>
