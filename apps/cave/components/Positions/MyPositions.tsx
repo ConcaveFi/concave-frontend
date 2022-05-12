@@ -181,7 +181,9 @@ const LPPositionItem = ({ userAddress, pair }: LPPosition) => {
             p={4}
             spacing={4}
           >
-            <PositionInfoItem label="Your total pool tokens:" value={balance.toSignificant()} />
+            {balance.greaterThan(0) && (
+              <PositionInfoItem label="Your total pool tokens:" value={balance.toSignificant()} />
+            )}
             <PositionInfoItem
               label={`Pooled ${pair.token0.symbol}:`}
               value={pair.reserve0.toSignificant(6, { groupSeparator: ',' })}
@@ -194,10 +196,13 @@ const LPPositionItem = ({ userAddress, pair }: LPPosition) => {
             >
               <CurrencyIcon h={'32px'} size="sm" currency={pair.token1} />
             </PositionInfoItem>
-            <PositionInfoItem
-              label="Your pool share:"
-              value={`${precision(userPoolShare * 100, 2).formatted}%`}
-            />
+
+            {balance.greaterThan(0) && (
+              <PositionInfoItem
+                label="Your pool share:"
+                value={`${precision(userPoolShare * 100, 2).formatted}%`}
+              />
+            )}
           </Stack>
           <Flex gap={5} justify="center" mt={6}>
             <AddLiquidityModalButton pair={pair} />
