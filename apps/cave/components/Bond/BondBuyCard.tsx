@@ -125,9 +125,10 @@ export function BondBuyCard({ bondTransaction, setBondTransaction, setAmountInAn
             .then((tx) => {
               setBondTransaction(tx)
               confirmModal.onClose()
+              console.log('amountOut', amountOut)
               setAmountInAndOut({
                 in: parseFloat(String(amountIn.toFixed())).toFixed(2),
-                out: parseInt(amountOut).toFixed(2),
+                out: parseFloat(amountOut).toFixed(2),
               })
             })
             .catch((e) => {
