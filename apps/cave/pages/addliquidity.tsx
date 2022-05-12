@@ -1,23 +1,10 @@
 import { Flex, Heading, Text } from '@concave/ui'
 import { AddLiquidityCard } from 'components/AMM/AddLiquidity/AddLiquidity'
-import { Loading } from 'components/Loading'
-import { useFetchTokenData } from 'hooks/useTokenList'
-import { useRouter } from 'next/router'
+import { useQueryCurrency } from 'components/CurrencyAmountField/UseQueryCurrency'
 import React from 'react'
 
 export default function AddLiquidity() {
-  const router = useRouter()
-  const params = {
-    chainID: Array.isArray(router.query.chainId) ? router.query.chainId[0] : router.query.chainId,
-    currency0: Array.isArray(router.query.currency0)
-      ? router.query.currency0[0]
-      : router.query.currency0,
-    currency1: Array.isArray(router.query.currency1)
-      ? router.query.currency1[0]
-      : router.query.currency1,
-  }
-  const currency0 = useFetchTokenData(params.chainID, params.currency0)
-  const currency1 = useFetchTokenData(params.chainID, params.currency1)
+  const { data: currencys, isLoading } = useQueryCurrency()
   return (
     <>
       <Flex
@@ -47,20 +34,17 @@ export default function AddLiquidity() {
           width="full"
           p={4}
         >
-          {!currency0?.isLoading && !currency1?.isLoading && router.isReady ? (
-            <AddLiquidityCard
-              borderWidth={2}
-              variant="primary"
-              p={4}
-              w="500px"
-              gap={6}
-              shadow="Up for Blocks"
-              currency0={currency0.data}
-              currency1={currency1.data}
-            />
-          ) : (
-            <Loading size="md" />
-          )}
+          <AddLiquidityCard
+            isLoading={isLoading}
+            currency0={currencys?.currency0}
+            currency1={currencys?.currency1}
+            borderWidth={2}
+            variant="primary"
+            p={4}
+            w="500px"
+            gap={6}
+            shadow="Up for Blocks"
+          />
         </Flex>
       </Flex>
     </>

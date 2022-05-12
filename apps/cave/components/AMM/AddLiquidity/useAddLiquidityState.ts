@@ -44,7 +44,7 @@ export const useAddLiquidityState = (props: CurrencyAmountFields) => {
         },
       },
       undefined,
-      { shallow: true },
+      { shallow: false },
     )
 
     return setFields((old) => {

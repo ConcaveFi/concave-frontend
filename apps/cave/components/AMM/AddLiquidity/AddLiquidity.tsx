@@ -8,6 +8,7 @@ import { useAddLiquidityState } from 'components/AMM/AddLiquidity/useAddLiquidit
 import { useAddLiquidityTransaction } from 'components/AMM/AddLiquidity/useAddLiquidityTransaction'
 import { ConnectWallet } from 'components/ConnectWallet'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
+import { Loading } from 'components/Loading'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
@@ -156,8 +157,9 @@ export const AddLiquidityModalButton = ({
 }
 
 export const AddLiquidityCard = (
-  props: CardProps & { currency0?: Currency; currency1?: Currency },
+  props: CardProps & { currency0?: Currency; currency1?: Currency; isLoading?: boolean },
 ) => {
+  if (props.isLoading) return <Loading size="md" />
   return (
     <Card {...props}>
       <AddLiquidityContent currency0={props.currency0} currency1={props.currency1} />
