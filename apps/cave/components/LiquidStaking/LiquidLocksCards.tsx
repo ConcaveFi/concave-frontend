@@ -12,12 +12,17 @@ const LiquidLocksCards = () => {
   const stakingData = useGet_Stakingv1_Last100_LockQuery()
   useEffect(() => {
     if (stakingData?.data?.logStakingV1_Lock) {
-      setStakingLocks(stakingData?.data?.logStakingV1_Lock)
+      setStakingLocks(
+        stakingData?.data?.logStakingV1_Lock.sort((current, before) => {
+          if (current.timestamp > before.timestamp) return 1
+        }),
+      )
     }
   }, [stakingData])
 
   const amounts = stakingLocks
     .filter((value, index) => {
+      console.log(value.txHash)
       if (index < 10) return 1
     })
     .map((value, index) => (
@@ -42,7 +47,7 @@ const LiquidLocksCards = () => {
     })
     .map((value, index) => (
       <Text opacity={1 - (index / 10) * (isOpen ? 1 : 3)} key={index}>
-        {formatDistanceStrict(value.timestamp * 1000, new Date().getTime())}
+        {formatDistanceStrict(value.timestamp * 1000, new Date().getTime()) + ' ago'}
       </Text>
     ))
   return (

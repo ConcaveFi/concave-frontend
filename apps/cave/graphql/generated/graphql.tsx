@@ -1151,7 +1151,7 @@ export const useGet_Stackingv1_By_Pool_IdQuery = <
   )
 export const Get_Stakingv1_Last100_LockDocument = `
     query GET_STAKINGV1_LAST100_LOCK {
-  logStakingV1_Lock {
+  logStakingV1_Lock(order_by: {timestamp: desc}, limit: 100) {
     txHash
     txBlockNumber
     poolID
