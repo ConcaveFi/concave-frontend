@@ -1597,11 +1597,11 @@
       },
       {
         "kind": "OBJECT",
-        "name": "logAccrualBondsV1_BondSold",
-        "description": "columns and relationships of \"logAccrualBondsV1_BondSold\"",
+        "name": "logAccrualbondsv1_BondSold",
+        "description": "get BondSold from AccrualBondsV1",
         "fields": [
           {
-            "name": "inputAmount",
+            "name": "inputToken",
             "description": null,
             "args": [],
             "type": {
@@ -1617,7 +1617,7 @@
             "deprecationReason": null
           },
           {
-            "name": "inputToken",
+            "name": "inputaAmount",
             "description": null,
             "args": [],
             "type": {
@@ -1728,8 +1728,8 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "logAccrualBondsV1_BondSold_bool_exp",
-        "description": "Boolean expression to filter rows from the table \"logAccrualBondsV1_BondSold\". All fields are combined with a logical 'AND'.",
+        "name": "logAccrualbondsv1_BondSold_bool_exp",
+        "description": "Boolean expression to filter rows from the table \"logAccrualbondsv1_BondSold\". All fields are combined with a logical 'AND'.",
         "fields": null,
         "inputFields": [
           {
@@ -1743,7 +1743,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "INPUT_OBJECT",
-                  "name": "logAccrualBondsV1_BondSold_bool_exp",
+                  "name": "logAccrualbondsv1_BondSold_bool_exp",
                   "ofType": null
                 }
               }
@@ -1757,7 +1757,7 @@
             "description": null,
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "logAccrualBondsV1_BondSold_bool_exp",
+              "name": "logAccrualbondsv1_BondSold_bool_exp",
               "ofType": null
             },
             "defaultValue": null,
@@ -1775,7 +1775,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "INPUT_OBJECT",
-                  "name": "logAccrualBondsV1_BondSold_bool_exp",
+                  "name": "logAccrualbondsv1_BondSold_bool_exp",
                   "ofType": null
                 }
               }
@@ -1785,7 +1785,7 @@
             "deprecationReason": null
           },
           {
-            "name": "inputAmount",
+            "name": "inputToken",
             "description": null,
             "type": {
               "kind": "INPUT_OBJECT",
@@ -1797,7 +1797,7 @@
             "deprecationReason": null
           },
           {
-            "name": "inputToken",
+            "name": "inputaAmount",
             "description": null,
             "type": {
               "kind": "INPUT_OBJECT",
@@ -1887,12 +1887,12 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "logAccrualBondsV1_BondSold_order_by",
-        "description": "Ordering options when selecting data from \"logAccrualBondsV1_BondSold\".",
+        "name": "logAccrualbondsv1_BondSold_order_by",
+        "description": "Ordering options when selecting data from \"logAccrualbondsv1_BondSold\".",
         "fields": null,
         "inputFields": [
           {
-            "name": "inputAmount",
+            "name": "inputToken",
             "description": null,
             "type": {
               "kind": "ENUM",
@@ -1904,7 +1904,7 @@
             "deprecationReason": null
           },
           {
-            "name": "inputToken",
+            "name": "inputaAmount",
             "description": null,
             "type": {
               "kind": "ENUM",
@@ -1994,20 +1994,20 @@
       },
       {
         "kind": "ENUM",
-        "name": "logAccrualBondsV1_BondSold_select_column",
-        "description": "select columns of table \"logAccrualBondsV1_BondSold\"",
+        "name": "logAccrualbondsv1_BondSold_select_column",
+        "description": "select columns of table \"logAccrualbondsv1_BondSold\"",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
         "enumValues": [
           {
-            "name": "inputAmount",
+            "name": "inputToken",
             "description": "column name",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "inputToken",
+            "name": "inputaAmount",
             "description": "column name",
             "isDeprecated": false,
             "deprecationReason": null
@@ -2424,9 +2424,13 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "numeric",
-              "ofType": null
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "numeric",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -4109,8 +4113,8 @@
             "deprecationReason": null
           },
           {
-            "name": "logAccrualBondsV1_BondSold",
-            "description": "fetch data from the table: \"logAccrualBondsV1_BondSold\"",
+            "name": "logAccrualbondsv1_BondSold",
+            "description": "fetch data from the table: \"logAccrualbondsv1_BondSold\"",
             "args": [
               {
                 "name": "distinct_on",
@@ -4123,7 +4127,7 @@
                     "name": null,
                     "ofType": {
                       "kind": "ENUM",
-                      "name": "logAccrualBondsV1_BondSold_select_column",
+                      "name": "logAccrualbondsv1_BondSold_select_column",
                       "ofType": null
                     }
                   }
@@ -4167,7 +4171,7 @@
                     "name": null,
                     "ofType": {
                       "kind": "INPUT_OBJECT",
-                      "name": "logAccrualBondsV1_BondSold_order_by",
+                      "name": "logAccrualbondsv1_BondSold_order_by",
                       "ofType": null
                     }
                   }
@@ -4181,7 +4185,7 @@
                 "description": "filter the rows returned",
                 "type": {
                   "kind": "INPUT_OBJECT",
-                  "name": "logAccrualBondsV1_BondSold_bool_exp",
+                  "name": "logAccrualbondsv1_BondSold_bool_exp",
                   "ofType": null
                 },
                 "defaultValue": null,
@@ -4200,40 +4204,11 @@
                   "name": null,
                   "ofType": {
                     "kind": "OBJECT",
-                    "name": "logAccrualBondsV1_BondSold",
+                    "name": "logAccrualbondsv1_BondSold",
                     "ofType": null
                   }
                 }
               }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "logAccrualBondsV1_BondSold_by_pk",
-            "description": "fetch data from the table: \"logAccrualBondsV1_BondSold\" using primary key columns",
-            "args": [
-              {
-                "name": "txHash",
-                "description": null,
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "OBJECT",
-              "name": "logAccrualBondsV1_BondSold",
-              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -4441,35 +4416,6 @@
             "deprecationReason": null
           },
           {
-            "name": "logStakingV1_Lock_by_pk",
-            "description": "fetch data from the table: \"logStakingV1_Lock\" using primary key columns",
-            "args": [
-              {
-                "name": "txHash",
-                "description": null,
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "OBJECT",
-              "name": "logStakingV1_Lock",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "logStakingV1_PoolRewarded",
             "description": "fetch data from the table: \"logStakingV1_PoolRewarded\"",
             "args": [
@@ -4566,35 +4512,6 @@
                   }
                 }
               }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "logStakingV1_by_pk",
-            "description": "fetch data from the table: \"logStakingV1\" using primary key columns",
-            "args": [
-              {
-                "name": "txHash",
-                "description": null,
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "OBJECT",
-              "name": "logStakingV1",
-              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -4712,8 +4629,8 @@
         "description": null,
         "fields": [
           {
-            "name": "logAccrualBondsV1_BondSold",
-            "description": "fetch data from the table: \"logAccrualBondsV1_BondSold\"",
+            "name": "logAccrualbondsv1_BondSold",
+            "description": "fetch data from the table: \"logAccrualbondsv1_BondSold\"",
             "args": [
               {
                 "name": "distinct_on",
@@ -4726,7 +4643,7 @@
                     "name": null,
                     "ofType": {
                       "kind": "ENUM",
-                      "name": "logAccrualBondsV1_BondSold_select_column",
+                      "name": "logAccrualbondsv1_BondSold_select_column",
                       "ofType": null
                     }
                   }
@@ -4770,7 +4687,7 @@
                     "name": null,
                     "ofType": {
                       "kind": "INPUT_OBJECT",
-                      "name": "logAccrualBondsV1_BondSold_order_by",
+                      "name": "logAccrualbondsv1_BondSold_order_by",
                       "ofType": null
                     }
                   }
@@ -4784,7 +4701,7 @@
                 "description": "filter the rows returned",
                 "type": {
                   "kind": "INPUT_OBJECT",
-                  "name": "logAccrualBondsV1_BondSold_bool_exp",
+                  "name": "logAccrualbondsv1_BondSold_bool_exp",
                   "ofType": null
                 },
                 "defaultValue": null,
@@ -4803,40 +4720,11 @@
                   "name": null,
                   "ofType": {
                     "kind": "OBJECT",
-                    "name": "logAccrualBondsV1_BondSold",
+                    "name": "logAccrualbondsv1_BondSold",
                     "ofType": null
                   }
                 }
               }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "logAccrualBondsV1_BondSold_by_pk",
-            "description": "fetch data from the table: \"logAccrualBondsV1_BondSold\" using primary key columns",
-            "args": [
-              {
-                "name": "txHash",
-                "description": null,
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "OBJECT",
-              "name": "logAccrualBondsV1_BondSold",
-              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -5044,35 +4932,6 @@
             "deprecationReason": null
           },
           {
-            "name": "logStakingV1_Lock_by_pk",
-            "description": "fetch data from the table: \"logStakingV1_Lock\" using primary key columns",
-            "args": [
-              {
-                "name": "txHash",
-                "description": null,
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "OBJECT",
-              "name": "logStakingV1_Lock",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "logStakingV1_PoolRewarded",
             "description": "fetch data from the table: \"logStakingV1_PoolRewarded\"",
             "args": [
@@ -5169,35 +5028,6 @@
                   }
                 }
               }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "logStakingV1_by_pk",
-            "description": "fetch data from the table: \"logStakingV1\" using primary key columns",
-            "args": [
-              {
-                "name": "txHash",
-                "description": null,
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "OBJECT",
-              "name": "logStakingV1",
-              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null

@@ -39,10 +39,10 @@ query GET_STAKINGV1_LAST100_LOCK {
 }
 
 query GET_ACCRUALBONDV1_LAST10_SOLD {
-  logAccrualBondsV1_BondSold(order_by: { txBlockNumber: desc }, limit: 10) {
+  logAccrualbondsv1_BondSold(order_by: { txBlockNumber: desc }, limit: 10) {
     timestamp
     inputToken
-    inputAmount
+    inputaAmount
     method
     output
   }

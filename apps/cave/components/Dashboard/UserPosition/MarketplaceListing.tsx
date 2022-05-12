@@ -82,7 +82,7 @@ const MarketplaceListing = (props: MarketplaceListingProps) => {
         </Flex>
         <Flex direction={'column'} flex={1} textAlign={{ lg: 'start', md: 'center' }} ml="2">
           <Button
-            // onClick={onOpen}
+            onClick={onOpen}
             fontWeight="bold"
             fontSize="md"
             variant={'primary'}

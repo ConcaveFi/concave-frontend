@@ -44,6 +44,9 @@ const LiquidLocksCards = () => {
         {formatDistanceStrict(value.timestamp * 1000, new Date().getTime())}
       </Text>
     ))
+
+  console.log(stakingData)
+
   return (
     <Card
       my={4}

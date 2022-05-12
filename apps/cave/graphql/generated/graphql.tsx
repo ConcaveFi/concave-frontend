@@ -109,9 +109,9 @@ export type CnvDataOutput = {
   msg?: Maybe<Scalars['String']>
 }
 
-/** columns and relationships of "logAccrualBondsV1_BondSold" */
-export type LogAccrualBondsV1_BondSold = {
-  __typename?: 'logAccrualBondsV1_BondSold'
+/** get BondSold from AccrualBondsV1 */
+export type LogAccrualbondsv1_BondSold = {
+  __typename?: 'logAccrualbondsv1_BondSold'
   inputToken: Scalars['String']
   inputaAmount: Scalars['String']
   method?: Maybe<Scalars['String']>
@@ -122,11 +122,11 @@ export type LogAccrualBondsV1_BondSold = {
   txHash: Scalars['String']
 }
 
-/** Boolean expression to filter rows from the table "logAccrualBondsV1_BondSold". All fields are combined with a logical 'AND'. */
-export type LogAccrualBondsV1_BondSold_Bool_Exp = {
-  _and?: InputMaybe<Array<LogAccrualBondsV1_BondSold_Bool_Exp>>
-  _not?: InputMaybe<LogAccrualBondsV1_BondSold_Bool_Exp>
-  _or?: InputMaybe<Array<LogAccrualBondsV1_BondSold_Bool_Exp>>
+/** Boolean expression to filter rows from the table "logAccrualbondsv1_BondSold". All fields are combined with a logical 'AND'. */
+export type LogAccrualbondsv1_BondSold_Bool_Exp = {
+  _and?: InputMaybe<Array<LogAccrualbondsv1_BondSold_Bool_Exp>>
+  _not?: InputMaybe<LogAccrualbondsv1_BondSold_Bool_Exp>
+  _or?: InputMaybe<Array<LogAccrualbondsv1_BondSold_Bool_Exp>>
   inputToken?: InputMaybe<String_Comparison_Exp>
   inputaAmount?: InputMaybe<String_Comparison_Exp>
   method?: InputMaybe<String_Comparison_Exp>
@@ -137,8 +137,8 @@ export type LogAccrualBondsV1_BondSold_Bool_Exp = {
   txHash?: InputMaybe<String_Comparison_Exp>
 }
 
-/** Ordering options when selecting data from "logAccrualBondsV1_BondSold". */
-export type LogAccrualBondsV1_BondSold_Order_By = {
+/** Ordering options when selecting data from "logAccrualbondsv1_BondSold". */
+export type LogAccrualbondsv1_BondSold_Order_By = {
   inputToken?: InputMaybe<Order_By>
   inputaAmount?: InputMaybe<Order_By>
   method?: InputMaybe<Order_By>
@@ -149,72 +149,12 @@ export type LogAccrualBondsV1_BondSold_Order_By = {
   txHash?: InputMaybe<Order_By>
 }
 
-/** select columns of table "logAccrualBondsV1_BondSold" */
-export enum LogAccrualBondsV1_BondSold_Select_Column {
+/** select columns of table "logAccrualbondsv1_BondSold" */
+export enum LogAccrualbondsv1_BondSold_Select_Column {
   /** column name */
   InputToken = 'inputToken',
   /** column name */
   InputaAmount = 'inputaAmount',
-  /** column name */
-  Method = 'method',
-  /** column name */
-  Output = 'output',
-  /** column name */
-  Timestamp = 'timestamp',
-  /** column name */
-  To = 'to',
-  /** column name */
-  TxBlockNumber = 'txBlockNumber',
-  /** column name */
-  TxHash = 'txHash',
-}
-
-/** columns and relationships of "logAccrualBondsV1_BondSold" */
-export type LogAccrualBondsV1_BondSold = {
-  __typename?: 'logAccrualBondsV1_BondSold'
-  inputAmount: Scalars['String']
-  inputToken: Scalars['String']
-  method?: Maybe<Scalars['String']>
-  output: Scalars['String']
-  timestamp: Scalars['numeric']
-  to: Scalars['String']
-  txBlockNumber?: Maybe<Scalars['numeric']>
-  txHash: Scalars['String']
-}
-
-/** Boolean expression to filter rows from the table "logAccrualBondsV1_BondSold". All fields are combined with a logical 'AND'. */
-export type LogAccrualBondsV1_BondSold_Bool_Exp = {
-  _and?: InputMaybe<Array<LogAccrualBondsV1_BondSold_Bool_Exp>>
-  _not?: InputMaybe<LogAccrualBondsV1_BondSold_Bool_Exp>
-  _or?: InputMaybe<Array<LogAccrualBondsV1_BondSold_Bool_Exp>>
-  inputAmount?: InputMaybe<String_Comparison_Exp>
-  inputToken?: InputMaybe<String_Comparison_Exp>
-  method?: InputMaybe<String_Comparison_Exp>
-  output?: InputMaybe<String_Comparison_Exp>
-  timestamp?: InputMaybe<Numeric_Comparison_Exp>
-  to?: InputMaybe<String_Comparison_Exp>
-  txBlockNumber?: InputMaybe<Numeric_Comparison_Exp>
-  txHash?: InputMaybe<String_Comparison_Exp>
-}
-
-/** Ordering options when selecting data from "logAccrualBondsV1_BondSold". */
-export type LogAccrualBondsV1_BondSold_Order_By = {
-  inputAmount?: InputMaybe<Order_By>
-  inputToken?: InputMaybe<Order_By>
-  method?: InputMaybe<Order_By>
-  output?: InputMaybe<Order_By>
-  timestamp?: InputMaybe<Order_By>
-  to?: InputMaybe<Order_By>
-  txBlockNumber?: InputMaybe<Order_By>
-  txHash?: InputMaybe<Order_By>
-}
-
-/** select columns of table "logAccrualBondsV1_BondSold" */
-export enum LogAccrualBondsV1_BondSold_Select_Column {
-  /** column name */
-  InputAmount = 'inputAmount',
-  /** column name */
-  InputToken = 'inputToken',
   /** column name */
   Method = 'method',
   /** column name */
@@ -259,7 +199,7 @@ export type LogStakingV1_Lock = {
   positionID: Scalars['numeric']
   rewardDebt: Scalars['String']
   shares: Scalars['String']
-  timestamp?: Maybe<Scalars['numeric']>
+  timestamp: Scalars['numeric']
   to: Scalars['String']
   txBlockNumber: Scalars['numeric']
   txHash: Scalars['String']
@@ -491,34 +431,24 @@ export enum Order_By {
 export type Query_Root = {
   __typename?: 'query_root'
   cnvData?: Maybe<CnvDataOutput>
-  /** fetch data from the table: "logAccrualBondsV1_BondSold" */
-  logAccrualBondsV1_BondSold: Array<LogAccrualBondsV1_BondSold>
-  /** fetch data from the table: "logAccrualBondsV1_BondSold" using primary key columns */
-  logAccrualBondsV1_BondSold_by_pk?: Maybe<LogAccrualBondsV1_BondSold>
+  /** fetch data from the table: "logAccrualbondsv1_BondSold" */
+  logAccrualbondsv1_BondSold: Array<LogAccrualbondsv1_BondSold>
   /** fetch data from the table: "logStakingV1" */
   logStakingV1: Array<LogStakingV1>
   /** fetch data from the table: "logStakingV1_Lock" */
   logStakingV1_Lock: Array<LogStakingV1_Lock>
-  /** fetch data from the table: "logStakingV1_Lock" using primary key columns */
-  logStakingV1_Lock_by_pk?: Maybe<LogStakingV1_Lock>
   /** fetch data from the table: "logStakingV1_PoolRewarded" */
   logStakingV1_PoolRewarded: Array<LogStakingV1_PoolRewarded>
-  /** fetch data from the table: "logStakingV1" using primary key columns */
-  logStakingV1_by_pk?: Maybe<LogStakingV1>
   /** fetch data from the table: "treasury" */
   treasury: Array<Treasury>
 }
 
-export type Query_RootLogAccrualBondsV1_BondSoldArgs = {
-  distinct_on?: InputMaybe<Array<LogAccrualBondsV1_BondSold_Select_Column>>
+export type Query_RootLogAccrualbondsv1_BondSoldArgs = {
+  distinct_on?: InputMaybe<Array<LogAccrualbondsv1_BondSold_Select_Column>>
   limit?: InputMaybe<Scalars['Int']>
   offset?: InputMaybe<Scalars['Int']>
-  order_by?: InputMaybe<Array<LogAccrualBondsV1_BondSold_Order_By>>
-  where?: InputMaybe<LogAccrualBondsV1_BondSold_Bool_Exp>
-}
-
-export type Query_RootLogAccrualBondsV1_BondSold_By_PkArgs = {
-  txHash: Scalars['String']
+  order_by?: InputMaybe<Array<LogAccrualbondsv1_BondSold_Order_By>>
+  where?: InputMaybe<LogAccrualbondsv1_BondSold_Bool_Exp>
 }
 
 export type Query_RootLogAccrualBondsV1_BondSoldArgs = {
@@ -549,20 +479,12 @@ export type Query_RootLogStakingV1_LockArgs = {
   where?: InputMaybe<LogStakingV1_Lock_Bool_Exp>
 }
 
-export type Query_RootLogStakingV1_Lock_By_PkArgs = {
-  txHash: Scalars['String']
-}
-
 export type Query_RootLogStakingV1_PoolRewardedArgs = {
   distinct_on?: InputMaybe<Array<LogStakingV1_PoolRewarded_Select_Column>>
   limit?: InputMaybe<Scalars['Int']>
   offset?: InputMaybe<Scalars['Int']>
   order_by?: InputMaybe<Array<LogStakingV1_PoolRewarded_Order_By>>
   where?: InputMaybe<LogStakingV1_PoolRewarded_Bool_Exp>
-}
-
-export type Query_RootLogStakingV1_By_PkArgs = {
-  txHash: Scalars['String']
 }
 
 export type Query_RootTreasuryArgs = {
@@ -575,34 +497,24 @@ export type Query_RootTreasuryArgs = {
 
 export type Subscription_Root = {
   __typename?: 'subscription_root'
-  /** fetch data from the table: "logAccrualBondsV1_BondSold" */
-  logAccrualBondsV1_BondSold: Array<LogAccrualBondsV1_BondSold>
-  /** fetch data from the table: "logAccrualBondsV1_BondSold" using primary key columns */
-  logAccrualBondsV1_BondSold_by_pk?: Maybe<LogAccrualBondsV1_BondSold>
+  /** fetch data from the table: "logAccrualbondsv1_BondSold" */
+  logAccrualbondsv1_BondSold: Array<LogAccrualbondsv1_BondSold>
   /** fetch data from the table: "logStakingV1" */
   logStakingV1: Array<LogStakingV1>
   /** fetch data from the table: "logStakingV1_Lock" */
   logStakingV1_Lock: Array<LogStakingV1_Lock>
-  /** fetch data from the table: "logStakingV1_Lock" using primary key columns */
-  logStakingV1_Lock_by_pk?: Maybe<LogStakingV1_Lock>
   /** fetch data from the table: "logStakingV1_PoolRewarded" */
   logStakingV1_PoolRewarded: Array<LogStakingV1_PoolRewarded>
-  /** fetch data from the table: "logStakingV1" using primary key columns */
-  logStakingV1_by_pk?: Maybe<LogStakingV1>
   /** fetch data from the table: "treasury" */
   treasury: Array<Treasury>
 }
 
-export type Subscription_RootLogAccrualBondsV1_BondSoldArgs = {
-  distinct_on?: InputMaybe<Array<LogAccrualBondsV1_BondSold_Select_Column>>
+export type Subscription_RootLogAccrualbondsv1_BondSoldArgs = {
+  distinct_on?: InputMaybe<Array<LogAccrualbondsv1_BondSold_Select_Column>>
   limit?: InputMaybe<Scalars['Int']>
   offset?: InputMaybe<Scalars['Int']>
-  order_by?: InputMaybe<Array<LogAccrualBondsV1_BondSold_Order_By>>
-  where?: InputMaybe<LogAccrualBondsV1_BondSold_Bool_Exp>
-}
-
-export type Subscription_RootLogAccrualBondsV1_BondSold_By_PkArgs = {
-  txHash: Scalars['String']
+  order_by?: InputMaybe<Array<LogAccrualbondsv1_BondSold_Order_By>>
+  where?: InputMaybe<LogAccrualbondsv1_BondSold_Bool_Exp>
 }
 
 export type Subscription_RootLogAccrualBondsV1_BondSoldArgs = {
@@ -633,20 +545,12 @@ export type Subscription_RootLogStakingV1_LockArgs = {
   where?: InputMaybe<LogStakingV1_Lock_Bool_Exp>
 }
 
-export type Subscription_RootLogStakingV1_Lock_By_PkArgs = {
-  txHash: Scalars['String']
-}
-
 export type Subscription_RootLogStakingV1_PoolRewardedArgs = {
   distinct_on?: InputMaybe<Array<LogStakingV1_PoolRewarded_Select_Column>>
   limit?: InputMaybe<Scalars['Int']>
   offset?: InputMaybe<Scalars['Int']>
   order_by?: InputMaybe<Array<LogStakingV1_PoolRewarded_Order_By>>
   where?: InputMaybe<LogStakingV1_PoolRewarded_Bool_Exp>
-}
-
-export type Subscription_RootLogStakingV1_By_PkArgs = {
-  txHash: Scalars['String']
 }
 
 export type Subscription_RootTreasuryArgs = {
@@ -787,7 +691,7 @@ export type Get_Stakingv1_Last100_LockQuery = {
     txHash: string
     txBlockNumber: any
     poolID: any
-    timestamp?: any | null
+    timestamp: any
     positionID: any
     to: string
     amount: string
@@ -798,11 +702,11 @@ export type Get_Accrualbondv1_Last10_SoldQueryVariables = Exact<{ [key: string]:
 
 export type Get_Accrualbondv1_Last10_SoldQuery = {
   __typename?: 'query_root'
-  logAccrualBondsV1_BondSold: Array<{
-    __typename?: 'logAccrualBondsV1_BondSold'
+  logAccrualbondsv1_BondSold: Array<{
+    __typename?: 'logAccrualbondsv1_BondSold'
     timestamp: any
     inputToken: string
-    inputAmount: string
+    inputaAmount: string
     method?: string | null
     output: string
   }>
@@ -984,10 +888,10 @@ export const useGet_Stakingv1_Last100_LockQuery = <
   )
 export const Get_Accrualbondv1_Last10_SoldDocument = `
     query GET_ACCRUALBONDV1_LAST10_SOLD {
-  logAccrualBondsV1_BondSold(order_by: {txBlockNumber: desc}, limit: 10) {
+  logAccrualbondsv1_BondSold(order_by: {txBlockNumber: desc}, limit: 10) {
     timestamp
     inputToken
-    inputAmount
+    inputaAmount
     method
     output
   }

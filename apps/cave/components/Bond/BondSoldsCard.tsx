@@ -7,7 +7,6 @@ import {
 } from 'graphql/generated/graphql'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useEffect, useState } from 'react'
-import BondSoldsModal from './BondSoldsModal'
 import { getBondSpotPrice } from './BondState'
 
 interface BoldSoldsCardProps {
@@ -26,7 +25,7 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
 
   useEffect(() => {
     if (data) {
-      setSolds(data.logAccrualBondsV1_BondSold)
+      setSolds(data.logAccrualbondsv1_BondSold)
     }
   }, [data])
 
@@ -50,20 +49,18 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
     </Text>
   ))
 
-  console.log(isOpen)
+  console.log(data)
 
   return (
-    // <Collapse startingHeight={'140px'} in={active}>
-    <>
-      <Flex height={'140px'} width="full" direction="column">
-        <Flex width={'full'} flex={1}>
-          <Flex flex={1} justify="center" align={'center'} direction="column">
+    <Collapse startingHeight={'140px'} in={isOpen}>
+      <Flex width="full" direction="column">
+        <Flex maxHeight={'100px'} width={'full'} flex={1}>
+          <Flex flex={1.3} justify="center" align={'center'} direction="column">
             <Text textColor={'text.low'} fontSize={'14px'} fontWeight="700">
               Current Price:
             </Text>
             <Text fontWeight={'700'}>
-              {'$34,23'}
-              {/* ${AMMData?.data?.cnvData?.data?.last?.toFixed(3)} */}
+              {/* {'$34,23'} */}${AMMData?.data?.cnvData?.data?.last?.toFixed(3)}
             </Text>
 
             <Text textColor={'text.low'} fontSize={'14px'} fontWeight="700">
@@ -75,7 +72,7 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
           </Flex>
           <Box w="1px" mt={0} bg="stroke.primary" />
           <Flex
-            flex={1}
+            flex={0.8}
             direction="column"
             align={'center'}
             fontWeight={500}
@@ -129,9 +126,7 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
           </Text>
         </Card>
       </Flex>
-      <BondSoldsModal isOpen={isOpen} onClose={onClose} data={data} />
-    </>
-    // </Collapse>
+    </Collapse>
   )
 }
 
