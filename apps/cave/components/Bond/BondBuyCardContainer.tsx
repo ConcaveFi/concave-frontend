@@ -64,12 +64,11 @@ export default function BondBuyCardContainer(props: any) {
   useEffect(() => {
     console.log(data, loading, error)
     let showToast = false
-    // if (loading) {
-    // console.log('is loading', loading)
-    // currentStatus = 'info'
-    // showToast = true
-    // } else
-    if (data) {
+    if (loading) {
+      console.log('is loading', loading)
+      currentStatus = 'info'
+      showToast = true
+    } else if (data) {
       // console.log(data)
       currentStatus = 'success'
       showToast = true
