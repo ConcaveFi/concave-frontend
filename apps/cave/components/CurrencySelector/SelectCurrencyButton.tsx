@@ -26,6 +26,7 @@ export const SelectCurrencyButton = ({
     onClick={onClick}
     {...props}
   >
+    {selected?.chainId === 3 ? 't' : ''}
     {selected?.symbol || `Select a token`}
   </Button>
 )

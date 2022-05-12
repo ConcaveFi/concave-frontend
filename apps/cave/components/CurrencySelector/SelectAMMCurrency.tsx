@@ -31,7 +31,8 @@ const CommonTokens = ({
             aria-selected={!!selected?.equals(currency)}
             variant="select"
           >
-            {currency.symbol.toUpperCase()}
+            {currency.chainId === 3 ? 't' : ''}
+            {currency.symbol}
           </Button>
         ))}
       </Flex>
