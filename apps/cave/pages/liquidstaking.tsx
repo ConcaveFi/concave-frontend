@@ -59,6 +59,7 @@ function LiquidStaking() {
       mt={0}
       alignItems={'center'}
       textAlign="center"
+      height={'2000px'}
       maxHeight={{ lg: '1200px', base: '1700px' }}
     >
       <Heading as="h1" mt={16} fontSize="5xl">
