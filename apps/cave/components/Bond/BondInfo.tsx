@@ -28,7 +28,7 @@ export const InfoItem = ({ value, label, ...props }) => (
 export const BondInfo = ({ asset, roi, vestingTerm, icon }) => {
   return (
     <Card bg="none" py={3} w="100%" direction="row" shadow="Glass Up Medium">
-      <Flex justify="center" flexBasis="40%">
+      <Flex justify="center" flexBasis="40%" alignItems={'center'}>
         <Image src={icon} alt="" w="55px" h="55px" mr={3} />
         <InfoItem value={asset.toUpperCase()} label="Asset" />
       </Flex>

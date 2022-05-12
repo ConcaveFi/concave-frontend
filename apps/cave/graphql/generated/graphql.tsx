@@ -112,6 +112,66 @@ export type CnvDataOutput = {
 /** columns and relationships of "logAccrualBondsV1_BondSold" */
 export type LogAccrualBondsV1_BondSold = {
   __typename?: 'logAccrualBondsV1_BondSold'
+  inputToken: Scalars['String']
+  inputaAmount: Scalars['String']
+  method?: Maybe<Scalars['String']>
+  output: Scalars['String']
+  timestamp: Scalars['numeric']
+  to: Scalars['String']
+  txBlockNumber?: Maybe<Scalars['numeric']>
+  txHash: Scalars['String']
+}
+
+/** Boolean expression to filter rows from the table "logAccrualBondsV1_BondSold". All fields are combined with a logical 'AND'. */
+export type LogAccrualBondsV1_BondSold_Bool_Exp = {
+  _and?: InputMaybe<Array<LogAccrualBondsV1_BondSold_Bool_Exp>>
+  _not?: InputMaybe<LogAccrualBondsV1_BondSold_Bool_Exp>
+  _or?: InputMaybe<Array<LogAccrualBondsV1_BondSold_Bool_Exp>>
+  inputToken?: InputMaybe<String_Comparison_Exp>
+  inputaAmount?: InputMaybe<String_Comparison_Exp>
+  method?: InputMaybe<String_Comparison_Exp>
+  output?: InputMaybe<String_Comparison_Exp>
+  timestamp?: InputMaybe<Numeric_Comparison_Exp>
+  to?: InputMaybe<String_Comparison_Exp>
+  txBlockNumber?: InputMaybe<Numeric_Comparison_Exp>
+  txHash?: InputMaybe<String_Comparison_Exp>
+}
+
+/** Ordering options when selecting data from "logAccrualBondsV1_BondSold". */
+export type LogAccrualBondsV1_BondSold_Order_By = {
+  inputToken?: InputMaybe<Order_By>
+  inputaAmount?: InputMaybe<Order_By>
+  method?: InputMaybe<Order_By>
+  output?: InputMaybe<Order_By>
+  timestamp?: InputMaybe<Order_By>
+  to?: InputMaybe<Order_By>
+  txBlockNumber?: InputMaybe<Order_By>
+  txHash?: InputMaybe<Order_By>
+}
+
+/** select columns of table "logAccrualBondsV1_BondSold" */
+export enum LogAccrualBondsV1_BondSold_Select_Column {
+  /** column name */
+  InputToken = 'inputToken',
+  /** column name */
+  InputaAmount = 'inputaAmount',
+  /** column name */
+  Method = 'method',
+  /** column name */
+  Output = 'output',
+  /** column name */
+  Timestamp = 'timestamp',
+  /** column name */
+  To = 'to',
+  /** column name */
+  TxBlockNumber = 'txBlockNumber',
+  /** column name */
+  TxHash = 'txHash',
+}
+
+/** columns and relationships of "logAccrualBondsV1_BondSold" */
+export type LogAccrualBondsV1_BondSold = {
+  __typename?: 'logAccrualBondsV1_BondSold'
   inputAmount: Scalars['String']
   inputToken: Scalars['String']
   method?: Maybe<Scalars['String']>
@@ -461,6 +521,18 @@ export type Query_RootLogAccrualBondsV1_BondSold_By_PkArgs = {
   txHash: Scalars['String']
 }
 
+export type Query_RootLogAccrualBondsV1_BondSoldArgs = {
+  distinct_on?: InputMaybe<Array<LogAccrualBondsV1_BondSold_Select_Column>>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  order_by?: InputMaybe<Array<LogAccrualBondsV1_BondSold_Order_By>>
+  where?: InputMaybe<LogAccrualBondsV1_BondSold_Bool_Exp>
+}
+
+export type Query_RootLogAccrualBondsV1_BondSold_By_PkArgs = {
+  txHash: Scalars['String']
+}
+
 export type Query_RootLogStakingV1Args = {
   distinct_on?: InputMaybe<Array<LogStakingV1_Select_Column>>
   limit?: InputMaybe<Scalars['Int']>
@@ -519,6 +591,18 @@ export type Subscription_Root = {
   logStakingV1_by_pk?: Maybe<LogStakingV1>
   /** fetch data from the table: "treasury" */
   treasury: Array<Treasury>
+}
+
+export type Subscription_RootLogAccrualBondsV1_BondSoldArgs = {
+  distinct_on?: InputMaybe<Array<LogAccrualBondsV1_BondSold_Select_Column>>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  order_by?: InputMaybe<Array<LogAccrualBondsV1_BondSold_Order_By>>
+  where?: InputMaybe<LogAccrualBondsV1_BondSold_Bool_Exp>
+}
+
+export type Subscription_RootLogAccrualBondsV1_BondSold_By_PkArgs = {
+  txHash: Scalars['String']
 }
 
 export type Subscription_RootLogAccrualBondsV1_BondSoldArgs = {
@@ -693,22 +777,6 @@ export type Get_Stackingv1_Last100_EventsQuery = {
 export type Get_Stackingv1_By_Pool_IdQueryVariables = Exact<{
   poolID?: InputMaybe<Numeric_Comparison_Exp>
 }>
-
-export type Get_Stackingv1_By_Pool_IdQuery = {
-  __typename?: 'query_root'
-  logStakingV1: Array<{
-    __typename?: 'logStakingV1'
-    blockNumber: any
-    txHash: string
-    poolID: any
-    tokenID: any
-    sold: boolean
-    from: string
-    to: string
-    amountLocked: any
-    lockedUntil: any
-  }>
-}
 
 export type Get_Stakingv1_Last100_LockQueryVariables = Exact<{ [key: string]: never }>
 

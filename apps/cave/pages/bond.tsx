@@ -17,7 +17,6 @@ import {
   useBondState,
   redeemBondBatch,
 } from 'components/Bond/BondState'
-import { BondBuyCard } from 'components/Bond/BondBuyCard'
 import { SelectedBondType } from 'components/Bond/SelectedBondType'
 import { Redeem } from 'components/Bond/Redeem'
 import { BondInfo, UserBondPositionInfo } from 'components/Bond/BondInfo'
@@ -29,6 +28,7 @@ const spin = keyframes({
   '100%': { transform: 'rotate(360deg)' },
 })
 import { SpinIcon } from '@concave/icons'
+import BondBuyCardContainer from 'components/Bond/BondBuyCardContainer'
 import { useGet_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql'
 import BondSoldsCard from 'components/Bond/BondSoldsCard'
 
@@ -180,7 +180,7 @@ export default function Bond() {
             </Card>
             <ViewSoldsButton onClick={() => setIsOpen(!isOpen)} active={isOpen} />
           </Box>
-          <BondBuyCard />
+          <BondBuyCardContainer />
         </Flex>
       </Flex>
     </Container>
