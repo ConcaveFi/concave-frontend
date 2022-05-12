@@ -1,6 +1,6 @@
 import { useQuery, UseQueryResult } from 'react-query'
 import { chain, useNetwork } from 'wagmi'
-import { Fetcher, Token } from '@concave/gemswap-sdk'
+import { Fetcher, NATIVE, Token } from '@concave/gemswap-sdk'
 import { concaveProvider } from 'lib/providers'
 
 const concaveTokenList = (networkName: string) =>
@@ -25,10 +25,17 @@ export const useTokenList = () => {
   })
 }
 
-export const useFetchTokenData = (chainID: number, address: string) => {
-  return useQuery(['fetchToken', address, chainID], () => {
-    return Fetcher.fetchTokenData(address, concaveProvider(chainID))
-  })
+export const useFetchTokenData = (chainID: number | string, address: string) => {
+  return useQuery(
+    ['fetchToken', address, +chainID],
+    () => {
+      if (address === NATIVE[chainID].symbol) return NATIVE[chainID]
+      return Fetcher.fetchTokenData(address, concaveProvider(+chainID))
+    },
+    {
+      enabled: !!chainID && !!address,
+    },
+  )
 }
 
 const headers = { 'x-api-key': process.env.NEXT_PUBLIC_MORALIS_TOKEN }

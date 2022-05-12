@@ -155,10 +155,12 @@ export const AddLiquidityModalButton = ({
   )
 }
 
-export const AddLiquidityCard = (props: CardProps) => {
+export const AddLiquidityCard = (
+  props: CardProps & { currency0?: Currency; currency1?: Currency },
+) => {
   return (
     <Card {...props}>
-      <AddLiquidityContent />
+      <AddLiquidityContent currency0={props.currency0} currency1={props.currency1} />
     </Card>
   )
 }
