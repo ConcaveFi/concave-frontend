@@ -91,7 +91,7 @@ export const useSwapButtonProps = ({
     if (approve.isWaitingForConfirmation)
       return { loadingText: 'Approve in your wallet', isLoading: true }
     if (approve.isWaitingTransactionReceipt)
-      return { loadingText: 'Waiting block confirmation', isLoading: true }
+      return { loadingText: 'Waiting approval confirmation', isLoading: true }
     if (permit.isLoading) return { loadingText: 'Sign in your wallet', isLoading: true }
 
     const permitErroredOrWasNotInitializedYet = permit.isError || permit.isIdle
