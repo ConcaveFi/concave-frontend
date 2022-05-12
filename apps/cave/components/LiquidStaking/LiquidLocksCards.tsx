@@ -1,5 +1,5 @@
-import { Box, Card, Flex, Link, Text } from '@concave/ui'
-import { formatDistanceStrict } from 'date-fns'
+import { Box, Card, Flex, Text } from '@concave/ui'
+import { format } from 'date-fns'
 import { formatEther } from 'ethers/lib/utils'
 import { useGet_Stakingv1_Last100_LockQuery } from 'graphql/generated/graphql'
 import { useRouter } from 'next/router'
@@ -41,12 +41,9 @@ const LiquidLocksCards = () => {
     })
     .map((value, index) => (
       <Text opacity={1 - (index / 10) * 3} key={index}>
-        {formatDistanceStrict(value.timestamp * 1000, new Date().getTime())}
+        {format(value.timestamp * 1000, new Date().getTime().toString())}
       </Text>
     ))
-
-  console.log(stakingData)
-
   return (
     <Card
       my={4}
