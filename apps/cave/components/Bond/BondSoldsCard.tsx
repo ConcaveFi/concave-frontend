@@ -62,7 +62,7 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
               Bond Price:
             </Text>
             <Text mr={3} ml={1} fontWeight={'700'}>
-              {parseFloat(bondSpotPrice).toFixed(5)}
+              ${parseFloat(bondSpotPrice).toFixed(5)}
             </Text>
           </Flex>
         </Flex>
