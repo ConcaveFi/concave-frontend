@@ -1,6 +1,9 @@
 import { Box, Button, Card, Flex, Image, Text } from '@concave/ui'
 import { InfoItem } from 'components/Bond/BondInfo'
+import { formatDistanceStrict } from 'date-fns'
+import { useGet_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql'
 import useAddTokenToWallet from 'hooks/useAddTokenToWallet'
+import { useEffect, useState } from 'react'
 
 interface TreasuryRevenueCardProps {}
 export const TreasuryInfoItem = ({ label, amount, ...props }) => (
@@ -106,14 +109,30 @@ export const BondInfo = ({
 
 export default function TreasuryRevenueCard(props) {
   const { cnv, treasury } = props
-  console.log('cnv data', cnv)
-  console.log('treasur ', treasury)
 
   // get total Treasury
   const sumTotal = treasury.treasury.map((i: any) => i.total)
   const reducer = (acc: any, curr: any) => acc + curr
   const seed = 600000
   const total = sumTotal.reduce(reducer) + seed
+
+  const { data, isLoading, isSuccess } = useGet_Accrualbondv1_Last10_SoldQuery()
+
+  const [lastsSolds, setLastsSolds] = useState([])
+
+  useEffect(() => {
+    if (data) {
+      setLastsSolds(
+        data.logAccrualBondsV1_BondSold.filter((value, index) => {
+          if (index < 3) return 1
+        }),
+      )
+    }
+  })
+
+  const relativeTimeline = lastsSolds
+    ? lastsSolds.map((value) => formatDistanceStrict(value.timestamp * 1000, new Date().getTime()))
+    : ['loading', 'loading', 'loading']
 
   return (
     <Card
@@ -143,13 +162,13 @@ export default function TreasuryRevenueCard(props) {
             box3b={'$' + cnv.cnvData.data.totalSupply.toFixed(2)}
           />
           <BondInfo
-            bondbox1="Just now"
+            bondbox1={relativeTimeline[0]}
             bondbox1a="1,000 CNV bond"
             bondbox1b="+$32,832"
-            bondbox2="3 min ago"
+            bondbox2={relativeTimeline[1]}
             bondbox2a="8,050 CNV bond"
             bondbox2b="+$264,300"
-            bondbox3="2 hours ago"
+            bondbox3={relativeTimeline[2]}
             bondbox3a="3,000 CNV bond"
             bondbox3b="+$98,496"
           />
