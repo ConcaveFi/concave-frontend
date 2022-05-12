@@ -111,7 +111,7 @@ export function BondBuyCard({ bondTransaction, setBondTransaction, setAmountInAn
           <HStack alignSelf={'start'}>
             <Text textColor={'text.low'}>Current Price:</Text>
             <Text textColor={'text.low'} opacity="0.7">
-              {currentPrice ? currentPrice + ' CNV' : 'Loading . . .'}
+              {currentPrice ? '$' + currentPrice + ' CNV' : 'Loading . . .'}
             </Text>
           </HStack>
           <HStack alignSelf={'start'}>
@@ -119,7 +119,9 @@ export function BondBuyCard({ bondTransaction, setBondTransaction, setAmountInAn
               Bond Price:
             </Text>
             <Text textColor={'text.low'} opacity="0.7">
-              {bondSpotPrice ? parseFloat(bondSpotPrice).toFixed(3) + ' CNV' : 'Loading . . .'}
+              {bondSpotPrice
+                ? '$' + parseFloat(bondSpotPrice).toFixed(3) + ' CNV'
+                : 'Loading . . .'}
             </Text>
           </HStack>
         </VStack>

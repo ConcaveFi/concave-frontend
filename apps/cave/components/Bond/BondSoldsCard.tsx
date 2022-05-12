@@ -66,9 +66,14 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
     </Text>
   ))
 
+  console.log()
+
   return (
     <Flex width="full" direction="column">
-      <Collapse in={isOpen} startingHeight={isLoading ? '50px' : '100px'}>
+      <Collapse
+        in={isOpen}
+        startingHeight={isLoading ? '50px' : solds.length == 0 ? '36px' : '100px'}
+      >
         <Flex width={'full'} height="full" flex={1}>
           <Flex
             flex={1.3}
