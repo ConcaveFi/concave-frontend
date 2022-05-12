@@ -1,4 +1,16 @@
-import { Box, Button, Card, Collapse, Flex, Text, useDisclosure } from '@concave/ui'
+import { SpinIcon, SpinnerIcon } from '@concave/icons'
+import {
+  Box,
+  Button,
+  ButtonSpinner,
+  Card,
+  Collapse,
+  Flex,
+  keyframes,
+  Spinner,
+  Text,
+  useDisclosure,
+} from '@concave/ui'
 import { BOND_ADDRESS } from 'contracts/Bond/BondingAddress'
 import { formatDistanceStrict } from 'date-fns'
 import {
@@ -10,14 +22,14 @@ import { useEffect, useState } from 'react'
 import { getBondSpotPrice } from './BondState'
 
 interface BoldSoldsCardProps {
-  loading: boolean
   data: Get_Accrualbondv1_Last10_SoldQuery
   error: any
+  loading: boolean
 }
 
 const BoldSoldsCard = (props: BoldSoldsCardProps) => {
-  const netWorkId = useCurrentSupportedNetworkId()
-  const { data, loading } = props
+  const netWorkdId = useCurrentSupportedNetworkId()
+  const { data, loading: isLoading, error } = props
   const AMMData = useGet_Amm_Cnv_PriceQuery()
   const [solds, setSolds] = useState([])
   const [bondSpotPrice, setBondSpotPrice] = useState('0')
@@ -31,7 +43,7 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
 
   useEffect(() => {
     if (bondSpotPrice === '0')
-      getBondSpotPrice(netWorkId, BOND_ADDRESS[netWorkId])
+      getBondSpotPrice(netWorkdId, BOND_ADDRESS[netWorkdId])
         .then(setBondSpotPrice)
         .catch((e) => {
           // console.log(e)
@@ -48,27 +60,30 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
       {'+ ' + +parseFloat(value.output).toFixed(3) + ' CNV'}
     </Text>
   ))
-
-  console.log(data)
+  const inputAmounts = solds.map((value, index) => (
+    <Text key={index} opacity={1 - (isOpen ? index / 10 : (index / 10) * 3)}>
+      {+parseFloat(value.inputaAmount).toFixed(3) + ' CNV'}
+    </Text>
+  ))
 
   return (
-    <Collapse startingHeight={'140px'} in={isOpen}>
-      <Flex width="full" direction="column">
-        <Flex maxHeight={'100px'} width={'full'} flex={1}>
-          <Flex flex={1.3} justify="center" align={'center'} direction="column">
-            <Text textColor={'text.low'} fontSize={'14px'} fontWeight="700">
-              Current Price:
+    <Flex width="full" direction="column">
+      <Collapse in={isOpen} startingHeight={isLoading ? '50px' : '100px'}>
+        <Flex width={'full'} height="full" flex={1}>
+          <Flex
+            flex={1.3}
+            direction="column"
+            align={'center'}
+            fontWeight={500}
+            textColor="text.accent"
+            textShadow={'0px 0px 27px rgba(129, 179, 255, 0.31)'}
+            my={'6px'}
+            fontSize="14px"
+          >
+            <Text fontSize="16px" textColor={'white'}>
+              Amount
             </Text>
-            <Text fontWeight={'700'}>
-              {/* {'$34,23'} */}${AMMData?.data?.cnvData?.data?.last?.toFixed(3)}
-            </Text>
-
-            <Text textColor={'text.low'} fontSize={'14px'} fontWeight="700">
-              Bond Price:
-            </Text>
-            <Text mr={3} ml={1} fontWeight={'700'}>
-              ${parseFloat(bondSpotPrice).toFixed(5)}
-            </Text>
+            {inputAmounts}
           </Flex>
           <Box w="1px" mt={0} bg="stroke.primary" />
           <Flex
@@ -85,9 +100,6 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
               Timeline
             </Text>
             {relatives}
-            <Text>3 min ago</Text>
-            <Text>3 hours ago</Text>
-            <Text>3 days ago</Text>
           </Flex>
           <Box w="1px" mt={0} bg="stroke.primary" />
           <Flex flex={1.3}>
@@ -105,29 +117,46 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
                 Purchase
               </Text>
               {purchases}
-              <Text>100 CNV</Text>
-              <Text>120 CNV</Text>
-              <Text>410 CNV</Text>
             </Flex>
           </Flex>
         </Flex>
-        <Card
-          height={'40px'}
-          width="full"
-          variant="secondary"
-          rounded={'0px 0px 16px 16px'}
-          justify="center"
-          align={'center'}
-          fontWeight="700"
-          fontSize={'18px'}
-        >
-          <Text onClick={onOpen} cursor={'pointer'}>
-            Show more
-          </Text>
-        </Card>
-      </Flex>
-    </Collapse>
+      </Collapse>
+      <Card
+        height={'40px'}
+        width="full"
+        variant="secondary"
+        rounded={'0px'}
+        justify="center"
+        align={'center'}
+        fontWeight="700"
+        fontSize={'18px'}
+      >
+        {!isLoading ? (
+          isOpen ? (
+            <Text onClick={onClose} cursor={'pointer'}>
+              Show less
+            </Text>
+          ) : (
+            <Text onClick={onOpen} cursor={'pointer'}>
+              Show more
+            </Text>
+          )
+        ) : (
+          <Flex gap={4}>
+            <Text>Loading transactions</Text>
+            <SpinIcon
+              width={'25px'}
+              height="25px"
+              css={{ animation: `${spin} 2s linear infinite` }}
+            />
+          </Flex>
+        )}
+      </Card>
+    </Flex>
   )
 }
-
+const spin = keyframes({
+  '0%': { transform: 'rotate(0deg)' },
+  '100%': { transform: 'rotate(360deg)' },
+})
 export default BoldSoldsCard
