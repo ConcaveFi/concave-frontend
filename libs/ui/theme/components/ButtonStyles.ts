@@ -14,7 +14,7 @@ const ButtonPrimaryTheme = (props) => ({
   fontFamily: 'heading',
   fontWeight: 'bold',
   shadow: PrimaryButtonShadow,
-  _focus: { shadow: PrimaryButtonShadow },
+  _focus: { shadow: PrimaryButtonShadow, transform: 'scale(1.05)' },
   _hover: { _disabled: { opacity: 1 } },
   _disabled: {
     apply: 'background.metalBrighter',
@@ -84,6 +84,7 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
         opacity: 0.5,
         bg: null,
       },
+      transform: 'scale(1.02)',
     },
     ...{
       primary: gradientBorder({ ...props, variant: 'primary' }),

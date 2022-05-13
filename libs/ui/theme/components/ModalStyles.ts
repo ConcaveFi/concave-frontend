@@ -15,7 +15,22 @@ export const ModalStyles: ComponentMultiStyleConfig = {
       overflowY: 'auto',
     },
     overlay: { backdropFilter: 'auto' },
-    closeButton: { right: 0, top: 4 },
+    closeButton: {
+      right: 0,
+      top: 3,
+      _focus: {
+        opacity: 0.8,
+        transform: 'scale(1.05)',
+        shadow: 'Up Big',
+        _hover: {
+          opacity: 0.6,
+          transform: 'scale(1)',
+        },
+      },
+      _hover: {
+        opacity: 0.6,
+      },
+    },
   },
   sizes: {},
   variants: {},
