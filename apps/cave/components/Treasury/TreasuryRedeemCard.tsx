@@ -17,7 +17,7 @@ function ClaimAcnvButton() {
     },
     'redeem',
     {
-      args: [account.address],
+      args: [account?.address],
     },
   )
   const [redeemText, setRedeemText] = useState('Redeem aCNV')
@@ -29,17 +29,18 @@ function ClaimAcnvButton() {
     write()
   }
   return (
-
-        <Button
-        fontSize={'18px'} fontWeight="700" my={'auto'}
-          size="large"
-          mx="moz-initial"
-          isLoading={redeeming}
-          loadingText="Redeeming"
-          onClick={redeemAncv}
-        >
-          {redeemText}
-        </Button>
+    <Button
+      fontSize={'18px'}
+      fontWeight="700"
+      my={'auto'}
+      size="large"
+      mx="moz-initial"
+      isLoading={redeeming}
+      loadingText="Redeeming"
+      onClick={redeemAncv}
+    >
+      {redeemText}
+    </Button>
   )
 }
 
@@ -75,16 +76,16 @@ function TreasuryRedeemCard() {
         </GlassPanel>
         <GlassPanel width={'182px'} height={'40px'} rounded="2xl" mx={'auto'} justify={'center'}>
           <Button>
-          <Text fontSize={'18px'} fontWeight="700" my={'auto'}>
-            pCNV - 3200
-          </Text>
+            <Text fontSize={'18px'} fontWeight="700" my={'auto'}>
+              pCNV - 3200
+            </Text>
           </Button>
         </GlassPanel>
         <GlassPanel width={'182px'} height={'40px'} rounded="2xl" mx={'auto'} justify={'center'}>
           <Button>
-          <Text fontSize={'18px'} fontWeight="700" my={'auto'}>
-            BBTCNV - 100
-          </Text>
+            <Text fontSize={'18px'} fontWeight="700" my={'auto'}>
+              BBTCNV - 100
+            </Text>
           </Button>
         </GlassPanel>
       </Flex>

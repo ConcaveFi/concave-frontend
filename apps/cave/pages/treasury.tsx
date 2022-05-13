@@ -15,13 +15,18 @@ export default function Treasury() {
   const { status: treaStatus, data: treaData } = useGet_TreasuryQuery()
   const { status: cnvStatus, data: cnvData } = useGet_Amm_Cnv_InfosQuery()
 
+  const revenueCardLoaded =
+    treaStatus === 'success' && cnvStatus === 'success' && cnvData && !!treaData
+
   return (
     <Flex height={'full'} width="full" align={'center'} justify="center" position={'relative'}>
       <Flex direction={'column'} maxWidth={'900px'} height="" gap={6}>
         <Flex direction="row" width={'full'} justify={'space-around'}>
-          {treaStatus === 'success' && cnvStatus === 'success' && cnvData && treaData && (
-            <TreasuryRevenueCard cnv={cnvData} treasury={treaData} />
-          )}
+          <Collapse in={revenueCardLoaded}>
+            {treaStatus === 'success' && cnvStatus === 'success' && cnvData && treaData && (
+              <TreasuryRevenueCard cnv={cnvData} treasury={treaData} />
+            )}
+          </Collapse>
           <TreasuryRedeemCard />
         </Flex>
         {/* for treasury assets  */}
