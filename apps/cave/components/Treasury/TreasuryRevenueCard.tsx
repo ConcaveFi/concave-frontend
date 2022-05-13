@@ -161,15 +161,15 @@ export default function TreasuryRevenueCard(props) {
             box2="CNV Price"
             box2b={'$' + commify(cnv.cnvData.data.last.toFixed(2))}
             box3="Treasury value per CNV"
-            box3b={'$' + commify((total / cnv.cnvData.data.last).toFixed(2))}
+            box3b={'$' + commify((total / cnv.cnvData.data.totalSupply).toFixed(2))}
           />
           <TreasuryInfo
             box1="Treasury Revenue 24h"
-            box1b="+$0"
+            box1b="+$20253"
             box2="Treasury Value"
             box2b={'$' + commify(total.toFixed(2))}
-            box3="Concave total Supply"
-            box3b={'$' + commify(cnv.cnvData.data.totalSupply.toFixed(2))}
+            box3="CNV total supply"
+            box3b={'' + commify(cnv.cnvData.data.totalSupply.toFixed(2))}
           />
           <BondInfo
             bondbox1={relativeTimeline[0]}
