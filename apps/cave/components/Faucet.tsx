@@ -43,7 +43,9 @@ const ETHFaucet = () => {
 
   const { data: ethBalance, isLoading } = useCurrencyBalance(NATIVE[ChainId.ROPSTEN])
 
-  const { data: faucetBalance } = useQuery('faucet balance', () => faucet.getBalance())
+  const { data: faucetBalance } = useQuery('faucet balance', () => faucet.getBalance(), {
+    enabled: !!faucet,
+  })
 
   const {
     data: sentEthTx,
@@ -136,7 +138,7 @@ const DAIMinter = () => {
   )
 }
 
-const TestTokensMinter = ({ isOpen, onClose }) => {
+const Faucet = ({ isOpen, onClose }) => {
   return (
     <Modal
       bluryOverlay={true}
@@ -223,7 +225,7 @@ export const TestnetIndicator = () => {
             <CloseIcon w="8px" h="8px" />
           </Button>
         </Card>
-        <TestTokensMinter isOpen={minterModal.isOpen} onClose={minterModal.onClose} />
+        <Faucet isOpen={minterModal.isOpen} onClose={minterModal.onClose} />
       </Box>
     </SlideFade>
   )

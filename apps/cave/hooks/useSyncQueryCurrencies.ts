@@ -4,7 +4,7 @@ import { concaveProvider } from 'lib/providers'
 import Router from 'next/router'
 import { useEffect } from 'react'
 
-const getAddressOrSymbol = (currency: Currency) => {
+export const getAddressOrSymbol = (currency: Currency) => {
   if (!currency) return undefined
   return currency.isNative ? currency.symbol : currency.wrapped.address
 }

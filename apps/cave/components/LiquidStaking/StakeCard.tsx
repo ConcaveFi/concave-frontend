@@ -21,8 +21,9 @@ import StakeInput from './StakeModal/StakeInput'
 import { Contract, ethers } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { LIQUID_STAKING_ADDRESS } from 'contracts/LiquidStaking/LiquidStakingAddress'
-const providers = new ethers.providers.InfuraProvider('ropsten', '545e522b4c0e45078a25b86f3b646a9b')
-
+import { useGet_Last_Poolid_VaprQuery } from 'graphql/generated/graphql'
+// const providers = new ethers.providers.InfuraProvider('ropsten', '545e522b4c0e45078a25b86f3b646a9b')
+import { concaveProvider, concaveProvider as providers } from 'lib/providers'
 const periodToPoolParameter = {
   '360 days': 0,
   '180 days': 1,
@@ -38,7 +39,9 @@ function StakeCard(props) {
   const [capPercentage, setCapPercentage] = useState('100')
   const [isLargerThan600] = useMediaQuery('(min-width: 600px)')
   const [isLargerThan700] = useMediaQuery('(min-width: 700px)')
-
+  const { status, data, error, isFetching } = useGet_Last_Poolid_VaprQuery({
+    poolID: props.poolId,
+  })
   const [modalDirection, setModalDirection] = useState<'column' | 'row'>('row')
 
   useEffect(() => {
@@ -146,7 +149,7 @@ function StakeCard(props) {
           h="40px"
           size="large"
           mx="auto"
-          disabled={fetchingData}
+          disabled={false}
         >
           Stake CNV
         </Button>
@@ -169,7 +172,8 @@ function StakeCard(props) {
               period={props.period}
               vaprText={vaprText}
               icon={props.icon}
-              vapr={props.vAPR}
+              vapr={data?.logStakingV1_PoolRewarded[0].base_vAPR}
+              // vapr={props.vAPR}
             />
             <VStack mt={8} spacing={8}>
               <StakeInfo
@@ -187,7 +191,7 @@ function StakeCard(props) {
                 }
                 capPercentage={capPercentage}
               />
-              <StakeInput period={props.period} />
+              <StakeInput period={props.period} onClose={onClose} />
             </VStack>
           </Flex>
         </Modal>
@@ -197,15 +201,24 @@ function StakeCard(props) {
 }
 
 async function getPools(netWorkdId: number, index: string) {
-  const stakingContract = new Contract(LIQUID_STAKING_ADDRESS[netWorkdId], StakingV1Abi, providers)
-  const pools = await stakingContract.pools(index).catch((error) => {})
+  const stakingContract = new Contract(
+    LIQUID_STAKING_ADDRESS[netWorkdId],
+    StakingV1Abi,
+    providers(3),
+  )
+  const pools = await stakingContract.pools(index).catch((e) => {})
   return pools
 }
 
 async function getViewStakingCap(netWorkdId: number, index: string) {
-  const stakingContract = new Contract(LIQUID_STAKING_ADDRESS[netWorkdId], StakingV1Abi, providers)
-  const stakingCap = await stakingContract.viewStakingCap(index).catch((error) => {})
-
+  const stakingContract = new Contract(
+    LIQUID_STAKING_ADDRESS[netWorkdId],
+    StakingV1Abi,
+    providers(3),
+  )
+  const stakingCap = await stakingContract.viewStakingCap(parseInt(index)).catch((error) => {})
+  console.log('stakingcap')
+  console.log(stakingCap)
   return stakingCap
 }
 export default StakeCard

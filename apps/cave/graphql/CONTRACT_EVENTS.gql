@@ -1,6 +1,6 @@
 query GET_STACKINGV1_LAST100_EVENTS {
-  logStakingV1(order_by: { blockNumber: desc }, limit: 100) {
-    blockNumber
+  logStakingV1(order_by: { txBlockNumber: desc }, limit: 100) {
+    txBlockNumber
     txHash
     poolID
     tokenID
@@ -13,8 +13,8 @@ query GET_STACKINGV1_LAST100_EVENTS {
 }
 
 query GET_STACKINGV1_BY_POOL_ID($poolID: numeric_comparison_exp) {
-  logStakingV1(order_by: { blockNumber: desc }, where: { poolID: $poolID }, limit: 10) {
-    blockNumber
+  logStakingV1(order_by: { txBlockNumber: desc }, where: { poolID: $poolID }, limit: 10) {
+    txBlockNumber
     txHash
     poolID
     tokenID
@@ -27,10 +27,11 @@ query GET_STACKINGV1_BY_POOL_ID($poolID: numeric_comparison_exp) {
 }
 
 query GET_STAKINGV1_LAST100_LOCK {
-  logStakingV1_Lock {
+  logStakingV1_Lock(order_by: { timestamp: desc }, limit: 100) {
     txHash
     txBlockNumber
     poolID
+    timestamp
     positionID
     to
     amount

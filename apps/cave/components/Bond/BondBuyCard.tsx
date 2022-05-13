@@ -1,19 +1,32 @@
 import { Currency, CurrencyAmount, DAI } from '@concave/gemswap-sdk'
-import { GasIcon } from '@concave/icons'
-import { Button, Card, HStack, Spinner, Text, useDisclosure } from '@concave/ui'
+import { GasIcon, SpinIcon, SpinnerIcon } from '@concave/icons'
+import {
+  Button,
+  Card,
+  Flex,
+  HStack,
+  keyframes,
+  Spinner,
+  Stack,
+  Text,
+  useDisclosure,
+  useToast,
+  VStack,
+} from '@concave/ui'
 import { CurrencyInputField as BondInput } from 'components/CurrencyAmountField'
-import { SelectBondCurrency } from 'components/CurrencySelector/SelectBondCurrency'
 import { BOND_ADDRESS } from 'contracts/Bond/BondingAddress'
 import { ApproveButton, useApprovalWhenNeeded } from 'hooks/useAllowance'
 import React, { useEffect, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
-import { useFeeData } from 'wagmi'
+import { useFeeData, useWaitForTransaction } from 'wagmi'
 import { BondOutput } from './BondOutput'
 import { getBondAmountOut, getBondSpotPrice, purchaseBond, useBondState } from './BondState'
 import { ConfirmBondModal } from './ConfirmBond'
 import { DownwardIcon } from './DownwardIcon'
 import { BondSettings, defaultSettings, Settings } from './Settings'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
+import { useGet_Amm_Cnv_PriceQuery } from 'graphql/generated/graphql'
+
 export const twoDecimals = (s: string | number) => {
   const a = s.toString()
   return a.indexOf('.') > -1 ? a.slice(0, a.indexOf('.') + 3) : a
@@ -35,9 +48,9 @@ const GasPrice = () => {
   )
 }
 
-export function BondBuyCard() {
+export function BondBuyCard({ bondTransaction, setBondTransaction, setAmountInAndOut }: any) {
   const { currencyIn, currencyOut, userAddress, balance, signer, networkId } = useBondState()
-  const [bondTransaction, setBondTransaction] = useState()
+  // const [bondTransaction, setBondTransaction] = useState()
   const [settings, setSettings] = useState<BondSettings>(defaultSettings)
   const userBalance = balance.data?.toFixed()
   const [amountIn, setAmountIn] = useState<CurrencyAmount<Currency>>(toAmount('0', DAI[networkId]))
@@ -45,8 +58,9 @@ export function BondBuyCard() {
 
   const [amountOut, setAmountOut] = useState<string>()
   const [bondSpotPrice, setBondSpotPrice] = useState<string>()
+
   const confirmModal = useDisclosure()
-  const receiptModal = useDisclosure()
+  // const receiptModal = useDisclosure()
 
   const approveInfo = useApprovalWhenNeeded(
     currencyIn,
@@ -54,6 +68,9 @@ export function BondBuyCard() {
     amountIn.denominator,
   )
   const [needsApprove] = approveInfo
+  const AMMData = useGet_Amm_Cnv_PriceQuery()
+
+  const currentPrice = AMMData?.data?.cnvData?.data?.last.toFixed(3)
 
   useEffect(() => {
     getBondSpotPrice(networkId, BOND_ADDRESS[networkId])
@@ -67,7 +84,7 @@ export function BondBuyCard() {
 
   return (
     <Card
-      p={6}
+      p={5}
       gap={2}
       variant="primary"
       h="fit-content"
@@ -86,15 +103,34 @@ export function BondBuyCard() {
             },
           )
         }}
-        CurrencySelector={SelectBondCurrency}
       />
       <DownwardIcon />
       <BondOutput disabled={true} currency={currencyOut} value={amountOut} />
-      <HStack align="center" justify="end" py={1}>
-        <GasPrice />
-        <HStack align="center" justify="end" py={5}>
-          <Settings onClose={setSettings} />
-        </HStack>
+      <HStack ml={4} align="center" justify="space-around" py={1}>
+        <VStack spacing={0} fontSize="13px" justify={'end'} fontWeight="500">
+          <HStack alignSelf={'start'}>
+            <Text textColor={'text.low'}>Current Price:</Text>
+            <Text textColor={'text.low'} opacity="0.7">
+              {currentPrice ? '$' + currentPrice + ' CNV' : 'Loading . . .'}
+            </Text>
+          </HStack>
+          <HStack alignSelf={'start'}>
+            <Text ml={4} textColor={'text.low'}>
+              Bond Price:
+            </Text>
+            <Text textColor={'text.low'} opacity="0.7">
+              {bondSpotPrice
+                ? '$' + parseFloat(bondSpotPrice).toFixed(3) + ' CNV'
+                : 'Loading . . .'}
+            </Text>
+          </HStack>
+        </VStack>
+        <Flex align={'center'} justify="end" flex={1} minWidth={100} gap={2}>
+          <GasPrice />
+          <HStack align="center" justify="end" py={5}>
+            <Settings onClose={setSettings} />
+          </HStack>
+        </Flex>
       </HStack>
 
       <ApproveButton variant="primary" size="large" isFullWidth useApproveInfo={approveInfo} />
@@ -121,12 +157,14 @@ export function BondBuyCard() {
         isOpen={confirmModal.isOpen}
         onClose={confirmModal.onClose}
         onConfirm={() => {
-          console.log('onConfirm')
-
           purchaseBond(networkId, amountIn.toFixed(), userAddress, signer, settings, amountOut)
-            .then((x) => {
-              setBondTransaction(x)
+            .then((tx) => {
+              setBondTransaction(tx)
               confirmModal.onClose()
+              setAmountInAndOut({
+                in: parseFloat(String(amountIn.toFixed())).toFixed(2),
+                out: parseFloat(amountOut).toFixed(2),
+              })
             })
             .catch((e) => {
               console.log('get position info failed', e)
@@ -143,3 +181,8 @@ export function BondBuyCard() {
     </Card>
   )
 }
+
+const spin = keyframes({
+  '0%': { transform: 'rotate(0deg)' },
+  '100%': { transform: 'rotate(360deg)' },
+})

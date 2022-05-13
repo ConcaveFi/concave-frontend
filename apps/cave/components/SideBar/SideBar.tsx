@@ -79,11 +79,12 @@ const SidebarContent = forwardRef<CardProps, 'div'>((props, ref) => {
       borderRightRadius="2xl"
       shadow="Up Big"
       p={3}
-      pb="5vh"
+      h="100vh"
       w={{ base: '250px', md: '250px' }}
       minW="250px"
       overflowY="auto"
       overflowX="hidden"
+      sx={{ '::-webkit-scrollbar': { display: 'none' }, scrollbarWidth: 'none' }}
       {...props}
     >
       <SideBarTop />

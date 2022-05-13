@@ -2,5 +2,5 @@ import { ChainId } from '@concave/gemswap-sdk'
 
 export const STAKING_CONTRACT = {
   [ChainId.ETHEREUM]: '',
-  [ChainId.ROPSTEN]: '0x265271970c6e13a942f0f75c9d619ffe5ca2872e',
+  [ChainId.ROPSTEN]: '0xb0f7D17A61b1fA6A91D855D6c28f809687Ae8a2F',
 }

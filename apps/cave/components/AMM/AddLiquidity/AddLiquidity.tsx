@@ -8,10 +8,12 @@ import { useAddLiquidityState } from 'components/AMM/AddLiquidity/useAddLiquidit
 import { useAddLiquidityTransaction } from 'components/AMM/AddLiquidity/useAddLiquidityTransaction'
 import { ConnectWallet } from 'components/ConnectWallet'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
+import { Loading } from 'components/Loading'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import React from 'react'
+import { toAmount } from 'utils/toAmount'
 import { useAccount } from 'wagmi'
 
 const AddSymbol = () => (
@@ -50,9 +52,11 @@ function AddLiquidityContent({
   currency1?: Currency
 } = {}) {
   // const initialTokens = [currencyFromJson(token0), currencyFromJson(token1)]
-
   const { pair, firstFieldAmount, secondFieldAmount, onChangeFirstField, onChangeSecondField } =
-    useAddLiquidityState({ currency0, currency1 })
+    useAddLiquidityState({
+      first: toAmount('0', currency0),
+      second: toAmount('0', currency1),
+    })
   // useSyncCurrenciesToUrl(firstFieldAmount?.currency, secondFieldAmount?.currency)
 
   const addLPTx = useAddLiquidityTransaction(firstFieldAmount, secondFieldAmount)
@@ -152,10 +156,13 @@ export const AddLiquidityModalButton = ({
   )
 }
 
-export const AddLiquidityCard = (props: CardProps) => {
+export const AddLiquidityCard = (
+  props: CardProps & { currency0?: Currency; currency1?: Currency; isLoading?: boolean },
+) => {
+  if (props.isLoading) return <Loading size="md" />
   return (
     <Card {...props}>
-      <AddLiquidityContent />
+      <AddLiquidityContent currency0={props.currency0} currency1={props.currency1} />
     </Card>
   )
 }

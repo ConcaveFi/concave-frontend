@@ -1,83 +1,75 @@
 import { useLinkedCurrencyFields } from 'components/CurrencyAmountField'
 import { usePair } from 'components/AMM/hooks/usePair'
-import { toAmount } from 'utils/toAmount'
-import { Currency, CurrencyAmount, NATIVE, Pair } from '@concave/gemswap-sdk'
-import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { useEffect, useMemo, useRef, useState } from 'react'
-
-const makeCurrencyFields = (initialTokens = [], networkId) => {
-  return {
-    first: initialTokens[0]?.chainId === networkId ? initialTokens[0] : NATIVE[networkId],
-    second: initialTokens[1]?.chainId === networkId ? initialTokens[1] : undefined,
-  }
-}
+import { Currency, CurrencyAmount, Pair } from '@concave/gemswap-sdk'
+import { useEffect, useRef, useState } from 'react'
+import { useRouter } from 'next/router'
+import { getAddressOrSymbol } from 'hooks/useSyncQueryCurrencies'
 
 const deriveAmount = (
   pair: Pair,
   exactAmount: CurrencyAmount<Currency>,
-  otherCurrency: Currency,
-  defaultValue: CurrencyAmount<Currency>,
+  otherAmount: CurrencyAmount<Currency>,
 ) => {
   if (!pair) {
-    return defaultValue
+    return otherAmount
   }
   const price = pair.priceOf(exactAmount.currency.wrapped)
   const quoteAmount = price.quote(exactAmount.wrapped)
-  if (otherCurrency.isNative)
-    return CurrencyAmount.fromRawAmount(otherCurrency, quoteAmount.quotient)
+  if (otherAmount.currency.isNative)
+    return CurrencyAmount.fromRawAmount(otherAmount.currency, quoteAmount.quotient)
   return quoteAmount
 }
 
-export const useAddLiquidityState = ({
-  currency0,
-  currency1,
-}: {
-  currency0: Currency
-  currency1: Currency
-}) => {
-  const networkId = useCurrentSupportedNetworkId()
+type CurrencyAmountFields = {
+  first?: CurrencyAmount<Currency>
+  second?: CurrencyAmount<Currency>
+}
 
-  const initialCurrencyFields = useMemo(
-    () => makeCurrencyFields([currency0, currency1], networkId),
-    [currency0, currency1, networkId],
-  )
+export const useAddLiquidityState = (props: CurrencyAmountFields) => {
+  const [amounts, setFields] = useState<CurrencyAmountFields>(props)
+  const lastField = useRef<keyof typeof amounts>()
+  const { first, second } = amounts
+  const pair = usePair(first?.currency.wrapped, second?.currency.wrapped)
+  const router = useRouter()
+  const { onChangeField } = useLinkedCurrencyFields({}, (amount, field) => {
+    const otherField = field === 'first' ? 'second' : 'first'
+    lastField.current = field
+    const otherAmount = amounts[otherField]
+    router.replace(
+      {
+        query: {
+          ...router.query,
+          chainId: amount.currency.chainId,
+          [field === 'first' ? 'currency0' : 'currency1']: getAddressOrSymbol(amount.currency),
+        },
+      },
+      undefined,
+      { shallow: false },
+    )
 
-  // the input user typed in, the other input value is then derived from it
-  const [exactAmount, setExactAmount] = useState<CurrencyAmount<Currency>>(
-    toAmount('0', initialCurrencyFields.first),
-  )
-
-  const { onChangeField, currencies, setCurrencies } = useLinkedCurrencyFields(
-    initialCurrencyFields,
-    (field) => {
-      setExactAmount(field)
-      console.log(field)
-    },
-  )
+    return setFields((old) => {
+      if (amount.currency.wrapped.address === otherAmount?.currency.wrapped.address) {
+        return { [field]: amount, [otherField]: old[field] }
+      }
+      return { ...old, [field]: amount }
+    })
+  })
 
   useEffect(() => {
-    setCurrencies(initialCurrencyFields)
-    setExactAmount(toAmount('0', initialCurrencyFields.first))
-    if (currency1) {
-      secondFieldAmount.current = toAmount('0', currency1)
+    if (!lastField.current || !pair.data) {
+      return // No changes or pair
     }
-  }, [currency1, initialCurrencyFields, setCurrencies])
-  const firstFieldAmount = useRef<CurrencyAmount<Currency>>()
-  const secondFieldAmount = useRef<CurrencyAmount<Currency>>()
-
-  const isExactFirst = currencies.first && exactAmount?.currency.equals(currencies.first)
-  const otherCurrency = currencies[isExactFirst ? 'second' : 'first']
-
-  const pair = usePair(exactAmount?.currency.wrapped, otherCurrency?.wrapped)
-  const otherAmount = isExactFirst ? firstFieldAmount.current : secondFieldAmount.current
-  const derivedAmount = deriveAmount(pair.data, exactAmount, otherCurrency, otherAmount)
-  const inputs = isExactFirst ? [exactAmount, derivedAmount] : [derivedAmount, exactAmount]
-  firstFieldAmount.current = pair.data || isExactFirst ? inputs[0] : firstFieldAmount.current
-  secondFieldAmount.current = pair.data || !isExactFirst ? inputs[1] : secondFieldAmount.current
+    const otherField = lastField.current === 'first' ? 'second' : 'first'
+    const anothterAmount = deriveAmount(pair.data, amounts[lastField.current], amounts[otherField])
+    if (anothterAmount?.toExact() === amounts[otherField]?.toExact()) {
+      return //no need update state
+    }
+    setFields((old) => ({ ...old, [otherField]: anothterAmount }))
+  }, [pair.data, lastField, amounts])
 
   return {
-    firstFieldAmount: firstFieldAmount.current,
-    secondFieldAmount: secondFieldAmount.current,
+    firstFieldAmount: first,
+    secondFieldAmount: second,
     pair: pair,
     onChangeFirstField: onChangeField('first'),
     onChangeSecondField: onChangeField('second'),

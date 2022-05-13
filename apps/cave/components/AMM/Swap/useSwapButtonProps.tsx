@@ -4,6 +4,7 @@ import { useModals } from 'contexts/ModalsContext'
 import { isAddress } from 'ethers/lib/utils'
 import { useApprove } from 'hooks/useApprove'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { usePermit } from 'hooks/usePermit'
 import { useAccount } from 'wagmi'
 import { NoValidPairsError } from '../hooks/usePair'
@@ -19,6 +20,7 @@ export const useSwapButtonProps = ({
   onSwapClick: () => void
 }): ButtonProps => {
   const [{ data: account }] = useAccount()
+  const networkId = useCurrentSupportedNetworkId()
 
   const inputAmount = trade.data.inputAmount
   const outputAmount = trade.data.outputAmount
@@ -36,6 +38,12 @@ export const useSwapButtonProps = ({
     Not Connected
   */
   if (!account?.address) return { children: 'Connect Wallet', onClick: connectModal.onOpen }
+
+  if (currencyIn.chainId !== networkId)
+    return {
+      children: 'Switch chains',
+      onClick: () => account.connector.switchChain(currencyIn.chainId).catch(() => {}),
+    }
 
   /*
     Trade loaded
@@ -83,12 +91,11 @@ export const useSwapButtonProps = ({
     if (approve.isWaitingForConfirmation)
       return { loadingText: 'Approve in your wallet', isLoading: true }
     if (approve.isWaitingTransactionReceipt)
-      return { loadingText: 'Waiting block confirmation', isLoading: true }
+      return { loadingText: 'Waiting approval confirmation', isLoading: true }
     if (permit.isLoading) return { loadingText: 'Sign in your wallet', isLoading: true }
 
     const permitErroredOrWasNotInitializedYet = permit.isError || permit.isIdle
-    const allowanceIsNotEnough =
-      allowance.isSuccess && !!allowance.value.lt(inputAmount.numerator.toString())
+    const allowanceIsNotEnough = allowance.isSuccess && !!allowance.amount?.lessThan(inputAmount)
 
     if (
       (permitErroredOrWasNotInitializedYet && allowanceIsNotEnough) ||
@@ -106,8 +113,10 @@ export const useSwapButtonProps = ({
     Wrap / Unwrap, ETH <-> WETH
   */
   const currencyOut = outputAmount?.currency
-  if (currencyIn.isNative && currencyIn.wrapped.equals(currencyOut)) return { children: 'Wrap' }
-  if (currencyOut?.isNative && currencyIn.equals(currencyOut.wrapped)) return { children: 'Unwrap' }
+  if (currencyIn.isNative && currencyIn.wrapped.equals(currencyOut))
+    return { children: 'Wrap', onClick: onSwapClick }
+  if (currencyOut?.isNative && currencyIn.equals(currencyOut.wrapped))
+    return { children: 'Unwrap', onClick: onSwapClick }
 
   /*
     Swap

@@ -53,7 +53,10 @@ const TradeDetails = ({
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const [currency0, currency1] = await fetchCurrenciesFromQuery(ctx.query).catch(() => [])
 
-  const chainId = currency0?.chainId || currency1?.chainId || ctx.query.chainId || 1
+  // if chainId is not supported default to mainnet
+  const c = currency0?.chainId || currency1?.chainId || +ctx.query.chainId
+  const chainId = [(ChainId.ETHEREUM, ChainId.ROPSTEN)].includes(c) ? c : 1
+
   const currencies = [currency0 || DAI[chainId], currency1 || CNV[chainId]]
   const setCurrencies = !currency0?.equals(currency1) ? currencies : [currencies[0]]
 

@@ -1,8 +1,10 @@
 import { Flex, Heading, Text } from '@concave/ui'
 import { AddLiquidityCard } from 'components/AMM/AddLiquidity/AddLiquidity'
+import { useQueryCurrency } from 'components/CurrencyAmountField/UseQueryCurrency'
 import React from 'react'
 
 export default function AddLiquidity() {
+  const { data: currencys, isLoading } = useQueryCurrency()
   return (
     <>
       <Flex
@@ -33,6 +35,9 @@ export default function AddLiquidity() {
           p={4}
         >
           <AddLiquidityCard
+            isLoading={isLoading}
+            currency0={currencys?.currency0}
+            currency1={currencys?.currency1}
             borderWidth={2}
             variant="primary"
             p={4}

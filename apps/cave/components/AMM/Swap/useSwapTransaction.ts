@@ -30,45 +30,16 @@ export const useSwapTransaction = (
     signerOrProvider: signer,
   })
 
-  const callParameters = useMemo(() => {
-    if (!trade || !isAddress(recipient) || !trade.route || !+settings.deadline) return
-    return Router.swapCallParameters(trade, {
-      allowedSlippage: settings.slippageTolerance.percent,
-      ttl: +settings.deadline * 60,
-      feeOnTransfer: trade.tradeType === TradeType.EXACT_INPUT,
-      recipient,
-    })
-  }, [recipient, settings.slippageTolerance, settings.deadline, trade])
-
-  /*
-    gas estimation can fail when for between other reasons 
-    the user don't have a balance or has not approved the input token yet
-  */
-  // const {
-  //   data: estimatedGasFee,
-  //   isLoading: isEstimatingGas,
-  //   error: errorEstimatingGas,
-  // } = useQuery(
-  //   ['swap estimated gas fee', callParameters],
-  //   () => {
-  //     const { methodName, args, value } = callParameters
-  //     return routerContract.estimateGas[methodName](...args, { value }).then((estimatedGasFee) =>
-  //       formatUnits(estimatedGasFee, 'wei'),
-  //     )
-  //   },
-  //   {
-  //     enabled: !!callParameters && !!routerContract.signer,
-  //     retry: false,
-  //     onError: (e) => console.log(e),
-  //     onSuccess: (d) => console.log(d),
-  //   },
-  // )
-
   const [state, setState] = useState(initialState)
   const submit = async () => {
     setState({ ...initialState, trade, isWaitingForConfirmation: true })
     try {
-      const { methodName, args, value } = callParameters
+      const { methodName, args, value } = Router.swapCallParameters(trade, {
+        allowedSlippage: settings.slippageTolerance.percent,
+        ttl: +settings.deadline * 60,
+        feeOnTransfer: trade.tradeType === TradeType.EXACT_INPUT,
+        recipient,
+      })
       const tx = await routerContract[methodName](...args, { value })
       setState({ ...initialState, trade, isTransactionSent: true, data: tx })
       onTransactionSent(tx)

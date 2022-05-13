@@ -1,16 +1,40 @@
-import { Box, Button, Collapse, Flex, Text } from '@concave/ui'
-import { formatDistance, formatDistanceStrict } from 'date-fns'
-import { Get_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql'
+import { SpinIcon, SpinnerIcon } from '@concave/icons'
+import {
+  Box,
+  Button,
+  ButtonSpinner,
+  Card,
+  Collapse,
+  Flex,
+  keyframes,
+  Spinner,
+  Text,
+  useDisclosure,
+} from '@concave/ui'
+import { BOND_ADDRESS } from 'contracts/Bond/BondingAddress'
+import { formatDistanceStrict } from 'date-fns'
+import { commify } from 'ethers/lib/utils'
+import {
+  Get_Accrualbondv1_Last10_SoldQuery,
+  useGet_Amm_Cnv_PriceQuery,
+} from 'graphql/generated/graphql'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useEffect, useState } from 'react'
+import { getBondSpotPrice } from './BondState'
 
 interface BoldSoldsCardProps {
-  active: boolean
   data: Get_Accrualbondv1_Last10_SoldQuery
+  error: any
+  loading: boolean
 }
 
 const BoldSoldsCard = (props: BoldSoldsCardProps) => {
-  const { data, active } = props
+  const netWorkdId = useCurrentSupportedNetworkId()
+  const { data, loading: isLoading, error } = props
+  const AMMData = useGet_Amm_Cnv_PriceQuery()
+  const [bondSpotPrice, setBondSpotPrice] = useState('0')
   const [solds, setSolds] = useState([])
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   useEffect(() => {
     if (data) {
@@ -19,75 +43,97 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
   }, [data])
 
   const relatives = solds.map((value, index) => (
-    <Text key={index} opacity={1 - (active ? index / 10 : (index / 10) * 3)}>
+    <Text key={index} opacity={1 - (isOpen ? index / 10 : (index / 10) * 3)}>
       {formatDistanceStrict(value.timestamp * 1000, new Date().getTime()) + ' ago'}
     </Text>
   ))
   const purchases = solds.map((value, index) => (
-    <Text key={index} opacity={1 - (active ? index / 10 : (index / 10) * 3)}>
-      {'+ ' + +parseFloat(value.output).toFixed(3) + ' CNV'}
+    <Text key={index} opacity={1 - (isOpen ? index / 10 : (index / 10) * 3)}>
+      {'+ $' + commify(parseFloat(value.output).toFixed()) + ' DAI'}
     </Text>
   ))
+  const inputAmounts = solds.map((value, index) => (
+    <Text key={index} opacity={1 - (isOpen ? index / 10 : (index / 10) * 3)}>
+      {+parseFloat(value.inputAmount).toFixed(3) + ' CNV'}
+    </Text>
+  ))
+
   return (
-    <Collapse startingHeight={'100px'} in={active}>
-      <Flex height={'250px'} width="full">
-        <Flex flex={1.5} justify="start" align={'end'} direction="column" gap={1}>
-          <Flex mt={6}>
-            <Text textColor={'text.low'} fontSize={'14px'} fontWeight="700">
-              Current Price:
-            </Text>
-            <Text mr={3} ml={1} fontWeight={'700'}>
-              249,1$
-            </Text>
-          </Flex>
-
-          <Flex>
-            <Text textColor={'text.low'} fontSize={'14px'} fontWeight="700">
-              Bond Price:
-            </Text>
-            <Text mr={3} ml={1} fontWeight={'700'}>
-              249,1$
-            </Text>
-          </Flex>
-        </Flex>
-
-        <Box w="1px" mt={0} bg="stroke.primary" />
+    <Flex width="full" direction="column">
+      <Collapse
+        in={isOpen}
+        startingHeight={isLoading ? '50px' : solds.length == 0 ? '36px' : '100px'}
+      >
         <Flex
-          flex={0.9}
-          direction="column"
-          align={'center'}
-          fontWeight={500}
-          textColor="text.accent"
+          width={'full'}
+          height="full"
+          flex={1}
           textShadow={'0px 0px 27px rgba(129, 179, 255, 0.31)'}
-          my={'6px'}
-          fontSize="14px"
+          textColor="text.accent"
+          fontWeight={500}
+          my={2}
         >
-          <Text fontSize="16px" textColor={'white'}>
-            Timeline
-          </Text>
-          {relatives}
-        </Flex>
-        <Box w="1px" mt={0} bg="stroke.primary" />
-        <Flex flex={1.3}>
-          <Flex
-            flex={0.9}
-            direction="column"
-            align={'center'}
-            textColor="text.accent"
-            textShadow={'0px 0px 27px rgba(129, 179, 255, 0.31)'}
-            my={'6px'}
-            fontSize="14px"
-            fontWeight={500}
-          >
+          <Flex flex={1.2} direction="column" align={'center'} fontSize="14px">
             <Text fontSize="16px" textColor={'white'}>
-              Purchase
+              Timeline
             </Text>
-            {purchases}
+            {relatives}
+          </Flex>
+          <Box w="1px" my={-2} bg="stroke.primary" />
+          <Flex flex={1.3} direction="column" align={'center'} fontSize="14px">
+            <Text fontSize="16px" textColor={'white'}>
+              Amount
+            </Text>
+            {inputAmounts}
+          </Flex>
+
+          <Box w="1px" my={-2} bg="stroke.primary" />
+          <Flex flex={1.3}>
+            <Flex flex={0.9} direction="column" align={'center'} fontSize="14px">
+              <Text fontSize="16px" textColor={'white'}>
+                Purchase
+              </Text>
+              {purchases}
+            </Flex>
           </Flex>
         </Flex>
-      </Flex>
-    </Collapse>
+      </Collapse>
+      <Card
+        height={'40px'}
+        width="full"
+        variant="secondary"
+        rounded={'0px'}
+        justify="center"
+        align={'center'}
+        fontWeight="700"
+        fontSize={'18px'}
+      >
+        {!isLoading ? (
+          isOpen ? (
+            <Text onClick={onClose} cursor={'pointer'}>
+              Show less
+            </Text>
+          ) : (
+            <Text onClick={onOpen} cursor={'pointer'}>
+              Show more
+            </Text>
+          )
+        ) : (
+          <Flex gap={4}>
+            <Text>Loading transactions</Text>
+            <SpinIcon
+              width={'25px'}
+              height="25px"
+              css={{ animation: `${spin} 2s linear infinite` }}
+            />
+          </Flex>
+        )}
+      </Card>
+    </Flex>
   )
 }
-
+const spin = keyframes({
+  '0%': { transform: 'rotate(0deg)' },
+  '100%': { transform: 'rotate(360deg)' },
+})
 export default BoldSoldsCard

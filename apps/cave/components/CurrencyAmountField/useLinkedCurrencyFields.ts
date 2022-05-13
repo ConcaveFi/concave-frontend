@@ -3,7 +3,7 @@ import { useCallback, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
 
 export const useLinkedCurrencyFields = (
-  initialFields: { first: Currency; second: Currency },
+  initialFields: { first?: Currency; second?: Currency } = {},
   onChangeAmount: (newAmount: CurrencyAmount<Currency>, field: keyof typeof initialFields) => void,
 ) => {
   const [currencies, setCurrencies] = useState(initialFields)

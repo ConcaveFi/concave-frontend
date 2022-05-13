@@ -1,14 +1,4 @@
-import {
-  Box,
-  Card,
-  Collapse,
-  Container,
-  Flex,
-  Heading,
-  Stack,
-  Text,
-  useMediaQuery,
-} from '@concave/ui'
+import { Box, Card, Collapse, Container, Flex, Heading, Stack } from '@concave/ui'
 import {
   getBondTermLength,
   getBondSpotPrice,
@@ -42,11 +32,10 @@ export default function Bond() {
   const [bondSigma, setBondSigma] = useState<any>()
   const [intervalID, setIntervalID] = useState<any>()
   const [showUserPosition, setShowUserPosition] = useState(false)
-  const { data: last10SoldsData } = useGet_Accrualbondv1_Last10_SoldQuery()
-  const [isOpen, setIsOpen] = useState(false)
+  const { data: last10SoldsData, isLoading, error } = useGet_Accrualbondv1_Last10_SoldQuery()
 
   useEffect(() => {
-    getCurrentBlockTimestamp().then((x) => {
+    getCurrentBlockTimestamp(networkId).then((x) => {
       setCurrentBlockTs(x)
     })
     const interval = setInterval(() => {
@@ -84,7 +73,7 @@ export default function Bond() {
       })
     fetch('/api/cnv')
       .then((j) => j.json())
-      .then((data) => JSON.parse(data))
+      // .then((data) => JSON.parse(data))
       .then((object) => {
         if (object) {
           setCnvMarketPrice(object?.data?.last)
@@ -103,8 +92,8 @@ export default function Bond() {
 
   return (
     <Container maxW="container.lg">
-      <Flex direction="column" gap={20}>
-        <Stack mt={20} maxW="100%" align="center" textAlign="center">
+      <Flex direction="column" gap={10}>
+        <Stack mt={10} maxW="100%" align="center" textAlign="center">
           <Heading as="h1" mb={3} fontSize="5xl">
             Dynamic Bond Market
           </Heading>
@@ -145,7 +134,7 @@ export default function Bond() {
                   icon="/assets/tokens/cnv.svg"
                   roi={`${
                     cnvMarketPrice > 0
-                      ? (1 - (+cnvMarketPrice / +bondSpotPrice) * 100).toFixed(2)
+                      ? ((1 - +bondSpotPrice / +cnvMarketPrice) * 100).toFixed(2)
                       : '-'
                   }%`}
                   vestingTerm={`${termLength} Days`}
@@ -176,7 +165,7 @@ export default function Bond() {
                   customHeight
                 ></Redeem>
               </Card>
-              <BondSoldsCard active={isOpen} data={last10SoldsData} />
+              <BondSoldsCard loading={isLoading} error={error} data={last10SoldsData} />
             </Card>
             {/* <ViewSoldsButton onClick={() => setIsOpen(!isOpen)} active={isOpen} /> */}
           </Box>
@@ -184,28 +173,5 @@ export default function Bond() {
         </Flex>
       </Flex>
     </Container>
-  )
-}
-
-interface ViewSoldsButtonProps {
-  onClick: () => void
-  active: boolean
-}
-const ViewSoldsButton = (props: ViewSoldsButtonProps) => {
-  const { onClick, active } = props
-  return (
-    <Card
-      cursor={'pointer'}
-      onClick={() => onClick()}
-      height={'30px'}
-      width="70%"
-      mx={'auto'}
-      variant="secondary"
-      rounded={'0px 0px 16px 16px'}
-      justify="center"
-      align={'center'}
-    >
-      <Text fontWeight={700}> {active ? 'Retract' : 'Expand'}</Text>
-    </Card>
   )
 }
