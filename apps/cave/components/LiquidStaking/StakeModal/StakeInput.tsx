@@ -2,12 +2,12 @@ import { CNV, Currency, CurrencyAmount, toHex } from '@concave/gemswap-sdk'
 import { Box, Button, Card, Flex, HStack, Image, Input, Text } from '@concave/ui'
 import { CurrencyInputField } from 'components/CurrencyAmountField'
 // import { SelectBondCurrency } from 'components/CurrencySelector/SelectBondCurrency'
-import { STAKING_CONTRACT } from 'constants/address'
+// import { STAKING_CONTRACT } from 'constants/address'
 import { StakingV1Abi } from 'contracts/LiquidStaking/LiquidStakingAbi'
 import { useFetchApi } from 'hooks/cnvData'
 import { useApprove } from 'hooks/useApprove'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { useRouter } from 'next/router'
+// import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { Contract, utils } from 'ethers'
 import { toAmount } from 'utils/toAmount'
@@ -53,22 +53,30 @@ function StakeInput(props: any) {
     // token: '0x000000007a58f5f58E697e51Ab0357BC9e260A04',
   })
 
-  // const setSafeStakeInputValue = (value: string) => {
-  //   let currentValue = value
-  //   if (Number(currentValue) >= +cnvBalance.data?.formatted) {
-  //     currentValue = String(+cnvBalance.data?.formatted)
-  //   }
-  //   setStakeInput(String(currentValue))
-  // }
-
-  // const setMax = () => {
-  //   setStakeInput(cnvBalance.data?.formatted)
-  // }
-
   const approveCNV = () => {
     approve.sendApproveTx()
     setApproveButtonText('Pending...')
   }
+
+  const [showAllowanceButton, setShowAllocationButton] = React.useState(
+    +allowance.value?.toString() === 0 ||
+      +allowance.value?.toString() < +stakeInput.numerator.toString(),
+  )
+  const [showStakeButton, setShowStakeButton] = React.useState(
+    +allowance.value?.toString() > 0 &&
+      +allowance.value?.toString() > +stakeInput.numerator.toString(),
+  )
+
+  useEffect(() => {
+    setShowAllocationButton(
+      +allowance.value?.toString() === 0 ||
+        +allowance.value?.toString() < +stakeInput.numerator.toString(),
+    )
+    setShowStakeButton(
+      +allowance.value?.toString() > 0 &&
+        +allowance.value?.toString() > +stakeInput.numerator.toString(),
+    )
+  }, [allowance['value'], stakeInput['numerator']])
 
   return (
     <Box>
@@ -79,7 +87,7 @@ function StakeInput(props: any) {
       </Card>
 
       <Box mt={10} width="350px">
-        {allowance.value < stakeInput.numerator.toString() && (
+        {showAllowanceButton && (
           <Button
             onClick={approveCNV}
             fontWeight="bold"
@@ -90,13 +98,13 @@ function StakeInput(props: any) {
             h="50px"
             size="large"
             mx="auto"
-            disabled={+stakeInput > +cnvBalance.data?.formatted}
+            disabled={+stakeInput.numerator.toString() > +cnvBalance.data?.formatted}
           >
             {approveButtonText}
           </Button>
         )}
 
-        {allowance.value >= stakeInput.numerator.toString() && (
+        {!showAllowanceButton && showStakeButton && (
           <Button
             mt={5}
             onClick={async () => {
@@ -121,7 +129,9 @@ function StakeInput(props: any) {
             h="50px"
             size="large"
             mx="auto"
-            disabled={+stakeInput == 0 || +stakeInput > +cnvBalance.data?.formatted}
+            disabled={
+              +stakeInput.numerator.toString() === 0 || +stakeInput > +cnvBalance.data?.formatted
+            }
           >
             Stake CNV
           </Button>
