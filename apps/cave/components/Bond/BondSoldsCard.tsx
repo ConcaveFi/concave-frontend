@@ -13,6 +13,7 @@ import {
 } from '@concave/ui'
 import { BOND_ADDRESS } from 'contracts/Bond/BondingAddress'
 import { formatDistanceStrict } from 'date-fns'
+import { commify } from 'ethers/lib/utils'
 import {
   Get_Accrualbondv1_Last10_SoldQuery,
   useGet_Amm_Cnv_PriceQuery,
@@ -48,7 +49,7 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
   ))
   const purchases = solds.map((value, index) => (
     <Text key={index} opacity={1 - (isOpen ? index / 10 : (index / 10) * 3)}>
-      {'+ ' + +parseFloat(value.output).toFixed(3) + ' DAI'}
+      {'+ $' + commify(parseFloat(value.output).toFixed()) + ' DAI'}
     </Text>
   ))
   const inputAmounts = solds.map((value, index) => (
