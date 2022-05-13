@@ -69,9 +69,9 @@ export const FRAX = new Token(
 
 export const ROPSTEN_CNV = new Token(
   ChainId.ROPSTEN,
-  '0xb9ced3eb5ce9d40a735ca3345978ab62eca0c4d0',
+  '0xB9CED3eB5Ce9d40A735cA3345978aB62Eca0c4d0',
   18,
-  'tCNV',
+  'tCNV2',
   'Concave',
 )
 
