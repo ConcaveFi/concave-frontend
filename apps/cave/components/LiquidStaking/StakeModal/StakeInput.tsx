@@ -9,8 +9,9 @@ import { useApprove } from 'hooks/useApprove'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
+import { Contract, utils } from 'ethers'
 import { toAmount } from 'utils/toAmount'
-import { useAccount, useBalance, useContractWrite, useNetwork } from 'wagmi'
+import { useAccount, useBalance, useContractWrite, useNetwork, useSigner } from 'wagmi'
 import { LIQUID_STAKING_ADDRESS } from 'contracts/LiquidStaking/LiquidStakingAddress'
 const periodToPoolParameter = {
   '360 days': 0,
@@ -23,12 +24,13 @@ function StakeInput(props: any) {
   const cnvPrice = useFetchApi('/api/cnv')
   const [{ data: account }] = useAccount()
   const [{ data }] = useNetwork()
+  const [{ data: signer }] = useSigner()
   // const [stakeInput, setStakeInput] = useState(toAmount(0, CNV[data?.chain.id]))
   const [stakeInput, setStakeInput] = useState<CurrencyAmount<Currency>>(toAmount(0, CNV[3]))
   useCurrentSupportedNetworkId((chainId) => setStakeInput(toAmount(0, CNV[chainId])))
   const { allowance, ...approve } = useApprove(
     stakeInput.currency.wrapped,
-    STAKING_CONTRACT[stakeInput.currency.chainId],
+    LIQUID_STAKING_ADDRESS[stakeInput.currency.chainId],
   )
   const [approveButtonText, setApproveButtonText] = useState('Approve CNV')
   const [allowanceEnough, setAllowanceEnough] = useState(false)
@@ -46,7 +48,7 @@ function StakeInput(props: any) {
 
   const [cnvBalance, getBalance] = useBalance({
     addressOrName: account?.address,
-    token: LIQUID_STAKING_ADDRESS[data?.chain?.id],
+    token: CNV[3],
     // token: '0x000000007a58f5f58E697e51Ab0357BC9e260A04',
   })
 
@@ -67,44 +69,11 @@ function StakeInput(props: any) {
     setApproveButtonText('Pending...')
   }
 
-  const [lockData, lockCNV] = useContractWrite(
-    {
-      addressOrName: LIQUID_STAKING_ADDRESS[data?.chain?.id],
-      contractInterface: StakingV1Abi,
-    },
-    'lock',
-    {
-      args: [
-        account?.address,
-        toHex(stakeInput),
-        // ethers.utils.parseEther(String(+stakeInput)),
-        periodToPoolParameter[`${props.period}`],
-      ],
-    },
-  )
-
-  const router = useRouter()
-
   return (
     <Box>
       <Card shadow="down" w="350px" px={0} py={0}>
         <Flex justify="space-between" alignItems="center">
-          {/* <Input
-            placeholder="0.00"
-            value={''}
-            onChange={null}
-            ml={-1}
-            shadow="none"
-            w="60%"
-            bg="none"
-            fontSize="xl"
-            type="number"
-          /> */}
-          <CurrencyInputField
-            currencyAmountIn={stakeInput}
-            onChangeAmount={setStakeInput}
-            // CurrencySelector={SelectBondCurrency}
-          />
+          <CurrencyInputField currencyAmountIn={stakeInput} onChangeAmount={setStakeInput} />
         </Flex>
       </Card>
 
@@ -129,13 +98,19 @@ function StakeInput(props: any) {
         {allowance.value >= stakeInput.numerator.toString() && (
           <Button
             mt={5}
-            onClick={() => {
-              lockCNV().then((r) => {
-                setStakeInput(toAmount(0, stakeInput.currency))
-                setTimeout(() => {
-                  props.onClose()
-                }, 300)
-              })
+            onClick={async () => {
+              const stakingContract = new Contract(LIQUID_STAKING_ADDRESS[3], StakingV1Abi, signer)
+              const formattedInput = utils.parseUnits('10', 18)
+              console.log('this shit exists, right?')
+              console.log(stakingContract)
+              stakingContract
+                .lock(account?.address, 1, 0)
+                .then((x) => {
+                  console.log(x)
+                })
+                .catch((e) => {
+                  console.log(e)
+                })
             }}
             fontWeight="bold"
             fontSize="md"
@@ -145,9 +120,7 @@ function StakeInput(props: any) {
             h="50px"
             size="large"
             mx="auto"
-            disabled={
-              +stakeInput == 0 || +stakeInput > +cnvBalance.data?.formatted || lockData.loading
-            }
+            disabled={+stakeInput == 0 || +stakeInput > +cnvBalance.data?.formatted}
           >
             Stake CNV
           </Button>
