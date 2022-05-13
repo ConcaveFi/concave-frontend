@@ -1,13 +1,12 @@
-import { Currency, Token } from '@concave/gemswap-sdk'
+import { CHAIN_NAME, Currency, Token } from '@concave/gemswap-sdk'
 import { Box, Button, Card, Flex, FlexProps, Image, Text } from '@concave/ui'
-import { CurrencyIcon } from 'components/CurrencyIcon'
-import { CNV, DAI, WETH } from 'constants/tokens'
+import { commify } from 'ethers/lib/utils'
+import { tokenService } from 'lib/token.service'
 import { Key } from 'react'
 
 export default function TreasuryManagementCard(props: { assets: any }) {
   const { assets } = props
-  console.log('assets', assets.treasury)
-
+  const convexToken = assets.treasury.filter((token) => token.name === 'DOLA-3pool')[0]
   return (
     <Card
       direction={'column'}
@@ -21,15 +20,23 @@ export default function TreasuryManagementCard(props: { assets: any }) {
       <Flex width={'full'} justify="center">
         <TreasyAssetsTitle />
       </Flex>
-      <Flex gap={'inherit'} justify="center" align={'center'} my="20px">
-        <FarmingViewer />
-        <Flex direction={'column'} gap={3}>
-          {assets.treasury.map(
-            (i: { name: string; total: string }, k: Key) =>
-              i.total > '1' && (
-                <TokenInfo key={k} tokenName={i.name} token={i.name} value={i.total} />
-              ),
-          )}
+      <Flex gap={'inherit'} justify="center" align={'center'} height="full" mb={4}>
+        <FarmingViewer value={commify(convexToken?.total.toFixed())} />
+        <Flex direction={'column'} gap={4}>
+          {assets.treasury
+            .filter((token) => token.name !== 'DOLA-3pool')
+            .map(
+              (i: { name: string; total: string; chainId: string; contract: string }, k: Key) =>
+                i.total > '1' && (
+                  <TokenInfo
+                    key={k}
+                    tokenName={i.name}
+                    token={i.name}
+                    value={i.total}
+                    image={'missing'}
+                  />
+                ),
+            )}
         </Flex>
       </Flex>
     </Card>
@@ -40,8 +47,11 @@ interface TokenInfoProps {
   token: string
   tokenName: string
   value: string
+  image?: string
 }
 const TokenInfo = (props: TokenInfoProps) => {
+  console.log(props.image)
+
   return (
     <Card rounded={'2xl'} width={'340px'} height="52px" direction={'row'}>
       <GlassPanel width={'180px'} height="52px" rounded={'2xl'}>
@@ -56,14 +66,14 @@ const TokenInfo = (props: TokenInfoProps) => {
       </GlassPanel>
       <Flex flex={1} justify="start" align={'center'} ml={4}>
         <Text fontWeight={'700'} fontSize="18px">
-          {'$' + parseFloat(props.value).toFixed(3)}
+          {'$' + commify(parseFloat(props.value).toFixed())}
         </Text>
       </Flex>
     </Card>
   )
 }
 
-const FarmingViewer = () => {
+const FarmingViewer = ({ value }) => {
   return (
     <GlassPanel width={'477px'} height="157px" rounded={'2xl'} justify="center" align={'center'}>
       <Flex>
@@ -98,7 +108,7 @@ const FarmingViewer = () => {
           </GlassPanel>
           <Flex flex={1} align="center">
             <Text fontWeight={700} fontSize="26px">
-              $12,234,512
+              {'$' + value}
             </Text>
           </Flex>
         </GlassPanel>
@@ -111,13 +121,7 @@ const FarmingViewer = () => {
           ml={10}
         >
           <Text fontWeight={'700'} fontSize="18px">
-            Farming:
-          </Text>
-          <Text fontWeight={'700'} fontSize="16px">
-            UST: $6,527,873
-          </Text>
-          <Text fontWeight={'700'} fontSize="16px">
-            3Crv: $5,237,468
+            Reward:
           </Text>
         </Flex>
       </Flex>
