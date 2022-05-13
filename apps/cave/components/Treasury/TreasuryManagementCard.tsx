@@ -16,6 +16,7 @@ export default function TreasuryManagementCard(props: { assets: any }) {
       bg={'#111e'}
       shadow={'0px 4px 4px rgba(0, 0, 0, 0.25), inset 0px 0px 20px rgba(87, 124, 255, 0.3)'}
       gap={5}
+      my={6}
     >
       <Flex width={'full'} justify="center">
         <TreasyAssetsTitle />
