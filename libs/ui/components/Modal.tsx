@@ -13,7 +13,6 @@ export interface ModalProps extends ChakraModalProps {
   title: string
   bluryOverlay?: boolean
   titleAlign?: 'left' | 'center' | 'right'
-  closeButton?: boolean
   children: ReactNode
   bodyProps?: CardProps
   hideClose?: boolean
@@ -24,7 +23,6 @@ export function Modal({
   title,
   bluryOverlay = false,
   titleAlign = 'left',
-  closeButton,
   bodyProps = {},
   hideClose,
   ...props
