@@ -13,7 +13,7 @@ import React from 'react'
 //   '90 days': 90,
 //   '45 days': 45,
 // }
-//
+
 function StakeButtons(props: any) {
   return (
     <Box
