@@ -1,3 +1,4 @@
+import { ExpandArrowIcon } from '@concave/icons'
 import { Box, Card, Collapse, Flex, Text, useDisclosure } from '@concave/ui'
 import { formatDistanceStrict } from 'date-fns'
 import { formatEther } from 'ethers/lib/utils'
@@ -7,7 +8,7 @@ import { useEffect, useState } from 'react'
 
 const LiquidLocksCards = () => {
   const [stakingLocks, setStakingLocks] = useState([])
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen, onToggle } = useDisclosure()
 
   const stakingData = useGet_Stakingv1_Last100_LockQuery()
   useEffect(() => {
@@ -83,16 +84,21 @@ const LiquidLocksCards = () => {
           </Flex>
         </Flex>
       </Collapse>
-      <Card height={'35px'} width="full" rounded={'0px 0px 16px 16px'} justify="center">
-        {isOpen ? (
-          <Text fontWeight={700} cursor="pointer" onClick={onClose}>
-            Show less
-          </Text>
-        ) : (
-          <Text fontWeight={700} cursor="pointer" onClick={onOpen}>
-            Show more
-          </Text>
-        )}
+      <Card
+        height={'35px'}
+        width="full"
+        rounded={'0px 0px 16px 16px'}
+        justify="center"
+        align={'center'}
+      >
+        <ExpandArrowIcon
+          width={12}
+          height={12}
+          cursor="pointer"
+          transition={'all 0.3s'}
+          transform={isOpen ? 'rotate(180deg)' : ''}
+          onClick={onToggle}
+        />
       </Card>
     </Card>
   )

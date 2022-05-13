@@ -1,4 +1,4 @@
-import { SpinIcon, SpinnerIcon } from '@concave/icons'
+import { ArrowDownIcon, ExpandArrowIcon, SpinIcon, SpinnerIcon } from '@concave/icons'
 import {
   Box,
   Button,
@@ -6,6 +6,7 @@ import {
   Card,
   Collapse,
   Flex,
+  Image,
   keyframes,
   Spinner,
   Text,
@@ -34,7 +35,7 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
   const AMMData = useGet_Amm_Cnv_PriceQuery()
   const [bondSpotPrice, setBondSpotPrice] = useState('0')
   const [solds, setSolds] = useState([])
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
     if (data) {
@@ -108,26 +109,14 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
         fontWeight="700"
         fontSize={'18px'}
       >
-        {!isLoading ? (
-          isOpen ? (
-            <Text onClick={onClose} cursor={'pointer'}>
-              Show less
-            </Text>
-          ) : (
-            <Text onClick={onOpen} cursor={'pointer'}>
-              Show more
-            </Text>
-          )
-        ) : (
-          <Flex gap={4}>
-            <Text>Loading transactions</Text>
-            <SpinIcon
-              width={'25px'}
-              height="25px"
-              css={{ animation: `${spin} 2s linear infinite` }}
-            />
-          </Flex>
-        )}
+        <ExpandArrowIcon
+          width={12}
+          height={12}
+          cursor="pointer"
+          transition={'all 0.3s'}
+          transform={isOpen ? 'rotate(180deg)' : ''}
+          onClick={() => setIsOpen(!isOpen)}
+        />
       </Card>
     </Flex>
   )
