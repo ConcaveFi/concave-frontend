@@ -28,7 +28,10 @@ export function CurrencyAmountField({
   const isFocused = useRef(false)
 
   useDebounce(
-    () => isFocused.current && onChangeAmount(toAmount(internalValue, currencyAmount.currency)),
+    () =>
+      isFocused.current &&
+      currencyAmount &&
+      onChangeAmount(toAmount(internalValue, currencyAmount.currency)),
     debounce,
     [internalValue],
   )
@@ -36,7 +39,8 @@ export function CurrencyAmountField({
   const handleChange = useCallback(
     ({ value }, { source }) => {
       if (source === 'prop') return // if the value changed from props, ignore it, only update on user typing
-      if (value === '') onChangeAmount(toAmount('0', currencyAmount.currency))
+      if (value === '' && currencyAmount?.currency)
+        onChangeAmount(toAmount('0', currencyAmount.currency))
       setInternalValue(value)
     },
     [currencyAmount?.currency, onChangeAmount],
