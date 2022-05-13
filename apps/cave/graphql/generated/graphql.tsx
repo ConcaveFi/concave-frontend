@@ -34,7 +34,6 @@ export type Scalars = {
   Float: number
   numeric: any
   timestamptz: any
-  uuid: any
 }
 
 /** Boolean expression to compare columns of type "Boolean". All fields are combined with logical 'AND'. */
@@ -110,20 +109,17 @@ export type CnvDataOutput = {
   msg?: Maybe<Scalars['String']>
 }
 
-/** get BondSold events from AccrualBondsV1 */
+/** columns and relationships of "logAccrualBondsV1_BondSold" */
 export type LogAccrualBondsV1_BondSold = {
   __typename?: 'logAccrualBondsV1_BondSold'
-  created_at: Scalars['timestamptz']
-  id: Scalars['uuid']
-  inputAmount?: Maybe<Scalars['String']>
-  inputToken?: Maybe<Scalars['String']>
+  inputAmount: Scalars['String']
+  inputToken: Scalars['String']
   method?: Maybe<Scalars['String']>
-  output?: Maybe<Scalars['String']>
-  timestamp?: Maybe<Scalars['numeric']>
-  to?: Maybe<Scalars['String']>
+  output: Scalars['String']
+  timestamp: Scalars['numeric']
+  to: Scalars['String']
   txBlockNumber?: Maybe<Scalars['numeric']>
-  txHash?: Maybe<Scalars['String']>
-  updated_at: Scalars['timestamptz']
+  txHash: Scalars['String']
 }
 
 /** Boolean expression to filter rows from the table "logAccrualBondsV1_BondSold". All fields are combined with a logical 'AND'. */
@@ -131,8 +127,6 @@ export type LogAccrualBondsV1_BondSold_Bool_Exp = {
   _and?: InputMaybe<Array<LogAccrualBondsV1_BondSold_Bool_Exp>>
   _not?: InputMaybe<LogAccrualBondsV1_BondSold_Bool_Exp>
   _or?: InputMaybe<Array<LogAccrualBondsV1_BondSold_Bool_Exp>>
-  created_at?: InputMaybe<Timestamptz_Comparison_Exp>
-  id?: InputMaybe<Uuid_Comparison_Exp>
   inputAmount?: InputMaybe<String_Comparison_Exp>
   inputToken?: InputMaybe<String_Comparison_Exp>
   method?: InputMaybe<String_Comparison_Exp>
@@ -141,13 +135,10 @@ export type LogAccrualBondsV1_BondSold_Bool_Exp = {
   to?: InputMaybe<String_Comparison_Exp>
   txBlockNumber?: InputMaybe<Numeric_Comparison_Exp>
   txHash?: InputMaybe<String_Comparison_Exp>
-  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>
 }
 
 /** Ordering options when selecting data from "logAccrualBondsV1_BondSold". */
 export type LogAccrualBondsV1_BondSold_Order_By = {
-  created_at?: InputMaybe<Order_By>
-  id?: InputMaybe<Order_By>
   inputAmount?: InputMaybe<Order_By>
   inputToken?: InputMaybe<Order_By>
   method?: InputMaybe<Order_By>
@@ -156,15 +147,10 @@ export type LogAccrualBondsV1_BondSold_Order_By = {
   to?: InputMaybe<Order_By>
   txBlockNumber?: InputMaybe<Order_By>
   txHash?: InputMaybe<Order_By>
-  updated_at?: InputMaybe<Order_By>
 }
 
 /** select columns of table "logAccrualBondsV1_BondSold" */
 export enum LogAccrualBondsV1_BondSold_Select_Column {
-  /** column name */
-  CreatedAt = 'created_at',
-  /** column name */
-  Id = 'id',
   /** column name */
   InputAmount = 'inputAmount',
   /** column name */
@@ -181,125 +167,42 @@ export enum LogAccrualBondsV1_BondSold_Select_Column {
   TxBlockNumber = 'txBlockNumber',
   /** column name */
   TxHash = 'txHash',
-  /** column name */
-  UpdatedAt = 'updated_at',
 }
 
-/** get daily cnv metrics */
-export type LogCnvData = {
-  __typename?: 'logCnvData'
-  chainID: Scalars['String']
-  circulatingSupply?: Maybe<Scalars['numeric']>
-  contract: Scalars['String']
-  created_at: Scalars['timestamptz']
-  id: Scalars['uuid']
-  last?: Maybe<Scalars['numeric']>
-  marketCap?: Maybe<Scalars['numeric']>
-  removedTokens?: Maybe<Scalars['numeric']>
-  ticker: Scalars['String']
-  totalSupply?: Maybe<Scalars['numeric']>
-  updated_at: Scalars['timestamptz']
-}
-
-/** Boolean expression to filter rows from the table "logCnvData". All fields are combined with a logical 'AND'. */
-export type LogCnvData_Bool_Exp = {
-  _and?: InputMaybe<Array<LogCnvData_Bool_Exp>>
-  _not?: InputMaybe<LogCnvData_Bool_Exp>
-  _or?: InputMaybe<Array<LogCnvData_Bool_Exp>>
-  chainID?: InputMaybe<String_Comparison_Exp>
-  circulatingSupply?: InputMaybe<Numeric_Comparison_Exp>
-  contract?: InputMaybe<String_Comparison_Exp>
-  created_at?: InputMaybe<Timestamptz_Comparison_Exp>
-  id?: InputMaybe<Uuid_Comparison_Exp>
-  last?: InputMaybe<Numeric_Comparison_Exp>
-  marketCap?: InputMaybe<Numeric_Comparison_Exp>
-  removedTokens?: InputMaybe<Numeric_Comparison_Exp>
-  ticker?: InputMaybe<String_Comparison_Exp>
-  totalSupply?: InputMaybe<Numeric_Comparison_Exp>
-  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>
-}
-
-/** Ordering options when selecting data from "logCnvData". */
-export type LogCnvData_Order_By = {
-  chainID?: InputMaybe<Order_By>
-  circulatingSupply?: InputMaybe<Order_By>
-  contract?: InputMaybe<Order_By>
-  created_at?: InputMaybe<Order_By>
-  id?: InputMaybe<Order_By>
-  last?: InputMaybe<Order_By>
-  marketCap?: InputMaybe<Order_By>
-  removedTokens?: InputMaybe<Order_By>
-  ticker?: InputMaybe<Order_By>
-  totalSupply?: InputMaybe<Order_By>
-  updated_at?: InputMaybe<Order_By>
-}
-
-/** select columns of table "logCnvData" */
-export enum LogCnvData_Select_Column {
-  /** column name */
-  ChainId = 'chainID',
-  /** column name */
-  CirculatingSupply = 'circulatingSupply',
-  /** column name */
-  Contract = 'contract',
-  /** column name */
-  CreatedAt = 'created_at',
-  /** column name */
-  Id = 'id',
-  /** column name */
-  Last = 'last',
-  /** column name */
-  MarketCap = 'marketCap',
-  /** column name */
-  RemovedTokens = 'removedTokens',
-  /** column name */
-  Ticker = 'ticker',
-  /** column name */
-  TotalSupply = 'totalSupply',
-  /** column name */
-  UpdatedAt = 'updated_at',
-}
-
-/** get Transfer events for Staking V1 */
+/** history of block with events */
 export type LogStakingV1 = {
   __typename?: 'logStakingV1'
-  amountLocked?: Maybe<Scalars['numeric']>
-  created_at: Scalars['timestamptz']
-  from?: Maybe<Scalars['String']>
-  id: Scalars['uuid']
-  lockedUntil?: Maybe<Scalars['numeric']>
-  poolID?: Maybe<Scalars['numeric']>
-  sold?: Maybe<Scalars['Boolean']>
-  to?: Maybe<Scalars['String']>
-  tokenID?: Maybe<Scalars['numeric']>
-  txBlockNumber?: Maybe<Scalars['numeric']>
-  txHash?: Maybe<Scalars['String']>
-  updated_at: Scalars['timestamptz']
+  amountLocked: Scalars['numeric']
+  blockNumber: Scalars['numeric']
+  from: Scalars['String']
+  lockedUntil: Scalars['numeric']
+  poolID: Scalars['numeric']
+  sold: Scalars['Boolean']
+  to: Scalars['String']
+  tokenID: Scalars['numeric']
+  txHash: Scalars['String']
 }
 
-/** get Lock events from Staking V1 */
+/** Lock events of Staking V1 */
 export type LogStakingV1_Lock = {
   __typename?: 'logStakingV1_Lock'
-  amount?: Maybe<Scalars['String']>
-  created_at: Scalars['timestamptz']
-  deposit?: Maybe<Scalars['String']>
-  id: Scalars['uuid']
-  maturity?: Maybe<Scalars['numeric']>
-  poolBalance?: Maybe<Scalars['String']>
-  poolExcessRatio?: Maybe<Scalars['numeric']>
-  poolG?: Maybe<Scalars['numeric']>
-  poolID?: Maybe<Scalars['numeric']>
-  poolRewardsPerShare?: Maybe<Scalars['String']>
-  poolSupply?: Maybe<Scalars['String']>
-  poolTerm?: Maybe<Scalars['numeric']>
-  positionID?: Maybe<Scalars['numeric']>
-  rewardDebt?: Maybe<Scalars['String']>
-  shares?: Maybe<Scalars['String']>
+  amount: Scalars['String']
+  deposit: Scalars['String']
+  maturity: Scalars['numeric']
+  poolBalance: Scalars['String']
+  poolExcessRatio: Scalars['numeric']
+  poolG: Scalars['numeric']
+  poolID: Scalars['numeric']
+  poolRewardsPerShare: Scalars['String']
+  poolSupply: Scalars['String']
+  poolTerm: Scalars['numeric']
+  positionID: Scalars['numeric']
+  rewardDebt: Scalars['String']
+  shares: Scalars['String']
   timestamp?: Maybe<Scalars['numeric']>
-  to?: Maybe<Scalars['String']>
-  txBlockNumber?: Maybe<Scalars['numeric']>
-  txHash?: Maybe<Scalars['String']>
-  updated_at: Scalars['timestamptz']
+  to: Scalars['String']
+  txBlockNumber: Scalars['numeric']
+  txHash: Scalars['String']
 }
 
 /** Boolean expression to filter rows from the table "logStakingV1_Lock". All fields are combined with a logical 'AND'. */
@@ -308,9 +211,7 @@ export type LogStakingV1_Lock_Bool_Exp = {
   _not?: InputMaybe<LogStakingV1_Lock_Bool_Exp>
   _or?: InputMaybe<Array<LogStakingV1_Lock_Bool_Exp>>
   amount?: InputMaybe<String_Comparison_Exp>
-  created_at?: InputMaybe<Timestamptz_Comparison_Exp>
   deposit?: InputMaybe<String_Comparison_Exp>
-  id?: InputMaybe<Uuid_Comparison_Exp>
   maturity?: InputMaybe<Numeric_Comparison_Exp>
   poolBalance?: InputMaybe<String_Comparison_Exp>
   poolExcessRatio?: InputMaybe<Numeric_Comparison_Exp>
@@ -326,15 +227,12 @@ export type LogStakingV1_Lock_Bool_Exp = {
   to?: InputMaybe<String_Comparison_Exp>
   txBlockNumber?: InputMaybe<Numeric_Comparison_Exp>
   txHash?: InputMaybe<String_Comparison_Exp>
-  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>
 }
 
 /** Ordering options when selecting data from "logStakingV1_Lock". */
 export type LogStakingV1_Lock_Order_By = {
   amount?: InputMaybe<Order_By>
-  created_at?: InputMaybe<Order_By>
   deposit?: InputMaybe<Order_By>
-  id?: InputMaybe<Order_By>
   maturity?: InputMaybe<Order_By>
   poolBalance?: InputMaybe<Order_By>
   poolExcessRatio?: InputMaybe<Order_By>
@@ -350,7 +248,6 @@ export type LogStakingV1_Lock_Order_By = {
   to?: InputMaybe<Order_By>
   txBlockNumber?: InputMaybe<Order_By>
   txHash?: InputMaybe<Order_By>
-  updated_at?: InputMaybe<Order_By>
 }
 
 /** select columns of table "logStakingV1_Lock" */
@@ -358,11 +255,7 @@ export enum LogStakingV1_Lock_Select_Column {
   /** column name */
   Amount = 'amount',
   /** column name */
-  CreatedAt = 'created_at',
-  /** column name */
   Deposit = 'deposit',
-  /** column name */
-  Id = 'id',
   /** column name */
   Maturity = 'maturity',
   /** column name */
@@ -393,24 +286,19 @@ export enum LogStakingV1_Lock_Select_Column {
   TxBlockNumber = 'txBlockNumber',
   /** column name */
   TxHash = 'txHash',
-  /** column name */
-  UpdatedAt = 'updated_at',
 }
 
-/** get PoolRewarded events from staking V1  */
+/** get all staking V1 PoolRewarded events */
 export type LogStakingV1_PoolRewarded = {
   __typename?: 'logStakingV1_PoolRewarded'
-  balance?: Maybe<Scalars['String']>
-  baseObligation?: Maybe<Scalars['String']>
-  base_vAPR?: Maybe<Scalars['numeric']>
-  created_at: Scalars['timestamptz']
-  excessObligation?: Maybe<Scalars['String']>
-  id: Scalars['uuid']
-  poolID?: Maybe<Scalars['numeric']>
-  to?: Maybe<Scalars['String']>
-  txBlockNumber?: Maybe<Scalars['numeric']>
-  txHash?: Maybe<Scalars['String']>
-  updated_at: Scalars['timestamptz']
+  balance: Scalars['String']
+  baseObligation: Scalars['String']
+  base_vAPR: Scalars['numeric']
+  excessObligation: Scalars['String']
+  poolID: Scalars['numeric']
+  to: Scalars['String']
+  txBlockNumber: Scalars['numeric']
+  txHash: Scalars['String']
 }
 
 /** Boolean expression to filter rows from the table "logStakingV1_PoolRewarded". All fields are combined with a logical 'AND'. */
@@ -421,14 +309,11 @@ export type LogStakingV1_PoolRewarded_Bool_Exp = {
   balance?: InputMaybe<String_Comparison_Exp>
   baseObligation?: InputMaybe<String_Comparison_Exp>
   base_vAPR?: InputMaybe<Numeric_Comparison_Exp>
-  created_at?: InputMaybe<Timestamptz_Comparison_Exp>
   excessObligation?: InputMaybe<String_Comparison_Exp>
-  id?: InputMaybe<Uuid_Comparison_Exp>
   poolID?: InputMaybe<Numeric_Comparison_Exp>
   to?: InputMaybe<String_Comparison_Exp>
   txBlockNumber?: InputMaybe<Numeric_Comparison_Exp>
   txHash?: InputMaybe<String_Comparison_Exp>
-  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>
 }
 
 /** Ordering options when selecting data from "logStakingV1_PoolRewarded". */
@@ -436,14 +321,11 @@ export type LogStakingV1_PoolRewarded_Order_By = {
   balance?: InputMaybe<Order_By>
   baseObligation?: InputMaybe<Order_By>
   base_vAPR?: InputMaybe<Order_By>
-  created_at?: InputMaybe<Order_By>
   excessObligation?: InputMaybe<Order_By>
-  id?: InputMaybe<Order_By>
   poolID?: InputMaybe<Order_By>
   to?: InputMaybe<Order_By>
   txBlockNumber?: InputMaybe<Order_By>
   txHash?: InputMaybe<Order_By>
-  updated_at?: InputMaybe<Order_By>
 }
 
 /** select columns of table "logStakingV1_PoolRewarded" */
@@ -455,11 +337,7 @@ export enum LogStakingV1_PoolRewarded_Select_Column {
   /** column name */
   BaseVApr = 'base_vAPR',
   /** column name */
-  CreatedAt = 'created_at',
-  /** column name */
   ExcessObligation = 'excessObligation',
-  /** column name */
-  Id = 'id',
   /** column name */
   PoolId = 'poolID',
   /** column name */
@@ -468,8 +346,6 @@ export enum LogStakingV1_PoolRewarded_Select_Column {
   TxBlockNumber = 'txBlockNumber',
   /** column name */
   TxHash = 'txHash',
-  /** column name */
-  UpdatedAt = 'updated_at',
 }
 
 /** Boolean expression to filter rows from the table "logStakingV1". All fields are combined with a logical 'AND'. */
@@ -478,33 +354,27 @@ export type LogStakingV1_Bool_Exp = {
   _not?: InputMaybe<LogStakingV1_Bool_Exp>
   _or?: InputMaybe<Array<LogStakingV1_Bool_Exp>>
   amountLocked?: InputMaybe<Numeric_Comparison_Exp>
-  created_at?: InputMaybe<Timestamptz_Comparison_Exp>
+  blockNumber?: InputMaybe<Numeric_Comparison_Exp>
   from?: InputMaybe<String_Comparison_Exp>
-  id?: InputMaybe<Uuid_Comparison_Exp>
   lockedUntil?: InputMaybe<Numeric_Comparison_Exp>
   poolID?: InputMaybe<Numeric_Comparison_Exp>
   sold?: InputMaybe<Boolean_Comparison_Exp>
   to?: InputMaybe<String_Comparison_Exp>
   tokenID?: InputMaybe<Numeric_Comparison_Exp>
-  txBlockNumber?: InputMaybe<Numeric_Comparison_Exp>
   txHash?: InputMaybe<String_Comparison_Exp>
-  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>
 }
 
 /** Ordering options when selecting data from "logStakingV1". */
 export type LogStakingV1_Order_By = {
   amountLocked?: InputMaybe<Order_By>
-  created_at?: InputMaybe<Order_By>
+  blockNumber?: InputMaybe<Order_By>
   from?: InputMaybe<Order_By>
-  id?: InputMaybe<Order_By>
   lockedUntil?: InputMaybe<Order_By>
   poolID?: InputMaybe<Order_By>
   sold?: InputMaybe<Order_By>
   to?: InputMaybe<Order_By>
   tokenID?: InputMaybe<Order_By>
-  txBlockNumber?: InputMaybe<Order_By>
   txHash?: InputMaybe<Order_By>
-  updated_at?: InputMaybe<Order_By>
 }
 
 /** select columns of table "logStakingV1" */
@@ -512,11 +382,9 @@ export enum LogStakingV1_Select_Column {
   /** column name */
   AmountLocked = 'amountLocked',
   /** column name */
-  CreatedAt = 'created_at',
+  BlockNumber = 'blockNumber',
   /** column name */
   From = 'from',
-  /** column name */
-  Id = 'id',
   /** column name */
   LockedUntil = 'lockedUntil',
   /** column name */
@@ -528,11 +396,7 @@ export enum LogStakingV1_Select_Column {
   /** column name */
   TokenId = 'tokenID',
   /** column name */
-  TxBlockNumber = 'txBlockNumber',
-  /** column name */
   TxHash = 'txHash',
-  /** column name */
-  UpdatedAt = 'updated_at',
 }
 
 /** Boolean expression to compare columns of type "numeric". All fields are combined with logical 'AND'. */
@@ -571,10 +435,6 @@ export type Query_Root = {
   logAccrualBondsV1_BondSold: Array<LogAccrualBondsV1_BondSold>
   /** fetch data from the table: "logAccrualBondsV1_BondSold" using primary key columns */
   logAccrualBondsV1_BondSold_by_pk?: Maybe<LogAccrualBondsV1_BondSold>
-  /** fetch data from the table: "logCnvData" */
-  logCnvData: Array<LogCnvData>
-  /** fetch data from the table: "logCnvData" using primary key columns */
-  logCnvData_by_pk?: Maybe<LogCnvData>
   /** fetch data from the table: "logStakingV1" */
   logStakingV1: Array<LogStakingV1>
   /** fetch data from the table: "logStakingV1_Lock" */
@@ -583,14 +443,10 @@ export type Query_Root = {
   logStakingV1_Lock_by_pk?: Maybe<LogStakingV1_Lock>
   /** fetch data from the table: "logStakingV1_PoolRewarded" */
   logStakingV1_PoolRewarded: Array<LogStakingV1_PoolRewarded>
-  /** fetch data from the table: "logStakingV1_PoolRewarded" using primary key columns */
-  logStakingV1_PoolRewarded_by_pk?: Maybe<LogStakingV1_PoolRewarded>
   /** fetch data from the table: "logStakingV1" using primary key columns */
   logStakingV1_by_pk?: Maybe<LogStakingV1>
   /** fetch data from the table: "treasury" */
   treasury: Array<Treasury>
-  /** fetch data from the table: "treasury" using primary key columns */
-  treasury_by_pk?: Maybe<Treasury>
 }
 
 export type Query_RootLogAccrualBondsV1_BondSoldArgs = {
@@ -602,19 +458,7 @@ export type Query_RootLogAccrualBondsV1_BondSoldArgs = {
 }
 
 export type Query_RootLogAccrualBondsV1_BondSold_By_PkArgs = {
-  id: Scalars['uuid']
-}
-
-export type Query_RootLogCnvDataArgs = {
-  distinct_on?: InputMaybe<Array<LogCnvData_Select_Column>>
-  limit?: InputMaybe<Scalars['Int']>
-  offset?: InputMaybe<Scalars['Int']>
-  order_by?: InputMaybe<Array<LogCnvData_Order_By>>
-  where?: InputMaybe<LogCnvData_Bool_Exp>
-}
-
-export type Query_RootLogCnvData_By_PkArgs = {
-  id: Scalars['uuid']
+  txHash: Scalars['String']
 }
 
 export type Query_RootLogStakingV1Args = {
@@ -634,7 +478,7 @@ export type Query_RootLogStakingV1_LockArgs = {
 }
 
 export type Query_RootLogStakingV1_Lock_By_PkArgs = {
-  id: Scalars['uuid']
+  txHash: Scalars['String']
 }
 
 export type Query_RootLogStakingV1_PoolRewardedArgs = {
@@ -645,12 +489,8 @@ export type Query_RootLogStakingV1_PoolRewardedArgs = {
   where?: InputMaybe<LogStakingV1_PoolRewarded_Bool_Exp>
 }
 
-export type Query_RootLogStakingV1_PoolRewarded_By_PkArgs = {
-  id: Scalars['uuid']
-}
-
 export type Query_RootLogStakingV1_By_PkArgs = {
-  id: Scalars['uuid']
+  txHash: Scalars['String']
 }
 
 export type Query_RootTreasuryArgs = {
@@ -661,20 +501,12 @@ export type Query_RootTreasuryArgs = {
   where?: InputMaybe<Treasury_Bool_Exp>
 }
 
-export type Query_RootTreasury_By_PkArgs = {
-  id: Scalars['uuid']
-}
-
 export type Subscription_Root = {
   __typename?: 'subscription_root'
   /** fetch data from the table: "logAccrualBondsV1_BondSold" */
   logAccrualBondsV1_BondSold: Array<LogAccrualBondsV1_BondSold>
   /** fetch data from the table: "logAccrualBondsV1_BondSold" using primary key columns */
   logAccrualBondsV1_BondSold_by_pk?: Maybe<LogAccrualBondsV1_BondSold>
-  /** fetch data from the table: "logCnvData" */
-  logCnvData: Array<LogCnvData>
-  /** fetch data from the table: "logCnvData" using primary key columns */
-  logCnvData_by_pk?: Maybe<LogCnvData>
   /** fetch data from the table: "logStakingV1" */
   logStakingV1: Array<LogStakingV1>
   /** fetch data from the table: "logStakingV1_Lock" */
@@ -683,14 +515,10 @@ export type Subscription_Root = {
   logStakingV1_Lock_by_pk?: Maybe<LogStakingV1_Lock>
   /** fetch data from the table: "logStakingV1_PoolRewarded" */
   logStakingV1_PoolRewarded: Array<LogStakingV1_PoolRewarded>
-  /** fetch data from the table: "logStakingV1_PoolRewarded" using primary key columns */
-  logStakingV1_PoolRewarded_by_pk?: Maybe<LogStakingV1_PoolRewarded>
   /** fetch data from the table: "logStakingV1" using primary key columns */
   logStakingV1_by_pk?: Maybe<LogStakingV1>
   /** fetch data from the table: "treasury" */
   treasury: Array<Treasury>
-  /** fetch data from the table: "treasury" using primary key columns */
-  treasury_by_pk?: Maybe<Treasury>
 }
 
 export type Subscription_RootLogAccrualBondsV1_BondSoldArgs = {
@@ -702,19 +530,7 @@ export type Subscription_RootLogAccrualBondsV1_BondSoldArgs = {
 }
 
 export type Subscription_RootLogAccrualBondsV1_BondSold_By_PkArgs = {
-  id: Scalars['uuid']
-}
-
-export type Subscription_RootLogCnvDataArgs = {
-  distinct_on?: InputMaybe<Array<LogCnvData_Select_Column>>
-  limit?: InputMaybe<Scalars['Int']>
-  offset?: InputMaybe<Scalars['Int']>
-  order_by?: InputMaybe<Array<LogCnvData_Order_By>>
-  where?: InputMaybe<LogCnvData_Bool_Exp>
-}
-
-export type Subscription_RootLogCnvData_By_PkArgs = {
-  id: Scalars['uuid']
+  txHash: Scalars['String']
 }
 
 export type Subscription_RootLogStakingV1Args = {
@@ -734,7 +550,7 @@ export type Subscription_RootLogStakingV1_LockArgs = {
 }
 
 export type Subscription_RootLogStakingV1_Lock_By_PkArgs = {
-  id: Scalars['uuid']
+  txHash: Scalars['String']
 }
 
 export type Subscription_RootLogStakingV1_PoolRewardedArgs = {
@@ -745,12 +561,8 @@ export type Subscription_RootLogStakingV1_PoolRewardedArgs = {
   where?: InputMaybe<LogStakingV1_PoolRewarded_Bool_Exp>
 }
 
-export type Subscription_RootLogStakingV1_PoolRewarded_By_PkArgs = {
-  id: Scalars['uuid']
-}
-
 export type Subscription_RootLogStakingV1_By_PkArgs = {
-  id: Scalars['uuid']
+  txHash: Scalars['String']
 }
 
 export type Subscription_RootTreasuryArgs = {
@@ -759,10 +571,6 @@ export type Subscription_RootTreasuryArgs = {
   offset?: InputMaybe<Scalars['Int']>
   order_by?: InputMaybe<Array<Treasury_Order_By>>
   where?: InputMaybe<Treasury_Bool_Exp>
-}
-
-export type Subscription_RootTreasury_By_PkArgs = {
-  id: Scalars['uuid']
 }
 
 /** Boolean expression to compare columns of type "timestamptz". All fields are combined with logical 'AND'. */
@@ -784,8 +592,6 @@ export type Treasury = {
   amount?: Maybe<Scalars['numeric']>
   chainId?: Maybe<Scalars['String']>
   contract: Scalars['String']
-  created_at: Scalars['timestamptz']
-  id: Scalars['uuid']
   name: Scalars['String']
   rewards?: Maybe<Scalars['numeric']>
   total?: Maybe<Scalars['numeric']>
@@ -801,8 +607,6 @@ export type Treasury_Bool_Exp = {
   amount?: InputMaybe<Numeric_Comparison_Exp>
   chainId?: InputMaybe<String_Comparison_Exp>
   contract?: InputMaybe<String_Comparison_Exp>
-  created_at?: InputMaybe<Timestamptz_Comparison_Exp>
-  id?: InputMaybe<Uuid_Comparison_Exp>
   name?: InputMaybe<String_Comparison_Exp>
   rewards?: InputMaybe<Numeric_Comparison_Exp>
   total?: InputMaybe<Numeric_Comparison_Exp>
@@ -815,8 +619,6 @@ export type Treasury_Order_By = {
   amount?: InputMaybe<Order_By>
   chainId?: InputMaybe<Order_By>
   contract?: InputMaybe<Order_By>
-  created_at?: InputMaybe<Order_By>
-  id?: InputMaybe<Order_By>
   name?: InputMaybe<Order_By>
   rewards?: InputMaybe<Order_By>
   total?: InputMaybe<Order_By>
@@ -833,10 +635,6 @@ export enum Treasury_Select_Column {
   /** column name */
   Contract = 'contract',
   /** column name */
-  CreatedAt = 'created_at',
-  /** column name */
-  Id = 'id',
-  /** column name */
   Name = 'name',
   /** column name */
   Rewards = 'rewards',
@@ -848,27 +646,11 @@ export enum Treasury_Select_Column {
   Value = 'value',
 }
 
-/** Boolean expression to compare columns of type "uuid". All fields are combined with logical 'AND'. */
-export type Uuid_Comparison_Exp = {
-  _eq?: InputMaybe<Scalars['uuid']>
-  _gt?: InputMaybe<Scalars['uuid']>
-  _gte?: InputMaybe<Scalars['uuid']>
-  _in?: InputMaybe<Array<Scalars['uuid']>>
-  _is_null?: InputMaybe<Scalars['Boolean']>
-  _lt?: InputMaybe<Scalars['uuid']>
-  _lte?: InputMaybe<Scalars['uuid']>
-  _neq?: InputMaybe<Scalars['uuid']>
-  _nin?: InputMaybe<Array<Scalars['uuid']>>
-}
-
 export type Get_Last_Base_VaprQueryVariables = Exact<{ [key: string]: never }>
 
 export type Get_Last_Base_VaprQuery = {
   __typename?: 'query_root'
-  logStakingV1_PoolRewarded: Array<{
-    __typename?: 'logStakingV1_PoolRewarded'
-    base_vAPR?: any | null
-  }>
+  logStakingV1_PoolRewarded: Array<{ __typename?: 'logStakingV1_PoolRewarded'; base_vAPR: any }>
 }
 
 export type Get_Last_Poolid_VaprQueryVariables = Exact<{
@@ -877,10 +659,7 @@ export type Get_Last_Poolid_VaprQueryVariables = Exact<{
 
 export type Get_Last_Poolid_VaprQuery = {
   __typename?: 'query_root'
-  logStakingV1_PoolRewarded: Array<{
-    __typename?: 'logStakingV1_PoolRewarded'
-    base_vAPR?: any | null
-  }>
+  logStakingV1_PoolRewarded: Array<{ __typename?: 'logStakingV1_PoolRewarded'; base_vAPR: any }>
 }
 
 export type Get_Amm_Cnv_PriceQueryVariables = Exact<{ [key: string]: never }>
@@ -915,15 +694,15 @@ export type Get_Stackingv1_Last100_EventsQuery = {
   __typename?: 'query_root'
   logStakingV1: Array<{
     __typename?: 'logStakingV1'
-    txBlockNumber?: any | null
-    txHash?: string | null
-    poolID?: any | null
-    tokenID?: any | null
-    sold?: boolean | null
-    from?: string | null
-    to?: string | null
-    amountLocked?: any | null
-    lockedUntil?: any | null
+    blockNumber: any
+    txHash: string
+    poolID: any
+    tokenID: any
+    sold: boolean
+    from: string
+    to: string
+    amountLocked: any
+    lockedUntil: any
   }>
 }
 
@@ -935,15 +714,15 @@ export type Get_Stackingv1_By_Pool_IdQuery = {
   __typename?: 'query_root'
   logStakingV1: Array<{
     __typename?: 'logStakingV1'
-    txBlockNumber?: any | null
-    txHash?: string | null
-    poolID?: any | null
-    tokenID?: any | null
-    sold?: boolean | null
-    from?: string | null
-    to?: string | null
-    amountLocked?: any | null
-    lockedUntil?: any | null
+    blockNumber: any
+    txHash: string
+    poolID: any
+    tokenID: any
+    sold: boolean
+    from: string
+    to: string
+    amountLocked: any
+    lockedUntil: any
   }>
 }
 
@@ -953,13 +732,12 @@ export type Get_Stakingv1_Last100_LockQuery = {
   __typename?: 'query_root'
   logStakingV1_Lock: Array<{
     __typename?: 'logStakingV1_Lock'
-    txHash?: string | null
-    txBlockNumber?: any | null
-    poolID?: any | null
-    timestamp?: any | null
-    positionID?: any | null
-    to?: string | null
-    amount?: string | null
+    txHash: string
+    txBlockNumber: any
+    poolID: any
+    positionID: any
+    to: string
+    amount: string
   }>
 }
 
@@ -969,11 +747,11 @@ export type Get_Accrualbondv1_Last10_SoldQuery = {
   __typename?: 'query_root'
   logAccrualBondsV1_BondSold: Array<{
     __typename?: 'logAccrualBondsV1_BondSold'
-    timestamp?: any | null
-    inputToken?: string | null
-    inputAmount?: string | null
+    timestamp: any
+    inputToken: string
+    inputAmount: string
     method?: string | null
-    output?: string | null
+    output: string
   }>
 }
 
@@ -1083,8 +861,8 @@ export const useGet_Amm_Cnv_InfosQuery = <TData = Get_Amm_Cnv_InfosQuery, TError
   )
 export const Get_Stackingv1_Last100_EventsDocument = `
     query GET_STACKINGV1_LAST100_EVENTS {
-  logStakingV1(order_by: {txBlockNumber: desc}, limit: 100) {
-    txBlockNumber
+  logStakingV1(order_by: {blockNumber: desc}, limit: 100) {
+    blockNumber
     txHash
     poolID
     tokenID
@@ -1115,12 +893,8 @@ export const useGet_Stackingv1_Last100_EventsQuery = <
   )
 export const Get_Stackingv1_By_Pool_IdDocument = `
     query GET_STACKINGV1_BY_POOL_ID($poolID: numeric_comparison_exp) {
-  logStakingV1(
-    order_by: {txBlockNumber: desc}
-    where: {poolID: $poolID}
-    limit: 10
-  ) {
-    txBlockNumber
+  logStakingV1(order_by: {blockNumber: desc}, where: {poolID: $poolID}, limit: 10) {
+    blockNumber
     txHash
     poolID
     tokenID
@@ -1151,11 +925,10 @@ export const useGet_Stackingv1_By_Pool_IdQuery = <
   )
 export const Get_Stakingv1_Last100_LockDocument = `
     query GET_STAKINGV1_LAST100_LOCK {
-  logStakingV1_Lock(order_by: {timestamp: desc}, limit: 100) {
+  logStakingV1_Lock {
     txHash
     txBlockNumber
     poolID
-    timestamp
     positionID
     to
     amount
