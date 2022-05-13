@@ -58,7 +58,7 @@ function StakeInput(props: any) {
     setApproveButtonText('Pending...')
   }
 
-  const [showAllowanceButton, setShowAllocationButton] = React.useState(
+  const [showApproveButton, setShowApproveButton] = React.useState(
     +allowance.value?.toString() === 0 ||
       +allowance.value?.toString() < +stakeInput.numerator.toString(),
   )
@@ -68,7 +68,7 @@ function StakeInput(props: any) {
   )
 
   useEffect(() => {
-    setShowAllocationButton(
+    setShowApproveButton(
       +allowance.value?.toString() === 0 ||
         +allowance.value?.toString() < +stakeInput.numerator.toString(),
     )
@@ -87,7 +87,7 @@ function StakeInput(props: any) {
       </Card>
 
       <Box mt={10} width="350px">
-        {showAllowanceButton && (
+        {showApproveButton && (
           <Button
             onClick={approveCNV}
             fontWeight="bold"
@@ -104,7 +104,7 @@ function StakeInput(props: any) {
           </Button>
         )}
 
-        {!showAllowanceButton && showStakeButton && (
+        {!showApproveButton && showStakeButton && (
           <Button
             mt={5}
             onClick={async () => {
