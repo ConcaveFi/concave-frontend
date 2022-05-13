@@ -48,7 +48,8 @@ function StakeInput(props: any) {
 
   const [cnvBalance, getBalance] = useBalance({
     addressOrName: account?.address,
-    token: CNV[3],
+    // token: CNV[3],
+    token: LIQUID_STAKING_ADDRESS[data?.chain?.id],
     // token: '0x000000007a58f5f58E697e51Ab0357BC9e260A04',
   })
 
