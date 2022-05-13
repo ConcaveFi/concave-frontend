@@ -174,7 +174,7 @@ export const TestnetIndicator = () => {
   // if (!isOpen) return null
   return (
     <SlideFade in={isOpen} unmountOnExit offsetY={-10}>
-      <Box pos="absolute" top={{ base: 20, md: 8 }}>
+      <Box pos="absolute" top={{ base: 20, md: 8 }} zIndex={10}>
         <Card
           variant="secondary"
           p={5}
