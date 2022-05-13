@@ -6,6 +6,7 @@ import { useApprove } from 'hooks/useApprove'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { usePermit } from 'hooks/usePermit'
+import { swapSupportedChains } from 'pages/swap'
 import { useAccount } from 'wagmi'
 import { NoValidPairsError } from '../hooks/usePair'
 import { InsufficientLiquidityError, UseTradeResult } from '../hooks/useTrade'
@@ -25,10 +26,10 @@ export const useSwapButtonProps = ({
   const inputAmount = trade.data.inputAmount
   const outputAmount = trade.data.outputAmount
 
-  const currencyIn = inputAmount.currency
+  const currencyIn = inputAmount?.currency
   const currencyInBalance = useCurrencyBalance(currencyIn, { watch: true })
 
-  const [token, spender] = [currencyIn.wrapped, ROUTER_ADDRESS[currencyIn?.chainId]]
+  const [token, spender] = [currencyIn?.wrapped, ROUTER_ADDRESS[currencyIn?.chainId]]
   const permit = usePermit(token, spender)
   const { allowance, ...approve } = useApprove(token, spender)
 
@@ -39,9 +40,10 @@ export const useSwapButtonProps = ({
   */
   if (!account?.address) return { children: 'Connect Wallet', onClick: connectModal.onOpen }
 
-  if (currencyIn.chainId !== networkId)
+  if (networkId !== currencyIn.chainId) return { children: 'Network mismatch', isDisabled: true }
+  if (!swapSupportedChains.includes(networkId))
     return {
-      children: 'Switch chains',
+      children: 'Unsupported chain',
       onClick: () => account.connector.switchChain(currencyIn.chainId).catch(() => {}),
     }
 

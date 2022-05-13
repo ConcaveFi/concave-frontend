@@ -1,5 +1,15 @@
 import { ChainId, CNV, Currency, DAI, Trade, TradeType } from '@concave/gemswap-sdk'
-import { Button, Card, Collapse, Flex, HStack, Stack, Text, useDisclosure } from '@concave/ui'
+import {
+  Button,
+  Card,
+  Collapse,
+  Flex,
+  HStack,
+  Modal,
+  Stack,
+  Text,
+  useDisclosure,
+} from '@concave/ui'
 import {
   CandleStickCard,
   ConfirmSwapModal,
@@ -18,6 +28,7 @@ import {
 } from 'components/AMM'
 import { ExpectedOutput, MinExpectedOutput } from 'components/AMM/Swap/ExpectedOutput'
 import { TradeRoute } from 'components/AMM/Swap/TradeRoute'
+import { CurrencyIcon } from 'components/CurrencyIcon'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
@@ -27,13 +38,11 @@ import {
   currencyToJson,
   currencyFromJson,
   fetchCurrenciesFromQuery,
-  useSyncQueryCurrencies,
 } from 'hooks/useSyncQueryCurrencies'
 import { GetServerSideProps } from 'next'
-import Router from 'next/router'
-import { useCallback, useEffect, useMemo, useReducer, useState } from 'react'
+import { useEffect, useMemo, useReducer, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
-import { useAccount } from 'wagmi'
+import { useAccount, useNetwork } from 'wagmi'
 
 const TradeDetails = ({
   trade,
@@ -50,14 +59,16 @@ const TradeDetails = ({
     </Stack>
   )
 
+export const swapSupportedChains = [ChainId.ETHEREUM, ChainId.ROPSTEN]
+
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const [currency0, currency1] = await fetchCurrenciesFromQuery(ctx.query).catch(() => [])
 
   // if chainId is not supported default to mainnet
-  const c = currency0?.chainId || currency1?.chainId || +ctx.query.chainId
-  const chainId = [(ChainId.ETHEREUM, ChainId.ROPSTEN)].includes(c) ? c : 1
+  // const c = currency0?.chainId || currency1?.chainId || +ctx.query.chainId
+  // const chainId = swapSupportedChains.includes(c) ? c : 1
 
-  const currencies = [currency0 || DAI[chainId], currency1 || CNV[chainId]]
+  const currencies = [currency0, currency1]
   const setCurrencies = !currency0?.equals(currency1) ? currencies : [currencies[0]]
 
   return { props: { currencies: setCurrencies.map(currencyToJson) } }
@@ -65,28 +76,20 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
 export function SwapPage({ currencies }) {
   const [settings, setSettings] = useState<SwapSettings>(defaultSettings)
+  const [{ data: network }] = useNetwork()
+
+  const networkId = useCurrentSupportedNetworkId()
 
   const initialCurrencies = useMemo(
     () => ({
-      first: currencyFromJson(currencies[0]),
-      second: currencyFromJson(currencies[1]),
+      first: currencyFromJson(currencies[0]) || DAI[networkId],
+      second: currencyFromJson(currencies[1]) || CNV[networkId],
     }),
-    [currencies],
+    [currencies, networkId],
   )
   const { trade, onChangeInput, onChangeOutput, switchCurrencies } = useSwapState(
     settings,
     initialCurrencies,
-  )
-
-  useSyncQueryCurrencies([trade.data.inputAmount.currency, trade.data.outputAmount.currency])
-  /*
-    reload page on network change, with default dai-cnv swap
-  */
-  useCurrentSupportedNetworkId(
-    useCallback((chainId: ChainId) => {
-      if (+Router.query.chainId !== chainId)
-        Router.replace({ query: { chainId } }, undefined, { scroll: false })
-    }, []),
   )
 
   const [{ data: account }] = useAccount()
@@ -104,8 +107,8 @@ export function SwapPage({ currencies }) {
   })
 
   const [currencyIn, currencyOut] = [
-    trade.data.inputAmount.currency,
-    trade.data.outputAmount.currency,
+    trade.data.inputAmount?.currency,
+    trade.data.outputAmount?.currency,
   ]
 
   const hasDetails = !!trade.data.route && trade.data.outputAmount.greaterThan(0)
@@ -205,6 +208,43 @@ export function SwapPage({ currencies }) {
 
       <TransactionSubmittedDialog tx={swapTx.data} isOpen={swapTx.isTransactionSent} />
       <TransactionErrorDialog error={swapTx.error?.message} isOpen={swapTx.isError} />
+
+      {/* <Modal
+        onClose={() => null}
+        isCentered
+        isOpen={true}
+        title="Network Mismatch"
+        bluryOverlay
+        hideClose
+        titleAlign="center"
+      >
+        <Stack spacing={4}>
+          <Text align="center" fontSize="md" fontWeight="bold">
+            You got here with a {CHAIN_NAME[currencyIn.chainId]} link
+          </Text>
+
+          <Flex gap={1} justify="center" fontWeight="medium">
+            For a <CurrencyIcon size="xs" currency={currencyIn} />
+            {currencyIn.symbol}
+            {currencyOut.symbol && (
+              <>
+                {' '}
+                to <CurrencyIcon size="xs" currency={currencyOut} /> {currencyOut.symbol}
+              </>
+            )}{' '}
+            swap
+          </Flex>
+
+          <Flex justify="center" gap={2}>
+            <Button variant="secondary" size="medium" px={3}>
+              Continue to {network.chain?.name}
+            </Button>
+            <Button variant="primary" size="medium" px={3}>
+              Switch Network
+            </Button>
+          </Flex>
+        </Stack>
+      </Modal> */}
     </>
   )
 }

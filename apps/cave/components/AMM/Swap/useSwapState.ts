@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from 'react'
-import { Currency, TradeType, CurrencyAmount, Trade } from '@concave/gemswap-sdk'
+import { Currency, TradeType, Trade } from '@concave/gemswap-sdk'
 import { useTrade, UseTradeResult } from '../hooks/useTrade'
 import { SwapSettings } from '../Settings'
 import { toAmount } from 'utils/toAmount'
@@ -8,22 +8,27 @@ import { useUpdateEffect } from '@concave/ui'
 
 export const useSwapState = ({ multihops }: SwapSettings, initialCurrencies) => {
   // the input user typed in, the other input value is then derived from it
-  const [exactAmount, setExactAmount] = useState<CurrencyAmount<Currency>>(
-    toAmount(0, initialCurrencies.first),
-  )
+  const [exactValue, setExactValue] = useState<string | number>(0)
 
-  const { onChangeField, switchCurrencies, setCurrencies, currencies } = useLinkedCurrencyFields(
-    initialCurrencies,
-    useCallback((newAmount, field) => setExactAmount(newAmount), []),
-  )
+  const { onChangeField, switchCurrencies, setCurrencies, currencies, lastUpdated } =
+    useLinkedCurrencyFields(
+      initialCurrencies,
+      useCallback((newAmount, field) => {
+        setExactValue(newAmount.toExact())
+      }, []),
+    )
 
   useUpdateEffect(() => {
     setCurrencies(initialCurrencies)
-    setExactAmount(toAmount(0, initialCurrencies.first))
+    setExactValue(0)
   }, [initialCurrencies])
 
-  const isExactIn = exactAmount?.currency.equals(currencies.first)
+  const isExactIn = lastUpdated === 'first'
   const otherCurrency = currencies[isExactIn ? 'second' : 'first']
+  const exactAmount = useMemo(
+    () => toAmount(exactValue, currencies[lastUpdated]),
+    [currencies, exactValue, lastUpdated],
+  )
 
   const trade = useTrade(exactAmount, otherCurrency, {
     tradeType: isExactIn ? TradeType.EXACT_INPUT : TradeType.EXACT_OUTPUT,
