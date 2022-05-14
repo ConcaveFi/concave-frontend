@@ -50,9 +50,63 @@ const StakingGroup: Array<StakingGroupProps> = [
 
 function LiquidStaking() {
   return (
-    <Box
+    <Flex
+      width={{ base: '1000px', xl: 'full', lg: 'full', md: 'full' }}
+      justify={'start'}
+      align="center"
+      direction={'column'}
+    >
+      <Heading as="h1" mt={8} fontSize="5xl">
+        Liquid Staking
+      </Heading>
+      <Flex
+        align={'center'}
+        justify="center"
+        direction={{ xl: 'row', base: 'column' }}
+        mt={{ xl: 8, base: 0 }}
+        gap={{ xl: 24, base: 7 }}
+      >
+        <Text maxW={520} textAlign={{ xl: 'justify', base: 'center' }}>
+          Stakers receive daily rewards to grow their <br /> CNV holdings and quarterly dividends
+          <br />
+          from Concave profits. Staking positions <br /> are represented by NFTs that are tradable
+          <br />
+          in Concave&apos;s native Marketplace.
+        </Text>
+        <GraphicGuide />
+      </Flex>
+      <Flex alignItems="start" justifyContent="center" height={{ xl: '550px', base: '1100px' }}>
+        <Flex
+          gap={{ lg: 8, base: 3 }}
+          justifyContent="center"
+          alignItems="center"
+          m={2}
+          wrap={{ xl: 'nowrap', base: 'wrap' }}
+          width={{ lg: '', base: '530px' }}
+        >
+          {StakingGroup.map((i) => {
+            return (
+              <StakeCard
+                icon={i.icon}
+                period={i.period}
+                poolId={i.poolID}
+                stakingLink={i.stakingLink}
+                key={i.period}
+              />
+            )
+          })}
+        </Flex>
+      </Flex>
+      <LiquidLocksCards />
+    </Flex>
+  )
+}
+
+export default LiquidStaking
+{
+  /*  <Box
       flex={1}
-      width={'600px'}
+      width={'full'}
       maxWidth="container.lg"
       overflow={'hidden'}
       m={'auto'}
@@ -61,6 +115,7 @@ function LiquidStaking() {
       textAlign="center"
       height={'2000px'}
       maxHeight={{ lg: '1200px', base: '1900px' }}
+      border="2px solid white"
     >
       <Heading as="h1" mt={16} fontSize="5xl">
         Liquid Staking
@@ -104,8 +159,5 @@ function LiquidStaking() {
         </Flex>
       </Flex>
       <LiquidLocksCards />
-    </Box>
-  )
+    </Box> */
 }
-
-export default LiquidStaking

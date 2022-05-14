@@ -163,7 +163,7 @@ export const GlassPanel: React.FC<FlexProps> = ({ ...props }) => {
         boxShadow={'down'}
         m={'1px'}
         bg="url(assets/textures/glass.jpg)"
-        bgSize={'130%'}
+        bgSize={'100%'}
         bgPos="center"
         rounded="inherit"
       >

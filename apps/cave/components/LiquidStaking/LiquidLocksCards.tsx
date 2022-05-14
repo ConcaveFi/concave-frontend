@@ -1,5 +1,6 @@
 import { ExpandArrowIcon } from '@concave/icons'
 import { Box, Card, Collapse, Flex, Text, useDisclosure } from '@concave/ui'
+import { GlassPanel } from 'components/Treasury/TreasuryManagementCard'
 import { formatDistanceStrict } from 'date-fns'
 import { formatEther } from 'ethers/lib/utils'
 import { useGet_Stakingv1_Last100_LockQuery } from 'graphql/generated/graphql'
@@ -52,31 +53,29 @@ const LiquidLocksCards = () => {
     ))
   return (
     <Card
-      my={4}
       mx={'auto'}
-      // height={'140px'}
-      maxWidth={400}
+      width={{ base: '520px', xl: '900px' }}
       variant="secondary"
       direction={'column'}
       textShadow={'0px 0px 27px rgba(129, 179, 255, 0.31)'}
     >
       <Collapse startingHeight={'100px'} in={isOpen}>
         <Flex fontWeight="700" width={'full'} flex={1}>
-          <Flex direction={'column'} flex={0.4} justify="start" mt={2}>
+          <Flex direction={'column'} flex={0.4} justify="center" align={'center'} mt={2}>
             <Text>Pool id</Text>
             <Flex direction={'column'} textColor="text.low" fontSize={'14px'}>
               {poolIds}
             </Flex>
           </Flex>
           <Box w="1px" bg="stroke.primary" />
-          <Flex direction={'column'} flex={0.5} justify="start" mt={2}>
+          <Flex direction={'column'} flex={0.5} justify="center" align={'center'} mt={2}>
             <Text>Amount locked</Text>
             <Flex direction={'column'} textColor="text.accent" fontSize={'14px'}>
               {amounts}
             </Flex>
           </Flex>
           <Box w="1px" bg="stroke.primary" />
-          <Flex direction={'column'} flex={0.5} justify="start" mt={2}>
+          <Flex direction={'column'} flex={0.5} justify="center" align={'center'} mt={2}>
             <Text>Timeline</Text>
             <Flex direction={'column'} textColor="text.accent" fontSize={'14px'}>
               {relativeTime}
