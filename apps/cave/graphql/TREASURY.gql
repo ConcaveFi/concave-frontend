@@ -6,6 +6,12 @@ query GET_TREASURY {
     name
     amount
     value
+    rewards
     total
+    image
+    isLP
+    imageP1
+    imageP2
+    imageP3
   }
 }
