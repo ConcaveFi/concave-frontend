@@ -1,16 +1,5 @@
-import {
-  Box,
-  Button,
-  Collapse,
-  Flex,
-  HStack,
-  Image,
-  Text,
-  useBreakpointValue,
-  useMediaQuery,
-  VStack,
-} from '@concave/ui'
-import { useEffect, useState } from 'react'
+import { Box, Button, Collapse, Flex, HStack, Image, Text } from '@concave/ui'
+import { useState } from 'react'
 
 interface NftPositionBoxProps {
   stakePeriod: number

@@ -10,6 +10,8 @@ import {
   Modal,
   ModalFooter,
   Text,
+  useBreakpoint,
+  useBreakpointValue,
   useMediaQuery,
 } from '@concave/ui'
 import GraphicGuide from 'components/LiquidStaking/GraphicGuide'
@@ -19,12 +21,12 @@ import MarketplaceActivityCard from 'components/Marketplace/MarketplaceActivityC
 import { useRouter } from 'next/router'
 
 const Marketplace = () => {
-  const [isMoreThan1200] = useMediaQuery('(min-width: 1200px)')
+  const isLargerLayout = useBreakpointValue({ base: false, lg: true })
   const [viewTransactions, setViewTransactions] = useState(false)
 
   useEffect(() => {
-    if (isMoreThan1200 && viewTransactions == true) setViewTransactions(false)
-  }, [isMoreThan1200])
+    if (isLargerLayout && viewTransactions == true) setViewTransactions(false)
+  }, [isLargerLayout])
 
   return (
     <Flex
@@ -71,7 +73,6 @@ const Marketplace = () => {
               justify={'center'}
               align="center"
               mt={{ lg: 12, base: 6 }}
-              // pl={pl}
             >
               <MarketplaceSearchCard />
             </Flex>
@@ -88,7 +89,7 @@ const Marketplace = () => {
                 px="140px"
                 rounded="0px 0px 16px 16px"
                 onClick={() => setViewTransactions(true)}
-                active={false}
+                active={!isLargerLayout}
               />
               <Box display={{ lg: 'flex', base: 'none' }}>
                 <MarketplaceActivityCard />
@@ -151,7 +152,6 @@ interface SwitchViewProps {
 }
 const SwitchView = (props: SwitchViewProps) => {
   const { active, onClick, px, title } = props
-  const [display, setDiplay] = useState<'flex' | 'none'>('flex')
   return (
     <Collapse in={active}>
       <Button _active={{}} onClick={() => onClick()}>

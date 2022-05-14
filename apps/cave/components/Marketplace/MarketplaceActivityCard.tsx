@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Box, Card, Flex, Text, Button, Image, useMediaQuery } from '@concave/ui'
-import NewActivityCard from './MarketplaceTransactionCard'
+import { Box, Card, Flex } from '@concave/ui'
 import MarketplaceTransactionCard from './MarketplaceTransactionCard'
 
 const MarketplaceActivityCard = () => {
@@ -76,16 +75,10 @@ const MarketplaceActivityCard = () => {
     ])
     setLoading(false)
   }
-  const [isLargerThan1200] = useMediaQuery('(min-width: 1200px)')
 
-  const [width, setWidth] = useState('300px')
-
-  useEffect(() => {
-    setWidth(isLargerThan1200 ? '300px' : '360px')
-  }, [isLargerThan1200])
   return (
     <Card
-      width={width}
+      width={{ base: '360px', lg: '300px' }}
       shadow="Block Up"
       height={642}
       position="relative"
@@ -109,7 +102,7 @@ const MarketplaceActivityCard = () => {
         px={'0.5rem'}
         py={'0.5rem'}
         __css={scrollBar}
-        pt={4}
+        pt={0}
       >
         <div>
           {loading && <span>loading...</span>}
@@ -157,7 +150,7 @@ export default MarketplaceActivityCard
 
 const scrollBar = {
   '&::-webkit-scrollbar': {
-    width: '20px',
+    width: '10px',
     boxShadow: `-1px 1px 3px rgba(126, 162, 255, 0.26), inset 0px -5px 5px rgba(255, 255, 255, 0.02), inset -9px 12px 24px rgba(13, 17, 23, 0.49)`,
     borderRadius: '10px',
     mt: '30px',

@@ -62,7 +62,7 @@ function MarketplaceStakeCard(props: any) {
       p={7}
       gap={2}
       shadow="Block Up"
-      w={{ lg: '300px', md: '460px' }}
+      w={{ lg: '300px', base: '460px' }}
       h={{ lg: '283px', md: '168px' }}
       style={{ alignContent: 'center', justifyContent: 'center' }}
       variant="secondary"
