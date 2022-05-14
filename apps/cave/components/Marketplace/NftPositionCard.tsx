@@ -18,17 +18,17 @@ const NftPositionBox = (props: NftPositionBoxProps) => {
     <Flex
       grow={1}
       height={'full'}
-      maxHeight={{ base: '180px', md: '80px', lg: '80px' }}
+      maxHeight={{ base: '180px', lg: '80px', xl: '80px' }}
       position="relative"
       bg={'linear-gradient(265.73deg, #274C63 0%, #182F3E 100%)'}
       rounded="2xl"
       shadow={'up'}
-      direction={{ base: 'column', md: 'row', lg: 'row' }}
+      direction={{ base: 'column', lg: 'row', xl: 'row' }}
     >
       <Flex height={'full'}>
         <HStack
-          spacing={{ base: 14, md: 0, lg: 0 }}
-          width={{ base: 'full', lg: '177px', md: '177px' }}
+          spacing={{ base: 14, lg: 0, xl: 0 }}
+          width={{ base: 'full', xl: '177px', lg: '177px' }}
           height={68}
           shadow={'Down Medium'}
           rounded={'2xl'}
@@ -41,7 +41,7 @@ const NftPositionBox = (props: NftPositionBoxProps) => {
               {stakePeriod} Days
             </Text>
           </Flex>
-          <Box w={{ base: '25%', lg: '45%', md: '45%' }}>
+          <Box w={{ base: '25%', xl: '45%', lg: '45%' }}>
             <Image sizes="100%" src={'/assets/marketplace/6mposition.png'} alt="position" />
           </Box>
         </HStack>
@@ -49,26 +49,26 @@ const NftPositionBox = (props: NftPositionBoxProps) => {
 
       <Flex width={'full'}>
         <Flex flex={1} justifyContent="center" direction={'column'} textAlign={'start'} ml="6">
-          <Text color="text.low" fontSize={{ base: '12px', lg: 'sm', md: 'sm' }} isTruncated>
+          <Text color="text.low" fontSize={{ base: '12px', xl: 'sm', lg: 'sm' }} isTruncated>
             Redeem In:
           </Text>
-          <Text fontSize="md" fontWeight="bold">
+          <Text fontSize="lg" fontWeight="bold">
             {redeemIn} Days
           </Text>
         </Flex>
         <Flex flex={1} justifyContent="center" direction={'column'} textAlign={'start'} ml="6">
-          <Text color="text.low" fontSize={{ base: '12px', lg: 'sm', md: 'sm' }} isTruncated>
+          <Text color="text.low" fontSize={{ base: '12px', xl: 'sm', lg: 'sm' }} isTruncated>
             Price:
           </Text>
-          <Text fontSize="md" fontWeight="bold" isTruncated>
+          <Text fontSize="lg" fontWeight="bold" isTruncated>
             {price} CNV
           </Text>
         </Flex>
         <Flex flex={1} justifyContent="center" direction={'column'} textAlign={'start'} ml="6">
-          <Text color="text.low" fontSize={{ base: '12px', lg: 'sm', md: 'sm' }}>
+          <Text color="text.low" fontSize={{ base: '12px', xl: 'sm', lg: 'sm' }}>
             Discount:
           </Text>
-          <Text fontSize="md" fontWeight="bold">
+          <Text fontSize="lg" fontWeight="bold">
             {discount}%
           </Text>
         </Flex>
@@ -98,19 +98,18 @@ const NftPositionBox = (props: NftPositionBoxProps) => {
 const NftPositionCard = (props: NftPositionBoxProps) => {
   const [active, setActive] = useState(false)
   const { discount, price, redeemIn, stakePeriod } = props
-  const backgroundBorder =
-    'linear-gradient(41.89deg, #53399B 0.69%, #7DE0FF 38.19%, #504179 72.85%, #84E2FF 100%)'
 
   return (
     <Flex
       shadow={active ? 'up' : ''}
-      bg={active ? backgroundBorder : 'rgb(0,0,0,0)'}
+      bg={active ? 'stroke.primary' : 'rgb(0,0,0,0)'}
       rounded={'2xl'}
       justifyContent="center"
       my={active ? 6 : 0}
       transition="all"
       transitionDuration={'0.3s'}
       maxH={'280px'}
+      width={{ xl: '520px', lg: 'full', base: 'full' }}
     >
       <Flex
         direction={'column'}
@@ -131,14 +130,13 @@ const NftPositionCard = (props: NftPositionBoxProps) => {
         />
         <Collapse in={active}>
           <Flex
-            direction={{ lg: 'row', md: 'row', base: 'column' }}
+            direction={{ xl: 'row', lg: 'row', base: 'column' }}
             justifyContent="start"
             alignItems={'center'}
-            width="full"
           >
-            <Flex width={'full'} justify={{ lg: '', md: '', base: 'space-around' }} isTruncated>
+            <Flex flex={1} isTruncated justify={'space-around'} width={'full'}>
               <Flex
-                pl={{ lg: 3, md: 3, base: 0 }}
+                // pl={{ xl: 3, lg: 3, base: 0 }}
                 direction={'column'}
                 justifyContent="center"
                 alignItems={'start'}
@@ -148,7 +146,7 @@ const NftPositionCard = (props: NftPositionBoxProps) => {
                 </Text>
                 <Flex justifyContent={'center'} alignItems="center">
                   <Text fontWeight={500}>600 CNV</Text>
-                  <Text color={'text.low'} fontSize="sm" pl={1}>
+                  <Text color={'text.low'} fontSize="sm">
                     (3 days ago)
                   </Text>
                 </Flex>
@@ -159,7 +157,7 @@ const NftPositionCard = (props: NftPositionBoxProps) => {
                 justifyContent="start"
                 alignItems={'start'}
                 textAlign="start"
-                ml={4}
+                // ml={4}
               >
                 <Text width={'full'} color={'text.low'} fontSize="sm">
                   Redeem date:
@@ -168,7 +166,7 @@ const NftPositionCard = (props: NftPositionBoxProps) => {
                   12.07.22
                 </Text>
               </Flex>
-              <Flex textAlign={'start'} ml={4} direction={'column'} justifyContent="center">
+              <Flex textAlign={'start'} direction={'column'} justifyContent="center">
                 <Text color={'text.low'} fontSize="sm">
                   Current value
                 </Text>
@@ -189,13 +187,13 @@ const NftPositionCard = (props: NftPositionBoxProps) => {
 
 const BuyButton = () => {
   return (
-    <Button pr={{ lg: 6, md: 6, base: 0 }}>
+    <Button pr={{ xl: 6, lg: 6, base: 0 }}>
       <Flex
         boxShadow={'Up Big'}
         background="linear-gradient(90deg, #72639B 0%, #44B9DE 100%)"
         height={38}
         width={143}
-        rounded={{ lg: '2xl', md: '2xl', base: '16px 16px 0px 0px' }}
+        rounded={{ xl: '2xl', lg: '2xl', base: '16px 16px 0px 0px' }}
         justifyContent={'center'}
         alignItems="center"
         ml={2}

@@ -21,7 +21,7 @@ import MarketplaceActivityCard from 'components/Marketplace/MarketplaceActivityC
 import { useRouter } from 'next/router'
 
 const Marketplace = () => {
-  const isLargerLayout = useBreakpointValue({ base: false, lg: true })
+  const isLargerLayout = useBreakpointValue({ base: false, xl: true })
   const [viewTransactions, setViewTransactions] = useState(false)
 
   useEffect(() => {
@@ -30,12 +30,12 @@ const Marketplace = () => {
 
   return (
     <Flex
-      width={{ base: '', md: 'full', lg: 'full', sm: 'full' }}
+      width={{ base: '', md: 'full', xl: 'full', sm: 'full' }}
       align={'center'}
       borderRadius={0}
       textAlign="center"
       direction="column"
-      pr={{ base: 5, md: 0, lg: 0, sm: 0 }}
+      pr={{ base: 5, md: 0, xl: 0, sm: 0 }}
     >
       {!viewTransactions ? (
         <>
@@ -43,7 +43,7 @@ const Marketplace = () => {
             {'Marketplace'}
           </Heading>
           <Flex
-            direction={{ lg: 'row', base: 'column' }}
+            direction={{ xl: 'row', base: 'column' }}
             mt={0}
             align="center"
             gap={10}
@@ -51,7 +51,7 @@ const Marketplace = () => {
             justify="center"
             alignItems={'center'}
           >
-            <Text maxW={520} textAlign={{ lg: 'right', base: 'center' }}>
+            <Text maxW={520} textAlign={{ xl: 'right', base: 'center' }}>
               The Concave Marketplace is where you are able to buy and/or sell your locked-staked
               NFT positions. Most of the positions will has a discount but 12 month stakes, because
               it has a limited supply.
@@ -60,7 +60,7 @@ const Marketplace = () => {
           </Flex>
 
           <Flex
-            direction={{ lg: 'row', base: 'column-reverse' }}
+            direction={{ xl: 'row', base: 'column-reverse' }}
             justify="center"
             align={'center'}
             gap={5}
@@ -72,16 +72,16 @@ const Marketplace = () => {
               position="relative"
               justify={'center'}
               align="center"
-              mt={{ lg: 12, base: 6 }}
+              mt={{ xl: 12, base: 6 }}
             >
               <MarketplaceSearchCard />
             </Flex>
             <Flex
               direction="column"
-              gap={{ lg: 8, base: 0 }}
+              gap={{ xl: 8, base: 0 }}
               align="center"
               position="relative"
-              mt={{ lg: 14, base: 6 }}
+              mt={{ xl: 14, base: 6 }}
             >
               <MarketplaceStakeCard />
               <SwitchView
@@ -91,7 +91,7 @@ const Marketplace = () => {
                 onClick={() => setViewTransactions(true)}
                 active={!isLargerLayout}
               />
-              <Box display={{ lg: 'flex', base: 'none' }}>
+              <Box display={{ xl: 'flex', base: 'none' }}>
                 <MarketplaceActivityCard />
               </Box>
             </Flex>
