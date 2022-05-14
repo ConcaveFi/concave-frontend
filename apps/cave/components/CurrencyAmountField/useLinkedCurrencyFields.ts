@@ -4,16 +4,11 @@ import Router from 'next/router'
 import { useCallback, useRef, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
 
-const updateQuery = ({
-  first: currency0,
-  second: currency1,
-}: {
-  first?: Currency
-  second?: Currency
-}) => {
-  const query = { chainId: currency0.chainId || currency1.chainId } as any
-  if (currency0) query.currency0 = getAddressOrSymbol(currency0)
-  if (currency1) query.currency1 = getAddressOrSymbol(currency1)
+const updateQuery = ({ first, second }: { first?: Currency; second?: Currency }) => {
+  const chainId = first?.chainId || second?.chainId
+  const currency0 = getAddressOrSymbol(first)
+  const currency1 = getAddressOrSymbol(second)
+  const query = { chainId, currency0, currency1 }
   Router.replace({ query }, undefined, { shallow: true })
 }
 
