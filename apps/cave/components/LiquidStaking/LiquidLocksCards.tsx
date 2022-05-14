@@ -53,6 +53,7 @@ const LiquidLocksCards = () => {
     ))
   return (
     <Card
+      mt={4}
       mx={'auto'}
       width={{ base: '520px', xl: '900px' }}
       variant="secondary"
