@@ -38,16 +38,10 @@ function StakeCard(props) {
   const [fetchingData, setFetchingData] = useState(true)
   const [capPercentage, setCapPercentage] = useState('100')
   const [isLargerThan600] = useMediaQuery('(min-width: 600px)')
-  const [isLargerThan700] = useMediaQuery('(min-width: 700px)')
   const { status, data, error, isFetching } = useGet_Last_Poolid_VaprQuery({
     poolID: props.poolId,
   })
   const [modalDirection, setModalDirection] = useState<'column' | 'row'>('row')
-
-  useEffect(() => {
-    setModalDirection(isLargerThan700 ? 'row' : 'column')
-  }, [isLargerThan700])
-  const [stakeWidth, setStakeWidth] = useState<'' | '200px'>('')
 
   const [pools, setPools] = useState(null)
   const [stakingCap, setStakingCap] = useState(null)
@@ -83,12 +77,9 @@ function StakeCard(props) {
     }
   })
 
-  useEffect(() => {
-    setStakeWidth(isLargerThan600 ? '' : '200px')
-  }, [isLargerThan600])
   return (
     <div>
-      <Card width={stakeWidth} variant="primary" px={4} py={6} shadow="up" gap={1}>
+      <Card variant="primary" px={4} py={6} shadow="up" gap={1}>
         <Box mx="auto" py={5} w="full" h="333px" shadow="down" borderRadius="100px/90px">
           <Text color="text.low" fontSize="sm">
             Stake Period
