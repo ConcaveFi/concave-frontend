@@ -96,7 +96,7 @@ function PageNav() {
       <Box shadow="Down Big" roundedLeft="2xl">
         <NavButton
           leftIcon={<NotInteractableImage src="/assets/sidebar/page-bond.svg" />}
-          href="/bond"
+          href="/smart-bonding"
         >
           Bond
         </NavButton>

@@ -22,7 +22,7 @@ import { SpinIcon } from '@concave/icons'
 import { useGet_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql'
 import BondSoldsCard from 'components/Bond/BondSoldsCard'
 
-export default function Bond() {
+export function Bond() {
   const { userAddress, signer, networkId } = useBondState()
   const spinnerStyles = { animation: `${spin} 2s linear infinite`, size: 'sm' }
   const [termLength, setTermLength] = useState<number>(0)
@@ -175,3 +175,10 @@ export default function Bond() {
     </Container>
   )
 }
+
+Bond.Meta = {
+  title: 'Concave | Bonding',
+  description: `Concave's Smart Bonding offers capital efficient bonds for virtually any ERC20 token, pricing and issuance model, which is optimized by an off-chain algorithm.`,
+}
+
+export default Bond
