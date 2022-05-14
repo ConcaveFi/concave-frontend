@@ -78,7 +78,8 @@ function PageNav() {
   const [liquidStakingHover, setLiquidStakingHover] = useState(false)
   const [swapHover, setSwapStakingHover] = useState(false)
 
-  const liquidStakingPage = router.pathname === '/liquidstaking' || router.pathname === '/dashboard'
+  const liquidStakingPage =
+    router.pathname === '/liquid-staking' || router.pathname === '/dashboard'
   const swapPage =
     router.pathname === '/swap' ||
     router.pathname === '/pools' ||
@@ -118,7 +119,7 @@ function PageNav() {
         >
           <NavButton
             leftIcon={<NotInteractableImage src="/assets/sidebar/page-lstaking.svg" />}
-            href="/liquidstaking"
+            href="/liquid-staking"
             variant="secondary"
             border="primary"
             mt="2px"
