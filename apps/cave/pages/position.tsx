@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import { useAccount } from 'wagmi'
 
-export default function PositionsView() {
+export function PositionsView() {
   const [{ data: account }] = useAccount()
   const router = useRouter()
   const { operation } = router.query
@@ -37,3 +37,10 @@ const View = ({ title, children }) => {
     </Flex>
   )
 }
+
+PositionsView.Meta = {
+  title: '',
+  description: ``,
+}
+
+export default PositionsView
