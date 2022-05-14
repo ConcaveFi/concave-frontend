@@ -786,7 +786,12 @@ export type Treasury = {
   contract: Scalars['String']
   created_at: Scalars['timestamptz']
   id: Scalars['uuid']
-  name: Scalars['String']
+  image?: Maybe<Scalars['String']>
+  imageP1?: Maybe<Scalars['String']>
+  imageP2?: Maybe<Scalars['String']>
+  imageP3?: Maybe<Scalars['String']>
+  isLP?: Maybe<Scalars['Boolean']>
+  name?: Maybe<Scalars['String']>
   rewards?: Maybe<Scalars['numeric']>
   total?: Maybe<Scalars['numeric']>
   updated_at: Scalars['timestamptz']
@@ -803,6 +808,11 @@ export type Treasury_Bool_Exp = {
   contract?: InputMaybe<String_Comparison_Exp>
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>
   id?: InputMaybe<Uuid_Comparison_Exp>
+  image?: InputMaybe<String_Comparison_Exp>
+  imageP1?: InputMaybe<String_Comparison_Exp>
+  imageP2?: InputMaybe<String_Comparison_Exp>
+  imageP3?: InputMaybe<String_Comparison_Exp>
+  isLP?: InputMaybe<Boolean_Comparison_Exp>
   name?: InputMaybe<String_Comparison_Exp>
   rewards?: InputMaybe<Numeric_Comparison_Exp>
   total?: InputMaybe<Numeric_Comparison_Exp>
@@ -817,6 +827,11 @@ export type Treasury_Order_By = {
   contract?: InputMaybe<Order_By>
   created_at?: InputMaybe<Order_By>
   id?: InputMaybe<Order_By>
+  image?: InputMaybe<Order_By>
+  imageP1?: InputMaybe<Order_By>
+  imageP2?: InputMaybe<Order_By>
+  imageP3?: InputMaybe<Order_By>
+  isLP?: InputMaybe<Order_By>
   name?: InputMaybe<Order_By>
   rewards?: InputMaybe<Order_By>
   total?: InputMaybe<Order_By>
@@ -836,6 +851,16 @@ export enum Treasury_Select_Column {
   CreatedAt = 'created_at',
   /** column name */
   Id = 'id',
+  /** column name */
+  Image = 'image',
+  /** column name */
+  ImageP1 = 'imageP1',
+  /** column name */
+  ImageP2 = 'imageP2',
+  /** column name */
+  ImageP3 = 'imageP3',
+  /** column name */
+  IsLp = 'isLP',
   /** column name */
   Name = 'name',
   /** column name */
@@ -986,7 +1011,7 @@ export type Get_TreasuryQuery = {
     updated_at: any
     contract: string
     chainId?: string | null
-    name: string
+    name?: string | null
     amount?: any | null
     value?: any | null
     total?: any | null
