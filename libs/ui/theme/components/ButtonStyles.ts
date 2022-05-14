@@ -84,7 +84,6 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
         opacity: 0.5,
         bg: null,
       },
-      transform: 'scale(1.02)',
     },
     ...{
       primary: gradientBorder({ ...props, variant: 'primary' }),
