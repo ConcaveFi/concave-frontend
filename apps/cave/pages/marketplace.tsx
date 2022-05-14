@@ -19,42 +19,21 @@ import MarketplaceActivityCard from 'components/Marketplace/MarketplaceActivityC
 import { useRouter } from 'next/router'
 
 const Marketplace = () => {
-  const router = useRouter()
   const [isMoreThan1200] = useMediaQuery('(min-width: 1200px)')
-  const [isMoreThan470] = useMediaQuery('(min-width: 470px)')
-  const [columnDirection, setColumnDirection] = useState<'row' | 'column-reverse'>('row')
-  const [headerDirection, setHeaderDirection] = useState<'row' | 'column'>('row')
-  const [searchCardMT, setSearchCardMT] = useState(16)
-  const [display, setDisplay] = useState<'flex' | 'none'>('flex')
-  const [textAlign, setTextAlign] = useState<'right' | 'center'>('right')
-  const [gap, setGap] = useState(8)
-  const [width, setWidth] = useState('')
-  const [pr, setPr] = useState(0)
-
   const [viewTransactions, setViewTransactions] = useState(false)
 
   useEffect(() => {
-    setColumnDirection(isMoreThan1200 ? 'row' : 'column-reverse')
-    setHeaderDirection(isMoreThan1200 ? 'row' : 'column')
-    setDisplay(isMoreThan1200 ? 'flex' : 'none')
-    setSearchCardMT(isMoreThan1200 ? 16 : 6)
-    setTextAlign(isMoreThan1200 ? 'right' : 'center')
-    setGap(isMoreThan1200 ? 8 : 0)
     if (isMoreThan1200 && viewTransactions == true) setViewTransactions(false)
   }, [isMoreThan1200])
 
-  useEffect(() => {
-    setWidth(isMoreThan470 ? 'full' : '')
-    setPr(isMoreThan470 ? 0 : 5)
-  }, [isMoreThan470])
   return (
     <Flex
+      width={{ base: '', md: 'full', lg: 'full', sm: 'full' }}
       align={'center'}
       borderRadius={0}
       textAlign="center"
       direction="column"
-      width={width}
-      pr={pr}
+      pr={{ base: 5, md: 0, lg: 0, sm: 0 }}
     >
       {!viewTransactions ? (
         <>
@@ -62,7 +41,7 @@ const Marketplace = () => {
             {'Marketplace'}
           </Heading>
           <Flex
-            direction={headerDirection}
+            direction={{ lg: 'row', base: 'column' }}
             mt={0}
             align="center"
             gap={10}
@@ -70,7 +49,7 @@ const Marketplace = () => {
             justify="center"
             alignItems={'center'}
           >
-            <Text maxW={520} textAlign={textAlign}>
+            <Text maxW={520} textAlign={{ lg: 'right', base: 'center' }}>
               The Concave Marketplace is where you are able to buy and/or sell your locked-staked
               NFT positions. Most of the positions will has a discount but 12 month stakes, because
               it has a limited supply.
@@ -78,28 +57,40 @@ const Marketplace = () => {
             <GraphicGuide />
           </Flex>
 
-          <Flex direction={columnDirection} justify="center" align={'center'} gap={5} width="full">
+          <Flex
+            direction={{ lg: 'row', base: 'column-reverse' }}
+            justify="center"
+            align={'center'}
+            gap={5}
+            width="full"
+          >
             <Flex
               direction="column"
               float={'left'}
               position="relative"
               justify={'center'}
               align="center"
-              mt={searchCardMT}
+              mt={{ lg: 12, base: 6 }}
               // pl={pl}
             >
               <MarketplaceSearchCard />
             </Flex>
-            <Flex direction="column" gap={gap} align="center" position="relative" mt={searchCardMT}>
+            <Flex
+              direction="column"
+              gap={{ lg: 8, base: 0 }}
+              align="center"
+              position="relative"
+              mt={{ lg: 14, base: 6 }}
+            >
               <MarketplaceStakeCard />
               <SwitchView
                 title="View Transactions"
                 px="140px"
                 rounded="0px 0px 16px 16px"
                 onClick={() => setViewTransactions(true)}
-                active={!isMoreThan1200}
+                active={false}
               />
-              <Box display={display}>
+              <Box display={{ lg: 'flex', base: 'none' }}>
                 <MarketplaceActivityCard />
               </Box>
             </Flex>

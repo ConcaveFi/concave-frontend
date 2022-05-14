@@ -217,7 +217,7 @@ const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
   })
 
   return (
-    <Card p={3} gap={2} variant="primary" h="945px" shadow="down" w={cardWidth}>
+    <Card p={3} gap={2} variant="primary" h="945px" shadow="down" w={'full'}>
       <Flex justify="center">
         <Box
           pos="relative"
@@ -232,7 +232,7 @@ const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
             grow={1}
             direction="row"
             pos="relative"
-            w="380px"
+            w="full"
             h="30px"
             shadow="down"
             py={2}
