@@ -49,7 +49,7 @@ const Marketplace = () => {
             direction={{ xl: 'row', base: 'column-reverse' }}
             justify="center"
             align={'center'}
-            gap={5}
+            gap={8}
             width="full"
           >
             <Flex
@@ -139,21 +139,19 @@ interface SwitchViewProps {
 const SwitchView = (props: SwitchViewProps) => {
   const { active, onClick, px, title } = props
   return (
-    <Collapse in={active}>
-      <Button _active={{}} onClick={() => onClick()}>
-        <Card
-          zIndex={-1}
-          height={'32px'}
-          rounded={props.rounded}
-          variant="secondary"
-          px={px}
-          justify="center"
-          fontSize={'18px'}
-        >
-          <Text>{title}</Text>
-        </Card>
-      </Button>
-    </Collapse>
+    <Button _active={{}} onClick={() => onClick()} display={active ? 'flex' : 'none'}>
+      <Card
+        zIndex={-1}
+        height={'32px'}
+        rounded={props.rounded}
+        variant="secondary"
+        px={px}
+        justify="center"
+        fontSize={'18px'}
+      >
+        <Text>{title}</Text>
+      </Card>
+    </Button>
   )
 }
 
