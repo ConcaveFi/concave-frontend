@@ -320,7 +320,7 @@ const sortByStakePeriod = (type: 'lowest' | 'highest') => (current, before) => {
 
 const scrollBar = {
   '&::-webkit-scrollbar': {
-    width: '20px',
+    width: '10px',
     boxShadow: `-1px 1px 3px rgba(126, 162, 255, 0.26), inset 0px -5px 5px rgba(255, 255, 255, 0.02), inset -9px 12px 24px rgba(13, 17, 23, 0.49)`,
     borderRadius: '10px',
   },

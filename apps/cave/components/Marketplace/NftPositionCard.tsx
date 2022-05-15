@@ -52,7 +52,7 @@ const NftPositionBox = (props: NftPositionBoxProps) => {
           <Text color="text.low" fontSize={{ base: '12px', xl: 'sm', lg: 'sm' }} noOfLines={1}>
             Redeem In:
           </Text>
-          <Text fontSize="lg" fontWeight="bold">
+          <Text fontSize="md" fontWeight="bold">
             {redeemIn} Days
           </Text>
         </Flex>
@@ -60,7 +60,7 @@ const NftPositionBox = (props: NftPositionBoxProps) => {
           <Text color="text.low" fontSize={{ base: '12px', xl: 'sm', lg: 'sm' }} noOfLines={1}>
             Price:
           </Text>
-          <Text fontSize="lg" fontWeight="bold" noOfLines={1}>
+          <Text fontSize="md" fontWeight="bold" noOfLines={1}>
             {price} CNV
           </Text>
         </Flex>
@@ -68,7 +68,7 @@ const NftPositionBox = (props: NftPositionBoxProps) => {
           <Text color="text.low" fontSize={{ base: '12px', xl: 'sm', lg: 'sm' }}>
             Discount:
           </Text>
-          <Text fontSize="lg" fontWeight="bold">
+          <Text fontSize="md" fontWeight="bold">
             {discount}%
           </Text>
         </Flex>
