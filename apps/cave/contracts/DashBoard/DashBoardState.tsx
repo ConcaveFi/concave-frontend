@@ -27,7 +27,6 @@ export async function getAllUserNfts(address: string, netWorkId: number) {
   const nft = await web3.alchemy.getNfts({
     owner: address,
   })
-
   if (nft.ownedNfts.length == 0) {
     return undefined
   } else {
@@ -46,17 +45,21 @@ export async function getUserPosition(address: string, index: number, netWorkId:
 
 export async function getUserPositions(address: string, netWorkId: number) {
   const stakingV1Contract = new StakingV1Contract(netWorkId)
-  const userPositions: Promise<{
+  const userPositions: {
     deposit: BigNumber
     maturity: number
     poolID: number
     rewardDebt: BigNumber
     shares: BigNumber
-  }>[] = []
+  }[] = []
   const userPositionsLength = await stakingV1Contract.balanceOf(address)
   for (let index = 0; userPositionsLength.gt(index); index++) {
-    const pos = getUserPosition(address, index, netWorkId)
-    userPositions.push(pos)
+    try {
+      const pos = await getUserPosition(address, index, netWorkId)
+      userPositions.push(pos)
+    } catch (e) {
+      console.error(e)
+    }
   }
   return Promise.all(userPositions)
 }
@@ -78,7 +81,7 @@ export const useDashBoardState = () => {
           setUserPositions(userPositions)
           setTotalLocked(getTotalLocked(userPositions))
         })
-        .catch(() => {})
+        .catch(console.error)
     }
     if (!loading) {
       if (!wallet.connected) setStatus('notConnected')
