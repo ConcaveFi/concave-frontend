@@ -3,7 +3,7 @@ import { nftContract } from 'components/Dashboard/UserPositionCard'
 import { LIQUID_STAKING_ADDRESS } from 'contracts/LiquidStaking/LiquidStakingAddress'
 import { BigNumber } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { StakingV1Contract } from 'lib/StakingV1Proxy/Contract'
+import { StakingV1Contract } from 'lib/StakingV1Proxy/StakingV1Contract'
 import { useEffect, useState } from 'react'
 import { useAccount, useConnect } from 'wagmi'
 
@@ -64,9 +64,7 @@ export async function getUserPositions(address: string, netWorkId: number) {
 export const useDashBoardState = () => {
   const [{ data: wallet, loading }, connect] = useConnect()
   const [{ data: account, error: accountError }] = useAccount()
-
   const netWorkId = useCurrentSupportedNetworkId()
-
   const [userPositions, setUserPositions] = useState([])
   const [totalLocked, setTotalLocked] = useState(0)
   const [status, setStatus] = useState<'loading' | 'notConnected' | 'loaded'>('loading')
