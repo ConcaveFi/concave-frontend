@@ -6,6 +6,7 @@ import { BigNumber } from 'ethers'
 import { formatEther } from 'ethers/lib/utils'
 import { useGet_Stakingv1_Last100_LockQuery } from 'graphql/generated/graphql'
 import { useEffect, useState } from 'react'
+import { PARAMETER_TO_POOL_PERIOD, PERIOD_TO_POOL_PARAMETER } from './StakeCard'
 
 const LiquidLocksCards = () => {
   const [stakingLocks, setStakingLocks] = useState([])
@@ -23,34 +24,28 @@ const LiquidLocksCards = () => {
   }, [stakingData])
 
   const amounts = stakingLocks
-    .filter((value, index) => {
-      if (index < 10) return 1
-    })
     .map((value, index) => (
       <Text opacity={1 - (index / 10) * (isOpen ? 1 : 3)} key={index}>
         {formatEther(BigNumber.from(value.amount)) + ' CNV'}
       </Text>
     ))
+    .splice(0, 9)
 
   const poolIds = stakingLocks
-    .filter((value, index) => {
-      if (index < 10) return 1
-    })
     .map((value, index) => (
       <Text opacity={1 - (index / 10) * (isOpen ? 1 : 3)} key={index}>
-        {value.poolID}
+        {PARAMETER_TO_POOL_PERIOD[value.poolID]}
       </Text>
     ))
+    .splice(0, 9)
 
   const relativeTime = stakingLocks
-    .filter((value, index) => {
-      if (index < 10) return 1
-    })
     .map((value, index) => (
       <Text opacity={1 - (index / 10) * (isOpen ? 1 : 3)} key={index}>
         {`${formatDistanceStrict(value.timestamp * 1000, Date.now())} ago`}
       </Text>
     ))
+    .splice(0, 9)
   return (
     <Card
       mt={4}
@@ -63,7 +58,7 @@ const LiquidLocksCards = () => {
       <Collapse startingHeight={'100px'} in={isOpen}>
         <Flex fontWeight="700" width={'full'} flex={1}>
           <Flex direction={'column'} flex={0.4} justify="center" align={'center'} mt={2}>
-            <Text>Pool id</Text>
+            <Text>Stake period</Text>
             <Flex direction={'column'} textColor="text.low" fontSize={'14px'}>
               {poolIds}
             </Flex>

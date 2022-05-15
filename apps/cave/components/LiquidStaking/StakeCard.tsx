@@ -19,11 +19,17 @@ import { useQuery } from 'react-query'
 import Emissions from './StakeModal/Emissions'
 import StakeInfo from './StakeModal/StakeInfo'
 import StakeInput from './StakeModal/StakeInput'
-const periodToPoolParameter = {
+export const PERIOD_TO_POOL_PARAMETER = {
   '360 days': 0,
   '180 days': 1,
   '90 days': 2,
   '45 days': 3,
+}
+export const PARAMETER_TO_POOL_PERIOD = {
+  0: '360 days',
+  1: '180 days',
+  2: '90 days',
+  3: '45 days',
 }
 
 type StackCardProps = {
@@ -67,7 +73,7 @@ function StakeCard(props: StackCardProps) {
     poolID: props.poolId,
   })
   const [modalDirection, setModalDirection] = useState<'column' | 'row'>('row')
-  const index = periodToPoolParameter[`${props.period}`]
+  const index = PERIOD_TO_POOL_PARAMETER[`${props.period}`]
   const { data: pools, error: poolsError, isLoading: isLoadingPools } = usePools(netWorkdId, index)
   const { data: stakingCap, isLoading: isLoadingStakings } = useViewStakingCap(netWorkdId, index)
   const capPercentage = useMemo(() => {
