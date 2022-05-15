@@ -9,7 +9,7 @@ export class Router {
   private readonly contract: ethers.Contract
   private readonly provider: MulticallProvider
 
-  constructor(chainId: number, private readonly singer: ethers.Signer) {
+  constructor(chainId: number, private readonly signer: ethers.Signer) {
     this.provider = concaveProvider(chainId)
     this.contract = new ethers.Contract(ROUTER_ADDRESS[chainId], contractABI, this.provider)
   }
@@ -22,7 +22,7 @@ export class Router {
     } = {},
   ): Promise<ethers.Transaction> {
     const deadLine = Math.round(Date.now() / 1000) + 86400
-    const tmp = this.contract.connect(this.singer)
+    const tmp = this.contract.connect(this.signer)
     return tmp.addLiquidityETH(
       tokenAmount.currency.address,
       parseUnits(tokenAmount.toFixed(tokenAmount.currency.decimals)),
@@ -60,7 +60,7 @@ export class Router {
       )
     }
     return this.contract
-      .connect(this.singer)
+      .connect(this.signer)
       .addLiquidity(
         amountA.currency.wrapped.address,
         amountB.currency.wrapped.address,
@@ -85,7 +85,7 @@ export class Router {
   ): Promise<ethers.Transaction> {
     const deadLine = Math.round(Date.now() / 1000) + 86400
     return this.contract
-      .connect(this.singer)
+      .connect(this.signer)
       .removeLiquidity(
         tokenA.address,
         tokenB.address,
@@ -108,7 +108,7 @@ export class Router {
   ): Promise<ethers.Transaction> {
     const deadLine = Math.round(Date.now() / 1000) + 86400
     return this.contract
-      .connect(this.singer)
+      .connect(this.signer)
       .removeLiquidityETH(
         token.address,
         liquidity,

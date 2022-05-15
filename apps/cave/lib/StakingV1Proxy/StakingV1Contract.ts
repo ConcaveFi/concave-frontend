@@ -8,10 +8,10 @@ export class StakingV1Contract {
   private readonly contract: ethers.Contract
   private readonly provider: MulticallProvider
 
-  constructor(chainId: number, private readonly singer?: ethers.Signer) {
+  constructor(chainId: number, private readonly signer?: ethers.Signer) {
     this.provider = concaveProvider(chainId)
     this.contract = new ethers.Contract(StakingV1Proxy[chainId], StakingV1Abi, this.provider)
-    if (this.singer) this.contract.connect(this.singer)
+    if (this.signer) this.contract.connect(this.signer)
   }
 
   public async viewStakingCap(poolNum: number | string): Promise<BigNumber> {
@@ -23,7 +23,7 @@ export class StakingV1Contract {
     amount: BigNumberish,
     poolId: BigNumberish,
   ): Promise<ethers.Transaction & { wait: (confirmations) => unknown }> {
-    return this.contract.connect(this.singer).lock(address, amount, poolId)
+    return this.contract.connect(this.signer).lock(address, amount, poolId)
   }
 
   public async pools(index: string): Promise<{

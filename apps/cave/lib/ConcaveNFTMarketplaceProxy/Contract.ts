@@ -9,16 +9,15 @@ export class ConcaveNFTMarketplace {
   private readonly contract: ethers.Contract
   private readonly provider: MulticallProvider
 
-  constructor(chainId: number, private readonly singer?: ethers.Signer) {
+  constructor(chainId: number, private readonly signer?: ethers.Signer) {
     this.provider = concaveProvider(chainId)
     this.contract = new ethers.Contract(
       ConcaveNFTMarketplaceProxy[chainId],
       ContractABI,
       this.provider,
     )
-    if (this.singer) {
-      console.log('connected with singer')
-      this.contract.connect(this.singer)
+    if (this.signer) {
+      this.contract.connect(this.signer)
     }
   }
 
@@ -48,7 +47,7 @@ export class ConcaveNFTMarketplace {
       feePercentages,
     ])
     return this.contract
-      .connect(this.singer)
+      .connect(this.signer)
       .createDefaultNftAuction(
         nftContractAddress,
         tokenId,

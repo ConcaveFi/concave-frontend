@@ -12,7 +12,7 @@ type UserListPositionCardProps = {
 const UserListPositionCard = (props: UserListPositionCardProps) => {
   const [expirationDate, setExpirationDate] = useState('')
   const [listingDate, setListingDate] = useState('')
-  const [{ data: singer }] = useSigner()
+  const [{ data: signer }] = useSigner()
 
   return (
     <Box
@@ -99,7 +99,7 @@ const UserListPositionCard = (props: UserListPositionCardProps) => {
         <Flex grow={1} justifyContent="center" alignItems={'end'} gap="2">
           <ChooseButton
             onClick={() => {
-              const concaveNFTMarketPlace = new ConcaveNFTMarketplace(chain.ropsten.id, singer)
+              const concaveNFTMarketPlace = new ConcaveNFTMarketplace(chain.ropsten.id, signer)
 
               concaveNFTMarketPlace
                 .createDefaultNftAuction(

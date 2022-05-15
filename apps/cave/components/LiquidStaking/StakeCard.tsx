@@ -72,7 +72,7 @@ function StakeCard(props: StackCardProps) {
   const { data: stakingCap } = useViewStakingCap(netWorkdId, index)
   const capPercentage = useMemo(() => {
     if (!pools || !stakingCap) return '0'
-    return ethers.utils.formatEther(pools?.balance.div(stakingCap))
+    return ethers.utils.formatEther(pools?.balance.div(stakingCap).mul(100))
   }, [pools, stakingCap])
   console.log(capPercentage)
   return (
