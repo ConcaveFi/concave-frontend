@@ -2,7 +2,8 @@ import { ExpandArrowIcon } from '@concave/icons'
 import { Box, Card, Collapse, Flex, Text, useDisclosure } from '@concave/ui'
 import { GlassPanel } from 'components/Treasury/TreasuryManagementCard'
 import { formatDistanceStrict } from 'date-fns'
-import { formatEther } from 'ethers/lib/utils'
+import { BigNumber } from 'ethers'
+import { formatEther, formatUnits } from 'ethers/lib/utils'
 import { useGet_Stakingv1_Last100_LockQuery } from 'graphql/generated/graphql'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -24,11 +25,11 @@ const LiquidLocksCards = () => {
 
   const amounts = stakingLocks
     .filter((value, index) => {
-      if (index < 10) return 1
+      if (index < 10 && value.amount !== null) return 1
     })
     .map((value, index) => (
       <Text opacity={1 - (index / 10) * (isOpen ? 1 : 3)} key={index}>
-        {formatEther(BigInt(value.amount)) + ' CNV'}
+        {formatEther(BigNumber.from(value.amount)) + ' CNV'}
       </Text>
     ))
 
@@ -44,11 +45,11 @@ const LiquidLocksCards = () => {
 
   const relativeTime = stakingLocks
     .filter((value, index) => {
-      if (index < 10) return 1
+      if (index < 10 && value.amount !== null) return 1
     })
     .map((value, index) => (
       <Text opacity={1 - (index / 10) * (isOpen ? 1 : 3)} key={index}>
-        {formatDistanceStrict(value.timestamp * 1000, new Date().getTime()) + ' ago'}
+        {`${formatDistanceStrict(value.timestamp * 1000, Date.now())} ago`}
       </Text>
     ))
   return (

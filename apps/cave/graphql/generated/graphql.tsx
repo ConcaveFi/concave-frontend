@@ -263,7 +263,7 @@ export enum LogCnvData_Select_Column {
 /** get Transfer events for Staking V1 */
 export type LogStakingV1 = {
   __typename?: 'logStakingV1'
-  amountLocked?: Maybe<Scalars['numeric']>
+  amountLocked?: Maybe<Scalars['String']>
   created_at: Scalars['timestamptz']
   from?: Maybe<Scalars['String']>
   id: Scalars['uuid']
@@ -477,7 +477,7 @@ export type LogStakingV1_Bool_Exp = {
   _and?: InputMaybe<Array<LogStakingV1_Bool_Exp>>
   _not?: InputMaybe<LogStakingV1_Bool_Exp>
   _or?: InputMaybe<Array<LogStakingV1_Bool_Exp>>
-  amountLocked?: InputMaybe<Numeric_Comparison_Exp>
+  amountLocked?: InputMaybe<String_Comparison_Exp>
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>
   from?: InputMaybe<String_Comparison_Exp>
   id?: InputMaybe<Uuid_Comparison_Exp>
@@ -947,7 +947,7 @@ export type Get_Stackingv1_Last100_EventsQuery = {
     sold?: boolean | null
     from?: string | null
     to?: string | null
-    amountLocked?: any | null
+    amountLocked?: string | null
     lockedUntil?: any | null
   }>
 }
@@ -967,7 +967,7 @@ export type Get_Stackingv1_By_Pool_IdQuery = {
     sold?: boolean | null
     from?: string | null
     to?: string | null
-    amountLocked?: any | null
+    amountLocked?: string | null
     lockedUntil?: any | null
   }>
 }
@@ -1014,7 +1014,13 @@ export type Get_TreasuryQuery = {
     name?: string | null
     amount?: any | null
     value?: any | null
+    rewards?: any | null
     total?: any | null
+    image?: string | null
+    isLP?: boolean | null
+    imageP1?: string | null
+    imageP2?: string | null
+    imageP3?: string | null
   }>
 }
 
@@ -1241,7 +1247,13 @@ export const Get_TreasuryDocument = `
     name
     amount
     value
+    rewards
     total
+    image
+    isLP
+    imageP1
+    imageP2
+    imageP3
   }
 }
     `
