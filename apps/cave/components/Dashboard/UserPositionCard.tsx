@@ -1,15 +1,16 @@
-import { Box, Collapse, Flex, useDisclosure } from '@concave/ui'
-import DividendsShare from './UserPosition/StakingRewards'
+import { Box, Collapse, Flex } from '@concave/ui'
+import { BigNumber } from 'ethers'
+import { useState } from 'react'
 import MarketplaceListing from './UserPosition/MarketplaceListing'
 import NftPositionContainer from './UserPosition/NftPositionContainer'
 import RedeemCardViewer from './UserPosition/RedeemViewer'
-import { useState } from 'react'
+import DividendsShare from './UserPosition/StakingRewards'
 
 export type nftContract = {
   maturity: number
   poolID: number
-  shares: { _hex: string; _isBigNumber: boolean }
-  rewardDebt: { _hex: string; _isBigNumber: boolean }
+  shares: BigNumber
+  rewardDebt: BigNumber
 }
 
 interface NftPositionCardProps {
@@ -19,10 +20,8 @@ interface NftPositionCardProps {
 const UserPositionCard = (props: NftPositionCardProps) => {
   const { contract } = props
   const { maturity, poolID, shares, rewardDebt } = contract
-
-  const sharesDecimals = parseInt(shares?._hex, 16) / 1000000000000000000
-  const gained = parseInt(rewardDebt?._hex, 16) / 1000000000000000000
-
+  const address = contract['contract'].address
+  const tokenId = contract['id'].tokenId
   const dateToRedeem = epochConverter(maturity)
   const currentData = new Date()
   const redeemIn = dateToRedeem.getTime() - currentData.getTime()
@@ -51,8 +50,8 @@ const UserPositionCard = (props: NftPositionCardProps) => {
                 redeemIn={redeemIn}
               />
               <Collapse in={active}>
-                <RedeemCardViewer gained={gained} redeemIn={redeemIn} initial={sharesDecimals} />
-                <MarketplaceListing />
+                <RedeemCardViewer gained={rewardDebt} redeemIn={redeemIn} initial={shares} />
+                <MarketplaceListing address={address} tokenId={tokenId} />
               </Collapse>
             </Flex>
           </Flex>

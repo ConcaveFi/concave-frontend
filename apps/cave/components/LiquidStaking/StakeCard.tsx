@@ -3,7 +3,6 @@ import {
   Button,
   Card,
   Flex,
-  HStack,
   Image,
   Modal,
   Stack,
@@ -13,17 +12,15 @@ import {
   VStack,
 } from '@concave/ui'
 import { StakingV1Abi } from 'contracts/LiquidStaking/LiquidStakingAbi'
+import { LIQUID_STAKING_ADDRESS } from 'contracts/LiquidStaking/LiquidStakingAddress'
+import { Contract, ethers } from 'ethers'
+import { useGet_Last_Poolid_VaprQuery } from 'graphql/generated/graphql'
+// const providers = new ethers.providers.InfuraProvider('ropsten', '545e522b4c0e45078a25b86f3b646a9b')
+import { concaveProvider as providers } from 'lib/providers'
 import { useEffect, useState } from 'react'
-import { useContractRead } from 'wagmi'
 import Emissions from './StakeModal/Emissions'
 import StakeInfo from './StakeModal/StakeInfo'
 import StakeInput from './StakeModal/StakeInput'
-import { Contract, ethers } from 'ethers'
-import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { LIQUID_STAKING_ADDRESS } from 'contracts/LiquidStaking/LiquidStakingAddress'
-import { useGet_Last_Poolid_VaprQuery } from 'graphql/generated/graphql'
-// const providers = new ethers.providers.InfuraProvider('ropsten', '545e522b4c0e45078a25b86f3b646a9b')
-import { concaveProvider, concaveProvider as providers } from 'lib/providers'
 const periodToPoolParameter = {
   '360 days': 0,
   '180 days': 1,
