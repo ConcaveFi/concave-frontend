@@ -134,9 +134,9 @@ const NftPositionCard = (props: NftPositionBoxProps) => {
             justifyContent="start"
             alignItems={'center'}
           >
-            <Flex flex={1} noOfLines={1} justify={'space-around'} width={'full'}>
+            <Flex flex={1} justify={'space-around'} width={'full'}>
               <Flex
-                // pl={{ xl: 3, lg: 3, base: 0 }}
+                pl={{ xl: 3, lg: 3, base: 0 }}
                 direction={'column'}
                 justifyContent="center"
                 alignItems={'start'}

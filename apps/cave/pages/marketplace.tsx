@@ -1,19 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {
-  Box,
-  Button,
-  Card,
-  Collapse,
-  Container,
-  Flex,
-  Heading,
-  Modal,
-  ModalFooter,
-  Text,
-  useBreakpoint,
-  useBreakpointValue,
-  useMediaQuery,
-} from '@concave/ui'
+import { Box, Button, Card, Collapse, Flex, Heading, Text, useBreakpointValue } from '@concave/ui'
 import GraphicGuide from 'components/LiquidStaking/GraphicGuide'
 import MarketplaceSearchCard from 'components/Marketplace/MarketplaceSearchCard'
 import MarketplaceStakeCard from 'components/Marketplace/MarketplaceStakeCard'

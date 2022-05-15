@@ -210,12 +210,6 @@ const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
     setFilter1Month(filter1Month)
   }
 
-  const [cardWidth, setCardWidth] = useState('640px')
-
-  useEffect(() => {
-    setCardWidth(isLargerThan770 ? '640px' : '460px')
-  })
-
   return (
     <Card p={3} gap={2} variant="primary" h="945px" shadow="down" w={'full'}>
       <Flex justify="center">
