@@ -11,7 +11,7 @@ import {
   useMediaQuery,
   VStack,
 } from '@concave/ui'
-import { ethers } from 'ethers'
+import { BigNumber, ethers } from 'ethers'
 import { useGet_Last_Poolid_VaprQuery } from 'graphql/generated/graphql'
 import { StakingV1Contract } from 'lib/StakingV1Proxy/StakingV1Contract'
 import { useMemo, useState } from 'react'
@@ -68,13 +68,14 @@ function StakeCard(props: StackCardProps) {
   })
   const [modalDirection, setModalDirection] = useState<'column' | 'row'>('row')
   const index = periodToPoolParameter[`${props.period}`]
-  const { data: pools } = usePools(netWorkdId, index)
-  const { data: stakingCap } = useViewStakingCap(netWorkdId, index)
+  const { data: pools, error: poolsError, isLoading: isLoadingPools } = usePools(netWorkdId, index)
+  const { data: stakingCap, isLoading: isLoadingStakings } = useViewStakingCap(netWorkdId, index)
   const capPercentage = useMemo(() => {
-    if (!pools || !stakingCap) return '0'
-    return ethers.utils.formatEther(pools?.balance.div(stakingCap).mul(100))
+    if (!pools?.balance || !stakingCap) return '0'
+    return BigNumber.from(pools.balance).div(stakingCap).mul(100)
   }, [pools, stakingCap])
-  console.log(capPercentage)
+
+  console.log(isLoadingPools, poolsError, pools?.balance)
   return (
     <div>
       <Card variant="primary" px={4} py={6} shadow="up" gap={1}>
@@ -111,18 +112,15 @@ function StakeCard(props: StackCardProps) {
               fontSize="sm"
             >
               <Text w="150px">
-                {pools
-                  ? `${Number(ethers.utils.formatEther(pools?.balance)).toFixed(0)}`
-                  : 'Fetching...'}
+                {isLoadingPools || !pools?.balance
+                  ? 'Fetching...'
+                  : (+ethers.utils.formatEther(pools?.balance)).toFixed(0)}
               </Text>
             </Box>
             <Text position="absolute" right="2" top="2" fontSize="sm">
-              {pools && stakingCap
-                ? `${Number(
-                    +ethers.utils.formatEther(pools?.balance) +
-                      +ethers.utils.formatEther(stakingCap),
-                  ).toFixed(0)}`
-                : 'Fetching...'}
+              {isLoadingPools || isLoadingStakings || !pools.balance
+                ? 'Fetching...'
+                : (+ethers.utils.formatEther(pools.balance.add(stakingCap))).toFixed(0)}
             </Text>
           </Box>
         </Stack>
@@ -168,10 +166,10 @@ function StakeCard(props: StackCardProps) {
               <StakeInfo
                 period={props.period}
                 stakedCNV={
-                  pools ? Number(ethers.utils.formatEther(pools?.balance)).toFixed(0) : '0'
+                  pools?.balance ? Number(ethers.utils.formatEther(pools?.balance)).toFixed(0) : '0'
                 }
                 CNVCap={
-                  pools && stakingCap
+                  pools?.balance && stakingCap
                     ? `${Number(
                         +ethers.utils.formatEther(pools?.balance) +
                           +ethers.utils.formatEther(stakingCap),
