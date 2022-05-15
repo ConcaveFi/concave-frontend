@@ -1026,7 +1026,7 @@ export type Get_TreasuryQuery = {
 
 export const Get_Last_Base_VaprDocument = `
     query GET_LAST_BASE_VAPR {
-  logStakingV1_PoolRewarded {
+  logStakingV1_PoolRewarded(where: {balance: {_gt: "0"}}) {
     base_vAPR
   }
 }
@@ -1182,7 +1182,11 @@ export const useGet_Stackingv1_By_Pool_IdQuery = <
   )
 export const Get_Stakingv1_Last100_LockDocument = `
     query GET_STAKINGV1_LAST100_LOCK {
-  logStakingV1_Lock(order_by: {timestamp: desc}, limit: 100) {
+  logStakingV1_Lock(
+    order_by: {timestamp: desc}
+    limit: 100
+    where: {txHash: {_neq: "null"}}
+  ) {
     txHash
     txBlockNumber
     poolID
