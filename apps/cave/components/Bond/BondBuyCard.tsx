@@ -133,13 +133,13 @@ export function BondBuyCard({ bondTransaction, setBondTransaction, setAmountInAn
         </Flex>
       </HStack>
 
-      <ApproveButton variant="primary" size="large" isFullWidth useApproveInfo={approveInfo} />
+      <ApproveButton variant="primary" size="large" w="full" useApproveInfo={approveInfo} />
       {!needsApprove && (
         <Button
           isDisabled={needsApprove || +userBalance < +amountIn}
           variant="primary"
           size="large"
-          isFullWidth
+          w="full"
           onClick={confirmModal.onOpen}
         >
           {+userBalance < +amountIn ? 'Insufficient Funds' : 'Bond'}

@@ -1,7 +1,7 @@
 import {
   ChakraProvider,
   ColorModeScript as ChakraColorModeScript,
-  cookieStorageManager,
+  createCookieStorageManager,
   localStorageManager,
 } from '@chakra-ui/react'
 import { Styles } from '@chakra-ui/theme-tools'
@@ -20,7 +20,7 @@ export const ThemeProvider = ({
 }) => {
   // this ensures the theme will be right even on ssr pages (won't flash wrong theme)
   const colorModeManager =
-    typeof cookies === 'string' ? cookieStorageManager(cookies) : localStorageManager
+    typeof cookies === 'string' ? createCookieStorageManager(cookies) : localStorageManager
   return (
     <ChakraProvider
       resetCSS

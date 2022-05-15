@@ -61,7 +61,7 @@ const TokenInfo = (props: TokenInfoProps) => {
           {/* <CurrencyIcon currency={props.token} /> */}
         </Flex>
         <Flex width={'60%'} justify="start" align={'center'}>
-          <Text fontWeight={'700'} fontSize="18px" isTruncated>
+          <Text fontWeight={'700'} fontSize="18px" noOfLines={1}>
             {props.tokenName}
           </Text>
         </Flex>

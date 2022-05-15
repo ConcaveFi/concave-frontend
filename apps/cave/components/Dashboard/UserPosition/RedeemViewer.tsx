@@ -55,10 +55,10 @@ const Info: React.FC<Info> = ({ ...props }) => {
       ml={{ lg: 3, md: '0px' }}
       {...props}
     >
-      <Text color="text.low" fontSize="sm" lineHeight={'15px'} isTruncated>
+      <Text color="text.low" fontSize="sm" lineHeight={'15px'} noOfLines={1}>
         {props.label}
       </Text>
-      <Text fontSize="md" fontWeight="bold" isTruncated>
+      <Text fontSize="md" fontWeight="bold" noOfLines={1}>
         {props.value} CNV
       </Text>
     </Flex>

@@ -25,7 +25,7 @@ export const Redeem = ({
           <Button
             variant="primary"
             size="lg"
-            isFullWidth
+            w="full"
             onClick={onConfirm}
             fontSize={'inherit'}
             {...customHeightSetting}

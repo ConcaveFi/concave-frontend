@@ -127,7 +127,7 @@ export const ConfirmBondModal = ({
         </Text>
       </Flex>
 
-      <Button variant="primary" size="large" onClick={onConfirm} isFullWidth>
+      <Button variant="primary" size="large" onClick={onConfirm} w="full">
         Confirm Bond
       </Button>
     </Modal>

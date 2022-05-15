@@ -100,7 +100,7 @@ const Marketplace = () => {
       ) : (
         <Flex direction={'column'} justify="center" align={'center'} gap={4} px={10}>
           <Flex height="120px" position="relative">
-            <Flex mt={20} grow={1} justify="center" align={'center'} isTruncated>
+            <Flex mt={20} grow={1} justify="center" align={'center'} noOfLines={1}>
               <Text fontWeight={700} fontSize="3xl">
                 {'<- Marketplace '}
               </Text>

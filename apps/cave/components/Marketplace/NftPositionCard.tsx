@@ -49,7 +49,7 @@ const NftPositionBox = (props: NftPositionBoxProps) => {
 
       <Flex width={'full'}>
         <Flex flex={1} justifyContent="center" direction={'column'} textAlign={'start'} ml="6">
-          <Text color="text.low" fontSize={{ base: '12px', xl: 'sm', lg: 'sm' }} isTruncated>
+          <Text color="text.low" fontSize={{ base: '12px', xl: 'sm', lg: 'sm' }} noOfLines={1}>
             Redeem In:
           </Text>
           <Text fontSize="lg" fontWeight="bold">
@@ -57,10 +57,10 @@ const NftPositionBox = (props: NftPositionBoxProps) => {
           </Text>
         </Flex>
         <Flex flex={1} justifyContent="center" direction={'column'} textAlign={'start'} ml="6">
-          <Text color="text.low" fontSize={{ base: '12px', xl: 'sm', lg: 'sm' }} isTruncated>
+          <Text color="text.low" fontSize={{ base: '12px', xl: 'sm', lg: 'sm' }} noOfLines={1}>
             Price:
           </Text>
-          <Text fontSize="lg" fontWeight="bold" isTruncated>
+          <Text fontSize="lg" fontWeight="bold" noOfLines={1}>
             {price} CNV
           </Text>
         </Flex>
@@ -134,7 +134,7 @@ const NftPositionCard = (props: NftPositionBoxProps) => {
             justifyContent="start"
             alignItems={'center'}
           >
-            <Flex flex={1} isTruncated justify={'space-around'} width={'full'}>
+            <Flex flex={1} noOfLines={1} justify={'space-around'} width={'full'}>
               <Flex
                 // pl={{ xl: 3, lg: 3, base: 0 }}
                 direction={'column'}
