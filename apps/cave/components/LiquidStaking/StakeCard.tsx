@@ -124,7 +124,7 @@ function StakeCard(props: StackCardProps) {
               </Text>
             </Box>
             <Text position="absolute" right="2" top="2" fontSize="sm">
-              {isLoadingPools || isLoadingStakings || !pools.balance
+              {isLoadingPools || isLoadingStakings || !pools?.balance
                 ? 'Fetching...'
                 : (+ethers.utils.formatEther(pools.balance.add(stakingCap))).toFixed(0)}
             </Text>
