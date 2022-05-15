@@ -39,7 +39,7 @@ export const BondInfo = ({ asset, roi, vestingTerm, icon }) => {
     </Card>
   )
 }
-// commit
+// commi
 export const UserBondPositionInfo = (bondSigma, userAddress) => {
   const spinnerStyles = { animation: `${spin} 2s linear infinite`, size: 'sm' }
   const parse = bondSigma?.bondSigma
