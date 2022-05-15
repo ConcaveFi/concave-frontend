@@ -28,7 +28,14 @@ const periodToPoolParameter = {
   '45 days': 3,
 }
 
-function StakeCard(props) {
+type StackCardProps = {
+  icon: string
+  period: string
+  poolId: number
+  stakingLink: string
+}
+
+function StakeCard(props: StackCardProps) {
   const netWorkdId = 3
   const vaprText = props.icon === '12m' ? 'Non-Dilutive vAPR' : 'vAPR'
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -179,7 +186,7 @@ function StakeCard(props) {
                 }
                 capPercentage={capPercentage}
               />
-              <StakeInput period={props.period} onClose={onClose} />
+              <StakeInput period={props.period} poolId={props.poolId} onClose={onClose} />
             </VStack>
           </Flex>
         </Modal>

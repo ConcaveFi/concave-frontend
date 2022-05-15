@@ -11,14 +11,8 @@ import { StakingV1Contract } from 'lib/StakingV1Proxy/Contract'
 import React, { useEffect, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
 import { useAccount, useBalance, useNetwork, useSigner } from 'wagmi'
-const periodToPoolParameter = {
-  '360 days': 0,
-  '180 days': 1,
-  '90 days': 2,
-  '45 days': 3,
-}
 
-function StakeInput(props: any) {
+function StakeInput(props: { poolId: number; period: string; onClose: () => void }) {
   const cnvPrice = useFetchApi('/api/cnv')
   const [{ data: account }] = useAccount()
   const [{ data }] = useNetwork()
@@ -95,7 +89,7 @@ function StakeInput(props: any) {
               const formattedInput = utils.parseUnits('10', 18)
               console.log(stakeInput.numerator.toString())
               contract
-                .lock(account?.address, stakeInput.numerator.toString(), 0)
+                .lock(account?.address, stakeInput.numerator.toString(), props.poolId)
                 .then((x) => {
                   console.log(x)
                 })
