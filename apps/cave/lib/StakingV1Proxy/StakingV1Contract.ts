@@ -3,7 +3,6 @@ import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/p
 import { concaveProvider } from 'lib/providers'
 import { StakingV1Proxy } from './Address'
 import { StakingV1Abi } from './ContractABI'
-import { MarketItem } from './MarketItem'
 
 export class StakingV1Contract {
   private readonly contract: ethers.Contract
@@ -15,10 +14,27 @@ export class StakingV1Contract {
     if (this.singer) this.contract.connect(this.singer)
   }
 
-  public async lock(address: string, amount: BigNumberish, poolId: BigNumberish) {
-    console.table([address, amount, poolId])
-    console.log(this.singer)
+  public async viewStakingCap(poolNum: number | string): Promise<BigNumber> {
+    return this.contract.viewStakingCap(poolNum)
+  }
+
+  public async lock(
+    address: string,
+    amount: BigNumberish,
+    poolId: BigNumberish,
+  ): Promise<ethers.Transaction & { wait: (confirmations) => unknown }> {
     return this.contract.connect(this.singer).lock(address, amount, poolId)
+  }
+
+  public async pools(index: string): Promise<{
+    balance: BigNumber
+    excessRatio: BigNumber
+    g: BigNumber
+    rewardsPerShare: BigNumber
+    supply: BigNumber
+    term: BigNumber
+  }> {
+    return this.contract.pools(index)
   }
 
   public async positions(index: BigNumberish): Promise<{

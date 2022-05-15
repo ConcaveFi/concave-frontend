@@ -11,13 +11,11 @@ import {
   useMediaQuery,
   VStack,
 } from '@concave/ui'
-import { StakingV1Abi } from 'contracts/LiquidStaking/LiquidStakingAbi'
-import { LIQUID_STAKING_ADDRESS } from 'contracts/LiquidStaking/LiquidStakingAddress'
-import { Contract, ethers } from 'ethers'
+import { ethers } from 'ethers'
 import { useGet_Last_Poolid_VaprQuery } from 'graphql/generated/graphql'
-// const providers = new ethers.providers.InfuraProvider('ropsten', '545e522b4c0e45078a25b86f3b646a9b')
-import { concaveProvider as providers } from 'lib/providers'
-import { useEffect, useState } from 'react'
+import { StakingV1Contract } from 'lib/StakingV1Proxy/StakingV1Contract'
+import { useMemo, useState } from 'react'
+import { useQuery } from 'react-query'
 import Emissions from './StakeModal/Emissions'
 import StakeInfo from './StakeModal/StakeInfo'
 import StakeInput from './StakeModal/StakeInput'
@@ -35,52 +33,48 @@ type StackCardProps = {
   stakingLink: string
 }
 
+export const usePools = (chainID: number | string, index: string) => {
+  return useQuery(
+    ['fetchPools', chainID, index],
+    () => {
+      const stakingV1Contract = new StakingV1Contract(+chainID)
+      return stakingV1Contract.pools(index)
+    },
+    {
+      enabled: !!chainID && Number.isInteger(index),
+    },
+  )
+}
+export const useViewStakingCap = (chainID: number | string, index: string) => {
+  return useQuery(
+    ['useViewStakingCap', chainID, index],
+    () => {
+      const stakingV1Contract = new StakingV1Contract(+chainID)
+      return stakingV1Contract.viewStakingCap(index)
+    },
+    {
+      enabled: !!chainID && Number.isInteger(index),
+    },
+  )
+}
+
 function StakeCard(props: StackCardProps) {
   const netWorkdId = 3
   const vaprText = props.icon === '12m' ? 'Non-Dilutive vAPR' : 'vAPR'
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [fetchingData, setFetchingData] = useState(true)
-  const [capPercentage, setCapPercentage] = useState('100')
   const [isLargerThan600] = useMediaQuery('(min-width: 600px)')
   const { status, data, error, isFetching } = useGet_Last_Poolid_VaprQuery({
     poolID: props.poolId,
   })
   const [modalDirection, setModalDirection] = useState<'column' | 'row'>('row')
-
-  const [pools, setPools] = useState(null)
-  const [stakingCap, setStakingCap] = useState(null)
-
-  useEffect(() => {
-    if (pools === null)
-      getPools(netWorkdId, periodToPoolParameter[`${props.period}`])
-        .then(setPools)
-        .catch((error) => {})
-    if (stakingCap === null)
-      getViewStakingCap(netWorkdId, periodToPoolParameter[`${props.period}`])
-        .then(setStakingCap)
-        .catch((error) => {})
-  })
-
-  const isPoolsLoading = pools === null
-  const isStakingLoading = stakingCap === null
-
-  useEffect(() => {
-    if (!isPoolsLoading && !isStakingLoading && pools && stakingCap) {
-      setFetchingData(false)
-      setCapPercentage(
-        String(
-          (Number(ethers.utils.formatEther(pools?.balance)) /
-            Number(
-              +ethers.utils.formatEther(pools?.balance) + +ethers.utils.formatEther(stakingCap),
-            )) *
-            100,
-        ),
-      )
-    } else {
-      setFetchingData(true)
-    }
-  })
-
+  const index = periodToPoolParameter[`${props.period}`]
+  const { data: pools } = usePools(netWorkdId, index)
+  const { data: stakingCap } = useViewStakingCap(netWorkdId, index)
+  const capPercentage = useMemo(() => {
+    if (!pools || !stakingCap) return '0'
+    return ethers.utils.formatEther(pools?.balance.div(stakingCap))
+  }, [pools, stakingCap])
+  console.log(capPercentage)
   return (
     <div>
       <Card variant="primary" px={4} py={6} shadow="up" gap={1}>
@@ -195,25 +189,4 @@ function StakeCard(props: StackCardProps) {
   )
 }
 
-async function getPools(netWorkdId: number, index: string) {
-  const stakingContract = new Contract(
-    LIQUID_STAKING_ADDRESS[netWorkdId],
-    StakingV1Abi,
-    providers(3),
-  )
-  const pools = await stakingContract.pools(index).catch((e) => {})
-  return pools
-}
-
-async function getViewStakingCap(netWorkdId: number, index: string) {
-  const stakingContract = new Contract(
-    LIQUID_STAKING_ADDRESS[netWorkdId],
-    StakingV1Abi,
-    providers(3),
-  )
-  const stakingCap = await stakingContract.viewStakingCap(parseInt(index)).catch((error) => {})
-  console.log('stakingcap')
-  console.log(stakingCap)
-  return stakingCap
-}
 export default StakeCard
