@@ -56,7 +56,7 @@ function TreasuryRedeemCard() {
 
   useEffect(() => {
     if (walletName === '') setWalletName(getWalletType())
-  })
+  }, [walletName])
 
   return (
     <GlassPanel
