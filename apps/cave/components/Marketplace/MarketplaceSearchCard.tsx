@@ -1,3 +1,4 @@
+import { SearchIcon } from '@concave/icons'
 import {
   Box,
   Button,
@@ -9,14 +10,13 @@ import {
   Portal,
   useMediaQuery,
 } from '@concave/ui'
-import SearchFilterCard from './SearchFilterCard'
-import NftPositionCard from './NftPositionCard'
-import { SearchIcon, SwapSettingsIcon } from '@concave/icons'
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import StakePeriodCard from './StakePeriodCard'
+import DiscountCard from './DiscountCard'
+import NftPositionCard from './NftPositionCard'
 import PriceCard from './PriceCard'
 import RedeemCard from './RedeemCard'
-import DiscountCard from './DiscountCard'
+import SearchFilterCard from './SearchFilterCard'
+import StakePeriodCard from './StakePeriodCard'
 interface MarketplaceSearchCardProps {
   active?: boolean
   onClick?: (any: Dispatch<SetStateAction<boolean>>) => void

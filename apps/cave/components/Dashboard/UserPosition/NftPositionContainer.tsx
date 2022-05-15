@@ -1,5 +1,4 @@
-import { ArrowBackIcon, ArrowUpDownIcon } from '@concave/icons'
-import { Box, Card, Flex, HStack, Image, Text } from '@concave/ui'
+import { Box, Flex, HStack, Image, Text } from '@concave/ui'
 import { useState } from 'react'
 
 interface NftPositionContainerProps {
@@ -12,13 +11,12 @@ const NftPositionContainer = (props: NftPositionContainerProps) => {
   const [active, setActive] = useState(false)
   const { stakeType, redeemIn } = props
   const redeemInDays = (redeemIn / (1000 * 3600 * 24)).toFixed()
-  const periodToPoolParameter = {
+  const period = {
     0: '360 Days',
     1: '180 Days',
     2: '90 Days',
     3: '45 Days',
-  }
-  const period = periodToPoolParameter[stakeType]
+  }[stakeType]
   return (
     <Box
       pos="relative"

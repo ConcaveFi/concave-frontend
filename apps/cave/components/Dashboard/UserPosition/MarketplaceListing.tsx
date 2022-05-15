@@ -10,7 +10,10 @@ import {
 } from '@concave/ui'
 import UserListPositionCard from '../UserListPositionCard'
 
-interface MarketplaceListingProps {}
+interface MarketplaceListingProps {
+  address: string
+  tokenId: string
+}
 
 const MarketplaceListing = (props: MarketplaceListingProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -23,12 +26,11 @@ const MarketplaceListing = (props: MarketplaceListingProps) => {
       mt={{ lg: 1, md: 0 }}
       mb={3}
     >
-      {/* @ts-ignore */}
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+      <Modal title="" isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay bg={'none'} backdropBlur="4px" zIndex={0} />
         <ModalContent>
           <Flex>
-            <UserListPositionCard />
+            <UserListPositionCard address={props.address} tokenId={props.tokenId} />
           </Flex>
         </ModalContent>
       </Modal>

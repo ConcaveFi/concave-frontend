@@ -1,8 +1,9 @@
 import { Button, Flex, FlexProps, Text } from '@concave/ui'
+import { BigNumber, ethers } from 'ethers'
 
 interface RedeemCardViewerProps {
-  initial: number
-  gained: number
+  initial: BigNumber
+  gained: BigNumber
   redeemIn: number
 }
 const RedeemCardViewer = (props: RedeemCardViewerProps) => {
@@ -20,9 +21,9 @@ const RedeemCardViewer = (props: RedeemCardViewerProps) => {
       gap={{ lg: 0, md: 2 }}
     >
       <Flex gap={{ lg: 0, md: 4 }}>
-        <Info label="Current Value" value={initial + gained} />
-        <Info label="Gained" value={+parseFloat(gained.toFixed(3))} />
-        <Info label="Initial" value={+parseFloat(initial.toFixed(3))} />
+        <Info label="Current Value" value={ethers.utils.formatEther(initial.add(gained))} />
+        <Info label="Gained" value={ethers.utils.formatEther(gained)} />
+        <Info label="Initial" value={ethers.utils.formatEther(initial)} />
       </Flex>
       <Button
         w={{ lg: '140px', md: '170px' }}

@@ -1,31 +1,21 @@
-import { CNV, Currency, CurrencyAmount, toHex } from '@concave/gemswap-sdk'
-import { Box, Button, Card, Flex, HStack, Image, Input, Text } from '@concave/ui'
+import { CNV, Currency, CurrencyAmount } from '@concave/gemswap-sdk'
+import { Box, Button, Card, Flex } from '@concave/ui'
 import { CurrencyInputField } from 'components/CurrencyAmountField'
-// import { SelectBondCurrency } from 'components/CurrencySelector/SelectBondCurrency'
-// import { STAKING_CONTRACT } from 'constants/address'
-import { StakingV1Abi } from 'contracts/LiquidStaking/LiquidStakingAbi'
+import { LIQUID_STAKING_ADDRESS } from 'contracts/LiquidStaking/LiquidStakingAddress'
+import { utils } from 'ethers'
 import { useFetchApi } from 'hooks/cnvData'
 import { useApprove } from 'hooks/useApprove'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-// import { useRouter } from 'next/router'
+import { StakingV1Contract } from 'lib/StakingV1Proxy/StakingV1Contract'
 import React, { useEffect, useState } from 'react'
-import { Contract, utils } from 'ethers'
 import { toAmount } from 'utils/toAmount'
-import { useAccount, useBalance, useContractWrite, useNetwork, useSigner } from 'wagmi'
-import { LIQUID_STAKING_ADDRESS } from 'contracts/LiquidStaking/LiquidStakingAddress'
-const periodToPoolParameter = {
-  '360 days': 0,
-  '180 days': 1,
-  '90 days': 2,
-  '45 days': 3,
-}
+import { useAccount, useBalance, useNetwork, useSigner } from 'wagmi'
 
-function StakeInput(props: any) {
+function StakeInput(props: { poolId: number; period: string; onClose: () => void }) {
   const cnvPrice = useFetchApi('/api/cnv')
   const [{ data: account }] = useAccount()
   const [{ data }] = useNetwork()
   const [{ data: signer }] = useSigner()
-  // const [stakeInput, setStakeInput] = useState(toAmount(0, CNV[data?.chain.id]))
   const [stakeInput, setStakeInput] = useState<CurrencyAmount<Currency>>(toAmount(0, CNV[3]))
   useCurrentSupportedNetworkId((chainId) => setStakeInput(toAmount(0, CNV[chainId])))
   const { allowance, ...approve } = useApprove(
@@ -34,23 +24,9 @@ function StakeInput(props: any) {
   )
   const [approveButtonText, setApproveButtonText] = useState('Approve CNV')
   const [allowanceEnough, setAllowanceEnough] = useState(false)
-  // console.log(allowance.formatted)
-  // approve.sendApproveTx()
-
-  // useEffect(() => {
-  //   if (allowance && +allowance.formatted > +stakeInput) {
-  //     setAllowanceEnough(true)
-  //   } else {
-  //     setAllowanceEnough(false)
-  //   }
-  //   if (stakeInput === '') setStakeInput('')
-  // }, [allowance, stakeInput])
-
   const [cnvBalance, getBalance] = useBalance({
     addressOrName: account?.address,
-    // token: CNV[3],
     token: LIQUID_STAKING_ADDRESS[data?.chain?.id],
-    // token: '0x000000007a58f5f58E697e51Ab0357BC9e260A04',
   })
 
   const approveCNV = () => {
@@ -108,12 +84,11 @@ function StakeInput(props: any) {
           <Button
             mt={5}
             onClick={async () => {
-              const stakingContract = new Contract(LIQUID_STAKING_ADDRESS[3], StakingV1Abi, signer)
+              const contract = new StakingV1Contract(3, signer)
               const formattedInput = utils.parseUnits('10', 18)
-              console.log('this shit exists, right?')
-              console.log(stakingContract)
-              stakingContract
-                .lock(account?.address, 1, 0)
+              console.log(stakeInput.numerator.toString())
+              contract
+                .lock(account?.address, stakeInput.numerator.toString(), props.poolId)
                 .then((x) => {
                   console.log(x)
                 })
