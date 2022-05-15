@@ -78,7 +78,7 @@ function StakeCard(props: StackCardProps) {
   console.log(isLoadingPools, poolsError, pools?.balance)
   return (
     <div>
-      <Card variant="primary" px={4} py={6} shadow="up" gap={1}>
+      <Card variant="primary" px={4} py={6} shadow="up" gap={1} textAlign={'center'}>
         <Box mx="auto" py={5} w="full" h="333px" shadow="down" borderRadius="100px/90px">
           <Text color="text.low" fontSize="sm">
             Stake Period
