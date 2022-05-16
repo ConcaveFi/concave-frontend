@@ -4,6 +4,7 @@ import { CurrencyInputField } from 'components/CurrencyAmountField'
 import { ApproveButton, useApproval } from 'hooks/useAllowance'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import { StakingV1ProxyAddress } from 'lib/StakingV1Proxy/Address'
 import { StakingV1Contract } from 'lib/StakingV1Proxy/StakingV1Contract'
 import React, { useState } from 'react'
 import { toAmount } from 'utils/toAmount'
@@ -16,7 +17,10 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
   const [stakeInput, setStakeInput] = useState<CurrencyAmount<Currency>>(
     toAmount(0, CNV[netWorkdId]),
   )
-  const approveStatus = useApproval(stakeInput.wrapped)
+  const approveStatus = useApproval(
+    stakeInput.wrapped,
+    StakingV1ProxyAddress[stakeInput.currency.chainId],
+  )
   const [approvedCNV] = approveStatus
   const cnvBalance = useCurrencyBalance(stakeInput?.currency, { watch: true })
 

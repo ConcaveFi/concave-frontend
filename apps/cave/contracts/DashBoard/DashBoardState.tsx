@@ -1,19 +1,19 @@
 import { createAlchemyWeb3, Nft } from '@alch/alchemy-web3'
 import { nftContract } from 'components/Dashboard/UserPositionCard'
-import { LIQUID_STAKING_ADDRESS } from 'contracts/LiquidStaking/LiquidStakingAddress'
 import { BigNumber } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import { StakingV1ProxyAddress } from 'lib/StakingV1Proxy/Address'
 import { StakingV1Contract } from 'lib/StakingV1Proxy/StakingV1Contract'
 import { useEffect, useState } from 'react'
 import { useAccount, useConnect } from 'wagmi'
 
 export async function getAllUsersPositionsID(address: string, netWorkId: number) {
   const usersNft = await getAllUserNfts(address, netWorkId)
-  return usersNft.filter(filterByContract(LIQUID_STAKING_ADDRESS[netWorkId])).map(mapToTokenId)
+  return usersNft.filter(filterByContract(StakingV1ProxyAddress[netWorkId])).map(mapToTokenId)
 }
 export async function getAllUsersPositions(address: string, netWorkId: number) {
   const usersNft = await getAllUserNfts(address, netWorkId)
-  return usersNft.filter(filterByContract(LIQUID_STAKING_ADDRESS[netWorkId]))
+  return usersNft.filter(filterByContract(StakingV1ProxyAddress[netWorkId]))
 }
 
 const filterByContract = (contractAddress: string) => (nft: Nft) => {

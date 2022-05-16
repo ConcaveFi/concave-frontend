@@ -1,14 +1,14 @@
-import { CurrencyAmount, MaxUint256, ROUTER_ADDRESS, Token } from '@concave/gemswap-sdk'
+import { CurrencyAmount, MaxUint256, Token } from '@concave/gemswap-sdk'
 import { Button, ButtonProps } from '@concave/ui'
 import { useModals } from 'contexts/ModalsContext'
 import { BigNumberish } from 'ethers'
 import { useAccount } from 'wagmi'
 import { useApprove } from './useApprove'
 
-export const useApproval = (currencyAmount: CurrencyAmount<Token>) => {
+export const useApproval = (currencyAmount: CurrencyAmount<Token>, address: string) => {
   return useApprovalWhenNeeded(
     currencyAmount.currency,
-    ROUTER_ADDRESS[currencyAmount.currency.chainId],
+    address,
     currencyAmount.numerator.toString(),
   )
 }
