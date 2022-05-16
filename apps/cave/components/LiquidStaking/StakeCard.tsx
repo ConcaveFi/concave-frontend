@@ -236,8 +236,7 @@ function StakeCard(props: StackCardProps) {
               period={props.period}
               vaprText={vaprText}
               icon={props.icon}
-              vapr={data?.logStakingV1_PoolRewarded[0].base_vAPR}
-              setShowFloatingCards={setShowFloatingCards}
+              vapr={data?.logStakingV1_PoolRewarded[0]?.base_vAPR}
               // vapr={props.vAPR}
             />
             <VStack mt={8} spacing={8}>
