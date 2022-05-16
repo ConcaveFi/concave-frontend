@@ -67,7 +67,8 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
             disabled={
               !cnvBalance.data ||
               +cnvBalance.data?.numerator.toString() === 0 ||
-              stakeInput.greaterThan(cnvBalance.data.numerator)
+              +stakeInput.numerator.toString() === 0 ||
+              stakeInput.greaterThan(cnvBalance.data?.numerator)
             }
           >
             Stake CNV
