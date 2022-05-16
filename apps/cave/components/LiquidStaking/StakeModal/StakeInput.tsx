@@ -29,7 +29,7 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
       </Card>
 
       <Box mt={10} width="350px">
-        {!approvedCNV && (
+        {approvedCNV && (
           <ApproveButton
             fontWeight="bold"
             fontSize="md"
@@ -42,7 +42,7 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
             useApproveInfo={approveStatus}
           />
         )}
-        {approvedCNV && (
+        {!approvedCNV && (
           <Button
             mt={5}
             onClick={async () => {
