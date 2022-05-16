@@ -116,7 +116,6 @@ function StakeCard(props: StackCardProps) {
     return BigNumber.from(pools.balance).div(stakingCap).mul(100)
   }, [pools, stakingCap])
 
-  console.log(isLoadingPools, poolsError, pools?.balance)
   return (
     <div>
       <Card variant="primary" px={4} py={6} shadow="up" gap={1} textAlign={'center'}>
