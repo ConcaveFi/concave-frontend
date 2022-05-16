@@ -28,69 +28,38 @@ function Emissions(props: any) {
           align="center"
           mt={isLargerThan700 ? 0 : 8}
         >
-          <HStack>
-            <Tooltip
-              label="Anti-dilutive bond emissions ensure staking positions are rewarded with a share of any new supply minted from bonds that are purchased. Staking positions recieve a share of this growth compounded at 8hr intervals."
-              bg="gray.900"
-              color="white"
-              placement="left-start"
-            >
-              <Image
-                mx="auto"
-                src={`/assets/liquidstaking/modal-moreinfo-logo.svg`}
-                alt="arrow down logo"
-              />
-            </Tooltip>
-            <Text mx={margin} color="text.low" fontSize="sm">
-              Bonding Emissions:
-            </Text>
-          </HStack>
+          <Text mx={margin} color="text.low" fontSize="sm">
+            Bonding Emissions:
+          </Text>
           <Text mx={margin} fontSize="md" fontWeight="bold">
             Calculating
           </Text>
           <Text mx={margin} color="text.low" fontSize="sm">
             +
           </Text>
-          <HStack>
-            <Tooltip
-              label="Base emissions ensure that staking positions receive continuous CNV rewards throughout the term. Staking positions receive a boost in base emissions as a function of term length."
-              bg="gray.900"
-              color="white"
-              placement="left-start"
-            >
-              <Image
-                mx="auto"
-                src={`/assets/liquidstaking/modal-moreinfo-logo.svg`}
-                alt="arrow down logo"
-              />
-            </Tooltip>
-            <Text mx={margin} color="text.low" fontSize="sm">
-              Base Emissions: {props?.vapr?.toFixed(2)} %
-            </Text>
-          </HStack>
+          <Text mx={margin} color="text.low" fontSize="sm">
+            Base Emissions: {props?.vapr?.toFixed(2)} %
+          </Text>
+          <Text mx={margin} fontSize="md" fontWeight="bold">
+            {props.vapr ? 'Calculating' : `${props?.vapr?.toFixed(2)} %`}
+          </Text>
           <Text mx={margin} color="text.low" fontSize="sm">
             +
           </Text>
-          <HStack>
-            <Tooltip
-              label="Quarterly dividends ensure that stakers  receive a share of profits in non CNV assets from all yield bearing products and services. Staking positions receive a boost in dividend as a function of term length."
-              bg="gray.900"
-              color="white"
-              placement="left-start"
-            >
-              <Image
-                mx="auto"
-                src={`/assets/liquidstaking/modal-moreinfo-logo.svg`}
-                alt="arrow down logo"
-              />
-            </Tooltip>
-            <Text mx={margin} color="text.low" fontSize="sm">
-              Quarterly Dividends:
-            </Text>
-          </HStack>
+          <Text mx={margin} color="text.low" fontSize="sm">
+            Quarterly Dividends:
+          </Text>
           <Text mx={margin} fontSize="md" fontWeight="bold">
             Calculating
           </Text>
+          <Image
+            mt={4}
+            mx="auto"
+            src={`/assets/liquidstaking/modal-moreinfo-logo.svg`}
+            alt="arrow down logo"
+            onMouseOver={() => props.setShowFloatingCards(true)}
+            onMouseLeave={() => props.setShowFloatingCards(false)}
+          />
         </Flex>
       </Box>
     )
@@ -128,18 +97,13 @@ function Emissions(props: any) {
             {props.vaprText}
           </Text>
           <Text fontSize="lg" fontWeight="bold" mb="2"></Text>
-          <Tooltip
-            label="Total vAPR aggregates rewards associated with each staking position including rewards from bonding activity, base emissions and the quarterly dividend."
-            color="white"
-            bg="gray.800"
-            placement="left-start"
-          >
-            <Image
-              mx="auto"
-              src={`/assets/liquidstaking/modal-moreinfo-logo.svg`}
-              alt="arrow down logo"
-            />
-          </Tooltip>
+          <Image
+            mx="auto"
+            src={`/assets/liquidstaking/modal-moreinfo-logo.svg`}
+            alt="arrow down logo"
+            onMouseOver={() => props.setShowFloatingCards(true)}
+            onMouseLeave={() => props.setShowFloatingCards(false)}
+          />
           {isLargerThan700 && (
             <Image
               mx="auto"

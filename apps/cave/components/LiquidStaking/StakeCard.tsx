@@ -115,6 +115,7 @@ function StakeCard(props: StackCardProps) {
     if (!pools?.balance || !stakingCap) return '0'
     return BigNumber.from(pools.balance).div(stakingCap).mul(100)
   }, [pools, stakingCap])
+  const [showFloatingCards, setShowFloatingCards] = useState(false)
 
   return (
     <div>
@@ -184,7 +185,7 @@ function StakeCard(props: StackCardProps) {
         <Modal
           bluryOverlay={true}
           childrenLeftNeighbor={<FloatingDescriptions />}
-          showchildrenLeftNeighbor={true}
+          showchildrenLeftNeighbor={showFloatingCards}
           title="Stake CNV"
           isOpen={isOpen}
           onClose={onClose}
@@ -202,6 +203,7 @@ function StakeCard(props: StackCardProps) {
               vaprText={vaprText}
               icon={props.icon}
               vapr={data?.logStakingV1_PoolRewarded[0].base_vAPR}
+              setShowFloatingCards={setShowFloatingCards}
               // vapr={props.vAPR}
             />
             <VStack mt={8} spacing={8}>
