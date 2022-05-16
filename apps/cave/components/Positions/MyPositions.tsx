@@ -122,18 +122,27 @@ const PairsAccordion = ({ userAddress, pairs }: PairsAccordionProps) => {
     )
   }
   return (
-    <Box borderRadius={'2xl'} p={4} shadow={'down'}>
-      <Accordion as={Stack} allowToggle gap={2}>
-        {pairs.map((pair) => {
-          return (
-            <LPPositionItem
-              key={pair.liquidityToken.address}
-              pair={pair}
-              userAddress={userAddress}
-            />
-          )
-        })}
-      </Accordion>
+    <Box borderRadius={'2xl'} px={4} py={2} shadow={'down'} w={'100%'}>
+      <Box
+        borderRadius={'2xl'}
+        p={4}
+        maxH={'55vh'}
+        apply="scrollbar.secondary"
+        w={'100%'}
+        overflowY={'auto'}
+      >
+        <Accordion as={Stack} allowToggle gap={2}>
+          {pairs.map((pair) => {
+            return (
+              <LPPositionItem
+                key={pair.liquidityToken.address}
+                pair={pair}
+                userAddress={userAddress}
+              />
+            )
+          })}
+        </Accordion>
+      </Box>
     </Box>
   )
 }
