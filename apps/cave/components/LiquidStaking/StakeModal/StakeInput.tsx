@@ -1,7 +1,19 @@
 import { CNV, Currency, CurrencyAmount } from '@concave/gemswap-sdk'
-import { Box, Button, Card, Flex, useDisclosure } from '@concave/ui'
+import {
+  Alert,
+  AlertDialog,
+  AlertDialogContent,
+  Box,
+  Button,
+  Card,
+  Flex,
+  Text,
+  useDisclosure,
+} from '@concave/ui'
 import { CurrencyInputField } from 'components/CurrencyAmountField'
+import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
+import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { ApproveButton, useApproval } from 'hooks/useAllowance'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
@@ -28,6 +40,7 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
   const [tx, setTx] = useState(undefined)
 
   const { isOpen, onClose, onOpen } = useDisclosure()
+  const [waitingForConfirm, setWaitingForConfirm] = useState(false)
   return (
     <>
       <Box>
@@ -56,14 +69,20 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
               mt={5}
               onClick={async () => {
                 const contract = new StakingV1Contract(netWorkdId, signer)
+                setWaitingForConfirm(true)
                 contract
                   .lock(account?.address, stakeInput.numerator.toString(), props.poolId)
                   .then((x) => {
                     setTx(x)
+                    setWaitingForConfirm(false)
                     onOpen()
                     console.log(x)
                   })
                   .catch((e) => {
+                    if (e.code === 4001) {
+                      // Code 4001 it's for reject transaction.
+                      setWaitingForConfirm(false)
+                    }
                     console.log(e)
                   })
               }}
@@ -105,6 +124,24 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
         </Button> */}
         </Box>
       </Box>
+      <WaitingConfirmationDialog isOpen={waitingForConfirm}>
+        <Flex
+          width={'200px'}
+          height="80px"
+          rounded={'2xl'}
+          mt={4}
+          shadow={'Down Medium'}
+          align={'center'}
+          direction={'column'}
+        >
+          <Text textColor={'text.low'} fontWeight="700" fontSize={18} mt={4}>
+            Staking:
+          </Text>
+          <Text fontWeight={'700'} textColor="text.accent">
+            {stakeInput.wrapped.toExact() + ' CNV'}
+          </Text>
+        </Flex>
+      </WaitingConfirmationDialog>
       <TransactionSubmittedDialog isOpen={isOpen} tx={tx} />
     </>
   )

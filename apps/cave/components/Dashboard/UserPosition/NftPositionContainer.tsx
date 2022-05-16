@@ -1,16 +1,18 @@
 import { Box, Flex, HStack, Image, Text } from '@concave/ui'
+import { formatDistanceStrict, formatDistanceToNowStrict } from 'date-fns'
+import { formatDistance } from 'date-fns/esm'
 import { useState } from 'react'
 
 interface NftPositionContainerProps {
   onChange: () => void
   stakeType: number
-  redeemIn: number
+  maturity: number
 }
 
 const NftPositionContainer = (props: NftPositionContainerProps) => {
   const [active, setActive] = useState(false)
-  const { stakeType, redeemIn } = props
-  const redeemInDays = (redeemIn / (1000 * 3600 * 24)).toFixed()
+  const { stakeType, maturity } = props
+  const redeemInDays = formatDistanceToNowStrict(maturity * 1000, { unit: 'day' })
   const period = {
     0: '360 Days',
     1: '180 Days',
@@ -24,7 +26,6 @@ const NftPositionContainer = (props: NftPositionContainerProps) => {
     2: '3mposition.png',
     3: '1mposition.png',
   }[stakeType]
-  console.log(imgNameByPeriod)
 
   return (
     <Box
@@ -65,7 +66,7 @@ const NftPositionContainer = (props: NftPositionContainerProps) => {
             Redeem In:
           </Text>
           <Text fontSize="md" fontWeight="bold">
-            {redeemInDays} Days
+            {redeemInDays}
           </Text>
         </Flex>
         <Flex width={'full'} height="50px" position={'absolute'} justify="end" align={'center'}>
