@@ -19,6 +19,7 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
   const approveStatus = useApproval(stakeInput.wrapped)
   const [approvedCNV] = approveStatus
   const cnvBalance = useCurrencyBalance(stakeInput?.currency, { watch: true })
+
   return (
     <Box>
       <Card shadow="down" w="350px" px={0} py={0}>
@@ -63,7 +64,11 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
             h="50px"
             size="large"
             mx="auto"
-            disabled={!cnvBalance.data || stakeInput.greaterThan(cnvBalance.data.numerator)}
+            disabled={
+              !cnvBalance.data ||
+              +cnvBalance.data?.numerator.toString() === 0 ||
+              stakeInput.greaterThan(cnvBalance.data.numerator)
+            }
           >
             Stake CNV
           </Button>
