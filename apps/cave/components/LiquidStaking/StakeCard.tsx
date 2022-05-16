@@ -64,6 +64,41 @@ export const useViewStakingCap = (chainID: number | string, index: string) => {
   )
 }
 
+const FloatingDescriptions: React.FC = () => (
+  <VStack position="absolute" top="10" left="-80" spacing={5}>
+    <Card variant="secondary" py="6" px="4" w={300}>
+      <Text fontWeight="bold">Total vAPR</Text>
+      <Text fontSize="sm">
+        Total vAPR aggregates rewards associated with each staking position including rewards from
+        bonding activity, base emissions and the quarterly dividend.
+      </Text>
+    </Card>
+    <Card variant="secondary" py="6" px="4" w={300}>
+      <Text fontWeight="bold">Bonding Emissions</Text>
+      <Text fontSize="sm">
+        Anti-Dilutive bond emissions ensure staking positions are rewarded with a share of any new
+        supply minted from bonds that are purchased. Staking positions recieve a share of this
+        growth compounded at 8hr intervals.
+      </Text>
+    </Card>
+    <Card variant="secondary" py="6" px="4" w={300}>
+      <Text fontWeight="bold">Base Emissions</Text>
+      <Text fontSize="sm">
+        Base emissions ensure that staking positions receive continuous CNV rewards throughout the
+        term. Staking positions receive a boost in base emissions as a function of term length.
+      </Text>
+    </Card>
+    <Card variant="secondary" py="6" px="4" w={300}>
+      <Text fontWeight="bold">Quarterly Dividend</Text>
+      <Text fontSize="sm">
+        Quarterly dividends ensure that stakers receive a share of profits in non CNV assets from
+        all yield bearing products and services. Staking positions receive a boost in dividend as a
+        function of term length.
+      </Text>
+    </Card>
+  </VStack>
+)
+
 function StakeCard(props: StackCardProps) {
   const netWorkdId = 3
   const vaprText = props.icon === '12m' ? 'Non-Dilutive vAPR' : 'vAPR'
@@ -149,6 +184,8 @@ function StakeCard(props: StackCardProps) {
 
         <Modal
           bluryOverlay={true}
+          childrenLeftNeighbor={<FloatingDescriptions />}
+          showchildrenLeftNeighbor={true}
           title="Stake CNV"
           isOpen={isOpen}
           onClose={onClose}
