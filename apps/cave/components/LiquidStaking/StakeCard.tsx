@@ -236,12 +236,8 @@ function StakeCard(props: StackCardProps) {
               period={props.period}
               vaprText={vaprText}
               icon={props.icon}
-<<<<<<< HEAD
               vapr={data?.logStakingV1_PoolRewarded[0].base_vAPR}
               setShowFloatingCards={setShowFloatingCards}
-=======
-              vapr={data?.logStakingV1_PoolRewarded[0]?.base_vAPR}
->>>>>>> 29f6b20 (liquid staking fetching currently staked and staking cap)
               // vapr={props.vAPR}
             />
             <VStack mt={8} spacing={8}>
