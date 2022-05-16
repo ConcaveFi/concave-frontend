@@ -103,7 +103,7 @@ const FloatingDescriptions: React.FC = () => (
 
 function StakeCard(props: StackCardProps) {
   const netWorkdId = 3
-  const vaprText = props.icon === '12m' ? 'Non-Dilutive vAPR' : 'vAPR'
+  const vaprText = props.icon === '12m' ? 'Non-Dilutive vAPR' : 'Total vAPR'
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [isLargerThan600] = useMediaQuery('(min-width: 600px)')
   const { status, data, error, isFetching } = useGet_Last_Poolid_VaprQuery({
