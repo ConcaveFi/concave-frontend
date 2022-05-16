@@ -38,32 +38,24 @@ export const CurrencyInputField = ({
   const balance = useCurrencyBalance(currencyAmountIn?.currency, { watch: true })
 
   return (
-    balance.isSuccess && (
-      <CurrencyAmountField
-        currencyAmount={currencyAmountIn}
-        onChangeAmount={onChangeAmount}
-        CurrencySelector={CurrencySelector}
-        debounce={debounce}
-      >
-        <HStack justify="space-between" align="end" textColor="text.low" w="full">
-          <Text noOfLines={1} fontWeight="bold" fontSize="sm" mr={2} w={'100%'}>
-            {+currencyAmountIn.numerator.toString() > +balance.data?.numerator.toString() ? (
-              <Text fontSize="xs" color={'red'}>
-                Not enough {currencyAmountIn.currency.symbol}.
-              </Text>
-            ) : (
-              <>
-                {!!inputFiat.value?.greaterThan(0) &&
-                  `$${inputFiat.value.toFixed(2, { groupSeparator: ',' })}`}
-              </>
-            )}
-          </Text>
+    <CurrencyAmountField
+      currencyAmount={currencyAmountIn}
+      onChangeAmount={onChangeAmount}
+      CurrencySelector={CurrencySelector}
+      debounce={debounce}
+    >
+      <HStack justify="space-between" align="end" textColor="text.low" w="full">
+        <Text noOfLines={1} fontWeight="bold" fontSize="sm" mr={2}>
+          {!!inputFiat.value?.greaterThan(0) &&
+            `$${inputFiat.value.toFixed(2, { groupSeparator: ',' })}`}
+        </Text>
+        {balance.isSuccess && (
           <Balance
             value={balance.data.toFixed(2, { groupSeparator: ',' })}
             onMax={() => onChangeAmount(maxAmount(balance.data))}
           />
-        </HStack>
-      </CurrencyAmountField>
-    )
+        )}
+      </HStack>
+    </CurrencyAmountField>
   )
 }
