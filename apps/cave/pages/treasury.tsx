@@ -1,4 +1,5 @@
 // import { Token } from '@concave/gemswap-sdk'
+import { SpinIcon } from '@concave/icons'
 import {
   Card,
   Collapse,
@@ -6,6 +7,7 @@ import {
   Flex,
   Heading,
   Image,
+  keyframes,
   ScaleFade,
   Spinner,
   Stack,
@@ -38,14 +40,25 @@ export function Treasury() {
               <TreasuryRevenueCard cnv={cnvData} treasury={treaData} />
             )}
           </ScaleFade>
-          <LoadingState mr={6} my={0} width={'630px'} isLoading={!revenueCardLoaded} />
+          <LoadingState
+            title={'Loading revenue values'}
+            mr={6}
+            my={0}
+            width={'630px'}
+            isLoading={!revenueCardLoaded}
+          />
           <TreasuryRedeemCard />
         </Flex>
         {/* for treasury assets  */}
         <ScaleFade in={revenueCardLoaded}>
           {cnvStatus === 'success' && cnvData && <TreasuryManagementCard assets={treaData} />}
         </ScaleFade>
-        <LoadingState width={'900px'} isLoading={!revenueCardLoaded} my={6} />
+        <LoadingState
+          title="Loading assets"
+          width={'900px'}
+          isLoading={!revenueCardLoaded}
+          my={6}
+        />
         <DividendsCard />
       </Flex>
     </Flex>
@@ -63,14 +76,23 @@ const LoadingState = (props) => {
         height="330px"
         justify={'center'}
         align="center"
+        variant="secondary"
+        direction={'column'}
+        gap={6}
       >
         <Text fontSize={'4xl'} fontWeight="700">
-          Is Loading...
+          {props.title}
         </Text>
+        <SpinIcon css={{ animation: `${spin} 3s linear infinite` }} />
       </Card>
     </ScaleFade>
   )
 }
+
+const spin = keyframes({
+  '0%': { transform: 'rotate(0deg)' },
+  '100%': { transform: 'rotate(360deg)' },
+})
 
 Treasury.Meta = {
   title: 'Concave | Treasury',

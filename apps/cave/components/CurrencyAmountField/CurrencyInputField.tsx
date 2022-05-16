@@ -45,7 +45,7 @@ export const CurrencyInputField = ({
       debounce={debounce}
     >
       <HStack justify="space-between" align="end" textColor="text.low" w="full">
-        <Text isTruncated fontWeight="bold" fontSize="sm" mr={2}>
+        <Text noOfLines={1} fontWeight="bold" fontSize="sm" mr={2}>
           {!!inputFiat.value?.greaterThan(0) &&
             `$${inputFiat.value.toFixed(2, { groupSeparator: ',' })}`}
         </Text>

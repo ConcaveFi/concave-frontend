@@ -50,29 +50,23 @@ const StakingGroup: Array<StakingGroupProps> = [
 
 function LiquidStaking() {
   return (
-    <Box
-      flex={1}
-      width={'600px'}
-      maxWidth="container.lg"
-      overflow={'hidden'}
-      m={'auto'}
-      mt={0}
-      alignItems={'center'}
-      textAlign="center"
-      height={'2000px'}
-      maxHeight={{ lg: '1200px', base: '1900px' }}
+    <Flex
+      width={{ base: '1000px', xl: 'full', lg: 'full', md: 'full' }}
+      justify={'start'}
+      align="center"
+      direction={'column'}
     >
-      <Heading as="h1" mt={16} fontSize="5xl">
+      <Heading as="h1" mt={8} fontSize="5xl">
         Liquid Staking
       </Heading>
       <Flex
         align={'center'}
         justify="center"
-        direction={{ lg: 'row', base: 'column' }}
-        mt={{ lg: 8, base: 0 }}
-        gap={{ lg: 24, base: 7 }}
+        direction={{ xl: 'row', base: 'column' }}
+        mt={{ xl: 8, base: 0 }}
+        gap={{ xl: 24, base: 7 }}
       >
-        <Text maxW={520} textAlign={{ lg: 'justify', base: 'center' }}>
+        <Text maxW={520} textAlign={{ xl: 'justify', base: 'center' }}>
           Stakers receive daily rewards to grow their <br /> CNV holdings and quarterly dividends
           <br />
           from Concave profits. Staking positions <br /> are represented by NFTs that are tradable
@@ -81,13 +75,13 @@ function LiquidStaking() {
         </Text>
         <GraphicGuide />
       </Flex>
-      <Flex alignItems="start" justifyContent="center" height={{ lg: '550px', base: '1100px' }}>
+      <Flex alignItems="start" justifyContent="center" height={{ xl: '550px', base: '1100px' }}>
         <Flex
           gap={{ lg: 8, base: 3 }}
           justifyContent="center"
           alignItems="center"
           m={2}
-          wrap={{ lg: 'nowrap', md: 'wrap', base: 'wrap' }}
+          wrap={{ xl: 'nowrap', base: 'wrap' }}
           width={{ lg: '', base: '530px' }}
         >
           {StakingGroup.map((i) => {
@@ -104,7 +98,7 @@ function LiquidStaking() {
         </Flex>
       </Flex>
       <LiquidLocksCards />
-    </Box>
+    </Flex>
   )
 }
 

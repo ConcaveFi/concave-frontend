@@ -1,18 +1,10 @@
-import { Card, Flex, useMediaQuery } from '@concave/ui'
+import { Card, Flex, useBreakpointValue, useMediaQuery } from '@concave/ui'
 import { useEffect, useState } from 'react'
 import StakeAprCard from './StakeAprCard'
 
 function MarketplaceStakeCard(props: any) {
-  const [isLargerThan1200] = useMediaQuery('(min-width: 1200px)')
-  const [direction, setDirection] = useState<'row' | 'column'>('column')
-  const [width, setWidth] = useState('300px')
-  const [height, setHeight] = useState('283px')
+  const isLargerLayout = useBreakpointValue({ xl: true, base: false })
 
-  useEffect(() => {
-    setDirection(isLargerThan1200 ? 'column' : 'row')
-    setHeight(isLargerThan1200 ? '283px' : '168px')
-    setWidth(isLargerThan1200 ? '300px' : '460px')
-  }, [isLargerThan1200])
   const filters = [
     {
       title: '360 Days',
@@ -51,7 +43,7 @@ function MarketplaceStakeCard(props: any) {
       filters.map((e, k) => {
         return (
           <StakeAprCard
-            isLargerThan1200={isLargerThan1200}
+            isLargerLayout={isLargerLayout}
             key={k}
             title={e.title}
             length={e.length}
@@ -62,7 +54,7 @@ function MarketplaceStakeCard(props: any) {
         )
       }),
     )
-  }, [isLargerThan1200])
+  }, [isLargerLayout])
 
   return (
     <Card
@@ -70,12 +62,12 @@ function MarketplaceStakeCard(props: any) {
       p={7}
       gap={2}
       shadow="Block Up"
-      w={width}
-      h={height}
+      w={{ xl: '300px', base: '460px' }}
+      h={{ xl: '283px', md: '168px' }}
       style={{ alignContent: 'center', justifyContent: 'center' }}
       variant="secondary"
     >
-      <Flex direction={direction} gap={-10} position="relative" mt={-2}>
+      <Flex direction={{ xl: 'column', base: 'row' }} gap={-10} position="relative" mt={-2}>
         {periods}
       </Flex>
     </Card>

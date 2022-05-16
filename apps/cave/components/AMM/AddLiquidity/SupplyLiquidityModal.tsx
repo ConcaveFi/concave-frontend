@@ -83,10 +83,10 @@ const SupplyLiquidityContent = ({
           value={`${poolShare?.percent?.toSignificant(4)}%`}
         />
       </Box>
-      <ApproveButton size="large" isFullWidth variant={'primary'} useApproveInfo={approval0} />
-      <ApproveButton size="large" isFullWidth variant={'primary'} useApproveInfo={approval1} />
+      <ApproveButton size="large" w="full" variant={'primary'} useApproveInfo={approval0} />
+      <ApproveButton size="large" w="full" variant={'primary'} useApproveInfo={approval1} />
       {!needsApprove0 && !needsApprove1 && (
-        <Button size="large" isFullWidth fontSize="2xl" variant={'primary'} onClick={onConfirm}>
+        <Button size="large" w="full" fontSize="2xl" variant={'primary'} onClick={onConfirm}>
           Confirm Supply
         </Button>
       )}

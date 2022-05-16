@@ -1,3 +1,4 @@
+import { SearchIcon } from '@concave/icons'
 import {
   Box,
   Button,
@@ -9,14 +10,13 @@ import {
   Portal,
   useMediaQuery,
 } from '@concave/ui'
-import SearchFilterCard from './SearchFilterCard'
-import NftPositionCard from './NftPositionCard'
-import { SearchIcon, SwapSettingsIcon } from '@concave/icons'
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import StakePeriodCard from './StakePeriodCard'
+import DiscountCard from './DiscountCard'
+import NftPositionCard from './NftPositionCard'
 import PriceCard from './PriceCard'
 import RedeemCard from './RedeemCard'
-import DiscountCard from './DiscountCard'
+import SearchFilterCard from './SearchFilterCard'
+import StakePeriodCard from './StakePeriodCard'
 interface MarketplaceSearchCardProps {
   active?: boolean
   onClick?: (any: Dispatch<SetStateAction<boolean>>) => void
@@ -210,14 +210,8 @@ const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
     setFilter1Month(filter1Month)
   }
 
-  const [cardWidth, setCardWidth] = useState('640px')
-
-  useEffect(() => {
-    setCardWidth(isLargerThan770 ? '640px' : '460px')
-  })
-
   return (
-    <Card p={3} gap={2} variant="primary" h="945px" shadow="down" w={cardWidth}>
+    <Card p={3} gap={2} variant="primary" h="945px" shadow="down" w={'full'}>
       <Flex justify="center">
         <Box
           pos="relative"
@@ -232,7 +226,7 @@ const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
             grow={1}
             direction="row"
             pos="relative"
-            w="380px"
+            w="full"
             h="30px"
             shadow="down"
             py={2}
@@ -326,7 +320,7 @@ const sortByStakePeriod = (type: 'lowest' | 'highest') => (current, before) => {
 
 const scrollBar = {
   '&::-webkit-scrollbar': {
-    width: '20px',
+    width: '10px',
     boxShadow: `-1px 1px 3px rgba(126, 162, 255, 0.26), inset 0px -5px 5px rgba(255, 255, 255, 0.02), inset -9px 12px 24px rgba(13, 17, 23, 0.49)`,
     borderRadius: '10px',
   },

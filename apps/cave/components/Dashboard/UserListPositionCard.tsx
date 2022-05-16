@@ -1,10 +1,19 @@
 import { Box, Flex, Input, Text } from '@concave/ui'
 import ChooseButton from 'components/Marketplace/ChooseButton'
+import { ConcaveNFTMarketplace } from 'lib/ConcaveNFTMarketplaceProxy/Contract'
 import { useState } from 'react'
+import { chain, useSigner } from 'wagmi'
 
-const UserListPositionCard = () => {
+type UserListPositionCardProps = {
+  address: string
+  tokenId: string
+}
+
+const UserListPositionCard = (props: UserListPositionCardProps) => {
   const [expirationDate, setExpirationDate] = useState('')
   const [listingDate, setListingDate] = useState('')
+  const [{ data: signer }] = useSigner()
+
   return (
     <Box
       h={220}
@@ -88,7 +97,26 @@ const UserListPositionCard = () => {
           </Flex>
         </Flex>
         <Flex grow={1} justifyContent="center" alignItems={'end'} gap="2">
-          <ChooseButton onClick={() => {}} title="List For Sale" backgroundType="blue" />
+          <ChooseButton
+            onClick={() => {
+              const concaveNFTMarketPlace = new ConcaveNFTMarketplace(chain.ropsten.id, signer)
+
+              concaveNFTMarketPlace
+                .createDefaultNftAuction(
+                  props.address,
+                  props.tokenId,
+                  '0xB9CED3eB5Ce9d40A735cA3345978aB62Eca0c4d0',
+                  300,
+                  800,
+                  ['0x8522093305253EfB2685241dc0C587CDD9B10e4B'],
+                  [100],
+                )
+                .then(console.log)
+                .catch(console.error)
+            }}
+            title="List For Sale"
+            backgroundType="blue"
+          />
         </Flex>
       </Flex>
     </Box>

@@ -263,7 +263,7 @@ export enum LogCnvData_Select_Column {
 /** get Transfer events for Staking V1 */
 export type LogStakingV1 = {
   __typename?: 'logStakingV1'
-  amountLocked?: Maybe<Scalars['numeric']>
+  amountLocked?: Maybe<Scalars['String']>
   created_at: Scalars['timestamptz']
   from?: Maybe<Scalars['String']>
   id: Scalars['uuid']
@@ -477,7 +477,7 @@ export type LogStakingV1_Bool_Exp = {
   _and?: InputMaybe<Array<LogStakingV1_Bool_Exp>>
   _not?: InputMaybe<LogStakingV1_Bool_Exp>
   _or?: InputMaybe<Array<LogStakingV1_Bool_Exp>>
-  amountLocked?: InputMaybe<Numeric_Comparison_Exp>
+  amountLocked?: InputMaybe<String_Comparison_Exp>
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>
   from?: InputMaybe<String_Comparison_Exp>
   id?: InputMaybe<Uuid_Comparison_Exp>
@@ -786,7 +786,12 @@ export type Treasury = {
   contract: Scalars['String']
   created_at: Scalars['timestamptz']
   id: Scalars['uuid']
-  name: Scalars['String']
+  image?: Maybe<Scalars['String']>
+  imageP1?: Maybe<Scalars['String']>
+  imageP2?: Maybe<Scalars['String']>
+  imageP3?: Maybe<Scalars['String']>
+  isLP?: Maybe<Scalars['Boolean']>
+  name?: Maybe<Scalars['String']>
   rewards?: Maybe<Scalars['numeric']>
   total?: Maybe<Scalars['numeric']>
   updated_at: Scalars['timestamptz']
@@ -803,6 +808,11 @@ export type Treasury_Bool_Exp = {
   contract?: InputMaybe<String_Comparison_Exp>
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>
   id?: InputMaybe<Uuid_Comparison_Exp>
+  image?: InputMaybe<String_Comparison_Exp>
+  imageP1?: InputMaybe<String_Comparison_Exp>
+  imageP2?: InputMaybe<String_Comparison_Exp>
+  imageP3?: InputMaybe<String_Comparison_Exp>
+  isLP?: InputMaybe<Boolean_Comparison_Exp>
   name?: InputMaybe<String_Comparison_Exp>
   rewards?: InputMaybe<Numeric_Comparison_Exp>
   total?: InputMaybe<Numeric_Comparison_Exp>
@@ -817,6 +827,11 @@ export type Treasury_Order_By = {
   contract?: InputMaybe<Order_By>
   created_at?: InputMaybe<Order_By>
   id?: InputMaybe<Order_By>
+  image?: InputMaybe<Order_By>
+  imageP1?: InputMaybe<Order_By>
+  imageP2?: InputMaybe<Order_By>
+  imageP3?: InputMaybe<Order_By>
+  isLP?: InputMaybe<Order_By>
   name?: InputMaybe<Order_By>
   rewards?: InputMaybe<Order_By>
   total?: InputMaybe<Order_By>
@@ -836,6 +851,16 @@ export enum Treasury_Select_Column {
   CreatedAt = 'created_at',
   /** column name */
   Id = 'id',
+  /** column name */
+  Image = 'image',
+  /** column name */
+  ImageP1 = 'imageP1',
+  /** column name */
+  ImageP2 = 'imageP2',
+  /** column name */
+  ImageP3 = 'imageP3',
+  /** column name */
+  IsLp = 'isLP',
   /** column name */
   Name = 'name',
   /** column name */
@@ -922,7 +947,7 @@ export type Get_Stackingv1_Last100_EventsQuery = {
     sold?: boolean | null
     from?: string | null
     to?: string | null
-    amountLocked?: any | null
+    amountLocked?: string | null
     lockedUntil?: any | null
   }>
 }
@@ -942,7 +967,7 @@ export type Get_Stackingv1_By_Pool_IdQuery = {
     sold?: boolean | null
     from?: string | null
     to?: string | null
-    amountLocked?: any | null
+    amountLocked?: string | null
     lockedUntil?: any | null
   }>
 }
@@ -986,16 +1011,22 @@ export type Get_TreasuryQuery = {
     updated_at: any
     contract: string
     chainId?: string | null
-    name: string
+    name?: string | null
     amount?: any | null
     value?: any | null
+    rewards?: any | null
     total?: any | null
+    image?: string | null
+    isLP?: boolean | null
+    imageP1?: string | null
+    imageP2?: string | null
+    imageP3?: string | null
   }>
 }
 
 export const Get_Last_Base_VaprDocument = `
     query GET_LAST_BASE_VAPR {
-  logStakingV1_PoolRewarded {
+  logStakingV1_PoolRewarded(where: {balance: {_gt: "0"}}) {
     base_vAPR
   }
 }
@@ -1151,7 +1182,11 @@ export const useGet_Stackingv1_By_Pool_IdQuery = <
   )
 export const Get_Stakingv1_Last100_LockDocument = `
     query GET_STAKINGV1_LAST100_LOCK {
-  logStakingV1_Lock(order_by: {timestamp: desc}, limit: 100) {
+  logStakingV1_Lock(
+    order_by: {timestamp: desc}
+    limit: 100
+    where: {txHash: {_neq: "null"}}
+  ) {
     txHash
     txBlockNumber
     poolID
@@ -1216,7 +1251,13 @@ export const Get_TreasuryDocument = `
     name
     amount
     value
+    rewards
     total
+    image
+    isLP
+    imageP1
+    imageP2
+    imageP3
   }
 }
     `

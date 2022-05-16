@@ -7,12 +7,12 @@ interface StakeAprCardProps {
   text: string
   image: string
   diluted: boolean
-  isLargerThan1200: boolean
+  isLargerLayout: boolean
 }
 const StakeAprCard = (props: StakeAprCardProps) => {
-  const { isLargerThan1200 } = props
+  const { isLargerLayout } = props
 
-  return isLargerThan1200 ? <DefaultLayout props={props} /> : <MobileLayout props={props} />
+  return isLargerLayout ? <DefaultLayout props={props} /> : <MobileLayout props={props} />
 }
 
 interface MobileLayoutProps {

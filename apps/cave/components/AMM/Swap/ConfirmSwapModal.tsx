@@ -39,7 +39,7 @@ const TradeCurrencyInfo = ({ currencyAmount, fiatValue, priceImpact }: TradeCurr
       bg="blackAlpha.100"
     >
       <Stack spacing={1} direction="column" h="100%">
-        <Heading isTruncated maxW="200px" fontSize="2xl">
+        <Heading noOfLines={1} maxW="200px" fontSize="2xl">
           {currencyAmount.toExact({ groupSeparator: ',' })}
         </Heading>
         <Flex fontWeight="bold" color="text.low" align="center">
@@ -189,7 +189,7 @@ const ConfirmSwap = ({
         variant="primary"
         size="large"
         onClick={onConfirm}
-        isFullWidth
+        w="full"
       >
         {hasAcceptedNewPrices ? 'Confirm Swap' : 'Accept new prices first'}
       </Button>

@@ -50,12 +50,12 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
   ))
   const purchases = solds.map((value, index) => (
     <Text key={index} opacity={1 - (isOpen ? index / 10 : (index / 10) * 3)}>
-      {'+ $' + commify(parseFloat(value.output).toFixed()) + ' DAI'}
+      {commify(parseFloat(value.output).toFixed()) + ' CNV'}
     </Text>
   ))
   const inputAmounts = solds.map((value, index) => (
     <Text key={index} opacity={1 - (isOpen ? index / 10 : (index / 10) * 3)}>
-      {+parseFloat(value.inputAmount).toFixed(3) + ' CNV'}
+      {`$${commify(parseFloat(value.inputAmount).toFixed(3))} DAI`}
     </Text>
   ))
 

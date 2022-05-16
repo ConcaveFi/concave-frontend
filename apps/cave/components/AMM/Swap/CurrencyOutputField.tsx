@@ -35,7 +35,7 @@ export const CurrencyOutputField = ({
     >
       <HStack justify="space-between" align="end" textColor="text.low" w="full">
         <Flex mr={2} align="center">
-          <Text isTruncated fontWeight="bold" fontSize="sm" mr={1}>
+          <Text noOfLines={1} fontWeight="bold" fontSize="sm" mr={1}>
             {!!outputFiat.value?.greaterThan(0) &&
               `$${outputFiat.value.toFixed(2, { groupSeparator: ',' })}`}
           </Text>

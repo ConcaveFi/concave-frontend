@@ -1,12 +1,14 @@
 import { CHAIN_NAME, Currency, Token } from '@concave/gemswap-sdk'
 import { Box, Button, Card, Flex, FlexProps, Image, Text } from '@concave/ui'
 import { commify } from 'ethers/lib/utils'
+import { getWalletType } from 'lib/injected.wallets'
 import { tokenService } from 'lib/token.service'
 import { Key } from 'react'
 
 export default function TreasuryManagementCard(props: { assets: any }) {
   const { assets } = props
-  const convexToken = assets.treasury.filter((token) => token.name === 'DOLA-3pool')[0]
+  const convexToken = assets.treasury.filter((token) => token.name === 'cvxDOLA3POOL')[0]
+
   return (
     <Card
       direction={'column'}
@@ -24,7 +26,7 @@ export default function TreasuryManagementCard(props: { assets: any }) {
         <FarmingViewer value={commify(convexToken?.total.toFixed())} />
         <Flex direction={'column'} gap={4}>
           {assets.treasury
-            .filter((token) => token.name !== 'DOLA-3pool')
+            .filter((token) => token.name !== 'cvxDOLA3POOL')
             .map(
               (i: { name: string; total: string; chainId: string; contract: string }, k: Key) =>
                 i.total > '1' && (
@@ -59,7 +61,7 @@ const TokenInfo = (props: TokenInfoProps) => {
           {/* <CurrencyIcon currency={props.token} /> */}
         </Flex>
         <Flex width={'60%'} justify="start" align={'center'}>
-          <Text fontWeight={'700'} fontSize="18px" isTruncated>
+          <Text fontWeight={'700'} fontSize="18px" noOfLines={1}>
             {props.tokenName}
           </Text>
         </Flex>
@@ -161,7 +163,7 @@ export const GlassPanel: React.FC<FlexProps> = ({ ...props }) => {
         boxShadow={'down'}
         m={'1px'}
         bg="url(assets/textures/glass.jpg)"
-        bgSize={'130%'}
+        bgSize={'100%'}
         bgPos="center"
         rounded="inherit"
       >

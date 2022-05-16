@@ -1,16 +1,19 @@
-import { StakingV1Abi } from 'contracts/LiquidStaking/LiquidStakingAbi'
-import { LIQUID_STAKING_ADDRESS } from 'contracts/LiquidStaking/LiquidStakingAddress'
-import { Contract, ethers } from 'ethers'
-import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { useEffect, useState } from 'react'
-import { useAccount, useConnect } from 'wagmi'
 import { createAlchemyWeb3, Nft } from '@alch/alchemy-web3'
 import { nftContract } from 'components/Dashboard/UserPositionCard'
-import { concaveProvider as providers } from 'lib/providers'
+import { LIQUID_STAKING_ADDRESS } from 'contracts/LiquidStaking/LiquidStakingAddress'
+import { BigNumber } from 'ethers'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import { StakingV1Contract } from 'lib/StakingV1Proxy/StakingV1Contract'
+import { useEffect, useState } from 'react'
+import { useAccount, useConnect } from 'wagmi'
 
 export async function getAllUsersPositionsID(address: string, netWorkId: number) {
   const usersNft = await getAllUserNfts(address, netWorkId)
   return usersNft.filter(filterByContract(LIQUID_STAKING_ADDRESS[netWorkId])).map(mapToTokenId)
+}
+export async function getAllUsersPositions(address: string, netWorkId: number) {
+  const usersNft = await getAllUserNfts(address, netWorkId)
+  return usersNft.filter(filterByContract(LIQUID_STAKING_ADDRESS[netWorkId]))
 }
 
 const filterByContract = (contractAddress: string) => (nft: Nft) => {
@@ -33,37 +36,35 @@ export async function getAllUserNfts(address: string, netWorkId: number) {
 }
 
 export async function getUserPosition(address: string, index: number, netWorkId: number) {
-  const stakingContract = new Contract(
-    LIQUID_STAKING_ADDRESS[netWorkId],
-    StakingV1Abi,
-    providers(netWorkId),
-  )
-  const userPositions = await getAllUsersPositionsID(address, netWorkId)
-  const tokenIndexId = +userPositions[index]
-  return await stakingContract.positions(tokenIndexId.toString()).catch((error) => {})
+  const userPositions = await getAllUsersPositions(address, netWorkId)
+  const nonFungibletoken = userPositions[index]
+  const tokenIndexId = +nonFungibletoken.id.tokenId
+  const stakingV1Contract = new StakingV1Contract(netWorkId)
+  const positionInfo = await stakingV1Contract.positions(tokenIndexId)
+  return { ...positionInfo, ...nonFungibletoken }
 }
 
 export async function getUserPositions(address: string, netWorkId: number) {
-  const stakingContract = new Contract(
-    LIQUID_STAKING_ADDRESS[netWorkId],
-    StakingV1Abi,
-    providers(netWorkId),
-  )
-  const userPositions = []
-  const userPositionsLength = await stakingContract.balanceOf(address).catch((error) => {})
-  for (let index = 0; index < userPositionsLength; index++) {
-    const pos = await getUserPosition(address, index, netWorkId)
+  const stakingV1Contract = new StakingV1Contract(netWorkId)
+  const userPositions: Promise<{
+    deposit: BigNumber
+    maturity: number
+    poolID: number
+    rewardDebt: BigNumber
+    shares: BigNumber
+  }>[] = []
+  const userPositionsLength = await stakingV1Contract.balanceOf(address)
+  for (let index = 0; userPositionsLength.gt(index); index++) {
+    const pos = getUserPosition(address, index, netWorkId)
     userPositions.push(pos)
   }
-  return userPositions
+  return Promise.all(userPositions)
 }
 
 export const useDashBoardState = () => {
   const [{ data: wallet, loading }, connect] = useConnect()
   const [{ data: account, error: accountError }] = useAccount()
-
   const netWorkId = useCurrentSupportedNetworkId()
-
   const [userPositions, setUserPositions] = useState([])
   const [totalLocked, setTotalLocked] = useState(0)
   const [status, setStatus] = useState<'loading' | 'notConnected' | 'loaded'>('loading')
@@ -72,10 +73,10 @@ export const useDashBoardState = () => {
     setStatus('loading')
     if (wallet.connected) {
       getUserPositions(account?.address, netWorkId)
-        .then((contract) => {
+        .then((userPositions) => {
           setStatus('loaded')
-          setUserPositions(contract)
-          setTotalLocked(getTotalLocked(contract))
+          setUserPositions(userPositions)
+          setTotalLocked(getTotalLocked(userPositions))
         })
         .catch(() => {})
     }

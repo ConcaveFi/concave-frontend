@@ -73,10 +73,10 @@ export function Bond() {
       })
     fetch('/api/cnv')
       .then((j) => j.json())
-      // .then((data) => JSON.parse(data))
-      .then((object) => {
-        if (object) {
-          setCnvMarketPrice(object?.data?.last)
+      .then((data) => JSON.parse(data))
+      .then((data) => {
+        if (data?.data) {
+          setCnvMarketPrice(data.data.last)
         }
       })
       .catch((e) => {
