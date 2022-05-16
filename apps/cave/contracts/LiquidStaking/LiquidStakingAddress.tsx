@@ -2,7 +2,7 @@ type AddressMap = { [chainId: number]: string }
 
 export const LIQUID_STAKING_ADDRESS: AddressMap = {
   1: '',
-  3: '0xE073cfeFa54171f6777b0A0eC0eC6DC35ABb5301',
+  3: '0x96Cd39103c79567785bD86734932754eeD185735',
 }
 
 //api.nftport.xyz
