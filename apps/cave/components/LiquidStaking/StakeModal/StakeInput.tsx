@@ -50,7 +50,7 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
           <Button
             mt={5}
             onClick={async () => {
-              const contract = new StakingV1Contract(3, signer)
+              const contract = new StakingV1Contract(netWorkdId, signer)
               contract
                 .lock(account?.address, stakeInput.numerator.toString(), props.poolId)
                 .then((x) => {
