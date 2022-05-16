@@ -71,7 +71,8 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
               stakeInput.greaterThan(cnvBalance.data?.numerator)
             }
           >
-            {+stakeInput.numerator?.toString() > +cnvBalance.data?.numerator.toString()
+            {+stakeInput.numerator?.toString() > +cnvBalance.data?.numerator.toString() ||
+            +cnvBalance.data?.numerator.toString() === 0
               ? 'Insufficient CNV'
               : 'Stake CNV'}
           </Button>
