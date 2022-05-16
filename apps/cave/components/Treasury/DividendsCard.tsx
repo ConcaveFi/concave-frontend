@@ -21,7 +21,8 @@ export default function DividendsCard() {
       </Flex>
       <Flex flex={1} justify="center" align={'center'} height="full">
         <Text fontWeight={700} textColor={'text.low'} fontSize="14px">
-          Dividends are distributed on a quarterly basis to the holders. You may redeem these dividends upon the distribution date on the My Positions page.
+          Dividends are distributed on a quarterly basis to the holders. You may redeem these
+          dividends upon the distribution date on the My Positions page.
         </Text>
       </Flex>
       <Flex flex={1} justify="center" align={'center'} height="full">
