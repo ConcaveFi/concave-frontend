@@ -128,9 +128,9 @@ export const getUserBondPositions = async (
     let length = currentBlockTimestamp - positionData.creation
     let elapsed = length / termData > 1 ? 1 : length / termData
     redeemable +=
-      Math.sign(positionData.owed * elapsed - positionData.redeemed) === 1
-        ? positionData.owed * elapsed - positionData.redeemed
-        : 0
+      positionData.owed * elapsed < positionData.redeemed
+        ? 0
+        : positionData.owed * elapsed - positionData.redeemed
     totalPending += +(+utils.formatEther(positionData.redeemed))
     totalOwed += +(+utils.formatEther(positionData.owed))
   }
