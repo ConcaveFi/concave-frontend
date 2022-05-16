@@ -123,7 +123,7 @@ const FarmingViewer = ({ value }) => {
           ml={10}
         >
           <Text fontWeight={'700'} fontSize="18px">
-            Reward:
+            Rewards:
           </Text>
         </Flex>
       </Flex>

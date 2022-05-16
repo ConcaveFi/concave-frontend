@@ -73,7 +73,7 @@ function TreasuryRedeemCard() {
       </Flex>
       <Flex mx={6} textAlign="center">
         <Text fontSize={'14px'} textColor="text.low" fontWeight={'700'}>
-          If you was on the one who did thar before and want your CNV please press that button
+          Redeem your tokens for CNV below
         </Text>
       </Flex>
       <Flex mt={5} direction="column" gap={2}>
@@ -83,7 +83,7 @@ function TreasuryRedeemCard() {
         <GlassPanel width={'182px'} height={'40px'} rounded="2xl" mx={'auto'} justify={'center'}>
           <Button>
             <Text fontSize={'18px'} fontWeight="700" my={'auto'}>
-              pCNV - 3200
+              pCNV - 0
             </Text>
           </Button>
         </GlassPanel>
