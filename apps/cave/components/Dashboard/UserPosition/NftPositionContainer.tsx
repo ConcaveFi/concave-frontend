@@ -17,6 +17,13 @@ const NftPositionContainer = (props: NftPositionContainerProps) => {
     2: '90 Days',
     3: '45 Days',
   }[stakeType]
+
+  const imgNameByPeriod = {
+    0: '12mposition.png',
+    1: '6mposition.png',
+    2: '3mposition.png',
+    3: '1mposition.png',
+  }[stakeType]
   return (
     <Box
       pos="relative"
@@ -46,7 +53,11 @@ const NftPositionContainer = (props: NftPositionContainerProps) => {
               </Text>
             </Flex>
             <Box w={'45%'}>
-              <Image sizes="100%" src={'/assets/marketplace/6mposition.png'} alt="position" />
+              <Image
+                sizes="100%"
+                src={`/assets/marketplace/${imgNameByPeriod}.png`}
+                alt="position"
+              />
             </Box>
           </HStack>
         </Flex>
