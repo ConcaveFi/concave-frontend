@@ -55,6 +55,7 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
                 .lock(account?.address, stakeInput.numerator.toString(), props.poolId)
                 .then((x) => {
                   console.log(x)
+                  props.onClose()
                 })
                 .catch((e) => {
                   console.log(e)
