@@ -36,8 +36,8 @@ const UserDividendCard = (props: UserDividendCardProps) => {
         </Text>
         <RedeemButton display={{ lg: 'none', md: 'flex' }} />
       </Flex>
-      <Flex justify={{ md: 'center' }} gap={{ md: 10 }}>
-        <Flex direction={'column'} alignItems="start" ml={6}>
+      <Flex justify={{ md: 'center' }} gap={{ base: 0 }} overflow="hidden">
+        <Flex direction={'column'} alignItems="start" ml={6} flex={1}>
           <Text fontSize={'11px'} fontWeight={600} textColor={'text.low'}>
             Total locked:
           </Text>
@@ -48,7 +48,7 @@ const UserDividendCard = (props: UserDividendCardProps) => {
             {isLoading && <Spinner height={'20px'} width={'20px'} ml={1} />}
           </Flex>
         </Flex>
-        <Flex direction={'column'} alignItems="start" ml={6}>
+        <Flex direction={'column'} alignItems="start" ml={6} flex={1}>
           <Text fontSize={'11px'} fontWeight={600} textColor={'text.low'}>
             Next Dividend Date:
           </Text>
@@ -56,7 +56,7 @@ const UserDividendCard = (props: UserDividendCardProps) => {
             07/04/2022
           </Text>
         </Flex>
-        <Flex direction={'column'} alignItems="start" ml={6}>
+        <Flex direction={'column'} alignItems="start" ml={6} flex={1}>
           <Text fontSize={'11px'} fontWeight={600} textColor={'text.low'}>
             Available Dividends:
           </Text>
