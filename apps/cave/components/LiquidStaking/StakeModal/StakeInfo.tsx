@@ -32,7 +32,7 @@ function StakeInfo(props: any) {
   return (
     <Box shadow="up" px={2} py={4} borderRadius="3xl" filter="drop-shadow(0px 0px 27px #81b3ff4f)">
       <Box px={4}>
-        <Stack isInline spacing={6}>
+        <Stack isInline justifyContent="space-between">
           <Stack spacing="1px">
             <Text textAlign="left" fontSize="3xl" fontWeight="bold">
               {/* {props.period} */}
@@ -47,11 +47,11 @@ function StakeInfo(props: any) {
               {periodToBondRevenueMapping[`${props.period}`]}
             </Text>
             <Text color="text.low" fontSize="sm">
-              Share of Bonding Revenue
+              Share of Bond Growth
             </Text>
           </Stack>
         </Stack>
-        <Text mt={6} color="text.low" fontSize="sm">
+        <Text mt={6} color="text.low" fontSize="sm" align="justify">
           The {props.period} staking term will accrue CNV from bond emissions by capturing{` `}
           {periodToBondRevenueMapping[props.period]} of the growth generated from purchased bonds
           every 8 hours. Additionally, the {props.period} term receives a{` `}
