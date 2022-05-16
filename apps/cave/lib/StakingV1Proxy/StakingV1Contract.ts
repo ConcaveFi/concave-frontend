@@ -34,7 +34,8 @@ export class StakingV1Contract {
     supply: BigNumber
     term: BigNumber
   }> {
-    return this.contract.pools(index)
+    const pools = await this.contract.pools(index)
+    return { ...pools }
   }
 
   public async positions(index: BigNumberish): Promise<{
