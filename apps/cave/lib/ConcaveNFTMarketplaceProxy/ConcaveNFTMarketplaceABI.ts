@@ -172,16 +172,6 @@ export const ContractABI = [
     inputs: [
       { internalType: 'address', name: '_nftContractAddress', type: 'address' },
       { internalType: 'uint256', name: '_tokenId', type: 'uint256' },
-    ],
-    name: 'cancelAuction',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      { internalType: 'address', name: '_nftContractAddress', type: 'address' },
-      { internalType: 'uint256', name: '_tokenId', type: 'uint256' },
       { internalType: 'address', name: '_erc20Token', type: 'address' },
       { internalType: 'uint128', name: '_minPrice', type: 'uint128' },
       { internalType: 'uint128', name: '_buyNowPrice', type: 'uint128' },
@@ -195,8 +185,8 @@ export const ContractABI = [
   },
   {
     inputs: [
-      { internalType: 'uint256', name: 'tokenId', type: 'uint256' },
-      { internalType: 'uint256', name: 'price', type: 'uint256' },
+      { internalType: 'address', name: '_nftContractAddress', type: 'address' },
+      { internalType: 'uint256', name: '_tokenId', type: 'uint256' },
     ],
     name: 'createMarketItem',
     outputs: [],
@@ -251,33 +241,13 @@ export const ContractABI = [
   },
   {
     inputs: [],
-    name: 'fetchItemsAll',
-    outputs: [
-      {
-        components: [
-          { internalType: 'uint256', name: 'itemId', type: 'uint256' },
-          { internalType: 'uint256', name: 'tokenId', type: 'uint256' },
-          { internalType: 'uint256', name: 'price', type: 'uint256' },
-          { internalType: 'address', name: 'owner', type: 'address' },
-          { internalType: 'bool', name: 'forSale', type: 'bool' },
-        ],
-        internalType: 'struct ConcaveNFTMarketplace.MarketItem[]',
-        name: '',
-        type: 'tuple[]',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
     name: 'fetchItemsForSale',
     outputs: [
       {
         components: [
           { internalType: 'uint256', name: 'itemId', type: 'uint256' },
           { internalType: 'uint256', name: 'tokenId', type: 'uint256' },
-          { internalType: 'uint256', name: 'price', type: 'uint256' },
+          { internalType: 'address', name: 'nftAddress', type: 'address' },
           { internalType: 'address', name: 'owner', type: 'address' },
           { internalType: 'bool', name: 'forSale', type: 'bool' },
         ],
@@ -297,7 +267,7 @@ export const ContractABI = [
         components: [
           { internalType: 'uint256', name: 'itemId', type: 'uint256' },
           { internalType: 'uint256', name: 'tokenId', type: 'uint256' },
-          { internalType: 'uint256', name: 'price', type: 'uint256' },
+          { internalType: 'address', name: 'nftAddress', type: 'address' },
           { internalType: 'address', name: 'owner', type: 'address' },
           { internalType: 'bool', name: 'forSale', type: 'bool' },
         ],
@@ -459,6 +429,26 @@ export const ContractABI = [
       { internalType: 'uint256', name: '_tokenId', type: 'uint256' },
     ],
     name: 'takeHighestBid',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { internalType: 'address', name: '_nftContractAddress', type: 'address' },
+      { internalType: 'uint256', name: '_tokenId', type: 'uint256' },
+    ],
+    name: 'toggleForSale',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { internalType: 'address', name: '_nftContractAddress', type: 'address' },
+      { internalType: 'uint256', name: '_tokenId', type: 'uint256' },
+    ],
+    name: 'unlockPositionHandler',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
