@@ -1,18 +1,6 @@
 // import { Token } from '@concave/gemswap-sdk'
 import { SpinIcon } from '@concave/icons'
-import {
-  Card,
-  Collapse,
-  Container,
-  Flex,
-  Heading,
-  Image,
-  keyframes,
-  ScaleFade,
-  Spinner,
-  Stack,
-  Text,
-} from '@concave/ui'
+import { Card, Flex, keyframes, ScaleFade, Text } from '@concave/ui'
 import DividendsCard from 'components/Treasury/DividendsCard'
 import TreasuryManagementCard from 'components/Treasury/TreasuryManagementCard'
 import TreasuryRedeemCard from 'components/Treasury/TreasuryRedeemCard'

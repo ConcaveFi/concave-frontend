@@ -1,13 +1,12 @@
-import { CHAIN_NAME, Currency, Token } from '@concave/gemswap-sdk'
-import { Box, Button, Card, Flex, FlexProps, Image, Text } from '@concave/ui'
+import { Card, Flex, FlexProps, Image, Text } from '@concave/ui'
 import { commify } from 'ethers/lib/utils'
-import { getWalletType } from 'lib/injected.wallets'
-import { tokenService } from 'lib/token.service'
 import { Key } from 'react'
 
 export default function TreasuryManagementCard(props: { assets: any }) {
   const { assets } = props
   const convexToken = assets.treasury.filter((token) => token.name === 'cvxDOLA3POOL')[0]
+
+  console.log(convexToken)
 
   return (
     <Card
@@ -23,19 +22,31 @@ export default function TreasuryManagementCard(props: { assets: any }) {
         <TreasyAssetsTitle />
       </Flex>
       <Flex gap={'inherit'} justify="center" align={'center'} height="full" mb={4}>
-        <FarmingViewer value={commify(convexToken?.total.toFixed())} />
+        <FarmingViewer
+          rewards={commify(convexToken?.rewards.toFixed())}
+          value={commify(convexToken?.total.toFixed())}
+        />
         <Flex direction={'column'} gap={4}>
           {assets.treasury
             .filter((token) => token.name !== 'cvxDOLA3POOL')
             .map(
-              (i: { name: string; total: string; chainId: string; contract: string }, k: Key) =>
+              (
+                i: {
+                  name: string
+                  total: string
+                  chainId: string
+                  contract: string
+                  image: string
+                },
+                k: Key,
+              ) =>
                 i.total > '1' && (
                   <TokenInfo
                     key={k}
                     tokenName={i.name}
                     token={i.name}
                     value={i.total}
-                    image={'missing'}
+                    image={i.image}
                   />
                 ),
             )}
@@ -49,16 +60,16 @@ interface TokenInfoProps {
   token: string
   tokenName: string
   value: string
-  image?: string
+  image: string
 }
 const TokenInfo = (props: TokenInfoProps) => {
-  console.log(props.image)
+  const image = props.image.replace('github', 'raw.githubusercontent').replace('blob/', '')
 
   return (
     <Card rounded={'2xl'} width={'340px'} height="52px" direction={'row'}>
       <GlassPanel width={'180px'} height="52px" rounded={'2xl'}>
         <Flex width={'40%'} justify="center" align={'center'}>
-          {/* <CurrencyIcon currency={props.token} /> */}
+          <Image width={'40px'} height="40px" src={image}></Image>
         </Flex>
         <Flex width={'60%'} justify="start" align={'center'}>
           <Text fontWeight={'700'} fontSize="18px" noOfLines={1}>
@@ -74,8 +85,7 @@ const TokenInfo = (props: TokenInfoProps) => {
     </Card>
   )
 }
-
-const FarmingViewer = ({ value }) => {
+const FarmingViewer = ({ value, rewards }) => {
   return (
     <GlassPanel width={'477px'} height="157px" rounded={'2xl'} justify="center" align={'center'}>
       <Flex>
@@ -109,7 +119,7 @@ const FarmingViewer = ({ value }) => {
             </Flex>
           </GlassPanel>
           <Flex flex={1} align="center">
-            <Text fontWeight={700} fontSize="26px">
+            <Text fontWeight={700} fontSize="26px" textColor={'text.low'}>
               {'$' + value}
             </Text>
           </Flex>
@@ -124,6 +134,9 @@ const FarmingViewer = ({ value }) => {
         >
           <Text fontWeight={'700'} fontSize="18px">
             Rewards:
+          </Text>
+          <Text fontWeight={'700'} fontSize="20" textColor={'text.low'}>
+            {'$' + rewards}
           </Text>
         </Flex>
       </Flex>
