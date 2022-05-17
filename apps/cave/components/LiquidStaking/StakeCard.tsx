@@ -157,10 +157,16 @@ function StakeCard(props: StackCardProps) {
             <Text>Staking Cap</Text>
           </Stack>
 
-          <Box height={'30px'} width="170px" shadow="down" borderRadius="2xl" position="relative">
+          <Box
+            height={'30px'}
+            width={{ base: '210px', xl: '170px' }}
+            shadow="down"
+            borderRadius="2xl"
+            position="relative"
+          >
             <Box
               position={'absolute'}
-              width="95%"
+              width="100%"
               height={'78%'}
               rounded={'2xl'}
               my={'4px'}
