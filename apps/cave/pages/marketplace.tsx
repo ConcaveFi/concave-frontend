@@ -6,12 +6,19 @@ import MarketplaceStakeCard from 'components/Marketplace/MarketplaceStakeCard'
 import React, { useEffect, useState } from 'react'
 
 const Marketplace = () => {
-  const isLargerLayout = useBreakpointValue({ base: false, xl: true })
+  const isLargerLayout = useBreakpointValue({
+    base: false,
+    md: false,
+    sm: false,
+    xl: true,
+  })
   const [viewTransactions, setViewTransactions] = useState(false)
 
   useEffect(() => {
     if (isLargerLayout && viewTransactions == true) setViewTransactions(false)
   }, [isLargerLayout])
+
+  console.log(isLargerLayout)
 
   return (
     <Flex
@@ -74,7 +81,6 @@ const Marketplace = () => {
                 px="140px"
                 rounded="0px 0px 16px 16px"
                 onClick={() => setViewTransactions(true)}
-                active={!isLargerLayout}
               />
               <Box display={{ xl: 'flex', base: 'none' }}>
                 <MarketplaceActivityCard />
@@ -99,7 +105,6 @@ const Marketplace = () => {
               title="Back to Marketplace"
               px="80px"
               onClick={() => setViewTransactions(false)}
-              active={true}
               rounded="16px 16px 0px 0px "
             />
             <MarketplaceActivityCard />
@@ -131,14 +136,13 @@ const Marketplace = () => {
 interface SwitchViewProps {
   title: string
   px: string
-  active: boolean
   rounded: string
   onClick: () => void
 }
 const SwitchView = (props: SwitchViewProps) => {
-  const { active, onClick, px, title } = props
+  const { onClick, px, title } = props
   return (
-    <Button _active={{}} onClick={() => onClick()} display={active ? 'flex' : 'none'}>
+    <Button _active={{}} onClick={() => onClick()} display={{ base: 'flex', xl: 'none' }}>
       <Card
         zIndex={-1}
         height={'32px'}
