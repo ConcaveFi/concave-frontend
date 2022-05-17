@@ -38,7 +38,7 @@ export const useSwapButtonProps = ({
   /*
     Not Connected
   */
-  if (!account?.address) return { children: 'Connect Wallet', onClick: connectModal.onOpen }
+  if (!account?.address) return { children: 'Connect wallet', onClick: connectModal.onOpen }
 
   if (networkId !== currencyIn.chainId) return { children: 'Network mismatch', isDisabled: true }
   if (!swapSupportedChains.includes(networkId))
