@@ -52,18 +52,23 @@ export const TransactionSubmittedDialog = ({
   subtitle,
   tx,
   isOpen: isOpenProp,
+  closeParentComponent,
 }: {
   title?: string
   subtitle?: string
   tx: Transaction
   isOpen: boolean
+  closeParentComponent?: VoidFunction
 }) => {
   const [isOpen, setIsOpen] = useState(isOpenProp)
   useEffect(() => {
     setIsOpen(isOpenProp)
   }, [isOpenProp])
 
-  const onClose = () => setIsOpen(false)
+  const onClose = () => {
+    setIsOpen(false)
+    closeParentComponent()
+  }
   return (
     <Modal
       bluryOverlay={true}

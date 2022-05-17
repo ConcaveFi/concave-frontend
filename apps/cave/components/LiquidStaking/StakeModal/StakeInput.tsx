@@ -38,9 +38,21 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
   const cnvBalance = useCurrencyBalance(stakeInput?.currency, { watch: true })
 
   const [tx, setTx] = useState(undefined)
+  const [txError, setTxError] = useState('')
 
-  const { isOpen, onClose, onOpen } = useDisclosure()
   const [waitingForConfirm, setWaitingForConfirm] = useState(false)
+
+  const {
+    isOpen: isOpenSubmitted,
+    onClose: onCloseSubmitted,
+    onOpen: onOpenSubmitted,
+  } = useDisclosure()
+  const {
+    isOpen: isOpenRejected,
+    onClose: onCloseRejected,
+    onOpen: onOpenRejected,
+  } = useDisclosure()
+
   return (
     <>
       <Box>
@@ -75,13 +87,18 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
                   .then((x) => {
                     setTx(x)
                     setWaitingForConfirm(false)
-                    onOpen()
+                    onOpenSubmitted()
                     console.log(x)
                   })
                   .catch((e) => {
                     if (e.code === 4001) {
                       // Code 4001 it's for reject transaction.
                       setWaitingForConfirm(false)
+                      setTxError('Transaction Rejected')
+                      onOpenRejected()
+                    } else {
+                      setTxError(e.message)
+                      onOpenRejected()
                     }
                     console.log(e)
                   })
@@ -124,7 +141,8 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
         </Button> */}
         </Box>
       </Box>
-      <WaitingConfirmationDialog isOpen={waitingForConfirm}>
+
+      <WaitingConfirmationDialog isOpen={waitingForConfirm} title={'Confirm Transaction'}>
         <Flex
           width={'200px'}
           height="80px"
@@ -142,7 +160,17 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
           </Text>
         </Flex>
       </WaitingConfirmationDialog>
-      <TransactionSubmittedDialog isOpen={isOpen} tx={tx} />
+
+      <TransactionSubmittedDialog
+        isOpen={isOpenSubmitted}
+        tx={tx}
+        closeParentComponent={props.onClose}
+      />
+      <TransactionErrorDialog
+        error={txError}
+        isOpen={isOpenRejected}
+        closeParentComponent={props.onClose}
+      />
     </>
   )
 }
