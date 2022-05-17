@@ -2,11 +2,13 @@ import { AVERAGE_BLOCK_TIME } from 'constants/blockchain'
 import { BigNumber, Contract } from 'ethers'
 import { Currency, CurrencyAmount, NATIVE } from '@concave/gemswap-sdk'
 import { useQuery } from 'react-query'
-import { erc20ABI, useAccount, useSigner } from 'wagmi'
+import { erc20ABI, useAccount, useNetwork, useSigner } from 'wagmi'
 
 export const useCurrencyBalance = (currency: Currency, { watch = false } = {}) => {
   const [{ data: account }] = useAccount()
   const [{ data: signer }] = useSigner()
+  const [network] = useNetwork()
+  const connectedChainId = network.data.chain?.id
   const chainId = currency?.chainId
   return useQuery(
     ['balance', currency?.symbol, currency?.wrapped.address, account?.address, chainId],
@@ -21,8 +23,13 @@ export const useCurrencyBalance = (currency: Currency, { watch = false } = {}) =
       return CurrencyAmount.fromRawAmount(currency, b.toString())
     },
     {
-      refetchInterval: watch ? AVERAGE_BLOCK_TIME[chainId] : false,
-      enabled: !!currency && !!chainId && !!account?.address && !!signer,
+      refetchInterval: watch && chainId === connectedChainId ? AVERAGE_BLOCK_TIME[chainId] : false,
+      enabled:
+        !!currency &&
+        !!connectedChainId &&
+        chainId === connectedChainId &&
+        !!account?.address &&
+        !!signer,
       notifyOnChangeProps: 'tracked',
       refetchOnWindowFocus: false,
       retry: false,
