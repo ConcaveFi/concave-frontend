@@ -213,7 +213,7 @@ function StakeCard(props: StackCardProps) {
           mx="auto"
           disabled={false}
         >
-          Stake CNV
+          Stake
         </Button>
 
         <Modal
