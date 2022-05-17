@@ -72,7 +72,7 @@ export const TransactionSubmittedDialog = ({
   return (
     <Modal
       bluryOverlay={true}
-      title={title || 'Success'}
+      title={title || 'Tx Submitted'}
       isOpen={isOpen}
       onClose={onClose}
       bodyProps={{ align: 'center', w: '300px' }}
