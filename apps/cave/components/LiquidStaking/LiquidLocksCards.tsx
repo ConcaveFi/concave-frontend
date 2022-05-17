@@ -59,21 +59,31 @@ const LiquidLocksCards = () => {
         <Flex fontWeight="700" width={'full'} flex={1}>
           <Flex direction={'column'} flex={0.4} justify="center" align={'center'} mt={2}>
             <Text>Stake period</Text>
-            <Flex direction={'column'} textColor="text.low" fontSize={'14px'}>
+            <Flex direction={'column'} textColor="text.low" fontSize={'14px'} alignItems={'center'}>
               {poolIds}
             </Flex>
           </Flex>
           <Box w="1px" bg="stroke.primary" />
           <Flex direction={'column'} flex={0.5} justify="center" align={'center'} mt={2}>
             <Text>Amount locked</Text>
-            <Flex direction={'column'} textColor="text.accent" fontSize={'14px'}>
+            <Flex
+              direction={'column'}
+              textColor="text.accent"
+              fontSize={'14px'}
+              alignItems={'center'}
+            >
               {amounts}
             </Flex>
           </Flex>
           <Box w="1px" bg="stroke.primary" />
           <Flex direction={'column'} flex={0.5} justify="center" align={'center'} mt={2}>
             <Text>Timeline</Text>
-            <Flex direction={'column'} textColor="text.accent" fontSize={'14px'}>
+            <Flex
+              direction={'column'}
+              textColor="text.accent"
+              fontSize={'14px'}
+              alignItems={'center'}
+            >
               {relativeTime}
             </Flex>
           </Flex>
