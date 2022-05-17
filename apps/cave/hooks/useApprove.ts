@@ -5,7 +5,6 @@ import { erc20ABI, useAccount, useSigner } from 'wagmi'
 import { MaxUint256 } from '@concave/gemswap-sdk'
 import { useQuery } from 'react-query'
 import { TransactionReceipt, TransactionResponse } from '@ethersproject/abstract-provider'
-import { AVERAGE_BLOCK_TIME } from 'constants/blockchain'
 import { concaveProvider } from 'lib/providers'
 
 export const useAllowance = (token: Token, spender: string, userAddress: string) => {
@@ -24,7 +23,6 @@ export const useAllowance = (token: Token, spender: string, userAddress: string)
     {
       enabled: !!token?.address && !!userAddress && !!spender,
       retry: false,
-      refetchInterval: AVERAGE_BLOCK_TIME[token?.chainId],
     },
   )
 
@@ -43,7 +41,7 @@ export const useContractApprove = (
   token: Token,
   spender: string,
   amountToApprove: BigNumberish = MaxUint256.toString(),
-  { onSuccess }: { onSuccess: (recipt: TransactionReceipt) => void },
+  { onSuccess }: { onSuccess: (receipt: TransactionReceipt) => void },
 ) => {
   const [{ data: signer }] = useSigner()
   const {
