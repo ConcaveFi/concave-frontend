@@ -2,7 +2,7 @@ import { Currency } from '@concave/gemswap-sdk'
 import { ExpandArrowIcon } from '@concave/icons'
 import { Box, Button, Flex, HStack, Modal, NumericInput, StackDivider, Text } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
-import React from 'react'
+import React, { useState } from 'react'
 
 const TokenInfo = ({
   currency,
@@ -78,6 +78,8 @@ export const ConfirmBondModal = ({
   minimumAmountOut: string
   slippage: string
 }) => {
+  const [hasClickedConfirm, setHasClickedConfirm] = useState(false)
+
   return (
     <Modal bluryOverlay={true} title="Confirm Bond" isOpen={isOpen} onClose={onClose}>
       <div>
@@ -126,8 +128,17 @@ export const ConfirmBondModal = ({
         </Text>
       </Flex>
 
-      <Button variant="primary" size="large" onClick={onConfirm} w="full">
-        Confirm Bond
+      <Button
+        disabled={hasClickedConfirm}
+        variant="primary"
+        size="large"
+        onClick={() => {
+          setHasClickedConfirm(true)
+          onConfirm()
+        }}
+        w="full"
+      >
+        {hasClickedConfirm ? 'Confirm in wallet' : 'Confirm bond'}
       </Button>
     </Modal>
   )
