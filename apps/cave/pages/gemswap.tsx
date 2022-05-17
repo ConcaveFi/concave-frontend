@@ -206,7 +206,12 @@ export function SwapPage({ currencies }) {
         </Text>
       </WaitingConfirmationDialog>
 
-      <TransactionSubmittedDialog tx={swapTx.data} isOpen={swapTx.isTransactionSent} />
+      <TransactionSubmittedDialog
+        tx={swapTx.data}
+        isOpen={swapTx.isTransactionSent}
+        tokenSymbol={currencyOut.symbol}
+        tokenOutAddress={currencyOut['address']} // workaround for type error
+      />
       <TransactionErrorDialog error={swapTx.error?.message} isOpen={swapTx.isError} />
 
       {/* <Modal
