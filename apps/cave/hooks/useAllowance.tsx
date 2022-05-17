@@ -27,7 +27,7 @@ export const ApproveButton = ({
   if (!account?.address)
     return (
       <Button fontSize="2xl" {...buttonProps} onClick={connectModal.onOpen}>
-        {'Connect Wallet'}
+        {'Connect wallet'}
       </Button>
     )
 
@@ -53,7 +53,7 @@ export const useApprovalWhenNeeded = (
 ) => {
   const { allowance, ...approve } = useApprove(token, spender)
   const label = (() => {
-    if (approve.isWaitingTransactionReceipt) return 'Waiting block confirmation'
+    if (approve.isWaitingTransactionReceipt) return 'Approving'
 
     if (allowance.isError) {
       return 'Error on request'
@@ -63,7 +63,7 @@ export const useApprovalWhenNeeded = (
       return 'Approved'
     }
     if (approve.isWaitingForConfirmation) {
-      return 'Approve in your wallet'
+      return 'Approve in wallet'
     }
     return `Approve ${token.symbol}`
   })()
