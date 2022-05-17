@@ -60,6 +60,10 @@ export function BondBuyCard(props: {
   const [amountIn, setAmountIn] = useState<CurrencyAmount<Currency>>(toAmount('0', DAI[networkId]))
   // const [amountIn, setAmountIn] = useState<number>(0)
 
+  useEffect(() => {
+    setAmountIn(toAmount(0, DAI[networkId]))
+  }, [networkId])
+
   const [amountOut, setAmountOut] = useState<string>()
   const [bondSpotPrice, setBondSpotPrice] = useState<string>()
 
