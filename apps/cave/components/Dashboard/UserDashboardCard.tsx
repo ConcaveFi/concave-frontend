@@ -128,7 +128,7 @@ const HasNoPositions = (props: HasNoPositionsprops) => {
           px={4}
           my="4"
           rounded={'2xl'}
-          onClick={() => router.push('liquidstaking')}
+          onClick={() => router.push('liquid-staking')}
         >
           <Flex fontSize={'16px'} fontWeight="700" grow={1} justify="center">
             Lets buy some!

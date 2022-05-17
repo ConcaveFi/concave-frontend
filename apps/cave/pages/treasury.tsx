@@ -24,7 +24,7 @@ import TreasuryRevenueCard from 'components/Treasury/TreasuryRevenueCard'
 // import { chain } from 'wagmi'
 import { useGet_TreasuryQuery, useGet_Amm_Cnv_InfosQuery } from 'graphql/generated/graphql'
 
-export default function Treasury() {
+export function Treasury() {
   const { status: treaStatus, data: treaData } = useGet_TreasuryQuery()
   const { status: cnvStatus, data: cnvData } = useGet_Amm_Cnv_InfosQuery()
 
@@ -93,3 +93,10 @@ const spin = keyframes({
   '0%': { transform: 'rotate(0deg)' },
   '100%': { transform: 'rotate(360deg)' },
 })
+
+Treasury.Meta = {
+  title: 'Concave | Treasury',
+  description: `Concave has treasury strategies to take advantage of yield opportunities. It is broken down into Investment Research, Delta Neutral, and Stable Farm strategies.`,
+}
+
+export default Treasury

@@ -3,7 +3,7 @@ import { AddLiquidityCard } from 'components/AMM/AddLiquidity/AddLiquidity'
 import { useQueryCurrency } from 'components/CurrencyAmountField/UseQueryCurrency'
 import React from 'react'
 
-export default function AddLiquidity() {
+export function AddLiquidity() {
   const { data: currencys, isLoading } = useQueryCurrency()
   return (
     <>
@@ -50,3 +50,10 @@ export default function AddLiquidity() {
     </>
   )
 }
+
+AddLiquidity.Meta = {
+  title: 'Concave | Add Liquidity',
+  description: `Add liquidity to Concave's liquidity pool to earn fees.`,
+}
+
+export default AddLiquidity

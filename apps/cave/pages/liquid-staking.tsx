@@ -102,4 +102,9 @@ function LiquidStaking() {
   )
 }
 
+LiquidStaking.Meta = {
+  title: 'Concave | Liquid Staking',
+  description: `With Liquid Staking, positions receive boosted rewards based on term length. Investors in the longest-term positions will receive the highest returns.`,
+}
+
 export default LiquidStaking
