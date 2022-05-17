@@ -1,4 +1,4 @@
-import { createAlchemyWeb3, Nft } from '@alch/alchemy-web3'
+import { createAlchemyWeb3 } from '@alch/alchemy-web3'
 import { nftContract } from 'components/Dashboard/UserPositionCard'
 import { BigNumber } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
@@ -7,22 +7,8 @@ import { StakingV1Contract } from 'lib/StakingV1Proxy/StakingV1Contract'
 import { useEffect, useState } from 'react'
 import { useAccount, useConnect } from 'wagmi'
 
-export async function getAllUsersPositionsID(address: string, netWorkId: number) {
-  const usersNft = await getAllUserNfts(address, netWorkId)
-  return usersNft.filter(filterByContract(StakingV1ProxyAddress[netWorkId])).map(mapToTokenId)
-}
-export async function getAllUsersPositions(address: string, netWorkId: number) {
-  const usersNft = await getAllUserNfts(address, netWorkId)
-  return usersNft.filter(filterByContract(StakingV1ProxyAddress[netWorkId]))
-}
-
-const filterByContract = (contractAddress: string) => (nft: Nft) => {
-  return contractAddress.toUpperCase() === nft.contract.address.toUpperCase()
-}
-const mapToTokenId = (nft: Nft) => nft.id.tokenId
-
-export async function getAllUserNfts(address: string, netWorkId: number) {
-  const network = netWorkId === 1 ? 'mainnet' : 'ropsten'
+export async function getAllUserNfts(address: string, chainId: number) {
+  const network = chainId === 1 ? 'mainnet' : 'ropsten'
   const web3 = createAlchemyWeb3(`https://eth-${network}.alchemyapi.io/v2/demo`)
   const nft = await web3.alchemy.getNfts({
     owner: address,
@@ -30,11 +16,14 @@ export async function getAllUserNfts(address: string, netWorkId: number) {
   return nft.ownedNfts
 }
 
-export async function getUserPosition(address: string, index: number, netWorkId: number) {
-  const userPositions = await getAllUsersPositions(address, netWorkId)
+export async function getUserPosition(address: string, index: number, chainId: number) {
+  const usersNft = await getAllUserNfts(address, chainId)
+  const userPositions = usersNft.filter(
+    (nft) => nft.contract.address.toUpperCase() === StakingV1ProxyAddress[chainId].toUpperCase(),
+  )
   const nonFungibletoken = userPositions[index]
   const tokenIndexId = +nonFungibletoken.id.tokenId
-  const stakingV1Contract = new StakingV1Contract(netWorkId)
+  const stakingV1Contract = new StakingV1Contract(chainId)
   const positionInfo = await stakingV1Contract.positions(tokenIndexId)
   return { ...positionInfo, ...nonFungibletoken }
 }

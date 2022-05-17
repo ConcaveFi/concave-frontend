@@ -4,28 +4,38 @@ import { concaveProvider } from 'lib/providers'
 import { ConcaveNFTMarketplaceProxy } from './Address'
 import { ContractABI } from './ConcaveNFTMarketplaceABI'
 import { MarketItem } from './MarketItem'
+import { Auction } from './Auction.entity'
+import { Signer } from 'ethers'
+import { Provider } from 'react'
 
 export class ConcaveNFTMarketplace {
   private readonly contract: ethers.Contract
   private readonly provider: MulticallProvider
 
-  constructor(chainId: number, private readonly signer?: ethers.Signer) {
+  constructor(chainId: number) {
     this.provider = concaveProvider(chainId)
     this.contract = new ethers.Contract(
       ConcaveNFTMarketplaceProxy[chainId],
       ContractABI,
       this.provider,
     )
-    if (this.signer) {
-      this.contract.connect(this.signer)
-    }
   }
 
   public async createMarketItem(marketItem: MarketItem): Promise<ethers.Transaction> {
     return this.contract.createMarketItem(marketItem.tokenID, marketItem.price, {})
   }
 
+  public async nftContractAuctions(nftContractAddress: string, index: string): Promise<Auction> {
+    const info = await this.contract.nftContractAuctions(nftContractAddress, index)
+    return Auction.fromObject(info)
+  }
+
+  public async withdrawAuction(signer: Signer, nftContractAddress: string, tokenId: string) {
+    return this.contract.connect(signer).withdrawAuction(nftContractAddress, tokenId)
+  }
+
   public async createDefaultNftAuction(
+    signer: Signer,
     nftContractAddress: string,
     tokenId: BigNumberish,
     erc20Token: string,
@@ -37,17 +47,8 @@ export class ConcaveNFTMarketplace {
     if (feeRecipients.length !== feePercentages.length) {
       throw 'Check recipients and percentages'
     }
-    console.table([
-      nftContractAddress,
-      tokenId,
-      erc20Token,
-      minPrice,
-      buyNowPrice,
-      feeRecipients,
-      feePercentages,
-    ])
     return this.contract
-      .connect(this.signer)
+      .connect(signer)
       .createDefaultNftAuction(
         nftContractAddress,
         tokenId,
