@@ -79,9 +79,8 @@ export const ConfirmBondModal = ({
   slippage: string
 }) => {
   return (
-    <Modal bluryOverlay={true} title="" isOpen={isOpen} onClose={onClose}>
+    <Modal bluryOverlay={true} title="Confirm Bond" isOpen={isOpen} onClose={onClose}>
       <div>
-        {' '}
         <TokenInfo
           currency={currencyIn}
           address={currencyIn.isToken ? currencyIn.address : currencyIn.symbol}
