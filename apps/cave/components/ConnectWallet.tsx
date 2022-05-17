@@ -104,7 +104,7 @@ const ConnectButton = () => {
           size="medium"
           w="100%"
         >
-          Connect Wallet
+          Connect wallet
         </MenuButton>
         <Portal>
           <MenuList
