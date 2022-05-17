@@ -1,4 +1,3 @@
-import { SpinIcon } from '@concave/icons'
 import {
   Box,
   Button,
@@ -114,7 +113,7 @@ function StakeCard(props: StackCardProps) {
   const { data: pools, error: poolsError, isLoading: isLoadingPools } = usePools(netWorkdId, index)
   const { data: stakingCap, isLoading: isLoadingStakings } = useViewStakingCap(netWorkdId, index)
   const capPercentage = useMemo(() => {
-    if (!pools?.balance || !stakingCap) return '0'
+    if (!pools?.balance || !stakingCap || stakingCap.eq(0)) return '0'
     return BigNumber.from(pools.balance).div(stakingCap).mul(100)
   }, [pools, stakingCap])
   const [showFloatingCards, setShowFloatingCards] = useState(false)
