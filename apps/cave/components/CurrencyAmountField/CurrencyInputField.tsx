@@ -37,6 +37,14 @@ export const CurrencyInputField = ({
   const inputFiat = useFiatValue(currencyAmountIn)
   const balance = useCurrencyBalance(currencyAmountIn?.currency, { watch: true })
 
+  // const with2Decimals = sucNut.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0]
+  if (balance.isSuccess) {
+    const truncatedBalance = parseFloat(
+      (+balance?.data?.numerator.toString() / 10 ** 18).toString().match(/^-?\d+(?:.\d{0,2})?/)[0],
+    ).toLocaleString()
+    console.log('truncatedBalance', truncatedBalance)
+  }
+
   return (
     <CurrencyAmountField
       currencyAmount={currencyAmountIn}
