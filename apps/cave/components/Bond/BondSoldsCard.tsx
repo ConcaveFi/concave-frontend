@@ -1,18 +1,5 @@
-import { ArrowDownIcon, ExpandArrowIcon, SpinIcon, SpinnerIcon } from '@concave/icons'
-import {
-  Box,
-  Button,
-  ButtonSpinner,
-  Card,
-  Collapse,
-  Flex,
-  Image,
-  keyframes,
-  Spinner,
-  Text,
-  useDisclosure,
-} from '@concave/ui'
-import { BOND_ADDRESS } from 'contracts/Bond/BondingAddress'
+import { ExpandArrowIcon } from '@concave/icons'
+import { Box, Card, Collapse, Flex, keyframes, Text } from '@concave/ui'
 import { formatDistanceStrict } from 'date-fns'
 import { commify } from 'ethers/lib/utils'
 import {
@@ -21,8 +8,6 @@ import {
 } from 'graphql/generated/graphql'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useEffect, useState } from 'react'
-import { getBondSpotPrice } from './BondState'
-
 interface BoldSoldsCardProps {
   data: Get_Accrualbondv1_Last10_SoldQuery
   error: any
@@ -75,14 +60,14 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
           my={2}
         >
           <Flex flex={1.2} direction="column" align={'center'} fontSize="14px">
-            <Text fontSize="16px" textColor={'white'}>
-              Timeline
+            <Text fontSize="16px" textColor={'white'} fontWeight="700">
+              Timestamp
             </Text>
             {relatives}
           </Flex>
           <Box w="1px" my={-2} bg="stroke.primary" />
           <Flex flex={1.3} direction="column" align={'center'} fontSize="14px">
-            <Text fontSize="16px" textColor={'white'}>
+            <Text fontSize="16px" textColor={'white'} fontWeight="700">
               Amount
             </Text>
             {inputAmounts}
@@ -91,7 +76,7 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
           <Box w="1px" my={-2} bg="stroke.primary" />
           <Flex flex={1.3}>
             <Flex flex={0.9} direction="column" align={'center'} fontSize="14px">
-              <Text fontSize="16px" textColor={'white'}>
+              <Text fontSize="16px" textColor={'white'} fontWeight="700">
                 Purchase
               </Text>
               {purchases}
