@@ -8,7 +8,6 @@ interface RedeemCardViewerProps {
 }
 const RedeemCardViewer = (props: RedeemCardViewerProps) => {
   const { initial, gained, redeemIn } = props
-
   return (
     <Flex
       flex={1}
@@ -29,9 +28,10 @@ const RedeemCardViewer = (props: RedeemCardViewerProps) => {
         w={{ lg: '140px', md: '170px' }}
         h={{ lg: '40px', md: '36px' }}
         mx="auto"
+        cursor={redeemIn > 0 ? 'default' : 'pointer'}
         variant={redeemIn > 0 ? '' : 'primary'}
         shadow={redeemIn > 0 ? 'down' : 'up'}
-        _active={{ transform: 'scale(0.9)' }}
+        _active={redeemIn <= 0 && { transform: 'scale(0.9)' }}
         _focus={{}}
         rounded="2xl"
       >

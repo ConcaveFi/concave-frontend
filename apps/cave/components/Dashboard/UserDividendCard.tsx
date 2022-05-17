@@ -74,21 +74,25 @@ const UserDividendCard = (props: UserDividendCardProps) => {
 export default UserDividendCard
 
 const RedeemButton = ({ ...props }) => {
+  const { redeemable } = props
   return (
     <Button
+      cursor={redeemable ? 'pointer' : 'default'}
       fontWeight="bold"
       fontSize="md"
-      variant="secondary"
-      border="stroke.primary"
+      variant={redeemable ? 'primary' : 'primary.outline'}
       w="160px"
       h="40px"
       size="large"
       shadow="down"
       mx={6}
+      _focus={{}}
+      _hover={{}}
+      _active={redeemable ? { transform: 'scale(0.95)' } : {}}
       {...props}
     >
-      <Text color="text.low" fontSize="sm">
-        Redeem
+      <Text color={redeemable ? 'white' : 'text.low'} fontSize="sm">
+        {props.redeemable ? 'Redeem' : 'Not Redeemable'}
       </Text>
     </Button>
   )
