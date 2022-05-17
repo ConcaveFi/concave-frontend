@@ -16,7 +16,7 @@ const addLiquidity = async (
   tokenAmountB: CurrencyAmount<Currency>,
   routerContract: Contract,
   recipient: string,
-  deadline = Math.round(Date.now() / 1000) * 60 * 30,
+  deadline = Math.round(Date.now() / 1000) + 60 * 30,
 ) => {
   /*
     Add with ETH
@@ -61,7 +61,6 @@ export const useAddLiquidityTransaction = (
   const [{ data: signer }] = useSigner()
   const routerContract = useContract<Contract>({
     addressOrName: ROUTER_ADDRESS[networkId],
-    // @ts-ignore
     contractInterface: RouterABI,
     signerOrProvider: signer,
   })
