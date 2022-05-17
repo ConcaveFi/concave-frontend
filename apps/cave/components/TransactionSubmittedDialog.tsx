@@ -67,7 +67,7 @@ export const TransactionSubmittedDialog = ({
 
   const onClose = () => {
     setIsOpen(false)
-    closeParentComponent()
+    if (closeParentComponent) closeParentComponent()
   }
   return (
     <Modal
