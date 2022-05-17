@@ -6,73 +6,79 @@ const MarketplaceActivityCard = () => {
   const [loading, setLoading] = useState(false)
   const [data, setData] = useState(null)
   const [error, setError] = useState(false)
+  const [filter, setFilter] = useState<'all' | 'listing' | 'sale'>('all')
 
   useEffect(() => {
-    handleClick('all')
-  }, [])
+    handleClick(filter)
+  }, [filter])
 
   // TODO create types for data later on
-  const handleClick = (trigger: string) => {
+  const handleClick = (filter: string) => {
     // fetch with the trigger filter and setData
     setLoading(true)
-    setData([
-      {
-        type: 'listing',
-        date: 1650615494,
-        event: 'listed',
-        length: '3 month',
-        cnv: 700,
-        link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
-      },
-      {
-        type: 'sale',
-        date: 1650615494,
-        event: 'sold',
-        length: '6 month',
-        cnv: 200,
-        link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
-      },
-      {
-        type: 'listing',
-        date: 1650615494,
-        event: 'listed',
-        length: '1 year',
-        cnv: 340,
-        link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
-      },
-      {
-        type: 'sale',
-        date: 1650615494,
-        event: 'listed',
-        length: '1 year',
-        cnv: 340,
-        link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
-      },
-      {
-        type: trigger,
-        date: 1650615494,
-        event: 'listed',
-        length: '1 year',
-        cnv: 340,
-        link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
-      },
-      {
-        type: trigger,
-        date: 1650615494,
-        event: 'listed',
-        length: '1 year',
-        cnv: 340,
-        link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
-      },
-      {
-        type: trigger,
-        date: 1650615494,
-        event: 'listed',
-        length: '1 year',
-        cnv: 340,
-        link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
-      },
-    ])
+    setData(
+      [
+        {
+          type: 'listing',
+          date: 1650615494,
+          event: 'listed',
+          length: '3 month',
+          cnv: 700,
+          link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
+        },
+        {
+          type: 'sale',
+          date: 1650615494,
+          event: 'sold',
+          length: '6 month',
+          cnv: 200,
+          link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
+        },
+        {
+          type: 'listing',
+          date: 1650615494,
+          event: 'listed',
+          length: '1 year',
+          cnv: 340,
+          link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
+        },
+        {
+          type: 'sale',
+          date: 1650615494,
+          event: 'listed',
+          length: '1 year',
+          cnv: 340,
+          link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
+        },
+        {
+          type: 'sale',
+          date: 1650615494,
+          event: 'listed',
+          length: '1 year',
+          cnv: 340,
+          link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
+        },
+        {
+          type: 'listing',
+          date: 1650615494,
+          event: 'listed',
+          length: '1 year',
+          cnv: 340,
+          link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
+        },
+        {
+          type: 'sale',
+          date: 1650615494,
+          event: 'listed',
+          length: '1 year',
+          cnv: 340,
+          link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
+        },
+      ].filter((value) => {
+        if (filter === 'all') return true
+        else return value.type === filter
+      }),
+    )
     setLoading(false)
   }
 
@@ -86,9 +92,17 @@ const MarketplaceActivityCard = () => {
       variant="secondary"
     >
       <Flex justify={'center'} align="center" height={'70px'} gap={1}>
-        <TransactionButton active label="All" />
-        <TransactionButton label="Listing" />
-        <TransactionButton label="Sale" />
+        <TransactionButton onClick={() => setFilter('all')} active={filter === 'all'} label="All" />
+        <TransactionButton
+          onClick={() => setFilter('listing')}
+          active={filter === 'listing'}
+          label="Listing"
+        />
+        <TransactionButton
+          onClick={() => setFilter('sale')}
+          active={filter === 'sale'}
+          label="Sale"
+        />
       </Flex>
       <Box
         backdropFilter="blur(8px)"
@@ -120,6 +134,7 @@ const MarketplaceActivityCard = () => {
 interface TransactionButtonProps {
   label: string
   active?: boolean
+  onClick: () => void
 }
 
 const TransactionButton = (props: TransactionButtonProps) => {
@@ -127,6 +142,7 @@ const TransactionButton = (props: TransactionButtonProps) => {
   const textColor = !!active ? 'white' : 'text.low'
   return (
     <Flex
+      onClick={props.onClick}
       textColor={textColor}
       fontSize="14"
       fontWeight={700}
@@ -140,6 +156,7 @@ const TransactionButton = (props: TransactionButtonProps) => {
       width={'90px'}
       height="37px"
       shadow={'Up Big'}
+      userSelect="none"
     >
       {label}
     </Flex>
