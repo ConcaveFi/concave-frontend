@@ -1,6 +1,6 @@
 import { Box, Flex, Input, Text } from '@concave/ui'
 import ChooseButton from 'components/Marketplace/ChooseButton'
-import { ConcaveNFTMarketplace } from 'lib/ConcaveNFTMarketplaceProxy/Contract'
+import { ConcaveNFTMarketplace } from 'lib/ConcaveNFTMarketplaceProxy/ConcaveNFTMarketplace'
 import { useState } from 'react'
 import { chain, useSigner } from 'wagmi'
 

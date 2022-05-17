@@ -1,3 +1,4 @@
+import { SpinIcon } from '@concave/icons'
 import {
   Box,
   Button,
@@ -5,6 +6,7 @@ import {
   Flex,
   Image,
   Modal,
+  Spinner,
   Stack,
   Text,
   useDisclosure,
@@ -101,7 +103,7 @@ const FloatingDescriptions: React.FC = () => (
 
 function StakeCard(props: StackCardProps) {
   const netWorkdId = 3
-  const vaprText = props.icon === '12m' ? 'Non-Dilutive vAPR' : 'vAPR'
+  const vaprText = props.icon === '12m' ? 'Non-Dilutive vAPR' : 'Total vAPR'
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [isLargerThan600] = useMediaQuery('(min-width: 600px)')
   const { status, data, error, isFetching } = useGet_Last_Poolid_VaprQuery({
@@ -115,8 +117,18 @@ function StakeCard(props: StackCardProps) {
     if (!pools?.balance || !stakingCap) return '0'
     return BigNumber.from(pools.balance).div(stakingCap).mul(100)
   }, [pools, stakingCap])
+  const [showFloatingCards, setShowFloatingCards] = useState(false)
 
-  console.log(isLoadingPools, poolsError, pools?.balance)
+  const currentlyStaked =
+    isLoadingPools || !pools?.balance ? '0' : (+ethers.utils.formatEther(pools?.balance)).toFixed(0)
+
+  const currentlyStakingCap =
+    isLoadingStakings || !pools?.balance
+      ? ''
+      : (+ethers.utils.formatEther(pools.balance.add(stakingCap))).toFixed(0)
+
+  const percent = (+currentlyStaked / +currentlyStakingCap) * 100
+
   return (
     <div>
       <Card variant="primary" px={4} py={6} shadow="up" gap={1} textAlign={'center'}>
@@ -127,7 +139,11 @@ function StakeCard(props: StackCardProps) {
           <Text fontSize="lg" fontWeight="bold">
             {props.period}
           </Text>
-          <Image src={`/assets/liquidstaking/${props.icon}-logo.svg`} alt="stake period logo" />
+          <Image
+            userSelect={'none'}
+            src={`/assets/liquidstaking/${props.icon}-logo.svg`}
+            alt="stake period logo"
+          />
           <Text color="text.low" fontSize="sm">
             {vaprText}
           </Text>
@@ -141,28 +157,46 @@ function StakeCard(props: StackCardProps) {
             <Text>Currently Staked</Text>
             <Text>Staking Cap</Text>
           </Stack>
-          <Box shadow="down" borderRadius="2xl" p={1} position="relative">
+
+          <Box height={'30px'} width="170px" shadow="down" borderRadius="2xl" position="relative">
             <Box
-              shadow="up"
-              px={1}
-              py={1}
-              borderRadius="2xl"
-              textAlign="left"
-              bg="secondary.50"
-              w={`${capPercentage}%`}
-              fontSize="sm"
+              position={'absolute'}
+              width="95%"
+              height={'78%'}
+              rounded={'2xl'}
+              my={'4px'}
+              ml="5px"
+              zIndex={-1}
             >
-              <Text w="150px">
-                {isLoadingPools || !pools?.balance
-                  ? 'Fetching...'
-                  : (+ethers.utils.formatEther(pools?.balance)).toFixed(0)}
-              </Text>
+              <Flex
+                transition={'all 1.3s'}
+                height={'full'}
+                maxW={!percent ? 'full' : `${percent}%`}
+                overflow={'hidden'}
+                position="relative"
+              >
+                <Box
+                  position={'absolute'}
+                  bg={'secondary.50'}
+                  width="160px"
+                  height={'full'}
+                  rounded="2xl"
+                />
+              </Flex>
             </Box>
-            <Text position="absolute" right="2" top="2" fontSize="sm">
-              {isLoadingPools || isLoadingStakings || !pools?.balance
-                ? 'Fetching...'
-                : (+ethers.utils.formatEther(pools.balance.add(stakingCap))).toFixed(0)}
-            </Text>
+            <Flex height="full" mx="3" justify={'space-between'} align="center" fontSize="14px">
+              {isLoadingPools || isLoadingStakings ? (
+                <Flex justify={'center'} width="full" align={'center'} gap={2} color="text.low">
+                  <Text fontWeight={700}>Fetching</Text>
+                  <Spinner transition={'all 2s'} size="sm" />
+                </Flex>
+              ) : (
+                <>
+                  <Text>{currentlyStaked}</Text>
+                  <Text>{currentlyStakingCap}</Text>
+                </>
+              )}
+            </Flex>
           </Box>
         </Stack>
 
@@ -185,7 +219,7 @@ function StakeCard(props: StackCardProps) {
         <Modal
           bluryOverlay={true}
           childrenLeftNeighbor={<FloatingDescriptions />}
-          showchildrenLeftNeighbor={true}
+          showchildrenLeftNeighbor={showFloatingCards}
           title="Stake CNV"
           isOpen={isOpen}
           onClose={onClose}
@@ -202,7 +236,8 @@ function StakeCard(props: StackCardProps) {
               period={props.period}
               vaprText={vaprText}
               icon={props.icon}
-              vapr={data?.logStakingV1_PoolRewarded[0].base_vAPR}
+              vapr={data?.logStakingV1_PoolRewarded[0]?.base_vAPR}
+              setShowFloatingCards={setShowFloatingCards}
               // vapr={props.vAPR}
             />
             <VStack mt={8} spacing={8}>
@@ -231,3 +266,25 @@ function StakeCard(props: StackCardProps) {
 }
 
 export default StakeCard
+
+//  <Box
+//     shadow="up"
+//     px={1}
+//     py={1}
+//     borderRadius="2xl"
+//     textAlign="left"
+//     bg="secondary.50"
+//     w={`${capPercentage}%`}
+//     fontSize="sm"
+//   >
+//     <Text w="150px">
+//       {isLoadingPools || !pools?.balance
+//         ? 'Fetching...'
+//         : (+ethers.utils.formatEther(pools?.balance)).toFixed(0)}
+//     </Text>
+//     <Text position="absolute" right="2" top="2" fontSize="sm">
+//       {isLoadingPools || isLoadingStakings || !pools?.balance
+//         ? 'Fetching...'
+//         : (+ethers.utils.formatEther(pools.balance.add(stakingCap))).toFixed(0)}
+//     </Text>
+//   </Box>

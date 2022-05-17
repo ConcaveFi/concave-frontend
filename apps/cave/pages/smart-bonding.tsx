@@ -1,26 +1,25 @@
+import { keyframes } from '@chakra-ui/system'
+import { SpinIcon } from '@concave/icons'
 import { Box, Card, Collapse, Container, Flex, Heading, Stack } from '@concave/ui'
+import { BondBuyCard } from 'components/Bond/BondBuyCard'
+import { BondInfo, UserBondPositionInfo } from 'components/Bond/BondInfo'
+import BondSoldsCard from 'components/Bond/BondSoldsCard'
 import {
-  getBondTermLength,
   getBondSpotPrice,
+  getBondTermLength,
   getCurrentBlockTimestamp,
   getUserBondPositions,
-  useBondState,
   redeemBondBatch,
+  useBondState,
 } from 'components/Bond/BondState'
-import { BondBuyCard } from 'components/Bond/BondBuyCard'
-import { SelectedBondType } from 'components/Bond/SelectedBondType'
 import { Redeem } from 'components/Bond/Redeem'
-import { BondInfo, UserBondPositionInfo } from 'components/Bond/BondInfo'
-import { useEffect, useState } from 'react'
-import React from 'react'
-import { keyframes } from '@chakra-ui/system'
+import { SelectedBondType } from 'components/Bond/SelectedBondType'
+import { useGet_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql'
+import React, { useEffect, useState } from 'react'
 const spin = keyframes({
   '0%': { transform: 'rotate(0deg)' },
   '100%': { transform: 'rotate(360deg)' },
 })
-import { SpinIcon } from '@concave/icons'
-import { useGet_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql'
-import BondSoldsCard from 'components/Bond/BondSoldsCard'
 
 export function Bond() {
   const { userAddress, signer, networkId } = useBondState()

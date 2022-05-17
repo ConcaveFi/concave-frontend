@@ -20,7 +20,7 @@ export function ClaimCard() {
       args: [account.address],
     },
   )
-  const [redeemText, setRedeemText] = useState('Redeem aCNV')
+  const [redeemText, setRedeemText] = useState('aCNV')
   const [redeeming, setRedeeming] = useState(false)
 
   const redeemAncv = () => {

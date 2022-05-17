@@ -2,7 +2,7 @@ import { BigNumber, BigNumberish, ethers } from 'ethers'
 import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/providers'
 import { concaveProvider } from 'lib/providers'
 import { ConcaveNFTMarketplaceProxy } from './Address'
-import { ContractABI } from './ContractABI'
+import { ContractABI } from './ConcaveNFTMarketplaceABI'
 import { MarketItem } from './MarketItem'
 
 export class ConcaveNFTMarketplace {

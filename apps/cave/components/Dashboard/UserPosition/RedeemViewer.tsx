@@ -44,7 +44,7 @@ const RedeemCardViewer = (props: RedeemCardViewerProps) => {
 }
 interface Info extends FlexProps {
   label: string
-  value: string | number
+  value: string
 }
 const Info: React.FC<Info> = ({ ...props }) => {
   return (
@@ -59,7 +59,7 @@ const Info: React.FC<Info> = ({ ...props }) => {
         {props.label}
       </Text>
       <Text fontSize="md" fontWeight="bold" noOfLines={1}>
-        {props.value} CNV
+        {parseFloat(props.value).toFixed(1)} CNV
       </Text>
     </Flex>
   )

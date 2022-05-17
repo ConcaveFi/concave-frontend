@@ -1,5 +1,5 @@
 import { chain } from 'wagmi'
 
 export const ConcaveNFTMarketplaceProxy = {
-  [chain.ropsten.id]: '0x9ce91198A0715Ad478dc2324eD399f6af38622A4',
+  [chain.ropsten.id]: '0x6dB3Bf5cD3Eb84Fbe0985418f383ef08f4d3c039',
 }

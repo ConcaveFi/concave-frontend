@@ -1,8 +1,7 @@
-import { Box, Button, Card, Collapse, Flex, FlexProps, Spinner, Text } from '@concave/ui'
-import UserPositionCard from './UserPositionCard'
+import { Box, Button, Card, Collapse, Flex, Spinner, Text } from '@concave/ui'
 import { useRouter } from 'next/router'
 import UserDividendCard from './UserDividendCard'
-import { Connector } from 'wagmi'
+import UserPositionCard from './UserPositionCard'
 
 interface UserDashBoardCardProps {
   data: {

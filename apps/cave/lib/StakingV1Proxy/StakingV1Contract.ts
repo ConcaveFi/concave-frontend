@@ -1,7 +1,7 @@
 import { BigNumber, BigNumberish, ethers } from 'ethers'
 import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/providers'
 import { concaveProvider } from 'lib/providers'
-import { StakingV1Proxy } from './Address'
+import { StakingV1ProxyAddress } from './Address'
 import { StakingV1Abi } from './ContractABI'
 
 export class StakingV1Contract {
@@ -10,7 +10,7 @@ export class StakingV1Contract {
 
   constructor(chainId: number, private readonly signer?: ethers.Signer) {
     this.provider = concaveProvider(chainId)
-    this.contract = new ethers.Contract(StakingV1Proxy[chainId], StakingV1Abi, this.provider)
+    this.contract = new ethers.Contract(StakingV1ProxyAddress[chainId], StakingV1Abi, this.provider)
     if (this.signer) this.contract.connect(this.signer)
   }
 
@@ -34,7 +34,8 @@ export class StakingV1Contract {
     supply: BigNumber
     term: BigNumber
   }> {
-    return this.contract.pools(index)
+    const pools = await this.contract.pools(index)
+    return { ...pools }
   }
 
   public async positions(index: BigNumberish): Promise<{

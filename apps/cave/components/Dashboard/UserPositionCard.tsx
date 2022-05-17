@@ -22,9 +22,7 @@ const UserPositionCard = (props: NftPositionCardProps) => {
   const { maturity, poolID, shares, rewardDebt } = contract
   const address = contract['contract'].address
   const tokenId = contract['id'].tokenId
-  const dateToRedeem = epochConverter(maturity)
-  const currentData = new Date()
-  const redeemIn = dateToRedeem.getTime() - currentData.getTime()
+
   const [active, setActive] = useState(true)
 
   return (
@@ -47,10 +45,10 @@ const UserPositionCard = (props: NftPositionCardProps) => {
               <NftPositionContainer
                 onChange={() => setActive(!active)}
                 stakeType={poolID}
-                redeemIn={redeemIn}
+                maturity={maturity}
               />
               <Collapse in={active}>
-                <RedeemCardViewer gained={rewardDebt} redeemIn={redeemIn} initial={shares} />
+                <RedeemCardViewer gained={rewardDebt} redeemIn={maturity} initial={shares} />
                 <MarketplaceListing address={address} tokenId={tokenId} />
               </Collapse>
             </Flex>
@@ -64,9 +62,3 @@ const UserPositionCard = (props: NftPositionCardProps) => {
   )
 }
 export default UserPositionCard
-
-const epochConverter = (epoch: number) => {
-  const timeInMillis = epoch * 1000
-  const dateFromEpoch = new Date(timeInMillis)
-  return dateFromEpoch
-}

@@ -1,19 +1,19 @@
 import { createAlchemyWeb3, Nft } from '@alch/alchemy-web3'
 import { nftContract } from 'components/Dashboard/UserPositionCard'
-import { LIQUID_STAKING_ADDRESS } from 'contracts/LiquidStaking/LiquidStakingAddress'
 import { BigNumber } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import { StakingV1ProxyAddress } from 'lib/StakingV1Proxy/Address'
 import { StakingV1Contract } from 'lib/StakingV1Proxy/StakingV1Contract'
 import { useEffect, useState } from 'react'
 import { useAccount, useConnect } from 'wagmi'
 
 export async function getAllUsersPositionsID(address: string, netWorkId: number) {
   const usersNft = await getAllUserNfts(address, netWorkId)
-  return usersNft.filter(filterByContract(LIQUID_STAKING_ADDRESS[netWorkId])).map(mapToTokenId)
+  return usersNft.filter(filterByContract(StakingV1ProxyAddress[netWorkId])).map(mapToTokenId)
 }
 export async function getAllUsersPositions(address: string, netWorkId: number) {
   const usersNft = await getAllUserNfts(address, netWorkId)
-  return usersNft.filter(filterByContract(LIQUID_STAKING_ADDRESS[netWorkId]))
+  return usersNft.filter(filterByContract(StakingV1ProxyAddress[netWorkId]))
 }
 
 const filterByContract = (contractAddress: string) => (nft: Nft) => {
@@ -27,12 +27,7 @@ export async function getAllUserNfts(address: string, netWorkId: number) {
   const nft = await web3.alchemy.getNfts({
     owner: address,
   })
-
-  if (nft.ownedNfts.length == 0) {
-    return undefined
-  } else {
-    return nft.ownedNfts
-  }
+  return nft.ownedNfts
 }
 
 export async function getUserPosition(address: string, index: number, netWorkId: number) {
@@ -46,17 +41,21 @@ export async function getUserPosition(address: string, index: number, netWorkId:
 
 export async function getUserPositions(address: string, netWorkId: number) {
   const stakingV1Contract = new StakingV1Contract(netWorkId)
-  const userPositions: Promise<{
+  const userPositions: {
     deposit: BigNumber
     maturity: number
     poolID: number
     rewardDebt: BigNumber
     shares: BigNumber
-  }>[] = []
+  }[] = []
   const userPositionsLength = await stakingV1Contract.balanceOf(address)
   for (let index = 0; userPositionsLength.gt(index); index++) {
-    const pos = getUserPosition(address, index, netWorkId)
-    userPositions.push(pos)
+    try {
+      const pos = await getUserPosition(address, index, netWorkId)
+      userPositions.push(pos)
+    } catch (e) {
+      console.error(e)
+    }
   }
   return Promise.all(userPositions)
 }
@@ -78,7 +77,7 @@ export const useDashBoardState = () => {
           setUserPositions(userPositions)
           setTotalLocked(getTotalLocked(userPositions))
         })
-        .catch(() => {})
+        .catch(console.error)
     }
     if (!loading) {
       if (!wallet.connected) setStatus('notConnected')

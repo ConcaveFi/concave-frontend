@@ -1,5 +1,5 @@
 import { Currency, CurrencyAmount, DAI } from '@concave/gemswap-sdk'
-import { GasIcon, SpinIcon, SpinnerIcon } from '@concave/icons'
+import { GasIcon } from '@concave/icons'
 import {
   Button,
   Card,
@@ -7,25 +7,23 @@ import {
   HStack,
   keyframes,
   Spinner,
-  Stack,
   Text,
   useDisclosure,
-  useToast,
   VStack,
 } from '@concave/ui'
 import { CurrencyInputField as BondInput } from 'components/CurrencyAmountField'
+import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { BOND_ADDRESS } from 'contracts/Bond/BondingAddress'
+import { useGet_Amm_Cnv_PriceQuery } from 'graphql/generated/graphql'
 import { ApproveButton, useApprovalWhenNeeded } from 'hooks/useAllowance'
 import React, { useEffect, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
-import { useFeeData, useWaitForTransaction } from 'wagmi'
+import { useFeeData } from 'wagmi'
 import { BondOutput } from './BondOutput'
 import { getBondAmountOut, getBondSpotPrice, purchaseBond, useBondState } from './BondState'
 import { ConfirmBondModal } from './ConfirmBond'
 import { DownwardIcon } from './DownwardIcon'
 import { BondSettings, defaultSettings, Settings } from './Settings'
-import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
-import { useGet_Amm_Cnv_PriceQuery } from 'graphql/generated/graphql'
 
 export const twoDecimals = (s: string | number) => {
   const a = s.toString()
@@ -48,9 +46,14 @@ const GasPrice = () => {
   )
 }
 
-export function BondBuyCard({ bondTransaction, setBondTransaction, setAmountInAndOut }: any) {
+export function BondBuyCard(props: {
+  bondTransaction?: any
+  setBondTransaction?: any
+  setAmountInAndOut?: any
+}) {
   const { currencyIn, currencyOut, userAddress, balance, signer, networkId } = useBondState()
-  // const [bondTransaction, setBondTransaction] = useState()
+  const [bondTransaction, setBondTransaction] = useState()
+
   const [settings, setSettings] = useState<BondSettings>(defaultSettings)
   const userBalance = balance.data?.toFixed()
   const [amountIn, setAmountIn] = useState<CurrencyAmount<Currency>>(toAmount('0', DAI[networkId]))
@@ -160,8 +163,9 @@ export function BondBuyCard({ bondTransaction, setBondTransaction, setAmountInAn
           purchaseBond(networkId, amountIn.toFixed(), userAddress, signer, settings, amountOut)
             .then((tx) => {
               setBondTransaction(tx)
+              props.setBondTransaction?.(tx)
               confirmModal.onClose()
-              setAmountInAndOut({
+              props.setAmountInAndOut?.({
                 in: parseFloat(String(amountIn.toFixed())).toFixed(2),
                 out: parseFloat(amountOut).toFixed(2),
               })

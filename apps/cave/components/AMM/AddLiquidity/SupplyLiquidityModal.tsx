@@ -1,3 +1,4 @@
+import { ROUTER_ADDRESS } from '@concave/gemswap-sdk'
 import { Box, Button, Flex, HStack, Modal, Text } from '@concave/ui'
 import { LiquidityPool } from 'components/AMM/AddLiquidity/AddLiquidity'
 import { CurrencyIcon } from 'components/CurrencyIcon'
@@ -25,8 +26,8 @@ const SupplyLiquidityContent = ({
     lp.pair.token0.address === lp.amount0.currency.wrapped.address
       ? [lp.amount0, lp.amount1]
       : [lp.amount1, lp.amount0]
-  const approval0 = useApproval(amount0.wrapped)
-  const approval1 = useApproval(amount1.wrapped)
+  const approval0 = useApproval(amount0.wrapped, ROUTER_ADDRESS[amount0.currency.chainId])
+  const approval1 = useApproval(amount1.wrapped, ROUTER_ADDRESS[amount1.currency.chainId])
   const [needsApprove0] = approval0
   const [needsApprove1] = approval1
   const token0 = amount0.currency
