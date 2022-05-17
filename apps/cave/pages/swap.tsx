@@ -250,10 +250,8 @@ export function SwapPage({ currencies }) {
 }
 
 SwapPage.Meta = {
-  title: 'Concave | Exchange (AMM)',
-  description: `A capital efficient, low slippage and high liquidity AMM, 
-    Concave Exchange offers traders deeper liquidity and allows 
-    liquidity providers to earn more with less capital investment.`,
+  title: 'Concave | Gemswap (AMM)',
+  description: `Concave’s AMM allows LPs to deploy deep liquidity for different pairs and allows LPs to earn more with less capital. The AMM has cheaper gas fees and swap fees.`,
 }
 
 export default SwapPage
