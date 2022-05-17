@@ -111,7 +111,7 @@ const Marketplace = () => {
           bluryOverlay={true}
           title=""
           isOpen={true}
-          onClose={() => router.push('swap')}
+          onClose={() => router.push('gemswap')}
           isCentered
           motionPreset="slideInBottom"
           hideClose={true}

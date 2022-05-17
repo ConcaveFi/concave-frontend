@@ -81,7 +81,7 @@ function PageNav() {
   const liquidStakingPage =
     router.pathname === '/liquid-staking' || router.pathname === '/dashboard'
   const swapPage =
-    router.pathname === '/swap' ||
+    router.pathname === '/gemswap' ||
     router.pathname === '/pools' ||
     router.pathname === '/addliquidity'
   return (
@@ -152,7 +152,7 @@ function PageNav() {
         >
           <NavButton
             leftIcon={<NotInteractableImage src="/assets/sidebar/page-swap.svg" />}
-            href="/swap"
+            href="/gemswap"
             mb="1px"
           >
             Swap

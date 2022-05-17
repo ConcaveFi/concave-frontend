@@ -2,7 +2,7 @@ export const getServerSideProps = async () => {
   // ! we can have as props th context ctx: any
   return {
     redirect: {
-      destination: '/swap',
+      destination: '/gemswap',
       permanent: false,
     },
   }
