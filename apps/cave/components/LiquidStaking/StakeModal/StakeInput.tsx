@@ -142,7 +142,7 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
         </Box>
       </Box>
 
-      <WaitingConfirmationDialog isOpen={waitingForConfirm} title={'Confirm Transaction'}>
+      <WaitingConfirmationDialog isOpen={waitingForConfirm} title={'Confirm Stake'}>
         <Flex
           width={'200px'}
           height="80px"
