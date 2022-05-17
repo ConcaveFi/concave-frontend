@@ -14,6 +14,7 @@ import {
 } from '@concave/ui'
 import { BigNumber, ethers } from 'ethers'
 import { useGet_Last_Poolid_VaprQuery } from 'graphql/generated/graphql'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { StakingV1Contract } from 'lib/StakingV1Proxy/StakingV1Contract'
 import { useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
@@ -101,7 +102,7 @@ const FloatingDescriptions: React.FC = () => (
 )
 
 function StakeCard(props: StackCardProps) {
-  const netWorkdId = 3
+  const chainId = useCurrentSupportedNetworkId()
   const vaprText = props.icon === '12m' ? 'Non-Dilutive vAPR' : 'Total vAPR'
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [isLargerThan600] = useMediaQuery('(min-width: 600px)')
@@ -110,8 +111,8 @@ function StakeCard(props: StackCardProps) {
   })
   const [modalDirection, setModalDirection] = useState<'column' | 'row'>('row')
   const index = PERIOD_TO_POOL_PARAMETER[`${props.period}`]
-  const { data: pools, error: poolsError, isLoading: isLoadingPools } = usePools(netWorkdId, index)
-  const { data: stakingCap, isLoading: isLoadingStakings } = useViewStakingCap(netWorkdId, index)
+  const { data: pools, error: poolsError, isLoading: isLoadingPools } = usePools(chainId, index)
+  const { data: stakingCap, isLoading: isLoadingStakings } = useViewStakingCap(chainId, index)
   const capPercentage = useMemo(() => {
     if (!pools?.balance || !stakingCap || stakingCap.eq(0)) return '0'
     return BigNumber.from(pools.balance).div(stakingCap).mul(100)
