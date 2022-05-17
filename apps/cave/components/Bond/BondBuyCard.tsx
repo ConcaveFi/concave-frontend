@@ -181,7 +181,12 @@ export function BondBuyCard(props: {
         ).toFixed(3)}
         slippage={settings.slippageTolerance.value}
       />
-      <TransactionSubmittedDialog tx={bondTransaction} isOpen={bondTransaction} />
+      <TransactionSubmittedDialog
+        tx={bondTransaction}
+        isOpen={bondTransaction}
+        tokenSymbol={currencyOut.symbol}
+        tokenOutAddress={currencyOut.address}
+      />
     </Card>
   )
 }
