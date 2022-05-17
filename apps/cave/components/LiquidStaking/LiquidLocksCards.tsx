@@ -57,24 +57,32 @@ const LiquidLocksCards = () => {
     >
       <Collapse startingHeight={'100px'} in={isOpen}>
         <Flex fontWeight="700" width={'full'} flex={1}>
+<<<<<<< HEAD
           <Flex direction={'column'} flex={0.4} justify="center" align={'center'} mt={2}>
             <Text>Stake period</Text>
             <Flex direction={'column'} textColor="text.low" fontSize={'14px'} alignItems={'center'}>
               {poolIds}
+=======
+          <Flex direction={'column'} flex={1} justify="center" align={'center'} mt={2}>
+            <Text>Timestamp</Text>
+            <Flex direction={'column'} textColor="text.accent" fontSize={'14px'} align="center">
+              {relativeTime}
+>>>>>>> 4a04865 (liquid staking locks updates)
             </Flex>
           </Flex>
+
           <Box w="1px" bg="stroke.primary" />
-          <Flex direction={'column'} flex={0.5} justify="center" align={'center'} mt={2}>
-            <Text>Amount locked</Text>
+          <Flex direction={'column'} flex={1} justify="center" align={'center'} mt={2}>
+            <Text>Amount Staked</Text>
             <Flex direction={'column'} textColor="text.accent" fontSize={'14px'} align="center">
               {amounts}
             </Flex>
           </Flex>
           <Box w="1px" bg="stroke.primary" />
-          <Flex direction={'column'} flex={0.5} justify="center" align={'center'} mt={2}>
-            <Text>Timeline</Text>
-            <Flex direction={'column'} textColor="text.accent" fontSize={'14px'} align="center">
-              {relativeTime}
+          <Flex direction={'column'} flex={1} justify="center" align={'center'} mt={2}>
+            <Text>Stake Pool</Text>
+            <Flex direction={'column'} textColor="text.low" fontSize={'14px'}>
+              {poolIds}
             </Flex>
           </Flex>
         </Flex>
