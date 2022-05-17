@@ -65,6 +65,8 @@ export function BondBuyCard(props: {
   const confirmModal = useDisclosure()
   // const receiptModal = useDisclosure()
 
+  const [hasClickedConfirm, setHasClickedConfirm] = useState(false)
+
   const approveInfo = useApprovalWhenNeeded(
     currencyIn,
     BOND_ADDRESS[networkId],
@@ -159,6 +161,8 @@ export function BondBuyCard(props: {
         tokenInRelativePriceToTokenOut={''}
         isOpen={confirmModal.isOpen}
         onClose={confirmModal.onClose}
+        hasClickedConfirm={hasClickedConfirm}
+        setHasClickedConfirm={setHasClickedConfirm}
         onConfirm={() => {
           purchaseBond(networkId, amountIn.toFixed(), userAddress, signer, settings, amountOut)
             .then((tx) => {
@@ -169,9 +173,11 @@ export function BondBuyCard(props: {
                 in: parseFloat(String(amountIn.toFixed())).toFixed(2),
                 out: parseFloat(amountOut).toFixed(2),
               })
+              setHasClickedConfirm(false)
             })
             .catch((e) => {
               console.log('get position info failed', e)
+              setHasClickedConfirm(false)
             })
         }}
         bondPrice={bondSpotPrice}
