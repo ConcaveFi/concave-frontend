@@ -23,12 +23,12 @@ const TokenInfo = ({
       px={5}
       p={4}
     >
-      <Box w={200} h="69px">
+      <Box w={200}>
         <NumericInput disabled fontSize={'32px'} decimalScale={5} value={amount} />
         <Text fontWeight={700} fontSize={14} textColor="text.low"></Text>
       </Box>
       <HStack>
-        <CurrencyIcon height={'40px'} currency={currency} />
+        <CurrencyIcon width={'32px'} currency={currency} />
         <Text fontSize={24} fontWeight={700}>
           {currency.symbol.toUpperCase()}
         </Text>
