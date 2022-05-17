@@ -7,6 +7,7 @@ interface NftPositionContainerProps {
   onChange: () => void
   stakeType: number
   maturity: number
+  tokendId: number
 }
 
 const NftPositionContainer = (props: NftPositionContainerProps) => {
@@ -61,14 +62,25 @@ const NftPositionContainer = (props: NftPositionContainerProps) => {
           </HStack>
         </Flex>
 
-        <Flex flex={1} direction={'column'} textAlign={'start'} ml="2">
-          <Text color="text.low" fontSize="sm">
-            Redeem In:
-          </Text>
-          <Text fontSize="md" fontWeight="bold">
-            {redeemInDays}
-          </Text>
+        <Flex flex={1} direction={'row'} gap={6} textAlign={'start'} ml="2">
+          <Flex direction={'column'}>
+            <Text color="text.low" fontSize="sm">
+              Redeem In:
+            </Text>
+            <Text fontSize="md" fontWeight="bold">
+              {redeemInDays}
+            </Text>
+          </Flex>
+          <Flex direction={'column'} align="center">
+            <Text color="text.low" fontSize="sm">
+              Token ID:
+            </Text>
+            <Text fontSize="md" fontWeight="bold">
+              {props.tokendId}
+            </Text>
+          </Flex>
         </Flex>
+
         <Flex width={'full'} height="50px" position={'absolute'} justify="end" align={'center'}>
           <Flex width={'80px'}>
             <Image

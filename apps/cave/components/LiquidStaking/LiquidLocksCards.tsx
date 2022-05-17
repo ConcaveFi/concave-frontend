@@ -48,6 +48,7 @@ const LiquidLocksCards = () => {
       </Text>
     ))
     .splice(0, 9)
+
   return (
     <Card
       mt={4}

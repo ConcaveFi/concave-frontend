@@ -46,6 +46,7 @@ const UserPositionCard = (props: NftPositionCardProps) => {
                 onChange={() => setActive(!active)}
                 stakeType={poolID}
                 maturity={maturity}
+                tokendId={tokenId}
               />
               <Collapse in={active}>
                 <RedeemCardViewer gained={rewardDebt} redeemIn={maturity} initial={shares} />
