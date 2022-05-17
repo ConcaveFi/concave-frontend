@@ -1,14 +1,14 @@
 import { BigNumber, BigNumberish, Contract } from 'ethers'
 import { formatUnits } from 'ethers/lib/utils'
 import { CurrencyAmount, Token } from '@concave/gemswap-sdk'
-import { erc20ABI, useAccount, useProvider, useSigner } from 'wagmi'
+import { erc20ABI, useAccount, useSigner } from 'wagmi'
 import { MaxUint256 } from '@concave/gemswap-sdk'
 import { useQuery } from 'react-query'
 import { TransactionReceipt, TransactionResponse } from '@ethersproject/abstract-provider'
 import { AVERAGE_BLOCK_TIME } from 'constants/blockchain'
+import { concaveProvider } from 'lib/providers'
 
 export const useAllowance = (token: Token, spender: string, userAddress: string) => {
-  const provider = useProvider()
   const {
     data: value,
     isLoading,
@@ -18,7 +18,7 @@ export const useAllowance = (token: Token, spender: string, userAddress: string)
   } = useQuery<BigNumber>(
     ['allowance', token?.address, userAddress],
     async () => {
-      const tokenContract = new Contract(token.address, erc20ABI, provider)
+      const tokenContract = new Contract(token.address, erc20ABI, concaveProvider(token.chainId))
       return await tokenContract.allowance(userAddress, spender)
     },
     {
