@@ -13,6 +13,7 @@ import {
 } from '@concave/ui'
 import { CurrencyInputField as BondInput } from 'components/CurrencyAmountField'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
+import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { BOND_ADDRESS } from 'contracts/Bond/BondingAddress'
 import { useGet_Amm_Cnv_PriceQuery } from 'graphql/generated/graphql'
 import { ApproveButton, useApprovalWhenNeeded } from 'hooks/useAllowance'
@@ -164,11 +165,11 @@ export function BondBuyCard(props: {
         hasClickedConfirm={hasClickedConfirm}
         setHasClickedConfirm={setHasClickedConfirm}
         onConfirm={() => {
+          confirmModal.onClose()
           purchaseBond(networkId, amountIn.toFixed(), userAddress, signer, settings, amountOut)
             .then((tx) => {
               setBondTransaction(tx)
               props.setBondTransaction?.(tx)
-              confirmModal.onClose()
               props.setAmountInAndOut?.({
                 in: parseFloat(String(amountIn.toFixed())).toFixed(2),
                 out: parseFloat(amountOut).toFixed(2),
@@ -187,6 +188,11 @@ export function BondBuyCard(props: {
         ).toFixed(3)}
         slippage={settings.slippageTolerance.value}
       />
+      <WaitingConfirmationDialog isOpen={hasClickedConfirm} title={'Confirm Bond'}>
+        <Text fontSize="lg" color="text.accent">
+          Bonding
+        </Text>
+      </WaitingConfirmationDialog>
       <TransactionSubmittedDialog
         tx={bondTransaction}
         isOpen={bondTransaction}
