@@ -51,14 +51,14 @@ export const useAddLiquidityButtonProps = (
     }
 
   /*
-      Create Pair
-    */
+    Create Pair
+  */
   if (!pair.data)
     return { children: 'Create a pair', isDisabled: false, onClick: onAddLiquidityClick }
 
   /*
     Add Liquidity
-    */
+  */
   return {
     children: pair.error === NoValidPairsError ? 'Create liquidity' : 'Add liquidity',
     onClick: onAddLiquidityClick,
