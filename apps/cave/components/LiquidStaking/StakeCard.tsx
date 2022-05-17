@@ -9,7 +9,6 @@ import {
   Stack,
   Text,
   useDisclosure,
-  useMediaQuery,
   VStack,
 } from '@concave/ui'
 import { BigNumber, ethers } from 'ethers'
@@ -105,7 +104,6 @@ function StakeCard(props: StackCardProps) {
   const chainId = useCurrentSupportedNetworkId()
   const vaprText = props.icon === '12m' ? 'Non-Dilutive vAPR' : 'Total vAPR'
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [isLargerThan600] = useMediaQuery('(min-width: 600px)')
   const { status, data, error, isFetching } = useGet_Last_Poolid_VaprQuery({
     poolID: props.poolId,
   })
