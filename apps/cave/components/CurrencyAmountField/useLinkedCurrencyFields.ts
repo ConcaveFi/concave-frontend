@@ -1,31 +1,43 @@
 import { Currency, CurrencyAmount } from '@concave/gemswap-sdk'
-import { getAddressOrSymbol } from 'hooks/useSyncQueryCurrencies'
-import Router from 'next/router'
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
 
-const updateQuery = ({ first, second }: { first?: Currency; second?: Currency }) => {
-  const chainId = first?.chainId || second?.chainId
-  const currency0 = getAddressOrSymbol(first)
-  const currency1 = getAddressOrSymbol(second)
-  const query = { chainId, currency0, currency1 }
-  Router.replace({ query }, undefined, { shallow: true })
+export type LinkedCurrencyFields = {
+  first: Currency
+  second: Currency
 }
 
+const makeFields = (arr) => ({ first: arr[0], second: arr[1] })
+
 export const useLinkedCurrencyFields = (
-  initialFields: { first?: Currency; second?: Currency } = {},
-  onChangeAmount: (newAmount: CurrencyAmount<Currency>, field: keyof typeof initialFields) => void,
+  initialCurrencies: Currency[],
+  onChangeAmount: (newAmount: CurrencyAmount<Currency>, field: keyof LinkedCurrencyFields) => void,
+  onChangeCurrencies: (newCurrencies: LinkedCurrencyFields) => void,
 ) => {
-  const [currencies, setCurrencies] = useState(initialFields)
-  const lastUpdated = useRef<keyof typeof initialFields>('first')
+  const [currencies, setCurrencies] = useState<LinkedCurrencyFields>(makeFields(initialCurrencies))
+  const lastUpdated = useRef<keyof typeof currencies>('first')
+
+  /*
+    when initialCurrencies change, set currencies 
+    and call onChangeAmount with a 0 amount of the new first currency
+  */
+  useEffect(() => {
+    const updatedFields = makeFields(initialCurrencies)
+    setCurrencies(updatedFields)
+    if (initialCurrencies[0]) {
+      console.log(initialCurrencies[0].symbol, initialCurrencies[1].symbol)
+      onChangeAmount(toAmount(0, initialCurrencies[0]), 'first')
+      lastUpdated.current = 'first'
+    }
+  }, [initialCurrencies, onChangeAmount])
 
   const switchCurrencies = useCallback(() => {
     setCurrencies((v) => ({ first: v.second, second: v.first }))
-    lastUpdated.current = 'second'
+    lastUpdated.current = lastUpdated.current === 'first' ? 'second' : 'first'
   }, [])
 
   const onChangeField = useCallback(
-    (field: keyof typeof initialFields) => (newAmount: CurrencyAmount<Currency>) => {
+    (field: keyof LinkedCurrencyFields) => (newAmount: CurrencyAmount<Currency>) => {
       lastUpdated.current = field
       if (currencies[field]?.equals(newAmount.currency)) return onChangeAmount(newAmount, field)
 
@@ -33,19 +45,20 @@ export const useLinkedCurrencyFields = (
 
       // switch currencies not amounts (1 ETH : 200 DAI -> 1 DAI : 200 ETH)
       if (currencies[otherField]?.equals(newAmount.currency)) {
-        setCurrencies({ first: currencies.second, second: currencies.first })
-        updateQuery({ first: currencies.second, second: currencies.first })
-        lastUpdated.current = otherField
-        onChangeAmount(toAmount(newAmount.toExact(), currencies[otherField]), field)
+        const newFields = { first: currencies.second, second: currencies.first }
+        setCurrencies(newFields)
+        onChangeCurrencies(newFields)
+        onChangeAmount(toAmount(newAmount.toExact(), newFields[field]), field)
         return
       }
 
       // change the currency of this field
-      setCurrencies({ ...currencies, [field]: newAmount.currency })
-      updateQuery({ ...currencies, [field]: newAmount.currency })
+      const newFields = { ...currencies, [field]: newAmount.currency }
+      setCurrencies(newFields)
+      onChangeCurrencies(newFields)
       onChangeAmount(newAmount, field)
     },
-    [currencies, onChangeAmount],
+    [currencies, onChangeAmount, onChangeCurrencies],
   )
 
   return {
