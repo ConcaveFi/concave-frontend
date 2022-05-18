@@ -35,7 +35,6 @@ export class ConcaveNFTMarketplace {
 
   public async createDefaultNftAuction(
     signer: Signer,
-    nftContractAddress: string,
     tokenId: BigNumberish,
     erc20Token: string,
     minPrice: BigNumberish,
@@ -49,7 +48,6 @@ export class ConcaveNFTMarketplace {
     return this.contract
       .connect(signer)
       .createDefaultNftAuction(
-        nftContractAddress,
         tokenId,
         erc20Token,
         minPrice,
