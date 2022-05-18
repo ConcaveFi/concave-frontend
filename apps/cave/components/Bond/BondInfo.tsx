@@ -20,7 +20,7 @@ export const InfoItem = ({ value, label, ...props }) => (
     <Text fontSize="sm" fontFamily="heading">
       {value}
     </Text>
-    <Text fontSize="sm" color="text.low">
+    <Text fontSize="sm" color="text.low" userSelect={'none'}>
       {label}
     </Text>
   </Flex>
@@ -82,7 +82,7 @@ export const UserBondPositionInfo = (props) => {
             flexBasis="25%"
           />
           <Box w="1px" mx={0} my={-4} bg="stroke.primary" />
-          <InfoItem value={formatRedeemable} label={'Available'} px={5} pl={2} flexBasis="35%" />
+          <InfoItem value={formatRedeemable} label={'Redeemable'} px={5} pl={2} flexBasis="35%" />
         </Card>
       ) : !!props.userAddress ? (
         <>
