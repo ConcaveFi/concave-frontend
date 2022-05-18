@@ -1,15 +1,5 @@
-import { ChainId, CNV, Currency, DAI, Trade, TradeType } from '@concave/gemswap-sdk'
-import {
-  Button,
-  Card,
-  Collapse,
-  Flex,
-  HStack,
-  Modal,
-  Stack,
-  Text,
-  useDisclosure,
-} from '@concave/ui'
+import { ChainId, CHAIN_NAME, CNV, Currency, DAI, Trade, TradeType } from '@concave/gemswap-sdk'
+import { Button, Card, Collapse, Flex, HStack, Stack, Text, useDisclosure } from '@concave/ui'
 import {
   CandleStickCard,
   ConfirmSwapModal,
@@ -26,23 +16,22 @@ import {
   useSwapState,
   useSwapTransaction,
 } from 'components/AMM'
+import { NetworkMismatch } from 'components/AMM/NetworkMismatch'
 import { ExpectedOutput, MinExpectedOutput } from 'components/AMM/Swap/ExpectedOutput'
 import { TradeRoute } from 'components/AMM/Swap/TradeRoute'
-import { CurrencyIcon } from 'components/CurrencyIcon'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
-import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import {
-  currencyToJson,
   currencyFromJson,
-  fetchCurrenciesFromQuery,
-} from 'hooks/useSyncQueryCurrencies'
+  currencyToJson,
+  fetchQueryCurrencies,
+  useQueryCurrencies,
+} from 'components/AMM/hooks/useQueryCurrencies'
 import { GetServerSideProps } from 'next'
 import { useEffect, useMemo, useReducer, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
-import { useAccount, useNetwork } from 'wagmi'
 
 const TradeDetails = ({
   trade,
@@ -60,57 +49,52 @@ const TradeDetails = ({
   )
 
 export const swapSupportedChains = [ChainId.ETHEREUM, ChainId.ROPSTEN]
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const [currency0, currency1] = await fetchCurrenciesFromQuery(ctx.query).catch(() => [])
-
-  // if chainId is not supported default to mainnet
-  // const c = currency0?.chainId || currency1?.chainId || +ctx.query.chainId
-  // const chainId = swapSupportedChains.includes(c) ? c : 1
-
-  const currencies = [currency0, currency1]
-  const setCurrencies = !currency0?.equals(currency1) ? currencies : [currencies[0]]
-
-  return { props: { currencies: setCurrencies.map(currencyToJson) } }
+const defaultCurrencies = {
+  [ChainId.ETHEREUM]: [DAI[1], CNV[1]],
+  [ChainId.ROPSTEN]: [DAI[3], CNV[3]],
 }
 
-export function SwapPage({ currencies }) {
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  const currencies = await fetchQueryCurrencies(query)
+  const currenciesOrDefaults =
+    currencies.filter(Boolean).length === 0
+      ? defaultCurrencies[+query.chainId] || defaultCurrencies[1]
+      : currencies
+  return { props: { currencies: currenciesOrDefaults.map(currencyToJson) } }
+}
+
+export function SwapPage({ currencies: serverPropsCurrencies }) {
   const [settings, setSettings] = useState<SwapSettings>(defaultSettings)
-  const [{ data: network }] = useNetwork()
 
-  const networkId = useCurrentSupportedNetworkId()
-
-  const initialCurrencies = useMemo(
-    () => ({
-      first: currencyFromJson(currencies[0]) || DAI[networkId],
-      second: currencyFromJson(currencies[1]) || CNV[networkId],
-    }),
-    [currencies, networkId],
+  const currencies = useMemo(
+    () => serverPropsCurrencies?.map(currencyFromJson),
+    [serverPropsCurrencies],
   )
+  const { onChangeCurrencies, isNetworkMismatch, queryHasCurrency, currentChainId, queryChainId } =
+    useQueryCurrencies()
+
   const { trade, onChangeInput, onChangeOutput, switchCurrencies } = useSwapState(
     settings,
-    initialCurrencies,
+    currencies,
+    onChangeCurrencies,
   )
 
-  const [{ data: account }] = useAccount()
   const [recipient, setRecipient] = useState('')
-  const swapTx = useSwapTransaction(trade.data, settings, recipient || account?.address, {
+  const swapTx = useSwapTransaction(trade.data, settings, recipient, {
     onTransactionSent: () => onChangeInput(toAmount(0, trade.data.inputAmount.currency)),
   })
 
   const confirmationModal = useDisclosure()
-
-  const swapButton = useSwapButtonProps({
+  const swapButtonProps = useSwapButtonProps({
     trade,
     recipient,
     onSwapClick: settings.expertMode ? swapTx.submit : confirmationModal.onOpen,
   })
 
-  const [currencyIn, currencyOut] = [
-    trade.data.inputAmount?.currency,
-    trade.data.outputAmount?.currency,
-  ]
-
+  /*
+    toggle trade details, only toggleable when there is a valid trade 
+    auto hide when there is no details to show (inputs are emptied)
+  */
   const hasDetails = !!trade.data.route && trade.data.outputAmount.greaterThan(0)
   const [isDetailsOpen, toggleDetails] = useReducer((s) => hasDetails && !s, false)
   useEffect(() => {
@@ -121,22 +105,15 @@ export function SwapPage({ currencies }) {
     <>
       <Flex
         wrap="wrap"
-        alignContent="start"
         justify="center"
-        mt={['10vh', '25vh']}
+        mt={{ base: '10vh', xl: '25vh' }}
         mb={['25vh', 'none']}
         w="100%"
         gap={10}
       >
         <CandleStickCard
-          from={currencyIn}
-          to={currencyOut}
-          variant="secondary"
-          gap={2}
-          p={6}
-          w="100%"
-          h="min"
-          maxW="567px"
+          from={trade.data.inputAmount?.currency}
+          to={trade.data.outputAmount?.currency}
         />
 
         <Card
@@ -173,7 +150,11 @@ export function SwapPage({ currencies }) {
             px={3}
             rounded="xl"
           >
-            <RelativePrice currency0={currencyIn} currency1={currencyOut} mr="auto" />
+            <RelativePrice
+              currency0={trade.data.inputAmount?.currency}
+              currency1={trade.data.outputAmount?.currency}
+              mr="auto"
+            />
             <GasPrice />
             <Settings onChange={setSettings} />
           </HStack>
@@ -182,7 +163,19 @@ export function SwapPage({ currencies }) {
             <TradeDetails trade={trade.data} settings={settings} />
           </Collapse>
 
-          <Button variant="primary" size="large" isFullWidth {...swapButton} />
+          <Button variant="primary" size="large" w="full" {...swapButtonProps} />
+
+          <NetworkMismatch
+            isOpen={isNetworkMismatch && queryHasCurrency}
+            expectedChainId={queryChainId}
+            currentChainId={currentChainId}
+          >
+            <Text color="text.low">
+              Do you wanna drop this {CHAIN_NAME[queryChainId]} trade
+              <br />
+              and restart on {CHAIN_NAME[currentChainId]}?
+            </Text>
+          </NetworkMismatch>
         </Card>
       </Flex>
 
@@ -209,47 +202,12 @@ export function SwapPage({ currencies }) {
       <TransactionSubmittedDialog
         tx={swapTx.data}
         isOpen={swapTx.isTransactionSent}
-        tokenSymbol={currencyOut.symbol}
-        tokenOutAddress={currencyOut['address']} // workaround for type error
+        tokenSymbol={swapTx.trade?.inputAmount.currency.symbol}
+        tokenOutAddress={swapTx.trade?.outputAmount.currency.address} // workaround for type error
       />
       <TransactionErrorDialog error={swapTx.error?.message} isOpen={swapTx.isError} />
 
-      {/* <Modal
-        onClose={() => null}
-        isCentered
-        isOpen={true}
-        title="Network Mismatch"
-        bluryOverlay
-        hideClose
-        titleAlign="center"
-      >
-        <Stack spacing={4}>
-          <Text align="center" fontSize="md" fontWeight="bold">
-            You got here with a {CHAIN_NAME[currencyIn.chainId]} link
-          </Text>
-
-          <Flex gap={1} justify="center" fontWeight="medium">
-            For a <CurrencyIcon size="xs" currency={currencyIn} />
-            {currencyIn.symbol}
-            {currencyOut.symbol && (
-              <>
-                {' '}
-                to <CurrencyIcon size="xs" currency={currencyOut} /> {currencyOut.symbol}
-              </>
-            )}{' '}
-            swap
-          </Flex>
-
-          <Flex justify="center" gap={2}>
-            <Button variant="secondary" size="medium" px={3}>
-              Continue to {network.chain?.name}
-            </Button>
-            <Button variant="primary" size="medium" px={3}>
-              Switch Network
-            </Button>
-          </Flex>
-        </Stack>
-      </Modal> */}
+      {/* <NetworkMismatchModal /> */}
     </>
   )
 }

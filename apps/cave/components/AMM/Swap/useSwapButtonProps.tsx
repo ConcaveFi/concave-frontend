@@ -4,10 +4,9 @@ import { useModals } from 'contexts/ModalsContext'
 import { isAddress } from 'ethers/lib/utils'
 import { useApprove } from 'hooks/useApprove'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
-import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { usePermit } from 'hooks/usePermit'
 import { swapSupportedChains } from 'pages/gemswap'
-import { useAccount } from 'wagmi'
+import { useAccount, useNetwork } from 'wagmi'
 import { NoValidPairsError } from '../hooks/usePair'
 import { InsufficientLiquidityError, UseTradeResult } from '../hooks/useTrade'
 
@@ -20,8 +19,8 @@ export const useSwapButtonProps = ({
   recipient: string
   onSwapClick: () => void
 }): ButtonProps => {
-  const [{ data: account }] = useAccount()
-  const networkId = useCurrentSupportedNetworkId()
+  const [account] = useAccount()
+  const [network] = useNetwork()
 
   const inputAmount = trade.data.inputAmount
   const outputAmount = trade.data.outputAmount
@@ -38,13 +37,24 @@ export const useSwapButtonProps = ({
   /*
     Not Connected
   */
-  if (!account?.address) return { children: 'Connect wallet', onClick: connectModal.onOpen }
+  if (account.loading || network.loading) return { isLoading: true }
+  if (!account.data?.address) return { children: 'Connect Wallet', onClick: connectModal.onOpen }
 
-  if (networkId !== currencyIn.chainId) return { children: 'Network mismatch', isDisabled: true }
-  if (!swapSupportedChains.includes(networkId))
+  /*
+    Select a token
+  */
+  if (!currencyIn || !outputAmount?.currency)
+    return { children: 'Select a token', isDisabled: true }
+
+  /*
+    Network Stuff
+  */
+  if (network.data.chain?.id !== currencyIn.chainId)
+    return { children: 'Network mismatch', isDisabled: true }
+  if (!swapSupportedChains.includes(network.data.chain?.id))
     return {
       children: 'Unsupported chain',
-      onClick: () => account.connector.switchChain(currencyIn.chainId).catch(() => {}),
+      isDisabled: true,
     }
 
   /*
@@ -68,8 +78,8 @@ export const useSwapButtonProps = ({
     Fetching user data (Allowance & Balance)
   */
   if (allowance.isLoading || currencyInBalance.isLoading) return { isLoading: true }
-  if (allowance.isError || currencyInBalance.isError)
-    return { children: `Error fetching account data`, isDisabled: true }
+  if (allowance.isError || (currencyInBalance.isError && !currencyInBalance.isFetching))
+    return { children: `Error fetching balances`, fontSize: 'lg', isDisabled: true }
 
   /*
     Enter an amount
@@ -91,9 +101,9 @@ export const useSwapButtonProps = ({
   */
   if (currencyIn.isToken) {
     if (approve.isWaitingForConfirmation)
-      return { loadingText: 'Approve in your wallet', isLoading: true }
+      return { loadingText: 'Approve in your wallet', fontSize: 'lg', isLoading: true }
     if (approve.isWaitingTransactionReceipt)
-      return { loadingText: 'Waiting approval confirmation', isLoading: true }
+      return { loadingText: 'Waiting approval confirmation', fontSize: 'lg', isLoading: true }
     if (permit.isLoading) return { loadingText: 'Sign in your wallet', isLoading: true }
 
     const permitErroredOrWasNotInitializedYet = permit.isError || permit.isIdle

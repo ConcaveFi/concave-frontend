@@ -1,6 +1,6 @@
-import { Currency, CurrencyAmount, Pair } from '@concave/gemswap-sdk'
+import { CHAIN_NAME, Currency, CurrencyAmount, Pair } from '@concave/gemswap-sdk'
 import { PlusIcon } from '@concave/icons'
-import { Button, ButtonProps, Card, CardProps, Flex, Modal, useDisclosure } from '@concave/ui'
+import { Button, ButtonProps, Card, Flex, Modal, Text, useDisclosure } from '@concave/ui'
 import { CurrencyInputField } from 'components/AMM'
 import { SupplyLiquidityModal } from 'components/AMM/AddLiquidity/SupplyLiquidityModal'
 import { useAddLiquidityButtonProps } from 'components/AMM/AddLiquidity/useAddLiquidityButtonProps'
@@ -8,13 +8,13 @@ import { useAddLiquidityState } from 'components/AMM/AddLiquidity/useAddLiquidit
 import { useAddLiquidityTransaction } from 'components/AMM/AddLiquidity/useAddLiquidityTransaction'
 import { ConnectWallet } from 'components/ConnectWallet'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
-import { Loading } from 'components/Loading'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
-import React from 'react'
-import { toAmount } from 'utils/toAmount'
+import React, { useMemo } from 'react'
 import { useAccount } from 'wagmi'
+import { useQueryCurrencies } from '../hooks/useQueryCurrencies'
+import { NetworkMismatch } from '../NetworkMismatch'
 
 const AddSymbol = () => (
   <Flex align="center" justify="center">
@@ -39,36 +39,23 @@ export type LiquidityPool = {
   amount1: CurrencyAmount<Currency>
 }
 
-// export const getServerSideProps = async (ctx) => {
-//   const [token0, token1] = await fetchCurrenciesFromQuery(ctx.query)
-//   return { props: { token0, token1 } }
-// }
+function AddLiquidityContent({ currencies }: { currencies: Currency[] }) {
+  const { onChangeCurrencies, isNetworkMismatch, queryHasCurrency, currentChainId, queryChainId } =
+    useQueryCurrencies()
 
-function AddLiquidityContent({
-  currency0,
-  currency1,
-}: {
-  currency0?: Currency
-  currency1?: Currency
-} = {}) {
-  // const initialTokens = [currencyFromJson(token0), currencyFromJson(token1)]
   const { pair, firstFieldAmount, secondFieldAmount, onChangeFirstField, onChangeSecondField } =
-    useAddLiquidityState({
-      first: toAmount('0', currency0),
-      second: toAmount('0', currency1),
-    })
-  // useSyncCurrenciesToUrl(firstFieldAmount?.currency, secondFieldAmount?.currency)
+    useAddLiquidityState(currencies, onChangeCurrencies)
 
   const addLPTx = useAddLiquidityTransaction(firstFieldAmount, secondFieldAmount)
 
+  const supplyLiquidityDisclosure = useDisclosure()
   const addLiquidityButtonProps = useAddLiquidityButtonProps(
     pair,
     firstFieldAmount,
     secondFieldAmount,
-    () => supplyLiquidityDisclosure.onOpen(),
+    supplyLiquidityDisclosure.onOpen,
   )
   const fixedPair = pair.data ?? Pair.createVirtualPair(firstFieldAmount, secondFieldAmount)
-  const supplyLiquidityDisclosure = useDisclosure()
 
   return (
     <>
@@ -95,6 +82,17 @@ function AddLiquidityContent({
         {...addLiquidityButtonProps}
       />
 
+      <NetworkMismatch
+        isOpen={isNetworkMismatch && queryHasCurrency}
+        expectedChainId={queryChainId}
+        currentChainId={currentChainId}
+      >
+        <Text color="text.low">
+          Do you wanna drop this {CHAIN_NAME[queryChainId]} LP <br />
+          and restart on {CHAIN_NAME[currentChainId]}?
+        </Text>
+      </NetworkMismatch>
+
       <SupplyLiquidityModal
         lp={{ pair: fixedPair, amount0: firstFieldAmount, amount1: secondFieldAmount }}
         isOpen={supplyLiquidityDisclosure.isOpen}
@@ -116,6 +114,7 @@ export const AddLiquidityModalButton = ({
 }: { label?: string; pair?: Pair } & ButtonProps) => {
   const [{ data: account }] = useAccount()
   const addLiquidityDisclosure = useDisclosure()
+  const currencies = useMemo(() => [pair.token0, pair.token1], [pair.token0, pair.token1])
   if (!account?.address) {
     return <ConnectWallet />
   }
@@ -150,19 +149,16 @@ export const AddLiquidityModalButton = ({
           gap: 6,
         }}
       >
-        <AddLiquidityContent currency0={pair?.token0} currency1={pair?.token1} />
+        <AddLiquidityContent currencies={currencies} />
       </Modal>
     </>
   )
 }
 
-export const AddLiquidityCard = (
-  props: CardProps & { currency0?: Currency; currency1?: Currency; isLoading?: boolean },
-) => {
-  if (props.isLoading) return <Loading size="md" />
+export const AddLiquidityCard = ({ currencies }: { currencies: Currency[] }) => {
   return (
-    <Card {...props}>
-      <AddLiquidityContent currency0={props.currency0} currency1={props.currency1} />
+    <Card borderWidth={2} variant="primary" p={4} w="500px" gap={6} shadow="Up for Blocks">
+      <AddLiquidityContent currencies={currencies} />
     </Card>
   )
 }

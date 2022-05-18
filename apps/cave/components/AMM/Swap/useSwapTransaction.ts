@@ -1,10 +1,9 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { SwapSettings } from '../Settings'
 import { RouterABI, ROUTER_ADDRESS, Router, Currency, TradeType, Trade } from '@concave/gemswap-sdk'
 import { Contract, Transaction } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { useContract, useSigner } from 'wagmi'
-import { isAddress } from 'ethers/lib/utils'
+import { useAccount, useContract, useSigner } from 'wagmi'
 
 const initialState = {
   isWaitingForConfirmation: false,
@@ -22,6 +21,7 @@ export const useSwapTransaction = (
   { onTransactionSent }: { onTransactionSent?: (tx: Transaction) => void },
 ) => {
   const networkId = useCurrentSupportedNetworkId()
+  const [{ data: account }] = useAccount()
   const [{ data: signer }] = useSigner()
   const routerContract = useContract<Contract>({
     addressOrName: ROUTER_ADDRESS[networkId],
@@ -38,7 +38,7 @@ export const useSwapTransaction = (
         allowedSlippage: settings.slippageTolerance.percent,
         ttl: +settings.deadline * 60,
         feeOnTransfer: trade.tradeType === TradeType.EXACT_INPUT,
-        recipient,
+        recipient: recipient || account.address,
       })
       const tx = await routerContract[methodName](...args, { value })
       setState({ ...initialState, trade, isTransactionSent: true, data: tx })

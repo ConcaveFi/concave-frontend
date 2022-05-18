@@ -1,10 +1,25 @@
 import { Flex, Heading, Text } from '@concave/ui'
 import { AddLiquidityCard } from 'components/AMM/AddLiquidity/AddLiquidity'
-import { useQueryCurrency } from 'components/CurrencyAmountField/UseQueryCurrency'
-import React from 'react'
+import {
+  currencyFromJson,
+  currencyToJson,
+  fetchQueryCurrencies,
+} from 'components/AMM/hooks/useQueryCurrencies'
+import { GetServerSideProps } from 'next'
 
-export function AddLiquidity() {
-  const { data: currencys, isLoading } = useQueryCurrency()
+import React, { useMemo } from 'react'
+
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  const currencies = await fetchQueryCurrencies(query)
+  return { props: { currencies: currencies.map(currencyToJson) } }
+}
+
+export function AddLiquidity({ currencies: serverPropsCurrencies }) {
+  const currencies = useMemo(
+    () => serverPropsCurrencies?.map(currencyFromJson),
+    [serverPropsCurrencies],
+  )
+
   return (
     <>
       <Flex
@@ -34,17 +49,7 @@ export function AddLiquidity() {
           width="full"
           p={4}
         >
-          <AddLiquidityCard
-            isLoading={isLoading}
-            currency0={currencys?.currency0}
-            currency1={currencys?.currency1}
-            borderWidth={2}
-            variant="primary"
-            p={4}
-            w="500px"
-            gap={6}
-            shadow="Up for Blocks"
-          />
+          <AddLiquidityCard currencies={currencies} />
         </Flex>
       </Flex>
     </>

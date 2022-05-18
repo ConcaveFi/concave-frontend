@@ -46,14 +46,7 @@ export const usePairs = <T = Pair[]>(
   queryOptions?: UsePairsQueryOptions<T>,
 ) => {
   return useQuery(
-    [
-      'pairs',
-      tokenB && tokenB?.address !== tokenA?.address && tokenA?.sortsBefore(tokenB)
-        ? [tokenA?.address, tokenB?.address]
-        : [tokenB?.address, tokenA?.address],
-      maxHops,
-      tokenA?.chainId,
-    ],
+    ['pairs', tokenA?.address, tokenB?.address, maxHops, tokenA?.chainId],
     async () => {
       const commonPairs = getAllCommonPairs(tokenA, tokenB, maxHops)
       const pairs: Pair[] = (
@@ -79,8 +72,8 @@ export const usePairs = <T = Pair[]>(
   )
 }
 
-export const usePair = (tokenA: Token, tokenB: Token) =>
-  usePairs(tokenA, tokenB, 1, { select: (pairs) => pairs[0] })
+export const usePair = (tokenA: Token, tokenB: Token, queryOptions?: UsePairsQueryOptions<Pair>) =>
+  usePairs(tokenA, tokenB, 1, { select: (pairs) => pairs[0], ...queryOptions })
 
 export type UsePairResult = UseQueryResult<Pair>
 export type UsePairsResult = UseQueryResult<Pair[]>
