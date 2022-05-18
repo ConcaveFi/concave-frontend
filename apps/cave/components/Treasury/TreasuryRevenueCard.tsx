@@ -1,10 +1,8 @@
 import { Box, Button, Card, Flex, Image, Text } from '@concave/ui'
 import { InfoItem } from 'components/Bond/BondInfo'
 import { formatDistanceStrict } from 'date-fns'
-import { commify, formatEther } from 'ethers/lib/utils'
+import { commify } from 'ethers/lib/utils'
 import { useGet_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql'
-import useAddTokenToWallet from 'hooks/useAddTokenToWallet'
-import { format } from 'path'
 import { useEffect, useState } from 'react'
 
 interface TreasuryRevenueCardProps {}
@@ -18,10 +16,10 @@ export const TreasuryInfoItem = ({ label, amount, ...props }) => (
     textAlign="center"
     {...props}
   >
-    <Text fontSize="m" color="text.low">
+    <Text fontSize={{ base: '13px', xl: 'md' }} color="text.low">
       {label}
     </Text>
-    <Text fontSize="large" fontFamily="heading">
+    <Text fontSize={{ base: '15px', xl: 'lg' }} fontFamily="heading">
       {amount}
     </Text>
   </Flex>
@@ -54,18 +52,18 @@ export const TreasuryInfo = ({ box1, box2, box3, box1b, box2b, box3b }) => {
       variant="secondary"
       bg="none"
       py={3}
-      w="599px"
+      w={{ base: '520px', xl: '620px' }}
       h="100px"
       direction="row"
       shadow="Glass Up Medium"
     >
-      <Flex justify="center" flexBasis="40%">
+      <Flex justify="center" flex={1}>
         <TreasuryInfoItem label={box1} amount={box1b} />
       </Flex>
       <Box w="1px" mx={0} my={-4} bg="stroke.primary" />
-      <TreasuryInfoItem label={box2} amount={box2b} flexGrow={1} pl={3} pr={3} flexBasis="25%" />
+      <TreasuryInfoItem label={box2} amount={box2b} pl={3} pr={3} flex={0.8} />
       <Box w="1px" mx={0} my={-4} bg="stroke.primary" />
-      <TreasuryInfoItem label={box3} amount={box3b} flexBasis="35%" />
+      <TreasuryInfoItem label={box3} amount={box3b} flex={1} />
     </Card>
   )
 }
@@ -147,7 +145,7 @@ export default function TreasuryRevenueCard(props) {
   return (
     <Card
       direction={'column'}
-      width={'600px'}
+      w={{ base: '520px', xl: '620px' }}
       height="330px"
       bg={'#111e'}
       shadow={'0px 4px 4px rgba(0, 0, 0, 0.25), inset 0px 0px 20px rgba(87, 124, 255, 0.3)'}

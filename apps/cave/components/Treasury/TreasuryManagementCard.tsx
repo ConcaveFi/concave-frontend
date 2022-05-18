@@ -11,8 +11,8 @@ export default function TreasuryManagementCard(props: { assets: any }) {
   return (
     <Card
       direction={'column'}
-      width={'900px'}
-      height="330px"
+      width={{ xl: '900px', lg: '800px' }}
+      height={{ base: '380px', xl: '330px' }}
       bg={'#111e'}
       shadow={'0px 4px 4px rgba(0, 0, 0, 0.25), inset 0px 0px 20px rgba(87, 124, 255, 0.3)'}
       gap={5}
@@ -21,12 +21,19 @@ export default function TreasuryManagementCard(props: { assets: any }) {
       <Flex width={'full'} justify="center">
         <TreasyAssetsTitle />
       </Flex>
-      <Flex gap={'inherit'} justify="center" align={'center'} height="full" mb={4}>
+      <Flex
+        direction={{ base: 'column', xl: 'row' }}
+        gap={'inherit'}
+        justify="center"
+        align={'center'}
+        height="full"
+        mb={4}
+      >
         <FarmingViewer
           rewards={commify(convexToken?.rewards.toFixed())}
           value={commify(convexToken?.total.toFixed())}
         />
-        <Flex direction={'column'} gap={4}>
+        <Flex direction={{ base: 'row', xl: 'column' }} gap={4}>
           {assets.treasury
             .filter((token) => token.name !== 'cvxDOLA3POOL')
             .map(
@@ -66,18 +73,28 @@ const TokenInfo = (props: TokenInfoProps) => {
   const image = props.image.replace('github', 'raw.githubusercontent').replace('blob/', '')
 
   return (
-    <Card rounded={'2xl'} width={'340px'} height="52px" direction={'row'}>
+    <Card
+      variant="secondary"
+      shadow={'Glow Inner'}
+      rounded={'2xl'}
+      width={{ base: '180px', xl: '340px' }}
+      height={{ base: '98px', xl: '52px' }}
+      direction={{ base: 'column', xl: 'row' }}
+    >
       <GlassPanel width={'180px'} height="52px" rounded={'2xl'}>
         <Flex width={'40%'} justify="center" align={'center'}>
-          <Image width={'40px'} height="40px" src={image}></Image>
+          <Flex bg={'stroke.primary'} p={'2px'} rounded="full" shadow="Magic Big">
+            <Image width={'30px'} height="30px" src={image} rounded={'full'} />
+          </Flex>
         </Flex>
+
         <Flex width={'60%'} justify="start" align={'center'}>
           <Text fontWeight={'700'} fontSize="18px" noOfLines={1}>
             {props.tokenName}
           </Text>
         </Flex>
       </GlassPanel>
-      <Flex flex={1} justify="start" align={'center'} ml={4}>
+      <Flex flex={1} justify={{ base: 'center', xl: 'start' }} align={'center'} ml={4}>
         <Text fontWeight={'700'} fontSize="18px">
           {'$' + commify(parseFloat(props.value).toFixed())}
         </Text>

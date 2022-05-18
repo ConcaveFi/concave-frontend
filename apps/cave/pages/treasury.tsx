@@ -21,8 +21,8 @@ export function Treasury() {
 
   return (
     <Flex height={'full'} width="full" align={'center'} justify="center" position={'relative'}>
-      <Flex direction={'column'} maxWidth={'900px'} height="">
-        <Flex direction="row" width={'full'} justify={'space-around'}>
+      <Flex direction={'column'} maxWidth={'1000px'}>
+        <Flex direction="row" width={'full'} justify={{ base: 'space-between' }}>
           <ScaleFade in={revenueCardLoaded}>
             {treaStatus === 'success' && cnvStatus === 'success' && cnvData && treaData && (
               <TreasuryRevenueCard cnv={cnvData} treasury={treaData} />
