@@ -24,8 +24,8 @@ export class ConcaveNFTMarketplace {
     return this.contract.createMarketItem(marketItem.tokenID, marketItem.price, {})
   }
 
-  public async nftContractAuctions(nftContractAddress: string, index: string): Promise<Auction> {
-    const info = await this.contract.nftContractAuctions(nftContractAddress, index)
+  public async nftContractAuctions(index: string): Promise<Auction> {
+    const info = await this.contract.nftContractAuctions(index)
     return Auction.fromObject(info)
   }
 

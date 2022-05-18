@@ -31,10 +31,7 @@ export const fetchUserNonFungibleTokenInfo = async (address: string, chainId: nu
     usersNft.map(async (nft) => {
       const tokenIndexId = nft.id.tokenId
       const positionInfo = await stakingV1Contract.positions(tokenIndexId)
-      const auction = await marketPlaceContract.nftContractAuctions(
-        nft.contract.address,
-        nft.id.tokenId,
-      )
+      const auction = await marketPlaceContract.nftContractAuctions(nft.id.tokenId)
       return new NonFungibleTokenInfo(nft.contract.address, nft.id.tokenId, positionInfo, auction)
     }),
   )
