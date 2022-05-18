@@ -5,6 +5,8 @@ import { ButtonLink, ButtonLinkProps } from 'components/ButtonLink'
 import { useRouter } from 'next/router'
 import getROI from 'utils/getROI'
 import { getBondSpotPrice } from 'components/Bond/BondState'
+import getCNVMarketPrice from 'utils/getCNVMarketPrice'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 
 const NavButton = (props: ButtonLinkProps) => {
   const router = useRouter()
@@ -56,28 +58,37 @@ const NotInteractableImage = ({ src, ...props }) => (
 )
 
 function PageNav() {
-  const [bondSpotPrice, setBondSpotPrice] = useState<string>('0')
-  const [cnvMarketPrice, setCnvMarketPrice] = useState<number>(0)
-  useEffect(() => {
-    getBondSpotPrice(3, '').then((bondSpotPrice) => {
-      setBondSpotPrice(bondSpotPrice)
-    })
-    fetch('/api/cnv')
-      .then((j) => j.json())
-      .then((data) => JSON.parse(data))
-      .then((data) => {
-        if (data?.data) {
-          setCnvMarketPrice(data.data.last)
-        }
-      })
-      .catch((e) => {
-        throw e
-      })
-  }, [cnvMarketPrice])
   const router = useRouter()
-
+  const currentSupportedNetworkId = useCurrentSupportedNetworkId()
+  const [bondSpotPrice, setBondSpotPrice] = useState<string>('0')
+  const [cnvMarketPrice, setCNVMarketPrice] = useState<number>(0)
   const [liquidStakingHover, setLiquidStakingHover] = useState(false)
   const [swapHover, setSwapStakingHover] = useState(false)
+  const [intervalID, setIntervalID] = useState<any>()
+
+  useEffect(() => {
+    getBondSpotPrice(currentSupportedNetworkId, '').then((bondSpotPrice) => {
+      setBondSpotPrice(bondSpotPrice)
+    })
+    getCNVMarketPrice().then((price) => {
+      setCNVMarketPrice(price)
+    })
+  }, [currentSupportedNetworkId])
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      getBondSpotPrice(currentSupportedNetworkId, '').then((bondSpotPrice) => {
+        setBondSpotPrice(bondSpotPrice)
+      })
+      getCNVMarketPrice().then((price) => {
+        setCNVMarketPrice(price)
+      })
+    }, 10000)
+    if (intervalID !== interval) {
+      clearTimeout(intervalID)
+      setIntervalID(interval)
+    }
+  }, [cnvMarketPrice, currentSupportedNetworkId])
 
   const liquidStakingPage =
     router.pathname === '/liquid-staking' || router.pathname === '/dashboard'
@@ -85,6 +96,7 @@ function PageNav() {
     router.pathname === '/gemswap' ||
     router.pathname === '/pools' ||
     router.pathname === '/addliquidity'
+
   return (
     <Flex direction="column" position="relative" mr="-2px">
       <NotInteractableImage
