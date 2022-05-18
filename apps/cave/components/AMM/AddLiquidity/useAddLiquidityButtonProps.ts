@@ -23,17 +23,16 @@ export const useAddLiquidityButtonProps = (
   */
   if (!account?.address) return { children: 'Connect wallet', onClick: connectModal.onOpen }
 
-  if (!amount0 || !amount1) return { isDisabled: true, children: `Invalid pair` }
+  if (!amount0 || !amount1 || amount0.currency.wrapped.equals(amount1.currency))
+    return { isDisabled: true, children: `Invalid pair` }
 
   if (pair.isLoading) return { isLoading: true, loadingText: `Fetching pair` }
 
   /*
     Enter an amount
   */
-  if (amount0.equalTo(0))
-    return { isDisabled: true, children: `Enter ${amount0.currency.symbol} amount` }
-  if (amount1.equalTo(0))
-    return { isDisabled: true, children: `Enter ${amount1.currency.symbol} amount` }
+  if (amount0.equalTo(0) || amount1.equalTo(0))
+    return { isDisabled: true, children: `Enter an amount` }
 
   /*
     Insufficient Funds
