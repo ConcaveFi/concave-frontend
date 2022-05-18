@@ -12,6 +12,7 @@ import {
   VStack,
 } from '@concave/ui'
 import { CurrencyInputField as BondInput } from 'components/CurrencyAmountField'
+import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { BOND_ADDRESS } from 'contracts/Bond/BondingAddress'
@@ -81,6 +82,13 @@ export function BondBuyCard(props: {
   const AMMData = useGet_Amm_Cnv_PriceQuery()
 
   const currentPrice = AMMData?.data?.cnvData?.data?.last.toFixed(3)
+
+  const [txError, setTxError] = useState('')
+  const {
+    isOpen: isOpenRejected,
+    onClose: onCloseRejected,
+    onOpen: onOpenRejected,
+  } = useDisclosure()
 
   useEffect(() => {
     getBondSpotPrice(networkId, BOND_ADDRESS[networkId])
@@ -170,7 +178,9 @@ export function BondBuyCard(props: {
         setHasClickedConfirm={setHasClickedConfirm}
         onConfirm={() => {
           confirmModal.onClose()
-          purchaseBond(networkId, amountIn.toFixed(), userAddress, signer, settings, amountOut)
+          const amountInTemp = amountIn.toFixed()
+          const amountOutTemp = amountOut
+          purchaseBond(networkId, amountInTemp, userAddress, signer, settings, amountOutTemp)
             .then((tx) => {
               setBondTransaction(tx)
               props.setBondTransaction?.(tx)
@@ -183,7 +193,8 @@ export function BondBuyCard(props: {
               setAmountOut('')
             })
             .catch((e) => {
-              console.log('get position info failed', e)
+              setTxError(e.message)
+              onOpenRejected()
               setHasClickedConfirm(false)
             })
         }}
@@ -206,6 +217,7 @@ export function BondBuyCard(props: {
         tokenSymbol={currencyOut.symbol}
         tokenOutAddress={currencyOut.address}
       />
+      <TransactionErrorDialog error={txError} isOpen={isOpenRejected} />
     </Card>
   )
 }
