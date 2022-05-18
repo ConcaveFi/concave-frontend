@@ -1,5 +1,4 @@
 import { Card, Button } from '@concave/ui'
-import { utils } from 'ethers'
 
 export const Redeem = ({
   onConfirm,
@@ -20,22 +19,19 @@ export const Redeem = ({
   const bottom = setBottom ? '1px' : -3
   return (
     <>
-      {Math.sign(redeemable) === 1 ? (
-        <Card mb={-12} bottom={bottom} fontWeight="bold" fontSize={fontSize} w="100%">
-          <Button
-            variant="primary"
-            size="lg"
-            w="full"
-            onClick={onConfirm}
-            fontSize={'inherit'}
-            {...customHeightSetting}
-          >
-            Redeem
-          </Button>
-        </Card>
-      ) : (
-        ''
-      )}
+      <Card mb={-12} bottom={bottom} fontWeight="bold" fontSize={fontSize} w="100%">
+        <Button
+          disabled={+(redeemable / 10 ** 18).toFixed(2) === 0}
+          variant="primary"
+          size="lg"
+          w="full"
+          onClick={onConfirm}
+          fontSize={'inherit'}
+          {...customHeightSetting}
+        >
+          Redeem
+        </Button>
+      </Card>
     </>
   )
 }

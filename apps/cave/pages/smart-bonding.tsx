@@ -31,9 +31,12 @@ export function Bond() {
   const [bondSigma, setBondSigma] = useState<any>()
   const [intervalID, setIntervalID] = useState<any>()
   const [showUserPosition, setShowUserPosition] = useState(false)
+  const [isLoadingBondSigma, setIsLoadingBondSigma] = useState(true)
+
   const { data: last10SoldsData, isLoading, error } = useGet_Accrualbondv1_Last10_SoldQuery()
 
   useEffect(() => {
+    setIsLoadingBondSigma(true)
     getCurrentBlockTimestamp(networkId).then((x) => {
       setCurrentBlockTs(x)
     })
@@ -84,7 +87,16 @@ export function Bond() {
   }, [networkId])
 
   useEffect(() => {
-    if (bondSigma) {
+    setIsLoadingBondSigma(true)
+    setBondSigma(null)
+    getUserBondPositions(networkId, userAddress, currentBlockTs).then((x) => {
+      setBondSigma(x)
+    })
+  }, [userAddress])
+
+  useEffect(() => {
+    if (bondSigma && isLoadingBondSigma) {
+      setIsLoadingBondSigma(false)
       setShowUserPosition(true)
     }
   }, [bondSigma])
@@ -128,41 +140,69 @@ export function Bond() {
                 height="386px"
               >
                 <SelectedBondType bondType="Classic" />
-                <BondInfo
-                  asset="CNV"
-                  icon="/assets/tokens/cnv.svg"
-                  roi={`${
-                    cnvMarketPrice > 0
-                      ? ((1 - +bondSpotPrice / +cnvMarketPrice) * 100).toFixed(2)
-                      : '-'
-                  }%`}
-                  vestingTerm={`${termLength} Days`}
-                />
-                {!userAddress && !bondSigma ? (
-                  <>Wallet not connected</>
-                ) : !bondSigma ? (
-                  <>
+                {!userAddress && isLoadingBondSigma ? (
+                  <Box
+                    position={'relative'}
+                    top={'32.5%'}
+                    display={'flex'}
+                    flexDirection="column"
+                    alignItems={'center'}
+                    gap={10}
+                  >
+                    Wallet not connected
+                  </Box>
+                ) : isLoadingBondSigma ? (
+                  <Box
+                    position={'relative'}
+                    top={'32.5%'}
+                    display={'flex'}
+                    flexDirection="column"
+                    alignItems={'center'}
+                    gap={10}
+                  >
                     Checking positions...
                     <SpinIcon __css={spinnerStyles} width={'10'} height={'10'} />
-                  </>
+                  </Box>
                 ) : (
                   ''
                 )}
-                <Box w="100%">
-                  <Collapse in={showUserPosition}>
-                    <UserBondPositionInfo bondSigma={bondSigma} userAddress={userAddress} />
-                  </Collapse>
-                </Box>
-                <Redeem
-                  bondSigma={bondSigma}
-                  onConfirm={() => {
-                    const batchRedeemIDArray = bondSigma.batchRedeemArray
-                    redeemBondBatch(networkId, batchRedeemIDArray, userAddress, signer)
-                  }}
-                  largeFont
-                  setBottom
-                  customHeight
-                ></Redeem>
+                {!isLoadingBondSigma && (
+                  <>
+                    <Box w="100%">
+                      <Collapse in={showUserPosition}>
+                        <BondInfo
+                          asset="CNV"
+                          icon="/assets/tokens/cnv.svg"
+                          roi={`${
+                            cnvMarketPrice > 0
+                              ? ((1 - +bondSpotPrice / +cnvMarketPrice) * 100).toFixed(2)
+                              : '-'
+                          }%`}
+                          vestingTerm={`${termLength} Days`}
+                        />
+                      </Collapse>
+                    </Box>
+
+                    <Box w="100%">
+                      <Collapse in={showUserPosition}>
+                        <UserBondPositionInfo bondSigma={bondSigma} userAddress={userAddress} />
+                      </Collapse>
+                    </Box>
+
+                    {showUserPosition && (
+                      <Redeem
+                        bondSigma={bondSigma}
+                        onConfirm={() => {
+                          const batchRedeemIDArray = bondSigma.batchRedeemArray
+                          redeemBondBatch(networkId, batchRedeemIDArray, userAddress, signer)
+                        }}
+                        largeFont
+                        setBottom
+                        customHeight
+                      />
+                    )}
+                  </>
+                )}
               </Card>
               <BondSoldsCard loading={isLoading} error={error} data={last10SoldsData} />
             </Card>
