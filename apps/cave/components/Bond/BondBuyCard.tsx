@@ -179,6 +179,8 @@ export function BondBuyCard(props: {
                 out: parseFloat(amountOut).toFixed(2),
               })
               setHasClickedConfirm(false)
+              setAmountIn(toAmount('0', DAI[networkId]))
+              setAmountOut('')
             })
             .catch((e) => {
               console.log('get position info failed', e)
