@@ -6,8 +6,6 @@ export default function TreasuryManagementCard(props: { assets: any }) {
   const { assets } = props
   const convexToken = assets.treasury.filter((token) => token.name === 'cvxDOLA3POOL')[0]
 
-  console.log(convexToken)
-
   return (
     <Card
       direction={'column'}
@@ -196,7 +194,7 @@ export const GlassPanel: React.FC<FlexProps> = ({ ...props }) => {
         boxShadow={'down'}
         m={'1px'}
         bg="url(assets/textures/glass.jpg)"
-        bgSize={'100%'}
+        bgSize={'cover'}
         bgPos="center"
         rounded="inherit"
       >

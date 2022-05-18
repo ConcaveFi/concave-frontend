@@ -1,13 +1,13 @@
 import { CNV } from 'constants/tokens'
-import { Button, Card, Flex, HStack, Image, Text } from '@concave/ui'
+import { Button, Flex, Text } from '@concave/ui'
 import useAddTokenToWallet, { injectedTokenResponse } from 'hooks/useAddTokenToWallet'
 import { useIsMounted } from 'hooks/useIsMounted'
-import { getWalletType, renderProviderText } from 'lib/injected.wallets'
+import { getWalletType } from 'lib/injected.wallets'
 import { GlassPanel } from './TreasuryManagementCard'
 import { useEffect, useState } from 'react'
 import { useAccount, useContractWrite } from 'wagmi'
 import { aCNVredeemabi } from 'lib/contractoABI'
-import { CNV_ADDRESS } from '@concave/gemswap-sdk'
+import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 
 function ClaimAcnvButton() {
   const [{ data: account }] = useAccount()
@@ -96,7 +96,16 @@ function TreasuryRedeemCard() {
         </GlassPanel>
       </Flex>
 
-      <Text textColor={'text.low'} fontWeight={700} cursor="pointer" mx={'auto'} my="auto">
+      <Text
+        onClick={() => {
+          addingToWallet()
+        }}
+        textColor={'text.low'}
+        fontWeight={700}
+        cursor="pointer"
+        mx={'auto'}
+        my="auto"
+      >
         Add CNV to your {walletName}
       </Text>
     </GlassPanel>
