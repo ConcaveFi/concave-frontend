@@ -16,6 +16,7 @@ import { Redeem } from 'components/Bond/Redeem'
 import { SelectedBondType } from 'components/Bond/SelectedBondType'
 import { useGet_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql'
 import React, { useEffect, useState } from 'react'
+import getROI from 'utils/getROI'
 const spin = keyframes({
   '0%': { transform: 'rotate(0deg)' },
   '100%': { transform: 'rotate(360deg)' },
@@ -173,11 +174,7 @@ export function Bond() {
                         <BondInfo
                           asset="CNV"
                           icon="/assets/tokens/cnv.svg"
-                          roi={`${
-                            cnvMarketPrice > 0
-                              ? ((1 - +bondSpotPrice / +cnvMarketPrice) * 100).toFixed(2)
-                              : '-'
-                          }%`}
+                          roi={getROI(cnvMarketPrice, bondSpotPrice)}
                           vestingTerm={`${termLength} Days`}
                         />
                       </Collapse>

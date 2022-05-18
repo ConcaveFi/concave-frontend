@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { Box, Flex, Text, Image, Collapse } from '@concave/ui'
 import { ButtonLink, ButtonLinkProps } from 'components/ButtonLink'
 import { useRouter } from 'next/router'
+import getROI from 'utils/getROI'
 import { getBondSpotPrice } from 'components/Bond/BondState'
 
 const NavButton = (props: ButtonLinkProps) => {
@@ -101,10 +102,7 @@ function PageNav() {
           Bond
         </NavButton>
         <Text fontSize="xs" fontWeight="bold" textColor="text.low" textAlign="center" py={2}>
-          CNV-DAI{' '}
-          {`${
-            cnvMarketPrice > 0 ? ((1 - +bondSpotPrice / +cnvMarketPrice) * 100).toFixed(2) : '-'
-          }%`}
+          CNV-DAI {getROI(cnvMarketPrice, bondSpotPrice)}
         </Text>
       </Box>
       <Box height={'110px'}>
