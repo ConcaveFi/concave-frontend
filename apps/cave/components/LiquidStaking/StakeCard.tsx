@@ -17,6 +17,7 @@ import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId
 import { StakingV1Contract } from 'lib/StakingV1Proxy/StakingV1Contract'
 import { useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
+import { useAccount } from 'wagmi'
 import Emissions from './StakeModal/Emissions'
 import StakeInfo from './StakeModal/StakeInfo'
 import StakeInput from './StakeModal/StakeInput'
@@ -128,6 +129,9 @@ function StakeCard(props: StackCardProps) {
 
   const percent = (+currentlyStaked / +currentlyStakingCap) * 100
 
+  const [{ data: account }] = useAccount()
+  const userAddress = account?.address
+
   return (
     <div>
       <Card
@@ -230,7 +234,7 @@ function StakeCard(props: StackCardProps) {
           h="40px"
           size="large"
           mx="auto"
-          disabled={false}
+          disabled={!userAddress}
         >
           Stake
         </Button>
