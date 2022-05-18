@@ -1,13 +1,5 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Modal,
-  ModalContent,
-  ModalOverlay,
-  Text,
-  useDisclosure,
-} from '@concave/ui'
+import { Box, Button, Flex, Text, useDisclosure } from '@concave/ui'
+import { ModalContent, Modal, ModalOverlay } from '@chakra-ui/react'
 import { ethers } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { ConcaveNFTMarketplace } from 'lib/ConcaveNFTMarketplaceProxy/ConcaveNFTMarketplace'
@@ -62,7 +54,7 @@ const MarketplaceListing = (props: MarketplaceListingProps) => {
       mt={{ lg: 1, md: 0 }}
       mb={3}
     >
-      <Modal title="" isOpen={isOpen} onClose={onClose} isCentered>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay bg={'none'} backdropBlur="4px" zIndex={0} />
         <ModalContent>
           <Flex>
