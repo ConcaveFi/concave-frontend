@@ -29,8 +29,7 @@ export class StakingV1Contract {
   }
 
   public async pools(index: string): Promise<Pool> {
-    const pools = await this.contract.pools(index)
-    return { ...pools }
+    return this.contract.pools(index)
   }
 
   public async positions(index: BigNumberish): Promise<Position> {
