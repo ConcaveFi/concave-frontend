@@ -38,8 +38,6 @@ export const CurrencyInputField = ({
   const inputFiat = useFiatValue(currencyAmountIn)
   const balance = useCurrencyBalance(currencyAmountIn?.currency, { watch: true })
 
-  // const with2Decimals = sucNut.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0]
-
   return (
     <CurrencyAmountField
       currencyAmount={currencyAmountIn}
