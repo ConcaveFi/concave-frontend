@@ -1,8 +1,7 @@
-import { SpinIcon, SpinnerIcon } from '@concave/icons'
-import { Box, Card, Collapse, Flex, FlexProps, keyframes, Spinner, Text, VStack } from '@concave/ui'
-import { useState } from 'react'
+import { SpinIcon } from '@concave/icons'
+import { Box, Collapse, Flex, keyframes, Text, VStack } from '@concave/ui'
+import { UseDashBoardState } from 'contracts/DashBoard/DashBoardState'
 import DividendsShareMobile from './Components/DividendsShare'
-import { NftPositionViewer } from './Components/UserCard/NftPositionViewer'
 import UserPositionCardMobile from './Components/UserPositionCard'
 
 const spin = keyframes({
@@ -10,27 +9,13 @@ const spin = keyframes({
   '100%': { transform: 'rotate(360deg)' },
 })
 
-interface DashboardMobileProps {
-  data: {
-    status: {
-      isLoading: boolean
-      notConnected: boolean
-    }
-    positions: {
-      totalLocked: number
-      userPositions: any[]
-    }
-  }
-}
-
-const DashboardMobile = (props: DashboardMobileProps) => {
+const DashboardMobile = (props: { data: UseDashBoardState }) => {
   const { data } = props
-  const { status, positions } = data
+  const { status, userNonFungibleTokensInfo, totalLocked } = data
   const { isLoading, notConnected } = status
-  const { userPositions, totalLocked } = positions
 
-  const userPosComps = userPositions.map((contract, index) => (
-    <UserPositionCardMobile key={index} contract={contract} />
+  const userPosComps = userNonFungibleTokensInfo.map((nonFungibleTokenInfo, index) => (
+    <UserPositionCardMobile key={index} nonFungibleTokenInfo={nonFungibleTokenInfo} />
   ))
 
   return (

@@ -1,13 +1,13 @@
 import { Button, Flex, FlexProps, Text } from '@concave/ui'
-import { BigNumber, ethers } from 'ethers'
+import { utils } from 'ethers'
+import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungibleToken'
 
 interface RedeemCardViewerProps {
-  initial: BigNumber
-  gained: BigNumber
-  redeemIn: number
+  nonFungibleTokenInfo: NonFungibleTokenInfo
 }
-const RedeemCardViewer = (props: RedeemCardViewerProps) => {
-  const { initial, gained, redeemIn } = props
+const RedeemCardViewer = ({ nonFungibleTokenInfo }: RedeemCardViewerProps) => {
+  const { shares, rewardDebt, maturity } = nonFungibleTokenInfo
+
   return (
     <Flex
       flex={1}
@@ -20,23 +20,23 @@ const RedeemCardViewer = (props: RedeemCardViewerProps) => {
       gap={{ lg: 0, md: 2 }}
     >
       <Flex gap={{ lg: 0, md: 4 }}>
-        <Info label="Current Value" value={ethers.utils.formatEther(initial.add(gained))} />
-        <Info label="Gained" value={ethers.utils.formatEther(gained)} />
-        <Info label="Initial" value={ethers.utils.formatEther(initial)} />
+        <Info label="Current Value" value={utils.formatEther(nonFungibleTokenInfo.currentValue)} />
+        <Info label="Gained" value={utils.formatEther(nonFungibleTokenInfo.rewardDebt)} />
+        <Info label="Initial" value={utils.formatEther(nonFungibleTokenInfo.initialValue)} />
       </Flex>
       <Button
         w={{ lg: '140px', md: '170px' }}
         h={{ lg: '40px', md: '36px' }}
         mx="auto"
-        cursor={redeemIn > 0 ? 'default' : 'pointer'}
-        variant={redeemIn > 0 ? '' : 'primary'}
-        shadow={redeemIn > 0 ? 'down' : 'up'}
-        _active={redeemIn <= 0 && { transform: 'scale(0.9)' }}
+        cursor={maturity > 0 ? 'default' : 'pointer'}
+        variant={maturity > 0 ? '' : 'primary'}
+        shadow={maturity > 0 ? 'down' : 'up'}
+        _active={maturity <= 0 && { transform: 'scale(0.9)' }}
         _focus={{}}
         rounded="2xl"
       >
-        <Text color={redeemIn > 0 ? 'text.low' : 'white'} fontSize="sm">
-          {redeemIn > 0 ? 'Not redeemable' : 'Redeem'}
+        <Text color={maturity > 0 ? 'text.low' : 'white'} fontSize="sm">
+          {maturity > 0 ? 'Not redeemable' : 'Redeem'}
         </Text>
       </Button>
     </Flex>

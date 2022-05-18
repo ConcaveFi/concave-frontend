@@ -1,8 +1,9 @@
 import { Box, Button, Flex, Spinner, Text } from '@concave/ui'
-import { useState } from 'react'
+import { BigNumber } from 'ethers'
+import { precisionBignumber } from 'hooks/usePrecision'
 
 interface UserDividendCardProps {
-  totalLocked: number
+  totalLocked: BigNumber
   status: { isLoading; notConnected }
 }
 const UserDividendCard = (props: UserDividendCardProps) => {
@@ -13,7 +14,7 @@ const UserDividendCard = (props: UserDividendCardProps) => {
     ? '--.--.--'
     : isLoading
     ? 'loading'
-    : +parseFloat(props.totalLocked.toFixed(3)) + ' CNV'
+    : precisionBignumber(props.totalLocked, 18, 4).formatted + ' CNV'
   return (
     <Box
       pos="relative"

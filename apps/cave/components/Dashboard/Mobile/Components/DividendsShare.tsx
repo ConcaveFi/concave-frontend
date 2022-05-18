@@ -1,8 +1,10 @@
-import { SpinIcon, SpinnerIcon } from '@concave/icons'
-import { Button, Card, Flex, FlexProps, keyframes, Spinner, Text } from '@concave/ui'
+import { SpinnerIcon } from '@concave/icons'
+import { Flex, keyframes, Text } from '@concave/ui'
+import { BigNumber } from 'ethers'
+import { precisionBignumber } from 'hooks/usePrecision'
 
 interface DividendsShareMobileProps {
-  totalLocked: number
+  totalLocked: BigNumber
   status: { isLoading; notConnected }
 }
 
@@ -18,7 +20,7 @@ const DividendsShareMobile = (props: DividendsShareMobileProps) => {
     ? '--.--.--.--'
     : isLoading
     ? 'loading'
-    : +parseFloat(props.totalLocked.toFixed(3)) + ' CNV'
+    : precisionBignumber(props.totalLocked, 18, 4).formatted + ' CNV'
   return (
     <Flex
       rounded={'2xl'}

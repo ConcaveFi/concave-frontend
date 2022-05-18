@@ -1,17 +1,17 @@
-import { Card, CardProps, Flex, Text } from '@concave/ui'
-import { nftContract } from 'components/Dashboard/UserPositionCard'
+import { Card, Flex } from '@concave/ui'
+import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungibleToken'
 import MarketPlaceListingMobile from './UserCard/MarketPlaceListing'
 import { NftPositionViewer } from './UserCard/NftPositionViewer'
 import RedeemContainer from './UserCard/RedeemContainer'
 import StakingRewardMobile from './UserCard/StakingReward'
 
 interface NftPositionCardMobileProps {
-  contract: nftContract
+  nonFungibleTokenInfo: NonFungibleTokenInfo
 }
 
 const UserPositionCardMobile = (props: NftPositionCardMobileProps) => {
-  const { contract } = props
-  const { maturity, poolID, shares, rewardDebt } = contract
+  const { nonFungibleTokenInfo } = props
+  const { maturity, poolID, shares, rewardDebt } = nonFungibleTokenInfo
 
   const sharesDecimals = parseInt(shares?._hex, 16) / 1000000000000000000
   const gained = parseInt(rewardDebt?._hex, 16) / 1000000000000000000

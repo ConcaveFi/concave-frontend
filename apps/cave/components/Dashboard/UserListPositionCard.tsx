@@ -1,20 +1,35 @@
-import { Box, Flex, Input, Text } from '@concave/ui'
+import { CNV, CurrencyAmount } from '@concave/gemswap-sdk'
+import { Box, Flex, Input, NumericInput, Text } from '@concave/ui'
 import ChooseButton from 'components/Marketplace/ChooseButton'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { ConcaveNFTMarketplace } from 'lib/ConcaveNFTMarketplaceProxy/ConcaveNFTMarketplace'
+import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungibleToken'
 import { useState } from 'react'
-import { useSigner } from 'wagmi'
+import { toAmount } from 'utils/toAmount'
+import { useAccount, useSigner } from 'wagmi'
 
 type UserListPositionCardProps = {
-  address: string
-  tokenId: string
+  nonFungibleTokenInfo: NonFungibleTokenInfo
 }
 
 const UserListPositionCard = (props: UserListPositionCardProps) => {
+  const [{ data: account }] = useAccount()
   const [expirationDate, setExpirationDate] = useState('')
   const [listingDate, setListingDate] = useState('')
   const [{ data: signer }] = useSigner()
   const chainId = useCurrentSupportedNetworkId()
+  const nonFungibleTokenInfo = props.nonFungibleTokenInfo
+  const [price, setPrice] = useState(
+    CurrencyAmount.fromRawAmount(
+      CNV[chainId],
+      nonFungibleTokenInfo.shares.div(100).mul(80).toString(),
+    ),
+  )
+  const buyNowPrice = CurrencyAmount.fromRawAmount(
+    CNV[chainId],
+    nonFungibleTokenInfo.currentValue.toString(),
+  )
+  const discount = nonFungibleTokenInfo.calculteDiscount(price.numerator.toString())
   return (
     <Box
       h={220}
@@ -66,16 +81,22 @@ const UserListPositionCard = (props: UserListPositionCardProps) => {
               Current Value:
             </Text>
           </Flex>
-          <Flex
-            width={'110px'}
-            height="30px"
-            shadow={'Up Small'}
-            rounded="2xl"
-            align="center"
-            fontWeight={'700'}
-            pl={'4'}
-          >
-            604 CNV
+          <Flex justifyContent="center" alignItems={'center'}>
+            <NumericInput
+              as={Input}
+              width="110px"
+              height="30px"
+              borderRadius={'2xl'}
+              pl="4"
+              value={+price?.toSignificant(8)}
+              onValueChange={(values, sourceInfo) => {
+                if (sourceInfo.source === 'prop') return
+                if (values.value === '') {
+                  return setPrice(toAmount('0', price.currency))
+                }
+                setPrice(toAmount(values.value, price.currency))
+              }}
+            />
           </Flex>
         </Flex>
 
@@ -94,7 +115,7 @@ const UserListPositionCard = (props: UserListPositionCardProps) => {
             fontWeight={'700'}
             pl={'4'}
           >
-            2.4%
+            {discount}
           </Flex>
         </Flex>
         <Flex grow={1} justifyContent="center" alignItems={'end'} gap="2">
@@ -104,12 +125,12 @@ const UserListPositionCard = (props: UserListPositionCardProps) => {
               concaveNFTMarketPlace
                 .createDefaultNftAuction(
                   signer,
-                  props.address,
-                  props.tokenId,
-                  '0xB9CED3eB5Ce9d40A735cA3345978aB62Eca0c4d0',
-                  300,
-                  800,
-                  ['0x8522093305253EfB2685241dc0C587CDD9B10e4B'],
+                  props.nonFungibleTokenInfo.contractAddress,
+                  props.nonFungibleTokenInfo.tokenId,
+                  price.currency.wrapped.address,
+                  price.numerator.toString(),
+                  buyNowPrice.numerator.toString(),
+                  [account.address],
                   [100],
                 )
                 .then(console.log)

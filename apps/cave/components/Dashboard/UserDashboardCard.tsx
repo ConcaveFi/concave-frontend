@@ -1,32 +1,19 @@
 import { Box, Button, Card, Collapse, Flex, Spinner, Text } from '@concave/ui'
+import { UseDashBoardState } from 'contracts/DashBoard/DashBoardState'
 import { useRouter } from 'next/router'
 import UserDividendCard from './UserDividendCard'
 import UserPositionCard from './UserPositionCard'
 
-interface UserDashBoardCardProps {
-  data: {
-    status: {
-      isLoading: boolean
-      notConnected: boolean
-    }
-    positions: {
-      totalLocked: number
-      userPositions: any[]
-    }
-  }
-}
-
-const UserDashboardCard = (props: UserDashBoardCardProps) => {
+const UserDashboardCard = (props: { data: UseDashBoardState }) => {
   const { data } = props
-  const { positions, status } = data
-  const { userPositions, totalLocked } = positions
+  const { userNonFungibleTokensInfo, totalLocked, status } = data
   const { isLoading, notConnected } = status
 
-  const userPositionsComponent = userPositions.map((contract, index) => (
-    <UserPositionCard key={index} contract={contract} />
+  const userPositionsComponent = userNonFungibleTokensInfo.map((nonFungibleTokenInfo, index) => (
+    <UserPositionCard key={index} nonFungibleTokenInfo={nonFungibleTokenInfo} />
   ))
 
-  const hasPositions = userPositions.length !== 0
+  const hasPositions = userNonFungibleTokensInfo.length !== 0
 
   return (
     <Flex display={{ lg: 'flex', md: 'flex', sm: 'none', base: 'none' }}>

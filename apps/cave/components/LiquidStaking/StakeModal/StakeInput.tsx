@@ -1,15 +1,5 @@
 import { CNV, Currency, CurrencyAmount } from '@concave/gemswap-sdk'
-import {
-  Alert,
-  AlertDialog,
-  AlertDialogContent,
-  Box,
-  Button,
-  Card,
-  Flex,
-  Text,
-  useDisclosure,
-} from '@concave/ui'
+import { Box, Button, Card, Flex, Text, useDisclosure } from '@concave/ui'
 import { CurrencyInputField } from 'components/CurrencyAmountField'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
@@ -80,10 +70,10 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
             <Button
               mt={5}
               onClick={async () => {
-                const contract = new StakingV1Contract(netWorkdId, signer)
+                const contract = new StakingV1Contract(netWorkdId)
                 setWaitingForConfirm(true)
                 contract
-                  .lock(account?.address, stakeInput.numerator.toString(), props.poolId)
+                  .lock(signer, account?.address, stakeInput.numerator.toString(), props.poolId)
                   .then((x) => {
                     setTx(x)
                     setWaitingForConfirm(false)
