@@ -57,7 +57,7 @@ const DefaultLayout = (props: DefaultLayoutProps) => {
         <HStack>
           <Flex direction={'column'}>
             <Text fontSize="xs" color="text.low" fontWeight="medium">
-              Stake Period
+              Stake Pool
             </Text>
             <Text fontSize="s" color="white" fontWeight="bold">
               {title}
