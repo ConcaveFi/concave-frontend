@@ -20,7 +20,7 @@ export const InfoItem = ({ value, label, ...props }) => (
     <Text fontSize="sm" fontFamily="heading">
       {value}
     </Text>
-    <Text fontSize="sm" color="text.low">
+    <Text fontSize="sm" color="text.low" userSelect={'none'}>
       {label}
     </Text>
   </Flex>
