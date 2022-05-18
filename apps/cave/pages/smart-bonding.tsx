@@ -1,6 +1,16 @@
 import { keyframes } from '@chakra-ui/system'
 import { SpinIcon } from '@concave/icons'
-import { Box, Card, Collapse, Container, Flex, Heading, Stack, Text } from '@concave/ui'
+import {
+  Box,
+  Card,
+  Collapse,
+  Container,
+  Flex,
+  Heading,
+  Stack,
+  useDisclosure,
+  Text,
+} from '@concave/ui'
 import { BondBuyCard } from 'components/Bond/BondBuyCard'
 import { BondInfo, UserBondPositionInfo } from 'components/Bond/BondInfo'
 import BondSoldsCard from 'components/Bond/BondSoldsCard'
@@ -15,9 +25,14 @@ import {
 import { Redeem } from 'components/Bond/Redeem'
 import { SelectedBondType } from 'components/Bond/SelectedBondType'
 import { withPageTransition } from 'components/PageTransition'
+import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
+import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
+import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { useGet_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql'
 import React, { useEffect, useState } from 'react'
+import getCNVMarketPrice from 'utils/getCNVMarketPrice'
 import getROI from 'utils/getROI'
+import { truncateNumber } from 'utils/truncateNumber'
 const spin = keyframes({
   '0%': { transform: 'rotate(0deg)' },
   '100%': { transform: 'rotate(360deg)' },
@@ -28,13 +43,22 @@ export function Bond() {
   const spinnerStyles = { animation: `${spin} 2s linear infinite`, size: 'sm' }
   const [termLength, setTermLength] = useState<number>(0)
   const [bondSpotPrice, setBondSpotPrice] = useState<string>('0')
-  const [cnvMarketPrice, setCnvMarketPrice] = useState<Object>()
+  const [cnvMarketPrice, setCNVMarketPrice] = useState<Object>()
   const [currentBlockTs, setCurrentBlockTs] = useState<number>(0)
   const [bondSigma, setBondSigma] = useState<any>()
   const [intervalID, setIntervalID] = useState<any>()
   const [showUserPosition, setShowUserPosition] = useState(false)
   const [isLoadingBondSigma, setIsLoadingBondSigma] = useState(true)
-
+  const [buttonDisabled, setButtonDisabled] = useState(false)
+  const [redeemTx, setRedeemTx] = useState<any>()
+  const [clickedRedeemButton, setClickedRedeemButton] = useState(false)
+  const [txError, setTxError] = useState('')
+  const {
+    isOpen: isOpenSubmitted,
+    onClose: onCloseSubmitted,
+    onOpen: onOpenSubmitted,
+  } = useDisclosure()
+  const { isOpen: isOpenError, onClose: onCloseError, onOpen: onOpenError } = useDisclosure()
   const { data: last10SoldsData, isLoading, error } = useGet_Accrualbondv1_Last10_SoldQuery()
 
   useEffect(() => {
@@ -45,8 +69,10 @@ export function Bond() {
     const interval = setInterval(() => {
       return new Promise((resolve) => {
         getUserBondPositions(networkId, userAddress, currentBlockTs)
-          .then((x) => {
-            setBondSigma(x)
+          .then((bondSigma) => {
+            if (bondSigma.address === userAddress) {
+              setBondSigma(bondSigma)
+            }
           })
           .catch((e) => {
             console.log('user bond fail', e)
@@ -80,7 +106,7 @@ export function Bond() {
       .then((data) => JSON.parse(data))
       .then((data) => {
         if (data?.data) {
-          setCnvMarketPrice(data.data.last)
+          setCNVMarketPrice(data.data.last)
         }
       })
       .catch((e) => {
@@ -91,13 +117,11 @@ export function Bond() {
   useEffect(() => {
     setIsLoadingBondSigma(true)
     setBondSigma(null)
-    getUserBondPositions(networkId, userAddress, currentBlockTs).then((x) => {
-      setBondSigma(x)
-    })
   }, [userAddress])
 
   useEffect(() => {
     if (bondSigma && isLoadingBondSigma) {
+      console.log('bondSigma', bondSigma)
       setIsLoadingBondSigma(false)
       setShowUserPosition(true)
     }
@@ -193,9 +217,25 @@ export function Bond() {
                     {showUserPosition && (
                       <Redeem
                         bondSigma={bondSigma}
+                        buttonDisabled={buttonDisabled}
                         onConfirm={() => {
+                          setButtonDisabled(true)
                           const batchRedeemIDArray = bondSigma.batchRedeemArray
+                          setClickedRedeemButton(true)
                           redeemBondBatch(networkId, batchRedeemIDArray, userAddress, signer)
+                            .then((tx) => {
+                              console.log(tx)
+                              setRedeemTx(tx)
+                              setClickedRedeemButton(false)
+                              onOpenSubmitted()
+                              setButtonDisabled(false)
+                            })
+                            .catch((err) => {
+                              setTxError(err.message)
+                              setClickedRedeemButton(false)
+                              onOpenError()
+                              setButtonDisabled(false)
+                            })
                         }}
                         largeFont
                         setBottom
@@ -211,7 +251,16 @@ export function Bond() {
           <BondBuyCard />
         </Flex>
       </Flex>
-    </Flex>
+      <WaitingConfirmationDialog isOpen={clickedRedeemButton} title={'Confirm Redeem'}>
+        <Text fontSize="lg" color="text.accent">
+          {bondSigma && bondSigma['parseRedeemable']
+            ? `Redeeming ` + truncateNumber(bondSigma.parseRedeemable) + ` CNV`
+            : ''}
+        </Text>
+      </WaitingConfirmationDialog>
+      <TransactionSubmittedDialog tx={redeemTx} isOpen={isOpenSubmitted} />
+      <TransactionErrorDialog error={txError} isOpen={isOpenError} />
+    </Container>
   )
 }
 
