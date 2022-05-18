@@ -131,7 +131,7 @@ const HasNoPositions = (props: HasNoPositionsprops) => {
           onClick={() => router.push('liquid-staking')}
         >
           <Flex fontSize={'16px'} fontWeight="700" grow={1} justify="center">
-            Lets buy some!
+            Stake CNV now!
           </Flex>
         </Button>
       </Flex>
