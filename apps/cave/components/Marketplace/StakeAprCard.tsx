@@ -25,7 +25,7 @@ const MobileLayout = (props: MobileLayoutProps) => {
   return (
     <Flex direction={'column'} align="center" justify={'center'} flex={1} position="relative">
       <Text fontSize="xs" color="text.low" fontWeight="medium">
-        Stake Period
+        Stake Pool
       </Text>
       <Text fontSize="s" color="white" fontWeight="bold">
         {title}
@@ -55,25 +55,25 @@ const DefaultLayout = (props: DefaultLayoutProps) => {
     <Flex>
       <VStack>
         <HStack>
-          <VStack>
+          <Flex direction={'column'}>
             <Text fontSize="xs" color="text.low" fontWeight="medium">
               Stake Period
             </Text>
             <Text fontSize="s" color="white" fontWeight="bold">
               {title}
             </Text>
-          </VStack>
+          </Flex>
           <>
             <Image h="70px" w="70px" src={image} alt={`stake-period-${length}`} />
           </>
-          <VStack>
+          <Flex direction={'column'}>
             <Text fontSize="xs" color="text.low" fontWeight="medium">
               {!diluted && 'v'}APR
             </Text>
             <Text fontSize="s" color="white" fontWeight="bold">
               {text}
             </Text>
-          </VStack>
+          </Flex>
         </HStack>
       </VStack>
     </Flex>

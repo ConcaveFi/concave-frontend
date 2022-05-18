@@ -21,7 +21,7 @@ function MarketplaceStakeCard(props: any) {
       diluted: false,
     },
     {
-      title: '180 Days',
+      title: '90 Days',
       length: '3m',
       marketvapr: 'Calculating',
       image: '/assets/marketplace/3mposition.png',
