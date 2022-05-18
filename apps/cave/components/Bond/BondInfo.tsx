@@ -20,7 +20,7 @@ export const InfoItem = ({ value, label, ...props }) => (
     <Text fontSize="sm" fontFamily="heading">
       {value}
     </Text>
-    <Text fontSize={{ base: '12px', md: 'sm' }} color="text.low">
+    <Text fontSize="sm" color="text.low" userSelect={'none'}>
       {label}
     </Text>
   </Flex>
@@ -30,19 +30,13 @@ export const BondInfo = ({ asset, roi, vestingTerm, icon }) => {
   return (
     <Card bg="none" py={3} w="100%" direction="row" shadow="Glass Up Medium">
       <Flex justify="center" flexBasis="40%" alignItems={'center'}>
-        <Image
-          src={icon}
-          alt=""
-          w={{ base: '40px', md: '55px' }}
-          h={{ base: '40px', md: '55px' }}
-          mr={3}
-        />
+        <Image src={icon} alt="" w="55px" h="55px" mr={3} />
         <InfoItem value={asset.toUpperCase()} label="Asset" />
       </Flex>
       <Box w="1px" mx={0} my={-4} bg="stroke.primary" />
-      <InfoItem value={roi} label="ROI" flexGrow={1} pl={3} pr={3} flexBasis="30%" />
+      <InfoItem value={roi} label="ROI" flexGrow={1} pl={3} pr={3} flexBasis="25%" />
       <Box w="1px" mx={0} my={-4} bg="stroke.primary" />
-      <InfoItem value={vestingTerm} label="Vesting Term" px={5} flexBasis="40%" />
+      <InfoItem value={vestingTerm} label="Vesting Term" px={5} flexBasis="35%" />
     </Card>
   )
 }
