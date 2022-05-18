@@ -128,16 +128,6 @@ export function Bond() {
                 height="386px"
               >
                 <SelectedBondType bondType="Classic" />
-                <BondInfo
-                  asset="CNV"
-                  icon="/assets/tokens/cnv.svg"
-                  roi={`${
-                    cnvMarketPrice > 0
-                      ? ((1 - +bondSpotPrice / +cnvMarketPrice) * 100).toFixed(2)
-                      : '-'
-                  }%`}
-                  vestingTerm={`${termLength} Days`}
-                />
                 {!userAddress && !bondSigma ? (
                   <>Wallet not connected</>
                 ) : !bondSigma ? (
@@ -150,19 +140,37 @@ export function Bond() {
                 )}
                 <Box w="100%">
                   <Collapse in={showUserPosition}>
+                    <BondInfo
+                      asset="CNV"
+                      icon="/assets/tokens/cnv.svg"
+                      roi={`${
+                        cnvMarketPrice > 0
+                          ? ((1 - +bondSpotPrice / +cnvMarketPrice) * 100).toFixed(2)
+                          : '-'
+                      }%`}
+                      vestingTerm={`${termLength} Days`}
+                    />
+                  </Collapse>
+                </Box>
+
+                <Box w="100%">
+                  <Collapse in={showUserPosition}>
                     <UserBondPositionInfo bondSigma={bondSigma} userAddress={userAddress} />
                   </Collapse>
                 </Box>
-                <Redeem
-                  bondSigma={bondSigma}
-                  onConfirm={() => {
-                    const batchRedeemIDArray = bondSigma.batchRedeemArray
-                    redeemBondBatch(networkId, batchRedeemIDArray, userAddress, signer)
-                  }}
-                  largeFont
-                  setBottom
-                  customHeight
-                ></Redeem>
+
+                {showUserPosition && (
+                  <Redeem
+                    bondSigma={bondSigma}
+                    onConfirm={() => {
+                      const batchRedeemIDArray = bondSigma.batchRedeemArray
+                      redeemBondBatch(networkId, batchRedeemIDArray, userAddress, signer)
+                    }}
+                    largeFont
+                    setBottom
+                    customHeight
+                  />
+                )}
               </Card>
               <BondSoldsCard loading={isLoading} error={error} data={last10SoldsData} />
             </Card>
