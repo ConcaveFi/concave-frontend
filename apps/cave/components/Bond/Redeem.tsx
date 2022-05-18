@@ -21,7 +21,7 @@ export const Redeem = ({
     <>
       <Card mb={-12} bottom={bottom} fontWeight="bold" fontSize={fontSize} w="100%">
         <Button
-          disabled={redeemable === 0}
+          disabled={+(redeemable / 10 ** 18).toFixed(2) === 0}
           variant="primary"
           size="lg"
           w="full"
