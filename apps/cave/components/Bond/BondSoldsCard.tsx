@@ -61,7 +61,7 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
         >
           <Flex flex={1.2} direction="column" align={'center'} fontSize="14px">
             <Text fontSize="16px" textColor={'white'} fontWeight="700">
-              Timestamp
+              When
             </Text>
             {relatives}
           </Flex>
@@ -77,7 +77,7 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
           <Flex flex={1.3}>
             <Flex flex={0.9} direction="column" align={'center'} fontSize="14px">
               <Text fontSize="16px" textColor={'white'} fontWeight="700">
-                Purchase
+                Bonded
               </Text>
               {purchases}
             </Flex>

@@ -52,30 +52,28 @@ interface DefaultLayoutProps {
 const DefaultLayout = (props: DefaultLayoutProps) => {
   const { title, length, text, image, diluted } = props.props
   return (
-    <Flex>
-      <VStack>
-        <HStack>
-          <Flex direction={'column'}>
-            <Text fontSize="xs" color="text.low" fontWeight="medium">
-              Stake Pool
-            </Text>
-            <Text fontSize="s" color="white" fontWeight="bold">
-              {title}
-            </Text>
-          </Flex>
-          <>
-            <Image h="70px" w="70px" src={image} alt={`stake-period-${length}`} />
-          </>
-          <Flex direction={'column'}>
-            <Text fontSize="xs" color="text.low" fontWeight="medium">
-              {!diluted && 'v'}APR
-            </Text>
-            <Text fontSize="s" color="white" fontWeight="bold">
-              {text}
-            </Text>
-          </Flex>
-        </HStack>
-      </VStack>
+    <Flex flex={1} direction={'column'} mx={6}>
+      <Flex>
+        <Flex direction={'column'} flex={1} mt={4}>
+          <Text fontSize="xs" color="text.low" fontWeight="medium">
+            Stake Pool
+          </Text>
+          <Text fontSize="s" color="white" fontWeight="bold">
+            {title}
+          </Text>
+        </Flex>
+        <>
+          <Image h="70px" w="70px" src={image} alt={`stake-period-${length}`} />
+        </>
+        <Flex direction={'column'} flex={1} mt={4}>
+          <Text fontSize="xs" color="text.low" fontWeight="medium">
+            {!diluted && 'v'}APR
+          </Text>
+          <Text fontSize="s" color="white" fontWeight="bold">
+            {text}
+          </Text>
+        </Flex>
+      </Flex>
     </Flex>
   )
 }

@@ -61,7 +61,7 @@ const LiquidLocksCards = () => {
       <Collapse startingHeight={isLoading ? '60px' : '100px'} in={isOpen}>
         <Flex fontWeight="700" width={'full'} flex={1} height="full">
           <Flex direction={'column'} flex={1} height="full" align={'center'}>
-            <Text mt={2}>Timestamp</Text>
+            <Text mt={2}>When</Text>
             <Flex direction={'column'} textColor="text.accent" fontSize={'14px'} align="center">
               {relativeTime}
             </Flex>
