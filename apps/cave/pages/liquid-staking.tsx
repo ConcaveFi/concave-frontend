@@ -67,11 +67,9 @@ function LiquidStaking() {
         gap={{ xl: 24, base: 7 }}
       >
         <Text maxW={520} textAlign={{ xl: 'justify', base: 'center' }}>
-          Stakers receive daily rewards to grow their <br /> CNV holdings and quarterly dividends
-          <br />
-          from Concave profits. Staking positions <br /> are represented by NFTs that are tradable
-          <br />
-          in Concave&apos;s native Marketplace.
+          Stakers receive daily rewards to grow their CNV holdings and quarterly dividends from
+          Concave profits. Staking positions are represented by NFTs that are tradable in
+          Concave&apos;s native Marketplace.
         </Text>
         <GraphicGuide />
       </Flex>
