@@ -9,7 +9,7 @@ import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { toAmount } from 'utils/toAmount'
 import { CurrencyAmountField } from '../CurrencyAmountField'
 import { Balance } from './Balance'
-import { trunctateNumber } from './trunctateNumber'
+import { truncateNumber } from 'utils/truncateNumber'
 
 type CurrencyInputFieldProps = {
   currencyAmountIn: CurrencyAmount<Currency>
@@ -54,7 +54,7 @@ export const CurrencyInputField = ({
         </Text>
         {balance.isSuccess && (
           <Balance
-            value={trunctateNumber(balance)}
+            value={truncateNumber(balance?.data?.numerator)}
             onMax={() => onChangeAmount(maxAmount(balance.data))}
           />
         )}
