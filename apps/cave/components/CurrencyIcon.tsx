@@ -23,8 +23,8 @@ export const CurrencyIcon = ({ currency, size = 'sm', ...props }: CurrencyIconPr
   return (
     <Avatar
       {...props}
-      src={getCurrencyLogoURI(currency)}
-      name={currency.symbol}
+      src={currency && getCurrencyLogoURI(currency)}
+      name={currency?.symbol}
       size={size}
       bg={isBadSrc ? 'text.low' : 'none'}
       onError={setBadSrc}
