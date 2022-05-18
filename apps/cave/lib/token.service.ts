@@ -37,7 +37,7 @@ class TokenService {
     token: string
     interval: CandleStickIntervalTypes
   }) {
-    const coingecko = token?.toLowerCase() === 'cnv' ? 'concave' : token?.toLowerCase()
+    const coingecko = { cnv: 'concave', eth: 'weth' }[token?.toLowerCase()] || token?.toLowerCase()
     const days = daysOptions[interval]
     return coingeckoApi.fetchCandleStickData({ id: coingecko, days })
   }
