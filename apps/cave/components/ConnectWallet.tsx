@@ -13,6 +13,7 @@ import {
 } from '@concave/ui'
 import { useAccount, useConnect } from 'wagmi'
 import { useIsMounted } from 'hooks/useIsMounted'
+import { useModals } from 'contexts/ModalsContext'
 
 // const miniAddress = (address) =>
 //   `${address.substr(0, 6)}...${address.substr(address.length - 6, address.length)}`
@@ -91,65 +92,22 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
 }
 
 const ConnectButton = () => {
-  const [{ data }, connect] = useConnect()
-  const isMounted = useIsMounted()
+  // const [{ data }, connect] = useConnect()
+  // const isMounted = useIsMounted()
+  const { connectModal } = useModals()
+
   return (
     <>
-      <Menu placement="auto-end" isLazy>
-        <MenuButton
-          as={Button}
-          sx={{ ...gradientBorder({ borderWidth: 2, borderRadius: '2xl' }) }}
-          fontFamily="heading"
-          variant="primary"
-          size="medium"
-          w="100%"
-        >
-          Connect wallet
-        </MenuButton>
-        <Portal>
-          <MenuList
-            minW="min"
-            bg="none"
-            border="none"
-            shadow="none"
-            p="0"
-            backdropFilter="blur(8px)"
-          >
-            <Card
-              variant="secondary"
-              borderGradient="secondary"
-              borderRadius="xl"
-              px={1}
-              py={2}
-              gap="1"
-            >
-              {isMounted &&
-                data.connectors.map((connector) => {
-                  if (!connector.ready) return null
-                  // change image from using connector id to something else, injected can be metamask, coinbase, brave etc
-                  return (
-                    <MenuItem
-                      borderRadius="xl"
-                      icon={
-                        <Image
-                          w="20px"
-                          src={`/assets/connectors/${connector.name
-                            .toLowerCase()
-                            .replace(' ', '-')}.png`}
-                          alt={connector.name}
-                        />
-                      }
-                      key={connector.id}
-                      onClick={() => connect(connector)}
-                    >
-                      {connector.name}
-                    </MenuItem>
-                  )
-                })}
-            </Card>
-          </MenuList>
-        </Portal>
-      </Menu>
+      <Button
+        sx={{ ...gradientBorder({ borderWidth: 2, borderRadius: '2xl' }) }}
+        fontFamily="heading"
+        variant="primary"
+        size="medium"
+        w="100%"
+        onClick={connectModal.onOpen}
+      >
+        Connect wallet
+      </Button>
     </>
   )
 }
