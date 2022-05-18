@@ -219,11 +219,12 @@ export function Bond() {
                           const batchRedeemIDArray = bondSigma.batchRedeemArray
                           setClickedRedeemButton(true)
                           redeemBondBatch(networkId, batchRedeemIDArray, userAddress, signer)
-                            .then((tx) => {
+                            .then(async (tx) => {
                               console.log(tx)
                               setRedeemTx(tx)
                               setClickedRedeemButton(false)
                               onOpenSubmitted()
+                              await tx.wait(1)
                               setButtonDisabled(false)
                             })
                             .catch((err) => {
