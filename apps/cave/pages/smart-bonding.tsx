@@ -133,12 +133,28 @@ export function Bond() {
               >
                 <SelectedBondType bondType="Classic" />
                 {!userAddress && !bondSigma ? (
-                  <>Wallet not connected</>
+                  <Box
+                    position={'relative'}
+                    top={'32.5%'}
+                    display={'flex'}
+                    flexDirection="column"
+                    alignItems={'center'}
+                    gap={10}
+                  >
+                    Wallet not connected
+                  </Box>
                 ) : !bondSigma ? (
-                  <>
+                  <Box
+                    position={'relative'}
+                    top={'32.5%'}
+                    display={'flex'}
+                    flexDirection="column"
+                    alignItems={'center'}
+                    gap={10}
+                  >
                     Checking positions...
                     <SpinIcon __css={spinnerStyles} width={'10'} height={'10'} />
-                  </>
+                  </Box>
                 ) : (
                   ''
                 )}
