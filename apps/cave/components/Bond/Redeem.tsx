@@ -1,4 +1,5 @@
 import { Card, Button } from '@concave/ui'
+import { truncateNumber } from 'utils/truncateNumber'
 
 export const Redeem = ({
   onConfirm,
@@ -6,12 +7,14 @@ export const Redeem = ({
   largeFont,
   setBottom,
   customHeight,
+  buttonDisabled,
 }: {
   onConfirm: () => void
   bondSigma
   largeFont?: boolean
   setBottom?: boolean
   customHeight?: boolean
+  buttonDisabled: boolean
 }) => {
   const redeemable = bondSigma?.parseRedeemable
   const fontSize = largeFont ? '2xl' : 'xl'
@@ -21,7 +24,7 @@ export const Redeem = ({
     <>
       <Card mb={-12} bottom={bottom} fontWeight="bold" fontSize={fontSize} w="100%">
         <Button
-          disabled={+(redeemable / 10 ** 18).toFixed(2) === 0}
+          disabled={buttonDisabled || +truncateNumber(redeemable) === 0}
           variant="primary"
           size="lg"
           w="full"
@@ -29,7 +32,11 @@ export const Redeem = ({
           fontSize={'inherit'}
           {...customHeightSetting}
         >
-          Redeem
+          {buttonDisabled
+            ? 'Confirm in wallet'
+            : +truncateNumber(redeemable) === 0
+            ? 'No redeeamble CNV'
+            : 'Redeem'}
         </Button>
       </Card>
     </>
