@@ -9,6 +9,7 @@ import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { toAmount } from 'utils/toAmount'
 import { CurrencyAmountField } from '../CurrencyAmountField'
 import { Balance } from './Balance'
+import { trunctateNumber } from './trunctateNumber'
 
 type CurrencyInputFieldProps = {
   currencyAmountIn: CurrencyAmount<Currency>
@@ -37,6 +38,8 @@ export const CurrencyInputField = ({
   const inputFiat = useFiatValue(currencyAmountIn)
   const balance = useCurrencyBalance(currencyAmountIn?.currency, { watch: true })
 
+  // const with2Decimals = sucNut.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0]
+
   return (
     <CurrencyAmountField
       currencyAmount={currencyAmountIn}
@@ -51,7 +54,7 @@ export const CurrencyInputField = ({
         </Text>
         {balance.isSuccess && (
           <Balance
-            value={balance.data.toFixed(2, { groupSeparator: ',' })}
+            value={trunctateNumber(balance)}
             onMax={() => onChangeAmount(maxAmount(balance.data))}
           />
         )}
