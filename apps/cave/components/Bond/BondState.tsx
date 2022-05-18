@@ -95,10 +95,9 @@ export async function redeemBondBatch(
 ) {
   const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, signer)
   const estimatedGas = bondingContract.estimateGas.redeemBondBatch(address, positionIDArray)
-  await bondingContract.redeemBondBatch(address, positionIDArray, {
+  return await bondingContract.redeemBondBatch(address, positionIDArray, {
     gasLimit: estimatedGas,
   })
-  return
 }
 
 export const getUserBondPositions = async (
