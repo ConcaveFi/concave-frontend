@@ -1,4 +1,4 @@
-import { Card, Flex, FlexProps, Image, Text } from '@concave/ui'
+import { Avatar, AvatarGroup, Card, Flex, FlexProps, Image, Text } from '@concave/ui'
 import { commify } from 'ethers/lib/utils'
 import { Key } from 'react'
 
@@ -29,24 +29,12 @@ export default function TreasuryManagementCard(props: { assets: any }) {
         height="full"
         mb={4}
       >
-        <FarmingViewer
-          rewards={commify(convexToken?.rewards.toFixed())}
-          value={commify(convexToken?.total.toFixed())}
-        />
+        <FarmingViewer convexToken={convexToken} />
         <Flex direction={{ base: 'row', xl: 'column' }} gap={4}>
           {assets.treasury
             .filter((token) => token.name !== 'cvxDOLA3POOL')
             .map(
-              (
-                i: {
-                  name: string
-                  total: string
-                  chainId: string
-                  contract: string
-                  image: string
-                },
-                k: Key,
-              ) =>
+              (i: TokenProps, k: Key) =>
                 i.total > '1' && (
                   <TokenInfo
                     key={k}
@@ -54,6 +42,9 @@ export default function TreasuryManagementCard(props: { assets: any }) {
                     token={i.name}
                     value={i.total}
                     image={i.image}
+                    imageP1={i.imageP1 ? i.imageP1 : ''}
+                    imageP2={i.imageP2 ? i.imageP2 : ''}
+                    imageP3={i.imageP3 ? i.imageP3 : ''}
                   />
                 ),
             )}
@@ -68,9 +59,13 @@ interface TokenInfoProps {
   tokenName: string
   value: string
   image: string
+  imageP1: string
+  imageP2: string
+  imageP3: string
 }
 const TokenInfo = (props: TokenInfoProps) => {
   const image = props.image.replace('github', 'raw.githubusercontent').replace('blob/', '')
+  const imageP1 = props.imageP1.replace('github', 'raw.githubusercontent').replace('blob/', '')
 
   return (
     <Card
@@ -82,10 +77,11 @@ const TokenInfo = (props: TokenInfoProps) => {
       direction={{ base: 'column', xl: 'row' }}
     >
       <GlassPanel width={'180px'} height="52px" rounded={'2xl'}>
-        <Flex width={'40%'} justify="center" align={'center'}>
-          <Flex bg={'stroke.primary'} p={'2px'} rounded="full" shadow="Magic Big">
-            <Image width={'30px'} height="30px" src={image} rounded={'full'} />
-          </Flex>
+        <Flex width={'40%'} justify="end" mr={2} align={'center'}>
+          <AvatarGroup size={'sm'}>
+            <Avatar src={image} />
+            {imageP1 ? <Avatar src={imageP1} zIndex={1} /> : ''}
+          </AvatarGroup>
         </Flex>
 
         <Flex width={'60%'} justify="start" align={'center'}>
@@ -102,13 +98,18 @@ const TokenInfo = (props: TokenInfoProps) => {
     </Card>
   )
 }
-const FarmingViewer = ({ value, rewards }) => {
+const FarmingViewer = ({ convexToken, ...props }) => {
+  const image = convexToken.image.replace('github', 'raw.githubusercontent').replace('blob/', '')
+  const imgP1 = convexToken.imageP1.replace('github', 'raw.githubusercontent').replace('blob/', '')
+  const imgP2 = convexToken.imageP2.replace('github', 'raw.githubusercontent').replace('blob/', '')
+  const imgP3 = convexToken.imageP3.replace('github', 'raw.githubusercontent').replace('blob/', '')
+
   return (
-    <GlassPanel width={'477px'} height="157px" rounded={'2xl'} justify="center" align={'center'}>
-      <Flex>
+    <GlassPanel width={'477px'} height="187px" rounded={'2xl'} justify="center" align={'center'}>
+      <Flex textShadow={'0px 0px 27px rgba(129, 179, 255, 0.31)'}>
         <GlassPanel
           minWidth={'244px'}
-          height="131px"
+          height="161px"
           rounded={'2xl'}
           align={'center'}
           bg={'#3333'}
@@ -129,16 +130,25 @@ const FarmingViewer = ({ value, rewards }) => {
                 src="https://static.debank.com/image/eth_token/logo_url/0x4e3fbd56cd56c3e72c1403e103b45db9da5b9d2b/be2a9b05a223d6dfca3dc88b1838fcd4.png"
               />
             </Flex>
+
             <Flex>
               <Text fontWeight={700} fontSize="24px">
                 Convex
               </Text>
             </Flex>
           </GlassPanel>
-          <Flex flex={1} align="center">
-            <Text fontWeight={700} fontSize="26px" textColor={'text.low'}>
-              {'$' + value}
+          <Flex direction={'column'}>
+            <Text fontWeight={700} fontSize="26px" textColor={'text.low'} zIndex={3}>
+              {'$' + commify(convexToken?.total.toFixed())}
             </Text>
+            <Flex justify="center" zIndex={1}>
+              <AvatarGroup size={'sm'} spacing={-3} opacity="0.6">
+                <Avatar src={image} />
+                <Avatar src={imgP1} />
+                <Avatar src={imgP2} />
+                <Avatar src={imgP3} />
+              </AvatarGroup>
+            </Flex>
           </Flex>
         </GlassPanel>
         <Flex
@@ -153,7 +163,7 @@ const FarmingViewer = ({ value, rewards }) => {
             Rewards:
           </Text>
           <Text fontWeight={'700'} fontSize="20" textColor={'text.low'}>
-            {'$' + rewards}
+            {'$' + commify(convexToken?.rewards.toFixed())}
           </Text>
         </Flex>
       </Flex>
@@ -212,4 +222,16 @@ export const GlassPanel: React.FC<FlexProps> = ({ ...props }) => {
       </Flex>
     </Flex>
   )
+}
+
+interface TokenProps {
+  name: string
+  total: string
+  chainId: string
+  contract: string
+  image: string
+  imageP1: string
+  imageP2: string
+  imageP3: string
+  isLP: boolean
 }
