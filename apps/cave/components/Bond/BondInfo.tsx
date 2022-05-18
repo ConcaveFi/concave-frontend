@@ -40,9 +40,9 @@ export const BondInfo = ({ asset, roi, vestingTerm, icon }) => {
   )
 }
 // commi
-export const UserBondPositionInfo = (bondSigma, userAddress) => {
+export const UserBondPositionInfo = (props) => {
   const spinnerStyles = { animation: `${spin} 2s linear infinite`, size: 'sm' }
-  const parse = bondSigma?.bondSigma
+  const parse = props?.bondSigma
   const oldestBond = parse?.parseOldest
   const claimed = parse?.claimed
   const redeemable = parse?.parseRedeemable
@@ -58,7 +58,11 @@ export const UserBondPositionInfo = (bondSigma, userAddress) => {
   return (
     <>
       {claimed ? (
-        ''
+        <Card bg="none" py={4} w="100%" h="79px" direction="row" shadow="Glass Up Medium">
+          <Flex justify="center" flexBasis="100%">
+            <InfoItem value={'No Current Bond Positions'} label={''} />
+          </Flex>
+        </Card>
       ) : totalOwed ? (
         <Card bg="none" py={4} w="100%" direction="row" shadow="Glass Up Medium">
           <Flex justify="center" flexBasis="40%">
@@ -79,7 +83,7 @@ export const UserBondPositionInfo = (bondSigma, userAddress) => {
           <Box w="1px" mx={0} my={-4} bg="stroke.primary" />
           <InfoItem value={formatRedeemable} label={'Available'} px={5} pl={2} flexBasis="35%" />
         </Card>
-      ) : !!userAddress ? (
+      ) : !!props.userAddress ? (
         <>
           Checking wallet...
           <SpinIcon __css={spinnerStyles} width={'10'} height={'10'} />
