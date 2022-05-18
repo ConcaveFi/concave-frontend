@@ -105,6 +105,7 @@ export const getUserBondPositions = async (
   networkId: number,
   address: string,
   currentBlockTimestamp: number,
+  currentRedeemable?: number,
 ) => {
   let batchRedeemArray = []
   let totalPending = 0
@@ -113,7 +114,7 @@ export const getUserBondPositions = async (
   let oldest = 0
   let oldestCreationTimestamp = 0
   let claimed = false
-  let redeemable = 0
+  let redeemable = currentRedeemable || 0
   const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, providers(networkId))
   const getUserPositionsLength = await bondingContract.getUserPositionCount(address)
   const termData = await bondingContract.term()
@@ -138,7 +139,15 @@ export const getUserBondPositions = async (
   const parseOldest = new Date(fullyVestedTimestamp).toString().slice(4, 21)
   const parseRedeemable = Math.sign(redeemable) === -1 ? 0 : +redeemable
   if (totalPending === totalOwed) claimed = true
-  return { parseOldest, totalOwed, totalPending, batchRedeemArray, claimed, parseRedeemable }
+  return {
+    parseOldest,
+    totalOwed,
+    totalPending,
+    batchRedeemArray,
+    claimed,
+    parseRedeemable,
+    address,
+  }
 }
 
 export const useBondState = () => {
