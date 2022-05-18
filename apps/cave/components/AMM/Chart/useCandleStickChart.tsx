@@ -45,6 +45,7 @@ export const useCandleStickChart = (inputToken: string, outputToken: string) => 
   )
 
   const promiseData = useMemo(async () => {
+    if (!inputData || !outputData) throw 'chart: not enough data'
     const result = joinData({
       inputData: inputData,
       outputData: outputData,

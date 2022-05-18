@@ -85,6 +85,7 @@ export const CandleStickChart = ({ data }: { data: (CandlestickData | Whitespace
 
   useEffect(() => {
     chart.current?.remove()
+    if (data.length === 0) return
     chart.current = createChart(chartContainerRef.current, chartOptions({ color, font }))
 
     chart.current.addCandlestickSeries(candlestickSeries({ color })).setData(data)
