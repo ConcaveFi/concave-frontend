@@ -45,7 +45,7 @@ export class ConcaveNFTMarketplace {
     minPrice: BigNumberish,
     buyNowPrice: BigNumberish,
     feeRecipients: string[],
-    feePercentages: number[],
+    feePercentages: number[], //max 10000
   ): Promise<ethers.Transaction> {
     if (feeRecipients.length !== feePercentages.length) {
       throw 'Check recipients and percentages'

@@ -131,7 +131,7 @@ const UserListPositionCard = (props: UserListPositionCardProps) => {
                   price.numerator.toString(),
                   buyNowPrice.numerator.toString(),
                   [account.address],
-                  [100],
+                  [10000],
                 )
                 .then(console.log)
                 .catch(console.error)
