@@ -4,9 +4,8 @@ import { concaveProvider } from 'lib/providers'
 import { ConcaveNFTMarketplaceProxy } from './Address'
 import { ContractABI } from './ConcaveNFTMarketplaceABI'
 import { MarketItem } from './MarketItem'
-import { Auction } from './Auction.entity'
+import { Auction } from './Auction'
 import { Signer } from 'ethers'
-import { Provider } from 'react'
 
 export class ConcaveNFTMarketplace {
   private readonly contract: ethers.Contract
@@ -30,8 +29,12 @@ export class ConcaveNFTMarketplace {
     return Auction.fromObject(info)
   }
 
-  public async withdrawAuction(signer: Signer, nftContractAddress: string, tokenId: string) {
-    return this.contract.connect(signer).withdrawAuction(nftContractAddress, tokenId)
+  public async withdrawAuction(
+    signer: Signer,
+    nftContractAddress: string,
+    tokenId: string | BigNumberish,
+  ) {
+    return this.contract.connect(signer).withdrawAuction(nftContractAddress, tokenId.toString())
   }
 
   public async createDefaultNftAuction(
