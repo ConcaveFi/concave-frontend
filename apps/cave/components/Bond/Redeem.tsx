@@ -33,9 +33,9 @@ export const Redeem = ({
           {...customHeightSetting}
         >
           {buttonDisabled
-            ? 'Confirm in wallet'
+            ? 'Redeeming'
             : +truncateNumber(redeemable) === 0
-            ? 'No redeeamble CNV'
+            ? 'No CNV redeemable'
             : 'Redeem'}
         </Button>
       </Card>
