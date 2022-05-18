@@ -22,4 +22,9 @@ const Swap = ()=>{
         </p> 
     )
 }
+
+Swap.Meta = {
+    title: 'Concave | Gemswap (AMM)',
+    description: `Concave's AMM allows LPs to deploy deep liquidity for different pairs and allows LPs to earn more with less capital. The AMM has cheaper gas fees and swap fees.`,
+  }
 export default Swap
