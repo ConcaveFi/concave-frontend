@@ -70,7 +70,10 @@ export const RemoveLiquidityModalButton = ({
       >
         <AmountToRemove onChange={removeLiquidityState.setPercentToRemove} />
         <YouWillReceive {...removeLiquidityState} />
-        <RemoveLiquidityActions removeLiquidityState={removeLiquidityState} />
+        <RemoveLiquidityActions
+          removeLiquidityState={removeLiquidityState}
+          closeParentComponent={removeLiquidityDisclosure.onClose}
+        />
         <YourPosition {...removeLiquidityState} {...liquidityInfo} />
       </Modal>
     </>
@@ -162,8 +165,10 @@ const ReceiveBox = ({
 }
 const RemoveLiquidityActions = ({
   removeLiquidityState,
+  closeParentComponent,
 }: {
   removeLiquidityState: { pair: Pair } & RemoveLiquidityState
+  closeParentComponent: VoidFunction
 }) => {
   const networkId = useCurrentSupportedNetworkId()
   const [needsApprove, requestApprove, approveLabel] = useApprovalWhenNeeded(
@@ -235,6 +240,7 @@ const RemoveLiquidityActions = ({
         subtitle="Withdraw values"
         tx={{ hash: removeLiquidityState.hash } as Transaction}
         isOpen={isOpenSubmitted}
+        closeParentComponent={closeParentComponent}
       />
     </Flex>
   )
