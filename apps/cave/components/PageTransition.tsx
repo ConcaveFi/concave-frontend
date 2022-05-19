@@ -18,9 +18,9 @@ const getVariant = (prevPath, nextPath) => {
   const isGoingUp = pagesIndex.indexOf(prevPath) > pagesIndex.indexOf(nextPath)
 
   return {
-    hidden: { opacity: 0, y: isGoingUp ? '50vh' : '-50vh' },
+    hidden: { opacity: 0, y: isGoingUp ? '25vh' : '-25vh' },
     enter: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: isGoingUp ? '-50vh' : '50vh' },
+    exit: { opacity: 0, y: isGoingUp ? '-25vh' : '25vh' },
   }
 }
 
@@ -31,7 +31,7 @@ export const withPageTransition = (Page) => {
       animate="enter"
       exit="exit"
       variants={getVariant(prevPath, path)}
-      transition={{ type: 'linear', duration: 0.15 }}
+      transition={{ type: 'linear', duration: 0.1 }}
       style={{ display: 'flex', flex: 1 }}
     >
       <Page {...pageProps} />
