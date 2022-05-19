@@ -3,15 +3,16 @@ import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/p
 import { concaveProvider } from 'lib/providers'
 import { StakingV1ProxyAddress } from './Address'
 import { StakingV1Abi } from './ContractABI'
+import { Position } from './Position'
+import { Pool } from './Pool'
 
 export class StakingV1Contract {
   private readonly contract: ethers.Contract
   private readonly provider: MulticallProvider
 
-  constructor(chainId: number, private readonly signer?: ethers.Signer) {
+  constructor(chainId: number) {
     this.provider = concaveProvider(chainId)
     this.contract = new ethers.Contract(StakingV1ProxyAddress[chainId], StakingV1Abi, this.provider)
-    if (this.signer) this.contract.connect(this.signer)
   }
 
   public async viewStakingCap(poolNum: number | string): Promise<BigNumber> {
@@ -19,32 +20,19 @@ export class StakingV1Contract {
   }
 
   public async lock(
+    signer: ethers.Signer,
     address: string,
     amount: BigNumberish,
     poolId: BigNumberish,
   ): Promise<ethers.Transaction & { wait: (confirmations) => unknown }> {
-    return this.contract.connect(this.signer).lock(address, amount, poolId)
+    return this.contract.connect(signer).lock(address, amount, poolId)
   }
 
-  public async pools(index: string): Promise<{
-    balance: BigNumber
-    excessRatio: BigNumber
-    g: BigNumber
-    rewardsPerShare: BigNumber
-    supply: BigNumber
-    term: BigNumber
-  }> {
-    const pools = await this.contract.pools(index)
-    return { ...pools }
+  public async pools(index: string): Promise<Pool> {
+    return this.contract.pools(index)
   }
 
-  public async positions(index: BigNumberish): Promise<{
-    deposit: BigNumber
-    maturity: number
-    poolID: number
-    rewardDebt: BigNumber
-    shares: BigNumber
-  }> {
+  public async positions(index: BigNumberish): Promise<Position> {
     return this.contract.positions(index)
   }
 

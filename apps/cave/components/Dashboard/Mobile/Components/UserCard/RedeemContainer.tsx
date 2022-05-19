@@ -1,11 +1,13 @@
 import { Button, ButtonProps, Flex, Text, TextProps, VStack } from '@concave/ui'
+import { BigNumber } from 'ethers'
+import { formatFixed } from 'utils/formatFixed'
 
 interface RedeemCardViewerProps {
-  initial: number
-  gained: number
+  shares: BigNumber
+  rewardDebt: BigNumber
 }
 const RedeemContainer = (props: RedeemCardViewerProps) => {
-  const { initial, gained } = props
+  const { shares, rewardDebt } = props
   return (
     <Flex height={'127px'} width="358px" direction="column">
       <Flex height={'70px'} maxH="70px" align={'center'}>
@@ -21,7 +23,7 @@ const RedeemContainer = (props: RedeemCardViewerProps) => {
         </VStack>
         <VStack justify={'center'} spacing={0} flex={1}>
           <LowText>Initial</LowText>
-          <HighText>{+parseFloat(initial.toFixed(3))}CNV</HighText>
+          <HighText>{formatFixed(shares, { places: 3 })}CNV</HighText>
         </VStack>
       </Flex>
       <RedeemButton />

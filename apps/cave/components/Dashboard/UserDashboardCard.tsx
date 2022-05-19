@@ -1,32 +1,19 @@
 import { Box, Button, Card, Collapse, Flex, Spinner, Text } from '@concave/ui'
+import { UseDashBoardState } from 'contracts/DashBoard/DashBoardState'
 import { useRouter } from 'next/router'
+import { useConnect } from 'wagmi'
 import UserDividendCard from './UserDividendCard'
 import UserPositionCard from './UserPositionCard'
 
-interface UserDashBoardCardProps {
-  data: {
-    status: {
-      isLoading: boolean
-      notConnected: boolean
-    }
-    positions: {
-      totalLocked: number
-      userPositions: any[]
-    }
-  }
-}
-
-const UserDashboardCard = (props: UserDashBoardCardProps) => {
+const UserDashboardCard = (props: { data: UseDashBoardState }) => {
   const { data } = props
-  const { positions, status } = data
-  const { userPositions, totalLocked } = positions
-  const { isLoading, notConnected } = status
-
-  const userPositionsComponent = userPositions.map((contract, index) => (
-    <UserPositionCard key={index} contract={contract} />
+  const [{ data: wallet }] = useConnect()
+  const { userNonFungibleTokensInfo, totalLocked, isLoading } = data
+  const userPositionsComponent = userNonFungibleTokensInfo.map((nonFungibleTokenInfo, index) => (
+    <UserPositionCard key={index} nonFungibleTokenInfo={nonFungibleTokenInfo} />
   ))
 
-  const hasPositions = userPositions.length !== 0
+  const hasPositions = userNonFungibleTokensInfo.length !== 0
 
   return (
     <Flex display={{ lg: 'flex', md: 'flex', sm: 'none', base: 'none' }}>
@@ -51,7 +38,7 @@ const UserDashboardCard = (props: UserDashBoardCardProps) => {
             maxHeight={'500px'}
           >
             <Flex direction="row" gap={4} position="relative" mt={1}>
-              <UserDividendCard status={status} totalLocked={totalLocked} />
+              <UserDividendCard isLoading={isLoading} totalLocked={totalLocked} />
             </Flex>
           </Box>
         </Flex>
@@ -74,8 +61,8 @@ const UserDashboardCard = (props: UserDashBoardCardProps) => {
         </Collapse>
 
         <LoadingPositions in={isLoading} />
-        <ItsNotConected in={notConnected} />
-        <HasNoPositions in={!hasPositions && !isLoading && !notConnected} />
+        <ItsNotConected in={!wallet.connected} />
+        <HasNoPositions in={!hasPositions && !isLoading && wallet.connected} />
       </Card>
     </Flex>
   )

@@ -1,5 +1,5 @@
 import { BigNumber, ethers } from 'ethers'
-import { Currency, CurrencyAmount, Ether, ROUTER_ADDRESS, Token } from '@concave/gemswap-sdk'
+import { CurrencyAmount, ROUTER_ADDRESS, Token } from '@concave/gemswap-sdk'
 import { concaveProvider } from 'lib/providers'
 import { contractABI } from 'lib/contractoABI'
 import { parseUnits } from 'ethers/lib/utils'

@@ -4,9 +4,8 @@ import { concaveProvider } from 'lib/providers'
 import { ConcaveNFTMarketplaceProxy } from './Address'
 import { ContractABI } from './ConcaveNFTMarketplaceABI'
 import { MarketItem } from './MarketItem'
-import { Auction } from './Auction.entity'
+import { Auction } from './Auction'
 import { Signer } from 'ethers'
-import { Provider } from 'react'
 
 export class ConcaveNFTMarketplace {
   private readonly contract: ethers.Contract
@@ -22,16 +21,50 @@ export class ConcaveNFTMarketplace {
   }
 
   public async createMarketItem(marketItem: MarketItem): Promise<ethers.Transaction> {
-    return this.contract.createMarketItem(marketItem.tokenID, marketItem.price, {})
+    return this.contract.createMarketItem(marketItem.tokenID, marketItem.price)
   }
 
   public async nftContractAuctions(nftContractAddress: string, index: string): Promise<Auction> {
-    const info = await this.contract.nftContractAuctions(nftContractAddress, index)
-    return Auction.fromObject(info)
+    return this.contract
+      .nftContractAuctions(nftContractAddress, index)
+      .then((result: Auction) => ({ ...result }))
   }
 
-  public async withdrawAuction(signer: Signer, nftContractAddress: string, tokenId: string) {
-    return this.contract.connect(signer).withdrawAuction(nftContractAddress, tokenId)
+  public async withdrawAuction(
+    signer: Signer,
+    nftContractAddress: string,
+    tokenId: string | BigNumberish,
+  ) {
+    return this.contract.connect(signer).withdrawAuction(nftContractAddress, tokenId.toString())
+  }
+
+  public async fetchItemsForSale() {
+    return this.contract.fetchItemsForSale()
+  }
+  public async createSale(
+    signer: Signer,
+    nftContractAddress: string,
+    tokenId: BigNumberish,
+    erc20Token: string,
+    buyNowPrice: BigNumberish,
+    whitelistedBuyer: string,
+    feeRecipients: string[],
+    feePercentages: number[], //max 10000
+  ) {
+    if (feeRecipients.length !== feePercentages.length) {
+      throw 'Check recipients and percentages'
+    }
+    return this.contract
+      .connect(signer)
+      .createSale(
+        nftContractAddress,
+        tokenId,
+        erc20Token,
+        buyNowPrice,
+        whitelistedBuyer,
+        feeRecipients,
+        feePercentages,
+      )
   }
 
   public async createDefaultNftAuction(
@@ -42,7 +75,7 @@ export class ConcaveNFTMarketplace {
     minPrice: BigNumberish,
     buyNowPrice: BigNumberish,
     feeRecipients: string[],
-    feePercentages: number[],
+    feePercentages: number[], //max 10000
   ): Promise<ethers.Transaction> {
     if (feeRecipients.length !== feePercentages.length) {
       throw 'Check recipients and percentages'

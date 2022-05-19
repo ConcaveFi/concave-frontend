@@ -17,7 +17,6 @@ import { ConnectWallet } from 'components/ConnectWallet'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { Loading } from 'components/Loading'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
-import { precision } from 'hooks/usePrecision'
 import { useAddressTokenList } from 'hooks/useTokenList'
 import { concaveProvider } from 'lib/providers'
 import React, { useState } from 'react'
@@ -209,7 +208,7 @@ const LPPositionItem = ({ userAddress, pair }: LPPosition) => {
             {balance.greaterThan(0) && (
               <PositionInfoItem
                 label="Your pool share:"
-                value={`${precision(userPoolShare * 100, 2).formatted}%`}
+                value={`${(userPoolShare * 100).toFixed(2)}%`}
               />
             )}
           </Stack>

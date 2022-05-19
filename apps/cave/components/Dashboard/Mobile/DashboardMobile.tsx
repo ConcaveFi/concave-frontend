@@ -1,8 +1,8 @@
-import { SpinIcon, SpinnerIcon } from '@concave/icons'
-import { Box, Card, Collapse, Flex, FlexProps, keyframes, Spinner, Text, VStack } from '@concave/ui'
-import { useState } from 'react'
+import { SpinIcon } from '@concave/icons'
+import { Box, Collapse, Flex, keyframes, Text, VStack } from '@concave/ui'
+import { UseDashBoardState } from 'contracts/DashBoard/DashBoardState'
+import { useConnect } from 'wagmi'
 import DividendsShareMobile from './Components/DividendsShare'
-import { NftPositionViewer } from './Components/UserCard/NftPositionViewer'
 import UserPositionCardMobile from './Components/UserPositionCard'
 
 const spin = keyframes({
@@ -10,32 +10,18 @@ const spin = keyframes({
   '100%': { transform: 'rotate(360deg)' },
 })
 
-interface DashboardMobileProps {
-  data: {
-    status: {
-      isLoading: boolean
-      notConnected: boolean
-    }
-    positions: {
-      totalLocked: number
-      userPositions: any[]
-    }
-  }
-}
-
-const DashboardMobile = (props: DashboardMobileProps) => {
+const DashboardMobile = (props: { data: UseDashBoardState }) => {
   const { data } = props
-  const { status, positions } = data
-  const { isLoading, notConnected } = status
-  const { userPositions, totalLocked } = positions
+  const { isLoading, userNonFungibleTokensInfo, totalLocked } = data
+  const [{ data: wallet }] = useConnect()
 
-  const userPosComps = userPositions.map((contract, index) => (
-    <UserPositionCardMobile key={index} contract={contract} />
+  const userPosComps = userNonFungibleTokensInfo.map((nonFungibleTokenInfo, index) => (
+    <UserPositionCardMobile key={index} nonFungibleTokenInfo={nonFungibleTokenInfo} />
   ))
 
   return (
     <Flex direction={'column'} align="center" display={{ lg: 'none', md: 'none', sm: 'flex' }}>
-      <DividendsShareMobile status={status} totalLocked={totalLocked} />
+      <DividendsShareMobile isLoading={isLoading} totalLocked={totalLocked} />
       <Box
         maxHeight={'660px'}
         overflowY="auto"
@@ -52,7 +38,7 @@ const DashboardMobile = (props: DashboardMobileProps) => {
           <VStack>{userPosComps}</VStack>
         </Collapse>
         <LoadingPositions in={isLoading} />
-        <NotConnected in={notConnected} />
+        <NotConnected in={!wallet.connected} />
       </Box>
     </Flex>
   )

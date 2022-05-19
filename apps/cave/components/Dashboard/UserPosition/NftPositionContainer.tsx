@@ -1,13 +1,13 @@
 import { Box, Flex, HStack, Image, Text } from '@concave/ui'
-import { formatDistanceStrict, formatDistanceToNowStrict } from 'date-fns'
-import { formatDistance } from 'date-fns/esm'
+import { formatDistanceToNowStrict } from 'date-fns'
+import { BigNumberish } from 'ethers'
 import { useState } from 'react'
 
 interface NftPositionContainerProps {
   onChange: () => void
   stakeType: number
   maturity: number
-  tokendId: number
+  tokendId: BigNumberish
 }
 
 const NftPositionContainer = (props: NftPositionContainerProps) => {
@@ -76,7 +76,7 @@ const NftPositionContainer = (props: NftPositionContainerProps) => {
               Token ID:
             </Text>
             <Text fontSize="md" fontWeight="bold">
-              {props.tokendId}
+              {props.tokendId.toString()}
             </Text>
           </Flex>
         </Flex>

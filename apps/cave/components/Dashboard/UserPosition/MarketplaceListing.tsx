@@ -1,26 +1,30 @@
-import { Box, Button, Flex, Text, useDisclosure } from '@concave/ui'
-import { ModalContent, Modal, ModalOverlay } from '@chakra-ui/react'
-import { ethers } from 'ethers'
+import {
+  Box,
+  Button,
+  Flex,
+  Modal,
+  ModalContent,
+  ModalOverlay,
+  Text,
+  useDisclosure,
+} from '@concave/ui'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { ConcaveNFTMarketplace } from 'lib/ConcaveNFTMarketplaceProxy/ConcaveNFTMarketplace'
+import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungibleToken'
 import { useMemo } from 'react'
-import { useQuery } from 'react-query'
+import { formatFixed } from 'utils/formatFixed'
 import { useSigner } from 'wagmi'
 import UserListPositionCard from '../UserListPositionCard'
 
 interface MarketplaceListingProps {
-  address: string
-  tokenId: string
+  nonFungibleTokenInfo: NonFungibleTokenInfo
 }
 
 const MarketplaceListing = (props: MarketplaceListingProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [{ data: signer }] = useSigner()
   const chainId = useCurrentSupportedNetworkId()
-  const audiction = useQuery(['Auction', chainId, props.address, props.tokenId], () => {
-    const contract = new ConcaveNFTMarketplace(chainId)
-    return contract.nftContractAuctions(props.address, props.tokenId)
-  })
+  const { nonFungibleTokenInfo } = props
 
   const actionButton = useMemo(() => {
     const contract = new ConcaveNFTMarketplace(chainId)
@@ -30,11 +34,16 @@ const MarketplaceListing = (props: MarketplaceListingProps) => {
       w: '150px',
       h: '40px',
     }
-    const isListed = audiction.data?.minPrice.gt(0)
+    const isListed = nonFungibleTokenInfo.readyForAuction
+
     const label = isListed ? 'Unlist' : 'List for Sale'
     const onClick = isListed
       ? () => {
-          contract.withdrawAuction(signer, props.address, props.tokenId)
+          contract.withdrawAuction(
+            signer,
+            nonFungibleTokenInfo.contractAddress,
+            nonFungibleTokenInfo.tokenId,
+          )
         }
       : onOpen
     const variant = isListed ? 'primary.outline' : 'primary'
@@ -43,7 +52,7 @@ const MarketplaceListing = (props: MarketplaceListingProps) => {
         {label}
       </Button>
     )
-  }, [audiction.data?.minPrice, chainId, onOpen, props.address, props.tokenId, signer])
+  }, [chainId, nonFungibleTokenInfo, onOpen, signer])
 
   return (
     <Box
@@ -54,11 +63,11 @@ const MarketplaceListing = (props: MarketplaceListingProps) => {
       mt={{ lg: 1, md: 0 }}
       mb={3}
     >
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+      <Modal title="" isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay bg={'none'} backdropBlur="4px" zIndex={0} />
         <ModalContent>
           <Flex>
-            <UserListPositionCard address={props.address} tokenId={props.tokenId} />
+            <UserListPositionCard nonFungibleTokenInfo={nonFungibleTokenInfo} />
           </Flex>
         </ModalContent>
       </Modal>
@@ -80,7 +89,7 @@ const MarketplaceListing = (props: MarketplaceListingProps) => {
               List Price:
             </Text>
             <Text fontSize="md" fontWeight="bold">
-              {audiction.data ? ethers.utils.formatUnits(audiction.data?.minPrice, 0) : '------'}
+              {formatFixed(nonFungibleTokenInfo.minPrice)}
             </Text>
           </Flex>
           <Flex
@@ -90,10 +99,10 @@ const MarketplaceListing = (props: MarketplaceListingProps) => {
             ml="2"
           >
             <Text color="text.low" fontSize="sm">
-              Discount:
+              Discount
             </Text>
             <Text fontSize="md" fontWeight="bold">
-              ----
+              {formatFixed(nonFungibleTokenInfo.calculteDiscount())}
             </Text>
           </Flex>
           <Flex
@@ -106,9 +115,7 @@ const MarketplaceListing = (props: MarketplaceListingProps) => {
               Expiration Date:
             </Text>
             <Text fontSize="md" fontWeight="bold">
-              {audiction.data
-                ? ethers.utils.formatUnits(audiction.data?.auctionBidPeriod, 0)
-                : '--.--.--'}
+              {'---'}
             </Text>
           </Flex>
         </Flex>

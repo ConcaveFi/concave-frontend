@@ -1,19 +1,15 @@
 import { Box, Button, Flex, Spinner, Text } from '@concave/ui'
-import { useState } from 'react'
+import { BigNumber } from 'ethers'
+import { formatFixed } from 'utils/formatFixed'
 
 interface UserDividendCardProps {
-  totalLocked: number
-  status: { isLoading; notConnected }
+  totalLocked: BigNumber
+  isLoading: boolean
 }
 const UserDividendCard = (props: UserDividendCardProps) => {
-  const { status } = props
-  const { isLoading, notConnected } = status
+  const { isLoading } = props
+  const totalLocked = isLoading ? 'loading' : formatFixed(props.totalLocked) + ' CNV'
 
-  const totalLocked = notConnected
-    ? '--.--.--'
-    : isLoading
-    ? 'loading'
-    : +parseFloat(props.totalLocked.toFixed(3)) + ' CNV'
   return (
     <Box
       pos="relative"

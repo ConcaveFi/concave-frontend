@@ -1,28 +1,18 @@
 import { Box, Collapse, Flex } from '@concave/ui'
-import { BigNumber } from 'ethers'
+import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungibleToken'
 import { useState } from 'react'
 import MarketplaceListing from './UserPosition/MarketplaceListing'
 import NftPositionContainer from './UserPosition/NftPositionContainer'
 import RedeemCardViewer from './UserPosition/RedeemViewer'
 import DividendsShare from './UserPosition/StakingRewards'
-
-export type nftContract = {
-  maturity: number
-  poolID: number
-  shares: BigNumber
-  rewardDebt: BigNumber
-}
-
 interface NftPositionCardProps {
-  contract: nftContract
+  nonFungibleTokenInfo: NonFungibleTokenInfo
 }
 
 const UserPositionCard = (props: NftPositionCardProps) => {
-  const { contract } = props
-  const { maturity, poolID, shares, rewardDebt } = contract
-  const address = contract['contract'].address
-  const tokenId = contract['id'].tokenId
-
+  const { nonFungibleTokenInfo } = props
+  const { maturity, poolID, shares, rewardDebt, contractAddress, tokenId } = nonFungibleTokenInfo
+  console.log(nonFungibleTokenInfo)
   const [active, setActive] = useState(true)
 
   return (
@@ -49,8 +39,8 @@ const UserPositionCard = (props: NftPositionCardProps) => {
                 tokendId={tokenId}
               />
               <Collapse in={active}>
-                <RedeemCardViewer gained={rewardDebt} redeemIn={maturity} initial={shares} />
-                <MarketplaceListing address={address} tokenId={tokenId} />
+                <RedeemCardViewer nonFungibleTokenInfo={nonFungibleTokenInfo} />
+                <MarketplaceListing nonFungibleTokenInfo={nonFungibleTokenInfo} />
               </Collapse>
             </Flex>
           </Flex>

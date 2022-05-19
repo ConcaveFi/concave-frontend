@@ -1,6 +1,5 @@
-import { Flex, gradientBorder, Heading, Text } from '@concave/ui'
+import { Flex, Heading, Text } from '@concave/ui'
 import DashboardMobile from 'components/Dashboard/Mobile/DashboardMobile'
-
 import UserDashboardCard from 'components/Dashboard/UserDashboardCard'
 import { useDashBoardState } from 'contracts/DashBoard/DashBoardState'
 import React from 'react'

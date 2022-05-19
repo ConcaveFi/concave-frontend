@@ -1,9 +1,12 @@
-import { SpinIcon, SpinnerIcon } from '@concave/icons'
-import { Button, Card, Flex, FlexProps, keyframes, Spinner, Text } from '@concave/ui'
+import { SpinnerIcon } from '@concave/icons'
+import { Flex, keyframes, Text } from '@concave/ui'
+import { BigNumber } from 'ethers'
+import { formatFixed } from 'utils/formatFixed'
+import { useConnect } from 'wagmi'
 
 interface DividendsShareMobileProps {
-  totalLocked: number
-  status: { isLoading; notConnected }
+  totalLocked: BigNumber
+  isLoading: boolean
 }
 
 const spin = keyframes({
@@ -11,14 +14,14 @@ const spin = keyframes({
   '100%': { transform: 'rotate(360deg)' },
 })
 const DividendsShareMobile = (props: DividendsShareMobileProps) => {
+  const [{ data: wallet }] = useConnect()
   const spinnerStyles = { animation: `${spin} 2s linear infinite`, size: 'sm' }
-  const { status } = props
-  const { isLoading, notConnected } = status
-  const totalLocked = notConnected
+  const { isLoading } = props
+  const totalLocked = !wallet.connected
     ? '--.--.--.--'
     : isLoading
     ? 'loading'
-    : +parseFloat(props.totalLocked.toFixed(3)) + ' CNV'
+    : formatFixed(props.totalLocked, { decimals: 3 }) + ' CNV'
   return (
     <Flex
       rounded={'2xl'}
