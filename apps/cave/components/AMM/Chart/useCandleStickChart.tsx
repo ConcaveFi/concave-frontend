@@ -45,7 +45,6 @@ export const useCandleStickChart = (inputToken: string, outputToken: string) => 
   )
 
   const promiseData = useMemo(async () => {
-    if (!inputData || !outputData) throw 'chart: not enough data'
     const result = joinData({
       inputData: inputData,
       outputData: outputData,
@@ -56,13 +55,14 @@ export const useCandleStickChart = (inputToken: string, outputToken: string) => 
   useEffect(() => {
     set({ loading: true })
     try {
+      if (!inputData || !outputData) throw 'chart: not enough data'
       promiseData.then((data) => {
         set({ loading: false, data: data })
       })
     } catch {
       set({ loading: false, data: [] })
     }
-  }, [promiseData])
+  }, [inputData, outputData, promiseData])
 
   return { ...candleStickData, set }
 }
