@@ -24,8 +24,10 @@ export class ConcaveNFTMarketplace {
     return this.contract.createMarketItem(marketItem.tokenID, marketItem.price)
   }
 
-  public async nftContractAuctions(index: string): Promise<Auction> {
-    return this.contract.nftContractAuctions(index).then((result: Auction) => ({ ...result }))
+  public async nftContractAuctions(nftContractAddress: string, index: string): Promise<Auction> {
+    return this.contract
+      .nftContractAuctions(nftContractAddress, index)
+      .then((result: Auction) => ({ ...result }))
   }
 
   public async withdrawAuction(signer: Signer, tokenId: string | BigNumberish) {
