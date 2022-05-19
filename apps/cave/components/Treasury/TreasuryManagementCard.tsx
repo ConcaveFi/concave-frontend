@@ -4,7 +4,7 @@ import { Key } from 'react'
 
 export default function TreasuryManagementCard(props: { assets: any }) {
   const { assets } = props
-  const convexToken = assets.treasury.filter((token) => token.name === 'cvxDOLA3POOL')[0]
+  const convexToken = assets?.treasury.filter((token) => token.name === 'cvxDOLA3POOL')[0]
 
   return (
     <Card

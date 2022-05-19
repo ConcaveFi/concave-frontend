@@ -1,15 +1,22 @@
 import { CNV } from 'constants/tokens'
-import { Button, Flex, Text } from '@concave/ui'
+import { Button, Flex, Spinner, Text } from '@concave/ui'
 import useAddTokenToWallet, { injectedTokenResponse } from 'hooks/useAddTokenToWallet'
 import { useIsMounted } from 'hooks/useIsMounted'
 import { getWalletType } from 'lib/injected.wallets'
 import { GlassPanel } from './TreasuryManagementCard'
 import { useEffect, useState } from 'react'
-import { useAccount, useContractWrite } from 'wagmi'
+import { useAccount, useBalance, useContractWrite } from 'wagmi'
 import { aCNVredeemabi } from 'lib/contractoABI'
-import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import { CNV_ADDRESS, DAI } from '@concave/gemswap-sdk'
+import { ethers } from 'ethers'
+import { formatEther } from 'ethers/lib/utils'
 
+// aCNV address
+// 0x2a6bb78490c2221e0d36d931192296be4b3a01f1 ropsten
+// 0x6ff0106d34feee8a8acf2e7b9168480f86b82e2f eth
 function ClaimAcnvButton() {
+  const netWorkdId = useCurrentSupportedNetworkId()
   const [{ data: account }] = useAccount()
   const [{ data, error, loading }, write] = useContractWrite(
     {
@@ -24,23 +31,23 @@ function ClaimAcnvButton() {
   const [redeemText, setRedeemText] = useState('Redeem aCNV')
   const [redeeming, setRedeeming] = useState(false)
 
+  const [{ data: balanceData, loading: loadingBalance }] = useBalance({
+    addressOrName: account?.address,
+    token: '0x6ff0106d34feee8a8acf2e7b9168480f86b82e2f',
+  })
+
   const redeemAncv = () => {
     setRedeeming(loading ? true : false)
     setRedeemText(loading ? 'Redeeming' : 'Nothing to Redeem')
     write()
   }
   return (
-    <Button
-      fontSize={'18px'}
-      fontWeight="700"
-      my={'auto'}
-      size="large"
-      mx="moz-initial"
-      isLoading={redeeming}
-      loadingText="Redeeming"
-      onClick={redeemAncv}
-    >
-      {redeemText}
+    <Button fontSize={'18px'} fontWeight="700" onClick={redeemAncv}>
+      <Flex align={'center'} justify="center">
+        <Text my={'auto'}>
+          aCNV - {loadingBalance ? <Spinner size={'sm'} /> : balanceData.formatted}{' '}
+        </Text>
+      </Flex>
     </Button>
   )
 }
