@@ -1,20 +1,15 @@
 import { Box, Button, Flex, Spinner, Text } from '@concave/ui'
 import { BigNumber } from 'ethers'
-import { precisionBignumber } from 'hooks/usePrecision'
+import { formatFixed } from 'utils/formatFixed'
 
 interface UserDividendCardProps {
   totalLocked: BigNumber
-  status: { isLoading; notConnected }
+  isLoading: boolean
 }
 const UserDividendCard = (props: UserDividendCardProps) => {
-  const { status } = props
-  const { isLoading, notConnected } = status
+  const { isLoading } = props
+  const totalLocked = isLoading ? 'loading' : formatFixed(props.totalLocked) + ' CNV'
 
-  const totalLocked = notConnected
-    ? '--.--.--'
-    : isLoading
-    ? 'loading'
-    : precisionBignumber(props.totalLocked, 18, 4).formatted + ' CNV'
   return (
     <Box
       pos="relative"

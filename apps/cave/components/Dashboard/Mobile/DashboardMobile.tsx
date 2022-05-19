@@ -1,6 +1,7 @@
 import { SpinIcon } from '@concave/icons'
 import { Box, Collapse, Flex, keyframes, Text, VStack } from '@concave/ui'
 import { UseDashBoardState } from 'contracts/DashBoard/DashBoardState'
+import { useConnect } from 'wagmi'
 import DividendsShareMobile from './Components/DividendsShare'
 import UserPositionCardMobile from './Components/UserPositionCard'
 
@@ -11,8 +12,8 @@ const spin = keyframes({
 
 const DashboardMobile = (props: { data: UseDashBoardState }) => {
   const { data } = props
-  const { status, userNonFungibleTokensInfo, totalLocked } = data
-  const { isLoading, notConnected } = status
+  const { isLoading, userNonFungibleTokensInfo, totalLocked } = data
+  const [{ data: wallet }] = useConnect()
 
   const userPosComps = userNonFungibleTokensInfo.map((nonFungibleTokenInfo, index) => (
     <UserPositionCardMobile key={index} nonFungibleTokenInfo={nonFungibleTokenInfo} />
@@ -20,7 +21,7 @@ const DashboardMobile = (props: { data: UseDashBoardState }) => {
 
   return (
     <Flex direction={'column'} align="center" display={{ lg: 'none', md: 'none', sm: 'flex' }}>
-      <DividendsShareMobile status={status} totalLocked={totalLocked} />
+      <DividendsShareMobile isLoading={isLoading} totalLocked={totalLocked} />
       <Box
         maxHeight={'660px'}
         overflowY="auto"
@@ -37,7 +38,7 @@ const DashboardMobile = (props: { data: UseDashBoardState }) => {
           <VStack>{userPosComps}</VStack>
         </Collapse>
         <LoadingPositions in={isLoading} />
-        <NotConnected in={notConnected} />
+        <NotConnected in={!wallet.connected} />
       </Box>
     </Flex>
   )

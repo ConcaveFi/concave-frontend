@@ -1,14 +1,14 @@
 import { Box, Button, Card, Collapse, Flex, Spinner, Text } from '@concave/ui'
 import { UseDashBoardState } from 'contracts/DashBoard/DashBoardState'
 import { useRouter } from 'next/router'
+import { useConnect } from 'wagmi'
 import UserDividendCard from './UserDividendCard'
 import UserPositionCard from './UserPositionCard'
 
 const UserDashboardCard = (props: { data: UseDashBoardState }) => {
   const { data } = props
-  const { userNonFungibleTokensInfo, totalLocked, status } = data
-  const { isLoading, notConnected } = status
-
+  const [{ data: wallet }] = useConnect()
+  const { userNonFungibleTokensInfo, totalLocked, isLoading } = data
   const userPositionsComponent = userNonFungibleTokensInfo.map((nonFungibleTokenInfo, index) => (
     <UserPositionCard key={index} nonFungibleTokenInfo={nonFungibleTokenInfo} />
   ))
@@ -38,7 +38,7 @@ const UserDashboardCard = (props: { data: UseDashBoardState }) => {
             maxHeight={'500px'}
           >
             <Flex direction="row" gap={4} position="relative" mt={1}>
-              <UserDividendCard status={status} totalLocked={totalLocked} />
+              <UserDividendCard isLoading={isLoading} totalLocked={totalLocked} />
             </Flex>
           </Box>
         </Flex>
@@ -61,8 +61,8 @@ const UserDashboardCard = (props: { data: UseDashBoardState }) => {
         </Collapse>
 
         <LoadingPositions in={isLoading} />
-        <ItsNotConected in={notConnected} />
-        <HasNoPositions in={!hasPositions && !isLoading && !notConnected} />
+        <ItsNotConected in={!wallet.connected} />
+        <HasNoPositions in={!hasPositions && !isLoading && wallet.connected} />
       </Card>
     </Flex>
   )

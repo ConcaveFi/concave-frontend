@@ -1,11 +1,12 @@
 import { SpinnerIcon } from '@concave/icons'
 import { Flex, keyframes, Text } from '@concave/ui'
 import { BigNumber } from 'ethers'
-import { precisionBignumber } from 'hooks/usePrecision'
+import { formatFixed } from 'utils/formatFixed'
+import { useConnect } from 'wagmi'
 
 interface DividendsShareMobileProps {
   totalLocked: BigNumber
-  status: { isLoading; notConnected }
+  isLoading: boolean
 }
 
 const spin = keyframes({
@@ -13,14 +14,14 @@ const spin = keyframes({
   '100%': { transform: 'rotate(360deg)' },
 })
 const DividendsShareMobile = (props: DividendsShareMobileProps) => {
+  const [{ data: wallet }] = useConnect()
   const spinnerStyles = { animation: `${spin} 2s linear infinite`, size: 'sm' }
-  const { status } = props
-  const { isLoading, notConnected } = status
-  const totalLocked = notConnected
+  const { isLoading } = props
+  const totalLocked = !wallet.connected
     ? '--.--.--.--'
     : isLoading
     ? 'loading'
-    : precisionBignumber(props.totalLocked, 18, 4).formatted + ' CNV'
+    : formatFixed(props.totalLocked, { decimals: 3 }) + ' CNV'
   return (
     <Flex
       rounded={'2xl'}

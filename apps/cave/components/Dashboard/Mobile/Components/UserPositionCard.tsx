@@ -12,13 +12,10 @@ interface NftPositionCardMobileProps {
 const UserPositionCardMobile = (props: NftPositionCardMobileProps) => {
   const { nonFungibleTokenInfo } = props
   const { maturity, poolID, shares, rewardDebt } = nonFungibleTokenInfo
-
-  const sharesDecimals = parseInt(shares?._hex, 16) / 1000000000000000000
-  const gained = parseInt(rewardDebt?._hex, 16) / 1000000000000000000
-
   const dateToRedeem = epochConverter(maturity)
   const currentData = new Date()
   const redeemIn = dateToRedeem.getTime() - currentData.getTime()
+
   return (
     <Card maxWidth={'358px'} variant="secondary" height={'660px'}>
       <Flex direction={'column'} bg={'#31293011'} width="full" flex={1}>
@@ -35,7 +32,7 @@ const UserPositionCardMobile = (props: NftPositionCardMobileProps) => {
             bgSize={'30% 30%'}
           >
             <NftPositionViewer redeemIn={redeemIn} stakeType={poolID} />
-            <RedeemContainer gained={gained} initial={sharesDecimals} />
+            <RedeemContainer rewardDebt={rewardDebt} shares={shares} />
             <MarketPlaceListingMobile />
             <Flex
               direction={'column'}

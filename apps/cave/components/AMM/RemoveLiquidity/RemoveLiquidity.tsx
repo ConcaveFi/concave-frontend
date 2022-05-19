@@ -16,9 +16,9 @@ import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialo
 import { Transaction } from 'ethers'
 import { useApprovalWhenNeeded } from 'hooks/useAllowance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { precision } from 'hooks/usePrecision'
 import { RemoveLiquidityState, useRemoveLiquidity } from 'hooks/useRemoveLiquidity'
 import React from 'react'
+import { precision } from 'utils/formatFixed'
 
 export const RemoveLiquidityModalButton = ({
   liquidityInfo,
@@ -150,7 +150,7 @@ const ReceiveBox = ({
       <CurrencyIcon size="sm" currency={currency} />
       <Box>
         <Text fontFamily={'heading'} fontWeight={600}>
-          {precision(amount, 4).formatted}
+          {precision(amount, 4)}
         </Text>
         <Text title={currency?.name} fontWeight={700} fontSize={'sm'} color={'text.low'}>
           {currency?.symbol}
@@ -231,17 +231,17 @@ const YourPosition = ({ pair, userPoolShare }: { pair: Pair; userPoolShare: numb
       >
         <PositionInfoItem
           label="Your pool share:"
-          value={`${precision(userPoolShare * 100, 2).formatted}%`}
+          value={`${precision(userPoolShare * 100, 2)}%`}
         />
         <PositionInfoItem
           label={pair.token0.symbol}
-          value={precision(+pair.reserve0.toExact() * userPoolShare).formatted}
+          value={precision(+pair.reserve0.toExact() * userPoolShare)}
         >
           <CurrencyIcon size="sm" currency={pair.token0} />
         </PositionInfoItem>
         <PositionInfoItem
           label={pair.token1.symbol}
-          value={precision(+pair.reserve1.toExact() * userPoolShare).formatted}
+          value={precision(+pair.reserve1.toExact() * userPoolShare)}
         >
           <CurrencyIcon size="sm" currency={pair.token1} />
         </PositionInfoItem>

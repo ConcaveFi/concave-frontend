@@ -21,16 +21,32 @@ export class ConcaveNFTMarketplace {
   }
 
   public async createMarketItem(marketItem: MarketItem): Promise<ethers.Transaction> {
-    return this.contract.createMarketItem(marketItem.tokenID, marketItem.price, {})
+    return this.contract.createMarketItem(marketItem.tokenID, marketItem.price)
   }
 
   public async nftContractAuctions(index: string): Promise<Auction> {
-    const info = await this.contract.nftContractAuctions(index)
-    return Auction.fromObject(info)
+    return this.contract.nftContractAuctions(index).then((result: Auction) => ({ ...result }))
   }
 
   public async withdrawAuction(signer: Signer, tokenId: string | BigNumberish) {
     return this.contract.connect(signer).withdrawAuction(tokenId.toString())
+  }
+
+  public async createSale(
+    signer: Signer,
+    tokenId: BigNumberish,
+    erc20Token: string,
+    buyNowPrice: BigNumberish,
+    whitelistedBuyer: string,
+    feeRecipients: string[],
+    feePercentages: number[], //max 10000
+  ) {
+    if (feeRecipients.length !== feePercentages.length) {
+      throw 'Check recipients and percentages'
+    }
+    return this.contract
+      .connect(signer)
+      .createSale(tokenId, erc20Token, buyNowPrice, whitelistedBuyer, feeRecipients, feePercentages)
   }
 
   public async createDefaultNftAuction(

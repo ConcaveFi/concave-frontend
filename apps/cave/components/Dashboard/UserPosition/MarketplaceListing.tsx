@@ -12,6 +12,7 @@ import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId
 import { ConcaveNFTMarketplace } from 'lib/ConcaveNFTMarketplaceProxy/ConcaveNFTMarketplace'
 import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungibleToken'
 import { useMemo } from 'react'
+import { formatFixed } from 'utils/formatFixed'
 import { useSigner } from 'wagmi'
 import UserListPositionCard from '../UserListPositionCard'
 
@@ -84,7 +85,7 @@ const MarketplaceListing = (props: MarketplaceListingProps) => {
               List Price:
             </Text>
             <Text fontSize="md" fontWeight="bold">
-              {nonFungibleTokenInfo.minPrice}
+              {formatFixed(nonFungibleTokenInfo.minPrice)}
             </Text>
           </Flex>
           <Flex
@@ -97,7 +98,7 @@ const MarketplaceListing = (props: MarketplaceListingProps) => {
               Discount
             </Text>
             <Text fontSize="md" fontWeight="bold">
-              {nonFungibleTokenInfo.calculteDiscount()}
+              {formatFixed(nonFungibleTokenInfo.calculteDiscount())}
             </Text>
           </Flex>
           <Flex
@@ -110,7 +111,7 @@ const MarketplaceListing = (props: MarketplaceListingProps) => {
               Expiration Date:
             </Text>
             <Text fontSize="md" fontWeight="bold">
-              {nonFungibleTokenInfo.expirationDate}
+              {'---'}
             </Text>
           </Flex>
         </Flex>

@@ -5,6 +5,7 @@ import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId
 import { ConcaveNFTMarketplace } from 'lib/ConcaveNFTMarketplaceProxy/ConcaveNFTMarketplace'
 import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungibleToken'
 import { useState } from 'react'
+import { formatFixed } from 'utils/formatFixed'
 import { toAmount } from 'utils/toAmount'
 import { useAccount, useSigner } from 'wagmi'
 
@@ -29,7 +30,7 @@ const UserListPositionCard = (props: UserListPositionCardProps) => {
     CNV[chainId],
     nonFungibleTokenInfo.currentValue.toString(),
   )
-  const discount = nonFungibleTokenInfo.calculteDiscount(price.numerator.toString())
+  const discount = nonFungibleTokenInfo.calculteDiscount(price.numerator)
   return (
     <Box
       h={220}
@@ -115,7 +116,7 @@ const UserListPositionCard = (props: UserListPositionCardProps) => {
             fontWeight={'700'}
             pl={'4'}
           >
-            {discount}
+            {formatFixed(discount)}
           </Flex>
         </Flex>
         <Flex grow={1} justifyContent="center" alignItems={'end'} gap="2">
@@ -123,12 +124,12 @@ const UserListPositionCard = (props: UserListPositionCardProps) => {
             onClick={() => {
               const concaveNFTMarketPlace = new ConcaveNFTMarketplace(chainId)
               concaveNFTMarketPlace
-                .createDefaultNftAuction(
+                .createSale(
                   signer,
                   props.nonFungibleTokenInfo.tokenId,
                   price.currency.wrapped.address,
                   price.numerator.toString(),
-                  buyNowPrice.numerator.toString(),
+                  '',
                   [account.address],
                   [10000],
                 )

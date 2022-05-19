@@ -1,7 +1,5 @@
 import { BigNumberish } from 'ethers'
-import { utils } from 'ethers'
 import { BigNumber } from 'ethers'
-import { precisionBignumber } from 'hooks/usePrecision'
 import { Position } from 'lib/StakingV1Proxy/Position'
 import { Auction } from './Auction'
 
@@ -12,6 +10,12 @@ export class NonFungibleTokenInfo {
     private readonly position: Position,
     private readonly auction: Auction,
   ) {}
+
+  public calculteDiscount(newPriceStr: BigNumberish = this.minPrice) {
+    const newPrice = BigNumber.from(newPriceStr.toString())
+    const difference = this.currentValue.sub(newPrice)
+    return difference.mul(100).div(this.currentValue)
+  }
 
   get poolID() {
     return this.position.poolID
@@ -31,30 +35,10 @@ export class NonFungibleTokenInfo {
   get currentValue() {
     return this.shares.add(this.rewardDebt)
   }
-  get listPrice() {
-    if (this.minPriceAuction.eq(0)) {
-      return '---'
-    }
-    return precisionBignumber(this.minPriceAuction, 18, 4).formatted
-  }
-  get expirationDate() {
-    return '--.--.--'
-  }
-
-  public calculteDiscount(newPiceStr: BigNumberish = this.minPriceAuction) {
-    const newPice = BigNumber.from(newPiceStr.toString())
-    if (newPice.eq(0)) {
-      return '---'
-    }
-    const desconto = this.currentValue.sub(newPice)
-    const porcentagem = desconto.mul(100).div(this.currentValue)
-    return porcentagem + '%'
-  }
-
   get readyForAuction() {
     return this.auction.minPrice.gt(0)
   }
-  get minPriceAuction() {
+  get minPrice() {
     return this.auction.minPrice
   }
 }
