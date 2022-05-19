@@ -100,17 +100,10 @@ export function Bond() {
       .catch((e) => {
         console.log(e)
       })
-    fetch('/api/cnv')
-      .then((j) => j.json())
-      .then((data) => JSON.parse(data))
-      .then((data) => {
-        if (data?.data) {
-          setCNVMarketPrice(data.data.last)
-        }
-      })
-      .catch((e) => {
-        throw e
-      })
+    getCNVMarketPrice().then((price) => {
+      setCNVMarketPrice(price)
+      console.log(price)
+    })
   }, [networkId])
 
   useEffect(() => {
