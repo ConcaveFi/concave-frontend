@@ -129,21 +129,7 @@ export function Bond() {
   return (
     <Container maxW="container.lg">
       <Flex direction="column" gap={10}>
-        <Stack mt={10} maxW="100%" align="center" textAlign="center">
-          <Heading as="h1" mb={3} fontSize="5xl">
-            Dynamic Bond Market
-          </Heading>
-          <Flex
-            align={'center'}
-            justify="center"
-            direction={{ lg: 'row', md: 'column' }}
-            maxW={550}
-          >
-            Bonds allow new CNV supply to be minted at a discount. All funds raised through bonds
-            are added to the Concave treasury and invested to generate returns for quarterly
-            dividends.
-          </Flex>
-        </Stack>
+        <BondDescription />
 
         <Flex
           gap={10}
@@ -268,3 +254,15 @@ Bond.Meta = {
 }
 
 export default Bond
+
+const BondDescription = () => (
+  <Stack mt={10} maxW="100%" align="center" textAlign="center">
+    <Heading as="h1" mb={3} fontSize="5xl">
+      Dynamic Bond Market
+    </Heading>
+    <Flex align={'center'} justify="center" direction={{ lg: 'row', md: 'column' }} maxW={550}>
+      Bonds allow new CNV supply to be minted at a discount. All funds raised through bonds are
+      added to the Concave treasury and invested to generate returns for quarterly dividends.
+    </Flex>
+  </Stack>
+)
