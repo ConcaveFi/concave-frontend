@@ -126,6 +126,7 @@ const UserListPositionCard = (props: UserListPositionCardProps) => {
               concaveNFTMarketPlace
                 .createSale(
                   signer,
+                  props.nonFungibleTokenInfo.contractAddress,
                   props.nonFungibleTokenInfo.tokenId,
                   price.currency.wrapped.address,
                   price.numerator.toString(),
