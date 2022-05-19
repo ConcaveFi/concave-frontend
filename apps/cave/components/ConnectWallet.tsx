@@ -10,9 +10,12 @@ import {
   MenuList,
   gradientBorder,
   Modal,
+  Flex,
+  useDisclosure,
 } from '@concave/ui'
 import { useAccount, useConnect } from 'wagmi'
 import { useIsMounted } from 'hooks/useIsMounted'
+import YourWalletModal from './YourWalletModal'
 
 // const miniAddress = (address) =>
 //   `${address.substr(0, 6)}...${address.substr(address.length - 6, address.length)}`
@@ -157,7 +160,29 @@ const ConnectButton = () => {
 export function ConnectWallet(): JSX.Element {
   const [{ data }] = useConnect()
 
+  const [{ data: account }] = useAccount()
+
+  const { isOpen, onOpen, onClose } = useDisclosure()
   if (data.connected) return <DisconnectButton />
+  // if (data.connected)
+  //   return (
+  //     <>
+  //       <Button
+  //         onClick={onOpen}
+  //         height="40px"
+  //         shadow="up"
+  //         fontFamily="heading"
+  //         w="100%"
+  //         rounded={'2xl'}
+  //         _focus={{}}
+  //       >
+  //         <Flex textColor={'text.low'} fontWeight="bold" mx={'auto'}>
+  //           {ellipseAddress(account?.address)}
+  //         </Flex>
+  //       </Button>
+  //       <YourWalletModal onClose={onClose} isOpen={isOpen} />
+  //     </>
+  //   )
 
   // if (isConnected && !isSignedIn) return
   return <ConnectButton />
