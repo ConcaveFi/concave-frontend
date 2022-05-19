@@ -79,8 +79,19 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
     onChangeCurrencies,
   )
 
+  /*
+    temporary workaround for unknow issue with swapTokenForExactToken
+    all trades are submited as exact input for now
+  */
+  const exactInTrade = useMemo(
+    () =>
+      trade.data.route &&
+      new Trade(trade.data.route, trade.data.inputAmount, TradeType.EXACT_INPUT),
+    [trade],
+  )
+
   const [recipient, setRecipient] = useState('')
-  const swapTx = useSwapTransaction(trade.data, settings, recipient, {
+  const swapTx = useSwapTransaction(exactInTrade, settings, recipient, {
     onTransactionSent: () => onChangeInput(toAmount(0, trade.data.inputAmount.currency)),
   })
 
@@ -180,7 +191,7 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
       </Flex>
 
       <ConfirmSwapModal
-        trade={trade.data}
+        trade={exactInTrade}
         settings={settings}
         isOpen={confirmationModal.isOpen}
         onClose={confirmationModal.onClose}
