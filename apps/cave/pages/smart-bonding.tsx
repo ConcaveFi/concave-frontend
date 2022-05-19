@@ -114,9 +114,20 @@ export function Bond() {
   }, [networkId])
 
   useEffect(() => {
-    setIsLoadingBondSigma(true)
-    setBondSigma(null)
-  }, [userAddress])
+    const interval = setInterval(() => {
+      getBondSpotPrice(networkId, '').then((bondSpotPrice) => {
+        setBondSpotPrice(bondSpotPrice)
+      })
+      getCNVMarketPrice().then((price) => {
+        setCNVMarketPrice(price)
+        console.log(price)
+      })
+    }, 10000)
+    if (intervalID !== interval) {
+      clearTimeout(intervalID)
+      setIntervalID(interval)
+    }
+  }, [cnvMarketPrice, networkId])
 
   useEffect(() => {
     if (bondSigma && isLoadingBondSigma) {
