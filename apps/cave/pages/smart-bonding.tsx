@@ -51,6 +51,7 @@ export function Bond() {
   const [buttonDisabled, setButtonDisabled] = useState(false)
   const [redeemTx, setRedeemTx] = useState<any>()
   const [clickedRedeemButton, setClickedRedeemButton] = useState(false)
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
   const [txError, setTxError] = useState('')
   const {
     isOpen: isOpenSubmitted,
@@ -60,29 +61,23 @@ export function Bond() {
   const { isOpen: isOpenError, onClose: onCloseError, onOpen: onOpenError } = useDisclosure()
   const { data: last10SoldsData, isLoading, error } = useGet_Accrualbondv1_Last10_SoldQuery()
 
+  function updateBondPositions() {
+    getUserBondPositions(networkId, userAddress, currentBlockTs)
+      .then((bondSigma) => {
+        setBondSigma(bondSigma)
+        setButtonDisabled(false)
+      })
+      .catch((e) => {
+        console.log('user bond fail', e)
+      })
+  }
+
   useEffect(() => {
     setIsLoadingBondSigma(true)
     getCurrentBlockTimestamp(networkId).then((x) => {
       setCurrentBlockTs(x)
     })
-    const interval = setInterval(() => {
-      return new Promise((resolve) => {
-        getUserBondPositions(networkId, userAddress, currentBlockTs)
-          .then((bondSigma) => {
-            if (bondSigma.address === userAddress) {
-              setBondSigma(bondSigma)
-            }
-          })
-          .catch((e) => {
-            console.log('user bond fail', e)
-          })
-        resolve(null)
-      })
-    }, 6000)
-    if (intervalID !== interval) {
-      clearTimeout(intervalID)
-      setIntervalID(interval)
-    }
+    updateBondPositions()
   }, [userAddress, currentBlockTs])
 
   useEffect(() => {
@@ -124,17 +119,39 @@ export function Bond() {
 
   useEffect(() => {
     if (bondSigma && isLoadingBondSigma) {
-      console.log('bondSigma', bondSigma)
       setIsLoadingBondSigma(false)
       setShowUserPosition(true)
     }
   }, [bondSigma])
 
+  function onRedeemConfirm() {
+    setButtonDisabled(true)
+    const batchRedeemIDArray = bondSigma.batchRedeemArray
+    setClickedRedeemButton(true)
+    setOpenConfirmDialog(true)
+    redeemBondBatch(networkId, batchRedeemIDArray, userAddress, signer)
+      .then(async (tx) => {
+        console.log(tx)
+        setRedeemTx(tx)
+        setOpenConfirmDialog(false)
+        onOpenSubmitted()
+        await tx.wait(1)
+        updateBondPositions()
+        setClickedRedeemButton(false)
+        setButtonDisabled(false)
+      })
+      .catch((err) => {
+        setTxError(err.message)
+        setClickedRedeemButton(false)
+        onOpenError()
+        setButtonDisabled(false)
+      })
+  }
+
   return (
     <Container maxW="container.lg">
       <Flex direction="column" gap={10}>
         <BondDescription />
-
         <Flex
           gap={10}
           direction={{ lg: 'row', md: 'column' }}
@@ -205,24 +222,7 @@ export function Bond() {
                         bondSigma={bondSigma}
                         buttonDisabled={buttonDisabled}
                         onConfirm={() => {
-                          setButtonDisabled(true)
-                          const batchRedeemIDArray = bondSigma.batchRedeemArray
-                          setClickedRedeemButton(true)
-                          redeemBondBatch(networkId, batchRedeemIDArray, userAddress, signer)
-                            .then(async (tx) => {
-                              console.log(tx)
-                              setRedeemTx(tx)
-                              setClickedRedeemButton(false)
-                              onOpenSubmitted()
-                              await tx.wait(1)
-                              setButtonDisabled(false)
-                            })
-                            .catch((err) => {
-                              setTxError(err.message)
-                              setClickedRedeemButton(false)
-                              onOpenError()
-                              setButtonDisabled(false)
-                            })
+                          onRedeemConfirm()
                         }}
                         isRedeeming={clickedRedeemButton}
                         largeFont
@@ -237,10 +237,13 @@ export function Bond() {
             </Card>
             {/* <ViewSoldsButton onClick={() => setIsOpen(!isOpen)} active={isOpen} /> */}
           </Box>
-          <BondBuyCard />
+          <BondBuyCard
+            updateBondPositions={updateBondPositions}
+            setRedeemButtonDisabled={setButtonDisabled}
+          />
         </Flex>
       </Flex>
-      <WaitingConfirmationDialog isOpen={clickedRedeemButton} title={'Confirm Redeem'}>
+      <WaitingConfirmationDialog isOpen={openConfirmDialog} title={'Confirm Redeem'}>
         <Text fontSize="lg" color="text.accent">
           {bondSigma && bondSigma['parseRedeemable']
             ? `Redeeming ` + truncateNumber(bondSigma.parseRedeemable) + ` CNV`
