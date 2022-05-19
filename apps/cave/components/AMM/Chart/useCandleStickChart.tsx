@@ -55,13 +55,13 @@ export const useCandleStickChart = (inputToken: string, outputToken: string) => 
 
   useEffect(() => {
     set({ loading: true })
-    promiseData
-      .then((data) => {
+    try {
+      promiseData.then((data) => {
         set({ loading: false, data: data })
       })
-      .catch(() => {
-        set({ loading: false, data: [] })
-      })
+    } catch {
+      set({ loading: false, data: [] })
+    }
   }, [promiseData])
 
   return { ...candleStickData, set }

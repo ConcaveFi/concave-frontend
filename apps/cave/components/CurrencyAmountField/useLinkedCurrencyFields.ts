@@ -25,7 +25,6 @@ export const useLinkedCurrencyFields = (
     const updatedFields = makeFields(initialCurrencies)
     setCurrencies(updatedFields)
     if (initialCurrencies[0]) {
-      console.log(initialCurrencies[0].symbol, initialCurrencies[1].symbol)
       onChangeAmount(toAmount(0, initialCurrencies[0]), 'first')
       lastUpdated.current = 'first'
     }

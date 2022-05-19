@@ -65,7 +65,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   return { props: { currencies: currenciesOrDefaults.map(currencyToJson) } }
 }
 
-export function SwapPage({ currencies: serverPropsCurrencies, prevRoute }) {
+export function SwapPage({ currencies: serverPropsCurrencies }) {
   const [settings, setSettings] = useState<SwapSettings>(defaultSettings)
 
   const currencies = useMemo(
