@@ -1,6 +1,7 @@
 import { Flex, Heading, Text } from '@concave/ui'
 import DashboardMobile from 'components/Dashboard/Mobile/DashboardMobile'
 import UserDashboardCard from 'components/Dashboard/UserDashboardCard'
+import { withPageTransition } from 'components/PageTransition'
 import { useDashBoardState } from 'contracts/DashBoard/DashBoardState'
 import React from 'react'
 
@@ -31,4 +32,4 @@ Dashboard.Meta = {
   description: `You can use the Dashboard to claim dividends and manage your Liquid NFT positions.`,
 }
 
-export default Dashboard
+export default withPageTransition(Dashboard)

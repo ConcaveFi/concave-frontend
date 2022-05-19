@@ -32,6 +32,8 @@ import {
 import { GetServerSideProps } from 'next'
 import { useEffect, useMemo, useReducer, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
+import { LayoutGroup } from 'framer-motion'
+import { withPageTransition } from 'components/PageTransition'
 
 const TradeDetails = ({
   trade,
@@ -63,7 +65,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   return { props: { currencies: currenciesOrDefaults.map(currencyToJson) } }
 }
 
-export function SwapPage({ currencies: serverPropsCurrencies }) {
+export function SwapPage({ currencies: serverPropsCurrencies, prevRoute }) {
   const [settings, setSettings] = useState<SwapSettings>(defaultSettings)
 
   const currencies = useMemo(
@@ -122,72 +124,74 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
         w="100%"
         gap={10}
       >
-        <CandleStickCard
-          from={trade.data.inputAmount?.currency}
-          to={trade.data.outputAmount?.currency}
-        />
-
-        <Card
-          p={6}
-          gap={2}
-          variant="primary"
-          h="fit-content"
-          shadow="Block Up"
-          w="100%"
-          maxW="420px"
-        >
-          <CurrencyInputField
-            currencyAmountIn={trade.data.inputAmount}
-            onChangeAmount={onChangeInput}
-            CurrencySelector={SelectAMMCurrency}
+        <LayoutGroup>
+          <CandleStickCard
+            from={trade.data.inputAmount?.currency}
+            to={trade.data.outputAmount?.currency}
           />
 
-          <SwitchCurrencies onClick={switchCurrencies} />
-
-          <CurrencyOutputField
-            currencyAmountOut={trade.data.outputAmount}
-            currencyAmountIn={trade.data.inputAmount}
-            updateOutputValue={onChangeOutput}
-          />
-
-          {settings.expertMode && <CustomRecipient onChangeRecipient={setRecipient} />}
-
-          <HStack
-            onClick={toggleDetails}
-            sx={hasDetails && { cursor: 'pointer', _hover: { bg: 'blackAlpha.200' } }}
-            justify="center"
-            align="center"
-            py={2}
-            px={3}
-            rounded="xl"
+          <Card
+            p={6}
+            gap={2}
+            variant="primary"
+            h="fit-content"
+            shadow="Block Up"
+            w="100%"
+            maxW="420px"
           >
-            <RelativePrice
-              currency0={trade.data.inputAmount?.currency}
-              currency1={trade.data.outputAmount?.currency}
-              mr="auto"
+            <CurrencyInputField
+              currencyAmountIn={trade.data.inputAmount}
+              onChangeAmount={onChangeInput}
+              CurrencySelector={SelectAMMCurrency}
             />
-            <GasPrice />
-            <Settings onChange={setSettings} />
-          </HStack>
 
-          <Collapse style={{ overflow: 'visible' }} in={isDetailsOpen} animateOpacity>
-            <TradeDetails trade={trade.data} settings={settings} />
-          </Collapse>
+            <SwitchCurrencies onClick={switchCurrencies} />
 
-          <Button variant="primary" size="large" w="full" {...swapButtonProps} />
+            <CurrencyOutputField
+              currencyAmountOut={trade.data.outputAmount}
+              currencyAmountIn={trade.data.inputAmount}
+              updateOutputValue={onChangeOutput}
+            />
 
-          <NetworkMismatch
-            isOpen={isNetworkMismatch && queryHasCurrency}
-            expectedChainId={queryChainId}
-            currentChainId={currentChainId}
-          >
-            <Text color="text.low">
-              Do you wanna drop this {CHAIN_NAME[queryChainId]} trade
-              <br />
-              and restart on {CHAIN_NAME[currentChainId]}?
-            </Text>
-          </NetworkMismatch>
-        </Card>
+            {settings.expertMode && <CustomRecipient onChangeRecipient={setRecipient} />}
+
+            <HStack
+              onClick={toggleDetails}
+              sx={hasDetails && { cursor: 'pointer', _hover: { bg: 'blackAlpha.200' } }}
+              justify="center"
+              align="center"
+              py={2}
+              px={3}
+              rounded="xl"
+            >
+              <RelativePrice
+                currency0={trade.data.inputAmount?.currency}
+                currency1={trade.data.outputAmount?.currency}
+                mr="auto"
+              />
+              <GasPrice />
+              <Settings onChange={setSettings} />
+            </HStack>
+
+            <Collapse style={{ overflow: 'visible' }} in={isDetailsOpen} animateOpacity>
+              <TradeDetails trade={trade.data} settings={settings} />
+            </Collapse>
+
+            <Button variant="primary" size="large" w="full" {...swapButtonProps} />
+
+            <NetworkMismatch
+              isOpen={isNetworkMismatch && queryHasCurrency}
+              expectedChainId={queryChainId}
+              currentChainId={currentChainId}
+            >
+              <Text color="text.low">
+                Do you wanna drop this {CHAIN_NAME[queryChainId]} trade
+                <br />
+                and restart on {CHAIN_NAME[currentChainId]}?
+              </Text>
+            </NetworkMismatch>
+          </Card>
+        </LayoutGroup>
       </Flex>
 
       <ConfirmSwapModal
@@ -228,4 +232,4 @@ SwapPage.Meta = {
   description: `Concave's AMM allows LPs to deploy deep liquidity for different pairs and allows LPs to earn more with less capital. The AMM has cheaper gas fees and swap fees.`,
 }
 
-export default SwapPage
+export default withPageTransition(SwapPage)

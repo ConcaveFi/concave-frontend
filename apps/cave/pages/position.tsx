@@ -1,4 +1,5 @@
 import { Card, Flex, Heading, Text } from '@concave/ui'
+import { withPageTransition } from 'components/PageTransition'
 import { MyPositions } from 'components/Positions/MyPositions'
 import { useRouter } from 'next/router'
 import React from 'react'
@@ -43,4 +44,4 @@ PositionsView.Meta = {
   description: ``,
 }
 
-export default PositionsView
+export default withPageTransition(PositionsView)

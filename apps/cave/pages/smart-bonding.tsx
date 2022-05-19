@@ -14,6 +14,7 @@ import {
 } from 'components/Bond/BondState'
 import { Redeem } from 'components/Bond/Redeem'
 import { SelectedBondType } from 'components/Bond/SelectedBondType'
+import { withPageTransition } from 'components/PageTransition'
 import { useGet_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql'
 import React, { useEffect, useState } from 'react'
 const spin = keyframes({
@@ -180,4 +181,4 @@ Bond.Meta = {
   description: `Concave's Smart Bonding offers capital efficient bonds for virtually any ERC20 token, pricing and issuance model, which is optimized by an off-chain algorithm.`,
 }
 
-export default Bond
+export default withPageTransition(Bond)

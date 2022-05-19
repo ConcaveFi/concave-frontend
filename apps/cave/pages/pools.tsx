@@ -1,4 +1,5 @@
 import { Box, Flex, Heading, Text } from '@concave/ui'
+import { withPageTransition } from 'components/PageTransition'
 import { MyPositions } from 'components/Positions/MyPositions'
 import React from 'react'
 
@@ -48,4 +49,4 @@ Pools.Meta = {
   description: `View your Liquidity Pool Positions and add liquidity to Concave supported pools. It is a pool of two tokens that allows users to exchange between them.`,
 }
 
-export default Pools
+export default withPageTransition(Pools)

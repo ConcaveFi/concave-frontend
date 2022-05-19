@@ -5,6 +5,7 @@ import {
   currencyToJson,
   fetchQueryCurrencies,
 } from 'components/AMM/hooks/useQueryCurrencies'
+import { withPageTransition } from 'components/PageTransition'
 import { GetServerSideProps } from 'next'
 
 import React, { useMemo } from 'react'
@@ -61,4 +62,4 @@ AddLiquidity.Meta = {
   description: `Add liquidity to Concave's liquidity pool to earn fees.`,
 }
 
-export default AddLiquidity
+export default withPageTransition(AddLiquidity)

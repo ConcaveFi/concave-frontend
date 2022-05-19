@@ -1,6 +1,7 @@
 // import { Token } from '@concave/gemswap-sdk'
 import { SpinIcon } from '@concave/icons'
 import { Card, Flex, keyframes, ScaleFade, Text } from '@concave/ui'
+import { withPageTransition } from 'components/PageTransition'
 import DividendsCard from 'components/Treasury/DividendsCard'
 import TreasuryManagementCard from 'components/Treasury/TreasuryManagementCard'
 import TreasuryRedeemCard from 'components/Treasury/TreasuryRedeemCard'
@@ -87,4 +88,4 @@ Treasury.Meta = {
   description: `Concave has treasury strategies to take advantage of yield opportunities. It is broken down into Investment Research, Delta Neutral, and Stable Farm strategies.`,
 }
 
-export default Treasury
+export default withPageTransition(Treasury)

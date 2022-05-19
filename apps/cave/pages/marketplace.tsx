@@ -3,6 +3,7 @@ import GraphicGuide from 'components/LiquidStaking/GraphicGuide'
 import MarketplaceActivityCard from 'components/Marketplace/MarketplaceActivityCard'
 import MarketplaceSearchCard from 'components/Marketplace/MarketplaceSearchCard'
 import MarketplaceStakeCard from 'components/Marketplace/MarketplaceStakeCard'
+import { withPageTransition } from 'components/PageTransition'
 import React, { useEffect, useState } from 'react'
 
 const Marketplace = () => {
@@ -163,4 +164,4 @@ Marketplace.Meta = {
   description: `Trade your Liquid Staked positions and other assets in Concave’s marketplace.`,
 }
 
-export default Marketplace
+export default withPageTransition(Marketplace)
