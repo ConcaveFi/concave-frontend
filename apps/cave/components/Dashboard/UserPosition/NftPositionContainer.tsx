@@ -50,7 +50,7 @@ const NftPositionContainer = (props: NftPositionContainerProps) => {
           <HStack>
             <Flex w={'55%'} pl={2} direction="column">
               <Text fontSize="xs" color="text.low" fontWeight="medium">
-                Stake Period
+                Stake Pool
               </Text>
               <Text fontSize="s" color="white" fontWeight="bold">
                 {period}

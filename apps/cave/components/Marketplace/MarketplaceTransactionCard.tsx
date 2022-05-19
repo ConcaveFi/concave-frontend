@@ -57,7 +57,7 @@ const MarketplaceTransactionCard = (props: MarketplaceTransactionCardProps) => {
         <Flex direction={'column'}>
           <Flex alignItems={'end'} width={'full'}>
             <Text fontSize={14} textColor={'white'} fontWeight="700">
-              3Month
+              90 Days
             </Text>
             <Text pl={1}> positions is</Text>
           </Flex>

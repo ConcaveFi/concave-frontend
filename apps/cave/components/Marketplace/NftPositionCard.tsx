@@ -2,7 +2,7 @@ import { Box, Button, Collapse, Flex, HStack, Image, Text } from '@concave/ui'
 import { useState } from 'react'
 
 interface NftPositionBoxProps {
-  stakePeriod: number
+  stakePool: number
   redeemIn: number
   price: number
   discount: number
@@ -11,7 +11,7 @@ interface NftPositionBoxProps {
 }
 
 const NftPositionBox = (props: NftPositionBoxProps) => {
-  const { stakePeriod, discount, price, redeemIn } = props
+  const { stakePool, discount, price, redeemIn } = props
   const active = props.active
 
   return (
@@ -35,10 +35,10 @@ const NftPositionBox = (props: NftPositionBoxProps) => {
         >
           <Flex w={'55%'} pl={2} direction="column" textAlign={'start'}>
             <Text fontSize="xs" color="text.low" fontWeight="medium" ml={4}>
-              Stake Period
+              Stake Pool
             </Text>
             <Text fontSize="s" color="white" fontWeight="bold" ml={4}>
-              {stakePeriod} Days
+              {stakePool} Days
             </Text>
           </Flex>
           <Box w={{ base: '25%', xl: '45%', lg: '45%' }}>
@@ -97,7 +97,7 @@ const NftPositionBox = (props: NftPositionBoxProps) => {
 }
 const NftPositionCard = (props: NftPositionBoxProps) => {
   const [active, setActive] = useState(false)
-  const { discount, price, redeemIn, stakePeriod } = props
+  const { discount, price, redeemIn, stakePool } = props
 
   return (
     <Flex
@@ -125,7 +125,7 @@ const NftPositionCard = (props: NftPositionBoxProps) => {
           discount={discount}
           price={price}
           redeemIn={redeemIn}
-          stakePeriod={stakePeriod}
+          stakePool={stakePool}
           onClick={() => setActive(!active)}
         />
         <Collapse in={active}>

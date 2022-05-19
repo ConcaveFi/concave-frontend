@@ -68,7 +68,7 @@ const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
       offsetX: 0,
     },
     {
-      title: 'Stake Period',
+      title: 'Stake Pool',
       icon: 'StakeIcon',
       hasFilter:
         activeStakeSortButton !== 0 ||
@@ -129,7 +129,7 @@ const MarketplaceSearchCard = (props: MarketplaceSearchCardProps) => {
         key={index}
         price={value.price}
         redeemIn={value.redeemIn}
-        stakePeriod={value.stakePeriod}
+        stakePool={value.stakePeriod}
         discount={value.discount}
       />
     ))

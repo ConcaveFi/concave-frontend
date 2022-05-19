@@ -160,7 +160,7 @@ const Periods = (props: PeriodsProps) => {
         alignItems={'center'}
         gap="2"
       >
-        <Text px={2.5}>Stake period:</Text>
+        <Text px={2.5}>Stake Pool:</Text>
         {periodButtonsComp}
       </Flex>
       <Flex height={'73px'} justifyContent="center" alignItems={'end'} gap="3">
