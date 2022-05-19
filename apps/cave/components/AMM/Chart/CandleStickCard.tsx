@@ -23,15 +23,15 @@ export const CandleStickCard = ({ from: _from, to: _to }: { from?: Currency; to?
 
   const candleStickChart = useCandleStickChart(from?.symbol, to?.symbol)
 
+  const hasData = candleStickChart.data.length > 0
   return (
     <SlideFade
       layout="position"
-      in={candleStickChart.data.length > 0}
+      in={hasData}
       delay={0.2}
-      unmountOnExit
-      style={{ width: '100%', maxWidth: '520px' }}
+      style={hasData && { width: '100%', maxWidth: '520px' }}
     >
-      {candleStickChart.data.length > 0 && (
+      {hasData && (
         <Card variant="secondary" gap={2} p={6} w="100%" h="min">
           <Flex justifyContent="space-between" w="100%" gap={8}>
             <CandleStickTokenOptions from={from} to={to} />

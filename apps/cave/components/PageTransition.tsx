@@ -1,17 +1,5 @@
 import { motion } from 'framer-motion'
 
-const goinUp = {
-  hidden: { opacity: 0, y: '-50vh' },
-  enter: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: '50vh' },
-}
-
-const goinDown = {
-  hidden: { opacity: 0, y: '50vh' },
-  enter: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: '-50vh' },
-}
-
 const pagesIndex = [
   '/treasury',
   '/smart-bonding',
@@ -23,8 +11,17 @@ const pagesIndex = [
   '/pools',
 ]
 
+/*
+  this is not working right, but it's a start
+*/
 const getVariant = (prevPath, nextPath) => {
-  return pagesIndex.indexOf(prevPath) < pagesIndex.indexOf(nextPath) ? goinUp : goinDown
+  const isGoingUp = pagesIndex.indexOf(prevPath) > pagesIndex.indexOf(nextPath)
+
+  return {
+    hidden: { opacity: 0, y: isGoingUp ? '50vh' : '-50vh' },
+    enter: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: isGoingUp ? '-50vh' : '50vh' },
+  }
 }
 
 export const withPageTransition = (Page) => {
