@@ -82,6 +82,7 @@ export class ConcaveNFTMarketplace {
   }
 
   public async createNewNftAuction(
+    nftContractAddress: string,
     tokenId: BigNumber,
     erc20Token: string,
     minPrice: BigNumber,
@@ -94,7 +95,8 @@ export class ConcaveNFTMarketplace {
     if (feeRecipients.length !== feePercentages.length) {
       throw 'Check recipients and percentages'
     }
-    return this.contract.createNewNftAuction(
+    return this.contract.createDefaultNftAuction(
+      nftContractAddress,
       tokenId,
       erc20Token,
       minPrice,
