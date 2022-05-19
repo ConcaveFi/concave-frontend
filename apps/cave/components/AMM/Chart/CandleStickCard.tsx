@@ -28,6 +28,7 @@ export const CandleStickCard = ({ from: _from, to: _to }: { from?: Currency; to?
       layout="position"
       in={candleStickChart.data.length > 0}
       delay={0.2}
+      unmountOnExit
       style={{ width: '100%', maxWidth: '520px' }}
     >
       {candleStickChart.data.length > 0 && (
