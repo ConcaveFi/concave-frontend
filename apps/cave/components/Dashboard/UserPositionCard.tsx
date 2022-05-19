@@ -12,6 +12,7 @@ interface NftPositionCardProps {
 const UserPositionCard = (props: NftPositionCardProps) => {
   const { nonFungibleTokenInfo } = props
   const { maturity, poolID, shares, rewardDebt, contractAddress, tokenId } = nonFungibleTokenInfo
+  console.log(nonFungibleTokenInfo)
   const [active, setActive] = useState(true)
 
   return (

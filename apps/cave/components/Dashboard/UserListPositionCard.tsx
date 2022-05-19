@@ -26,10 +26,6 @@ const UserListPositionCard = (props: UserListPositionCardProps) => {
       nonFungibleTokenInfo.shares.div(100).mul(80).toString(),
     ),
   )
-  const buyNowPrice = CurrencyAmount.fromRawAmount(
-    CNV[chainId],
-    nonFungibleTokenInfo.currentValue.toString(),
-  )
   const discount = nonFungibleTokenInfo.calculteDiscount(price.numerator)
   return (
     <Box
@@ -130,7 +126,7 @@ const UserListPositionCard = (props: UserListPositionCardProps) => {
                   props.nonFungibleTokenInfo.tokenId,
                   price.currency.wrapped.address,
                   price.numerator.toString(),
-                  '',
+                  account.address, // this field is mandatory :/
                   [account.address],
                   [10000],
                 )

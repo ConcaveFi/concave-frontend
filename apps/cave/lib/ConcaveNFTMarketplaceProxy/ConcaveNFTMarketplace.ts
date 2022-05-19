@@ -38,8 +38,12 @@ export class ConcaveNFTMarketplace {
     return this.contract.connect(signer).withdrawAuction(nftContractAddress, tokenId.toString())
   }
 
+  public async fetchItemsForSale() {
+    return this.contract.fetchItemsForSale()
+  }
   public async createSale(
     signer: Signer,
+    nftContractAddress: string,
     tokenId: BigNumberish,
     erc20Token: string,
     buyNowPrice: BigNumberish,
@@ -52,7 +56,15 @@ export class ConcaveNFTMarketplace {
     }
     return this.contract
       .connect(signer)
-      .createSale(tokenId, erc20Token, buyNowPrice, whitelistedBuyer, feeRecipients, feePercentages)
+      .createSale(
+        nftContractAddress,
+        tokenId,
+        erc20Token,
+        buyNowPrice,
+        whitelistedBuyer,
+        feeRecipients,
+        feePercentages,
+      )
   }
 
   public async createDefaultNftAuction(
