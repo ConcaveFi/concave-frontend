@@ -1,7 +1,7 @@
 export { SwapIcon } from './SwapIcon'
 export { DownIcon } from './DownIcon'
 export { GasIcon } from './GasIcon'
-export { SwapSettingsIcon } from './SwapSettingsIcon'
+export { SettingsIcon } from './SettingsIcon'
 export { CnvQuestionIcon } from './CnvQuestionIcon'
 export { ExpandArrowIcon } from './ExpandArrowIcon'
 export { SpinIcon } from './SpinIcon'

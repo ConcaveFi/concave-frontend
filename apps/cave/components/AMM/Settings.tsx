@@ -1,5 +1,5 @@
 import { Percent } from '@concave/gemswap-sdk'
-import { CnvQuestionIcon, SwapSettingsIcon } from '@concave/icons'
+import { CnvQuestionIcon, SettingsIcon } from '@concave/icons'
 import {
   Box,
   Button,
@@ -187,16 +187,14 @@ export const Settings = ({ onChange }: { onChange: (settings: SwapSettings) => v
 
   return (
     <Popover placement="top-end" offset={[20, 5]}>
-      {/* Chakra type bug, related to just released react 18, should be fixed soon 
-       // @ts-ignore  */}
       <PopoverTrigger>
         <IconButton
           onClick={(e) => e.stopPropagation()}
           px={2}
           _focus={{ transform: 'scale(1.12)', filter: 'drop-shadow(-1px 1px 2px #ffffff20)' }}
           _hover={{ transform: 'scale(1.06)', filter: 'drop-shadow(-1px 1px 2px #ffffff20)' }}
-          icon={<SwapSettingsIcon viewBox="0 0 20 25" cursor={'pointer'} />}
-          aria-label="swap settings"
+          icon={<SettingsIcon viewBox="0 0 20 25" cursor={'pointer'} />}
+          aria-label="settings"
         />
       </PopoverTrigger>
       <Portal>
