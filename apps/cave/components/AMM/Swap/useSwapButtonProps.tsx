@@ -91,10 +91,10 @@ export const useSwapButtonProps = ({
   */
   if (currencyIn.isToken) {
     if (approve.isWaitingForConfirmation)
-      return { loadingText: 'Approve in your wallet', isLoading: true }
+      return { loadingText: 'Approve in wallet', isLoading: true }
     if (approve.isWaitingTransactionReceipt)
-      return { loadingText: 'Waiting approval confirmation', isLoading: true }
-    if (permit.isLoading) return { loadingText: 'Sign in your wallet', isLoading: true }
+      return { loadingText: 'Waiting for approval', isLoading: true }
+    if (permit.isLoading) return { loadingText: 'Sign in wallet', isLoading: true }
 
     const permitErroredOrWasNotInitializedYet = permit.isError || permit.isIdle
     const allowanceIsNotEnough = allowance.isSuccess && !!allowance.amount?.lessThan(inputAmount)
