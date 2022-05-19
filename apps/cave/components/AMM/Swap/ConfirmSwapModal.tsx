@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, Percent, Trade, TradeType } from '@concave/gemswap-sdk'
+import { Currency, CurrencyAmount, Percent, Rounding, Trade, TradeType } from '@concave/gemswap-sdk'
 import { ExpandArrowIcon, WarningTwoIcon } from '@concave/icons'
 import {
   Box,
@@ -40,7 +40,7 @@ const TradeCurrencyInfo = ({ currencyAmount, fiatValue, priceImpact }: TradeCurr
     >
       <Stack spacing={1} direction="column" h="100%">
         <Heading noOfLines={1} maxW="200px" fontSize="2xl">
-          {currencyAmount.toExact({ groupSeparator: ',' })}
+          {currencyAmount.toSignificant(8, { groupSeparator: ',' }, Rounding.ROUND_HALF_UP)}
         </Heading>
         <Flex fontWeight="bold" color="text.low" align="center">
           <Text fontSize="sm" mr={1}>
