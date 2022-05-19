@@ -1,5 +1,5 @@
 import { CNV } from 'constants/tokens'
-import { Button, Flex, Spinner, Text } from '@concave/ui'
+import { Button, Flex, Modal, Spinner, Text, useDisclosure } from '@concave/ui'
 import useAddTokenToWallet, { injectedTokenResponse } from 'hooks/useAddTokenToWallet'
 import { useIsMounted } from 'hooks/useIsMounted'
 import { getWalletType } from 'lib/injected.wallets'
@@ -11,6 +11,7 @@ import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId
 import { CNV_ADDRESS, DAI } from '@concave/gemswap-sdk'
 import { ethers } from 'ethers'
 import { formatEther } from 'ethers/lib/utils'
+import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 
 // aCNV address
 // 0x2a6bb78490c2221e0d36d931192296be4b3a01f1 ropsten
@@ -33,7 +34,7 @@ function ClaimAcnvButton() {
 
   const [{ data: balanceData, loading: loadingBalance }] = useBalance({
     addressOrName: account?.address,
-    token: '0x6ff0106d34feee8a8acf2e7b9168480f86b82e2f',
+    token: '0x2a6bb78490c2221e0d36d931192296be4b3a01f1',
   })
 
   const redeemAncv = () => {
@@ -41,14 +42,41 @@ function ClaimAcnvButton() {
     setRedeemText(loading ? 'Redeeming' : 'Nothing to Redeem')
     write()
   }
+
+  const { isOpen, onClose, onOpen } = useDisclosure()
   return (
-    <Button fontSize={'18px'} fontWeight="700" onClick={redeemAncv}>
-      <Flex align={'center'} justify="center">
-        <Text my={'auto'}>
-          aCNV - {loadingBalance ? <Spinner size={'sm'} /> : balanceData.formatted}{' '}
-        </Text>
-      </Flex>
-    </Button>
+    <>
+      <Button fontSize={'18px'} fontWeight="700" onClick={onOpen}>
+        <Flex align={'center'} justify="center" gap={2}>
+          <Text my={'auto'}>aCNV -</Text>
+          {loadingBalance ? <Spinner size={'sm'} /> : <Text>{balanceData?.formatted}</Text>}
+        </Flex>
+      </Button>
+      <Modal
+        bluryOverlay={true}
+        title="Nothing to Redeem"
+        isOpen={isOpen}
+        onClose={onClose}
+        bodyProps={{ align: 'center', w: '300px' }}
+      >
+        <Flex
+          height={'150px'}
+          boxShadow="Down Medium"
+          width={'full'}
+          rounded="2xl"
+          align={'center'}
+          direction="column"
+          textAlign={'center'}
+        >
+          <Text fontSize={'2xl'} fontWeight="bold" mt={6}>
+            Error:
+          </Text>
+          <Text fontWeight={'bold'} textColor={'text.low'}>
+            You do not have any aCNV to redeem.
+          </Text>
+        </Flex>
+      </Modal>
+    </>
   )
 }
 
