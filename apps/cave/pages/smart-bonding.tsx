@@ -220,6 +220,7 @@ export function Bond() {
                               setButtonDisabled(false)
                             })
                         }}
+                        isRedeeming={clickedRedeemButton}
                         largeFont
                         setBottom
                         customHeight
