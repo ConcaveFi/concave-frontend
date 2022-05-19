@@ -125,7 +125,7 @@ function TreasuryRedeemCard() {
         <GlassPanel width={'182px'} height={'40px'} rounded="2xl" mx={'auto'} justify={'center'}>
           <Button>
             <Text fontSize={'18px'} fontWeight="700" my={'auto'}>
-              BBTCNV - 100
+              bbtCNV - 100
             </Text>
           </Button>
         </GlassPanel>
