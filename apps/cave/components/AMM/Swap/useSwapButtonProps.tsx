@@ -82,7 +82,7 @@ export const useSwapButtonProps = ({
   */
   if (currencyInBalance.data?.lessThan(inputAmount))
     return {
-      children: `Insufficient ${inputAmount.currency.symbol} balance`,
+      children: `Insufficient ${inputAmount.currency.symbol}`,
       isDisabled: true,
     }
 
