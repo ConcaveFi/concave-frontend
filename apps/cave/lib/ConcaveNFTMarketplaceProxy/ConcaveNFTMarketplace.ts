@@ -30,8 +30,12 @@ export class ConcaveNFTMarketplace {
       .then((result: Auction) => ({ ...result }))
   }
 
-  public async withdrawAuction(signer: Signer, tokenId: string | BigNumberish) {
-    return this.contract.connect(signer).withdrawAuction(tokenId.toString())
+  public async withdrawAuction(
+    signer: Signer,
+    nftContractAddress: string,
+    tokenId: string | BigNumberish,
+  ) {
+    return this.contract.connect(signer).withdrawAuction(nftContractAddress, tokenId.toString())
   }
 
   public async createSale(

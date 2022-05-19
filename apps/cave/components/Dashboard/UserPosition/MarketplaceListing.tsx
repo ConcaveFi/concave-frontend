@@ -39,7 +39,11 @@ const MarketplaceListing = (props: MarketplaceListingProps) => {
     const label = isListed ? 'Unlist' : 'List for Sale'
     const onClick = isListed
       ? () => {
-          contract.withdrawAuction(signer, nonFungibleTokenInfo.tokenId)
+          contract.withdrawAuction(
+            signer,
+            nonFungibleTokenInfo.contractAddress,
+            nonFungibleTokenInfo.tokenId,
+          )
         }
       : onOpen
     const variant = isListed ? 'primary.outline' : 'primary'
