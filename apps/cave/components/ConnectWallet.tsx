@@ -16,6 +16,7 @@ import {
 import { useAccount, useConnect, useNetwork } from 'wagmi'
 import { useIsMounted } from 'hooks/useIsMounted'
 import YourWalletModal from './YourWalletModal'
+import { isFunction } from 'util'
 
 // const miniAddress = (address) =>
 //   `${address.substr(0, 6)}...${address.substr(address.length - 6, address.length)}`
@@ -52,11 +53,12 @@ const DisconnectButton = () => {
 }
 
 export const ConnectWalletModal = ({ isOpen, onClose }) => {
-  const [{ data }, connect] = useConnect()
+  const [{ data, loading }, connect] = useConnect()
   const isMounted = useIsMounted()
 
   return (
     <Modal
+      preserveScrollBarGap
       bluryOverlay={true}
       title="Connect Wallet"
       isOpen={isOpen}
@@ -70,11 +72,13 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
           if (!connector.ready) return null
           return (
             <Button
+              cursor={connector.id === data?.connector?.id ? 'default' : 'pointer'}
               w="100%"
-              shadow="Up Small"
-              _hover={{ shadow: 'Up Big' }}
-              _active={{ shadow: 'down' }}
-              _focus={{ shadow: 'Up Big' }}
+              shadow={connector.id === data?.connector?.id ? 'down' : 'Up Small'}
+              variant={connector.id === data?.connector?.id ? 'primary.outline' : 'secondary'}
+              _hover={connector.id === data?.connector?.id ? {} : { shadow: 'Up Big' }}
+              _active={connector.id === data?.connector?.id ? {} : { shadow: 'down' }}
+              _focus={connector.id === data?.connector?.id ? {} : { shadow: 'Up Big' }}
               size="large"
               leftIcon={
                 <Image
@@ -84,7 +88,9 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
                 />
               }
               key={connector.id}
-              onClick={() => connect(connector).then(onClose)}
+              onClick={() => {
+                if (connector.id !== data?.connector?.id) connect(connector).then(onClose)
+              }}
             >
               {connector.name}
             </Button>

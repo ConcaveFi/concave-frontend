@@ -1,10 +1,9 @@
-import { CheckIcon, CloseIcon } from '@concave/icons'
-import { Button, Card, Checkbox, Flex, Text, useDisclosure, VStack } from '@concave/ui'
+import { CheckIcon, CloseIcon, SpinIcon } from '@concave/icons'
+import { Button, Card, Flex, Text, useDisclosure } from '@concave/ui'
 import { Modal, ModalContent, ModalOverlay, ModalBody } from '@chakra-ui/react'
-import { getWalletType } from 'lib/injected.wallets'
-import { useState } from 'react'
 import { useAccount, useConnect, useNetwork } from 'wagmi'
 import { ConnectWalletModal, ellipseAddress } from './ConnectWallet'
+import ChangeNetWorkdModal from './ChangeNetworkModal'
 
 interface YourWalletModalProps {
   isOpen: boolean
@@ -13,8 +12,12 @@ interface YourWalletModalProps {
 
 export default function YourWalletModal(props: YourWalletModalProps) {
   const [{ data: account }, disconnect] = useAccount()
-
   const { isOpen, onClose, onOpen } = useDisclosure()
+  const {
+    isOpen: isChangeNetworkOpen,
+    onClose: onCloseChangeNetwork,
+    onOpen: onOpenChangeNetwork,
+  } = useDisclosure()
   const [{ data: networkData }, switchNetwork] = useNetwork()
   const [{ data: connectorData, loading: loadingWallet }] = useConnect()
 
@@ -51,7 +54,6 @@ export default function YourWalletModal(props: YourWalletModalProps) {
                   <Text fontWeight={'bold'} textColor={'text.low'} fontSize="20px">
                     Your Wallet
                   </Text>
-
                   <Text fontWeight={'bold'} fontSize={'3xl'}>
                     {ellipseAddress(account?.address)}
                   </Text>
@@ -61,7 +63,6 @@ export default function YourWalletModal(props: YourWalletModalProps) {
                 </Flex>
               </Flex>
               {/* ------------------------- */}
-
               {/* Connected areas Container */}
               <Flex direction={'column'} gap={4} mx="auto">
                 <Flex
@@ -101,6 +102,7 @@ export default function YourWalletModal(props: YourWalletModalProps) {
                     Change Network
                   </Text>
                   <Button
+                    onClick={onOpenChangeNetwork}
                     rounded={'3xl'}
                     _focus={{}}
                     width={'142px'}
@@ -109,9 +111,13 @@ export default function YourWalletModal(props: YourWalletModalProps) {
                     mr={2}
                   >
                     <Text my={'auto'} mx="auto" fontWeight={'bold'} fontSize="lg">
-                      {networkData?.chain.name}
+                      {networkData?.chain?.name}
                     </Text>
                   </Button>
+                  <ChangeNetWorkdModal
+                    isOpen={isChangeNetworkOpen}
+                    onClose={onCloseChangeNetwork}
+                  />
                 </Flex>
               </Flex>
               {/* ------------------------- */}
@@ -141,7 +147,7 @@ export default function YourWalletModal(props: YourWalletModalProps) {
               height="40px"
               rounded="16px 16px 0px 0px"
               variant={'primary'}
-              onClick={disconnect}
+              onClick={() => disconnect()}
             >
               <Text fontSize={'xl'} fontWeight="bold">
                 Disconnect
@@ -153,7 +159,6 @@ export default function YourWalletModal(props: YourWalletModalProps) {
     </Modal>
   )
 }
-
 const TransactionInfo = ({ type, info }) => {
   return (
     <Flex justify={'space-between'}>
