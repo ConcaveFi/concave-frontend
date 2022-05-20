@@ -158,8 +158,8 @@ const SwitchView = (props: SwitchViewProps) => {
 }
 
 Marketplace.Meta = {
-  title: 'Concave | Marketplace',
-  description: `Trade your Liquid Staked positions and other assets in Concave’s marketplace.`,
+  title: 'Concave | NFT Marketplace',
+  description: `Trade your Liquid Staking positions and other NFTs in Concave’s marketplace.`,
 }
 
 export default Marketplace
