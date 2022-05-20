@@ -3,7 +3,7 @@ import { Button, Card, Checkbox, Flex, Text, useDisclosure, VStack } from '@conc
 import { Modal, ModalContent, ModalOverlay, ModalBody } from '@chakra-ui/react'
 import { getWalletType } from 'lib/injected.wallets'
 import { useState } from 'react'
-import { useAccount, useConnect, useNetwork } from 'wagmi'
+import { useAccount, useConnect, useDisconnect, useNetwork } from 'wagmi'
 import { ConnectWalletModal, ellipseAddress } from './ConnectWallet'
 
 interface YourWalletModalProps {
@@ -12,11 +12,12 @@ interface YourWalletModalProps {
 }
 
 export default function YourWalletModal(props: YourWalletModalProps) {
-  const [{ data: account }, disconnect] = useAccount()
+  const { data: account } = useAccount()
+  const { disconnect } = useDisconnect()
 
   const { isOpen, onClose, onOpen } = useDisclosure()
-  const [{ data: networkData }, switchNetwork] = useNetwork()
-  const [{ data: connectorData, loading: loadingWallet }] = useConnect()
+  const { activeChain, switchNetwork } = useNetwork()
+  const { data: connectorData, isConnecting: loadingWallet } = useConnect()
 
   return (
     <Modal
@@ -109,7 +110,7 @@ export default function YourWalletModal(props: YourWalletModalProps) {
                     mr={2}
                   >
                     <Text my={'auto'} mx="auto" fontWeight={'bold'} fontSize="lg">
-                      {networkData?.chain.name}
+                      {activeChain?.name}
                     </Text>
                   </Button>
                 </Flex>
@@ -141,7 +142,7 @@ export default function YourWalletModal(props: YourWalletModalProps) {
               height="40px"
               rounded="16px 16px 0px 0px"
               variant={'primary'}
-              onClick={disconnect}
+              onClick={() => disconnect()}
             >
               <Text fontSize={'xl'} fontWeight="bold">
                 Disconnect

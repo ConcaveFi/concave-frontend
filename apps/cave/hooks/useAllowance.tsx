@@ -21,7 +21,7 @@ export const ApproveButton = ({
 }: {
   useApproveInfo: UseApprovalReturnType
 } & ButtonProps) => {
-  const [{ data: account }] = useAccount()
+  const { data: account } = useAccount()
   const { connectModal } = useModals()
 
   if (!account?.address)

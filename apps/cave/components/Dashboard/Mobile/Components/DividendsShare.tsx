@@ -14,10 +14,10 @@ const spin = keyframes({
   '100%': { transform: 'rotate(360deg)' },
 })
 const DividendsShareMobile = (props: DividendsShareMobileProps) => {
-  const [{ data: wallet }] = useConnect()
+  const { isConnected } = useConnect()
   const spinnerStyles = { animation: `${spin} 2s linear infinite`, size: 'sm' }
   const { isLoading } = props
-  const totalLocked = !wallet.connected
+  const totalLocked = !isConnected
     ? '--.--.--.--'
     : isLoading
     ? 'loading'

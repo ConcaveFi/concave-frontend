@@ -13,7 +13,7 @@ const spin = keyframes({
 const DashboardMobile = (props: { data: UseDashBoardState }) => {
   const { data } = props
   const { isLoading, userNonFungibleTokensInfo, totalLocked } = data
-  const [{ data: wallet }] = useConnect()
+  const { isConnected } = useConnect()
 
   const userPosComps = userNonFungibleTokensInfo.map((nonFungibleTokenInfo, index) => (
     <UserPositionCardMobile key={index} nonFungibleTokenInfo={nonFungibleTokenInfo} />
@@ -38,7 +38,7 @@ const DashboardMobile = (props: { data: UseDashBoardState }) => {
           <VStack>{userPosComps}</VStack>
         </Collapse>
         <LoadingPositions in={isLoading} />
-        <NotConnected in={!wallet.connected} />
+        <NotConnected in={!isConnected} />
       </Box>
     </Flex>
   )

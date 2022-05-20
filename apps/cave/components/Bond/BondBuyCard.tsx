@@ -1,25 +1,15 @@
 import { Currency, CurrencyAmount, DAI } from '@concave/gemswap-sdk'
-import { GasIcon } from '@concave/icons'
-import {
-  Button,
-  Card,
-  Flex,
-  HStack,
-  keyframes,
-  Spinner,
-  Text,
-  useDisclosure,
-  VStack,
-} from '@concave/ui'
+import { Button, Card, Flex, HStack, keyframes, Text, useDisclosure, VStack } from '@concave/ui'
+import { GasPrice } from 'components/AMM'
 import { CurrencyInputField as BondInput } from 'components/CurrencyAmountField'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { BOND_ADDRESS } from 'contracts/Bond/BondingAddress'
 import { useGet_Amm_Cnv_PriceQuery } from 'graphql/generated/graphql'
 import { ApproveButton, useApprovalWhenNeeded } from 'hooks/useAllowance'
+import { useIsMounted } from 'hooks/useIsMounted'
 import React, { useEffect, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
-import { useFeeData } from 'wagmi'
 import { BondOutput } from './BondOutput'
 import { getBondAmountOut, getBondSpotPrice, purchaseBond, useBondState } from './BondState'
 import { ConfirmBondModal } from './ConfirmBond'
@@ -29,22 +19,6 @@ import { BondSettings, defaultSettings, Settings } from './Settings'
 export const twoDecimals = (s: string | number) => {
   const a = s.toString()
   return a.indexOf('.') > -1 ? a.slice(0, a.indexOf('.') + 3) : a
-}
-
-const GasPrice = () => {
-  const [{ data }] = useFeeData({ formatUnits: 'gwei', watch: true })
-  return (
-    <>
-      <GasIcon viewBox="0 0 16 16" />
-      {data ? (
-        <Text fontSize="xs" color="text.low" fontWeight="medium">
-          {twoDecimals(data?.formatted.gasPrice)} gwei
-        </Text>
-      ) : (
-        <Spinner size="xs" color="text.low" />
-      )}
-    </>
-  )
 }
 
 export function BondBuyCard(props: {
@@ -91,6 +65,8 @@ export function BondBuyCard(props: {
         console.log(e)
       })
   }, [networkId, userAddress])
+
+  const isMounted = useIsMounted()
 
   return (
     <Card
@@ -143,7 +119,9 @@ export function BondBuyCard(props: {
         </Flex>
       </HStack>
 
-      <ApproveButton variant="primary" size="large" w="full" useApproveInfo={approveInfo} />
+      {isMounted && (
+        <ApproveButton variant="primary" size="large" w="full" useApproveInfo={approveInfo} />
+      )}
       {!needsApprove && (
         <Button
           isDisabled={needsApprove || +userBalance < +amountIn}

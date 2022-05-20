@@ -2,7 +2,7 @@ import { useQuery, UseQueryOptions, UseQueryResult } from 'react-query'
 import { concaveProvider } from 'lib/providers'
 import { Token, Fetcher, Pair } from '@concave/gemswap-sdk'
 import { BASES_TO_CHECK_TRADES_AGAINST, INTERMEDIARY_PAIRS_FOR_MULTI_HOPS } from 'constants/routing'
-import { AVERAGE_BLOCK_TIME } from 'constants/blockchain'
+import { useBlockNumber } from 'wagmi'
 
 const filterRepeatedPairs = (pairs: [Token, Token][]) =>
   pairs.filter(
@@ -45,7 +45,8 @@ export const usePairs = <T = Pair[]>(
   maxHops = 3,
   queryOptions?: UsePairsQueryOptions<T>,
 ) => {
-  return useQuery(
+  const enabled = !!tokenA?.address && !!tokenB?.address && !tokenA.equals(tokenB)
+  const result = useQuery(
     ['pairs', tokenA?.address, tokenB?.address, maxHops, tokenA?.chainId],
     async () => {
       const commonPairs = getAllCommonPairs(tokenA, tokenB, maxHops)
@@ -62,14 +63,17 @@ export const usePairs = <T = Pair[]>(
       return pairs
     },
     {
-      enabled: !!tokenA?.address && !!tokenB?.address && !tokenA.equals(tokenB),
-      refetchInterval: AVERAGE_BLOCK_TIME[tokenA?.chainId],
+      enabled,
       refetchOnWindowFocus: false,
       notifyOnChangeProps: 'tracked',
       retry: false,
       ...queryOptions,
     },
   )
+
+  useBlockNumber({ watch: true, onSuccess: () => !!enabled && result.refetch() })
+
+  return result
 }
 
 export const usePair = (tokenA: Token, tokenB: Token, queryOptions?: UsePairsQueryOptions<Pair>) =>
