@@ -24,11 +24,7 @@ type TxSubmittedProps = {
 }
 
 const TxSubmitted = ({ title, tx, onClose, tokenSymbol, addTokenToWallet }: TxSubmittedProps) => {
-  const [
-    {
-      data: { chain },
-    },
-  ] = useNetwork()
+  const { activeChain } = useNetwork()
 
   const [showAddButton, setShowAddButton] = useState(
     typeof tokenSymbol !== 'undefined' ? true : false,
@@ -39,7 +35,7 @@ const TxSubmitted = ({ title, tx, onClose, tokenSymbol, addTokenToWallet }: TxSu
       <SubmittedIcon w={10} my={6} />
       <Text align="center" fontSize="md" fontWeight="bold">
         {title || `Transaction Submitted`} <br />
-        <Link href={getTxExplorer(tx, chain)} fontSize="sm" color="text.accent" isExternal>
+        <Link href={getTxExplorer(tx, activeChain)} fontSize="sm" color="text.accent" isExternal>
           View on Explorer
         </Link>
       </Text>

@@ -4,6 +4,7 @@ import { useModals } from 'contexts/ModalsContext'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { Currency, CurrencyAmount } from '@concave/gemswap-sdk'
 import { NoValidPairsError, UsePairResult } from '../hooks/usePair'
+import { useIsMounted } from 'hooks/useIsMounted'
 
 export const useAddLiquidityButtonProps = (
   pair: UsePairResult,
@@ -11,12 +12,16 @@ export const useAddLiquidityButtonProps = (
   amount1: CurrencyAmount<Currency>,
   onAddLiquidityClick: () => void,
 ): ButtonProps => {
-  const [{ data: account }] = useAccount()
+  const { data: account } = useAccount()
 
   const currency0Balance = useCurrencyBalance(amount0?.currency, { watch: true })
   const currency1Balance = useCurrencyBalance(amount1?.currency, { watch: true })
 
   const { connectModal } = useModals()
+
+  const isMounted = useIsMounted()
+
+  if (!isMounted) return { isLoading: true }
 
   /*
     Not Connected

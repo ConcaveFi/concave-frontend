@@ -14,9 +14,9 @@ import { toAmount } from 'utils/toAmount'
 import { useAccount, useSigner } from 'wagmi'
 
 function StakeInput(props: { poolId: number; period: string; onClose: () => void }) {
-  const [{ data: account }] = useAccount()
+  const { data: account } = useAccount()
   const netWorkdId = useCurrentSupportedNetworkId()
-  const [{ data: signer }] = useSigner()
+  const { data: signer } = useSigner()
   const [stakeInput, setStakeInput] = useState<CurrencyAmount<Currency>>(
     toAmount(0, CNV[netWorkdId]),
   )

@@ -14,10 +14,10 @@ type UserListPositionCardProps = {
 }
 
 const UserListPositionCard = (props: UserListPositionCardProps) => {
-  const [{ data: account }] = useAccount()
+  const { data: account } = useAccount()
   const [expirationDate, setExpirationDate] = useState('')
   const [listingDate, setListingDate] = useState('')
-  const [{ data: signer }] = useSigner()
+  const { data: signer } = useSigner()
   const chainId = useCurrentSupportedNetworkId()
   const nonFungibleTokenInfo = props.nonFungibleTokenInfo
   const [price, setPrice] = useState(

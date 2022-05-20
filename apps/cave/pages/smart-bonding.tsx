@@ -16,6 +16,7 @@ import { Redeem } from 'components/Bond/Redeem'
 import { SelectedBondType } from 'components/Bond/SelectedBondType'
 import { withPageTransition } from 'components/PageTransition'
 import { useGet_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql'
+import { useIsMounted } from 'hooks/useIsMounted'
 import React, { useEffect, useState } from 'react'
 const spin = keyframes({
   '0%': { transform: 'rotate(0deg)' },
@@ -90,6 +91,8 @@ export function Bond() {
     }
   }, [bondSigma])
 
+  const isMounted = useIsMounted()
+
   return (
     <Container maxW="container.lg">
       <Flex direction="column" gap={10} align="center">
@@ -139,7 +142,7 @@ export function Bond() {
                   }%`}
                   vestingTerm={`${termLength} Days`}
                 />
-                {!userAddress && !bondSigma ? (
+                {!isMounted || (!userAddress && !bondSigma) ? (
                   <>Wallet not connected</>
                 ) : !bondSigma ? (
                   <>

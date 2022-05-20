@@ -6,7 +6,7 @@ import React from 'react'
 import { useAccount } from 'wagmi'
 
 export function PositionsView() {
-  const [{ data: account }] = useAccount()
+  const { data: account } = useAccount()
   const router = useRouter()
   const { operation } = router.query
   if (!account) {

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { RouterABI, ROUTER_ADDRESS, Currency, CurrencyAmount, Percent } from '@concave/gemswap-sdk'
 import { Contract } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { useContract, UserRejectedRequestError, useSigner } from 'wagmi'
+import { useContract, useSigner } from 'wagmi'
 import { parseUnits } from 'ethers/lib/utils'
 const currencyAmountToBigNumber = (currency: CurrencyAmount<Currency>) => {
   return parseUnits(currency.toFixed(currency.currency.decimals))
@@ -58,7 +58,7 @@ export const useAddLiquidityTransaction = (
   recipient?: string,
 ) => {
   const networkId = useCurrentSupportedNetworkId()
-  const [{ data: signer }] = useSigner()
+  const { data: signer } = useSigner()
   const routerContract = useContract<Contract>({
     addressOrName: ROUTER_ADDRESS[networkId],
     contractInterface: RouterABI,

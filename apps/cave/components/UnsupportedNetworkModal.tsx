@@ -1,15 +1,18 @@
+import { ChainId } from '@concave/gemswap-sdk'
 import { Text, Button, Modal, Image } from '@concave/ui'
 import { chain, useNetwork } from 'wagmi'
 
+const supportedNetworks = [ChainId.ETHEREUM, ChainId.ROPSTEN]
+
 export const UnsupportedNetworkModal = () => {
-  const [{ data }, switchNetwork] = useNetwork()
+  const { activeChain, switchNetwork } = useNetwork()
 
   return (
     <Modal
       bluryOverlay={true}
       title="Unsupported Network"
       titleAlign="center"
-      isOpen={data.chain?.id && ![chain.mainnet.id, chain.ropsten.id].includes(data.chain?.id)}
+      isOpen={activeChain?.id && !supportedNetworks.includes(activeChain?.id)}
       onClose={() => {}}
       bodyProps={{ w: '350px', gap: 2 }}
       hideClose

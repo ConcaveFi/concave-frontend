@@ -5,15 +5,16 @@ import { motion } from 'framer-motion'
 export interface CardProps extends StackProps {
   variant?: 'primary' | 'secondary'
   borderGradient?: GradientBorderStyleProps['variant']
-  colorscheme?: 'brighter' | 'default'
+  colorScheme?: 'brighter' | 'default'
 }
 
 export const Card = forwardRef<CardProps, 'div'>(
-  ({ children, variant, borderWidth, borderGradient, ...props }, ref) => {
+  ({ children, variant, borderWidth, borderGradient, colorScheme, ...props }, ref) => {
     const styles = useStyleConfig('Card', {
       variant,
       borderWidth,
       borderGradient,
+      colorScheme,
       ...props,
     })
 
