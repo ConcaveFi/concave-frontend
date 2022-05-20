@@ -19,7 +19,7 @@ export const useRemoveLiquidity = ({
   userBalance: CurrencyAmount<Currency>
 }) => {
   const networkId = useCurrentSupportedNetworkId()
-  const { data: account } = useAccount()
+  const [{ data: account }] = useAccount()
   const tokenA = pair.token0
   const tokenB = pair.token1
   const [percentToRemove, setPercentToRemove] = useState(0)
@@ -27,7 +27,7 @@ export const useRemoveLiquidity = ({
   const amountAMin = +pair.reserve0.toExact() * userPoolShare * ratioToRemove
   const amountBMin = +pair.reserve1.toExact() * userPoolShare * ratioToRemove
   const [hash, setHash] = useState<string>(null)
-  const { data } = useSigner()
+  const [{ data }] = useSigner()
   const [receiveInNativeToken, setReceiveInNativeToken] = useState(true)
   const tokenAIsNativeWrapper = tokenA.address === WETH9_ADDRESS[networkId]
   const tokenBIsNativeWrapper = tokenB.address === WETH9_ADDRESS[networkId]

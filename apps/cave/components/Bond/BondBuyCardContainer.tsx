@@ -9,11 +9,11 @@ export default function BondBuyCardContainer(props: any) {
   const [bondTransaction, setBondTransaction] = useState<any>()
   const [amountInOut, setAmountInAndOut] = useState<{ in: number; out: number }>()
 
-  const { data, error, isLoading } = useWaitForTransaction({ hash: bondTransaction?.hash })
+  const [{ data, error, loading }, wait] = useWaitForTransaction({ hash: bondTransaction?.hash })
   let currentStatus
   let currentHash
 
-  console.log(isLoading)
+  console.log(loading)
 
   function closeToast() {
     if (toast.isActive(currentHash)) {
@@ -62,10 +62,10 @@ export default function BondBuyCardContainer(props: any) {
   }, [bondTransaction])
 
   useEffect(() => {
-    console.log(data, isLoading, error)
+    console.log(data, loading, error)
     let showToast = false
-    if (isLoading) {
-      console.log('is loading', isLoading)
+    if (loading) {
+      console.log('is loading', loading)
       currentStatus = 'info'
       showToast = true
     } else if (data) {
@@ -78,7 +78,7 @@ export default function BondBuyCardContainer(props: any) {
       showToast = true
     }
     showToast && addToast()
-  }, [data, isLoading, error])
+  }, [data, loading, error])
 
   const parentProps = {
     bondTransaction: bondTransaction,

@@ -22,7 +22,7 @@ interface MarketplaceListingProps {
 
 const MarketplaceListing = (props: MarketplaceListingProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { data: signer } = useSigner()
+  const [{ data: signer }] = useSigner()
   const chainId = useCurrentSupportedNetworkId()
   const { nonFungibleTokenInfo } = props
 

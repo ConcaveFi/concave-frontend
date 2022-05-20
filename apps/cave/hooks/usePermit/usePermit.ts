@@ -28,7 +28,7 @@ const isTokenPermissible = (token: Token) =>
   !!PERMITTABLE_TOKENS.find((t) => token.equals(t[token.chainId]))
 
 export const usePermit = (token: Token, spender: string) => {
-  const { data: signer } = useSigner()
+  const [{ data: signer }] = useSigner()
 
   // TODO: check contract for permit method
   const supportsPermit = isTokenPermissible(token)

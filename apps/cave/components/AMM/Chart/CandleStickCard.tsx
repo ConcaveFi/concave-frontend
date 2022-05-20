@@ -23,7 +23,7 @@ export const CandleStickCard = ({ from: _from, to: _to }: { from?: Currency; to?
 
   const candleStickChart = useCandleStickChart(from?.symbol, to?.symbol)
 
-  const hasData = candleStickChart.data.length > 0 && !candleStickChart.loading
+  const hasData = candleStickChart.data.length > 0
   return (
     <SlideFade
       layout="position"

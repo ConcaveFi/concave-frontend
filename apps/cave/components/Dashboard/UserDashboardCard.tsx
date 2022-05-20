@@ -7,7 +7,7 @@ import UserPositionCard from './UserPositionCard'
 
 const UserDashboardCard = (props: { data: UseDashBoardState }) => {
   const { data } = props
-  const { isConnected } = useConnect()
+  const [{ data: wallet }] = useConnect()
   const { userNonFungibleTokensInfo, totalLocked, isLoading } = data
   const userPositionsComponent = userNonFungibleTokensInfo.map((nonFungibleTokenInfo, index) => (
     <UserPositionCard key={index} nonFungibleTokenInfo={nonFungibleTokenInfo} />
@@ -61,8 +61,8 @@ const UserDashboardCard = (props: { data: UseDashBoardState }) => {
         </Collapse>
 
         <LoadingPositions in={isLoading} />
-        <ItsNotConected in={!isConnected} />
-        <HasNoPositions in={!hasPositions && !isLoading && isConnected} />
+        <ItsNotConected in={!wallet.connected} />
+        <HasNoPositions in={!hasPositions && !isLoading && wallet.connected} />
       </Card>
     </Flex>
   )

@@ -15,23 +15,24 @@ export function NetworkMismatch({
   currentChainId: ChainId
   expectedChainId: ChainId
 }) {
-  const { switchNetwork, error } = useNetwork()
+  const [, switchNetwork] = useNetwork()
 
   return (
     <SlideFade
       in={isOpen}
       offsetY={10}
-      delay={0.2}
       unmountOnExit
-      style={{
-        position: 'absolute',
-        bottom: '40px',
-        insetInline: 0,
-        display: 'flex',
-        justifyContent: 'center',
-      }}
+      style={{ position: 'absolute', bottom: '40px', left: '50%' }}
     >
-      <Card variant="secondary" p={4} gap={1} fontSize="md" fontWeight="medium" textAlign="start">
+      <Card
+        variant="secondary"
+        p={4}
+        gap={1}
+        fontSize="md"
+        fontWeight="medium"
+        transform="translateX(-50%)"
+        textAlign="start"
+      >
         <Text fontWeight="bold">Network changed</Text>
         {children}
         <Flex justify="center" gap={2} mt={2}>
@@ -46,22 +47,17 @@ export function NetworkMismatch({
               })
             }
           >
-            Restart on {CHAIN_NAME[currentChainId]}
+            Continue in {CHAIN_NAME[currentChainId]}
           </Button>
           <Button
             variant="primary"
             size="medium"
             px={3}
-            onClick={() => switchNetwork?.(+expectedChainId)}
+            onClick={() => switchNetwork(expectedChainId)}
           >
             Switch to {CHAIN_NAME[expectedChainId]}
           </Button>
         </Flex>
-        {error && (
-          <Text color="text.low" align="center" fontSize="sm" mt={2}>
-            Try switching directly in your wallet.
-          </Text>
-        )}
       </Card>
     </SlideFade>
   )
