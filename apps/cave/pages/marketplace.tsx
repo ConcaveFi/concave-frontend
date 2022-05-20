@@ -43,10 +43,9 @@ const Marketplace = () => {
             justify="center"
             alignItems={'center'}
           >
-            <Text maxW={520} textAlign={{ xl: 'right', base: 'center' }}>
-              The Concave Marketplace is where you are able to buy and/or sell your locked-staked
-              NFT positions. Most of the positions will has a discount but 12 month stakes, because
-              it has a limited supply.
+            <Text maxW={540} textAlign={{ xl: 'right', base: 'right' }}>
+              The Concave Marketplace is where you are able to buy and sell your locked staked
+              NFT positions.Prices are quoted in terms of CNV.
             </Text>
             <GraphicGuide />
           </Flex>
