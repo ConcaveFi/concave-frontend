@@ -7,7 +7,7 @@ type ApproveButtonProps = ButtonProps & {
   autoHide?: boolean
   approveArgs: {
     currency: Currency
-    amount: BigNumberish
+    amount?: BigNumberish
     contract: string
     onSuccess?: () => void
   }
@@ -52,7 +52,11 @@ export const ApproveButton = ({ approveArgs, ...buttonProps }: ApproveButtonProp
   if ('successful' === stateKey && buttonProps.children) return <Button {...buttonProps} />
 
   return (
-    <Button {...buttonProps} disabled={!state.enable} onClick={() => approve.sendApproveTx()}>
+    <Button
+      {...buttonProps}
+      disabled={!state.enable || buttonProps.disabled}
+      onClick={() => approve.sendApproveTx()}
+    >
       {state.label}
     </Button>
   )
