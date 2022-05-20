@@ -47,9 +47,11 @@ export type LiquidityPool = {
 function AddLiquidityContent({
   currency0,
   currency1,
+  liquidityModalClose,
 }: {
   currency0?: Currency
   currency1?: Currency
+  liquidityModalClose?: VoidFunction
 } = {}) {
   // const initialTokens = [currencyFromJson(token0), currencyFromJson(token1)]
   const { pair, firstFieldAmount, secondFieldAmount, onChangeFirstField, onChangeSecondField } =
@@ -98,12 +100,16 @@ function AddLiquidityContent({
       <SupplyLiquidityModal
         lp={{ pair: fixedPair, amount0: firstFieldAmount, amount1: secondFieldAmount }}
         isOpen={supplyLiquidityDisclosure.isOpen}
-        onClose={supplyLiquidityDisclosure.onClose}
+        onClose={liquidityModalClose || supplyLiquidityDisclosure.onClose}
         onConfirm={addLPTx.submit}
       />
 
       <WaitingConfirmationDialog isOpen={addLPTx.isWaitingForConfirmation} />
-      <TransactionSubmittedDialog tx={addLPTx.data} isOpen={addLPTx.isTransactionSent} />
+      <TransactionSubmittedDialog
+        tx={addLPTx.data}
+        isOpen={addLPTx.isTransactionSent}
+        closeParentComponent={liquidityModalClose || supplyLiquidityDisclosure.onClose}
+      />
       <TransactionErrorDialog error={addLPTx.error?.message} isOpen={addLPTx.isError} />
     </>
   )
@@ -150,7 +156,11 @@ export const AddLiquidityModalButton = ({
           gap: 6,
         }}
       >
-        <AddLiquidityContent currency0={pair?.token0} currency1={pair?.token1} />
+        <AddLiquidityContent
+          currency0={pair?.token0}
+          currency1={pair?.token1}
+          liquidityModalClose={addLiquidityDisclosure.onClose}
+        />
       </Modal>
     </>
   )
