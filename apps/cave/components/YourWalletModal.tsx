@@ -1,6 +1,6 @@
+import { Modal, ModalContent, ModalOverlay, ModalBody, Avatar } from '@chakra-ui/react'
 import { CheckIcon, CloseIcon, SpinIcon } from '@concave/icons'
-import { Button, Card, Flex, Text, useDisclosure } from '@concave/ui'
-import { Modal, ModalContent, ModalOverlay, ModalBody } from '@chakra-ui/react'
+import { Button, Card, Flex, Text, useDisclosure, Image } from '@concave/ui'
 import { useAccount, useConnect, useNetwork } from 'wagmi'
 import { ConnectWalletModal, ellipseAddress } from './ConnectWallet'
 import ChangeNetWorkdModal from './ChangeNetworkModal'
@@ -20,6 +20,8 @@ export default function YourWalletModal(props: YourWalletModalProps) {
   } = useDisclosure()
   const [{ data: networkData }, switchNetwork] = useNetwork()
   const [{ data: connectorData, loading: loadingWallet }] = useConnect()
+
+  console.log(networkData)
 
   return (
     <Modal
@@ -105,14 +107,27 @@ export default function YourWalletModal(props: YourWalletModalProps) {
                     onClick={onOpenChangeNetwork}
                     rounded={'3xl'}
                     _focus={{}}
-                    width={'142px'}
                     height="40px"
                     boxShadow="Up Big"
                     mr={2}
                   >
-                    <Text my={'auto'} mx="auto" fontWeight={'bold'} fontSize="lg">
-                      {networkData?.chain?.name}
-                    </Text>
+                    <Flex justify={'end'} flex={1} gap={2}>
+                      <Avatar
+                        shadow={'0px 0px 20px 0px #111'}
+                        ml={3}
+                        width="25px"
+                        height={'25px'}
+                        mt={'2px'}
+                        src={
+                          networkData?.chain.id == 1
+                            ? 'https://images-ext-2.discordapp.net/external/6xv9IUyAOWmlbQE8LfBQNr5pBjHIADMgOmbHWKMbutg/https/raw.githubusercontent.com/ConcaveFi/assets/master/blockchains/ethereum/info/logo.png'
+                            : 'https://raw.githubusercontent.com/ConcaveFi/assets/master/blockchains/arbitrum/info/logo.png'
+                        }
+                      />
+                      <Text my={'auto'} mr={4} fontWeight={'bold'} fontSize="lg">
+                        {networkData?.chain?.name}
+                      </Text>
+                    </Flex>
                   </Button>
                   <ChangeNetWorkdModal
                     isOpen={isChangeNetworkOpen}

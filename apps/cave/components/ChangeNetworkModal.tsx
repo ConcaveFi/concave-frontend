@@ -13,8 +13,6 @@ export default function ChangeNetWorkdModal(props: ChangeNetWorkdModalProps) {
 
   const [switchingNetwork, setSwitchingNetwork] = useState(data?.chain.name)
 
-  console.log(loading)
-
   return (
     <Modal
       isCentered
