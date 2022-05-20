@@ -1,6 +1,6 @@
 import { Currency, CurrencyAmount, Pair } from '@concave/gemswap-sdk'
 import { PlusIcon } from '@concave/icons'
-import { Button, ButtonProps, Card, CardProps, Flex, Modal, useDisclosure } from '@concave/ui'
+import { Button, ButtonProps, Card, CardProps, Flex, Modal, useDisclosure, Text } from '@concave/ui'
 import { CurrencyInputField } from 'components/AMM'
 import { SupplyLiquidityModal } from 'components/AMM/AddLiquidity/SupplyLiquidityModal'
 import { useAddLiquidityButtonProps } from 'components/AMM/AddLiquidity/useAddLiquidityButtonProps'
@@ -12,9 +12,11 @@ import { Loading } from 'components/Loading'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
+import { precision } from 'hooks/usePrecision'
 import React from 'react'
 import { toAmount } from 'utils/toAmount'
 import { useAccount } from 'wagmi'
+import useLiquidityData from './useLiquidityData'
 
 const AddSymbol = () => (
   <Flex align="center" justify="center">
@@ -72,6 +74,12 @@ function AddLiquidityContent({
   const fixedPair = pair.data ?? Pair.createVirtualPair(firstFieldAmount, secondFieldAmount)
   const supplyLiquidityDisclosure = useDisclosure()
 
+  const lpData = useLiquidityData({
+    pair: fixedPair,
+    amount0: firstFieldAmount,
+    amount1: secondFieldAmount,
+  })
+
   return (
     <>
       <Flex direction="column" p={4} gap={2}>
@@ -98,7 +106,7 @@ function AddLiquidityContent({
       />
 
       <SupplyLiquidityModal
-        lp={{ pair: fixedPair, amount0: firstFieldAmount, amount1: secondFieldAmount }}
+        lpData={lpData}
         isOpen={supplyLiquidityDisclosure.isOpen}
         onClose={liquidityModalClose || supplyLiquidityDisclosure.onClose}
         onConfirm={addLPTx.submit}
@@ -107,7 +115,40 @@ function AddLiquidityContent({
       <WaitingConfirmationDialog
         isOpen={addLPTx.isWaitingForConfirmation}
         title={'Confirm Liquidity'}
-      />
+      >
+        <Flex
+          width={'220px'}
+          height="200px"
+          rounded={'2xl'}
+          mt={4}
+          shadow={'Down Medium'}
+          align={'center'}
+          direction={'column'}
+          textAlign={'center'}
+        >
+          <Text textColor={'text.low'} fontWeight="700" fontSize={18} mt={4}>
+            You will lock
+          </Text>
+          <Text width={'90%'} fontWeight={'700'} textColor="text.accent">
+            {`${lpData.amount0.toSignificant(6, { groupSeparator: ',' })} ${lpData.token0.symbol}`}
+          </Text>
+          <Text width={'90%'} fontWeight={'700'} textColor="text.accent">
+            {`${lpData.amount1.toSignificant(6, { groupSeparator: ',' })} ${lpData.token1.symbol}`}
+          </Text>
+          <Text textColor={'text.low'} fontWeight="700" fontSize={18} mt={4}>
+            You will receive
+          </Text>
+          <Text width={'90%'} fontWeight={'700'} textColor="text.accent">
+            {`${lpData.poolShare?.amount.toSignificant(6, { groupSeparator: ',' })} ${
+              lpData.pair.liquidityToken.symbol
+            } ${
+              +lpData.poolShare?.amount.toSignificant(6, { groupSeparator: ',' }) > 1
+                ? 'Tokens'
+                : 'Token'
+            }`}
+          </Text>
+        </Flex>
+      </WaitingConfirmationDialog>
       <TransactionSubmittedDialog
         tx={addLPTx.data}
         isOpen={addLPTx.isTransactionSent}
