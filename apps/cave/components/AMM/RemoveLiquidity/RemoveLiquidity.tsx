@@ -12,6 +12,7 @@ import {
 } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { PositionInfoItem } from 'components/Positions/MyPositions'
+import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { Transaction } from 'ethers'
@@ -182,6 +183,9 @@ const RemoveLiquidityActions = ({
     onOpen: onOpenSubmitted,
   } = useDisclosure()
 
+  const [txError, setTxError] = useState('')
+  const { isOpen: isOpenError, onClose: onCloseError, onOpen: onOpenError } = useDisclosure()
+
   const [waitingForConfirm, setWaitingForConfirm] = useState(false)
   const confirmedWithdrawal = async () => {
     try {
@@ -193,7 +197,8 @@ const RemoveLiquidityActions = ({
     } catch (err) {
       setWaitingForConfirm(false)
       onCloseSubmitted()
-      console.error(err)
+      setTxError(err.message)
+      onOpenError()
     }
   }
 
@@ -255,6 +260,7 @@ const RemoveLiquidityActions = ({
         isOpen={isOpenSubmitted}
         closeParentComponent={closeParentComponent}
       />
+      <TransactionErrorDialog error={txError} isOpen={isOpenError} />
     </Flex>
   )
 }
