@@ -72,6 +72,8 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.events])
 
+  const t = '1'
+
   return (
     <AppProviders globalStyles={globalStyles} cookies={pageProps?.cookies}>
       <ConcaveFonts />
