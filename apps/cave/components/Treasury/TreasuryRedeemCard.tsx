@@ -18,8 +18,9 @@ import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 // 0x6ff0106d34feee8a8acf2e7b9168480f86b82e2f eth
 function ClaimAcnvButton() {
   const netWorkdId = useCurrentSupportedNetworkId()
-  const { data: account } = useAccount()
-  const { data, error, isLoading, write } = useContractWrite(
+  const [{ data: account }] = useAccount()
+  console.table(account)
+  const [{ data, error, loading }, write] = useContractWrite(
     {
       addressOrName: '0x38baBedCb1f226B49b2089DA0b84e52b6181Ca59',
       contractInterface: aCNVredeemabi,
@@ -32,14 +33,14 @@ function ClaimAcnvButton() {
   const [redeemText, setRedeemText] = useState('Redeem aCNV')
   const [redeeming, setRedeeming] = useState(false)
 
-  const { data: balanceData, isLoading: loadingBalance } = useBalance({
+  const [{ data: balanceData, loading: loadingBalance }] = useBalance({
     addressOrName: account?.address,
     token: '0x2a6bb78490c2221e0d36d931192296be4b3a01f1',
   })
 
   const redeemAncv = () => {
-    setRedeeming(isLoading ? true : false)
-    setRedeemText(isLoading ? 'Redeeming' : 'Nothing to Redeem')
+    setRedeeming(loading ? true : false)
+    setRedeemText(loading ? 'Redeeming' : 'Nothing to Redeem')
     write()
   }
 

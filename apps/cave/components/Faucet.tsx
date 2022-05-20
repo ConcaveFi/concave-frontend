@@ -39,7 +39,7 @@ const sendSomeEth = async (recipient) => {
 }
 
 const ETHFaucet = () => {
-  const { data: account } = useAccount()
+  const [{ data: account }] = useAccount()
 
   const { data: ethBalance, isLoading } = useCurrencyBalance(NATIVE[ChainId.ROPSTEN])
 
@@ -98,13 +98,9 @@ const ETHFaucet = () => {
 }
 
 const DAIMinter = () => {
-  const { data: account } = useAccount()
+  const [{ data: account }] = useAccount()
 
-  const {
-    data: mintDaiTx,
-    isLoading,
-    write: mintDAI,
-  } = useContractWrite(
+  const [{ data: mintDaiTx, loading }, mintDAI] = useContractWrite(
     {
       addressOrName: DAI[ChainId.ROPSTEN].address,
       contractInterface: ['function mint(address guy, uint256 wad) external'],
@@ -132,7 +128,7 @@ const DAIMinter = () => {
     <Button
       leftIcon={<Image w="20px" src={`/assets/tokens/dai.svg`} alt="" />}
       onClick={() => mintDAI()}
-      isLoading={isLoading}
+      isLoading={loading}
       loadingText="Confirm in your wallet"
       variant="secondary"
       p={3}
@@ -163,18 +159,19 @@ const Faucet = ({ isOpen, onClose }) => {
 }
 
 export const TestnetIndicator = () => {
-  const { activeChain } = useNetwork()
+  const [{ data: network }] = useNetwork()
   const { isUserWorthy } = useWorthyUser()
 
-  const [isOpen, setIsOpen] = useState(activeChain?.testnet && isUserWorthy)
+  const [isOpen, setIsOpen] = useState(network.chain?.testnet && isUserWorthy)
   const onClose = () => setIsOpen(false)
 
   useEffect(() => {
-    setIsOpen(activeChain?.testnet && isUserWorthy)
-  }, [isUserWorthy, activeChain?.testnet])
+    setIsOpen(network.chain?.testnet && isUserWorthy)
+  }, [isUserWorthy, network.chain?.testnet])
 
   const minterModal = useDisclosure()
 
+  // if (!isOpen) return null
   return (
     <SlideFade in={isOpen} unmountOnExit offsetY={-10}>
       <Box pos="absolute" top={{ base: 20, md: 8 }} zIndex={10}>
@@ -197,7 +194,7 @@ export const TestnetIndicator = () => {
                 filter="drop-shadow(0px 0px 10px rgba(240, 255, 245, 0.3))"
                 bgClip="text"
               >
-                {activeChain?.name}
+                {network.chain?.name}
               </Text>{' '}
               testnet
             </Text>

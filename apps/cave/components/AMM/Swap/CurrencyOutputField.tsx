@@ -6,7 +6,6 @@ import { CurrencyAmountField } from 'components/CurrencyAmountField'
 import { Balance } from 'components/CurrencyAmountField/Balance'
 import { useFiatValue } from '../hooks/useFiatPrice'
 import { percentDifference } from 'utils/percentDifference'
-import { useIsMounted } from 'hooks/useIsMounted'
 
 type CurrencyOutputFieldProps = {
   currencyAmountIn: CurrencyAmount<Currency>
@@ -28,8 +27,6 @@ export const CurrencyOutputField = ({
 
   const balance = useCurrencyBalance(currencyAmountOut?.currency, { watch: true })
 
-  const isMounted = useIsMounted()
-
   return (
     <CurrencyAmountField
       currencyAmount={currencyAmountOut}
@@ -47,9 +44,7 @@ export const CurrencyOutputField = ({
               `(${fiatPriceImpact?.toFixed(2, { groupSeparator: ',' })}%)`}{' '}
           </Text>
         </Flex>
-        {balance.isSuccess && isMounted && (
-          <Balance value={balance.data.toFixed(2, { groupSeparator: ',' })} />
-        )}
+        {balance.isSuccess && <Balance value={balance.data.toFixed(2, { groupSeparator: ',' })} />}
       </HStack>
     </CurrencyAmountField>
   )

@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import { chain, createClient, defaultChains, Provider } from 'wagmi'
+import { chain, defaultChains, Provider } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
@@ -34,13 +34,13 @@ const provider = ({ chainId }) =>
 const webSocketProvider = ({ chainId }) =>
   concaveWSProvider(isChainSupported(chainId) ? chainId : chain.mainnet.id)
 
-const client = createClient({
+const client = {
   autoConnect: true,
   connectors,
   provider,
   webSocketProvider,
-})
+}
 
 export const WagmiProvider = ({ children }: { children: ReactNode }) => (
-  <Provider client={client}>{children}</Provider>
+  <Provider {...client}>{children}</Provider>
 )

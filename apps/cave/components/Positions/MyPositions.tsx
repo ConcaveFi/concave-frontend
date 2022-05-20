@@ -25,13 +25,13 @@ import { useAccount, useNetwork } from 'wagmi'
 
 export const MyPositions = () => {
   const [view, setView] = useState<'user' | 'all'>('all')
-  const { activeChain } = useNetwork()
-  const chainId = activeChain?.id ?? 1
+  const [{ data: network }] = useNetwork()
+  const chainId = network?.chain?.id ?? 1
   const provider = concaveProvider(chainId)
   const allPairs = useQuery(['fetchPairs', chainId], () => {
     return Fetcher.fetchPairs(chainId, provider)
   })
-  const { data: account } = useAccount()
+  const [{ data: account }] = useAccount()
   const { data: tokens, isLoading: userPoolsLoading } = useAddressTokenList(account?.address)
 
   if (userPoolsLoading) {

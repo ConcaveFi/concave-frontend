@@ -4,7 +4,6 @@ import { useModals } from 'contexts/ModalsContext'
 import { isAddress } from 'ethers/lib/utils'
 import { useApprove } from 'hooks/useApprove'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
-import { useIsMounted } from 'hooks/useIsMounted'
 import { usePermit } from 'hooks/usePermit'
 import { swapSupportedChains } from 'pages/gemswap'
 import { useAccount, useNetwork } from 'wagmi'
@@ -20,8 +19,8 @@ export const useSwapButtonProps = ({
   recipient: string
   onSwapClick: () => void
 }): ButtonProps => {
-  const account = useAccount()
-  const network = useNetwork()
+  const [account] = useAccount()
+  const [network] = useNetwork()
 
   const inputAmount = trade.data.inputAmount
   const outputAmount = trade.data.outputAmount
@@ -35,14 +34,10 @@ export const useSwapButtonProps = ({
 
   const { connectModal } = useModals()
 
-  const isMounted = useIsMounted()
-
-  if (!isMounted) return { isLoading: true }
-
   /*
     Not Connected
   */
-  if (account.isLoading || network.isLoading) return { isLoading: true }
+  if (account.loading || network.loading) return { isLoading: true }
   if (!account.data?.address) return { children: 'Connect Wallet', onClick: connectModal.onOpen }
 
   /*
@@ -54,9 +49,9 @@ export const useSwapButtonProps = ({
   /*
     Network Stuff
   */
-  if (network.activeChain?.id !== currencyIn.chainId)
+  if (network.data.chain?.id !== currencyIn.chainId)
     return { children: 'Network mismatch', isDisabled: true }
-  if (!swapSupportedChains.includes(network.activeChain?.id))
+  if (!swapSupportedChains.includes(network.data.chain?.id))
     return {
       children: 'Unsupported chain',
       isDisabled: true,

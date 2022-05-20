@@ -6,7 +6,6 @@ import {
   CurrencySelector as DisabledCurrencySelector,
 } from 'components/CurrencySelector/CurrencySelector'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
-import { useIsMounted } from 'hooks/useIsMounted'
 import { toAmount } from 'utils/toAmount'
 import { CurrencyAmountField } from '../CurrencyAmountField'
 import { Balance } from './Balance'
@@ -37,7 +36,7 @@ export const CurrencyInputField = ({
 }: CurrencyInputFieldProps) => {
   const inputFiat = useFiatValue(currencyAmountIn)
   const balance = useCurrencyBalance(currencyAmountIn?.currency, { watch: true })
-  const isMounted = useIsMounted()
+
   return (
     <CurrencyAmountField
       currencyAmount={currencyAmountIn}
@@ -50,7 +49,7 @@ export const CurrencyInputField = ({
           {!!inputFiat.value?.greaterThan(0) &&
             `$${inputFiat.value.toFixed(2, { groupSeparator: ',' })}`}
         </Text>
-        {balance.isSuccess && isMounted && (
+        {balance.isSuccess && (
           <Balance
             value={balance.data.toFixed(2, { groupSeparator: ',' })}
             onMax={() => onChangeAmount(maxAmount(balance.data))}
