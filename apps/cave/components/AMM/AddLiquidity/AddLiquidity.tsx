@@ -104,7 +104,10 @@ function AddLiquidityContent({
         onConfirm={addLPTx.submit}
       />
 
-      <WaitingConfirmationDialog isOpen={addLPTx.isWaitingForConfirmation} />
+      <WaitingConfirmationDialog
+        isOpen={addLPTx.isWaitingForConfirmation}
+        title={'Confirm Liquidity'}
+      />
       <TransactionSubmittedDialog
         tx={addLPTx.data}
         isOpen={addLPTx.isTransactionSent}

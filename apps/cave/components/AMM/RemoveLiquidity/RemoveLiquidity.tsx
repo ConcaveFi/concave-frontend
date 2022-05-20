@@ -222,7 +222,7 @@ const RemoveLiquidityActions = ({
         Confirm Withdrawal
       </Button>
 
-      <WaitingConfirmationDialog isOpen={waitingForConfirm} title={'Confirm Stake'}>
+      <WaitingConfirmationDialog isOpen={waitingForConfirm} title={'Confirm Liquidity Removal'}>
         <Flex
           width={'200px'}
           height="107px"
