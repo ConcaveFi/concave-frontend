@@ -197,6 +197,12 @@ const RemoveLiquidityActions = ({
     }
   }
 
+  console.log(
+    removeLiquidityState.pair.token0,
+    removeLiquidityState.amountAMin,
+    removeLiquidityState.amountBMin,
+  )
+
   return (
     <Flex gap={4} h={45} justifyContent={'center'}>
       <Button
@@ -227,10 +233,17 @@ const RemoveLiquidityActions = ({
           direction={'column'}
         >
           <Text textColor={'text.low'} fontWeight="700" fontSize={18} mt={4}>
-            1
+            You will receive
           </Text>
           <Text fontWeight={'700'} textColor="text.accent">
-            2
+            {`${precision(removeLiquidityState.amountAMin, 2).formatted} ${
+              removeLiquidityState.pair.token0.symbol
+            }`}
+          </Text>
+          <Text fontWeight={'700'} textColor="text.accent">
+            {`${precision(removeLiquidityState.amountBMin, 2).formatted} ${
+              removeLiquidityState.pair.token1.symbol
+            }`}
           </Text>
         </Flex>
       </WaitingConfirmationDialog>
