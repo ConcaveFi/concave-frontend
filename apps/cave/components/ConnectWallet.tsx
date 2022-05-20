@@ -51,7 +51,7 @@ const DisconnectButton = () => {
 }
 
 export const ConnectWalletModal = ({ isOpen, onClose }) => {
-  const { activeConnector, connectors, connectAsync } = useConnect()
+  const { connectors, connectAsync } = useConnect()
   const isMounted = useIsMounted()
 
   return (
@@ -61,7 +61,6 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
       isOpen={isOpen}
       onClose={onClose}
       isCentered
-      preserveScrollBarGap
       motionPreset="slideInBottom"
       bodyProps={{ alignItems: 'center', gap: 3, w: '100%', maxW: '350px' }}
     >
@@ -70,13 +69,11 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
           if (!connector.ready) return null
           return (
             <Button
-              cursor={connector.id === activeConnector.id ? 'default' : 'pointer'}
               w="100%"
-              shadow={connector.id === activeConnector.id ? 'down' : 'Up Small'}
-              variant={connector.id === activeConnector.id ? 'primary.outline' : 'secondary'}
-              _hover={connector.id === activeConnector.id ? {} : { shadow: 'Up Big' }}
-              _active={connector.id === activeConnector.id ? {} : { shadow: 'down' }}
-              _focus={connector.id === activeConnector.id ? {} : { shadow: 'Up Big' }}
+              shadow="Up Small"
+              _hover={{ shadow: 'Up Big' }}
+              _active={{ shadow: 'down' }}
+              _focus={{ shadow: 'Up Big' }}
               size="large"
               leftIcon={
                 <Image
@@ -86,13 +83,7 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
                 />
               }
               key={connector.id}
-              onClick={() => {
-                if (connector.id !== activeConnector.id) {
-                  connectAsync(connector)
-                    .then(onClose)
-                    .catch((e) => {})
-                }
-              }}
+              onClick={() => connectAsync(connector).then(onClose)}
             >
               {connector.name}
             </Button>
@@ -103,7 +94,7 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
 }
 
 const ConnectButton = () => {
-  const { activeConnector, connectors, connect } = useConnect()
+  const { connectors, connect } = useConnect()
   const isMounted = useIsMounted()
 
   return (
