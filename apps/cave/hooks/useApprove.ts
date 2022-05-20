@@ -48,6 +48,7 @@ export const useContractApprove = (
     data: tx,
     isLoading: isWaitingForConfirmation,
     isSuccess: isTransactionSent,
+    isError,
     refetch: sendApproveTx,
   } = useQuery<TransactionResponse>(
     ['approve', token?.address, spender],
@@ -67,6 +68,7 @@ export const useContractApprove = (
     isWaitingForConfirmation,
     isWaitingTransactionReceipt,
     isTransactionSent,
+    isError,
     tx,
     receipt,
     sendApproveTx,
@@ -78,11 +80,11 @@ export const useApprove = (
   spender: string,
   amount: BigNumberish = MaxUint256.toString(),
 ) => {
-  const [{ data: account }] = useAccount()
+  const [{ data: account, loading }] = useAccount()
   const allowance = useAllowance(token, spender, account?.address)
   const approve = useContractApprove(token, spender, amount, {
     onSuccess: () => allowance.refetch(),
   })
 
-  return { allowance, ...approve }
+  return { allowance, ...approve, isFeching: loading || allowance.isLoading }
 }

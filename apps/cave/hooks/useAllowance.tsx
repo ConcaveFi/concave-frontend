@@ -1,8 +1,5 @@
 import { CurrencyAmount, MaxUint256, Token } from '@concave/gemswap-sdk'
-import { Button, ButtonProps } from '@concave/ui'
-import { useModals } from 'contexts/ModalsContext'
 import { BigNumberish } from 'ethers'
-import { useAccount } from 'wagmi'
 import { useApprove } from './useApprove'
 
 export const useApproval = (currencyAmount: CurrencyAmount<Token>, address: string) => {
@@ -14,37 +11,6 @@ export const useApproval = (currencyAmount: CurrencyAmount<Token>, address: stri
 }
 
 type UseApprovalReturnType = ReturnType<typeof useApproval>
-
-export const ApproveButton = ({
-  useApproveInfo: [needsApprove, approve, label, isLoading],
-  ...buttonProps
-}: {
-  useApproveInfo: UseApprovalReturnType
-} & ButtonProps) => {
-  const [{ data: account }] = useAccount()
-  const { connectModal } = useModals()
-
-  if (!account?.address)
-    return (
-      <Button fontSize="2xl" {...buttonProps} onClick={connectModal.onOpen}>
-        {'Connect wallet'}
-      </Button>
-    )
-
-  if (isLoading) {
-    return <></>
-  }
-
-  if (!needsApprove) {
-    return <></>
-  }
-
-  return (
-    <Button fontSize="2xl" {...buttonProps} onClick={approve}>
-      {label}
-    </Button>
-  )
-}
 
 export const useApprovalWhenNeeded = (
   token: Token,

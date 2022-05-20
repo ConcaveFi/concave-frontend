@@ -1,9 +1,9 @@
 import { ROUTER_ADDRESS } from '@concave/gemswap-sdk'
 import { Box, Button, Flex, HStack, Modal, Text } from '@concave/ui'
 import { LiquidityPool } from 'components/AMM/AddLiquidity/AddLiquidity'
+import { ApproveButton } from 'components/ApproveButton/ApproveButton'
 import { CurrencyIcon } from 'components/CurrencyIcon'
-import { ApproveButton, useApproval } from 'hooks/useAllowance'
-import React from 'react'
+import React, { useState } from 'react'
 
 const PositionInfoItem = ({ color = '', label = '', value, mt = 0, children = <></> }) => (
   <Flex justify="space-between" align={'center'} mt={mt}>
@@ -26,10 +26,8 @@ const SupplyLiquidityContent = ({
     lp.pair.token0.address === lp.amount0.currency.wrapped.address
       ? [lp.amount0, lp.amount1]
       : [lp.amount1, lp.amount0]
-  const approval0 = useApproval(amount0.wrapped, ROUTER_ADDRESS[amount0.currency.chainId])
-  const approval1 = useApproval(amount1.wrapped, ROUTER_ADDRESS[amount1.currency.chainId])
-  const [needsApprove0] = approval0
-  const [needsApprove1] = approval1
+  const [approve0, setApprove0] = useState(false)
+  const [approve1, setApprove1] = useState(false)
   const token0 = amount0.currency
   const token1 = amount1.currency
   const pair = lp.pair
@@ -84,9 +82,32 @@ const SupplyLiquidityContent = ({
           value={`${poolShare?.percent?.toSignificant(4)}%`}
         />
       </Box>
-      <ApproveButton size="large" w="full" variant={'primary'} useApproveInfo={approval0} />
-      <ApproveButton size="large" w="full" variant={'primary'} useApproveInfo={approval1} />
-      {!needsApprove0 && !needsApprove1 && (
+
+      <ApproveButton
+        size="large"
+        w="full"
+        variant={'primary'}
+        autoHide
+        approveArgs={{
+          currency: amount0.currency,
+          amount: amount0.numerator.toString(),
+          contract: ROUTER_ADDRESS[amount0.currency.chainId],
+          onSuccess: () => setApprove0(true),
+        }}
+      />
+      <ApproveButton
+        size="large"
+        w="full"
+        variant={'primary'}
+        autoHide
+        approveArgs={{
+          currency: amount1.currency,
+          amount: amount1.numerator.toString(),
+          contract: ROUTER_ADDRESS[amount0.currency.chainId],
+          onSuccess: () => setApprove1(true),
+        }}
+      />
+      {approve0 && approve1 && (
         <Button size="large" w="full" fontSize="2xl" variant={'primary'} onClick={onConfirm}>
           Confirm Supply
         </Button>
