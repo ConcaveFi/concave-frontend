@@ -25,7 +25,6 @@ export function SideBar() {
     <>
       {/* show on bigger screens like not mobile lol */}
       <SidebarContent display={{ base: 'none', md: 'flex' }} />
-
       {/* show on small devices (mobile) */}
       <Flex
         align="center"
@@ -50,12 +49,13 @@ export function SideBar() {
         isOpen={isOpen}
         placement="left"
         onClose={onClose}
+        lockFocusAcrossFrames
+        size={'sm'}
       >
+        <DrawerOverlay />
         <DrawerOverlay backdropFilter="blur(8px)" />
         <DrawerContent
           w="min"
-          py={4}
-          my={-4}
           bg="none"
           shadow="none"
           overflow="auto"
