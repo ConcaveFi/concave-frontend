@@ -9,9 +9,9 @@ interface ChangeNetWorkdModalProps {
 }
 
 export default function ChangeNetWorkdModal(props: ChangeNetWorkdModalProps) {
-  const [{ data, loading, error }, switchNetwork] = useNetwork()
+  const { data, isLoading: loading, error, activeChain, switchNetwork, chains } = useNetwork()
 
-  const [switchingNetwork, setSwitchingNetwork] = useState(data?.chain.name)
+  const [switchingNetwork, setSwitchingNetwork] = useState(activeChain?.name)
 
   console.log(loading)
 
@@ -26,20 +26,20 @@ export default function ChangeNetWorkdModal(props: ChangeNetWorkdModalProps) {
       motionPreset="slideInBottom"
     >
       <Flex direction={'column'} width="250px" align={'center'} gap={3}>
-        {data.chains.map((chain, index) => {
+        {chains?.map((chain, index) => {
           return (
             <Button
               key={index}
               py={6}
               px={20}
-              variant={data.chain.id === chain.id ? 'primary.outline' : ''}
-              shadow={data.chain.id === chain.id ? 'down' : 'up'}
+              variant={activeChain.id === chain.id ? 'primary.outline' : ''}
+              shadow={activeChain.id === chain.id ? 'down' : 'up'}
               height={8}
               rounded={'2xl'}
-              cursor={data.chain.id === chain.id ? 'default' : 'pointer'}
+              cursor={activeChain.id === chain.id ? 'default' : 'pointer'}
               transition={'all 0.3s'}
-              _active={data.chain.id === chain.id ? {} : { transform: 'scale(0.9)' }}
-              // _hover={data.chain.id === chain.id ? {} : { transform: 'scale(1.1)' }}
+              _active={activeChain.id === chain.id ? {} : { transform: 'scale(0.9)' }}
+              // _hover={activeChain.id === chain.id ? {} : { transform: 'scale(1.1)' }}
               _hover={{}}
               _focus={{}}
               onClick={() => {
@@ -56,7 +56,7 @@ export default function ChangeNetWorkdModal(props: ChangeNetWorkdModalProps) {
       </Flex>
       <WaitingChangeNetworkDialog
         switchingNetwork={switchingNetwork}
-        currentNetwork={data.chain.name}
+        currentNetwork={activeChain.name}
         isOpen={loading}
         onClose={() => {}}
       />

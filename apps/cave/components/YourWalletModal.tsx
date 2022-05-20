@@ -16,7 +16,7 @@ import {
 import { Modal, ModalContent, ModalOverlay, ModalBody } from '@chakra-ui/react'
 import { getWalletType } from 'lib/injected.wallets'
 import { useState } from 'react'
-import { useAccount, useConnect, useNetwork } from 'wagmi'
+import { useAccount, useConnect, useDisconnect, useNetwork } from 'wagmi'
 import { ConnectWalletModal, ellipseAddress } from './ConnectWallet'
 import ChangeNetWorkdModal from './ChangeNetworkModal'
 
@@ -26,16 +26,16 @@ interface YourWalletModalProps {
 }
 
 export default function YourWalletModal(props: YourWalletModalProps) {
-  const [{ data: account }] = useAccount()
+  const { data: account, isLoading } = useAccount()
   const { isOpen, onClose, onOpen } = useDisclosure()
   const {
     isOpen: isChangeNetworkOpen,
     onClose: onCloseChangeNetwork,
     onOpen: onOpenChangeNetwork,
   } = useDisclosure()
-  const [{ data: networkData }, switchNetwork] = useNetwork()
-  const [{ data: connectorData, loading: loadingWallet }] = useConnect()
-
+  const { data: networkData, switchNetwork, activeChain } = useNetwork()
+  const { data: connectorData, isConnecting, connect } = useConnect()
+  const { disconnect, isLoading: disconnecting } = useDisconnect()
   return (
     <Modal
       motionPreset="slideInBottom"
@@ -128,7 +128,7 @@ export default function YourWalletModal(props: YourWalletModalProps) {
                     mr={2}
                   >
                     <Text my={'auto'} mx="auto" fontWeight={'bold'} fontSize="lg">
-                      {networkData?.chain?.name}
+                      {activeChain?.name}
                     </Text>
                   </Button>
                   <ChangeNetWorkdModal
@@ -164,7 +164,7 @@ export default function YourWalletModal(props: YourWalletModalProps) {
               height="40px"
               rounded="16px 16px 0px 0px"
               variant={'primary'}
-              onClick={() => connectorData.connector.disconnect()}
+              onClick={() => disconnect()}
             >
               <Text fontSize={'xl'} fontWeight="bold">
                 Disconnect
