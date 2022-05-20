@@ -1,9 +1,10 @@
-import { CheckIcon } from '@concave/icons'
-import { Button, Checkbox, Flex, Modal, Text, useDisclosure, VStack } from '@concave/ui'
+import { CheckIcon, CloseIcon } from '@concave/icons'
+import { Button, Card, Checkbox, Flex, Text, useDisclosure, VStack } from '@concave/ui'
+import { Modal, ModalContent, ModalOverlay, ModalBody } from '@chakra-ui/react'
 import { getWalletType } from 'lib/injected.wallets'
 import { useState } from 'react'
-import { useAccount } from 'wagmi'
-import { ellipseAddress } from './ConnectWallet'
+import { useAccount, useConnect, useNetwork } from 'wagmi'
+import { ConnectWalletModal, ellipseAddress } from './ConnectWallet'
 
 interface YourWalletModalProps {
   isOpen: boolean
@@ -13,81 +14,142 @@ interface YourWalletModalProps {
 export default function YourWalletModal(props: YourWalletModalProps) {
   const [{ data: account }, disconnect] = useAccount()
 
+  const { isOpen, onClose, onOpen } = useDisclosure()
+  const [{ data: networkData }, switchNetwork] = useNetwork()
+  const [{ data: connectorData, loading: loadingWallet }] = useConnect()
+
   return (
-    <Modal title={'Your Wallet'} isOpen={props.isOpen} onClose={props.onClose}>
-      <Flex
-        direction={'column'}
-        width={'400px'}
-        minHeight="500px"
-        textShadow={'0px 0px 27px rgba(129, 179, 255, 0.31)'}
-      >
-        <Flex
-          rounded={'2xl'}
-          width={'380px'}
-          height="320px"
-          mx={'auto'}
-          mt={2}
-          direction="column"
-          shadow={'up'}
-        >
-          {/* Your Wallet Container */}
-          <Flex ml={8} direction={'column'} height="52%" align={'start'} justify="center">
-            <Text fontWeight={'bold'} textColor={'text.low'} fontSize="20px">
-              Your Wallet
-            </Text>
+    <Modal
+      motionPreset="slideInBottom"
+      preserveScrollBarGap
+      isOpen={props.isOpen}
+      onClose={props.onClose}
+      isCentered
+    >
+      <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
+      <ModalContent>
+        <ModalBody>
+          <Card
+            variant="primary"
+            direction={'column'}
+            width={'400px'}
+            minHeight="500px"
+            textShadow={'0px 0px 27px rgba(129, 179, 255, 0.31)'}
+          >
+            <Flex
+              rounded={'2xl'}
+              width={'380px'}
+              height="320px"
+              mx={'auto'}
+              mt={2}
+              direction="column"
+              shadow={'up'}
+            >
+              {/* Your Wallet Container */}
+              <Flex height="52%" justify="space-between">
+                <Flex ml={8} direction={'column'} align={'start'} justify="center">
+                  <Text fontWeight={'bold'} textColor={'text.low'} fontSize="20px">
+                    Your Wallet
+                  </Text>
 
-            <Text fontWeight={'bold'} fontSize={'3xl'}>
-              {ellipseAddress(account?.address)}
-            </Text>
-          </Flex>
-          {/* ------------------------- */}
+                  <Text fontWeight={'bold'} fontSize={'3xl'}>
+                    {ellipseAddress(account?.address)}
+                  </Text>
+                </Flex>
+                <Flex align={'start'} height={'full'} mt={3} mr={3}>
+                  <CloseIcon color={'text.low'} cursor="pointer" onClick={props.onClose} />
+                </Flex>
+              </Flex>
+              {/* ------------------------- */}
 
-          {/* Connected areas Container */}
-          <Flex direction={'column'} gap={4} mx="auto">
-            <Flex width={'340px'} rounded="3xl" height={'60px'} shadow="down" align={'center'}>
-              <Text ml={4} fontWeight="700" textColor={'text.low'}>
-                Connected with {getWalletType()}{' '}
-              </Text>
-              <Flex></Flex>
+              {/* Connected areas Container */}
+              <Flex direction={'column'} gap={4} mx="auto">
+                <Flex
+                  width={'340px'}
+                  rounded="3xl"
+                  height={'60px'}
+                  shadow="down"
+                  align={'center'}
+                  justify="space-between"
+                >
+                  <Text ml={4} fontSize="13px" fontWeight="700" textColor={'text.low'}>
+                    Connected with {connectorData?.connector?.name}
+                  </Text>
+                  <Button
+                    mr={2}
+                    rounded={'3xl'}
+                    onClick={onOpen}
+                    _focus={{}}
+                    width={'102px'}
+                    height="40px"
+                    boxShadow="Up Big"
+                  >
+                    <Text my={'auto'} mx="auto" fontWeight={'bold'} fontSize="lg">
+                      Change
+                    </Text>
+                  </Button>
+                </Flex>
+                <Flex
+                  width={'340px'}
+                  justify="space-between"
+                  rounded="3xl"
+                  height={'60px'}
+                  shadow="down"
+                  align={'center'}
+                >
+                  <Text fontSize="13px" ml={4} fontWeight="700" textColor={'text.low'}>
+                    Change Network
+                  </Text>
+                  <Button
+                    rounded={'3xl'}
+                    _focus={{}}
+                    width={'142px'}
+                    height="40px"
+                    boxShadow="Up Big"
+                    mr={2}
+                  >
+                    <Text my={'auto'} mx="auto" fontWeight={'bold'} fontSize="lg">
+                      {networkData?.chain.name}
+                    </Text>
+                  </Button>
+                </Flex>
+              </Flex>
+              {/* ------------------------- */}
             </Flex>
-            <Flex width={'340px'} rounded="3xl" height={'60px'} shadow="down" align={'center'}>
-              <Text ml={4} fontWeight="700" textColor={'text.low'}>
-                Change Network
-              </Text>
+            <ConnectWalletModal isOpen={isOpen} onClose={onClose} />
+            {/* Transactions Container */}
+            <Flex flex={1} direction={'column'} mx={8} my={6}>
+              <Flex justify={'space-between'}>
+                <Text fontWeight={'700'} fontSize="md" textColor={'text.low'}>
+                  Recent Transactions:
+                </Text>
+                <Text fontWeight={'700'} fontSize="md" textColor={'text.low'}>
+                  Clear all
+                </Text>
+              </Flex>
+              <Flex direction={'column'} mt={3} gap={1}>
+                <TransactionInfo type={'Swap'} info="2000 DAI for 36.58 CNV" />
+                <TransactionInfo type={'Stake'} info="2000 in 360 days Position" />
+                <TransactionInfo type={'Swap'} info="2000 DAI for 36.58 CNV" />
+                <TransactionInfo type={'Stake'} info="100 in 45 days Position" />
+              </Flex>
             </Flex>
-          </Flex>
-          {/* ------------------------- */}
-        </Flex>
-        {/* Transactions Container */}
-        <Flex flex={1} direction={'column'} mx={8} my={6}>
-          <Flex justify={'space-between'}>
-            <Text fontWeight={'700'} fontSize="md" textColor={'text.low'}>
-              Recent Transactions:
-            </Text>
-            <Text fontWeight={'700'} fontSize="md" textColor={'text.low'}>
-              Clear all
-            </Text>
-          </Flex>
-          <Flex direction={'column'} mt={3} gap={1}>
-            <TransactionInfo type={'Swap'} info="2000 DAI for 36.58 CNV" />
-            <TransactionInfo type={'Stake'} info="2000 in 360 days Position" />
-            <TransactionInfo type={'Swap'} info="2000 DAI for 36.58 CNV" />
-            <TransactionInfo type={'Stake'} info="100 in 45 days Position" />
-          </Flex>
-        </Flex>
-        <Button
-          _focus={{}}
-          mx={'auto'}
-          width={'180px'}
-          height="40px"
-          rounded="full"
-          variant={'primary'}
-        >
-          <Text fontSize={'xl'} fontWeight="bold">
-            Disconnect
-          </Text>
-        </Button>
-      </Flex>
+            <Button
+              _focus={{}}
+              mx={'auto'}
+              width={'180px'}
+              height="40px"
+              rounded="16px 16px 0px 0px"
+              variant={'primary'}
+              onClick={disconnect}
+            >
+              <Text fontSize={'xl'} fontWeight="bold">
+                Disconnect
+              </Text>
+            </Button>
+          </Card>
+        </ModalBody>
+      </ModalContent>
     </Modal>
   )
 }

@@ -13,7 +13,7 @@ import {
   Flex,
   useDisclosure,
 } from '@concave/ui'
-import { useAccount, useConnect } from 'wagmi'
+import { useAccount, useConnect, useNetwork } from 'wagmi'
 import { useIsMounted } from 'hooks/useIsMounted'
 import YourWalletModal from './YourWalletModal'
 
@@ -54,6 +54,7 @@ const DisconnectButton = () => {
 export const ConnectWalletModal = ({ isOpen, onClose }) => {
   const [{ data }, connect] = useConnect()
   const isMounted = useIsMounted()
+
   return (
     <Modal
       bluryOverlay={true}
@@ -96,6 +97,7 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
 const ConnectButton = () => {
   const [{ data }, connect] = useConnect()
   const isMounted = useIsMounted()
+
   return (
     <>
       <Menu placement="auto-end" isLazy>
@@ -143,7 +145,9 @@ const ConnectButton = () => {
                         />
                       }
                       key={connector.id}
-                      onClick={() => connect(connector)}
+                      onClick={() => {
+                        connect(connector)
+                      }}
                     >
                       {connector.name}
                     </MenuItem>
@@ -161,28 +165,27 @@ export function ConnectWallet(): JSX.Element {
   const [{ data }] = useConnect()
 
   const [{ data: account }] = useAccount()
-
   const { isOpen, onOpen, onClose } = useDisclosure()
-  if (data.connected) return <DisconnectButton />
-  // if (data.connected)
-  //   return (
-  //     <>
-  //       <Button
-  //         onClick={onOpen}
-  //         height="40px"
-  //         shadow="up"
-  //         fontFamily="heading"
-  //         w="100%"
-  //         rounded={'2xl'}
-  //         _focus={{}}
-  //       >
-  //         <Flex textColor={'text.low'} fontWeight="bold" mx={'auto'}>
-  //           {ellipseAddress(account?.address)}
-  //         </Flex>
-  //       </Button>
-  //       <YourWalletModal onClose={onClose} isOpen={isOpen} />
-  //     </>
-  //   )
+  // if (data.connected) return <DisconnectButton />
+  if (data.connected)
+    return (
+      <>
+        <Button
+          onClick={onOpen}
+          height="40px"
+          shadow="up"
+          fontFamily="heading"
+          w="100%"
+          rounded={'2xl'}
+          _focus={{}}
+        >
+          <Flex textColor={'text.low'} fontWeight="bold" mx={'auto'}>
+            {ellipseAddress(account?.address)}
+          </Flex>
+        </Button>
+        <YourWalletModal onClose={onClose} isOpen={isOpen} />
+      </>
+    )
 
   // if (isConnected && !isSignedIn) return
   return <ConnectButton />
