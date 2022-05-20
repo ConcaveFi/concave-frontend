@@ -44,15 +44,12 @@ export function SideBar() {
         <Image src="/assets/concave/logotype.svg" alt="concave" width="100px" ml={2} />
       </Flex>
       <Drawer
-        autoFocus={false}
+        autoFocus={true}
         closeOnOverlayClick={true}
         isOpen={isOpen}
         placement="left"
         onClose={onClose}
-        lockFocusAcrossFrames
-        size={'sm'}
       >
-        <DrawerOverlay />
         <DrawerOverlay backdropFilter="blur(8px)" />
         <DrawerContent
           w="min"

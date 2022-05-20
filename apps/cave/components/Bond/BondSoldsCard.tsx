@@ -45,7 +45,7 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
   ))
 
   return (
-    <Flex width="full" direction="column">
+    <Flex maxW={{ base: '430px' }} direction="column">
       <Collapse
         in={isOpen}
         startingHeight={isLoading ? '50px' : solds.length == 0 ? '36px' : '100px'}

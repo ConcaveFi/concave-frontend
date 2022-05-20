@@ -95,7 +95,7 @@ export function Bond() {
 
   return (
     <Container maxW="container.lg">
-      <Flex direction="column" gap={10}>
+      <Flex direction="column" gap={10} align="center">
         <Stack mt={10} maxW="100%" align="center" textAlign="center">
           <Heading as="h1" mb={3} fontSize="5xl">
             Dynamic Bond Market
@@ -114,12 +114,12 @@ export function Bond() {
 
         <Flex
           gap={10}
-          direction={{ lg: 'row', md: 'column' }}
+          direction={{ lg: 'row', base: 'column' }}
           align={{ lg: 'start', md: 'center' }}
           justifyContent={'center'}
         >
           <Box pos="relative" h="fit-content">
-            <Card variant="secondary">
+            <Card variant="secondary" maxW={{ base: '430px' }}>
               <Card
                 variant="secondary"
                 borderWidth={1}
