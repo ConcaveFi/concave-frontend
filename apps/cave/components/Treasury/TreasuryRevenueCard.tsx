@@ -167,7 +167,7 @@ export default function TreasuryRevenueCard(props) {
             box2="Treasury Value"
             box2b={'$' + commify(total.toFixed(2))}
             box3="CNV total supply"
-            box3b={'' + commify(cnv.cnvData.data.totalSupply.toFixed(2))}
+            box3b={'$' + commify(cnv.cnvData.data.totalSupply.toFixed(2))}
           />
           <BondInfo
             bondbox1={relativeTimeline[0]}

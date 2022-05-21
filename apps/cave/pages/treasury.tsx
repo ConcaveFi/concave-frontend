@@ -5,6 +5,7 @@ import DividendsCard from 'components/Treasury/DividendsCard'
 import DividendsCardMobile from 'components/Treasury/Mobile/DividendsCardMobile'
 import RedeemMobileCard from 'components/Treasury/Mobile/RedeemMobileCard'
 import TreasuryManagementMobile from 'components/Treasury/Mobile/TreasuryManagementMobile'
+import TreasuryRevenueMobile from 'components/Treasury/Mobile/TreasuryRevenueMobile'
 import TreasuryManagementCard from 'components/Treasury/TreasuryManagementCard'
 import TreasuryRedeemCard from 'components/Treasury/TreasuryRedeemCard'
 import TreasuryRevenueCard from 'components/Treasury/TreasuryRevenueCard'
@@ -19,9 +20,10 @@ export function Treasury() {
 
   return (
     <Flex m={20} gap={4} direction="column">
-      <DividendsCardMobile />
-      <TreasuryManagementMobile loading={cnvStatus !== 'success' && !cnvData} treaData={treaData} />
+      <TreasuryRevenueMobile cnv={cnvData} treasury={treaData} loading={!revenueCardLoaded} />
       <RedeemMobileCard />
+      <TreasuryManagementMobile loading={cnvStatus !== 'success' && !cnvData} treaData={treaData} />
+      <DividendsCardMobile />
     </Flex>
     // <Flex height={'full'} width="full" align={'center'} justify="center" position={'relative'}>
     //   <Flex direction={'column'} maxWidth={'1000px'}>
