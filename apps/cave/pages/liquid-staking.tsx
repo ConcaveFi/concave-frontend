@@ -52,12 +52,12 @@ const StakingGroup: Array<StakingGroupProps> = [
 function LiquidStaking() {
   return (
     <Flex
-      width={{ base: '1000px', xl: 'full', lg: 'full', md: 'full' }}
+      width={{ base: 'full', xl: 'full', lg: 'full', md: 'full' }}
       justify={'start'}
       align="center"
       direction={'column'}
     >
-      <Heading as="h1" mt={8} fontSize="5xl">
+      <Heading as="h1" mt={8} fontSize={{ base: '4xl', sm: '5xl' }}>
         Liquid Staking
       </Heading>
       <Flex
@@ -65,9 +65,10 @@ function LiquidStaking() {
         justify="center"
         direction={{ xl: 'row', base: 'column' }}
         mt={{ xl: 8, base: 0 }}
-        gap={{ xl: 24, base: 7 }}
+        gap={{ xl: 24, base: 2 }}
+        textColor="white"
       >
-        <Text maxW={520} textAlign={{ xl: 'justify', base: 'center' }}>
+        <Text textAlign={{ xl: 'justify', base: 'center' }} fontSize={{ base: 'sm', sm: 'md' }}>
           Stakers receive daily rewards to grow their <br /> CNV holdings and quarterly dividends
           <br />
           from Concave profits. Staking positions <br /> are represented by NFTs that are tradable
@@ -76,14 +77,16 @@ function LiquidStaking() {
         </Text>
         <GraphicGuide />
       </Flex>
-      <Flex alignItems="start" justifyContent="center" height={{ xl: '550px', base: '1100px' }}>
+      <Flex
+        justifyContent="center"
+        maxW={{ base: '330px', md: '420px', xl: 'full' }}
+        // height={{ xl: '550px', base: '1100px' }}
+      >
         <Flex
-          gap={{ lg: 8, base: 3 }}
+          gap={{ xl: 8, base: 1, md: 3 }}
           justifyContent="center"
           alignItems="center"
-          m={2}
           wrap={{ xl: 'nowrap', base: 'wrap' }}
-          width={{ lg: '', base: '530px' }}
         >
           {StakingGroup.map((i) => {
             return (

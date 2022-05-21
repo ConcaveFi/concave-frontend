@@ -129,8 +129,22 @@ function StakeCard(props: StackCardProps) {
 
   return (
     <div>
-      <Card variant="primary" px={4} py={6} shadow="up" gap={1} textAlign={'center'}>
-        <Box mx="auto" py={5} w="full" h="333px" shadow="down" borderRadius="100px/90px">
+      <Card
+        variant="primary"
+        px={4}
+        py={6}
+        shadow="up"
+        gap={1}
+        textAlign={'center'}
+        maxW={{ base: '160px', md: '200px' }}
+      >
+        <Box
+          py={5}
+          w="full"
+          h={{ base: '290px', md: '333px' }}
+          shadow="down"
+          borderRadius="100px/90px"
+        >
           <Text color="text.low" fontSize="sm">
             Stake Pool
           </Text>
@@ -145,7 +159,7 @@ function StakeCard(props: StackCardProps) {
           <Text color="text.low" fontSize="sm">
             {vaprText}
           </Text>
-          <Text fontSize="lg" fontWeight="bold">
+          <Text fontSize={{ base: 'md', md: 'lg' }} fontWeight="bold">
             Calculating
           </Text>
         </Box>
@@ -158,7 +172,7 @@ function StakeCard(props: StackCardProps) {
 
           <Box
             height={'30px'}
-            width={{ base: '210px', xl: '170px' }}
+            width={{ base: '130px', md: '170px' }}
             shadow="down"
             borderRadius="2xl"
             position="relative"
@@ -182,7 +196,7 @@ function StakeCard(props: StackCardProps) {
                 <Box
                   position={'absolute'}
                   bg={'secondary.50'}
-                  width="160px"
+                  width={{ base: '120px', md: '160px' }}
                   height={'full'}
                   rounded="2xl"
                 />

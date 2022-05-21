@@ -53,7 +53,7 @@ const LiquidLocksCards = () => {
     <Card
       mt={4}
       mx={'auto'}
-      width={{ base: '520px', xl: '900px' }}
+      width={{ base: '330px', md: '560px', xl: '900px' }}
       variant="secondary"
       direction={'column'}
       textShadow={'0px 0px 27px rgba(129, 179, 255, 0.31)'}
@@ -61,23 +61,39 @@ const LiquidLocksCards = () => {
       <Collapse startingHeight={isLoading ? '60px' : '100px'} in={isOpen}>
         <Flex fontWeight="700" width={'full'} flex={1} height="full">
           <Flex direction={'column'} flex={1} height="full" align={'center'}>
-            <Text mt={2}>When</Text>
-            <Flex direction={'column'} textColor="text.accent" fontSize={'14px'} align="center">
+            <Text mt={2} fontSize={{ base: 'sm', md: 'md' }}>
+              When
+            </Text>
+            <Flex
+              direction={'column'}
+              textColor="text.accent"
+              fontSize={{ base: '12px', md: '14px' }}
+              align="center"
+            >
               {relativeTime}
             </Flex>
           </Flex>
 
           <Box w="1px" bg="stroke.primary" />
           <Flex direction={'column'} flex={1} align={'center'} height="full">
-            <Text mt={2}>Amount Staked</Text>
-            <Flex direction={'column'} textColor="text.accent" fontSize={'14px'} align="center">
+            <Text mt={2} fontSize={{ base: 'sm', md: 'md' }}>
+              Amount Staked
+            </Text>
+            <Flex
+              direction={'column'}
+              textColor="text.accent"
+              fontSize={{ base: '12px', md: '14px' }}
+              align="center"
+            >
               {amounts}
             </Flex>
           </Flex>
           <Box w="1px" bg="stroke.primary" />
           <Flex direction={'column'} flex={1} align={'center'} height="full">
-            <Text mt={2}>Stake Pool</Text>
-            <Flex direction={'column'} textColor="text.low" fontSize={'14px'}>
+            <Text mt={2} fontSize={{ base: 'sm', md: 'md' }}>
+              Stake Pool
+            </Text>
+            <Flex direction={'column'} textColor="text.low" fontSize={{ base: '12px', md: '14px' }}>
               {poolIds}
             </Flex>
           </Flex>
