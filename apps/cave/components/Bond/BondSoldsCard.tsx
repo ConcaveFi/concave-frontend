@@ -29,23 +29,35 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
   }, [data])
 
   const relatives = solds.map((value, index) => (
-    <Text key={index} opacity={1 - (isOpen ? index / 10 : (index / 10) * 3)}>
+    <Text
+      fontSize={{ base: '12px', md: 'sm' }}
+      key={index}
+      opacity={1 - (isOpen ? index / 10 : (index / 10) * 3)}
+    >
       {formatDistanceStrict(value.timestamp * 1000, new Date().getTime()) + ' ago'}
     </Text>
   ))
   const purchases = solds.map((value, index) => (
-    <Text key={index} opacity={1 - (isOpen ? index / 10 : (index / 10) * 3)}>
+    <Text
+      fontSize={{ base: '12px', md: 'sm' }}
+      key={index}
+      opacity={1 - (isOpen ? index / 10 : (index / 10) * 3)}
+    >
       {commify(parseFloat(value.output).toFixed()) + ' CNV'}
     </Text>
   ))
   const inputAmounts = solds.map((value, index) => (
-    <Text key={index} opacity={1 - (isOpen ? index / 10 : (index / 10) * 3)}>
+    <Text
+      fontSize={{ base: '12px', md: 'sm' }}
+      key={index}
+      opacity={1 - (isOpen ? index / 10 : (index / 10) * 3)}
+    >
       {`${commify(parseFloat(value.inputAmount).toFixed(3))} DAI`}
     </Text>
   ))
 
   return (
-    <Flex maxW={{ base: '430px' }} direction="column">
+    <Flex direction="column">
       <Collapse
         in={isOpen}
         startingHeight={isLoading ? '50px' : solds.length == 0 ? '36px' : '100px'}

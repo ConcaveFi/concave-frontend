@@ -119,7 +119,13 @@ export function BondBuyCard(props: {
       />
       <DownwardIcon />
       <BondOutput disabled={true} currency={currencyOut} value={amountOut} />
-      <HStack ml={4} align="center" justify="space-around" py={1}>
+      <Flex
+        ml={{ base: 0, md: 4 }}
+        align="center"
+        justify="space-around"
+        direction={{ base: 'column', md: 'row', lg: 'column', xl: 'row' }}
+        flex={1}
+      >
         <VStack spacing={0} fontSize="13px" justify={'end'} fontWeight="500">
           <HStack alignSelf={'start'}>
             <Text textColor={'text.low'}>Current Price:</Text>
@@ -138,13 +144,13 @@ export function BondBuyCard(props: {
             </Text>
           </HStack>
         </VStack>
-        <Flex align={'center'} justify="end" flex={1} minWidth={100} gap={2}>
+        <Flex flex={1} align={'center'} justify="end" minWidth={100} gap={2}>
           <GasPrice />
-          <HStack align="center" justify="end" py={5}>
+          <HStack align="center" justify="end" py={{ base: 0, md: 5, lg: 0, xl: 5 }}>
             <Settings onClose={setSettings} />
           </HStack>
         </Flex>
-      </HStack>
+      </Flex>
 
       <ApproveButton variant="primary" size="large" w="full" useApproveInfo={approveInfo} />
       {!needsApprove && (

@@ -10,7 +10,7 @@ export const DefaultLayout = ({ children }) => {
   return (
     <Flex direction={{ base: 'column', md: 'row' }}>
       <SideBar />
-      <Container display="flex" maxWidth="container.xl">
+      <Container display="flex" maxWidth="container.xl" p={'0px'}>
         <TestnetIndicator />
         <AnimatePresence
           exitBeforeEnter

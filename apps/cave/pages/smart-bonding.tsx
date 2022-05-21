@@ -1,6 +1,6 @@
 import { keyframes } from '@chakra-ui/system'
 import { SpinIcon } from '@concave/icons'
-import { Box, Card, Collapse, Container, Flex, Heading, Stack } from '@concave/ui'
+import { Box, Card, Collapse, Container, Flex, Heading, Stack, Text } from '@concave/ui'
 import { BondBuyCard } from 'components/Bond/BondBuyCard'
 import { BondInfo, UserBondPositionInfo } from 'components/Bond/BondInfo'
 import BondSoldsCard from 'components/Bond/BondSoldsCard'
@@ -91,41 +91,44 @@ export function Bond() {
   }, [bondSigma])
 
   return (
-    <Container maxW="container.lg">
-      <Flex direction="column" gap={10} align="center">
+    <Flex p={'0px'} width={'full'}>
+      <Flex width={'full'} direction="column" gap={{ base: 3, md: 10 }} align="center">
         <Stack mt={10} maxW="100%" align="center" textAlign="center">
-          <Heading as="h1" mb={3} fontSize="5xl">
+          <Heading as="h1" mb={3} fontSize={{ base: '3xl', md: '5xl' }}>
             Dynamic Bond Market
           </Heading>
           <Flex
+            maxW={{ base: '350px', md: '600px' }}
             align={'center'}
             justify="center"
             direction={{ lg: 'row', md: 'column' }}
-            maxW={550}
           >
-            Bonds allow new CNV supply to be minted at a discount. All funds raised through bonds
-            are added to the Concave treasury and invested to generate returns for quarterly
-            dividends.
+            <Text fontSize={{ base: 'sm', md: 'lg' }}>
+              Bonds allow new CNV supply to be minted at a discount. All funds raised through bonds
+              are added to the Concave treasury and invested to generate returns for quarterly
+              dividends.
+            </Text>
           </Flex>
         </Stack>
 
         <Flex
-          gap={10}
+          gap={{ base: 3, md: 10 }}
           direction={{ lg: 'row', base: 'column' }}
           align={{ lg: 'start', md: 'center' }}
           justifyContent={'center'}
+          w={{ base: '350px', md: 'full' }}
         >
-          <Box pos="relative" h="fit-content">
-            <Card variant="secondary" maxW={{ base: '430px' }}>
+          <Box pos="relative" h="fit-content" maxW={{ base: '360px', md: '430px' }}>
+            <Card variant="secondary" w={{ base: '350px', md: '430px' }}>
               <Card
                 variant="secondary"
                 borderWidth={1}
-                px={6}
+                px={{ base: 0, md: 6 }}
                 py={20}
                 shadow="Glow Inner"
                 gap={10}
                 align="center"
-                w="430px"
+                w={{ base: '350px', md: '430px' }}
                 height="386px"
               >
                 <SelectedBondType bondType="Classic" />
@@ -167,12 +170,11 @@ export function Bond() {
               </Card>
               <BondSoldsCard loading={isLoading} error={error} data={last10SoldsData} />
             </Card>
-            {/* <ViewSoldsButton onClick={() => setIsOpen(!isOpen)} active={isOpen} /> */}
           </Box>
           <BondBuyCard />
         </Flex>
       </Flex>
-    </Container>
+    </Flex>
   )
 }
 
