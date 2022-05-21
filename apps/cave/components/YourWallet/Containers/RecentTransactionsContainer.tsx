@@ -1,5 +1,5 @@
 import { CheckIcon, CloseIcon, SpinnerIcon } from '@concave/icons'
-import { Flex, keyframes, Text, useDisclosure } from '@concave/ui'
+import { Flex, keyframes, Link, Text, useDisclosure } from '@concave/ui'
 import SecondConfirmModal from 'components/SecondConfirmModal'
 import { commify } from 'ethers/lib/utils'
 import { RecentTransaction, useRecentTransactions } from 'hooks/useRecentTransactions'
@@ -83,9 +83,14 @@ const TransactionInfo = ({ recentTransaction }: { recentTransaction: RecentTrans
     <Flex justify={'space-between'}>
       <Flex fontWeight={'bold'} gap={1} align="center">
         <Text>{recentTransaction.type}</Text>
-        <Text fontSize={'14px'} textColor={'text.low'}>
+        <Link
+          isExternal
+          href={`https://ropsten.etherscan.io/tx/${transaction.hash}`}
+          fontSize={'14px'}
+          textColor={'text.low'}
+        >
           {info + ' ->'}
-        </Text>
+        </Link>
       </Flex>
       {/* Status 0 = Fail  */}
       {/* Status 1 = Success  */}

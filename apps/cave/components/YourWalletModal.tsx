@@ -33,6 +33,7 @@ export default function YourWalletModal(props: YourWalletModalProps) {
       isOpen={props.isOpen}
       onClose={props.onClose}
       isCentered
+      bluryOverlay
     >
       <Flex
         direction={'column'}
