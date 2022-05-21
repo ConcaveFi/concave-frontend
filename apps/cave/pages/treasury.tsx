@@ -1,17 +1,12 @@
-// import { Token } from '@concave/gemswap-sdk'
 import { SpinIcon } from '@concave/icons'
 import { Card, Flex, keyframes, ScaleFade, Text } from '@concave/ui'
 import { withPageTransition } from 'components/PageTransition'
 import DividendsCard from 'components/Treasury/DividendsCard'
 import DividendsCardMobile from 'components/Treasury/Mobile/DividendsCardMobile'
+import TreasuryManagementMobile from 'components/Treasury/Mobile/TreasuryManagementMobile'
 import TreasuryManagementCard from 'components/Treasury/TreasuryManagementCard'
 import TreasuryRedeemCard from 'components/Treasury/TreasuryRedeemCard'
 import TreasuryRevenueCard from 'components/Treasury/TreasuryRevenueCard'
-// import { useLiquidityInfo } from 'hooks/useLiquidityInfo'
-// import { fetchPortfolio } from 'lib/debank'
-// import { useState } from 'react'
-// import { useQuery } from 'react-query'
-// import { chain } from 'wagmi'
 import { useGet_TreasuryQuery, useGet_Amm_Cnv_InfosQuery } from 'graphql/generated/graphql'
 
 export function Treasury() {
@@ -22,8 +17,9 @@ export function Treasury() {
     treaStatus === 'success' && cnvStatus === 'success' && cnvData && !!treaData
 
   return (
-    <Flex m={20}>
+    <Flex m={20} gap={4} direction="column">
       <DividendsCardMobile />
+      <TreasuryManagementMobile loading={cnvStatus !== 'success' && !cnvData} treaData={treaData} />
     </Flex>
     // <Flex height={'full'} width="full" align={'center'} justify="center" position={'relative'}>
     //   <Flex direction={'column'} maxWidth={'1000px'}>

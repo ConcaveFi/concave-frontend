@@ -8,6 +8,7 @@ export default function DividendsCardMobile() {
       height="281px"
       bg={'#111c'}
       textShadow="0px 0px 27px rgba(129, 179, 255, 0.31)"
+      shadow={'up'}
     >
       <Flex
         fontSize={'3xl'}

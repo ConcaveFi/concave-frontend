@@ -32,7 +32,7 @@ export default function TreasuryManagementCard(props: { assets: any }) {
           {assets.treasury
             .filter((token) => token.name !== 'cvxDOLA3POOL')
             .map(
-              (i: TokenProps, k: Key) =>
+              (i: TreasuryQueryTokenInfo, k: Key) =>
                 i.total > '1' && (
                   <TokenInfo
                     key={k}
@@ -61,7 +61,7 @@ interface TokenInfoProps {
   imageP2: string
   imageP3: string
 }
-const TokenInfo = (props: TokenInfoProps) => {
+export const TokenInfo = (props: TokenInfoProps) => {
   const image = props.image.replace('github', 'raw.githubusercontent').replace('blob/', '')
   const imageP1 = props.imageP1.replace('github', 'raw.githubusercontent').replace('blob/', '')
 
@@ -70,9 +70,10 @@ const TokenInfo = (props: TokenInfoProps) => {
       variant="secondary"
       shadow={'Glow Inner'}
       rounded={'2xl'}
-      width={{ base: '180px', xl: '340px' }}
-      height={{ base: '98px', xl: '52px' }}
-      direction={{ base: 'column', xl: 'row' }}
+      width={{ base: '300px', md: '180px', xl: '340px' }}
+      height={{ md: '98px', xl: '52px' }}
+      direction={{ md: 'column', xl: 'row' }}
+      mx={{ base: 'auto', md: '' }}
     >
       <GlassPanel width={'180px'} height="52px" rounded={'2xl'}>
         <Flex width={'40%'} justify="end" mr={2} align={'center'}>
@@ -88,8 +89,8 @@ const TokenInfo = (props: TokenInfoProps) => {
           </Text>
         </Flex>
       </GlassPanel>
-      <Flex flex={1} justify={{ base: 'center', xl: 'start' }} align={'center'} ml={4}>
-        <Text fontWeight={'700'} fontSize="18px">
+      <Flex flex={1} justify={{ md: 'center', xl: 'start' }} align={'center'} ml={4}>
+        <Text fontWeight={'700'} fontSize={{ base: '14px', md: '18px' }}>
           {'$' + commify(parseFloat(props.value).toFixed())}
         </Text>
       </Flex>
@@ -183,6 +184,7 @@ export const GlassPanel: React.FC<FlexProps> = ({ ...props }) => {
   return (
     <Flex
       boxShadow={'up'}
+      rounded="2xl"
       {...props}
       bg={'linear-gradient(90deg, #72639B 0%, #44B9DE 100%)'}
       justify="center"
@@ -215,7 +217,7 @@ export const GlassPanel: React.FC<FlexProps> = ({ ...props }) => {
   )
 }
 
-interface TokenProps {
+export interface TreasuryQueryTokenInfo {
   name: string
   total: string
   chainId: string
