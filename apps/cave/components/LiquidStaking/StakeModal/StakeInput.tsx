@@ -7,11 +7,13 @@ import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { ApproveButton, useApproval } from 'hooks/useAllowance'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import { useRecentTransactions } from 'hooks/useRecentTransactions'
 import { StakingV1ProxyAddress } from 'lib/StakingV1Proxy/Address'
 import { StakingV1Contract } from 'lib/StakingV1Proxy/StakingV1Contract'
 import React, { useState } from 'react'
 import { toAmount } from 'utils/toAmount'
 import { useAccount, useSigner } from 'wagmi'
+import { PARAMETER_TO_POOL_PERIOD } from '../StakeCard'
 
 function StakeInput(props: { poolId: number; period: string; onClose: () => void }) {
   const [{ data: account }] = useAccount()
@@ -31,6 +33,8 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
   const [txError, setTxError] = useState('')
 
   const [waitingForConfirm, setWaitingForConfirm] = useState(false)
+
+  const { addRecentTransaction } = useRecentTransactions()
 
   const {
     isOpen: isOpenSubmitted,
@@ -75,6 +79,12 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
                 contract
                   .lock(signer, account?.address, stakeInput.numerator.toString(), props.poolId)
                   .then((x) => {
+                    addRecentTransaction({
+                      amount: +stakeInput.toExact(),
+                      transaction: x,
+                      type: 'Stake',
+                      stakePool: PARAMETER_TO_POOL_PERIOD[props.poolId],
+                    })
                     setTx(x)
                     setWaitingForConfirm(false)
                     onOpenSubmitted()

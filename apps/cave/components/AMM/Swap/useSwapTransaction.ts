@@ -4,6 +4,7 @@ import { RouterABI, ROUTER_ADDRESS, Router, Currency, TradeType, Trade } from '@
 import { Contract, Transaction } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useAccount, useContract, useSigner } from 'wagmi'
+import { useRecentTransactions } from 'hooks/useRecentTransactions'
 
 const initialState = {
   isWaitingForConfirmation: false,
@@ -30,6 +31,8 @@ export const useSwapTransaction = (
     signerOrProvider: signer,
   })
 
+  const { addRecentTransaction } = useRecentTransactions()
+
   const [state, setState] = useState(initialState)
   const submit = async () => {
     setState({ ...initialState, trade, isWaitingForConfirmation: true })
@@ -43,6 +46,12 @@ export const useSwapTransaction = (
       const tx = await routerContract[methodName](...args, { value })
       setState({ ...initialState, trade, isTransactionSent: true, data: tx })
       onTransactionSent(tx)
+      addRecentTransaction({
+        amount: +trade.inputAmount.toExact(),
+        purchase: +trade.outputAmount.toExact(),
+        transaction: tx,
+        type: 'Swap',
+      })
     } catch (error) {
       if (error.message === 'User rejected the transaction')
         return setState({ ...initialState, trade, isWaitingForConfirmation: false })

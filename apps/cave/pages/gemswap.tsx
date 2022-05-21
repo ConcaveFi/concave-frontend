@@ -34,6 +34,7 @@ import { useEffect, useMemo, useReducer, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
 import { LayoutGroup } from 'framer-motion'
 import { withPageTransition } from 'components/PageTransition'
+import { useRecentTransactions } from 'hooks/useRecentTransactions'
 
 const TradeDetails = ({
   trade,

@@ -1,9 +1,11 @@
-import { Modal, ModalContent, ModalOverlay, ModalBody, Avatar } from '@chakra-ui/react'
-import { CheckIcon, CloseIcon, SpinIcon } from '@concave/icons'
+import { Modal, ModalContent, ModalOverlay, ModalBody, Avatar, keyframes } from '@chakra-ui/react'
+import { CheckIcon, CloseIcon, SpinIcon, SpinnerIcon } from '@concave/icons'
 import { Button, Card, Flex, Text, useDisclosure, Image } from '@concave/ui'
-import { useAccount, useConnect, useNetwork } from 'wagmi'
+import { useAccount, useConnect, useNetwork, useWaitForTransaction } from 'wagmi'
 import { ConnectWalletModal, ellipseAddress } from './ConnectWallet'
 import ChangeNetWorkdModal from './ChangeNetworkModal'
+import { RecentTransaction, useRecentTransactions } from 'hooks/useRecentTransactions'
+import { commify } from 'ethers/lib/utils'
 
 interface YourWalletModalProps {
   isOpen: boolean
@@ -21,7 +23,7 @@ export default function YourWalletModal(props: YourWalletModalProps) {
   const [{ data: networkData }, switchNetwork] = useNetwork()
   const [{ data: connectorData, loading: loadingWallet }] = useConnect()
 
-  console.log(networkData)
+  const { data: recentTransactions, clearRecentTransactions } = useRecentTransactions()
 
   return (
     <Modal
@@ -144,15 +146,20 @@ export default function YourWalletModal(props: YourWalletModalProps) {
                 <Text fontWeight={'700'} fontSize="md" textColor={'text.low'}>
                   Recent Transactions:
                 </Text>
-                <Text fontWeight={'700'} fontSize="md" textColor={'text.low'}>
+                <Text
+                  cursor={'pointer'}
+                  onClick={clearRecentTransactions}
+                  fontWeight={'700'}
+                  fontSize="md"
+                  textColor={'text.low'}
+                >
                   Clear all
                 </Text>
               </Flex>
               <Flex direction={'column'} mt={3} gap={1}>
-                <TransactionInfo type={'Swap'} info="2000 DAI for 36.58 CNV" />
-                <TransactionInfo type={'Stake'} info="2000 in 360 days Position" />
-                <TransactionInfo type={'Swap'} info="2000 DAI for 36.58 CNV" />
-                <TransactionInfo type={'Stake'} info="100 in 45 days Position" />
+                {recentTransactions.map((value, index) => (
+                  <TransactionInfo key={index} recentTransaction={value} />
+                ))}
               </Flex>
             </Flex>
             <Button
@@ -162,7 +169,7 @@ export default function YourWalletModal(props: YourWalletModalProps) {
               height="40px"
               rounded="16px 16px 0px 0px"
               variant={'primary'}
-              onClick={() => disconnect()}
+              onClick={disconnect}
             >
               <Text fontSize={'xl'} fontWeight="bold">
                 Disconnect
@@ -174,14 +181,45 @@ export default function YourWalletModal(props: YourWalletModalProps) {
     </Modal>
   )
 }
-const TransactionInfo = ({ type, info }) => {
+const TransactionInfo = ({ recentTransaction }: { recentTransaction: RecentTransaction }) => {
+  const { type, amount, transaction, purchase, stakePool } = recentTransaction
+  const [{ data: txData, loading, error }] = useWaitForTransaction({ hash: transaction.hash })
+
+  console.log(loading)
+
+  const info =
+    type === 'Stake'
+      ? `${commify(amount.toFixed(2))} CNV in ${stakePool} Position`
+      : type === 'Bond'
+      ? `${commify(amount.toFixed(2))} DAI bonded for ${commify(purchase.toFixed(2))} CNV`
+      : `${commify(amount.toFixed(2))} Swaped`
+
   return (
     <Flex justify={'space-between'}>
-      <Flex fontWeight={'bold'} gap={1}>
-        <Text>{type}</Text>
-        <Text textColor={'text.low'}>{info + ' ->'}</Text>
+      <Flex fontWeight={'bold'} gap={1} align="center">
+        <Text>{recentTransaction.type}</Text>
+        <Text fontSize={'14px'} textColor={'text.low'}>
+          {info + ' ->'}
+        </Text>
       </Flex>
-      <CheckIcon color={'text.low'} justifySelf="end" />
+      {/* Status 0 = Fail  */}
+      {/* Status 1 = Success  */}
+      {txData?.status == 0 && (
+        <CloseIcon width={'12px'} height="12px" color={'red.300'} justifySelf="end" />
+      )}
+      {loading && (
+        <SpinnerIcon
+          animation={`${spin} 3s linear infinite`}
+          color={'text.low'}
+          justifySelf="end"
+        />
+      )}
+      {txData?.status == 1 && <CheckIcon color={'green.300'} justifySelf="end" />}
     </Flex>
   )
 }
+
+const spin = keyframes({
+  '0%': { transform: 'rotate(0deg)' },
+  '100%': { transform: 'rotate(360deg)' },
+})

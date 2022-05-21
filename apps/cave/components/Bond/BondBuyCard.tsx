@@ -17,6 +17,7 @@ import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { BOND_ADDRESS } from 'contracts/Bond/BondingAddress'
 import { useGet_Amm_Cnv_PriceQuery } from 'graphql/generated/graphql'
 import { ApproveButton, useApprovalWhenNeeded } from 'hooks/useAllowance'
+import { useRecentTransactions } from 'hooks/useRecentTransactions'
 import React, { useEffect, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
 import { useFeeData } from 'wagmi'
@@ -91,6 +92,8 @@ export function BondBuyCard(props: {
         console.log(e)
       })
   }, [networkId, userAddress])
+
+  const { addRecentTransaction } = useRecentTransactions()
 
   return (
     <Card
@@ -173,6 +176,12 @@ export function BondBuyCard(props: {
           purchaseBond(networkId, amountIn.toFixed(), userAddress, signer, settings, amountOut)
             .then((tx) => {
               setBondTransaction(tx)
+              addRecentTransaction({
+                amount: +amountIn.toExact(),
+                purchase: +amountOut,
+                transaction: tx,
+                type: 'Bond',
+              })
               props.setBondTransaction?.(tx)
               props.setAmountInAndOut?.({
                 in: parseFloat(String(amountIn.toFixed())).toFixed(2),
