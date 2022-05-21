@@ -3,6 +3,7 @@ import { Card, Flex, keyframes, ScaleFade, Text } from '@concave/ui'
 import { withPageTransition } from 'components/PageTransition'
 import DividendsCard from 'components/Treasury/DividendsCard'
 import DividendsCardMobile from 'components/Treasury/Mobile/DividendsCardMobile'
+import RedeemMobileCard from 'components/Treasury/Mobile/RedeemMobileCard'
 import TreasuryManagementMobile from 'components/Treasury/Mobile/TreasuryManagementMobile'
 import TreasuryManagementCard from 'components/Treasury/TreasuryManagementCard'
 import TreasuryRedeemCard from 'components/Treasury/TreasuryRedeemCard'
@@ -20,6 +21,7 @@ export function Treasury() {
     <Flex m={20} gap={4} direction="column">
       <DividendsCardMobile />
       <TreasuryManagementMobile loading={cnvStatus !== 'success' && !cnvData} treaData={treaData} />
+      <RedeemMobileCard />
     </Flex>
     // <Flex height={'full'} width="full" align={'center'} justify="center" position={'relative'}>
     //   <Flex direction={'column'} maxWidth={'1000px'}>
