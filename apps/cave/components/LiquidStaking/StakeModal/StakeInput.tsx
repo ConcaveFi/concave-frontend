@@ -80,7 +80,8 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
                   .lock(signer, account?.address, stakeInput.numerator.toString(), props.poolId)
                   .then((x) => {
                     addRecentTransaction({
-                      amount: +stakeInput.toExact(),
+                      amount: +stakeInput.toSignificant(3),
+                      amountTokenName: stakeInput.currency.symbol,
                       transaction: x,
                       type: 'Stake',
                       stakePool: PARAMETER_TO_POOL_PERIOD[props.poolId],

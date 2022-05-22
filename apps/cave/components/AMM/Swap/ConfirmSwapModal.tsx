@@ -44,7 +44,7 @@ const TradeCurrencyInfo = ({ currencyAmount, fiatValue, priceImpact }: TradeCurr
         </Heading>
         <Flex fontWeight="bold" color="text.low" align="center">
           <Text fontSize="sm" mr={1}>
-            $ {fiatValue.toFixed(2, { groupSeparator: ',' })}
+            $ {fiatValue?.toFixed(2, { groupSeparator: ',' })}
           </Text>
           <Text fontSize="xs" opacity={0.7}>
             {priceImpact && `(${priceImpact?.toFixed(2)}%)`}

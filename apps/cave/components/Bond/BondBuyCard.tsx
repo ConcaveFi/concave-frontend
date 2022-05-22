@@ -183,7 +183,9 @@ export function BondBuyCard(props: {
             .then((tx) => {
               setBondTransaction(tx)
               addRecentTransaction({
-                amount: +amountIn.toExact(),
+                amount: +amountIn.toSignificant(3),
+                amountTokenName: amountIn.currency.symbol,
+                purchaseTokenName: 'CNV',
                 purchase: +amountOut,
                 transaction: tx,
                 type: 'Bond',

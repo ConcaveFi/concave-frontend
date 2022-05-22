@@ -2,6 +2,7 @@ import { SpinIcon, SpinnerIcon } from '@concave/icons'
 import { Button, Flex, keyframes, Modal, Spinner, Text } from '@concave/ui'
 import { useState } from 'react'
 import { useNetwork } from 'wagmi'
+import { spinAnimation } from './Treasury/Mobile/TreasuryManagementMobile'
 
 interface ChangeNetWorkdModalProps {
   isOpen: boolean
@@ -41,8 +42,10 @@ export default function ChangeNetWorkdModal(props: ChangeNetWorkdModalProps) {
               _hover={{}}
               _focus={{}}
               onClick={() => {
-                setSwitchingNetwork(chain.name)
-                switchNetwork(chain.id)
+                if (data.chain.id !== chain.id) {
+                  setSwitchingNetwork(chain.name)
+                  switchNetwork(chain.id)
+                }
               }}
             >
               <Text fontWeight={'bold'} fontSize={'2xl'}>
@@ -68,10 +71,6 @@ interface WaitingChangeNetworkDialogProps {
   currentNetwork: string
   switchingNetwork: string
 }
-const spin = keyframes({
-  '0%': { transform: 'rotate(0deg)' },
-  '100%': { transform: 'rotate(360deg)' },
-})
 
 export const WaitingChangeNetworkDialog = (props: WaitingChangeNetworkDialogProps) => {
   return (
@@ -97,21 +96,15 @@ export const WaitingChangeNetworkDialog = (props: WaitingChangeNetworkDialogProp
           <Text mt={3} fontSize={'xl'} fontWeight="bold">
             Waiting for confirmation.
           </Text>
-          <Text fontWeight={'bold'} textColor={'text.low'} fontSize={'sm'}>
+          <Text mb={2} fontWeight={'bold'} textColor={'text.low'} fontSize={'sm'}>
             Confirm the switch on your wallet.
           </Text>
-          <SpinnerIcon
-            color={'text.low'}
-            mt={4}
-            width={'40px'}
-            height="40px"
-            animation={`${spin} 3s linear infinite`}
-          />
+          <SpinIcon color={'text.low'} width={'60px'} height="60px" animation={spinAnimation(3)} />
         </Flex>
 
         <Flex width={'90%'} mt={3} justify="space-between">
           <Text fontWeight={'bold'} textColor={'text.low'}>
-            Current netWork:
+            Current Network:
           </Text>
           <Text fontSize={'md'} fontWeight="bold">
             {props.currentNetwork}
@@ -120,7 +113,7 @@ export const WaitingChangeNetworkDialog = (props: WaitingChangeNetworkDialogProp
 
         <Flex width={'90%'} mt={3} justify="space-between">
           <Text fontWeight={'bold'} textColor={'text.low'}>
-            Switching netWork:
+            Switching Network:
           </Text>
           <Text fontSize={'md'} fontWeight="bold">
             {props.switchingNetwork}

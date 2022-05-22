@@ -1,7 +1,7 @@
 import { CheckIcon, CloseIcon, SpinnerIcon } from '@concave/icons'
 import { Flex, keyframes, Link, Text, useDisclosure } from '@concave/ui'
 import SecondConfirmModal from 'components/SecondConfirmModal'
-import { commify } from 'ethers/lib/utils'
+import { commify, formatUnits } from 'ethers/lib/utils'
 import { RecentTransaction, useRecentTransactions } from 'hooks/useRecentTransactions'
 import { useWaitForTransaction } from 'wagmi'
 
@@ -10,21 +10,29 @@ export default function RecentTransactionsContainer() {
 
   const { isOpen: isDialogOpen, onOpen: onOpenDialog, onClose: onCloseDialog } = useDisclosure()
 
+  const hasRecentTransactions = recentTransactions.length > 0
+
   return (
     <Flex flex={1} direction={'column'} mt={8} mb={4}>
-      <Flex justify={'space-between'}>
+      <Flex
+        justify={hasRecentTransactions ? 'space-between' : 'center'}
+        align={hasRecentTransactions ? 'start' : 'center'}
+        height={hasRecentTransactions ? '20px' : '40px'}
+      >
         <Text fontWeight={'700'} fontSize="md" textColor={'text.low'}>
-          Recent Transactions:
+          {hasRecentTransactions ? 'Recent Transactions:' : 'You do not have recent transactions.'}
         </Text>
-        <Text
-          cursor={'pointer'}
-          onClick={onOpenDialog}
-          fontWeight={'700'}
-          fontSize="md"
-          textColor={'text.low'}
-        >
-          Clear all
-        </Text>
+        {hasRecentTransactions && (
+          <Text
+            cursor={'pointer'}
+            onClick={onOpenDialog}
+            fontWeight={'700'}
+            fontSize="md"
+            textColor={'text.low'}
+          >
+            Clear all
+          </Text>
+        )}
       </Flex>
 
       {/* Confimation Modal --------------- */}
@@ -57,27 +65,28 @@ export default function RecentTransactionsContainer() {
       </SecondConfirmModal>
       {/* -------------------------- */}
 
-      <Flex direction={'column'} mt={3} gap={1}>
-        {recentTransactions.map((value, index) => (
-          <TransactionInfo key={index} recentTransaction={value} />
-        ))}
-      </Flex>
+      {recentTransactions.length > 0 && (
+        <Flex direction={'column'} mt={3} gap={1} maxH="90px">
+          {recentTransactions.map((value, index) => (
+            <TransactionInfo key={index} recentTransaction={value} />
+          ))}
+        </Flex>
+      )}
     </Flex>
   )
 }
 
 const TransactionInfo = ({ recentTransaction }: { recentTransaction: RecentTransaction }) => {
-  const { type, amount, transaction, purchase, stakePool } = recentTransaction
+  const { type, amount, amountTokenName, purchaseTokenName, transaction, purchase, stakePool } =
+    recentTransaction
   const [{ data: txData, loading, error }] = useWaitForTransaction({ hash: transaction.hash })
-
-  console.log(loading)
 
   const info =
     type === 'Stake'
-      ? `${commify(amount.toFixed(2))} CNV in ${stakePool} Position`
+      ? `${commify(amount)} ${amountTokenName} staked in ${stakePool} Position`
       : type === 'Bond'
-      ? `${commify(amount.toFixed(2))} DAI bonded for ${commify(purchase.toFixed(2))} CNV`
-      : `${commify(amount.toFixed(2))} Swaped`
+      ? `${commify(amount)} ${amountTokenName} bonded for ${commify(purchase)} ${purchaseTokenName}`
+      : `${commify(amount)} ${amountTokenName} swaped for ${commify(purchase)} ${purchaseTokenName}`
 
   return (
     <Flex justify={'space-between'}>

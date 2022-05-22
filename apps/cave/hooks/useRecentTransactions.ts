@@ -1,3 +1,4 @@
+import { Currency, CurrencyAmount } from '@concave/gemswap-sdk'
 import { Transaction } from 'ethers'
 import { useIsMounted } from './useIsMounted'
 
@@ -22,7 +23,9 @@ export function useRecentTransactions() {
 export type RecentTransaction = {
   type: 'Swap' | 'Bond' | 'Stake'
   amount: number
+  amountTokenName: string
   purchase?: number
+  purchaseTokenName?: string
   stakePool?: string
   transaction: Transaction
 }

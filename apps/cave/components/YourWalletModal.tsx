@@ -39,6 +39,7 @@ export default function YourWalletModal(props: YourWalletModalProps) {
         direction={'column'}
         rounded={'2xl'}
         w={'380px'}
+        maxW="380px"
         h="320px"
         mx={'auto'}
         m={-3}

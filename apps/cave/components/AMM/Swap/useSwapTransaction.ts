@@ -47,8 +47,10 @@ export const useSwapTransaction = (
       setState({ ...initialState, trade, isTransactionSent: true, data: tx })
       onTransactionSent(tx)
       addRecentTransaction({
-        amount: +trade.inputAmount.toExact(),
-        purchase: +trade.outputAmount.toExact(),
+        amount: +trade.inputAmount.toSignificant(3),
+        amountTokenName: trade.inputAmount.currency.symbol,
+        purchaseTokenName: trade.outputAmount.currency.symbol,
+        purchase: +trade.outputAmount.toSignificant(3),
         transaction: tx,
         type: 'Swap',
       })
