@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import StakeAprCard from './StakeAprCard'
 
 function MarketplaceStakeCard(props: any) {
-  const isLargerLayout = useBreakpointValue({ xl: true, base: false })
+  const isLargerLayout = useBreakpointValue({ xl: true, base: true, md: false })
 
   const filters = [
     {
@@ -61,12 +61,12 @@ function MarketplaceStakeCard(props: any) {
       zIndex={2}
       gap={2}
       shadow="Block Up"
-      w={{ xl: '300px', base: '460px' }}
-      h={{ xl: '283px', md: '168px' }}
+      w={{ base: '300px', md: '460px', xl: '300px' }}
+      h={{ base: '283px', md: '168px', xl: '283px' }}
       style={{ alignContent: 'center', justifyContent: 'center' }}
       variant="secondary"
     >
-      <Flex direction={{ xl: 'column', base: 'row' }} gap={-10} position="relative">
+      <Flex direction={{ md: 'row', base: 'column', xl: 'column' }} gap={-10} position="relative">
         {periods}
       </Flex>
     </Card>

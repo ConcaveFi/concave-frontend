@@ -84,7 +84,7 @@ const MarketplaceActivityCard = () => {
 
   return (
     <Card
-      width={{ base: '360px', xl: '300px' }}
+      width={{ base: '300px', md: '360px', xl: '300px' }}
       shadow="Block Up"
       height={642}
       position="relative"

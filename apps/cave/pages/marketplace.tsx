@@ -22,14 +22,7 @@ const Marketplace = () => {
   console.log(isLargerLayout)
 
   return (
-    <Flex
-      width={{ base: '', md: 'full', xl: 'full', sm: 'full' }}
-      align={'center'}
-      borderRadius={0}
-      textAlign="center"
-      direction="column"
-      pr={{ base: 5, md: 0, xl: 0, sm: 0 }}
-    >
+    <Flex width={{ base: 'full' }} borderRadius={0} textAlign="center" direction="column">
       {!viewTransactions ? (
         <>
           <Heading as="h1" mt={16} mb={3} fontSize="5xl">
@@ -79,7 +72,7 @@ const Marketplace = () => {
               <MarketplaceStakeCard />
               <SwitchView
                 title="View Transactions"
-                px="140px"
+                px={{ base: '40px', md: '140px' }}
                 rounded="0px 0px 16px 16px"
                 onClick={() => setViewTransactions(true)}
               />
@@ -90,13 +83,20 @@ const Marketplace = () => {
           </Flex>
         </>
       ) : (
-        <Flex direction={'column'} justify="center" align={'center'} gap={4} px={10}>
+        <Flex
+          border={'2px solid white'}
+          direction={'column'}
+          width="full"
+          justify="center"
+          align={'center'}
+          gap={4}
+        >
           <Flex height="120px" position="relative">
-            <Flex mt={20} grow={1} justify="center" align={'center'} noOfLines={1}>
-              <Text fontWeight={700} fontSize="3xl">
+            <Flex mt={20} grow={1} justify="center" align={'center'}>
+              <Text fontWeight={700} fontSize={{ base: '2xl', md: '3xl' }}>
                 {'<- Marketplace '}
               </Text>
-              <Text fontSize="2xl" textColor={'gray.300'} pl="3" pt={2}>
+              <Text fontSize={{ base: 'xl', md: '2xl' }} textColor={'gray.300'} pl={2}>
                 {' > Transactions'}
               </Text>
             </Flex>
@@ -104,7 +104,7 @@ const Marketplace = () => {
           <Flex mt={2} direction={'column'} justify="center" align={'center'}>
             <SwitchView
               title="Back to Marketplace"
-              px="80px"
+              px={{ base: '40px', md: '80px' }}
               onClick={() => setViewTransactions(false)}
               rounded="16px 16px 0px 0px "
             />
@@ -136,7 +136,7 @@ const Marketplace = () => {
 
 interface SwitchViewProps {
   title: string
-  px: string
+  px: string | any
   rounded: string
   onClick: () => void
 }
