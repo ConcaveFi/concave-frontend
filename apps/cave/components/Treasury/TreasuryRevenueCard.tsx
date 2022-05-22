@@ -5,7 +5,6 @@ import { commify } from 'ethers/lib/utils'
 import { useGet_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql'
 import { useEffect, useState } from 'react'
 
-interface TreasuryRevenueCardProps {}
 export const TreasuryInfoItem = ({ label, amount, ...props }) => (
   <Flex
     direction="column"
@@ -52,7 +51,7 @@ export const TreasuryInfo = ({ box1, box2, box3, box1b, box2b, box3b }) => {
       variant="secondary"
       bg="none"
       py={3}
-      w={{ base: '520px', xl: '620px' }}
+      w={{ base: '510px', xl: '620px' }}
       h="100px"
       direction="row"
       shadow="Glass Up Medium"
@@ -145,7 +144,7 @@ export default function TreasuryRevenueCard(props) {
   return (
     <Card
       direction={'column'}
-      w={{ base: '520px', xl: '620px' }}
+      w={{ base: '510px', xl: '620px' }}
       height="330px"
       bg={'#111e'}
       shadow={'0px 4px 4px rgba(0, 0, 0, 0.25), inset 0px 0px 20px rgba(87, 124, 255, 0.3)'}

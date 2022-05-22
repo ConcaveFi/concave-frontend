@@ -9,8 +9,8 @@ export default function TreasuryManagementCard(props: { assets: any }) {
   return (
     <Card
       direction={'column'}
-      width={{ xl: '900px', lg: '800px' }}
-      height={{ base: '380px', xl: '330px' }}
+      width={{ xl: '900px', base: '510px' }}
+      height={{ base: '520px', xl: '330px' }}
       bg={'#111e'}
       shadow={'0px 4px 4px rgba(0, 0, 0, 0.25), inset 0px 0px 20px rgba(87, 124, 255, 0.3)'}
       gap={5}
@@ -28,7 +28,7 @@ export default function TreasuryManagementCard(props: { assets: any }) {
         mb={4}
       >
         <FarmingViewer convexToken={convexToken} />
-        <Flex direction={{ base: 'row', xl: 'column' }} gap={4}>
+        <Flex direction={'column'} gap={4}>
           {assets.treasury
             .filter((token) => token.name !== 'cvxDOLA3POOL')
             .map(
@@ -70,9 +70,9 @@ export const TokenInfo = (props: TokenInfoProps) => {
       variant="secondary"
       shadow={'Glow Inner'}
       rounded={'2xl'}
-      width={{ base: '300px', md: '180px', xl: '340px' }}
-      height={{ md: '98px', xl: '52px' }}
-      direction={{ md: 'column', xl: 'row' }}
+      width={{ base: '300px', md: '400px', xl: '340px' }}
+      height={'52px'}
+      direction={'row'}
       mx={{ base: 'auto', md: '' }}
     >
       <GlassPanel width={'180px'} height="52px" rounded={'2xl'}>
@@ -89,7 +89,7 @@ export const TokenInfo = (props: TokenInfoProps) => {
           </Text>
         </Flex>
       </GlassPanel>
-      <Flex flex={1} justify={{ md: 'center', xl: 'start' }} align={'center'} ml={4}>
+      <Flex flex={1} justify={'start'} align={'center'} ml={4}>
         <Text fontWeight={'700'} fontSize={{ base: '14px', md: '18px' }}>
           {'$' + commify(parseFloat(props.value).toFixed())}
         </Text>

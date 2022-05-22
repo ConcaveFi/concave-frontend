@@ -102,7 +102,7 @@ const FarmingViewer = ({ convexToken }) => {
 const renderTokenInfos = (treaData) => {
   return (
     <Flex direction={'column'} gap={2}>
-      {treaData.treasury
+      {treaData?.treasury
         .filter((token) => token.name !== 'cvxDOLA3POOL')
         .map(
           (i: TreasuryQueryTokenInfo, k: any) =>

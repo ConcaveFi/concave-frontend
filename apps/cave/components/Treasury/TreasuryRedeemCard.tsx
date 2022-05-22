@@ -47,7 +47,7 @@ function ClaimAcnvButton() {
   const { isOpen, onClose, onOpen } = useDisclosure()
   return (
     <>
-      <Button fontSize={'18px'} fontWeight="700" onClick={onOpen}>
+      <Button fontSize={{ base: '13px', xl: '18px' }} fontWeight="700" onClick={onOpen}>
         <Flex align={'center'} justify="center" gap={2}>
           <Text my={'auto'}>aCNV -</Text>
           {loadingBalance ? <Spinner size={'sm'} /> : <Text>{balanceData?.formatted}</Text>}
@@ -96,8 +96,8 @@ function TreasuryRedeemCard() {
 
   return (
     <GlassPanel
-      width={'260px'}
-      height={'331px'}
+      width={{ base: '510px', xl: '260px' }}
+      height={{ base: '240px', xl: '331px' }}
       backdropBlur={'2px'}
       rounded="2xl"
       direction={'column'}
@@ -107,25 +107,43 @@ function TreasuryRedeemCard() {
           Redeem CNV
         </Text>
       </Flex>
-      <Flex mx={6} textAlign="center">
-        <Text fontSize={'14px'} textColor="text.low" fontWeight={'700'}>
+      <Flex mx={6} textAlign="center" justify={'center'}>
+        <Text fontSize={{ base: '20px', xl: '16px' }} textColor="text.low" fontWeight={'700'}>
           Redeem your tokens for CNV below
         </Text>
       </Flex>
-      <Flex mt={5} direction="column" gap={2}>
-        <GlassPanel width={'182px'} height={'40px'} rounded="2xl" mx={'auto'} justify={'center'}>
+      <Flex mt={5} direction={{ base: 'row', xl: 'column' }} gap={{ base: 0, xl: 3 }}>
+        <GlassPanel
+          width={{ base: '150px', xl: '182px' }}
+          height={'40px'}
+          rounded="2xl"
+          mx={'auto'}
+          justify={'center'}
+        >
           <ClaimAcnvButton />
         </GlassPanel>
-        <GlassPanel width={'182px'} height={'40px'} rounded="2xl" mx={'auto'} justify={'center'}>
+        <GlassPanel
+          width={{ base: '150px', xl: '182px' }}
+          height={'40px'}
+          rounded="2xl"
+          mx={'auto'}
+          justify={'center'}
+        >
           <Button>
-            <Text fontSize={'18px'} fontWeight="700" my={'auto'}>
+            <Text fontSize={{ base: '13px', xl: '18px' }} fontWeight="700" my={'auto'}>
               pCNV - 0
             </Text>
           </Button>
         </GlassPanel>
-        <GlassPanel width={'182px'} height={'40px'} rounded="2xl" mx={'auto'} justify={'center'}>
+        <GlassPanel
+          width={{ base: '150px', xl: '182px' }}
+          height={'40px'}
+          rounded="2xl"
+          mx={'auto'}
+          justify={'center'}
+        >
           <Button>
-            <Text fontSize={'18px'} fontWeight="700" my={'auto'}>
+            <Text fontSize={{ base: '13px', xl: '18px' }} fontWeight="700" my={'auto'}>
               bbtCNV - 100
             </Text>
           </Button>
@@ -141,6 +159,7 @@ function TreasuryRedeemCard() {
         cursor="pointer"
         mx={'auto'}
         my="auto"
+        fontSize={{ base: '22px', xl: '18px' }}
       >
         Add CNV to your {walletName}
       </Text>

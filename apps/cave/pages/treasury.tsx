@@ -1,5 +1,13 @@
 import { SpinIcon } from '@concave/icons'
-import { Card, Flex, keyframes, ScaleFade, Text } from '@concave/ui'
+import {
+  Card,
+  Flex,
+  keyframes,
+  ScaleFade,
+  Text,
+  useBreakpoint,
+  useBreakpointValue,
+} from '@concave/ui'
 import { withPageTransition } from 'components/PageTransition'
 import DividendsCard from 'components/Treasury/DividendsCard'
 import DividendsCardMobile from 'components/Treasury/Mobile/DividendsCardMobile'
@@ -10,6 +18,7 @@ import TreasuryManagementCard from 'components/Treasury/TreasuryManagementCard'
 import TreasuryRedeemCard from 'components/Treasury/TreasuryRedeemCard'
 import TreasuryRevenueCard from 'components/Treasury/TreasuryRevenueCard'
 import { useGet_TreasuryQuery, useGet_Amm_Cnv_InfosQuery } from 'graphql/generated/graphql'
+import { useEffect, useState } from 'react'
 
 export function Treasury() {
   const { status: treaStatus, data: treaData } = useGet_TreasuryQuery()
@@ -19,42 +28,67 @@ export function Treasury() {
     treaStatus === 'success' && cnvStatus === 'success' && cnvData && !!treaData
 
   return (
-    <Flex m={20} gap={4} direction="column">
-      <TreasuryRevenueMobile cnv={cnvData} treasury={treaData} loading={!revenueCardLoaded} />
-      <RedeemMobileCard />
-      <TreasuryManagementMobile loading={cnvStatus !== 'success' && !cnvData} treaData={treaData} />
-      <DividendsCardMobile />
-    </Flex>
-    // <Flex height={'full'} width="full" align={'center'} justify="center" position={'relative'}>
-    //   <Flex direction={'column'} maxWidth={'1000px'}>
-    //     <Flex direction="row" width={'full'} justify={{ base: 'space-between' }}>
-    //       <ScaleFade in={revenueCardLoaded}>
-    //         {treaStatus === 'success' && cnvStatus === 'success' && cnvData && treaData && (
-    //           <TreasuryRevenueCard cnv={cnvData} treasury={treaData} />
-    //         )}
-    //       </ScaleFade>
-    //       <LoadingState
-    //         title={'Loading revenue values'}
-    //         mr={6}
-    //         my={0}
-    //         width={'630px'}
-    //         isLoading={!revenueCardLoaded}
-    //       />
-    //       <TreasuryRedeemCard />
-    //     </Flex>
-    //     {/* for treasury assets  */}
-    //     <ScaleFade in={revenueCardLoaded}>
-    //       {cnvStatus === 'success' && cnvData && <TreasuryManagementCard assets={treaData} />}
-    //     </ScaleFade>
-    //     <LoadingState
-    //       title="Loading assets"
-    //       width={'900px'}
-    //       isLoading={!revenueCardLoaded}
-    //       my={6}
-    //     />
-    //     <DividendsCard />
-    //   </Flex>
-    // </Flex>
+    <>
+      <Flex
+        mt={20}
+        width={'full'}
+        justify="center"
+        align={'center'}
+        gap={4}
+        direction="column"
+        display={{ base: 'flex', md: 'none' }}
+      >
+        <TreasuryRevenueMobile cnv={cnvData} treasury={treaData} loading={!revenueCardLoaded} />
+        <RedeemMobileCard />
+        <TreasuryManagementMobile
+          loading={cnvStatus !== 'success' && !cnvData}
+          treaData={treaData}
+        />
+        <DividendsCardMobile />
+      </Flex>
+      <Flex
+        display={{ base: 'none', md: 'flex' }}
+        height={'full'}
+        width="full"
+        align={'center'}
+        justify="center"
+        position={'relative'}
+      >
+        <Flex direction={'column'} maxWidth={'1000px'}>
+          <Flex
+            direction={{ base: 'column', xl: 'row' }}
+            width={'full'}
+            justify={{ base: 'space-between' }}
+            gap={{ base: 3, xl: 0 }}
+          >
+            <ScaleFade in={revenueCardLoaded}>
+              {treaStatus === 'success' && cnvStatus === 'success' && cnvData && treaData && (
+                <TreasuryRevenueCard cnv={cnvData} treasury={treaData} />
+              )}
+            </ScaleFade>
+            <LoadingState
+              title={'Loading revenue values'}
+              mr={6}
+              my={0}
+              width={'630px'}
+              isLoading={!revenueCardLoaded}
+            />
+            <TreasuryRedeemCard />
+          </Flex>
+          {/* for treasury assets  */}
+          <ScaleFade in={revenueCardLoaded}>
+            {cnvStatus === 'success' && cnvData && <TreasuryManagementCard assets={treaData} />}
+          </ScaleFade>
+          <LoadingState
+            title="Loading assets"
+            width={'900px'}
+            isLoading={!revenueCardLoaded}
+            my={6}
+          />
+          <DividendsCard />
+        </Flex>
+      </Flex>
+    </>
   )
 }
 
