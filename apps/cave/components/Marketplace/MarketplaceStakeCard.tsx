@@ -66,7 +66,7 @@ function MarketplaceStakeCard(props: any) {
       style={{ alignContent: 'center', justifyContent: 'center' }}
       variant="secondary"
     >
-      <Flex direction={{ xl: 'column', base: 'row' }} gap={-10} position="relative" mt={-2}>
+      <Flex direction={{ xl: 'column', base: 'row' }} gap={-10} position="relative">
         {periods}
       </Flex>
     </Card>

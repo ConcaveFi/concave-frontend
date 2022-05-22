@@ -23,7 +23,14 @@ const MobileLayout = (props: MobileLayoutProps) => {
   const { title, length, text, image, diluted } = props.props
 
   return (
-    <Flex direction={'column'} align="center" justify={'center'} flex={1} position="relative">
+    <Flex
+      direction={'column'}
+      align="center"
+      justify={'center'}
+      flex={1}
+      height="170px"
+      position="relative"
+    >
       <Text fontSize="xs" color="text.low" fontWeight="medium">
         Stake Pool
       </Text>
