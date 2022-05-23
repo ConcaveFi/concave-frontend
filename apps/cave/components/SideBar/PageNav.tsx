@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { Box, Flex, Text, Image, Collapse } from '@concave/ui'
 import { ButtonLink, ButtonLinkProps } from 'components/ButtonLink'
 import { useRouter } from 'next/router'
-import { getBondSpotPrice } from 'components/Bond/BondState'
+import { getBondSpotPrice, useBondState } from 'components/Bond/BondState'
 
 const NavButton = (props: ButtonLinkProps) => {
   const router = useRouter()
@@ -57,10 +57,11 @@ const NotInteractableImage = ({ src, ...props }) => (
 function PageNav() {
   const [bondSpotPrice, setBondSpotPrice] = useState<string>('0')
   const [cnvMarketPrice, setCnvMarketPrice] = useState<number>(0)
+  const {networkId} = useBondState()
   useEffect(() => {
-    getBondSpotPrice(3, '').then((bondSpotPrice) => {
+    getBondSpotPrice(networkId, '').then((bondSpotPrice) => {
       setBondSpotPrice(bondSpotPrice)
-    })
+    }).catch(() => {})
     fetch('/api/cnv')
       .then((j) => j.json())
       .then((data) => JSON.parse(data))
@@ -72,7 +73,7 @@ function PageNav() {
       .catch((e) => {
         throw e
       })
-  }, [cnvMarketPrice])
+  }, [cnvMarketPrice, networkId])
   const router = useRouter()
 
   const [liquidStakingHover, setLiquidStakingHover] = useState(false)
