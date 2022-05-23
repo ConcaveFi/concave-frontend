@@ -13,7 +13,9 @@ import {
 import { ApproveButton } from 'components/ApproveButton/ApproveButton'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { PositionInfoItem } from 'components/Positions/MyPositions'
+import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
+import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { Transaction } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { RemoveLiquidityState, useRemoveLiquidity } from 'hooks/useRemoveLiquidity'
@@ -69,7 +71,10 @@ export const RemoveLiquidityModalButton = ({
       >
         <AmountToRemove onChange={removeLiquidityState.setPercentToRemove} />
         <YouWillReceive {...removeLiquidityState} />
-        <RemoveLiquidityActions removeLiquidityState={removeLiquidityState} />
+        <RemoveLiquidityActions
+          removeLiquidityState={removeLiquidityState}
+          closeParentComponent={removeLiquidityDisclosure.onClose}
+        />
         <YourPosition {...removeLiquidityState} {...liquidityInfo} />
       </Modal>
     </>
@@ -161,20 +166,45 @@ const ReceiveBox = ({
 }
 const RemoveLiquidityActions = ({
   removeLiquidityState,
+  closeParentComponent,
 }: {
   removeLiquidityState: { pair: Pair } & RemoveLiquidityState
+  closeParentComponent: VoidFunction
 }) => {
   const networkId = useCurrentSupportedNetworkId()
-  const transactionStatusDisclosure = useDisclosure()
   const [currencyApproved, setCurrencyApproved] = useState(false)
+
+  const {
+    isOpen: isOpenSubmitted,
+    onClose: onCloseSubmitted,
+    onOpen: onOpenSubmitted,
+  } = useDisclosure()
+
+  const [txError, setTxError] = useState('')
+  const { isOpen: isOpenError, onClose: onCloseError, onOpen: onOpenError } = useDisclosure()
+
+  const [waitingForConfirm, setWaitingForConfirm] = useState(false)
+
   const confirmedWithdrawal = async () => {
     try {
-      transactionStatusDisclosure.onOpen()
-      await removeLiquidityState.removeLiquidity()
+      setWaitingForConfirm(true)
+      await removeLiquidityState.removeLiquidity().then(() => {
+        onOpenSubmitted()
+        setWaitingForConfirm(false)
+      })
     } catch (err) {
-      transactionStatusDisclosure.onClose()
+      setWaitingForConfirm(false)
+      onCloseSubmitted()
+      setTxError(err.message)
+      onOpenError()
     }
   }
+
+  console.log(
+    removeLiquidityState.pair.token0,
+    removeLiquidityState.amountAMin,
+    removeLiquidityState.amountBMin,
+  )
 
   return (
     <Flex gap={4} h={45} justifyContent={'center'}>
@@ -198,12 +228,40 @@ const RemoveLiquidityActions = ({
         Confirm Withdrawal
       </Button>
 
+      <WaitingConfirmationDialog isOpen={waitingForConfirm} title={'Confirm Liquidity Removal'}>
+        <Flex
+          width={'200px'}
+          height="107px"
+          rounded={'2xl'}
+          mt={4}
+          shadow={'Down Medium'}
+          align={'center'}
+          direction={'column'}
+        >
+          <Text textColor={'text.low'} fontWeight="700" fontSize={18} mt={4}>
+            You will receive
+          </Text>
+          <Text fontWeight={'700'} textColor="text.accent">
+            {`${precision(removeLiquidityState.amountAMin, 2)} ${
+              removeLiquidityState.pair.token0.symbol
+            }`}
+          </Text>
+          <Text fontWeight={'700'} textColor="text.accent">
+            {`${precision(removeLiquidityState.amountBMin, 2)} ${
+              removeLiquidityState.pair.token1.symbol
+            }`}
+          </Text>
+        </Flex>
+      </WaitingConfirmationDialog>
+
       <TransactionSubmittedDialog
         title="Withdraw"
         subtitle="Withdraw values"
         tx={{ hash: removeLiquidityState.hash } as Transaction}
-        isOpen={!!removeLiquidityState.hash}
+        isOpen={isOpenSubmitted}
+        closeParentComponent={closeParentComponent}
       />
+      <TransactionErrorDialog error={txError} isOpen={isOpenError} />
     </Flex>
   )
 }

@@ -68,13 +68,15 @@ function LiquidStaking() {
         gap={{ xl: 24, base: 2 }}
         textColor="white"
       >
-        <Text maxW={520} textAlign={{ xl: 'justify', base: 'center' }}  fontSize={{ base: 'sm', sm: 'md' }}>
-        Stakers are incentivized with daily rewards and <br /> quarterly dividends to grow their CNV holdings 
+        <Text maxW={520} textAlign={{ xl: 'justify', base: 'center' }} fontSize={{ base: 'sm', sm: 'md' }}>
+          Stakers are incentivized with daily rewards and <br /> quarterly dividends to grow their
+          CNV holdings
           <br />
-        with profit from the protocol. Staked positions<br />are represented by NFTs that are tradable 
+          with profit from the protocol. Staked positions
           <br />
-          in Concave's native Marketplace.
-         
+          are represented by NFTs that are tradable
+          <br />
+          in Concave&apos;s native Marketplace.
         </Text>
         <GraphicGuide />
       </Flex>
@@ -108,7 +110,7 @@ function LiquidStaking() {
 }
 
 LiquidStaking.Meta = {
-  title: 'Concave | Liquid Staking',
+  title: `Concave | Liquid Staking`,
   description: `With Liquid Staking, positions receive boosted rewards based on term length. Investors in the longest-term positions will receive the highest returns.`,
 }
 

@@ -52,6 +52,7 @@ export function Bond() {
   const [buttonDisabled, setButtonDisabled] = useState(false)
   const [redeemTx, setRedeemTx] = useState<any>()
   const [clickedRedeemButton, setClickedRedeemButton] = useState(false)
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
   const [txError, setTxError] = useState('')
   const {
     isOpen: isOpenSubmitted,
@@ -61,29 +62,23 @@ export function Bond() {
   const { isOpen: isOpenError, onClose: onCloseError, onOpen: onOpenError } = useDisclosure()
   const { data: last10SoldsData, isLoading, error } = useGet_Accrualbondv1_Last10_SoldQuery()
 
+  function updateBondPositions() {
+    getUserBondPositions(networkId, userAddress, currentBlockTs)
+      .then((bondSigma) => {
+        setBondSigma(bondSigma)
+        setButtonDisabled(false)
+      })
+      .catch((e) => {
+        console.log('user bond fail', e)
+      })
+  }
+
   useEffect(() => {
     setIsLoadingBondSigma(true)
     getCurrentBlockTimestamp(networkId).then((x) => {
       setCurrentBlockTs(x)
     })
-    const interval = setInterval(() => {
-      return new Promise((resolve) => {
-        getUserBondPositions(networkId, userAddress, currentBlockTs)
-          .then((bondSigma) => {
-            if (bondSigma.address === userAddress) {
-              setBondSigma(bondSigma)
-            }
-          })
-          .catch((e) => {
-            console.log('user bond fail', e)
-          })
-        resolve(null)
-      })
-    }, 6000)
-    if (intervalID !== interval) {
-      clearTimeout(intervalID)
-      setIntervalID(interval)
-    }
+    updateBondPositions()
   }, [userAddress, currentBlockTs])
 
   useEffect(() => {
@@ -101,56 +96,66 @@ export function Bond() {
       .catch((e) => {
         console.log(e)
       })
-    fetch('/api/cnv')
-      .then((j) => j.json())
-      .then((data) => JSON.parse(data))
-      .then((data) => {
-        if (data?.data) {
-          setCNVMarketPrice(data.data.last)
-        }
-      })
-      .catch((e) => {
-        throw e
-      })
+    getCNVMarketPrice().then((price) => {
+      setCNVMarketPrice(price)
+      console.log(price)
+    })
   }, [networkId])
 
   useEffect(() => {
-    setIsLoadingBondSigma(true)
-    setBondSigma(null)
-  }, [userAddress])
+    const interval = setInterval(() => {
+      getBondSpotPrice(networkId, '').then((bondSpotPrice) => {
+        setBondSpotPrice(bondSpotPrice)
+      })
+      getCNVMarketPrice().then((price) => {
+        setCNVMarketPrice(price)
+        console.log(price)
+      })
+    }, 10000)
+    if (intervalID !== interval) {
+      clearTimeout(intervalID)
+      setIntervalID(interval)
+    }
+  }, [cnvMarketPrice, networkId])
 
   useEffect(() => {
     if (bondSigma && isLoadingBondSigma) {
-      console.log('bondSigma', bondSigma)
       setIsLoadingBondSigma(false)
       setShowUserPosition(true)
     }
   }, [bondSigma])
 
-  return (
-    <Flex p={'0px'} width={'full'}>
-      <Flex width={'full'} direction="column" gap={{ base: 3, md: 10 }} align="center">
-        <Stack mt={10} maxW="100%" align="center" textAlign="center">
-          <Heading as="h1" mb={3} fontSize={{ base: '3xl', md: '5xl' }}>
-            Dynamic Bond Market
-          </Heading>
-          <Flex
-            maxW={{ base: '350px', md: '600px' }}
-            align={'center'}
-            justify="center"
-            direction={{ lg: 'row', md: 'column' }}
-          >
-            <Text fontSize={{ base: 'sm', md: 'lg' }}>
-              Bonds allow new CNV supply to be minted at a discount. All funds raised through bonds
-              are added to the Concave treasury and invested to generate returns for quarterly
-              dividends.
-            </Text>
-          </Flex>
-        </Stack>
+  function onRedeemConfirm() {
+    setButtonDisabled(true)
+    const batchRedeemIDArray = bondSigma.batchRedeemArray
+    setClickedRedeemButton(true)
+    setOpenConfirmDialog(true)
+    redeemBondBatch(networkId, batchRedeemIDArray, userAddress, signer)
+      .then(async (tx) => {
+        console.log(tx)
+        setRedeemTx(tx)
+        setOpenConfirmDialog(false)
+        onOpenSubmitted()
+        await tx.wait(1)
+        updateBondPositions()
+        setClickedRedeemButton(false)
+        setButtonDisabled(false)
+      })
+      .catch((err) => {
+        setTxError(err.message)
+        setClickedRedeemButton(false)
+        onOpenError()
+        setButtonDisabled(false)
+      })
+  }
 
+  return (
+    <Container maxW="container.lg">
+      <Flex direction="column" gap={10}>
+        <BondDescription />
         <Flex
           gap={{ base: 3, md: 10 }}
-          direction={{ lg: 'row', base: 'column' }}
+          direction={{ lg: 'row', md: 'column' }}
           align={{ lg: 'start', md: 'center' }}
           justifyContent={'center'}
           w={{ base: '350px', md: 'full' }}
@@ -219,25 +224,9 @@ export function Bond() {
                         bondSigma={bondSigma}
                         buttonDisabled={buttonDisabled}
                         onConfirm={() => {
-                          setButtonDisabled(true)
-                          const batchRedeemIDArray = bondSigma.batchRedeemArray
-                          setClickedRedeemButton(true)
-                          redeemBondBatch(networkId, batchRedeemIDArray, userAddress, signer)
-                            .then(async (tx) => {
-                              console.log(tx)
-                              setRedeemTx(tx)
-                              setClickedRedeemButton(false)
-                              onOpenSubmitted()
-                              await tx.wait(1)
-                              setButtonDisabled(false)
-                            })
-                            .catch((err) => {
-                              setTxError(err.message)
-                              setClickedRedeemButton(false)
-                              onOpenError()
-                              setButtonDisabled(false)
-                            })
+                          onRedeemConfirm()
                         }}
+                        isRedeeming={clickedRedeemButton}
                         largeFont
                         setBottom
                         customHeight
@@ -249,10 +238,13 @@ export function Bond() {
               <BondSoldsCard loading={isLoading} error={error} data={last10SoldsData} />
             </Card>
           </Box>
-          <BondBuyCard />
+          <BondBuyCard
+            updateBondPositions={updateBondPositions}
+            setRedeemButtonDisabled={setButtonDisabled}
+          />
         </Flex>
       </Flex>
-      <WaitingConfirmationDialog isOpen={clickedRedeemButton} title={'Confirm Redeem'}>
+      <WaitingConfirmationDialog isOpen={openConfirmDialog} title={'Confirm Redeem'}>
         <Text fontSize="lg" color="text.accent">
           {bondSigma && bondSigma['parseRedeemable']
             ? `Redeeming ` + truncateNumber(bondSigma.parseRedeemable) + ` CNV`
@@ -271,3 +263,15 @@ Bond.Meta = {
 }
 
 export default withPageTransition(Bond)
+
+const BondDescription = () => (
+  <Stack mt={10} maxW="100%" align="center" textAlign="center">
+    <Heading as="h1" mb={3} fontSize="5xl">
+      Dynamic Bond Market
+    </Heading>
+    <Flex align={'center'} justify="center" direction={{ lg: 'row', md: 'column' }} maxW={550}>
+      Bonds allow new CNV supply to be minted at a discount. All funds raised through bonds are
+      added to the Concave treasury and invested to generate returns for quarterly dividends.
+    </Flex>
+  </Stack>
+)

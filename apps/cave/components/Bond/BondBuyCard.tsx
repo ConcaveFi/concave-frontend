@@ -43,6 +43,8 @@ export function BondBuyCard(props: {
   bondTransaction?: any
   setBondTransaction?: any
   setAmountInAndOut?: any
+  updateBondPositions?: any
+  setRedeemButtonDisabled?: any
 }) {
   const { currencyIn, currencyOut, userAddress, balance, signer, networkId } = useBondState()
   const [bondTransaction, setBondTransaction] = useState()
@@ -159,7 +161,6 @@ export function BondBuyCard(props: {
       <ConfirmBondModal
         currencyIn={currencyIn}
         currencyOut={currencyOut}
-        //amountIn.numerator.toString
         amountIn={amountIn.toFixed()}
         amountOut={amountOut}
         tokenInUsdPrice={'currencyIn'}
@@ -173,7 +174,7 @@ export function BondBuyCard(props: {
           const amountInTemp = amountIn.toFixed()
           const amountOutTemp = amountOut
           purchaseBond(networkId, amountInTemp, userAddress, signer, settings, amountOutTemp)
-            .then((tx) => {
+            .then(async (tx) => {
               setBondTransaction(tx)
               addRecentTransaction({
                 amount: +amountIn.toSignificant(3),
@@ -191,6 +192,9 @@ export function BondBuyCard(props: {
               setHasClickedConfirm(false)
               setAmountIn(toAmount('0', DAI[networkId]))
               setAmountOut('')
+              await tx.wait(1)
+              props.setRedeemButtonDisabled(true)
+              props.updateBondPositions()
             })
             .catch((e) => {
               setTxError(e.message)

@@ -38,8 +38,8 @@ const Marketplace = () => {
             alignItems={'center'}
           >
             <Text maxW={540} textAlign={{ xl: 'right', base: 'right' }}>
-              The Concave Marketplace is where you are able to buy and sell your locked staked
-              NFT positions. Prices are quoted in terms of CNV.
+              The Concave Marketplace is where you are able to buy and sell your locked staked NFT
+              positions. Prices are quoted in terms of CNV.
             </Text>
             <GraphicGuide />
           </Flex>
@@ -160,7 +160,7 @@ const SwitchView = (props: SwitchViewProps) => {
 
 Marketplace.Meta = {
   title: 'Concave | NFT Marketplace',
-  description: `Trade your Liquid Staking positions and other NFTs in Concave’s marketplace.`,
+  description: `Trade your Liquid Staking positions and other NFTs in Concave's marketplace.`,
 }
 
 export default withPageTransition(Marketplace)
