@@ -72,6 +72,13 @@ export const useSwapButtonProps = ({
     return { children: `Error fetching account data`, isDisabled: true }
 
   /*
+    Return approve button first if no approval
+  */
+  if (currencyIn.isToken && allowance.value.isZero()) {
+    return permitOrApprove()
+  }
+
+  /*
     Enter an amount
   */
   if (!inputAmount || inputAmount?.equalTo(0))
@@ -82,7 +89,7 @@ export const useSwapButtonProps = ({
   */
   if (currencyInBalance.data?.lessThan(inputAmount))
     return {
-      children: `Insufficient ${inputAmount.currency.symbol} balance`,
+      children: `Insufficient ${inputAmount.currency.symbol}`,
       isDisabled: true,
     }
 
@@ -90,23 +97,7 @@ export const useSwapButtonProps = ({
     Permit / Approve
   */
   if (currencyIn.isToken) {
-    if (approve.isWaitingForConfirmation)
-      return { loadingText: 'Approve in your wallet', isLoading: true }
-    if (approve.isWaitingTransactionReceipt)
-      return { loadingText: 'Waiting approval confirmation', isLoading: true }
-    if (permit.isLoading) return { loadingText: 'Sign in your wallet', isLoading: true }
-
-    const permitErroredOrWasNotInitializedYet = permit.isError || permit.isIdle
-    const allowanceIsNotEnough = allowance.isSuccess && !!allowance.amount?.lessThan(inputAmount)
-
-    if (
-      (permitErroredOrWasNotInitializedYet && allowanceIsNotEnough) ||
-      allowanceIsNotEnough ||
-      allowance.value.isZero()
-    )
-      return !permit.isSupported || permit.isError
-        ? { children: `Approve ${currencyIn.symbol}`, onClick: () => approve.sendApproveTx() }
-        : { children: `Permit ${currencyIn.symbol}`, onClick: () => permit.signPermit() }
+    permitOrApprove()
   }
 
   if (recipient && !isAddress(recipient)) return { children: 'Invalid recipient', isDisabled: true }
@@ -126,5 +117,27 @@ export const useSwapButtonProps = ({
   return {
     children: 'Swap',
     onClick: onSwapClick,
+  }
+
+  function permitOrApprove() {
+    if (approve.isWaitingForConfirmation)
+      return { loadingText: 'Approve in wallet', isLoading: true }
+    if (approve.isWaitingTransactionReceipt)
+      return { loadingText: 'Waiting for approval', isLoading: true }
+    if (permit.isLoading) return { loadingText: 'Sign in wallet', isLoading: true }
+
+    const permitErroredOrWasNotInitializedYet = permit.isError || permit.isIdle
+    const allowanceIsNotEnough =
+      allowance.isSuccess &&
+      (!!allowance.amount?.lessThan(inputAmount) || +allowance.formatted === 0)
+
+    if (
+      (permitErroredOrWasNotInitializedYet && allowanceIsNotEnough) ||
+      allowanceIsNotEnough ||
+      allowance.value.isZero()
+    )
+      return !permit.isSupported || permit.isError
+        ? { children: `Approve ${currencyIn.symbol}`, onClick: () => approve.sendApproveTx() }
+        : { children: `Permit ${currencyIn.symbol}`, onClick: () => permit.signPermit() }
   }
 }
