@@ -57,6 +57,7 @@ export function CurrencyAmountField({
     <Stack sx={{ ...styles.field, bg: 'none' }} justify="space-between" spacing={0}>
       <HStack justify="space-between" align="start">
         <NumericInput
+          fontSize={{ base: 'lg', md: '2xl' }}
           disabled={disabled}
           w="100%"
           onFocus={() => (isFocused.current = true)}

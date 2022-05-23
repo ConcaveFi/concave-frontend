@@ -157,7 +157,14 @@ export const AddLiquidityModalButton = ({
 
 export const AddLiquidityCard = ({ currencies }: { currencies: Currency[] }) => {
   return (
-    <Card borderWidth={2} variant="primary" p={4} w="500px" gap={6} shadow="Up for Blocks">
+    <Card
+      borderWidth={2}
+      variant="primary"
+      p={4}
+      w={{ base: '340px', md: '500px' }}
+      gap={6}
+      shadow="Up for Blocks"
+    >
       <AddLiquidityContent currencies={currencies} />
     </Card>
   )

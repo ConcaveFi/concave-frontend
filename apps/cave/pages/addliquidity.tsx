@@ -31,7 +31,7 @@ export function AddLiquidity({ currencies: serverPropsCurrencies }) {
         textAlign="center"
         direction="column"
       >
-        <Heading as="h1" mt={16} mb={3} fontSize="5xl">
+        <Heading as="h1" mt={16} mb={3} fontSize={{ base: '4xl', sm: '5xl' }}>
           Add Liquidity Pools
         </Heading>
         <Flex mt={0} align="center" gap={10} width="full" justify="center" alignItems={'center'}>
@@ -48,7 +48,7 @@ export function AddLiquidity({ currencies: serverPropsCurrencies }) {
           justify={'center'}
           align="center"
           width="full"
-          p={4}
+          mt={4}
         >
           <AddLiquidityCard currencies={currencies} />
         </Flex>
