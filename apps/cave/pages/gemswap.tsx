@@ -1,5 +1,14 @@
-import { ChainId, CHAIN_NAME, CNV, Currency, DAI, Trade, TradeType } from '@concave/gemswap-sdk'
-import { Button, Card, Collapse, Flex, HStack, Stack, Text, useDisclosure } from '@concave/ui'
+import {
+  ChainId,
+  CHAIN_NAME,
+  CNV,
+  Currency,
+  DAI,
+  ROUTER_ADDRESS,
+  Trade,
+  TradeType,
+} from '@concave/gemswap-sdk'
+import { Card, Collapse, Flex, HStack, Stack, Text, useDisclosure } from '@concave/ui'
 import {
   CandleStickCard,
   ConfirmSwapModal,
@@ -16,25 +25,25 @@ import {
   useSwapState,
   useSwapTransaction,
 } from 'components/AMM'
-import { NetworkMismatch } from 'components/AMM/NetworkMismatch'
-import { ExpectedOutput, MinExpectedOutput } from 'components/AMM/Swap/ExpectedOutput'
-import { TradeRoute } from 'components/AMM/Swap/TradeRoute'
-import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
-import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
-import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
-import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import {
   currencyFromJson,
   currencyToJson,
   fetchQueryCurrencies,
   useQueryCurrencies,
 } from 'components/AMM/hooks/useQueryCurrencies'
+import { NetworkMismatch } from 'components/AMM/NetworkMismatch'
+import { ExpectedOutput, MinExpectedOutput } from 'components/AMM/Swap/ExpectedOutput'
+import { TradeRoute } from 'components/AMM/Swap/TradeRoute'
+import { ApproveButton } from 'components/ApproveButton/ApproveButton'
+import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
+import { withPageTransition } from 'components/PageTransition'
+import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
+import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
+import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
+import { LayoutGroup } from 'framer-motion'
 import { GetServerSideProps } from 'next'
 import { useEffect, useMemo, useReducer, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
-import { LayoutGroup } from 'framer-motion'
-import { withPageTransition } from 'components/PageTransition'
-import { useRecentTransactions } from 'hooks/useRecentTransactions'
 
 const TradeDetails = ({
   trade,
@@ -178,7 +187,16 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
               <TradeDetails trade={trade.data} settings={settings} />
             </Collapse>
 
-            <Button variant="primary" size="large" w="full" {...swapButtonProps} />
+            <ApproveButton
+              variant="primary"
+              size="large"
+              w="full"
+              approveArgs={{
+                currency: trade.data.inputAmount.currency,
+                spender: ROUTER_ADDRESS[trade.data.inputAmount.currency?.chainId],
+              }}
+              {...swapButtonProps}
+            />
 
             <NetworkMismatch
               isOpen={isNetworkMismatch && queryHasCurrency}
