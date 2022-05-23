@@ -63,7 +63,7 @@ const TradeDetails = ({
 export const swapSupportedChains = [ChainId.ETHEREUM, ChainId.RINKEBY]
 const defaultCurrencies = {
   [ChainId.ETHEREUM]: [DAI[1], CNV[1]],
-  [ChainId.RINKEBY]: [DAI[3], CNV[3]],
+  [ChainId.RINKEBY]: [DAI[4], CNV[4]],
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {

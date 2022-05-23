@@ -84,7 +84,7 @@ const ETHFaucet = () => {
         <Stack fontWeight="bold" rounded="2xl" shadow="down" py={2} fontSize="sm" spacing={0}>
           <Text>🎉 0.1 ETH Sent!</Text>
           <Link
-            href={getTxExplorer(sentEthTx, chain.RINKEBY)}
+            href={getTxExplorer(sentEthTx, chain.rinkeby)}
             fontSize="sm"
             color="text.accent"
             isExternal
@@ -114,7 +114,7 @@ const DAIMinter = () => {
       <Stack fontWeight="bold" rounded="2xl" shadow="down" py={2} fontSize="sm" spacing={0}>
         <Text>🎉 69420 tDAI tx sent!</Text>
         <Link
-          href={getTxExplorer(mintDaiTx, chain.RINKEBY)}
+          href={getTxExplorer(mintDaiTx, chain.rinkeby)}
           fontSize="sm"
           color="text.accent"
           isExternal
