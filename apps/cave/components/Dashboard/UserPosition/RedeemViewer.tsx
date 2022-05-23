@@ -27,6 +27,7 @@ const RedeemCardViewer = ({ nonFungibleTokenInfo }: RedeemCardViewerProps) => {
       <Button
         w={{ lg: '140px', md: '170px' }}
         h={{ lg: '40px', md: '36px' }}
+        fontWeight="bold"
         mx="auto"
         cursor={maturity > 0 ? 'default' : 'pointer'}
         variant={maturity > 0 ? '' : 'primary'}

@@ -119,12 +119,40 @@ const MarketplaceListing = (props: MarketplaceListingProps) => {
             </Text>
           </Flex>
         </Flex>
-        <Flex direction={'column'} flex={1} textAlign={{ lg: 'start', md: 'center' }} ml="2">
+<ListButton />
+        {/* <Flex direction={'column'} flex={1} textAlign={{ lg: 'start', md: 'center' }} ml="2">
           {actionButton}
-        </Flex>
+        </Flex> */}
       </Flex>
     </Box>
   )
 }
+
+const ListButton = () => {
+  return (
+    <Button pr={{ xl: 6, lg: 6, base: 0 }}>
+      <Flex
+        boxShadow={'Up Big'}
+        background="linear-gradient(90deg, #72639B 0%, #44B9DE 100%)"
+        height={38}
+        width={143}
+        rounded={{ xl: '2xl', lg: '2xl', base: '16px 16px 0px 0px' }}
+        justifyContent={'center'}
+        alignItems="center"
+        ml={2}
+        fontWeight="bold"
+        fontSize="md"
+        mx="auto"
+
+      >
+        <Text>
+        Coming Soon!
+        </Text>
+
+      </Flex>
+    </Button>
+  )
+}
+
 
 export default MarketplaceListing

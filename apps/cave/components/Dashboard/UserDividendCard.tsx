@@ -76,7 +76,7 @@ const RedeemButton = ({ ...props }) => {
       cursor={redeemable ? 'pointer' : 'default'}
       fontWeight="bold"
       fontSize="md"
-      variant={redeemable ? 'primary' : 'primary.outline'}
+      variant={redeemable ? 'primary.outline' : ''}
       w="160px"
       h="40px"
       size="large"
@@ -87,7 +87,7 @@ const RedeemButton = ({ ...props }) => {
       _active={redeemable ? { transform: 'scale(0.95)' } : {}}
       {...props}
     >
-      <Text color={redeemable ? 'white' : 'text.low'} fontSize="sm">
+      <Text color={redeemable ?  'white' :'text.low' } fontSize="sm">
         {props.redeemable ? 'Redeem' : 'Not Redeemable'}
       </Text>
     </Button>
