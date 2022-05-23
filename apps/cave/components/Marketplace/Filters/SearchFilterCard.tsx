@@ -15,7 +15,7 @@ const SearchFilterCard = (props: SearchFilterCardProps) => {
 
   return (
     <Flex
-      background={!!hasFilter ? gradientBg : defaultBackground}
+      background={!!hasFilter ? gradientBg : 'linear-gradient(265.73deg, #274C63 0%, #182F3E 100%)'}
       width={83}
       height={53}
       rounded="2xl"
@@ -26,11 +26,11 @@ const SearchFilterCard = (props: SearchFilterCardProps) => {
         align="center"
         justify={'center'}
         gap={1}
-        background={defaultBackground}
+        background={'linear-gradient(265.73deg, #274C63 0%, #182F3E 100%)'}
         rounded="2xl"
         m={'1px'}
         flex="1"
-        shadow={'up'}
+        shadow={{ base: 'Up Small', md: 'up' }}
       >
         <Box
           position={'absolute'}

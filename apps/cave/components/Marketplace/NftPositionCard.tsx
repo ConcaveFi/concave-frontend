@@ -40,10 +40,10 @@ const NftPositionBox = (props: NftPositionBoxProps) => {
               {stakePool} Days
             </Text>
           </Flex>
-          <Flex w={{ base: '55%' }} justify="end">
+          <Flex w={{ base: '55%', lg: '45%' }} justify="end">
             <Image
-              width={{ base: '90px', md: '80px' }}
-              height={{ base: '90px', md: '80px' }}
+              width={{ base: '90px', lg: '70px' }}
+              height={{ base: '90px', lg: '70px' }}
               src={'/assets/marketplace/6mposition.png'}
               alt="position"
             />
@@ -118,19 +118,22 @@ const NftPositionCard = (props: NftPositionBoxProps) => {
       position="relative"
     >
       <Box
-        display={{ base: 'block', md: 'none' }}
+        // display={{ base: 'block', md: 'none' }}
         position={'absolute'}
         height="full"
         width={'full'}
         bgImage={'/assets/textures/metal.png'}
-        bgSize="40% 50%"
+        bgSize="20%"
         rounded={'2xl'}
       />
       <Flex
         direction={'column'}
         height="full"
         m={'2px'}
-        bg={'linear-gradient(239.18deg, #19394C 27.18%, #0A161F 96.11%)'}
+        bg={{
+          base: 'linear-gradient(239.18deg, #19394C 27.18%, #0A161F 96.11%)',
+          md: 'linear-gradient(265.73deg, #274C63 0%, #182F3E 100%)',
+        }}
         rounded={'2xl'}
         onClick={() => {}}
         flex={1}
