@@ -1,5 +1,4 @@
-import { Box, Card, Flex, Image } from '@concave/ui'
-import { log } from 'console'
+import { Box, Flex } from '@concave/ui'
 import { useState } from 'react'
 import useNftPositionFilter, {
   MarketPlaceFilterType,
@@ -84,14 +83,13 @@ export default function MarketplaceSearchCard() {
         mt={{ base: 0, md: 5 }}
         height={'full'}
         shadow={{ base: '', md: 'down' }}
-        rounded={'2xl'}
+        rounded={'xl'}
         overflowX="hidden"
         overflowY="scroll"
         __css={scrollBar}
         direction="column"
         width={{ base: '330px', md: '420px', lg: '600px' }}
         position={'relative'}
-        // px={'10px'}
       >
         {nftPositions}
       </Flex>
@@ -99,18 +97,12 @@ export default function MarketplaceSearchCard() {
   )
 }
 
-const invisibleScrollBar = {
-  '&::-webkit-scrollbar': {
-    display: { base: 'none', md: '' },
-  },
-}
-
 const scrollBar = {
   '&::-webkit-scrollbar': {
     width: { base: '0px', md: '15px' },
     display: { base: 'none', md: 'flex' },
-    // boxShadow: `-1px 1px 3px rgba(126, 162, 255, 0.26), inset 0px -5px 5px rgba(255, 255, 255, 0.02), inset -9px 12px 24px rgba(13, 17, 23, 0.49)`,
-    borderRadius: '10px',
+    boxShadow: `-1px 1px 3px rgba(126, 162, 255, 0.26), inset 0px -5px 5px rgba(255, 255, 255, 0.02), inset -9px 12px 24px rgba(13, 17, 23, 0.49)`,
+    borderRadius: '26px',
     mt: '30px',
   },
   '&::-webkit-scrollbar-thumb': {

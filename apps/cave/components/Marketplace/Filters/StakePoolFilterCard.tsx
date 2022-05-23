@@ -51,7 +51,10 @@ export default function StakePoolFilterCard(props: StakePoolFilterCardProps) {
             pos="absolute"
             width={{ base: '340px', md: 357 }}
             height={249}
-            background="linear-gradient(239.18deg, #19394C 27.18%, #0A161F 96.11%)"
+            bg={{
+              base: 'linear-gradient(239.18deg, #19394C 27.18%, #0A161F 96.11%)',
+              md: 'linear-gradient(265.73deg, #274C63 0%, #182F3E 100%)',
+            }}
             rounded={'2xl'}
             shadow="up"
           >

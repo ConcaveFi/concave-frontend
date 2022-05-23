@@ -1,14 +1,4 @@
-import { Box, Button, Card, Flex, Stack, Text, VStack } from '@concave/ui'
-import { Dispatch, SetStateAction, useState } from 'react'
-
-const highLightedBorder = {
-  border: '2px solid #7DE0FF',
-  // borderImageSource:
-  //   'linear-gradient(41.89deg, #53399B 0.69%, #7DE0FF 38.19%, #504179 72.85%, #84E2FF 100%)',
-}
-const testBorder = {
-  border: '2px solid transparent',
-}
+import { Flex, Text } from '@concave/ui'
 const UpSmall = `0px 4px 4px rgba(0, 0, 0, 0.25), inset -1px 1px 2px rgba(128, 186, 255, 0.05)`
 
 interface ToggleButtonProps {
@@ -44,7 +34,10 @@ export default function ToggleButton(props: ToggleButtonProps) {
       background={active ? backgroundBorder : ''}
     >
       <Flex
-        background={'linear-gradient(200.73deg, #274C63 20%, #182F3E 100%)'}
+        background={{
+          base: 'linear-gradient(239.18deg, #19394C 27.18%, #0A161F 120.11%)',
+          md: 'linear-gradient(200.73deg, #274C63 20%, #182F3E 100%)',
+        }}
         minWidth={50}
         m={'2px'}
         py={1}

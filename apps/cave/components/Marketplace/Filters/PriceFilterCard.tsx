@@ -4,7 +4,6 @@ import {
   Flex,
   Input,
   Popover,
-  PopoverArrow,
   PopoverContent,
   PopoverTrigger,
   Portal,
@@ -50,7 +49,10 @@ export default function PriceFilterCard(props: RedeemFilterCardProps) {
             height={198}
             width={{ base: '340px', md: '400px' }}
             rounded="2xl"
-            background={'linear-gradient(239.18deg, #19394C 27.18%, #0A161F 96.11%)'}
+            bg={{
+              base: 'linear-gradient(239.18deg, #19394C 27.18%, #0A161F 96.11%)',
+              md: 'linear-gradient(265.73deg, #274C63 0%, #182F3E 100%)',
+            }}
             shadow="up"
           >
             <Box
@@ -179,6 +181,7 @@ const FiltersContainer = (props: FiltersContainerProps) => {
         alignItems="center"
         direction={{ base: 'column', md: 'row' }}
         gap={{ base: 2, md: 0 }}
+        align="center"
       >
         <Text
           alignSelf={'start'}
@@ -187,6 +190,7 @@ const FiltersContainer = (props: FiltersContainerProps) => {
           fontSize={14}
           fontWeight={700}
           textColor={'#5F7A99'}
+          my="auto"
         >
           CNV Price Range:
         </Text>

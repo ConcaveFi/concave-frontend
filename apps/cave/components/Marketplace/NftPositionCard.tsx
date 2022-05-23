@@ -232,7 +232,6 @@ const BuyButton = () => {
         fontWeight="bold"
         fontSize="md"
         mx="auto"
-
       >
         <Text>Buy</Text>
       </Flex>
