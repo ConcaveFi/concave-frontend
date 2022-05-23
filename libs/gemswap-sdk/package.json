@@ -11,8 +11,8 @@
     "dist/**"
   ],
   "scripts": {
-    "build": "tsdx build",
-    "dev": "tsdx watch --verbose",
+    "build": "tsup src/index.ts --format esm,cjs --dts",
+    "dev": "tsup src/index.ts --format esm,cjs --watch --dts",
     "test": "tsdx test"
   },
   "dependencies": {
