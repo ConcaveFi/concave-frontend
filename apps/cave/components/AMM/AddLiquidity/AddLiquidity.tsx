@@ -130,17 +130,21 @@ function AddLiquidityContent({
             You will lock
           </Text>
           <Text width={'90%'} fontWeight={'700'} textColor="text.accent">
-            {`${lpData.amount0.toSignificant(6, { groupSeparator: ',' })} ${lpData.token0.symbol}`}
+            {`${lpData.amount0?.toSignificant(6, { groupSeparator: ',' })} ${
+              lpData.token0?.symbol
+            }`}
           </Text>
           <Text width={'90%'} fontWeight={'700'} textColor="text.accent">
-            {`${lpData.amount1.toSignificant(6, { groupSeparator: ',' })} ${lpData.token1.symbol}`}
+            {`${lpData.amount1?.toSignificant(6, { groupSeparator: ',' })} ${
+              lpData.token1?.symbol
+            }`}
           </Text>
           <Text textColor={'text.low'} fontWeight="700" fontSize={18} mt={4}>
             You will receive
           </Text>
           <Text width={'90%'} fontWeight={'700'} textColor="text.accent">
             {`${lpData.poolShare?.amount.toSignificant(6, { groupSeparator: ',' })} ${
-              lpData.pair.liquidityToken.symbol
+              lpData?.pair?.liquidityToken?.symbol
             } ${
               +lpData.poolShare?.amount.toSignificant(6, { groupSeparator: ',' }) > 1
                 ? 'Tokens'

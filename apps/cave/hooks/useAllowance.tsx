@@ -7,9 +7,9 @@ import { useApprove } from './useApprove'
 
 export const useApproval = (currencyAmount: CurrencyAmount<Token>, address: string) => {
   return useApprovalWhenNeeded(
-    currencyAmount.currency,
+    currencyAmount?.currency,
     address,
-    currencyAmount.numerator.toString(),
+    currencyAmount?.numerator.toString(),
   )
 }
 
@@ -65,7 +65,7 @@ export const useApprovalWhenNeeded = (
     if (approve.isWaitingForConfirmation) {
       return 'Approve in wallet'
     }
-    return `Approve ${token.symbol}`
+    return `Approve ${token?.symbol}`
   })()
 
   return [
