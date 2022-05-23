@@ -9,7 +9,7 @@ export const listAllNonFunginleTokensOnAddress = async (
   chainId: number,
   contractAddress?: string,
 ) => {
-  const network = chainId === 1 ? 'mainnet' : 'ropsten'
+  const network = chainId === 1 ? 'mainnet' : 'rinkeby'
   const web3 = createAlchemyWeb3(`https://eth-${network}.alchemyapi.io/v2/demo`)
   const nft = await web3.alchemy.getNfts({ owner })
   if (!contractAddress) {

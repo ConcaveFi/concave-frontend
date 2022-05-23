@@ -94,7 +94,7 @@ const TransactionInfo = ({ recentTransaction }: { recentTransaction: RecentTrans
         <Text>{recentTransaction.type}</Text>
         <Link
           isExternal
-          href={`https://ropsten.etherscan.io/tx/${transaction.hash}`}
+          href={`https://RINKEBY.etherscan.io/tx/${transaction.hash}`}
           fontSize={'14px'}
           textColor={'text.low'}
         >

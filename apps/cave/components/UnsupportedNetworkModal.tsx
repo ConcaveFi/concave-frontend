@@ -9,7 +9,7 @@ export const UnsupportedNetworkModal = () => {
       bluryOverlay={true}
       title="Unsupported Network"
       titleAlign="center"
-      isOpen={data.chain?.id && ![chain.mainnet.id, chain.ropsten.id].includes(data.chain?.id)}
+      isOpen={data.chain?.id && ![chain.mainnet.id, chain.RINKEBY.id].includes(data.chain?.id)}
       onClose={() => {}}
       bodyProps={{ w: '350px', gap: 2 }}
       hideClose
