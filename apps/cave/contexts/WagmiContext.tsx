@@ -6,7 +6,7 @@ import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
 import { concaveProvider, concaveWSProvider, infuraId } from 'lib/providers'
 import { NEXT_PUBLIC_ALCHEMY_ID } from 'lib/env.conf'
 
-const chains = [chain.mainnet, chain.RINKEBY] // app supported chains
+const chains = [chain.mainnet, chain.rinkeby] // app supported chains
 
 const connectors = (config) => [
   new InjectedConnector({ chains }),
