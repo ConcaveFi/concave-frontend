@@ -18,6 +18,7 @@
     "@0xsequence/multicall": "^0.39.6",
     "@badrap/bar-of-progress": "^0.2.1",
     "@concave/gemswap-sdk": "*",
+    "@concave/core": "*",
     "@concave/icons": "*",
     "@concave/marketplace": "*",
     "@concave/ui": "*",
