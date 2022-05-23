@@ -66,7 +66,15 @@ export default function RecentTransactionsContainer() {
       {/* -------------------------- */}
 
       {recentTransactions.length > 0 && (
-        <Flex direction={'column'} mt={3} gap={1} maxH="90px">
+        <Flex
+          direction={'column'}
+          mt={3}
+          gap={1}
+          maxH="98px"
+          overflow={'auto'}
+          apply="border.secondary"
+          __css={scroll}
+        >
           {recentTransactions.map((value, index) => (
             <TransactionInfo key={index} recentTransaction={value} />
           ))}
@@ -122,3 +130,22 @@ const spin = keyframes({
   '0%': { transform: 'rotate(0deg)' },
   '100%': { transform: 'rotate(360deg)' },
 })
+
+const scroll = {
+  '::-webkit-scrollbar': {
+    width: '12px',
+  },
+
+  '::-webkit-scrollbar-track': {
+    // boxShadow: 'inset 0 0 10px 10px',
+    // color: 'green.300',
+    border: 'solid 4px transparent',
+    rounded: '2xl',
+  },
+
+  '::-webkit-scrollbar-thumb': {
+    border: 'solid 3px transparent',
+    boxShadow: 'inset 0 0 10px 10px #74bae8',
+    rounded: 'full',
+  },
+}
