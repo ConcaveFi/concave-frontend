@@ -43,7 +43,7 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
       key={index}
       opacity={1 - (isOpen ? index / 10 : (index / 10) * 3)}
     >
-      {commify(parseFloat(value.output).toFixed()) + ' CNV'}
+      {/* {commify(parseFloat(value.output).toFixed()) + ' CNV'} */}
     </Text>
   ))
   const inputAmounts = solds.map((value, index) => (

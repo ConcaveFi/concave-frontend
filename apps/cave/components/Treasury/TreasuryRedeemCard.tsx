@@ -19,7 +19,6 @@ import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 function ClaimAcnvButton() {
   const netWorkdId = useCurrentSupportedNetworkId()
   const [{ data: account }] = useAccount()
-  console.table(account)
   const [{ data, error, loading }, write] = useContractWrite(
     {
       addressOrName: '0x38baBedCb1f226B49b2089DA0b84e52b6181Ca59',

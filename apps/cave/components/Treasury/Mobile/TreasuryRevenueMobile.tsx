@@ -29,18 +29,13 @@ export default function TreasuryRevenueMobile({
 
   useEffect(() => {
     if (data) {
-      setLastsSolds(
-        data.logAccrualBondsV1_BondSold.filter((value, index) => {
-          if (index < 3) return 1
-        }),
-      )
+      setLastsSolds(data.logAccrualBondsV1_BondSold.slice(0, 3))
     }
   }, [data])
 
   const relativeTimeline = lastsSolds
     ? lastsSolds.map((value, index) => (
         <Text key={index} opacity={1 - (index / 10) * 3}>
-          {' '}
           {formatDistanceStrict(value.timestamp * 1000, new Date().getTime()) + ' ago'}{' '}
         </Text>
       ))
@@ -48,16 +43,14 @@ export default function TreasuryRevenueMobile({
   const lastsAmounts = lastsSolds
     ? lastsSolds.map((value, index) => (
         <Text key={index} opacity={1 - (index / 10) * 3}>
-          {' '}
-          {commify(value.inputAmount) + ' DAI'}
+          {commify(commify(parseFloat(value.inputAmount).toFixed(2))) + ' DAI'}
         </Text>
       ))
     : ['0', '0', '0']
   const lastsOutputamounts = lastsSolds
     ? lastsSolds.map((value, index) => (
         <Text key={index} opacity={1 - (index / 10) * 3}>
-          {' '}
-          {'+$' + commify(parseFloat(value.output).toFixed(2))}{' '}
+          {'+$' + commify(parseFloat(value.output).toFixed(2))}
         </Text>
       ))
     : ['0', '0', '0']

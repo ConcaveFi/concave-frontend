@@ -1216,7 +1216,11 @@ export const useGet_Stakingv1_Last100_LockQuery = <
   )
 export const Get_Accrualbondv1_Last10_SoldDocument = `
     query GET_ACCRUALBONDV1_LAST10_SOLD {
-  logAccrualBondsV1_BondSold(order_by: {txBlockNumber: desc}, limit: 10) {
+  logAccrualBondsV1_BondSold(
+    order_by: {txBlockNumber: desc}
+    limit: 10
+    where: {output: {_neq: "null"}}
+  ) {
     timestamp
     inputToken
     inputAmount

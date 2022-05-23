@@ -9,13 +9,12 @@ interface SearchFilterCardProps {
 
 const SearchFilterCard = (props: SearchFilterCardProps) => {
   const { title, icon, hasFilter } = props
-  const gradientBg = 'linear-gradient(43deg, #72639B 0%, #44B9DE 100%)'
-  const defaultBackground = 'linear-gradient(209.18deg, #19394C 6.18%, #0A161F 146.11%)'
-  const UpSmall = `0px 4px 4px rgba(0, 0, 0, 0.25), inset -1px 1px 2px rgba(128, 186, 255, 0.05)`
 
   return (
     <Flex
-      background={!!hasFilter ? gradientBg : 'linear-gradient(265.73deg, #274C63 0%, #182F3E 100%)'}
+      background={
+        !!hasFilter ? 'stroke.primary' : 'linear-gradient(265.73deg, #274C63 0%, #182F3E 100%)'
+      }
       width={83}
       height={53}
       rounded="2xl"

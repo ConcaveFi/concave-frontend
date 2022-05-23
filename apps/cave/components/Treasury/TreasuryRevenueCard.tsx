@@ -120,14 +120,10 @@ export default function TreasuryRevenueCard(props) {
   const [lastsSolds, setLastsSolds] = useState([])
 
   useEffect(() => {
-    if (data) {
-      setLastsSolds(
-        data.logAccrualBondsV1_BondSold.filter((value, index) => {
-          if (index < 3) return 1
-        }),
-      )
-    }
+    setLastsSolds(data && data.logAccrualBondsV1_BondSold.splice(3))
   }, [data])
+
+  console.log(cnv)
 
   const relativeTimeline = lastsSolds
     ? lastsSolds.map(
@@ -135,9 +131,7 @@ export default function TreasuryRevenueCard(props) {
       )
     : ['loading', 'loading', 'loading']
 
-  const lastsAmounts = lastsSolds
-    ? lastsSolds.map((value) => commify(value.inputAmount))
-    : ['0', '0', '0']
+  const lastsAmounts = lastsSolds ? lastsSolds.map((value) => value.inputAmount) : ['0', '0', '0']
   const lastsOutputamounts = lastsSolds
     ? lastsSolds.map((value) => '+$' + commify(parseFloat(value.output).toFixed(2)))
     : ['0', '0', '0']
@@ -162,7 +156,7 @@ export default function TreasuryRevenueCard(props) {
           />
           <TreasuryInfo
             box1="Treasury Revenue 24h"
-            box1b="+$20253"
+            box1b="+$20,253"
             box2="Treasury Value"
             box2b={'$' + commify(total.toFixed(2))}
             box3="CNV total supply"
