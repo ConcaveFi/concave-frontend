@@ -119,7 +119,7 @@ const MarketplaceListing = (props: MarketplaceListingProps) => {
             </Text>
           </Flex>
         </Flex>
-<ListButton />
+        <ListButton />
         {/* <Flex direction={'column'} flex={1} textAlign={{ lg: 'start', md: 'center' }} ml="2">
           {actionButton}
         </Flex> */}
@@ -143,16 +143,11 @@ const ListButton = () => {
         fontWeight="bold"
         fontSize="md"
         mx="auto"
-
       >
-        <Text>
-        Coming Soon!
-        </Text>
-
+        <Text>Coming Soon!</Text>
       </Flex>
     </Button>
   )
 }
-
 
 export default MarketplaceListing

@@ -1,4 +1,5 @@
 import { Box, Button, Collapse, Flex, HStack, Image, Text } from '@concave/ui'
+import { PERIOD_TO_POOL_PARAMETER } from 'components/LiquidStaking/StakeCard'
 import { useState } from 'react'
 
 interface NftPositionBoxProps {
@@ -13,6 +14,9 @@ interface NftPositionBoxProps {
 const NftPositionBox = (props: NftPositionBoxProps) => {
   const { stakePool, discount, price, redeemIn } = props
   const active = props.active
+
+  const stakeImage =
+    stakePool === 360 ? '12m' : stakePool === 180 ? '6m' : stakePool === 90 ? '3m' : '1m'
 
   return (
     <Flex
@@ -44,7 +48,7 @@ const NftPositionBox = (props: NftPositionBoxProps) => {
             <Image
               width={{ base: '90px', lg: '70px' }}
               height={{ base: '90px', lg: '70px' }}
-              src={'/assets/marketplace/6mposition.png'}
+              src={`/assets/marketplace/${stakeImage}position.png`}
               alt="position"
             />
           </Flex>

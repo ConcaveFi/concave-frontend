@@ -20,6 +20,7 @@ import { useQuery } from 'react-query'
 import Emissions from './StakeModal/Emissions'
 import StakeInfo from './StakeModal/StakeInfo'
 import StakeInput from './StakeModal/StakeInput'
+
 export const PERIOD_TO_POOL_PARAMETER = {
   '360 days': 0,
   '180 days': 1,
