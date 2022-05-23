@@ -1,19 +1,18 @@
 {
-  "name": "@concave/gemswap-sdk",
+  "name": "@concave/core",
   "version": "0.0.0",
-  "description": "Concave Gemswap library",
+  "description": "Concave core library",
   "license": "MIT",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
-  "sideEffects": false,
   "files": [
     "dist/**"
   ],
   "scripts": {
     "build": "tsdx build",
     "dev": "tsdx watch --verbose",
-    "test": "tsdx test"
+    "test": "tsdx test --passWithNoTests"
   },
   "dependencies": {
     "@ethersproject/address": "^5.4.0",
@@ -27,8 +26,7 @@
     "jsbi": "^4.2.0",
     "tiny-invariant": "^1.1.0",
     "tiny-warning": "^1.0.0",
-    "toformat": "^2.0.0",
-    "@concave/core": "*"
+    "toformat": "^2.0.0"
   },
   "devDependencies": {
     "prettier": "^2.6.2",

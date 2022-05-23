@@ -1,7 +1,5 @@
-import { Currency } from './currency'
-import { Pair } from './pair'
-import { Price } from './price'
-import { Token } from './token'
+import { Currency, Token } from '@concave/core'
+import { Pair, Price } from '../entities'
 import invariant from 'tiny-invariant'
 
 export class Route<TInput extends Currency, TOutput extends Currency> {

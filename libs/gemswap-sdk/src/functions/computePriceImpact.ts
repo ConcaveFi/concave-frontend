@@ -1,6 +1,4 @@
-import { Currency } from '../entities'
-import { CurrencyAmount } from '../entities'
-import { Percent } from '../entities'
+import { Currency, CurrencyAmount, Percent } from '@concave/core'
 import { Price } from '../entities'
 
 /**

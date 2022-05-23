@@ -1,4 +1,5 @@
-import { CurrencyAmount, Price, Token } from '../../src'
+import { CurrencyAmount, Token } from '@concave/core'
+import { Price } from '../../src'
 
 describe('Price', () => {
   const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000'

@@ -1,8 +1,8 @@
+import { Token } from '../entities/token'
 import { AddressMap, ChainTokenMap, TokenMap } from '../types'
 import { CNV_ADDRESS, DAI_ADDRESS, USDC_ADDRESS, WETH9_ADDRESS, WNATIVE_ADDRESS } from './addresses'
 
 import { ChainId } from '../enums'
-import { Token } from '../entities'
 
 const makeTokenMap = (
   chains: ChainId[],
@@ -20,6 +20,14 @@ const makeTokenMap = (
   )
 
 const getAddressesChains = (addresses) => Object.keys(addresses).map((chainId) => +chainId)
+
+export const CNV: ChainTokenMap = makeTokenMap(
+  getAddressesChains(CNV_ADDRESS),
+  CNV_ADDRESS,
+  18,
+  'CNV',
+  'Concave',
+)
 
 export const USDC: TokenMap = {
   ...makeTokenMap(getAddressesChains(USDC_ADDRESS), USDC_ADDRESS, 6, 'USDC', 'USD Coin'),
@@ -188,11 +196,3 @@ export const WNATIVE: TokenMap = {
     'Wrapped Glimmer',
   ),
 }
-
-export const CNV: ChainTokenMap = makeTokenMap(
-  getAddressesChains(CNV_ADDRESS),
-  CNV_ADDRESS,
-  18,
-  'CNV',
-  'Concave',
-)

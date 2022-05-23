@@ -1,4 +1,4 @@
-import _Big, { RoundingMode } from 'big.js'
+import _Big from 'big.js'
 
 import { BigintIsh } from '../types'
 import JSBI from 'jsbi'

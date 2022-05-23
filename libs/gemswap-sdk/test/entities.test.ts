@@ -1,8 +1,7 @@
-import { CurrencyAmount, Pair, Route, Token, Trade } from '../src/entities'
+import { WETH9 as _WETH9, CurrencyAmount, Token } from '@concave/core'
+import { Pair, Route, Trade, TradeType } from '../src/entities'
 
 import JSBI from 'jsbi'
-import { TradeType } from '../src/enums'
-import { WETH9 as _WETH9 } from '../src/constants'
 import invariant from 'tiny-invariant'
 
 const ADDRESSES = [
