@@ -81,8 +81,7 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
           <ApproveButton
             approveArgs={{
               currency: stakeInput.currency,
-              amount: stakeInput.denominator.toString(),
-              contract: StakingV1ProxyAddress[stakeInput.currency.chainId],
+              spender: StakingV1ProxyAddress[stakeInput.currency.chainId],
             }}
             mt={5}
             onClick={lock}

@@ -181,7 +181,7 @@ const RemoveLiquidityActions = ({
       <ApproveButton
         approveArgs={{
           currency: removeLiquidityState.pair.liquidityToken,
-          contract: ROUTER_ADDRESS[networkId],
+          spender: ROUTER_ADDRESS[networkId],
           onSuccess: () => setCurrencyApproved(true),
         }}
         disabled={!removeLiquidityState.percentToRemove}

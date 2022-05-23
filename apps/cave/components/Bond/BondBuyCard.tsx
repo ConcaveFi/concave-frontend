@@ -140,8 +140,7 @@ export function BondBuyCard(props: {
         w="full"
         approveArgs={{
           currency: currencyIn,
-          amount: amountIn.denominator,
-          contract: BOND_ADDRESS[networkId],
+          spender: BOND_ADDRESS[networkId],
         }}
         isDisabled={+userBalance < +amountIn}
         onClick={confirmModal.onOpen}

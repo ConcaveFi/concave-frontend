@@ -12,6 +12,7 @@ export const useAllowance = (token: Token, spender: string, userAddress: string)
     data: value,
     isLoading,
     isError,
+    error,
     isSuccess,
     refetch,
   } = useQuery<BigNumber>(
@@ -30,6 +31,7 @@ export const useAllowance = (token: Token, spender: string, userAddress: string)
     isError,
     isLoading,
     isSuccess,
+    error,
     value,
     formatted: value && formatUnits(value, token?.decimals),
     amount: value && CurrencyAmount.fromRawAmount(token, value.toString()),
@@ -49,6 +51,7 @@ export const useContractApprove = (
     isLoading: isWaitingForConfirmation,
     isSuccess: isTransactionSent,
     isError,
+    error,
     refetch: sendApproveTx,
   } = useQuery<TransactionResponse>(
     ['approve', token?.address, spender],
@@ -69,6 +72,7 @@ export const useContractApprove = (
     isWaitingTransactionReceipt,
     isTransactionSent,
     isError,
+    error,
     tx,
     receipt,
     sendApproveTx,

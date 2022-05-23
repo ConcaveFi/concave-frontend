@@ -90,8 +90,7 @@ const SupplyLiquidityContent = ({
         autoHide
         approveArgs={{
           currency: amount0.currency,
-          amount: amount0.numerator.toString(),
-          contract: ROUTER_ADDRESS[amount0.currency.chainId],
+          spender: ROUTER_ADDRESS[amount0.currency.chainId],
           onSuccess: () => setApprove0(true),
         }}
       />
@@ -102,8 +101,7 @@ const SupplyLiquidityContent = ({
         autoHide
         approveArgs={{
           currency: amount1.currency,
-          amount: amount1.numerator.toString(),
-          contract: ROUTER_ADDRESS[amount0.currency.chainId],
+          spender: ROUTER_ADDRESS[amount0.currency.chainId],
           onSuccess: () => setApprove1(true),
         }}
       />
