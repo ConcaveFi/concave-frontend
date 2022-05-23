@@ -1,73 +1,11 @@
-import { tokenService } from 'lib/token.service'
+import { ChartInterval, tokenService } from 'lib/token.service'
 import { CandlestickData } from 'lightweight-charts'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { useQuery } from 'react-query'
-
-const avaliableIntervals: CandleStickIntervalTypes[] = ['5m', '15m', '1H', '4H', '1D']
-const interval: CandleStickIntervalTypes = '5m'
-const defautValue = {
-  loading: true,
-  interval,
-  avaliableIntervals,
-  data: [],
-}
-
-export type CandleStickIntervalTypes = '5m' | '15m' | '1H' | '4H' | '1D'
-
-export type CandleStickChartProps = {
-  loading: boolean
-  interval: CandleStickIntervalTypes
-  avaliableIntervals: CandleStickIntervalTypes[]
-  data: any[]
-}
 
 const ID = 'CANDLESTICK_TOKEN'
 
-export const useCandleStickChart = (inputToken: string, outputToken: string) => {
-  const [candleStickData, setCandleStickData] = useState<CandleStickChartProps>({ ...defautValue })
-
-  const set = (value: Partial<CandleStickChartProps>) => {
-    setCandleStickData((currentValue) => ({ ...currentValue, ...value }))
-  }
-
-  const { data: inputData } = useQuery([ID, inputToken, candleStickData.interval], () =>
-    tokenService.fetchCandleStickData({
-      token: inputToken,
-      interval: candleStickData.interval,
-    }),
-  )
-
-  const { data: outputData } = useQuery([ID, outputToken, candleStickData.interval], () =>
-    tokenService.fetchCandleStickData({
-      token: outputToken,
-      interval: candleStickData.interval,
-    }),
-  )
-
-  const promiseData = useMemo(async () => {
-    const result = joinData({
-      inputData: inputData,
-      outputData: outputData,
-    })
-    return result
-  }, [inputData, outputData])
-
-  useEffect(() => {
-    set({ loading: true })
-    try {
-      if (!inputData || !outputData) throw 'chart: not enough data'
-      promiseData.then((data) => {
-        set({ loading: false, data: data })
-      })
-    } catch {
-      set({ loading: false, data: [] })
-    }
-  }, [inputData, outputData, promiseData])
-
-  return { ...candleStickData, set }
-}
-
-export const joinData = ({
+const joinData = ({
   inputData = [],
   outputData = [],
 }: {
@@ -87,4 +25,26 @@ export const joinData = ({
       open: input.open / output.open,
     }
   })
+}
+
+export const useCandleStickChart = (
+  inputToken: string,
+  outputToken: string,
+  interval: ChartInterval,
+) => {
+  const fromQuery = useQuery([ID, inputToken, interval], () =>
+    tokenService.fetchCandleStickData({ token: inputToken, interval }),
+  )
+
+  const toQuery = useQuery([ID, outputToken, interval], () =>
+    tokenService.fetchCandleStickData({ token: outputToken, interval }),
+  )
+
+  return useMemo(
+    () => ({
+      isLoading: fromQuery.isLoading || toQuery.isLoading,
+      data: joinData({ inputData: fromQuery.data, outputData: toQuery.data }),
+    }),
+    [fromQuery.isLoading, toQuery.isLoading, fromQuery.data, toQuery.data],
+  )
 }

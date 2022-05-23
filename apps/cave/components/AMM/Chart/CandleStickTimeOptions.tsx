@@ -1,10 +1,10 @@
 import { BoxRadioGroup, HStack, StackProps } from '@concave/ui'
-import { CandleStickIntervalTypes } from './useCandleStickChart'
+import { ChartInterval } from 'lib/token.service'
 
 type OwnProps = StackProps & {
-  intervals: string[]
-  defaultValue: string
-  onChangeInteral: (interval: CandleStickIntervalTypes) => void
+  intervals: readonly ChartInterval[]
+  defaultValue: ChartInterval
+  onChangeInteral: (interval: ChartInterval) => void
 }
 
 export const CandleStickTimeOptions = ({
@@ -15,7 +15,11 @@ export const CandleStickTimeOptions = ({
 }: OwnProps) => {
   return (
     <HStack p={2} borderRadius={'full'} shadow="Down Big" {...stackProps}>
-      <BoxRadioGroup options={intervals} defaultValue={defaultValue} onChange={onChangeInteral} />
+      <BoxRadioGroup
+        options={intervals as string[]}
+        defaultValue={defaultValue}
+        onChange={onChangeInteral}
+      />
     </HStack>
   )
 }

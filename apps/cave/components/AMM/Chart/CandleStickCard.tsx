@@ -6,6 +6,8 @@ import { CandleStickTimeOptions } from './CandleStickTimeOptions'
 import { CandleStickTokenOptions } from './CandleStickTokenOptions'
 import { useCandleStickChart } from './useCandleStickChart'
 import { motion } from 'framer-motion'
+import { useState } from 'react'
+import { chartIntervals, ChartInterval } from 'lib/token.service'
 
 const CandleStickChart = dynamic(() => import('./CandleStickChart'), {
   loading: () => <p>Loading ...</p>,
@@ -21,9 +23,10 @@ export const CandleStickCard = ({ from: _from, to: _to }: { from?: Currency; to?
     ? [_to, _from]
     : [_from, _to]
 
-  const candleStickChart = useCandleStickChart(from?.symbol, to?.symbol)
+  const [interval, setInterval] = useState<ChartInterval>('5m')
+  const candleStickChart = useCandleStickChart(from?.symbol, to?.symbol, interval)
 
-  const hasData = candleStickChart.data.length > 0
+  const hasData = candleStickChart.isLoading || candleStickChart.data.length > 0
   return (
     <SlideFade
       layout="position"
@@ -36,11 +39,9 @@ export const CandleStickCard = ({ from: _from, to: _to }: { from?: Currency; to?
           <Flex justifyContent="space-between" w="100%" gap={8}>
             <CandleStickTokenOptions from={from} to={to} />
             <CandleStickTimeOptions
-              intervals={candleStickChart.avaliableIntervals}
-              defaultValue={candleStickChart.interval}
-              onChangeInteral={(interval) => {
-                candleStickChart.set({ interval })
-              }}
+              intervals={chartIntervals}
+              defaultValue={interval}
+              onChangeInteral={setInterval}
               display={{ base: 'none', md: 'flex' }}
             />
           </Flex>
@@ -49,11 +50,9 @@ export const CandleStickCard = ({ from: _from, to: _to }: { from?: Currency; to?
           </Box>
           <Flex justifyContent={'center'} display={{ base: 'flex', md: 'none' }}>
             <CandleStickTimeOptions
-              intervals={candleStickChart.avaliableIntervals}
-              defaultValue={candleStickChart.interval}
-              onChangeInteral={(interval) => {
-                candleStickChart.set({ interval })
-              }}
+              intervals={chartIntervals}
+              defaultValue={interval}
+              onChangeInteral={setInterval}
             />
           </Flex>
         </Card>
