@@ -225,9 +225,9 @@ const LPPositionItem = ({ userAddress, pair }: LPPosition) => {
 }
 
 export const PositionInfoItem = ({ color = '', label, value, mt = 0, children = <></> }) => (
-  <Flex justify="space-between" align={'center'} mt={mt}>
+  <Flex direction={{ base: 'column', sm: 'row' }} justify="space-between" align={'center'} mt={mt}>
     <Text color={color}>{label}</Text>
-    <HStack gap={2} align={'center'} alignContent={'center'}>
+    <HStack gap={{ base: 0, sm: 2 }} align={'center'} alignContent={'center'}>
       <Text>{value}</Text>
       {children}
     </HStack>
