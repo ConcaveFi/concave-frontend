@@ -15,14 +15,14 @@ export default function ConnectedAreasContainer() {
   return (
     <Flex direction={'column'} gap={4} mx="auto">
       <Flex
-        width={'340px'}
+        width={{ base: '290px', sm: '340px' }}
         rounded="3xl"
         height={'60px'}
         shadow="down"
         align={'center'}
         justify="space-between"
       >
-        <Text ml={4} fontSize="13px" fontWeight="700" textColor={'text.low'}>
+        <Text ml={4} fontSize="12px" fontWeight="700" textColor={'text.low'}>
           Connected with {connectorData?.connector?.name}
         </Text>
         <Button
@@ -30,24 +30,25 @@ export default function ConnectedAreasContainer() {
           rounded={'3xl'}
           onClick={onOpen}
           _focus={{}}
-          width={'102px'}
+          // width={{ base: '87px', sm: '102px' }}
+          px="3"
           height="40px"
           boxShadow="Up Big"
         >
-          <Text my={'auto'} mx="auto" fontWeight={'bold'} fontSize="lg">
+          <Text my={'auto'} mx="auto" fontWeight={'bold'} fontSize={{ base: '14px', sm: 'lg' }}>
             Change
           </Text>
         </Button>
       </Flex>
       <Flex
-        width={'340px'}
+        width={{ base: '290px', sm: '340px' }}
         justify="space-between"
         rounded="3xl"
         height={'60px'}
         shadow="down"
         align={'center'}
       >
-        <Text fontSize="13px" ml={4} fontWeight="700" textColor={'text.low'}>
+        <Text fontSize="12px" ml={4} fontWeight="700" textColor={'text.low'}>
           Change Network
         </Text>
         <Button
@@ -71,7 +72,7 @@ export default function ConnectedAreasContainer() {
                   : 'https://raw.githubusercontent.com/ConcaveFi/assets/master/blockchains/arbitrum/info/logo.png'
               }
             />
-            <Text my={'auto'} mr={4} fontWeight={'bold'} fontSize="lg">
+            <Text my={'auto'} mr={4} fontWeight={'bold'} fontSize={{ base: '14px', sm: 'lg' }}>
               {networkData?.chain?.name}
             </Text>
           </Flex>

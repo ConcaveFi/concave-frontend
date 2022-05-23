@@ -29,7 +29,7 @@ export default function YourWalletModal(props: YourWalletModalProps) {
 
   return (
     <Modal
-      title=""
+      title="Your wallet"
       hideClose
       motionPreset="slideInBottom"
       preserveScrollBarGap
@@ -41,10 +41,9 @@ export default function YourWalletModal(props: YourWalletModalProps) {
       <Flex
         direction={'column'}
         rounded={'2xl'}
-        w={'380px'}
+        w={{ base: '330px', sm: '380px' }}
         maxW="380px"
         h="320px"
-        mx={'auto'}
         m={-3}
         shadow={'up'}
       >

@@ -121,10 +121,10 @@ const PairsAccordion = ({ userAddress, pairs }: PairsAccordionProps) => {
     )
   }
   return (
-    <Box borderRadius={'2xl'} px={4} py={2} shadow={'down'} w={'100%'}>
+    <Box borderRadius={'2xl'} px={{ base: 0, sm: 4 }} py={2} shadow={'down'} w={'100%'}>
       <Box
         borderRadius={'2xl'}
-        p={4}
+        p={{ base: 2, sm: 4 }}
         maxH={'55vh'}
         apply="scrollbar.secondary"
         w={'100%'}

@@ -34,7 +34,7 @@ const Pools = () => {
             align="center"
             width="full"
             gap={5}
-            p={4}
+            p={{ base: 0, sm: 4 }}
           >
             <MyPositions />
           </Flex>
