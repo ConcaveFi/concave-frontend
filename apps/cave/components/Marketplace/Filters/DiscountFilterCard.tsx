@@ -1,4 +1,13 @@
-import { Button, Flex, Popover, PopoverContent, PopoverTrigger, Portal, Text } from '@concave/ui'
+import {
+  Box,
+  Button,
+  Flex,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  Portal,
+  Text,
+} from '@concave/ui'
 import { useEffect, useState } from 'react'
 import { NftPositionSortType } from '../hooks/useNftPositionSort'
 import ToggleButton from '../ToggleButton'
@@ -52,7 +61,7 @@ export default function DiscountFilterCard(props: RedeemFilterCardProps) {
           <Flex
             width={160}
             height={160}
-            background="linear-gradient(265.73deg, #274C63 0%, #182F3E 100%)"
+            background="linear-gradient(239.18deg, #19394C 27.18%, #0A161F 96.11%)"
             rounded={'2xl'}
             justifyContent="center"
             alignItems={'center'}
@@ -60,6 +69,15 @@ export default function DiscountFilterCard(props: RedeemFilterCardProps) {
             gap={1}
             shadow="up"
           >
+            <Box
+              display={{ base: 'none', md: 'block' }}
+              position={'absolute'}
+              height="full"
+              width={'full'}
+              bgImage={'/assets/textures/metal.png'}
+              bgSize="16% 16%"
+              rounded={'2xl'}
+            />
             <Text fontSize={14} fontWeight={700} textColor={'#5F7A99'}>
               Sort:
             </Text>

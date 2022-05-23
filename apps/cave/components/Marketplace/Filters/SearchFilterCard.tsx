@@ -1,4 +1,4 @@
-import { Text, VStack, HStack, Flex, Button } from '@concave/ui'
+import { Text, VStack, HStack, Flex, Button, Box } from '@concave/ui'
 import { GasIcon, RedeemIcon, LinesIcon, DiscountIcon, PriceIcon, StakeIcon } from '@concave/icons'
 
 interface SearchFilterCardProps {
@@ -10,7 +10,7 @@ interface SearchFilterCardProps {
 const SearchFilterCard = (props: SearchFilterCardProps) => {
   const { title, icon, hasFilter } = props
   const gradientBg = 'linear-gradient(43deg, #72639B 0%, #44B9DE 100%)'
-  const defaultBackground = 'linear-gradient(200.73deg, #274C63 00%, #182F3E 100%)'
+  const defaultBackground = 'linear-gradient(209.18deg, #19394C 6.18%, #0A161F 146.11%)'
   const UpSmall = `0px 4px 4px rgba(0, 0, 0, 0.25), inset -1px 1px 2px rgba(128, 186, 255, 0.05)`
 
   return (
@@ -19,7 +19,7 @@ const SearchFilterCard = (props: SearchFilterCardProps) => {
       width={83}
       height={53}
       rounded="2xl"
-      shadow={UpSmall}
+      transform={{ base: 'scale(0.9)', md: 'scale(1)' }}
     >
       <Flex
         direction={'column'}
@@ -28,9 +28,18 @@ const SearchFilterCard = (props: SearchFilterCardProps) => {
         gap={1}
         background={defaultBackground}
         rounded="2xl"
-        m={'2px'}
+        m={'1px'}
         flex="1"
+        shadow={'up'}
       >
+        <Box
+          position={'absolute'}
+          height="full"
+          width={'full'}
+          bgImage={'/assets/textures/metal.png'}
+          bgSize="20%"
+          rounded={'2xl'}
+        />
         <Flex gap={0} mt={1} alignItems="end">
           <>
             {icon === 'GasIcon' && <GasIcon viewBox="0 0 16 16" />}

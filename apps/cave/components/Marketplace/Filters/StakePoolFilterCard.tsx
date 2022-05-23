@@ -3,10 +3,12 @@ import {
   Button,
   Flex,
   Popover,
+  PopoverArrow,
   PopoverContent,
   PopoverTrigger,
   Portal,
   Text,
+  useBreakpointValue,
 } from '@concave/ui'
 import { useEffect, useState } from 'react'
 import ChooseButton from '../ChooseButton'
@@ -27,9 +29,10 @@ export default function StakePoolFilterCard(props: StakePoolFilterCardProps) {
 
   const [hasSorter, setHasSorter] = useState(false)
   const [hasFilter, setHasFilter] = useState(false)
+  const mobileLayout = useBreakpointValue({ base: true, md: false })
 
   return (
-    <Popover>
+    <Popover offset={[mobileLayout ? 115 : 132, 10]}>
       {/* Chakra type bug, related to just released react 18, should be fixed soon 
         // @ts-ignore  */}
       <PopoverTrigger>
@@ -42,16 +45,24 @@ export default function StakePoolFilterCard(props: StakePoolFilterCardProps) {
         </Button>
       </PopoverTrigger>
       <Portal>
-        <PopoverContent width={160} border={'none'}>
+        <PopoverContent>
           <Flex
             flex={1}
             pos="absolute"
-            width={357}
+            width={{ base: '340px', md: 357 }}
             height={249}
-            background="linear-gradient(265.73deg, #274C63 0%, #182F3E 100%)"
+            background="linear-gradient(239.18deg, #19394C 27.18%, #0A161F 96.11%)"
             rounded={'2xl'}
             shadow="up"
           >
+            <Box
+              position={'absolute'}
+              height="full"
+              width={'full'}
+              bgImage={'/assets/textures/metal.png'}
+              bgSize="20%"
+              rounded={'2xl'}
+            />
             <Box position={'relative'} width={'full'} height={100}>
               <PeriodSorts
                 onChangeCurSorterActive={setHasSorter}
@@ -187,11 +198,10 @@ const Periods = (props: PeriodsProps) => {
         textColor={'#5F7A99'}
         wrap={'wrap'}
         justifyContent="center"
-        mx="3"
         alignItems={'center'}
-        gap="2"
+        gap={2}
       >
-        <Text px={2.5}>Stake Pool:</Text>
+        <Text px={4}>Stake Pool:</Text>
         {periodButtonsComp}
       </Flex>
       <Flex height={'73px'} justifyContent="center" alignItems={'end'} gap="3">

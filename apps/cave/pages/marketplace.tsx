@@ -49,7 +49,7 @@ const Marketplace = () => {
             direction={{ xl: 'row', base: 'column-reverse' }}
             justify="center"
             align={'center'}
-            gap={8}
+            gap={{ base: 1, md: 8 }}
             width="full"
           >
             <Flex
@@ -58,7 +58,7 @@ const Marketplace = () => {
               position="relative"
               justify={'center'}
               align="center"
-              mt={{ xl: 12, base: 6 }}
+              mt={{ xl: 12, md: 6, base: 0 }}
             >
               <MarketplaceSearchCard />
             </Flex>
@@ -67,7 +67,7 @@ const Marketplace = () => {
               gap={{ xl: 8, base: 0 }}
               align="center"
               position="relative"
-              mt={{ xl: 14, base: 6 }}
+              mt={{ xl: 14, base: 0, md: 6 }}
             >
               <MarketplaceStakeCard />
               <SwitchView

@@ -20,7 +20,6 @@ const NftPositionBox = (props: NftPositionBoxProps) => {
       height={'full'}
       maxHeight={{ base: '180px', lg: '80px', xl: '80px' }}
       position="relative"
-      bg={'linear-gradient(265.73deg, #274C63 0%, #182F3E 100%)'}
       rounded="2xl"
       shadow={'up'}
       direction={{ base: 'column', lg: 'row', xl: 'row' }}
@@ -41,9 +40,9 @@ const NftPositionBox = (props: NftPositionBoxProps) => {
               {stakePool} Days
             </Text>
           </Flex>
-          <Box w={{ base: '25%', xl: '45%', lg: '45%' }}>
+          <Flex w={{ base: '25%', xl: '45%', lg: '45%' }}>
             <Image sizes="100%" src={'/assets/marketplace/6mposition.png'} alt="position" />
-          </Box>
+          </Flex>
         </HStack>
       </Flex>
 
@@ -52,7 +51,7 @@ const NftPositionBox = (props: NftPositionBoxProps) => {
           <Text color="text.low" fontSize={{ base: '12px', xl: 'sm', lg: 'sm' }} noOfLines={1}>
             Redeem In:
           </Text>
-          <Text fontSize="md" fontWeight="bold">
+          <Text fontSize={{ base: '14px', xl: 'sm', lg: 'sm' }} fontWeight="bold">
             {redeemIn} Days
           </Text>
         </Flex>
@@ -60,7 +59,7 @@ const NftPositionBox = (props: NftPositionBoxProps) => {
           <Text color="text.low" fontSize={{ base: '12px', xl: 'sm', lg: 'sm' }} noOfLines={1}>
             Price:
           </Text>
-          <Text fontSize="md" fontWeight="bold" noOfLines={1}>
+          <Text fontSize={{ base: '14px', xl: 'sm', lg: 'sm' }} fontWeight="bold" noOfLines={1}>
             {price} CNV
           </Text>
         </Flex>
@@ -68,7 +67,7 @@ const NftPositionBox = (props: NftPositionBoxProps) => {
           <Text color="text.low" fontSize={{ base: '12px', xl: 'sm', lg: 'sm' }}>
             Discount:
           </Text>
-          <Text fontSize="md" fontWeight="bold">
+          <Text fontSize={{ base: '14px', xl: 'sm', lg: 'sm' }} fontWeight="bold">
             {discount}%
           </Text>
         </Flex>
@@ -84,7 +83,7 @@ const NftPositionBox = (props: NftPositionBoxProps) => {
             transition={'all'}
             transitionDuration="0.3s"
             transform={!!active ? 'rotate(180deg)' : ''}
-            height={'60px'}
+            boxSize="60px"
             src={`/assets/liquidstaking/modal-arrow-logo.svg`}
             alt="arrow down logo"
             cursor={'pointer'}
@@ -105,17 +104,28 @@ const NftPositionCard = (props: NftPositionBoxProps) => {
       bg={active ? 'stroke.primary' : 'rgb(0,0,0,0)'}
       rounded={'2xl'}
       justifyContent="center"
-      my={active ? 6 : 0}
+      my={active ? 6 : '1px'}
+      mx="auto"
       transition="all"
       transitionDuration={'0.3s'}
       maxH={'280px'}
-      width={{ xl: '520px', lg: 'full', base: 'full' }}
+      width={{ lg: '570px', base: 'full' }}
+      position="relative"
     >
+      <Box
+        display={{ base: 'block', md: 'none' }}
+        position={'absolute'}
+        height="full"
+        width={'full'}
+        bgImage={'/assets/textures/metal.png'}
+        bgSize="40% 50%"
+        rounded={'2xl'}
+      />
       <Flex
         direction={'column'}
         height="full"
         m={'2px'}
-        bg={'linear-gradient(265.73deg, #274C63 0%, #182F3E 100%)'}
+        bg={'linear-gradient(239.18deg, #19394C 27.18%, #0A161F 96.11%)'}
         rounded={'2xl'}
         onClick={() => {}}
         flex={1}
@@ -141,12 +151,14 @@ const NftPositionCard = (props: NftPositionBoxProps) => {
                 justifyContent="center"
                 alignItems={'start'}
               >
-                <Text color={'text.low'} fontSize="sm">
+                <Text color={'text.low'} fontSize={{ base: '12px', xl: 'sm', lg: 'sm' }}>
                   Last sold by 0x43fs... for
                 </Text>
                 <Flex justifyContent={'center'} alignItems="center">
-                  <Text fontWeight={500}>600 CNV</Text>
-                  <Text color={'text.low'} fontSize="sm">
+                  <Text fontWeight={500} fontSize={{ base: '14px', xl: 'sm', lg: 'sm' }}>
+                    600 CNV
+                  </Text>
+                  <Text color={'text.low'} fontSize={{ base: '12px', xl: 'sm', lg: 'sm' }}>
                     (3 days ago)
                   </Text>
                 </Flex>
@@ -159,19 +171,31 @@ const NftPositionCard = (props: NftPositionBoxProps) => {
                 textAlign="start"
                 // ml={4}
               >
-                <Text width={'full'} color={'text.low'} fontSize="sm">
+                <Text
+                  width={'full'}
+                  color={'text.low'}
+                  fontSize={{ base: '12px', xl: 'sm', lg: 'sm' }}
+                >
                   Redeem date:
                 </Text>
-                <Text width={'full'} fontWeight={500}>
+                <Text
+                  width={'full'}
+                  fontWeight={700}
+                  fontSize={{ base: '14px', xl: 'sm', lg: 'sm' }}
+                >
                   12.07.22
                 </Text>
               </Flex>
               <Flex textAlign={'start'} direction={'column'} justifyContent="center">
-                <Text color={'text.low'} fontSize="sm">
+                <Text color={'text.low'} fontSize={{ base: '12px', xl: 'sm', lg: 'sm' }}>
                   Current value
                 </Text>
                 <Flex justifyContent={'center'} alignItems="center">
-                  <Text width={'full'} fontWeight={500}>
+                  <Text
+                    width={'full'}
+                    fontWeight={700}
+                    fontSize={{ base: '14px', xl: 'sm', lg: 'sm' }}
+                  >
                     612.42 CNV
                   </Text>
                 </Flex>

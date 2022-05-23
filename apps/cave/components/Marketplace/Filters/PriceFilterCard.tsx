@@ -4,10 +4,12 @@ import {
   Flex,
   Input,
   Popover,
+  PopoverArrow,
   PopoverContent,
   PopoverTrigger,
   Portal,
   Text,
+  useBreakpointValue,
 } from '@concave/ui'
 import { useEffect, useState } from 'react'
 import ChooseButton from '../ChooseButton'
@@ -28,8 +30,12 @@ export default function PriceFilterCard(props: RedeemFilterCardProps) {
   const [hasSorter, setHasSorter] = useState(false)
   const [hasFilter, setHasFilter] = useState(false)
 
+  const [offSetX, setOffSetX] = useState(100)
+
+  const mobileLayout = useBreakpointValue({ base: true, md: false })
+
   return (
-    <Popover>
+    <Popover closeOnEsc offset={[mobileLayout ? -135 : -187, 10]} placement="bottom">
       {/* Chakra type bug, related to just released react 18, should be fixed soon 
         // @ts-ignore  */}
       <PopoverTrigger>
@@ -38,14 +44,23 @@ export default function PriceFilterCard(props: RedeemFilterCardProps) {
         </Button>
       </PopoverTrigger>
       <Portal>
-        <PopoverContent width={160} border={'none'}>
+        <PopoverContent>
           <Box
+            position={'relative'}
             height={198}
-            width={400}
+            width={{ base: '340px', md: '400px' }}
             rounded="2xl"
-            background={'linear-gradient(265.73deg, #274C63 0%, #182F3E 100%)'}
+            background={'linear-gradient(239.18deg, #19394C 27.18%, #0A161F 96.11%)'}
             shadow="up"
           >
+            <Box
+              position={'absolute'}
+              height="full"
+              width={'full'}
+              bgImage={'/assets/textures/metal.png'}
+              bgSize="20%"
+              rounded={'2xl'}
+            />
             <SortCard
               onChangeActive={setHasSorter}
               currentSorter={currentSorter}
@@ -116,7 +131,7 @@ const SortCard = (props: SortCardProps) => {
         pb={2}
         width="full"
         textAlign={'start'}
-        pl="12"
+        pl={12}
         fontSize={14}
         fontWeight={700}
         textColor={'#5F7A99'}
@@ -158,11 +173,17 @@ const FiltersContainer = (props: FiltersContainerProps) => {
   }
   return (
     <>
-      <Flex mt={6} justifyContent={'start'} alignItems="center">
+      <Flex
+        mt={{ base: 2, md: 6 }}
+        justifyContent={'start'}
+        alignItems="center"
+        direction={{ base: 'column', md: 'row' }}
+        gap={{ base: 2, md: 0 }}
+      >
         <Text
-          pr={4}
+          alignSelf={'start'}
+          pl={{ base: 12 }}
           textAlign={'center'}
-          pl="12"
           fontSize={14}
           fontWeight={700}
           textColor={'#5F7A99'}
@@ -197,7 +218,13 @@ const FiltersContainer = (props: FiltersContainerProps) => {
           </Flex>
         </Flex>
       </Flex>
-      <Flex height={'65px'} justifyContent="center" alignItems={'end'} gap="2">
+      <Flex
+        mt={{ base: '23px', md: '35.5px' }}
+        flex={1}
+        justifyContent="center"
+        align={'end'}
+        gap="2"
+      >
         <ChooseButton onClick={onReset} title="Reset" />
         <ChooseButton onClick={onApply} title="Apply" backgroundType="blue" />
       </Flex>

@@ -43,10 +43,30 @@ export default function MarketplaceFilterContainer(props: MarketplaceFilterConta
   }
 
   return (
-    <Flex height={'100px'} width="full" direction={'column'} mt={4}>
+    <Flex
+      height={{ base: '140px', md: '100px' }}
+      width="full"
+      direction={'column'}
+      mt={4}
+      bg={{ base: 'linear-gradient(239.18deg, #19394C 27.18%, #0A161F 96.11%)', md: 'transparent' }}
+      justify={'center'}
+      align="center"
+      rounded={'2xl'}
+      position="relative"
+      gap={{ base: 4, md: 0 }}
+    >
+      <Box
+        display={{ base: 'block', md: 'none' }}
+        position={'absolute'}
+        height="full"
+        width={'full'}
+        bgImage={'/assets/textures/metal.png'}
+        bgSize="40% 50%"
+        rounded={'2xl'}
+      />
       {/* Search Container */}
-      <Flex flex={1} justify="center">
-        <Flex width={'380px'} height="30px" rounded={'full'} shadow="down">
+      <Flex flex={{ base: 0, md: 1 }} justify="center">
+        <Flex width={{ md: '380px', base: '280px' }} height="30px" rounded={'full'} shadow="down">
           <Search2Icon color="text.low" boxSize={'20px'} my="auto" ml={2} />
           <Text my={'auto'} fontWeight="bold" textColor={'text.low'} ml={3}>
             {/* Coming soon! */}
@@ -55,7 +75,7 @@ export default function MarketplaceFilterContainer(props: MarketplaceFilterConta
       </Flex>
 
       {/* Filters Container */}
-      <Flex justify={'center'} align="center" flex={1} gap={4}>
+      <Flex justify={'center'} align="center" flex={{ base: 0, md: 1 }} gap={{ base: 0, md: 4 }}>
         <StakePoolFilterCard
           currentSorter={sortType}
           onChangeSorter={onChangeSorter}
