@@ -68,7 +68,11 @@ function MarketplaceStakeCard(props: any) {
       justify="center"
       // variant="secondary"
     >
-      <Flex direction={{ md: 'row', base: 'column', xl: 'column' }} gap={-10} position="relative">
+      <Flex
+        direction={{ md: 'row', base: 'column', xl: 'column' }}
+        gap={{ base: -10, md: 5, xl: -10 }}
+        position="relative"
+      >
         {periods}
       </Flex>
     </GlassPanel>

@@ -53,7 +53,7 @@ export default function MarketplaceFilterContainer(props: MarketplaceFilterConta
       align="center"
       rounded={'2xl'}
       position="relative"
-      gap={{ base: 4, md: 0 }}
+      shadow={{ base: 'up', md: 'none' }}
     >
       <Box
         display={{ base: 'block', md: 'none' }}
@@ -65,7 +65,7 @@ export default function MarketplaceFilterContainer(props: MarketplaceFilterConta
         rounded={'2xl'}
       />
       {/* Search Container */}
-      <Flex flex={{ base: 0, md: 1 }} justify="center">
+      <Flex height={'40px'} justify="center">
         <Flex width={{ md: '380px', base: '280px' }} height="30px" rounded={'full'} shadow="down">
           <Search2Icon color="text.low" boxSize={'20px'} my="auto" ml={2} />
           <Text my={'auto'} fontWeight="bold" textColor={'text.low'} ml={3}>
