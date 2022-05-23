@@ -33,10 +33,10 @@ const NftPositionBox = (props: NftPositionBoxProps) => {
           rounded={'2xl'}
         >
           <Flex w={'55%'} pl={2} direction="column" textAlign={'start'}>
-            <Text fontSize="xs" color="text.low" fontWeight="medium" ml={4}>
+            <Text fontSize="xs" color="text.low" fontWeight="medium" ml={3}>
               Stake Pool
             </Text>
-            <Text fontSize="s" color="white" fontWeight="bold" ml={4}>
+            <Text fontSize="s" color="white" fontWeight="bold" ml={3}>
               {stakePool} Days
             </Text>
           </Flex>
@@ -188,7 +188,7 @@ const NftPositionCard = (props: NftPositionBoxProps) => {
                   fontWeight={700}
                   fontSize={{ base: '14px', xl: 'sm', lg: 'sm' }}
                 >
-                  12.07.22
+                  12/07/22
                 </Text>
               </Flex>
               <Flex textAlign={'start'} direction={'column'} justifyContent="center">
@@ -226,6 +226,10 @@ const BuyButton = () => {
         justifyContent={'center'}
         alignItems="center"
         ml={2}
+        fontWeight="bold"
+        fontSize="md"
+        mx="auto"
+
       >
         <Text>Buy</Text>
       </Flex>
