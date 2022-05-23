@@ -1,4 +1,5 @@
-import { Currency, CurrencyAmount, NATIVE, Pair, ROUTER_ADDRESS, Token } from '@concave/gemswap-sdk'
+import { Currency, CurrencyAmount, NATIVE, ROUTER_ADDRESS, Token } from '@concave/core'
+import { Pair } from '@concave/gemswap-sdk'
 import {
   Box,
   Button,

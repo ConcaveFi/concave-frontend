@@ -1,4 +1,4 @@
-import { Percent } from '@concave/gemswap-sdk'
+import { Percent } from '@concave/core'
 import { CnvQuestionIcon, SettingsIcon } from '@concave/icons'
 import {
   Box,

@@ -1,4 +1,4 @@
-import { ChainId } from '@concave/gemswap-sdk'
+import { ChainId } from '@concave/core'
 import { useUpdateEffect } from '@concave/ui'
 import { chain, useNetwork } from 'wagmi'
 

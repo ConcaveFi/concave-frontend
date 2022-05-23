@@ -1,6 +1,7 @@
 import { useLinkedCurrencyFields } from 'components/CurrencyAmountField'
 import { usePair } from 'components/AMM/hooks/usePair'
-import { Currency, CurrencyAmount, Pair } from '@concave/gemswap-sdk'
+import { Currency, CurrencyAmount } from '@concave/core'
+import { Pair } from '@concave/gemswap-sdk'
 import { useCallback, useEffect, useState } from 'react'
 import { LinkedCurrencyFields } from 'components/CurrencyAmountField/useLinkedCurrencyFields'
 import { toAmount } from 'utils/toAmount'

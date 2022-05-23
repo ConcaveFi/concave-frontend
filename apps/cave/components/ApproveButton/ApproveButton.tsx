@@ -1,4 +1,4 @@
-import { Currency, MaxUint256 } from '@concave/gemswap-sdk'
+import { Currency, MaxUint256 } from '@concave/core'
 import { Button, ButtonProps } from '@concave/ui'
 import { BigNumberish } from 'ethers'
 import { useApprove } from 'hooks/useApprove'

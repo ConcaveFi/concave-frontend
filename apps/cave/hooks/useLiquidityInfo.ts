@@ -1,9 +1,9 @@
+import { CurrencyAmount, Token } from '@concave/core'
 import { Fetcher } from '@concave/gemswap-sdk'
 import { concaveProvider } from 'lib/providers'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import { BigNumber } from 'ethers'
-import { CurrencyAmount, Token } from '@concave/gemswap-sdk'
 import { useCurrencyBalance } from './useCurrencyBalance'
 import { useQuery } from 'react-query'
 

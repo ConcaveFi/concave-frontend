@@ -1,5 +1,5 @@
-import { Currency } from '@concave/gemswap-sdk'
-import { Box, Card, Flex, SlideFade, Text } from '@concave/ui'
+import { Currency } from '@concave/core'
+import { Box, Card, Flex, SlideFade } from '@concave/ui'
 import { STABLES } from 'constants/routing'
 import dynamic from 'next/dynamic'
 import { CandleStickTimeOptions } from './CandleStickTimeOptions'

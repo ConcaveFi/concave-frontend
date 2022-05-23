@@ -1,4 +1,4 @@
-import { Token, ChainId } from '@concave/gemswap-sdk'
+import { Token, ChainId } from '@concave/core'
 
 export const CNV = new Token(
   ChainId.ETHEREUM,

@@ -22,6 +22,7 @@
     "@badrap/bar-of-progress": "^0.2.1",
     "@chakra-ui/cli": "^2.0.0",
     "@concave/gemswap-sdk": "*",
+    "@concave/core": "*",
     "@concave/icons": "*",
     "@concave/ui": "*",
     "@graphql-codegen/add": "^3.1.1",

@@ -1,4 +1,3 @@
-import { Currency, CurrencyAmount } from '@concave/gemswap-sdk'
 import { Transaction } from 'ethers'
 import { useIsMounted } from './useIsMounted'
 

@@ -1,4 +1,4 @@
-import { CNV, DAI } from '@concave/gemswap-sdk'
+import { CNV, DAI } from '@concave/core'
 import { position } from '@concave/ui'
 import { Contract, ethers, utils } from 'ethers'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'

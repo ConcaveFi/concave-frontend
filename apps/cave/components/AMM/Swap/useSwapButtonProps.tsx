@@ -1,4 +1,4 @@
-import { ROUTER_ADDRESS } from '@concave/gemswap-sdk'
+import { ROUTER_ADDRESS } from '@concave/core'
 import { ButtonProps } from '@concave/ui'
 import { useModals } from 'contexts/ModalsContext'
 import { isAddress } from 'ethers/lib/utils'

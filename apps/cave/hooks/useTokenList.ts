@@ -1,6 +1,7 @@
 import { useQuery, UseQueryResult } from 'react-query'
 import { chain, useNetwork } from 'wagmi'
-import { Currency, Fetcher, NATIVE, Token } from '@concave/gemswap-sdk'
+import { Currency, NATIVE, Token } from '@concave/core'
+import { Fetcher } from '@concave/gemswap-sdk'
 import { concaveProvider } from 'lib/providers'
 import { add } from 'date-fns'
 

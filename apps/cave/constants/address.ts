@@ -1,4 +1,4 @@
-import { ChainId } from '@concave/gemswap-sdk'
+import { ChainId } from '@concave/core'
 
 export const STAKING_CONTRACT = {
   [ChainId.ETHEREUM]: '',

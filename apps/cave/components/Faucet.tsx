@@ -1,4 +1,4 @@
-import { ChainId, DAI, NATIVE } from '@concave/gemswap-sdk'
+import { ChainId, DAI, NATIVE } from '@concave/core'
 import { CloseIcon } from '@concave/icons'
 import {
   Box,

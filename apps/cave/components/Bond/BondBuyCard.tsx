@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, DAI } from '@concave/gemswap-sdk'
+import { Currency, CurrencyAmount, DAI } from '@concave/core'
 import { GasIcon } from '@concave/icons'
 import { Card, Flex, HStack, keyframes, Spinner, Text, useDisclosure, VStack } from '@concave/ui'
 import { ApproveButton } from 'components/ApproveButton/ApproveButton'

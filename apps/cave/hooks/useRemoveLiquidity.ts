@@ -1,5 +1,6 @@
 import { parseUnits } from 'ethers/lib/utils'
-import { Currency, CurrencyAmount, Pair, Percent, WETH9_ADDRESS } from '@concave/gemswap-sdk'
+import { Currency, CurrencyAmount, Percent, WETH9_ADDRESS } from '@concave/core'
+import { Pair } from '@concave/gemswap-sdk'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { Router } from 'lib/Router'
 import { useState } from 'react'

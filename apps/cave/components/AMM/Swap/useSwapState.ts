@@ -1,5 +1,6 @@
 import { useState, useMemo, useCallback } from 'react'
-import { Currency, TradeType } from '@concave/gemswap-sdk'
+import { Currency } from '@concave/core'
+import { TradeType } from '@concave/gemswap-sdk'
 import { useTrade, UseTradeResult } from '../hooks/useTrade'
 import { SwapSettings } from '../Settings'
 import { toAmount } from 'utils/toAmount'

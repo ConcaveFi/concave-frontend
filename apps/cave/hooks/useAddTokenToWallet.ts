@@ -2,7 +2,7 @@ import { ERC20_ABI } from 'constants/abi'
 import { Contract } from 'ethers'
 import { concaveProvider } from 'lib/providers'
 import { useState, useEffect } from 'react'
-import { CHAIN_NAME } from '@concave/gemswap-sdk'
+import { CHAIN_NAME } from '@concave/core'
 
 interface injectedToken {
   tokenAddress: string

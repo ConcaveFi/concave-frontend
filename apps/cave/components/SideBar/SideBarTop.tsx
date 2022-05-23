@@ -1,4 +1,4 @@
-import { ChainId, CNV } from '@concave/gemswap-sdk'
+import { ChainId, CNV } from '@concave/core'
 import { Box, Flex, Image, Stack, Text } from '@concave/ui'
 import { ButtonLink } from 'components/ButtonLink'
 import { ConnectWallet } from 'components/ConnectWallet'

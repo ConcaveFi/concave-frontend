@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { SwapSettings } from '../Settings'
-import { RouterABI, ROUTER_ADDRESS, Router, Currency, TradeType, Trade } from '@concave/gemswap-sdk'
+import { RouterABI, ROUTER_ADDRESS, Currency } from '@concave/core'
+import { Router, TradeType, Trade } from '@concave/gemswap-sdk'
 import { Contract, Transaction } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useAccount, useContract, useSigner } from 'wagmi'
