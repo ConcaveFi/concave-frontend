@@ -157,12 +157,9 @@ const SwitchView = (props: SwitchViewProps) => {
   )
 }
 
-/* eslint-disable */
 Marketplace.Meta = {
   title: 'Concave | NFT Marketplace',
-  // eslint-disable-next-line
-  description: `Trade your Liquid Staking positions and other NFTs in Concave's marketplace.`, // eslint-disable-next-line
+  description: `Trade your Liquid Staking positions and other NFTs in Concave's marketplace.`,
 }
-/* eslint-enable */
 
 export default Marketplace
