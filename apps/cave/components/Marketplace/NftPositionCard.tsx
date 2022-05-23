@@ -40,8 +40,13 @@ const NftPositionBox = (props: NftPositionBoxProps) => {
               {stakePool} Days
             </Text>
           </Flex>
-          <Flex w={{ base: '25%', xl: '45%', lg: '45%' }}>
-            <Image sizes="100%" src={'/assets/marketplace/6mposition.png'} alt="position" />
+          <Flex w={{ base: '55%' }} justify="end">
+            <Image
+              width={{ base: '90px', md: '80px' }}
+              height={{ base: '90px', md: '80px' }}
+              src={'/assets/marketplace/6mposition.png'}
+              alt="position"
+            />
           </Flex>
         </HStack>
       </Flex>
