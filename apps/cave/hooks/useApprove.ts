@@ -12,6 +12,7 @@ export const useAllowance = (token: Token, spender: string, userAddress: string)
     data: value,
     isLoading,
     isError,
+    error,
     isSuccess,
     refetch,
   } = useQuery<BigNumber>(
@@ -30,6 +31,7 @@ export const useAllowance = (token: Token, spender: string, userAddress: string)
     isError,
     isLoading,
     isSuccess,
+    error,
     value,
     formatted: value && formatUnits(value, token?.decimals),
     amount: value && CurrencyAmount.fromRawAmount(token, value.toString()),
@@ -48,6 +50,8 @@ export const useContractApprove = (
     data: tx,
     isLoading: isWaitingForConfirmation,
     isSuccess: isTransactionSent,
+    isError,
+    error,
     refetch: sendApproveTx,
   } = useQuery<TransactionResponse>(
     ['approve', token?.address, spender],
@@ -67,6 +71,8 @@ export const useContractApprove = (
     isWaitingForConfirmation,
     isWaitingTransactionReceipt,
     isTransactionSent,
+    isError,
+    error,
     tx,
     receipt,
     sendApproveTx,
@@ -78,11 +84,11 @@ export const useApprove = (
   spender: string,
   amount: BigNumberish = MaxUint256.toString(),
 ) => {
-  const [{ data: account }] = useAccount()
+  const [{ data: account, loading }] = useAccount()
   const allowance = useAllowance(token, spender, account?.address)
   const approve = useContractApprove(token, spender, amount, {
     onSuccess: () => allowance.refetch(),
   })
 
-  return { allowance, ...approve }
+  return { allowance, ...approve, isFeching: loading || allowance.isLoading }
 }

@@ -114,7 +114,7 @@ export const AddLiquidityModalButton = ({
 }: { label?: string; pair?: Pair } & ButtonProps) => {
   const [{ data: account }] = useAccount()
   const addLiquidityDisclosure = useDisclosure()
-  const currencies = useMemo(() => [pair.token0, pair.token1], [pair.token0, pair.token1])
+  const currencies = useMemo(() => [pair?.token0, pair?.token1], [pair?.token0, pair?.token1])
   if (!account?.address) {
     return <ConnectWallet />
   }

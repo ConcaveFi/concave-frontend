@@ -1,10 +1,10 @@
 import { CNV, Currency, CurrencyAmount } from '@concave/gemswap-sdk'
-import { Box, Button, Card, Flex, Text, useDisclosure } from '@concave/ui'
+import { Box, Card, Flex, Text, useDisclosure } from '@concave/ui'
+import { ApproveButton } from 'components/ApproveButton/ApproveButton'
 import { CurrencyInputField } from 'components/CurrencyAmountField'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
-import { ApproveButton, useApproval } from 'hooks/useAllowance'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useRecentTransactions } from 'hooks/useRecentTransactions'
@@ -22,16 +22,9 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
   const [stakeInput, setStakeInput] = useState<CurrencyAmount<Currency>>(
     toAmount(0, CNV[netWorkdId]),
   )
-  const approveStatus = useApproval(
-    stakeInput.wrapped,
-    StakingV1ProxyAddress[stakeInput.currency.chainId],
-  )
-  const [approvedCNV] = approveStatus
   const cnvBalance = useCurrencyBalance(stakeInput?.currency, { watch: true })
-
   const [tx, setTx] = useState(undefined)
   const [txError, setTxError] = useState('')
-
   const [waitingForConfirm, setWaitingForConfirm] = useState(false)
 
   const { addRecentTransaction } = useRecentTransactions()
@@ -41,11 +34,39 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
     onClose: onCloseSubmitted,
     onOpen: onOpenSubmitted,
   } = useDisclosure()
+
   const {
     isOpen: isOpenRejected,
     onClose: onCloseRejected,
     onOpen: onOpenRejected,
   } = useDisclosure()
+
+  const onError = (e: { code: number; message: string }) => {
+    const errorMessage = e.code === 4001 ? 'Transaction Rejected' : e.message
+    setTxError(errorMessage)
+    setWaitingForConfirm(false)
+    onOpenRejected()
+  }
+
+  const lock = () => {
+    const contract = new StakingV1Contract(netWorkdId)
+    setWaitingForConfirm(true)
+    contract
+      .lock(signer, account?.address, stakeInput.numerator.toString(), props.poolId)
+      .then((x) => {
+        addRecentTransaction({
+          amount: +stakeInput.toSignificant(3),
+          amountTokenName: stakeInput.currency.symbol,
+          transaction: x,
+          type: 'Stake',
+          stakePool: PARAMETER_TO_POOL_PERIOD[props.poolId],
+        })
+        setTx(x)
+        setWaitingForConfirm(false)
+        onOpenSubmitted()
+      })
+      .catch(onError)
+  }
 
   return (
     <>
@@ -57,74 +78,33 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
         </Card>
 
         <Box mt={10} width="350px">
-          {approvedCNV && (
-            <ApproveButton
-              fontWeight="bold"
-              fontSize="md"
-              variant="primary"
-              bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
-              w="100%"
-              h="50px"
-              size="large"
-              mx="auto"
-              useApproveInfo={approveStatus}
-            />
-          )}
-          {!approvedCNV && (
-            <Button
-              mt={5}
-              onClick={async () => {
-                const contract = new StakingV1Contract(netWorkdId)
-                setWaitingForConfirm(true)
-                contract
-                  .lock(signer, account?.address, stakeInput.numerator.toString(), props.poolId)
-                  .then((x) => {
-                    addRecentTransaction({
-                      amount: +stakeInput.toSignificant(3),
-                      amountTokenName: stakeInput.currency.symbol,
-                      transaction: x,
-                      type: 'Stake',
-                      stakePool: PARAMETER_TO_POOL_PERIOD[props.poolId],
-                    })
-                    setTx(x)
-                    setWaitingForConfirm(false)
-                    onOpenSubmitted()
-                    console.log(x)
-                  })
-                  .catch((e) => {
-                    if (e.code === 4001) {
-                      // Code 4001 it's for reject transaction.
-                      setWaitingForConfirm(false)
-                      setTxError('Transaction Rejected')
-                      onOpenRejected()
-                    } else {
-                      setTxError(e.message)
-                      onOpenRejected()
-                    }
-                    console.log(e)
-                  })
-              }}
-              fontWeight="bold"
-              fontSize="md"
-              variant="primary"
-              bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
-              w="100%"
-              h="50px"
-              size="large"
-              mx="auto"
-              disabled={
-                !cnvBalance.data ||
-                +cnvBalance.data?.numerator.toString() === 0 ||
-                +stakeInput.numerator.toString() === 0 ||
-                stakeInput.greaterThan(cnvBalance.data?.numerator)
-              }
-            >
-              {+stakeInput.numerator?.toString() > +cnvBalance.data?.numerator.toString() ||
-              +cnvBalance.data?.numerator.toString() === 0
-                ? 'Insufficient CNV'
-                : 'Stake CNV'}
-            </Button>
-          )}
+          <ApproveButton
+            approveArgs={{
+              currency: stakeInput.currency,
+              spender: StakingV1ProxyAddress[stakeInput.currency.chainId],
+            }}
+            mt={5}
+            onClick={lock}
+            fontWeight="bold"
+            fontSize="md"
+            variant="primary"
+            bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
+            w="100%"
+            h="50px"
+            size="large"
+            mx="auto"
+            disabled={
+              !cnvBalance.data ||
+              +cnvBalance.data?.numerator.toString() === 0 ||
+              +stakeInput.numerator.toString() === 0 ||
+              stakeInput.greaterThan(cnvBalance.data?.numerator)
+            }
+          >
+            {+stakeInput.numerator?.toString() > +cnvBalance.data?.numerator.toString() ||
+            +cnvBalance.data?.numerator.toString() === 0
+              ? 'Insufficient CNV'
+              : 'Stake CNV'}
+          </ApproveButton>
 
           {/* <Button
           mt={5}

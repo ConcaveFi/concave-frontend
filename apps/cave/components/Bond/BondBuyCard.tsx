@@ -1,22 +1,12 @@
 import { Currency, CurrencyAmount, DAI } from '@concave/gemswap-sdk'
 import { GasIcon } from '@concave/icons'
-import {
-  Button,
-  Card,
-  Flex,
-  HStack,
-  keyframes,
-  Spinner,
-  Text,
-  useDisclosure,
-  VStack,
-} from '@concave/ui'
+import { Card, Flex, HStack, keyframes, Spinner, Text, useDisclosure, VStack } from '@concave/ui'
+import { ApproveButton } from 'components/ApproveButton/ApproveButton'
 import { CurrencyInputField as BondInput } from 'components/CurrencyAmountField'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { BOND_ADDRESS } from 'contracts/Bond/BondingAddress'
 import { useGet_Amm_Cnv_PriceQuery } from 'graphql/generated/graphql'
-import { ApproveButton, useApprovalWhenNeeded } from 'hooks/useAllowance'
 import { useRecentTransactions } from 'hooks/useRecentTransactions'
 import React, { useEffect, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
@@ -70,15 +60,7 @@ export function BondBuyCard(props: {
 
   const confirmModal = useDisclosure()
   // const receiptModal = useDisclosure()
-
   const [hasClickedConfirm, setHasClickedConfirm] = useState(false)
-
-  const approveInfo = useApprovalWhenNeeded(
-    currencyIn,
-    BOND_ADDRESS[networkId],
-    amountIn.denominator,
-  )
-  const [needsApprove] = approveInfo
   const AMMData = useGet_Amm_Cnv_PriceQuery()
 
   const currentPrice = AMMData?.data?.cnvData?.data?.last.toFixed(3)
@@ -152,18 +134,19 @@ export function BondBuyCard(props: {
         </Flex>
       </Flex>
 
-      <ApproveButton variant="primary" size="large" w="full" useApproveInfo={approveInfo} />
-      {!needsApprove && (
-        <Button
-          isDisabled={needsApprove || +userBalance < +amountIn}
-          variant="primary"
-          size="large"
-          w="full"
-          onClick={confirmModal.onOpen}
-        >
-          {+userBalance < +amountIn ? 'Insufficient Funds' : 'Bond'}
-        </Button>
-      )}
+      <ApproveButton
+        variant="primary"
+        size="large"
+        w="full"
+        approveArgs={{
+          currency: currencyIn,
+          spender: BOND_ADDRESS[networkId],
+        }}
+        isDisabled={+userBalance < +amountIn}
+        onClick={confirmModal.onOpen}
+      >
+        {+userBalance < +amountIn ? 'Insufficient Funds' : 'Bond'}
+      </ApproveButton>
 
       <ConfirmBondModal
         currencyIn={currencyIn}

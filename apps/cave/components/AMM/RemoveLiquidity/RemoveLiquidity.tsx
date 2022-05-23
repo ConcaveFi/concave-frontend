@@ -10,14 +10,14 @@ import {
   Text,
   useDisclosure,
 } from '@concave/ui'
+import { ApproveButton } from 'components/ApproveButton/ApproveButton'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { PositionInfoItem } from 'components/Positions/MyPositions'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { Transaction } from 'ethers'
-import { useApprovalWhenNeeded } from 'hooks/useAllowance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { RemoveLiquidityState, useRemoveLiquidity } from 'hooks/useRemoveLiquidity'
-import React from 'react'
+import React, { useState } from 'react'
 import { precision } from 'utils/formatFixed'
 
 export const RemoveLiquidityModalButton = ({
@@ -166,11 +166,7 @@ const RemoveLiquidityActions = ({
 }) => {
   const networkId = useCurrentSupportedNetworkId()
   const transactionStatusDisclosure = useDisclosure()
-  const [needsApprove, requestApprove, approveLabel] = useApprovalWhenNeeded(
-    removeLiquidityState.pair.liquidityToken,
-    ROUTER_ADDRESS[networkId],
-  )
-
+  const [currencyApproved, setCurrencyApproved] = useState(false)
   const confirmedWithdrawal = async () => {
     try {
       transactionStatusDisclosure.onOpen()
@@ -182,16 +178,19 @@ const RemoveLiquidityActions = ({
 
   return (
     <Flex gap={4} h={45} justifyContent={'center'}>
-      <Button
-        disabled={!needsApprove || !removeLiquidityState.percentToRemove}
+      <ApproveButton
+        approveArgs={{
+          currency: removeLiquidityState.pair.liquidityToken,
+          spender: ROUTER_ADDRESS[networkId],
+          onSuccess: () => setCurrencyApproved(true),
+        }}
+        disabled={!removeLiquidityState.percentToRemove}
         w={250}
         variant={'primary'}
-        onClick={requestApprove}
-      >
-        {approveLabel}
-      </Button>
+      />
+
       <Button
-        disabled={needsApprove || !removeLiquidityState.percentToRemove}
+        disabled={!currencyApproved || !removeLiquidityState.percentToRemove}
         w={250}
         variant={'primary'}
         onClick={confirmedWithdrawal}
