@@ -57,11 +57,13 @@ const NotInteractableImage = ({ src, ...props }) => (
 function PageNav() {
   const [bondSpotPrice, setBondSpotPrice] = useState<string>('0')
   const [cnvMarketPrice, setCnvMarketPrice] = useState<number>(0)
-  const {networkId} = useBondState()
+  const { networkId } = useBondState()
   useEffect(() => {
-    getBondSpotPrice(networkId, '').then((bondSpotPrice) => {
-      setBondSpotPrice(bondSpotPrice)
-    }).catch(() => {})
+    getBondSpotPrice(networkId, '')
+      .then((bondSpotPrice) => {
+        setBondSpotPrice(bondSpotPrice)
+      })
+      .catch(() => {})
     fetch('/api/cnv')
       .then((j) => j.json())
       .then((data) => JSON.parse(data))
@@ -137,10 +139,10 @@ function PageNav() {
 
       <NavButton
         leftIcon={<NotInteractableImage src="/assets/sidebar/page-marketplace.svg" />}
-        href="/marketplace"
+        href=""
         mt="26px"
       >
-        Marketplace
+        Marketplace <br></br>(Coming Soon)
       </NavButton>
 
       <Box height={'120px'}>
