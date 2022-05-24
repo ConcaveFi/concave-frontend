@@ -8,7 +8,7 @@ class TokenService {
   constructor(private networkName: string = chain.mainnet.name) {}
 
   async getTokenPrice(symbol: string) {
-    if (this.networkName === chain.ropsten.name) {
+    if (this.networkName === chain.rinkeby.name) {
       const values = {
         DAI: 1,
         WETH: 3402,
@@ -46,4 +46,4 @@ const daysOptions = {
   '4H': '30',
   '1D': '365',
 } as const
-export const tokenService = new TokenService(chain.ropsten.name)
+export const tokenService = new TokenService(chain.rinkeby.name)

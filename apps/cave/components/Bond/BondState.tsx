@@ -1,4 +1,5 @@
 import { CNV, DAI } from '@concave/gemswap-sdk'
+import { DAI_ADDRESS } from '@concave/gemswap-sdk'
 import { position } from '@concave/ui'
 import { Contract, ethers, utils } from 'ethers'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
@@ -8,7 +9,7 @@ import { useMemo, useState } from 'react'
 import { useAccount, useSigner } from 'wagmi'
 import { BOND_ABI } from '../../contracts/Bond/BondABI'
 import { BOND_ADDRESS } from '../../contracts/Bond/BondingAddress'
-import { ROPSTEN_DAI_ABI } from '../../contracts/Bond/ROPSTEN_DAI_ABI'
+import { RINKEBY_DAI_ABI } from '../../contracts/Bond/RINKEBY_DAI_ABI'
 import { BondSettings } from './Settings'
 
 export const getBondAmountOut = async (
@@ -18,10 +19,10 @@ export const getBondAmountOut = async (
   input: string,
 ) => {
   const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, providers(networkId))
-  const ROPSTEN_DAI = '0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4'
+  const DAI = DAI_ADDRESS[networkId]
   // pass decimals argument where 18 is hardcoded
   const formattedInput = ethers.utils.parseUnits(input.toString(), 18)
-  const amountOut = await bondingContract.getAmountOut(ROPSTEN_DAI, formattedInput)
+  const amountOut = await bondingContract.getAmountOut(DAI, formattedInput)
   console.log(amountOut)
   const ethValue = ethers.utils.formatEther(amountOut)
   const cleanedOutput = parseFloat(ethValue).toFixed(6)
@@ -37,8 +38,8 @@ export const getBondTermLength = async (networkId: number) => {
 
 export const getBondSpotPrice = async (networkId: number, tokenAddress: string) => {
   const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, providers(networkId))
-  const ROPSTEN_DAI = '0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4'
-  const spotPrice = await bondingContract.getSpotPrice(ROPSTEN_DAI)
+  const DAI = DAI_ADDRESS[networkId]
+  const spotPrice = await bondingContract.getSpotPrice(DAI)
   const formatted = ethers.utils.formatEther(spotPrice)
   return formatted
 }
@@ -51,7 +52,7 @@ export const purchaseBond = async (
   settings: BondSettings,
   amountOut: string,
 ) => {
-  const ROPSTEN_DAI_ADDRESS = '0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4'
+  const DAI = DAI_ADDRESS[networkId]
   const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, signer)
   const minOutput = +(+amountOut - (+settings.slippageTolerance.value / 100) * +amountOut).toFixed(
     2,
@@ -61,19 +62,13 @@ export const purchaseBond = async (
   const formattedMinOutput = utils.parseUnits(minOutput.toString(), 18)
   const estimatedGas = await bondingContract.estimateGas.purchaseBond(
     address,
-    ROPSTEN_DAI_ADDRESS,
+    DAI,
     formattedInput,
     formattedMinOutput,
   )
-  return await bondingContract.purchaseBond(
-    address,
-    ROPSTEN_DAI_ADDRESS,
-    formattedInput,
-    formattedMinOutput,
-    {
-      gasLimit: estimatedGas,
-    },
-  )
+  return await bondingContract.purchaseBond(address, DAI, formattedInput, formattedMinOutput, {
+    gasLimit: estimatedGas,
+  })
 }
 
 export async function getCurrentBlockTimestamp(networkId) {

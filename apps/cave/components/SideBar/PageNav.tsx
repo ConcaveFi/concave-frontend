@@ -4,9 +4,9 @@ import { Box, Flex, Text, Image, Collapse } from '@concave/ui'
 import { ButtonLink, ButtonLinkProps } from 'components/ButtonLink'
 import { useRouter } from 'next/router'
 import getROI from 'utils/getROI'
-import { getBondSpotPrice } from 'components/Bond/BondState'
 import getCNVMarketPrice from 'utils/getCNVMarketPrice'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import { getBondSpotPrice, useBondState } from 'components/Bond/BondState'
 
 const NavButton = (props: ButtonLinkProps) => {
   const router = useRouter()
@@ -146,10 +146,10 @@ function PageNav() {
 
       <NavButton
         leftIcon={<NotInteractableImage src="/assets/sidebar/page-marketplace.svg" />}
-        href="/marketplace"
+        href=""
         mt="26px"
       >
-        Marketplace
+        Marketplace <br></br>(Coming Soon)
       </NavButton>
 
       <Box height={'120px'}>

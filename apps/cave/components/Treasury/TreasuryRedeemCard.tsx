@@ -14,7 +14,7 @@ import { formatEther } from 'ethers/lib/utils'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 
 // aCNV address
-// 0x2a6bb78490c2221e0d36d931192296be4b3a01f1 ropsten
+// 0x2a6bb78490c2221e0d36d931192296be4b3a01f1 RINKEBY
 // 0x6ff0106d34feee8a8acf2e7b9168480f86b82e2f eth
 function ClaimAcnvButton() {
   const netWorkdId = useCurrentSupportedNetworkId()
