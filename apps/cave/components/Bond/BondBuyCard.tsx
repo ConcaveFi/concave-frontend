@@ -132,7 +132,7 @@ export function BondBuyCard(props: {
             </Text>
             <Text textColor={'text.low'} opacity="0.7">
               {bondSpotPrice
-                ? '$' +  truncateNumber( parseFloat(bondSpotPrice)*10**18 , 3)+ ' CNV'
+                ? '$' +  truncateNumber(+bondSpotPrice*10**18 , 3)+ ' CNV'
                 : 'Loading . . .'}
             </Text>
           </HStack>
@@ -213,8 +213,8 @@ export function BondBuyCard(props: {
       />
       <WaitingConfirmationDialog isOpen={hasClickedConfirm} title={'Confirm Bond'}>
         <Text fontSize="lg" color="text.accent">
-          Bonding {String(amountIn.toFixed(4))} {currencyIn.symbol} for{' '}
-          {parseFloat(amountOut).toFixed(4)} CNV.
+          Bonding {truncateNumber(+amountIn, 4)} {currencyIn.symbol} for{' '}
+          {truncateNumber(+amountOut, 4)}CNV.
         </Text>
       </WaitingConfirmationDialog>
       <TransactionSubmittedDialog

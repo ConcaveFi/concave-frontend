@@ -61,7 +61,7 @@ const Info: React.FC<Info> = ({ ...props }) => {
         {props.label}
       </Text>
       <Text fontSize="md" fontWeight="bold" noOfLines={1}>
-      {parseFloat(props.value)>= .01 ? truncateNumber(parseFloat(props.value)*10**18) : '<.01'} CNV
+      {+props.value>= .01 ? truncateNumber(+props.value*10**18) : '<.01'} CNV
       </Text>
     </Flex>
   )
