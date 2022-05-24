@@ -69,7 +69,7 @@ function PageNav() {
   useEffect(() => {
     getBondSpotPrice(currentSupportedNetworkId, '').then((bondSpotPrice) => {
       setBondSpotPrice(bondSpotPrice)
-    })
+    }).catch(() => {})
     getCNVMarketPrice().then((price) => {
       setCNVMarketPrice(price)
     })
