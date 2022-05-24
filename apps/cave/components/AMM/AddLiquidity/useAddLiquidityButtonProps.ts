@@ -23,6 +23,10 @@ export const useAddLiquidityButtonProps = (
   */
   if (!account?.address) return { children: 'Connect wallet', onClick: connectModal.onOpen }
 
+  if (!amount0?.currency) return { isDisabled: true, children: `Select a first token` }
+
+  if (!amount1?.currency) return { isDisabled: true, children: `Select a second token` }
+
   if (!amount0 || !amount1 || amount0.currency.wrapped.equals(amount1.currency))
     return { isDisabled: true, children: `Invalid pair` }
 

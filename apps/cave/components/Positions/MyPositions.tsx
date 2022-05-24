@@ -45,7 +45,7 @@ export const MyPositions = () => {
   }
 
   const userPairs = allPairs.data.filter((p) => {
-    return tokens.find((t) => p.liquidityToken.address === t.address)
+    return tokens?.find((t) => p.liquidityToken.address === t.address)
   })
 
   const pairs = view === 'user' ? userPairs : allPairs.data
