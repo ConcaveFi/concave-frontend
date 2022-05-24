@@ -4,7 +4,7 @@ import { Button, Flex, Heading, Modal } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import React from 'react'
-import { chain, developmentChains } from 'wagmi'
+import { developmentChains } from 'wagmi'
 import { CurrencySelector } from './CurrencySelector'
 import { SearchableTokenList } from './SearchableTokenList'
 
