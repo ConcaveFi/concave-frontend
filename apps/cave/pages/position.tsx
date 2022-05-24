@@ -39,9 +39,4 @@ const View = ({ title, children }) => {
   )
 }
 
-PositionsView.Meta = {
-  title: '',
-  description: ``,
-}
-
 export default withPageTransition(PositionsView)
