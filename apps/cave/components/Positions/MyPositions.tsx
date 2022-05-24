@@ -24,7 +24,7 @@ import { useQuery } from 'react-query'
 import { useAccount, useNetwork } from 'wagmi'
 
 export const MyPositions = () => {
-  const [view, setView] = useState<'user' | 'all'>('all')
+  const [view, setView] = useState<'user' | 'all'>('user')
   const [{ data: network }] = useNetwork()
   const chainId = network?.chain?.id ?? 1
   const provider = concaveProvider(chainId)
