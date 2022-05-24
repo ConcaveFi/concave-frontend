@@ -17,6 +17,7 @@ import { getBondAmountOut, getBondSpotPrice, purchaseBond, useBondState } from '
 import { ConfirmBondModal } from './ConfirmBond'
 import { DownwardIcon } from './DownwardIcon'
 import { BondSettings, defaultSettings, Settings } from './Settings'
+import { truncateNumber } from 'utils/truncateNumber'
 
 export const twoDecimals = (s: string | number) => {
   const a = s.toString()
@@ -122,7 +123,7 @@ export function BondBuyCard(props: {
           <HStack alignSelf={'start'}>
             <Text textColor={'text.low'}>Current Price:</Text>
             <Text textColor={'text.low'} opacity="0.7">
-              {currentPrice ? '$' + currentPrice + ' CNV' : 'Loading . . .'}
+              {currentPrice ? '$' + truncateNumber(+currentPrice*10**18,3) + ' CNV' : 'Loading . . .'}
             </Text>
           </HStack>
           <HStack alignSelf={'start'}>
@@ -131,7 +132,7 @@ export function BondBuyCard(props: {
             </Text>
             <Text textColor={'text.low'} opacity="0.7">
               {bondSpotPrice
-                ? '$' + parseFloat(bondSpotPrice).toFixed(3) + ' CNV'
+                ? '$' +  truncateNumber( parseFloat(bondSpotPrice)*10**18 , 3)+ ' CNV'
                 : 'Loading . . .'}
             </Text>
           </HStack>
