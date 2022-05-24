@@ -50,12 +50,11 @@ export const useAddLiquidityState = (
 
   useEffect(() => {
     const otherField = lastUpdated === 'first' ? 'second' : 'first'
-    setAmounts({
+    setAmounts((amounts) => ({
       [lastUpdated]: exactAmount,
       [otherField]:
-        deriveAmount(pair.data, exactAmount, currencies[otherField]) ||
-        toAmount(0, currencies[otherField]),
-    })
+        deriveAmount(pair.data, exactAmount, currencies[otherField]) || amounts[otherField],
+    }))
   }, [exactAmount, pair.data, lastUpdated, currencies])
 
   return {
