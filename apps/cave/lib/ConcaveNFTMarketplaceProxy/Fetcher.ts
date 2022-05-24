@@ -4,7 +4,7 @@ import { StakingV1Contract } from 'lib/StakingV1Proxy/StakingV1Contract'
 import { ConcaveNFTMarketplace } from './ConcaveNFTMarketplace'
 import { NonFungibleTokenInfo } from './NonFungibleToken'
 
-export const listAllNonFunginleTokensOnAddress = async (
+export const listAllNonFungibleTokensOnAddress = async (
   owner: string,
   chainId: number,
   contractAddress?: string,
@@ -23,7 +23,7 @@ export const listAllNonFunginleTokensOnAddress = async (
 export const listUserNonFungibleTokenInfo = async (userAddress: string, chainId: number) => {
   const marketPlaceContract = new ConcaveNFTMarketplace(chainId)
   const stakingV1Contract = new StakingV1Contract(chainId)
-  const usersNft = await listAllNonFunginleTokensOnAddress(
+  const usersNft = await listAllNonFungibleTokensOnAddress(
     userAddress,
     chainId,
     StakingV1ProxyAddress[chainId],
