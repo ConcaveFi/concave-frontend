@@ -7,20 +7,26 @@ export const truncateNumber = (
 ) => {
   let decimalPlaces = decimal || 2
   let value = (Number(valueToTruncate.toString()) / 10 ** 18).toString()
-
+  let countAfterDecimal = 0
   const pointIndex = value.indexOf('.')
 
-  let trunctNum = value
-    .slice(0, pointIndex > -1 ? decimalPlaces + pointIndex + 1 : undefined)
-    .toLocaleString()
-  const countAfterDecimal = pointIndex > -1 ? trunctNum.substring(pointIndex).length : 0
+  let trunctNum
+  if (pointIndex > -1) {
+    trunctNum = value.slice(0, decimalPlaces + pointIndex + 1).toLocaleString()
+    countAfterDecimal = trunctNum.substring(pointIndex).length
 
-  if (decimalPlaces >= countAfterDecimal) {
-    const padLength =
-      pointIndex > -1 ? trunctNum.length - countAfterDecimal + decimalPlaces + 1 : decimalPlaces + 1
+    if (decimalPlaces >= countAfterDecimal) {
+      let padLength = trunctNum.length - countAfterDecimal + decimalPlaces + 1
 
-    trunctNum =
-      pointIndex > -1 ? trunctNum.padEnd(padLength, '0') : trunctNum + '.'.padEnd(padLength, '0')
+      trunctNum = trunctNum.padEnd(padLength, '0')
+    }
+  } else {
+    trunctNum = value.toLocaleString()
+    if (decimalPlaces >= countAfterDecimal) {
+      let padLength = decimalPlaces + 1
+
+      trunctNum = trunctNum + '.'.padEnd(padLength, '0')
+    }
   }
 
   return trunctNum.toLocaleString()
