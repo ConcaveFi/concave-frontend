@@ -29,11 +29,11 @@ export class StakingV1Contract {
   }
 
   public async pools(index: string): Promise<Pool> {
-    return this.contract.pools(index)
+    return this.contract.pools(index).then((p) => ({ ...p }))
   }
 
   public async positions(index: BigNumberish): Promise<Position> {
-    return this.contract.positions(index)
+    return this.contract.positions(index).then((p) => ({ ...p }))
   }
 
   public async balanceOf(address: string): Promise<BigNumber> {
