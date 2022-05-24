@@ -12,12 +12,15 @@ import {
   Modal,
   Flex,
   useDisclosure,
+  Spinner,
 } from '@concave/ui'
 import { useAccount, useConnect } from 'wagmi'
 import { useIsMounted } from 'hooks/useIsMounted'
 import { useModals } from 'contexts/ModalsContext'
 import YourWalletModal from './YourWalletModal'
 import { useRecentTransactions } from 'hooks/useRecentTransactions'
+import { SpinIcon, SpinnerIcon } from '@concave/icons'
+import { spinAnimation } from './Treasury/Mobile/TreasuryManagementMobile'
 
 // const miniAddress = (address) =>
 //   `${address.substr(0, 6)}...${address.substr(address.length - 6, address.length)}`
@@ -125,9 +128,9 @@ export function ConnectWallet(): JSX.Element {
   const { isOpen, onOpen, onClose } = useDisclosure()
   // if (data.connected) return <DisconnectButton />
 
-  const { anyPedingTx } = useRecentTransactions()
+  const { data: recentTx, anyPendingTx } = useRecentTransactions()
 
-  console.log(anyPedingTx)
+  console.log(anyPendingTx)
 
   if (data.connected)
     return (
@@ -144,6 +147,11 @@ export function ConnectWallet(): JSX.Element {
           <Flex textColor={'text.low'} fontWeight="bold" mx={'auto'}>
             {ellipseAddress(account?.address)}
           </Flex>
+          {anyPendingTx && (
+            <Flex position={'absolute'} width="80%" justify={'end'}>
+              <SpinnerIcon color={'text.low'} animation={spinAnimation(4)} boxSize={'20px'} />
+            </Flex>
+          )}
         </Button>
         <YourWalletModal onClose={onClose} isOpen={isOpen} />
       </>

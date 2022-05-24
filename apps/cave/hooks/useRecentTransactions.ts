@@ -1,51 +1,50 @@
 import { valueToPercent } from '@chakra-ui/utils'
 import { Currency, CurrencyAmount } from '@concave/gemswap-sdk'
+import { useTimeout } from '@concave/ui'
 import { Transaction } from 'ethers'
 import { useEffect, useState } from 'react'
+import { setInterval } from 'timers/promises'
 import { useTransaction, useWaitForTransaction } from 'wagmi'
 import { useIsMounted } from './useIsMounted'
 
 const clearRecentTransactions = () => localStorage.clear()
 
-export function useAddRecentTransaction() {
-  const [currentTx, setCurrentTx] = useState<RecentTransaction>(undefined)
-  const { data: recentTransactions } = useRecentTransactions()
-  const [{}, wait] = useWaitForTransaction()
-
-  function addRecentTransaction(recenTx: RecentTransaction) {
-    setCurrentTx({ ...recenTx })
-  }
-  useEffect(() => {
-    if (currentTx) {
-      const newData = recentTransactions.set(currentTx.transaction.hash, currentTx)
-      localStorage.setItem('recentTransactions', JSON.stringify(Array.from(newData)))
-      wait({ hash: currentTx.transaction.hash })
-        .then((value) => {
-          recentTransactions.get(currentTx.transaction.hash).loading = false
-          localStorage.setItem('recentTransactions', JSON.stringify(Array.from(recentTransactions)))
-        })
-        .catch((e) => {})
-    }
-  }, [currentTx])
-
-  return {
-    addRecentTransaction,
-  }
-}
-
 export function useRecentTransactions() {
   const wait = useWaitForTransaction()[1]
   const isMounted = useIsMounted()
   const data = isMounted ? getRecentTransactions() : new Map<String, RecentTransaction>()
+  const [verified, setVerified] = useState(false)
 
   const addRecentTransaction = (recentTx: RecentTransaction) => {
     data.set(recentTx.transaction.hash, recentTx)
     localStorage.setItem('recentTransactions', JSON.stringify(Array.from(data)))
+    setTimeout(() => {
+      setVerified(false)
+    }, 200)
   }
 
-  const anyPedingTx = Array.from(data).filter((value) => value[1].loading).length > 0
+  useEffect(() => {
+    if (!verified && data.size > 0) {
+      console.log('entered here')
+
+      data.forEach((value) => {
+        if (!value.loading) return
+        wait({ hash: value.transaction.hash })
+          .then((e) => {
+            console.log('finished')
+            data.set(value.transaction.hash, { ...value, loading: e.data.status === 2 })
+            localStorage.setItem('recentTransactions', JSON.stringify(Array.from(data)))
+          })
+          .catch((e) => {})
+      })
+    }
+    setVerified(true)
+  }, [data])
+
+  const anyPendingTx = Array.from(data).filter((value) => value[1].loading).length > 0
+
   return {
-    anyPedingTx,
+    anyPendingTx,
     data,
     clearRecentTransactions,
     addRecentTransaction,
