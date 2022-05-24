@@ -28,11 +28,12 @@ import { withPageTransition } from 'components/PageTransition'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
+import { utils } from 'ethers'
 import { useGet_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql'
 import React, { useEffect, useState } from 'react'
 import getCNVMarketPrice from 'utils/getCNVMarketPrice'
 import getROI from 'utils/getROI'
-import { truncateNumber } from 'utils/truncateNumber'
+// import { truncateNumber } from 'utils/truncateNumber'
 const spin = keyframes({
   '0%': { transform: 'rotate(0deg)' },
   '100%': { transform: 'rotate(360deg)' },
@@ -247,7 +248,9 @@ export function Bond() {
       <WaitingConfirmationDialog isOpen={openConfirmDialog} title={'Confirm Redeem'}>
         <Text fontSize="lg" color="text.accent">
           {bondSigma && bondSigma['parseRedeemable']
-            ? `Redeeming ` + truncateNumber(bondSigma.parseRedeemable) + ` CNV`
+            ? `Redeeming ` +
+              (+utils.formatEther(BigInt(parseInt(bondSigma.parseRedeemable)))).toFixed(2) +
+              ` CNV`
             : ''}
         </Text>
       </WaitingConfirmationDialog>
