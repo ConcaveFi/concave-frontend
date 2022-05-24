@@ -57,9 +57,4 @@ export function AddLiquidity({ currencies: serverPropsCurrencies }) {
   )
 }
 
-AddLiquidity.Meta = {
-  title: 'Concave | Add Liquidity',
-  description: `Add liquidity to Concave's liquidity pool to earn fees.`,
-}
-
 export default withPageTransition(AddLiquidity)

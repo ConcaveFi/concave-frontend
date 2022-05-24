@@ -44,9 +44,4 @@ const Pools = () => {
   )
 }
 
-Pools.Meta = {
-  title: 'Concave | Liquidity Pools',
-  description: `View your Liquidity Pool Positions and add liquidity to Concave supported pools. It is a pool of two tokens that allows users to exchange between them.`,
-}
-
 export default withPageTransition(Pools)

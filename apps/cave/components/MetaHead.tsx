@@ -15,9 +15,8 @@ export interface MetaProps {
 export const MetaHead = ({ meta: _meta }: { meta?: MetaProps }): JSX.Element => {
   const router = useRouter()
   const meta: MetaProps = {
-    title: 'Concave | Exchange (AMM)',
-    description:
-      'A capital efficient, low slippage and high liquidity AMM, Concave Exchange offers traders deeper liquidity and allows liquidity providers to earn more with less capital investment.',
+    title: metaData[router.route.replace('/', '')].title,
+    description: metaData[router.route.replace('/', '')].description,
     image: `${HOST_URL}/assets/concave/ConcavePreview.png`,
     type: 'website',
     ..._meta,
@@ -42,4 +41,39 @@ export const MetaHead = ({ meta: _meta }: { meta?: MetaProps }): JSX.Element => 
       <link rel="shortcut icon" href="/assets/tokens/cnv.svg" />
     </NextHead>
   )
+}
+
+const metaData = {
+  addliquidity: {
+    title: 'Concave | Add Liquidity',
+    description: `Add liquidity to Concave's liquidity pool to earn fees.`,
+  },
+  dashboard: {
+    title: 'Concave | Dashboard',
+    description: `You can use the Dashboard to claim dividends and manage your Liquid NFT positions.`,
+  },
+  gemswap: {
+    title: 'Concave | Gemswap (AMM)',
+    description: `Concave's AMM allows LPs to deploy deep liquidity for different pairs and allows LPs to earn more with less capital. The AMM has cheaper gas fees and swap fees.`,
+  },
+  'liquid-staking': {
+    title: `Concave | Liquid Staking`,
+    description: `With Liquid Staking, positions receive boosted rewards based on term length. Investors in the longest-term positions will receive the highest returns.`,
+  },
+  marketplace: {
+    title: 'Concave | NFT Marketplace',
+    description: `Trade your Liquid Staking positions and other NFTs in Concave's marketplace.`,
+  },
+  pools: {
+    title: 'Concave | Liquidity Pools',
+    description: `View your Liquidity Pool Positions and add liquidity to Concave supported pools. It is a pool of two tokens that allows users to exchange between them.`,
+  },
+  'smart-bonding': {
+    title: 'Concave | Bonding',
+    description: `Concave's Smart Bonding offers capital efficient bonds for virtually any ERC20 token, pricing and issuance model, which is optimized by an off-chain algorithm.`,
+  },
+  treasury: {
+    title: 'Concave | Treasury',
+    description: `Concave has treasury strategies to take advantage of yield opportunities. It is broken down into Investment Research, Delta Neutral, and Stable Farm strategies.`,
+  },
 }

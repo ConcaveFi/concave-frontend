@@ -121,9 +121,4 @@ const spin = keyframes({
   '100%': { transform: 'rotate(360deg)' },
 })
 
-Treasury.Meta = {
-  title: 'Concave | Treasury',
-  description: `Concave has treasury strategies to take advantage of yield opportunities. It is broken down into Investment Research, Delta Neutral, and Stable Farm strategies.`,
-}
-
 export default withPageTransition(Treasury)
