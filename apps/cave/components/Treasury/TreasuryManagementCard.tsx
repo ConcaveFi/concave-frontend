@@ -187,7 +187,7 @@ export const GlassPanel: React.FC<FlexProps> = ({ ...props }) => {
       boxShadow={'up'}
       rounded="2xl"
       {...props}
-      bg={'linear-gradient(90deg, #72639B 0%, #44B9DE 100%)'}
+      bg={'stroke.primary'}
       justify="center"
       align={''}
       direction="row"
