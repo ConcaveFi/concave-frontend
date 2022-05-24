@@ -43,7 +43,7 @@ export default function TreasuryRevenueMobile({
   const lastsAmounts = lastsSolds
     ? lastsSolds.map((value, index) => (
         <Text key={index} opacity={1 - (index / 10) * 3}>
-          {commify(commify(parseFloat(value.inputAmount).toFixed(2))) + ' DAI'}
+          {(commify(parseFloat(value.inputAmount).toFixed(2))) + ' DAI'}
         </Text>
       ))
     : ['0', '0', '0']
