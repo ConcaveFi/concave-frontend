@@ -7,6 +7,7 @@ import getROI from 'utils/getROI'
 import getCNVMarketPrice from 'utils/getCNVMarketPrice'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { getBondSpotPrice, useBondState } from 'components/Bond/BondState'
+import { useGet_Cnv_DataQuery } from 'graphql/generated/graphql'
 
 const NavButton = (props: ButtonLinkProps) => {
   const router = useRouter()
@@ -61,10 +62,12 @@ function PageNav() {
   const router = useRouter()
   const currentSupportedNetworkId = useCurrentSupportedNetworkId()
   const [bondSpotPrice, setBondSpotPrice] = useState<string>('0')
-  const [cnvMarketPrice, setCNVMarketPrice] = useState<number>(0)
+  // const [cnvMarketPrice, setCNVMarketPrice] = useState<number>(0)
   const [liquidStakingHover, setLiquidStakingHover] = useState(false)
   const [swapHover, setSwapStakingHover] = useState(false)
   const [intervalID, setIntervalID] = useState<any>()
+  const { data: cnvData } = useGet_Cnv_DataQuery()
+  const cnvMarketPrice = cnvData?.cnvData?.data?.last
 
   useEffect(() => {
     getBondSpotPrice(currentSupportedNetworkId, '')
@@ -74,9 +77,9 @@ function PageNav() {
       .catch((e) => {
         console.log(e)
       })
-    getCNVMarketPrice().then((price) => {
-      setCNVMarketPrice(price)
-    })
+    // getCNVMarketPrice().then((price) => {
+    //   setCNVMarketPrice(price)
+    // })
   }, [currentSupportedNetworkId])
 
   useEffect(() => {
@@ -84,9 +87,9 @@ function PageNav() {
       getBondSpotPrice(currentSupportedNetworkId, '').then((bondSpotPrice) => {
         setBondSpotPrice(bondSpotPrice)
       })
-      getCNVMarketPrice().then((price) => {
-        setCNVMarketPrice(price)
-      })
+      // getCNVMarketPrice().then((price) => {
+      //   setCNVMarketPrice(price)
+      // })
     }, 10000)
     if (intervalID !== interval) {
       clearTimeout(intervalID)

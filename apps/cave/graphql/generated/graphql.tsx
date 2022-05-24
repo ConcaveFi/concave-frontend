@@ -934,6 +934,17 @@ export type Get_Amm_Cnv_InfosQuery = {
   } | null
 }
 
+export type Get_Cnv_DataQueryVariables = Exact<{ [key: string]: never }>
+
+export type Get_Cnv_DataQuery = {
+  __typename?: 'query_root'
+  cnvData?: {
+    __typename?: 'cnvDataOutput'
+    data?: { __typename?: 'cnvData'; last?: number | null; ticker?: string | null } | null
+  } | null
+  logCnvData: Array<{ __typename?: 'logCnvData'; last?: any | null; updated_at: any }>
+}
+
 export type Get_Stackingv1_Last100_EventsQueryVariables = Exact<{ [key: string]: never }>
 
 export type Get_Stackingv1_Last100_EventsQuery = {
@@ -1110,6 +1121,29 @@ export const useGet_Amm_Cnv_InfosQuery = <TData = Get_Amm_Cnv_InfosQuery, TError
       Get_Amm_Cnv_InfosDocument,
       variables,
     ),
+    options,
+  )
+export const Get_Cnv_DataDocument = `
+    query GET_CNV_DATA {
+  cnvData {
+    data {
+      last
+      ticker
+    }
+  }
+  logCnvData(limit: 7, order_by: {created_at: desc}) {
+    last
+    updated_at
+  }
+}
+    `
+export const useGet_Cnv_DataQuery = <TData = Get_Cnv_DataQuery, TError = unknown>(
+  variables?: Get_Cnv_DataQueryVariables,
+  options?: UseQueryOptions<Get_Cnv_DataQuery, TError, TData>,
+) =>
+  useQuery<Get_Cnv_DataQuery, TError, TData>(
+    variables === undefined ? ['GET_CNV_DATA'] : ['GET_CNV_DATA', variables],
+    fetcher<Get_Cnv_DataQuery, Get_Cnv_DataQueryVariables>(Get_Cnv_DataDocument, variables),
     options,
   )
 export const Get_Stackingv1_Last100_EventsDocument = `
