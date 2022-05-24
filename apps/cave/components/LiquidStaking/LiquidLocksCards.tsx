@@ -53,7 +53,7 @@ const LiquidLocksCards = () => {
     <Card
       mt={4}
       mx={'auto'}
-      width={{ base: '330px', md: '560px', xl: '900px' }}
+      width={{ base: '330px', md: '430px', xl: '900px' }}
       variant="secondary"
       direction={'column'}
       textShadow={'0px 0px 27px rgba(129, 179, 255, 0.31)'}

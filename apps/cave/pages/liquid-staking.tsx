@@ -56,6 +56,7 @@ function LiquidStaking() {
       justify={'start'}
       align="center"
       direction={'column'}
+      p="0px"
     >
       <Heading as="h1" mt={8} fontSize={{ base: '4xl', sm: '5xl' }}>
         Liquid Staking
@@ -87,7 +88,7 @@ function LiquidStaking() {
       <Flex
         alignItems="start"
         justifyContent="center"
-        maxW={{ base: '330px', md: '420px', xl: 'full' }}
+        maxW={{ base: '330px', md: '420px', lg: '450px', xl: 'full' }}
         height={{ xl: '550px', base: '1100px' }}
       >
         <Flex

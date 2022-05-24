@@ -151,7 +151,7 @@ export function Bond() {
   }
 
   return (
-    <Container maxW="container.lg">
+    <Container maxW="container.lg" p={'4px'}>
       <Flex direction="column" gap={10}>
         <BondDescription />
         <Flex
