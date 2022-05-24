@@ -53,7 +53,7 @@ const DisconnectButton = () => {
 }
 
 export const ConnectWalletModal = ({ isOpen, onClose }) => {
-  const [{ data }, connect] = useConnect()
+  const [{ data, loading }, connect] = useConnect()
   const isMounted = useIsMounted()
   return (
     <Modal
@@ -84,7 +84,9 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
                 />
               }
               key={connector.id}
-              onClick={() => connect(connector).then(onClose)}
+              onClick={() => {
+                if (connector.id !== data?.connector?.id) connect(connector).then(onClose)
+              }}
             >
               {connector.name}
             </Button>
