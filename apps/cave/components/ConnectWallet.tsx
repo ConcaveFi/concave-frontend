@@ -17,6 +17,7 @@ import { useAccount, useConnect } from 'wagmi'
 import { useIsMounted } from 'hooks/useIsMounted'
 import { useModals } from 'contexts/ModalsContext'
 import YourWalletModal from './YourWalletModal'
+import { useRecentTransactions } from 'hooks/useRecentTransactions'
 
 // const miniAddress = (address) =>
 //   `${address.substr(0, 6)}...${address.substr(address.length - 6, address.length)}`
@@ -123,6 +124,11 @@ export function ConnectWallet(): JSX.Element {
   const [{ data: account }] = useAccount()
   const { isOpen, onOpen, onClose } = useDisclosure()
   // if (data.connected) return <DisconnectButton />
+
+  const { anyPedingTx } = useRecentTransactions()
+
+  console.log(anyPedingTx)
+
   if (data.connected)
     return (
       <>

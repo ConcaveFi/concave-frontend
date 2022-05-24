@@ -10,7 +10,7 @@ export default function RecentTransactionsContainer() {
 
   const { isOpen: isDialogOpen, onOpen: onOpenDialog, onClose: onCloseDialog } = useDisclosure()
 
-  const hasRecentTransactions = recentTransactions.length > 0
+  const hasRecentTransactions = recentTransactions.size > 0
 
   return (
     <Flex flex={1} direction={'column'} mt={8} mb={4}>
@@ -65,18 +65,19 @@ export default function RecentTransactionsContainer() {
       </SecondConfirmModal>
       {/* -------------------------- */}
 
-      {recentTransactions.length > 0 && (
+      {hasRecentTransactions && (
         <Flex
           direction={'column'}
           mt={3}
           gap={1}
           maxH="98px"
-          overflow={'auto'}
+          overflowY={'auto'}
+          overflowX="hidden"
           apply="border.secondary"
           __css={scroll}
         >
-          {recentTransactions.map((value, index) => (
-            <TransactionInfo key={index} recentTransaction={value} />
+          {Array.from(recentTransactions).map((value, index) => (
+            <TransactionInfo key={index} recentTransaction={value[1]} />
           ))}
         </Flex>
       )}
