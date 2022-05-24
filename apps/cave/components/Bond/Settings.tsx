@@ -107,7 +107,7 @@ export type BondSettings = {
   deadline: string
   slippageTolerance: {
     value: string
-    percent: Percent
+    percent: number | Percent
   }
 }
 
