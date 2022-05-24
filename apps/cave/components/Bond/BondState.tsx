@@ -66,15 +66,9 @@ export const purchaseBond = async (
     formattedInput,
     formattedMinOutput,
   )
-  return await bondingContract.purchaseBond(
-    address,
-    DAI,
-    formattedInput,
-    formattedMinOutput,
-    {
-      gasLimit: estimatedGas,
-    },
-  )
+  return await bondingContract.purchaseBond(address, DAI, formattedInput, formattedMinOutput, {
+    gasLimit: estimatedGas,
+  })
 }
 
 export async function getCurrentBlockTimestamp(networkId) {
