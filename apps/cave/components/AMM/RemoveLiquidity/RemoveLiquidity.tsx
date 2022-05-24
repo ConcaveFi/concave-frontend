@@ -200,7 +200,7 @@ const RemoveLiquidityActions = ({
 
       <TransactionSubmittedDialog
         title="Withdraw"
-        subtitle="Withdraw values"
+        subtitle="Transaction submitted"
         tx={{ hash: removeLiquidityState.hash } as Transaction}
         isOpen={!!removeLiquidityState.hash}
       />
