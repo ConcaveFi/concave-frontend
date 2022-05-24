@@ -68,7 +68,11 @@ function LiquidStaking() {
         gap={{ xl: 24, base: 2 }}
         textColor="white"
       >
-        <Text maxW={520} textAlign={{ xl: 'justify', base: 'center' }} fontSize={{ base: 'sm', sm: 'md' }}>
+        <Text
+          maxW={520}
+          textAlign={{ xl: 'justify', base: 'center' }}
+          fontSize={{ base: 'sm', sm: 'md' }}
+        >
           Stakers are incentivized with daily rewards and <br /> quarterly dividends to grow their
           CNV holdings
           <br />
@@ -80,11 +84,12 @@ function LiquidStaking() {
         </Text>
         <GraphicGuide />
       </Flex>
-      <Flex 
-		alignItems="start" 
-		justifyContent="center" 
-        maxW={{ base: '330px', md: '420px', xl: 'full' }} 
-		height={{ xl: '550px', base: '1100px' }}>
+      <Flex
+        alignItems="start"
+        justifyContent="center"
+        maxW={{ base: '330px', md: '420px', xl: 'full' }}
+        height={{ xl: '550px', base: '1100px' }}
+      >
         <Flex
           gap={{ xl: 8, lg: 8, base: 1, md: 3 }}
           justifyContent="center"
