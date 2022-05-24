@@ -1,0 +1,24 @@
+{
+    "name": "Concave Rinkeby List",
+    "timestamp": "2022-03-28T22:48:08Z",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "patch": 0
+    },
+    "tags": {},
+    "logoURI": "https://raw.githubusercontent.com/ConcaveFi/concave-frontend/c74472356a060b01d892a3208175625e3dc9a57f/assets/tokens/cnv.svg?token=ABPRVGKZSVUTQGJ3SV3EAVTCIOMTO",
+    "keywords": [
+      "concave"
+    ],
+    "tokens": [
+      {
+        "name": "ChainLink",
+        "address": "0x01BE23585060835E02B77ef475b0Cc51aA1e0709",
+        "symbol": "LINK",
+        "decimals": 18,
+        "chainId": 4,
+        "logoURI": "https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/svg/icon/link.svg"
+      }
+    ]
+  }
