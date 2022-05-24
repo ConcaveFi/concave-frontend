@@ -156,22 +156,21 @@ export function Bond() {
         <BondDescription />
         <Flex
           gap={{ base: 3, md: 10 }}
-          direction={{ lg: 'row', md: 'column' }}
-          align={{ lg: 'start', md: 'center' }}
-          justifyContent={'center'}
-          w={{ base: '350px', md: 'full' }}
+          direction={{ lg: 'row', base: 'column' }}
+          align={{ lg: 'start', base: 'center' }}
+          justify={'center'}
         >
-          <Box pos="relative" h="fit-content" maxW={{ base: '360px', md: '430px' }}>
-            <Card variant="secondary" w={{ base: '350px', md: '430px' }}>
+          <Box pos="relative" h="fit-content" w={{ base: '340px', md: '430px' }}>
+            <Card variant="secondary" w={{ base: '340px', md: '430px' }}>
               <Card
                 variant="secondary"
                 borderWidth={1}
-                px={{ base: 0, md: 6 }}
+                // px={{ base: 0, md: 6 }}
+                w={{ base: '340px', md: '430px' }}
                 py={20}
                 shadow="Glow Inner"
                 gap={10}
                 align="center"
-                w={{ base: '350px', md: '430px' }}
                 height="386px"
               >
                 <SelectedBondType bondType="Classic" />
