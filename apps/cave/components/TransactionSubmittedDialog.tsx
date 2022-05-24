@@ -40,7 +40,7 @@ const TxSubmitted = ({ title, tx, onClose, tokenSymbol, addTokenToWallet }: TxSu
       <Text align="center" fontSize="md" fontWeight="bold">
         {title || `Transaction Submitted`} <br />
         <Link href={getTxExplorer(tx, chain)} fontSize="sm" color="text.accent" isExternal>
-          View on Explorer
+          View on explorer
         </Link>
       </Text>
 
@@ -57,7 +57,7 @@ const TxSubmitted = ({ title, tx, onClose, tokenSymbol, addTokenToWallet }: TxSu
             size="large"
             mt={4}
           >
-            Add {tokenSymbol} to Wallet
+            Add {tokenSymbol} to wallet
           </Button>
         </Flex>
       )}

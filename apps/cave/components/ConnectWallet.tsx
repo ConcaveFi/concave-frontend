@@ -1,22 +1,21 @@
-import React from 'react'
 import {
-  Portal,
   Button,
   Card,
+  Flex,
+  gradientBorder,
   Image,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
-  gradientBorder,
   Modal,
-  Flex,
+  Portal,
   useDisclosure,
 } from '@concave/ui'
-import { useAccount, useConnect, useNetwork } from 'wagmi'
 import { useIsMounted } from 'hooks/useIsMounted'
+import React from 'react'
+import { useAccount, useConnect } from 'wagmi'
 import YourWalletModal from './YourWalletModal'
-import { isFunction } from 'util'
 
 // const miniAddress = (address) =>
 //   `${address.substr(0, 6)}...${address.substr(address.length - 6, address.length)}`

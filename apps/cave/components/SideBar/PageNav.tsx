@@ -3,6 +3,9 @@ import React, { useState, useEffect } from 'react'
 import { Box, Flex, Text, Image, Collapse } from '@concave/ui'
 import { ButtonLink, ButtonLinkProps } from 'components/ButtonLink'
 import { useRouter } from 'next/router'
+import getROI from 'utils/getROI'
+import getCNVMarketPrice from 'utils/getCNVMarketPrice'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { getBondSpotPrice, useBondState } from 'components/Bond/BondState'
 
 const NavButton = (props: ButtonLinkProps) => {
@@ -55,31 +58,37 @@ const NotInteractableImage = ({ src, ...props }) => (
 )
 
 function PageNav() {
-  const [bondSpotPrice, setBondSpotPrice] = useState<string>('0')
-  const [cnvMarketPrice, setCnvMarketPrice] = useState<number>(0)
-  const { networkId } = useBondState()
-  useEffect(() => {
-    getBondSpotPrice(networkId, '')
-      .then((bondSpotPrice) => {
-        setBondSpotPrice(bondSpotPrice)
-      })
-      .catch(() => {})
-    fetch('/api/cnv')
-      .then((j) => j.json())
-      .then((data) => JSON.parse(data))
-      .then((data) => {
-        if (data?.data) {
-          setCnvMarketPrice(data.data.last)
-        }
-      })
-      .catch((e) => {
-        throw e
-      })
-  }, [cnvMarketPrice, networkId])
   const router = useRouter()
-
+  const currentSupportedNetworkId = useCurrentSupportedNetworkId()
+  const [bondSpotPrice, setBondSpotPrice] = useState<string>('0')
+  const [cnvMarketPrice, setCNVMarketPrice] = useState<number>(0)
   const [liquidStakingHover, setLiquidStakingHover] = useState(false)
   const [swapHover, setSwapStakingHover] = useState(false)
+  const [intervalID, setIntervalID] = useState<any>()
+
+  useEffect(() => {
+    getBondSpotPrice(currentSupportedNetworkId, '').then((bondSpotPrice) => {
+      setBondSpotPrice(bondSpotPrice)
+    })
+    getCNVMarketPrice().then((price) => {
+      setCNVMarketPrice(price)
+    })
+  }, [currentSupportedNetworkId])
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      getBondSpotPrice(currentSupportedNetworkId, '').then((bondSpotPrice) => {
+        setBondSpotPrice(bondSpotPrice)
+      })
+      getCNVMarketPrice().then((price) => {
+        setCNVMarketPrice(price)
+      })
+    }, 10000)
+    if (intervalID !== interval) {
+      clearTimeout(intervalID)
+      setIntervalID(interval)
+    }
+  }, [cnvMarketPrice, currentSupportedNetworkId])
 
   const liquidStakingPage =
     router.pathname === '/liquid-staking' || router.pathname === '/dashboard'
@@ -87,6 +96,7 @@ function PageNav() {
     router.pathname === '/gemswap' ||
     router.pathname === '/pools' ||
     router.pathname === '/addliquidity'
+
   return (
     <Flex direction="column" position="relative" mr="-2px">
       <NotInteractableImage
@@ -104,10 +114,7 @@ function PageNav() {
           Bond
         </NavButton>
         <Text fontSize="xs" fontWeight="bold" textColor="text.low" textAlign="center" py={2}>
-          CNV-DAI{' '}
-          {`${
-            cnvMarketPrice > 0 ? ((1 - +bondSpotPrice / +cnvMarketPrice) * 100).toFixed(2) : '-'
-          }%`}
+          CNV-DAI {getROI(cnvMarketPrice, bondSpotPrice)}
         </Text>
       </Box>
       <Box height={'110px'}>
