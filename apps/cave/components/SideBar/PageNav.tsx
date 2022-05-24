@@ -67,9 +67,13 @@ function PageNav() {
   const [intervalID, setIntervalID] = useState<any>()
 
   useEffect(() => {
-    getBondSpotPrice(currentSupportedNetworkId, '').then((bondSpotPrice) => {
-      setBondSpotPrice(bondSpotPrice)
-    }).catch(() => {})
+    getBondSpotPrice(currentSupportedNetworkId, '')
+      .then((bondSpotPrice) => {
+        setBondSpotPrice(bondSpotPrice)
+      })
+      .catch((e) => {
+        console.log(e)
+      })
     getCNVMarketPrice().then((price) => {
       setCNVMarketPrice(price)
     })
