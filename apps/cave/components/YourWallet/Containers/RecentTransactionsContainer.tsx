@@ -94,7 +94,7 @@ const TransactionInfo = ({ recentTransaction }: { recentTransaction: RecentTrans
       ? `${commify(amount)} ${amountTokenName} staked in ${stakePool} Position`
       : type === 'Bond'
       ? `${commify(amount)} ${amountTokenName} bonded for ${commify(purchase)} ${purchaseTokenName}`
-      : `${commify(amount)} ${amountTokenName} swaped for ${commify(purchase)} ${purchaseTokenName}`
+      : `${commify(amount)} ${amountTokenName} swaped for ${purchase > 100 ? commify(purchase) : purchase} ${purchaseTokenName}`
 
   return (
     <Flex justify={'space-between'}>
