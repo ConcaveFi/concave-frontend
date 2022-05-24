@@ -100,7 +100,7 @@ const Deadline = ({ value, onValueChange }) => {
 }
 
 const toPercent = (input: string) => {
- return Math.sign(+input) === 1 ? new Percent(+input * 100, 10_000) : 0
+  return Math.sign(+input) === 1 ? new Percent(+input * 100, 10_000) : 0
 }
 
 export type BondSettings = {

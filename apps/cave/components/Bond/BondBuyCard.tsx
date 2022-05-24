@@ -8,7 +8,7 @@ import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialo
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { BOND_ADDRESS } from 'contracts/Bond/BondingAddress'
 import { useGet_Amm_Cnv_PriceQuery } from 'graphql/generated/graphql'
-import { useAddRecentTransaction, useRecentTransactions } from 'hooks/useRecentTransactions'
+import { useRecentTransactions } from 'hooks/useRecentTransactions'
 import React, { useEffect, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
 import { useFeeData } from 'wagmi'
@@ -85,7 +85,7 @@ export function BondBuyCard(props: {
       })
   }, [networkId, userAddress])
 
-  const { addRecentTransaction } = useAddRecentTransaction()
+  const { addRecentTransaction } = useRecentTransactions()
 
   return (
     <Card

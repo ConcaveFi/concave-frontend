@@ -4,7 +4,7 @@ import { RouterABI, ROUTER_ADDRESS, Router, Currency, TradeType, Trade } from '@
 import { Contract, Transaction } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useAccount, useContract, useSigner } from 'wagmi'
-import { useAddRecentTransaction, useRecentTransactions } from 'hooks/useRecentTransactions'
+import { useRecentTransactions } from 'hooks/useRecentTransactions'
 
 const initialState = {
   isWaitingForConfirmation: false,
@@ -31,7 +31,7 @@ export const useSwapTransaction = (
     signerOrProvider: signer,
   })
 
-  const { addRecentTransaction } = useAddRecentTransaction()
+  const { addRecentTransaction } = useRecentTransactions()
 
   const [state, setState] = useState(initialState)
   const submit = async () => {

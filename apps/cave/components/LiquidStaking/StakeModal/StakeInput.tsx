@@ -7,7 +7,7 @@ import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialo
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { useAddRecentTransaction, useRecentTransactions } from 'hooks/useRecentTransactions'
+import { useRecentTransactions } from 'hooks/useRecentTransactions'
 import { StakingV1ProxyAddress } from 'lib/StakingV1Proxy/Address'
 import { StakingV1Contract } from 'lib/StakingV1Proxy/StakingV1Contract'
 import React, { useState } from 'react'
@@ -27,7 +27,7 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
   const [txError, setTxError] = useState('')
   const [waitingForConfirm, setWaitingForConfirm] = useState(false)
 
-  const { addRecentTransaction } = useAddRecentTransaction()
+  const { addRecentTransaction } = useRecentTransactions()
 
   const {
     isOpen: isOpenSubmitted,
