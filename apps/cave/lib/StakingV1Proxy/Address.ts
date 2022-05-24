@@ -1,5 +1,5 @@
 import { chain } from 'wagmi'
 
 export const StakingV1ProxyAddress = {
-  [chain.rinkeby.id]: '0xB45Ab2b612069d1cCA22F6ab9262F8BAE9b81146',
+  [chain.rinkeby.id]: '0x2d88De942051701C311862Da7657ba7954Bc7ca6',
 }
