@@ -53,7 +53,8 @@ export const useAddLiquidityState = (
     setAmounts((amounts) => ({
       [lastUpdated]: exactAmount,
       [otherField]:
-        deriveAmount(pair.data, exactAmount, currencies[otherField]) || amounts[otherField],
+        deriveAmount(pair.data, exactAmount, currencies[otherField]) ||
+        toAmount(amounts[otherField].toExact(), currencies[otherField]),
     }))
   }, [exactAmount, pair.data, lastUpdated, currencies])
 
