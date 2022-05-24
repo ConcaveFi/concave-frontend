@@ -256,7 +256,7 @@ const RemoveLiquidityActions = ({
 
       <TransactionSubmittedDialog
         title="Withdraw"
-        subtitle="Withdraw values"
+        subtitle="Withdraw"
         tx={{ hash: removeLiquidityState.hash } as Transaction}
         isOpen={isOpenSubmitted}
         closeParentComponent={closeParentComponent}
