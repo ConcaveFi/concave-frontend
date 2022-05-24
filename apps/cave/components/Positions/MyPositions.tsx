@@ -1,4 +1,4 @@
-import { CurrencyAmount } from '@concave/core'
+import { CurrencyAmount, Percent } from '@concave/core'
 import { Fetcher, Pair } from '@concave/gemswap-sdk'
 import {
   Accordion,
@@ -17,12 +17,15 @@ import { RemoveLiquidityModalButton } from 'components/AMM/RemoveLiquidity/Remov
 import { ConnectWallet } from 'components/ConnectWallet'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { Loading } from 'components/Loading'
+import { Contract } from 'ethers'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useAddressTokenList } from 'hooks/useTokenList'
+import { useTotalSupply } from 'hooks/useTotalSupply'
 import { concaveProvider } from 'lib/providers'
 import React, { useState } from 'react'
 import { useQuery } from 'react-query'
-import { useAccount, useNetwork } from 'wagmi'
+import { toAmount } from 'utils/toAmount'
+import { erc20ABI, useAccount, useNetwork, useProvider } from 'wagmi'
 
 export const MyPositions = () => {
   const [view, setView] = useState<'user' | 'all'>('all')
@@ -133,13 +136,7 @@ const PairsAccordion = ({ userAddress, pairs }: PairsAccordionProps) => {
       >
         <Accordion as={Stack} allowToggle gap={2}>
           {pairs.map((pair) => {
-            return (
-              <LPPositionItem
-                key={pair.liquidityToken.address}
-                pair={pair}
-                userAddress={userAddress}
-              />
-            )
+            return <LPPositionItem key={pair.liquidityToken.address} pair={pair} />
           })}
         </Accordion>
       </Box>
@@ -147,13 +144,11 @@ const PairsAccordion = ({ userAddress, pairs }: PairsAccordionProps) => {
   )
 }
 
-interface LPPosition {
-  userAddress: string
-  pair: Pair
-}
-const LPPositionItem = ({ userAddress, pair }: LPPosition) => {
+const LPPositionItem = ({ pair }: { pair: Pair }) => {
   const userBalance = useCurrencyBalance(pair.liquidityToken)
-  if (userBalance.isLoading) {
+  const totalSupply = useTotalSupply(pair.liquidityToken)
+
+  if (userBalance.isLoading || totalSupply.isLoading) {
     return (
       <AccordionItem p={2} shadow="Up Big" borderRadius="2xl" alignItems="center">
         <AccordionButton disabled={true}>
@@ -163,11 +158,17 @@ const LPPositionItem = ({ userAddress, pair }: LPPosition) => {
       </AccordionItem>
     )
   }
-  if (userBalance.error) {
+  if (userBalance.error || totalSupply.error) {
     return <Text>{`${userBalance.error}`}</Text>
   }
+
   const balance = userBalance.data || CurrencyAmount.fromRawAmount(pair.liquidityToken, '0')
-  const userPoolShare = +userBalance.data?.toExact() / +pair.liquidityToken.totalSupply.toExact()
+
+  const userPoolShare =
+    userBalance.data &&
+    totalSupply.data &&
+    new Percent(userBalance.data.toExact(), totalSupply.data.toExact())
+
   return (
     <>
       <AccordionItem p={2} shadow="Up Big" borderRadius="2xl" alignItems="center">
@@ -207,10 +208,7 @@ const LPPositionItem = ({ userAddress, pair }: LPPosition) => {
             </PositionInfoItem>
 
             {balance.greaterThan(0) && (
-              <PositionInfoItem
-                label="Your pool share:"
-                value={`${(userPoolShare * 100).toFixed(2)}%`}
-              />
+              <PositionInfoItem label="Your pool share:" value={`${userPoolShare.toFixed(2)}%`} />
             )}
           </Stack>
           <Flex gap={5} justify="center" mt={6}>

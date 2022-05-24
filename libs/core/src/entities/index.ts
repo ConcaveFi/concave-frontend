@@ -1,6 +1,6 @@
-export * from './currencyAmount'
 export * from './AbstractCurrency'
 export * from './nativeCurrency'
+export * from './currencyAmount'
 export * from './fraction'
 export * from './percent'
 export * from './token'
