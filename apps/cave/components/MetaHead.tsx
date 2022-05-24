@@ -14,9 +14,10 @@ export interface MetaProps {
 
 export const MetaHead = ({ meta: _meta }: { meta?: MetaProps }): JSX.Element => {
   const router = useRouter()
+  const currentRoute = router.route.substring(1, undefined)
   const meta: MetaProps = {
-    title: metaData[router.route.replace('/', '')].title,
-    description: metaData[router.route.replace('/', '')].description,
+    title: metaData[currentRoute].title,
+    description: metaData[currentRoute].description,
     image: `${HOST_URL}/assets/concave/ConcavePreview.png`,
     type: 'website',
     ..._meta,
