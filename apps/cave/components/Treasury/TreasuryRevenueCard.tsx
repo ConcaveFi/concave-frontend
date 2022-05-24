@@ -123,8 +123,6 @@ export default function TreasuryRevenueCard(props) {
     setLastsSolds(data && data.logAccrualBondsV1_BondSold.splice(3))
   }, [data])
 
-  console.log(cnv)
-
   const relativeTimeline = lastsSolds
     ? lastsSolds.map(
         (value) => formatDistanceStrict(value.timestamp * 1000, new Date().getTime()) + ' ago',

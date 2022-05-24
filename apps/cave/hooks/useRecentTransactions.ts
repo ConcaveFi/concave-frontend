@@ -1,10 +1,6 @@
-import { valueToPercent } from '@chakra-ui/utils'
-import { Currency, CurrencyAmount } from '@concave/gemswap-sdk'
-import { useTimeout } from '@concave/ui'
 import { Transaction } from 'ethers'
 import { useEffect, useState } from 'react'
-import { setInterval } from 'timers/promises'
-import { useTransaction, useWaitForTransaction } from 'wagmi'
+import { useWaitForTransaction } from 'wagmi'
 import { useIsMounted } from './useIsMounted'
 
 const clearRecentTransactions = () => localStorage.clear()
@@ -14,6 +10,9 @@ export function useRecentTransactions() {
   const isMounted = useIsMounted()
   const data = isMounted ? getRecentTransactions() : new Map<String, RecentTransaction>()
   const [verified, setVerified] = useState(false)
+
+  const [test, setTest] = useState(0)
+  const [anyPendingTx, setAnyPendingTx] = useState(false)
 
   const addRecentTransaction = (recentTx: RecentTransaction) => {
     data.set(recentTx.transaction.hash, recentTx)
@@ -25,25 +24,36 @@ export function useRecentTransactions() {
 
   useEffect(() => {
     if (!verified && data.size > 0) {
-      console.log('entered here')
-
-      data.forEach((value) => {
-        if (!value.loading) return
-        wait({ hash: value.transaction.hash })
-          .then((e) => {
-            console.log('finished')
-            data.set(value.transaction.hash, { ...value, loading: e.data.status === 2 })
-            localStorage.setItem('recentTransactions', JSON.stringify(Array.from(data)))
-          })
-          .catch((e) => {})
-      })
+      const hasUnNotLoaded = Array.from(data).filter((value) => value[1].loading).length > 0
+      if (hasUnNotLoaded) {
+        data.forEach((value) => {
+          if (!value.loading) return
+          wait({ hash: value.transaction.hash })
+            .then((e) => {
+              console.log('finished')
+              data.set(value.transaction.hash, { ...value, loading: e.data.status === 2 })
+              localStorage.setItem('recentTransactions', JSON.stringify(Array.from(data)))
+            })
+            .catch((e) => {})
+        })
+      }
     }
+
     setVerified(true)
   }, [data])
 
-  const anyPendingTx = Array.from(data).filter((value) => value[1].loading).length > 0
+  useEffect(() => {
+    setInterval(() => {
+      console.log(
+        'current value ->' + (Array.from(data).filter((value) => value[1].loading).length > 0),
+      )
+
+      setAnyPendingTx(Array.from(data).filter((value) => value[1].loading).length > 0)
+    }, 3000)
+  }, [])
 
   return {
+    test,
     anyPendingTx,
     data,
     clearRecentTransactions,
