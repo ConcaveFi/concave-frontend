@@ -259,6 +259,11 @@ export function Bond() {
   )
 }
 
+Bond.Meta = {
+  title: 'Concave | Bonding',
+  description: `Concave's Smart Bonding offers capital efficient bonds for virtually any ERC20 token, pricing and issuance model, which is optimized by an off-chain algorithm.`,
+}
+
 export default withPageTransition(Bond)
 
 const BondDescription = () => (
