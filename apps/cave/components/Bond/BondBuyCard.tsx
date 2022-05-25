@@ -123,7 +123,9 @@ export function BondBuyCard(props: {
           <HStack alignSelf={'start'}>
             <Text textColor={'text.low'}>Current Price:</Text>
             <Text textColor={'text.low'} opacity="0.7">
-              {currentPrice ? '$' + truncateNumber(+currentPrice*10**18,3) + ' CNV' : 'Loading . . .'}
+              {currentPrice
+                ? '$' + truncateNumber(+currentPrice * 10 ** 18, 3) + ' CNV'
+                : 'Loading . . .'}
             </Text>
           </HStack>
           <HStack alignSelf={'start'}>
@@ -132,7 +134,7 @@ export function BondBuyCard(props: {
             </Text>
             <Text textColor={'text.low'} opacity="0.7">
               {bondSpotPrice
-                ? '$' +  truncateNumber(+bondSpotPrice*10**18 , 3)+ ' CNV'
+                ? '$' + truncateNumber(+bondSpotPrice * 10 ** 18, 3) + ' CNV'
                 : 'Loading . . .'}
             </Text>
           </HStack>
