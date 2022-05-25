@@ -16,6 +16,7 @@
     "test": "tsdx test"
   },
   "dependencies": {
+    "@concave/core": "*",
     "@ethersproject/address": "^5.4.0",
     "@ethersproject/bignumber": "^5.6.1",
     "@ethersproject/contracts": "^5.6.1",
@@ -27,12 +28,11 @@
     "jsbi": "^4.2.0",
     "tiny-invariant": "^1.1.0",
     "tiny-warning": "^1.0.0",
-    "toformat": "^2.0.0",
-    "@concave/core": "*"
+    "toformat": "^2.0.0"
   },
   "devDependencies": {
-    "prettier": "^2.6.2",
     "@types/big.js": "^6.1.0",
+    "prettier": "^2.6.2",
     "tsdx": "^0.14.1"
   }
 }

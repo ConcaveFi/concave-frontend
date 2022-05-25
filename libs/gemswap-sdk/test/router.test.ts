@@ -1,9 +1,9 @@
-import { CurrencyAmount, Ether, Percent, Token, WETH9 } from '@concave/core'
-import { Pair, Route, Trade } from '../src/entities'
-
 import JSBI from 'jsbi'
-import { Router } from '../src/router'
 import invariant from 'tiny-invariant'
+import { CurrencyAmount, Ether, Percent, Token, WETH9 } from '@concave/core'
+
+import { Pair, Route, Trade } from '../src/entities'
+import { Router } from '../src/router'
 
 function checkDeadline(deadline: string[] | string): void {
   expect(typeof deadline).toBe('string')
