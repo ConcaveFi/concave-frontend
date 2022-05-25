@@ -1,4 +1,4 @@
-import { Percent } from '../../src/entities/percent'
+import { Percent } from '../../src/entities'
 
 describe('Percent', () => {
   describe('constructor', () => {
