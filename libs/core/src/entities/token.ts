@@ -12,7 +12,7 @@ export class Token extends AbstractCurrency {
 
   public readonly isNative: false = false
   public readonly isToken: true = true
-  public readonly totalSupply: CurrencyAmount<Token>
+  private readonly _totalSupply: string
 
   public constructor(
     chainId: number,
@@ -24,7 +24,11 @@ export class Token extends AbstractCurrency {
   ) {
     super(chainId, decimals, symbol, name)
     this.address = validateAndParseAddress(address)
-    this.totalSupply = CurrencyAmount.fromRawAmount(this, totalSupply?.toString() ?? '0')
+    this._totalSupply = totalSupply?.toString() ?? '0'
+  }
+
+  get totalSupply() {
+    return CurrencyAmount.fromRawAmount(this, this._totalSupply)
   }
 
   /**
