@@ -81,9 +81,7 @@ export function BondBuyCard(props: {
       .then((bondSpotPrice) => {
         setBondSpotPrice(bondSpotPrice)
       })
-      .catch((e) => {
-        console.log(e)
-      })
+      .catch((e) => console.log(e))
   }, [networkId, userAddress])
 
   const { addRecentTransaction } = useRecentTransactions()

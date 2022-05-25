@@ -69,9 +69,7 @@ export function Bond() {
         setBondSigma(bondSigma)
         setButtonDisabled(false)
       })
-      .catch((e) => {
-        console.log('user bond fail', e)
-      })
+      .catch((e) => console.log(e))
   }
 
   useEffect(() => {
@@ -94,9 +92,7 @@ export function Bond() {
       .then((bondSpotPrice) => {
         setBondSpotPrice(bondSpotPrice)
       })
-      .catch((e) => {
-        console.log(e)
-      })
+      .catch((e) => console.log(e))
     getCNVMarketPrice().then((price) => {
       setCNVMarketPrice(price)
       console.log(price)
@@ -109,9 +105,7 @@ export function Bond() {
         .then((bondSpotPrice) => {
           setBondSpotPrice(bondSpotPrice)
         })
-        .catch((e) => {
-          console.log(e)
-        })
+        .catch((e) => console.log(e))
       getCNVMarketPrice().then((price) => {
         setCNVMarketPrice(price)
         console.log(price)
