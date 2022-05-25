@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, NATIVE, Percent, ROUTER_ADDRESS } from '@concave/core'
+import { Currency, CurrencyAmount, NATIVE, ROUTER_ADDRESS, Token } from '@concave/core'
 import { Pair } from '@concave/gemswap-sdk'
 import {
   Box,
@@ -19,6 +19,7 @@ import { Transaction } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { RemoveLiquidityState, useRemoveLiquidity } from 'hooks/useRemoveLiquidity'
 import React, { useState } from 'react'
+import { precision } from 'utils/formatFixed'
 
 export const RemoveLiquidityModalButton = ({
   liquidityInfo,
@@ -28,7 +29,7 @@ export const RemoveLiquidityModalButton = ({
   label?: string
   liquidityInfo: {
     pair: Pair
-    userPoolShare: Percent
+    userPoolShare: number
     userBalance: CurrencyAmount<Currency>
   }
 }) => {
@@ -57,26 +58,20 @@ export const RemoveLiquidityModalButton = ({
         isCentered
         size={'2xl'}
         bodyProps={{
+          variant: 'primary',
           borderRadius: '3xl',
+          borderWidth: 2,
+          p: 6,
+          shadow: 'Up for Blocks',
           fontWeight: 'bold',
           fontSize: 'lg',
           gap: 6,
         }}
       >
         <AmountToRemove onChange={removeLiquidityState.setPercentToRemove} />
-        <YouWillReceive
-          pair={removeLiquidityState.pair}
-          amountAMin={removeLiquidityState.amountAMin}
-          amountBMin={removeLiquidityState.amountBMin}
-          hasNativeToken={removeLiquidityState.hasNativeToken}
-          receiveInNativeToken={removeLiquidityState.receiveInNativeToken}
-          handleNativeToken={removeLiquidityState.handleNativeToken}
-        />
+        <YouWillReceive {...removeLiquidityState} />
         <RemoveLiquidityActions removeLiquidityState={removeLiquidityState} />
-        <YourPosition
-          pair={removeLiquidityState.pair}
-          userPoolShare={liquidityInfo.userPoolShare}
-        />
+        <YourPosition {...removeLiquidityState} {...liquidityInfo} />
       </Modal>
     </>
   )
@@ -111,8 +106,10 @@ const YouWillReceive = ({
   amountBMin,
   hasNativeToken,
   receiveInNativeToken,
+  tokenAIsNativeWrapper,
+  tokenBIsNativeWrapper,
   handleNativeToken,
-}: Partial<RemoveLiquidityState>) => {
+}: RemoveLiquidityState) => {
   return (
     <HStack gap={7} shadow="Up Big" px={6} py={3} borderRadius="2xl" align="center">
       <Box>
@@ -126,12 +123,14 @@ const YouWillReceive = ({
         )}
       </Box>
       <ReceiveBox
-        receiveInNative={pair.token0.isNative && receiveInNativeToken}
+        receiveInNative={tokenAIsNativeWrapper && receiveInNativeToken}
         amount={amountAMin}
+        token={pair.token0}
       />
       <ReceiveBox
-        receiveInNative={pair.token0.isNative && receiveInNativeToken}
+        receiveInNative={tokenBIsNativeWrapper && receiveInNativeToken}
         amount={amountBMin}
+        token={pair.token1}
       />
     </HStack>
   )
@@ -139,18 +138,20 @@ const YouWillReceive = ({
 
 const ReceiveBox = ({
   amount,
+  token,
   receiveInNative,
 }: {
-  amount: CurrencyAmount<Currency>
+  amount: number
+  token: Token
   receiveInNative?: boolean
 }) => {
-  const currency = receiveInNative ? NATIVE[amount.currency.chainId] : amount.currency
+  const currency = receiveInNative ? NATIVE[token.chainId] : token
   return (
     <HStack shadow="down" borderRadius="2xl" p={3}>
       <CurrencyIcon size="sm" currency={currency} />
       <Box>
         <Text fontFamily={'heading'} fontWeight={600}>
-          {amount.toFixed(4)}
+          {precision(amount, 4)}
         </Text>
         <Text title={currency?.name} fontWeight={700} fontSize={'sm'} color={'text.low'}>
           {currency?.symbol}
@@ -208,7 +209,7 @@ const RemoveLiquidityActions = ({
   )
 }
 
-const YourPosition = ({ pair, userPoolShare }: { pair: Pair; userPoolShare: Percent }) => {
+const YourPosition = ({ pair, userPoolShare }: { pair: Pair; userPoolShare: number }) => {
   return (
     <Flex gap={7} direction={'column'} shadow="Up Big" px={4} py={4} borderRadius="2xl">
       <Text fontSize={'lg'}>Your Position</Text>
@@ -228,16 +229,19 @@ const YourPosition = ({ pair, userPoolShare }: { pair: Pair; userPoolShare: Perc
         p={4}
         spacing={3}
       >
-        <PositionInfoItem label="Your pool share:" value={`${userPoolShare.toFixed(2)}%`} />
+        <PositionInfoItem
+          label="Your pool share:"
+          value={`${precision(userPoolShare * 100, 2)}%`}
+        />
         <PositionInfoItem
           label={pair.token0.symbol}
-          value={pair.reserve0.multiply(userPoolShare).toFixed(4)}
+          value={precision(+pair.reserve0.toExact() * userPoolShare)}
         >
           <CurrencyIcon size="sm" currency={pair.token0} />
         </PositionInfoItem>
         <PositionInfoItem
           label={pair.token1.symbol}
-          value={pair.reserve1.multiply(userPoolShare).toFixed(4)}
+          value={precision(+pair.reserve1.toExact() * userPoolShare)}
         >
           <CurrencyIcon size="sm" currency={pair.token1} />
         </PositionInfoItem>

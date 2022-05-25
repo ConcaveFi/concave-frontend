@@ -16,27 +16,29 @@ export const useRemoveLiquidity = ({
   userBalance,
 }: {
   pair: Pair
-  userPoolShare: Percent
+  userPoolShare: number
   userBalance: CurrencyAmount<Currency>
 }) => {
   const networkId = useCurrentSupportedNetworkId()
   const [{ data: account }] = useAccount()
-  const [{ data: signer }] = useSigner()
   const tokenA = pair.token0
   const tokenB = pair.token1
   const [percentToRemove, setPercentToRemove] = useState(0)
   const ratioToRemove = Math.min(percentToRemove, 100) / 100
-  const amountAMin = userPoolShare && pair.reserve0.multiply(userPoolShare).multiply(ratioToRemove)
-  const amountBMin = userPoolShare && pair.reserve1.multiply(userPoolShare).multiply(ratioToRemove)
+  const amountAMin = +pair.reserve0.toExact() * userPoolShare * ratioToRemove
+  const amountBMin = +pair.reserve1.toExact() * userPoolShare * ratioToRemove
   const [hash, setHash] = useState<string>(null)
+  const [{ data }] = useSigner()
   const [receiveInNativeToken, setReceiveInNativeToken] = useState(true)
-  const hasNativeToken = tokenA.isNative || tokenB.isNative
+  const tokenAIsNativeWrapper = tokenA.address === WETH9_ADDRESS[networkId]
+  const tokenBIsNativeWrapper = tokenB.address === WETH9_ADDRESS[networkId]
+  const hasNativeToken = tokenAIsNativeWrapper || tokenBIsNativeWrapper
 
   const removeLiquidity = async () => {
-    const router = new Router(networkId, signer)
-    if (receiveInNativeToken && hasNativeToken) {
+    const router = new Router(networkId, data)
+    if (receiveInNativeToken && (tokenAIsNativeWrapper || tokenBIsNativeWrapper)) {
       const transaction = await router.removeLiquidityETH(
-        tokenA.isNative ? tokenB : tokenA,
+        tokenAIsNativeWrapper ? tokenB : tokenA,
         currencyAmountToBigNumber(userBalance.multiply(new Percent(percentToRemove, 100))),
         account.address,
       )
@@ -60,6 +62,8 @@ export const useRemoveLiquidity = ({
     setPercentToRemove,
     removeLiquidity,
     hash,
+    tokenAIsNativeWrapper,
+    tokenBIsNativeWrapper,
     hasNativeToken,
     receiveInNativeToken,
     handleNativeToken: () => setReceiveInNativeToken(!receiveInNativeToken),

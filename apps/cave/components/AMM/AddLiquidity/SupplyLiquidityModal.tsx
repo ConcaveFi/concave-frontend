@@ -1,9 +1,8 @@
-import { Percent, ROUTER_ADDRESS } from '@concave/core'
+import { ROUTER_ADDRESS } from '@concave/core'
 import { Box, Button, Flex, HStack, Modal, Text } from '@concave/ui'
 import { LiquidityPool } from 'components/AMM/AddLiquidity/AddLiquidity'
 import { ApproveButton } from 'components/ApproveButton/ApproveButton'
 import { CurrencyIcon } from 'components/CurrencyIcon'
-import { useTotalSupply } from 'hooks/useTotalSupply'
 import React, { useState } from 'react'
 
 const PositionInfoItem = ({ color = '', label = '', value, mt = 0, children = <></> }) => (
@@ -29,25 +28,17 @@ const SupplyLiquidityContent = ({
       : [lp.amount1, lp.amount0]
   const [approve0, setApprove0] = useState(false)
   const [approve1, setApprove1] = useState(false)
-
   const token0 = amount0.currency
   const token1 = amount1.currency
   const pair = lp.pair
-
-  const totalSupply = useTotalSupply(pair.liquidityToken)
-
-  if (!totalSupply.data) return null // TODO loading states (probably not in here)
-
-  const poolShare = pair.getLiquidityMinted(totalSupply.data, amount0.wrapped, amount1.wrapped) // this can throw
-  console.log(totalSupply.data.toSignificant(6))
-  const percentShare = new Percent(poolShare.numerator, totalSupply.data.add(poolShare).numerator)
+  const poolShare = pair.calculatePoolShare(amount0, amount1)
 
   return (
     <>
-      <Text fontSize="2xl">You will receive</Text>
+      <Text fontSize="2xl"> You will receive</Text>
       <HStack>
         <Text fontWeight={'bold'} lineHeight={'48px'} fontSize={32}>
-          {poolShare?.toSignificant(6)}
+          {poolShare?.amount.toSignificant(6, { groupSeparator: ',' })}
         </Text>
         <CurrencyIcon h={10} w={10} currency={amount0.currency} />
         <CurrencyIcon h={10} w={10} currency={amount1.currency} />
@@ -59,32 +50,36 @@ const SupplyLiquidityContent = ({
         fontStyle={'italic'}
         fontSize={14}
         textColor={'#5F7A99'}
-      >{`Output is estimated. You will receive approximately ${poolShare?.toSignificant(6)} ${
-        pair.liquidityToken.symbol
-      } or the transaction will revert.`}</Text>
+      >{`Output is estimated. You will receive approximately ${poolShare?.amount.toSignificant(6, {
+        groupSeparator: ',',
+      })} ${pair.liquidityToken.symbol} or the transaction will revert.`}</Text>
       <Box borderRadius={'2xl'} p={6} shadow={'down'}>
         <PositionInfoItem
           label="Rates"
-          value={`1  ${token0.symbol} = ${pair.token0Price.toSignificant(6)} ${token1.symbol}`}
+          value={`1  ${token0.symbol} = ${pair.token0Price.toSignificant(6, {
+            groupSeparator: ',',
+          })} ${token1.symbol}`}
         />
         <PositionInfoItem
-          value={`1  ${token1.symbol} = ${pair.token1Price.toSignificant(6)}  ${token0.symbol}`}
+          value={`1  ${token1.symbol} = ${pair.token1Price.toSignificant(6, {
+            groupSeparator: ',',
+          })}  ${token0.symbol}`}
         />
         <PositionInfoItem
           mt={8}
           color={'text.low'}
           label={`${token0.symbol} Deposited`}
-          value={`${amount0.toSignificant(8)} ${token0.symbol}`}
+          value={`${amount0.toSignificant(8, { groupSeparator: ',' })} ${token0.symbol}`}
         />
         <PositionInfoItem
           color={'text.low'}
           label={`${token1.symbol} Deposited`}
-          value={`${amount1.toSignificant(8)} ${token1.symbol}`}
+          value={`${amount1.toSignificant(8, { groupSeparator: ',' })} ${token1.symbol}`}
         />
         <PositionInfoItem
           color={'text.low'}
           label="Share Pool"
-          value={`${percentShare?.toSignificant(4)}%`}
+          value={`${poolShare?.percent?.toSignificant(4)}%`}
         />
       </Box>
 
