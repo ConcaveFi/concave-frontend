@@ -85,17 +85,6 @@ const SupplyLiquidityContent = ({
         variant={'primary'}
         autoHide
         approveArgs={{
-          currency: lpData.amount0.currency,
-          spender: ROUTER_ADDRESS[lpData.amount0.currency.chainId],
-          onSuccess: () => lpData.setApprove0(true),
-        }}
-      />
-      <ApproveButton
-        size="large"
-        w="full"
-        variant={'primary'}
-        autoHide
-        approveArgs={{
           currency: lpData.amount1.currency,
           spender: ROUTER_ADDRESS[lpData.amount0.currency.chainId],
           onSuccess: () => lpData.setApprove1(true),
