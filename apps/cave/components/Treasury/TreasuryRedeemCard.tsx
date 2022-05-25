@@ -5,13 +5,14 @@ import { useIsMounted } from 'hooks/useIsMounted'
 import { getWalletType } from 'lib/injected.wallets'
 import { GlassPanel } from './TreasuryManagementCard'
 import { useEffect, useState } from 'react'
-import { useAccount, useBalance, useContractWrite } from 'wagmi'
+import { useAccount, useBalance, useConnect, useContractWrite } from 'wagmi'
 import { aCNVredeemabi } from 'lib/contractoABI'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { CNV_ADDRESS, DAI } from '@concave/gemswap-sdk'
-import { ethers } from 'ethers'
+import { Contract, ethers } from 'ethers'
 import { formatEther } from 'ethers/lib/utils'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
+import { concaveProvider } from 'lib/providers'
 
 // aCNV address
 // 0x2a6bb78490c2221e0d36d931192296be4b3a01f1 RINKEBY
@@ -29,8 +30,11 @@ function ClaimAcnvButton() {
       args: [account?.address],
     },
   )
+
   const [redeemText, setRedeemText] = useState('Redeem aCNV')
   const [redeeming, setRedeeming] = useState(false)
+
+  console.log(data)
 
   const [{ data: balanceData, loading: loadingBalance }] = useBalance({
     addressOrName: account?.address,
@@ -46,9 +50,15 @@ function ClaimAcnvButton() {
   const { isOpen, onClose, onOpen } = useDisclosure()
   return (
     <>
-      <Button fontSize={{ base: '13px', xl: '18px' }} fontWeight="700" onClick={onOpen}>
+      <Button
+        fontSize={{ base: '13px', xl: '18px' }}
+        fontWeight="700"
+        onClick={() => {
+          write().then((tx) => console.log(tx))
+        }}
+      >
         <Flex align={'center'} justify="center" gap={2}>
-          <Text my={'auto'}>aCNV -</Text>
+          <Text my={'auto'}>aCNV</Text>
           {loadingBalance ? <Spinner size={'sm'} /> : <Text>{balanceData?.formatted}</Text>}
         </Flex>
       </Button>
@@ -89,8 +99,10 @@ function TreasuryRedeemCard() {
 
   const [walletName, setWalletName] = useState('')
 
+  const [{ data }] = useConnect()
+
   useEffect(() => {
-    if (walletName === '') setWalletName(getWalletType())
+    if (walletName === '') setWalletName(data?.connector?.name ? data?.connector?.name : 'wallet')
   }, [walletName])
 
   return (
@@ -130,7 +142,7 @@ function TreasuryRedeemCard() {
         >
           <Button>
             <Text fontSize={{ base: '13px', xl: '18px' }} fontWeight="700" my={'auto'}>
-              pCNV - 0
+              pCNV
             </Text>
           </Button>
         </GlassPanel>
@@ -143,7 +155,7 @@ function TreasuryRedeemCard() {
         >
           <Button>
             <Text fontSize={{ base: '13px', xl: '18px' }} fontWeight="700" my={'auto'}>
-              bbtCNV - 100
+              bbtCNV
             </Text>
           </Button>
         </GlassPanel>

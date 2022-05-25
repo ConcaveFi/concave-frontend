@@ -128,9 +128,9 @@ export function ConnectWallet(): JSX.Element {
   const { isOpen, onOpen, onClose } = useDisclosure()
   // if (data.connected) return <DisconnectButton />
 
-  const { data: recentTx, isLoading, test } = useRecentTransactions()
+  const { data: recentTx } = useRecentTransactions()
 
-  console.log('connect wallet ->' + isLoading)
+  const isLoading = Array.from(recentTx).filter((value) => !value[1].status).length > 0
 
   if (data.connected)
     return (
