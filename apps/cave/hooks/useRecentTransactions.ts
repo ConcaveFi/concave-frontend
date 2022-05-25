@@ -1,89 +1,68 @@
 import { Transaction } from 'ethers'
+import { concaveProvider } from 'lib/providers'
 import { useEffect, useState } from 'react'
-import { useQuery } from 'react-query'
+import { useQueries, useQuery } from 'react-query'
 import { text } from 'stream/consumers'
 import { useWaitForTransaction } from 'wagmi'
+import { useCurrentSupportedNetworkId } from './useCurrentSupportedNetworkId'
 import { useIsMounted } from './useIsMounted'
 
 const clearRecentTransactions = () => localStorage.clear()
 
 export function useRecentTransactions() {
-  const wait = useWaitForTransaction()[1]
-  const isMounted = useIsMounted()
-  // const data = isMounted ? getRecentTransactions() : new Map<String, RecentTransaction>()
-  const [verified, setVerified] = useState(false)
-  const [t, setT] = useState(0)
-  const [data, setData] = useState(getRecentTransactions())
-
-  const [isLoading, setIsLoading] = useState(false)
+  const data = getRecentTransactions()
+  const netWorkdID = useCurrentSupportedNetworkId()
+  const provider = concaveProvider(netWorkdID)
+  const [status, setStatus] = useState<'pending' | 'loaded'>('pending')
 
   const addRecentTransaction = (recentTx: RecentTransaction) => {
-    setIsLoading(true)
-    setData(data.set(recentTx.transaction.hash, recentTx))
-    localStorage.setItem('recentTransactions', JSON.stringify(Array.from(data)))
-    setTimeout(() => {
-      setVerified(false)
-    }, 200)
+    data[recentTx.transaction.hash] = recentTx
+    console.log(data)
+
+    localStorage.setItem('recentTransactions', JSON.stringify(data))
+    setStatus('pending')
   }
 
-  useEffect(() => {
-    if (!verified) {
-      setData(getRecentTransactions())
-      setVerified(true)
-    }
-  }, [data])
+  const isLoading = Object.values(data).filter((v) => v.loading).length > 0
+  useQuery(
+    ['transactions'],
+    async () => {
+      const promises = Object.values(getRecentTransactions())
+        .filter((v) => v.loading)
+        .map((v) => provider.waitForTransaction(v.transaction.hash, 1, 1000))
 
-  useEffect(() => {
-    if (!verified && data.size > 0) {
-      const hasUnNotLoaded = Array.from(data).filter((value) => !value[1].status).length > 0
-      if (hasUnNotLoaded) {
-        data.forEach((value) => {
-          if (!value.loading) return
-          wait({ hash: value.transaction.hash }).then((e) => {
-            console.log('finished')
-            data.set(value.transaction.hash, {
-              ...value,
-              loading: e.data.status === 2,
-              status: status[e.data.status],
-            })
-            localStorage.setItem('recentTransactions', JSON.stringify(Array.from(data)))
+      if (promises.length === 0) return getRecentTransactions()
+
+      const newData = await Promise.all(promises)
+        .then((txs) => {
+          txs.forEach((tx) => {
+            data[tx.transactionHash].loading = false
+            data[tx.transactionHash].status = txStatus[tx.status]
           })
+          return data
         })
-      }
-    }
-    setVerified(true)
-  }, [data])
+        .catch((error) => {
+          return getRecentTransactions()
+        })
 
-  useEffect(() => {
-    setInterval(() => {
-      setIsLoading(
-        Array.from(getRecentTransactions()).filter((value) => value[1].loading).length > 0,
-      )
-    }, 2000)
-  }, [])
+      localStorage.setItem('recentTransactions', JSON.stringify(newData))
+    },
+    { refetchInterval: 2500 },
+  )
 
   return {
-    // data2,
     isLoading,
+    status,
     data,
     clearRecentTransactions,
     addRecentTransaction,
   }
 }
 
-const updateTransactions = () => {
-  const recentTx = getRecentTransactions()
-  recentTx.forEach(() => {})
-}
-
-const updateRecentTxStatus = (txHash: string, loading: boolean) => {
-  const recentTx = getRecentTransactions()
-  recentTx.get(txHash).loading = loading
-  return recentTx
-}
-
 export const getRecentTransactions = () =>
-  new Map<String, RecentTransaction>(JSON.parse(localStorage.getItem('recentTransactions')))
+  (JSON.parse(localStorage.getItem('recentTransactions')) || {}) as RecentTxList
+
+type RecentTxList = { [key: string]: RecentTransaction }
 
 export type RecentTransaction = {
   type: 'Swap' | 'Bond' | 'Stake'
@@ -97,7 +76,7 @@ export type RecentTransaction = {
   status?: 'success' | 'error'
 }
 
-const status = {
+const txStatus = {
   0: 'error',
   1: 'success',
 }
