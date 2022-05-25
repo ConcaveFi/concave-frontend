@@ -1,7 +1,7 @@
-import { Flex, Container } from '@concave/ui'
+import { Flex, Container, useMediaQuery } from '@concave/ui'
 import dynamic from 'next/dynamic'
 import React, { useState } from 'react'
-import { SideBar } from './SideBar/SideBar'
+import { SideBar, SIDE_BAR_WIDTH } from './SideBar/SideBar'
 import { AnimatePresence } from 'framer-motion'
 import { useIsomorphicLayoutEffect } from 'react-use'
 
@@ -21,10 +21,17 @@ export const DefaultLayout = ({ children }) => {
 }
 
 export const Layout = ({ children }) => {
+  useMediaQuery('minimum-width(768px')
+
   return (
     <Flex direction={{ base: 'column', md: 'row' }}>
       <SideBar />
-      <Container display="flex" maxWidth="container.xl" p={'0px'}>
+      <Container
+        display="flex"
+        maxWidth="container.xl"
+        p={'0px'}
+        ml={{ md: SIDE_BAR_WIDTH, sm: 'auto' }}
+      >
         <TestnetIndicator />
         <AnimatePresence
           exitBeforeEnter
