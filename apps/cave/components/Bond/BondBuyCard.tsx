@@ -16,7 +16,7 @@ import { BondOutput } from './BondOutput'
 import { getBondAmountOut, getBondSpotPrice, purchaseBond, useBondState } from './BondState'
 import { ConfirmBondModal } from './ConfirmBond'
 import { DownwardIcon } from './DownwardIcon'
-import { BondSettings, defaultSettings, Settings } from './Settings'
+import { Settings, useBondSettings } from './Settings'
 import { truncateNumber } from 'utils/truncateNumber'
 
 export const twoDecimals = (s: string | number) => {
@@ -50,7 +50,7 @@ export function BondBuyCard(props: {
   const { currencyIn, currencyOut, userAddress, balance, signer, networkId } = useBondState()
   const [bondTransaction, setBondTransaction] = useState()
 
-  const [settings, setSettings] = useState<BondSettings>(defaultSettings)
+  const [settings, setSetting] = useBondSettings()
   const userBalance = balance.data?.toFixed()
   const [amountIn, setAmountIn] = useState<CurrencyAmount<Currency>>(toAmount('0', DAI[networkId]))
   // const [amountIn, setAmountIn] = useState<number>(0)
@@ -142,7 +142,7 @@ export function BondBuyCard(props: {
         <Flex flex={1} align={'center'} justify="end" minWidth={100} gap={2}>
           <GasPrice />
           <HStack align="center" justify="end" py={{ base: 0, md: 5, lg: 0, xl: 5 }}>
-            <Settings onClose={setSettings} />
+            <Settings settings={settings} setSetting={setSetting} />
           </HStack>
         </Flex>
       </Flex>

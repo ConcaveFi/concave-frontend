@@ -1,5 +1,5 @@
 import { CNV, Currency, DAI, NATIVE, WETH9 } from '@concave/gemswap-sdk'
-import { CnvQuestionIcon } from '@concave/icons'
+import { QuestionIcon } from '@concave/icons'
 import { Button, Flex, Heading, Modal } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
@@ -20,7 +20,7 @@ const CommonTokens = ({
   return (
     <>
       <Heading size="sm">
-        Common pairs <CnvQuestionIcon w="22px" h="22px" ml={2} />
+        Common pairs <QuestionIcon w="22px" h="22px" ml={2} />
       </Heading>
       <Flex gap={2} wrap="wrap">
         {currencies.map((currency) => (

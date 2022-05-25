@@ -15,7 +15,6 @@ import {
   CurrencyInputField,
   CurrencyOutputField,
   CustomRecipient,
-  defaultSettings,
   GasPrice,
   RelativePrice,
   Settings,
@@ -33,6 +32,7 @@ import {
 } from 'components/AMM/hooks/useQueryCurrencies'
 import { NetworkMismatch } from 'components/AMM/NetworkMismatch'
 import { ExpectedOutput, MinExpectedOutput } from 'components/AMM/Swap/ExpectedOutput'
+import { useSwapSettings } from 'components/AMM/Swap/Settings'
 import { TradeRoute } from 'components/AMM/Swap/TradeRoute'
 import { ApproveButton } from 'components/ApproveButton/ApproveButton'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
@@ -76,7 +76,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 }
 
 export function SwapPage({ currencies: serverPropsCurrencies }) {
-  const [settings, setSettings] = useState<SwapSettings>(defaultSettings)
+  const [settings, setSetting] = useSwapSettings()
 
   const currencies = useMemo(
     () => serverPropsCurrencies?.map(currencyFromJson),
@@ -180,7 +180,7 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
                 mr="auto"
               />
               <GasPrice />
-              <Settings onChange={setSettings} />
+              <Settings settings={settings} setSetting={setSetting} />
             </HStack>
 
             <Collapse style={{ overflow: 'visible' }} in={isDetailsOpen} animateOpacity>
