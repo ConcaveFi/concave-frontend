@@ -29,5 +29,6 @@ export const truncateNumber = (
     }
   }
 
-  return trunctNum.toLocaleString()
+  trunctNum = +trunctNum
+  return trunctNum.toLocaleString('en-US', { minimumFractionDigits: decimalPlaces })
 }

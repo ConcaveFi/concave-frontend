@@ -52,7 +52,7 @@ export const CurrencyInputField = ({
         </Text>
         {balance.isSuccess && (
           <Balance
-            value={truncateNumber(balance?.data?.numerator)}
+            value={truncateNumber(balance?.data?.numerator,2)}
             onMax={() => onChangeAmount(maxAmount(balance.data))}
           />
         )}
