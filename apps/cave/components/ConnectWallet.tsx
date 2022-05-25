@@ -128,9 +128,9 @@ export function ConnectWallet(): JSX.Element {
   const { isOpen, onOpen, onClose } = useDisclosure()
   // if (data.connected) return <DisconnectButton />
 
-  const { data: recentTx, anyPendingTx, test } = useRecentTransactions()
+  const { data: recentTx, isLoading, test } = useRecentTransactions()
 
-  console.log('connect wallet ->' + anyPendingTx)
+  console.log('connect wallet ->' + isLoading)
 
   if (data.connected)
     return (
@@ -147,7 +147,7 @@ export function ConnectWallet(): JSX.Element {
           <Flex textColor={'text.low'} fontWeight="bold" mx={'auto'}>
             {ellipseAddress(account?.address)}
           </Flex>
-          {anyPendingTx && (
+          {isLoading && (
             <Flex position={'absolute'} width="80%" justify={'end'}>
               <SpinnerIcon color={'text.low'} animation={spinAnimation(4)} boxSize={'20px'} />
             </Flex>

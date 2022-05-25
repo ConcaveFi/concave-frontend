@@ -1,5 +1,6 @@
 import { Transaction } from 'ethers'
 import { useEffect, useState } from 'react'
+import { text } from 'stream/consumers'
 import { useWaitForTransaction } from 'wagmi'
 import { useIsMounted } from './useIsMounted'
 
@@ -12,7 +13,7 @@ export function useRecentTransactions() {
   const [verified, setVerified] = useState(false)
 
   const [test, setTest] = useState(0)
-  const [anyPendingTx, setAnyPendingTx] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const addRecentTransaction = (recentTx: RecentTransaction) => {
     data.set(recentTx.transaction.hash, recentTx)
@@ -24,17 +25,21 @@ export function useRecentTransactions() {
 
   useEffect(() => {
     if (!verified && data.size > 0) {
-      const hasUnNotLoaded = Array.from(data).filter((value) => value[1].loading).length > 0
-      if (hasUnNotLoaded) {
+      const hasUnNotLoaded = Array.from(data).filter((value) => !value[1].status).length > 0
+      console.log('ttt')
+
+      if (!hasUnNotLoaded) {
         data.forEach((value) => {
           if (!value.loading) return
-          wait({ hash: value.transaction.hash })
-            .then((e) => {
-              console.log('finished')
-              data.set(value.transaction.hash, { ...value, loading: e.data.status === 2 })
-              localStorage.setItem('recentTransactions', JSON.stringify(Array.from(data)))
+          wait({ hash: value.transaction.hash }).then((e) => {
+            console.log('finished')
+            data.set(value.transaction.hash, {
+              ...value,
+              loading: e.data.status === 2,
+              status: status[e.data.status],
             })
-            .catch((e) => {})
+            localStorage.setItem('recentTransactions', JSON.stringify(Array.from(data)))
+          })
         })
       }
     }
@@ -44,17 +49,15 @@ export function useRecentTransactions() {
 
   useEffect(() => {
     setInterval(() => {
-      console.log(
-        'current value ->' + (Array.from(data).filter((value) => value[1].loading).length > 0),
+      setIsLoading(
+        Array.from(getRecentTransactions()).filter((value) => value[1].loading).length > 0,
       )
-
-      setAnyPendingTx(Array.from(data).filter((value) => value[1].loading).length > 0)
-    }, 3000)
-  }, [])
+    }, 1000)
+  }, [data])
 
   return {
     test,
-    anyPendingTx,
+    isLoading,
     data,
     clearRecentTransactions,
     addRecentTransaction,
@@ -72,7 +75,7 @@ const updateRecentTxStatus = (txHash: string, loading: boolean) => {
   return recentTx
 }
 
-const getRecentTransactions = () =>
+export const getRecentTransactions = () =>
   new Map<String, RecentTransaction>(JSON.parse(localStorage.getItem('recentTransactions')))
 
 export type RecentTransaction = {
@@ -84,4 +87,10 @@ export type RecentTransaction = {
   purchaseTokenName?: string
   stakePool?: string
   transaction: Transaction
+  status?: 'success' | 'error'
+}
+
+const status = {
+  0: 'error',
+  1: 'success',
 }

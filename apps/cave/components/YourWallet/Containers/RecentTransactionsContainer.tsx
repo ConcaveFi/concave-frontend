@@ -2,7 +2,12 @@ import { CheckIcon, CloseIcon, SpinnerIcon } from '@concave/icons'
 import { Flex, keyframes, Link, Text, useDisclosure } from '@concave/ui'
 import SecondConfirmModal from 'components/SecondConfirmModal'
 import { commify, formatUnits } from 'ethers/lib/utils'
-import { RecentTransaction, useRecentTransactions } from 'hooks/useRecentTransactions'
+import { useIsMounted } from 'hooks/useIsMounted'
+import {
+  getRecentTransactions,
+  RecentTransaction,
+  useRecentTransactions,
+} from 'hooks/useRecentTransactions'
 import { useWaitForTransaction } from 'wagmi'
 
 export default function RecentTransactionsContainer() {
@@ -90,6 +95,11 @@ const TransactionInfo = ({ recentTransaction }: { recentTransaction: RecentTrans
     recentTransaction
   const [{ data: txData, loading, error }] = useWaitForTransaction({ hash: transaction.hash })
 
+  const recentTxs = useRecentTransactions()
+  // const tx = recentTxs.data.get(transaction.hash)
+  const isMounted = useIsMounted()
+  const tx = isMounted && getRecentTransactions().get(transaction.hash)
+
   const info =
     type === 'Stake'
       ? `${commify(amount)} ${amountTokenName} staked in ${stakePool} Position`
@@ -114,17 +124,17 @@ const TransactionInfo = ({ recentTransaction }: { recentTransaction: RecentTrans
       </Flex>
       {/* Status 0 = Fail  */}
       {/* Status 1 = Success  */}
-      {txData?.status == 0 && (
+      {tx?.status === 'error' && (
         <CloseIcon width={'12px'} height="12px" color={'red.300'} justifySelf="end" />
       )}
-      {loading && (
+      {!tx?.status && (
         <SpinnerIcon
           animation={`${spin} 3s linear infinite`}
           color={'text.low'}
           justifySelf="end"
         />
       )}
-      {txData?.status == 1 && <CheckIcon color={'green.300'} justifySelf="end" />}
+      {tx?.status === 'success' && <CheckIcon color={'green.300'} justifySelf="end" />}
     </Flex>
   )
 }
