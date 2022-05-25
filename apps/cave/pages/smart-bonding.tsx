@@ -105,9 +105,13 @@ export function Bond() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      getBondSpotPrice(networkId, '').then((bondSpotPrice) => {
-        setBondSpotPrice(bondSpotPrice)
-      })
+      getBondSpotPrice(networkId, '')
+        .then((bondSpotPrice) => {
+          setBondSpotPrice(bondSpotPrice)
+        })
+        .catch((e) => {
+          console.log(e)
+        })
       getCNVMarketPrice().then((price) => {
         setCNVMarketPrice(price)
         console.log(price)

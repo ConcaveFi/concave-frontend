@@ -84,9 +84,11 @@ function PageNav() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      getBondSpotPrice(currentSupportedNetworkId, '').then((bondSpotPrice) => {
-        setBondSpotPrice(bondSpotPrice)
-      })
+      getBondSpotPrice(currentSupportedNetworkId, '')
+        .then((bondSpotPrice) => {
+          setBondSpotPrice(bondSpotPrice)
+        })
+        .catch((e) => console.log(e))
       // getCNVMarketPrice().then((price) => {
       //   setCNVMarketPrice(price)
       // })
