@@ -2,17 +2,11 @@ import { CNV } from 'constants/tokens'
 import { Button, Flex, Modal, Spinner, Text, useDisclosure } from '@concave/ui'
 import useAddTokenToWallet, { injectedTokenResponse } from 'hooks/useAddTokenToWallet'
 import { useIsMounted } from 'hooks/useIsMounted'
-import { getWalletType } from 'lib/injected.wallets'
 import { GlassPanel } from './TreasuryManagementCard'
 import { useEffect, useState } from 'react'
 import { useAccount, useBalance, useConnect, useContractWrite } from 'wagmi'
 import { aCNVredeemabi } from 'lib/contractoABI'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { CNV_ADDRESS, DAI } from '@concave/gemswap-sdk'
-import { Contract, ethers } from 'ethers'
-import { formatEther } from 'ethers/lib/utils'
-import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
-import { concaveProvider } from 'lib/providers'
 
 // aCNV address
 // 0x2a6bb78490c2221e0d36d931192296be4b3a01f1 RINKEBY

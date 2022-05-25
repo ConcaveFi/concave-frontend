@@ -1,7 +1,7 @@
 import { CheckIcon, CloseIcon, SpinnerIcon } from '@concave/icons'
 import { Flex, keyframes, Link, Text, useDisclosure } from '@concave/ui'
 import SecondConfirmModal from 'components/SecondConfirmModal'
-import { commify, formatUnits } from 'ethers/lib/utils'
+import { commify } from 'ethers/lib/utils'
 import { useIsMounted } from 'hooks/useIsMounted'
 import {
   getRecentTransactions,
@@ -15,7 +15,7 @@ export default function RecentTransactionsContainer() {
 
   const { isOpen: isDialogOpen, onOpen: onOpenDialog, onClose: onCloseDialog } = useDisclosure()
 
-  const hasRecentTransactions = recentTransactions.size > 0
+  const hasRecentTransactions = !!recentTransactions
 
   return (
     <Flex flex={1} direction={'column'} mt={8} mb={4}>
@@ -81,8 +81,8 @@ export default function RecentTransactionsContainer() {
           apply="border.secondary"
           __css={scroll}
         >
-          {Array.from(recentTransactions).map((value, index) => (
-            <TransactionInfo key={index} recentTransaction={value[1]} />
+          {Object.values(recentTransactions).map((value, index) => (
+            <TransactionInfo key={index} recentTransaction={value} />
           ))}
         </Flex>
       )}
@@ -91,14 +91,17 @@ export default function RecentTransactionsContainer() {
 }
 
 const TransactionInfo = ({ recentTransaction }: { recentTransaction: RecentTransaction }) => {
-  const { type, amount, amountTokenName, purchaseTokenName, transaction, purchase, stakePool } =
-    recentTransaction
-  const [{ data: txData, loading, error }] = useWaitForTransaction({ hash: transaction.hash })
-
-  const recentTxs = useRecentTransactions()
-  // const tx = recentTxs.data.get(transaction.hash)
-  const isMounted = useIsMounted()
-  const tx = isMounted && getRecentTransactions().get(transaction.hash)
+  const {
+    type,
+    amount,
+    amountTokenName,
+    purchaseTokenName,
+    transaction,
+    purchase,
+    stakePool,
+    status,
+    loading,
+  } = recentTransaction
 
   const info =
     type === 'Stake'
@@ -124,17 +127,17 @@ const TransactionInfo = ({ recentTransaction }: { recentTransaction: RecentTrans
       </Flex>
       {/* Status 0 = Fail  */}
       {/* Status 1 = Success  */}
-      {tx?.status === 'error' && (
+      {status === 'error' && (
         <CloseIcon width={'12px'} height="12px" color={'red.300'} justifySelf="end" />
       )}
-      {!tx?.status && (
+      {loading && (
         <SpinnerIcon
           animation={`${spin} 3s linear infinite`}
           color={'text.low'}
           justifySelf="end"
         />
       )}
-      {tx?.status === 'success' && <CheckIcon color={'green.300'} justifySelf="end" />}
+      {status === 'success' && <CheckIcon color={'green.300'} justifySelf="end" />}
     </Flex>
   )
 }
