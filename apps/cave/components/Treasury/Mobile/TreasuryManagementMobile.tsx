@@ -57,10 +57,10 @@ const LoadingState = () => {
 }
 
 const FarmingViewer = ({ convexToken }) => {
-  const image = convexToken?.image.replace('github', 'raw.githubusercontent').replace('blob/', '')
-  const imgP1 = convexToken?.imageP1.replace('github', 'raw.githubusercontent').replace('blob/', '')
-  const imgP2 = convexToken?.imageP2.replace('github', 'raw.githubusercontent').replace('blob/', '')
-  const imgP3 = convexToken?.imageP3.replace('github', 'raw.githubusercontent').replace('blob/', '')
+  const image = convexToken.image.replace('github', 'raw.githubusercontent').replace('blob/', '')
+  const imgP1 = convexToken.imageP1.replace('github', 'raw.githubusercontent').replace('blob/', '')
+  const imgP2 = convexToken.imageP2.replace('github', 'raw.githubusercontent').replace('blob/', '')
+  const imgP3 = convexToken.imageP3.replace('github', 'raw.githubusercontent').replace('blob/', '')
   return (
     <GlassPanel width={'310px'} height="240px" mx={'auto'} direction="column">
       <GlassPanel width={'280px'} mx="auto" mt={4} direction="column" height={'140px'}>
