@@ -70,7 +70,7 @@ describe('CurrencyAmount', () => {
     it('is correct for 0 decimals', () => {
       const token = new Token(1, ADDRESS_ONE, 0)
       const amount = CurrencyAmount.fromRawAmount(token, 123456)
-      expect(amount.toFixed(0)).toEqual('123456')
+      expect(amount.toFixed(0)).toEqual('123,456')
     })
     it('is correct for 18 decimals', () => {
       const token = new Token(1, ADDRESS_ONE, 18)
@@ -83,12 +83,12 @@ describe('CurrencyAmount', () => {
     it('does not throw for sig figs > currency.decimals', () => {
       const token = new Token(1, ADDRESS_ONE, 0)
       const amount = CurrencyAmount.fromRawAmount(token, 1000)
-      expect(amount.toSignificant(3)).toEqual('1000')
+      expect(amount.toSignificant(3)).toEqual('1,000')
     })
     it('is correct for 0 decimals', () => {
       const token = new Token(1, ADDRESS_ONE, 0)
       const amount = CurrencyAmount.fromRawAmount(token, 123456)
-      expect(amount.toSignificant(4)).toEqual('123400')
+      expect(amount.toSignificant(4)).toEqual('123,400')
     })
     it('is correct for 18 decimals', () => {
       const token = new Token(1, ADDRESS_ONE, 18)
