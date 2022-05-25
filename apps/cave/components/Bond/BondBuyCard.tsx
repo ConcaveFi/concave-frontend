@@ -155,7 +155,10 @@ export function BondBuyCard(props: {
           currency: currencyIn,
           spender: BOND_ADDRESS[networkId],
         }}
-        isDisabled={+amountIn.numerator.toString() === 0 || +userBalance < +amountIn}
+        isDisabled={
+          +amountIn.numerator.toString() === 0 ||
+          +userBalance < +amountIn.numerator.toString() / 10 ** 18
+        }
         onClick={confirmModal.onOpen}
       >
         {+userBalance < +amountIn ? 'Insufficient Funds' : 'Bond'}
