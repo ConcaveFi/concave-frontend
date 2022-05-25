@@ -51,6 +51,8 @@ export const ApproveButton = ({ approveArgs, ...buttonProps }: ApproveButtonProp
 
   const stateKey: keyof typeof approveButtonAvailabelStates = (() => {
     if (currency.isNative) return 'successful'
+    if (allowance?.value?.gte(currency.wrapped.totalSupply.numerator.toString()))
+      return 'successful'
     if (approve.isFeching) return 'feching'
     if (allowance?.value?.gte(amount)) return 'successful'
     if (approve.isWaitingTransactionReceipt) return 'pending'
