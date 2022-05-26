@@ -103,7 +103,7 @@ function PageNav() {
         </NavButton>
         <Text fontSize="xs" fontWeight="bold" textColor="text.low" textAlign="center" py={2}>
           {`CNV-DAI ${roi.data || ''}`} {roi.isError ? 'error' : ''}{' '}
-          {roi.isFetching ? <Spinner size={'xs'} /> : ''}
+          {roi.isFetching ? <Spinner ml={'0.25rem'} size={'xs'} /> : ''}
         </Text>
       </Box>
       <Box height={'110px'}>
