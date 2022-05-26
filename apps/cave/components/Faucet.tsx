@@ -203,7 +203,7 @@ export const TestnetIndicator = () => {
               Get some test tokens on the faucet!
             </Text>
           </Stack>
-          <Stack spacing={1} align="center" ml={6}>
+          <Stack spacing={1} align="center" ml={{ base: 0, sm: 6 }}>
             <Button variant="primary" px={4} py={2} h="min" onClick={minterModal.onOpen}>
               Open Faucet
             </Button>

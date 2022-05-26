@@ -49,7 +49,7 @@ export const ApproveButton = ({ approveArgs, ...buttonProps }: ApproveButtonProp
     error: { enable: false, label: 'Error occurred' },
   }
   const stateKey: keyof typeof approveButtonAvailabelStates = (() => {
-    if(+allowance?.value === 0) return 'default'
+    if (+allowance?.value === 0) return 'default'
     if (currency.isNative) return 'successful'
     if (allowance?.value?.gte(currency.wrapped.totalSupply.numerator.toString()))
       return 'successful'

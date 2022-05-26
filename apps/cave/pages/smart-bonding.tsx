@@ -98,21 +98,27 @@ export function Bond() {
       .catch((e) => {
         console.log(e)
       })
-    getCNVMarketPrice().then((price) => {
-      setCNVMarketPrice(price)
-      console.log(price)
-    }).catch(() => {})
+    getCNVMarketPrice()
+      .then((price) => {
+        setCNVMarketPrice(price)
+        console.log(price)
+      })
+      .catch(() => {})
   }, [networkId])
 
   useEffect(() => {
     const interval = setInterval(() => {
-      getBondSpotPrice(networkId, '').then((bondSpotPrice) => {
-        setBondSpotPrice(bondSpotPrice)
-      }).catch(() => {})
-      getCNVMarketPrice().then((price) => {
-        setCNVMarketPrice(price)
-        console.log(price)
-      }).catch(() =>{})
+      getBondSpotPrice(networkId, '')
+        .then((bondSpotPrice) => {
+          setBondSpotPrice(bondSpotPrice)
+        })
+        .catch(() => {})
+      getCNVMarketPrice()
+        .then((price) => {
+          setCNVMarketPrice(price)
+          console.log(price)
+        })
+        .catch(() => {})
     }, 10000)
     if (intervalID !== interval) {
       clearTimeout(intervalID)
