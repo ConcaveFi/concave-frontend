@@ -75,6 +75,7 @@ function PageNav() {
         setBondSpotPrice(bondSpotPrice)
       })
       .catch((e) => console.log(e))
+
     // getCNVMarketPrice().then((price) => {
     //   setCNVMarketPrice(price)
     // })
