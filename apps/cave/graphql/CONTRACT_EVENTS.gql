@@ -55,3 +55,19 @@ query GET_ACCRUALBONDV1_LAST10_SOLD {
     output
   }
 }
+
+query GET_BONDS_VAPR {
+  rebaseStakingV1(
+    order_by: { txBlockNumber: desc }
+    limit: 1
+    where: { txHash: { _is_null: false } }
+  ) {
+    indexRebase
+    created_at
+    txHash
+    bondVaprPool0
+    bondVaprPool1
+    bondVaprPool2
+    bondVaprPool3
+  }
+}
