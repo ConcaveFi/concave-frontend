@@ -14,7 +14,7 @@ export default function DividendsCard() {
       shadow={'0px 4px 4px rgba(0, 0, 0, 0.25), inset 0px 0px 20px rgba(87, 124, 255, 0.3)'}
       direction={{ base: 'column', xl: 'row' }}
       px="10"
-      mb={6}
+      // mb={6}
     >
       <Flex
         direction={{ base: 'column', xl: 'row' }}
