@@ -30,6 +30,4 @@ export const truncateNumber = (
   }
   trunctNum = +trunctNum
   return trunctNum.toLocaleString('en-US', { minimumFractionDigits: decimalPlaces })
-
-
 }

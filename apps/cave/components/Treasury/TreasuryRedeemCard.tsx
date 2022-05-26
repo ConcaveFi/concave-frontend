@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 import { useAccount, useBalance, useConnect, useContractWrite } from 'wagmi'
 import { aCNVredeemabi } from 'lib/contractoABI'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import RedeemVestedTokenDialog from './RedeemVestedTokenDialog'
 
 // aCNV address
 // 0x2a6bb78490c2221e0d36d931192296be4b3a01f1 RINKEBY
@@ -28,8 +29,6 @@ function ClaimAcnvButton() {
   const [redeemText, setRedeemText] = useState('Redeem aCNV')
   const [redeeming, setRedeeming] = useState(false)
 
-  console.log(data)
-
   const [{ data: balanceData, loading: loadingBalance }] = useBalance({
     addressOrName: account?.address,
     token: '0x2a6bb78490c2221e0d36d931192296be4b3a01f1',
@@ -43,50 +42,23 @@ function ClaimAcnvButton() {
 
   const { isOpen, onClose, onOpen } = useDisclosure()
   return (
-    <>
-      <Button
-        fontSize={{ base: '13px', xl: '18px' }}
-        fontWeight="700"
-        onClick={() => {
-          write().then((tx) => console.log(tx))
-        }}
-      >
-        <Flex align={'center'} justify="center" gap={2}>
-          <Text my={'auto'}>aCNV</Text>
-          {loadingBalance ? <Spinner size={'sm'} /> : <Text>{balanceData?.formatted}</Text>}
-        </Flex>
-      </Button>
-      <Modal
-        bluryOverlay={true}
-        title="Nothing to Redeem"
-        isOpen={isOpen}
-        onClose={onClose}
-        bodyProps={{ align: 'center', w: '300px' }}
-      >
-        <Flex
-          height={'150px'}
-          boxShadow="Down Medium"
-          width={'full'}
-          rounded="2xl"
-          align={'center'}
-          direction="column"
-          textAlign={'center'}
-        >
-          <Text fontSize={'2xl'} fontWeight="bold" mt={6}>
-            Error:
-          </Text>
-          <Text fontWeight={'bold'} textColor={'text.low'}>
-            You do not have any aCNV to redeem.
-          </Text>
-        </Flex>
-      </Modal>
-    </>
+    <Button
+      fontSize={{ base: '13px', xl: '18px' }}
+      fontWeight="700"
+      onClick={() => {
+        write().then((tx) => console.log(tx))
+      }}
+    >
+      <Flex align={'center'} justify="center" gap={2}>
+        <Text my={'auto'}>aCNV</Text>
+        {loadingBalance ? <Spinner size={'sm'} /> : <Text>{balanceData?.formatted}</Text>}
+      </Flex>
+    </Button>
   )
 }
 
 function TreasuryRedeemCard() {
-  const isMounted = useIsMounted()
-  const { loading: loadingtoWallet, addingToWallet }: injectedTokenResponse = useAddTokenToWallet({
+  const { addingToWallet }: injectedTokenResponse = useAddTokenToWallet({
     tokenAddress: CNV.address,
     tokenChainId: CNV.chainId,
   })
@@ -126,6 +98,7 @@ function TreasuryRedeemCard() {
           justify={'center'}
         >
           <ClaimAcnvButton />
+          <RedeemVestedTokenDialog isOpen={true} />
         </GlassPanel>
         <GlassPanel
           width={{ base: '150px', xl: '182px' }}
