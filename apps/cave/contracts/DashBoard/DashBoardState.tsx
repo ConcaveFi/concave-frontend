@@ -15,9 +15,9 @@ export const useDashBoardState = () => {
   )
   const totalLocked = getTotalLocked(userNonFungibleTokensInfo)
   return {
-    // isLoading,
-    // totalLocked,
-    // userNonFungibleTokensInfo: userNonFungibleTokensInfo || [],
+    isLoading,
+    totalLocked,
+    userNonFungibleTokensInfo: userNonFungibleTokensInfo || [],
     account,
     netWorkId,
   }
