@@ -11,7 +11,6 @@ import ProgressBar from '@badrap/bar-of-progress'
 import Router from 'next/router'
 import { NODE_ENV } from 'lib/env.conf'
 import * as gtag from '../lib/analytics'
-import React from 'react'
 
 const globalStyles: Styles = {
   global: {
@@ -79,51 +78,18 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     <AppProviders globalStyles={globalStyles} cookies={pageProps?.cookies}>
       <ConcaveFonts />
       <MetaHead meta={Component.Meta} />
-      <ErrorBoundary>
-        <Layout>
-          <Component
-            {...pageProps}
-            prevPath={prevPath}
-            path={router.pathname}
-            key={router.pathname}
-          />
-        </Layout>
-      </ErrorBoundary>
+      <Layout>
+        <Component
+          {...pageProps}
+          prevPath={prevPath}
+          path={router.pathname}
+          key={router.pathname}
+        />
+      </Layout>
     </AppProviders>
   )
 }
 
 export function getServerSideProps({ req }) {
   return { props: { cookies: req.headers.cookie ?? '' } }
-}
-function logErrorToMyService(error: any, errorInfo: any) {
-  throw new Error('Function not implemented.')
-}
-
-class ErrorBoundary extends React.Component {
-  public state: { hasError: boolean }
-  public props: any
-  constructor(props) {
-    super(props)
-    this.state = { hasError: false }
-  }
-
-  static getDerivedStateFromError(error) {
-    // Update state so the next render will show the fallback UI.
-    return { hasError: true }
-  }
-
-  componentDidCatch(error, errorInfo) {
-    // You can also log the error to an error reporting service
-    logErrorToMyService(error, errorInfo)
-  }
-
-  render() {
-    if (this.state.hasError) {
-      // You can render any custom fallback UI
-      return <h1>Something went wrong.</h1>
-    }
-
-    return this.props.children
-  }
 }
