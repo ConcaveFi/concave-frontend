@@ -1,20 +1,7 @@
 import { CloseIcon } from '@concave/icons'
-import {
-  Button,
-  Flex,
-  HStack,
-  Input,
-  Modal,
-  NumericInput,
-  Text,
-  useDisclosure,
-  VStack,
-} from '@concave/ui'
-import { Balance } from 'components/CurrencyAmountField/Balance'
-import Placeholder from 'components/Placeholder'
+import { Button, Flex, Modal, NumericInput, Text, useDisclosure } from '@concave/ui'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
-import { CNV } from 'constants/tokens'
 import { RedeemBBT_CNV_Abi } from 'contracts/VestedTokens/RedeemBbtCNVAbi'
 import { Contract } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
@@ -24,43 +11,43 @@ import { useAccount, useSigner } from 'wagmi'
 
 interface RedeemVestedTokenDialog {
   isOpen: boolean
+  onClose: () => void
+  tokenSymbol: string
+  contractAddress: string
+  balance: string
 }
 
 // 0x98501987a763ccE92539CB4650969ddA16b33454
+
 export default function RedeemVestedTokenDialog(props: RedeemVestedTokenDialog) {
   const networkId = useCurrentSupportedNetworkId()
   const [{ data: signer }] = useSigner()
-
-  const [isOpen, setIsOpen] = useState(props.isOpen)
-  const contract = new Contract(
-    '0x1697118735044519aF9454700Bc005eEAB9D102b',
-    RedeemBBT_CNV_Abi,
-    provider(networkId),
-  )
-
+  const contract = new Contract(props.contractAddress, RedeemBBT_CNV_Abi, provider(networkId))
   const [value, setValue] = useState('')
-
   const [{ data: account }] = useAccount()
-
   const { isOpen: isConfirmOpen, onOpen: onOpenConfirm, onClose: onCloseConfirm } = useDisclosure()
+
   const {
     isOpen: isSubmittedOpen,
     onOpen: onOpenSubmitted,
     onClose: onCloseSubmitted,
   } = useDisclosure()
 
+  const validValue = +value !== 0
+
   const [tx, setTx] = useState(undefined)
   return (
-    <Modal onClose={() => setIsOpen(false)} title={''} isOpen={isOpen} hideClose>
-      <Flex height={'350px'} width="350px" direction={'column'}>
-        <Flex position={'absolute'} width="85%" justify={'end'}>
-          <CloseIcon color="text.low" cursor={'pointer'} onClick={() => setIsOpen(false)} />
+    <Modal onClose={props.onClose} title={''} isOpen={props.isOpen} hideClose>
+      <Flex height={'250px'} width="350px" direction={'column'}>
+        <Flex position={'absolute'} width="85%" justify={'end'} alignSelf="start">
+          <CloseIcon color="text.low" cursor={'pointer'} onClick={props.onClose} />
         </Flex>
-        <Text fontSize={'2xl'} fontWeight="bold" mb={4} mx={'auto'}>
-          Redeem aCNV
+        <Text fontSize={'2xl'} fontWeight="bold" my={4} mx={'auto'}>
+          Redeem {props.tokenSymbol}
         </Text>
 
         <Flex
+          gap={2}
           direction={'column'}
           align={'start'}
           width={'70%'}
@@ -78,35 +65,55 @@ export default function RedeemVestedTokenDialog(props: RedeemVestedTokenDialog) 
             onChange={(e) => setValue(e.target.value)}
             placeholder="0.0"
           />
-          <Flex>
-            <Text fontWeight="bold" fontSize="sm" textColor={'text.low'}>
+          <Flex fontSize="sm">
+            <Text
+              cursor={'pointer'}
+              onClick={() => setValue(props.balance)}
+              fontWeight="bold"
+              textColor={'text.low'}
+            >
               Balance:
             </Text>
             <Text fontWeight={'bold'} pl={1}>
-              0
+              {props.balance}
             </Text>
           </Flex>
         </Flex>
         <Button
-          variant={'primary'}
-          width="60%"
+          transition={'all .3s'}
+          _focus={{}}
+          _active={validValue && { transform: 'scale(o.9)' }}
+          variant="secondary"
+          cursor={!validValue && 'default'}
+          mt={8}
+          shadow="Up Small"
+          _hover={validValue && { shadow: 'up' }}
+          width="70%"
           mx={'auto'}
-          py={1}
-          fontSize="20px"
+          py={2}
+          rounded="2xl"
+          fontSize="2xl"
+          textColor={!validValue && 'text.low'}
           onClick={() => {
+            if (!validValue) return
             onOpenConfirm()
             contract
               .connect(signer)
-              .redeem(1, account?.address, account?.address, true, { gasLimit: 5000000 })
+              .redeem(value, account?.address, account?.address, true, { gasLimit: 5000000 })
               .then((tx) => {
                 setTx(tx)
+                onCloseConfirm()
                 onOpenSubmitted()
               })
           }}
         >
-          Redeem
+          {validValue ? 'Redeem' : 'Invalid value.'}
         </Button>
-        <TransactionSubmittedDialog isOpen={isSubmittedOpen} tx={tx} />
+        <TransactionSubmittedDialog
+          closeParentComponent={onCloseSubmitted}
+          isOpen={isSubmittedOpen}
+          tx={tx}
+        />
         <WaitingConfirmationDialog isOpen={isConfirmOpen} />
       </Flex>
     </Modal>
