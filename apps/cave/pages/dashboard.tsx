@@ -6,7 +6,7 @@ import { useDashBoardState } from 'contracts/DashBoard/DashBoardState'
 import React from 'react'
 
 export function Dashboard() {
-  const data = useDashBoardState()
+  // const data = useDashBoardState()
 
   return (
     <Flex align={'center'} justify="start" direction={'column'} width={'full'} textAlign="center">
