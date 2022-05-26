@@ -52,7 +52,7 @@ export const SearchableTokenList = ({
   const searchedToken = useQuery(
     ['token', search],
     () => Fetcher.fetchTokenData(search, provider),
-    { retry: false, enabled: isAddress(search) && tokens.length === 0 },
+    { retry: false, enabled: isAddress(search) && !tokens.length },
   )
   return (
     <>
@@ -71,7 +71,7 @@ export const SearchableTokenList = ({
       >
         {tokenList.isLoading || searchedToken.isLoading ? (
           <Spinner />
-        ) : !tokens || tokens.length === 0 ? (
+        ) : !searchedToken.data && tokens.length === 0 ? (
           <Text w="full" align="center" fontSize="sm" fontWeight="bold" color="text.low">
             No token found
           </Text>

@@ -20,6 +20,7 @@ export function useRecentTransactions() {
     data[recentTx.transaction.hash] = recentTx
     localStorage.setItem('recentTransactions', JSON.stringify(data))
     setStatus('pending')
+    console.log('Entered here.')
   }
 
   const isLoading = Object.values(data).filter((v) => v?.loading).length > 0
