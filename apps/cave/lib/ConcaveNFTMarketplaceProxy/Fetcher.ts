@@ -28,7 +28,7 @@ export const listUserNonFungibleTokenInfo = async (userAddress: string, chainId:
     chainId,
     StakingV1ProxyAddress[chainId],
   )
-  return Promise.all(
+  return await Promise.all(
     usersNft.map(async (nft) => {
       const tokenIndexId = nft.id.tokenId
       const positionInfo = stakingV1Contract.positions(tokenIndexId)
