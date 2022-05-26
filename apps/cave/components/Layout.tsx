@@ -21,16 +21,16 @@ export const DefaultLayout = ({ children }) => {
 }
 
 export const Layout = ({ children }) => {
-  const [ref, containerSize] = useMeasure()
+  const [ref, contentSize] = useMeasure()
   const windowSize = useWindowSize()
   const getSideBarHeight = () =>
-    containerSize.height > windowSize.height ? `${containerSize.height}px` : '100vh'
+    contentSize.height > windowSize.height ? `${contentSize.height}px` : '100vh'
   const [sideBarHeight, setSideBarHeight] = useState('100vh')
   let updateBarHeight = false
   useEffect(() => {
-    console.log('useMeasure', 'containerSize.height', containerSize.height)
+    console.log('useMeasure', 'contentSize.height', contentSize.height)
     setSideBarHeight(getSideBarHeight)
-  }, [updateBarHeight, containerSize.height, windowSize.height])
+  }, [updateBarHeight, contentSize.height, windowSize.height])
 
   return (
     <Flex direction={{ base: 'column', md: 'row' }}>
