@@ -20,8 +20,8 @@ export function Dashboard() {
       </Flex>
 
       <Flex justify={'center'} position="relative">
-        {/* <UserDashboardCard data={data} />
-        <DashboardMobile data={data} /> */}
+        <UserDashboardCard data={data} />
+        <DashboardMobile data={data} />
       </Flex>
     </Flex>
   )
