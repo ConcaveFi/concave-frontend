@@ -1,6 +1,4 @@
-import { CNV, DAI } from '@concave/gemswap-sdk'
-import { DAI_ADDRESS } from '@concave/gemswap-sdk'
-import { position } from '@concave/ui'
+import { CNV, DAI, DAI_ADDRESS } from '@concave/gemswap-sdk'
 import { Contract, ethers, utils } from 'ethers'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
@@ -9,7 +7,6 @@ import { useMemo, useState } from 'react'
 import { useAccount, useSigner } from 'wagmi'
 import { BOND_ABI } from '../../contracts/Bond/BondABI'
 import { BOND_ADDRESS } from '../../contracts/Bond/BondingAddress'
-import { RINKEBY_DAI_ABI } from '../../contracts/Bond/RINKEBY_DAI_ABI'
 import { BondSettings } from './Settings'
 
 export const getBondAmountOut = async (
@@ -36,7 +33,7 @@ export const getBondTermLength = async (networkId: number) => {
   return formattedTermLength / 60 / 60 / 24
 }
 
-export const getBondSpotPrice = async (networkId: number, tokenAddress: string) => {
+export const getBondSpotPrice = async (networkId: number, tokenAddress?: string) => {
   const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, providers(networkId))
   const DAI = DAI_ADDRESS[networkId]
   const spotPrice = await bondingContract.getSpotPrice(DAI)

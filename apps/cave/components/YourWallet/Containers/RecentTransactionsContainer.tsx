@@ -15,7 +15,7 @@ export default function RecentTransactionsContainer() {
 
   const { isOpen: isDialogOpen, onOpen: onOpenDialog, onClose: onCloseDialog } = useDisclosure()
 
-  const hasRecentTransactions = !!recentTransactions
+  const hasRecentTransactions = Object.values(recentTransactions).length > 0
 
   return (
     <Flex flex={1} direction={'column'} mt={8} mb={4}>
