@@ -22,14 +22,14 @@ export function useRecentTransactions() {
     setStatus('pending')
   }
 
-  const isLoading = Object.values(data).filter((v) => v.loading).length > 0
+  const isLoading = Object.values(data).filter((v) => v?.loading).length > 0
   useQuery(
     ['transactions'],
     async () => {
       const fromStorage = getRecentTransactions(account?.address, networkdID)
       const promises = Object.values(fromStorage)
-        .filter((v) => v.loading)
-        .map((v) => provider.waitForTransaction(v.transaction.hash, 1, 1000))
+        .filter((v) => v?.loading)
+        .map((v) => provider.waitForTransaction(v?.transaction?.hash, 1, 1000))
 
       if (promises.length === 0) return fromStorage
 
