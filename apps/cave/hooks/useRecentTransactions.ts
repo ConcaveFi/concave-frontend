@@ -22,14 +22,14 @@ export function useRecentTransactions() {
     setStatus('pending')
   }
 
-  const isLoading = Object.values(data).filter((v) => v.loading).length > 0
+  const isLoading = Object.values(data).filter((v) => v?.loading).length > 0
   useQuery(
     ['transactions'],
     async () => {
       const fromStorage = getRecentTransactions(account?.address, networkdID)
       const promises = Object.values(fromStorage)
-        .filter((v) => v.loading)
-        .map((v) => provider.waitForTransaction(v.transaction.hash, 1, 1000))
+        .filter((v) => v?.loading)
+        .map((v) => provider.waitForTransaction(v?.transaction?.hash, 1, 1000))
 
       if (promises.length === 0) return fromStorage
 
@@ -62,7 +62,7 @@ export function useRecentTransactions() {
 export const getRecentTransactions = (accountAddress: string, chainId: number) =>
   Object.values(
     (JSON.parse(localStorage.getItem('recentTransactions')) || {}) as RecentTxList,
-  )?.filter((v) => v.transaction.from === accountAddress)
+  )?.filter((v) => v.transaction?.from === accountAddress)
 
 type RecentTxList = { [key: string]: RecentTransaction }
 
