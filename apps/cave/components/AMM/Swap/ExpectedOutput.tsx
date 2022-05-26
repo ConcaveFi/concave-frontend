@@ -6,7 +6,7 @@ export const MinExpectedOutput = ({
   slippageTolerance,
 }: {
   trade: Trade<Currency, Currency, TradeType>
-  slippageTolerance: { value: string; percent: Percent }
+  slippageTolerance: { value: number; percent: Percent }
 }) => {
   const isExactInput = trade.tradeType === TradeType.EXACT_INPUT
   const amount = isExactInput

@@ -66,20 +66,24 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
       isOpen={isOpen}
       onClose={onClose}
       isCentered
+      preserveScrollBarGap
       motionPreset="slideInBottom"
       bodyProps={{ alignItems: 'center', gap: 3, w: '100%', maxW: '350px' }}
     >
       {isMounted &&
         data.connectors.map((connector) => {
           if (!connector.ready) return null
+          const itsConnect = connector.id === data?.connector?.id
           return (
             <Button
+              cursor={itsConnect ? 'default' : 'pointer'}
               w="100%"
-              shadow="Up Small"
-              _hover={{ shadow: 'Up Big' }}
-              _active={{ shadow: 'down' }}
-              _focus={{ shadow: 'Up Big' }}
+              shadow={itsConnect ? 'down' : 'Up Small'}
+              _hover={!itsConnect && { shadow: 'Up Big' }}
+              _active={!itsConnect && { shadow: 'down' }}
+              _focus={!itsConnect && { shadow: 'Up Big' }}
               size="large"
+              variant={itsConnect && 'primary.outline'}
               leftIcon={
                 <Image
                   w="20px"
@@ -89,7 +93,7 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
               }
               key={connector.id}
               onClick={() => {
-                if (connector.id !== data?.connector?.id) connect(connector).then(onClose)
+                if (!itsConnect) connect(connector).then(onClose)
               }}
             >
               {connector.name}
@@ -101,8 +105,6 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
 }
 
 const ConnectButton = () => {
-  // const [{ data }, connect] = useConnect()
-  // const isMounted = useIsMounted()
   const { connectModal } = useModals()
 
   return (
@@ -126,11 +128,7 @@ export function ConnectWallet(): JSX.Element {
 
   const [{ data: account }] = useAccount()
   const { isOpen, onOpen, onClose } = useDisclosure()
-  // if (data.connected) return <DisconnectButton />
-
-  const { data: recentTx, isLoading, test } = useRecentTransactions()
-
-  console.log('connect wallet ->' + isLoading)
+  const { data: recentTx, status, isLoading } = useRecentTransactions()
 
   if (data.connected)
     return (

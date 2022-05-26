@@ -98,10 +98,10 @@ export const TokenInfo = (props: TokenInfoProps) => {
   )
 }
 const FarmingViewer = ({ convexToken, ...props }) => {
-  const image = convexToken.image.replace('github', 'raw.githubusercontent').replace('blob/', '')
-  const imgP1 = convexToken.imageP1.replace('github', 'raw.githubusercontent').replace('blob/', '')
-  const imgP2 = convexToken.imageP2.replace('github', 'raw.githubusercontent').replace('blob/', '')
-  const imgP3 = convexToken.imageP3.replace('github', 'raw.githubusercontent').replace('blob/', '')
+  const image = convexToken?.image.replace('github', 'raw.githubusercontent').replace('blob/', '')
+  const imgP1 = convexToken?.imageP1.replace('github', 'raw.githubusercontent').replace('blob/', '')
+  const imgP2 = convexToken?.imageP2.replace('github', 'raw.githubusercontent').replace('blob/', '')
+  const imgP3 = convexToken?.imageP3.replace('github', 'raw.githubusercontent').replace('blob/', '')
 
   return (
     <Flex width={'477px'} height="187px" rounded={'2xl'} justify="center" align={'center'}>

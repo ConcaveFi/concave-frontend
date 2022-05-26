@@ -1,82 +1,70 @@
 import { Transaction } from 'ethers'
+import { concaveProvider } from 'lib/providers'
 import { useEffect, useState } from 'react'
+import { useQueries, useQuery } from 'react-query'
 import { text } from 'stream/consumers'
-import { useWaitForTransaction } from 'wagmi'
+import { useAccount, useWaitForTransaction } from 'wagmi'
+import { useCurrentSupportedNetworkId } from './useCurrentSupportedNetworkId'
 import { useIsMounted } from './useIsMounted'
 
 const clearRecentTransactions = () => localStorage.clear()
 
 export function useRecentTransactions() {
-  const wait = useWaitForTransaction()[1]
-  const isMounted = useIsMounted()
-  const data = isMounted ? getRecentTransactions() : new Map<String, RecentTransaction>()
-  const [verified, setVerified] = useState(false)
-
-  const [test, setTest] = useState(0)
-  const [isLoading, setIsLoading] = useState(false)
+  const [{ data: account }] = useAccount()
+  const networkdID = useCurrentSupportedNetworkId()
+  const provider = concaveProvider(networkdID)
+  const data = getRecentTransactions(account?.address, networkdID)
+  const [status, setStatus] = useState<'pending' | 'loaded'>('pending')
 
   const addRecentTransaction = (recentTx: RecentTransaction) => {
-    data.set(recentTx.transaction.hash, recentTx)
-    localStorage.setItem('recentTransactions', JSON.stringify(Array.from(data)))
-    setTimeout(() => {
-      setVerified(false)
-    }, 200)
+    data[recentTx.transaction.hash] = recentTx
+    localStorage.setItem('recentTransactions', JSON.stringify(data))
+    setStatus('pending')
   }
 
-  useEffect(() => {
-    if (!verified && data.size > 0) {
-      const hasUnNotLoaded = Array.from(data).filter((value) => !value[1].status).length > 0
-      console.log('ttt')
+  const isLoading = Object.values(data).filter((v) => v.loading).length > 0
+  useQuery(
+    ['transactions'],
+    async () => {
+      const fromStorage = getRecentTransactions(account?.address, networkdID)
+      const promises = Object.values(fromStorage)
+        .filter((v) => v.loading)
+        .map((v) => provider.waitForTransaction(v.transaction.hash, 1, 1000))
 
-      if (!hasUnNotLoaded) {
-        data.forEach((value) => {
-          if (!value.loading) return
-          wait({ hash: value.transaction.hash }).then((e) => {
-            console.log('finished')
-            data.set(value.transaction.hash, {
-              ...value,
-              loading: e.data.status === 2,
-              status: status[e.data.status],
-            })
-            localStorage.setItem('recentTransactions', JSON.stringify(Array.from(data)))
+      if (promises.length === 0) return fromStorage
+
+      const newData = await Promise.all(promises)
+        .then((txs) => {
+          txs.forEach((tx) => {
+            fromStorage[tx.transactionHash].loading = false
+            fromStorage[tx.transactionHash].status = txStatus[tx.status]
           })
+          return fromStorage
         })
-      }
-    }
+        .catch((error) => {
+          return fromStorage
+        })
 
-    setVerified(true)
-  }, [data])
-
-  useEffect(() => {
-    setInterval(() => {
-      setIsLoading(
-        Array.from(getRecentTransactions()).filter((value) => value[1].loading).length > 0,
-      )
-    }, 1000)
-  }, [data])
+      localStorage.setItem('recentTransactions', JSON.stringify(newData))
+    },
+    { refetchInterval: 2500 },
+  )
 
   return {
-    test,
     isLoading,
+    status,
     data,
     clearRecentTransactions,
     addRecentTransaction,
   }
 }
 
-const updateTransactions = () => {
-  const recentTx = getRecentTransactions()
-  recentTx.forEach(() => {})
-}
+export const getRecentTransactions = (accountAddress: string, chainId: number) =>
+  Object.values(
+    (JSON.parse(localStorage.getItem('recentTransactions')) || {}) as RecentTxList,
+  )?.filter((v) => v.transaction.from === accountAddress)
 
-const updateRecentTxStatus = (txHash: string, loading: boolean) => {
-  const recentTx = getRecentTransactions()
-  recentTx.get(txHash).loading = loading
-  return recentTx
-}
-
-export const getRecentTransactions = () =>
-  new Map<String, RecentTransaction>(JSON.parse(localStorage.getItem('recentTransactions')))
+type RecentTxList = { [key: string]: RecentTransaction }
 
 export type RecentTransaction = {
   type: 'Swap' | 'Bond' | 'Stake'
@@ -90,7 +78,7 @@ export type RecentTransaction = {
   status?: 'success' | 'error'
 }
 
-const status = {
+const txStatus = {
   0: 'error',
   1: 'success',
 }
