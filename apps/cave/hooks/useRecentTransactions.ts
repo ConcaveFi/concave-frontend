@@ -1,11 +1,9 @@
 import { Transaction } from 'ethers'
 import { concaveProvider } from 'lib/providers'
-import { useEffect, useState } from 'react'
-import { useQueries, useQuery } from 'react-query'
-import { text } from 'stream/consumers'
-import { useAccount, useWaitForTransaction } from 'wagmi'
+import { useState } from 'react'
+import { useQuery } from 'react-query'
+import { useAccount } from 'wagmi'
 import { useCurrentSupportedNetworkId } from './useCurrentSupportedNetworkId'
-import { useIsMounted } from './useIsMounted'
 
 const clearRecentTransactions = () => localStorage.clear()
 
