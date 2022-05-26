@@ -71,7 +71,7 @@ export function Treasury() {
               title={'Loading revenue values'}
               mr={6}
               my={0}
-              width={'630px'}
+              width={'619px'}
               isLoading={!revenueCardLoaded}
             />
             <TreasuryRedeemCard />
