@@ -28,6 +28,8 @@ export const truncateNumber = (
       trunctNum = trunctNum + '.'.padEnd(padLength, '0')
     }
   }
+  trunctNum = +trunctNum
+  return trunctNum.toLocaleString('en-US', { minimumFractionDigits: decimalPlaces })
 
-  return trunctNum.toLocaleString()
+
 }

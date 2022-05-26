@@ -1,24 +1,17 @@
-import { SpinIcon } from '@concave/icons'
-import {
-  Card,
-  Flex,
-  keyframes,
-  ScaleFade,
-  Text,
-  useBreakpoint,
-  useBreakpointValue,
-} from '@concave/ui'
+import { SpinIcon, SpinnerIcon } from '@concave/icons'
+import { Card, Flex, keyframes, ScaleFade, Text } from '@concave/ui'
 import { withPageTransition } from 'components/PageTransition'
 import DividendsCard from 'components/Treasury/DividendsCard'
 import DividendsCardMobile from 'components/Treasury/Mobile/DividendsCardMobile'
 import RedeemMobileCard from 'components/Treasury/Mobile/RedeemMobileCard'
-import TreasuryManagementMobile from 'components/Treasury/Mobile/TreasuryManagementMobile'
+import TreasuryManagementMobile, {
+  spinAnimation,
+} from 'components/Treasury/Mobile/TreasuryManagementMobile'
 import TreasuryRevenueMobile from 'components/Treasury/Mobile/TreasuryRevenueMobile'
 import TreasuryManagementCard from 'components/Treasury/TreasuryManagementCard'
 import TreasuryRedeemCard from 'components/Treasury/TreasuryRedeemCard'
 import TreasuryRevenueCard from 'components/Treasury/TreasuryRevenueCard'
 import { useGet_TreasuryQuery, useGet_Amm_Cnv_InfosQuery } from 'graphql/generated/graphql'
-import { useEffect, useState } from 'react'
 
 export function Treasury() {
   const { status: treaStatus, data: treaData } = useGet_TreasuryQuery()
@@ -70,7 +63,7 @@ export function Treasury() {
               title={'Loading revenue values'}
               mr={6}
               my={0}
-              width={'630px'}
+              width={{ base: '510px', xl: '630px' }}
               isLoading={!revenueCardLoaded}
             />
             <TreasuryRedeemCard />
@@ -81,7 +74,7 @@ export function Treasury() {
           </ScaleFade>
           <LoadingState
             title="Loading assets"
-            width={'900px'}
+            width={{ base: '510px', xl: '900px' }}
             isLoading={!revenueCardLoaded}
             my={6}
           />
@@ -110,16 +103,11 @@ const LoadingState = (props) => {
         <Text fontSize={'4xl'} fontWeight="700">
           {props.title}
         </Text>
-        <SpinIcon css={{ animation: `${spin} 3s linear infinite` }} />
+        <SpinnerIcon color={'text.low'} width={'60px'} height="60px" animation={spinAnimation(3)} />
       </Card>
     </ScaleFade>
   )
 }
-
-const spin = keyframes({
-  '0%': { transform: 'rotate(0deg)' },
-  '100%': { transform: 'rotate(360deg)' },
-})
 
 Treasury.Meta = {
   title: 'Concave | Treasury',
