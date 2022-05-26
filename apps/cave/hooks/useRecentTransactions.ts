@@ -62,7 +62,7 @@ export function useRecentTransactions() {
 export const getRecentTransactions = (accountAddress: string, chainId: number) =>
   Object.values(
     (JSON.parse(localStorage.getItem('recentTransactions')) || {}) as RecentTxList,
-  )?.filter((v) => v.transaction.from === accountAddress)
+  )?.filter((v) => v.transaction?.from === accountAddress)
 
 type RecentTxList = { [key: string]: RecentTransaction }
 
