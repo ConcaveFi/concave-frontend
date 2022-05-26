@@ -8,6 +8,7 @@ import React, { useState } from 'react'
 import { useQuery } from 'react-query'
 import getCNVMarketPrice from 'utils/getCNVMarketPrice'
 import getROI from 'utils/getROI'
+import { useAccount } from 'wagmi'
 
 const NavButton = (props: ButtonLinkProps) => {
   const router = useRouter()
@@ -61,6 +62,8 @@ const NotInteractableImage = ({ src, ...props }) => (
 function PageNav() {
   const router = useRouter()
   const currentSupportedNetworkId = useCurrentSupportedNetworkId()
+  const [{ data: account }] = useAccount()
+  const userAddress = account?.address
   const [liquidStakingHover, setLiquidStakingHover] = useState(false)
   const [swapHover, setSwapStakingHover] = useState(false)
   const { data: cnvData } = useGet_Cnv_DataQuery()
@@ -97,9 +100,13 @@ function PageNav() {
         >
           Bond
         </NavButton>
-        {cnvMarketPrice && bondSpotPrice && (
+        {cnvMarketPrice && bondSpotPrice ? (
           <Text fontSize="xs" fontWeight="bold" textColor="text.low" textAlign="center" py={2}>
             CNV-DAI {getROI(cnvMarketPrice, bondSpotPrice)}
+          </Text>
+        ) : (
+          <Text fontSize="xs" fontWeight="bold" textColor="text.low" textAlign="center" py={2}>
+            {userAddress ? 'Loading ROI...' : '...'}
           </Text>
         )}
       </Box>
