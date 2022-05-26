@@ -1,4 +1,4 @@
-import { Box, Collapse, Flex, Image, Text } from '@concave/ui'
+import { Box, Collapse, Flex, Image, Spinner, Text } from '@concave/ui'
 import { getBondSpotPrice } from 'components/Bond/BondState'
 import { ButtonLink, ButtonLinkProps } from 'components/ButtonLink'
 import { useGet_Cnv_DataQuery } from 'graphql/generated/graphql'
@@ -67,14 +67,15 @@ function PageNav() {
   const [liquidStakingHover, setLiquidStakingHover] = useState(false)
   const [swapHover, setSwapStakingHover] = useState(false)
   const { data: cnvData } = useGet_Cnv_DataQuery()
-  const { data: cnvMarketPrice } = useQuery(['getCNVMarketPrice', cnvData], () => {
-    const cnvMarketPrice = cnvData?.cnvData?.data?.last
-    if (cnvMarketPrice) return cnvMarketPrice
-    return getCNVMarketPrice()
-  })
 
-  const { data: bondSpotPrice } = useQuery(['getBondSpotPrice', currentSupportedNetworkId], () =>
-    getBondSpotPrice(currentSupportedNetworkId),
+  const roi = useQuery(
+    ['getCNVMarketPrice', currentSupportedNetworkId, cnvData],
+    async () => {
+      const cnvMarketPrice = cnvData?.cnvData?.data?.last ?? (await getCNVMarketPrice())
+      const bondSpotPrice = await getBondSpotPrice(currentSupportedNetworkId)
+      return getROI(cnvMarketPrice, bondSpotPrice)
+    },
+    { enabled: !!currentSupportedNetworkId, refetchInterval: 17000 },
   )
 
   const liquidStakingPage =
@@ -100,15 +101,10 @@ function PageNav() {
         >
           Bond
         </NavButton>
-        {cnvMarketPrice && bondSpotPrice ? (
-          <Text fontSize="xs" fontWeight="bold" textColor="text.low" textAlign="center" py={2}>
-            CNV-DAI {getROI(cnvMarketPrice, bondSpotPrice)}
-          </Text>
-        ) : (
-          <Text fontSize="xs" fontWeight="bold" textColor="text.low" textAlign="center" py={2}>
-            {userAddress ? 'Loading ROI...' : '...'}
-          </Text>
-        )}
+        <Text fontSize="xs" fontWeight="bold" textColor="text.low" textAlign="center" py={2}>
+          {`CNV-DAI ${roi.data || ''}`} {roi.isError ? 'error' : ''}{' '}
+          {roi.isFetching ? <Spinner size={'xs'} /> : ''}
+        </Text>
       </Box>
       <Box height={'110px'}>
         <Box
