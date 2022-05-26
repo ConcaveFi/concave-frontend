@@ -53,6 +53,7 @@ export function Treasury() {
         align={'center'}
         justify="center"
         position={'relative'}
+        mt={{ base: '10vh', xl: '10vh' }}
       >
         <Flex direction={'column'} maxWidth={'1000px'}>
           <Flex
