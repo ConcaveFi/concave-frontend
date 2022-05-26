@@ -86,7 +86,6 @@ function PageNav() {
     <Flex direction="column" position="relative" mr="-2px">
       <NotInteractableImage
         src="/assets/sidebar/linkage.svg"
-        alt="NotInteractableImage"
         position="absolute"
         left={-6}
         top={6}
