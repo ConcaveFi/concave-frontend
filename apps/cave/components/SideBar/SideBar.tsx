@@ -16,9 +16,7 @@ import SideBarBottom from './SideBarBottom'
 import PageNav from './PageNav'
 import { useSwipeable } from 'react-swipeable'
 
-export const SIDE_BAR_WIDTH = '250px'
-
-export function SideBar() {
+export function SideBar({ sideBarHeight }: { sideBarHeight: string }) {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const swipeableHandlers = useSwipeable({ onSwipedLeft: onClose })
@@ -26,7 +24,7 @@ export function SideBar() {
   return (
     <>
       {/* show on bigger screens like not mobile lol */}
-      <SidebarContent display={{ base: 'none', md: 'flex' }} />
+      <SidebarContent display={{ base: 'none', md: 'flex' }} h={sideBarHeight} />
       {/* show on small devices (mobile) */}
       <Flex
         align="center"
@@ -78,10 +76,10 @@ const SidebarContent = forwardRef<CardProps, 'div'>((props, ref) => {
       borderRightRadius="2xl"
       shadow="Up Big"
       p={3}
-      position="fixed"
+      minH="933px"
       h="100vh"
       w={{ base: '250px', md: '250px' }}
-      minW={SIDE_BAR_WIDTH}
+      minW="250px"
       overflowY="auto"
       overflowX="hidden"
       sx={{ '::-webkit-scrollbar': { display: 'none' }, scrollbarWidth: 'none' }}
