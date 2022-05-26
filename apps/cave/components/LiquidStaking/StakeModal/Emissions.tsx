@@ -38,10 +38,10 @@ function Emissions(props: any) {
             +
           </Text>
           <Text mx={margin} color="text.low" fontSize="sm">
-            Base Emissions: {props?.vapr?.toFixed(2)} %
+            Base Emissions:
           </Text>
           <Text mx={margin} fontSize="md" fontWeight="bold">
-            {props.vapr ? 'Calculating' : `${props?.vapr?.toFixed(2)} %`}
+            {props.vapr ? 'Calculating' : `${props?.vapr} * 100 %`}
           </Text>
           <Text mx={margin} color="text.low" fontSize="sm">
             +
