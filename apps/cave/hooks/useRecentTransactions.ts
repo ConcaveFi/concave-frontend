@@ -18,9 +18,10 @@ export function useRecentTransactions() {
 
   const addRecentTransaction = (recentTx: RecentTransaction) => {
     data[recentTx.transaction.hash] = recentTx
+
+    console.log(data)
     localStorage.setItem('recentTransactions', JSON.stringify(data))
     setStatus('pending')
-    console.log('Entered here.')
   }
 
   const isLoading = Object.values(data).filter((v) => v?.loading).length > 0
@@ -61,9 +62,7 @@ export function useRecentTransactions() {
 }
 
 export const getRecentTransactions = (accountAddress: string, chainId: number) =>
-  Object.values(
-    (JSON.parse(localStorage.getItem('recentTransactions')) || {}) as RecentTxList,
-  )?.filter((v) => v.transaction?.from === accountAddress)
+  (JSON.parse(localStorage.getItem('recentTransactions')) || {}) as RecentTxList
 
 type RecentTxList = { [key: string]: RecentTransaction }
 

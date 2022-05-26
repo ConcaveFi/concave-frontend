@@ -2,19 +2,15 @@ import { CheckIcon, CloseIcon, SpinnerIcon } from '@concave/icons'
 import { Flex, keyframes, Link, Text, useDisclosure } from '@concave/ui'
 import SecondConfirmModal from 'components/SecondConfirmModal'
 import { commify } from 'ethers/lib/utils'
-import { useIsMounted } from 'hooks/useIsMounted'
-import {
-  getRecentTransactions,
-  RecentTransaction,
-  useRecentTransactions,
-} from 'hooks/useRecentTransactions'
-import { useWaitForTransaction } from 'wagmi'
+import { RecentTransaction, useRecentTransactions } from 'hooks/useRecentTransactions'
+import { useAccount } from 'wagmi'
 
 export default function RecentTransactionsContainer() {
   const { data: recentTransactions, clearRecentTransactions } = useRecentTransactions()
 
   const { isOpen: isDialogOpen, onOpen: onOpenDialog, onClose: onCloseDialog } = useDisclosure()
 
+  const [{ data: account }] = useAccount()
   const hasRecentTransactions = Object.values(recentTransactions).length > 0
 
   return (
@@ -81,9 +77,11 @@ export default function RecentTransactionsContainer() {
           apply="border.secondary"
           __css={scroll}
         >
-          {Object.values(recentTransactions).map((value, index) => (
-            <TransactionInfo key={index} recentTransaction={value} />
-          ))}
+          {Object.values(recentTransactions)
+            .filter((tx) => tx.transaction.from === account?.address)
+            .map((value, index) => (
+              <TransactionInfo key={index} recentTransaction={value} />
+            ))}
         </Flex>
       )}
     </Flex>
