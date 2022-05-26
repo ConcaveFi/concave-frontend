@@ -3,7 +3,6 @@ import { StakingV1ProxyAddress } from 'lib/StakingV1Proxy/Address'
 import { StakingV1Contract } from 'lib/StakingV1Proxy/StakingV1Contract'
 import { ConcaveNFTMarketplace } from './ConcaveNFTMarketplace'
 import { NonFungibleTokenInfo } from './NonFungibleToken'
-
 export const listAllNonFungibleTokensOnAddress = async (
   owner: string,
   chainId: number,
@@ -19,7 +18,6 @@ export const listAllNonFungibleTokensOnAddress = async (
     ({ contract }) => contract.address.toUpperCase() === contractAddress.toUpperCase(),
   )
 }
-
 export const listUserNonFungibleTokenInfo = async (userAddress: string, chainId: number) => {
   const marketPlaceContract = new ConcaveNFTMarketplace(chainId)
   const stakingV1Contract = new StakingV1Contract(chainId)
@@ -28,7 +26,7 @@ export const listUserNonFungibleTokenInfo = async (userAddress: string, chainId:
     chainId,
     StakingV1ProxyAddress[chainId],
   )
-  return await Promise.all(
+  return Promise.all(
     usersNft.map(async (nft) => {
       const tokenIndexId = nft.id.tokenId
       const positionInfo = stakingV1Contract.positions(tokenIndexId)
