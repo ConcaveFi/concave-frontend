@@ -15,10 +15,10 @@ function SideBarTop() {
     skip: !account?.address,
   })
 
-  const paddingTop = useBreakpointValue({ base: 10, xs: 10, md: 3 })
+  // const paddingTop = useBreakpointValue({ base: 10, xs: 10, md: 3 })
 
   return (
-    <Box shadow="down" px={2} pt={paddingTop} pb={3} rounded="2xl">
+    <Box shadow="down" px={2} pt={10} pb={3} rounded="2xl">
       <Flex
         alignItems="center"
         justify="center"
