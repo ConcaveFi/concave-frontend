@@ -11,12 +11,11 @@ import {
   useDisclosure,
   VStack,
 } from '@concave/ui'
-import { BigNumber, ethers } from 'ethers'
-import { formatEther } from 'ethers/lib/utils'
+import { ethers } from 'ethers'
 import { useGet_Last_Poolid_VaprQuery } from 'graphql/generated/graphql'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { StakingV1Contract } from 'lib/StakingV1Proxy/StakingV1Contract'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { useQuery } from 'react-query'
 import { useAccount } from 'wagmi'
 import Emissions from './StakeModal/Emissions'
@@ -107,20 +106,16 @@ function StakeCard(props: StackCardProps) {
   const chainId = useCurrentSupportedNetworkId()
   const vaprText = props.icon === '12m' ? 'Non-Dilutive vAPR' : 'Total vAPR'
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { status, data, error, isFetching } = useGet_Last_Poolid_VaprQuery({
+  const { data } = useGet_Last_Poolid_VaprQuery({
     poolID: props.poolId,
   })
   const index = PERIOD_TO_POOL_PARAMETER[`${props.period}`]
   const { data: pools, error: poolsError, isLoading: isLoadingPools } = usePools(chainId, index)
   const { data: stakingCap, isLoading: isLoadingStakings } = useViewStakingCap(chainId, index)
-  const capPercentage = useMemo(() => {
-    if (!pools?.balance || !stakingCap || stakingCap.eq(0)) return '0'
-    return BigNumber.from(pools.balance).div(stakingCap.add(pools.balance)).mul(100)
-  }, [pools, stakingCap])
   const [showFloatingCards, setShowFloatingCards] = useState(false)
 
   const currentlyStaked =
-    isLoadingPools || !pools?.balance ? '0' : (+ethers.utils.formatEther(pools?.balance)).toFixed(0)
+    isLoadingPools || !pools?.balance ? 0 : (+ethers.utils.formatEther(pools?.balance)).toFixed(0)
 
   const currentlyStakingCap =
     isLoadingStakings || !pools?.balance
@@ -281,10 +276,12 @@ function StakeCard(props: StackCardProps) {
                     : '0'
                 }
                 capPercentage={
+                  pools?.balance &&
+                  stakingCap &&
                   (+ethers.utils.formatEther(pools?.balance) /
                     (+ethers.utils.formatEther(stakingCap) +
                       +ethers.utils.formatEther(pools?.balance))) *
-                  100
+                    100
                 }
               />
               <StakeInput period={props.period} poolId={props.poolId} onClose={onClose} />
