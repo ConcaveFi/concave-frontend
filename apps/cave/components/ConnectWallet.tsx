@@ -103,7 +103,7 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
     </Modal>
   )
 }
-
+// commit
 const ConnectButton = () => {
   const { connectModal } = useModals()
 
