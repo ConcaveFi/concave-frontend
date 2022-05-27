@@ -6,12 +6,6 @@ const nextConfig = {
   images: {
     formats: ['image/avif', 'image/webp'],
   },
-  async rewrites() {
-    return [
-      { source: '/', destination: '/gemswap' },
-      { source: '/swap', destination: '/gemswap' },
-    ]
-  },
 }
 
-module.exports = nextConfig
+export default nextConfig
