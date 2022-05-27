@@ -10,7 +10,7 @@ export const useDashBoardState = () => {
   const netWorkId = useCurrentSupportedNetworkId()
   const { data: userNonFungibleTokensInfo, isLoading } = useQuery(
     ['listUserNonFungibleTokenInfo', account?.address, netWorkId],
-    async () => await listUserNonFungibleTokenInfo(account.address, netWorkId),
+    () => listUserNonFungibleTokenInfo(account.address, netWorkId),
     { enabled: !!account?.address && !!netWorkId },
   )
   const totalLocked = getTotalLocked(userNonFungibleTokensInfo)
@@ -24,6 +24,6 @@ export const useDashBoardState = () => {
 }
 function getTotalLocked(nonFungibleTokens: NonFungibleTokenInfo[]) {
   return (nonFungibleTokens || []).reduce((amount, current) => {
-    return amount.add(current.shares)
+    return amount.add(current.deposit)
   }, BigNumber.from(0))
 }
