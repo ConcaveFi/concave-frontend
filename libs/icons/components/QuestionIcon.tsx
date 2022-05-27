@@ -1,7 +1,7 @@
 import { Icon, IconProps } from '@chakra-ui/icons'
 
-export const CnvQuestionIcon = (props: IconProps) => (
-  <Icon viewBox="0 0 16 16" {...props}>
+export const QuestionIcon = (props: IconProps) => (
+  <Icon viewBox="0 0 16 16" filter="drop-shadow(-1px 1px 2px #ffffff40)" {...props}>
     <circle cx="8" cy="8" r="7.5" fillOpacity="0.01" stroke="url(#b)" />
     <path
       d="M7.217 9.787h1.23v-.11c0-1.81 1.82-1.41 1.82-3.31 0-1.26-.96-2.1-2.32-2.1-1.28 0-2.05.66-2.29 1.63l1.29.43c.11-.48.46-.85.98-.85.57 0 .93.37.93.87 0 1.19-1.64.9-1.64 3.33v.11Zm-.07 1.88h1.37v-1.37h-1.37v1.37Z"

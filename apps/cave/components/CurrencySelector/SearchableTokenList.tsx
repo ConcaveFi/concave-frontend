@@ -49,11 +49,11 @@ export const SearchableTokenList = ({
   const provider = useProvider()
   const tokenList = useTokenList()
   const [search, setSearch] = useState('')
-  const tokens = tokenList.data?.filter(searchTokenFilter(search))
+  const tokens = tokenList.data?.filter(searchTokenFilter(search)) || []
   const searchedToken = useQuery(
     ['token', search],
     () => Fetcher.fetchTokenData(search, provider),
-    { retry: false, enabled: isAddress(search) && tokens.length === 0 },
+    { retry: false, enabled: isAddress(search) && !tokens.length },
   )
   return (
     <>
@@ -70,8 +70,12 @@ export const SearchableTokenList = ({
         shadow="Down Big"
         p={3}
       >
-        {tokenList.isLoading || (!tokens.length && searchedToken.isLoading) ? (
+        {tokenList.isLoading || searchedToken.isLoading ? (
           <Spinner />
+        ) : !searchedToken.data && tokens.length === 0 ? (
+          <Text w="full" align="center" fontSize="sm" fontWeight="bold" color="text.low">
+            No token found
+          </Text>
         ) : (
           <UnorderedList
             w="100%"

@@ -7,7 +7,6 @@ import {
   CurrencyInputField,
   CurrencyOutputField,
   CustomRecipient,
-  defaultSettings,
   GasPrice,
   RelativePrice,
   Settings,
@@ -25,6 +24,7 @@ import {
 } from 'components/AMM/hooks/useQueryCurrencies'
 import { NetworkMismatch } from 'components/AMM/NetworkMismatch'
 import { ExpectedOutput, MinExpectedOutput } from 'components/AMM/Swap/ExpectedOutput'
+import { useSwapSettings } from 'components/AMM/Swap/Settings'
 import { TradeRoute } from 'components/AMM/Swap/TradeRoute'
 import { ApproveButton } from 'components/ApproveButton/ApproveButton'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
@@ -52,10 +52,10 @@ const TradeDetails = ({
     </Stack>
   )
 
-export const swapSupportedChains = [ChainId.ETHEREUM, ChainId.ROPSTEN]
+export const swapSupportedChains = [ChainId.ETHEREUM, ChainId.RINKEBY]
 const defaultCurrencies = {
   [ChainId.ETHEREUM]: [DAI[1], CNV[1]],
-  [ChainId.ROPSTEN]: [DAI[3], CNV[3]],
+  [ChainId.RINKEBY]: [DAI[4], CNV[4]],
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
@@ -68,7 +68,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 }
 
 export function SwapPage({ currencies: serverPropsCurrencies }) {
-  const [settings, setSettings] = useState<SwapSettings>(defaultSettings)
+  const [settings, setSetting] = useSwapSettings()
 
   const currencies = useMemo(
     () => serverPropsCurrencies?.map(currencyFromJson),
@@ -172,7 +172,7 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
                 mr="auto"
               />
               <GasPrice />
-              <Settings onChange={setSettings} />
+              <Settings settings={settings} setSetting={setSetting} />
             </HStack>
 
             <Collapse style={{ overflow: 'visible' }} in={isDetailsOpen} animateOpacity>
@@ -228,7 +228,7 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
       <TransactionSubmittedDialog
         tx={swapTx.data}
         isOpen={swapTx.isTransactionSent}
-        tokenSymbol={swapTx.trade?.inputAmount.currency.symbol}
+        tokenSymbol={swapTx.trade?.outputAmount.currency.symbol}
         tokenOutAddress={swapTx.trade?.outputAmount.currency.address} // workaround for type error
       />
       <TransactionErrorDialog error={swapTx.error?.message} isOpen={swapTx.isError} />

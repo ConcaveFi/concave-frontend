@@ -1,7 +1,9 @@
 import { Currency, MaxUint256 } from '@concave/core'
 import { Button, ButtonProps } from '@concave/ui'
+import { useModals } from 'contexts/ModalsContext'
 import { BigNumberish } from 'ethers'
 import { useApprove } from 'hooks/useApprove'
+import { useAccount } from 'wagmi'
 
 type ApproveButtonProps = ButtonProps & {
   autoHide?: boolean
@@ -25,6 +27,16 @@ type ApproveButtonState = {
 export const ApproveButton = ({ approveArgs, ...buttonProps }: ApproveButtonProps) => {
   const { currency, spender, amount = MaxUint256.toString() } = approveArgs
   const { allowance, ...approve } = useApprove(currency.wrapped, spender)
+
+  const [{ data: account }] = useAccount()
+  const { connectModal } = useModals()
+  if (!account?.address)
+    return (
+      <Button fontSize="2xl" {...buttonProps} onClick={connectModal.onOpen}>
+        {'Connect wallet'}
+      </Button>
+    )
+
   const approveButtonAvailabelStates: ApproveButtonState = {
     default: { enable: true, label: `Approve ${currency.symbol}` },
     feching: { isLoading: true, label: `Loading ${currency.symbol} info` },
@@ -36,9 +48,11 @@ export const ApproveButton = ({ approveArgs, ...buttonProps }: ApproveButtonProp
     },
     error: { enable: false, label: 'Error occurred' },
   }
-
   const stateKey: keyof typeof approveButtonAvailabelStates = (() => {
+    if (+allowance?.value === 0) return 'default'
     if (currency.isNative) return 'successful'
+    if (allowance?.value?.gte(currency.wrapped.totalSupply.numerator.toString()))
+      return 'successful'
     if (approve.isFeching) return 'feching'
     if (allowance?.value?.gte(amount)) return 'successful'
     if (approve.isWaitingTransactionReceipt) return 'pending'

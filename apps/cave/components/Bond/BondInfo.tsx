@@ -6,6 +6,7 @@ const spin = keyframes({
   '100%': { transform: 'rotate(360deg)' },
 })
 import { utils } from 'ethers'
+// import { truncateNumber } from 'utils/truncateNumber'
 
 export const InfoItem = ({ value, label, ...props }) => (
   <Flex
@@ -19,7 +20,7 @@ export const InfoItem = ({ value, label, ...props }) => (
     <Text fontSize="sm" fontFamily="heading">
       {value}
     </Text>
-    <Text fontSize={{ base: '12px', md: 'sm' }} color="text.low">
+    <Text fontSize="sm" color="text.low" userSelect={'none'}>
       {label}
     </Text>
   </Flex>
@@ -29,26 +30,20 @@ export const BondInfo = ({ asset, roi, vestingTerm, icon }) => {
   return (
     <Card bg="none" py={3} w="100%" direction="row" shadow="Glass Up Medium">
       <Flex justify="center" flexBasis="40%" alignItems={'center'}>
-        <Image
-          src={icon}
-          alt=""
-          w={{ base: '40px', md: '55px' }}
-          h={{ base: '40px', md: '55px' }}
-          mr={3}
-        />
+        <Image src={icon} alt="" w="55px" h="55px" mr={3} />
         <InfoItem value={asset.toUpperCase()} label="Asset" />
       </Flex>
       <Box w="1px" mx={0} my={-4} bg="stroke.primary" />
-      <InfoItem value={roi} label="ROI" flexGrow={1} pl={3} pr={3} flexBasis="30%" />
+      <InfoItem value={roi} label="ROI" flexGrow={1} pl={3} pr={3} flexBasis="25%" />
       <Box w="1px" mx={0} my={-4} bg="stroke.primary" />
-      <InfoItem value={vestingTerm} label="Vesting Term" px={5} flexBasis="40%" />
+      <InfoItem value={vestingTerm} label="Vesting Term" px={5} flexBasis="35%" />
     </Card>
   )
 }
 // commi
-export const UserBondPositionInfo = (bondSigma, userAddress) => {
+export const UserBondPositionInfo = (props) => {
   const spinnerStyles = { animation: `${spin} 2s linear infinite`, size: 'sm' }
-  const parse = bondSigma?.bondSigma
+  const parse = props?.bondSigma
   const oldestBond = parse?.parseOldest
   const claimed = parse?.claimed
   const redeemable = parse?.parseRedeemable
@@ -56,6 +51,7 @@ export const UserBondPositionInfo = (bondSigma, userAddress) => {
   const totalPending = parse?.totalPending.toFixed(2)
   // const bigIntRedeemable = BigInt(redeemable)
 
+  // const formatRedeemable = truncateNumber(redeemable)
   const formatRedeemable =
     Math.sign(parseInt(redeemable)) === 1
       ? (+utils.formatEther(BigInt(parseInt(redeemable)))).toFixed(2)
@@ -64,7 +60,11 @@ export const UserBondPositionInfo = (bondSigma, userAddress) => {
   return (
     <>
       {claimed ? (
-        ''
+        <Card bg="none" py={4} w="100%" h="79px" direction="row" shadow="Glass Up Medium">
+          <Flex justify="center" flexBasis="100%">
+            <InfoItem value={'No Current Bond Positions'} label={''} />
+          </Flex>
+        </Card>
       ) : totalOwed ? (
         <Card bg="none" py={4} w="100%" direction="row" shadow="Glass Up Medium">
           <Flex justify="center" flexBasis="40%">
@@ -83,9 +83,9 @@ export const UserBondPositionInfo = (bondSigma, userAddress) => {
             flexBasis="25%"
           />
           <Box w="1px" mx={0} my={-4} bg="stroke.primary" />
-          <InfoItem value={formatRedeemable} label={'Available'} px={5} pl={2} flexBasis="35%" />
+          <InfoItem value={formatRedeemable} label={'Redeemable'} px={5} pl={2} flexBasis="35%" />
         </Card>
-      ) : !!userAddress ? (
+      ) : !!props.userAddress ? (
         <>
           Checking wallet...
           <SpinIcon __css={spinnerStyles} width={'10'} height={'10'} />

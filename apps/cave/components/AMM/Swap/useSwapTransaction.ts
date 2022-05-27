@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { SwapSettings } from '../Settings'
 import { RouterABI, ROUTER_ADDRESS, Currency } from '@concave/core'
 import { Router, TradeType, Trade } from '@concave/gemswap-sdk'
+import { SwapSettings } from '../Swap/Settings'
 import { Contract, Transaction } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useAccount, useContract, useSigner } from 'wagmi'
@@ -54,6 +54,7 @@ export const useSwapTransaction = (
         purchase: +trade.outputAmount.toSignificant(3),
         transaction: tx,
         type: 'Swap',
+        loading: true,
       })
     } catch (error) {
       if (error.message === 'User rejected the transaction')

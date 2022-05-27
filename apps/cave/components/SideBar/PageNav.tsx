@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from 'react'
-
-import { Box, Flex, Text, Image, Collapse } from '@concave/ui'
-import { ButtonLink, ButtonLinkProps } from 'components/ButtonLink'
-import { useRouter } from 'next/router'
+import { Box, Collapse, Flex, Image, Spinner, Text } from '@concave/ui'
 import { getBondSpotPrice } from 'components/Bond/BondState'
+import { ButtonLink, ButtonLinkProps } from 'components/ButtonLink'
+import { useGet_Cnv_DataQuery } from 'graphql/generated/graphql'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import { useRouter } from 'next/router'
+import React, { useState } from 'react'
+import { useQuery } from 'react-query'
+import getCNVMarketPrice from 'utils/getCNVMarketPrice'
+import getROI from 'utils/getROI'
 
 const NavButton = (props: ButtonLinkProps) => {
   const router = useRouter()
@@ -55,28 +59,21 @@ const NotInteractableImage = ({ src, ...props }) => (
 )
 
 function PageNav() {
-  const [bondSpotPrice, setBondSpotPrice] = useState<string>('0')
-  const [cnvMarketPrice, setCnvMarketPrice] = useState<number>(0)
-  useEffect(() => {
-    getBondSpotPrice(3, '').then((bondSpotPrice) => {
-      setBondSpotPrice(bondSpotPrice)
-    })
-    fetch('/api/cnv')
-      .then((j) => j.json())
-      .then((data) => JSON.parse(data))
-      .then((data) => {
-        if (data?.data) {
-          setCnvMarketPrice(data.data.last)
-        }
-      })
-      .catch((e) => {
-        throw e
-      })
-  }, [cnvMarketPrice])
   const router = useRouter()
-
+  const currentSupportedNetworkId = useCurrentSupportedNetworkId()
   const [liquidStakingHover, setLiquidStakingHover] = useState(false)
   const [swapHover, setSwapStakingHover] = useState(false)
+  const { data: cnvData } = useGet_Cnv_DataQuery()
+
+  const roi = useQuery(
+    ['getCNVMarketPrice', currentSupportedNetworkId, cnvData],
+    async () => {
+      const cnvMarketPrice = cnvData?.cnvData?.data?.last ?? (await getCNVMarketPrice())
+      const bondSpotPrice = await getBondSpotPrice(currentSupportedNetworkId)
+      return getROI(cnvMarketPrice, bondSpotPrice)
+    },
+    { enabled: !!currentSupportedNetworkId, refetchInterval: 17000 },
+  )
 
   const liquidStakingPage =
     router.pathname === '/liquid-staking' || router.pathname === '/dashboard'
@@ -84,11 +81,11 @@ function PageNav() {
     router.pathname === '/gemswap' ||
     router.pathname === '/pools' ||
     router.pathname === '/addliquidity'
+
   return (
     <Flex direction="column" position="relative" mr="-2px">
       <NotInteractableImage
         src="/assets/sidebar/linkage.svg"
-        alt=""
         position="absolute"
         left={-6}
         top={6}
@@ -101,10 +98,8 @@ function PageNav() {
           Bond
         </NavButton>
         <Text fontSize="xs" fontWeight="bold" textColor="text.low" textAlign="center" py={2}>
-          CNV-DAI{' '}
-          {`${
-            cnvMarketPrice > 0 ? ((1 - +bondSpotPrice / +cnvMarketPrice) * 100).toFixed(2) : '-'
-          }%`}
+          {`CNV-DAI ${roi.data || ''}`} {roi.isError ? 'error' : ''}{' '}
+          {roi.isFetching ? <Spinner size={'xs'} /> : ''}
         </Text>
       </Box>
       <Box height={'110px'}>
@@ -136,10 +131,10 @@ function PageNav() {
 
       <NavButton
         leftIcon={<NotInteractableImage src="/assets/sidebar/page-marketplace.svg" />}
-        href="/marketplace"
+        href=""
         mt="26px"
       >
-        Marketplace
+        Marketplace <br></br>(Coming Soon)
       </NavButton>
 
       <Box height={'120px'}>

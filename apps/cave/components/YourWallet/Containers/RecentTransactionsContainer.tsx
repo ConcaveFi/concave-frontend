@@ -1,16 +1,17 @@
 import { CheckIcon, CloseIcon, SpinnerIcon } from '@concave/icons'
 import { Flex, keyframes, Link, Text, useDisclosure } from '@concave/ui'
 import SecondConfirmModal from 'components/SecondConfirmModal'
-import { commify, formatUnits } from 'ethers/lib/utils'
+import { commify } from 'ethers/lib/utils'
 import { RecentTransaction, useRecentTransactions } from 'hooks/useRecentTransactions'
-import { useWaitForTransaction } from 'wagmi'
+import { useAccount } from 'wagmi'
 
 export default function RecentTransactionsContainer() {
   const { data: recentTransactions, clearRecentTransactions } = useRecentTransactions()
 
   const { isOpen: isDialogOpen, onOpen: onOpenDialog, onClose: onCloseDialog } = useDisclosure()
 
-  const hasRecentTransactions = recentTransactions.length > 0
+  const [{ data: account }] = useAccount()
+  const hasRecentTransactions = Object.values(recentTransactions).length > 0
 
   return (
     <Flex flex={1} direction={'column'} mt={8} mb={4}>
@@ -65,11 +66,22 @@ export default function RecentTransactionsContainer() {
       </SecondConfirmModal>
       {/* -------------------------- */}
 
-      {recentTransactions.length > 0 && (
-        <Flex direction={'column'} mt={3} gap={1} maxH="90px">
-          {recentTransactions.map((value, index) => (
-            <TransactionInfo key={index} recentTransaction={value} />
-          ))}
+      {hasRecentTransactions && (
+        <Flex
+          direction={'column'}
+          mt={3}
+          gap={1}
+          maxH="98px"
+          overflowY={'auto'}
+          overflowX="hidden"
+          apply="border.secondary"
+          __css={scroll}
+        >
+          {Object.values(recentTransactions)
+            .filter((tx) => tx.transaction.from === account?.address)
+            .map((value, index) => (
+              <TransactionInfo key={index} recentTransaction={value} />
+            ))}
         </Flex>
       )}
     </Flex>
@@ -77,16 +89,26 @@ export default function RecentTransactionsContainer() {
 }
 
 const TransactionInfo = ({ recentTransaction }: { recentTransaction: RecentTransaction }) => {
-  const { type, amount, amountTokenName, purchaseTokenName, transaction, purchase, stakePool } =
-    recentTransaction
-  const [{ data: txData, loading, error }] = useWaitForTransaction({ hash: transaction.hash })
+  const {
+    type,
+    amount,
+    amountTokenName,
+    purchaseTokenName,
+    transaction,
+    purchase,
+    stakePool,
+    status,
+    loading,
+  } = recentTransaction
 
   const info =
     type === 'Stake'
       ? `${commify(amount)} ${amountTokenName} staked in ${stakePool} Position`
       : type === 'Bond'
       ? `${commify(amount)} ${amountTokenName} bonded for ${commify(purchase)} ${purchaseTokenName}`
-      : `${commify(amount)} ${amountTokenName} swaped for ${commify(purchase)} ${purchaseTokenName}`
+      : `${commify(amount)} ${amountTokenName} swaped for ${
+          purchase > 100 ? commify(purchase) : purchase
+        } ${purchaseTokenName}`
 
   return (
     <Flex justify={'space-between'}>
@@ -94,7 +116,7 @@ const TransactionInfo = ({ recentTransaction }: { recentTransaction: RecentTrans
         <Text>{recentTransaction.type}</Text>
         <Link
           isExternal
-          href={`https://ropsten.etherscan.io/tx/${transaction.hash}`}
+          href={`https://RINKEBY.etherscan.io/tx/${transaction.hash}`}
           fontSize={'14px'}
           textColor={'text.low'}
         >
@@ -103,7 +125,7 @@ const TransactionInfo = ({ recentTransaction }: { recentTransaction: RecentTrans
       </Flex>
       {/* Status 0 = Fail  */}
       {/* Status 1 = Success  */}
-      {txData?.status == 0 && (
+      {status === 'error' && (
         <CloseIcon width={'12px'} height="12px" color={'red.300'} justifySelf="end" />
       )}
       {loading && (
@@ -113,7 +135,7 @@ const TransactionInfo = ({ recentTransaction }: { recentTransaction: RecentTrans
           justifySelf="end"
         />
       )}
-      {txData?.status == 1 && <CheckIcon color={'green.300'} justifySelf="end" />}
+      {status === 'success' && <CheckIcon color={'green.300'} justifySelf="end" />}
     </Flex>
   )
 }
@@ -122,3 +144,22 @@ const spin = keyframes({
   '0%': { transform: 'rotate(0deg)' },
   '100%': { transform: 'rotate(360deg)' },
 })
+
+const scroll = {
+  '::-webkit-scrollbar': {
+    width: '12px',
+  },
+
+  '::-webkit-scrollbar-track': {
+    // boxShadow: 'inset 0 0 10px 10px',
+    // color: 'green.300',
+    border: 'solid 4px transparent',
+    rounded: '2xl',
+  },
+
+  '::-webkit-scrollbar-thumb': {
+    border: 'solid 3px transparent',
+    boxShadow: 'inset 0 0 10px 10px #74bae8',
+    rounded: 'full',
+  },
+}

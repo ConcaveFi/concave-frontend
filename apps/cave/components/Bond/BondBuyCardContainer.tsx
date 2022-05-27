@@ -25,7 +25,7 @@ export default function BondBuyCardContainer(props: any) {
     if (typeof currentStatus !== 'undefined' && !toast.isActive(currentHash)) {
       const capitalizedStatus = currentStatus[0].toUpperCase() + currentStatus.slice(1)
       const title = `Transaction ${capitalizedStatus}`
-      const link = `https://ropsten.etherscan.io/tx/${currentHash}`
+      const link = `https://RINKEBY.etherscan.io/tx/${currentHash}`
       toast({
         id: currentHash,
         title: capitalizedStatus,

@@ -16,6 +16,7 @@ import React, { useMemo } from 'react'
 import { useAccount } from 'wagmi'
 import { useQueryCurrencies } from '../hooks/useQueryCurrencies'
 import { NetworkMismatch } from '../NetworkMismatch'
+import useLiquidityData from './useLiquidityData'
 
 const AddSymbol = () => (
   <Flex align="center" justify="center">
@@ -40,7 +41,13 @@ export type LiquidityPool = {
   amount1: CurrencyAmount<Currency>
 }
 
-function AddLiquidityContent({ currencies }: { currencies: Currency[] }) {
+function AddLiquidityContent({
+  currencies,
+  liquidityModalClose,
+}: {
+  currencies: Currency[]
+  liquidityModalClose?: VoidFunction
+}) {
   const { onChangeCurrencies, isNetworkMismatch, queryHasCurrency, currentChainId, queryChainId } =
     useQueryCurrencies()
 
@@ -57,6 +64,12 @@ function AddLiquidityContent({ currencies }: { currencies: Currency[] }) {
     supplyLiquidityDisclosure.onOpen,
   )
   const fixedPair = pair.data ?? Pair.createVirtualPair(firstFieldAmount, secondFieldAmount)
+
+  const lpData = useLiquidityData({
+    pair: fixedPair,
+    amount0: firstFieldAmount,
+    amount1: secondFieldAmount,
+  })
 
   return (
     <>
@@ -95,14 +108,58 @@ function AddLiquidityContent({ currencies }: { currencies: Currency[] }) {
       </NetworkMismatch>
 
       <SupplyLiquidityModal
-        lp={{ pair: fixedPair, amount0: firstFieldAmount, amount1: secondFieldAmount }}
+        lpData={lpData}
         isOpen={supplyLiquidityDisclosure.isOpen}
-        onClose={supplyLiquidityDisclosure.onClose}
+        onClose={liquidityModalClose || supplyLiquidityDisclosure.onClose}
         onConfirm={addLPTx.submit}
       />
 
-      <WaitingConfirmationDialog isOpen={addLPTx.isWaitingForConfirmation} />
-      <TransactionSubmittedDialog tx={addLPTx.data} isOpen={addLPTx.isTransactionSent} />
+      <WaitingConfirmationDialog
+        isOpen={addLPTx.isWaitingForConfirmation}
+        title={'Confirm Liquidity'}
+      >
+        <Flex
+          width={'220px'}
+          height="200px"
+          rounded={'2xl'}
+          mt={4}
+          shadow={'Down Medium'}
+          align={'center'}
+          direction={'column'}
+          textAlign={'center'}
+        >
+          <Text textColor={'text.low'} fontWeight="700" fontSize={18} mt={4}>
+            You will lock
+          </Text>
+          <Text width={'90%'} fontWeight={'700'} textColor="text.accent">
+            {`${lpData.amount0?.toSignificant(6, { groupSeparator: ',' })} ${
+              lpData.token0?.symbol
+            }`}
+          </Text>
+          <Text width={'90%'} fontWeight={'700'} textColor="text.accent">
+            {`${lpData.amount1?.toSignificant(6, { groupSeparator: ',' })} ${
+              lpData.token1?.symbol
+            }`}
+          </Text>
+          <Text textColor={'text.low'} fontWeight="700" fontSize={18} mt={4}>
+            You will receive
+          </Text>
+          <Text width={'90%'} fontWeight={'700'} textColor="text.accent">
+            {`${lpData.poolShare?.amount.toSignificant(6, { groupSeparator: ',' })} ${
+              lpData?.pair?.liquidityToken?.symbol
+            } ${
+              +lpData.poolShare?.amount.toSignificant(6, { groupSeparator: ',' }) > 1
+                ? 'Tokens'
+                : 'Token'
+            }`}
+          </Text>
+        </Flex>
+      </WaitingConfirmationDialog>
+      <TransactionSubmittedDialog
+        tx={addLPTx.data}
+        isOpen={addLPTx.isTransactionSent}
+        closeParentComponent={liquidityModalClose || supplyLiquidityDisclosure.onClose}
+      />
       <TransactionErrorDialog error={addLPTx.error?.message} isOpen={addLPTx.isError} />
     </>
   )
@@ -150,7 +207,10 @@ export const AddLiquidityModalButton = ({
           gap: 6,
         }}
       >
-        <AddLiquidityContent currencies={currencies} />
+        <AddLiquidityContent
+          currencies={currencies}
+          liquidityModalClose={addLiquidityDisclosure.onClose}
+        />
       </Modal>
     </>
   )

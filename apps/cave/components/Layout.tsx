@@ -1,12 +1,26 @@
 import { Flex, Container } from '@concave/ui'
 import dynamic from 'next/dynamic'
-import React from 'react'
+import React, { useState } from 'react'
 import { SideBar } from './SideBar/SideBar'
 import { AnimatePresence } from 'framer-motion'
+import { useIsomorphicLayoutEffect } from 'react-use'
 
 const TestnetIndicator = dynamic(() => import('./Faucet').then((module) => module.TestnetIndicator))
 
 export const DefaultLayout = ({ children }) => {
+  const [shouldRender, setShouldRender] = useState(false)
+  useIsomorphicLayoutEffect(() => {
+    setShouldRender(true)
+  })
+
+  if (shouldRender) {
+    return <Layout>{children}</Layout>
+  } else {
+    return <></>
+  }
+}
+
+export const Layout = ({ children }) => {
   return (
     <Flex direction={{ base: 'column', md: 'row' }}>
       <SideBar />

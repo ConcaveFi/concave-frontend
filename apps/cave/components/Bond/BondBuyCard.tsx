@@ -3,6 +3,7 @@ import { GasIcon } from '@concave/icons'
 import { Card, Flex, HStack, keyframes, Spinner, Text, useDisclosure, VStack } from '@concave/ui'
 import { ApproveButton } from 'components/ApproveButton/ApproveButton'
 import { CurrencyInputField as BondInput } from 'components/CurrencyAmountField'
+import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { BOND_ADDRESS } from 'contracts/Bond/BondingAddress'
@@ -15,7 +16,8 @@ import { BondOutput } from './BondOutput'
 import { getBondAmountOut, getBondSpotPrice, purchaseBond, useBondState } from './BondState'
 import { ConfirmBondModal } from './ConfirmBond'
 import { DownwardIcon } from './DownwardIcon'
-import { BondSettings, defaultSettings, Settings } from './Settings'
+import { Settings, useBondSettings } from './Settings'
+import { truncateNumber } from 'utils/truncateNumber'
 
 export const twoDecimals = (s: string | number) => {
   const a = s.toString()
@@ -42,11 +44,13 @@ export function BondBuyCard(props: {
   bondTransaction?: any
   setBondTransaction?: any
   setAmountInAndOut?: any
+  updateBondPositions?: any
+  setRedeemButtonDisabled?: any
 }) {
   const { currencyIn, currencyOut, userAddress, balance, signer, networkId } = useBondState()
   const [bondTransaction, setBondTransaction] = useState()
 
-  const [settings, setSettings] = useState<BondSettings>(defaultSettings)
+  const [settings, setSetting] = useBondSettings()
   const userBalance = balance.data?.toFixed()
   const [amountIn, setAmountIn] = useState<CurrencyAmount<Currency>>(toAmount('0', DAI[networkId]))
   // const [amountIn, setAmountIn] = useState<number>(0)
@@ -64,6 +68,13 @@ export function BondBuyCard(props: {
   const AMMData = useGet_Amm_Cnv_PriceQuery()
 
   const currentPrice = AMMData?.data?.cnvData?.data?.last.toFixed(3)
+
+  const [txError, setTxError] = useState('')
+  const {
+    isOpen: isOpenRejected,
+    onClose: onCloseRejected,
+    onOpen: onOpenRejected,
+  } = useDisclosure()
 
   useEffect(() => {
     getBondSpotPrice(networkId, BOND_ADDRESS[networkId])
@@ -112,7 +123,9 @@ export function BondBuyCard(props: {
           <HStack alignSelf={'start'}>
             <Text textColor={'text.low'}>Current Price:</Text>
             <Text textColor={'text.low'} opacity="0.7">
-              {currentPrice ? '$' + currentPrice + ' CNV' : 'Loading . . .'}
+              {currentPrice
+                ? '$' + truncateNumber(+currentPrice * 10 ** 18, 3) + ' CNV'
+                : 'Loading . . .'}
             </Text>
           </HStack>
           <HStack alignSelf={'start'}>
@@ -121,7 +134,7 @@ export function BondBuyCard(props: {
             </Text>
             <Text textColor={'text.low'} opacity="0.7">
               {bondSpotPrice
-                ? '$' + parseFloat(bondSpotPrice).toFixed(3) + ' CNV'
+                ? '$' + truncateNumber(+bondSpotPrice * 10 ** 18, 3) + ' CNV'
                 : 'Loading . . .'}
             </Text>
           </HStack>
@@ -129,7 +142,7 @@ export function BondBuyCard(props: {
         <Flex flex={1} align={'center'} justify="end" minWidth={100} gap={2}>
           <GasPrice />
           <HStack align="center" justify="end" py={{ base: 0, md: 5, lg: 0, xl: 5 }}>
-            <Settings onClose={setSettings} />
+            <Settings settings={settings} setSetting={setSetting} />
           </HStack>
         </Flex>
       </Flex>
@@ -142,7 +155,10 @@ export function BondBuyCard(props: {
           currency: currencyIn,
           spender: BOND_ADDRESS[networkId],
         }}
-        isDisabled={+userBalance < +amountIn}
+        isDisabled={
+          +amountIn.numerator.toString() === 0 ||
+          +userBalance < +amountIn.numerator.toString() / 10 ** 18
+        }
         onClick={confirmModal.onOpen}
       >
         {+userBalance < +amountIn ? 'Insufficient Funds' : 'Bond'}
@@ -151,7 +167,6 @@ export function BondBuyCard(props: {
       <ConfirmBondModal
         currencyIn={currencyIn}
         currencyOut={currencyOut}
-        //amountIn.numerator.toString
         amountIn={amountIn.toFixed()}
         amountOut={amountOut}
         tokenInUsdPrice={'currencyIn'}
@@ -162,8 +177,10 @@ export function BondBuyCard(props: {
         setHasClickedConfirm={setHasClickedConfirm}
         onConfirm={() => {
           confirmModal.onClose()
-          purchaseBond(networkId, amountIn.toFixed(), userAddress, signer, settings, amountOut)
-            .then((tx) => {
+          const amountInTemp = amountIn.toFixed()
+          const amountOutTemp = amountOut
+          purchaseBond(networkId, amountInTemp, userAddress, signer, settings, amountOutTemp)
+            .then(async (tx) => {
               setBondTransaction(tx)
               addRecentTransaction({
                 amount: +amountIn.toSignificant(3),
@@ -172,6 +189,7 @@ export function BondBuyCard(props: {
                 purchase: +amountOut,
                 transaction: tx,
                 type: 'Bond',
+                loading: true,
               })
               props.setBondTransaction?.(tx)
               props.setAmountInAndOut?.({
@@ -179,9 +197,15 @@ export function BondBuyCard(props: {
                 out: parseFloat(amountOut).toFixed(2),
               })
               setHasClickedConfirm(false)
+              setAmountIn(toAmount('0', DAI[networkId]))
+              setAmountOut('')
+              await tx.wait(1)
+              props.setRedeemButtonDisabled(true)
+              props.updateBondPositions()
             })
             .catch((e) => {
-              console.log('get position info failed', e)
+              setTxError(e.message)
+              onOpenRejected()
               setHasClickedConfirm(false)
             })
         }}
@@ -194,8 +218,8 @@ export function BondBuyCard(props: {
       />
       <WaitingConfirmationDialog isOpen={hasClickedConfirm} title={'Confirm Bond'}>
         <Text fontSize="lg" color="text.accent">
-          Bonding {String(amountIn.toFixed(4))} {currencyIn.symbol} for{' '}
-          {parseFloat(amountOut).toFixed(4)} CNV.
+          Bonding {truncateNumber(+amountIn.numerator.toString(), 4)} {currencyIn.symbol} for{' '}
+          {truncateNumber(+amountOut, 4)}CNV.
         </Text>
       </WaitingConfirmationDialog>
       <TransactionSubmittedDialog
@@ -204,6 +228,7 @@ export function BondBuyCard(props: {
         tokenSymbol={currencyOut.symbol}
         tokenOutAddress={currencyOut.address}
       />
+      <TransactionErrorDialog error={txError} isOpen={isOpenRejected} />
     </Card>
   )
 }

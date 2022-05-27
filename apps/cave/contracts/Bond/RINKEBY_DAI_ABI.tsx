@@ -1,4 +1,4 @@
-export const ROPSTEN_DAI_ABI = [
+export const RINKEBY_DAI_ABI = [
   {
     anonymous: false,
     inputs: [

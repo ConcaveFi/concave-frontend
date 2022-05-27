@@ -60,6 +60,7 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
           transaction: x,
           type: 'Stake',
           stakePool: PARAMETER_TO_POOL_PERIOD[props.poolId],
+          loading: true,
         })
         setTx(x)
         setWaitingForConfirm(false)
@@ -126,7 +127,7 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
       <WaitingConfirmationDialog isOpen={waitingForConfirm} title={'Confirm Stake'}>
         <Flex
           width={'200px'}
-          height="80px"
+          height="107px"
           rounded={'2xl'}
           mt={4}
           shadow={'Down Medium'}
@@ -139,6 +140,7 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
           <Text fontWeight={'700'} textColor="text.accent">
             {stakeInput.wrapped.toExact() + ' CNV'}
           </Text>
+          <Text textColor={'text.low'}>For {props.period}</Text>
         </Flex>
       </WaitingConfirmationDialog>
 

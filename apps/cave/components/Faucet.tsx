@@ -24,7 +24,7 @@ import { useWorthyUser } from './DevelopGateway'
 import { getTxExplorer } from './TransactionSubmittedDialog'
 
 const faucetKey = process.env.NEXT_PUBLIC_FAUCET_PK
-const faucet = faucetKey && new Wallet(faucetKey, concaveProvider(ChainId.ROPSTEN))
+const faucet = faucetKey && new Wallet(faucetKey, concaveProvider(ChainId.RINKEBY))
 
 const sendSomeEth = async (recipient) => {
   const tx = {
@@ -41,7 +41,7 @@ const sendSomeEth = async (recipient) => {
 const ETHFaucet = () => {
   const [{ data: account }] = useAccount()
 
-  const { data: ethBalance, isLoading } = useCurrencyBalance(NATIVE[ChainId.ROPSTEN])
+  const { data: ethBalance, isLoading } = useCurrencyBalance(NATIVE[ChainId.RINKEBY])
 
   const { data: faucetBalance } = useQuery('faucet balance', () => faucet.getBalance(), {
     enabled: !!faucet,
@@ -84,7 +84,7 @@ const ETHFaucet = () => {
         <Stack fontWeight="bold" rounded="2xl" shadow="down" py={2} fontSize="sm" spacing={0}>
           <Text>🎉 0.1 ETH Sent!</Text>
           <Link
-            href={getTxExplorer(sentEthTx, chain.ropsten)}
+            href={getTxExplorer(sentEthTx, chain.rinkeby)}
             fontSize="sm"
             color="text.accent"
             isExternal
@@ -102,7 +102,7 @@ const DAIMinter = () => {
 
   const [{ data: mintDaiTx, loading }, mintDAI] = useContractWrite(
     {
-      addressOrName: DAI[ChainId.ROPSTEN].address,
+      addressOrName: DAI[ChainId.RINKEBY].address,
       contractInterface: ['function mint(address guy, uint256 wad) external'],
     },
     'mint',
@@ -114,7 +114,7 @@ const DAIMinter = () => {
       <Stack fontWeight="bold" rounded="2xl" shadow="down" py={2} fontSize="sm" spacing={0}>
         <Text>🎉 69420 tDAI tx sent!</Text>
         <Link
-          href={getTxExplorer(mintDaiTx, chain.ropsten)}
+          href={getTxExplorer(mintDaiTx, chain.rinkeby)}
           fontSize="sm"
           color="text.accent"
           isExternal
@@ -174,11 +174,11 @@ export const TestnetIndicator = () => {
   // if (!isOpen) return null
   return (
     <SlideFade in={isOpen} unmountOnExit offsetY={-10}>
-      <Box pos="absolute" top={{ base: 20, md: 8 }} zIndex={10}>
+      <Box mx="auto" pos="absolute" top={{ base: 20, md: 8 }} zIndex={10}>
         <Card
           variant="secondary"
           p={5}
-          direction="row"
+          direction={{ base: 'column', sm: 'row' }}
           align="center"
           rounded="3xl"
           shadow="Up for Blocks"
@@ -203,7 +203,7 @@ export const TestnetIndicator = () => {
               Get some test tokens on the faucet!
             </Text>
           </Stack>
-          <Stack spacing={1} align="center" ml={6}>
+          <Stack spacing={1} align="center" ml={{ base: 0, sm: 6 }}>
             <Button variant="primary" px={4} py={2} h="min" onClick={minterModal.onOpen}>
               Open Faucet
             </Button>

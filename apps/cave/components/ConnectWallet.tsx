@@ -12,11 +12,15 @@ import {
   Modal,
   Flex,
   useDisclosure,
+  Spinner,
 } from '@concave/ui'
-import { useAccount, useConnect, useNetwork } from 'wagmi'
+import { useAccount, useConnect } from 'wagmi'
 import { useIsMounted } from 'hooks/useIsMounted'
+import { useModals } from 'contexts/ModalsContext'
 import YourWalletModal from './YourWalletModal'
-import { isFunction } from 'util'
+import { useRecentTransactions } from 'hooks/useRecentTransactions'
+import { SpinIcon, SpinnerIcon } from '@concave/icons'
+import { spinAnimation } from './Treasury/Mobile/TreasuryManagementMobile'
 
 // const miniAddress = (address) =>
 //   `${address.substr(0, 6)}...${address.substr(address.length - 6, address.length)}`
@@ -55,31 +59,31 @@ const DisconnectButton = () => {
 export const ConnectWalletModal = ({ isOpen, onClose }) => {
   const [{ data, loading }, connect] = useConnect()
   const isMounted = useIsMounted()
-
   return (
     <Modal
-      preserveScrollBarGap
       bluryOverlay={true}
       title="Connect Wallet"
       isOpen={isOpen}
       onClose={onClose}
       isCentered
+      preserveScrollBarGap
       motionPreset="slideInBottom"
       bodyProps={{ alignItems: 'center', gap: 3, w: '100%', maxW: '350px' }}
     >
       {isMounted &&
         data.connectors.map((connector) => {
           if (!connector.ready) return null
+          const itsConnect = connector.id === data?.connector?.id
           return (
             <Button
-              cursor={connector.id === data?.connector?.id ? 'default' : 'pointer'}
+              cursor={itsConnect ? 'default' : 'pointer'}
               w="100%"
-              shadow={connector.id === data?.connector?.id ? 'down' : 'Up Small'}
-              variant={connector.id === data?.connector?.id ? 'primary.outline' : 'secondary'}
-              _hover={connector.id === data?.connector?.id ? {} : { shadow: 'Up Big' }}
-              _active={connector.id === data?.connector?.id ? {} : { shadow: 'down' }}
-              _focus={connector.id === data?.connector?.id ? {} : { shadow: 'Up Big' }}
+              shadow={itsConnect ? 'down' : 'Up Small'}
+              _hover={!itsConnect && { shadow: 'Up Big' }}
+              _active={!itsConnect && { shadow: 'down' }}
+              _focus={!itsConnect && { shadow: 'Up Big' }}
               size="large"
+              variant={itsConnect && 'primary.outline'}
               leftIcon={
                 <Image
                   w="20px"
@@ -89,7 +93,7 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
               }
               key={connector.id}
               onClick={() => {
-                if (connector.id !== data?.connector?.id) connect(connector).then(onClose)
+                if (!itsConnect) connect(connector).then(onClose)
               }}
             >
               {connector.name}
@@ -101,68 +105,20 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
 }
 
 const ConnectButton = () => {
-  const [{ data }, connect] = useConnect()
-  const isMounted = useIsMounted()
+  const { connectModal } = useModals()
 
   return (
     <>
-      <Menu placement="auto-end" isLazy>
-        <MenuButton
-          as={Button}
-          sx={{ ...gradientBorder({ borderWidth: 2, borderRadius: '2xl' }) }}
-          fontFamily="heading"
-          variant="primary"
-          size="medium"
-          w="100%"
-        >
-          Connect wallet
-        </MenuButton>
-        <Portal>
-          <MenuList
-            minW="min"
-            bg="none"
-            border="none"
-            shadow="none"
-            p="0"
-            backdropFilter="blur(8px)"
-          >
-            <Card
-              variant="secondary"
-              borderGradient="secondary"
-              borderRadius="xl"
-              px={1}
-              py={2}
-              gap="1"
-            >
-              {isMounted &&
-                data.connectors.map((connector) => {
-                  if (!connector.ready) return null
-                  // change image from using connector id to something else, injected can be metamask, coinbase, brave etc
-                  return (
-                    <MenuItem
-                      borderRadius="xl"
-                      icon={
-                        <Image
-                          w="20px"
-                          src={`/assets/connectors/${connector.name
-                            .toLowerCase()
-                            .replace(' ', '-')}.png`}
-                          alt={connector.name}
-                        />
-                      }
-                      key={connector.id}
-                      onClick={() => {
-                        connect(connector)
-                      }}
-                    >
-                      {connector.name}
-                    </MenuItem>
-                  )
-                })}
-            </Card>
-          </MenuList>
-        </Portal>
-      </Menu>
+      <Button
+        sx={{ ...gradientBorder({ borderWidth: 2, borderRadius: '2xl' }) }}
+        fontFamily="heading"
+        variant="primary"
+        size="medium"
+        w="100%"
+        onClick={connectModal.onOpen}
+      >
+        Connect wallet
+      </Button>
     </>
   )
 }
@@ -172,7 +128,8 @@ export function ConnectWallet(): JSX.Element {
 
   const [{ data: account }] = useAccount()
   const { isOpen, onOpen, onClose } = useDisclosure()
-  // if (data.connected) return <DisconnectButton />
+  const { data: recentTx, status, isLoading } = useRecentTransactions()
+
   if (data.connected)
     return (
       <>
@@ -188,6 +145,11 @@ export function ConnectWallet(): JSX.Element {
           <Flex textColor={'text.low'} fontWeight="bold" mx={'auto'}>
             {ellipseAddress(account?.address)}
           </Flex>
+          {isLoading && (
+            <Flex position={'absolute'} width="80%" justify={'end'}>
+              <SpinnerIcon color={'text.low'} animation={spinAnimation(4)} boxSize={'20px'} />
+            </Flex>
+          )}
         </Button>
         <YourWalletModal onClose={onClose} isOpen={isOpen} />
       </>

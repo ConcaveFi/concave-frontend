@@ -3,13 +3,12 @@ import { StakingV1ProxyAddress } from 'lib/StakingV1Proxy/Address'
 import { StakingV1Contract } from 'lib/StakingV1Proxy/StakingV1Contract'
 import { ConcaveNFTMarketplace } from './ConcaveNFTMarketplace'
 import { NonFungibleTokenInfo } from './NonFungibleToken'
-
-export const listAllNonFunginleTokensOnAddress = async (
+export const listAllNonFungibleTokensOnAddress = async (
   owner: string,
   chainId: number,
   contractAddress?: string,
 ) => {
-  const network = chainId === 1 ? 'mainnet' : 'ropsten'
+  const network = chainId === 1 ? 'mainnet' : 'rinkeby'
   const web3 = createAlchemyWeb3(`https://eth-${network}.alchemyapi.io/v2/demo`)
   const nft = await web3.alchemy.getNfts({ owner })
   if (!contractAddress) {
@@ -19,11 +18,10 @@ export const listAllNonFunginleTokensOnAddress = async (
     ({ contract }) => contract.address.toUpperCase() === contractAddress.toUpperCase(),
   )
 }
-
 export const listUserNonFungibleTokenInfo = async (userAddress: string, chainId: number) => {
   const marketPlaceContract = new ConcaveNFTMarketplace(chainId)
   const stakingV1Contract = new StakingV1Contract(chainId)
-  const usersNft = await listAllNonFunginleTokensOnAddress(
+  const usersNft = await listAllNonFungibleTokensOnAddress(
     userAddress,
     chainId,
     StakingV1ProxyAddress[chainId],

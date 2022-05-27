@@ -1,9 +1,10 @@
 import { CNV, Currency, DAI, NATIVE, WETH9 } from '@concave/core'
-import { CnvQuestionIcon } from '@concave/icons'
+import { QuestionIcon } from '@concave/icons'
 import { Button, Flex, Heading, Modal } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import React from 'react'
+import { developmentChains } from 'wagmi'
 import { CurrencySelector } from './CurrencySelector'
 import { SearchableTokenList } from './SearchableTokenList'
 
@@ -19,7 +20,7 @@ const CommonTokens = ({
   return (
     <>
       <Heading size="sm">
-        Common pairs <CnvQuestionIcon w="22px" h="22px" ml={2} />
+        Common pairs <QuestionIcon w="22px" h="22px" ml={2} />
       </Heading>
       <Flex gap={2} wrap="wrap">
         {currencies.map((currency) => (
@@ -31,7 +32,7 @@ const CommonTokens = ({
             aria-selected={!!selected?.equals(currency)}
             variant="select"
           >
-            {currency.chainId === 3 ? 't' : ''}
+            {!!developmentChains.findIndex((c) => c.id === currency.chainId) ? 't' : ''}
             {currency.symbol}
           </Button>
         ))}

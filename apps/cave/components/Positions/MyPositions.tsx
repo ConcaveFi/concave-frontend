@@ -18,39 +18,20 @@ import { ConnectWallet } from 'components/ConnectWallet'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { Loading } from 'components/Loading'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
-import { useAddressTokenList } from 'hooks/useTokenList'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
-import React, { useState } from 'react'
+import React from 'react'
 import { useQuery } from 'react-query'
-import { useAccount, useNetwork } from 'wagmi'
+import { PositionsState } from './usePositionsState'
 
-export const MyPositions = () => {
-  const [view, setView] = useState<'user' | 'all'>('all')
-  const [{ data: network }] = useNetwork()
-  const chainId = network?.chain?.id ?? 1
-  const provider = concaveProvider(chainId)
-  const allPairs = useQuery(['fetchPairs', chainId], () => {
-    return Fetcher.fetchPairs(chainId, provider)
-  })
-  const [{ data: account }] = useAccount()
-  const { data: tokens, isLoading: userPoolsLoading } = useAddressTokenList(account?.address)
-
-  if (userPoolsLoading) {
-    return <Loading size="lg" label="Loading user pools" />
+export const MyPositions = ({ state }: { state: PositionsState }) => {
+  const { loading, error, setView, view, account, pairs } = state
+  if (loading) {
+    return <Loading size="lg" label={loading} />
   }
-  if (allPairs.isLoading) {
-    return <Loading size="lg" label="Loading pools" />
+  if (error) {
+    return <Text>error</Text>
   }
-  if (allPairs.error) {
-    return <p>Error to get Pairs</p>
-  }
-
-  const userPairs = allPairs.data.filter((p) => {
-    return tokens.find((t) => p.liquidityToken.address === t.address)
-  })
-
-  const pairs = view === 'user' ? userPairs : allPairs.data
-
   return (
     <Card
       gap={4}
@@ -132,95 +113,112 @@ const PairsAccordion = ({ userAddress, pairs }: PairsAccordionProps) => {
         overflowY={'auto'}
       >
         <Accordion as={Stack} allowToggle gap={2}>
-          {pairs.map((pair) => {
-            return (
-              <LPPositionItem
-                key={pair.liquidityToken.address}
-                pair={pair}
-                userAddress={userAddress}
-              />
-            )
-          })}
+          {pairs.map((pair) => (
+            <AccordionItem
+              key={pair.liquidityToken.address}
+              p={2}
+              shadow="Up Big"
+              borderRadius="2xl"
+              alignItems="center"
+            >
+              {({ isExpanded }) => <LPPositionItem isExpanded={isExpanded} pair={pair} />}
+            </AccordionItem>
+          ))}
         </Accordion>
       </Box>
     </Box>
   )
 }
 
-interface LPPosition {
-  userAddress: string
-  pair: Pair
-}
-const LPPositionItem = ({ userAddress, pair }: LPPosition) => {
-  const userBalance = useCurrencyBalance(pair.liquidityToken)
-  if (userBalance.isLoading) {
+export const LiquidityPoolPainel = (props: LPPosition) => {
+  const chainId = useCurrentSupportedNetworkId()
+  const userBalance = useCurrencyBalance(props.pair.liquidityToken)
+  const pairData = useQuery(
+    [
+      'fetchPairData',
+      props.pair.liquidityToken.address,
+      chainId,
+      props.isExpanded,
+      userBalance.data?.toExact(),
+    ],
+    () => Fetcher.fetchPairFromAddress(props.pair.liquidityToken.address, concaveProvider(chainId)),
+    { enabled: props.isExpanded },
+  )
+
+  const pair = pairData.data
+  if (userBalance.isLoading || pairData.isLoading || !userBalance.data) {
     return (
-      <AccordionItem p={2} shadow="Up Big" borderRadius="2xl" alignItems="center">
-        <AccordionButton disabled={true}>
-          <Loading size="sm" rLabel="Loading pair info" />
-        </AccordionButton>
-        <AccordionPanel></AccordionPanel>
-      </AccordionItem>
+      <AccordionPanel>
+        <Loading size="sm" />
+      </AccordionPanel>
     )
   }
-  if (userBalance.error) {
-    return <Text>{`${userBalance.error}`}</Text>
-  }
+  if (userBalance.error || pairData.error)
+    return <Text>{`${userBalance.error || pairData.error}`}</Text>
+
+  if (!pair) return <AccordionPanel />
   const balance = userBalance.data || CurrencyAmount.fromRawAmount(pair.liquidityToken, '0')
   const userPoolShare = +userBalance.data?.toExact() / +pair.liquidityToken.totalSupply.toExact()
+
+  return (
+    <AccordionPanel>
+      <Stack
+        fontWeight="bold"
+        fontSize="lg"
+        color="text.medium"
+        borderRadius="2xl"
+        shadow="down"
+        p={4}
+        spacing={4}
+      >
+        {balance.greaterThan(0) && (
+          <PositionInfoItem label="Your total pool tokens:" value={balance.toSignificant()} />
+        )}
+        <PositionInfoItem
+          label={`Pooled ${pair.token0.symbol}:`}
+          value={pair.reserve0.toSignificant(6, { groupSeparator: ',' })}
+        >
+          <CurrencyIcon h={'32px'} size="sm" currency={pair.token0} />
+        </PositionInfoItem>
+        <PositionInfoItem
+          label={`Pooled ${pair.token1.symbol}:`}
+          value={pair.reserve1.toSignificant(6, { groupSeparator: ',' })}
+        >
+          <CurrencyIcon h={'32px'} size="sm" currency={pair.token1} />
+        </PositionInfoItem>
+
+        {balance.greaterThan(0) && (
+          <PositionInfoItem
+            label="Your pool share:"
+            value={`${(userPoolShare * 100).toFixed(2)}%`}
+          />
+        )}
+      </Stack>
+      <Flex gap={5} justify="center" mt={6}>
+        <AddLiquidityModalButton pair={pair} />
+        <RemoveLiquidityModalButton liquidityInfo={{ pair, userPoolShare, userBalance: balance }} />
+      </Flex>
+    </AccordionPanel>
+  )
+}
+
+interface LPPosition {
+  isExpanded?: boolean
+  pair: Pair
+}
+const LPPositionItem = (props: LPPosition) => {
   return (
     <>
-      <AccordionItem p={2} shadow="Up Big" borderRadius="2xl" alignItems="center">
-        <AccordionButton>
-          <HStack>
-            <CurrencyIcon size={'sm'} currency={pair.token0} />
-            <CurrencyIcon size={'sm'} currency={pair.token1} />
-            <Text ml="24px" fontWeight="semibold" fontSize="lg">
-              {pair.token0.symbol}/{pair.token1.symbol}
-            </Text>
-          </HStack>
-        </AccordionButton>
-        <AccordionPanel>
-          <Stack
-            fontWeight="bold"
-            fontSize="lg"
-            color="text.medium"
-            borderRadius="2xl"
-            shadow="down"
-            p={4}
-            spacing={4}
-          >
-            {balance.greaterThan(0) && (
-              <PositionInfoItem label="Your total pool tokens:" value={balance.toSignificant()} />
-            )}
-            <PositionInfoItem
-              label={`Pooled ${pair.token0.symbol}:`}
-              value={pair.reserve0.toSignificant(6, { groupSeparator: ',' })}
-            >
-              <CurrencyIcon h={'32px'} size="sm" currency={pair.token0} />
-            </PositionInfoItem>
-            <PositionInfoItem
-              label={`Pooled ${pair.token1.symbol}:`}
-              value={pair.reserve1.toSignificant(6, { groupSeparator: ',' })}
-            >
-              <CurrencyIcon h={'32px'} size="sm" currency={pair.token1} />
-            </PositionInfoItem>
-
-            {balance.greaterThan(0) && (
-              <PositionInfoItem
-                label="Your pool share:"
-                value={`${(userPoolShare * 100).toFixed(2)}%`}
-              />
-            )}
-          </Stack>
-          <Flex gap={5} justify="center" mt={6}>
-            <AddLiquidityModalButton pair={pair} />
-            <RemoveLiquidityModalButton
-              liquidityInfo={{ pair, userPoolShare, userBalance: balance }}
-            />
-          </Flex>
-        </AccordionPanel>
-      </AccordionItem>
+      <AccordionButton>
+        <HStack>
+          <CurrencyIcon size={'sm'} currency={props.pair.token0} />
+          <CurrencyIcon size={'sm'} currency={props.pair.token1} />
+          <Text ml="24px" fontWeight="semibold" fontSize="lg">
+            {props.pair.token0.symbol}/{props.pair.token1.symbol}
+          </Text>
+        </HStack>
+      </AccordionButton>
+      <LiquidityPoolPainel {...props} />
     </>
   )
 }

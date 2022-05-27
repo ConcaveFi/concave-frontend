@@ -4,9 +4,7 @@ import { listUserNonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/Fet
 import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungibleToken'
 import { useQuery } from 'react-query'
 import { useAccount } from 'wagmi'
-
 export type UseDashBoardState = ReturnType<typeof useDashBoardState>
-
 export const useDashBoardState = () => {
   const [{ data: account, error: accountError }] = useAccount()
   const netWorkId = useCurrentSupportedNetworkId()
@@ -16,7 +14,6 @@ export const useDashBoardState = () => {
     { enabled: !!account?.address && !!netWorkId },
   )
   const totalLocked = getTotalLocked(userNonFungibleTokensInfo)
-
   return {
     isLoading,
     totalLocked,
@@ -25,7 +22,6 @@ export const useDashBoardState = () => {
     netWorkId,
   }
 }
-
 function getTotalLocked(nonFungibleTokens: NonFungibleTokenInfo[]) {
   return (nonFungibleTokens || []).reduce((amount, current) => {
     return amount.add(current.shares)

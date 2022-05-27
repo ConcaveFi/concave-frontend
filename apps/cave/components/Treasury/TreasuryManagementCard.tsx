@@ -98,16 +98,16 @@ export const TokenInfo = (props: TokenInfoProps) => {
   )
 }
 const FarmingViewer = ({ convexToken, ...props }) => {
-  const image = convexToken.image.replace('github', 'raw.githubusercontent').replace('blob/', '')
-  const imgP1 = convexToken.imageP1.replace('github', 'raw.githubusercontent').replace('blob/', '')
-  const imgP2 = convexToken.imageP2.replace('github', 'raw.githubusercontent').replace('blob/', '')
-  const imgP3 = convexToken.imageP3.replace('github', 'raw.githubusercontent').replace('blob/', '')
+  const image = convexToken?.image.replace('github', 'raw.githubusercontent').replace('blob/', '')
+  const imgP1 = convexToken?.imageP1.replace('github', 'raw.githubusercontent').replace('blob/', '')
+  const imgP2 = convexToken?.imageP2.replace('github', 'raw.githubusercontent').replace('blob/', '')
+  const imgP3 = convexToken?.imageP3.replace('github', 'raw.githubusercontent').replace('blob/', '')
 
   return (
-    <GlassPanel width={'477px'} height="187px" rounded={'2xl'} justify="center" align={'center'}>
+    <Flex width={'477px'} height="187px" rounded={'2xl'} justify="center" align={'center'}>
       <Flex textShadow={'0px 0px 27px rgba(129, 179, 255, 0.31)'}>
         <GlassPanel
-          minWidth={'244px'}
+          minWidth={'344px'}
           height="161px"
           rounded={'2xl'}
           align={'center'}
@@ -150,16 +150,17 @@ const FarmingViewer = ({ convexToken, ...props }) => {
             </Flex>
           </Flex>
         </GlassPanel>
-        <Flex direction={'column'} width={'160px'} justify={'center'} align="start" ml={10}>
+        {/* <Flex direction={'column'} width={'160px'} justify={'center'} align="start" ml={10}>
           <Text fontWeight={'700'} fontSize="24px">
             Rewards:
           </Text>
           <Text fontWeight={'700'} fontSize="22" textColor={'text.low'}>
             {'$' + commify(convexToken?.rewards.toFixed())}
+            Comming Soon.
           </Text>
-        </Flex>
+        </Flex> */}
       </Flex>
-    </GlassPanel>
+    </Flex>
   )
 }
 
@@ -186,7 +187,7 @@ export const GlassPanel: React.FC<FlexProps> = ({ ...props }) => {
       boxShadow={'up'}
       rounded="2xl"
       {...props}
-      bg={'linear-gradient(90deg, #72639B 0%, #44B9DE 100%)'}
+      bg={'stroke.primary'}
       justify="center"
       align={''}
       direction="row"

@@ -38,5 +38,8 @@ export const withPageTransition = (Page) => {
     </motion.main>
   )
 
+  PageTransition.Meta = Page.Meta
+  PageTransition.Layout = Page.Layout
+
   return PageTransition
 }

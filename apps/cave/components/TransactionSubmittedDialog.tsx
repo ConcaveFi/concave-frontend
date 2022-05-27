@@ -10,7 +10,7 @@ export const getTxExplorer = (tx: Transaction, chain: { id: number }) => {
   const { hash, chainId } = tx
   const explorer = {
     [ChainId.ETHEREUM]: `https://etherscan.io/tx/${hash}`,
-    [ChainId.ROPSTEN]: `https://ropsten.etherscan.io/tx/${hash}`,
+    [ChainId.RINKEBY]: `https://RINKEBY.etherscan.io/tx/${hash}`,
   }
   return explorer[chainId || chain?.id]
 }
@@ -40,7 +40,7 @@ const TxSubmitted = ({ title, tx, onClose, tokenSymbol, addTokenToWallet }: TxSu
       <Text align="center" fontSize="md" fontWeight="bold">
         {title || `Transaction Submitted`} <br />
         <Link href={getTxExplorer(tx, chain)} fontSize="sm" color="text.accent" isExternal>
-          View on Explorer
+          View on explorer
         </Link>
       </Text>
 
@@ -57,7 +57,7 @@ const TxSubmitted = ({ title, tx, onClose, tokenSymbol, addTokenToWallet }: TxSu
             size="large"
             mt={4}
           >
-            Add {tokenSymbol} to Wallet
+            Add {tokenSymbol} to wallet
           </Button>
         </Flex>
       )}
@@ -100,7 +100,7 @@ export const TransactionSubmittedDialog = ({
 
   const { loading: loadingtoWallet, addingToWallet }: injectedTokenResponse = useAddTokenToWallet({
     tokenAddress: tokenOutAddress,
-    tokenChainId: 3,
+    tokenChainId: 4,
     tokenImage:
       'https://raw.githubusercontent.com/ConcaveFi/assets/master/blockchains/ethereum/assets/0x000000007a58f5f58E697e51Ab0357BC9e260A04/logo.png',
   })

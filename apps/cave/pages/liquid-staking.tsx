@@ -56,6 +56,7 @@ function LiquidStaking() {
       justify={'start'}
       align="center"
       direction={'column'}
+      p="0px"
     >
       <Heading as="h1" mt={8} fontSize={{ base: '4xl', sm: '5xl' }}>
         Liquid Staking
@@ -68,22 +69,30 @@ function LiquidStaking() {
         gap={{ xl: 24, base: 2 }}
         textColor="white"
       >
-        <Text textAlign={{ xl: 'justify', base: 'center' }} fontSize={{ base: 'sm', sm: 'md' }}>
-          Stakers receive daily rewards to grow their <br /> CNV holdings and quarterly dividends
+        <Text
+          maxW={520}
+          textAlign={{ xl: 'justify', base: 'center' }}
+          fontSize={{ base: 'sm', sm: 'md' }}
+        >
+          Stakers are incentivized with daily rewards and <br /> quarterly dividends to grow their
+          CNV holdings
           <br />
-          from Concave profits. Staking positions <br /> are represented by NFTs that are tradable
+          with profit from the protocol. Staked positions
+          <br />
+          are represented by NFTs that are tradable
           <br />
           in Concave&apos;s native Marketplace.
         </Text>
         <GraphicGuide />
       </Flex>
       <Flex
+        alignItems="start"
         justifyContent="center"
-        maxW={{ base: '330px', md: '420px', xl: 'full' }}
-        // height={{ xl: '550px', base: '1100px' }}
+        maxW={{ base: '330px', md: '420px', lg: '450px', xl: 'full' }}
+        height={{ xl: '550px', base: '1100px' }}
       >
         <Flex
-          gap={{ xl: 8, base: 1, md: 3 }}
+          gap={{ xl: 8, lg: 8, base: 1, md: 3 }}
           justifyContent="center"
           alignItems="center"
           wrap={{ xl: 'nowrap', base: 'wrap' }}
@@ -107,7 +116,7 @@ function LiquidStaking() {
 }
 
 LiquidStaking.Meta = {
-  title: 'Concave | Liquid Staking',
+  title: `Concave | Liquid Staking`,
   description: `With Liquid Staking, positions receive boosted rewards based on term length. Investors in the longest-term positions will receive the highest returns.`,
 }
 
