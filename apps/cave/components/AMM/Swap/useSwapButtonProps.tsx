@@ -57,6 +57,15 @@ export const useSwapButtonProps = ({
       isDisabled: true,
     }
 
+  /* 
+    SOON Wrap / Unwrap
+  */
+  const currencyOut = outputAmount?.currency
+  if (currencyIn.isNative && currencyIn.wrapped.equals(currencyOut))
+    return { children: 'Wrap (soon)', isDisabled: true }
+  if (currencyOut?.isNative && currencyIn.equals(currencyOut.wrapped))
+    return { children: 'Unwrap (soon)', isDisabled: true }
+
   /*
     Trade loaded
   */
@@ -112,14 +121,14 @@ export const useSwapButtonProps = ({
 
   if (recipient && !isAddress(recipient)) return { children: 'Invalid recipient', isDisabled: true }
 
-  /* 
-    Wrap / Unwrap, ETH <-> WETH
-  */
-  const currencyOut = outputAmount?.currency
-  if (currencyIn.isNative && currencyIn.wrapped.equals(currencyOut))
-    return { children: 'Wrap', onClick: onSwapClick }
-  if (currencyOut?.isNative && currencyIn.equals(currencyOut.wrapped))
-    return { children: 'Unwrap', onClick: onSwapClick }
+  // /*
+  //   Wrap / Unwrap, ETH <-> WETH
+  // */
+  // const currencyOut = outputAmount?.currency
+  // if (currencyIn.isNative && currencyIn.wrapped.equals(currencyOut))
+  //   return { children: 'Wrap', isDisabled: true }
+  // if (currencyOut?.isNative && currencyIn.equals(currencyOut.wrapped))
+  //   return { children: 'Unwrap', isDisabled: true }
 
   /*
     Swap
