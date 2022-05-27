@@ -6,7 +6,7 @@ import { BigNumber } from 'ethers'
 import { formatEther } from 'ethers/lib/utils'
 import { useGet_Stakingv1_Last100_LockQuery } from 'graphql/generated/graphql'
 import { useEffect, useState } from 'react'
-import { truncateNumber } from 'utils/dist/truncateNumber'
+import { truncateNumber } from 'utils/truncateNumber'
 import { PARAMETER_TO_POOL_PERIOD, PERIOD_TO_POOL_PARAMETER } from './StakeCard'
 
 const LiquidLocksCards = () => {
