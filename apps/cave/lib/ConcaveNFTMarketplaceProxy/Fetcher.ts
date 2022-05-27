@@ -9,9 +9,7 @@ export const listAllNonFungibleTokensOnAddress = async (
   contractAddress?: string,
 ) => {
   const network = chainId === 1 ? 'mainnet' : 'rinkeby'
-  const web3 = createAlchemyWeb3(
-    `https://eth-${network}.alchemyapi.io/v2/fFoEI_NGlTMuaaWTWUa7m9IS-zOCkmH0`,
-  )
+  const web3 = createAlchemyWeb3(`https://eth-${network}.alchemyapi.io/v2/demo`)
   const nft = await web3.alchemy.getNfts({ owner })
   if (!contractAddress) {
     return nft.ownedNfts
