@@ -218,8 +218,8 @@ export function BondBuyCard(props: {
       />
       <WaitingConfirmationDialog isOpen={hasClickedConfirm} title={'Confirm Bond'}>
         <Text fontSize="lg" color="text.accent">
-          Bonding {truncateNumber(+amountIn.numerator.toString())} {currencyIn.symbol} for{' '}
-          {truncateNumber(+amountOut)}CNV.
+          Bonding {truncateNumber(+amountIn.numerator.toString(), 4)} {currencyIn.symbol} for{' '}
+          {truncateNumber(+amountOut, 4)}CNV.
         </Text>
       </WaitingConfirmationDialog>
       <TransactionSubmittedDialog
