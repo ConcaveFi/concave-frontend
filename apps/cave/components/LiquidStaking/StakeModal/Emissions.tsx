@@ -96,6 +96,9 @@ function Emissions(props: any) {
           <Text color="text.low" fontSize="sm">
             {props.vaprText}
           </Text>
+          <Text mx={margin} fontSize="md" fontWeight="bold">
+            {props.vapr}
+          </Text>
           <Text fontSize="lg" fontWeight="bold" mb="2"></Text>
           <Image
             mx="auto"

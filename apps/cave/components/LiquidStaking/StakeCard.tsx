@@ -141,6 +141,16 @@ function StakeCard(props: StackCardProps) {
     error: errorVAPR,
   } = useGet_Bonds_VaprQuery()
   const bondVaprPool = `bondVaprPool${props.poolId}`
+  let currentVAPR
+  if (isLoadingVAPR) {
+    currentVAPR = 'Calculating...'
+  } else if (isSuccessVAPR) {
+    currentVAPR = `${dataVAPR?.rebaseStakingV1[0][bondVaprPool].toFixed(2)}%`
+  } else if (isErrorVAPR) {
+    currentVAPR = 'Error Calculating vAPR'
+  }
+
+  // console.log(currentVAPR)
 
   return (
     <div>
@@ -175,13 +185,7 @@ function StakeCard(props: StackCardProps) {
             {vaprText}
           </Text>
           <Text fontSize={{ base: 'md', md: 'lg' }} fontWeight="bold">
-            {isLoadingVAPR
-              ? 'Calculating...'
-              : isSuccessVAPR
-              ? `${dataVAPR?.rebaseStakingV1[0][bondVaprPool].toFixed(2)}%`
-              : isErrorVAPR
-              ? 'Error Calculating vAPR'
-              : ''}
+            {currentVAPR}
           </Text>
         </Box>
 
@@ -275,7 +279,7 @@ function StakeCard(props: StackCardProps) {
               period={props.period}
               vaprText={vaprText}
               icon={props.icon}
-              vapr={data?.logStakingV1_PoolRewarded[0]?.base_vAPR}
+              vapr={currentVAPR}
               setShowFloatingCards={setShowFloatingCards}
               // vapr={props.vAPR}
             />
