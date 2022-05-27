@@ -32,6 +32,7 @@ export default function RedeemMobileCard() {
   const { bbtCNVData, aCNVData, pCNVData } = useVestedTokens({ chainId: netWorkId })
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [description, setDescription] = useState("This feature it's not done yet.")
+  const [title, setTitle] = useState('Coming soon')
 
   const [walletName, setWalletName] = useState('')
   const [{ data }] = useConnect()
@@ -81,8 +82,22 @@ export default function RedeemMobileCard() {
               })
           }}
         />
-        <RedeemButton onClick={onOpen} title="pCNV" />
-        <RedeemButton onClick={onOpen} title="bbtCNV" />
+        <RedeemButton
+          onClick={() => {
+            onOpen()
+            setTitle('pCNV Loading')
+            setDescription("We're busy mining the pCNV token, come back later.")
+          }}
+          title="pCNV"
+        />
+        <RedeemButton
+          onClick={() => {
+            onOpen()
+            setTitle('bbtCNV Loading')
+            setDescription('bbtCNV is on its way up and out of the mines, are you ready anon?')
+          }}
+          title="bbtCNV"
+        />
       </Flex>
       <Text
         fontWeight={'bold'}
@@ -100,7 +115,7 @@ export default function RedeemMobileCard() {
         isOpen={isErrorOpen}
         closeParentComponent={onCloseError}
       />
-      <ComingSoonDialog desc={description} isOpen={isOpen} onClose={onClose} />
+      <ComingSoonDialog title={title} desc={description} isOpen={isOpen} onClose={onClose} />
     </GlassPanel>
   )
 }

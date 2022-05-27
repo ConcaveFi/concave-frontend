@@ -14,6 +14,7 @@ import { concaveProvider as provider } from 'lib/providers'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
+import { title } from 'process'
 // aCNV address
 // 0x2a6bb78490c2221e0d36d931192296be4b3a01f1 RINKEBY
 // 0x6ff0106d34feee8a8acf2e7b9168480f86b82e2f eth
@@ -28,6 +29,7 @@ function TreasuryRedeemCard() {
   const { bbtCNVData, aCNVData, pCNVData } = useVestedTokens({ chainId: netWorkId })
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [description, setDescription] = useState("This feature it's not done yet.")
+  const [title, setTitle] = useState('Coming soon')
 
   const [walletName, setWalletName] = useState('')
   const [{ data }] = useConnect()
@@ -124,7 +126,11 @@ function TreasuryRedeemCard() {
           >
             <Button>
               <Text
-                onClick={onOpen}
+                onClick={() => {
+                  onOpen()
+                  setTitle('pCNV Loading')
+                  setDescription("We're busy mining the pCNV token, come back later.")
+                }}
                 fontSize={{ base: '13px', xl: '18px' }}
                 fontWeight="700"
                 my={'auto'}
@@ -140,7 +146,13 @@ function TreasuryRedeemCard() {
             mx={'auto'}
             justify={'center'}
           >
-            <Button onClick={onOpen}>
+            <Button
+              onClick={() => {
+                onOpen()
+                setTitle('bbtCNV Loading')
+                setDescription('bbtCNV is on its way up and out of the mines, are you ready anon?')
+              }}
+            >
               <Text fontSize={{ base: '13px', xl: '18px' }} fontWeight="700" my={'auto'}>
                 bbtCNV
               </Text>
@@ -169,7 +181,7 @@ function TreasuryRedeemCard() {
         isOpen={isErrorOpen}
         closeParentComponent={onCloseError}
       />
-      <ComingSoonDialog desc={description} isOpen={isOpen} onClose={onClose} />
+      <ComingSoonDialog title={title} desc={description} isOpen={isOpen} onClose={onClose} />
     </>
   )
 }
@@ -182,6 +194,7 @@ export const ComingSoonDialog = ({
   onClose,
 }: {
   isOpen: boolean
+  title: string
   desc: string
   onClose: () => void
 }) => {
@@ -196,8 +209,8 @@ export const ComingSoonDialog = ({
       isOpen={isOpen}
     >
       <Flex width={'220px'} height="140px" direction={'column'} px="3">
-        <Text fontSize={'2xl'} fontWeight="bold" mx={'auto'} mt="4">
-          Coming soon!
+        <Text fontSize={'2xl'} fontWeight="bold" mx={'auto'} mt="2">
+          {title}
         </Text>
         <Flex width={'full'} height="full" textAlign="center" wordBreak={'break-word'}>
           <Text textColor={'text.low'} fontWeight="bold" fontSize={'lg'}>
