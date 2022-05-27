@@ -25,7 +25,7 @@ export function PositionsView() {
 
   return (
     <View title="My Liquidity Position">
-      <MyPositions />
+      {/* <MyPositions /> */}
     </View>
   )
 }
