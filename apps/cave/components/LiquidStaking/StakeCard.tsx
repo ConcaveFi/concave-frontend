@@ -13,7 +13,7 @@ import {
   VStack,
 } from '@concave/ui'
 import { ethers } from 'ethers'
-import { useGet_Last_Poolid_VaprQuery } from 'graphql/generated/graphql'
+import { useGet_Bonds_VaprQuery, useGet_Last_Poolid_VaprQuery } from 'graphql/generated/graphql'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { StakingV1Contract } from 'lib/StakingV1Proxy/StakingV1Contract'
 import { useState } from 'react'
@@ -29,6 +29,7 @@ export const PERIOD_TO_POOL_PARAMETER = {
   '90 days': 2,
   '45 days': 3,
 }
+
 export const PARAMETER_TO_POOL_PERIOD = {
   0: '360 days',
   1: '180 days',
@@ -133,6 +134,25 @@ function StakeCard(props: StackCardProps) {
   const [{ data: account }] = useAccount()
   const userAddress = account?.address
 
+  const {
+    data: dataVAPR,
+    isSuccess: isSuccessVAPR,
+    isLoading: isLoadingVAPR,
+    isError: isErrorVAPR,
+    error: errorVAPR,
+  } = useGet_Bonds_VaprQuery()
+  const bondVaprPool = `bondVaprPool${props.poolId}`
+  let currentVAPR
+  if (isLoadingVAPR) {
+    currentVAPR = 'Calculating...'
+  } else if (isSuccessVAPR) {
+    currentVAPR = `${dataVAPR?.rebaseStakingV1[0][bondVaprPool].toFixed(2)}%`
+  } else if (isErrorVAPR) {
+    currentVAPR = 'Error Calculating vAPR'
+  }
+
+  // console.log(currentVAPR)
+
   const mobileUI = useBreakpointValue({ base: true, xl: false })
 
   return (
@@ -168,7 +188,7 @@ function StakeCard(props: StackCardProps) {
             {vaprText}
           </Text>
           <Text fontSize={{ base: 'md', md: 'lg' }} fontWeight="bold">
-            Calculating
+            {currentVAPR}
           </Text>
         </Box>
 
@@ -265,7 +285,7 @@ function StakeCard(props: StackCardProps) {
               period={props.period}
               vaprText={vaprText}
               icon={props.icon}
-              vapr={data?.logStakingV1_PoolRewarded[0]?.base_vAPR}
+              vapr={currentVAPR}
               setShowFloatingCards={setShowFloatingCards}
               // vapr={props.vAPR}
             />
