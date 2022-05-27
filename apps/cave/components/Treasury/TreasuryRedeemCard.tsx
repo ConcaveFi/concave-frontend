@@ -65,101 +65,112 @@ function TreasuryRedeemCard() {
         height={{ base: '240px', xl: '331px' }}
         backdropBlur={'2px'}
         rounded="2xl"
-        direction={'column'}
+        direction={{ base: 'column', lg: 'column' }}
       >
-        <Flex justify={'center'} align="center" flex={1} maxHeight="60px" mt={2}>
-          <Text fontSize={'25px'} fontWeight="700">
-            Redeem CNV
-          </Text>
-        </Flex>
-        <Flex mx={6} textAlign="center" justify={'center'}>
-          <Text fontSize={{ base: '20px', xl: '16px' }} textColor="text.low" fontWeight={'700'}>
-            Redeem your tokens for CNV below
-          </Text>
-        </Flex>
-        <Flex mt={5} direction={{ base: 'row', xl: 'column' }} gap={{ base: 0, xl: 3 }}>
-          <GlassPanel
-            width={{ base: '150px', xl: '182px' }}
-            height={'40px'}
-            rounded="2xl"
-            mx={'auto'}
-            justify={'center'}
-          >
-            <Button onClick={onOpenRedeemACNV}>
-              <Text fontSize={{ base: '13px', xl: '18px' }} fontWeight="700" my={'auto'}>
-                aCNV
-              </Text>
-            </Button>
-            <RedeemVestedTokenDialog
-              balance={aCNVData.formatted}
-              isOpen={onRedeemACNV}
-              onClose={onCloseRedeemACNV}
-              tokenSymbol="aCNV"
-              onClick={() => {
-                onOpenConfirm()
-                new Contract(
-                  '0x38baBedCb1f226B49b2089DA0b84e52b6181Ca59',
-                  aCNVredeemabi,
-                  provider(1),
-                )
-                  .connect(signer)
-                  .redeem(account?.address)
-                  .then((tx) => {
-                    setTx(tx)
-                    onOpenSub()
-                    onCloseConfirm()
-                  })
-                  .catch((e) => {
-                    onCloseConfirm()
-                    setError('Transaction reject.')
-                    onOpenError()
-                  })
-              }}
-            />
-          </GlassPanel>
-          <GlassPanel
-            width={{ base: '150px', xl: '182px' }}
-            height={'40px'}
-            rounded="2xl"
-            mx={'auto'}
-            justify={'center'}
-          >
-            <Button>
+        <Flex mx={'auto'} direction={{ base: 'row', xl: 'column' }}>
+          <Flex justify={'center'} direction={{ base: 'column', lg: 'column' }} maxW="240px">
+            <Flex justify={'center'} align="center" flex={1} maxHeight="60px" mt={2}>
               <Text
+                mx={6}
+                width="full"
+                textAlign={{ base: 'start', xl: 'center' }}
+                fontSize={'25px'}
+                fontWeight="700"
+              >
+                Redeem CNV
+              </Text>
+            </Flex>
+            <Flex mx={6} textAlign={{ base: 'start', xl: 'center' }} justify={'center'}>
+              <Text fontSize={{ base: '20px', xl: '16px' }} textColor="text.low" fontWeight={'700'}>
+                Redeem your tokens for CNV below
+              </Text>
+            </Flex>
+          </Flex>
+          <Flex mt={5} direction={{ base: 'column', xl: 'column' }} gap={{ base: 3 }}>
+            <GlassPanel
+              width={{ base: '160px', xl: '182px' }}
+              height={'40px'}
+              rounded="2xl"
+              mx={'auto'}
+              justify={'center'}
+            >
+              <Button onClick={onOpenRedeemACNV}>
+                <Text fontSize={'20px'} fontWeight="700" my={'auto'}>
+                  aCNV
+                </Text>
+              </Button>
+              <RedeemVestedTokenDialog
+                balance={aCNVData?.formatted}
+                isOpen={onRedeemACNV}
+                onClose={onCloseRedeemACNV}
+                tokenSymbol="aCNV"
+                onClick={() => {
+                  onOpenConfirm()
+                  new Contract(
+                    '0x38baBedCb1f226B49b2089DA0b84e52b6181Ca59',
+                    aCNVredeemabi,
+                    provider(1),
+                  )
+                    .connect(signer)
+                    .redeem(account?.address)
+                    .then((tx) => {
+                      setTx(tx)
+                      onOpenSub()
+                      onCloseConfirm()
+                    })
+                    .catch((e) => {
+                      onCloseConfirm()
+                      setError('Transaction reject.')
+                      onOpenError()
+                    })
+                }}
+              />
+            </GlassPanel>
+            <GlassPanel
+              width={{ base: '160px', xl: '182px' }}
+              height={'40px'}
+              rounded="2xl"
+              mx={'auto'}
+              justify={'center'}
+            >
+              <Button>
+                <Text
+                  onClick={() => {
+                    onOpen()
+                    setTitle('pCNV Loading')
+                    setDescription("We're busy mining the pCNV token, come back later.")
+                  }}
+                  fontSize={'20px'}
+                  fontWeight="700"
+                  my={'auto'}
+                >
+                  pCNV
+                </Text>
+              </Button>
+            </GlassPanel>
+            <GlassPanel
+              width={{ base: '160px', xl: '182px' }}
+              height={'40px'}
+              rounded="2xl"
+              mx={'auto'}
+              justify={'center'}
+            >
+              <Button
                 onClick={() => {
                   onOpen()
-                  setTitle('pCNV Loading')
-                  setDescription("We're busy mining the pCNV token, come back later.")
+                  setTitle('bbtCNV Loading')
+                  setDescription(
+                    'bbtCNV is on its way up and out of the mines, are you ready anon?',
+                  )
                 }}
-                fontSize={{ base: '13px', xl: '18px' }}
-                fontWeight="700"
-                my={'auto'}
               >
-                pCNV
-              </Text>
-            </Button>
-          </GlassPanel>
-          <GlassPanel
-            width={{ base: '150px', xl: '182px' }}
-            height={'40px'}
-            rounded="2xl"
-            mx={'auto'}
-            justify={'center'}
-          >
-            <Button
-              onClick={() => {
-                onOpen()
-                setTitle('bbtCNV Loading')
-                setDescription('bbtCNV is on its way up and out of the mines, are you ready anon?')
-              }}
-            >
-              <Text fontSize={{ base: '13px', xl: '18px' }} fontWeight="700" my={'auto'}>
-                bbtCNV
-              </Text>
-            </Button>
-          </GlassPanel>
+                <Text fontSize={'20px'} fontWeight="700" my={'auto'}>
+                  bbtCNV
+                </Text>
+              </Button>
+            </GlassPanel>
+          </Flex>
         </Flex>
-
         <Text
           onClick={() => {
             addingToWallet()
@@ -191,6 +202,7 @@ export default TreasuryRedeemCard
 export const ComingSoonDialog = ({
   isOpen,
   desc,
+  title,
   onClose,
 }: {
   isOpen: boolean

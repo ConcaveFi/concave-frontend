@@ -18,9 +18,9 @@ interface RedeemVestedTokenDialog {
   connect?: any
 }
 
-// 0x98501987a763ccE92539CB4650969ddA16b33454
-
 export default function RedeemVestedTokenDialog(props: RedeemVestedTokenDialog) {
+  const balance = parseFloat(props.balance) || 0
+
   return (
     <>
       <Modal
@@ -29,7 +29,7 @@ export default function RedeemVestedTokenDialog(props: RedeemVestedTokenDialog) 
         motionPreset="slideInBottom"
         onClose={props.onClose}
         title={''}
-        isOpen={props.isOpen && parseFloat(props.balance) > 0}
+        isOpen={props.isOpen && balance > 0}
         hideClose
       >
         <Flex height={'200px'} width="260px" direction={'column'}>
@@ -72,7 +72,7 @@ export default function RedeemVestedTokenDialog(props: RedeemVestedTokenDialog) 
         preserveScrollBarGap
         onClose={props.onClose}
         title={'Error'}
-        isOpen={props.isOpen && parseFloat(props.balance) === 0}
+        isOpen={props.isOpen && balance === 0}
         hideClose
         isCentered
         motionPreset="slideInBottom"

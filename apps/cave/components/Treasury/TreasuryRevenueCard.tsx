@@ -159,7 +159,7 @@ export default function TreasuryRevenueCard(props) {
           />
           <TreasuryInfo
             box1="Treasury Revenue 24h"
-            box1b="Coming soon"
+            box1b="Coming Soon"
             box2="Treasury Value"
             box2b={'$' + truncateNumber(total*10**18)}
             box3="CNV total supply"

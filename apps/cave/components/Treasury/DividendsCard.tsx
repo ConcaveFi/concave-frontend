@@ -51,7 +51,7 @@ export default function DividendsCard() {
         my={'auto'}
         mx="auto"
       >
-        <Text fontSize={'2xl'}>4 July 2022</Text>
+        <Text fontSize={'2xl'}>Coming Soon</Text>
         <Text textColor={'text.low'} fontSize="14px">
           Next Distribution Date
         </Text>

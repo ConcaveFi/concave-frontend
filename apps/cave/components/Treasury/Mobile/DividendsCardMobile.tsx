@@ -35,7 +35,7 @@ export default function DividendsCardMobile() {
         direction="column"
       >
         <Text fontSize={'2xl'} fontWeight="bold">
-          4 july 2022
+          Coming Soon
         </Text>
         <Text fontSize={'16px'} fontWeight="bold" textColor="text.low">
           Next Distribution Date
