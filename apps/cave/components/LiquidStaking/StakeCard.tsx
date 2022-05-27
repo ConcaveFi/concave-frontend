@@ -12,6 +12,7 @@ import {
   VStack,
 } from '@concave/ui'
 import { BigNumber, ethers } from 'ethers'
+import { formatEther } from 'ethers/lib/utils'
 import { useGet_Last_Poolid_VaprQuery } from 'graphql/generated/graphql'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { StakingV1Contract } from 'lib/StakingV1Proxy/StakingV1Contract'
@@ -109,13 +110,12 @@ function StakeCard(props: StackCardProps) {
   const { status, data, error, isFetching } = useGet_Last_Poolid_VaprQuery({
     poolID: props.poolId,
   })
-  const [modalDirection, setModalDirection] = useState<'column' | 'row'>('row')
   const index = PERIOD_TO_POOL_PARAMETER[`${props.period}`]
   const { data: pools, error: poolsError, isLoading: isLoadingPools } = usePools(chainId, index)
   const { data: stakingCap, isLoading: isLoadingStakings } = useViewStakingCap(chainId, index)
   const capPercentage = useMemo(() => {
     if (!pools?.balance || !stakingCap || stakingCap.eq(0)) return '0'
-    return BigNumber.from(pools.balance).div(stakingCap).mul(100)
+    return BigNumber.from(pools.balance).div(stakingCap.add(pools.balance)).mul(100)
   }, [pools, stakingCap])
   const [showFloatingCards, setShowFloatingCards] = useState(false)
 
@@ -254,7 +254,10 @@ function StakeCard(props: StackCardProps) {
           titleAlign="center"
           size="2xl"
         >
-          <Flex direction={modalDirection}>
+          <Flex
+            direction={{ base: 'column', md: 'row' }}
+            maxW={{ base: '310px', sm: '340px', md: 'full' }}
+          >
             <Emissions
               period={props.period}
               vaprText={vaprText}
@@ -263,7 +266,7 @@ function StakeCard(props: StackCardProps) {
               setShowFloatingCards={setShowFloatingCards}
               // vapr={props.vAPR}
             />
-            <VStack mt={8} spacing={8}>
+            <VStack mt={{ base: 0, sm: 8 }} spacing={8}>
               <StakeInfo
                 period={props.period}
                 stakedCNV={
@@ -277,7 +280,12 @@ function StakeCard(props: StackCardProps) {
                       ).toFixed(0)}`
                     : '0'
                 }
-                capPercentage={capPercentage}
+                capPercentage={
+                  (+ethers.utils.formatEther(pools?.balance) /
+                    (+ethers.utils.formatEther(stakingCap) +
+                      +ethers.utils.formatEther(pools?.balance))) *
+                  100
+                }
               />
               <StakeInput period={props.period} poolId={props.poolId} onClose={onClose} />
             </VStack>
