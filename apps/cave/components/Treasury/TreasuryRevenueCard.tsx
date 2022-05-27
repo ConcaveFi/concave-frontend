@@ -156,7 +156,7 @@ export default function TreasuryRevenueCard(props) {
           />
           <TreasuryInfo
             box1="Treasury Revenue 24h"
-            box1b=""
+            box1b="Coming soon"
             box2="Treasury Value"
             box2b={'$' + commify(total.toFixed(2))}
             box3="CNV total supply"
