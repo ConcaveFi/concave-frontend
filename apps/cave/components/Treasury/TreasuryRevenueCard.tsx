@@ -129,9 +129,11 @@ export default function TreasuryRevenueCard(props) {
       )
     : ['loading', 'loading', 'loading']
 
-  const lastsAmounts = lastsSolds ? lastsSolds.map((value) => value.inputAmount) : ['0', '0', '0']
+  const lastsAmounts = lastsSolds
+    ? lastsSolds.map((value) => '$' + commify(value?.inputAmount))
+    : ['0', '0', '0']
   const lastsOutputamounts = lastsSolds
-    ? lastsSolds.map((value) => '+$' + commify(parseFloat(value.output).toFixed(2)))
+    ? lastsSolds.map((value) => '+$' + commify(parseFloat(value?.output).toFixed(2)))
     : ['0', '0', '0']
   return (
     <Card
@@ -154,7 +156,7 @@ export default function TreasuryRevenueCard(props) {
           />
           <TreasuryInfo
             box1="Treasury Revenue 24h"
-            box1b="+$20,253"
+            box1b=""
             box2="Treasury Value"
             box2b={'$' + commify(total.toFixed(2))}
             box3="CNV total supply"
