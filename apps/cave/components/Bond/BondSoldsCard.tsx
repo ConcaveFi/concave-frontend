@@ -9,7 +9,7 @@ import {
 } from 'graphql/generated/graphql'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useEffect, useState } from 'react'
-import { truncateNumber } from 'utils/dist/truncateNumber'
+import { truncateNumber } from 'utils/truncateNumber'
 interface BoldSoldsCardProps {
   data: Get_Accrualbondv1_Last10_SoldQuery
   error: any
@@ -45,10 +45,10 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
       key={index}
       opacity={1 - (isOpen ? index / 10 : (index / 10) * 3)}
     >
-      
       {
-              truncateNumber(+value.output*10**18)
-      /* {commify(parseFloat(value.output).toFixed()) + ' CNV'} */}
+        truncateNumber(+value.output * 10 ** 18)
+        /* {commify(parseFloat(value.output).toFixed()) + ' CNV'} */
+      }
     </Text>
   ))
   const inputAmounts = solds.map((value, index) => (
@@ -78,7 +78,7 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
         >
           <Flex flex={1.2} direction="column" align={'center'} fontSize="14px">
             <Text fontSize="16px" textColor={'white'} fontWeight="700">
-              When 
+              When
             </Text>
             {relatives}
           </Flex>
