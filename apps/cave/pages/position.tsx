@@ -34,7 +34,6 @@ const View = ({ title, children }) => {
     </Flex>
   )
 }
-// commit
 PositionsView.Meta = {
   title: '',
   description: ``,
