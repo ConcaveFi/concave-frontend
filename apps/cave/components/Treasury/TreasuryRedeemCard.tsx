@@ -89,7 +89,7 @@ function TreasuryRedeemCard() {
               </Text>
             </Button>
             <RedeemVestedTokenDialog
-              balance={'1'}
+              balance={aCNVData.formatted}
               isOpen={onRedeemACNV}
               onClose={onCloseRedeemACNV}
               tokenSymbol="aCNV"
@@ -196,7 +196,7 @@ export const ComingSoonDialog = ({
       isOpen={isOpen}
     >
       <Flex width={'220px'} height="140px" direction={'column'} px="3">
-        <Text fontSize={'2xl'} fontWeight="bold" mx={'auto'}>
+        <Text fontSize={'2xl'} fontWeight="bold" mx={'auto'} mt="4">
           Coming soon!
         </Text>
         <Flex width={'full'} height="full" textAlign="center" wordBreak={'break-word'}>

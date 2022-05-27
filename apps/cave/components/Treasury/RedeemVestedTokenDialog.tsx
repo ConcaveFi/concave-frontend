@@ -21,11 +21,6 @@ interface RedeemVestedTokenDialog {
 // 0x98501987a763ccE92539CB4650969ddA16b33454
 
 export default function RedeemVestedTokenDialog(props: RedeemVestedTokenDialog) {
-  const { isOpen: isConfirmOpen, onOpen: onOpenConfirm, onClose: onCloseConfirm } = useDisclosure()
-  const [tx, setTx] = useState(undefined)
-
-  const signer = useSigner()
-
   return (
     <>
       <Modal
