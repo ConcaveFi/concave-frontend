@@ -23,11 +23,7 @@ export function PositionsView() {
   //   )
   // }
 
-  return (
-    <View title="My Liquidity Position">
-      {/* <MyPositions /> */}
-    </View>
-  )
+  return <View title="My Liquidity Position">{/* <MyPositions /> */}</View>
 }
 
 const View = ({ title, children }) => {
