@@ -8,6 +8,7 @@ import {
   Spinner,
   Stack,
   Text,
+  useBreakpointValue,
   useDisclosure,
   VStack,
 } from '@concave/ui'
@@ -68,7 +69,12 @@ export const useViewStakingCap = (chainID: number | string, index: string) => {
 }
 
 const FloatingDescriptions: React.FC = () => (
-  <VStack position="absolute" top="10" left="-80" spacing={5}>
+  <VStack
+    position={{ base: 'relative', xl: 'absolute' }}
+    top="10"
+    left={{ base: '', xl: '-80' }}
+    spacing={{ base: 2, xl: 5 }}
+  >
     <Card variant="secondary" py="6" px="4" w={300}>
       <Text fontWeight="bold">Total vAPR</Text>
       <Text fontSize="sm">
@@ -126,6 +132,8 @@ function StakeCard(props: StackCardProps) {
 
   const [{ data: account }] = useAccount()
   const userAddress = account?.address
+
+  const mobileUI = useBreakpointValue({ base: true, xl: false })
 
   return (
     <div>
@@ -237,7 +245,7 @@ function StakeCard(props: StackCardProps) {
         <Modal
           bluryOverlay={true}
           childrenLeftNeighbor={<FloatingDescriptions />}
-          showchildrenLeftNeighbor={showFloatingCards}
+          showchildrenLeftNeighbor={showFloatingCards && !mobileUI}
           title="Stake CNV"
           isOpen={isOpen}
           onClose={onClose}
@@ -261,6 +269,20 @@ function StakeCard(props: StackCardProps) {
               setShowFloatingCards={setShowFloatingCards}
               // vapr={props.vAPR}
             />
+            <Modal
+              preserveScrollBarGap
+              isOpen={showFloatingCards && mobileUI}
+              title=""
+              onClose={() => setShowFloatingCards(false)}
+              motionPreset="slideInBottom"
+              hideClose
+              isCentered
+              bluryOverlay
+            >
+              <Flex maxHeight={'800px'} mt="-10" mb={10}>
+                <FloatingDescriptions />
+              </Flex>
+            </Modal>
             <VStack mt={{ base: 0, sm: 8 }} spacing={8}>
               <StakeInfo
                 period={props.period}

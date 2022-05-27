@@ -1,10 +1,18 @@
-import React, { useEffect, useState } from 'react'
-import { Box, Flex, HStack, Image, Text, Tooltip, useMediaQuery } from '@concave/ui'
+import { Box, Flex, Image, Text } from '@concave/ui'
 function Emissions(props: any) {
-  const Informations = (props) => {
+  const Informations = ({
+    onClick,
+    onClose,
+    display,
+  }: {
+    onClick: () => void
+    onClose: () => void
+    display: any
+  }) => {
     return (
       <Box
         // shadow="down"
+        display={display}
         borderTopRadius="xl"
         borderBottomRadius="full"
         w="80%"
@@ -13,7 +21,6 @@ function Emissions(props: any) {
         px={{ base: 0, md: 3 }}
         mx="auto"
         filter="drop-shadow(0px 0px 27px #81b3ff4f)"
-        {...props}
       >
         <Flex textAlign={'center'} direction={'column'} justify={'center'} align="center">
           <Text mx={{ base: '', sm: 'auto' }} color="text.low" fontSize="sm">
@@ -40,14 +47,14 @@ function Emissions(props: any) {
           <Text mx={{ base: '', sm: 'auto' }} fontSize="md" fontWeight="bold">
             Calculating
           </Text>
-          <Image
-            mt={4}
-            mx="auto"
-            src={`/assets/liquidstaking/modal-moreinfo-logo.svg`}
-            alt="arrow down logo"
-            onMouseOver={() => props.setShowFloatingCards(true)}
-            onMouseLeave={() => props.setShowFloatingCards(false)}
-          />
+          <Flex onClick={onClick} onMouseLeave={onClose}>
+            <Image
+              mt={4}
+              mx="auto"
+              src={`/assets/liquidstaking/modal-moreinfo-logo.svg`}
+              alt="arrow down logo"
+            />
+          </Flex>
         </Flex>
       </Box>
     )
@@ -98,7 +105,11 @@ function Emissions(props: any) {
             src={`/assets/liquidstaking/modal-arrow-logo.svg`}
             alt="arrow down logo"
           />
-          <Informations display={{ base: 'none', md: 'block' }} />
+          <Informations
+            onClick={() => props.setShowFloatingCards(true)}
+            onClose={() => props.setShowFloatingCards(false)}
+            display={{ base: 'none', md: 'block' }}
+          />
         </Flex>
 
         <Image
@@ -109,7 +120,11 @@ function Emissions(props: any) {
           alt="arrow down logo"
           transform={'rotate(-90deg)'}
         />
-        <Informations display={{ base: 'block', md: 'none' }} />
+        <Informations
+          onClick={() => props.setShowFloatingCards(true)}
+          onClose={() => props.setShowFloatingCards(false)}
+          display={{ base: 'block', md: 'none' }}
+        />
       </Flex>
     </Flex>
   )
