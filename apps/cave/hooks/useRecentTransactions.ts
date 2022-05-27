@@ -7,7 +7,7 @@ import { useAccount, useWaitForTransaction } from 'wagmi'
 import { useCurrentSupportedNetworkId } from './useCurrentSupportedNetworkId'
 import { useIsMounted } from './useIsMounted'
 
-const clearRecentTransactions = () => localStorage.clear()
+const clearRecentTransactions = () => localStorage.setItem('recentTransactions', JSON.stringify({}))
 
 export function useRecentTransactions() {
   const [{ data: account }] = useAccount()
