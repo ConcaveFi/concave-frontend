@@ -1,6 +1,6 @@
 import { Interface } from '@ethersproject/abi'
 
-export const RouterABI = new Interface([
+export const RouterAbi = new Interface([
   'constructor(address _factory, address _implementation, address _WETH)',
   'function WETH() view returns (address)',
   'function factory() view returns (address)',

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { RouterABI, ROUTER_ADDRESS, Currency } from '@concave/core'
+import { RouterAbi, ROUTER_ADDRESS, Currency } from '@concave/core'
 import { Router, TradeType, Trade } from '@concave/gemswap-sdk'
 import { SwapSettings } from '../Swap/Settings'
 import { Contract, Transaction } from 'ethers'
@@ -28,7 +28,7 @@ export const useSwapTransaction = (
   const routerContract = useContract<Contract>({
     addressOrName: ROUTER_ADDRESS[networkId],
     // @ts-ignore
-    contractInterface: RouterABI,
+    contractInterface: RouterAbi,
     signerOrProvider: signer,
   })
 

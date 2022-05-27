@@ -1,5 +1,5 @@
 import { Flex, Text } from '@concave/ui'
-import { CNV } from 'constants/tokens'
+import { CNV } from '@concave/core'
 import useAddTokenToWallet, { injectedTokenResponse } from 'hooks/useAddTokenToWallet'
 import { useConnect } from 'wagmi'
 import { GlassPanel } from '../TreasuryManagementCard'
@@ -7,9 +7,10 @@ import { GlassPanel } from '../TreasuryManagementCard'
 export default function RedeemMobileCard() {
   const [{ data }] = useConnect()
 
+  // TODO make token chain dinamic, refactor useAddTokenToWallet hook
   const { loading: loadingtoWallet, addingToWallet }: injectedTokenResponse = useAddTokenToWallet({
-    tokenAddress: CNV.address,
-    tokenChainId: CNV.chainId,
+    tokenAddress: CNV[1].address,
+    tokenChainId: CNV[1].chainId,
   })
 
   return (

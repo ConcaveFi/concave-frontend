@@ -4,6 +4,8 @@ import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialo
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { RedeemBBT_CNV_Abi } from 'contracts/VestedTokens/RedeemBbtCNVAbi'
 import { Contract } from 'ethers'
+import { FormatTypes } from 'ethers/lib/utils'
+import { Interface } from 'ethers/lib/utils'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider as provider } from 'lib/providers'
 import { useState } from 'react'
@@ -22,7 +24,13 @@ interface RedeemVestedTokenDialog {
 export default function RedeemVestedTokenDialog(props: RedeemVestedTokenDialog) {
   const networkId = useCurrentSupportedNetworkId()
   const [{ data: signer }] = useSigner()
-  const contract = new Contract(props.contractAddress, RedeemBBT_CNV_Abi, provider(networkId))
+  const contract = new Contract(
+    props.contractAddress,
+    [
+      'function redeem(uint256 _amount, address _who, address _to, bool _max) returns (uint256 amountOut)',
+    ],
+    provider(networkId),
+  )
   const [value, setValue] = useState('')
   const [{ data: account }] = useAccount()
   const { isOpen: isConfirmOpen, onOpen: onOpenConfirm, onClose: onCloseConfirm } = useDisclosure()

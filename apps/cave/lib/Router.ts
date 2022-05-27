@@ -1,7 +1,6 @@
 import { BigNumber, ethers } from 'ethers'
-import { CurrencyAmount, ROUTER_ADDRESS, Token } from '@concave/core'
+import { CurrencyAmount, ROUTER_ADDRESS, RouterAbi, Token } from '@concave/core'
 import { concaveProvider } from 'lib/providers'
-import { contractABI } from 'lib/contractoABI'
 import { parseUnits } from 'ethers/lib/utils'
 import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/providers'
 
@@ -11,7 +10,7 @@ export class Router {
 
   constructor(chainId: number, private readonly signer: ethers.Signer) {
     this.provider = concaveProvider(chainId)
-    this.contract = new ethers.Contract(ROUTER_ADDRESS[chainId], contractABI, this.provider)
+    this.contract = new ethers.Contract(ROUTER_ADDRESS[chainId], RouterAbi, this.provider)
   }
   public async addLiquidityETH(
     ethAmount: BigNumber,

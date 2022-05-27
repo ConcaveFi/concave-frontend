@@ -1,4 +1,4 @@
-import { CNV } from 'constants/tokens'
+import { CNV } from '@concave/core'
 import { Button, Flex, Modal, Spinner, Text, useDisclosure } from '@concave/ui'
 import useAddTokenToWallet, { injectedTokenResponse } from 'hooks/useAddTokenToWallet'
 import { useIsMounted } from 'hooks/useIsMounted'
@@ -15,9 +15,10 @@ import useVestedTokens from './Hooks/useVestedTokens'
 // 0x6ff0106d34feee8a8acf2e7b9168480f86b82e2f eth
 
 function TreasuryRedeemCard() {
+  // TODO make token chain dinamic, refactor useAddTokenToWallet hook
   const { addingToWallet }: injectedTokenResponse = useAddTokenToWallet({
-    tokenAddress: CNV.address,
-    tokenChainId: CNV.chainId,
+    tokenAddress: CNV[1].address,
+    tokenChainId: CNV[1].chainId,
   })
 
   const netWorkId = useCurrentSupportedNetworkId()

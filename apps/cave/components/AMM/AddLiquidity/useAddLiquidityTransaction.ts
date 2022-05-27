@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { RouterABI, ROUTER_ADDRESS, Currency, CurrencyAmount, Percent } from '@concave/core'
+import { RouterAbi, ROUTER_ADDRESS, Currency, CurrencyAmount, Percent } from '@concave/core'
 import { Contract } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useContract, UserRejectedRequestError, useSigner } from 'wagmi'
@@ -61,7 +61,7 @@ export const useAddLiquidityTransaction = (
   const [{ data: signer }] = useSigner()
   const routerContract = useContract<Contract>({
     addressOrName: ROUTER_ADDRESS[networkId],
-    contractInterface: RouterABI,
+    contractInterface: RouterAbi,
     signerOrProvider: signer,
   })
 
