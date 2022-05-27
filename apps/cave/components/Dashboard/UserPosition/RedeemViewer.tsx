@@ -1,7 +1,6 @@
 import { Button, Flex, FlexProps, Text } from '@concave/ui'
 import { utils } from 'ethers'
 import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungibleToken'
-import { truncateNumber } from 'utils/truncateNumber'
 
 interface RedeemCardViewerProps {
   nonFungibleTokenInfo: NonFungibleTokenInfo
@@ -61,7 +60,7 @@ const Info: React.FC<Info> = ({ ...props }) => {
         {props.label}
       </Text>
       <Text fontSize="md" fontWeight="bold" noOfLines={1}>
-        {+props.value >= 0.01 ? truncateNumber(+props.value * 10 ** 18) : '<.01'} CNV
+        {parseFloat(props.value).toFixed(1)} CNV
       </Text>
     </Flex>
   )

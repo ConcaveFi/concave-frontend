@@ -1,6 +1,7 @@
 import { Box, Button, Flex, Spinner, Text } from '@concave/ui'
 import { BigNumber } from 'ethers'
 import { formatFixed } from 'utils/formatFixed'
+
 interface UserDividendCardProps {
   totalLocked: BigNumber
   isLoading: boolean
