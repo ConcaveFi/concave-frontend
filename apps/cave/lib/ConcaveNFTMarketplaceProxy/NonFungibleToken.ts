@@ -26,6 +26,9 @@ export class NonFungibleTokenInfo {
   get initialValue() {
     return this.shares
   }
+  get deposit() {
+    return this.position.deposit
+  }
   get maturity() {
     return this.position.maturity
   }
