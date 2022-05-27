@@ -8,14 +8,18 @@ import {
   Spinner,
   Stack,
   Text,
+  useBreakpointValue,
   useDisclosure,
   VStack,
 } from '@concave/ui'
 import { BigNumber, ethers } from 'ethers'
 import { useGet_Bonds_VaprQuery, useGet_Last_Poolid_VaprQuery } from 'graphql/generated/graphql'
+=======
+import { ethers } from 'ethers'
+import { useGet_Last_Poolid_VaprQuery } from 'graphql/generated/graphql'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { StakingV1Contract } from 'lib/StakingV1Proxy/StakingV1Contract'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { useQuery } from 'react-query'
 import { useAccount } from 'wagmi'
 import Emissions from './StakeModal/Emissions'
@@ -69,7 +73,12 @@ export const useViewStakingCap = (chainID: number | string, index: string) => {
 }
 
 const FloatingDescriptions: React.FC = () => (
-  <VStack position="absolute" top="10" left="-80" spacing={5}>
+  <VStack
+    position={{ base: 'relative', xl: 'absolute' }}
+    top="10"
+    left={{ base: '', xl: '-80' }}
+    spacing={{ base: 2, xl: 5 }}
+  >
     <Card variant="secondary" py="6" px="4" w={300}>
       <Text fontWeight="bold">Total vAPR</Text>
       <Text fontSize="sm">
@@ -107,21 +116,16 @@ function StakeCard(props: StackCardProps) {
   const chainId = useCurrentSupportedNetworkId()
   const vaprText = props.icon === '12m' ? 'Non-Dilutive vAPR' : 'Total vAPR'
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { status, data, error, isFetching } = useGet_Last_Poolid_VaprQuery({
+  const { data } = useGet_Last_Poolid_VaprQuery({
     poolID: props.poolId,
   })
-  const [modalDirection, setModalDirection] = useState<'column' | 'row'>('row')
   const index = PERIOD_TO_POOL_PARAMETER[`${props.period}`]
   const { data: pools, error: poolsError, isLoading: isLoadingPools } = usePools(chainId, index)
   const { data: stakingCap, isLoading: isLoadingStakings } = useViewStakingCap(chainId, index)
-  const capPercentage = useMemo(() => {
-    if (!pools?.balance || !stakingCap || stakingCap.eq(0)) return '0'
-    return BigNumber.from(pools.balance).div(stakingCap).mul(100)
-  }, [pools, stakingCap])
   const [showFloatingCards, setShowFloatingCards] = useState(false)
 
   const currentlyStaked =
-    isLoadingPools || !pools?.balance ? '0' : (+ethers.utils.formatEther(pools?.balance)).toFixed(0)
+    isLoadingPools || !pools?.balance ? 0 : (+ethers.utils.formatEther(pools?.balance)).toFixed(0)
 
   const currentlyStakingCap =
     isLoadingStakings || !pools?.balance
@@ -151,6 +155,8 @@ function StakeCard(props: StackCardProps) {
   }
 
   // console.log(currentVAPR)
+
+  const mobileUI = useBreakpointValue({ base: true, xl: false })
 
   return (
     <div>
@@ -262,7 +268,7 @@ function StakeCard(props: StackCardProps) {
         <Modal
           bluryOverlay={true}
           childrenLeftNeighbor={<FloatingDescriptions />}
-          showchildrenLeftNeighbor={showFloatingCards}
+          showchildrenLeftNeighbor={showFloatingCards && !mobileUI}
           title="Stake CNV"
           isOpen={isOpen}
           onClose={onClose}
@@ -274,7 +280,10 @@ function StakeCard(props: StackCardProps) {
           titleAlign="center"
           size="2xl"
         >
-          <Flex direction={modalDirection}>
+          <Flex
+            direction={{ base: 'column', md: 'row' }}
+            maxW={{ base: '310px', sm: '340px', md: 'full' }}
+          >
             <Emissions
               period={props.period}
               vaprText={vaprText}
@@ -283,7 +292,21 @@ function StakeCard(props: StackCardProps) {
               setShowFloatingCards={setShowFloatingCards}
               // vapr={props.vAPR}
             />
-            <VStack mt={8} spacing={8}>
+            <Modal
+              preserveScrollBarGap
+              isOpen={showFloatingCards && mobileUI}
+              title=""
+              onClose={() => setShowFloatingCards(false)}
+              motionPreset="slideInBottom"
+              hideClose
+              isCentered
+              bluryOverlay
+            >
+              <Flex maxHeight={'800px'} mt="-10" mb={10}>
+                <FloatingDescriptions />
+              </Flex>
+            </Modal>
+            <VStack mt={{ base: 0, sm: 8 }} spacing={8}>
               <StakeInfo
                 period={props.period}
                 stakedCNV={
@@ -297,7 +320,14 @@ function StakeCard(props: StackCardProps) {
                       ).toFixed(0)}`
                     : '0'
                 }
-                capPercentage={capPercentage}
+                capPercentage={
+                  pools?.balance &&
+                  stakingCap &&
+                  (+ethers.utils.formatEther(pools?.balance) /
+                    (+ethers.utils.formatEther(stakingCap) +
+                      +ethers.utils.formatEther(pools?.balance))) *
+                    100
+                }
               />
               <StakeInput period={props.period} poolId={props.poolId} onClose={onClose} />
             </VStack>

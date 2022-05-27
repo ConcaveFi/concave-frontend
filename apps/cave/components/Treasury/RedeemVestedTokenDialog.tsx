@@ -33,7 +33,12 @@ export default function RedeemVestedTokenDialog(props: RedeemVestedTokenDialog) 
     onClose: onCloseSubmitted,
   } = useDisclosure()
 
-  const validValue = +value !== 0
+  const tokenBalane = parseFloat(props.balance)
+  const formatedValue = parseFloat(value)
+  const insufficientFounds = tokenBalane < formatedValue
+  const validValue = formatedValue > 0
+
+  const buttonActive = validValue && !insufficientFounds
 
   const [tx, setTx] = useState(undefined)
   return (
@@ -43,7 +48,7 @@ export default function RedeemVestedTokenDialog(props: RedeemVestedTokenDialog) 
           <CloseIcon color="text.low" cursor={'pointer'} onClick={props.onClose} />
         </Flex>
         <Text fontSize={'2xl'} fontWeight="bold" my={4} mx={'auto'}>
-          Redeem {props.tokenSymbol}
+          {`Redeem ${props.tokenSymbol}`}
         </Text>
 
         <Flex
@@ -82,20 +87,20 @@ export default function RedeemVestedTokenDialog(props: RedeemVestedTokenDialog) 
         <Button
           transition={'all .3s'}
           _focus={{}}
-          _active={validValue && { transform: 'scale(o.9)' }}
+          _active={buttonActive && { transform: 'scale(o.9)' }}
           variant="secondary"
-          cursor={!validValue && 'default'}
+          cursor={!buttonActive && 'default'}
           mt={8}
           shadow="Up Small"
-          _hover={validValue && { shadow: 'up' }}
+          _hover={buttonActive && { shadow: 'up' }}
           width="70%"
           mx={'auto'}
           py={2}
           rounded="2xl"
           fontSize="2xl"
-          textColor={!validValue && 'text.low'}
+          textColor={!buttonActive && 'text.low'}
           onClick={() => {
-            if (!validValue) return
+            if (!buttonActive) return
             onOpenConfirm()
             contract
               .connect(signer)
@@ -107,7 +112,9 @@ export default function RedeemVestedTokenDialog(props: RedeemVestedTokenDialog) 
               })
           }}
         >
-          {validValue ? 'Redeem' : 'Invalid value.'}
+          {!validValue && 'Invalid value.'}
+          {insufficientFounds && 'Insufficient Founds'}
+          {buttonActive && !insufficientFounds && 'Redeem'}
         </Button>
         <TransactionSubmittedDialog
           closeParentComponent={onCloseSubmitted}
