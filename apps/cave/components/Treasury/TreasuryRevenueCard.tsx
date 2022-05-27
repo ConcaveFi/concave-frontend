@@ -132,7 +132,9 @@ export default function TreasuryRevenueCard(props) {
       )
     : ['loading', 'loading', 'loading']
 
-  const lastsAmounts = lastsSolds ? lastsSolds.map((value) => value.inputAmount) : ['0', '0', '0']
+  const lastsAmounts = lastsSolds
+    ? lastsSolds.map((value) => '$' + commify(value?.inputAmount))
+    : ['0', '0', '0']
   const lastsOutputamounts = lastsSolds
     ? lastsSolds.map((value) => '+$' + truncateNumber(+value?.output*10**18))
     : ['0', '0', '0']

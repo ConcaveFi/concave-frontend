@@ -78,8 +78,8 @@ export const TokenInfo = (props: TokenInfoProps) => {
       <GlassPanel width={'180px'} height="52px" rounded={'2xl'}>
         <Flex width={'40%'} justify="end" mr={2} align={'center'}>
           <AvatarGroup size={'sm'}>
-            <Avatar src={image} />
-            {imageP1 ? <Avatar src={imageP1} zIndex={1} /> : ''}
+            <Avatar src={image} opacity={0.6} />
+            {imageP1 ? <Avatar src={imageP1} zIndex={1} opacity={0.8} /> : ''}
           </AvatarGroup>
         </Flex>
 

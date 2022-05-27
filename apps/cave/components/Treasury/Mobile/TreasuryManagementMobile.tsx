@@ -62,43 +62,45 @@ const FarmingViewer = ({ convexToken }) => {
   const imgP2 = convexToken?.imageP2.replace('github', 'raw.githubusercontent').replace('blob/', '')
   const imgP3 = convexToken?.imageP3.replace('github', 'raw.githubusercontent').replace('blob/', '')
   return (
-    <GlassPanel width={'310px'} height="240px" mx={'auto'} direction="column">
-      <GlassPanel width={'280px'} mx="auto" mt={4} direction="column" height={'140px'}>
-        <GlassPanel width={'full'} height="65px" justify={'center'} align="center" gap={3}>
-          <Flex height={'30px'} width="30px">
-            <Image
-              alt="logo"
-              src="https://static.debank.com/image/eth_token/logo_url/0x4e3fbd56cd56c3e72c1403e103b45db9da5b9d2b/be2a9b05a223d6dfca3dc88b1838fcd4.png"
-            />
-          </Flex>
-          <Text fontWeight={'bold'} fontSize="2xl">
-            Convex
-          </Text>
-        </GlassPanel>
-        <Flex direction={'column'} align="center" justify={'center'}>
-          <Text fontWeight={'bold'} fontSize="xl" mt={'5px'} mb={-2} zIndex="10">
-            {'$' + commify(convexToken?.total.toFixed())}
-          </Text>
-          <AvatarGroup size={'sm'} spacing={-3} opacity="0.4">
-            <Avatar src={image} />
-            <Avatar src={imgP1} />
-            <Avatar src={imgP2} />
-            <Avatar src={imgP3} />
-          </AvatarGroup>
+    // <GlassPanel width={'310px'} height="240px" mx={'auto'} direction="column">
+    <GlassPanel width={'280px'} mx="auto" mt={4} direction="column" height={'200px'}>
+      <GlassPanel width={'full'} height="65px" justify={'center'} align="center" gap={3}>
+        <Flex height={'30px'} width="30px">
+          <Image
+            alt="logo"
+            src="https://static.debank.com/image/eth_token/logo_url/0x4e3fbd56cd56c3e72c1403e103b45db9da5b9d2b/be2a9b05a223d6dfca3dc88b1838fcd4.png"
+          />
         </Flex>
+        <Text fontWeight={'bold'} fontSize="2xl">
+          Convex
+        </Text>
       </GlassPanel>
-      <Flex direction={'column'} align={'center'} justify="center" flex={1} mx={6}>
+      <Flex direction={'column'} height="120px" align="center" justify={'center'}>
+        <Text fontWeight={'bold'} fontSize="3xl" mt={'5px'} mb={-2} zIndex="10">
+          {'$' + commify(convexToken?.total.toFixed())}
+        </Text>
+        <AvatarGroup size={'sm'} spacing={-3} opacity="0.4">
+          <Avatar src={image} />
+          <Avatar src={imgP1} />
+          <Avatar src={imgP2} />
+          <Avatar src={imgP3} />
+        </AvatarGroup>
+      </Flex>
+    </GlassPanel>
+  )
+}
+{
+  // Don't remove this yet.
+  /* <Flex direction={'column'} align={'center'} justify="center" flex={1} mx={6}>
         <Text fontSize={'xl'} fontWeight="bold">
           Rewards:
         </Text>
         <Text fontSize={'xl'} textColor="text.low">
           {'$' + commify(convexToken?.rewards.toFixed(2))}
         </Text>
-      </Flex>
-    </GlassPanel>
-  )
+      </Flex> */
 }
-
+// </GlassPanel>
 const renderTokenInfos = (treaData) => {
   return (
     <Flex direction={'column'} gap={2}>

@@ -1,5 +1,5 @@
 import { CloseIcon } from '@concave/icons'
-import { Button, Flex, Modal, NumericInput, Text, useDisclosure } from '@concave/ui'
+import { Button, Flex, HStack, Modal, NumericInput, Text, useDisclosure } from '@concave/ui'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { RedeemBBT_CNV_Abi } from 'contracts/VestedTokens/RedeemBbtCNVAbi'
@@ -11,111 +11,93 @@ import { useAccount, useSigner } from 'wagmi'
 
 interface RedeemVestedTokenDialog {
   isOpen: boolean
+  onClick: () => void
   onClose: () => void
   tokenSymbol: string
-  contractAddress: string
   balance: string
+  connect?: any
 }
 
 // 0x98501987a763ccE92539CB4650969ddA16b33454
 
 export default function RedeemVestedTokenDialog(props: RedeemVestedTokenDialog) {
-  const networkId = useCurrentSupportedNetworkId()
-  const [{ data: signer }] = useSigner()
-  const contract = new Contract(props.contractAddress, RedeemBBT_CNV_Abi, provider(networkId))
-  const [value, setValue] = useState('')
-  const [{ data: account }] = useAccount()
   const { isOpen: isConfirmOpen, onOpen: onOpenConfirm, onClose: onCloseConfirm } = useDisclosure()
-
-  const {
-    isOpen: isSubmittedOpen,
-    onOpen: onOpenSubmitted,
-    onClose: onCloseSubmitted,
-  } = useDisclosure()
-
-  const validValue = +value !== 0
-
   const [tx, setTx] = useState(undefined)
-  return (
-    <Modal onClose={props.onClose} title={''} isOpen={props.isOpen} hideClose>
-      <Flex height={'250px'} width="350px" direction={'column'}>
-        <Flex position={'absolute'} width="85%" justify={'end'} alignSelf="start">
-          <CloseIcon color="text.low" cursor={'pointer'} onClick={props.onClose} />
-        </Flex>
-        <Text fontSize={'2xl'} fontWeight="bold" my={4} mx={'auto'}>
-          Redeem {props.tokenSymbol}
-        </Text>
 
-        <Flex
-          gap={2}
-          direction={'column'}
-          align={'start'}
-          width={'70%'}
-          mx="auto"
-          boxShadow={'down'}
-          py="2"
-          rounded={'2xl'}
-          px="8"
-        >
-          <NumericInput
-            px={'0'}
-            width={'70%'}
-            value={value}
-            fontSize="xl"
-            onChange={(e) => setValue(e.target.value)}
-            placeholder="0.0"
-          />
-          <Flex fontSize="sm">
-            <Text
-              cursor={'pointer'}
-              onClick={() => setValue(props.balance)}
-              fontWeight="bold"
-              textColor={'text.low'}
+  const signer = useSigner()
+
+  return (
+    <>
+      <Modal
+        isCentered
+        preserveScrollBarGap
+        motionPreset="slideInBottom"
+        onClose={props.onClose}
+        title={''}
+        isOpen={props.isOpen && parseFloat(props.balance) > 0}
+        hideClose
+      >
+        <Flex height={'200px'} width="260px" direction={'column'}>
+          <Flex position={'absolute'} width="85%" justify={'end'} alignSelf="start">
+            <CloseIcon color="text.low" cursor={'pointer'} onClick={props.onClose} />
+          </Flex>
+          <Text mx={'auto'} fontWeight={'bold'} fontSize="2xl">
+            Redeem {props.tokenSymbol}
+          </Text>
+          <Flex
+            mx={'auto'}
+            mt={'4'}
+            width={'80%'}
+            px="8"
+            rounded={'2xl'}
+            height="120px"
+            shadow={'Down Medium'}
+            direction="column"
+          >
+            <HStack my={4} mx="auto" justify="space-between">
+              <Text fontWeight={'bold'} fontSize="lg" textColor={'text.low'}>
+                Your balance:
+              </Text>
+              <Text>{+props.balance}</Text>
+            </HStack>
+            <Button
+              onClick={props.onClick}
+              _focus={{}}
+              shadow="Up Small"
+              fontSize={'2xl'}
+              py="2"
+              _hover={{ shadow: 'up' }}
             >
-              Balance:
-            </Text>
-            <Text fontWeight={'bold'} pl={1}>
-              {props.balance}
-            </Text>
+              Redeem
+            </Button>
           </Flex>
         </Flex>
-        <Button
-          transition={'all .3s'}
-          _focus={{}}
-          _active={validValue && { transform: 'scale(o.9)' }}
-          variant="secondary"
-          cursor={!validValue && 'default'}
-          mt={8}
-          shadow="Up Small"
-          _hover={validValue && { shadow: 'up' }}
-          width="70%"
-          mx={'auto'}
-          py={2}
-          rounded="2xl"
-          fontSize="2xl"
-          textColor={!validValue && 'text.low'}
-          onClick={() => {
-            if (!validValue) return
-            onOpenConfirm()
-            contract
-              .connect(signer)
-              .redeem(value, account?.address, account?.address, true, { gasLimit: 5000000 })
-              .then((tx) => {
-                setTx(tx)
-                onCloseConfirm()
-                onOpenSubmitted()
-              })
-          }}
-        >
-          {validValue ? 'Redeem' : 'Invalid value.'}
-        </Button>
-        <TransactionSubmittedDialog
-          closeParentComponent={onCloseSubmitted}
-          isOpen={isSubmittedOpen}
-          tx={tx}
-        />
-        <WaitingConfirmationDialog isOpen={isConfirmOpen} />
-      </Flex>
-    </Modal>
+      </Modal>
+      <Modal
+        preserveScrollBarGap
+        onClose={props.onClose}
+        title={'Error'}
+        isOpen={props.isOpen && parseFloat(props.balance) === 0}
+        hideClose
+        isCentered
+        motionPreset="slideInBottom"
+      >
+        <Flex>
+          <Flex height={'120px'} width="240px" direction={'column'}>
+            <Flex position={'absolute'} width="85%" justify={'end'} alignSelf="start">
+              <Text
+                fontSize={'2xl'}
+                fontWeight="bold"
+                textAlign={'center'}
+                textColor="text.low"
+                mt={'5'}
+              >
+                You do not have enough balance.
+              </Text>
+            </Flex>
+          </Flex>
+        </Flex>
+      </Modal>
+    </>
   )
 }

@@ -587,6 +587,8 @@ export type Query_Root = {
   logStakingV1_PoolRewarded_by_pk?: Maybe<LogStakingV1_PoolRewarded>
   /** fetch data from the table: "logStakingV1" using primary key columns */
   logStakingV1_by_pk?: Maybe<LogStakingV1>
+  /** fetch data from the table: "rebaseStakingV1" */
+  rebaseStakingV1: Array<RebaseStakingV1>
   /** fetch data from the table: "treasury" */
   treasury: Array<Treasury>
   /** fetch data from the table: "treasury" using primary key columns */
@@ -653,6 +655,14 @@ export type Query_RootLogStakingV1_By_PkArgs = {
   id: Scalars['uuid']
 }
 
+export type Query_RootRebaseStakingV1Args = {
+  distinct_on?: InputMaybe<Array<RebaseStakingV1_Select_Column>>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  order_by?: InputMaybe<Array<RebaseStakingV1_Order_By>>
+  where?: InputMaybe<RebaseStakingV1_Bool_Exp>
+}
+
 export type Query_RootTreasuryArgs = {
   distinct_on?: InputMaybe<Array<Treasury_Select_Column>>
   limit?: InputMaybe<Scalars['Int']>
@@ -663,6 +673,66 @@ export type Query_RootTreasuryArgs = {
 
 export type Query_RootTreasury_By_PkArgs = {
   id: Scalars['uuid']
+}
+
+/** run every 8h and scrap stakingV1 Rebase PoolRewarded events */
+export type RebaseStakingV1 = {
+  __typename?: 'rebaseStakingV1'
+  bondVaprPool0?: Maybe<Scalars['numeric']>
+  bondVaprPool1?: Maybe<Scalars['numeric']>
+  bondVaprPool2?: Maybe<Scalars['numeric']>
+  bondVaprPool3?: Maybe<Scalars['numeric']>
+  created_at: Scalars['timestamptz']
+  indexRebase?: Maybe<Scalars['numeric']>
+  txBlockNumber?: Maybe<Scalars['numeric']>
+  txHash?: Maybe<Scalars['String']>
+}
+
+/** Boolean expression to filter rows from the table "rebaseStakingV1". All fields are combined with a logical 'AND'. */
+export type RebaseStakingV1_Bool_Exp = {
+  _and?: InputMaybe<Array<RebaseStakingV1_Bool_Exp>>
+  _not?: InputMaybe<RebaseStakingV1_Bool_Exp>
+  _or?: InputMaybe<Array<RebaseStakingV1_Bool_Exp>>
+  bondVaprPool0?: InputMaybe<Numeric_Comparison_Exp>
+  bondVaprPool1?: InputMaybe<Numeric_Comparison_Exp>
+  bondVaprPool2?: InputMaybe<Numeric_Comparison_Exp>
+  bondVaprPool3?: InputMaybe<Numeric_Comparison_Exp>
+  created_at?: InputMaybe<Timestamptz_Comparison_Exp>
+  indexRebase?: InputMaybe<Numeric_Comparison_Exp>
+  txBlockNumber?: InputMaybe<Numeric_Comparison_Exp>
+  txHash?: InputMaybe<String_Comparison_Exp>
+}
+
+/** Ordering options when selecting data from "rebaseStakingV1". */
+export type RebaseStakingV1_Order_By = {
+  bondVaprPool0?: InputMaybe<Order_By>
+  bondVaprPool1?: InputMaybe<Order_By>
+  bondVaprPool2?: InputMaybe<Order_By>
+  bondVaprPool3?: InputMaybe<Order_By>
+  created_at?: InputMaybe<Order_By>
+  indexRebase?: InputMaybe<Order_By>
+  txBlockNumber?: InputMaybe<Order_By>
+  txHash?: InputMaybe<Order_By>
+}
+
+/** select columns of table "rebaseStakingV1" */
+export enum RebaseStakingV1_Select_Column {
+  /** column name */
+  BondVaprPool0 = 'bondVaprPool0',
+  /** column name */
+  BondVaprPool1 = 'bondVaprPool1',
+  /** column name */
+  BondVaprPool2 = 'bondVaprPool2',
+  /** column name */
+  BondVaprPool3 = 'bondVaprPool3',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  IndexRebase = 'indexRebase',
+  /** column name */
+  TxBlockNumber = 'txBlockNumber',
+  /** column name */
+  TxHash = 'txHash',
 }
 
 export type Subscription_Root = {
@@ -687,6 +757,8 @@ export type Subscription_Root = {
   logStakingV1_PoolRewarded_by_pk?: Maybe<LogStakingV1_PoolRewarded>
   /** fetch data from the table: "logStakingV1" using primary key columns */
   logStakingV1_by_pk?: Maybe<LogStakingV1>
+  /** fetch data from the table: "rebaseStakingV1" */
+  rebaseStakingV1: Array<RebaseStakingV1>
   /** fetch data from the table: "treasury" */
   treasury: Array<Treasury>
   /** fetch data from the table: "treasury" using primary key columns */
@@ -751,6 +823,14 @@ export type Subscription_RootLogStakingV1_PoolRewarded_By_PkArgs = {
 
 export type Subscription_RootLogStakingV1_By_PkArgs = {
   id: Scalars['uuid']
+}
+
+export type Subscription_RootRebaseStakingV1Args = {
+  distinct_on?: InputMaybe<Array<RebaseStakingV1_Select_Column>>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  order_by?: InputMaybe<Array<RebaseStakingV1_Order_By>>
+  where?: InputMaybe<RebaseStakingV1_Bool_Exp>
 }
 
 export type Subscription_RootTreasuryArgs = {
@@ -1010,6 +1090,22 @@ export type Get_Accrualbondv1_Last10_SoldQuery = {
     inputAmount?: string | null
     method?: string | null
     output?: string | null
+  }>
+}
+
+export type Get_Bonds_VaprQueryVariables = Exact<{ [key: string]: never }>
+
+export type Get_Bonds_VaprQuery = {
+  __typename?: 'query_root'
+  rebaseStakingV1: Array<{
+    __typename?: 'rebaseStakingV1'
+    indexRebase?: any | null
+    created_at: any
+    txHash?: string | null
+    bondVaprPool0?: any | null
+    bondVaprPool1?: any | null
+    bondVaprPool2?: any | null
+    bondVaprPool3?: any | null
   }>
 }
 
@@ -1278,6 +1374,32 @@ export const useGet_Accrualbondv1_Last10_SoldQuery = <
       Get_Accrualbondv1_Last10_SoldDocument,
       variables,
     ),
+    options,
+  )
+export const Get_Bonds_VaprDocument = `
+    query GET_BONDS_VAPR {
+  rebaseStakingV1(
+    order_by: {txBlockNumber: desc}
+    limit: 1
+    where: {txHash: {_is_null: false}}
+  ) {
+    indexRebase
+    created_at
+    txHash
+    bondVaprPool0
+    bondVaprPool1
+    bondVaprPool2
+    bondVaprPool3
+  }
+}
+    `
+export const useGet_Bonds_VaprQuery = <TData = Get_Bonds_VaprQuery, TError = unknown>(
+  variables?: Get_Bonds_VaprQueryVariables,
+  options?: UseQueryOptions<Get_Bonds_VaprQuery, TError, TData>,
+) =>
+  useQuery<Get_Bonds_VaprQuery, TError, TData>(
+    variables === undefined ? ['GET_BONDS_VAPR'] : ['GET_BONDS_VAPR', variables],
+    fetcher<Get_Bonds_VaprQuery, Get_Bonds_VaprQueryVariables>(Get_Bonds_VaprDocument, variables),
     options,
   )
 export const Get_TreasuryDocument = `
