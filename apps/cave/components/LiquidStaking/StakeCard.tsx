@@ -12,11 +12,8 @@ import {
   useDisclosure,
   VStack,
 } from '@concave/ui'
-import { BigNumber, ethers } from 'ethers'
-import { useGet_Bonds_VaprQuery, useGet_Last_Poolid_VaprQuery } from 'graphql/generated/graphql'
-=======
 import { ethers } from 'ethers'
-import { useGet_Last_Poolid_VaprQuery } from 'graphql/generated/graphql'
+import { useGet_Bonds_VaprQuery, useGet_Last_Poolid_VaprQuery } from 'graphql/generated/graphql'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { StakingV1Contract } from 'lib/StakingV1Proxy/StakingV1Contract'
 import { useState } from 'react'
