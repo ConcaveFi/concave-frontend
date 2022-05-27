@@ -48,7 +48,7 @@ const UserDividendCard = (props: UserDividendCardProps) => {
             Next Dividend Date:
           </Text>
           <Text fontSize={'17px'} fontWeight={700}>
-            07/04/2022
+            Coming Soon
           </Text>
         </Flex>
         <Flex direction={'column'} alignItems="start" ml={6} flex={1}>
