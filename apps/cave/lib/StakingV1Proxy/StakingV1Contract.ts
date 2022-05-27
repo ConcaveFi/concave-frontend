@@ -1,4 +1,4 @@
-import { BigNumber, BigNumberish, ethers } from 'ethers'
+import { BigNumber, BigNumberish, ethers, Contract } from 'ethers'
 import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/providers'
 import { concaveProvider } from 'lib/providers'
 import { StakingV1ProxyAddress } from './Address'
@@ -12,7 +12,10 @@ export class StakingV1Contract {
 
   constructor(chainId: number) {
     this.provider = concaveProvider(chainId)
-    this.contract = new ethers.Contract(StakingV1ProxyAddress[chainId], StakingV1Abi, this.provider)
+    if (!chainId) throw 'ChainID is undefined for constructor of contract StakingV1Contract'
+    const address = StakingV1ProxyAddress[chainId]
+    if (!address) throw 'Address is undefined for constructor of contract StakingV1Contract'
+    this.contract = new Contract(address, StakingV1Abi, this.provider)
   }
 
   public async viewStakingCap(poolNum: number | string): Promise<BigNumber> {
@@ -29,11 +32,11 @@ export class StakingV1Contract {
   }
 
   public async pools(index: string): Promise<Pool> {
-    return this.contract.pools(index)
+    return this.contract.pools(index).then((p) => ({ ...p }))
   }
 
   public async positions(index: BigNumberish): Promise<Position> {
-    return this.contract.positions(index)
+    return this.contract.positions(index).then((p) => ({ ...p }))
   }
 
   public async balanceOf(address: string): Promise<BigNumber> {
