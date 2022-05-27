@@ -14,9 +14,6 @@ const nextConfig = {
       { source: '/swap', destination: '/gemswap' },
     ]
   },
-  experimental: {
-    outputFileTracingRoot: path.join(__dirname, '../../'),
-  },
 }
 
 module.exports = nextConfig
