@@ -24,6 +24,7 @@ const RedeemCardViewer = ({ nonFungibleTokenInfo }: RedeemCardViewerProps) => {
         <Info
           label="Current Value"
           value={utils.formatEther(nonFungibleTokenInfo.deposit.add(rewardDebt))}
+          ml={{ lg: 7, md: '0px' }}
         />
         <Info label="Gained" value={utils.formatEther(nonFungibleTokenInfo.rewardDebt)} />
         <Info label="Initial" value={utils.formatEther(nonFungibleTokenInfo.deposit)} />
