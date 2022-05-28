@@ -10,15 +10,17 @@ import {
   Text,
   useDisclosure,
 } from '@concave/ui'
+import { ApproveButton } from 'components/ApproveButton/ApproveButton'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { PositionInfoItem } from 'components/Positions/MyPositions'
+import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
+import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { Transaction } from 'ethers'
-import { useApprovalWhenNeeded } from 'hooks/useAllowance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { precision } from 'hooks/usePrecision'
 import { RemoveLiquidityState, useRemoveLiquidity } from 'hooks/useRemoveLiquidity'
-import React from 'react'
+import React, { useState } from 'react'
+import { precision } from 'utils/formatFixed'
 
 export const RemoveLiquidityModalButton = ({
   liquidityInfo,
@@ -69,7 +71,10 @@ export const RemoveLiquidityModalButton = ({
       >
         <AmountToRemove onChange={removeLiquidityState.setPercentToRemove} />
         <YouWillReceive {...removeLiquidityState} />
-        <RemoveLiquidityActions removeLiquidityState={removeLiquidityState} />
+        <RemoveLiquidityActions
+          removeLiquidityState={removeLiquidityState}
+          closeParentComponent={removeLiquidityDisclosure.onClose}
+        />
         <YourPosition {...removeLiquidityState} {...liquidityInfo} />
       </Modal>
     </>
@@ -150,7 +155,7 @@ const ReceiveBox = ({
       <CurrencyIcon size="sm" currency={currency} />
       <Box>
         <Text fontFamily={'heading'} fontWeight={600}>
-          {precision(amount, 4).formatted}
+          {precision(amount, 4)}
         </Text>
         <Text title={currency?.name} fontWeight={700} fontSize={'sm'} color={'text.low'}>
           {currency?.symbol}
@@ -161,41 +166,61 @@ const ReceiveBox = ({
 }
 const RemoveLiquidityActions = ({
   removeLiquidityState,
+  closeParentComponent,
 }: {
   removeLiquidityState: { pair: Pair } & RemoveLiquidityState
+  closeParentComponent: VoidFunction
 }) => {
   const networkId = useCurrentSupportedNetworkId()
-  const transactionStatusDisclosure = useDisclosure()
-  const [needsApprove, requestApproveA, approveLabel] = useApprovalWhenNeeded(
-    removeLiquidityState.pair.liquidityToken,
-    ROUTER_ADDRESS[networkId],
-  )
+  const [currencyApproved, setCurrencyApproved] = useState(false)
 
-  const removeAproval = async () => {
-    requestApproveA()
-  }
+  const {
+    isOpen: isOpenSubmitted,
+    onClose: onCloseSubmitted,
+    onOpen: onOpenSubmitted,
+  } = useDisclosure()
+
+  const [txError, setTxError] = useState('')
+  const { isOpen: isOpenError, onClose: onCloseError, onOpen: onOpenError } = useDisclosure()
+
+  const [waitingForConfirm, setWaitingForConfirm] = useState(false)
 
   const confirmedWithdrawal = async () => {
     try {
-      transactionStatusDisclosure.onOpen()
-      await removeLiquidityState.removeLiquidity()
+      setWaitingForConfirm(true)
+      await removeLiquidityState.removeLiquidity().then(() => {
+        onOpenSubmitted()
+        setWaitingForConfirm(false)
+      })
     } catch (err) {
-      transactionStatusDisclosure.onClose()
+      setWaitingForConfirm(false)
+      onCloseSubmitted()
+      setTxError(err.message)
+      onOpenError()
     }
   }
 
+  console.log(
+    removeLiquidityState.pair.token0,
+    removeLiquidityState.amountAMin,
+    removeLiquidityState.amountBMin,
+  )
+
   return (
     <Flex gap={4} h={45} justifyContent={'center'}>
-      <Button
-        disabled={!needsApprove || !removeLiquidityState.percentToRemove}
+      <ApproveButton
+        approveArgs={{
+          currency: removeLiquidityState.pair.liquidityToken,
+          spender: ROUTER_ADDRESS[networkId],
+          onSuccess: () => setCurrencyApproved(true),
+        }}
+        disabled={!removeLiquidityState.percentToRemove}
         w={250}
         variant={'primary'}
-        onClick={removeAproval}
-      >
-        {approveLabel}
-      </Button>
+      />
+
       <Button
-        disabled={needsApprove || !removeLiquidityState.percentToRemove}
+        disabled={!currencyApproved || !removeLiquidityState.percentToRemove}
         w={250}
         variant={'primary'}
         onClick={confirmedWithdrawal}
@@ -203,12 +228,40 @@ const RemoveLiquidityActions = ({
         Confirm Withdrawal
       </Button>
 
+      <WaitingConfirmationDialog isOpen={waitingForConfirm} title={'Confirm Liquidity Removal'}>
+        <Flex
+          width={'200px'}
+          height="107px"
+          rounded={'2xl'}
+          mt={4}
+          shadow={'Down Medium'}
+          align={'center'}
+          direction={'column'}
+        >
+          <Text textColor={'text.low'} fontWeight="700" fontSize={18} mt={4}>
+            You will receive
+          </Text>
+          <Text fontWeight={'700'} textColor="text.accent">
+            {`${precision(removeLiquidityState.amountAMin, 2)} ${
+              removeLiquidityState.pair.token0.symbol
+            }`}
+          </Text>
+          <Text fontWeight={'700'} textColor="text.accent">
+            {`${precision(removeLiquidityState.amountBMin, 2)} ${
+              removeLiquidityState.pair.token1.symbol
+            }`}
+          </Text>
+        </Flex>
+      </WaitingConfirmationDialog>
+
       <TransactionSubmittedDialog
         title="Withdraw"
-        subtitle="Withdraw values"
+        subtitle="Withdraw"
         tx={{ hash: removeLiquidityState.hash } as Transaction}
-        isOpen={!!removeLiquidityState.hash}
+        isOpen={isOpenSubmitted}
+        closeParentComponent={closeParentComponent}
       />
+      <TransactionErrorDialog error={txError} isOpen={isOpenError} />
     </Flex>
   )
 }
@@ -235,17 +288,17 @@ const YourPosition = ({ pair, userPoolShare }: { pair: Pair; userPoolShare: numb
       >
         <PositionInfoItem
           label="Your pool share:"
-          value={`${precision(userPoolShare * 100, 2).formatted}%`}
+          value={`${precision(userPoolShare * 100, 2)}%`}
         />
         <PositionInfoItem
           label={pair.token0.symbol}
-          value={precision(+pair.reserve0.toExact() * userPoolShare).formatted}
+          value={precision(+pair.reserve0.toExact() * userPoolShare)}
         >
           <CurrencyIcon size="sm" currency={pair.token0} />
         </PositionInfoItem>
         <PositionInfoItem
           label={pair.token1.symbol}
-          value={precision(+pair.reserve1.toExact() * userPoolShare).formatted}
+          value={precision(+pair.reserve1.toExact() * userPoolShare)}
         >
           <CurrencyIcon size="sm" currency={pair.token1} />
         </PositionInfoItem>

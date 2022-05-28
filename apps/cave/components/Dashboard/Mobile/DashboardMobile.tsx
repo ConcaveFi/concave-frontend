@@ -1,31 +1,27 @@
-import { Box, Card, Collapse, Flex, FlexProps } from '@concave/ui'
+import { SpinIcon } from '@concave/icons'
+import { Box, Collapse, Flex, keyframes, Text, VStack } from '@concave/ui'
+import { UseDashBoardState } from 'contracts/DashBoard/DashBoardState'
+import { useConnect } from 'wagmi'
 import DividendsShareMobile from './Components/DividendsShare'
-import { NftPositionViewer } from './Components/UserCard/NftPositionViewer'
 import UserPositionCardMobile from './Components/UserPositionCard'
 
-interface DashboardMobileProps extends FlexProps {
-  usercontract: any
-  totallocked: any
-  statusdata: {
-    isLoading: boolean
-    notConnected: boolean
-    success: boolean
-  }
-}
+const spin = keyframes({
+  '0%': { transform: 'rotate(0deg)' },
+  '100%': { transform: 'rotate(360deg)' },
+})
 
-const DashboardMobile: React.FC<DashboardMobileProps> = ({ ...props }) => {
-  const { usercontract, totallocked, statusdata } = props
-  const { isLoading, notConnected, success } = statusdata
+const DashboardMobile = (props: { data: UseDashBoardState }) => {
+  const { data } = props
+  const { isLoading, userNonFungibleTokensInfo, totalLocked } = data
+  const [{ data: wallet }] = useConnect()
 
-  const userPosComps =
-    usercontract &&
-    usercontract.map((contract, index) => (
-      <UserPositionCardMobile key={index} contract={contract} />
-    ))
+  const userPosComps = userNonFungibleTokensInfo.map((nonFungibleTokenInfo, index) => (
+    <UserPositionCardMobile key={index} nonFungibleTokenInfo={nonFungibleTokenInfo} />
+  ))
 
   return (
-    <Flex direction={'column'} align="center" {...props}>
-      <DividendsShareMobile statusData={statusdata} totalLocked={totallocked} />
+    <Flex direction={'column'} align="center" display={{ lg: 'none', md: 'none', sm: 'flex' }}>
+      <DividendsShareMobile isLoading={isLoading} totalLocked={totalLocked} />
       <Box
         maxHeight={'660px'}
         overflowY="auto"
@@ -33,16 +29,16 @@ const DashboardMobile: React.FC<DashboardMobileProps> = ({ ...props }) => {
         position="relative"
         css={scrollBar}
         mt={3}
-        borderBottom="4px solid skyblue"
-        borderTop="4px solid skyblue"
-        rounded={'3xl'}
+        borderBottom={!isLoading && '4px solid skyblue'}
+        borderTop={!isLoading && '4px solid skyblue'}
+        rounded={!isLoading && '3xl'}
         gap={4}
       >
-        <Collapse in={success}>
-          <Flex rounded={'3xl'} direction={'column'} gap={4} width="full" align={'center'}>
-            {userPosComps}
-          </Flex>
+        <Collapse in={!isLoading}>
+          <VStack>{userPosComps}</VStack>
         </Collapse>
+        <LoadingPositions in={isLoading} />
+        <NotConnected in={!wallet.connected} />
       </Box>
     </Flex>
   )
@@ -62,4 +58,68 @@ const scrollBar = {
     background: ' #0A161F ',
     margin: '2px',
   },
+}
+
+interface LoadingPositionsProps {
+  in: boolean
+}
+const LoadingPositions = (props: LoadingPositionsProps) => {
+  const spinnerStyles = { animation: `${spin} 2s linear infinite`, size: 'sm' }
+
+  return (
+    <Collapse in={props.in}>
+      <Box
+        height={'140px'}
+        width="360px"
+        rounded="2xl"
+        bg="linear-gradient(239.18deg, #19394C 27.18%, #0A161F 96.11%)"
+        boxShadow={'Up Small'}
+      >
+        <Flex
+          height={'full'}
+          width="full"
+          bgSize={'40%'}
+          bgImage={'/assets/textures/metal.png'}
+          justify="center"
+          align={'center'}
+          direction="column"
+        >
+          <Text fontSize={'22px'} fontWeight="700" textColor={'gray.400'}>
+            Loading your positions
+          </Text>
+          <SpinIcon __css={spinnerStyles} width={'8'} height={'8'} mt={2} />
+        </Flex>
+      </Box>
+    </Collapse>
+  )
+}
+interface NotConnectedProps {
+  in: boolean
+}
+const NotConnected = (props: NotConnectedProps) => {
+  return (
+    <Collapse in={props.in}>
+      <Box
+        height={'140px'}
+        width="360px"
+        rounded="2xl"
+        bg="linear-gradient(239.18deg, #19394C 27.18%, #0A161F 96.11%)"
+        boxShadow={'Up Small'}
+      >
+        <Flex
+          height={'full'}
+          width="full"
+          bgSize={'40%'}
+          bgImage={'/assets/textures/metal.png'}
+          justify="center"
+          align={'center'}
+          direction="column"
+        >
+          <Text fontSize={'22px'} fontWeight="700" textColor={'gray.400'}>
+            You are not connected
+          </Text>
+        </Flex>
+      </Box>
+    </Collapse>
+  )
 }

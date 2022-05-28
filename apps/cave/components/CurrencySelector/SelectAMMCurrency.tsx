@@ -1,9 +1,10 @@
-import { CNV, Currency, DAI, NATIVE } from '@concave/gemswap-sdk'
-import { CnvQuestionIcon } from '@concave/icons'
+import { CNV, Currency, DAI, NATIVE, WETH9 } from '@concave/gemswap-sdk'
+import { QuestionIcon } from '@concave/icons'
 import { Button, Flex, Heading, Modal } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import React from 'react'
+import { developmentChains } from 'wagmi'
 import { CurrencySelector } from './CurrencySelector'
 import { SearchableTokenList } from './SearchableTokenList'
 
@@ -15,11 +16,11 @@ const CommonTokens = ({
   onSelect: (currency: Currency) => void
 }) => {
   const networkId = useCurrentSupportedNetworkId()
-  const currencies = [DAI, CNV, NATIVE].map((c) => c[networkId])
+  const currencies = [DAI, CNV, NATIVE, WETH9].map((c) => c[networkId])
   return (
     <>
       <Heading size="sm">
-        Common pairs <CnvQuestionIcon w="22px" h="22px" ml={2} />
+        Common pairs <QuestionIcon w="22px" h="22px" ml={2} />
       </Heading>
       <Flex gap={2} wrap="wrap">
         {currencies.map((currency) => (
@@ -31,7 +32,8 @@ const CommonTokens = ({
             aria-selected={!!selected?.equals(currency)}
             variant="select"
           >
-            {currency.symbol.toUpperCase()}
+            {!!developmentChains.findIndex((c) => c.id === currency.chainId) ? 't' : ''}
+            {currency.symbol}
           </Button>
         ))}
       </Flex>
@@ -59,7 +61,7 @@ const AMMCurrencySelectorModal = ({
       size="md"
       isOpen={isOpen}
       onClose={onClose}
-      bodyProps={{ gap: 4, w: ['350px', '400px'] }}
+      bodyProps={{ gap: 4, w: ['350px', '420px'] }}
     >
       <CommonTokens selected={selected} onSelect={selectAndClose} />
       <SearchableTokenList selected={selected} onSelect={selectAndClose} />

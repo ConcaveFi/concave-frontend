@@ -67,16 +67,16 @@ export const FRAX = new Token(
 
 // Testnet addresses under here
 
-export const ROPSTEN_CNV = new Token(
-  ChainId.ROPSTEN,
-  '0x2B8E79CBD58418CE9aeB720BAf6B93825B93eF1F',
+export const RINKEBY_CNV = new Token(
+  ChainId.RINKEBY,
+  '0xB9CED3eB5Ce9d40A735cA3345978aB62Eca0c4d0',
   18,
-  'tCNV',
+  'tCNV2',
   'Concave',
 )
 
-export const ROPSTEN_DAI = new Token(
-  ChainId.ROPSTEN,
+export const RINKEBY_DAI = new Token(
+  ChainId.RINKEBY,
   '0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4',
   18,
   'tDAI',

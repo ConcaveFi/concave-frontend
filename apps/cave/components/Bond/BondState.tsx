@@ -1,14 +1,12 @@
-import { CNV, DAI } from '@concave/gemswap-sdk'
-import { position } from '@concave/ui'
+import { CNV, DAI, DAI_ADDRESS } from '@concave/gemswap-sdk'
 import { Contract, ethers, utils } from 'ethers'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { concaveProvider as providers, rawProvider } from 'lib/providers'
+import { concaveProvider, concaveProvider as providers } from 'lib/providers'
 import { useMemo, useState } from 'react'
 import { useAccount, useSigner } from 'wagmi'
 import { BOND_ABI } from '../../contracts/Bond/BondABI'
 import { BOND_ADDRESS } from '../../contracts/Bond/BondingAddress'
-import { ROPSTEN_DAI_ABI } from '../../contracts/Bond/ROPSTEN_DAI_ABI'
 import { BondSettings } from './Settings'
 
 export const getBondAmountOut = async (
@@ -18,10 +16,10 @@ export const getBondAmountOut = async (
   input: string,
 ) => {
   const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, providers(networkId))
-  const ROPSTEN_DAI = '0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4'
+  const DAI = DAI_ADDRESS[networkId]
   // pass decimals argument where 18 is hardcoded
   const formattedInput = ethers.utils.parseUnits(input.toString(), 18)
-  const amountOut = await bondingContract.getAmountOut(ROPSTEN_DAI, formattedInput)
+  const amountOut = await bondingContract.getAmountOut(DAI, formattedInput)
   console.log(amountOut)
   const ethValue = ethers.utils.formatEther(amountOut)
   const cleanedOutput = parseFloat(ethValue).toFixed(6)
@@ -35,10 +33,10 @@ export const getBondTermLength = async (networkId: number) => {
   return formattedTermLength / 60 / 60 / 24
 }
 
-export const getBondSpotPrice = async (networkId: number, tokenAddress: string) => {
+export const getBondSpotPrice = async (networkId: number, tokenAddress?: string) => {
   const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, providers(networkId))
-  const ROPSTEN_DAI = '0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4'
-  const spotPrice = await bondingContract.getSpotPrice(ROPSTEN_DAI)
+  const DAI = DAI_ADDRESS[networkId]
+  const spotPrice = await bondingContract.getSpotPrice(DAI)
   const formatted = ethers.utils.formatEther(spotPrice)
   return formatted
 }
@@ -51,7 +49,7 @@ export const purchaseBond = async (
   settings: BondSettings,
   amountOut: string,
 ) => {
-  const ROPSTEN_DAI_ADDRESS = '0xb9ae584F5A775B2F43C79053A7887ACb2F648dD4'
+  const DAI = DAI_ADDRESS[networkId]
   const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, signer)
   const minOutput = +(+amountOut - (+settings.slippageTolerance.value / 100) * +amountOut).toFixed(
     2,
@@ -61,25 +59,20 @@ export const purchaseBond = async (
   const formattedMinOutput = utils.parseUnits(minOutput.toString(), 18)
   const estimatedGas = await bondingContract.estimateGas.purchaseBond(
     address,
-    ROPSTEN_DAI_ADDRESS,
+    DAI,
     formattedInput,
     formattedMinOutput,
   )
-  return await bondingContract.purchaseBond(
-    address,
-    ROPSTEN_DAI_ADDRESS,
-    formattedInput,
-    formattedMinOutput,
-    {
-      gasLimit: estimatedGas,
-    },
-  )
+  return await bondingContract.purchaseBond(address, DAI, formattedInput, formattedMinOutput, {
+    gasLimit: estimatedGas,
+  })
 }
 
-export async function getCurrentBlockTimestamp() {
+export async function getCurrentBlockTimestamp(networkId) {
   try {
-    const getBlock = await rawProvider.getBlockNumber()
-    const timestamp = (await rawProvider.getBlock(getBlock)).timestamp
+    const provider = concaveProvider(networkId)
+    const getBlock = await provider.getBlockNumber()
+    const timestamp = (await provider.getBlock(getBlock)).timestamp
     return timestamp
   } catch (e) {
     return
@@ -94,16 +87,16 @@ export async function redeemBondBatch(
 ) {
   const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, signer)
   const estimatedGas = bondingContract.estimateGas.redeemBondBatch(address, positionIDArray)
-  await bondingContract.redeemBondBatch(address, positionIDArray, {
+  return await bondingContract.redeemBondBatch(address, positionIDArray, {
     gasLimit: estimatedGas,
   })
-  return
 }
 
 export const getUserBondPositions = async (
   networkId: number,
   address: string,
   currentBlockTimestamp: number,
+  currentRedeemable?: number,
 ) => {
   let batchRedeemArray = []
   let totalPending = 0
@@ -112,7 +105,7 @@ export const getUserBondPositions = async (
   let oldest = 0
   let oldestCreationTimestamp = 0
   let claimed = false
-  let redeemable = 0
+  let redeemable = currentRedeemable || 0
   const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, providers(networkId))
   const getUserPositionsLength = await bondingContract.getUserPositionCount(address)
   const termData = await bondingContract.term()
@@ -127,17 +120,25 @@ export const getUserBondPositions = async (
     let length = currentBlockTimestamp - positionData.creation
     let elapsed = length / termData > 1 ? 1 : length / termData
     redeemable +=
-      positionData.owed * elapsed < positionData.redeemed
-        ? 0
-        : positionData.owed * elapsed - positionData.redeemed
+      Math.sign(positionData.owed * elapsed - positionData.redeemed) === 1
+        ? positionData.owed * elapsed - positionData.redeemed
+        : 0
     totalPending += +(+utils.formatEther(positionData.redeemed))
     totalOwed += +(+utils.formatEther(positionData.owed))
   }
-  const fullyVestedTimestamp = oldest * 1000 + 86400000
+  const fullyVestedTimestamp = oldest * 1000 + 432000000
   const parseOldest = new Date(fullyVestedTimestamp).toString().slice(4, 21)
   const parseRedeemable = Math.sign(redeemable) === -1 ? 0 : +redeemable
   if (totalPending === totalOwed) claimed = true
-  return { parseOldest, totalOwed, totalPending, batchRedeemArray, claimed, parseRedeemable }
+  return {
+    parseOldest,
+    totalOwed,
+    totalPending,
+    batchRedeemArray,
+    claimed,
+    parseRedeemable,
+    address,
+  }
 }
 
 export const useBondState = () => {

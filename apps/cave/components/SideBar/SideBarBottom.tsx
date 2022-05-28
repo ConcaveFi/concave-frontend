@@ -47,11 +47,12 @@ function SideBarBottom() {
 
   return (
     <VStack
-      w="186px"
+      // w="186px"
+      w={'100%'}
       borderRadius="2xl"
       shadow="Down Big"
       py={7}
-      pl={6}
+      // pl={6}
       textColor="text.low"
       fontSize="sm"
     >

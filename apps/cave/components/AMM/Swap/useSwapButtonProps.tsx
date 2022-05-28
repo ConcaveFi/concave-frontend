@@ -5,7 +5,8 @@ import { isAddress } from 'ethers/lib/utils'
 import { useApprove } from 'hooks/useApprove'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { usePermit } from 'hooks/usePermit'
-import { useAccount } from 'wagmi'
+import { swapSupportedChains } from 'pages/gemswap'
+import { useAccount, useNetwork } from 'wagmi'
 import { NoValidPairsError } from '../hooks/usePair'
 import { InsufficientLiquidityError, UseTradeResult } from '../hooks/useTrade'
 
@@ -18,15 +19,16 @@ export const useSwapButtonProps = ({
   recipient: string
   onSwapClick: () => void
 }): ButtonProps => {
-  const [{ data: account }] = useAccount()
+  const [account] = useAccount()
+  const [network] = useNetwork()
 
   const inputAmount = trade.data.inputAmount
   const outputAmount = trade.data.outputAmount
 
-  const currencyIn = inputAmount.currency
+  const currencyIn = inputAmount?.currency
   const currencyInBalance = useCurrencyBalance(currencyIn, { watch: true })
 
-  const [token, spender] = [currencyIn.wrapped, ROUTER_ADDRESS[currencyIn?.chainId]]
+  const [token, spender] = [currencyIn?.wrapped, ROUTER_ADDRESS[currencyIn?.chainId]]
   const permit = usePermit(token, spender)
   const { allowance, ...approve } = useApprove(token, spender)
 
@@ -35,7 +37,34 @@ export const useSwapButtonProps = ({
   /*
     Not Connected
   */
-  if (!account?.address) return { children: 'Connect Wallet', onClick: connectModal.onOpen }
+  if (account.loading || network.loading) return { isLoading: true }
+  if (!account.data?.address) return { children: 'Connect Wallet', onClick: connectModal.onOpen }
+
+  /*
+    Select a token
+  */
+  if (!currencyIn || !outputAmount?.currency)
+    return { children: 'Select a token', isDisabled: true }
+
+  /*
+    Network Stuff
+  */
+  if (network.data.chain?.id !== currencyIn.chainId)
+    return { children: 'Network mismatch', isDisabled: true }
+  if (!swapSupportedChains.includes(network.data.chain?.id))
+    return {
+      children: 'Unsupported chain',
+      isDisabled: true,
+    }
+
+  /* 
+    SOON Wrap / Unwrap
+  */
+  const currencyOut = outputAmount?.currency
+  if (currencyIn.isNative && currencyIn.wrapped.equals(currencyOut))
+    return { children: 'Wrap (soon)', isDisabled: true }
+  if (currencyOut?.isNative && currencyIn.equals(currencyOut.wrapped))
+    return { children: 'Unwrap (soon)', isDisabled: true }
 
   /*
     Trade loaded
@@ -58,8 +87,15 @@ export const useSwapButtonProps = ({
     Fetching user data (Allowance & Balance)
   */
   if (allowance.isLoading || currencyInBalance.isLoading) return { isLoading: true }
-  if (allowance.isError || currencyInBalance.isError)
-    return { children: `Error fetching account data`, isDisabled: true }
+  if (allowance.isError || (currencyInBalance.isError && !currencyInBalance.isFetching))
+    return { children: `Error fetching balances`, fontSize: 'lg', isDisabled: true }
+
+  /*
+    Return approve button first if no approval
+  */
+  if (currencyIn.isToken && allowance.value.isZero()) {
+    return permitOrApprove()
+  }
 
   /*
     Enter an amount
@@ -72,7 +108,7 @@ export const useSwapButtonProps = ({
   */
   if (currencyInBalance.data?.lessThan(inputAmount))
     return {
-      children: `Insufficient ${inputAmount.currency.symbol} balance`,
+      children: `Insufficient ${inputAmount.currency.symbol}`,
       isDisabled: true,
     }
 
@@ -80,15 +116,39 @@ export const useSwapButtonProps = ({
     Permit / Approve
   */
   if (currencyIn.isToken) {
+    permitOrApprove()
+  }
+
+  if (recipient && !isAddress(recipient)) return { children: 'Invalid recipient', isDisabled: true }
+
+  // /*
+  //   Wrap / Unwrap, ETH <-> WETH
+  // */
+  // const currencyOut = outputAmount?.currency
+  // if (currencyIn.isNative && currencyIn.wrapped.equals(currencyOut))
+  //   return { children: 'Wrap', isDisabled: true }
+  // if (currencyOut?.isNative && currencyIn.equals(currencyOut.wrapped))
+  //   return { children: 'Unwrap', isDisabled: true }
+
+  /*
+    Swap
+  */
+  return {
+    children: 'Swap',
+    onClick: onSwapClick,
+  }
+
+  function permitOrApprove() {
     if (approve.isWaitingForConfirmation)
-      return { loadingText: 'Approve in your wallet', isLoading: true }
+      return { loadingText: 'Approve in wallet', isLoading: true }
     if (approve.isWaitingTransactionReceipt)
-      return { loadingText: 'Waiting block confirmation', isLoading: true }
-    if (permit.isLoading) return { loadingText: 'Sign in your wallet', isLoading: true }
+      return { loadingText: 'Waiting for approval', isLoading: true }
+    if (permit.isLoading) return { loadingText: 'Sign in wallet', isLoading: true }
 
     const permitErroredOrWasNotInitializedYet = permit.isError || permit.isIdle
     const allowanceIsNotEnough =
-      allowance.isSuccess && !!allowance.value.lt(inputAmount.numerator.toString())
+      allowance.isSuccess &&
+      (!!allowance.amount?.lessThan(inputAmount) || +allowance.formatted === 0)
 
     if (
       (permitErroredOrWasNotInitializedYet && allowanceIsNotEnough) ||
@@ -98,22 +158,5 @@ export const useSwapButtonProps = ({
       return !permit.isSupported || permit.isError
         ? { children: `Approve ${currencyIn.symbol}`, onClick: () => approve.sendApproveTx() }
         : { children: `Permit ${currencyIn.symbol}`, onClick: () => permit.signPermit() }
-  }
-
-  if (recipient && !isAddress(recipient)) return { children: 'Invalid recipient', isDisabled: true }
-
-  /* 
-    Wrap / Unwrap, ETH <-> WETH
-  */
-  const currencyOut = outputAmount?.currency
-  if (currencyIn.isNative && currencyIn.wrapped.equals(currencyOut)) return { children: 'Wrap' }
-  if (currencyOut?.isNative && currencyIn.equals(currencyOut.wrapped)) return { children: 'Unwrap' }
-
-  /*
-    Swap
-  */
-  return {
-    children: 'Swap',
-    onClick: onSwapClick,
   }
 }

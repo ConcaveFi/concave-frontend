@@ -1,30 +1,29 @@
 import { BigNumber, BigNumberish, Contract } from 'ethers'
 import { formatUnits } from 'ethers/lib/utils'
-import { Token } from '@concave/gemswap-sdk'
-import { erc20ABI, useAccount, useProvider, useSigner } from 'wagmi'
+import { CurrencyAmount, Token } from '@concave/gemswap-sdk'
+import { erc20ABI, useAccount, useSigner } from 'wagmi'
 import { MaxUint256 } from '@concave/gemswap-sdk'
 import { useQuery } from 'react-query'
 import { TransactionReceipt, TransactionResponse } from '@ethersproject/abstract-provider'
-import { AVERAGE_BLOCK_TIME } from 'constants/blockchain'
+import { concaveProvider } from 'lib/providers'
 
 export const useAllowance = (token: Token, spender: string, userAddress: string) => {
-  const provider = useProvider()
   const {
     data: value,
     isLoading,
     isError,
+    error,
     isSuccess,
     refetch,
   } = useQuery<BigNumber>(
     ['allowance', token?.address, userAddress],
     async () => {
-      const tokenContract = new Contract(token.address, erc20ABI, provider)
+      const tokenContract = new Contract(token.address, erc20ABI, concaveProvider(token.chainId))
       return await tokenContract.allowance(userAddress, spender)
     },
     {
-      enabled: !!token.address && !!userAddress && !!spender,
+      enabled: !!token?.address && !!userAddress && !!spender,
       retry: false,
-      refetchInterval: AVERAGE_BLOCK_TIME[token.chainId],
     },
   )
 
@@ -32,8 +31,10 @@ export const useAllowance = (token: Token, spender: string, userAddress: string)
     isError,
     isLoading,
     isSuccess,
+    error,
     value,
     formatted: value && formatUnits(value, token?.decimals),
+    amount: value && CurrencyAmount.fromRawAmount(token, value.toString()),
     refetch,
   }
 }
@@ -42,13 +43,15 @@ export const useContractApprove = (
   token: Token,
   spender: string,
   amountToApprove: BigNumberish = MaxUint256.toString(),
-  { onSuccess }: { onSuccess: (recipt: TransactionReceipt) => void },
+  { onSuccess }: { onSuccess: (receipt: TransactionReceipt) => void },
 ) => {
   const [{ data: signer }] = useSigner()
   const {
     data: tx,
     isLoading: isWaitingForConfirmation,
     isSuccess: isTransactionSent,
+    isError,
+    error,
     refetch: sendApproveTx,
   } = useQuery<TransactionResponse>(
     ['approve', token?.address, spender],
@@ -68,6 +71,8 @@ export const useContractApprove = (
     isWaitingForConfirmation,
     isWaitingTransactionReceipt,
     isTransactionSent,
+    isError,
+    error,
     tx,
     receipt,
     sendApproveTx,
@@ -79,11 +84,11 @@ export const useApprove = (
   spender: string,
   amount: BigNumberish = MaxUint256.toString(),
 ) => {
-  const [{ data: account }] = useAccount()
+  const [{ data: account, loading }] = useAccount()
   const allowance = useAllowance(token, spender, account?.address)
   const approve = useContractApprove(token, spender, amount, {
     onSuccess: () => allowance.refetch(),
   })
 
-  return { allowance, ...approve }
+  return { allowance, ...approve, isFeching: loading || allowance.isLoading }
 }

@@ -21,7 +21,7 @@ export const usePrice = (currencyIn?: Currency, currencyOut?: Currency) => {
   )
 
   return useMemo(() => {
-    if (currencyIn?.wrapped.equals(currencyOut.wrapped))
+    if (currencyOut && currencyIn?.wrapped.equals(currencyOut.wrapped))
       return {
         price: new Price(currencyIn, currencyIn, 1, 1),
         isLoading: false,

@@ -32,9 +32,9 @@ function StakeInfo(props: any) {
   return (
     <Box shadow="up" px={2} py={4} borderRadius="3xl" filter="drop-shadow(0px 0px 27px #81b3ff4f)">
       <Box px={4}>
-        <Stack isInline spacing={6}>
+        <Stack isInline justifyContent="space-between">
           <Stack spacing="1px">
-            <Text textAlign="left" fontSize="3xl" fontWeight="bold">
+            <Text textAlign="left" fontSize={{ base: '2xl', sm: '3xl' }} fontWeight="bold">
               {/* {props.period} */}
               {periodToRewardsBoost[`${props.period}`]}
             </Text>
@@ -43,15 +43,20 @@ function StakeInfo(props: any) {
             </Text>
           </Stack>
           <Stack spacing="1px">
-            <Text textAlign="left" fontSize="3xl" fontWeight="bold">
+            <Text textAlign="left" fontSize={{ base: '2xl', sm: '3xl' }} fontWeight="bold">
               {periodToBondRevenueMapping[`${props.period}`]}
             </Text>
             <Text color="text.low" fontSize="sm">
-              Share of Bonding Revenue
+              Share of Bond Growth
             </Text>
           </Stack>
         </Stack>
-        <Text mt={6} color="text.low" fontSize="sm">
+        <Text
+          mt={{ base: 3, sm: 6 }}
+          color="text.low"
+          fontSize={{ base: '12px', sm: 'sm' }}
+          align="justify"
+        >
           The {props.period} staking term will accrue CNV from bond emissions by capturing{` `}
           {periodToBondRevenueMapping[props.period]} of the growth generated from purchased bonds
           every 8 hours. Additionally, the {props.period} term receives a{` `}
@@ -59,13 +64,14 @@ function StakeInfo(props: any) {
           dividend derived from protocol profits in non CNV assets.
         </Text>
 
-        <Text mt={5} color="text.low" fontSize="sm" fontWeight="semibold">
-          Redeem Date: {props.period}
+        <Text mt={{ base: 3, sm: 5 }} color="text.low" fontSize="sm" fontWeight="semibold">
+          {/* Redeem Date: {props.period} */}
+          Redeem Date:{' '}
+          {addDays(Date(), periodToDaysMapping[`${props.period}`]).toISOString().slice(0, 10)}
         </Text>
-        {/* {addDays(Date(), periodToDaysMapping[`${props.period}`]).toISOString().slice(0, 10)} */}
       </Box>
 
-      <Stack mt={4}>
+      <Stack mt={{ base: 0, sm: 4 }}>
         <Stack px={4} color="text.low" fontSize={12} isInline justify="space-between" mt={3}>
           <Text fontSize="sm">Currently Staked</Text>
           <Text fontSize="sm">Staking Cap</Text>

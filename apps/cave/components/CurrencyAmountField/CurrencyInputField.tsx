@@ -1,16 +1,20 @@
 import { Currency, CurrencyAmount } from '@concave/gemswap-sdk'
 import { HStack, Text } from '@concave/ui'
 import { useFiatValue } from 'components/AMM/hooks/useFiatPrice'
-import { CurrencySelectorComponent } from 'components/CurrencySelector/CurrencySelector'
+import {
+  CurrencySelectorComponent,
+  CurrencySelector as DisabledCurrencySelector,
+} from 'components/CurrencySelector/CurrencySelector'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { toAmount } from 'utils/toAmount'
 import { CurrencyAmountField } from '../CurrencyAmountField'
 import { Balance } from './Balance'
+import { truncateNumber } from 'utils/truncateNumber'
 
 type CurrencyInputFieldProps = {
   currencyAmountIn: CurrencyAmount<Currency>
   onChangeAmount: (value: CurrencyAmount<Currency>) => void
-  CurrencySelector: CurrencySelectorComponent
+  CurrencySelector?: CurrencySelectorComponent
   debounce?: number
 }
 
@@ -28,7 +32,7 @@ const maxAmount = (userBalance: CurrencyAmount<Currency>) => {
 export const CurrencyInputField = ({
   currencyAmountIn,
   onChangeAmount,
-  CurrencySelector,
+  CurrencySelector = DisabledCurrencySelector,
   debounce,
 }: CurrencyInputFieldProps) => {
   const inputFiat = useFiatValue(currencyAmountIn)
@@ -42,13 +46,13 @@ export const CurrencyInputField = ({
       debounce={debounce}
     >
       <HStack justify="space-between" align="end" textColor="text.low" w="full">
-        <Text isTruncated fontWeight="bold" fontSize="sm" mr={2}>
+        <Text noOfLines={1} fontWeight="bold" fontSize="sm" mr={2}>
           {!!inputFiat.value?.greaterThan(0) &&
             `$${inputFiat.value.toFixed(2, { groupSeparator: ',' })}`}
         </Text>
         {balance.isSuccess && (
           <Balance
-            value={balance.data.toFixed(2, { groupSeparator: ',' })}
+            value={truncateNumber(balance?.data?.numerator)}
             onMax={() => onChangeAmount(maxAmount(balance.data))}
           />
         )}

@@ -1,112 +1,73 @@
-import React, { useEffect, useState } from 'react'
-import { Box, Flex, HStack, Image, Text, Tooltip, useMediaQuery } from '@concave/ui'
+import { Box, Flex, Image, Text } from '@concave/ui'
 function Emissions(props: any) {
-  const [isLargerThan700] = useMediaQuery('(min-width: 700px)')
-
-  const [margin, setMargin] = useState('auto')
-
-  useEffect(() => {
-    setMargin(isLargerThan700 ? 'auto' : '')
-  }, [isLargerThan700])
-  const informations = () => {
+  const Informations = ({
+    onClick,
+    onClose,
+    display,
+  }: {
+    onClick: () => void
+    onClose: () => void
+    display: any
+  }) => {
     return (
       <Box
         // shadow="down"
+        display={display}
         borderTopRadius="xl"
         borderBottomRadius="full"
-        w="90%"
+        w="80%"
         pt={4}
-        pb={10}
-        px={3}
+        pb={{ base: 0, md: 10 }}
+        px={{ base: 0, md: 3 }}
         mx="auto"
         filter="drop-shadow(0px 0px 27px #81b3ff4f)"
       >
-        <Flex
-          textAlign={'center'}
-          direction={'column'}
-          justify={'center'}
-          align="center"
-          mt={isLargerThan700 ? 0 : 8}
-        >
-          <HStack>
-            <Tooltip
-              label="Anti-dilutive bond emissions ensure staking positions are rewarded with a share of any new supply minted from bonds that are purchased. Staking positions recieve a share of this growth compounded at 8hr intervals."
-              bg="gray.900"
-              color="white"
-              placement="left-start"
-            >
-              <Image
-                mx="auto"
-                src={`/assets/liquidstaking/modal-moreinfo-logo.svg`}
-                alt="arrow down logo"
-              />
-            </Tooltip>
-            <Text mx={margin} color="text.low" fontSize="sm">
-              Bonding Emissions:
-            </Text>
-          </HStack>
-          <Text mx={margin} fontSize="md" fontWeight="bold">
-            Coming Soon
+        <Flex textAlign={'center'} direction={'column'} justify={'center'} align="center">
+          <Text mx={{ base: '', sm: 'auto' }} color="text.low" fontSize="sm">
+            Bonding Emissions:
           </Text>
-          <Text mx={margin} color="text.low" fontSize="sm">
+          <Text mx={{ base: '', sm: 'auto' }} fontSize="sm" fontWeight="bold">
+            Calculating
+          </Text>
+          <Text mx={{ base: '', sm: 'auto' }} color="text.low" fontSize="sm">
             +
           </Text>
-          <HStack>
-            <Tooltip
-              label="Base emissions ensure that staking positions receive continuous CNV rewards throughout the term. Staking positions receive a boost in base emissions as a function of term length."
-              bg="gray.900"
-              color="white"
-              placement="left-start"
-            >
-              <Image
-                mx="auto"
-                src={`/assets/liquidstaking/modal-moreinfo-logo.svg`}
-                alt="arrow down logo"
-              />
-            </Tooltip>
-            <Text mx={margin} color="text.low" fontSize="sm">
-              Base Emissions:
-            </Text>
-          </HStack>
-          <Text mx={margin} fontSize="md" fontWeight="bold">
-            Coming Soon
+          <Text mx={{ base: '', sm: 'auto' }} color="text.low" fontSize="sm">
+            Base Emissions:
           </Text>
-          <Text mx={margin} color="text.low" fontSize="sm">
+          <Text mx={{ base: '', sm: 'auto' }} fontSize="sm" fontWeight="bold">
+            {Math.sign(props?.vapr) !== 1 ? 'Calculating' : `${(props?.vapr * 100).toFixed(2)}%`}
+          </Text>
+          <Text mx={{ base: '', sm: 'auto' }} color="text.low" fontSize="sm">
             +
           </Text>
-          <HStack>
-            <Tooltip
-              label="Quarterly dividends ensure that stakers  receive a share of profits in non CNV assets from all yield bearing products and services. Staking positions receive a boost in dividend as a function of term length."
-              bg="gray.900"
-              color="white"
-              placement="left-start"
-            >
-              <Image
-                mx="auto"
-                src={`/assets/liquidstaking/modal-moreinfo-logo.svg`}
-                alt="arrow down logo"
-              />
-            </Tooltip>
-            <Text mx={margin} color="text.low" fontSize="sm">
-              Quarterly Dividends:
-            </Text>
-          </HStack>
-          <Text mx={margin} fontSize="md" fontWeight="bold">
-            Coming Soon
+          <Text mx={{ base: '', sm: 'auto' }} color="text.low" fontSize="sm">
+            Quarterly Dividends:
           </Text>
+          <Text mx={{ base: '', sm: 'auto' }} fontSize="md" fontWeight="bold">
+            Calculating
+          </Text>
+          <Flex onClick={onClick} onMouseLeave={onClose}>
+            <Image
+              mt={4}
+              mx="auto"
+              src={`/assets/liquidstaking/modal-moreinfo-logo.svg`}
+              alt="arrow down logo"
+            />
+          </Flex>
         </Flex>
       </Box>
     )
   }
 
   return (
-    <Flex direction={'column'} py={2} px={5}>
-      <Flex direction={'row'} gap="4">
+    <Flex direction={'column'} py={2} px={5} maxW={{ base: '90px', sm: 'full' }}>
+      <Flex direction={'row'} maxW={{ base: '100px', sm: '260px' }}>
         <Flex
           mx="auto"
           pt={5}
           pb={3}
-          w="220px"
+          w="240px"
           h="full"
           minW={'150px'}
           minHeight={'300px'}
@@ -114,7 +75,7 @@ function Emissions(props: any) {
           borderRadius="full"
           textAlign="center"
           direction={'column'}
-          ml={-1}
+          ml={{ base: -4, sm: -1 }}
         >
           <Text color="text.low" fontSize="sm">
             Stake period
@@ -130,41 +91,43 @@ function Emissions(props: any) {
           <Text color="text.low" fontSize="sm">
             {props.vaprText}
           </Text>
-          <Text fontSize="lg" fontWeight="bold" mb="2">
-            {/* {props.vapr} % */}
-            Calculating
+          <Text mx={{ base: '', sm: 'auto' }} fontSize="md" fontWeight="bold">
+            {props.vapr}
           </Text>
-          <Tooltip
-            label="Total vAPR aggregates rewards associated with each staking position including rewards from bonding activity, base emissions and the quarterly dividend."
-            color="white"
-            bg="gray.800"
-            placement="left-start"
-          >
-            <Image
-              mx="auto"
-              src={`/assets/liquidstaking/modal-moreinfo-logo.svg`}
-              alt="arrow down logo"
-            />
-          </Tooltip>
-          {isLargerThan700 && (
-            <Image
-              mx="auto"
-              src={`/assets/liquidstaking/modal-arrow-logo.svg`}
-              alt="arrow down logo"
-            />
-          )}
-          {isLargerThan700 && informations()}
-        </Flex>
-
-        {!isLargerThan700 && (
+          <Text fontSize="lg" fontWeight="bold" mb="2"></Text>
           <Image
+            mx="auto"
+            src={`/assets/liquidstaking/modal-moreinfo-logo.svg`}
+            alt="arrow down logo"
+            onMouseOver={() => props.setShowFloatingCards(true)}
+            onMouseLeave={() => props.setShowFloatingCards(false)}
+          />
+          <Image
+            display={{ base: 'none', md: 'flex' }}
             mx="auto"
             src={`/assets/liquidstaking/modal-arrow-logo.svg`}
             alt="arrow down logo"
-            transform={'rotate(-90deg)'}
           />
-        )}
-        {!isLargerThan700 && informations()}
+          <Informations
+            onClick={() => props.setShowFloatingCards(true)}
+            onClose={() => props.setShowFloatingCards(false)}
+            display={{ base: 'none', md: 'block' }}
+          />
+        </Flex>
+
+        <Image
+          mr={3}
+          display={{ base: 'block', md: 'none' }}
+          src={`/assets/liquidstaking/modal-arrow-logo.svg`}
+          width="60px"
+          alt="arrow down logo"
+          transform={'rotate(-90deg)'}
+        />
+        <Informations
+          onClick={() => props.setShowFloatingCards(true)}
+          onClose={() => props.setShowFloatingCards(false)}
+          display={{ base: 'block', md: 'none' }}
+        />
       </Flex>
     </Flex>
   )

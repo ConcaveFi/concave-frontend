@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, Percent, Trade, TradeType } from '@concave/gemswap-sdk'
+import { Currency, CurrencyAmount, Percent, Rounding, Trade, TradeType } from '@concave/gemswap-sdk'
 import { ExpandArrowIcon, WarningTwoIcon } from '@concave/icons'
 import {
   Box,
@@ -17,7 +17,7 @@ import { CurrencyIcon } from 'components/CurrencyIcon'
 import React, { useEffect, useState } from 'react'
 import { usePreviousDistinct } from 'react-use'
 import { useFiatValue } from '../hooks/useFiatPrice'
-import { SwapSettings } from '../Settings'
+import { SwapSettings } from '../Swap/Settings'
 import { percentDifference } from 'utils/percentDifference'
 import { ExpectedOutput, MinExpectedOutput } from './ExpectedOutput'
 import { RelativePrice } from './RelativePrice'
@@ -39,10 +39,12 @@ const TradeCurrencyInfo = ({ currencyAmount, fiatValue, priceImpact }: TradeCurr
       bg="blackAlpha.100"
     >
       <Stack spacing={1} direction="column" h="100%">
-        <Heading fontSize="2xl">{currencyAmount.toSignificant(2, { groupSeparator: ',' })}</Heading>
+        <Heading noOfLines={1} maxW="200px" fontSize="2xl">
+          {currencyAmount.toSignificant(8, { groupSeparator: ',' }, Rounding.ROUND_HALF_UP)}
+        </Heading>
         <Flex fontWeight="bold" color="text.low" align="center">
           <Text fontSize="sm" mr={1}>
-            $ {fiatValue.toFixed(2, { groupSeparator: ',' })}
+            $ {fiatValue?.toFixed(2, { groupSeparator: ',' })}
           </Text>
           <Text fontSize="xs" opacity={0.7}>
             {priceImpact && `(${priceImpact?.toFixed(2)}%)`}
@@ -148,7 +150,7 @@ const ConfirmSwap = ({
   const [hasAcceptedNewPrices, setAcceptedNewPrices] = useState(true)
   useEffect(() => {
     if (prevTrade?.outputAmount && hasAcceptedNewPrices) setAcceptedNewPrices(false)
-  }, [prevTrade?.outputAmount])
+  }, [hasAcceptedNewPrices, prevTrade?.outputAmount])
 
   return (
     <>
@@ -187,7 +189,7 @@ const ConfirmSwap = ({
         variant="primary"
         size="large"
         onClick={onConfirm}
-        isFullWidth
+        w="full"
       >
         {hasAcceptedNewPrices ? 'Confirm Swap' : 'Accept new prices first'}
       </Button>

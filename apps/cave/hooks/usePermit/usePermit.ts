@@ -40,7 +40,7 @@ export const usePermit = (token: Token, spender: string) => {
     isError,
     isIdle,
     refetch,
-  } = useQuery(['permit', token.address, spender], () => signPermit(signer, token, spender), {
+  } = useQuery(['permit', token?.address, spender], () => signPermit(signer, token, spender), {
     enabled: false,
   })
 

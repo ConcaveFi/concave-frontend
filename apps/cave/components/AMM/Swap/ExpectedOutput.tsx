@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, Percent, Trade, TradeType } from '@concave/gemswap-sdk'
+import { Currency, CurrencyAmount, Percent, Rounding, Trade, TradeType } from '@concave/gemswap-sdk'
 import { Box, Flex, Stack, Text } from '@concave/ui'
 
 export const MinExpectedOutput = ({
@@ -6,7 +6,7 @@ export const MinExpectedOutput = ({
   slippageTolerance,
 }: {
   trade: Trade<Currency, Currency, TradeType>
-  slippageTolerance: { value: string; percent: Percent }
+  slippageTolerance: { value: number; percent: Percent }
 }) => {
   const isExactInput = trade.tradeType === TradeType.EXACT_INPUT
   const amount = isExactInput
@@ -20,7 +20,7 @@ export const MinExpectedOutput = ({
           {slippageTolerance.value}%)
         </Text>
         <Text fontWeight="bold" textColor="text.low">
-          {amount.toSignificant(4, { groupSeparator: ',' })} {amount.currency.symbol}
+          {amount.toFixed(3, { groupSeparator: ',' })} {amount.currency.symbol}
         </Text>
       </Flex>
       {/* <Flex fontSize="sm" w="100%" justify="space-between">
@@ -49,12 +49,13 @@ export const ExpectedOutput = ({
           Expected Output
         </Text>
         <Text>
-          {outputAmount.toSignificant(6, { groupSeparator: ',' })} {outputAmount.currency.symbol}
+          {outputAmount.toSignificant(6, { groupSeparator: ',' }, Rounding.ROUND_HALF_UP)}{' '}
+          {outputAmount.currency.symbol}
         </Text>
       </Flex>
       <Flex justify="space-between">
         <Text>Price Impact</Text>
-        <Text>{priceImpact.toFixed(2, { groupSeparator: ',' })}%</Text>
+        <Text>{priceImpact.toFixed(2, { groupSeparator: ',' }, Rounding.ROUND_UP)}%</Text>
       </Flex>
     </Stack>
   )

@@ -1,17 +1,27 @@
-import { Button, Card, Flex, FlexProps, Spinner, Text } from '@concave/ui'
+import { SpinnerIcon } from '@concave/icons'
+import { Flex, keyframes, Text } from '@concave/ui'
+import { BigNumber } from 'ethers'
+import { formatFixed } from 'utils/formatFixed'
+import { useConnect } from 'wagmi'
 
-interface DividendsShareMobileProps extends FlexProps {
-  totalLocked: number
-  statusData: { isLoading; success; notConnected }
+interface DividendsShareMobileProps {
+  totalLocked: BigNumber
+  isLoading: boolean
 }
-const DividendsShareMobile: React.FC<DividendsShareMobileProps> = ({ ...props }) => {
-  const { statusData } = props
-  const { isLoading, success, notConnected } = statusData
-  const totalLocked = notConnected
+
+const spin = keyframes({
+  '0%': { transform: 'rotate(0deg)' },
+  '100%': { transform: 'rotate(360deg)' },
+})
+const DividendsShareMobile = (props: DividendsShareMobileProps) => {
+  const [{ data: wallet }] = useConnect()
+  const spinnerStyles = { animation: `${spin} 2s linear infinite`, size: 'sm' }
+  const { isLoading } = props
+  const totalLocked = !wallet.connected
     ? '--.--.--.--'
     : isLoading
     ? 'loading'
-    : +parseFloat(props.totalLocked.toFixed(3))
+    : formatFixed(props.totalLocked, { decimals: 3 }) + ' CNV'
   return (
     <Flex
       rounded={'2xl'}
@@ -33,7 +43,9 @@ const DividendsShareMobile: React.FC<DividendsShareMobileProps> = ({ ...props })
             <LowText label="Total Locked:" />
             <Flex justify={'center'}>
               <HighText label={totalLocked} />
-              {isLoading && <Spinner height={'20px'} width={'20px'} ml={1} />}
+              {isLoading && (
+                <SpinnerIcon css={spinnerStyles} height={'15px'} width={'15px'} ml={1} my="auto" />
+              )}
             </Flex>
           </Flex>
           <Flex flex={1} direction={'column'}>

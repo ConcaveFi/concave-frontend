@@ -1,33 +1,22 @@
-import { Box, Button, Card, Collapse, Flex, FlexProps, Spinner, Text } from '@concave/ui'
-import UserPositionCard from './UserPositionCard'
-import UserDividendCard from './UserDividendCard'
-import { ButtonLink } from 'components/ButtonLink'
-import { useDashBoardState } from 'contracts/DashBoard/DashBoardState'
+import { Box, Button, Card, Collapse, Flex, Spinner, Text } from '@concave/ui'
+import { UseDashBoardState } from 'contracts/DashBoard/DashBoardState'
 import { useRouter } from 'next/router'
+import { useConnect } from 'wagmi'
+import UserDividendCard from './UserDividendCard'
+import UserPositionCard from './UserPositionCard'
 
+const UserDashboardCard = (props: { data: UseDashBoardState }) => {
+  const { data } = props
+  const [{ data: wallet }] = useConnect()
+  const { userNonFungibleTokensInfo, totalLocked, isLoading } = data
+  const userPositionsComponent = userNonFungibleTokensInfo.map((nonFungibleTokenInfo, index) => (
+    <UserPositionCard key={index} nonFungibleTokenInfo={nonFungibleTokenInfo} />
+  ))
 
-interface UserDashBoardCardProps extends FlexProps {
-  usercontract: any
-  totallocked: any
-  statusdata: {
-    isLoading: boolean
-    notConnected: boolean
-    success: boolean
-  }
-}
+  const hasPositions = userNonFungibleTokensInfo.length !== 0
 
-const UserDashboardCard: React.FC<UserDashBoardCardProps> = ({ ...props }) => {
-  const { usercontract, totallocked, statusdata } = props
-  const { isLoading, success, notConnected } = statusdata
-
-
-  const userPosComps =
-    usercontract &&
-    usercontract.map((contract, index) => <UserPositionCard key={index} contract={contract} />)
-
-  const hasPositions = usercontract !== null
   return (
-    <Flex position={'absolute'} {...props}>
+    <Flex display={{ lg: 'flex', md: 'flex', sm: 'none', base: 'none' }}>
       <Card
         p={3}
         gap={2}
@@ -49,12 +38,12 @@ const UserDashboardCard: React.FC<UserDashBoardCardProps> = ({ ...props }) => {
             maxHeight={'500px'}
           >
             <Flex direction="row" gap={4} position="relative" mt={1}>
-              <UserDividendCard statusData={statusdata} totalLocked={totallocked} />
+              <UserDividendCard isLoading={isLoading} totalLocked={totalLocked} />
             </Flex>
           </Box>
         </Flex>
 
-        <Collapse in={usercontract !== null}>
+        <Collapse in={hasPositions}>
           <Box
             pos="relative"
             h="100%"
@@ -67,13 +56,13 @@ const UserDashboardCard: React.FC<UserDashBoardCardProps> = ({ ...props }) => {
             shadow="down"
             __css={scrollBar}
           >
-            {userPosComps}
+            {userPositionsComponent}
           </Box>
         </Collapse>
 
         <LoadingPositions in={isLoading} />
-        <ItsNotConected in={notConnected} />
-        <HasNoPositions in={!hasPositions && !isLoading && !notConnected} />
+        <ItsNotConected in={!wallet.connected} />
+        <HasNoPositions in={!hasPositions && !isLoading && wallet.connected} />
       </Card>
     </Flex>
   )
@@ -126,10 +115,10 @@ const HasNoPositions = (props: HasNoPositionsprops) => {
           px={4}
           my="4"
           rounded={'2xl'}
-          onClick={() => router.push('liquidstaking')}
+          onClick={() => router.push('liquid-staking')}
         >
           <Flex fontSize={'16px'} fontWeight="700" grow={1} justify="center">
-            Lets buy some!
+            Stake CNV now!
           </Flex>
         </Button>
       </Flex>

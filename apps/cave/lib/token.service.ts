@@ -1,12 +1,14 @@
-import { CandleStickIntervalTypes } from 'components/AMM/Chart/useCandleStickChart'
 import { chain } from 'wagmi'
 import { coingeckoApi } from './coingecko.api'
+
+export const chartIntervals = ['5m', '15m', '1H', '4H', '1D'] as const
+export type ChartInterval = typeof chartIntervals[number]
 
 class TokenService {
   constructor(private networkName: string = chain.mainnet.name) {}
 
   async getTokenPrice(symbol: string) {
-    if (this.networkName === chain.ropsten.name) {
+    if (this.networkName === chain.rinkeby.name) {
       const values = {
         DAI: 1,
         WETH: 3402,
@@ -30,14 +32,8 @@ class TokenService {
     )
   }
 
-  async fetchCandleStickData({
-    token,
-    interval,
-  }: {
-    token: string
-    interval: CandleStickIntervalTypes
-  }) {
-    const coingecko = token?.toLowerCase() === 'cnv' ? 'concave' : token?.toLowerCase()
+  async fetchCandleStickData({ token, interval }: { token: string; interval: ChartInterval }) {
+    const coingecko = { cnv: 'concave', eth: 'weth' }[token?.toLowerCase()] || token?.toLowerCase()
     const days = daysOptions[interval]
     return coingeckoApi.fetchCandleStickData({ id: coingecko, days })
   }
@@ -50,4 +46,4 @@ const daysOptions = {
   '4H': '30',
   '1D': '365',
 } as const
-export const tokenService = new TokenService(chain.ropsten.name)
+export const tokenService = new TokenService(chain.rinkeby.name)

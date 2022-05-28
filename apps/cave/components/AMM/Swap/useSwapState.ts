@@ -1,60 +1,55 @@
-import { useState, useMemo, useEffect } from 'react'
-import { Currency, TradeType, CNV, DAI, CurrencyAmount, Trade } from '@concave/gemswap-sdk'
-import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import { useState, useMemo, useCallback } from 'react'
+import { Currency, TradeType } from '@concave/gemswap-sdk'
 import { useTrade, UseTradeResult } from '../hooks/useTrade'
-import { SwapSettings } from '../Settings'
+import { SwapSettings } from '../Swap/Settings'
 import { toAmount } from 'utils/toAmount'
-import { useLinkedFields } from 'components/CurrencyAmountField'
+import { useLinkedCurrencyFields } from 'components/CurrencyAmountField'
+import { LinkedCurrencyFields } from 'components/CurrencyAmountField/useLinkedCurrencyFields'
 
-const makeCurrencyFields = (networkId) => ({
-  first: DAI[networkId],
-  second: CNV[networkId],
-})
+const makeTradePlaceholder = (exactAmount, otherCurrency, tradeType) =>
+  tradeType === TradeType.EXACT_INPUT
+    ? { inputAmount: exactAmount, outputAmount: toAmount(0, otherCurrency) }
+    : { inputAmount: toAmount(0, otherCurrency), outputAmount: exactAmount }
 
-export const useSwapState = ({ multihops }: SwapSettings) => {
-  const networkId = useCurrentSupportedNetworkId()
-  const initialCurrencyFields = useMemo(() => makeCurrencyFields(networkId), [networkId])
-
+export const useSwapState = (
+  { multihops }: SwapSettings,
+  initialCurrencies: Currency[],
+  onChangeCurrencies: (currencies: LinkedCurrencyFields) => void,
+) => {
   // the input user typed in, the other input value is then derived from it
-  const [exactAmount, setExactAmount] = useState<CurrencyAmount<Currency>>(
-    toAmount('0', initialCurrencyFields.first),
+  const [exactAmount, setExactAmount] = useState(toAmount(0, initialCurrencies[0]))
+
+  const { onChangeField, switchCurrencies, currencies, lastUpdated } = useLinkedCurrencyFields(
+    initialCurrencies,
+    useCallback((newAmount) => setExactAmount(newAmount), []),
+    onChangeCurrencies,
   )
 
-  const { onChangeField, setFieldCurrency, switchCurrencies, fieldCurrency } = useLinkedFields(
-    (field) => (newAmount) => setExactAmount(newAmount),
-    initialCurrencyFields,
-  )
+  const tradeType = lastUpdated === 'first' ? TradeType.EXACT_INPUT : TradeType.EXACT_OUTPUT
+  const otherCurrency = currencies[lastUpdated === 'first' ? 'second' : 'first']
 
-  // TODO: shouldn't be using useEffect for this, replace with a onNetworkChange handler or something, after updating wagmi
-  useEffect(() => {
-    setFieldCurrency(initialCurrencyFields)
-    setExactAmount(toAmount(0, initialCurrencyFields.first))
-  }, [initialCurrencyFields, setFieldCurrency])
-
-  const isExactIn = exactAmount?.currency.equals(fieldCurrency.first)
-  const otherCurrency = fieldCurrency[isExactIn ? 'second' : 'first']
-
-  const trade = useTrade(exactAmount, otherCurrency.wrapped, {
-    tradeType: isExactIn ? TradeType.EXACT_INPUT : TradeType.EXACT_OUTPUT,
+  const trade = useTrade(exactAmount, otherCurrency, {
+    tradeType,
     maxHops: multihops ? 3 : 1,
   })
 
   // return this partial just to show some data while loading (like currencies icons) if needed
-  const partialTradeData: Partial<Trade<Currency, Currency, TradeType>> = useMemo(
+  const partialTrade = useMemo(
     () =>
-      isExactIn
-        ? { inputAmount: exactAmount, outputAmount: toAmount(0, otherCurrency) }
-        : { inputAmount: toAmount(0, otherCurrency), outputAmount: exactAmount },
-    [exactAmount, isExactIn, otherCurrency],
+      ({
+        ...trade,
+        data: makeTradePlaceholder(exactAmount, otherCurrency, tradeType),
+      } as UseTradeResult),
+    [exactAmount, otherCurrency, tradeType, trade],
   )
 
   return useMemo(
     () => ({
-      trade: trade.data ? trade : ({ ...trade, data: partialTradeData } as UseTradeResult),
+      trade: trade.isSuccess ? trade : partialTrade,
       onChangeInput: onChangeField('first'),
       onChangeOutput: onChangeField('second'),
       switchCurrencies,
     }),
-    [trade, partialTradeData, switchCurrencies, onChangeField],
+    [trade, partialTrade, switchCurrencies, onChangeField],
   )
 }

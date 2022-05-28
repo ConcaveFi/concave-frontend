@@ -1,17 +1,18 @@
 import { Button, Flex, FlexProps, Text } from '@concave/ui'
+import { utils } from 'ethers'
+import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungibleToken'
+import { truncateNumber } from 'utils/truncateNumber'
 
 interface RedeemCardViewerProps {
-  initial: number
-  gained: number
-  redeemIn: number
+  nonFungibleTokenInfo: NonFungibleTokenInfo
 }
-const RedeemCardViewer = (props: RedeemCardViewerProps) => {
-  const { initial, gained, redeemIn } = props
+const RedeemCardViewer = ({ nonFungibleTokenInfo }: RedeemCardViewerProps) => {
+  const { shares, rewardDebt, maturity, deposit } = nonFungibleTokenInfo
 
   return (
     <Flex
       flex={1}
-      height={'30px'}
+      height={{ lg: '50px', md: '90px' }}
       maxHeight="100px"
       direction={{ lg: 'row', md: 'column' }}
       alignItems="center"
@@ -20,22 +21,27 @@ const RedeemCardViewer = (props: RedeemCardViewerProps) => {
       gap={{ lg: 0, md: 2 }}
     >
       <Flex gap={{ lg: 0, md: 4 }}>
-        <Info label="Current Value" value={initial + gained} />
-        <Info label="Gained" value={+parseFloat(gained.toFixed(3))} />
-        <Info label="Initial" value={+parseFloat(initial.toFixed(3))} />
+        <Info
+          label="Current Value"
+          value={utils.formatEther(nonFungibleTokenInfo.deposit.add(rewardDebt))}
+        />
+        <Info label="Gained" value={utils.formatEther(nonFungibleTokenInfo.rewardDebt)} />
+        <Info label="Initial" value={utils.formatEther(nonFungibleTokenInfo.deposit)} />
       </Flex>
       <Button
         w={{ lg: '140px', md: '170px' }}
         h={{ lg: '40px', md: '36px' }}
+        fontWeight="bold"
         mx="auto"
-        variant={redeemIn > 0 ? '' : 'primary'}
-        shadow={redeemIn > 0 ? 'down' : 'up'}
-        _active={{ transform: 'scale(0.9)' }}
+        cursor={maturity > 0 ? 'default' : 'pointer'}
+        variant={maturity > 0 ? '' : 'primary'}
+        shadow={maturity > 0 ? 'down' : 'up'}
+        _active={maturity <= 0 && { transform: 'scale(0.9)' }}
         _focus={{}}
         rounded="2xl"
       >
-        <Text color={redeemIn > 0 ? 'text.low' : 'white'} fontSize="sm">
-          {redeemIn > 0 ? 'Not redeemable' : 'Redeem'}
+        <Text color={maturity > 0 ? 'text.low' : 'white'} fontSize="sm">
+          {maturity > 0 ? 'Not redeemable' : 'Redeem'}
         </Text>
       </Button>
     </Flex>
@@ -43,7 +49,7 @@ const RedeemCardViewer = (props: RedeemCardViewerProps) => {
 }
 interface Info extends FlexProps {
   label: string
-  value: string | number
+  value: string
 }
 const Info: React.FC<Info> = ({ ...props }) => {
   return (
@@ -54,11 +60,11 @@ const Info: React.FC<Info> = ({ ...props }) => {
       ml={{ lg: 3, md: '0px' }}
       {...props}
     >
-      <Text color="text.low" fontSize="sm" lineHeight={'15px'} isTruncated>
+      <Text color="text.low" fontSize="sm" lineHeight={'15px'} noOfLines={1}>
         {props.label}
       </Text>
-      <Text fontSize="md" fontWeight="bold" isTruncated>
-        {props.value} CNV
+      <Text fontSize="md" fontWeight="bold" noOfLines={1}>
+        {+props.value >= 0.01 ? truncateNumber(+props.value * 10 ** 18) : '<.01'} CNV
       </Text>
     </Flex>
   )

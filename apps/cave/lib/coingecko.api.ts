@@ -41,7 +41,7 @@ export const fetchCandleStickData = async ({
   urlInput.search = new URLSearchParams({ vs_currency: 'usd', days }).toString()
   const inputResponse = await fetch(urlInput.toString())
   const result = await inputResponse.json()
-  const clean = result.map(mapOHLCData)
+  const clean = result?.map?.(mapOHLCData)
   return clean
 }
 

@@ -7,10 +7,11 @@ import { erc20ABI, useAccount, useNetwork, useSigner } from 'wagmi'
 export const useCurrencyBalance = (currency: Currency, { watch = false } = {}) => {
   const [{ data: account }] = useAccount()
   const [{ data: signer }] = useSigner()
-  const [{ data: network }] = useNetwork()
-  const chainId = network.chain?.id
+  const [network] = useNetwork()
+  const connectedChainId = network.data.chain?.id
+  const chainId = currency?.chainId
   return useQuery(
-    ['balance', currency?.symbol, currency?.wrapped.address, account?.address],
+    ['balance', currency?.symbol, currency?.wrapped.address, account?.address, chainId],
     async () => {
       if (currency.isNative) {
         const b = (await signer.getBalance()) as BigNumber
@@ -22,9 +23,15 @@ export const useCurrencyBalance = (currency: Currency, { watch = false } = {}) =
       return CurrencyAmount.fromRawAmount(currency, b.toString())
     },
     {
-      refetchInterval: watch ? AVERAGE_BLOCK_TIME[chainId] : false,
-      enabled: !!currency && !!chainId && !!account?.address && !!signer,
+      refetchInterval: watch && chainId === connectedChainId ? AVERAGE_BLOCK_TIME[chainId] : false,
+      enabled:
+        !!currency &&
+        !!connectedChainId &&
+        chainId === connectedChainId &&
+        !!account?.address &&
+        !!signer,
       notifyOnChangeProps: 'tracked',
+      refetchOnWindowFocus: false,
       retry: false,
     },
   )

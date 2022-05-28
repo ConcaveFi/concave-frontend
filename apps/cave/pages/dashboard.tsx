@@ -1,39 +1,15 @@
-import { Container, Flex, Heading, HStack, Stack, Text, useMediaQuery } from '@concave/ui'
-import UserPositionCardMobile from 'components/Dashboard/Mobile/Components/UserPositionCard'
+import { Flex, Heading, Text } from '@concave/ui'
 import DashboardMobile from 'components/Dashboard/Mobile/DashboardMobile'
-
 import UserDashboardCard from 'components/Dashboard/UserDashboardCard'
+import { withPageTransition } from 'components/PageTransition'
 import { useDashBoardState } from 'contracts/DashBoard/DashBoardState'
 import React from 'react'
-import { useEffect, useState } from 'react'
-export default function Dashboard() {
-  const [isLargerThan350] = useMediaQuery('(min-width: 350px)')
-  const [isLargerThan850] = useMediaQuery('(min-width: 850px)')
-  const [scale, setScale] = useState('scale(1)')
-  const [defaultDisplay, setDefaultDisplay] = useState('none')
-  const [mobileDisplay, setMobileDisplay] = useState('none')
-  const [mobileScale, setMobileScale] = useState('')
 
-  useEffect(() => {
-    setDefaultDisplay(isLargerThan850 ? 'flex' : 'none')
-    setMobileDisplay(isLargerThan850 ? 'none' : 'flex')
-  }, [isLargerThan850])
+export function Dashboard() {
+  const data = useDashBoardState()
 
-  useEffect(() => {
-    setMobileScale(isLargerThan350 ? '' : 'scale(0.8) translateY(-90px)')
-  }, [isLargerThan350])
-
-  const { userContracts, totalLocked, statusData } = useDashBoardState()
   return (
-    <Flex
-      transform={mobileScale}
-      align={'center'}
-      justify="start"
-      direction={'column'}
-      width={'full'}
-      textAlign="center"
-    >
-      {/* <DashboardMobile transform={scale} /> */}
+    <Flex align={'center'} justify="start" direction={'column'} width={'full'} textAlign="center">
       <Heading as="h1" mt={8} mb={3} fontSize="5xl">
         My Dashboard
       </Heading>
@@ -44,19 +20,16 @@ export default function Dashboard() {
       </Flex>
 
       <Flex justify={'center'} position="relative">
-        <UserDashboardCard
-          statusdata={statusData}
-          totallocked={totalLocked}
-          usercontract={userContracts}
-          display={defaultDisplay}
-        />
-        <DashboardMobile
-          statusdata={statusData}
-          totallocked={totalLocked}
-          usercontract={userContracts}
-          display={mobileDisplay}
-        />
+        <UserDashboardCard data={data} />
+        <DashboardMobile data={data} />
       </Flex>
     </Flex>
   )
 }
+
+Dashboard.Meta = {
+  title: 'Concave | Dashboard',
+  description: `You can use the Dashboard to claim dividends and manage your Liquid NFT positions.`,
+}
+
+export default withPageTransition(Dashboard)

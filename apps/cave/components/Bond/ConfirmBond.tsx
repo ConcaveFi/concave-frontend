@@ -2,7 +2,7 @@ import { Currency } from '@concave/gemswap-sdk'
 import { ExpandArrowIcon } from '@concave/icons'
 import { Box, Button, Flex, HStack, Modal, NumericInput, StackDivider, Text } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
-import React from 'react'
+import React, { Dispatch, SetStateAction, useState } from 'react'
 
 const TokenInfo = ({
   currency,
@@ -23,12 +23,12 @@ const TokenInfo = ({
       px={5}
       p={4}
     >
-      <Box w={200} h="69px">
+      <Box w={200}>
         <NumericInput disabled fontSize={'32px'} decimalScale={5} value={amount} />
         <Text fontWeight={700} fontSize={14} textColor="text.low"></Text>
       </Box>
       <HStack>
-        <CurrencyIcon height={'40px'} currency={currency} />
+        <CurrencyIcon width={'32px'} currency={currency} />
         <Text fontSize={24} fontWeight={700}>
           {currency.symbol.toUpperCase()}
         </Text>
@@ -64,6 +64,8 @@ export const ConfirmBondModal = ({
   bondPrice,
   minimumAmountOut,
   slippage,
+  hasClickedConfirm,
+  setHasClickedConfirm,
 }: {
   currencyIn: Currency
   currencyOut: Currency
@@ -77,11 +79,12 @@ export const ConfirmBondModal = ({
   bondPrice: string
   minimumAmountOut: string
   slippage: string
+  hasClickedConfirm: boolean
+  setHasClickedConfirm: Dispatch<SetStateAction<boolean>>
 }) => {
   return (
-    <Modal bluryOverlay={true} title="" isOpen={isOpen} onClose={onClose}>
+    <Modal bluryOverlay={true} title="Confirm Bond" isOpen={isOpen} onClose={onClose}>
       <div>
-        {' '}
         <TokenInfo
           currency={currencyIn}
           address={currencyIn.isToken ? currencyIn.address : currencyIn.symbol}
@@ -127,8 +130,17 @@ export const ConfirmBondModal = ({
         </Text>
       </Flex>
 
-      <Button variant="primary" size="large" onClick={onConfirm} isFullWidth>
-        Confirm Bond
+      <Button
+        disabled={hasClickedConfirm}
+        variant="primary"
+        size="large"
+        onClick={() => {
+          setHasClickedConfirm(true)
+          onConfirm()
+        }}
+        w="full"
+      >
+        {hasClickedConfirm ? 'Confirm in wallet' : 'Confirm bond'}
       </Button>
     </Modal>
   )

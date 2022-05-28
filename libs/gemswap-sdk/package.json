@@ -11,17 +11,17 @@
     "dist/**"
   ],
   "scripts": {
-    "build": "tsup index.tsx --format esm,cjs --dts",
-    "dev": "tsup index.tsx --format esm,cjs --watch --dts",
+    "build": "tsup src/index.ts --format esm,cjs --dts",
+    "dev": "tsup src/index.ts --format esm,cjs --watch --dts",
     "test": "tsdx test --passWithNoTests"
   },
   "dependencies": {
     "@ethersproject/address": "^5.4.0",
-    "@ethersproject/bignumber": "^5.4.0",
-    "@ethersproject/contracts": "^5.6.0",
-    "@ethersproject/providers": "^5.4.0",
+    "@ethersproject/bignumber": "^5.6.1",
+    "@ethersproject/contracts": "^5.6.1",
+    "@ethersproject/providers": "^5.6.6",
     "@ethersproject/solidity": "^5.4.0",
-    "@ethersproject/wallet": "^5.6.0",
+    "@ethersproject/wallet": "^5.6.1",
     "big.js": "^6.1.1",
     "decimal.js-light": "^2.5.0",
     "jsbi": "^4.2.0",

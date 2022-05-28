@@ -25,7 +25,6 @@ export function SideBar() {
     <>
       {/* show on bigger screens like not mobile lol */}
       <SidebarContent display={{ base: 'none', md: 'flex' }} />
-
       {/* show on small devices (mobile) */}
       <Flex
         align="center"
@@ -45,7 +44,7 @@ export function SideBar() {
         <Image src="/assets/concave/logotype.svg" alt="concave" width="100px" ml={2} />
       </Flex>
       <Drawer
-        autoFocus={false}
+        autoFocus={true}
         closeOnOverlayClick={true}
         isOpen={isOpen}
         placement="left"
@@ -54,8 +53,6 @@ export function SideBar() {
         <DrawerOverlay backdropFilter="blur(8px)" />
         <DrawerContent
           w="min"
-          py={4}
-          my={-4}
           bg="none"
           shadow="none"
           overflow="auto"
@@ -79,11 +76,12 @@ const SidebarContent = forwardRef<CardProps, 'div'>((props, ref) => {
       borderRightRadius="2xl"
       shadow="Up Big"
       p={3}
-      pb="5vh"
+      h="100vh"
       w={{ base: '250px', md: '250px' }}
       minW="250px"
       overflowY="auto"
       overflowX="hidden"
+      sx={{ '::-webkit-scrollbar': { display: 'none' }, scrollbarWidth: 'none' }}
       {...props}
     >
       <SideBarTop />
