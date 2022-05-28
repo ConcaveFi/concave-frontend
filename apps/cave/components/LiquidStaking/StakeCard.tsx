@@ -13,7 +13,11 @@ import {
   VStack,
 } from '@concave/ui'
 import { ethers } from 'ethers'
-import { useGet_Bonds_VaprQuery, useGet_Last_Poolid_VaprQuery } from 'graphql/generated/graphql'
+import {
+  useGet_All_Total_Pools_VaprQuery,
+  useGet_Bonds_VaprQuery,
+  useGet_Last_Poolid_VaprQuery,
+} from 'graphql/generated/graphql'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { StakingV1Contract } from 'lib/StakingV1Proxy/StakingV1Contract'
 import { useState } from 'react'
@@ -113,12 +117,9 @@ function StakeCard(props: StackCardProps) {
   const chainId = useCurrentSupportedNetworkId()
   const vaprText = props.icon === '12m' ? 'Non-Dilutive vAPR' : 'Total vAPR'
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { data } = useGet_Last_Poolid_VaprQuery({
-    poolID: props.poolId,
-  })
-  const index = PERIOD_TO_POOL_PARAMETER[`${props.period}`]
-  const { data: pools, error: poolsError, isLoading: isLoadingPools } = usePools(chainId, index)
-  const { data: stakingCap, isLoading: isLoadingStakings } = useViewStakingCap(chainId, index)
+  const poolId = PERIOD_TO_POOL_PARAMETER[`${props.period}`]
+  const { data: pools, error: poolsError, isLoading: isLoadingPools } = usePools(chainId, poolId)
+  const { data: stakingCap, isLoading: isLoadingStakings } = useViewStakingCap(chainId, poolId)
   const [showFloatingCards, setShowFloatingCards] = useState(false)
 
   const currentlyStaked =
@@ -135,23 +136,21 @@ function StakeCard(props: StackCardProps) {
   const userAddress = account?.address
 
   const {
-    data: dataVAPR,
-    isSuccess: isSuccessVAPR,
+    data: logStakingPoolRewards,
     isLoading: isLoadingVAPR,
-    isError: isErrorVAPR,
-    error: errorVAPR,
-  } = useGet_Bonds_VaprQuery()
+    isSuccess: isSuccessVAPR,
+  } = useGet_All_Total_Pools_VaprQuery()
   const bondVaprPool = `bondVaprPool${props.poolId}`
-  let currentVAPR
-  if (isLoadingVAPR) {
-    currentVAPR = 'Calculating...'
-  } else if (isSuccessVAPR) {
-    currentVAPR = `${dataVAPR?.rebaseStakingV1[0][bondVaprPool].toFixed(2) * 100}%`
-  } else if (isErrorVAPR) {
-    currentVAPR = 'Error Calculating vAPR'
-  }
 
-  // console.log(currentVAPR)
+  const baseEmissions = logStakingPoolRewards?.rebaseStakingV1[0][bondVaprPool] * 100
+  const bondEmissions =
+    logStakingPoolRewards?.logStakingV1_PoolRewarded.find((o) => o.poolID === poolId).base_vAPR *
+    100
+  const totalVAPR = baseEmissions + bondEmissions
+
+  const bondEmissionsFormatted = bondEmissions?.toFixed(2) + '%'
+  const baseEmissionsFormatted = baseEmissions?.toFixed(2) + '%'
+  const totalVAPRFormatted = totalVAPR?.toFixed(2) + '%'
 
   const mobileUI = useBreakpointValue({ base: true, xl: false })
 
@@ -188,7 +187,7 @@ function StakeCard(props: StackCardProps) {
             {vaprText}
           </Text>
           <Text fontSize={{ base: 'md', md: 'lg' }} fontWeight="bold">
-            {currentVAPR}
+            {isLoadingVAPR ? 'Calculating...' : totalVAPRFormatted}
           </Text>
         </Box>
 
@@ -284,10 +283,11 @@ function StakeCard(props: StackCardProps) {
             <Emissions
               period={props.period}
               vaprText={vaprText}
+              totalVAPR={isLoadingVAPR ? 'Calculating...' : totalVAPRFormatted}
               icon={props.icon}
-              vapr={currentVAPR}
+              baseVAPR={isLoadingVAPR ? 'Calculating...' : baseEmissionsFormatted}
+              vapr={isLoadingVAPR ? 'Calculating...' : bondEmissionsFormatted}
               setShowFloatingCards={setShowFloatingCards}
-              // vapr={props.vAPR}
             />
             <Modal
               preserveScrollBarGap
