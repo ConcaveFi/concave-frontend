@@ -8,7 +8,7 @@ export class NonFungibleTokenInfo {
     public readonly contractAddress: string,
     public readonly tokenId: BigNumberish,
     private readonly position: Position,
-    private readonly auction: Auction,
+    private readonly auction?: Auction,
   ) {}
 
   public calculteDiscount(newPriceStr: BigNumberish = this.minPrice) {
@@ -39,7 +39,7 @@ export class NonFungibleTokenInfo {
     return this.shares.add(this.rewardDebt)
   }
   get readyForAuction() {
-    return this.auction.minPrice.gt(0)
+    return this.auction?.minPrice?.gt(0)
   }
   get minPrice() {
     return this.auction.minPrice

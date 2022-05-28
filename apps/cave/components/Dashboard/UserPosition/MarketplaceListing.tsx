@@ -9,10 +9,9 @@ import {
   useDisclosure,
 } from '@concave/ui'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { ConcaveNFTMarketplace } from 'lib/ConcaveNFTMarketplaceProxy/ConcaveNFTMarketplace'
+import { ConcaveNFTMarketplaceFactory } from 'lib/ConcaveNFTMarketplaceProxy/ConcaveNFTMarketplaceFactory'
 import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungibleToken'
 import { useMemo } from 'react'
-import { formatFixed } from 'utils/formatFixed'
 import { useSigner } from 'wagmi'
 import UserListPositionCard from '../UserListPositionCard'
 
@@ -27,7 +26,7 @@ const MarketplaceListing = (props: MarketplaceListingProps) => {
   const { nonFungibleTokenInfo } = props
 
   const actionButton = useMemo(() => {
-    const contract = new ConcaveNFTMarketplace(chainId)
+    const contract = ConcaveNFTMarketplaceFactory({ chainId })
     const buttonProps = {
       fontWeight: 'bold',
       fontSize: 'md',

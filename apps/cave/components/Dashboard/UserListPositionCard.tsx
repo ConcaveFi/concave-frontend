@@ -2,7 +2,7 @@ import { CNV, CurrencyAmount } from '@concave/gemswap-sdk'
 import { Box, Flex, Input, NumericInput, Text } from '@concave/ui'
 import ChooseButton from 'components/Marketplace/ChooseButton'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { ConcaveNFTMarketplace } from 'lib/ConcaveNFTMarketplaceProxy/ConcaveNFTMarketplace'
+import { ConcaveNFTMarketplaceFactory } from 'lib/ConcaveNFTMarketplaceProxy/ConcaveNFTMarketplaceFactory'
 import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungibleToken'
 import { useState } from 'react'
 import { formatFixed } from 'utils/formatFixed'
@@ -118,7 +118,7 @@ const UserListPositionCard = (props: UserListPositionCardProps) => {
         <Flex grow={1} justifyContent="center" alignItems={'end'} gap="2">
           <ChooseButton
             onClick={() => {
-              const concaveNFTMarketPlace = new ConcaveNFTMarketplace(chainId)
+              const concaveNFTMarketPlace = ConcaveNFTMarketplaceFactory({ chainId })
               concaveNFTMarketPlace
                 .createSale(
                   signer,

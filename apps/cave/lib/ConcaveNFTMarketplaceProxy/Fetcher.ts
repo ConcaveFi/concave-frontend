@@ -1,8 +1,9 @@
 import { createAlchemyWeb3 } from '@alch/alchemy-web3'
 import { StakingV1ProxyAddress } from 'lib/StakingV1Proxy/Address'
 import { StakingV1Contract } from 'lib/StakingV1Proxy/StakingV1Contract'
-import { ConcaveNFTMarketplace } from './ConcaveNFTMarketplace'
+import { ConcaveNFTMarketplaceFactory } from './ConcaveNFTMarketplaceFactory'
 import { NonFungibleTokenInfo } from './NonFungibleToken'
+
 export const listAllNonFungibleTokensOnAddress = async (
   owner: string,
   chainId: number,
@@ -19,8 +20,8 @@ export const listAllNonFungibleTokensOnAddress = async (
   )
 }
 export const listUserNonFungibleTokenInfo = async (userAddress: string, chainId: number) => {
-  const marketPlaceContract = new ConcaveNFTMarketplace(chainId)
   const stakingV1Contract = new StakingV1Contract(chainId)
+  const marketPlaceContract = ConcaveNFTMarketplaceFactory({ chainId })
   const usersNft = await listAllNonFungibleTokensOnAddress(
     userAddress,
     chainId,
