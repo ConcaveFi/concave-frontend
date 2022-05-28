@@ -195,6 +195,7 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
               w="full"
               approveArgs={{
                 currency: trade.data.inputAmount.currency,
+                amount: trade.data.inputAmount.numerator,
                 spender: ROUTER_ADDRESS[trade.data.inputAmount.currency?.chainId],
               }}
               {...swapButtonProps}
