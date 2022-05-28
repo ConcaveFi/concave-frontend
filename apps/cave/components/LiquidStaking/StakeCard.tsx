@@ -138,6 +138,14 @@ function StakeCard(props: StackCardProps) {
   const [{ data: account }] = useAccount()
   const userAddress = account?.address
 
+  const vaprByIndex = {
+    0: 'pool0TotalBaseVapr',
+    1: 'pool1TotalBaseVapr',
+    2: 'pool2TotalBaseVapr',
+    3: 'pool3TotalBaseVapr',
+  }
+  const vapr = vaprByIndex[index] || ''
+  // dataTotalVapr
   const {
     data: dataVAPR,
     isSuccess: isSuccessVAPR,
@@ -201,7 +209,7 @@ function StakeCard(props: StackCardProps) {
             {vaprText}
           </Text>
           <Text fontSize={{ base: 'md', md: 'lg' }} fontWeight="bold">
-            {currentVAPR}
+            {(dataTotalVapr?.totalVapr[vapr] * 100).toFixed(2) + '%'}
           </Text>
         </Box>
 
@@ -298,7 +306,7 @@ function StakeCard(props: StackCardProps) {
               period={props.period}
               vaprText={vaprText}
               icon={props.icon}
-              vapr={currentVAPR}
+              vapr={(dataTotalVapr?.totalVapr[vapr] * 100).toFixed(2) + '%'}
               setShowFloatingCards={setShowFloatingCards}
               // vapr={props.vAPR}
             />
