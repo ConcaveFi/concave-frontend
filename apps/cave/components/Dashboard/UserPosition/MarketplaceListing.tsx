@@ -132,22 +132,19 @@ const MarketplaceListing = (props: MarketplaceListingProps) => {
 
 const ListButton = () => {
   return (
-    <Button disabled pr={{ xl: 6, lg: 6, base: 0 }}>
-      <Flex
-        boxShadow={'Up Big'}
-        background="linear-gradient(90deg, #72639B 0%, #44B9DE 100%)"
-        height={38}
-        width={143}
-        rounded={{ xl: '2xl', lg: '2xl', base: '16px 16px 0px 0px' }}
-        justifyContent={'center'}
-        alignItems="center"
-        ml={2}
-        fontWeight="bold"
-        fontSize="md"
-        mx="auto"
-      >
-        <Text>Coming soon!</Text>
-      </Flex>
+    <Button
+      disabled
+      variant={'primary'}
+      width={180}
+      height={'48px'}
+      rounded="2xl"
+      boxShadow={'Up Big'}
+      mx="auto"
+      mr={{ lg: 4, md: 'auto' }}
+      mt={{ lg: -10, md: 'auto' }}
+      // mr={3}
+    >
+      <Text fontSize={'md'}>Coming soon!</Text>
     </Button>
   )
 }
