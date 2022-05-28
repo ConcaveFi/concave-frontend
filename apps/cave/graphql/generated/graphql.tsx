@@ -1010,6 +1010,24 @@ export type Get_Last_Poolid_VaprQuery = {
   }>
 }
 
+export type Get_All_Total_Pools_VaprQueryVariables = Exact<{ [key: string]: never }>
+
+export type Get_All_Total_Pools_VaprQuery = {
+  __typename?: 'query_root'
+  logStakingV1_PoolRewarded: Array<{
+    __typename?: 'logStakingV1_PoolRewarded'
+    base_vAPR?: any | null
+    poolID?: any | null
+  }>
+  rebaseStakingV1: Array<{
+    __typename?: 'rebaseStakingV1'
+    bondVaprPool0?: any | null
+    bondVaprPool1?: any | null
+    bondVaprPool2?: any | null
+    bondVaprPool3?: any | null
+  }>
+}
+
 export type Get_Amm_Cnv_PriceQueryVariables = Exact<{ [key: string]: never }>
 
 export type Get_Amm_Cnv_PriceQuery = {
@@ -1218,6 +1236,45 @@ export const useGet_Last_Poolid_VaprQuery = <TData = Get_Last_Poolid_VaprQuery, 
     variables === undefined ? ['GET_LAST_POOLID_VAPR'] : ['GET_LAST_POOLID_VAPR', variables],
     fetcher<Get_Last_Poolid_VaprQuery, Get_Last_Poolid_VaprQueryVariables>(
       Get_Last_Poolid_VaprDocument,
+      variables,
+    ),
+    options,
+  )
+export const Get_All_Total_Pools_VaprDocument = `
+    query GET_ALL_TOTAL_POOLS_VAPR {
+  logStakingV1_PoolRewarded(
+    limit: 4
+    order_by: {txBlockNumber: desc}
+    where: {base_vAPR: {_gte: "0"}}
+  ) {
+    base_vAPR
+    poolID
+  }
+  rebaseStakingV1(
+    where: {bondVaprPool0: {_gt: "0"}, bondVaprPool1: {_gt: "0"}, bondVaprPool2: {_gt: "0"}, bondVaprPool3: {_gt: "0"}}
+    limit: 1
+    order_by: {txBlockNumber: desc}
+  ) {
+    bondVaprPool0
+    bondVaprPool1
+    bondVaprPool2
+    bondVaprPool3
+  }
+}
+    `
+export const useGet_All_Total_Pools_VaprQuery = <
+  TData = Get_All_Total_Pools_VaprQuery,
+  TError = unknown,
+>(
+  variables?: Get_All_Total_Pools_VaprQueryVariables,
+  options?: UseQueryOptions<Get_All_Total_Pools_VaprQuery, TError, TData>,
+) =>
+  useQuery<Get_All_Total_Pools_VaprQuery, TError, TData>(
+    variables === undefined
+      ? ['GET_ALL_TOTAL_POOLS_VAPR']
+      : ['GET_ALL_TOTAL_POOLS_VAPR', variables],
+    fetcher<Get_All_Total_Pools_VaprQuery, Get_All_Total_Pools_VaprQueryVariables>(
+      Get_All_Total_Pools_VaprDocument,
       variables,
     ),
     options,
