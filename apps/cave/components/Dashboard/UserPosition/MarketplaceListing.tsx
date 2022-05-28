@@ -73,7 +73,7 @@ const MarketplaceListing = (props: MarketplaceListingProps) => {
       </Modal>
 
       <Flex justify={{ lg: 'left', md: 'center' }}>
-        <Text pl="6" my={1} pt="3" color="text.low" fontSize="lg" as="b">
+        <Text pl="5" my={1} pt="3" color="text.low" fontSize="lg" as="b">
           {`Your Marketplace Listing `}
         </Text>
       </Flex>
@@ -83,7 +83,7 @@ const MarketplaceListing = (props: MarketplaceListingProps) => {
             width={'110px'}
             direction={'column'}
             textAlign={{ lg: 'start', md: 'center' }}
-            ml="2"
+            ml="5"
           >
             <Text color="text.low" fontSize="sm">
               List Price:
