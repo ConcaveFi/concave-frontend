@@ -33,6 +33,7 @@ const RedeemCardViewer = ({ nonFungibleTokenInfo }: RedeemCardViewerProps) => {
         h={{ lg: '40px', md: '36px' }}
         fontWeight="bold"
         mx="auto"
+        mr={{ lg: 3, md: 'auto' }}
         cursor={maturity > 0 ? 'default' : 'pointer'}
         variant={maturity > 0 ? '' : 'primary'}
         shadow={maturity > 0 ? 'down' : 'up'}
