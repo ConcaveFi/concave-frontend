@@ -27,7 +27,9 @@ function Emissions(props: any) {
             Bonding Emissions:
           </Text>
           <Text mx={{ base: '', sm: 'auto' }} fontSize="sm" fontWeight="bold">
-            Calculating
+            {Math.sign(props?.vapr) !== 0
+              ? 'Calculating'
+              : `${(props?.CurrentVAPR * 100).toFixed(2)}%`}
           </Text>
           <Text mx={{ base: '', sm: 'auto' }} color="text.low" fontSize="sm">
             +
@@ -36,7 +38,7 @@ function Emissions(props: any) {
             Base Emissions:
           </Text>
           <Text mx={{ base: '', sm: 'auto' }} fontSize="sm" fontWeight="bold">
-            {Math.sign(props?.vapr) !== 1 ? 'Calculating' : `${(props?.vapr * 100).toFixed(2)}%`}
+            {Math.sign(props?.vapr) !== 0 ? 'Calculating' : `${(props?.vapr * 100).toFixed(2)}%`}
           </Text>
           <Text mx={{ base: '', sm: 'auto' }} color="text.low" fontSize="sm">
             +
@@ -45,7 +47,7 @@ function Emissions(props: any) {
             Quarterly Dividends:
           </Text>
           <Text mx={{ base: '', sm: 'auto' }} fontSize="md" fontWeight="bold">
-            Calculating
+            Coming Soon
           </Text>
           <Flex onClick={onClick} onMouseLeave={onClose}>
             <Image
