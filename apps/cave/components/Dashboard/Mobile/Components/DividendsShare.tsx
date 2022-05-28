@@ -20,7 +20,7 @@ const DividendsShareMobile = (props: DividendsShareMobileProps) => {
   const totalLocked = !wallet.connected
     ? '--.--.--.--'
     : isLoading
-    ? 'loading'
+    ? 'Loading'
     : formatFixed(props.totalLocked, { decimals: 3 }) + ' CNV'
   return (
     <Flex
