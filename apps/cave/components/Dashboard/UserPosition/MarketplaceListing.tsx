@@ -130,7 +130,7 @@ const MarketplaceListing = (props: MarketplaceListingProps) => {
 
 const ListButton = () => {
   return (
-    <Button pr={{ xl: 6, lg: 6, base: 0 }}>
+    <Button disabled pr={{ xl: 6, lg: 6, base: 0 }}>
       <Flex
         boxShadow={'Up Big'}
         background="linear-gradient(90deg, #72639B 0%, #44B9DE 100%)"
@@ -144,7 +144,7 @@ const ListButton = () => {
         fontSize="md"
         mx="auto"
       >
-        <Text>Coming Soon!</Text>
+        <Text>Coming soon!</Text>
       </Flex>
     </Button>
   )
