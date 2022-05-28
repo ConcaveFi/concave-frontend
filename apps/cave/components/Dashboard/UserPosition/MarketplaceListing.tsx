@@ -12,7 +12,6 @@ import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId
 import { ConcaveNFTMarketplace } from 'lib/ConcaveNFTMarketplaceProxy/ConcaveNFTMarketplace'
 import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungibleToken'
 import { useMemo } from 'react'
-import { formatFixed } from 'utils/formatFixed'
 import { useSigner } from 'wagmi'
 import UserListPositionCard from '../UserListPositionCard'
 
@@ -34,7 +33,7 @@ const MarketplaceListing = (props: MarketplaceListingProps) => {
       w: '150px',
       h: '40px',
     }
-    const isListed = nonFungibleTokenInfo.readyForAuction
+    const isListed = false
 
     const label = isListed ? 'Unlist' : 'List for Sale'
     const onClick = isListed
