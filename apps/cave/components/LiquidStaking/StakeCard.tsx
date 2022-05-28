@@ -13,7 +13,11 @@ import {
   VStack,
 } from '@concave/ui'
 import { ethers } from 'ethers'
-import { useGet_Bonds_VaprQuery, useGet_Last_Poolid_VaprQuery } from 'graphql/generated/graphql'
+import {
+  useGet_Bonds_VaprQuery,
+  useGet_Last_Poolid_VaprQuery,
+  useGet_Last_Pools_Total_VaprQuery,
+} from 'graphql/generated/graphql'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { StakingV1Contract } from 'lib/StakingV1Proxy/StakingV1Contract'
 import { useState } from 'react'
@@ -141,6 +145,7 @@ function StakeCard(props: StackCardProps) {
     isError: isErrorVAPR,
     error: errorVAPR,
   } = useGet_Bonds_VaprQuery()
+
   const bondVaprPool = `bondVaprPool${props.poolId}`
   let currentVAPR
   if (isLoadingVAPR) {
@@ -154,7 +159,15 @@ function StakeCard(props: StackCardProps) {
   // console.log(currentVAPR)
 
   const mobileUI = useBreakpointValue({ base: true, xl: false })
-
+  const {
+    data: dataTotalVapr,
+    // isLoading: isLoadingTvapr,
+    // isSuccess: isSuccessTvapr,
+    // isError: isErrorTvapr,
+  } = useGet_Last_Pools_Total_VaprQuery()
+  //  {
+  //    dataTotalVapr.totalVapr.pool0TotalBaseVapr
+  //  }
   return (
     <div>
       <Card

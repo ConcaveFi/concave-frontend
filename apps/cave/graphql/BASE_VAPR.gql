@@ -21,3 +21,12 @@ query GET_LAST_POOLID_VAPR($poolID: numeric) {
     base_vAPR
   }
 }
+
+query GET_LAST_POOLS_TOTAL_VAPR {
+  totalVapr {
+    pool0TotalBaseVapr
+    pool1TotalBaseVapr
+    pool2TotalBaseVapr
+    pool3TotalBaseVapr
+  }
+}
