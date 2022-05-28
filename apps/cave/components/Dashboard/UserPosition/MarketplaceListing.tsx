@@ -89,7 +89,8 @@ const MarketplaceListing = (props: MarketplaceListingProps) => {
               List Price:
             </Text>
             <Text fontSize="md" fontWeight="bold">
-              {formatFixed(nonFungibleTokenInfo.minPrice)}
+              {/* {formatFixed(nonFungibleTokenInfo.minPrice)} */}
+              ---
             </Text>
           </Flex>
           <Flex
@@ -102,7 +103,8 @@ const MarketplaceListing = (props: MarketplaceListingProps) => {
               Discount
             </Text>
             <Text fontSize="md" fontWeight="bold">
-              {formatFixed(nonFungibleTokenInfo.calculteDiscount())}
+              {/* {formatFixed(nonFungibleTokenInfo.calculteDiscount())} */}
+              ---
             </Text>
           </Flex>
           <Flex
