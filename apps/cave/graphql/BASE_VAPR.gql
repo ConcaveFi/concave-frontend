@@ -30,3 +30,28 @@ query GET_LAST_POOLS_TOTAL_VAPR {
     pool3TotalBaseVapr
   }
 }
+query GET_ALL_TOTAL_POOLS_VAPR {
+  logStakingV1_PoolRewarded(
+    limit: 4
+    order_by: { txBlockNumber: desc }
+    where: { base_vAPR: { _gte: "0" } }
+  ) {
+    base_vAPR
+    poolID
+  }
+  rebaseStakingV1(
+    where: {
+      bondVaprPool0: { _gt: "0" }
+      bondVaprPool1: { _gt: "0" }
+      bondVaprPool2: { _gt: "0" }
+      bondVaprPool3: { _gt: "0" }
+    }
+    limit: 1
+    order_by: { txBlockNumber: desc }
+  ) {
+    bondVaprPool0
+    bondVaprPool1
+    bondVaprPool2
+    bondVaprPool3
+  }
+}
