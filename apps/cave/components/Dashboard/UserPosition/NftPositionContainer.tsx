@@ -35,7 +35,8 @@ const NftPositionContainer = (props: NftPositionContainerProps) => {
       maxHeight={'100px'}
       borderRadius="16px"
       boxShadow={'up'}
-      width={{ lg: '540px', md: '380px' }}
+      // width={{ lg: '540px', md: '380px' }}
+      width={{ lg: '700px', md: '520px' }}
     >
       <Flex direction="row" gap={4} alignItems="center" justify="center" m={2} position="relative">
         <Flex
