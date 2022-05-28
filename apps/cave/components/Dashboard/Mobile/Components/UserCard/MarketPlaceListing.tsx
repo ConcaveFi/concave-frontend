@@ -17,7 +17,7 @@ const MarketPlaceListingMobile = () => {
         </VStack>
         <VStack justify={'center'} spacing={0} flex={1}>
           <LowText>Expiration Date</LowText>
-          <HighText>-,-,-</HighText>
+          <HighText>---</HighText>
         </VStack>
       </Flex>
       <Flex flex={1} align="center" justify={'center'}>
@@ -31,8 +31,15 @@ export default MarketPlaceListingMobile
 
 const ListForSale: React.FC<ButtonProps> = ({ ...props }) => {
   return (
-    <Button variant={'primary'} width="302px" height={'48px'} rounded="2xl" boxShadow={'Up Big'}>
-      <HighText fontSize={'24px'}>List for sale</HighText>
+    <Button
+      disabled
+      variant={'primary'}
+      width="302px"
+      height={'48px'}
+      rounded="2xl"
+      boxShadow={'Up Big'}
+    >
+      <HighText fontSize={'24px'}>Coming soon!</HighText>
     </Button>
   )
 }
