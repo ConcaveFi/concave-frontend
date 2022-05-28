@@ -10,6 +10,6 @@ export { SwitchCurrencies } from './Swap/SwitchCurrencies'
 export { ConfirmSwapModal } from './Swap/ConfirmSwapModal'
 export { CustomRecipient } from './Swap/CustomRecipient'
 export { CandleStickCard } from './Chart'
-export { defaultSettings, Settings } from './Settings'
+export { Settings } from './Swap/Settings'
 
-export type { SwapSettings } from './Settings'
+export type { SwapSettings } from './Swap/Settings'

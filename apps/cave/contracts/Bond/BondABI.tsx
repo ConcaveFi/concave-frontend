@@ -150,13 +150,6 @@ export const BOND_ABI = [
   },
   {
     inputs: [],
-    name: 'POLICY_OR_TREASURY_ROLE',
-    outputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
     name: 'POLICY_ROLE',
     outputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
     stateMutability: 'view',
@@ -220,6 +213,13 @@ export const BOND_ABI = [
     type: 'function',
   },
   {
+    inputs: [{ internalType: 'address', name: 'token', type: 'address' }],
+    name: 'getQuoteReserves',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [{ internalType: 'bytes32', name: 'role', type: 'bytes32' }],
     name: 'getRoleAdmin',
     outputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
@@ -234,7 +234,7 @@ export const BOND_ABI = [
     type: 'function',
   },
   {
-    inputs: [{ internalType: 'address', name: 'guy', type: 'address' }],
+    inputs: [{ internalType: 'address', name: 'account', type: 'address' }],
     name: 'getUserPositionCount',
     outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
@@ -301,7 +301,6 @@ export const BOND_ABI = [
     inputs: [
       { internalType: 'uint256', name: 'supplyDelta', type: 'uint256' },
       { internalType: 'bool', name: 'positiveDelta', type: 'bool' },
-      { internalType: 'uint256', name: 'percentToConvert', type: 'uint256' },
       { internalType: 'uint256', name: 'newVirtualOutputReserves', type: 'uint256' },
       { internalType: 'address[]', name: 'tokens', type: 'address[]' },
       { internalType: 'uint256[]', name: 'virtualReserves', type: 'uint256[]' },
@@ -352,23 +351,6 @@ export const BOND_ABI = [
       { internalType: 'bytes32', name: 's', type: 'bytes32' },
     ],
     name: 'purchaseBondUsingPermit',
-    outputs: [{ internalType: 'uint256', name: 'output', type: 'uint256' }],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      { internalType: 'address', name: 'recipient', type: 'address' },
-      { internalType: 'address', name: 'token', type: 'address' },
-      { internalType: 'uint256', name: 'input', type: 'uint256' },
-      { internalType: 'uint256', name: 'minOutput', type: 'uint256' },
-      { internalType: 'uint256', name: 'nonce', type: 'uint256' },
-      { internalType: 'uint256', name: 'expiry', type: 'uint256' },
-      { internalType: 'uint8', name: 'v', type: 'uint8' },
-      { internalType: 'bytes32', name: 'r', type: 'bytes32' },
-      { internalType: 'bytes32', name: 's', type: 'bytes32' },
-    ],
-    name: 'purchaseBondUsingPermitAllowed',
     outputs: [{ internalType: 'uint256', name: 'output', type: 'uint256' }],
     stateMutability: 'nonpayable',
     type: 'function',

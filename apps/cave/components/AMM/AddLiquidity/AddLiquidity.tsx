@@ -1,6 +1,6 @@
-import { Currency, CurrencyAmount, Pair } from '@concave/gemswap-sdk'
+import { CHAIN_NAME, Currency, CurrencyAmount, Pair } from '@concave/gemswap-sdk'
 import { PlusIcon } from '@concave/icons'
-import { Button, ButtonProps, Card, CardProps, Flex, Modal, Text, useDisclosure } from '@concave/ui'
+import { Button, ButtonProps, Card, Flex, Modal, Text, useDisclosure } from '@concave/ui'
 import { CurrencyInputField } from 'components/AMM'
 import { SupplyLiquidityModal } from 'components/AMM/AddLiquidity/SupplyLiquidityModal'
 import { useAddLiquidityButtonProps } from 'components/AMM/AddLiquidity/useAddLiquidityButtonProps'
@@ -11,18 +11,11 @@ import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useAccount } from 'wagmi'
-
-const LiquidityTip = () => (
-  <Card variant="secondary" p={4} backgroundBlendMode={'screen'}>
-    <Text fontSize="lg">
-      Tip: When you add liquidity, you will receive pool tokens representing your position. These
-      tokens automatically earn fees proportional to your share of the pool, and can be redeemed at
-      any time.
-    </Text>
-  </Card>
-)
+import { useQueryCurrencies } from '../hooks/useQueryCurrencies'
+import { NetworkMismatch } from '../NetworkMismatch'
+import useLiquidityData from './useLiquidityData'
 
 const AddSymbol = () => (
   <Flex align="center" justify="center">
@@ -47,34 +40,35 @@ export type LiquidityPool = {
   amount1: CurrencyAmount<Currency>
 }
 
-// export const getServerSideProps = async (ctx) => {
-//   const [token0, token1] = await fetchCurrenciesFromQuery(ctx.query)
-//   return { props: { token0, token1 } }
-// }
-
 function AddLiquidityContent({
-  currency0,
-  currency1,
+  currencies,
+  liquidityModalClose,
 }: {
-  currency0?: Currency
-  currency1?: Currency
-} = {}) {
-  // const initialTokens = [currencyFromJson(token0), currencyFromJson(token1)]
+  currencies: Currency[]
+  liquidityModalClose?: VoidFunction
+}) {
+  const { onChangeCurrencies, isNetworkMismatch, queryHasCurrency, currentChainId, queryChainId } =
+    useQueryCurrencies()
 
   const { pair, firstFieldAmount, secondFieldAmount, onChangeFirstField, onChangeSecondField } =
-    useAddLiquidityState({ currency0, currency1 })
-  // useSyncCurrenciesToUrl(firstFieldAmount?.currency, secondFieldAmount?.currency)
+    useAddLiquidityState(currencies, onChangeCurrencies)
 
   const addLPTx = useAddLiquidityTransaction(firstFieldAmount, secondFieldAmount)
 
+  const supplyLiquidityDisclosure = useDisclosure()
   const addLiquidityButtonProps = useAddLiquidityButtonProps(
     pair,
     firstFieldAmount,
     secondFieldAmount,
-    () => supplyLiquidityDisclosure.onOpen(),
+    supplyLiquidityDisclosure.onOpen,
   )
   const fixedPair = pair.data ?? Pair.createVirtualPair(firstFieldAmount, secondFieldAmount)
-  const supplyLiquidityDisclosure = useDisclosure()
+
+  const lpData = useLiquidityData({
+    pair: fixedPair,
+    amount0: firstFieldAmount,
+    amount1: secondFieldAmount,
+  })
 
   return (
     <>
@@ -101,15 +95,70 @@ function AddLiquidityContent({
         {...addLiquidityButtonProps}
       />
 
+      <NetworkMismatch
+        isOpen={isNetworkMismatch && queryHasCurrency}
+        expectedChainId={queryChainId}
+        currentChainId={currentChainId}
+      >
+        <Text color="text.low">
+          Do you wanna drop this {CHAIN_NAME[queryChainId]} LP <br />
+          and restart on {CHAIN_NAME[currentChainId]}?
+        </Text>
+      </NetworkMismatch>
+
       <SupplyLiquidityModal
-        lp={{ pair: fixedPair, amount0: firstFieldAmount, amount1: secondFieldAmount }}
+        lpData={lpData}
         isOpen={supplyLiquidityDisclosure.isOpen}
-        onClose={supplyLiquidityDisclosure.onClose}
+        onClose={liquidityModalClose || supplyLiquidityDisclosure.onClose}
         onConfirm={addLPTx.submit}
       />
 
-      <WaitingConfirmationDialog isOpen={addLPTx.isWaitingForConfirmation} />
-      <TransactionSubmittedDialog tx={addLPTx.data} isOpen={addLPTx.isTransactionSent} />
+      <WaitingConfirmationDialog
+        isOpen={addLPTx.isWaitingForConfirmation}
+        title={'Confirm Liquidity'}
+      >
+        <Flex
+          width={'220px'}
+          height="200px"
+          rounded={'2xl'}
+          mt={4}
+          shadow={'Down Medium'}
+          align={'center'}
+          direction={'column'}
+          textAlign={'center'}
+        >
+          <Text textColor={'text.low'} fontWeight="700" fontSize={18} mt={4}>
+            You will lock
+          </Text>
+          <Text width={'90%'} fontWeight={'700'} textColor="text.accent">
+            {`${lpData.amount0?.toSignificant(6, { groupSeparator: ',' })} ${
+              lpData.token0?.symbol
+            }`}
+          </Text>
+          <Text width={'90%'} fontWeight={'700'} textColor="text.accent">
+            {`${lpData.amount1?.toSignificant(6, { groupSeparator: ',' })} ${
+              lpData.token1?.symbol
+            }`}
+          </Text>
+          <Text textColor={'text.low'} fontWeight="700" fontSize={18} mt={4}>
+            You will receive
+          </Text>
+          <Text width={'90%'} fontWeight={'700'} textColor="text.accent">
+            {`${lpData.poolShare?.amount.toSignificant(6, { groupSeparator: ',' })} ${
+              lpData?.pair?.liquidityToken?.symbol
+            } ${
+              +lpData.poolShare?.amount.toSignificant(6, { groupSeparator: ',' }) > 1
+                ? 'Tokens'
+                : 'Token'
+            }`}
+          </Text>
+        </Flex>
+      </WaitingConfirmationDialog>
+      <TransactionSubmittedDialog
+        tx={addLPTx.data}
+        isOpen={addLPTx.isTransactionSent}
+        closeParentComponent={liquidityModalClose || supplyLiquidityDisclosure.onClose}
+      />
       <TransactionErrorDialog error={addLPTx.error?.message} isOpen={addLPTx.isError} />
     </>
   )
@@ -122,6 +171,7 @@ export const AddLiquidityModalButton = ({
 }: { label?: string; pair?: Pair } & ButtonProps) => {
   const [{ data: account }] = useAccount()
   const addLiquidityDisclosure = useDisclosure()
+  const currencies = useMemo(() => [pair?.token0, pair?.token1], [pair?.token0, pair?.token1])
   if (!account?.address) {
     return <ConnectWallet />
   }
@@ -156,16 +206,26 @@ export const AddLiquidityModalButton = ({
           gap: 6,
         }}
       >
-        <AddLiquidityContent currency0={pair?.token0} currency1={pair?.token1} />
+        <AddLiquidityContent
+          currencies={currencies}
+          liquidityModalClose={addLiquidityDisclosure.onClose}
+        />
       </Modal>
     </>
   )
 }
 
-export const AddLiquidityCard = (props: CardProps) => {
+export const AddLiquidityCard = ({ currencies }: { currencies: Currency[] }) => {
   return (
-    <Card {...props}>
-      <AddLiquidityContent />
+    <Card
+      borderWidth={2}
+      variant="primary"
+      p={4}
+      w={{ base: '340px', md: '500px' }}
+      gap={6}
+      shadow="Up for Blocks"
+    >
+      <AddLiquidityContent currencies={currencies} />
     </Card>
   )
 }

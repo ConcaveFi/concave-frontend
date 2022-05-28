@@ -1,160 +1,113 @@
-import { CNV } from '@concave/gemswap-sdk'
-import { Box, Button, Card, Flex, HStack, Image, Input, Text } from '@concave/ui'
-import { STAKING_CONTRACT } from 'constants/address'
-import { StakingV1Abi } from 'contracts/LiquidStaking/LiquidStakingAbi'
-import { ethers } from 'ethers'
-import { useFetchApi } from 'hooks/cnvData'
-import { useApprove } from 'hooks/useApprove'
-import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
-import { useAccount, useBalance, useContractWrite, useNetwork } from 'wagmi'
+import { CNV, Currency, CurrencyAmount } from '@concave/gemswap-sdk'
+import { Box, Card, Flex, Text, useDisclosure } from '@concave/ui'
+import { ApproveButton } from 'components/ApproveButton/ApproveButton'
+import { CurrencyInputField } from 'components/CurrencyAmountField'
+import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
+import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
+import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
+import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import { useRecentTransactions } from 'hooks/useRecentTransactions'
+import { StakingV1ProxyAddress } from 'lib/StakingV1Proxy/Address'
+import { StakingV1Contract } from 'lib/StakingV1Proxy/StakingV1Contract'
+import React, { useState } from 'react'
+import { toAmount } from 'utils/toAmount'
+import { useAccount, useSigner } from 'wagmi'
+import { PARAMETER_TO_POOL_PERIOD } from '../StakeCard'
 
-const periodToPoolParameter = {
-  '360 days': 0,
-  '180 days': 1,
-  '90 days': 2,
-  '45 days': 3,
-}
-
-function StakeInput(props) {
-  const cnvPrice = useFetchApi('/api/cnv')
-  const [stakeInput, setStakeInput] = useState('')
+function StakeInput(props: { poolId: number; period: string; onClose: () => void }) {
   const [{ data: account }] = useAccount()
-  const [{ data }] = useNetwork()
-  const { allowance, ...approve } = useApprove(CNV[data.chain.id], STAKING_CONTRACT[data.chain.id])
-  const [approveButtonText, setApproveButtonText] = useState('Approve CNV')
-  const [allowanceEnough, setAllowanceEnough] = useState(false)
-  // console.log(allowance.formatted)
-  // approve.sendApproveTx()
-
-  useEffect(() => {
-    if (allowance && +allowance.formatted > +stakeInput) {
-      setAllowanceEnough(true)
-    } else {
-      setAllowanceEnough(false)
-    }
-    if (stakeInput === '') setStakeInput('')
-  }, [allowance, stakeInput])
-
-  const [cnvBalance, getBalance] = useBalance({
-    addressOrName: account?.address,
-    token: '0x2B8E79CBD58418CE9aeB720BAf6B93825B93eF1F',
-    // token: '0x000000007a58f5f58E697e51Ab0357BC9e260A04',
-  })
-
-  const setSafeStakeInputValue = (value: string) => {
-    let currentValue = value
-    if (Number(currentValue) > Number.MAX_SAFE_INTEGER) {
-      currentValue = String(Number.MAX_SAFE_INTEGER)
-    }
-    setStakeInput(String(currentValue))
-  }
-
-  const setMax = () => {
-    setStakeInput(cnvBalance.data?.formatted)
-  }
-
-  const approveCNV = () => {
-    approve.sendApproveTx()
-    setApproveButtonText('Pending...')
-  }
-
-  const [lockData, lockCNV] = useContractWrite(
-    {
-      addressOrName: '0x265271970c6e13a942f0f75c9d619ffe5ca2872e',
-      contractInterface: StakingV1Abi,
-    },
-    'lock',
-    {
-      args: [
-        account.address,
-        ethers.utils.parseEther(String(+stakeInput)),
-        periodToPoolParameter[`${props.period}`],
-      ],
-    },
+  const netWorkdId = useCurrentSupportedNetworkId()
+  const [{ data: signer }] = useSigner()
+  const [stakeInput, setStakeInput] = useState<CurrencyAmount<Currency>>(
+    toAmount(0, CNV[netWorkdId]),
   )
+  const cnvBalance = useCurrencyBalance(stakeInput?.currency, { watch: true })
+  const [tx, setTx] = useState(undefined)
+  const [txError, setTxError] = useState('')
+  const [waitingForConfirm, setWaitingForConfirm] = useState(false)
 
-  const router = useRouter()
+  const { addRecentTransaction } = useRecentTransactions()
+
+  const {
+    isOpen: isOpenSubmitted,
+    onClose: onCloseSubmitted,
+    onOpen: onOpenSubmitted,
+  } = useDisclosure()
+
+  const {
+    isOpen: isOpenRejected,
+    onClose: onCloseRejected,
+    onOpen: onOpenRejected,
+  } = useDisclosure()
+
+  const onError = (e: { code: number; message: string }) => {
+    const errorMessage = e.code === 4001 ? 'Transaction Rejected' : e.message
+    setTxError(errorMessage)
+    setWaitingForConfirm(false)
+    onOpenRejected()
+  }
+
+  const lock = () => {
+    const contract = new StakingV1Contract(netWorkdId)
+    setWaitingForConfirm(true)
+    contract
+      .lock(signer, account?.address, stakeInput.numerator.toString(), props.poolId)
+      .then((x) => {
+        addRecentTransaction({
+          amount: +stakeInput.toSignificant(3),
+          amountTokenName: stakeInput.currency.symbol,
+          transaction: x,
+          type: 'Stake',
+          stakePool: PARAMETER_TO_POOL_PERIOD[props.poolId],
+          loading: true,
+        })
+        setTx(x)
+        setWaitingForConfirm(false)
+        onOpenSubmitted()
+      })
+      .catch(onError)
+  }
 
   return (
-    <Box>
-      <Card shadow="down" w="350px" px={4} py={5}>
-        <Flex justify="space-between" alignItems="center">
-          <Input
-            placeholder="0.00"
-            value={stakeInput}
-            onChange={(e) => setSafeStakeInputValue(e.target.value)}
-            ml={-1}
-            shadow="none"
-            w="60%"
-            bg="none"
-            fontSize="xl"
-            type="number"
-          />
-          <Flex shadow="up" borderRadius="3xl" px={4} py={1} alignItems="center">
-            <Image src="/assets/tokens/cnv.svg" alt="concave-logo" h={8} w={8} />
-            <Text ml={2} color="text.medium" fontSize="xl" fontWeight="bold">
-              CNV
-            </Text>
+    <>
+      <Box>
+        <Card shadow="down" w="350px" px={0} py={0}>
+          <Flex>
+            <CurrencyInputField currencyAmountIn={stakeInput} onChangeAmount={setStakeInput} />
           </Flex>
-        </Flex>
-        <Flex mt={2} justify="space-between" px={2}>
-          <Text color="text.low" fontSize="md" fontWeight="bold">
-            {/* Loading Price */}
-            {(cnvPrice as any)?.data
-              ? `$${(+stakeInput * (cnvPrice as any)?.data.cnv).toFixed(2)}`
-              : 'Loading price'}
-          </Text>
-          <HStack spacing={2}>
-            <Text color="text.low" fontSize="sm" fontWeight="bold">
-              Balance: {(+cnvBalance.data?.formatted).toFixed(2)}
-            </Text>
-            <Button textColor="blue.500" onClick={setMax}>
-              Max
-            </Button>
-          </HStack>
-        </Flex>
-      </Card>
+        </Card>
 
-      <Box mt={10} width="350px">
-        {!allowanceEnough && (
-          <Button
-            onClick={approveCNV}
-            fontWeight="bold"
-            fontSize="md"
-            variant="primary"
-            bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
-            w="100%"
-            h="50px"
-            size="large"
-            mx="auto"
-            disabled={+stakeInput > +cnvBalance.data?.formatted}
-          >
-            {approveButtonText}
-          </Button>
-        )}
-
-        {allowanceEnough && (
-          <Button
+        <Box mt={{ base: 4, sm: 10 }} width="350px">
+          <ApproveButton
+            approveArgs={{
+              currency: stakeInput.currency,
+              spender: StakingV1ProxyAddress[stakeInput.currency.chainId],
+            }}
             mt={5}
-            onClick={() => lockCNV()}
+            onClick={lock}
             fontWeight="bold"
             fontSize="md"
             variant="primary"
             bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
-            w="100%"
+            w={{ base: '60%', sm: '80%', md: '100%' }}
             h="50px"
             size="large"
             mx="auto"
             disabled={
-              +stakeInput == 0 || +stakeInput > +cnvBalance.data?.formatted || lockData.loading
+              !cnvBalance.data ||
+              +cnvBalance.data?.numerator.toString() === 0 ||
+              +stakeInput.numerator.toString() === 0 ||
+              stakeInput.greaterThan(cnvBalance.data?.numerator)
             }
           >
-            Stake CNV
-          </Button>
-        )}
+            {+stakeInput.numerator?.toString() > +cnvBalance.data?.numerator.toString() ||
+            +cnvBalance.data?.numerator.toString() === 0
+              ? 'Insufficient CNV'
+              : 'Stake CNV'}
+          </ApproveButton>
 
-        {/* <Button
+          {/* <Button
           mt={5}
           onClick={() => router.push('/dashboard')}
           fontWeight="bold"
@@ -165,11 +118,43 @@ function StakeInput(props) {
           h="40px"
           size="large"
           mx="auto"
-        >
+          >
           Check position
         </Button> */}
+        </Box>
       </Box>
-    </Box>
+
+      <WaitingConfirmationDialog isOpen={waitingForConfirm} title={'Confirm Stake'}>
+        <Flex
+          width={'200px'}
+          height="107px"
+          rounded={'2xl'}
+          mt={4}
+          shadow={'Down Medium'}
+          align={'center'}
+          direction={'column'}
+        >
+          <Text textColor={'text.low'} fontWeight="700" fontSize={18} mt={4}>
+            Staking:
+          </Text>
+          <Text fontWeight={'700'} textColor="text.accent">
+            {stakeInput.wrapped.toExact() + ' CNV'}
+          </Text>
+          <Text textColor={'text.low'}>For {props.period}</Text>
+        </Flex>
+      </WaitingConfirmationDialog>
+
+      <TransactionSubmittedDialog
+        isOpen={isOpenSubmitted}
+        tx={tx}
+        closeParentComponent={props.onClose}
+      />
+      <TransactionErrorDialog
+        error={txError}
+        isOpen={isOpenRejected}
+        closeParentComponent={props.onClose}
+      />
+    </>
   )
 }
 

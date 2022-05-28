@@ -2,5 +2,6 @@ type AddressMap = { [chainId: number]: string }
 
 export const BOND_ADDRESS: AddressMap = {
   1: '',
-  3: '0xC25e7D34859bFB2682e6B09A34a61C397bfBad1E',
+  3: '0x82335F5F77D04b95AA09543Bc37Fa70269b0E1d1',
+  4: '0x9B4147eb30daFc75CF4A5E33d1Ee72156790c917',
 }

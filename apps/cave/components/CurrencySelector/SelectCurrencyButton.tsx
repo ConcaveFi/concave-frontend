@@ -20,12 +20,13 @@ export const SelectCurrencyButton = ({
     px={3}
     fontWeight="bold"
     alignSelf="end"
-    fontSize="lg"
+    fontSize={{ base: '12px', md: 'lg' }}
     rightIcon={!props.isDisabled && <DownIcon w="16px" />}
     leftIcon={selected?.symbol && <CurrencyIcon size="xs" currency={selected} />}
     onClick={onClick}
     {...props}
   >
+    {selected?.chainId === 3 ? 't' : ''}
     {selected?.symbol || `Select a token`}
   </Button>
 )

@@ -7,12 +7,12 @@ interface StakeAprCardProps {
   text: string
   image: string
   diluted: boolean
-  isLargerThan1200: boolean
+  isLargerLayout: boolean
 }
 const StakeAprCard = (props: StakeAprCardProps) => {
-  const { isLargerThan1200 } = props
+  const { isLargerLayout } = props
 
-  return isLargerThan1200 ? <DefaultLayout props={props} /> : <MobileLayout props={props} />
+  return isLargerLayout ? <DefaultLayout props={props} /> : <MobileLayout props={props} />
 }
 
 interface MobileLayoutProps {
@@ -23,9 +23,16 @@ const MobileLayout = (props: MobileLayoutProps) => {
   const { title, length, text, image, diluted } = props.props
 
   return (
-    <Flex direction={'column'} align="center" justify={'center'} flex={1} position="relative">
+    <Flex
+      direction={'column'}
+      align="center"
+      justify={'center'}
+      flex={1}
+      height="170px"
+      position="relative"
+    >
       <Text fontSize="xs" color="text.low" fontWeight="medium">
-        Stake Period
+        Stake Pool
       </Text>
       <Text fontSize="s" color="white" fontWeight="bold">
         {title}
@@ -52,30 +59,28 @@ interface DefaultLayoutProps {
 const DefaultLayout = (props: DefaultLayoutProps) => {
   const { title, length, text, image, diluted } = props.props
   return (
-    <Flex>
-      <VStack>
-        <HStack>
-          <VStack>
-            <Text fontSize="xs" color="text.low" fontWeight="medium">
-              Stake Period
-            </Text>
-            <Text fontSize="s" color="white" fontWeight="bold">
-              {title}
-            </Text>
-          </VStack>
-          <>
-            <Image h="70px" w="70px" src={image} alt={`stake-period-${length}`} />
-          </>
-          <VStack>
-            <Text fontSize="xs" color="text.low" fontWeight="medium">
-              {!diluted && 'v'}APR
-            </Text>
-            <Text fontSize="s" color="white" fontWeight="bold">
-              {text}
-            </Text>
-          </VStack>
-        </HStack>
-      </VStack>
+    <Flex flex={1} direction={'column'} mx={6}>
+      <Flex>
+        <Flex direction={'column'} flex={1} mt={4}>
+          <Text fontSize="xs" color="text.low" fontWeight="medium">
+            Stake Pool
+          </Text>
+          <Text fontSize="s" color="white" fontWeight="bold">
+            {title}
+          </Text>
+        </Flex>
+        <>
+          <Image h="70px" w="70px" src={image} alt={`stake-period-${length}`} />
+        </>
+        <Flex direction={'column'} flex={1} mt={4}>
+          <Text fontSize="xs" color="text.low" fontWeight="medium">
+            {!diluted && 'v'}APR
+          </Text>
+          <Text fontSize="s" color="white" fontWeight="bold">
+            {text}
+          </Text>
+        </Flex>
+      </Flex>
     </Flex>
   )
 }

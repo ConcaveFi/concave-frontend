@@ -21,46 +21,57 @@ export const useAddLiquidityButtonProps = (
   /*
     Not Connected
   */
-  if (!account?.address) return { children: 'Connect Wallet', onClick: connectModal.onOpen }
+  if (!account?.address) return { children: 'Connect wallet', onClick: connectModal.onOpen }
 
-  if (!amount0 || !amount1) return { isDisabled: true, children: `Select a second token` }
+  // if (!amount0?.currency) return { isDisabled: true, children: `Select a first token` }
+  // if (!amount1?.currency) return { isDisabled: true, children: `Select a second token` }
+
+  /*
+    Invalid pair
+  */
+  if (
+    !amount0?.currency ||
+    !amount1?.currency ||
+    !amount0 ||
+    !amount1 ||
+    amount0.currency.wrapped.equals(amount1.currency)
+  )
+    return { isDisabled: true, children: `Invalid pair` }
 
   if (pair.isLoading) return { isLoading: true, loadingText: `Fetching pair` }
 
   /*
     Enter an amount
   */
-  if (amount0.equalTo(0))
-    return { isDisabled: true, children: `Enter an ${amount0.currency.symbol} amount` }
-  if (amount1.equalTo(0))
-    return { isDisabled: true, children: `Enter an ${amount1.currency.symbol} amount` }
+  if (amount0.equalTo(0) || amount1.equalTo(0))
+    return { isDisabled: true, children: `Enter an amount` }
 
   /*
     Insufficient Funds
   */
   if (currency0Balance.data?.lessThan(amount0))
     return {
-      children: `Insufficient ${amount0.currency.symbol} balance`,
+      children: `Insufficient ${amount0.currency.symbol}`,
       isDisabled: true,
     }
 
   if (currency1Balance.data?.lessThan(amount1))
     return {
-      children: `Insufficient ${amount1.currency.symbol} balance`,
+      children: `Insufficient ${amount1.currency.symbol}`,
       isDisabled: true,
     }
 
   /*
-      Create Pair
-    */
+    Create Pair
+  */
   if (!pair.data)
-    return { children: 'Create a Pair', isDisabled: false, onClick: onAddLiquidityClick }
+    return { children: 'Create a pair', isDisabled: false, onClick: onAddLiquidityClick }
 
   /*
     Add Liquidity
-    */
+  */
   return {
-    children: pair.error === NoValidPairsError ? 'Create Liquidity' : 'Add Liquidity',
+    children: pair.error === NoValidPairsError ? 'Create liquidity' : 'Add liquidity',
     onClick: onAddLiquidityClick,
   }
 }

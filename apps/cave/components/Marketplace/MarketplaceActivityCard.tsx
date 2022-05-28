@@ -1,91 +1,90 @@
 import { useEffect, useState } from 'react'
-import { Box, Card, Flex, Text, Button, Image, useMediaQuery } from '@concave/ui'
-import NewActivityCard from './MarketplaceTransactionCard'
+import { Box, Card, Flex } from '@concave/ui'
 import MarketplaceTransactionCard from './MarketplaceTransactionCard'
 
 const MarketplaceActivityCard = () => {
   const [loading, setLoading] = useState(false)
   const [data, setData] = useState(null)
   const [error, setError] = useState(false)
+  const [filter, setFilter] = useState<'all' | 'listing' | 'sale'>('all')
 
   useEffect(() => {
-    handleClick('all')
-  }, [])
+    handleClick(filter)
+  }, [filter])
 
   // TODO create types for data later on
-  const handleClick = (trigger: string) => {
+  const handleClick = (filter: string) => {
     // fetch with the trigger filter and setData
     setLoading(true)
-    setData([
-      {
-        type: 'listing',
-        date: 1650615494,
-        event: 'listed',
-        length: '3 month',
-        cnv: 700,
-        link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
-      },
-      {
-        type: 'sale',
-        date: 1650615494,
-        event: 'sold',
-        length: '6 month',
-        cnv: 200,
-        link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
-      },
-      {
-        type: 'listing',
-        date: 1650615494,
-        event: 'listed',
-        length: '1 year',
-        cnv: 340,
-        link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
-      },
-      {
-        type: 'sale',
-        date: 1650615494,
-        event: 'listed',
-        length: '1 year',
-        cnv: 340,
-        link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
-      },
-      {
-        type: trigger,
-        date: 1650615494,
-        event: 'listed',
-        length: '1 year',
-        cnv: 340,
-        link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
-      },
-      {
-        type: trigger,
-        date: 1650615494,
-        event: 'listed',
-        length: '1 year',
-        cnv: 340,
-        link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
-      },
-      {
-        type: trigger,
-        date: 1650615494,
-        event: 'listed',
-        length: '1 year',
-        cnv: 340,
-        link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
-      },
-    ])
+    setData(
+      [
+        {
+          type: 'listing',
+          date: 1650615494,
+          event: 'listed',
+          length: '3 month',
+          cnv: 700,
+          link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
+        },
+        {
+          type: 'sale',
+          date: 1650615494,
+          event: 'sold',
+          length: '6 month',
+          cnv: 200,
+          link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
+        },
+        {
+          type: 'listing',
+          date: 1650615494,
+          event: 'listed',
+          length: '1 year',
+          cnv: 340,
+          link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
+        },
+        {
+          type: 'sale',
+          date: 1650615494,
+          event: 'listed',
+          length: '1 year',
+          cnv: 340,
+          link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
+        },
+        {
+          type: 'sale',
+          date: 1650615494,
+          event: 'listed',
+          length: '1 year',
+          cnv: 340,
+          link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
+        },
+        {
+          type: 'listing',
+          date: 1650615494,
+          event: 'listed',
+          length: '1 year',
+          cnv: 340,
+          link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
+        },
+        {
+          type: 'sale',
+          date: 1650615494,
+          event: 'listed',
+          length: '1 year',
+          cnv: 340,
+          link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
+        },
+      ].filter((value) => {
+        if (filter === 'all') return true
+        else return value.type === filter
+      }),
+    )
     setLoading(false)
   }
-  const [isLargerThan1200] = useMediaQuery('(min-width: 1200px)')
 
-  const [width, setWidth] = useState('300px')
-
-  useEffect(() => {
-    setWidth(isLargerThan1200 ? '300px' : '360px')
-  }, [isLargerThan1200])
   return (
     <Card
-      width={width}
+      width={{ base: '300px', md: '360px', xl: '300px' }}
       shadow="Block Up"
       height={642}
       position="relative"
@@ -93,9 +92,17 @@ const MarketplaceActivityCard = () => {
       variant="secondary"
     >
       <Flex justify={'center'} align="center" height={'70px'} gap={1}>
-        <TransactionButton active label="All" />
-        <TransactionButton label="Listing" />
-        <TransactionButton label="Sale" />
+        <TransactionButton onClick={() => setFilter('all')} active={filter === 'all'} label="All" />
+        <TransactionButton
+          onClick={() => setFilter('listing')}
+          active={filter === 'listing'}
+          label="Listing"
+        />
+        <TransactionButton
+          onClick={() => setFilter('sale')}
+          active={filter === 'sale'}
+          label="Sale"
+        />
       </Flex>
       <Box
         backdropFilter="blur(8px)"
@@ -109,7 +116,7 @@ const MarketplaceActivityCard = () => {
         px={'0.5rem'}
         py={'0.5rem'}
         __css={scrollBar}
-        pt={4}
+        pt={0}
       >
         <div>
           {loading && <span>loading...</span>}
@@ -127,6 +134,7 @@ const MarketplaceActivityCard = () => {
 interface TransactionButtonProps {
   label: string
   active?: boolean
+  onClick: () => void
 }
 
 const TransactionButton = (props: TransactionButtonProps) => {
@@ -134,6 +142,7 @@ const TransactionButton = (props: TransactionButtonProps) => {
   const textColor = !!active ? 'white' : 'text.low'
   return (
     <Flex
+      onClick={props.onClick}
       textColor={textColor}
       fontSize="14"
       fontWeight={700}
@@ -147,6 +156,7 @@ const TransactionButton = (props: TransactionButtonProps) => {
       width={'90px'}
       height="37px"
       shadow={'Up Big'}
+      userSelect="none"
     >
       {label}
     </Flex>
@@ -157,7 +167,7 @@ export default MarketplaceActivityCard
 
 const scrollBar = {
   '&::-webkit-scrollbar': {
-    width: '20px',
+    width: '10px',
     boxShadow: `-1px 1px 3px rgba(126, 162, 255, 0.26), inset 0px -5px 5px rgba(255, 255, 255, 0.02), inset -9px 12px 24px rgba(13, 17, 23, 0.49)`,
     borderRadius: '10px',
     mt: '30px',

@@ -2,7 +2,7 @@ import { ComponentStyleConfig } from '@chakra-ui/react'
 import { gradientBorder } from '../utils/gradientBorder'
 
 export const CardStyles: ComponentStyleConfig = {
-  baseStyle: ({ borderWidth = 1, borderRadius = '2xl', borderGradient, ...props }) => ({
+  baseStyle: ({ borderWidth = 2, borderRadius = '2xl', borderGradient, ...props }) => ({
     borderRadius,
     ...gradientBorder({ borderRadius, borderWidth, ...props, variant: borderGradient }),
   }),

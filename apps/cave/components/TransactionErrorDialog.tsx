@@ -14,7 +14,7 @@ const TransactionError = ({ error, onClose }: { error: string; onClose: () => vo
       maxH="40vh"
       overflow="auto"
     >
-      {error}
+      {error || 'An unexpected error occured'}
     </Text>
 
     <Flex>
@@ -28,15 +28,20 @@ const TransactionError = ({ error, onClose }: { error: string; onClose: () => vo
 export const TransactionErrorDialog = ({
   error,
   isOpen: isOpenProp,
+  closeParentComponent,
 }: {
   error: string
   isOpen: boolean
+  closeParentComponent?: VoidFunction
 }) => {
   const [isOpen, setIsOpen] = useState(isOpenProp)
   useEffect(() => {
     setIsOpen(isOpenProp)
   }, [isOpenProp])
-  const onClose = () => setIsOpen(false)
+  const onClose = () => {
+    setIsOpen(false)
+    // closeParentComponent()
+  }
   return (
     <Modal
       bluryOverlay={true}

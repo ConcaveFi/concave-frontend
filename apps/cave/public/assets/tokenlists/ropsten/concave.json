@@ -14,6 +14,14 @@
   "tokens": [
     {
       "chainId": 3,
+      "name": "Wrapped Ethereum",
+      "address": "0xc778417E063141139Fce010982780140Aa0cD5Ab",
+      "decimals": 18,
+      "logoURI": "/assets/tokens/weth.svg",
+      "symbol": "wETH"
+    },
+    {
+      "chainId": 3,
       "name": "Dai Stablecoin",
       "address": "0x7B731FFcf1b9C6E0868dA3F1312673A12Da28dc5",
       "symbol": "DAI",
@@ -30,7 +38,7 @@
     },
     {
       "name": "Concave",
-      "address": "0x2b8e79cbd58418ce9aeb720baf6b93825b93ef1f",
+      "address": "0xB9CED3eB5Ce9d40A735cA3345978aB62Eca0c4d0",
       "symbol": "tCNV",
       "decimals": 18,
       "chainId": 3,

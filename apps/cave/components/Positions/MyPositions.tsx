@@ -1,5 +1,4 @@
 import { CurrencyAmount, Fetcher, Pair } from '@concave/gemswap-sdk'
-import { SpinIcon } from '@concave/icons'
 import {
   Accordion,
   AccordionButton,
@@ -9,64 +8,29 @@ import {
   Card,
   Flex,
   HStack,
-  keyframes,
   Stack,
   Text,
-  VStack,
 } from '@concave/ui'
 import { AddLiquidityModalButton } from 'components/AMM/AddLiquidity/AddLiquidity'
 import { RemoveLiquidityModalButton } from 'components/AMM/RemoveLiquidity/RemoveLiquidity'
 import { ConnectWallet } from 'components/ConnectWallet'
 import { CurrencyIcon } from 'components/CurrencyIcon'
+import { Loading } from 'components/Loading'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
-import { precision } from 'hooks/usePrecision'
-import { useAddressTokenList } from 'hooks/useTokenList'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
-import React, { useState } from 'react'
+import React from 'react'
 import { useQuery } from 'react-query'
-import { useAccount, useNetwork } from 'wagmi'
+import { PositionsState } from './usePositionsState'
 
-export const MyPositions = () => {
-  const [view, setView] = useState<'user' | 'all'>('all')
-  const [{ data: network }] = useNetwork()
-  const chainId = network?.chain?.id ?? 1
-  const provider = concaveProvider(chainId)
-  const allPairs = useQuery(['fetchPairs', chainId], () => {
-    return Fetcher.fetchPairs(chainId, provider)
-  })
-  const [{ data: account }] = useAccount()
-  const { data: tokens, isLoading } = useAddressTokenList(account?.address)
-
-  if (allPairs.isLoading) {
-    return (
-      <Flex justifyContent={'center'}>
-        <VStack gap={1}>
-          <SpinIcon __css={spinnerStyles} width="16" height="16" viewBox="0 0 64 64" />
-          <Text>Loading pools</Text>
-        </VStack>
-      </Flex>
-    )
+export const MyPositions = ({ state }: { state: PositionsState }) => {
+  const { loading, error, setView, view, account, pairs } = state
+  if (loading) {
+    return <Loading size="lg" label={loading} />
   }
-  if (allPairs.error) {
-    return <p>Error to get Pairs</p>
+  if (error) {
+    return <Text>error</Text>
   }
-
-  if (isLoading) {
-    return (
-      <Flex justifyContent={'center'}>
-        <VStack gap={1}>
-          <SpinIcon __css={spinnerStyles} width="16" height="16" viewBox="0 0 64 64" />
-          <Text>Loading user pools</Text>
-        </VStack>
-      </Flex>
-    )
-  }
-  const userPairs = allPairs.data.filter((p) => {
-    return (tokens || []).find((t) => p.liquidityToken.address === t.address)
-  })
-
-  const pairs = view === 'user' ? userPairs : allPairs.data
-
   return (
     <Card
       gap={4}
@@ -123,7 +87,7 @@ const PairsAccordion = ({ userAddress, pairs }: PairsAccordionProps) => {
   if (!pairs.length) {
     const { label, Button } = userAddress
       ? {
-          label: 'You dont have pools on your wallet.',
+          label: 'You are not in any pools',
           Button: <AddLiquidityModalButton />,
         }
       : { label: 'You are disconnected.', Button: <ConnectWallet /> }
@@ -138,109 +102,130 @@ const PairsAccordion = ({ userAddress, pairs }: PairsAccordionProps) => {
     )
   }
   return (
-    <Box borderRadius={'2xl'} p={4} shadow={'down'}>
-      <Accordion as={Stack} allowToggle gap={2}>
-        {pairs.map((pair) => {
-          return (
-            <LPPositionItem
+    <Box borderRadius={'2xl'} px={{ base: 0, sm: 4 }} py={2} shadow={'down'} w={'100%'}>
+      <Box
+        borderRadius={'2xl'}
+        p={{ base: 2, sm: 4 }}
+        maxH={'55vh'}
+        apply="scrollbar.secondary"
+        w={'100%'}
+        overflowY={'auto'}
+      >
+        <Accordion as={Stack} allowToggle gap={2}>
+          {pairs.map((pair) => (
+            <AccordionItem
               key={pair.liquidityToken.address}
-              pair={pair}
-              userAddress={userAddress}
-            />
-          )
-        })}
-      </Accordion>
+              p={2}
+              shadow="Up Big"
+              borderRadius="2xl"
+              alignItems="center"
+            >
+              {({ isExpanded }) => <LPPositionItem isExpanded={isExpanded} pair={pair} />}
+            </AccordionItem>
+          ))}
+        </Accordion>
+      </Box>
     </Box>
   )
 }
 
-const spin = keyframes({
-  '0%': {
-    transform: 'rotate(0deg)',
-  },
-  '100%': {
-    transform: 'rotate(360deg)',
-  },
-})
+export const LiquidityPoolPainel = (props: LPPosition) => {
+  const chainId = useCurrentSupportedNetworkId()
+  const userBalance = useCurrencyBalance(props.pair.liquidityToken)
+  const pairData = useQuery(
+    [
+      'fetchPairData',
+      props.pair.liquidityToken.address,
+      chainId,
+      props.isExpanded,
+      userBalance.data?.toExact(),
+    ],
+    () => Fetcher.fetchPairFromAddress(props.pair.liquidityToken.address, concaveProvider(chainId)),
+    { enabled: props.isExpanded },
+  )
 
-const spinnerStyles = {
-  animation: `${spin} 2s linear infinite`,
+  const pair = pairData.data
+  if (userBalance.isLoading || pairData.isLoading || !userBalance.data) {
+    return (
+      <AccordionPanel>
+        <Loading size="sm" />
+      </AccordionPanel>
+    )
+  }
+  if (userBalance.error || pairData.error)
+    return <Text>{`${userBalance.error || pairData.error}`}</Text>
+
+  if (!pair) return <AccordionPanel />
+  const balance = userBalance.data || CurrencyAmount.fromRawAmount(pair.liquidityToken, '0')
+  const userPoolShare = +userBalance.data?.toExact() / +pair.liquidityToken.totalSupply.toExact()
+
+  return (
+    <AccordionPanel>
+      <Stack
+        fontWeight="bold"
+        fontSize="lg"
+        color="text.medium"
+        borderRadius="2xl"
+        shadow="down"
+        p={4}
+        spacing={4}
+      >
+        {balance.greaterThan(0) && (
+          <PositionInfoItem label="Your total pool tokens:" value={balance.toSignificant()} />
+        )}
+        <PositionInfoItem
+          label={`Pooled ${pair.token0.symbol}:`}
+          value={pair.reserve0.toSignificant(6, { groupSeparator: ',' })}
+        >
+          <CurrencyIcon h={'32px'} size="sm" currency={pair.token0} />
+        </PositionInfoItem>
+        <PositionInfoItem
+          label={`Pooled ${pair.token1.symbol}:`}
+          value={pair.reserve1.toSignificant(6, { groupSeparator: ',' })}
+        >
+          <CurrencyIcon h={'32px'} size="sm" currency={pair.token1} />
+        </PositionInfoItem>
+
+        {balance.greaterThan(0) && (
+          <PositionInfoItem
+            label="Your pool share:"
+            value={`${(userPoolShare * 100).toFixed(2)}%`}
+          />
+        )}
+      </Stack>
+      <Flex gap={5} justify="center" mt={6}>
+        <AddLiquidityModalButton pair={pair} />
+        <RemoveLiquidityModalButton liquidityInfo={{ pair, userPoolShare, userBalance: balance }} />
+      </Flex>
+    </AccordionPanel>
+  )
 }
 
 interface LPPosition {
-  userAddress: string
+  isExpanded?: boolean
   pair: Pair
 }
-const LPPositionItem = ({ userAddress, pair }: LPPosition) => {
-  const userBalance = useCurrencyBalance(pair.liquidityToken)
-  if (userBalance.isLoading) {
-    return (
-      <Flex justifyContent={'center'}>
-        <SpinIcon __css={spinnerStyles} width="8" height="16" viewBox="0 0 64 64" />
-      </Flex>
-    )
-  }
-  if (userBalance.error) {
-    return <Text>{`${userBalance.error}`}</Text>
-  }
-  const balance = userBalance.data || CurrencyAmount.fromRawAmount(pair.liquidityToken, '0')
-  const userPoolShare = +userBalance.data?.toExact() / +pair.liquidityToken.totalSupply.toExact()
+const LPPositionItem = (props: LPPosition) => {
   return (
     <>
-      <AccordionItem p={2} shadow="Up Big" borderRadius="2xl" alignItems="center">
-        <AccordionButton>
-          <HStack>
-            <CurrencyIcon h={'32px'} currency={pair.token0} />
-            <CurrencyIcon h={'32px'} currency={pair.token1} />
-            <Text ml="24px" fontWeight="semibold" fontSize="lg">
-              {pair.token0.symbol}/{pair.token1.symbol}
-            </Text>
-          </HStack>
-        </AccordionButton>
-        <AccordionPanel>
-          <Stack
-            fontWeight="bold"
-            fontSize="lg"
-            color="text.medium"
-            borderRadius="2xl"
-            shadow="down"
-            p={4}
-            spacing={4}
-          >
-            <PositionInfoItem label="Your total pool tokens:" value={balance.toSignificant()} />
-            <PositionInfoItem
-              label={`Pooled ${pair.token0.symbol}:`}
-              value={pair.reserve0.toSignificant(6, { groupSeparator: ',' })}
-            >
-              <CurrencyIcon h={'32px'} size="sm" currency={pair.token0} />
-            </PositionInfoItem>
-            <PositionInfoItem
-              label={`Pooled ${pair.token1.symbol}:`}
-              value={pair.reserve1.toSignificant(6, { groupSeparator: ',' })}
-            >
-              <CurrencyIcon h={'32px'} size="sm" currency={pair.token1} />
-            </PositionInfoItem>
-            <PositionInfoItem
-              label="Your pool share:"
-              value={`${precision(userPoolShare * 100, 2).formatted}%`}
-            />
-          </Stack>
-          <Flex gap={5} justify="center" mt={6}>
-            <AddLiquidityModalButton pair={pair} />
-            <RemoveLiquidityModalButton
-              liquidityInfo={{ pair, userPoolShare, userBalance: balance }}
-            />
-          </Flex>
-        </AccordionPanel>
-      </AccordionItem>
+      <AccordionButton>
+        <HStack>
+          <CurrencyIcon size={'sm'} currency={props.pair.token0} />
+          <CurrencyIcon size={'sm'} currency={props.pair.token1} />
+          <Text ml="24px" fontWeight="semibold" fontSize="lg">
+            {props.pair.token0.symbol}/{props.pair.token1.symbol}
+          </Text>
+        </HStack>
+      </AccordionButton>
+      <LiquidityPoolPainel {...props} />
     </>
   )
 }
 
 export const PositionInfoItem = ({ color = '', label, value, mt = 0, children = <></> }) => (
-  <Flex justify="space-between" align={'center'} mt={mt}>
+  <Flex direction={{ base: 'column', sm: 'row' }} justify="space-between" align={'center'} mt={mt}>
     <Text color={color}>{label}</Text>
-    <HStack gap={2} align={'center'} alignContent={'center'}>
+    <HStack gap={{ base: 0, sm: 2 }} align={'center'} alignContent={'center'}>
       <Text>{value}</Text>
       {children}
     </HStack>

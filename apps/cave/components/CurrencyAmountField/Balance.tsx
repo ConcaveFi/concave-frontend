@@ -13,7 +13,7 @@ export const Balance = ({ value, onMax }: { value: string; onMax?: () => void })
     leftIcon={<Text>Balance:</Text>}
     iconSpacing={1}
   >
-    <Text isTruncated maxW="100px">
+    <Text noOfLines={1} maxW="100px">
       {value}
     </Text>
   </Button>

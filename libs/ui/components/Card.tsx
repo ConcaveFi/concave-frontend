@@ -1,5 +1,6 @@
 import { forwardRef, Stack, StackProps, useStyleConfig } from '@chakra-ui/react'
 import { GradientBorderStyleProps } from 'theme/utils/gradientBorder'
+import { motion } from 'framer-motion'
 
 export interface CardProps extends StackProps {
   variant?: 'primary' | 'secondary'
@@ -17,7 +18,14 @@ export const Card = forwardRef<CardProps, 'div'>(
     })
 
     return (
-      <Stack ref={ref} overflow="hidden" __css={styles} {...props}>
+      <Stack
+        as={motion.div}
+        layout="position"
+        ref={ref}
+        overflow="hidden"
+        __css={styles}
+        {...props}
+      >
         {children}
       </Stack>
     )

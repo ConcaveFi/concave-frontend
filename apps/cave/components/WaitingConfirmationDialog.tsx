@@ -13,9 +13,13 @@ const spinnerStyles = { animation: `${spin} 2s linear infinite` }
 export const WaitingConfirmationDialog = ({
   children,
   isOpen: isOpenProp,
+  title,
+  disableCloseButton = false,
 }: {
   children?: ReactNode
   isOpen: boolean
+  title?: string
+  disableCloseButton?: boolean
 }) => {
   const [isOpen, setIsOpen] = useState(isOpenProp)
   useEffect(() => {
@@ -25,7 +29,7 @@ export const WaitingConfirmationDialog = ({
   return (
     <Modal
       bluryOverlay={true}
-      title="Confirm Swap"
+      title={title || 'Confirm Swap'}
       isOpen={isOpen}
       onClose={onClose}
       bodyProps={{ align: 'center', gap: 1, w: '400px' }}
@@ -38,11 +42,13 @@ export const WaitingConfirmationDialog = ({
       <Text my={5} fontWeight="medium" color="text.low" fontSize="md">
         Confirm this transaction in your wallet
       </Text>
-      <Flex>
-        <Button onClick={onClose} variant="secondary" size="large" w="180px">
-          Close
-        </Button>
-      </Flex>
+      {/* {!disableCloseButton && (
+        <Flex>
+          <Button onClick={onClose} variant="secondary" size="large" w="180px">
+            Close
+          </Button>
+        </Flex>
+      )} */}
     </Modal>
   )
 }

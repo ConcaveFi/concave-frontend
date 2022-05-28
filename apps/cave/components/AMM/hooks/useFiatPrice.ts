@@ -13,7 +13,11 @@ export const useFiatPrice = (currency?: Currency) => {
 export const useFiatValue = (currencyAmount?: CurrencyAmount<Currency>) => {
   const fiatPrice = useFiatPrice(currencyAmount?.currency.wrapped)
   return useMemo(() => {
-    if (!fiatPrice.price) return { value: undefined, ...fiatPrice }
-    return { value: fiatPrice.price.quote(currencyAmount.wrapped), ...fiatPrice }
-  }, [currencyAmount, fiatPrice])
+    if (!fiatPrice.price || !fiatPrice.price.baseCurrency.equals(currencyAmount.currency))
+      return { value: undefined, ...fiatPrice }
+
+    if (fiatPrice) return { value: fiatPrice.price.quote(currencyAmount.wrapped), ...fiatPrice }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currencyAmount?.serialize(), fiatPrice.price])
 }

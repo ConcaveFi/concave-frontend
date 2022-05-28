@@ -1,8 +1,26 @@
 import { Flex, Heading, Text } from '@concave/ui'
 import { AddLiquidityCard } from 'components/AMM/AddLiquidity/AddLiquidity'
-import React from 'react'
+import {
+  currencyFromJson,
+  currencyToJson,
+  fetchQueryCurrencies,
+} from 'components/AMM/hooks/useQueryCurrencies'
+import { withPageTransition } from 'components/PageTransition'
+import { GetServerSideProps } from 'next'
 
-export default function AddLiquidity() {
+import React, { useMemo } from 'react'
+
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  const currencies = await fetchQueryCurrencies(query)
+  return { props: { currencies: currencies.map(currencyToJson) } }
+}
+
+export function AddLiquidity({ currencies: serverPropsCurrencies }) {
+  const currencies = useMemo(
+    () => serverPropsCurrencies?.map(currencyFromJson),
+    [serverPropsCurrencies],
+  )
+
   return (
     <>
       <Flex
@@ -13,7 +31,7 @@ export default function AddLiquidity() {
         textAlign="center"
         direction="column"
       >
-        <Heading as="h1" mt={16} mb={3} fontSize="5xl">
+        <Heading as="h1" mt={16} mb={3} fontSize={{ base: '4xl', sm: '5xl' }}>
           Add Liquidity Pools
         </Heading>
         <Flex mt={0} align="center" gap={10} width="full" justify="center" alignItems={'center'}>
@@ -30,18 +48,18 @@ export default function AddLiquidity() {
           justify={'center'}
           align="center"
           width="full"
-          p={4}
+          mt={4}
         >
-          <AddLiquidityCard
-            borderWidth={2}
-            variant="primary"
-            p={4}
-            w="500px"
-            gap={6}
-            shadow="Up for Blocks"
-          />
+          <AddLiquidityCard currencies={currencies} />
         </Flex>
       </Flex>
     </>
   )
 }
+
+AddLiquidity.Meta = {
+  title: 'Concave | Add Liquidity',
+  description: `Add liquidity to Concave's liquidity pool to earn fees.`,
+}
+
+export default withPageTransition(AddLiquidity)

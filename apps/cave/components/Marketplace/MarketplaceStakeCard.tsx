@@ -1,18 +1,11 @@
-import { Card, Flex, useMediaQuery } from '@concave/ui'
+import { Card, Flex, useBreakpointValue, useMediaQuery } from '@concave/ui'
+import { GlassPanel } from 'components/Treasury/TreasuryManagementCard'
 import { useEffect, useState } from 'react'
 import StakeAprCard from './StakeAprCard'
 
 function MarketplaceStakeCard(props: any) {
-  const [isLargerThan1200] = useMediaQuery('(min-width: 1200px)')
-  const [direction, setDirection] = useState<'row' | 'column'>('column')
-  const [width, setWidth] = useState('300px')
-  const [height, setHeight] = useState('283px')
+  const isLargerLayout = useBreakpointValue({ xl: true, base: true, md: false })
 
-  useEffect(() => {
-    setDirection(isLargerThan1200 ? 'column' : 'row')
-    setHeight(isLargerThan1200 ? '283px' : '168px')
-    setWidth(isLargerThan1200 ? '300px' : '460px')
-  }, [isLargerThan1200])
   const filters = [
     {
       title: '360 Days',
@@ -29,7 +22,7 @@ function MarketplaceStakeCard(props: any) {
       diluted: false,
     },
     {
-      title: '180 Days',
+      title: '90 Days',
       length: '3m',
       marketvapr: 'Calculating',
       image: '/assets/marketplace/3mposition.png',
@@ -51,7 +44,7 @@ function MarketplaceStakeCard(props: any) {
       filters.map((e, k) => {
         return (
           <StakeAprCard
-            isLargerThan1200={isLargerThan1200}
+            isLargerLayout={isLargerLayout}
             key={k}
             title={e.title}
             length={e.length}
@@ -62,23 +55,27 @@ function MarketplaceStakeCard(props: any) {
         )
       }),
     )
-  }, [isLargerThan1200])
+  }, [isLargerLayout])
 
   return (
-    <Card
+    <GlassPanel
       zIndex={2}
-      p={7}
       gap={2}
       shadow="Block Up"
-      w={width}
-      h={height}
+      w={{ base: '300px', md: '460px', xl: '300px' }}
+      h={{ base: '283px', md: '168px', xl: '283px' }}
       style={{ alignContent: 'center', justifyContent: 'center' }}
-      variant="secondary"
+      justify="center"
+      // variant="secondary"
     >
-      <Flex direction={direction} gap={-10} position="relative" mt={-2}>
+      <Flex
+        direction={{ md: 'row', base: 'column', xl: 'column' }}
+        gap={{ base: -10, md: 5, xl: -10 }}
+        position="relative"
+      >
         {periods}
       </Flex>
-    </Card>
+    </GlassPanel>
   )
 }
 
