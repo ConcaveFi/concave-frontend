@@ -148,7 +148,7 @@ function StakeCard(props: StackCardProps) {
   } else if (isSuccessVAPR) {
     currentVAPR = `${dataVAPR?.rebaseStakingV1[0][bondVaprPool].toFixed(2) * 100}%`
   } else if (isErrorVAPR) {
-    currentVAPR = 'Error Calculating vAPR'
+    currentVAPR = 'Calculating vAPR'
   }
 
   // console.log(currentVAPR)
