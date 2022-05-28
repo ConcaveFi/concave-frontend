@@ -3,27 +3,24 @@ import { BigNumber } from 'ethers'
 import { formatFixed } from 'utils/formatFixed'
 
 interface RedeemCardViewerProps {
-  shares: BigNumber
+  deposit: BigNumber
   rewardDebt: BigNumber
 }
 const RedeemContainer = (props: RedeemCardViewerProps) => {
-  const { shares, rewardDebt } = props
+  const { deposit, rewardDebt } = props
   return (
     <Flex height={'127px'} width="358px" direction="column">
       <Flex height={'70px'} maxH="70px" align={'center'}>
         <VStack spacing={0} justify="center" flex={1}>
           <LowText>Current value</LowText>
-          <HighText>{0} CNV</HighText>
-          {/* <HighText>{+parseFloat((initial + gained).toFixed(3))} CNV</HighText> */}
+          <HighText>{formatFixed(deposit.add(rewardDebt), { places: 2 })} CNV</HighText>
         </VStack>
         <VStack justify={'center'} spacing={0} flex={1}>
           <LowText>Gained</LowText>
-          <HighText>{0.0} CNV</HighText>
-          {/* <HighText>{+parseFloat(gained.toFixed(3))} CNV</HighText> */}
+          <HighText>{formatFixed(rewardDebt, { places: 2 })} CNV</HighText>
         </VStack>
         <VStack justify={'center'} spacing={0} flex={1}>
-          <LowText>Initial</LowText>
-          <HighText>{formatFixed(shares, { places: 3 })}CNV</HighText>
+          <HighText>{formatFixed(deposit, { places: 4 })}CNV</HighText>
         </VStack>
       </Flex>
       <RedeemButton />

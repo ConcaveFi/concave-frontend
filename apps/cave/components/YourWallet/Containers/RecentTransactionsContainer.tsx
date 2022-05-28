@@ -72,6 +72,7 @@ export default function RecentTransactionsContainer() {
           mt={3}
           gap={1}
           maxH="98px"
+          pr={2}
           overflowY={'auto'}
           overflowX="hidden"
           apply="border.secondary"

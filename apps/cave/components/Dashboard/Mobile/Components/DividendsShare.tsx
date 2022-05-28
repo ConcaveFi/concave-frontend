@@ -21,7 +21,7 @@ const DividendsShareMobile = (props: DividendsShareMobileProps) => {
     ? '--.--.--.--'
     : isLoading
     ? 'Loading'
-    : formatFixed(props.totalLocked, { decimals: 3 }) + ' CNV'
+    : formatFixed(props.totalLocked, { decimals: 3 })
   return (
     <Flex
       rounded={'2xl'}
@@ -42,7 +42,7 @@ const DividendsShareMobile = (props: DividendsShareMobileProps) => {
           <Flex flex={1} direction={'column'}>
             <LowText label="Total Locked:" />
             <Flex justify={'center'}>
-              <HighText label={totalLocked} />
+              <HighText label={parseFloat(totalLocked).toFixed(2) + ' CNV'} />
               {isLoading && (
                 <SpinnerIcon css={spinnerStyles} height={'15px'} width={'15px'} ml={1} my="auto" />
               )}
