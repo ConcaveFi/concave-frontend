@@ -15,7 +15,8 @@ export function Dashboard() {
       </Heading>
       <Flex my={3} justify={'center'} maxWidth={{ sm: '358px', lg: '1000px' }}>
         <Text textAlign="center">
-          This is the user dashboard to claim divdends and manage your liquid NFT positions.
+          This is your dashboard where you can claim your dividends and manage your liquid NFT
+          positions.
         </Text>
       </Flex>
 
