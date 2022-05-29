@@ -27,7 +27,7 @@ function Emissions(props: any) {
             Bonding Emissions:
           </Text>
           <Text mx={{ base: '', sm: 'auto' }} fontSize="sm" fontWeight="bold">
-            {Math.sign(props?.vapr) === 0 ? 'Calculating' : props.vapr}
+            {props.baseVAPR && props.baseVAPR}
           </Text>
           <Text mx={{ base: '', sm: 'auto' }} color="text.low" fontSize="sm">
             +
@@ -36,7 +36,7 @@ function Emissions(props: any) {
             Base Emissions:
           </Text>
           <Text mx={{ base: '', sm: 'auto' }} fontSize="sm" fontWeight="bold">
-            {props.baseVAPR && props.baseVAPR}
+            {Math.sign(props?.vapr) === 0 ? 'Calculating' : props.vapr}
           </Text>
           <Text mx={{ base: '', sm: 'auto' }} color="text.low" fontSize="sm">
             +
