@@ -14,10 +14,19 @@ const NotFoundPage = () => {
   }, [image])
 
   return (
-    <Flex justify="center" align="center" w="100%" direction={'column'} gap="10">
-      <Image src="https://concave.lol/static/logo.png" boxSize={'15%'}></Image>
+    <Flex
+      mt={{ base: 20, md: -20 }}
+      justify="center"
+      align="center"
+      w="100%"
+      direction={'column'}
+      gap="10"
+    >
+      <Flex width={'180px'} height="100px">
+        <Image src="https://concave.lol/static/logo.png"></Image>
+      </Flex>
       <Heading fontSize="5xl">404</Heading>
-      <Image src={image && image} boxSize="400px" rounded={'2xl'} />
+      <Image shadow={'Block Up'} src={image && image} boxSize="350px" rounded={'2xl'} />
     </Flex>
   )
 }
