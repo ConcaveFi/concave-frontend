@@ -13,11 +13,7 @@ import {
   VStack,
 } from '@concave/ui'
 import { ethers } from 'ethers'
-import {
-  useGet_All_Total_Pools_VaprQuery,
-  useGet_Bonds_VaprQuery,
-  useGet_Last_Poolid_VaprQuery,
-} from 'graphql/generated/graphql'
+import { useGet_All_Total_Pools_VaprQuery } from 'graphql/generated/graphql'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { StakingV1Contract } from 'lib/StakingV1Proxy/StakingV1Contract'
 import { useState } from 'react'
@@ -120,15 +116,21 @@ function StakeCard(props: StackCardProps) {
   const poolId = PERIOD_TO_POOL_PARAMETER[`${props.period}`]
   const { data: pools, error: poolsError, isLoading: isLoadingPools } = usePools(chainId, poolId)
   const { data: stakingCap, isLoading: isLoadingStakings } = useViewStakingCap(chainId, poolId)
-  const [showFloatingCards, setShowFloatingCards] = useState(false)
+  // const [showFloatingCards, setShowFloatingCards] = useState(false)
+  const {
+    onOpen: onOpenFloatingCards,
+    onClose: onCloseFloatingCards,
+    isOpen: showFloatingCards,
+    onToggle: onToggleFloatingCards,
+  } = useDisclosure()
 
   const currentlyStaked =
     isLoadingPools || !pools?.balance ? 0 : (+ethers.utils.formatEther(pools?.balance)).toFixed(0)
 
   const currentlyStakingCap =
-    isLoadingStakings || !pools?.balance
-      ? ''
-      : (+ethers.utils.formatEther(pools.balance.add(stakingCap))).toFixed(0)
+    !!pools?.balance && !!stakingCap
+      ? (+ethers.utils.formatEther(pools?.balance.add(stakingCap))).toFixed(0)
+      : 0
 
   const percent = (+currentlyStaked / +currentlyStakingCap) * 100
 
@@ -269,7 +271,7 @@ function StakeCard(props: StackCardProps) {
           isOpen={isOpen}
           onClose={onClose}
           bodyProps={{
-            roundedLeft: '100px',
+            roundedLeft: { base: '20px', md: '100px' },
             roundedRight: '20px',
             shadow: 'Up for Blocks',
           }}
@@ -287,15 +289,17 @@ function StakeCard(props: StackCardProps) {
               icon={props.icon}
               baseVAPR={isLoadingVAPR ? 'Calculating...' : baseEmissionsFormatted}
               vapr={isLoadingVAPR ? 'Calculating...' : bondEmissionsFormatted}
-              setShowFloatingCards={setShowFloatingCards}
+              onToggle={onToggleFloatingCards}
+              onShow={onOpenFloatingCards}
+              onDisable={onCloseFloatingCards}
+              // setShowFloatingCards={setShowFloatingCards}
             />
             <Modal
               preserveScrollBarGap
               isOpen={showFloatingCards && mobileUI}
-              title=""
-              onClose={() => setShowFloatingCards(false)}
+              title="Informations"
+              onClose={onCloseFloatingCards}
               motionPreset="slideInBottom"
-              hideClose
               isCentered
               bluryOverlay
             >

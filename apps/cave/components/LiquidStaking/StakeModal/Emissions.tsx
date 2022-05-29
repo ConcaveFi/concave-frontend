@@ -1,5 +1,6 @@
-import { Box, Flex, Image, Text } from '@concave/ui'
+import { Box, Flex, Image, Text, useBreakpointValue } from '@concave/ui'
 function Emissions(props: any) {
+  const mobileUI = useBreakpointValue({ base: true, xl: false })
   const Informations = ({
     onClick,
     onClose,
@@ -47,14 +48,21 @@ function Emissions(props: any) {
           <Text mx={{ base: '', sm: 'auto' }} fontSize="md" fontWeight="bold">
             Coming Soon
           </Text>
-          <Flex onClick={onClick} onMouseLeave={onClose}>
-            <Image
-              mt={4}
-              mx="auto"
-              src={`/assets/liquidstaking/modal-moreinfo-logo.svg`}
-              alt="arrow down logo"
-            />
-          </Flex>
+          <Image
+            mt={4}
+            mx="auto"
+            src={`/assets/liquidstaking/modal-moreinfo-logo.svg`}
+            alt="arrow down logo"
+            onMouseOver={() => {
+              if (!mobileUI) props.onShow()
+            }}
+            onMouseLeave={() => {
+              if (!mobileUI) props.onDisable()
+            }}
+            onClick={() => {
+              if (mobileUI) props.onToggle()
+            }}
+          />
         </Flex>
       </Box>
     )
@@ -99,8 +107,15 @@ function Emissions(props: any) {
             mx="auto"
             src={`/assets/liquidstaking/modal-moreinfo-logo.svg`}
             alt="arrow down logo"
-            onMouseOver={() => props.setShowFloatingCards(true)}
-            onMouseLeave={() => props.setShowFloatingCards(false)}
+            onMouseOver={() => {
+              if (!mobileUI) props.onShow()
+            }}
+            onMouseLeave={() => {
+              if (!mobileUI) props.onDisable()
+            }}
+            onClick={() => {
+              if (mobileUI) props.onToggle()
+            }}
           />
           <Image
             display={{ base: 'none', md: 'flex' }}
@@ -109,8 +124,8 @@ function Emissions(props: any) {
             alt="arrow down logo"
           />
           <Informations
-            onClick={() => props.setShowFloatingCards(true)}
-            onClose={() => props.setShowFloatingCards(false)}
+            onClick={() => props.onToggle()}
+            onClose={() => props.onToggle()}
             display={{ base: 'none', md: 'block' }}
           />
         </Flex>
@@ -124,8 +139,8 @@ function Emissions(props: any) {
           transform={'rotate(-90deg)'}
         />
         <Informations
-          onClick={() => props.setShowFloatingCards(true)}
-          onClose={() => props.setShowFloatingCards(false)}
+          onClick={() => props.onToggle()}
+          onClose={() => props.onToggle()}
           display={{ base: 'block', md: 'none' }}
         />
       </Flex>
