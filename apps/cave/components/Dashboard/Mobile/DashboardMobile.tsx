@@ -31,8 +31,7 @@ const DashboardMobile = (props: { data: UseDashBoardState }) => {
         mt={3}
         // borderBottom={!isLoading && '4px solid skyblue'}
         // borderTop={! && '4px solid skyblue'}
-          rounded={!isLoading && '2xl'}
-
+        rounded={!isLoading && '2xl'}
         gap={4}
       >
         <Collapse in={!isLoading}>
@@ -103,31 +102,39 @@ const HasNoPositions = (props: HasNoPositionsprops) => {
   const router = useRouter()
   return (
     <Collapse in={props.in}>
-        <Box
+      <Box
         height={'140px'}
         width="360px"
         rounded="2xl"
-       bg="linear-gradient(239.18deg, #19394C 27.18%, #0A161F 96.11%)"
+        bg="linear-gradient(239.18deg, #19394C 27.18%, #0A161F 96.11%)"
         boxShadow={'Up Small'}
       >
-      <Flex direction={'column'}  justifyContent='center' align="center" height={'full'} width="full"   bgImage={'/assets/textures/metal.png'} bgSize={'40%'}>
-        <Text textColor={'gray.400'} fontWeight={'700'} fontSize={'22px'}>
-          You do not have any positions
-        </Text>
-        <Button
-          bg={'linear-gradient(90deg, #72639B 0%, #44B9DE 100%)'}
-          boxShadow="up"
-          height="40px"
-          px={4}
-          my="4"
-          rounded={'2xl'}
-          onClick={() => router.push('liquid-staking')}
+        <Flex
+          direction={'column'}
+          justifyContent="center"
+          align="center"
+          height={'full'}
+          width="full"
+          bgImage={'/assets/textures/metal.png'}
+          bgSize={'40%'}
         >
-          <Flex fontSize={'16px'} fontWeight="700" grow={1} justify="center">
-            Stake CNV now!
-          </Flex>
-        </Button>
-      </Flex>
+          <Text textColor={'gray.400'} fontWeight={'700'} fontSize={'22px'}>
+            You do not have any positions
+          </Text>
+          <Button
+            bg={'linear-gradient(90deg, #72639B 0%, #44B9DE 100%)'}
+            boxShadow="up"
+            height="40px"
+            px={4}
+            my="4"
+            rounded={'2xl'}
+            onClick={() => router.push('liquid-staking')}
+          >
+            <Flex fontSize={'16px'} fontWeight="700" grow={1} justify="center">
+              Stake CNV now!
+            </Flex>
+          </Button>
+        </Flex>
       </Box>
     </Collapse>
   )
