@@ -103,7 +103,7 @@ export const BondInfo = ({
     </Box>
   )
 }
-
+// commit
 export default function TreasuryRevenueCard(props) {
   const { cnv, treasury } = props
 
@@ -176,7 +176,7 @@ export default function TreasuryRevenueCard(props) {
     </Card>
   )
 }
-// commit
+
 const formatNumber = (number: string) => {
   return number.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
 }
