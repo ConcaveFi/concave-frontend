@@ -1,6 +1,6 @@
 import { Text, Button, Modal, Image } from '@concave/ui'
 import { chain, useNetwork } from 'wagmi'
-// commit
+
 export const UnsupportedNetworkModal = () => {
   const [{ data }, switchNetwork] = useNetwork()
 
