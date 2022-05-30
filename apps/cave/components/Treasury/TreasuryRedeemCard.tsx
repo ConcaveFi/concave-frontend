@@ -85,9 +85,7 @@ function TreasuryRedeemCard() {
           </Flex>
         </Flex>
         <Text
-          onClick={() => {
-            addingToWallet()
-          }}
+          onClick={addingToWallet}
           textColor={'text.low'}
           fontWeight={700}
           cursor="pointer"
@@ -98,7 +96,6 @@ function TreasuryRedeemCard() {
           Add CNV to your {walletName}
         </Text>
       </GlassPanel>
-
       <ComingSoonDialog title={title} desc={description} isOpen={isOpen} onClose={onClose} />
     </>
   )
