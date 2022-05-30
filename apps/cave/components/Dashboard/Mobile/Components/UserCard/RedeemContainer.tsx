@@ -12,21 +12,21 @@ const RedeemContainer = (props: RedeemCardViewerProps) => {
 
   const curValue = +userReward[3].toString()
   const initialBal = +userReward[0].toString()
-  const gainedAmt= curValue - initialBal
+  const gainedAmt = curValue - initialBal
   return (
     <Flex height={'127px'} width="358px" direction="column">
       <Flex height={'70px'} maxH="70px" align={'center'}>
         <VStack spacing={0} justify="center" flex={1}>
           <LowText>Current value</LowText>
-          <HighText>{truncateNumber( +curValue.toString())} CNV</HighText>
+          <HighText>{truncateNumber(+curValue.toString())} CNV</HighText>
         </VStack>
         <VStack justify={'center'} spacing={0} flex={1}>
           <LowText>Gained</LowText>
-          <HighText>{ truncateNumber(+gainedAmt)} CNV</HighText>
+          <HighText>{truncateNumber(+gainedAmt)} CNV</HighText>
         </VStack>
         <VStack justify={'center'} spacing={0} flex={1}>
           <LowText>Initial</LowText>
-          <HighText>{truncateNumber( +initialBal.toString())} CNV</HighText>
+          <HighText>{truncateNumber(+initialBal.toString())} CNV</HighText>
         </VStack>
       </Flex>
       <RedeemButton />

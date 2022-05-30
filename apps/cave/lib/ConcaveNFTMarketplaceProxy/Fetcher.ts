@@ -29,8 +29,13 @@ export const listUserNonFungibleTokenInfo = async (userAddress: string, chainId:
     usersNft.map(async (nft) => {
       const tokenIndexId = nft.id.tokenId
       const positionInfo = stakingV1Contract.positions(tokenIndexId)
-      const  userRewards=stakingV1Contract.viewPositionRewards(+tokenIndexId)
-      return new NonFungibleTokenInfo(nft.contract.address, tokenIndexId, await positionInfo, await userRewards)
+      const userRewards = stakingV1Contract.viewPositionRewards(+tokenIndexId)
+      return new NonFungibleTokenInfo(
+        nft.contract.address,
+        tokenIndexId,
+        await positionInfo,
+        await userRewards,
+      )
     }),
   )
 }

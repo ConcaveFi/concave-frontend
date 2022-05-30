@@ -14,11 +14,10 @@ const spin = keyframes({
   '100%': { transform: 'rotate(360deg)' },
 })
 const DividendsShareMobile = (props: DividendsShareMobileProps) => {
-  
   const [{ data: wallet }] = useConnect()
   const spinnerStyles = { animation: `${spin} 2s linear infinite`, size: 'sm' }
-  const { isLoading, totalLocked } = props 
- 
+  const { isLoading, totalLocked } = props
+
   return (
     <Flex
       rounded={'2xl'}
@@ -39,7 +38,7 @@ const DividendsShareMobile = (props: DividendsShareMobileProps) => {
           <Flex flex={1} direction={'column'}>
             <LowText label="Total Locked:" />
             <Flex justify={'center'}>
-              <HighText label={truncateNumber( +totalLocked.toString()) + ' CNV'} />
+              <HighText label={truncateNumber(+totalLocked.toString()) + ' CNV'} />
               {isLoading && (
                 <SpinnerIcon css={spinnerStyles} height={'15px'} width={'15px'} ml={1} my="auto" />
               )}

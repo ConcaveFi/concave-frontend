@@ -1,5 +1,5 @@
 import { Button, Flex, FlexProps, Text } from '@concave/ui'
-import { BigNumber, utils ,  } from 'ethers'
+import { BigNumber, utils } from 'ethers'
 import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungibleToken'
 import { truncateNumber } from 'utils/truncateNumber'
 
@@ -10,8 +10,8 @@ const RedeemCardViewer = ({ nonFungibleTokenInfo }: RedeemCardViewerProps) => {
   const { shares, rewardDebt, maturity, deposit, userReward } = nonFungibleTokenInfo
   console.log('nft info', nonFungibleTokenInfo)
   const curValue = BigNumber.from(userReward[3])
-  const initialBal =BigNumber.from(userReward[0])
-  const gainedAmt=curValue .sub(initialBal)
+  const initialBal = BigNumber.from(userReward[0])
+  const gainedAmt = curValue.sub(initialBal)
   return (
     <Flex
       flex={1}
@@ -26,11 +26,10 @@ const RedeemCardViewer = ({ nonFungibleTokenInfo }: RedeemCardViewerProps) => {
       <Flex gap={{ lg: 0, md: 4 }}>
         <Info
           label="Current Value"
-
           value={utils.formatEther(userReward[3])}
           ml={{ lg: 7, md: '0px' }}
         />
-       <Info label="Gained" value={utils.formatEther(gainedAmt)} />
+        <Info label="Gained" value={utils.formatEther(gainedAmt)} />
         <Info label="Initial" value={utils.formatEther(userReward[0])} />
       </Flex>
       <Button
