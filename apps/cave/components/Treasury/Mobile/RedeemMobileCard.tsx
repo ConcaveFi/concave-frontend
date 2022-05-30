@@ -3,17 +3,12 @@ import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { CNV } from 'constants/tokens'
-import { Contract } from 'ethers'
 import useAddTokenToWallet, { injectedTokenResponse } from 'hooks/useAddTokenToWallet'
-import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { aCNVredeemabi } from 'lib/contractoABI'
-import { concaveProvider as provider } from 'lib/providers'
 import { useState } from 'react'
-import { useAccount, useConnect, useSigner } from 'wagmi'
-import useVestedTokens from '../Hooks/useVestedTokens'
-import RedeemVestedTokenDialog from '../RedeemVestedTokenDialog'
+import { useConnect } from 'wagmi'
 import { GlassPanel } from '../TreasuryManagementCard'
-import { ComingSoonDialog } from '../TreasuryRedeemCard'
+import { ComingSoonDialog } from 'components/ComingSoonDialog'
+import ACVNRedemptionDialog from '../VestedTokensDialogs/ACVNRedemptionDialog'
 
 export default function RedeemMobileCard() {
   const { loading: loadingtoWallet, addingToWallet }: injectedTokenResponse = useAddTokenToWallet({
@@ -27,16 +22,11 @@ export default function RedeemMobileCard() {
   const [tx, setTx] = useState()
   const [error, setError] = useState('')
 
-  const [{ data: signer }] = useSigner()
-  const netWorkId = useCurrentSupportedNetworkId()
-  const { bbtCNVData, aCNVData, pCNVData } = useVestedTokens({ chainId: netWorkId })
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [description, setDescription] = useState("This feature it's not done yet.")
   const [title, setTitle] = useState('Coming soon')
 
-  const [walletName, setWalletName] = useState('')
   const [{ data }] = useConnect()
-  const [{ data: account }] = useAccount()
 
   const {
     isOpen: onRedeemACNV,
@@ -60,28 +50,12 @@ export default function RedeemMobileCard() {
       </Text>
       <Flex direction="column" gap={3} my={6}>
         <RedeemButton onClick={onOpenRedeemACNV} title="aCNV" />
-        <RedeemVestedTokenDialog
-          balance={'1'}
+        <ACVNRedemptionDialog
           isOpen={onRedeemACNV}
           onClose={onCloseRedeemACNV}
-          tokenSymbol="aCNV"
-          onClick={() => {
-            onOpenConfirm()
-            new Contract('0x38baBedCb1f226B49b2089DA0b84e52b6181Ca59', aCNVredeemabi, provider(1))
-              .connect(signer)
-              .redeem(account?.address)
-              .then((tx) => {
-                setTx(tx)
-                onOpenSub()
-                onCloseConfirm()
-              })
-              .catch((e) => {
-                onCloseConfirm()
-                setError('Transaction reject.')
-                onOpenError()
-              })
-          }}
+          onRedeem={onOpenConfirm}
         />
+
         <RedeemButton
           onClick={() => {
             onOpen()
@@ -90,6 +64,7 @@ export default function RedeemMobileCard() {
           }}
           title="pCNV"
         />
+
         <RedeemButton
           onClick={() => {
             onOpen()
