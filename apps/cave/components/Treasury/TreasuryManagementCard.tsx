@@ -28,7 +28,7 @@ export default function TreasuryManagementCard(props: { assets: any }) {
         mb={4}
       >
         <FarmingViewer convexToken={convexToken} />
-        <Flex direction={'column'} gap={4}>
+        <Flex direction={'column'} gap={2}>
           {assets.treasury
             .filter((token) => token.name !== 'cvxDOLA3POOL')
             .map(
