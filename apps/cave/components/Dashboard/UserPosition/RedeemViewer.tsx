@@ -7,7 +7,7 @@ interface RedeemCardViewerProps {
   nonFungibleTokenInfo: NonFungibleTokenInfo
 }
 const RedeemCardViewer = ({ nonFungibleTokenInfo }: RedeemCardViewerProps) => {
-  const { shares, rewardDebt, maturity, deposit } = nonFungibleTokenInfo
+  const { shares, rewardDebt, maturity, deposit,userReward } = nonFungibleTokenInfo
 console.log("nft info", nonFungibleTokenInfo)
   return (
     <Flex
@@ -23,7 +23,8 @@ console.log("nft info", nonFungibleTokenInfo)
       <Flex gap={{ lg: 0, md: 4 }}>
         <Info
           label="Current Value"
-          value={utils.formatEther(nonFungibleTokenInfo.deposit.add(rewardDebt))}
+          value={utils.formatEther(rewardDebt)}
+          // value={utils.formatEther(userReward[0])}
           ml={{ lg: 7, md: '0px' }}
         />
         <Info label="Gained" value={utils.formatEther(nonFungibleTokenInfo.rewardDebt)} />
