@@ -122,8 +122,8 @@ function PageNav() {
             Stake
           </NavButton>
           <Collapse in={liquidStakingHover || liquidStakingPage}>
-            <SubnavButton isActive={router.pathname === '/dashboard'} href="/dashboard" mt="1px">
-              Your Positions
+            <SubnavButton href="" mt="1px">
+              Your Positions <br></br> (Coming Soon)
             </SubnavButton>
           </Collapse>
         </Box>
