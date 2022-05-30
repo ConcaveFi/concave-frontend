@@ -8,6 +8,7 @@ interface UserDividendCardProps {
 }
 const UserDividendCard = (props: UserDividendCardProps) => {
   const { isLoading , totalLocked } = props
+
   // commit
   return (
     <Box
