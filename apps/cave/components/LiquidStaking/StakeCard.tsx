@@ -13,7 +13,7 @@ import {
   VStack,
 } from '@concave/ui'
 import { ethers } from 'ethers'
-import { useGet_Bonds_VaprQuery, useGet_Last_Poolid_VaprQuery } from 'graphql/generated/graphql'
+import { useGet_All_Total_Pools_VaprQuery } from 'graphql/generated/graphql'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { StakingV1Contract } from 'lib/StakingV1Proxy/StakingV1Contract'
 import { useState } from 'react'
@@ -113,21 +113,24 @@ function StakeCard(props: StackCardProps) {
   const chainId = useCurrentSupportedNetworkId()
   const vaprText = props.icon === '12m' ? 'Non-Dilutive vAPR' : 'Total vAPR'
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { data } = useGet_Last_Poolid_VaprQuery({
-    poolID: props.poolId,
-  })
-  const index = PERIOD_TO_POOL_PARAMETER[`${props.period}`]
-  const { data: pools, error: poolsError, isLoading: isLoadingPools } = usePools(chainId, index)
-  const { data: stakingCap, isLoading: isLoadingStakings } = useViewStakingCap(chainId, index)
-  const [showFloatingCards, setShowFloatingCards] = useState(false)
+  const poolId = PERIOD_TO_POOL_PARAMETER[`${props.period}`]
+  const { data: pools, error: poolsError, isLoading: isLoadingPools } = usePools(chainId, poolId)
+  const { data: stakingCap, isLoading: isLoadingStakings } = useViewStakingCap(chainId, poolId)
+  // const [showFloatingCards, setShowFloatingCards] = useState(false)
+  const {
+    onOpen: onOpenFloatingCards,
+    onClose: onCloseFloatingCards,
+    isOpen: showFloatingCards,
+    onToggle: onToggleFloatingCards,
+  } = useDisclosure()
 
   const currentlyStaked =
     isLoadingPools || !pools?.balance ? 0 : (+ethers.utils.formatEther(pools?.balance)).toFixed(0)
 
   const currentlyStakingCap =
-    isLoadingStakings || !pools?.balance
-      ? ''
-      : (+ethers.utils.formatEther(pools.balance.add(stakingCap))).toFixed(0)
+    !!pools?.balance && !!stakingCap
+      ? (+ethers.utils.formatEther(pools?.balance.add(stakingCap))).toFixed(0)
+      : 0
 
   const percent = (+currentlyStaked / +currentlyStakingCap) * 100
 
@@ -135,23 +138,43 @@ function StakeCard(props: StackCardProps) {
   const userAddress = account?.address
 
   const {
-    data: dataVAPR,
-    isSuccess: isSuccessVAPR,
+    data: logStakingPoolRewards,
     isLoading: isLoadingVAPR,
+    isSuccess: isSuccessVAPR,
     isError: isErrorVAPR,
-    error: errorVAPR,
-  } = useGet_Bonds_VaprQuery()
-  const bondVaprPool = `bondVaprPool${props.poolId}`
-  let currentVAPR
-  if (isLoadingVAPR) {
-    currentVAPR = 'Calculating...'
-  } else if (isSuccessVAPR) {
-    currentVAPR = `${dataVAPR?.rebaseStakingV1[0][bondVaprPool].toFixed(2) * 100}%`
-  } else if (isErrorVAPR) {
-    currentVAPR = 'Calculating vAPR'
-  }
+  } = useGet_All_Total_Pools_VaprQuery()
+  let baseEmissions,
+    bondEmissions,
+    totalVAPR,
+    bondEmissionsFormatted,
+    baseEmissionsFormatted,
+    totalVAPRFormatted
 
-  // console.log(currentVAPR)
+  // const vapr_useget = useGet_All_Total_Pools_VaprQuery()
+  // console.log('vapr useget', vapr_useget)
+
+  if (
+    !isLoadingVAPR &&
+    !isErrorVAPR &&
+    isSuccessVAPR &&
+    logStakingPoolRewards?.rebaseStakingV1.length
+  ) {
+    const bondVaprPool = `bondVaprPool${props.poolId}`
+    baseEmissions = logStakingPoolRewards?.rebaseStakingV1[0][bondVaprPool] * 100
+    bondEmissions =
+      logStakingPoolRewards?.logStakingV1_PoolRewarded.find((o) => o.poolID === poolId).base_vAPR *
+      100
+    totalVAPR = baseEmissions + bondEmissions
+
+    bondEmissionsFormatted = bondEmissions?.toFixed(2) + '%'
+    baseEmissionsFormatted = baseEmissions?.toFixed(2) + '%'
+    totalVAPRFormatted = totalVAPR?.toFixed(2) + '%'
+  } else {
+    const soonTM = <>Soon&trade;</>
+    totalVAPRFormatted = soonTM
+    baseEmissionsFormatted = soonTM
+    bondEmissionsFormatted = soonTM
+  }
 
   const mobileUI = useBreakpointValue({ base: true, xl: false })
 
@@ -188,7 +211,7 @@ function StakeCard(props: StackCardProps) {
             {vaprText}
           </Text>
           <Text fontSize={{ base: 'md', md: 'lg' }} fontWeight="bold">
-            {currentVAPR}
+            {isLoadingVAPR && !isErrorVAPR ? 'Calculating...' : totalVAPRFormatted}
           </Text>
         </Box>
 
@@ -270,7 +293,7 @@ function StakeCard(props: StackCardProps) {
           isOpen={isOpen}
           onClose={onClose}
           bodyProps={{
-            roundedLeft: '100px',
+            roundedLeft: { base: '20px', md: '100px' },
             roundedRight: '20px',
             shadow: 'Up for Blocks',
           }}
@@ -283,19 +306,22 @@ function StakeCard(props: StackCardProps) {
           >
             <Emissions
               period={props.period}
-              vaprText={vaprText}
+              // vaprText={!isErrorVAPR ? vaprText : 'Error Loading vAPR'}
+              totalVAPR={isLoadingVAPR && !isErrorVAPR ? 'Calculating...' : totalVAPRFormatted}
               icon={props.icon}
-              vapr={currentVAPR}
-              setShowFloatingCards={setShowFloatingCards}
-              // vapr={props.vAPR}
+              baseVAPR={isLoadingVAPR && !isErrorVAPR ? 'Calculating...' : baseEmissionsFormatted}
+              vapr={isLoadingVAPR && !isErrorVAPR ? 'Calculating...' : bondEmissionsFormatted}
+              onToggle={onToggleFloatingCards}
+              onShow={onOpenFloatingCards}
+              onDisable={onCloseFloatingCards}
+              // setShowFloatingCards={setShowFloatingCards}
             />
             <Modal
               preserveScrollBarGap
               isOpen={showFloatingCards && mobileUI}
-              title=""
-              onClose={() => setShowFloatingCards(false)}
+              title="Informations"
+              onClose={onCloseFloatingCards}
               motionPreset="slideInBottom"
-              hideClose
               isCentered
               bluryOverlay
             >

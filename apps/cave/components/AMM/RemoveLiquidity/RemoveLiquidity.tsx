@@ -1,4 +1,12 @@
-import { Currency, CurrencyAmount, NATIVE, Pair, ROUTER_ADDRESS, Token } from '@concave/gemswap-sdk'
+import {
+  Currency,
+  CurrencyAmount,
+  MaxUint256,
+  NATIVE,
+  Pair,
+  ROUTER_ADDRESS,
+  Token,
+} from '@concave/gemswap-sdk'
 import {
   Box,
   Button,
@@ -211,6 +219,7 @@ const RemoveLiquidityActions = ({
       <ApproveButton
         approveArgs={{
           currency: removeLiquidityState.pair.liquidityToken,
+          amount: MaxUint256.toString(),
           spender: ROUTER_ADDRESS[networkId],
           onSuccess: () => setCurrencyApproved(true),
         }}

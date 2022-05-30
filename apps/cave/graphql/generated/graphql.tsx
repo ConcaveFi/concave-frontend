@@ -589,6 +589,7 @@ export type Query_Root = {
   logStakingV1_by_pk?: Maybe<LogStakingV1>
   /** fetch data from the table: "rebaseStakingV1" */
   rebaseStakingV1: Array<RebaseStakingV1>
+  totalVapr?: Maybe<TotalVaprOutput>
   /** fetch data from the table: "treasury" */
   treasury: Array<Treasury>
   /** fetch data from the table: "treasury" using primary key columns */
@@ -858,6 +859,14 @@ export type Timestamptz_Comparison_Exp = {
   _nin?: InputMaybe<Array<Scalars['timestamptz']>>
 }
 
+export type TotalVaprOutput = {
+  __typename?: 'totalVaprOutput'
+  pool0TotalBaseVapr: Scalars['Float']
+  pool1TotalBaseVapr: Scalars['Float']
+  pool2TotalBaseVapr: Scalars['Float']
+  pool3TotalBaseVapr: Scalars['Float']
+}
+
 /** list of assets where value are updated with cronjob */
 export type Treasury = {
   __typename?: 'treasury'
@@ -976,6 +985,19 @@ export type Get_Last_Base_VaprQuery = {
   }>
 }
 
+export type Get_Last_Pools_Total_VaprQueryVariables = Exact<{ [key: string]: never }>
+
+export type Get_Last_Pools_Total_VaprQuery = {
+  __typename?: 'query_root'
+  totalVapr?: {
+    __typename?: 'totalVaprOutput'
+    pool0TotalBaseVapr: number
+    pool1TotalBaseVapr: number
+    pool2TotalBaseVapr: number
+    pool3TotalBaseVapr: number
+  } | null
+}
+
 export type Get_Last_Poolid_VaprQueryVariables = Exact<{
   poolID?: InputMaybe<Scalars['numeric']>
 }>
@@ -985,6 +1007,24 @@ export type Get_Last_Poolid_VaprQuery = {
   logStakingV1_PoolRewarded: Array<{
     __typename?: 'logStakingV1_PoolRewarded'
     base_vAPR?: any | null
+  }>
+}
+
+export type Get_All_Total_Pools_VaprQueryVariables = Exact<{ [key: string]: never }>
+
+export type Get_All_Total_Pools_VaprQuery = {
+  __typename?: 'query_root'
+  logStakingV1_PoolRewarded: Array<{
+    __typename?: 'logStakingV1_PoolRewarded'
+    base_vAPR?: any | null
+    poolID?: any | null
+  }>
+  rebaseStakingV1: Array<{
+    __typename?: 'rebaseStakingV1'
+    bondVaprPool0?: any | null
+    bondVaprPool1?: any | null
+    bondVaprPool2?: any | null
+    bondVaprPool3?: any | null
   }>
 }
 
@@ -1150,6 +1190,33 @@ export const useGet_Last_Base_VaprQuery = <TData = Get_Last_Base_VaprQuery, TErr
     ),
     options,
   )
+export const Get_Last_Pools_Total_VaprDocument = `
+    query GET_LAST_POOLS_TOTAL_VAPR {
+  totalVapr {
+    pool0TotalBaseVapr
+    pool1TotalBaseVapr
+    pool2TotalBaseVapr
+    pool3TotalBaseVapr
+  }
+}
+    `
+export const useGet_Last_Pools_Total_VaprQuery = <
+  TData = Get_Last_Pools_Total_VaprQuery,
+  TError = unknown,
+>(
+  variables?: Get_Last_Pools_Total_VaprQueryVariables,
+  options?: UseQueryOptions<Get_Last_Pools_Total_VaprQuery, TError, TData>,
+) =>
+  useQuery<Get_Last_Pools_Total_VaprQuery, TError, TData>(
+    variables === undefined
+      ? ['GET_LAST_POOLS_TOTAL_VAPR']
+      : ['GET_LAST_POOLS_TOTAL_VAPR', variables],
+    fetcher<Get_Last_Pools_Total_VaprQuery, Get_Last_Pools_Total_VaprQueryVariables>(
+      Get_Last_Pools_Total_VaprDocument,
+      variables,
+    ),
+    options,
+  )
 export const Get_Last_Poolid_VaprDocument = `
     query GET_LAST_POOLID_VAPR($poolID: numeric) {
   logStakingV1_PoolRewarded(
@@ -1169,6 +1236,45 @@ export const useGet_Last_Poolid_VaprQuery = <TData = Get_Last_Poolid_VaprQuery, 
     variables === undefined ? ['GET_LAST_POOLID_VAPR'] : ['GET_LAST_POOLID_VAPR', variables],
     fetcher<Get_Last_Poolid_VaprQuery, Get_Last_Poolid_VaprQueryVariables>(
       Get_Last_Poolid_VaprDocument,
+      variables,
+    ),
+    options,
+  )
+export const Get_All_Total_Pools_VaprDocument = `
+    query GET_ALL_TOTAL_POOLS_VAPR {
+  logStakingV1_PoolRewarded(
+    limit: 4
+    order_by: {txBlockNumber: desc}
+    where: {base_vAPR: {_gte: "0"}}
+  ) {
+    base_vAPR
+    poolID
+  }
+  rebaseStakingV1(
+    where: {bondVaprPool0: {_gt: "0"}, bondVaprPool1: {_gt: "0"}, bondVaprPool2: {_gt: "0"}, bondVaprPool3: {_gt: "0"}}
+    limit: 1
+    order_by: {txBlockNumber: desc}
+  ) {
+    bondVaprPool0
+    bondVaprPool1
+    bondVaprPool2
+    bondVaprPool3
+  }
+}
+    `
+export const useGet_All_Total_Pools_VaprQuery = <
+  TData = Get_All_Total_Pools_VaprQuery,
+  TError = unknown,
+>(
+  variables?: Get_All_Total_Pools_VaprQueryVariables,
+  options?: UseQueryOptions<Get_All_Total_Pools_VaprQuery, TError, TData>,
+) =>
+  useQuery<Get_All_Total_Pools_VaprQuery, TError, TData>(
+    variables === undefined
+      ? ['GET_ALL_TOTAL_POOLS_VAPR']
+      : ['GET_ALL_TOTAL_POOLS_VAPR', variables],
+    fetcher<Get_All_Total_Pools_VaprQuery, Get_All_Total_Pools_VaprQueryVariables>(
+      Get_All_Total_Pools_VaprDocument,
       variables,
     ),
     options,

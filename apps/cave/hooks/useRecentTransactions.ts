@@ -18,8 +18,6 @@ export function useRecentTransactions() {
 
   const addRecentTransaction = (recentTx: RecentTransaction) => {
     data[recentTx.transaction.hash] = recentTx
-
-    console.log(data)
     localStorage.setItem('recentTransactions', JSON.stringify(data))
     setStatus('pending')
   }
@@ -67,7 +65,7 @@ export const getRecentTransactions = (accountAddress: string, chainId: number) =
 type RecentTxList = { [key: string]: RecentTransaction }
 
 export type RecentTransaction = {
-  type: 'Swap' | 'Bond' | 'Stake'
+  type: 'Swap' | 'Bond' | 'Stake' | 'Liq'
   loading: boolean
   amount: number
   amountTokenName: string

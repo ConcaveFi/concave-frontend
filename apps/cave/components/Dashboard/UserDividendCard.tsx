@@ -1,14 +1,15 @@
 import { Box, Button, Flex, Spinner, Text } from '@concave/ui'
 import { BigNumber } from 'ethers'
 import { formatFixed } from 'utils/formatFixed'
+import { truncateNumber } from 'utils/truncateNumber'
 interface UserDividendCardProps {
   totalLocked: BigNumber
   isLoading: boolean
 }
 const UserDividendCard = (props: UserDividendCardProps) => {
-  const { isLoading } = props
-  const totalLocked = isLoading ? 'loading' : formatFixed(props.totalLocked) + ' CNV'
+  const { isLoading, totalLocked } = props
 
+  // commit
   return (
     <Box
       pos="relative"
@@ -38,7 +39,7 @@ const UserDividendCard = (props: UserDividendCardProps) => {
           </Text>
           <Flex>
             <Text fontSize={'17px'} fontWeight={700}>
-              {totalLocked}
+              {truncateNumber(totalLocked)}
             </Text>
             {isLoading && <Spinner height={'20px'} width={'20px'} ml={1} />}
           </Flex>

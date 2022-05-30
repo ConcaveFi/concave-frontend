@@ -19,7 +19,6 @@ export const listAllNonFungibleTokensOnAddress = async (
   )
 }
 export const listUserNonFungibleTokenInfo = async (userAddress: string, chainId: number) => {
-  const marketPlaceContract = new ConcaveNFTMarketplace(chainId)
   const stakingV1Contract = new StakingV1Contract(chainId)
   const usersNft = await listAllNonFungibleTokensOnAddress(
     userAddress,
@@ -30,12 +29,12 @@ export const listUserNonFungibleTokenInfo = async (userAddress: string, chainId:
     usersNft.map(async (nft) => {
       const tokenIndexId = nft.id.tokenId
       const positionInfo = stakingV1Contract.positions(tokenIndexId)
-      const auction = marketPlaceContract.nftContractAuctions(nft.contract.address, tokenIndexId)
+      const userRewards = stakingV1Contract.viewPositionRewards(+tokenIndexId)
       return new NonFungibleTokenInfo(
         nft.contract.address,
         tokenIndexId,
         await positionInfo,
-        await auction,
+        await userRewards,
       )
     }),
   )

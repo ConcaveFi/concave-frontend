@@ -78,7 +78,7 @@ const LiquidLocksCards = () => {
           <Box w="1px" bg="stroke.primary" />
           <Flex direction={'column'} flex={1} align={'center'} height="full">
             <Text mt={2} fontSize={{ base: 'sm', md: 'md' }}>
-              Amount Staked 
+              Amount Staked
             </Text>
             <Flex
               direction={'column'}

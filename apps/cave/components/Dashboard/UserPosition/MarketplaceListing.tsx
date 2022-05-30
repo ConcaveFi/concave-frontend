@@ -12,7 +12,6 @@ import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId
 import { ConcaveNFTMarketplace } from 'lib/ConcaveNFTMarketplaceProxy/ConcaveNFTMarketplace'
 import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungibleToken'
 import { useMemo } from 'react'
-import { formatFixed } from 'utils/formatFixed'
 import { useSigner } from 'wagmi'
 import UserListPositionCard from '../UserListPositionCard'
 
@@ -34,7 +33,7 @@ const MarketplaceListing = (props: MarketplaceListingProps) => {
       w: '150px',
       h: '40px',
     }
-    const isListed = nonFungibleTokenInfo.readyForAuction
+    const isListed = false
 
     const label = isListed ? 'Unlist' : 'List for Sale'
     const onClick = isListed
@@ -58,7 +57,7 @@ const MarketplaceListing = (props: MarketplaceListingProps) => {
     <Box
       mx={2}
       shadow="down"
-      height={{ lg: '100px', md: '145px' }}
+      height={{ lg: '100px', md: '160px' }}
       borderRadius="16px"
       mt={{ lg: 1, md: 0 }}
       mb={3}
@@ -73,7 +72,7 @@ const MarketplaceListing = (props: MarketplaceListingProps) => {
       </Modal>
 
       <Flex justify={{ lg: 'left', md: 'center' }}>
-        <Text pl="6" my={1} pt="3" color="text.low" fontSize="lg" as="b">
+        <Text pl="5" my={1} pt="3" color="text.low" fontSize="lg" as="b">
           {`Your Marketplace Listing `}
         </Text>
       </Flex>
@@ -83,7 +82,7 @@ const MarketplaceListing = (props: MarketplaceListingProps) => {
             width={'110px'}
             direction={'column'}
             textAlign={{ lg: 'start', md: 'center' }}
-            ml="2"
+            ml="5"
           >
             <Text color="text.low" fontSize="sm">
               List Price:
@@ -132,22 +131,19 @@ const MarketplaceListing = (props: MarketplaceListingProps) => {
 
 const ListButton = () => {
   return (
-    <Button pr={{ xl: 6, lg: 6, base: 0 }}>
-      <Flex
-        boxShadow={'Up Big'}
-        background="linear-gradient(90deg, #72639B 0%, #44B9DE 100%)"
-        height={38}
-        width={143}
-        rounded={{ xl: '2xl', lg: '2xl', base: '16px 16px 0px 0px' }}
-        justifyContent={'center'}
-        alignItems="center"
-        ml={2}
-        fontWeight="bold"
-        fontSize="md"
-        mx="auto"
-      >
-        <Text>Coming Soon!</Text>
-      </Flex>
+    <Button
+      disabled
+      variant={'primary'}
+      width={180}
+      height={'48px'}
+      rounded="2xl"
+      boxShadow={'Up Big'}
+      mx="auto"
+      mr={{ lg: 4, md: 'auto' }}
+      mt={{ lg: -10, md: 'auto' }}
+      // mr={3}
+    >
+      <Text fontSize={'md'}>Coming soon!</Text>
     </Button>
   )
 }

@@ -11,8 +11,7 @@ interface NftPositionCardProps {
 
 const UserPositionCard = (props: NftPositionCardProps) => {
   const { nonFungibleTokenInfo } = props
-  const { maturity, poolID, shares, rewardDebt, contractAddress, tokenId } = nonFungibleTokenInfo
-  console.log(nonFungibleTokenInfo)
+  const { maturity, poolID, tokenId } = nonFungibleTokenInfo
   const [active, setActive] = useState(true)
 
   return (
@@ -28,7 +27,8 @@ const UserPositionCard = (props: NftPositionCardProps) => {
         <Box
           bg="linear-gradient(265.73deg, #274C63 0%, #182F3E 100%)"
           rounded="2xl"
-          maxWidth={{ lg: '550px', md: '380px' }}
+          // maxWidth={{ lg: '550px', md: '380px' }}
+          maxWidth={{ lg: '700px', md: '520px' }}
         >
           <Flex bgSize="20% 30%" bgImage={'/assets/textures/metal.png'} shadow={'up'} rounded="2xl">
             <Flex direction={'column'}>

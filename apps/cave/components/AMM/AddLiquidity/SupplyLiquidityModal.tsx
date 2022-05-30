@@ -86,6 +86,7 @@ const SupplyLiquidityContent = ({
         autoHide
         approveArgs={{
           currency: lpData.amount0.currency,
+          amount: lpData.amount0.numerator,
           spender: ROUTER_ADDRESS[lpData.amount0.currency.chainId],
           onSuccess: () => lpData.setApprove0(true),
         }}
@@ -99,6 +100,7 @@ const SupplyLiquidityContent = ({
         approveArgs={{
           currency: lpData.amount1.currency,
           spender: ROUTER_ADDRESS[lpData.amount0.currency.chainId],
+          amount: lpData.amount1.numerator,
           onSuccess: () => lpData.setApprove1(true),
         }}
       />
