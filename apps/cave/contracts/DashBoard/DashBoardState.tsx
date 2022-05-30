@@ -23,7 +23,10 @@ export const useDashBoardState = () => {
   }
 }
 function getTotalLocked(nonFungibleTokens: NonFungibleTokenInfo[]) {
+  
   return (nonFungibleTokens || []).reduce((amount, current) => {
-    return amount.add(current.deposit).add(current.rewardDebt)
+    const currentValue = current.userReward[3]
+  
+    return amount.add(currentValue)
   }, BigNumber.from(0))
 }
