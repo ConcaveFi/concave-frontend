@@ -3,7 +3,6 @@ import { Contract } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { aCNVredeemabi } from 'lib/contractoABI'
 import { concaveProvider as provider } from 'lib/providers'
-import { MdOutlineRedeem } from 'react-icons/md'
 
 interface ACVNRedemptionDialogProps {
   onRedeem: () => void
