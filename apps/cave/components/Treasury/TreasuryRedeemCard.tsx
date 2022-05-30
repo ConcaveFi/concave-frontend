@@ -10,6 +10,7 @@ import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialo
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import ACVNRedemptionDialog from './VestedTokensDialogs/ACVNRedemptionDialog'
 import { ComingSoonDialog } from 'components/ComingSoonDialog'
+import { Transaction } from 'ethers'
 // aCNV address
 // 0x2a6bb78490c2221e0d36d931192296be4b3a01f1 RINKEBY
 // 0x6ff0106d34feee8a8acf2e7b9168480f86b82e2f eth
@@ -19,7 +20,6 @@ function TreasuryRedeemCard() {
     tokenAddress: CNV.address,
     tokenChainId: CNV.chainId,
   })
-  const netWorkId = useCurrentSupportedNetworkId()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [description, setDescription] = useState("This feature it's not done yet.")
   const [title, setTitle] = useState('Coming soon')
@@ -41,12 +41,6 @@ function TreasuryRedeemCard() {
   useEffect(() => {
     setWalletName(data?.connector?.name || 'Wallet')
   }, [walletName])
-
-  const { isOpen: isConfirmOpen, onOpen: onOpenConfirm, onClose: onCloseConfirm } = useDisclosure()
-  const { isOpen: isSubOpen, onOpen: onOpenSub, onClose: onCloseSub } = useDisclosure()
-  const { isOpen: isErrorOpen, onOpen: onOpenError, onClose: onCloseError } = useDisclosure()
-  const [tx, setTx] = useState()
-  const [error, setError] = useState('')
 
   return (
     <>
@@ -71,11 +65,7 @@ function TreasuryRedeemCard() {
           </Flex>
           <Flex mt={5} direction={{ base: 'column' }} gap={{ base: 3 }}>
             <RedeemButton onClick={onOpenRedeemACNV} title="aCNV" />
-            <ACVNRedemptionDialog
-              onClose={onCloseRedeemACNV}
-              isOpen={onRedeemACNV}
-              onRedeem={() => {}}
-            />
+            <ACVNRedemptionDialog onClose={onCloseRedeemACNV} isOpen={onRedeemACNV} />
             <RedeemButton
               onClick={() => {
                 onOpen()
@@ -109,13 +99,6 @@ function TreasuryRedeemCard() {
         </Text>
       </GlassPanel>
 
-      <WaitingConfirmationDialog isOpen={isConfirmOpen} />
-      <TransactionSubmittedDialog isOpen={isSubOpen} closeParentComponent={onCloseSub} tx={tx} />
-      <TransactionErrorDialog
-        error={error}
-        isOpen={isErrorOpen}
-        closeParentComponent={onCloseError}
-      />
       <ComingSoonDialog title={title} desc={description} isOpen={isOpen} onClose={onClose} />
     </>
   )
