@@ -9,6 +9,7 @@ const UserDividendCard = (props: UserDividendCardProps) => {
   const { isLoading } = props
   const totalLocked = isLoading ? 'loading' : formatFixed(props.totalLocked) + ' CNV'
 
+  // commit
   return (
     <Box
       pos="relative"
