@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic'
 import { useLocalStorage } from 'react-use'
 
 const isDevEnv = process.env.NEXT_PUBLIC_VERCEL_ENV !== 'production'
-const password = process.env.DEV_PASSWORD || 'buycnv'
+const password = process.env.DEV_PASSWORD || 'uwu123'
 
 export const useWorthyUser = () => {
   const [value, setValue] = useLocalStorage('can enter?', false)
