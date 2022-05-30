@@ -105,7 +105,7 @@ export default TreasuryRedeemCard
 
 const RedeemButton = ({ onClick, title }: { onClick: () => void; title: string }) => {
   return (
-    <Button _hover={{ transform: 'scale(1.05)' }}>
+    <Button _hover={{ transform: 'scale(1.05)' }} onClick={onClick}>
       <GlassPanel width={{ base: '160px', xl: '182px' }} height={'40px'} justify="center">
         <Text fontSize={'20px'} fontWeight="700" my={'auto'}>
           {title}
