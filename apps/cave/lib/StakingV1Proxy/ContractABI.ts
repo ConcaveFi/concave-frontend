@@ -49,6 +49,12 @@ export const StakingV1Abi = [
   },
   {
     anonymous: false,
+    inputs: [{ indexed: false, internalType: 'uint8', name: 'version', type: 'uint8' }],
+    name: 'Initialized',
+    type: 'event',
+  },
+  {
+    anonymous: false,
     inputs: [
       { indexed: true, internalType: 'uint256', name: '_amount', type: 'uint256' },
       { indexed: true, internalType: 'uint256', name: '_poolID', type: 'uint256' },
@@ -694,6 +700,18 @@ export const StakingV1Abi = [
     name: 'unlock',
     outputs: [{ internalType: 'uint256', name: 'amountOut', type: 'uint256' }],
     stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [{ internalType: 'uint256', name: 'tokenId', type: 'uint256' }],
+    name: 'viewPositionRewards',
+    outputs: [
+      { internalType: 'uint256', name: 'amountDeposited', type: 'uint256' },
+      { internalType: 'uint256', name: 'baseRewards', type: 'uint256' },
+      { internalType: 'uint256', name: 'excessRewards', type: 'uint256' },
+      { internalType: 'uint256', name: 'totalRewards', type: 'uint256' },
+    ],
+    stateMutability: 'view',
     type: 'function',
   },
   {

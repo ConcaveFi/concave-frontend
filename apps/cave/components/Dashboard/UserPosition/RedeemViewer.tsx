@@ -8,7 +8,7 @@ interface RedeemCardViewerProps {
 }
 const RedeemCardViewer = ({ nonFungibleTokenInfo }: RedeemCardViewerProps) => {
   const { shares, rewardDebt, maturity, deposit } = nonFungibleTokenInfo
-
+console.log("nft info", nonFungibleTokenInfo)
   return (
     <Flex
       flex={1}

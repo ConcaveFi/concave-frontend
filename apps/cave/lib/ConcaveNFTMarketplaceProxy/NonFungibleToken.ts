@@ -1,5 +1,4 @@
 import { BigNumberish } from 'ethers'
-import { BigNumber } from 'ethers'
 import { Position } from 'lib/StakingV1Proxy/Position'
 import { Auction } from './Auction'
 
@@ -8,6 +7,7 @@ export class NonFungibleTokenInfo {
     public readonly contractAddress: string,
     public readonly tokenId: BigNumberish,
     private readonly position: Position,
+    private readonly _userReward: BigNumberish,
     private readonly auction?: Auction,
   ) {}
 
@@ -31,5 +31,8 @@ export class NonFungibleTokenInfo {
   }
   get currentValue() {
     return this.shares.add(this.rewardDebt)
+  }
+  get userReward() {
+    return this._userReward
   }
 }

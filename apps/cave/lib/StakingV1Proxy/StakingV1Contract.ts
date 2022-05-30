@@ -21,6 +21,11 @@ export class StakingV1Contract {
   public async viewStakingCap(poolNum: number | string): Promise<BigNumber> {
     return this.contract.viewStakingCap(poolNum)
   }
+  
+  public async viewPositionRewards(tokenId: number ): Promise<BigNumber> {
+    return this.contract.viewPositionRewards(tokenId)
+  }
+
 
   public async lock(
     signer: ethers.Signer,
