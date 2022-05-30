@@ -284,7 +284,7 @@ function StakeCard(props: StackCardProps) {
           >
             <Emissions
               period={props.period}
-              vaprText={vaprText}
+              // vaprText={!isErrorVAPR ? vaprText : 'Error Loading vAPR'}
               totalVAPR={isLoadingVAPR ? 'Calculating...' : totalVAPRFormatted}
               icon={props.icon}
               baseVAPR={isLoadingVAPR ? 'Calculating...' : baseEmissionsFormatted}

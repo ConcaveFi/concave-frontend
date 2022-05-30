@@ -97,7 +97,7 @@ function Emissions(props: any) {
             alt="stake period logo"
           />
           <Text color="text.low" fontSize="sm">
-            {props.vaprText}
+            Total vAPR
           </Text>
           <Text mx={{ base: '', sm: 'auto' }} fontSize="md" fontWeight="bold">
             {props.totalVAPR}
