@@ -1,7 +1,4 @@
 import { Flex, Text, useDisclosure } from '@concave/ui'
-import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
-import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
-import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { CNV } from 'constants/tokens'
 import useAddTokenToWallet, { injectedTokenResponse } from 'hooks/useAddTokenToWallet'
 import { useState } from 'react'
@@ -9,12 +6,14 @@ import { useConnect } from 'wagmi'
 import { GlassPanel } from '../TreasuryManagementCard'
 import { ComingSoonDialog } from 'components/ComingSoonDialog'
 import ACVNRedemptionDialog from '../VestedTokensDialogs/ACVNRedemptionDialog'
+import { bbtCNV_ADDRESS } from '../Hooks/useVestedTokens'
 
 export default function RedeemMobileCard() {
   const { loading: loadingtoWallet, addingToWallet }: injectedTokenResponse = useAddTokenToWallet({
     tokenAddress: CNV.address,
     tokenChainId: CNV.chainId,
   })
+
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [description, setDescription] = useState("This feature it's not done yet.")
   const [title, setTitle] = useState('Coming soon')
