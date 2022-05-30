@@ -1,79 +1,71 @@
-import { ethers, Contract } from 'ethers'
-import { formatUnits, parseUnits } from 'ethers/lib/utils'
-import { ContractAddress } from 'lib/contractAddress'
-import { contractABI } from 'lib/contractoABI'
-import { concaveProvider2, concaveProvider } from 'lib/providers'
-import { useEffect, useState } from 'react'
-import { chain, useSigner, useWaitForTransaction } from 'wagmi'
-import { useToken, WrapperTokenInfo } from '../components/Swap/useSwap'
-import { useAllowance, useApproval } from './useAllowance'
+import { parseUnits } from 'ethers/lib/utils'
+import { Currency, CurrencyAmount, Pair, Percent, WETH9_ADDRESS } from '@concave/gemswap-sdk'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import { Router } from 'lib/Router'
+import { useState } from 'react'
+import { useAccount, useSigner } from 'wagmi'
 
-export const useRemoveLiquidity = (chainId = chain.ropsten.id, userAddress) => {
-  const [wrapperTokenA, setTokenA] = useToken({ userAddressOrName: userAddress, symbol: '' })
-  const [wrapperTokenB, setTokenB] = useToken({ userAddressOrName: userAddress, symbol: '' })
-  const [lpRemoveAmount, setLpRemoveAmount] = useState<number>(null)
-  // GRAB FACTORY ADDRESS,
-  const [{ data, error, loading }, getSigner] = useSigner()
+const currencyAmountToBigNumber = (currency: CurrencyAmount<Currency>) => {
+  return parseUnits(currency.toFixed(currency.currency.decimals))
+}
 
-  const contractInstance = new ethers.Contract(
-    ContractAddress[chainId],
-    contractABI,
-    concaveProvider2(chainId),
-  )
+export const useRemoveLiquidity = ({
+  pair,
+  userPoolShare,
+  userBalance,
+}: {
+  pair: Pair
+  userPoolShare: number
+  userBalance: CurrencyAmount<Currency>
+}) => {
+  const networkId = useCurrentSupportedNetworkId()
+  const [{ data: account }] = useAccount()
+  const tokenA = pair.token0
+  const tokenB = pair.token1
+  const [percentToRemove, setPercentToRemove] = useState(0)
+  const ratioToRemove = Math.min(percentToRemove, 100) / 100
+  const amountAMin = +pair.reserve0.toExact() * userPoolShare * ratioToRemove
+  const amountBMin = +pair.reserve1.toExact() * userPoolShare * ratioToRemove
+  const [hash, setHash] = useState<string>(null)
+  const [{ data }] = useSigner()
+  const [receiveInNativeToken, setReceiveInNativeToken] = useState(true)
+  const tokenAIsNativeWrapper = tokenA.address === WETH9_ADDRESS[networkId]
+  const tokenBIsNativeWrapper = tokenB.address === WETH9_ADDRESS[networkId]
+  const hasNativeToken = tokenAIsNativeWrapper || tokenBIsNativeWrapper
 
-  const call = async () => {
-    const contractSigner = contractInstance.connect(data)
-    const to = userAddress
-    const provider = concaveProvider(chain.ropsten.id)
-    const currentBlockNumber = await provider.getBlockNumber()
-    const { timestamp } = await provider.getBlock(currentBlockNumber)
-    const deadLine = timestamp + 86400
-    const gasPrice = await provider.getGasPrice()
-    const tokenA = wrapperTokenA.token.address
-    const tokenB = wrapperTokenB.token.address
-    contractSigner.removeLiquidity(
+  const removeLiquidity = async () => {
+    const router = new Router(networkId, data)
+    if (receiveInNativeToken && (tokenAIsNativeWrapper || tokenBIsNativeWrapper)) {
+      const transaction = await router.removeLiquidityETH(
+        tokenAIsNativeWrapper ? tokenB : tokenA,
+        currencyAmountToBigNumber(userBalance.multiply(new Percent(percentToRemove, 100))),
+        account.address,
+      )
+      setHash(transaction.hash)
+      return
+    }
+    const transaction = await router.removeLiquidity(
       tokenA,
       tokenB,
-      // LIQUIDITY GOES HERE
-      parseUnits(`0`, wrapperTokenA.token.decimals),
-      parseUnits(`0`, wrapperTokenB.token.decimals),
-      to,
-      deadLine,
-      {
-        gasLimit: gasPrice,
-      },
+      currencyAmountToBigNumber(userBalance.multiply(percentToRemove).divide(100)),
+      account.address,
     )
+    setHash(transaction.hash)
   }
 
-  return [
-    {
-      wrapperTokenA,
-      wrapperTokenB,
-      userAddress,
-      lpRemoveAmount,
-    },
-    {
-      setTokenA,
-      setTokenB,
-      lpRemoveAmount,
-    },
-    call,
-  ] as const
+  return {
+    amountAMin,
+    amountBMin,
+    pair,
+    percentToRemove,
+    setPercentToRemove,
+    removeLiquidity,
+    hash,
+    tokenAIsNativeWrapper,
+    tokenBIsNativeWrapper,
+    hasNativeToken,
+    receiveInNativeToken,
+    handleNativeToken: () => setReceiveInNativeToken(!receiveInNativeToken),
+  }
 }
-export type UseAddLiquidityData = {
-  wrapperTokenA: WrapperTokenInfo
-  wrapperTokenB: WrapperTokenInfo
-  liquidity: number
-  userAddress: string
-}
-
-// console.table({
-//   tokenA,
-//   tokenB,
-//   amountADesired: parseUnits(`${amountADesired}`, wrapperTokenA.token.decimals).toString(),
-//   amountBDesired: parseUnits(`${amountBDesired}`, wrapperTokenB.token.decimals).toString(),
-//   amountAMin: parseUnits(`0`, wrapperTokenA.token.decimals).toString(),
-//   amountBMin: parseUnits(`0`, wrapperTokenB.token.decimals).toString(),
-//   to,
-//   deadLine,
-// })
+export type RemoveLiquidityState = ReturnType<typeof useRemoveLiquidity>

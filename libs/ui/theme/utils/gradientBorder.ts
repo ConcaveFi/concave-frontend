@@ -1,14 +1,10 @@
-import { calc, theme, BoxProps } from '@chakra-ui/react'
+import { BoxProps } from '@chakra-ui/react'
 import { SystemStyleInterpolation } from '@chakra-ui/theme-tools'
 import { toPx } from './toPx'
 
 const variants = {
-  primary: {
-    bg: 'stroke.primary',
-  },
-  secondary: {
-    bg: 'stroke.secondary',
-  },
+  primary: { bg: 'stroke.primary' },
+  secondary: { bg: 'stroke.secondary' },
 }
 
 export interface GradientBorderStyleProps extends BoxProps {
@@ -17,19 +13,9 @@ export interface GradientBorderStyleProps extends BoxProps {
 }
 
 export const gradientBorder = ({
-  borderWidth = 1.1,
+  borderWidth = 1,
   variant = 'primary',
-  ...props
 }: GradientBorderStyleProps = {}): SystemStyleInterpolation => {
-  const borderRadiusStyles = Object.fromEntries(
-    Object.entries(props)
-      .filter(([k, v]) => k.endsWith('Radius') || k.startsWith('rounded'))
-      .map(([k, v]) => {
-        const radius = theme.radii[v] ?? v
-        const gradientBorderRadius = radius !== '0' ? calc.add(radius, toPx(borderWidth)) : 0
-        return [k, gradientBorderRadius]
-      }),
-  )
   return {
     position: 'relative',
     '& > *': { zIndex: 1 },
@@ -38,12 +24,12 @@ export const gradientBorder = ({
         content: '""',
         position: 'absolute',
         inset: 0,
-        m: calc.negate(toPx(borderWidth)),
         p: toPx(borderWidth),
         WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
         WebkitMaskComposite: 'source-out',
         maskComposite: 'exclude',
-        ...borderRadiusStyles,
+        pointerEvents: 'none',
+        rounded: 'inherit',
         ...variants[variant],
       },
     }),

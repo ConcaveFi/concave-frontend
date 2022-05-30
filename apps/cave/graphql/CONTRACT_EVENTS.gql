@@ -1,0 +1,73 @@
+query GET_STACKINGV1_LAST100_EVENTS {
+  logStakingV1(order_by: { txBlockNumber: desc }, limit: 100) {
+    txBlockNumber
+    txHash
+    poolID
+    tokenID
+    sold
+    from
+    to
+    amountLocked
+    lockedUntil
+  }
+}
+
+query GET_STACKINGV1_BY_POOL_ID($poolID: numeric_comparison_exp) {
+  logStakingV1(order_by: { txBlockNumber: desc }, where: { poolID: $poolID }, limit: 10) {
+    txBlockNumber
+    txHash
+    poolID
+    tokenID
+    sold
+    from
+    to
+    amountLocked
+    lockedUntil
+  }
+}
+
+query GET_STAKINGV1_LAST100_LOCK {
+  logStakingV1_Lock(
+    order_by: { timestamp: desc }
+    limit: 100
+    where: { txHash: { _neq: "null" } }
+  ) {
+    txHash
+    txBlockNumber
+    poolID
+    timestamp
+    positionID
+    to
+    amount
+  }
+}
+
+query GET_ACCRUALBONDV1_LAST10_SOLD {
+  logAccrualBondsV1_BondSold(
+    order_by: { txBlockNumber: desc }
+    limit: 10
+    where: { output: { _neq: "null" } }
+  ) {
+    timestamp
+    inputToken
+    inputAmount
+    method
+    output
+  }
+}
+
+query GET_BONDS_VAPR {
+  rebaseStakingV1(
+    order_by: { txBlockNumber: desc }
+    limit: 1
+    where: { txHash: { _is_null: false } }
+  ) {
+    indexRebase
+    created_at
+    txHash
+    bondVaprPool0
+    bondVaprPool1
+    bondVaprPool2
+    bondVaprPool3
+  }
+}

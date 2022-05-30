@@ -4,6 +4,6 @@
     "baseUrl": ".",
     "jsx": "preserve"
   },
-  "include": ["."],
+  "include": [".", "next-env.d.ts", "types/**/*.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["dist", "build", "node_modules"]
 }

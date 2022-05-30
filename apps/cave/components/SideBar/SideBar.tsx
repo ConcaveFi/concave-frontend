@@ -1,100 +1,100 @@
 import {
-  IconButton,
-  Box,
-  CloseButton,
-  Flex,
-  useColorModeValue,
   Drawer,
-  DrawerContent,
   useDisclosure,
-  BoxProps,
-  FlexProps,
   Card,
+  Stack,
+  CardProps,
+  DrawerContent,
+  DrawerOverlay,
+  Flex,
+  Image,
+  forwardRef,
 } from '@concave/ui'
-import { FiMenu } from 'react-icons/fi'
+import { HamburgerIcon } from '@concave/icons'
 import SideBarTop from './SideBarTop'
 import SideBarBottom from './SideBarBottom'
 import PageNav from './PageNav'
+import { useSwipeable } from 'react-swipeable'
 
 export function SideBar() {
   const { isOpen, onOpen, onClose } = useDisclosure()
+
+  const swipeableHandlers = useSwipeable({ onSwipedLeft: onClose })
+
   return (
-    <Box minH="100vh">
-      <SidebarContent onClose={() => onClose} display={{ base: 'none', md: 'block' }} />
+    <>
+      {/* show on bigger screens like not mobile lol */}
+      <SidebarContent display={{ base: 'none', md: 'flex' }} />
+      {/* show on small devices (mobile) */}
+      <Flex
+        align="center"
+        position="fixed"
+        zIndex={5}
+        p={4}
+        display={{ base: 'flex', md: 'none' }}
+        onClick={onOpen}
+        filter="drop-shadow(0px 0px 12px #81b3ff4f)"
+        bg="blackAlpha.100"
+        backdropFilter="blur(16px)"
+        direction="row"
+        w="100%"
+        roundedBottom="xl"
+      >
+        <HamburgerIcon />
+        <Image src="/assets/concave/logotype.svg" alt="concave" width="100px" ml={2} />
+      </Flex>
       <Drawer
-        autoFocus={false}
+        autoFocus={true}
+        closeOnOverlayClick={true}
         isOpen={isOpen}
         placement="left"
         onClose={onClose}
-        returnFocusOnClose={false}
-        onOverlayClick={onClose}
-        size="lg"
       >
-        <DrawerContent>
-          <SidebarContent onClose={onClose} />
+        <DrawerOverlay backdropFilter="blur(8px)" />
+        <DrawerContent
+          w="min"
+          bg="none"
+          shadow="none"
+          overflow="auto"
+          sx={{ '::-webkit-scrollbar': { display: 'none' }, scrollbarWidth: 'none' }}
+        >
+          <SidebarContent {...swipeableHandlers} />
         </DrawerContent>
       </Drawer>
-      {/* mobilenav */}
-      <MobileNav display={{ base: 'flex', md: 'none' }} onOpen={onOpen} />
-      {/* <Box ml={{ base: 0, md: 60 }} p="4"> */}
-      {/* {children} */}
-      {/* </Box> */}
-    </Box>
+    </>
   )
 }
 
-interface SidebarProps extends BoxProps {
-  onClose: () => void
-}
-
-const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
+const SidebarContent = forwardRef<CardProps, 'div'>((props, ref) => {
   return (
     <Card
+      ref={ref}
       variant="primary"
-      bgGradient="radial(248.94% 38.67% at 100% 27.33%, secondary.75 25.26%, secondary.150 100%)"
+      apply="background.sidebar"
       borderWidth={0}
       borderRadius={0}
       borderRightRadius="2xl"
       shadow="Up Big"
-      px={2}
-      py={4}
-      w={{ base: 'full', md: 60 }}
-      h="full"
-      {...rest}
+      p={3}
+      h="100vh"
+      w={{ base: '250px', md: '250px' }}
+      minW="250px"
+      overflowY="auto"
+      overflowX="hidden"
+      sx={{ '::-webkit-scrollbar': { display: 'none' }, scrollbarWidth: 'none' }}
+      {...props}
     >
-      <Flex position="absolute" right="10px">
-        <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} mb={5} />
-      </Flex>
       <SideBarTop />
-
-      <Box mt={10}>
+      <Stack spacing="50px" mt="50px" mr={-3} ml="auto" pb={8} w="max">
         <PageNav />
-      </Box>
-      <Box mt={14}>
+      </Stack>
+      <Flex ml="4" mt="20px">
         <SideBarBottom />
-      </Box>
+      </Flex>
+      {/* <Flex         
+      align="center">
+        <SideBarBottom />
+      </Flex> */}
     </Card>
   )
-}
-
-interface MobileProps extends FlexProps {
-  onOpen: () => void
-}
-
-const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
-  return (
-    <Flex
-      ml={{ base: 0, md: 60 }}
-      px={{ base: 4, md: 24 }}
-      height="20"
-      alignItems="center"
-      bg={useColorModeValue('white', 'gray.900')}
-      borderBottomWidth="1px"
-      borderBottomColor={useColorModeValue('gray.200', 'gray.700')}
-      justifyContent="flex-start"
-      {...rest}
-    >
-      <IconButton variant="outline" onClick={onOpen} aria-label="open menu" icon={<FiMenu />} />
-    </Flex>
-  )
-}
+})

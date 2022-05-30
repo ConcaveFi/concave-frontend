@@ -1,5 +1,4 @@
-import { Icon } from '@chakra-ui/icons'
-import { IconProps } from '@chakra-ui/react'
+import { Icon, IconProps } from '@chakra-ui/icons'
 
 export const PlusIcon = (props: IconProps) => (
   <Icon viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>

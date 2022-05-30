@@ -1,0 +1,57 @@
+query GET_LAST_BASE_VAPR {
+  logStakingV1_PoolRewarded(where: { balance: { _gt: "0" } }) {
+    base_vAPR
+  }
+}
+
+query GET_LAST_POOLS_TOTAL_VAPR {
+  totalVapr {
+    pool0TotalBaseVapr
+    pool1TotalBaseVapr
+    pool2TotalBaseVapr
+    pool3TotalBaseVapr
+  }
+}
+query GET_LAST_POOLID_VAPR($poolID: numeric) {
+  logStakingV1_PoolRewarded(
+    where: { poolID: { _eq: $poolID } }
+    order_by: { txBlockNumber: desc }
+    limit: 1
+  ) {
+    base_vAPR
+  }
+}
+
+query GET_LAST_POOLS_TOTAL_VAPR {
+  totalVapr {
+    pool0TotalBaseVapr
+    pool1TotalBaseVapr
+    pool2TotalBaseVapr
+    pool3TotalBaseVapr
+  }
+}
+query GET_ALL_TOTAL_POOLS_VAPR {
+  logStakingV1_PoolRewarded(
+    limit: 4
+    order_by: { txBlockNumber: desc }
+    where: { base_vAPR: { _gte: "0" } }
+  ) {
+    base_vAPR
+    poolID
+  }
+  rebaseStakingV1(
+    where: {
+      bondVaprPool0: { _gt: "0" }
+      bondVaprPool1: { _gt: "0" }
+      bondVaprPool2: { _gt: "0" }
+      bondVaprPool3: { _gt: "0" }
+    }
+    limit: 1
+    order_by: { txBlockNumber: desc }
+  ) {
+    bondVaprPool0
+    bondVaprPool1
+    bondVaprPool2
+    bondVaprPool3
+  }
+}

@@ -1,0 +1,17 @@
+query GET_TREASURY {
+  treasury {
+    updated_at
+    contract
+    chainId
+    name
+    amount
+    value
+    rewards
+    total
+    image
+    isLP
+    imageP1
+    imageP2
+    imageP3
+  }
+}

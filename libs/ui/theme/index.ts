@@ -5,18 +5,21 @@ import Tooltip from './components/TooltipStyles'
 import CloseButton from './components/CloseButtonStyles'
 import Input from './components/InputStyles'
 import Modal from './components/ModalStyles'
+import Popover from './components/PopoverStyles'
 import Card from './components/CardStyles'
 import Switch from './components/SwitchStyles'
 import Accordion from './components/AccordionStyles'
 import scrollbar from './scrollbars'
+import background from './backgrounds'
 import { fonts, shadows } from './foundations'
-//
+
 const theme = extendTheme({
   config: { initialColorMode: 'dark', cssVarPrefix: 'concave' },
   fonts,
   colors,
   shadows,
   scrollbar,
+  background,
   components: {
     Input,
     Button,
@@ -26,6 +29,7 @@ const theme = extendTheme({
     Modal,
     Card,
     Accordion,
+    Popover,
   },
 } as const) as ChakraTheme
 

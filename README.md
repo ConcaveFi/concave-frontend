@@ -32,32 +32,63 @@ create more shared libs as you feel necessary in `/libs`
 
 Prerequisites: [Node](https://nodejs.org/en/download/), [Yarn](https://classic.yarnpkg.com/en/docs/install/) and [Git](https://git-scm.com/downloads)
 
-> dev with hasura on localhost with docker-compose
-
-Please change `lib/hasura/admin.ts`
-
-```js
-const HasuraUrl =
-  process.env.NODE_ENV !== 'production'
-    ? 'http://localhost:8080/v1/graphql'
-    : (process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT as string)
-// const HasuraUrl = (process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT as string)
-```
-
 > clone/fork:
 
 ```bash
 git clone https://github.com/ConcaveFi/concave-frontend.git
 cd concave-frontend
-
-# create and config env.local file following env.example on the app you wanna run
-# if you're on the vercel team, you can also run `vercel env pull` on the desired app folder
+cp -i apps/cave/.env.example apps/cave/.env
 
 # Install dependencies
 yarn
 
-# Start development server
-yarn dev:<app_name> # eg. yarn dev:cave
+# Start and watch
+yarn dev:cave
 ```
 
 running dev this way will build and watch dependencies, this means you can edit `@concave/ui` working on `apps/cave` and it will just work
+
+# Graphql Concave-api
+
+> Schema crafted with Hasura on frontend using Codegen + React-Query
+
+## Schema on Hasura
+
+The graphql schema got different sources (see on concave-api)
+
+- POSTGRES ex: creating a table on postgres, Hasura will crafted for you the graphql
+- LAMBDA ex: create a lambda bind this one in Hasura Action to be a part of the schema
+
+## Import the Queries/Mutations into the frontend
+
+- Create your Query/Mutation on Hasura
+- Close concave-fontend (not running locally)
+- Copie them into the appropriate file inside `apps/cave/graphql` as a `.gql` file
+- Then enter in your terminal
+
+```sh
+cd app/cave
+yarn gen
+```
+
+> You don't need to "gen" at build time, but only when a new Query is in
+> This will generate or update 2 files inside `apps/cave/graphql/generated`
+> This is specific for React-Query (see config `codegen.yml`) with his own fetcher for Hasura
+> You can now import generated Hooks, Query or Mutation from `graphql/generated/graphql`
+
+## Summary for graphql
+
+- Craft you query on hasura
+- Import the query inside `apps/cave/graphql` as a `.gql` file or inside an other one
+- Do `yarn gen` from `app/cave`
+
+Example for a react-query hook on frontend
+
+```js
+import {useGet_Stackingv1_Last100_EventsQuery} from 'graphql/generated/graphql'
+
+...
+
+const { status, data, error, isFetching } = useGet_Stackingv1_Last100_EventsQuery()
+console.log('react query', status, data, error, isFetching)
+```

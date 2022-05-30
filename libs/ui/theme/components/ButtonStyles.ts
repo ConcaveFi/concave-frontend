@@ -1,14 +1,70 @@
-import { ComponentSingleStyleConfig, cssVar, tokenToCSSVar } from '@chakra-ui/react'
+import { ComponentSingleStyleConfig, ButtonProps } from '@chakra-ui/react'
 import { gradientBorder } from '../utils/gradientBorder'
 
 const HoverRadialGradient =
-  'radial-gradient(97.48% 120.4% at 49.69% 76.45%, #3082E1 0%, #3D3786 31.18%, transparent 100%)'
+  'radial-gradient(80% 232.61% at 52.27% 160%, #578CF2C4 0%, #895FFF1C 100%)'
 
 const PrimaryButtonShadow =
   '20px -20px 39px rgba(120, 182, 255, 0.25), 0px 5px 14px rgba(0, 0, 0, 0.47), inset 0px -10px 20px rgba(117, 164, 255, 0.5)'
 
+const ButtonPrimaryTheme = (props) => ({
+  borderRadius: '2xl',
+  ...gradientBorder({ borderRadius: '2xl' }),
+  bgGradient: 'linear(to-r, primary.1, primary.2)',
+  fontFamily: 'heading',
+  fontWeight: 'bold',
+  shadow: PrimaryButtonShadow,
+  _focus: { shadow: PrimaryButtonShadow, transform: 'scale(1.05)' },
+  _hover: { _disabled: { opacity: 1 } },
+  _disabled: {
+    apply: 'background.metalBrighter',
+    ...gradientBorder({ borderRadius: '2xl', variant: 'secondary' }),
+    shadow: 'Up Big',
+    color: 'text.low',
+  },
+})
+
+const ButtonSecondaryTheme = (props) => ({
+  apply: 'background.metalBrighter',
+  shadow: 'Up Big',
+  borderRadius: '2xl',
+  _active: {
+    bg: HoverRadialGradient,
+    color: 'text.high',
+    transform: 'scale(1)',
+    ...gradientBorder({ borderRadius: '2xl', ...props, variant: 'primary' }),
+  },
+  _focus: {
+    bg: HoverRadialGradient,
+    color: 'text.high',
+    ...gradientBorder({ borderRadius: '2xl', ...props, variant: 'primary' }),
+  },
+  _hover: {
+    bg: HoverRadialGradient,
+    color: 'text.high',
+    ...gradientBorder({ borderRadius: '2xl', ...props, variant: 'primary' }),
+  },
+})
+
+const ButtonSelectTheme = (props) => ({
+  borderRadius: 'full',
+  h: 'auto',
+  w: 'min',
+  fontFamily: 'heading',
+  fontWeight: 'bold',
+  rounded: 'full',
+  shadow: 'Up Small',
+  _hover: { shadow: 'Up Big', _disabled: { shadow: 'Up Small', opacity: 1 } },
+  _focus: { shadow: 'Up Big' },
+  _active: { shadow: 'down' },
+  _selected: { shadow: 'Down Big', color: 'text.low', _hover: { bg: 'blackAlpha.100' } },
+  _disabled: { shadow: 'Up Small' },
+  p: 1,
+  fontSize: 'sm',
+})
+
 export const ButtonStyles: ComponentSingleStyleConfig = {
-  baseStyle: {
+  baseStyle: (props) => ({
     fontSize: '14px',
     lineHeight: 'initial',
     width: 'auto',
@@ -17,8 +73,23 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
     borderColor: 'transparent',
     display: 'flex',
     alignItems: 'center',
-    _active: { transform: 'scale(0.95)' },
-  },
+    _active: { transform: 'scale(0.96)' },
+    _disabled: {
+      cursor: 'default',
+      _active: { transform: 'scale(1)' },
+      opacity: 1,
+    },
+    _hover: {
+      _disabled: {
+        opacity: 0.5,
+        bg: null,
+      },
+    },
+    ...{
+      primary: gradientBorder({ ...props, variant: 'primary' }),
+      secondary: gradientBorder({ ...props, variant: 'secondary' }),
+    }[props.border],
+  }),
   sizes: {
     large: {
       height: '50px',
@@ -30,54 +101,17 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
     },
   },
   variants: {
-    'primary.outline': {
-      borderRadius: '2xl',
+    primary: ButtonPrimaryTheme,
+    'primary.outline': (props) => ({
+      ...ButtonPrimaryTheme(props),
       ...gradientBorder({ borderRadius: '2xl', borderWidth: 2 }),
-      fontFamily: 'heading',
+      bg: 'none',
       fontWeight: 'bold',
       shadow: 'Up Big',
       _hover: { bg: HoverRadialGradient, color: 'text.high' },
-    },
-    primary: {
-      borderRadius: '2xl',
-      ...gradientBorder({ borderRadius: '2xl' }),
-      bgGradient: 'linear(to-r, primary.1, primary.2)',
-      fontFamily: 'heading',
-      fontWeight: 'bold',
-      shadow: PrimaryButtonShadow,
-      _focus: { shadow: PrimaryButtonShadow },
-      _disabled: {
-        _hover: {
-          bgGradient: 'linear(to-r, primary.1, primary.2)',
-        },
-      },
-    },
-    secondary: {
-      bgGradient: 'linear(to-r, secondary.125, secondary.50)',
-      shadow: 'Up Big',
-    },
-    navigation: (props) => ({
-      height: '100%',
-      borderX: 'solid 1px',
-      borderColor: 'subtle',
-      color: 'text.low',
-      ...(props.isActive && {
-        color: 'text.high',
-        textDecoration: 'underline',
-      }),
-      _even: {
-        border: 'unset', // prevent double border when side by side
-      },
-      _last: {
-        // doesn't matter if last is even, must have border
-        borderX: 'solid 1px',
-        borderColor: 'subtle',
-      },
-      boxShadow: 'inset 1px 0px 2px 0px rgba(16, 19, 23, 1), 1px 0px 2px 0px rgba(16, 19, 23, 1)',
-      bg: 'transparent',
-      _active: { bg: HoverRadialGradient },
-      _hover: { bg: HoverRadialGradient },
     }),
+    secondary: ButtonSecondaryTheme,
+    select: ButtonSelectTheme,
   },
   defaultProps: {
     variant: null,

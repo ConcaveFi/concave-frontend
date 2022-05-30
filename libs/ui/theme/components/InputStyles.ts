@@ -27,7 +27,7 @@ export const InputStyles: ComponentMultiStyleConfig = {
       field: {
         fontWeight: 'semibold',
         fontSize: 'md',
-        p: 3,
+        p: 2.5,
         borderRadius: 'xl',
       },
     },

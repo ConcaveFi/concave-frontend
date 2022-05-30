@@ -1,23 +1,28 @@
-import { concaveProvider, concaveWSProvider, infuraId } from 'lib/providers'
 import { ReactNode } from 'react'
 import { chain, defaultChains, Provider } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
-import { WalletLinkConnector } from 'wagmi/connectors/walletLink'
+import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
+import { concaveProvider, concaveWSProvider, infuraId } from 'lib/providers'
+import { NEXT_PUBLIC_ALCHEMY_ID } from 'lib/env.conf'
 
-const supportedChains = [chain.mainnet]
+const chains = [chain.mainnet, chain.rinkeby] // app supported chains
 
-const connectors = [
-  new InjectedConnector({ chains: supportedChains }),
-  new WalletLinkConnector({
+const connectors = (config) => [
+  new InjectedConnector({ chains }),
+  new CoinbaseWalletConnector({
+    chains,
     options: {
       appName: 'Concave App',
-      jsonRpcUrl: `https://mainnet.infura.io/v3/${infuraId}`,
+      // jsonRpcUrl: concaveRPC,
+      jsonRpcUrl: `https://eth-mainnet.alchemyapi.io/v2/${NEXT_PUBLIC_ALCHEMY_ID}`,
+      // appLogoUrl: 'https://concave.lol/assets/concave/logomark.png',
+      darkMode: true,
     },
   }),
   new WalletConnectConnector({
-    chains: supportedChains,
-    options: { infuraId: process.env.NEXT_PUBLIC_INFURA_ID, qrcode: true },
+    chains,
+    options: { infuraId, qrcode: true, chainId: config.chainId },
   }),
 ]
 
@@ -29,14 +34,13 @@ const provider = ({ chainId }) =>
 const webSocketProvider = ({ chainId }) =>
   concaveWSProvider(isChainSupported(chainId) ? chainId : chain.mainnet.id)
 
+const client = {
+  autoConnect: true,
+  connectors,
+  provider,
+  webSocketProvider,
+}
+
 export const WagmiProvider = ({ children }: { children: ReactNode }) => (
-  <Provider
-    autoConnect
-    connectorStorageKey="concave"
-    connectors={connectors}
-    provider={provider}
-    webSocketProvider={webSocketProvider}
-  >
-    {children}
-  </Provider>
+  <Provider {...client}>{children}</Provider>
 )

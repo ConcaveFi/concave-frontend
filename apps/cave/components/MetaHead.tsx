@@ -2,7 +2,7 @@ import NextHead from 'next/head'
 import { useRouter } from 'next/router'
 import React from 'react'
 
-export const HOST_URL = 'https://concavefi.vercel.app/'
+export const HOST_URL = 'https://app.concave.lol/app'
 export const TWITTER_USER = '@concavefi'
 
 export interface MetaProps {
@@ -12,7 +12,7 @@ export interface MetaProps {
   type?: string
 }
 
-export const MetaHead = ({ customMeta }: { customMeta?: MetaProps }): JSX.Element => {
+export const MetaHead = ({ meta: _meta }: { meta?: MetaProps }): JSX.Element => {
   const router = useRouter()
   const meta: MetaProps = {
     title: 'Concave | Exchange (AMM)',
@@ -20,7 +20,7 @@ export const MetaHead = ({ customMeta }: { customMeta?: MetaProps }): JSX.Elemen
       'A capital efficient, low slippage and high liquidity AMM, Concave Exchange offers traders deeper liquidity and allows liquidity providers to earn more with less capital investment.',
     image: `${HOST_URL}/assets/concave/ConcavePreview.png`,
     type: 'website',
-    ...customMeta,
+    ..._meta,
   }
 
   return (
@@ -39,6 +39,7 @@ export const MetaHead = ({ customMeta }: { customMeta?: MetaProps }): JSX.Elemen
       <meta name="twitter:title" content={meta.title} />
       <meta name="twitter:description" content={meta.description} />
       <meta name="twitter:image" content={meta.image} />
+      <link rel="shortcut icon" href="/assets/tokens/cnv.svg" />
     </NextHead>
   )
 }

@@ -1,27 +1,54 @@
 import { providers } from 'ethers'
 import { providers as multicallProvider } from '@0xsequence/multicall'
+import {
+  NEXT_PUBLIC_ALCHEMY_ID,
+  NEXT_PUBLIC_CONCAVE_RPC_KEY,
+  NEXT_PUBLIC_INFURA_ID,
+} from './env.conf'
 
-const alchemy = process.env.NEXT_PUBLIC_ALCHEMY_ID as string
-const etherscan = process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY as string
-export const infuraId = process.env.NEXT_PUBLIC_INFURA_ID as string
-const concaveKey = process.env.NEXT_PUBLIC_CONCAVE_RPC_KEY
+export const infuraId = NEXT_PUBLIC_INFURA_ID
+export const concaveRPC = `https://rpc.concave.lol/v1/${NEXT_PUBLIC_CONCAVE_RPC_KEY}`
+export const concaveWSS = `wss://rpc.concave.lol/ws/v1/${NEXT_PUBLIC_CONCAVE_RPC_KEY}`
 
-export const concaveRPC = 'https://eth.concave.lol/'
+const NoProviderKeyError = `Concave Provider
+  You need to set at least one provider key in your .env file, examples in .env.example`
 
-// export const concaveProvider = (chainid: number) => {
-//   // const alchemyapi_1 = new providers.JsonRpcProvider(
-//   //   `https://eth-mainnet.alchemyapi.io/v2/${alchemy}`, //${alchemy}`,
-//   // )
-//   const infura_1 = new providers.JsonRpcProvider(`https://ropsten.infura.io/v3/${infuraId}`)
-//   return infura_1
-// }
+const getFallbackProviders = (chainId: number) => {
+  const fallbackProviderConfigs = []
 
-export const concaveProvider2 = (chainId: number) =>
+  if (NEXT_PUBLIC_CONCAVE_RPC_KEY && chainId === 1)
+    fallbackProviderConfigs.push({
+      provider: new providers.JsonRpcProvider(concaveRPC, chainId),
+      priority: 1,
+      weight: 2,
+    })
+
+  if (NEXT_PUBLIC_ALCHEMY_ID)
+    fallbackProviderConfigs.push({
+      provider: new providers.AlchemyProvider(chainId, NEXT_PUBLIC_ALCHEMY_ID),
+      priority: 2,
+    })
+
+  if (infuraId)
+    fallbackProviderConfigs.push({
+      provider: new providers.InfuraProvider(chainId, infuraId),
+      priority: 2,
+    })
+
+  if (fallbackProviderConfigs.length === 0) throw NoProviderKeyError
+
+  return fallbackProviderConfigs
+}
+
+export const concaveProvider = (chainId: number) =>
   new multicallProvider.MulticallProvider(
-    new providers.FallbackProvider([
-      providers.getDefaultProvider(chainId, { alchemy, etherscan, infuraId }),
-    ]),
+    new providers.FallbackProvider(getFallbackProviders(chainId), 1),
   )
-export const concaveProvider = concaveProvider2
-export const concaveWSProvider = (chainId: number) =>
-  new providers.InfuraWebSocketProvider(chainId, infuraId)
+
+export const concaveWSProvider = (chainId: number) => {
+  if (NEXT_PUBLIC_CONCAVE_RPC_KEY) return new providers.WebSocketProvider(concaveWSS, chainId)
+  if (infuraId) return new providers.InfuraWebSocketProvider(chainId, infuraId)
+  if (NEXT_PUBLIC_ALCHEMY_ID)
+    return new providers.AlchemyWebSocketProvider(chainId, NEXT_PUBLIC_ALCHEMY_ID)
+  throw NoProviderKeyError
+}

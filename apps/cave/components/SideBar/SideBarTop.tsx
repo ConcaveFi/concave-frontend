@@ -1,21 +1,18 @@
-import React, { useEffect } from 'react'
-import { Box, Flex, Text, Stack, HStack } from '@concave/ui'
-import { Image } from '@concave/ui'
-import { ConnectWallet } from 'components/ConnectWallet'
+import { ChainId, CNV } from '@concave/gemswap-sdk'
+import { Box, Flex, Image, Stack, Text } from '@concave/ui'
 import { ButtonLink } from 'components/ButtonLink'
+import { ConnectWallet } from 'components/ConnectWallet'
+import React from 'react'
 import { MdOutlineDashboard } from 'react-icons/md'
-import { useBalance } from 'wagmi'
-import { useAuth } from 'contexts/AuthContext'
+import { useAccount, useBalance } from 'wagmi'
 
 function SideBarTop() {
-  const { user } = useAuth()
-  const [{ data, error, loading }, getCNVBalance] = useBalance({
-    addressOrName: user.address,
-    token: '0x000000007a58f5f58E697e51Ab0357BC9e260A04',
-  })
-
-  useEffect(() => {
-    console.log(`error:${error}`)
+  const [{ data: account }] = useAccount()
+  const [{ data }] = useBalance({
+    addressOrName: account?.address,
+    token: CNV[ChainId.ETHEREUM].address,
+    formatUnits: CNV[ChainId.ETHEREUM].decimals,
+    skip: !account?.address,
   })
 
   return (
@@ -32,24 +29,26 @@ function SideBarTop() {
 
       <Stack gap="1" align="flex-end" mt={7}>
         <ButtonLink
-          href="treasury"
+          href="/treasury"
           variant="primary.outline"
           size="medium"
           w="full"
           leftIcon={<MdOutlineDashboard size="20px" />}
         >
-          Dashboard
+          Treasury
         </ButtonLink>
-        <Box shadow="down" w="full" p={2} rounded="2xl">
+        <Box shadow="down" w="full" p={1} rounded="2xl">
           <ConnectWallet />
-          <Flex justifyContent="space-between" p={2} mt={2}>
-            <Text color="text.low" fontWeight="bold" fontSize="md" lineHeight="100%">
-              Your CNV Balance
-            </Text>
-            <Text color="text.low" fontWeight="bold" fontSize="md" lineHeight="100%">
-              {loading ? 0 : Number(data?.formatted).toFixed(2)} CNV
-            </Text>
-          </Flex>
+          {data?.formatted && (
+            <Flex justifyContent="space-between" p={2} mt={2}>
+              <Text color="text.low" fontWeight="bold" fontSize="md" lineHeight="100%">
+                Your CNV Balance
+              </Text>
+              <Text color="text.low" fontWeight="bold" fontSize="md" lineHeight="100%">
+                {(+data?.formatted).toFixed(2)} CNV
+              </Text>
+            </Flex>
+          )}
         </Box>
       </Stack>
     </Box>

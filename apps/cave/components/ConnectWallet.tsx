@@ -10,33 +10,45 @@ import {
   MenuList,
   gradientBorder,
   Modal,
+  Flex,
+  useDisclosure,
+  Spinner,
 } from '@concave/ui'
-import { useConnect } from 'wagmi'
-import { useAuth } from 'contexts/AuthContext'
+import { useAccount, useConnect } from 'wagmi'
 import { useIsMounted } from 'hooks/useIsMounted'
+import { useModals } from 'contexts/ModalsContext'
+import YourWalletModal from './YourWalletModal'
+import { useRecentTransactions } from 'hooks/useRecentTransactions'
+import { SpinIcon, SpinnerIcon } from '@concave/icons'
+import { spinAnimation } from './Treasury/Mobile/TreasuryManagementMobile'
 
-const miniAddress = (address) =>
-  `${address.substr(0, 6)}...${address.substr(address.length - 6, address.length)}`
+// const miniAddress = (address) =>
+//   `${address.substr(0, 6)}...${address.substr(address.length - 6, address.length)}`
+
+/** Transform a wallet address
+ *  {6first keys}{...}{4 keys}
+ */
+export function ellipseAddress(hash: string, length = 38): string {
+  if (!hash) {
+    return ''
+  }
+  return hash.replace(hash.substring(6, length), '...')
+}
 
 const DisconnectButton = () => {
-  const { signOut, user } = useAuth()
+  const [{ data: account }, disconnect] = useAccount()
 
   return (
     <Menu placement="right-start">
       <MenuButton as={Button} shadow="up" fontFamily="heading" size="medium" w="100%">
-        {miniAddress(user.address)}
+        {ellipseAddress(account.address)}
       </MenuButton>
       <Portal>
         <MenuList minW="min" bg="none" border="none" shadow="none" p="0" backdropFilter="blur(8px)">
-          <Card
-            variant="secondary"
-            borderGradient="secondary"
-            borderRadius="xl"
-            px={1}
-            py={2}
-            gap="1"
-          >
-            <MenuItem onClick={signOut}>Disconnect</MenuItem>
+          <Card variant="secondary" borderGradient="secondary" borderRadius="xl" px={1} py={2}>
+            <MenuItem borderRadius="lg" onClick={() => disconnect()}>
+              Disconnect
+            </MenuItem>
           </Card>
         </MenuList>
       </Portal>
@@ -45,7 +57,7 @@ const DisconnectButton = () => {
 }
 
 export const ConnectWalletModal = ({ isOpen, onClose }) => {
-  const [{ data }, connect] = useConnect()
+  const [{ data, loading }, connect] = useConnect()
   const isMounted = useIsMounted()
   return (
     <Modal
@@ -54,25 +66,35 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
       isOpen={isOpen}
       onClose={onClose}
       isCentered
+      preserveScrollBarGap
       motionPreset="slideInBottom"
-      bodyProps={{ alignItems: 'center', gap: 3, w: '100', maxW: '350px' }}
+      bodyProps={{ alignItems: 'center', gap: 3, w: '100%', maxW: '350px' }}
     >
       {isMounted &&
         data.connectors.map((connector) => {
           if (!connector.ready) return null
+          const itsConnect = connector.id === data?.connector?.id
           return (
             <Button
+              cursor={itsConnect ? 'default' : 'pointer'}
               w="100%"
-              shadow="Up Small"
-              _hover={{ shadow: 'Up Big' }}
-              _active={{ shadow: 'down' }}
-              _focus={{ shadow: 'Up Big' }}
+              shadow={itsConnect ? 'down' : 'Up Small'}
+              _hover={!itsConnect && { shadow: 'Up Big' }}
+              _active={!itsConnect && { shadow: 'down' }}
+              _focus={!itsConnect && { shadow: 'Up Big' }}
               size="large"
+              variant={itsConnect && 'primary.outline'}
               leftIcon={
-                <Image maxWidth="20px" src={`/assets/connectors/${connector.id}.png`} alt="" />
+                <Image
+                  w="20px"
+                  src={`/assets/connectors/${connector.name.toLowerCase().replace(' ', '-')}.png`}
+                  alt={connector.name}
+                />
               }
               key={connector.id}
-              onClick={() => connect(connector).then(onClose)}
+              onClick={() => {
+                if (!itsConnect) connect(connector).then(onClose)
+              }}
             >
               {connector.name}
             </Button>
@@ -81,94 +103,58 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
     </Modal>
   )
 }
-
+// commit
 const ConnectButton = () => {
-  const [{ data }, connect] = useConnect()
-  const { signIn } = useAuth()
-  const isMounted = useIsMounted()
-  return (
-    <>
-      <Menu placement="right-start" isLazy>
-        <MenuButton
-          as={Button}
-          sx={{ ...gradientBorder({ borderWidth: 2, borderRadius: '2xl' }) }}
-          fontFamily="heading"
-          variant="primary"
-          size="medium"
-          w="100%"
-        >
-          Connect Wallet
-        </MenuButton>
-        <Portal>
-          <MenuList
-            minW="min"
-            bg="none"
-            border="none"
-            shadow="none"
-            p="0"
-            backdropFilter="blur(8px)"
-          >
-            <Card
-              variant="secondary"
-              borderGradient="secondary"
-              borderRadius="xl"
-              px={1}
-              py={2}
-              gap="1"
-            >
-              {isMounted &&
-                data.connectors.map((connector) => {
-                  if (!connector.ready) return null
-                  // change image from using connector id to something else, injected can be metamask, coinbase, brave etc
-                  return (
-                    <MenuItem
-                      borderRadius="xl"
-                      icon={
-                        <Image
-                          maxWidth="20px"
-                          src={`/assets/connectors/${connector.id}.png`}
-                          alt=""
-                        />
-                      }
-                      key={connector.id}
-                      onClick={() => connect(connector).then(signIn)}
-                    >
-                      {connector.name}
-                    </MenuItem>
-                  )
-                })}
-            </Card>
-          </MenuList>
-        </Portal>
-      </Menu>
-    </>
-  )
-}
+  const { connectModal } = useModals()
 
-const SignInButton = () => {
-  const { signIn, isWaitingForSignature } = useAuth()
   return (
     <>
       <Button
+        sx={{ ...gradientBorder({ borderWidth: 2, borderRadius: '2xl' }) }}
+        fontFamily="heading"
         variant="primary"
         size="medium"
         w="100%"
-        sx={{ ...gradientBorder({ borderWidth: 2, borderRadius: '2xl' }) }}
-        onClick={signIn}
-        isLoading={isWaitingForSignature}
-        loadingText="Awaiting signature"
+        onClick={connectModal.onOpen}
       >
-        Sign In
+        Connect wallet
       </Button>
     </>
   )
 }
 
 export function ConnectWallet(): JSX.Element {
-  const { isSignedIn, isConnected } = useAuth()
+  const [{ data }] = useConnect()
 
-  if (isSignedIn) return <DisconnectButton />
+  const [{ data: account }] = useAccount()
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { data: recentTx, status, isLoading } = useRecentTransactions()
 
-  if (isConnected && !isSignedIn) return <SignInButton />
+  if (data.connected)
+    return (
+      <>
+        <Button
+          onClick={onOpen}
+          height="40px"
+          shadow="up"
+          fontFamily="heading"
+          w="100%"
+          rounded={'2xl'}
+          _focus={{}}
+        >
+          <Flex textColor={'text.low'} fontWeight="bold" mx={'auto'}>
+            {ellipseAddress(account?.address)}
+          </Flex>
+          {isLoading && (
+            <Flex position={'absolute'} width="80%" justify={'end'}>
+              <SpinnerIcon color={'text.low'} animation={spinAnimation(4)} boxSize={'20px'} />
+            </Flex>
+          )}
+        </Button>
+        <YourWalletModal onClose={onClose} isOpen={isOpen} />
+      </>
+    )
+
+  // if (isConnected && !isSignedIn) return
   return <ConnectButton />
 }

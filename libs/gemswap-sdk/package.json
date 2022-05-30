@@ -1,0 +1,37 @@
+{
+  "name": "@concave/gemswap-sdk",
+  "version": "0.0.0",
+  "description": "Concave Gemswap library",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "dist/**"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm,cjs --dts",
+    "dev": "tsup src/index.ts --format esm,cjs --watch --dts",
+    "test": "tsdx test --passWithNoTests"
+  },
+  "dependencies": {
+    "@ethersproject/address": "^5.4.0",
+    "@ethersproject/bignumber": "^5.6.1",
+    "@ethersproject/contracts": "^5.6.1",
+    "@ethersproject/providers": "^5.6.6",
+    "@ethersproject/solidity": "^5.4.0",
+    "@ethersproject/wallet": "^5.6.1",
+    "big.js": "^6.1.1",
+    "decimal.js-light": "^2.5.0",
+    "jsbi": "^4.2.0",
+    "prettier": "^2.6.2",
+    "tiny-invariant": "^1.1.0",
+    "tiny-warning": "^1.0.0",
+    "toformat": "^2.0.0"
+  },
+  "devDependencies": {
+    "@types/big.js": "^6.1.0",
+    "tsdx": "^0.14.1"
+  }
+}

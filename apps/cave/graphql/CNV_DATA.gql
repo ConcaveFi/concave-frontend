@@ -1,0 +1,31 @@
+query GET_AMM_CNV_PRICE {
+  cnvData {
+    data {
+      last
+      ticker
+    }
+  }
+}
+
+query GET_AMM_CNV_INFOS {
+  cnvData {
+    data {
+      last
+      marketCap
+      totalSupply
+      circulatingSupply
+    }
+  }
+}
+query GET_CNV_DATA {
+  cnvData {
+    data {
+      last
+      ticker
+    }
+  }
+  logCnvData(limit: 7, order_by: { created_at: desc }) {
+    last
+    updated_at
+  }
+}

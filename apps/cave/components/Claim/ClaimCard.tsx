@@ -1,11 +1,10 @@
 import { Button, Card, Stack } from '@concave/ui'
-import { useAuth } from 'contexts/AuthContext'
 import { useEffect, useState } from 'react'
-import { useContractWrite } from 'wagmi'
+import { useAccount, useContractWrite } from 'wagmi'
 import { aCNVredeemabi } from 'lib/contractoABI'
 
 export function ClaimCard() {
-  const { user } = useAuth()
+  const [{ data: account }] = useAccount()
   // const [{ data, error, loading }, getaCNVBalance] = useBalance({
   //   addressOrName: user.address,
   //   token: '0x2A6bb78490c2221E0D36d931192296BE4b3A01F1', // INSERT aCNV ADDRESS
@@ -18,16 +17,11 @@ export function ClaimCard() {
     },
     'redeem',
     {
-      args: [user.address],
+      args: [account.address],
     },
   )
-  const [redeemText, setRedeemText] = useState('Redeem aCNV')
+  const [redeemText, setRedeemText] = useState('aCNV')
   const [redeeming, setRedeeming] = useState(false)
-
-  useEffect(() => {
-    console.log(`data:${data}`)
-    console.log(`error:${error}`)
-  }, [data, error])
 
   const redeemAncv = () => {
     setRedeeming(loading ? true : false)
