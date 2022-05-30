@@ -9,20 +9,24 @@ interface RedeemCardViewerProps {
 }
 const RedeemContainer = (props: RedeemCardViewerProps) => {
   const { deposit, rewardDebt, userReward } = props.nonFungibleTokenInfo
+
+  const CurValue = userReward[3]
+  const Initial = userReward[0]
+  const Gained= CurValue - Initial 
   return (
     <Flex height={'127px'} width="358px" direction="column">
       <Flex height={'70px'} maxH="70px" align={'center'}>
         <VStack spacing={0} justify="center" flex={1}>
           <LowText>Current value</LowText>
-          <HighText>{utils.formatEther(userReward[3])} CNV</HighText>
+          <HighText>{truncateNumber( +CurValue.toString())} CNV</HighText>
         </VStack>
         <VStack justify={'center'} spacing={0} flex={1}>
           <LowText>Gained</LowText>
-          <HighText>{utils.formatEther(userReward[0].sub(userReward[3]))} CNV</HighText>
+          <HighText>{ truncateNumber(+Gained)} CNV</HighText>
         </VStack>
         <VStack justify={'center'} spacing={0} flex={1}>
           <LowText>Initial</LowText>
-          <HighText>{utils.formatEther(userReward[0])}CNV</HighText>
+          <HighText>{truncateNumber( +Initial.toString())} CNV</HighText>
         </VStack>
       </Flex>
       <RedeemButton />
