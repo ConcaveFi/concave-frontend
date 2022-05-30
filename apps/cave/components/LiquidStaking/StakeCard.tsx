@@ -141,18 +141,40 @@ function StakeCard(props: StackCardProps) {
     data: logStakingPoolRewards,
     isLoading: isLoadingVAPR,
     isSuccess: isSuccessVAPR,
+    isError: isErrorVAPR,
   } = useGet_All_Total_Pools_VaprQuery()
-  const bondVaprPool = `bondVaprPool${props.poolId}`
+  let baseEmissions,
+    bondEmissions,
+    totalVAPR,
+    bondEmissionsFormatted,
+    baseEmissionsFormatted,
+    totalVAPRFormatted
 
-  const baseEmissions = logStakingPoolRewards?.rebaseStakingV1[0][bondVaprPool] * 100
-  const bondEmissions =
-    logStakingPoolRewards?.logStakingV1_PoolRewarded.find((o) => o.poolID === poolId).base_vAPR *
-    100
-  const totalVAPR = baseEmissions + bondEmissions
+  // const vapr_useget = useGet_All_Total_Pools_VaprQuery()
+  // console.log('vapr useget', vapr_useget)
 
-  const bondEmissionsFormatted = bondEmissions?.toFixed(2) + '%'
-  const baseEmissionsFormatted = baseEmissions?.toFixed(2) + '%'
-  const totalVAPRFormatted = totalVAPR?.toFixed(2) + '%'
+  if (
+    !isLoadingVAPR &&
+    !isErrorVAPR &&
+    isSuccessVAPR &&
+    logStakingPoolRewards?.rebaseStakingV1.length
+  ) {
+    const bondVaprPool = `bondVaprPool${props.poolId}`
+    baseEmissions = logStakingPoolRewards?.rebaseStakingV1[0][bondVaprPool] * 100
+    bondEmissions =
+      logStakingPoolRewards?.logStakingV1_PoolRewarded.find((o) => o.poolID === poolId).base_vAPR *
+      100
+    totalVAPR = baseEmissions + bondEmissions
+
+    bondEmissionsFormatted = bondEmissions?.toFixed(2) + '%'
+    baseEmissionsFormatted = baseEmissions?.toFixed(2) + '%'
+    totalVAPRFormatted = totalVAPR?.toFixed(2) + '%'
+  } else {
+    const soonTM = <>Soon&trade;</>
+    totalVAPRFormatted = soonTM
+    baseEmissionsFormatted = soonTM
+    bondEmissionsFormatted = soonTM
+  }
 
   const mobileUI = useBreakpointValue({ base: true, xl: false })
 
@@ -189,7 +211,7 @@ function StakeCard(props: StackCardProps) {
             {vaprText}
           </Text>
           <Text fontSize={{ base: 'md', md: 'lg' }} fontWeight="bold">
-            {isLoadingVAPR ? 'Calculating...' : totalVAPRFormatted}
+            {isLoadingVAPR && !isErrorVAPR ? 'Calculating...' : totalVAPRFormatted}
           </Text>
         </Box>
 
@@ -285,10 +307,10 @@ function StakeCard(props: StackCardProps) {
             <Emissions
               period={props.period}
               // vaprText={!isErrorVAPR ? vaprText : 'Error Loading vAPR'}
-              totalVAPR={isLoadingVAPR ? 'Calculating...' : totalVAPRFormatted}
+              totalVAPR={isLoadingVAPR && !isErrorVAPR ? 'Calculating...' : totalVAPRFormatted}
               icon={props.icon}
-              baseVAPR={isLoadingVAPR ? 'Calculating...' : baseEmissionsFormatted}
-              vapr={isLoadingVAPR ? 'Calculating...' : bondEmissionsFormatted}
+              baseVAPR={isLoadingVAPR && !isErrorVAPR ? 'Calculating...' : baseEmissionsFormatted}
+              vapr={isLoadingVAPR && !isErrorVAPR ? 'Calculating...' : bondEmissionsFormatted}
               onToggle={onToggleFloatingCards}
               onShow={onOpenFloatingCards}
               onDisable={onCloseFloatingCards}
