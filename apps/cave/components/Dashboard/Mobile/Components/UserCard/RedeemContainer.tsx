@@ -1,26 +1,28 @@
 import { Button, ButtonProps, Flex, Text, TextProps, VStack } from '@concave/ui'
-import { BigNumber } from 'ethers'
+import { BigNumber, utils } from 'ethers'
+import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungibleToken'
 import { formatFixed } from 'utils/formatFixed'
+import { truncateNumber } from 'utils/truncateNumber'
 
 interface RedeemCardViewerProps {
-  deposit: BigNumber
-  rewardDebt: BigNumber
+  nonFungibleTokenInfo: NonFungibleTokenInfo
 }
 const RedeemContainer = (props: RedeemCardViewerProps) => {
-  const { deposit, rewardDebt } = props
+  const { deposit, rewardDebt, userReward } = props.nonFungibleTokenInfo
   return (
     <Flex height={'127px'} width="358px" direction="column">
       <Flex height={'70px'} maxH="70px" align={'center'}>
         <VStack spacing={0} justify="center" flex={1}>
           <LowText>Current value</LowText>
-          <HighText>{formatFixed(deposit.add(rewardDebt), { places: 2 })} CNV</HighText>
+          <HighText>{utils.formatEther(userReward[3])} CNV</HighText>
         </VStack>
         <VStack justify={'center'} spacing={0} flex={1}>
           <LowText>Gained</LowText>
-          <HighText>{formatFixed(rewardDebt, { places: 2 })} CNV</HighText>
+          <HighText>{utils.formatEther(userReward[0].sub(userReward[3]))} CNV</HighText>
         </VStack>
         <VStack justify={'center'} spacing={0} flex={1}>
-          <HighText>{formatFixed(deposit, { places: 4 })}CNV</HighText>
+          <LowText>Initial</LowText>
+          <HighText>{utils.formatEther(userReward[0])}CNV</HighText>
         </VStack>
       </Flex>
       <RedeemButton />

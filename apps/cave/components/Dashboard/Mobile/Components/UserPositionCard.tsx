@@ -29,7 +29,7 @@ const UserPositionCardMobile = (props: NftPositionCardMobileProps) => {
             bgSize={'30% 30%'}
           >
             <NftPositionViewer redeemIn={maturity} stakeType={poolID} />
-            <RedeemContainer rewardDebt={rewardDebt} deposit={deposit} />
+            <RedeemContainer nonFungibleTokenInfo={nonFungibleTokenInfo} />
             <MarketPlaceListingMobile />
             <Flex
               direction={'column'}
