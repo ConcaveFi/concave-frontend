@@ -15,13 +15,6 @@ export default function RedeemMobileCard() {
     tokenAddress: CNV.address,
     tokenChainId: CNV.chainId,
   })
-
-  const { isOpen: isConfirmOpen, onOpen: onOpenConfirm, onClose: onCloseConfirm } = useDisclosure()
-  const { isOpen: isSubOpen, onOpen: onOpenSub, onClose: onCloseSub } = useDisclosure()
-  const { isOpen: isErrorOpen, onOpen: onOpenError, onClose: onCloseError } = useDisclosure()
-  const [tx, setTx] = useState()
-  const [error, setError] = useState('')
-
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [description, setDescription] = useState("This feature it's not done yet.")
   const [title, setTitle] = useState('Coming soon')
@@ -50,11 +43,7 @@ export default function RedeemMobileCard() {
       </Text>
       <Flex direction="column" gap={3} my={6}>
         <RedeemButton onClick={onOpenRedeemACNV} title="aCNV" />
-        <ACVNRedemptionDialog
-          isOpen={onRedeemACNV}
-          onClose={onCloseRedeemACNV}
-          onRedeem={onOpenConfirm}
-        />
+        <ACVNRedemptionDialog isOpen={onRedeemACNV} onClose={onCloseRedeemACNV} />
 
         <RedeemButton
           onClick={() => {
@@ -83,13 +72,6 @@ export default function RedeemMobileCard() {
       >
         Add CNV to your {data?.connector?.name}
       </Text>
-      <WaitingConfirmationDialog isOpen={isConfirmOpen} />
-      <TransactionSubmittedDialog isOpen={isSubOpen} closeParentComponent={onCloseSub} tx={tx} />
-      <TransactionErrorDialog
-        error={error}
-        isOpen={isErrorOpen}
-        closeParentComponent={onCloseError}
-      />
       <ComingSoonDialog title={title} desc={description} isOpen={isOpen} onClose={onClose} />
     </GlassPanel>
   )
