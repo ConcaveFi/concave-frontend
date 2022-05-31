@@ -6,7 +6,6 @@ import { RedeemBBT_CNV_Abi } from 'contracts/VestedTokens/RedeemBbtCNVAbi'
 import { Contract, Transaction, utils } from 'ethers'
 import { concaveProvider as provider } from 'lib/providers'
 import { useState } from 'react'
-import { truncateNumber } from 'utils/truncateNumber'
 import { useAccount, useSigner } from 'wagmi'
 import useBBTCNVRedeemable from '../Hooks/useBBTCNVRedeemable'
 import useVestedTokens from '../Hooks/useVestedTokens'
@@ -29,21 +28,19 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
   const { data: redeemableData, isLoading } = useBBTCNVRedeemable()
   const { bbtCNVData } = useVestedTokens({ chainId: 4 })
 
-  const balance = +bbtCNVData?.formatted
+  const balance = +bbtCNVData?.formatted || 0
   const redeemable = !isLoading && +utils.formatEther(redeemableData?.redeemable)
   const redeemed = !isLoading && +utils.formatEther(redeemableData?.redeemed)
 
   // booleans
-  const nothingToRedeem = redeemable === 0 || redeemable === balance
   const insufficientFounds = balance === 0
+  const nothingToRedeem = (redeemable === 0 || redeemable === balance) && !insufficientFounds
   const validValue = !insufficientFounds && !nothingToRedeem
 
-  // It's only working on rinkeby for now, it's necessary make it on mainnet too
-  // provider(4) it's for rinkeby network.
   const bbtCNVContract = new Contract(
-    '0xbFe30e2445445147893af7A4757F9eDBca5b91e7',
+    '0x16F9746C0ADAAD0086b51A1a5221298E5254D906',
     RedeemBBT_CNV_Abi,
-    provider(4),
+    provider(1),
   )
   return (
     <>
@@ -92,7 +89,7 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
 
           <Button
             onClick={() => {
-              // if (!validValue) return
+              if (!validValue) return
               onOpenConfirm()
               bbtCNVContract
                 .connect(signer)
@@ -104,12 +101,12 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
                 })
                 .catch((e) => {
                   console.log(e)
-
                   setError('Transaction rejected')
                   onOpenError()
                   onCloseConfirm()
                 })
             }}
+            cursor={!validValue && 'default'}
             shadow={validValue ? 'Up Small' : 'down'}
             fontSize={'20'}
             height={'55px'}
