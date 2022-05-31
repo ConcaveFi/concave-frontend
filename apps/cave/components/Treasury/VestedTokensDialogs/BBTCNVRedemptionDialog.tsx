@@ -125,7 +125,7 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
             {wallet?.connected ? (
               <Text>
                 {nothingToRedeem && 'Nothing To Redeem'}
-                {insufficientFounds && 'Insufficient Founds'}
+                {insufficientFounds && 'Insufficient Funds'}
                 {validValue && 'Redeem'}
               </Text>
             ) : (
