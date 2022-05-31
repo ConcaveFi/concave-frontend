@@ -29,8 +29,8 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
   const { bbtCNVData } = useVestedTokens({ chainId: 4 })
 
   const balance = +bbtCNVData?.formatted || 0
-  const redeemable = !isLoading && +utils.formatEther(redeemableData?.redeemable)
-  const redeemed = !isLoading && +utils.formatEther(redeemableData?.redeemed)
+  const redeemable = (!isLoading && +utils.formatEther(redeemableData?.redeemable)) || 0
+  const redeemed = (!isLoading && +utils.formatEther(redeemableData?.redeemed)) || 0
 
   // booleans
   const insufficientFounds = balance === 0
@@ -74,14 +74,14 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
             <Flex width={'full'} justify="space-between" fontWeight={'bold'}>
               <Text textColor={'text.low'}>Redeemable:</Text>
               <Text textColor={'text.accent'}>
-                {!isLoading && '$' + redeemable.toFixed(8)}
+                {!isLoading && '$' + redeemable}
                 {isLoading && 'Loading...'}
               </Text>
             </Flex>
             <Flex width={'full'} justify="space-between" fontWeight={'bold'}>
               <Text textColor={'text.low'}>Redeemed:</Text>
               <Text textColor={'text.accent'}>
-                {!isLoading && '$' + redeemed.toFixed(8)}
+                {!isLoading && '$' + redeemed}
                 {isLoading && 'Loading...'}
               </Text>
             </Flex>
@@ -119,9 +119,15 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
             _hover={validValue && { shadow: 'up' }}
             _focus={{}}
           >
-            {nothingToRedeem && 'Nothing To Redeem'}
-            {insufficientFounds && 'Insufficient Founds'}
-            {validValue && 'Redeem'}
+            {isLoading ? (
+              'Loading...'
+            ) : (
+              <Text>
+                {nothingToRedeem && 'Nothing To Redeem'}
+                {insufficientFounds && 'Insufficient Founds'}
+                {validValue && 'Redeem'}
+              </Text>
+            )}
           </Button>
         </Card>
       </Modal>
