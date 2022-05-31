@@ -14,7 +14,8 @@ const UserPositionCardMobile = (props: NftPositionCardMobileProps) => {
   const { maturity, poolID, deposit, rewardDebt } = nonFungibleTokenInfo
 
   return (
-    <Card maxWidth={'358px'} variant="secondary" height={'660px'}>
+    // Default height: 660px
+    <Card maxWidth={'358px'} variant="secondary" height={'510px'}>
       <Flex direction={'column'} bg={'#31293011'} width="full" flex={1}>
         <Flex
           bg={'linear-gradient(223.18deg, #19394C 27.18%, #0A161F 96.11%)'}
@@ -39,7 +40,7 @@ const UserPositionCardMobile = (props: NftPositionCardMobileProps) => {
               justify={'end'}
               zIndex={-1}
             >
-              <StakingRewardMobile position="relative" />
+              {/* <StakingRewardMobile position="relative" /> */}
             </Flex>
           </Flex>
         </Flex>
