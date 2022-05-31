@@ -38,7 +38,7 @@ export default function ACVNRedemptionDialog(props: ACVNRedemptionDialogProps) {
   const [tx, setTx] = useState<Transaction>()
   const [error, setError] = useState('')
 
-  // const validBalance = +aCNVData?.formatted > 0
+  const validBalance = +aCNVData?.formatted > 0
 
   function redeem() {
     onOpenConfirm()
@@ -88,15 +88,21 @@ export default function ACVNRedemptionDialog(props: ACVNRedemptionDialogProps) {
           </Flex>
           <Button
             onClick={() => {
-              if (!aCNVData) return
+              if (!validBalance) return
               redeem()
             }}
             py={2}
             fontSize="22"
             variant={'primary.outline'}
             width="210px"
+            shadow={'Up Small'}
+            textColor={!validBalance && 'text.low'}
+            _hover={validBalance && { shadow: 'up' }}
+            cursor={!validBalance && 'default'}
+            _active={{}}
+            _focus={{}}
           >
-            Redeem
+            {!validBalance ? 'Insufficient balance' : 'Redeem'}
           </Button>
         </Card>
       </Modal>
