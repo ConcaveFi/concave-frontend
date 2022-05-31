@@ -1,7 +1,7 @@
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useAccount, useBalance } from 'wagmi'
 
-export default function useVestedTokens({ chainId }: { chainId: number }) {
+export default function useVestedTokens() {
   const networkId = useCurrentSupportedNetworkId()
   const [{ data: account }] = useAccount()
   const [{ data: bbtCNVData }] = useBalance({

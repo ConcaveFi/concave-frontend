@@ -1,4 +1,5 @@
-import { Modal, Card, Text, Flex, Button, useDisclosure } from '@concave/ui'
+import { SpinIcon, SpinnerIcon } from '@concave/icons'
+import { Modal, Card, Text, Flex, Button, useDisclosure, Spinner } from '@concave/ui'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
@@ -7,7 +8,10 @@ import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId
 import { aCNVredeemabi } from 'lib/contractoABI'
 import { concaveProvider as provider } from 'lib/providers'
 import { useState } from 'react'
+import { truncateNumber } from 'utils/truncateNumber'
 import { useAccount, useSigner } from 'wagmi'
+import useVestedTokens from '../Hooks/useVestedTokens'
+import { spinAnimation } from '../Mobile/TreasuryManagementMobile'
 
 interface ACVNRedemptionDialogProps {
   onClose: () => void
@@ -29,8 +33,12 @@ export default function ACVNRedemptionDialog(props: ACVNRedemptionDialogProps) {
     provider(networkdId),
   )
 
+  const { aCNVData } = useVestedTokens()
+
   const [tx, setTx] = useState<Transaction>()
   const [error, setError] = useState('')
+
+  // const validBalance = +aCNVData?.formatted > 0
 
   function redeem() {
     onOpenConfirm()
@@ -74,10 +82,20 @@ export default function ACVNRedemptionDialog(props: ACVNRedemptionDialogProps) {
               Current balance:
             </Text>
             <Text textColor={'text.low'} fontWeight="bold" fontSize={'18'}>
-              $0,450.00
+              {aCNVData && '$' + truncateNumber(+aCNVData?.formatted)}
+              {!aCNVData && 'loading...'}
             </Text>
           </Flex>
-          <Button onClick={redeem} py={2} fontSize="22" variant={'primary.outline'} width="210px">
+          <Button
+            onClick={() => {
+              if (!aCNVData) return
+              redeem()
+            }}
+            py={2}
+            fontSize="22"
+            variant={'primary.outline'}
+            width="210px"
+          >
             Redeem
           </Button>
         </Card>
