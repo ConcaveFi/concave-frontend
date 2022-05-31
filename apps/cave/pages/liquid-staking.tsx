@@ -52,7 +52,7 @@ function LiquidStaking() {
       direction={'column'}
       p="0px"
     >
-      <Heading as="h1" mt={8} fontSize={{ base: '4xl', sm: '5xl' }}>
+      <Heading as="h1" mt={{ base: 12, md: 8 }} fontSize={{ base: '4xl', sm: '5xl' }}>
         Liquid Staking
       </Heading>
       <Flex
