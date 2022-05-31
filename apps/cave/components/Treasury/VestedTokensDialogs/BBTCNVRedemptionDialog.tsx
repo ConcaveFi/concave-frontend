@@ -26,7 +26,7 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
   const [error, setError] = useState('')
 
   const { data: redeemableData, isLoading } = useBBTCNVRedeemable()
-  const { bbtCNVData } = useVestedTokens({ chainId: 4 })
+  const { bbtCNVData } = useVestedTokens()
 
   const balance = +bbtCNVData?.formatted || 0
   const redeemable = (redeemableData && +utils.formatEther(redeemableData?.redeemable)) || 0

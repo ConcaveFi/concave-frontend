@@ -8,6 +8,7 @@ import { aCNVredeemabi } from 'lib/contractoABI'
 import { concaveProvider as provider } from 'lib/providers'
 import { useState } from 'react'
 import { useAccount, useSigner } from 'wagmi'
+import useVestedTokens from '../Hooks/useVestedTokens'
 
 interface ACVNRedemptionDialogProps {
   onClose: () => void
@@ -28,6 +29,8 @@ export default function ACVNRedemptionDialog(props: ACVNRedemptionDialogProps) {
     aCNVredeemabi,
     provider(networkdId),
   )
+
+  const { aCNVData } = useVestedTokens()
 
   const [tx, setTx] = useState<Transaction>()
   const [error, setError] = useState('')
