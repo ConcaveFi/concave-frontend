@@ -6,7 +6,7 @@ import { RedeemBBT_CNV_Abi } from 'contracts/VestedTokens/RedeemBbtCNVAbi'
 import { Contract, Transaction, utils } from 'ethers'
 import { concaveProvider as provider } from 'lib/providers'
 import { useState } from 'react'
-import { useAccount, useSigner } from 'wagmi'
+import { useAccount, useConnect, useSigner } from 'wagmi'
 import useBBTCNVRedeemable from '../Hooks/useBBTCNVRedeemable'
 import useVestedTokens from '../Hooks/useVestedTokens'
 interface BBBTCNVRedemptionDialogProps {
@@ -21,6 +21,7 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
   const { onClose, isOpen } = props
   const [{ data: signer }] = useSigner()
   const [{ data: account }] = useAccount()
+  const [{ data: wallet }] = useConnect()
 
   const [tx, setTx] = useState<Transaction>()
   const [error, setError] = useState('')
@@ -119,9 +120,15 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
             _hover={validValue && { shadow: 'up' }}
             _focus={{}}
           >
-            {nothingToRedeem && 'Nothing To Redeem'}
-            {insufficientFounds && 'Insufficient Founds'}
-            {validValue && 'Redeem'}
+            {wallet?.connected ? (
+              <Text>
+                {nothingToRedeem && 'Nothing To Redeem'}
+                {insufficientFounds && 'Insufficient Founds'}
+                {validValue && 'Redeem'}
+              </Text>
+            ) : (
+              'Not Connected'
+            )}
           </Button>
         </Card>
       </Modal>
