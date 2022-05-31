@@ -17,10 +17,14 @@ export default function useBBTCNVRedeemable() {
   )
   const { data, isLoading } = useQuery(
     ['bbtRedeemable'],
-    async () => bbtCNVContract.redeemable(account?.address),
-    {
-      enabled: !!account?.address,
+    async () => {
+      try {
+        return await bbtCNVContract.redeemable('0x43F991Ea47DEd5A9E4bF394009c8b5f10D3647Bd')
+      } catch (e) {
+        return 0
+      }
     },
+    {},
   )
   return {
     data,
