@@ -59,7 +59,7 @@ export default function RedeemMobileCard() {
         />
 
         <RedeemButton onClick={onOpenRedeemBBTCNV} title="bbtCNV" />
-        <BBBTCNVRedemptionDialog isOpen={onRedeemBBTCNV} onClose={onCloseRedeemACNV} />
+        <BBBTCNVRedemptionDialog isOpen={onRedeemBBTCNV} onClose={onCloseRedeemBBTCNV} />
       </Flex>
       <Text
         fontWeight={'bold'}
