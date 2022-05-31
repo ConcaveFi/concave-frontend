@@ -3,7 +3,7 @@ import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { RedeemBBT_CNV_Abi } from 'contracts/VestedTokens/RedeemBbtCNVAbi'
-import { BigNumber, Contract, ethers, Transaction, utils } from 'ethers'
+import { Contract, Transaction, utils } from 'ethers'
 import { concaveProvider as provider } from 'lib/providers'
 import { useState } from 'react'
 import { truncateNumber } from 'utils/truncateNumber'
@@ -23,7 +23,6 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
   const [{ data: signer }] = useSigner()
   const [{ data: account }] = useAccount()
 
-  const [value, setValue] = useState<number>()
   const [tx, setTx] = useState<Transaction>()
   const [error, setError] = useState('')
 
@@ -46,8 +45,6 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
     RedeemBBT_CNV_Abi,
     provider(4),
   )
-  console.log()
-
   return (
     <>
       <Modal
@@ -113,7 +110,7 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
                   onCloseConfirm()
                 })
             }}
-            shadow={validValue ? 'up' : 'down'}
+            shadow={validValue ? 'Up Small' : 'down'}
             fontSize={'20'}
             height={'55px'}
             width="270px"
@@ -122,10 +119,12 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
             my={4}
             textColor={!validValue && 'text.low'}
             _active={validValue && { transform: 'scale(0.9)' }}
-            _hover={{}}
+            _hover={validValue && { shadow: 'up' }}
             _focus={{}}
           >
-            Redeem
+            {nothingToRedeem && 'Nothing To Redeem'}
+            {insufficientFounds && 'Insufficient Founds'}
+            {validValue && 'Redeem'}
           </Button>
         </Card>
       </Modal>
