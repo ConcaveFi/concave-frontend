@@ -9,7 +9,7 @@ import { aCNVredeemabi } from 'lib/contractoABI'
 import { concaveProvider as provider } from 'lib/providers'
 import { useState } from 'react'
 import { truncateNumber } from 'utils/truncateNumber'
-import { useAccount, useSigner } from 'wagmi'
+import { useAccount, useConnect, useSigner } from 'wagmi'
 import useVestedTokens from '../Hooks/useVestedTokens'
 import { spinAnimation } from '../Mobile/TreasuryManagementMobile'
 
@@ -26,6 +26,7 @@ export default function ACVNRedemptionDialog(props: ACVNRedemptionDialogProps) {
 
   const [{ data: signer }] = useSigner()
   const [{ data: account }] = useAccount()
+  const [{ data: wallet }] = useConnect()
   const networkdId = useCurrentSupportedNetworkId()
   const aCNVContract = new Contract(
     '0x38baBedCb1f226B49b2089DA0b84e52b6181Ca59',
@@ -102,7 +103,11 @@ export default function ACVNRedemptionDialog(props: ACVNRedemptionDialogProps) {
             _active={{}}
             _focus={{}}
           >
-            {!validBalance ? 'Insufficient balance' : 'Redeem'}
+            {wallet?.connected
+              ? !validBalance
+                ? 'Insufficient balance'
+                : 'Redeem'
+              : 'Not Connected'}
           </Button>
         </Card>
       </Modal>
