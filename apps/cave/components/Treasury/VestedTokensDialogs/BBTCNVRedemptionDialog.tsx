@@ -74,14 +74,14 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
             <Flex width={'full'} justify="space-between" fontWeight={'bold'}>
               <Text textColor={'text.low'}>Redeemable:</Text>
               <Text textColor={'text.accent'}>
-                {!isLoading && '$' + redeemable}
+                {!isLoading && '$' + redeemable.toFixed(4)}
                 {isLoading && 'Loading...'}
               </Text>
             </Flex>
             <Flex width={'full'} justify="space-between" fontWeight={'bold'}>
               <Text textColor={'text.low'}>Redeemed:</Text>
               <Text textColor={'text.accent'}>
-                {!isLoading && '$' + redeemed}
+                {!isLoading && '$' + redeemed.toFixed(4)}
                 {isLoading && 'Loading...'}
               </Text>
             </Flex>
