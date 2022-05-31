@@ -1,4 +1,5 @@
 import { Button, ButtonProps, Flex, Text, TextProps, VStack } from '@concave/ui'
+import { formatDistance, formatDistanceToNow, formatDistanceToNowStrict } from 'date-fns'
 import { BigNumber, utils } from 'ethers'
 import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungibleToken'
 import { formatFixed } from 'utils/formatFixed'
@@ -8,11 +9,12 @@ interface RedeemCardViewerProps {
   nonFungibleTokenInfo: NonFungibleTokenInfo
 }
 const RedeemContainer = (props: RedeemCardViewerProps) => {
-  const { deposit, rewardDebt, userReward } = props.nonFungibleTokenInfo
+  const { deposit, rewardDebt, userReward, maturity } = props.nonFungibleTokenInfo
 
   const curValue = +userReward[3].toString()
   const initialBal = +userReward[0].toString()
   const gainedAmt = curValue - initialBal
+
   return (
     <Flex height={'127px'} width="358px" direction="column">
       <Flex height={'70px'} maxH="70px" align={'center'}>
@@ -29,26 +31,32 @@ const RedeemContainer = (props: RedeemCardViewerProps) => {
           <HighText>{truncateNumber(+initialBal.toString())} CNV</HighText>
         </VStack>
       </Flex>
-      <RedeemButton />
+      <RedeemButton active={maturity >= new Date().getTime()} />
     </Flex>
   )
 }
 
 export default RedeemContainer
 
-const RedeemButton: React.FC<ButtonProps> = ({ ...props }, onClick?: () => void) => {
+const RedeemButton = ({ onClick, active }: { onClick?: () => void; active: boolean }) => {
   return (
     <Button
-      variant={'primary.outline'}
+      onClick={onClick}
+      variant={active ? 'primary' : 'primary.outline'}
       rounded={'2xl'}
       height="48px"
       mx={10}
       _hover={{}}
+      _active={active && { transform: 'scale(0.92)' }}
       _focus={{}}
       shadow="Down Big"
-      {...props}
+      cursor={active ? 'pointer' : 'default'}
     >
-      <LowText fontSize={'20px'}>Not Redeemable</LowText>
+      {active ? (
+        <HighText fontSize={'20px'}>Redeem</HighText>
+      ) : (
+        <LowText fontSize={'20px'}>Not Redeemable</LowText>
+      )}
     </Button>
   )
 }
