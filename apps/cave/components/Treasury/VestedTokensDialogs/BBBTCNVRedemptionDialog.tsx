@@ -38,7 +38,7 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
   // It's only working on rinkeby for now, it's necessary make it on mainnet too
   // provider(4) it's for rinkeby network.
   const bbtCNVContract = new Contract(
-    '0x1e61c955e49e4Ba3020a316739A3472BA07F1964',
+    '0x7EbDe370e724F536C198B3013a25d9BFE5462e0B',
     RedeemBBT_CNV_Abi,
     provider(4),
   )
