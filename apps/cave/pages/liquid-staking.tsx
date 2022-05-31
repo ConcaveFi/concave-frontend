@@ -1,12 +1,6 @@
-import { Box, Card, Flex, Heading, Text, useMediaQuery } from '@concave/ui'
+import { Flex, Heading, Text } from '@concave/ui'
 import StakeCard from 'components/LiquidStaking/StakeCard'
 import GraphicGuide from 'components/LiquidStaking/GraphicGuide'
-import { useEffect, useState } from 'react'
-import {
-  useGet_Last_Poolid_VaprQuery,
-  useGet_Stakingv1_Last100_LockQuery,
-} from 'graphql/generated/graphql'
-import { formatEther } from 'ethers/lib/utils'
 import LiquidLocksCards from 'components/LiquidStaking/LiquidLocksCards'
 import { withPageTransition } from 'components/PageTransition'
 
