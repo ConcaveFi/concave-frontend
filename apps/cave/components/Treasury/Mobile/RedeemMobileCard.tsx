@@ -7,6 +7,7 @@ import { GlassPanel } from '../TreasuryManagementCard'
 import { ComingSoonDialog } from 'components/ComingSoonDialog'
 import ACVNRedemptionDialog from '../VestedTokensDialogs/ACVNRedemptionDialog'
 import { bbtCNV_ADDRESS } from '../Hooks/useVestedTokens'
+import BBBTCNVRedemptionDialog from '../VestedTokensDialogs/BBBTCNVRedemptionDialog'
 
 export default function RedeemMobileCard() {
   const { loading: loadingtoWallet, addingToWallet }: injectedTokenResponse = useAddTokenToWallet({
@@ -19,7 +20,11 @@ export default function RedeemMobileCard() {
   const [title, setTitle] = useState('Coming soon')
 
   const [{ data }] = useConnect()
-
+  const {
+    isOpen: onRedeemBBTCNV,
+    onOpen: onOpenRedeemBBTCNV,
+    onClose: onCloseRedeemBBTCNV,
+  } = useDisclosure()
   const {
     isOpen: onRedeemACNV,
     onOpen: onOpenRedeemACNV,
@@ -53,14 +58,8 @@ export default function RedeemMobileCard() {
           title="pCNV"
         />
 
-        <RedeemButton
-          onClick={() => {
-            onOpen()
-            setTitle('bbtCNV Loading')
-            setDescription('bbtCNV is on its way up and out of the mines, are you ready anon?')
-          }}
-          title="bbtCNV"
-        />
+        <RedeemButton onClick={onOpenRedeemBBTCNV} title="bbtCNV" />
+        <BBBTCNVRedemptionDialog isOpen={onRedeemBBTCNV} onClose={onCloseRedeemACNV} />
       </Flex>
       <Text
         fontWeight={'bold'}

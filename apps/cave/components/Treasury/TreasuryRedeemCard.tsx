@@ -11,6 +11,7 @@ import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import ACVNRedemptionDialog from './VestedTokensDialogs/ACVNRedemptionDialog'
 import { ComingSoonDialog } from 'components/ComingSoonDialog'
 import { Transaction } from 'ethers'
+import BBBTCNVRedemptionDialog from './VestedTokensDialogs/BBBTCNVRedemptionDialog'
 // aCNV address
 // 0x2a6bb78490c2221e0d36d931192296be4b3a01f1 RINKEBY
 // 0x6ff0106d34feee8a8acf2e7b9168480f86b82e2f eth
@@ -66,6 +67,7 @@ function TreasuryRedeemCard() {
           <Flex mt={5} direction={{ base: 'column' }} gap={{ base: 3 }}>
             <RedeemButton onClick={onOpenRedeemACNV} title="aCNV" />
             <ACVNRedemptionDialog onClose={onCloseRedeemACNV} isOpen={onRedeemACNV} />
+
             <RedeemButton
               onClick={() => {
                 onOpen()
@@ -74,14 +76,9 @@ function TreasuryRedeemCard() {
               }}
               title="pCNV"
             />
-            <RedeemButton
-              onClick={() => {
-                onOpen()
-                setTitle('bbtCNV Loading')
-                setDescription('bbtCNV is on its way up and out of the mines, are you ready anon?')
-              }}
-              title="bbtCNV"
-            />
+
+            <RedeemButton onClick={onOpenRedeemBBTCNV} title="bbtCNV" />
+            <BBBTCNVRedemptionDialog isOpen={onRedeemBBTCNV} onClose={onCloseRedeemBBTCNV} />
           </Flex>
         </Flex>
         <Text
