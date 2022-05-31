@@ -12,18 +12,19 @@ export class StakingV1Contract {
   private readonly provider: MulticallProvider
 
   constructor(chainId: number) {
-    this.provider = concaveProvider(chainId)
     if (!chainId) throw 'ChainID is undefined for constructor of contract StakingV1Contract'
     const address = StakingV1ProxyAddress[chainId]
     if (!address) throw 'Address is undefined for constructor of contract StakingV1Contract'
+    this.provider = concaveProvider(chainId)
     this.contract = new Contract(address, StakingV1Abi, this.provider)
   }
 
-  public async viewStakingCap(poolNum: number | string): Promise<BigNumber> {
-    return this.contract.viewStakingCap(poolNum)
+  public async viewStakingCap(tokenId: BigNumberish): Promise<BigNumber> {
+    console.log(tokenId.toString())
+    return this.contract.viewStakingCap(tokenId.toString())
   }
 
-  public async viewPositionRewards(tokenId: number): Promise<UserReward> {
+  public async viewPositionRewards(tokenId: BigNumberish): Promise<UserReward> {
     const rewards = await this.contract.viewPositionRewards(tokenId)
     // to remove array props
     return { ...rewards }

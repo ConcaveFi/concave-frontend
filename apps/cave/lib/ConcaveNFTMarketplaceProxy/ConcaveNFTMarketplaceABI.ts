@@ -33,6 +33,22 @@ export const ContractABI = [
     anonymous: false,
     inputs: [
       { indexed: false, internalType: 'address', name: 'nftContractAddress', type: 'address' },
+      { indexed: false, internalType: 'uint256', name: 'masterTokenId', type: 'uint256' },
+      { indexed: false, internalType: 'uint256[]', name: 'batchTokens', type: 'uint256[]' },
+      { indexed: false, internalType: 'address', name: 'nftSeller', type: 'address' },
+      { indexed: false, internalType: 'address', name: 'erc20Token', type: 'address' },
+      { indexed: false, internalType: 'uint128', name: 'buyNowPrice', type: 'uint128' },
+      { indexed: false, internalType: 'address', name: 'whitelistedBuyer', type: 'address' },
+      { indexed: false, internalType: 'address[]', name: 'feeRecipients', type: 'address[]' },
+      { indexed: false, internalType: 'uint32[]', name: 'feePercentages', type: 'uint32[]' },
+    ],
+    name: 'BatchSaleCreated',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: false, internalType: 'address', name: 'nftContractAddress', type: 'address' },
       { indexed: false, internalType: 'uint256', name: 'tokenId', type: 'uint256' },
       { indexed: false, internalType: 'address', name: 'bidder', type: 'address' },
       { indexed: false, internalType: 'uint256', name: 'ethAmount', type: 'uint256' },
@@ -85,6 +101,16 @@ export const ContractABI = [
     inputs: [
       { indexed: false, internalType: 'address', name: 'nftContractAddress', type: 'address' },
       { indexed: false, internalType: 'uint256', name: 'tokenId', type: 'uint256' },
+      { indexed: false, internalType: 'address', name: 'nftOwner', type: 'address' },
+    ],
+    name: 'NFTWithdrawn',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: false, internalType: 'address', name: 'nftContractAddress', type: 'address' },
+      { indexed: false, internalType: 'uint256', name: 'tokenId', type: 'uint256' },
       { indexed: false, internalType: 'address', name: 'nftSeller', type: 'address' },
       { indexed: false, internalType: 'address', name: 'erc20Token', type: 'address' },
       { indexed: false, internalType: 'uint128', name: 'minPrice', type: 'uint128' },
@@ -95,6 +121,24 @@ export const ContractABI = [
       { indexed: false, internalType: 'uint32[]', name: 'feePercentages', type: 'uint32[]' },
     ],
     name: 'NftAuctionCreated',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: false, internalType: 'address', name: 'nftContractAddress', type: 'address' },
+      { indexed: false, internalType: 'uint256', name: 'masterTokenId', type: 'uint256' },
+      { indexed: false, internalType: 'uint256[]', name: 'batchTokens', type: 'uint256[]' },
+      { indexed: false, internalType: 'address', name: 'nftSeller', type: 'address' },
+      { indexed: false, internalType: 'address', name: 'erc20Token', type: 'address' },
+      { indexed: false, internalType: 'uint128', name: 'minPrice', type: 'uint128' },
+      { indexed: false, internalType: 'uint128', name: 'buyNowPrice', type: 'uint128' },
+      { indexed: false, internalType: 'uint32', name: 'auctionBidPeriod', type: 'uint32' },
+      { indexed: false, internalType: 'uint32', name: 'bidIncreasePercentage', type: 'uint32' },
+      { indexed: false, internalType: 'address[]', name: 'feeRecipients', type: 'address[]' },
+      { indexed: false, internalType: 'uint32[]', name: 'feePercentages', type: 'uint32[]' },
+    ],
+    name: 'NftBatchAuctionCreated',
     type: 'event',
   },
   {
@@ -170,7 +214,50 @@ export const ContractABI = [
   },
   {
     inputs: [
-      { internalType: 'address', name: '_nftContractAddress', type: 'address' },
+      { internalType: 'uint256[]', name: '_batchTokenIds', type: 'uint256[]' },
+      { internalType: 'address', name: '_erc20Token', type: 'address' },
+      { internalType: 'uint128', name: '_minPrice', type: 'uint128' },
+      { internalType: 'uint128', name: '_buyNowPrice', type: 'uint128' },
+      { internalType: 'uint32', name: '_auctionBidPeriod', type: 'uint32' },
+      { internalType: 'uint32', name: '_bidIncreasePercentage', type: 'uint32' },
+      { internalType: 'address[]', name: '_feeRecipients', type: 'address[]' },
+      { internalType: 'uint32[]', name: '_feePercentages', type: 'uint32[]' },
+    ],
+    name: 'createBatchNftAuction',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { internalType: 'uint256[]', name: '_batchTokenIds', type: 'uint256[]' },
+      { internalType: 'address', name: '_erc20Token', type: 'address' },
+      { internalType: 'uint128', name: '_buyNowPrice', type: 'uint128' },
+      { internalType: 'address', name: '_whitelistedBuyer', type: 'address' },
+      { internalType: 'address[]', name: '_feeRecipients', type: 'address[]' },
+      { internalType: 'uint32[]', name: '_feePercentages', type: 'uint32[]' },
+    ],
+    name: 'createBatchSale',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { internalType: 'uint256[]', name: '_batchTokenIds', type: 'uint256[]' },
+      { internalType: 'address', name: '_erc20Token', type: 'address' },
+      { internalType: 'uint128', name: '_minPrice', type: 'uint128' },
+      { internalType: 'uint128', name: '_buyNowPrice', type: 'uint128' },
+      { internalType: 'address[]', name: '_feeRecipients', type: 'address[]' },
+      { internalType: 'uint32[]', name: '_feePercentages', type: 'uint32[]' },
+    ],
+    name: 'createDefaultBatchNftAuction',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
       { internalType: 'uint256', name: '_tokenId', type: 'uint256' },
       { internalType: 'address', name: '_erc20Token', type: 'address' },
       { internalType: 'uint128', name: '_minPrice', type: 'uint128' },
@@ -184,10 +271,7 @@ export const ContractABI = [
     type: 'function',
   },
   {
-    inputs: [
-      { internalType: 'address', name: '_nftContractAddress', type: 'address' },
-      { internalType: 'uint256', name: '_tokenId', type: 'uint256' },
-    ],
+    inputs: [{ internalType: 'uint256', name: '_tokenId', type: 'uint256' }],
     name: 'createMarketItem',
     outputs: [],
     stateMutability: 'nonpayable',
@@ -195,7 +279,6 @@ export const ContractABI = [
   },
   {
     inputs: [
-      { internalType: 'address', name: '_nftContractAddress', type: 'address' },
       { internalType: 'uint256', name: '_tokenId', type: 'uint256' },
       { internalType: 'address', name: '_erc20Token', type: 'address' },
       { internalType: 'uint128', name: '_minPrice', type: 'uint128' },
@@ -212,7 +295,6 @@ export const ContractABI = [
   },
   {
     inputs: [
-      { internalType: 'address', name: '_nftContractAddress', type: 'address' },
       { internalType: 'uint256', name: '_tokenId', type: 'uint256' },
       { internalType: 'address', name: '_erc20Token', type: 'address' },
       { internalType: 'uint128', name: '_buyNowPrice', type: 'uint128' },
@@ -309,7 +391,6 @@ export const ContractABI = [
   { inputs: [], name: 'initialize', outputs: [], stateMutability: 'nonpayable', type: 'function' },
   {
     inputs: [
-      { internalType: 'address', name: '_nftContractAddress', type: 'address' },
       { internalType: 'uint256', name: '_tokenId', type: 'uint256' },
       { internalType: 'address', name: '_erc20Token', type: 'address' },
       { internalType: 'uint128', name: '_tokenAmount', type: 'uint128' },
@@ -321,7 +402,6 @@ export const ContractABI = [
   },
   {
     inputs: [
-      { internalType: 'address', name: '_nftContractAddress', type: 'address' },
       { internalType: 'uint256', name: '_tokenId', type: 'uint256' },
       { internalType: 'address', name: '_erc20Token', type: 'address' },
       { internalType: 'uint128', name: '_tokenAmount', type: 'uint128' },
@@ -347,10 +427,7 @@ export const ContractABI = [
     type: 'function',
   },
   {
-    inputs: [
-      { internalType: 'address', name: '', type: 'address' },
-      { internalType: 'uint256', name: '', type: 'uint256' },
-    ],
+    inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     name: 'nftContractAuctions',
     outputs: [
       { internalType: 'uint32', name: 'bidIncreasePercentage', type: 'uint32' },
@@ -369,10 +446,14 @@ export const ContractABI = [
     type: 'function',
   },
   {
-    inputs: [
-      { internalType: 'address', name: '_nftContractAddress', type: 'address' },
-      { internalType: 'uint256', name: '_tokenId', type: 'uint256' },
-    ],
+    inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    name: 'nftOwner',
+    outputs: [{ internalType: 'address', name: '', type: 'address' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [{ internalType: 'uint256', name: '_tokenId', type: 'uint256' }],
     name: 'ownerOfNFT',
     outputs: [{ internalType: 'address', name: '', type: 'address' }],
     stateMutability: 'view',
@@ -407,10 +488,14 @@ export const ContractABI = [
     type: 'function',
   },
   {
-    inputs: [
-      { internalType: 'address', name: '_nftContractAddress', type: 'address' },
-      { internalType: 'uint256', name: '_tokenId', type: 'uint256' },
-    ],
+    inputs: [{ internalType: 'address', name: 'nftContractAddress', type: 'address' }],
+    name: 'setNFTContractAddress',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [{ internalType: 'uint256', name: '_tokenId', type: 'uint256' }],
     name: 'settleAuction',
     outputs: [],
     stateMutability: 'nonpayable',
@@ -424,30 +509,28 @@ export const ContractABI = [
     type: 'function',
   },
   {
-    inputs: [
-      { internalType: 'address', name: '_nftContractAddress', type: 'address' },
-      { internalType: 'uint256', name: '_tokenId', type: 'uint256' },
-    ],
+    inputs: [{ internalType: 'uint256', name: '_tokenId', type: 'uint256' }],
     name: 'takeHighestBid',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
   },
   {
-    inputs: [
-      { internalType: 'address', name: '_nftContractAddress', type: 'address' },
-      { internalType: 'uint256', name: '_tokenId', type: 'uint256' },
-    ],
+    inputs: [{ internalType: 'uint256', name: '_tokenId', type: 'uint256' }],
     name: 'toggleForSale',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
   },
   {
-    inputs: [
-      { internalType: 'address', name: '_nftContractAddress', type: 'address' },
-      { internalType: 'uint256', name: '_tokenId', type: 'uint256' },
-    ],
+    inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    name: 'tokenIdToItemIds',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [{ internalType: 'uint256', name: '_tokenId', type: 'uint256' }],
     name: 'unlockPositionHandler',
     outputs: [],
     stateMutability: 'nonpayable',
@@ -456,7 +539,6 @@ export const ContractABI = [
   { inputs: [], name: 'unpause', outputs: [], stateMutability: 'nonpayable', type: 'function' },
   {
     inputs: [
-      { internalType: 'address', name: '_nftContractAddress', type: 'address' },
       { internalType: 'uint256', name: '_tokenId', type: 'uint256' },
       { internalType: 'uint128', name: '_newBuyNowPrice', type: 'uint128' },
     ],
@@ -467,7 +549,6 @@ export const ContractABI = [
   },
   {
     inputs: [
-      { internalType: 'address', name: '_nftContractAddress', type: 'address' },
       { internalType: 'uint256', name: '_tokenId', type: 'uint256' },
       { internalType: 'uint128', name: '_newMinPrice', type: 'uint128' },
     ],
@@ -478,7 +559,6 @@ export const ContractABI = [
   },
   {
     inputs: [
-      { internalType: 'address', name: '_nftContractAddress', type: 'address' },
       { internalType: 'uint256', name: '_tokenId', type: 'uint256' },
       { internalType: 'address', name: '_newWhitelistedBuyer', type: 'address' },
     ],
@@ -495,21 +575,22 @@ export const ContractABI = [
     type: 'function',
   },
   {
-    inputs: [
-      { internalType: 'address', name: '_nftContractAddress', type: 'address' },
-      { internalType: 'uint256', name: '_tokenId', type: 'uint256' },
-    ],
+    inputs: [{ internalType: 'uint256', name: '_tokenId', type: 'uint256' }],
     name: 'withdrawAuction',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
   },
   {
-    inputs: [
-      { internalType: 'address', name: '_nftContractAddress', type: 'address' },
-      { internalType: 'uint256', name: '_tokenId', type: 'uint256' },
-    ],
+    inputs: [{ internalType: 'uint256', name: '_tokenId', type: 'uint256' }],
     name: 'withdrawBid',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [{ internalType: 'uint256', name: '_tokenId', type: 'uint256' }],
+    name: 'withdrawNft',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',

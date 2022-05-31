@@ -1,20 +1,17 @@
 import { Box, Collapse, Flex } from '@concave/ui'
-import { BigNumber } from 'ethers'
 import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungibleToken'
-import { useState } from 'react'
-import MarketplaceListing from './UserPosition/MarketplaceListing'
-import NftPositionContainer from './UserPosition/NftPositionContainer'
-import RedeemCardViewer from './UserPosition/RedeemViewer'
-import DividendsShare from './UserPosition/StakingRewards'
+import MarketplaceInfo from '../UserPosition/MarketplaceInfo'
+import NftPositionContainer from '../UserPosition/NftPositionContainer'
+import RedeemCardViewer from '../UserPosition/RedeemViewer'
+import DividendsShare from '../UserPosition/StakingRewards'
+import { useUserPositionState } from './useUserPositionState'
+
 interface NftPositionCardProps {
   nonFungibleTokenInfo: NonFungibleTokenInfo
 }
 
-const UserPositionCard = (props: NftPositionCardProps) => {
-  const { nonFungibleTokenInfo } = props
-  const { maturity, poolID, tokenId: tokenIdHex } = nonFungibleTokenInfo
-  const [active, setActive] = useState(true)
-  const tokenId = BigNumber.from(tokenIdHex).toNumber()
+const UserStackPositionCard = (props: NftPositionCardProps) => {
+  const { setActive, active, nonFungibleTokenInfo } = useUserPositionState(props)
 
   return (
     <Box
@@ -36,13 +33,11 @@ const UserPositionCard = (props: NftPositionCardProps) => {
             <Flex direction={'column'}>
               <NftPositionContainer
                 onChange={() => setActive(!active)}
-                stakeType={poolID}
-                maturity={maturity}
-                tokenId={tokenId}
+                nonFungibleTokenInfo={nonFungibleTokenInfo}
               />
               <Collapse in={active}>
                 <RedeemCardViewer nonFungibleTokenInfo={nonFungibleTokenInfo} />
-                <MarketplaceListing nonFungibleTokenInfo={nonFungibleTokenInfo} />
+                <MarketplaceInfo nonFungibleTokenInfo={nonFungibleTokenInfo} />
               </Collapse>
             </Flex>
           </Flex>
@@ -54,4 +49,4 @@ const UserPositionCard = (props: NftPositionCardProps) => {
     </Box>
   )
 }
-export default UserPositionCard
+export default UserStackPositionCard

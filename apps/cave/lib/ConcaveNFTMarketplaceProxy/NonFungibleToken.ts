@@ -1,16 +1,20 @@
+import { CNV } from '@concave/core'
 import { BigNumberish } from 'ethers'
 import { Position } from 'lib/StakingV1Proxy/Position'
 import { UserReward } from 'lib/StakingV1Proxy/UserReward'
-import { Auction } from './Auction'
 
 export class NonFungibleTokenInfo {
   constructor(
+    public readonly networkId: number,
     public readonly contractAddress: string,
     public readonly tokenId: BigNumberish,
     private readonly position: Position,
     private readonly _userReward: UserReward,
   ) {}
 
+  get tokenOfStack() {
+    return CNV[this.networkId]
+  }
   get poolID() {
     return this.position.poolID
   }
@@ -18,7 +22,7 @@ export class NonFungibleTokenInfo {
     return this.position.shares
   }
   get initialValue() {
-    return this.shares
+    return this.deposit
   }
   get deposit() {
     return this.position.deposit
@@ -30,7 +34,7 @@ export class NonFungibleTokenInfo {
     return this.position.rewardDebt
   }
   get currentValue() {
-    return this.shares.add(this.rewardDebt)
+    return this.deposit.add(this.rewardDebt)
   }
   get userReward() {
     return this._userReward
