@@ -1,145 +1,217 @@
-import { CNV, CurrencyAmount } from '@concave/core'
-import { Box, Flex, Input, NumericInput, Text } from '@concave/ui'
+import { CNV, Currency, CurrencyAmount } from '@concave/core'
+import { Box, Button, Flex, HStack, NumericInput, Text, VStack } from '@concave/ui'
 import ChooseButton from 'components/Marketplace/ChooseButton'
+import { BigNumber } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { ConcaveNFTMarketplace } from 'lib/ConcaveNFTMarketplaceProxy/ConcaveNFTMarketplace'
-import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungibleToken'
-import { useState } from 'react'
+import { Offer } from 'lib/ConcaveNFTMarketplaceProxy/Auction'
+import { MarketItemInfo } from 'lib/ConcaveNFTMarketplaceProxy/MarketInfo'
+import { useEffect, useState } from 'react'
+import { formatFixed } from 'utils/formatFixed'
 import { toAmount } from 'utils/toAmount'
-import { useAccount, useSigner } from 'wagmi'
+import { truncateNumber } from 'utils/truncateNumber'
+import { useAccount } from 'wagmi'
+import { UserMarketInfoState } from './UserPosition/MarketplaceInfo'
 
 type UserListPositionCardProps = {
-  nonFungibleTokenInfo: NonFungibleTokenInfo
+  marketInfoState: UserMarketInfoState
+}
+type ListForSaleState = ReturnType<typeof useListeForSaleState>
+
+export const useListeForSaleState = ({ marketInfoState }: UserListPositionCardProps) => {
+  const [{ data: account }] = useAccount()
+  const [method, setMethod] = useState<'Sale' | 'Auction'>('Sale')
+  const [offer, setOffer] = useState(
+    new Offer({
+      ...marketInfoState.marketInfo.data.offer,
+      ERC20Token: marketInfoState.marketInfo.data.NFT.tokenOfStack.address,
+      feePercentages: [10000],
+      feeRecipients: [account.address],
+    }),
+  )
+  const marketInfo = new MarketItemInfo({ ...marketInfoState.marketInfo.data, offer })
+  useEffect(() => {
+    if (method === 'Sale') setOffer((old) => old.setMinPrice(0))
+  }, [method])
+
+  const setPrice = (amount: CurrencyAmount<Currency>) => {
+    setOffer((old) => old.setMinPrice(amount.numerator))
+  }
+
+  const setBuyNowPrice = (amount: CurrencyAmount<Currency>) => {
+    setOffer((old) => old.setBuyNowPrice(amount.numerator))
+  }
+
+  const create = () => {
+    marketInfoState.createOffer(offer)
+  }
+
+  const handleMethod = () => {
+    setMethod((old) => (old === 'Auction' ? 'Sale' : 'Auction'))
+  }
+
+  return {
+    method,
+    marketInfo,
+    offer,
+    setBuyNowPrice,
+    handleMethod,
+    setPrice,
+    create,
+  }
 }
 
-const UserListPositionCard = (props: UserListPositionCardProps) => {
-  const { data: account } = useAccount()
-  const [expirationDate, setExpirationDate] = useState('')
-  const [listingDate, setListingDate] = useState('')
-  const { data: signer } = useSigner()
-  const chainId = useCurrentSupportedNetworkId()
-  const nonFungibleTokenInfo = props.nonFungibleTokenInfo
-  const [price, setPrice] = useState(
-    CurrencyAmount.fromRawAmount(
-      CNV[chainId],
-      nonFungibleTokenInfo.shares.div(100).mul(80).toString(),
-    ),
-  )
-  //const discount = nonFungibleTokenInfo.calculteDiscount(price.numerator)
+export const ListPositionForSale = ({ state }: { state: ListForSaleState }) => {
   return (
     <Box
-      h={220}
-      w={320}
+      minW={350}
       rounded="2xl"
       background={'linear-gradient(265.73deg, #274C63 0%, #182F3E 100%)'}
       shadow="up"
     >
-      <Flex direction={'column'} h={200} mt={5} fontSize={14}>
-        <Flex width={'full'} align="center" gap={3}>
-          <Flex w={160} py={2} textAlign="end">
-            <Text textColor={'text.low'} fontWeight={700} width={'full'}>
-              Set Expiration Date:
-            </Text>
-          </Flex>
-          <Flex justifyContent="center" alignItems={'center'}>
-            <Input
-              value={expirationDate}
-              onChange={(result) => setExpirationDate(result.target.value)}
-              width="110px"
-              height="30px"
-              borderRadius={'2xl'}
-              pl="4"
-            />
-          </Flex>
+      <VStack direction={'column'} gap={1} pt={4} px={8} pb={0}>
+        <Type state={state} />
+        <CurrentValue currentValue={state.marketInfo.NFT.currentValue} />
+        <ListenPrice state={state} />
+        <BuyNowPrice state={state} />
+        <Discount state={state} />
+        <Flex pt={4} justifyContent="center">
+          <ChooseButton onClick={state.create} title={`List`} backgroundType="blue" />
         </Flex>
-
-        <Flex width={'full'} align="center" gap={3}>
-          <Flex w={160} py={2} textAlign="end">
-            <Text textColor={'text.low'} fontWeight={700} width={'full'}>
-              Set Listing Date:
-            </Text>
-          </Flex>
-          <Flex justifyContent="center" alignItems={'center'}>
-            <Input
-              value={listingDate}
-              onChange={(result) => setListingDate(result.target.value)}
-              width="110px"
-              height="30px"
-              borderRadius={'2xl'}
-              pl="4"
-            />
-          </Flex>
-        </Flex>
-
-        <Flex width={'full'} align="center" gap={3}>
-          <Flex w={160} py={2} textAlign="end">
-            <Text textColor={'text.low'} fontWeight={700} width={'full'}>
-              Current Value:
-            </Text>
-          </Flex>
-          <Flex justifyContent="center" alignItems={'center'}>
-            <NumericInput
-              as={Input}
-              width="110px"
-              height="30px"
-              borderRadius={'2xl'}
-              pl="4"
-              value={+price?.toSignificant(8)}
-              onValueChange={(values, sourceInfo) => {
-                if (sourceInfo.source === 'prop') return
-                if (values.value === '') {
-                  return setPrice(toAmount('0', price.currency))
-                }
-                setPrice(toAmount(values.value, price.currency))
-              }}
-            />
-          </Flex>
-        </Flex>
-
-        <Flex width={'full'} align="center" gap={3}>
-          <Flex w={160} py={2} textAlign="end">
-            <Text textColor={'text.low'} fontWeight={700} width={'full'}>
-              Discount:
-            </Text>
-          </Flex>
-          <Flex
-            width={'110px'}
-            height="30px"
-            shadow={'Up Small'}
-            rounded="2xl"
-            align="center"
-            fontWeight={'700'}
-            pl={'4'}
-          >
-            {/* TODO */}
-            0%
-          </Flex>
-        </Flex>
-        <Flex grow={1} justifyContent="center" alignItems={'end'} gap="2">
-          <ChooseButton
-            onClick={() => {
-              const concaveNFTMarketPlace = new ConcaveNFTMarketplace(chainId)
-              concaveNFTMarketPlace
-                .createSale(
-                  signer,
-                  props.nonFungibleTokenInfo.contractAddress,
-                  props.nonFungibleTokenInfo.tokenId,
-                  price.currency.wrapped.address,
-                  price.numerator.toString(),
-                  account.address, // this field is mandatory :/
-                  [account.address],
-                  [10000],
-                )
-                .then(console.log)
-                .catch(console.error)
-            }}
-            title="List For Sale"
-            backgroundType="blue"
-          />
-        </Flex>
-      </Flex>
+      </VStack>
     </Box>
   )
 }
 
-export default UserListPositionCard
+const Type = ({ state }: { state: ListForSaleState }) => {
+  return (
+    <HStack justifyContent={'center'} width={'full'}>
+      <Text textColor={'text.low'} width={'full'} textAlign={'right'} fontWeight={700}>
+        Type:
+      </Text>
+      <Box width={'full'}>
+        <Button
+          width={'110px'}
+          height="30px"
+          shadow={'Up Small'}
+          onClick={state.handleMethod}
+          rounded="2xl"
+          fontWeight={'700'}
+          _focus={{}}
+        >
+          {state.method}
+        </Button>
+      </Box>
+    </HStack>
+  )
+}
+
+const ListenPrice = (props: { state: ListForSaleState }) => {
+  const { marketInfo, setPrice } = props.state
+  const chainId = useCurrentSupportedNetworkId()
+  if (props.state.method === 'Sale') {
+    return <></>
+  }
+  return (
+    <HStack justifyContent={'center'} width={'full'}>
+      <Text textColor={'text.low'} textAlign={'right'} fontWeight={700} width={'full'}>
+        Set listing Price:
+      </Text>
+      <Box width={'full'}>
+        <NumericInput
+          width={'full'}
+          shadow={'Down Big'}
+          maxWidth="110px"
+          height="30px"
+          borderRadius={'2xl'}
+          pl="4"
+          value={formatFixed(marketInfo.offer.minPrice)}
+          onValueChange={(values, sourceInfo) => {
+            if (sourceInfo.source === 'prop') return
+            if (values.value === '') {
+              return setPrice(toAmount('0', CNV[chainId]))
+            }
+            setPrice(toAmount(values.value, CNV[chainId]))
+          }}
+        />
+      </Box>
+    </HStack>
+  )
+}
+
+const BuyNowPrice = (props: { state: ListForSaleState }) => {
+  const { marketInfo, setBuyNowPrice } = props.state
+  const chainId = useCurrentSupportedNetworkId()
+
+  return (
+    <HStack justifyContent={'center'} width={'full'}>
+      <Text textColor={'text.low'} textAlign={'right'} fontWeight={700} width={'full'}>
+        Set buy price:
+      </Text>
+      <Box width={'full'}>
+        <NumericInput
+          width={'full'}
+          shadow={'Down Big'}
+          maxWidth="110px"
+          height="30px"
+          borderRadius={'2xl'}
+          pl="4"
+          value={formatFixed(marketInfo.offer.buyNowPrice)}
+          onValueChange={(values, sourceInfo) => {
+            if (sourceInfo.source === 'prop') return
+            if (values.value === '') {
+              return setBuyNowPrice(toAmount('0', CNV[chainId]))
+            }
+            setBuyNowPrice(toAmount(values.value, CNV[chainId]))
+          }}
+        />
+      </Box>
+    </HStack>
+  )
+}
+const Discount = ({ state }: { state: ListForSaleState }) => {
+  return (
+    <HStack justifyContent={'center'} width={'full'}>
+      <Text textColor={'text.low'} textAlign={'right'} fontWeight={700} width={'full'}>
+        Discount:
+      </Text>
+
+      <Box width={'full'}>
+        <Flex
+          height="30px"
+          maxWidth="110px"
+          shadow={'Up Small'}
+          rounded="2xl"
+          align="center"
+          fontWeight={'700'}
+          pl={'4'}
+        >
+          {formatFixed(state.marketInfo.discount, { decimals: 2 })}%
+        </Flex>
+      </Box>
+    </HStack>
+  )
+}
+
+const CurrentValue = (props: { currentValue: BigNumber }) => {
+  return (
+    <HStack justifyContent={'center'} width={'full'}>
+      <Text textColor={'text.low'} textAlign={'right'} fontWeight={700} width={'full'}>
+        Current value:
+      </Text>
+
+      <Box width={'full'}>
+        <Flex
+          height="30px"
+          maxWidth="110px"
+          shadow={'Up Small'}
+          rounded="2xl"
+          align="center"
+          fontWeight={'700'}
+          pl={'4'}
+        >
+          {truncateNumber(props.currentValue)}
+        </Flex>
+      </Box>
+    </HStack>
+  )
+}

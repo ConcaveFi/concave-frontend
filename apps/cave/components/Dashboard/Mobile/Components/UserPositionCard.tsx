@@ -32,6 +32,7 @@ const UserPositionCardMobile = (props: NftPositionCardMobileProps) => {
             <NftPositionViewer redeemIn={maturity} stakeType={poolID} />
             <RedeemContainer nonFungibleTokenInfo={nonFungibleTokenInfo} />
             <MarketPlaceListingMobile />
+
             <Flex
               direction={'column'}
               height={'640px'}
@@ -50,8 +51,3 @@ const UserPositionCardMobile = (props: NftPositionCardMobileProps) => {
 }
 
 export default UserPositionCardMobile
-const epochConverter = (epoch: number) => {
-  const timeInMillis = epoch * 1000
-  const dateFromEpoch = new Date(timeInMillis)
-  return dateFromEpoch
-}

@@ -1,31 +1,30 @@
 import { Box, Flex, HStack, Image, Text } from '@concave/ui'
 import { formatDistanceToNowStrict } from 'date-fns'
+import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungibleToken'
 import { useState } from 'react'
 
 interface NftPositionContainerProps {
   onChange: () => void
-  stakeType: number
-  maturity: number
-  tokenId: number
+  nonFungibleTokenInfo: NonFungibleTokenInfo
 }
 
-const NftPositionContainer = (props: NftPositionContainerProps) => {
+const NftPositionContainer = ({ nonFungibleTokenInfo, onChange }: NftPositionContainerProps) => {
   const [active, setActive] = useState(false)
-  const { stakeType, maturity } = props
+  const { poolID, maturity, tokenId } = nonFungibleTokenInfo
   const redeemInDays = formatDistanceToNowStrict(maturity * 1000, { unit: 'day' })
   const period = {
     0: '360 Days',
     1: '180 Days',
     2: '90 Days',
     3: '45 Days',
-  }[stakeType]
+  }[poolID]
 
   const imgNameByPeriod = {
     0: '12mposition.png',
     1: '6mposition.png',
     2: '3mposition.png',
     3: '1mposition.png',
-  }[stakeType]
+  }[poolID]
 
   return (
     <Box
@@ -76,7 +75,7 @@ const NftPositionContainer = (props: NftPositionContainerProps) => {
               Token ID:
             </Text>
             <Text fontSize="md" fontWeight="bold">
-              {props.tokenId.toString()}
+              {tokenId.toString()}
             </Text>
           </Flex>
         </Flex>
@@ -93,7 +92,7 @@ const NftPositionContainer = (props: NftPositionContainerProps) => {
               alt="arrow down logo"
               cursor={'pointer'}
               onClick={() => {
-                props.onChange()
+                onChange()
                 setActive(!active)
               }}
             />

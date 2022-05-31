@@ -1,17 +1,18 @@
 import { Box, Button, Card, Collapse, Flex, Spinner, Text } from '@concave/ui'
-import { UseDashBoardState } from 'contracts/DashBoard/DashBoardState'
+import { UseStackPositionsState } from 'contracts/DashBoard/DashBoardState'
 import { useRouter } from 'next/router'
 import { useConnect } from 'wagmi'
 import UserDividendCard from './UserDividendCard'
+import UserStackPositionCard from './UserStackPositionCard/UserPositionCard'
+
 import UserPositionCard from './UserPositionCard'
 
 const UserDashboardCard = ({ data }: { data: UseDashBoardState }) => {
   const { isConnected } = useConnect()
   const { userNonFungibleTokensInfo, totalLocked, isLoading } = data
   const userPositionsComponent = userNonFungibleTokensInfo.map((nonFungibleTokenInfo, index) => (
-    <UserPositionCard key={index} nonFungibleTokenInfo={nonFungibleTokenInfo} />
+    <UserStackPositionCard key={index} nonFungibleTokenInfo={nonFungibleTokenInfo} />
   ))
-
   const hasPositions = userNonFungibleTokensInfo.length !== 0
 
   return (
@@ -124,7 +125,7 @@ const HasNoPositions = (props: HasNoPositionsprops) => {
     </Collapse>
   )
 }
-export default UserDashboardCard
+export default UserStacksPositionsBox
 
 const scrollBar = {
   '&::-webkit-scrollbar': {

@@ -10,7 +10,7 @@ const spin = keyframes({
   '100%': { transform: 'rotate(360deg)' },
 })
 
-const DashboardMobile = (props: { data: UseDashBoardState }) => {
+const DashboardMobile = (props: { data: UseStackPositionsState }) => {
   const { data } = props
   const { isLoading, userNonFungibleTokensInfo, totalLocked } = data
   const { isConnected } = useConnect()

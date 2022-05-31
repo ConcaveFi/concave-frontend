@@ -1,12 +1,12 @@
 import { Flex, Heading, Text } from '@concave/ui'
 import DashboardMobile from 'components/Dashboard/Mobile/DashboardMobile'
-import UserDashboardCard from 'components/Dashboard/UserDashboardCard'
+import UserStacksPositionsBox from 'components/Dashboard/UserDashboardCard'
 import { withPageTransition } from 'components/PageTransition'
-import { useDashBoardState } from 'contracts/DashBoard/DashBoardState'
+import { useStackPositions } from 'contracts/DashBoard/DashBoardState'
 import React from 'react'
 
 export function LiquidStakePositions() {
-  const data = useDashBoardState()
+  const data = useStackPositions()
 
   // commit
 
@@ -22,7 +22,7 @@ export function LiquidStakePositions() {
       </Flex>
 
       <Flex justify={'center'} position="relative">
-        <UserDashboardCard data={data} />
+        <UserStacksPositionsBox data={data} />
         <DashboardMobile data={data} />
       </Flex>
     </Flex>

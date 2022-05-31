@@ -1,8 +1,9 @@
 import { createAlchemyWeb3, Nft } from '@alch/alchemy-web3'
-import { Console } from 'console'
 import { NEXT_PUBLIC_ALCHEMY_ID } from 'lib/env.conf'
 import { StakingV1ProxyAddress } from 'lib/StakingV1Proxy/Address'
 import { StakingV1Contract } from 'lib/StakingV1Proxy/StakingV1Contract'
+import { ConcaveNFTMarketplace } from './ConcaveNFTMarketplace'
+import { MarketItemInfo } from './MarketInfo'
 import { NonFungibleTokenInfo } from './NonFungibleToken'
 
 const nftapi = NEXT_PUBLIC_ALCHEMY_ID
@@ -34,18 +35,30 @@ export const listAllNonFungibleTokensOnAddress = async (
   return nfts
 }
 
+export const fechMarketInfo = async (chainId: number, NFT: NonFungibleTokenInfo) => {
+  const contract = new ConcaveNFTMarketplace(chainId)
+  return MarketItemInfo.from({
+    offer: contract.nftContractAuctions(NFT),
+    itenId: contract.tokenIdToItemIds(NFT),
+    NFT,
+  })
+}
+
 export const listUserNonFungibleTokenInfo = async (userAddress: string, chainId: number) => {
+  console.log('listUserNonFungibleTokenInfo')
   const stakingV1Contract = new StakingV1Contract(chainId)
   const usersNft = await listAllNonFungibleTokensOnAddress(userAddress, chainId, [
     StakingV1ProxyAddress[chainId],
   ])
   return Promise.all(
-    usersNft.map(async (nft) => {
-      const tokenIndexId = nft.id.tokenId
+    usersNft.map(async ({ id, contract }: Nft) => {
+      console.log('usersNft.map')
+      const tokenIndexId = id.tokenId
       const positionInfo = stakingV1Contract.positions(tokenIndexId)
-      const userRewards = stakingV1Contract.viewPositionRewards(+tokenIndexId)
+      const userRewards = stakingV1Contract.viewPositionRewards(tokenIndexId)
       return new NonFungibleTokenInfo(
-        nft.contract.address,
+        chainId,
+        contract.address,
         tokenIndexId,
         await positionInfo,
         await userRewards,
