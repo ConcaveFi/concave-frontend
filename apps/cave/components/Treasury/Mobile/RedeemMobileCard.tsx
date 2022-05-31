@@ -6,7 +6,6 @@ import { useConnect } from 'wagmi'
 import { GlassPanel } from '../TreasuryManagementCard'
 import { ComingSoonDialog } from 'components/ComingSoonDialog'
 import ACVNRedemptionDialog from '../VestedTokensDialogs/ACVNRedemptionDialog'
-import { bbtCNV_ADDRESS } from '../Hooks/useVestedTokens'
 import BBBTCNVRedemptionDialog from '../VestedTokensDialogs/BBTCNVRedemptionDialog'
 
 export default function RedeemMobileCard() {
