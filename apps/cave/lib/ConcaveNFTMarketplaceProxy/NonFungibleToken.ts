@@ -9,7 +9,6 @@ export class NonFungibleTokenInfo {
     public readonly tokenId: BigNumberish,
     private readonly position: Position,
     private readonly _userReward: UserReward,
-    private readonly auction?: Auction,
   ) {}
 
   get poolID() {
