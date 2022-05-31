@@ -69,7 +69,7 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
           >
             <Flex width={'full'} justify="space-between" fontWeight={'bold'}>
               <Text textColor={'text.low'}>Current Balance:</Text>
-              <Text textColor={'text.accent'}>${balance.toFixed(2)}</Text>
+              <Text textColor={'text.accent'}>{balance.toFixed(2)}</Text>
             </Flex>
             <Flex width={'full'} justify="space-between" fontWeight={'bold'}>
               <Text textColor={'text.low'}>Redeemable:</Text>
