@@ -3,7 +3,7 @@ import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { RedeemBBT_CNV_Abi } from 'contracts/VestedTokens/RedeemBbtCNVAbi'
-import { Contract, ethers, Transaction } from 'ethers'
+import { BigNumber, Contract, ethers, Transaction, utils } from 'ethers'
 import { concaveProvider as provider } from 'lib/providers'
 import { useState } from 'react'
 import { useAccount, useSigner } from 'wagmi'
@@ -38,7 +38,7 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
   // It's only working on rinkeby for now, it's necessary make it on mainnet too
   // provider(4) it's for rinkeby network.
   const bbtCNVContract = new Contract(
-    '0x7EbDe370e724F536C198B3013a25d9BFE5462e0B',
+    '0xbFe30e2445445147893af7A4757F9eDBca5b91e7',
     RedeemBBT_CNV_Abi,
     provider(4),
   )
@@ -100,12 +100,12 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
               </Text>
             </Flex>
           </Flex>
-          <Flex width={'270px'} px={4} mx={'auto'} mt={1} gap={1}>
+          <Flex width={'270px'} px={'21px'} mx={'auto'} mt={1} gap={1}>
             <Text textColor={'text.low'} fontSize={'15'} fontWeight="bold">
               Redeemable:
             </Text>
-            <Text textColor={'text.accent'} fontSize={'15'} fontWeight="bold">
-              ${!isLoading && ethers.utils.formatEther(redeemableValue)}
+            <Text textColor={'text.accent'} fontSize={'15'} fontWeight="bold" noOfLines={1}>
+              ${!isLoading && utils.formatEther(BigInt(redeemableValue.toString()))}
               {isLoading && 'Loading...'}
             </Text>
           </Flex>
@@ -115,13 +115,15 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
               onOpenConfirm()
               bbtCNVContract
                 .connect(signer)
-                .redeem(value, account?.address, account.address, false, { gasLimit: 5000000 })
+                .redeem(value, account?.address, account?.address, false)
                 .then((tx) => {
                   onCloseConfirm()
                   setTx(tx)
                   onOpenSub()
                 })
                 .catch((e) => {
+                  console.log(e)
+
                   setError('Transaction rejected')
                   onOpenError()
                   onCloseConfirm()
