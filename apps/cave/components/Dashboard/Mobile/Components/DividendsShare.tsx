@@ -51,7 +51,7 @@ const DividendsShareMobile = (props: DividendsShareMobileProps) => {
         </Flex>
         <Flex height={'60px'} justify={'space-around'} textAlign="center">
           <Flex flex={1} direction={'column'}>
-            <LowText label="Next devidend date:" />
+            <LowText label="Next dividend date:" />
             <HighText label="07/04/2022" />
           </Flex>
           <Flex flex={1} direction={'column'}>
