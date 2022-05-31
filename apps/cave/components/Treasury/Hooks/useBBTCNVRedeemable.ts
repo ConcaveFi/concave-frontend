@@ -18,7 +18,10 @@ export default function useBBTCNVRedeemable() {
   )
   const { data, isLoading } = useQuery(
     ['bbtRedeemable', account?.address],
-    async () => bbtCNVContract.redeemable(account?.address),
+    async () => ({
+      redeemable: await bbtCNVContract.redeemable(account?.address),
+      redeemed: await bbtCNVContract.redeemed(account?.address),
+    }),
     {},
   )
   return {
