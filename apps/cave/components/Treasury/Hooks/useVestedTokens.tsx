@@ -6,11 +6,11 @@ export default function useVestedTokens({ chainId }: { chainId: number }) {
   const [{ data: account }] = useAccount()
   const [{ data: bbtCNVData }] = useBalance({
     addressOrName: account?.address,
-    token: bbtCNV_ADDRESS[networkId],
+    token: '0x0000000012a0592C154D552C410030E724b2eA00',
   })
   const [{ data: aCNVData }] = useBalance({
     addressOrName: account?.address,
-    token: aCNV_ADDRESS[1],
+    token: '0x0000000012a0592C154D552C410030E724b2eA00',
   })
 
   const pCNVData = false
@@ -23,15 +23,6 @@ export default function useVestedTokens({ chainId }: { chainId: number }) {
     pCNVData,
     bbtCNVData,
   }
-}
-
-export const bbtCNV_ADDRESS = {
-  1: '0x0000000012a0592C154D552C410030E724b2eA00',
-  4: '0xebbd91d0b8334dfb3cb94a11f4afac52470d1ab7',
-}
-export const aCNV_ADDRESS = {
-  1: '0x6ff0106d34feee8a8acf2e7b9168480f86b82e2f',
-  4: '0',
 }
 
 export const pCNV_ADDRESS = {
