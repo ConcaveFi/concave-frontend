@@ -6,6 +6,7 @@ import { RedeemBBT_CNV_Abi } from 'contracts/VestedTokens/RedeemBbtCNVAbi'
 import { BigNumber, Contract, ethers, Transaction, utils } from 'ethers'
 import { concaveProvider as provider } from 'lib/providers'
 import { useState } from 'react'
+import { truncateNumber } from 'utils/truncateNumber'
 import { useAccount, useSigner } from 'wagmi'
 import useBBTCNVRedeemable from '../Hooks/useBBTCNVRedeemable'
 import useVestedTokens from '../Hooks/useVestedTokens'
@@ -26,14 +27,17 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
   const [tx, setTx] = useState<Transaction>()
   const [error, setError] = useState('')
 
-  const { data: redeemableValue, isLoading } = useBBTCNVRedeemable()
+  const { data: redeemableData, isLoading } = useBBTCNVRedeemable()
   const { bbtCNVData } = useVestedTokens({ chainId: 4 })
 
-  const balance = parseFloat(bbtCNVData?.formatted)
-  const redeemableExceeded = value > +redeemableValue?.toString() && value <= balance
-  const insufficientFounds = value > balance
-  const invalidValue = !value
-  const validValue = !insufficientFounds && !invalidValue && !redeemableExceeded
+  const balance = +bbtCNVData?.formatted
+  const redeemable = !isLoading && +utils.formatEther(redeemableData?.redeemable)
+  const redeemed = !isLoading && +utils.formatEther(redeemableData?.redeemed)
+
+  // booleans
+  const nothingToRedeem = redeemable === 0 || redeemable === balance
+  const insufficientFounds = balance === 0
+  const validValue = !insufficientFounds && !nothingToRedeem
 
   // It's only working on rinkeby for now, it's necessary make it on mainnet too
   // provider(4) it's for rinkeby network.
@@ -42,6 +46,8 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
     RedeemBBT_CNV_Abi,
     provider(4),
   )
+  console.log()
+
   return (
     <>
       <Modal
@@ -58,7 +64,7 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
           <Flex
             mt={4}
             width={'270px'}
-            height="74px"
+            height="124px"
             shadow={'Down Medium'}
             rounded="2xl"
             mx={'auto'}
@@ -67,55 +73,33 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
             px={4}
             gap={2}
           >
-            <Flex>
-              <NumericInput
-                value={value}
-                onChange={(e) => setValue(parseFloat(e.target.value.replaceAll(',', '')))}
-              />
-              <Button
-                _focus={{}}
-                onClick={() => setValue(parseFloat(redeemableValue?.toString()))}
-                variant={'primary.outline'}
-                width="110px"
-              >
-                Max
-              </Button>
+            <Flex width={'full'} justify="space-between" fontWeight={'bold'}>
+              <Text textColor={'text.low'}>Current Balance:</Text>
+              <Text textColor={'text.accent'}>${balance.toFixed(2)}</Text>
             </Flex>
-            <Flex
-              width={'fit-content'}
-              gap={1}
-              textColor="text.low"
-              cursor={'pointer'}
-              fontSize={'13'}
-              transition="all .2s"
-              _hover={{ transform: 'scale(1.1)', textColor: 'white' }}
-              userSelect="none"
-              onClick={() => setValue(balance)}
-            >
-              <Text onClick={() => {}} fontWeight="bold">
-                Balance: ${balance.toFixed(2)}
+            <Flex width={'full'} justify="space-between" fontWeight={'bold'}>
+              <Text textColor={'text.low'}>Redeemable:</Text>
+              <Text textColor={'text.accent'}>
+                {!isLoading && '$' + truncateNumber(redeemableData?.redeemable)}
+                {isLoading && 'Loading...'}
               </Text>
-              <Text textColor={'text.accent'} fontWeight="bold">
-                Max
+            </Flex>
+            <Flex width={'full'} justify="space-between" fontWeight={'bold'}>
+              <Text textColor={'text.low'}>Redeemed:</Text>
+              <Text textColor={'text.accent'}>
+                {!isLoading && '$' + redeemed.toFixed(2)}
+                {isLoading && 'Loading...'}
               </Text>
             </Flex>
           </Flex>
-          <Flex width={'270px'} px={'21px'} mx={'auto'} mt={1} gap={1}>
-            <Text textColor={'text.low'} fontSize={'15'} fontWeight="bold">
-              Redeemable:
-            </Text>
-            <Text textColor={'text.accent'} fontSize={'15'} fontWeight="bold" noOfLines={1}>
-              ${!isLoading && utils.formatEther(BigInt(redeemableValue.toString()))}
-              {isLoading && 'Loading...'}
-            </Text>
-          </Flex>
+
           <Button
             onClick={() => {
-              if (!validValue) return
+              // if (!validValue) return
               onOpenConfirm()
               bbtCNVContract
                 .connect(signer)
-                .redeem(value, account?.address, account?.address, false)
+                .redeem(redeemableData.redeemable, account?.address, account?.address, true)
                 .then((tx) => {
                   onCloseConfirm()
                   setTx(tx)
@@ -141,10 +125,7 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
             _hover={{}}
             _focus={{}}
           >
-            {redeemableExceeded && 'Redeemable Exceeded'}
-            {invalidValue && 'Invalid value'}
-            {validValue && 'Redeem'}
-            {insufficientFounds && 'Insufficient Founds'}
+            Redeem
           </Button>
         </Card>
       </Modal>
