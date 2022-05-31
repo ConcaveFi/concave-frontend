@@ -12,7 +12,7 @@ export default function useBBTCNVRedeemable() {
 
   //   const networkId = useCurrentSupportedNetworkId()
   const bbtCNVContract = new Contract(
-    '0xf16167FD383364EdCAC6d27E34C8534AFaC1B80d',
+    '0xbc0f18de3a0d650e37ac02535c5d0a6e958ceaa8',
     RedeemBBT_CNV_Abi,
     provider(1),
   )

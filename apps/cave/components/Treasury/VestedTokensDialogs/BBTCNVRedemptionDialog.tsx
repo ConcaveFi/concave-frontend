@@ -41,7 +41,7 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
   const validValue = !insufficientFounds && !nothingToRedeem
 
   const bbtCNVContract = new Contract(
-    '0x16F9746C0ADAAD0086b51A1a5221298E5254D906',
+    '0xbc0f18de3a0d650e37ac02535c5d0a6e958ceaa8',
     RedeemBBT_CNV_Abi,
     provider(1),
   )
