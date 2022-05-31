@@ -162,7 +162,7 @@ const ReceiveBox = ({
       <CurrencyIcon size="sm" currency={currency} />
       <Box>
         <Text fontFamily={'heading'} fontWeight={600}>
-          {amount.toPrecision(4)}
+          {amount ? amount?.toPrecision(4) : 0}
         </Text>
         <Text title={currency?.name} fontWeight={700} fontSize={'sm'} color={'text.low'}>
           {currency?.symbol}
