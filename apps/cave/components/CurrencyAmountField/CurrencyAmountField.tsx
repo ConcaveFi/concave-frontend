@@ -1,7 +1,8 @@
 import { Currency, CurrencyAmount } from '@concave/gemswap-sdk'
 import { FlexProps, HStack, NumericInput, Stack, useMultiStyleConfig } from '@concave/ui'
 import { CurrencySelectorComponent } from 'components/CurrencySelector/CurrencySelector'
-import React, { ReactNode, useCallback } from 'react'
+import React, { ReactNode, useCallback, useRef, useState } from 'react'
+import { useDebounce } from 'react-use'
 import { toAmount } from 'utils/toAmount'
 
 export function CurrencyAmountField({
@@ -9,27 +10,47 @@ export function CurrencyAmountField({
   currencyAmount,
   disabled = false,
   onChangeAmount,
+  debounce = 150,
   CurrencySelector,
 }: {
   children?: ReactNode
   currencyAmount: CurrencyAmount<Currency>
   disabled?: boolean
   onChangeAmount: (value: CurrencyAmount<Currency>) => void
+  debounce?: number
   CurrencySelector: CurrencySelectorComponent
+  disableCurrencySelector?: boolean
 } & FlexProps) {
   const styles = useMultiStyleConfig('Input', { variant: 'primary', size: 'large' })
+
+  const [internalValue, setInternalValue] = useState<number | string>('')
+
+  const isFocused = useRef(false)
+
+  useDebounce(
+    () =>
+      isFocused.current &&
+      currencyAmount &&
+      onChangeAmount(toAmount(internalValue, currencyAmount.currency)),
+    debounce,
+    [internalValue],
+  )
 
   const handleChange = useCallback(
     ({ value }, { source }) => {
       if (source === 'prop') return // if the value changed from props, ignore it, only update on user typing
-      onChangeAmount(toAmount(value, currencyAmount.currency))
+      if (value === '' && currencyAmount?.currency)
+        onChangeAmount(toAmount('0', currencyAmount.currency))
+      setInternalValue(value)
     },
     [currencyAmount?.currency, onChangeAmount],
   )
 
+  const inputValue = isFocused.current ? internalValue : +currencyAmount?.toSignificant(8) || ''
+
   const onSelectCurrency = useCallback(
-    (newCurrency: Currency) => onChangeAmount(toAmount(currencyAmount?.toExact(), newCurrency)),
-    [currencyAmount, onChangeAmount],
+    (newCurrency: Currency) => onChangeAmount(toAmount(inputValue, newCurrency)),
+    [inputValue, onChangeAmount],
   )
 
   return (
@@ -39,12 +60,14 @@ export function CurrencyAmountField({
           fontSize={{ base: 'lg', md: '2xl' }}
           disabled={disabled}
           w="100%"
-          value={+currencyAmount?.toSignificant(8) || ''}
+          onFocus={() => (isFocused.current = true)}
+          onBlur={() => (isFocused.current = false)}
+          value={inputValue}
           onValueChange={handleChange}
         />
         <CurrencySelector onSelect={onSelectCurrency} selected={currencyAmount?.currency} />
       </HStack>
-      <Stack>{children}</Stack>
+      <Stack onClick={() => (isFocused.current = false)}>{children}</Stack>
     </Stack>
   )
 }
