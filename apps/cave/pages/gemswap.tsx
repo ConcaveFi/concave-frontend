@@ -111,6 +111,7 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
   const swapButtonProps = useSwapButtonProps({
     trade,
     recipient,
+    settings,
     onSwapClick: settings.expertMode ? swapTx.submit : confirmationModal.onOpen,
   })
 
