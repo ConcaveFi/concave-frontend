@@ -90,7 +90,7 @@ const useMarketInfo = ({
   const [isWaitingForWallet, setIsWaitingForWallet] = useState<boolean>(false)
   const [tx] = useWaitForTransaction({ hash: transaction?.hash })
   const marketInfo = useQuery(
-    ['MarketInfo', networkId, nonFungibleTokenInfo.tokenId],
+    ['MarketInfo', tx, networkId, nonFungibleTokenInfo.tokenId],
     async () => {
       const marketPlaceInfo = await fechMarketInfo(networkId, nonFungibleTokenInfo)
       return marketPlaceInfo
