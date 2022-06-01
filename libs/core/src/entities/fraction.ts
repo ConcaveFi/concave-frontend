@@ -132,7 +132,7 @@ export class Fraction {
 
   public toSignificant(
     significantDigits: number,
-    format: object = { groupSeparator: '' },
+    format: object = { groupSeparator: ',' },
     rounding: Rounding = Rounding.ROUND_HALF_UP,
   ): string {
     invariant(Number.isInteger(significantDigits), `${significantDigits} is not an integer.`)
@@ -150,7 +150,7 @@ export class Fraction {
 
   public toFixed(
     decimalPlaces: number,
-    format: object = { groupSeparator: '' },
+    format: object = { groupSeparator: ',' },
     rounding: Rounding = Rounding.ROUND_HALF_UP,
   ): string {
     invariant(Number.isInteger(decimalPlaces), `${decimalPlaces} is not an integer.`)
