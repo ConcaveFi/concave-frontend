@@ -5,8 +5,6 @@ import { useConnect } from 'wagmi'
 import UserDividendCard from './UserDividendCard'
 import UserStackPositionCard from './UserStackPositionCard/UserPositionCard'
 
-import UserPositionCard from './UserPositionCard'
-
 const UserDashboardCard = ({ data }: { data: UseDashBoardState }) => {
   const { isConnected } = useConnect()
   const { userNonFungibleTokensInfo, totalLocked, isLoading } = data
@@ -125,7 +123,7 @@ const HasNoPositions = (props: HasNoPositionsprops) => {
     </Collapse>
   )
 }
-export default UserStacksPositionsBox
+export default DashboardBody
 
 const scrollBar = {
   '&::-webkit-scrollbar': {
