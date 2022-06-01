@@ -23,7 +23,7 @@ export function CurrencyAmountField({
 } & FlexProps) {
   const styles = useMultiStyleConfig('Input', { variant: 'primary', size: 'large' })
 
-  const [internalValue, setInternalValue] = useState('')
+  const [internalValue, setInternalValue] = useState<number | string>('')
 
   const isFocused = useRef(false)
 
@@ -64,7 +64,10 @@ export function CurrencyAmountField({
             isFocused.current = true
             setInternalValue(+currencyAmount?.toSignificant(8) || '')
           }}
-          onBlur={() => (isFocused.current = false)}
+          onBlur={() => {
+            isFocused.current = false
+            setInternalValue('')
+          }}
           value={inputValue}
           onValueChange={handleChange}
         />
