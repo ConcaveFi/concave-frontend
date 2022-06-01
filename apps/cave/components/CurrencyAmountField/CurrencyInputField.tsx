@@ -43,7 +43,6 @@ export const CurrencyInputField = ({
       currencyAmount={currencyAmountIn}
       onChangeAmount={onChangeAmount}
       CurrencySelector={CurrencySelector}
-      debounce={debounce}
     >
       <HStack justify="space-between" align="end" textColor="text.low" w="full">
         <Text noOfLines={1} fontWeight="bold" fontSize="sm" mr={2}>
