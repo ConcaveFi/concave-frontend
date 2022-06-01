@@ -1,15 +1,18 @@
 import { createAlchemyWeb3 } from '@alch/alchemy-web3'
+import { NEXT_PUBLIC_ALCHEMY_ID } from 'lib/env.conf'
 import { StakingV1ProxyAddress } from 'lib/StakingV1Proxy/Address'
 import { StakingV1Contract } from 'lib/StakingV1Proxy/StakingV1Contract'
-import { ConcaveNFTMarketplace } from './ConcaveNFTMarketplace'
 import { NonFungibleTokenInfo } from './NonFungibleToken'
+
+const nftapi = NEXT_PUBLIC_ALCHEMY_ID
+
 export const listAllNonFungibleTokensOnAddress = async (
   owner: string,
   chainId: number,
   contractAddress?: string,
 ) => {
   const network = chainId === 1 ? 'mainnet' : 'rinkeby'
-  const web3 = createAlchemyWeb3(`https://eth-${network}.alchemyapi.io/v2/demo`)
+  const web3 = createAlchemyWeb3(`https://eth-${network}.alchemyapi.io/v2/${nftapi}`)
   const nft = await web3.alchemy.getNfts({ owner })
   if (!contractAddress) {
     return nft.ownedNfts
