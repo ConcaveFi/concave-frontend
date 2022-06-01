@@ -24,21 +24,8 @@ const UserDashboardCard = ({ data }: { data: UseDashBoardState }) => {
         maxW={{ lg: '760px', md: '580px' }}
         justify="center"
       >
-        <Flex justify="center" position={'relative'}>
-          <Box
-            pos="relative"
-            h="fit-content"
-            w="fit-content"
-            px={4}
-            pb="4"
-            pt="1"
-            overflowY={'auto'}
-            maxHeight={'500px'}
-          >
-            <Flex direction="row" gap={4} position="relative" mt={1}>
-              <UserDividendCard isLoading={isLoading} totalLocked={totalLocked} />
-            </Flex>
-          </Box>
+        <Flex justify="center" p={4} pt={2} position={'relative'}>
+          <UserDividendCard isLoading={isLoading} totalLocked={totalLocked} />
         </Flex>
 
         <Collapse in={hasPositions}>
@@ -123,7 +110,6 @@ const HasNoPositions = (props: HasNoPositionsprops) => {
     </Collapse>
   )
 }
-export default DashboardBody
 
 const scrollBar = {
   '&::-webkit-scrollbar': {
