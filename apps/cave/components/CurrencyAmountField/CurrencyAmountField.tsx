@@ -28,7 +28,7 @@ export function CurrencyAmountField({
   )
 
   const onSelectCurrency = useCallback(
-    (newCurrency: Currency) => onChangeAmount(toAmount(currencyAmount.toExact(), newCurrency)),
+    (newCurrency: Currency) => onChangeAmount(toAmount(currencyAmount?.toExact(), newCurrency)),
     [currencyAmount, onChangeAmount],
   )
 
@@ -39,7 +39,7 @@ export function CurrencyAmountField({
           fontSize={{ base: 'lg', md: '2xl' }}
           disabled={disabled}
           w="100%"
-          value={+currencyAmount.toSignificant(8) || ''}
+          value={+currencyAmount?.toSignificant(8) || ''}
           onValueChange={handleChange}
         />
         <CurrencySelector onSelect={onSelectCurrency} selected={currencyAmount?.currency} />
