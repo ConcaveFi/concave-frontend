@@ -60,7 +60,10 @@ export function CurrencyAmountField({
           fontSize={{ base: 'lg', md: '2xl' }}
           disabled={disabled}
           w="100%"
-          onFocus={() => (isFocused.current = true)}
+          onFocus={() => {
+            isFocused.current = true
+            setInternalValue(+currencyAmount?.toSignificant(8) || '')
+          }}
           onBlur={() => (isFocused.current = false)}
           value={inputValue}
           onValueChange={handleChange}
