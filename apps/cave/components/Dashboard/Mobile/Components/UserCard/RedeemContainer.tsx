@@ -35,7 +35,7 @@ const RedeemContainer = (props: RedeemCardViewerProps) => {
 
 export default RedeemContainer
 
-const RedeemButton = ({ onClick, active }: { onClick?: () => void; active: boolean }) => {
+const RedeemButton = ({ onClick, active }: { onClick?: () => void; active?: boolean }) => {
   return (
     <Button
       onClick={onClick}

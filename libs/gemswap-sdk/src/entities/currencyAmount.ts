@@ -87,7 +87,7 @@ export class CurrencyAmount<T extends Currency> extends Fraction {
   public toSignificant(
     significantDigits: number = 6,
     format?: object,
-    rounding: Rounding = Rounding.ROUND_DOWN,
+    rounding: Rounding = Rounding.ROUND_HALF_UP,
   ): string {
     return super.divide(this.decimalScale).toSignificant(significantDigits, format, rounding)
   }
@@ -95,7 +95,7 @@ export class CurrencyAmount<T extends Currency> extends Fraction {
   public toFixed(
     decimalPlaces: number = this.currency.decimals,
     format?: object,
-    rounding: Rounding = Rounding.ROUND_DOWN,
+    rounding: Rounding = Rounding.ROUND_HALF_UP,
   ): string {
     invariant(decimalPlaces <= this.currency.decimals, 'DECIMALS')
     return super.divide(this.decimalScale).toFixed(decimalPlaces, format, rounding)
