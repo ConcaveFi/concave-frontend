@@ -7,6 +7,7 @@
   "scripts": {
     "build": "turbo run build",
     "lint": "turbo run lint",
+    "test": "turbo run test",
     "postinstall": "turbo run postinstall",
     "build:cave": "turbo run build --filter=cave...",
     "dev:cave": "turbo run dev --filter=cave...",
