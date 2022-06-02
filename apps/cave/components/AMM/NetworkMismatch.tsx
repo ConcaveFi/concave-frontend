@@ -1,4 +1,4 @@
-import { ChainId, CHAIN_NAME } from '@concave/gemswap-sdk'
+import { ChainId, CHAIN_NAME } from '@concave/core'
 import { Button, Card, Flex, SlideFade, Text } from '@concave/ui'
 import Router from 'next/router'
 import { ReactNode } from 'react'

@@ -1,4 +1,5 @@
-import { CurrencyAmount, Ether, Percent, Price, Token } from '../../src/entities'
+import { CurrencyAmount, Ether, Percent, Token } from '@concave/core'
+import { Price } from '../../src/entities'
 
 import { computePriceImpact } from '../../src/functions/computePriceImpact'
 

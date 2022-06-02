@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, Percent } from '@concave/gemswap-sdk'
+import { Currency, CurrencyAmount, Percent } from '@concave/core'
 import { Flex, HStack, Text } from '@concave/ui'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'

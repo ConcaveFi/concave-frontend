@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount } from '@concave/gemswap-sdk'
+import { Currency, CurrencyAmount } from '@concave/core'
 import { FlexProps, HStack, NumericInput, Stack, useMultiStyleConfig } from '@concave/ui'
 import { CurrencySelectorComponent } from 'components/CurrencySelector/CurrencySelector'
 import React, { ReactNode, useCallback, useRef, useState } from 'react'

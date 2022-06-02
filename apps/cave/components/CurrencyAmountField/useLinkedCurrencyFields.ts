@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount } from '@concave/gemswap-sdk'
+import { Currency, CurrencyAmount } from '@concave/core'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
 

@@ -6,11 +6,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "yarn resolve-assets-symlinks && next build",
+    "build": "next build",
     "local-build": "next build",
     "start": "next start",
-    "symlink-assets": "globstar --node -- lnk \"../../assets/*\" ./public/assets",
-    "resolve-assets-symlinks": "find ./public/assets -lname '*' -delete && cp -a ../../assets/. ./public/assets",
     "lint": "next lint --fix",
     "test": "jest --watch",
     "gen": "DOTENV_CONFIG_PATH=./.env graphql-codegen --config codegen.yml -r dotenv/config"

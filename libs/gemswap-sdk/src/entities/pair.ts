@@ -1,15 +1,23 @@
-import { FEE, FIVE, MINIMUM_LIQUIDITY, ZERO, _1000, _997 } from '../constants'
+import {
+  FIVE,
+  ZERO,
+  _1000,
+  _997,
+  BigintIsh,
+  CurrencyAmount,
+  Token,
+  Currency,
+  Percent,
+} from '@concave/core'
 import { InsufficientInputAmountError, InsufficientReservesError } from '../errors'
 
-import { BigintIsh } from '../types'
-import { CurrencyAmount } from './currencyAmount'
 import JSBI from 'jsbi'
 import { Price } from './price'
-import { Token } from './token'
 import invariant from 'tiny-invariant'
-import { sqrt } from '../functions/math'
-import { Currency } from './'
-import { Percent } from './percent'
+import { sqrt } from '../functions'
+
+const FEE = _997
+const MINIMUM_LIQUIDITY = _1000
 
 export class Pair {
   public readonly liquidityToken: Token
@@ -241,19 +249,15 @@ export class Pair {
     currencyAmount2: CurrencyAmount<Currency>,
     address?: string,
   ) {
-    try {
-      const virtualAddress = address || '0x0000000000000000000000000000000000000001'
-      const liquidityToken = new Token(
-        currencyAmount1.currency.chainId,
-        virtualAddress,
-        18,
-        `Concave LP`,
-        `Concave LP | ${currencyAmount1.currency.symbol}-${currencyAmount2.currency.symbol}`,
-      )
-      return new Pair(currencyAmount1.wrapped, currencyAmount2.wrapped, liquidityToken)
-    } catch {
-      return undefined
-    }
+    const virtualAddress = address || '0x0000000000000000000000000000000000000001'
+    const liquidityToken = new Token(
+      currencyAmount1.currency.chainId,
+      virtualAddress,
+      18,
+      `Concave LP`,
+      `Concave LP | ${currencyAmount1.currency.symbol}-${currencyAmount2.currency.symbol}`,
+    )
+    return new Pair(currencyAmount1.wrapped, currencyAmount2.wrapped, liquidityToken)
   }
 
   public calculatePoolShare(amount0: CurrencyAmount<Currency>, amount1: CurrencyAmount<Currency>) {

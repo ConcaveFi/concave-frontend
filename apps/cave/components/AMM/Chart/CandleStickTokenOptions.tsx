@@ -1,4 +1,4 @@
-import { Currency } from '@concave/gemswap-sdk'
+import { Currency } from '@concave/core'
 import { HStack, Text } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import React from 'react'

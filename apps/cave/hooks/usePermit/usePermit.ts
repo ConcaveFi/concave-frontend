@@ -1,6 +1,6 @@
 import { Signer } from 'ethers'
 import { useSigner } from 'wagmi'
-import { CNV, DAI, Token } from '@concave/gemswap-sdk'
+import { CNV, DAI, Token } from '@concave/core'
 import { useQuery } from 'react-query'
 import { signPermitAllowed, signPermitAmount } from './permit'
 

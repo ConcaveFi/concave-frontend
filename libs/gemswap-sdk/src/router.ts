@@ -1,11 +1,6 @@
-import { Currency } from './entities'
-import { CurrencyAmount } from './entities'
-import { Percent } from './entities'
-import { Token } from './entities'
-import { Trade } from './entities'
-import { TradeType } from './enums/TradeType'
+import { Currency, CurrencyAmount, Percent, Token, validateAndParseAddress } from '@concave/core'
+import { Trade, TradeType } from './entities'
 import invariant from 'tiny-invariant'
-import { validateAndParseAddress } from './functions/validateAndParseAddress'
 
 /**
  * Options for producing the arguments to send call to the router.

@@ -1,4 +1,4 @@
-import { ChainId } from '@concave/gemswap-sdk'
+import { ChainId } from '@concave/core'
 import ms from 'ms'
 
 // used to refetch data on every block

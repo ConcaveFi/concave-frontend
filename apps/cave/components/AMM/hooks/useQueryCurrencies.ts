@@ -1,5 +1,6 @@
 import { isAddress } from 'ethers/lib/utils'
-import { ChainId, Currency, Fetcher, NATIVE, Token } from '@concave/gemswap-sdk'
+import { ChainId, Currency, NATIVE, Token } from '@concave/core'
+import { Fetcher } from '@concave/gemswap-sdk'
 import { concaveProvider } from 'lib/providers'
 import Router, { useRouter } from 'next/router'
 import { useNetwork } from 'wagmi'

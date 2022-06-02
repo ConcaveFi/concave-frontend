@@ -1,18 +1,16 @@
-import { Token, Currency, DAI, WETH9, ChainId, NATIVE } from '@concave/gemswap-sdk'
-
-import * as Ethereum from './tokens'
+import { Token, Currency, DAI, WETH9, ChainId, NATIVE } from '@concave/core'
 
 type ChainTokenList = { readonly [chainId: number]: Token[] }
 type ChainCurrencyList = { readonly [chainId: number]: Currency[] }
 
 export const STABLES = {
-  [ChainId.ETHEREUM]: [Ethereum.DAI /* DOLA, USDC, FRAX, USDT */],
+  [ChainId.ETHEREUM]: [DAI[ChainId.ETHEREUM]],
   [ChainId.RINKEBY]: [DAI[ChainId.RINKEBY]],
 }
 
 // used to construct intermediary pairs for trading
 export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
-  [ChainId.ETHEREUM]: [Ethereum.WETH, ...STABLES[ChainId.ETHEREUM]],
+  [ChainId.ETHEREUM]: [WETH9[ChainId.ETHEREUM], ...STABLES[ChainId.ETHEREUM]],
   [ChainId.RINKEBY]: [WETH9[ChainId.RINKEBY], ...STABLES[ChainId.RINKEBY]],
 }
 
@@ -29,25 +27,10 @@ export const INTERMEDIARY_PAIRS_FOR_MULTI_HOPS = {
  * Shows up in the currency select for swap and add liquidity
  */
 export const COMMON_BASES: ChainCurrencyList = {
-  [ChainId.ETHEREUM]: [
-    NATIVE[ChainId.ETHEREUM],
-    Ethereum.WETH,
-    Ethereum.DAI,
-    Ethereum.USDC,
-    Ethereum.DOLA,
-    Ethereum.FRAX,
-    Ethereum.USDT,
-  ],
+  [ChainId.ETHEREUM]: [NATIVE[ChainId.ETHEREUM], WETH9[ChainId.ETHEREUM], DAI[ChainId.ETHEREUM]],
 }
 
 // used to construct the list of all pairs we consider by default in the frontend
 export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
-  [ChainId.ETHEREUM]: [
-    Ethereum.WETH,
-    Ethereum.DAI,
-    Ethereum.USDC,
-    Ethereum.DOLA,
-    Ethereum.FRAX,
-    Ethereum.USDT,
-  ],
+  [ChainId.ETHEREUM]: [WETH9[ChainId.ETHEREUM], DAI[ChainId.ETHEREUM]],
 }

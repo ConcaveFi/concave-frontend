@@ -1,6 +1,7 @@
 import { useState } from 'react'
+import { RouterAbi, ROUTER_ADDRESS, Currency } from '@concave/core'
+import { Router, TradeType, Trade } from '@concave/gemswap-sdk'
 import { SwapSettings } from '../Swap/Settings'
-import { RouterABI, ROUTER_ADDRESS, Router, Currency, TradeType, Trade } from '@concave/gemswap-sdk'
 import { Contract, Transaction } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useAccount, useContract, useSigner } from 'wagmi'
@@ -27,7 +28,7 @@ export const useSwapTransaction = (
   const routerContract = useContract<Contract>({
     addressOrName: ROUTER_ADDRESS[networkId],
     // @ts-ignore
-    contractInterface: RouterABI,
+    contractInterface: RouterAbi,
     signerOrProvider: signer,
   })
 
