@@ -27,7 +27,7 @@ export const SelectCurrencyButton = ({
     onClick={onClick}
     {...props}
   >
-    {defaultChains.findIndex((c) => c.id === selected.chainId) ? 't' : ''}
+    {selected?.symbol && defaultChains.findIndex((c) => c.id === selected?.chainId) ? 't' : ''}
     {selected?.symbol || `Select a token`}
   </Button>
 )
