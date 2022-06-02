@@ -1,6 +1,6 @@
 import { Interface } from '@ethersproject/abi'
 
-export const RouterAbi = new Interface([
+export const RouterAbi = [
   'constructor(address _factory, address _implementation, address _WETH)',
   'function WETH() view returns (address)',
   'function factory() view returns (address)',
@@ -43,4 +43,4 @@ export const RouterAbi = new Interface([
   'function swapTokensForExactTokens(uint256 amountOut, uint256 amountInMax, address[] path, address to, uint256 deadline) returns (uint256[] amounts)',
   'function swapTokensForExactTokensUsingPermit(uint256 amountOut, uint256 amountInMax, address[] path, address to, uint256 deadline, uint8 v, bytes32 r, bytes32 s) returns (uint256[] amounts)',
   'function swapTokensForExactTokensUsingPermitAllowed(uint256 amountOut, uint256 amountInMax, address[] path, address to, uint256 deadline, uint256 nonce, uint8 v, bytes32 r, bytes32 s) returns (uint256[] amounts)',
-])
+]
