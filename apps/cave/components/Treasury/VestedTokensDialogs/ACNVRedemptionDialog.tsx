@@ -32,7 +32,7 @@ export default function ACNVRedemptionDialog(props: ACNVRedemptionDialogProps) {
     provider(networkdId),
   )
 
-  const { aCNVData } = useVestedTokens()
+  const { aCNVData, loadingACNV } = useVestedTokens()
 
   const [tx, setTx] = useState<Transaction>()
   const [error, setError] = useState('')
@@ -81,8 +81,8 @@ export default function ACNVRedemptionDialog(props: ACNVRedemptionDialogProps) {
               Current balance:
             </Text>
             <Text textColor={'text.low'} fontWeight="bold" fontSize={'18'}>
-              {aCNVData && '$' + truncateNumber(+aCNVData?.formatted)}
-              {!aCNVData && 'loading...'}
+              {!loadingACNV && '$' + truncateNumber(+aCNVData?.formatted)}
+              {loadingACNV && 'loading...'}
             </Text>
           </Flex>
           <Button
