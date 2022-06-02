@@ -1,15 +1,7 @@
-import {
-  Box,
-  Button,
-  Card,
-  Collapse,
-  Flex,
-  Spinner,
-  Text,
-  useBreakpoint,
-  useBreakpointValue,
-} from '@concave/ui'
-import DividendsCardMobile from 'components/Treasury/Mobile/DividendsCardMobile'
+import { SpinIcon } from '@concave/icons'
+import { Box, Button, Collapse, Flex, Text, useBreakpointValue } from '@concave/ui'
+import { MetalBox } from 'components/MetalBox'
+import { spinAnimation } from 'components/Treasury/Mobile/TreasuryManagementMobile'
 import { UseDashBoardState } from 'contracts/DashBoard/DashBoardState'
 import { useRouter } from 'next/router'
 import { useConnect } from 'wagmi'
@@ -43,10 +35,11 @@ const UserDashboardCard = (props: { data: UseDashBoardState }) => {
       <Flex
         rounded={'inherit'}
         width={{ lg: '740px', md: '520px', base: '360px' }}
-        height="770px"
+        h="770px"
         bg={{ base: '', md: 'linear-gradient(265.73deg, #274C63 0%, #182F3E 100%)' }}
         position="relative"
         direction={'column'}
+        gap={{ base: 6, md: 0 }}
       >
         <Box
           display={{ base: 'none', md: 'block' }}
@@ -57,27 +50,13 @@ const UserDashboardCard = (props: { data: UseDashBoardState }) => {
           height="full"
           bgSize={'20% 30%'}
         />
-        <UserDividendCard isLoading={isLoading} totalLocked={totalLocked} />
-        {/* Displayed only in shorter screens */}
-        <DividendsShareMobile isLoading={isLoading} totalLocked={totalLocked} />
-        <Flex
-          pos="relative"
-          h="100%"
-          overflowY={'scroll'}
-          overflowX="hidden"
-          maxHeight={'100%'}
-          borderRadius="12px"
-          px={'0.5rem'}
-          py={'0.5rem'}
-          mt={6}
-          __css={scrollBar}
-        >
-          {userPositionsComponent}
-        </Flex>
-      </Flex>
-      {/* 
+        <>
+          <UserDividendCard isLoading={isLoading} totalLocked={totalLocked} />
+          {/* Will be displayed only on mobile layout */}
+          <DividendsShareMobile isLoading={isLoading} totalLocked={totalLocked} />
+        </>
         <Collapse in={hasPositions}>
-          <Box
+          <Flex
             pos="relative"
             h="100%"
             overflowY={'scroll'}
@@ -86,58 +65,116 @@ const UserDashboardCard = (props: { data: UseDashBoardState }) => {
             borderRadius="12px"
             px={'0.5rem'}
             py={'0.5rem'}
-            shadow="down"
+            mt={6}
             __css={scrollBar}
           >
             {userPositionsComponent}
-          </Box>
+          </Flex>
         </Collapse>
-
-        <LoadingPositions in={isLoading} />
-        <ItsNotConected in={!wallet.connected} />
-        <HasNoPositions in={!hasPositions && !isLoading && wallet.connected} />
-      */}
+        <LoadingPositions in={isLoading} isMobile={isMobile} />
+        <ItsNotConected in={!wallet.connected} isMobile={isMobile} />
+        <HasNoPositions in={!hasPositions && !isLoading && wallet.connected} isMobile={isMobile} />
+      </Flex>
     </Box>
   )
 }
 
 interface ItsNotConectedProps {
   in?: boolean
+  isMobile?: boolean
 }
 
 const ItsNotConected = (props: ItsNotConectedProps) => {
   return (
     <Collapse in={props.in}>
-      <Text pb={6} textColor={'gray.300'} fontWeight={'700'} fontSize="3xl">
-        You are not connected
-      </Text>
+      <MetalBox
+        width={'full'}
+        height="150px"
+        direction={'column'}
+        shadow={(props.isMobile && 'up') || 'none'}
+        disableMetal={!props.isMobile}
+      >
+        <Text
+          textColor={{ base: 'text.low', md: 'white' }}
+          fontWeight={'700'}
+          fontSize={{ base: '2xl', md: '3xl' }}
+        >
+          You are not connected
+        </Text>
+      </MetalBox>
     </Collapse>
   )
 }
 
 interface LoadingPositionsProps {
   in?: boolean
+  isMobile?: boolean
 }
 
 const LoadingPositions = (props: LoadingPositionsProps) => {
   return (
     <Collapse in={props.in}>
-      <Text textColor={'gray.300'} fontWeight={'700'} fontSize="3xl">
-        Loading your positions
-      </Text>
-      <Spinner height={'30px'} width={'30px'} />
+      <MetalBox
+        width={'full'}
+        height="150px"
+        direction={'column'}
+        shadow={(props.isMobile && 'up') || 'none'}
+        disableMetal={!props.isMobile}
+        gap={1}
+      >
+        <Text
+          textColor={{ base: 'text.low', md: 'white' }}
+          fontWeight={'700'}
+          fontSize={{ base: '2xl', md: '3xl' }}
+        >
+          Loading your positions
+        </Text>
+        <SpinIcon animation={spinAnimation(3)} width={{ base: '40px', md: '80px' }} />
+      </MetalBox>
     </Collapse>
   )
 }
 
 interface HasNoPositionsprops {
   in?: boolean
+  isMobile?: boolean
 }
 const HasNoPositions = (props: HasNoPositionsprops) => {
   const router = useRouter()
   return (
     <Collapse in={props.in}>
-      <Flex direction={'column'} align="center">
+      <MetalBox
+        height={'150px'}
+        width="full"
+        shadow={(props.isMobile && 'up') || 'none'}
+        disableMetal={!props.isMobile}
+        direction={'column'}
+        justify="center"
+      >
+        <Text
+          textColor={{ base: 'text.low', md: 'white' }}
+          fontWeight={'700'}
+          fontSize={{ base: '2xl', md: '3xl' }}
+        >
+          You do not have any positions
+        </Text>
+        <Button
+          bg={'linear-gradient(90deg, #72639B 0%, #44B9DE 100%)'}
+          boxShadow="up"
+          height="40px"
+          px={4}
+          my="4"
+          mx={'auto'}
+          rounded={'2xl'}
+          onClick={() => router.push('liquid-staking')}
+          width="165px"
+        >
+          <Flex fontSize={'16px'} fontWeight="700" grow={1} justify="center">
+            Stake CNV now!
+          </Flex>
+        </Button>
+      </MetalBox>
+      {/* <Card mt={8} mb={4} direction={'column'} align="center">
         <Text textColor={'gray.300'} fontWeight={'700'} fontSize="3xl">
           You do not have any positions
         </Text>
@@ -154,7 +191,7 @@ const HasNoPositions = (props: HasNoPositionsprops) => {
             Stake CNV now!
           </Flex>
         </Button>
-      </Flex>
+      </Card> */}
     </Collapse>
   )
 }
