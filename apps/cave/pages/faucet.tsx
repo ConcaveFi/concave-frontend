@@ -1,4 +1,4 @@
-import { CNV, Currency, CurrencyAmount } from '@concave/gemswap-sdk'
+import { CNV, Currency, CurrencyAmount } from '@concave/core'
 import { Box, Button, Card, Flex, Heading, Text } from '@concave/ui'
 import { CurrencyInputField } from 'components/CurrencyAmountField'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'

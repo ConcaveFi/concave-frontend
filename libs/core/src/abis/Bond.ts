@@ -1,6 +1,6 @@
 import { Interface } from '@ethersproject/abi'
 
-export const BondAbi = new Interface([
+export const BondAbi = [
   'event BeneficiarySet(address indexed caller, address beneficiary)',
   'event BondRedeemed(address indexed bonder, uint256 indexed bondId, uint256 output)',
   'event BondSold(address indexed bonder, address indexed token, uint256 input, uint256 output)',
@@ -56,4 +56,4 @@ export const BondAbi = new Interface([
   'function unpause()',
   'function vebase() returns (bool)',
   'function virtualOutputReserves() view returns (uint256)',
-])
+]

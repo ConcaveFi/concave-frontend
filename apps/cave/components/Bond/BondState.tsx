@@ -1,13 +1,10 @@
-import { CNV, DAI, DAI_ADDRESS } from '@concave/core'
+import { BondAbi, BOND_ADDRESS, CNV, DAI, DAI_ADDRESS } from '@concave/core'
 import { Contract, ethers, utils } from 'ethers'
-import { FormatTypes } from 'ethers/lib/utils'
-import { Interface } from 'ethers/lib/utils'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider, concaveProvider as providers } from 'lib/providers'
 import { useMemo, useState } from 'react'
 import { useAccount, useSigner } from 'wagmi'
-import { BondAbi, BOND_ADDRESS } from '@concave/core'
 import { BondSettings } from './Settings'
 
 export const getBondAmountOut = async (
