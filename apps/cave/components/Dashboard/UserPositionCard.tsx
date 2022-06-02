@@ -1,4 +1,5 @@
 import { Box, Collapse, Flex } from '@concave/ui'
+import { BigNumber } from 'ethers'
 import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungibleToken'
 import { useState } from 'react'
 import MarketplaceListing from './UserPosition/MarketplaceListing'
@@ -11,8 +12,9 @@ interface NftPositionCardProps {
 
 const UserPositionCard = (props: NftPositionCardProps) => {
   const { nonFungibleTokenInfo } = props
-  const { maturity, poolID, tokenId } = nonFungibleTokenInfo
+  const { maturity, poolID, tokenId: tokenIdHex } = nonFungibleTokenInfo
   const [active, setActive] = useState(true)
+  const tokenId = BigNumber.from(tokenIdHex).toNumber()
 
   return (
     <Box
@@ -36,7 +38,7 @@ const UserPositionCard = (props: NftPositionCardProps) => {
                 onChange={() => setActive(!active)}
                 stakeType={poolID}
                 maturity={maturity}
-                tokendId={tokenId}
+                tokenId={tokenId}
               />
               <Collapse in={active}>
                 <RedeemCardViewer nonFungibleTokenInfo={nonFungibleTokenInfo} />
