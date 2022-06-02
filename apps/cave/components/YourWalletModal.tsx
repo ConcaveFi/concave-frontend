@@ -39,43 +39,7 @@ export default function YourWalletModal(props: YourWalletModalProps) {
       isCentered
       bluryOverlay
     >
-      <Tabs mt={-3} isFitted width={'300px'} variant="enclosed" colorScheme={'linkedin'}>
-        <TabList height={'30px'} border="none">
-          <Tab
-            rounded={'16px 16px 0px 0px'}
-            _selected={{ shadow: 'up' }}
-            border="none"
-            shadow="Down Medium"
-            zIndex={1}
-          ></Tab>
-          <Tab
-            rounded={'16px 16px 0px 0px'}
-            _selected={{ shadow: '' }}
-            border="none"
-            shadow="Down Medium"
-            zIndex={1}
-          >
-            Two
-          </Tab>
-        </TabList>
-        <TabPanels>
-          <TabPanel>
-            <Flex
-              mt={-4}
-              ml="-7"
-              width="325px"
-              height="400px"
-              shadow={'up'}
-              rounded="2xl"
-              zIndex={4}
-            ></Flex>
-          </TabPanel>
-          <TabPanel>
-            <Card mt={-4} ml="-7" width="325px" height="400px"></Card>
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
-      {/* <Flex
+      <Flex
         direction={'column'}
         rounded={'2xl'}
         w={{ base: '330px', sm: '380px' }}
@@ -117,7 +81,7 @@ export default function YourWalletModal(props: YourWalletModalProps) {
             </Text>
           </Flex>
         </Flex>
-      </SecondConfirmModal>*/}
+      </SecondConfirmModal>
     </Modal>
   )
 }
