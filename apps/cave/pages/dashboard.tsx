@@ -8,8 +8,6 @@ import React from 'react'
 export function Dashboard() {
   const data = useDashBoardState()
 
-  // commit
-
   return (
     <Flex align={'center'} justify="start" direction={'column'} width={'full'} textAlign="center">
       <Heading as="h1" mt={8} mb={3} fontSize="5xl">
