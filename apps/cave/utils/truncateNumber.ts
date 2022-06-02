@@ -1,4 +1,4 @@
-import { JSBI } from '@concave/gemswap-sdk'
+import { JSBI } from '@concave/core'
 import { BigNumber } from 'ethers'
 import { useCurrencyBalance, UseCurrencyBalanceData } from 'hooks/useCurrencyBalance'
 
