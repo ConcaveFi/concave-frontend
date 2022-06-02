@@ -145,12 +145,11 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
             p={6}
             gap={2}
             variant="primary"
-            // h="fit-content"
-            h="400px" // match candlestick
+            h="fit-content"
+            minH="400px" // match candlestick
             shadow="Block Up"
             w="100%"
             maxW="420px"
-            justifyContent={'center'}
           >
             <CurrencyInputField
               currencyAmountIn={trade.data.inputAmount}
@@ -175,6 +174,7 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
               align="center"
               py={2}
               px={3}
+              my="auto"
               rounded="xl"
             >
               <RelativePrice
