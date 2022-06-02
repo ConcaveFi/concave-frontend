@@ -18,7 +18,7 @@
   "dependencies": {
     "@0xsequence/multicall": "^0.38.0",
     "@alch/alchemy-web3": "^1.4.2",
-    "@apollo/client": "^3.6.5",
+    "@apollo/client": "^3.6.6",
     "@badrap/bar-of-progress": "^0.2.1",
     "@concave/gemswap-sdk": "*",
     "@concave/icons": "*",
