@@ -69,7 +69,7 @@ function Emissions(props: any) {
   }
 
   return (
-    <Flex direction={'column'} py={2} px={5} maxW={{ base: '90px', sm: 'full' }}>
+    <Flex direction={'column'} maxW={{ base: '90px', sm: 'full' }}>
       <Flex direction={'row'} maxW={{ base: '100px', sm: '260px' }}>
         <Flex
           mx="auto"
