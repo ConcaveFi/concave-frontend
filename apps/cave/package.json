@@ -14,7 +14,7 @@
     "gen": "DOTENV_CONFIG_PATH=./.env graphql-codegen --config codegen.yml -r dotenv/config"
   },
   "dependencies": {
-    "@0xsequence/multicall": "^0.38.0",
+    "@0xsequence/multicall": "^0.39.0",
     "@alch/alchemy-web3": "^1.4.2",
     "@apollo/client": "^3.6.5",
     "@badrap/bar-of-progress": "^0.2.1",
