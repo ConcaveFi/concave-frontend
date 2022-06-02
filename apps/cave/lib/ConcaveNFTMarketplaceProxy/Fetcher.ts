@@ -9,25 +9,21 @@ const nftapi = NEXT_PUBLIC_ALCHEMY_ID
 export const listAllNonFungibleTokensOnAddress = async (
   owner: string,
   chainId: number,
-  contractAddress?: string,
+  contractAddresses?: string[],
 ) => {
   const network = chainId === 1 ? 'mainnet' : 'rinkeby'
   const web3 = createAlchemyWeb3(`https://eth-${network}.alchemyapi.io/v2/${nftapi}`)
-  const nft = await web3.alchemy.getNfts({ owner })
-  if (!contractAddress) {
-    return nft.ownedNfts
-  }
-  return nft.ownedNfts.filter(
-    ({ contract }) => contract.address.toUpperCase() === contractAddress.toUpperCase(),
-  )
+  const { ownedNfts, pageKey, totalCount } = await web3.alchemy.getNfts({
+    owner,
+    contractAddresses,
+  })
+  return ownedNfts
 }
 export const listUserNonFungibleTokenInfo = async (userAddress: string, chainId: number) => {
   const stakingV1Contract = new StakingV1Contract(chainId)
-  const usersNft = await listAllNonFungibleTokensOnAddress(
-    userAddress,
-    chainId,
+  const usersNft = await listAllNonFungibleTokensOnAddress(userAddress, chainId, [
     StakingV1ProxyAddress[chainId],
-  )
+  ])
   return Promise.all(
     usersNft.map(async (nft) => {
       const tokenIndexId = nft.id.tokenId
