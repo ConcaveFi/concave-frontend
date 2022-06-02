@@ -6,10 +6,11 @@ import warning from 'tiny-warning'
 export function validateAndParseAddress(address: string): string {
   try {
     const checksummedAddress = getAddress(address)
-    warning(
-      address === checksummedAddress,
-      `${address} is not checksummed.\nPlease use ${checksummedAddress} instead.`,
-    )
+    if (process.env.NODE_ENV !== 'test')
+      warning(
+        address === checksummedAddress,
+        `${address} is not checksummed.\nPlease use ${checksummedAddress} instead.`,
+      )
     return checksummedAddress
   } catch (error) {
     invariant(false, `${address} is not a valid address.`)

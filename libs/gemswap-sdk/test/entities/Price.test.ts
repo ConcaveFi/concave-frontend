@@ -12,7 +12,7 @@ describe('Price', () => {
   describe('#constructor', () => {
     it('array format works', () => {
       const price = new Price(t0, t1, 1, 54321)
-      expect(price.toSignificant(5)).toEqual('54321')
+      expect(price.toSignificant(5)).toEqual('54,321')
       expect(price.baseCurrency.equals(t0))
       expect(price.quoteCurrency.equals(t1))
     })
@@ -21,7 +21,7 @@ describe('Price', () => {
         baseAmount: CurrencyAmount.fromRawAmount(t0, 1),
         quoteAmount: CurrencyAmount.fromRawAmount(t1, 54321),
       })
-      expect(price.toSignificant(5)).toEqual('54321')
+      expect(price.toSignificant(5)).toEqual('54,321')
       expect(price.baseCurrency.equals(t0))
       expect(price.quoteCurrency.equals(t1))
     })
@@ -55,7 +55,7 @@ describe('Price', () => {
     })
     it('with decimal difference flipped base quote flipped', () => {
       const p = new Price(t1, t0_6, 456, 123)
-      expect(p.toSignificant(4)).toEqual('269700000000')
+      expect(p.toSignificant(4)).toEqual('269,700,000,000')
     })
   })
 })
