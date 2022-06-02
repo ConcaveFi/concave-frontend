@@ -6,7 +6,6 @@ import {
   BigintIsh,
   CurrencyAmount,
   Token,
-  sqrt,
   Currency,
   Percent,
 } from '@concave/core'
@@ -15,6 +14,7 @@ import { InsufficientInputAmountError, InsufficientReservesError } from '../erro
 import JSBI from 'jsbi'
 import { Price } from './price'
 import invariant from 'tiny-invariant'
+import { sqrt } from '../functions'
 
 const FEE = _997
 const MINIMUM_LIQUIDITY = _1000
@@ -249,19 +249,15 @@ export class Pair {
     currencyAmount2: CurrencyAmount<Currency>,
     address?: string,
   ) {
-    try {
-      const virtualAddress = address || '0x0000000000000000000000000000000000000001'
-      const liquidityToken = new Token(
-        currencyAmount1.currency.chainId,
-        virtualAddress,
-        18,
-        `Concave LP`,
-        `Concave LP | ${currencyAmount1.currency.symbol}-${currencyAmount2.currency.symbol}`,
-      )
-      return new Pair(currencyAmount1.wrapped, currencyAmount2.wrapped, liquidityToken)
-    } catch {
-      return undefined
-    }
+    const virtualAddress = address || '0x0000000000000000000000000000000000000001'
+    const liquidityToken = new Token(
+      currencyAmount1.currency.chainId,
+      virtualAddress,
+      18,
+      `Concave LP`,
+      `Concave LP | ${currencyAmount1.currency.symbol}-${currencyAmount2.currency.symbol}`,
+    )
+    return new Pair(currencyAmount1.wrapped, currencyAmount2.wrapped, liquidityToken)
   }
 
   public calculatePoolShare(amount0: CurrencyAmount<Currency>, amount1: CurrencyAmount<Currency>) {
