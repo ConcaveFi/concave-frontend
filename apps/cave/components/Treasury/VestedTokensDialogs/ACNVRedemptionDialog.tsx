@@ -1,5 +1,4 @@
-import { SpinIcon, SpinnerIcon } from '@concave/icons'
-import { Modal, Card, Text, Flex, Button, useDisclosure, Spinner } from '@concave/ui'
+import { Modal, Card, Text, Flex, Button, useDisclosure } from '@concave/ui'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
@@ -11,14 +10,13 @@ import { useState } from 'react'
 import { truncateNumber } from 'utils/truncateNumber'
 import { useAccount, useConnect, useSigner } from 'wagmi'
 import useVestedTokens from '../Hooks/useVestedTokens'
-import { spinAnimation } from '../Mobile/TreasuryManagementMobile'
 
-interface ACVNRedemptionDialogProps {
+interface ACNVRedemptionDialogProps {
   onClose: () => void
   isOpen: boolean
 }
 
-export default function ACVNRedemptionDialog(props: ACVNRedemptionDialogProps) {
+export default function ACNVRedemptionDialog(props: ACNVRedemptionDialogProps) {
   const { isOpen: isConfirmOpen, onOpen: onOpenConfirm, onClose: onCloseConfirm } = useDisclosure()
   const { isOpen: isSubOpen, onOpen: onOpenSub, onClose: onCloseSub } = useDisclosure()
   const { isOpen: isErrorOpen, onOpen: onOpenError, onClose: onCloseError } = useDisclosure()
@@ -62,7 +60,7 @@ export default function ACVNRedemptionDialog(props: ACVNRedemptionDialogProps) {
     <>
       <Modal
         bluryOverlay
-        title="Redeem aCVN"
+        title="Redeem aCNV"
         motionPreset="slideInBottom"
         isOpen={isOpen}
         onClose={onClose}
