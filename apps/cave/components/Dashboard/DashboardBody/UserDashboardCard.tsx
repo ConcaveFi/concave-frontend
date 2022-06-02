@@ -2,19 +2,17 @@ import { Box, Button, Card, Collapse, Flex, Spinner, Text } from '@concave/ui'
 import { UseStackPositionsState } from 'contracts/DashBoard/DashBoardState'
 import { useRouter } from 'next/router'
 import { useConnect } from 'wagmi'
+import { UserPositionCard } from '../LockPosition/Card/UserPositionCard'
 import UserDividendCard from './UserDividendCard'
-import UserStackPositionCard from './UserStackPositionCard/UserPositionCard'
+
 
 const UserDashboardCard = ({ data }: { data: UseDashBoardState }) => {
   const { isConnected } = useConnect()
   const { userNonFungibleTokensInfo, totalLocked, isLoading } = data
-  const userPositionsComponent = userNonFungibleTokensInfo.map((nonFungibleTokenInfo, index) => (
-    <UserStackPositionCard key={index} nonFungibleTokenInfo={nonFungibleTokenInfo} />
-  ))
   const hasPositions = userNonFungibleTokensInfo.length !== 0
 
   return (
-    <Flex display={{ lg: 'flex', md: 'flex', sm: 'none', base: 'none' }}>
+    <Flex display={{ lg: 'flex', md: 'flex' }}>
       <Card
         p={3}
         gap={2}
@@ -41,7 +39,9 @@ const UserDashboardCard = ({ data }: { data: UseDashBoardState }) => {
             shadow="down"
             __css={scrollBar}
           >
-            {userPositionsComponent}
+            {userNonFungibleTokensInfo.map((nonFungibleTokenInfo, index) => (
+              <UserPositionCard key={index} nonFungibleTokenInfo={nonFungibleTokenInfo} />
+            ))}
           </Box>
         </Collapse>
 

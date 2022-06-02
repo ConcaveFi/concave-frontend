@@ -1,20 +1,18 @@
 import { Card, Flex } from '@concave/ui'
+import { useUserPositionState } from 'components/Dashboard/LockPosition/Card/useUserPositionState'
 import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungibleToken'
-import MarketPlaceListingMobile from './UserCard/MarketPlaceListing'
-import { NftPositionViewer } from './UserCard/NftPositionViewer'
-import RedeemContainer from './UserCard/RedeemContainer'
-import StakingRewardMobile from './UserCard/StakingReward'
+import { MarketListingMobile } from '../MarketLockInfo/MarketListingMobile'
+import { NFTPositionHeaderMobile } from '../NFTPositionHeader/NFTPositionHeaderMobile'
+import { RedeemMobileContainer } from '../Redeem/RedeemMobileView'
 
 interface NftPositionCardMobileProps {
   nonFungibleTokenInfo: NonFungibleTokenInfo
 }
 
-const UserPositionCardMobile = (props: NftPositionCardMobileProps) => {
-  const { nonFungibleTokenInfo } = props
-  const { maturity, poolID, deposit, rewardDebt } = nonFungibleTokenInfo
+export const UserPositionCardMobile = (props: NftPositionCardMobileProps) => {
+  const { toogleActive, active, nonFungibleTokenInfo } = useUserPositionState(props)
 
   return (
-    // Default height: 660px
     <Card maxWidth={'358px'} variant="secondary" height={'510px'}>
       <Flex direction={'column'} bg={'#31293011'} width="full" flex={1}>
         <Flex
@@ -29,10 +27,13 @@ const UserPositionCardMobile = (props: NftPositionCardMobileProps) => {
             bg="url(assets/textures/metal.png)"
             bgSize={'30% 30%'}
           >
-            <NftPositionViewer redeemIn={maturity} stakeType={poolID} />
-            <RedeemContainer nonFungibleTokenInfo={nonFungibleTokenInfo} />
-            <MarketPlaceListingMobile />
-
+            <NFTPositionHeaderMobile
+              nonFungibleTokenInfo={nonFungibleTokenInfo}
+              active
+              toogleActive={toogleActive}
+            />
+            <RedeemMobileContainer nonFungibleTokenInfo={nonFungibleTokenInfo} />
+            <MarketListingMobile nonFungibleTokenInfo={nonFungibleTokenInfo} />
             <Flex
               direction={'column'}
               height={'640px'}
@@ -49,5 +50,3 @@ const UserPositionCardMobile = (props: NftPositionCardMobileProps) => {
     </Card>
   )
 }
-
-export default UserPositionCardMobile

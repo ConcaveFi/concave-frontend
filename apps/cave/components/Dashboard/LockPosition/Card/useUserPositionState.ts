@@ -7,10 +7,12 @@ interface NftPositionCardProps {
 
 export const useUserPositionState = (props: NftPositionCardProps) => {
   const { nonFungibleTokenInfo } = props
-  const [active, setActive] = useState(true)
+  const [active, setActive] = useState(false)
   return {
     nonFungibleTokenInfo,
     active,
-    setActive,
+    toogleActive: () => {
+      setActive(!active)
+    },
   }
 }

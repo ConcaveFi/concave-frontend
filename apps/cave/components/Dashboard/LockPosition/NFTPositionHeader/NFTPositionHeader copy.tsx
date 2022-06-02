@@ -1,31 +1,10 @@
 import { Box, Flex, HStack, Image, Text } from '@concave/ui'
-import { formatDistanceToNowStrict } from 'date-fns'
-import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungibleToken'
-import { useState } from 'react'
+import { formatUnits } from 'ethers/lib/utils'
+import { NFTPositionHeaderProps, useNFTLockedPositionState } from './useNFTPositionViewer'
 
-interface NftPositionContainerProps {
-  onChange: () => void
-  nonFungibleTokenInfo: NonFungibleTokenInfo
-}
-
-const NftPositionContainer = ({ nonFungibleTokenInfo, onChange }: NftPositionContainerProps) => {
-  const [active, setActive] = useState(false)
-  const { poolID, maturity, tokenId } = nonFungibleTokenInfo
-  const redeemInDays = formatDistanceToNowStrict(maturity * 1000, { unit: 'day' })
-  const period = {
-    0: '360 Days',
-    1: '180 Days',
-    2: '90 Days',
-    3: '45 Days',
-  }[poolID]
-
-  const imgNameByPeriod = {
-    0: '12mposition.png',
-    1: '6mposition.png',
-    2: '3mposition.png',
-    3: '1mposition.png',
-  }[poolID]
-
+export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
+  const { period, redeemInDays, imgNameByPeriod, tokenId, active, toogleActive } =
+    useNFTLockedPositionState(props)
   return (
     <Box
       pos="relative"
@@ -33,7 +12,6 @@ const NftPositionContainer = ({ nonFungibleTokenInfo, onChange }: NftPositionCon
       maxHeight={'100px'}
       borderRadius="16px"
       boxShadow={'up'}
-      // width={{ lg: '540px', md: '380px' }}
       width={{ lg: '700px', md: '520px' }}
     >
       <Flex direction="row" gap={4} alignItems="center" justify="center" m={2} position="relative">
@@ -75,7 +53,7 @@ const NftPositionContainer = ({ nonFungibleTokenInfo, onChange }: NftPositionCon
               Token ID:
             </Text>
             <Text fontSize="md" fontWeight="bold">
-              {tokenId.toString()}
+              {formatUnits(tokenId, 0)}
             </Text>
           </Flex>
         </Flex>
@@ -91,10 +69,7 @@ const NftPositionContainer = ({ nonFungibleTokenInfo, onChange }: NftPositionCon
               src={`/assets/liquidstaking/modal-arrow-logo.svg`}
               alt="arrow down logo"
               cursor={'pointer'}
-              onClick={() => {
-                onChange()
-                setActive(!active)
-              }}
+              onClick={toogleActive}
             />
           </Flex>
         </Flex>
@@ -102,5 +77,3 @@ const NftPositionContainer = ({ nonFungibleTokenInfo, onChange }: NftPositionCon
     </Box>
   )
 }
-
-export default NftPositionContainer

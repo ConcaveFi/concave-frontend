@@ -1,16 +1,12 @@
-import { Button, ButtonProps, Flex, Text, TextProps, VStack } from '@concave/ui'
-import { bigNumberMask } from 'components/Dashboard/UserPosition/RedeemViewer'
+import { Button, Flex, Text, TextProps, VStack } from '@concave/ui'
 import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungibleToken'
+import { bigNumberMask, createRedeemState } from './UseRedeemState'
 
 interface RedeemCardViewerProps {
   nonFungibleTokenInfo: NonFungibleTokenInfo
 }
-const RedeemContainer = (props: RedeemCardViewerProps) => {
-  const { userReward } = props.nonFungibleTokenInfo
-
-  const curValue = userReward.totalRewards
-  const initialBal = userReward.amountDeposited
-  const gainedAmt = curValue.sub(initialBal)
+export const RedeemMobileContainer = ({ nonFungibleTokenInfo }: RedeemCardViewerProps) => {
+  const { curValue, initialBal, gainedAmt } = createRedeemState({ nonFungibleTokenInfo })
 
   return (
     <Flex height={'127px'} width="358px" direction="column">
@@ -32,8 +28,6 @@ const RedeemContainer = (props: RedeemCardViewerProps) => {
     </Flex>
   )
 }
-
-export default RedeemContainer
 
 const RedeemButton = ({ onClick, active }: { onClick?: () => void; active?: boolean }) => {
   return (

@@ -1,22 +1,8 @@
 import { Flex, Image, Text, TextProps, VStack } from '@concave/ui'
-import { formatDistanceToNowStrict } from 'date-fns'
+import { NFTPositionHeaderProps, useNFTLockedPositionState } from './useNFTPositionViewer'
 
-interface NftPositionViewerProps {
-  stakeType: number
-  redeemIn: number
-}
-export const NftPositionViewer = (props: NftPositionViewerProps) => {
-  const { redeemIn, stakeType } = props
-
-  const redeemInDays = formatDistanceToNowStrict(redeemIn * 1000, { unit: 'day' })
-  const periodToPoolParameter = {
-    0: '360 Days',
-    1: '180 Days',
-    2: '90 Days',
-    3: '45 Days',
-  }
-  const period = periodToPoolParameter[stakeType]
-
+export const NFTPositionHeaderMobile = (props: NFTPositionHeaderProps) => {
+  const { period, redeemInDays } = useNFTLockedPositionState(props)
   return (
     <Flex height={'176px'} width="358px" direction="column" rounded={'2xl'} shadow={'Up Big'}>
       <Flex

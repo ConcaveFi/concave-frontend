@@ -1,6 +1,5 @@
 import { Box, Button, Flex, Spinner, Text } from '@concave/ui'
 import { BigNumber } from 'ethers'
-import { formatFixed } from 'utils/formatFixed'
 import { truncateNumber } from 'utils/truncateNumber'
 interface UserDividendCardProps {
   totalLocked: BigNumber
@@ -9,7 +8,6 @@ interface UserDividendCardProps {
 const UserDividendCard = (props: UserDividendCardProps) => {
   const { isLoading, totalLocked } = props
 
-  // commit
   return (
     <Box
       pos="relative"

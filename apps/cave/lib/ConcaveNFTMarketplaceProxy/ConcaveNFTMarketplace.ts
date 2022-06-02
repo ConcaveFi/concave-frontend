@@ -27,7 +27,7 @@ export class ConcaveNFTMarketplace {
     signer: Signer,
     { tokenId }: { tokenId: BigNumberish },
   ): Promise<ethers.Transaction> {
-    console.debug('createMarketItem')
+    //console.debug('createMarketItem')
     return this.contract.connect(signer).createMarketItem(tokenId.toString())
   }
 
@@ -37,7 +37,7 @@ export class ConcaveNFTMarketplace {
    * @returns
    */
   public async tokenIdToItemIds(nfc: NonFungibleTokenInfo): Promise<BigNumber> {
-    console.debug('tokenIdToItemIds', [nfc])
+    //console.debug('tokenIdToItemIds', [nfc])
     return this.contract.tokenIdToItemIds(nfc.tokenId)
   }
 
@@ -55,12 +55,12 @@ export class ConcaveNFTMarketplace {
     signer: Signer,
     nftContractAddress: NonFungibleTokenInfo,
   ): Promise<Transaction> {
-    console.debug('withdrawAuction')
+    //console.debug('withdrawAuction')
     return this.contract.connect(signer).withdrawAuction(nftContractAddress.tokenId.toString())
   }
 
   public async fetchItemsForSale() {
-    console.debug('fetchItemsForSale')
+    //console.debug('fetchItemsForSale')
     return this.contract.fetchItemsForSale()
   }
 
