@@ -21,7 +21,7 @@ export function Dashboard() {
 
       <Flex justify={'center'} position="relative">
         <UserDashboardCard data={data} />
-        <DashboardMobile data={data} />
+        {/* <DashboardMobile data={data} /> */}
       </Flex>
     </Flex>
   )

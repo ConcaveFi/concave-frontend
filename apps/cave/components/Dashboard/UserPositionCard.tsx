@@ -20,7 +20,7 @@ const UserPositionCard = (props: NftPositionCardProps) => {
       borderRadius={'2xl'}
       maxHeight={{ lg: '300px', md: '400px' }}
       bg={'linear-gradient(223.18deg, #19394C 27.18%, #0A161F 96.11%)'}
-      mr={1}
+      mr={3}
       mb={3}
     >
       <Flex shadow={'down'} bgSize="20% 30%" bgImage={'/assets/textures/metal.png'} rounded="2xl">
@@ -28,7 +28,7 @@ const UserPositionCard = (props: NftPositionCardProps) => {
           bg="linear-gradient(265.73deg, #274C63 0%, #182F3E 100%)"
           rounded="2xl"
           // maxWidth={{ lg: '550px', md: '380px' }}
-          maxWidth={{ lg: '700px', md: '520px' }}
+          maxWidth={{ lg: '710px', md: '490px' }}
         >
           <Flex bgSize="20% 30%" bgImage={'/assets/textures/metal.png'} shadow={'up'} rounded="2xl">
             <Flex direction={'column'}>

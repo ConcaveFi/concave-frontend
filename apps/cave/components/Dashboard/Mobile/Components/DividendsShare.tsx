@@ -27,6 +27,7 @@ const DividendsShareMobile = (props: DividendsShareMobileProps) => {
       bgPos="top"
       bgImage="assets/textures/glass.jpg"
       boxShadow={'Up Big'}
+      display={{ base: 'flex', md: 'none' }}
     >
       <Flex bg={'#31293066'} rounded={'2xl'} width="full" direction={'column'}>
         <Flex width={'full'} py="15px" justify={'center'}>

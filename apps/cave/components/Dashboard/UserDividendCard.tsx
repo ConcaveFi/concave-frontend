@@ -15,13 +15,15 @@ const UserDividendCard = (props: UserDividendCardProps) => {
       pos="relative"
       overflowY={'hidden'}
       borderRadius="16px"
-      mt={1}
+      mt={4}
+      mx="auto"
       shadow={'Down Big'}
-      width={'800px'}
-      height={{ lg: '136px', md: '160px' }}
+      width={{ lg: '700px', md: '490px' }}
+      height={{ lg: '166px', md: '160px' }}
+      display={{ base: 'none', md: 'block' }}
     >
       <Flex
-        m={6}
+        m={{ lg: 6, md: 4 }}
         flex={1}
         justify={{ lg: 'start', md: 'center' }}
         align="center"

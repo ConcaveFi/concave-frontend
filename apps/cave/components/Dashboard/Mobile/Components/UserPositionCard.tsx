@@ -15,7 +15,7 @@ const UserPositionCardMobile = (props: NftPositionCardMobileProps) => {
 
   return (
     // Default height: 660px
-    <Card maxWidth={'358px'} variant="secondary" height={'510px'}>
+    <Card maxWidth={'358px'} variant="secondary" height={'510px'} mb={2}>
       <Flex direction={'column'} bg={'#31293011'} width="full" flex={1}>
         <Flex
           bg={'linear-gradient(223.18deg, #19394C 27.18%, #0A161F 96.11%)'}

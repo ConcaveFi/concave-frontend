@@ -18,10 +18,10 @@ export const NftPositionViewer = (props: NftPositionViewerProps) => {
   const period = periodToPoolParameter[stakeType]
 
   return (
-    <Flex height={'176px'} width="358px" direction="column" rounded={'2xl'} shadow={'Up Big'}>
+    <Flex height={'176px'} width="345px" direction="column" rounded={'2xl'} shadow={'Up Big'}>
       <Flex
         height={'92px'}
-        width="334px"
+        width="320px"
         mx={'auto'}
         mt={3}
         boxShadow={'Down Big'}

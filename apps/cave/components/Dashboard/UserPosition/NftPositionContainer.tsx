@@ -36,7 +36,7 @@ const NftPositionContainer = (props: NftPositionContainerProps) => {
       borderRadius="16px"
       boxShadow={'up'}
       // width={{ lg: '540px', md: '380px' }}
-      width={{ lg: '700px', md: '520px' }}
+      width={{ lg: '710px', md: '490px' }}
     >
       <Flex direction="row" gap={4} alignItems="center" justify="center" m={2} position="relative">
         <Flex
@@ -77,7 +77,7 @@ const NftPositionContainer = (props: NftPositionContainerProps) => {
               Token ID:
             </Text>
             <Text fontSize="md" fontWeight="bold">
-              {props.tokendId.toString()}
+              {+props.tokendId.toString()}
             </Text>
           </Flex>
         </Flex>

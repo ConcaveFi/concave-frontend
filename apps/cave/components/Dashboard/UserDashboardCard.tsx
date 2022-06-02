@@ -1,7 +1,20 @@
-import { Box, Button, Card, Collapse, Flex, Spinner, Text } from '@concave/ui'
+import {
+  Box,
+  Button,
+  Card,
+  Collapse,
+  Flex,
+  Spinner,
+  Text,
+  useBreakpoint,
+  useBreakpointValue,
+} from '@concave/ui'
+import DividendsCardMobile from 'components/Treasury/Mobile/DividendsCardMobile'
 import { UseDashBoardState } from 'contracts/DashBoard/DashBoardState'
 import { useRouter } from 'next/router'
 import { useConnect } from 'wagmi'
+import DividendsShareMobile from './Mobile/Components/DividendsShare'
+import UserPositionCardMobile from './Mobile/Components/UserPositionCard'
 import UserDividendCard from './UserDividendCard'
 import UserPositionCard from './UserPositionCard'
 
@@ -9,40 +22,60 @@ const UserDashboardCard = (props: { data: UseDashBoardState }) => {
   const { data } = props
   const [{ data: wallet }] = useConnect()
   const { userNonFungibleTokensInfo, totalLocked, isLoading } = data
-  const userPositionsComponent = userNonFungibleTokensInfo.map((nonFungibleTokenInfo, index) => (
-    <UserPositionCard key={index} nonFungibleTokenInfo={nonFungibleTokenInfo} />
-  ))
+  const isMobile = useBreakpointValue({ base: true, md: false })
+  const userPositionsComponent = userNonFungibleTokensInfo.map((nonFungibleTokenInfo, index) =>
+    isMobile ? (
+      <UserPositionCardMobile key={index} nonFungibleTokenInfo={nonFungibleTokenInfo} />
+    ) : (
+      <UserPositionCard key={index} nonFungibleTokenInfo={nonFungibleTokenInfo} />
+    ),
+  )
 
   const hasPositions = userNonFungibleTokensInfo.length !== 0
 
   return (
-    <Flex display={{ lg: 'flex', md: 'flex', sm: 'none', base: 'none' }}>
-      <Card
-        p={3}
-        gap={2}
-        variant="primary"
-        maxHeight="775px"
-        shadow="down"
-        maxW={{ lg: '760px', md: '580px' }}
-        justify="center"
+    <Box
+      shadow={{ base: '', md: 'up' }}
+      bg={{ base: '', md: 'stroke.primary' }}
+      rounded="2xl"
+      p={'1px'}
+    >
+      <Flex
+        rounded={'inherit'}
+        width={{ lg: '740px', md: '520px', base: '360px' }}
+        height="770px"
+        bg={{ base: '', md: 'linear-gradient(265.73deg, #274C63 0%, #182F3E 100%)' }}
+        position="relative"
+        direction={'column'}
       >
-        <Flex justify="center" position={'relative'}>
-          <Box
-            pos="relative"
-            h="fit-content"
-            w="fit-content"
-            px={4}
-            pb="4"
-            pt="1"
-            overflowY={'auto'}
-            maxHeight={'500px'}
-          >
-            <Flex direction="row" gap={4} position="relative" mt={1}>
-              <UserDividendCard isLoading={isLoading} totalLocked={totalLocked} />
-            </Flex>
-          </Box>
+        <Box
+          display={{ base: 'none', md: 'block' }}
+          rounded={'inherit'}
+          position={'absolute'}
+          bgImage={'assets/textures/metal.png'}
+          width={'full'}
+          height="full"
+          bgSize={'20% 30%'}
+        />
+        <UserDividendCard isLoading={isLoading} totalLocked={totalLocked} />
+        {/* Displayed only in shorter screens */}
+        <DividendsShareMobile isLoading={isLoading} totalLocked={totalLocked} />
+        <Flex
+          pos="relative"
+          h="100%"
+          overflowY={'scroll'}
+          overflowX="hidden"
+          maxHeight={'100%'}
+          borderRadius="12px"
+          px={'0.5rem'}
+          py={'0.5rem'}
+          mt={6}
+          __css={scrollBar}
+        >
+          {userPositionsComponent}
         </Flex>
-
+      </Flex>
+      {/* 
         <Collapse in={hasPositions}>
           <Box
             pos="relative"
@@ -63,8 +96,8 @@ const UserDashboardCard = (props: { data: UseDashBoardState }) => {
         <LoadingPositions in={isLoading} />
         <ItsNotConected in={!wallet.connected} />
         <HasNoPositions in={!hasPositions && !isLoading && wallet.connected} />
-      </Card>
-    </Flex>
+      */}
+    </Box>
   )
 }
 
@@ -129,6 +162,7 @@ export default UserDashboardCard
 
 const scrollBar = {
   '&::-webkit-scrollbar': {
+    display: { base: 'none', md: 'block' },
     width: '15px',
     boxShadow: `-1px 1px 3px rgba(126, 162, 255, 0.26), inset 0px -5px 5px rgba(255, 255, 255, 0.02), inset -9px 12px 24px rgba(13, 17, 23, 0.49)`,
     borderRadius: '10px',
