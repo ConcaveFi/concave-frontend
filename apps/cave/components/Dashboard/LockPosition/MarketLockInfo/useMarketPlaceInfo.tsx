@@ -1,15 +1,4 @@
-import {
-  Box,
-  Button,
-  ButtonProps,
-  Flex,
-  Modal,
-  ModalContent,
-  ModalOverlay,
-  Text,
-  useDisclosure,
-} from '@concave/ui'
-import { Loading } from 'components/Loading'
+import { ButtonProps, useDisclosure } from '@concave/ui'
 import { Transaction } from 'ethers'
 import { Offer } from 'lib/ConcaveNFTMarketplaceProxy/Auction'
 import { ConcaveNFTMarketplace } from 'lib/ConcaveNFTMarketplaceProxy/ConcaveNFTMarketplace'
@@ -18,66 +7,10 @@ import { MarketItemInfo } from 'lib/ConcaveNFTMarketplaceProxy/MarketInfo'
 import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungibleToken'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
-import { formatFixed } from 'utils/formatFixed'
 import { useSigner, useWaitForTransaction } from 'wagmi'
-import { ListPositionForSale, useListeForSaleState } from '../UserListPositionCard'
-import { Info } from './RedeemViewer'
-interface MarketplaceInfoProps {
-  nonFungibleTokenInfo: NonFungibleTokenInfo
-}
-
-const MarketplaceInfo = (props: MarketplaceInfoProps) => {
-  const marketInfoState = useMarketInfo(props)
-  const buttonState = useMarketInfoActionButton(marketInfoState)
-  const { marketInfo } = marketInfoState
-  if (marketInfo.isLoading) {
-    return <Loading m={4} size="sm" rLabel="Loading market info" />
-  }
-  return (
-    <Box
-      shadow={marketInfo.data.isListed ? '' : 'down'}
-      borderRadius="2xl"
-      mt={{ lg: 1, md: 0 }}
-      mb={3}
-      mx={2}
-      py={3}
-      px={4}
-    >
-      <Flex justify={{ lg: 'left', md: 'center' }}>
-        <Text color="text.low" fontSize="lg" as="b">
-          Your Marketplace Listing
-        </Text>
-      </Flex>
-      <Flex justify={{ lg: 'left', md: 'center' }}>
-        <Info
-          label={'List Price:'}
-          width={'full'}
-          valueFontSize={'lg'}
-          value={
-            marketInfo.data.isListed
-              ? `${formatFixed(marketInfo.data.listPrice, { places: 4 })} CNV`
-              : '---'
-          }
-        />
-        <Info
-          label={'Discount:'}
-          width={'full'}
-          value={
-            marketInfo.data.isListed
-              ? `${formatFixed(marketInfo.data.discount, { decimals: 2 })} %`
-              : '---'
-          }
-        />
-        <Info label={'Expiration Date:'} width={'full'} value={'---'} />
-        <Button variant={'primary'} minW={'160px'} size={'md'} width={'full'} {...buttonState} />
-      </Flex>
-      <ListForSaleModal marketInfoState={marketInfoState} />
-    </Box>
-  )
-}
 
 export type UserMarketInfoState = ReturnType<typeof useMarketInfo>
-const useMarketInfo = ({
+export const useMarketInfo = ({
   nonFungibleTokenInfo,
 }: {
   nonFungibleTokenInfo: NonFungibleTokenInfo
@@ -124,6 +57,7 @@ const useMarketInfo = ({
       setTransaction(tx)
     } catch {}
     setIsWaitingForWallet(false)
+    offerDisclosure.onClose()
   }
 
   return {
@@ -138,7 +72,7 @@ const useMarketInfo = ({
   }
 }
 
-const useMarketInfoActionButton = (marketInfoState: UserMarketInfoState): ButtonProps => {
+export const getMarketPlaceButtonProps = (marketInfoState: UserMarketInfoState): ButtonProps => {
   const { tx, marketInfo, isWaitingForWallet, offerDisclosure, createMarketItem, withdrawOffer } =
     marketInfoState
   if (tx?.loading) {
@@ -161,23 +95,3 @@ const useMarketInfoActionButton = (marketInfoState: UserMarketInfoState): Button
   }
   return { children: 'List For Sale', onClick: offerDisclosure.onOpen }
 }
-
-const ListForSaleModal = ({ marketInfoState }: { marketInfoState: UserMarketInfoState }) => {
-  const listForSaleState = useListeForSaleState({ marketInfoState })
-  return (
-    <Modal
-      title=""
-      size={'xs'}
-      isOpen={marketInfoState.offerDisclosure.isOpen}
-      onClose={marketInfoState.offerDisclosure.onClose}
-      isCentered
-    >
-      <ModalOverlay bg={'none'} backdropBlur="4px" zIndex={0} />
-      <ModalContent>
-        <ListPositionForSale state={listForSaleState} />
-      </ModalContent>
-    </Modal>
-  )
-}
-
-export default MarketplaceInfo

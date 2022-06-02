@@ -1,9 +1,8 @@
 import { SpinnerIcon } from '@concave/icons'
 import { Flex, keyframes, Text } from '@concave/ui'
 import { BigNumber } from 'ethers'
-import { formatFixed } from 'utils/formatFixed'
-import { useConnect } from 'wagmi'
 import { truncateNumber } from 'utils/truncateNumber'
+import { useConnect } from 'wagmi'
 interface DividendsShareMobileProps {
   totalLocked: BigNumber
   isLoading: boolean
@@ -13,7 +12,7 @@ const spin = keyframes({
   '0%': { transform: 'rotate(0deg)' },
   '100%': { transform: 'rotate(360deg)' },
 })
-const DividendsShareMobile = (props: DividendsShareMobileProps) => {
+export const DividendsShareMobile = (props: DividendsShareMobileProps) => {
   const spinnerStyles = { animation: `${spin} 2s linear infinite`, size: 'sm' }
   const { isLoading, totalLocked } = props
 
@@ -102,4 +101,3 @@ const HighText = (props: { label: string | number }) => {
     </Text>
   )
 }
-export default DividendsShareMobile

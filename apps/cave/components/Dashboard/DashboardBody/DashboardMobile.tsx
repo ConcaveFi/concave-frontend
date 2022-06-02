@@ -2,22 +2,18 @@ import { SpinIcon } from '@concave/icons'
 import { Box, Collapse, Flex, keyframes, Text, VStack, Button } from '@concave/ui'
 import { UseDashBoardState } from 'contracts/DashBoard/DashBoardState'
 import { useConnect } from 'wagmi'
-import DividendsShareMobile from './Components/DividendsShare'
-import UserPositionCardMobile from './Components/UserPositionCard'
+import { UserPositionCardMobile } from '../LockPosition/Card/MobileUserPositionCard'
+import { DividendsShareMobile } from './DividendsShare'
 import { useRouter } from 'next/router'
 const spin = keyframes({
   '0%': { transform: 'rotate(0deg)' },
   '100%': { transform: 'rotate(360deg)' },
 })
 
-const DashboardMobile = (props: { data: UseStackPositionsState }) => {
+export const DashboardMobile = (props: { data: UseStackPositionsState }) => {
   const { data } = props
   const { isLoading, userNonFungibleTokensInfo, totalLocked } = data
   const { isConnected } = useConnect()
-
-  const userPosComps = userNonFungibleTokensInfo.map((nonFungibleTokenInfo, index) => (
-    <UserPositionCardMobile key={index} nonFungibleTokenInfo={nonFungibleTokenInfo} />
-  ))
   const hasPositions = userNonFungibleTokensInfo.length !== 0
   return (
     <Flex direction={'column'} align="center" display={{ lg: 'none', md: 'none', sm: 'flex' }}>
@@ -34,8 +30,12 @@ const DashboardMobile = (props: { data: UseStackPositionsState }) => {
         rounded={!isLoading && '2xl'}
         gap={4}
       >
-        <Collapse in={!isLoading}>
-          <VStack>{userPosComps}</VStack>
+        <Collapse in={true}>
+          <VStack>
+            {userNonFungibleTokensInfo.map((nonFungibleTokenInfo, index) => (
+              <UserPositionCardMobile key={index} nonFungibleTokenInfo={nonFungibleTokenInfo} />
+            ))}
+          </VStack>
         </Collapse>
         <LoadingPositions in={isLoading} />
         <NotConnected in={!isConnected} />
@@ -44,8 +44,6 @@ const DashboardMobile = (props: { data: UseStackPositionsState }) => {
     </Flex>
   )
 }
-
-export default DashboardMobile
 
 const scrollBar = {
   '&::-webkit-scrollbar': {

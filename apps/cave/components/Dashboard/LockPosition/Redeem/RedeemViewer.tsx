@@ -1,18 +1,13 @@
 import { Box, Button, Flex, FlexProps, Text, TextProps } from '@concave/ui'
-import { BigNumber } from 'ethers'
-import { formatEther } from 'ethers/lib/utils'
 import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungibleToken'
-import { formatFixed } from 'utils/formatFixed'
+import { bigNumberMask, createRedeemState } from './UseRedeemState'
 
 interface RedeemCardViewerProps {
   nonFungibleTokenInfo: NonFungibleTokenInfo
 }
 const RedeemCardViewer = ({ nonFungibleTokenInfo }: RedeemCardViewerProps) => {
-  const { shares, rewardDebt, maturity, deposit, userReward } = nonFungibleTokenInfo
-  console.log('nft info', nonFungibleTokenInfo)
-  const curValue = BigNumber.from(userReward[3])
-  const initialBal = BigNumber.from(userReward[0])
-  const gainedAmt = curValue.sub(initialBal)
+  const { curValue, initialBal, gainedAmt, maturity } = createRedeemState({ nonFungibleTokenInfo })
+
   return (
     <Box borderRadius="2xl" mt={{ lg: 1, md: 0 }} mb={3} mx={2} py={3} px={4}>
       <Flex justify={{ lg: 'left', md: 'center' }}>
@@ -54,15 +49,6 @@ const RedeemCardViewer = ({ nonFungibleTokenInfo }: RedeemCardViewerProps) => {
   )
 }
 
-export const bigNumberMask = (number: BigNumber) => {
-  if (number.eq(0)) {
-    return `0`
-  }
-  if (+formatEther(number) < 0.01) {
-    return `<.01`
-  }
-  return formatFixed(number)
-}
 interface Info extends FlexProps {
   label: string
   value: string

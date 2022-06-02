@@ -10,7 +10,7 @@ import { formatFixed } from 'utils/formatFixed'
 import { toAmount } from 'utils/toAmount'
 import { truncateNumber } from 'utils/truncateNumber'
 import { useAccount } from 'wagmi'
-import { UserMarketInfoState } from './UserPosition/MarketplaceInfo'
+import { UserMarketInfoState } from './LockPosition/MarketLockInfo/useMarketPlaceInfo'
 
 type UserListPositionCardProps = {
   marketInfoState: UserMarketInfoState
@@ -24,6 +24,7 @@ export const useListeForSaleState = ({ marketInfoState }: UserListPositionCardPr
     new Offer({
       ...marketInfoState.marketInfo.data.offer,
       ERC20Token: marketInfoState.marketInfo.data.NFT.tokenOfStack.address,
+      buyNowPrice: marketInfoState.marketInfo.data.NFT.currentValue,
       feePercentages: [10000],
       feeRecipients: [account.address],
     }),
