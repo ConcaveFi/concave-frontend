@@ -73,15 +73,16 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
     <>
       <Box>
         <Card shadow="down" w="350px" px={0} py={0}>
-          <Flex justify="space-between" alignItems="center">
+          <Flex>
             <CurrencyInputField currencyAmountIn={stakeInput} onChangeAmount={setStakeInput} />
           </Flex>
         </Card>
 
-        <Box mt={10} width="350px">
+        <Box mt={{ base: 4, sm: 10 }} width="350px">
           <ApproveButton
             approveArgs={{
               currency: stakeInput.currency,
+              amount: stakeInput.numerator,
               spender: StakingV1ProxyAddress[stakeInput.currency.chainId],
             }}
             mt={5}
@@ -90,7 +91,7 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
             fontSize="md"
             variant="primary"
             bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
-            w="100%"
+            w={{ base: '60%', sm: '80%', md: '100%' }}
             h="50px"
             size="large"
             mx="auto"

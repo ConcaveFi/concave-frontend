@@ -1,10 +1,8 @@
-import { Box, Button, Card, Flex, Image, Text } from '@concave/ui'
-import { InfoItem } from 'components/Bond/BondInfo'
+import { Box, Card, Flex, Text } from '@concave/ui'
 import { formatDistanceStrict } from 'date-fns'
-import { commify } from 'ethers/lib/utils'
 import { useGet_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql'
 import { useEffect, useState } from 'react'
-
+import { truncateNumber } from 'utils/truncateNumber'
 export const TreasuryInfoItem = ({ label, amount, ...props }) => (
   <Flex
     direction="column"
@@ -129,9 +127,11 @@ export default function TreasuryRevenueCard(props) {
       )
     : ['loading', 'loading', 'loading']
 
-  const lastsAmounts = lastsSolds ? lastsSolds.map((value) => value.inputAmount) : ['0', '0', '0']
+  const lastsAmounts = lastsSolds
+    ? lastsSolds.map((value) => '+$' + truncateNumber(value?.inputAmount * 10 ** 18))
+    : ['0', '0', '0']
   const lastsOutputamounts = lastsSolds
-    ? lastsSolds.map((value) => '+$' + commify(parseFloat(value.output).toFixed(2)))
+    ? lastsSolds.map((value) => '' + truncateNumber(+value?.output * 10 ** 18))
     : ['0', '0', '0']
   return (
     <Card
@@ -146,30 +146,30 @@ export default function TreasuryRevenueCard(props) {
         <Flex direction={'column'} gap={5}>
           <TreasuryInfo
             box1="Market Cap"
-            box1b={'$' + commify(cnv.cnvData.data.marketCap.toFixed(2))}
+            box1b={'$' + truncateNumber(cnv.cnvData.data.marketCap * 10 ** 18)}
             box2="CNV Price"
-            box2b={'$' + commify(cnv.cnvData.data.last.toFixed(2))}
-            box3="Treasury value per CNV"
-            box3b={'$' + commify((total / cnv.cnvData.data.totalSupply).toFixed(2))}
+            box2b={'$' + truncateNumber(cnv.cnvData.data.last * 10 ** 18)}
+            box3="Treasury Value per CNV"
+            box3b={'$' + truncateNumber((total / cnv.cnvData.data.totalSupply) * 10 ** 18)}
           />
           <TreasuryInfo
             box1="Treasury Revenue 24h"
-            box1b="+$20,253"
+            box1b="Coming Soon"
             box2="Treasury Value"
-            box2b={'$' + commify(total.toFixed(2))}
-            box3="CNV total supply"
-            box3b={'$' + commify(cnv.cnvData.data.totalSupply.toFixed(2))}
+            box2b={'$' + truncateNumber(total * 10 ** 18)}
+            box3="CNV Total Supply"
+            box3b={'' + truncateNumber(cnv.cnvData.data.totalSupply * 10 ** 18)}
           />
           <BondInfo
             bondbox1={relativeTimeline[0]}
-            bondbox1a={`${lastsAmounts[0]} CNV bond`}
-            bondbox1b={lastsOutputamounts[0]}
+            bondbox1a={`${lastsOutputamounts[0]} CNV bond`}
+            bondbox1b={lastsAmounts[0]}
             bondbox2={relativeTimeline[1]}
-            bondbox2a={`${lastsAmounts[1]} CNV bond`}
-            bondbox2b={lastsOutputamounts[1]}
+            bondbox2a={`${lastsOutputamounts[1]} CNV bond`}
+            bondbox2b={lastsAmounts[1]}
             bondbox3={relativeTimeline[2]}
-            bondbox3a={`${lastsAmounts[2]} CNV bond`}
-            bondbox3b={lastsOutputamounts[2]}
+            bondbox3a={`${lastsOutputamounts[2]} CNV bond`}
+            bondbox3b={lastsAmounts[2]}
           />
         </Flex>
       </Flex>

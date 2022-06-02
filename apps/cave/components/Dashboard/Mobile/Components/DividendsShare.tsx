@@ -3,7 +3,7 @@ import { Flex, keyframes, Text } from '@concave/ui'
 import { BigNumber } from 'ethers'
 import { formatFixed } from 'utils/formatFixed'
 import { useConnect } from 'wagmi'
-
+import { truncateNumber } from 'utils/truncateNumber'
 interface DividendsShareMobileProps {
   totalLocked: BigNumber
   isLoading: boolean
@@ -16,12 +16,8 @@ const spin = keyframes({
 const DividendsShareMobile = (props: DividendsShareMobileProps) => {
   const [{ data: wallet }] = useConnect()
   const spinnerStyles = { animation: `${spin} 2s linear infinite`, size: 'sm' }
-  const { isLoading } = props
-  const totalLocked = !wallet.connected
-    ? '--.--.--.--'
-    : isLoading
-    ? 'loading'
-    : formatFixed(props.totalLocked, { decimals: 3 }) + ' CNV'
+  const { isLoading, totalLocked } = props
+
   return (
     <Flex
       rounded={'2xl'}
@@ -42,7 +38,7 @@ const DividendsShareMobile = (props: DividendsShareMobileProps) => {
           <Flex flex={1} direction={'column'}>
             <LowText label="Total Locked:" />
             <Flex justify={'center'}>
-              <HighText label={totalLocked} />
+              <HighText label={truncateNumber(+totalLocked.toString()) + ' CNV'} />
               {isLoading && (
                 <SpinnerIcon css={spinnerStyles} height={'15px'} width={'15px'} ml={1} my="auto" />
               )}
@@ -55,7 +51,7 @@ const DividendsShareMobile = (props: DividendsShareMobileProps) => {
         </Flex>
         <Flex height={'60px'} justify={'space-around'} textAlign="center">
           <Flex flex={1} direction={'column'}>
-            <LowText label="Next devidend date:" />
+            <LowText label="Next dividend date:" />
             <HighText label="07/04/2022" />
           </Flex>
           <Flex flex={1} direction={'column'}>

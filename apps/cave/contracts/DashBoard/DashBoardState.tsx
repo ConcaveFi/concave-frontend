@@ -24,6 +24,8 @@ export const useDashBoardState = () => {
 }
 function getTotalLocked(nonFungibleTokens: NonFungibleTokenInfo[]) {
   return (nonFungibleTokens || []).reduce((amount, current) => {
-    return amount.add(current.shares)
+    const currentValue = current.userReward.totalRewards
+
+    return amount.add(currentValue)
   }, BigNumber.from(0))
 }

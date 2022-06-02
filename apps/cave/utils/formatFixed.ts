@@ -1,15 +1,22 @@
 import { utils } from 'ethers'
 import { BigNumber } from 'ethers'
 
-export const formatFixed = (bigNumber: BigNumber, { decimals = 18, places = 2 } = {}) => {
+export const formatFixed = (
+  bigNumber: BigNumber,
+  { decimals = 18, places = 2, minPlaces = 2 } = {},
+) => {
   const input = +utils.formatUnits(bigNumber, decimals)
-  return precision(input, places)
+  return floorPrecision(input, { maximumFractionDigits: places, minimumFractionDigits: minPlaces })
 }
 
-export const precision = (input: number, places = 4) => {
-  const _ = 10 ** places
-  const result = Math.abs(input * _) / _ || 0
+const floorPrecision = (
+  input: number,
+  { maximumFractionDigits = 4, minimumFractionDigits = 2 },
+) => {
+  const _ = 10 ** maximumFractionDigits
+  const result = Math.floor(input * _) / _ || 0
   return result.toLocaleString('en-US', {
-    maximumFractionDigits: places,
+    minimumFractionDigits,
+    maximumFractionDigits,
   })
 }

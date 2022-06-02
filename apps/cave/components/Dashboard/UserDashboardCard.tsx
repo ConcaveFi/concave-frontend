@@ -134,7 +134,8 @@ const scrollBar = {
     borderRadius: '10px',
   },
   '&::-webkit-scrollbar-thumb': {
-    background: 'linear-gradient(239.18deg, #19394C 27.18%, #0A161F 96.11%)',
+    // background: 'linear-gradient(239.18deg, #19394C 27.18%, #0A161F 96.11%)',
+    background: '#19394C',
     boxShadow:
       '0px 5px 14px rgba(0, 0, 0, 0.47), 4px -7px 15px rgba(174, 177, 255, 0.13), inset -1px 1px 2px rgba(128, 186, 255, 0.24)',
     rounded: 'lg',

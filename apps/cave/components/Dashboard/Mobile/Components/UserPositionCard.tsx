@@ -11,13 +11,11 @@ interface NftPositionCardMobileProps {
 
 const UserPositionCardMobile = (props: NftPositionCardMobileProps) => {
   const { nonFungibleTokenInfo } = props
-  const { maturity, poolID, shares, rewardDebt } = nonFungibleTokenInfo
-  const dateToRedeem = epochConverter(maturity)
-  const currentData = new Date()
-  const redeemIn = dateToRedeem.getTime() - currentData.getTime()
+  const { maturity, poolID, deposit, rewardDebt } = nonFungibleTokenInfo
 
   return (
-    <Card maxWidth={'358px'} variant="secondary" height={'660px'}>
+    // Default height: 660px
+    <Card maxWidth={'358px'} variant="secondary" height={'510px'}>
       <Flex direction={'column'} bg={'#31293011'} width="full" flex={1}>
         <Flex
           bg={'linear-gradient(223.18deg, #19394C 27.18%, #0A161F 96.11%)'}
@@ -31,8 +29,8 @@ const UserPositionCardMobile = (props: NftPositionCardMobileProps) => {
             bg="url(assets/textures/metal.png)"
             bgSize={'30% 30%'}
           >
-            <NftPositionViewer redeemIn={redeemIn} stakeType={poolID} />
-            <RedeemContainer rewardDebt={rewardDebt} shares={shares} />
+            <NftPositionViewer redeemIn={maturity} stakeType={poolID} />
+            <RedeemContainer nonFungibleTokenInfo={nonFungibleTokenInfo} />
             <MarketPlaceListingMobile />
             <Flex
               direction={'column'}
@@ -42,7 +40,7 @@ const UserPositionCardMobile = (props: NftPositionCardMobileProps) => {
               justify={'end'}
               zIndex={-1}
             >
-              <StakingRewardMobile position="relative" />
+              {/* <StakingRewardMobile position="relative" /> */}
             </Flex>
           </Flex>
         </Flex>

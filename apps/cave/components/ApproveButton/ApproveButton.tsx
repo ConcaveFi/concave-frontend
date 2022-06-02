@@ -9,7 +9,7 @@ type ApproveButtonProps = ButtonProps & {
   autoHide?: boolean
   approveArgs: {
     currency: Currency
-    amount?: BigNumberish
+    amount: BigNumberish
     spender: string
     onSuccess?: () => void
   }
@@ -27,7 +27,6 @@ type ApproveButtonState = {
 export const ApproveButton = ({ approveArgs, ...buttonProps }: ApproveButtonProps) => {
   const { currency, spender, amount = MaxUint256.toString() } = approveArgs
   const { allowance, ...approve } = useApprove(currency.wrapped, spender)
-
   const [{ data: account }] = useAccount()
   const { connectModal } = useModals()
   if (!account?.address)
@@ -49,24 +48,24 @@ export const ApproveButton = ({ approveArgs, ...buttonProps }: ApproveButtonProp
     error: { enable: false, label: 'Error occurred' },
   }
   const stateKey: keyof typeof approveButtonAvailabelStates = (() => {
-    if (+allowance?.value === 0) return 'default'
     if (currency.isNative) return 'successful'
-    if (allowance?.value?.gte(currency.wrapped.totalSupply.numerator.toString()))
-      return 'successful'
-    if (approve.isFeching) return 'feching'
-    if (allowance?.value?.gte(amount)) return 'successful'
-    if (approve.isWaitingTransactionReceipt) return 'pending'
-    if (approve.isWaitingForConfirmation) return 'waitingWallet'
-    if (approve.isTransactionSent) return 'successful'
     if (approve.isError && approve.error['code'] !== 4001) return 'error'
+
+    if (
+      currency.wrapped.totalSupply.greaterThan(0) &&
+      allowance?.amount?.greaterThan(currency.wrapped.totalSupply.numerator)
+    )
+      return 'successful'
+    if (allowance?.value?.gte(amount.toString())) return 'successful'
+    if (approve.isWaitingForConfirmation) return 'waitingWallet'
+    if (approve.isWaitingTransactionReceipt) return 'pending'
+    if (approve.isFeching) return 'feching'
     return 'default'
   })()
   const state = approveButtonAvailabelStates[stateKey]
   if ('cb' in state) state.cb()
   if ('successful' === stateKey && buttonProps.autoHide) return <></>
-  if (('successful' === stateKey || buttonProps.isDisabled) && buttonProps.children) {
-    return <Button {...buttonProps} />
-  }
+  if ('successful' === stateKey) return <Button {...buttonProps} />
 
   return (
     <Button

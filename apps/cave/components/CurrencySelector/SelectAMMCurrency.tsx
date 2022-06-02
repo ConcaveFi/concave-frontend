@@ -4,7 +4,7 @@ import { Button, Flex, Heading, Modal } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import React from 'react'
-import { developmentChains } from 'wagmi'
+import { defaultChains, developmentChains } from 'wagmi'
 import { CurrencySelector } from './CurrencySelector'
 import { SearchableTokenList } from './SearchableTokenList'
 
@@ -32,7 +32,7 @@ const CommonTokens = ({
             aria-selected={!!selected?.equals(currency)}
             variant="select"
           >
-            {!!developmentChains.findIndex((c) => c.id === currency.chainId) ? 't' : ''}
+            {!!defaultChains.findIndex((c) => c.id === currency.chainId) ? 't' : ''}
             {currency.symbol}
           </Button>
         ))}

@@ -1,14 +1,17 @@
 import { Button, Flex, FlexProps, Text } from '@concave/ui'
-import { utils } from 'ethers'
+import { BigNumber } from 'ethers'
+import { formatEther } from 'ethers/lib/utils'
 import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungibleToken'
-import { truncateNumber } from 'utils/truncateNumber'
+import { formatFixed } from 'utils/formatFixed'
 
 interface RedeemCardViewerProps {
   nonFungibleTokenInfo: NonFungibleTokenInfo
 }
 const RedeemCardViewer = ({ nonFungibleTokenInfo }: RedeemCardViewerProps) => {
-  const { shares, rewardDebt, maturity } = nonFungibleTokenInfo
-
+  const { maturity, userReward } = nonFungibleTokenInfo
+  const curValue = userReward.totalRewards
+  const initialBal = userReward.amountDeposited
+  const gainedAmt = curValue.sub(initialBal)
   return (
     <Flex
       flex={1}
@@ -21,15 +24,20 @@ const RedeemCardViewer = ({ nonFungibleTokenInfo }: RedeemCardViewerProps) => {
       gap={{ lg: 0, md: 2 }}
     >
       <Flex gap={{ lg: 0, md: 4 }}>
-        <Info label="Current Value" value={utils.formatEther(nonFungibleTokenInfo.currentValue)} />
-        <Info label="Gained" value={utils.formatEther(nonFungibleTokenInfo.rewardDebt)} />
-        <Info label="Initial" value={utils.formatEther(nonFungibleTokenInfo.initialValue)} />
+        <Info
+          label="Current Value"
+          value={bigNumberMask(curValue) + ' CNV'}
+          ml={{ lg: 7, md: '0px' }}
+        />
+        <Info label="Gained" value={bigNumberMask(gainedAmt) + ' CNV'} />
+        <Info label="Initial" value={bigNumberMask(initialBal) + ' CNV'} />
       </Flex>
       <Button
         w={{ lg: '140px', md: '170px' }}
         h={{ lg: '40px', md: '36px' }}
         fontWeight="bold"
         mx="auto"
+        mr={{ lg: 3, md: 'auto' }}
         cursor={maturity > 0 ? 'default' : 'pointer'}
         variant={maturity > 0 ? '' : 'primary'}
         shadow={maturity > 0 ? 'down' : 'up'}
@@ -43,6 +51,16 @@ const RedeemCardViewer = ({ nonFungibleTokenInfo }: RedeemCardViewerProps) => {
       </Button>
     </Flex>
   )
+}
+
+export const bigNumberMask = (number: BigNumber) => {
+  if (number.eq(0)) {
+    return `0`
+  }
+  if (+formatEther(number) < 0.01) {
+    return `<.01`
+  }
+  return formatFixed(number)
 }
 interface Info extends FlexProps {
   label: string
@@ -61,7 +79,7 @@ const Info: React.FC<Info> = ({ ...props }) => {
         {props.label}
       </Text>
       <Text fontSize="md" fontWeight="bold" noOfLines={1}>
-        {+props.value >= 0.01 ? truncateNumber(+props.value * 10 ** 18) : '<.01'} CNV
+        {props.value}
       </Text>
     </Flex>
   )

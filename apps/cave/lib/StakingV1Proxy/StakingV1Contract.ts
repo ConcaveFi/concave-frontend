@@ -5,6 +5,7 @@ import { StakingV1ProxyAddress } from './Address'
 import { StakingV1Abi } from './ContractABI'
 import { Position } from './Position'
 import { Pool } from './Pool'
+import { UserReward } from './UserReward'
 
 export class StakingV1Contract {
   private readonly contract: ethers.Contract
@@ -20,6 +21,12 @@ export class StakingV1Contract {
 
   public async viewStakingCap(poolNum: number | string): Promise<BigNumber> {
     return this.contract.viewStakingCap(poolNum)
+  }
+
+  public async viewPositionRewards(tokenId: number): Promise<UserReward> {
+    const rewards = await this.contract.viewPositionRewards(tokenId)
+    // to remove array props
+    return { ...rewards }
   }
 
   public async lock(

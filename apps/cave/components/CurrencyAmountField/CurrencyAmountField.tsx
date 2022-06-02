@@ -23,7 +23,7 @@ export function CurrencyAmountField({
 } & FlexProps) {
   const styles = useMultiStyleConfig('Input', { variant: 'primary', size: 'large' })
 
-  const [internalValue, setInternalValue] = useState('')
+  const [internalValue, setInternalValue] = useState<number | string>('')
 
   const isFocused = useRef(false)
 
@@ -46,12 +46,12 @@ export function CurrencyAmountField({
     [currencyAmount?.currency, onChangeAmount],
   )
 
-  const onSelectCurrency = useCallback(
-    (newCurrency: Currency) => onChangeAmount(toAmount(internalValue, newCurrency)),
-    [internalValue, onChangeAmount],
-  )
-
   const inputValue = isFocused.current ? internalValue : +currencyAmount?.toSignificant(8) || ''
+
+  const onSelectCurrency = useCallback(
+    (newCurrency: Currency) => onChangeAmount(toAmount(inputValue, newCurrency)),
+    [inputValue, onChangeAmount],
+  )
 
   return (
     <Stack sx={{ ...styles.field, bg: 'none' }} justify="space-between" spacing={0}>
@@ -60,7 +60,10 @@ export function CurrencyAmountField({
           fontSize={{ base: 'lg', md: '2xl' }}
           disabled={disabled}
           w="100%"
-          onFocus={() => (isFocused.current = true)}
+          onFocus={() => {
+            isFocused.current = true
+            if (currencyAmount) setInternalValue(+currencyAmount?.toSignificant(8) || '')
+          }}
           onBlur={() => (isFocused.current = false)}
           value={inputValue}
           onValueChange={handleChange}

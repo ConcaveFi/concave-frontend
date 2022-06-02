@@ -1,8 +1,9 @@
 import { JSBI } from '@concave/gemswap-sdk'
+import { BigNumber } from 'ethers'
 import { useCurrencyBalance, UseCurrencyBalanceData } from 'hooks/useCurrencyBalance'
 
 export const truncateNumber = (
-  valueToTruncate: number | UseCurrencyBalanceData | JSBI,
+  valueToTruncate: number | UseCurrencyBalanceData | JSBI | BigNumber,
   decimal?: number,
 ) => {
   let decimalPlaces = decimal || 2

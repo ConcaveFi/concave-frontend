@@ -103,6 +103,7 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
   const swapButtonProps = useSwapButtonProps({
     trade,
     recipient,
+    settings,
     onSwapClick: settings.expertMode ? swapTx.submit : confirmationModal.onOpen,
   })
 
@@ -136,10 +137,12 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
             p={6}
             gap={2}
             variant="primary"
-            h="fit-content"
+            // h="fit-content"
+            h="400px" // match candlestick
             shadow="Block Up"
             w="100%"
             maxW="420px"
+            justifyContent={'center'}
           >
             <CurrencyInputField
               currencyAmountIn={trade.data.inputAmount}
@@ -185,6 +188,7 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
               w="full"
               approveArgs={{
                 currency: trade.data.inputAmount.currency,
+                amount: trade.data.inputAmount.numerator,
                 spender: ROUTER_ADDRESS[trade.data.inputAmount.currency?.chainId],
               }}
               {...swapButtonProps}

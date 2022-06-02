@@ -72,6 +72,7 @@ export default function RecentTransactionsContainer() {
           mt={3}
           gap={1}
           maxH="98px"
+          pr={2}
           overflowY={'auto'}
           overflowX="hidden"
           apply="border.secondary"
@@ -106,9 +107,11 @@ const TransactionInfo = ({ recentTransaction }: { recentTransaction: RecentTrans
       ? `${commify(amount)} ${amountTokenName} staked in ${stakePool} Position`
       : type === 'Bond'
       ? `${commify(amount)} ${amountTokenName} bonded for ${commify(purchase)} ${purchaseTokenName}`
-      : `${commify(amount)} ${amountTokenName} swaped for ${
+      : type === 'Swap'
+      ? `${commify(amount)} ${amountTokenName} swaped for ${
           purchase > 100 ? commify(purchase) : purchase
         } ${purchaseTokenName}`
+      : `Add Liquidity for ${amount} ${amountTokenName}-${purchaseTokenName} LP`
 
   return (
     <Flex justify={'space-between'}>
@@ -120,22 +123,26 @@ const TransactionInfo = ({ recentTransaction }: { recentTransaction: RecentTrans
           fontSize={'14px'}
           textColor={'text.low'}
         >
-          {info + ' ->'}
+          {info}
         </Link>
       </Flex>
       {/* Status 0 = Fail  */}
       {/* Status 1 = Success  */}
-      {status === 'error' && (
-        <CloseIcon width={'12px'} height="12px" color={'red.300'} justifySelf="end" />
-      )}
-      {loading && (
-        <SpinnerIcon
-          animation={`${spin} 3s linear infinite`}
-          color={'text.low'}
-          justifySelf="end"
-        />
-      )}
-      {status === 'success' && <CheckIcon color={'green.300'} justifySelf="end" />}
+      <Flex width={'17px'}>
+        {status === 'error' && (
+          <CloseIcon width={'15px'} height="15px" color={'red.300'} justifySelf="end" />
+        )}
+        {loading && (
+          <SpinnerIcon
+            animation={`${spin} 3s linear infinite`}
+            color={'text.low'}
+            justifySelf="end"
+          />
+        )}
+        {status === 'success' && (
+          <CheckIcon width={'17px'} height="17px" color={'green.300'} justifySelf="end" />
+        )}
+      </Flex>
     </Flex>
   )
 }

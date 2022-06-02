@@ -1,17 +1,34 @@
-import { Flex, Text } from '@concave/ui'
+import { Flex, Text, useDisclosure } from '@concave/ui'
 import { CNV } from '@concave/core'
 import useAddTokenToWallet, { injectedTokenResponse } from 'hooks/useAddTokenToWallet'
+import { useState } from 'react'
 import { useConnect } from 'wagmi'
 import { GlassPanel } from '../TreasuryManagementCard'
+import { ComingSoonDialog } from 'components/ComingSoonDialog'
+import ACVNRedemptionDialog from '../VestedTokensDialogs/ACVNRedemptionDialog'
+import BBBTCNVRedemptionDialog from '../VestedTokensDialogs/BBTCNVRedemptionDialog'
 
 export default function RedeemMobileCard() {
-  const [{ data }] = useConnect()
-
-  // TODO make token chain dinamic, refactor useAddTokenToWallet hook
   const { loading: loadingtoWallet, addingToWallet }: injectedTokenResponse = useAddTokenToWallet({
     tokenAddress: CNV[1].address,
     tokenChainId: CNV[1].chainId,
   })
+
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const [description, setDescription] = useState("This feature it's not done yet.")
+  const [title, setTitle] = useState('Coming soon')
+
+  const [{ data }] = useConnect()
+  const {
+    isOpen: onRedeemBBTCNV,
+    onOpen: onOpenRedeemBBTCNV,
+    onClose: onCloseRedeemBBTCNV,
+  } = useDisclosure()
+  const {
+    isOpen: onRedeemACNV,
+    onOpen: onOpenRedeemACNV,
+    onClose: onCloseRedeemACNV,
+  } = useDisclosure()
 
   return (
     <GlassPanel
@@ -28,9 +45,20 @@ export default function RedeemMobileCard() {
         Redeem your tokens for CNV below
       </Text>
       <Flex direction="column" gap={3} my={6}>
-        <RedeemButton onClick={() => {}} title="aCNV" value={0} />
-        <RedeemButton onClick={() => {}} title="pCNV" value={0} />
-        <RedeemButton onClick={() => {}} title="bbtCNV" value={0} />
+        <RedeemButton onClick={onOpenRedeemACNV} title="aCNV" />
+        <ACVNRedemptionDialog isOpen={onRedeemACNV} onClose={onCloseRedeemACNV} />
+
+        <RedeemButton
+          onClick={() => {
+            onOpen()
+            setTitle('pCNV Loading')
+            setDescription("We're busy mining the pCNV token, come back later.")
+          }}
+          title="pCNV"
+        />
+
+        <RedeemButton onClick={onOpenRedeemBBTCNV} title="bbtCNV" />
+        <BBBTCNVRedemptionDialog isOpen={onRedeemBBTCNV} onClose={onCloseRedeemBBTCNV} />
       </Flex>
       <Text
         fontWeight={'bold'}
@@ -41,6 +69,7 @@ export default function RedeemMobileCard() {
       >
         Add CNV to your {data?.connector?.name}
       </Text>
+      <ComingSoonDialog title={title} desc={description} isOpen={isOpen} onClose={onClose} />
     </GlassPanel>
   )
 }
@@ -48,7 +77,6 @@ export default function RedeemMobileCard() {
 interface RedeemButtonProps {
   onClick: () => void
   title: string
-  value: string | number
 }
 const RedeemButton = (props: RedeemButtonProps) => {
   return (
@@ -65,7 +93,7 @@ const RedeemButton = (props: RedeemButtonProps) => {
       userSelect="none"
     >
       <Text fontWeight={'bold'} fontSize="xl">
-        {props.title + ' - ' + props.value}
+        {props.title}
       </Text>
     </GlassPanel>
   )

@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, NATIVE, ROUTER_ADDRESS, Token } from '@concave/core'
+import { Currency, CurrencyAmount, MaxUint256, NATIVE, ROUTER_ADDRESS, Token } from '@concave/core'
 import { Pair } from '@concave/gemswap-sdk'
 import {
   Box,
@@ -21,7 +21,6 @@ import { Transaction } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { RemoveLiquidityState, useRemoveLiquidity } from 'hooks/useRemoveLiquidity'
 import React, { useState } from 'react'
-import { precision } from 'utils/formatFixed'
 
 export const RemoveLiquidityModalButton = ({
   liquidityInfo,
@@ -156,7 +155,7 @@ const ReceiveBox = ({
       <CurrencyIcon size="sm" currency={currency} />
       <Box>
         <Text fontFamily={'heading'} fontWeight={600}>
-          {precision(amount, 4)}
+          {amount ? amount?.toPrecision(4) : 0}
         </Text>
         <Text title={currency?.name} fontWeight={700} fontSize={'sm'} color={'text.low'}>
           {currency?.symbol}
@@ -212,6 +211,7 @@ const RemoveLiquidityActions = ({
       <ApproveButton
         approveArgs={{
           currency: removeLiquidityState.pair.liquidityToken,
+          amount: MaxUint256.toString(),
           spender: ROUTER_ADDRESS[networkId],
           onSuccess: () => setCurrencyApproved(true),
         }}
@@ -243,12 +243,12 @@ const RemoveLiquidityActions = ({
             You will receive
           </Text>
           <Text fontWeight={'700'} textColor="text.accent">
-            {`${precision(removeLiquidityState.amountAMin, 2)} ${
+            {`${removeLiquidityState.amountAMin.toPrecision(2)} ${
               removeLiquidityState.pair.token0.symbol
             }`}
           </Text>
           <Text fontWeight={'700'} textColor="text.accent">
-            {`${precision(removeLiquidityState.amountBMin, 2)} ${
+            {`${removeLiquidityState.amountBMin.toPrecision(2)} ${
               removeLiquidityState.pair.token1.symbol
             }`}
           </Text>
@@ -289,17 +289,17 @@ const YourPosition = ({ pair, userPoolShare }: { pair: Pair; userPoolShare: numb
       >
         <PositionInfoItem
           label="Your pool share:"
-          value={`${precision(userPoolShare * 100, 2)}%`}
+          value={`${(userPoolShare * 100).toPrecision(2)}%`}
         />
         <PositionInfoItem
           label={pair.token0.symbol}
-          value={precision(+pair.reserve0.toExact() * userPoolShare)}
+          value={+(+pair.reserve0.toExact() * userPoolShare).toPrecision(2)}
         >
           <CurrencyIcon size="sm" currency={pair.token0} />
         </PositionInfoItem>
         <PositionInfoItem
           label={pair.token1.symbol}
-          value={precision(+pair.reserve1.toExact() * userPoolShare)}
+          value={+(+pair.reserve1.toExact() * userPoolShare).toPrecision(2)}
         >
           <CurrencyIcon size="sm" currency={pair.token1} />
         </PositionInfoItem>

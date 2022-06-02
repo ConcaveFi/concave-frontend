@@ -1,4 +1,5 @@
 import { Flex, Image, Text, TextProps, VStack } from '@concave/ui'
+import { formatDistanceToNowStrict } from 'date-fns'
 
 interface NftPositionViewerProps {
   stakeType: number
@@ -7,7 +8,7 @@ interface NftPositionViewerProps {
 export const NftPositionViewer = (props: NftPositionViewerProps) => {
   const { redeemIn, stakeType } = props
 
-  const redeemInDays = (redeemIn / (1000 * 3600 * 24)).toFixed()
+  const redeemInDays = formatDistanceToNowStrict(redeemIn * 1000, { unit: 'day' })
   const periodToPoolParameter = {
     0: '360 Days',
     1: '180 Days',

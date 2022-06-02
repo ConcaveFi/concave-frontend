@@ -11,13 +11,13 @@ import { useGet_Amm_Cnv_PriceQuery } from 'graphql/generated/graphql'
 import { useRecentTransactions } from 'hooks/useRecentTransactions'
 import React, { useEffect, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
+import { truncateNumber } from 'utils/truncateNumber'
 import { useFeeData } from 'wagmi'
 import { BondOutput } from './BondOutput'
 import { getBondAmountOut, getBondSpotPrice, purchaseBond, useBondState } from './BondState'
 import { ConfirmBondModal } from './ConfirmBond'
 import { DownwardIcon } from './DownwardIcon'
 import { Settings, useBondSettings } from './Settings'
-import { truncateNumber } from 'utils/truncateNumber'
 
 export const twoDecimals = (s: string | number) => {
   const a = s.toString()
@@ -39,7 +39,7 @@ const GasPrice = () => {
     </>
   )
 }
-
+//aaaa
 export function BondBuyCard(props: {
   bondTransaction?: any
   setBondTransaction?: any
@@ -153,6 +153,7 @@ export function BondBuyCard(props: {
         w="full"
         approveArgs={{
           currency: currencyIn,
+          amount: amountIn.numerator,
           spender: BOND_ADDRESS[networkId],
         }}
         isDisabled={
