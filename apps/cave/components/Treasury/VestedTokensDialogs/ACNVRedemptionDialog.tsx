@@ -81,10 +81,8 @@ export default function ACNVRedemptionDialog(props: ACNVRedemptionDialogProps) {
               Current balance:
             </Text>
             <Text textColor={'text.low'} fontWeight="bold" fontSize={'18'}>
-
               {aCNVData && parseFloat(aCNVData?.formatted).toFixed(2)}
               {!aCNVData && 'loading...'}
-
             </Text>
           </Flex>
           <Button
