@@ -83,7 +83,7 @@ export default function ACVNRedemptionDialog(props: ACVNRedemptionDialogProps) {
               Current balance:
             </Text>
             <Text textColor={'text.low'} fontWeight="bold" fontSize={'18'}>
-              {aCNVData && '$' + truncateNumber(+aCNVData?.formatted)}
+              {aCNVData && parseFloat(aCNVData?.formatted).toFixed(2)}
               {!aCNVData && 'loading...'}
             </Text>
           </Flex>
