@@ -29,7 +29,7 @@ export default function ACNVRedemptionDialog(props: ACNVRedemptionDialogProps) {
   const aCNVContract = new Contract(
     '0x38baBedCb1f226B49b2089DA0b84e52b6181Ca59',
     aCNVredeemabi,
-    provider(networkdId),
+    provider(1),
   )
 
   const { aCNVData, loadingACNV } = useVestedTokens()
