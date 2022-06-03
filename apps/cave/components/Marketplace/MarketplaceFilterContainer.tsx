@@ -5,8 +5,8 @@ import DiscountFilterCard from './Filters/DiscountFilterCard'
 import PriceFilterCard from './Filters/PriceFilterCard'
 import RedeemFilterCard from './Filters/RedeemFilterCard'
 import StakePoolFilterCard from './Filters/StakePoolFilterCard'
-import { MarketPlaceFilterType, NftPositionDaysFilterType } from './hooks/useNftPositionFilter'
-import { NftPositionSortType } from './hooks/useNftPositionSort'
+import { MarketPlaceFilterType, NftPositionDaysFilterType } from '../../hooks/useNftPositionFilter'
+import { NftPositionSortType } from 'hooks/useNftPositionSort'
 
 interface MarketplaceFilterContainerProps {
   sortType: NftPositionSortType

@@ -1,10 +1,10 @@
 import { Box, Flex } from '@concave/ui'
+import useNftPositionSort, { NftPositionSortType } from 'hooks/useNftPositionSort'
 import { useState } from 'react'
 import useNftPositionFilter, {
   MarketPlaceFilterType,
   NftPositionDaysFilterType,
-} from './hooks/useNftPositionFilter'
-import useNftPositionSort, { NftPositionSortType } from './hooks/useNftPositionSort'
+} from '../../hooks/useNftPositionFilter'
 import MarketplaceFilterContainer from './MarketplaceFilterContainer'
 import NftPositionCard from './NftPositionCard'
 
