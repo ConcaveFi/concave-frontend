@@ -18,7 +18,7 @@ export class NonFungibleTokenInfo {
     return this.position.shares
   }
   get initialValue() {
-    return this.shares
+    return this.userReward[0]
   }
   get deposit() {
     return this.position.deposit
@@ -29,8 +29,11 @@ export class NonFungibleTokenInfo {
   get rewardDebt() {
     return this.position.rewardDebt
   }
+  get gained() {
+    return this.userReward[3].sub(this.userReward[0])
+  }
   get currentValue() {
-    return this.shares.add(this.rewardDebt)
+    return this.userReward[3]
   }
   get userReward() {
     return this._userReward
