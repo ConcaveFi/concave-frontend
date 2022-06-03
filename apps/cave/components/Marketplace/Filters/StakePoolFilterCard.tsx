@@ -12,10 +12,10 @@ import {
 } from '@concave/ui'
 import { useEffect, useState } from 'react'
 import ChooseButton from '../ChooseButton'
-import { NftPositionDaysFilterType } from '../hooks/useNftPositionFilter'
-import { NftPositionSortType } from '../hooks/useNftPositionSort'
+import { NftPositionDaysFilterType } from '../../../hooks/useNftPositionFilter'
 import ToggleButton from '../ToggleButton'
 import SearchFilterCard from './SearchFilterCard'
+import { NftPositionSortType } from 'hooks/useNftPositionSort'
 
 interface StakePoolFilterCardProps {
   onChangeSorter: (sortType: NftPositionSortType) => void

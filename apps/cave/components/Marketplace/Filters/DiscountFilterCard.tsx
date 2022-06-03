@@ -8,8 +8,8 @@ import {
   Portal,
   Text,
 } from '@concave/ui'
+import { NftPositionSortType } from 'hooks/useNftPositionSort'
 import { useEffect, useState } from 'react'
-import { NftPositionSortType } from '../hooks/useNftPositionSort'
 import ToggleButton from '../ToggleButton'
 import SearchFilterCard from './SearchFilterCard'
 
