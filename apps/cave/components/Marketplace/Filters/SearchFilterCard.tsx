@@ -39,10 +39,10 @@ const SearchFilterCard = (props: SearchFilterCardProps) => {
           bgSize="20%"
           rounded={'2xl'}
         />
-        <Flex gap={0} mt={1} alignItems="end">
+        <Flex gap={1} mt={1} alignItems="start">
           <>
             {icon === 'GasIcon' && <GasIcon viewBox="0 0 16 16" />}
-            {icon === 'RedeemIcon' && <RedeemIcon viewBox="0 0 16 16" />}
+            {icon === 'RedeemIcon' && <RedeemIcon mt={'-2px'} viewBox="0 0 16 16" />}
             {icon === 'DiscountIcon' && <DiscountIcon viewBox="0 0 16 16" />}
             {icon === 'PriceIcon' && <PriceIcon viewBox="0 0 16 16" />}
             {icon === 'StakeIcon' && <StakeIcon viewBox="0 0 16 16" />}
