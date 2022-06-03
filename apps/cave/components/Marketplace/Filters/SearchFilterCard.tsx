@@ -18,7 +18,7 @@ const SearchFilterCard = (props: SearchFilterCardProps) => {
       width={83}
       height={53}
       rounded="2xl"
-      transform={{ base: 'scale(0.9)', md: 'scale(1)' }}
+      // transform={{ base: 'scale(0.9)', md: 'scale(1)' }}
     >
       <Flex
         direction={'column'}
