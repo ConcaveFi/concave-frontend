@@ -23,11 +23,11 @@ export enum NftPositionSortType {
 // 0 = 360, 1 =180, 2 = 90, 3 =45
 
 export default function useNftPositionSort(sortType: NftPositionSortType) {
-  const type = sortType !== NftPositionSortType.NONE ? sortType.split('.')[0] : 'none'
-  const order = sortType !== NftPositionSortType.NONE ? sortType.split('.')[1] : 'none'
+  const type = sortType.split('.')[0] || 'none'
+  const order = sortType.split('.')[1] || 'none'
 
   const sorterFunction = (current: NonFungibleTokenInfo, before: NonFungibleTokenInfo) => {
-    if (type === 'none') return 1
+    if (type === 'none') return Math.random() > 0.5 ? 1 : -1
     else if (current[type] < before[type] && order === 'highest') return 1
     else if (current[type] > before[type] && order === 'lowest') return 1
     else return -1
