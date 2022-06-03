@@ -24,6 +24,7 @@ export default function ChooseButton(props: ChooseButtonProps) {
       cursor={'pointer'}
       borderTopRightRadius="16px"
       borderTopLeftRadius="16px"
+      zIndex={1}
     >
       {title}
     </Flex>
