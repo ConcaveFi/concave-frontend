@@ -3,27 +3,34 @@ import { Box, Button, Collapse, Flex, Text, useBreakpointValue } from '@concave/
 import { MetalBox } from 'components/MetalBox'
 import { spinAnimation } from 'components/Treasury/Mobile/TreasuryManagementMobile'
 import { UseDashBoardState } from 'contracts/DashBoard/DashBoardState'
+import useNftPositionSort, { NftPositionSortType } from 'hooks/useNftPositionSort'
 import { useRouter } from 'next/router'
+import { useState } from 'react'
 import { useConnect } from 'wagmi'
+import DashboardFilterContainer from './DashboardFilterContainer'
 import DividendsShareMobile from './Mobile/Components/DividendsShare'
 import UserPositionCardMobile from './Mobile/Components/UserPositionCard'
 import UserDividendCard from './UserDividendCard'
 import UserPositionCard from './UserPositionCard'
 
 const UserDashboardCard = (props: { data: UseDashBoardState }) => {
-  const { data } = props
   const [{ data: wallet }] = useConnect()
+  const [sorterType, setSorterType] = useState(NftPositionSortType.NONE)
+  const { data } = props
   const { userNonFungibleTokensInfo, totalLocked, isLoading } = data
-  const isMobile = useBreakpointValue({ base: true, md: false })
-  const userPositionsComponent = userNonFungibleTokensInfo.map((nonFungibleTokenInfo, index) =>
-    isMobile ? (
-      <UserPositionCardMobile key={index} nonFungibleTokenInfo={nonFungibleTokenInfo} />
-    ) : (
-      <UserPositionCard key={index} nonFungibleTokenInfo={nonFungibleTokenInfo} />
-    ),
-  )
+  const { sorterFunction } = useNftPositionSort(sorterType)
 
+  const isMobile = useBreakpointValue({ base: true, md: false })
   const hasPositions = userNonFungibleTokensInfo.length !== 0
+  const userPositionsComponent = userNonFungibleTokensInfo
+    .sort(sorterFunction)
+    .map((nonFungibleTokenInfo, index) =>
+      isMobile ? (
+        <UserPositionCardMobile key={index} nonFungibleTokenInfo={nonFungibleTokenInfo} />
+      ) : (
+        <UserPositionCard key={index} nonFungibleTokenInfo={nonFungibleTokenInfo} />
+      ),
+    )
 
   return (
     <Box
@@ -35,11 +42,11 @@ const UserDashboardCard = (props: { data: UseDashBoardState }) => {
       <Flex
         rounded={'inherit'}
         width={{ lg: '740px', md: '520px', base: '360px' }}
-        h="770px"
+        // maxH="1220px"
         bg={{ base: '', md: 'linear-gradient(265.73deg, #274C63 0%, #182F3E 100%)' }}
         position="relative"
         direction={'column'}
-        gap={{ base: 6, md: 0 }}
+        gap={{ base: 2, md: 0 }}
       >
         <Box
           display={{ base: 'none', md: 'block' }}
@@ -55,21 +62,22 @@ const UserDashboardCard = (props: { data: UseDashBoardState }) => {
           {/* Will be displayed only on mobile layout */}
           <DividendsShareMobile isLoading={isLoading} totalLocked={totalLocked} />
         </>
+        <DashboardFilterContainer currentSorter={sorterType} onChangeSorter={setSorterType} />
         <Collapse in={hasPositions}>
-          <Flex
+          <MetalBox
             pos="relative"
-            h="100%"
-            overflowY={'scroll'}
+            overflowY={'auto'}
             overflowX="hidden"
-            maxHeight={'100%'}
+            maxHeight={'600px'}
             borderRadius="12px"
             px={'0.5rem'}
+            shadow={{ base: '', md: 'down' }}
             py={'0.5rem'}
-            mt={6}
+            bgVariant="dark"
             __css={scrollBar}
           >
             {userPositionsComponent}
-          </Flex>
+          </MetalBox>
         </Collapse>
         <LoadingPositions in={isLoading} isMobile={isMobile} />
         <ItsNotConected in={!wallet.connected} isMobile={isMobile} />

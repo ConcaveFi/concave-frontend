@@ -19,7 +19,7 @@ const UserDividendCard = (props: UserDividendCardProps) => {
       mx="auto"
       shadow={'Down Big'}
       width={{ lg: '700px', md: '490px' }}
-      height={{ lg: '166px', md: '160px' }}
+      height={'130px'}
       display={{ base: 'none', md: 'block' }}
     >
       <Flex
