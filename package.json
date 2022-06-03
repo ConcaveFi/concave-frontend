@@ -34,5 +34,10 @@
   "packageManager": "yarn@1.22.0",
   "dependencies": {
     "typescript": "^4.6.4"
+  },
+  "ts-standard": {
+    "ignore": [
+      "apps/cave/lib/*"
+    ]
   }
 }
