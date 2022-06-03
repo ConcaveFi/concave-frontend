@@ -4,7 +4,7 @@ This is the worlds best kept secret frontend monorepo
 
 ## Resources
 
-Reading the following tools docs will help you navigate and develop in this repo
+Reading the following tool docs will help you navigate and develop in this repo
 
 - [Next.js](https://nextjs.org/docs/basic-features)
 - [wagmi](https://wagmi-xyz.vercel.app/)
