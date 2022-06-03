@@ -91,7 +91,42 @@ export async function redeemBondBatch(
     gasLimit: estimatedGas,
   })
 }
+export const getIndividualUserBondPositions = async (
+  networkId: number,
+  address: string,
+  currentBlockTimestamp: number,
+  currentRedeemable?: number,
 
+
+)=>{
+  interface userBondDetails {
+    redeemaed: number;
+    owed: number;
+    created: number;
+    }
+  let userBondList:userBondDetails[]
+
+  let totalPending = 0
+  let totalOwed = 0
+  let rawOwed = 0
+  let oldest = 0
+  let oldestCreationTimestamp = 0
+  let claimed = false
+  let redeemable = currentRedeemable || 0
+ 
+  
+  const bondingContract = new Contract(BOND_ADDRESS[networkId], BOND_ABI, providers(networkId))
+  const getUserPositionsLength = await bondingContract.getUserPositionCount(address)
+  const termData = await bondingContract.term()
+  for (let i = 0; i < +getUserPositionsLength; i++) {
+
+
+  
+
+  }
+
+
+}
 export const getUserBondPositions = async (
   networkId: number,
   address: string,
