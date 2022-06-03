@@ -3,10 +3,10 @@ import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungible
 
 export enum NftPositionDaysFilterType {
   NONE = 'none',
-  FILTER_BY_45 = '45',
-  FILTER_BY_90 = '90',
-  FILTER_BY_180 = '180',
-  FILTER_BY_360 = '360',
+  FILTER_BY_45 = '3',
+  FILTER_BY_90 = '2',
+  FILTER_BY_180 = '1',
+  FILTER_BY_360 = '0',
 }
 export interface NftPositionFilters {
   price?: { min: number; max: number }
@@ -19,9 +19,8 @@ export default function useNftPositionFilter(filters: NftPositionFilters) {
   const filterDay = filters.filterByDay
   const { gained, initial } = filters
 
-  const filterByDay = (value) => {
-    if (filterDay === 'none') return true
-    else return value.stakePool === +filterDay
+  const filterByDay = (token: NonFungibleTokenInfo) => {
+    return filterDay !== 'none' ? token.poolID === +filterDay : true
   }
 
   const filterByGained = (token: NonFungibleTokenInfo) => {
