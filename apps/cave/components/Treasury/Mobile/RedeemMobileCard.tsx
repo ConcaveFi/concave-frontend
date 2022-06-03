@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { useConnect } from 'wagmi'
 import { GlassPanel } from '../TreasuryManagementCard'
 import { ComingSoonDialog } from 'components/ComingSoonDialog'
-import ACVNRedemptionDialog from '../VestedTokensDialogs/ACVNRedemptionDialog'
+import ACNVRedemptionDialog from '../VestedTokensDialogs/ACNVRedemptionDialog'
 import BBBTCNVRedemptionDialog from '../VestedTokensDialogs/BBTCNVRedemptionDialog'
 
 export default function RedeemMobileCard() {
@@ -46,7 +46,7 @@ export default function RedeemMobileCard() {
       </Text>
       <Flex direction="column" gap={3} my={6}>
         <RedeemButton onClick={onOpenRedeemACNV} title="aCNV" />
-        <ACVNRedemptionDialog isOpen={onRedeemACNV} onClose={onCloseRedeemACNV} />
+        <ACNVRedemptionDialog isOpen={onRedeemACNV} onClose={onCloseRedeemACNV} />
 
         <RedeemButton
           onClick={() => {

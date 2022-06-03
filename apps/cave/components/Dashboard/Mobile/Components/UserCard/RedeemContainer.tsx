@@ -1,44 +1,41 @@
 import { Button, ButtonProps, Flex, Text, TextProps, VStack } from '@concave/ui'
-import { formatDistance, formatDistanceToNow, formatDistanceToNowStrict } from 'date-fns'
-import { BigNumber, utils } from 'ethers'
+import { bigNumberMask } from 'components/Dashboard/UserPosition/RedeemViewer'
 import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungibleToken'
-import { formatFixed } from 'utils/formatFixed'
-import { truncateNumber } from 'utils/truncateNumber'
 
 interface RedeemCardViewerProps {
   nonFungibleTokenInfo: NonFungibleTokenInfo
 }
 const RedeemContainer = (props: RedeemCardViewerProps) => {
-  const { deposit, rewardDebt, userReward, maturity } = props.nonFungibleTokenInfo
+  const { userReward } = props.nonFungibleTokenInfo
 
-  const curValue = +userReward[3].toString()
-  const initialBal = +userReward[0].toString()
-  const gainedAmt = curValue - initialBal
+  const curValue = userReward.totalRewards
+  const initialBal = userReward.amountDeposited
+  const gainedAmt = curValue.sub(initialBal)
 
   return (
     <Flex height={'127px'} width="358px" direction="column">
       <Flex height={'70px'} maxH="70px" align={'center'}>
         <VStack spacing={0} justify="center" flex={1}>
           <LowText>Current value</LowText>
-          <HighText>{truncateNumber(+curValue.toString())} CNV</HighText>
+          <HighText>{bigNumberMask(curValue)} CNV</HighText>
         </VStack>
         <VStack justify={'center'} spacing={0} flex={1}>
           <LowText>Gained</LowText>
-          <HighText>{truncateNumber(+gainedAmt)} CNV</HighText>
+          <HighText>{bigNumberMask(gainedAmt)} CNV</HighText>
         </VStack>
         <VStack justify={'center'} spacing={0} flex={1}>
           <LowText>Initial</LowText>
-          <HighText>{truncateNumber(+initialBal.toString())} CNV</HighText>
+          <HighText>{bigNumberMask(initialBal)} CNV</HighText>
         </VStack>
       </Flex>
-      <RedeemButton active={maturity >= new Date().getTime()} />
+      <RedeemButton />
     </Flex>
   )
 }
 
 export default RedeemContainer
 
-const RedeemButton = ({ onClick, active }: { onClick?: () => void; active: boolean }) => {
+const RedeemButton = ({ onClick, active }: { onClick?: () => void; active?: boolean }) => {
   return (
     <Button
       onClick={onClick}

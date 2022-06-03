@@ -7,7 +7,8 @@ export const CandleStickTokenOptions = ({ from, to }: { from: Currency; to: Curr
   return (
     <HStack p={2} borderRadius="2xl" shadow="Down Big">
       <CurrencyIcon size="sm" currency={from} />
-      <Text>{from?.symbol.toUpperCase()} /</Text>
+      <Text>{from?.symbol.toUpperCase()}</Text>
+      <Text color="text.low">/</Text>
       <CurrencyIcon size="sm" currency={to} />
       <Text paddingRight={1}>{to?.symbol?.toUpperCase()}</Text>
     </HStack>

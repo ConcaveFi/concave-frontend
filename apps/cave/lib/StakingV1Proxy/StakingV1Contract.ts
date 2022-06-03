@@ -24,7 +24,9 @@ export class StakingV1Contract {
   }
 
   public async viewPositionRewards(tokenId: number): Promise<UserReward> {
-    return this.contract.viewPositionRewards(tokenId)
+    const rewards = await this.contract.viewPositionRewards(tokenId)
+    // to remove array props
+    return { ...rewards }
   }
 
   public async lock(

@@ -3,6 +3,7 @@ import { DownIcon } from '@concave/icons'
 import { Button, ButtonProps } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import React from 'react'
+import { defaultChains } from 'wagmi'
 
 export const SelectCurrencyButton = ({
   selected,
@@ -26,7 +27,7 @@ export const SelectCurrencyButton = ({
     onClick={onClick}
     {...props}
   >
-    {selected?.chainId === 3 ? 't' : ''}
+    {selected?.symbol && defaultChains.findIndex((c) => c.id === selected?.chainId) ? 't' : ''}
     {selected?.symbol || `Select a token`}
   </Button>
 )

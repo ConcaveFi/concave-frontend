@@ -23,7 +23,7 @@
     "@types/react": "^18.0.5",
     "@types/react-dom": "^18.0.1",
     "react": "^18.0.0",
-    "tsup": "^5.12.5"
+    "tsup": "^6.0.1"
   },
   "dependencies": {
     "@chakra-ui/cli": "^2.0.0",
@@ -32,11 +32,11 @@
     "@emotion/styled": "^11.8.1",
     "@types/react": "^18.0.8",
     "@types/react-dom": "^18.0.3",
-    "framer-motion": "^6.3.3",
+    "framer-motion": "^6.3.5",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-number-format": "^4.9.3",
-    "tsup": "^5.12.7"
+    "tsup": "^6.0.1"
   },
   "resolutions": {
     "@types/react": "17.0.2",

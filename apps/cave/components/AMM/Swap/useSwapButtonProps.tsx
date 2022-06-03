@@ -2,17 +2,21 @@ import { ButtonProps } from '@concave/ui'
 import { isAddress } from 'ethers/lib/utils'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { swapSupportedChains } from 'pages/gemswap'
+import { toPercent } from 'utils/toPercent'
 import { useNetwork } from 'wagmi'
 import { NoValidPairsError } from '../hooks/usePair'
 import { InsufficientLiquidityError, UseTradeResult } from '../hooks/useTrade'
+import { SwapSettings } from './Settings'
 
 export const useSwapButtonProps = ({
   trade,
   recipient,
+  settings,
   onSwapClick,
 }: {
   trade: UseTradeResult
   recipient: string
+  settings: SwapSettings
   onSwapClick: () => void
 }): ButtonProps => {
   const [network] = useNetwork()
@@ -51,6 +55,12 @@ export const useSwapButtonProps = ({
     return { children: 'Wrap (soon)', isDisabled: true }
   if (currencyOut?.isNative && currencyIn.equals(currencyOut.wrapped))
     return { children: 'Unwrap (soon)', isDisabled: true }
+
+  /*
+    Price impact
+  */
+  if (!settings.expertMode && trade.data.priceImpact?.greaterThan(toPercent(20)))
+    return { children: 'Price impact is too high', isDisabled: true }
 
   /*
     Trade loaded

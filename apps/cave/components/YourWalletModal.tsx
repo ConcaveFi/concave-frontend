@@ -1,16 +1,17 @@
 import {
   Modal,
-  ModalContent,
-  ModalOverlay,
-  ModalBody,
   useDisclosure,
   Flex,
   Button,
   Text,
+  Tabs,
+  TabList,
+  Tab,
+  TabPanels,
+  TabPanel,
   Card,
 } from '@concave/ui'
 import { useAccount } from 'wagmi'
-import { useRecentTransactions } from 'hooks/useRecentTransactions'
 import YourWalletContainer from './YourWallet/Containers/YourWalletContainer'
 import ConnectedAreasContainer from './YourWallet/Containers/ConnectedsAreaContainer'
 import RecentTransactionsContainer from './YourWallet/Containers/RecentTransactionsContainer'

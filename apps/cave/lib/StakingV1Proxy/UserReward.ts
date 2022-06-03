@@ -1,3 +1,8 @@
-import { BigNumberish } from 'ethers'
+import { BigNumber } from 'ethers'
 
-export type UserReward = [BigNumberish, BigNumberish, BigNumberish, BigNumberish]
+export type UserReward = {
+  amountDeposited: BigNumber
+  baseRewards: BigNumber
+  excessRewards: BigNumber
+  totalRewards: BigNumber
+}

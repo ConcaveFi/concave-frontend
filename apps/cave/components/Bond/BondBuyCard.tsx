@@ -39,7 +39,7 @@ const GasPrice = () => {
     </>
   )
 }
-
+//aaaa
 export function BondBuyCard(props: {
   bondTransaction?: any
   setBondTransaction?: any
