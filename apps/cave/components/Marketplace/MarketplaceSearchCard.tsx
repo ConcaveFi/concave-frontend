@@ -17,7 +17,7 @@ export default function MarketplaceSearchCard() {
     to: 0,
   })
 
-  const { type, sorterFunction } = useNftPositionSort(sortType)
+  // const { type, sorterFunction } = useNftPositionSort(sortType)
   const { filterByDay, filterByPrice } = useNftPositionFilter(marketPlaceFilter)
 
   const nftPositions = [
@@ -33,19 +33,15 @@ export default function MarketplaceSearchCard() {
     { stakePool: 360, price: 229, redeemIn: 4, discount: 14 },
     { stakePool: 360, price: 112, redeemIn: 7, discount: 12 },
     { stakePool: 45, price: 522, redeemIn: 12, discount: 5 },
-  ]
-    .filter(filterByDay)
-    .filter(filterByPrice)
-    .sort(sorterFunction)
-    .map((value, index) => (
-      <NftPositionCard
-        key={index}
-        stakePool={value.stakePool}
-        redeemIn={value.redeemIn}
-        price={value.price}
-        discount={value.discount}
-      />
-    ))
+  ].map((value, index) => (
+    <NftPositionCard
+      key={index}
+      stakePool={value.stakePool}
+      redeemIn={value.redeemIn}
+      price={value.price}
+      discount={value.discount}
+    />
+  ))
 
   return (
     <Box
