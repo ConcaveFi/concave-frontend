@@ -160,7 +160,7 @@ interface PeriodsProps {
 }
 
 const Periods = (props: PeriodsProps) => {
-  const { onApply, onReset, onChangeFilter } = props
+  const { onApply: onApplyFilter, onReset, onChangeFilter } = props
   const [currentButton, setCurrentButton] = useState('None')
   const periodButtons = [
     { title: 'None', filter: NftPositionDaysFilterType.NONE },
@@ -176,7 +176,6 @@ const Periods = (props: PeriodsProps) => {
         title={value.title}
         onClick={() => {
           setCurrentButton(value.title)
-          onChangeFilter(value.filter !== NftPositionDaysFilterType.NONE)
           setCurrentFilter(value.filter)
         }}
         active={currentButton === value.title}
@@ -186,11 +185,15 @@ const Periods = (props: PeriodsProps) => {
   })
 
   const [currentFilter, setCurrentFilter] = useState(NftPositionDaysFilterType.NONE)
+  const onApply = () => {
+    onChangeFilter(currentFilter !== NftPositionDaysFilterType.NONE)
+    onApplyFilter(currentFilter)
+  }
 
   const resetFilter = () => {
     setCurrentButton('None')
     setCurrentFilter(NftPositionDaysFilterType.NONE)
-    // onReset()
+    onReset()
   }
 
   return (
@@ -209,7 +212,7 @@ const Periods = (props: PeriodsProps) => {
       </Flex>
       <Flex height={'73px'} justifyContent="center" alignItems={'end'} gap="3">
         <ChooseButton onClick={resetFilter} title="Reset" />
-        <ChooseButton onClick={() => onApply(currentFilter)} title="Apply" backgroundType="blue" />
+        <ChooseButton onClick={onApply} title="Apply" backgroundType="blue" />
       </Flex>
     </>
   )
