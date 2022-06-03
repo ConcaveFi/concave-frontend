@@ -2,7 +2,6 @@ import { Box, Flex, FlexProps } from '@concave/ui'
 
 interface MetalBoxProps extends FlexProps {
   bgVariant?: 'dark' | 'light' | 'empty'
-  disableCustomBorder?: boolean
   disableMetal?: boolean
 }
 
@@ -16,6 +15,9 @@ export const MetalBox: React.FC<MetalBoxProps> = ({ ...props }) => {
       width={props.width}
       height={props.height}
       shadow={props.shadow || 'up'}
+      align={'center'}
+      justify="center"
+      {...props}
     >
       <Box
         display={props.disableMetal && 'none'}
@@ -26,9 +28,9 @@ export const MetalBox: React.FC<MetalBoxProps> = ({ ...props }) => {
         width="inherit"
         bgSize={'10% 35%'}
       />
-      <Flex position={'absolute'} rounded="inherit" align={'center'} justify="center" {...props}>
-        {props.children}
-      </Flex>
+      {/* <Flex position={'absolute'} rounded="inherit" {...props}> */}
+      {props.children}
+      {/* </Flex> */}
     </Flex>
   )
 }
