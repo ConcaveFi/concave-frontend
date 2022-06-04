@@ -27,7 +27,7 @@ export default function useNftPositionSort(sortType: NftPositionSortType) {
   const order = sortType.split('.')[1] || 'none'
 
   const sorterFunction = (current: NonFungibleTokenInfo, before: NonFungibleTokenInfo) => {
-    if (type === 'none') return Math.random() > 0.5 ? 1 : -1
+    if (type === 'none') return 1
     else if (current[type] < before[type] && order === 'highest') return 1
     else if (current[type] > before[type] && order === 'lowest') return 1
     else return -1

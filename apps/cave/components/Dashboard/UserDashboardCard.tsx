@@ -3,6 +3,10 @@ import { Box, Button, Collapse, Flex, Text, useBreakpointValue } from '@concave/
 import { MetalBox } from 'components/MetalBox'
 import { spinAnimation } from 'components/Treasury/Mobile/TreasuryManagementMobile'
 import { UseDashBoardState } from 'contracts/DashBoard/DashBoardState'
+import useNftPositionFilter, {
+  NftPositionDaysFilterType,
+  NftPositionFilters,
+} from 'hooks/useNftPositionFilter'
 import useNftPositionSort, { NftPositionSortType } from 'hooks/useNftPositionSort'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
@@ -19,11 +23,19 @@ const UserDashboardCard = (props: { data: UseDashBoardState }) => {
   const { data } = props
   const { userNonFungibleTokensInfo, totalLocked, isLoading } = data
   const { sorterFunction } = useNftPositionSort(sorterType)
+  const [filters, setFilters] = useState<NftPositionFilters>({
+    filterByDay: NftPositionDaysFilterType.NONE,
+  })
+
+  const { filterByGained, filterByDay, filterByInitial } = useNftPositionFilter(filters)
 
   const isMobile = useBreakpointValue({ base: true, md: false })
   const hasPositions = userNonFungibleTokensInfo.length !== 0
   const userPositionsComponent = userNonFungibleTokensInfo
     .sort(sorterFunction)
+    .filter(filterByGained)
+    .filter(filterByInitial)
+    .filter(filterByDay)
     .map((nonFungibleTokenInfo, index) =>
       isMobile ? (
         <UserPositionCardMobile key={index} nonFungibleTokenInfo={nonFungibleTokenInfo} />
@@ -62,7 +74,12 @@ const UserDashboardCard = (props: { data: UseDashBoardState }) => {
           {/* Will be displayed only on mobile layout */}
           <DividendsShareMobile isLoading={isLoading} totalLocked={totalLocked} />
         </>
-        <DashboardFilterContainer currentSorter={sorterType} onChangeSorter={setSorterType} />
+        <DashboardFilterContainer
+          currentFilters={filters}
+          onChangeFilters={(e) => setFilters(e)}
+          currentSorter={sorterType}
+          onChangeSorter={setSorterType}
+        />
         <Collapse in={hasPositions}>
           <MetalBox
             pos="relative"

@@ -3,19 +3,20 @@ import StakePoolFilterCard from 'components/Marketplace/Filters/StakePoolFilterC
 import { MetalBox } from 'components/MetalBox'
 import SimplePriceFilterCard from 'components/SearchFilters/SimplePriceFilterCard'
 import SimpleSorterCard from 'components/SearchFilters/SimpleSorterCard'
-import { MarketPlaceFilterType, NftPositionDaysFilterType } from 'hooks/useNftPositionFilter'
+import { NftPositionDaysFilterType, NftPositionFilters } from 'hooks/useNftPositionFilter'
 import { NftPositionSortType } from 'hooks/useNftPositionSort'
 import { useState } from 'react'
 
 interface DashboardFilterContainerProps {
-  onChangeFilter?: (filterProps: MarketPlaceFilterType) => void
+  onChangeFilters?: (filterProps: NftPositionFilters) => void
   onChangeSorter: (sorter: NftPositionSortType) => void
   currentSorter: NftPositionSortType
+  currentFilters: NftPositionFilters
 }
 
 export default function DashboardFilterContainer(props: DashboardFilterContainerProps) {
   const [dayFilterType, setDayFilterType] = useState(NftPositionDaysFilterType.NONE)
-  const { onChangeSorter, currentSorter } = props
+  const { onChangeFilters, onChangeSorter, currentSorter, currentFilters } = props
 
   const mobileUI = useBreakpointValue({ base: true, md: false })
   return (
@@ -32,8 +33,10 @@ export default function DashboardFilterContainer(props: DashboardFilterContainer
         <StakePoolFilterCard
           currentSorter={currentSorter}
           onChangeSorter={onChangeSorter}
-          onApplyFilters={(e) => {}}
-          onResetFilters={() => {}}
+          onApplyFilters={(filterByDay) => onChangeFilters({ ...currentFilters, filterByDay })}
+          onResetFilters={() =>
+            onChangeFilters({ ...currentFilters, filterByDay: NftPositionDaysFilterType.NONE })
+          }
         />
         <SimpleSorterCard
           title="Redeem In"
@@ -51,6 +54,8 @@ export default function DashboardFilterContainer(props: DashboardFilterContainer
           lowestFirst={NftPositionSortType.TOKEN_ID_LOWEST_FIRST}
         />
         <SimplePriceFilterCard
+          onApplyFilter={(min, max) => onChangeFilters({ ...currentFilters, gained: { min, max } })}
+          onResetFilter={() => onChangeFilters({ ...currentFilters, gained: undefined })}
           currentSorter={currentSorter}
           highestFirst={NftPositionSortType.GAINED_HIGHEST_FIRST}
           lowestFirst={NftPositionSortType.GAINED_LOWEST_FIRST}
@@ -59,6 +64,10 @@ export default function DashboardFilterContainer(props: DashboardFilterContainer
         />
         <SimplePriceFilterCard
           currentSorter={currentSorter}
+          onApplyFilter={(min, max) =>
+            onChangeFilters({ ...currentFilters, initial: { min, max } })
+          }
+          onResetFilter={() => onChangeFilters({ ...currentFilters, initial: undefined })}
           highestFirst={NftPositionSortType.INITIAL_HIGHEST_FIRST}
           lowestFirst={NftPositionSortType.INITIAL_LOWEST_FIRST}
           onChangeSorter={onChangeSorter}
