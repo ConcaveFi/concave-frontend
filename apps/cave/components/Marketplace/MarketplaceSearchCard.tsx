@@ -1,24 +1,9 @@
 import { Box, Flex } from '@concave/ui'
-import useNftPositionSort, { NftPositionSortType } from 'hooks/useNftPositionSort'
 import { useState } from 'react'
-import useNftPositionFilter, {
-  NftPositionDaysFilterType,
-  NftPositionFilters,
-} from '../../hooks/useNftPositionFilter'
-import MarketplaceFilterContainer from './MarketplaceFilterContainer'
 import NftPositionCard from './NftPositionCard'
 
 export default function MarketplaceSearchCard() {
-  const [sortType, setSortType] = useState(NftPositionSortType.NONE)
-  const [marketPlaceFilter, setMarketPlaceFilter] = useState<NftPositionFilters>({
-    filterByDay: NftPositionDaysFilterType.NONE,
-    filterByPrice: false,
-    from: 0,
-    to: 0,
-  })
-
   // const { type, sorterFunction } = useNftPositionSort(sortType)
-  const { filterByDay, filterByPrice } = useNftPositionFilter(marketPlaceFilter)
 
   const nftPositions = [
     { stakePool: 45, price: 102, redeemIn: 20, discount: 2.1 },
@@ -65,11 +50,6 @@ export default function MarketplaceSearchCard() {
         bgImage={'/assets/textures/metal.png'}
         bgSize="16% 16%"
         rounded={'2xl'}
-      />
-      <MarketplaceFilterContainer
-        onChangeFilter={setMarketPlaceFilter}
-        sortType={sortType}
-        onChangeSorter={setSortType}
       />
       <Flex
         flex={1}
