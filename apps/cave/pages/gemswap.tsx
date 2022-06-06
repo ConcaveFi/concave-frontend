@@ -29,7 +29,6 @@ import { useSwapSettings } from 'components/AMM/Swap/Settings'
 import { TradeRoute } from 'components/AMM/Swap/TradeRoute'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
 import { withPageTransition } from 'components/PageTransition'
-import SecurityBanner from 'components/SecurityBanner'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
@@ -111,7 +110,6 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
 
   return (
     <>
-      <SecurityBanner />
       <Flex
         wrap="wrap"
         justify="center"

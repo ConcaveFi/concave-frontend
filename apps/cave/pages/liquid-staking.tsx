@@ -3,7 +3,6 @@ import GraphicGuide from 'components/LiquidStaking/GraphicGuide'
 import LiquidLocksCards from 'components/LiquidStaking/LiquidLocksCards'
 import StakeCard from 'components/LiquidStaking/StakeCard'
 import { withPageTransition } from 'components/PageTransition'
-import SecurityBanner from 'components/SecurityBanner'
 
 interface StakingGroupProps {
   icon: string
@@ -53,7 +52,6 @@ function LiquidStaking() {
       direction={'column'}
       p="0px"
     >
-      <SecurityBanner />
       <Heading as="h1" mt={{ base: 12, md: 8 }} fontSize={{ base: '4xl', sm: '5xl' }}>
         Liquid Staking
       </Heading>

@@ -25,7 +25,6 @@ import {
 import { Redeem } from 'components/Bond/Redeem'
 import { SelectedBondType } from 'components/Bond/SelectedBondType'
 import { withPageTransition } from 'components/PageTransition'
-import SecurityBanner from 'components/SecurityBanner'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
@@ -151,7 +150,6 @@ export function Bond() {
 
   return (
     <Container maxW="container.lg" p={'4px'}>
-      <SecurityBanner />
       <Flex direction="column" gap={10}>
         <BondDescription />
         <Flex
