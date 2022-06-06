@@ -43,7 +43,6 @@ const UserDashboardCard = (props: { data: UseDashBoardState }) => {
         <UserPositionCard key={index} nonFungibleTokenInfo={nonFungibleTokenInfo} />
       ),
     )
-  console.log(sorters)
 
   return (
     <Box

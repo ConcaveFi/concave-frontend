@@ -95,8 +95,8 @@ function PeriodSorts(props: PeriodSortsProps) {
   const { onAddSorter, onChangeCurSorterActive, onRemoveSorter } = props
   const buttons: { title: string; order: NftSortOrder }[] = [
     { title: 'None', order: 'none' },
-    { title: 'Lowest First', order: 'lowest' },
-    { title: 'Highest First', order: 'highest' },
+    { title: 'Lowest First', order: 'highest' },
+    { title: 'Highest First', order: 'lowest' },
   ]
 
   const [currentButton, setCurrentButton] = useState('None')
