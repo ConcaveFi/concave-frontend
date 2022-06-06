@@ -7,7 +7,7 @@ import useNftPositionFilter, {
   NftPositionDaysFilterType,
   NftPositionFilters,
 } from 'hooks/useNftPositionFilter'
-import useNftPositionSort, { NftPositionSortType } from 'hooks/useNftPositionSort'
+import { NftSorter, NftSorters, useNftPositionSort } from 'hooks/useNftPositionSort'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useConnect } from 'wagmi'
@@ -19,10 +19,10 @@ import UserPositionCard from './UserPositionCard'
 
 const UserDashboardCard = (props: { data: UseDashBoardState }) => {
   const [{ data: wallet }] = useConnect()
-  const [sorterType, setSorterType] = useState(NftPositionSortType.NONE)
+  const [sorters, setSorters] = useState<NftSorters>({})
   const { data } = props
   const { userNonFungibleTokensInfo, totalLocked, isLoading } = data
-  const { sorterFunction } = useNftPositionSort(sorterType)
+  const { sorter } = useNftPositionSort(sorters)
   const [filters, setFilters] = useState<NftPositionFilters>({
     filterByDay: NftPositionDaysFilterType.NONE,
   })
@@ -32,7 +32,7 @@ const UserDashboardCard = (props: { data: UseDashBoardState }) => {
   const isMobile = useBreakpointValue({ base: true, md: false })
   const hasPositions = userNonFungibleTokensInfo.length !== 0
   const userPositionsComponent = userNonFungibleTokensInfo
-    .sort(sorterFunction)
+    .sort(sorter)
     .filter(filterByGained)
     .filter(filterByInitial)
     .filter(filterByDay)
@@ -43,7 +43,8 @@ const UserDashboardCard = (props: { data: UseDashBoardState }) => {
         <UserPositionCard key={index} nonFungibleTokenInfo={nonFungibleTokenInfo} />
       ),
     )
-  // Commit
+  console.log(sorters)
+
   return (
     <Box
       shadow={{ base: '', md: 'up' }}
@@ -75,10 +76,12 @@ const UserDashboardCard = (props: { data: UseDashBoardState }) => {
           <DividendsShareMobile isLoading={isLoading} totalLocked={totalLocked} />
         </>
         <DashboardFilterContainer
-          currentFilters={filters}
           onChangeFilters={(e) => setFilters(e)}
-          currentSorter={sorterType}
-          onChangeSorter={setSorterType}
+          onAddSorter={(type, order) => setSorters({ ...sorters, [type]: order })}
+          onRemoveSorter={(type) => {
+            const { [type]: removed, ...newSorters } = sorters
+            setSorters(newSorters)
+          }}
         />
         <Collapse in={hasPositions}>
           <MetalBox

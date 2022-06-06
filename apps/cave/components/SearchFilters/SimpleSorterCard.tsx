@@ -1,4 +1,3 @@
-import { SpinnerIcon } from '@concave/icons'
 import {
   Box,
   Button,
@@ -11,46 +10,42 @@ import {
 } from '@concave/ui'
 import SearchFilterCard from 'components/Marketplace/Filters/SearchFilterCard'
 import ToggleButton from 'components/Marketplace/ToggleButton'
-import { NftPositionSortType } from 'hooks/useNftPositionSort'
-import { useEffect, useState } from 'react'
+import { NftSorter, NftSortOrder } from 'hooks/useNftPositionSort'
+import { useState } from 'react'
 
 interface SimpleSorterCardProps {
-  onChangeSorter: (sortType: NftPositionSortType) => void
-  currentSorter: NftPositionSortType
-  lowestFirst: NftPositionSortType
-  highestFirst: NftPositionSortType
+  onChangeSorter: (sortType: NftSorter, order: NftSortOrder) => void
+  onRemoveSorter: (sortType: NftSorter) => void
+  sorterType: NftSorter
   title: string
   icon?: string
 }
 
 export default function SimpleSorterCard(props: SimpleSorterCardProps) {
-  const { currentSorter, highestFirst, lowestFirst } = props
-  const currentActive = currentSorter === highestFirst || currentSorter === lowestFirst
+  const { sorterType, onChangeSorter, onRemoveSorter } = props
 
-  const buttons = [
-    { title: 'None', sorter: NftPositionSortType.NONE },
-    { title: 'Lowest First', sorter: lowestFirst },
-    { title: 'Highest First', sorter: highestFirst },
+  const buttons: { title: string; order: NftSortOrder }[] = [
+    { title: 'None', order: 'none' },
+    { title: 'Lowest First', order: 'lowest' },
+    { title: 'Highest First', order: 'highest' },
   ]
-
   const [currentButton, setCurrentButton] = useState('None')
+
+  const currentActive = currentButton !== 'None'
   const toggleButons = buttons.map((button, index) => {
     return (
       <ToggleButton
         key={index}
         onClick={() => {
           setCurrentButton(button.title)
-          props.onChangeSorter(button.sorter)
+          if (button.title === 'None') onRemoveSorter(sorterType)
+          else onChangeSorter(sorterType, button.order)
         }}
         title={button.title}
         active={button.title === currentButton}
       />
     )
   })
-
-  useEffect(() => {
-    if (!currentActive) setCurrentButton('None')
-  }, [currentSorter])
 
   return (
     <Popover>

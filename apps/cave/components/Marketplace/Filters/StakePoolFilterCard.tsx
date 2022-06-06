@@ -15,17 +15,16 @@ import ChooseButton from '../ChooseButton'
 import { NftPositionDaysFilterType } from '../../../hooks/useNftPositionFilter'
 import ToggleButton from '../ToggleButton'
 import SearchFilterCard from './SearchFilterCard'
-import { NftPositionSortType } from 'hooks/useNftPositionSort'
+import { NftSorter, NftSortOrder } from 'hooks/useNftPositionSort'
 
 interface StakePoolFilterCardProps {
-  onChangeSorter: (sortType: NftPositionSortType) => void
-  currentSorter: NftPositionSortType
+  onChangeSorter: (sortType: NftSorter) => void
   onResetFilters?: () => void
   onApplyFilters?: (filterType: NftPositionDaysFilterType) => void
 }
 
 export default function StakePoolFilterCard(props: StakePoolFilterCardProps) {
-  const { currentSorter, onApplyFilters, onResetFilters } = props
+  const { onApplyFilters, onResetFilters } = props
 
   const [hasSorter, setHasSorter] = useState(false)
   const [hasFilter, setHasFilter] = useState(false)
@@ -70,7 +69,6 @@ export default function StakePoolFilterCard(props: StakePoolFilterCardProps) {
               <PeriodSorts
                 onChangeCurSorterActive={setHasSorter}
                 onChangeSorter={props.onChangeSorter}
-                currentSorter={currentSorter}
               />
               <Periods
                 onChangeFilter={setHasFilter}
@@ -86,22 +84,17 @@ export default function StakePoolFilterCard(props: StakePoolFilterCardProps) {
 }
 
 interface PeriodSortsProps {
-  onChangeSorter: (sortType: NftPositionSortType) => void
-  currentSorter: NftPositionSortType
+  onChangeSorter: (sortType: NftSorter, order: NftSortOrder) => void
   onChangeCurSorterActive: (active: boolean) => void
 }
 
 function PeriodSorts(props: PeriodSortsProps) {
-  const { currentSorter, onChangeCurSorterActive } = props
+  const { onChangeCurSorterActive } = props
 
-  const currentActive =
-    currentSorter === NftPositionSortType.STAKE_HIGHEST_FIRST ||
-    currentSorter === NftPositionSortType.STAKE_LOWEST_FIRST
-
-  const buttons = [
-    { title: 'None', sorter: NftPositionSortType.NONE },
-    { title: 'Lowest First', sorter: NftPositionSortType.STAKE_LOWEST_FIRST },
-    { title: 'Highest First', sorter: NftPositionSortType.STAKE_HIGHEST_FIRST },
+  const buttons: { title: string; order: NftSortOrder }[] = [
+    { title: 'None', order: 'none' },
+    { title: 'Lowest First', order: 'lowest' },
+    { title: 'Highest First', order: 'highest' },
   ]
 
   const [currentButton, setCurrentButton] = useState('None')
@@ -111,19 +104,13 @@ function PeriodSorts(props: PeriodSortsProps) {
         key={index}
         onClick={() => {
           setCurrentButton(button.title)
-          props.onChangeSorter(button.sorter)
+          props.onChangeSorter(NftSorter.STAKE, button.order)
         }}
         title={button.title}
         active={button.title === currentButton}
       />
     )
   })
-
-  useEffect(() => {
-    if (!currentActive) setCurrentButton('None')
-    onChangeCurSorterActive(currentActive)
-  }, [currentSorter])
-
   return (
     <>
       <Text

@@ -4,19 +4,17 @@ import { MetalBox } from 'components/MetalBox'
 import SimplePriceFilterCard from 'components/SearchFilters/SimplePriceFilterCard'
 import SimpleSorterCard from 'components/SearchFilters/SimpleSorterCard'
 import { NftPositionDaysFilterType, NftPositionFilters } from 'hooks/useNftPositionFilter'
-import { NftPositionSortType } from 'hooks/useNftPositionSort'
+import { NftSorter, NftSortOrder } from 'hooks/useNftPositionSort'
 import { useState } from 'react'
 
 interface DashboardFilterContainerProps {
   onChangeFilters?: (filterProps: NftPositionFilters) => void
-  onChangeSorter: (sorter: NftPositionSortType) => void
-  currentSorter: NftPositionSortType
-  currentFilters: NftPositionFilters
+  onAddSorter: (sorter: NftSorter, order: NftSortOrder) => void
+  onRemoveSorter: (sorter: NftSorter) => void
 }
 
 export default function DashboardFilterContainer(props: DashboardFilterContainerProps) {
-  const [dayFilterType, setDayFilterType] = useState(NftPositionDaysFilterType.NONE)
-  const { onChangeFilters, onChangeSorter, currentSorter, currentFilters } = props
+  const { onChangeFilters, onAddSorter, onRemoveSorter } = props
 
   const mobileUI = useBreakpointValue({ base: true, md: false })
   return (
@@ -30,49 +28,43 @@ export default function DashboardFilterContainer(props: DashboardFilterContainer
       bgVariant={mobileUI ? 'dark' : 'empty'}
     >
       <Flex transform={{ base: 'scale(0.8)', md: 'scale(1)' }} gap={1}>
-        <StakePoolFilterCard
-          currentSorter={currentSorter}
+        {/* <StakePoolFilterCard
           onChangeSorter={onChangeSorter}
           onApplyFilters={(filterByDay) => onChangeFilters({ ...currentFilters, filterByDay })}
           onResetFilters={() =>
             onChangeFilters({ ...currentFilters, filterByDay: NftPositionDaysFilterType.NONE })
           }
-        />
+        /> */}
         <SimpleSorterCard
           title="Redeem In"
           icon="RedeemIcon"
-          currentSorter={currentSorter}
-          onChangeSorter={onChangeSorter}
-          highestFirst={NftPositionSortType.REDEEM_HIGHEST_FIRST}
-          lowestFirst={NftPositionSortType.REDEEM_LOWEST_FIRST}
+          onChangeSorter={onAddSorter}
+          sorterType={NftSorter.REDEEM}
+          onRemoveSorter={onRemoveSorter}
         />
         <SimpleSorterCard
           title="Token Id"
-          currentSorter={currentSorter}
-          onChangeSorter={onChangeSorter}
-          highestFirst={NftPositionSortType.TOKEN_ID_HIGHEST_FIRST}
-          lowestFirst={NftPositionSortType.TOKEN_ID_LOWEST_FIRST}
+          onChangeSorter={onAddSorter}
+          sorterType={NftSorter.TOKEN_ID}
+          onRemoveSorter={onRemoveSorter}
         />
-        <SimplePriceFilterCard
+
+        {/* <SimplePriceFilterCard
           onApplyFilter={(min, max) => onChangeFilters({ ...currentFilters, gained: { min, max } })}
           onResetFilter={() => onChangeFilters({ ...currentFilters, gained: undefined })}
           currentSorter={currentSorter}
-          highestFirst={NftPositionSortType.GAINED_HIGHEST_FIRST}
-          lowestFirst={NftPositionSortType.GAINED_LOWEST_FIRST}
           onChangeSorter={onChangeSorter}
           title="Gained"
-        />
-        <SimplePriceFilterCard
+        /> */}
+        {/* <SimplePriceFilterCard
           currentSorter={currentSorter}
           onApplyFilter={(min, max) =>
             onChangeFilters({ ...currentFilters, initial: { min, max } })
           }
           onResetFilter={() => onChangeFilters({ ...currentFilters, initial: undefined })}
-          highestFirst={NftPositionSortType.INITIAL_HIGHEST_FIRST}
-          lowestFirst={NftPositionSortType.INITIAL_LOWEST_FIRST}
           onChangeSorter={onChangeSorter}
           title="Initial"
-        />
+        /> */}
       </Flex>
     </MetalBox>
   )
