@@ -116,6 +116,7 @@ const SortCard = (props: SortCardProps) => {
         key={index}
         onClick={() => {
           setCurrentButton(button.title)
+          onChangeActive(button.title !== 'None')
           if (button.title === 'none') onRemoveSorter(sorter)
           else onAddSorter(sorter, button.order)
         }}

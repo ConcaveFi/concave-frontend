@@ -106,6 +106,7 @@ function PeriodSorts(props: PeriodSortsProps) {
         key={index}
         onClick={() => {
           setCurrentButton(button.title)
+          onChangeCurSorterActive(button.title !== 'None')
           if (title !== 'None') onAddSorter(NftSorter.STAKE, button.order)
           else onRemoveSorter(NftSorter.STAKE)
         }}
