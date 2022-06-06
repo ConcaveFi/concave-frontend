@@ -1,4 +1,3 @@
-import { JSBI } from '@concave/gemswap-sdk'
 import { BigNumberish } from 'ethers'
 import { BigNumber } from 'ethers'
 
@@ -54,11 +53,11 @@ export class Offer {
     this.feeRecipients = args.feeRecipients
   }
 
-  public setMinPrice(minPrice: BigNumberish | JSBI) {
+  public setMinPrice(minPrice: BigNumberish) {
     this.minPrice = BigNumber.from(minPrice.toString())
     return new Offer(this)
   }
-  public setBuyNowPrice(buyNowPrice: BigNumberish | JSBI) {
+  public setBuyNowPrice(buyNowPrice: BigNumberish) {
     this.buyNowPrice = BigNumber.from(buyNowPrice.toString())
     return new Offer(this)
   }
