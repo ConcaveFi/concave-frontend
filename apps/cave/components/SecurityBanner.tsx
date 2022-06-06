@@ -4,17 +4,13 @@ import React from 'react'
 
 function SecurityBanner() {
   return (
-    <Box
-      mx="auto"
-      pos={{ base: 'relative', md: 'absolute' }}
-      top={{ base: 12, md: 4 }}
-      left={{ base: 0, md: 5 }}
-    >
+    <Box mx="auto" pos="absolute" top={{ base: 12, md: 4 }} left={{ base: 0, md: 300 }}>
       <Card
         variant="secondary"
         px={5}
         py={3}
         direction={{ base: 'column', sm: 'row' }}
+        display={{ base: 'none', md: 'inline-flex' }}
         align="center"
         rounded="3xl"
         shadow="Up for Blocks"
@@ -29,7 +25,6 @@ function SecurityBanner() {
           <Text fontWeight="bold" whiteSpace="nowrap">
             app.concave.lol
           </Text>
-
           <Text color="text.low" fontSize="sm">
             bookmark it to be safe
           </Text>

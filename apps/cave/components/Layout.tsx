@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import { SideBar } from './SideBar/SideBar'
 import { AnimatePresence } from 'framer-motion'
 import { useIsomorphicLayoutEffect } from 'react-use'
+import SecurityBanner from './SecurityBanner'
 
 const TestnetIndicator = dynamic(() => import('./Faucet').then((module) => module.TestnetIndicator))
 
@@ -26,6 +27,7 @@ export const Layout = ({ children }) => {
       <SideBar />
       <Container display="flex" maxWidth="container.xl" p={'0px'}>
         <TestnetIndicator />
+        <SecurityBanner />
         <AnimatePresence
           exitBeforeEnter
           initial={false}
