@@ -1,13 +1,5 @@
-import {
-  ChainId,
-  CHAIN_NAME,
-  CNV,
-  Currency,
-  DAI,
-  ROUTER_ADDRESS,
-  Trade,
-  TradeType,
-} from '@concave/gemswap-sdk'
+import { ChainId, CHAIN_NAME, CNV, Currency, DAI, ROUTER_ADDRESS } from '@concave/core'
+import { Trade, TradeType } from '@concave/gemswap-sdk'
 import { Card, Collapse, Flex, HStack, Stack, Text, useDisclosure } from '@concave/ui'
 import {
   CandleStickCard,

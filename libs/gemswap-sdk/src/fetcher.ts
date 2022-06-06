@@ -3,9 +3,7 @@ import { getNetwork } from '@ethersproject/networks'
 import { getDefaultProvider } from '@ethersproject/providers'
 import { Pair } from './entities'
 import invariant from 'tiny-invariant'
-import { FACTORY_ADDRESS } from './constants'
-import { Token } from './entities'
-import { CurrencyAmount } from './entities'
+import { FACTORY_ADDRESS, Token, CurrencyAmount } from '@concave/core'
 
 const TOKENS_CACHE: { [chainId: number]: { [address: string]: Token } } = {}
 
@@ -106,7 +104,7 @@ export abstract class Fetcher {
     tokenA: Token,
     tokenB: Token,
     provider = getDefaultProvider(getNetwork(tokenA.chainId)),
-  ): Promise<Pair> {
+  ): Promise<Pair | undefined> {
     invariant(tokenA.chainId === tokenB.chainId, 'CHAIN_ID')
     const addresses = tokenA.sortsBefore(tokenB)
       ? `${tokenA.address}-${tokenB.address}`
@@ -159,7 +157,7 @@ export abstract class Fetcher {
       ],
       provider,
     )
-    const promiseAddress = []
+    const promiseAddress: Promise<Pair>[] = []
     const index = await pairContract.allPairsLength()
     for (let i = 0; i < index; i++) {
       const LPPromise = pairContract

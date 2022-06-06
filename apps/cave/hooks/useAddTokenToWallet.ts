@@ -1,8 +1,8 @@
-import { ERC20_ABI } from 'constants/abi'
+import { Erc20Abi } from '@concave/core'
 import { Contract } from 'ethers'
 import { concaveProvider } from 'lib/providers'
 import { useState, useEffect } from 'react'
-import { CHAIN_NAME } from '@concave/gemswap-sdk'
+import { CHAIN_NAME } from '@concave/core'
 
 interface injectedToken {
   tokenAddress: string
@@ -46,7 +46,7 @@ const useAddTokenToWallet = ({ tokenAddress, tokenChainId, tokenImage }: injecte
         try {
           const getToken = async () => {
             const fetcher = concaveProvider(tokenChainId)
-            const contractInstance = new Contract(tokenAddress, ERC20_ABI, fetcher)
+            const contractInstance = new Contract(tokenAddress, Erc20Abi, fetcher)
             return contractInstance
           }
 

@@ -1,4 +1,4 @@
-import { Button, Card, Flex, Modal, Text, NumericInput, useDisclosure } from '@concave/ui'
+import { Button, Card, Flex, Modal, Text, useDisclosure } from '@concave/ui'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'

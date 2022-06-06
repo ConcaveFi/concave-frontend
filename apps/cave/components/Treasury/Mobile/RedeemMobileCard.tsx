@@ -1,5 +1,5 @@
 import { Flex, Text, useDisclosure } from '@concave/ui'
-import { CNV } from 'constants/tokens'
+import { CNV } from '@concave/core'
 import useAddTokenToWallet, { injectedTokenResponse } from 'hooks/useAddTokenToWallet'
 import { useState } from 'react'
 import { useConnect } from 'wagmi'
@@ -10,8 +10,8 @@ import BBBTCNVRedemptionDialog from '../VestedTokensDialogs/BBTCNVRedemptionDial
 
 export default function RedeemMobileCard() {
   const { loading: loadingtoWallet, addingToWallet }: injectedTokenResponse = useAddTokenToWallet({
-    tokenAddress: CNV.address,
-    tokenChainId: CNV.chainId,
+    tokenAddress: CNV[1].address,
+    tokenChainId: CNV[1].chainId,
   })
 
   const { isOpen, onOpen, onClose } = useDisclosure()

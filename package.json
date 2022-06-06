@@ -7,10 +7,10 @@
   "scripts": {
     "build": "turbo run build",
     "lint": "turbo run lint",
-    "dev": "turbo run dev --no-cache --parallel --continue",
+    "test": "turbo run test",
     "postinstall": "turbo run postinstall",
-    "build:cave": "turbo run build --scope=cave --include-dependencies --no-deps",
-    "dev:cave": "turbo run dev --scope=cave --include-dependencies --no-deps",
+    "build:cave": "turbo run build --filter=cave...",
+    "dev:cave": "turbo run dev --filter=cave...",
     "clean": "rimraf \"./**/{node_modules,dist,.turbo,.next,.eslintcache,.vercel}\"",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "prepare": "husky install",
@@ -21,7 +21,7 @@
     "eslint-config-next": "^12.1.6",
     "eslint-config-prettier": "^8.5.0",
     "husky": "^8.0.1",
-    "lint-staged": "^12.4.1",
+    "lint-staged": "^13.0.0",
     "prettier": "^2.5.1",
     "rimraf": "^3.0.2",
     "turbo": "^1.2.9"

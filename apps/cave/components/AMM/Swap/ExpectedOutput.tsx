@@ -1,4 +1,5 @@
-import { Currency, CurrencyAmount, Percent, Rounding, Trade, TradeType } from '@concave/gemswap-sdk'
+import { Currency, CurrencyAmount, Percent, Rounding } from '@concave/core'
+import { Trade, TradeType } from '@concave/gemswap-sdk'
 import { Box, Flex, Stack, Text } from '@concave/ui'
 
 export const MinExpectedOutput = ({

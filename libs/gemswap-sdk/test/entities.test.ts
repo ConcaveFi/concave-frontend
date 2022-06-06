@@ -1,8 +1,7 @@
-import { CurrencyAmount, Pair, Route, Token, Trade } from '../src/entities'
+import { WETH9 as _WETH9, CurrencyAmount, Token } from '@concave/core'
+import { Pair, Route, Trade, TradeType } from '../src/entities'
 
 import JSBI from 'jsbi'
-import { TradeType } from '../src/enums'
-import { WETH9 as _WETH9 } from '../src/constants'
 import invariant from 'tiny-invariant'
 
 const ADDRESSES = [
@@ -88,7 +87,7 @@ describe('entities', () => {
         )
 
         expect(route.midPrice.invert().toSignificant(5)).toEqual('0.00081037')
-        expect(route.midPrice.toFixed(2)).toEqual('1234.00')
+        expect(route.midPrice.toFixed(2)).toEqual('1,234.00')
         expect(route.midPrice.invert().toFixed(8)).toEqual('0.00081037')
       })
 

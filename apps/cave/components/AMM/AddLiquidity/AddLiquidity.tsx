@@ -1,4 +1,5 @@
-import { CHAIN_NAME, Currency, CurrencyAmount, Pair } from '@concave/gemswap-sdk'
+import { CHAIN_NAME, Currency, CurrencyAmount } from '@concave/core'
+import { Pair } from '@concave/gemswap-sdk'
 import { PlusIcon } from '@concave/icons'
 import { Button, ButtonProps, Card, Flex, Modal, Text, useDisclosure } from '@concave/ui'
 import { CurrencyInputField } from 'components/AMM'

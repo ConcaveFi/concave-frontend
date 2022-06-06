@@ -1,4 +1,4 @@
-import { ChainId } from '@concave/gemswap-sdk'
+import { ChainId } from '@concave/core'
 import { SubmittedIcon } from '@concave/icons'
 import { Button, Flex, Link, Modal, Text } from '@concave/ui'
 import { Transaction } from 'ethers'

@@ -293,9 +293,9 @@ function StakeCard(props: StackCardProps) {
           isOpen={isOpen}
           onClose={onClose}
           bodyProps={{
-            roundedLeft: { base: '20px', md: '100px' },
-            roundedRight: '20px',
-            shadow: 'Up for Blocks',
+            roundedLeft: { base: '3xl', md: '8.75rem' },
+            roundedRight: '3xl',
+            p: { md: 6, base: 8 },
           }}
           titleAlign="center"
           size="2xl"
