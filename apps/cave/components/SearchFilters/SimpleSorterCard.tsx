@@ -8,7 +8,7 @@ import {
   Portal,
   Text,
 } from '@concave/ui'
-import SearchFilterCard from 'components/Marketplace/Filters/SearchFilterCard'
+import SearchFilterCard from 'components/SearchFilters/SearchFilterCard'
 import ToggleButton from 'components/Marketplace/ToggleButton'
 import { NftSorter, NftSortOrder } from 'hooks/useNftPositionSort'
 import { useState } from 'react'

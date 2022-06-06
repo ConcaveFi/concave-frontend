@@ -1,18 +1,8 @@
 import { Search2Icon } from '@concave/icons'
 import { Box, Flex, Text } from '@concave/ui'
-import { useEffect, useState } from 'react'
-import DiscountFilterCard from './Filters/DiscountFilterCard'
-import PriceFilterCard from './Filters/PriceFilterCard'
-import RedeemFilterCard from './Filters/RedeemFilterCard'
-import StakePoolFilterCard from './Filters/StakePoolFilterCard'
-import { NftPositionSortType } from 'hooks/useNftPositionSort'
-import { NftPositionDaysFilterType, NftPositionFilters } from 'hooks/useNftPositionFilter'
+import { NftPositionFilters } from 'hooks/useNftPositionFilter'
 
-interface MarketplaceFilterContainerProps {
-  sortType: NftPositionSortType
-  onChangeSorter: (sorterType: NftPositionSortType) => void
-  onChangeFilter: (filterProps: NftPositionFilters) => void
-}
+interface MarketplaceFilterContainerProps {}
 
 export default function MarketplaceFilterContainer(props: MarketplaceFilterContainerProps) {
   return (

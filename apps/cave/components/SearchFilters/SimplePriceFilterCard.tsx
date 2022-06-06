@@ -3,38 +3,32 @@ import {
   Box,
   Button,
   Flex,
-  Image,
-  Input,
   NumericInput,
   Popover,
-  PopoverArrow,
   PopoverContent,
   PopoverTrigger,
   Portal,
-  StatArrow,
   Text,
   useBreakpointValue,
 } from '@concave/ui'
 import ChooseButton from 'components/Marketplace/ChooseButton'
-import SearchFilterCard from 'components/Marketplace/Filters/SearchFilterCard'
+import SearchFilterCard from 'components/SearchFilters/SearchFilterCard'
 import ToggleButton from 'components/Marketplace/ToggleButton'
-import { NftPositionSortType } from 'hooks/useNftPositionSort'
 import { useEffect, useState } from 'react'
-import { MdArrowBack, MdArrowBackIos, MdArrowForwardIos } from 'react-icons/md'
+import { NftSorter, NftSortOrder } from 'hooks/useNftPositionSort'
 
 interface SimplePriceFilterCardProps {
-  onChangeSorter: (sortType: NftPositionSortType) => void
+  onChangeSorter: (sortType: NftSorter, order: NftSortOrder) => void
+  onRemoveSorter: (sortType: NftSorter) => void
   onApplyFilter?: (from: number, to: number) => void
   onResetFilter?: () => void
-  currentSorter: NftPositionSortType
-  highestFirst: NftPositionSortType
-  lowestFirst: NftPositionSortType
+  sortType: NftSorter
   title: string
   icon?: string
 }
 
 export default function SimplePriceFilterCard(props: SimplePriceFilterCardProps) {
-  const { currentSorter, highestFirst, lowestFirst, title, icon } = props
+  const { sortType, title, icon, onChangeSorter, onRemoveSorter } = props
 
   const [hasSorter, setHasSorter] = useState(false)
   const [hasFilter, setHasFilter] = useState(false)
@@ -75,10 +69,9 @@ export default function SimplePriceFilterCard(props: SimplePriceFilterCardProps)
             />
             <SortCard
               onChangeActive={setHasSorter}
-              currentSorter={currentSorter}
-              onChangeSorter={props.onChangeSorter}
-              lowestFirst={lowestFirst}
-              highestFirst={highestFirst}
+              sorter={sortType}
+              onAddSorter={onChangeSorter}
+              onRemoveSorter={onRemoveSorter}
             />
             <FiltersContainer
               onApply={(from, to) => {
@@ -100,43 +93,37 @@ export default function SimplePriceFilterCard(props: SimplePriceFilterCardProps)
 }
 
 interface SortCardProps {
-  currentSorter: NftPositionSortType
-  onChangeSorter: (sortType: NftPositionSortType) => void
+  sorter: NftSorter
+  onAddSorter: (sortType: NftSorter, order: NftSortOrder) => void
+  onRemoveSorter: (sortType: NftSorter) => void
   onChangeActive: (active: boolean) => void
-  highestFirst: NftPositionSortType
-  lowestFirst: NftPositionSortType
 }
 
 const SortCard = (props: SortCardProps) => {
-  const { currentSorter, highestFirst, lowestFirst } = props
+  const { onChangeActive, onRemoveSorter, onAddSorter, sorter } = props
 
-  const currentActive = currentSorter === highestFirst || currentSorter === lowestFirst
-
-  const buttons = [
-    { title: 'None', sorter: NftPositionSortType.NONE },
-    { title: 'Lowest First', sorter: lowestFirst },
-    { title: 'Highest First', sorter: highestFirst },
+  const buttons: { title: string; order: NftSortOrder }[] = [
+    { title: 'None', order: 'none' },
+    { title: 'Lowest First', order: 'lowest' },
+    { title: 'Highest First', order: 'highest' },
   ]
 
   const [currentButton, setCurrentButton] = useState('None')
+  const currentActive = currentButton !== 'None'
   const toggleButons = buttons.map((button, index) => {
     return (
       <ToggleButton
         key={index}
         onClick={() => {
           setCurrentButton(button.title)
-          props.onChangeSorter(button.sorter)
+          if (button.title === 'none') onRemoveSorter(sorter)
+          else onAddSorter(sorter, button.order)
         }}
         title={button.title}
         active={button.title === currentButton}
       />
     )
   })
-
-  useEffect(() => {
-    if (!currentActive) setCurrentButton('None')
-    props.onChangeActive(currentActive)
-  }, [currentSorter])
 
   return (
     <>

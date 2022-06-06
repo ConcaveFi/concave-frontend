@@ -1,5 +1,5 @@
 import { Flex, useBreakpointValue } from '@concave/ui'
-import StakePoolFilterCard from 'components/Marketplace/Filters/StakePoolFilterCard'
+import StakePoolFilterCard from 'components/SearchFilters/StakePoolFilterCard'
 import { MetalBox } from 'components/MetalBox'
 import SimplePriceFilterCard from 'components/SearchFilters/SimplePriceFilterCard'
 import SimpleSorterCard from 'components/SearchFilters/SimpleSorterCard'
@@ -48,22 +48,24 @@ export default function DashboardFilterContainer(props: DashboardFilterContainer
           onRemoveSorter={onRemoveSorter}
         />
 
-        {/* <SimplePriceFilterCard
-          onApplyFilter={(min, max) => onChangeFilters({ ...currentFilters, gained: { min, max } })}
-          onResetFilter={() => onChangeFilters({ ...currentFilters, gained: undefined })}
-          currentSorter={currentSorter}
-          onChangeSorter={onChangeSorter}
+        <SimplePriceFilterCard
+          // onApplyFilter={(min, max) => onChangeFilters({ ...currentFilters, gained: { min, max } })}
+          // onResetFilter={() => onChangeFilters({ ...currentFilters, gained: undefined })}
+          onChangeSorter={onAddSorter}
+          onRemoveSorter={onRemoveSorter}
+          sortType={NftSorter.GAINED}
           title="Gained"
-        /> */}
-        {/* <SimplePriceFilterCard
-          currentSorter={currentSorter}
-          onApplyFilter={(min, max) =>
-            onChangeFilters({ ...currentFilters, initial: { min, max } })
-          }
-          onResetFilter={() => onChangeFilters({ ...currentFilters, initial: undefined })}
-          onChangeSorter={onChangeSorter}
+        />
+        <SimplePriceFilterCard
+          // onApplyFilter={(min, max) =>
+          //   onChangeFilters({ ...currentFilters, initial: { min, max } })
+          // }
+          // onResetFilter={() => onChangeFilters({ ...currentFilters, initial: undefined })}
+          onChangeSorter={onAddSorter}
+          onRemoveSorter={onRemoveSorter}
+          sortType={NftSorter.INITIAL}
           title="Initial"
-        /> */}
+        />
       </Flex>
     </MetalBox>
   )

@@ -10,9 +10,9 @@ import {
   useBreakpointValue,
 } from '@concave/ui'
 import { useState } from 'react'
-import ChooseButton from '../ChooseButton'
-import { NftPositionDaysFilterType } from '../../../hooks/useNftPositionFilter'
-import ToggleButton from '../ToggleButton'
+import ChooseButton from '../Marketplace/ChooseButton'
+import { NftPositionDaysFilterType } from '../../hooks/useNftPositionFilter'
+import ToggleButton from '../Marketplace/ToggleButton'
 import SearchFilterCard from './SearchFilterCard'
 import { NftSorter, NftSortOrder } from 'hooks/useNftPositionSort'
 import { title } from 'process'
