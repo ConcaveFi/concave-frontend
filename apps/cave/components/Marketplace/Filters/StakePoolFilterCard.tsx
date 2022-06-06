@@ -3,28 +3,29 @@ import {
   Button,
   Flex,
   Popover,
-  PopoverArrow,
   PopoverContent,
   PopoverTrigger,
   Portal,
   Text,
   useBreakpointValue,
 } from '@concave/ui'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import ChooseButton from '../ChooseButton'
 import { NftPositionDaysFilterType } from '../../../hooks/useNftPositionFilter'
 import ToggleButton from '../ToggleButton'
 import SearchFilterCard from './SearchFilterCard'
 import { NftSorter, NftSortOrder } from 'hooks/useNftPositionSort'
+import { title } from 'process'
 
 interface StakePoolFilterCardProps {
-  onChangeSorter: (sortType: NftSorter) => void
+  onChangeSorter: (sortType: NftSorter, order: NftSortOrder) => void
+  onRemoveSorter: (sortType: NftSorter) => void
   onResetFilters?: () => void
   onApplyFilters?: (filterType: NftPositionDaysFilterType) => void
 }
 
 export default function StakePoolFilterCard(props: StakePoolFilterCardProps) {
-  const { onApplyFilters, onResetFilters } = props
+  const { onApplyFilters, onResetFilters, onChangeSorter, onRemoveSorter } = props
 
   const [hasSorter, setHasSorter] = useState(false)
   const [hasFilter, setHasFilter] = useState(false)
@@ -68,7 +69,8 @@ export default function StakePoolFilterCard(props: StakePoolFilterCardProps) {
             <Box position={'relative'} width={'full'} height={100}>
               <PeriodSorts
                 onChangeCurSorterActive={setHasSorter}
-                onChangeSorter={props.onChangeSorter}
+                onAddSorter={onChangeSorter}
+                onRemoveSorter={onRemoveSorter}
               />
               <Periods
                 onChangeFilter={setHasFilter}
@@ -84,13 +86,13 @@ export default function StakePoolFilterCard(props: StakePoolFilterCardProps) {
 }
 
 interface PeriodSortsProps {
-  onChangeSorter: (sortType: NftSorter, order: NftSortOrder) => void
+  onAddSorter: (sortType: NftSorter, order: NftSortOrder) => void
+  onRemoveSorter: (sortType: NftSorter) => void
   onChangeCurSorterActive: (active: boolean) => void
 }
 
 function PeriodSorts(props: PeriodSortsProps) {
-  const { onChangeCurSorterActive } = props
-
+  const { onAddSorter, onChangeCurSorterActive, onRemoveSorter } = props
   const buttons: { title: string; order: NftSortOrder }[] = [
     { title: 'None', order: 'none' },
     { title: 'Lowest First', order: 'lowest' },
@@ -104,7 +106,8 @@ function PeriodSorts(props: PeriodSortsProps) {
         key={index}
         onClick={() => {
           setCurrentButton(button.title)
-          props.onChangeSorter(NftSorter.STAKE, button.order)
+          if (title !== 'None') onAddSorter(NftSorter.STAKE, button.order)
+          else onRemoveSorter(NftSorter.STAKE)
         }}
         title={button.title}
         active={button.title === currentButton}

@@ -28,13 +28,12 @@ export default function DashboardFilterContainer(props: DashboardFilterContainer
       bgVariant={mobileUI ? 'dark' : 'empty'}
     >
       <Flex transform={{ base: 'scale(0.8)', md: 'scale(1)' }} gap={1}>
-        {/* <StakePoolFilterCard
-          onChangeSorter={onChangeSorter}
-          onApplyFilters={(filterByDay) => onChangeFilters({ ...currentFilters, filterByDay })}
-          onResetFilters={() =>
-            onChangeFilters({ ...currentFilters, filterByDay: NftPositionDaysFilterType.NONE })
-          }
-        /> */}
+        <StakePoolFilterCard
+          onChangeSorter={onAddSorter}
+          onRemoveSorter={onRemoveSorter}
+          onApplyFilters={(filterByDay) => {}}
+          onResetFilters={() => {}}
+        />
         <SimpleSorterCard
           title="Redeem In"
           icon="RedeemIcon"
