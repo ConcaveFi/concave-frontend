@@ -37,6 +37,7 @@ import { TradeRoute } from 'components/AMM/Swap/TradeRoute'
 import { ApproveButton } from 'components/ApproveButton/ApproveButton'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
 import { withPageTransition } from 'components/PageTransition'
+import SecurityBanner from 'components/SecurityBanner'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
@@ -128,6 +129,8 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
   return (
     <>
       <Flex wrap="wrap" justify="center" align="center" alignContent="center" w="100%" gap={10}>
+        <SecurityBanner />
+
         <LayoutGroup>
           <CandleStickCard
             from={trade.data.inputAmount?.currency}
