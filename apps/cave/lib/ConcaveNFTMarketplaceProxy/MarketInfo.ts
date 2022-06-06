@@ -1,4 +1,3 @@
-import { CNV, Currency, CurrencyAmount } from '@concave/gemswap-sdk'
 import { BigNumber } from 'ethers'
 import { Offer } from './Auction'
 import { NonFungibleTokenInfo } from './NonFungibleToken'
