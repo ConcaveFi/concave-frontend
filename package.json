@@ -33,6 +33,6 @@
   },
   "packageManager": "yarn@1.22.0",
   "dependencies": {
-    "typescript": "^4.6.4"
+    "typescript": "^4.7.3"
   }
 }
