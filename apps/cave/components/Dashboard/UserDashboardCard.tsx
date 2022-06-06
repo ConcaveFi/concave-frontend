@@ -3,10 +3,7 @@ import { Box, Button, Collapse, Flex, Text, useBreakpointValue } from '@concave/
 import { MetalBox } from 'components/MetalBox'
 import { spinAnimation } from 'components/Treasury/Mobile/TreasuryManagementMobile'
 import { UseDashBoardState } from 'contracts/DashBoard/DashBoardState'
-import useNftPositionFilter, {
-  NftPositionDaysFilterType,
-  NftPositionFilters,
-} from 'hooks/useNftPositionFilter'
+import { NftRangeFilters, useNftPositionFilter } from 'hooks/useNftPositionFilter'
 import { NftSorter, NftSorters, useNftPositionSort } from 'hooks/useNftPositionSort'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
@@ -22,20 +19,18 @@ const UserDashboardCard = (props: { data: UseDashBoardState }) => {
   const [sorters, setSorters] = useState<NftSorters>({})
   const { data } = props
   const { userNonFungibleTokensInfo, totalLocked, isLoading } = data
-  const { sorter } = useNftPositionSort(sorters)
-  const [filters, setFilters] = useState<NftPositionFilters>({
-    filterByDay: NftPositionDaysFilterType.NONE,
-  })
+  const [filters, setFilters] = useState<NftRangeFilters>({})
 
-  const { filterByGained, filterByDay, filterByInitial } = useNftPositionFilter(filters)
+  const { sorter } = useNftPositionSort(sorters)
+  const { filterByRange } = useNftPositionFilter(filters)
+
+  console.log(filterByRange)
 
   const isMobile = useBreakpointValue({ base: true, md: false })
   const hasPositions = userNonFungibleTokensInfo.length !== 0
   const userPositionsComponent = userNonFungibleTokensInfo
+    .filter(filterByRange)
     .sort(sorter)
-    .filter(filterByGained)
-    .filter(filterByInitial)
-    .filter(filterByDay)
     .map((nonFungibleTokenInfo, index) =>
       isMobile ? (
         <UserPositionCardMobile key={index} nonFungibleTokenInfo={nonFungibleTokenInfo} />
@@ -75,7 +70,7 @@ const UserDashboardCard = (props: { data: UseDashBoardState }) => {
           <DividendsShareMobile isLoading={isLoading} totalLocked={totalLocked} />
         </>
         <DashboardFilterContainer
-          onChangeFilters={(e) => setFilters(e)}
+          onAddFilter={(filter, { min, max }) => setFilters({ ...filters, [filter]: { min, max } })}
           onAddSorter={(type, order) => setSorters({ ...sorters, [type]: order })}
           onRemoveSorter={(type) => {
             const { [type]: removed, ...newSorters } = sorters

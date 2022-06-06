@@ -11,7 +11,6 @@ import {
 } from '@concave/ui'
 import { useState } from 'react'
 import ChooseButton from '../Marketplace/ChooseButton'
-import { NftPositionDaysFilterType } from '../../hooks/useNftPositionFilter'
 import ToggleButton from '../Marketplace/ToggleButton'
 import SearchFilterCard from './SearchFilterCard'
 import { NftSorter, NftSortOrder } from 'hooks/useNftPositionSort'
@@ -21,7 +20,7 @@ interface StakePoolFilterCardProps {
   onChangeSorter: (sortType: NftSorter, order: NftSortOrder) => void
   onRemoveSorter: (sortType: NftSorter) => void
   onResetFilters?: () => void
-  onApplyFilters?: (filterType: NftPositionDaysFilterType) => void
+  onApplyFilters?: (filterType: any) => void
 }
 
 export default function StakePoolFilterCard(props: StakePoolFilterCardProps) {
@@ -145,7 +144,7 @@ function PeriodSorts(props: PeriodSortsProps) {
 }
 
 interface PeriodsProps {
-  onApply: (filterType: NftPositionDaysFilterType) => void
+  onApply: (filterType: any) => void
   onReset: () => void
   onChangeFilter: (hasFilter: boolean) => void
 }
@@ -154,11 +153,11 @@ const Periods = (props: PeriodsProps) => {
   const { onApply: onApplyFilter, onReset, onChangeFilter } = props
   const [currentButton, setCurrentButton] = useState('None')
   const periodButtons = [
-    { title: 'None', filter: NftPositionDaysFilterType.NONE },
-    { title: '360 Days', filter: NftPositionDaysFilterType.FILTER_BY_360 },
-    { title: '180 Days', filter: NftPositionDaysFilterType.FILTER_BY_180 },
-    { title: '90 Days', filter: NftPositionDaysFilterType.FILTER_BY_90 },
-    { title: '45 Days', filter: NftPositionDaysFilterType.FILTER_BY_45 },
+    { title: 'None' },
+    { title: '360 Days' },
+    { title: '180 Days' },
+    { title: '90 Days' },
+    { title: '45 Days' },
   ]
   const periodButtonsComp = periodButtons.map((value, index) => {
     return (
@@ -167,7 +166,7 @@ const Periods = (props: PeriodsProps) => {
         title={value.title}
         onClick={() => {
           setCurrentButton(value.title)
-          setCurrentFilter(value.filter)
+          // setCurrentFilter(value.filter)
         }}
         active={currentButton === value.title}
         width={100}
@@ -175,16 +174,16 @@ const Periods = (props: PeriodsProps) => {
     )
   })
 
-  const [currentFilter, setCurrentFilter] = useState(NftPositionDaysFilterType.NONE)
+  const [currentFilter, setCurrentFilter] = useState()
   const onApply = () => {
-    onChangeFilter(currentFilter !== NftPositionDaysFilterType.NONE)
-    onApplyFilter(currentFilter)
+    // onChangeFilter(currentFilter !== NftPositionDaysFilterType.NONE)
+    // onApplyFilter(currentFilter)
   }
 
   const resetFilter = () => {
-    setCurrentButton('None')
-    setCurrentFilter(NftPositionDaysFilterType.NONE)
-    onReset()
+    // setCurrentButton('None')
+    // setCurrentFilter(NftPositionDaysFilterType.NONE)
+    // onReset()
   }
 
   return (

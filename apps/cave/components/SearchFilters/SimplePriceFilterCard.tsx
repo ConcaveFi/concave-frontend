@@ -16,19 +16,21 @@ import SearchFilterCard from 'components/SearchFilters/SearchFilterCard'
 import ToggleButton from 'components/Marketplace/ToggleButton'
 import { useEffect, useState } from 'react'
 import { NftSorter, NftSortOrder } from 'hooks/useNftPositionSort'
+import { NftRangeFilter } from 'hooks/useNftPositionFilter'
 
 interface SimplePriceFilterCardProps {
   onChangeSorter: (sortType: NftSorter, order: NftSortOrder) => void
   onRemoveSorter: (sortType: NftSorter) => void
-  onApplyFilter?: (from: number, to: number) => void
+  onApply: (filter: NftRangeFilter, { min, max }: { min: number; max: number }) => void
   onResetFilter?: () => void
+  filter: NftRangeFilter
   sortType: NftSorter
   title: string
   icon?: string
 }
 
 export default function SimplePriceFilterCard(props: SimplePriceFilterCardProps) {
-  const { sortType, title, icon, onChangeSorter, onRemoveSorter } = props
+  const { filter, sortType, title, icon, onChangeSorter, onRemoveSorter } = props
 
   const [hasSorter, setHasSorter] = useState(false)
   const [hasFilter, setHasFilter] = useState(false)
@@ -74,10 +76,11 @@ export default function SimplePriceFilterCard(props: SimplePriceFilterCardProps)
               onRemoveSorter={onRemoveSorter}
             />
             <FiltersContainer
-              onApply={(from, to) => {
-                if (from || to) {
+              filter={filter}
+              onApply={(filter, { min, max }) => {
+                if (min || max) {
                   setHasFilter(true)
-                  props.onApplyFilter(from, to)
+                  props.onApply(filter, { min, max })
                 }
               }}
               onReset={() => {
@@ -148,18 +151,21 @@ const SortCard = (props: SortCardProps) => {
 }
 
 interface FiltersContainerProps {
-  onApply: (from: number, to: number) => void
+  onApply: (filter: NftRangeFilter, { min, max }: { min: number; max: number }) => void
   onReset: () => void
+  filter: NftRangeFilter
 }
 
 const FiltersContainer = (props: FiltersContainerProps) => {
+  const { filter } = props
   const [fromValue, setFromValue] = useState('')
   const [toValue, setToValue] = useState('')
 
   const onApply = () => {
-    const higherNumber = fromValue > toValue ? +fromValue : +toValue
-    const smallerNumber = fromValue < toValue ? +fromValue : +toValue
-    props.onApply(smallerNumber, higherNumber)
+    props.onApply(filter, {
+      min: Math.min(+fromValue, +toValue),
+      max: Math.max(+fromValue, +toValue),
+    })
   }
 
   const onReset = () => {

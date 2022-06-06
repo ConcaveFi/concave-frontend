@@ -1,40 +1,22 @@
 import { utils } from 'ethers'
-import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungibleToken'
 
-export enum NftPositionDaysFilterType {
-  NONE = 'none',
-  FILTER_BY_45 = '3',
-  FILTER_BY_90 = '2',
-  FILTER_BY_180 = '1',
-  FILTER_BY_360 = '0',
+export enum NftRangeFilter {
+  GAINED = 'gained',
+  INITIAL = 'initialValue',
 }
-export interface NftPositionFilters {
-  price?: { min: number; max: number }
-  gained?: { min: number; max: number }
-  initial?: { min: number; max: number }
-  filterByDay: NftPositionDaysFilterType
-}
+export type NftRangeFilters = { [key: string]: { min?: number; max?: number } }
 
-export default function useNftPositionFilter(filters: NftPositionFilters) {
-  const filterDay = filters.filterByDay
-  const { gained, initial } = filters
+export const useNftPositionFilter = (filters: NftRangeFilters) => ({
+  filterByRange: Object.entries(filters)
+    .map(mapToFilterFunction)
+    .reduce(reduceToOneFunction, () => true),
+})
 
-  const filterByDay = (token: NonFungibleTokenInfo) => {
-    return filterDay !== 'none' ? token.poolID === +filterDay : true
+const mapToFilterFunction =
+  ([type, { min, max }]: [NftRangeFilter, { min: number; max: number }]) =>
+  (current) => {
+    const currentFormatted = +utils.formatEther(current[type])
+    return currentFormatted >= min && currentFormatted <= max
   }
 
-  const filterByGained = (token: NonFungibleTokenInfo) => {
-    const gainedValue = +utils.formatEther(token.gained)
-    return gained ? gainedValue >= gained.min && gainedValue <= gained.max : true
-  }
-
-  const filterByInitial = (token: NonFungibleTokenInfo) => {
-    const initialValue = +utils.formatEther(token.initialValue)
-    return initial ? initialValue >= initial.min && initialValue <= initial.max : true
-  }
-  return {
-    filterByDay,
-    filterByGained,
-    filterByInitial,
-  }
-}
+const reduceToOneFunction = (currentFilter, filterBefore) => currentFilter && filterBefore

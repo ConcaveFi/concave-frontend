@@ -3,18 +3,18 @@ import StakePoolFilterCard from 'components/SearchFilters/StakePoolFilterCard'
 import { MetalBox } from 'components/MetalBox'
 import SimplePriceFilterCard from 'components/SearchFilters/SimplePriceFilterCard'
 import SimpleSorterCard from 'components/SearchFilters/SimpleSorterCard'
-import { NftPositionDaysFilterType, NftPositionFilters } from 'hooks/useNftPositionFilter'
 import { NftSorter, NftSortOrder } from 'hooks/useNftPositionSort'
 import { useState } from 'react'
+import { NftRangeFilter } from 'hooks/useNftPositionFilter'
 
 interface DashboardFilterContainerProps {
-  onChangeFilters?: (filterProps: NftPositionFilters) => void
+  onAddFilter?: (filter: NftRangeFilter, { min, max }: { min: number; max: number }) => void
   onAddSorter: (sorter: NftSorter, order: NftSortOrder) => void
   onRemoveSorter: (sorter: NftSorter) => void
 }
 
 export default function DashboardFilterContainer(props: DashboardFilterContainerProps) {
-  const { onChangeFilters, onAddSorter, onRemoveSorter } = props
+  const { onAddFilter, onAddSorter, onRemoveSorter } = props
 
   const mobileUI = useBreakpointValue({ base: true, md: false })
   return (
@@ -49,18 +49,16 @@ export default function DashboardFilterContainer(props: DashboardFilterContainer
         />
 
         <SimplePriceFilterCard
-          // onApplyFilter={(min, max) => onChangeFilters({ ...currentFilters, gained: { min, max } })}
-          // onResetFilter={() => onChangeFilters({ ...currentFilters, gained: undefined })}
           onChangeSorter={onAddSorter}
           onRemoveSorter={onRemoveSorter}
+          onApply={onAddFilter}
           sortType={NftSorter.GAINED}
+          filter={NftRangeFilter.GAINED}
           title="Gained"
         />
         <SimplePriceFilterCard
-          // onApplyFilter={(min, max) =>
-          //   onChangeFilters({ ...currentFilters, initial: { min, max } })
-          // }
-          // onResetFilter={() => onChangeFilters({ ...currentFilters, initial: undefined })}
+          onApply={onAddFilter}
+          filter={NftRangeFilter.INITIAL}
           onChangeSorter={onAddSorter}
           onRemoveSorter={onRemoveSorter}
           sortType={NftSorter.INITIAL}
