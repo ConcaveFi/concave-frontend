@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount } from '@concave/core'
+import { Currency, CurrencyAmount, Rounding } from '@concave/core'
 import { FlexProps, HStack, NumericInput, Stack, useMultiStyleConfig } from '@concave/ui'
 import { CurrencySelectorComponent } from 'components/CurrencySelector/CurrencySelector'
 import React, { ReactNode, useCallback, useRef, useState } from 'react'
@@ -39,6 +39,7 @@ export function CurrencyAmountField({
   const handleChange = useCallback(
     ({ value }, { source }) => {
       if (source === 'prop') return // if the value changed from props, ignore it, only update on user typing
+      isFocused.current = true
       if (value === '' && currencyAmount?.currency)
         onChangeAmount(toAmount('0', currencyAmount.currency))
       setInternalValue(value)
@@ -46,7 +47,9 @@ export function CurrencyAmountField({
     [currencyAmount?.currency, onChangeAmount],
   )
 
-  const inputValue = isFocused.current ? internalValue : +currencyAmount?.toSignificant(8) || ''
+  const inputValue = isFocused.current
+    ? internalValue
+    : +currencyAmount?.toSignificant(8, undefined, Rounding.ROUND_HALF_UP) || ''
 
   const onSelectCurrency = useCallback(
     (newCurrency: Currency) => onChangeAmount(toAmount(inputValue, newCurrency)),
@@ -60,10 +63,6 @@ export function CurrencyAmountField({
           fontSize={{ base: 'lg', md: '2xl' }}
           disabled={disabled}
           w="100%"
-          onFocus={() => {
-            isFocused.current = true
-            if (currencyAmount) setInternalValue(+currencyAmount?.toSignificant(8) || '')
-          }}
           onBlur={() => (isFocused.current = false)}
           value={inputValue}
           onValueChange={handleChange}
