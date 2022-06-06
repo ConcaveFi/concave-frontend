@@ -127,14 +127,7 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
 
   return (
     <>
-      <Flex
-        wrap="wrap"
-        justify="center"
-        mt={{ base: '10vh', xl: '25vh' }}
-        mb={['25vh', 'none']}
-        w="100%"
-        gap={10}
-      >
+      <Flex wrap="wrap" justify="center" align="center" alignContent="center" w="100%" gap={10}>
         <LayoutGroup>
           <CandleStickCard
             from={trade.data.inputAmount?.currency}
@@ -244,8 +237,6 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
         tokenOutAddress={swapTx.trade?.outputAmount.currency.address} // workaround for type error
       />
       <TransactionErrorDialog error={swapTx.error?.message} isOpen={swapTx.isError} />
-
-      {/* <NetworkMismatchModal /> */}
     </>
   )
 }
