@@ -42,10 +42,11 @@ const getFallbackProviders = (chainId: number) => {
   return providerConfigs
 }
 
-export const concaveProvider = (chainId: number) =>
-  // new multicallProvider.MulticallProvider(
+export const concaveFallbackProvider = (chainId: number) =>
   new providers.FallbackProvider(getFallbackProviders(chainId), 1)
-// )
+
+export const concaveProvider = (chainId: number) =>
+  new multicallProvider.MulticallProvider(concaveFallbackProvider(chainId))
 
 export const concaveWSProvider = (chainId: number) => {
   if (NEXT_PUBLIC_CONCAVE_RPC_KEY) return new providers.WebSocketProvider(concaveWSS, chainId)
