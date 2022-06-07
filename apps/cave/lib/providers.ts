@@ -42,11 +42,18 @@ const getFallbackProviders = (chainId: number) => {
   return providerConfigs
 }
 
-export const concaveFallbackProvider = (chainId: number) =>
-  new providers.FallbackProvider(getFallbackProviders(chainId), 1)
+class ConcaveProvider extends multicallProvider.MulticallProvider {
+  constructor(chainId: number) {
+    // TODO: should be fixed on @0xsequence/multicall side
+    // wagmi expects provider.network to exist,
+    // but when wrapping with multicall it waits a promise to resolve
+    const p = new providers.FallbackProvider(getFallbackProviders(chainId), 1)
+    super(p)
+    this._network = p.network
+  }
+}
 
-export const concaveProvider = (chainId: number) =>
-  new multicallProvider.MulticallProvider(concaveFallbackProvider(chainId))
+export const concaveProvider = (chainId: number) => new ConcaveProvider(chainId)
 
 export const concaveWSProvider = (chainId: number) => {
   if (NEXT_PUBLIC_CONCAVE_RPC_KEY) return new providers.WebSocketProvider(concaveWSS, chainId)
