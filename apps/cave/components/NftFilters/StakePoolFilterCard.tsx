@@ -3,29 +3,28 @@ import {
   Button,
   Flex,
   Popover,
-  PopoverArrow,
   PopoverContent,
   PopoverTrigger,
   Portal,
   Text,
   useBreakpointValue,
 } from '@concave/ui'
-import { useEffect, useState } from 'react'
-import ChooseButton from '../ChooseButton'
-import { NftPositionDaysFilterType } from '../hooks/useNftPositionFilter'
-import { NftPositionSortType } from '../hooks/useNftPositionSort'
-import ToggleButton from '../ToggleButton'
+import { useState } from 'react'
+import ChooseButton from '../Marketplace/ChooseButton'
+import ToggleButton from './ToggleButton'
 import SearchFilterCard from './SearchFilterCard'
+import { title } from 'process'
+import { NftSorter, NftSortOrder } from './hooks/useNftSort'
 
 interface StakePoolFilterCardProps {
-  onChangeSorter: (sortType: NftPositionSortType) => void
-  currentSorter: NftPositionSortType
+  onChangeSorter: (sortType: NftSorter, order: NftSortOrder) => void
+  onRemoveSorter: (sortType: NftSorter) => void
   onResetFilters?: () => void
-  onApplyFilters?: (filterType: NftPositionDaysFilterType) => void
+  onApplyFilters?: (filterType: any) => void
 }
 
 export default function StakePoolFilterCard(props: StakePoolFilterCardProps) {
-  const { currentSorter, onApplyFilters, onResetFilters } = props
+  const { onApplyFilters, onResetFilters, onChangeSorter, onRemoveSorter } = props
 
   const [hasSorter, setHasSorter] = useState(false)
   const [hasFilter, setHasFilter] = useState(false)
@@ -33,8 +32,6 @@ export default function StakePoolFilterCard(props: StakePoolFilterCardProps) {
 
   return (
     <Popover offset={[mobileLayout ? 115 : 132, 10]}>
-      {/* Chakra type bug, related to just released react 18, should be fixed soon 
-        // @ts-ignore  */}
       <PopoverTrigger>
         <Button>
           <SearchFilterCard
@@ -69,8 +66,8 @@ export default function StakePoolFilterCard(props: StakePoolFilterCardProps) {
             <Box position={'relative'} width={'full'} height={100}>
               <PeriodSorts
                 onChangeCurSorterActive={setHasSorter}
-                onChangeSorter={props.onChangeSorter}
-                currentSorter={currentSorter}
+                onAddSorter={onChangeSorter}
+                onRemoveSorter={onRemoveSorter}
               />
               <Periods
                 onChangeFilter={setHasFilter}
@@ -86,22 +83,17 @@ export default function StakePoolFilterCard(props: StakePoolFilterCardProps) {
 }
 
 interface PeriodSortsProps {
-  onChangeSorter: (sortType: NftPositionSortType) => void
-  currentSorter: NftPositionSortType
+  onAddSorter: (sortType: NftSorter, order: NftSortOrder) => void
+  onRemoveSorter: (sortType: NftSorter) => void
   onChangeCurSorterActive: (active: boolean) => void
 }
 
 function PeriodSorts(props: PeriodSortsProps) {
-  const { currentSorter, onChangeCurSorterActive } = props
-
-  const currentActive =
-    currentSorter === NftPositionSortType.STAKE_HIGHEST_FIRST ||
-    currentSorter === NftPositionSortType.STAKE_LOWEST_FIRST
-
-  const buttons = [
-    { title: 'None', sorter: NftPositionSortType.NONE },
-    { title: 'Lowest First', sorter: NftPositionSortType.STAKE_LOWEST_FIRST },
-    { title: 'Highest First', sorter: NftPositionSortType.STAKE_HIGHEST_FIRST },
+  const { onAddSorter, onChangeCurSorterActive, onRemoveSorter } = props
+  const buttons: { title: string; order: NftSortOrder }[] = [
+    { title: 'None', order: 'none' },
+    { title: 'Lowest First', order: 'highest' },
+    { title: 'Highest First', order: 'lowest' },
   ]
 
   const [currentButton, setCurrentButton] = useState('None')
@@ -111,19 +103,15 @@ function PeriodSorts(props: PeriodSortsProps) {
         key={index}
         onClick={() => {
           setCurrentButton(button.title)
-          props.onChangeSorter(button.sorter)
+          onChangeCurSorterActive(button.title !== 'None')
+          if (title !== 'None') onAddSorter(NftSorter.STAKE, button.order)
+          else onRemoveSorter(NftSorter.STAKE)
         }}
         title={button.title}
         active={button.title === currentButton}
       />
     )
   })
-
-  useEffect(() => {
-    if (!currentActive) setCurrentButton('None')
-    onChangeCurSorterActive(currentActive)
-  }, [currentSorter])
-
   return (
     <>
       <Text
@@ -154,20 +142,20 @@ function PeriodSorts(props: PeriodSortsProps) {
 }
 
 interface PeriodsProps {
-  onApply: (filterType: NftPositionDaysFilterType) => void
+  onApply: (filterType: any) => void
   onReset: () => void
   onChangeFilter: (hasFilter: boolean) => void
 }
 
 const Periods = (props: PeriodsProps) => {
-  const { onApply, onReset, onChangeFilter } = props
+  const { onApply: onApplyFilter, onReset, onChangeFilter } = props
   const [currentButton, setCurrentButton] = useState('None')
   const periodButtons = [
-    { title: 'None', filter: NftPositionDaysFilterType.NONE },
-    { title: '360 Days', filter: NftPositionDaysFilterType.FILTER_BY_360 },
-    { title: '180 Days', filter: NftPositionDaysFilterType.FILTER_BY_180 },
-    { title: '90 Days', filter: NftPositionDaysFilterType.FILTER_BY_90 },
-    { title: '45 Days', filter: NftPositionDaysFilterType.FILTER_BY_45 },
+    { title: 'None' },
+    { title: '360 Days' },
+    { title: '180 Days' },
+    { title: '90 Days' },
+    { title: '45 Days' },
   ]
   const periodButtonsComp = periodButtons.map((value, index) => {
     return (
@@ -176,8 +164,7 @@ const Periods = (props: PeriodsProps) => {
         title={value.title}
         onClick={() => {
           setCurrentButton(value.title)
-          onChangeFilter(value.filter !== NftPositionDaysFilterType.NONE)
-          setCurrentFilter(value.filter)
+          // setCurrentFilter(value.filter)
         }}
         active={currentButton === value.title}
         width={100}
@@ -185,11 +172,15 @@ const Periods = (props: PeriodsProps) => {
     )
   })
 
-  const [currentFilter, setCurrentFilter] = useState(NftPositionDaysFilterType.NONE)
+  const [currentFilter, setCurrentFilter] = useState()
+  const onApply = () => {
+    // onChangeFilter(currentFilter !== NftPositionDaysFilterType.NONE)
+    // onApplyFilter(currentFilter)
+  }
 
   const resetFilter = () => {
-    setCurrentButton('None')
-    setCurrentFilter(NftPositionDaysFilterType.NONE)
+    // setCurrentButton('None')
+    // setCurrentFilter(NftPositionDaysFilterType.NONE)
     // onReset()
   }
 
@@ -209,7 +200,7 @@ const Periods = (props: PeriodsProps) => {
       </Flex>
       <Flex height={'73px'} justifyContent="center" alignItems={'end'} gap="3">
         <ChooseButton onClick={resetFilter} title="Reset" />
-        <ChooseButton onClick={() => onApply(currentFilter)} title="Apply" backgroundType="blue" />
+        <ChooseButton onClick={onApply} title="Apply" backgroundType="blue" />
       </Flex>
     </>
   )

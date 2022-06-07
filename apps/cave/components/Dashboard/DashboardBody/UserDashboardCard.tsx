@@ -1,8 +1,12 @@
 import { Box, Button, Card, Collapse, Flex, Spinner, Text } from '@concave/ui'
+import { NftRangeFilters, useNftFilter } from 'components/NftFilters/hooks/useNftFilter'
+import { NftSorters, useNftSort } from 'components/NftFilters/hooks/useNftSort'
 import { UseStackPositionsState } from 'contracts/DashBoard/DashBoardState'
 import { useRouter } from 'next/router'
+import { useState } from 'react'
 import { useConnect } from 'wagmi'
 import { UserPositionCard } from '../LockPosition/Card/UserPositionCard'
+import FilterContainer from './FilterContainer'
 import UserDividendCard from './UserDividendCard'
 
 
@@ -10,6 +14,12 @@ const UserDashboardCard = ({ data }: { data: UseDashBoardState }) => {
   const { isConnected } = useConnect()
   const { userNonFungibleTokensInfo, totalLocked, isLoading } = data
   const hasPositions = userNonFungibleTokensInfo.length !== 0
+
+  // filters and sorters
+  const [sorters, setSorters] = useState<NftSorters>({})
+  const [filters, setFilters] = useState<NftRangeFilters>({})
+  const { sorter } = useNftSort(sorters)
+  const { filterByRange } = useNftFilter(filters)
 
   return (
     <Flex display={{ lg: 'flex', md: 'flex' }}>
@@ -25,7 +35,14 @@ const UserDashboardCard = ({ data }: { data: UseDashBoardState }) => {
         <Flex justify="center" p={4} pt={2} position={'relative'}>
           <UserDividendCard isLoading={isLoading} totalLocked={totalLocked} />
         </Flex>
-
+        <FilterContainer
+          onAddFilter={(filter, { min, max }) => setFilters({ ...filters, [filter]: { min, max } })}
+          onAddSorter={(type, order) => setSorters({ ...sorters, [type]: order })}
+          onRemoveSorter={(sorter) => {
+            const { [sorter]: removed, ...newSorters } = sorters
+            setSorters(newSorters)
+          }}
+        />
         <Collapse in={hasPositions}>
           <Box
             pos="relative"
@@ -39,9 +56,12 @@ const UserDashboardCard = ({ data }: { data: UseDashBoardState }) => {
             shadow="down"
             __css={scrollBar}
           >
-            {userNonFungibleTokensInfo.map((nonFungibleTokenInfo, index) => (
-              <UserPositionCard key={index} nonFungibleTokenInfo={nonFungibleTokenInfo} />
-            ))}
+            {userNonFungibleTokensInfo
+              .filter(filterByRange)
+              .sort(sorter)
+              .map((nonFungibleTokenInfo, index) => (
+                <UserPositionCard key={index} nonFungibleTokenInfo={nonFungibleTokenInfo} />
+              ))}
           </Box>
         </Collapse>
 

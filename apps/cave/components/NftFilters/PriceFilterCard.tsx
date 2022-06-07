@@ -2,7 +2,7 @@ import {
   Box,
   Button,
   Flex,
-  Input,
+  NumericInput,
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -10,21 +10,26 @@ import {
   Text,
   useBreakpointValue,
 } from '@concave/ui'
-import { useEffect, useState } from 'react'
-import ChooseButton from '../ChooseButton'
-import { NftPositionSortType } from '../hooks/useNftPositionSort'
-import ToggleButton from '../ToggleButton'
+import ChooseButton from 'components/Marketplace/ChooseButton'
+import ToggleButton from 'components/NftFilters/ToggleButton'
+import { useState } from 'react'
+import { NftRangeFilter } from './hooks/useNftFilter'
+import { NftSorter, NftSortOrder } from './hooks/useNftSort'
 import SearchFilterCard from './SearchFilterCard'
 
-interface RedeemFilterCardProps {
-  onChangeSorter: (sortType: NftPositionSortType) => void
-  onApplyFilter?: (from: number, to: number) => void
+interface PriceFilterCardProps {
+  onChangeSorter: (sortType: NftSorter, order: NftSortOrder) => void
+  onRemoveSorter: (sortType: NftSorter) => void
+  onApply: (filter: NftRangeFilter, { min, max }: { min: number; max: number }) => void
   onResetFilter?: () => void
-  currentSorter: NftPositionSortType
+  filter: NftRangeFilter
+  sortType: NftSorter
+  title: string
+  icon?: string
 }
 
-export default function PriceFilterCard(props: RedeemFilterCardProps) {
-  const { currentSorter } = props
+export default function PriceFilterCard(props: PriceFilterCardProps) {
+  const { filter, sortType, title, icon, onChangeSorter, onRemoveSorter } = props
 
   const [hasSorter, setHasSorter] = useState(false)
   const [hasFilter, setHasFilter] = useState(false)
@@ -35,11 +40,9 @@ export default function PriceFilterCard(props: RedeemFilterCardProps) {
 
   return (
     <Popover closeOnEsc offset={[mobileLayout ? -135 : -187, 10]} placement="bottom">
-      {/* Chakra type bug, related to just released react 18, should be fixed soon 
-        // @ts-ignore  */}
       <PopoverTrigger>
         <Button>
-          <SearchFilterCard hasFilter={hasSorter || hasFilter} title={'Price'} icon={'PriceIcon'} />
+          <SearchFilterCard hasFilter={hasSorter || hasFilter} title={title} icon={icon} />
         </Button>
       </PopoverTrigger>
       <Portal>
@@ -65,14 +68,16 @@ export default function PriceFilterCard(props: RedeemFilterCardProps) {
             />
             <SortCard
               onChangeActive={setHasSorter}
-              currentSorter={currentSorter}
-              onChangeSorter={props.onChangeSorter}
+              sorter={sortType}
+              onAddSorter={onChangeSorter}
+              onRemoveSorter={onRemoveSorter}
             />
             <FiltersContainer
-              onApply={(from, to) => {
-                if (from || to) {
+              filter={filter}
+              onApply={(filter, { min, max }) => {
+                if (min || max) {
                   setHasFilter(true)
-                  props.onApplyFilter(from, to)
+                  props.onApply(filter, { min, max })
                 }
               }}
               onReset={() => {
@@ -88,43 +93,38 @@ export default function PriceFilterCard(props: RedeemFilterCardProps) {
 }
 
 interface SortCardProps {
-  currentSorter: NftPositionSortType
-  onChangeSorter: (sortType: NftPositionSortType) => void
+  sorter: NftSorter
+  onAddSorter: (sortType: NftSorter, order: NftSortOrder) => void
+  onRemoveSorter: (sortType: NftSorter) => void
   onChangeActive: (active: boolean) => void
 }
 
 const SortCard = (props: SortCardProps) => {
-  const { currentSorter } = props
+  const { onChangeActive, onRemoveSorter, onAddSorter, sorter } = props
 
-  const currentActive =
-    currentSorter === NftPositionSortType.PRICE_HIGHEST_FIRST ||
-    currentSorter === NftPositionSortType.PRICE_LOWEST_FIRST
-
-  const buttons = [
-    { title: 'None', sorter: NftPositionSortType.NONE },
-    { title: 'Lowest First', sorter: NftPositionSortType.PRICE_LOWEST_FIRST },
-    { title: 'Highest First', sorter: NftPositionSortType.PRICE_HIGHEST_FIRST },
+  const buttons: { title: string; order: NftSortOrder }[] = [
+    { title: 'None', order: 'none' },
+    { title: 'Lowest First', order: 'lowest' },
+    { title: 'Highest First', order: 'highest' },
   ]
 
   const [currentButton, setCurrentButton] = useState('None')
+  const currentActive = currentButton !== 'None'
   const toggleButons = buttons.map((button, index) => {
     return (
       <ToggleButton
         key={index}
         onClick={() => {
           setCurrentButton(button.title)
-          props.onChangeSorter(button.sorter)
+          onChangeActive(button.title !== 'None')
+          if (button.title === 'none') onRemoveSorter(sorter)
+          else onAddSorter(sorter, button.order)
         }}
         title={button.title}
         active={button.title === currentButton}
       />
     )
   })
-
-  useEffect(() => {
-    if (!currentActive) setCurrentButton('None')
-    props.onChangeActive(currentActive)
-  }, [currentSorter])
 
   return (
     <>
@@ -148,24 +148,21 @@ const SortCard = (props: SortCardProps) => {
 }
 
 interface FiltersContainerProps {
-  onApply: (from: number, to: number) => void
+  onApply: (filter: NftRangeFilter, { min, max }: { min: number; max: number }) => void
   onReset: () => void
+  filter: NftRangeFilter
 }
 
 const FiltersContainer = (props: FiltersContainerProps) => {
+  const { filter } = props
   const [fromValue, setFromValue] = useState('')
-  const emptyFrom = fromValue === ''
-  const fromLabel = emptyFrom ? 'From' : ''
-
-  // INPUT 2
   const [toValue, setToValue] = useState('')
-  const emptyToValue = toValue === ''
-  const toLabel = emptyToValue ? 'To' : ''
 
   const onApply = () => {
-    const higherNumber = fromValue > toValue ? +fromValue : +toValue
-    const smallerNumber = fromValue < toValue ? +fromValue : +toValue
-    props.onApply(smallerNumber, higherNumber)
+    props.onApply(filter, {
+      min: Math.min(+fromValue, +toValue),
+      max: Math.max(+fromValue, +toValue),
+    })
   }
 
   const onReset = () => {
@@ -179,8 +176,8 @@ const FiltersContainer = (props: FiltersContainerProps) => {
         mt={{ base: 2, md: 6 }}
         justifyContent={'start'}
         alignItems="center"
+        gap={{ base: 2, md: 2 }}
         direction={{ base: 'column', md: 'row' }}
-        gap={{ base: 2, md: 0 }}
         align="center"
       >
         <Text
@@ -192,30 +189,33 @@ const FiltersContainer = (props: FiltersContainerProps) => {
           textColor={'#5F7A99'}
           my="auto"
         >
-          CNV Price Range:
+          Range:
         </Text>
-        <Flex gap={1} alignItems="center">
+        <Flex ml={4} alignItems="center" gap={1}>
           <Flex justifyContent="center" alignItems={'center'}>
-            <Text position={'absolute'}>{fromLabel}</Text>
-            <Input
+            <Text position={'absolute'}></Text>
+            <NumericInput
+              textAlign={'center'}
+              shadow="down"
+              placeholder="From"
               value={fromValue}
-              onChange={(v) => {
-                setFromValue(v.target.value)
-              }}
-              width="90px"
+              onChange={(v) => setFromValue(v.target.value.replaceAll(',', ''))}
+              width="110px"
               height="30px"
               borderRadius={'2xl'}
             />
           </Flex>
-          <Box width={2.5} height={1} shadow="down"></Box>
+          {/* <MdArrowForwardIos /> */}
+          <Box width={4} height={1} shadow="down"></Box>
           <Flex justifyContent="center" alignItems={'center'}>
-            <Text position={'absolute'}>{toLabel}</Text>
-            <Input
+            <Text position={'absolute'}></Text>
+            <NumericInput
+              placeholder="To"
+              shadow="down"
+              textAlign={'center'}
               value={toValue}
-              onChange={(v) => {
-                setToValue(v.target.value)
-              }}
-              width="90px"
+              onChange={(v) => setToValue(v.target.value.replaceAll(',', ''))}
+              width="110px"
               height="30px"
               borderRadius={'2xl'}
             />

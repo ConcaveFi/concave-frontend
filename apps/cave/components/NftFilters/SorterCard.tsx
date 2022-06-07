@@ -8,34 +8,38 @@ import {
   Portal,
   Text,
 } from '@concave/ui'
-import { useEffect, useState } from 'react'
-import { NftPositionSortType } from '../hooks/useNftPositionSort'
-import ToggleButton from '../ToggleButton'
+import { useState } from 'react'
+import { NftSorter, NftSortOrder } from './hooks/useNftSort'
 import SearchFilterCard from './SearchFilterCard'
+import ToggleButton from './ToggleButton'
 
-interface RedeemFilterCardProps {
-  onChangeSorter: (sortType: NftPositionSortType) => void
-  currentSorter: NftPositionSortType
+interface SorterCardProps {
+  onChangeSorter: (sortType: NftSorter, order: NftSortOrder) => void
+  onRemoveSorter: (sortType: NftSorter) => void
+  sorterType: NftSorter
+  title: string
+  icon?: string
 }
 
-export default function RedeemFilterCard(props: RedeemFilterCardProps) {
-  const { currentSorter } = props
-  const currentActive =
-    currentSorter === NftPositionSortType.REDEEM_HIGHEST_FIRST ||
-    currentSorter === NftPositionSortType.REDEEM_LOWEST_FIRST
-  const buttons = [
-    { title: 'None', sorter: NftPositionSortType.NONE },
-    { title: 'Lowest First', sorter: NftPositionSortType.REDEEM_LOWEST_FIRST },
-    { title: 'Highest First', sorter: NftPositionSortType.REDEEM_HIGHEST_FIRST },
+export default function SorterCard(props: SorterCardProps) {
+  const { sorterType, onChangeSorter, onRemoveSorter } = props
+
+  const buttons: { title: string; order: NftSortOrder }[] = [
+    { title: 'None', order: 'none' },
+    { title: 'Lowest First', order: 'lowest' },
+    { title: 'Highest First', order: 'highest' },
   ]
   const [currentButton, setCurrentButton] = useState('None')
+
+  const currentActive = currentButton !== 'None'
   const toggleButons = buttons.map((button, index) => {
     return (
       <ToggleButton
         key={index}
         onClick={() => {
           setCurrentButton(button.title)
-          props.onChangeSorter(button.sorter)
+          if (button.title === 'None') onRemoveSorter(sorterType)
+          else onChangeSorter(sorterType, button.order)
         }}
         title={button.title}
         active={button.title === currentButton}
@@ -43,17 +47,11 @@ export default function RedeemFilterCard(props: RedeemFilterCardProps) {
     )
   })
 
-  useEffect(() => {
-    if (!currentActive) setCurrentButton('None')
-  }, [currentSorter])
-
   return (
     <Popover>
-      {/* Chakra type bug, related to just released react 18, should be fixed soon 
-        // @ts-ignore  */}
       <PopoverTrigger>
         <Button>
-          <SearchFilterCard hasFilter={currentActive} title={'Redeem in'} icon={'RedeemIcon'} />
+          <SearchFilterCard hasFilter={currentActive} title={props.title} icon={props.icon} />
         </Button>
       </PopoverTrigger>
       <Portal>
