@@ -10,22 +10,18 @@ export function ClaimCard() {
   //   token: '0x2A6bb78490c2221E0D36d931192296BE4b3A01F1', // INSERT aCNV ADDRESS
   // })
   //
-  const [{ data, error, loading }, write] = useContractWrite(
+  const { isLoading: isRedeeming, write } = useContractWrite(
     {
       addressOrName: '0x38baBedCb1f226B49b2089DA0b84e52b6181Ca59',
       contractInterface: aCNVredeemabi,
     },
     'redeem',
-    {
-      args: [account.address],
-    },
+    { args: [account.address] },
   )
-  const [redeemText, setRedeemText] = useState('aCNV')
-  const [redeeming, setRedeeming] = useState(false)
+  // const [redeemText, setRedeemText] = useState('aCNV')
 
   const redeemAncv = () => {
-    setRedeeming(loading ? true : false)
-    setRedeemText(loading ? 'Redeeming' : 'Nothing to Redeem')
+    // setRedeemText(isRedeeming ? 'Redeeming' : 'Nothing to Redeem')
     write()
   }
   return (
@@ -48,11 +44,11 @@ export function ClaimCard() {
           h="30px"
           size="large"
           mx="moz-initial"
-          isLoading={redeeming}
+          isLoading={isRedeeming}
           loadingText="Redeeming"
           onClick={redeemAncv}
         >
-          {redeemText}
+          aCNV
         </Button>
         {/* <Text color="text.low">aCNV Balance: {loading ? 0 : data?.formatted}</Text> */}
       </Stack>
