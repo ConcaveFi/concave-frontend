@@ -40,7 +40,7 @@ export function ChangeNetworkModal(props: ChangeNetworkModalProps) {
               _focus={{}}
               onClick={() => {
                 if (activeChain.id !== chain.id) {
-                  switchNetwork(chain.id)
+                  switchNetwork?.(chain.id)
                 }
               }}
             >
@@ -52,7 +52,7 @@ export function ChangeNetworkModal(props: ChangeNetworkModalProps) {
         })}
       </Flex>
       <WaitingChangeNetworkDialog
-        switchingNetwork={chains.find(({ id }) => id === pendingChainId).name}
+        switchingNetwork={chains.find(({ id }) => id === pendingChainId)?.name}
         currentNetwork={activeChain.name}
         isOpen={isLoading}
         onClose={() => {}}
