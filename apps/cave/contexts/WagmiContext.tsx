@@ -17,7 +17,7 @@ const connectors = [
     options: {
       appName: 'Concave App',
       jsonRpcUrl: concaveRPC,
-      // appLogoUrl: 'https://concave.lol/assets/concave/logomark.png',
+      appLogoUrl: 'https://app.concave.lol/assets/tokens/cnv.svg',
       darkMode: true,
     },
   }),
