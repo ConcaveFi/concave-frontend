@@ -1,18 +1,15 @@
-import { SpinIcon, SpinnerIcon } from '@concave/icons'
-import { Button, Flex, keyframes, Modal, Spinner, Text } from '@concave/ui'
-import { useState } from 'react'
+import { SpinIcon } from '@concave/icons'
+import { Button, Flex, Modal, Text } from '@concave/ui'
 import { useNetwork } from 'wagmi'
 import { spinAnimation } from './Treasury/Mobile/TreasuryManagementMobile'
 
-interface ChangeNetWorkdModalProps {
+interface ChangeNetworkModalProps {
   isOpen: boolean
   onClose: () => void
 }
 
-export default function ChangeNetWorkdModal(props: ChangeNetWorkdModalProps) {
-  const [{ data, loading, error }, switchNetwork] = useNetwork()
-
-  const [switchingNetwork, setSwitchingNetwork] = useState(data?.chain.name)
+export function ChangeNetworkModal(props: ChangeNetworkModalProps) {
+  const { activeChain, pendingChainId, isLoading, chains, switchNetwork } = useNetwork()
 
   return (
     <Modal
@@ -25,25 +22,24 @@ export default function ChangeNetWorkdModal(props: ChangeNetWorkdModalProps) {
       motionPreset="slideInBottom"
     >
       <Flex direction={'column'} width="250px" align={'center'} gap={3}>
-        {data.chains.map((chain, index) => {
+        {chains.map((chain, index) => {
           return (
             <Button
               key={index}
               py={6}
               px={20}
-              variant={data.chain.id === chain.id ? 'primary.outline' : ''}
-              shadow={data.chain.id === chain.id ? 'down' : 'up'}
+              variant={activeChain.id === chain.id ? 'primary.outline' : ''}
+              shadow={activeChain.id === chain.id ? 'down' : 'up'}
               height={8}
               rounded={'2xl'}
-              cursor={data.chain.id === chain.id ? 'default' : 'pointer'}
+              cursor={activeChain.id === chain.id ? 'default' : 'pointer'}
               transition={'all 0.3s'}
-              _active={data.chain.id === chain.id ? {} : { transform: 'scale(0.9)' }}
+              _active={activeChain.id === chain.id ? {} : { transform: 'scale(0.9)' }}
               // _hover={data.chain.id === chain.id ? {} : { transform: 'scale(1.1)' }}
               _hover={{}}
               _focus={{}}
               onClick={() => {
-                if (data.chain.id !== chain.id) {
-                  setSwitchingNetwork(chain.name)
+                if (activeChain.id !== chain.id) {
                   switchNetwork(chain.id)
                 }
               }}
@@ -56,9 +52,9 @@ export default function ChangeNetWorkdModal(props: ChangeNetWorkdModalProps) {
         })}
       </Flex>
       <WaitingChangeNetworkDialog
-        switchingNetwork={switchingNetwork}
-        currentNetwork={data.chain.name}
-        isOpen={loading}
+        switchingNetwork={chains.find(({ id }) => id === pendingChainId).name}
+        currentNetwork={activeChain.name}
+        isOpen={isLoading}
         onClose={() => {}}
       />
     </Modal>
@@ -72,14 +68,19 @@ interface WaitingChangeNetworkDialogProps {
   switchingNetwork: string
 }
 
-export const WaitingChangeNetworkDialog = (props: WaitingChangeNetworkDialogProps) => {
+export const WaitingChangeNetworkDialog = ({
+  isOpen,
+  onClose,
+  currentNetwork,
+  switchingNetwork,
+}: WaitingChangeNetworkDialogProps) => {
   return (
     <Modal
       isCentered
       preserveScrollBarGap
       title=""
-      isOpen={props.isOpen}
-      onClose={props.onClose}
+      isOpen={isOpen}
+      onClose={onClose}
       bluryOverlay
       motionPreset="slideInBottom"
       hideClose
@@ -107,7 +108,7 @@ export const WaitingChangeNetworkDialog = (props: WaitingChangeNetworkDialogProp
             Current Network:
           </Text>
           <Text fontSize={'md'} fontWeight="bold">
-            {props.currentNetwork}
+            {currentNetwork}
           </Text>
         </Flex>
 
@@ -116,7 +117,7 @@ export const WaitingChangeNetworkDialog = (props: WaitingChangeNetworkDialogProp
             Switching Network:
           </Text>
           <Text fontSize={'md'} fontWeight="bold">
-            {props.switchingNetwork}
+            {switchingNetwork}
           </Text>
         </Flex>
       </Flex>

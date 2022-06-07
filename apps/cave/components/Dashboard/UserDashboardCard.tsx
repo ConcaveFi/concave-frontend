@@ -5,9 +5,8 @@ import { useConnect } from 'wagmi'
 import UserDividendCard from './UserDividendCard'
 import UserPositionCard from './UserPositionCard'
 
-const UserDashboardCard = (props: { data: UseDashBoardState }) => {
-  const { data } = props
-  const [{ data: wallet }] = useConnect()
+const UserDashboardCard = ({ data }: { data: UseDashBoardState }) => {
+  const { isConnected } = useConnect()
   const { userNonFungibleTokensInfo, totalLocked, isLoading } = data
   const userPositionsComponent = userNonFungibleTokensInfo.map((nonFungibleTokenInfo, index) => (
     <UserPositionCard key={index} nonFungibleTokenInfo={nonFungibleTokenInfo} />
@@ -61,8 +60,8 @@ const UserDashboardCard = (props: { data: UseDashBoardState }) => {
         </Collapse>
 
         <LoadingPositions in={isLoading} />
-        <ItsNotConected in={!wallet.connected} />
-        <HasNoPositions in={!hasPositions && !isLoading && wallet.connected} />
+        <ItsNotConected in={!isConnected} />
+        <HasNoPositions in={!hasPositions && !isLoading && isConnected} />
       </Card>
     </Flex>
   )

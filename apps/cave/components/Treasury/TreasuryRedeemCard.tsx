@@ -4,12 +4,7 @@ import useAddTokenToWallet, { injectedTokenResponse } from 'hooks/useAddTokenToW
 import { GlassPanel } from './TreasuryManagementCard'
 import { useEffect, useState } from 'react'
 import { useConnect } from 'wagmi'
-import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
-import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
-import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { ComingSoonDialog } from 'components/ComingSoonDialog'
-import { Transaction } from 'ethers'
 import BBBTCNVRedemptionDialog from './VestedTokensDialogs/BBTCNVRedemptionDialog'
 import ACNVRedemptionDialog from './VestedTokensDialogs/ACNVRedemptionDialog'
 // aCNV address
@@ -27,7 +22,7 @@ function TreasuryRedeemCard() {
   const [title, setTitle] = useState('Coming soon')
 
   const [walletName, setWalletName] = useState('')
-  const [{ data }] = useConnect()
+  const { activeConnector } = useConnect()
 
   const {
     isOpen: onRedeemBBTCNV,
@@ -41,7 +36,7 @@ function TreasuryRedeemCard() {
   } = useDisclosure()
 
   useEffect(() => {
-    setWalletName(data?.connector?.name || 'Wallet')
+    setWalletName(activeConnector?.name || 'Wallet')
   }, [walletName])
 
   return (

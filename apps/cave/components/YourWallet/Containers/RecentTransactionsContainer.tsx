@@ -10,7 +10,7 @@ export default function RecentTransactionsContainer() {
 
   const { isOpen: isDialogOpen, onOpen: onOpenDialog, onClose: onCloseDialog } = useDisclosure()
 
-  const [{ data: account }] = useAccount()
+  const { data: account } = useAccount()
   const hasRecentTransactions = Object.values(recentTransactions).length > 0
 
   return (
