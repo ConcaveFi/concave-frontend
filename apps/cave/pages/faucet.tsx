@@ -14,8 +14,8 @@ const Faucet = () => {
   const [inputAmount, setInputAmout] = useState<CurrencyAmount<Currency>>(
     CurrencyAmount.fromRawAmount(CNV[chainId], '0'),
   )
-  const [{ data: account }] = useAccount()
-  const [{ data: signer }] = useSigner()
+  const { data: account } = useAccount()
+  const { data: signer } = useSigner()
 
   const mint = () => {
     const provider = concaveProvider(chainId)

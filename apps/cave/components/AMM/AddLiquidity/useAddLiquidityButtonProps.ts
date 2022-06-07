@@ -11,7 +11,7 @@ export const useAddLiquidityButtonProps = (
   amount1: CurrencyAmount<Currency>,
   onAddLiquidityClick: () => void,
 ): ButtonProps => {
-  const [{ data: account }] = useAccount()
+  const { data: account } = useAccount()
 
   const currency0Balance = useCurrencyBalance(amount0?.currency, { watch: true })
   const currency1Balance = useCurrencyBalance(amount1?.currency, { watch: true })

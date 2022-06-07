@@ -1,36 +1,23 @@
 import { motion } from 'framer-motion'
 
-const pagesIndex = [
-  '/treasury',
-  '/smart-bonding',
-  '/liquid-staking',
-  '/positions',
-  '/marketplace',
-  '/gemswap',
-  '/addliquidity',
-  '/pools',
-]
-
 /*
   this is not working right, but it's a start
 */
-const getVariant = (prevPath, nextPath) => {
-  const isGoingUp = pagesIndex.indexOf(prevPath) > pagesIndex.indexOf(nextPath)
-
+const getVariant = () => {
   return {
-    hidden: { opacity: 0, y: isGoingUp ? '25vh' : '-25vh' },
+    hidden: { opacity: 0, y: '25vh' },
     enter: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: isGoingUp ? '-25vh' : '25vh' },
+    exit: { opacity: 0, y: '-25vh' },
   }
 }
 
 export const withPageTransition = (Page) => {
-  const PageTransition = ({ prevPath, path, ...pageProps }) => (
+  const PageTransition = (pageProps) => (
     <motion.main
       initial="hidden"
       animate="enter"
       exit="exit"
-      variants={getVariant(prevPath, path)}
+      variants={getVariant()}
       transition={{ type: 'linear', duration: 0.1 }}
       style={{ display: 'flex', flex: 1 }}
     >

@@ -4,7 +4,7 @@ import { useAccount, useContractWrite } from 'wagmi'
 import { aCNVredeemabi } from 'lib/contractoABI'
 
 export function ClaimCard() {
-  const [{ data: account }] = useAccount()
+  const { data: account } = useAccount()
   // const [{ data, error, loading }, getaCNVBalance] = useBalance({
   //   addressOrName: user.address,
   //   token: '0x2A6bb78490c2221E0D36d931192296BE4b3A01F1', // INSERT aCNV ADDRESS

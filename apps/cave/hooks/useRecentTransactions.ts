@@ -10,7 +10,7 @@ import { useIsMounted } from './useIsMounted'
 const clearRecentTransactions = () => localStorage.setItem('recentTransactions', JSON.stringify({}))
 
 export function useRecentTransactions() {
-  const [{ data: account }] = useAccount()
+  const { data: account } = useAccount()
   const networkdID = useCurrentSupportedNetworkId()
   const provider = concaveProvider(networkdID)
   const data = getRecentTransactions(account?.address, networkdID)

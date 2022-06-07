@@ -138,8 +138,8 @@ export const getUserBondPositions = async (
 }
 
 export const useBondState = () => {
-  const [{ data: account }] = useAccount()
-  const [{ data: signer }] = useSigner()
+  const { data: account } = useAccount()
+  const { data: signer } = useSigner()
   const [recipient, setRecipient] = useState<string>('')
   const networkId = useCurrentSupportedNetworkId()
   const currencyIn = DAI[networkId]

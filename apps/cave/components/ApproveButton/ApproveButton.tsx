@@ -27,7 +27,7 @@ type ApproveButtonState = {
 export const ApproveButton = ({ approveArgs, ...buttonProps }: ApproveButtonProps) => {
   const { currency, spender, amount = MaxUint256.toString() } = approveArgs
   const { allowance, ...approve } = useApprove(currency.wrapped, spender)
-  const [{ data: account }] = useAccount()
+  const { data: account } = useAccount()
   const { connectModal } = useModals()
   if (!account?.address)
     return (

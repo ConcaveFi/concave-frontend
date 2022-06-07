@@ -19,9 +19,9 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
   const { isOpen: isSubOpen, onOpen: onOpenSub, onClose: onCloseSub } = useDisclosure()
   const { isOpen: isErrorOpen, onOpen: onOpenError, onClose: onCloseError } = useDisclosure()
   const { onClose, isOpen } = props
-  const [{ data: signer }] = useSigner()
-  const [{ data: account }] = useAccount()
-  const [{ data: wallet }] = useConnect()
+  const { data: signer } = useSigner()
+  const { data: account } = useAccount()
+  const { isConnected } = useConnect()
 
   const [tx, setTx] = useState<Transaction>()
   const [error, setError] = useState('')
@@ -122,7 +122,7 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
             _hover={validValue && { shadow: 'up' }}
             _focus={{}}
           >
-            {wallet?.connected ? (
+            {isConnected ? (
               <Text>
                 {nothingToRedeem && 'Nothing To Redeem'}
                 {insufficientFounds && 'Insufficient Funds'}

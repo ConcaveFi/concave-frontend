@@ -1,6 +1,6 @@
 import { Currency } from '@concave/core'
 import { Box, Card, Flex, SlideFade } from '@concave/ui'
-import { STABLES } from 'constants/routing'
+import { STABLES } from 'components/AMM/constants/routing'
 import dynamic from 'next/dynamic'
 import { CandleStickTimeOptions } from './CandleStickTimeOptions'
 import { CandleStickTokenOptions } from './CandleStickTokenOptions'
