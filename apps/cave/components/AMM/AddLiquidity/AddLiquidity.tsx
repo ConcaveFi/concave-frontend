@@ -63,7 +63,14 @@ function AddLiquidityContent({
     secondFieldAmount,
     supplyLiquidityDisclosure.onOpen,
   )
-  const fixedPair = pair.data ?? Pair.createVirtualPair(firstFieldAmount, secondFieldAmount)
+
+  let fixedPair
+  if (pair.data) {
+    fixedPair = pair.data
+  } else if (firstFieldAmount && secondFieldAmount) {
+    fixedPair = Pair.createVirtualPair(firstFieldAmount, secondFieldAmount)
+  }
+  // const fixedPair = pair.data ?? Pair.createVirtualPair(firstFieldAmount, secondFieldAmount)
 
   const lpData = useLiquidityData({
     pair: fixedPair,
