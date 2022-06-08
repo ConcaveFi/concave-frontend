@@ -3,6 +3,7 @@ import { getBondSpotPrice } from 'components/Bond/BondState'
 import { ButtonLink, ButtonLinkProps } from 'components/ButtonLink'
 import { useGet_Cnv_DataQuery } from 'graphql/generated/graphql'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import { useDevice } from 'hooks/useDevice'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import { useQuery } from 'react-query'
@@ -64,6 +65,7 @@ function PageNav() {
   const [liquidStakingHover, setLiquidStakingHover] = useState(false)
   const [swapHover, setSwapStakingHover] = useState(false)
   const { data: cnvData } = useGet_Cnv_DataQuery()
+  const device = useDevice()
 
   const roi = useQuery(
     ['getCNVMarketPrice', currentSupportedNetworkId, cnvData],
@@ -81,6 +83,12 @@ function PageNav() {
     router.pathname === '/gemswap' ||
     router.pathname === '/pools' ||
     router.pathname === '/addliquidity'
+
+  const isMobile = {
+    tablet: true,
+    mobile: true,
+    desktop: false,
+  }[device]
 
   return (
     <Flex direction="column" position="relative" mr="-2px">
@@ -121,7 +129,7 @@ function PageNav() {
           >
             Stake
           </NavButton>
-          <Collapse in={liquidStakingHover || liquidStakingPage}>
+          <Collapse in={liquidStakingHover || liquidStakingPage || isMobile}>
             <SubnavButton isActive={router.pathname === '/dashboard'} href="/dashboard" mt="1px">
               Your Positions
             </SubnavButton>
@@ -153,7 +161,7 @@ function PageNav() {
             Swap
           </NavButton>
 
-          <Collapse in={swapHover || swapPage}>
+          <Collapse in={swapHover || swapPage || isMobile}>
             <SubnavButton href="/addliquidity">Add liquidity</SubnavButton>
             <SubnavButton href="/pools">Your Pools</SubnavButton>
           </Collapse>

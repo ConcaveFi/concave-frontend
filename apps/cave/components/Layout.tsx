@@ -5,6 +5,7 @@ import { SideBar } from './SideBar/SideBar'
 import { AnimatePresence } from 'framer-motion'
 import { useIsomorphicLayoutEffect } from 'react-use'
 import { useIsMounted } from 'hooks/useIsMounted'
+import SecurityBanner from './SecurityBanner'
 
 const TestnetIndicator = dynamic(() => import('./Faucet').then((module) => module.TestnetIndicator))
 
@@ -25,6 +26,7 @@ export const Layout = ({ children }) => {
         pb={{ base: '300px', md: '0' }} // add a lil padding to the bottom on small screens (mobile)
       >
         <TestnetIndicator />
+        <SecurityBanner />
         <AnimatePresence
           exitBeforeEnter
           initial={false}
