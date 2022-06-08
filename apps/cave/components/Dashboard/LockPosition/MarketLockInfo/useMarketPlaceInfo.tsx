@@ -18,7 +18,6 @@ export const useMarketInfo = ({
   const offerDisclosure = useDisclosure()
   const networkId = nonFungibleTokenInfo.networkId
   const [{ data: signer }] = useSigner()
-  const contract = new ConcaveNFTMarketplace(networkId)
   const [transaction, setTransaction] = useState<Transaction>()
   const [isWaitingForWallet, setIsWaitingForWallet] = useState<boolean>(false)
   const [tx] = useWaitForTransaction({ hash: transaction?.hash })
@@ -34,6 +33,7 @@ export const useMarketInfo = ({
   const createMarketItem = async () => {
     setIsWaitingForWallet(true)
     try {
+      const contract = new ConcaveNFTMarketplace(networkId)
       const tx = await contract.createMarketItem(signer, nonFungibleTokenInfo)
       setTransaction(tx)
     } catch {}
@@ -43,6 +43,7 @@ export const useMarketInfo = ({
   const withdrawOffer = async () => {
     setIsWaitingForWallet(true)
     try {
+      const contract = new ConcaveNFTMarketplace(networkId)
       const tx = await contract.withdrawAuction(signer, nonFungibleTokenInfo)
       setTransaction(tx)
     } catch {}
@@ -52,6 +53,7 @@ export const useMarketInfo = ({
   const createOffer = async (offer: Offer) => {
     setIsWaitingForWallet(true)
     try {
+      const contract = new ConcaveNFTMarketplace(networkId)
       const marketItemInfo = new MarketItemInfo({ ...marketInfo.data, offer })
       const tx = await contract.createOffer(signer, marketItemInfo)
       setTransaction(tx)
@@ -84,6 +86,10 @@ export const getMarketPlaceButtonProps = (marketInfoState: UserMarketInfoState):
   if (marketInfo.isLoading) {
     return { loadingText: 'Loading Market Item', disabled: true, isLoading: true }
   }
+  if (marketInfo.error) {
+    return { children: 'Comming Soom', disabled: true }
+  }
+  console.log(marketInfo)
   if (!marketInfo.data.isMarketItem) {
     return { children: 'Create Market Item', onClick: createMarketItem }
   }

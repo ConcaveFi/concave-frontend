@@ -17,9 +17,10 @@ export const MarketListing = (props: MarketplaceInfoProps) => {
   }
 
   const buttonState = getMarketPlaceButtonProps(marketInfoState)
+  const marketData = marketInfo.data
   return (
     <Box
-      shadow={marketInfo.data.isListed ? '' : 'down'}
+      shadow={marketData?.isListed ? '' : 'down'}
       borderRadius="2xl"
       mt={{ lg: 1, md: 0 }}
       mb={3}
@@ -38,8 +39,8 @@ export const MarketListing = (props: MarketplaceInfoProps) => {
           width={'full'}
           valueFontSize={'lg'}
           value={
-            marketInfo.data.isListed
-              ? `${formatFixed(marketInfo.data.listPrice, { places: 4 })} CNV`
+            marketData?.isListed
+              ? `${formatFixed(marketData?.listPrice, { places: 4 })} CNV`
               : '---'
           }
         />
@@ -47,15 +48,13 @@ export const MarketListing = (props: MarketplaceInfoProps) => {
           label={'Discount:'}
           width={'full'}
           value={
-            marketInfo.data.isListed
-              ? `${formatFixed(marketInfo.data.discount, { decimals: 2 })} %`
-              : '---'
+            marketData?.isListed ? `${formatFixed(marketData?.discount, { decimals: 2 })} %` : '---'
           }
         />
         <Info label={'Expiration Date:'} width={'full'} value={'---'} />
         <Button variant={'primary'} minW={'160px'} size={'md'} width={'full'} {...buttonState} />
       </Flex>
-      <ListForSaleModal marketInfoState={marketInfoState} />
+      {marketData && <ListForSaleModal marketInfoState={marketInfoState} />}
     </Box>
   )
 }
