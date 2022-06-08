@@ -54,7 +54,7 @@ export function CurrencyAmountField({
   */
   const inputValue = isFocused.current
     ? internalValue
-    : currencyAmount.greaterThan(0)
+    : currencyAmount?.greaterThan(0)
     ? currencyAmount?.toSignificant(8)
     : ''
 
@@ -70,12 +70,7 @@ export function CurrencyAmountField({
           fontSize={{ base: 'lg', md: '2xl' }}
           disabled={disabled}
           w="100%"
-          onBlur={() => {
-            /* isFocused is only set to true when user actually type in the field (probably deserves a rename)
-               if so, don't wait for debounce, sync values on blur */
-            // if (isFocused.current) onChangeAmount(toAmount(inputValue, currencyAmount?.currency))
-            isFocused.current = false
-          }}
+          onBlur={() => (isFocused.current = false)}
           value={inputValue}
           onValueChange={handleChange}
         />
