@@ -39,7 +39,7 @@ const GasPrice = () => {
     </>
   )
 }
-
+//aaaa
 export function BondBuyCard(props: {
   bondTransaction?: any
   setBondTransaction?: any
@@ -51,6 +51,7 @@ export function BondBuyCard(props: {
   const [bondTransaction, setBondTransaction] = useState()
 
   const [settings, setSetting] = useBondSettings()
+  const userBalance = balance.data?.toFixed()
   const [amountIn, setAmountIn] = useState<CurrencyAmount<Currency>>(toAmount('0', DAI[networkId]))
   // const [amountIn, setAmountIn] = useState<number>(0)
 
@@ -155,12 +156,13 @@ export function BondBuyCard(props: {
           amount: amountIn.numerator,
           spender: BOND_ADDRESS[networkId],
         }}
-        isDisabled={amountIn.equalTo(0) || balance.data?.lessThan(amountIn)}
+        isDisabled={
+          +amountIn.numerator.toString() === 0 ||
+          +userBalance < +amountIn.numerator.toString() / 10 ** 18
+        }
         onClick={confirmModal.onOpen}
       >
-        {balance.data?.lessThan(amountIn.numerator)
-          ? `Insufficient ${amountIn.currency.symbol}`
-          : 'Bond'}
+        {+userBalance < +amountIn ? 'Insufficient Funds' : 'Bond'}
       </ApproveButton>
 
       <ConfirmBondModal
