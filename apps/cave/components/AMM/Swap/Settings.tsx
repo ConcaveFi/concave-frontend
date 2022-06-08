@@ -1,8 +1,7 @@
 import { QuestionIcon } from '@concave/icons'
 import { HStack, Stack, Switch, Text } from '@concave/ui'
 import { TransactionSettings, SlippageTolerance, Deadline } from 'components/TransactionSettings'
-import { useReducer } from 'react'
-import { toPercent } from 'utils/toPercent'
+import { useTransactionSettings } from 'components/TransactionSettings/TransactionSettings'
 
 const ToggleExpertMode = ({ isChecked, onToggle }) => {
   return (
@@ -28,10 +27,7 @@ const ToggleMultihops = ({ isChecked, onToggle }) => {
 }
 
 const defaultSettings = {
-  slippageTolerance: {
-    value: 0.5,
-    percent: toPercent(0.5),
-  },
+  slippageTolerance: 0.5,
   deadline: 30,
   multihops: true,
   expertMode: false,
@@ -39,13 +35,10 @@ const defaultSettings = {
 
 export type SwapSettings = typeof defaultSettings
 
-export const useSwapSettings = () => useReducer((s, a) => ({ ...s, ...a }), defaultSettings)
+export const useSwapSettings = () => useTransactionSettings('swap', defaultSettings)
 
 // TODO: implement auto slippage
-const calculateAutoSlippage = () => ({
-  value: 0.96,
-  percent: toPercent(0.96),
-})
+const calculateAutoSlippage = () => 0.96
 
 export const Settings = ({
   settings: { slippageTolerance, deadline, multihops, expertMode },
@@ -54,7 +47,7 @@ export const Settings = ({
   return (
     <TransactionSettings>
       <SlippageTolerance
-        value={slippageTolerance.value}
+        value={slippageTolerance}
         onValueChange={(slippageTolerance) => setSetting({ slippageTolerance })}
         onClickAuto={() => setSetting({ slippageTolerance: calculateAutoSlippage() })}
       />

@@ -49,9 +49,7 @@ export const purchaseBond = async (
 ) => {
   const DAI = DAI_ADDRESS[networkId]
   const bondingContract = new Contract(BOND_ADDRESS[networkId], BondAbi, signer)
-  const minOutput = +(+amountOut - (+settings.slippageTolerance.value / 100) * +amountOut).toFixed(
-    2,
-  )
+  const minOutput = +(+amountOut - (+settings.slippageTolerance / 100) * +amountOut).toFixed(2)
   1
   const formattedInput = utils.parseUnits(input.toString(), 18)
   const formattedMinOutput = utils.parseUnits(minOutput.toString(), 18)

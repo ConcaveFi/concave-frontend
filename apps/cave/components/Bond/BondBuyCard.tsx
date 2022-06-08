@@ -209,11 +209,10 @@ export function BondBuyCard(props: {
             })
         }}
         bondPrice={bondSpotPrice}
-        minimumAmountOut={(
-          +amountOut -
-          (+settings.slippageTolerance.value / 100) * +amountOut
-        ).toFixed(3)}
-        slippage={settings.slippageTolerance.value}
+        minimumAmountOut={(+amountOut - (+settings.slippageTolerance / 100) * +amountOut).toFixed(
+          3,
+        )}
+        slippage={settings.slippageTolerance.toString()}
       />
       <WaitingConfirmationDialog isOpen={hasClickedConfirm} title={'Confirm Bond'}>
         <Text fontSize="lg" color="text.accent">

@@ -10,7 +10,16 @@ import {
   Portal,
   Stack,
 } from '@concave/ui'
-import React, { ReactNode } from 'react'
+import { ReactNode } from 'react'
+import { useLocalStorage } from 'react-use'
+
+export const useTransactionSettings = <T extends Object>(
+  transactionType: string,
+  defaultSettings: T,
+): [T, (v: Partial<T>) => void] => {
+  const [settings, setSettings] = useLocalStorage(`${transactionType}-tx-settings`, defaultSettings)
+  return [settings, (s) => setSettings({ ...settings, ...s })]
+}
 
 export const TransactionSettings = ({
   trigger,
