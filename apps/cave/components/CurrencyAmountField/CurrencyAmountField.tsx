@@ -39,6 +39,7 @@ export function CurrencyAmountField({
   const handleChange = useCallback(
     ({ value }, { source }) => {
       if (source === 'prop') return // if the value changed from props, ignore it, only update on user typing
+      isFocused.current = true
       if (value === '' && currencyAmount?.currency)
         onChangeAmount(toAmount('0', currencyAmount.currency))
       setInternalValue(value)
@@ -46,7 +47,16 @@ export function CurrencyAmountField({
     [currencyAmount?.currency, onChangeAmount],
   )
 
-  const inputValue = isFocused.current ? internalValue : +currencyAmount?.toSignificant(8) || ''
+  /* inputValue:
+    if the input is focused use it's internal value, as the currencyAmount value is being debounced
+    if the amount is 0 and it's not focused, instead of showing a zero, show the input placeholder 
+    (whitch is zero but in another color lol)
+  */
+  const inputValue = isFocused.current
+    ? internalValue
+    : currencyAmount?.greaterThan(0)
+    ? currencyAmount?.toSignificant(8)
+    : ''
 
   const onSelectCurrency = useCallback(
     (newCurrency: Currency) => onChangeAmount(toAmount(inputValue, newCurrency)),
@@ -60,10 +70,6 @@ export function CurrencyAmountField({
           fontSize={{ base: 'lg', md: '2xl' }}
           disabled={disabled}
           w="100%"
-          onFocus={() => {
-            isFocused.current = true
-            if (currencyAmount) setInternalValue(+currencyAmount?.toSignificant(8) || '')
-          }}
           onBlur={() => (isFocused.current = false)}
           value={inputValue}
           onValueChange={handleChange}
