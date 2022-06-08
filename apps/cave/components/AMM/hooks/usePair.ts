@@ -29,8 +29,7 @@ const getAllCommonPairs = (
   chainId = tokenA?.chainId,
 ) =>
   filterRepeatedPairs([
-    // if maxHops is 1 it will only try to route tokenIn -> tokenOut directly
-    ...(maxHops === 1 ? [[tokenA.wrapped, tokenB.wrapped]] : []),
+    [tokenA.wrapped, tokenB.wrapped],
     ...(maxHops > 1 ? buildPairs(BASES_TO_CHECK_TRADES_AGAINST[chainId], tokenA, tokenB) : []),
     // if maxHops is more than 2, it will also check routes like tokenIn -> DAI -> WETH -> tokenOut
     ...(maxHops > 2 ? INTERMEDIARY_PAIRS_FOR_MULTI_HOPS[chainId] || [] : []),
