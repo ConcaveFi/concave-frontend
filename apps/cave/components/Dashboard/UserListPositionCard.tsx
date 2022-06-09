@@ -18,7 +18,7 @@ type UserListPositionCardProps = {
 type ListForSaleState = ReturnType<typeof useListeForSaleState>
 
 export const useListeForSaleState = ({ marketInfoState }: UserListPositionCardProps) => {
-  const [{ data: account }] = useAccount()
+  const { data: account } = useAccount()
   const [method, setMethod] = useState<'Sale' | 'Auction'>('Sale')
   const [offer, setOffer] = useState(
     new Offer({

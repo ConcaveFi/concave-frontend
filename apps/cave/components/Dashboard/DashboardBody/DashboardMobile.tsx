@@ -1,16 +1,16 @@
 import { SpinIcon } from '@concave/icons'
-import { Box, Collapse, Flex, keyframes, Text, VStack, Button } from '@concave/ui'
+import { Box, Button, Collapse, Flex, keyframes, Text, VStack } from '@concave/ui'
 import { UseDashBoardState } from 'contracts/DashBoard/DashBoardState'
+import { useRouter } from 'next/router'
 import { useConnect } from 'wagmi'
 import { UserPositionCardMobile } from '../LockPosition/Card/MobileUserPositionCard'
 import { DividendsShareMobile } from './DividendsShare'
-import { useRouter } from 'next/router'
 const spin = keyframes({
   '0%': { transform: 'rotate(0deg)' },
   '100%': { transform: 'rotate(360deg)' },
 })
 
-export const DashboardMobile = (props: { data: UseStackPositionsState }) => {
+export const DashboardMobile = (props: { data: UseDashBoardState }) => {
   const { data } = props
   const { isLoading, userNonFungibleTokensInfo, totalLocked } = data
   const { isConnected } = useConnect()

@@ -1,7 +1,7 @@
 import { Box, Button, Card, Collapse, Flex, Spinner, Text } from '@concave/ui'
 import { NftRangeFilters, useNftFilter } from 'components/NftFilters/hooks/useNftFilter'
 import { NftSorters, useNftSort } from 'components/NftFilters/hooks/useNftSort'
-import { UseStackPositionsState } from 'contracts/DashBoard/DashBoardState'
+import { UseDashBoardState } from 'contracts/DashBoard/DashBoardState'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useConnect } from 'wagmi'
@@ -9,8 +9,7 @@ import { UserPositionCard } from '../LockPosition/Card/UserPositionCard'
 import FilterContainer from './FilterContainer'
 import UserDividendCard from './UserDividendCard'
 
-
-const UserDashboardCard = ({ data }: { data: UseDashBoardState }) => {
+export const UserDashboardCard = ({ data }: { data: UseDashBoardState }) => {
   const { isConnected } = useConnect()
   const { userNonFungibleTokensInfo, totalLocked, isLoading } = data
   const hasPositions = userNonFungibleTokensInfo.length !== 0
