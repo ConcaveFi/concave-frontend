@@ -44,7 +44,7 @@ export const useContractApprove = (
   amountToApprove: BigNumberish = MaxUint256.toString(),
   { onSuccess }: { onSuccess: (receipt: TransactionReceipt) => void },
 ) => {
-  const [{ data: signer }] = useSigner()
+  const { data: signer } = useSigner()
   const {
     data: tx,
     isLoading: isWaitingForConfirmation,
@@ -83,11 +83,11 @@ export const useApprove = (
   spender: string,
   amount: BigNumberish = MaxUint256.toString(),
 ) => {
-  const [{ data: account, loading }] = useAccount()
+  const { data: account, isLoading } = useAccount()
   const allowance = useAllowance(token, spender, account?.address)
   const approve = useContractApprove(token, spender, amount, {
     onSuccess: () => allowance.refetch(),
   })
 
-  return { allowance, ...approve, isFeching: loading || allowance.isLoading }
+  return { allowance, ...approve, isFeching: isLoading || allowance.isLoading }
 }

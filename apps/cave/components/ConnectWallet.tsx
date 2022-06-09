@@ -1,63 +1,26 @@
-import React from 'react'
-import {
-  Portal,
-  Button,
-  Card,
-  Image,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  gradientBorder,
-  Modal,
-  Flex,
-  useDisclosure,
-  Spinner,
-} from '@concave/ui'
+import { Button, Image, gradientBorder, Modal, Flex, useDisclosure } from '@concave/ui'
 import { useAccount, useConnect } from 'wagmi'
 import { useIsMounted } from 'hooks/useIsMounted'
 import { useModals } from 'contexts/ModalsContext'
 import YourWalletModal from './YourWalletModal'
 import { useRecentTransactions } from 'hooks/useRecentTransactions'
-import { SpinIcon, SpinnerIcon } from '@concave/icons'
+import { SpinnerIcon } from '@concave/icons'
 import { spinAnimation } from './Treasury/Mobile/TreasuryManagementMobile'
-
-// const miniAddress = (address) =>
-//   `${address.substr(0, 6)}...${address.substr(address.length - 6, address.length)}`
+import { useRouter } from 'next/router'
 
 /** Transform a wallet address
  *  {6first keys}{...}{4 keys}
  */
 export function ellipseAddress(hash: string, length = 38): string {
-  if (!hash) {
-    return ''
-  }
+  if (!hash) return ''
   return hash.replace(hash.substring(6, length), '...')
 }
 
-const DisconnectButton = () => {
-  const [{ data: account }, disconnect] = useAccount()
-
-  return (
-    <Menu placement="right-start">
-      <MenuButton as={Button} shadow="up" fontFamily="heading" size="medium" w="100%">
-        {ellipseAddress(account.address)}
-      </MenuButton>
-      <Portal>
-        <MenuList minW="min" bg="none" border="none" shadow="none" p="0" backdropFilter="blur(8px)">
-          <Card variant="secondary" borderGradient="secondary" borderRadius="xl" px={1} py={2}>
-            <MenuItem borderRadius="lg" onClick={() => disconnect()}>
-              Disconnect
-            </MenuItem>
-          </Card>
-        </MenuList>
-      </Portal>
-    </Menu>
-  )
-}
-
 export const ConnectWalletModal = ({ isOpen, onClose }) => {
-  const [{ data, loading }, connect] = useConnect()
+  const router = useRouter()
+  const { connectors, connectAsync, activeConnector } = useConnect({
+    chainId: +router.query.chainId,
+  })
   const isMounted = useIsMounted()
   return (
     <Modal
@@ -71,9 +34,9 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
       bodyProps={{ alignItems: 'center', gap: 3, w: '100%', maxW: '350px' }}
     >
       {isMounted &&
-        data.connectors.map((connector) => {
+        connectors.map((connector) => {
           if (!connector.ready) return null
-          const itsConnect = connector.id === data?.connector?.id
+          const itsConnect = connector.id === activeConnector?.id
           return (
             <Button
               cursor={itsConnect ? 'default' : 'pointer'}
@@ -83,7 +46,6 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
               _active={!itsConnect && { shadow: 'down' }}
               _focus={!itsConnect && { shadow: 'Up Big' }}
               size="large"
-              variant={itsConnect && 'primary.outline'}
               leftIcon={
                 <Image
                   w="20px"
@@ -93,7 +55,7 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
               }
               key={connector.id}
               onClick={() => {
-                if (!itsConnect) connect(connector).then(onClose)
+                if (!itsConnect) connectAsync(connector).then(onClose)
               }}
             >
               {connector.name}
@@ -124,13 +86,13 @@ const ConnectButton = () => {
 }
 
 export function ConnectWallet(): JSX.Element {
-  const [{ data }] = useConnect()
+  const { isConnected } = useConnect()
 
-  const [{ data: account }] = useAccount()
+  const { data: account } = useAccount()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { data: recentTx, status, isLoading } = useRecentTransactions()
 
-  if (data.connected)
+  if (isConnected)
     return (
       <>
         <Button

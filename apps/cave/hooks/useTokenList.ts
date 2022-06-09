@@ -10,22 +10,20 @@ const concaveTokenList = (networkName: string) =>
   `/assets/tokenlists/${networkName.toLowerCase()}/concave.json`
 
 export const useTokenList = () => {
-  const [
-    {
-      data: { chain: selectedChain = chain.mainnet },
-      loading,
-    },
-  ] = useNetwork()
-  // const provider = concaveProvider(selectedChain.id)
-  return useQuery(['token-list', selectedChain.name], async () => {
-    if (loading) return []
-    const tokenList = await fetchJson(concaveTokenList(selectedChain.name))
-    const chainTokens = tokenList.tokens.filter((t) => t.chainId === selectedChain.id)
-    return chainTokens.map((t) => new Token(t.chainId, t.address, t.decimals, t.symbol, t.name))
+  const { activeChain } = useNetwork()
 
-    // .then((list) => list.map((token) => Fetcher.fetchTokenData(token.address, provider)))
-    // .then((tokens) => Promise.all(tokens))
-  })
+  return useQuery(
+    ['token-list', activeChain.id || 1],
+    async () => {
+      const tokenList = await fetchJson(concaveTokenList(activeChain.name))
+      const chainTokens = tokenList.tokens.filter((t) => t.chainId === activeChain.id)
+      return chainTokens.map((t) => new Token(t.chainId, t.address, t.decimals, t.symbol, t.name))
+    },
+    {
+      enabled: !!activeChain.id,
+      placeholderData: [],
+    },
+  )
 }
 
 export const useFetchTokenData = (chainID: number | string, address: string) => {
@@ -52,9 +50,8 @@ const headers = { 'x-api-key': process.env.NEXT_PUBLIC_MORALIS_TOKEN }
 export const useAddressTokenList: (address?: string) => UseQueryResult<Token[], unknown> = (
   address: string,
 ) => {
-  const [{ data: network }] = useNetwork()
-  const chainName =
-    network?.chain?.id === chain.rinkeby.id ? chain.rinkeby.name : chain.mainnet.name
+  const { activeChain } = useNetwork()
+  const chainName = activeChain?.id === chain.rinkeby.id ? chain.rinkeby.name : chain.mainnet.name
   const url = `https://deep-index.moralis.io/api/v2/${address}/erc20?chain=${chainName}`
   return useQuery(['LISTTOKENS', address], () => {
     if (!address) {

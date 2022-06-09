@@ -1,5 +1,4 @@
 import { Currency, CurrencyAmount, DAI } from '@concave/core'
-import { GasIcon } from '@concave/icons'
 import { Card, Flex, HStack, keyframes, Spinner, Text, useDisclosure, VStack } from '@concave/ui'
 import { ApproveButton } from 'components/ApproveButton/ApproveButton'
 import { CurrencyInputField as BondInput } from 'components/CurrencyAmountField'
@@ -12,32 +11,16 @@ import { useRecentTransactions } from 'hooks/useRecentTransactions'
 import React, { useEffect, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
 import { truncateNumber } from 'utils/truncateNumber'
-import { useFeeData } from 'wagmi'
 import { BondOutput } from './BondOutput'
 import { getBondAmountOut, getBondSpotPrice, purchaseBond, useBondState } from './BondState'
 import { ConfirmBondModal } from './ConfirmBond'
 import { DownwardIcon } from './DownwardIcon'
 import { Settings, useBondSettings } from './Settings'
+import { GasPrice } from 'components/AMM'
 
 export const twoDecimals = (s: string | number) => {
   const a = s.toString()
   return a.indexOf('.') > -1 ? a.slice(0, a.indexOf('.') + 3) : a
-}
-
-const GasPrice = () => {
-  const [{ data }] = useFeeData({ formatUnits: 'gwei', watch: true })
-  return (
-    <>
-      <GasIcon viewBox="0 0 16 16" />
-      {data ? (
-        <Text fontSize="xs" color="text.low" fontWeight="medium">
-          {twoDecimals(data?.formatted.gasPrice)} gwei
-        </Text>
-      ) : (
-        <Spinner size="xs" color="text.low" />
-      )}
-    </>
-  )
 }
 
 export function BondBuyCard(props: {
