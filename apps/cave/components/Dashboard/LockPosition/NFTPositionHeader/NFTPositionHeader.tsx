@@ -1,9 +1,10 @@
 import { Flex, Grid, GridItem, Image, Text } from '@concave/ui'
 import { format } from 'date-fns'
+import { truncateNumber } from 'utils/truncateNumber'
 import { NFTPositionHeaderProps, useNFTLockedPositionState } from './useNFTPositionViewer'
 
 export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
-  const { period, redeemInDays, imgNameByPeriod, redeemDate, active, toogleActive } =
+  const { period, redeemInDays, imgNameByPeriod, redeemDate, active, toogleActive, tokenId } =
     useNFTLockedPositionState(props)
   return (
     <Grid w={'full'} p={2} boxShadow={'up'} borderRadius={'2xl'} templateColumns="repeat(7,1fr)">
@@ -31,21 +32,44 @@ export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
         />
       </GridItem>
 
-      <GridItem display={'flex'} flexDir={'column'} justifyContent={'center'} colSpan={1}>
-        <Text color="text.low" fontSize="sm">
-          Redeem In:
-        </Text>
-        <Text fontSize="md" fontWeight="bold">
-          {redeemInDays}
-        </Text>
-      </GridItem>
-
-      <GridItem display={'flex'} flexDir={'column'} justifyContent={'center'} colSpan={1} h="auto">
+      <GridItem
+        display={'flex'}
+        flexDir={'column'}
+        justifyContent={'start'}
+        colSpan={1}
+        h="full"
+        position={'relative'}
+        lineHeight="18px"
+        fontWeight={'bold'}
+        mt={2}
+      >
         <Text color="text.low" fontSize="sm">
           Redeem Date
         </Text>
+        <Text fontSize="md">{format(redeemDate, `MM/dd/yy`)}</Text>
+        <Flex justify={'center'} align="end" gap={1}>
+          <Text fontSize="sm" textColor="text.low">
+            In:
+          </Text>
+          <Text fontSize="sm" fontWeight={'bold'} textColor="text.accent">
+            {redeemInDays}
+          </Text>
+        </Flex>
+      </GridItem>
+      <GridItem
+        lineHeight="18px"
+        fontWeight={'bold'}
+        mt={2}
+        display={'flex'}
+        flexDir={'column'}
+        justifyContent={'start'}
+        colSpan={1}
+      >
+        <Text color="text.low" fontSize="sm">
+          Token Id:
+        </Text>
         <Text fontSize="md" fontWeight="bold">
-          {format(redeemDate, `MM.dd.yy`)}
+          {+tokenId?.toString()}
         </Text>
       </GridItem>
       <GridItem display={'flex'} colSpan={3} h="full" justifyContent={'space-around'}>
@@ -56,7 +80,6 @@ export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
           transition={'all'}
           transitionDuration="0.3s"
           transform={!active ? 'rotate(180deg)' : ''}
-          //height={'80px'}
           maxH={'68.8px'}
           src={`/assets/liquidstaking/modal-arrow-logo.svg`}
           alt="arrow down logo"
