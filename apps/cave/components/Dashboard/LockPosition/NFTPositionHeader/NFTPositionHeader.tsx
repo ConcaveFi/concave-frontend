@@ -7,14 +7,21 @@ export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
   const { period, redeemInDays, imgNameByPeriod, redeemDate, active, toogleActive, tokenId } =
     useNFTLockedPositionState(props)
   return (
-    <Grid w={'full'} p={2} boxShadow={'up'} borderRadius={'2xl'} templateColumns="repeat(7,1fr)">
-      <GridItem
-        colSpan={2}
+    <Flex
+      width={{ base: '353px', md: '512px', lg: '692px' }}
+      boxShadow={'up'}
+      direction={{ base: 'column', md: 'row' }}
+      borderRadius={'2xl'}
+      height={{ md: '84px', base: '150px' }}
+      p={2}
+    >
+      <Flex
         display={'flex'}
-        justifyContent={'center'}
+        justify={{ base: 'space-between', md: '' }}
         px={3}
         boxShadow={'Down Medium'}
         borderRadius={'2xl'}
+        minW="190px"
       >
         <Flex direction="column" maxW={'90px'} h="full" justifyContent={'center'} w="full">
           <Text fontSize="xs" color="text.low" fontWeight="medium">
@@ -30,63 +37,62 @@ export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
           src={`/assets/marketplace/${imgNameByPeriod}`}
           alt="position"
         />
-      </GridItem>
-
-      <GridItem
-        display={'flex'}
-        flexDir={'column'}
-        justifyContent={'start'}
-        colSpan={1}
-        h="full"
-        position={'relative'}
-        lineHeight="18px"
-        fontWeight={'bold'}
-        mt={2}
-      >
-        <Text color="text.low" fontSize="sm">
-          Redeem Date
-        </Text>
-        <Text fontSize="md">{redeemDate.toString().slice(4, 16)}</Text>
-        <Flex justify={'center'} align="end" gap={1}>
-          <Text fontSize="sm" textColor="text.low">
-            In:
+      </Flex>
+      <Flex height="full" flex={1} align={'start'} gap={4} px="4">
+        <Flex
+          display={'flex'}
+          flexDir={'column'}
+          justifyContent={'start'}
+          align="start"
+          h="full"
+          position={'relative'}
+          lineHeight="18px"
+          fontWeight={'bold'}
+          mt={2}
+        >
+          <Text color="text.low" fontSize="sm">
+            Redeem Date
           </Text>
-          <Text fontSize="sm" fontWeight={'bold'} textColor="text.accent">
-            {redeemInDays}
+          <Text fontSize="md">{redeemDate.toString().slice(4, 16)}</Text>
+          <Flex justify={'center'} align="end" gap={1}>
+            <Text fontSize="sm" textColor="text.low">
+              In:
+            </Text>
+            <Text fontSize="sm" fontWeight={'bold'} textColor="text.accent">
+              {redeemInDays}
+            </Text>
+          </Flex>
+        </Flex>
+        <Flex
+          lineHeight="18px"
+          fontWeight={'bold'}
+          mt={2}
+          display={'flex'}
+          flexDir={'column'}
+          justifyContent={'start'}
+        >
+          <Text color="text.low" fontSize="sm">
+            Token Id:
+          </Text>
+          <Text fontSize="md" fontWeight="bold">
+            {+tokenId?.toString()}
           </Text>
         </Flex>
-      </GridItem>
-      <GridItem
-        lineHeight="18px"
-        fontWeight={'bold'}
-        mt={2}
-        display={'flex'}
-        flexDir={'column'}
-        justifyContent={'start'}
-        colSpan={1}
-      >
-        <Text color="text.low" fontSize="sm">
-          Token Id:
-        </Text>
-        <Text fontSize="md" fontWeight="bold">
-          {+tokenId?.toString()}
-        </Text>
-      </GridItem>
-      <GridItem display={'flex'} colSpan={3} h="full" justifyContent={'space-around'}>
-        <Image
-          ml={'auto'}
-          userSelect={'none'}
-          width={'80px'}
-          transition={'all'}
-          transitionDuration="0.3s"
-          transform={!active ? 'rotate(180deg)' : ''}
-          maxH={'68.8px'}
-          src={`/assets/liquidstaking/modal-arrow-logo.svg`}
-          alt="arrow down logo"
-          cursor={'pointer'}
-          onClick={toogleActive}
-        />
-      </GridItem>
-    </Grid>
+        <Flex flex={1} justify="end">
+          <Image
+            userSelect={'none'}
+            width={'80px'}
+            transition={'all'}
+            transitionDuration="0.3s"
+            transform={!active ? 'rotate(180deg)' : ''}
+            maxH={'68.8px'}
+            src={`/assets/liquidstaking/modal-arrow-logo.svg`}
+            alt="arrow down logo"
+            cursor={'pointer'}
+            onClick={toogleActive}
+          />
+        </Flex>
+      </Flex>
+    </Flex>
   )
 }

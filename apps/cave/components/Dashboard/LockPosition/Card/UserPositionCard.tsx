@@ -16,32 +16,30 @@ export const UserPositionCard = (props: NftPositionCardProps) => {
       pos={'relative'}
       borderRadius={'2xl'}
       maxHeight={{ lg: '300px', md: '400px' }}
-      bg={'linear-gradient(223.18deg, #19394C 27.18%, #0A161F 96.11%)'}
+      maxWidth={{ lg: '700px', md: '520px' }}
+      bg={{
+        base: 'linear-gradient(223.18deg, #19394C 27.18%, #0A161F 96.11%)',
+        md: 'linear-gradient(265.73deg, #274C63 0%, #182F3E 100%)',
+      }}
       mr={1}
       mb={3}
     >
-      <Box
-        bg="linear-gradient(265.73deg, #274C63 0%, #182F3E 100%)"
-        rounded="2xl"
-        maxWidth={{ lg: '700px', md: '520px' }}
-      >
-        <Flex bgSize="20% 30%" bgImage={'/assets/textures/metal.png'} shadow={'up'} rounded="2xl">
-          <Flex w={'full'} direction={'column'} minW={'600px'}>
-            <NFTPositionHeader
-              nonFungibleTokenInfo={nonFungibleTokenInfo}
-              active={active}
-              toogleActive={toogleActive}
-            />
-            <Collapse in={active}>
-              <RedeemCardViewer nonFungibleTokenInfo={nonFungibleTokenInfo} />
-              {active && <MarketListing nonFungibleTokenInfo={nonFungibleTokenInfo} />}
-            </Collapse>
-          </Flex>
-          {/* <Flex w={'full'} direction={'column'}>
+      <Flex bgSize="20% 30%" bgImage={'/assets/textures/metal.png'} shadow={'up'} rounded="2xl">
+        <Flex w={'full'} direction={'column'} minW={'600px'}>
+          <NFTPositionHeader
+            nonFungibleTokenInfo={nonFungibleTokenInfo}
+            active={active}
+            toogleActive={toogleActive}
+          />
+          <Collapse in={active}>
+            <RedeemCardViewer nonFungibleTokenInfo={nonFungibleTokenInfo} />
+            {active && <MarketListing nonFungibleTokenInfo={nonFungibleTokenInfo} />}
+          </Collapse>
+        </Flex>
+        {/* <Flex w={'full'} direction={'column'}>
             <DividendsShare />
           </Flex> */}
-        </Flex>
-      </Box>
+      </Flex>
       {/* <Collapse in={active}> */}
       {/* <DividendsShare /> */}
       {/* </Collapse> */}

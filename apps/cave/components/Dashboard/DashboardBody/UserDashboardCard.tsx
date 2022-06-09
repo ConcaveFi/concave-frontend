@@ -1,4 +1,15 @@
-import { Box, Button, Card, Collapse, Flex, Spinner, Text } from '@concave/ui'
+import {
+  Box,
+  Button,
+  Card,
+  Collapse,
+  Flex,
+  Spinner,
+  Text,
+  useBreakpoint,
+  useBreakpointValue,
+} from '@concave/ui'
+import { MetalBox } from 'components/MetalBox'
 import { NftRangeFilters, useNftFilter } from 'components/NftFilters/hooks/useNftFilter'
 import { NftSorters, useNftSort } from 'components/NftFilters/hooks/useNftSort'
 import { UseDashBoardState } from 'contracts/DashBoard/DashBoardState'
@@ -20,39 +31,49 @@ export const UserDashboardCard = ({ data }: { data: UseDashBoardState }) => {
   const { sorter } = useNftSort(sorters)
   const { filterByRange } = useNftFilter(filters)
 
+  const mobileLayout = useBreakpointValue({ base: true, md: false })
+
   return (
     <Flex display={{ lg: 'flex', md: 'flex' }}>
-      <Card
-        p={3}
+      <Flex
         gap={2}
-        variant="primary"
         maxHeight="775px"
-        shadow="down"
-        maxW={{ lg: '760px', md: '580px' }}
+        direction={'column'}
+        shadow={{ base: '', md: 'down' }}
+        maxW={{ lg: '760px', md: '580px', base: '358px' }}
         justify="center"
+        rounded={'2xl'}
+        bg={{ base: '', md: 'linear-gradient(270deg, #224D67 0%, #182F3E 100%)' }}
       >
-        <Flex justify="center" px={4} pt={2} position={'relative'}>
+        <Box
+          bgImage={'assets/textures/metal.png'}
+          position="absolute"
+          height={'full'}
+          width="full"
+          bgSize={'10% 20%'}
+        />
+        <Flex justify="center" px={4} pt={4} position={'relative'}>
           <UserDividendCard isLoading={isLoading} totalLocked={totalLocked} />
         </Flex>
-        <FilterContainer
+        {/* <FilterContainer
           onAddFilter={(filter, { min, max }) => setFilters({ ...filters, [filter]: { min, max } })}
           onAddSorter={(type, order) => setSorters({ ...sorters, [type]: order })}
           onRemoveSorter={(sorter) => {
             const { [sorter]: removed, ...newSorters } = sorters
             setSorters(newSorters)
           }}
-        />
+        /> */}
         <Collapse in={hasPositions}>
           <Box
             pos="relative"
             h="100%"
             overflowY={'scroll'}
             overflowX="hidden"
-            maxHeight={'100%'}
             borderRadius="12px"
-            px={'0.5rem'}
+            px={{ base: 0, md: '0.5rem' }}
+            mx={{ base: 0, md: 4 }}
             py={'0.5rem'}
-            shadow="down"
+            shadow={{ base: '', md: 'down' }}
             __css={scrollBar}
           >
             {userNonFungibleTokensInfo
@@ -65,9 +86,15 @@ export const UserDashboardCard = ({ data }: { data: UseDashBoardState }) => {
         </Collapse>
 
         <LoadingPositions in={isLoading} />
+<<<<<<< HEAD
         <ItsNotConected in={!isConnected} />
         <HasNoPositions in={!hasPositions && !isLoading && isConnected} />
       </Card>
+=======
+        <ItsNotConected in={!wallet.connected} />
+        <HasNoPositions in={!hasPositions && !isLoading && wallet.connected} />
+      </Flex>
+>>>>>>> a0824435 (start intregating mobile components)
     </Flex>
   )
 }
@@ -132,6 +159,7 @@ const HasNoPositions = (props: HasNoPositionsprops) => {
 
 const scrollBar = {
   '&::-webkit-scrollbar': {
+    display: { base: 'none', md: 'flex' },
     width: '15px',
     boxShadow: `-1px 1px 3px rgba(126, 162, 255, 0.26), inset 0px -5px 5px rgba(255, 255, 255, 0.02), inset -9px 12px 24px rgba(13, 17, 23, 0.49)`,
     borderRadius: '10px',

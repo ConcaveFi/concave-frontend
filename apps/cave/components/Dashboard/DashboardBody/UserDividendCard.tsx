@@ -1,4 +1,5 @@
-import { Box, Button, Flex, Spinner, Text } from '@concave/ui'
+import { Box, Button, Flex, Spinner, Text, useBreakpointValue } from '@concave/ui'
+import { GlassPanel } from 'components/Treasury/TreasuryManagementCard'
 import { BigNumber } from 'ethers'
 import { truncateNumber } from 'utils/truncateNumber'
 interface UserDividendCardProps {
@@ -6,66 +7,62 @@ interface UserDividendCardProps {
   isLoading: boolean
 }
 const UserDividendCard = (props: UserDividendCardProps) => {
-  const { isLoading, totalLocked } = props
+  const mobileLayout = useBreakpointValue({ base: true, md: false })
+  if (mobileLayout)
+    return (
+      <GlassPanel direction={'column'} align="center" minW={'358px'} height={242}>
+        <DividendContent isLoading={props.isLoading} totalLocked={props.totalLocked} />
+      </GlassPanel>
+    )
 
   return (
     <Box
-      pos="relative"
-      overflowY={'hidden'}
       borderRadius="16px"
-      mt={1}
       shadow={'Down Big'}
       width={'800px'}
-      height={{ lg: '136px', md: '160px' }}
+      height={{ lg: '136px', md: '130px' }}
     >
-      <Flex
-        m={6}
-        flex={1}
-        justify={{ lg: 'start', md: 'center' }}
-        align="center"
-        gap={{ md: 10, lg: 0 }}
-      >
-        <Text ml={{ lg: 3, md: 0 }} textColor={'text.low'} fontSize={'18px'} fontWeight="700">
-          Your Dividends Share
-        </Text>
-        <RedeemButton display={{ lg: 'none', md: 'flex' }} />
-      </Flex>
-      <Flex justify={{ md: 'center' }} gap={{ base: 0 }} overflow="hidden">
-        <Flex direction={'column'} alignItems="start" ml={6} flex={1}>
-          <Text fontSize={'11px'} fontWeight={600} textColor={'text.low'}>
-            Total locked:
-          </Text>
-          <Flex>
-            <Text fontSize={'17px'} fontWeight={700}>
-              {truncateNumber(totalLocked)}
-            </Text>
-            {isLoading && <Spinner height={'20px'} width={'20px'} ml={1} />}
-          </Flex>
-        </Flex>
-        <Flex direction={'column'} alignItems="start" ml={6} flex={1}>
-          <Text fontSize={'11px'} fontWeight={600} textColor={'text.low'}>
-            Next Dividend Date:
-          </Text>
-          <Text fontSize={'17px'} fontWeight={700}>
-            Coming Soon
-          </Text>
-        </Flex>
-        <Flex direction={'column'} alignItems="start" ml={6} flex={1}>
-          <Text fontSize={'11px'} fontWeight={600} textColor={'text.low'}>
-            Available Dividends:
-          </Text>
-          <Text fontSize={'17px'} fontWeight={700}>
-            0.0
-          </Text>
-        </Flex>
-        <Flex direction={'row'} justify="end">
-          <RedeemButton display={{ lg: 'flex', md: 'none' }} />
-        </Flex>
-      </Flex>
+      <DividendContent isLoading={props.isLoading} totalLocked={props.totalLocked} />
     </Box>
   )
 }
 export default UserDividendCard
+
+const DividendContent = (props: UserDividendCardProps) => {
+  const { isLoading, totalLocked } = props
+  const mobileLayout = useBreakpointValue({ base: true, md: false })
+  const mediumLayout = useBreakpointValue({ base: false, md: true, lg: false })
+  const largeLayout = useBreakpointValue({ base: false, lg: true })
+  return (
+    <>
+      <Flex>
+        <Text
+          textAlign={'start'}
+          ml={{ lg: 6, md: 12 }}
+          textColor={'text.low'}
+          fontSize={'18px'}
+          fontWeight="700"
+          my={5}
+        >
+          Your Dividends Share
+        </Text>
+        {mediumLayout && <RedeemButton m="auto" />}
+      </Flex>
+      <Flex justify={'center'} gap={{ base: 4 }} overflow="hidden" minW={320}>
+        <Flex direction={{ base: 'column', md: 'row' }} gap={6}>
+          <Info title="Total Locked" label={truncateNumber(totalLocked)} />
+          <Info title="Next Dividend Date" label="Coming Soon" />
+        </Flex>
+        <Flex direction={{ base: 'column', md: 'row' }} gap={6}>
+          <Info title="Available Dividends" label="0.0" />
+          <Info title="Your dividends Share" label="0.0" />
+        </Flex>
+        {largeLayout && <RedeemButton my={'auto'} />}
+      </Flex>
+      {mobileLayout && <RedeemButton my={'auto'} />}
+    </>
+  )
+}
 
 const RedeemButton = ({ ...props }) => {
   const { redeemable } = props
@@ -89,5 +86,21 @@ const RedeemButton = ({ ...props }) => {
         {props.redeemable ? 'Redeem' : 'Not Redeemable'}
       </Text>
     </Button>
+  )
+}
+
+const Info = ({ title, label, loading }: { title: string; label: string; loading?: boolean }) => {
+  return (
+    <Flex direction={'column'} alignItems="start">
+      <Text fontSize={'11px'} fontWeight={600} textColor={'text.low'}>
+        {title}
+      </Text>
+      <Flex>
+        <Text fontSize={{ base: '12px', lg: '17px' }} fontWeight={700}>
+          {label}
+        </Text>
+        {loading && <Spinner height={'20px'} width={'20px'} ml={1} />}
+      </Flex>
+    </Flex>
   )
 }

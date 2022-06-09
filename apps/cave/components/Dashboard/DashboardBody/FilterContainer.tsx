@@ -29,7 +29,7 @@ export default function FilterContainer(props: FilterContainerProps) {
       bgVariant={mobileUI ? 'dark' : 'empty'}
       my={2}
     >
-      <Flex transform={{ base: 'scale(0.8)', md: 'scale(1)' }} gap={1}>
+      <Flex transform={{ base: 'scale(0.8)', md: 'scale(1)' }} gap={0}>
         <StakePoolFilterCard
           onChangeSorter={onAddSorter}
           onRemoveSorter={onRemoveSorter}
