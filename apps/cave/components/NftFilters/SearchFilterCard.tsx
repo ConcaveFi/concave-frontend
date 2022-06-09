@@ -15,7 +15,7 @@ const SearchFilterCard = (props: SearchFilterCardProps) => {
       background={
         !!hasFilter ? 'stroke.primary' : 'linear-gradient(265.73deg, #274C63 0%, #182F3E 100%)'
       }
-      width={83}
+      width={90}
       height={53}
       rounded="2xl"
       transform={{ base: 'scale(0.9)', md: 'scale(1)' }}

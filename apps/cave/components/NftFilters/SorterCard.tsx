@@ -19,15 +19,25 @@ interface SorterCardProps {
   sorterType: NftSorter
   title: string
   icon?: string
+  noneButtonName?: string
+  lowestButtonName?: string
+  highestButtonName?: string
 }
 
 export default function SorterCard(props: SorterCardProps) {
-  const { sorterType, onChangeSorter, onRemoveSorter } = props
+  const {
+    sorterType,
+    onChangeSorter,
+    onRemoveSorter,
+    lowestButtonName,
+    highestButtonName,
+    noneButtonName,
+  } = props
 
   const buttons: { title: string; order: NftSortOrder }[] = [
-    { title: 'None', order: 'none' },
-    { title: 'Lowest First', order: 'lowest' },
-    { title: 'Highest First', order: 'highest' },
+    { title: noneButtonName || 'None', order: 'none' },
+    { title: lowestButtonName || 'Lowest First', order: 'lowest' },
+    { title: highestButtonName || 'Highest First', order: 'highest' },
   ]
   const [currentButton, setCurrentButton] = useState('None')
 
