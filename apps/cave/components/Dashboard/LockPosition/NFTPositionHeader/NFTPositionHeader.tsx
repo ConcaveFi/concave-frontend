@@ -46,7 +46,7 @@ export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
         <Text color="text.low" fontSize="sm">
           Redeem Date
         </Text>
-        <Text fontSize="md">{format(redeemDate, `MM/dd/yy`)}</Text>
+        <Text fontSize="md">{redeemDate.toString().slice(4, 16)}</Text>
         <Flex justify={'center'} align="end" gap={1}>
           <Text fontSize="sm" textColor="text.low">
             In:
