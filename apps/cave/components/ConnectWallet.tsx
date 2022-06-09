@@ -18,10 +18,16 @@ export function ellipseAddress(hash: string, length = 38): string {
 
 export const ConnectWalletModal = ({ isOpen, onClose }) => {
   const router = useRouter()
-  const { connectors, connectAsync, activeConnector } = useConnect({
+  const { connectors, connect, activeConnector } = useConnect({
     chainId: +router.query.chainId,
+    onConnect: () => onClose(),
   })
   const isMounted = useIsMounted()
+  /*
+   injected & metamask connectors sometimes can be the same, showing two metamask buttons
+    _connectors is an array with no repeated connectors
+  */
+  const _connectors = [...new Map(connectors.map((c) => [c.name, c])).values()]
   return (
     <Modal
       bluryOverlay={true}
@@ -34,7 +40,7 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
       bodyProps={{ alignItems: 'center', gap: 3, w: '100%', maxW: '350px' }}
     >
       {isMounted &&
-        connectors.map((connector) => {
+        _connectors.map((connector) => {
           if (!connector.ready) return null
           const itsConnect = connector.id === activeConnector?.id
           return (
@@ -55,7 +61,7 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
               }
               key={connector.id}
               onClick={() => {
-                if (!itsConnect) connectAsync(connector).then(onClose)
+                if (!itsConnect) connect(connector)
               }}
             >
               {connector.name}
