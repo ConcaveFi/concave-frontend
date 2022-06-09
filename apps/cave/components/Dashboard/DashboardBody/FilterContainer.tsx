@@ -37,11 +37,13 @@ export default function FilterContainer(props: FilterContainerProps) {
           onResetFilters={() => {}}
         />
         <SorterCard
-          title="Redeem In"
+          title="Redeem Date"
           icon="RedeemIcon"
           onChangeSorter={onAddSorter}
           sorterType={NftSorter.REDEEM}
           onRemoveSorter={onRemoveSorter}
+          lowestButtonName="Earliest Redeemed"
+          highestButtonName="Latest Redeemed"
         />
         <SorterCard
           title="Token Id"
