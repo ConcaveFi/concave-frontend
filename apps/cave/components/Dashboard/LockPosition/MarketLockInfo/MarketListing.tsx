@@ -27,31 +27,36 @@ export const MarketListing = (props: MarketplaceInfoProps) => {
       mx={2}
       py={3}
       px={4}
+      width={{ base: '340px', md: '495px', lg: '675px' }}
     >
-      <Flex justify={{ lg: 'left', md: 'center' }}>
+      <Flex justify={{ lg: 'left', base: 'center' }} my="3">
         <Text color="text.low" fontSize="lg" as="b">
           Your Marketplace Listing
         </Text>
       </Flex>
-      <Flex justify={{ lg: 'left', md: 'center' }}>
-        <Info
-          label={'List Price:'}
-          width={'full'}
-          valueFontSize={'lg'}
-          value={
-            marketData?.isListed
-              ? `${formatFixed(marketData?.listPrice, { places: 4 })} CNV`
-              : '---'
-          }
-        />
-        <Info
-          label={'Discount:'}
-          width={'full'}
-          value={
-            marketData?.isListed ? `${formatFixed(marketData?.discount, { decimals: 2 })} %` : '---'
-          }
-        />
-        <Info label={'Expiration Date:'} width={'full'} value={'---'} />
+      <Flex justify={{ lg: 'left', md: 'center' }} direction={{ base: 'column', lg: 'row' }}>
+        <Flex flexBasis={'200%'}>
+          <Info
+            label={'List Price:'}
+            width={'full'}
+            valueFontSize={'lg'}
+            value={
+              marketData?.isListed
+                ? `${formatFixed(marketData?.listPrice, { places: 4 })} CNV`
+                : '---'
+            }
+          />
+          <Info
+            label={'Discount:'}
+            width={'full'}
+            value={
+              marketData?.isListed
+                ? `${formatFixed(marketData?.discount, { decimals: 2 })} %`
+                : '---'
+            }
+          />
+          <Info label={'Expiration Date:'} width={'full'} value={'---'} />
+        </Flex>
         <Button variant={'primary'} minW={'160px'} size={'md'} width={'full'} {...buttonState} />
       </Flex>
       {marketData && <ListForSaleModal marketInfoState={marketInfoState} />}

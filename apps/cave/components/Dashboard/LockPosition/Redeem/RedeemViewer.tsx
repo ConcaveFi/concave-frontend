@@ -1,4 +1,5 @@
 import { Box, Button, Flex, FlexProps, Text, TextProps } from '@concave/ui'
+import { Dirent } from 'fs'
 import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungibleToken'
 import { bigNumberMask, createRedeemState } from './UseRedeemState'
 
@@ -9,38 +10,52 @@ const RedeemCardViewer = ({ nonFungibleTokenInfo }: RedeemCardViewerProps) => {
   const { curValue, initialBal, gainedAmt, maturity } = createRedeemState({ nonFungibleTokenInfo })
 
   return (
-    <Box borderRadius="2xl" mt={{ lg: 1, md: 0 }} mb={3} mx={2} py={3} px={4}>
-      <Flex justify={{ lg: 'left', md: 'center' }}>
-        {/* <Info
-          label="Current Value"
-          width={'full'}
-          valueFontSize={'lg'}
-          value={utils.formatEther(userReward[3])}
-          ml={{ lg: 7, md: '0px' }}
-        />
-        <Info label="Gained" 
-          width={'full'} value={utils.formatEther(gainedAmt)} />
-        <Info label="Initial"
-          width={'full'} value={utils.formatEther(userReward[0])} /> */}
-        <Info
-          width={'full'}
-          label="Current Value"
-          valueFontSize={'lg'}
-          value={bigNumberMask(curValue) + ' CNV'}
-        />
-        <Info width={'full'} label="Gained" value={bigNumberMask(gainedAmt) + ' CNV'} />
-        <Info width={'full'} label="Initial" value={bigNumberMask(initialBal) + ' CNV'} />
+    <Box
+      borderRadius="2xl"
+      mt={{ lg: 1, md: 3 }}
+      mb={3}
+      mx={{ base: 3, md: '0px', lg: 2 }}
+      pt={{ base: 6, md: 3 }}
+      px={{ base: 0, md: 0 }}
+      maxW={{ base: '353px', md: '500px', lg: '720px' }}
+    >
+      <Flex
+        // justify={{ lg: 'left', md: 'center' }}
+        gap={3}
+        flex={1}
+        direction={{ base: 'column', md: 'row' }}
+      >
+        <Flex ml={{ lg: 7 }}>
+          <Info
+            label="Current Value"
+            valueFontSize={{ base: 'sm', md: 'lg' }}
+            value={bigNumberMask(curValue) + ' CNV'}
+          />
+          <Info
+            label="Gained"
+            valueFontSize={{ base: 'sm', md: 'lg' }}
+            value={bigNumberMask(gainedAmt) + ' CNV'}
+          />
+          <Info
+            label="Initial"
+            valueFontSize={{ base: 'sm', md: 'lg' }}
+            value={bigNumberMask(initialBal) + ' CNV'}
+          />
+        </Flex>
         <Button
           size={'md'}
-          minW={'160px'}
-          width={'full'}
+          minW={{ base: '280px', md: '160px' }}
           cursor={maturity > 0 ? 'default' : 'pointer'}
-          variant={maturity > 0 ? '' : 'primary'}
+          variant={maturity > 0 ? 'primary.outline' : 'primary'}
           shadow={maturity > 0 ? 'down' : 'up'}
+          _hover={{}}
+          mx="auto"
+          my={'auto'}
+          mt="2px"
           _active={maturity <= 0 && { transform: 'scale(0.9)' }}
           _focus={{}}
         >
-          <Text color={maturity > 0 ? 'text.low' : 'white'} fontSize="sm">
+          <Text color={maturity > 0 ? 'text.low' : 'white'} fontSize={{ base: '2xl', md: 'sm' }}>
             {maturity > 0 ? 'Not redeemable' : 'Redeem'}
           </Text>
         </Button>
@@ -57,7 +72,7 @@ interface Info extends FlexProps {
 export const Info: React.FC<Info> = ({ ...props }) => {
   return (
     <Flex width={'110px'} direction={'column'} textAlign={{ lg: 'start', md: 'center' }} {...props}>
-      <Text color="text.low" fontSize="sm" lineHeight={'15px'} noOfLines={1}>
+      <Text color="text.low" fontSize="sm" lineHeight={'12px'} noOfLines={1}>
         {props.label}
       </Text>
       <Text fontSize={props.valueFontSize || 'md'} fontWeight="bold" noOfLines={1}>
