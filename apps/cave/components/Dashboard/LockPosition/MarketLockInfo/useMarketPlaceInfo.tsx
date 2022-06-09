@@ -17,12 +17,12 @@ export const useMarketInfo = ({
 }) => {
   const offerDisclosure = useDisclosure()
   const networkId = nonFungibleTokenInfo.networkId
-  const [{ data: signer }] = useSigner()
+  const { data: signer } = useSigner()
   const [transaction, setTransaction] = useState<Transaction>()
   const [isWaitingForWallet, setIsWaitingForWallet] = useState<boolean>(false)
-  const [tx] = useWaitForTransaction({ hash: transaction?.hash })
+  const tx = useWaitForTransaction({ hash: transaction?.hash })
   const marketInfo = useQuery(
-    ['MarketInfo', tx, networkId, nonFungibleTokenInfo.tokenId],
+    ['MarketInfo', tx.data, networkId, nonFungibleTokenInfo.tokenId],
     async () => {
       const marketPlaceInfo = await fechMarketInfo(networkId, nonFungibleTokenInfo)
       return marketPlaceInfo
@@ -77,7 +77,7 @@ export const useMarketInfo = ({
 export const getMarketPlaceButtonProps = (marketInfoState: UserMarketInfoState): ButtonProps => {
   const { tx, marketInfo, isWaitingForWallet, offerDisclosure, createMarketItem, withdrawOffer } =
     marketInfoState
-  if (tx?.loading) {
+  if (tx?.isLoading) {
     return { loadingText: 'Loading', disabled: true, isLoading: true }
   }
   if (isWaitingForWallet) {
