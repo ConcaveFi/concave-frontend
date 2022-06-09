@@ -32,7 +32,7 @@ const UserDashboardCard = ({ data }: { data: UseDashBoardState }) => {
         maxW={{ lg: '760px', md: '580px' }}
         justify="center"
       >
-        <Flex justify="center" p={4} pt={2} position={'relative'}>
+        <Flex justify="center" px={4} pt={2} position={'relative'}>
           <UserDividendCard isLoading={isLoading} totalLocked={totalLocked} />
         </Flex>
         <FilterContainer
