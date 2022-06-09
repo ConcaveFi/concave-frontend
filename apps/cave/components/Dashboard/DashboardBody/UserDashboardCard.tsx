@@ -86,15 +86,9 @@ export const UserDashboardCard = ({ data }: { data: UseDashBoardState }) => {
         </Collapse>
 
         <LoadingPositions in={isLoading} />
-<<<<<<< HEAD
         <ItsNotConected in={!isConnected} />
         <HasNoPositions in={!hasPositions && !isLoading && isConnected} />
-      </Card>
-=======
-        <ItsNotConected in={!wallet.connected} />
-        <HasNoPositions in={!hasPositions && !isLoading && wallet.connected} />
       </Flex>
->>>>>>> a0824435 (start intregating mobile components)
     </Flex>
   )
 }
