@@ -12210,7 +12210,7 @@ react-query@^3.39.0:
     broadcast-channel "^3.4.1"
     match-sorter "^6.0.2"
 
-react-query@^4.0.0-beta.19:
+react-query@^4.0.0-beta.23:
   version "4.0.0-beta.23"
   resolved "https://registry.yarnpkg.com/react-query/-/react-query-4.0.0-beta.23.tgz#76713547670ef1f991ae828b3d51df63ec6e035c"
   integrity sha512-e6mNBVAYGy0M1OwX0mhRB/lCkOedKeqTUrbPjNCqvm8hQGUsJJobqfHVvTv8o6JJaOO2MFcxKF4vZM+PEKbHZA==
@@ -14705,15 +14705,15 @@ w3c-xmlserializer@^1.1.2:
     webidl-conversions "^4.0.2"
     xml-name-validator "^3.0.0"
 
-wagmi@^0.4.9:
-  version "0.4.9"
-  resolved "https://registry.yarnpkg.com/wagmi/-/wagmi-0.4.9.tgz#1c441beff17fbcaee69dabe41e2b225260b091fa"
-  integrity sha512-jXBKSzxGRXTgrK9kGRPNziRWmPu1QRz5FbANyeeUcEeZ0agAZnObkMJSIJJxrajjO6vldscMaVtrAC9bODArPQ==
+wagmi@^0.4.11:
+  version "0.4.11"
+  resolved "https://registry.yarnpkg.com/wagmi/-/wagmi-0.4.11.tgz#de660f26dec002ec916d3bdde4e913cbf953b69f"
+  integrity sha512-5GTA7ugsRvnza660Bgy4WKYlS3CodZSw/bVNFGaICJTi3DX/8dO0veCQsSzwQzh+koDgYg0ZRNTLbHH7VR+bUg==
   dependencies:
     "@coinbase/wallet-sdk" "^3.2.0"
     "@wagmi/core" "^0.3.7"
     "@walletconnect/ethereum-provider" "^1.7.8"
-    react-query "^4.0.0-beta.19"
+    react-query "^4.0.0-beta.23"
     use-sync-external-store "^1.1.0"
 
 walker@^1.0.7, walker@~1.0.5:
