@@ -1,10 +1,14 @@
 import { BigNumber, BigNumberish, ethers, Transaction } from 'ethers'
 import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/providers'
 import { concaveProvider } from 'lib/providers'
-import { ConcaveNFTMarketplaceProxy } from './Address'
 import { ContractABI } from './ConcaveNFTMarketplaceABI'
 import { Signer } from 'ethers'
-import { MarketItemInfo, NonFungibleTokenInfo, Offer } from '@concave/marketplace-sdk'
+import {
+  MarketItemInfo,
+  NonFungibleTokenInfo,
+  Offer,
+  ConcaveNFTMarketplaceProxy,
+} from '@concave/marketplace-sdk'
 export class ConcaveNFTMarketplace {
   private readonly contract: ethers.Contract
   private readonly provider: MulticallProvider
