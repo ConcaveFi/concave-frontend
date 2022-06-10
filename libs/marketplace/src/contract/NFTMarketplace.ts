@@ -7,7 +7,7 @@ import {
   NonFungibleTokenInfo,
   Offer,
   ConcaveNFTMarketplaceProxy,
-} from '@concave/marketplace-sdk'
+} from '@concave/marketplace'
 import { BaseProvider } from '@ethersproject/providers'
 export class ConcaveNFTMarketplace {
   private readonly contract: ethers.Contract

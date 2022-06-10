@@ -1,4 +1,4 @@
-import { NonFungibleTokenInfo } from '@concave/marketplace-sdk'
+import { NonFungibleTokenInfo } from '@concave/marketplace'
 import { BigNumber } from 'ethers'
 import { formatEther } from 'ethers/lib/utils'
 import { formatFixed } from 'utils/formatFixed'

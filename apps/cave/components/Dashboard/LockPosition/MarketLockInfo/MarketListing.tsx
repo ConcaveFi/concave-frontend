@@ -1,4 +1,4 @@
-import { NonFungibleTokenInfo } from '@concave/marketplace-sdk'
+import { NonFungibleTokenInfo } from '@concave/marketplace'
 import { Box, Button, Flex, Modal, ModalContent, ModalOverlay, Text } from '@concave/ui'
 import { Loading } from 'components/Loading'
 import { formatFixed } from 'utils/formatFixed'

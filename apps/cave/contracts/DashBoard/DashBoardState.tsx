@@ -1,7 +1,8 @@
-import { NonFungibleTokenInfo } from '@concave/marketplace-sdk'
+import { listUserNonFungibleTokenInfo, NonFungibleTokenInfo } from '@concave/marketplace'
 import { BigNumber } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { listUserNonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/Fetcher'
+import { NEXT_PUBLIC_ALCHEMY_ID } from 'lib/env.conf'
+import { concaveProvider } from 'lib/providers'
 import { useQuery } from 'react-query'
 import { useAccount } from 'wagmi'
 
@@ -11,7 +12,12 @@ export const useDashBoardState = () => {
   const netWorkId = useCurrentSupportedNetworkId()
   const { data: userNonFungibleTokensInfo, isLoading } = useQuery(
     ['listUserNonFungibleTokenInfo', account?.address, netWorkId],
-    () => listUserNonFungibleTokenInfo(account.address, netWorkId),
+    () =>
+      listUserNonFungibleTokenInfo(
+        account.address,
+        concaveProvider(netWorkId),
+        NEXT_PUBLIC_ALCHEMY_ID,
+      ),
     { enabled: !!account?.address && !!netWorkId },
   )
   const totalLocked = getTotalLocked(userNonFungibleTokensInfo)

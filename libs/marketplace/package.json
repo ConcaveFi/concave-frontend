@@ -1,5 +1,5 @@
 {
-  "name": "@concave/marketplace-sdk",
+  "name": "@concave/marketplace",
   "version": "0.0.0",
   "description": "Concave Marketplace library",
   "license": "MIT",
@@ -16,6 +16,7 @@
     "test": "tsdx test"
   },
   "dependencies": {
+    "@alch/alchemy-web3": "^1.4.2",
     "@concave/core": "*",
     "@ethersproject/address": "^5.6.1",
     "@ethersproject/bignumber": "^5.6.2",
