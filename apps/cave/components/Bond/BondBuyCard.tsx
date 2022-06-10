@@ -42,13 +42,16 @@ export function BondBuyCard(props: {
   }, [networkId])
 
   const [amountOut, setAmountOut] = useState<string>()
-  const [bondSpotPrice, setBondSpotPrice] = useState<string>()
-
   const confirmModal = useDisclosure()
   const [hasClickedConfirm, setHasClickedConfirm] = useState(false)
   const AMMData = useGet_Amm_Cnv_PriceQuery()
 
   const currentPrice = AMMData?.data?.cnvData?.data?.last.toFixed(3)
+  const { data: bondSpotPrice } = useQuery(
+    ['bondSpotPrice', networkId],
+    async () => await getBondSpotPrice(networkId),
+    { enabled: !!networkId, refetchInterval: 17000 },
+  )
 
   const [txError, setTxError] = useState('')
   const {
@@ -56,24 +59,6 @@ export function BondBuyCard(props: {
     onClose: onCloseRejected,
     onOpen: onOpenRejected,
   } = useDisclosure()
-
-  useQuery(
-    ['bondSpotPrice', networkId],
-    async () => {
-      const bondSpotPrice = await getBondSpotPrice(networkId)
-      setBondSpotPrice(bondSpotPrice)
-    },
-    { enabled: !!networkId, refetchInterval: 17000 },
-  )
-  useEffect(() => {
-    getBondSpotPrice(networkId, BOND_ADDRESS[networkId])
-      .then((bondSpotPrice) => {
-        setBondSpotPrice(bondSpotPrice)
-      })
-      .catch((e) => {
-        console.log(e)
-      })
-  }, [networkId, userAddress])
 
   const { addRecentTransaction } = useRecentTransactions()
 
