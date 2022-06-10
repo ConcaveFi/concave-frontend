@@ -1,10 +1,8 @@
 import { createAlchemyWeb3, Nft } from '@alch/alchemy-web3'
+import { MarketItemInfo, NonFungibleTokenInfo } from '@concave/marketplace-sdk'
 import { NEXT_PUBLIC_ALCHEMY_ID } from 'lib/env.conf'
-import { StakingV1ProxyAddress } from 'lib/StakingV1Proxy/Address'
 import { StakingV1Contract } from 'lib/StakingV1Proxy/StakingV1Contract'
 import { ConcaveNFTMarketplace } from './ConcaveNFTMarketplace'
-import { MarketItemInfo } from './MarketInfo'
-import { NonFungibleTokenInfo } from './NonFungibleToken'
 
 const nftapi = NEXT_PUBLIC_ALCHEMY_ID
 
@@ -48,7 +46,7 @@ export const listUserNonFungibleTokenInfo = async (userAddress: string, chainId:
   console.log('listUserNonFungibleTokenInfo')
   const stakingV1Contract = new StakingV1Contract(chainId)
   const usersNft = await listAllNonFungibleTokensOnAddress(userAddress, chainId, [
-    StakingV1ProxyAddress[chainId],
+    'StakingV1ProxyAddress[chainId]',
   ])
   return Promise.all(
     usersNft.map(async ({ id, contract }: Nft) => {

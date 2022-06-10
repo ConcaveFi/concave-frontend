@@ -1,10 +1,8 @@
+import { MarketItemInfo, NonFungibleTokenInfo, Offer } from '@concave/marketplace-sdk'
 import { ButtonProps, useDisclosure } from '@concave/ui'
 import { Transaction } from 'ethers'
-import { Offer } from 'lib/ConcaveNFTMarketplaceProxy/Auction'
 import { ConcaveNFTMarketplace } from 'lib/ConcaveNFTMarketplaceProxy/ConcaveNFTMarketplace'
 import { fechMarketInfo } from 'lib/ConcaveNFTMarketplaceProxy/Fetcher'
-import { MarketItemInfo } from 'lib/ConcaveNFTMarketplaceProxy/MarketInfo'
-import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungibleToken'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
 import { useSigner, useWaitForTransaction } from 'wagmi'
@@ -67,6 +65,7 @@ export const useMarketInfo = ({
     tx,
     isWaitingForWallet,
     offerDisclosure,
+    networkId,
     createOffer,
     setTransaction,
     withdrawOffer,

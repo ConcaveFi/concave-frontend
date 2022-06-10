@@ -1,4 +1,4 @@
-import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungibleToken'
+import { NonFungibleTokenInfo } from '@concave/marketplace-sdk'
 import { useState } from 'react'
 
 interface NftPositionCardProps {

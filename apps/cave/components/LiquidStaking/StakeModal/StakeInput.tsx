@@ -8,7 +8,6 @@ import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useRecentTransactions } from 'hooks/useRecentTransactions'
-import { StakingV1ProxyAddress } from 'lib/StakingV1Proxy/Address'
 import { StakingV1Contract } from 'lib/StakingV1Proxy/StakingV1Contract'
 import React, { useState } from 'react'
 import { toAmount } from 'utils/toAmount'
@@ -83,7 +82,7 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
             approveArgs={{
               currency: stakeInput.currency,
               amount: stakeInput.numerator,
-              spender: StakingV1ProxyAddress[stakeInput.currency.chainId],
+              spender: 'StakingV1ProxyAddress[stakeInput.currency.chainId]',
             }}
             mt={5}
             onClick={lock}

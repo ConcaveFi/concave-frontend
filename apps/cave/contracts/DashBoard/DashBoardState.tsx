@@ -1,7 +1,7 @@
+import { NonFungibleTokenInfo } from '@concave/marketplace-sdk'
 import { BigNumber } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { listUserNonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/Fetcher'
-import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungibleToken'
 import { useQuery } from 'react-query'
 import { useAccount } from 'wagmi'
 

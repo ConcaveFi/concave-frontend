@@ -1,10 +1,9 @@
 import { CNV, Currency, CurrencyAmount } from '@concave/core'
+import { MarketItemInfo, Offer } from '@concave/marketplace-sdk'
 import { Box, Button, Flex, HStack, NumericInput, Text, VStack } from '@concave/ui'
 import ChooseButton from 'components/Marketplace/ChooseButton'
 import { BigNumber } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { Offer } from 'lib/ConcaveNFTMarketplaceProxy/Auction'
-import { MarketItemInfo } from 'lib/ConcaveNFTMarketplaceProxy/MarketInfo'
 import { useEffect, useState } from 'react'
 import { formatFixed } from 'utils/formatFixed'
 import { toAmount } from 'utils/toAmount'
@@ -23,7 +22,7 @@ export const useListeForSaleState = ({ marketInfoState }: UserListPositionCardPr
   const [offer, setOffer] = useState(
     new Offer({
       ...marketInfoState.marketInfo.data.offer,
-      ERC20Token: marketInfoState.marketInfo.data.NFT.tokenOfStack.address,
+      ERC20Token: CNV[marketInfoState.networkId].address,
       buyNowPrice: marketInfoState.marketInfo.data.NFT.currentValue,
       feePercentages: [10000],
       feeRecipients: [account.address],

@@ -1,5 +1,5 @@
-import { BigNumber } from 'ethers'
-import { Offer } from './Auction'
+import { BigNumber } from '@ethersproject/bignumber'
+import { Offer } from './Offer'
 import { NonFungibleTokenInfo } from './NonFungibleToken'
 
 export type MarketItemInfoArgs = {

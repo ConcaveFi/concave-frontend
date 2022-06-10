@@ -1,11 +1,8 @@
 import { BigNumber, BigNumberish, ethers, Contract } from 'ethers'
 import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/providers'
 import { concaveProvider } from 'lib/providers'
-import { StakingV1ProxyAddress } from './Address'
 import { StakingV1Abi } from './ContractABI'
-import { Position } from './Position'
-import { Pool } from './Pool'
-import { UserReward } from './UserReward'
+import { Pool, Position, UserReward } from '@concave/marketplace-sdk'
 
 export class StakingV1Contract {
   private readonly contract: ethers.Contract
@@ -13,7 +10,7 @@ export class StakingV1Contract {
 
   constructor(chainId: number) {
     if (!chainId) throw 'ChainID is undefined for constructor of contract StakingV1Contract'
-    const address = StakingV1ProxyAddress[chainId]
+    const address = 'StakingV1ProxyAddress[chainId]'
     if (!address) throw 'Address is undefined for constructor of contract StakingV1Contract'
     this.provider = concaveProvider(chainId)
     this.contract = new Contract(address, StakingV1Abi, this.provider)

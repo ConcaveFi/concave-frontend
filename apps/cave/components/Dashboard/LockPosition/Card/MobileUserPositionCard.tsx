@@ -1,6 +1,6 @@
+import { NonFungibleTokenInfo } from '@concave/marketplace-sdk'
 import { Card, Flex } from '@concave/ui'
 import { useUserPositionState } from 'components/Dashboard/LockPosition/Card/useUserPositionState'
-import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungibleToken'
 import { MarketListingMobile } from '../MarketLockInfo/MarketListingMobile'
 import { NFTPositionHeaderMobile } from '../NFTPositionHeader/NFTPositionHeaderMobile'
 import { RedeemMobileContainer } from '../Redeem/RedeemMobileView'

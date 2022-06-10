@@ -1,4 +1,4 @@
-import { BigNumber } from 'ethers'
+import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
 
 export type Pool = {
   readonly balance: BigNumber

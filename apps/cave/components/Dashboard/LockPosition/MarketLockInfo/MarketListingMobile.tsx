@@ -1,6 +1,6 @@
+import { NonFungibleTokenInfo } from '@concave/marketplace-sdk'
 import { Button, ButtonProps, Flex, Text, TextProps, VStack } from '@concave/ui'
 import { Loading } from 'components/Loading'
-import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungibleToken'
 import { formatFixed } from 'utils/formatFixed'
 import { ListForSaleModal } from './MarketListing'
 import { getMarketPlaceButtonProps, useMarketInfo } from './useMarketPlaceInfo'

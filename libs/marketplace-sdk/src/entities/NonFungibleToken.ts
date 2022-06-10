@@ -1,7 +1,6 @@
-import { CNV } from '@concave/core'
-import { BigNumberish } from 'ethers'
-import { Position } from 'lib/StakingV1Proxy/Position'
-import { UserReward } from 'lib/StakingV1Proxy/UserReward'
+import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
+import { Position } from './Position'
+import { UserReward } from './UserReward'
 
 export class NonFungibleTokenInfo {
   constructor(
@@ -13,7 +12,7 @@ export class NonFungibleTokenInfo {
   ) {}
 
   get tokenOfStack() {
-    return CNV[this.networkId]
+    return '' //CNV[this.networkId]
   }
   get poolID() {
     return this.position.poolID

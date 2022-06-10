@@ -1,6 +1,6 @@
+import { NonFungibleTokenInfo } from '@concave/marketplace-sdk'
 import { Box, Button, Flex, Modal, ModalContent, ModalOverlay, Text } from '@concave/ui'
 import { Loading } from 'components/Loading'
-import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungibleToken'
 import { formatFixed } from 'utils/formatFixed'
 import { ListPositionForSale, useListeForSaleState } from '../../UserListPositionCard'
 import { Info } from '../Redeem/RedeemViewer'
