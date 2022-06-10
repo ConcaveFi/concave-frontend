@@ -37,7 +37,6 @@ export const UserDashboardCard = ({ data }: { data: UseDashBoardState }) => {
     <Flex display={{ lg: 'flex', md: 'flex' }}>
       <Flex
         gap={2}
-        maxHeight="775px"
         direction={'column'}
         shadow={{ base: '', md: 'down' }}
         maxW={{ lg: '760px', md: '580px', base: '358px' }}
@@ -66,7 +65,7 @@ export const UserDashboardCard = ({ data }: { data: UseDashBoardState }) => {
         <Collapse in={hasPositions}>
           <Box
             pos="relative"
-            h="100%"
+            maxH={{ lg: '675px', md: '740px', base: '800px' }}
             overflowY={'scroll'}
             overflowX="hidden"
             borderRadius="12px"
@@ -75,6 +74,7 @@ export const UserDashboardCard = ({ data }: { data: UseDashBoardState }) => {
             py={'0.5rem'}
             shadow={{ base: '', md: 'down' }}
             __css={scrollBar}
+            mb={3}
           >
             {userNonFungibleTokensInfo
               .filter(filterByRange)
