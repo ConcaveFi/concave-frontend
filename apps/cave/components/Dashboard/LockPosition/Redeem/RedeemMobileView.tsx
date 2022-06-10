@@ -1,4 +1,4 @@
-import { NonFungibleTokenInfo } from '@concave/marketplace-sdk'
+import { NonFungibleTokenInfo } from '@concave/marketplace'
 import { Button, Flex, Text, TextProps, VStack } from '@concave/ui'
 import { bigNumberMask, createRedeemState } from './UseRedeemState'
 

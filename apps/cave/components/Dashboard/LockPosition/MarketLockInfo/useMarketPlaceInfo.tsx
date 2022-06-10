@@ -1,12 +1,12 @@
 import {
   ConcaveNFTMarketplace,
+  fechMarketInfo,
   MarketItemInfo,
   NonFungibleTokenInfo,
   Offer,
-} from '@concave/marketplace-sdk'
+} from '@concave/marketplace'
 import { ButtonProps, useDisclosure } from '@concave/ui'
 import { Transaction } from 'ethers'
-import { fechMarketInfo } from 'lib/ConcaveNFTMarketplaceProxy/Fetcher'
 import { concaveProvider } from 'lib/providers'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
@@ -27,7 +27,7 @@ export const useMarketInfo = ({
   const marketInfo = useQuery(
     ['MarketInfo', tx.data, networkId, nonFungibleTokenInfo.tokenId],
     async () => {
-      const marketPlaceInfo = await fechMarketInfo(networkId, nonFungibleTokenInfo)
+      const marketPlaceInfo = await fechMarketInfo(concaveProvider(networkId), nonFungibleTokenInfo)
       return marketPlaceInfo
     },
     { enabled: !!networkId && !!nonFungibleTokenInfo.tokenId },

@@ -1,4 +1,4 @@
-import { NonFungibleTokenInfo } from '@concave/marketplace-sdk'
+import { NonFungibleTokenInfo } from '@concave/marketplace'
 import { Box, Collapse, Flex } from '@concave/ui'
 import { MarketListing } from '../MarketLockInfo/MarketListing'
 import { NFTPositionHeader } from '../NFTPositionHeader/NFTPositionHeader'

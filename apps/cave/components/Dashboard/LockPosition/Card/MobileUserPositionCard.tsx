@@ -1,4 +1,4 @@
-import { NonFungibleTokenInfo } from '@concave/marketplace-sdk'
+import { NonFungibleTokenInfo } from '@concave/marketplace'
 import { Card, Flex } from '@concave/ui'
 import { useUserPositionState } from 'components/Dashboard/LockPosition/Card/useUserPositionState'
 import { MarketListingMobile } from '../MarketLockInfo/MarketListingMobile'

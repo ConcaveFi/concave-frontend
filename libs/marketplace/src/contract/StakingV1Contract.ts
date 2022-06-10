@@ -1,7 +1,7 @@
 import { BigNumber, BigNumberish, ethers, Contract } from 'ethers'
 import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/providers'
 import { StakingV1Abi } from './StakingV1Abi'
-import { Pool, Position, UserReward, StakingV1ProxyAddress } from '@concave/marketplace-sdk'
+import { Pool, Position, UserReward, StakingV1ProxyAddress } from '@concave/marketplace'
 import { BaseProvider } from '@ethersproject/providers'
 
 export class StakingV1Contract {

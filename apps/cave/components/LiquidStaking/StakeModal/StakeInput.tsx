@@ -1,5 +1,5 @@
 import { CNV, Currency, CurrencyAmount } from '@concave/core'
-import { StakingV1Contract, StakingV1ProxyAddress } from '@concave/marketplace-sdk'
+import { StakingV1Contract, StakingV1ProxyAddress } from '@concave/marketplace'
 import { Box, Card, Flex, Text, useDisclosure } from '@concave/ui'
 import { ApproveButton } from 'components/ApproveButton/ApproveButton'
 import { CurrencyInputField } from 'components/CurrencyAmountField'

@@ -1,4 +1,4 @@
-import { StakingV1Contract } from '@concave/marketplace-sdk'
+import { StakingV1Contract } from '@concave/marketplace'
 import {
   Box,
   Button,
