@@ -79,7 +79,7 @@ export default function RecentTransactionsContainer() {
           __css={scroll}
         >
           {Object.values(recentTransactions)
-            .filter((tx) => tx.transaction.from === account?.address)
+            .filter((tx) => tx.transaction?.from === account?.address)
             .map((value, index) => (
               <TransactionInfo key={index} recentTransaction={value} />
             ))}
