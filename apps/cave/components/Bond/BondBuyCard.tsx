@@ -1,4 +1,5 @@
 import { Currency, CurrencyAmount, DAI } from '@concave/core'
+import { GasIcon } from '@concave/icons'
 import { Card, Flex, HStack, keyframes, Spinner, Text, useDisclosure, VStack } from '@concave/ui'
 import { ApproveButton } from 'components/ApproveButton/ApproveButton'
 import { CurrencyInputField as BondInput } from 'components/CurrencyAmountField'
@@ -11,13 +12,14 @@ import { useRecentTransactions } from 'hooks/useRecentTransactions'
 import React, { useEffect, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
 import { truncateNumber } from 'utils/truncateNumber'
+import { useFeeData } from 'wagmi'
 import { BondOutput } from './BondOutput'
 import { getBondAmountOut, getBondSpotPrice, purchaseBond, useBondState } from './BondState'
 import { ConfirmBondModal } from './ConfirmBond'
 import { DownwardIcon } from './DownwardIcon'
 import { Settings, useBondSettings } from './Settings'
-import { GasPrice } from 'components/AMM'
-
+import { useGet_Cnv_DataQuery } from 'graphql/generated/graphql'
+import { useQuery } from 'react-query'
 export const twoDecimals = (s: string | number) => {
   const a = s.toString()
   return a.indexOf('.') > -1 ? a.slice(0, a.indexOf('.') + 3) : a
@@ -58,6 +60,17 @@ export function BondBuyCard(props: {
     onOpen: onOpenRejected,
   } = useDisclosure()
 
+  const { data: cnvData } = useGet_Cnv_DataQuery()
+
+  const spotPrice = useQuery(
+    ['bondSpotPrice', networkId, cnvData],
+    async () => {
+      const bondSpotPrice = await getBondSpotPrice(networkId)
+      console.log(bondSpotPrice)
+      setBondSpotPrice(bondSpotPrice)
+    },
+    { enabled: !!networkId, refetchInterval: 17000 },
+  )
   useEffect(() => {
     getBondSpotPrice(networkId, BOND_ADDRESS[networkId])
       .then((bondSpotPrice) => {
@@ -122,7 +135,7 @@ export function BondBuyCard(props: {
           </HStack>
         </VStack>
         <Flex flex={1} align={'center'} justify="end" minWidth={100} gap={2}>
-          <GasPrice />
+          {/* <GasPrice /> */}
           <HStack align="center" justify="end" py={{ base: 0, md: 5, lg: 0, xl: 5 }}>
             <Settings settings={settings} setSetting={setSetting} />
           </HStack>
@@ -214,8 +227,3 @@ export function BondBuyCard(props: {
     </Card>
   )
 }
-
-const spin = keyframes({
-  '0%': { transform: 'rotate(0deg)' },
-  '100%': { transform: 'rotate(360deg)' },
-})
