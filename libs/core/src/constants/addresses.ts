@@ -36,7 +36,7 @@ export const ROUTER_ADDRESS: AddressMap = {
 }
 
 export const STAKING_CONTRACT: AddressMap = {
-  [ChainId.ETHEREUM]: '',
+  [ChainId.ETHEREUM]: '0x93c3A816242E50Ea8871A29BF62cC3df58787FBD',
   [ChainId.RINKEBY]: '0xb0f7D17A61b1fA6A91D855D6c28f809687Ae8a2F',
 }
 
