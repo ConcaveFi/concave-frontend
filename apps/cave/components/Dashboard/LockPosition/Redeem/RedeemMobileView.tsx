@@ -1,5 +1,5 @@
+import { NonFungibleTokenInfo } from '@concave/marketplace-sdk'
 import { Button, Flex, Text, TextProps, VStack } from '@concave/ui'
-import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungibleToken'
 import { bigNumberMask, createRedeemState } from './UseRedeemState'
 
 interface RedeemCardViewerProps {

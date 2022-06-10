@@ -1,5 +1,5 @@
+import { NonFungibleTokenInfo } from '@concave/marketplace-sdk'
 import { Box, Collapse, Flex } from '@concave/ui'
-import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungibleToken'
 import { MarketListing } from '../MarketLockInfo/MarketListing'
 import { NFTPositionHeader } from '../NFTPositionHeader/NFTPositionHeader'
 import RedeemCardViewer from '../Redeem/RedeemViewer'

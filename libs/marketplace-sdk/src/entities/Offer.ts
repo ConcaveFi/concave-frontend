@@ -1,7 +1,6 @@
-import { BigNumberish } from 'ethers'
-import { BigNumber } from 'ethers'
+import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
 
-export type OfferConstructorArgs = {
+type OfferConstructorArgs = {
   readonly bidIncreasePercentage: number
   readonly auctionBidPeriod: number
   readonly auctionEnd: BigNumberish
@@ -15,11 +14,6 @@ export type OfferConstructorArgs = {
   readonly ERC20Token: string
   readonly feePercentages?: number[]
   readonly feeRecipients?: string[]
-}
-
-export type OfferConstructorBaseArgs = {
-  readonly buyNowPrice: BigNumber
-  readonly ERC20Token: string
 }
 
 export class Offer {

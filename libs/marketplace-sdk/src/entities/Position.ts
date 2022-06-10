@@ -1,4 +1,4 @@
-import { BigNumber } from 'ethers'
+import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
 
 export type Position = {
   readonly deposit: BigNumber

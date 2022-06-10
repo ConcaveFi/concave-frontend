@@ -1,7 +1,6 @@
-import { Box, Button, Flex, FlexProps, Text, TextProps } from '@concave/ui'
+import { NonFungibleTokenInfo } from '@concave/marketplace-sdk'
 import { BigNumber } from 'ethers'
 import { formatEther } from 'ethers/lib/utils'
-import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungibleToken'
 import { formatFixed } from 'utils/formatFixed'
 
 interface RedeemCardViewerProps {

@@ -1,5 +1,5 @@
+import { NonFungibleTokenInfo } from '@concave/marketplace-sdk'
 import { formatDistanceToNowStrict, format } from 'date-fns'
-import { NonFungibleTokenInfo } from 'lib/ConcaveNFTMarketplaceProxy/NonFungibleToken'
 
 export interface NFTPositionHeaderProps {
   nonFungibleTokenInfo: NonFungibleTokenInfo
