@@ -18,6 +18,7 @@ import { ConfirmBondModal } from './ConfirmBond'
 import { DownwardIcon } from './DownwardIcon'
 import { Settings, useBondSettings } from './Settings'
 import { useQuery } from 'react-query'
+import { GasPrice } from 'components/AMM'
 export const twoDecimals = (s: string | number) => {
   const a = s.toString()
   return a.indexOf('.') > -1 ? a.slice(0, a.indexOf('.') + 3) : a
@@ -55,7 +56,6 @@ export function BondBuyCard(props: {
     onClose: onCloseRejected,
     onOpen: onOpenRejected,
   } = useDisclosure()
-
 
   useQuery(
     ['bondSpotPrice', networkId],
@@ -129,7 +129,7 @@ export function BondBuyCard(props: {
           </HStack>
         </VStack>
         <Flex flex={1} align={'center'} justify="end" minWidth={100} gap={2}>
-          {/* <GasPrice /> */}
+          <GasPrice />
           <HStack align="center" justify="end" py={{ base: 0, md: 5, lg: 0, xl: 5 }}>
             <Settings settings={settings} setSetting={setSetting} />
           </HStack>
