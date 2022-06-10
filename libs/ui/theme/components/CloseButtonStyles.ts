@@ -11,7 +11,15 @@ export const CloseButtonStyles: ComponentSingleStyleConfig = {
       fontSize: '8px',
     },
   },
-  variants: {},
+  variants: {
+    subtle: {
+      border: 'none',
+      fontSize: '10px',
+      color: 'text.low',
+      _hover: { color: 'text.high' },
+      _active: { color: 'text.high' },
+    },
+  },
   defaultProps: {
     size: 'sm',
   },

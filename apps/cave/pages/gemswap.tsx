@@ -30,6 +30,7 @@ import { ApproveButton } from 'components/ApproveButton/ApproveButton'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
 import { withPageTransition } from 'components/PageTransition'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
+import { ToastCard } from 'components/TransactionStatusToast/ToastCard'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { LayoutGroup } from 'framer-motion'
@@ -120,6 +121,13 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
   return (
     <>
       <Flex wrap="wrap" justify="center" align="center" alignContent="center" w="100%" gap={10}>
+        <ToastCard
+          type="success"
+          title="Transaction pending"
+          body="Swapping dai for cnv"
+          link="1212"
+        />
+
         <LayoutGroup>
           <CandleStickCard
             from={trade.data.inputAmount?.currency}

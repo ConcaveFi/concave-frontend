@@ -1,4 +1,4 @@
-import { BoxProps } from '@chakra-ui/react'
+import { BoxProps, keyframes } from '@chakra-ui/react'
 import { SystemStyleInterpolation } from '@chakra-ui/theme-tools'
 import { toPx } from './toPx'
 
@@ -9,7 +9,7 @@ const variants = {
 
 export interface GradientBorderStyleProps extends BoxProps {
   borderWidth?: number
-  variant?: keyof typeof variants
+  variant?: keyof typeof variants | string
 }
 
 export const gradientBorder = ({
@@ -30,7 +30,7 @@ export const gradientBorder = ({
         maskComposite: 'exclude',
         pointerEvents: 'none',
         rounded: 'inherit',
-        ...variants[variant],
+        ...(variants[variant] || { bg: variant }),
       },
     }),
   }

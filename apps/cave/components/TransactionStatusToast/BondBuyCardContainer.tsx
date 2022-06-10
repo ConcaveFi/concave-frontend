@@ -1,8 +1,7 @@
 import { Stack, useToast } from '@concave/ui'
 import React, { useEffect, useState } from 'react'
 import { useWaitForTransaction } from 'wagmi'
-import { BondBuyCard } from './BondBuyCard'
-import BondToastCard from './BondToastCard'
+import { ToastCard } from './ToastCard'
 
 export default function BondBuyCardContainer(props: any) {
   const toast = useToast()
@@ -36,7 +35,7 @@ export default function BondBuyCardContainer(props: any) {
         // duration: null,
         duration: 10000,
         render: () => (
-          <BondToastCard
+          <ToastCard
             type={currentStatus}
             title={title}
             tx={currentHash}
@@ -85,12 +84,7 @@ export default function BondBuyCardContainer(props: any) {
     setBondTransaction: setBondTransaction,
     setAmountInAndOut: setAmountInAndOut,
   }
-  return (
-    <>
-      {/* <TxToast /> */}
-      <BondBuyCard {...props} {...parentProps} />
-    </>
-  )
+  return <>{/* <TxToast /> */}</>
 }
 
 function TxToast(props: any) {
