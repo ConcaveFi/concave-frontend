@@ -1,5 +1,4 @@
 import { Currency, CurrencyAmount, DAI } from '@concave/core'
-import { GasIcon } from '@concave/icons'
 import { Card, Flex, HStack, keyframes, Spinner, Text, useDisclosure, VStack } from '@concave/ui'
 import { ApproveButton } from 'components/ApproveButton/ApproveButton'
 import { CurrencyInputField as BondInput } from 'components/CurrencyAmountField'
@@ -18,7 +17,6 @@ import { getBondAmountOut, getBondSpotPrice, purchaseBond, useBondState } from '
 import { ConfirmBondModal } from './ConfirmBond'
 import { DownwardIcon } from './DownwardIcon'
 import { Settings, useBondSettings } from './Settings'
-import { useGet_Cnv_DataQuery } from 'graphql/generated/graphql'
 import { useQuery } from 'react-query'
 export const twoDecimals = (s: string | number) => {
   const a = s.toString()
@@ -37,7 +35,6 @@ export function BondBuyCard(props: {
 
   const [settings, setSetting] = useBondSettings()
   const [amountIn, setAmountIn] = useState<CurrencyAmount<Currency>>(toAmount('0', DAI[networkId]))
-  // const [amountIn, setAmountIn] = useState<number>(0)
 
   useEffect(() => {
     setAmountIn(toAmount(0, DAI[networkId]))
@@ -47,7 +44,6 @@ export function BondBuyCard(props: {
   const [bondSpotPrice, setBondSpotPrice] = useState<string>()
 
   const confirmModal = useDisclosure()
-  // const receiptModal = useDisclosure()
   const [hasClickedConfirm, setHasClickedConfirm] = useState(false)
   const AMMData = useGet_Amm_Cnv_PriceQuery()
 
@@ -60,13 +56,11 @@ export function BondBuyCard(props: {
     onOpen: onOpenRejected,
   } = useDisclosure()
 
-  const { data: cnvData } = useGet_Cnv_DataQuery()
 
-  const spotPrice = useQuery(
-    ['bondSpotPrice', networkId, cnvData],
+  useQuery(
+    ['bondSpotPrice', networkId],
     async () => {
       const bondSpotPrice = await getBondSpotPrice(networkId)
-      console.log(bondSpotPrice)
       setBondSpotPrice(bondSpotPrice)
     },
     { enabled: !!networkId, refetchInterval: 17000 },
