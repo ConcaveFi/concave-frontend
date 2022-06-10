@@ -7,7 +7,7 @@ export const STAKING_CONTRACT: AddressMap = {
 }
 
 export const BOND_ADDRESS: AddressMap = {
-  [ChainId.ETHEREUM]: '',
+  [ChainId.ETHEREUM]: '0xe42bce7bd1a94f99a099ee9242Aa0f3B2F5b1D50',
   [ChainId.ROPSTEN]: '0x82335F5F77D04b95AA09543Bc37Fa70269b0E1d1',
   [ChainId.RINKEBY]: '0x9B4147eb30daFc75CF4A5E33d1Ee72156790c917',
 }
