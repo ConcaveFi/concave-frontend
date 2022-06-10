@@ -13,7 +13,14 @@ export const MarketListing = (props: MarketplaceInfoProps) => {
   const marketInfoState = useMarketInfo(props)
   const { marketInfo } = marketInfoState
   if (marketInfo.isLoading) {
-    return <Loading m={4} size="sm" rLabel="Loading market info" />
+    return (
+      <Loading
+        m={4}
+        size="sm"
+        rLabel="Loading market info"
+        width={{ base: '340px', md: '490px', lg: '650px' }}
+      />
+    )
   }
 
   const buttonState = getMarketPlaceButtonProps(marketInfoState)

@@ -14,18 +14,19 @@ const RedeemCardViewer = ({ nonFungibleTokenInfo }: RedeemCardViewerProps) => {
       borderRadius="2xl"
       mt={{ lg: 1, md: 3 }}
       mb={3}
-      mx={{ base: 3, md: '0px', lg: 2 }}
+      mx={{ base: 0, md: '0px', lg: 2 }}
       pt={{ base: 6, md: 3 }}
       px={{ base: 0, md: 0 }}
       maxW={{ base: '353px', md: '500px', lg: '720px' }}
     >
       <Flex
         // justify={{ lg: 'left', md: 'center' }}
+
         gap={3}
         flex={1}
         direction={{ base: 'column', md: 'row' }}
       >
-        <Flex ml={{ lg: 7 }}>
+        <Flex ml={{ lg: 7 }} mx="auto">
           <Info
             label="Current Value"
             valueFontSize={{ base: 'sm', md: 'lg' }}
