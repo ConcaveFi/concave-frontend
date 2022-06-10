@@ -1,8 +1,13 @@
-import { MarketItemInfo, NonFungibleTokenInfo, Offer } from '@concave/marketplace-sdk'
+import {
+  ConcaveNFTMarketplace,
+  MarketItemInfo,
+  NonFungibleTokenInfo,
+  Offer,
+} from '@concave/marketplace-sdk'
 import { ButtonProps, useDisclosure } from '@concave/ui'
 import { Transaction } from 'ethers'
-import { ConcaveNFTMarketplace } from 'lib/ConcaveNFTMarketplaceProxy/ConcaveNFTMarketplace'
 import { fechMarketInfo } from 'lib/ConcaveNFTMarketplaceProxy/Fetcher'
+import { concaveProvider } from 'lib/providers'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
 import { useSigner, useWaitForTransaction } from 'wagmi'
@@ -31,7 +36,7 @@ export const useMarketInfo = ({
   const createMarketItem = async () => {
     setIsWaitingForWallet(true)
     try {
-      const contract = new ConcaveNFTMarketplace(networkId)
+      const contract = new ConcaveNFTMarketplace(concaveProvider(networkId))
       const tx = await contract.createMarketItem(signer, nonFungibleTokenInfo)
       setTransaction(tx)
     } catch {}
@@ -41,7 +46,7 @@ export const useMarketInfo = ({
   const withdrawOffer = async () => {
     setIsWaitingForWallet(true)
     try {
-      const contract = new ConcaveNFTMarketplace(networkId)
+      const contract = new ConcaveNFTMarketplace(concaveProvider(networkId))
       const tx = await contract.withdrawAuction(signer, nonFungibleTokenInfo)
       setTransaction(tx)
     } catch {}
@@ -51,7 +56,7 @@ export const useMarketInfo = ({
   const createOffer = async (offer: Offer) => {
     setIsWaitingForWallet(true)
     try {
-      const contract = new ConcaveNFTMarketplace(networkId)
+      const contract = new ConcaveNFTMarketplace(concaveProvider(networkId))
       const marketItemInfo = new MarketItemInfo({ ...marketInfo.data, offer })
       const tx = await contract.createOffer(signer, marketItemInfo)
       setTransaction(tx)

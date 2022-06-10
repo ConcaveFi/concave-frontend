@@ -1,7 +1,6 @@
 import { BigNumber, BigNumberish, ethers, Transaction } from 'ethers'
 import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/providers'
-import { concaveProvider } from 'lib/providers'
-import { ContractABI } from './ConcaveNFTMarketplaceABI'
+import { ContractABI } from './NFTMarketplaceAbi'
 import { Signer } from 'ethers'
 import {
   MarketItemInfo,
@@ -9,17 +8,16 @@ import {
   Offer,
   ConcaveNFTMarketplaceProxy,
 } from '@concave/marketplace-sdk'
+import { BaseProvider } from '@ethersproject/providers'
 export class ConcaveNFTMarketplace {
   private readonly contract: ethers.Contract
-  private readonly provider: MulticallProvider
-
-  constructor(chainId: number) {
-    if (!chainId) throw 'ChainID is undefined for constructor of contract ConcaveNFTMarketplace'
-    const address = ConcaveNFTMarketplaceProxy[chainId]
+  constructor(private readonly provider: BaseProvider | MulticallProvider) {
+    if (!provider.network.chainId)
+      throw 'ChainID is undefined for constructor of contract ConcaveNFTMarketplace'
+    const address = ConcaveNFTMarketplaceProxy[provider.network.chainId]
     if (!address) throw 'Address is undefined for constructor of contract ConcaveNFTMarketplace'
-    this.provider = concaveProvider(chainId)
     this.contract = new ethers.Contract(
-      ConcaveNFTMarketplaceProxy[chainId],
+      ConcaveNFTMarketplaceProxy[provider.network.chainId],
       ContractABI,
       this.provider,
     )
