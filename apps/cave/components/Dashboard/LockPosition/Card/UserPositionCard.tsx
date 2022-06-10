@@ -16,7 +16,7 @@ export const UserPositionCard = (props: NftPositionCardProps) => {
       pos={'relative'}
       borderRadius={'2xl'}
       maxHeight={{ lg: '300px', md: '400px' }}
-      maxWidth={{ lg: '700px', md: '520px' }}
+      maxWidth={{ lg: '700px', md: '520px', base: '352px' }}
       bg={{
         base: 'linear-gradient(223.18deg, #19394C 27.18%, #0A161F 96.11%)',
         md: 'linear-gradient(265.73deg, #274C63 0%, #182F3E 100%)',
