@@ -13,9 +13,13 @@ export const useBondSettings = () => useTransactionSettings('bond', defaultSetti
 // TODO: implement auto slippage
 const calculateAutoSlippage = () => 1.2
 
-export const Settings = ({ settings: { slippageTolerance, deadline }, setSetting }) => {
+export const Settings = ({
+  settings: { slippageTolerance, deadline },
+  setSetting,
+  isDefaultSettings = true,
+}) => {
   return (
-    <TransactionSettings>
+    <TransactionSettings isDefaultSettings={isDefaultSettings}>
       <SlippageTolerance
         value={slippageTolerance}
         onValueChange={(slippageTolerance) => setSetting({ slippageTolerance })}

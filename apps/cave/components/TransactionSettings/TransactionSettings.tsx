@@ -16,17 +16,23 @@ import { useLocalStorage } from 'react-use'
 export const useTransactionSettings = <T extends Object>(
   transactionType: string,
   defaultSettings: T,
-): [T, (v: Partial<T>) => void] => {
+): { settings: T; setSetting: (v: Partial<T>) => void; isDefaultSettings: boolean } => {
   const [settings, setSettings] = useLocalStorage(`${transactionType}-tx-settings`, defaultSettings)
-  return [settings, (s) => setSettings({ ...settings, ...s })]
+  return {
+    settings,
+    setSetting: (s) => setSettings({ ...settings, ...s }),
+    isDefaultSettings: JSON.stringify(settings) === JSON.stringify(defaultSettings),
+  }
 }
 
 export const TransactionSettings = ({
   trigger,
   children,
+  isDefaultSettings = true,
 }: {
   trigger?: ReactNode
   children: ReactNode
+  isDefaultSettings?: boolean
 }) => {
   return (
     <Popover placement="top-end" offset={[20, 5]} isLazy>
@@ -37,7 +43,13 @@ export const TransactionSettings = ({
             px={2}
             _focus={{ transform: 'scale(1.12)', filter: 'drop-shadow(-1px 1px 2px #ffffff20)' }}
             _hover={{ transform: 'scale(1.06)', filter: 'drop-shadow(-1px 1px 2px #ffffff20)' }}
-            icon={<SettingsIcon viewBox="0 0 20 25" cursor={'pointer'} />}
+            icon={
+              <SettingsIcon
+                viewBox="0 0 20 25"
+                cursor="pointer"
+                stroke={isDefaultSettings ? 'text.low' : 'text.accent'}
+              />
+            }
             aria-label="settings"
           />
         )}

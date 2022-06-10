@@ -68,7 +68,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 }
 
 export function SwapPage({ currencies: serverPropsCurrencies }) {
-  const [settings, setSetting] = useSwapSettings()
+  const { settings, setSetting, isDefaultSettings } = useSwapSettings()
 
   const currencies = useMemo(
     () => serverPropsCurrencies?.map(currencyFromJson),
@@ -168,7 +168,11 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
                 mr="auto"
               />
               <GasPrice />
-              <Settings settings={settings} setSetting={setSetting} />
+              <Settings
+                settings={settings}
+                setSetting={setSetting}
+                isDefaultSettings={isDefaultSettings}
+              />
             </HStack>
 
             <Collapse style={{ overflow: 'visible' }} in={isDetailsOpen} animateOpacity>

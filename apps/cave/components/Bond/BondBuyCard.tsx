@@ -33,7 +33,7 @@ export function BondBuyCard(props: {
   const { currencyIn, currencyOut, userAddress, balance, signer, networkId } = useBondState()
   const [bondTransaction, setBondTransaction] = useState()
 
-  const [settings, setSetting] = useBondSettings()
+  const { settings, setSetting, isDefaultSettings } = useBondSettings()
   const [amountIn, setAmountIn] = useState<CurrencyAmount<Currency>>(toAmount('0', DAI[networkId]))
   // const [amountIn, setAmountIn] = useState<number>(0)
 
@@ -124,7 +124,11 @@ export function BondBuyCard(props: {
         <Flex flex={1} align={'center'} justify="end" minWidth={100} gap={2}>
           <GasPrice />
           <HStack align="center" justify="end" py={{ base: 0, md: 5, lg: 0, xl: 5 }}>
-            <Settings settings={settings} setSetting={setSetting} />
+            <Settings
+              settings={settings}
+              setSetting={setSetting}
+              isDefaultSettings={isDefaultSettings}
+            />
           </HStack>
         </Flex>
       </Flex>

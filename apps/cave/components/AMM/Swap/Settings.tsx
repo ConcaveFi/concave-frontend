@@ -43,9 +43,10 @@ const calculateAutoSlippage = () => 0.96
 export const Settings = ({
   settings: { slippageTolerance, deadline, multihops, expertMode },
   setSetting,
+  isDefaultSettings = true,
 }) => {
   return (
-    <TransactionSettings>
+    <TransactionSettings isDefaultSettings={isDefaultSettings}>
       <SlippageTolerance
         value={slippageTolerance}
         onValueChange={(slippageTolerance) => setSetting({ slippageTolerance })}
