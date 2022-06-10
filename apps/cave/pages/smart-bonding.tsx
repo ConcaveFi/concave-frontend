@@ -58,10 +58,10 @@ export function Bond() {
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
   const [txError, setTxError] = useState('')
   const [networkCNV, setNetworkCNV] = useState(CNV[networkId])
-  useCurrentSupportedNetworkId( networkId =>setNetworkCNV(CNV[networkId]))  
-  const  cnvPrice= useFiatPrice(networkCNV)
-  console.log("roi test ", cnvPrice?.price?.toSignificant(8))
-  console.log("bond spot price", bondSpotPrice)
+  useCurrentSupportedNetworkId((networkId) => setNetworkCNV(CNV[networkId]))
+  const cnvPrice = useFiatPrice(networkCNV)
+  console.log('roi test ', cnvPrice?.price?.toSignificant(8))
+  console.log('bond spot price', bondSpotPrice)
   const {
     isOpen: isOpenSubmitted,
     onClose: onCloseSubmitted,
@@ -104,7 +104,6 @@ export function Bond() {
       .catch((e) => {
         console.log(e)
       })
-
   }, [networkId])
 
   useEffect(() => {
@@ -114,13 +113,12 @@ export function Bond() {
           setBondSpotPrice(bondSpotPrice)
         })
         .catch(() => {})
-      
     }, 10000)
     if (intervalID !== interval) {
       clearTimeout(intervalID)
       setIntervalID(interval)
-
-    } return clearInterval()
+    }
+    return clearInterval()
   }, [networkId])
 
   useEffect(() => {
