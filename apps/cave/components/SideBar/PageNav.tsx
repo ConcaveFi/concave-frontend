@@ -3,7 +3,6 @@ import { Box, Collapse, Flex, Image, Spinner, Text } from '@concave/ui'
 import { useFiatPrice } from 'components/AMM/hooks/useFiatPrice'
 import { getBondSpotPrice } from 'components/Bond/BondState'
 import { ButtonLink, ButtonLinkProps } from 'components/ButtonLink'
-import { useGet_Cnv_DataQuery } from 'graphql/generated/graphql'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useDevice } from 'hooks/useDevice'
 import { useRouter } from 'next/router'
@@ -67,7 +66,7 @@ function PageNav() {
   const [liquidStakingHover, setLiquidStakingHover] = useState(false)
   const [swapHover, setSwapStakingHover] = useState(false)
   const device = useDevice()
-const  cnvPrice= useFiatPrice(CNV[currentSupportedNetworkId])
+  const cnvPrice = useFiatPrice(CNV[currentSupportedNetworkId])
   const roi = useQuery(
     ['bondROI', currentSupportedNetworkId, cnvPrice.price],
     async () => {
@@ -75,7 +74,7 @@ const  cnvPrice= useFiatPrice(CNV[currentSupportedNetworkId])
       const bondSpotPrice = await getBondSpotPrice(currentSupportedNetworkId)
       return getROI(cnvMarketPrice, bondSpotPrice)
     },
-    { enabled:cnvPrice.isSuccess && !!currentSupportedNetworkId, refetchInterval: 17000 },
+    { enabled: cnvPrice.isSuccess && !!currentSupportedNetworkId, refetchInterval: 17000 },
   )
 
   const liquidStakingPage =
