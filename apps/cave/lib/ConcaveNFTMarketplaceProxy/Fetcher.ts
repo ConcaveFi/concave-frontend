@@ -1,9 +1,9 @@
 import { createAlchemyWeb3, Nft } from '@alch/alchemy-web3'
-import { StakingV1ProxyAddress } from '@concave/marketplace-sdk'
+import { StakingV1Contract, StakingV1ProxyAddress } from '@concave/marketplace-sdk'
 import { MarketItemInfo, NonFungibleTokenInfo } from '@concave/marketplace-sdk'
 import { NEXT_PUBLIC_ALCHEMY_ID } from 'lib/env.conf'
-import { StakingV1Contract } from 'lib/StakingV1Proxy/StakingV1Contract'
-import { ConcaveNFTMarketplace } from './ConcaveNFTMarketplace'
+import { ConcaveNFTMarketplace } from '@concave/marketplace-sdk'
+import { concaveProvider } from 'lib/providers'
 
 const nftapi = NEXT_PUBLIC_ALCHEMY_ID
 
@@ -35,7 +35,7 @@ export const listAllNonFungibleTokensOnAddress = async (
 }
 
 export const fechMarketInfo = async (chainId: number, NFT: NonFungibleTokenInfo) => {
-  const contract = new ConcaveNFTMarketplace(chainId)
+  const contract = new ConcaveNFTMarketplace(concaveProvider(chainId))
   return MarketItemInfo.from({
     offer: contract.nftContractAuctions(NFT),
     itenId: contract.tokenIdToItemIds(NFT),
@@ -45,7 +45,7 @@ export const fechMarketInfo = async (chainId: number, NFT: NonFungibleTokenInfo)
 
 export const listUserNonFungibleTokenInfo = async (userAddress: string, chainId: number) => {
   console.log('listUserNonFungibleTokenInfo')
-  const stakingV1Contract = new StakingV1Contract(chainId)
+  const stakingV1Contract = new StakingV1Contract(concaveProvider(chainId))
   const usersNft = await listAllNonFungibleTokensOnAddress(userAddress, chainId, [
     StakingV1ProxyAddress[chainId],
   ])
