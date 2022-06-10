@@ -8,6 +8,7 @@ import {
   NumericInput,
   Stack,
   Text,
+  Tooltip,
 } from '@concave/ui'
 import { toPercent } from 'utils/toPercent'
 
@@ -26,9 +27,19 @@ export const SlippageTolerance = ({
 }: SlippageToleranceProps) => {
   return (
     <Stack align="flex-start">
-      <Text fontSize="sm">
-        Slippage tolerance <QuestionIcon w="18px" h="18px" />
-      </Text>
+      <HStack>
+        <Text fontSize="sm">Slippage tolerance</Text>
+        <Tooltip
+          label="Your transaction will revert if the price changes unfavorably by more than this percentage."
+          bg="gray.900"
+          color="white"
+          placement="bottom"
+          position="relative"
+          shouldWrapChildren
+        >
+          <QuestionIcon w="18px" h="18px" />
+        </Tooltip>
+      </HStack>
       <HStack>
         <Card shadow="Down Big" borderRadius="xl">
           <InputGroup px={3} variant="unstyled" size="sm" h="full">

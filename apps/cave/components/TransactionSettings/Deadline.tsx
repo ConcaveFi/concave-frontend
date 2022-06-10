@@ -1,12 +1,30 @@
 import { QuestionIcon } from '@concave/icons'
-import { Card, InputGroup, InputRightAddon, NumericInput, Stack, Text } from '@concave/ui'
+import {
+  Card,
+  HStack,
+  InputGroup,
+  InputRightAddon,
+  NumericInput,
+  Stack,
+  Text,
+  Tooltip,
+} from '@concave/ui'
 
 export const Deadline = ({ value, onValueChange }) => {
   return (
     <Stack align="start">
-      <Text fontSize="sm">
-        Transaction deadline <QuestionIcon />
-      </Text>
+      <HStack>
+        <Text fontSize="sm">Transaction deadline</Text>
+        <Tooltip
+          label="Your transaction will revert if it is pending for more than this period of time."
+          bg="gray.900"
+          color="white"
+          placement="bottom"
+          shouldWrapChildren
+        >
+          <QuestionIcon />
+        </Tooltip>
+      </HStack>
       <Card shadow="Down Big" borderRadius="xl">
         <InputGroup px={3} variant="unstyled" size="sm">
           <NumericInput
