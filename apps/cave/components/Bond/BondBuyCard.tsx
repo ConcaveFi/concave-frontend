@@ -11,13 +11,14 @@ import { useRecentTransactions } from 'hooks/useRecentTransactions'
 import React, { useEffect, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
 import { truncateNumber } from 'utils/truncateNumber'
+import { useFeeData } from 'wagmi'
 import { BondOutput } from './BondOutput'
 import { getBondAmountOut, getBondSpotPrice, purchaseBond, useBondState } from './BondState'
 import { ConfirmBondModal } from './ConfirmBond'
 import { DownwardIcon } from './DownwardIcon'
 import { Settings, useBondSettings } from './Settings'
+import { useQuery } from 'react-query'
 import { GasPrice } from 'components/AMM'
-
 export const twoDecimals = (s: string | number) => {
   const a = s.toString()
   return a.indexOf('.') > -1 ? a.slice(0, a.indexOf('.') + 3) : a
@@ -35,21 +36,22 @@ export function BondBuyCard(props: {
 
   const [settings, setSetting] = useBondSettings()
   const [amountIn, setAmountIn] = useState<CurrencyAmount<Currency>>(toAmount('0', DAI[networkId]))
-  // const [amountIn, setAmountIn] = useState<number>(0)
 
   useEffect(() => {
     setAmountIn(toAmount(0, DAI[networkId]))
   }, [networkId])
 
   const [amountOut, setAmountOut] = useState<string>()
-  const [bondSpotPrice, setBondSpotPrice] = useState<string>()
-
   const confirmModal = useDisclosure()
-  // const receiptModal = useDisclosure()
   const [hasClickedConfirm, setHasClickedConfirm] = useState(false)
   const AMMData = useGet_Amm_Cnv_PriceQuery()
 
   const currentPrice = AMMData?.data?.cnvData?.data?.last.toFixed(3)
+  const { data: bondSpotPrice } = useQuery(
+    ['bondSpotPrice', networkId],
+    async () => await getBondSpotPrice(networkId),
+    { enabled: !!networkId, refetchInterval: 17000 },
+  )
 
   const [txError, setTxError] = useState('')
   const {
@@ -57,16 +59,6 @@ export function BondBuyCard(props: {
     onClose: onCloseRejected,
     onOpen: onOpenRejected,
   } = useDisclosure()
-
-  useEffect(() => {
-    getBondSpotPrice(networkId, BOND_ADDRESS[networkId])
-      .then((bondSpotPrice) => {
-        setBondSpotPrice(bondSpotPrice)
-      })
-      .catch((e) => {
-        console.log(e)
-      })
-  }, [networkId, userAddress])
 
   const { addRecentTransaction } = useRecentTransactions()
 
@@ -214,8 +206,3 @@ export function BondBuyCard(props: {
     </Card>
   )
 }
-
-const spin = keyframes({
-  '0%': { transform: 'rotate(0deg)' },
-  '100%': { transform: 'rotate(360deg)' },
-})
