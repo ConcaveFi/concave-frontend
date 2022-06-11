@@ -78,7 +78,7 @@ function PageNav() {
   )
 
   const liquidStakingPage =
-    router.pathname === '/liquid-staking' || router.pathname === '/dashboard'
+    router.pathname === '/liquid-staking' || router.pathname === '/liquid-stake-positions'
   const swapPage =
     router.pathname === '/gemswap' ||
     router.pathname === '/pools' ||
@@ -130,8 +130,12 @@ function PageNav() {
             Stake
           </NavButton>
           <Collapse in={liquidStakingHover || liquidStakingPage || isMobile}>
-            <SubnavButton isActive={router.pathname === '/dashboard'} href="/dashboard" mt="1px">
-              Your Positions
+            <SubnavButton
+              isActive={router.pathname === '/liquid-stake-positions'}
+              href="/liquid-stake-positions"
+              mt="1px"
+            >
+              Your Stake Positions
             </SubnavButton>
           </Collapse>
         </Box>
