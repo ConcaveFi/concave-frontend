@@ -28,7 +28,7 @@ interface PriceFilterCardProps {
   icon?: string
 }
 
-export default function PriceFilterCard(props: PriceFilterCardProps) {
+export function PriceFilterCard(props: PriceFilterCardProps) {
   const { filter, sortType, title, icon, onChangeSorter, onRemoveSorter } = props
 
   const [hasSorter, setHasSorter] = useState(false)

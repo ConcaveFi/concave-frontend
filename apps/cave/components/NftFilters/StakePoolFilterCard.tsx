@@ -9,12 +9,12 @@ import {
   Text,
   useBreakpointValue,
 } from '@concave/ui'
-import { useState } from 'react'
-import ChooseButton from '../Marketplace/ChooseButton'
-import ToggleButton from './ToggleButton'
-import SearchFilterCard from './SearchFilterCard'
 import { title } from 'process'
+import { useState } from 'react'
+import { ChooseButton } from '../Marketplace/ChooseButton'
 import { NftSorter, NftSortOrder } from './hooks/useNftSort'
+import SearchFilterCard from './SearchFilterCard'
+import { ToggleButton } from './ToggleButton'
 
 interface StakePoolFilterCardProps {
   onChangeSorter: (sortType: NftSorter, order: NftSortOrder) => void
@@ -23,7 +23,7 @@ interface StakePoolFilterCardProps {
   onApplyFilters?: (filterType: any) => void
 }
 
-export default function StakePoolFilterCard(props: StakePoolFilterCardProps) {
+export function StakePoolFilterCard(props: StakePoolFilterCardProps) {
   const { onApplyFilters, onResetFilters, onChangeSorter, onRemoveSorter } = props
 
   const [hasSorter, setHasSorter] = useState(false)

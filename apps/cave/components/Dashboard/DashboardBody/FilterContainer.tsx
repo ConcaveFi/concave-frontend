@@ -2,9 +2,9 @@ import { Flex, useBreakpointValue } from '@concave/ui'
 import { MetalBox } from 'components/MetalBox'
 import { NftRangeFilter } from 'components/NftFilters/hooks/useNftFilter'
 import { NftSorter, NftSortOrder } from 'components/NftFilters/hooks/useNftSort'
-import PriceFilterCard from 'components/NftFilters/PriceFilterCard'
-import SorterCard from 'components/NftFilters/SorterCard'
-import StakePoolFilterCard from 'components/NftFilters/StakePoolFilterCard'
+import { PriceFilterCard } from 'components/NftFilters/PriceFilterCard'
+import { SorterCard } from 'components/NftFilters/SorterCard'
+import { StakePoolFilterCard } from 'components/NftFilters/StakePoolFilterCard'
 
 interface FilterContainerProps {
   onAddFilter?: (filter: NftRangeFilter, { min, max }: { min: number; max: number }) => void
@@ -12,7 +12,7 @@ interface FilterContainerProps {
   onRemoveSorter: (sorter: NftSorter) => void
 }
 
-export default function FilterContainer(props: FilterContainerProps) {
+export function FilterContainer(props: FilterContainerProps) {
   const { onAddFilter, onAddSorter, onRemoveSorter } = props
 
   const mobileUI = useBreakpointValue({ base: true, md: false })

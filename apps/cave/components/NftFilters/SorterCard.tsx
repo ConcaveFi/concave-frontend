@@ -24,7 +24,7 @@ interface SorterCardProps {
   highestButtonName?: string
 }
 
-export default function SorterCard(props: SorterCardProps) {
+export function SorterCard(props: SorterCardProps) {
   const {
     sorterType,
     onChangeSorter,
