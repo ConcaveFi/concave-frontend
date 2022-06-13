@@ -6,7 +6,7 @@ interface ChooseButtonProps {
   backgroundType?: 'default' | 'blue'
 }
 
-export default function ChooseButton(props: ChooseButtonProps) {
+export function ChooseButton(props: ChooseButtonProps) {
   const { title, backgroundType } = props
   const background =
     backgroundType == 'blue' ? 'linear-gradient(90deg, #72639B 0%, #44B9DE 100%)' : ''

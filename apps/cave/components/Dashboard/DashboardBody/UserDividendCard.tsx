@@ -6,7 +6,7 @@ interface UserDividendCardProps {
   totalLocked: BigNumber
   isLoading: boolean
 }
-const UserDividendCard = (props: UserDividendCardProps) => {
+export const UserDividendCard = (props: UserDividendCardProps) => {
   const mobileLayout = useBreakpointValue({ base: true, md: false })
   if (mobileLayout)
     return (
@@ -26,7 +26,6 @@ const UserDividendCard = (props: UserDividendCardProps) => {
     </Box>
   )
 }
-export default UserDividendCard
 
 const DividendContent = (props: UserDividendCardProps) => {
   const { isLoading, totalLocked } = props
@@ -72,9 +71,7 @@ const RedeemButton = ({ ...props }) => {
       fontWeight="bold"
       fontSize="md"
       variant={redeemable ? 'primary.outline' : ''}
-      w="160px"
-      h="40px"
-      size="large"
+      size="md"
       shadow="down"
       mx={6}
       _focus={{}}

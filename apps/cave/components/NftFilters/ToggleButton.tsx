@@ -10,7 +10,7 @@ interface ToggleButtonProps {
   onClick?: (props: ToggleButtonProps) => void
 }
 
-export default function ToggleButton(props: ToggleButtonProps) {
+export function ToggleButton(props: ToggleButtonProps) {
   const { title, height, width, flexGrow } = props
   const active = !!props.active
   const textColor = active ? 'white' : '#5F7A99'

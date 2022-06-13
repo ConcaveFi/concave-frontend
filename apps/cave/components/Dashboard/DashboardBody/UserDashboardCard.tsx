@@ -1,15 +1,4 @@
-import {
-  Box,
-  Button,
-  Card,
-  Collapse,
-  Flex,
-  Spinner,
-  Text,
-  useBreakpoint,
-  useBreakpointValue,
-} from '@concave/ui'
-import { MetalBox } from 'components/MetalBox'
+import { Box, Button, Collapse, Flex, Spinner, Text, useBreakpointValue } from '@concave/ui'
 import { NftRangeFilters, useNftFilter } from 'components/NftFilters/hooks/useNftFilter'
 import { NftSorters, useNftSort } from 'components/NftFilters/hooks/useNftSort'
 import { UseDashBoardState } from 'contracts/DashBoard/DashBoardState'
@@ -17,8 +6,7 @@ import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useConnect } from 'wagmi'
 import { UserPositionCard } from '../LockPosition/Card/UserPositionCard'
-import FilterContainer from './FilterContainer'
-import UserDividendCard from './UserDividendCard'
+import { UserDividendCard } from './UserDividendCard'
 
 export const UserDashboardCard = ({ data }: { data: UseDashBoardState }) => {
   const { isConnected } = useConnect()
@@ -79,8 +67,11 @@ export const UserDashboardCard = ({ data }: { data: UseDashBoardState }) => {
             {userNonFungibleTokensInfo
               .filter(filterByRange)
               .sort(sorter)
-              .map((nonFungibleTokenInfo, index) => (
-                <UserPositionCard key={index} nonFungibleTokenInfo={nonFungibleTokenInfo} />
+              .map((nonFungibleTokenInfo) => (
+                <UserPositionCard
+                  key={+nonFungibleTokenInfo.tokenId.toString()}
+                  nonFungibleTokenInfo={nonFungibleTokenInfo}
+                />
               ))}
           </Box>
         </Collapse>
