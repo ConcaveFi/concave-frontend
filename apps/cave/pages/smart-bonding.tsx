@@ -60,8 +60,6 @@ export function Bond() {
   const [networkCNV, setNetworkCNV] = useState(CNV[networkId])
   useCurrentSupportedNetworkId((networkId) => setNetworkCNV(CNV[networkId]))
   const cnvPrice = useFiatPrice(networkCNV)
-  console.log('cnv price ', cnvPrice?.price?.toSignificant(8))
-  console.log('bond spot price', bondSpotPrice)
   const {
     isOpen: isOpenSubmitted,
     onClose: onCloseSubmitted,
