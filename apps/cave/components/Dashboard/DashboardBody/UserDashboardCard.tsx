@@ -8,9 +8,9 @@ import { useConnect } from 'wagmi'
 import { UserPositionCard } from '../LockPosition/Card/UserPositionCard'
 import { UserDividendCard } from './UserDividendCard'
 
-export const UserDashboardCard = ({ data }: { data: UseDashBoardState }) => {
+export const UserDashboardCard = ({ stakePositions }: { stakePositions: UseDashBoardState }) => {
   const { isConnected } = useConnect()
-  const { userNonFungibleTokensInfo, totalLocked, isLoading } = data
+  const { userNonFungibleTokensInfo, totalLocked, isLoading } = stakePositions
   const hasPositions = userNonFungibleTokensInfo.length !== 0
 
   // filters and sorters
