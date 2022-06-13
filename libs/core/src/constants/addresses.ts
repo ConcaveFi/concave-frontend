@@ -1,9 +1,14 @@
 import { AddressMap } from '../types'
 import { ChainId } from '../enums'
 
+export const MARKETPLACE_CONTRACT: AddressMap = {
+  [ChainId.ETHEREUM]: '',
+  [ChainId.RINKEBY]: '0x6Cc7F744f720e01834F0b497519e22e921FDF161',
+}
+
 export const STAKING_CONTRACT: AddressMap = {
   [ChainId.ETHEREUM]: '0x93c3A816242E50Ea8871A29BF62cC3df58787FBD',
-  [ChainId.RINKEBY]: '0xb0f7D17A61b1fA6A91D855D6c28f809687Ae8a2F',
+  [ChainId.RINKEBY]: '0xB9E431Fc34152246BB28453b6ce117829E8A5B0C',
 }
 
 export const BOND_ADDRESS: AddressMap = {

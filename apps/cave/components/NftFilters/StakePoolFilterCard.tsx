@@ -13,7 +13,7 @@ import { title } from 'process'
 import { useState } from 'react'
 import { ChooseButton } from '../Marketplace/ChooseButton'
 import { NftSorter, NftSortOrder } from './hooks/useNftSort'
-import SearchFilterCard from './SearchFilterCard'
+import { SearchFilterCard } from './SearchFilterCard'
 import { ToggleButton } from './ToggleButton'
 
 interface StakePoolFilterCardProps {

@@ -10,8 +10,8 @@ import {
 } from '@concave/ui'
 import { useState } from 'react'
 import { NftSorter, NftSortOrder } from './hooks/useNftSort'
-import SearchFilterCard from './SearchFilterCard'
-import ToggleButton from './ToggleButton'
+import { SearchFilterCard } from './SearchFilterCard'
+import { ToggleButton } from './ToggleButton'
 
 interface SorterCardProps {
   onChangeSorter: (sortType: NftSorter, order: NftSortOrder) => void

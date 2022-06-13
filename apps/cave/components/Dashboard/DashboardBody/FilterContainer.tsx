@@ -31,7 +31,6 @@ export function FilterContainer(props: FilterContainerProps) {
         <StakePoolFilterCard
           onChangeSorter={onAddSorter}
           onRemoveSorter={onRemoveSorter}
-          onApplyFilters={(filterByDay) => {}}
           onResetFilters={() => {}}
         />
         <SorterCard

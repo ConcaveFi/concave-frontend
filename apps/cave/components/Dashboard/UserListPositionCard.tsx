@@ -1,7 +1,7 @@
 import { CNV, Currency, CurrencyAmount } from '@concave/core'
 import { MarketItemInfo, Offer } from '@concave/marketplace'
 import { Box, Button, Flex, HStack, NumericInput, Text, VStack } from '@concave/ui'
-import ChooseButton from 'components/Marketplace/ChooseButton'
+import { ChooseButton } from 'components/Marketplace/ChooseButton'
 import { BigNumber } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useEffect, useState } from 'react'
