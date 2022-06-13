@@ -1,5 +1,5 @@
-import { Text, VStack, HStack, Flex, Button, Box } from '@concave/ui'
-import { GasIcon, RedeemIcon, LinesIcon, DiscountIcon, PriceIcon, StakeIcon } from '@concave/icons'
+import { DiscountIcon, GasIcon, LinesIcon, PriceIcon, RedeemIcon, StakeIcon } from '@concave/icons'
+import { Box, Flex, Text } from '@concave/ui'
 
 interface SearchFilterCardProps {
   title: string
@@ -7,7 +7,7 @@ interface SearchFilterCardProps {
   hasFilter?: boolean
 }
 
-const SearchFilterCard = (props: SearchFilterCardProps) => {
+export const SearchFilterCard = (props: SearchFilterCardProps) => {
   const { title, icon, hasFilter } = props
 
   return (
@@ -56,4 +56,3 @@ const SearchFilterCard = (props: SearchFilterCardProps) => {
     </Flex>
   )
 }
-export default SearchFilterCard

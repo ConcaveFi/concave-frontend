@@ -1,5 +1,6 @@
 import { createAlchemyWeb3, Nft } from '@alch/alchemy-web3'
-import { StakingV1Contract, StakingV1ProxyAddress } from '@concave/marketplace'
+import { StakingV1Contract } from '@concave/marketplace'
+import { STAKING_CONTRACT } from '@concave/core'
 import { MarketItemInfo, NonFungibleTokenInfo } from '@concave/marketplace'
 import { ConcaveNFTMarketplace } from '@concave/marketplace'
 import { BaseProvider } from '@ethersproject/providers'
@@ -49,7 +50,7 @@ export const listUserNonFungibleTokenInfo = async (
   const stakingV1Contract = new StakingV1Contract(provider)
   const chainId = provider.network.chainId
   const usersNft = await listAllNonFungibleTokensOnAddress(userAddress, chainId, alchemy, [
-    StakingV1ProxyAddress[chainId],
+    STAKING_CONTRACT[chainId],
   ])
   return Promise.all(
     usersNft.map(async ({ id, contract }: Nft) => {

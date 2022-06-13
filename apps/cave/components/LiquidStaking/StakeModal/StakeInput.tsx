@@ -1,5 +1,5 @@
-import { CNV, Currency, CurrencyAmount } from '@concave/core'
-import { StakingV1Contract, StakingV1ProxyAddress } from '@concave/marketplace'
+import { CNV, Currency, CurrencyAmount, STAKING_CONTRACT } from '@concave/core'
+import { StakingV1Contract } from '@concave/marketplace'
 import { Box, Card, Flex, Text, useDisclosure } from '@concave/ui'
 import { ApproveButton } from 'components/ApproveButton/ApproveButton'
 import { CurrencyInputField } from 'components/CurrencyAmountField'
@@ -83,7 +83,7 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
             approveArgs={{
               currency: stakeInput.currency,
               amount: stakeInput.numerator,
-              spender: StakingV1ProxyAddress[stakeInput.currency.chainId],
+              spender: STAKING_CONTRACT[stakeInput.currency.chainId],
             }}
             mt={5}
             onClick={lock}

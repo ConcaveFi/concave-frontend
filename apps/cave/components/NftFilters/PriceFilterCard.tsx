@@ -10,12 +10,12 @@ import {
   Text,
   useBreakpointValue,
 } from '@concave/ui'
-import ChooseButton from 'components/Marketplace/ChooseButton'
-import ToggleButton from 'components/NftFilters/ToggleButton'
+import { ChooseButton } from 'components/Marketplace/ChooseButton'
+import { ToggleButton } from 'components/NftFilters/ToggleButton'
 import { useState } from 'react'
 import { NftRangeFilter } from './hooks/useNftFilter'
 import { NftSorter, NftSortOrder } from './hooks/useNftSort'
-import SearchFilterCard from './SearchFilterCard'
+import { SearchFilterCard } from './SearchFilterCard'
 
 interface PriceFilterCardProps {
   onChangeSorter: (sortType: NftSorter, order: NftSortOrder) => void
