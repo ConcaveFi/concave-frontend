@@ -67,15 +67,15 @@ function PageNav() {
   const [liquidStakingHover, setLiquidStakingHover] = useState(false)
   const [swapHover, setSwapStakingHover] = useState(false)
   const device = useDevice()
-const  cnvPrice= useFiatPrice(CNV[currentSupportedNetworkId])
+  const cnvPrice = useFiatPrice(CNV[currentSupportedNetworkId])
   const roi = useQuery(
     ['bondROI', currentSupportedNetworkId, cnvPrice.price],
     async () => {
-      const cnvMarketPrice = cnvPrice.price.toSignificant(8)
+      const cnvMarketPrice = cnvPrice?.price?.toSignificant(8)
       const bondSpotPrice = await getBondSpotPrice(currentSupportedNetworkId)
       return getROI(cnvMarketPrice, bondSpotPrice)
     },
-    { enabled:cnvPrice.isSuccess && !!currentSupportedNetworkId, refetchInterval: 17000 },
+    { enabled: cnvPrice.isSuccess && !!currentSupportedNetworkId, refetchInterval: 17000 },
   )
 
   const liquidStakingPage =
