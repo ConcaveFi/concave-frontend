@@ -93,7 +93,6 @@ export const getMarketPlaceButtonProps = (marketInfoState: UserMarketInfoState):
   if (marketInfo.error) {
     return { children: 'Comming Soom', disabled: true }
   }
-  console.log(marketInfo)
   if (!marketInfo.data.isMarketItem) {
     return { children: 'Create Market Item', onClick: createMarketItem }
   }
