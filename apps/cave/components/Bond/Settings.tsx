@@ -25,7 +25,7 @@ export const Settings = ({
         onValueChange={(slippageTolerance) => setSetting({ slippageTolerance })}
         onClickAuto={() => setSetting({ slippageTolerance: calculateAutoSlippage() })}
       />
-      <Deadline value={deadline} onValueChange={({ value }) => setSetting({ deadline: value })} />
+      <Deadline value={deadline} onValueChange={(deadline) => setSetting({ deadline })} />
     </TransactionSettings>
   )
 }
