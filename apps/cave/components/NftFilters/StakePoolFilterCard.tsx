@@ -20,11 +20,10 @@ interface StakePoolFilterCardProps {
   onChangeSorter: (sortType: NftSorter, order: NftSortOrder) => void
   onRemoveSorter: (sortType: NftSorter) => void
   onResetFilters?: () => void
-  onApplyFilters?: (filterType: any) => void
 }
 
 export function StakePoolFilterCard(props: StakePoolFilterCardProps) {
-  const { onApplyFilters, onResetFilters, onChangeSorter, onRemoveSorter } = props
+  const { onResetFilters, onChangeSorter, onRemoveSorter } = props
 
   const [hasSorter, setHasSorter] = useState(false)
   const [hasFilter, setHasFilter] = useState(false)
@@ -69,11 +68,7 @@ export function StakePoolFilterCard(props: StakePoolFilterCardProps) {
                 onAddSorter={onChangeSorter}
                 onRemoveSorter={onRemoveSorter}
               />
-              <Periods
-                onChangeFilter={setHasFilter}
-                onReset={onResetFilters}
-                onApply={onApplyFilters}
-              />
+              <Periods onChangeFilter={setHasFilter} onReset={onResetFilters} />
             </Box>
           </Flex>
         </PopoverContent>
@@ -142,13 +137,11 @@ function PeriodSorts(props: PeriodSortsProps) {
 }
 
 interface PeriodsProps {
-  onApply: (filterType: any) => void
   onReset: () => void
   onChangeFilter: (hasFilter: boolean) => void
 }
 
 const Periods = (props: PeriodsProps) => {
-  const { onApply: onApplyFilter, onReset, onChangeFilter } = props
   const [currentButton, setCurrentButton] = useState('None')
   const periodButtons = [
     { title: 'None' },
