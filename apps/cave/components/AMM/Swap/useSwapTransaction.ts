@@ -46,15 +46,20 @@ export const useSwapTransaction = (
       const tx = await routerContract[methodName](...args, { value })
       setState({ ...initialState, trade, isTransactionSent: true, data: tx })
       onTransactionSent(tx)
-      addRecentTransaction({
-        amount: +trade.inputAmount.toSignificant(3),
-        amountTokenName: trade.inputAmount.currency.symbol,
-        purchaseTokenName: trade.outputAmount.currency.symbol,
-        purchase: +trade.outputAmount.toSignificant(3),
+      registerTransaction({
         transaction: tx,
-        type: 'Swap',
-        loading: true,
+        type: 'swap',
+        description: `${trade.inputAmount.toString()} for ${trade.outputAmount.toString()}`,
       })
+      // addRecentTransaction({
+      //   amount: +trade.inputAmount.toSignificant(3),
+      //   amountTokenName: trade.inputAmount.currency.symbol,
+      //   purchaseTokenName: trade.outputAmount.currency.symbol,
+      //   purchase: +trade.outputAmount.toSignificant(3),
+      //   transaction: tx,
+      //   type: 'Swap',
+      //   loading: true,
+      // })
     } catch (error) {
       if (error.message === 'User rejected the transaction')
         return setState({ ...initialState, trade, isWaitingForConfirmation: false })
