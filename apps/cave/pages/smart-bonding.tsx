@@ -63,7 +63,8 @@ export function Bond() {
   } = useDisclosure()
   const { isOpen: isOpenError, onClose: onCloseError, onOpen: onOpenError } = useDisclosure()
   const { data: last10SoldsData, isLoading, error } = useGet_Accrualbondv1_Last10_SoldQuery()
-
+  console.log(cnvMarketPrice, 'market')
+  console.log(bondSpotPrice, 'bondSpotPrice')
   function updateBondPositions() {
     getUserBondPositions(networkId, userAddress, currentBlockTs)
       .then((bondSigma) => {
