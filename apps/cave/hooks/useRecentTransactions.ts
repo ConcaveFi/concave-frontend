@@ -1,18 +1,63 @@
+import { ChainId, CNV, Currency, CurrencyAmount, Token } from '@concave/core'
+import { Pair, Trade, TradeType } from '@concave/gemswap-sdk'
 import { Transaction } from 'ethers'
-import { concaveProvider } from 'lib/providers'
-import { useEffect, useState } from 'react'
-import { useQueries, useQuery } from 'react-query'
-import { text } from 'stream/consumers'
-import { useAccount, useWaitForTransaction } from 'wagmi'
+import { useState } from 'react'
+import { useQuery } from 'react-query'
+import { useAccount, useWaitForTransaction, useWebSocketProvider } from 'wagmi'
 import { useCurrentSupportedNetworkId } from './useCurrentSupportedNetworkId'
-import { useIsMounted } from './useIsMounted'
+
+export const getRecentTransactions = (accountAddress: string, chainId: number) =>
+  (JSON.parse(localStorage.getItem('recentTransactions')) || {}) as RecentTxList
+
+type RecentTxList = { [key: string]: RecentTransaction }
+
+type ApproveTransaction = {
+  type: 'Approve'
+  transaction: Transaction
+  token: Token
+}
+
+type SwapTransaction = {
+  type: 'Swap'
+  trade: Trade<Currency, Currency, TradeType>
+}
+
+type AddLiquidityTransaction = {
+  type: 'Swap'
+  pair: Pair
+}
+
+type BondTransaction = {
+  type: 'Bond'
+  amountIn: CurrencyAmount<Currency>
+  amountOut: CurrencyAmount<Currency>
+}
+
+type StakeTransaction = {
+  type: 'Stake'
+  amount: CurrencyAmount<Token>
+}
+
+export type RecentTransaction = {
+  type: 'Swap' | 'Bond' | 'Stake' | 'Liq'
+  loading: boolean
+  amount: number
+  amountTokenName: string
+  purchase?: number
+  purchaseTokenName?: string
+  stakePool?: string
+  transaction: Transaction
+  status?: 'success' | 'error'
+}
 
 const clearRecentTransactions = () => localStorage.setItem('recentTransactions', JSON.stringify({}))
 
 export function useRecentTransactions() {
   const { data: account } = useAccount()
   const networkdID = useCurrentSupportedNetworkId()
-  const provider = concaveProvider(networkdID)
+
+  const provider = useWebSocketProvider()
+
   const data = getRecentTransactions(account?.address, networkdID)
   const [status, setStatus] = useState<'pending' | 'loaded'>('pending')
 
@@ -57,23 +102,6 @@ export function useRecentTransactions() {
     clearRecentTransactions,
     addRecentTransaction,
   }
-}
-
-export const getRecentTransactions = (accountAddress: string, chainId: number) =>
-  (JSON.parse(localStorage.getItem('recentTransactions')) || {}) as RecentTxList
-
-type RecentTxList = { [key: string]: RecentTransaction }
-
-export type RecentTransaction = {
-  type: 'Swap' | 'Bond' | 'Stake' | 'Liq'
-  loading: boolean
-  amount: number
-  amountTokenName: string
-  purchase?: number
-  purchaseTokenName?: string
-  stakePool?: string
-  transaction: Transaction
-  status?: 'success' | 'error'
 }
 
 const txStatus = {

@@ -1,6 +1,6 @@
 import { ChainId, CHAIN_NAME, CNV, Currency, DAI, ROUTER_ADDRESS } from '@concave/core'
 import { Trade, TradeType } from '@concave/gemswap-sdk'
-import { Card, Collapse, Flex, HStack, Stack, Text, useDisclosure } from '@concave/ui'
+import { useToast, Card, Collapse, Flex, HStack, Stack, Text, useDisclosure } from '@concave/ui'
 import {
   CandleStickCard,
   ConfirmSwapModal,
@@ -30,12 +30,14 @@ import { ApproveButton } from 'components/ApproveButton/ApproveButton'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
 import { withPageTransition } from 'components/PageTransition'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
-import { ToastCard } from 'components/TransactionStatusToast/ToastCard'
+import { TransactionStatusToast } from 'components/TransactionStatusToast/ToastCard'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { LayoutGroup } from 'framer-motion'
+import ms from 'ms'
 import { GetServerSideProps } from 'next'
 import { useEffect, useMemo, useReducer, useState } from 'react'
+import { useEffectOnce } from 'react-use'
 import { toAmount } from 'utils/toAmount'
 
 const TradeDetails = ({
@@ -95,9 +97,13 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
     [trade],
   )
 
+  const { registerTransaction } = useTransactionManager()
   const [recipient, setRecipient] = useState('')
   const swapTx = useSwapTransaction(exactInTrade, settings, recipient, {
-    onTransactionSent: () => onChangeInput(toAmount(0, trade.data.inputAmount.currency)),
+    onTransactionSent: (tx) => {
+      onChangeInput(toAmount(0, trade.data.inputAmount.currency))
+      registerTransaction('swap', tx, exactInTrade)
+    },
   })
 
   const confirmationModal = useDisclosure()
@@ -121,12 +127,32 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
   return (
     <>
       <Flex wrap="wrap" justify="center" align="center" alignContent="center" w="100%" gap={10}>
-        <ToastCard
-          type="success"
-          title="Transaction pending"
-          body="Swapping dai for cnv"
-          link="1212"
-        />
+        <Stack>
+          {/* <TransactionStatusToast
+            type="info"
+            title="Info"
+            description="Swapping 25 DAI for 1 CNV"
+            link="1212"
+          /> */}
+          <TransactionStatusToast
+            type="error"
+            title="Transaction errored"
+            description="Could't swap 25 DAI for 1 CNV"
+            link="1212"
+          />
+          <TransactionStatusToast
+            type="pending"
+            title="Transaction pending"
+            description="Swapping dai for cnv"
+            link="1212"
+          />
+          <TransactionStatusToast
+            type="success"
+            title="Transaction success"
+            description="25 DAI was swapped for 1 CNV"
+            link="1212"
+          />
+        </Stack>
 
         <LayoutGroup>
           <CandleStickCard

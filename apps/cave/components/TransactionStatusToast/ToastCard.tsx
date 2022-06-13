@@ -1,19 +1,13 @@
-import { useToast, Stack, CloseButton, Card, Link, Text } from '@concave/ui'
+import { useToast, Stack, CloseButton, Card, Link, Text, CardProps } from '@concave/ui'
 import ms from 'ms'
 
-const TransactionStatusToastVariant = {
-  info: {
-    borderGradient:
-      'linear-gradient(41.89deg, #53399B 0.69%, #7DE0FF 38.19%, #504179 72.85%, #84E2FF 100%)',
-  },
-  success: {
-    borderGradient: 'linear-gradient(45deg, #48D89A 50%, #328E5D 10%, #259E59 100%)',
-  },
-  error: {
-    borderGradient: 'linear-gradient(45deg, #A54747 50%, #F79494 40%,red 100%)',
-  },
-  loading: {
-    borderGradient: 'url(/assets/borders/transaction-pending.svg)',
+type TransactionStatus = 'success' | 'error' | 'pending'
+
+const TransactionStatusToastVariant: Record<TransactionStatus, CardProps> = {
+  success: { borderGradient: '#48D89A' },
+  error: { borderGradient: '#A54747' },
+  pending: {
+    borderGradient: `url(/assets/borders/transaction-pending.svg)`,
   },
 }
 
@@ -25,7 +19,7 @@ interface TransactionStatusToastProps {
   onClose: () => void
 }
 
-const TransactionStatusToast = ({
+export const TransactionStatusToast = ({
   type,
   title,
   description,
@@ -59,6 +53,11 @@ const TransactionStatusToast = ({
   )
 }
 
+/* 
+  there is no way of styling a toast on the theme (without styling Alert) 
+  it is recomended to use a custom component
+  https://github.com/chakra-ui/chakra-ui/issues/2736#issuecomment-743159129
+*/
 const useTransactionStatusToast = () => {
   const toast = useToast({
     position: 'top-right',
@@ -66,9 +65,27 @@ const useTransactionStatusToast = () => {
     // render: //TransactionStatusToast,
   })
 
-  toast({
-    title: 'Transaction is pending',
-    description: 'swapping will be completed shortly',
-    status: 'loading',
-  })
+  return {
+    onSuccess: (description: string) => {
+      toast({
+        title: 'Transaction completed',
+        description,
+        isClosable: true,
+      })
+    },
+    onError: (description: string) => {
+      toast({
+        title: 'Transaction errored',
+        description,
+        isClosable: true,
+      })
+    },
+    onPending: (description: string) => {
+      toast({
+        title: 'Transaction is pending',
+        description,
+        isClosable: true,
+      })
+    },
+  }
 }

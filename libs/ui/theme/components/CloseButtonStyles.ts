@@ -3,7 +3,6 @@ import { ComponentSingleStyleConfig, theme } from '@chakra-ui/react'
 export const CloseButtonStyles: ComponentSingleStyleConfig = {
   baseStyle: {
     borderRadius: 'full',
-    border: 'solid 2px white',
   },
   sizes: {
     sm: {
@@ -13,7 +12,6 @@ export const CloseButtonStyles: ComponentSingleStyleConfig = {
   },
   variants: {
     subtle: {
-      border: 'none',
       fontSize: '10px',
       color: 'text.low',
       _hover: { color: 'text.high' },
