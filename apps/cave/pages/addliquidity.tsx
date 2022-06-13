@@ -13,8 +13,8 @@ import React, { useMemo } from 'react'
 
 export const getServerSideProps: GetServerSideProps = async ({ query, res }) => {
   const currencies = await fetchQueryCurrencies(query)
-  if (NODE_ENV !== 'development')
-    res.setHeader('Cache-Control', 'public, s-maxage=31536000, stale-while-revalidate')
+
+  res.setHeader('Cache-Control', 'public, s-maxage=31536000, stale-while-revalidate')
   return { props: { currencies: currencies.map(currencyToJson) } }
 }
 

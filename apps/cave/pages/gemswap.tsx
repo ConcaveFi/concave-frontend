@@ -65,8 +65,8 @@ export const getServerSideProps: GetServerSideProps = async ({ query, res }) => 
     currencies.filter(Boolean).length === 0
       ? defaultCurrencies[+query.chainId] || defaultCurrencies[1]
       : currencies
-  if (NODE_ENV !== 'development')
-    res.setHeader('Cache-Control', 'public, s-maxage=31536000, stale-while-revalidate')
+
+  res.setHeader('Cache-Control', 'public, s-maxage=31536000, stale-while-revalidate')
   return { props: { currencies: currenciesOrDefaults.map(currencyToJson) } }
 }
 
