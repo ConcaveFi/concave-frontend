@@ -6,12 +6,10 @@ import PriceFilterCard from 'components/NftFilters/PriceFilterCard'
 import SorterCard from 'components/NftFilters/SorterCard'
 import StakePoolFilterCard from 'components/NftFilters/StakePoolFilterCard'
 
-type NewType = NftSorter
-
 interface FilterContainerProps {
   onAddFilter?: (filter: NftRangeFilter, { min, max }: { min: number; max: number }) => void
   onAddSorter: (sorter: NftSorter, order: NftSortOrder) => void
-  onRemoveSorter: (sorter: NewType) => void
+  onRemoveSorter: (sorter: NftSorter) => void
 }
 
 export default function FilterContainer(props: FilterContainerProps) {
