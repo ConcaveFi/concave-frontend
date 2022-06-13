@@ -7,7 +7,7 @@ interface RedeemCardViewerProps {
 }
 const RedeemCardViewer = ({ nonFungibleTokenInfo }: RedeemCardViewerProps) => {
   const { curValue, initialBal, gainedAmt, maturity } = createRedeemState({ nonFungibleTokenInfo })
-
+  const readyForReedem = maturity < Date.now() / 1000
   return (
     <Box
       borderRadius="2xl"
@@ -45,18 +45,17 @@ const RedeemCardViewer = ({ nonFungibleTokenInfo }: RedeemCardViewerProps) => {
         <Button
           size={'md'}
           minW={{ base: '280px', md: '160px' }}
-          cursor={maturity > 0 ? 'default' : 'pointer'}
-          variant={maturity > 0 ? 'primary.outline' : 'primary'}
-          shadow={maturity > 0 ? 'down' : 'up'}
+          cursor={!readyForReedem ? 'default' : 'pointer'}
+          variant={!readyForReedem ? 'primary.outline' : 'primary'}
+          shadow={!readyForReedem ? 'down' : 'up'}
           _hover={{}}
           mx="auto"
           my={'auto'}
           mt="2px"
-          _active={maturity <= 0 && { transform: 'scale(0.9)' }}
           _focus={{}}
         >
-          <Text color={maturity > 0 ? 'text.low' : 'white'} fontSize={{ base: '2xl', md: 'sm' }}>
-            {maturity > 0 ? 'Not redeemable' : 'Redeem'}
+          <Text color={!readyForReedem ? 'text.low' : 'white'} fontSize={{ base: '2xl', md: 'sm' }}>
+            {!readyForReedem ? 'Not redeemable' : 'Redeem'}
           </Text>
         </Button>
       </Flex>
