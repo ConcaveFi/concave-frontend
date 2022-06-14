@@ -1,14 +1,18 @@
-import { Box, Button, Collapse, Flex, Spinner, Text } from '@concave/ui'
-import { UseStakePositionsState } from 'components/StakingPositions/DashboardBody/DashBoardState'
+import { Box, Button, Collapse, Flex, Spinner, Text, useBreakpointValue } from '@concave/ui'
 import { useRouter } from 'next/router'
 import { useConnect } from 'wagmi'
 import { UserPositionCard } from '../LockPosition/Card/UserPositionCard'
+import { UseStakePositionsState } from './DashBoardState'
 import { UserDividendCard } from './UserDividendCard'
 
 export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePositionsState }) => {
   const { isConnected } = useConnect()
   const { userNonFungibleTokensInfo, totalLocked, isLoading } = stakePosition
   const hasPositions = userNonFungibleTokensInfo.length !== 0
+
+  // filters and sorters
+
+  const mobileLayout = useBreakpointValue({ base: true, md: false })
 
   return (
     <Flex display={{ lg: 'flex', md: 'flex' }}>
@@ -45,10 +49,10 @@ export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePo
             apply="scrollbar.big"
             mb={3}
           >
-            {userNonFungibleTokensInfo.map((stakePosition) => (
+            {userNonFungibleTokensInfo.map((nonFungibleTokenInfo) => (
               <UserPositionCard
-                key={+stakePosition.tokenId.toString()}
-                stakingPosition={stakePosition}
+                key={+nonFungibleTokenInfo.tokenId.toString()}
+                stakingPosition={nonFungibleTokenInfo}
               />
             ))}
           </Box>
