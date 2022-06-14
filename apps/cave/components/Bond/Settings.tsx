@@ -17,9 +17,10 @@ export const Settings = ({
   settings: { slippageTolerance, deadline },
   setSetting,
   isDefaultSettings = true,
+  onClose,
 }) => {
   return (
-    <TransactionSettings isDefaultSettings={isDefaultSettings}>
+    <TransactionSettings isDefaultSettings={isDefaultSettings} onClose={onClose}>
       <SlippageTolerance
         value={slippageTolerance}
         onValueChange={(slippageTolerance) => setSetting({ slippageTolerance })}

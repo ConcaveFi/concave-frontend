@@ -33,7 +33,7 @@ export function BondBuyCard(props: {
   const { currencyIn, currencyOut, userAddress, balance, signer, networkId } = useBondState()
   const [bondTransaction, setBondTransaction] = useState()
 
-  const { settings, setSetting, isDefaultSettings } = useBondSettings()
+  const { settings, setSetting, isDefaultSettings, onClose } = useBondSettings()
   const [amountIn, setAmountIn] = useState<CurrencyAmount<Currency>>(toAmount('0', DAI[networkId]))
   // const [amountIn, setAmountIn] = useState<number>(0)
 
@@ -128,6 +128,7 @@ export function BondBuyCard(props: {
               settings={settings}
               setSetting={setSetting}
               isDefaultSettings={isDefaultSettings}
+              onClose={onClose}
             />
           </HStack>
         </Flex>
@@ -199,7 +200,7 @@ export function BondBuyCard(props: {
         minimumAmountOut={(+amountOut - (+settings.slippageTolerance / 100) * +amountOut).toFixed(
           3,
         )}
-        slippage={settings.slippageTolerance.toString()}
+        slippage={settings.slippageTolerance?.toString()}
       />
       <WaitingConfirmationDialog isOpen={hasClickedConfirm} title={'Confirm Bond'}>
         <Text fontSize="lg" color="text.accent">

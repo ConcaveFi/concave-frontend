@@ -10,17 +10,26 @@ import {
   Portal,
   Stack,
 } from '@concave/ui'
-import { ReactNode } from 'react'
+import { ReactNode, useCallback } from 'react'
 import { useLocalStorage } from 'react-use'
 
 export const useTransactionSettings = <T extends Object>(
   transactionType: string,
   defaultSettings: T,
-): { settings: T; setSetting: (v: Partial<T>) => void; isDefaultSettings: boolean } => {
+): {
+  settings: T
+  setSetting: (v: Partial<T>) => void
+  onClose: () => void
+  isDefaultSettings: boolean
+} => {
   const [settings, setSettings] = useLocalStorage(`${transactionType}-tx-settings`, defaultSettings)
+  const onClose = useCallback(() => {
+    setSettings({ ...defaultSettings, ...settings })
+  }, [defaultSettings, setSettings, settings])
   return {
     settings,
     setSetting: (s) => setSettings({ ...settings, ...s }),
+    onClose,
     isDefaultSettings: JSON.stringify(settings) === JSON.stringify(defaultSettings),
   }
 }
@@ -29,13 +38,15 @@ export const TransactionSettings = ({
   trigger,
   children,
   isDefaultSettings = true,
+  onClose,
 }: {
   trigger?: ReactNode
   children: ReactNode
   isDefaultSettings?: boolean
+  onClose: () => void
 }) => {
   return (
-    <Popover placement="top-end" offset={[20, 5]} isLazy>
+    <Popover placement="top-end" offset={[20, 5]} isLazy onClose={onClose}>
       <PopoverTrigger>
         {trigger || (
           <IconButton

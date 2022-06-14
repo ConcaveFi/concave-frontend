@@ -68,7 +68,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 }
 
 export function SwapPage({ currencies: serverPropsCurrencies }) {
-  const { settings, setSetting, isDefaultSettings } = useSwapSettings()
+  const { settings, setSetting, isDefaultSettings, onClose } = useSwapSettings()
 
   const currencies = useMemo(
     () => serverPropsCurrencies?.map(currencyFromJson),
@@ -172,6 +172,7 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
                 settings={settings}
                 setSetting={setSetting}
                 isDefaultSettings={isDefaultSettings}
+                onClose={onClose}
               />
             </HStack>
 
