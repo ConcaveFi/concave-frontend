@@ -1,8 +1,5 @@
-import { Box, Button, Collapse, Flex, Spinner, Text, useBreakpointValue } from '@concave/ui'
-import {
-  StakePoolFilter,
-  useFilterByStakePool,
-} from 'components/NftFilters/Filters/hooks/useFilterByStakePool'
+import { Box, Button, Collapse, Flex, Spinner, Text } from '@concave/ui'
+import { useFilterByStakePool } from 'components/NftFilters/Filters/hooks/useFilterByStakePool'
 import { UseDashBoardState } from 'contracts/DashBoard/DashBoardState'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
