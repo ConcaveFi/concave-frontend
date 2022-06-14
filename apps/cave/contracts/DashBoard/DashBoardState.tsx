@@ -6,8 +6,8 @@ import { concaveProvider } from 'lib/providers'
 import { useQuery } from 'react-query'
 import { useAccount } from 'wagmi'
 
-export type UseDashBoardState = ReturnType<typeof useDashBoardState>
-export const useDashBoardState = () => {
+export type UseStakePositionsState = ReturnType<typeof useStakePositions>
+export const useStakePositions = () => {
   const { data: account } = useAccount()
   const netWorkId = useCurrentSupportedNetworkId()
   const { data: userNonFungibleTokensInfo, isLoading } = useQuery(
