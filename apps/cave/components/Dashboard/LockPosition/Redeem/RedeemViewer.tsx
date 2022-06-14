@@ -18,13 +18,7 @@ const RedeemCardViewer = ({ nonFungibleTokenInfo }: RedeemCardViewerProps) => {
       px={{ base: 0, md: 0 }}
       maxW={{ base: '353px', md: '500px', lg: '720px' }}
     >
-      <Flex
-        // justify={{ lg: 'left', md: 'center' }}
-
-        gap={3}
-        flex={1}
-        direction={{ base: 'column', md: 'row' }}
-      >
+      <Flex gap={3} flex={1} direction={{ base: 'column', md: 'row' }}>
         <Flex ml={{ lg: 7 }} mx="auto">
           <Info
             label="Current Value"
@@ -52,6 +46,7 @@ const RedeemCardViewer = ({ nonFungibleTokenInfo }: RedeemCardViewerProps) => {
           mx="auto"
           my={'auto'}
           mt="2px"
+          _active={readyForReedem && { transform: 'scale(0.9)' }}
           _focus={{}}
         >
           <Text color={!readyForReedem ? 'text.low' : 'white'} fontSize={{ base: '2xl', md: 'sm' }}>

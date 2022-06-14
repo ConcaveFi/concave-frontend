@@ -1,5 +1,5 @@
 import { NonFungibleTokenInfo } from '@concave/marketplace'
-import { Box, Button, Flex, Modal, ModalContent, ModalOverlay, Text } from '@concave/ui'
+import { Box, Button, Flex, Modal, Text } from '@concave/ui'
 import { Loading } from 'components/Loading'
 import { formatFixed } from 'utils/formatFixed'
 import { ListPositionForSale, useListeForSaleState } from '../../UserListPositionCard'
@@ -75,16 +75,22 @@ export const ListForSaleModal = ({ marketInfoState }: { marketInfoState: UserMar
   const listForSaleState = useListeForSaleState({ marketInfoState })
   return (
     <Modal
+      bluryOverlay
       title=""
       size={'xs'}
       isOpen={marketInfoState.offerDisclosure.isOpen}
       onClose={marketInfoState.offerDisclosure.onClose}
       isCentered
+      hideClose
+      bodyProps={{
+        minW: 350,
+        p: 0,
+        rounded: '2xl',
+        shadow: 'up',
+        variant: 'primary',
+      }}
     >
-      <ModalOverlay bg={'none'} backdropBlur="4px" zIndex={0} />
-      <ModalContent>
-        <ListPositionForSale state={listForSaleState} />
-      </ModalContent>
+      <ListPositionForSale listForSaleState={listForSaleState} />
     </Modal>
   )
 }
