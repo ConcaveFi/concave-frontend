@@ -36,13 +36,7 @@ export const UserPositionCard = (props: NftPositionCardProps) => {
             {active && <MarketListing nonFungibleTokenInfo={nonFungibleTokenInfo} />}
           </Collapse>
         </Flex>
-        {/* <Flex w={'full'} direction={'column'}>
-            <DividendsShare />
-          </Flex> */}
       </Flex>
-      {/* <Collapse in={active}> */}
-      {/* <DividendsShare /> */}
-      {/* </Collapse> */}
     </Box>
   )
 }
