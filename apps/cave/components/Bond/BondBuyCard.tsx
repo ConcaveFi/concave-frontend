@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, DAI } from '@concave/core'
+import { CNV, Currency, CurrencyAmount, DAI } from '@concave/core'
 import { Card, Flex, HStack, keyframes, Spinner, Text, useDisclosure, VStack } from '@concave/ui'
 import { ApproveButton } from 'components/ApproveButton/ApproveButton'
 import { CurrencyInputField as BondInput } from 'components/CurrencyAmountField'
@@ -17,6 +17,9 @@ import { ConfirmBondModal } from './ConfirmBond'
 import { DownwardIcon } from './DownwardIcon'
 import { Settings, useBondSettings } from './Settings'
 import { GasPrice } from 'components/AMM'
+import { useFiatPrice } from 'components/AMM/hooks/useFiatPrice'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import { formatFixed } from 'utils/formatFixed'
 
 export const twoDecimals = (s: string | number) => {
   const a = s.toString()
@@ -47,10 +50,10 @@ export function BondBuyCard(props: {
   const confirmModal = useDisclosure()
   // const receiptModal = useDisclosure()
   const [hasClickedConfirm, setHasClickedConfirm] = useState(false)
-  const AMMData = useGet_Amm_Cnv_PriceQuery()
-
-  const currentPrice = AMMData?.data?.cnvData?.data?.last.toFixed(3)
-
+  const [networkCNV, setNetworkCNV] = useState(CNV[networkId])
+  useCurrentSupportedNetworkId((networkId) => setNetworkCNV(CNV[networkId]))
+  const cnvPrice = useFiatPrice(networkCNV)
+  console.log(cnvPrice, 'cnv object')
   const [txError, setTxError] = useState('')
   const {
     isOpen: isOpenRejected,
@@ -105,9 +108,7 @@ export function BondBuyCard(props: {
           <HStack alignSelf={'start'}>
             <Text textColor={'text.low'}>Current Price:</Text>
             <Text textColor={'text.low'} opacity="0.7">
-              {currentPrice
-                ? '$' + truncateNumber(+currentPrice * 10 ** 18, 3) + ' CNV'
-                : 'Loading . . .'}
+              {cnvPrice.price ? '$' + cnvPrice.price?.toFixed(2) + ' CNV' : 'Loading . . .'}
             </Text>
           </HStack>
           <HStack alignSelf={'start'}>
