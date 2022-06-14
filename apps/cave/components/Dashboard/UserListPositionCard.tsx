@@ -60,25 +60,22 @@ export const useListeForSaleState = ({ marketInfoState }: UserListPositionCardPr
   }
 }
 
-export const ListPositionForSale = ({ state }: { state: ListForSaleState }) => {
+export const ListPositionForSale = ({
+  listForSaleState,
+}: {
+  listForSaleState: ListForSaleState
+}) => {
   return (
-    <Box
-      minW={350}
-      rounded="2xl"
-      background={'linear-gradient(265.73deg, #274C63 0%, #182F3E 100%)'}
-      shadow="up"
-    >
-      <VStack direction={'column'} gap={1} pt={4} px={8} pb={0}>
-        <Type state={state} />
-        <CurrentValue currentValue={state.marketInfo.NFT.currentValue} />
-        <ListenPrice state={state} />
-        <BuyNowPrice state={state} />
-        <Discount state={state} />
-        <Flex pt={4} justifyContent="center">
-          <ChooseButton onClick={state.create} title={`List`} backgroundType="blue" />
-        </Flex>
-      </VStack>
-    </Box>
+    <VStack direction={'column'} gap={1} pt={4} px={8} pb={0}>
+      <Type state={listForSaleState} />
+      <CurrentValue currentValue={listForSaleState.marketInfo.NFT.currentValue} />
+      <ListenPrice state={listForSaleState} />
+      <BuyNowPrice state={listForSaleState} />
+      <Discount state={listForSaleState} />
+      <Flex pt={4} justifyContent="center">
+        <ChooseButton onClick={listForSaleState.create} title={`List`} backgroundType="blue" />
+      </Flex>
+    </VStack>
   )
 }
 
@@ -91,10 +88,10 @@ const Type = ({ state }: { state: ListForSaleState }) => {
       <Box width={'full'}>
         <Button
           width={'110px'}
-          height="30px"
+          height={'30px'}
           shadow={'Up Small'}
           onClick={state.handleMethod}
-          rounded="2xl"
+          rounded={'2xl'}
           fontWeight={'700'}
           _focus={{}}
         >
@@ -120,10 +117,10 @@ const ListenPrice = (props: { state: ListForSaleState }) => {
         <NumericInput
           width={'full'}
           shadow={'Down Big'}
-          maxWidth="110px"
-          height="30px"
+          maxWidth={'110px'}
+          height={'30px'}
           borderRadius={'2xl'}
-          pl="4"
+          pl={4}
           value={formatFixed(marketInfo.offer.minPrice)}
           onValueChange={(values, sourceInfo) => {
             if (sourceInfo.source === 'prop') return
