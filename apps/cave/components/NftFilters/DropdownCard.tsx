@@ -1,3 +1,4 @@
+import { ExpandArrowIcon } from '@concave/icons'
 import { Flex, FlexProps, StatDownArrow, Text } from '@concave/ui'
 
 type DropdownCard = {
@@ -12,6 +13,7 @@ export const DropdownCard: React.FC<DropdownCard & FlexProps> = ({ isOpen, title
       align="center"
       rounded={'lg'}
       gap="2"
+      px={2}
       minW="110px"
       height={'30px'}
       border="2px solid"
@@ -23,9 +25,10 @@ export const DropdownCard: React.FC<DropdownCard & FlexProps> = ({ isOpen, title
       <Text fontSize={'12px'} fontWeight="bold">
         {title}
       </Text>
-      <StatDownArrow
+      <ExpandArrowIcon
         color={'text.low'}
-        mt={'1'}
+        width="16px"
+        height={'30px'}
         transform={isOpen && 'rotate(180deg)'}
         transition="0.3s all"
       />
