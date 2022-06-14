@@ -1,4 +1,8 @@
 import { Box, Button, Collapse, Flex, Spinner, Text, useBreakpointValue } from '@concave/ui'
+import {
+  StakePoolFilter,
+  useFilterByStakePool,
+} from 'components/NftFilters/Filters/hooks/useFilterByStakePool'
 import { UseDashBoardState } from 'contracts/DashBoard/DashBoardState'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
@@ -11,7 +15,9 @@ export const UserDashboardCard = ({ stakePositions }: { stakePositions: UseDashB
   const { isConnected } = useConnect()
   const { userNonFungibleTokensInfo, totalLocked, isLoading } = stakePositions
   const hasPositions = userNonFungibleTokensInfo.length !== 0
-  const mobileLayout = useBreakpointValue({ base: true, md: false })
+
+  const [stakeFilters, setStakeFilters] = useState([])
+  const { filterByStakePool } = useFilterByStakePool(stakeFilters)
 
   return (
     <Flex display={{ lg: 'flex', md: 'flex' }}>
@@ -34,7 +40,12 @@ export const UserDashboardCard = ({ stakePositions }: { stakePositions: UseDashB
         <Flex justify="center" px={4} pt={4} position={'relative'}>
           <UserDividendCard isLoading={isLoading} totalLocked={totalLocked} />
         </Flex>
-        <FilterContainer />
+        <FilterContainer
+          onEnableFilter={(filter) => setStakeFilters([...stakeFilters, filter])}
+          onDisableFilter={(disabledFilter) =>
+            setStakeFilters(stakeFilters.filter((stakeFilter) => stakeFilter !== disabledFilter))
+          }
+        />
         <Collapse in={hasPositions}>
           <Box
             pos="relative"
@@ -49,7 +60,7 @@ export const UserDashboardCard = ({ stakePositions }: { stakePositions: UseDashB
             __css={scrollBar}
             mb={3}
           >
-            {userNonFungibleTokensInfo.map((nonFungibleTokenInfo) => (
+            {userNonFungibleTokensInfo.filter(filterByStakePool).map((nonFungibleTokenInfo) => (
               <UserPositionCard
                 key={+nonFungibleTokenInfo.tokenId.toString()}
                 nonFungibleTokenInfo={nonFungibleTokenInfo}

@@ -8,7 +8,6 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import { DropdownCard } from '../DropdownCard'
-
 export const RedeemDateFilter = () => {
   const { isOpen, onOpen, onClose, onToggle } = useDisclosure()
   return (
