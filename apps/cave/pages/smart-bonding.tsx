@@ -32,6 +32,7 @@ import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialo
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { utils } from 'ethers'
 import { useGet_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql'
+import { useCurrentCNVPrice } from 'hooks/useCurrentCNVPrice'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import React, { useEffect, useState } from 'react'
 import getROI from 'utils/getROI'
@@ -57,9 +58,8 @@ export function Bond() {
   const [clickedRedeemButton, setClickedRedeemButton] = useState(false)
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
   const [txError, setTxError] = useState('')
-  const [networkCNV, setNetworkCNV] = useState(CNV[networkId])
-  useCurrentSupportedNetworkId((networkId) => setNetworkCNV(CNV[networkId]))
-  const cnvPrice = useFiatPrice(networkCNV)
+
+  const cnvPrice = useCurrentCNVPrice()
   const {
     isOpen: isOpenSubmitted,
     onClose: onCloseSubmitted,

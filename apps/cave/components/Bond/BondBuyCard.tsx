@@ -20,6 +20,7 @@ import { GasPrice } from 'components/AMM'
 import { useFiatPrice } from 'components/AMM/hooks/useFiatPrice'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { formatFixed } from 'utils/formatFixed'
+import { useCurrentCNVPrice } from 'hooks/useCurrentCNVPrice'
 
 export const twoDecimals = (s: string | number) => {
   const a = s.toString()
@@ -50,9 +51,8 @@ export function BondBuyCard(props: {
   const confirmModal = useDisclosure()
   // const receiptModal = useDisclosure()
   const [hasClickedConfirm, setHasClickedConfirm] = useState(false)
-  const [networkCNV, setNetworkCNV] = useState(CNV[networkId])
-  useCurrentSupportedNetworkId((networkId) => setNetworkCNV(CNV[networkId]))
-  const cnvPrice = useFiatPrice(networkCNV)
+
+  const cnvPrice = useCurrentCNVPrice()
   console.log(cnvPrice, 'cnv object')
   const [txError, setTxError] = useState('')
   const {
