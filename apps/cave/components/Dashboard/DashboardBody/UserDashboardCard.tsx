@@ -1,6 +1,4 @@
 import { Box, Button, Collapse, Flex, Spinner, Text, useBreakpointValue } from '@concave/ui'
-import { NftRangeFilters, useNftFilter } from 'components/NftFilters/hooks/useNftFilter'
-import { NftSorters, useNftSort } from 'components/NftFilters/hooks/useNftSort'
 import { UseDashBoardState } from 'contracts/DashBoard/DashBoardState'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
@@ -14,10 +12,6 @@ export const UserDashboardCard = ({ stakePositions }: { stakePositions: UseDashB
   const hasPositions = userNonFungibleTokensInfo.length !== 0
 
   // filters and sorters
-  const [sorters, setSorters] = useState<NftSorters>({})
-  const [filters, setFilters] = useState<NftRangeFilters>({})
-  const { sorter } = useNftSort(sorters)
-  const { filterByRange } = useNftFilter(filters)
 
   const mobileLayout = useBreakpointValue({ base: true, md: false })
 
@@ -64,15 +58,12 @@ export const UserDashboardCard = ({ stakePositions }: { stakePositions: UseDashB
             __css={scrollBar}
             mb={3}
           >
-            {userNonFungibleTokensInfo
-              .filter(filterByRange)
-              .sort(sorter)
-              .map((nonFungibleTokenInfo) => (
-                <UserPositionCard
-                  key={+nonFungibleTokenInfo.tokenId.toString()}
-                  nonFungibleTokenInfo={nonFungibleTokenInfo}
-                />
-              ))}
+            {userNonFungibleTokensInfo.map((nonFungibleTokenInfo) => (
+              <UserPositionCard
+                key={+nonFungibleTokenInfo.tokenId.toString()}
+                nonFungibleTokenInfo={nonFungibleTokenInfo}
+              />
+            ))}
           </Box>
         </Collapse>
 
