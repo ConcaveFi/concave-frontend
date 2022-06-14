@@ -66,7 +66,7 @@ function PageNav() {
   const [liquidStakingHover, setLiquidStakingHover] = useState(false)
   const [swapHover, setSwapStakingHover] = useState(false)
   const device = useDevice()
-  const cnvPrice = useFiatPrice(CNV[1])
+  const cnvPrice = useFiatPrice(CNV[currentSupportedNetworkId])
   const roi = useQuery(
     ['bondROI', currentSupportedNetworkId, cnvPrice.price],
     async () => {
