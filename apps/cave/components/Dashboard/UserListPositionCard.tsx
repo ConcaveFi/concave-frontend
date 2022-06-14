@@ -117,9 +117,8 @@ const ListenPrice = (props: { state: ListForSaleState }) => {
         <NumericInput
           width={'full'}
           shadow={'Down Big'}
-          maxWidth={'110px'}
-          height={'30px'}
-          borderRadius={'2xl'}
+          borderRadius={'full'}
+          p={1}
           pl={4}
           value={formatFixed(marketInfo.offer.minPrice)}
           onValueChange={(values, sourceInfo) => {
@@ -148,10 +147,9 @@ const BuyNowPrice = (props: { state: ListForSaleState }) => {
         <NumericInput
           width={'full'}
           shadow={'Down Big'}
-          maxWidth="110px"
-          height="30px"
-          borderRadius={'2xl'}
-          pl="4"
+          borderRadius={'full'}
+          p={1}
+          pl={4}
           value={formatFixed(marketInfo.offer.buyNowPrice)}
           onValueChange={(values, sourceInfo) => {
             if (sourceInfo.source === 'prop') return
@@ -174,13 +172,13 @@ const Discount = ({ state }: { state: ListForSaleState }) => {
 
       <Box width={'full'}>
         <Flex
-          height="30px"
-          maxWidth="110px"
+          width={'full'}
           shadow={'Up Small'}
-          rounded="2xl"
+          borderRadius={'full'}
+          p={1}
+          pl={4}
           align="center"
           fontWeight={'700'}
-          pl={'4'}
         >
           {formatFixed(state.marketInfo.discount, { decimals: 2 })}%
         </Flex>
@@ -198,13 +196,13 @@ const CurrentValue = (props: { currentValue: BigNumber }) => {
 
       <Box width={'full'}>
         <Flex
-          height="30px"
-          maxWidth="110px"
+          width={'full'}
           shadow={'Up Small'}
-          rounded="2xl"
+          borderRadius={'full'}
+          p={1}
+          pl={4}
           align="center"
           fontWeight={'700'}
-          pl={'4'}
         >
           {truncateNumber(props.currentValue)}
         </Flex>
