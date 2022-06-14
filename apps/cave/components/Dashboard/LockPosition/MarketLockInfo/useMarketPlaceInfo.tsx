@@ -36,7 +36,8 @@ export const useMarketInfo = ({
   const transactionWrapper = async (fn: () => Promise<Transaction>) => {
     setIsWaitingForWallet(true)
     try {
-      await fn()
+      const tx = await fn()
+      setTransaction(tx)
     } catch {}
     setIsWaitingForWallet(false)
   }
