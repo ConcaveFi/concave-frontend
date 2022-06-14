@@ -11,6 +11,7 @@ import {
   Stack,
 } from '@concave/ui'
 import { ReactNode, useCallback } from 'react'
+import { shallowEqualObjects } from 'react-query/lib/core/utils'
 import { useLocalStorage } from 'react-use'
 
 export const useTransactionSettings = <T extends Object>(
@@ -30,7 +31,7 @@ export const useTransactionSettings = <T extends Object>(
     settings,
     setSetting: (s) => setSettings({ ...settings, ...s }),
     onClose,
-    isDefaultSettings: JSON.stringify(settings) === JSON.stringify(defaultSettings),
+    isDefaultSettings: shallowEqualObjects(settings, defaultSettings),
   }
 }
 
