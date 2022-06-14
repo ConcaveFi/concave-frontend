@@ -166,7 +166,7 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
                   px={3}
                   py={2}
                   my={1}
-                  shadow={isDetailsOpen ? 'Down Small' : 'Up Small'}
+                  shadow={isDetailsOpen ? 'Down Big' : 'Up Small'}
                   rounded="3xl"
                 >
                   <ExpandArrowIcon
