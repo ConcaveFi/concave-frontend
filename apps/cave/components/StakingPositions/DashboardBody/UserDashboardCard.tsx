@@ -1,4 +1,5 @@
 import { Box, Button, Collapse, Flex, Spinner, Text, useBreakpointValue } from '@concave/ui'
+import { FilterContainer } from 'components/Dashboard/DashboardBody/FilterContainer'
 import { useRouter } from 'next/router'
 import { useConnect } from 'wagmi'
 import { UserPositionCard } from '../LockPosition/Card/UserPositionCard'
@@ -9,9 +10,6 @@ export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePo
   const { isConnected } = useConnect()
   const { userNonFungibleTokensInfo, totalLocked, isLoading } = stakePosition
   const hasPositions = userNonFungibleTokensInfo.length !== 0
-
-  // filters and sorters
-
   const mobileLayout = useBreakpointValue({ base: true, md: false })
 
   return (
@@ -35,6 +33,7 @@ export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePo
         <Flex justify="center" px={4} pt={4} position={'relative'}>
           <UserDividendCard isLoading={isLoading} totalLocked={totalLocked} />
         </Flex>
+        <FilterContainer />
         <Collapse in={hasPositions}>
           <Box
             pos="relative"
