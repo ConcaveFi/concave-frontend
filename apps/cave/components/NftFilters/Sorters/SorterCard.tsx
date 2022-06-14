@@ -19,7 +19,13 @@ export const SorterCard = () => {
         </Button>
       </PopoverTrigger>
       <Portal>
-        <PopoverContent width={160}>
+        <PopoverContent
+          variants={{
+            enter: { opacity: 1, height: '240px' },
+            exit: { opacity: 0, height: '0px' },
+          }}
+          width={160}
+        >
           <Flex
             width={'160px'}
             height="240px"

@@ -19,10 +19,19 @@ export const RedeemDateFilter = () => {
         </Button>
       </PopoverTrigger>
       <Portal>
-        <PopoverContent animation={{}} width={160} border={'none'}>
+        <PopoverContent
+          variants={{
+            enter: { opacity: 1, height: '240px' },
+            exit: { opacity: 0, height: '0px' },
+          }}
+          animation={{}}
+          width={160}
+          border={'none'}
+        >
           <Flex
             width={'160px'}
-            height="240px"
+            transition=".3s all"
+            height={isOpen ? '240px' : '0px'}
             rounded={'lg'}
             border="2px solid"
             borderColor={'text.accent'}
