@@ -33,35 +33,36 @@ export const useMarketInfo = ({
     { enabled: !!networkId && !!nonFungibleTokenInfo.tokenId },
   )
 
-  const createMarketItem = async () => {
+  const transactionWrapper = async (fn: () => Promise<Transaction>) => {
     setIsWaitingForWallet(true)
     try {
-      const contract = new ConcaveNFTMarketplace(concaveProvider(networkId))
-      const tx = await contract.createMarketItem(signer, nonFungibleTokenInfo)
-      setTransaction(tx)
+      await fn()
     } catch {}
     setIsWaitingForWallet(false)
   }
 
-  const withdrawOffer = async () => {
-    setIsWaitingForWallet(true)
-    try {
-      const contract = new ConcaveNFTMarketplace(concaveProvider(networkId))
-      const tx = await contract.withdrawAuction(signer, nonFungibleTokenInfo)
-      setTransaction(tx)
-    } catch {}
-    setIsWaitingForWallet(false)
-  }
+  const createMarketItem = () =>
+    transactionWrapper(() =>
+      new ConcaveNFTMarketplace(concaveProvider(networkId)).createMarketItem(
+        signer,
+        nonFungibleTokenInfo,
+      ),
+    )
+
+  const withdrawOffer = () =>
+    transactionWrapper(() =>
+      new ConcaveNFTMarketplace(concaveProvider(networkId)).withdrawAuction(
+        signer,
+        nonFungibleTokenInfo,
+      ),
+    )
 
   const createOffer = async (offer: Offer) => {
-    setIsWaitingForWallet(true)
-    try {
+    transactionWrapper(() => {
       const contract = new ConcaveNFTMarketplace(concaveProvider(networkId))
       const marketItemInfo = new MarketItemInfo({ ...marketInfo.data, offer })
-      const tx = await contract.createOffer(signer, marketItemInfo)
-      setTransaction(tx)
-    } catch {}
-    setIsWaitingForWallet(false)
+      return contract.createOffer(signer, marketItemInfo)
+    })
     offerDisclosure.onClose()
   }
 
