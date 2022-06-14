@@ -4,15 +4,13 @@ import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useConnect } from 'wagmi'
 import { UserPositionCard } from '../LockPosition/Card/UserPositionCard'
+import { FilterContainer } from './FilterContainer'
 import { UserDividendCard } from './UserDividendCard'
 
 export const UserDashboardCard = ({ stakePositions }: { stakePositions: UseDashBoardState }) => {
   const { isConnected } = useConnect()
   const { userNonFungibleTokensInfo, totalLocked, isLoading } = stakePositions
   const hasPositions = userNonFungibleTokensInfo.length !== 0
-
-  // filters and sorters
-
   const mobileLayout = useBreakpointValue({ base: true, md: false })
 
   return (
@@ -36,14 +34,7 @@ export const UserDashboardCard = ({ stakePositions }: { stakePositions: UseDashB
         <Flex justify="center" px={4} pt={4} position={'relative'}>
           <UserDividendCard isLoading={isLoading} totalLocked={totalLocked} />
         </Flex>
-        {/* <FilterContainer
-          onAddFilter={(filter, { min, max }) => setFilters({ ...filters, [filter]: { min, max } })}
-          onAddSorter={(type, order) => setSorters({ ...sorters, [type]: order })}
-          onRemoveSorter={(sorter) => {
-            const { [sorter]: removed, ...newSorters } = sorters
-            setSorters(newSorters)
-          }}
-        /> */}
+        <FilterContainer />
         <Collapse in={hasPositions}>
           <Box
             pos="relative"
