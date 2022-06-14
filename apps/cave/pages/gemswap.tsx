@@ -1,6 +1,7 @@
 import { ChainId, CHAIN_NAME, CNV, Currency, DAI, ROUTER_ADDRESS } from '@concave/core'
 import { Trade, TradeType } from '@concave/gemswap-sdk'
-import { Card, Collapse, Flex, HStack, Stack, Text, useDisclosure } from '@concave/ui'
+import { ExpandArrowIcon } from '@concave/icons'
+import { Button, Card, Collapse, Flex, HStack, Stack, Text, useDisclosure } from '@concave/ui'
 import {
   CandleStickCard,
   ConfirmSwapModal,
@@ -152,22 +153,28 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
 
             {settings.expertMode && <CustomRecipient onChangeRecipient={setRecipient} />}
 
-            <HStack
-              onClick={toggleDetails}
-              sx={hasDetails && { cursor: 'pointer', _hover: { bg: 'blackAlpha.200' } }}
-              justify="center"
-              align="center"
-              py={2}
-              px={3}
-              my="auto"
-              rounded="xl"
-            >
+            <HStack justify="center" align="center" py={2} px={3} my="auto" rounded="xl">
               <RelativePrice
                 currency0={trade.data.inputAmount?.currency}
                 currency1={trade.data.outputAmount?.currency}
                 mr="auto"
               />
               <GasPrice />
+              <Collapse in={hasDetails} animateOpacity>
+                <Button
+                  onClick={toggleDetails}
+                  px={3}
+                  py={2}
+                  my={1}
+                  shadow={isDetailsOpen ? 'Down Small' : 'Up Small'}
+                  rounded="3xl"
+                >
+                  <ExpandArrowIcon
+                    transition={'all 0.3s'}
+                    transform={isDetailsOpen ? 'rotate(180deg)' : ''}
+                  />
+                </Button>
+              </Collapse>
               <Settings settings={settings} setSetting={setSetting} />
             </HStack>
 
