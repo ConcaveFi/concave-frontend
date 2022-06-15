@@ -3,6 +3,7 @@ export const RedeemBBT_CNV_Abi = [
     inputs: [
       { internalType: 'address', name: '_bbtCNV', type: 'address' },
       { internalType: 'address', name: '_CNV', type: 'address' },
+      { internalType: 'address', name: '_redeemBBTV1', type: 'address' },
     ],
     stateMutability: 'nonpayable',
     type: 'constructor',
@@ -18,24 +19,11 @@ export const RedeemBBT_CNV_Abi = [
   },
   {
     anonymous: false,
-    inputs: [{ indexed: false, internalType: 'address', name: 'account', type: 'address' }],
-    name: 'Paused',
-    type: 'event',
-  },
-  {
-    anonymous: false,
     inputs: [
       { indexed: true, internalType: 'address', name: '_from', type: 'address' },
-      { indexed: true, internalType: 'address', name: '_who', type: 'address' },
       { indexed: true, internalType: 'uint256', name: '_amount', type: 'uint256' },
     ],
     name: 'Redemption',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [{ indexed: false, internalType: 'address', name: 'account', type: 'address' }],
-    name: 'Unpaused',
     type: 'event',
   },
   {
@@ -69,13 +57,19 @@ export const RedeemBBT_CNV_Abi = [
   {
     inputs: [
       { internalType: 'uint256', name: '_amount', type: 'uint256' },
-      { internalType: 'address', name: '_who', type: 'address' },
       { internalType: 'address', name: '_to', type: 'address' },
       { internalType: 'bool', name: '_max', type: 'bool' },
     ],
     name: 'redeem',
     outputs: [{ internalType: 'uint256', name: 'amountOut', type: 'uint256' }],
     stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'redeemBBTV1',
+    outputs: [{ internalType: 'address', name: '', type: 'address' }],
+    stateMutability: 'view',
     type: 'function',
   },
   {
@@ -100,7 +94,7 @@ export const RedeemBBT_CNV_Abi = [
     type: 'function',
   },
   {
-    inputs: [{ internalType: 'bool', name: '_toPause', type: 'bool' }],
+    inputs: [{ internalType: 'bool', name: '_paused', type: 'bool' }],
     name: 'setPause',
     outputs: [],
     stateMutability: 'nonpayable',
