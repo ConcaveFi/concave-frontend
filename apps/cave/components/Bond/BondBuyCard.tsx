@@ -50,16 +50,13 @@ export function BondBuyCard(props: {
   const confirmModal = useDisclosure()
   const [hasClickedConfirm, setHasClickedConfirm] = useState(false)
 
-<<<<<<< HEAD
   const cnvPrice = useCurrentCNVPrice()
-=======
-  const currentPrice = AMMData?.data?.cnvData?.data?.last.toFixed(3)
+
   const { data: bondSpotPrice } = useQuery(
     ['bondSpotPrice', networkId],
     async () => await getBondSpotPrice(networkId),
     { enabled: !!networkId, refetchInterval: 17000 },
   )
->>>>>>> 2c97a9a788ddaa0146c0d05ee34e37858f49c1a4
 
   const [txError, setTxError] = useState('')
   const {
