@@ -16,7 +16,13 @@ export const InitialFilter = ({ onApplyFilter, onResetFilter }: InitialFilter) =
         </Button>
       </PopoverTrigger>
       <Portal>
-        <PopoverContent width={260}>
+        <PopoverContent
+          width={260}
+          variants={{
+            enter: { opacity: 1, height: '124px' },
+            exit: { opacity: 0, height: '0px' },
+          }}
+        >
           <RangeFilterCard onApplyFilter={onApplyFilter} onResetFilter={onResetFilter} />
         </PopoverContent>
       </Portal>
