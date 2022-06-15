@@ -10,7 +10,7 @@ import {
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useEffect, useState } from 'react'
 import { truncateNumber } from 'utils/truncateNumber'
-import { useCurrentCNVPrice } from 'hooks/useCurrentCNVPrice'
+import { useCNVPrice } from 'hooks/useCNVPrice'
 interface BoldSoldsCardProps {
   data: Get_Accrualbondv1_Last10_SoldQuery
   error: any
@@ -20,7 +20,7 @@ interface BoldSoldsCardProps {
 const BoldSoldsCard = (props: BoldSoldsCardProps) => {
   const netWorkdId = useCurrentSupportedNetworkId()
   const { data, loading: isLoading, error } = props
-  const AMMData = useCurrentCNVPrice()
+  const AMMData = useCNVPrice()
   const [bondSpotPrice, setBondSpotPrice] = useState('0')
   const [solds, setSolds] = useState([])
   const [isOpen, setIsOpen] = useState(false)

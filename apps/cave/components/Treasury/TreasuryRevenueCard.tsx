@@ -1,7 +1,7 @@
 import { Box, Card, Flex, Text } from '@concave/ui'
 import { formatDistanceStrict } from 'date-fns'
 import { useGet_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql'
-import { useCurrentCNVPrice } from 'hooks/useCurrentCNVPrice'
+import { useCNVPrice } from 'hooks/useCNVPrice'
 import { useEffect, useState } from 'react'
 import { truncateNumber } from 'utils/truncateNumber'
 export const TreasuryInfoItem = ({ label, amount, ...props }) => (
@@ -107,7 +107,7 @@ export const BondInfo = ({
 
 export default function TreasuryRevenueCard(props) {
   const { cnv, treasury } = props
-  const cnvPrice = useCurrentCNVPrice()
+  const cnvPrice = useCNVPrice()
   // get total Treasury
   const sumTotal = treasury.treasury.map((i: any) => i.total)
   const reducer = (acc: any, curr: any) => acc + curr
