@@ -4,15 +4,21 @@ import { StakePoolFilter } from 'components/NftFilters/Filters/hooks/useFilterBy
 import { InitialFilter } from 'components/NftFilters/Filters/InitialFilter'
 import { RedeemDateFilter } from 'components/NftFilters/Filters/RedeemDateFilter'
 import { StakePoolFilterCard } from 'components/NftFilters/Filters/StakePoolFilter'
+import { NftSorter } from 'components/NftFilters/Sorters/hooks/useNftSorter'
 import { SorterCard } from 'components/NftFilters/Sorters/SorterCard'
 import { useState } from 'react'
 
 interface FilterContainerProps {
   onEnableFilter: (filter: StakePoolFilter) => void
+  onChangeSorter: (sorter: NftSorter) => void
   onDisableFilter: (filter: StakePoolFilter) => void
 }
 
-export function FilterContainer({ onDisableFilter, onEnableFilter }: FilterContainerProps) {
+export function FilterContainer({
+  onDisableFilter,
+  onEnableFilter,
+  onChangeSorter,
+}: FilterContainerProps) {
   const mobileUI = useBreakpointValue({ base: true, md: false })
   const [stakeFilters, setStakeFilters] = useState([])
 
@@ -45,7 +51,7 @@ export function FilterContainer({ onDisableFilter, onEnableFilter }: FilterConta
           <Text fontWeight={'bold'} textColor="text.low">
             Sorter by:
           </Text>
-          <SorterCard />
+          <SorterCard onChangeSorter={onChangeSorter} />
         </Flex>
       </Flex>
     </MetalBox>
