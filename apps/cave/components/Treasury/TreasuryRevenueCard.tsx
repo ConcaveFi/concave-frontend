@@ -115,24 +115,19 @@ export default function TreasuryRevenueCard(props) {
 
   const { data, isLoading, isSuccess } = useGet_Accrualbondv1_Last10_SoldQuery()
 
-  const [lastsSolds, setLastsSolds] = useState([])
+  const lastsSolds = data?.logAccrualBondsV1_BondSold
 
-  useEffect(() => {
-    setLastsSolds(data && data.logAccrualBondsV1_BondSold.splice(3))
-  }, [data])
+  const relativeTimeline = lastsSolds.map(
+    (value) => formatDistanceStrict(value.timestamp * 1000, new Date().getTime()) + ' ago',
+  )
 
-  const relativeTimeline = lastsSolds
-    ? lastsSolds.map(
-        (value) => formatDistanceStrict(value.timestamp * 1000, new Date().getTime()) + ' ago',
-      )
-    : ['loading', 'loading', 'loading']
+  const lastsAmounts = lastsSolds.map(
+    (value) => '+$' + truncateNumber(+value?.inputAmount * 10 ** 18),
+  )
+  const lastsOutputamounts = lastsSolds.map(
+    (value) => '' + truncateNumber(+value?.output * 10 ** 18),
+  )
 
-  const lastsAmounts = lastsSolds
-    ? lastsSolds.map((value) => '+$' + truncateNumber(value?.inputAmount * 10 ** 18))
-    : ['0', '0', '0']
-  const lastsOutputamounts = lastsSolds
-    ? lastsSolds.map((value) => '' + truncateNumber(+value?.output * 10 ** 18))
-    : ['0', '0', '0']
   return (
     <Card
       direction={'column'}

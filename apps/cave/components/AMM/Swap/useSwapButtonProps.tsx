@@ -19,7 +19,7 @@ export const useSwapButtonProps = ({
   settings: SwapSettings
   onSwapClick: () => void
 }): ButtonProps => {
-  const [network] = useNetwork()
+  const network = useNetwork()
   const inputAmount = trade.data.inputAmount
   const outputAmount = trade.data.outputAmount
   const currencyIn = inputAmount?.currency
@@ -28,7 +28,7 @@ export const useSwapButtonProps = ({
   /*
     Not Connected
   */
-  if (network.loading) return { isLoading: true }
+  if (network.isLoading) return { isLoading: true }
 
   /*
     Select a token
@@ -39,9 +39,9 @@ export const useSwapButtonProps = ({
   /*
     Network Stuff
   */
-  if (network.data.chain?.id !== currencyIn.chainId)
+  if (network.activeChain?.id !== currencyIn.chainId)
     return { children: 'Network mismatch', isDisabled: true }
-  if (!swapSupportedChains.includes(network.data.chain?.id))
+  if (!swapSupportedChains.includes(network.activeChain?.id))
     return {
       children: 'Unsupported chain',
       isDisabled: true,

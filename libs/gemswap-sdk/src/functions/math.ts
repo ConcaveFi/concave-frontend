@@ -1,4 +1,4 @@
-import { ONE, TWO, ZERO } from '../constants/numbers'
+import { ONE, TWO, ZERO } from '@concave/core'
 
 import JSBI from 'jsbi'
 import invariant from 'tiny-invariant'

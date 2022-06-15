@@ -1,6 +1,5 @@
-import { CurrencyAmount, Ether, Pair, Route, Token } from '../../src/entities'
-
-import { WETH9 } from '../../src/constants'
+import { WETH9, CurrencyAmount, Ether, Token } from '@concave/core'
+import { Pair, Route } from '../../src/entities'
 
 describe('Route', () => {
   const ETHER = Ether.onChain(1)

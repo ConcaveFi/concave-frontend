@@ -1,4 +1,4 @@
-import { CNV, Currency, CurrencyAmount } from '@concave/gemswap-sdk'
+import { CNV, Currency, CurrencyAmount } from '@concave/core'
 import { Box, Card, Flex, Text, useDisclosure } from '@concave/ui'
 import { ApproveButton } from 'components/ApproveButton/ApproveButton'
 import { CurrencyInputField } from 'components/CurrencyAmountField'
@@ -16,9 +16,9 @@ import { useAccount, useSigner } from 'wagmi'
 import { PARAMETER_TO_POOL_PERIOD } from '../StakeCard'
 
 function StakeInput(props: { poolId: number; period: string; onClose: () => void }) {
-  const [{ data: account }] = useAccount()
+  const { data: account } = useAccount()
   const netWorkdId = useCurrentSupportedNetworkId()
-  const [{ data: signer }] = useSigner()
+  const { data: signer } = useSigner()
   const [stakeInput, setStakeInput] = useState<CurrencyAmount<Currency>>(
     toAmount(0, CNV[netWorkdId]),
   )

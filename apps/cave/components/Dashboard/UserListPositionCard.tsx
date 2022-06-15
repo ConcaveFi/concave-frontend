@@ -1,4 +1,4 @@
-import { CNV, CurrencyAmount } from '@concave/gemswap-sdk'
+import { CNV, CurrencyAmount } from '@concave/core'
 import { Box, Flex, Input, NumericInput, Text } from '@concave/ui'
 import ChooseButton from 'components/Marketplace/ChooseButton'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
@@ -13,10 +13,10 @@ type UserListPositionCardProps = {
 }
 
 const UserListPositionCard = (props: UserListPositionCardProps) => {
-  const [{ data: account }] = useAccount()
+  const { data: account } = useAccount()
   const [expirationDate, setExpirationDate] = useState('')
   const [listingDate, setListingDate] = useState('')
-  const [{ data: signer }] = useSigner()
+  const { data: signer } = useSigner()
   const chainId = useCurrentSupportedNetworkId()
   const nonFungibleTokenInfo = props.nonFungibleTokenInfo
   const [price, setPrice] = useState(

@@ -1,17 +1,7 @@
-import {
-  CurrencyAmount,
-  Ether,
-  Pair,
-  Percent,
-  Price,
-  Route,
-  Token,
-  Trade,
-} from '../../src/entities'
+import { WETH9, CurrencyAmount, Ether, Percent, Token } from '@concave/core'
+import { Pair, Price, Route, Trade, TradeType } from '../../src/entities'
 
 import JSBI from 'jsbi'
-import { TradeType } from '../../src/enums'
-import { WETH9 } from '../../src/constants'
 
 describe('Trade', () => {
   const ETHER = Ether.onChain(1)

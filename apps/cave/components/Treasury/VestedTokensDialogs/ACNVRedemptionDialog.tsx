@@ -22,9 +22,9 @@ export default function ACNVRedemptionDialog(props: ACNVRedemptionDialogProps) {
   const { isOpen: isErrorOpen, onOpen: onOpenError, onClose: onCloseError } = useDisclosure()
   const { onClose, isOpen } = props
 
-  const [{ data: signer }] = useSigner()
-  const [{ data: account }] = useAccount()
-  const [{ data: wallet }] = useConnect()
+  const { data: signer } = useSigner()
+  const { data: account } = useAccount()
+  const { isConnected } = useConnect()
   const networkdId = useCurrentSupportedNetworkId()
   const aCNVContract = new Contract(
     '0x38baBedCb1f226B49b2089DA0b84e52b6181Ca59',
@@ -101,11 +101,7 @@ export default function ACNVRedemptionDialog(props: ACNVRedemptionDialogProps) {
             _active={{}}
             _focus={{}}
           >
-            {wallet?.connected
-              ? !validBalance
-                ? 'Insufficient balance'
-                : 'Redeem'
-              : 'Not Connected'}
+            {isConnected ? (!validBalance ? 'Insufficient balance' : 'Redeem') : 'Not Connected'}
           </Button>
         </Card>
       </Modal>

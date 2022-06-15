@@ -1,12 +1,11 @@
-import { Currency, CurrencyAmount, DAI } from '@concave/gemswap-sdk'
-import { GasIcon } from '@concave/icons'
+import { Currency, CurrencyAmount, DAI } from '@concave/core'
 import { Card, Flex, HStack, keyframes, Spinner, Text, useDisclosure, VStack } from '@concave/ui'
 import { ApproveButton } from 'components/ApproveButton/ApproveButton'
 import { CurrencyInputField as BondInput } from 'components/CurrencyAmountField'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
-import { BOND_ADDRESS } from 'contracts/Bond/BondingAddress'
+import { BOND_ADDRESS } from '@concave/core'
 import { useGet_Amm_Cnv_PriceQuery } from 'graphql/generated/graphql'
 import { useRecentTransactions } from 'hooks/useRecentTransactions'
 import React, { useEffect, useState } from 'react'
@@ -18,28 +17,13 @@ import { getBondAmountOut, getBondSpotPrice, purchaseBond, useBondState } from '
 import { ConfirmBondModal } from './ConfirmBond'
 import { DownwardIcon } from './DownwardIcon'
 import { Settings, useBondSettings } from './Settings'
-
+import { useQuery } from 'react-query'
+import { GasPrice } from 'components/AMM'
 export const twoDecimals = (s: string | number) => {
   const a = s.toString()
   return a.indexOf('.') > -1 ? a.slice(0, a.indexOf('.') + 3) : a
 }
 
-const GasPrice = () => {
-  const [{ data }] = useFeeData({ formatUnits: 'gwei', watch: true })
-  return (
-    <>
-      <GasIcon viewBox="0 0 16 16" />
-      {data ? (
-        <Text fontSize="xs" color="text.low" fontWeight="medium">
-          {twoDecimals(data?.formatted.gasPrice)} gwei
-        </Text>
-      ) : (
-        <Spinner size="xs" color="text.low" />
-      )}
-    </>
-  )
-}
-//aaaa
 export function BondBuyCard(props: {
   bondTransaction?: any
   setBondTransaction?: any
@@ -51,23 +35,23 @@ export function BondBuyCard(props: {
   const [bondTransaction, setBondTransaction] = useState()
 
   const [settings, setSetting] = useBondSettings()
-  const userBalance = balance.data?.toFixed()
   const [amountIn, setAmountIn] = useState<CurrencyAmount<Currency>>(toAmount('0', DAI[networkId]))
-  // const [amountIn, setAmountIn] = useState<number>(0)
 
   useEffect(() => {
     setAmountIn(toAmount(0, DAI[networkId]))
   }, [networkId])
 
   const [amountOut, setAmountOut] = useState<string>()
-  const [bondSpotPrice, setBondSpotPrice] = useState<string>()
-
   const confirmModal = useDisclosure()
-  // const receiptModal = useDisclosure()
   const [hasClickedConfirm, setHasClickedConfirm] = useState(false)
   const AMMData = useGet_Amm_Cnv_PriceQuery()
 
   const currentPrice = AMMData?.data?.cnvData?.data?.last.toFixed(3)
+  const { data: bondSpotPrice } = useQuery(
+    ['bondSpotPrice', networkId],
+    async () => await getBondSpotPrice(networkId),
+    { enabled: !!networkId, refetchInterval: 17000 },
+  )
 
   const [txError, setTxError] = useState('')
   const {
@@ -75,16 +59,6 @@ export function BondBuyCard(props: {
     onClose: onCloseRejected,
     onOpen: onOpenRejected,
   } = useDisclosure()
-
-  useEffect(() => {
-    getBondSpotPrice(networkId, BOND_ADDRESS[networkId])
-      .then((bondSpotPrice) => {
-        setBondSpotPrice(bondSpotPrice)
-      })
-      .catch((e) => {
-        console.log(e)
-      })
-  }, [networkId, userAddress])
 
   const { addRecentTransaction } = useRecentTransactions()
 
@@ -156,13 +130,12 @@ export function BondBuyCard(props: {
           amount: amountIn.numerator,
           spender: BOND_ADDRESS[networkId],
         }}
-        isDisabled={
-          +amountIn.numerator.toString() === 0 ||
-          +userBalance < +amountIn.numerator.toString() / 10 ** 18
-        }
+        isDisabled={amountIn.equalTo(0) || balance.data?.lessThan(amountIn)}
         onClick={confirmModal.onOpen}
       >
-        {+userBalance < +amountIn ? 'Insufficient Funds' : 'Bond'}
+        {balance.data?.lessThan(amountIn.numerator)
+          ? `Insufficient ${amountIn.currency.symbol}`
+          : 'Bond'}
       </ApproveButton>
 
       <ConfirmBondModal
@@ -220,7 +193,7 @@ export function BondBuyCard(props: {
       <WaitingConfirmationDialog isOpen={hasClickedConfirm} title={'Confirm Bond'}>
         <Text fontSize="lg" color="text.accent">
           Bonding {truncateNumber(+amountIn.numerator.toString(), 4)} {currencyIn.symbol} for{' '}
-          {truncateNumber(+amountOut*10**18, 4)}CNV.
+          {truncateNumber(+amountOut * 10 ** 18, 4)}CNV.
         </Text>
       </WaitingConfirmationDialog>
       <TransactionSubmittedDialog
@@ -233,8 +206,3 @@ export function BondBuyCard(props: {
     </Card>
   )
 }
-
-const spin = keyframes({
-  '0%': { transform: 'rotate(0deg)' },
-  '100%': { transform: 'rotate(360deg)' },
-})

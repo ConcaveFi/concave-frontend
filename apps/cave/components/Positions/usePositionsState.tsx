@@ -8,7 +8,7 @@ import { useAccount } from 'wagmi'
 
 export const usePositionsState = () => {
   const [view, setView] = useState<'user' | 'all'>('user')
-  const [{ data: account, loading: loadingAccount }] = useAccount()
+  const { data: account, isLoading: loadingAccount } = useAccount()
   const chainId = useCurrentSupportedNetworkId()
   const allPairs = useQuery(['fetchPairs', chainId], () => {
     return Fetcher.fetchPairs(chainId, concaveProvider(chainId))

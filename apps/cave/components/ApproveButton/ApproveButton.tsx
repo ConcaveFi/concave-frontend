@@ -1,4 +1,4 @@
-import { Currency, MaxUint256 } from '@concave/gemswap-sdk'
+import { Currency, MaxUint256 } from '@concave/core'
 import { Button, ButtonProps } from '@concave/ui'
 import { useModals } from 'contexts/ModalsContext'
 import { BigNumberish } from 'ethers'
@@ -27,7 +27,7 @@ type ApproveButtonState = {
 export const ApproveButton = ({ approveArgs, ...buttonProps }: ApproveButtonProps) => {
   const { currency, spender, amount = MaxUint256.toString() } = approveArgs
   const { allowance, ...approve } = useApprove(currency.wrapped, spender)
-  const [{ data: account }] = useAccount()
+  const { data: account } = useAccount()
   const { connectModal } = useModals()
   if (!account?.address)
     return (

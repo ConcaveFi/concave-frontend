@@ -6,7 +6,7 @@ import { useQuery } from 'react-query'
 import { useAccount } from 'wagmi'
 export type UseDashBoardState = ReturnType<typeof useDashBoardState>
 export const useDashBoardState = () => {
-  const [{ data: account, error: accountError }] = useAccount()
+  const { data: account } = useAccount()
   const netWorkId = useCurrentSupportedNetworkId()
   const { data: userNonFungibleTokensInfo, isLoading } = useQuery(
     ['listUserNonFungibleTokenInfo', account?.address, netWorkId],

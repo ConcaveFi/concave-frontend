@@ -1,4 +1,5 @@
-import { Currency, Route } from '@concave/gemswap-sdk'
+import { Currency } from '@concave/core'
+import { Route } from '@concave/gemswap-sdk'
 import { Box, Flex, HStack, Stack, Text } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 

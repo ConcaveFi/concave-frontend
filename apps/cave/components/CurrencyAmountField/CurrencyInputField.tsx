@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount } from '@concave/gemswap-sdk'
+import { Currency, CurrencyAmount } from '@concave/core'
 import { HStack, Text } from '@concave/ui'
 import { useFiatValue } from 'components/AMM/hooks/useFiatPrice'
 import {
@@ -52,7 +52,7 @@ export const CurrencyInputField = ({
         </Text>
         {balance.isSuccess && (
           <Balance
-            value={truncateNumber(balance?.data?.numerator)}
+            value={balance.data?.toFixed(2, { groupSeparator: ',' })}
             onMax={() => onChangeAmount(maxAmount(balance.data))}
           />
         )}

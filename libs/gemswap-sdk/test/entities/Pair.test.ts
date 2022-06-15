@@ -1,61 +1,7 @@
-import { CurrencyAmount, Pair, Price, Token } from '../../src/entities'
+import { WETH9, CurrencyAmount, Token } from '@concave/core'
+import { Pair, Price } from '../../src/entities'
 
 import { InsufficientInputAmountError } from '../../src/errors'
-import { WETH9 } from '../../src/constants'
-import { computePairAddress } from '../../src/functions'
-
-describe('computePairAddress', () => {
-  it('should correctly compute the pool address', () => {
-    const tokenA = new Token(
-      1,
-      '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
-      18,
-      'USDC',
-      'USD Coin',
-    )
-    const tokenB = new Token(
-      1,
-      '0x6B175474E89094C44Da98b954EedeAC495271d0F',
-      18,
-      'DAI',
-      'DAI Stablecoin',
-    )
-    const result = computePairAddress({
-      factoryAddress: '0x1111111111111111111111111111111111111111',
-      tokenA,
-      tokenB,
-    })
-
-    expect(result).toEqual('0xbCfFCD50d09095E48CC5ea02d564CAEe61aBc004')
-  })
-  it('should give same result regardless of token order', () => {
-    const USDC = new Token(1, '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', 18, 'USDC', 'USD Coin')
-    const DAI = new Token(
-      1,
-      '0x6B175474E89094C44Da98b954EedeAC495271d0F',
-      18,
-      'DAI',
-      'DAI Stablecoin',
-    )
-    let tokenA = USDC
-    let tokenB = DAI
-    const resultA = computePairAddress({
-      factoryAddress: '0x1111111111111111111111111111111111111111',
-      tokenA,
-      tokenB,
-    })
-
-    tokenA = DAI
-    tokenB = USDC
-    const resultB = computePairAddress({
-      factoryAddress: '0x1111111111111111111111111111111111111111',
-      tokenA,
-      tokenB,
-    })
-
-    expect(resultA).toEqual(resultB)
-  })
-})
 
 describe('Pair', () => {
   const USDC = new Token(1, '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', 18, 'USDC', 'USD Coin')

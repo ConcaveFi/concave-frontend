@@ -1,5 +1,6 @@
 import { parseUnits } from 'ethers/lib/utils'
-import { Currency, CurrencyAmount, Pair, Percent, WETH9_ADDRESS } from '@concave/gemswap-sdk'
+import { Currency, CurrencyAmount, Percent, WETH9_ADDRESS } from '@concave/core'
+import { Pair } from '@concave/gemswap-sdk'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { Router } from 'lib/Router'
 import { useState } from 'react'
@@ -19,7 +20,7 @@ export const useRemoveLiquidity = ({
   userBalance: CurrencyAmount<Currency>
 }) => {
   const networkId = useCurrentSupportedNetworkId()
-  const [{ data: account }] = useAccount()
+  const { data: account } = useAccount()
   const tokenA = pair.token0
   const tokenB = pair.token1
   const [percentToRemove, setPercentToRemove] = useState(0)
@@ -27,14 +28,14 @@ export const useRemoveLiquidity = ({
   const amountAMin = +pair.reserve0.toExact() * userPoolShare * ratioToRemove
   const amountBMin = +pair.reserve1.toExact() * userPoolShare * ratioToRemove
   const [hash, setHash] = useState<string>(null)
-  const [{ data }] = useSigner()
+  const { data: signer } = useSigner()
   const [receiveInNativeToken, setReceiveInNativeToken] = useState(true)
   const tokenAIsNativeWrapper = tokenA.address === WETH9_ADDRESS[networkId]
   const tokenBIsNativeWrapper = tokenB.address === WETH9_ADDRESS[networkId]
   const hasNativeToken = tokenAIsNativeWrapper || tokenBIsNativeWrapper
 
   const removeLiquidity = async () => {
-    const router = new Router(networkId, data)
+    const router = new Router(networkId, signer)
     if (receiveInNativeToken && (tokenAIsNativeWrapper || tokenBIsNativeWrapper)) {
       const transaction = await router.removeLiquidityETH(
         tokenAIsNativeWrapper ? tokenB : tokenA,

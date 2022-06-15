@@ -40,6 +40,7 @@ export const MetaHead = ({ meta: _meta }: { meta?: MetaProps }): JSX.Element => 
       <meta name="twitter:description" content={meta.description} />
       <meta name="twitter:image" content={meta.image} />
       <link rel="shortcut icon" href="/assets/tokens/cnv.svg" />
+      <meta name="theme-color" content="#141414" />
     </NextHead>
   )
 }

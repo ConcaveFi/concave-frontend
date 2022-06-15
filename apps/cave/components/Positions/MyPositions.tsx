@@ -1,4 +1,5 @@
-import { CurrencyAmount, Fetcher, Pair } from '@concave/gemswap-sdk'
+import { CurrencyAmount } from '@concave/core'
+import { Fetcher, Pair } from '@concave/gemswap-sdk'
 import {
   Accordion,
   AccordionButton,

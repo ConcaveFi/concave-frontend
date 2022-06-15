@@ -1,5 +1,5 @@
 import { parseUnits } from 'ethers/lib/utils'
-import { Currency, CurrencyAmount, DAI, Percent } from '@concave/gemswap-sdk'
+import { Currency, CurrencyAmount, DAI, Percent } from '@concave/core'
 
 const currencyAmountToBigNumber = (currency: CurrencyAmount<Currency>) => {
   return parseUnits(currency.toFixed(currency.currency.decimals))

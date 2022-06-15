@@ -1,4 +1,4 @@
-import { ROUTER_ADDRESS } from '@concave/gemswap-sdk'
+import { ROUTER_ADDRESS } from '@concave/core'
 import { Box, Button, Flex, HStack, Modal, Text } from '@concave/ui'
 import { ApproveButton } from 'components/ApproveButton/ApproveButton'
 import { CurrencyIcon } from 'components/CurrencyIcon'

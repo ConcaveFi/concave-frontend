@@ -1,12 +1,12 @@
 import { Avatar, Button, Flex, Text, useDisclosure } from '@concave/ui'
-import ChangeNetWorkdModal from 'components/ChangeNetworkModal'
+import { ChangeNetworkModal } from 'components/ChangeNetworkModal'
 import { ConnectWalletModal } from 'components/ConnectWallet'
 import { useConnect, useNetwork } from 'wagmi'
 
 export default function ConnectedAreasContainer() {
-  const [{ data: connectorData, loading: loadingWallet }] = useConnect()
+  const { activeConnector } = useConnect()
   const { isOpen, onClose, onOpen } = useDisclosure()
-  const [{ data: networkData }] = useNetwork()
+  const { activeChain } = useNetwork()
   const {
     isOpen: isChangeNetworkOpen,
     onClose: onCloseChangeNetwork,
@@ -23,7 +23,7 @@ export default function ConnectedAreasContainer() {
         justify="space-between"
       >
         <Text ml={4} fontSize="12px" fontWeight="700" textColor={'text.low'}>
-          Connected with {connectorData?.connector?.name}
+          Connected with {activeConnector?.name}
         </Text>
         <Button
           mr={2}
@@ -67,17 +67,17 @@ export default function ConnectedAreasContainer() {
               height={'25px'}
               mt={'2px'}
               src={
-                networkData?.chain.id == 1
+                activeChain.id == 1
                   ? 'https://images-ext-2.discordapp.net/external/6xv9IUyAOWmlbQE8LfBQNr5pBjHIADMgOmbHWKMbutg/https/raw.githubusercontent.com/ConcaveFi/assets/master/blockchains/ethereum/info/logo.png'
                   : 'https://raw.githubusercontent.com/ConcaveFi/assets/master/blockchains/arbitrum/info/logo.png'
               }
             />
             <Text my={'auto'} mr={4} fontWeight={'bold'} fontSize={{ base: '14px', sm: 'lg' }}>
-              {networkData?.chain?.name}
+              {activeChain?.name}
             </Text>
           </Flex>
         </Button>
-        <ChangeNetWorkdModal isOpen={isChangeNetworkOpen} onClose={onCloseChangeNetwork} />
+        <ChangeNetworkModal isOpen={isChangeNetworkOpen} onClose={onCloseChangeNetwork} />
         <ConnectWalletModal isOpen={isOpen} onClose={onClose} />
       </Flex>
     </Flex>
