@@ -33,10 +33,8 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
   const { registerTransaction } = useTransactionRegistry()
 
   const balance = +bbtCNVData?.formatted || 0
-  const redeemable =
-    (!isLoading && redeemableData && +utils.formatEther(redeemableData?.redeemable)) || 0
-  const redeemed =
-    (!isLoading && redeemableData && +utils.formatEther(redeemableData?.redeemed)) || 0
+  const redeemable = +utils.formatEther(redeemableData?.redeemable || 0)
+  const redeemed = +utils.formatEther(redeemableData?.redeemed || 0)
 
   // booleans
   const insufficientFounds = balance === 0
@@ -44,7 +42,7 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
   const validValue = !insufficientFounds && !nothingToRedeem
 
   const bbtCNVContract = new Contract(
-    '0x7fcc30e97d718864d46a84f13e3ba111a56123d3',
+    '0xCf6B82Ca69bE4272d457c246FAF380f88af34f69',
     RedeemBBT_CNV_Abi,
     provider(1),
   )
