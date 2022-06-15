@@ -10,12 +10,13 @@ type RangeFilterCard = {
 }
 
 export const RangeFilterCard = ({ onApplyFilter, onResetFilter }: RangeFilterCard) => {
-  const [min, setMin] = useState<number>(0)
-  const [max, setMax] = useState<number>(0)
-  const isOpen = !!min || !!max
+  const [min, setMin] = useState<string>()
+  const [max, setMax] = useState<string>()
+  const [hasFilter, setHasFilter] = useState(false)
+  const isOpen = !!min || !!max || hasFilter
   const onReset = () => {
-    setMin(0)
-    setMax(0)
+    setMin('')
+    setMax('')
     onResetFilter()
   }
   return (
@@ -35,9 +36,20 @@ export const RangeFilterCard = ({ onApplyFilter, onResetFilter }: RangeFilterCar
         <InputField value={max} placeholder="To" onChangeValue={setMax} />
       </Flex>
       <Flex height={'60px'} align="end" mb={'2px'} justify={'center'} gap={2}>
-        <ChooseButton onClick={onReset} title={'Reset'} backgroundType="default" width={'100px'} />
         <ChooseButton
-          onClick={() => onApplyFilter({ min: Math.min(min, max), max: Math.max(min, max) })}
+          onClick={() => {
+            onReset()
+            setHasFilter(false)
+          }}
+          title={'Reset'}
+          backgroundType="default"
+          width={'100px'}
+        />
+        <ChooseButton
+          onClick={() => {
+            onApplyFilter({ min: Math.min(+min, +max), max: Math.max(+min, +max) })
+            setHasFilter(true)
+          }}
           title={'Apply'}
           backgroundType="blue"
           width={'100px'}
@@ -48,8 +60,8 @@ export const RangeFilterCard = ({ onApplyFilter, onResetFilter }: RangeFilterCar
 }
 
 type InputField = {
-  onChangeValue: (value: number) => void
-  value: number
+  onChangeValue: (value: string) => void
+  value: number | string
   placeholder: string
 }
 const InputField = ({ onChangeValue, placeholder, value }: InputField) => {
@@ -59,7 +71,7 @@ const InputField = ({ onChangeValue, placeholder, value }: InputField) => {
         value={value}
         textAlign={'center'}
         placeholder={placeholder}
-        onValueChange={(e) => onChangeValue(+e.value)}
+        onValueChange={(e) => onChangeValue(e.value)}
       />
     </Flex>
   )
