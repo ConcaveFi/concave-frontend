@@ -1,4 +1,4 @@
-import { BigNumber, BigNumberish, Contract } from 'ethers'
+import { BigNumberish } from 'ethers'
 import { formatUnits } from 'ethers/lib/utils'
 import { CurrencyAmount, Token, MaxUint256 } from '@concave/core'
 import {
