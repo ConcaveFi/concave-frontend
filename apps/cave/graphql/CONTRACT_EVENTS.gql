@@ -71,3 +71,11 @@ query GET_BONDS_VAPR {
     bondVaprPool3
   }
 }
+
+query GET_USER_ACNV_REDEEMED($address: String!) {
+  logACNVRedemption(where: { address: { _eq: $address }, amount: { _gt: "0" } }) {
+    address
+    amount
+    txHash
+  }
+}

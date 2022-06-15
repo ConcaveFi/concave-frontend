@@ -3,6 +3,7 @@ import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { Contract, Transaction } from 'ethers'
+import { useGet_User_Acnv_RedeemedQuery } from 'graphql/generated/graphql'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { aCNVredeemabi } from 'lib/contractoABI'
 import { concaveProvider as provider } from 'lib/providers'
@@ -31,6 +32,8 @@ export default function ACNVRedemptionDialog(props: ACNVRedemptionDialogProps) {
     aCNVredeemabi,
     provider(1),
   )
+  const { data, isLoading } = useGet_User_Acnv_RedeemedQuery({ address: account?.address })
+  console.log('data', data)
 
   const { aCNVData, loadingACNV } = useVestedTokens()
 
