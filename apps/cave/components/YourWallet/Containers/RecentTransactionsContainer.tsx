@@ -1,17 +1,23 @@
+import { CHAIN_NAME } from '@concave/core'
 import { CheckIcon, CloseIcon, SpinnerIcon } from '@concave/icons'
 import { Flex, keyframes, Link, Text, useDisclosure } from '@concave/ui'
 import SecondConfirmModal from 'components/SecondConfirmModal'
-import { commify } from 'ethers/lib/utils'
-import { RecentTransaction, useRecentTransactions } from 'hooks/useRecentTransactions'
-import { useAccount } from 'wagmi'
+import { getTxExplorer } from 'components/TransactionSubmittedDialog'
+import {
+  getTransactionStatusLabel,
+  TrackedTransaction,
+  useTransactionRegistry,
+} from 'hooks/useTransactionRegistry'
+import { etherscanBlockExplorers, useAccount } from 'wagmi'
 
 export default function RecentTransactionsContainer() {
-  const { data: recentTransactions, clearRecentTransactions } = useRecentTransactions()
+  const { lastTransactions } = useTransactionRegistry()
+  // const { data: recentTransactions, clearRecentTransactions } = useRecentTransactions()
 
-  const { isOpen: isDialogOpen, onOpen: onOpenDialog, onClose: onCloseDialog } = useDisclosure()
+  // const { isOpen: isDialogOpen, onOpen: onOpenDialog, onClose: onCloseDialog } = useDisclosure()
 
   const { data: account } = useAccount()
-  const hasRecentTransactions = Object.values(recentTransactions).length > 0
+  const hasRecentTransactions = lastTransactions.length > 0
 
   return (
     <Flex flex={1} direction={'column'} mt={8} mb={4}>
@@ -23,7 +29,7 @@ export default function RecentTransactionsContainer() {
         <Text fontWeight={'700'} fontSize="md" textColor={'text.low'}>
           {hasRecentTransactions ? 'Recent Transactions:' : 'You do not have recent transactions.'}
         </Text>
-        {hasRecentTransactions && (
+        {/* {hasRecentTransactions && (
           <Text
             cursor={'pointer'}
             onClick={onOpenDialog}
@@ -33,11 +39,11 @@ export default function RecentTransactionsContainer() {
           >
             Clear all
           </Text>
-        )}
+        )} */}
       </Flex>
 
       {/* Confimation Modal --------------- */}
-      <SecondConfirmModal
+      {/* <SecondConfirmModal
         onConfirm={() => {
           clearRecentTransactions()
           onCloseDialog()
@@ -63,7 +69,7 @@ export default function RecentTransactionsContainer() {
             </Text>
           </Flex>
         </Flex>
-      </SecondConfirmModal>
+      </SecondConfirmModal> */}
       {/* -------------------------- */}
 
       {hasRecentTransactions && (
@@ -78,61 +84,34 @@ export default function RecentTransactionsContainer() {
           apply="border.secondary"
           __css={scroll}
         >
-          {Object.values(recentTransactions)
-            .filter((tx) => tx.transaction?.from === account?.address)
-            .map((value, index) => (
-              <TransactionInfo key={index} recentTransaction={value} />
-            ))}
+          {lastTransactions.map((tx) => (
+            <TransactionInfo key={tx.hash} {...tx} />
+          ))}
         </Flex>
       )}
     </Flex>
   )
 }
 
-const TransactionInfo = ({ recentTransaction }: { recentTransaction: RecentTransaction }) => {
-  const {
-    type,
-    amount,
-    amountTokenName,
-    purchaseTokenName,
-    transaction,
-    purchase,
-    stakePool,
-    status,
-    loading,
-  } = recentTransaction
-
-  const info =
-    type === 'Stake'
-      ? `${commify(amount)} ${amountTokenName} staked in ${stakePool} Position`
-      : type === 'Bond'
-      ? `${commify(amount)} ${amountTokenName} bonded for ${commify(purchase)} ${purchaseTokenName}`
-      : type === 'Swap'
-      ? `${commify(amount)} ${amountTokenName} swaped for ${
-          purchase > 100 ? commify(purchase) : purchase
-        } ${purchaseTokenName}`
-      : `Add Liquidity for ${amount} ${amountTokenName}-${purchaseTokenName} LP`
-
+const TransactionInfo = ({ meta, status, chainId, hash }: TrackedTransaction) => {
   return (
     <Flex justify={'space-between'}>
       <Flex fontWeight={'bold'} gap={1} align="center">
-        <Text>{recentTransaction.type}</Text>
+        <Text autoCapitalize="">{meta.type}</Text>
         <Link
           isExternal
-          href={`https://RINKEBY.etherscan.io/tx/${transaction.hash}`}
-          fontSize={'14px'}
+          href={etherscanBlockExplorers[CHAIN_NAME[chainId]].url + `/tx/${hash}`}
+          fontSize="sm"
           textColor={'text.low'}
         >
-          {info}
+          {getTransactionStatusLabel(meta, status)}
         </Link>
       </Flex>
-      {/* Status 0 = Fail  */}
-      {/* Status 1 = Success  */}
       <Flex width={'17px'}>
         {status === 'error' && (
           <CloseIcon width={'15px'} height="15px" color={'red.300'} justifySelf="end" />
         )}
-        {loading && (
+        {status === 'pending' && (
           <SpinnerIcon
             animation={`${spin} 3s linear infinite`}
             color={'text.low'}

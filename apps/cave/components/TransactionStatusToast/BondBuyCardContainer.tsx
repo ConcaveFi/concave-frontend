@@ -1,7 +1,6 @@
 import { Stack, useToast } from '@concave/ui'
 import React, { useEffect, useState } from 'react'
 import { useWaitForTransaction } from 'wagmi'
-import { ToastCard } from './ToastCard'
 
 export default function BondBuyCardContainer(props: any) {
   const toast = useToast()
@@ -21,30 +20,30 @@ export default function BondBuyCardContainer(props: any) {
   }
 
   function addToast() {
-    if (typeof currentStatus !== 'undefined' && !toast.isActive(currentHash)) {
-      const capitalizedStatus = currentStatus[0].toUpperCase() + currentStatus.slice(1)
-      const title = `Transaction ${capitalizedStatus}`
-      const link = `https://RINKEBY.etherscan.io/tx/${currentHash}`
-      toast({
-        id: currentHash,
-        title: capitalizedStatus,
-        position: 'top-right',
-        description: ``,
-        status: currentStatus,
-        isClosable: true,
-        // duration: null,
-        duration: 10000,
-        render: () => (
-          <ToastCard
-            type={currentStatus}
-            title={title}
-            tx={currentHash}
-            amountInOut={amountInOut}
-            link={link}
-          />
-        ),
-      })
-    }
+    // if (typeof currentStatus !== 'undefined' && !toast.isActive(currentHash)) {
+    //   const capitalizedStatus = currentStatus[0].toUpperCase() + currentStatus.slice(1)
+    //   const title = `Transaction ${capitalizedStatus}`
+    //   const link = `https://RINKEBY.etherscan.io/tx/${currentHash}`
+    //   toast({
+    //     id: currentHash,
+    //     title: capitalizedStatus,
+    //     position: 'top-right',
+    //     description: ``,
+    //     status: currentStatus,
+    //     isClosable: true,
+    //     // duration: null,
+    //     duration: 10000,
+    //     render: () => (
+    //       <ToastCard
+    //         type={currentStatus}
+    //         title={title}
+    //         tx={currentHash}
+    //         amountInOut={amountInOut}
+    //         link={link}
+    //       />
+    //     ),
+    //   })
+    // }
     currentStatus = undefined
   }
 
