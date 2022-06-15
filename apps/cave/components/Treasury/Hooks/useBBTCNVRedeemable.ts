@@ -1,29 +1,21 @@
 import { RedeemBBT_CNV_Abi } from 'contracts/VestedTokens/RedeemBbtCNVAbi'
 import { Contract } from 'ethers'
-import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider as provider } from 'lib/providers'
-import { useState } from 'react'
 import { useQuery } from 'react-query'
-import { useAccount, useSigner } from 'wagmi'
+import { useAccount } from 'wagmi'
 
 export default function useBBTCNVRedeemable() {
-  const { data: signer } = useSigner()
   const { data: account } = useAccount()
 
-  //   const networkId = useCurrentSupportedNetworkId()
-  const bbtCNVContract = new Contract(
-    '0x7fcc30e97d718864d46a84f13e3ba111a56123d3', //mainnet?
+  const bbtCNV_Redemption_Contract = new Contract(
+    '0xCf6B82Ca69bE4272d457c246FAF380f88af34f69', //mainnet?
     RedeemBBT_CNV_Abi,
-    provider(1),
+    provider(4),
   )
-  const { data, isLoading } = useQuery(
-    ['bbtRedeemable', account?.address],
-    async () => ({
-      redeemable: await bbtCNVContract.redeemable(account?.address),
-      redeemed: await bbtCNVContract.redeemed(account?.address),
-    }),
-    {},
-  )
+  const { data, isLoading } = useQuery(['bbtRedeemable', account?.address], async () => ({
+    redeemable: await bbtCNV_Redemption_Contract.redeemable(account?.address),
+    redeemed: await bbtCNV_Redemption_Contract.redeemed(account?.address),
+  }))
   return {
     data,
     isLoading,
