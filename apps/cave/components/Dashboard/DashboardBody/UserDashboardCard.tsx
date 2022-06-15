@@ -26,7 +26,7 @@ export const UserDashboardCard = ({ stakePositions }: { stakePositions: UseDashB
   const [rangeFilter, setRangeFilter] = useState<RangeFilter>({})
   const { filterByRange } = useFilterByRange(rangeFilter)
 
-  const [sorter, setSorter] = useState<NftSorter>()
+  const [sorter, setSorter] = useState<NftSorter>({ sorter: NftSorterType.NONE, order: 'ASC' })
   const { sorter: sorterFunction } = useNFtSorter(sorter)
 
   return (
