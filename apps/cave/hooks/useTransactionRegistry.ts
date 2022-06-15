@@ -1,9 +1,10 @@
 import { TransactionResponse } from '@ethersproject/abstract-provider'
 import { concaveProvider } from 'lib/providers'
+import { useCallback } from 'react'
 import { useQueries } from 'react-query'
-import { useLocalStorage } from 'react-use'
 import { UnionToIntersection } from 'types/utils'
-import { useAccount } from 'wagmi'
+import { useAccount, useNetwork } from 'wagmi'
+import { useLocalStorage } from './useLocalStorage'
 
 type TransactionMeta =
   | { type: 'approve'; tokenSymbol: string }
@@ -12,24 +13,29 @@ type TransactionMeta =
   | { type: 'bond'; amountIn: string; amountOut: string }
   | { type: 'stake'; amount: string; pool: string }
 
-type TrackedTransaction = {
+export type TrackedTransaction = {
   from: string
   hash: string
   chainId: number
   status: 'pending' | 'success' | 'error'
   meta: TransactionMeta
 }
+
 type TransactionMetaToStatusLabel = {
-  [Meta in TransactionMeta as Meta['type']]: (meta: Meta) => {
+  [Meta in TransactionMeta as Meta['type']]: (meta: Omit<Meta, 'type'>) => {
     [status in TrackedTransaction['status']]: string
   }
 }
 
-export const getTransactionStatusLabel = (meta: TransactionMeta) =>
+export const getTransactionStatusLabel = (
+  meta: TransactionMeta,
+  status: TrackedTransaction['status'],
+) =>
   (<TransactionMetaToStatusLabel>{
     approve: ({ tokenSymbol }) => ({
       pending: `Approving ${tokenSymbol}`,
       success: `Approved ${tokenSymbol}`,
+      error: `Failed to approve ${tokenSymbol}`,
     }),
     swap: ({ amountIn, amountOut }) => ({
       pending: `Swapping ${amountIn} for ${amountOut}`,
@@ -51,30 +57,48 @@ export const getTransactionStatusLabel = (meta: TransactionMeta) =>
       success: `Bonded ${amountIn} for ${amountOut}`,
       error: `Failed to bond ${amountIn} for ${amountOut}`,
     }),
-  })[meta.type](meta as UnionToIntersection<typeof meta>)
-
-const waitTransaction = async (tx: TrackedTransaction): Promise<TrackedTransaction> => {
-  const receipt = await concaveProvider(tx.chainId).waitForTransaction(tx.hash)
-  if (receipt.status === 0) return { ...tx, status: 'error' }
-  return { ...tx, status: 'success' }
-}
+  })[meta.type](meta as UnionToIntersection<TransactionMeta>)[status]
 
 export const useTransactionRegistry = () => {
   const { data: account } = useAccount()
-  const [transactions, setTransactions] = useLocalStorage<TrackedTransaction[]>(
-    `transactions ${account.address}`,
+  const { activeChain } = useNetwork()
+
+  const { data: transactions, mutateAsync: setTransactions } = useLocalStorage<
+    TrackedTransaction[]
+  >(account?.address && `transactions ${account.address} ${activeChain}`, [])
+
+  const pushTransaction = useCallback(
+    (tx: TrackedTransaction) => {
+      // keep last 10 txs in localstorage, filter by hash to avoid duplicates
+      return setTransactions(
+        [tx, ...transactions.filter((_tx) => _tx.hash !== tx.hash).slice(0, 9)],
+        {
+          onSuccess: () => {
+            // on transaction included to localstorage
+            console.log('TOGGLE TOAST', tx, getTransactionStatusLabel(tx.meta, 'pending'))
+          },
+        },
+      )
+    },
+    [transactions, setTransactions],
   )
 
-  const transactionsQueries = useQueries(
-    transactions.map((tx) => ({
-      queryKey: tx.hash,
-      queryFn: () => (tx.status === 'pending' ? waitTransaction(tx) : tx),
-      placeholderData: tx, // use tx as placeholder data since it will have a status: pending flag inside
-      onSuccess(data) {
-        console.log('TOGGLE TOAST', data)
-        setTransactions((prev) => prev.map((t) => (t.hash === tx.hash ? data : t)))
-      },
-    })),
+  /* await resolution of pending transactions saved to localstorage
+   (ex user closed the app while pending, when he connects again, 
+    will load localstorage, and await resolution of his pending transactions)
+  */
+  useQueries(
+    transactions
+      ?.filter((tx) => tx.status === 'pending')
+      .map((tx) => ({
+        queryKey: tx.hash,
+        queryFn: async () => {
+          const receipt = await concaveProvider(tx.chainId).waitForTransaction(tx.hash)
+          if (receipt.status === 0) return { ...tx, status: 'error' }
+          return { ...tx, status: 'success' }
+        },
+        onSuccess: (data) => pushTransaction(data),
+      })) || [],
   )
 
   return {
@@ -83,13 +107,8 @@ export const useTransactionRegistry = () => {
       meta: TrackedTransaction['meta'],
     ) => {
       const newTrackedTransaction = { hash, from, chainId, status: <const>'pending', meta }
-      console.log('TOGGLE TOAST', newTrackedTransaction, getTransactionStatusLabel(meta))
-      // keep last 10 txs in localstorage, filter by hash to avoid duplicates
-      setTransactions((lastTransactions) => [
-        newTrackedTransaction,
-        ...lastTransactions.filter((tx) => tx.hash !== hash).slice(0, 9),
-      ])
+      pushTransaction(newTrackedTransaction)
     },
-    lastTransactions: transactionsQueries.map((q) => q.data),
+    lastTransactions: transactions,
   }
 }
