@@ -18,9 +18,6 @@ export const SorterButton = ({ sorter, title, enabled, onClick }: SorterButton) 
       px={2}
       cursor="pointer"
       transition={'.4s all'}
-      borderBottom={'1px '}
-      borderColor="text.low"
-      bg="secondary.75"
       onClick={() => onClick(sorter)}
     >
       <Text
