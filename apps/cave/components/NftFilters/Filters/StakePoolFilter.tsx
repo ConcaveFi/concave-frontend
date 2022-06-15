@@ -7,6 +7,7 @@ import {
   Portal,
   useDisclosure,
 } from '@chakra-ui/react'
+import { gradientBorder } from '@concave/ui'
 import { DropdownCard } from '../DropdownCard'
 import { StakePoolFilter } from './hooks/useFilterByStakePool'
 import { StakeToggleButton } from './StakeToggleButton'
@@ -37,8 +38,7 @@ export const StakePoolFilterCard = ({ onDisableFilter, onEnableFilter }: StakePo
             width={'160px'}
             rounded={'lg'}
             height={isOpen ? '124px' : '0px'}
-            border="2px solid"
-            borderColor={'text.accent'}
+            sx={{ ...gradientBorder({ borderWidth: 2 }) }}
             backdropFilter={'blur(10px)'}
             direction="column"
             apply={'background.metalBrighter'}
