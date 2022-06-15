@@ -41,6 +41,7 @@ export const SorterCard = ({ onChangeSorter }: SorterCard) => {
             borderColor={'text.accent'}
             backdropFilter={'blur(3px)'}
             direction="column"
+            apply={'background.metalBrighter'}
             overflow={'hidden'}
           >
             {sorterButtons.map((sorter, index) => (
