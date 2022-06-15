@@ -32,10 +32,10 @@ export const SorterCard = ({ onChangeSorter }: SorterCard) => {
             enter: { opacity: 1, height: '180px' },
             exit: { opacity: 0, height: '0px' },
           }}
-          width={160}
+          width={175}
         >
           <Flex
-            width={'160px'}
+            width={'175px'}
             height="180px"
             rounded={'lg'}
             sx={{ ...gradientBorder({ borderWidth: 2, rounded: 'lg' }) }}
@@ -49,7 +49,8 @@ export const SorterCard = ({ onChangeSorter }: SorterCard) => {
               <SorterButton
                 enabled={title === sorter.title}
                 onClick={(clickedSorter) => {
-                  setTitle(sorter.title)
+                  if (clickedSorter.sorter === NftSorterType.NONE) setTitle('None')
+                  else setTitle(sorter.title)
                   onChangeSorter(clickedSorter)
                 }}
                 sorter={sorter.nftSorter}
