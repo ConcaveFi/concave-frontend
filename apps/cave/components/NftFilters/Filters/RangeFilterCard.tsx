@@ -1,37 +1,47 @@
 import { Box, Collapse, Flex } from '@chakra-ui/react'
-import { NumericInput } from '@concave/ui'
+import { gradientBorder, NumericInput } from '@concave/ui'
 import { ChooseButton } from 'components/Marketplace/ChooseButton'
 import { useState } from 'react'
+import { RangeFilter } from './hooks/useFilterByRange'
 
 type RangeFilterCard = {
-  onApplyFilter: () => void
+  onApplyFilter: (rangeFilter: RangeFilter) => void
   onResetFilter: () => void
 }
 
-export const RangeFilterCard = () => {
+export const RangeFilterCard = ({ onApplyFilter, onResetFilter }: RangeFilterCard) => {
   const [min, setMin] = useState<number>(0)
   const [max, setMax] = useState<number>(0)
-  const isOpen = !!min && !!max
+  const isOpen = !!min || !!max
+  const onReset = () => {
+    setMin(0)
+    setMax(0)
+    onResetFilter()
+  }
   return (
     <Flex
       width={'260px'}
       height={isOpen ? '114px' : '80px'}
       rounded={'lg'}
-      border="2px solid"
-      bg={'linear-gradient(265.73deg, #364E6A 0%, #1C2E3E 100%)'}
-      borderColor={'text.accent'}
+      apply="background.metalBrighter"
       direction={'column'}
       overflow="hidden"
+      sx={{ ...gradientBorder({ borderWidth: 2 }) }}
       transition={'.4s all'}
     >
       <Flex height={'40px'} justify="center" width="full" align="center" py={'10'} gap={1}>
-        <InputField placeholder="From" onChangeValue={setMin} />
+        <InputField value={min} placeholder="From" onChangeValue={setMin} />
         <Box width={'10px'} height="4px" shadow={'down'} my="auto" />
-        <InputField placeholder="To" onChangeValue={setMax} />
+        <InputField value={max} placeholder="To" onChangeValue={setMax} />
       </Flex>
-      <Flex height={'60px'} align="end" justify={'center'} gap={2}>
-        <ChooseButton onClick={() => {}} title={'Reset'} backgroundType="default" width={'100px'} />
-        <ChooseButton onClick={() => {}} title={'Apply'} backgroundType="blue" width={'100px'} />
+      <Flex height={'60px'} align="end" mb={'2px'} justify={'center'} gap={2}>
+        <ChooseButton onClick={onReset} title={'Reset'} backgroundType="default" width={'100px'} />
+        <ChooseButton
+          onClick={() => onApplyFilter({ min: Math.min(min, max), max: Math.max(min, max) })}
+          title={'Apply'}
+          backgroundType="blue"
+          width={'100px'}
+        />
       </Flex>
     </Flex>
   )
@@ -39,12 +49,14 @@ export const RangeFilterCard = () => {
 
 type InputField = {
   onChangeValue: (value: number) => void
+  value: number
   placeholder: string
 }
-const InputField = ({ onChangeValue, placeholder }: InputField) => {
+const InputField = ({ onChangeValue, placeholder, value }: InputField) => {
   return (
     <Flex width={'100px'} height="30px" shadow={'down'} rounded="full" justify={'center'}>
       <NumericInput
+        value={value}
         textAlign={'center'}
         placeholder={placeholder}
         onValueChange={(e) => onChangeValue(+e.value)}

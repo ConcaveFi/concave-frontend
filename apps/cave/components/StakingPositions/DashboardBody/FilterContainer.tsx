@@ -1,4 +1,5 @@
 import { Flex, Text, useBreakpointValue } from '@concave/ui'
+import { RangeFilter } from 'components/NftFilters/Filters/hooks/useFilterByRange'
 import { StakePoolFilter } from 'components/NftFilters/Filters/hooks/useFilterByStakePool'
 import { InitialFilter } from 'components/NftFilters/Filters/InitialFilter'
 import { RedeemDateFilter } from 'components/NftFilters/Filters/RedeemDateFilter'
@@ -9,6 +10,8 @@ import { useState } from 'react'
 
 interface FilterContainerProps {
   onEnableFilter: (filter: StakePoolFilter) => void
+  onApplyFilter: (rangeFilter: RangeFilter) => void
+  onResetFilter: () => void
   onChangeSorter: (sorter: NftSorter) => void
   onDisableFilter: (filter: StakePoolFilter) => void
 }
@@ -17,6 +20,8 @@ export function FilterContainer({
   onDisableFilter,
   onEnableFilter,
   onChangeSorter,
+  onApplyFilter,
+  onResetFilter,
 }: FilterContainerProps) {
   const mobileUI = useBreakpointValue({ base: true, md: false })
   const [stakeFilters, setStakeFilters] = useState([])
@@ -37,7 +42,7 @@ export function FilterContainer({
           </Text>
           <Flex gap={3}>
             <RedeemDateFilter />
-            <InitialFilter />
+            <InitialFilter onResetFilter={onResetFilter} onApplyFilter={onApplyFilter} />
             <StakePoolFilterCard
               onDisableFilter={onDisableFilter}
               onEnableFilter={onEnableFilter}
