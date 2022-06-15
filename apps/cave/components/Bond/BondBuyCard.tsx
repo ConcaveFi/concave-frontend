@@ -53,7 +53,7 @@ export function BondBuyCard(props: {
   const [hasClickedConfirm, setHasClickedConfirm] = useState(false)
 
   const cnvPrice = useCurrentCNVPrice()
-  console.log(cnvPrice, 'cnv object')
+
   const [txError, setTxError] = useState('')
   const {
     isOpen: isOpenRejected,
