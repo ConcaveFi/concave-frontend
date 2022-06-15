@@ -1,28 +1,26 @@
 import { useQuery, UseQueryResult } from 'react-query'
-import { chain, useNetwork } from 'wagmi'
+import { Chain, chain, useNetwork } from 'wagmi'
 import { Currency, NATIVE, Token } from '@concave/core'
 import { Fetcher } from '@concave/gemswap-sdk'
 import { concaveProvider } from 'lib/providers'
-import { add } from 'date-fns'
 import { fetchJson } from 'ethers/lib/utils'
 
 const concaveTokenList = (networkName: string) =>
   `/assets/tokenlists/${networkName.toLowerCase()}/concave.json`
 
+const fetchTokenList = async (chain: Chain) => {
+  const tokenList = await fetchJson(concaveTokenList(chain.name))
+  const chainTokens = tokenList.tokens.filter((t) => t.chainId === chain.id)
+  return chainTokens.map((t) => new Token(t.chainId, t.address, t.decimals, t.symbol, t.name))
+}
+
 export const useTokenList = () => {
   const { activeChain } = useNetwork()
 
   return useQuery(
-    ['token-list', activeChain.id || 1],
-    async () => {
-      const tokenList = await fetchJson(concaveTokenList(activeChain.name))
-      const chainTokens = tokenList.tokens.filter((t) => t.chainId === activeChain.id)
-      return chainTokens.map((t) => new Token(t.chainId, t.address, t.decimals, t.symbol, t.name))
-    },
-    {
-      enabled: !!activeChain.id,
-      placeholderData: [],
-    },
+    ['token-list', activeChain?.id || 1],
+    async () => fetchTokenList(activeChain?.id ? activeChain : chain.mainnet),
+    { placeholderData: [], refetchOnWindowFocus: false },
   )
 }
 

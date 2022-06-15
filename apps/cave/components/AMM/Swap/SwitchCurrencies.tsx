@@ -11,6 +11,7 @@ export const SwitchCurrencies = ({ onClick }) => {
         bgColor="blackAlpha.100"
         rounded="3xl"
         onClick={onClick}
+        aria-label="switch currencies"
       >
         <ExpandArrowIcon />
       </Button>

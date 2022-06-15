@@ -34,6 +34,7 @@ import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { LayoutGroup } from 'framer-motion'
+import { NODE_ENV } from 'lib/env.conf'
 import { GetServerSideProps } from 'next'
 import { useEffect, useMemo, useReducer, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
@@ -59,12 +60,14 @@ const defaultCurrencies = {
   [ChainId.RINKEBY]: [DAI[4], CNV[4]],
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+export const getServerSideProps: GetServerSideProps = async ({ query, res }) => {
   const currencies = await fetchQueryCurrencies(query)
   const currenciesOrDefaults =
     currencies.filter(Boolean).length === 0
       ? defaultCurrencies[+query.chainId] || defaultCurrencies[1]
       : currencies
+
+  res.setHeader('Cache-Control', 'public, s-maxage=31536000, stale-while-revalidate')
   return { props: { currencies: currenciesOrDefaults.map(currencyToJson) } }
 }
 
