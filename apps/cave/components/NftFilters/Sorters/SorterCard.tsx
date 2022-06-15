@@ -1,6 +1,7 @@
 import {
   Button,
   Flex,
+  gradientBorder,
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -28,17 +29,17 @@ export const SorterCard = ({ onChangeSorter }: SorterCard) => {
       <Portal>
         <PopoverContent
           variants={{
-            enter: { opacity: 1, height: '183px' },
+            enter: { opacity: 1, height: '180px' },
             exit: { opacity: 0, height: '0px' },
           }}
           width={160}
         >
           <Flex
             width={'160px'}
-            height="183px"
+            height="180px"
             rounded={'lg'}
-            border="2px solid"
-            borderColor={'text.accent'}
+            sx={{ ...gradientBorder({ borderWidth: 2, rounded: 'lg' }) }}
+            p={'3px'}
             backdropFilter={'blur(3px)'}
             direction="column"
             apply={'background.metalBrighter'}

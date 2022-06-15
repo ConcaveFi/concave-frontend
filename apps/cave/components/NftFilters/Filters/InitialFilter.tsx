@@ -1,13 +1,6 @@
-import {
-  Button,
-  Flex,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  Portal,
-  useDisclosure,
-} from '@concave/ui'
+import { Button, Popover, PopoverContent, PopoverTrigger, Portal, useDisclosure } from '@concave/ui'
 import { DropdownCard } from '../DropdownCard'
+import { RangeFilterCard } from './RangeFilterCard'
 
 export const InitialFilter = () => {
   const { isOpen, onToggle, onClose } = useDisclosure()
@@ -19,15 +12,8 @@ export const InitialFilter = () => {
         </Button>
       </PopoverTrigger>
       <Portal>
-        <PopoverContent width={160}>
-          <Flex
-            width={'160px'}
-            height="240px"
-            rounded={'lg'}
-            border="2px solid"
-            borderColor={'text.accent'}
-            backdropFilter={'blur(3px)'}
-          ></Flex>
+        <PopoverContent width={260}>
+          <RangeFilterCard />
         </PopoverContent>
       </Portal>
     </Popover>
