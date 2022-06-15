@@ -1,9 +1,8 @@
-import { Box, Button, Flex, Spinner, Text, useBreakpointValue } from '@concave/ui'
+import { Currency, CurrencyAmount } from '@concave/core'
+import { Box, Button, ButtonProps, Flex, Spinner, Text, useBreakpointValue } from '@concave/ui'
 import { GlassPanel } from 'components/Treasury/TreasuryManagementCard'
-import { BigNumber } from 'ethers'
-import { truncateNumber } from 'utils/truncateNumber'
 interface UserDividendCardProps {
-  totalLocked: BigNumber
+  totalLocked: CurrencyAmount<Currency>
   isLoading: boolean
 }
 export const UserDividendCard = (props: UserDividendCardProps) => {
@@ -17,7 +16,7 @@ export const UserDividendCard = (props: UserDividendCardProps) => {
 
   return (
     <Box
-      borderRadius="16px"
+      borderRadius="2xl"
       shadow={'Down Big'}
       width={'800px'}
       height={{ lg: '136px', md: '130px' }}
@@ -39,8 +38,8 @@ const DividendContent = (props: UserDividendCardProps) => {
           textAlign={'start'}
           ml={{ lg: 6, md: 12 }}
           textColor={'text.low'}
-          fontSize={'18px'}
-          fontWeight="700"
+          fontSize={'lg'}
+          fontWeight={'bold'}
           my={5}
         >
           Your Dividends Share
@@ -49,7 +48,7 @@ const DividendContent = (props: UserDividendCardProps) => {
       </Flex>
       <Flex justify={'center'} gap={{ base: 4 }} overflow="hidden" minW={320}>
         <Flex direction={{ base: 'column', md: 'row' }} gap={6}>
-          <Info title="Total Locked" label={truncateNumber(totalLocked)} />
+          <Info title="Total Locked" label={totalLocked.toFixed(2, { groupSeparator: ',' })} />
           <Info title="Next Dividend Date" label="Coming Soon" />
         </Flex>
         <Flex direction={{ base: 'column', md: 'row' }} gap={6}>
@@ -63,8 +62,8 @@ const DividendContent = (props: UserDividendCardProps) => {
   )
 }
 
-const RedeemButton = ({ ...props }) => {
-  const { redeemable } = props
+const RedeemButton = ({ ...props }: ButtonProps) => {
+  const redeemable = false
   return (
     <Button
       cursor={redeemable ? 'pointer' : 'default'}
@@ -74,13 +73,11 @@ const RedeemButton = ({ ...props }) => {
       size="md"
       shadow="down"
       mx={6}
-      _focus={{}}
-      _hover={{}}
       _active={redeemable ? { transform: 'scale(0.95)' } : {}}
       {...props}
     >
       <Text color={redeemable ? 'white' : 'text.low'} fontSize="sm">
-        {props.redeemable ? 'Redeem' : 'Not Redeemable'}
+        {redeemable ? 'Redeem' : 'Not Redeemable'}
       </Text>
     </Button>
   )
@@ -89,11 +86,11 @@ const RedeemButton = ({ ...props }) => {
 const Info = ({ title, label, loading }: { title: string; label: string; loading?: boolean }) => {
   return (
     <Flex direction={'column'} alignItems="start">
-      <Text fontSize={'11px'} fontWeight={600} textColor={'text.low'}>
+      <Text fontSize={'11px'} fontWeight="semibold" textColor={'text.low'}>
         {title}
       </Text>
       <Flex>
-        <Text fontSize={{ base: '12px', lg: '17px' }} fontWeight={700}>
+        <Text fontSize={{ base: 'xs', lg: '17px' }} fontWeight="bold">
           {label}
         </Text>
         {loading && <Spinner height={'20px'} width={'20px'} ml={1} />}

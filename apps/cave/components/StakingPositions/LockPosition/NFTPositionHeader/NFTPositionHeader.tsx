@@ -1,6 +1,4 @@
-import { Flex, Grid, GridItem, Image, Text } from '@concave/ui'
-import { format } from 'date-fns'
-import { truncateNumber } from 'utils/truncateNumber'
+import { Flex, Image, Text } from '@concave/ui'
 import { NFTPositionHeaderProps, useNFTLockedPositionState } from './useNFTPositionViewer'
 
 export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {

@@ -1,9 +1,10 @@
 import { createAlchemyWeb3, Nft } from '@alch/alchemy-web3'
 import { StakingV1Contract } from '@concave/marketplace'
 import { STAKING_CONTRACT } from '@concave/core'
-import { MarketItemInfo, NonFungibleTokenInfo } from '@concave/marketplace'
+import { MarketItemInfo } from '@concave/marketplace'
 import { ConcaveNFTMarketplace } from '@concave/marketplace'
 import { BaseProvider } from '@ethersproject/providers'
+import { StakingPosition } from './entities'
 
 export const listAllNonFungibleTokensOnAddress = async (
   owner: string,
@@ -33,16 +34,16 @@ export const listAllNonFungibleTokensOnAddress = async (
   return nfts
 }
 
-export const fechMarketInfo = async (provider: BaseProvider, NFT: NonFungibleTokenInfo) => {
+export const fechMarketInfo = async (provider: BaseProvider, position: StakingPosition) => {
   const contract = new ConcaveNFTMarketplace(provider)
   return MarketItemInfo.from({
-    offer: contract.nftContractAuctions(NFT),
-    itenId: contract.tokenIdToItemIds(NFT),
-    NFT,
+    offer: contract.nftContractAuctions(position),
+    itemId: contract.tokenIdToItemIds(position),
+    position,
   })
 }
 
-export const listUserNonFungibleTokenInfo = async (
+export const listUserPositions = async (
   userAddress: string,
   provider: BaseProvider,
   alchemy: string,
@@ -52,18 +53,5 @@ export const listUserNonFungibleTokenInfo = async (
   const usersNft = await listAllNonFungibleTokensOnAddress(userAddress, chainId, alchemy, [
     STAKING_CONTRACT[chainId],
   ])
-  return Promise.all(
-    usersNft.map(async ({ id, contract }: Nft) => {
-      const tokenIndexId = id.tokenId
-      const positionInfo = stakingV1Contract.positions(tokenIndexId)
-      const userRewards = stakingV1Contract.viewPositionRewards(tokenIndexId)
-      return new NonFungibleTokenInfo(
-        chainId,
-        contract.address,
-        tokenIndexId,
-        await positionInfo,
-        await userRewards,
-      )
-    }),
-  )
+  return Promise.all(usersNft.map(async ({ id }: Nft) => stakingV1Contract.positions(id.tokenId)))
 }

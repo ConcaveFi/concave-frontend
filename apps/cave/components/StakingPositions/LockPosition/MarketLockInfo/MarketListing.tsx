@@ -1,4 +1,4 @@
-import { NonFungibleTokenInfo } from '@concave/marketplace'
+import { StakingPosition } from '@concave/marketplace'
 import { Box, Button, Flex, Modal, Text } from '@concave/ui'
 import { Loading } from 'components/Loading'
 import { formatFixed } from 'utils/formatFixed'
@@ -6,7 +6,7 @@ import { ListPositionForSale, useListeForSaleState } from '../../UserListPositio
 import { Info } from '../Redeem/RedeemViewer'
 import { getMarketPlaceButtonProps, useMarketInfo, UserMarketInfoState } from './useMarketPlaceInfo'
 interface MarketplaceInfoProps {
-  nonFungibleTokenInfo: NonFungibleTokenInfo
+  stakingPosition: StakingPosition
 }
 
 export const MarketListing = (props: MarketplaceInfoProps) => {

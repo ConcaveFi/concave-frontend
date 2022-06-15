@@ -1,16 +1,16 @@
-import { NonFungibleTokenInfo } from '@concave/marketplace'
+import { StakingPosition } from '@concave/marketplace'
 import { BigNumber } from 'ethers'
 import { formatEther } from 'ethers/lib/utils'
 import { formatFixed } from 'utils/formatFixed'
 
 interface RedeemCardViewerProps {
-  nonFungibleTokenInfo: NonFungibleTokenInfo
+  stakingPosition: StakingPosition
 }
 
-export const createRedeemState = ({ nonFungibleTokenInfo }: RedeemCardViewerProps) => {
-  const { maturity, userReward } = nonFungibleTokenInfo
-  const curValue = userReward.totalRewards
-  const initialBal = userReward.amountDeposited
+export const createRedeemState = ({ stakingPosition }: RedeemCardViewerProps) => {
+  const { maturity } = stakingPosition
+  const curValue = stakingPosition.currentValue
+  const initialBal = stakingPosition.initialValue
   const gainedAmt = curValue.sub(initialBal)
 
   return {

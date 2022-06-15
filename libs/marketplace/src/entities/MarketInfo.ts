@@ -1,33 +1,32 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { Offer } from './Offer'
-import { NonFungibleTokenInfo } from './NonFungibleToken'
+import { NFT, StakingPosition } from './StakingPosition'
 
 export type MarketItemInfoArgs = {
   readonly offer: Offer
-  readonly itenId: BigNumber
-  readonly NFT: NonFungibleTokenInfo
+  readonly itemId: BigNumber
+  readonly position: StakingPosition
 }
-
 export class MarketItemInfo {
   public readonly offer: Offer
-  public readonly itenId: BigNumber
-  public readonly NFT: NonFungibleTokenInfo
+  public readonly itemId: BigNumber
+  public readonly position: StakingPosition
 
   constructor(args: MarketItemInfoArgs) {
     this.offer = args.offer
-    this.itenId = args.itenId
-    this.NFT = args.NFT
+    this.itemId = args.itemId
+    this.position = args.position
   }
 
   public static async from(args: {
     offer: Promise<Offer>
-    itenId: Promise<BigNumber>
-    NFT: Promise<NonFungibleTokenInfo> | NonFungibleTokenInfo
+    itemId: Promise<BigNumber>
+    position: Promise<StakingPosition> | StakingPosition
   }) {
     return new MarketItemInfo({
       offer: await args.offer,
-      itenId: await args.itenId,
-      NFT: await args.NFT,
+      itemId: await args.itemId,
+      position: await args.position,
     })
   }
 
@@ -41,9 +40,10 @@ export class MarketItemInfo {
     const newPrice = this.isSale
       ? BigNumber.from(this.offer.buyNowPrice.toString())
       : BigNumber.from(this.offer.minPrice.toString())
-    if (newPrice.gte(this.NFT.currentValue)) return BigNumber.from(0)
-    const difference = this.NFT.currentValue.sub(newPrice)
-    return difference.mul(basisPoints).div(this.NFT.currentValue)
+
+    if (newPrice.gte(this.position.currentValue)) return BigNumber.from(0)
+    const difference = this.position.currentValue.sub(newPrice)
+    return difference.mul(basisPoints).div(this.position.currentValue)
   }
 
   get isSale() {
@@ -51,7 +51,7 @@ export class MarketItemInfo {
   }
 
   get isMarketItem() {
-    return this.itenId.gt(0)
+    return this.itemId.gt(0)
   }
 
   get isAuction() {

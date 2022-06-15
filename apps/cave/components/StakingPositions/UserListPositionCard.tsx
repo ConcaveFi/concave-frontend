@@ -22,8 +22,10 @@ export const useListeForSaleState = ({ marketInfoState }: UserListPositionCardPr
   const [offer, setOffer] = useState(
     new Offer({
       ...marketInfoState.marketInfo.data.offer,
-      ERC20Token: CNV[marketInfoState.networkId].address,
-      buyNowPrice: marketInfoState.marketInfo.data.NFT.currentValue,
+      ERC20Token: CNV[marketInfoState.chainId].address,
+      buyNowPrice:
+        marketInfoState.marketInfo.data.offer.buyNowPrice ||
+        marketInfoState.marketInfo.data.position.currentValue,
       feePercentages: [10000],
       feeRecipients: [account.address],
     }),
@@ -68,7 +70,7 @@ export const ListPositionForSale = ({
   return (
     <VStack direction={'column'} gap={1} pt={4} px={8} pb={0}>
       <Type state={listForSaleState} />
-      <CurrentValue currentValue={listForSaleState.marketInfo.NFT.currentValue} />
+      <CurrentValue currentValue={listForSaleState.marketInfo.position.currentValue} />
       <ListenPrice state={listForSaleState} />
       <BuyNowPrice state={listForSaleState} />
       <Discount state={listForSaleState} />
@@ -82,7 +84,7 @@ export const ListPositionForSale = ({
 const Type = ({ state }: { state: ListForSaleState }) => {
   return (
     <HStack justifyContent={'center'} width={'full'}>
-      <Text textColor={'text.low'} width={'full'} textAlign={'right'} fontWeight={700}>
+      <Text textColor={'text.low'} width={'full'} textAlign={'right'} fontWeight="bold">
         Type:
       </Text>
       <Box width={'full'}>
@@ -92,8 +94,7 @@ const Type = ({ state }: { state: ListForSaleState }) => {
           shadow={'Up Small'}
           onClick={state.handleMethod}
           rounded={'2xl'}
-          fontWeight={'700'}
-          _focus={{}}
+          fontWeight="bold"
         >
           {state.method}
         </Button>
@@ -110,8 +111,8 @@ const ListenPrice = (props: { state: ListForSaleState }) => {
   }
   return (
     <HStack justifyContent={'center'} width={'full'}>
-      <Text textColor={'text.low'} textAlign={'right'} fontWeight={700} width={'full'}>
-        Set listing Price:
+      <Text textColor={'text.low'} textAlign={'right'} fontWeight="bold" width={'full'}>
+        Starting price:
       </Text>
       <Box width={'full'}>
         <NumericInput
@@ -135,13 +136,12 @@ const ListenPrice = (props: { state: ListForSaleState }) => {
 }
 
 const BuyNowPrice = (props: { state: ListForSaleState }) => {
-  const { marketInfo, setBuyNowPrice } = props.state
+  const { marketInfo, setBuyNowPrice, method } = props.state
   const chainId = useCurrentSupportedNetworkId()
-
   return (
     <HStack justifyContent={'center'} width={'full'}>
-      <Text textColor={'text.low'} textAlign={'right'} fontWeight={700} width={'full'}>
-        Set buy price:
+      <Text textColor={'text.low'} textAlign={'right'} fontWeight="bold" width={'full'}>
+        {method === 'Sale' ? 'Sell price' : 'Reserve price'}:
       </Text>
       <Box width={'full'}>
         <NumericInput
@@ -166,7 +166,7 @@ const BuyNowPrice = (props: { state: ListForSaleState }) => {
 const Discount = ({ state }: { state: ListForSaleState }) => {
   return (
     <HStack justifyContent={'center'} width={'full'}>
-      <Text textColor={'text.low'} textAlign={'right'} fontWeight={700} width={'full'}>
+      <Text textColor={'text.low'} textAlign={'right'} fontWeight="bold" width={'full'}>
         Discount:
       </Text>
 
@@ -178,7 +178,7 @@ const Discount = ({ state }: { state: ListForSaleState }) => {
           p={1}
           pl={4}
           align="center"
-          fontWeight={'700'}
+          fontWeight="bold"
         >
           {formatFixed(state.marketInfo.discount, { decimals: 2 })}%
         </Flex>
@@ -190,7 +190,7 @@ const Discount = ({ state }: { state: ListForSaleState }) => {
 const CurrentValue = (props: { currentValue: BigNumber }) => {
   return (
     <HStack justifyContent={'center'} width={'full'}>
-      <Text textColor={'text.low'} textAlign={'right'} fontWeight={700} width={'full'}>
+      <Text textColor={'text.low'} textAlign={'right'} fontWeight="bold" width={'full'}>
         Current value:
       </Text>
 
@@ -202,7 +202,7 @@ const CurrentValue = (props: { currentValue: BigNumber }) => {
           p={1}
           pl={4}
           align="center"
-          fontWeight={'700'}
+          fontWeight="bold"
         >
           {truncateNumber(props.currentValue)}
         </Flex>

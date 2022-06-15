@@ -1,17 +1,13 @@
 import { Box, Button, Collapse, Flex, Spinner, Text } from '@concave/ui'
-import { UseStakePositionsState } from 'contracts/DashBoard/DashBoardState'
+import { UseStakePositionsState } from 'components/StakingPositions/DashboardBody/DashBoardState'
 import { useRouter } from 'next/router'
 import { useConnect } from 'wagmi'
 import { UserPositionCard } from '../LockPosition/Card/UserPositionCard'
 import { UserDividendCard } from './UserDividendCard'
 
-export const UserDashboardCard = ({
-  stakePositions,
-}: {
-  stakePositions: UseStakePositionsState
-}) => {
+export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePositionsState }) => {
   const { isConnected } = useConnect()
-  const { userNonFungibleTokensInfo, totalLocked, isLoading } = stakePositions
+  const { userNonFungibleTokensInfo, totalLocked, isLoading } = stakePosition
   const hasPositions = userNonFungibleTokensInfo.length !== 0
 
   return (
@@ -41,18 +37,18 @@ export const UserDashboardCard = ({
             maxH={{ lg: '675px', md: '740px', base: '800px' }}
             overflowY={'scroll'}
             overflowX="hidden"
-            borderRadius="12px"
+            borderRadius="xl"
             px={{ base: 0, md: '0.5rem' }}
             mx={{ base: 0, md: 4 }}
             py={'0.5rem'}
             shadow={{ base: '', md: 'down' }}
-            __css={scrollBar}
+            apply="scrollbar.big"
             mb={3}
           >
-            {userNonFungibleTokensInfo.map((nonFungibleTokenInfo) => (
+            {userNonFungibleTokensInfo.map((stakePosition) => (
               <UserPositionCard
-                key={+nonFungibleTokenInfo.tokenId.toString()}
-                nonFungibleTokenInfo={nonFungibleTokenInfo}
+                key={+stakePosition.tokenId.toString()}
+                stakingPosition={stakePosition}
               />
             ))}
           </Box>
@@ -73,7 +69,7 @@ interface ItsNotConectedProps {
 const ItsNotConected = (props: ItsNotConectedProps) => {
   return (
     <Collapse in={props.in}>
-      <Text pb={6} textColor={'gray.300'} fontWeight={'700'} fontSize="3xl">
+      <Text pb={6} textColor={'gray.300'} fontWeight="bold" fontSize="3xl">
         You are not connected
       </Text>
     </Collapse>
@@ -87,7 +83,7 @@ interface LoadingPositionsProps {
 const LoadingPositions = (props: LoadingPositionsProps) => {
   return (
     <Collapse in={props.in}>
-      <Text textColor={'gray.300'} fontWeight={'700'} fontSize="3xl">
+      <Text textColor={'gray.300'} fontWeight="bold" fontSize="3xl">
         Loading your positions
       </Text>
       <Spinner height={'30px'} width={'30px'} />
@@ -103,7 +99,7 @@ const HasNoPositions = (props: HasNoPositionsprops) => {
   return (
     <Collapse in={props.in}>
       <Flex direction={'column'} align="center">
-        <Text textColor={'gray.300'} fontWeight={'700'} fontSize="3xl">
+        <Text textColor={'gray.300'} fontWeight="bold" fontSize="3xl">
           You do not have any positions
         </Text>
         <Button
@@ -115,27 +111,11 @@ const HasNoPositions = (props: HasNoPositionsprops) => {
           rounded={'2xl'}
           onClick={() => router.push('liquid-staking')}
         >
-          <Flex fontSize={'16px'} fontWeight="700" grow={1} justify="center">
+          <Flex fontSize={'md'} fontWeight="bold" grow={1} justify="center">
             Stake CNV now!
           </Flex>
         </Button>
       </Flex>
     </Collapse>
   )
-}
-
-const scrollBar = {
-  '&::-webkit-scrollbar': {
-    display: { base: 'none', md: 'flex' },
-    width: '15px',
-    boxShadow: `-1px 1px 3px rgba(126, 162, 255, 0.26), inset 0px -5px 5px rgba(255, 255, 255, 0.02), inset -9px 12px 24px rgba(13, 17, 23, 0.49)`,
-    borderRadius: '10px',
-  },
-  '&::-webkit-scrollbar-thumb': {
-    // background: 'linear-gradient(239.18deg, #19394C 27.18%, #0A161F 96.11%)',
-    background: '#19394C',
-    boxShadow:
-      '0px 5px 14px rgba(0, 0, 0, 0.47), 4px -7px 15px rgba(174, 177, 255, 0.13), inset -1px 1px 2px rgba(128, 186, 255, 0.24)',
-    rounded: 'lg',
-  },
 }

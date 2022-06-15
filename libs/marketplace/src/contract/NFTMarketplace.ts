@@ -2,9 +2,10 @@ import { BigNumber, BigNumberish, ethers, Transaction } from 'ethers'
 import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/providers'
 import { ContractABI } from './NFTMarketplaceAbi'
 import { Signer } from 'ethers'
-import { MarketItemInfo, NonFungibleTokenInfo, Offer } from '@concave/marketplace'
+import { MarketItemInfo, Offer } from '@concave/marketplace'
 import { BaseProvider } from '@ethersproject/providers'
 import { MARKETPLACE_CONTRACT } from '@concave/core'
+import { NFT } from 'src/entities'
 
 export class ConcaveNFTMarketplace {
   private readonly contract: ethers.Contract
@@ -24,36 +25,28 @@ export class ConcaveNFTMarketplace {
     return this.contract.connect(signer).createMarketItem(tokenId.toString())
   }
 
-  /**
-   * Returns a auction info
-   * @param nfc token to get auctions
-   * @returns
-   */
-  public async tokenIdToItemIds(nfc: NonFungibleTokenInfo): Promise<BigNumber> {
-    //console.debug('tokenIdToItemIds', [nfc])
-    return this.contract.tokenIdToItemIds(nfc.tokenId)
+  public async tokenIdToItemIds(nft: NFT): Promise<BigNumber> {
+    console.debug('tokenIdToItemIds', [nft])
+    return this.contract.tokenIdToItemIds(nft.tokenId)
   }
 
   /**
    * Returns a auction info
-   * @param nfc token to get auctions
+   * @param nft token to get auctions
    * @returns
    */
-  public async nftContractAuctions(nfc: NonFungibleTokenInfo): Promise<Offer> {
-    console.debug('nftContractAuctions', [nfc])
-    return this.contract.nftContractAuctions(nfc.tokenId).then((result: Offer) => new Offer(result))
+  public async nftContractAuctions(nft: NFT): Promise<Offer> {
+    console.debug('nftContractAuctions', [nft])
+    return this.contract.nftContractAuctions(nft.tokenId).then((result: Offer) => new Offer(result))
   }
 
-  public async withdrawAuction(
-    signer: Signer,
-    nftContractAddress: NonFungibleTokenInfo,
-  ): Promise<Transaction> {
-    //console.debug('withdrawAuction')
+  public async withdrawAuction(signer: Signer, nftContractAddress: NFT): Promise<Transaction> {
+    console.debug('withdrawAuction')
     return this.contract.connect(signer).withdrawAuction(nftContractAddress.tokenId.toString())
   }
 
   public async fetchItemsForSale() {
-    //console.debug('fetchItemsForSale')
+    console.debug('fetchItemsForSale')
     return this.contract.fetchItemsForSale()
   }
 
@@ -69,18 +62,10 @@ export class ConcaveNFTMarketplace {
     signer: Signer,
     saleInfo: MarketItemInfo, //max 10000
   ) {
-    console.table([
-      saleInfo.NFT.tokenId,
-      saleInfo.offer.ERC20Token,
-      saleInfo.offer.buyNowPrice.toString(),
-      saleInfo.offer.whitelistedBuyer,
-      saleInfo.offer.feeRecipients,
-      saleInfo.offer.feePercentages,
-    ])
     return this.contract
       .connect(signer)
       .createSale(
-        saleInfo.NFT.tokenId,
+        saleInfo.position.tokenId,
         saleInfo.offer.ERC20Token,
         saleInfo.offer.buyNowPrice.toString(),
         saleInfo.offer.whitelistedBuyer,
@@ -96,7 +81,7 @@ export class ConcaveNFTMarketplace {
     return this.contract
       .connect(signer)
       .createDefaultNftAuction(
-        saleInfo.NFT.tokenId,
+        saleInfo.position.tokenId,
         saleInfo.offer.ERC20Token,
         saleInfo.offer.minPrice.toString(),
         saleInfo.offer.buyNowPrice.toString(),

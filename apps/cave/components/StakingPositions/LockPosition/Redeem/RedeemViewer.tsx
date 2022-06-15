@@ -1,12 +1,12 @@
-import { NonFungibleTokenInfo } from '@concave/marketplace'
+import { StakingPosition } from '@concave/marketplace'
 import { Box, Button, Flex, FlexProps, Text, TextProps } from '@concave/ui'
 import { bigNumberMask, createRedeemState } from './UseRedeemState'
 
 interface RedeemCardViewerProps {
-  nonFungibleTokenInfo: NonFungibleTokenInfo
+  stakingPosition: StakingPosition
 }
-const RedeemCardViewer = ({ nonFungibleTokenInfo }: RedeemCardViewerProps) => {
-  const { curValue, initialBal, gainedAmt, maturity } = createRedeemState({ nonFungibleTokenInfo })
+const RedeemCardViewer = ({ stakingPosition }: RedeemCardViewerProps) => {
+  const { curValue, initialBal, gainedAmt, maturity } = createRedeemState({ stakingPosition })
   const readyForReedem = maturity < Date.now() / 1000
   return (
     <Box

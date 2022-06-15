@@ -2,8 +2,8 @@ import {
   ConcaveNFTMarketplace,
   fechMarketInfo,
   MarketItemInfo,
-  NonFungibleTokenInfo,
   Offer,
+  StakingPosition,
 } from '@concave/marketplace'
 import { ButtonProps, useDisclosure } from '@concave/ui'
 import { Transaction } from 'ethers'
@@ -13,24 +13,17 @@ import { useQuery } from 'react-query'
 import { useSigner, useWaitForTransaction } from 'wagmi'
 
 export type UserMarketInfoState = ReturnType<typeof useMarketInfo>
-export const useMarketInfo = ({
-  nonFungibleTokenInfo,
-}: {
-  nonFungibleTokenInfo: NonFungibleTokenInfo
-}) => {
+export const useMarketInfo = ({ stakingPosition }: { stakingPosition: StakingPosition }) => {
   const offerDisclosure = useDisclosure()
-  const networkId = nonFungibleTokenInfo.networkId
+  const chainId = stakingPosition.chainId
   const { data: signer } = useSigner()
   const [transaction, setTransaction] = useState<Transaction>()
   const [isWaitingForWallet, setIsWaitingForWallet] = useState<boolean>(false)
   const tx = useWaitForTransaction({ hash: transaction?.hash })
   const marketInfo = useQuery(
-    ['MarketInfo', tx.data, networkId, nonFungibleTokenInfo.tokenId],
-    async () => {
-      const marketPlaceInfo = await fechMarketInfo(concaveProvider(networkId), nonFungibleTokenInfo)
-      return marketPlaceInfo
-    },
-    { enabled: !!networkId && !!nonFungibleTokenInfo.tokenId },
+    ['MarketInfo', tx.data, chainId, stakingPosition.tokenId],
+    async () => fechMarketInfo(concaveProvider(chainId), stakingPosition),
+    { enabled: chainId != undefined },
   )
 
   const transactionWrapper = async (fn: () => Promise<Transaction>) => {
@@ -44,23 +37,17 @@ export const useMarketInfo = ({
 
   const createMarketItem = () =>
     transactionWrapper(() =>
-      new ConcaveNFTMarketplace(concaveProvider(networkId)).createMarketItem(
-        signer,
-        nonFungibleTokenInfo,
-      ),
+      new ConcaveNFTMarketplace(concaveProvider(chainId)).createMarketItem(signer, stakingPosition),
     )
 
   const withdrawOffer = () =>
     transactionWrapper(() =>
-      new ConcaveNFTMarketplace(concaveProvider(networkId)).withdrawAuction(
-        signer,
-        nonFungibleTokenInfo,
-      ),
+      new ConcaveNFTMarketplace(concaveProvider(chainId)).withdrawAuction(signer, stakingPosition),
     )
 
   const createOffer = async (offer: Offer) => {
     transactionWrapper(() => {
-      const contract = new ConcaveNFTMarketplace(concaveProvider(networkId))
+      const contract = new ConcaveNFTMarketplace(concaveProvider(chainId))
       const marketItemInfo = new MarketItemInfo({ ...marketInfo.data, offer })
       return contract.createOffer(signer, marketItemInfo)
     })
@@ -72,7 +59,7 @@ export const useMarketInfo = ({
     tx,
     isWaitingForWallet,
     offerDisclosure,
-    networkId,
+    chainId,
     createOffer,
     setTransaction,
     withdrawOffer,

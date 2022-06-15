@@ -1,18 +1,18 @@
-import { NonFungibleTokenInfo } from '@concave/marketplace'
+import { StakingPosition } from '@concave/marketplace'
 import { formatDistanceToNowStrict, format } from 'date-fns'
 
 export interface NFTPositionHeaderProps {
-  nonFungibleTokenInfo: NonFungibleTokenInfo
+  stakingPosition: StakingPosition
   active: boolean
   toogleActive: VoidFunction
 }
 
 export const useNFTLockedPositionState = ({
-  nonFungibleTokenInfo,
+  stakingPosition,
   active,
   toogleActive,
 }: NFTPositionHeaderProps) => {
-  const { poolID, maturity, tokenId } = nonFungibleTokenInfo
+  const { poolID, maturity, tokenId } = stakingPosition
   const redeemInDays = formatDistanceToNowStrict(maturity * 1000, { unit: 'day' })
   const period = {
     0: '360 Days',

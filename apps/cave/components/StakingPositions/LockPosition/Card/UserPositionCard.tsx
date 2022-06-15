@@ -1,4 +1,4 @@
-import { NonFungibleTokenInfo } from '@concave/marketplace'
+import { StakingPosition } from '@concave/marketplace'
 import { Box, Collapse, Flex } from '@concave/ui'
 import { MarketListing } from '../MarketLockInfo/MarketListing'
 import { NFTPositionHeader } from '../NFTPositionHeader/NFTPositionHeader'
@@ -6,11 +6,11 @@ import RedeemCardViewer from '../Redeem/RedeemViewer'
 import { useUserPositionState } from './useUserPositionState'
 
 interface NftPositionCardProps {
-  nonFungibleTokenInfo: NonFungibleTokenInfo
+  stakingPosition: StakingPosition
 }
 
 export const UserPositionCard = (props: NftPositionCardProps) => {
-  const { toogleActive, active, nonFungibleTokenInfo } = useUserPositionState(props)
+  const { toogleActive, active, stakingPosition } = useUserPositionState(props)
   return (
     <Box
       pos={'relative'}
@@ -27,13 +27,13 @@ export const UserPositionCard = (props: NftPositionCardProps) => {
       <Flex bgSize="20% 30%" bgImage={'/assets/textures/metal.png'} shadow={'up'} rounded="2xl">
         <Flex w={'full'} direction={'column'} minW={'600px'}>
           <NFTPositionHeader
-            nonFungibleTokenInfo={nonFungibleTokenInfo}
+            stakingPosition={stakingPosition}
             active={active}
             toogleActive={toogleActive}
           />
           <Collapse in={active}>
-            <RedeemCardViewer nonFungibleTokenInfo={nonFungibleTokenInfo} />
-            {active && <MarketListing nonFungibleTokenInfo={nonFungibleTokenInfo} />}
+            <RedeemCardViewer stakingPosition={stakingPosition} />
+            {active && <MarketListing stakingPosition={stakingPosition} />}
           </Collapse>
         </Flex>
       </Flex>

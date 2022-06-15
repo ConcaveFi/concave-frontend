@@ -1,6 +1,6 @@
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
 
-export type Pool = {
+export type StakePool = {
   readonly balance: BigNumber
   readonly excessRatio: BigNumber
   readonly g: BigNumber

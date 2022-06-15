@@ -1,15 +1,15 @@
-import { NonFungibleTokenInfo } from '@concave/marketplace'
+import { StakingPosition } from '@concave/marketplace'
 import { useState } from 'react'
 
 interface NftPositionCardProps {
-  nonFungibleTokenInfo: NonFungibleTokenInfo
+  stakingPosition: StakingPosition
 }
 
 export const useUserPositionState = (props: NftPositionCardProps) => {
-  const { nonFungibleTokenInfo } = props
+  const { stakingPosition } = props
   const [active, setActive] = useState(false)
   return {
-    nonFungibleTokenInfo,
+    stakingPosition,
     active,
     toogleActive: () => {
       setActive(!active)
