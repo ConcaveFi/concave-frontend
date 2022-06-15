@@ -5,7 +5,7 @@ import { withPageTransition } from 'components/PageTransition'
 import { useDashBoardState } from 'contracts/DashBoard/DashBoardState'
 import React from 'react'
 
-export function Dashboard() {
+export function LiquidStakePositions() {
   const data = useDashBoardState()
 
   // commit
@@ -13,7 +13,7 @@ export function Dashboard() {
   return (
     <Flex align={'center'} justify="start" direction={'column'} width={'full'} textAlign="center">
       <Heading as="h1" mt={8} mb={3} fontSize="5xl">
-        My Dashboard
+        Liquid Stake Positions
       </Heading>
       <Flex my={3} justify={'center'} maxWidth={{ sm: '358px', lg: '1000px' }}>
         <Text textAlign="center">
@@ -29,9 +29,9 @@ export function Dashboard() {
   )
 }
 
-Dashboard.Meta = {
-  title: 'Concave | Dashboard',
+LiquidStakePositions.Meta = {
+  title: 'Concave | Liquid Stake Positions',
   description: `You can use the Dashboard to claim dividends and manage your Liquid NFT positions.`,
 }
 
-export default withPageTransition(Dashboard)
+export default withPageTransition(LiquidStakePositions)
