@@ -18,8 +18,11 @@ export const StakeToggleButton: React.FC<StakeToggleButton> = ({
         {nameByFilter[filter]}
       </Text>
       <ToggleButton
-        onActivate={() => onEnableFilter(filter)}
-        onDisable={() => onDisableFilter(filter)}
+        enabled={true}
+        onToggle={(enabled) => {
+          if (enabled) onEnableFilter(filter)
+          else onDisableFilter(filter)
+        }}
       />
     </Flex>
   )

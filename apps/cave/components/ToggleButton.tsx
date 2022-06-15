@@ -1,38 +1,44 @@
 import { Box, Flex, useDisclosure } from '@concave/ui'
+import { useEffect } from 'react'
 
 type ToggleButton = {
-  onActivate: VoidFunction
-  onDisable: VoidFunction
+  onToggle: (enabled: boolean) => void
+  enabled?: boolean
 }
 
-export const ToggleButton = ({ onActivate, onDisable }: ToggleButton) => {
-  const { isOpen, onToggle } = useDisclosure()
+export const ToggleButton = ({ onToggle, enabled }: ToggleButton) => {
+  const { isOpen: isEnabled, onToggle: onToggleEnabled } = useDisclosure({
+    defaultIsOpen: enabled || false,
+  })
+  const onToggleButton = () => {
+    onToggleEnabled()
+    onToggle(!isEnabled)
+  }
+
   return (
     <Flex
       width={'36px'}
       height="20px"
-      shadow={!isOpen && 'down'}
+      shadow={!isEnabled && 'down'}
       rounded="2xl"
       p={'2px'}
-      bg={isOpen && 'green.400'}
+      bg={isEnabled && 'green.400'}
       cursor="pointer"
       onClick={() => {
-        if (isOpen) onDisable()
-        else onActivate()
-        onToggle()
+        onToggleButton()
       }}
       transition={'0.3s all'}
     >
       <Box
         boxShadow={''}
         transition={'0.3s all'}
-        ml={isOpen && '15px'}
+        ml={isEnabled && '15px'}
         rounded={'full'}
         width="16px"
         height="full"
         bg="gray.100"
         shadow={'0px 0px 10px 0px #222'}
-      ></Box>
+      />
     </Flex>
   )
 }
