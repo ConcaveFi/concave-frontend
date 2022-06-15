@@ -6,6 +6,7 @@ import {
   fetchQueryCurrencies,
 } from 'components/AMM/hooks/useQueryCurrencies'
 import { withPageTransition } from 'components/PageTransition'
+import { NODE_ENV } from 'lib/env.conf'
 import { GetServerSideProps } from 'next'
 
 import { useMemo } from 'react'
