@@ -72,7 +72,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query, res }) => 
 }
 
 export function SwapPage({ currencies: serverPropsCurrencies }) {
-  const [settings, setSetting] = useSwapSettings()
+  const { settings, setSetting, isDefaultSettings, onClose } = useSwapSettings()
 
   const currencies = useMemo(
     () => serverPropsCurrencies?.map(currencyFromJson),
@@ -178,7 +178,12 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
                   />
                 </Button>
               </Collapse>
-              <Settings settings={settings} setSetting={setSetting} />
+              <Settings
+                settings={settings}
+                setSetting={setSetting}
+                isDefaultSettings={isDefaultSettings}
+                onClose={onClose}
+              />
             </HStack>
 
             <Collapse style={{ overflow: 'visible' }} in={isDetailsOpen} animateOpacity>
