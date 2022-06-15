@@ -1,8 +1,12 @@
 import { Button, Popover, PopoverContent, PopoverTrigger, Portal, useDisclosure } from '@concave/ui'
 import { DropdownCard } from '../DropdownCard'
+import { RangeFilter } from './hooks/useFilterByRange'
 import { RangeFilterCard } from './RangeFilterCard'
-
-export const InitialFilter = () => {
+type InitialFilter = {
+  onApplyFilter: (rangeFilter: RangeFilter) => void
+  onResetFilter: () => void
+}
+export const InitialFilter = ({ onApplyFilter, onResetFilter }: InitialFilter) => {
   const { isOpen, onToggle, onClose } = useDisclosure()
   return (
     <Popover onClose={onClose}>
@@ -13,7 +17,7 @@ export const InitialFilter = () => {
       </PopoverTrigger>
       <Portal>
         <PopoverContent width={260}>
-          <RangeFilterCard />
+          <RangeFilterCard onApplyFilter={onApplyFilter} onResetFilter={onResetFilter} />
         </PopoverContent>
       </Portal>
     </Popover>

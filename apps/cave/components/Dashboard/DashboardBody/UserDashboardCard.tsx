@@ -1,4 +1,5 @@
 import { Box, Button, Collapse, Flex, Spinner, Text } from '@concave/ui'
+import { RangeFilter, useFilterByRange } from 'components/NftFilters/Filters/hooks/useFilterByRange'
 import { useFilterByStakePool } from 'components/NftFilters/Filters/hooks/useFilterByStakePool'
 import {
   NftSorter,
@@ -21,6 +22,9 @@ export const UserDashboardCard = ({ stakePositions }: { stakePositions: UseDashB
   // Sorters && filters
   const [stakeFilters, setStakeFilters] = useState([])
   const { filterByStakePool } = useFilterByStakePool(stakeFilters)
+
+  const [rangeFilter, setRangeFilter] = useState<RangeFilter>({})
+  const { filterByRange } = useFilterByRange(rangeFilter)
 
   const [sorter, setSorter] = useState<NftSorter>()
   const { sorter: sorterFunction } = useNFtSorter(sorter)
@@ -47,6 +51,8 @@ export const UserDashboardCard = ({ stakePositions }: { stakePositions: UseDashB
           <UserDividendCard isLoading={isLoading} totalLocked={totalLocked} />
         </Flex>
         <FilterContainer
+          onApplyFilter={setRangeFilter}
+          onResetFilter={() => setRangeFilter({})}
           onChangeSorter={setSorter}
           onEnableFilter={(filter) => setStakeFilters([...stakeFilters, filter])}
           onDisableFilter={(disabledFilter) =>
@@ -69,6 +75,7 @@ export const UserDashboardCard = ({ stakePositions }: { stakePositions: UseDashB
           >
             {userNonFungibleTokensInfo
               .filter(filterByStakePool)
+              .filter(filterByRange)
               .sort(sorterFunction)
               .map((nonFungibleTokenInfo) => (
                 <UserPositionCard
