@@ -1,6 +1,9 @@
 import { Box, Button, Collapse, Flex, Spinner, Text } from '@concave/ui'
 import { RangeFilter, useFilterByRange } from 'components/NftFilters/Filters/hooks/useFilterByRange'
-import { useFilterByStakePool } from 'components/NftFilters/Filters/hooks/useFilterByStakePool'
+import {
+  StakePoolFilter,
+  useFilterByStakePool,
+} from 'components/NftFilters/Filters/hooks/useFilterByStakePool'
 import {
   NftSorter,
   NftSorterType,
@@ -20,8 +23,15 @@ export const UserDashboardCard = ({ stakePositions }: { stakePositions: UseDashB
   const hasPositions = userNonFungibleTokensInfo.length !== 0
 
   // Sorters && filters
-  const [stakeFilters, setStakeFilters] = useState([])
+  const [stakeFilters, setStakeFilters] = useState([
+    StakePoolFilter.FILTER_BY_45_DAYS,
+    StakePoolFilter.FILTER_BY_90_DAYS,
+    StakePoolFilter.FILTER_BY_180_DAYS,
+    StakePoolFilter.FILTER_BY_360_DAYS,
+  ])
   const { filterByStakePool } = useFilterByStakePool(stakeFilters)
+
+  console.log(stakeFilters)
 
   const [rangeFilter, setRangeFilter] = useState<RangeFilter>({})
   const { filterByRange } = useFilterByRange(rangeFilter)
@@ -63,7 +73,7 @@ export const UserDashboardCard = ({ stakePositions }: { stakePositions: UseDashB
           <Box
             pos="relative"
             maxH={{ lg: '675px', md: '740px', base: '800px' }}
-            overflowY={'scroll'}
+            overflowY={'auto'}
             overflowX="hidden"
             borderRadius="12px"
             px={{ base: 0, md: '0.5rem' }}

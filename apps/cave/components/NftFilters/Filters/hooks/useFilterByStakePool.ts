@@ -9,8 +9,6 @@ export enum StakePoolFilter {
 }
 
 export const useFilterByStakePool = (filters: StakePoolFilter[]) => ({
-  filterByStakePool:
-    filters.length !== 0
-      ? (current: NonFungibleTokenInfo) => filters.some((value) => current.poolID === value)
-      : () => true,
+  filterByStakePool: (current: NonFungibleTokenInfo) =>
+    filters.some((value) => current.poolID === value),
 })
