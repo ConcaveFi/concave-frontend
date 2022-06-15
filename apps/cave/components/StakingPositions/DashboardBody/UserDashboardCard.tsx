@@ -1,5 +1,6 @@
 import { Box, Button, Collapse, Flex, Spinner, Text } from '@concave/ui'
 import { useFilterByStakePool } from 'components/NftFilters/Filters/hooks/useFilterByStakePool'
+import { NftSorter, useNFtSorter } from 'components/NftFilters/Sorters/hooks/useNftSorter'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useConnect } from 'wagmi'
@@ -13,8 +14,12 @@ export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePo
   const { userNonFungibleTokensInfo, totalLocked, isLoading } = stakePosition
   const hasPositions = userNonFungibleTokensInfo.length !== 0
 
+  // Sorters && filters
   const [stakeFilters, setStakeFilters] = useState([])
   const { filterByStakePool } = useFilterByStakePool(stakeFilters)
+
+  const [sorter, setSorter] = useState<NftSorter>()
+  const { sorter: sorterFunction } = useNFtSorter(sorter)
 
   return (
     <Flex display={{ lg: 'flex', md: 'flex' }}>
@@ -38,6 +43,7 @@ export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePo
           <UserDividendCard isLoading={isLoading} totalLocked={totalLocked} />
         </Flex>
         <FilterContainer
+          onChangeSorter={setSorter}
           onEnableFilter={(filter) => setStakeFilters([...stakeFilters, filter])}
           onDisableFilter={(disabledFilter) =>
             setStakeFilters(stakeFilters.filter((stakeFilter) => stakeFilter !== disabledFilter))
@@ -57,12 +63,15 @@ export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePo
             apply="scrollbar.big"
             mb={3}
           >
-            {userNonFungibleTokensInfo.filter(filterByStakePool).map((nonFungibleTokenInfo) => (
-              <UserPositionCard
-                key={+nonFungibleTokenInfo.tokenId.toString()}
-                stakingPosition={nonFungibleTokenInfo}
-              />
-            ))}
+            {userNonFungibleTokensInfo
+              .filter(filterByStakePool)
+              .sort(sorterFunction)
+              .map((nonFungibleTokenInfo) => (
+                <UserPositionCard
+                  key={+nonFungibleTokenInfo.tokenId.toString()}
+                  stakingPosition={nonFungibleTokenInfo}
+                />
+              ))}
           </Box>
         </Collapse>
 

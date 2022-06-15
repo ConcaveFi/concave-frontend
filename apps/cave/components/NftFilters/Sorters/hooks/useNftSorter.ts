@@ -8,7 +8,6 @@ export enum NftSorterType {
 }
 
 export type NftOrder = 'ASC' | 'DESC'
-
 export type NftSorter = { sorter: NftSorterType; order: NftOrder }
 
 export const useNFtSorter = (sorter: NftSorter) => ({
