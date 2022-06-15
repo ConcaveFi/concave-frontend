@@ -41,7 +41,7 @@ export function FilterContainer({
             Filter by:
           </Text>
           <Flex gap={3}>
-            <RedeemDateFilter />
+            {/* <RedeemDateFilter /> */}
             <InitialFilter onResetFilter={onResetFilter} onApplyFilter={onApplyFilter} />
             <StakePoolFilterCard
               onDisableFilter={onDisableFilter}
@@ -51,7 +51,7 @@ export function FilterContainer({
         </Flex>
         <Flex align={'center'} gap={2}>
           <Text fontWeight={'bold'} textColor="text.low">
-            Sorter by:
+            Sort by:
           </Text>
           <SorterCard onChangeSorter={onChangeSorter} />
         </Flex>

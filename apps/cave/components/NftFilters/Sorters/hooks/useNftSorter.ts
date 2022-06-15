@@ -1,4 +1,3 @@
-import { NonFungibleTokenInfo } from '@concave/marketplace'
 import { utils } from 'ethers'
 
 export enum NftSorterType {
