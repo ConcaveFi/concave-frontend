@@ -8,6 +8,7 @@ import { RedeemBBT_CNV_Abi } from 'contracts/VestedTokens/RedeemBbtCNVAbi'
 import { Contract, Transaction, utils } from 'ethers'
 import { parseEther } from 'ethers/lib/utils'
 import { concaveProvider as provider } from 'lib/providers'
+import { bbtCNV_REDEEM_CONTRACT } from 'lib/VestedTokens/addresses'
 import { useState } from 'react'
 import { MdInfo } from 'react-icons/md'
 import { useAccount, useConnect, useSigner } from 'wagmi'
@@ -46,11 +47,7 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
   const [useMax, setUseMax] = useState(false)
   const [value, setValue] = useState<number>()
 
-  const bbtCNVContract = new Contract(
-    '0xCf6B82Ca69bE4272d457c246FAF380f88af34f69',
-    RedeemBBT_CNV_Abi,
-    provider(4),
-  )
+  const bbtCNVContract = new Contract(bbtCNV_REDEEM_CONTRACT[4], RedeemBBT_CNV_Abi, provider(4))
   return (
     <>
       <Modal

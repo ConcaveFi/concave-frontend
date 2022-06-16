@@ -6,6 +6,7 @@ import { Contract, Transaction } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { aCNVredeemabi } from 'lib/contractoABI'
 import { concaveProvider as provider } from 'lib/providers'
+import { aCNV_REDEEM_CONTRACT } from 'lib/VestedTokens/addresses'
 import { useState } from 'react'
 import { truncateNumber } from 'utils/truncateNumber'
 import { useAccount, useConnect, useSigner } from 'wagmi'
@@ -25,12 +26,7 @@ export default function ACNVRedemptionDialog(props: ACNVRedemptionDialogProps) {
   const { data: signer } = useSigner()
   const { data: account } = useAccount()
   const { isConnected } = useConnect()
-  const networkdId = useCurrentSupportedNetworkId()
-  const aCNVContract = new Contract(
-    '0x38baBedCb1f226B49b2089DA0b84e52b6181Ca59',
-    aCNVredeemabi,
-    provider(1),
-  )
+  const aCNVContract = new Contract(aCNV_REDEEM_CONTRACT[1], aCNVredeemabi, provider(1))
 
   const { aCNVData, loadingACNV } = useVestedTokens()
 

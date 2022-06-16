@@ -1,0 +1,18 @@
+export const bbtCNV_REDEEM_CONTRACT = {
+  1: '',
+  4: '0xCf6B82Ca69bE4272d457c246FAF380f88af34f69',
+}
+
+export const bbtCNV_ADDRESS = {
+  1: '0x0000000012a0592C154D552C410030E724b2eA00',
+  4: '0x03eebe71dca9cdfc71d5f9a50f48a52ca5662526',
+}
+
+export const aCNV_ADDRESS = {
+  1: '0x6Ff0106D34FEEe8A8aCF2e7b9168480f86B82E2f',
+  4: '',
+}
+export const aCNV_REDEEM_CONTRACT = {
+  1: '0x38baBedCb1f226B49b2089DA0b84e52b6181Ca59',
+  4: '',
+}
