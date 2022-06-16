@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 import { CNV, Currency, CurrencyAmount, DAI } from '@concave/core'
 import { Card, Flex, HStack, keyframes, Spinner, Text, useDisclosure, VStack } from '@concave/ui'
+=======
+import { Currency, CurrencyAmount, DAI } from '@concave/core'
+import { Card, Flex, HStack, keyframes, Text, useDisclosure, VStack } from '@concave/ui'
+>>>>>>> ea3e96a8a7bbaa0481a1fa79002ea851cbd9f1da
 import { ApproveButton } from 'components/ApproveButton/ApproveButton'
 import { CurrencyInputField as BondInput } from 'components/CurrencyAmountField'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
@@ -39,7 +44,7 @@ export function BondBuyCard(props: {
   const { currencyIn, currencyOut, userAddress, balance, signer, networkId } = useBondState()
   const [bondTransaction, setBondTransaction] = useState()
 
-  const [settings, setSetting] = useBondSettings()
+  const { settings, setSetting, isDefaultSettings, onClose } = useBondSettings()
   const [amountIn, setAmountIn] = useState<CurrencyAmount<Currency>>(toAmount('0', DAI[networkId]))
 
   useEffect(() => {
@@ -119,7 +124,12 @@ export function BondBuyCard(props: {
         <Flex flex={1} align={'center'} justify="end" minWidth={100} gap={2}>
           <GasPrice />
           <HStack align="center" justify="end" py={{ base: 0, md: 5, lg: 0, xl: 5 }}>
-            <Settings settings={settings} setSetting={setSetting} />
+            <Settings
+              settings={settings}
+              setSetting={setSetting}
+              isDefaultSettings={isDefaultSettings}
+              onClose={onClose}
+            />
           </HStack>
         </Flex>
       </Flex>
@@ -187,11 +197,10 @@ export function BondBuyCard(props: {
             })
         }}
         bondPrice={bondSpotPrice}
-        minimumAmountOut={(
-          +amountOut -
-          (+settings.slippageTolerance.value / 100) * +amountOut
-        ).toFixed(3)}
-        slippage={settings.slippageTolerance.value}
+        minimumAmountOut={(+amountOut - (+settings.slippageTolerance / 100) * +amountOut).toFixed(
+          3,
+        )}
+        slippage={settings.slippageTolerance?.toString()}
       />
       <WaitingConfirmationDialog isOpen={hasClickedConfirm} title={'Confirm Bond'}>
         <Text fontSize="lg" color="text.accent">
