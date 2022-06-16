@@ -6,6 +6,7 @@ import { Transaction } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useAccount, useContract, useSigner } from 'wagmi'
 import { useRecentTransactions } from 'hooks/useRecentTransactions'
+import { toPercent } from 'utils/toPercent'
 
 const initialState = {
   isWaitingForConfirmation: false,
@@ -38,7 +39,7 @@ export const useSwapTransaction = (
     setState({ ...initialState, trade, isWaitingForConfirmation: true })
     try {
       const { methodName, args, value } = Router.swapCallParameters(trade, {
-        allowedSlippage: settings.slippageTolerance.percent,
+        allowedSlippage: toPercent(settings.slippageTolerance),
         ttl: +settings.deadline * 60,
         feeOnTransfer: trade.tradeType === TradeType.EXACT_INPUT,
         recipient: recipient || account.address,

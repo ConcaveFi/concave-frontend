@@ -13,7 +13,7 @@ import { toPercent } from 'utils/toPercent'
 
 type SlippageToleranceProps = {
   value: number
-  onValueChange: ({ value: number, percent: Percent }) => void
+  onValueChange: (value: number) => void
   onClickAuto: () => void
   maxSlippage?: number
 }
@@ -41,9 +41,7 @@ export const SlippageTolerance = ({
                 value === '' || (floatValue < maxSlippage && !!toPercent(floatValue))
               }
               size="medium"
-              onValueChange={({ floatValue }) =>
-                onValueChange({ value: floatValue, percent: toPercent(floatValue) })
-              }
+              onValueChange={({ floatValue }) => onValueChange(floatValue)}
             />
             <InputRightAddon color="text.low" fontWeight="semibold">
               %
