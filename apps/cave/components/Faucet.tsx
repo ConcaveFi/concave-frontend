@@ -39,7 +39,7 @@ const sendSomeEth = async (recipient) => {
 }
 
 const ETHFaucet = () => {
-  const [{ data: account }] = useAccount()
+  const { data: account } = useAccount()
 
   const { data: ethBalance, isLoading } = useCurrencyBalance(NATIVE[ChainId.RINKEBY])
 
@@ -98,9 +98,13 @@ const ETHFaucet = () => {
 }
 
 const DAIMinter = () => {
-  const [{ data: account }] = useAccount()
+  const { data: account } = useAccount()
 
-  const [{ data: mintDaiTx, loading }, mintDAI] = useContractWrite(
+  const {
+    data: mintDaiTx,
+    isLoading,
+    write: mintDAI,
+  } = useContractWrite(
     {
       addressOrName: DAI[ChainId.RINKEBY].address,
       contractInterface: ['function mint(address guy, uint256 wad) external'],
@@ -128,7 +132,7 @@ const DAIMinter = () => {
     <Button
       leftIcon={<Image w="20px" src={`/assets/tokens/dai.svg`} alt="" />}
       onClick={() => mintDAI()}
-      isLoading={loading}
+      isLoading={isLoading}
       loadingText="Confirm in your wallet"
       variant="secondary"
       p={3}
@@ -159,15 +163,15 @@ const Faucet = ({ isOpen, onClose }) => {
 }
 
 export const TestnetIndicator = () => {
-  const [{ data: network }] = useNetwork()
+  const { activeChain } = useNetwork()
   const { isUserWorthy } = useWorthyUser()
 
-  const [isOpen, setIsOpen] = useState(network.chain?.testnet && isUserWorthy)
+  const [isOpen, setIsOpen] = useState(activeChain?.testnet && isUserWorthy)
   const onClose = () => setIsOpen(false)
 
   useEffect(() => {
-    setIsOpen(network.chain?.testnet && isUserWorthy)
-  }, [isUserWorthy, network.chain?.testnet])
+    setIsOpen(activeChain?.testnet && isUserWorthy)
+  }, [isUserWorthy, activeChain?.testnet])
 
   const minterModal = useDisclosure()
 
@@ -194,7 +198,7 @@ export const TestnetIndicator = () => {
                 filter="drop-shadow(0px 0px 10px rgba(240, 255, 245, 0.3))"
                 bgClip="text"
               >
-                {network.chain?.name}
+                {activeChain?.name}
               </Text>{' '}
               testnet
             </Text>

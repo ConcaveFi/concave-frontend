@@ -1,24 +1,24 @@
 import { Currency, CurrencyAmount, Percent, Rounding } from '@concave/core'
 import { Trade, TradeType } from '@concave/gemswap-sdk'
 import { Box, Flex, Stack, Text } from '@concave/ui'
+import { toPercent } from 'utils/toPercent'
 
 export const MinExpectedOutput = ({
   trade,
   slippageTolerance,
 }: {
   trade: Trade<Currency, Currency, TradeType>
-  slippageTolerance: { value: number; percent: Percent }
+  slippageTolerance: number
 }) => {
   const isExactInput = trade.tradeType === TradeType.EXACT_INPUT
   const amount = isExactInput
-    ? trade.minimumAmountOut(slippageTolerance.percent)
-    : trade.maximumAmountIn(slippageTolerance.percent)
+    ? trade.minimumAmountOut(toPercent(slippageTolerance))
+    : trade.maximumAmountIn(toPercent(slippageTolerance))
   return (
     <Box>
       <Flex fontSize="sm" w="100%" mb={3} justify="space-between" align="center">
         <Text maxW="200px" fontWeight="bold" textColor="text.low" mr={4}>
-          {isExactInput ? `Minimum received` : `Maximum sent`} after slippage (
-          {slippageTolerance.value}%)
+          {isExactInput ? `Minimum received` : `Maximum sent`} after slippage ({slippageTolerance}%)
         </Text>
         <Text fontWeight="bold" textColor="text.low">
           {amount.toFixed(3, { groupSeparator: ',' })} {amount.currency.symbol}

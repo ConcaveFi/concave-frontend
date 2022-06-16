@@ -2,14 +2,14 @@ import { Text, Button, Modal, Image } from '@concave/ui'
 import { chain, useNetwork } from 'wagmi'
 
 export const UnsupportedNetworkModal = () => {
-  const [{ data }, switchNetwork] = useNetwork()
+  const { activeChain, switchNetwork } = useNetwork()
 
   return (
     <Modal
       bluryOverlay={true}
       title="Unsupported Network"
       titleAlign="center"
-      isOpen={data.chain?.id && ![chain.mainnet.id, chain.rinkeby.id].includes(data.chain?.id)}
+      isOpen={activeChain?.id && ![chain.mainnet.id, chain.rinkeby.id].includes(activeChain?.id)}
       onClose={() => {}}
       bodyProps={{ w: '350px', gap: 2 }}
       hideClose

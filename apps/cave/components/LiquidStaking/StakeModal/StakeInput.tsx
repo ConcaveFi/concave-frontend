@@ -1,4 +1,5 @@
-import { CNV, Currency, CurrencyAmount } from '@concave/core'
+import { CNV, Currency, CurrencyAmount, STAKING_CONTRACT } from '@concave/core'
+import { StakingV1Contract } from '@concave/marketplace'
 import { Box, Card, Flex, Text, useDisclosure } from '@concave/ui'
 import { ApproveButton } from 'components/ApproveButton/ApproveButton'
 import { CurrencyInputField } from 'components/CurrencyAmountField'
@@ -8,17 +9,16 @@ import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useRecentTransactions } from 'hooks/useRecentTransactions'
-import { StakingV1ProxyAddress } from 'lib/StakingV1Proxy/Address'
-import { StakingV1Contract } from 'lib/StakingV1Proxy/StakingV1Contract'
+import { concaveProvider } from 'lib/providers'
 import React, { useState } from 'react'
 import { toAmount } from 'utils/toAmount'
 import { useAccount, useSigner } from 'wagmi'
 import { PARAMETER_TO_POOL_PERIOD } from '../StakeCard'
 
 function StakeInput(props: { poolId: number; period: string; onClose: () => void }) {
-  const [{ data: account }] = useAccount()
+  const { data: account } = useAccount()
   const netWorkdId = useCurrentSupportedNetworkId()
-  const [{ data: signer }] = useSigner()
+  const { data: signer } = useSigner()
   const [stakeInput, setStakeInput] = useState<CurrencyAmount<Currency>>(
     toAmount(0, CNV[netWorkdId]),
   )
@@ -49,7 +49,7 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
   }
 
   const lock = () => {
-    const contract = new StakingV1Contract(netWorkdId)
+    const contract = new StakingV1Contract(concaveProvider(netWorkdId))
     setWaitingForConfirm(true)
     contract
       .lock(signer, account?.address, stakeInput.numerator.toString(), props.poolId)
@@ -83,7 +83,7 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
             approveArgs={{
               currency: stakeInput.currency,
               amount: stakeInput.numerator,
-              spender: StakingV1ProxyAddress[stakeInput.currency.chainId],
+              spender: STAKING_CONTRACT[stakeInput.currency.chainId],
             }}
             mt={5}
             onClick={lock}

@@ -1,17 +1,5 @@
-import {
-  Modal,
-  useDisclosure,
-  Flex,
-  Button,
-  Text,
-  Tabs,
-  TabList,
-  Tab,
-  TabPanels,
-  TabPanel,
-  Card,
-} from '@concave/ui'
-import { useAccount } from 'wagmi'
+import { Modal, useDisclosure, Flex, Button, Text } from '@concave/ui'
+import { useAccount, useDisconnect } from 'wagmi'
 import YourWalletContainer from './YourWallet/Containers/YourWalletContainer'
 import ConnectedAreasContainer from './YourWallet/Containers/ConnectedsAreaContainer'
 import RecentTransactionsContainer from './YourWallet/Containers/RecentTransactionsContainer'
@@ -24,7 +12,8 @@ interface YourWalletModalProps {
 }
 
 export default function YourWalletModal(props: YourWalletModalProps) {
-  const [{ data: account }, disconnect] = useAccount()
+  const { data: account } = useAccount()
+  const { disconnect } = useDisconnect()
 
   const { isOpen, onOpen, onClose } = useDisclosure()
 

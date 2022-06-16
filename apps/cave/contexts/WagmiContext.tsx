@@ -1,28 +1,25 @@
 import { ReactNode } from 'react'
-import { chain, defaultChains, Provider } from 'wagmi'
+import { chain, createClient, defaultChains, WagmiConfig } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
-import { concaveProvider, concaveWSProvider, infuraId } from 'lib/providers'
-import { NEXT_PUBLIC_ALCHEMY_ID } from 'lib/env.conf'
+import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
+import { concaveProvider, concaveRPC, concaveWSProvider } from 'lib/providers'
 
 const chains = [chain.mainnet, chain.rinkeby] // app supported chains
 
-const connectors = (config) => [
+const connectors = [
   new InjectedConnector({ chains }),
+  new MetaMaskConnector({ chains }),
+  new WalletConnectConnector({ chains, options: { qrcode: true } }),
   new CoinbaseWalletConnector({
     chains,
     options: {
       appName: 'Concave App',
-      // jsonRpcUrl: concaveRPC,
-      jsonRpcUrl: `https://eth-mainnet.alchemyapi.io/v2/${NEXT_PUBLIC_ALCHEMY_ID}`,
-      // appLogoUrl: 'https://concave.lol/assets/concave/logomark.png',
+      jsonRpcUrl: concaveRPC,
+      appLogoUrl: 'https://app.concave.lol/assets/tokens/cnv.svg',
       darkMode: true,
     },
-  }),
-  new WalletConnectConnector({
-    chains,
-    options: { infuraId, qrcode: true, chainId: config.chainId },
   }),
 ]
 
@@ -34,13 +31,13 @@ const provider = ({ chainId }) =>
 const webSocketProvider = ({ chainId }) =>
   concaveWSProvider(isChainSupported(chainId) ? chainId : chain.mainnet.id)
 
-const client = {
+const client = createClient({
   autoConnect: true,
   connectors,
   provider,
   webSocketProvider,
-}
+})
 
 export const WagmiProvider = ({ children }: { children: ReactNode }) => (
-  <Provider {...client}>{children}</Provider>
+  <WagmiConfig client={client}>{children}</WagmiConfig>
 )

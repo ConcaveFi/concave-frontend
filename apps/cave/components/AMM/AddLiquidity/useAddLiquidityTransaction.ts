@@ -59,7 +59,7 @@ export const useAddLiquidityTransaction = (
   recipient?: string,
 ) => {
   const networkId = useCurrentSupportedNetworkId()
-  const [{ data: signer }] = useSigner()
+  const { data: signer } = useSigner()
   const routerContract = useContract<Contract>({
     addressOrName: ROUTER_ADDRESS[networkId],
     // @ts-ignore

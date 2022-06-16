@@ -4,15 +4,16 @@ import { ButtonLink } from 'components/ButtonLink'
 import { ConnectWallet } from 'components/ConnectWallet'
 import React from 'react'
 import { MdOutlineDashboard } from 'react-icons/md'
-import { useAccount, useBalance } from 'wagmi'
+import { useAccount, useBalance, useNetwork } from 'wagmi'
 
 function SideBarTop() {
-  const [{ data: account }] = useAccount()
-  const [{ data }] = useBalance({
+  const { data: account } = useAccount()
+  const { activeChain } = useNetwork()
+  const { data } = useBalance({
     addressOrName: account?.address,
-    token: CNV[ChainId.ETHEREUM].address,
-    formatUnits: CNV[ChainId.ETHEREUM].decimals,
-    skip: !account?.address,
+    token: CNV[activeChain?.id || ChainId.ETHEREUM].address,
+    formatUnits: CNV[activeChain?.id || ChainId.ETHEREUM].decimals,
+    enabled: !!account?.address,
   })
 
   return (

@@ -32,7 +32,7 @@ export const Deadline = ({ value, onValueChange }) => {
             maxLength={7}
             size="medium"
             variant="unstyled"
-            onValueChange={onValueChange}
+            onValueChange={({ floatValue }) => onValueChange(floatValue)}
           />
           <InputRightAddon fontFamily="body" color="text.low" fontWeight="semibold">
             minutes
