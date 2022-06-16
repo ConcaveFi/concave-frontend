@@ -3,6 +3,7 @@ import { Box, Collapse, Flex, Image, Spinner, Text } from '@concave/ui'
 import { useFiatPrice } from 'components/AMM/hooks/useFiatPrice'
 import { getBondSpotPrice } from 'components/Bond/BondState'
 import { ButtonLink, ButtonLinkProps } from 'components/ButtonLink'
+import { useCNVPrice } from 'hooks/useCNVPrice'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useDevice } from 'hooks/useDevice'
 import { useRouter } from 'next/router'
@@ -66,7 +67,7 @@ function PageNav() {
   const [liquidStakingHover, setLiquidStakingHover] = useState(false)
   const [swapHover, setSwapStakingHover] = useState(false)
   const device = useDevice()
-  const cnvPrice = useFiatPrice(CNV[currentSupportedNetworkId])
+  const cnvPrice = useCNVPrice()
   const roi = useQuery(
     ['bondROI', currentSupportedNetworkId, cnvPrice.price],
     async () => {
