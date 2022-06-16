@@ -23,7 +23,7 @@ export const BBT_CNVDialogInput = ({
             value={value}
             onValueChange={({ value }) => onChangeValue(+value)}
           />
-          <MaxButton onClick={() => onChangeValue(redeemable)} />
+          {/* <MaxButton onClick={() => onChangeValue(redeemable)} /> */}
         </Flex>
         <Flex width={'full'} justify="space-between" align={'center'}>
           <BalanceButton amount={balance} onClick={() => onChangeValue(balance)} />

@@ -6,6 +6,7 @@ import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialo
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { RedeemBBT_CNV_Abi } from 'contracts/VestedTokens/RedeemBbtCNVAbi'
 import { Contract, Transaction, utils } from 'ethers'
+import { parseEther } from 'ethers/lib/utils'
 import { concaveProvider as provider } from 'lib/providers'
 import { useState } from 'react'
 import { MdInfo } from 'react-icons/md'
@@ -103,7 +104,7 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
               onOpenConfirm()
               bbtCNVContract
                 .connect(signer)
-                .redeem(redeemableData.redeemable, account?.address, account?.address, true)
+                .redeem(parseEther(String(value)), account?.address, useMax)
                 .then((tx) => {
                   onCloseConfirm()
                   setTx(tx)
