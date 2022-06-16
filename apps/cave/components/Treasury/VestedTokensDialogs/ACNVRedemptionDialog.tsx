@@ -1,14 +1,12 @@
-import { Modal, Card, Text, Flex, Button, useDisclosure } from '@concave/ui'
+import { Modal, Card, Text, Flex, Button, useDisclosure, Link } from '@concave/ui'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { Contract, Transaction } from 'ethers'
 import { useGet_User_Acnv_RedeemedQuery } from 'graphql/generated/graphql'
-import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { aCNVredeemabi } from 'lib/contractoABI'
 import { concaveProvider as provider } from 'lib/providers'
 import { useState } from 'react'
-import { truncateNumber } from 'utils/truncateNumber'
 import { useAccount, useConnect, useSigner } from 'wagmi'
 import useVestedTokens from '../Hooks/useVestedTokens'
 
@@ -26,22 +24,25 @@ export default function ACNVRedemptionDialog(props: ACNVRedemptionDialogProps) {
   const { data: signer } = useSigner()
   const { data: account } = useAccount()
   const { isConnected } = useConnect()
-  const networkdId = useCurrentSupportedNetworkId()
+
+  const [tx, setTx] = useState<Transaction>()
+  const [error, setError] = useState('')
+
   const aCNVContract = new Contract(
     '0x38baBedCb1f226B49b2089DA0b84e52b6181Ca59',
     aCNVredeemabi,
     provider(1),
   )
-  const { data, isLoading } = useGet_User_Acnv_RedeemedQuery({ address: account?.address })
-  console.log('data', data)
+  const { data, isLoading } = useGet_User_Acnv_RedeemedQuery({
+    address: account?.address,
+  })
+  const redeemed: number = data?.logACNVRedemption[0]?.amount || 0
+  const txHash = data?.logACNVRedemption[0]?.txHash || ''
 
   const { aCNVData, loadingACNV } = useVestedTokens()
-
-  const [tx, setTx] = useState<Transaction>()
-  const [error, setError] = useState('')
-
   const validBalance = +aCNVData?.formatted > 0
-
+  const alreadyRedeemed = redeemed === +aCNVData?.formatted
+  const canRedeem = validBalance && !alreadyRedeemed
   function redeem() {
     onOpenConfirm()
     aCNVContract
@@ -70,41 +71,68 @@ export default function ACNVRedemptionDialog(props: ACNVRedemptionDialogProps) {
         preserveScrollBarGap
         isCentered
       >
-        <Card gap={4} width={'300px'} height="240px" m={-6} justify="center" align={'center'}>
+        <Card gap={4} width={'340px'} height="220px" m={-6} justify="center" px={5}>
           <Flex
             direction={'column'}
+            width="full"
             shadow={'Down Medium'}
             rounded="2xl"
-            align={'center'}
             height={'100px'}
-            px="5"
             justify={'center'}
+            py={4}
+            px={3}
+            fontSize={'18'}
           >
-            <Text fontSize={'22'} fontWeight="bold">
-              Current balance:
-            </Text>
-            <Text textColor={'text.low'} fontWeight="bold" fontSize={'18'}>
-              {aCNVData && parseFloat(aCNVData?.formatted).toFixed(2)}
-              {!aCNVData && 'loading...'}
-            </Text>
+            <Flex gap={'2'} align={'center'} width={'full'}>
+              <Text textColor={'text.low'} fontWeight="bold">
+                Current balance:
+              </Text>
+              <Text textColor={'text.accent'} fontWeight="bold">
+                {!loadingACNV && parseFloat(aCNVData?.formatted || '0').toFixed(2)}
+                {loadingACNV && 'loading...'}
+              </Text>
+            </Flex>
+            <Flex gap={2}>
+              <Text color={'text.low'} fontWeight="bold">
+                Redeemed:
+              </Text>
+              <Text textColor={'text.accent'} fontWeight="bold">
+                {!isLoading && redeemed.toFixed(2)}
+                {isLoading && 'loading...'}
+              </Text>
+            </Flex>
+            {txHash && (
+              <Link
+                isExternal
+                href={`https://etherscan.io/tx/${data?.logACNVRedemption[0].txHash}`}
+                fontWeight={'bold'}
+                textColor="text.low"
+                fontSize={'13'}
+              >
+                Show tx on explorer
+              </Link>
+            )}
           </Flex>
           <Button
             onClick={() => {
-              if (!validBalance) return
+              if (!canRedeem) return
               redeem()
             }}
             py={2}
             fontSize="22"
             variant={'primary.outline'}
-            width="210px"
+            width="full"
             shadow={'Up Small'}
-            textColor={!validBalance && 'text.low'}
-            _hover={validBalance && { shadow: 'up' }}
-            cursor={!validBalance && 'default'}
+            textColor={!canRedeem && 'text.low'}
+            _hover={canRedeem && { shadow: 'up' }}
+            cursor={!canRedeem && 'default'}
             _active={{}}
             _focus={{}}
           >
-            {isConnected ? (!validBalance ? 'Insufficient balance' : 'Redeem') : 'Not Connected'}
+            {!isConnected && 'Not Connected'}
+            {!validBalance && isConnected && 'Insufficient Balance'}
+            {isConnected && canRedeem && 'Redeem'}
+            {isConnected && !canRedeem && validBalance && 'Nothing To Redeem'}
           </Button>
         </Card>
       </Modal>
