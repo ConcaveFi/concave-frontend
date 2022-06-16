@@ -7,6 +7,7 @@ import { useGet_User_Acnv_RedeemedQuery } from 'graphql/generated/graphql'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { aCNVredeemabi } from 'lib/contractoABI'
 import { concaveProvider as provider } from 'lib/providers'
+import { aCNV_REDEEM_CONTRACT } from 'lib/VestedTokens/addresses'
 import { useState } from 'react'
 import { useAccount, useConnect, useSigner } from 'wagmi'
 import useVestedTokens from '../Hooks/useVestedTokens'
@@ -29,16 +30,12 @@ export default function ACNVRedemptionDialog(props: ACNVRedemptionDialogProps) {
   const [tx, setTx] = useState<Transaction>()
   const [error, setError] = useState('')
 
-  const aCNVContract = new Contract(
-    '0x38baBedCb1f226B49b2089DA0b84e52b6181Ca59',
-    aCNVredeemabi,
-    provider(1),
-  )
   const { data, isLoading } = useGet_User_Acnv_RedeemedQuery({
     address: account?.address,
   })
   const redeemed: number = data?.logACNVRedemption[0]?.amount || 0
   const txHash = data?.logACNVRedemption[0]?.txHash || ''
+  const aCNVContract = new Contract(aCNV_REDEEM_CONTRACT[1], aCNVredeemabi, provider(1))
 
   const { aCNVData, loadingACNV } = useVestedTokens()
   const validBalance = +aCNVData?.formatted > 0

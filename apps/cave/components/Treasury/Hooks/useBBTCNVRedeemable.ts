@@ -1,6 +1,7 @@
 import { RedeemBBT_CNV_Abi } from 'contracts/VestedTokens/RedeemBbtCNVAbi'
 import { Contract } from 'ethers'
 import { concaveProvider as provider } from 'lib/providers'
+import { bbtCNV_REDEEM_CONTRACT } from 'lib/VestedTokens/addresses'
 import { useQuery } from 'react-query'
 import { useAccount } from 'wagmi'
 
@@ -8,7 +9,7 @@ export default function useBBTCNVRedeemable() {
   const { data: account } = useAccount()
 
   const bbtCNV_Redemption_Contract = new Contract(
-    '0xCf6B82Ca69bE4272d457c246FAF380f88af34f69', //mainnet?
+    bbtCNV_REDEEM_CONTRACT[4],
     RedeemBBT_CNV_Abi,
     provider(4),
   )
