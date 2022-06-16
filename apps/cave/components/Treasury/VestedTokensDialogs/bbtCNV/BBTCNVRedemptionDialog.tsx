@@ -4,13 +4,12 @@ import { ToggleButton } from 'components/ToggleButton'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
-import { RedeemBBT_CNV_Abi } from 'contracts/VestedTokens/RedeemBbtCNVAbi'
+import { bbtCNV_REDEMPTION_V2 } from 'contracts/VestedTokens/addresses'
+import { bbtCNV_REDEMPTION_V2_ABI } from 'contracts/VestedTokens/BBTCNV_V2_ABI'
 import { Contract, Transaction, utils } from 'ethers'
 import { parseEther } from 'ethers/lib/utils'
 import { concaveProvider as provider } from 'lib/providers'
-import { bbtCNV_REDEEM_CONTRACT } from 'lib/VestedTokens/addresses'
 import { useState } from 'react'
-import { MdInfo } from 'react-icons/md'
 import { useAccount, useConnect, useSigner } from 'wagmi'
 import useBBTCNVRedeemable from '../../Hooks/useBBTCNVRedeemable'
 import useVestedTokens from '../../Hooks/useVestedTokens'
@@ -47,7 +46,11 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
   const [useMax, setUseMax] = useState(false)
   const [value, setValue] = useState<number>()
 
-  const bbtCNVContract = new Contract(bbtCNV_REDEEM_CONTRACT[4], RedeemBBT_CNV_Abi, provider(4))
+  const bbtCNVContract = new Contract(
+    bbtCNV_REDEMPTION_V2[4],
+    bbtCNV_REDEMPTION_V2_ABI,
+    provider(4),
+  )
   return (
     <>
       <Modal
