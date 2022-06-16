@@ -106,7 +106,7 @@ function Emissions(props: any) {
           <Image
             mx="auto"
             src={`/assets/liquidstaking/modal-moreinfo-logo.svg`}
-            alt="more-info logo"
+            alt="more info logo"
             onMouseOver={() => {
               if (!mobileUI) props.onShow()
             }}

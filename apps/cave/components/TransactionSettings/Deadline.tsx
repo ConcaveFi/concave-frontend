@@ -17,9 +17,6 @@ export const Deadline = ({ value, onValueChange }) => {
         <Text fontSize="sm">Transaction deadline</Text>
         <Tooltip
           label="Your transaction will revert if it is pending for more than this period of time."
-          bg="gray.900"
-          color="white"
-          placement="bottom"
           shouldWrapChildren
         >
           <QuestionIcon />

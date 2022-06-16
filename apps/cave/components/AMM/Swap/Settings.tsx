@@ -10,10 +10,7 @@ const ToggleExpertMode = ({ isChecked, onToggle }) => {
       <HStack>
         <Text fontSize="sm">Expert Mode</Text>
         <Tooltip
-          label="Expert mode allows high slippage trades. Check yourself before you wreck yourself."
-          bg="gray.900"
-          color="white"
-          placement="bottom"
+          label="Expert mode allows high slippage trades and custom recipients without the confirmation screen. Use at your own risk."
           shouldWrapChildren
         >
           <QuestionIcon />
@@ -31,9 +28,6 @@ const ToggleMultihops = ({ isChecked, onToggle }) => {
         <Text fontSize="sm">Multihops</Text>
         <Tooltip
           label="Disabling multihops restricts swaps to direct pairs only - no routing."
-          bg="gray.900"
-          color="white"
-          placement="bottom"
           shouldWrapChildren
         >
           <QuestionIcon />

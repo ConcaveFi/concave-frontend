@@ -31,10 +31,6 @@ export const SlippageTolerance = ({
         <Text fontSize="sm">Slippage tolerance</Text>
         <Tooltip
           label="Your transaction will revert if the price changes unfavorably by more than this percentage."
-          bg="gray.900"
-          color="white"
-          placement="bottom"
-          position="relative"
           shouldWrapChildren
         >
           <QuestionIcon w="18px" h="18px" />
