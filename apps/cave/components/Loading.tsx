@@ -1,5 +1,5 @@
 import { SpinIcon } from '@concave/icons'
-import { Flex, HStack, keyframes, Text, VStack } from '@concave/ui'
+import { Flex, FlexProps, HStack, keyframes, Text, VStack } from '@concave/ui'
 
 const spin = keyframes({
   '0%': {
@@ -24,13 +24,14 @@ export const Loading = ({
   label,
   rLabel,
   size,
+  ...flexProps
 }: {
   rLabel?: string
   label?: string
   size: 'xs' | 'sm' | 'md' | 'lg'
-}) => {
+} & FlexProps) => {
   return (
-    <Flex justifyContent={'center'}>
+    <Flex justifyContent={'center'} {...flexProps}>
       <VStack>
         <HStack>
           <SpinIcon

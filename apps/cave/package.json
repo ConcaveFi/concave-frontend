@@ -15,11 +15,11 @@
   },
   "dependencies": {
     "@0xsequence/multicall": "^0.39.0",
-    "@alch/alchemy-web3": "^1.4.2",
     "@apollo/client": "^3.6.5",
     "@badrap/bar-of-progress": "^0.2.1",
     "@chakra-ui/cli": "^2.1.0",
     "@chakra-ui/react": "^2.2.0",
+    "@concave/marketplace": "*",
     "@concave/gemswap-sdk": "*",
     "@concave/icons": "*",
     "@concave/ui": "*",
