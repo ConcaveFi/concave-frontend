@@ -1,6 +1,4 @@
-import { CNV } from '@concave/core'
 import { Box, Collapse, Flex, Image, Spinner, Text } from '@concave/ui'
-import { useFiatPrice } from 'components/AMM/hooks/useFiatPrice'
 import { getBondSpotPrice } from 'components/Bond/BondState'
 import { ButtonLink, ButtonLinkProps } from 'components/ButtonLink'
 import { useCNVPrice } from 'hooks/useCNVPrice'
@@ -9,7 +7,6 @@ import { useDevice } from 'hooks/useDevice'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import { useQuery } from 'react-query'
-
 import getROI from 'utils/getROI'
 
 const NavButton = (props: ButtonLinkProps) => {
