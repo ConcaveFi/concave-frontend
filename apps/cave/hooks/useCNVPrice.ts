@@ -1,3 +1,8 @@
+/**
+ * returns current cnv price on a given network
+ *
+ */
+
 import { CNV } from '@concave/core'
 import { useFiatPrice } from 'components/AMM/hooks/useFiatPrice'
 import { useState } from 'react'
