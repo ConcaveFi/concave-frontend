@@ -1,4 +1,8 @@
-export const bbtCNV_REDEEM_CONTRACT = {
+export const bbtCNV_REDEMPTION_V1 = {
+  1: '',
+  4: '0x2098D3D18f005b2Bb165412057Dfa122310E768C',
+}
+export const bbtCNV_REDEMPTION_V2 = {
   1: '',
   4: '0xCf6B82Ca69bE4272d457c246FAF380f88af34f69',
 }

@@ -1,5 +1,5 @@
+import { aCNV_ADDRESS, bbtCNV_ADDRESS } from 'contracts/VestedTokens/addresses'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { aCNV_ADDRESS, bbtCNV_ADDRESS } from 'lib/VestedTokens/addresses'
 import { useAccount, useBalance } from 'wagmi'
 
 export default function useVestedTokens() {
