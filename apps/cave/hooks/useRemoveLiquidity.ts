@@ -43,7 +43,7 @@ export const useRemoveLiquidity = ({
         account.address,
       )
       setHash(transaction.hash)
-      return
+      return transaction
     }
     const transaction = await router.removeLiquidity(
       tokenA,
@@ -52,6 +52,7 @@ export const useRemoveLiquidity = ({
       account.address,
     )
     setHash(transaction.hash)
+    return transaction
   }
 
   return {

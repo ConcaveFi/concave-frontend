@@ -19,6 +19,11 @@ export const getTransactionStatusLabel = ({ status, meta }: Partial<TrackedTrans
       success: `Swapped ${amountIn} for ${amountOut}`,
       error: `Failed to swap ${amountIn} for ${amountOut}`,
     }),
+    'remove liquidity': ({ amount0, amount1, pairSymbol }) => ({
+      pending: `Removing liquidity from ${pairSymbol} pair`,
+      success: `Removed ${amount0} and ${amount1} from liquidity pair`,
+      error: `Failed to remove ${pairSymbol} liquidity`,
+    }),
     'add liquidity': ({ amount0, amount1, pairSymbol }) => ({
       pending: `Adding liquidity to ${pairSymbol} pair`,
       success: `Added ${amount0} and ${amount1} to the liquidity pair`,

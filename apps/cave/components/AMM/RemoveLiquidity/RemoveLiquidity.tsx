@@ -18,6 +18,7 @@ import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { Transaction } from 'ethers'
+import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { RemoveLiquidityState, useRemoveLiquidity } from 'hooks/useRemoveLiquidity'
 import React, { useState } from 'react'
@@ -183,12 +184,15 @@ const RemoveLiquidityActions = ({
   const [txError, setTxError] = useState('')
   const { isOpen: isOpenError, onClose: onCloseError, onOpen: onOpenError } = useDisclosure()
 
+  const { registerTransaction } = useTransactionRegistry()
+
   const [waitingForConfirm, setWaitingForConfirm] = useState(false)
 
   const confirmedWithdrawal = async () => {
     try {
       setWaitingForConfirm(true)
-      await removeLiquidityState.removeLiquidity().then(() => {
+      await removeLiquidityState.removeLiquidity().then((tx) => {
+        // registerTransaction(tx, { type: 'remove liquidity' })
         onOpenSubmitted()
         setWaitingForConfirm(false)
       })
