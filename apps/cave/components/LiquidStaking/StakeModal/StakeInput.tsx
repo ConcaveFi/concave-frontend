@@ -1,5 +1,4 @@
-import { CNV, Currency, CurrencyAmount, STAKING_CONTRACT } from '@concave/core'
-import { StakingV1Contract } from '@concave/marketplace'
+import { CNV, Currency, CurrencyAmount } from '@concave/core'
 import { Box, Card, Flex, Text, useDisclosure } from '@concave/ui'
 import { ApproveButton } from 'components/ApproveButton/ApproveButton'
 import { CurrencyInputField } from 'components/CurrencyAmountField'
@@ -9,7 +8,8 @@ import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useRecentTransactions } from 'hooks/useRecentTransactions'
-import { concaveProvider } from 'lib/providers'
+import { StakingV1ProxyAddress } from 'lib/StakingV1Proxy/Address'
+import { StakingV1Contract } from 'lib/StakingV1Proxy/StakingV1Contract'
 import React, { useState } from 'react'
 import { toAmount } from 'utils/toAmount'
 import { useAccount, useSigner } from 'wagmi'
@@ -49,7 +49,7 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
   }
 
   const lock = () => {
-    const contract = new StakingV1Contract(concaveProvider(netWorkdId))
+    const contract = new StakingV1Contract(netWorkdId)
     setWaitingForConfirm(true)
     contract
       .lock(signer, account?.address, stakeInput.numerator.toString(), props.poolId)
@@ -83,7 +83,7 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
             approveArgs={{
               currency: stakeInput.currency,
               amount: stakeInput.numerator,
-              spender: STAKING_CONTRACT[stakeInput.currency.chainId],
+              spender: StakingV1ProxyAddress[stakeInput.currency.chainId],
             }}
             mt={5}
             onClick={lock}

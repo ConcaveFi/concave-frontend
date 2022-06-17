@@ -1,9 +1,25 @@
 import { Box, Flex } from '@concave/ui'
 import { useState } from 'react'
+import useNftPositionFilter, {
+  MarketPlaceFilterType,
+  NftPositionDaysFilterType,
+} from './hooks/useNftPositionFilter'
+import useNftPositionSort, { NftPositionSortType } from './hooks/useNftPositionSort'
 import MarketplaceFilterContainer from './MarketplaceFilterContainer'
 import NftPositionCard from './NftPositionCard'
 
 export default function MarketplaceSearchCard() {
+  const [sortType, setSortType] = useState(NftPositionSortType.NONE)
+  const [marketPlaceFilter, setMarketPlaceFilter] = useState<MarketPlaceFilterType>({
+    filterByDay: NftPositionDaysFilterType.NONE,
+    filterByPrice: false,
+    from: 0,
+    to: 0,
+  })
+
+  const { type, sorterFunction } = useNftPositionSort(sortType)
+  const { filterByDay, filterByPrice } = useNftPositionFilter(marketPlaceFilter)
+
   const nftPositions = [
     { stakePool: 45, price: 102, redeemIn: 20, discount: 2.1 },
     { stakePool: 360, price: 12, redeemIn: 1, discount: 20 },
@@ -17,15 +33,19 @@ export default function MarketplaceSearchCard() {
     { stakePool: 360, price: 229, redeemIn: 4, discount: 14 },
     { stakePool: 360, price: 112, redeemIn: 7, discount: 12 },
     { stakePool: 45, price: 522, redeemIn: 12, discount: 5 },
-  ].map((value, index) => (
-    <NftPositionCard
-      key={index}
-      stakePool={value.stakePool}
-      redeemIn={value.redeemIn}
-      price={value.price}
-      discount={value.discount}
-    />
-  ))
+  ]
+    .filter(filterByDay)
+    .filter(filterByPrice)
+    .sort(sorterFunction)
+    .map((value, index) => (
+      <NftPositionCard
+        key={index}
+        stakePool={value.stakePool}
+        redeemIn={value.redeemIn}
+        price={value.price}
+        discount={value.discount}
+      />
+    ))
 
   return (
     <Box
@@ -50,7 +70,11 @@ export default function MarketplaceSearchCard() {
         bgSize="16% 16%"
         rounded={'2xl'}
       />
-      <MarketplaceFilterContainer />
+      <MarketplaceFilterContainer
+        onChangeFilter={setMarketPlaceFilter}
+        sortType={sortType}
+        onChangeSorter={setSortType}
+      />
       <Flex
         flex={1}
         pt={3}

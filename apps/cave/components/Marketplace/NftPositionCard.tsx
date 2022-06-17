@@ -1,4 +1,5 @@
 import { Box, Button, Collapse, Flex, HStack, Image, Text } from '@concave/ui'
+import { PERIOD_TO_POOL_PARAMETER } from 'components/LiquidStaking/StakeCard'
 import { useState } from 'react'
 
 interface NftPositionBoxProps {

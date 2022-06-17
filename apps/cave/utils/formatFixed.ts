@@ -1,9 +1,8 @@
-import { BigNumberish } from 'ethers'
 import { utils } from 'ethers'
 import { BigNumber } from 'ethers'
 
 export const formatFixed = (
-  bigNumber: BigNumberish,
+  bigNumber: BigNumber,
   { decimals = 18, places = 2, minPlaces = 2 } = {},
 ) => {
   const input = +utils.formatUnits(bigNumber, decimals)

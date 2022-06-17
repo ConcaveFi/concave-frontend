@@ -1,14 +1,15 @@
 import { TransactionIcon } from '@concave/icons'
-import { Flex, Image, Link, Text, useMediaQuery, VStack } from '@concave/ui'
+import { Box, Flex, HStack, Image, Link, Text, useMediaQuery, VStack } from '@concave/ui'
 import { format } from 'date-fns'
 import { useEffect, useState } from 'react'
+// import fromUnixTime from 'date-fns/fromUnixTime'
 
 interface MarketplaceTransactionCardProps {
   type: 'sale' | 'listing'
   filter?: any
 }
 
-export const MarketplaceTransactionCard = (props: MarketplaceTransactionCardProps) => {
+const MarketplaceTransactionCard = (props: MarketplaceTransactionCardProps) => {
   const { filter, type } = props
   const cleanDate = format(new Date(filter.date), 'PPpp')
   const labelType = type === 'sale' ? 'sale' : 'listing'
@@ -84,3 +85,4 @@ export const MarketplaceTransactionCard = (props: MarketplaceTransactionCardProp
     </Flex>
   )
 }
+export default MarketplaceTransactionCard

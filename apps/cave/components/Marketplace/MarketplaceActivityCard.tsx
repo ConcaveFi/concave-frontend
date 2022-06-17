@@ -1,6 +1,6 @@
-import { Box, Card, Flex } from '@concave/ui'
 import { useEffect, useState } from 'react'
-import { MarketplaceTransactionCard } from './MarketplaceTransactionCard'
+import { Box, Card, Flex } from '@concave/ui'
+import MarketplaceTransactionCard from './MarketplaceTransactionCard'
 
 const MarketplaceActivityCard = () => {
   const [loading, setLoading] = useState(false)
