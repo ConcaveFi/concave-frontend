@@ -53,5 +53,16 @@ export const listUserPositions = async (
   const usersNft = await listAllNonFungibleTokensOnAddress(userAddress, chainId, alchemy, [
     STAKING_CONTRACT[chainId],
   ])
-  return Promise.all(usersNft.map(async ({ id }: Nft) => stakingV1Contract.positions(id.tokenId)))
+  return Promise.all(
+    usersNft.map(async ({ id }: Nft) => {
+      const position = stakingV1Contract.positions(id.tokenId)
+      const reward = stakingV1Contract.viewPositionRewards(id.tokenId)
+      return new StakingPosition({
+        chainId,
+        tokenId: id.tokenId,
+        position: await position,
+        reward: await reward,
+      })
+    }),
+  )
 }
