@@ -7,7 +7,7 @@ import { useAccount, useNetwork } from 'wagmi'
 import { useLocalStorage } from 'hooks/useLocalStorage'
 import { TrackedTransaction } from './TrackedTransactions'
 
-const hrs2 = 2 * 60 * 1000 // 2 hours
+const hrs2 = 2 * 60 * 60 * 1000 // 2 hours
 const useTrackedTransactions = () => {
   const { data: account } = useAccount()
   const { activeChain } = useNetwork()
