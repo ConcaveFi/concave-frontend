@@ -1,6 +1,6 @@
-import { Card, Flex, FlexboxProps, gradientBorder, Text } from '@concave/ui'
+import { Card, Flex, FlexboxProps, gradientBorder, StackProps, Text } from '@concave/ui'
 type BondedCard = { variant: Variant }
-export const BondedCard = ({ variant }: BondedCard) => {
+export const BondedCard: React.FC<StackProps & BondedCard> = ({ variant, ...props }) => {
   return (
     <Card
       variant="secondary"
@@ -10,6 +10,7 @@ export const BondedCard = ({ variant }: BondedCard) => {
       rounded="50px"
       position={'relative'}
       bg="linear-gradient(180deg, rgba(40, 219, 209, 0.19) 0%, rgba(0, 83, 78, 0) 55.79%)"
+      {...props}
     >
       <ListedInfo variant={variant} />
       <Flex
