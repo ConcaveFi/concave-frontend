@@ -1,11 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 
-export function useLocalStorage<T>(key: string, placeholderData) {
+export function useLocalStorage<T>(key: string, initialData) {
   const queryClient = useQueryClient()
 
   const { data } = useQuery<T>(key, () => JSON.parse(localStorage.getItem(key)), {
     enabled: !!key,
-    placeholderData,
+    initialData,
   })
 
   const { mutateAsync } = useMutation(
