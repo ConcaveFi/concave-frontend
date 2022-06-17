@@ -1,9 +1,8 @@
-import { Button } from '@concave/ui'
+import { Flex } from '@concave/ui'
 
 interface ChooseButtonProps {
   title: string
   onClick: () => void
-  disabled?: boolean
   backgroundType?: 'default' | 'blue'
 }
 
@@ -12,17 +11,21 @@ export function ChooseButton(props: ChooseButtonProps) {
   const background =
     backgroundType == 'blue' ? 'linear-gradient(90deg, #72639B 0%, #44B9DE 100%)' : ''
   return (
-    <Button
-      disabled={props.disabled}
+    <Flex
       onClick={() => props.onClick()}
       background={background}
-      fontWeight={'bold'}
+      fontWeight={700}
+      fontSize={14}
+      justifyContent={'center'}
+      alignItems="center"
       shadow={'up'}
-      size={'sm'}
+      height="30px"
       width="120px"
-      borderBottomRadius={0}
+      cursor={'pointer'}
+      borderTopRightRadius="16px"
+      borderTopLeftRadius="16px"
     >
       {title}
-    </Button>
+    </Flex>
   )
 }

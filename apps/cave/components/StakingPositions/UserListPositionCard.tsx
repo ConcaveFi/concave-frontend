@@ -19,11 +19,10 @@ type ListForSaleState = ReturnType<typeof useListeForSaleState>
 export const useListeForSaleState = ({ marketInfoState }: UserListPositionCardProps) => {
   const { data: account } = useAccount()
   const [method, setMethod] = useState<'Sale' | 'Auction'>('Sale')
-  const selectedToken = CNV[marketInfoState.chainId]
   const [offer, setOffer] = useState(
     new Offer({
       ...marketInfoState.marketInfo.data.offer,
-      ERC20Token: selectedToken.address,
+      ERC20Token: CNV[marketInfoState.chainId].address,
       buyNowPrice:
         marketInfoState.marketInfo.data.offer.buyNowPrice ||
         marketInfoState.marketInfo.data.position.currentValue,
@@ -75,19 +74,8 @@ export const ListPositionForSale = ({
       <ListenPrice state={listForSaleState} />
       <BuyNowPrice state={listForSaleState} />
       <Discount state={listForSaleState} />
-
-      {!listForSaleState.offer.isValid && (
-        <Text mr="auto" fontSize="sm" color="#c32417" fontWeight="medium">
-          {listForSaleState.method === 'Sale' ? 'Invalid sell price' : 'Invalid reserve price'}
-        </Text>
-      )}
       <Flex pt={4} justifyContent="center">
-        <ChooseButton
-          onClick={listForSaleState.create}
-          disabled={!listForSaleState.offer.isValid}
-          title={`List`}
-          backgroundType="blue"
-        />
+        <ChooseButton onClick={listForSaleState.create} title={`List`} backgroundType="blue" />
       </Flex>
     </VStack>
   )
@@ -133,10 +121,13 @@ const ListenPrice = (props: { state: ListForSaleState }) => {
           borderRadius={'full'}
           p={1}
           pl={4}
+          value={formatFixed(marketInfo.offer.minPrice)}
           onValueChange={(values, sourceInfo) => {
             if (sourceInfo.source === 'prop') return
-            const value = values.value || '0'
-            setPrice(toAmount(value, CNV[chainId]))
+            if (values.value === '') {
+              return setPrice(toAmount('0', CNV[chainId]))
+            }
+            setPrice(toAmount(values.value, CNV[chainId]))
           }}
         />
       </Box>
@@ -144,31 +135,32 @@ const ListenPrice = (props: { state: ListForSaleState }) => {
   )
 }
 
-const BuyNowPrice = ({ state }: { state: ListForSaleState }) => {
-  const { marketInfo, setBuyNowPrice, method } = state
+const BuyNowPrice = (props: { state: ListForSaleState }) => {
+  const { marketInfo, setBuyNowPrice, method } = props.state
   const chainId = useCurrentSupportedNetworkId()
   return (
-    <>
-      <HStack justifyContent={'center'} width={'full'}>
-        <Text textColor={'text.low'} textAlign={'right'} fontWeight="bold" width={'full'}>
-          {method === 'Sale' ? 'Sell price' : 'Reserve price'}:
-        </Text>
-        <Box width={'full'}>
-          <NumericInput
-            width={'full'}
-            shadow={'Down Big'}
-            borderRadius={'full'}
-            p={1}
-            pl={4}
-            onValueChange={(values, sourceInfo) => {
-              if (sourceInfo.source === 'prop') return
-              const value = values.value || '0'
-              setBuyNowPrice(toAmount(value, CNV[chainId]))
-            }}
-          />
-        </Box>
-      </HStack>
-    </>
+    <HStack justifyContent={'center'} width={'full'}>
+      <Text textColor={'text.low'} textAlign={'right'} fontWeight="bold" width={'full'}>
+        {method === 'Sale' ? 'Sell price' : 'Reserve price'}:
+      </Text>
+      <Box width={'full'}>
+        <NumericInput
+          width={'full'}
+          shadow={'Down Big'}
+          borderRadius={'full'}
+          p={1}
+          pl={4}
+          value={formatFixed(marketInfo.offer.buyNowPrice)}
+          onValueChange={(values, sourceInfo) => {
+            if (sourceInfo.source === 'prop') return
+            if (values.value === '') {
+              return setBuyNowPrice(toAmount('0', CNV[chainId]))
+            }
+            setBuyNowPrice(toAmount(values.value, CNV[chainId]))
+          }}
+        />
+      </Box>
+    </HStack>
   )
 }
 const Discount = ({ state }: { state: ListForSaleState }) => {
