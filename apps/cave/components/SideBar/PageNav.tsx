@@ -82,12 +82,11 @@ function PageNav() {
     router.pathname === '/pools' ||
     router.pathname === '/addliquidity'
 
-  const isMobile = false
-  // {
-  //   tablet: true,
-  //   mobile: true,
-  //   desktop: false,
-  // }[device]
+  const isMobile = {
+    tablet: true,
+    mobile: true,
+    desktop: false,
+  }[device]
 
   return (
     <Flex direction="column" position="relative" mr="-2px">
@@ -104,10 +103,12 @@ function PageNav() {
         >
           Bond
         </NavButton>
-        <Text fontSize="xs" fontWeight="bold" textColor="text.low" textAlign="center" py={2}>
-          {`CNV-DAI ${roi.data || ''}`} {roi.isError ? 'error' : ''}{' '}
-          {roi.isFetching ? <Spinner size={'xs'} /> : ''}
-        </Text>
+        <Flex gap={1} justify="center" align="center" textColor="text.low">
+          <Text fontSize="xs" fontWeight="bold" py={2}>
+            {`CNV-DAI ${roi.data || ''}`} {roi.isError ? 'error' : ''}
+          </Text>
+          {(roi.isFetching || roi.isIdle) && <Spinner size={'xs'} />}
+        </Flex>
       </Box>
       <Box height={'110px'}>
         <Box
