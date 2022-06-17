@@ -34,7 +34,7 @@ export default function ACNVRedemptionDialog(props: ACNVRedemptionDialogProps) {
     provider(1),
   )
   const { data, isLoading } = useGet_User_Acnv_RedeemedQuery({
-    address: account?.address,
+    address: '0x507F0daA42b215273B8a063B092ff3b6d27767aF',
   })
   const redeemed: number = data?.logACNVRedemption[0]?.amount || 0
   const txHash = data?.logACNVRedemption[0]?.txHash || ''
@@ -88,7 +88,7 @@ export default function ACNVRedemptionDialog(props: ACNVRedemptionDialogProps) {
                 Current balance:
               </Text>
               <Text textColor={'text.accent'} fontWeight="bold">
-                {!loadingACNV && parseFloat(aCNVData?.formatted || '0').toFixed(2)}
+                {(!loadingACNV && aCNVData?.formatted) || '0'}
                 {loadingACNV && 'loading...'}
               </Text>
             </Flex>
@@ -97,7 +97,7 @@ export default function ACNVRedemptionDialog(props: ACNVRedemptionDialogProps) {
                 Redeemed:
               </Text>
               <Text textColor={'text.accent'} fontWeight="bold">
-                {!isLoading && redeemed.toFixed(2)}
+                {(!isLoading && redeemed?.toFixed(2)) || '0.0'}
                 {isLoading && 'loading...'}
               </Text>
             </Flex>
