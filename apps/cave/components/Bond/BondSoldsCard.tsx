@@ -9,7 +9,6 @@ import {
 } from 'graphql/generated/graphql'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useEffect, useState } from 'react'
-import { truncateNumber } from 'utils/truncateNumber'
 import { useCNVPrice } from 'hooks/useCNVPrice'
 interface BoldSoldsCardProps {
   data: Get_Accrualbondv1_Last10_SoldQuery
@@ -46,10 +45,7 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
       key={index}
       opacity={1 - (isOpen ? index / 10 : (index / 10) * 3)}
     >
-      {
-        truncateNumber(+value.output * 10 ** 18)
-        /* {commify(parseFloat(value.output).toFixed()) + ' CNV'} */
-      }
+      {commify(parseFloat(value.output).toFixed()) + ' CNV'}
     </Text>
   ))
   const inputAmounts = solds.map((value, index) => (

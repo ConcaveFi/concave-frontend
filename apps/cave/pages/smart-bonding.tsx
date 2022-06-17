@@ -36,8 +36,6 @@ import { useCNVPrice } from 'hooks/useCNVPrice'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import React, { useEffect, useState } from 'react'
 import getROI from 'utils/getROI'
-// import { truncateNumber } from 'utils/truncateNumber'
-// send it
 const spin = keyframes({
   '0%': { transform: 'rotate(0deg)' },
   '100%': { transform: 'rotate(360deg)' },
@@ -67,8 +65,7 @@ export function Bond() {
   } = useDisclosure()
   const { isOpen: isOpenError, onClose: onCloseError, onOpen: onOpenError } = useDisclosure()
   const { data: last10SoldsData, isLoading, error } = useGet_Accrualbondv1_Last10_SoldQuery()
-  console.log(cnvMarketPrice, 'market')
-  console.log(bondSpotPrice, 'bondSpotPrice')
+
   function updateBondPositions() {
     getUserBondPositions(networkId, userAddress, currentBlockTs)
       .then((bondSigma) => {

@@ -9,7 +9,6 @@ import { BOND_ADDRESS } from '@concave/core'
 import { useRecentTransactions } from 'hooks/useRecentTransactions'
 import React, { useEffect, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
-import { truncateNumber } from 'utils/truncateNumber'
 import { BondOutput } from './BondOutput'
 import { getBondAmountOut, getBondSpotPrice, purchaseBond, useBondState } from './BondState'
 import { ConfirmBondModal } from './ConfirmBond'
@@ -98,11 +97,7 @@ export function BondBuyCard(props: {
           <HStack alignSelf={'start'}>
             <Text textColor={'text.low'}>Current Price:</Text>
             <Text textColor={'text.low'} opacity="0.7">
-<<<<<<< HEAD
-              {currentPrice ? '$' + parseFloat(currentPrice).toFixed(3) + ' CNV' : 'Loading . . .'}
-=======
               {cnvPrice.price ? '$' + cnvPrice.price?.toFixed(2) + ' CNV' : 'Loading . . .'}
->>>>>>> 2f3b28d0641eeaf841cccee7363d43efbd6b73ab
             </Text>
           </HStack>
           <HStack alignSelf={'start'}>
@@ -199,8 +194,7 @@ export function BondBuyCard(props: {
       />
       <WaitingConfirmationDialog isOpen={hasClickedConfirm} title={'Confirm Bond'}>
         <Text fontSize="lg" color="text.accent">
-          Bonding {truncateNumber(+amountIn.numerator.toString(), 4)} {currencyIn.symbol} for{' '}
-          {truncateNumber(+amountOut * 10 ** 18, 4)}CNV.
+          Bonding {amountIn.toFixed(2)} {currencyIn.symbol} for {amountOut} CNV.
         </Text>
       </WaitingConfirmationDialog>
       <TransactionSubmittedDialog

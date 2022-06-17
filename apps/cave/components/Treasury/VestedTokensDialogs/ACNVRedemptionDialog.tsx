@@ -7,7 +7,6 @@ import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId
 import { aCNVredeemabi } from 'lib/contractoABI'
 import { concaveProvider as provider } from 'lib/providers'
 import { useState } from 'react'
-import { truncateNumber } from 'utils/truncateNumber'
 import { useAccount, useConnect, useSigner } from 'wagmi'
 import useVestedTokens from '../Hooks/useVestedTokens'
 

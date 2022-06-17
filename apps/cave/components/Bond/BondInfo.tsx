@@ -6,7 +6,6 @@ const spin = keyframes({
   '100%': { transform: 'rotate(360deg)' },
 })
 import { utils } from 'ethers'
-// import { truncateNumber } from 'utils/truncateNumber'
 
 export const InfoItem = ({ value, label, ...props }) => (
   <Flex
@@ -49,9 +48,6 @@ export const UserBondPositionInfo = (props) => {
   const redeemable = parse?.parseRedeemable
   const totalOwed = parse?.totalOwed.toFixed(2)
   const totalPending = parse?.totalPending.toFixed(2)
-  // const bigIntRedeemable = BigInt(redeemable)
-
-  // const formatRedeemable = truncateNumber(redeemable)
   const formatRedeemable =
     Math.sign(parseInt(redeemable)) === 1
       ? (+utils.formatEther(BigInt(parseInt(redeemable)))).toFixed(2)

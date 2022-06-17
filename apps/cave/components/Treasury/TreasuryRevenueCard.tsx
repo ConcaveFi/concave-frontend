@@ -2,8 +2,7 @@ import { Box, Card, Flex, Text } from '@concave/ui'
 import { formatDistanceStrict } from 'date-fns'
 import { useGet_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql'
 import { useCNVPrice } from 'hooks/useCNVPrice'
-import { useEffect, useState } from 'react'
-import { truncateNumber } from 'utils/truncateNumber'
+
 export const TreasuryInfoItem = ({ label, amount, ...props }) => (
   <Flex
     direction="column"
@@ -122,12 +121,8 @@ export default function TreasuryRevenueCard(props) {
     (value) => formatDistanceStrict(value.timestamp * 1000, new Date().getTime()) + ' ago',
   )
 
-  const lastsAmounts = lastsSolds.map(
-    (value) => '+$' + truncateNumber(+value?.inputAmount * 10 ** 18),
-  )
-  const lastsOutputamounts = lastsSolds.map(
-    (value) => '' + truncateNumber(+value?.output * 10 ** 18),
-  )
+  const lastsAmounts = lastsSolds.map((value) => '+$' + numberMask(+value?.inputAmount))
+  const lastsOutputamounts = lastsSolds.map((value) => '' + numberMask(+value?.output))
 
   return (
     <Card
@@ -142,19 +137,19 @@ export default function TreasuryRevenueCard(props) {
         <Flex direction={'column'} gap={5}>
           <TreasuryInfo
             box1="Market Cap"
-            box1b={'$' + truncateNumber(cnv.cnvData.data.marketCap * 10 ** 18)}
+            box1b={'$' + numberMask(cnv.cnvData.data.marketCap)}
             box2="CNV Price"
             box2b={'$' + cnvPrice?.price.toFixed(2)}
             box3="Treasury Value per CNV"
-            box3b={'$' + truncateNumber((total / cnv.cnvData.data.totalSupply) * 10 ** 18)}
+            box3b={'$' + numberMask(total / cnv.cnvData.data.totalSupply)}
           />
           <TreasuryInfo
             box1="Treasury Revenue 24h"
             box1b="Coming Soon"
             box2="Treasury Value"
-            box2b={'$' + truncateNumber(total * 10 ** 18)}
+            box2b={'$' + numberMask(total)}
             box3="CNV Total Supply"
-            box3b={'' + truncateNumber(cnv.cnvData.data.totalSupply * 10 ** 18)}
+            box3b={'' + numberMask(cnv.cnvData.data.totalSupply)}
           />
           <BondInfo
             bondbox1={relativeTimeline[0]}
@@ -175,4 +170,19 @@ export default function TreasuryRevenueCard(props) {
 
 const formatNumber = (number: string) => {
   return number.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
+}
+
+export const twoDecimals = (s: string | number) => {
+  const a = s.toString()
+  return a.indexOf('.') > -1 ? a.slice(0, a.indexOf('.') + 3) : a
+}
+
+export const numberMask = (number: Number) => {
+  if (number === 0) {
+    return `0`
+  }
+  if (number < 0.01) {
+    return `<.01`
+  }
+  return twoDecimals(number.toString())
 }
