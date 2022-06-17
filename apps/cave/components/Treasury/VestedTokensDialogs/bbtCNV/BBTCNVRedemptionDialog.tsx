@@ -45,8 +45,7 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
   const { bbtCNVData } = useVestedTokens()
 
   const { registerTransaction } = useTransactionRegistry()
-
-  const [useMax, setUseMax] = useState(false)
+  const [redeemMax, setRedeemMax] = useState(false)
   const [value, setValue] = useState<string>()
 
   const balance = bbtCNVData?.formatted || '0'
@@ -83,7 +82,7 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
         <Card width={'340px'} height="280px" m={-6} px={6} gap={2} justify="center">
           <BBT_CNVDialogInput
             redeemable={String(redeemable)}
-            redeemMax={useMax}
+            redeemMax={redeemMax}
             balance={balance}
             onChangeValue={setValue}
             value={value}
@@ -94,7 +93,10 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
           </Flex>
           <Flex gap={2} fontWeight={'bold'} pl={2} align="center">
             <Text textColor={'gray.200'}>Redeem max?</Text>
-            <ToggleButton onActivate={() => setUseMax(true)} onDisable={() => setUseMax(false)} />
+            <ToggleButton
+              onActivate={() => setRedeemMax(true)}
+              onDisable={() => setRedeemMax(false)}
+            />
             <Tooltip
               textColor={'white'}
               bg="text.low"
@@ -123,7 +125,7 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
               onOpenConfirm()
               bbtCNVContract
                 .connect(signer)
-                .redeem(parseEther(String(value)), account?.address, useMax)
+                .redeem(parseEther(String(value)), account?.address, redeemMax)
                 .then((tx) => {
                   onCloseConfirm()
                   registerTransaction(tx, {
