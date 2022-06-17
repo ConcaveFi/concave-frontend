@@ -95,28 +95,26 @@ export default function RecentTransactionsContainer() {
 
 const TransactionInfo = ({ meta, status, chainId, hash }: TrackedTransaction) => {
   return (
-    <Flex justify={'space-between'}>
-      <Flex fontWeight={'bold'} gap={1} align="center">
-        <Text autoCapitalize="">{meta.type}</Text>
+    <Flex justify="space-between" align="center">
+      <Flex fontWeight="bold" gap={2} align="center">
+        <Text textTransform="capitalize">{meta.type}</Text>
         <Link isExternal href={getTxExplorer(hash, chainId)} fontSize="sm" textColor={'text.low'}>
           {getTransactionStatusLabel({ status, meta })}
         </Link>
       </Flex>
-      <Flex width={'17px'}>
-        {status === 'error' && (
-          <CloseIcon width={'15px'} height="15px" color={'red.300'} justifySelf="end" />
-        )}
-        {status === 'pending' && (
-          <SpinnerIcon
-            animation={`${spin} 3s linear infinite`}
-            color={'text.low'}
-            justifySelf="end"
-          />
-        )}
-        {status === 'success' && (
-          <CheckIcon width={'17px'} height="17px" color={'green.300'} justifySelf="end" />
-        )}
-      </Flex>
+      {status === 'error' && (
+        <CloseIcon width={'15px'} height="15px" color={'red.300'} justifySelf="end" />
+      )}
+      {status === 'pending' && (
+        <SpinnerIcon
+          animation={`${spin} 3s linear infinite`}
+          color={'text.low'}
+          justifySelf="end"
+        />
+      )}
+      {status === 'success' && (
+        <CheckIcon width={'17px'} height="17px" color={'green.300'} justifySelf="end" />
+      )}
     </Flex>
   )
 }
