@@ -11,6 +11,7 @@ import ProgressBar from '@badrap/bar-of-progress'
 import Router from 'next/router'
 import { NODE_ENV } from 'lib/env.conf'
 import * as gtag from '../lib/analytics'
+import { TransactionsObserver } from 'hooks/TransactionsRegistry'
 
 const globalStyles: Styles = {
   global: {
@@ -68,6 +69,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
 
   return (
     <AppProviders globalStyles={globalStyles} cookies={pageProps?.cookies}>
+      <TransactionsObserver />
       <ConcaveFonts />
       <MetaHead meta={Component.Meta} />
       <Layout>

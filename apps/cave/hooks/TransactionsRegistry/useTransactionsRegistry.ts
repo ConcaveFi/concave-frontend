@@ -1,7 +1,7 @@
 import { TransactionResponse } from '@ethersproject/abstract-provider'
 import { useTransactionStatusToast } from 'components/TransactionStatusToast'
 import { concaveProvider } from 'lib/providers'
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { QueriesObserver, useQueryClient } from 'react-query'
 import { useAccount, useNetwork } from 'wagmi'
 import { useLocalStorage } from 'hooks/useLocalStorage'
@@ -15,7 +15,7 @@ const useTrackedTransactions = () => {
 
   const { data: transactions, mutateAsync: setTransactions } = useLocalStorage<
     TrackedTransaction[]
-  >(account?.address && `transactions ${account.address} ${activeChain}`, [])
+  >(account?.address && `transactions ${account.address} ${activeChain.id}`, [])
 
   const pushTransaction = useCallback(
     (tx: TrackedTransaction) => {
@@ -66,42 +66,48 @@ export const useTransactionRegistry = () => {
 }
 
 /**
-  CAUTION: this hook should be called only once in the app, 
+  CAUTION: this component should be called only once in the app (preferably at _app), 
   each time it's called it spawns a new tracked transactions listener
   
   await resolution of pending transactions saved to localstorage
-  (ex user closed the app while pending, when he connects again, 
-  will load localstorage, and await resolution of his pending transactions)
+  (ex user closed the app while pending, when he connects again, will load localstorage, 
+   and await resolution of his pending transactions, so we can show toasts etc)
 */
-export const useTransactionsObserver = () => {
+export const TransactionsObserver = () => {
   const { transactions, pushTransaction } = useTrackedTransactions()
 
   const queryClient = useQueryClient()
 
+  const observer = useRef<QueriesObserver>()
+
   useEffect(() => {
-    // Create an observer to watch the query and update its result into state
-    const observer = new QueriesObserver(
+    if (observer.current) observer.current.destroy()
+
+    const pendingTxs = transactions?.filter((tx) => tx.status === 'pending')
+    if (!pendingTxs || pendingTxs.length === 0) return
+
+    observer.current = new QueriesObserver(
       queryClient,
-      transactions
-        ?.filter((tx) => tx.status === 'pending')
-        .map((tx) => ({
-          queryKey: tx.hash,
-          queryFn: async () => {
-            const receipt = await concaveProvider(tx.chainId).waitForTransaction(tx.hash)
-            if (receipt.status === 0) return { ...tx, status: 'error' }
-            return { ...tx, status: 'success' }
-          },
-          onSuccess(data: TrackedTransaction) {
-            pushTransaction(data)
-          },
-          refetchOnWindowFocus: false,
-          refetchOnReconnect: false,
-        })) || [],
+      pendingTxs.map((tx) => ({
+        queryKey: tx.hash,
+        queryFn: async () => {
+          const receipt = await concaveProvider(tx.chainId).waitForTransaction(tx.hash)
+          if (receipt.status === 0) return { ...tx, status: 'error' }
+          return { ...tx, status: 'success' }
+        },
+        onSuccess(data: TrackedTransaction) {
+          pushTransaction(data)
+        },
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
+      })) || [],
     )
 
-    const unsubscribe = observer.subscribe()
+    const unsubscribe = observer.current.subscribe()
 
     // Clean up subscription on unmount
     return () => unsubscribe()
   }, [pushTransaction, queryClient, transactions])
+
+  return null
 }
