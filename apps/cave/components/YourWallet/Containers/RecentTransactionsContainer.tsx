@@ -1,9 +1,6 @@
-import { CHAIN_NAME } from '@concave/core'
 import { CheckIcon, CloseIcon, SpinnerIcon } from '@concave/icons'
-import { Flex, keyframes, Link, Text, useDisclosure } from '@concave/ui'
-import SecondConfirmModal from 'components/SecondConfirmModal'
+import { Flex, keyframes, Link, Text } from '@concave/ui'
 import { getTxExplorer } from 'lib/getTransactionExplorer'
-import { useAccount } from 'wagmi'
 import {
   useTransactionRegistry,
   getTransactionStatusLabel,
@@ -12,10 +9,6 @@ import {
 
 export default function RecentTransactionsContainer() {
   const { lastTransactions } = useTransactionRegistry()
-
-  // const { isOpen: isDialogOpen, onOpen: onOpenDialog, onClose: onCloseDialog } = useDisclosure()
-
-  const { data: account } = useAccount()
   const hasRecentTransactions = lastTransactions.length > 0
 
   return (
@@ -28,49 +21,7 @@ export default function RecentTransactionsContainer() {
         <Text fontWeight={'700'} fontSize="md" textColor={'text.low'}>
           {hasRecentTransactions ? 'Recent Transactions:' : 'You do not have recent transactions.'}
         </Text>
-        {/* {hasRecentTransactions && (
-          <Text
-            cursor={'pointer'}
-            onClick={onOpenDialog}
-            fontWeight={'700'}
-            fontSize="md"
-            textColor={'text.low'}
-          >
-            Clear all
-          </Text>
-        )} */}
       </Flex>
-
-      {/* Confimation Modal --------------- */}
-      {/* <SecondConfirmModal
-        onConfirm={() => {
-          clearRecentTransactions()
-          onCloseDialog()
-        }}
-        onClose={onCloseDialog}
-        title="You are sure?"
-        isOpen={isDialogOpen}
-      >
-        <Flex
-          m={4}
-          width={'300px'}
-          justify="center"
-          height="90%"
-          shadow={'Down Medium'}
-          rounded="2xl"
-        >
-          <Flex mt={6} maxW={'240px'} direction="column" justify={'space-between'}>
-            <Text fontSize={'16px'} textAlign="center" textColor={'text.low'} fontWeight="bold">
-              If you confirm all your recents transactions will be cleared from your localstorage
-            </Text>
-            <Text textColor={'text.low'} opacity={0.6} textAlign="center" mb={2} fontWeight="bold">
-              This action can not be reverted
-            </Text>
-          </Flex>
-        </Flex>
-      </SecondConfirmModal> */}
-      {/* -------------------------- */}
-
       {hasRecentTransactions && (
         <Flex
           direction={'column'}
