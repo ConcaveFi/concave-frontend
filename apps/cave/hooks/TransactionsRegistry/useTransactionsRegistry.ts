@@ -6,6 +6,7 @@ import { QueriesObserver, useQueryClient } from 'react-query'
 import { useAccount, useNetwork } from 'wagmi'
 import { useLocalStorage } from 'hooks/useLocalStorage'
 import { TrackedTransaction } from './TrackedTransactions'
+import { Transaction } from 'ethers'
 
 const hrs2 = 2 * 60 * 60 * 1000 // 2 hours
 const useTrackedTransactions = () => {
@@ -47,7 +48,10 @@ export const useTransactionRegistry = () => {
   const { transactions, pushTransaction } = useTrackedTransactions()
 
   const registerTransaction = useCallback(
-    ({ hash, from, chainId }: TransactionResponse, meta: TrackedTransaction['meta']) => {
+    (
+      { hash, from, chainId }: TransactionResponse | Transaction,
+      meta: TrackedTransaction['meta'],
+    ) => {
       const newTrackedTransaction = {
         hash,
         from,
