@@ -13,9 +13,9 @@ export default function ConnectedAreasContainer() {
     onOpen: onOpenChangeNetwork,
   } = useDisclosure()
   return (
-    <Flex direction={'column'} gap={4} mx="auto">
+    <Flex direction={'column'} gap={4}>
       <Flex
-        width={{ base: '290px', sm: '340px' }}
+        // width={{ base: '290px', sm: '340px' }}
         rounded="3xl"
         height={'60px'}
         shadow="down"
@@ -30,7 +30,6 @@ export default function ConnectedAreasContainer() {
           rounded={'3xl'}
           onClick={onOpen}
           _focus={{}}
-          // width={{ base: '87px', sm: '102px' }}
           px="3"
           height="40px"
           boxShadow="Up Big"
@@ -40,14 +39,7 @@ export default function ConnectedAreasContainer() {
           </Text>
         </Button>
       </Flex>
-      <Flex
-        width={{ base: '290px', sm: '340px' }}
-        justify="space-between"
-        rounded="3xl"
-        height={'60px'}
-        shadow="down"
-        align={'center'}
-      >
+      <Flex justify="space-between" rounded="3xl" height={'60px'} shadow="down" align={'center'}>
         <Text fontSize="12px" ml={4} fontWeight="700" textColor={'text.low'}>
           Change Network
         </Text>

@@ -26,9 +26,9 @@ export default function RecentTransactionsContainer() {
         <Flex
           direction={'column'}
           mt={3}
-          gap={1}
-          maxH="98px"
+          maxH="128px"
           pr={2}
+          mr={-4}
           overflowY={'auto'}
           overflowX="hidden"
           apply="border.secondary"
@@ -45,10 +45,10 @@ export default function RecentTransactionsContainer() {
 
 const TransactionInfo = ({ meta, status, chainId, hash }: TrackedTransaction) => {
   return (
-    <Flex justify="space-between" align="center">
-      <Flex fontWeight="bold" gap={2} align="center">
+    <Flex justify="space-between" align="center" gap={1} mb={2}>
+      <Flex fontSize="sm" fontWeight="bold" direction="column">
         <Text textTransform="capitalize">{meta.type}</Text>
-        <Link isExternal href={getTxExplorer(hash, chainId)} fontSize="sm" textColor={'text.low'}>
+        <Link isExternal href={getTxExplorer(hash, chainId)} textColor={'text.low'}>
           {getTransactionStatusLabel({ status, meta })}
         </Link>
       </Flex>

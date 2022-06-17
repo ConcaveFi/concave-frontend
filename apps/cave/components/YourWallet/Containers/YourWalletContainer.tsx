@@ -3,8 +3,8 @@ import { Flex, Text } from '@concave/ui'
 
 export default function YourWalletContainer({ value, onClose }) {
   return (
-    <Flex height="52%" justify="space-between">
-      <Flex ml={8} direction={'column'} align={'start'} justify="center">
+    <Flex justify="space-between">
+      <Flex direction={'column'} align={'start'} justify="center" p={4}>
         <Text fontWeight={'bold'} textColor={'text.low'} fontSize="20px">
           Your Wallet
         </Text>
@@ -12,7 +12,7 @@ export default function YourWalletContainer({ value, onClose }) {
           {value}
         </Text>
       </Flex>
-      <Flex align={'start'} height={'full'} mt={3} mr={3}>
+      <Flex align={'start'} height={'full'}>
         <CloseIcon color={'text.low'} cursor="pointer" onClick={onClose} />
       </Flex>
     </Flex>
