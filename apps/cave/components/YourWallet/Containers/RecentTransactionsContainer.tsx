@@ -12,7 +12,6 @@ import {
 
 export default function RecentTransactionsContainer() {
   const { lastTransactions } = useTransactionRegistry()
-  // const { data: recentTransactions, clearRecentTransactions } = useRecentTransactions()
 
   // const { isOpen: isDialogOpen, onOpen: onOpenDialog, onClose: onCloseDialog } = useDisclosure()
 
