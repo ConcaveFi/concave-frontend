@@ -1,5 +1,5 @@
 import { useToast, Stack, CloseButton, Card, Link, Text, CardProps, RenderProps } from '@concave/ui'
-import { getTransactionStatusLabel, TrackedTransaction } from 'hooks/useTransactionRegistry'
+import { getTransactionStatusLabel, TrackedTransaction } from 'hooks/TransactionsRegistry'
 import { getTxExplorer } from 'lib/getTransactionExplorer'
 import ms from 'ms'
 import { useCallback } from 'react'
@@ -60,7 +60,10 @@ const makeTransactionStatusToast = (tx: TrackedTransaction) =>
     return <TransactionStatusToast onClose={onClose} id={id} {...tx} />
   }
 
-/* 
+/**
+  Transaction status toasts are managed by useTransactionRegisty
+  you probably don't want to use it directly
+
   there is no way of styling a toast on the theme (without styling Alert) 
   it seems to be recomended using a custom component
   https://github.com/chakra-ui/chakra-ui/issues/2736#issuecomment-743159129
@@ -68,13 +71,13 @@ const makeTransactionStatusToast = (tx: TrackedTransaction) =>
 export const useTransactionStatusToast = () => {
   const toast = useToast({
     position: 'top-right',
-    duration: ms('15s'),
   })
 
   return useCallback(
     (tx: TrackedTransaction) => {
       toast({
         id: tx.hash,
+        duration: tx.status === 'pending' ? null : ms('15s'), // don't auto hide while pending
         render: makeTransactionStatusToast(tx),
       })
     },
