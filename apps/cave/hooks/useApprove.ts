@@ -19,9 +19,10 @@ export const useAllowance = (token: Token, spender: string, userAddress: string)
     error,
     isSuccess,
     refetch,
-  } = useContractRead({ addressOrName: token.address, contractInterface: erc20ABI }, 'allowance', {
+  } = useContractRead({ addressOrName: token?.address, contractInterface: erc20ABI }, 'allowance', {
     args: [userAddress, spender],
     chainId: token.chainId,
+    enabled: !!(token?.address && spender && userAddress),
   })
 
   return {
@@ -50,7 +51,7 @@ export const useContractApprove = (
     isError,
     error,
     writeAsync: sendApproveTx,
-  } = useContractWrite({ contractInterface: erc20ABI, addressOrName: token.address }, 'approve', {
+  } = useContractWrite({ contractInterface: erc20ABI, addressOrName: token?.address }, 'approve', {
     args: [spender, amountToApprove],
     onSuccess: (tx) => {
       registerTransaction(tx, { type: 'approve', tokenSymbol: token.symbol })
