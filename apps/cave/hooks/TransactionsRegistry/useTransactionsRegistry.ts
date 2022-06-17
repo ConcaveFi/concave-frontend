@@ -25,7 +25,9 @@ const useTrackedTransactions = () => {
         {
           onSuccess: () => {
             // onSuccess means on transaction included to localstorage
-            // if tx happened less then 2hrs ago, show toast
+            /* if tx happened less then 2hrs ago, show toast
+              used for the case a tx is registered as pending and the app is closed
+              if the user returns before 2hrs it is considere still relevant to show a confirmation */
             if (tx.timestamp > +Date.now() - hrs2) renderTxStatusToast(tx)
           },
         },

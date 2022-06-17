@@ -1,14 +1,15 @@
 import { CNV, Currency, CurrencyAmount, STAKING_CONTRACT } from '@concave/core'
 import { StakingV1Contract } from '@concave/marketplace'
 import { Box, Card, Flex, Text, useDisclosure } from '@concave/ui'
+import { TransactionResponse } from '@ethersproject/abstract-provider'
 import { ApproveButton } from 'components/ApproveButton/ApproveButton'
 import { CurrencyInputField } from 'components/CurrencyAmountField'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
+import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { useRecentTransactions } from 'hooks/useRecentTransactions'
 import { concaveProvider } from 'lib/providers'
 import React, { useState } from 'react'
 import { toAmount } from 'utils/toAmount'
@@ -27,7 +28,7 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
   const [txError, setTxError] = useState('')
   const [waitingForConfirm, setWaitingForConfirm] = useState(false)
 
-  const { addRecentTransaction } = useRecentTransactions()
+  const { registerTransaction } = useTransactionRegistry()
 
   const {
     isOpen: isOpenSubmitted,
@@ -53,14 +54,11 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
     setWaitingForConfirm(true)
     contract
       .lock(signer, account?.address, stakeInput.numerator.toString(), props.poolId)
-      .then((x) => {
-        addRecentTransaction({
-          amount: +stakeInput.toSignificant(3),
-          amountTokenName: stakeInput.currency.symbol,
-          transaction: x,
-          type: 'Stake',
-          stakePool: PARAMETER_TO_POOL_PERIOD[props.poolId],
-          loading: true,
+      .then((x: TransactionResponse) => {
+        registerTransaction(x, {
+          type: 'stake',
+          amount: stakeInput.toString(),
+          pool: PARAMETER_TO_POOL_PERIOD[props.poolId],
         })
         setTx(x)
         setWaitingForConfirm(false)

@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, DAI } from '@concave/core'
+import { CNV, Currency, CurrencyAmount, DAI } from '@concave/core'
 import { Card, Flex, HStack, Text, useDisclosure, VStack } from '@concave/ui'
 import { ApproveButton } from 'components/ApproveButton/ApproveButton'
 import { CurrencyInputField as BondInput } from 'components/CurrencyAmountField'
@@ -18,6 +18,7 @@ import { Settings, useBondSettings } from './Settings'
 import { useQuery } from 'react-query'
 import { GasPrice } from 'components/AMM'
 import { useCNVPrice } from 'hooks/useCNVPrice'
+import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 
 export const twoDecimals = (s: string | number) => {
   const a = s.toString()
@@ -60,7 +61,7 @@ export function BondBuyCard(props: {
     onOpen: onOpenRejected,
   } = useDisclosure()
 
-  const { addRecentTransaction } = useRecentTransactions()
+  const { registerTransaction } = useTransactionRegistry()
 
   return (
     <Card
@@ -159,14 +160,10 @@ export function BondBuyCard(props: {
           purchaseBond(networkId, amountInTemp, userAddress, signer, settings, amountOutTemp)
             .then(async (tx) => {
               setBondTransaction(tx)
-              addRecentTransaction({
-                amount: +amountIn.toSignificant(3),
-                amountTokenName: amountIn.currency.symbol,
-                purchaseTokenName: 'CNV',
-                purchase: +amountOut,
-                transaction: tx,
-                type: 'Bond',
-                loading: true,
+              registerTransaction(tx, {
+                type: 'bond',
+                amountIn: amountIn.toString(),
+                amountOut: toAmount(amountOut, CNV[networkId]).toString(),
               })
               props.setBondTransaction?.(tx)
               props.setAmountInAndOut?.({
