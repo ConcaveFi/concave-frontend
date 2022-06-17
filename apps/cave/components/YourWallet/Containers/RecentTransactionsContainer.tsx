@@ -3,12 +3,12 @@ import { CheckIcon, CloseIcon, SpinnerIcon } from '@concave/icons'
 import { Flex, keyframes, Link, Text, useDisclosure } from '@concave/ui'
 import SecondConfirmModal from 'components/SecondConfirmModal'
 import { getTxExplorer } from 'lib/getTransactionExplorer'
+import { useAccount } from 'wagmi'
 import {
+  useTransactionRegistry,
   getTransactionStatusLabel,
   TrackedTransaction,
-  useTransactionRegistry,
-} from 'hooks/useTransactionRegistry'
-import { useAccount } from 'wagmi'
+} from 'hooks/TransactionsRegistry'
 
 export default function RecentTransactionsContainer() {
   const { lastTransactions } = useTransactionRegistry()

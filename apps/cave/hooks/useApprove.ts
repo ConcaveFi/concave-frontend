@@ -9,7 +9,7 @@ import {
   useWaitForTransaction,
 } from 'wagmi'
 import { TransactionReceipt } from '@ethersproject/abstract-provider'
-import { useTransactionRegistry } from './useTransactionRegistry'
+import { useTransactionRegistry } from 'hooks/TransactionsRegistry/'
 
 export const useAllowance = (token: Token, spender: string, userAddress: string) => {
   const {
