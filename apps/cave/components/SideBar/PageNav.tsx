@@ -62,6 +62,7 @@ function PageNav() {
   const router = useRouter()
   const currentSupportedNetworkId = useCurrentSupportedNetworkId()
   const [liquidStakingHover, setLiquidStakingHover] = useState(false)
+  const [bondMarketHover, setBondMarketHover] = useState(false)
   const [swapHover, setSwapStakingHover] = useState(false)
   const device = useDevice()
   const cnvPrice = useCNVPrice()
@@ -74,7 +75,7 @@ function PageNav() {
     },
     { enabled: cnvPrice.isSuccess && !!currentSupportedNetworkId, refetchInterval: 17000 },
   )
-
+  const bondspage = router.pathname === '/bonds-market' || router.pathname === '/bond-positions'
   const liquidStakingPage =
     router.pathname === '/liquid-staking' || router.pathname === '/liquid-stake-positions'
   const swapPage =
@@ -146,6 +147,37 @@ function PageNav() {
       >
         Marketplace <br></br>(Coming Soon)
       </NavButton>
+
+      <Box height={'110px'}>
+        <Box
+          shadow="Down Big"
+          roundedLeft="2xl"
+          mt="24px"
+          transition={'all'}
+          transitionDuration="0.5s"
+          onMouseEnter={() => setBondMarketHover(true)}
+          onMouseLeave={() => setBondMarketHover(false)}
+        >
+          <NavButton
+            leftIcon={<NotInteractableImage src="" />}
+            href="/bonds-market"
+            variant="secondary"
+            border="primary"
+            mt="2px"
+          >
+            Bonds Market
+          </NavButton>
+          <Collapse in={bondMarketHover || bondspage || isMobile}>
+            <SubnavButton
+              isActive={router.pathname === '/bond-positions'}
+              href="/bond-positions"
+              mt="1px"
+            >
+              Your positions
+            </SubnavButton>
+          </Collapse>
+        </Box>
+      </Box>
 
       <Box height={'120px'}>
         <Box
