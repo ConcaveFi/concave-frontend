@@ -23,7 +23,7 @@ export const useMarketInfo = ({ stakingPosition }: { stakingPosition: StakingPos
   const marketInfo = useQuery(
     ['MarketInfo', tx.data, chainId, stakingPosition.tokenId],
     async () => fechMarketInfo(concaveProvider(chainId), stakingPosition),
-    { enabled: chainId != undefined },
+    { enabled: chainId != undefined, refetchOnWindowFocus: false },
   )
 
   const transactionWrapper = async (fn: () => Promise<Transaction>) => {
@@ -80,7 +80,7 @@ export const getMarketPlaceButtonProps = (marketInfoState: UserMarketInfoState):
     return { loadingText: 'Loading Market Item', disabled: true, isLoading: true }
   }
   if (marketInfo.error) {
-    return { children: 'Comming Soom', disabled: true }
+    return { children: 'Coming Soon', disabled: true }
   }
   if (!marketInfo.data.isMarketItem) {
     return { children: 'Create Market Item', onClick: createMarketItem }
