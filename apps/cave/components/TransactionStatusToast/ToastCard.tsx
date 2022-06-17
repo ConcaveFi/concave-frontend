@@ -1,9 +1,10 @@
-import { useToast, Stack, CloseButton, Card, Link, Text, CardProps } from '@concave/ui'
+import { useToast, Stack, CloseButton, Card, Link, Text, CardProps, RenderProps } from '@concave/ui'
+import { getTransactionStatusLabel, TrackedTransaction } from 'hooks/useTransactionRegistry'
+import { getTxExplorer } from 'lib/getTransactionExplorer'
 import ms from 'ms'
+import { useCallback } from 'react'
 
-type TransactionStatus = 'success' | 'error' | 'pending'
-
-const TransactionStatusToastVariant: Record<TransactionStatus, CardProps> = {
+const variants: Record<TrackedTransaction['status'], CardProps> = {
   success: { borderGradient: '#48D89A' },
   error: { borderGradient: '#A54747' },
   pending: {
@@ -11,23 +12,24 @@ const TransactionStatusToastVariant: Record<TransactionStatus, CardProps> = {
   },
 }
 
-interface TransactionStatusToastProps {
-  type: keyof typeof TransactionStatusToastVariant
-  title: string
-  description: string
-  link: string
-  onClose: () => void
+const titles: Record<TrackedTransaction['status'], string> = {
+  success: 'Transaction completed',
+  error: 'Transaction errored',
+  // transaction in queue (you probably messed with the nonce, more info)
+  pending: 'Transaction is pending',
 }
 
 export const TransactionStatusToast = ({
-  type,
-  title,
-  description,
-  link,
+  meta,
+  status,
+  hash,
+  chainId,
   onClose,
-}: TransactionStatusToastProps) => {
+  id,
+}: TrackedTransaction & RenderProps) => {
   return (
     <Card
+      key={id}
       minW="300px"
       shadow="Glass Up Medium"
       variant="secondary"
@@ -37,14 +39,14 @@ export const TransactionStatusToast = ({
       py={3}
       direction="row"
       justify="space-between"
-      {...TransactionStatusToastVariant[type]}
+      {...variants[status]}
     >
       <Stack spacing={1}>
         <Text fontSize="lg" fontFamily="heading" fontWeight="bold">
-          {title}
+          {titles[status]}
         </Text>
-        <Text textColor="text.low">{description}</Text>
-        <Link isExternal href={link} textColor="text.accent" fontSize="xs">
+        <Text textColor="text.low">{getTransactionStatusLabel({ meta, status })}</Text>
+        <Link isExternal href={getTxExplorer(hash, chainId)} textColor="text.accent" fontSize="xs">
           View on explorer
         </Link>
       </Stack>
@@ -53,39 +55,29 @@ export const TransactionStatusToast = ({
   )
 }
 
+const makeTransactionStatusToast = (tx: TrackedTransaction) =>
+  function TransactionToast({ onClose, id }: RenderProps) {
+    return <TransactionStatusToast onClose={onClose} id={id} {...tx} />
+  }
+
 /* 
   there is no way of styling a toast on the theme (without styling Alert) 
-  it is recomended to use a custom component
+  it seems to be recomended using a custom component
   https://github.com/chakra-ui/chakra-ui/issues/2736#issuecomment-743159129
 */
-const useTransactionStatusToast = () => {
+export const useTransactionStatusToast = () => {
   const toast = useToast({
     position: 'top-right',
-    duration: ms('5s'),
-    // render: //TransactionStatusToast,
+    duration: ms('15s'),
   })
 
-  return {
-    onSuccess: (description: string) => {
+  return useCallback(
+    (tx: TrackedTransaction) => {
       toast({
-        title: 'Transaction completed',
-        description,
-        isClosable: true,
+        id: tx.hash,
+        render: makeTransactionStatusToast(tx),
       })
     },
-    onError: (description: string) => {
-      toast({
-        title: 'Transaction errored',
-        description,
-        isClosable: true,
-      })
-    },
-    onPending: (description: string) => {
-      toast({
-        title: 'Transaction is pending',
-        description,
-        isClosable: true,
-      })
-    },
-  }
+    [toast],
+  )
 }

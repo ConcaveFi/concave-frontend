@@ -49,15 +49,9 @@ type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout
 }
 
-let prevPath = ''
-
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const Layout = Component.Layout || DefaultLayout
   const router = useRouter()
-
-  useEffect(() => {
-    prevPath = router.pathname
-  }, [router.pathname])
 
   useEffect(() => {
     const handleRouteChange = (url: URL) => {
@@ -72,19 +66,12 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.events])
 
-  const t = '1'
-
   return (
     <AppProviders globalStyles={globalStyles} cookies={pageProps?.cookies}>
       <ConcaveFonts />
       <MetaHead meta={Component.Meta} />
       <Layout>
-        <Component
-          {...pageProps}
-          prevPath={prevPath}
-          path={router.pathname}
-          key={router.pathname}
-        />
+        <Component {...pageProps} key={router.pathname} />
       </Layout>
     </AppProviders>
   )

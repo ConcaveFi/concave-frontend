@@ -1,4 +1,5 @@
 import { TransactionResponse } from '@ethersproject/abstract-provider'
+import { useTransactionStatusToast } from 'components/TransactionStatusToast/ToastCard'
 import { concaveProvider } from 'lib/providers'
 import { useCallback } from 'react'
 import { useQueries } from 'react-query'
@@ -17,20 +18,18 @@ export type TrackedTransaction = {
   from: string
   hash: string
   chainId: number
+  timestamp: number
   status: 'pending' | 'success' | 'error'
   meta: TransactionMeta
 }
 
 type TransactionMetaToStatusLabel = {
-  [Meta in TransactionMeta as Meta['type']]: (meta: Omit<Meta, 'type'>) => {
-    [status in TrackedTransaction['status']]: string
-  }
+  [Meta in TransactionMeta as Meta['type']]: (
+    meta: Omit<Meta, 'type'>,
+  ) => Record<TrackedTransaction['status'], string>
 }
 
-export const getTransactionStatusLabel = (
-  meta: TransactionMeta,
-  status: TrackedTransaction['status'],
-) =>
+export const getTransactionStatusLabel = ({ status, meta }: Partial<TrackedTransaction>) =>
   (<TransactionMetaToStatusLabel>{
     approve: ({ tokenSymbol }) => ({
       pending: `Approving ${tokenSymbol}`,
@@ -59,9 +58,11 @@ export const getTransactionStatusLabel = (
     }),
   })[meta.type](meta as UnionToIntersection<TransactionMeta>)[status]
 
+const hrs2 = 2 * 60 * 1000
 export const useTransactionRegistry = () => {
   const { data: account } = useAccount()
   const { activeChain } = useNetwork()
+  const renderTxStatusToast = useTransactionStatusToast()
 
   const { data: transactions, mutateAsync: setTransactions } = useLocalStorage<
     TrackedTransaction[]
@@ -74,13 +75,16 @@ export const useTransactionRegistry = () => {
         [tx, ...transactions.filter((_tx) => _tx.hash !== tx.hash).slice(0, 9)],
         {
           onSuccess: () => {
-            // on transaction included to localstorage
-            console.log('TOGGLE TOAST', tx, getTransactionStatusLabel(tx.meta, 'pending'))
+            // onSuccess means on transaction included to localstorage
+            // if tx happened less then 2hrs ago, show toast
+            // if (tx.timestamp < +Date.now() - hrs2)
+            console.log(tx.timestamp, tx.timestamp < +Date.now() - hrs2)
+            renderTxStatusToast(tx)
           },
         },
       )
     },
-    [transactions, setTransactions],
+    [transactions, setTransactions, renderTxStatusToast],
   )
 
   /* await resolution of pending transactions saved to localstorage
@@ -97,7 +101,12 @@ export const useTransactionRegistry = () => {
           if (receipt.status === 0) return { ...tx, status: 'error' }
           return { ...tx, status: 'success' }
         },
-        onSuccess: (data) => pushTransaction(data),
+        onSuccess: (data) => {
+          console.log(data)
+          pushTransaction(data)
+        },
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
       })) || [],
   )
 
@@ -106,7 +115,14 @@ export const useTransactionRegistry = () => {
       { hash, from, chainId }: TransactionResponse,
       meta: TrackedTransaction['meta'],
     ) => {
-      const newTrackedTransaction = { hash, from, chainId, status: <const>'pending', meta }
+      const newTrackedTransaction = {
+        hash,
+        from,
+        chainId,
+        timestamp: Date.now(),
+        status: <const>'pending',
+        meta,
+      }
       pushTransaction(newTrackedTransaction)
     },
     lastTransactions: transactions,

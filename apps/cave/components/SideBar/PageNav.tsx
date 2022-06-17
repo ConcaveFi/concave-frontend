@@ -84,11 +84,12 @@ function PageNav() {
     router.pathname === '/pools' ||
     router.pathname === '/addliquidity'
 
-  const isMobile = {
-    tablet: true,
-    mobile: true,
-    desktop: false,
-  }[device]
+  const isMobile = false
+  // {
+  //   tablet: true,
+  //   mobile: true,
+  //   desktop: false,
+  // }[device]
 
   return (
     <Flex direction="column" position="relative" mr="-2px">

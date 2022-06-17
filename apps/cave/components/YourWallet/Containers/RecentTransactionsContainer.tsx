@@ -2,13 +2,13 @@ import { CHAIN_NAME } from '@concave/core'
 import { CheckIcon, CloseIcon, SpinnerIcon } from '@concave/icons'
 import { Flex, keyframes, Link, Text, useDisclosure } from '@concave/ui'
 import SecondConfirmModal from 'components/SecondConfirmModal'
-import { getTxExplorer } from 'components/TransactionSubmittedDialog'
+import { getTxExplorer } from 'lib/getTransactionExplorer'
 import {
   getTransactionStatusLabel,
   TrackedTransaction,
   useTransactionRegistry,
 } from 'hooks/useTransactionRegistry'
-import { etherscanBlockExplorers, useAccount } from 'wagmi'
+import { useAccount } from 'wagmi'
 
 export default function RecentTransactionsContainer() {
   const { lastTransactions } = useTransactionRegistry()
@@ -98,13 +98,8 @@ const TransactionInfo = ({ meta, status, chainId, hash }: TrackedTransaction) =>
     <Flex justify={'space-between'}>
       <Flex fontWeight={'bold'} gap={1} align="center">
         <Text autoCapitalize="">{meta.type}</Text>
-        <Link
-          isExternal
-          href={etherscanBlockExplorers[CHAIN_NAME[chainId]].url + `/tx/${hash}`}
-          fontSize="sm"
-          textColor={'text.low'}
-        >
-          {getTransactionStatusLabel(meta, status)}
+        <Link isExternal href={getTxExplorer(hash, chainId)} fontSize="sm" textColor={'text.low'}>
+          {getTransactionStatusLabel({ status, meta })}
         </Link>
       </Flex>
       <Flex width={'17px'}>
@@ -137,8 +132,6 @@ const scroll = {
   },
 
   '::-webkit-scrollbar-track': {
-    // boxShadow: 'inset 0 0 10px 10px',
-    // color: 'green.300',
     border: 'solid 4px transparent',
     rounded: '2xl',
   },
