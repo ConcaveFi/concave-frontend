@@ -29,7 +29,6 @@ export const TransactionStatusToast = ({
 }: TrackedTransaction & RenderProps) => {
   return (
     <Card
-      key={id}
       minW="300px"
       shadow="Glass Up Medium"
       variant="secondary"
@@ -71,12 +70,20 @@ const makeTransactionStatusToast = (tx: TrackedTransaction) =>
 export const useTransactionStatusToast = () => {
   const toast = useToast({
     position: 'top-right',
+    containerStyle: {
+      margin: 4,
+    },
   })
 
   return useCallback(
     (tx: TrackedTransaction) => {
+      /* no idea why, maybe bug on chakra, 
+        it's not auto closing when adding two toasts with same id
+        tried using tx.hash as the id but toast.close(tx.hash) closes the new one being created
+        and shows nothing lol */
+      toast.close('pending' + tx.hash)
       toast({
-        id: tx.hash,
+        id: tx.status + tx.hash,
         duration: tx.status === 'pending' ? null : ms('15s'), // don't auto hide while pending
         render: makeTransactionStatusToast(tx),
       })
