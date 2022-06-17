@@ -1,5 +1,14 @@
 import { InfoIcon } from '@concave/icons'
-import { Button, Card, Flex, Modal, Text, Tooltip, useDisclosure } from '@concave/ui'
+import {
+  Button,
+  Card,
+  Flex,
+  InputLeftAddon,
+  Modal,
+  Text,
+  Tooltip,
+  useDisclosure,
+} from '@concave/ui'
 import { ToggleButton } from 'components/ToggleButton'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
@@ -37,23 +46,28 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
 
   const { registerTransaction } = useTransactionRegistry()
 
-  const balance = +bbtCNVData?.formatted || 0
+  const [useMax, setUseMax] = useState(false)
+  const [value, setValue] = useState<string>()
+
+  const balance = bbtCNVData?.formatted || '0'
   const redeemable = +utils.formatEther(redeemableData?.redeemable || 0)
   const redeemed = +utils.formatEther(redeemableData?.redeemed || 0)
 
   // booleans
-  const insufficientFounds = balance === 0
-  const nothingToRedeem = (redeemable === 0 || redeemable === balance) && !insufficientFounds
-  const validValue = !insufficientFounds && !nothingToRedeem
+  const insufficientFunds = +balance === 0 || +value > +balance
+  const invalidValue = utils.parseEther(value || '0').isZero()
+  const nothingToRedeem = (redeemable === 0 || redeemable === +balance) && !insufficientFunds
+  const validValue = !insufficientFunds && !nothingToRedeem && !invalidValue
 
-  const [useMax, setUseMax] = useState(false)
-  const [value, setValue] = useState<number>()
-
+  // When bbtCNV redeem V2 is deployed on mainnet,
+  // provider and bbtCNV_REDEMPTION_V2, should be changed to use the
+  // current network intead of 4.
   const bbtCNVContract = new Contract(
     bbtCNV_REDEMPTION_V2[4],
     bbtCNV_REDEMPTION_V2_ABI,
     provider(4),
   )
+
   return (
     <>
       <Modal
@@ -77,7 +91,7 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
             <Info title="Redeemed:" value={isLoading ? 'Loading...' : redeemed} />
           </Flex>
           <Flex gap={2} fontWeight={'bold'} pl={2} align="center">
-            <Text textColor={'gray.200'}>Try redeem max?</Text>
+            <Text textColor={'gray.200'}>Redeem max?</Text>
             <ToggleButton onActivate={() => setUseMax(true)} onDisable={() => setUseMax(false)} />
             <Tooltip
               textColor={'white'}
@@ -86,7 +100,7 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
               fontWeight={'bold'}
               fontSize="13px"
               textAlign="center"
-              label="If this option it's enabled, the contract will try to redeem all your redeemable amount"
+              label="Attempts to redeem all of your currently available bbtCNV."
             >
               <InfoIcon color={'text.low'} cursor="pointer" />
             </Tooltip>
@@ -127,8 +141,9 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
           >
             {isConnected ? (
               <Text>
+                {invalidValue && 'Invalid Value'}
                 {nothingToRedeem && 'Nothing To Redeem'}
-                {insufficientFounds && 'Insufficient Funds'}
+                {insufficientFunds && 'Insufficient Funds'}
                 {validValue && 'Redeem'}
               </Text>
             ) : (

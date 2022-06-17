@@ -1,11 +1,12 @@
 import { Button, Flex, Text, Tooltip, useDisclosure } from '@chakra-ui/react'
 import { NumericInput } from '@concave/ui'
+import { BigNumber, utils } from 'ethers'
 
 type BBT_CNVDialogInput = {
-  onChangeValue: (value: number) => void
-  value: number
+  onChangeValue: (value: string) => void
+  value: string
   redeemable: number
-  balance: number
+  balance: string
 }
 export const BBT_CNVDialogInput = ({
   redeemable,
@@ -21,7 +22,7 @@ export const BBT_CNVDialogInput = ({
             py={2}
             fontSize={'18px'}
             value={value}
-            onValueChange={({ value }) => onChangeValue(+value)}
+            onValueChange={({ value }) => onChangeValue(value)}
           />
           {/* <MaxButton onClick={() => onChangeValue(redeemable)} /> */}
         </Flex>
@@ -49,7 +50,7 @@ const MaxButton = ({ onClick }: { onClick: VoidFunction }) => {
   )
 }
 
-const BalanceButton = ({ onClick, amount }: { onClick: VoidFunction; amount: number }) => {
+const BalanceButton = ({ onClick, amount }: { onClick: VoidFunction; amount: string }) => {
   const { isOpen, onClose, onOpen } = useDisclosure()
   return (
     <Flex
