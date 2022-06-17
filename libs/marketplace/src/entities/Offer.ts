@@ -56,6 +56,14 @@ export class Offer {
     return new Offer(this)
   }
 
+  get isValid() {
+    if (this.buyNowPrice.eq(0)) return false
+    if (this.isSale) return true
+    const difference = this.minPrice.mul(100).div(this.buyNowPrice)
+    if (difference.gt(80)) return false
+    return true
+  }
+
   get isSale() {
     return this.minPrice.eq(0) && this.buyNowPrice.gt(0)
   }

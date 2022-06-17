@@ -6,12 +6,10 @@ import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { BOND_ADDRESS } from '@concave/core'
-import { useGet_Amm_Cnv_PriceQuery } from 'graphql/generated/graphql'
 import { useRecentTransactions } from 'hooks/useRecentTransactions'
 import React, { useEffect, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
 import { truncateNumber } from 'utils/truncateNumber'
-import { useFeeData } from 'wagmi'
 import { BondOutput } from './BondOutput'
 import { getBondAmountOut, getBondSpotPrice, purchaseBond, useBondState } from './BondState'
 import { ConfirmBondModal } from './ConfirmBond'
@@ -19,6 +17,9 @@ import { DownwardIcon } from './DownwardIcon'
 import { Settings, useBondSettings } from './Settings'
 import { useQuery } from 'react-query'
 import { GasPrice } from 'components/AMM'
+import { formatFixed } from 'utils/formatFixed'
+import { useCNVPrice } from 'hooks/useCNVPrice'
+
 export const twoDecimals = (s: string | number) => {
   const a = s.toString()
   return a.indexOf('.') > -1 ? a.slice(0, a.indexOf('.') + 3) : a
@@ -44,9 +45,9 @@ export function BondBuyCard(props: {
   const [amountOut, setAmountOut] = useState<string>()
   const confirmModal = useDisclosure()
   const [hasClickedConfirm, setHasClickedConfirm] = useState(false)
-  const AMMData = useGet_Amm_Cnv_PriceQuery()
 
-  const currentPrice = AMMData?.data?.cnvData?.data?.last.toFixed(3)
+  const cnvPrice = useCNVPrice()
+
   const { data: bondSpotPrice } = useQuery(
     ['bondSpotPrice', networkId],
     async () => await getBondSpotPrice(networkId),
@@ -97,7 +98,11 @@ export function BondBuyCard(props: {
           <HStack alignSelf={'start'}>
             <Text textColor={'text.low'}>Current Price:</Text>
             <Text textColor={'text.low'} opacity="0.7">
+<<<<<<< HEAD
               {currentPrice ? '$' + parseFloat(currentPrice).toFixed(3) + ' CNV' : 'Loading . . .'}
+=======
+              {cnvPrice.price ? '$' + cnvPrice.price?.toFixed(2) + ' CNV' : 'Loading . . .'}
+>>>>>>> 2f3b28d0641eeaf841cccee7363d43efbd6b73ab
             </Text>
           </HStack>
           <HStack alignSelf={'start'}>

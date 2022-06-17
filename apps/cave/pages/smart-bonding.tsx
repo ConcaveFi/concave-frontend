@@ -1,4 +1,5 @@
 import { keyframes } from '@chakra-ui/system'
+import { CNV } from '@concave/core'
 import { SpinIcon } from '@concave/icons'
 import {
   Box,
@@ -11,6 +12,7 @@ import {
   useDisclosure,
   Text,
 } from '@concave/ui'
+import { useFiatPrice } from 'components/AMM/hooks/useFiatPrice'
 import { BondBuyCard } from 'components/Bond/BondBuyCard'
 import { BondInfo, UserBondPositionInfo } from 'components/Bond/BondInfo'
 import BondSoldsCard from 'components/Bond/BondSoldsCard'
@@ -30,8 +32,9 @@ import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialo
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { utils } from 'ethers'
 import { useGet_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql'
+import { useCNVPrice } from 'hooks/useCNVPrice'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import React, { useEffect, useState } from 'react'
-import getCNVMarketPrice from 'utils/getCNVMarketPrice'
 import getROI from 'utils/getROI'
 // import { truncateNumber } from 'utils/truncateNumber'
 // send it
@@ -45,7 +48,6 @@ export function Bond() {
   const spinnerStyles = { animation: `${spin} 2s linear infinite`, size: 'sm' }
   const [termLength, setTermLength] = useState<number>(0)
   const [bondSpotPrice, setBondSpotPrice] = useState<string>('0')
-  const [cnvMarketPrice, setCNVMarketPrice] = useState<Object>()
   const [currentBlockTs, setCurrentBlockTs] = useState<number>(0)
   const [bondSigma, setBondSigma] = useState<any>()
   const [intervalID, setIntervalID] = useState<any>()
@@ -56,6 +58,8 @@ export function Bond() {
   const [clickedRedeemButton, setClickedRedeemButton] = useState(false)
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
   const [txError, setTxError] = useState('')
+
+  const cnvPrice = useCNVPrice()
   const {
     isOpen: isOpenSubmitted,
     onClose: onCloseSubmitted,
@@ -99,12 +103,6 @@ export function Bond() {
       .catch((e) => {
         console.log(e)
       })
-    getCNVMarketPrice()
-      .then((price) => {
-        setCNVMarketPrice(price)
-        console.log(price)
-      })
-      .catch(() => {})
   }, [networkId])
 
   useEffect(() => {
@@ -114,18 +112,13 @@ export function Bond() {
           setBondSpotPrice(bondSpotPrice)
         })
         .catch(() => {})
-      getCNVMarketPrice()
-        .then((price) => {
-          setCNVMarketPrice(price)
-          console.log(price)
-        })
-        .catch(() => {})
     }, 10000)
     if (intervalID !== interval) {
       clearTimeout(intervalID)
       setIntervalID(interval)
     }
-  }, [cnvMarketPrice, networkId])
+    return clearInterval(interval)
+  }, [networkId])
 
   useEffect(() => {
     if (bondSigma && isLoadingBondSigma) {
@@ -215,7 +208,7 @@ export function Bond() {
                         <BondInfo
                           asset="CNV"
                           icon="/assets/tokens/cnv.svg"
-                          roi={getROI(cnvMarketPrice, bondSpotPrice)}
+                          roi={getROI(cnvPrice.price?.toSignificant(8), bondSpotPrice)}
                           vestingTerm={`${termLength} Days`}
                         />
                       </Collapse>

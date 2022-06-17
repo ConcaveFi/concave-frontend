@@ -1,14 +1,20 @@
 import { QuestionIcon } from '@concave/icons'
-import { HStack, Stack, Switch, Text } from '@concave/ui'
+import { HStack, Stack, Switch, Text, Tooltip } from '@concave/ui'
 import { TransactionSettings, SlippageTolerance, Deadline } from 'components/TransactionSettings'
 import { useTransactionSettings } from 'components/TransactionSettings/TransactionSettings'
 
 const ToggleExpertMode = ({ isChecked, onToggle }) => {
   return (
     <HStack justifyContent="space-between" width="100%">
-      <Text fontSize="sm">
-        Expert Mode <QuestionIcon />
-      </Text>
+      <HStack>
+        <Text fontSize="sm">Expert Mode</Text>
+        <Tooltip
+          label="Expert mode allows high slippage trades and custom recipients without the confirmation screen. Use at your own risk."
+          shouldWrapChildren
+        >
+          <QuestionIcon />
+        </Tooltip>
+      </HStack>
       <Switch size="sm" isChecked={isChecked} onChange={onToggle} />
     </HStack>
   )
@@ -17,10 +23,16 @@ const ToggleExpertMode = ({ isChecked, onToggle }) => {
 const ToggleMultihops = ({ isChecked, onToggle }) => {
   return (
     <HStack justifyContent="space-between" width="100%">
-      <Text fontSize="sm">
-        Multihops
-        <QuestionIcon />
-      </Text>
+      <HStack>
+        <Text fontSize="sm">Multihops</Text>
+        <Tooltip
+          label="Disabling multihops restricts swaps to direct pairs only - no routing."
+          shouldWrapChildren
+        >
+          <QuestionIcon />
+        </Tooltip>
+      </HStack>
+
       <Switch size="sm" isChecked={isChecked} onChange={onToggle} />
     </HStack>
   )
