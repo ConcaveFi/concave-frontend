@@ -77,7 +77,7 @@ const FarmingViewer = ({ convexToken }) => {
       </GlassPanel>
       <Flex direction={'column'} height="120px" align="center" justify={'center'}>
         <Text fontWeight={'bold'} fontSize="3xl" mt={'5px'} mb={-2} zIndex="10">
-          {'$' + commify(convexToken?.total.toFixed())}
+          {'$' + commify(convexToken?.total.toFixed() || 0)}
         </Text>
         <AvatarGroup size={'sm'} spacing={-3} opacity="0.4">
           <Avatar src={image} />
