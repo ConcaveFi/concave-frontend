@@ -5,13 +5,15 @@ import { BigNumber, utils } from 'ethers'
 type BBT_CNVDialogInput = {
   onChangeValue: (value: string) => void
   value: string
-  redeemable: number
   balance: string
+  redeemMax: boolean
+  redeemable: string
 }
 export const BBT_CNVDialogInput = ({
-  redeemable,
   balance,
   value,
+  redeemMax,
+  redeemable,
   onChangeValue,
 }: BBT_CNVDialogInput) => {
   return (
@@ -21,36 +23,25 @@ export const BBT_CNVDialogInput = ({
           <NumericInput
             py={2}
             fontSize={'18px'}
-            value={value}
-            onValueChange={({ value }) => onChangeValue(value)}
+            value={!redeemMax && value}
+            disabled={redeemMax}
+            placeholder={redeemMax ? redeemable : '0.0'}
+            onValueChange={({ value }) => !redeemMax && onChangeValue(value)}
           />
-          {/* <MaxButton onClick={() => onChangeValue(redeemable)} /> */}
         </Flex>
         <Flex width={'full'} justify="space-between" align={'center'}>
-          <BalanceButton amount={balance} onClick={() => onChangeValue(balance)} />
+          <BalanceButton
+            redeemMax={redeemMax}
+            amount={balance}
+            onClick={() => onChangeValue(balance)}
+          />
         </Flex>
       </Flex>
     </Flex>
   )
 }
-
-const MaxButton = ({ onClick }: { onClick: VoidFunction }) => {
-  return (
-    <Tooltip
-      openDelay={200}
-      label="Change the input to the max amount you can redeem "
-      textColor={'white'}
-      fontWeight="bold"
-      bg="text.low"
-    >
-      <Button width={'90px'} height="30px" variant={'primary.outline'} onClick={onClick}>
-        <Text fontWeight={'bold'}>Max</Text>
-      </Button>
-    </Tooltip>
-  )
-}
-
-const BalanceButton = ({ onClick, amount }: { onClick: VoidFunction; amount: string }) => {
+type BalanceButton = { onClick: VoidFunction; amount: string; redeemMax: boolean }
+const BalanceButton = ({ onClick, amount, redeemMax }: BalanceButton) => {
   const { isOpen, onClose, onOpen } = useDisclosure()
   return (
     <Flex
@@ -58,9 +49,9 @@ const BalanceButton = ({ onClick, amount }: { onClick: VoidFunction; amount: str
       fontSize={isOpen ? '15px' : '14px'}
       gap={2}
       fontWeight={'bold'}
-      onMouseEnter={onOpen}
-      onMouseLeave={onClose}
-      cursor="pointer"
+      onMouseEnter={() => !redeemMax && onOpen()}
+      onMouseLeave={() => !redeemMax && onClose()}
+      cursor={!redeemMax && 'pointer'}
       onClick={onClick}
     >
       <Text textColor={isOpen ? 'text.accent' : 'text.low'}>Balance:</Text>

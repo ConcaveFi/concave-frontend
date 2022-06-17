@@ -53,11 +53,12 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
   const redeemable = +utils.formatEther(redeemableData?.redeemable || 0)
   const redeemed = +utils.formatEther(redeemableData?.redeemed || 0)
 
-  // booleans
+  // Conditions
   const insufficientFunds = +balance === 0 || +value > +balance
+  const redeemableExceeded = +value > redeemable && !insufficientFunds
   const invalidValue = utils.parseEther(value || '0').isZero()
   const nothingToRedeem = (redeemable === 0 || redeemable === +balance) && !insufficientFunds
-  const validValue = !insufficientFunds && !nothingToRedeem && !invalidValue
+  const validValue = !insufficientFunds && !nothingToRedeem && !invalidValue && !redeemableExceeded
 
   // When bbtCNV redeem V2 is deployed on mainnet,
   // provider and bbtCNV_REDEMPTION_V2, should be changed to use the
@@ -81,8 +82,9 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
       >
         <Card width={'340px'} height="280px" m={-6} px={6} gap={2} justify="center">
           <BBT_CNVDialogInput
+            redeemable={String(redeemable)}
+            redeemMax={useMax}
             balance={balance}
-            redeemable={redeemable}
             onChangeValue={setValue}
             value={value}
           />
@@ -107,11 +109,11 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
           </Flex>
           <Button
             cursor={!validValue && 'default'}
-            shadow={validValue ? 'Up Small' : 'down'}
+            shadow={'Up Small'}
             fontSize={'20'}
             height={'55px'}
             width="full"
-            variant="primary.outline"
+            variant={'secondary'}
             textColor={!validValue && 'text.low'}
             _active={validValue && { transform: 'scale(0.9)' }}
             _hover={validValue && { shadow: 'up' }}
@@ -142,6 +144,7 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
             {isConnected ? (
               <Text>
                 {invalidValue && 'Invalid Value'}
+                {redeemableExceeded && 'Redeemable Exceeded'}
                 {nothingToRedeem && 'Nothing To Redeem'}
                 {insufficientFunds && 'Insufficient Funds'}
                 {validValue && 'Redeem'}
