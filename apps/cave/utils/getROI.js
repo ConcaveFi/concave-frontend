@@ -1,3 +1,9 @@
+/**
+ * Take cnvMarketPrice and bondSpotPrice to calculate ROI
+ * @param {string} cnvMarketPrice
+ * @param {string} bondSpotPrice
+ * @returns {string} Returns calculated ROI
+ */
 export default function getROI(cnvMarketPrice, bondSpotPrice) {
   const bondSpotPriceInt = +bondSpotPrice
   const cnvMarketPriceInt = +cnvMarketPrice

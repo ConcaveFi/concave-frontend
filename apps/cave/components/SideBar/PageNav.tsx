@@ -1,13 +1,12 @@
 import { Box, Collapse, Flex, Image, Spinner, Text } from '@concave/ui'
 import { getBondSpotPrice } from 'components/Bond/BondState'
 import { ButtonLink, ButtonLinkProps } from 'components/ButtonLink'
-import { useGet_Cnv_DataQuery } from 'graphql/generated/graphql'
+import { useCNVPrice } from 'hooks/useCNVPrice'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useDevice } from 'hooks/useDevice'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import { useQuery } from 'react-query'
-import getCNVMarketPrice from 'utils/getCNVMarketPrice'
 import getROI from 'utils/getROI'
 
 const NavButton = (props: ButtonLinkProps) => {
@@ -64,17 +63,16 @@ function PageNav() {
   const currentSupportedNetworkId = useCurrentSupportedNetworkId()
   const [liquidStakingHover, setLiquidStakingHover] = useState(false)
   const [swapHover, setSwapStakingHover] = useState(false)
-  const { data: cnvData } = useGet_Cnv_DataQuery()
   const device = useDevice()
-
+  const cnvPrice = useCNVPrice()
   const roi = useQuery(
-    ['getCNVMarketPrice', currentSupportedNetworkId, cnvData],
+    ['bondROI', currentSupportedNetworkId, cnvPrice.price],
     async () => {
-      const cnvMarketPrice = cnvData?.cnvData?.data?.last ?? (await getCNVMarketPrice())
+      const cnvMarketPrice = cnvPrice?.price?.toSignificant(8)
       const bondSpotPrice = await getBondSpotPrice(currentSupportedNetworkId)
       return getROI(cnvMarketPrice, bondSpotPrice)
     },
-    { enabled: !!currentSupportedNetworkId, refetchInterval: 17000 },
+    { enabled: cnvPrice.isSuccess && !!currentSupportedNetworkId, refetchInterval: 17000 },
   )
 
   const liquidStakingPage =

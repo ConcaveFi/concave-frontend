@@ -1,29 +1,17 @@
-import { Flex, Heading, Text } from '@concave/ui'
-import DashboardMobile from 'components/Dashboard/Mobile/DashboardMobile'
-import UserDashboardCard from 'components/Dashboard/UserDashboardCard'
+import { Flex } from '@concave/ui'
 import { withPageTransition } from 'components/PageTransition'
-import { useDashBoardState } from 'contracts/DashBoard/DashBoardState'
-import React from 'react'
+import { useStakePositions } from 'components/StakingPositions/DashboardBody/DashBoardState'
+import { UserDashboardCard } from 'components/StakingPositions/DashboardBody/UserDashboardCard'
+import { DashboardHeader } from 'components/StakingPositions/DashboardHeader'
 
 export function LiquidStakePositions() {
-  const data = useDashBoardState()
-
-  // commit
-
+  const stakePosition = useStakePositions()
   return (
     <Flex align={'center'} justify="start" direction={'column'} width={'full'} textAlign="center">
-      <Heading as="h1" mt={8} mb={3} fontSize="5xl">
-        Liquid Stake Positions
-      </Heading>
-      <Flex my={3} justify={'center'} maxWidth={{ sm: '358px', lg: '1000px' }}>
-        <Text textAlign="center">
-          This is the user dashboard to claim dividends and manage your liquid NFT positions.
-        </Text>
-      </Flex>
-
+      <DashboardHeader />
       <Flex justify={'center'} position="relative">
-        <UserDashboardCard data={data} />
-        <DashboardMobile data={data} />
+        <UserDashboardCard stakePosition={stakePosition} />
+        {/* <DashboardMobile data={data} /> */}
       </Flex>
     </Flex>
   )
