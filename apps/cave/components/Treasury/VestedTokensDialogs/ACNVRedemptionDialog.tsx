@@ -89,7 +89,7 @@ export default function ACNVRedemptionDialog(props: ACNVRedemptionDialogProps) {
               </Text>
               <Text textColor={'text.accent'} fontWeight="bold">
                 {(!loadingACNV && aCNVData?.formatted) || '0'}
-                {loadingACNV && 'loading...'}
+                {loadingACNV && 'Loading...'}
               </Text>
             </Flex>
             <Flex gap={2}>
@@ -98,7 +98,7 @@ export default function ACNVRedemptionDialog(props: ACNVRedemptionDialogProps) {
               </Text>
               <Text textColor={'text.accent'} fontWeight="bold">
                 {!isLoading && redeemed}
-                {isLoading && 'loading...'}
+                {isLoading && 'Loading...'}
               </Text>
             </Flex>
             {txHash && (
@@ -109,7 +109,7 @@ export default function ACNVRedemptionDialog(props: ACNVRedemptionDialogProps) {
                 textColor="text.low"
                 fontSize={'13'}
               >
-                Show tx on explorer
+                View on explorer
               </Link>
             )}
           </Flex>
