@@ -144,7 +144,7 @@ export default function TreasuryRevenueCard(props) {
             box1="Market Cap"
             box1b={'$' + truncateNumber(cnv.cnvData.data.marketCap * 10 ** 18)}
             box2="CNV Price"
-            box2b={'$' + cnvPrice?.price?.toFixed(2)}
+            box2b={'$' + cnvPrice?.price.toFixed(2)}
             box3="Treasury Value per CNV"
             box3b={'$' + truncateNumber((total / cnv.cnvData.data.totalSupply) * 10 ** 18)}
           />
