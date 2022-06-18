@@ -2,7 +2,7 @@ import { ButtonProps } from '@concave/ui'
 import { useAccount } from 'wagmi'
 import { useModals } from 'contexts/ModalsContext'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
-import { Currency, CurrencyAmount } from '@concave/gemswap-sdk'
+import { Currency, CurrencyAmount } from '@concave/core'
 import { NoValidPairsError, UsePairResult } from '../hooks/usePair'
 
 export const useAddLiquidityButtonProps = (
@@ -11,7 +11,7 @@ export const useAddLiquidityButtonProps = (
   amount1: CurrencyAmount<Currency>,
   onAddLiquidityClick: () => void,
 ): ButtonProps => {
-  const [{ data: account }] = useAccount()
+  const { data: account } = useAccount()
 
   const currency0Balance = useCurrencyBalance(amount0?.currency, { watch: true })
   const currency1Balance = useCurrencyBalance(amount1?.currency, { watch: true })

@@ -1,4 +1,4 @@
-import { CNV, Currency, CurrencyAmount } from '@concave/gemswap-sdk'
+import { CNV, Currency, CurrencyAmount } from '@concave/core'
 import { Box, Button, Card, Flex, Heading, Text } from '@concave/ui'
 import { CurrencyInputField } from 'components/CurrencyAmountField'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
@@ -14,8 +14,8 @@ const Faucet = () => {
   const [inputAmount, setInputAmout] = useState<CurrencyAmount<Currency>>(
     CurrencyAmount.fromRawAmount(CNV[chainId], '0'),
   )
-  const [{ data: account }] = useAccount()
-  const [{ data: signer }] = useSigner()
+  const { data: account } = useAccount()
+  const { data: signer } = useSigner()
 
   const mint = () => {
     const provider = concaveProvider(chainId)

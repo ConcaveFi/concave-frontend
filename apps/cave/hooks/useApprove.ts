@@ -1,8 +1,7 @@
 import { BigNumber, BigNumberish, Contract } from 'ethers'
 import { formatUnits } from 'ethers/lib/utils'
-import { CurrencyAmount, Token } from '@concave/gemswap-sdk'
+import { CurrencyAmount, Token, MaxUint256 } from '@concave/core'
 import { erc20ABI, useAccount, useSigner } from 'wagmi'
-import { MaxUint256 } from '@concave/gemswap-sdk'
 import { useQuery } from 'react-query'
 import { TransactionReceipt, TransactionResponse } from '@ethersproject/abstract-provider'
 import { concaveProvider } from 'lib/providers'
@@ -45,7 +44,7 @@ export const useContractApprove = (
   amountToApprove: BigNumberish = MaxUint256.toString(),
   { onSuccess }: { onSuccess: (receipt: TransactionReceipt) => void },
 ) => {
-  const [{ data: signer }] = useSigner()
+  const { data: signer } = useSigner()
   const {
     data: tx,
     isLoading: isWaitingForConfirmation,
@@ -84,11 +83,11 @@ export const useApprove = (
   spender: string,
   amount: BigNumberish = MaxUint256.toString(),
 ) => {
-  const [{ data: account, loading }] = useAccount()
+  const { data: account, isLoading } = useAccount()
   const allowance = useAllowance(token, spender, account?.address)
   const approve = useContractApprove(token, spender, amount, {
     onSuccess: () => allowance.refetch(),
   })
 
-  return { allowance, ...approve, isFeching: loading || allowance.isLoading }
+  return { allowance, ...approve, isFeching: isLoading || allowance.isLoading }
 }

@@ -1,14 +1,7 @@
-import { ONE, ZERO } from '../constants'
-
-import { Currency } from './currency'
-import { CurrencyAmount } from './currencyAmount'
-import { Fraction } from './fraction'
+import { ONE, ZERO, Currency, CurrencyAmount, Fraction, Percent, Token } from '@concave/core'
 import { Pair } from './pair'
-import { Percent } from './percent'
 import { Price } from './price'
 import { Route } from './route'
-import { Token } from './token'
-import { TradeType } from '../enums/TradeType'
 import { computePriceImpact } from '../functions/computePriceImpact'
 import invariant from 'tiny-invariant'
 import { sortedInsert } from '../functions/sortedInsert'
@@ -17,6 +10,11 @@ import { sortedInsert } from '../functions/sortedInsert'
 interface InputOutput<TInput extends Currency, TOutput extends Currency> {
   readonly inputAmount: CurrencyAmount<TInput>
   readonly outputAmount: CurrencyAmount<TOutput>
+}
+
+export enum TradeType {
+  EXACT_INPUT,
+  EXACT_OUTPUT,
 }
 
 // comparator function that allows sorting trades by their output amounts, in decreasing order, and then input amounts

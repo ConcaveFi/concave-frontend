@@ -1,4 +1,5 @@
-import { Currency, Fetcher, Token } from '@concave/gemswap-sdk'
+import { Currency, Token } from '@concave/core'
+import { Fetcher } from '@concave/gemswap-sdk'
 import { Flex, Input, ListItem, Spinner, Stack, Text, UnorderedList } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { isAddress } from 'ethers/lib/utils'

@@ -9,6 +9,7 @@ import {
   Flex,
   Image,
   forwardRef,
+  Box,
 } from '@concave/ui'
 import { HamburgerIcon } from '@concave/icons'
 import SideBarTop from './SideBarTop'
@@ -26,41 +27,43 @@ export function SideBar() {
       {/* show on bigger screens like not mobile lol */}
       <SidebarContent display={{ base: 'none', md: 'flex' }} />
       {/* show on small devices (mobile) */}
-      <Flex
-        align="center"
-        position="fixed"
-        zIndex={5}
-        p={4}
-        display={{ base: 'flex', md: 'none' }}
-        onClick={onOpen}
-        filter="drop-shadow(0px 0px 12px #81b3ff4f)"
-        bg="blackAlpha.100"
-        backdropFilter="blur(16px)"
-        direction="row"
-        w="100%"
-        roundedBottom="xl"
-      >
-        <HamburgerIcon />
-        <Image src="/assets/concave/logotype.svg" alt="concave" width="100px" ml={2} />
-      </Flex>
-      <Drawer
-        autoFocus={true}
-        closeOnOverlayClick={true}
-        isOpen={isOpen}
-        placement="left"
-        onClose={onClose}
-      >
-        <DrawerOverlay backdropFilter="blur(8px)" />
-        <DrawerContent
-          w="min"
-          bg="none"
-          shadow="none"
-          overflow="auto"
-          sx={{ '::-webkit-scrollbar': { display: 'none' }, scrollbarWidth: 'none' }}
+      <Box mb={20}>
+        <Flex
+          align="center"
+          position="fixed"
+          zIndex={5}
+          p={4}
+          display={{ base: 'flex', md: 'none' }}
+          onClick={onOpen}
+          filter="drop-shadow(0px 0px 12px #81b3ff4f)"
+          bg="blackAlpha.100"
+          backdropFilter="blur(16px)"
+          direction="row"
+          w="100%"
+          roundedBottom="xl"
         >
-          <SidebarContent {...swipeableHandlers} />
-        </DrawerContent>
-      </Drawer>
+          <HamburgerIcon />
+          <Image src="/assets/concave/logotype.svg" alt="concave" width="100px" ml={2} />
+        </Flex>
+        <Drawer
+          autoFocus={true}
+          closeOnOverlayClick={true}
+          isOpen={isOpen}
+          placement="left"
+          onClose={onClose}
+        >
+          <DrawerOverlay backdropFilter="blur(8px)" />
+          <DrawerContent
+            maxW="min"
+            bg="none"
+            shadow="none"
+            overflow="auto"
+            sx={{ '::-webkit-scrollbar': { display: 'none' }, scrollbarWidth: 'none' }}
+          >
+            <SidebarContent {...swipeableHandlers} />
+          </DrawerContent>
+        </Drawer>
+      </Box>
     </>
   )
 }

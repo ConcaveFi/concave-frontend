@@ -1,10 +1,12 @@
 import { useState } from 'react'
+import { RouterAbi, ROUTER_ADDRESS, Currency } from '@concave/core'
+import { Router, TradeType, Trade } from '@concave/gemswap-sdk'
 import { SwapSettings } from '../Swap/Settings'
-import { RouterABI, ROUTER_ADDRESS, Router, Currency, TradeType, Trade } from '@concave/gemswap-sdk'
-import { Contract, Transaction } from 'ethers'
+import { Transaction } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useAccount, useContract, useSigner } from 'wagmi'
 import { useRecentTransactions } from 'hooks/useRecentTransactions'
+import { toPercent } from 'utils/toPercent'
 
 const initialState = {
   isWaitingForConfirmation: false,
@@ -22,12 +24,11 @@ export const useSwapTransaction = (
   { onTransactionSent }: { onTransactionSent?: (tx: Transaction) => void },
 ) => {
   const networkId = useCurrentSupportedNetworkId()
-  const [{ data: account }] = useAccount()
-  const [{ data: signer }] = useSigner()
-  const routerContract = useContract<Contract>({
+  const { data: account } = useAccount()
+  const { data: signer } = useSigner()
+  const routerContract = useContract({
     addressOrName: ROUTER_ADDRESS[networkId],
-    // @ts-ignore
-    contractInterface: RouterABI,
+    contractInterface: RouterAbi,
     signerOrProvider: signer,
   })
 
@@ -38,7 +39,7 @@ export const useSwapTransaction = (
     setState({ ...initialState, trade, isWaitingForConfirmation: true })
     try {
       const { methodName, args, value } = Router.swapCallParameters(trade, {
-        allowedSlippage: settings.slippageTolerance.percent,
+        allowedSlippage: toPercent(settings.slippageTolerance),
         ttl: +settings.deadline * 60,
         feeOnTransfer: trade.tradeType === TradeType.EXACT_INPUT,
         recipient: recipient || account.address,

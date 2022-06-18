@@ -1,4 +1,4 @@
-import { Currency } from '@concave/gemswap-sdk'
+import { Currency } from '@concave/core'
 import { HStack, Spinner, Text, StackProps, Flex } from '@concave/ui'
 import { useReducer } from 'react'
 import { useFiatPrice } from '../hooks/useFiatPrice'

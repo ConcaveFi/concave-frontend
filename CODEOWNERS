@@ -1,34 +1,32 @@
 # *        @casuwu @gregs @NUnicorn2860 @Schrammel @shanghigh @rrobrms @21Chani
 
-
-# Bonds UI: @greg-schrammel
+# Bonds UI: @casuwu
 # Bonds contract-integeration: @casuwu
-apps/cave/components/Bond @greg-schrammel @casuwu
+apps/cave/components/Bond @casuwu
 
-
-# LiquidStaking UI: @NUnicorn2860 @casuwu
+# LiquidStaking UI: @NUnicorn2860
 # LiquidStaking contract-integration: @NUnicorn2860
-apps/cave/components/LiquidStaking  @NUnicorn2860 @casuwu
+apps/cave/components/LiquidStaking @NUnicorn2860
 
-# Marketplace UI: @shanghigh @21Chani
-# Marketplace contract-integration:
-apps/cave/components/Marketplace  @shanghigh @21Chani
+# Marketplace UI: @Schrammel
+# Marketplace contract-integration: @Schrammel
+apps/cave/components/Marketplace @Schrammel
 
 # Swap UI: @greg-schrammel
-# Swap contract-integration: @greg-schrammel @casuwu
-apps/cave/components/AMM @greg-schrammel @casuwu
+# Swap contract-integration: @greg-schrammel
+apps/cave/components/AMM @greg-schrammel
 
 # Add/Remove Liquidity UI: @Schrammel
-# Add/Remove Liquidity contract-integration: @Schrammel @casuwu
-apps/cave/components/Positions @Schrammel @casuwu
+# Add/Remove Liquidity contract-integration: @Schrammel
+apps/cave/components/Positions @Schrammel
 
-# Dashboard UI: @greg-schrammel @shanghigh 
-# Dashboard contract-integration: @greg-schrammel
-apps/cave/components/Dashboard @greg-schrammel @shanghigh
+# Dashboard UI: @21Chani
+# Dashboard contract-integration: @21Chani
+apps/cave/components/Dashboard @21Chani
 
-# Sidebar UI: @NUnicorn2860 
+# Sidebar UI: @NUnicorn2860 @greg-schrammel
 # Sidebar contract-integration: @NUnicorn2860
-apps/cave/components/Sidebar @NUnicorn2860
+apps/cave/components/Sidebar @NUnicorn2860 @greg-schrammel
 
 # GraphQL and Hasura @rrobrms
 apps/cave/graphql @rrobrms

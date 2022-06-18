@@ -4,7 +4,7 @@ export const SelectedBondType = ({ bondType }) => {
   return (
     <Card
       variant="primary"
-      colorscheme="brighter"
+      colorScheme="brighter"
       shadow="Magic Big"
       direction="row"
       mt={-20}
