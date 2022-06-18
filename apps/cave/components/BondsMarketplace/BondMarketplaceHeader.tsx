@@ -1,9 +1,9 @@
 import { SettingsIcon } from '@chakra-ui/icons'
-import { Flex, Text } from '@chakra-ui/react'
+import { Flex, FlexboxProps, Text } from '@chakra-ui/react'
 import { BondFilterButton } from './FilterButton'
 import { BondFilterContainer } from './FilterContainer'
 
-export const BondMarketplaceHeader = () => {
+export const BondMarketplaceHeader: React.FC<FlexboxProps> = ({ ...props }) => {
   return (
     <Flex
       width={'778px'}
@@ -13,8 +13,9 @@ export const BondMarketplaceHeader = () => {
       rounded={'2xl'}
       px="8"
       pt={8}
-      m="auto"
+      mx="auto"
       direction={'column'}
+      {...props}
     >
       <TitleContainer />
       <BondFilterContainer />
