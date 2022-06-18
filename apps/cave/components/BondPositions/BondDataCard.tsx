@@ -13,7 +13,7 @@ export const BondDataCard: React.FC<FlexProps & Variants> = ({ variant, ...props
     direction="column"
     {...props}
   >
-    <DataViewer />
+    <DataViewer variant={variant} />
     <Flex mt={6} gap={6} px={4}>
       <ListForSale variant={variant} />
       <ViewData variant={variant} />
@@ -32,7 +32,7 @@ export const BondDataCard: React.FC<FlexProps & Variants> = ({ variant, ...props
   </Flex>
 )
 
-const DataViewer = () => (
+const DataViewer: React.FC<Variants> = ({ variant }) => (
   <Flex
     direction={'column'}
     width={'full'}
@@ -45,10 +45,13 @@ const DataViewer = () => (
   >
     <Flex gap={'80px'}>
       <Info title="Your Supply" info="1935.13 xRUNE" />
-      <Info title="Bonded Out" info="935.13 xRUNE" />
+      <Info title={variant === 'listed' ? 'Bonded Out' : 'Left:'} info="935.13 xRUNE" />
     </Flex>
     <LoadBar percent={50} />
-    <Info title="Total Revenue" info="2535.25 DAI" />
+    <Flex gap={'80px'}>
+      <Info title="Total Revenue" info="2535.25 DAI" />
+      {variant === 'pending' && <Info title="Left:" info="8 Hours" />}
+    </Flex>
   </Flex>
 )
 
