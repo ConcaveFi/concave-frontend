@@ -17,8 +17,17 @@ export const BondDataCard: React.FC<FlexProps & Variants> = ({ variant, ...props
     <Flex mt={6} gap={6} px={4}>
       <ListForSale variant={variant} />
       <ViewData variant={variant} />
-      <Info title="Your Offer Roi:" info="8.3%" flexDirection={'column'} gap={0} />
-      <Info title="Current Floor Roi:" info="7.4%" flexDirection={'column'} gap={0} />
+      {variant === 'listed' ? (
+        <>
+          <Info title="Your Offer Roi:" info="8.3%" flexDirection={'column'} gap={0} />
+          <Info title="Current Floor Roi:" info="7.4%" flexDirection={'column'} gap={0} />
+        </>
+      ) : (
+        <>
+          <Info title="Redeemable:" info="35.2 xRUNE" flexDirection={'column'} gap={0} />
+          <Info title="Next Redeem in:" info="3.5 Hours" flexDirection={'column'} gap={0} />
+        </>
+      )}
     </Flex>
   </Flex>
 )
