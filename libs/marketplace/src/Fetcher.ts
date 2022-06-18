@@ -1,8 +1,8 @@
 import { createAlchemyWeb3, Nft } from '@alch/alchemy-web3'
-import { StakingV1Contract } from '@concave/marketplace'
+import { StakingV1Contract } from './contract'
 import { STAKING_CONTRACT } from '@concave/core'
-import { MarketItemInfo } from '@concave/marketplace'
-import { ConcaveNFTMarketplace } from '@concave/marketplace'
+import { MarketItemInfo } from './entities'
+import { ConcaveNFTMarketplace } from './contract'
 import { BaseProvider } from '@ethersproject/providers'
 import { StakingPosition } from './entities'
 
