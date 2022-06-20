@@ -1,4 +1,5 @@
-import { Card, Flex, FlexboxProps, gradientBorder, StackProps, Text } from '@concave/ui'
+import { CNV } from '@concave/core'
+import { Avatar, Card, Flex, FlexboxProps, gradientBorder, StackProps, Text } from '@concave/ui'
 type BondedCard = { variant: Variant }
 export const BondedCard: React.FC<StackProps & BondedCard> = ({ variant, ...props }) => {
   return (
@@ -19,10 +20,13 @@ export const BondedCard: React.FC<StackProps & BondedCard> = ({ variant, ...prop
         width="full"
         align="center"
         justify={'center'}
-        gap={20}
+        gap={6}
       >
-        <Info title="Thor Starter" info="xRUNE"></Info>
-        <Info alignItems={'start'} title="You Bonded:" info="2,415.43 xRUNE"></Info>
+        <Info title="Concave" info="CNV" />
+        <Avatar
+          src={`https://raw.githubusercontent.com/ConcaveFi/assets/master/blockchains/ethereum/assets/${CNV[1].address}/logo.png`}
+        />
+        <Info alignItems={'start'} title="You Bonded:" info="2,415.43 xRUNE" />
       </Flex>
     </Card>
   )
