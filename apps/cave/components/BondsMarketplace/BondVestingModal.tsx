@@ -8,7 +8,7 @@ export const BondVestingModal = () => {
 
   return (
     <Modal size={'5xl'} motionPreset="slideInBottom" isOpen={true} onClose={onClose} isCentered>
-      <ModalOverlay backdropBlur={'8px'} />
+      <ModalOverlay backdropBlur={'20px'} />
       <ModalContent flexDirection={'row'} m="auto">
         <Flex direction={'column'} maxW="1200px">
           <BondMarketplacePosition variant="primary" />

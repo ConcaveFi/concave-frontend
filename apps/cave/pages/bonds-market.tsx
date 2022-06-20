@@ -1,6 +1,7 @@
 import { Flex } from '@chakra-ui/react'
 import { BondMarketplaceHeader } from 'components/BondsMarketplace/BondMarketplaceHeader'
 import { BondMarketplacePosition } from 'components/BondsMarketplace/BondMarketplacePosition'
+import { BondVestingModal } from 'components/BondsMarketplace/BondVestingModal'
 export default function BondsMarket() {
   return (
     <>
@@ -15,7 +16,7 @@ export default function BondsMarket() {
           <BondMarketplacePosition variant="secondary" />
         </Flex>
       </Flex>
-      {/* <BondVestingModal /> */}
+      <BondVestingModal />
     </>
   )
 }

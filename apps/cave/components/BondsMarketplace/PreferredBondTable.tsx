@@ -79,12 +79,12 @@ const BodyRow: React.FC<BodyRow & Enabled> = ({ columns, enabled }) => (
         <TableText label={value} key={index} />
       ))}
     </Flex>
-    {!enabled && <Box height={'2px'} width="95%" mx={'auto'} bg="stroke.secondary" />}
+    {!enabled && <Box height={'1px'} width="95%" mx={'auto'} bg="stroke.secondary" />}
   </Flex>
 )
 
 const TableText: React.FC<Label> = ({ label }) => (
-  <Flex py={'10px'} maxW={'116px'} flex={1} align="center" justify={'center'}>
+  <Flex color={'gray.300'} py={'10px'} maxW={'116px'} flex={1} align="center" justify={'center'}>
     <Text fontSize={'14px'} fontWeight="bold" textAlign={'center'}>
       {label}
     </Text>
