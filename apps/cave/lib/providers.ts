@@ -5,7 +5,7 @@ import {
   NEXT_PUBLIC_CONCAVE_RPC_KEY,
   NEXT_PUBLIC_INFURA_ID,
 } from './env.conf'
-
+//build
 export const concaveRPC = `https://rpc.concave.lol/v1/${NEXT_PUBLIC_CONCAVE_RPC_KEY}`
 export const concaveWSS = `wss://rpc.concave.lol/ws/v1/${NEXT_PUBLIC_CONCAVE_RPC_KEY}`
 
