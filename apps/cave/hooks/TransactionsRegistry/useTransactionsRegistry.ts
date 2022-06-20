@@ -46,6 +46,7 @@ const useTrackedTransactions = () => {
  */
 export const useTransactionRegistry = () => {
   const { transactions, pushTransaction } = useTrackedTransactions()
+  const { activeChain } = useNetwork()
 
   const registerTransaction = useCallback(
     (
@@ -55,14 +56,14 @@ export const useTransactionRegistry = () => {
       const newTrackedTransaction = {
         hash,
         from,
-        chainId,
+        chainId: chainId || activeChain.id,
         timestamp: Date.now(),
         status: <const>'pending',
         meta,
       }
       pushTransaction(newTrackedTransaction)
     },
-    [pushTransaction],
+    [pushTransaction, activeChain?.id],
   )
 
   return {
