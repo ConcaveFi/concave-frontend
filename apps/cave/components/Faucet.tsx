@@ -15,13 +15,12 @@ import {
 import { Wallet } from 'ethers'
 import { hexlify, parseEther, parseUnits } from 'ethers/lib/utils'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
+import { getTxExplorer } from 'lib/getTransactionExplorer'
 import { concaveProvider } from 'lib/providers'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import { chain, useAccount, useContractWrite, useNetwork } from 'wagmi'
 import { useWorthyUser } from './DevelopGateway'
-
-import { getTxExplorer } from './TransactionSubmittedDialog'
 
 const faucetKey = process.env.NEXT_PUBLIC_FAUCET_PK
 const faucet = faucetKey && new Wallet(faucetKey, concaveProvider(ChainId.RINKEBY))
@@ -84,7 +83,7 @@ const ETHFaucet = () => {
         <Stack fontWeight="bold" rounded="2xl" shadow="down" py={2} fontSize="sm" spacing={0}>
           <Text>🎉 0.1 ETH Sent!</Text>
           <Link
-            href={getTxExplorer(sentEthTx, chain.rinkeby)}
+            href={getTxExplorer(sentEthTx.hash, sentEthTx.chainId)}
             fontSize="sm"
             color="text.accent"
             isExternal
@@ -118,7 +117,7 @@ const DAIMinter = () => {
       <Stack fontWeight="bold" rounded="2xl" shadow="down" py={2} fontSize="sm" spacing={0}>
         <Text>🎉 69420 tDAI tx sent!</Text>
         <Link
-          href={getTxExplorer(mintDaiTx, chain.rinkeby)}
+          href={getTxExplorer(mintDaiTx.hash, mintDaiTx.chainId)}
           fontSize="sm"
           color="text.accent"
           isExternal

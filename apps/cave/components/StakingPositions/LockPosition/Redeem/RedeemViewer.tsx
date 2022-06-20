@@ -1,13 +1,24 @@
 import { StakingPosition } from '@concave/marketplace'
 import { Box, Button, Flex, FlexProps, Text, TextProps } from '@concave/ui'
-import { bigNumberMask, createRedeemState } from './UseRedeemState'
+import { BigNumber } from 'ethers'
+import { formatEther } from 'ethers/lib/utils'
+import { formatFixed } from 'utils/formatFixed'
+
+const bigNumberMask = (number: BigNumber) => {
+  if (number.eq(0)) {
+    return `0`
+  }
+  if (+formatEther(number) < 0.01) {
+    return `<.01`
+  }
+  return formatFixed(number)
+}
 
 interface RedeemCardViewerProps {
   stakingPosition: StakingPosition
 }
 const RedeemCardViewer = ({ stakingPosition }: RedeemCardViewerProps) => {
-  const { curValue, initialBal, gainedAmt, maturity } = createRedeemState({ stakingPosition })
-  const readyForReedem = maturity < Date.now() / 1000
+  const readyForReedem = stakingPosition.maturity < Date.now() / 1000
   return (
     <Box
       borderRadius="2xl"
@@ -23,17 +34,17 @@ const RedeemCardViewer = ({ stakingPosition }: RedeemCardViewerProps) => {
           <Info
             label="Current Value"
             valueFontSize={{ base: 'sm', md: 'lg' }}
-            value={bigNumberMask(curValue) + ' CNV'}
+            value={bigNumberMask(stakingPosition.currentValue) + ' CNV'}
           />
           <Info
             label="Gained"
             valueFontSize={{ base: 'sm', md: 'lg' }}
-            value={bigNumberMask(gainedAmt) + ' CNV'}
+            value={bigNumberMask(stakingPosition.totalRewards) + ' CNV'}
           />
           <Info
             label="Initial"
             valueFontSize={{ base: 'sm', md: 'lg' }}
-            value={bigNumberMask(initialBal) + ' CNV'}
+            value={bigNumberMask(stakingPosition.initialValue) + ' CNV'}
           />
         </Flex>
         <Button

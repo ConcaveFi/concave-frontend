@@ -139,7 +139,11 @@ export default function TreasuryRevenueCard(props) {
             box1="Market Cap"
             box1b={'$' + numberMask(cnv.cnvData.data.marketCap, 4)}
             box2="CNV Price"
+<<<<<<< HEAD
             box2b={'$' + cnvPrice?.price?.toFixed(2)}
+=======
+            box2b={'$' + cnvPrice?.price?.toFixed(2) || 0}
+>>>>>>> 3b73db0a242f3f72a566ada2ade694ff324e42eb
             box3="Treasury Value per CNV"
             box3b={'$' + numberMask(total / cnv.cnvData.data.totalSupply, 4)}
           />

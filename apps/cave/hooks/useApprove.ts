@@ -1,10 +1,15 @@
-import { BigNumber, BigNumberish, Contract } from 'ethers'
+import { BigNumberish } from 'ethers'
 import { formatUnits } from 'ethers/lib/utils'
 import { CurrencyAmount, Token, MaxUint256 } from '@concave/core'
-import { erc20ABI, useAccount, useSigner } from 'wagmi'
-import { useQuery } from 'react-query'
-import { TransactionReceipt, TransactionResponse } from '@ethersproject/abstract-provider'
-import { concaveProvider } from 'lib/providers'
+import {
+  erc20ABI,
+  useAccount,
+  useContractRead,
+  useContractWrite,
+  useWaitForTransaction,
+} from 'wagmi'
+import { TransactionReceipt } from '@ethersproject/abstract-provider'
+import { useTransactionRegistry } from 'hooks/TransactionsRegistry/'
 
 export const useAllowance = (token: Token, spender: string, userAddress: string) => {
   const {
@@ -14,17 +19,11 @@ export const useAllowance = (token: Token, spender: string, userAddress: string)
     error,
     isSuccess,
     refetch,
-  } = useQuery<BigNumber>(
-    ['allowance', token?.address, userAddress],
-    async () => {
-      const tokenContract = new Contract(token.address, erc20ABI, concaveProvider(token.chainId))
-      return await tokenContract.allowance(userAddress, spender)
-    },
-    {
-      enabled: !!token?.address && !!userAddress && !!spender,
-      retry: false,
-    },
-  )
+  } = useContractRead({ addressOrName: token?.address, contractInterface: erc20ABI }, 'allowance', {
+    args: [userAddress, spender],
+    chainId: token.chainId,
+    enabled: !!(token?.address && spender && userAddress),
+  })
 
   return {
     isError,
@@ -44,27 +43,25 @@ export const useContractApprove = (
   amountToApprove: BigNumberish = MaxUint256.toString(),
   { onSuccess }: { onSuccess: (receipt: TransactionReceipt) => void },
 ) => {
-  const { data: signer } = useSigner()
+  const { registerTransaction } = useTransactionRegistry()
   const {
     data: tx,
     isLoading: isWaitingForConfirmation,
     isSuccess: isTransactionSent,
     isError,
     error,
-    refetch: sendApproveTx,
-  } = useQuery<TransactionResponse>(
-    ['approve', token?.address, spender],
-    async () => {
-      const tokenContract = new Contract(token.address, erc20ABI, signer)
-      return await tokenContract.approve(spender, amountToApprove)
+    writeAsync: sendApproveTx,
+  } = useContractWrite({ contractInterface: erc20ABI, addressOrName: token?.address }, 'approve', {
+    args: [spender, amountToApprove],
+    onSuccess: (tx) => {
+      registerTransaction(tx, { type: 'approve', tokenSymbol: token.symbol })
     },
-    { enabled: false, retry: false },
-  )
-  const { data: receipt, isLoading: isWaitingTransactionReceipt } = useQuery<TransactionReceipt>(
-    ['receipt', tx?.hash],
-    () => tx.wait(1),
-    { enabled: !!tx, onSuccess },
-  )
+  })
+
+  const { data: receipt, isLoading: isWaitingTransactionReceipt } = useWaitForTransaction({
+    hash: tx?.hash,
+    onSuccess,
+  })
 
   return {
     isWaitingForConfirmation,

@@ -79,10 +79,11 @@ export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
         <Flex flex={1} justify="end">
           <Image
             userSelect={'none'}
+            draggable={'false'}
             width={'80px'}
             transition={'all'}
             transitionDuration="0.3s"
-            transform={!active ? 'rotate(180deg)' : ''}
+            transform={active ? 'rotate(180deg)' : ''}
             maxH={'68.8px'}
             src={`/assets/liquidstaking/modal-arrow-logo.svg`}
             alt="arrow down logo"

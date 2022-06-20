@@ -41,7 +41,7 @@ export function Modal({
       <ModalContent w="auto">
         <ModalHeader textAlign={titleAlign}>{title}</ModalHeader>
         {!hideClose && <ModalCloseButton />}
-        <HStack>
+        <HStack spacing={showchildrenLeftNeighbor ? 2 : 0}>
           <Box>{showchildrenLeftNeighbor && childrenLeftNeighbor}</Box>
           <Card variant="primary" p="6" shadow="Up for Blocks" {...bodyProps}>
             {children}

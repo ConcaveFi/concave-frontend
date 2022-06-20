@@ -110,6 +110,46 @@ export type CnvDataOutput = {
   msg?: Maybe<Scalars['String']>
 }
 
+/** columns and relationships of "logACNVRedemption" */
+export type LogAcnvRedemption = {
+  __typename?: 'logACNVRedemption'
+  address?: Maybe<Scalars['String']>
+  amount?: Maybe<Scalars['numeric']>
+  txBlockNumber?: Maybe<Scalars['numeric']>
+  txHash?: Maybe<Scalars['String']>
+}
+
+/** Boolean expression to filter rows from the table "logACNVRedemption". All fields are combined with a logical 'AND'. */
+export type LogAcnvRedemption_Bool_Exp = {
+  _and?: InputMaybe<Array<LogAcnvRedemption_Bool_Exp>>
+  _not?: InputMaybe<LogAcnvRedemption_Bool_Exp>
+  _or?: InputMaybe<Array<LogAcnvRedemption_Bool_Exp>>
+  address?: InputMaybe<String_Comparison_Exp>
+  amount?: InputMaybe<Numeric_Comparison_Exp>
+  txBlockNumber?: InputMaybe<Numeric_Comparison_Exp>
+  txHash?: InputMaybe<String_Comparison_Exp>
+}
+
+/** Ordering options when selecting data from "logACNVRedemption". */
+export type LogAcnvRedemption_Order_By = {
+  address?: InputMaybe<Order_By>
+  amount?: InputMaybe<Order_By>
+  txBlockNumber?: InputMaybe<Order_By>
+  txHash?: InputMaybe<Order_By>
+}
+
+/** select columns of table "logACNVRedemption" */
+export enum LogAcnvRedemption_Select_Column {
+  /** column name */
+  Address = 'address',
+  /** column name */
+  Amount = 'amount',
+  /** column name */
+  TxBlockNumber = 'txBlockNumber',
+  /** column name */
+  TxHash = 'txHash',
+}
+
 /** get BondSold events from AccrualBondsV1 */
 export type LogAccrualBondsV1_BondSold = {
   __typename?: 'logAccrualBondsV1_BondSold'
@@ -567,6 +607,8 @@ export enum Order_By {
 export type Query_Root = {
   __typename?: 'query_root'
   cnvData?: Maybe<CnvDataOutput>
+  /** fetch data from the table: "logACNVRedemption" */
+  logACNVRedemption: Array<LogAcnvRedemption>
   /** fetch data from the table: "logAccrualBondsV1_BondSold" */
   logAccrualBondsV1_BondSold: Array<LogAccrualBondsV1_BondSold>
   /** fetch data from the table: "logAccrualBondsV1_BondSold" using primary key columns */
@@ -594,6 +636,14 @@ export type Query_Root = {
   treasury: Array<Treasury>
   /** fetch data from the table: "treasury" using primary key columns */
   treasury_by_pk?: Maybe<Treasury>
+}
+
+export type Query_RootLogAcnvRedemptionArgs = {
+  distinct_on?: InputMaybe<Array<LogAcnvRedemption_Select_Column>>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  order_by?: InputMaybe<Array<LogAcnvRedemption_Order_By>>
+  where?: InputMaybe<LogAcnvRedemption_Bool_Exp>
 }
 
 export type Query_RootLogAccrualBondsV1_BondSoldArgs = {
@@ -738,6 +788,8 @@ export enum RebaseStakingV1_Select_Column {
 
 export type Subscription_Root = {
   __typename?: 'subscription_root'
+  /** fetch data from the table: "logACNVRedemption" */
+  logACNVRedemption: Array<LogAcnvRedemption>
   /** fetch data from the table: "logAccrualBondsV1_BondSold" */
   logAccrualBondsV1_BondSold: Array<LogAccrualBondsV1_BondSold>
   /** fetch data from the table: "logAccrualBondsV1_BondSold" using primary key columns */
@@ -764,6 +816,14 @@ export type Subscription_Root = {
   treasury: Array<Treasury>
   /** fetch data from the table: "treasury" using primary key columns */
   treasury_by_pk?: Maybe<Treasury>
+}
+
+export type Subscription_RootLogAcnvRedemptionArgs = {
+  distinct_on?: InputMaybe<Array<LogAcnvRedemption_Select_Column>>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  order_by?: InputMaybe<Array<LogAcnvRedemption_Order_By>>
+  where?: InputMaybe<LogAcnvRedemption_Bool_Exp>
 }
 
 export type Subscription_RootLogAccrualBondsV1_BondSoldArgs = {
@@ -1149,6 +1209,20 @@ export type Get_Bonds_VaprQuery = {
   }>
 }
 
+export type Get_User_Acnv_RedeemedQueryVariables = Exact<{
+  address: Scalars['String']
+}>
+
+export type Get_User_Acnv_RedeemedQuery = {
+  __typename?: 'query_root'
+  logACNVRedemption: Array<{
+    __typename?: 'logACNVRedemption'
+    address?: string | null
+    amount?: any | null
+    txHash?: string | null
+  }>
+}
+
 export type Get_TreasuryQueryVariables = Exact<{ [key: string]: never }>
 
 export type Get_TreasuryQuery = {
@@ -1506,6 +1580,30 @@ export const useGet_Bonds_VaprQuery = <TData = Get_Bonds_VaprQuery, TError = unk
   useQuery<Get_Bonds_VaprQuery, TError, TData>(
     variables === undefined ? ['GET_BONDS_VAPR'] : ['GET_BONDS_VAPR', variables],
     fetcher<Get_Bonds_VaprQuery, Get_Bonds_VaprQueryVariables>(Get_Bonds_VaprDocument, variables),
+    options,
+  )
+export const Get_User_Acnv_RedeemedDocument = `
+    query GET_USER_ACNV_REDEEMED($address: String!) {
+  logACNVRedemption(where: {address: {_eq: $address}, amount: {_gt: "0"}}) {
+    address
+    amount
+    txHash
+  }
+}
+    `
+export const useGet_User_Acnv_RedeemedQuery = <
+  TData = Get_User_Acnv_RedeemedQuery,
+  TError = unknown,
+>(
+  variables: Get_User_Acnv_RedeemedQueryVariables,
+  options?: UseQueryOptions<Get_User_Acnv_RedeemedQuery, TError, TData>,
+) =>
+  useQuery<Get_User_Acnv_RedeemedQuery, TError, TData>(
+    ['GET_USER_ACNV_REDEEMED', variables],
+    fetcher<Get_User_Acnv_RedeemedQuery, Get_User_Acnv_RedeemedQueryVariables>(
+      Get_User_Acnv_RedeemedDocument,
+      variables,
+    ),
     options,
   )
 export const Get_TreasuryDocument = `

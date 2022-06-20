@@ -3,10 +3,10 @@ import { useAccount, useConnect } from 'wagmi'
 import { useIsMounted } from 'hooks/useIsMounted'
 import { useModals } from 'contexts/ModalsContext'
 import YourWalletModal from './YourWalletModal'
-import { useRecentTransactions } from 'hooks/useRecentTransactions'
 import { SpinnerIcon } from '@concave/icons'
 import { spinAnimation } from './Treasury/Mobile/TreasuryManagementMobile'
 import { useRouter } from 'next/router'
+import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 
 /** Transform a wallet address
  *  {6first keys}{...}{4 keys}
@@ -96,7 +96,7 @@ export function ConnectWallet(): JSX.Element {
 
   const { data: account } = useAccount()
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { data: recentTx, status, isLoading } = useRecentTransactions()
+  const { lastTransactions } = useTransactionRegistry()
 
   if (isConnected)
     return (
@@ -113,7 +113,7 @@ export function ConnectWallet(): JSX.Element {
           <Flex textColor={'text.low'} fontWeight="bold" mx={'auto'}>
             {ellipseAddress(account?.address)}
           </Flex>
-          {isLoading && (
+          {lastTransactions.some((tx) => tx.status === 'pending') && (
             <Flex position={'absolute'} width="80%" justify={'end'}>
               <SpinnerIcon color={'text.low'} animation={spinAnimation(4)} boxSize={'20px'} />
             </Flex>
