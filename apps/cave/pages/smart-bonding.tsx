@@ -32,6 +32,7 @@ import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialo
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { utils } from 'ethers'
 import { useGet_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql'
+import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useCNVPrice } from 'hooks/useCNVPrice'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import React, { useEffect, useState } from 'react'
@@ -126,6 +127,8 @@ export function Bond() {
     }
   }, [bondSigma])
 
+  const { registerTransaction } = useTransactionRegistry()
+
   function onRedeemConfirm() {
     setButtonDisabled(true)
     const batchRedeemIDArray = bondSigma.batchRedeemArray
@@ -133,10 +136,10 @@ export function Bond() {
     setOpenConfirmDialog(true)
     redeemBondBatch(networkId, batchRedeemIDArray, userAddress, signer)
       .then(async (tx) => {
-        console.log(tx)
         setRedeemTx(tx)
         setOpenConfirmDialog(false)
         onOpenSubmitted()
+        registerTransaction(tx, { type: 'redeem', amount: 'CNV Bonds' })
         await tx.wait(1)
         updateBondPositions()
         setClickedRedeemButton(false)
