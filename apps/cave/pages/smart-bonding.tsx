@@ -37,8 +37,7 @@ import { useCNVPrice } from 'hooks/useCNVPrice'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import React, { useEffect, useState } from 'react'
 import getROI from 'utils/getROI'
-// import { truncateNumber } from 'utils/truncateNumber'
-// send it
+
 const spin = keyframes({
   '0%': { transform: 'rotate(0deg)' },
   '100%': { transform: 'rotate(360deg)' },
