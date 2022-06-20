@@ -18,7 +18,6 @@ import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { Transaction } from 'ethers'
-import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { RemoveLiquidityState, useRemoveLiquidity } from 'hooks/useRemoveLiquidity'
 import React, { useState } from 'react'
@@ -200,12 +199,6 @@ const RemoveLiquidityActions = ({
       onOpenError()
     }
   }
-
-  // console.log(
-  //   removeLiquidityState.pair.token0,
-  //   removeLiquidityState.amountAMin,
-  //   removeLiquidityState.amountBMin,
-  // )
 
   return (
     <Flex gap={4} h={45} justifyContent={'center'}>
