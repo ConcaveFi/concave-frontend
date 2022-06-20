@@ -115,6 +115,10 @@ export class CurrencyAmount<T extends Currency> extends Fraction {
     )
   }
 
+  public toString(): string {
+    return `${this.toSignificant(6, { groupSeparator: ',' })} ${this.currency.symbol}`
+  }
+
   /**
    * Returns a string representation of the address and currency amount.
    * Useful in cases where a dependency is needed to detect changes (e.g. useEffect).

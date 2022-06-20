@@ -4,6 +4,7 @@ import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialo
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { Contract, Transaction } from 'ethers'
 import { useGet_User_Acnv_RedeemedQuery } from 'graphql/generated/graphql'
+import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { aCNVredeemabi } from 'lib/contractoABI'
 import { concaveProvider as provider } from 'lib/providers'
 import { useState } from 'react'
@@ -43,6 +44,9 @@ export default function ACNVRedemptionDialog(props: ACNVRedemptionDialogProps) {
   const validBalance = +aCNVData?.formatted > 0
   const alreadyRedeemed = redeemed === +aCNVData?.formatted
   const canRedeem = validBalance && !alreadyRedeemed
+
+  const { registerTransaction } = useTransactionRegistry()
+
   function redeem() {
     onOpenConfirm()
     aCNVContract
@@ -50,6 +54,10 @@ export default function ACNVRedemptionDialog(props: ACNVRedemptionDialogProps) {
       .redeem(account?.address)
       .then((tx) => {
         onCloseConfirm()
+        registerTransaction(tx, {
+          type: 'redeem',
+          amount: `${aCNVData.formatted} aCNV`,
+        })
         setTx(tx)
         onOpenSub()
       })

@@ -57,7 +57,7 @@
     "react-swipeable": "^7.0.0",
     "react-use": "^17.3.2",
     "siwe": "^1.1.6",
-    "wagmi": "^0.4.9"
+    "wagmi": "^0.4.12"
   },
   "devDependencies": {
     "@chakra-ui/cli": "^2.0.0",

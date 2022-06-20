@@ -1,9 +1,7 @@
 import { Container, Flex } from '@concave/ui'
 import { AnimatePresence } from 'framer-motion'
 import dynamic from 'next/dynamic'
-import React, { useState } from 'react'
 import { SideBar } from './SideBar/SideBar'
-import { useIsomorphicLayoutEffect } from 'react-use'
 import { useIsMounted } from 'hooks/useIsMounted'
 import SecurityBanner from './SecurityBanner'
 

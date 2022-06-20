@@ -1,18 +1,18 @@
-import { ChainId, CNV } from '@concave/core'
+import { CNV } from '@concave/core'
 import { Box, Flex, Image, Stack, Text } from '@concave/ui'
 import { ButtonLink } from 'components/ButtonLink'
 import { ConnectWallet } from 'components/ConnectWallet'
-import React from 'react'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { MdOutlineDashboard } from 'react-icons/md'
-import { useAccount, useBalance, useNetwork } from 'wagmi'
+import { useAccount, useBalance } from 'wagmi'
 
 function SideBarTop() {
   const { data: account } = useAccount()
-  const { activeChain } = useNetwork()
+  const networkId = useCurrentSupportedNetworkId()
   const { data } = useBalance({
     addressOrName: account?.address,
-    token: CNV[activeChain?.id || ChainId.ETHEREUM].address,
-    formatUnits: CNV[activeChain?.id || ChainId.ETHEREUM].decimals,
+    token: CNV[networkId].address,
+    formatUnits: CNV[networkId].decimals,
     enabled: !!account?.address,
   })
 
