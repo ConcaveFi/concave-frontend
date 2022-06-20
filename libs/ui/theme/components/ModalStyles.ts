@@ -18,6 +18,7 @@ export const ModalStyles: ComponentMultiStyleConfig = {
     closeButton: {
       right: 0,
       top: 3,
+      border: 'solid 2px white',
       _focus: {
         opacity: 0.8,
         transform: 'scale(1.05)',
