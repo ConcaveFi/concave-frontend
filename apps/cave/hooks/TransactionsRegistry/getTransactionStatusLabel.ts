@@ -39,4 +39,9 @@ export const getTransactionStatusLabel = ({ status, meta }: Partial<TrackedTrans
       success: `Bonded ${amountIn} for ${amountOut}`,
       error: `Failed to bond ${amountIn} for ${amountOut}`,
     }),
+    redeem: ({ amount }) => ({
+      pending: `Redeeming ${amount}`,
+      success: `Successfully redeemed ${amount}`,
+      error: `Failed to redeem ${amount}`,
+    }),
   })[meta.type](meta as UnionToIntersection<TransactionMeta>)[status]
