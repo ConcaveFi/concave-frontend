@@ -3,7 +3,7 @@ import { withPageTransition } from 'components/PageTransition'
 import { useStakePositions } from 'components/StakingPositions/DashboardBody/DashBoardState'
 import { UserDashboardCard } from 'components/StakingPositions/DashboardBody/UserDashboardCard'
 import { DashboardHeader } from 'components/StakingPositions/DashboardHeader'
-import React from 'react'
+
 export function LiquidStakePositions() {
   const stakePosition = useStakePositions()
   return (

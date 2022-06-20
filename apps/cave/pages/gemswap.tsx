@@ -34,7 +34,7 @@ import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { LayoutGroup } from 'framer-motion'
-import { NODE_ENV } from 'lib/env.conf'
+import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { GetServerSideProps } from 'next'
 import { useEffect, useMemo, useReducer, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
@@ -98,9 +98,18 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
     [trade],
   )
 
+  const { registerTransaction } = useTransactionRegistry()
+
   const [recipient, setRecipient] = useState('')
   const swapTx = useSwapTransaction(exactInTrade, settings, recipient, {
-    onTransactionSent: () => onChangeInput(toAmount(0, trade.data.inputAmount.currency)),
+    onTransactionSent: (tx) => {
+      onChangeInput(toAmount(0, trade.data.inputAmount.currency))
+      registerTransaction(tx, {
+        type: 'swap',
+        amountIn: trade.data.inputAmount.toString(),
+        amountOut: trade.data.outputAmount.toString(),
+      })
+    },
   })
 
   const confirmationModal = useDisclosure()
