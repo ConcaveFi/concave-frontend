@@ -46,7 +46,6 @@ export function BondBuyCard(props: {
   const [hasClickedConfirm, setHasClickedConfirm] = useState(false)
 
   const cnvPrice = useCNVPrice()
-
   const { data: bondSpotPrice } = useQuery(
     ['bondSpotPrice', networkId],
     async () => await getBondSpotPrice(networkId),
@@ -194,8 +193,7 @@ export function BondBuyCard(props: {
       />
       <WaitingConfirmationDialog isOpen={hasClickedConfirm} title={'Confirm Bond'}>
         <Text fontSize="lg" color="text.accent">
-          Bonding {amountIn?.toFixed(4)} {currencyIn.symbol} for {parseFloat(amountOut).toFixed(4)}{' '}
-          CNV.
+          Bonding {amountIn?.toFixed(4)} {currencyIn.symbol} for {amountOut} CNV.
         </Text>
       </WaitingConfirmationDialog>
       <TransactionSubmittedDialog
