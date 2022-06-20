@@ -1,9 +1,10 @@
-import { Button, Card, Flex, Modal, Text, NumericInput, useDisclosure } from '@concave/ui'
+import { Button, Card, Flex, Modal, Text, useDisclosure } from '@concave/ui'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { RedeemBBT_CNV_Abi } from 'contracts/VestedTokens/RedeemBbtCNVAbi'
 import { Contract, Transaction, utils } from 'ethers'
+import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { concaveProvider as provider } from 'lib/providers'
 import { useState } from 'react'
 import { useAccount, useConnect, useSigner } from 'wagmi'
@@ -19,15 +20,17 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
   const { isOpen: isSubOpen, onOpen: onOpenSub, onClose: onCloseSub } = useDisclosure()
   const { isOpen: isErrorOpen, onOpen: onOpenError, onClose: onCloseError } = useDisclosure()
   const { onClose, isOpen } = props
-  const [{ data: signer }] = useSigner()
-  const [{ data: account }] = useAccount()
-  const [{ data: wallet }] = useConnect()
+  const { data: signer } = useSigner()
+  const { data: account } = useAccount()
+  const { isConnected } = useConnect()
 
   const [tx, setTx] = useState<Transaction>()
   const [error, setError] = useState('')
 
   const { data: redeemableData, isLoading } = useBBTCNVRedeemable()
   const { bbtCNVData } = useVestedTokens()
+
+  const { registerTransaction } = useTransactionRegistry()
 
   const balance = +bbtCNVData?.formatted || 0
   const redeemable =
@@ -45,6 +48,7 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
     RedeemBBT_CNV_Abi,
     provider(1),
   )
+
   return (
     <>
       <Modal
@@ -99,6 +103,10 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
                 .redeem(redeemableData.redeemable, account?.address, account?.address, true)
                 .then((tx) => {
                   onCloseConfirm()
+                  registerTransaction(tx, {
+                    type: 'redeem',
+                    amount: `${bbtCNVData.formatted} bbtCNV`,
+                  })
                   setTx(tx)
                   onOpenSub()
                 })
@@ -122,7 +130,7 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
             _hover={validValue && { shadow: 'up' }}
             _focus={{}}
           >
-            {wallet?.connected ? (
+            {isConnected ? (
               <Text>
                 {nothingToRedeem && 'Nothing To Redeem'}
                 {insufficientFounds && 'Insufficient Funds'}

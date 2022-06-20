@@ -1,5 +1,5 @@
 import { Flex, Text, useDisclosure } from '@concave/ui'
-import { CNV } from 'constants/tokens'
+import { CNV } from '@concave/core'
 import useAddTokenToWallet, { injectedTokenResponse } from 'hooks/useAddTokenToWallet'
 import { useState } from 'react'
 import { useConnect } from 'wagmi'
@@ -10,15 +10,15 @@ import BBBTCNVRedemptionDialog from '../VestedTokensDialogs/BBTCNVRedemptionDial
 
 export default function RedeemMobileCard() {
   const { loading: loadingtoWallet, addingToWallet }: injectedTokenResponse = useAddTokenToWallet({
-    tokenAddress: CNV.address,
-    tokenChainId: CNV.chainId,
+    tokenAddress: CNV[1].address,
+    tokenChainId: CNV[1].chainId,
   })
 
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [description, setDescription] = useState("This feature it's not done yet.")
   const [title, setTitle] = useState('Coming soon')
 
-  const [{ data }] = useConnect()
+  const { activeConnector } = useConnect()
   const {
     isOpen: onRedeemBBTCNV,
     onOpen: onOpenRedeemBBTCNV,
@@ -67,7 +67,7 @@ export default function RedeemMobileCard() {
         onClick={addingToWallet}
         cursor="pointer"
       >
-        Add CNV to your {data?.connector?.name}
+        Add CNV to your {activeConnector?.name}
       </Text>
       <ComingSoonDialog title={title} desc={description} isOpen={isOpen} onClose={onClose} />
     </GlassPanel>

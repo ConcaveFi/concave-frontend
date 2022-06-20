@@ -1,19 +1,10 @@
-import { ChainId } from '@concave/gemswap-sdk'
 import { SubmittedIcon } from '@concave/icons'
 import { Button, Flex, Link, Modal, Text } from '@concave/ui'
 import { Transaction } from 'ethers'
 import useAddTokenToWallet, { injectedTokenResponse } from 'hooks/useAddTokenToWallet'
+import { getTxExplorer } from 'lib/getTransactionExplorer'
 import { useEffect, useState } from 'react'
 import { useNetwork } from 'wagmi'
-
-export const getTxExplorer = (tx: Transaction, chain: { id: number }) => {
-  const { hash, chainId } = tx
-  const explorer = {
-    [ChainId.ETHEREUM]: `https://etherscan.io/tx/${hash}`,
-    [ChainId.RINKEBY]: `https://RINKEBY.etherscan.io/tx/${hash}`,
-  }
-  return explorer[chainId || chain?.id]
-}
 
 type TxSubmittedProps = {
   title: string
@@ -24,11 +15,7 @@ type TxSubmittedProps = {
 }
 
 const TxSubmitted = ({ title, tx, onClose, tokenSymbol, addTokenToWallet }: TxSubmittedProps) => {
-  const [
-    {
-      data: { chain },
-    },
-  ] = useNetwork()
+  const { activeChain } = useNetwork()
 
   const [showAddButton, setShowAddButton] = useState(
     typeof tokenSymbol !== 'undefined' ? true : false,
@@ -39,7 +26,12 @@ const TxSubmitted = ({ title, tx, onClose, tokenSymbol, addTokenToWallet }: TxSu
       <SubmittedIcon w={10} my={6} />
       <Text align="center" fontSize="md" fontWeight="bold">
         {title || `Transaction Submitted`} <br />
-        <Link href={getTxExplorer(tx, chain)} fontSize="sm" color="text.accent" isExternal>
+        <Link
+          href={getTxExplorer(tx.hash, activeChain.id)}
+          fontSize="sm"
+          color="text.accent"
+          isExternal
+        >
           View on explorer
         </Link>
       </Text>

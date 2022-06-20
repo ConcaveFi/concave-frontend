@@ -1,12 +1,5 @@
-import {
-  Currency,
-  CurrencyAmount,
-  MaxUint256,
-  NATIVE,
-  Pair,
-  ROUTER_ADDRESS,
-  Token,
-} from '@concave/gemswap-sdk'
+import { Currency, CurrencyAmount, MaxUint256, NATIVE, ROUTER_ADDRESS, Token } from '@concave/core'
+import { Pair } from '@concave/gemswap-sdk'
 import {
   Box,
   Button,
@@ -37,7 +30,7 @@ export const RemoveLiquidityModalButton = ({
   label?: string
   liquidityInfo: {
     pair: Pair
-    userPoolShare: number
+    userPoolShare: CurrencyAmount<Currency>
     userBalance: CurrencyAmount<Currency>
   }
 }) => {
@@ -152,7 +145,7 @@ const ReceiveBox = ({
   token,
   receiveInNative,
 }: {
-  amount: number
+  amount: CurrencyAmount<Currency>
   token: Token
   receiveInNative?: boolean
 }) => {
@@ -162,7 +155,7 @@ const ReceiveBox = ({
       <CurrencyIcon size="sm" currency={currency} />
       <Box>
         <Text fontFamily={'heading'} fontWeight={600}>
-          {amount ? amount?.toPrecision(4) : 0}
+          {amount ? amount?.toFixed(4) : 0}
         </Text>
         <Text title={currency?.name} fontWeight={700} fontSize={'sm'} color={'text.low'}>
           {currency?.symbol}
@@ -207,12 +200,6 @@ const RemoveLiquidityActions = ({
     }
   }
 
-  console.log(
-    removeLiquidityState.pair.token0,
-    removeLiquidityState.amountAMin,
-    removeLiquidityState.amountBMin,
-  )
-
   return (
     <Flex gap={4} h={45} justifyContent={'center'}>
       <ApproveButton
@@ -250,12 +237,12 @@ const RemoveLiquidityActions = ({
             You will receive
           </Text>
           <Text fontWeight={'700'} textColor="text.accent">
-            {`${removeLiquidityState.amountAMin.toPrecision(2)} ${
+            {`${removeLiquidityState.amountAMin.toFixed(2)} ${
               removeLiquidityState.pair.token0.symbol
             }`}
           </Text>
           <Text fontWeight={'700'} textColor="text.accent">
-            {`${removeLiquidityState.amountBMin.toPrecision(2)} ${
+            {`${removeLiquidityState.amountBMin.toFixed(2)} ${
               removeLiquidityState.pair.token1.symbol
             }`}
           </Text>
@@ -274,7 +261,13 @@ const RemoveLiquidityActions = ({
   )
 }
 
-const YourPosition = ({ pair, userPoolShare }: { pair: Pair; userPoolShare: number }) => {
+const YourPosition = ({
+  pair,
+  userPoolShare,
+}: {
+  pair: Pair
+  userPoolShare: CurrencyAmount<Currency>
+}) => {
   return (
     <Flex gap={7} direction={'column'} shadow="Up Big" px={4} py={4} borderRadius="2xl">
       <Text fontSize={'lg'}>Your Position</Text>
@@ -296,17 +289,17 @@ const YourPosition = ({ pair, userPoolShare }: { pair: Pair; userPoolShare: numb
       >
         <PositionInfoItem
           label="Your pool share:"
-          value={`${(userPoolShare * 100).toPrecision(2)}%`}
+          value={`${userPoolShare.multiply(100).toFixed(2)}%`}
         />
         <PositionInfoItem
           label={pair.token0.symbol}
-          value={+(+pair.reserve0.toExact() * userPoolShare).toPrecision(2)}
+          value={pair.reserve0.multiply(userPoolShare).toFixed(2)}
         >
           <CurrencyIcon size="sm" currency={pair.token0} />
         </PositionInfoItem>
         <PositionInfoItem
           label={pair.token1.symbol}
-          value={+(+pair.reserve1.toExact() * userPoolShare).toPrecision(2)}
+          value={pair.reserve1.multiply(userPoolShare).toFixed(2)}
         >
           <CurrencyIcon size="sm" currency={pair.token1} />
         </PositionInfoItem>

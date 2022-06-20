@@ -1,5 +1,5 @@
 import JSBI from 'jsbi'
-import { MaxUint256 } from '../../src/constants'
+import { MaxUint256 } from '@concave/core'
 import { sqrt } from '../../src/functions/math'
 
 describe('#sqrt', () => {

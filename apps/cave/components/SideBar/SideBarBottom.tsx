@@ -1,9 +1,5 @@
 import React from 'react'
 import { Link, Text, VStack, HStack, Image } from '@concave/ui'
-import useAddTokenToWallet, { injectedTokenResponse } from 'hooks/useAddTokenToWallet'
-import { getWalletType, renderProviderText } from 'lib/injected.wallets'
-import { useIsMounted } from 'hooks/useIsMounted'
-import { CNV } from 'constants/tokens'
 
 interface MediaProps {
   icon: string
@@ -39,12 +35,6 @@ const Media: Array<MediaProps> = [
 ]
 
 function SideBarBottom() {
-  const isMounted = useIsMounted()
-  const { loading: loadingtoWallet, addingToWallet }: injectedTokenResponse = useAddTokenToWallet({
-    tokenAddress: CNV.address,
-    tokenChainId: CNV.chainId,
-  })
-
   return (
     <VStack
       // w="186px"

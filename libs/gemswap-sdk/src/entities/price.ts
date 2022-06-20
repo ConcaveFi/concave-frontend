@@ -1,9 +1,5 @@
-import { BigintIsh } from '../types'
-import { Currency } from './currency'
-import { CurrencyAmount } from './currencyAmount'
-import { Fraction } from './fraction'
+import { BigintIsh, Currency, CurrencyAmount, Fraction, Rounding } from '@concave/core'
 import JSBI from 'jsbi'
-import { Rounding } from '../enums'
 import invariant from 'tiny-invariant'
 
 export class Price<TBase extends Currency, TQuote extends Currency> extends Fraction {

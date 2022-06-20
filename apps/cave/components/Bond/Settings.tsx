@@ -1,34 +1,32 @@
 import { TransactionSettings, SlippageTolerance, Deadline } from 'components/TransactionSettings'
-import { useReducer } from 'react'
-import { toPercent } from 'utils/toPercent'
+import { useTransactionSettings } from 'components/TransactionSettings/TransactionSettings'
 
 const defaultSettings = {
-  slippageTolerance: {
-    value: 1,
-    percent: toPercent(1),
-  },
+  slippageTolerance: 1,
   deadline: 30,
 }
 
 export type BondSettings = typeof defaultSettings
 
-export const useBondSettings = () => useReducer((s, a) => ({ ...s, ...a }), defaultSettings)
+export const useBondSettings = () => useTransactionSettings('bond', defaultSettings)
 
 // TODO: implement auto slippage
-const calculateAutoSlippage = () => ({
-  value: 1.2,
-  percent: toPercent(1.2),
-})
+const calculateAutoSlippage = () => 1.2
 
-export const Settings = ({ settings: { slippageTolerance, deadline }, setSetting }) => {
+export const Settings = ({
+  settings: { slippageTolerance, deadline },
+  setSetting,
+  isDefaultSettings = true,
+  onClose,
+}) => {
   return (
-    <TransactionSettings>
+    <TransactionSettings isDefaultSettings={isDefaultSettings} onClose={onClose}>
       <SlippageTolerance
-        value={slippageTolerance.value}
+        value={slippageTolerance}
         onValueChange={(slippageTolerance) => setSetting({ slippageTolerance })}
         onClickAuto={() => setSetting({ slippageTolerance: calculateAutoSlippage() })}
       />
-      <Deadline value={deadline} onValueChange={({ value }) => setSetting({ deadline: value })} />
+      <Deadline value={deadline} onValueChange={(deadline) => setSetting({ deadline })} />
     </TransactionSettings>
   )
 }

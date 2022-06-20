@@ -11,6 +11,7 @@ import ProgressBar from '@badrap/bar-of-progress'
 import Router from 'next/router'
 import { NODE_ENV } from 'lib/env.conf'
 import * as gtag from '../lib/analytics'
+import { TransactionsObserver } from 'hooks/TransactionsRegistry'
 
 const globalStyles: Styles = {
   global: {
@@ -18,7 +19,7 @@ const globalStyles: Styles = {
       fontFamily: 'body',
       color: 'text.high',
       lineHeight: 'base',
-      colorscheme: 'dark',
+      colorScheme: 'dark',
       bgImage: 'url(/background.jpg)',
       bgColor: '#121115',
     },
@@ -49,15 +50,9 @@ type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout
 }
 
-let prevPath = ''
-
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const Layout = Component.Layout || DefaultLayout
   const router = useRouter()
-
-  useEffect(() => {
-    prevPath = router.pathname
-  }, [router.pathname])
 
   useEffect(() => {
     const handleRouteChange = (url: URL) => {
@@ -72,19 +67,13 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.events])
 
-  const t = '1'
-
   return (
     <AppProviders globalStyles={globalStyles} cookies={pageProps?.cookies}>
+      <TransactionsObserver />
       <ConcaveFonts />
       <MetaHead meta={Component.Meta} />
       <Layout>
-        <Component
-          {...pageProps}
-          prevPath={prevPath}
-          path={router.pathname}
-          key={router.pathname}
-        />
+        <Component {...pageProps} key={router.pathname} />
       </Layout>
     </AppProviders>
   )

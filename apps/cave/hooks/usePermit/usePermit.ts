@@ -1,6 +1,6 @@
 import { Signer } from 'ethers'
 import { useSigner } from 'wagmi'
-import { CNV, DAI, Token } from '@concave/gemswap-sdk'
+import { CNV, DAI, Token } from '@concave/core'
 import { useQuery } from 'react-query'
 import { signPermitAllowed, signPermitAmount } from './permit'
 
@@ -28,7 +28,7 @@ const isTokenPermissible = (token: Token) =>
   !!PERMITTABLE_TOKENS.find((t) => token.equals(t[token.chainId]))
 
 export const usePermit = (token: Token, spender: string) => {
-  const [{ data: signer }] = useSigner()
+  const { data: signer } = useSigner()
 
   // TODO: check contract for permit method
   const supportsPermit = isTokenPermissible(token)

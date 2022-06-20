@@ -1,4 +1,4 @@
-import { Currency } from '@concave/gemswap-sdk'
+import { Currency } from '@concave/core'
 import { DownIcon } from '@concave/icons'
 import { Button, ButtonProps } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'

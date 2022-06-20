@@ -1,3 +1,4 @@
+import { StakingV1Contract } from '@concave/marketplace'
 import {
   Box,
   Button,
@@ -15,8 +16,7 @@ import {
 import { ethers } from 'ethers'
 import { useGet_All_Total_Pools_VaprQuery } from 'graphql/generated/graphql'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { StakingV1Contract } from 'lib/StakingV1Proxy/StakingV1Contract'
-import { useState } from 'react'
+import { concaveProvider } from 'lib/providers'
 import { useQuery } from 'react-query'
 import { useAccount } from 'wagmi'
 import Emissions from './StakeModal/Emissions'
@@ -48,7 +48,7 @@ export const usePools = (chainID: number | string, index: string) => {
   return useQuery(
     ['fetchPools', chainID, index],
     () => {
-      const stakingV1Contract = new StakingV1Contract(+chainID)
+      const stakingV1Contract = new StakingV1Contract(concaveProvider(+chainID))
       return stakingV1Contract.pools(index)
     },
     {
@@ -60,7 +60,7 @@ export const useViewStakingCap = (chainID: number | string, index: string) => {
   return useQuery(
     ['useViewStakingCap', chainID, index],
     () => {
-      const stakingV1Contract = new StakingV1Contract(+chainID)
+      const stakingV1Contract = new StakingV1Contract(concaveProvider(+chainID))
       return stakingV1Contract.viewStakingCap(index)
     },
     {
@@ -134,7 +134,7 @@ function StakeCard(props: StackCardProps) {
 
   const percent = (+currentlyStaked / +currentlyStakingCap) * 100
 
-  const [{ data: account }] = useAccount()
+  const { data: account } = useAccount()
   const userAddress = account?.address
 
   const {
@@ -293,9 +293,9 @@ function StakeCard(props: StackCardProps) {
           isOpen={isOpen}
           onClose={onClose}
           bodyProps={{
-            roundedLeft: { base: '20px', md: '100px' },
-            roundedRight: '20px',
-            shadow: 'Up for Blocks',
+            roundedLeft: { base: '3xl', md: '8.75rem' },
+            roundedRight: '3xl',
+            p: { md: 6, base: 8 },
           }}
           titleAlign="center"
           size="2xl"

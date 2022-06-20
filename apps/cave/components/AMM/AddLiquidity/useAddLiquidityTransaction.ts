@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import { RouterABI, ROUTER_ADDRESS, Currency, CurrencyAmount, Percent } from '@concave/gemswap-sdk'
+import { RouterAbi, ROUTER_ADDRESS, Currency, CurrencyAmount, Percent } from '@concave/core'
 import { Contract } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useContract, UserRejectedRequestError, useSigner } from 'wagmi'
 import { parseUnits } from 'ethers/lib/utils'
-import { useRecentTransactions } from 'hooks/useRecentTransactions'
+import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 const currencyAmountToBigNumber = (currency: CurrencyAmount<Currency>) => {
   return parseUnits(currency.toFixed(currency.currency.decimals))
 }
@@ -59,10 +59,11 @@ export const useAddLiquidityTransaction = (
   recipient?: string,
 ) => {
   const networkId = useCurrentSupportedNetworkId()
-  const [{ data: signer }] = useSigner()
+  const { data: signer } = useSigner()
   const routerContract = useContract<Contract>({
     addressOrName: ROUTER_ADDRESS[networkId],
-    contractInterface: RouterABI,
+    // @ts-ignore
+    contractInterface: RouterAbi,
     signerOrProvider: signer,
   })
 
@@ -73,7 +74,9 @@ export const useAddLiquidityTransaction = (
     isTransactionSent: false,
     data: undefined,
   })
-  const { addRecentTransaction } = useRecentTransactions()
+
+  const { registerTransaction } = useTransactionRegistry()
+
   const submit = async () => {
     setState((s) => ({ ...s, isWaitingForConfirmation: true }))
     try {
@@ -85,16 +88,12 @@ export const useAddLiquidityTransaction = (
         data: tx,
         isWaitingForConfirmation: false,
       }))
-      console.log('tx')
 
-      addRecentTransaction({
-        amount: +tokenAmountA.toSignificant(2),
-        amountTokenName: tokenAmountA.currency.symbol,
-        loading: true,
-        transaction: tx,
-        type: 'Liq',
-        purchase: +tokenAmountB.toSignificant(2),
-        purchaseTokenName: tokenAmountB.currency.symbol,
+      registerTransaction(tx, {
+        type: 'add liquidity',
+        amount0: tokenAmountA.toString(),
+        amount1: tokenAmountB.toString(),
+        pairSymbol: `${tokenAmountA.currency.symbol}-${tokenAmountB.currency.symbol}`,
       })
     } catch (error) {
       if (error.message === 'User rejected the transaction')

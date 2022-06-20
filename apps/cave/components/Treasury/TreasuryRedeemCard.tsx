@@ -1,15 +1,10 @@
-import { CNV } from 'constants/tokens'
+import { CNV } from '@concave/core'
 import { Button, Flex, Text, useDisclosure } from '@concave/ui'
 import useAddTokenToWallet, { injectedTokenResponse } from 'hooks/useAddTokenToWallet'
 import { GlassPanel } from './TreasuryManagementCard'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useConnect } from 'wagmi'
-import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
-import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
-import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { ComingSoonDialog } from 'components/ComingSoonDialog'
-import { Transaction } from 'ethers'
 import BBBTCNVRedemptionDialog from './VestedTokensDialogs/BBTCNVRedemptionDialog'
 import ACNVRedemptionDialog from './VestedTokensDialogs/ACNVRedemptionDialog'
 // aCNV address
@@ -17,16 +12,16 @@ import ACNVRedemptionDialog from './VestedTokensDialogs/ACNVRedemptionDialog'
 // 0x6ff0106d34feee8a8acf2e7b9168480f86b82e2f eth
 
 function TreasuryRedeemCard() {
+  // TODO make token chain dinamic, refactor useAddTokenToWallet hook
   const { addingToWallet }: injectedTokenResponse = useAddTokenToWallet({
-    tokenAddress: CNV.address,
-    tokenChainId: CNV.chainId,
+    tokenAddress: CNV[1].address,
+    tokenChainId: CNV[1].chainId,
   })
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [description, setDescription] = useState("This feature it's not done yet.")
   const [title, setTitle] = useState('Coming soon')
 
-  const [walletName, setWalletName] = useState('')
-  const [{ data }] = useConnect()
+  const { activeConnector } = useConnect()
 
   const {
     isOpen: onRedeemBBTCNV,
@@ -38,10 +33,6 @@ function TreasuryRedeemCard() {
     onOpen: onOpenRedeemACNV,
     onClose: onCloseRedeemACNV,
   } = useDisclosure()
-
-  useEffect(() => {
-    setWalletName(data?.connector?.name || 'Wallet')
-  }, [walletName])
 
   return (
     <>
@@ -90,7 +81,7 @@ function TreasuryRedeemCard() {
           my="auto"
           fontSize={{ base: '22px', xl: '18px' }}
         >
-          Add CNV to your {walletName}
+          Add CNV to your {activeConnector?.name || 'wallet'}
         </Text>
       </GlassPanel>
       <ComingSoonDialog title={title} desc={description} isOpen={isOpen} onClose={onClose} />

@@ -1,15 +1,20 @@
 import { QuestionIcon } from '@concave/icons'
-import { HStack, Stack, Switch, Text } from '@concave/ui'
+import { HStack, Stack, Switch, Text, Tooltip } from '@concave/ui'
 import { TransactionSettings, SlippageTolerance, Deadline } from 'components/TransactionSettings'
-import { useReducer } from 'react'
-import { toPercent } from 'utils/toPercent'
+import { useTransactionSettings } from 'components/TransactionSettings/TransactionSettings'
 
 const ToggleExpertMode = ({ isChecked, onToggle }) => {
   return (
     <HStack justifyContent="space-between" width="100%">
-      <Text fontSize="sm">
-        Expert Mode <QuestionIcon />
-      </Text>
+      <HStack>
+        <Text fontSize="sm">Expert Mode</Text>
+        <Tooltip
+          label="Expert mode allows high slippage trades and custom recipients without the confirmation screen. Use at your own risk."
+          shouldWrapChildren
+        >
+          <QuestionIcon />
+        </Tooltip>
+      </HStack>
       <Switch size="sm" isChecked={isChecked} onChange={onToggle} />
     </HStack>
   )
@@ -18,20 +23,23 @@ const ToggleExpertMode = ({ isChecked, onToggle }) => {
 const ToggleMultihops = ({ isChecked, onToggle }) => {
   return (
     <HStack justifyContent="space-between" width="100%">
-      <Text fontSize="sm">
-        Multihops
-        <QuestionIcon />
-      </Text>
+      <HStack>
+        <Text fontSize="sm">Multihops</Text>
+        <Tooltip
+          label="Disabling multihops restricts swaps to direct pairs only - no routing."
+          shouldWrapChildren
+        >
+          <QuestionIcon />
+        </Tooltip>
+      </HStack>
+
       <Switch size="sm" isChecked={isChecked} onChange={onToggle} />
     </HStack>
   )
 }
 
 const defaultSettings = {
-  slippageTolerance: {
-    value: 0.5,
-    percent: toPercent(0.5),
-  },
+  slippageTolerance: 0.5,
   deadline: 30,
   multihops: true,
   expertMode: false,
@@ -39,26 +47,25 @@ const defaultSettings = {
 
 export type SwapSettings = typeof defaultSettings
 
-export const useSwapSettings = () => useReducer((s, a) => ({ ...s, ...a }), defaultSettings)
+export const useSwapSettings = () => useTransactionSettings('swap', defaultSettings)
 
 // TODO: implement auto slippage
-const calculateAutoSlippage = () => ({
-  value: 0.96,
-  percent: toPercent(0.96),
-})
+const calculateAutoSlippage = () => 0.96
 
 export const Settings = ({
   settings: { slippageTolerance, deadline, multihops, expertMode },
   setSetting,
+  isDefaultSettings = true,
+  onClose,
 }) => {
   return (
-    <TransactionSettings>
+    <TransactionSettings isDefaultSettings={isDefaultSettings} onClose={onClose}>
       <SlippageTolerance
-        value={slippageTolerance.value}
+        value={slippageTolerance}
         onValueChange={(slippageTolerance) => setSetting({ slippageTolerance })}
         onClickAuto={() => setSetting({ slippageTolerance: calculateAutoSlippage() })}
       />
-      <Deadline value={deadline} onValueChange={({ value }) => setSetting({ deadline: value })} />
+      <Deadline value={deadline} onValueChange={(deadline) => setSetting({ deadline })} />
       <Stack gap={1} w="full">
         <Text fontWeight="bold" fontSize="sm">
           Interface Settings

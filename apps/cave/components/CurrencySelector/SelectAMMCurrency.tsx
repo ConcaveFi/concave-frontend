@@ -1,4 +1,4 @@
-import { CNV, Currency, DAI, NATIVE, WETH9 } from '@concave/gemswap-sdk'
+import { CNV, Currency, DAI, NATIVE, WETH9 } from '@concave/core'
 import { QuestionIcon } from '@concave/icons'
 import { Button, Flex, Heading, Modal } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'

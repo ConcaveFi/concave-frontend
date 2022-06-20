@@ -1,14 +1,7 @@
-import {
-  ChainId,
-  CHAIN_NAME,
-  CNV,
-  Currency,
-  DAI,
-  ROUTER_ADDRESS,
-  Trade,
-  TradeType,
-} from '@concave/gemswap-sdk'
-import { Card, Collapse, Flex, HStack, Stack, Text, useDisclosure } from '@concave/ui'
+import { ChainId, CHAIN_NAME, CNV, Currency, DAI, ROUTER_ADDRESS } from '@concave/core'
+import { Trade, TradeType } from '@concave/gemswap-sdk'
+import { ExpandArrowIcon } from '@concave/icons'
+import { Button, Card, Collapse, Flex, HStack, Stack, Text, useDisclosure } from '@concave/ui'
 import {
   CandleStickCard,
   ConfirmSwapModal,
@@ -41,6 +34,7 @@ import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { LayoutGroup } from 'framer-motion'
+import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { GetServerSideProps } from 'next'
 import { useEffect, useMemo, useReducer, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
@@ -66,17 +60,19 @@ const defaultCurrencies = {
   [ChainId.RINKEBY]: [DAI[4], CNV[4]],
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+export const getServerSideProps: GetServerSideProps = async ({ query, res }) => {
   const currencies = await fetchQueryCurrencies(query)
   const currenciesOrDefaults =
     currencies.filter(Boolean).length === 0
       ? defaultCurrencies[+query.chainId] || defaultCurrencies[1]
       : currencies
+
+  res.setHeader('Cache-Control', 'public, s-maxage=31536000, stale-while-revalidate')
   return { props: { currencies: currenciesOrDefaults.map(currencyToJson) } }
 }
 
 export function SwapPage({ currencies: serverPropsCurrencies }) {
-  const [settings, setSetting] = useSwapSettings()
+  const { settings, setSetting, isDefaultSettings, onClose } = useSwapSettings()
 
   const currencies = useMemo(
     () => serverPropsCurrencies?.map(currencyFromJson),
@@ -102,9 +98,18 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
     [trade],
   )
 
+  const { registerTransaction } = useTransactionRegistry()
+
   const [recipient, setRecipient] = useState('')
   const swapTx = useSwapTransaction(exactInTrade, settings, recipient, {
-    onTransactionSent: () => onChangeInput(toAmount(0, trade.data.inputAmount.currency)),
+    onTransactionSent: (tx) => {
+      onChangeInput(toAmount(0, trade.data.inputAmount.currency))
+      registerTransaction(tx, {
+        type: 'swap',
+        amountIn: trade.data.inputAmount.toString(),
+        amountOut: trade.data.outputAmount.toString(),
+      })
+    },
   })
 
   const confirmationModal = useDisclosure()
@@ -127,14 +132,7 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
 
   return (
     <>
-      <Flex
-        wrap="wrap"
-        justify="center"
-        mt={{ base: '10vh', xl: '25vh' }}
-        mb={['25vh', 'none']}
-        w="100%"
-        gap={10}
-      >
+      <Flex wrap="wrap" justify="center" align="center" alignContent="center" w="100%" gap={10}>
         <LayoutGroup>
           <CandleStickCard
             from={trade.data.inputAmount?.currency}
@@ -167,23 +165,34 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
 
             {settings.expertMode && <CustomRecipient onChangeRecipient={setRecipient} />}
 
-            <HStack
-              onClick={toggleDetails}
-              sx={hasDetails && { cursor: 'pointer', _hover: { bg: 'blackAlpha.200' } }}
-              justify="center"
-              align="center"
-              py={2}
-              px={3}
-              my="auto"
-              rounded="xl"
-            >
+            <HStack justify="center" align="center" py={2} px={3} my="auto" rounded="xl">
               <RelativePrice
                 currency0={trade.data.inputAmount?.currency}
                 currency1={trade.data.outputAmount?.currency}
                 mr="auto"
               />
               <GasPrice />
-              <Settings settings={settings} setSetting={setSetting} />
+              <Collapse in={hasDetails} animateOpacity>
+                <Button
+                  onClick={toggleDetails}
+                  px={3}
+                  py={2}
+                  my={1}
+                  shadow={isDetailsOpen ? 'Down Big' : 'Up Small'}
+                  rounded="3xl"
+                >
+                  <ExpandArrowIcon
+                    transition={'all 0.3s'}
+                    transform={isDetailsOpen ? 'rotate(180deg)' : ''}
+                  />
+                </Button>
+              </Collapse>
+              <Settings
+                settings={settings}
+                setSetting={setSetting}
+                isDefaultSettings={isDefaultSettings}
+                onClose={onClose}
+              />
             </HStack>
 
             <Collapse style={{ overflow: 'visible' }} in={isDetailsOpen} animateOpacity>
@@ -244,8 +253,6 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
         tokenOutAddress={swapTx.trade?.outputAmount.currency.address} // workaround for type error
       />
       <TransactionErrorDialog error={swapTx.error?.message} isOpen={swapTx.isError} />
-
-      {/* <NetworkMismatchModal /> */}
     </>
   )
 }

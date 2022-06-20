@@ -1,4 +1,5 @@
-import { CHAIN_NAME, Currency, CurrencyAmount, Pair } from '@concave/gemswap-sdk'
+import { CHAIN_NAME, Currency, CurrencyAmount } from '@concave/core'
+import { Pair } from '@concave/gemswap-sdk'
 import { PlusIcon } from '@concave/icons'
 import { Button, ButtonProps, Card, Flex, Modal, Text, useDisclosure } from '@concave/ui'
 import { CurrencyInputField } from 'components/AMM'
@@ -62,7 +63,12 @@ function AddLiquidityContent({
     secondFieldAmount,
     supplyLiquidityDisclosure.onOpen,
   )
-  const fixedPair = pair.data ?? Pair.createVirtualPair(firstFieldAmount, secondFieldAmount)
+
+  let fixedPair = pair.data
+
+  if (firstFieldAmount?.currency && secondFieldAmount?.currency && !pair.data) {
+    fixedPair = Pair.createVirtualPair(firstFieldAmount, secondFieldAmount)
+  }
 
   const lpData = useLiquidityData({
     pair: fixedPair,
@@ -169,7 +175,7 @@ export const AddLiquidityModalButton = ({
   label = 'Add liquidity',
   ...buttonProps
 }: { label?: string; pair?: Pair } & ButtonProps) => {
-  const [{ data: account }] = useAccount()
+  const { data: account } = useAccount()
   const addLiquidityDisclosure = useDisclosure()
   const currencies = useMemo(() => [pair?.token0, pair?.token1], [pair?.token0, pair?.token1])
   if (!account?.address) {

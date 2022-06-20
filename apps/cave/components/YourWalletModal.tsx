@@ -1,17 +1,5 @@
-import {
-  Modal,
-  useDisclosure,
-  Flex,
-  Button,
-  Text,
-  Tabs,
-  TabList,
-  Tab,
-  TabPanels,
-  TabPanel,
-  Card,
-} from '@concave/ui'
-import { useAccount } from 'wagmi'
+import { Modal, useDisclosure, Flex, Button, Text } from '@concave/ui'
+import { useAccount, useDisconnect } from 'wagmi'
 import YourWalletContainer from './YourWallet/Containers/YourWalletContainer'
 import ConnectedAreasContainer from './YourWallet/Containers/ConnectedsAreaContainer'
 import RecentTransactionsContainer from './YourWallet/Containers/RecentTransactionsContainer'
@@ -24,7 +12,8 @@ interface YourWalletModalProps {
 }
 
 export default function YourWalletModal(props: YourWalletModalProps) {
-  const [{ data: account }, disconnect] = useAccount()
+  const { data: account } = useAccount()
+  const { disconnect } = useDisconnect()
 
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -41,11 +30,12 @@ export default function YourWalletModal(props: YourWalletModalProps) {
     >
       <Flex
         direction={'column'}
+        justify="space-between"
         rounded={'2xl'}
-        w={{ base: '330px', sm: '380px' }}
-        maxW="380px"
-        h="320px"
+        // h="300px"
+        gap={6}
         m={-3}
+        p={6}
         shadow={'up'}
       >
         <YourWalletContainer onClose={props.onClose} value={ellipseAddress(account?.address)} />

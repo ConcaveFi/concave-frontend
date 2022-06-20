@@ -7,12 +7,12 @@ import { useQuery } from 'react-query'
 import { useAccount, useSigner } from 'wagmi'
 
 export default function useBBTCNVRedeemable() {
-  const [{ data: signer }] = useSigner()
-  const [{ data: account }] = useAccount()
+  const { data: signer } = useSigner()
+  const { data: account } = useAccount()
 
   //   const networkId = useCurrentSupportedNetworkId()
   const bbtCNVContract = new Contract(
-    '0x7fcc30e97d718864d46a84f13e3ba111a56123d3',
+    '0x7fcc30e97d718864d46a84f13e3ba111a56123d3', //mainnet?
     RedeemBBT_CNV_Abi,
     provider(1),
   )

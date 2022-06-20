@@ -1,4 +1,4 @@
-import { DAI, CurrencyAmount, Currency } from '@concave/gemswap-sdk'
+import { DAI, CurrencyAmount, Currency } from '@concave/core'
 import { useMemo } from 'react'
 import { usePrice } from './usePrice'
 
@@ -13,7 +13,7 @@ export const useFiatPrice = (currency?: Currency) => {
 export const useFiatValue = (currencyAmount?: CurrencyAmount<Currency>) => {
   const fiatPrice = useFiatPrice(currencyAmount?.currency.wrapped)
   return useMemo(() => {
-    if (!fiatPrice.price || !fiatPrice.price.baseCurrency.equals(currencyAmount.currency))
+    if (!fiatPrice.price || !fiatPrice.price.baseCurrency.equals(currencyAmount.currency.wrapped))
       return { value: undefined, ...fiatPrice }
 
     if (fiatPrice) return { value: fiatPrice.price.quote(currencyAmount.wrapped), ...fiatPrice }

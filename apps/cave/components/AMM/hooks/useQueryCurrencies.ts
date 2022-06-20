@@ -1,5 +1,6 @@
 import { isAddress } from 'ethers/lib/utils'
-import { ChainId, Currency, Fetcher, NATIVE, Token } from '@concave/gemswap-sdk'
+import { ChainId, Currency, NATIVE, Token } from '@concave/core'
+import { Fetcher } from '@concave/gemswap-sdk'
 import { concaveProvider } from 'lib/providers'
 import Router, { useRouter } from 'next/router'
 import { useNetwork } from 'wagmi'
@@ -60,10 +61,10 @@ const updateQuery = ({ currency0, currency1, chainId }: UpdateCurrenciesQuery, {
 const getQueryValue = (query, key) => (Array.isArray(query[key]) ? query[key][0] : query[key])
 
 export const useQueryCurrencies = () => {
-  const [{ data: network }] = useNetwork()
+  const { activeChain } = useNetwork()
   const { query } = useRouter()
 
-  const currentChainId = network.chain?.id
+  const currentChainId = activeChain?.id
   const queryChainId = getQueryValue(query, 'chainId')
 
   const isNetworkMismatch = +queryChainId && currentChainId && +queryChainId !== currentChainId
