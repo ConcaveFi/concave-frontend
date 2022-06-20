@@ -8,7 +8,7 @@ export const BondMarketplaceHeader: React.FC<FlexProps> = ({ ...props }) => {
       height="313px"
       shadow={'up'}
       apply="background.metal"
-      rounded={'2xl'}
+      rounded={'40px'}
       px="8"
       pt={8}
       mx="auto"

@@ -1,7 +1,12 @@
-import { Box, Card, Flex, Text } from '@concave/ui'
+import { CNV, DAI } from '@concave/core'
+import { Avatar, Box, Card, Flex, Image, Text } from '@concave/ui'
 
 type Variants = { variant: 'primary' | 'secondary' }
 export const BondMarketplacePosition: React.FC<Variants> = ({ variant }) => {
+  const primary = variant === 'primary'
+  const address = primary ? CNV[1].address : DAI[1].address
+  const name = primary ? CNV[1].name : DAI[1].name
+  const symbol = primary ? CNV[1].symbol : DAI[1].symbol
   return (
     <Flex direction={'column'} textShadow={'0px 0px 27px rgba(129, 179, 255, 0.31)'}>
       <Card
@@ -16,9 +21,12 @@ export const BondMarketplacePosition: React.FC<Variants> = ({ variant }) => {
         variant="secondary"
         rounded={'50px'}
       >
-        <Flex height={'100px'} justify="center" gap={14} align={'center'}>
-          <Info variant={variant} title="ThorStarter" info="xRUNE"></Info>
-          <Info variant={variant} title="Market price:" info="$98.23"></Info>
+        <Flex height={'100px'} justify="center" gap={4} align={'center'}>
+          <Info variant={variant} title={symbol} info={name} />
+          <Avatar
+            src={`https://raw.githubusercontent.com/ConcaveFi/assets/master/blockchains/ethereum/assets/${address}/logo.png`}
+          />
+          <Info variant={variant} title="Market price:" info="$98.23" />
         </Flex>
         <LoadBar percent={variant === 'primary' ? 23 : 82} variant={variant} />
         <Flex my={2} justify={'center'} fontWeight="bold" gap={2}>
@@ -51,11 +59,11 @@ const RoiContainer = () => (
 
 type Info = { title: string; info: string }
 const Info: React.FC<Info & Variants> = ({ info, title, variant }) => (
-  <Flex fontWeight={'bold'} direction={'column'} align="center">
+  <Flex maxW={''} fontWeight={'bold'} direction={'column'} align="center">
     <Text textColor={'text.low'} fontSize={'14px'}>
       {title}
     </Text>
-    <Text fontSize={'22px'}>{info}</Text>
+    <Text fontSize={'16px'}>{info}</Text>
   </Flex>
 )
 
