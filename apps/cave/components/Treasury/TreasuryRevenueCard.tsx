@@ -112,7 +112,7 @@ export default function TreasuryRevenueCard(props) {
   const reducer = (acc: any, curr: any) => acc + curr
   const seed = 600000
   const total = sumTotal.reduce(reducer) + seed
-
+  console.log(cnv.cnvData, 'what is cnv test')
   const { data, isLoading, isSuccess } = useGet_Accrualbondv1_Last10_SoldQuery()
 
   const lastsSolds = data?.logAccrualBondsV1_BondSold
@@ -137,19 +137,19 @@ export default function TreasuryRevenueCard(props) {
         <Flex direction={'column'} gap={5}>
           <TreasuryInfo
             box1="Market Cap"
-            box1b={'$' + numberMask(cnv.cnvData.data.marketCap)}
+            box1b={'$' + numberMask(cnv.cnvData.data.marketCap, 4)}
             box2="CNV Price"
             box2b={'$' + cnvPrice?.price?.toFixed(2)}
             box3="Treasury Value per CNV"
-            box3b={'$' + numberMask(total / cnv.cnvData.data.totalSupply)}
+            box3b={'$' + numberMask(total / cnv.cnvData.data.totalSupply, 4)}
           />
           <TreasuryInfo
             box1="Treasury Revenue 24h"
             box1b="Coming Soon"
             box2="Treasury Value"
-            box2b={'$' + numberMask(total)}
+            box2b={'$' + numberMask(total, 4)}
             box3="CNV Total Supply"
-            box3b={'' + numberMask(cnv.cnvData.data.totalSupply)}
+            box3b={'' + numberMask(cnv.cnvData.data.totalSupply, 4)}
           />
           <BondInfo
             bondbox1={relativeTimeline[0]}
@@ -177,12 +177,17 @@ export const twoDecimals = (s: string | number) => {
   return a.indexOf('.') > -1 ? a.slice(0, a.indexOf('.') + 3) : a
 }
 
-export const numberMask = (number: Number) => {
+export const numberMask = (number: Number, decimals?: number) => {
+  let test = twoDecimals(number)
   if (number === 0) {
     return `0`
   }
   if (number < 0.01) {
     return `<.01`
   }
-  return twoDecimals(number.toString())
+  const _decimals = decimals || 2
+  return number.toLocaleString('en', {
+    maximumFractionDigits: _decimals,
+    minimumFractionDigits: _decimals,
+  })
 }
