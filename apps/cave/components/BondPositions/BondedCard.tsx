@@ -26,7 +26,7 @@ export const BondedCard: React.FC<StackProps & BondedCard> = ({ variant, ...prop
         <Avatar
           src={`https://raw.githubusercontent.com/ConcaveFi/assets/master/blockchains/ethereum/assets/${CNV[1].address}/logo.png`}
         />
-        <Info alignItems={'start'} title="You Bonded:" info="2,415.43 xRUNE" />
+        <Info alignItems={'start'} title="You Bonded:" info="2,415.43 CNV" />
       </Flex>
     </Card>
   )
