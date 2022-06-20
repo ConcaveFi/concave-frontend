@@ -144,6 +144,18 @@ function SliderThumbWithTooltip() {
       >
         <SliderThumb />
       </Tooltip>
+
+      <RangeSlider aria-label={['min', 'max']} defaultValue={[30, 80]}>
+        <RangeSliderTrack bg="red.100">
+          <RangeSliderFilledTrack bg="tomato" />
+        </RangeSliderTrack>
+        <RangeSliderThumb boxSize={6} index={0}>
+          <Box color="tomato" as={MdGraphicEq} />
+        </RangeSliderThumb>
+        <RangeSliderThumb boxSize={6} index={1}>
+          <Box color="tomato" as={MdGraphicEq} />
+        </RangeSliderThumb>
+      </RangeSlider>
     </Slider>
   )
 }
