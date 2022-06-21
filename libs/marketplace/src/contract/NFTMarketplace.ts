@@ -2,7 +2,7 @@ import { BigNumber, BigNumberish, ethers, Transaction } from 'ethers'
 import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/providers'
 import { ContractABI } from './NFTMarketplaceAbi'
 import { Signer } from 'ethers'
-import { MarketItemInfo, Offer } from '@concave/marketplace'
+import { MarketItemInfo, Offer } from './../entities'
 import { BaseProvider } from '@ethersproject/providers'
 import { MARKETPLACE_CONTRACT } from '@concave/core'
 import { NFT } from 'src/entities'
@@ -21,7 +21,7 @@ export class ConcaveNFTMarketplace {
     signer: Signer,
     { tokenId }: { tokenId: BigNumberish },
   ): Promise<ethers.Transaction> {
-    //console.debug('createMarketItem')
+    console.debug('createMarketItem')
     return this.contract.connect(signer).createMarketItem(tokenId.toString())
   }
 
