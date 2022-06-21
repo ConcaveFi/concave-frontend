@@ -18,12 +18,7 @@ import { GasPrice } from 'components/AMM'
 import { useCNVPrice } from 'hooks/useCNVPrice'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { commify } from 'ethers/lib/utils'
-import { numberMask } from 'components/Treasury/dist/TreasuryRevenueCard'
-
-export const twoDecimals = (s: string | number) => {
-  const a = s.toString()
-  return a.indexOf('.') > -1 ? a.slice(0, a.indexOf('.') + 3) : a
-}
+import { numberMask } from 'components/Treasury/TreasuryRevenueCard'
 
 export function BondBuyCard(props: {
   bondTransaction?: any
@@ -105,7 +100,7 @@ export function BondBuyCard(props: {
               Bond Price:
             </Text>
             <Text textColor={'text.low'} opacity="0.7">
-              {bondSpotPrice ? '$' + numberMask(bondSpotPrice, 3) + ' CNV' : 'Loading . . .'}
+              {bondSpotPrice ? '$' + numberMask(+bondSpotPrice, 3) + ' CNV' : 'Loading . . .'}
             </Text>
           </HStack>
         </VStack>

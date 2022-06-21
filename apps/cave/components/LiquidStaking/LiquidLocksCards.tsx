@@ -1,6 +1,6 @@
 import { ExpandArrowIcon, SpinnerIcon } from '@concave/icons'
 import { Box, Card, Collapse, Flex, keyframes, Spinner, Text, useDisclosure } from '@concave/ui'
-import { numberMask } from 'components/Treasury/dist/TreasuryRevenueCard'
+import { numberMask } from 'components/Treasury/TreasuryRevenueCard'
 // import { GlassPanel } from 'components/Treasury/TreasuryManagementCard'
 import { formatDistanceStrict } from 'date-fns'
 import { BigNumber } from 'ethers'

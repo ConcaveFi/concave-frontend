@@ -10,7 +10,7 @@ import {
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useEffect, useState } from 'react'
 import { useCNVPrice } from 'hooks/useCNVPrice'
-import { numberMask } from 'components/Treasury/dist/TreasuryRevenueCard'
+import { numberMask } from 'components/Treasury/TreasuryRevenueCard'
 interface BoldSoldsCardProps {
   data: Get_Accrualbondv1_Last10_SoldQuery
   error: any
