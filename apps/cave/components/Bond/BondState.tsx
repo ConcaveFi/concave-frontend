@@ -20,11 +20,9 @@ export const getBondAmountOut = async (
   const formattedInput = ethers.utils.parseUnits(input.toString(), 18)
   const amountOut = await bondingContract.getAmountOut(DAI, formattedInput)
   console.log(amountOut)
-  const ethValue = ethers.utils.formatEther(amountOut)
+  const ethValue = +ethers.utils.formatEther(amountOut)
 
-  const cleanedOutput = formatFixed(amountOut, 5)
-  const test = formatFixed(amountOut, 4)
-  console.log(parseFloat(cleanedOutput), 'number test')
+  const cleanedOutput = ethValue.toFixed(4)
 
   return cleanedOutput
 }

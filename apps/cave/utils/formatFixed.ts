@@ -4,8 +4,7 @@ import { BigNumber } from 'ethers'
 
 export const formatFixed = (
   bigNumber: BigNumberish,
-  _places?: number,
-  { decimals = 18, places = _places || 2, minPlaces = 2 } = {},
+  { decimals = 18, places = 2, minPlaces = 2 } = {},
 ) => {
   const input = +utils.formatUnits(bigNumber, decimals)
   return floorPrecision(input, { maximumFractionDigits: places, minimumFractionDigits: minPlaces })
