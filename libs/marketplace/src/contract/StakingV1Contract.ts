@@ -33,6 +33,18 @@ export class StakingV1Contract {
     return this.contract.connect(signer).lock(address, amount, poolId)
   }
 
+  public async getApproved(tokenId: BigNumberish): Promise<string[]> {
+    return this.contract.getApproved(tokenId)
+  }
+
+  public async approve(
+    signer: ethers.Signer,
+    address: string,
+    tokenId: BigNumberish,
+  ): Promise<BigNumber> {
+    return this.contract.connect(signer).approve(address, tokenId)
+  }
+
   public async pools(index: string): Promise<StakePool> {
     return this.contract.pools(index).then((p) => ({ ...p }))
   }

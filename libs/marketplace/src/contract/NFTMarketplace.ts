@@ -9,12 +9,14 @@ import { NFT } from 'src/entities'
 
 export class ConcaveNFTMarketplace {
   private readonly contract: ethers.Contract
+  public readonly address: string
   constructor(private readonly provider: BaseProvider | MulticallProvider) {
     if (!provider.network.chainId)
       throw 'ChainID is undefined for constructor of contract ConcaveNFTMarketplace'
-    const address = MARKETPLACE_CONTRACT[provider.network.chainId]
-    if (!address) throw 'Address is undefined for constructor of contract ConcaveNFTMarketplace'
-    this.contract = new ethers.Contract(address, ContractABI, this.provider)
+    this.address = MARKETPLACE_CONTRACT[provider.network.chainId]
+    if (!this.address)
+      throw 'Address is undefined for constructor of contract ConcaveNFTMarketplace'
+    this.contract = new ethers.Contract(this.address, ContractABI, this.provider)
   }
 
   public async createMarketItem(
@@ -112,5 +114,29 @@ export class ConcaveNFTMarketplace {
       feeRecipients,
       feePercentages,
     )
+  }
+  public async makeBid(signer: Signer, marketItem: MarketItemInfo, ethers: BigNumber) {
+    return this.contract
+      .connect(signer)
+      .makeBid(
+        marketItem.position.tokenId,
+        marketItem.offer.ERC20Token,
+        marketItem.offer.listPrice.toString(),
+        {
+          value: ethers,
+        },
+      )
+  }
+  public async buyNow(signer: Signer, marketItem: MarketItemInfo, ethers: BigNumber) {
+    return this.contract
+      .connect(signer)
+      .makeBid(
+        marketItem.position.tokenId,
+        marketItem.offer.ERC20Token,
+        marketItem.offer.buyNowPrice.toString(),
+        {
+          value: ethers,
+        },
+      )
   }
 }
