@@ -1,6 +1,6 @@
 import { ExpandArrowIcon, SpinnerIcon } from '@concave/icons'
 import { Box, Card, Collapse, Flex, keyframes, Spinner, Text, useDisclosure } from '@concave/ui'
-import { bigNumberMask } from 'components/StakingPositions/LockPosition/Redeem/UseRedeemState'
+import { numberMask } from 'components/Treasury/dist/TreasuryRevenueCard'
 // import { GlassPanel } from 'components/Treasury/TreasuryManagementCard'
 import { formatDistanceStrict } from 'date-fns'
 import { BigNumber } from 'ethers'
@@ -29,7 +29,7 @@ const LiquidLocksCards = () => {
   const amounts = stakingLocks
     .map((value, index) => (
       <Text opacity={1 - (index / 10) * (isOpen ? 1 : 3)} key={index}>
-        {bigNumberMask(BigNumber.from(value.amount)) + ' CNV'}
+        {numberMask(value.amount) + ' CNV'}
       </Text>
     ))
     .splice(0, 9)
