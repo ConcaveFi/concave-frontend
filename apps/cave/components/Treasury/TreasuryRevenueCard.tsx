@@ -1,5 +1,6 @@
 import { Box, Card, Flex, Text } from '@concave/ui'
 import { formatDistanceStrict } from 'date-fns'
+import { commify } from 'ethers/lib/utils'
 import { useGet_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql'
 import { useCNVPrice } from 'hooks/useCNVPrice'
 
@@ -137,23 +138,19 @@ export default function TreasuryRevenueCard(props) {
         <Flex direction={'column'} gap={5}>
           <TreasuryInfo
             box1="Market Cap"
-            box1b={'$' + numberMask(cnv.cnvData.data.marketCap, 4)}
+            box1b={'$' + numberMask(cnv.cnvData.data.marketCap)}
             box2="CNV Price"
-<<<<<<< HEAD
-            box2b={'$' + cnvPrice?.price?.toFixed(2)}
-=======
             box2b={'$' + cnvPrice?.price?.toFixed(2) || 0}
->>>>>>> 3b73db0a242f3f72a566ada2ade694ff324e42eb
             box3="Treasury Value per CNV"
-            box3b={'$' + numberMask(total / cnv.cnvData.data.totalSupply, 4)}
+            box3b={'$' + numberMask(total / cnv.cnvData.data.totalSupply)}
           />
           <TreasuryInfo
             box1="Treasury Revenue 24h"
             box1b="Coming Soon"
             box2="Treasury Value"
-            box2b={'$' + numberMask(total, 4)}
+            box2b={'$' + numberMask(total)}
             box3="CNV Total Supply"
-            box3b={'' + numberMask(cnv.cnvData.data.totalSupply, 4)}
+            box3b={'' + numberMask(cnv.cnvData.data.totalSupply)}
           />
           <BondInfo
             bondbox1={relativeTimeline[0]}
@@ -172,17 +169,13 @@ export default function TreasuryRevenueCard(props) {
   )
 }
 
-const formatNumber = (number: string) => {
-  return number.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
-}
-
-export const twoDecimals = (s: string | number) => {
+export const numSplice = (s: string | Number, decimals?: number) => {
   const a = s.toString()
-  return a.indexOf('.') > -1 ? a.slice(0, a.indexOf('.') + 3) : a
+  const _decimals = decimals + 1 || 3
+  return a.indexOf('.') > -1 ? a.slice(0, a.indexOf('.') + _decimals) : a
 }
 
 export const numberMask = (number: Number, decimals?: number) => {
-  let test = twoDecimals(number)
   if (number === 0) {
     return `0`
   }
@@ -190,8 +183,5 @@ export const numberMask = (number: Number, decimals?: number) => {
     return `<.01`
   }
   const _decimals = decimals || 2
-  return number.toLocaleString('en', {
-    maximumFractionDigits: _decimals,
-    minimumFractionDigits: _decimals,
-  })
+  return commify(numSplice(number, _decimals))
 }

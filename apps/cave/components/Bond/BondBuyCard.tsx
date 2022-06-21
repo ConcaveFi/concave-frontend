@@ -17,6 +17,8 @@ import { useQuery } from 'react-query'
 import { GasPrice } from 'components/AMM'
 import { useCNVPrice } from 'hooks/useCNVPrice'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
+import { commify } from 'ethers/lib/utils'
+import { numberMask } from 'components/Treasury/dist/TreasuryRevenueCard'
 
 export const twoDecimals = (s: string | number) => {
   const a = s.toString()
@@ -59,7 +61,7 @@ export function BondBuyCard(props: {
   } = useDisclosure()
 
   const { registerTransaction } = useTransactionRegistry()
-
+  let spotPrice = +bondSpotPrice //i was getting errors, when trying to use unary on its own to convert to number.
   return (
     <Card
       p={5}
@@ -95,7 +97,7 @@ export function BondBuyCard(props: {
           <HStack alignSelf={'start'}>
             <Text textColor={'text.low'}>Current Price:</Text>
             <Text textColor={'text.low'} opacity="0.7">
-              {cnvPrice.price ? '$' + cnvPrice.price?.toFixed(2) + ' CNV' : 'Loading . . .'}
+              {cnvPrice.price ? '$' + cnvPrice.price?.toFixed(3) + ' CNV' : 'Loading . . .'}
             </Text>
           </HStack>
           <HStack alignSelf={'start'}>
@@ -103,9 +105,7 @@ export function BondBuyCard(props: {
               Bond Price:
             </Text>
             <Text textColor={'text.low'} opacity="0.7">
-              {bondSpotPrice
-                ? '$' + parseFloat(bondSpotPrice).toFixed(3) + ' CNV'
-                : 'Loading . . .'}
+              {bondSpotPrice ? '$' + numberMask(bondSpotPrice, 3) + ' CNV' : 'Loading . . .'}
             </Text>
           </HStack>
         </VStack>
@@ -188,7 +188,7 @@ export function BondBuyCard(props: {
       />
       <WaitingConfirmationDialog isOpen={hasClickedConfirm} title={'Confirm Bond'}>
         <Text fontSize="lg" color="text.accent">
-          Bonding {amountIn?.toFixed(4)} {currencyIn.symbol} for {amountOut} CNV.
+          Bonding {amountIn.toString()} {currencyIn.symbol} for {amountOut} CNV.
         </Text>
       </WaitingConfirmationDialog>
       <TransactionSubmittedDialog

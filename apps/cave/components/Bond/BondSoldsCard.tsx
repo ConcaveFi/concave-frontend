@@ -10,6 +10,7 @@ import {
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useEffect, useState } from 'react'
 import { useCNVPrice } from 'hooks/useCNVPrice'
+import { numberMask } from 'components/Treasury/dist/TreasuryRevenueCard'
 interface BoldSoldsCardProps {
   data: Get_Accrualbondv1_Last10_SoldQuery
   error: any
@@ -45,7 +46,7 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
       key={index}
       opacity={1 - (isOpen ? index / 10 : (index / 10) * 3)}
     >
-      {commify(parseFloat(value.output).toFixed()) + ' CNV'}
+      {numberMask(value.output) + ' CNV'}
     </Text>
   ))
   const inputAmounts = solds.map((value, index) => (
@@ -54,7 +55,7 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
       key={index}
       opacity={1 - (isOpen ? index / 10 : (index / 10) * 3)}
     >
-      {`${commify(parseFloat(value.inputAmount).toFixed(3))} DAI`}
+      {`${numberMask(value.inputAmount)} DAI`}
     </Text>
   ))
 

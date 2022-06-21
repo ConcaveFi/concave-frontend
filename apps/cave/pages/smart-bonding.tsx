@@ -37,10 +37,6 @@ import { useCNVPrice } from 'hooks/useCNVPrice'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import React, { useEffect, useState } from 'react'
 import getROI from 'utils/getROI'
-<<<<<<< HEAD
-=======
-
->>>>>>> 3b73db0a242f3f72a566ada2ade694ff324e42eb
 const spin = keyframes({
   '0%': { transform: 'rotate(0deg)' },
   '100%': { transform: 'rotate(360deg)' },
