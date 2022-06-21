@@ -11,7 +11,7 @@ export const InitialFilter = ({ onApplyFilter, onResetFilter }: InitialFilter) =
   return (
     <Popover onClose={onClose}>
       <PopoverTrigger>
-        <Button onClick={onToggle}>
+        <Button onClick={onToggle} _active={{}}>
           <DropdownCard title="Initial CNV" isOpen={isOpen} />
         </Button>
       </PopoverTrigger>

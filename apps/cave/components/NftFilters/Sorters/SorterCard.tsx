@@ -22,14 +22,14 @@ export const SorterCard = ({ onChangeSorter }: SorterCard) => {
   return (
     <Popover onClose={onClose}>
       <PopoverTrigger>
-        <Button onClick={onToggle}>
+        <Button onClick={onToggle} _active={{}}>
           <DropdownCard minW={'160px'} title={title || 'None'} isOpen={isOpen} />
         </Button>
       </PopoverTrigger>
       <Portal>
         <PopoverContent
           variants={{
-            enter: { opacity: 1, height: '180px' },
+            enter: { opacity: 1, height: '172px' },
             exit: { opacity: 0, height: '0px' },
           }}
           width={175}
@@ -38,8 +38,7 @@ export const SorterCard = ({ onChangeSorter }: SorterCard) => {
             width={'175px'}
             height="180px"
             rounded={'lg'}
-            sx={{ ...gradientBorder({ borderWidth: 2, rounded: 'lg' }) }}
-            p={'3px'}
+            boxShadow="up"
             backdropFilter={'blur(3px)'}
             direction="column"
             apply={'background.metalBrighter'}

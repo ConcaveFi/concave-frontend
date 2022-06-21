@@ -7,7 +7,7 @@ import {
   Portal,
   useDisclosure,
 } from '@chakra-ui/react'
-import { gradientBorder } from '@concave/ui'
+import { Card, gradientBorder } from '@concave/ui'
 import { DropdownCard } from '../DropdownCard'
 import { StakePoolFilter } from './hooks/useFilterByStakePool'
 import { StakeToggleButton } from './StakeToggleButton'
@@ -22,7 +22,7 @@ export const StakePoolFilterCard = ({ onDisableFilter, onEnableFilter }: StakePo
   return (
     <Popover onClose={onClose}>
       <PopoverTrigger>
-        <Button onClick={onToggle}>
+        <Button onClick={onToggle} _active={{}}>
           <DropdownCard isOpen={isOpen} title="Stake Pool" />
         </Button>
       </PopoverTrigger>
@@ -38,7 +38,8 @@ export const StakePoolFilterCard = ({ onDisableFilter, onEnableFilter }: StakePo
             width={'160px'}
             rounded={'lg'}
             height={'124px'}
-            sx={{ ...gradientBorder({ borderWidth: 2 }) }}
+            // sx={{ ...gradientBorder({ borderWidth: 2 }) }}
+            shadow="up"
             backdropFilter={'blur(10px)'}
             direction="column"
             apply={'background.metalBrighter'}

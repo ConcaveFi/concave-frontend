@@ -13,7 +13,7 @@ export const RedeemDateFilter = () => {
   return (
     <Popover onClose={onClose}>
       <PopoverTrigger>
-        <Button onClick={onToggle}>
+        <Button onClick={onToggle} _active={{}}>
           <DropdownCard title="Redeem Date" isOpen={isOpen} />
         </Button>
       </PopoverTrigger>

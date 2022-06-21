@@ -27,7 +27,7 @@ export const RangeFilterCard = ({ onApplyFilter, onResetFilter }: RangeFilterCar
       apply="background.metalBrighter"
       direction={'column'}
       overflow="hidden"
-      sx={{ ...gradientBorder({ borderWidth: 2 }) }}
+      shadow={'up'}
       transition={'.4s all'}
     >
       <Flex height={'40px'} justify="center" width="full" align="center" py={'10'} gap={1}>
