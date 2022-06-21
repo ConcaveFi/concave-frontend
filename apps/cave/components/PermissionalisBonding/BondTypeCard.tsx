@@ -7,6 +7,7 @@ import {
   HStack,
   RangeSlider,
   RangeSliderFilledTrack,
+  RangeSliderMark,
   RangeSliderThumb,
   RangeSliderTrack,
   Slider,
@@ -18,7 +19,7 @@ import {
   Tooltip,
 } from '@concave/ui'
 import { ButtonLink } from 'components/ButtonLink'
-import React from 'react'
+import React, { useState } from 'react'
 import { MdGraphicEq, MdOutlineDashboard } from 'react-icons/md'
 
 export function BondTypeCard() {
@@ -93,69 +94,56 @@ export function BondTypeCard() {
           </Button>
         </HStack>
       </Flex>
-      <Flex shadow="down" width="384px" height="60px" alignContent={'center'} rounded={'2xl'}>
-        <RangeSlider aria-label={['min', 'max']} defaultValue={[30, 80]}>
-          <RangeSliderTrack bg="red.100">
-            <RangeSliderFilledTrack bg="tomato" />
-          </RangeSliderTrack>
-          <RangeSliderThumb boxSize={6} index={0}>
-            <Box color="tomato" as={MdGraphicEq} />
-          </RangeSliderThumb>
-          <RangeSliderThumb boxSize={6} index={1}>
-            <Box color="tomato" as={MdGraphicEq} />
-          </RangeSliderThumb>
-        </RangeSlider>
-      </Flex>
+
+      <RangeSliderExample></RangeSliderExample>
     </Card>
   )
 }
 
-function SliderThumbWithTooltip() {
-  const [sliderValue, setSliderValue] = React.useState(5)
-  const [showTooltip, setShowTooltip] = React.useState(false)
+function RangeSliderExample() {
+  const [rangeSliderValue, setRangeSliderValue] = React.useState([5, 50])
   return (
-    <Slider
-      id="slider"
-      defaultValue={5}
-      min={0}
-      max={360}
-      colorScheme="teal"
-      onChange={(v) => setSliderValue(v)}
-      onMouseEnter={() => setShowTooltip(true)}
-      onMouseLeave={() => setShowTooltip(false)}
-    >
-      <SliderMark value={sliderValue} mb="2" mt="1" ml="-2.5" fontSize="sm">
-        {sliderValue} Days
-      </SliderMark>
-
-      <SliderMark value={70} mb="2" mt="1" ml="-2.5" fontSize="sm">
-        70 Days
-      </SliderMark>
-      <SliderTrack>
-        <SliderFilledTrack />
-      </SliderTrack>
-      <Tooltip
-        hasArrow
-        bg="teal.500"
-        color="white"
-        placement="top"
-        isOpen={showTooltip}
-        label={`${sliderValue}%`}
+    <Flex shadow="down" width="384px" height="77px" alignContent={'center'} rounded={'2xl'}>
+      <RangeSlider
+        aria-label={['min', 'max']}
+        defaultValue={[5, 50]}
+        onChange={setRangeSliderValue}
+        fontWeight={'bold'}
       >
-        <SliderThumb />
-      </Tooltip>
-
-      <RangeSlider aria-label={['min', 'max']} defaultValue={[30, 80]}>
-        <RangeSliderTrack bg="red.100">
-          <RangeSliderFilledTrack bg="tomato" />
+        <RangeSliderMark value={rangeSliderValue[0]} color="white" ml="-6" w="12">
+          <Flex direction={'column'}>
+            <Text mt="-6px">{rangeSliderValue[0] + '%'}</Text>
+            <Text color={'text.low'} mt="4">
+              min
+            </Text>
+          </Flex>
+        </RangeSliderMark>
+        <RangeSliderMark value={rangeSliderValue[1]} color="white" ml="-6" w="12">
+          <Flex direction={'column'}>
+            <Text mt="-6px">{rangeSliderValue[1] + '%'}</Text>
+            <Text color={'text.low'} mt="4">
+              max
+            </Text>
+          </Flex>
+        </RangeSliderMark>
+        <RangeSliderTrack bg={''}>
+          <RangeSliderFilledTrack bg={'linear-gradient(90deg, #72639B 0%, #44B9DE 100%)'} />
         </RangeSliderTrack>
-        <RangeSliderThumb boxSize={6} index={0}>
-          <Box color="tomato" as={MdGraphicEq} />
-        </RangeSliderThumb>
-        <RangeSliderThumb boxSize={6} index={1}>
-          <Box color="tomato" as={MdGraphicEq} />
-        </RangeSliderThumb>
+        <RangeSliderThumb
+          bg={'linear-gradient(90deg, #72639B 0%, #44B9DE 100%)'}
+          bgSize="200%"
+          bgPosition={'center'}
+          boxSize="15px"
+          index={0}
+        />
+        <RangeSliderThumb
+          bg={'linear-gradient(90deg, #72639B 0%, #44B9DE 100%)'}
+          bgSize="200%"
+          bgPosition={'center'}
+          boxSize="15px"
+          index={1}
+        />
       </RangeSlider>
-    </Slider>
+    </Flex>
   )
 }
