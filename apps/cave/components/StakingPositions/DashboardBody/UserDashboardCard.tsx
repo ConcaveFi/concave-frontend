@@ -31,8 +31,6 @@ export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePo
   ])
   const { filterByStakePool } = useFilterByStakePool(stakeFilters)
 
-  console.log(stakeFilters)
-
   const [rangeFilter, setRangeFilter] = useState<RangeFilter>({})
   const { filterByRange } = useFilterByRange(rangeFilter)
 
