@@ -171,7 +171,7 @@ export default function TreasuryRevenueCard(props) {
 
 export const numSplice = (s: string | Number, decimals?: number) => {
   const a = s.toString()
-  const _decimals = decimals + 1 || 3
+  const _decimals = decimals + 1
   return a.indexOf('.') > -1 ? a.slice(0, a.indexOf('.') + _decimals) : a
 }
 
