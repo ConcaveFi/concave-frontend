@@ -1,9 +1,9 @@
 import { Box, Button, Collapse, Flex, Spinner, Text, useBreakpointValue } from '@concave/ui'
-import { FilterContainer } from 'components/Dashboard/DashboardBody/FilterContainer'
 import { useRouter } from 'next/router'
 import { useConnect } from 'wagmi'
 import { UserPositionCard } from '../LockPosition/Card/UserPositionCard'
 import { UseStakePositionsState } from './DashBoardState'
+import { FilterContainer } from './FilterContainer'
 import { UserDividendCard } from './UserDividendCard'
 
 export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePositionsState }) => {
