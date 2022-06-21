@@ -1,5 +1,5 @@
 import { filter } from '@chakra-ui/react'
-import { NonFungibleTokenInfo } from '@concave/marketplace'
+import { StakingPosition } from '@concave/marketplace'
 
 export enum StakePoolFilter {
   FILTER_BY_45_DAYS = 3,
@@ -9,6 +9,6 @@ export enum StakePoolFilter {
 }
 
 export const useFilterByStakePool = (filters: StakePoolFilter[]) => ({
-  filterByStakePool: (current: NonFungibleTokenInfo) =>
+  filterByStakePool: (current: StakingPosition) =>
     filters.some((value) => current.poolID === value),
 })
