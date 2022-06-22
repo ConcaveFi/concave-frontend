@@ -1,8 +1,10 @@
 import { SpinIcon, SpinnerIcon } from '@concave/icons'
-import { Card, Flex, keyframes, ScaleFade, Text } from '@concave/ui'
+import { Card, Flex, HStack, keyframes, ScaleFade, Text } from '@concave/ui'
 import { withPageTransition } from 'components/PageTransition'
+import { BondChartSimulation } from 'components/PermissionalisBonding/bondchart'
 import { BondOfferHeader } from 'components/PermissionalisBonding/BondOfferHeader'
 import { BondTypeCard } from 'components/PermissionalisBonding/BondTypeCard'
+import { BondableAssets } from 'components/PermissionalisBonding/bondableAssetsCard'
 
 import TreasuryManagementMobile, {
   spinAnimation,
@@ -10,10 +12,15 @@ import TreasuryManagementMobile, {
 
 export function BondOffer() {
   return (
-    <Flex align={'center'} justify="start" direction={'column'} width={'full'} textAlign="center">
+    <Flex align={'center'} direction={'column'} width={'full'} height={'full'} textAlign="center">
       <BondOfferHeader />
-      <BondTypeCard />
-      <Flex justify={'center'} position="relative"></Flex>
+      <Flex flexDirection={'row'} justify="center" mt={8} width={'full'} gap={8}>
+        <BondTypeCard />
+        <BondChartSimulation></BondChartSimulation>
+      </Flex>
+      <Flex mt={8} width={'full'} gap={8}>
+        <BondableAssets></BondableAssets>
+      </Flex>
     </Flex>
   )
 }

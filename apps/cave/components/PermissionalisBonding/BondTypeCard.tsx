@@ -23,6 +23,7 @@ import React, { useState } from 'react'
 import { MdGraphicEq, MdOutlineDashboard } from 'react-icons/md'
 
 export function BondTypeCard() {
+  const [rangeSliderValue, setRangeSliderValue] = React.useState([5, 50])
   return (
     <Card
       p={5}
@@ -32,9 +33,9 @@ export function BondTypeCard() {
       shadow="Block Up"
       w="100%"
       maxW="430px"
-      height="386px"
+      height="332px"
     >
-      <Flex shadow="down" width="384px" height="60px" alignContent={'center'} rounded={'2xl'}>
+      <Flex shadow="down" width="400px" height="60px" alignContent={'center'} rounded={'2xl'}>
         <Text
           fontWeight="bold"
           verticalAlign={'bottom'}
@@ -49,7 +50,7 @@ export function BondTypeCard() {
 
       <Flex
         shadow="down"
-        width="384px"
+        width="400px"
         height="60px"
         mt={2}
         alignContent={'center'}
@@ -95,55 +96,113 @@ export function BondTypeCard() {
         </HStack>
       </Flex>
 
-      <RangeSliderExample></RangeSliderExample>
+      <BondSlider
+        onChangeValue={setRangeSliderValue}
+        label1={'Vesting Term:'}
+        label2={'Days'}
+        maxValue={360}
+        defaultValue={[0, 360]}
+      ></BondSlider>
+      <BondSlider
+        onChangeValue={setRangeSliderValue}
+        label1={'Discount Range:'}
+        label2={'%'}
+        maxValue={100}
+        defaultValue={[0, 100]}
+        step={0.05}
+      ></BondSlider>
     </Card>
   )
 }
+type sliderLabel = {
+  onChangeValue: ([minValue, maxValue]: [number, number]) => void
+  label1: string
+  label2: string
+  maxValue?: number
+  minValue?: number
+  step?: number
+  defaultValue?: number[]
+}
 
-function RangeSliderExample() {
-  const [rangeSliderValue, setRangeSliderValue] = React.useState([5, 50])
+function BondSlider(props: sliderLabel) {
+  const { onChangeValue, label1, label2, maxValue, minValue, step, defaultValue } = props
+
+  const min = minValue || 0
+  const max = maxValue || 100
+  const _step = step || 1
+  const _defaultValue = [defaultValue[0], defaultValue[1]] || [5, 50]
+  const [rangeSliderValue, setRangeSliderValue] = React.useState([
+    _defaultValue[0],
+    _defaultValue[1],
+  ])
+
   return (
-    <Flex shadow="down" width="384px" height="77px" alignContent={'center'} rounded={'2xl'}>
-      <RangeSlider
-        aria-label={['min', 'max']}
-        defaultValue={[5, 50]}
-        onChange={setRangeSliderValue}
-        fontWeight={'bold'}
-      >
-        <RangeSliderMark value={rangeSliderValue[0]} color="white" ml="-6" w="12">
-          <Flex direction={'column'}>
-            <Text mt="-6px">{rangeSliderValue[0] + '%'}</Text>
-            <Text color={'text.low'} mt="4">
-              min
-            </Text>
-          </Flex>
-        </RangeSliderMark>
-        <RangeSliderMark value={rangeSliderValue[1]} color="white" ml="-6" w="12">
-          <Flex direction={'column'}>
-            <Text mt="-6px">{rangeSliderValue[1] + '%'}</Text>
-            <Text color={'text.low'} mt="4">
-              max
-            </Text>
-          </Flex>
-        </RangeSliderMark>
-        <RangeSliderTrack bg={''}>
-          <RangeSliderFilledTrack bg={'linear-gradient(90deg, #72639B 0%, #44B9DE 100%)'} />
-        </RangeSliderTrack>
-        <RangeSliderThumb
-          bg={'linear-gradient(90deg, #72639B 0%, #44B9DE 100%)'}
-          bgSize="200%"
-          bgPosition={'center'}
-          boxSize="15px"
-          index={0}
-        />
-        <RangeSliderThumb
-          bg={'linear-gradient(90deg, #72639B 0%, #44B9DE 100%)'}
-          bgSize="200%"
-          bgPosition={'center'}
-          boxSize="15px"
-          index={1}
-        />
-      </RangeSlider>
+    <Flex
+      shadow="down"
+      width="400px"
+      height="77px"
+      alignContent={'center'}
+      rounded={'2xl'}
+      flexDirection="row"
+    >
+      <Flex width="120px" align="center">
+        <Text color={'text.low'} fontSize="14px">
+          {label1}
+        </Text>
+      </Flex>
+      <Flex width="242px ">
+        <RangeSlider
+          min={min}
+          max={max}
+          step={_step}
+          defaultValue={[_defaultValue[0], _defaultValue[1]]}
+          onChange={(value) => {
+            setRangeSliderValue(value)
+            onChangeValue([value[0], value[1]])
+          }}
+          fontWeight={'bold'}
+        >
+          <RangeSliderMark value={rangeSliderValue[0]} color="white" ml="-6" w="14">
+            <Flex direction={'column'}>
+              <Text fontSize="12px">
+                {rangeSliderValue[0]} {label2}{' '}
+              </Text>
+              <Text color={'text.low'} mt="6">
+                min
+              </Text>
+            </Flex>
+          </RangeSliderMark>
+          <RangeSliderMark value={rangeSliderValue[1]} color="white" ml="-6" w="14">
+            <Flex direction={'column'}>
+              <Text fontSize="12px">{rangeSliderValue[1] + ' ' + label2}</Text>
+              <Text color={'text.low'} mt="6">
+                max
+              </Text>
+            </Flex>
+          </RangeSliderMark>
+          <RangeSliderTrack bg={''}>
+            <Box border="2px dotted" borderColor="text.low"></Box>
+            <RangeSliderFilledTrack
+              position={'absolute'}
+              bg={'linear-gradient(90deg, #72639B 0%, #44B9DE 100%)'}
+            />
+          </RangeSliderTrack>
+          <RangeSliderThumb
+            bg={'linear-gradient(90deg, #72639B 0%, #44B9DE 100%)'}
+            bgSize="200%"
+            bgPosition={'center'}
+            boxSize="15px"
+            index={0}
+          />
+          <RangeSliderThumb
+            bg={'linear-gradient(90deg, #72639B 0%, #44B9DE 100%)'}
+            bgSize="200%"
+            bgPosition={'center'}
+            boxSize="15px"
+            index={1}
+          />
+        </RangeSlider>
+      </Flex>
     </Flex>
   )
 }
