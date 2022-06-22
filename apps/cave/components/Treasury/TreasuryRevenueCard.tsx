@@ -3,6 +3,7 @@ import { formatDistanceStrict } from 'date-fns'
 import { commify } from 'ethers/lib/utils'
 import { useGet_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql'
 import { useCNVPrice } from 'hooks/useCNVPrice'
+import { numberMask } from 'utils/numberMask'
 
 export const TreasuryInfoItem = ({ label, amount, ...props }) => (
   <Flex
@@ -113,7 +114,7 @@ export default function TreasuryRevenueCard(props) {
   const reducer = (acc: any, curr: any) => acc + curr
   const seed = 600000
   const total = sumTotal.reduce(reducer) + seed
-  console.log(cnv.cnvData, 'what is cnv test')
+
   const { data, isLoading, isSuccess } = useGet_Accrualbondv1_Last10_SoldQuery()
 
   const lastsSolds = data?.logAccrualBondsV1_BondSold
@@ -167,21 +168,4 @@ export default function TreasuryRevenueCard(props) {
       </Flex>
     </Card>
   )
-}
-
-export const numSplice = (s: string | Number, decimals?: number) => {
-  const a = s.toString()
-  const _decimals = decimals + 1
-  return a.indexOf('.') > -1 ? a.slice(0, a.indexOf('.') + _decimals) : a
-}
-
-export const numberMask = (number: Number, decimals?: number) => {
-  if (number === 0) {
-    return `0`
-  }
-  if (number < 0.01) {
-    return `<.01`
-  }
-  const _decimals = decimals || 2
-  return commify(numSplice(number, _decimals))
 }

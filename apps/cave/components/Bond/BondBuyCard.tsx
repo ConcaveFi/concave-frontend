@@ -17,8 +17,8 @@ import { useQuery } from 'react-query'
 import { GasPrice } from 'components/AMM'
 import { useCNVPrice } from 'hooks/useCNVPrice'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
-import { commify } from 'ethers/lib/utils'
-import { numberMask } from 'components/Treasury/TreasuryRevenueCard'
+
+import { numberMask } from 'utils/numberMask'
 
 export function BondBuyCard(props: {
   bondTransaction?: any
@@ -57,7 +57,6 @@ export function BondBuyCard(props: {
 
   const { registerTransaction } = useTransactionRegistry()
 
- 
   return (
     <Card
       p={5}
@@ -198,4 +197,4 @@ export function BondBuyCard(props: {
   )
 }
 
-// 
+//
