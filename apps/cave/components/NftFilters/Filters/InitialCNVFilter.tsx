@@ -6,7 +6,7 @@ type InitialFilter = {
   onApplyFilter: (rangeFilter: RangeFilter) => void
   onResetFilter: () => void
 }
-export const InitialFilter = ({ onApplyFilter, onResetFilter }: InitialFilter) => {
+export const InitialCNVFilter = ({ onApplyFilter, onResetFilter }: InitialFilter) => {
   const { isOpen, onToggle, onClose } = useDisclosure()
   return (
     <Popover onClose={onClose}>

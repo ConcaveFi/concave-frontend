@@ -1,14 +1,10 @@
 import { Box, Button, Collapse, Flex, Spinner, Text } from '@concave/ui'
 import { RangeFilter, useFilterByRange } from 'components/NftFilters/Filters/hooks/useFilterByRange'
 import {
-  StakePoolFilter,
+  StakePoolFilterEnum,
   useFilterByStakePool,
 } from 'components/NftFilters/Filters/hooks/useFilterByStakePool'
-import {
-  NftSorter,
-  NftSorterType,
-  useNFtSorter,
-} from 'components/NftFilters/Sorters/hooks/useNftSorter'
+import { NftSort, NftSortMethod, useNftSort } from 'components/NftFilters/Sorters/hooks/useNftSort'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useConnect } from 'wagmi'
@@ -24,18 +20,18 @@ export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePo
 
   // Sorters && filters
   const [stakeFilters, setStakeFilters] = useState([
-    StakePoolFilter.FILTER_BY_45_DAYS,
-    StakePoolFilter.FILTER_BY_90_DAYS,
-    StakePoolFilter.FILTER_BY_180_DAYS,
-    StakePoolFilter.FILTER_BY_360_DAYS,
+    StakePoolFilterEnum.FILTER_BY_45_DAYS,
+    StakePoolFilterEnum.FILTER_BY_90_DAYS,
+    StakePoolFilterEnum.FILTER_BY_180_DAYS,
+    StakePoolFilterEnum.FILTER_BY_360_DAYS,
   ])
   const { filterByStakePool } = useFilterByStakePool(stakeFilters)
 
   const [rangeFilter, setRangeFilter] = useState<RangeFilter>({})
   const { filterByRange } = useFilterByRange(rangeFilter)
 
-  const [sorter, setSorter] = useState<NftSorter>({ sorter: NftSorterType.NONE, order: 'ASC' })
-  const { sorter: sorterFunction } = useNFtSorter(sorter)
+  const [sort, setSort] = useState<NftSort>({ sort: NftSortMethod.NONE, order: 'ASC' })
+  const sortFunction = useNftSort(sort)
 
   return (
     <Flex display={{ lg: 'flex', md: 'flex' }}>
@@ -59,11 +55,11 @@ export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePo
           <UserDividendCard isLoading={isLoading} totalLocked={totalLocked} />
         </Flex>
         <FilterContainer
-          onApplyFilter={setRangeFilter}
-          onResetFilter={() => setRangeFilter({})}
-          onChangeSorter={setSorter}
-          onEnableFilter={(filter) => setStakeFilters([...stakeFilters, filter])}
-          onDisableFilter={(disabledFilter) =>
+          onApplyInitalCNVFilter={setRangeFilter}
+          onResetInitialCNVFilter={() => setRangeFilter({})}
+          onChangeSorter={(sort) => setSort(sort)}
+          onEnableStakeFilter={(filter) => setStakeFilters([...stakeFilters, filter])}
+          onDisableStakeFilter={(disabledFilter) =>
             setStakeFilters(stakeFilters.filter((stakeFilter) => stakeFilter !== disabledFilter))
           }
         />
@@ -84,7 +80,7 @@ export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePo
             {userNonFungibleTokensInfo
               .filter(filterByStakePool)
               .filter(filterByRange)
-              .sort(sorterFunction)
+              .sort(sortFunction)
               .map((nonFungibleTokenInfo) => (
                 <UserPositionCard
                   key={+nonFungibleTokenInfo.tokenId.toString()}

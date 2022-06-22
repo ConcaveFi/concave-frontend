@@ -1,10 +1,11 @@
 import { Flex, Text } from '@chakra-ui/react'
+import { PARAMETER_TO_POOL_PERIOD } from 'components/LiquidStaking/StakeCard'
 import { ToggleButton } from 'components/ToggleButton'
-import { StakePoolFilter } from './hooks/useFilterByStakePool'
+import { StakePoolFilterEnum } from './hooks/useFilterByStakePool'
 type StakeToggleButton = {
-  filter: StakePoolFilter
-  onEnableFilter: (filter: StakePoolFilter) => void
-  onDisableFilter: (filter: StakePoolFilter) => void
+  filter: StakePoolFilterEnum
+  onEnableFilter: (filter: StakePoolFilterEnum) => void
+  onDisableFilter: (filter: StakePoolFilterEnum) => void
 }
 
 export const StakeToggleButton: React.FC<StakeToggleButton> = ({
@@ -15,7 +16,7 @@ export const StakeToggleButton: React.FC<StakeToggleButton> = ({
   return (
     <Flex textColor={'gray.300'} fontWeight="bold" width={'full'} justify="space-between" px={4}>
       <Text textAlign={'end'} width="70px">
-        {nameByFilter[filter]}
+        {PARAMETER_TO_POOL_PERIOD[filter]}
       </Text>
       <ToggleButton
         enabled={true}
@@ -26,11 +27,4 @@ export const StakeToggleButton: React.FC<StakeToggleButton> = ({
       />
     </Flex>
   )
-}
-
-const nameByFilter = {
-  3: '45 Days',
-  2: '90 Days',
-  1: '180 Days',
-  0: '360 Days',
 }

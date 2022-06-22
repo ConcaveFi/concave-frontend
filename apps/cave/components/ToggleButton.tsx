@@ -1,12 +1,12 @@
 import { Box, Flex, useDisclosure } from '@concave/ui'
 import { useEffect } from 'react'
 
-type ToggleButton = {
+type ToggleButtonProps = {
   onToggle: (enabled: boolean) => void
   enabled?: boolean
 }
 
-export const ToggleButton = ({ onToggle, enabled }: ToggleButton) => {
+export const ToggleButton = ({ onToggle, enabled }: ToggleButtonProps) => {
   const { isOpen: isEnabled, onToggle: onToggleEnabled } = useDisclosure({
     defaultIsOpen: enabled || false,
   })
