@@ -12,20 +12,19 @@ import {
   Box,
 } from '@concave/ui'
 import { HamburgerIcon } from '@concave/icons'
+import { motion } from 'framer-motion'
 import SideBarTop from './SideBarTop'
 import SideBarBottom from './SideBarBottom'
 import PageNav from './PageNav'
-import { useSwipeable } from 'react-swipeable'
 
 export function SideBar() {
   const { isOpen, onOpen, onClose } = useDisclosure()
-
-  const swipeableHandlers = useSwipeable({ onSwipedLeft: onClose })
 
   return (
     <>
       {/* show on bigger screens like not mobile lol */}
       <SidebarContent display={{ base: 'none', md: 'flex' }} />
+
       {/* show on small devices (mobile) */}
       <Box mb={20}>
         <Flex
@@ -45,25 +44,35 @@ export function SideBar() {
           <HamburgerIcon />
           <Image src="/assets/concave/logotype.svg" alt="concave" width="100px" ml={2} />
         </Flex>
-        <Drawer
-          autoFocus={true}
-          closeOnOverlayClick={true}
-          isOpen={isOpen}
-          placement="left"
-          onClose={onClose}
-        >
-          <DrawerOverlay backdropFilter="blur(8px)" />
-          <DrawerContent
-            maxW="min"
-            bg="none"
-            shadow="none"
-            overflow="auto"
-            sx={{ '::-webkit-scrollbar': { display: 'none' }, scrollbarWidth: 'none' }}
-          >
-            <SidebarContent {...swipeableHandlers} />
-          </DrawerContent>
-        </Drawer>
       </Box>
+
+      <Drawer
+        autoFocus={false}
+        closeOnOverlayClick={true}
+        isOpen={isOpen}
+        placement="left"
+        onClose={onClose}
+      >
+        <DrawerOverlay backdropFilter="blur(8px)" />
+        <DrawerContent
+          maxW="min"
+          bg="none"
+          shadow="none"
+          overflow="auto"
+          sx={{ '::-webkit-scrollbar': { display: 'none' }, scrollbarWidth: 'none' }}
+        >
+          <SidebarContent
+            drag="x"
+            onDragEnd={(a, i) => {
+              if (i.offset.x < -200) onClose()
+            }}
+            dragElastic={{ left: 0.3, right: 0 }}
+            dragSnapToOrigin
+            dragMomentum={false}
+            dragConstraints={{ left: 10, right: 0 }}
+          />
+        </DrawerContent>
+      </Drawer>
     </>
   )
 }
@@ -71,6 +80,7 @@ export function SideBar() {
 const SidebarContent = forwardRef<CardProps, 'div'>((props, ref) => {
   return (
     <Card
+      as={motion.aside}
       ref={ref}
       variant="primary"
       apply="background.sidebar"
@@ -92,13 +102,9 @@ const SidebarContent = forwardRef<CardProps, 'div'>((props, ref) => {
       <Stack spacing="50px" mt="50px" mr={-3} ml="auto" pb={8} w="max">
         <PageNav />
       </Stack>
-      <Flex ml="4" mt="20px">
+      <Flex mt={5}>
         <SideBarBottom />
       </Flex>
-      {/* <Flex         
-      align="center">
-        <SideBarBottom />
-      </Flex> */}
     </Card>
   )
 })
