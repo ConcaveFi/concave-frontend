@@ -1,7 +1,7 @@
 import { commify } from 'ethers/lib/utils'
 
 /**
- * Adds decimals if '.' character is found
+ * Adds decimals if '.' character is found, otherwise returns number string without modification
  * @param number - number to modify
  * @param decimalCount - amount of decimal places
  * @returns a number in string format
