@@ -57,7 +57,7 @@ export function BondBuyCard(props: {
 
   const { registerTransaction } = useTransactionRegistry()
 
-  let spotPrice = +bondSpotPrice //i was getting errors, when trying to use unary on its own to convert to number.
+ 
   return (
     <Card
       p={5}
