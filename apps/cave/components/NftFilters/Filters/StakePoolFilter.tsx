@@ -9,12 +9,12 @@ import {
 } from '@chakra-ui/react'
 import { Card, gradientBorder } from '@concave/ui'
 import { DropdownCard } from '../DropdownCard'
-import { StakePoolFilter } from './hooks/useFilterByStakePool'
+import { StakePoolFilterEnum } from './hooks/useFilterByStakePool'
 import { StakeToggleButton } from './StakeToggleButton'
 
 type StakePoolFilterCard = {
-  onEnableFilter: (filter: StakePoolFilter) => void
-  onDisableFilter: (filter: StakePoolFilter) => void
+  onEnableFilter: (filter: StakePoolFilterEnum) => void
+  onDisableFilter: (filter: StakePoolFilterEnum) => void
 }
 
 export const StakePoolFilterCard = ({ onDisableFilter, onEnableFilter }: StakePoolFilterCard) => {
@@ -47,7 +47,7 @@ export const StakePoolFilterCard = ({ onDisableFilter, onEnableFilter }: StakePo
             transition={'0.3s all'}
             justify="center"
           >
-            {Object.values(StakePoolFilter)
+            {Object.values(StakePoolFilterEnum)
               .filter((filter) => typeof filter !== 'string')
               .map((filter, index) => (
                 <StakeToggleButton
