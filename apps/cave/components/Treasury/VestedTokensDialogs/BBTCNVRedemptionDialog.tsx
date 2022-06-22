@@ -4,6 +4,7 @@ import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialo
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { RedeemBBT_CNV_Abi } from 'contracts/VestedTokens/RedeemBbtCNVAbi'
 import { Contract, Transaction, utils } from 'ethers'
+import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { concaveProvider as provider } from 'lib/providers'
 import { useState } from 'react'
 import { useAccount, useConnect, useSigner } from 'wagmi'
@@ -29,6 +30,8 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
   const { data: redeemableData, isLoading } = useBBTCNVRedeemable()
   const { bbtCNVData } = useVestedTokens()
 
+  const { registerTransaction } = useTransactionRegistry()
+
   const balance = +bbtCNVData?.formatted || 0
   const redeemable =
     (!isLoading && redeemableData && +utils.formatEther(redeemableData?.redeemable)) || 0
@@ -45,6 +48,7 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
     RedeemBBT_CNV_Abi,
     provider(1),
   )
+
   return (
     <>
       <Modal
@@ -99,6 +103,10 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
                 .redeem(redeemableData.redeemable, account?.address, account?.address, true)
                 .then((tx) => {
                   onCloseConfirm()
+                  registerTransaction(tx, {
+                    type: 'redeem',
+                    amount: `${bbtCNVData.formatted} bbtCNV`,
+                  })
                   setTx(tx)
                   onOpenSub()
                 })

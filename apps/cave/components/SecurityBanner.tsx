@@ -5,7 +5,7 @@ import React, { useState } from 'react'
 function SecurityBanner() {
   const [isOpen, setIsOpen] = useState(true)
   return (
-    <Box mx="auto" pos="absolute" top={{ base: 12, md: 4 }} left={{ base: 0, md: 300 }}>
+    <Box mx="auto" pos="absolute" top={{ base: 12, md: 4 }} zIndex={10} left={{ base: 0, md: 300 }}>
       {isOpen && (
         <Card
           variant="secondary"

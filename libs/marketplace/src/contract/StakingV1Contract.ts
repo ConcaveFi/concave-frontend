@@ -3,7 +3,7 @@ import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/p
 import { StakingV1Abi } from './StakingV1Abi'
 import { BaseProvider } from '@ethersproject/providers'
 import { STAKING_CONTRACT } from '@concave/core'
-import { StakePool, StakingPosition, UserReward } from 'src/entities'
+import { Position, StakePool, StakingPosition, StakingReward } from 'src/entities'
 
 export class StakingV1Contract {
   private readonly contract: ethers.Contract
@@ -19,9 +19,9 @@ export class StakingV1Contract {
     return this.contract.viewStakingCap(tokenId.toString())
   }
 
-  public async viewPositionRewards(tokenId: BigNumberish): Promise<UserReward> {
+  public async viewPositionRewards(tokenId: BigNumberish): Promise<StakingReward> {
     const rewards = await this.contract.viewPositionRewards(tokenId)
-    return { ...rewards }
+    return new StakingReward(rewards)
   }
 
   public async lock(
@@ -37,10 +37,8 @@ export class StakingV1Contract {
     return this.contract.pools(index).then((p) => ({ ...p }))
   }
 
-  public async positions(tokenId: BigNumberish): Promise<StakingPosition> {
-    return this.contract
-      .positions(tokenId)
-      .then((p) => new StakingPosition({ tokenId, chainId: this.provider.network.chainId, ...p }))
+  public async positions(tokenId: BigNumberish): Promise<Position> {
+    return this.contract.positions(tokenId).then((p: Position) => ({ ...p }))
   }
 
   public async balanceOf(address: string): Promise<BigNumber> {

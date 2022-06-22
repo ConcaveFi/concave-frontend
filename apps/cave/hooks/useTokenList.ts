@@ -49,7 +49,8 @@ export const useAddressTokenList: (address?: string) => UseQueryResult<Token[], 
   address: string,
 ) => {
   const { activeChain } = useNetwork()
-  const chainName = activeChain?.id === chain.rinkeby.id ? chain.rinkeby.name : chain.mainnet.name
+  // const chainName = activeChain?.id === chain.rinkeby.id ? chain.rinkeby.name : chain.mainnet.name
+  const chainName = activeChain?.id === chain.rinkeby.id ? chain.rinkeby.name : 'eth'
   const url = `https://deep-index.moralis.io/api/v2/${address}/erc20?chain=${chainName}`
   return useQuery(['LISTTOKENS', address], () => {
     if (!address) {

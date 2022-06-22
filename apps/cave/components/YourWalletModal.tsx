@@ -30,11 +30,12 @@ export default function YourWalletModal(props: YourWalletModalProps) {
     >
       <Flex
         direction={'column'}
+        justify="space-between"
         rounded={'2xl'}
-        w={{ base: '330px', sm: '380px' }}
-        maxW="380px"
-        h="320px"
+        // h="300px"
+        gap={6}
         m={-3}
+        p={6}
         shadow={'up'}
       >
         <YourWalletContainer onClose={props.onClose} value={ellipseAddress(account?.address)} />

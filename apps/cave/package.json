@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@0xsequence/multicall": "^0.39.0",
-    "@apollo/client": "^3.6.5",
+    "@apollo/client": "^3.6.8",
     "@badrap/bar-of-progress": "^0.2.1",
     "@chakra-ui/cli": "^2.1.0",
     "@chakra-ui/react": "^2.2.0",
@@ -27,7 +27,7 @@
     "@graphql-codegen/cli": "^2.6.2",
     "@graphql-codegen/introspection": "^2.1.1",
     "@graphql-codegen/typescript": "^2.4.11",
-    "@graphql-codegen/typescript-operations": "^2.3.7",
+    "@graphql-codegen/typescript-operations": "^2.4.2",
     "@graphql-codegen/typescript-react-query": "^3.5.12",
     "@testing-library/jest-dom": "^5.16.3",
     "@testing-library/react": "^13.2.0",
@@ -57,14 +57,14 @@
     "react-swipeable": "^7.0.0",
     "react-use": "^17.3.2",
     "siwe": "^1.1.6",
-    "wagmi": "^0.4.9"
+    "wagmi": "^0.4.12"
   },
   "devDependencies": {
     "@chakra-ui/cli": "^2.0.0",
     "@graphql-codegen/cli": "^2.6.2",
     "@graphql-codegen/introspection": "^2.1.1",
     "@graphql-codegen/typescript": "^2.4.11",
-    "@graphql-codegen/typescript-operations": "^2.3.5",
+    "@graphql-codegen/typescript-operations": "^2.4.2",
     "@graphql-codegen/typescript-react-query": "^3.5.12",
     "@types/gtag.js": "^0.0.10",
     "@types/ms": "^0.7.31",
