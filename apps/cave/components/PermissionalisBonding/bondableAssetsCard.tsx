@@ -14,6 +14,35 @@ export function BondableAssets() {
       w="100%"
       maxW="506px"
       height="352px"
-    ></Card>
+    >
+      <Flex flexDir={'column'} align="center">
+        <Flex
+          shadow="down"
+          width="474px"
+          height="110px"
+          alignContent={'center'}
+          rounded={'2xl'}
+        ></Flex>
+        <Flex
+          shadow="down"
+          width="474px"
+          height="110px"
+          alignContent={'center'}
+          rounded={'2xl'}
+        ></Flex>
+        <Button
+          my={3}
+          variant="primary"
+          size="lg"
+          w="278px"
+          h="49px"
+          bgColor="secondary.75"
+          fontSize="14px"
+          rounded={'3xl'}
+        >
+          Confirm
+        </Button>
+      </Flex>
+    </Card>
   )
 }

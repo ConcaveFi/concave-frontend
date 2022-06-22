@@ -12,7 +12,7 @@ export function BondChartSimulation() {
       h="fit-content"
       shadow="Block Up"
       w="100%"
-      maxW="416px"
+      maxW="430px"
       height="332px"
     ></Card>
   )
