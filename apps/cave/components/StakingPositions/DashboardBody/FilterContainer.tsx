@@ -1,6 +1,6 @@
 import { Flex, Text, useBreakpointValue } from '@concave/ui'
 import { RangeFilter } from 'components/NftFilters/Filters/hooks/useFilterByRange'
-import { StakePoolFilter } from 'components/NftFilters/Filters/hooks/useFilterByStakePool'
+import { StakePoolFilterEnum } from 'components/NftFilters/Filters/hooks/useFilterByStakePool'
 import { InitialCNVFilter } from 'components/NftFilters/Filters/InitialCNVFilter'
 import { RedeemDateFilter } from 'components/NftFilters/Filters/RedeemDateFilter'
 import { StakePoolFilterCard } from 'components/NftFilters/Filters/StakePoolFilter'
@@ -9,11 +9,11 @@ import { SorterCard } from 'components/NftFilters/Sorters/SorterCard'
 import { useState } from 'react'
 
 interface FilterContainerProps {
-  onEnableStakeFilter: (filter: StakePoolFilter) => void
+  onEnableStakeFilter: (filter: StakePoolFilterEnum) => void
   onApplyInitalCNVFilter: (rangeFilter: RangeFilter) => void
   onResetInitialCNVFilter: () => void
   onChangeSorter: (sorter: NftSort) => void
-  onDisableStakeFilter: (filter: StakePoolFilter) => void
+  onDisableStakeFilter: (filter: StakePoolFilterEnum) => void
 }
 
 export function FilterContainer({
