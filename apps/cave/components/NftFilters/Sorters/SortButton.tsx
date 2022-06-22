@@ -9,7 +9,7 @@ type SorterButton = {
   onClick: (sorter: NftSort) => void
 }
 
-export const SorterButton = ({ sorter, title, enabled, onClick }: SorterButton) => {
+export const SortButton = ({ sorter, title, enabled, onClick }: SorterButton) => {
   return (
     <Flex
       width="full"
@@ -34,7 +34,7 @@ export const SorterButton = ({ sorter, title, enabled, onClick }: SorterButton) 
       </Text>
       {enabled && (
         <Tooltip
-          label="Remove Sorter"
+          label="Remove Sort"
           textColor={'white'}
           textShadow="0px 0px 10px #333"
           bg="text.low"

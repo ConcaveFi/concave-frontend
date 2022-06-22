@@ -5,7 +5,7 @@ import { InitialCNVFilter } from 'components/NftFilters/Filters/InitialCNVFilter
 import { RedeemDateFilter } from 'components/NftFilters/Filters/RedeemDateFilter'
 import { StakePoolFilterCard } from 'components/NftFilters/Filters/StakePoolFilter'
 import { NftSort } from 'components/NftFilters/Sorters/hooks/useNftSort'
-import { SorterCard } from 'components/NftFilters/Sorters/SorterCard'
+import { SortCard } from 'components/NftFilters/Sorters/SortCard'
 import { useState } from 'react'
 
 interface FilterContainerProps {
@@ -56,7 +56,7 @@ export function FilterContainer({
           <Text fontWeight={'bold'} textColor="text.low">
             Sort by:
           </Text>
-          <SorterCard onChangeSorter={onChangeSorter} />
+          <SortCard onChangeSorter={onChangeSorter} />
         </Flex>
       </Flex>
     </Flex>

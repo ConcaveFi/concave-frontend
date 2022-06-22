@@ -11,12 +11,12 @@ import {
 import { useState } from 'react'
 import { DropdownCard } from '../DropdownCard'
 import { NftSort, NftSortMethod } from './hooks/useNftSort'
-import { SorterButton } from './SorterButton'
+import { SortButton } from './SortButton'
 
 type SorterCard = {
   onChangeSorter: (sorter: NftSort) => void
 }
-export const SorterCard = ({ onChangeSorter }: SorterCard) => {
+export const SortCard = ({ onChangeSorter }: SorterCard) => {
   const { isOpen, onToggle, onClose } = useDisclosure()
   const [title, setTitle] = useState<string>('')
   return (
@@ -45,7 +45,7 @@ export const SorterCard = ({ onChangeSorter }: SorterCard) => {
             overflow={'hidden'}
           >
             {sorterButtons.map((sorter, index) => (
-              <SorterButton
+              <SortButton
                 enabled={title === sorter.title}
                 onClick={(clickedSorter) => {
                   if (clickedSorter.sort === NftSortMethod.NONE) setTitle('None')
