@@ -56,6 +56,7 @@ export function BondBuyCard(props: {
   } = useDisclosure()
 
   const { registerTransaction } = useTransactionRegistry()
+
   let spotPrice = +bondSpotPrice //i was getting errors, when trying to use unary on its own to convert to number.
   return (
     <Card
@@ -183,7 +184,7 @@ export function BondBuyCard(props: {
       />
       <WaitingConfirmationDialog isOpen={hasClickedConfirm} title={'Confirm Bond'}>
         <Text fontSize="lg" color="text.accent">
-          Bonding {amountIn.toString()} {currencyIn.symbol} for {amountOut} CNV.
+          Bonding {amountIn.toString()} for {amountOut} CNV.
         </Text>
       </WaitingConfirmationDialog>
       <TransactionSubmittedDialog
