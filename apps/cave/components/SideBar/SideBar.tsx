@@ -64,7 +64,7 @@ export function SideBar() {
           <SidebarContent
             drag="x"
             onDragEnd={(a, i) => {
-              if (i.offset.x < -200) onClose()
+              if (i.offset.x < -150) onClose()
             }}
             dragElastic={{ left: 0.3, right: 0 }}
             dragSnapToOrigin

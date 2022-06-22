@@ -20,6 +20,7 @@ export const Layout = ({ children }) => {
       <Container
         display="flex"
         maxWidth="container.xl"
+        position="relative"
         p={'0px'}
         pb={{ base: '300px', md: '0' }} // add a lil padding to the bottom on small screens (mobile)
       >
