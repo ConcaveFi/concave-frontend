@@ -69,7 +69,7 @@ export function SideBar() {
             dragElastic={{ left: 0.3, right: 0 }}
             dragSnapToOrigin
             dragMomentum={false}
-            dragConstraints={{ left: 10, right: 0 }}
+            dragConstraints={{ left: 0, right: 0 }}
           />
         </DrawerContent>
       </Drawer>
