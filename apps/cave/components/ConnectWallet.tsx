@@ -106,11 +106,12 @@ export function ConnectWallet(): JSX.Element {
           height="40px"
           shadow="up"
           fontFamily="heading"
+          color="text.low"
+          _focus={{ color: 'text.high', shadow: 'up' }}
           w="100%"
           rounded={'2xl'}
-          _focus={{}}
         >
-          <Flex textColor={'text.low'} fontWeight="bold" mx={'auto'}>
+          <Flex fontWeight="bold" mx={'auto'}>
             {ellipseAddress(account?.address)}
           </Flex>
           {lastTransactions.some((tx) => tx.status === 'pending') && (
@@ -123,6 +124,5 @@ export function ConnectWallet(): JSX.Element {
       </>
     )
 
-  // if (isConnected && !isSignedIn) return
   return <ConnectButton />
 }

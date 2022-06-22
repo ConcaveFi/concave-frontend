@@ -20,7 +20,6 @@ const NavButton = (props: ButtonLinkProps) => {
       w="175px"
       borderRightRadius={0}
       h="50px"
-      _focus={{}}
       rightIcon={<Box roundedLeft="lg" shadow="Up Big" mr={-5} w="16px" h="36px" />}
       isActive={router.route === props.href}
       {...props}
