@@ -45,7 +45,7 @@ export const useRemoveLiquidity = ({
   const tokenAIsNativeWrapper = tokenA.equals(WETH9[networkId])
   const tokenBIsNativeWrapper = tokenB.equals(WETH9[networkId])
   const hasNativeToken = tokenAIsNativeWrapper || tokenBIsNativeWrapper
-
+  const amountToRemove = BigNumber.from(userBalance.multiply(ratioToRemove).quotient.toString())
   const { registerTransaction } = useTransactionRegistry()
 
   const removeLiquidity = async () => {
@@ -54,7 +54,7 @@ export const useRemoveLiquidity = ({
     if (receiveInNativeToken && (tokenAIsNativeWrapper || tokenBIsNativeWrapper)) {
       const transaction = await router.removeLiquidityETH(
         tokenAIsNativeWrapper ? tokenB : tokenA,
-        BigNumber.from(userBalance.multiply(ratioToRemove).quotient.toString()),
+        amountToRemove,
         address,
       )
       setHash(transaction.hash)
@@ -72,7 +72,7 @@ export const useRemoveLiquidity = ({
     const transaction = await router.removeLiquidity(
       pair.token0,
       pair.token1,
-      BigNumber.from(userBalance.multiply(ratioToRemove).quotient.toString()),
+      amountToRemove,
       address,
     )
     registerTransaction(transaction, {
@@ -85,6 +85,7 @@ export const useRemoveLiquidity = ({
   }
 
   return {
+    amountToRemove,
     amountAMin,
     amountBMin,
     pair,
