@@ -15,12 +15,12 @@ export default function ConnectedAreasContainer() {
   return (
     <Flex direction={'column'} gap={4}>
       <Flex
-        // width={{ base: '290px', sm: '340px' }}
         rounded="3xl"
         height={'60px'}
         shadow="down"
         align={'center'}
         justify="space-between"
+        gap={8}
       >
         <Text ml={4} fontSize="12px" fontWeight="700" textColor={'text.low'}>
           Connected with {activeConnector?.name}
