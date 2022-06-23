@@ -174,10 +174,9 @@ export const TestnetIndicator = () => {
 
   const minterModal = useDisclosure()
 
-  // if (!isOpen) return null
   return (
     <SlideFade in={isOpen} unmountOnExit offsetY={-10}>
-      <Box mx="auto" pos="absolute" top={{ base: 20, md: 8 }} zIndex={10}>
+      <Box pos="fixed" insetX={0} bottom={8} maxW="min" mx="auto" zIndex={10}>
         <Card
           variant="secondary"
           p={5}
@@ -187,6 +186,7 @@ export const TestnetIndicator = () => {
           shadow="Up for Blocks"
           pos="relative"
           overflow="visible"
+          gap={2}
         >
           <Stack spacing={0}>
             <Text fontWeight="bold" whiteSpace="nowrap">
@@ -206,13 +206,10 @@ export const TestnetIndicator = () => {
               Get some test tokens on the faucet!
             </Text>
           </Stack>
-          <Stack spacing={1} align="center" ml={{ base: 0, sm: 6 }}>
+          <Stack spacing={1} align="center" ml={{ base: 0, sm: 4 }}>
             <Button variant="primary" px={4} py={2} h="min" onClick={minterModal.onOpen}>
               Open Faucet
             </Button>
-            {/* <Button fontSize="xs" color="text.accent">
-            Switch to mainnet
-          </Button> */}
           </Stack>
 
           <Button
