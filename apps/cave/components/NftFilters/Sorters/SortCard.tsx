@@ -41,7 +41,9 @@ export const SortCard = ({ onChangeSorter }: SorterCard) => {
             boxShadow="up"
             backdropFilter={'blur(3px)'}
             direction="column"
-            apply={'background.metalBrighter'}
+            apply={'background.glass'}
+            border="2px solid"
+            borderColor={'text.low'}
             overflow={'hidden'}
             py={3}
           >

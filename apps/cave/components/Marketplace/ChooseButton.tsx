@@ -1,4 +1,4 @@
-import { Button, FlexProps } from '@concave/ui'
+import { Button, ButtonProps } from '@concave/ui'
 
 interface ChooseButtonProps {
   title: string
@@ -12,7 +12,7 @@ export function ChooseButton({
   backgroundType,
   onClick,
   ...props
-}: ChooseButtonProps & FlexProps) {
+}: ChooseButtonProps & ButtonProps) {
   const background =
     backgroundType == 'blue' ? 'linear-gradient(90deg, #72639B 0%, #44B9DE 100%)' : ''
   return (
@@ -25,6 +25,7 @@ export function ChooseButton({
       size={'sm'}
       width="120px"
       borderBottomRadius={0}
+      {...props}
     >
       {title}
     </Button>

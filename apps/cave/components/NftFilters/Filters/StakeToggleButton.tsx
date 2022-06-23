@@ -14,7 +14,7 @@ export const StakeToggleButton: React.FC<StakeToggleButton> = ({
   onEnableFilter,
 }) => {
   return (
-    <Flex textColor={'gray.300'} fontWeight="bold" width={'full'} justify="space-between" px={4}>
+    <Flex textColor={'white'} fontWeight="bold" width={'full'} justify="space-between" px={4}>
       <Text textAlign={'end'} width="70px">
         {PARAMETER_TO_POOL_PERIOD[filter]}
       </Text>

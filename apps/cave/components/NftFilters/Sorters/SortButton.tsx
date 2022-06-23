@@ -14,7 +14,7 @@ export const SortButton = ({ sorter, title, enabled, onClick }: SorterButton) =>
     <Flex
       width="full"
       // py={'2px'}
-      textColor={enabled ? 'white' : 'text.low'}
+      textColor={enabled ? 'white' : 'gray.500'}
       _hover={!enabled && { bg: 'blue.300', textColor: 'white' }}
       px={4}
       flex={1}

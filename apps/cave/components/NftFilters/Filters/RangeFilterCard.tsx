@@ -25,17 +25,19 @@ export const RangeFilterCard = ({ onApplyFilter, onResetFilter }: RangeFilterCar
       height={isOpen ? '114px' : '80px'}
       rounded={'lg'}
       apply="background.metalBrighter"
+      border={'2px solid'}
+      borderColor="text.low"
       direction={'column'}
       overflow="hidden"
       shadow={'up'}
       transition={'.4s all'}
     >
-      <Flex height={'40px'} justify="center" width="full" align="center" py={'10'} gap={1}>
+      <Flex height={'40px'} justify="center" width="full" align="center" pt={'10'} pb={5} gap={1}>
         <InputField value={min} placeholder="From" onChangeValue={setMin} />
         <Box width={'10px'} height="4px" shadow={'down'} my="auto" />
         <InputField value={max} placeholder="To" onChangeValue={setMax} />
       </Flex>
-      <Flex height={'60px'} align="end" mb={'2px'} justify={'center'} gap={2}>
+      <Flex height={'60px'} align="center" justify={'center'} gap={2}>
         <ChooseButton
           onClick={() => {
             onReset()
@@ -44,15 +46,21 @@ export const RangeFilterCard = ({ onApplyFilter, onResetFilter }: RangeFilterCar
           title={'Reset'}
           backgroundType="default"
           width={'100px'}
+          rounded="2xl"
+          height="30px"
+          borderBottomRadius={'2xl'}
         />
         <ChooseButton
           onClick={() => {
             onApplyFilter({ min: Math.min(+min, +max), max: Math.max(+min, +max) })
             setHasFilter(true)
           }}
+          rounded="2xl"
+          borderBottomRadius={'2xl'}
           title={'Apply'}
           backgroundType="blue"
           width={'100px'}
+          height="30px"
         />
       </Flex>
     </Flex>

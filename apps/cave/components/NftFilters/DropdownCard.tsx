@@ -4,9 +4,15 @@ import { Card, Flex, FlexProps, gradientBorder, StatDownArrow, Text } from '@con
 type DropdownCard = {
   isOpen: boolean
   title: string
+  highlighted?: boolean
 }
 
-export const DropdownCard: React.FC<DropdownCard & FlexProps> = ({ isOpen, title, ...props }) => {
+export const DropdownCard: React.FC<DropdownCard & FlexProps> = ({
+  isOpen,
+  title,
+  highlighted,
+  ...props
+}) => {
   return (
     <Flex
       direction={'row'}
@@ -17,13 +23,11 @@ export const DropdownCard: React.FC<DropdownCard & FlexProps> = ({ isOpen, title
       px={2}
       minW="110px"
       height={'30px'}
-      _hover={{ borderColor: 'text.accent' }}
       userSelect="none"
-      bg={'linear-gradient(180deg, rgba(40, 219, 209, 0.1) 0%, rgba(0, 83, 78, 0) 55.79%)'}
-      // apply={isOpen && 'background.metal'}
-      // sx={{ ...gradientBorder({ borderWidth: 2 }) }}
+      border="2px solid"
+      borderColor={'text.low'}
+      // bg={'linear-gradient(180deg, rgba(40, 219, 209, 0.1) 0%, rgba(0, 83, 78, 0) 55.79%)'}
       shadow={isOpen ? 'up' : 'Up Small'}
-      // {...props}
     >
       <Text fontSize={'12px'} fontWeight="bold">
         {title}

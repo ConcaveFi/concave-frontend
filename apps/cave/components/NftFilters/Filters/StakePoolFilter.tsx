@@ -29,7 +29,7 @@ export const StakePoolFilterCard = ({ onDisableFilter, onEnableFilter }: StakePo
       <Portal>
         <PopoverContent
           variants={{
-            enter: { opacity: 1, height: '124px' },
+            enter: { opacity: 1, height: '144px' },
             exit: { opacity: 0, height: '0px' },
           }}
           width={'160px'}
@@ -37,15 +37,20 @@ export const StakePoolFilterCard = ({ onDisableFilter, onEnableFilter }: StakePo
           <Flex
             width={'160px'}
             rounded={'lg'}
-            height={'124px'}
+            height={'144px'}
             // sx={{ ...gradientBorder({ borderWidth: 2 }) }}
-            shadow="up"
-            backdropFilter={'blur(10px)'}
+            border="2px solid"
+            borderColor={'text.low'}
+            // shadow="up"
+            // backdropFilter={'blur(10px)'}
             direction="column"
-            apply={'background.metalBrighter'}
+            apply={'background.glass'}
+            // bg={'#19394C16'}
+            // backdropBlur="16px"
             overflow="hidden"
             transition={'0.3s all'}
             justify="center"
+            gap={1}
           >
             {Object.values(StakePoolFilterEnum)
               .filter((filter) => typeof filter !== 'string')
