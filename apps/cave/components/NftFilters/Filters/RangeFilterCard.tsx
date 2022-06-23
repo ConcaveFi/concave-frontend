@@ -13,7 +13,8 @@ export const RangeFilterCard = ({ onApplyFilter, onResetFilter }: RangeFilterCar
   const [min, setMin] = useState<string>()
   const [max, setMax] = useState<string>()
   const [hasFilter, setHasFilter] = useState(false)
-  const isOpen = !!min || !!max || hasFilter
+  const hasAtLeastOneNumber = !!(+min || 0) || !!(+max || 0)
+  const isOpen = hasAtLeastOneNumber || hasFilter
   const onReset = () => {
     setMin('')
     setMax('')
@@ -22,7 +23,7 @@ export const RangeFilterCard = ({ onApplyFilter, onResetFilter }: RangeFilterCar
   return (
     <Flex
       width={'260px'}
-      height={isOpen ? '114px' : '80px'}
+      height={'114px'}
       rounded={'lg'}
       apply="background.metalBrighter"
       border={'2px solid'}
@@ -37,32 +38,34 @@ export const RangeFilterCard = ({ onApplyFilter, onResetFilter }: RangeFilterCar
         <Box width={'10px'} height="4px" shadow={'down'} my="auto" />
         <InputField value={max} placeholder="To" onChangeValue={setMax} />
       </Flex>
-      <Flex height={'60px'} align="center" justify={'center'} gap={2}>
-        <ChooseButton
-          onClick={() => {
-            onReset()
-            setHasFilter(false)
-          }}
-          title={'Reset'}
-          backgroundType="default"
-          width={'100px'}
-          rounded="2xl"
-          height="30px"
-          borderBottomRadius={'2xl'}
-        />
-        <ChooseButton
-          onClick={() => {
-            onApplyFilter({ min: Math.min(+min, +max), max: Math.max(+min, +max) })
-            setHasFilter(true)
-          }}
-          rounded="2xl"
-          borderBottomRadius={'2xl'}
-          title={'Apply'}
-          backgroundType="blue"
-          width={'100px'}
-          height="30px"
-        />
-      </Flex>
+      {
+        <Flex height={'60px'} align="center" justify={'center'} gap={2}>
+          <ChooseButton
+            onClick={() => {
+              onReset()
+              setHasFilter(false)
+            }}
+            title={'Reset'}
+            backgroundType="default"
+            width={'100px'}
+            rounded="2xl"
+            height="30px"
+            borderBottomRadius={'2xl'}
+          />
+          <ChooseButton
+            onClick={() => {
+              onApplyFilter({ min: Math.min(+min, +max), max: Math.max(+min, +max) })
+              setHasFilter(true)
+            }}
+            rounded="2xl"
+            borderBottomRadius={'2xl'}
+            title={'Apply'}
+            backgroundType="blue"
+            width={'100px'}
+            height="30px"
+          />
+        </Flex>
+      }
     </Flex>
   )
 }
