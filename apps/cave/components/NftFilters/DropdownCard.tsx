@@ -26,8 +26,6 @@ export const DropdownCard: React.FC<DropdownCard & FlexProps> = ({
       userSelect="none"
       border="2px solid"
       borderColor={'text.low'}
-      // bg={'linear-gradient(180deg, rgba(40, 219, 209, 0.1) 0%, rgba(0, 83, 78, 0) 55.79%)'}
-      shadow={isOpen ? 'up' : 'Up Small'}
     >
       <Text fontSize={'12px'} fontWeight="bold">
         {title}
