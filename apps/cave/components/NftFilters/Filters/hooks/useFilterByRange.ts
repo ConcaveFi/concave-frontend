@@ -6,11 +6,12 @@ export const useFilterByRange = ({ min, max }: RangeFilter) => ({
   filterByRange: (nftPosition: StakingPosition) => {
     const allValuesEmpty = !!min && !!max
     if (allValuesEmpty) {
-      return () => true
+      return true
     } else {
-      return () =>
+      return (
         +utils.formatEther(nftPosition.initialValue) >= min &&
         +utils.formatEther(nftPosition.initialValue) <= max
+      )
     }
   },
 })
