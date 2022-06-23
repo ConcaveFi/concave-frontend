@@ -94,4 +94,3 @@ import {useGet_Stackingv1_Last100_EventsQuery} from 'graphql/generated/graphql'
 const { status, data, error, isFetching } = useGet_Stackingv1_Last100_EventsQuery()
 console.log('react query', status, data, error, isFetching)
 ```
-
