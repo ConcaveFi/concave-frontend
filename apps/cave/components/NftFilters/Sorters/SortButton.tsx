@@ -13,11 +13,11 @@ export const SortButton = ({ sorter, title, enabled, onClick }: SorterButton) =>
   return (
     <Flex
       width="full"
-      p={1}
+      // py={'2px'}
       textColor={enabled ? 'white' : 'text.low'}
-      rounded="lg"
-      _hover={!enabled && { shadow: 'Up Small', textColor: 'gray.300' }}
-      px={2}
+      _hover={!enabled && { bg: 'blue.300', textColor: 'white' }}
+      px={4}
+      flex={1}
       cursor={!enabled && 'pointer'}
       transition={'.4s all'}
       onClick={() => !enabled && onClick(sorter)}

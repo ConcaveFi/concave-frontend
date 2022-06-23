@@ -29,20 +29,21 @@ export const SortCard = ({ onChangeSorter }: SorterCard) => {
       <Portal>
         <PopoverContent
           variants={{
-            enter: { opacity: 1, height: '172px' },
+            enter: { opacity: 1, height: '195px' },
             exit: { opacity: 0, height: '0px' },
           }}
-          width={175}
+          width={190}
         >
           <Flex
-            width={'175px'}
-            height="180px"
+            width={'190px'}
+            height="195px"
             rounded={'lg'}
             boxShadow="up"
             backdropFilter={'blur(3px)'}
             direction="column"
             apply={'background.metalBrighter'}
             overflow={'hidden'}
+            py={3}
           >
             {sorterButtons.map((sorter, index) => (
               <SortButton
