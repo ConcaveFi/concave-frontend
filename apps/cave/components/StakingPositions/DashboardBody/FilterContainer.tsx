@@ -13,6 +13,7 @@ interface FilterContainerProps {
   onResetInitialCNVFilter: () => void
   onChangeSort: (sorter: NftSort) => void
   onDisableStakeFilter: (filter: StakePoolFilterEnum) => void
+  stakePoolFilters: StakePoolFilterEnum[]
 }
 
 export function FilterContainer({
@@ -21,9 +22,9 @@ export function FilterContainer({
   onChangeSort,
   onApplyInitalCNVFilter,
   onResetInitialCNVFilter,
+  stakePoolFilters,
 }: FilterContainerProps) {
   const mobileUI = useBreakpointValue({ base: true, md: false })
-  const [stakeFilters, setStakeFilters] = useState([])
 
   return (
     <Flex height={'45px'} width="full" justify={'center'} align="center" my={2}>
@@ -39,6 +40,7 @@ export function FilterContainer({
               onApplyFilter={onApplyInitalCNVFilter}
             />
             <StakePoolFilterCard
+              stakePoolFilters={stakePoolFilters}
               onDisableFilter={onDisableStakeFilter}
               onEnableFilter={onEnableStakeFilter}
             />

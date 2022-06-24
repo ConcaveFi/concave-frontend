@@ -55,6 +55,7 @@ export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePo
           <UserDividendCard isLoading={isLoading} totalLocked={totalLocked} />
         </Flex>
         <FilterContainer
+          stakePoolFilters={stakeFilters}
           onApplyInitalCNVFilter={setRangeFilter}
           onResetInitialCNVFilter={() => setRangeFilter({})}
           onChangeSort={(sort) => setSort(sort)}

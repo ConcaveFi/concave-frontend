@@ -15,15 +15,24 @@ import { StakeToggleButton } from './StakeToggleButton'
 type StakePoolFilterCard = {
   onEnableFilter: (filter: StakePoolFilterEnum) => void
   onDisableFilter: (filter: StakePoolFilterEnum) => void
+  stakePoolFilters: StakePoolFilterEnum[]
 }
 
-export const StakePoolFilterCard = ({ onDisableFilter, onEnableFilter }: StakePoolFilterCard) => {
+export const StakePoolFilterCard = ({
+  onDisableFilter,
+  onEnableFilter,
+  stakePoolFilters,
+}: StakePoolFilterCard) => {
   const { isOpen, onClose, onToggle } = useDisclosure()
   return (
     <Popover onClose={onClose}>
       <PopoverTrigger>
         <Button onClick={onToggle} _active={{}}>
-          <DropdownCard isOpen={isOpen} title="Stake Pool" />
+          <DropdownCard
+            highlighted={stakePoolFilters?.length < 4}
+            isOpen={isOpen}
+            title="Stake Pool"
+          />
         </Button>
       </PopoverTrigger>
       <Portal>
