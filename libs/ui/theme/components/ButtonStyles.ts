@@ -8,8 +8,10 @@ const PrimaryButtonShadow =
   '20px -20px 39px rgba(120, 182, 255, 0.25), 0px 5px 14px rgba(0, 0, 0, 0.47), inset 0px -10px 20px rgba(117, 164, 255, 0.5)'
 
 const ButtonPrimaryTheme = (props) => ({
+  px: props.px,
+  py: props.py,
   borderRadius: '2xl',
-  ...gradientBorder({ borderRadius: '2xl' }),
+  ...gradientBorder({ borderRadius: '2xl', borderWidth: props.borderWidth }),
   bgGradient: 'linear(to-r, primary.1, primary.2)',
   fontFamily: 'heading',
   fontWeight: 'bold',
