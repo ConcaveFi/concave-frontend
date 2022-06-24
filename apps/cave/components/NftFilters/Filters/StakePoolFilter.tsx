@@ -7,7 +7,6 @@ import {
   Portal,
   useDisclosure,
 } from '@chakra-ui/react'
-import { Card, gradientBorder } from '@concave/ui'
 import { DropdownCard } from '../DropdownCard'
 import { StakePoolFilterEnum } from './hooks/useFilterByStakePool'
 import { StakeToggleButton } from './StakeToggleButton'
@@ -31,7 +30,7 @@ export const StakePoolFilterCard = ({
           <DropdownCard
             highlighted={stakePoolFilters?.length < 4}
             isOpen={isOpen}
-            title="Stake Pool"
+            title="Stake pool"
           />
         </Button>
       </PopoverTrigger>
