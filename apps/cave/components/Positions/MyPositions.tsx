@@ -1,4 +1,4 @@
-import { CurrencyAmount } from '@concave/core'
+import { CurrencyAmount, Rounding } from '@concave/core'
 import { Fetcher, Pair } from '@concave/gemswap-sdk'
 import {
   Accordion,
@@ -161,6 +161,10 @@ export const LiquidityPoolPainel = (props: LPPosition) => {
   const balance = userBalance.data || CurrencyAmount.fromRawAmount(pair.liquidityToken, '0')
   const userPoolShare =
     pair.liquidityToken?.totalSupply && userBalance.data?.divide(pair.liquidityToken.totalSupply)
+  const userPoolPercentage = userPoolShare
+    .multiply('100')
+    .asFraction.toSignificant(3, { groupSeparator: ',' }, Rounding.ROUND_HALF_UP)
+
   return (
     <AccordionPanel>
       <Stack
@@ -189,10 +193,7 @@ export const LiquidityPoolPainel = (props: LPPosition) => {
         </PositionInfoItem>
 
         {balance.greaterThan(0) && (
-          <PositionInfoItem
-            label="Your pool share:"
-            value={`${userPoolShare.multiply(10 ** 20).toSignificant(2, { groupSeparator: ',' })}%`}
-          />
+          <PositionInfoItem label="Your pool share:" value={`${userPoolPercentage}%`} />
         )}
       </Stack>
       <Flex gap={5} justify="center" mt={6}>
