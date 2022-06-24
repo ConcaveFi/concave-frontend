@@ -54,8 +54,10 @@ export const RangeFilterCard = ({ onApplyFilter, onResetFilter }: RangeFilterCar
           />
           <ChooseButton
             onClick={() => {
-              if (!+(min && +max)) return
+              if (+min && +max) return
               onApplyFilter({ min: Math.min(+min, +max), max: Math.max(+min, +max) })
+              setMax(String(Math.max(+min, +max)))
+              setMin(String(Math.min(+min, +max)))
               setHasFilter(true)
             }}
             rounded="2xl"
