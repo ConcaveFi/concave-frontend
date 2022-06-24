@@ -1,4 +1,5 @@
 import { Button, Popover, PopoverContent, PopoverTrigger, Portal, useDisclosure } from '@concave/ui'
+import { useState } from 'react'
 import { DropdownCard } from '../DropdownCard'
 import { RangeFilter } from './hooks/useFilterByRange'
 import { RangeFilterCard } from './RangeFilterCard'
@@ -8,11 +9,13 @@ type InitialFilter = {
 }
 export const InitialCNVFilter = ({ onApplyFilter, onResetFilter }: InitialFilter) => {
   const { isOpen, onToggle, onClose } = useDisclosure()
+  const [hasFilter, setHasFilter] = useState(false)
+
   return (
     <Popover onClose={onClose}>
       <PopoverTrigger>
         <Button onClick={onToggle} _active={{}}>
-          <DropdownCard title="Initial CNV" isOpen={isOpen} />
+          <DropdownCard highlighted={hasFilter} title="Initial CNV" isOpen={isOpen} />
         </Button>
       </PopoverTrigger>
       <Portal>
@@ -23,7 +26,16 @@ export const InitialCNVFilter = ({ onApplyFilter, onResetFilter }: InitialFilter
             exit: { opacity: 0, height: '0px' },
           }}
         >
-          <RangeFilterCard onApplyFilter={onApplyFilter} onResetFilter={onResetFilter} />
+          <RangeFilterCard
+            onApplyFilter={(filter) => {
+              onApplyFilter(filter)
+              setHasFilter(true)
+            }}
+            onResetFilter={() => {
+              onResetFilter()
+              setHasFilter(false)
+            }}
+          />
         </PopoverContent>
       </Portal>
     </Popover>

@@ -54,6 +54,7 @@ export const RangeFilterCard = ({ onApplyFilter, onResetFilter }: RangeFilterCar
           />
           <ChooseButton
             onClick={() => {
+              if (!+(min && +max)) return
               onApplyFilter({ min: Math.min(+min, +max), max: Math.max(+min, +max) })
               setHasFilter(true)
             }}
