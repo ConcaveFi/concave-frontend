@@ -1,12 +1,14 @@
 import { forwardRef, Stack, StackProps, useStyleConfig } from '@chakra-ui/react'
 import { GradientBorderStyleProps } from 'theme/utils/gradientBorder'
-import { motion } from 'framer-motion'
+import { motion, MotionProps } from 'framer-motion'
 
-export interface CardProps extends StackProps {
+type Merge<M, N> = Omit<M, Extract<keyof M, keyof N>> & N
+
+export type CardProps = {
   variant?: 'primary' | 'secondary'
   borderGradient?: GradientBorderStyleProps['variant']
   colorScheme?: 'brighter' | 'default'
-}
+} & Merge<StackProps, MotionProps>
 
 export const Card = forwardRef<CardProps, 'div'>(
   ({ children, variant, borderWidth, borderGradient, colorScheme, ...props }, ref) => {
@@ -19,6 +21,7 @@ export const Card = forwardRef<CardProps, 'div'>(
     })
 
     return (
+      // @ts-ignore Stack not happy with the motion props (as={motion.div})
       <Stack
         as={motion.div}
         layout="position"

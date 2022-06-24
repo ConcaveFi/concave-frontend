@@ -26,7 +26,6 @@ export const ThemeProvider = ({
       resetCSS
       theme={{ ...theme, styles: globalStyles }}
       colorModeManager={colorModeManager}
-      portalZIndex={100}
     >
       {children}
     </ChakraProvider>
