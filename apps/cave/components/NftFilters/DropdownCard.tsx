@@ -25,7 +25,7 @@ export const DropdownCard: React.FC<DropdownCard & FlexProps> = ({
       height={'30px'}
       userSelect="none"
       border="2px solid"
-      borderColor={'text.low'}
+      borderColor={highlighted ? 'text.accent' : 'text.low'}
     >
       <Text fontSize={'12px'} fontWeight="bold">
         {title}
