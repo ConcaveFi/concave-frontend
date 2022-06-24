@@ -18,7 +18,7 @@ type SorterCard = {
 }
 export const SortCard = ({ onChangeSorter }: SorterCard) => {
   const { isOpen, onToggle, onClose } = useDisclosure()
-  const [title, setTitle] = useState<string>('')
+  const [title, setTitle] = useState<string>('Redeem Date (ASC)')
   return (
     <Popover onClose={onClose}>
       <PopoverTrigger>

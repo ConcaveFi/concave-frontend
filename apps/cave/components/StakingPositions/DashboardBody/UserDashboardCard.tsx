@@ -30,7 +30,7 @@ export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePo
   const [rangeFilter, setRangeFilter] = useState<RangeFilter>({})
   const { filterByRange } = useFilterByRange(rangeFilter)
 
-  const [sort, setSort] = useState<NftSort>({ sort: NftSortMethod.NONE, order: 'ASC' })
+  const [sort, setSort] = useState<NftSort>({ sort: NftSortMethod.REDEEM_DATE, order: 'ASC' })
   const sortFunction = useNftSort(sort)
 
   return (
