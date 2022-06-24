@@ -14,11 +14,11 @@
     "gen": "DOTENV_CONFIG_PATH=./.env graphql-codegen --config codegen.yml -r dotenv/config"
   },
   "dependencies": {
-    "@0xsequence/multicall": "^0.39.0",
+    "@0xsequence/multicall": "^0.39.5",
     "@apollo/client": "^3.6.8",
     "@badrap/bar-of-progress": "^0.2.1",
     "@chakra-ui/cli": "^2.1.0",
-    "@chakra-ui/react": "^2.2.0",
+    "@chakra-ui/react": "^2.2.1",
     "@concave/marketplace": "*",
     "@concave/gemswap-sdk": "*",
     "@concave/icons": "*",
