@@ -49,7 +49,10 @@ export const useListeForSaleState = ({ marketInfoState }: UserListPositionCardPr
   }
 
   const handleMethod = () => {
-    setMethod((old) => (old === 'Auction' ? 'Sale' : 'Auction'))
+    /**
+     * Uncomment to enable auctions
+     * setMethod((old) => (old === 'Auction' ? 'Sale' : 'Auction'))
+     */
   }
 
   return {

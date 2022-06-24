@@ -1,12 +1,13 @@
 import {
   ConcaveNFTMarketplace,
   fechMarketInfo,
-  MarketItemInfo,
   Offer,
   StakingPosition,
+  StakingV1Contract,
 } from '@concave/marketplace'
 import { ButtonProps, useDisclosure } from '@concave/ui'
 import { Transaction } from 'ethers'
+import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { concaveProvider } from 'lib/providers'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
@@ -14,8 +15,10 @@ import { useSigner, useWaitForTransaction } from 'wagmi'
 
 export type UserMarketInfoState = ReturnType<typeof useMarketInfo>
 export const useMarketInfo = ({ stakingPosition }: { stakingPosition: StakingPosition }) => {
-  const offerDisclosure = useDisclosure()
   const chainId = stakingPosition.chainId
+
+  const offerDisclosure = useDisclosure()
+  const { registerTransaction } = useTransactionRegistry()
   const { data: signer } = useSigner()
   const [transaction, setTransaction] = useState<Transaction>()
   const [isWaitingForWallet, setIsWaitingForWallet] = useState<boolean>(false)
@@ -41,15 +44,42 @@ export const useMarketInfo = ({ stakingPosition }: { stakingPosition: StakingPos
     )
 
   const withdrawOffer = () =>
-    transactionWrapper(() =>
-      new ConcaveNFTMarketplace(concaveProvider(chainId)).withdrawAuction(signer, stakingPosition),
-    )
+    transactionWrapper(async () => {
+      const tx = await new ConcaveNFTMarketplace(concaveProvider(chainId)).withdrawAuction(
+        signer,
+        stakingPosition,
+      )
+      registerTransaction(tx, {
+        type: 'unlist position',
+        tokenId: +stakingPosition.tokenId.toString(),
+      })
+      return tx
+    })
 
   const createOffer = async (offer: Offer) => {
-    transactionWrapper(() => {
-      const contract = new ConcaveNFTMarketplace(concaveProvider(chainId))
-      const marketItemInfo = new MarketItemInfo({ ...marketInfo.data, offer })
-      return contract.createOffer(signer, marketItemInfo)
+    transactionWrapper(async () => {
+      try {
+        const market = new ConcaveNFTMarketplace(concaveProvider(chainId))
+        const staking = new StakingV1Contract(concaveProvider(chainId))
+        const marketplaceHasPermission = await staking.isApprovedForAll(
+          await signer.getAddress(),
+          market.address,
+        )
+        if (!marketplaceHasPermission) {
+          const approveTx = await staking.setApprovalForAll(signer, market.address, true)
+          registerTransaction(approveTx, { type: 'approve', tokenSymbol: 'position' })
+        }
+        const tx = await market.createOffer(signer, stakingPosition, offer)
+        registerTransaction(tx, {
+          type: 'list position',
+          action: offer.isAuction ? 'auction' : 'sale',
+          tokenId: +stakingPosition.tokenId.toString(),
+        })
+        return tx
+      } catch (e) {
+        console.error(e)
+        throw e
+      }
     })
     offerDisclosure.onClose()
   }
@@ -77,19 +107,19 @@ export const getMarketPlaceButtonProps = (marketInfoState: UserMarketInfoState):
     return { loadingText: 'Approve in wallet', disabled: true, isLoading: true }
   }
   if (marketInfo.isLoading) {
-    return { loadingText: 'Loading Market Item', disabled: true, isLoading: true }
+    return { loadingText: 'Loading market item', disabled: true, isLoading: true }
   }
   if (marketInfo.error) {
-    return { children: 'Coming Soon', disabled: true }
+    return { children: 'Coming soon', disabled: true }
   }
   if (!marketInfo.data.isMarketItem) {
-    return { children: 'Create Market Item', onClick: createMarketItem }
+    return { children: 'Create market item', onClick: createMarketItem }
   }
   if (marketInfo.data.isAuction) {
-    return { children: 'Unlist Auction', onClick: withdrawOffer, variant: 'primary.outline' }
+    return { children: 'Unlist auction', onClick: withdrawOffer, variant: 'primary.outline' }
   }
   if (marketInfo.data.isSale) {
-    return { children: 'Unlist Sale', onClick: withdrawOffer, variant: 'primary.outline' }
+    return { children: 'Unlist sale', onClick: withdrawOffer, variant: 'primary.outline' }
   }
-  return { children: 'List For Sale', onClick: offerDisclosure.onOpen }
+  return { children: 'List for sale', onClick: offerDisclosure.onOpen }
 }

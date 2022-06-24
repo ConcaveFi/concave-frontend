@@ -224,7 +224,13 @@ const LPPositionItem = (props: LPPosition) => {
 }
 
 export const PositionInfoItem = ({ color = '', label, value, mt = 0, children = <></> }) => (
-  <Flex direction={{ base: 'column', sm: 'row' }} justify="space-between" align={'center'} mt={mt}>
+  <Flex
+    direction={{ base: 'column', sm: 'row' }}
+    w={'full'}
+    justify="space-between"
+    align={'center'}
+    mt={mt}
+  >
     <Text color={color}>{label}</Text>
     <HStack gap={{ base: 0, sm: 2 }} align={'center'} alignContent={'center'}>
       <Text>{value}</Text>

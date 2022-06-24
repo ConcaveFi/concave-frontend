@@ -1,21 +1,34 @@
-import { Box, Button, Collapse, Flex, HStack, Image, Text } from '@concave/ui'
+import { MarketItemInfo } from '@concave/marketplace'
+import { Box, Collapse, Flex, HStack, Image, Text } from '@concave/ui'
+import { formatDistanceToNowStrict } from 'date-fns'
 import { useState } from 'react'
+import { formatFixed } from 'utils/formatFixed'
+import { BidButton } from './Bid'
+import { BuyButton } from './Buy'
 
 interface NftPositionBoxProps {
-  stakePool: number
-  redeemIn: number
-  price: number
-  discount: number
+  marketInfo: MarketItemInfo
   active?: boolean
   onClick?: () => void
 }
 
 const NftPositionBox = (props: NftPositionBoxProps) => {
-  const { stakePool, discount, price, redeemIn } = props
+  const { discount, position } = props.marketInfo
   const active = props.active
+  const redeemInDays = formatDistanceToNowStrict(position.maturity * 1000, { unit: 'day' })
 
-  const stakeImage =
-    stakePool === 360 ? '12m' : stakePool === 180 ? '6m' : stakePool === 90 ? '3m' : '1m'
+  const stakeImage = {
+    0: '12mposition.png',
+    1: '6mposition.png',
+    2: '3mposition.png',
+    3: '1mposition.png',
+  }[position.poolID]
+  const period = {
+    0: '360 Days',
+    1: '180 Days',
+    2: '90 Days',
+    3: '45 Days',
+  }[position.poolID]
 
   return (
     <Flex
@@ -40,14 +53,14 @@ const NftPositionBox = (props: NftPositionBoxProps) => {
               Stake Pool
             </Text>
             <Text fontSize="s" color="white" fontWeight="bold" ml={3}>
-              {stakePool} Days
+              {period}
             </Text>
           </Flex>
           <Flex w={{ base: '55%', lg: '45%' }} justify="end">
             <Image
               width={{ base: '90px', lg: '70px' }}
               height={{ base: '90px', lg: '70px' }}
-              src={`/assets/marketplace/${stakeImage}position.png`}
+              src={`/assets/marketplace/${stakeImage}`}
               alt="position"
             />
           </Flex>
@@ -60,7 +73,7 @@ const NftPositionBox = (props: NftPositionBoxProps) => {
             Redeem In:
           </Text>
           <Text fontSize={{ base: '14px', xl: 'sm', lg: 'sm' }} fontWeight="bold">
-            {redeemIn} Days
+            {redeemInDays}
           </Text>
         </Flex>
         <Flex flex={1} justifyContent="center" direction={'column'} textAlign={'start'} ml="6">
@@ -68,7 +81,7 @@ const NftPositionBox = (props: NftPositionBoxProps) => {
             Price:
           </Text>
           <Text fontSize={{ base: '14px', xl: 'sm', lg: 'sm' }} fontWeight="bold" noOfLines={1}>
-            {price} CNV
+            {formatFixed(props.marketInfo.listPrice)} CNV
           </Text>
         </Flex>
         <Flex flex={1} justifyContent="center" direction={'column'} textAlign={'start'} ml="6">
@@ -76,7 +89,7 @@ const NftPositionBox = (props: NftPositionBoxProps) => {
             Discount:
           </Text>
           <Text fontSize={{ base: '14px', xl: 'sm', lg: 'sm' }} fontWeight="bold">
-            {discount}%
+            {formatFixed(props.marketInfo?.discount, { decimals: 2 })}%
           </Text>
         </Flex>
         <Flex
@@ -102,10 +115,8 @@ const NftPositionBox = (props: NftPositionBoxProps) => {
     </Flex>
   )
 }
-const NftPositionCard = (props: NftPositionBoxProps) => {
+export const NftPositionCard = ({ marketInfo }: NftPositionBoxProps) => {
   const [active, setActive] = useState(false)
-  const { discount, price, redeemIn, stakePool } = props
-
   return (
     <Flex
       shadow={active ? 'up' : ''}
@@ -121,7 +132,6 @@ const NftPositionCard = (props: NftPositionBoxProps) => {
       position="relative"
     >
       <Box
-        // display={{ base: 'block', md: 'none' }}
         position={'absolute'}
         height="full"
         width={'full'}
@@ -143,103 +153,53 @@ const NftPositionCard = (props: NftPositionBoxProps) => {
       >
         <NftPositionBox
           active={active}
-          discount={discount}
-          price={price}
-          redeemIn={redeemIn}
-          stakePool={stakePool}
+          marketInfo={marketInfo}
           onClick={() => setActive(!active)}
         />
         <Collapse in={active}>
-          <Flex
-            direction={{ xl: 'row', lg: 'row', base: 'column' }}
-            justifyContent="start"
-            alignItems={'center'}
-          >
-            <Flex flex={1} justify={'space-around'} width={'full'}>
-              <Flex
-                pl={{ xl: 3, lg: 3, base: 0 }}
-                direction={'column'}
-                justifyContent="center"
-                alignItems={'start'}
-              >
-                <Text color={'text.low'} fontSize={{ base: '12px', xl: 'sm', lg: 'sm' }}>
-                  Last sold by 0x43fs... for
-                </Text>
-                <Flex justifyContent={'center'} alignItems="center">
-                  <Text fontWeight={500} fontSize={{ base: '14px', xl: 'sm', lg: 'sm' }}>
-                    600 CNV
-                  </Text>
-                  <Text color={'text.low'} fontSize={{ base: '12px', xl: 'sm', lg: 'sm' }}>
-                    (3 days ago)
-                  </Text>
-                </Flex>
-              </Flex>
-              <Flex
-                py={4}
-                direction={'column'}
-                justifyContent="start"
-                alignItems={'start'}
-                textAlign="start"
-                // ml={4}
-              >
-                <Text
-                  width={'full'}
-                  color={'text.low'}
-                  fontSize={{ base: '12px', xl: 'sm', lg: 'sm' }}
-                >
-                  Redeem date:
-                </Text>
-                <Text
-                  width={'full'}
-                  fontWeight={700}
-                  fontSize={{ base: '14px', xl: 'sm', lg: 'sm' }}
-                >
-                  12/07/22
-                </Text>
-              </Flex>
-              <Flex textAlign={'start'} direction={'column'} justifyContent="center">
-                <Text color={'text.low'} fontSize={{ base: '12px', xl: 'sm', lg: 'sm' }}>
-                  Current value
-                </Text>
-                <Flex justifyContent={'center'} alignItems="center">
-                  <Text
-                    width={'full'}
-                    fontWeight={700}
-                    fontSize={{ base: '14px', xl: 'sm', lg: 'sm' }}
-                  >
-                    612.42 CNV
-                  </Text>
-                </Flex>
-              </Flex>
-            </Flex>
-            <BuyButton />
-          </Flex>
+          <MarketItemInfoBody marketItem={marketInfo} />
         </Collapse>
       </Flex>
     </Flex>
   )
 }
 
-const BuyButton = () => {
+const MarketItemInfoBody = ({ marketItem }: { marketItem: MarketItemInfo }) => {
+  const redeemDate = new Date(marketItem.position.maturity * 1000).toString().slice(4, 16)
   return (
-    <Button pr={{ xl: 6, lg: 6, base: 0 }}>
-      <Flex
-        boxShadow={'Up Big'}
-        background="linear-gradient(90deg, #72639B 0%, #44B9DE 100%)"
-        height={38}
-        width={143}
-        rounded={{ xl: '2xl', lg: '2xl', base: '16px 16px 0px 0px' }}
-        justifyContent={'center'}
-        alignItems="center"
-        ml={2}
-        fontWeight="bold"
-        fontSize="md"
-        mx="auto"
-      >
-        <Text>Buy</Text>
+    <Flex
+      direction={{ xl: 'row', lg: 'row', base: 'column' }}
+      justifyContent="start"
+      alignItems={'center'}
+    >
+      <Flex flex={1} justify={'space-around'} width={'full'}>
+        <Flex
+          py={4}
+          direction={'column'}
+          justifyContent="start"
+          alignItems={'start'}
+          textAlign="start"
+        >
+          <Text width={'full'} color={'text.low'} fontSize={{ base: '12px', xl: 'sm', lg: 'sm' }}>
+            Redeem date:
+          </Text>
+          <Text width={'full'} fontWeight={700} fontSize={{ base: '14px', xl: 'sm', lg: 'sm' }}>
+            {redeemDate}
+          </Text>
+        </Flex>
+        <Flex textAlign={'start'} direction={'column'} justifyContent="center">
+          <Text color={'text.low'} fontSize={{ base: '12px', xl: 'sm', lg: 'sm' }}>
+            Current value
+          </Text>
+          <Flex justifyContent={'center'} alignItems="center">
+            <Text width={'full'} fontWeight={700} fontSize={{ base: '14px', xl: 'sm', lg: 'sm' }}>
+              {formatFixed(marketItem.position.currentValue, { decimals: 18 })} CNV
+            </Text>
+          </Flex>
+        </Flex>
       </Flex>
-    </Button>
+      <BidButton marketInfo={marketItem} />
+      <BuyButton marketInfo={marketItem} />
+    </Flex>
   )
 }
-
-export default NftPositionCard

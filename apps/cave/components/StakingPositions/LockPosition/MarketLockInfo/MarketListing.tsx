@@ -1,6 +1,7 @@
 import { StakingPosition } from '@concave/marketplace'
 import { Box, Button, Flex, Modal, Text } from '@concave/ui'
 import { Loading } from 'components/Loading'
+import { formatDistanceToNow } from 'date-fns'
 import { formatFixed } from 'utils/formatFixed'
 import { ListPositionForSale, useListeForSaleState } from '../../UserListPositionCard'
 import { Info } from '../Redeem/RedeemViewer'
@@ -25,6 +26,12 @@ export const MarketListing = (props: MarketplaceInfoProps) => {
 
   const buttonState = getMarketPlaceButtonProps(marketInfoState)
   const marketData = marketInfo.data
+  const auctionEnd = marketData.offer.auctionEnd.gt(0)
+    ? formatDistanceToNow(new Date(+marketData.offer.auctionEnd.toString() * 1000), {
+        addSuffix: false,
+      })
+    : '--.--.--'
+
   return (
     <Box
       shadow={marketData?.isListed ? '' : 'down'}
@@ -62,7 +69,7 @@ export const MarketListing = (props: MarketplaceInfoProps) => {
                 : '---'
             }
           />
-          <Info label={'Expiration Date:'} width={'full'} value={'---'} />
+          <Info label={'Expiration Date:'} width={'full'} value={auctionEnd} />
         </Flex>
         <Button variant={'primary'} minW={'160px'} size={'md'} width={'full'} {...buttonState} />
       </Flex>

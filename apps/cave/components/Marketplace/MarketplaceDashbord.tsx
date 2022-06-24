@@ -1,30 +1,14 @@
 import { Box, Flex } from '@concave/ui'
-import { useState } from 'react'
-import MarketplaceFilterContainer from './MarketplaceFilterContainer'
-import NftPositionCard from './NftPositionCard'
+import { Loading } from 'components/Loading'
+import { MarketplaceFilterContainer } from './MarketplaceFilterContainer'
+import { NftPositionCard } from './NftPositionCard'
+import { useMarketplaceDashbord } from './UseMarkeplaceState'
 
-export default function MarketplaceSearchCard() {
-  const nftPositions = [
-    { stakePool: 45, price: 102, redeemIn: 20, discount: 2.1 },
-    { stakePool: 360, price: 12, redeemIn: 1, discount: 20 },
-    { stakePool: 90, price: 50, redeemIn: 12, discount: 1.2 },
-    { stakePool: 360, price: 229, redeemIn: 4, discount: 14 },
-    { stakePool: 90, price: 112, redeemIn: 7, discount: 12 },
-    { stakePool: 180, price: 522, redeemIn: 12, discount: 5 },
-    { stakePool: 90, price: 102, redeemIn: 20, discount: 2.1 },
-    { stakePool: 180, price: 12, redeemIn: 1, discount: 20 },
-    { stakePool: 90, price: 50, redeemIn: 12, discount: 1.2 },
-    { stakePool: 360, price: 229, redeemIn: 4, discount: 14 },
-    { stakePool: 360, price: 112, redeemIn: 7, discount: 12 },
-    { stakePool: 45, price: 522, redeemIn: 12, discount: 5 },
-  ].map((value, index) => (
-    <NftPositionCard
-      key={index}
-      stakePool={value.stakePool}
-      redeemIn={value.redeemIn}
-      price={value.price}
-      discount={value.discount}
-    />
+export function MarketplaceDashbord() {
+  const { isLoading, salePositions, owner, setOwner } = useMarketplaceDashbord()
+
+  const nftPositions = salePositions.map((marketInfo) => (
+    <NftPositionCard key={+marketInfo.position.tokenId.toString()} marketInfo={marketInfo} />
   ))
 
   return (
@@ -50,7 +34,7 @@ export default function MarketplaceSearchCard() {
         bgSize="16% 16%"
         rounded={'2xl'}
       />
-      <MarketplaceFilterContainer />
+      <MarketplaceFilterContainer address={owner} setAddress={setOwner} />
       <Flex
         flex={1}
         pt={3}
@@ -67,7 +51,7 @@ export default function MarketplaceSearchCard() {
         width={{ base: '330px', md: '420px', lg: '600px' }}
         position={'relative'}
       >
-        {nftPositions}
+        {!isLoading ? nftPositions : <Loading mt={10} size="lg"></Loading>}
       </Flex>
     </Box>
   )
