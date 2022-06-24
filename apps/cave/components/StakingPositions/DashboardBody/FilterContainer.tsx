@@ -11,14 +11,14 @@ interface FilterContainerProps {
   onEnableStakeFilter: (filter: StakePoolFilterEnum) => void
   onApplyInitalCNVFilter: (rangeFilter: RangeFilter) => void
   onResetInitialCNVFilter: () => void
-  onChangeSorter: (sorter: NftSort) => void
+  onChangeSort: (sorter: NftSort) => void
   onDisableStakeFilter: (filter: StakePoolFilterEnum) => void
 }
 
 export function FilterContainer({
   onDisableStakeFilter,
   onEnableStakeFilter,
-  onChangeSorter,
+  onChangeSort,
   onApplyInitalCNVFilter,
   onResetInitialCNVFilter,
 }: FilterContainerProps) {
@@ -48,7 +48,7 @@ export function FilterContainer({
           <Text fontWeight={'bold'} textColor="text.low">
             Sort by:
           </Text>
-          <SortCard onChangeSorter={onChangeSorter} />
+          <SortCard onChangeSort={onChangeSort} />
         </Flex>
       </Flex>
     </Flex>

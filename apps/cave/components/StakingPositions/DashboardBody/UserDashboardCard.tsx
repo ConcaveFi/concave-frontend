@@ -57,7 +57,7 @@ export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePo
         <FilterContainer
           onApplyInitalCNVFilter={setRangeFilter}
           onResetInitialCNVFilter={() => setRangeFilter({})}
-          onChangeSorter={(sort) => setSort(sort)}
+          onChangeSort={(sort) => setSort(sort)}
           onEnableStakeFilter={(filter) => setStakeFilters([...stakeFilters, filter])}
           onDisableStakeFilter={(disabledFilter) =>
             setStakeFilters(stakeFilters.filter((stakeFilter) => stakeFilter !== disabledFilter))

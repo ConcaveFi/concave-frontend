@@ -14,9 +14,9 @@ import { NftSort, NftSortMethod } from './hooks/useNftSort'
 import { SortButton } from './SortButton'
 
 type SorterCard = {
-  onChangeSorter: (sorter: NftSort) => void
+  onChangeSort: (sorter: NftSort) => void
 }
-export const SortCard = ({ onChangeSorter }: SorterCard) => {
+export const SortCard = ({ onChangeSort }: SorterCard) => {
   const { isOpen, onToggle, onClose } = useDisclosure()
   const [title, setTitle] = useState<string>('Redeem Date (ASC)')
   return (
@@ -53,7 +53,7 @@ export const SortCard = ({ onChangeSorter }: SorterCard) => {
                 onClick={(clickedSorter) => {
                   if (clickedSorter.sort === NftSortMethod.NONE) setTitle('None')
                   else setTitle(sorter.title)
-                  onChangeSorter(clickedSorter)
+                  onChangeSort(clickedSorter)
                 }}
                 sorter={sorter.nftSort}
                 title={sorter.title}
