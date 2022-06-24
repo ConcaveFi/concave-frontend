@@ -27,15 +27,8 @@ export function FilterContainer({
   const [stakeFilters, setStakeFilters] = useState([])
 
   return (
-    <Flex
-      height={'45px'}
-      width="full"
-      justify={'center'}
-      align="center"
-      shadow={mobileUI ? 'up' : 'none'}
-      my={2}
-    >
-      <Flex zIndex={2} justify="space-around" width={'full'}>
+    <Flex height={'45px'} width="full" justify={'center'} align="center" my={2}>
+      <Flex zIndex={2} px={5} justify="space-between" width={'full'}>
         <Flex align="center " gap={2}>
           <Text fontWeight={'bold'} textColor="text.low">
             Filter by:
