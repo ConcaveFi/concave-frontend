@@ -146,7 +146,6 @@ export const LiquidityPoolPainel = (props: LPPosition) => {
   )
 
   const pair = pairData.data
-  console.log('pair', pair)
   if (userBalance.isLoading || pairData.isLoading || !userBalance.data) {
     return (
       <AccordionPanel>
@@ -177,7 +176,7 @@ export const LiquidityPoolPainel = (props: LPPosition) => {
         spacing={4}
       >
         {balance.greaterThan(0) && (
-          <PositionInfoItem label="Your total pool tokens:" value={balance.toSignificant(2)} />
+          <PositionInfoItem label="Your total pool tokens:" value={balance.toSignificant()} />
         )}
         <PositionInfoItem
           label={`Pooled ${pair.token0.symbol}:`}
