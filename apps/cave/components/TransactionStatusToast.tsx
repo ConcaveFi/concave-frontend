@@ -70,9 +70,7 @@ const makeTransactionStatusToast = (tx: TrackedTransaction) =>
 export const useTransactionStatusToast = () => {
   const toast = useToast({
     position: 'top-right',
-    containerStyle: {
-      margin: 4,
-    },
+    containerStyle: { margin: 8 },
   })
 
   return useCallback(

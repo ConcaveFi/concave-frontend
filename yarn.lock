@@ -2,35 +2,35 @@
 # yarn lockfile v1
 
 
-"@0xsequence/abi@^0.39.0":
-  version "0.39.0"
-  resolved "https://registry.yarnpkg.com/@0xsequence/abi/-/abi-0.39.0.tgz#5102831ab106735352bb0af7a0bc2a7b7658627c"
-  integrity sha512-26KvkoDEymIbuOwPFlOsgL2rwNjuWaCN+Ea9X9TD9P+MDjZ/ThCsYfyVgzdoN0IXBtxrOAUNIpQ6wk1v98RMuA==
+"@0xsequence/abi@^0.39.5":
+  version "0.39.5"
+  resolved "https://registry.yarnpkg.com/@0xsequence/abi/-/abi-0.39.5.tgz#95a12f59da3af01651c22936e5e6cae27eb2e813"
+  integrity sha512-QYQonBIAvXcFfxFFKTZjgVW/VnEHIbcU6R1hYnZG1FQjfzRtI4MWUhlZU45w6ExWe0Mv34N7jdcGr4tmHw6bBg==
 
-"@0xsequence/multicall@^0.39.0":
-  version "0.39.0"
-  resolved "https://registry.yarnpkg.com/@0xsequence/multicall/-/multicall-0.39.0.tgz#b130a8558a5d123f1fbc8f380ec287dbed864fe8"
-  integrity sha512-McLpU3zFCnIsLfvU+xRGqp30/0LjnphboId2dfgS4el4KaSQpnhNarmrGa/ON/hHHjFR3aFj4OKV6FecM5k7Yg==
+"@0xsequence/multicall@^0.39.5":
+  version "0.39.5"
+  resolved "https://registry.yarnpkg.com/@0xsequence/multicall/-/multicall-0.39.5.tgz#da165740ed6af71f1b45dc1348c0c0a59fdedf89"
+  integrity sha512-RL43tU7FZqTzAT0uWvUBrK9cdEtv5fB9ganLFzZubatQmnbClLTb3vBZ7acVbJxJXt6TVYFR9vqr3JTJ4A89BA==
   dependencies:
-    "@0xsequence/abi" "^0.39.0"
-    "@0xsequence/network" "^0.39.0"
-    "@0xsequence/utils" "^0.39.0"
+    "@0xsequence/abi" "^0.39.5"
+    "@0xsequence/network" "^0.39.5"
+    "@0xsequence/utils" "^0.39.5"
     "@ethersproject/providers" "^5.5.1"
     ethers "^5.5.2"
 
-"@0xsequence/network@^0.39.0":
-  version "0.39.0"
-  resolved "https://registry.yarnpkg.com/@0xsequence/network/-/network-0.39.0.tgz#7dba08936a45f8312ab3236e24028713fcb6bd58"
-  integrity sha512-OAJmb9NC6h9L95RN8oJSIcoDoO3QumLESpvoXsKzNNlzNkTD92QbCgQ6h7mxmqtQhwJ+6GOT08beARMf5MTS+A==
+"@0xsequence/network@^0.39.5":
+  version "0.39.5"
+  resolved "https://registry.yarnpkg.com/@0xsequence/network/-/network-0.39.5.tgz#43fd178b80be49463bdb5b05190b19ad94d24907"
+  integrity sha512-nmZCHP/mRXKa772H5aoIB8/gn4Nyg8JVdLZpe2SW7LDG3T3iEcrx3YnkKk3R1Z0n7c1VEHY/COkgBICH2bLtkw==
   dependencies:
-    "@0xsequence/utils" "^0.39.0"
+    "@0xsequence/utils" "^0.39.5"
     "@ethersproject/providers" "^5.5.1"
     ethers "^5.5.2"
 
-"@0xsequence/utils@^0.39.0":
-  version "0.39.0"
-  resolved "https://registry.yarnpkg.com/@0xsequence/utils/-/utils-0.39.0.tgz#011a21caa9cf9f69acd1138e7b7a73b43c269eb5"
-  integrity sha512-+h0bfGomUsAoOzEnPuWSi1keuoXP0d/oAybtfLe0OQwGL+nuhJnIsW4nKlL8qelnjbV69/EqjQjTa5k5b9YHBw==
+"@0xsequence/utils@^0.39.5":
+  version "0.39.5"
+  resolved "https://registry.yarnpkg.com/@0xsequence/utils/-/utils-0.39.5.tgz#b996b713c94d4c38d8ee92bff9e2e2b95d7e3e29"
+  integrity sha512-XoEX9P1rNUYA4lNl8C18HVS3nDur30rxhGsd5J0RNC1N/XCtGl2OEl/oggRYhrLvl+njpNcRTwmgWnaMbVKrMQ==
   dependencies:
     "@ethersproject/abstract-signer" "^5.5.0"
     "@ethersproject/properties" "^5.5.0"
@@ -3711,19 +3711,10 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^18.0.1":
-  version "18.0.10"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.0.10.tgz#5692944d4a45e204fb7a981eb1388afe919cf4d0"
-  integrity sha512-dIugadZuIPrRzvIEevIu7A1smqOAjkSMv8qOfwPt9Ve6i6JT/FQcCHyk2qIAxwsQNKZt5/oGR0T4z9h2dXRAkg==
-  dependencies:
-    "@types/prop-types" "*"
-    "@types/scheduler" "*"
-    csstype "^3.0.2"
-
-"@types/react@^18.0.12":
-  version "18.0.12"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.0.12.tgz#cdaa209d0a542b3fcf69cf31a03976ec4cdd8840"
-  integrity sha512-duF1OTASSBQtcigUvhuiTB1Ya3OvSy+xORCiEf20H0P0lzx+/KeVsA99U5UjLXSbyo1DRJDlLKqTeM1ngosqtg==
+"@types/react@*", "@types/react@^18.0.1", "@types/react@^18.0.14":
+  version "18.0.14"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.0.14.tgz#e016616ffff51dba01b04945610fe3671fdbe06d"
+  integrity sha512-x4gGuASSiWmo0xjDLpm5mPb52syZHJx02VKbqUKdLmKtAwIh63XClGsiTI1K6DO5q7ox4xAsQrU+Gl3+gGXF9Q==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -11960,10 +11951,10 @@ prettier@^1.19.1:
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.19.1.tgz#f7d7f5ff8a9cd872a7be4ca142095956a60797cb"
   integrity sha512-s7PoyDv/II1ObgQunCbB9PdLmUcBZcnWOcxDh7O0N/UwDEsHyqkW+Qh28jW+mVuCdx7gLB0BotYI1Y6uI9iyew==
 
-prettier@^2.0.5, prettier@^2.4.1, prettier@^2.5.1, prettier@^2.6.2:
-  version "2.6.2"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.6.2.tgz#e26d71a18a74c3d0f0597f55f01fb6c06c206032"
-  integrity sha512-PkUpF+qoXTqhOeWL9fu7As8LXsIUZ1WYaJiY/a7McAQzxjk82OF0tibkFXVCDImZtWxbvojFjerkiLb0/q8mew==
+prettier@^2.0.5, prettier@^2.4.1, prettier@^2.7.1:
+  version "2.7.1"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.7.1.tgz#e235806850d057f97bb08368a4f7d899f7760c64"
+  integrity sha512-ujppO+MkdPqoVINuDFDRLClm7D78qbDt0/NR+wp5FqEZOoTNAjPHWj17QRhu7geIHJfcNhRk1XVQmF8Bp3ye+g==
 
 pretty-format@^25.2.1, pretty-format@^25.5.0:
   version "25.5.0"
@@ -12326,10 +12317,10 @@ react-use@^17.3.2:
     ts-easing "^0.2.0"
     tslib "^2.1.0"
 
-react@^18.1.0:
-  version "18.1.0"
-  resolved "https://registry.yarnpkg.com/react/-/react-18.1.0.tgz#6f8620382decb17fdc5cc223a115e2adbf104890"
-  integrity sha512-4oL8ivCz5ZEPyclFQXaNksK3adutVS8l2xzZU0cqEFrE9Sb7fC0EFK5uEk74wIreL1DERyjvsU915j1pcT2uEQ==
+react@^18.2.0:
+  version "18.2.0"
+  resolved "https://registry.yarnpkg.com/react/-/react-18.2.0.tgz#555bd98592883255fa00de14f1151a917b5d77d5"
+  integrity sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==
   dependencies:
     loose-envify "^1.1.0"
 
