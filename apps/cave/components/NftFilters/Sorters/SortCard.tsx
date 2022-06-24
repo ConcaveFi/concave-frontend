@@ -67,10 +67,10 @@ export const SortCard = ({ onChangeSort }: SorterCard) => {
   )
 }
 const sorterButtons: { title: string; nftSort: NftSort }[] = [
-  { title: 'Stake Pool (ASC)', nftSort: { order: 'DESC', sort: NftSortMethod.STAKE_POOL } },
-  { title: 'Stake Pool (DESC)', nftSort: { order: 'ASC', sort: NftSortMethod.STAKE_POOL } },
-  { title: 'Redeem Date (ASC)', nftSort: { order: 'ASC', sort: NftSortMethod.REDEEM_DATE } },
-  { title: 'Redeem Date (DESC)', nftSort: { order: 'DESC', sort: NftSortMethod.REDEEM_DATE } },
+  { title: 'Stake pool (ASC)', nftSort: { order: 'DESC', sort: NftSortMethod.STAKE_POOL } },
+  { title: 'Stake pool (DESC)', nftSort: { order: 'ASC', sort: NftSortMethod.STAKE_POOL } },
+  { title: 'Redeem date (ASC)', nftSort: { order: 'ASC', sort: NftSortMethod.REDEEM_DATE } },
+  { title: 'Redeem date (DESC)', nftSort: { order: 'DESC', sort: NftSortMethod.REDEEM_DATE } },
   { title: 'Initial CNV (ASC)', nftSort: { order: 'ASC', sort: NftSortMethod.INITIAL } },
   { title: 'Initial CNV (DESC)', nftSort: { order: 'DESC', sort: NftSortMethod.INITIAL } },
 ]
