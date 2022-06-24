@@ -2,10 +2,12 @@ import { BigNumber, BigNumberish, ethers, Transaction } from 'ethers'
 import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/providers'
 import { ContractABI } from './NFTMarketplaceAbi'
 import { Signer } from 'ethers'
-import { MarketItemInfo, Offer } from './../entities'
+import { MarketItemInfo, Offer, StakingPosition } from './../entities'
 import { BaseProvider } from '@ethersproject/providers'
 import { MARKETPLACE_CONTRACT } from '@concave/core'
 import { NFT } from 'src/entities'
+import { CurrencyAmount } from '@concave/core'
+import { Currency } from '@concave/core'
 
 export class ConcaveNFTMarketplace {
   private readonly contract: ethers.Contract
@@ -52,43 +54,38 @@ export class ConcaveNFTMarketplace {
     return this.contract.fetchItemsForSale()
   }
 
-  public async createOffer(
-    signer: Signer,
-    saleInfo: MarketItemInfo, //max 10000
-  ) {
-    if (saleInfo.isSale) return this.createSale(signer, saleInfo)
-    if (saleInfo.isAuction) return this.createDefaultNftAuction(signer, saleInfo)
+  public async createOffer(signer: Signer, stakingPosition: StakingPosition, offer: Offer) {
+    if (offer.isSale) return this.createSale(signer, stakingPosition, offer)
+    if (offer.isAuction) return this.createDefaultNftAuction(signer, stakingPosition, offer)
   }
 
-  private async createSale(
-    signer: Signer,
-    saleInfo: MarketItemInfo, //max 10000
-  ) {
+  private async createSale(signer: Signer, stakingPosition: StakingPosition, offer: Offer) {
     return this.contract
       .connect(signer)
       .createSale(
-        saleInfo.position.tokenId,
-        saleInfo.offer.ERC20Token,
-        saleInfo.offer.buyNowPrice.toString(),
-        saleInfo.offer.whitelistedBuyer,
-        saleInfo.offer.feeRecipients,
-        saleInfo.offer.feePercentages,
+        stakingPosition.tokenId,
+        offer.ERC20Token,
+        offer.buyNowPrice.toString(),
+        offer.whitelistedBuyer,
+        offer.feeRecipients,
+        offer.feePercentages,
       )
   }
 
   private async createDefaultNftAuction(
     signer: Signer,
-    saleInfo: MarketItemInfo,
+    stakingPosition: StakingPosition,
+    offer: Offer,
   ): Promise<ethers.Transaction> {
     return this.contract
       .connect(signer)
       .createDefaultNftAuction(
-        saleInfo.position.tokenId,
-        saleInfo.offer.ERC20Token,
-        saleInfo.offer.minPrice.toString(),
-        saleInfo.offer.buyNowPrice.toString(),
-        saleInfo.offer.feeRecipients,
-        saleInfo.offer.feePercentages,
+        stakingPosition.tokenId,
+        offer.ERC20Token,
+        offer.minPrice.toString(),
+        offer.buyNowPrice.toString(),
+        offer.feeRecipients,
+        offer.feePercentages,
       )
   }
 
@@ -115,16 +112,20 @@ export class ConcaveNFTMarketplace {
       feePercentages,
     )
   }
-  public async makeBid(signer: Signer, marketItem: MarketItemInfo, ethers: BigNumber) {
+  public async makeBid(
+    signer: Signer,
+    marketItem: MarketItemInfo,
+    currencyAmount?: CurrencyAmount<Currency>,
+  ) {
+    if (currencyAmount.currency.isNative) {
+      throw 'Native currency'
+    }
     return this.contract
       .connect(signer)
       .makeBid(
         marketItem.position.tokenId,
-        marketItem.offer.ERC20Token,
-        marketItem.offer.listPrice.toString(),
-        {
-          value: ethers,
-        },
+        currencyAmount.wrapped.currency.address,
+        currencyAmount.numerator.toString(),
       )
   }
   public async buyNow(signer: Signer, marketItem: MarketItemInfo, ethers: BigNumber) {
