@@ -1,4 +1,4 @@
-import { Box, Collapse, Flex } from '@chakra-ui/react'
+import { Box, Button, Collapse, Flex } from '@chakra-ui/react'
 import { gradientBorder, NumericInput } from '@concave/ui'
 import { ChooseButton } from 'components/Marketplace/ChooseButton'
 import { useState } from 'react'
@@ -13,8 +13,11 @@ export const RangeFilterCard = ({ onApplyFilter, onResetFilter }: RangeFilterCar
   const [min, setMin] = useState<string>()
   const [max, setMax] = useState<string>()
   const [hasFilter, setHasFilter] = useState(false)
-  const hasAtLeastOneNumber = !!(+min || 0) || !!(+max || 0)
-  const isOpen = hasAtLeastOneNumber || hasFilter
+
+  const maxHigherThanMin = +max > +min
+  const allInputsEmpty = !!+min && !!+max
+  const canApply = (!allInputsEmpty && maxHigherThanMin) || hasFilter
+
   const onReset = () => {
     setMin('')
     setMax('')
@@ -52,21 +55,31 @@ export const RangeFilterCard = ({ onApplyFilter, onResetFilter }: RangeFilterCar
             height="30px"
             borderBottomRadius={'2xl'}
           />
-          <ChooseButton
+          <Button
             onClick={() => {
-              if (+min && +max) return
+              if (!canApply) return
+              if (hasFilter && allInputsEmpty) {
+                onResetFilter()
+                setHasFilter(false)
+                return
+              }
               onApplyFilter({ min: Math.min(+min, +max), max: Math.max(+min, +max) })
-              setMax(String(Math.max(+min, +max)))
-              setMin(String(Math.min(+min, +max)))
               setHasFilter(true)
             }}
             rounded="2xl"
             borderBottomRadius={'2xl'}
             title={'Apply'}
-            backgroundType="blue"
             width={'100px'}
+            shadow={!canApply && 'Down Medium'}
+            cursor={!canApply && 'default'}
+            _hover={!canApply && {}}
+            _focus={{}}
+            _active={{}}
             height="30px"
-          />
+            variant={canApply ? 'primary' : 'secondary'}
+          >
+            apply
+          </Button>
         </Flex>
       }
     </Flex>
