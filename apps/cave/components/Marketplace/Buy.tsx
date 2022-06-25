@@ -1,30 +1,29 @@
 import { CNV, MARKETPLACE_CONTRACT } from '@concave/core'
-import { ConcaveNFTMarketplace, MarketItemInfo } from '@concave/marketplace'
+import { ConcaveNFTMarketplace, Offer, StakingPosition } from '@concave/marketplace'
 import { Text } from '@concave/ui'
 import { ApproveButton } from 'components/ApproveButton/ApproveButton'
-import { BigNumber } from 'ethers'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { concaveProvider } from 'lib/providers'
 import { useSigner } from 'wagmi'
 
-export const BuyButton = ({ marketInfo }: { marketInfo: MarketItemInfo }) => {
+export const BuyButton = ({ position, offer }: { position: StakingPosition; offer: Offer }) => {
   const { data: signer } = useSigner()
   const { registerTransaction } = useTransactionRegistry()
 
   const onClick = async () => {
-    const contract = new ConcaveNFTMarketplace(concaveProvider(marketInfo.position.chainId))
-    const tx = await contract.buyNow(signer, marketInfo, BigNumber.from(0))
+    const contract = new ConcaveNFTMarketplace(concaveProvider(position.chainId))
+    const tx = await contract.buyNow(signer, position, offer)
     registerTransaction(tx, {
       type: 'offer marketplace',
-      tokenId: +marketInfo.position.tokenId.toString(),
+      tokenId: +position.tokenId.toString(),
     })
   }
   return (
     <ApproveButton
       approveArgs={{
-        currency: CNV[marketInfo.position.chainId],
-        spender: MARKETPLACE_CONTRACT[marketInfo.position.chainId],
-        amount: marketInfo.offer.buyNowPrice,
+        currency: CNV[position.chainId],
+        spender: MARKETPLACE_CONTRACT[position.chainId],
+        amount: offer.buyNowPrice,
       }}
       variant={'primary'}
       borderWidth={0}

@@ -23,7 +23,7 @@ export const useMarketInfo = ({ stakingPosition }: { stakingPosition: StakingPos
   const [transaction, setTransaction] = useState<Transaction>()
   const [isWaitingForWallet, setIsWaitingForWallet] = useState<boolean>(false)
   const tx = useWaitForTransaction({ hash: transaction?.hash })
-  const marketInfo = useQuery(
+  const marketItem = useQuery(
     ['MarketInfo', tx.data, chainId, stakingPosition.tokenId],
     async () => fechMarketInfo(concaveProvider(chainId), stakingPosition),
     { enabled: chainId != undefined, refetchOnWindowFocus: false },
@@ -85,7 +85,7 @@ export const useMarketInfo = ({ stakingPosition }: { stakingPosition: StakingPos
   }
 
   return {
-    marketInfo,
+    marketItem,
     tx,
     isWaitingForWallet,
     offerDisclosure,
@@ -97,19 +97,19 @@ export const useMarketInfo = ({ stakingPosition }: { stakingPosition: StakingPos
   }
 }
 
-export const getMarketPlaceButtonProps = (marketInfoState: UserMarketInfoState): ButtonProps => {
-  const { tx, marketInfo, isWaitingForWallet, offerDisclosure, createMarketItem, withdrawOffer } =
-    marketInfoState
+export const getMarketPlaceButtonProps = (marketItemState: UserMarketInfoState): ButtonProps => {
+  const { tx, marketItem, isWaitingForWallet, offerDisclosure, createMarketItem, withdrawOffer } =
+    marketItemState
   if (tx?.isLoading) {
     return { loadingText: 'Loading', disabled: true, isLoading: true }
   }
   if (isWaitingForWallet) {
     return { loadingText: 'Approve in wallet', disabled: true, isLoading: true }
   }
-  if (marketInfo.isLoading) {
+  if (marketItem.isLoading) {
     return { loadingText: 'Loading market item', disabled: true, isLoading: true }
   }
-  if (marketInfo.error) {
+  if (marketItem.error) {
     return { children: 'Coming soon', disabled: true }
   }
   // if (!marketInfo.data.isMarketItem) {
@@ -118,7 +118,7 @@ export const getMarketPlaceButtonProps = (marketInfoState: UserMarketInfoState):
   if (marketInfo.data.isAuction) {
     return { children: 'Unlist auction', onClick: withdrawOffer, variant: 'primary.outline' }
   }
-  if (marketInfo.data.isSale) {
+  if (marketItem.data.isSale) {
     return { children: 'Unlist sale', onClick: withdrawOffer, variant: 'primary.outline' }
   }
   return { children: 'List for sale', onClick: offerDisclosure.onOpen }

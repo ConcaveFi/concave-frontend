@@ -11,9 +11,9 @@ interface MarketplaceInfoProps {
 }
 
 export const MarketListing = (props: MarketplaceInfoProps) => {
-  const marketInfoState = useMarketInfo(props)
-  const { marketInfo } = marketInfoState
-  if (marketInfo.isLoading) {
+  const marketItemState = useMarketInfo(props)
+  const { marketItem } = marketItemState
+  if (marketItem.isLoading) {
     return (
       <Loading
         m={4}
@@ -24,8 +24,8 @@ export const MarketListing = (props: MarketplaceInfoProps) => {
     )
   }
 
-  const buttonState = getMarketPlaceButtonProps(marketInfoState)
-  const marketData = marketInfo.data
+  const buttonState = getMarketPlaceButtonProps(marketItemState)
+  const marketData = marketItem.data
   const auctionEnd = marketData.offer.auctionEnd.gt(0)
     ? formatDistanceToNow(new Date(+marketData.offer.auctionEnd.toString() * 1000), {
         addSuffix: false,
@@ -33,17 +33,8 @@ export const MarketListing = (props: MarketplaceInfoProps) => {
     : '--.--.--'
 
   return (
-    <Box
-      shadow={marketData?.isListed ? '' : 'down'}
-      borderRadius="2xl"
-      mt={{ lg: 1, md: 0 }}
-      mb={3}
-      mx={2}
-      py={3}
-      px={4}
-      width={{ base: '340px', md: '495px', lg: '675px' }}
-    >
-      <Flex justify={{ lg: 'left', base: 'center' }} my="3">
+    <Box shadow={marketData?.isListed ? '' : 'down'} borderRadius="2xl" width={'full'} p={4}>
+      <Flex justify={{ lg: 'left', base: 'center' }}>
         <Text color="text.low" fontSize="lg" as="b">
           Your Marketplace Listing
         </Text>
@@ -73,20 +64,20 @@ export const MarketListing = (props: MarketplaceInfoProps) => {
         </Flex>
         <Button variant={'primary'} minW={'160px'} size={'md'} width={'full'} {...buttonState} />
       </Flex>
-      {marketData && <ListForSaleModal marketInfoState={marketInfoState} />}
+      {marketData && <ListForSaleModal marketItemState={marketItemState} />}
     </Box>
   )
 }
 
-export const ListForSaleModal = ({ marketInfoState }: { marketInfoState: UserMarketInfoState }) => {
-  const listForSaleState = useListeForSaleState({ marketInfoState })
+export const ListForSaleModal = ({ marketItemState }: { marketItemState: UserMarketInfoState }) => {
+  const listForSaleState = useListeForSaleState({ marketItemState })
   return (
     <Modal
       bluryOverlay
       title=""
       size={'xs'}
-      isOpen={marketInfoState.offerDisclosure.isOpen}
-      onClose={marketInfoState.offerDisclosure.onClose}
+      isOpen={marketItemState.offerDisclosure.isOpen}
+      onClose={marketItemState.offerDisclosure.onClose}
       isCentered
       hideClose
       bodyProps={{

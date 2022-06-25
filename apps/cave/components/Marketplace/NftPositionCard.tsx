@@ -1,34 +1,35 @@
-import { MarketItemInfo } from '@concave/marketplace'
+import { MarketItem, Offer, StakingPosition } from '@concave/marketplace'
 import { Box, Collapse, Flex, HStack, Image, Text } from '@concave/ui'
+import { MarketListing } from 'components/StakingPositions/LockPosition/MarketLockInfo/MarketListing'
 import { formatDistanceToNowStrict } from 'date-fns'
 import { useState } from 'react'
 import { formatFixed } from 'utils/formatFixed'
+import { useAccount } from 'wagmi'
 import { BidButton } from './Bid'
 import { BuyButton } from './Buy'
 
 interface NftPositionBoxProps {
-  marketInfo: MarketItemInfo
+  stakingPosition: StakingPosition
   active?: boolean
   onClick?: () => void
 }
 
-const NftPositionBox = (props: NftPositionBoxProps) => {
-  const { discount, position } = props.marketInfo
-  const active = props.active
-  const redeemInDays = formatDistanceToNowStrict(position.maturity * 1000, { unit: 'day' })
+const NftPositionBox = ({ stakingPosition, active, onClick }: NftPositionBoxProps) => {
+  const redeemInDays = formatDistanceToNowStrict(stakingPosition.maturity * 1000, { unit: 'day' })
 
   const stakeImage = {
     0: '12mposition.png',
     1: '6mposition.png',
     2: '3mposition.png',
     3: '1mposition.png',
-  }[position.poolID]
+  }[stakingPosition.poolID]
+
   const period = {
     0: '360 Days',
     1: '180 Days',
     2: '90 Days',
     3: '45 Days',
-  }[position.poolID]
+  }[stakingPosition.poolID]
 
   return (
     <Flex
@@ -40,7 +41,7 @@ const NftPositionBox = (props: NftPositionBoxProps) => {
       shadow={'up'}
       direction={{ base: 'column', lg: 'row', xl: 'row' }}
     >
-      <Flex height={'full'}>
+      <Flex height={'full'} m={2}>
         <HStack
           spacing={{ base: 14, lg: 0, xl: 0 }}
           width={{ base: 'full', xl: '177px', lg: '177px' }}
@@ -68,38 +69,24 @@ const NftPositionBox = (props: NftPositionBoxProps) => {
       </Flex>
 
       <Flex width={'full'}>
-        <Flex flex={1} justifyContent="center" direction={'column'} textAlign={'start'} ml="6">
+        <Flex flex={1} justifyContent="center" direction={'column'} textAlign={'center'} ml="6">
           <Text color="text.low" fontSize={{ base: '12px', xl: 'sm', lg: 'sm' }} noOfLines={1}>
-            Redeem In:
+            Redeem in:
           </Text>
           <Text fontSize={{ base: '14px', xl: 'sm', lg: 'sm' }} fontWeight="bold">
             {redeemInDays}
           </Text>
         </Flex>
-        <Flex flex={1} justifyContent="center" direction={'column'} textAlign={'start'} ml="6">
-          <Text color="text.low" fontSize={{ base: '12px', xl: 'sm', lg: 'sm' }} noOfLines={1}>
-            Price:
-          </Text>
-          <Text fontSize={{ base: '14px', xl: 'sm', lg: 'sm' }} fontWeight="bold" noOfLines={1}>
-            {formatFixed(props.marketInfo.listPrice)} CNV
-          </Text>
-        </Flex>
-        <Flex flex={1} justifyContent="center" direction={'column'} textAlign={'start'} ml="6">
+
+        <Flex flex={1} justifyContent="center" direction={'column'} textAlign={'center'} ml="6">
           <Text color="text.low" fontSize={{ base: '12px', xl: 'sm', lg: 'sm' }}>
-            Discount:
+            Token id:
           </Text>
           <Text fontSize={{ base: '14px', xl: 'sm', lg: 'sm' }} fontWeight="bold">
-            {formatFixed(props.marketInfo?.discount, { decimals: 2 })}%
+            {+stakingPosition.tokenId.toString()}
           </Text>
         </Flex>
-        <Flex
-          flex={1.3}
-          justifyContent="center"
-          width={'60px'}
-          height="60px"
-          alignItems={'center'}
-          zIndex={3}
-        >
+        <Flex flex={1.3} justifyContent="center" alignItems={'center'}>
           <Image
             transition={'all'}
             transitionDuration="0.3s"
@@ -108,15 +95,17 @@ const NftPositionBox = (props: NftPositionBoxProps) => {
             src={`/assets/liquidstaking/modal-arrow-logo.svg`}
             alt="arrow down logo"
             cursor={'pointer'}
-            onClick={props.onClick}
+            onClick={onClick}
           />
         </Flex>
       </Flex>
     </Flex>
   )
 }
-export const NftPositionCard = ({ marketInfo }: NftPositionBoxProps) => {
+export const NftPositionCard = ({ marketItem }: { marketItem: MarketItem }) => {
   const [active, setActive] = useState(false)
+  const { data: account } = useAccount()
+
   return (
     <Flex
       shadow={active ? 'up' : ''}
@@ -153,19 +142,22 @@ export const NftPositionCard = ({ marketInfo }: NftPositionBoxProps) => {
       >
         <NftPositionBox
           active={active}
-          marketInfo={marketInfo}
+          stakingPosition={marketItem.position}
           onClick={() => setActive(!active)}
         />
         <Collapse in={active}>
-          <MarketItemInfoBody marketItem={marketInfo} />
+          {account.address !== marketItem.offer.nftSeller && <MarketItemBody {...marketItem} />}
+          {account.address === marketItem.offer.nftSeller && (
+            <MarketListing stakingPosition={marketItem.position} />
+          )}
         </Collapse>
       </Flex>
     </Flex>
   )
 }
 
-const MarketItemInfoBody = ({ marketItem }: { marketItem: MarketItemInfo }) => {
-  const redeemDate = new Date(marketItem.position.maturity * 1000).toString().slice(4, 16)
+const MarketItemBody = ({ position, offer }: { position: StakingPosition; offer: Offer }) => {
+  const redeemDate = new Date(position.maturity * 1000).toString().slice(4, 16)
   return (
     <Flex
       direction={{ xl: 'row', lg: 'row', base: 'column' }}
@@ -193,13 +185,13 @@ const MarketItemInfoBody = ({ marketItem }: { marketItem: MarketItemInfo }) => {
           </Text>
           <Flex justifyContent={'center'} alignItems="center">
             <Text width={'full'} fontWeight={700} fontSize={{ base: '14px', xl: 'sm', lg: 'sm' }}>
-              {formatFixed(marketItem.position.currentValue, { decimals: 18 })} CNV
+              {formatFixed(position.currentValue, { decimals: 18 })} CNV
             </Text>
           </Flex>
         </Flex>
       </Flex>
-      <BidButton marketInfo={marketItem} />
-      <BuyButton marketInfo={marketItem} />
+      <BidButton position={position} offer={offer} />
+      <BuyButton position={position} offer={offer} />
     </Flex>
   )
 }

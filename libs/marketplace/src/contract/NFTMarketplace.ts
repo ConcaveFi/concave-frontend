@@ -2,7 +2,7 @@ import { BigNumber, BigNumberish, ethers, Transaction } from 'ethers'
 import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/providers'
 import { ContractABI } from './NFTMarketplaceAbi'
 import { Signer } from 'ethers'
-import { MarketItemInfo, Offer, StakingPosition } from './../entities'
+import { MarketItem, Offer, StakingPosition } from './../entities'
 import { BaseProvider } from '@ethersproject/providers'
 import { MARKETPLACE_CONTRACT } from '@concave/core'
 import { NFT } from 'src/entities'
@@ -114,7 +114,7 @@ export class ConcaveNFTMarketplace {
   }
   public async makeBid(
     signer: Signer,
-    marketItem: MarketItemInfo,
+    position: StakingPosition,
     currencyAmount?: CurrencyAmount<Currency>,
   ) {
     if (currencyAmount.currency.isNative) {
@@ -123,21 +123,14 @@ export class ConcaveNFTMarketplace {
     return this.contract
       .connect(signer)
       .makeBid(
-        marketItem.position.tokenId,
+        position.tokenId,
         currencyAmount.wrapped.currency.address,
         currencyAmount.numerator.toString(),
       )
   }
-  public async buyNow(signer: Signer, marketItem: MarketItemInfo, ethers: BigNumber) {
+  public async buyNow(signer: Signer, position: StakingPosition, offer: Offer) {
     return this.contract
       .connect(signer)
-      .makeBid(
-        marketItem.position.tokenId,
-        marketItem.offer.ERC20Token,
-        marketItem.offer.buyNowPrice.toString(),
-        {
-          value: ethers,
-        },
-      )
+      .makeBid(position.tokenId, offer.ERC20Token, offer.buyNowPrice.toString())
   }
 }

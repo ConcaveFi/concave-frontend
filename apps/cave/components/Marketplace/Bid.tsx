@@ -1,6 +1,6 @@
 import { CNV, Currency, CurrencyAmount, MARKETPLACE_CONTRACT } from '@concave/core'
 import { ChevronDownIcon } from '@concave/icons'
-import { ConcaveNFTMarketplace, MarketItemInfo } from '@concave/marketplace'
+import { ConcaveNFTMarketplace, Offer, StakingPosition } from '@concave/marketplace'
 import { Button, ButtonProps, Collapse, HStack, IconButton, Modal, Text, VStack } from '@concave/ui'
 import { ApproveButton } from 'components/ApproveButton/ApproveButton'
 import { CurrencyInputField } from 'components/CurrencyAmountField'
@@ -13,9 +13,9 @@ import { useMemo, useState } from 'react'
 import { formatFixed } from 'utils/formatFixed'
 import { useSigner } from 'wagmi'
 
-export const BidButton = ({ marketInfo }: { marketInfo: MarketItemInfo }) => {
+export const BidButton = ({ position, offer }: { position: StakingPosition; offer: Offer }) => {
   const { data: signer } = useSigner()
-  const currentCurrency = CNV[marketInfo.position.chainId]
+  const currentCurrency = CNV[position.chainId]
   const [open, setOpen] = useState(false)
   const [infoOpen, setInfoOpen] = useState(false)
   const { registerTransaction } = useTransactionRegistry()
@@ -27,40 +27,37 @@ export const BidButton = ({ marketInfo }: { marketInfo: MarketItemInfo }) => {
   }
 
   const bidButtonProps: ButtonProps = useMemo(() => {
-    const minPriceEnough = marketInfo.offer.minPrice.lte(amount.numerator.toString())
-    const highestBidEnough = marketInfo.offer.nftHighestBid.lt(amount.numerator.toString())
+    const minPriceEnough = offer.minPrice.lte(amount.numerator.toString())
+    const highestBidEnough = offer.nftHighestBid.lt(amount.numerator.toString())
     if (!minPriceEnough || !highestBidEnough) return { children: 'Bid is too low', disabled: true }
 
-    const bidAmountOverflow = marketInfo.offer.buyNowPrice.lt(amount.numerator.toString())
+    const bidAmountOverflow = offer.buyNowPrice.lt(amount.numerator.toString())
     if (bidAmountOverflow) return { children: 'Bid is too high', disabled: true }
 
     const onClick = async () => {
-      const contract = new ConcaveNFTMarketplace(concaveProvider(marketInfo.position.chainId))
-      const tx = await contract.makeBid(signer, marketInfo, amount)
+      const contract = new ConcaveNFTMarketplace(concaveProvider(position.chainId))
+      const tx = await contract.makeBid(signer, position, amount)
       registerTransaction(tx, {
         type: 'offer marketplace',
-        tokenId: +marketInfo.position.tokenId.toString(),
+        tokenId: +position.tokenId.toString(),
       })
       setOpen(false)
     }
     return { children: 'Submit bid', onClick }
-  }, [amount, marketInfo, registerTransaction, signer])
+  }, [amount, offer, position, registerTransaction, signer])
 
-  if (!marketInfo.isAuction) {
+  if (!offer.isAuction) {
     return <></>
   }
 
-  const auctionEnd = +marketInfo.offer.auctionEnd.toString()
+  const auctionEnd = +offer.auctionEnd.toString()
   const auctionEndLabel = formatDistanceToNow(new Date(auctionEnd * 1000), {
     addSuffix: false,
   })
 
-  const redeemDate = formatDistanceToNow(
-    new Date(+marketInfo.position.maturity.toString() * 1000),
-    {
-      addSuffix: false,
-    },
-  )
+  const redeemDate = formatDistanceToNow(new Date(+position.maturity.toString() * 1000), {
+    addSuffix: false,
+  })
 
   return (
     <>
@@ -96,19 +93,13 @@ export const BidButton = ({ marketInfo }: { marketInfo: MarketItemInfo }) => {
             fontSize="lg"
             color="text.medium"
           >
-            <PositionInfoItem label={'Buy now'} value={formatFixed(marketInfo.offer.buyNowPrice)}>
+            <PositionInfoItem label={'Buy now'} value={formatFixed(offer.buyNowPrice)}>
               <CurrencyIcon h={'32px'} size="sm" currency={currentCurrency} />
             </PositionInfoItem>
-            <PositionInfoItem
-              label={'Current bid'}
-              value={formatFixed(marketInfo.offer.nftHighestBid)}
-            >
+            <PositionInfoItem label={'Current bid'} value={formatFixed(offer.nftHighestBid)}>
               <CurrencyIcon h={'32px'} size="sm" currency={currentCurrency} />
             </PositionInfoItem>
-            <PositionInfoItem
-              label={'Current value'}
-              value={formatFixed(marketInfo.position.currentValue)}
-            >
+            <PositionInfoItem label={'Current value'} value={formatFixed(position.currentValue)}>
               <CurrencyIcon h={'32px'} size="sm" currency={currentCurrency} />
             </PositionInfoItem>
             {auctionEnd && (
@@ -128,19 +119,19 @@ export const BidButton = ({ marketInfo }: { marketInfo: MarketItemInfo }) => {
             <VStack w={'full'} as={Collapse} in={infoOpen} animateOpacity>
               <PositionInfoItem
                 label={'Seller'}
-                value={marketInfo.offer.nftSeller.substring(0, 8) + '...'}
+                value={offer.nftSeller.substring(0, 8) + '...'}
               ></PositionInfoItem>
               <PositionInfoItem
                 label={'Highest bidder'}
-                value={marketInfo.offer.nftHighestBidder.substring(0, 8) + '...'}
+                value={offer.nftHighestBidder.substring(0, 8) + '...'}
               ></PositionInfoItem>
               <PositionInfoItem
                 label={'Bid increase'}
-                value={formatFixed(marketInfo.offer.bidIncreasePercentage) + '%'}
+                value={formatFixed(offer.bidIncreasePercentage) + '%'}
               ></PositionInfoItem>
               <PositionInfoItem
                 label={'Auction bid period'}
-                value={formatFixed(marketInfo.offer.auctionBidPeriod)}
+                value={formatFixed(offer.auctionBidPeriod)}
               ></PositionInfoItem>
             </VStack>
           </VStack>
@@ -149,7 +140,7 @@ export const BidButton = ({ marketInfo }: { marketInfo: MarketItemInfo }) => {
             <ApproveButton
               approveArgs={{
                 currency: amount.currency,
-                spender: MARKETPLACE_CONTRACT[marketInfo.position.chainId],
+                spender: MARKETPLACE_CONTRACT[position.chainId],
                 amount: amount.numerator.toString(),
               }}
               width={'full'}

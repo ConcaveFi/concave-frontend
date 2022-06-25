@@ -7,8 +7,8 @@ import { useMarketplaceDashbord } from './UseMarkeplaceState'
 export function MarketplaceDashbord() {
   const { isLoading, salePositions, owner, setOwner } = useMarketplaceDashbord()
 
-  const nftPositions = salePositions.map((marketInfo) => (
-    <NftPositionCard key={+marketInfo.position.tokenId.toString()} marketInfo={marketInfo} />
+  const nftPositions = salePositions.map((marketItem) => (
+    <NftPositionCard key={+marketItem.position.tokenId.toString()} marketItem={marketItem} />
   ))
 
   return (

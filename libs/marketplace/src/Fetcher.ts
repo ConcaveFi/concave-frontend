@@ -1,7 +1,7 @@
 import { createAlchemyWeb3, Nft } from '@alch/alchemy-web3'
 import { StakingV1Contract } from './contract'
 import { STAKING_CONTRACT } from '@concave/core'
-import { MarketItemInfo } from './entities'
+import { MarketItem } from './entities'
 import { ConcaveNFTMarketplace } from './contract'
 import { BaseProvider } from '@ethersproject/providers'
 import { StakingPosition } from './entities'
@@ -36,7 +36,7 @@ export const listAllNonFungibleTokensOnAddress = async (
 
 export const fechMarketInfo = async (provider: BaseProvider, position: StakingPosition) => {
   const contract = new ConcaveNFTMarketplace(provider)
-  return MarketItemInfo.from({
+  return MarketItem.from({
     offer: contract.nftContractAuctions(position),
     itemId: contract.tokenIdToItemIds(position),
     position,
