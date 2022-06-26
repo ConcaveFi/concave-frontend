@@ -56,6 +56,7 @@ export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePo
         </Flex>
         <FilterContainer
           stakePoolFilters={stakeFilters}
+          currentInitalCNVFilter={rangeFilter}
           onApplyInitalCNVFilter={setRangeFilter}
           onResetInitialCNVFilter={() => setRangeFilter({})}
           onChangeSort={(sort) => setSort(sort)}

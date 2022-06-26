@@ -14,6 +14,7 @@ interface FilterContainerProps {
   onChangeSort: (sorter: NftSort) => void
   onDisableStakeFilter: (filter: StakePoolFilterEnum) => void
   stakePoolFilters: StakePoolFilterEnum[]
+  currentInitalCNVFilter: RangeFilter
 }
 
 export function FilterContainer({
@@ -23,6 +24,7 @@ export function FilterContainer({
   onApplyInitalCNVFilter,
   onResetInitialCNVFilter,
   stakePoolFilters,
+  currentInitalCNVFilter,
 }: FilterContainerProps) {
   const mobileUI = useBreakpointValue({ base: true, md: false })
 
@@ -36,6 +38,7 @@ export function FilterContainer({
           <Flex gap={3}>
             {/* <RedeemDateFilter /> */}
             <InitialCNVFilter
+              currentFilter={currentInitalCNVFilter}
               onResetFilter={onResetInitialCNVFilter}
               onApplyFilter={onApplyInitalCNVFilter}
             />

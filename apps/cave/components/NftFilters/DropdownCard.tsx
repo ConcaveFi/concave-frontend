@@ -4,6 +4,7 @@ import { Card, Flex, FlexProps, gradientBorder, StatDownArrow, Text } from '@con
 type DropdownCard = {
   isOpen: boolean
   title: string
+  placeholder?: string
   highlighted?: boolean
 }
 
@@ -11,6 +12,7 @@ export const DropdownCard: React.FC<DropdownCard & FlexProps> = ({
   isOpen,
   title,
   highlighted,
+  placeholder,
   ...props
 }) => {
   return (
@@ -27,9 +29,16 @@ export const DropdownCard: React.FC<DropdownCard & FlexProps> = ({
       border="2px solid"
       borderColor={highlighted ? 'text.accent' : 'text.low'}
     >
-      <Text fontSize={'12px'} fontWeight="bold">
+      <Text
+        transition={'.4s all'}
+        position={placeholder ? 'absolute' : 'relative'}
+        transform={placeholder && 'translate(0px,-22px)'}
+        fontSize={'12px'}
+        fontWeight="bold"
+      >
         {title}
       </Text>
+      {placeholder && <Text>{placeholder}</Text>}
       <ExpandArrowIcon
         color={'text.low'}
         width="16px"

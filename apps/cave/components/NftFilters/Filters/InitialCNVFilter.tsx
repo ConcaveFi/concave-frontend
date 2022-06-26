@@ -6,8 +6,13 @@ import { RangeFilterCard } from './RangeFilterCard'
 type InitialFilter = {
   onApplyFilter: (rangeFilter: RangeFilter) => void
   onResetFilter: () => void
+  currentFilter: RangeFilter
 }
-export const InitialCNVFilter = ({ onApplyFilter, onResetFilter }: InitialFilter) => {
+export const InitialCNVFilter = ({
+  onApplyFilter,
+  onResetFilter,
+  currentFilter,
+}: InitialFilter) => {
   const { isOpen, onToggle, onClose } = useDisclosure()
   const [hasFilter, setHasFilter] = useState(false)
 
@@ -15,7 +20,12 @@ export const InitialCNVFilter = ({ onApplyFilter, onResetFilter }: InitialFilter
     <Popover onClose={onClose}>
       <PopoverTrigger>
         <Button onClick={onToggle} _active={{}}>
-          <DropdownCard highlighted={hasFilter} title="Initial CNV" isOpen={isOpen} />
+          <DropdownCard
+            placeholder={hasFilter && currentFilter?.min + ' - ' + currentFilter?.max}
+            highlighted={hasFilter}
+            title="Initial CNV"
+            isOpen={isOpen}
+          />
         </Button>
       </PopoverTrigger>
       <Portal>
