@@ -74,7 +74,6 @@ export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePo
             borderRadius="xl"
             px={{ base: 0, md: '0.5rem' }}
             mx={{ base: 0, md: 4 }}
-            py={'0.5rem'}
             shadow={{ base: '', md: 'down' }}
             apply="scrollbar.big"
             mb={3}

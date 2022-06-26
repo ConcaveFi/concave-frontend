@@ -19,7 +19,7 @@ export const UserPositionCard = (props: NftPositionCardProps) => {
       width="full"
       apply={{ base: 'background.metal', md: 'background.metalBrighter' }}
       mr={1}
-      mb={3}
+      my={3}
     >
       {/* <Flex shadow={'up'} rounded="2xl"> */}
       <Flex direction={'column'} shadow={'up'} rounded="2xl">
