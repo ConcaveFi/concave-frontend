@@ -21,7 +21,9 @@ export const InitialCNVFilter = ({
       <PopoverTrigger>
         <Button onClick={onToggle} _active={{}}>
           <DropdownCard
-            placeholder={hasFilter && currentFilter?.min + ' - ' + currentFilter?.max}
+            placeholder={
+              hasFilter && (currentFilter?.min || '...') + ' - ' + (currentFilter?.max || '...')
+            }
             highlighted={hasFilter}
             title="Initial CNV"
             isOpen={isOpen}

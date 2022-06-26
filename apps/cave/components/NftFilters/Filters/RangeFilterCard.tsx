@@ -14,9 +14,10 @@ export const RangeFilterCard = ({ onApplyFilter, onResetFilter }: RangeFilterCar
   const [max, setMax] = useState<string>()
   const [hasFilter, setHasFilter] = useState(false)
 
+  const allInputsEmpty = !+min && !+max
+  const onlyOneInputEnpty = (!+min && !!max) || (!!+min && !max)
   const maxHigherThanMin = +max > +min
-  const allInputsEmpty = !!+min && !!+max
-  const canApply = (!allInputsEmpty && maxHigherThanMin) || hasFilter
+  const canApply = !allInputsEmpty && (maxHigherThanMin || onlyOneInputEnpty)
 
   const onReset = () => {
     setMin('')
@@ -58,12 +59,7 @@ export const RangeFilterCard = ({ onApplyFilter, onResetFilter }: RangeFilterCar
           <Button
             onClick={() => {
               if (!canApply) return
-              if (hasFilter && allInputsEmpty) {
-                onResetFilter()
-                setHasFilter(false)
-                return
-              }
-              onApplyFilter({ min: Math.min(+min, +max), max: Math.max(+min, +max) })
+              onApplyFilter({ min: min && +min, max: max && +max })
               setHasFilter(true)
             }}
             rounded="2xl"
