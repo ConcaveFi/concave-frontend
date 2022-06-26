@@ -1,4 +1,4 @@
-import { Box, Button, Collapse, Flex } from '@chakra-ui/react'
+import { Box, Button, Collapse, Flex, useDisclosure } from '@chakra-ui/react'
 import { gradientBorder, NumericInput } from '@concave/ui'
 import { ChooseButton } from 'components/Marketplace/ChooseButton'
 import { useState } from 'react'
@@ -19,6 +19,11 @@ export const RangeFilterCard = ({ onApplyFilter, onResetFilter }: RangeFilterCar
   const maxHigherThanMin = +max > +min
   const canApply = !allInputsEmpty && (maxHigherThanMin || onlyOneInputEnpty)
 
+  const onApply = () => {
+    if (!canApply) return
+    onApplyFilter({ min: min && +min, max: max && +max })
+    setHasFilter(true)
+  }
   const onReset = () => {
     setMin('')
     setMax('')
@@ -38,9 +43,9 @@ export const RangeFilterCard = ({ onApplyFilter, onResetFilter }: RangeFilterCar
       transition={'.4s all'}
     >
       <Flex height={'40px'} justify="center" width="full" align="center" pt={'10'} pb={5} gap={1}>
-        <InputField value={min} placeholder="From" onChangeValue={setMin} />
+        <InputField onPressEnter={onApply} value={min} placeholder="From" onChangeValue={setMin} />
         <Box width={'10px'} height="4px" shadow={'down'} my="auto" />
-        <InputField value={max} placeholder="To" onChangeValue={setMax} />
+        <InputField onPressEnter={onApply} value={max} placeholder="To" onChangeValue={setMax} />
       </Flex>
       {
         <Flex height={'60px'} align="center" justify={'center'} gap={2}>
@@ -57,11 +62,7 @@ export const RangeFilterCard = ({ onApplyFilter, onResetFilter }: RangeFilterCar
             borderBottomRadius={'2xl'}
           />
           <Button
-            onClick={() => {
-              if (!canApply) return
-              onApplyFilter({ min: min && +min, max: max && +max })
-              setHasFilter(true)
-            }}
+            onClick={onApply}
             rounded="2xl"
             borderBottomRadius={'2xl'}
             title={'Apply'}
@@ -84,13 +85,15 @@ export const RangeFilterCard = ({ onApplyFilter, onResetFilter }: RangeFilterCar
 
 type InputField = {
   onChangeValue: (value: string) => void
+  onPressEnter: VoidFunction
   value: number | string
   placeholder: string
 }
-const InputField = ({ onChangeValue, placeholder, value }: InputField) => {
+const InputField = ({ onChangeValue, onPressEnter, placeholder, value }: InputField) => {
   return (
     <Flex width={'100px'} height="30px" shadow={'down'} rounded="full" justify={'center'}>
       <NumericInput
+        onKeyDown={(event) => event?.key === 'Enter' && onPressEnter()}
         value={value}
         textAlign={'center'}
         placeholder={placeholder}
