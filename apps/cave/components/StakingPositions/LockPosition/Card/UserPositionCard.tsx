@@ -16,7 +16,7 @@ export const UserPositionCard = (props: NftPositionCardProps) => {
       pos={'relative'}
       borderRadius={'2xl'}
       maxHeight={{ lg: '300px', md: '400px' }}
-      maxWidth={{ lg: '700px', md: '520px', base: '352px' }}
+      width="full"
       apply={{ base: 'background.metal', md: 'background.metalBrighter' }}
       mr={1}
       mb={3}
