@@ -20,7 +20,7 @@ export const useRemoveLiquidity = ({
   userBalance,
 }: {
   pair: Pair
-  userPoolShare: CurrencyAmount<Currency>
+  userPoolShare: Percent
   userBalance: CurrencyAmount<Currency>
 }) => {
   const networkId = useCurrentSupportedNetworkId()
@@ -34,7 +34,9 @@ export const useRemoveLiquidity = ({
   const ratioToRemove = toPercent(percentToRemove)
 
   const amountAMin = pair.reserve0.multiply(userPoolShare).multiply(ratioToRemove)
+  console.log(amountAMin, 'amt AMin')
   const amountBMin = pair.reserve1.multiply(userPoolShare).multiply(ratioToRemove)
+  console.log(amountBMin, 'amt BMin')
 
   const [hash, setHash] = useState<string>(null)
 

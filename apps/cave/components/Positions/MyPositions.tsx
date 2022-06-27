@@ -159,12 +159,10 @@ export const LiquidityPoolPainel = (props: LPPosition) => {
 
   if (!pair) return <AccordionPanel />
   const balance = userBalance.data || CurrencyAmount.fromRawAmount(pair.liquidityToken, '0')
+
   const userPoolShare =
-    pair.liquidityToken?.totalSupply && userBalance.data?.divide(pair.liquidityToken.totalSupply)
-  const userPoolPercentage = new Percent(
-    userBalance.data.quotient,
-    pair.liquidityToken.totalSupply.quotient,
-  )
+    pair.liquidityToken?.totalSupply &&
+    new Percent(userBalance.data.quotient, pair.liquidityToken.totalSupply.quotient)
   return (
     <AccordionPanel>
       <Stack
@@ -193,7 +191,7 @@ export const LiquidityPoolPainel = (props: LPPosition) => {
         </PositionInfoItem>
 
         {balance.greaterThan(0) && (
-          <PositionInfoItem label="Your pool share:" value={`${userPoolPercentage.toFixed()}%`} />
+          <PositionInfoItem label="Your pool share:" value={`${userPoolShare.toFixed()}%`} />
         )}
       </Stack>
       <Flex gap={5} justify="center" mt={6}>
