@@ -181,8 +181,8 @@ function PageNav() {
               Offer Bond
             </SubnavButton>
             <SubnavButton
-              isActive={router.pathname === '/bond-positions'}
-              href="/bond-positions"
+              isActive={router.pathname === '/add-new-bond-offer'}
+              href="/add-new-bond-offer"
               mt="1px"
             >
               Add Bond Offer

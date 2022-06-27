@@ -1,9 +1,17 @@
-import { Button, Card, Flex, Heading, HStack, Input, Text } from '@concave/ui'
+import { DAI, USDC } from '@concave/core'
+import { ChevronDownIcon } from '@concave/icons'
+import { Avatar, Button, Card, Flex, Heading, HStack, Icon, Input, Text } from '@concave/ui'
 import { ButtonLink } from 'components/ButtonLink'
+import { CurrencyIcon } from 'components/CurrencyIcon'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import React from 'react'
 import { MdOutlineDashboard } from 'react-icons/md'
 
 export function BondableAssets() {
+  const networkId = useCurrentSupportedNetworkId()
+  const DAI_token = DAI[networkId]
+  const usdc = USDC[networkId]
+
   return (
     <Card
       p={5}
@@ -26,7 +34,7 @@ export function BondableAssets() {
           flexDirection="column"
         >
           <Text fontSize="18px" fontWeight="600" textColor="text.high" mb={4}>
-            Bondable Assets
+            Bondable Assets {DAI_token.symbol}
           </Text>
           <HStack justify="center">
             <Card variant="primary" w="100%" maxW="170px" height="34px">
@@ -37,10 +45,15 @@ export function BondableAssets() {
                   height="31px"
                   shadow="up"
                   bgColor="secondary.100"
+                  justify={'center'}
+                  alignContent={'center'}
+                  align={'center'}
                 >
-                  <Text>test</Text>
+                  <CurrencyIcon mr={2} size="xs" currency={DAI_token} />
+                  <Text mr={2}> {DAI_token.symbol}</Text>
+                  <ChevronDownIcon />
                 </Flex>
-                <Text>40%</Text>
+                <Text>60%</Text>
               </HStack>
             </Card>
 
@@ -52,10 +65,23 @@ export function BondableAssets() {
                   height="31px"
                   shadow="up"
                   bgColor="secondary.100"
+                  justify={'center'}
+                  alignContent={'center'}
+                  align={'center'}
                 >
-                  <Text>test</Text>
+                  <Avatar
+                    src={`/assets/tokens/usdc.svg`}
+                    size="xs"
+                    bg={'text.low'}
+                    getInitials={(a) => a}
+                    draggable={false}
+                    userSelect="none"
+                    mr={2}
+                  />
+                  <Text mr={2}>USDC</Text>
+                  <ChevronDownIcon />
                 </Flex>
-                <Text>60%</Text>
+                <Text>40%</Text>
               </HStack>
             </Card>
           </HStack>
