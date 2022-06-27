@@ -20,7 +20,7 @@ export const useRemoveLiquidity = ({
   userBalance,
 }: {
   pair: Pair
-  userPoolShare: CurrencyAmount<Currency>
+  userPoolShare: Percent
   userBalance: CurrencyAmount<Currency>
 }) => {
   const networkId = useCurrentSupportedNetworkId()
