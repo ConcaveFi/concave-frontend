@@ -16,7 +16,7 @@ export const RangeFilterCard = ({ onApplyFilter, onResetFilter }: RangeFilterCar
 
   const allInputsEmpty = !+min && !+max
   const onlyOneInputEnpty = (!+min && !!max) || (!!+min && !max)
-  const maxHigherThanMin = +max > +min
+  const maxHigherThanMin = +max >= +min
   const canApply = !allInputsEmpty && (maxHigherThanMin || onlyOneInputEnpty)
 
   const onApply = () => {
