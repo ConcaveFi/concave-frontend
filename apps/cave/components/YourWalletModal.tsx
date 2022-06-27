@@ -3,7 +3,7 @@ import { useAccount, useDisconnect } from 'wagmi'
 import YourWalletContainer from './YourWallet/Containers/YourWalletContainer'
 import ConnectedAreasContainer from './YourWallet/Containers/ConnectedsAreaContainer'
 import RecentTransactionsContainer from './YourWallet/Containers/RecentTransactionsContainer'
-import { ellipseAddress } from './ConnectWallet'
+import { formatAddress } from './ConnectWallet'
 import SecondConfirmModal from './SecondConfirmModal'
 
 interface YourWalletModalProps {
@@ -38,7 +38,7 @@ export default function YourWalletModal(props: YourWalletModalProps) {
         p={6}
         shadow={'up'}
       >
-        <YourWalletContainer onClose={props.onClose} value={ellipseAddress(account?.address)} />
+        <YourWalletContainer onClose={props.onClose} value={formatAddress(account?.address)} />
         <ConnectedAreasContainer />
       </Flex>
 

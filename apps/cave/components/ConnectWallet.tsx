@@ -11,7 +11,7 @@ import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 /** Transform a wallet address
  *  {6first keys}{...}{4 keys}
  */
-export function ellipseAddress(hash: string, length = 38): string {
+export function formatAddress(hash: string, length = 38): string {
   if (!hash) return ''
   return hash.replace(hash.substring(6, length), '...')
 }
@@ -87,41 +87,42 @@ const ConnectButton = () => {
   )
 }
 
-export function ConnectWallet(): JSX.Element {
-  const { isConnected } = useConnect()
-
+const ConnectedButton = () => {
   const { data: account } = useAccount()
   const { data: ens } = useEnsName({ address: account?.address })
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { hasPendingTransactions } = useTransactionRegistry()
 
-  if (isConnected)
-    return (
-      <>
-        <Button
-          onClick={onOpen}
-          size="medium"
-          shadow="up"
-          fontFamily="heading"
-          color="text.low"
-          _focus={{ color: 'text.high', shadow: 'up' }}
-          w="100%"
-          rounded="2xl"
-          fontWeight="bold"
-          justifyContent="center"
-        >
-          <Text noOfLines={1} wordBreak="break-all" whiteSpace="normal" maxW="60%">
-            {ens || ellipseAddress(account?.address)}
-          </Text>
-          {hasPendingTransactions && (
-            <Flex position="absolute" right={4}>
-              <SpinnerIcon color="text.low" animation={spinAnimation(4)} boxSize="18px" />
-            </Flex>
-          )}
-        </Button>
-        <YourWalletModal onClose={onClose} isOpen={isOpen} />
-      </>
-    )
+  return (
+    <>
+      <Button
+        onClick={onOpen}
+        size="medium"
+        shadow="up"
+        fontFamily="heading"
+        color="text.low"
+        _focus={{ color: 'text.high', shadow: 'up' }}
+        w="100%"
+        rounded="2xl"
+        fontWeight="bold"
+        justifyContent="center"
+      >
+        <Text noOfLines={1} wordBreak="break-all" whiteSpace="normal" maxW="60%">
+          {ens || formatAddress(account?.address)}
+        </Text>
+        {hasPendingTransactions && (
+          <Flex position="absolute" right={4}>
+            <SpinnerIcon color="text.low" animation={spinAnimation(4)} boxSize="18px" />
+          </Flex>
+        )}
+      </Button>
 
-  return <ConnectButton />
+      <YourWalletModal onClose={onClose} isOpen={isOpen} />
+    </>
+  )
+}
+
+export function ConnectWallet(): JSX.Element {
+  const { isConnected } = useConnect()
+  return isConnected ? <ConnectedButton /> : <ConnectButton />
 }
