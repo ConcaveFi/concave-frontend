@@ -3,7 +3,7 @@ import { getBondSpotPrice } from 'components/Bond/BondState'
 import { ButtonLink, ButtonLinkProps } from 'components/ButtonLink'
 import { useCNVPrice } from 'hooks/useCNVPrice'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { useDevice } from 'hooks/useDevice'
+import { isMobile } from 'utils/isMobile'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import { useQuery } from 'react-query'
@@ -62,7 +62,7 @@ function PageNav() {
   const currentSupportedNetworkId = useCurrentSupportedNetworkId()
   const [liquidStakingHover, setLiquidStakingHover] = useState(false)
   const [swapHover, setSwapStakingHover] = useState(false)
-  const device = useDevice()
+
   const cnvPrice = useCNVPrice()
   const roi = useQuery(
     ['bondROI', currentSupportedNetworkId, cnvPrice.price],
@@ -80,12 +80,6 @@ function PageNav() {
     router.pathname === '/gemswap' ||
     router.pathname === '/pools' ||
     router.pathname === '/addliquidity'
-
-  const isMobile = {
-    tablet: true,
-    mobile: true,
-    desktop: false,
-  }[device]
 
   return (
     <Flex direction="column" position="relative" mr="-2px">
@@ -128,7 +122,7 @@ function PageNav() {
           >
             Stake
           </NavButton>
-          <Collapse in={liquidStakingHover || liquidStakingPage || isMobile}>
+          <Collapse in={liquidStakingHover || liquidStakingPage || isMobile()}>
             <SubnavButton
               isActive={router.pathname === '/liquid-stake-positions'}
               href="/liquid-stake-positions"
@@ -164,7 +158,7 @@ function PageNav() {
             Swap
           </NavButton>
 
-          <Collapse in={swapHover || swapPage || isMobile}>
+          <Collapse in={swapHover || swapPage || isMobile()}>
             <SubnavButton href="/addliquidity">Add liquidity</SubnavButton>
             <SubnavButton href="/pools">Your Pools</SubnavButton>
           </Collapse>
