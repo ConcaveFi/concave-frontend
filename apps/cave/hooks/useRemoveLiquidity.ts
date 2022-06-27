@@ -34,9 +34,7 @@ export const useRemoveLiquidity = ({
   const ratioToRemove = toPercent(percentToRemove)
 
   const amountAMin = pair.reserve0.multiply(userPoolShare).multiply(ratioToRemove)
-
   const amountBMin = pair.reserve1.multiply(userPoolShare).multiply(ratioToRemove)
-
 
   const [hash, setHash] = useState<string>(null)
 
