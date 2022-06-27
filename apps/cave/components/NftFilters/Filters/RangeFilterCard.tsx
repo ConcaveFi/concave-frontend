@@ -43,9 +43,14 @@ export const RangeFilterCard = ({ onApplyFilter, onResetFilter }: RangeFilterCar
       transition={'.4s all'}
     >
       <Flex height={'40px'} justify="center" width="full" align="center" pt={'10'} pb={5} gap={1}>
-        <InputField onPressEnter={onApply} value={min} placeholder="From" onChangeValue={setMin} />
+        <InputField onPressEnter={onApply} value={min} placeholder="lower" onChangeValue={setMin} />
         <Box width={'10px'} height="4px" shadow={'down'} my="auto" />
-        <InputField onPressEnter={onApply} value={max} placeholder="To" onChangeValue={setMax} />
+        <InputField
+          onPressEnter={onApply}
+          value={max}
+          placeholder="higher"
+          onChangeValue={setMax}
+        />
       </Flex>
       {
         <Flex height={'60px'} align="center" justify={'center'} gap={2}>
