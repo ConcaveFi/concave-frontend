@@ -160,6 +160,8 @@ export const LiquidityPoolPainel = (props: LPPosition) => {
 
   if (!pair) return <AccordionPanel />
   const balance = userBalance.data || CurrencyAmount.fromRawAmount(pair.liquidityToken, '0')
+  const userPoolShare =
+    pair.liquidityToken?.totalSupply && userBalance.data?.divide(pair.liquidityToken.totalSupply)
   const userPoolPercentage = new Percent(
     userBalance.data.quotient,
     pair.liquidityToken.totalSupply.quotient,
