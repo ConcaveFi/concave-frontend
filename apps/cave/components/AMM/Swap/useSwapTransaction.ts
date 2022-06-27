@@ -2,10 +2,9 @@ import { useState } from 'react'
 import { RouterAbi, ROUTER_ADDRESS, Currency } from '@concave/core'
 import { Router, TradeType, Trade } from '@concave/gemswap-sdk'
 import { SwapSettings } from '../Swap/Settings'
-import { Transaction } from 'ethers'
+import { TransactionResponse } from '@ethersproject/abstract-provider'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useAccount, useContract, useSigner } from 'wagmi'
-import { useRecentTransactions } from 'hooks/useRecentTransactions'
 import { toPercent } from 'utils/toPercent'
 
 const initialState = {
@@ -21,7 +20,7 @@ export const useSwapTransaction = (
   trade: Trade<Currency, Currency, TradeType>,
   settings: SwapSettings,
   recipient: string,
-  { onTransactionSent }: { onTransactionSent?: (tx: Transaction) => void },
+  { onTransactionSent }: { onTransactionSent?: (tx: TransactionResponse) => void },
 ) => {
   const networkId = useCurrentSupportedNetworkId()
   const { data: account } = useAccount()
@@ -31,8 +30,6 @@ export const useSwapTransaction = (
     contractInterface: RouterAbi,
     signerOrProvider: signer,
   })
-
-  const { addRecentTransaction } = useRecentTransactions()
 
   const [state, setState] = useState(initialState)
   const submit = async () => {
@@ -44,18 +41,9 @@ export const useSwapTransaction = (
         feeOnTransfer: trade.tradeType === TradeType.EXACT_INPUT,
         recipient: recipient || account.address,
       })
-      const tx = await routerContract[methodName](...args, { value })
+      const tx: TransactionResponse = await routerContract[methodName](...args, { value })
       setState({ ...initialState, trade, isTransactionSent: true, data: tx })
       onTransactionSent(tx)
-      addRecentTransaction({
-        amount: +trade.inputAmount.toSignificant(3),
-        amountTokenName: trade.inputAmount.currency.symbol,
-        purchaseTokenName: trade.outputAmount.currency.symbol,
-        purchase: +trade.outputAmount.toSignificant(3),
-        transaction: tx,
-        type: 'Swap',
-        loading: true,
-      })
     } catch (error) {
       if (error.message === 'User rejected the transaction')
         return setState({ ...initialState, trade, isWaitingForConfirmation: false })
