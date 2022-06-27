@@ -1,4 +1,4 @@
-import { CurrencyAmount, Rounding } from '@concave/core'
+import { CurrencyAmount, Percent } from '@concave/core'
 import { Fetcher, Pair } from '@concave/gemswap-sdk'
 import {
   Accordion,
@@ -12,7 +12,6 @@ import {
   Stack,
   Text,
 } from '@concave/ui'
-import { Percent } from '@concave/core'
 
 import { AddLiquidityModalButton } from 'components/AMM/AddLiquidity/AddLiquidity'
 import { RemoveLiquidityModalButton } from 'components/AMM/RemoveLiquidity/RemoveLiquidity'
