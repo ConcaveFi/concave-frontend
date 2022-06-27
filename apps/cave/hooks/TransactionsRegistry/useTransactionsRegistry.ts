@@ -42,7 +42,7 @@ const useTrackedTransactions = () => {
 
 /**
   @returns registerTransaction: Register a new transaction to be tracked by the app, (handles status toasts, and user last transactions screen)
-  @returns lastTransactions: last 10 transactions 
+  @returns recentTransactions: last 10 transactions 
  */
 export const useTransactionRegistry = () => {
   const { transactions, pushTransaction } = useTrackedTransactions()
@@ -68,7 +68,8 @@ export const useTransactionRegistry = () => {
 
   return {
     registerTransaction,
-    lastTransactions: transactions,
+    recentTransactions: transactions,
+    hasPendingTransactions: transactions.some((tx) => tx.status === 'pending'),
   }
 }
 
