@@ -41,12 +41,4 @@ export const numberMask = (number: Number | BigNumber, decimals?: number): strin
   }
 }
 
-const bigNumberMask = (number: BigNumber) => {
-  if (number.eq(0)) {
-    return `0`
-  }
-  if (+formatEther(number) < 0.01) {
-    return `<.01`
-  }
-  return formatFixed(number)
-}
+
