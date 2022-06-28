@@ -26,7 +26,7 @@ export const SortButton = ({ sorter, title, enabled, onClick }: SorterButton) =>
       <Text
         userSelect="none"
         fontWeight={'bold'}
-        fontSize={'14px'}
+        fontSize={'sm'}
         textAlign={'start'}
         width="full"
       >
