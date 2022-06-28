@@ -8,7 +8,6 @@ import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { BOND_ADDRESS } from '@concave/core'
 import React, { useEffect, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
-import { truncateNumber } from 'utils/truncateNumber'
 import { BondOutput } from './BondOutput'
 import { getBondAmountOut, getBondSpotPrice, purchaseBond, useBondState } from './BondState'
 import { ConfirmBondModal } from './ConfirmBond'
@@ -19,10 +18,7 @@ import { GasPrice } from 'components/AMM'
 import { useCNVPrice } from 'hooks/useCNVPrice'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 
-export const twoDecimals = (s: string | number) => {
-  const a = s.toString()
-  return a.indexOf('.') > -1 ? a.slice(0, a.indexOf('.') + 3) : a
-}
+import { numberMask } from 'utils/numberMask'
 
 export function BondBuyCard(props: {
   bondTransaction?: any
@@ -46,7 +42,6 @@ export function BondBuyCard(props: {
   const [hasClickedConfirm, setHasClickedConfirm] = useState(false)
 
   const cnvPrice = useCNVPrice()
-
   const { data: bondSpotPrice } = useQuery(
     ['bondSpotPrice', networkId],
     async () => await getBondSpotPrice(networkId),
@@ -97,7 +92,7 @@ export function BondBuyCard(props: {
           <HStack alignSelf={'start'}>
             <Text textColor={'text.low'}>Current Price:</Text>
             <Text textColor={'text.low'} opacity="0.7">
-              {cnvPrice.price ? '$' + cnvPrice.price?.toFixed(2) + ' CNV' : 'Loading . . .'}
+              {cnvPrice.price ? '$' + cnvPrice.price?.toFixed(3) + ' CNV' : 'Loading . . .'}
             </Text>
           </HStack>
           <HStack alignSelf={'start'}>
@@ -105,9 +100,7 @@ export function BondBuyCard(props: {
               Bond Price:
             </Text>
             <Text textColor={'text.low'} opacity="0.7">
-              {bondSpotPrice
-                ? '$' + truncateNumber(+bondSpotPrice * 10 ** 18, 3) + ' CNV'
-                : 'Loading . . .'}
+              {bondSpotPrice ? '$' + numberMask(+bondSpotPrice, 3) + ' CNV' : 'Loading . . .'}
             </Text>
           </HStack>
         </VStack>
@@ -190,8 +183,7 @@ export function BondBuyCard(props: {
       />
       <WaitingConfirmationDialog isOpen={hasClickedConfirm} title={'Confirm Bond'}>
         <Text fontSize="lg" color="text.accent">
-          Bonding {truncateNumber(+amountIn.numerator.toString(), 4)} {currencyIn.symbol} for{' '}
-          {truncateNumber(+amountOut * 10 ** 18, 4)}CNV.
+          Bonding {amountIn.toString()} for {amountOut} CNV.
         </Text>
       </WaitingConfirmationDialog>
       <TransactionSubmittedDialog
