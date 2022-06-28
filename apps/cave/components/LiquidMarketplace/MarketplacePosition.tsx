@@ -1,10 +1,14 @@
 import { Box, Button, Flex, Image, Text } from '@chakra-ui/react'
+import { MarketItem } from '@concave/marketplace'
 import { gradientBorder } from '@concave/ui'
+import { utils } from 'ethers'
+import { truncateNumber } from 'utils/truncateNumber'
 
-type MarketplacePositionProps = {}
-export const MarketplacePosition: React.FC<MarketplacePositionProps & ImageContainerProps> = ({
-  stakePeriod,
-}) => {
+type MarketplacePositionProps = { marketItem: MarketItem }
+export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ marketItem }) => {
+  const currentValue = truncateNumber(+utils.formatEther(marketItem?.position?.currentValue))
+  const discount = truncateNumber(+utils.formatEther(marketItem?.discount))
+  const price = truncateNumber(+utils.formatEther(marketItem?.listPrice))
   return (
     <Flex
       width={'full'}
@@ -18,10 +22,10 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps & ImageConta
       justify="space-between"
     >
       <Flex align="center" maxH={'95px'} gap={4} width={'full'}>
-        <ImageContainer stakePeriod={stakePeriod} />
-        <Info title="Current value" info="600 CNV" />
-        <Info title="Discount" info="2.3%" />
-        <BuyContainer price={605} />
+        <ImageContainer stakePeriod={marketItem?.position?.poolID} />
+        <Info title="Current value" info={`${currentValue}`} />
+        <Info title="Discount" info={`${discount}%`} />
+        <BuyContainer price={price} />
       </Flex>
       <LoadBard percent={20} />
     </Flex>
