@@ -17,7 +17,7 @@ const NavButton = (props: ButtonLinkProps) => {
       px={4}
       variant="secondary"
       color="text.low"
-      w="175px"
+      w="100%"
       borderRightRadius={0}
       h="50px"
       rightIcon={<Box roundedLeft="lg" shadow="Up Big" mr={-5} w="16px" h="36px" />}
@@ -36,7 +36,7 @@ const SubnavButton = ({ children, ...props }: ButtonLinkProps) => {
     <ButtonLink
       px={4}
       py={'10px'}
-      w="175px"
+      w="100%"
       color="text.low"
       variant="secondary"
       bg="none"
