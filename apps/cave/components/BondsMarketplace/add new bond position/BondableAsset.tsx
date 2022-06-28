@@ -1,5 +1,5 @@
 import { DAI, USDC } from '@concave/core'
-import { ChevronDownIcon } from '@concave/icons'
+import { AddIcon, ChevronDownIcon } from '@concave/icons'
 import { Avatar, Button, Card, Flex, Heading, HStack, Input, Text } from '@concave/ui'
 import { ButtonLink } from 'components/ButtonLink'
 import { CurrencyIcon } from 'components/CurrencyIcon'
@@ -36,7 +36,7 @@ export function BondableAssetCard() {
             flexDirection="column"
           >
             <Text fontSize="18px" fontWeight="600" textColor="text.high" mb={4}>
-              Bondable Assets {DAI_token.symbol}
+              Bondable Assets
             </Text>
             <HStack justify="center">
               <Card variant="primary" w="100%" maxW="170px" height="34px">
@@ -86,6 +86,9 @@ export function BondableAssetCard() {
                   <Text>40%</Text>
                 </HStack>
               </Card>
+              <Flex shadow="up" width="26px" height="24px" rounded="2xl" justify={'center'}>
+                <AddIcon w={'8px'} h={'24px'} />
+              </Flex>
             </HStack>
           </Flex>
           <Flex
@@ -99,7 +102,7 @@ export function BondableAssetCard() {
             <Text textColor="text.high" fontWeight="600" fontSize="18px">
               Issued Asset
             </Text>
-            <HStack mt={4} mb={4} ml={8} alignContent={'end'} justifyContent="center">
+            <HStack align="center" mb={4} px={3} alignContent={'flex-end'} justifyContent="center">
               <Text fontSize="12px" textColor={'text.low'}>
                 Token Contract:
               </Text>
@@ -116,14 +119,14 @@ export function BondableAssetCard() {
                 07a58f5f58E697e51Ab0357BC9e260A04
               </Text>
             </HStack>
-            <HStack alignContent={'end'} justifyContent="center" mt={4} mb={4} ml={8}>
+            <HStack align="center" mb={4} ml={'55px'} px={3}>
               <Text
                 fontSize="12px"
                 alignContent={'center'}
                 justifyContent="center"
                 textColor={'text.low'}
               >
-                Amount
+                Amount:
               </Text>
 
               <Text
@@ -158,7 +161,14 @@ export function BondableAssetCard() {
             <Text textColor="text.high" fontWeight="600" fontSize="18px">
               Recepient Address
             </Text>
-            <HStack mt={4} mb={4} ml={8} alignContent={'center'} justifyContent="center">
+            <HStack
+              mt={4}
+              mb={4}
+              ml={'40px'}
+              px={4}
+              alignContent={'center'}
+              justifyContent="center"
+            >
               <Text
                 alignContent={'center'}
                 justifyContent="center"

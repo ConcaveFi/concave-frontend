@@ -34,17 +34,17 @@ export function BondTypeCard() {
         h="fit-content"
         shadow="Block Up"
         w="100%"
-        maxW="430px"
+        maxW="460px"
         height="332px"
       >
-        <Flex shadow="down" width="400px" height="60px" alignContent={'center'} rounded={'2xl'}>
+        <Flex shadow="down" width="400px" height="60px" justify={'flex-start'} rounded={'2xl'}>
           <Text
-            fontWeight="bold"
-            verticalAlign={'bottom'}
-            ml={1}
-            mt={4}
-            align={'left'}
+            px={3}
+            verticalAlign={'center'}
+            textAlign={'left'}
             fontSize="24px"
+            fontWeight="600"
+            textColor="text.high"
           >
             Discount Type
           </Text>
@@ -148,9 +148,11 @@ function BondSlider(props: sliderLabel) {
       alignContent={'center'}
       rounded={'2xl'}
       flexDirection="row"
+      ml={2}
+      mr={2}
     >
       <Flex width="120px" align="center">
-        <Text color={'text.low'} fontSize="14px">
+        <Text ml={2} color={'text.low'} fontSize="14px">
           {label1}
         </Text>
       </Flex>
@@ -165,6 +167,7 @@ function BondSlider(props: sliderLabel) {
             onChangeValue([value[0], value[1]])
           }}
           fontWeight={'bold'}
+          px={3}
         >
           <RangeSliderMark value={rangeSliderValue[0]} color="white" ml="-6" w="14">
             <Flex direction={'column'}>

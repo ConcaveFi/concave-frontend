@@ -14,16 +14,12 @@ import { Bond } from './smart-bonding'
 
 export function AddBondOffer() {
   return (
-    <Flex align={'start'} direction={'column'} width={'full'} height={'full'} textAlign="center">
-      <Flex align={'center'} direction={'column'} width={'full'} height={'full'} textAlign="center">
-        <BondOfferHeader />
-        <Flex flexDirection={'column'} justify="center" mt={8} mb={10} width={'70%'}>
-          <AppearancedCard />
-          <BondTypeCard></BondTypeCard>
-        </Flex>
-      </Flex>
-      <Flex>
+    <Flex align={'center'} direction={'column'} width={'full'} height={'full'} textAlign="center">
+      <BondOfferHeader />
+      <Flex flexDirection={'column'} justify="center" mt={8} mb={10} width={'80%'}>
+        <AppearancedCard />
         <BondTypeCard></BondTypeCard>
+        <BondableAssetCard></BondableAssetCard>
       </Flex>
     </Flex>
   )
