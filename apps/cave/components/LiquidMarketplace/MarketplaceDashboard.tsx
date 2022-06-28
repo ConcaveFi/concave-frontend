@@ -1,4 +1,5 @@
 import { Flex } from '@chakra-ui/react'
+import { MarketplaceFilterContainer } from 'components/Marketplace/MarketplaceFilterContainer'
 import { useMarketplaceDashbord } from 'components/Marketplace/UseMarkeplaceState'
 import { MarketplacePosition } from './MarketplacePosition'
 
@@ -17,6 +18,7 @@ export const MarketplaceDashboard = () => {
       shadow={'up'}
       p={5}
     >
+      <MarketplaceFilterContainer address={owner} setAddress={setOwner} />
       {/* Positions Container */}
       <Flex
         rounded={'inherit'}
