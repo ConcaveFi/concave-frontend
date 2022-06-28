@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react'
 import { MarketItem } from '@concave/marketplace'
 import { Card, gradientBorder } from '@concave/ui'
-import { format } from 'date-fns'
+import { format, formatDistance, formatDistanceToNowStrict } from 'date-fns'
 import { utils } from 'ethers'
 import { truncateNumber } from 'utils/truncateNumber'
 
@@ -23,7 +23,10 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ market
   const currentValue = truncateNumber(+utils.formatEther(marketItem?.position?.currentValue))
   const discount = truncateNumber(+utils.formatEther(marketItem?.discount))
   const price = truncateNumber(+utils.formatEther(marketItem?.listPrice))
-  const currentDate = new Date(marketItem?.position?.maturity * 1000)
+  const positionDate = new Date(marketItem?.position?.maturity * 1000)
+  const relativePositionTime = formatDistanceToNowStrict(positionDate, { unit: 'day' })
+
+  const percent = Math.abs(positionDate.getTime() / new Date().getTime())
   return (
     <Flex
       width={'full'}
@@ -42,7 +45,11 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ market
         <Info title="Discount" info={`${discount}%`} />
         <BuyContainer price={price} />
       </Flex>
-      <LoadBard date={format(currentDate, 'mm/dd/yyyy')} relativeDate={'100 days'} percent={20} />
+      <LoadBard
+        date={format(positionDate, 'mm/dd/yyyy')}
+        relativeDate={relativePositionTime}
+        percent={percent}
+      />
     </Flex>
   )
 }
@@ -57,7 +64,7 @@ const ImageContainer: React.FC<ImageContainerProps> = ({ stakePeriod }) => (
     px={'2'}
     justify="space-around"
   >
-    <Info info={period[stakePeriod]} title="Stake period" />
+    <Info info={stakeDayPeriod[stakePeriod]} title="Stake period" />
     <Image
       width={{ base: '90px', lg: '70px' }}
       height={{ base: '90px', lg: '70px' }}
@@ -153,9 +160,15 @@ const stakeImage = {
   3: '1mposition.png',
 }
 
-const period = {
+const stakeDayPeriod = {
   0: '360 Days',
   1: '180 Days',
   2: '90 Days',
   3: '45 Days',
+}
+const stakeNumberPeriod = {
+  0: 360,
+  1: 180,
+  2: 90,
+  3: 45,
 }
