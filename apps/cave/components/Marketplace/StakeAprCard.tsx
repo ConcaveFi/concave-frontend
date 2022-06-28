@@ -66,7 +66,7 @@ const DefaultLayout = ({ props }: { props: StakeAprCardProps }) => {
         <Image h="65px" w="65px" src={stakeImage[poolId]} alt={`stake-period-${length}`} />
         <Flex direction={'column'} flex={1}>
           <Text fontSize="xs" color="text.low" fontWeight="medium">
-            {!diluted && 'v'}APR
+            vAPR
           </Text>
           <Text fontSize="s" color="white" fontWeight="bold">
             {(+vAPR * 100).toFixed(2) + '%'}

@@ -51,16 +51,18 @@ function MarketplaceStakeCard(props: any) {
       variant="secondary"
     >
       {!isLoading ? (
-        data?.logStakingV1_PoolRewarded?.map((e, k) => {
-          return (
-            <StakeAprCard
-              vAPR={e.base_vAPR + data?.rebaseStakingV1[0][`bondVaprPool${e.poolID}`]}
-              key={k}
-              poolId={e.poolID}
-              diluted
-            />
-          )
-        })
+        data?.logStakingV1_PoolRewarded
+          ?.sort((current, before) => (current.poolID < before.poolID ? 1 : -1))
+          .map((e, k) => {
+            return (
+              <StakeAprCard
+                vAPR={e.base_vAPR + data?.rebaseStakingV1[0][`bondVaprPool${e.poolID}`]}
+                key={k}
+                poolId={e.poolID}
+                diluted
+              />
+            )
+          })
       ) : (
         <Flex direction={'column'} align="center" gap={2}>
           <Text color={'text.low'} fontWeight={'bold'} fontSize="30px">
