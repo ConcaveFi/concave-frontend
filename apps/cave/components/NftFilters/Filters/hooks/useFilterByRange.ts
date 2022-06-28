@@ -11,11 +11,10 @@ export const useFilterByRange = ({ min, max }: RangeFilter) => ({
     if (filterByOnlyOneValue) {
       if (min) return +utils.formatEther(nftPosition.initialValue) >= min
       if (max) return +utils.formatEther(nftPosition.initialValue) <= max
-    } else {
-      return (
-        +utils.formatEther(nftPosition.initialValue) >= min &&
-        +utils.formatEther(nftPosition.initialValue) <= max
-      )
     }
+    return (
+      +utils.formatEther(nftPosition.initialValue) >= min &&
+      +utils.formatEther(nftPosition.initialValue) <= max
+    )
   },
 })
