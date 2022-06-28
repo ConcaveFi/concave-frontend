@@ -1,11 +1,12 @@
-import { Card, Flex, useBreakpointValue, useMediaQuery } from '@concave/ui'
+import { SpinIcon } from '@concave/icons'
+import { Card, Flex, Text, useBreakpointValue, useMediaQuery } from '@concave/ui'
+import { spinAnimation } from 'components/Treasury/Mobile/TreasuryManagementMobile'
 import { GlassPanel } from 'components/Treasury/TreasuryManagementCard'
+import { useGet_All_Total_Pools_VaprQuery } from 'graphql/generated/graphql'
 import { useEffect, useState } from 'react'
 import StakeAprCard from './StakeAprCard'
 
 function MarketplaceStakeCard(props: any) {
-  const isLargerLayout = useBreakpointValue({ xl: true, base: true, md: false })
-
   const filters = [
     {
       title: '360 Days',
@@ -37,45 +38,38 @@ function MarketplaceStakeCard(props: any) {
     },
   ]
 
-  const [periods, setPeriods] = useState(null)
-
-  useEffect(() => {
-    setPeriods(
-      filters.map((e, k) => {
-        return (
-          <StakeAprCard
-            isLargerLayout={isLargerLayout}
-            key={k}
-            title={e.title}
-            length={e.length}
-            image={e.image}
-            text={e.marketvapr}
-            diluted={e.diluted}
-          />
-        )
-      }),
-    )
-  }, [isLargerLayout])
-
+  const { data, isLoading } = useGet_All_Total_Pools_VaprQuery()
   return (
-    <GlassPanel
+    <Card
+      px={6}
+      py={10}
       zIndex={2}
-      gap={2}
       shadow="Block Up"
       w={{ base: '300px', md: '460px', xl: '300px' }}
       h={{ base: '283px', md: '168px', xl: '283px' }}
       style={{ alignContent: 'center', justifyContent: 'center' }}
-      justify="center"
-      // variant="secondary"
+      variant="secondary"
     >
-      <Flex
-        direction={{ md: 'row', base: 'column', xl: 'column' }}
-        gap={{ base: -10, md: 5, xl: -10 }}
-        position="relative"
-      >
-        {periods}
-      </Flex>
-    </GlassPanel>
+      {!isLoading ? (
+        data?.logStakingV1_PoolRewarded?.map((e, k) => {
+          return (
+            <StakeAprCard
+              vAPR={e.base_vAPR + data?.rebaseStakingV1[0][`bondVaprPool${e.poolID}`]}
+              key={k}
+              poolId={e.poolID}
+              diluted
+            />
+          )
+        })
+      ) : (
+        <Flex direction={'column'} align="center" gap={2}>
+          <Text color={'text.low'} fontWeight={'bold'} fontSize="30px">
+            Loading ...
+          </Text>
+          <SpinIcon animation={spinAnimation(2)} />
+        </Flex>
+      )}
+    </Card>
   )
 }
 
