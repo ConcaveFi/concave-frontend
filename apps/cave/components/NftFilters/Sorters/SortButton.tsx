@@ -23,13 +23,7 @@ export const SortButton = ({ sorter, title, enabled, onClick }: SorterButton) =>
       onClick={() => !enabled && onClick(sorter)}
       align="center"
     >
-      <Text
-        userSelect="none"
-        fontWeight={'bold'}
-        fontSize={'sm'}
-        textAlign={'start'}
-        width="full"
-      >
+      <Text userSelect="none" fontWeight={'bold'} fontSize={'sm'} textAlign={'start'} width="full">
         {title}
       </Text>
       {enabled && (
