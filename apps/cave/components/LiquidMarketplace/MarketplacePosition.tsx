@@ -1,6 +1,20 @@
-import { Box, Button, Flex, Image, Text } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  Flex,
+  Image,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  Portal,
+  Text,
+  Tooltip,
+  useDisclosure,
+  VStack,
+} from '@chakra-ui/react'
 import { MarketItem } from '@concave/marketplace'
-import { gradientBorder } from '@concave/ui'
+import { Card, gradientBorder } from '@concave/ui'
+import { format } from 'date-fns'
 import { utils } from 'ethers'
 import { truncateNumber } from 'utils/truncateNumber'
 
@@ -9,6 +23,7 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ market
   const currentValue = truncateNumber(+utils.formatEther(marketItem?.position?.currentValue))
   const discount = truncateNumber(+utils.formatEther(marketItem?.discount))
   const price = truncateNumber(+utils.formatEther(marketItem?.listPrice))
+  const currentDate = new Date(marketItem?.position?.maturity * 1000)
   return (
     <Flex
       width={'full'}
@@ -27,7 +42,7 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ market
         <Info title="Discount" info={`${discount}%`} />
         <BuyContainer price={price} />
       </Flex>
-      <LoadBard percent={20} />
+      <LoadBard date={format(currentDate, 'mm/dd/yyyy')} relativeDate={'100 days'} percent={20} />
     </Flex>
   )
 }
@@ -76,15 +91,59 @@ const BuyContainer = ({ price }: BuyContainerProps) => (
     </Flex>
   </Box>
 )
-type LoadBarProps = { percent: number }
-const LoadBard = ({ percent }: LoadBarProps) => (
-  <Flex width={'full'} h="12px" rounded={'2xl'} shadow="down" p={'3px'}>
-    <Box
-      width={`${percent}%`}
-      height="full"
-      bg={'linear-gradient(90deg, #375FC2 0%, #46CFF3 100%)'}
-      rounded="2xl"
-    />
+type LoadBarProps = { percent: number; date: string; relativeDate: string }
+const LoadBard = ({ percent, date, relativeDate }: LoadBarProps) => {
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  return (
+    <Flex
+      h="12px"
+      rounded={'2xl'}
+      shadow="down"
+      p={'3px'}
+      onMouseEnter={onOpen}
+      onMouseLeave={onClose}
+    >
+      <Popover isOpen={isOpen}>
+        <PopoverTrigger>
+          <Box
+            width={`${percent}%`}
+            height="full"
+            bg={'linear-gradient(90deg, #375FC2 0%, #46CFF3 100%)'}
+            rounded="2xl"
+          />
+        </PopoverTrigger>
+
+        <PopoverContent width={'100px'}>
+          <Flex
+            direction={'column'}
+            w={'140px'}
+            h="85px"
+            rounded="inherit"
+            apply={'background.glass'}
+            shadow="up"
+            fontWeight="bold"
+          >
+            <Text mx={'auto'} mt={2} color="text.low">
+              Redeem date:
+            </Text>
+            <Text>{date}</Text>
+            <Flex justify={'center'} gap={2}>
+              <Text color={'text.low'}>in</Text>
+              <Text color={'text.accent'}>{relativeDate}</Text>
+            </Flex>
+          </Flex>
+        </PopoverContent>
+      </Popover>
+    </Flex>
+  )
+}
+type InfoProps = { title: string; info: string; infoSize?: number }
+const Info = ({ info, infoSize, title }: InfoProps) => (
+  <Flex direction={'column'} align="center" fontWeight={'bold'}>
+    <Text fontSize={'12px'} color="text.low">
+      {title}
+    </Text>
+    <Text fontSize={infoSize || 16}>{info}</Text>
   </Flex>
 )
 const stakeImage = {
@@ -100,13 +159,3 @@ const period = {
   2: '90 Days',
   3: '45 Days',
 }
-
-type InfoProps = { title: string; info: string; infoSize?: number }
-const Info = ({ info, infoSize, title }: InfoProps) => (
-  <Flex direction={'column'} align="center" fontWeight={'bold'}>
-    <Text fontSize={'12px'} color="text.low">
-      {title}
-    </Text>
-    <Text fontSize={infoSize || 16}>{info}</Text>
-  </Flex>
-)
