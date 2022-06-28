@@ -4,7 +4,11 @@ import { BondGraphicCard } from './BondGraphicCard'
 export const BondGraphics = () => {
   return (
     <Flex direction={'column'} width="full" gap="6" mt={6}>
-      <Flex justify={'space-between'}>
+      <Flex
+        direction={{ base: 'column', xl: 'row' }}
+        justify={'space-between'}
+        gap={{ base: 6, xl: 0 }}
+      >
         <BondGraphicCard
           src="https://dune.com/embeds/870572/1517430/1d989b49-6f5a-412d-bbab-53949231f413"
           title="Cumlative DAI bonded"
@@ -14,7 +18,11 @@ export const BondGraphics = () => {
           title="Cumlative CNV bonded"
         />
       </Flex>
-      <Flex justify={'space-between'}>
+      <Flex
+        direction={{ base: 'column', xl: 'row' }}
+        justify={'space-between'}
+        gap={{ base: 6, xl: 0 }}
+      >
         <BondGraphicCard
           src="https://dune.com/embeds/870572/1517380/0a732574-e53d-4e97-8241-770ae7bbbf2b"
           title="DAI bonded events"

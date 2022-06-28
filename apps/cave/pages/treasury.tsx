@@ -34,6 +34,7 @@ export function Treasury() {
       >
         <TreasuryRevenueMobile cnv={cnvData} treasury={treaData} loading={!revenueCardLoaded} />
         <RedeemMobileCard />
+        <BondGraphics />
         <TreasuryManagementMobile
           loading={cnvStatus !== 'success' && !cnvData}
           treaData={treaData}
