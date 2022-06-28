@@ -4,6 +4,7 @@ import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider, concaveProvider as providers } from 'lib/providers'
 import { useMemo, useState } from 'react'
+import { formatFixed } from 'utils/formatFixed'
 import { useAccount, useSigner } from 'wagmi'
 import { BondSettings } from './Settings'
 
