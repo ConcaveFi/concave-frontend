@@ -112,10 +112,10 @@ export const getMarketPlaceButtonProps = (marketItemState: UserMarketInfoState):
   if (marketItem.error) {
     return { children: 'Coming soon', disabled: true }
   }
-  // if (!marketInfo.data.isMarketItem) {
+  // if (!marketItem.data.isMarketItem) {
   //   return { children: 'Create market item', onClick: createMarketItem }
   // }
-  if (marketInfo.data.isAuction) {
+  if (marketItem.data.isAuction) {
     return { children: 'Unlist auction', onClick: withdrawOffer, variant: 'primary.outline' }
   }
   if (marketItem.data.isSale) {
