@@ -36,13 +36,15 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ market
       my={'1.5'}
       apply="background.metalBrighter"
       direction={'column'}
-      p={2}
+      px={1}
+      py={2}
       justify="space-between"
     >
-      <Flex align="center" maxH={'95px'} gap={4} width={'full'}>
+      <Flex align="center" maxH={'95px'} gap={1} width={'full'} justify="space-between">
         <ImageContainer stakePeriod={marketItem?.position?.poolID} />
         <Info title="Current value" info={`${currentValue}`} />
         <Info title="Discount" info={`${discount}%`} />
+        <Info title="Token id" info={`23`} />
         <BuyContainer price={price} />
       </Flex>
       <LoadBard
@@ -77,7 +79,7 @@ type BuyContainerProps = { price: number }
 const BuyContainer = ({ price }: BuyContainerProps) => (
   <Box p={'2px'} bg="linear-gradient(90deg, #72639B 0%, #44B9DE 100%)" rounded={'2xl'}>
     <Flex
-      w="172px"
+      w="152px"
       h="49px"
       rounded={'2xl'}
       shadow="up"
@@ -85,9 +87,10 @@ const BuyContainer = ({ price }: BuyContainerProps) => (
       justify="end"
     >
       <Flex flex={1} align="center" justify="center">
-        <Info title="Price" info={price + ' CNV'} />
+        <Info title="Price" info={price + ' CNV'} infoSize={12} />
       </Flex>
       <Button
+        shadow={'up'}
         width={'45%'}
         height="full"
         bg="linear-gradient(90deg, #72639B 0%, #44B9DE 100%)"
@@ -103,6 +106,8 @@ const LoadBard = ({ percent, date, relativeDate }: LoadBarProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <Flex
+      w={'95%'}
+      mx="auto"
       h="12px"
       rounded={'2xl'}
       shadow="down"
