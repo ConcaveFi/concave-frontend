@@ -19,9 +19,9 @@
     "@badrap/bar-of-progress": "^0.2.1",
     "@chakra-ui/cli": "^2.1.0",
     "@chakra-ui/react": "^2.2.0",
-    "@concave/marketplace": "*",
     "@concave/gemswap-sdk": "*",
     "@concave/icons": "*",
+    "@concave/marketplace": "*",
     "@concave/ui": "*",
     "@graphql-codegen/add": "^3.1.1",
     "@graphql-codegen/cli": "^2.6.2",
@@ -49,14 +49,16 @@
     "nock": "^13.2.4",
     "node-mocks-http": "^1.11.0",
     "patch-package": "^6.4.7",
+    "qrcode": "^1.5.0",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-icons": "^4.3.1",
     "react-lottie": "^1.2.3",
+    "react-qrcode-logo": "^2.7.0",
     "react-query": "^3.39.0",
     "react-use": "^17.3.2",
     "siwe": "^1.1.6",
-    "wagmi": "^0.4.12"
+    "wagmi": "^0.5.2"
   },
   "devDependencies": {
     "@chakra-ui/cli": "^2.0.0",

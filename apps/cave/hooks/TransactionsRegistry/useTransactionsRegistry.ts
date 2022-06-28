@@ -10,13 +10,13 @@ import { Transaction } from 'ethers'
 
 const hrs2 = 2 * 60 * 60 * 1000 // 2 hours
 const useTrackedTransactions = () => {
-  const { data: account } = useAccount()
-  const { activeChain } = useNetwork()
+  const { address } = useAccount()
+  const { chain } = useNetwork()
   const renderTxStatusToast = useTransactionStatusToast()
 
   const { data: transactions, mutateAsync: setTransactions } = useLocalStorage<
     TrackedTransaction[]
-  >(account?.address && activeChain?.id && `transactions ${account.address} ${activeChain.id}`, [])
+  >(address && chain?.id && `transactions ${address} ${chain.id}`, [])
 
   const pushTransaction = useCallback(
     (tx: TrackedTransaction) => {
@@ -46,7 +46,7 @@ const useTrackedTransactions = () => {
  */
 export const useTransactionRegistry = () => {
   const { transactions, pushTransaction } = useTrackedTransactions()
-  const { activeChain } = useNetwork()
+  const { chain } = useNetwork()
 
   const registerTransaction = useCallback(
     (
@@ -56,14 +56,14 @@ export const useTransactionRegistry = () => {
       const newTrackedTransaction = {
         hash,
         from,
-        chainId: chainId || activeChain.id,
+        chainId: chainId || chain.id,
         timestamp: Date.now(),
         status: <const>'pending',
         meta,
       }
       pushTransaction(newTrackedTransaction)
     },
-    [pushTransaction, activeChain?.id],
+    [pushTransaction, chain?.id],
   )
 
   return {
