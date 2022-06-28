@@ -1,8 +1,6 @@
 import { Search2Icon } from '@concave/icons'
 import { Box, Flex, Input, InputGroup, InputLeftElement } from '@concave/ui'
 
-interface MarketplaceFilterContainerProps {}
-
 export function MarketplaceFilterContainer({
   address,
   setAddress,
@@ -12,14 +10,12 @@ export function MarketplaceFilterContainer({
 }) {
   return (
     <Flex
-      height={{ base: '140px', md: '100px' }}
       width="full"
       direction={'column'}
       bg={{ base: 'linear-gradient(239.18deg, #19394C 27.18%, #0A161F 96.11%)', md: 'transparent' }}
       justify={'center'}
       align="center"
       rounded={'2xl'}
-      p={4}
       position="relative"
       shadow={{ base: 'up', md: 'none' }}
     >
@@ -27,7 +23,6 @@ export function MarketplaceFilterContainer({
         display={{ base: 'block', md: 'none' }}
         position={'absolute'}
         height="full"
-        p={4}
         width={'full'}
         bgImage={'/assets/textures/metal.png'}
         bgSize="40% 50%"

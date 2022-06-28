@@ -1,4 +1,4 @@
-import { Flex } from '@chakra-ui/react'
+import { Flex, VStack } from '@chakra-ui/react'
 import { MarketplaceFilterContainer } from 'components/Marketplace/MarketplaceFilterContainer'
 import { useMarketplaceDashbord } from 'components/Marketplace/UseMarkeplaceState'
 import { MarketplacePosition } from './MarketplacePosition'
@@ -10,12 +10,13 @@ export const MarketplaceDashboard = () => {
     <MarketplacePosition key={+marketItem.position.tokenId.toString()} marketItem={marketItem} />
   ))
   return (
-    <Flex
+    <VStack
       width={'640px'}
       height="940px"
       rounded={'2xl'}
       apply="background.metalBrighter"
       shadow={'up'}
+      gap={5}
       p={5}
     >
       <MarketplaceFilterContainer address={owner} setAddress={setOwner} />
@@ -34,6 +35,6 @@ export const MarketplaceDashboard = () => {
       >
         {nftPositions}
       </Flex>
-    </Flex>
+    </VStack>
   )
 }

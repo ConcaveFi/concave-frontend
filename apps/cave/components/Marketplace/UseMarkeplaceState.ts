@@ -7,7 +7,7 @@ import { NEXT_PUBLIC_ALCHEMY_ID } from 'lib/env.conf'
 
 export const useMarketplaceDashbord = () => {
   const chainId = useCurrentSupportedNetworkId()
-  const [owner, setOwner] = useState('0xF9b97A491Be443E525D2CB32AE4Bb700f2489746')
+  const [owner, setOwner] = useState('0x8522093305253EfB2685241dc0C587CDD9B10e4B')
   const { data, isLoading } = useQuery(
     ['sales', owner, chainId],
     async () => {

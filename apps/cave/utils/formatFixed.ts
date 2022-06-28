@@ -1,11 +1,11 @@
 import { BigNumberish } from 'ethers'
 import { utils } from 'ethers'
-import { BigNumber } from 'ethers'
 
 export const formatFixed = (
   bigNumber: BigNumberish,
   { decimals = 18, places = 2, minPlaces = 2 } = {},
 ) => {
+  if (!bigNumber) return '0'
   const input = +utils.formatUnits(bigNumber, decimals)
   return floorPrecision(input, { maximumFractionDigits: places, minimumFractionDigits: minPlaces })
 }

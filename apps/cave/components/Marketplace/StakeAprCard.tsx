@@ -1,11 +1,11 @@
-import { Text, Flex, Image, useBreakpointValue } from '@concave/ui'
+import { Flex, Image, Text, useBreakpointValue } from '@concave/ui'
 
 interface StakeAprCardProps {
   poolId: number
   diluted: boolean
   vAPR?: string | number
 }
-const StakeAprCard = (props: StakeAprCardProps) => {
+export const StakeAprCard = (props: StakeAprCardProps) => {
   const isLargerLayout = useBreakpointValue({ xl: true, base: true, md: false })
   return isLargerLayout ? <DefaultLayout props={props} /> : <MobileLayout props={props} />
 }
@@ -77,8 +77,7 @@ const DefaultLayout = ({ props }: { props: StakeAprCardProps }) => {
   )
 }
 
-export default StakeAprCard
-
+//TODO: there are 3 locations with same logic, merge it
 const stakeImage = {
   0: '/assets/marketplace/12mposition.png',
   1: '/assets/marketplace/6mposition.png',

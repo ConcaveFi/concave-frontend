@@ -9,19 +9,33 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react'
-import { MarketItem } from '@concave/marketplace'
+import { ConcaveNFTMarketplace, MarketItem } from '@concave/marketplace'
 import { format, formatDistanceToNowStrict } from 'date-fns'
+import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
+import { concaveProvider } from 'lib/providers'
 import { formatFixed } from 'utils/formatFixed'
+import { useSigner } from 'wagmi'
 
 type MarketplacePositionProps = { marketItem: MarketItem }
 export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ marketItem }) => {
-  const currentValue = formatFixed(marketItem?.position?.currentValue)
-  const discount = formatFixed(marketItem?.discount, { decimals: 2 })
-  const price = formatFixed(marketItem?.listPrice)
-  const positionDate = new Date(marketItem?.position?.maturity * 1000)
+  const { data: signer } = useSigner()
+  const currentValue = formatFixed(marketItem.position?.currentValue)
+  const discount = formatFixed(marketItem.discount, { decimals: 2 })
+  const price = formatFixed(marketItem.listPrice)
+  const positionDate = new Date(marketItem.position?.maturity * 1000)
   const relativePositionTime = formatDistanceToNowStrict(positionDate, { unit: 'day' })
-
   const percent = Math.abs(positionDate.getTime() / new Date().getTime())
+  const { registerTransaction } = useTransactionRegistry()
+
+  const buyAction = async () => {
+    const contract = new ConcaveNFTMarketplace(concaveProvider(marketItem.position.chainId))
+    const tx = await contract.buyNow(signer, marketItem?.position, marketItem?.offer)
+    registerTransaction(tx, {
+      type: 'offer marketplace',
+      tokenId: +marketItem.position.tokenId.toString(),
+    })
+  }
+
   return (
     <Flex
       width={'full'}
@@ -40,7 +54,7 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ market
         <Info title="Current value" info={`${currentValue}`} />
         <Info title="Discount" info={`${discount}%`} />
         <Info title="Token id" info={`23`} />
-        <BuyContainer price={price} />
+        <BuyContainer price={price} onClick={buyAction} />
       </Flex>
       <LoadBard
         date={format(positionDate, 'mm/dd/yyyy')}
@@ -70,8 +84,8 @@ const ImageContainer: React.FC<ImageContainerProps> = ({ stakePeriod }) => (
   </Flex>
 )
 
-type BuyContainerProps = { price: number }
-const BuyContainer = ({ price }: BuyContainerProps) => (
+type BuyContainerProps = { price: string; onClick: VoidFunction }
+const BuyContainer = ({ price, onClick }: BuyContainerProps) => (
   <Box p={'2px'} bg="linear-gradient(90deg, #72639B 0%, #44B9DE 100%)" rounded={'2xl'}>
     <Flex
       w="152px"
@@ -82,7 +96,7 @@ const BuyContainer = ({ price }: BuyContainerProps) => (
       justify="end"
     >
       <Flex flex={1} align="center" justify="center">
-        <Info title="Price" info={price + ' CNV'} infoSize={12} />
+        <Info title="Price" info={price} infoSize={12} />
       </Flex>
       <Button
         shadow={'up'}
@@ -90,6 +104,7 @@ const BuyContainer = ({ price }: BuyContainerProps) => (
         height="full"
         bg="linear-gradient(90deg, #72639B 0%, #44B9DE 100%)"
         rounded={'2xl'}
+        onClick={onClick}
       >
         Buy
       </Button>

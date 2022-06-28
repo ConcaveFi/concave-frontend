@@ -1,43 +1,10 @@
 import { SpinIcon } from '@concave/icons'
-import { Card, Flex, Text, useBreakpointValue, useMediaQuery } from '@concave/ui'
+import { Card, Flex, Text } from '@concave/ui'
 import { spinAnimation } from 'components/Treasury/Mobile/TreasuryManagementMobile'
-import { GlassPanel } from 'components/Treasury/TreasuryManagementCard'
 import { useGet_All_Total_Pools_VaprQuery } from 'graphql/generated/graphql'
-import { useEffect, useState } from 'react'
-import StakeAprCard from './StakeAprCard'
+import { StakeAprCard } from './StakeAprCard'
 
-function MarketplaceStakeCard(props: any) {
-  const filters = [
-    {
-      title: '360 Days',
-      length: '12m',
-      marketvapr: 'Calculating',
-      image: '/assets/marketplace/12mposition.png',
-      diluted: true,
-    },
-    {
-      title: '180 Days',
-      length: '6m',
-      marketvapr: 'Calculating',
-      image: '/assets/marketplace/6mposition.png',
-      diluted: false,
-    },
-    {
-      title: '90 Days',
-      length: '3m',
-      marketvapr: 'Calculating',
-      image: '/assets/marketplace/3mposition.png',
-      diluted: false,
-    },
-    {
-      title: '45 Days',
-      length: '1m',
-      marketvapr: 'Calculating',
-      image: '/assets/marketplace/1mposition.png',
-      diluted: false,
-    },
-  ]
-
+export function MarketplaceStakeCard() {
   const { data, isLoading } = useGet_All_Total_Pools_VaprQuery()
   return (
     <Card
@@ -74,5 +41,3 @@ function MarketplaceStakeCard(props: any) {
     </Card>
   )
 }
-
-export default MarketplaceStakeCard

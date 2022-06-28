@@ -84,7 +84,7 @@ export const ListPositionForSale = ({
         label="Discount:"
         value={
           formatFixed(
-            listForSaleState.offer.calculateDiscount(listForSaleState.marketItem.position),
+            listForSaleState.offer.calculateDiscount?.(listForSaleState.marketItem.position),
             { decimals: 2 },
           ) + '%'
         }
@@ -121,6 +121,7 @@ const Type = ({ state }: { state: ListForSaleState }) => {
           onClick={state.handleMethod}
           rounded={'2xl'}
           fontWeight="bold"
+          cursor={'not-allowed'}
         >
           {state.method}
         </Button>

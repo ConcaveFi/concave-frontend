@@ -2,8 +2,7 @@ import { Box, Button, Card, Flex, Heading, Text, useBreakpointValue } from '@con
 import { MarketplaceDashboard } from 'components/LiquidMarketplace/MarketplaceDashboard'
 import GraphicGuide from 'components/LiquidStaking/GraphicGuide'
 import MarketplaceActivityCard from 'components/Marketplace/MarketplaceActivityCard'
-import { MarketplaceDashbord } from 'components/Marketplace/MarketplaceDashbord'
-import MarketplaceStakeCard from 'components/Marketplace/MarketplaceStakeCard'
+import { MarketplaceStakeCard } from 'components/Marketplace/MarketplaceStakeCard'
 import { withPageTransition } from 'components/PageTransition'
 import React, { useEffect, useState } from 'react'
 
@@ -60,7 +59,6 @@ const Marketplace = () => {
               align="center"
               mt={{ xl: 12, md: 6, base: 0 }}
             >
-              {/* <MarketplaceDashbord /> */}
               <MarketplaceDashboard />
             </Flex>
             <Flex
