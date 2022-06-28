@@ -3,7 +3,6 @@ import { Box, Button, Flex, FlexProps, Text, TextProps } from '@concave/ui'
 import { BigNumber } from 'ethers'
 import { formatEther } from 'ethers/lib/utils'
 import { formatFixed } from 'utils/formatFixed'
-import { numberMask } from 'utils/numberMask'
 
 const bigNumberMask = (number: BigNumber) => {
   if (number.eq(0)) {
@@ -35,17 +34,17 @@ const RedeemCardViewer = ({ stakingPosition }: RedeemCardViewerProps) => {
           <Info
             label="Current Value"
             valueFontSize={{ base: 'sm', md: 'lg' }}
-            value={numberMask(stakingPosition.currentValue) + ' CNV'}
+            value={bigNumberMask(stakingPosition.currentValue) + ' CNV'}
           />
           <Info
             label="Gained"
             valueFontSize={{ base: 'sm', md: 'lg' }}
-            value={numberMask(stakingPosition.totalRewards) + ' CNV'}
+            value={bigNumberMask(stakingPosition.totalRewards) + ' CNV'}
           />
           <Info
             label="Initial"
             valueFontSize={{ base: 'sm', md: 'lg' }}
-            value={numberMask(stakingPosition.initialValue) + ' CNV'}
+            value={bigNumberMask(stakingPosition.initialValue) + ' CNV'}
           />
         </Flex>
         <Button
