@@ -6,23 +6,18 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-  Portal,
   Text,
-  Tooltip,
   useDisclosure,
-  VStack,
 } from '@chakra-ui/react'
 import { MarketItem } from '@concave/marketplace'
-import { Card, gradientBorder } from '@concave/ui'
-import { format, formatDistance, formatDistanceToNowStrict } from 'date-fns'
-import { utils } from 'ethers'
-import { truncateNumber } from 'utils/truncateNumber'
+import { format, formatDistanceToNowStrict } from 'date-fns'
+import { formatFixed } from 'utils/formatFixed'
 
 type MarketplacePositionProps = { marketItem: MarketItem }
 export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ marketItem }) => {
-  const currentValue = truncateNumber(+utils.formatEther(marketItem?.position?.currentValue))
-  const discount = truncateNumber(+utils.formatEther(marketItem?.discount))
-  const price = truncateNumber(+utils.formatEther(marketItem?.listPrice))
+  const currentValue = formatFixed(marketItem?.position?.currentValue)
+  const discount = formatFixed(marketItem?.discount, { decimals: 2 })
+  const price = formatFixed(marketItem?.listPrice)
   const positionDate = new Date(marketItem?.position?.maturity * 1000)
   const relativePositionTime = formatDistanceToNowStrict(positionDate, { unit: 'day' })
 
