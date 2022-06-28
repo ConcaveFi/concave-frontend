@@ -18,18 +18,18 @@ type ListForSaleState = ReturnType<typeof useListeForSaleState>
 export const useListeForSaleState = ({ marketItemState }: UserListPositionCardProps) => {
   const { data: account } = useAccount()
   const [method, setMethod] = useState<'Sale' | 'Auction'>('Sale')
+  const marketItem = marketItemState.marketItem.data
   const selectedToken = CNV[marketItemState.chainId]
   const [offer, setOffer] = useState(
     new Offer({
-      ...marketItemState.marketItem.data.offer,
+      ...marketItem.offer,
       ERC20Token: selectedToken.address,
-      buyNowPrice:
-        marketItemState.marketItem.data.offer.buyNowPrice ||
-        marketItemState.marketItem.data.position.currentValue,
+      buyNowPrice: marketItem.position.currentValue,
       feePercentages: [10000],
       feeRecipients: [account.address],
     }),
   )
+
   useEffect(() => {
     if (method === 'Sale') setOffer((old) => old.setMinPrice(0))
   }, [method])
@@ -82,7 +82,12 @@ export const ListPositionForSale = ({
       <BuyNowPrice state={listForSaleState} />
       <Info
         label="Discount:"
-        value={formatFixed(listForSaleState.marketItem.discount, { decimals: 2 }) + '%'}
+        value={
+          formatFixed(
+            listForSaleState.offer.calculateDiscount(listForSaleState.marketItem.position),
+            { decimals: 2 },
+          ) + '%'
+        }
       ></Info>
 
       {!listForSaleState.offer.isValid && (
