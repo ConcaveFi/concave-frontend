@@ -1,26 +1,29 @@
 import { SpinIcon, SpinnerIcon } from '@concave/icons'
 import { Card, Flex, HStack, keyframes, ScaleFade, Text } from '@concave/ui'
+import { AppearancedCard } from 'components/BondsMarketplace/add new bond position/AppearanceCard'
+import { BondableAssetCard } from 'components/BondsMarketplace/add new bond position/BondableAsset'
+import { BondChartSimulation } from 'components/BondsMarketplace/offer-bond/bondchart'
+import { BondOfferHeader } from 'components/BondsMarketplace/offer-bond/BondOfferHeader'
+import { BondTypeCard } from 'components/BondsMarketplace/offer-bond/BondTypeCard'
 import { withPageTransition } from 'components/PageTransition'
 
 import TreasuryManagementMobile, {
   spinAnimation,
 } from 'components/Treasury/Mobile/TreasuryManagementMobile'
-import { AppearancedCard } from 'components/BondPositions/add new bond position/AppearanceCard'
-import { BondOfferHeader } from 'components/BondPositions/offer-bond/BondOfferHeader'
-import { BondableAssets } from 'components/BondPositions/offer-bond/bondableAssetsCard'
-import { BondChartSimulation } from 'components/BondPositions/offer-bond/bondchart'
-import { BondableAssetCard } from 'components/BondPositions/add new bond position/BondableAsset'
+import { Bond } from './smart-bonding'
 
 export function AddBondOffer() {
   return (
-    <Flex align={'center'} direction={'column'} width={'full'} height={'full'} textAlign="center">
-      <BondOfferHeader />
-      <Flex flexDirection={'row'} justify="center" mt={8} mb={10} width={'70%'}>
-        <Flex flexDirection={'column'} height="100%" width="100%" gap={20}>
+    <Flex align={'start'} direction={'column'} width={'full'} height={'full'} textAlign="center">
+      <Flex align={'center'} direction={'column'} width={'full'} height={'full'} textAlign="center">
+        <BondOfferHeader />
+        <Flex flexDirection={'column'} justify="center" mt={8} mb={10} width={'70%'}>
           <AppearancedCard />
-          <BondableAssetCard></BondableAssetCard>
+          <BondTypeCard></BondTypeCard>
         </Flex>
-        <BondChartSimulation></BondChartSimulation>
+      </Flex>
+      <Flex>
+        <BondTypeCard></BondTypeCard>
       </Flex>
     </Flex>
   )

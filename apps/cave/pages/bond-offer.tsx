@@ -1,10 +1,10 @@
 import { SpinIcon, SpinnerIcon } from '@concave/icons'
 import { Card, Flex, HStack, keyframes, ScaleFade, Text } from '@concave/ui'
+import { BondableAssets } from 'components/BondsMarketplace/offer-bond/bondableAssetsCard'
+import { BondChartSimulation } from 'components/BondsMarketplace/offer-bond/bondchart'
+import { BondOfferHeader } from 'components/BondsMarketplace/offer-bond/BondOfferHeader'
+import { BondTypeCard } from 'components/BondsMarketplace/offer-bond/BondTypeCard'
 
-import { BondableAssets } from 'components/BondPositions/offer-bond/bondableAssetsCard'
-import { BondChartSimulation } from 'components/BondPositions/offer-bond/bondchart'
-import { BondOfferHeader } from 'components/BondPositions/offer-bond/BondOfferHeader'
-import { BondTypeCard } from 'components/BondPositions/offer-bond/BondTypeCard'
 import { withPageTransition } from 'components/PageTransition'
 
 import TreasuryManagementMobile, {

@@ -21,97 +21,101 @@ import {
 import { ButtonLink } from 'components/ButtonLink'
 import React, { useState } from 'react'
 import { MdGraphicEq, MdOutlineDashboard } from 'react-icons/md'
+import { BondChartSimulation } from './bondchart'
 
 export function BondTypeCard() {
   const [rangeSliderValue, setRangeSliderValue] = React.useState([5, 50])
   return (
-    <Card
-      p={5}
-      gap={2}
-      variant="primary"
-      h="fit-content"
-      shadow="Block Up"
-      w="100%"
-      maxW="430px"
-      height="332px"
-    >
-      <Flex shadow="down" width="400px" height="60px" alignContent={'center'} rounded={'2xl'}>
-        <Text
-          fontWeight="bold"
-          verticalAlign={'bottom'}
-          ml={1}
-          mt={4}
-          align={'left'}
-          fontSize="24px"
-        >
-          Discount Type
-        </Text>
-      </Flex>
-
-      <Flex
-        shadow="down"
-        width="400px"
-        height="60px"
-        mt={2}
-        alignContent={'center'}
-        rounded={'2xl'}
+    <Flex flexDir={'row'} gap={10} mt={10} mb={10}>
+      <Card
+        p={5}
+        gap={2}
+        variant="primary"
+        h="fit-content"
+        shadow="Block Up"
+        w="100%"
+        maxW="430px"
+        height="332px"
       >
-        <HStack justify={'space-around'} width="full">
-          <Button
-            my={3}
-            variant="secondary"
-            size="lg"
-            w="109px"
-            rightIcon={<MdOutlineDashboard size="20px" />}
-            bgColor="secondary.75"
-            fontSize="14px"
-            rounded={'3xl'}
+        <Flex shadow="down" width="400px" height="60px" alignContent={'center'} rounded={'2xl'}>
+          <Text
+            fontWeight="bold"
+            verticalAlign={'bottom'}
+            ml={1}
+            mt={4}
+            align={'left'}
+            fontSize="24px"
           >
-            vAMM
-          </Button>
-          <Button
-            my={3}
-            variant="secondary"
-            size="lg"
-            w="109px"
-            rightIcon={<MdOutlineDashboard size="20px" />}
-            bgColor="secondary.75"
-            fontSize="14px"
-            rounded={'3xl'}
-          >
-            Fixed
-          </Button>
-          <Button
-            my={3}
-            variant="primary"
-            size="lg"
-            w="109px"
-            rightIcon={<MdOutlineDashboard size="20px" />}
-            bgColor="secondary.75"
-            fontSize="14px"
-            rounded={'3xl'}
-          >
-            Custom
-          </Button>
-        </HStack>
-      </Flex>
+            Discount Type
+          </Text>
+        </Flex>
 
-      <BondSlider
-        onChangeValue={setRangeSliderValue}
-        label1={'Vesting Term:'}
-        label2={'Days'}
-        maxValue={360}
-        defaultValue={[0, 360]}
-      ></BondSlider>
-      <BondSlider
-        onChangeValue={setRangeSliderValue}
-        label1={'Discount Range:'}
-        label2={'%'}
-        maxValue={100}
-        defaultValue={[0, 100]}
-        step={0.05}
-      ></BondSlider>
-    </Card>
+        <Flex
+          shadow="down"
+          width="400px"
+          height="60px"
+          mt={2}
+          alignContent={'center'}
+          rounded={'2xl'}
+        >
+          <HStack justify={'space-around'} width="full">
+            <Button
+              my={3}
+              variant="secondary"
+              size="lg"
+              w="109px"
+              rightIcon={<MdOutlineDashboard size="20px" />}
+              bgColor="secondary.75"
+              fontSize="14px"
+              rounded={'3xl'}
+            >
+              vAMM
+            </Button>
+            <Button
+              my={3}
+              variant="secondary"
+              size="lg"
+              w="109px"
+              rightIcon={<MdOutlineDashboard size="20px" />}
+              bgColor="secondary.75"
+              fontSize="14px"
+              rounded={'3xl'}
+            >
+              Fixed
+            </Button>
+            <Button
+              my={3}
+              variant="primary"
+              size="lg"
+              w="109px"
+              rightIcon={<MdOutlineDashboard size="20px" />}
+              bgColor="secondary.75"
+              fontSize="14px"
+              rounded={'3xl'}
+            >
+              Custom
+            </Button>
+          </HStack>
+        </Flex>
+
+        <BondSlider
+          onChangeValue={setRangeSliderValue}
+          label1={'Vesting Term:'}
+          label2={'Days'}
+          maxValue={360}
+          defaultValue={[0, 360]}
+        ></BondSlider>
+        <BondSlider
+          onChangeValue={setRangeSliderValue}
+          label1={'Discount Range:'}
+          label2={'%'}
+          maxValue={100}
+          defaultValue={[0, 100]}
+          step={0.05}
+        ></BondSlider>
+      </Card>
+      <BondChartSimulation></BondChartSimulation>
+    </Flex>
   )
 }
 type sliderLabel = {
