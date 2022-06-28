@@ -1,6 +1,7 @@
 import { SpinIcon, SpinnerIcon } from '@concave/icons'
 import { Card, Flex, keyframes, ScaleFade, Text } from '@concave/ui'
 import { withPageTransition } from 'components/PageTransition'
+import { BondGraphics } from 'components/Treasury/BondGraphics'
 import DividendsCard from 'components/Treasury/DividendsCard'
 import DividendsCardMobile from 'components/Treasury/Mobile/DividendsCardMobile'
 import RedeemMobileCard from 'components/Treasury/Mobile/RedeemMobileCard'
@@ -68,6 +69,7 @@ export function Treasury() {
             />
             <TreasuryRedeemCard />
           </Flex>
+          <BondGraphics />
           {/* for treasury assets  */}
           <ScaleFade in={revenueCardLoaded}>
             {cnvStatus === 'success' && cnvData && <TreasuryManagementCard assets={treaData} />}
