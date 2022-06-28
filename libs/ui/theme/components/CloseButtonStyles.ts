@@ -16,6 +16,7 @@ export const CloseButtonStyles: ComponentSingleStyleConfig = {
       color: 'text.low',
       _hover: { color: 'text.high' },
       _active: { color: 'text.high' },
+      _focus: { color: 'text.high', transform: 'scale(1.1)' },
     },
   },
   defaultProps: {
