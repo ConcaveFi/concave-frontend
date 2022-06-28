@@ -1,4 +1,6 @@
-import { commify } from 'ethers/lib/utils'
+import { BigNumber } from 'ethers'
+import { commify, formatEther } from 'ethers/lib/utils'
+import { formatFixed } from './formatFixed'
 
 /**
  * Adds decimals if '.' character is found, otherwise returns number string without modification
@@ -18,13 +20,33 @@ const numSplice = (number: string | Number, decimalCount?: number): string => {
  * @param decimals - the number of decimal places to use
  * @returns a number in string format
  */
-export const numberMask = (number: Number, decimals?: number): string => {
-  if (number === 0) {
+export const numberMask = (number: Number | BigNumber, decimals?: number): string => {
+  if (BigNumber.isBigNumber(number)) {
+    if (number.eq(0)) {
+      return `0`
+    }
+    if (+formatEther(number) < 0.01) {
+      return `<.01`
+    }
+    return formatFixed(number)
+  } else {
+    if (number === 0) {
+      return `0`
+    }
+    if (number < 0.01) {
+      return `<.01`
+    }
+    const decimalCount = decimals || 2
+    return commify(numSplice(number, decimalCount))
+  }
+}
+
+const bigNumberMask = (number: BigNumber) => {
+  if (number.eq(0)) {
     return `0`
   }
-  if (number < 0.01) {
+  if (+formatEther(number) < 0.01) {
     return `<.01`
   }
-  const decimalCount = decimals || 2
-  return commify(numSplice(number, decimalCount))
+  return formatFixed(number)
 }
