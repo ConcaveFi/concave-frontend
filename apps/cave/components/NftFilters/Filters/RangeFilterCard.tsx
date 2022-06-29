@@ -13,16 +13,23 @@ export const RangeFilterCard = ({ onApplyFilter, onResetFilter }: RangeFilterCar
   const [min, setMin] = useState<string>()
   const [max, setMax] = useState<string>()
   const [hasFilter, setHasFilter] = useState(false)
+  const [appliedFilter, setAppliedFilter] = useState<RangeFilter>()
 
   const allInputsEmpty = !+min && !+max
   const onlyOneInputEnpty = (!+min && !!max) || (!!+min && !max)
   const maxHigherThanMin = +max >= +min
-  const canApply = !allInputsEmpty && (maxHigherThanMin || onlyOneInputEnpty)
+  const sameValuesOfApplied =
+    hasFilter && appliedFilter?.min === +min && appliedFilter?.max === +max
+
+  const canApply =
+    !allInputsEmpty && (maxHigherThanMin || onlyOneInputEnpty) && !sameValuesOfApplied
 
   const onApply = () => {
     if (!canApply) return
-    onApplyFilter({ min: min && +min, max: max && +max })
+    const filter = { min: min && +min, max: max && +max }
+    onApplyFilter(filter)
     setHasFilter(true)
+    setAppliedFilter(filter)
   }
   const onReset = () => {
     setMin('')
@@ -46,7 +53,7 @@ export const RangeFilterCard = ({ onApplyFilter, onResetFilter }: RangeFilterCar
         <InputField onPressEnter={onApply} value={min} placeholder="From" onChangeValue={setMin} />
         <Box width={'10px'} height="4px" shadow={'down'} my="auto" />
         <InputField
-          redOutline={!canApply}
+          redOutline={!canApply && !sameValuesOfApplied}
           onPressEnter={onApply}
           value={max}
           placeholder="To"
