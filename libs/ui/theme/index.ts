@@ -11,7 +11,8 @@ import Switch from './components/SwitchStyles'
 import Accordion from './components/AccordionStyles'
 import scrollbar from './scrollbars'
 import background from './backgrounds'
-import { fonts, shadows } from './foundations'
+import shadows from './shadows'
+import { fonts } from './foundations'
 
 const theme = extendTheme({
   config: { initialColorMode: 'dark', cssVarPrefix: 'concave' },
