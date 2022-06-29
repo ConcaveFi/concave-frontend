@@ -13,16 +13,16 @@ export const BondGraphicCard = ({ title, src }: BondGraphicCardProps) => {
       mx="auto"
       h="300px"
     >
-      <Text color={'text.low'} fontSize="xl" mt={8} ml={6}>
+      {/* <Text color={'text.low'} fontSize="xl" mt={8} ml={6}>
         AccrualBondsV1
       </Text>
       <Text fontSize={'2xl'} ml={6}>
         {title}
-      </Text>
+      </Text> */}
       <Flex mx={'auto'} my="auto" rounded={'2xl'} overflow="hidden">
         <iframe
           src={src}
-          height="160"
+          height="260"
           width={isMobile ? '320' : !isLarger ? '470' : '400'}
           title="chart 1"
         />

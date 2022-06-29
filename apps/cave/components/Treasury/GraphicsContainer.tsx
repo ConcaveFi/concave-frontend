@@ -1,5 +1,5 @@
 import { Flex } from '@chakra-ui/react'
-import { BondGraphicCard } from './BondGraphicCard'
+import { BondGraphicCard } from './GraphicCard'
 
 export const BondGraphics = () => {
   return (
