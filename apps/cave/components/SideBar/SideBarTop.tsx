@@ -1,5 +1,6 @@
 import { CNV } from '@concave/core'
 import { Box, Flex, Image, Stack, Text } from '@concave/ui'
+import { DashboardIcon } from '@concave/icons'
 import { ButtonLink } from 'components/ButtonLink'
 import { ConnectButton, UserWallet } from 'components/UserWallet/ConnectWallet'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
@@ -50,7 +51,8 @@ function SideBarTop() {
           variant="primary.outline"
           size="medium"
           w="full"
-          // leftIcon={<MdOutlineDashboard size="20px" />}
+          alignItems="center"
+          leftIcon={<DashboardIcon h="20px" w="20px" />}
         >
           Treasury
         </ButtonLink>
