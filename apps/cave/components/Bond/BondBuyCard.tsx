@@ -18,6 +18,7 @@ import { useQuery } from 'react-query'
 import { GasPrice } from 'components/AMM'
 import { useCNVPrice } from 'hooks/useCNVPrice'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
+import { AddTokenToWalletButton } from 'components/AddTokenToWalletButton'
 
 export const twoDecimals = (s: string | number) => {
   const a = s.toString()
@@ -195,11 +196,12 @@ export function BondBuyCard(props: {
         </Text>
       </WaitingConfirmationDialog>
       <TransactionSubmittedDialog
+        title="Bond Submitted"
         tx={bondTransaction}
         isOpen={bondTransaction}
-        tokenSymbol={currencyOut.symbol}
-        tokenOutAddress={currencyOut.address}
-      />
+      >
+        <AddTokenToWalletButton token={currencyOut} />
+      </TransactionSubmittedDialog>
       <TransactionErrorDialog error={txError} isOpen={isOpenRejected} />
     </Card>
   )
