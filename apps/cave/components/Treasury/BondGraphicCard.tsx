@@ -14,7 +14,7 @@ export const BondGraphicCard = ({ title, src }: BondGraphicCardProps) => {
       h="300px"
     >
       <Text color={'text.low'} fontSize="xl" mt={8} ml={6}>
-        Accrual bonds V1
+        AccrualBondsV1
       </Text>
       <Text fontSize={'2xl'} ml={6}>
         {title}
