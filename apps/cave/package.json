@@ -11,6 +11,7 @@
     "start": "next start",
     "lint": "next lint --fix",
     "test": "tsdx test",
+    "test:watch": "tsdx test --watch",
     "gen": "DOTENV_CONFIG_PATH=./.env graphql-codegen --config codegen.yml -r dotenv/config"
   },
   "dependencies": {
