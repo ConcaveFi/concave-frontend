@@ -75,7 +75,7 @@ export const RangeFilterCard = ({ onApplyFilter, onResetFilter }: RangeFilterCar
             height="30px"
             variant={canApply ? 'primary' : 'secondary'}
           >
-            apply
+            Apply
           </Button>
         </Flex>
       }
