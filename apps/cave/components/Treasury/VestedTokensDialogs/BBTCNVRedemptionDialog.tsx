@@ -3,11 +3,12 @@ import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { RedeemBBT_CNV_Abi } from 'contracts/VestedTokens/RedeemBbtCNVAbi'
-import { Contract, Transaction, utils } from 'ethers'
+import { Contract, utils } from 'ethers'
+import { TransactionResponse } from '@ethersproject/abstract-provider'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { concaveProvider as provider } from 'lib/providers'
 import { useState } from 'react'
-import { useAccount, useConnect, useSigner } from 'wagmi'
+import { useAccount, useSigner } from 'wagmi'
 import useBBTCNVRedeemable from '../Hooks/useBBTCNVRedeemable'
 import useVestedTokens from '../Hooks/useVestedTokens'
 interface BBBTCNVRedemptionDialogProps {
@@ -21,10 +22,9 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
   const { isOpen: isErrorOpen, onOpen: onOpenError, onClose: onCloseError } = useDisclosure()
   const { onClose, isOpen } = props
   const { data: signer } = useSigner()
-  const { data: account } = useAccount()
-  const { isConnected } = useConnect()
+  const { address, isConnected } = useAccount()
 
-  const [tx, setTx] = useState<Transaction>()
+  const [tx, setTx] = useState<TransactionResponse>()
   const [error, setError] = useState('')
 
   const { data: redeemableData, isLoading } = useBBTCNVRedeemable()
@@ -100,7 +100,7 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
               onOpenConfirm()
               bbtCNVContract
                 .connect(signer)
-                .redeem(redeemableData.redeemable, account?.address, account?.address, true)
+                .redeem(redeemableData.redeemable, address, address, true)
                 .then((tx) => {
                   onCloseConfirm()
                   registerTransaction(tx, {
