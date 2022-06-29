@@ -62,18 +62,26 @@ export const RangeFilterCard = ({ onApplyFilter, onResetFilter }: RangeFilterCar
       </Flex>
       {
         <Flex height={'60px'} align="center" justify={'center'} gap={2}>
-          <ChooseButton
+          <Button
             onClick={() => {
+              if (!hasFilter) return
               onReset()
               setHasFilter(false)
             }}
             title={'Reset'}
-            backgroundType="default"
             width={'100px'}
             rounded="2xl"
             height="30px"
             borderBottomRadius={'2xl'}
-          />
+            variant="secondary"
+            shadow={!hasFilter ? 'Down Medium' : 'up'}
+            cursor={!hasFilter && 'default'}
+            _hover={!hasFilter && {}}
+            _focus={{}}
+            _active={{}}
+          >
+            Reset
+          </Button>
           <Button
             onClick={onApply}
             rounded="2xl"
