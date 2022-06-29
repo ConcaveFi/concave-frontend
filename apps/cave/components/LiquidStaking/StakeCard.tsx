@@ -301,6 +301,7 @@ function StakeCard(props: StackCardProps) {
           <Flex
             direction={{ base: 'column', md: 'row' }}
             maxW={{ base: '310px', sm: '340px', md: 'full' }}
+            gap={6}
           >
             <Emissions
               period={props.period}

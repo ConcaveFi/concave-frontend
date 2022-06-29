@@ -1,4 +1,12 @@
-import { Currency, CurrencyAmount, MaxUint256, NATIVE, ROUTER_ADDRESS, Token } from '@concave/core'
+import {
+  Currency,
+  CurrencyAmount,
+  MaxUint256,
+  NATIVE,
+  ROUTER_ADDRESS,
+  Token,
+  Percent,
+} from '@concave/core'
 import { Pair } from '@concave/gemswap-sdk'
 import {
   Box,
@@ -30,7 +38,7 @@ export const RemoveLiquidityModalButton = ({
   label?: string
   liquidityInfo: {
     pair: Pair
-    userPoolShare: CurrencyAmount<Currency>
+    userPoolShare: Percent
     userBalance: CurrencyAmount<Currency>
   }
 }) => {
@@ -261,13 +269,7 @@ const RemoveLiquidityActions = ({
   )
 }
 
-const YourPosition = ({
-  pair,
-  userPoolShare,
-}: {
-  pair: Pair
-  userPoolShare: CurrencyAmount<Currency>
-}) => {
+const YourPosition = ({ pair, userPoolShare }: { pair: Pair; userPoolShare: Percent }) => {
   return (
     <Flex gap={7} direction={'column'} shadow="Up Big" px={4} py={4} borderRadius="2xl">
       <Text fontSize={'lg'}>Your Position</Text>

@@ -7,7 +7,7 @@ import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId
 import { useEffect, useState } from 'react'
 import { formatFixed } from 'utils/formatFixed'
 import { toAmount } from 'utils/toAmount'
-import { truncateNumber } from 'utils/truncateNumber'
+
 import { useAccount } from 'wagmi'
 import { UserMarketInfoState } from './LockPosition/MarketLockInfo/useMarketPlaceInfo'
 
@@ -212,7 +212,7 @@ const CurrentValue = (props: { currentValue: BigNumber }) => {
           align="center"
           fontWeight="bold"
         >
-          {truncateNumber(props.currentValue)}
+          {formatFixed(props.currentValue)}
         </Flex>
       </Box>
     </HStack>

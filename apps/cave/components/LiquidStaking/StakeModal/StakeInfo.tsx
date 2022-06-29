@@ -16,6 +16,12 @@ const periodToDaysMapping = {
 }
 
 const periodToRewardsBoost = {
+  '360 days': '4x',
+  '180 days': '2x',
+  '90 days': '1.5x',
+  '45 days': '1.25x',
+}
+const quaterlyBoost = {
   '360 days': '2x',
   '180 days': '1.75x',
   '90 days': '1.5x',
@@ -42,7 +48,6 @@ function StakeInfo(props: any) {
         <Stack isInline justifyContent="space-between">
           <Stack spacing="1px">
             <Text textAlign="left" fontSize={{ base: '2xl', sm: '3xl' }} fontWeight="bold">
-              {/* {props.period} */}
               {periodToRewardsBoost[`${props.period}`]}
             </Text>
             <Text color="text.low" fontSize="sm">
@@ -67,12 +72,11 @@ function StakeInfo(props: any) {
           The {props.period} staking term will accrue CNV from bond emissions by capturing{` `}
           {periodToBondRevenueMapping[props.period]} of the growth generated from purchased bonds
           every 8 hours. Additionally, the {props.period} term receives a{` `}
-          {periodToRewardsBoost[props.period]} boost on base CNV emissions and the quarterly
-          dividend derived from protocol profits in non CNV assets.
+          {periodToRewardsBoost[props.period]} boost on base CNV emissions and a{' '}
+          {quaterlyBoost[props.period]} the quarterly dividend derived from protocol profits in non
+          CNV assets.
         </Text>
-
         <Text mt={{ base: 3, sm: 5 }} color="text.low" fontSize="sm" fontWeight="semibold">
-          {/* Redeem Date: {props.period} */}
           Redeem Date:{' '}
           {addDays(Date(), periodToDaysMapping[`${props.period}`]).toISOString().slice(0, 10)}
         </Text>
