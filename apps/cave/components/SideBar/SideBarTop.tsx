@@ -3,7 +3,6 @@ import { Box, Flex, Image, Stack, Text } from '@concave/ui'
 import { ButtonLink } from 'components/ButtonLink'
 import { ConnectButton, UserWallet } from 'components/UserWallet/ConnectWallet'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { MdOutlineDashboard } from 'react-icons/md'
 import { useAccount, useBalance } from 'wagmi'
 
 const UserCnvBalance = () => {
@@ -51,7 +50,7 @@ function SideBarTop() {
           variant="primary.outline"
           size="medium"
           w="full"
-          leftIcon={<MdOutlineDashboard size="20px" />}
+          // leftIcon={<MdOutlineDashboard size="20px" />}
         >
           Treasury
         </ButtonLink>
