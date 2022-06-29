@@ -13,7 +13,7 @@
   "scripts": {
     "build": "tsup src/index.ts --format esm,cjs --dts",
     "dev": "tsup src/index.ts --format esm,cjs --watch --dts",
-    "test": "tsdx test"
+    "test": "tsdx test --passWithNoTests"
   },
   "dependencies": {
     "@alch/alchemy-web3": "^1.4.4",
