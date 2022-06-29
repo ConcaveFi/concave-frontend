@@ -1,20 +1,37 @@
 import { CNV } from '@concave/core'
 import { Box, Flex, Image, Stack, Text } from '@concave/ui'
 import { ButtonLink } from 'components/ButtonLink'
-import { ConnectWallet } from 'components/ConnectWallet'
+import { ConnectButton, UserWallet } from 'components/UserWallet/ConnectWallet'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { MdOutlineDashboard } from 'react-icons/md'
 import { useAccount, useBalance } from 'wagmi'
 
-function SideBarTop() {
-  const { data: account } = useAccount()
+const UserCnvBalance = () => {
+  const { address } = useAccount()
   const networkId = useCurrentSupportedNetworkId()
   const { data } = useBalance({
-    addressOrName: account?.address,
+    addressOrName: address,
     token: CNV[networkId].address,
     formatUnits: CNV[networkId].decimals,
-    enabled: !!account?.address,
+    enabled: !!address,
   })
+
+  return (
+    data?.formatted && (
+      <Flex justifyContent="space-between" p={2} mt={2}>
+        <Text color="text.low" fontWeight="bold" fontSize="md" lineHeight="100%">
+          Your CNV Balance
+        </Text>
+        <Text color="text.low" fontWeight="bold" fontSize="md" lineHeight="100%">
+          {(+data?.formatted).toFixed(2)} CNV
+        </Text>
+      </Flex>
+    )
+  )
+}
+
+function SideBarTop() {
+  const { isConnected } = useAccount()
 
   return (
     <Box shadow="down" px={2} pt={10} pb={3} rounded="2xl">
@@ -39,17 +56,8 @@ function SideBarTop() {
           Treasury
         </ButtonLink>
         <Box shadow="down" w="full" p={1} rounded="2xl">
-          <ConnectWallet />
-          {data?.formatted && (
-            <Flex justifyContent="space-between" p={2} mt={2}>
-              <Text color="text.low" fontWeight="bold" fontSize="md" lineHeight="100%">
-                Your CNV Balance
-              </Text>
-              <Text color="text.low" fontWeight="bold" fontSize="md" lineHeight="100%">
-                {(+data?.formatted).toFixed(2)} CNV
-              </Text>
-            </Flex>
-          )}
+          {isConnected ? <UserWallet /> : <ConnectButton />}
+          <UserCnvBalance />
         </Box>
       </Stack>
     </Box>
