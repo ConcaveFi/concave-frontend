@@ -14,7 +14,7 @@ export function BondableAssetCard() {
   const usdc = USDC[networkId]
 
   return (
-    <Flex flexDir={'row'} gap={10} mt={10}>
+    <Flex flexDir={'row'} gap={10} mt={2}>
       <Card
         p={5}
         gap={4}
@@ -205,7 +205,6 @@ export function BondableAssetCard() {
           </Button>
         </Flex>
       </Card>
-      <BondChartSimulation></BondChartSimulation>
     </Flex>
   )
 }

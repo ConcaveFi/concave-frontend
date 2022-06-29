@@ -1,5 +1,5 @@
 import { DAI, USDC } from '@concave/core'
-import { ChevronDownIcon } from '@concave/icons'
+import { AddIcon, ChevronDownIcon } from '@concave/icons'
 import { Avatar, Button, Card, Flex, Heading, HStack, Icon, Input, Text } from '@concave/ui'
 import { ButtonLink } from 'components/ButtonLink'
 import { CurrencyIcon } from 'components/CurrencyIcon'
@@ -84,6 +84,9 @@ export function BondableAssets() {
                 <Text>40%</Text>
               </HStack>
             </Card>
+            <Flex shadow="up" width="26px" height="24px" rounded="2xl" justify={'center'}>
+              <AddIcon w={'8px'} h={'24px'} />
+            </Flex>
           </HStack>
         </Flex>
         <Flex

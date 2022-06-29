@@ -1,4 +1,4 @@
-import { SpinIcon, SpinnerIcon } from '@concave/icons'
+import { ArrowDownIcon, SpinIcon, SpinnerIcon } from '@concave/icons'
 import { Card, Flex, HStack, keyframes, ScaleFade, Text } from '@concave/ui'
 import { BondableAssets } from 'components/BondsMarketplace/offer-bond/bondableAssetsCard'
 import { BondChartSimulation } from 'components/BondsMarketplace/offer-bond/bondchart'
@@ -15,12 +15,11 @@ export function BondOffer() {
   return (
     <Flex align={'center'} direction={'column'} width={'full'} height={'full'} textAlign="center">
       <BondOfferHeader />
-      <Flex flexDirection={'row'} justify="center" mt={8} mb={10} width={'70%'}>
-        <Flex flexDirection={'column'} height="100%" width="100%" gap={20}>
-          <BondTypeCard />
-          <BondableAssets></BondableAssets>
-        </Flex>
-        <BondChartSimulation></BondChartSimulation>
+
+      <Flex flexDirection={'column'} height="100%" width="70%">
+        <BondTypeCard />
+        <ArrowDownIcon ml={2} h="40px" w="40px"></ArrowDownIcon>
+        <BondableAssets></BondableAssets>
       </Flex>
     </Flex>
   )

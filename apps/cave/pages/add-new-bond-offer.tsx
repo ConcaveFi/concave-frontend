@@ -1,4 +1,4 @@
-import { SpinIcon, SpinnerIcon } from '@concave/icons'
+import { ArrowDownIcon, SpinIcon, SpinnerIcon } from '@concave/icons'
 import { Card, Flex, HStack, keyframes, ScaleFade, Text } from '@concave/ui'
 import { AppearancedCard } from 'components/BondsMarketplace/add new bond position/AppearanceCard'
 import { BondableAssetCard } from 'components/BondsMarketplace/add new bond position/BondableAsset'
@@ -16,9 +16,11 @@ export function AddBondOffer() {
   return (
     <Flex align={'center'} direction={'column'} width={'full'} height={'full'} textAlign="center">
       <BondOfferHeader />
-      <Flex flexDirection={'column'} justify="center" mt={8} mb={10} width={'80%'}>
+      <Flex flexDirection={'column'} justify="center" mt={8} mb={10} width={'80%'} wrap={'wrap'}>
         <AppearancedCard />
+        <ArrowDownIcon ml={2} h="40px" w="40px"></ArrowDownIcon>
         <BondTypeCard></BondTypeCard>
+        <ArrowDownIcon ml={2} h="40px" w="40px"></ArrowDownIcon>
         <BondableAssetCard></BondableAssetCard>
       </Flex>
     </Flex>

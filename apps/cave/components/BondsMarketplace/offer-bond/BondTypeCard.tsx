@@ -26,7 +26,7 @@ import { BondChartSimulation } from './bondchart'
 export function BondTypeCard() {
   const [rangeSliderValue, setRangeSliderValue] = React.useState([5, 50])
   return (
-    <Flex flexDir={'row'} gap={10} mt={10} mb={10}>
+    <Flex flexDir={'row'} gap={10} mt={2} mb={2}>
       <Card
         p={5}
         gap={2}
