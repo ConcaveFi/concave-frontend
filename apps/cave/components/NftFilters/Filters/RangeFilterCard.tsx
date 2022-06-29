@@ -45,7 +45,13 @@ export const RangeFilterCard = ({ onApplyFilter, onResetFilter }: RangeFilterCar
       <Flex height={'40px'} justify="center" width="full" align="center" pt={'10'} pb={5} gap={1}>
         <InputField onPressEnter={onApply} value={min} placeholder="From" onChangeValue={setMin} />
         <Box width={'10px'} height="4px" shadow={'down'} my="auto" />
-        <InputField onPressEnter={onApply} value={max} placeholder="To" onChangeValue={setMax} />
+        <InputField
+          redOutline={!canApply}
+          onPressEnter={onApply}
+          value={max}
+          placeholder="To"
+          onChangeValue={setMax}
+        />
       </Flex>
       {
         <Flex height={'60px'} align="center" justify={'center'} gap={2}>
@@ -88,14 +94,22 @@ type InputField = {
   onPressEnter: VoidFunction
   value: number | string
   placeholder: string
+  redOutline?: boolean
 }
-const InputField = ({ onChangeValue, onPressEnter, placeholder, value }: InputField) => {
+const InputField = ({
+  onChangeValue,
+  onPressEnter,
+  placeholder,
+  value,
+  redOutline,
+}: InputField) => {
   return (
     <Flex width={'100px'} height="30px" shadow={'down'} rounded="full" justify={'center'}>
       <NumericInput
         onKeyDown={(event) => event?.key === 'Enter' && onPressEnter()}
         value={value}
         textAlign={'center'}
+        color={redOutline && 'red.300'}
         placeholder={placeholder}
         onValueChange={(e) => onChangeValue(e.value)}
       />
