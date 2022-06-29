@@ -31,15 +31,14 @@ export function FilterContainer({
     <Flex
       rounded={'2xl'}
       py="6"
-      shadow={'up'}
+      shadow={{ base: 'up', md: 'none' }}
       width="full"
-      direction={'column'}
+      direction={{ base: 'column', md: 'row' }}
       justify={'space-between'}
       px={4}
-      align="start"
-      gap={1}
+      gap={{ base: 4 }}
       my={2}
-      apply="background.metal"
+      apply={mobileUI && 'background.metalBrighter'}
     >
       <Flex align="center " gap={2} fontWeight={'bold'}>
         <Text textColor="text.low">Filter by:</Text>
