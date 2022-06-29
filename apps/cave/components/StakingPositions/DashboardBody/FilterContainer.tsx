@@ -27,34 +27,37 @@ export function FilterContainer({
   currentInitalCNVFilter,
 }: FilterContainerProps) {
   const mobileUI = useBreakpointValue({ base: true, md: false })
-
   return (
-    <Flex height={'45px'} width="full" justify={'center'} align="center" my={2}>
-      <Flex zIndex={2} px={4} justify="space-between" width={'full'}>
-        <Flex align="center " gap={2}>
-          <Text fontWeight={'bold'} textColor="text.low">
-            Filter by:
-          </Text>
-          <Flex gap={3}>
-            {/* <RedeemDateFilter /> */}
-            <InitialCNVFilter
-              currentFilter={currentInitalCNVFilter}
-              onResetFilter={onResetInitialCNVFilter}
-              onApplyFilter={onApplyInitalCNVFilter}
-            />
-            <StakePoolFilterCard
-              stakePoolFilters={stakePoolFilters}
-              onDisableFilter={onDisableStakeFilter}
-              onEnableFilter={onEnableStakeFilter}
-            />
-          </Flex>
-        </Flex>
-        <Flex align={'center'} gap={2}>
-          <Text fontWeight={'bold'} textColor="text.low">
-            Sort by:
-          </Text>
-          <SortCard onChangeSort={onChangeSort} />
-        </Flex>
+    <Flex
+      rounded={'2xl'}
+      py="6"
+      shadow={'up'}
+      width="full"
+      direction={'column'}
+      justify={'space-between'}
+      px={4}
+      align="start"
+      gap={1}
+      my={2}
+      apply="background.metal"
+    >
+      <Flex align="center " gap={2} fontWeight={'bold'}>
+        <Text textColor="text.low">Filter by:</Text>
+        {/* <RedeemDateFilter /> */}
+        <InitialCNVFilter
+          currentFilter={currentInitalCNVFilter}
+          onResetFilter={onResetInitialCNVFilter}
+          onApplyFilter={onApplyInitalCNVFilter}
+        />
+        <StakePoolFilterCard
+          stakePoolFilters={stakePoolFilters}
+          onDisableFilter={onDisableStakeFilter}
+          onEnableFilter={onEnableStakeFilter}
+        />
+      </Flex>
+      <Flex ml={2} align={'center'} gap={2} fontWeight={'bold'}>
+        <Text textColor="text.low">Sort by:</Text>
+        <SortCard onChangeSort={onChangeSort} />
       </Flex>
     </Flex>
   )

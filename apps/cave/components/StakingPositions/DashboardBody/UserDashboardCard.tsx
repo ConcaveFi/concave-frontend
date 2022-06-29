@@ -42,15 +42,8 @@ export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePo
         maxW={{ lg: '760px', md: '580px', base: '358px' }}
         justify="center"
         rounded={'2xl'}
-        bg={{ base: '', md: 'linear-gradient(270deg, #224D67 0%, #182F3E 100%)' }}
+        apply={{ base: '', md: 'background.metalBrighter' }}
       >
-        <Box
-          bgImage={'assets/textures/metal.png'}
-          position="absolute"
-          height={'full'}
-          width="full"
-          bgSize={'10% 20%'}
-        />
         <Flex justify="center" px={4} pt={4} position={'relative'}>
           <UserDividendCard isLoading={isLoading} totalLocked={totalLocked} />
         </Flex>
