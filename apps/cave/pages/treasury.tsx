@@ -1,6 +1,7 @@
 import { SpinnerIcon } from '@concave/icons'
 import { Card, Flex, ScaleFade, Text } from '@concave/ui'
 import { withPageTransition } from 'components/PageTransition'
+import { BondGraphics } from 'components/Treasury/GraphicsContainer'
 import DividendsCard from 'components/Treasury/DividendsCard'
 import { BondGraphics } from 'components/Treasury/GraphicsContainer'
 import DividendsCardMobile from 'components/Treasury/Mobile/DividendsCardMobile'
