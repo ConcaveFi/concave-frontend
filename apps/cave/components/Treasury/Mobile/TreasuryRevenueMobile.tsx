@@ -55,32 +55,37 @@ export default function TreasuryRevenueMobile({
       ))
     : ['0', '0', '0']
 
+  // console.log('cnv', cnv)
+  let marketCap, cnvPrice, treasuryValuePerCNV, concaveLiquidity
+  if (!loading && JSON.stringify(cnv['cnvData']['data']) === '{}') {
+    marketCap = 'API Error'
+    cnvPrice = 'API Error'
+    treasuryValuePerCNV = 'API Error'
+    concaveLiquidity = 'API Error'
+  } else if (!loading) {
+    marketCap = '$' + commify(cnv.cnvData.data.marketCap.toFixed(2))
+    cnvPrice = '$' + commify(cnv.cnvData.data.last.toFixed(2))
+    treasuryValuePerCNV = '$' + commify((total / cnv.cnvData.data.totalSupply).toFixed(2))
+    concaveLiquidity = '$' + commify(cnv.cnvData.data.totalSupply.toFixed(2))
+  }
+
   return (
     <Card width={'340px'} height="610px" gap={0}>
       {!loading ? (
         <>
           <GlassPanel mb={6} width={'340px'} height="216px" direction={'column'}>
-            <CardInfo
-              info={'Market Cap'}
-              value={'$' + commify(cnv.cnvData.data.marketCap.toFixed(2))}
-            />
+            <CardInfo info={'Market Cap'} value={marketCap} />
             <Box h="1px" width={'full'} bg="stroke.primary" />
-            <CardInfo info={'CNV Price'} value={'$' + commify(cnv.cnvData.data.last.toFixed(2))} />
+            <CardInfo info={'CNV Price'} value={cnvPrice} />
             <Box h="1px" width={'full'} bg="stroke.primary" />
-            <CardInfo
-              info={`Treasury value per CNV`}
-              value={'$' + commify((total / cnv.cnvData.data.totalSupply).toFixed(2))}
-            />
+            <CardInfo info={`Treasury value per CNV`} value={treasuryValuePerCNV} />
           </GlassPanel>
           <GlassPanel width={'340px'} height="216px" direction={'column'}>
             <CardInfo info={'Treasury Revenue 24h'} value={'Coming Soon'} />
             <Box h="1px" width={'full'} bg="stroke.primary" />
             <CardInfo info={'Treasury Value'} value={'$' + commify(total.toFixed(2))} />
             <Box h="1px" width={'full'} bg="stroke.primary" />
-            <CardInfo
-              info={`Concave Liquidity`}
-              value={'$' + commify(cnv.cnvData.data.totalSupply.toFixed(2))}
-            />
+            <CardInfo info={`Concave Liquidity`} value={concaveLiquidity} />
           </GlassPanel>
         </>
       ) : (
