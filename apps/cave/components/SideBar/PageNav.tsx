@@ -177,6 +177,16 @@ function PageNav() {
             >
               Your positions
             </SubnavButton>
+            <SubnavButton isActive={router.pathname === '/bond-offer'} href="/bond-offer" mt="1px">
+              Offer Bond
+            </SubnavButton>
+            <SubnavButton
+              isActive={router.pathname === '/add-new-bond-offer'}
+              href="/add-new-bond-offer"
+              mt="1px"
+            >
+              Add Bond Offer
+            </SubnavButton>
           </Collapse>
         </Box>
       </Box>
@@ -185,7 +195,7 @@ function PageNav() {
         <Box
           shadow="Down Big"
           roundedLeft="2xl"
-          mt="28px"
+          mt="100px"
           onMouseEnter={() => setSwapStakingHover(true)}
           onMouseLeave={() => setSwapStakingHover(false)}
         >
