@@ -1,4 +1,4 @@
-import { Button, Card, Flex, Heading, Text } from '@concave/ui'
+import { Box, Button, Card, Flex, Heading, Text, Image, AspectRatio } from '@concave/ui'
 import { ButtonLink } from 'components/ButtonLink'
 import React from 'react'
 import { MdOutlineDashboard } from 'react-icons/md'
@@ -70,27 +70,13 @@ export function BondChartSimulation() {
       maxW="430px"
       height="332px"
     >
-      <ResponsiveBar
-        data={test}
-        keys={['degress']}
-        indexBy="day"
-        margin={{ top: 75, right: 130, bottom: 50, left: 60 }}
-        padding={0.4}
-        valueScale={{ type: 'linear' }}
-        colors="#4DBEE1"
-        animate={true}
-        enableLabel={false}
-        axisTop={null}
-        axisRight={null}
-        axisLeft={{
-          tickSize: 1,
-          tickPadding: 1,
-          tickRotation: 0,
-          legend: 'degrees',
-          legendPosition: 'middle',
-          legendOffset: -40,
-        }}
-      />
+      <AspectRatio maxW="400px" ratio={4 / 3}>
+        <Image
+          src="https://user-images.githubusercontent.com/95505687/176762432-be00e745-babb-470d-90e8-1851a8beeac5.png"
+          alt="naruto"
+          objectFit="cover"
+        />
+      </AspectRatio>
     </Card>
   )
 }

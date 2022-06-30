@@ -16,7 +16,7 @@ export function BondOffer() {
     <Flex align={'center'} direction={'column'} width={'full'} height={'full'} textAlign="center">
       <BondOfferHeader />
 
-      <Flex flexDirection={'column'} height="100%" width="70%">
+      <Flex flexDirection={'column'} height="100%" width="80%">
         <BondTypeCard />
         <ArrowDownIcon ml={2} h="40px" w="40px"></ArrowDownIcon>
         <BondableAssets></BondableAssets>
