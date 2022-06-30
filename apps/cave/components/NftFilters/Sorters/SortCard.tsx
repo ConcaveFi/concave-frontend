@@ -39,7 +39,6 @@ export const SortCard = ({ onChangeSort }: SorterCard) => {
             height="195px"
             rounded={'lg'}
             boxShadow="up"
-            backdropFilter={'blur(3px)'}
             direction="column"
             apply={'background.glass'}
             border="2px solid"
