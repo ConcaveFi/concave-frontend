@@ -18,6 +18,7 @@ import { bbtCNV_REDEMPTION_V2_ABI } from 'contracts/VestedTokens/BBTCNV_V2_ABI'
 import { Contract, Transaction, utils } from 'ethers'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { parseEther } from 'ethers/lib/utils'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider as provider } from 'lib/providers'
 import { useState } from 'react'
 import { useAccount, useConnect, useSigner } from 'wagmi'
@@ -59,13 +60,12 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
   const nothingToRedeem = (redeemable === 0 || redeemable === +balance) && !insufficientFunds
   const validValue = !insufficientFunds && !nothingToRedeem && !invalidValue && !redeemableExceeded
 
-  // When bbtCNV redeem V2 is deployed on mainnet,
-  // provider and bbtCNV_REDEMPTION_V2, should be changed to use the
-  // current network intead of 4.
+  const networdId = useCurrentSupportedNetworkId()
+
   const bbtCNVContract = new Contract(
-    bbtCNV_REDEMPTION_V2[4],
+    bbtCNV_REDEMPTION_V2[networdId],
     bbtCNV_REDEMPTION_V2_ABI,
-    provider(4),
+    provider(networdId),
   )
 
   return (
