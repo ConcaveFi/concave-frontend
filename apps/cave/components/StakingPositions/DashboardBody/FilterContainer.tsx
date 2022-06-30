@@ -10,6 +10,7 @@ import { useState } from 'react'
 interface FilterContainerProps {
   onEnableStakeFilter: (filter: StakePoolFilterEnum) => void
   onApplyInitalCNVFilter: (rangeFilter: RangeFilter) => void
+  onResetStakeFilters: (filters: StakePoolFilterEnum[]) => void
   onResetInitialCNVFilter: () => void
   onChangeSort: (sorter: NftSort) => void
   onDisableStakeFilter: (filter: StakePoolFilterEnum) => void
@@ -23,6 +24,7 @@ export function FilterContainer({
   onChangeSort,
   onApplyInitalCNVFilter,
   onResetInitialCNVFilter,
+  onResetStakeFilters,
   stakePoolFilters,
   currentInitalCNVFilter,
 }: FilterContainerProps) {
@@ -49,6 +51,7 @@ export function FilterContainer({
           onApplyFilter={onApplyInitalCNVFilter}
         />
         <StakePoolFilterCard
+          onResetFilter={onResetStakeFilters}
           stakePoolFilters={stakePoolFilters}
           onDisableFilter={onDisableStakeFilter}
           onEnableFilter={onEnableStakeFilter}

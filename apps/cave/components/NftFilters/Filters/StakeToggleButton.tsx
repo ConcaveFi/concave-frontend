@@ -4,6 +4,7 @@ import { ToggleButton } from 'components/ToggleButton'
 import { StakePoolFilterEnum } from './hooks/useFilterByStakePool'
 type StakeToggleButton = {
   filter: StakePoolFilterEnum
+  enabled?: boolean
   onEnableFilter: (filter: StakePoolFilterEnum) => void
   onDisableFilter: (filter: StakePoolFilterEnum) => void
 }
@@ -12,6 +13,7 @@ export const StakeToggleButton: React.FC<StakeToggleButton> = ({
   filter,
   onDisableFilter,
   onEnableFilter,
+  enabled,
 }) => {
   return (
     <Flex textColor={'white'} fontWeight="bold" width={'full'} justify="space-between" px={4}>
@@ -19,7 +21,7 @@ export const StakeToggleButton: React.FC<StakeToggleButton> = ({
         {PARAMETER_TO_POOL_PERIOD[filter]}
       </Text>
       <ToggleButton
-        enabled={true}
+        enabled={enabled}
         onToggle={(enabled) => {
           if (enabled) onEnableFilter(filter)
           else onDisableFilter(filter)

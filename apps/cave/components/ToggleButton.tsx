@@ -7,13 +7,22 @@ type ToggleButtonProps = {
 }
 
 export const ToggleButton = ({ onToggle, enabled }: ToggleButtonProps) => {
-  const { isOpen: isEnabled, onToggle: onToggleEnabled } = useDisclosure({
+  const {
+    isOpen: isEnabled,
+    onToggle: onToggleEnabled,
+    onOpen,
+    onClose,
+  } = useDisclosure({
     defaultIsOpen: enabled || false,
   })
   const onToggleButton = () => {
     onToggleEnabled()
     onToggle(!isEnabled)
   }
+  useEffect(() => {
+    if (enabled) onOpen()
+    else onClose()
+  }, [enabled])
 
   return (
     <Flex

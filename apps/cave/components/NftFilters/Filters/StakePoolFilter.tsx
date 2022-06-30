@@ -1,5 +1,6 @@
 import {
   Button,
+  Collapse,
   Flex,
   Popover,
   PopoverContent,
@@ -7,6 +8,7 @@ import {
   Portal,
   useDisclosure,
 } from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
 import { DropdownCard } from '../DropdownCard'
 import { StakePoolFilterEnum } from './hooks/useFilterByStakePool'
 import { StakeToggleButton } from './StakeToggleButton'
@@ -14,15 +16,20 @@ import { StakeToggleButton } from './StakeToggleButton'
 type StakePoolFilterCard = {
   onEnableFilter: (filter: StakePoolFilterEnum) => void
   onDisableFilter: (filter: StakePoolFilterEnum) => void
+  onResetFilter: (filter: StakePoolFilterEnum[]) => void
   stakePoolFilters: StakePoolFilterEnum[]
 }
 
 export const StakePoolFilterCard = ({
   onDisableFilter,
   onEnableFilter,
+  onResetFilter,
   stakePoolFilters,
 }: StakePoolFilterCard) => {
   const { isOpen, onClose, onToggle } = useDisclosure()
+
+  const canShowReset = stakePoolFilters.length < 3
+
   return (
     <Popover onClose={onClose}>
       <PopoverTrigger>
@@ -37,7 +44,7 @@ export const StakePoolFilterCard = ({
       <Portal>
         <PopoverContent
           variants={{
-            enter: { opacity: 1, height: '144px' },
+            enter: { opacity: 1, height: '175px' },
             exit: { opacity: 0, height: '0px' },
           }}
           width={'160px'}
@@ -45,14 +52,14 @@ export const StakePoolFilterCard = ({
           <Flex
             width={'160px'}
             rounded={'lg'}
-            height={'144px'}
+            height={canShowReset ? '175px' : '144px'}
             border="2px solid"
             borderColor={'text.low'}
             direction="column"
             apply={'background.glass'}
             overflow="hidden"
             transition={'0.3s all'}
-            justify="center"
+            pt={4}
             gap={1}
           >
             {Object.values(StakePoolFilterEnum)
@@ -60,11 +67,33 @@ export const StakePoolFilterCard = ({
               .map((filter, index) => (
                 <StakeToggleButton
                   filter={+filter}
+                  enabled={
+                    stakePoolFilters?.filter((currentFilter) => filter === currentFilter).length > 0
+                  }
                   key={index}
                   onDisableFilter={onDisableFilter}
                   onEnableFilter={onEnableFilter}
                 />
               ))}
+            {canShowReset && (
+              <Button
+                onClick={() =>
+                  onResetFilter([
+                    StakePoolFilterEnum.FILTER_BY_45_DAYS,
+                    StakePoolFilterEnum.FILTER_BY_90_DAYS,
+                    StakePoolFilterEnum.FILTER_BY_180_DAYS,
+                    StakePoolFilterEnum.FILTER_BY_360_DAYS,
+                  ])
+                }
+                mt={1}
+                width="90px"
+                height={'30px'}
+                variant="primary"
+                mx={'auto'}
+              >
+                Reset
+              </Button>
+            )}
           </Flex>
         </PopoverContent>
       </Portal>
