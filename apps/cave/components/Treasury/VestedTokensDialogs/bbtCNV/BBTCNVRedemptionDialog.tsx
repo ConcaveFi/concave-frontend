@@ -56,7 +56,7 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
   // Conditions
   const insufficientFunds = +balance === 0 || +value > +balance
   const redeemableExceeded = +value > redeemable && !insufficientFunds
-  const invalidValue = utils.parseEther(value || '0').isZero()
+  const invalidValue = utils.parseEther(value || '0').isZero() && !redeemMax
   const nothingToRedeem = (redeemable === 0 || redeemable === +balance) && !insufficientFunds
   const validValue = !insufficientFunds && !nothingToRedeem && !invalidValue && !redeemableExceeded
 
@@ -125,7 +125,7 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
               onOpenConfirm()
               bbtCNVContract
                 .connect(signer)
-                .redeem(parseEther(String(value)), account?.address, redeemMax)
+                .redeem(parseEther(String(value || '0')), account?.address, redeemMax)
                 .then((tx) => {
                   onCloseConfirm()
                   registerTransaction(tx, {
