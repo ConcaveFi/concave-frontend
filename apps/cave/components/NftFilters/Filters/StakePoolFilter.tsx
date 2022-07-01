@@ -28,7 +28,7 @@ export const StakePoolFilterCard = ({
 }: StakePoolFilterCard) => {
   const { isOpen, onClose, onToggle } = useDisclosure()
 
-  const canShowReset = stakePoolFilters.length < 3
+  const canShowReset = stakePoolFilters.length <= 3
 
   return (
     <Popover onClose={onClose}>
