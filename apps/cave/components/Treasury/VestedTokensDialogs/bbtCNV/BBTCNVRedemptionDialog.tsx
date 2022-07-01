@@ -21,7 +21,7 @@ import { parseEther } from 'ethers/lib/utils'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider as provider } from 'lib/providers'
 import { useState } from 'react'
-import { useAccount, useConnect, useSigner } from 'wagmi'
+import { useAccount, useBalance, useConnect, useSigner } from 'wagmi'
 import useBBTCNVRedeemable from '../../Hooks/useBBTCNVRedeemable'
 import useVestedTokens from '../../Hooks/useVestedTokens'
 import { BBT_CNVDialogInput } from './BbtCNVDialogInput'
@@ -56,7 +56,7 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
   // Conditions
   const insufficientFunds = +balance === 0 || +value > +balance
   const redeemableExceeded = +value > redeemable && !insufficientFunds
-  const invalidValue = utils.parseEther(value || '0').isZero() && !redeemMax
+  const invalidValue = utils.parseEther(value || '0').isZero() && !redeemMax && !insufficientFunds
   const nothingToRedeem = (redeemable === 0 || redeemable === +balance) && !insufficientFunds
   const validValue = !insufficientFunds && !nothingToRedeem && !invalidValue && !redeemableExceeded
 
