@@ -1,15 +1,39 @@
 import { CNV } from '@concave/core'
 import { Box, Flex, Image, Stack, Text } from '@concave/ui'
+import { DashboardIcon } from '@concave/icons'
 import { ButtonLink } from 'components/ButtonLink'
-import { ConnectWallet } from 'components/ConnectWallet'
+import { ConnectButton, UserWallet } from 'components/ConnectWallet'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { MdOutlineDashboard } from 'react-icons/md'
-import { formatFixed } from 'utils/formatFixed'
-import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
+import { useAccount, useBalance } from 'wagmi'
+import { onCloseSidebar } from './SideBar'
+
+const UserCnvBalance = () => {
+  const { address } = useAccount()
+  const networkId = useCurrentSupportedNetworkId()
+  const { data } = useBalance({
+    addressOrName: address,
+    token: CNV[networkId].address,
+    formatUnits: CNV[networkId].decimals,
+    enabled: !!address,
+  })
+
+  return (
+    data?.formatted && (
+      <Flex justifyContent="space-between" p={2} mt={2}>
+        <Text color="text.low" fontWeight="bold" fontSize="md" lineHeight="100%">
+          Your CNV Balance
+        </Text>
+        <Text color="text.low" fontWeight="bold" fontSize="md" lineHeight="100%">
+          {(+data?.formatted).toFixed(2)} CNV
+        </Text>
+      </Flex>
+    )
+  )
+}
 
 function SideBarTop() {
-  const networkId = useCurrentSupportedNetworkId()
-  const cnvAmount = useCurrencyBalance(CNV[networkId], { watch: true })
+  const { isConnected } = useAccount()
+
   return (
     <Box shadow="down" px={2} pt={10} pb={3} rounded="2xl">
       <Flex
@@ -24,26 +48,19 @@ function SideBarTop() {
 
       <Stack gap="1" align="flex-end" mt={7}>
         <ButtonLink
-          href="/treasury"
+          onClick={onCloseSidebar} // the click will close the sidebar
+          href="/treasury" // and redirect to the treasury page
           variant="primary.outline"
           size="medium"
           w="full"
-          leftIcon={<MdOutlineDashboard size="20px" />}
+          alignItems="center"
+          leftIcon={<DashboardIcon h="20px" w="20px" />}
         >
           Treasury
         </ButtonLink>
         <Box shadow="down" w="full" p={1} rounded="2xl">
-          <ConnectWallet />
-          {cnvAmount?.data && (
-            <Flex justifyContent="space-between" p={2} mt={2}>
-              <Text color="text.low" fontWeight="bold" fontSize="md" lineHeight="100%">
-                Your CNV Balance
-              </Text>
-              <Text color="text.low" fontWeight="bold" fontSize="md" lineHeight="100%">
-                {formatFixed(cnvAmount?.data.numerator.toString())} CNV
-              </Text>
-            </Flex>
-          )}
+          {isConnected ? <UserWallet /> : <ConnectButton />}
+          <UserCnvBalance />
         </Box>
       </Stack>
     </Box>
