@@ -33,7 +33,7 @@ export const DropdownCard: React.FC<DropdownCard & FlexProps> = ({
         transition={'.4s all'}
         position={placeholder ? 'absolute' : 'relative'}
         transform={placeholder && 'translate(0px,-22px)'}
-        fontSize={'12px'}
+        fontSize={'xs'}
         fontWeight="bold"
       >
         {title}

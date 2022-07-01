@@ -33,9 +33,7 @@ export const ToggleButton = ({ onToggle, enabled }: ToggleButtonProps) => {
       p={'2px'}
       bg={isEnabled && 'green.400'}
       cursor="pointer"
-      onClick={() => {
-        onToggleButton()
-      }}
+      onClick={onToggleButton}
       transition={'0.3s all'}
     >
       <Box

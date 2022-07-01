@@ -11,12 +11,12 @@ import {
 import { useState } from 'react'
 import { DropdownCard } from '../DropdownCard'
 import { NftSort, NftSortMethod } from './hooks/useNftSort'
-import { SortButton } from './SortButton'
+import { SortOption } from './SortOption'
 
-type SorterCard = {
+type SortCardProps = {
   onChangeSort: (sorter: NftSort) => void
 }
-export const SortCard = ({ onChangeSort }: SorterCard) => {
+export const SortCard = ({ onChangeSort }: SortCardProps) => {
   const { isOpen, onToggle, onClose } = useDisclosure()
   const [title, setTitle] = useState<string>('Redeem date (ASC)')
   return (
@@ -46,11 +46,11 @@ export const SortCard = ({ onChangeSort }: SorterCard) => {
             overflow={'hidden'}
             py={3}
           >
-            {sorterButtons.map((sorter, index) => (
-              <SortButton
+            {sortOptions.map((sorter, index) => (
+              <SortOption
                 enabled={title === sorter.title}
                 onClick={(clickedSorter) => {
-                  if (clickedSorter.sort === NftSortMethod.NONE) setTitle('None')
+                  if (clickedSorter === undefined) setTitle('None')
                   else setTitle(sorter.title)
                   onChangeSort(clickedSorter)
                 }}
@@ -65,11 +65,11 @@ export const SortCard = ({ onChangeSort }: SorterCard) => {
     </Popover>
   )
 }
-const sorterButtons: { title: string; nftSort: NftSort }[] = [
-  { title: 'Stake pool (ASC)', nftSort: { order: 'DESC', sort: NftSortMethod.STAKE_POOL } },
-  { title: 'Stake pool (DESC)', nftSort: { order: 'ASC', sort: NftSortMethod.STAKE_POOL } },
-  { title: 'Redeem date (ASC)', nftSort: { order: 'ASC', sort: NftSortMethod.REDEEM_DATE } },
-  { title: 'Redeem date (DESC)', nftSort: { order: 'DESC', sort: NftSortMethod.REDEEM_DATE } },
-  { title: 'Initial CNV (ASC)', nftSort: { order: 'ASC', sort: NftSortMethod.INITIAL } },
-  { title: 'Initial CNV (DESC)', nftSort: { order: 'DESC', sort: NftSortMethod.INITIAL } },
+const sortOptions: { title: string; nftSort: NftSort }[] = [
+  { title: 'Stake pool (ASC)', nftSort: { order: 'DESC', sort: 'STAKE_POOL' } },
+  { title: 'Stake pool (DESC)', nftSort: { order: 'ASC', sort: 'STAKE_POOL' } },
+  { title: 'Redeem date (ASC)', nftSort: { order: 'ASC', sort: 'REDEEM_DATE' } },
+  { title: 'Redeem date (DESC)', nftSort: { order: 'DESC', sort: 'REDEEM_DATE' } },
+  { title: 'Initial CNV (ASC)', nftSort: { order: 'ASC', sort: 'INITIAL' } },
+  { title: 'Initial CNV (DESC)', nftSort: { order: 'DESC', sort: 'INITIAL' } },
 ]

@@ -2,14 +2,14 @@ import { CloseButton, Flex, Text, Tooltip } from '@chakra-ui/react'
 import { CloseIcon } from '@concave/icons'
 import { NftSort, NftSortMethod } from './hooks/useNftSort'
 
-type SorterButton = {
+type SortOptionProps = {
   title: string
   sorter: NftSort
   enabled: boolean
   onClick: (sorter: NftSort) => void
 }
 
-export const SortButton = ({ sorter, title, enabled, onClick }: SorterButton) => {
+export const SortOption = ({ sorter, title, enabled, onClick }: SortOptionProps) => {
   return (
     <Flex
       width="full"
@@ -39,7 +39,7 @@ export const SortButton = ({ sorter, title, enabled, onClick }: SorterButton) =>
             height="12px"
             cursor={'pointer'}
             color="text.low"
-            onClick={() => onClick({ sort: NftSortMethod.NONE, order: 'ASC' })}
+            onClick={() => onClick(undefined)}
           />
         </Tooltip>
       )}
