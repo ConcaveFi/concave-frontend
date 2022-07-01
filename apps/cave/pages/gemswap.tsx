@@ -237,7 +237,7 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
         tx={swapTx.data}
         isOpen={swapTx.isSuccess}
         tokenSymbol={swapTx.trade?.outputAmount.currency.symbol}
-        tokenOutAddress={swapTx.trade?.outputAmount.currency.address} // workaround for type error
+        tokenOutAddress={swapTx.trade?.outputAmount.currency.wrapped.address} // workaround for type error
       />
       <TransactionErrorDialog error={swapTx.error?.message} isOpen={swapTx.isError} />
     </>
