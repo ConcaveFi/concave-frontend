@@ -52,7 +52,7 @@ export const StakePoolFilterCard = ({
           <Flex
             width={'160px'}
             rounded={'lg'}
-            height={canShowReset ? '175px' : '144px'}
+            height={'175px'}
             border="2px solid"
             borderColor={'text.low'}
             direction="column"
@@ -75,25 +75,27 @@ export const StakePoolFilterCard = ({
                   onEnableFilter={onEnableFilter}
                 />
               ))}
-            {canShowReset && (
-              <Button
-                onClick={() =>
-                  onResetFilter([
-                    StakePoolFilterEnum.FILTER_BY_45_DAYS,
-                    StakePoolFilterEnum.FILTER_BY_90_DAYS,
-                    StakePoolFilterEnum.FILTER_BY_180_DAYS,
-                    StakePoolFilterEnum.FILTER_BY_360_DAYS,
-                  ])
-                }
-                mt={1}
-                width="90px"
-                height={'30px'}
-                variant="primary"
-                mx={'auto'}
-              >
-                Reset
-              </Button>
-            )}
+            <Button
+              onClick={() =>
+                onResetFilter([
+                  StakePoolFilterEnum.FILTER_BY_45_DAYS,
+                  StakePoolFilterEnum.FILTER_BY_90_DAYS,
+                  StakePoolFilterEnum.FILTER_BY_180_DAYS,
+                  StakePoolFilterEnum.FILTER_BY_360_DAYS,
+                ])
+              }
+              mt={1}
+              width="90px"
+              height={'30px'}
+              variant={canShowReset ? 'primary' : ''}
+              shadow={!canShowReset && 'down'}
+              cursor={!canShowReset && 'default'}
+              _focus={{}}
+              _active={{}}
+              mx={'auto'}
+            >
+              Reset
+            </Button>
           </Flex>
         </PopoverContent>
       </Portal>
