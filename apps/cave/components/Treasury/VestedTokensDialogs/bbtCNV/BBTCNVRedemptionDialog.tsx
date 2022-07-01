@@ -56,9 +56,8 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
   // Conditions
   const insufficientFunds = +balance === 0 || +value > +balance
   const redeemableExceeded = +value > redeemable && !insufficientFunds
-  const invalidValue = utils.parseEther(value || '0').isZero() && !redeemMax && !insufficientFunds
   const nothingToRedeem = (redeemable === 0 || redeemable === +balance) && !insufficientFunds
-  const validValue = !insufficientFunds && !nothingToRedeem && !invalidValue && !redeemableExceeded
+  const validValue = !insufficientFunds && !nothingToRedeem && !redeemableExceeded
 
   const networdId = useCurrentSupportedNetworkId()
 
@@ -145,7 +144,6 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
           >
             {isConnected ? (
               <Text>
-                {invalidValue && 'Invalid Value'}
                 {redeemableExceeded && 'Redeemable Exceeded'}
                 {nothingToRedeem && 'Nothing To Redeem'}
                 {insufficientFunds && 'Insufficient Funds'}
