@@ -81,7 +81,7 @@ export default function TreasuryRevenueMobile({
             <CardInfo info={`Treasury value per CNV`} value={treasuryValuePerCNV} />
           </GlassPanel>
           <GlassPanel width={'340px'} height="216px" direction={'column'}>
-            <CardInfo info={'Treasury Revenue 24h'} value={'Coming Soon'} />
+            <CardInfo info={'Treasury Revenue'} value={'Coming Soon'} />
             <Box h="1px" width={'full'} bg="stroke.primary" />
             <CardInfo info={'Treasury Value'} value={'$' + commify(total.toFixed(2))} />
             <Box h="1px" width={'full'} bg="stroke.primary" />

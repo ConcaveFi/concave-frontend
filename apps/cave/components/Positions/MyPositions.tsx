@@ -1,4 +1,4 @@
-import { CurrencyAmount } from '@concave/core'
+import { CurrencyAmount, Percent } from '@concave/core'
 import { Fetcher, Pair } from '@concave/gemswap-sdk'
 import {
   Accordion,
@@ -12,6 +12,7 @@ import {
   Stack,
   Text,
 } from '@concave/ui'
+
 import { AddLiquidityModalButton } from 'components/AMM/AddLiquidity/AddLiquidity'
 import { RemoveLiquidityModalButton } from 'components/AMM/RemoveLiquidity/RemoveLiquidity'
 import { ConnectWallet } from 'components/ConnectWallet'
@@ -158,9 +159,10 @@ export const LiquidityPoolPainel = (props: LPPosition) => {
 
   if (!pair) return <AccordionPanel />
   const balance = userBalance.data || CurrencyAmount.fromRawAmount(pair.liquidityToken, '0')
-  const userPoolShare =
-    pair.liquidityToken?.totalSupply && userBalance.data?.divide(pair.liquidityToken.totalSupply)
 
+  const userPoolShare =
+    pair.liquidityToken?.totalSupply &&
+    new Percent(userBalance.data.quotient, pair.liquidityToken.totalSupply.quotient)
   return (
     <AccordionPanel>
       <Stack
@@ -189,10 +191,7 @@ export const LiquidityPoolPainel = (props: LPPosition) => {
         </PositionInfoItem>
 
         {balance.greaterThan(0) && (
-          <PositionInfoItem
-            label="Your pool share:"
-            value={`${userPoolShare.multiply(100).toFixed(2)}%`}
-          />
+          <PositionInfoItem label="Your pool share:" value={`${userPoolShare.toFixed()}%`} />
         )}
       </Stack>
       <Flex gap={5} justify="center" mt={6}>
