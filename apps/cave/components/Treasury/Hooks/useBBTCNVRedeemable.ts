@@ -17,7 +17,7 @@ export default function useBBTCNVRedeemable() {
     provider(networkdId),
   )
   const { data, isLoading } = useQuery(
-    ['bbtRedeemable', account?.address],
+    ['bbtRedeemable', account?.address, networkdId],
     async () => ({
       redeemable: await contractV2.connect(signer).redeemable(account?.address),
       redeemed: await contractV2.connect(signer).redeemed(account?.address),

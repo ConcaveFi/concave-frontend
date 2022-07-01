@@ -3,10 +3,11 @@ import { Box, Flex, useDisclosure } from '@concave/ui'
 type ToggleButton = {
   onActivate: VoidFunction
   onDisable: VoidFunction
+  defaultEnabled?: boolean
 }
 
-export const ToggleButton = ({ onActivate, onDisable }: ToggleButton) => {
-  const { isOpen, onToggle } = useDisclosure()
+export const ToggleButton = ({ onActivate, onDisable, defaultEnabled }: ToggleButton) => {
+  const { isOpen, onToggle } = useDisclosure({ defaultIsOpen: defaultEnabled })
   return (
     <Flex
       width={'36px'}

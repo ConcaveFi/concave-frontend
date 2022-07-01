@@ -93,6 +93,7 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
           <Flex gap={2} fontWeight={'bold'} pl={2} align="center">
             <Text textColor={'gray.200'}>Redeem max?</Text>
             <ToggleButton
+              defaultEnabled={true}
               onActivate={() => setRedeemMax(true)}
               onDisable={() => setRedeemMax(false)}
             />
