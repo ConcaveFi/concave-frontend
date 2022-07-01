@@ -15,13 +15,14 @@ import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialo
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { bbtCNV_REDEMPTION_V2 } from 'contracts/VestedTokens/addresses'
 import { bbtCNV_REDEMPTION_V2_ABI } from 'contracts/VestedTokens/BBTCNV_V2_ABI'
-import { Contract, Transaction, utils } from 'ethers'
+import { Contract, utils } from 'ethers'
+import { TransactionResponse } from '@ethersproject/abstract-provider'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { parseEther } from 'ethers/lib/utils'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider as provider } from 'lib/providers'
 import { useState } from 'react'
-import { useAccount, useConnect, useSigner } from 'wagmi'
+import { useAccount, useSigner } from 'wagmi'
 import useBBTCNVRedeemable from '../../Hooks/useBBTCNVRedeemable'
 import useVestedTokens from '../../Hooks/useVestedTokens'
 import { BBT_CNVDialogInput } from './BbtCNVDialogInput'
@@ -36,10 +37,9 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
   const { isOpen: isErrorOpen, onOpen: onOpenError, onClose: onCloseError } = useDisclosure()
   const { onClose, isOpen } = props
   const { data: signer } = useSigner()
-  const { data: account } = useAccount()
-  const { isConnected } = useConnect()
+  const { address, isConnected } = useAccount()
 
-  const [tx, setTx] = useState<Transaction>()
+  const [tx, setTx] = useState<TransactionResponse>()
   const [error, setError] = useState('')
 
   const { data: redeemableData, isLoading } = useBBTCNVRedeemable()
@@ -125,7 +125,7 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
               onOpenConfirm()
               bbtCNVContract
                 .connect(signer)
-                .redeem(parseEther(String(value || '0')), account?.address, redeemMax)
+                .redeem(parseEther(String(value || '0')), address, redeemMax)
                 .then((tx) => {
                   onCloseConfirm()
                   registerTransaction(tx, {
