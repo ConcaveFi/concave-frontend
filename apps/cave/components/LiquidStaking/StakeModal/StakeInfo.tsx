@@ -36,7 +36,14 @@ function addDays(date, days) {
 
 function StakeInfo(props: any) {
   return (
-    <Box shadow="up" px={2} py={4} borderRadius="3xl" filter="drop-shadow(0px 0px 27px #81b3ff4f)">
+    <Box
+      shadow="up"
+      px={2}
+      py={4}
+      borderRadius="3xl"
+      filter="drop-shadow(0px 0px 27px #81b3ff4f)"
+      maxW="sm"
+    >
       <Box px={4}>
         <Stack isInline justifyContent="space-between">
           <Stack spacing="1px">

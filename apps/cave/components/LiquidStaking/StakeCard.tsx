@@ -287,8 +287,7 @@ function StakeCard(props: StackCardProps) {
 
         <Modal
           bluryOverlay={true}
-          childrenLeftNeighbor={<FloatingDescriptions />}
-          showchildrenLeftNeighbor={showFloatingCards && !mobileUI}
+          left={showFloatingCards && !mobileUI && <FloatingDescriptions />}
           title="Stake CNV"
           isOpen={isOpen}
           onClose={onClose}
