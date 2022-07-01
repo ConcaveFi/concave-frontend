@@ -16,7 +16,7 @@ const useTrackedTransactions = () => {
 
   const { data: transactions, mutateAsync: setTransactions } = useLocalStorage<
     TrackedTransaction[]
-  >(account?.address && `transactions ${account.address} ${activeChain.id}`, [])
+  >(account?.address && activeChain?.id && `transactions ${account.address} ${activeChain.id}`, [])
 
   const pushTransaction = useCallback(
     (tx: TrackedTransaction) => {

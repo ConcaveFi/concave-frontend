@@ -1,11 +1,11 @@
 import { CloseIcon, InfoOutlineIcon } from '@concave/icons'
-import { Box, Button, ButtonGroup, Card, SlideFade, Stack, Text } from '@concave/ui'
+import { Box, Button, Card, Stack, Text } from '@concave/ui'
 import React, { useState } from 'react'
 
 function SecurityBanner() {
   const [isOpen, setIsOpen] = useState(true)
   return (
-    <Box mx="auto" pos="absolute" top={{ base: 12, md: 4 }} zIndex={10} left={{ base: 0, md: 300 }}>
+    <Box mx="auto" pos="absolute" top={{ base: 12, md: 8 }} zIndex={10} left={8}>
       {isOpen && (
         <Card
           variant="secondary"
