@@ -53,7 +53,7 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ market
         <ImageContainer stakePeriod={marketItem?.position?.poolID} />
         <Info title="Current value" info={`${currentValue}`} />
         <Info title="Discount" info={`${discount}%`} />
-        <Info title="Token id" info={`23`} />
+        <Info title="Token id" info={'' + +marketItem?.position.tokenId.toString()} />
         <BuyContainer price={price} onClick={buyAction} />
       </Flex>
       <LoadBard
