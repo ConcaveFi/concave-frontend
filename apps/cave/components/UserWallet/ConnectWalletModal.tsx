@@ -24,7 +24,6 @@ import { useQuery } from 'react-query'
 import { QRCode } from 'react-qrcode-logo'
 import { isMobile } from 'utils/isMobile'
 import { fetchWalletConnectRegistry, uriToLink } from 'lib/walletConnect'
-import { useEffectOnce } from 'react-use'
 
 const getConnectorLogo = (connectorName: Connector['name']) =>
   `/assets/connectors/${connectorName.toLowerCase().replace(' ', '-')}.png`
@@ -41,9 +40,11 @@ const usePendingConnectorQrCode = () => {
     `${pendingConnector?.name} uri`,
     async () => {
       const connectorProvider = await pendingConnector?.getProvider()
-      return connectorProvider.connector?.uri || connectorProvider.qrUrl
+      const uri = connectorProvider.connector?.uri || connectorProvider.qrUrl
+      if (uri.endsWith('key=')) throw 'no key'
+      return uri
     },
-    { enabled: !!pendingConnector?.id, onSuccess: console.log },
+    { enabled: !!pendingConnector?.id, retry: (_, error) => error === 'no key' },
   )
 
   return { qrCode, isLoading }
@@ -90,19 +91,20 @@ const LoadingLabel = ({ children }) => (
 )
 
 const PendingInjected = () => {
-  const { pendingConnector, isError, connect, variables } = _connectCtx
+  const { pendingConnector, isError, isLoading, connect, variables } = _connectCtx
 
   return (
     <Stack align="center" justify="center" textAlign="center" fontWeight="medium">
       <ConnectorLogo connector={pendingConnector} size="48px" />
-      {isError ? (
+      {isError && (
         <>
           <Text>Something went wrong connecting to {pendingConnector.name}</Text>
           <Button variant="secondary" px={4} py={2} onClick={() => connect(variables)}>
             Retry
           </Button>
         </>
-      ) : (
+      )}
+      {isLoading && (
         <>
           <Text fontWeight="bold">Opening {pendingConnector.name}</Text>
           <LoadingLabel>Confirm in your wallet</LoadingLabel>
@@ -112,27 +114,12 @@ const PendingInjected = () => {
   )
 }
 
-const PendingConnectionInfo = () => {
+const PendingQRCode = () => {
   const { qrCode, isLoading: isLoadingQr } = usePendingConnectorQrCode()
-
-  if (!_connectCtx.isLoading && !_connectCtx.pendingConnector)
-    return (
-      <Stack textAlign="center" alignSelf="center" fontSize="sm">
-        <Text fontFamily="heading" fontWeight="bold" fontSize="xl">
-          Select a wallet to enter the cave
-        </Text>
-        <Text color="text.low" fontWeight="medium" w="320px">
-          Connecting your wallet means the app can see your address and ask for signatures <br />
-        </Text>
-        <Text color="text.low" opacity={0.6} fontWeight="medium" w="320px">
-          Note: No funds can be transfered without your explicit concent
-        </Text>
-      </Stack>
-    )
 
   if (isLoadingQr)
     return (
-      <ScaleFade delay={0.2}>
+      <ScaleFade delay={0.1} in={true}>
         <Stack align="center" justify="center" textAlign="center" fontWeight="medium">
           <ConnectorLogo connector={_connectCtx.pendingConnector} size="48px" />
           <LoadingLabel>Loading wallet connector</LoadingLabel>
@@ -140,17 +127,32 @@ const PendingConnectionInfo = () => {
       </ScaleFade>
     )
 
-  return qrCode ? <ScanQrCode qrCode={qrCode} /> : <PendingInjected />
+  return <ScanQrCode qrCode={qrCode} />
 }
 
+const SelectAWallet = () => (
+  <Stack textAlign="center" alignSelf="center" fontSize="sm">
+    <Text fontFamily="heading" fontWeight="bold" fontSize="xl">
+      Select a wallet to enter the cave
+    </Text>
+    <Text color="text.low" fontWeight="medium" w="320px">
+      Connecting your wallet means the app can see your address and ask for signatures
+    </Text>
+    <Text color="text.low" opacity={0.6} fontWeight="medium" w="320px">
+      Note: No funds can be transfered without your explicit concent
+    </Text>
+  </Stack>
+)
+
 const DesktopConnect = ({ isOpen, onClose }) => {
-  const { connectors, connect, pendingConnector } = _connectCtx
+  const { connectors, connect, pendingConnector, isLoading } = _connectCtx
 
   /*
-     injected & metamask connectors sometimes can be the same, showing two metamask buttons
-      _connectors is an array with no repeated connectors
-    */
+    injected & metamask connectors sometimes can be the same, showing two metamask buttons
+    _connectors is an array with no repeated connectors
+  */
   const _connectors = [...new Map(connectors.map((c) => [c.name, c])).values()]
+  const isQRConnector = ['walletConnect', 'coinbaseWallet'].includes(pendingConnector?.id)
 
   const modalPadding = useToken('space', 6)
 
@@ -161,11 +163,11 @@ const DesktopConnect = ({ isOpen, onClose }) => {
       hideClose
       isOpen={isOpen}
       onClose={onClose}
+      autoFocus={false}
       isCentered
       motionPreset="slideInBottom"
       bodyProps={{ w: '100%', h: 'auto', p: modalPadding }}
     >
-      <CloseButton variant="subtle" onClick={onClose} pos="absolute" top={2} right={2} />
       <Flex align="start">
         <Stack>
           <Text fontFamily="heading" fontWeight="bold" fontSize="xl">
@@ -206,39 +208,43 @@ const DesktopConnect = ({ isOpen, onClose }) => {
           justify="center"
           alignSelf="center"
         >
-          <PendingConnectionInfo />
+          {!isLoading && !pendingConnector ? (
+            <SelectAWallet />
+          ) : isQRConnector ? (
+            <PendingQRCode />
+          ) : (
+            <PendingInjected />
+          )}
         </Stack>
+        <CloseButton variant="subtle" onClick={onClose} pos="absolute" top={2} right={2} />
       </Flex>
     </Modal>
   )
 }
 
-const MobileConnect = ({ isOpen, onClose }) => {
-  const {
-    data: wallets,
-    isSuccess,
-    isError,
-    isLoading,
-  } = useQuery('wallet connect registry', fetchWalletConnectRegistry, {
+const useWalletConnectRegistry = () =>
+  useQuery('wallet connect registry', fetchWalletConnectRegistry, {
     staleTime: Infinity,
     cacheTime: Infinity,
   })
 
+const MobileConnect = ({ isOpen, onClose }) => {
+  const { data: wallets, isSuccess, isError, isLoading } = useWalletConnectRegistry()
   const { connectors, connect, pendingConnector } = _connectCtx
 
   const walletConnectConnector = connectors.find((connector) => connector.id === 'walletConnect')
 
-  useEffectOnce(() => {
-    connect({ connector: walletConnectConnector, chainId: 4 })
+  // useEffectOnce(() => {
+  //   connect({ connector: walletConnectConnector, chainId: 4 })
 
-    walletConnectConnector.on('message', ({ type }) => {
-      if (type === 'connecting') return ''
-    })
+  //   walletConnectConnector.on('message', ({ type }) => {
+  //     if (type === 'connecting') return ''
+  //   })
 
-    return () => {
-      walletConnectConnector.off('message')
-    }
-  })
+  //   return () => {
+  //     walletConnectConnector.off('message')
+  //   }
+  // })
 
   const { data: uri } = useQuery(
     `wallet connect uri`,
@@ -320,10 +326,11 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
   })
   _connectCtx = connectCtx
 
-  return <DesktopConnect isOpen={isOpen} onClose={onClose} />
-  // return isMounted && isMobile() ? (
-  //   <MobileConnect isOpen={isOpen} onClose={onClose} />
-  // ) : (
-  //   <DesktopConnect isOpen={isOpen} onClose={onClose} />
-  // )
+  // return <DesktopConnect isOpen={isOpen} onClose={onClose} />
+  // return <MobileConnect isOpen={isOpen} onClose={onClose} />
+  return isMobile() ? (
+    <MobileConnect isOpen={isOpen} onClose={onClose} />
+  ) : (
+    <DesktopConnect isOpen={isOpen} onClose={onClose} />
+  )
 }
