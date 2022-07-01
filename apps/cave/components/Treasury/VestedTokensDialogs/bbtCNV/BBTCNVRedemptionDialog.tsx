@@ -46,7 +46,7 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
   const { bbtCNVData } = useVestedTokens()
 
   const { registerTransaction } = useTransactionRegistry()
-  const [redeemMax, setRedeemMax] = useState(false)
+  const [redeemMax, setRedeemMax] = useState(true)
   const [value, setValue] = useState<string>()
 
   const balance = bbtCNVData?.formatted || '0'
@@ -55,8 +55,8 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
 
   // Conditions
   const insufficientFunds = +balance === 0 || +value > +balance
-  const redeemableExceeded = +value > redeemable && !insufficientFunds
   const nothingToRedeem = (redeemable === 0 || redeemable === +balance) && !insufficientFunds
+  const redeemableExceeded = +value > redeemable && !insufficientFunds && !nothingToRedeem
   const validValue = !insufficientFunds && !nothingToRedeem && !redeemableExceeded
 
   const networdId = useCurrentSupportedNetworkId()
@@ -143,12 +143,16 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
             }}
           >
             {isConnected ? (
-              <Text>
-                {redeemableExceeded && 'Redeemable Exceeded'}
-                {nothingToRedeem && 'Nothing To Redeem'}
-                {insufficientFunds && 'Insufficient Funds'}
-                {validValue && 'Redeem'}
-              </Text>
+              isLoading ? (
+                <Text>{'Loading'}</Text>
+              ) : (
+                <Text>
+                  {redeemableExceeded && 'Redeemable Exceeded'}
+                  {nothingToRedeem && 'Nothing To Redeem'}
+                  {insufficientFunds && 'Insufficient Funds'}
+                  {validValue && 'Redeem'}
+                </Text>
+              )
             ) : (
               'Not Connected'
             )}
