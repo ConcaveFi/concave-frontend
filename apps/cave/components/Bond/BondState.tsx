@@ -4,6 +4,7 @@ import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider, concaveProvider as providers } from 'lib/providers'
 import { useMemo, useState } from 'react'
+import { formatFixed } from 'utils/formatFixed'
 import { useAccount, useSigner } from 'wagmi'
 import { BondSettings } from './Settings'
 
@@ -19,8 +20,10 @@ export const getBondAmountOut = async (
   const formattedInput = ethers.utils.parseUnits(input.toString(), 18)
   const amountOut = await bondingContract.getAmountOut(DAI, formattedInput)
   console.log(amountOut)
-  const ethValue = ethers.utils.formatEther(amountOut)
-  const cleanedOutput = parseFloat(ethValue).toFixed(6)
+  const ethValue = +ethers.utils.formatEther(amountOut)
+
+  const cleanedOutput = ethValue.toFixed(4)
+
   return cleanedOutput
 }
 
