@@ -1,18 +1,19 @@
-import { Flex, VStack } from '@chakra-ui/react'
+import { Flex, VStack, Text, HStack } from '@chakra-ui/react'
+import { Loading } from 'components/Loading'
 import { MarketplaceFilterContainer } from 'components/Marketplace/MarketplaceFilterContainer'
 import { useMarketplaceDashbord } from 'components/Marketplace/UseMarkeplaceState'
 import { MarketplacePosition } from './MarketplacePosition'
 
 export const MarketplaceDashboard = () => {
-  const { isLoading, salePositions, owner, setOwner } = useMarketplaceDashbord()
-
+  const { isFetching, salePositions, owner, setOwner } = useMarketplaceDashbord()
   const nftPositions = salePositions.map((marketItem) => (
     <MarketplacePosition key={+marketItem.position.tokenId.toString()} marketItem={marketItem} />
   ))
+
   return (
     <VStack
       width={'640px'}
-      height="940px"
+      maxHeight="940px"
       rounded={'2xl'}
       apply="background.metalBrighter"
       shadow={'up'}
@@ -22,18 +23,30 @@ export const MarketplaceDashboard = () => {
       <MarketplaceFilterContainer address={owner} setAddress={setOwner} />
       {/* Positions Container */}
       <Flex
+        as={Loading}
+        size="md"
+        isLoading={isFetching}
+        rLabel=""
         rounded={'inherit'}
         shadow="down"
-        h="full"
         w="full"
         maxW="900px"
+        m={4}
+        p={4}
         overflowY={'auto'}
-        px={1.5}
         direction="column"
         apply="scrollbar.big"
         bg={'linear-gradient(238.35deg, #19394C 9.11%, #0A161F 92.45%)'}
       >
-        {nftPositions}
+        {!!nftPositions.length && nftPositions}
+        {!nftPositions.length && (
+          <>
+            <Text size={'lg'} fontWeight={'bold'}>
+              Not found results
+            </Text>
+            <Text>Check your filters</Text>
+          </>
+        )}
       </Flex>
     </VStack>
   )

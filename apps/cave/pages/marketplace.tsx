@@ -19,8 +19,6 @@ const Marketplace = () => {
     if (isLargerLayout && viewTransactions == true) setViewTransactions(false)
   }, [isLargerLayout])
 
-  console.log(isLargerLayout)
-
   return (
     <Flex width={{ base: 'full' }} borderRadius={0} textAlign="center" direction="column">
       {!viewTransactions ? (
@@ -47,7 +45,6 @@ const Marketplace = () => {
           <Flex
             direction={{ xl: 'row', base: 'column-reverse' }}
             justify="center"
-            align={'center'}
             gap={{ base: 1, md: 8 }}
             width="full"
           >
@@ -55,7 +52,6 @@ const Marketplace = () => {
               direction="column"
               float={'left'}
               position="relative"
-              justify={'center'}
               align="center"
               mt={{ xl: 12, md: 6, base: 0 }}
             >
