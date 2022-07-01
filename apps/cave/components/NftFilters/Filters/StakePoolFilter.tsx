@@ -67,9 +67,7 @@ export const StakePoolFilterCard = ({
               .map((filter, index) => (
                 <StakeToggleButton
                   filter={+filter}
-                  enabled={
-                    stakePoolFilters?.filter((currentFilter) => filter === currentFilter).length > 0
-                  }
+                  enabled={stakePoolFilters.includes(+filter)}
                   key={index}
                   onDisableFilter={onDisableFilter}
                   onEnableFilter={onEnableFilter}

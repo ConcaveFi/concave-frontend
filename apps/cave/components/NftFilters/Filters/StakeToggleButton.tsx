@@ -4,16 +4,16 @@ import { ToggleButton } from 'components/ToggleButton'
 import { StakePoolFilterEnum } from './hooks/useFilterByStakePool'
 type StakeToggleButton = {
   filter: StakePoolFilterEnum
-  enabled?: boolean
+  enabled: boolean
   onEnableFilter: (filter: StakePoolFilterEnum) => void
   onDisableFilter: (filter: StakePoolFilterEnum) => void
 }
 
 export const StakeToggleButton: React.FC<StakeToggleButton> = ({
   filter,
+  enabled,
   onDisableFilter,
   onEnableFilter,
-  enabled,
 }) => {
   return (
     <Flex textColor={'white'} fontWeight="bold" width={'full'} justify="space-between" px={4}>
