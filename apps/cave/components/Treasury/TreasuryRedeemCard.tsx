@@ -4,7 +4,7 @@ import useAddTokenToWallet, { injectedTokenResponse } from 'hooks/useAddTokenToW
 import { GlassPanel } from './TreasuryManagementCard'
 import { useState } from 'react'
 import { ComingSoonDialog } from 'components/ComingSoonDialog'
-import BBBTCNVRedemptionDialog from './VestedTokensDialogs/BBTCNVRedemptionDialog'
+import BBBTCNVRedemptionDialog from './VestedTokensDialogs/bbtCNV/BBTCNVRedemptionDialog'
 import ACNVRedemptionDialog from './VestedTokensDialogs/ACNVRedemptionDialog'
 // aCNV address
 // 0x2a6bb78490c2221e0d36d931192296be4b3a01f1 RINKEBY

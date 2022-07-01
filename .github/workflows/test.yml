@@ -1,0 +1,20 @@
+name: Test Package
+
+on: [pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 16
+
+      - name: Set up packages
+        run: yarn
+
+      - name: '@concave/core'
+        run: cd libs/core/ && yarn test && cd ../..
+
+      - name: '@concave/cave'
+        run: cd apps/cave/ && yarn test && cd ../..
