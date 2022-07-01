@@ -2,7 +2,7 @@ import { useDisclosure } from '@concave/ui'
 import { DevelopGateway } from 'components/DevelopGateway'
 import { UnsupportedNetworkModal } from 'components/UnsupportedNetworkModal'
 import React, { ComponentType, createContext, useContext } from 'react'
-import { useAccount } from 'wagmi'
+import { useAccount, useConnect } from 'wagmi'
 import dynamic from 'next/dynamic'
 
 type ModalsDisclosure = Record<
@@ -20,16 +20,20 @@ const ConnectWalletModal: ComponentType<{ isOpen: boolean; onClose: () => void }
   { ssr: false },
 )
 
+let shouldFetchConnectWalletModal = false
 export const ModalsProvider: React.FC<React.PropsWithChildren<unknown>> = ({ children }) => {
   const { isReconnecting, isDisconnected } = useAccount()
   const connectModal = useDisclosure()
+
+  /* lazy load ConnectWalletModal only if couldn't restore a session */
+  shouldFetchConnectWalletModal =
+    shouldFetchConnectWalletModal || (!isReconnecting && isDisconnected)
 
   return (
     <ModalsContext.Provider value={{ connectModal }}>
       <DevelopGateway />
       <UnsupportedNetworkModal />
-      {/* lazy load ConnectWalletModal only if couldn't restore a session */}
-      {!isReconnecting && isDisconnected && (
+      {shouldFetchConnectWalletModal && (
         <ConnectWalletModal isOpen={connectModal.isOpen} onClose={connectModal.onClose} />
       )}
       {children}
