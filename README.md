@@ -23,7 +23,7 @@ bootstraping a new concave app? put it in `/apps`
 ### libs
 
 - `@concave/core`: has all core features to interact with web3 contracts, like currencyAmount and address
-- `@concave/gemswap`: has all AMM logics, like Trade, TradeType, Pairs, Fetcher, Contracts and more
+- `@concave/gemswap`: has all AMM logic, like Trade, TradeType, Pairs, Fetcher, Contracts and more
 - `@concave/marketplace`: has Marketplace and Staking logics, like StakingPosition, Fecher, Contracts and more
 - `@concave/ui`: has all chakra-ui components + more, you should add shared more abstracted components here, let use case specifics for each app components folder
 - `@concave/icon`: has all chakra-ui icons + more
