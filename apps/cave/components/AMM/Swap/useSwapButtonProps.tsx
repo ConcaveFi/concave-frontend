@@ -88,11 +88,11 @@ export const useSwapButtonProps = ({
   /*
     Insufficient Funds
   */
-  if (currencyInBalance.data?.lessThan(inputAmount))
-    return {
-      children: `Insufficient ${inputAmount.currency.symbol}`,
-      isDisabled: true,
-    }
+  // if (currencyInBalance.data?.lessThan(inputAmount))
+  //   return {
+  //     children: `Insufficient ${inputAmount.currency.symbol}`,
+  //     isDisabled: true,
+  //   }
 
   if (recipient && !isAddress(recipient)) return { children: 'Invalid recipient', isDisabled: true }
 
