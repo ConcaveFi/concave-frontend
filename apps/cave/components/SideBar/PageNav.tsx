@@ -7,10 +7,12 @@ import { isMobile } from 'utils/isMobile'
 import Router from 'next/router'
 import { useQuery } from 'react-query'
 import getROI from 'utils/getROI'
+import { onCloseSidebar } from './SideBar'
 
 const NavButton = (props: ButtonLinkProps) => {
   return (
     <ButtonLink
+      onClick={onCloseSidebar}
       iconSpacing={2}
       px={4}
       variant="secondary"
@@ -30,16 +32,19 @@ const NavButton = (props: ButtonLinkProps) => {
   )
 }
 
+const subnavVisibleStyles = { maxH: 'unset', opacity: 1, p: '10px' }
 const SubnavButton = ({ children, ...props }: ButtonLinkProps) => {
   return (
     <ButtonLink
+      onClick={onCloseSidebar}
       px={4}
       sx={isMobile() || Router.route === props.href ? { p: '10px' } : { maxH: 0, opacity: 0, p: 0 }}
       transition="all 0.1s ease-in"
-      _groupHover={{ maxH: 'unset', opacity: 1, p: '10px' }}
+      _groupHover={subnavVisibleStyles}
+      _groupFocusWithin={subnavVisibleStyles}
       isActive={Router.route === props.href}
       data-peer
-      _peerActive={{ maxH: 'unset', opacity: 1, p: '10px' }}
+      _peerActive={subnavVisibleStyles}
       w="100%"
       color="text.low"
       variant="secondary"

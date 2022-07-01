@@ -17,8 +17,10 @@ import SideBarTop from './SideBarTop'
 import SideBarBottom from './SideBarBottom'
 import PageNav from './PageNav'
 
+export let onCloseSidebar = () => void null
 export function SideBar() {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  onCloseSidebar = onClose
 
   return (
     <>
@@ -51,6 +53,7 @@ export function SideBar() {
         closeOnOverlayClick={true}
         isOpen={isOpen}
         placement="left"
+        blockScrollOnMount={false}
         onClose={onClose}
       >
         <DrawerOverlay backdropFilter="blur(8px)" />
