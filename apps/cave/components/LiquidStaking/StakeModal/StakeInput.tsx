@@ -94,16 +94,17 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
             size="large"
             mx="auto"
             disabled={
-              !cnvBalance.data ||
-              +cnvBalance.data?.numerator.toString() === 0 ||
-              +stakeInput.numerator.toString() === 0 ||
-              stakeInput.greaterThan(cnvBalance.data?.numerator)
+              // !cnvBalance.data ||
+              // +cnvBalance.data?.numerator.toString() === 0 ||
+              +stakeInput.numerator.toString() === 0
+              // stakeInput.greaterThan(cnvBalance.data?.numerator)
             }
           >
-            {+stakeInput.numerator?.toString() > +cnvBalance.data?.numerator.toString() ||
+            {/* {+stakeInput.numerator?.toString() > +cnvBalance.data?.numerator.toString() ||
             +cnvBalance.data?.numerator.toString() === 0
               ? 'Insufficient CNV'
-              : 'Stake CNV'}
+              : 'Stake CNV'} */}
+              Stake CNV
           </ApproveButton>
 
           {/* <Button
