@@ -22,7 +22,7 @@ export default function useBBTCNVRedeemable() {
       redeemable: await contractV2.connect(signer).redeemable(account?.address),
       redeemed: await contractV2.connect(signer).redeemed(account?.address),
     }),
-    { enabled: !!account?.address },
+    { enabled: !!account?.address && !!signer },
   )
   return {
     data,
