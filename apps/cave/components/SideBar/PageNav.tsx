@@ -1,27 +1,28 @@
-import { Box, Collapse, Flex, Image, Spinner, Text } from '@concave/ui'
+import { Box, Flex, Image, Spinner, Text } from '@concave/ui'
 import { getBondSpotPrice } from 'components/Bond/BondState'
 import { ButtonLink, ButtonLinkProps } from 'components/ButtonLink'
 import { useCNVPrice } from 'hooks/useCNVPrice'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { useDevice } from 'hooks/useDevice'
-import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import { isMobile } from 'utils/isMobile'
+import Router from 'next/router'
 import { useQuery } from 'react-query'
 import getROI from 'utils/getROI'
+import { onCloseSidebar } from './SideBar'
 
 const NavButton = (props: ButtonLinkProps) => {
-  const router = useRouter()
   return (
     <ButtonLink
+      onClick={onCloseSidebar}
       iconSpacing={2}
       px={4}
       variant="secondary"
       color="text.low"
-      w="175px"
+      w="100%"
       borderRightRadius={0}
       h="50px"
       rightIcon={<Box roundedLeft="lg" shadow="Up Big" mr={-5} w="16px" h="36px" />}
-      isActive={router.route === props.href}
+      isActive={Router.route === props.href}
+      data-peer
       {...props}
     >
       <Flex w="100%" align="center" justify="center">
@@ -31,12 +32,20 @@ const NavButton = (props: ButtonLinkProps) => {
   )
 }
 
+const subnavVisibleStyles = { maxH: 'unset', opacity: 1, p: '10px' }
 const SubnavButton = ({ children, ...props }: ButtonLinkProps) => {
   return (
     <ButtonLink
+      onClick={onCloseSidebar}
       px={4}
-      py={'10px'}
-      w="175px"
+      sx={isMobile() || Router.route === props.href ? { p: '10px' } : { maxH: 0, opacity: 0, p: 0 }}
+      transition="all 0.1s ease-in"
+      _groupHover={subnavVisibleStyles}
+      _groupFocusWithin={subnavVisibleStyles}
+      isActive={Router.route === props.href}
+      data-peer
+      _peerActive={subnavVisibleStyles}
+      w="100%"
       color="text.low"
       variant="secondary"
       bg="none"
@@ -57,12 +66,8 @@ const NotInteractableImage = ({ src, ...props }) => (
   <Image alt="" src={src} userSelect="none" draggable="false" pointerEvents="none" {...props} />
 )
 
-function PageNav() {
-  const router = useRouter()
+const BondROI = () => {
   const currentSupportedNetworkId = useCurrentSupportedNetworkId()
-  const [liquidStakingHover, setLiquidStakingHover] = useState(false)
-  const [swapHover, setSwapStakingHover] = useState(false)
-  const device = useDevice()
   const cnvPrice = useCNVPrice()
   const roi = useQuery(
     ['bondROI', currentSupportedNetworkId, cnvPrice.price],
@@ -74,19 +79,17 @@ function PageNav() {
     { enabled: cnvPrice.isSuccess && !!currentSupportedNetworkId, refetchInterval: 17000 },
   )
 
-  const liquidStakingPage =
-    router.pathname === '/liquid-staking' || router.pathname === '/liquid-stake-positions'
-  const swapPage =
-    router.pathname === '/gemswap' ||
-    router.pathname === '/pools' ||
-    router.pathname === '/addliquidity'
+  return (
+    <>
+      <Text fontSize="xs" fontWeight="bold" py={2}>
+        {`CNV-DAI ${roi.data || ''}`} {roi.isError ? 'error' : ''}
+      </Text>
+      {(roi.isFetching || roi.isIdle) && <Spinner size={'xs'} />}
+    </>
+  )
+}
 
-  const isMobile = {
-    tablet: true,
-    mobile: true,
-    desktop: false,
-  }[device]
-
+function PageNav() {
   return (
     <Flex direction="column" position="relative" mr="-2px">
       <NotInteractableImage
@@ -103,10 +106,7 @@ function PageNav() {
           Bond
         </NavButton>
         <Flex gap={1} justify="center" align="center" textColor="text.low">
-          <Text fontSize="xs" fontWeight="bold" py={2}>
-            {`CNV-DAI ${roi.data || ''}`} {roi.isError ? 'error' : ''}
-          </Text>
-          {(roi.isFetching || roi.isIdle) && <Spinner size={'xs'} />}
+          <BondROI />
         </Flex>
       </Box>
       <Box height={'110px'}>
@@ -116,8 +116,7 @@ function PageNav() {
           mt="24px"
           transition={'all'}
           transitionDuration="0.5s"
-          onMouseEnter={() => setLiquidStakingHover(true)}
-          onMouseLeave={() => setLiquidStakingHover(false)}
+          role="group"
         >
           <NavButton
             leftIcon={<NotInteractableImage src="/assets/sidebar/page-lstaking.svg" />}
@@ -128,15 +127,9 @@ function PageNav() {
           >
             Stake
           </NavButton>
-          <Collapse in={liquidStakingHover || liquidStakingPage || isMobile}>
-            <SubnavButton
-              isActive={router.pathname === '/liquid-stake-positions'}
-              href="/liquid-stake-positions"
-              mt="1px"
-            >
-              Your Stake Positions
-            </SubnavButton>
-          </Collapse>
+          <SubnavButton href="/liquid-stake-positions" mt="1px">
+            Your Stake Positions
+          </SubnavButton>
         </Box>
       </Box>
 
@@ -149,13 +142,7 @@ function PageNav() {
       </NavButton>
 
       <Box height={'120px'}>
-        <Box
-          shadow="Down Big"
-          roundedLeft="2xl"
-          mt="28px"
-          onMouseEnter={() => setSwapStakingHover(true)}
-          onMouseLeave={() => setSwapStakingHover(false)}
-        >
+        <Box shadow="Down Big" roundedLeft="2xl" mt="28px" role="group">
           <NavButton
             leftIcon={<NotInteractableImage src="/assets/sidebar/page-swap.svg" />}
             href="/gemswap"
@@ -164,10 +151,8 @@ function PageNav() {
             Swap
           </NavButton>
 
-          <Collapse in={swapHover || swapPage || isMobile}>
-            <SubnavButton href="/addliquidity">Add liquidity</SubnavButton>
-            <SubnavButton href="/pools">Your Pools</SubnavButton>
-          </Collapse>
+          <SubnavButton href="/addliquidity">Add liquidity</SubnavButton>
+          <SubnavButton href="/pools">Your Pools</SubnavButton>
         </Box>
       </Box>
     </Flex>
