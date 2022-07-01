@@ -127,10 +127,10 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
                 .redeem(parseEther(String(value || '0')), account?.address, redeemMax)
                 .then((tx) => {
                   onCloseConfirm()
-                  registerTransaction(tx, {
-                    type: 'redeem',
-                    amount: `${bbtCNVData.formatted} bbtCNV`,
-                  })
+                  // registerTransaction(tx, {
+                  //   type: 'redeem',
+                  //   amount: `${bbtCNVData.formatted} bbtCNV`,
+                  // })
                   setTx(tx)
                   onOpenSub()
                 })
