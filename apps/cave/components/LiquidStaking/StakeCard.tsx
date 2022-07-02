@@ -49,16 +49,7 @@ export const StakeCard = (props: StakeCardProps) => {
           Stake
         </Button>
       </Card>
-      <StakeModal
-        stakeValues={{
-          currentlyStaked: stakingV1Pools?.balance,
-          percent,
-          stakingCap: stakingV1Cap,
-        }}
-        isOpen={isOpen}
-        onClose={onClose}
-        stakeData={props.stakeData}
-      />
+      <StakeModal isOpen={isOpen} onClose={onClose} stakeData={props.stakeData} />
     </>
   )
 }
