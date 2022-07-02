@@ -9,18 +9,19 @@ import { useAccount } from 'wagmi'
 //build
 export type UseStakePositionsState = ReturnType<typeof useStakePositions>
 export const useStakePositions = () => {
-  const { address } = useAccount()
+  const { data: account } = useAccount()
   const chainId = useCurrentSupportedNetworkId()
   const { data: stakingPositions, isLoading } = useQuery(
-    ['listUserPositions', address, chainId],
-    () => listUserPositions(address, concaveProvider(chainId), NEXT_PUBLIC_ALCHEMY_ID),
-    { enabled: !!address && !!chainId },
+    ['listUserPositions', account?.address, chainId],
+    () => listUserPositions(account.address, concaveProvider(chainId), NEXT_PUBLIC_ALCHEMY_ID),
+    { enabled: !!account?.address && !!chainId },
   )
   const totalLocked = getTotalLocked(stakingPositions, CNV[chainId])
   return {
     isLoading,
     totalLocked,
     userNonFungibleTokensInfo: stakingPositions || [],
+    account,
     netWorkId: chainId,
   }
 }

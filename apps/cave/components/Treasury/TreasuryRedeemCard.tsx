@@ -3,6 +3,7 @@ import { Button, Flex, Text, useDisclosure } from '@concave/ui'
 import useAddTokenToWallet, { injectedTokenResponse } from 'hooks/useAddTokenToWallet'
 import { GlassPanel } from './TreasuryManagementCard'
 import { useState } from 'react'
+import { useConnect } from 'wagmi'
 import { ComingSoonDialog } from 'components/ComingSoonDialog'
 import BBBTCNVRedemptionDialog from './VestedTokensDialogs/bbtCNV/BBTCNVRedemptionDialog'
 import ACNVRedemptionDialog from './VestedTokensDialogs/ACNVRedemptionDialog'
@@ -19,6 +20,8 @@ function TreasuryRedeemCard() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [description, setDescription] = useState("This feature it's not done yet.")
   const [title, setTitle] = useState('Coming soon')
+
+  const { activeConnector } = useConnect()
 
   const {
     isOpen: onRedeemBBTCNV,
@@ -78,7 +81,7 @@ function TreasuryRedeemCard() {
           my="auto"
           fontSize={{ base: '22px', xl: '18px' }}
         >
-          Add CNV to your wallet
+          Add CNV to your {activeConnector?.name || 'wallet'}
         </Text>
       </GlassPanel>
       <ComingSoonDialog title={title} desc={description} isOpen={isOpen} onClose={onClose} />

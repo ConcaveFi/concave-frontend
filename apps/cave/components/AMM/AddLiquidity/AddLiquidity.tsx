@@ -175,10 +175,12 @@ export const AddLiquidityModalButton = ({
   label = 'Add liquidity',
   ...buttonProps
 }: { label?: string; pair?: Pair } & ButtonProps) => {
-  const { isDisconnected } = useAccount()
+  const { data: account } = useAccount()
   const addLiquidityDisclosure = useDisclosure()
   const currencies = useMemo(() => [pair?.token0, pair?.token1], [pair?.token0, pair?.token1])
-  if (isDisconnected) return <ConnectWallet />
+  if (!account?.address) {
+    return <ConnectWallet />
+  }
   return (
     <>
       <Button

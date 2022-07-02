@@ -2,6 +2,7 @@ import { Box, Flex, Heading, Text } from '@concave/ui'
 import { withPageTransition } from 'components/PageTransition'
 import { MyPositions } from 'components/Positions/MyPositions'
 import { usePositionsState } from 'components/Positions/usePositionsState'
+import React from 'react'
 
 const Pools = () => {
   const state = usePositionsState()

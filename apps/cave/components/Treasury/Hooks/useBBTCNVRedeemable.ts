@@ -10,7 +10,6 @@ export default function useBBTCNVRedeemable() {
   const { address } = useAccount()
   const { data: signer } = useSigner()
 
-
   const networkdId = useCurrentSupportedNetworkId()
 
   const contractV2 = new Contract(
@@ -18,7 +17,6 @@ export default function useBBTCNVRedeemable() {
     bbtCNV_REDEMPTION_V2_ABI,
     provider(networkdId),
   )
-
   const { data, isLoading } = useQuery(
     ['bbtRedeemable', address, networkdId],
     async () => ({
