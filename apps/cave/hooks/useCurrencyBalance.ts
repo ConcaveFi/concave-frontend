@@ -7,12 +7,12 @@ export const useCurrencyBalance = (
   currency: Currency,
   { watch = false } = {},
 ): Omit<ReturnType<typeof useBalance>, 'data'> & { data: CurrencyAmount<Currency> } => {
-  const { data: account } = useAccount()
+  const { address } = useAccount()
 
-  const enabled = !!currency && !!account?.address
+  const enabled = !!currency && !!address
 
   const balance = useBalance({
-    addressOrName: account?.address,
+    addressOrName: address,
     chainId: currency?.chainId,
     formatUnits: currency?.decimals,
     token: currency?.isToken && currency?.wrapped.address,

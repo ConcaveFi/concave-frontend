@@ -1,6 +1,6 @@
 import { SpinIcon } from '@concave/icons'
 import { Button, Flex, Modal, Text } from '@concave/ui'
-import { useNetwork } from 'wagmi'
+import { useNetwork, useSwitchNetwork } from 'wagmi'
 import { spinAnimation } from './Treasury/Mobile/TreasuryManagementMobile'
 
 interface ChangeNetworkModalProps {
@@ -9,7 +9,8 @@ interface ChangeNetworkModalProps {
 }
 
 export function ChangeNetworkModal(props: ChangeNetworkModalProps) {
-  const { activeChain, pendingChainId, isLoading, chains, switchNetwork } = useNetwork()
+  const { chain: activeChain, chains } = useNetwork()
+  const { switchNetwork, isLoading, pendingChainId } = useSwitchNetwork()
 
   return (
     <Modal

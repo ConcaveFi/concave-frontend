@@ -27,9 +27,9 @@ type ApproveButtonState = {
 export const ApproveButton = ({ approveArgs, ...buttonProps }: ApproveButtonProps) => {
   const { currency, spender, amount = MaxUint256.toString() } = approveArgs
   const { allowance, ...approve } = useApprove(currency.wrapped, spender)
-  const { data: account } = useAccount()
+  const { isDisconnected } = useAccount()
   const { connectModal } = useModals()
-  if (!account?.address)
+  if (isDisconnected)
     return (
       <Button fontSize="2xl" {...buttonProps} onClick={connectModal.onOpen}>
         {'Connect wallet'}
@@ -59,7 +59,7 @@ export const ApproveButton = ({ approveArgs, ...buttonProps }: ApproveButtonProp
     if (allowance?.value?.gte(amount.toString())) return 'successful'
     if (approve.isWaitingForConfirmation) return 'waitingWallet'
     if (approve.isWaitingTransactionReceipt) return 'pending'
-    if (approve.isFeching) return 'feching'
+    if (approve.isFetching) return 'feching'
     return 'default'
   })()
   const state = approveButtonAvailabelStates[stateKey]
