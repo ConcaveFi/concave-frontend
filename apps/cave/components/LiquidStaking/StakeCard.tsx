@@ -134,7 +134,8 @@ function StakeCard(props: StackCardProps) {
 
   const percent = (+currentlyStaked / +currentlyStakingCap) * 100
 
-  const { address: userAddress } = useAccount()
+  const { data: account } = useAccount()
+  const userAddress = account?.address
 
   const {
     data: logStakingPoolRewards,

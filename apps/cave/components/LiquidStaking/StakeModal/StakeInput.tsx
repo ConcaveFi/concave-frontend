@@ -17,7 +17,7 @@ import { useAccount, useSigner } from 'wagmi'
 import { PARAMETER_TO_POOL_PERIOD } from '../StakeCard'
 
 function StakeInput(props: { poolId: number; period: string; onClose: () => void }) {
-  const { address } = useAccount()
+  const { data: account } = useAccount()
   const netWorkdId = useCurrentSupportedNetworkId()
   const { data: signer } = useSigner()
   const [stakeInput, setStakeInput] = useState<CurrencyAmount<Currency>>(
@@ -53,7 +53,7 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
     const contract = new StakingV1Contract(concaveProvider(netWorkdId))
     setWaitingForConfirm(true)
     contract
-      .lock(signer, address, stakeInput.numerator.toString(), props.poolId)
+      .lock(signer, account?.address, stakeInput.numerator.toString(), props.poolId)
       .then((x: TransactionResponse) => {
         registerTransaction(x, {
           type: 'stake',

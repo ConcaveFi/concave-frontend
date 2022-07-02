@@ -17,6 +17,7 @@ export default function RedeemMobileCard() {
   const [description, setDescription] = useState("This feature it's not done yet.")
   const [title, setTitle] = useState('Coming soon')
 
+  const { activeConnector } = useConnect()
   const {
     isOpen: onRedeemBBTCNV,
     onOpen: onOpenRedeemBBTCNV,
@@ -65,7 +66,7 @@ export default function RedeemMobileCard() {
         onClick={addingToWallet}
         cursor="pointer"
       >
-        Add CNV to your wallet
+        Add CNV to your {activeConnector?.name}
       </Text>
       <ComingSoonDialog title={title} desc={description} isOpen={isOpen} onClose={onClose} />
     </GlassPanel>

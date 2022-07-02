@@ -14,7 +14,7 @@ const Faucet = () => {
   const [inputAmount, setInputAmout] = useState<CurrencyAmount<Currency>>(
     CurrencyAmount.fromRawAmount(CNV[chainId], '0'),
   )
-  const { address } = useAccount()
+  const { data: account } = useAccount()
   const { data: signer } = useSigner()
 
   const mint = () => {
@@ -26,7 +26,7 @@ const Faucet = () => {
     ).connect(signer)
 
     console.log(contract)
-    contract.mint(address, inputAmount.numerator.toString())
+    contract.mint(account.address, inputAmount.numerator.toString())
   }
 
   return (

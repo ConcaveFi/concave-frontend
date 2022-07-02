@@ -2,7 +2,7 @@ import { ChainId, CHAIN_NAME } from '@concave/core'
 import { Button, Card, Flex, SlideFade, Text } from '@concave/ui'
 import Router from 'next/router'
 import { ReactNode } from 'react'
-import { useSwitchNetwork } from 'wagmi'
+import { useNetwork } from 'wagmi'
 
 export function NetworkMismatch({
   isOpen,
@@ -15,7 +15,7 @@ export function NetworkMismatch({
   currentChainId: ChainId
   expectedChainId: ChainId
 }) {
-  const { switchNetwork, error } = useSwitchNetwork()
+  const { switchNetwork, error } = useNetwork()
 
   return (
     <SlideFade
@@ -38,6 +38,7 @@ export function NetworkMismatch({
           <Button
             variant="secondary"
             size="medium"
+            px={3}
             onClick={() =>
               Router.push({ query: { chainId: currentChainId } }, undefined, {
                 shallow: false,
@@ -47,7 +48,12 @@ export function NetworkMismatch({
           >
             Restart on {CHAIN_NAME[currentChainId]}
           </Button>
-          <Button variant="primary" size="medium" onClick={() => switchNetwork?.(+expectedChainId)}>
+          <Button
+            variant="primary"
+            size="medium"
+            px={3}
+            onClick={() => switchNetwork?.(+expectedChainId)}
+          >
             Switch to {CHAIN_NAME[expectedChainId]}
           </Button>
         </Flex>

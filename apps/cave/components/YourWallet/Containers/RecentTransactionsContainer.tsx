@@ -8,8 +8,8 @@ import {
 import { getTxExplorer } from 'lib/getTransactionExplorer'
 
 export default function RecentTransactionsContainer() {
-  const { recentTransactions } = useTransactionRegistry()
-  const hasRecentTransactions = recentTransactions.length > 0
+  const { lastTransactions } = useTransactionRegistry()
+  const hasRecentTransactions = lastTransactions.length > 0
 
   return (
     <Flex flex={1} direction={'column'} mt={8} mb={4}>
@@ -34,7 +34,7 @@ export default function RecentTransactionsContainer() {
           apply="border.secondary"
           __css={scroll}
         >
-          {recentTransactions.map((tx) => (
+          {lastTransactions.map((tx) => (
             <TransactionInfo key={tx.hash} {...tx} />
           ))}
         </Flex>

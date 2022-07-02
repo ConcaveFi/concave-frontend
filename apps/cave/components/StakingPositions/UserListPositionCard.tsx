@@ -17,7 +17,7 @@ type UserListPositionCardProps = {
 type ListForSaleState = ReturnType<typeof useListeForSaleState>
 
 export const useListeForSaleState = ({ marketInfoState }: UserListPositionCardProps) => {
-  const { address } = useAccount()
+  const { data: account } = useAccount()
   const [method, setMethod] = useState<'Sale' | 'Auction'>('Sale')
   const selectedToken = CNV[marketInfoState.chainId]
   const [offer, setOffer] = useState(
@@ -28,7 +28,7 @@ export const useListeForSaleState = ({ marketInfoState }: UserListPositionCardPr
         marketInfoState.marketInfo.data.offer.buyNowPrice ||
         marketInfoState.marketInfo.data.position.currentValue,
       feePercentages: [10000],
-      feeRecipients: [address],
+      feeRecipients: [account.address],
     }),
   )
   const marketInfo = new MarketItemInfo({ ...marketInfoState.marketInfo.data, offer })

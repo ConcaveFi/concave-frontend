@@ -3,7 +3,7 @@ import { isAddress } from 'ethers/lib/utils'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { swapSupportedChains } from 'pages/gemswap'
 import { toPercent } from 'utils/toPercent'
-import { useAccount, useNetwork } from 'wagmi'
+import { useNetwork } from 'wagmi'
 import { NoValidPairsError } from '../hooks/usePair'
 import { InsufficientLiquidityError, UseTradeResult } from '../hooks/useTrade'
 import { SwapSettings } from './Settings'
@@ -19,8 +19,7 @@ export const useSwapButtonProps = ({
   settings: SwapSettings
   onSwapClick: () => void
 }): ButtonProps => {
-  const { isConnecting } = useAccount()
-  const { chain } = useNetwork()
+  const network = useNetwork()
   const inputAmount = trade.data.inputAmount
   const outputAmount = trade.data.outputAmount
   const currencyIn = inputAmount?.currency
@@ -29,7 +28,7 @@ export const useSwapButtonProps = ({
   /*
     Not Connected
   */
-  if (isConnecting) return { isLoading: true }
+  if (network.isLoading) return { isLoading: true }
 
   /*
     Select a token
@@ -40,8 +39,9 @@ export const useSwapButtonProps = ({
   /*
     Network Stuff
   */
-  if (chain?.id !== currencyIn.chainId) return { children: 'Network mismatch', isDisabled: true }
-  if (!swapSupportedChains.includes(chain?.id))
+  if (network.activeChain?.id !== currencyIn.chainId)
+    return { children: 'Network mismatch', isDisabled: true }
+  if (!swapSupportedChains.includes(network.activeChain?.id))
     return {
       children: 'Unsupported chain',
       isDisabled: true,

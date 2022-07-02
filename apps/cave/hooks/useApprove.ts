@@ -19,10 +19,7 @@ export const useAllowance = (token: Token, spender: string, userAddress: string)
     error,
     isSuccess,
     refetch,
-  } = useContractRead({
-    addressOrName: token?.address,
-    contractInterface: erc20ABI,
-    functionName: 'allowance',
+  } = useContractRead({ addressOrName: token?.address, contractInterface: erc20ABI }, 'allowance', {
     args: [userAddress, spender],
     chainId: token.chainId,
     enabled: !!(token?.address && spender && userAddress),
@@ -54,10 +51,7 @@ export const useContractApprove = (
     isError,
     error,
     writeAsync: sendApproveTx,
-  } = useContractWrite({
-    contractInterface: erc20ABI,
-    addressOrName: token?.address,
-    functionName: 'approve',
+  } = useContractWrite({ contractInterface: erc20ABI, addressOrName: token?.address }, 'approve', {
     args: [spender, amountToApprove],
     onSuccess: (tx) => {
       registerTransaction(tx, { type: 'approve', tokenSymbol: token.symbol })
@@ -86,11 +80,11 @@ export const useApprove = (
   spender: string,
   amount: BigNumberish = MaxUint256.toString(),
 ) => {
-  const { address, isConnecting } = useAccount()
-  const allowance = useAllowance(token, spender, address)
+  const { data: account, isLoading } = useAccount()
+  const allowance = useAllowance(token, spender, account?.address)
   const approve = useContractApprove(token, spender, amount, {
     onSuccess: () => allowance.refetch(),
   })
 
-  return { allowance, ...approve, isFetching: isConnecting || allowance.isLoading }
+  return { allowance, ...approve, isFeching: isLoading || allowance.isLoading }
 }
