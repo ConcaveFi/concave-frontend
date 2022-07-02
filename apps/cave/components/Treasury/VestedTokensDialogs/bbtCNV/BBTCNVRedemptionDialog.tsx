@@ -21,7 +21,7 @@ import { parseEther } from 'ethers/lib/utils'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider as provider } from 'lib/providers'
 import { useState } from 'react'
-import { useAccount, useConnect, useSigner } from 'wagmi'
+import { useAccount, useBalance, useConnect, useSigner } from 'wagmi'
 import useBBTCNVRedeemable from '../../Hooks/useBBTCNVRedeemable'
 import useVestedTokens from '../../Hooks/useVestedTokens'
 import { BBT_CNVDialogInput } from './BbtCNVDialogInput'
@@ -55,10 +55,9 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
 
   // Conditions
   const insufficientFunds = +balance === 0 || +value > +balance
-  const redeemableExceeded = +value > redeemable && !insufficientFunds
-  const invalidValue = utils.parseEther(value || '0').isZero() && !redeemMax
   const nothingToRedeem = (redeemable === 0 || redeemable === +balance) && !insufficientFunds
-  const validValue = !insufficientFunds && !nothingToRedeem && !invalidValue && !redeemableExceeded
+  const redeemableExceeded = +value > redeemable && !insufficientFunds && !nothingToRedeem
+  const validValue = !insufficientFunds && !nothingToRedeem && !redeemableExceeded
 
   const networdId = useCurrentSupportedNetworkId()
 
@@ -92,7 +91,7 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
             <Info title="Redeemed:" value={isLoading ? 'Loading...' : redeemed} />
           </Flex>
           <Flex gap={2} fontWeight={'bold'} pl={2} align="center">
-            <Text textColor={'gray.200'}>Redeem max?</Text>
+            <Text textColor={'gray.200'}>Redeem max</Text>
             <ToggleButton enabled={redeemMax} onToggle={setRedeemMax} />
             <Tooltip
               textColor={'white'}
@@ -125,10 +124,10 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
                 .redeem(parseEther(String(value || '0')), account?.address, redeemMax)
                 .then((tx) => {
                   onCloseConfirm()
-                  registerTransaction(tx, {
-                    type: 'redeem',
-                    amount: `${bbtCNVData.formatted} bbtCNV`,
-                  })
+                  // registerTransaction(tx, {
+                  //   type: 'redeem',
+                  //   amount: `${bbtCNVData.formatted} bbtCNV`,
+                  // })
                   setTx(tx)
                   onOpenSub()
                 })
@@ -141,13 +140,16 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
             }}
           >
             {isConnected ? (
-              <Text>
-                {invalidValue && 'Invalid Value'}
-                {redeemableExceeded && 'Redeemable Exceeded'}
-                {nothingToRedeem && 'Nothing To Redeem'}
-                {insufficientFunds && 'Insufficient Funds'}
-                {validValue && 'Redeem'}
-              </Text>
+              isLoading ? (
+                <Text>{'Loading'}</Text>
+              ) : (
+                <Text>
+                  {redeemableExceeded && 'Redeemable Exceeded'}
+                  {nothingToRedeem && 'Nothing To Redeem'}
+                  {insufficientFunds && 'Insufficient Funds'}
+                  {validValue && 'Redeem'}
+                </Text>
+              )
             ) : (
               'Not Connected'
             )}
