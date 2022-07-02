@@ -6,7 +6,7 @@ export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
     useNFTLockedPositionState(props)
   return (
     <Flex
-      width={{ base: '353px', md: '512px', lg: '692px' }}
+      width={'full'}
       boxShadow={'up'}
       direction={{ base: 'column', md: 'row' }}
       borderRadius={'2xl'}
