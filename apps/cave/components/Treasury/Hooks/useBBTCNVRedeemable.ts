@@ -6,8 +6,10 @@ import { concaveProvider as provider } from 'lib/providers'
 import { useQuery } from 'react-query'
 import { useAccount, useSigner } from 'wagmi'
 export default function useBBTCNVRedeemable() {
+
   const { data: account } = useAccount()
   const { data: signer } = useSigner()
+
 
   const networkdId = useCurrentSupportedNetworkId()
 
@@ -16,6 +18,7 @@ export default function useBBTCNVRedeemable() {
     bbtCNV_REDEMPTION_V2_ABI,
     provider(networkdId),
   )
+
   const { data, isLoading } = useQuery(
     ['bbtRedeemable', account?.address, networkdId],
     async () => ({
@@ -24,6 +27,7 @@ export default function useBBTCNVRedeemable() {
     }),
     { enabled: !!account?.address && !!signer },
   )
+
   return {
     data,
     isLoading,
