@@ -10,6 +10,7 @@ export default function useBBTCNVRedeemable() {
   const { address } = useAccount()
   const { data: signer } = useSigner()
 
+
   const networkdId = useCurrentSupportedNetworkId()
 
   const contractV2 = new Contract(
