@@ -90,7 +90,7 @@ function LiquidStaking() {
           wrap={{ xl: 'nowrap', base: 'wrap' }}
         >
           {stakeData?.map((stake, index) => (
-            <StakeCard key={index} props={stake} />
+            <StakeCard key={index} stakeData={stake} />
           ))}
           {/* {StakingGroup.map((i) => {
             return (
