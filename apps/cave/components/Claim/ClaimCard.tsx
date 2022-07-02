@@ -1,20 +1,23 @@
 import { Button, Card, Stack } from '@concave/ui'
+import { useEffect, useState } from 'react'
 import { useAccount, useContractWrite } from 'wagmi'
 import { aCNVredeemabi } from 'lib/contractoABI'
 
 export function ClaimCard() {
-  const { address } = useAccount()
+  const { data: account } = useAccount()
   // const [{ data, error, loading }, getaCNVBalance] = useBalance({
   //   addressOrName: user.address,
   //   token: '0x2A6bb78490c2221E0D36d931192296BE4b3A01F1', // INSERT aCNV ADDRESS
   // })
   //
-  const { isLoading: isRedeeming, write } = useContractWrite({
-    addressOrName: '0x38baBedCb1f226B49b2089DA0b84e52b6181Ca59',
-    contractInterface: aCNVredeemabi,
-    functionName: 'redeem',
-    args: [address],
-  })
+  const { isLoading: isRedeeming, write } = useContractWrite(
+    {
+      addressOrName: '0x38baBedCb1f226B49b2089DA0b84e52b6181Ca59',
+      contractInterface: aCNVredeemabi,
+    },
+    'redeem',
+    { args: [account.address] },
+  )
   // const [redeemText, setRedeemText] = useState('aCNV')
 
   const redeemAncv = () => {

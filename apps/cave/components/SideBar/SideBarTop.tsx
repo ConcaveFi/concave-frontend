@@ -7,13 +7,13 @@ import { MdOutlineDashboard } from 'react-icons/md'
 import { useAccount, useBalance } from 'wagmi'
 
 function SideBarTop() {
-  const { address } = useAccount()
+  const { data: account } = useAccount()
   const networkId = useCurrentSupportedNetworkId()
   const { data } = useBalance({
-    addressOrName: address,
+    addressOrName: account?.address,
     token: CNV[networkId].address,
     formatUnits: CNV[networkId].decimals,
-    enabled: !!address,
+    enabled: !!account?.address,
   })
 
   return (

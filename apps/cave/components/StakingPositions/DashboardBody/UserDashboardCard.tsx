@@ -1,12 +1,12 @@
 import { Box, Button, Collapse, Flex, Spinner, Text } from '@concave/ui'
 import { UseStakePositionsState } from 'components/StakingPositions/DashboardBody/DashBoardState'
 import { useRouter } from 'next/router'
-import { useAccount } from 'wagmi'
+import { useConnect } from 'wagmi'
 import { UserPositionCard } from '../LockPosition/Card/UserPositionCard'
 import { UserDividendCard } from './UserDividendCard'
 
 export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePositionsState }) => {
-  const { isConnected } = useAccount()
+  const { isConnected } = useConnect()
   const { userNonFungibleTokensInfo, totalLocked, isLoading } = stakePosition
   const hasPositions = userNonFungibleTokensInfo.length !== 0
 

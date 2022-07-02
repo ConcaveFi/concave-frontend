@@ -24,10 +24,9 @@ import { concaveProvider } from 'lib/providers'
 import React from 'react'
 import { useQuery } from 'react-query'
 import { PositionsState } from './usePositionsState'
-import { useAccount } from 'wagmi'
 
 export const MyPositions = ({ state }: { state: PositionsState }) => {
-  const { loading, error, setView, view, pairs } = state
+  const { loading, error, setView, view, account, pairs } = state
   if (loading) {
     return <Loading size="lg" label={loading} />
   }
@@ -58,7 +57,7 @@ export const MyPositions = ({ state }: { state: PositionsState }) => {
           onClick={() => setView('all')}
         />
       </HStack>
-      <PairsAccordion pairs={pairs} />
+      <PairsAccordion userAddress={account?.address} pairs={pairs} />
     </Card>
   )
 }
@@ -82,11 +81,13 @@ const LiquidityOptionButton = ({ active, onClick, label }) => {
   )
 }
 
-const PairsAccordion = ({ pairs }: { pairs: Pair[] }) => {
-  const { address } = useAccount()
-
+interface PairsAccordionProps {
+  userAddress?: string
+  pairs: Pair[]
+}
+const PairsAccordion = ({ userAddress, pairs }: PairsAccordionProps) => {
   if (!pairs.length) {
-    const { label, Button } = address
+    const { label, Button } = userAddress
       ? {
           label: 'You are not in any pools',
           Button: <AddLiquidityModalButton />,

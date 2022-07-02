@@ -10,13 +10,13 @@ import { Transaction } from 'ethers'
 
 const hrs2 = 2 * 60 * 60 * 1000 // 2 hours
 const useTrackedTransactions = () => {
-  const { address } = useAccount()
-  const { chain } = useNetwork()
+  const { data: account } = useAccount()
+  const { activeChain } = useNetwork()
   const renderTxStatusToast = useTransactionStatusToast()
 
   const { data: transactions, mutateAsync: setTransactions } = useLocalStorage<
     TrackedTransaction[]
-  >(address && chain?.id && `transactions ${address} ${chain.id}`, [])
+  >(account?.address && activeChain?.id && `transactions ${account.address} ${activeChain.id}`, [])
 
   const pushTransaction = useCallback(
     (tx: TrackedTransaction) => {
@@ -42,11 +42,11 @@ const useTrackedTransactions = () => {
 
 /**
   @returns registerTransaction: Register a new transaction to be tracked by the app, (handles status toasts, and user last transactions screen)
-  @returns recentTransactions: last 10 transactions 
+  @returns lastTransactions: last 10 transactions 
  */
 export const useTransactionRegistry = () => {
   const { transactions, pushTransaction } = useTrackedTransactions()
-  const { chain } = useNetwork()
+  const { activeChain } = useNetwork()
 
   const registerTransaction = useCallback(
     (
@@ -56,20 +56,19 @@ export const useTransactionRegistry = () => {
       const newTrackedTransaction = {
         hash,
         from,
-        chainId: chainId || chain.id,
+        chainId: chainId || activeChain.id,
         timestamp: Date.now(),
         status: <const>'pending',
         meta,
       }
       pushTransaction(newTrackedTransaction)
     },
-    [pushTransaction, chain?.id],
+    [pushTransaction, activeChain?.id],
   )
 
   return {
     registerTransaction,
-    recentTransactions: transactions,
-    hasPendingTransactions: transactions.some((tx) => tx.status === 'pending'),
+    lastTransactions: transactions,
   }
 }
 

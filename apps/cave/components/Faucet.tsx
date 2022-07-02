@@ -38,7 +38,7 @@ const sendSomeEth = async (recipient) => {
 }
 
 const ETHFaucet = () => {
-  const { address } = useAccount()
+  const { data: account } = useAccount()
 
   const { data: ethBalance, isLoading } = useCurrencyBalance(NATIVE[ChainId.RINKEBY])
 
@@ -51,7 +51,7 @@ const ETHFaucet = () => {
     isSuccess: ethSentSuccess,
     isLoading: isSendingEth,
     refetch: sendEth,
-  } = useQuery('send eth', () => sendSomeEth(address), { enabled: false })
+  } = useQuery('send eth', () => sendSomeEth(account?.address), { enabled: false })
 
   if (faucetBalance?.lt(parseEther('0.1')))
     return (
@@ -97,18 +97,20 @@ const ETHFaucet = () => {
 }
 
 const DAIMinter = () => {
-  const { address } = useAccount()
+  const { data: account } = useAccount()
 
   const {
     data: mintDaiTx,
     isLoading,
     write: mintDAI,
-  } = useContractWrite({
-    addressOrName: DAI[ChainId.RINKEBY].address,
-    contractInterface: ['function mint(address guy, uint256 wad) external'],
-    functionName: 'mint',
-    args: [address, parseUnits('69420', 18)],
-  })
+  } = useContractWrite(
+    {
+      addressOrName: DAI[ChainId.RINKEBY].address,
+      contractInterface: ['function mint(address guy, uint256 wad) external'],
+    },
+    'mint',
+    { args: [account.address, parseUnits('69420', 18)] },
+  )
 
   if (!!mintDaiTx)
     return (
@@ -160,15 +162,15 @@ const Faucet = ({ isOpen, onClose }) => {
 }
 
 export const TestnetIndicator = () => {
-  const { chain } = useNetwork()
+  const { activeChain } = useNetwork()
   const { isUserWorthy } = useWorthyUser()
 
-  const [isOpen, setIsOpen] = useState(chain?.testnet && isUserWorthy)
+  const [isOpen, setIsOpen] = useState(activeChain?.testnet && isUserWorthy)
   const onClose = () => setIsOpen(false)
 
   useEffect(() => {
-    setIsOpen(chain?.testnet && isUserWorthy)
-  }, [isUserWorthy, chain?.testnet])
+    setIsOpen(activeChain?.testnet && isUserWorthy)
+  }, [isUserWorthy, activeChain?.testnet])
 
   const minterModal = useDisclosure()
 
@@ -195,7 +197,7 @@ export const TestnetIndicator = () => {
                 filter="drop-shadow(0px 0px 10px rgba(240, 255, 245, 0.3))"
                 bgClip="text"
               >
-                {chain?.name}
+                {activeChain?.name}
               </Text>{' '}
               testnet
             </Text>

@@ -24,7 +24,7 @@ export const useRemoveLiquidity = ({
   userBalance: CurrencyAmount<Currency>
 }) => {
   const networkId = useCurrentSupportedNetworkId()
-  const { address } = useAccount()
+  const { data: account } = useAccount()
 
   const tokenA = pair.token0
   const tokenB = pair.token1
@@ -55,7 +55,7 @@ export const useRemoveLiquidity = ({
       const transaction = await router.removeLiquidityETH(
         tokenAIsNativeWrapper ? tokenB : tokenA,
         BigNumber.from(userBalance.multiply(ratioToRemove).quotient.toString()),
-        address,
+        account.address,
       )
       setHash(transaction.hash)
       const [nativeAmount, token1Amount] = tokenAIsNativeWrapper
@@ -73,7 +73,7 @@ export const useRemoveLiquidity = ({
       pair.token0,
       pair.token1,
       BigNumber.from(userBalance.multiply(ratioToRemove).quotient.toString()),
-      address,
+      account.address,
     )
     registerTransaction(transaction, {
       type: 'remove liquidity',

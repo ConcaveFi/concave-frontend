@@ -18,9 +18,9 @@ export function ellipseAddress(hash: string, length = 38): string {
 
 export const ConnectWalletModal = ({ isOpen, onClose }) => {
   const router = useRouter()
-  const { connectors, connect, pendingConnector } = useConnect({
+  const { connectors, connect, activeConnector } = useConnect({
     chainId: +router.query.chainId,
-    onSuccess: () => onClose(),
+    onConnect: () => onClose(),
   })
   const isMounted = useIsMounted()
   /*
@@ -42,7 +42,7 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
       {isMounted &&
         _connectors.map((connector) => {
           if (!connector.ready) return null
-          const itsConnect = connector.id === pendingConnector?.id
+          const itsConnect = connector.id === activeConnector?.id
           return (
             <Button
               cursor={itsConnect ? 'default' : 'pointer'}
@@ -61,7 +61,7 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
               }
               key={connector.id}
               onClick={() => {
-                if (!itsConnect) connect({ connector })
+                if (!itsConnect) connect(connector)
               }}
             >
               {connector.name}
@@ -92,9 +92,11 @@ const ConnectButton = () => {
 }
 
 export function ConnectWallet(): JSX.Element {
-  const { address, isConnected } = useAccount()
+  const { isConnected } = useConnect()
+
+  const { data: account } = useAccount()
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { recentTransactions } = useTransactionRegistry()
+  const { lastTransactions } = useTransactionRegistry()
 
   if (isConnected)
     return (
@@ -110,9 +112,9 @@ export function ConnectWallet(): JSX.Element {
           rounded={'2xl'}
         >
           <Flex fontWeight="bold" mx={'auto'}>
-            {ellipseAddress(address)}
+            {ellipseAddress(account?.address)}
           </Flex>
-          {recentTransactions.some((tx) => tx.status === 'pending') && (
+          {lastTransactions.some((tx) => tx.status === 'pending') && (
             <Flex position={'absolute'} width="80%" justify={'end'}>
               <SpinnerIcon color={'text.low'} animation={spinAnimation(4)} boxSize={'20px'} />
             </Flex>
