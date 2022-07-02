@@ -1,13 +1,16 @@
 import { Flex, Heading, Text } from '@concave/ui'
-import StakeCard from 'components/LiquidStaking/StakeCard'
 import GraphicGuide from 'components/LiquidStaking/GraphicGuide'
+import { useLiquidStakeData } from 'components/LiquidStaking/hooks/useLiquidStakeData'
+import { useLiquidValues } from 'components/LiquidStaking/hooks/useLiquidValues'
 import LiquidLocksCards from 'components/LiquidStaking/LiquidLocksCards'
+import { StakeCard } from 'components/LiquidStaking/StakeCard'
+import StakeCardOld from 'components/LiquidStaking/StakeCard_old'
 import { withPageTransition } from 'components/PageTransition'
+import { truncateNumber } from 'utils/truncateNumber'
 
 interface StakingGroupProps {
   icon: string
   period: string
-  vapr: string
   stakingLink: string
   poolID: number
 }
@@ -16,34 +19,32 @@ const StakingGroup: Array<StakingGroupProps> = [
   {
     icon: '360d',
     period: '360 days',
-    vapr: '6,342',
     stakingLink: '',
     poolID: 0,
   },
   {
     icon: '180d',
     period: '180 days',
-    vapr: '1,002',
     stakingLink: '',
     poolID: 1,
   },
   {
     icon: '90d',
     period: '90 days',
-    vapr: '266',
     stakingLink: '',
     poolID: 2,
   },
   {
     icon: '45d',
     period: '45 days',
-    vapr: '17',
     stakingLink: '',
     poolID: 3,
   },
 ]
 
 function LiquidStaking() {
+  const { stakeData } = useLiquidStakeData()
+
   return (
     <Flex
       width={{ base: 'full', xl: 'full', lg: 'full', md: 'full' }}
@@ -91,9 +92,12 @@ function LiquidStaking() {
           alignItems="center"
           wrap={{ xl: 'nowrap', base: 'wrap' }}
         >
-          {StakingGroup.map((i) => {
+          {stakeData?.map((stake, index) => (
+            <StakeCard key={index} props={stake} />
+          ))}
+          {/* {StakingGroup.map((i) => {
             return (
-              <StakeCard
+              <StakeCardOld
                 icon={i.icon}
                 period={i.period}
                 poolId={i.poolID}
@@ -101,7 +105,7 @@ function LiquidStaking() {
                 key={i.period}
               />
             )
-          })}
+          })} */}
         </Flex>
       </Flex>
       <LiquidLocksCards />

@@ -7,7 +7,7 @@ import { formatEther } from 'ethers/lib/utils'
 import { useGet_Stakingv1_Last100_LockQuery } from 'graphql/generated/graphql'
 import { useEffect, useState } from 'react'
 import { formatFixed } from 'utils/formatFixed'
-import { PARAMETER_TO_POOL_PERIOD, PERIOD_TO_POOL_PARAMETER } from './StakeCard'
+import { PARAMETER_TO_POOL_PERIOD } from './StakeCard_old'
 
 const LiquidLocksCards = () => {
   const [stakingLocks, setStakingLocks] = useState([])
