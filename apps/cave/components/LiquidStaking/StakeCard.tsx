@@ -49,7 +49,16 @@ export const StakeCard = (props: StakeCardProps) => {
           Stake
         </Button>
       </Card>
-      <StakeModal isOpen={isOpen} onClose={onClose} stakeData={props.stakeData} />
+      <StakeModal
+        stakeValues={{
+          currentlyStaked: stakingV1Pools?.balance,
+          percent,
+          stakingCap: stakingV1Cap,
+        }}
+        isOpen={isOpen}
+        onClose={onClose}
+        stakeData={props.stakeData}
+      />
     </>
   )
 }
@@ -89,7 +98,7 @@ const LoadBard = ({ percent, currentlyStaked, loading, stakingCap }: LoadBarProp
       fontSize={{ base: '11px', md: '14px' }}
       justify={'space-around'}
       width="full"
-      mt={'-32px'}
+      mt={'-30px'}
     >
       {loading ? (
         <Text>Loading...</Text>
