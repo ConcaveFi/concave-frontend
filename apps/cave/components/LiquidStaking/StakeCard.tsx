@@ -1,8 +1,10 @@
-import { Box, Button, Flex, Image, Spinner, Stack, Text, useDisclosure } from '@chakra-ui/react'
+import { Box, Button, Flex, Image, Stack, Text, TextProps, useDisclosure } from '@chakra-ui/react'
 import { Card } from '@concave/ui'
+import { utils } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { POOL_ID_TO_DAYS } from 'utils/contants'
 import { truncateNumber } from 'utils/truncateNumber'
+import { useAccount } from 'wagmi'
 import { StakeData } from './hooks/useLiquidStakeData'
 import { useLiquidValues } from './hooks/useLiquidValues'
 import { StakeModal } from './StakeModal/StakeModal'
@@ -10,144 +12,114 @@ import { StakeModal } from './StakeModal/StakeModal'
 type StakeCardProps = { stakeData: StakeData }
 export const StakeCard = (props: StakeCardProps) => {
   const chainId = useCurrentSupportedNetworkId()
-  const { poolId, baseEmissions, bondEmissions, totalVAPR } = props.stakeData
+  const { poolId, totalVAPR } = props.stakeData
+  const { data: userAccount } = useAccount()
 
-  const { data } = useLiquidValues(chainId, poolId)
+  const { data, isLoading } = useLiquidValues(chainId, poolId)
   const { stakingV1Pools, stakingV1Cap } = data || {}
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const percent =
+    (+utils.formatEther(stakingV1Pools?.balance || 0) / +utils.formatEther(stakingV1Cap || 0)) * 100
+
   return (
     <>
       <Card
         variant="primary"
-        px={4}
-        py={6}
-        shadow="up"
-        textAlign={'center'}
+        p={[6, 4]}
         maxW={{ base: '160px', md: '200px' }}
+        fontWeight={'bold'}
+        align="center"
       >
-        <Box py={5} h={{ base: '290px', md: '333px' }} shadow="down" borderRadius="100px/90px">
-          <Info title="StakePool" label={POOL_ID_TO_DAYS[poolId] + ' days'} />
-          <Image
-            userSelect={'none'}
-            src={`/assets/liquidstaking/${POOL_ID_TO_DAYS[poolId]}d-logo.svg`}
-            alt="stake period logo"
-          />
-          <Info title="Total vAPR" label={totalVAPR?.toFixed(2) + '%'} />
-        </Box>
-        <Stack color="text.low" fontSize={12} isInline justify="space-between" mt={3}>
-          <Text fontWeight={'bold'}>Currently Staked</Text>
-          <Text fontWeight={'bold'}>Staking Cap</Text>
-        </Stack>
-        <Flex>
-          <Box width={'full'} height="28px" shadow={'down'} rounded="2xl" my={2} p={1}>
-            <Box width={'50%'} height="full" apply={'background.metalBrighter'} rounded="full" />
-            <Flex fontWeight={'bold'} fontSize={'14px'} justify="space-between" px={1} mt="-18px">
-              <Text fontSize={'14px'}>{truncateNumber(stakingV1Pools?.balance || 0)}</Text>
-              <Text>{truncateNumber(stakingV1Pools?.balance?.add(stakingV1Cap) || 0)}</Text>
-            </Flex>
-          </Box>
-        </Flex>
+        <ImageContainer poolId={poolId} totalVAPR={totalVAPR?.toFixed(2) + '%'} />
+        <LoadBard
+          percent={percent}
+          loading={isLoading}
+          currentlyStaked={truncateNumber(stakingV1Pools?.balance || 0, 1)}
+          stakingCap={truncateNumber(stakingV1Pools?.balance?.add(stakingV1Cap) || 0, 1)}
+        />
         <Button
-          mt={2}
+          mt={4}
           onClick={onOpen}
-          fontWeight="bold"
           fontSize="md"
           variant="primary"
-          bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
           w="92.5%"
           h="40px"
-          size="large"
-          mx="auto"
-          // disabled={!userAddress}
+          disabled={!userAccount?.address}
         >
           Stake
         </Button>
       </Card>
-      <StakeModal isOpen={isOpen} onClose={onClose} stakeData={props.stakeData} />
+      <StakeModal
+        stakeValues={{
+          currentlyStaked: stakingV1Pools?.balance,
+          percent,
+          stakingCap: stakingV1Cap,
+        }}
+        isOpen={isOpen}
+        onClose={onClose}
+        stakeData={props.stakeData}
+      />
     </>
   )
 }
 
-type InfoProps = { title: string; label: string }
-const Info = ({ title, label }: InfoProps) => (
+type ImageContainerProps = { poolId: number; totalVAPR: string }
+const ImageContainer: React.FC<ImageContainerProps> = ({ poolId, totalVAPR }) => (
+  <Box py={5} h={{ base: '290px', md: '333px' }} shadow="down" borderRadius="100px/90px">
+    <Info title="StakePool" label={POOL_ID_TO_DAYS[poolId] + ' days'} textAlign="center" />
+    <Image
+      userSelect={'none'}
+      src={`/assets/liquidstaking/${POOL_ID_TO_DAYS[poolId]}d-logo.svg`}
+      alt="stake period logo"
+    />
+    <Info title="Total vAPR" label={totalVAPR} textAlign="center" />
+  </Box>
+)
+
+type LoadBarProps = {
+  percent: number
+  loading: boolean
+  currentlyStaked: string
+  stakingCap: string
+}
+const LoadBard = ({ percent, currentlyStaked, loading, stakingCap }: LoadBarProps) => (
   <>
-    <Text color="text.low" fontSize="sm">
+    {/* Header */}
+    <Stack color="text.low" fontSize={12} isInline justify="space-between" mt={3}>
+      <Text fontWeight={'bold'}>Currently Staked</Text>
+      <Text fontWeight={'bold'}>Staking Cap</Text>
+    </Stack>
+    {/* Loading Bar */}
+    <Flex width={'full'} height="28px" shadow={'down'} rounded="2xl" my={2} p={1}>
+      <Flex width={`${percent}%`} height="full" apply={'background.metalBrighter'} rounded="full" />
+    </Flex>
+    {/* Values */}
+    <Flex
+      fontSize={{ base: '11px', md: '14px' }}
+      justify={'space-around'}
+      width="full"
+      mt={'-30px'}
+    >
+      {loading ? (
+        <Text>Loading...</Text>
+      ) : (
+        <>
+          <Text>{currentlyStaked}</Text>
+          <Text>{stakingCap}</Text>
+        </>
+      )}
+    </Flex>
+  </>
+)
+
+type InfoProps = { title: string; label: string }
+const Info: React.FC<InfoProps & TextProps> = ({ title, label, ...props }) => (
+  <>
+    <Text color="text.low" fontSize="sm" {...props}>
       {title}
     </Text>
-    <Text fontSize="lg" fontWeight="bold">
+    <Text fontSize="lg" fontWeight="bold" {...props}>
       {label}
     </Text>
   </>
 )
-{
-  /* 
-        <Stack>
-          <Stack color="text.low" fontSize={12} isInline justify="space-between" mt={3}>
-            <Text>Currently Staked</Text>
-            <Text>Staking Cap</Text>
-          </Stack>
-
-          <Box
-            height={'30px'}
-            width={{ base: '130px', md: '170px' }}
-            shadow="down"
-            borderRadius="2xl"
-            position="relative"
-          >
-            <Box
-              position={'absolute'}
-              width="100%"
-              height={'78%'}
-              rounded={'2xl'}
-              my={'4px'}
-              ml="5px"
-              zIndex={-1}
-            >
-              <Flex
-                transition={'all 1.3s'}
-                height={'full'}
-                maxW={!percent ? 'full' : `${percent}%`}
-                overflow={'hidden'}
-                position="relative"
-              >
-                <Box
-                  position={'absolute'}
-                  bg={'secondary.50'}
-                  width={{ base: '120px', md: '160px' }}
-                  height={'full'}
-                  rounded="2xl"
-                />
-              </Flex>
-            </Box>
-            <Flex height="full" mx="3" justify={'space-between'} align="center" fontSize="14px">
-              {isLoadingPools || isLoadingStakings ? (
-                <Flex justify={'center'} width="full" align={'center'} gap={2} color="text.low">
-                  <Text fontWeight={700}>Fetching</Text>
-                  <Spinner transition={'all 2s'} size="sm" />
-                </Flex>
-              ) : (
-                <>
-                  <Text>{currentlyStaked}</Text>
-                  <Text>{currentlyStakingCap}</Text>
-                </>
-              )}
-            </Flex>
-          </Box>
-        </Stack>
-
-        <Button
-          mt={5}
-          onClick={onOpen}
-          fontWeight="bold"
-          fontSize="md"
-          variant="primary"
-          bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
-          w="92.5%"
-          h="40px"
-          size="large"
-          mx="auto"
-          disabled={!userAddress}
-        >
-          Stake
-        </Button> */
-}
