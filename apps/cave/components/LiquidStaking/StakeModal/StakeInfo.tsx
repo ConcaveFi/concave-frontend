@@ -21,7 +21,7 @@ type StakeInfoProps = {
 }
 function StakeInfo({ currentlyStaked, poolId, stakingCap, percent }: StakeInfoProps) {
   return (
-    <Flex w="350px" rounded="3xl" shadow={'up'} p={4} direction="column">
+    <Flex w={{ base: '300px', md: '350px' }} rounded="3xl" shadow={'up'} p={4} direction="column">
       <Flex justify={'space-between'} w="full">
         <HeaderInfo title={periodToRewardsBoost[`${poolId}`]} info="Rewards boost" />
         <HeaderInfo title={periodToBondRevenueMapping[`${poolId}`]} info="Share of Bond Growth" />
