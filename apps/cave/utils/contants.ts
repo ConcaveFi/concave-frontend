@@ -18,14 +18,6 @@ export const periodToBondRevenueMapping = {
   2: '50%',
   3: '25%',
 }
-
-export const periodToDaysMapping = {
-  0: 360,
-  1: 180,
-  2: 90,
-  3: 45,
-}
-
 export const periodToRewardsBoost = {
   0: '4x',
   1: '2x',
