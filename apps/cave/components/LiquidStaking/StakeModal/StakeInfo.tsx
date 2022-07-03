@@ -1,6 +1,6 @@
 import { Flex, Stack, Text } from '@concave/ui'
 import React from 'react'
-import {} from 'utils/contants'
+import { poolIdToBondRevenueMapping } from 'utils/contants'
 
 function addDays(date, days) {
   var result = new Date(date)
@@ -18,8 +18,8 @@ function StakeInfo({ currentlyStaked, poolId, stakingCap, percent }: StakeInfoPr
   return (
     <Flex w={{ base: '300px', md: '350px' }} rounded="3xl" shadow={'up'} p={4} direction="column">
       <Flex justify={'space-between'} w="full">
-        <HeaderInfo title={periodToRewardsBoost[`${poolId}`]} info="Rewards boost" />
-        <HeaderInfo title={periodToBondRevenueMapping[`${poolId}`]} info="Share of Bond Growth" />
+        <HeaderInfo title={poolIdToBondRevenueMapping[`${poolId}`]} info="Rewards boost" />
+        <HeaderInfo title={p[`${poolId}`]} info="Share of Bond Growth" />
       </Flex>
       <Paragraph poolId={poolId} />
       <Flex mt={{ base: 3, md: 5 }} align="center" gap={1} fontWeight="semibold">

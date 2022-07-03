@@ -12,9 +12,9 @@ import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
 import { useState } from 'react'
+import { poolIdToDays } from 'utils/contants'
 import { toAmount } from 'utils/toAmount'
 import { useAccount, useSigner } from 'wagmi'
-import { PARAMETER_TO_POOL_PERIOD } from '../StakeCard'
 
 function StakeInput(props: { poolId: number; period: string; onClose: () => void }) {
   const { address } = useAccount()
@@ -58,7 +58,7 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
         registerTransaction(x, {
           type: 'stake',
           amount: stakeInput.toString(),
-          pool: PARAMETER_TO_POOL_PERIOD[props.poolId],
+          pool: poolIdToDays[props.poolId],
         })
         setTx(x)
         setWaitingForConfirm(false)
@@ -84,10 +84,8 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
   return (
     <>
       <Box>
-        <Card shadow="down" w="350px" px={0} py={0}>
-          <Flex>
-            <CurrencyInputField currencyAmountIn={stakeInput} onChangeAmount={setStakeInput} />
-          </Flex>
+        <Card shadow="down" mx={'auto'} w={{ base: '300px', md: '350px' }} px={0} py={0}>
+          <CurrencyInputField currencyAmountIn={stakeInput} onChangeAmount={setStakeInput} />
         </Card>
 
         <Box mt={{ base: 4, sm: 10 }} width="350px">
@@ -98,7 +96,7 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
             fontSize="md"
             variant="primary"
             bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
-            w={{ base: '60%', sm: '80%', md: '100%' }}
+            w={{ base: '300px', md: '100%' }}
             h="50px"
             size="large"
             mx="auto"
@@ -138,7 +136,7 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
           <Text fontWeight={'700'} textColor="text.accent">
             {stakeInput.wrapped.toExact() + ' CNV'}
           </Text>
-          <Text textColor={'text.low'}>For {props.period}</Text>
+          <Text textColor={'text.low'}>For {poolIdToDays[props.poolId] + ' days'}</Text>
         </Flex>
       </WaitingConfirmationDialog>
 
