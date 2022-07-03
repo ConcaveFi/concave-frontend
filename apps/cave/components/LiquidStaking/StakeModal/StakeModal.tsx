@@ -1,81 +1,73 @@
-import { Flex, Modal } from '@concave/ui'
+import {
+  Modal,
+  ModalContent,
+  ModalOverlay,
+  useBreakpointValue,
+  useDisclosure,
+  VStack,
+} from '@chakra-ui/react'
+import { Card } from '@concave/ui'
+import { BigNumber } from 'ethers'
+import { truncateNumber } from 'utils/truncateNumber'
 import { StakeData } from '../hooks/useLiquidStakeData'
 import Emissions from './Emissions'
+import { FloatingDescriptions } from './FloatingDescriptions'
+import StakeInfo from './StakeInfo'
+import StakeInput from './StakeInput'
 
-type StakeModalProps = { isOpen: boolean; onClose: VoidFunction; stakeData: StakeData }
-export const StakeModal = ({ isOpen, onClose, stakeData }: StakeModalProps) => {
+type StakeModalProps = {
+  isOpen: boolean
+  onClose: VoidFunction
+  stakeData: StakeData
+  stakeValues: { currentlyStaked: BigNumber; stakingCap: BigNumber; percent: number }
+}
+export const StakeModal = ({ isOpen, onClose, stakeData, stakeValues }: StakeModalProps) => {
   const { baseEmissions, bondEmissions, poolId, totalVAPR } = stakeData || {}
+  const {
+    isOpen: isDescritionsOpen,
+    onOpen: onOpenDescriptions,
+    onClose: onCloseDescription,
+  } = useDisclosure()
+  const type = useBreakpointValue<'modal' | 'card'>({ base: 'modal', xl: 'card' })
+
   return (
-    <Modal
-      bluryOverlay={true}
-      title="Stake CNV"
-      isOpen={isOpen}
-      onClose={onClose}
-      bodyProps={{
-        roundedLeft: { base: '3xl', md: '8.75rem' },
-        roundedRight: '3xl',
-        p: { md: 6, base: 8 },
-      }}
-      titleAlign="center"
-      size="2xl"
-    >
-      <Flex
-        direction={{ base: 'column', md: 'row' }}
-        maxW={{ base: '310px', sm: '340px', md: 'full' }}
-        gap={6}
-      >
-        <Emissions
-          period={poolId}
-          // vaprText={!isErrorVAPR ? vaprText : 'Error Loading vAPR'}
-          totalVAPR={totalVAPR}
-          icon={''}
-          baseVAPR={baseEmissions}
-          vapr={bondEmissions}
-          //   onToggle={onToggleFloatingCards}
-          //   onShow={onOpenFloatingCards}
-          //   onDisable={onCloseFloatingCards}
-          // setShowFloatingCards={setShowFloatingCards}
-        />
-        {/*
-        <Modal
-          preserveScrollBarGap
-          isOpen={showFloatingCards && mobileUI}
-          title="Informations"
-          onClose={onCloseFloatingCards}
-          motionPreset="slideInBottom"
-          isCentered
-          bluryOverlay
+    <Modal isOpen={isOpen} onClose={onClose} size="4xl" isCentered>
+      <ModalOverlay backdropFilter={'blur(15px)'} />
+      <ModalContent width={{ base: '340px', md: '650px' }} flexDirection="row">
+        <Card
+          direction={{ base: 'column', md: 'row' }}
+          maxW={{ base: '340px', md: 'full' }}
+          variant="primary"
+          roundedLeft={{ base: '3xl', md: '8.75rem' }}
+          roundedRight="3xl"
+          overflow="visible"
+          p={6}
+          gap={4}
         >
-          <Flex maxHeight={'800px'} mt="-10" mb={10}>
-            <FloatingDescriptions />
-          </Flex>
-        </Modal>
-        <VStack mt={{ base: 0, sm: 8 }} spacing={8}>
-          <StakeInfo
-            period={props.period}
-            stakedCNV={
-              pools?.balance ? Number(ethers.utils.formatEther(pools?.balance)).toFixed(0) : '0'
-            }
-            CNVCap={
-              pools?.balance && stakingCap
-                ? `${Number(
-                    +ethers.utils.formatEther(pools?.balance) +
-                      +ethers.utils.formatEther(stakingCap),
-                  ).toFixed(0)}`
-                : '0'
-            }
-            capPercentage={
-              pools?.balance &&
-              stakingCap &&
-              (+ethers.utils.formatEther(pools?.balance) /
-                (+ethers.utils.formatEther(stakingCap) +
-                  +ethers.utils.formatEther(pools?.balance))) *
-                100
-            }
+          <FloatingDescriptions
+            onClose={onCloseDescription}
+            isOpen={isDescritionsOpen}
+            type={type}
           />
-          <StakeInput period={props.period} poolId={props.poolId} onClose={onClose} />
-        </VStack> */}
-      </Flex>
+          <Emissions
+            onCloseDescription={onCloseDescription}
+            onOpenDescription={onOpenDescriptions}
+            totalVAPR={totalVAPR?.toFixed(2) + '%'}
+            baseEmissions={baseEmissions?.toFixed(2) + '%'}
+            bondEmissions={bondEmissions?.toFixed(2) + '%'}
+            poolid={poolId}
+          />
+          <VStack gap={4} w="full" justify={'center'} align="center">
+            <StakeInfo
+              currentlyStaked={truncateNumber(stakeValues?.currentlyStaked || 0)}
+              percent={stakeValues?.percent}
+              poolId={stakeData?.poolId}
+              stakingCap={truncateNumber(stakeValues?.stakingCap || 0)}
+            />
+            <StakeInput onClose={onClose} poolId={poolId} />
+          </VStack>
+        </Card>
+      </ModalContent>
     </Modal>
   )
 }
