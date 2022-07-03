@@ -89,7 +89,7 @@ const LoadBard = ({ percent, currentlyStaked, loading, stakingCap }: LoadBarProp
       fontSize={{ base: '11px', md: '14px' }}
       justify={'space-around'}
       width="full"
-      mt={'-30px'}
+      mt={'-32px'}
     >
       {loading ? (
         <Text>Loading...</Text>
