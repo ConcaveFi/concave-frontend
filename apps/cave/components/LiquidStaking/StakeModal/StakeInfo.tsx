@@ -1,11 +1,6 @@
 import { Flex, Stack, Text } from '@concave/ui'
 import React from 'react'
-import {
-  poolIdToBondRevenueMapping,
-  poolIdToDays,
-  poolIdToquaterlyBoost,
-  poolIdToRewardsBoost,
-} from 'utils/contants'
+import { poolIdToDays, poolIdToquaterlyBoost, poolIdToRewardsBoost } from 'utils/contants'
 
 function addDays(date, days) {
   var result = new Date(date)
@@ -24,7 +19,7 @@ function StakeInfo({ currentlyStaked, poolId, stakingCap, percent }: StakeInfoPr
     <Flex w={{ base: '300px', md: '350px' }} rounded="3xl" shadow={'up'} p={4} direction="column">
       <Flex justify={'space-between'} w="full">
         <HeaderInfo title={poolIdToRewardsBoost[`${poolId}`]} info="Rewards boost" />
-        <HeaderInfo title={poolIdToBondRevenueMapping[`${poolId}`]} info="Share of bond growth" />
+        <HeaderInfo title={poolIdToRewardsBoost[`${poolId}`]} info="Share of bond growth" />
       </Flex>
       <Paragraph poolId={poolId} />
       <Flex mt={{ base: 3, md: 5 }} align="center" gap={1} fontWeight="semibold">
@@ -51,7 +46,7 @@ const Paragraph = ({ poolId }: ParagraphProps) => (
     align="justify"
   >
     The {poolId} staking term will accrue CNV from bond emissions by capturing{` `}
-    {poolIdToBondRevenueMapping[poolId]} of the growth generated from purchased bonds every 8 hours.
+    {poolIdToRewardsBoost[poolId]} of the growth generated from purchased bonds every 8 hours.
     Additionally, the {poolId} term receives a{` `}
     {poolIdToRewardsBoost[poolId]} boost on base CNV emissions and a {poolIdToquaterlyBoost[poolId]}{' '}
     the quarterly dividend derived from protocol profits in non CNV assets.
