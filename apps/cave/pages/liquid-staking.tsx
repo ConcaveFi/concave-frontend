@@ -1,47 +1,9 @@
 import { Flex, Heading, Text } from '@concave/ui'
 import GraphicGuide from 'components/LiquidStaking/GraphicGuide'
 import { useLiquidStakeData } from 'components/LiquidStaking/hooks/useLiquidStakeData'
-import { useLiquidValues } from 'components/LiquidStaking/hooks/useLiquidValues'
 import LiquidLocksCards from 'components/LiquidStaking/LiquidLocksCards'
 import { StakeCard } from 'components/LiquidStaking/StakeCard'
-import StakeCardOld from 'components/LiquidStaking/StakeCard_old'
 import { withPageTransition } from 'components/PageTransition'
-import { truncateNumber } from 'utils/truncateNumber'
-
-interface StakingGroupProps {
-  icon: string
-  period: string
-  stakingLink: string
-  poolID: number
-}
-
-const StakingGroup: Array<StakingGroupProps> = [
-  {
-    icon: '360d',
-    period: '360 days',
-    stakingLink: '',
-    poolID: 0,
-  },
-  {
-    icon: '180d',
-    period: '180 days',
-    stakingLink: '',
-    poolID: 1,
-  },
-  {
-    icon: '90d',
-    period: '90 days',
-    stakingLink: '',
-    poolID: 2,
-  },
-  {
-    icon: '45d',
-    period: '45 days',
-    stakingLink: '',
-    poolID: 3,
-  },
-]
-
 function LiquidStaking() {
   const { stakeData } = useLiquidStakeData()
 
@@ -95,17 +57,6 @@ function LiquidStaking() {
           {stakeData?.map((stake, index) => (
             <StakeCard key={index} stakeData={stake} />
           ))}
-          {/* {StakingGroup.map((i) => {
-            return (
-              <StakeCardOld
-                icon={i.icon}
-                period={i.period}
-                poolId={i.poolID}
-                stakingLink={i.stakingLink}
-                key={i.period}
-              />
-            )
-          })} */}
         </Flex>
       </Flex>
       <LiquidLocksCards />
