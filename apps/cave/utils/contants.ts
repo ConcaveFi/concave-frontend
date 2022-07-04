@@ -5,7 +5,7 @@ export const poolIdToDays = {
   3: 45,
 }
 
-export const DAYS_TO_POOL_ID = {
+export const daysToPoolId = {
   360: 0,
   180: 1,
   90: 2,
