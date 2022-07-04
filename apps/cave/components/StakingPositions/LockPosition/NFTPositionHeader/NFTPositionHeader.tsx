@@ -23,7 +23,7 @@ export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
       >
         <Flex direction="column" maxW={'90px'} h="full" justifyContent={'center'} w="full">
           <Text fontSize="xs" color="text.low" fontWeight="medium">
-            Stake Pool
+            Stake pool
           </Text>
           <Text fontSize="s" color="white" whiteSpace={'nowrap'} fontWeight="bold">
             {period}
@@ -49,7 +49,7 @@ export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
           mt={2}
         >
           <Text color="text.low" fontSize="sm">
-            Redeem Date
+            Redeem date
           </Text>
           {redeemInDays ? (
             <>
@@ -80,7 +80,7 @@ export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
           justifyContent={'start'}
         >
           <Text color="text.low" fontSize="sm">
-            Token Id:
+            Token id:
           </Text>
           <Text fontSize="md" fontWeight="bold">
             {+tokenId?.toString()}
