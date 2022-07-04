@@ -18,7 +18,7 @@ export const StakeToggleButton: React.FC<StakeToggleButton> = ({
   return (
     <Flex textColor={'white'} fontWeight="bold" width={'full'} justify="space-between" px={4}>
       <Text textAlign={'end'} width="70px">
-        {poolIdToDays[filter]}
+        {poolIdToDays[filter] + ' days'}
       </Text>
       <ToggleButton
         enabled={enabled}

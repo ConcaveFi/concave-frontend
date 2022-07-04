@@ -66,7 +66,7 @@ export const StakeCard = (props: StakeCardProps) => {
 type ImageContainerProps = { poolId: number; totalVAPR: string }
 const ImageContainer: React.FC<ImageContainerProps> = ({ poolId, totalVAPR }) => (
   <Box py={5} h={{ base: '290px', md: '333px' }} shadow="down" borderRadius="100px/90px">
-    <Info title="StakePool" label={poolIdToDays[poolId] + ' days'} textAlign="center" />
+    <Info title="Stake pool" label={poolIdToDays[poolId] + ' days'} textAlign="center" />
     <Image
       userSelect={'none'}
       src={`/assets/liquidstaking/${poolIdToDays[poolId]}d-logo.svg`}
@@ -86,8 +86,8 @@ const LoadBard = ({ percent, currentlyStaked, loading, stakingCap }: LoadBarProp
   <>
     {/* Header */}
     <Stack color="text.low" fontSize={12} isInline justify="space-between" mt={3}>
-      <Text fontWeight={'bold'}>Currently Staked</Text>
-      <Text fontWeight={'bold'}>Staking Cap</Text>
+      <Text fontWeight={'bold'}>Currently staked</Text>
+      <Text fontWeight={'bold'}>Staking cap</Text>
     </Stack>
     {/* Loading Bar */}
     <Flex width={'full'} height="28px" shadow={'down'} rounded="2xl" my={2} p={1}>
