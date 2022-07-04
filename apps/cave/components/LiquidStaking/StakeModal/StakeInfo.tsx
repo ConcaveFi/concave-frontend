@@ -19,7 +19,7 @@ function StakeInfo({ currentlyStaked, poolId, stakingCap, percent }: StakeInfoPr
     <Flex w={{ base: '300px', md: '350px' }} rounded="3xl" shadow={'up'} p={4} direction="column">
       <Flex justify={'space-between'} w="full">
         <HeaderInfo title={poolIdToRewardsBoost[`${poolId}`]} info="Rewards boost" />
-        <HeaderInfo title={poolIdToRewardsBoost[`${poolId}`]} info="Share of bond growth" />
+        <HeaderInfo title={poolIdToBondRevenueMapping[`${poolId}`]} info="Share of bond growth" />
       </Flex>
       <Paragraph poolId={poolId} />
       <Flex mt={{ base: 3, md: 5 }} align="center" gap={1} fontWeight="semibold">
