@@ -12,6 +12,7 @@ import { Balance } from './Balance'
 
 type CurrencyInputFieldProps = {
   currencyAmountIn: CurrencyAmount<Currency>
+  isCurrencyLoading?: boolean
   onChangeAmount: (value: CurrencyAmount<Currency>) => void
   CurrencySelector?: CurrencySelectorComponent
   debounce?: number
@@ -35,7 +36,6 @@ export const CurrencyInputField = ({
   debounce,
 }: CurrencyInputFieldProps) => {
   const inputFiat = useFiatValue(currencyAmountIn)
-  const balance = useCurrencyBalance(currencyAmountIn?.currency, { watch: true })
 
   return (
     <CurrencyAmountField
@@ -49,12 +49,10 @@ export const CurrencyInputField = ({
           {!!inputFiat.value?.greaterThan(0) &&
             `$${inputFiat.value.toFixed(2, { groupSeparator: ',' })}`}
         </Text>
-        {balance.isSuccess && (
-          <Balance
-            value={balance.data?.toFixed(2, { groupSeparator: ',' })}
-            onMax={() => onChangeAmount(maxAmount(balance.data))}
-          />
-        )}
+        <Balance
+          currency={currencyAmountIn.currency}
+          onMax={(balance) => onChangeAmount(maxAmount(balance))}
+        />
       </HStack>
     </CurrencyAmountField>
   )

@@ -25,8 +25,6 @@ export const CurrencyOutputField = ({
 
   const fiatPriceImpact = percentDifference(inputFiat.value, outputFiat.value)
 
-  const balance = useCurrencyBalance(currencyAmountOut?.currency, { watch: true })
-
   return (
     <CurrencyAmountField
       currencyAmount={currencyAmountOut}
@@ -44,7 +42,7 @@ export const CurrencyOutputField = ({
               `(${fiatPriceImpact?.toFixed(2, { groupSeparator: ',' })}%)`}{' '}
           </Text>
         </Flex>
-        {balance.isSuccess && <Balance value={balance.data.toFixed(2, { groupSeparator: ',' })} />}
+        <Balance currency={currencyAmountOut.currency} />
       </HStack>
     </CurrencyAmountField>
   )
