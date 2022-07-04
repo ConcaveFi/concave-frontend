@@ -1,5 +1,5 @@
 import { Flex, Image, Text, useBreakpointValue } from '@concave/ui'
-import { POOL_ID_TO_DAYS } from 'utils/contants'
+import { poolIdToDays } from 'utils/contants'
 import { StakeInformations } from './StakeInformations'
 
 type EmissionsProps = {
@@ -36,10 +36,10 @@ function Emissions({
         justify="center"
         direction={'column'}
       >
-        <Info info={POOL_ID_TO_DAYS[poolid] + ' days'} title="Stake period" />
+        <Info info={poolIdToDays[poolid] + ' days'} title="Stake period" />
         <Image
           mx="auto"
-          src={`/assets/liquidstaking/${POOL_ID_TO_DAYS[poolid]}d-logo.svg`}
+          src={`/assets/liquidstaking/${poolIdToDays[poolid]}d-logo.svg`}
           alt="stake period logo"
         />
         <Info title="Total vAPR" info={totalVAPR} />
