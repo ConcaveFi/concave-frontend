@@ -12,7 +12,7 @@ import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
 import React, { useState } from 'react'
-import { POOL_ID_TO_DAYS } from 'utils/contants'
+import { poolIdToDays } from 'utils/contants'
 import { toAmount } from 'utils/toAmount'
 import { useAccount, useSigner } from 'wagmi'
 
@@ -58,7 +58,7 @@ function StakeInput(props: { poolId: number; onClose: () => void }) {
         registerTransaction(x, {
           type: 'stake',
           amount: stakeInput.toString(),
-          pool: POOL_ID_TO_DAYS[props.poolId],
+          pool: poolIdToDays[props.poolId],
         })
         setTx(x)
         setWaitingForConfirm(false)
@@ -122,7 +122,7 @@ function StakeInput(props: { poolId: number; onClose: () => void }) {
           <Text fontWeight={'700'} textColor="text.accent">
             {stakeInput.wrapped.toExact() + ' CNV'}
           </Text>
-          <Text textColor={'text.low'}>For {POOL_ID_TO_DAYS[props.poolId] + ' days'}</Text>
+          <Text textColor={'text.low'}>For {poolIdToDays[props.poolId] + ' days'}</Text>
         </Flex>
       </WaitingConfirmationDialog>
 

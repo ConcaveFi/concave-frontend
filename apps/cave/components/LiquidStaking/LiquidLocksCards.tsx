@@ -6,7 +6,7 @@ import { BigNumber } from 'ethers'
 import { formatEther } from 'ethers/lib/utils'
 import { useGet_Stakingv1_Last100_LockQuery } from 'graphql/generated/graphql'
 import { useEffect, useState } from 'react'
-import { POOL_ID_TO_DAYS } from 'utils/contants'
+import { poolIdToDays } from 'utils/contants'
 import { formatFixed } from 'utils/formatFixed'
 
 const LiquidLocksCards = () => {
@@ -37,7 +37,7 @@ const LiquidLocksCards = () => {
   const poolIds = stakingLocks
     .map((value, index) => (
       <Text opacity={1 - (index / 10) * (isOpen ? 1 : 3)} key={index}>
-        {POOL_ID_TO_DAYS[value.poolID]}
+        {poolIdToDays[value.poolID]}
       </Text>
     ))
     .splice(0, 9)

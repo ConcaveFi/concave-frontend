@@ -1,6 +1,6 @@
 import { Flex, Text } from '@chakra-ui/react'
 import { ToggleButton } from 'components/ToggleButton'
-import { POOL_ID_TO_DAYS } from 'utils/contants'
+import { poolIdToDays } from 'utils/contants'
 import { StakePoolFilterEnum } from './hooks/useFilterByStakePool'
 type StakeToggleButton = {
   filter: StakePoolFilterEnum
@@ -18,7 +18,7 @@ export const StakeToggleButton: React.FC<StakeToggleButton> = ({
   return (
     <Flex textColor={'white'} fontWeight="bold" width={'full'} justify="space-between" px={4}>
       <Text textAlign={'end'} width="70px">
-        {POOL_ID_TO_DAYS[filter]}
+        {poolIdToDays[filter]}
       </Text>
       <ToggleButton
         enabled={enabled}

@@ -2,7 +2,7 @@ import { Box, Button, Flex, Image, Stack, Text, TextProps, useDisclosure } from 
 import { Card } from '@concave/ui'
 import { utils } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { POOL_ID_TO_DAYS } from 'utils/contants'
+import { poolIdToDays } from 'utils/contants'
 import { truncateNumber } from 'utils/truncateNumber'
 import { useAccount } from 'wagmi'
 import { StakeData } from './hooks/useLiquidStakeData'
@@ -66,10 +66,10 @@ export const StakeCard = (props: StakeCardProps) => {
 type ImageContainerProps = { poolId: number; totalVAPR: string }
 const ImageContainer: React.FC<ImageContainerProps> = ({ poolId, totalVAPR }) => (
   <Box py={5} h={{ base: '290px', md: '333px' }} shadow="down" borderRadius="100px/90px">
-    <Info title="StakePool" label={POOL_ID_TO_DAYS[poolId] + ' days'} textAlign="center" />
+    <Info title="StakePool" label={poolIdToDays[poolId] + ' days'} textAlign="center" />
     <Image
       userSelect={'none'}
-      src={`/assets/liquidstaking/${POOL_ID_TO_DAYS[poolId]}d-logo.svg`}
+      src={`/assets/liquidstaking/${poolIdToDays[poolId]}d-logo.svg`}
       alt="stake period logo"
     />
     <Info title="Total vAPR" label={totalVAPR} textAlign="center" />

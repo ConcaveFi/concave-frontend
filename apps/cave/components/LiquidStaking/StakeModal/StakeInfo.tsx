@@ -1,10 +1,10 @@
 import { Text, Stack, Flex } from '@concave/ui'
 import React from 'react'
 import {
-  periodToBondRevenueMapping,
-  periodToRewardsBoost,
-  POOL_ID_TO_DAYS,
-  quaterlyBoost,
+  poolIdToBondRevenueMapping,
+  poolIdToDays,
+  poolIdToquaterlyBoost,
+  poolIdToRewardsBoost,
 } from 'utils/contants'
 
 function addDays(date, days) {
@@ -23,8 +23,8 @@ function StakeInfo({ currentlyStaked, poolId, stakingCap, percent }: StakeInfoPr
   return (
     <Flex w={{ base: '300px', md: '350px' }} rounded="3xl" shadow={'up'} p={4} direction="column">
       <Flex justify={'space-between'} w="full">
-        <HeaderInfo title={periodToRewardsBoost[`${poolId}`]} info="Rewards boost" />
-        <HeaderInfo title={periodToBondRevenueMapping[`${poolId}`]} info="Share of Bond Growth" />
+        <HeaderInfo title={poolIdToRewardsBoost[`${poolId}`]} info="Rewards boost" />
+        <HeaderInfo title={poolIdToBondRevenueMapping[`${poolId}`]} info="Share of Bond Growth" />
       </Flex>
       <Paragraph poolId={poolId} />
       <Flex mt={{ base: 3, md: 5 }} align="center" gap={1} fontWeight="semibold">
@@ -32,7 +32,7 @@ function StakeInfo({ currentlyStaked, poolId, stakingCap, percent }: StakeInfoPr
           Redeem Date:
         </Text>
         <Text fontSize="md">
-          {addDays(Date(), POOL_ID_TO_DAYS[`${poolId}`]).toISOString().slice(0, 10)}
+          {addDays(Date(), poolIdToDays[`${poolId}`]).toISOString().slice(0, 10)}
         </Text>
       </Flex>
       <LoadBar currentlyStaked={currentlyStaked} percent={percent} stakingCap={stakingCap} />
@@ -51,10 +51,10 @@ const Paragraph = ({ poolId }: ParagraphProps) => (
     align="justify"
   >
     The {poolId} staking term will accrue CNV from bond emissions by capturing{` `}
-    {periodToBondRevenueMapping[poolId]} of the growth generated from purchased bonds every 8 hours.
+    {poolIdToBondRevenueMapping[poolId]} of the growth generated from purchased bonds every 8 hours.
     Additionally, the {poolId} term receives a{` `}
-    {periodToRewardsBoost[poolId]} boost on base CNV emissions and a {quaterlyBoost[poolId]} the
-    quarterly dividend derived from protocol profits in non CNV assets.
+    {poolIdToRewardsBoost[poolId]} boost on base CNV emissions and a {poolIdToquaterlyBoost[poolId]}{' '}
+    the quarterly dividend derived from protocol profits in non CNV assets.
   </Text>
 )
 
