@@ -20,9 +20,9 @@ const toSignificantRounding = {
 }
 
 const toFixedRounding = {
-  [Rounding.ROUND_DOWN]: 0,
-  [Rounding.ROUND_HALF_UP]: 1,
-  [Rounding.ROUND_UP]: 3,
+  [Rounding.ROUND_DOWN]: _Big.roundDown,
+  [Rounding.ROUND_HALF_UP]: _Big.roundHalfUp,
+  [Rounding.ROUND_UP]: _Big.roundUp,
 }
 
 export class Fraction {
