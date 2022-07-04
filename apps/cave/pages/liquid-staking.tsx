@@ -43,7 +43,7 @@ function LiquidStaking() {
         <GraphicGuide />
       </Flex>
       <Flex
-        alignItems="start"
+        alignItems="center"
         justifyContent="center"
         maxW={{ base: '330px', md: '420px', lg: '450px', xl: 'full' }}
         height={{ xl: '550px', base: '1100px' }}
