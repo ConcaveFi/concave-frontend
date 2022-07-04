@@ -1,25 +1,29 @@
-import { ChainId, CHAIN_NAME } from '@concave/core'
+import { CHAIN_NAME } from '@concave/core'
 import { Button, Card, Flex, SlideFade, Text } from '@concave/ui'
-import Router from 'next/router'
+import { useRouter } from 'next/router'
 import { ReactNode } from 'react'
+import { getQueryValue } from 'utils/getQueryValue'
 import { useNetwork } from 'wagmi'
 
 export function NetworkMismatch({
-  isOpen,
   children,
-  currentChainId,
-  expectedChainId,
 }: {
-  isOpen: boolean
-  children: ReactNode
-  currentChainId: ChainId
-  expectedChainId: ChainId
+  children: (props: { activeChainId; queryChainId }) => ReactNode
 }) {
   const { switchNetwork, error } = useNetwork()
 
+  const { query, push } = useRouter()
+  const { activeChain } = useNetwork()
+
+  const activeChainId = activeChain?.id
+  const queryChainId = getQueryValue(query, 'chainId')
+
+  const isNetworkMismatch = +queryChainId && activeChainId && +queryChainId !== activeChainId
+  const queryHasCurrency = !!query.currency0 || !!query.currency1
+
   return (
     <SlideFade
-      in={isOpen}
+      in={isNetworkMismatch && queryHasCurrency}
       offsetY={10}
       delay={0.2}
       unmountOnExit
@@ -33,28 +37,25 @@ export function NetworkMismatch({
     >
       <Card variant="secondary" p={4} gap={1} fontSize="md" fontWeight="medium" textAlign="start">
         <Text fontWeight="bold">Network changed</Text>
-        {children}
+        {children({ queryChainId, activeChainId })}
         <Flex justify="center" gap={2} mt={2}>
           <Button
             variant="secondary"
             size="medium"
             px={3}
             onClick={() =>
-              Router.push({ query: { chainId: currentChainId } }, undefined, {
-                shallow: false,
-                scroll: false,
-              })
+              push({ query: { chainId: activeChainId } }, undefined, { shallow: true })
             }
           >
-            Restart on {CHAIN_NAME[currentChainId]}
+            Restart on {CHAIN_NAME[activeChainId]}
           </Button>
           <Button
             variant="primary"
             size="medium"
             px={3}
-            onClick={() => switchNetwork?.(+expectedChainId)}
+            onClick={() => switchNetwork?.(+queryChainId)}
           >
-            Switch to {CHAIN_NAME[expectedChainId]}
+            Switch to {CHAIN_NAME[queryChainId]}
           </Button>
         </Flex>
         {error && (
