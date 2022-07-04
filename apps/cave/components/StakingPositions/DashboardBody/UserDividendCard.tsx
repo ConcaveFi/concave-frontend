@@ -42,18 +42,18 @@ const DividendContent = (props: UserDividendCardProps) => {
           fontWeight={'bold'}
           my={5}
         >
-          Your Dividends Share
+          Your dividends share
         </Text>
         {mediumLayout && <RedeemButton m="auto" />}
       </Flex>
       <Flex justify={'center'} gap={{ base: 4 }} overflow="hidden" minW={320}>
         <Flex direction={{ base: 'column', md: 'row' }} gap={6}>
-          <Info title="Total Locked" label={totalLocked.toFixed(2, { groupSeparator: ',' })} />
-          <Info title="Next Dividend Date" label="Coming Soon" />
+          <Info title="Total locked" label={totalLocked.toFixed(2, { groupSeparator: ',' })} />
+          <Info title="Next dividend date" label="Coming soon" />
         </Flex>
         <Flex direction={{ base: 'column', md: 'row' }} gap={6}>
-          <Info title="Available Dividends" label="0.0" />
-          <Info title="Your dividends Share" label="0.0" />
+          <Info title="Available dividends" label="0.0" />
+          <Info title="Your dividends share" label="0.0" />
         </Flex>
         {largeLayout && <RedeemButton my={'auto'} />}
       </Flex>

@@ -2,13 +2,13 @@ import { Flex } from '@concave/ui'
 import { withPageTransition } from 'components/PageTransition'
 import { useStakePositions } from 'components/StakingPositions/DashboardBody/DashBoardState'
 import { UserDashboardCard } from 'components/StakingPositions/DashboardBody/UserDashboardCard'
-import { DashboardHeader } from 'components/StakingPositions/DashboardHeader'
+import { LiquidDashboardHeader } from 'components/StakingPositions/LiquidDashboardHeader'
 
 export function LiquidStakePositions() {
   const stakePosition = useStakePositions()
   return (
     <Flex align={'center'} justify="start" direction={'column'} width={'full'} textAlign="center">
-      <DashboardHeader />
+      <LiquidDashboardHeader />
       <Flex justify={'center'} position="relative">
         <UserDashboardCard stakePosition={stakePosition} />
         {/* <DashboardMobile data={data} /> */}

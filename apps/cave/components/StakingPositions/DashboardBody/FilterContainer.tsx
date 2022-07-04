@@ -40,7 +40,7 @@ export function FilterContainer({
       px={4}
       gap={{ base: 4 }}
       my={2}
-      apply={mobileUI && 'background.metalBrighter'}
+      apply={mobileUI && 'background.metal'}
     >
       <Flex align="center " gap={2} fontWeight={'bold'}>
         <Text textColor="text.low">Filter by:</Text>
