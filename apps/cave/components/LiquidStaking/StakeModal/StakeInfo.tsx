@@ -24,12 +24,12 @@ function StakeInfo({ currentlyStaked, poolId, stakingCap, percent }: StakeInfoPr
     <Flex w={{ base: '300px', md: '350px' }} rounded="3xl" shadow={'up'} p={4} direction="column">
       <Flex justify={'space-between'} w="full">
         <HeaderInfo title={poolIdToRewardsBoost[`${poolId}`]} info="Rewards boost" />
-        <HeaderInfo title={poolIdToBondRevenueMapping[`${poolId}`]} info="Share of Bond Growth" />
+        <HeaderInfo title={poolIdToBondRevenueMapping[`${poolId}`]} info="Share of bond growth" />
       </Flex>
       <Paragraph poolId={poolId} />
       <Flex mt={{ base: 3, md: 5 }} align="center" gap={1} fontWeight="semibold">
         <Text color="text.low" fontSize="md">
-          Redeem Date:
+          Redeem date:
         </Text>
         <Text fontSize="md">
           {addDays(Date(), poolIdToDays[`${poolId}`]).toISOString().slice(0, 10)}
@@ -75,8 +75,8 @@ const LoadBar: React.FC<LoadBarProps> = ({ currentlyStaked, percent, stakingCap 
   <>
     {' '}
     <Stack px={4} color="text.low" fontSize={12} isInline justify="space-between" mt={6}>
-      <Text fontSize="sm">Currently Staked</Text>
-      <Text fontSize="sm">Staking Cap</Text>
+      <Text fontSize="sm">Currently staked</Text>
+      <Text fontSize="sm">Staking cap</Text>
     </Stack>
     <Flex w="full" h="30px" shadow={'down'} rounded="2xl" mt={3} p={1}>
       <Flex
