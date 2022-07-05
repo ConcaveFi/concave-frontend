@@ -1,4 +1,5 @@
 import { Avatar, AvatarGroup, Card, Flex, Text } from '@concave/ui'
+import { utils } from 'ethers'
 import { parseEther, parseUnits } from 'ethers/lib/utils'
 import { truncateNumber } from 'utils/truncateNumber'
 import { TreasuryTokenInfo } from './Hooks/useTreasuryData'
@@ -106,7 +107,7 @@ const TokenInfo: React.FC<{ token: TreasuryTokenInfo }> = ({ token }) => (
       </Text>
     </Card>
     <Text fontSize={'xl'} my="auto" fontWeight={'bold'} color="text.low">
-      {` $${truncateNumber(token.value || 0)}`}
+      {` $${truncateNumber(utils.parseEther(String(token?.total) || '0'))}`}
     </Text>
   </Card>
 )
