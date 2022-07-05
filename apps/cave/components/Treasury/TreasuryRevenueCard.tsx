@@ -1,182 +1,113 @@
-import { Box, Card, Flex, Text } from '@concave/ui'
-import { formatDistanceStrict } from 'date-fns'
-import { useGet_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql'
-import { useCNVPrice } from 'hooks/useCNVPrice'
-import { numberMask } from 'utils/numberMask'
+import { Box, Card, Flex, gradientBorder, Text } from '@concave/ui'
+import { LastBondSolds } from './Hooks/useTreasuryData'
 
-export const TreasuryInfoItem = ({ label, amount, ...props }) => (
-  <Flex
-    direction="column"
-    py={0.5}
-    gap="5px"
-    justify="center"
-    fontWeight="bold"
-    textAlign="center"
-    {...props}
-  >
-    <Text fontSize={{ base: '13px', xl: 'md' }} color="text.low">
-      {label}
-    </Text>
-    <Text fontSize={{ base: '15px', xl: 'lg' }} fontFamily="heading">
-      {amount}
-    </Text>
-  </Flex>
-)
-
-export const BondInfoItem = ({ timestamp, cnvamount, daiamount, ...props }) => (
-  <Flex
-    direction="column"
-    py={0.5}
-    justify="center"
-    fontWeight="bold"
-    textAlign="center"
-    {...props}
-  >
-    <Text fontSize="xs" color="text.low">
-      {timestamp}
-    </Text>
-    <Text fontSize="xs" color="text.low">
-      {cnvamount}
-    </Text>
-    <Text opacity={0.6} fontSize={'16px'} textColor="text.accent" fontWeight={700}>
-      {daiamount}
-    </Text>
-  </Flex>
-)
-
-export const TreasuryInfo = ({ box1, box2, box3, box1b, box2b, box3b }) => {
-  return (
-    <Card
-      variant="secondary"
-      bg="none"
-      py={3}
-      w={{ base: '510px', xl: '620px' }}
-      h="100px"
-      direction="row"
-      shadow="Glass Up Medium"
-    >
-      <Flex justify="center" flex={1}>
-        <TreasuryInfoItem label={box1} amount={box1b} />
-      </Flex>
-      <Box w="1px" mx={0} my={-4} bg="stroke.primary" />
-      <TreasuryInfoItem label={box2} amount={box2b} pl={3} pr={3} flex={0.8} />
-      <Box w="1px" mx={0} my={-4} bg="stroke.primary" />
-      <TreasuryInfoItem label={box3} amount={box3b} flex={1} />
-    </Card>
-  )
-}
-
-export const BondInfo = ({
-  bondbox1,
-  bondbox1a,
-  bondbox1b,
-  bondbox2,
-  bondbox2a,
-  bondbox2b,
-  bondbox3,
-  bondbox3a,
-  bondbox3b,
-}) => {
-  return (
-    <Box>
-      <Flex direction="row">
-        <Flex justify="center" flexBasis="40%">
-          <BondInfoItem timestamp={bondbox1} cnvamount={bondbox1a} daiamount={bondbox1b} />
-        </Flex>
-
-        <BondInfoItem
-          timestamp={bondbox2}
-          cnvamount={bondbox2a}
-          daiamount={bondbox2b}
-          flexGrow={1}
-          pl={3}
-          pr={3}
-          flexBasis="25%"
-        />
-
-        <BondInfoItem
-          timestamp={bondbox3}
-          cnvamount={bondbox3a}
-          daiamount={bondbox3b}
-          flexBasis="35%"
-        />
-      </Flex>
-    </Box>
-  )
-}
-// commit
-export default function TreasuryRevenueCard(props) {
-  const { cnv, treasury } = props
-  const cnvPrice = useCNVPrice()
-  // get total Treasury
-  const sumTotal = treasury.treasury.map((i: any) => i.total)
-  const reducer = (acc: any, curr: any) => acc + curr
-  const seed = 600000
-  const total = sumTotal.reduce(reducer) + seed
-
-  const { data, isLoading, isSuccess } = useGet_Accrualbondv1_Last10_SoldQuery()
-
-  const lastsSolds = data?.logAccrualBondsV1_BondSold
-
-  const relativeTimeline = lastsSolds.map(
-    (value) => formatDistanceStrict(value.timestamp * 1000, new Date().getTime()) + ' ago',
-  )
-
-  const lastsAmounts = lastsSolds.map((value) => '+$' + numberMask(+value?.inputAmount))
-  const lastsOutputamounts = lastsSolds.map((value) => '' + numberMask(+value?.output))
-
-  let marketCap = '$' + numberMask(cnv.cnvData.data.marketCap)
-  let treasuryValuePerCNV = '$' + numberMask(total / cnv.cnvData.data.totalSupply)
-  let treasuryValue = '$' + numberMask(total)
-  let CNVTotalSupply = '' + numberMask(cnv.cnvData.data.totalSupply)
-
-  if (JSON.stringify(cnv['cnvData']['data']) === '{}') {
-    marketCap = 'API Error'
-    treasuryValuePerCNV = 'API Error'
-    treasuryValue = 'API Error'
-    CNVTotalSupply = 'API Error'
+type TreasuryRevenueCardProps = {
+  firstRow: {
+    marketCap: string
+    cnvPrice: string
+    valuePerCNV: string
   }
-
+  secondRow: {
+    treasuryRevenue: string
+    treasuryValue: string
+    cnvTotalSupply: string
+  }
+  lastBondSolds: LastBondSolds
+}
+export const TreasuryRevenueCard = ({
+  firstRow,
+  secondRow,
+  lastBondSolds,
+}: TreasuryRevenueCardProps) => {
+  const { cnvPrice, marketCap, valuePerCNV } = firstRow || {}
+  const { cnvTotalSupply, treasuryRevenue, treasuryValue } = secondRow || {}
   return (
-    <Card
-      direction={'column'}
-      w={{ base: '510px', xl: '620px' }}
-      height="330px"
-      bg={'#111e'}
-      shadow={'0px 4px 4px rgba(0, 0, 0, 0.25), inset 0px 0px 20px rgba(87, 124, 255, 0.3)'}
-      textShadow="0px 0px 27px rgba(129, 179, 255, 0.41)"
-    >
-      <Flex direction={'row'} flex={1} alignItems="start" gap={5}>
-        <Flex direction={'column'} gap={5}>
-          <TreasuryInfo
-            box1="Market Cap"
-            box1b={marketCap}
-            box2="CNV Price"
-            box2b={'$' + cnvPrice?.price?.toFixed(2) || 0}
-            box3="Treasury Value per CNV"
-            box3b={treasuryValuePerCNV}
-          />
-          <TreasuryInfo
-            box1="Treasury Revenue"
-            box1b="Coming Soon"
-            box2="Treasury Value"
-            box2b={treasuryValue}
-            box3="CNV Total Supply"
-            box3b={CNVTotalSupply}
-          />
-          <BondInfo
-            bondbox1={relativeTimeline[0]}
-            bondbox1a={`${lastsOutputamounts[0]} CNV bond`}
-            bondbox1b={lastsAmounts[0]}
-            bondbox2={relativeTimeline[1]}
-            bondbox2a={`${lastsOutputamounts[1]} CNV bond`}
-            bondbox2b={lastsAmounts[1]}
-            bondbox3={relativeTimeline[2]}
-            bondbox3a={`${lastsOutputamounts[2]} CNV bond`}
-            bondbox3b={lastsAmounts[2]}
-          />
-        </Flex>
-      </Flex>
+    <Card bg={'#111b'} w={'600px'} h="330px" justify={'space-between'}>
+      <TreasuryRevenueRow
+        info1={['Market cap', marketCap]}
+        info2={['CNV Price', cnvPrice]}
+        info3={['Treasury value per CNV', valuePerCNV]}
+        variant="primary"
+      />
+      <TreasuryRevenueRow
+        info1={['Treasury revenue', treasuryRevenue]}
+        info2={['Treasury value', treasuryValue]}
+        info3={['CNV total suply', cnvTotalSupply]}
+        variant="primary"
+      />
+      <LastBondsContainer lastBondSolds={lastBondSolds} />
     </Card>
   )
+}
+
+type LastBondsContainerProps = { lastBondSolds: LastBondSolds }
+const LastBondsContainer: React.FC<LastBondsContainerProps> = ({ lastBondSolds }) => (
+  <Flex mt={'-4'} flex={0.75} align="center" w="full">
+    {lastBondSolds?.map(({ timesTamp, inputAmount, outputAmount }, index) => (
+      <LastBondInfo
+        key={index}
+        timestamp={timesTamp}
+        outputAmount={outputAmount}
+        inputAmount={inputAmount}
+      />
+    ))}
+  </Flex>
+)
+
+type LastBondInfoProps = { timestamp: string; inputAmount: string; outputAmount: String }
+const LastBondInfo: React.FC<LastBondInfoProps> = ({ timestamp, inputAmount, outputAmount }) => (
+  <Flex flex={1} align="center" color={'text.low'} fontWeight="semibold" direction={'column'}>
+    <Text fontSize={'12px'}>{timestamp}</Text>
+    <Text fontSize={'12px'}>{outputAmount + ' CNV bond'}</Text>
+    <Text fontSize={'md'} color="text.accent">
+      {'$' + inputAmount}
+    </Text>
+  </Flex>
+)
+
+type RevenueInfo = [string, string]
+type TreasuryRevenueRowProps = {
+  variant: 'primary' | 'secondary'
+  info1: RevenueInfo
+  info2: RevenueInfo
+  info3: RevenueInfo
+}
+const TreasuryRevenueRow: React.FC<TreasuryRevenueRowProps> = ({
+  variant,
+  info1,
+  info2,
+  info3,
+}) => (
+  <Flex
+    w="full"
+    height={'100px'}
+    apply={revenueRowBackground[variant]}
+    sx={revenueRowBorder[variant]}
+    rounded="2xl"
+  >
+    <Info info={info1[1] || 'loading...'} title={info1[0]} />
+    {variant == 'primary' && <Box w={'1px'} h="full" bg={'stroke.primary'} />}
+    <Info info={info2[1] || 'loading...'} title={info2[0]} />
+    {variant == 'primary' && <Box w={'1px'} h="full" bg={'stroke.primary'} />}
+    <Info info={info3[1] || 'loading...'} title={info3[0]} />
+  </Flex>
+)
+
+type InfoProps = { title: string; info: string }
+const Info: React.FC<InfoProps> = ({ info, title }) => (
+  <Flex flex={1} fontWeight={'bold'} direction={'column'} justify={'center'} align="center">
+    <Text color="text.low" fontSize={'14px'}>
+      {title}
+    </Text>
+    <Text fontSize={'16px'}>{info}</Text>
+  </Flex>
+)
+
+const revenueRowBackground = {
+  primary: 'background.glass',
+  secondary: '',
+}
+const revenueRowBorder = {
+  primary: { ...gradientBorder() },
+  secondary: {},
 }
