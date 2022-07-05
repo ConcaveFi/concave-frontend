@@ -1,6 +1,7 @@
 import { Flex } from '@concave/ui'
 import { withPageTransition } from 'components/PageTransition'
 import { BondGraphics } from 'components/Treasury/BondGraphics'
+import DividendsCard from 'components/Treasury/DividendsCard'
 import { useTreasuryData } from 'components/Treasury/Hooks/useTreasuryData'
 import { TreasuryAssetsCard } from 'components/Treasury/TreasuryAssetsCard'
 import { TreasuryDataCard } from 'components/Treasury/TreasuryDataCard'
@@ -27,6 +28,7 @@ export function Treasury() {
       </Flex>
       <BondGraphics />
       <TreasuryAssetsCard assets={assets} />
+      <DividendsCard />
     </Flex>
   )
 }
