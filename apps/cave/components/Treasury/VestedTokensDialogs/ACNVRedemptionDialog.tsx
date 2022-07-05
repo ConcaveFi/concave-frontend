@@ -12,13 +12,9 @@ import { concaveProvider as provider } from 'lib/providers'
 import { useState } from 'react'
 import { useAccount, useSigner } from 'wagmi'
 import useVestedTokens from '../Hooks/useVestedTokens'
+import { VestedTokenDialodProps } from '../TreasuryRedeemCard'
 
-interface ACNVRedemptionDialogProps {
-  onClose: () => void
-  isOpen: boolean
-}
-
-export default function ACNVRedemptionDialog(props: ACNVRedemptionDialogProps) {
+export const ACNVRedemptionDialog: React.FC<VestedTokenDialodProps> = (props) => {
   const { isOpen: isConfirmOpen, onOpen: onOpenConfirm, onClose: onCloseConfirm } = useDisclosure()
   const { isOpen: isSubOpen, onOpen: onOpenSub, onClose: onCloseSub } = useDisclosure()
   const { isOpen: isErrorOpen, onOpen: onOpenError, onClose: onCloseError } = useDisclosure()
