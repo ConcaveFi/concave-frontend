@@ -1,42 +1,28 @@
 import { Currency, CurrencyAmount } from '@concave/core'
 import { Box, Button, ButtonProps, Flex, Spinner, Text, useBreakpointValue } from '@concave/ui'
-import { GlassPanel } from 'components/Treasury/TreasuryManagementCard'
+
 interface UserDividendCardProps {
   totalLocked: CurrencyAmount<Currency>
   isLoading: boolean
 }
 export const UserDividendCard = (props: UserDividendCardProps) => {
-  const mobileLayout = useBreakpointValue({ base: true, md: false })
-  if (mobileLayout)
-    return (
-      <GlassPanel direction={'column'} align="center" minW={'358px'} height={242}>
-        <DividendContent isLoading={props.isLoading} totalLocked={props.totalLocked} />
-      </GlassPanel>
-    )
-
-  return (
-    <Box
-      borderRadius="2xl"
-      shadow={'Down Big'}
-      width={'800px'}
-      height={{ lg: '136px', md: '130px' }}
-    >
-      <DividendContent isLoading={props.isLoading} totalLocked={props.totalLocked} />
-    </Box>
-  )
-}
-
-const DividendContent = (props: UserDividendCardProps) => {
-  const { isLoading, totalLocked } = props
+  const { totalLocked } = props
   const mobileLayout = useBreakpointValue({ base: true, md: false })
   const mediumLayout = useBreakpointValue({ base: false, md: true, lg: false })
   const largeLayout = useBreakpointValue({ base: false, lg: true })
   return (
-    <>
+    <Box
+      apply={mobileLayout && 'background.glass'}
+      borderRadius="2xl"
+      shadow={'down'}
+      width={'7700px'}
+      height={{ lg: '136px', md: '130px' }}
+    >
       <Flex>
         <Text
           textAlign={'start'}
           ml={{ lg: 6, md: 12 }}
+          mx={{ base: 'auto', md: 'none' }}
           textColor={'text.low'}
           fontSize={'lg'}
           fontWeight={'bold'}
@@ -57,8 +43,8 @@ const DividendContent = (props: UserDividendCardProps) => {
         </Flex>
         {largeLayout && <RedeemButton my={'auto'} />}
       </Flex>
-      {mobileLayout && <RedeemButton my={'auto'} />}
-    </>
+      {mobileLayout && <RedeemButton mx={'auto'} my={'4'} />}
+    </Box>
   )
 }
 
