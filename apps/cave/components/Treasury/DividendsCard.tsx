@@ -1,6 +1,4 @@
 import { Card, Flex, Text } from '@concave/ui'
-import { GlassPanel } from './TreasuryManagementCard'
-
 interface DividendsCardProps {
   onChange: () => void
 }
@@ -40,7 +38,7 @@ export default function DividendsCard() {
         </Flex>
       </Flex>
       {/* <Flex flex={0.5} justify="center" align={'center'} height="full"> */}
-      <GlassPanel
+      <Card
         width={'250px'}
         height="105px"
         rounded={'2xl'}
@@ -55,7 +53,7 @@ export default function DividendsCard() {
         <Text textColor={'text.low'} fontSize="14px">
           Next Distribution Date
         </Text>
-      </GlassPanel>
+      </Card>
       {/* </Flex> */}
     </Card>
   )

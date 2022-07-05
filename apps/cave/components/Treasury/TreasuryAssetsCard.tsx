@@ -32,9 +32,9 @@ export const TreasuryAssetsCard: React.FC<TreasuryAssetsCardProps> = ({ assets }
           tokenImage={convex?.tokenImage}
           total={convex?.total}
         />
-        <TokenContainer tokens={tokens.slice(0, 3)} />
+        <TokenContainer tokens={tokens?.slice(0, 3)} />
       </Flex>
-      <TokenContainer direction="row" tokens={tokens.slice(4)} />
+      <TokenContainer direction="row" tokens={tokens?.slice(4)} />
     </Card>
   )
 }
