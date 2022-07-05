@@ -1,11 +1,10 @@
 import { SpinnerIcon } from '@concave/icons'
-import { Button, Flex, gradientBorder, Image, Modal, useDisclosure } from '@concave/ui'
+import { Button, Flex, gradientBorder, Image, keyframes, Modal, useDisclosure } from '@concave/ui'
 import { useModals } from 'contexts/ModalsContext'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useIsMounted } from 'hooks/useIsMounted'
 import { useRouter } from 'next/router'
 import { useAccount, useConnect } from 'wagmi'
-import { spinAnimation } from './Treasury/Mobile/TreasuryManagementMobile'
 import YourWalletModal from './YourWalletModal'
 
 /** Transform a wallet address
@@ -114,7 +113,14 @@ export function ConnectWallet(): JSX.Element {
           </Flex>
           {recentTransactions.some((tx) => tx.status === 'pending') && (
             <Flex position={'absolute'} width="80%" justify={'end'}>
-              <SpinnerIcon color={'text.low'} animation={spinAnimation(4)} boxSize={'20px'} />
+              <SpinnerIcon
+                color={'text.low'}
+                animation={` ${keyframes({
+                  '0%': { transform: 'rotate(0deg)' },
+                  '100%': { transform: 'rotate(360deg)' },
+                })} 3s linear infinite`}
+                boxSize={'20px'}
+              />
             </Flex>
           )}
         </Button>
