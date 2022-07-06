@@ -289,10 +289,7 @@ const YourPosition = ({ pair, userPoolShare }: { pair: Pair; userPoolShare: Perc
         p={4}
         spacing={3}
       >
-        <PositionInfoItem
-          label="Your pool share:"
-          value={`${userPoolShare.multiply(100).toFixed(2)}%`}
-        />
+        <PositionInfoItem label="Your pool share:" value={`${userPoolShare.toFixed(2)}%`} />
         <PositionInfoItem
           label={pair.token0.symbol}
           value={pair.reserve0.multiply(userPoolShare).toFixed(2)}
