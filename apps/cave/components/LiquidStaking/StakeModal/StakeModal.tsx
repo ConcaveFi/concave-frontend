@@ -52,19 +52,18 @@ export const StakeModal = ({ isOpen, onClose, stakeData, stakeValues }: StakeMod
           <Emissions
             onCloseDescription={onCloseDescription}
             onOpenDescription={onOpenDescriptions}
-            totalVAPR={totalVAPR}
-            baseEmissions={baseEmissions}
-            bondEmissions={bondEmissions}
-            poolid={poolId}
+            poolId={poolId}
+            {...stakeData}
           />
           <VStack gap={4} w="full" justify={'center'} align="center">
             <StakeInfo
+              poolRewards={stakeData}
               currentlyStaked={numberMask(+utils.formatEther(stakeValues?.currentlyStaked || 0))}
               percent={stakeValues?.percent}
               poolId={stakeData?.poolId}
               stakingCap={numberMask(+utils.formatEther(stakeValues?.stakingCap || 0))}
             />
-            <StakeInput onClose={onClose} poolId={poolId} />
+            <StakeInput onClose={onClose} poolId={poolId} poolRewards={stakeData} />
           </VStack>
         </Card>
       </ModalContent>

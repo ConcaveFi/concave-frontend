@@ -45,8 +45,7 @@ export const StakeInformations = ({
     </Box>
   )
 }
-
-type InfoProps = { title: string; info: string }
+type InfoProps = { title: string; info: string | number }
 const Info = ({ title, info }: InfoProps) => (
   <>
     <Text color="text.low" fontSize="sm">

@@ -1,26 +1,15 @@
 import { Flex, Image, Text, useBreakpointValue } from '@concave/ui'
-import { poolIdToDays } from 'utils/contants'
+import { StakeData } from '../hooks/useLiquidStakeData'
 import { StakeInformations } from './StakeInformations'
 
 type EmissionsProps = {
-  baseEmissions: number
-  bondEmissions: number
-  totalVAPR: number
-  poolid: number
   onOpenDescription: VoidFunction
   onCloseDescription: VoidFunction
-}
+} & StakeData
 
-function Emissions({
-  baseEmissions,
-  bondEmissions,
-  poolid,
-  totalVAPR,
-  onCloseDescription,
-  onOpenDescription,
-}: EmissionsProps) {
+function Emissions({ onCloseDescription, onOpenDescription, ...stakeData }: EmissionsProps) {
   const mobileUI = useBreakpointValue({ base: true, md: false })
-  const totalVAPRFormatted = totalVAPR?.toFixed(2) + '%'
+  const totalVAPRFormatted = stakeData?.totalVAPR?.toFixed(2) + '%'
   return (
     <Flex direction={{ base: 'row', md: 'column' }}>
       <Flex
@@ -37,13 +26,13 @@ function Emissions({
         justify="center"
         direction={'column'}
       >
-        <Info info={poolIdToDays[poolid] + ' days'} title="Stake period" />
+        <Info info={stakeData.days + ' days'} title="Stake period" />
         <Image
           mx="auto"
-          src={`/assets/liquidstaking/${poolIdToDays[poolid]}d-logo.svg`}
+          src={`/assets/liquidstaking/${stakeData.days}d-logo.svg`}
           alt="stake period logo"
         />
-        <Info title="Total vAPR" info={totalVAPRFormatted} />
+        <Info title="Total vAPR" info={stakeData.totalVAPR} />
         <Image
           mx="auto"
           src={`/assets/liquidstaking/modal-moreinfo-logo.svg`}
@@ -59,8 +48,8 @@ function Emissions({
           <StakeInformations
             onDisable={onCloseDescription}
             onShow={onOpenDescription}
-            bondingEmissions={bondEmissions}
-            baseEmissions={baseEmissions}
+            bondingEmissions={stakeData.bondEmissions}
+            baseEmissions={stakeData.baseEmissions}
           />
         )}
       </Flex>
@@ -77,15 +66,15 @@ function Emissions({
         <StakeInformations
           onDisable={onCloseDescription}
           onShow={onOpenDescription}
-          bondingEmissions={bondEmissions}
-          baseEmissions={baseEmissions}
+          bondingEmissions={stakeData.bondEmissions}
+          baseEmissions={stakeData.baseEmissions}
         />
       )}
     </Flex>
   )
 }
 
-type InfoProps = { title: string; info: string }
+type InfoProps = { title: string; info: string | number }
 const Info = ({ title, info }: InfoProps) => (
   <>
     <Text color="text.low" fontSize="sm">

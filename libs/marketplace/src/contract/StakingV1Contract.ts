@@ -33,8 +33,8 @@ export class StakingV1Contract {
     return this.contract.connect(signer).lock(address, amount, poolId)
   }
 
-  public async pools(index: string): Promise<StakePool> {
-    return this.contract.pools(index).then((p) => ({ ...p }))
+  public async pools(poolId: number): Promise<StakePool> {
+    return this.contract.pools(poolId).then((p) => new StakePool({ poolId, ...p }))
   }
 
   public async positions(tokenId: BigNumberish): Promise<Position> {
