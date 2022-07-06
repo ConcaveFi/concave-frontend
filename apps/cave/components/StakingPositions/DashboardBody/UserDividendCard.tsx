@@ -15,6 +15,7 @@ export const UserDividendCard = (props: UserDividendCardProps) => {
       apply={mobileLayout && 'background.glass'}
       borderRadius="2xl"
       shadow={'down'}
+      width="800px"
       height={{ lg: '136px', md: '130px' }}
     >
       <Flex>
