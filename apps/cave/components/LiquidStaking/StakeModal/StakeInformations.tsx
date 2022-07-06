@@ -1,8 +1,8 @@
 import { Box, Flex, Image, Text, useBreakpointValue } from '@chakra-ui/react'
 
 type StakeInformationsProps = {
-  bondingEmissions: string
-  baseEmissions: string
+  bondingEmissions: number
+  baseEmissions: number
   onShow: VoidFunction
   onDisable: VoidFunction
 }
@@ -50,7 +50,7 @@ const PlusSign = () => (
   </Text>
 )
 
-type InfoProps = { title: string; info: string }
+type InfoProps = { title: string; info: string | number }
 const Info = ({ title, info }: InfoProps) => (
   <>
     <Text color="text.low" fontSize="sm">

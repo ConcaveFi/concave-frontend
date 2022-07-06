@@ -29,10 +29,10 @@ export const getTransactionStatusLabel = ({ status, meta }: Partial<TrackedTrans
       success: `Added ${amount0} and ${amount1} to the liquidity pair`,
       error: `Failed to add ${pairSymbol} liquidity`,
     }),
-    stake: ({ amount, pool }) => ({
-      pending: `Staking ${amount} for ${pool}`,
-      success: `${amount} Staked for ${pool}`,
-      error: `Failed to stake ${amount} for ${pool}`,
+    stake: ({ amount, days }) => ({
+      pending: `Staking ${amount} for ${days}`,
+      success: `${amount} Staked for ${days}`,
+      error: `Failed to stake ${amount} for ${days}`,
     }),
     bond: ({ amountIn, amountOut }) => ({
       pending: `Bonding ${amountIn} for ${amountOut}`,
