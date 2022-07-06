@@ -31,7 +31,7 @@ function Emissions({ onCloseDescription, onOpenDescription, ...stakeData }: Emis
           src={`/assets/liquidstaking/${stakeData.days}d-logo.svg`}
           alt="stake period logo"
         />
-        <Info title="Total vAPR" info={stakeData.totalVAPR} />
+        <Info title="Total vAPR" info={stakeData.totalVAPR?.toFixed(2) + '%'} />
         <Image
           mx="auto"
           src={`/assets/liquidstaking/modal-moreinfo-logo.svg`}
