@@ -95,14 +95,11 @@ const TreasuryDataContainer: React.FC<TreasuryDataContainerProps> = ({ info1, in
     direction={{ base: 'column', md: 'row' }}
   >
     <DataInfo info={info1[1] || 'loading...'} title={info1[0]} />
-    <Border />
+    <Box __css={borderProps} />
     <DataInfo info={info2[1] || 'loading...'} title={info2[0]} />
-    <Border />
+    <Box __css={borderProps} />
     <DataInfo info={info3[1] || 'loading...'} title={info3[0]} />
   </Flex>
-)
-const Border = () => (
-  <Box w={{ base: 'full', md: '1px' }} h={{ base: '1px', md: 'full' }} bg={'stroke.primary'} />
 )
 
 type DataInfoProps = { title: string; info: string }
@@ -124,3 +121,8 @@ const DataInfo: React.FC<DataInfoProps> = ({ info, title }) => (
     </Text>
   </Flex>
 )
+const borderProps = {
+  width: { base: 'full', md: '1px' },
+  height: { base: '1px', md: 'full' },
+  background: 'stroke.primary',
+}
