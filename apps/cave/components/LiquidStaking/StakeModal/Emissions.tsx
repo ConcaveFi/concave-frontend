@@ -9,7 +9,6 @@ type EmissionsProps = {
 
 function Emissions({ onCloseDescription, onOpenDescription, ...stakeData }: EmissionsProps) {
   const mobileUI = useBreakpointValue({ base: true, md: false })
-  const totalVAPRFormatted = stakeData?.totalVAPR?.toFixed(2) + '%'
   return (
     <Flex direction={{ base: 'row', md: 'column' }}>
       <Flex

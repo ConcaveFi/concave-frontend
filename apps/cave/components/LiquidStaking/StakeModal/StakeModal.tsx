@@ -22,7 +22,7 @@ type StakeModalProps = {
   stakeValues: { currentlyStaked: BigNumber; stakingCap: BigNumber; percent: number }
 }
 export const StakeModal = ({ isOpen, onClose, stakeData, stakeValues }: StakeModalProps) => {
-  const { baseEmissions, bondEmissions, poolId, totalVAPR } = stakeData || {}
+  const { poolId } = stakeData || {}
   const {
     isOpen: isDescritionsOpen,
     onOpen: onOpenDescriptions,

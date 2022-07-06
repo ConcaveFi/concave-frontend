@@ -1,16 +1,9 @@
 import { stakingPools, PoolRewards } from '@concave/marketplace'
 import { useGet_All_Total_Pools_VaprQuery } from 'graphql/generated/graphql'
-import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-export const useLiquidStakeData = () => {
-  const {
-    data: stakingV1,
-    isLoading: isLoadingVAPR,
-    isSuccess: isSuccessVAPR,
-    isError: isErrorVAPR,
-  } = useGet_All_Total_Pools_VaprQuery()
-  const chainID = useCurrentSupportedNetworkId()
-  const poolRewards = stakingV1?.logStakingV1_PoolRewarded
 
+export const useLiquidStakeData = () => {
+  const { data: stakingV1 } = useGet_All_Total_Pools_VaprQuery()
+  const poolRewards = stakingV1?.logStakingV1_PoolRewarded
   const stakeData = poolRewards
     ?.map((poolReward) => {
       const baseEmissions = stakingV1.rebaseStakingV1[0][`bondVaprPool${poolReward.poolID}`] * 100
@@ -23,7 +16,7 @@ export const useLiquidStakeData = () => {
         baseEmissions,
         bondEmissions,
         totalVAPR,
-        ...stakingPools[+(t.poolID || 0)],
+        ...stakingPools[+(poolReward.poolID || 0)],
       } as const
     })
     .sort((current, previus) => current.poolId - previus.poolId)
