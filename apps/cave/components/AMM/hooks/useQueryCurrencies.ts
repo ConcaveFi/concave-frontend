@@ -1,48 +1,26 @@
 import { isAddress } from 'ethers/lib/utils'
-import { ChainId, Currency, NATIVE, Token } from '@concave/core'
+import { ChainId, Currency, NATIVE } from '@concave/core'
 import { Fetcher } from '@concave/gemswap-sdk'
 import { concaveProvider } from 'lib/providers'
 import Router, { useRouter } from 'next/router'
 import { useNetwork } from 'wagmi'
-import { LinkedCurrencyFields } from 'components/CurrencyAmountField/useLinkedCurrencyFields'
-import { useCallback, useEffect, useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
+import { useQuery, useQueryClient } from 'react-query'
+import { getQueryValue } from 'utils/getQueryValue'
 
 const getAddressOrSymbol = (currency: Currency) => {
+  if (!currency) return undefined
   return currency.isNative ? currency.symbol : currency.wrapped.address
 }
 
-export const currencyToJson = (c: Currency | undefined) => {
-  if (!c) return null
-  return {
-    chainId: c.chainId,
-    wrapped: {
-      address: c.wrapped.address,
-    },
-    decimals: c.decimals,
-    symbol: c.symbol,
-    name: c.symbol,
-    isNative: c.isNative,
-  }
-}
-
-export const currencyFromJson = (c: Currency | undefined): Currency => {
-  if (!c) return
-  if (c.isNative) return NATIVE[c.chainId]
-  return new Token(c.chainId, c.wrapped.address, c.decimals, c.symbol, c.name)
-}
-
-const fetchTokenOrNativeData = (addressOrSymbol: string, chainId: ChainId) => {
+const fetchTokenOrNativeData = (
+  addressOrSymbol: string,
+  chainId: ChainId,
+): Promise<Currency> | Currency => {
   if (!addressOrSymbol) return
   if (isAddress(addressOrSymbol))
     return Fetcher.fetchTokenData(addressOrSymbol, concaveProvider(+chainId))
   return NATIVE[chainId]
-}
-
-export const fetchQueryCurrencies = async (query) => {
-  const { currency0, currency1, chainId } = query
-  if (!chainId) return []
-  const currencies = [...new Set<string>([currency0, currency1])]
-  return Promise.all(currencies.map((c) => fetchTokenOrNativeData(c, chainId))).catch(() => [])
 }
 
 type UpdateCurrenciesQuery = {
@@ -51,51 +29,61 @@ type UpdateCurrenciesQuery = {
   currency1?: Currency
 }
 
-const updateQuery = ({ currency0, currency1, chainId }: UpdateCurrenciesQuery, { shallow }) => {
+const updateQuery = ({ currency0, currency1, chainId }: UpdateCurrenciesQuery) => {
   const query = { chainId: chainId || currency0?.chainId || currency1?.chainId } as any
   if (currency0) query.currency0 = getAddressOrSymbol(currency0)
   if (currency1) query.currency1 = getAddressOrSymbol(currency1)
-  Router.replace({ query }, undefined, { shallow })
+  Router.replace({ query }, undefined, { shallow: true })
 }
 
-const getQueryValue = (query, key) => (Array.isArray(query[key]) ? query[key][0] : query[key])
+const queryCurrenciesQueryKey = 'query currencies'
 
-export const useQueryCurrencies = () => {
-  const { activeChain } = useNetwork()
+// https://react-query.tanstack.com/guides/ssr#caveat-for-nextjs-rewrites
+export const useQueryCurrencies = (defaultCurrencies?: {
+  [chain in ChainId]?: [Currency, Currency]
+}) => {
   const { query } = useRouter()
+  const { activeChain } = useNetwork()
 
-  const currentChainId = activeChain?.id
-  const queryChainId = getQueryValue(query, 'chainId')
+  const chainId = (getQueryValue(query, 'chainId') || activeChain?.id) as ChainId
 
-  const isNetworkMismatch = +queryChainId && currentChainId && +queryChainId !== currentChainId
-  const queryHasCurrency = !!query.currency0 || !!query.currency1
+  const queryClient = useQueryClient()
 
-  // run on network change
-  useEffect(() => {
-    if (!queryHasCurrency && currentChainId)
-      updateQuery({ chainId: currentChainId }, { shallow: false })
-    /* if the query has currencies, wait for a user action to change it
-      (so that he won't loose his input by mistake) */
-  }, [currentChainId, queryHasCurrency])
-
-  const onChangeCurrencies = useCallback(
-    ({ first, second }: LinkedCurrencyFields) => {
-      if (first && second && first.chainId !== second.chainId) {
-        updateQuery(
-          { chainId: currentChainId, currency0: first, currency1: second },
-          { shallow: false },
-        )
-      }
-      updateQuery({ currency0: first, currency1: second }, { shallow: true })
+  const { data: currencies } = useQuery<[Currency, Currency]>(
+    queryCurrenciesQueryKey,
+    async () => {
+      const currency0 = getQueryValue(query, 'currency0')
+      const currency1 = getQueryValue(query, 'currency1')
+      return [
+        await fetchTokenOrNativeData(currency0, chainId),
+        await fetchTokenOrNativeData(currency1, chainId),
+      ]
     },
-    [currentChainId],
+    {
+      enabled: Boolean(query.currency0 || query.currency1),
+      initialData: defaultCurrencies?.[chainId] || defaultCurrencies?.[ChainId.ETHEREUM],
+      // placeholderData: defaultCurrencies?.[chainId] || defaultCurrencies?.[ChainId.ETHEREUM],
+      // cacheTime: 0,
+      staleTime: 0,
+    },
   )
 
-  return {
-    onChangeCurrencies,
-    isNetworkMismatch,
-    queryHasCurrency,
-    currentChainId,
-    queryChainId,
-  }
+  const queryHasCurrency = query.currency0 || query.currency1
+  // run on network change
+  useEffect(() => {
+    if (!queryHasCurrency && activeChain?.id) updateQuery({ chainId: activeChain.id })
+    /* if the query has currencies, wait for a user action to change it
+        (so that he won't loose his input by mistake) */
+  }, [activeChain?.id, queryHasCurrency])
+
+  return useMemo(
+    () => ({
+      currencies,
+      onChangeCurrencies: (currencies: [Currency, Currency]) => {
+        updateQuery({ currency0: currencies[0], currency1: currencies[1] })
+        queryClient.setQueryData(queryCurrenciesQueryKey, currencies)
+      },
+    }),
+    [currencies, queryClient],
+  )
 }
