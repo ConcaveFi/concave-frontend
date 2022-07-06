@@ -46,19 +46,16 @@ export const useTreasuryData = () => {
   const cnvTotalSupply = cnvData?.cnvData?.data?.totalSupply || 0
 
   const convexToken = treasuryData?.treasury?.find((token) => token.name === 'cvxDOLA3POOL')
+
   return {
     lastBondSolds,
     treasuryData: {
-      firstRow: {
-        marketCap: '$' + numberMask(marketCap),
-        cnvPrice: '$' + cnvPrice?.toFixed(2) || ' 0',
-        valuePerCNV: '$' + numberMask(treasuryValuePerCNV),
-      },
-      secondRow: {
-        treasuryRevenue: 'Coming soon',
-        treasuryValue: '$' + numberMask(treasuryValue),
-        cnvTotalSupply: '$' + numberMask(cnvTotalSupply),
-      },
+      marketCap: marketCap,
+      cnvPrice: +cnvPrice.toFixed(2),
+      valuePerCNV: treasuryValuePerCNV,
+      treasuryRevenue: 0,
+      treasuryValue: treasuryValue,
+      cnvTotalSupply: cnvTotalSupply,
     },
     isloading: false,
     assets: {
@@ -78,6 +75,15 @@ export const useTreasuryData = () => {
       },
     },
   }
+}
+
+export type TreasuryData = {
+  marketCap: number
+  cnvPrice: number
+  valuePerCNV: number
+  treasuryRevenue: number
+  treasuryValue: number
+  cnvTotalSupply: number
 }
 
 export type TreasuryTokenInfo = {

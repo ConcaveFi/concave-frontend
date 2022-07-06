@@ -1,22 +1,14 @@
 import { Box, Card, Flex, FlexProps, gradientBorder, Text } from '@concave/ui'
-import { LastBondSolds } from './Hooks/useTreasuryData'
+import { numberMask } from 'utils/numberMask'
+import { LastBondSolds, TreasuryData } from './Hooks/useTreasuryData'
 
 type TreasuryDataCardProps = {
-  firstRow: {
-    marketCap: string
-    cnvPrice: string
-    valuePerCNV: string
-  }
-  secondRow: {
-    treasuryRevenue: string
-    treasuryValue: string
-    cnvTotalSupply: string
-  }
+  treasuryData: TreasuryData
   lastBondSolds: LastBondSolds
 }
-export const TreasuryDataCard = ({ firstRow, secondRow, lastBondSolds }: TreasuryDataCardProps) => {
-  const { cnvPrice, marketCap, valuePerCNV } = firstRow || {}
-  const { cnvTotalSupply, treasuryRevenue, treasuryValue } = secondRow || {}
+export const TreasuryDataCard = ({ treasuryData, lastBondSolds }: TreasuryDataCardProps) => {
+  const { cnvPrice, marketCap, valuePerCNV, cnvTotalSupply, treasuryRevenue, treasuryValue } =
+    treasuryData || {}
   return (
     <Card
       backdropFilter="blur(8px)"
@@ -25,14 +17,14 @@ export const TreasuryDataCard = ({ firstRow, secondRow, lastBondSolds }: Treasur
       justify={'space-between'}
     >
       <TreasuryDataContainer
-        info1={['Market cap', marketCap]}
-        info2={['CNV Price', cnvPrice]}
-        info3={['Treasury value per CNV', valuePerCNV]}
+        info1={['Market cap', marketCap && '$' + numberMask(marketCap)]}
+        info2={['CNV Price', cnvPrice && '$' + numberMask(cnvPrice)]}
+        info3={['Treasury value per CNV', valuePerCNV && '$' + numberMask(valuePerCNV)]}
       />
       <TreasuryDataContainer
-        info1={['Treasury revenue', treasuryRevenue]}
-        info2={['Treasury value', treasuryValue]}
-        info3={['CNV total suply', cnvTotalSupply]}
+        info1={['Treasury revenue', 'Coming soon']}
+        info2={['Treasury value', treasuryValue && '$' + numberMask(treasuryValue)]}
+        info3={['CNV total suply', cnvTotalSupply && '$' + numberMask(cnvTotalSupply)]}
       />
       <LastBondsContainer lastBondSolds={lastBondSolds} />
     </Card>

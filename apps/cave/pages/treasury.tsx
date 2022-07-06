@@ -19,11 +19,7 @@ export function Treasury() {
         align={'center'}
         position={'relative'}
       >
-        <TreasuryDataCard
-          lastBondSolds={lastBondSolds}
-          firstRow={treasuryData?.firstRow}
-          secondRow={treasuryData?.secondRow}
-        />
+        <TreasuryDataCard lastBondSolds={lastBondSolds} treasuryData={treasuryData} />
         <TreasuryRedeemCard />
       </Flex>
       <BondGraphics />
