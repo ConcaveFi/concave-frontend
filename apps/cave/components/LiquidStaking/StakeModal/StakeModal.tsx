@@ -7,8 +7,8 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { Card } from '@concave/ui'
-import { BigNumber } from 'ethers'
-import { truncateNumber } from 'utils/truncateNumber'
+import { BigNumber, utils } from 'ethers'
+import { numberMask } from 'utils/numberMask'
 import { StakeData } from '../hooks/useLiquidStakeData'
 import Emissions from './Emissions'
 import { FloatingDescriptions } from './FloatingDescriptions'
@@ -52,17 +52,17 @@ export const StakeModal = ({ isOpen, onClose, stakeData, stakeValues }: StakeMod
           <Emissions
             onCloseDescription={onCloseDescription}
             onOpenDescription={onOpenDescriptions}
-            totalVAPR={totalVAPR?.toFixed(2) + '%'}
-            baseEmissions={baseEmissions?.toFixed(2) + '%'}
-            bondEmissions={bondEmissions?.toFixed(2) + '%'}
+            totalVAPR={totalVAPR}
+            baseEmissions={baseEmissions}
+            bondEmissions={bondEmissions}
             poolid={poolId}
           />
           <VStack gap={4} w="full" justify={'center'} align="center">
             <StakeInfo
-              currentlyStaked={truncateNumber(stakeValues?.currentlyStaked || 0)}
+              currentlyStaked={numberMask(+utils.formatEther(stakeValues?.currentlyStaked || 0))}
               percent={stakeValues?.percent}
               poolId={stakeData?.poolId}
-              stakingCap={truncateNumber(stakeValues?.stakingCap || 0)}
+              stakingCap={numberMask(+utils.formatEther(stakeValues?.stakingCap || 0))}
             />
             <StakeInput onClose={onClose} poolId={poolId} />
           </VStack>

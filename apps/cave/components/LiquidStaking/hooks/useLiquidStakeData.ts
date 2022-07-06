@@ -11,13 +11,14 @@ export const useLiquidStakeData = () => {
   const poolRewards = stakingV1?.logStakingV1_PoolRewarded
 
   const stakeData = poolRewards
-    ?.map((t) => {
-      const baseEmissions = stakingV1.rebaseStakingV1[0][`bondVaprPool${t.poolID}`] * 100
+    ?.map((poolReward) => {
+      const baseEmissions = stakingV1.rebaseStakingV1[0][`bondVaprPool${poolReward.poolID}`] * 100
       const bondEmissions =
-        stakingV1.logStakingV1_PoolRewarded.find((obj) => obj.poolID === t.poolID).base_vAPR * 100
+        stakingV1.logStakingV1_PoolRewarded.find((obj) => obj.poolID === poolReward.poolID)
+          .base_vAPR * 100
       const totalVAPR = baseEmissions + bondEmissions
       return {
-        poolId: t.poolID,
+        poolId: poolReward.poolID,
         baseEmissions,
         bondEmissions,
         totalVAPR,

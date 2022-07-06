@@ -6,7 +6,6 @@ import { StakeCard } from 'components/LiquidStaking/StakeCard'
 import { withPageTransition } from 'components/PageTransition'
 function LiquidStaking() {
   const { stakeData } = useLiquidStakeData()
-
   return (
     <Flex
       width={{ base: 'full', xl: 'full', lg: 'full', md: 'full' }}

@@ -1,8 +1,8 @@
 import { Box, Flex, Image, Text, useBreakpointValue } from '@chakra-ui/react'
 
 type StakeInformationsProps = {
-  bondingEmissions: string
-  baseEmissions: string
+  bondingEmissions: number
+  baseEmissions: number
   onShow: VoidFunction
   onDisable: VoidFunction
 }
@@ -13,6 +13,8 @@ export const StakeInformations = ({
   onDisable,
 }: StakeInformationsProps) => {
   const mobileUI = useBreakpointValue({ base: true, xl: false })
+  const bondEmissionsFormatted = bondingEmissions?.toFixed(2) + '%'
+  const baseEmissionsFormatted = baseEmissions?.toFixed(2) + '%'
   return (
     <Box
       borderTopRadius="xl"
@@ -25,10 +27,10 @@ export const StakeInformations = ({
       filter="drop-shadow(0px 0px 27px #81b3ff4f)"
     >
       <Flex textAlign={'center'} direction={'column'} justify={'center'} align="center">
-        <Info title="Bonding emissions" info={bondingEmissions} />
-        <PlusSign />
-        <Info title="Base emissions" info={baseEmissions} />
-        <PlusSign />
+        <Info title="Bonding emissions" info={bondEmissionsFormatted} />
+        <Text __css={PlusSign}>+</Text>
+        <Info title="Base emissions" info={baseEmissionsFormatted} />
+        <Text __css={PlusSign}>+</Text>
         <Info title="Quaterly dividends" info={'Coming soon'} />
         <Image
           mt={{ base: 4, md: 4 }}
@@ -44,12 +46,6 @@ export const StakeInformations = ({
   )
 }
 
-const PlusSign = () => (
-  <Text mx={{ base: '', sm: 'auto' }} color="text.low" fontSize="sm">
-    +
-  </Text>
-)
-
 type InfoProps = { title: string; info: string }
 const Info = ({ title, info }: InfoProps) => (
   <>
@@ -61,3 +57,9 @@ const Info = ({ title, info }: InfoProps) => (
     </Text>
   </>
 )
+
+const PlusSign = {
+  mx: { base: '', sm: 'auto' },
+  color: 'text.low',
+  fontSize: 'sm',
+}

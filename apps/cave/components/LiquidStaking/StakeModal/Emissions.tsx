@@ -3,9 +3,9 @@ import { poolIdToDays } from 'utils/contants'
 import { StakeInformations } from './StakeInformations'
 
 type EmissionsProps = {
-  baseEmissions: string
-  bondEmissions: string
-  totalVAPR: string
+  baseEmissions: number
+  bondEmissions: number
+  totalVAPR: number
   poolid: number
   onOpenDescription: VoidFunction
   onCloseDescription: VoidFunction
@@ -20,6 +20,7 @@ function Emissions({
   onOpenDescription,
 }: EmissionsProps) {
   const mobileUI = useBreakpointValue({ base: true, md: false })
+  const totalVAPRFormatted = totalVAPR?.toFixed(2) + '%'
   return (
     <Flex direction={{ base: 'row', md: 'column' }}>
       <Flex
@@ -42,7 +43,7 @@ function Emissions({
           src={`/assets/liquidstaking/${poolIdToDays[poolid]}d-logo.svg`}
           alt="stake period logo"
         />
-        <Info title="Total vAPR" info={totalVAPR} />
+        <Info title="Total vAPR" info={totalVAPRFormatted} />
         <Image
           mx="auto"
           src={`/assets/liquidstaking/modal-moreinfo-logo.svg`}

@@ -3,7 +3,7 @@ import { Card } from '@concave/ui'
 import { utils } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { poolIdToDays } from 'utils/contants'
-import { truncateNumber } from 'utils/truncateNumber'
+import { numberMask } from 'utils/numberMask'
 import { useAccount } from 'wagmi'
 import { StakeData } from './hooks/useLiquidStakeData'
 import { useLiquidValues } from './hooks/useLiquidValues'
@@ -34,8 +34,10 @@ export const StakeCard = (props: StakeCardProps) => {
         <LoadBard
           percent={percent}
           loading={isLoading}
-          currentlyStaked={truncateNumber(stakingV1Pools?.balance || 0, 1)}
-          stakingCap={truncateNumber(stakingV1Pools?.balance?.add(stakingV1Cap) || 0, 1)}
+          currentlyStaked={numberMask(+utils.formatEther(stakingV1Pools?.balance || 0))}
+          stakingCap={numberMask(
+            +utils.formatEther(stakingV1Pools?.balance?.add(stakingV1Cap) || 0),
+          )}
         />
         <Button
           mt={4}
