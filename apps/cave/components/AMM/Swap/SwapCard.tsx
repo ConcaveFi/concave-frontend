@@ -23,30 +23,33 @@ import { toAmount } from 'utils/toAmount'
 import { NetworkMismatch } from '../NetworkMismatch'
 import { TradeDetails } from './TradeDetails'
 
-export function SwapCard({ currencies, onChangeCurrencies }) {
-  const { trade, onChangeInput, onChangeOutput, switchCurrencies } = useSwapState(
-    currencies,
-    onChangeCurrencies,
-  )
+export function SwapCard() {
+  const {
+    trade,
+    error,
+    inputAmount,
+    outputAmount,
+    onChangeInput,
+    onChangeOutput,
+    switchCurrencies,
+  } = useSwapState()
 
   /*
     temporary workaround for unknow issue with swapTokenForExactToken
     all trades are submited as exact input for now
   */
   const exactInTrade = useMemo(
-    () =>
-      trade.data?.route &&
-      new Trade(trade.data.route, trade.data.inputAmount, TradeType.EXACT_INPUT),
+    () => trade && new Trade(trade.route, trade.inputAmount, TradeType.EXACT_INPUT),
     [trade],
   )
   const { registerTransaction } = useTransactionRegistry()
   const swapTx = useSwapTransaction({
     onTransactionSent: (tx) => {
-      onChangeInput(toAmount(0, trade.data.inputAmount.currency))
+      onChangeInput(toAmount(0, trade.inputAmount.currency))
       registerTransaction(tx, {
         type: 'swap',
-        amountIn: trade.data.inputAmount.toString(),
-        amountOut: trade.data.outputAmount.toString(),
+        amountIn: trade.inputAmount.toString(),
+        amountOut: trade.outputAmount.toString(),
       })
     },
   })
@@ -56,9 +59,15 @@ export function SwapCard({ currencies, onChangeCurrencies }) {
   const confirmationModal = useDisclosure()
   const swapButtonProps = useSwapButtonProps({
     trade,
+    inputAmount,
+    outputAmount,
+    error,
     recipient,
     settings,
-    onSwapClick: () => (settings.expertMode ? swapTx.submit : confirmationModal.onOpen),
+    onSwapClick: () =>
+      settings.expertMode
+        ? () => swapTx.submit({ trade: exactInTrade, settings, recipient })
+        : confirmationModal.onOpen,
   })
 
   return (
@@ -74,7 +83,7 @@ export function SwapCard({ currencies, onChangeCurrencies }) {
         maxW="420px"
       >
         <CurrencyInputField
-          currencyAmountIn={trade.data.inputAmount}
+          currencyAmountIn={inputAmount}
           onChangeAmount={onChangeInput}
           CurrencySelector={SelectAMMCurrency}
         />
@@ -82,8 +91,8 @@ export function SwapCard({ currencies, onChangeCurrencies }) {
         <SwitchCurrencies onClick={switchCurrencies} />
 
         <CurrencyOutputField
-          currencyAmountOut={trade.data.outputAmount}
-          currencyAmountIn={trade.data.inputAmount}
+          currencyAmountOut={outputAmount}
+          currencyAmountIn={inputAmount}
           updateOutputValue={onChangeOutput}
         />
 
@@ -98,9 +107,9 @@ export function SwapCard({ currencies, onChangeCurrencies }) {
           size="large"
           w="full"
           approveArgs={{
-            currency: trade.data.inputAmount.currency,
-            amount: trade.data.inputAmount.numerator,
-            spender: ROUTER_ADDRESS[trade.data.inputAmount.currency?.chainId],
+            currency: inputAmount.currency,
+            amount: inputAmount.numerator,
+            spender: ROUTER_ADDRESS[inputAmount.currency?.chainId],
           }}
           {...swapButtonProps}
         />

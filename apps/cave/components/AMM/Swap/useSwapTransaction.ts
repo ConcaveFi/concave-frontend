@@ -16,12 +16,11 @@ const initialState = {
   trade: undefined,
 }
 
-export const useSwapTransaction = (
-  trade: Trade<Currency, Currency, TradeType>,
-  settings: SwapSettings,
-  recipient: string,
-  { onTransactionSent }: { onTransactionSent?: (tx: TransactionResponse) => void },
-) => {
+export const useSwapTransaction = ({
+  onTransactionSent,
+}: {
+  onTransactionSent?: (tx: TransactionResponse) => void
+}) => {
   const networkId = useCurrentSupportedNetworkId()
   const { data: account } = useAccount()
   const { data: signer } = useSigner()
@@ -32,7 +31,15 @@ export const useSwapTransaction = (
   })
 
   const [state, setState] = useState(initialState)
-  const submit = async () => {
+  const submit = async ({
+    trade,
+    settings,
+    recipient,
+  }: {
+    trade: Trade<Currency, Currency, TradeType>
+    settings: SwapSettings
+    recipient: string
+  }) => {
     setState({ ...initialState, trade, isWaitingForConfirmation: true })
     try {
       const { methodName, args, value } = Router.swapCallParameters(trade, {
