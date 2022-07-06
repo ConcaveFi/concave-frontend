@@ -1,56 +1,57 @@
-import { useState, useMemo, useCallback } from 'react'
-import { Currency } from '@concave/core'
-import { TradeType } from '@concave/gemswap-sdk'
-import { useTrade, UseTradeResult } from '../hooks/useTrade'
-import { SwapSettings } from '../Swap/Settings'
-import { toAmount } from 'utils/toAmount'
-import { useLinkedCurrencyFields } from 'components/CurrencyAmountField'
-import { LinkedCurrencyFields } from 'components/CurrencyAmountField/useLinkedCurrencyFields'
+import { useCallback, useMemo, useRef, useState } from 'react'
+import { Trade, TradeType } from '@concave/gemswap-sdk'
+import { getBestTrade } from '../hooks/useTrade'
+import { useSwapSettings } from '../Swap/Settings'
+import { useLinkedCurrencyAmounts } from 'components/CurrencyAmountField'
+import { usePairs } from '../hooks/usePair'
+import { useQueryCurrencies } from '../hooks/useQueryCurrencies'
+import { Currency, CurrencyAmount } from '@concave/core'
 
-const makeTradePlaceholder = (exactAmount, otherCurrency, tradeType) =>
-  tradeType === TradeType.EXACT_INPUT
-    ? { inputAmount: exactAmount, outputAmount: toAmount(0, otherCurrency) }
-    : { inputAmount: toAmount(0, otherCurrency), outputAmount: exactAmount }
+export const useSwapState = () => {
+  const { currencies } = useQueryCurrencies()
 
-export const useSwapState = (
-  { multihops }: SwapSettings,
-  initialCurrencies: Currency[],
-  onChangeCurrencies: (currencies: LinkedCurrencyFields) => void,
-) => {
-  // the input user typed in, the other input value is then derived from it
-  const [exactAmount, setExactAmount] = useState(toAmount(0, initialCurrencies[0]))
+  const { settings } = useSwapSettings()
+  const maxHops = settings.multihops ? 3 : 1
 
-  const { onChangeField, switchCurrencies, currencies, lastUpdated } = useLinkedCurrencyFields(
-    initialCurrencies,
-    useCallback((newAmount) => setExactAmount(newAmount), []),
-    onChangeCurrencies,
-  )
+  const pairs = usePairs(currencies[0].wrapped, currencies[1].wrapped, maxHops)
+  const trade = useRef<Trade<Currency, Currency, TradeType>>(null)
 
-  const tradeType = lastUpdated === 'first' ? TradeType.EXACT_INPUT : TradeType.EXACT_OUTPUT
-  const otherCurrency = currencies[lastUpdated === 'first' ? 'second' : 'first']
+  const [error, setError] = useState()
 
-  const trade = useTrade(exactAmount, otherCurrency, {
-    tradeType,
-    maxHops: multihops ? 3 : 1,
+  const { amounts, onChangeField, switchCurrencies } = useLinkedCurrencyAmounts({
+    onDerive: useCallback(
+      (enteredAmount: CurrencyAmount<Currency>, _currencies: typeof currencies) => {
+        const [otherCurrency, tradeType] = enteredAmount.currency.equals(_currencies[0])
+          ? [_currencies[1], TradeType.EXACT_INPUT]
+          : [_currencies[0], TradeType.EXACT_OUTPUT]
+
+        try {
+          trade.current = getBestTrade(pairs.data, tradeType, enteredAmount, otherCurrency, {
+            maxHops,
+          })
+          setError(undefined)
+          return tradeType === TradeType.EXACT_INPUT
+            ? trade.current.outputAmount
+            : trade.current.inputAmount
+        } catch (e) {
+          setError(e)
+          return undefined
+        }
+      },
+      [maxHops, pairs.data],
+    ),
   })
-
-  // return this partial just to show some data while loading (like currencies icons) if needed
-  const partialTrade = useMemo(
-    () =>
-      ({
-        ...trade,
-        data: makeTradePlaceholder(exactAmount, otherCurrency, tradeType),
-      } as UseTradeResult),
-    [exactAmount, otherCurrency, tradeType, trade],
-  )
 
   return useMemo(
     () => ({
-      trade: trade.isSuccess ? trade : partialTrade,
-      onChangeInput: onChangeField('first'),
-      onChangeOutput: onChangeField('second'),
+      trade: trade.current,
+      error,
+      inputAmount: amounts[0],
+      outputAmount: amounts[1],
+      onChangeInput: onChangeField(0),
+      onChangeOutput: onChangeField(1),
       switchCurrencies,
     }),
-    [trade, partialTrade, switchCurrencies, onChangeField],
+    [error, amounts, onChangeField, switchCurrencies],
   )
 }
