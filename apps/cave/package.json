@@ -10,7 +10,7 @@
     "local-build": "next build",
     "start": "next start",
     "lint": "next lint --fix",
-    "test": "tsdx test",
+    "test": "tsdx test --runInBand  --detectOpenHandles --forceExit",
     "test:watch": "tsdx test --watch",
     "gen": "DOTENV_CONFIG_PATH=./.env graphql-codegen --config codegen.yml -r dotenv/config"
   },
