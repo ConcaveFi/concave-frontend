@@ -5,11 +5,10 @@ import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId
 import { concaveProvider as provider } from 'lib/providers'
 import { useQuery } from 'react-query'
 import { useAccount, useSigner } from 'wagmi'
+
 export default function useBBTCNVRedeemable() {
-
-  const { data: account } = useAccount()
+  const { address } = useAccount()
   const { data: signer } = useSigner()
-
 
   const networkdId = useCurrentSupportedNetworkId()
 
@@ -20,17 +19,13 @@ export default function useBBTCNVRedeemable() {
   )
 
   const { data, isLoading } = useQuery(
-    ['bbtRedeemable', account?.address, networkdId],
+    ['bbtRedeemable', address, networkdId],
     async () => ({
-      redeemable: await contractV2.connect(signer).redeemable(account?.address),
-      redeemed: await contractV2.connect(signer).redeemed(account?.address),
+      redeemable: await contractV2.connect(signer).redeemable(address),
+      redeemed: await contractV2.connect(signer).redeemed(address),
     }),
-    { enabled: !!account?.address && !!signer },
+    { enabled: !!address && !!signer },
   )
 
-  return {
-    data,
-    isLoading,
-  }
-  console.log(data)
+  return { data, isLoading }
 }
