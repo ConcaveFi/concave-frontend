@@ -61,10 +61,10 @@ const updateQuery = ({ currency0, currency1, chainId }: UpdateCurrenciesQuery, {
 const getQueryValue = (query, key) => (Array.isArray(query[key]) ? query[key][0] : query[key])
 
 export const useQueryCurrencies = () => {
-  const { activeChain } = useNetwork()
+  const { chain } = useNetwork()
   const { query } = useRouter()
 
-  const currentChainId = activeChain?.id
+  const currentChainId = chain?.id
   const queryChainId = getQueryValue(query, 'chainId')
 
   const isNetworkMismatch = +queryChainId && currentChainId && +queryChainId !== currentChainId

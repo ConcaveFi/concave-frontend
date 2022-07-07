@@ -15,11 +15,11 @@ const fetchTokenList = async (chain: Chain) => {
 }
 
 export const useTokenList = () => {
-  const { activeChain } = useNetwork()
+  const { chain: activeChain } = useNetwork()
 
   return useQuery(
     ['token-list', activeChain?.id || 1],
-    async () => fetchTokenList(activeChain?.id ? activeChain : chain.mainnet),
+    async () => fetchTokenList(activeChain?.unsupported ? chain.mainnet : activeChain),
     { placeholderData: [], refetchOnWindowFocus: false },
   )
 }
@@ -48,8 +48,7 @@ const headers = { 'x-api-key': process.env.NEXT_PUBLIC_MORALIS_TOKEN }
 export const useAddressTokenList: (address?: string) => UseQueryResult<Token[], unknown> = (
   address: string,
 ) => {
-  const { activeChain } = useNetwork()
-  // const chainName = activeChain?.id === chain.rinkeby.id ? chain.rinkeby.name : chain.mainnet.name
+  const { chain: activeChain } = useNetwork()
   const chainName = activeChain?.id === chain.rinkeby.id ? chain.rinkeby.name : 'eth'
   const url = `https://deep-index.moralis.io/api/v2/${address}/erc20?chain=${chainName}`
   return useQuery(['LISTTOKENS', address], () => {

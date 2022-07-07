@@ -11,7 +11,7 @@ export const useAddLiquidityButtonProps = (
   amount1: CurrencyAmount<Currency>,
   onAddLiquidityClick: () => void,
 ): ButtonProps => {
-  const { data: account } = useAccount()
+  const { address } = useAccount()
 
   const currency0Balance = useCurrencyBalance(amount0?.currency, { watch: true })
   const currency1Balance = useCurrencyBalance(amount1?.currency, { watch: true })
@@ -21,7 +21,7 @@ export const useAddLiquidityButtonProps = (
   /*
     Not Connected
   */
-  if (!account?.address) return { children: 'Connect wallet', onClick: connectModal.onOpen }
+  if (!address) return { children: 'Connect wallet', onClick: connectModal.onOpen }
 
   // if (!amount0?.currency) return { isDisabled: true, children: `Select a first token` }
   // if (!amount1?.currency) return { isDisabled: true, children: `Select a second token` }
