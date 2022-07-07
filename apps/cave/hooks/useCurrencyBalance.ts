@@ -8,7 +8,7 @@ export const useCurrencyBalance = (
   { watch = false } = {},
 ): Omit<ReturnType<typeof useBalance>, 'data'> & { data: CurrencyAmount<Currency> } => {
   const { address } = useAccount()
-  return useCurrencyBalanceOfAddress(currency, account?.address, { watch })
+  return useCurrencyBalanceOfAddress(currency, address, { watch })
 }
 
 export const useCurrencyBalanceOfAddress = (
