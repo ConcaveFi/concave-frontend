@@ -30,6 +30,8 @@
     "@next/bundle-analyzer": "^12.2.0",
     "@testing-library/jest-dom": "^5.16.3",
     "@testing-library/react": "^13.2.0",
+    "@types/node": "^18.0.3",
+    "@types/react": "^18.0.15",
     "date-fns": "^2.28.0",
     "debounce": "^1.2.1",
     "eth-permit": "^0.2.1",
@@ -50,7 +52,7 @@
     "react-qrcode-logo": "^2.7.0",
     "react-query": "^3.39.0",
     "react-use": "^17.3.2",
-    "wagmi": "^0.5.5"
+    "wagmi": "^0.5.9"
   },
   "devDependencies": {
     "@chakra-ui/cli": "^2.0.0",
