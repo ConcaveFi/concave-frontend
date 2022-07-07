@@ -2,15 +2,19 @@ import { CNV } from '@concave/core'
 import { Box, Flex, Image, Stack, Text } from '@concave/ui'
 import { ButtonLink } from 'components/ButtonLink'
 import { ConnectWallet } from 'components/ConnectWallet'
-import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { MdOutlineDashboard } from 'react-icons/md'
-import { formatFixed } from 'utils/formatFixed'
 import { useAccount, useBalance } from 'wagmi'
 
 function SideBarTop() {
+  const { data: account } = useAccount()
   const networkId = useCurrentSupportedNetworkId()
-  const cnvAmount = useCurrencyBalance(CNV[networkId], { watch: true })
+  const { data } = useBalance({
+    addressOrName: account?.address,
+    token: CNV[networkId].address,
+    formatUnits: CNV[networkId].decimals,
+    enabled: !!account?.address,
+  })
 
   return (
     <Box shadow="down" px={2} pt={10} pb={3} rounded="2xl">
@@ -36,13 +40,13 @@ function SideBarTop() {
         </ButtonLink>
         <Box shadow="down" w="full" p={1} rounded="2xl">
           <ConnectWallet />
-          {cnvAmount?.data && (
+          {data?.formatted && (
             <Flex justifyContent="space-between" p={2} mt={2}>
               <Text color="text.low" fontWeight="bold" fontSize="md" lineHeight="100%">
                 Your CNV Balance
               </Text>
               <Text color="text.low" fontWeight="bold" fontSize="md" lineHeight="100%">
-                {formatFixed(cnvAmount?.data.numerator.toString())} CNV
+                {(+data?.formatted).toFixed(2)} CNV
               </Text>
             </Flex>
           )}
