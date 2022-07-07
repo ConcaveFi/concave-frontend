@@ -7,7 +7,8 @@ export const useFiatPrice = (currency?: Currency) => {
   // e.g. use some stable pegged to EUR
   const stablecoin = DAI[currency?.chainId]
 
-  return usePrice(currency, stablecoin)
+  const price = usePrice(currency, stablecoin)
+  return { ...price, stablecoin }
 }
 
 export const useFiatValue = (currencyAmount?: CurrencyAmount<Currency>) => {

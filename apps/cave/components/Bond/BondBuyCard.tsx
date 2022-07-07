@@ -105,7 +105,7 @@ export function BondBuyCard(props: {
           </HStack>
         </VStack>
         <Flex flex={1} align={'center'} justify="end" minWidth={100} gap={2}>
-          <GasPrice />
+          <GasPrice estimate="bond" />
           <HStack align="center" justify="end" py={{ base: 0, md: 5, lg: 0, xl: 5 }}>
             <Settings
               settings={settings}

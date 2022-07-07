@@ -171,7 +171,7 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
                 currency1={trade.data.outputAmount?.currency}
                 mr="auto"
               />
-              <GasPrice />
+              <GasPrice estimate="swap" />
               <Collapse in={hasDetails} animateOpacity>
                 <Button
                   onClick={toggleDetails}
