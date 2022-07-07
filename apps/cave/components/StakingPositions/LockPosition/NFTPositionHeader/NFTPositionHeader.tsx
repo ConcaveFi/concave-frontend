@@ -6,7 +6,7 @@ export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
     useNFTLockedPositionState(props)
   return (
     <Flex
-      width={{ base: '353px', md: '512px', lg: '692px' }}
+      width={'full'}
       boxShadow={'up'}
       direction={{ base: 'column', md: 'row' }}
       borderRadius={'2xl'}
@@ -51,15 +51,25 @@ export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
           <Text color="text.low" fontSize="sm">
             Redeem Date
           </Text>
-          <Text fontSize="md">{redeemDate.toString().slice(4, 16)}</Text>
-          <Flex justify={'center'} align="end" gap={1}>
-            <Text fontSize="sm" textColor="text.low">
-              In:
-            </Text>
-            <Text fontSize="sm" fontWeight={'bold'} textColor="text.accent">
-              {redeemInDays}
-            </Text>
-          </Flex>
+          {redeemInDays ? (
+            <>
+              <Text fontSize="md">
+                {redeemDate.toString().slice(11, 15) === '1969'
+                  ? '-'
+                  : redeemDate.toString().slice(4, 16)}
+              </Text>
+              <Flex justify={'center'} align="end" gap={1}>
+                <Text fontSize="sm" textColor="text.low">
+                  In:
+                </Text>
+                <Text fontSize="sm" fontWeight={'bold'} textColor="text.accent">
+                  {redeemInDays}
+                </Text>
+              </Flex>
+            </>
+          ) : (
+            <Text>Loading...</Text>
+          )}
         </Flex>
         <Flex
           lineHeight="18px"
