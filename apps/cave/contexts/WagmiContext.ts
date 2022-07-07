@@ -31,7 +31,7 @@ const provider = ({ chainId }) =>
 const webSocketProvider = ({ chainId }) =>
   concaveWSProvider(isChainSupported(chainId) ? chainId : chain.mainnet.id)
 
-export const client = createClient({
+const client = createClient({
   autoConnect: true,
   connectors,
   provider,

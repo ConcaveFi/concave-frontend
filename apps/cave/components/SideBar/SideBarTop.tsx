@@ -4,18 +4,12 @@ import { ButtonLink } from 'components/ButtonLink'
 import { ConnectWallet } from 'components/ConnectWallet'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { MdOutlineDashboard } from 'react-icons/md'
-import { useAccount, useBalance } from 'wagmi'
+import { formatFixed } from 'utils/formatFixed'
+import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 
 function SideBarTop() {
-  const { address } = useAccount()
   const networkId = useCurrentSupportedNetworkId()
-  const { data } = useBalance({
-    addressOrName: address,
-    token: CNV[networkId].address,
-    formatUnits: CNV[networkId].decimals,
-    enabled: !!address,
-  })
-
+  const cnvAmount = useCurrencyBalance(CNV[networkId], { watch: true })
   return (
     <Box shadow="down" px={2} pt={10} pb={3} rounded="2xl">
       <Flex
@@ -40,13 +34,13 @@ function SideBarTop() {
         </ButtonLink>
         <Box shadow="down" w="full" p={1} rounded="2xl">
           <ConnectWallet />
-          {data?.formatted && (
+          {cnvAmount?.data && (
             <Flex justifyContent="space-between" p={2} mt={2}>
               <Text color="text.low" fontWeight="bold" fontSize="md" lineHeight="100%">
                 Your CNV Balance
               </Text>
               <Text color="text.low" fontWeight="bold" fontSize="md" lineHeight="100%">
-                {(+data?.formatted).toFixed(2)} CNV
+                {formatFixed(cnvAmount?.data.numerator.toString())} CNV
               </Text>
             </Flex>
           )}
