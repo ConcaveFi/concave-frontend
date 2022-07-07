@@ -1,7 +1,7 @@
 import { Avatar, AvatarGroup, Card, Flex, Text } from '@concave/ui'
 import { utils } from 'ethers'
-import { parseEther, parseUnits } from 'ethers/lib/utils'
-import { truncateNumber } from 'utils/truncateNumber'
+import { formatEther, parseEther, parseUnits } from 'ethers/lib/utils'
+import { numberMask } from 'utils/numberMask'
 import { TreasuryTokenInfo } from './Hooks/useTreasuryData'
 
 type TreasuryAssetsCardProps = {
@@ -69,7 +69,7 @@ const FarmingContainer: React.FC<FarmingContainerProps> = ({ images, tokenImage,
       </Text>
     </Card>
     <Text mx={'auto'} color="text.low" fontSize={'2xl'} fontWeight="bold" mt={3}>
-      {total ? `$${truncateNumber(parseEther(String(total)))}` : 'loading...'}
+      {total ? `$${numberMask(total)}` : 'loading...'}
     </Text>
     <AvatarGroup size={'sm'} opacity={0.4} mx="auto" mt={'-12px'} zIndex="-1">
       {images?.map((image, index) => (
@@ -107,7 +107,7 @@ const TokenInfo: React.FC<{ token: TreasuryTokenInfo }> = ({ token }) => (
       </Text>
     </Card>
     <Text fontSize={'xl'} my="auto" fontWeight={'bold'} color="text.low">
-      {` $${truncateNumber(utils.parseEther(String(token?.total) || '0'))}`}
+      {` $${numberMask(token?.total)}`}
     </Text>
   </Card>
 )

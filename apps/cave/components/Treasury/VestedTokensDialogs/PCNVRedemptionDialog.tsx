@@ -1,7 +1,7 @@
 import { Flex, Modal, Text } from '@concave/ui'
-import { VestedTokenDialodProps } from '../TreasuryRedeemCard'
+import { VestedTokenDialogProps } from '../TreasuryRedeemCard'
 
-export const PCNVRedemptionDialog: React.FC<VestedTokenDialodProps> = ({ isOpen, onClose }) => {
+export const PCNVRedemptionDialog: React.FC<VestedTokenDialogProps> = ({ isOpen, onClose }) => {
   return (
     <Modal
       isCentered

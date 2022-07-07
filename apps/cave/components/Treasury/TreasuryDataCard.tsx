@@ -17,14 +17,22 @@ export const TreasuryDataCard = ({ treasuryData, lastBondSolds }: TreasuryDataCa
       justify={'space-between'}
     >
       <TreasuryDataContainer
-        info1={['Market cap', marketCap && '$' + numberMask(marketCap)]}
-        info2={['CNV Price', cnvPrice && '$' + numberMask(cnvPrice)]}
-        info3={['Treasury value per CNV', valuePerCNV && '$' + numberMask(valuePerCNV)]}
-      />
+        data={[
+          { title: 'Market cap', info: marketCap && '$' + numberMask(marketCap) },
+          { title: 'CNV price', info: cnvPrice && '$' + numberMask(cnvPrice), applyBorder: true },
+          { title: 'Treasury value', info: valuePerCNV && '$' + numberMask(valuePerCNV) },
+        ]}
+      />{' '}
       <TreasuryDataContainer
-        info1={['Treasury revenue', 'Coming soon']}
-        info2={['Treasury value', treasuryValue && '$' + numberMask(treasuryValue)]}
-        info3={['CNV total suply', cnvTotalSupply && '$' + numberMask(cnvTotalSupply)]}
+        data={[
+          { title: 'Treasury revenue', info: 'Coming soon' },
+          {
+            title: 'Treasury value',
+            info: treasuryValue && '$' + numberMask(treasuryValue),
+            applyBorder: true,
+          },
+          { title: 'CNV Total suply', info: cnvTotalSupply && '$' + numberMask(cnvTotalSupply) },
+        ]}
       />
       <LastBondsContainer lastBondSolds={lastBondSolds} />
     </Card>
@@ -71,13 +79,10 @@ const LastBondInfo: React.FC<LastBondInfoProps & FlexProps> = ({
   </Flex>
 )
 
-type RevenueInfo = [string, string]
 type TreasuryDataContainerProps = {
-  info1: RevenueInfo
-  info2: RevenueInfo
-  info3: RevenueInfo
+  data: { title: string; info: string; applyBorder?: boolean }[]
 }
-const TreasuryDataContainer: React.FC<TreasuryDataContainerProps> = ({ info1, info2, info3 }) => (
+const TreasuryDataContainer: React.FC<TreasuryDataContainerProps> = ({ data }) => (
   <Flex
     w="full"
     height={{ base: '216px', md: '100px' }}
@@ -86,16 +91,14 @@ const TreasuryDataContainer: React.FC<TreasuryDataContainerProps> = ({ info1, in
     rounded="2xl"
     direction={{ base: 'column', md: 'row' }}
   >
-    <DataInfo info={info1[1] || 'loading...'} title={info1[0]} />
-    <Box __css={borderProps} />
-    <DataInfo info={info2[1] || 'loading...'} title={info2[0]} />
-    <Box __css={borderProps} />
-    <DataInfo info={info3[1] || 'loading...'} title={info3[0]} />
+    {data?.map(({ title, info, applyBorder }, index) => (
+      <DataInfo info={info} title={title} key={index} applyBorder={applyBorder} />
+    ))}
   </Flex>
 )
 
-type DataInfoProps = { title: string; info: string }
-const DataInfo: React.FC<DataInfoProps> = ({ info, title }) => (
+type DataInfoProps = { title: string; info: string; applyBorder?: boolean }
+const DataInfo: React.FC<DataInfoProps> = ({ info, title, applyBorder }) => (
   <Flex
     flex={1}
     fontWeight={'bold'}
@@ -104,6 +107,7 @@ const DataInfo: React.FC<DataInfoProps> = ({ info, title }) => (
     textAlign={'center'}
     align="center"
     px={{ base: 3, md: 0 }}
+    sx={applyBorder && { ...gradientBorder() }}
   >
     <Text width={'full'} color="text.low" fontSize={'14px'}>
       {title}
@@ -114,7 +118,7 @@ const DataInfo: React.FC<DataInfoProps> = ({ info, title }) => (
   </Flex>
 )
 const borderProps = {
-  width: { base: 'full', md: '1px' },
+  width: { base: 'full', md: '2px' },
   height: { base: '1px', md: 'full' },
   background: 'stroke.primary',
 }

@@ -25,15 +25,15 @@ export const TreasuryRedeemCard = () => {
       <Text fontSize={'2xl'} fontWeight="bold" mx={'auto'} mt={8}>
         Redeem CNV
       </Text>
-      <Text color="text.low" textAlign={'center'} px={10} fontWeight="bold" mb={4}>
-        Redeem your tokens for CNV below{' '}
+      <Text color="text.low" textAlign={'center'} px={10} fontWeight="bold">
+        Redeem your tokens for CNV below
       </Text>
       <Flex direction={{ sm: 'column', md: 'row', lg: 'column' }}>
         <VestedTokenButton title="aCNV" VestedTokenDialog={ACNVRedemptionDialog} />
         <VestedTokenButton title="pCNV" VestedTokenDialog={PCNVRedemptionDialog} />
         <VestedTokenButton title="bbtCNV" VestedTokenDialog={BBBTCNVRedemptionDialog} />
       </Flex>
-      <Text
+      <Button
         onClick={addingToWallet}
         textColor={'text.low'}
         fontWeight={'bold'}
@@ -41,22 +41,24 @@ export const TreasuryRedeemCard = () => {
         mx={'auto'}
         my="auto"
         fontSize={{ base: '22px', lg: '18px' }}
+        variant="primary.outline"
+        p={2}
       >
         Add CNV to your {data?.connector?.name || 'wallet'}
-      </Text>
+      </Button>
     </Card>
   )
 }
 
-export type VestedTokenDialodProps = { onClose: VoidFunction; isOpen: boolean }
+export type VestedTokenDialogProps = { onClose: VoidFunction; isOpen: boolean }
 
-type VestedTokenButton = { title: string; VestedTokenDialog: FC<VestedTokenDialodProps> }
+type VestedTokenButton = { title: string; VestedTokenDialog: FC<VestedTokenDialogProps> }
 const VestedTokenButton: React.FC<VestedTokenButton> = ({ title, VestedTokenDialog }) => {
   const { isOpen, onClose, onOpen } = useDisclosure()
   return (
     <>
       <Button
-        mb={3}
+        mt={3}
         mx={'auto'}
         w={{ sm: '180px', md: '150px', lg: '180px' }}
         h="38px"

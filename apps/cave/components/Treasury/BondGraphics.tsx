@@ -2,7 +2,7 @@ import { Flex, Text, useBreakpoint, useBreakpointValue } from '@chakra-ui/react'
 import { Card } from '@concave/ui'
 
 type BondGraphicCardProps = { src: string }
-export const BondGraphicCard = ({ src }: BondGraphicCardProps) => {
+const BondGraphicCard = ({ src }: BondGraphicCardProps) => {
   return (
     <Card
       fontWeight={'bold'}
