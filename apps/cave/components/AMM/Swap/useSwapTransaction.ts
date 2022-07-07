@@ -52,7 +52,7 @@ export const useSwapTransaction = (
       })
     },
     onError: (error) => {
-      if (error.name === 'UserRejectedRequest') reset()
+      if (error.name === 'UserRejectedRequestError') reset()
     },
   })
 

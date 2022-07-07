@@ -96,7 +96,7 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
     trade,
     recipient,
     settings,
-    onSwapClick: settings.expertMode ? swapTx.write : confirmationModal.onOpen,
+    onSwapClick: settings.expertMode ? () => swapTx.write() : confirmationModal.onOpen,
   })
 
   /*
