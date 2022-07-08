@@ -2,7 +2,7 @@ import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/p
 import { STAKING_CONTRACT } from '@concave/core'
 import { BaseProvider } from '@ethersproject/providers'
 import { BigNumber, BigNumberish, Contract, ethers } from 'ethers'
-import { Position, StakePool, StakingReward } from 'src/entities'
+import { PoolState, Position, StakingReward } from 'src/entities'
 import { StakingV1Abi } from './StakingV1Abi'
 
 export class StakingV1Contract {
@@ -33,8 +33,8 @@ export class StakingV1Contract {
     return this.contract.connect(signer).lock(address, amount, poolId)
   }
 
-  public async pools(poolId: number): Promise<StakePool> {
-    return this.contract.pools(poolId).then((p) => new StakePool({ poolId, ...p }))
+  public async pools(poolId: number): Promise<PoolState> {
+    return this.contract.pools(poolId).then((p) => new PoolState({ poolId, ...p }))
   }
 
   public async positions(tokenId: BigNumberish): Promise<Position> {

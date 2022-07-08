@@ -1,5 +1,5 @@
 import { CNV, Currency, CurrencyAmount, STAKING_CONTRACT } from '@concave/core'
-import { PoolRewards, StakingV1Contract } from '@concave/marketplace'
+import { StakingPool, StakingV1Contract } from '@concave/marketplace'
 import { Box, Button, Card, Flex, Text, useDisclosure } from '@concave/ui'
 import { TransactionResponse } from '@ethersproject/abstract-provider'
 import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
@@ -15,7 +15,7 @@ import { useState } from 'react'
 import { toAmount } from 'utils/toAmount'
 import { useAccount, useSigner } from 'wagmi'
 
-function StakeInput(props: { poolRewards: PoolRewards; poolId: number; onClose: () => void }) {
+function StakeInput(props: { stakingPool: StakingPool; poolId: number; onClose: () => void }) {
   const { address } = useAccount()
   const netWorkdId = useCurrentSupportedNetworkId()
   const { data: signer } = useSigner()
@@ -57,7 +57,7 @@ function StakeInput(props: { poolRewards: PoolRewards; poolId: number; onClose: 
         registerTransaction(x, {
           type: 'stake',
           amount: stakeInput.toString(),
-          pool: props.poolRewards.days,
+          days: props.stakingPool.days,
         })
         setTx(x)
         setWaitingForConfirm(false)
@@ -120,7 +120,7 @@ function StakeInput(props: { poolRewards: PoolRewards; poolId: number; onClose: 
           <Text fontWeight={'700'} textColor="text.accent">
             {stakeInput.wrapped.toExact() + ' CNV'}
           </Text>
-          <Text textColor={'text.low'}>For {props.poolRewards.days + ' days'}</Text>
+          <Text textColor={'text.low'}>For {props.stakingPool.days + ' days'}</Text>
         </Flex>
       </WaitingConfirmationDialog>
 

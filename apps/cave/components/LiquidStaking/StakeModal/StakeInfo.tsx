@@ -1,4 +1,4 @@
-import { PoolRewards } from '@concave/marketplace'
+import { StakingPool } from '@concave/marketplace'
 import { Flex, Stack, Text } from '@concave/ui'
 import React from 'react'
 
@@ -10,24 +10,24 @@ function addDays(date, days) {
 
 type StakeInfoProps = {
   poolId: number
-  poolRewards: PoolRewards
+  stakingPool: StakingPool
   currentlyStaked: string
   stakingCap: string
   percent: number
 }
-function StakeInfo({ currentlyStaked, poolId, poolRewards, stakingCap, percent }: StakeInfoProps) {
+function StakeInfo({ currentlyStaked, poolId, stakingPool, stakingCap, percent }: StakeInfoProps) {
   return (
     <Flex w={{ base: '300px', md: '350px' }} rounded="3xl" shadow={'up'} p={4} direction="column">
       <Flex justify={'space-between'} w="full">
-        <HeaderInfo title={poolRewards.rewardsBoost} info="Rewards boost" />
-        <HeaderInfo title={poolRewards.bondRevenue} info="Share of bond growth" />
+        <HeaderInfo title={stakingPool.rewardsBoost} info="Rewards boost" />
+        <HeaderInfo title={stakingPool.bondRevenue} info="Share of bond growth" />
       </Flex>
-      <Paragraph poolId={poolId} staking={poolRewards} />
+      <Paragraph poolId={poolId} staking={stakingPool} />
       <Flex mt={{ base: 3, md: 5 }} align="center" gap={1} fontWeight="semibold">
         <Text color="text.low" fontSize="md">
           Redeem date:
         </Text>
-        <Text fontSize="md">{addDays(Date(), poolRewards.days).toISOString().slice(0, 10)}</Text>
+        <Text fontSize="md">{addDays(Date(), stakingPool.days).toISOString().slice(0, 10)}</Text>
       </Flex>
       <LoadBar currentlyStaked={currentlyStaked} percent={percent} stakingCap={stakingCap} />
     </Flex>
@@ -36,7 +36,7 @@ function StakeInfo({ currentlyStaked, poolId, poolRewards, stakingCap, percent }
 
 export default StakeInfo
 
-type ParagraphProps = { poolId: number; staking: PoolRewards }
+type ParagraphProps = { poolId: number; staking: StakingPool }
 const Paragraph = ({ poolId, staking }: ParagraphProps) => (
   <Text
     mt={{ base: 3, md: 6 }}

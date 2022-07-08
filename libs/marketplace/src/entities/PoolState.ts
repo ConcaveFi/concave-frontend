@@ -1,6 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber'
 
-type StakePoolConstructorArgs = {
+type PoolStateConstructorArgs = {
   readonly balance: BigNumber
   readonly excessRatio: BigNumber
   readonly g: BigNumber
@@ -10,8 +10,8 @@ type StakePoolConstructorArgs = {
   readonly poolId: number
 }
 
-export class StakePool {
-  constructor(value: StakePoolConstructorArgs) {
+export class PoolState {
+  constructor(value: PoolStateConstructorArgs) {
     this.balance = value.balance
     this.excessRatio = value.excessRatio
     this.g = value.g
@@ -19,17 +19,7 @@ export class StakePool {
     this.supply = value.supply
     this.term = value.term
     this.poolId = value.poolId
-
-    const stakeInfo = stakingPools[value.poolId]
-    this.days = stakeInfo.days
-    this.bondRevenue = stakeInfo.bondRevenue
-    this.rewardsBoost = stakeInfo.rewardsBoost
-    this.quaterlyBoost = stakeInfo.quaterlyBoost
   }
-  readonly days: 360 | 180 | 90 | 45
-  readonly bondRevenue: '100%' | '75%' | '50%' | '25%'
-  readonly rewardsBoost: '4x' | '2x' | '1.5x' | '1.25x'
-  readonly quaterlyBoost: '2x' | '1.75x' | '1.5x' | '1.25x'
   readonly poolId: number
   readonly balance: BigNumber
   readonly excessRatio: BigNumber
@@ -40,17 +30,16 @@ export class StakePool {
 }
 
 export const stakingPools = [
-  { days: 360, bondRevenue: '100%', rewardsBoost: '4x', quaterlyBoost: '2x' },
-  { days: 180, bondRevenue: '75%', rewardsBoost: '2x', quaterlyBoost: '1.75x' },
-  { days: 90, bondRevenue: '50%', rewardsBoost: '1.5x', quaterlyBoost: '1.5x' },
-  { days: 45, bondRevenue: '25%', rewardsBoost: '1.25x', quaterlyBoost: '1.25x' },
+  { poolId: 0, days: 360, bondRevenue: '100%', rewardsBoost: '4x', quaterlyBoost: '2x' },
+  { poolId: 1, days: 180, bondRevenue: '75%', rewardsBoost: '2x', quaterlyBoost: '1.75x' },
+  { poolId: 2, days: 90, bondRevenue: '50%', rewardsBoost: '1.5x', quaterlyBoost: '1.5x' },
+  { poolId: 3, days: 45, bondRevenue: '25%', rewardsBoost: '1.25x', quaterlyBoost: '1.25x' },
 ] as const
 
-export type PoolRewards = {
+export type StakingPool = {
+  readonly poolId: 0 | 1 | 2 | 3
   readonly days: 360 | 180 | 90 | 45
   readonly bondRevenue: '100%' | '75%' | '50%' | '25%'
   readonly rewardsBoost: '4x' | '2x' | '1.5x' | '1.25x'
   readonly quaterlyBoost: '2x' | '1.75x' | '1.5x' | '1.25x'
 }
-
-// export type StakingType = typeof stakingPools;

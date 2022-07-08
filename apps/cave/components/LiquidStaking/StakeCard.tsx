@@ -1,5 +1,5 @@
 import { Box, Button, Flex, Image, Stack, Text, TextProps, useDisclosure } from '@chakra-ui/react'
-import { PoolRewards } from '@concave/marketplace'
+import { StakingPool } from '@concave/marketplace'
 import { Card } from '@concave/ui'
 import { utils } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
@@ -30,7 +30,7 @@ export const StakeCard = (props: StakeCardProps) => {
         fontWeight={'bold'}
         align="center"
       >
-        <ImageContainer poolRewards={props.stakeData} totalVAPR={totalVAPR?.toFixed(2) + '%'} />
+        <ImageContainer stakingPool={props.stakeData} totalVAPR={totalVAPR?.toFixed(2) + '%'} />
         <LoadBard
           percent={percent}
           loading={isLoading}
@@ -65,13 +65,13 @@ export const StakeCard = (props: StakeCardProps) => {
   )
 }
 
-type ImageContainerProps = { poolRewards: PoolRewards; totalVAPR: string }
-const ImageContainer: React.FC<ImageContainerProps> = ({ poolRewards, totalVAPR }) => (
+type ImageContainerProps = { stakingPool: StakingPool; totalVAPR: string }
+const ImageContainer: React.FC<ImageContainerProps> = ({ stakingPool, totalVAPR }) => (
   <Box py={5} h={{ base: '290px', md: '333px' }} shadow="down" borderRadius="100px/90px">
-    <Info title="Stake pool" label={poolRewards.days + ' days'} textAlign="center" />
+    <Info title="Stake pool" label={stakingPool.days + ' days'} textAlign="center" />
     <Image
       userSelect={'none'}
-      src={`/assets/liquidstaking/${poolRewards.days}d-logo.svg`}
+      src={`/assets/liquidstaking/${stakingPool.days}d-logo.svg`}
       alt="stake period logo"
     />
     <Info title="Total vAPR" label={totalVAPR} textAlign="center" />
