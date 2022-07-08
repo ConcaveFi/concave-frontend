@@ -20,6 +20,7 @@ import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { RemoveLiquidityState, useRemoveLiquidity } from 'hooks/useRemoveLiquidity'
 import { useState } from 'react'
+import { TransactionResponse } from '@ethersproject/abstract-provider'
 
 export const RemoveLiquidityModalButton = ({
   liquidityInfo,
