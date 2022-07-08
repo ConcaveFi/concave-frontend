@@ -5,7 +5,6 @@ import { InitialCNVFilter } from 'components/NftFilters/Filters/InitialCNVFilter
 import { StakePoolFilterCard } from 'components/NftFilters/Filters/StakePoolFilter'
 import { NftSort } from 'components/NftFilters/Sorters/hooks/useNftSort'
 import { SortCard } from 'components/NftFilters/Sorters/SortCard'
-import { useState } from 'react'
 
 interface FilterContainerProps {
   onEnableStakeFilter: (filter: StakePoolFilterEnum) => void

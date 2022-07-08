@@ -1,5 +1,5 @@
 import { ChainId } from '@concave/core'
-import { Text, Button, Modal, Image } from '@concave/ui'
+import { Button, Image, Modal, Text } from '@concave/ui'
 import dynamic from 'next/dynamic'
 import { useNetwork, useSwitchNetwork } from 'wagmi'
 

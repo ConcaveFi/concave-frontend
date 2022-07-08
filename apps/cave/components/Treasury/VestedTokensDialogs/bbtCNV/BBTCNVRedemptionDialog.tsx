@@ -1,14 +1,6 @@
 import { InfoIcon } from '@concave/icons'
-import {
-  Button,
-  Card,
-  Flex,
-  InputLeftAddon,
-  Modal,
-  Text,
-  Tooltip,
-  useDisclosure,
-} from '@concave/ui'
+import { Button, Card, Flex, Modal, Text, Tooltip, useDisclosure } from '@concave/ui'
+import { TransactionResponse } from '@ethersproject/abstract-provider'
 import { ToggleButton } from 'components/ToggleButton'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
@@ -16,13 +8,12 @@ import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { bbtCNV_REDEMPTION_V2 } from 'contracts/VestedTokens/addresses'
 import { bbtCNV_REDEMPTION_V2_ABI } from 'contracts/VestedTokens/BBTCNV_V2_ABI'
 import { Contract, utils } from 'ethers'
-import { TransactionResponse } from '@ethersproject/abstract-provider'
-import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { parseEther } from 'ethers/lib/utils'
+import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider as provider } from 'lib/providers'
 import { useState } from 'react'
-import { useAccount, useBalance, useConnect, useSigner } from 'wagmi'
+import { useAccount, useSigner } from 'wagmi'
 
 import useBBTCNVRedeemable from '../../Hooks/useBBTCNVRedeemable'
 import useVestedTokens from '../../Hooks/useVestedTokens'

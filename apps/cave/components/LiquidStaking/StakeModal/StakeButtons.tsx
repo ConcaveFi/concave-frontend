@@ -1,5 +1,4 @@
-import { Box, Button, SimpleGrid, Text } from '@concave/ui'
-import React from 'react'
+import { Box, Button } from '@concave/ui'
 
 // function addDays(date, days) {
 //   var result = new Date(date)

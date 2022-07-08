@@ -1,13 +1,13 @@
 import { Currency } from '@concave/core'
 import { Box, Card, Flex, SlideFade } from '@concave/ui'
 import { STABLES } from 'components/AMM/constants/routing'
+import { motion } from 'framer-motion'
+import { ChartInterval, chartIntervals } from 'lib/token.service'
 import dynamic from 'next/dynamic'
+import { useState } from 'react'
 import { CandleStickTimeOptions } from './CandleStickTimeOptions'
 import { CandleStickTokenOptions } from './CandleStickTokenOptions'
 import { useCandleStickChart } from './useCandleStickChart'
-import { motion } from 'framer-motion'
-import { useState } from 'react'
-import { chartIntervals, ChartInterval } from 'lib/token.service'
 
 const CandleStickChart = dynamic(() => import('./CandleStickChart'), {
   loading: () => <p>Loading ...</p>,

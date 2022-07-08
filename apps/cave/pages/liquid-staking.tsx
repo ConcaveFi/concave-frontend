@@ -1,7 +1,7 @@
 import { Flex, Heading, Text } from '@concave/ui'
-import StakeCard from 'components/LiquidStaking/StakeCard'
 import GraphicGuide from 'components/LiquidStaking/GraphicGuide'
 import LiquidLocksCards from 'components/LiquidStaking/LiquidLocksCards'
+import StakeCard from 'components/LiquidStaking/StakeCard'
 import { withPageTransition } from 'components/PageTransition'
 
 interface StakingGroupProps {

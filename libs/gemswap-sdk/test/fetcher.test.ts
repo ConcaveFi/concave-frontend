@@ -1,4 +1,4 @@
-import { DAI, CNV, Token, ChainId } from '@concave/core'
+import { ChainId, CNV, DAI, Token } from '@concave/core'
 import { Fetcher } from '../src'
 
 describe('Fetcher', () => {

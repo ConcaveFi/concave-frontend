@@ -1,7 +1,6 @@
 import { Currency } from '@concave/core'
 import { HStack, Text } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
-import React from 'react'
 
 export const CandleStickTokenOptions = ({ from, to }: { from: Currency; to: Currency }) => {
   return (

@@ -1,6 +1,6 @@
+import { CurrencyAmount, Ether, Percent, Token, WETH9 } from '@concave/core'
 import JSBI from 'jsbi'
 import invariant from 'tiny-invariant'
-import { CurrencyAmount, Ether, Percent, Token, WETH9 } from '@concave/core'
 
 import { Pair, Route, Trade } from '../src/entities'
 import { Router } from '../src/router'

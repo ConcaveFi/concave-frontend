@@ -1,11 +1,10 @@
 import JSBI from 'jsbi'
 
 // Export JSBI
-export { JSBI }
-
+export * from './abis'
 export * from './constants'
 export * from './entities'
-export * from './functions'
 export * from './enums'
+export * from './functions'
 export * from './types'
-export * from './abis'
+export { JSBI }

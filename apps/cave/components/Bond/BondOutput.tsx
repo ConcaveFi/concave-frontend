@@ -1,7 +1,6 @@
 import { Currency } from '@concave/core'
 import { FlexProps, HStack, NumericInput, Stack, useMultiStyleConfig } from '@concave/ui'
 import { SelectCurrencyButton } from 'components/CurrencySelector/SelectCurrencyButton'
-import React from 'react'
 
 export function BondOutput({
   currency,

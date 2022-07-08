@@ -1,11 +1,11 @@
 import { CNV } from '@concave/core'
 import { Button, Flex, Text, useDisclosure } from '@concave/ui'
-import useAddTokenToWallet, { injectedTokenResponse } from 'hooks/useAddTokenToWallet'
-import { GlassPanel } from './TreasuryManagementCard'
-import { useState } from 'react'
 import { ComingSoonDialog } from 'components/ComingSoonDialog'
-import BBBTCNVRedemptionDialog from './VestedTokensDialogs/bbtCNV/BBTCNVRedemptionDialog'
+import useAddTokenToWallet, { injectedTokenResponse } from 'hooks/useAddTokenToWallet'
+import { useState } from 'react'
+import { GlassPanel } from './TreasuryManagementCard'
 import ACNVRedemptionDialog from './VestedTokensDialogs/ACNVRedemptionDialog'
+import BBBTCNVRedemptionDialog from './VestedTokensDialogs/bbtCNV/BBTCNVRedemptionDialog'
 // aCNV address
 // 0x2a6bb78490c2221e0d36d931192296be4b3a01f1 RINKEBY
 // 0x6ff0106d34feee8a8acf2e7b9168480f86b82e2f eth

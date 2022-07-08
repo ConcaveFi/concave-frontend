@@ -1,6 +1,6 @@
-import { CloseButton, Flex, Text, Tooltip } from '@chakra-ui/react'
+import { Flex, Text, Tooltip } from '@chakra-ui/react'
 import { CloseIcon } from '@concave/icons'
-import { NftSort, NftSortMethod } from './hooks/useNftSort'
+import { NftSort } from './hooks/useNftSort'
 
 type SortOptionProps = {
   title: string
