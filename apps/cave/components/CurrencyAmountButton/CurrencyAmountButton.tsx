@@ -17,7 +17,7 @@ enum State {
 }
 
 export const useCurrencyButtonState = (amount: CurrencyAmount<Currency>, spender: string) => {
-  const { data: account } = useAccount()
+  const { address } = useAccount()
   const { connectModal } = useModals()
   const currency = amount.currency
   const symbol = currency.symbol
@@ -40,7 +40,7 @@ export const useCurrencyButtonState = (amount: CurrencyAmount<Currency>, spender
   } as const
 
   const stateKey: State = (() => {
-    if (!account?.address) return State.disconected
+    if (!address) return State.disconected
     if (balance.data?.lessThan(amount)) return State.insufficient
     if (currency.isNative) return State.successful
     if (approve.isError && approve.error['code'] !== 4001) return State.error
@@ -48,7 +48,7 @@ export const useCurrencyButtonState = (amount: CurrencyAmount<Currency>, spender
     if (allowance?.greaterThan(amount)) return State.successful
     if (approve.isWaitingForConfirmation) return State.waitingWallet
     if (approve.isWaitingTransactionReceipt) return State.pending
-    if (approve.isFeching) return State.feching
+    if (approve.isFetching) return State.feching
     if (allowance?.lessThan(amount)) return State.default
     if (amount.equalTo(0)) return State.successful
   })()
