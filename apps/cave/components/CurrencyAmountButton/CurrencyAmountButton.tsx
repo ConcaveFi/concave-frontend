@@ -5,17 +5,6 @@ import { useApprove } from 'hooks/useApprove'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useAccount } from 'wagmi'
 
-export enum CurrencyButtonState {
-  default,
-  feching,
-  pending,
-  waitingWallet,
-  successful,
-  insufficient,
-  disconected,
-  error,
-}
-
 export const useCurrencyButtonState = (amount: CurrencyAmount<Currency>, spender: string) => {
   const { address } = useAccount()
   const { connectModal } = useModals()
@@ -23,55 +12,40 @@ export const useCurrencyButtonState = (amount: CurrencyAmount<Currency>, spender
   const symbol = currency.symbol
   const totalSupply = currency.wrapped.totalSupply
   const balance = useCurrencyBalance(currency, { watch: true })
-  const {
-    allowance: { amount: allowance },
-    ...approve
-  } = useApprove(currency.wrapped, spender)
+  const { allowance, ...approve } = useApprove(currency.wrapped, spender)
 
-  const states: { [states in CurrencyButtonState]: ButtonProps } = {
-    [CurrencyButtonState.disconected]: { children: 'Connect wallet', onClick: connectModal.onOpen },
-    [CurrencyButtonState.pending]: {
-      disabled: true,
-      isLoading: true,
-      loadingText: 'Approval pending',
-    },
-    [CurrencyButtonState.error]: { disabled: true, children: 'Error occurred' },
-    [CurrencyButtonState.default]: {
-      children: `Approve ${symbol}`,
-      onClick: () => approve.sendApproveTx(),
-    },
-    [CurrencyButtonState.feching]: {
-      disabled: true,
-      isLoading: true,
-      loadingText: `Loading ${symbol} info`,
-    },
-    [CurrencyButtonState.insufficient]: { disabled: true, children: `Insufficient ${symbol}` },
-    [CurrencyButtonState.waitingWallet]: {
-      disabled: true,
-      isLoading: true,
-      loadingText: 'Approve in wallet',
-    },
-    [CurrencyButtonState.successful]: { disabled: true, children: 'Approved' },
+  const disabled = true
+  const isLoading = true
+  const props = {
+    disconected: { children: 'Connect wallet', onClick: connectModal.onOpen },
+    pending: { disabled, isLoading, loadingText: 'Approval pending' },
+    error: { disabled, children: 'Error occurred' },
+    default: { children: `Approve ${symbol}`, onClick: () => approve.sendApproveTx() },
+    feching: { disabled, isLoading, loadingText: `Loading ${symbol} info` },
+    insufficient: { disabled, children: `Insufficient ${symbol}` },
+    waitingWallet: { disabled, isLoading, loadingText: 'Approve in wallet' },
+    successful: { disabled, children: 'Approved' },
   } as const
 
-  const stateKey: CurrencyButtonState = (() => {
-    if (!address) return CurrencyButtonState.disconected
-    if (balance.data?.lessThan(amount)) return CurrencyButtonState.insufficient
-    if (currency.isNative) return CurrencyButtonState.successful
-    if (approve.isError && approve.error['code'] !== 4001) return CurrencyButtonState.error
-    if (totalSupply.greaterThan(0) && allowance?.greaterThan(totalSupply))
-      return CurrencyButtonState.successful
-    if (allowance?.greaterThan(amount)) return CurrencyButtonState.successful
-    if (approve.isWaitingForConfirmation) return CurrencyButtonState.waitingWallet
-    if (approve.isWaitingTransactionReceipt) return CurrencyButtonState.pending
-    if (approve.isFetching) return CurrencyButtonState.feching
-    if (allowance?.lessThan(amount)) return CurrencyButtonState.default
-    if (amount.equalTo(0)) return CurrencyButtonState.successful
+  const state: keyof typeof props = (() => {
+    if (!address) return 'disconected'
+    if (balance.data?.lessThan(amount)) return 'insufficient'
+    if (currency.isNative) return 'successful'
+    if (approve.isError && approve.error['code'] !== 4001) return 'error'
+    if (totalSupply.greaterThan(0) && allowance?.amount.greaterThan(totalSupply))
+      return 'successful'
+    if (allowance?.amount?.greaterThan(amount)) return 'successful'
+    if (approve.isWaitingForConfirmation) return 'waitingWallet'
+    if (approve.isWaitingTransactionReceipt) return 'pending'
+    if (approve.isFetching) return 'feching'
+    if (allowance?.amount?.lessThan(amount)) return 'default'
+    if (amount.equalTo(0)) return 'successful'
   })()
+
   return {
-    approved: stateKey === CurrencyButtonState.successful,
-    stateKey,
-    state: states[stateKey],
+    approved: state === 'successful',
+    state,
+    buttonProps: props[state],
   }
 }
 
@@ -113,5 +87,5 @@ export const CurrencyAmountButton = ({
     return <></>
   }
 
-  return <Button {...buttonProps} {...currencyButtonState.state}></Button>
+  return <Button {...buttonProps} {...currencyButtonState.buttonProps}></Button>
 }

@@ -1,7 +1,3 @@
-import { ROUTER_ADDRESS } from '@concave/core'
-import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
-import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { useState } from 'react'
 import { LiquidityPool } from './AddLiquidity'
 
 /**

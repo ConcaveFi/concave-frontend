@@ -88,11 +88,11 @@ const SupplyLiquidityContent = ({
       </Box>
 
       {!approve0.approved && (
-        <Button size="large" w="full" variant={'primary'} {...approve0.state} />
+        <Button size="large" w="full" variant={'primary'} {...approve0.buttonProps} />
       )}
 
       {!approve1.approved && (
-        <Button size="large" w="full" variant={'primary'} {...approve1.state} />
+        <Button size="large" w="full" variant={'primary'} {...approve1.buttonProps} />
       )}
 
       {approve0.approved && approve1.approved && (
