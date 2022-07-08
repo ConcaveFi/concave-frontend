@@ -51,8 +51,14 @@ function AddLiquidityContent({
   const { onChangeCurrencies, isNetworkMismatch, queryHasCurrency, currentChainId, queryChainId } =
     useQueryCurrencies()
 
-  const { pair, firstFieldAmount, secondFieldAmount, onChangeFirstField, onChangeSecondField } =
-    useAddLiquidityState(currencies, onChangeCurrencies)
+  const {
+    pair,
+    firstFieldAmount,
+    secondFieldAmount,
+    onChangeFirstField,
+    onChangeSecondField,
+    setExactAmountInLiquidityState,
+  } = useAddLiquidityState(currencies, onChangeCurrencies)
 
   const addLPTx = useAddLiquidityTransaction(firstFieldAmount, secondFieldAmount)
   console.log(
@@ -172,8 +178,14 @@ function AddLiquidityContent({
       <TransactionSubmittedDialog
         tx={addLPTx.data}
         isOpen={addLPTx.isTransactionSent}
-        closeParentComponent={liquidityModalClose || supplyLiquidityDisclosure.onClose}
-        reset={reset}
+        closeParentComponent={() => {
+          setExactAmountInLiquidityState(firstFieldAmount.multiply(0))
+          if (liquidityModalClose) {
+            liquidityModalClose()
+          } else {
+            supplyLiquidityDisclosure.onClose()
+          }
+        }}
       />
       <TransactionErrorDialog error={addLPTx.error?.message} isOpen={addLPTx.isError} />
     </>

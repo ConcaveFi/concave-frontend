@@ -65,5 +65,6 @@ export const useAddLiquidityState = (
     pair: pair,
     onChangeFirstField: onChangeField('first'),
     onChangeSecondField: onChangeField('second'),
+    setExactAmountInLiquidityState: setExactAmount,
   }
 }
