@@ -11,7 +11,6 @@ import type { AppProps } from 'next/app'
 import Router, { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import * as gtag from '../lib/analytics'
-import { TransactionsObserver } from 'hooks/TransactionsRegistry'
 
 const globalStyles: Styles = {
   global: {
