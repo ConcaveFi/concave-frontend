@@ -40,11 +40,11 @@ export const TreasuryRedeemCard = () => {
         cursor="pointer"
         mx={'auto'}
         my="auto"
-        fontSize={{ base: '22px', lg: '18px' }}
+        fontSize={{ base: '22px', lg: 'md' }}
         variant="primary.outline"
         p={2}
       >
-        Add CNV to your {data?.connector?.name || 'wallet'}
+        Add CNV to {data?.connector?.name || 'wallet'}
       </Button>
     </Card>
   )
