@@ -1,12 +1,4 @@
-import {
-  Currency,
-  CurrencyAmount,
-  MaxUint256,
-  NATIVE,
-  ROUTER_ADDRESS,
-  Token,
-  Percent,
-} from '@concave/core'
+import { Currency, CurrencyAmount, NATIVE, ROUTER_ADDRESS, Token, Percent } from '@concave/core'
 import { Pair } from '@concave/gemswap-sdk'
 import {
   Box,
@@ -19,7 +11,7 @@ import {
   Text,
   useDisclosure,
 } from '@concave/ui'
-import { ApproveButton } from 'components/ApproveButton/ApproveButton'
+import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { PositionInfoItem } from 'components/Positions/MyPositions'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
@@ -180,7 +172,6 @@ const RemoveLiquidityActions = ({
   closeParentComponent: VoidFunction
 }) => {
   const networkId = useCurrentSupportedNetworkId()
-  const [currencyApproved, setCurrencyApproved] = useState(false)
 
   const {
     isOpen: isOpenSubmitted,
@@ -207,28 +198,28 @@ const RemoveLiquidityActions = ({
       onOpenError()
     }
   }
+  const currencyAmount = CurrencyAmount.fromRawAmount(
+    removeLiquidityState.pair.liquidityToken,
+    removeLiquidityState.amountToRemove.toString(),
+  )
+  const useCurrencyState = useCurrencyButtonState(currencyAmount, ROUTER_ADDRESS[networkId])
 
   return (
     <Flex gap={4} h={45} justifyContent={'center'}>
-      <ApproveButton
-        approveArgs={{
-          currency: removeLiquidityState.pair.liquidityToken,
-          amount: MaxUint256.toString(),
-          spender: ROUTER_ADDRESS[networkId],
-          onSuccess: () => setCurrencyApproved(true),
-        }}
+      <Button
         disabled={!removeLiquidityState.percentToRemove}
+        {...useCurrencyState.state}
         w={250}
         variant={'primary'}
       />
 
       <Button
-        disabled={!currencyApproved || !removeLiquidityState.percentToRemove}
+        disabled={!useCurrencyState.approved || !removeLiquidityState.percentToRemove}
         w={250}
         variant={'primary'}
         onClick={confirmedWithdrawal}
       >
-        Confirm Withdrawal
+        Confirm withdrawal
       </Button>
 
       <WaitingConfirmationDialog isOpen={waitingForConfirm} title={'Confirm Liquidity Removal'}>
