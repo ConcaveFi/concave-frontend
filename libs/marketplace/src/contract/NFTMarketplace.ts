@@ -3,7 +3,8 @@ import { MARKETPLACE_CONTRACT } from '@concave/core'
 import { BaseProvider } from '@ethersproject/providers'
 import { BigNumber, BigNumberish, ethers, Signer, Transaction } from 'ethers'
 import { NFT } from 'src/entities'
-import { MarketItemInfo, Offer } from './../entities'
+import { Offer } from 'src/entities/Offer'
+import { MarketItemInfo } from './../entities'
 import { ContractABI } from './NFTMarketplaceAbi'
 
 export class ConcaveNFTMarketplace {
