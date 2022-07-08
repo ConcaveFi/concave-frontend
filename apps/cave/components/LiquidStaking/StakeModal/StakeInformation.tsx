@@ -5,16 +5,19 @@ type StakeInformationProps = {
   baseEmissions: number
   onShow: VoidFunction
   onDisable: VoidFunction
+  type: 'hover' | 'click'
 }
 export const StakeInformation = ({
   baseEmissions,
   bondingEmissions,
+  type,
   onShow,
   onDisable,
 }: StakeInformationProps) => {
-  const mobileUI = useBreakpointValue({ base: true, xl: false })
   const bondEmissionsFormatted = bondingEmissions?.toFixed(2) + '%'
   const baseEmissionsFormatted = baseEmissions?.toFixed(2) + '%'
+  const hasToClick = type === 'click'
+  const hasToHover = type === 'hover'
   return (
     <Box
       borderTopRadius="xl"
@@ -37,9 +40,9 @@ export const StakeInformation = ({
           mx="auto"
           src={`/assets/liquidstaking/modal-moreinfo-logo.svg`}
           alt="arrow down logo"
-          onMouseOver={() => !mobileUI && onShow()}
-          onMouseLeave={() => !mobileUI && onDisable()}
-          onClick={() => mobileUI && onShow()}
+          onMouseOver={() => hasToHover && onShow()}
+          onMouseLeave={() => hasToHover && onDisable()}
+          onClick={() => hasToClick && onShow()}
         />
       </Flex>
     </Box>

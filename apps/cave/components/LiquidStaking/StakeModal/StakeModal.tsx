@@ -28,8 +28,8 @@ export const StakeModal = ({ isOpen, onClose, stakeData, stakeValues }: StakeMod
     onOpen: onOpenDescriptions,
     onClose: onCloseDescription,
   } = useDisclosure()
-  const type = useBreakpointValue<'modal' | 'card'>({ base: 'modal', xl: 'card' })
-
+  const descriptionType = useBreakpointValue<'modal' | 'card'>({ base: 'modal', xl: 'card' })
+  const informationType = { modal: 'click', card: 'hover' } as const
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="4xl" isCentered>
       <ModalOverlay backdropFilter={'blur(15px)'} />
@@ -47,12 +47,13 @@ export const StakeModal = ({ isOpen, onClose, stakeData, stakeValues }: StakeMod
           <FloatingDescriptions
             onClose={onCloseDescription}
             isOpen={isDescritionsOpen}
-            type={type}
+            type={descriptionType}
           />
           <Emissions
             onCloseDescription={onCloseDescription}
             onOpenDescription={onOpenDescriptions}
             poolId={poolId}
+            stakeInformationType={informationType[descriptionType]}
             {...stakeData}
           />
           <VStack gap={4} w="full" justify={'center'} align="center">

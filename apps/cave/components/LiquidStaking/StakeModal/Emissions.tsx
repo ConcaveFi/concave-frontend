@@ -5,9 +5,15 @@ import { StakeInformation } from './StakeInformation'
 type EmissionsProps = {
   onOpenDescription: VoidFunction
   onCloseDescription: VoidFunction
+  stakeInformationType: 'hover' | 'click'
 } & StakeData
 
-function Emissions({ onCloseDescription, onOpenDescription, ...stakeData }: EmissionsProps) {
+function Emissions({
+  onCloseDescription,
+  onOpenDescription,
+  stakeInformationType,
+  ...stakeData
+}: EmissionsProps) {
   const mobileUI = useBreakpointValue({ base: true, md: false })
   return (
     <Flex direction={{ base: 'row', md: 'column' }}>
@@ -45,6 +51,7 @@ function Emissions({ onCloseDescription, onOpenDescription, ...stakeData }: Emis
         />
         {!mobileUI && (
           <StakeInformation
+            type={stakeInformationType}
             onDisable={onCloseDescription}
             onShow={onOpenDescription}
             bondingEmissions={stakeData.bondEmissions}
@@ -63,6 +70,7 @@ function Emissions({ onCloseDescription, onOpenDescription, ...stakeData }: Emis
       />
       {mobileUI && (
         <StakeInformation
+          type={stakeInformationType}
           onDisable={onCloseDescription}
           onShow={onOpenDescription}
           bondingEmissions={stakeData.bondEmissions}
