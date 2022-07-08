@@ -7,7 +7,7 @@ import { SupplyLiquidityModal } from 'components/AMM/AddLiquidity/SupplyLiquidit
 import { useAddLiquidityButtonProps } from 'components/AMM/AddLiquidity/useAddLiquidityButtonProps'
 import { useAddLiquidityState } from 'components/AMM/AddLiquidity/useAddLiquidityState'
 import { useAddLiquidityTransaction } from 'components/AMM/AddLiquidity/useAddLiquidityTransaction'
-import { ConnectWallet } from 'components/ConnectWallet'
+import { ConnectButton } from 'components/ConnectWallet'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
@@ -178,7 +178,7 @@ export const AddLiquidityModalButton = ({
   const { isDisconnected } = useAccount()
   const addLiquidityDisclosure = useDisclosure()
   const currencies = useMemo(() => [pair?.token0, pair?.token1], [pair?.token0, pair?.token1])
-  if (isDisconnected) return <ConnectWallet />
+  if (isDisconnected) return <ConnectButton />
   return (
     <>
       <Button

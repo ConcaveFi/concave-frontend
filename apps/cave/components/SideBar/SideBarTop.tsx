@@ -2,10 +2,9 @@ import { CNV } from '@concave/core'
 import { Box, Flex, Image, Stack, Text } from '@concave/ui'
 import { DashboardIcon } from '@concave/icons'
 import { ButtonLink } from 'components/ButtonLink'
-import { ConnectButton, UserWallet } from 'components/UserWallet/ConnectWallet'
+import { ConnectButton, UserWallet } from 'components/ConnectWallet'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useAccount, useBalance } from 'wagmi'
-import { onCloseSidebar } from './SideBar'
 
 const UserCnvBalance = () => {
   const { address } = useAccount()
@@ -48,7 +47,6 @@ function SideBarTop() {
 
       <Stack gap="1" align="flex-end" mt={7}>
         <ButtonLink
-          onClick={onCloseSidebar} // the click will close the sidebar
           href="/treasury" // and redirect to the treasury page
           variant="primary.outline"
           size="medium"
@@ -59,14 +57,7 @@ function SideBarTop() {
           Treasury
         </ButtonLink>
         <Box shadow="down" w="full" p={1} rounded="2xl">
-          {isConnected ? (
-            <UserWallet />
-          ) : (
-            // non intrusive way of closing the sidebar, the click will bubble up from the connect button
-            <Box onClick={onCloseSidebar}>
-              <ConnectButton />
-            </Box>
-          )}
+          {isConnected ? <UserWallet /> : <ConnectButton />}
           <UserCnvBalance />
         </Box>
       </Stack>

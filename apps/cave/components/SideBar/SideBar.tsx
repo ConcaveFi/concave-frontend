@@ -13,14 +13,20 @@ import {
   useDisclosure,
 } from '@concave/ui'
 import { motion } from 'framer-motion'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 import PageNav from './PageNav'
 import SideBarBottom from './SideBarBottom'
 import SideBarTop from './SideBarTop'
 
-export let onCloseSidebar = () => void null
 export function SideBar() {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  onCloseSidebar = onClose
+
+  // close on route change
+  const router = useRouter()
+  useEffect(() => {
+    onClose()
+  }, [router.asPath, onClose])
 
   return (
     <>
