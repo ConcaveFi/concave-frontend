@@ -64,6 +64,7 @@ type TransactionSubmittedDialogProps = {
   title?: string
   subtitle?: string
   tx: Transaction
+
   isOpen: boolean
   closeParentComponent?: VoidFunction
   tokenSymbol?: string
