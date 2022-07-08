@@ -1,10 +1,8 @@
 import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/providers'
-import { MARKETPLACE_CONTRACT } from '@concave/core'
+import { Currency, CurrencyAmount, MARKETPLACE_CONTRACT } from '@concave/core'
 import { BaseProvider } from '@ethersproject/providers'
 import { BigNumber, BigNumberish, ethers, Signer, Transaction } from 'ethers'
 import { NFT, Offer, StakingPosition } from 'src/entities'
-import { CurrencyAmount } from '@concave/core'
-import { Currency } from '@concave/core'
 import { ContractABI } from './NFTMarketplaceAbi'
 
 export class ConcaveNFTMarketplace {

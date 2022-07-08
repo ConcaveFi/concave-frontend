@@ -1,4 +1,4 @@
-import { Flex, VStack, Text, HStack } from '@chakra-ui/react'
+import { Flex, Text, VStack } from '@chakra-ui/react'
 import { Loading } from 'components/Loading'
 import { MarketplaceFilterContainer } from 'components/Marketplace/MarketplaceFilterContainer'
 import { useMarketplaceDashbord } from 'components/Marketplace/UseMarkeplaceState'

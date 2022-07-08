@@ -1,9 +1,8 @@
 import type { Nft } from '@alch/alchemy-web3'
 import { STAKING_CONTRACT } from '@concave/core'
-import { MarketItem } from './entities'
 import { BaseProvider } from '@ethersproject/providers'
 import { ConcaveNFTMarketplace, StakingV1Contract } from './contract'
-import { StakingPosition } from './entities'
+import { MarketItem, StakingPosition } from './entities'
 
 export const listAllNonFungibleTokensOnAddress = async (
   owner: string,

@@ -1,4 +1,3 @@
-export * from './Offer'
 export * from './MarketItem'
 export * from './Offer'
 export * from './StakePool'
