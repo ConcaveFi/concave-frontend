@@ -1,3 +1,4 @@
+import { Percent } from '@concave/core'
 import { StakingPool } from '@concave/marketplace'
 import { Flex, Stack, Text } from '@concave/ui'
 import React from 'react'
@@ -13,7 +14,7 @@ type StakeInfoProps = {
   stakingPool: StakingPool
   currentlyStaked: string
   stakingCap: string
-  percent: number
+  percent: Percent
 }
 function StakeInfo({ currentlyStaked, poolId, stakingPool, stakingCap, percent }: StakeInfoProps) {
   return (
@@ -64,7 +65,7 @@ const HeaderInfo: React.FC<HeaderInfoProps> = ({ info, title }) => (
   </Stack>
 )
 
-type LoadBarProps = { percent: number; currentlyStaked: string; stakingCap: string }
+type LoadBarProps = { percent: Percent; currentlyStaked: string; stakingCap: string }
 const LoadBar: React.FC<LoadBarProps> = ({ currentlyStaked, percent, stakingCap }) => (
   <>
     {' '}
@@ -75,7 +76,7 @@ const LoadBar: React.FC<LoadBarProps> = ({ currentlyStaked, percent, stakingCap 
     <Flex w="full" h="30px" shadow={'down'} rounded="2xl" mt={3} p={1}>
       <Flex
         h={'full'}
-        width={`${percent}%`}
+        width={`${percent.toSignificant(3)}%`}
         apply="background.metalBrighter"
         rounded={'2xl'}
         shadow="up"

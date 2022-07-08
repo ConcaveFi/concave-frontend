@@ -1,4 +1,5 @@
 import { Box, Button, Flex, Image, Stack, Text, TextProps, useDisclosure } from '@chakra-ui/react'
+import { Percent } from '@concave/core'
 import { StakingPool } from '@concave/marketplace'
 import { Card } from '@concave/ui'
 import { utils } from 'ethers'
@@ -18,8 +19,7 @@ export const StakeCard = (props: StakeCardProps) => {
   const { data, isLoading } = useLiquidValues(chainId, poolId)
   const { stakingV1Pools, stakingV1Cap } = data || {}
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const percent =
-    (+utils.formatEther(stakingV1Pools?.balance || 0) / +utils.formatEther(stakingV1Cap || 0)) * 100
+  const percent = new Percent(stakingV1Pools?.balance?.toString(), stakingV1Cap?.toString())
 
   return (
     <>
@@ -79,7 +79,7 @@ const ImageContainer: React.FC<ImageContainerProps> = ({ stakingPool, totalVAPR 
 )
 
 type LoadBarProps = {
-  percent: number
+  percent: Percent
   loading: boolean
   currentlyStaked: string
   stakingCap: string
@@ -93,7 +93,12 @@ const LoadBard = ({ percent, currentlyStaked, loading, stakingCap }: LoadBarProp
     </Stack>
     {/* Loading Bar */}
     <Flex width={'full'} height="28px" shadow={'down'} rounded="2xl" my={2} p={1}>
-      <Flex width={`${percent}%`} height="full" apply={'background.metalBrighter'} rounded="full" />
+      <Flex
+        width={`${percent.toSignificant(3)}%`}
+        height="full"
+        apply={'background.metalBrighter'}
+        rounded="full"
+      />
     </Flex>
     {/* Values */}
     <Flex

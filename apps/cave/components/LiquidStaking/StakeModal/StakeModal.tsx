@@ -6,6 +6,7 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
+import { Percent } from '@concave/core'
 import { Card } from '@concave/ui'
 import { BigNumber, utils } from 'ethers'
 import { numberMask } from 'utils/numberMask'
@@ -19,7 +20,7 @@ type StakeModalProps = {
   isOpen: boolean
   onClose: VoidFunction
   stakeData: StakeData
-  stakeValues: { currentlyStaked: BigNumber; stakingCap: BigNumber; percent: number }
+  stakeValues: { currentlyStaked: BigNumber; stakingCap: BigNumber; percent: Percent }
 }
 export const StakeModal = ({ isOpen, onClose, stakeData, stakeValues }: StakeModalProps) => {
   const { poolId } = stakeData || {}
