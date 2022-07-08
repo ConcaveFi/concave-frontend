@@ -1,8 +1,10 @@
 import { Box, Flex } from '@concave/ui'
-import MarketplaceFilterContainer from './MarketplaceFilterContainer'
+import { MarketplaceFilterContainer } from './MarketplaceFilterContainer'
 import NftPositionCard from './NftPositionCard'
+import { useMarketplaceDashbord } from './UseMarkeplaceState'
 
 export default function MarketplaceSearchCard() {
+  const { isFetching, salePositions, owner, setOwner } = useMarketplaceDashbord()
   const nftPositions = [
     { stakePool: 45, price: 102, redeemIn: 20, discount: 2.1 },
     { stakePool: 360, price: 12, redeemIn: 1, discount: 20 },
@@ -49,7 +51,7 @@ export default function MarketplaceSearchCard() {
         bgSize="16% 16%"
         rounded={'2xl'}
       />
-      <MarketplaceFilterContainer />
+      <MarketplaceFilterContainer address={owner} setAddress={setOwner} />
       <Flex
         flex={1}
         pt={3}
