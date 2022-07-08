@@ -2,7 +2,7 @@ import { Currency } from '@concave/core'
 import { ExpandArrowIcon } from '@concave/icons'
 import { Box, Button, Flex, HStack, Modal, NumericInput, StackDivider, Text } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
-import React, { Dispatch, SetStateAction, useState } from 'react'
+import { Dispatch, SetStateAction } from 'react'
 
 const TokenInfo = ({
   currency,

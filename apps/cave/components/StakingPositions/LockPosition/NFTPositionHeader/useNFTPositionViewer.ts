@@ -1,5 +1,5 @@
 import { StakingPosition } from '@concave/marketplace'
-import { formatDistanceToNowStrict, format } from 'date-fns'
+import { formatDistanceToNowStrict } from 'date-fns'
 
 export interface NFTPositionHeaderProps {
   stakingPosition: StakingPosition

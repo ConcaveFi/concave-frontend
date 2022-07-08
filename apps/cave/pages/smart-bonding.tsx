@@ -1,5 +1,4 @@
 import { keyframes } from '@chakra-ui/system'
-import { CNV } from '@concave/core'
 import { SpinIcon } from '@concave/icons'
 import {
   Box,
@@ -9,10 +8,9 @@ import {
   Flex,
   Heading,
   Stack,
-  useDisclosure,
   Text,
+  useDisclosure,
 } from '@concave/ui'
-import { useFiatPrice } from 'components/AMM/hooks/useFiatPrice'
 import { BondBuyCard } from 'components/Bond/BondBuyCard'
 import { BondInfo, UserBondPositionInfo } from 'components/Bond/BondInfo'
 import BondSoldsCard from 'components/Bond/BondSoldsCard'
@@ -34,8 +32,7 @@ import { utils } from 'ethers'
 import { useGet_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useCNVPrice } from 'hooks/useCNVPrice'
-import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import getROI from 'utils/getROI'
 const spin = keyframes({
   '0%': { transform: 'rotate(0deg)' },

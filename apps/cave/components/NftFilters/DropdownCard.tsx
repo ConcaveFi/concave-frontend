@@ -1,5 +1,5 @@
 import { ExpandArrowIcon } from '@concave/icons'
-import { Card, Flex, FlexProps, gradientBorder, StatDownArrow, Text } from '@concave/ui'
+import { Flex, FlexProps, Text } from '@concave/ui'
 
 type DropdownCard = {
   isOpen: boolean

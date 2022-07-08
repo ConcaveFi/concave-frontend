@@ -1,9 +1,8 @@
-import { BigNumber, ethers } from 'ethers'
-import { Interface } from '@ethersproject/abi'
-import { CurrencyAmount, ROUTER_ADDRESS, RouterAbi, Token } from '@concave/core'
-import { concaveProvider } from 'lib/providers'
-import { parseUnits } from 'ethers/lib/utils'
 import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/providers'
+import { CurrencyAmount, RouterAbi, ROUTER_ADDRESS, Token } from '@concave/core'
+import { BigNumber, ethers } from 'ethers'
+import { parseUnits } from 'ethers/lib/utils'
+import { concaveProvider } from 'lib/providers'
 
 export class Router {
   private readonly contract: ethers.Contract

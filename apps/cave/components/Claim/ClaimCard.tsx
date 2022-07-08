@@ -1,6 +1,6 @@
 import { Button, Card, Stack } from '@concave/ui'
-import { useAccount, useContractWrite } from 'wagmi'
 import { aCNVredeemabi } from 'lib/contractoABI'
+import { useAccount, useContractWrite } from 'wagmi'
 
 export function ClaimCard() {
   const { address } = useAccount()

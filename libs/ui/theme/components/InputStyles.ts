@@ -1,5 +1,5 @@
-import { ComponentMultiStyleConfig } from '@chakra-ui/react'
 import { inputAnatomy } from '@chakra-ui/anatomy'
+import { ComponentMultiStyleConfig } from '@chakra-ui/react'
 
 export const InputStyles: ComponentMultiStyleConfig = {
   parts: inputAnatomy.keys,

@@ -1,7 +1,7 @@
 import { keyframes } from '@chakra-ui/system'
 import { SpinIcon } from '@concave/icons'
-import { Modal, Text, Button, Flex, Heading } from '@concave/ui'
-import { useState, useEffect, ReactNode } from 'react'
+import { Heading, Modal, Text } from '@concave/ui'
+import { ReactNode, useEffect, useState } from 'react'
 
 const spin = keyframes({
   '0%': { transform: 'rotate(0deg)' },

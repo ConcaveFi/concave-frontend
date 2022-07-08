@@ -1,4 +1,4 @@
-import { Button, Card, Flex, Text, Image } from '@concave/ui'
+import { Card, Flex, Text } from '@concave/ui'
 import { GlassPanel } from './TreasuryManagementCard'
 
 interface DividendsCardProps {

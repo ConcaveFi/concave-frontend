@@ -6,12 +6,10 @@ import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { MdOutlineDashboard } from 'react-icons/md'
 import { formatFixed } from 'utils/formatFixed'
-import { useAccount, useBalance } from 'wagmi'
 
 function SideBarTop() {
   const networkId = useCurrentSupportedNetworkId()
   const cnvAmount = useCurrencyBalance(CNV[networkId], { watch: true })
-
   return (
     <Box shadow="down" px={2} pt={10} pb={3} rounded="2xl">
       <Flex

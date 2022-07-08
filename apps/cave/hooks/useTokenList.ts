@@ -1,9 +1,9 @@
-import { useQuery, UseQueryResult } from 'react-query'
-import { Chain, chain, useNetwork } from 'wagmi'
 import { Currency, NATIVE, Token } from '@concave/core'
 import { Fetcher } from '@concave/gemswap-sdk'
-import { concaveProvider } from 'lib/providers'
 import { fetchJson } from 'ethers/lib/utils'
+import { concaveProvider } from 'lib/providers'
+import { useQuery, UseQueryResult } from 'react-query'
+import { Chain, chain, useNetwork } from 'wagmi'
 
 const concaveTokenList = (networkName: string) =>
   `/assets/tokenlists/${networkName.toLowerCase()}/concave.json`

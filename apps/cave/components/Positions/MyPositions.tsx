@@ -21,10 +21,9 @@ import { Loading } from 'components/Loading'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
-import React from 'react'
 import { useQuery } from 'react-query'
-import { PositionsState } from './usePositionsState'
 import { useAccount } from 'wagmi'
+import { PositionsState } from './usePositionsState'
 
 export const MyPositions = ({ state }: { state: PositionsState }) => {
   const { loading, error, setView, view, pairs } = state

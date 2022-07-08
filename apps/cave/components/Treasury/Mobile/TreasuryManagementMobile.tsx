@@ -1,7 +1,6 @@
 import { SpinIcon } from '@concave/icons'
 import { Avatar, AvatarGroup, Card, Flex, Image, keyframes, Text } from '@concave/ui'
 import { commify } from 'ethers/lib/utils'
-import { Get_TreasuryQuery } from 'graphql/generated/graphql'
 import { GlassPanel, TokenInfo, TreasuryQueryTokenInfo } from '../TreasuryManagementCard'
 
 interface TreasuryManagementMobileProps {
