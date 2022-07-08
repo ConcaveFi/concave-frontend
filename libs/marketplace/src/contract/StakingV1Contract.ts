@@ -33,6 +33,30 @@ export class StakingV1Contract {
     return this.contract.connect(signer).lock(address, amount, poolId)
   }
 
+  public async getApproved(tokenId: BigNumberish): Promise<string[]> {
+    return this.contract.getApproved(tokenId)
+  }
+
+  public async approve(
+    signer: ethers.Signer,
+    address: string,
+    tokenId: BigNumberish,
+  ): Promise<ethers.Transaction> {
+    return this.contract.connect(signer).approve(address, tokenId)
+  }
+
+  public async setApprovalForAll(
+    signer: ethers.Signer,
+    address: string,
+    bool: boolean,
+  ): Promise<ethers.Transaction> {
+    return this.contract.connect(signer).setApprovalForAll(address, bool)
+  }
+
+  public async isApprovedForAll(owner: string, operator: string): Promise<boolean> {
+    return this.contract.isApprovedForAll(owner, operator)
+  }
+
   public async pools(index: string): Promise<StakePool> {
     return this.contract.pools(index).then((p) => ({ ...p }))
   }

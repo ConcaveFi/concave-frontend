@@ -6,6 +6,9 @@ export type TransactionMeta =
   | { type: 'bond'; amountIn: string; amountOut: string }
   | { type: 'stake'; amount: string; pool: string }
   | { type: 'redeem'; amount: string }
+  | { type: 'offer marketplace'; tokenId: number }
+  | { type: 'list position'; tokenId: number; action: 'auction' | 'sale' }
+  | { type: 'unlist position'; tokenId: number }
 
 export type TrackedTransaction = {
   from: string
