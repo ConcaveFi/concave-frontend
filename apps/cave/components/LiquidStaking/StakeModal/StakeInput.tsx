@@ -80,7 +80,7 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
           stakeInput.greaterThan(cnvBalance.data?.numerator),
         children: 'Stake CNV',
       }
-    : useCurrencyState.state
+    : useCurrencyState.buttonProps
   return (
     <>
       <Box>

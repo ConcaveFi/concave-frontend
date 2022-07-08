@@ -208,7 +208,7 @@ const RemoveLiquidityActions = ({
     <Flex gap={4} h={45} justifyContent={'center'}>
       <Button
         disabled={!removeLiquidityState.percentToRemove}
-        {...useCurrencyState.state}
+        {...useCurrencyState.buttonProps}
         w={250}
         variant={'primary'}
       />

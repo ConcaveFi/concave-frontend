@@ -61,7 +61,7 @@ export function BondBuyCard(props: {
         onClick: confirmModal.onOpen,
         children: 'Bond',
       }
-    : useCurrencyState.state
+    : useCurrencyState.buttonProps
 
   return (
     <Card
