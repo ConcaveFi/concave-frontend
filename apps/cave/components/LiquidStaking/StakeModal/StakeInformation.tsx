@@ -1,17 +1,17 @@
 import { Box, Flex, Image, Text, useBreakpointValue } from '@chakra-ui/react'
 
-type StakeInformationsProps = {
+type StakeInformationProps = {
   bondingEmissions: number
   baseEmissions: number
   onShow: VoidFunction
   onDisable: VoidFunction
 }
-export const StakeInformations = ({
+export const StakeInformation = ({
   baseEmissions,
   bondingEmissions,
   onShow,
   onDisable,
-}: StakeInformationsProps) => {
+}: StakeInformationProps) => {
   const mobileUI = useBreakpointValue({ base: true, xl: false })
   const bondEmissionsFormatted = bondingEmissions?.toFixed(2) + '%'
   const baseEmissionsFormatted = baseEmissions?.toFixed(2) + '%'

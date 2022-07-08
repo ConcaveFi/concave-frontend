@@ -1,6 +1,6 @@
 import { Flex, Image, Text, useBreakpointValue } from '@concave/ui'
 import { StakeData } from '../hooks/useLiquidStakeData'
-import { StakeInformations } from './StakeInformations'
+import { StakeInformation } from './StakeInformation'
 
 type EmissionsProps = {
   onOpenDescription: VoidFunction
@@ -44,7 +44,7 @@ function Emissions({ onCloseDescription, onOpenDescription, ...stakeData }: Emis
           alt="arrow down logo"
         />
         {!mobileUI && (
-          <StakeInformations
+          <StakeInformation
             onDisable={onCloseDescription}
             onShow={onOpenDescription}
             bondingEmissions={stakeData.bondEmissions}
@@ -62,7 +62,7 @@ function Emissions({ onCloseDescription, onOpenDescription, ...stakeData }: Emis
         transform={'rotate(-90deg)'}
       />
       {mobileUI && (
-        <StakeInformations
+        <StakeInformation
           onDisable={onCloseDescription}
           onShow={onOpenDescription}
           bondingEmissions={stakeData.bondEmissions}
