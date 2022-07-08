@@ -1,25 +1,17 @@
-import { Flex, Image, Text } from '@concave/ui'
+import { Flex, Image, Text, useBreakpointValue } from '@concave/ui'
 
 interface StakeAprCardProps {
-  title: string
-  length: string
-  text: string
-  image: string
+  poolId: number
   diluted: boolean
-  isLargerLayout: boolean
+  vAPR?: string | number
 }
-const StakeAprCard = (props: StakeAprCardProps) => {
-  const { isLargerLayout } = props
-
+export const StakeAprCard = (props: StakeAprCardProps) => {
+  const isLargerLayout = useBreakpointValue({ xl: true, base: true, md: false })
   return isLargerLayout ? <DefaultLayout props={props} /> : <MobileLayout props={props} />
 }
 
-interface MobileLayoutProps {
-  props: StakeAprCardProps
-}
-
-const MobileLayout = (props: MobileLayoutProps) => {
-  const { title, length, text, image, diluted } = props.props
+const MobileLayout = ({ props }: { props: StakeAprCardProps }) => {
+  const { diluted, poolId, vAPR } = props
 
   return (
     <Flex
@@ -34,11 +26,17 @@ const MobileLayout = (props: MobileLayoutProps) => {
         Stake Pool
       </Text>
       <Text fontSize="s" color="white" fontWeight="bold">
-        {title}
+        {/* {vAPR} */}
       </Text>
       <Flex position={'relative'} height="40px" width={'full'} align="center">
         <Flex position={'absolute'} width="full">
-          <Image h="70px" w="70px" src={image} alt={`stake-period-${length}`} mx="auto" />
+          <Image
+            h="70px"
+            w="70px"
+            src={stakeImage[poolId]}
+            alt={`stake-period-${length}`}
+            mx="auto"
+          />
         </Flex>
       </Flex>
       <Text fontSize="xs" color="text.low" fontWeight="medium">
@@ -46,37 +44,32 @@ const MobileLayout = (props: MobileLayoutProps) => {
       </Text>
 
       <Text fontSize="s" color="white" fontWeight="bold">
-        {text}
+        {'text'}
       </Text>
     </Flex>
   )
 }
-interface DefaultLayoutProps {
-  props: StakeAprCardProps
-}
 
-const DefaultLayout = (props: DefaultLayoutProps) => {
-  const { title, length, text, image, diluted } = props.props
+const DefaultLayout = ({ props }: { props: StakeAprCardProps }) => {
+  const { poolId, diluted, vAPR } = props
   return (
-    <Flex flex={1} direction={'column'} mx={6}>
-      <Flex>
-        <Flex direction={'column'} flex={1} mt={4}>
+    <Flex width={'full'} direction={'column'}>
+      <Flex align={'center'}>
+        <Flex direction={'column'} flex={1}>
           <Text fontSize="xs" color="text.low" fontWeight="medium">
             Stake Pool
           </Text>
           <Text fontSize="s" color="white" fontWeight="bold">
-            {title}
+            {stakePeriod[poolId] + ' days'}
           </Text>
         </Flex>
-        <>
-          <Image h="70px" w="70px" src={image} alt={`stake-period-${length}`} />
-        </>
-        <Flex direction={'column'} flex={1} mt={4}>
+        <Image h="65px" w="65px" src={stakeImage[poolId]} alt={`stake-period-${length}`} />
+        <Flex direction={'column'} flex={1}>
           <Text fontSize="xs" color="text.low" fontWeight="medium">
-            {!diluted && 'v'}APR
+            vAPR
           </Text>
           <Text fontSize="s" color="white" fontWeight="bold">
-            {text}
+            {(+vAPR * 100).toFixed(2) + '%'}
           </Text>
         </Flex>
       </Flex>
@@ -84,4 +77,17 @@ const DefaultLayout = (props: DefaultLayoutProps) => {
   )
 }
 
-export default StakeAprCard
+//TODO: there are 3 locations with same logic, merge it
+const stakeImage = {
+  0: '/assets/marketplace/12mposition.png',
+  1: '/assets/marketplace/6mposition.png',
+  2: '/assets/marketplace/3mposition.png',
+  3: '/assets/marketplace/1mposition.png',
+}
+
+const stakePeriod = {
+  0: 360,
+  1: 180,
+  2: 90,
+  3: 45,
+}

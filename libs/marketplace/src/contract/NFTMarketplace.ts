@@ -1,20 +1,21 @@
 import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/providers'
-import { MARKETPLACE_CONTRACT } from '@concave/core'
+import { Currency, CurrencyAmount, MARKETPLACE_CONTRACT } from '@concave/core'
 import { BaseProvider } from '@ethersproject/providers'
 import { BigNumber, BigNumberish, ethers, Signer, Transaction } from 'ethers'
-import { NFT } from 'src/entities'
+import { NFT, StakingPosition } from 'src/entities'
 import { Offer } from 'src/entities/Offer'
-import { MarketItemInfo } from './../entities'
 import { ContractABI } from './NFTMarketplaceAbi'
 
 export class ConcaveNFTMarketplace {
   private readonly contract: ethers.Contract
+  public readonly address: string
   constructor(private readonly provider: BaseProvider | MulticallProvider) {
     if (!provider.network.chainId)
       throw 'ChainID is undefined for constructor of contract ConcaveNFTMarketplace'
-    const address = MARKETPLACE_CONTRACT[provider.network.chainId]
-    if (!address) throw 'Address is undefined for constructor of contract ConcaveNFTMarketplace'
-    this.contract = new ethers.Contract(address, ContractABI, this.provider)
+    this.address = MARKETPLACE_CONTRACT[provider.network.chainId]
+    if (!this.address)
+      throw 'Address is undefined for constructor of contract ConcaveNFTMarketplace'
+    this.contract = new ethers.Contract(this.address, ContractABI, this.provider)
   }
 
   public async createMarketItem(
@@ -50,43 +51,38 @@ export class ConcaveNFTMarketplace {
     return this.contract.fetchItemsForSale()
   }
 
-  public async createOffer(
-    signer: Signer,
-    saleInfo: MarketItemInfo, //max 10000
-  ) {
-    if (saleInfo.isSale) return this.createSale(signer, saleInfo)
-    if (saleInfo.isAuction) return this.createDefaultNftAuction(signer, saleInfo)
+  public async createOffer(signer: Signer, stakingPosition: StakingPosition, offer: Offer) {
+    if (offer.isSale) return this.createSale(signer, stakingPosition, offer)
+    if (offer.isAuction) return this.createDefaultNftAuction(signer, stakingPosition, offer)
   }
 
-  private async createSale(
-    signer: Signer,
-    saleInfo: MarketItemInfo, //max 10000
-  ) {
+  private async createSale(signer: Signer, stakingPosition: StakingPosition, offer: Offer) {
     return this.contract
       .connect(signer)
       .createSale(
-        saleInfo.position.tokenId,
-        saleInfo.offer.ERC20Token,
-        saleInfo.offer.buyNowPrice.toString(),
-        saleInfo.offer.whitelistedBuyer,
-        saleInfo.offer.feeRecipients,
-        saleInfo.offer.feePercentages,
+        stakingPosition.tokenId,
+        offer.ERC20Token,
+        offer.buyNowPrice.toString(),
+        offer.whitelistedBuyer,
+        offer.feeRecipients,
+        offer.feePercentages,
       )
   }
 
   private async createDefaultNftAuction(
     signer: Signer,
-    saleInfo: MarketItemInfo,
+    stakingPosition: StakingPosition,
+    offer: Offer,
   ): Promise<ethers.Transaction> {
     return this.contract
       .connect(signer)
       .createDefaultNftAuction(
-        saleInfo.position.tokenId,
-        saleInfo.offer.ERC20Token,
-        saleInfo.offer.minPrice.toString(),
-        saleInfo.offer.buyNowPrice.toString(),
-        saleInfo.offer.feeRecipients,
-        saleInfo.offer.feePercentages,
+        stakingPosition.tokenId,
+        offer.ERC20Token,
+        offer.minPrice.toString(),
+        offer.buyNowPrice.toString(),
+        offer.feeRecipients,
+        offer.feePercentages,
       )
   }
 
@@ -112,5 +108,26 @@ export class ConcaveNFTMarketplace {
       feeRecipients,
       feePercentages,
     )
+  }
+  public async makeBid(
+    signer: Signer,
+    position: StakingPosition,
+    currencyAmount?: CurrencyAmount<Currency>,
+  ) {
+    if (currencyAmount.currency.isNative) {
+      throw 'Native currency'
+    }
+    return this.contract
+      .connect(signer)
+      .makeBid(
+        position.tokenId,
+        currencyAmount.wrapped.currency.address,
+        currencyAmount.numerator.toString(),
+      )
+  }
+  public async buyNow(signer: Signer, position: StakingPosition, offer: Offer) {
+    return this.contract
+      .connect(signer)
+      .makeBid(position.tokenId, offer.ERC20Token, offer.buyNowPrice.toString())
   }
 }

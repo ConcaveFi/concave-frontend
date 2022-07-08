@@ -1,8 +1,8 @@
 import { Box, Button, Card, Flex, Heading, Text, useBreakpointValue } from '@concave/ui'
+import { MarketplaceDashboard } from 'components/LiquidMarketplace/MarketplaceDashboard'
 import GraphicGuide from 'components/LiquidStaking/GraphicGuide'
 import MarketplaceActivityCard from 'components/Marketplace/MarketplaceActivityCard'
-import MarketplaceSearchCard from 'components/Marketplace/MarketplaceSearchCard'
-import MarketplaceStakeCard from 'components/Marketplace/MarketplaceStakeCard'
+import { MarketplaceStakeCard } from 'components/Marketplace/MarketplaceStakeCard'
 import { withPageTransition } from 'components/PageTransition'
 import { useEffect, useState } from 'react'
 
@@ -18,8 +18,6 @@ const Marketplace = () => {
   useEffect(() => {
     if (isLargerLayout && viewTransactions == true) setViewTransactions(false)
   }, [isLargerLayout])
-
-  console.log(isLargerLayout)
 
   return (
     <Flex width={{ base: 'full' }} borderRadius={0} textAlign="center" direction="column">
@@ -47,7 +45,6 @@ const Marketplace = () => {
           <Flex
             direction={{ xl: 'row', base: 'column-reverse' }}
             justify="center"
-            align={'center'}
             gap={{ base: 1, md: 8 }}
             width="full"
           >
@@ -55,11 +52,10 @@ const Marketplace = () => {
               direction="column"
               float={'left'}
               position="relative"
-              justify={'center'}
               align="center"
               mt={{ xl: 12, md: 6, base: 0 }}
             >
-              <MarketplaceSearchCard />
+              <MarketplaceDashboard />
             </Flex>
             <Flex
               direction="column"

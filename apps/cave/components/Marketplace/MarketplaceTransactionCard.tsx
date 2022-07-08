@@ -1,16 +1,14 @@
 import { TransactionIcon } from '@concave/icons'
 import { Flex, Image, Link, Text, useMediaQuery, VStack } from '@concave/ui'
-import { format } from 'date-fns'
 import { useEffect, useState } from 'react'
 
 interface MarketplaceTransactionCardProps {
   type: 'sale' | 'listing'
-  filter?: any
+  filter?: { link: string }
 }
 
 export const MarketplaceTransactionCard = (props: MarketplaceTransactionCardProps) => {
   const { filter, type } = props
-  const cleanDate = format(new Date(filter.date), 'PPpp')
   const labelType = type === 'sale' ? 'sale' : 'listing'
   const labelColor = type === 'sale' ? '#7AF0CD' : '#2E97E2'
 
@@ -20,7 +18,7 @@ export const MarketplaceTransactionCard = (props: MarketplaceTransactionCardProp
 
   useEffect(() => {
     setWidth(isLargerThan770 ? '' : '180px')
-  })
+  }, [isLargerThan770])
 
   return (
     <Flex
@@ -70,7 +68,7 @@ export const MarketplaceTransactionCard = (props: MarketplaceTransactionCardProp
         <Flex width={'full'} mt={1} justify={'start'}>
           <Link
             pb={1}
-            href={`https://etherscan.io/tx/${filter.link}`}
+            href={`https://etherscan.io/tx/${filter.link}`} //TODO: fix this link
             target="_blank"
             rel="noreferrer"
             textColor={'blue.300'}

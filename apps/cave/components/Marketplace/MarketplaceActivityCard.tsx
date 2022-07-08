@@ -122,9 +122,12 @@ const MarketplaceActivityCard = () => {
           {loading && <span>loading...</span>}
           {data &&
             !error &&
-            data.map((e: any, k) => (
-              <MarketplaceTransactionCard type={e.type} key={k} filter={e} />
-            ))}
+            data.map(
+              (
+                e: any,
+                k, //TODO: FIX this type
+              ) => <MarketplaceTransactionCard type={e.type} key={k} filter={e} />,
+            )}
         </div>
       </Box>
     </Card>

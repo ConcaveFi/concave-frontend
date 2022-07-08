@@ -1,4 +1,5 @@
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
+import { StakingPosition } from './StakingPosition'
 
 type OfferConstructorArgs = {
   readonly bidIncreasePercentage: number
@@ -51,6 +52,7 @@ export class Offer {
     this.minPrice = BigNumber.from(minPrice.toString())
     return new Offer(this)
   }
+
   public setBuyNowPrice(buyNowPrice: BigNumberish) {
     this.buyNowPrice = BigNumber.from(buyNowPrice.toString())
     return new Offer(this)
@@ -72,5 +74,17 @@ export class Offer {
   }
   get listPrice() {
     return this.isSale ? this.buyNowPrice : this.minPrice
+  }
+
+  public calculateDiscount(position: StakingPosition) {
+    const basisPoints = 10000
+    const newPrice = this.isSale
+      ? BigNumber.from(this.buyNowPrice.toString())
+      : BigNumber.from(this.minPrice.toString())
+
+    //TODO: Calculate with differents tokens
+    if (newPrice.gte(position.currentValue)) return BigNumber.from(0)
+    const difference = position.currentValue.sub(newPrice)
+    return difference.mul(basisPoints).div(position.currentValue)
   }
 }

@@ -1,37 +1,36 @@
 import { CNV, Currency, CurrencyAmount } from '@concave/core'
-import { MarketItemInfo, Offer } from '@concave/marketplace'
+import { Offer } from '@concave/marketplace'
 import { Box, Button, Flex, HStack, NumericInput, Text, VStack } from '@concave/ui'
 import { ChooseButton } from 'components/Marketplace/ChooseButton'
-import { BigNumber } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useEffect, useState } from 'react'
 import { formatFixed } from 'utils/formatFixed'
 import { toAmount } from 'utils/toAmount'
+import { truncateNumber } from 'utils/truncateNumber'
 
 import { useAccount } from 'wagmi'
 import { UserMarketInfoState } from './LockPosition/MarketLockInfo/useMarketPlaceInfo'
 
 type UserListPositionCardProps = {
-  marketInfoState: UserMarketInfoState
+  marketItemState: UserMarketInfoState
 }
 type ListForSaleState = ReturnType<typeof useListeForSaleState>
 
-export const useListeForSaleState = ({ marketInfoState }: UserListPositionCardProps) => {
+export const useListeForSaleState = ({ marketItemState }: UserListPositionCardProps) => {
   const { address } = useAccount()
   const [method, setMethod] = useState<'Sale' | 'Auction'>('Sale')
-  const selectedToken = CNV[marketInfoState.chainId]
+  const marketItem = marketItemState.marketItem.data
+  const selectedToken = CNV[marketItemState.chainId]
   const [offer, setOffer] = useState(
     new Offer({
-      ...marketInfoState.marketInfo.data.offer,
+      ...marketItem.offer,
       ERC20Token: selectedToken.address,
-      buyNowPrice:
-        marketInfoState.marketInfo.data.offer.buyNowPrice ||
-        marketInfoState.marketInfo.data.position.currentValue,
+      buyNowPrice: marketItem.position.currentValue,
       feePercentages: [10000],
       feeRecipients: [address],
     }),
   )
-  const marketInfo = new MarketItemInfo({ ...marketInfoState.marketInfo.data, offer })
+
   useEffect(() => {
     if (method === 'Sale') setOffer((old) => old.setMinPrice(0))
   }, [method])
@@ -45,16 +44,20 @@ export const useListeForSaleState = ({ marketInfoState }: UserListPositionCardPr
   }
 
   const create = () => {
-    marketInfoState.createOffer(offer)
+    marketItemState.createOffer(offer)
   }
 
   const handleMethod = () => {
-    setMethod((old) => (old === 'Auction' ? 'Sale' : 'Auction'))
+    /**
+     * Uncomment to enable auctions
+     * setMethod((old) => (old === 'Auction' ? 'Sale' : 'Auction'))
+     */
   }
 
   return {
     method,
-    marketInfo,
+    position: marketItemState.marketItem.data.position,
+    marketItem: marketItemState.marketItem.data,
     offer,
     setBuyNowPrice,
     handleMethod,
@@ -71,10 +74,22 @@ export const ListPositionForSale = ({
   return (
     <VStack direction={'column'} gap={1} pt={4} px={8} pb={0}>
       <Type state={listForSaleState} />
-      <CurrentValue currentValue={listForSaleState.marketInfo.position.currentValue} />
+      <Info
+        label="Current value:"
+        value={truncateNumber(listForSaleState.position.currentValue)}
+      ></Info>
+
       <ListenPrice state={listForSaleState} />
       <BuyNowPrice state={listForSaleState} />
-      <Discount state={listForSaleState} />
+      <Info
+        label="Discount:"
+        value={
+          formatFixed(
+            listForSaleState.offer.calculateDiscount?.(listForSaleState.marketItem.position),
+            { decimals: 2 },
+          ) + '%'
+        }
+      ></Info>
 
       {!listForSaleState.offer.isValid && (
         <Text mr="auto" fontSize="sm" color="#c32417" fontWeight="medium">
@@ -107,6 +122,7 @@ const Type = ({ state }: { state: ListForSaleState }) => {
           onClick={state.handleMethod}
           rounded={'2xl'}
           fontWeight="bold"
+          cursor={'not-allowed'}
         >
           {state.method}
         </Button>
@@ -116,7 +132,7 @@ const Type = ({ state }: { state: ListForSaleState }) => {
 }
 
 const ListenPrice = (props: { state: ListForSaleState }) => {
-  const { marketInfo, setPrice } = props.state
+  const { marketItem, setPrice } = props.state
   const chainId = useCurrentSupportedNetworkId()
   if (props.state.method === 'Sale') {
     return <></>
@@ -145,7 +161,7 @@ const ListenPrice = (props: { state: ListForSaleState }) => {
 }
 
 const BuyNowPrice = ({ state }: { state: ListForSaleState }) => {
-  const { marketInfo, setBuyNowPrice, method } = state
+  const { marketItem, setBuyNowPrice, method } = state
   const chainId = useCurrentSupportedNetworkId()
   return (
     <>
@@ -171,11 +187,11 @@ const BuyNowPrice = ({ state }: { state: ListForSaleState }) => {
     </>
   )
 }
-const Discount = ({ state }: { state: ListForSaleState }) => {
+const Info = ({ label, value }: { label: string; value: string }) => {
   return (
     <HStack justifyContent={'center'} width={'full'}>
       <Text textColor={'text.low'} textAlign={'right'} fontWeight="bold" width={'full'}>
-        Discount:
+        {label}
       </Text>
 
       <Box width={'full'}>
@@ -188,31 +204,7 @@ const Discount = ({ state }: { state: ListForSaleState }) => {
           align="center"
           fontWeight="bold"
         >
-          {formatFixed(state.marketInfo.discount, { decimals: 2 })}%
-        </Flex>
-      </Box>
-    </HStack>
-  )
-}
-
-const CurrentValue = (props: { currentValue: BigNumber }) => {
-  return (
-    <HStack justifyContent={'center'} width={'full'}>
-      <Text textColor={'text.low'} textAlign={'right'} fontWeight="bold" width={'full'}>
-        Current value:
-      </Text>
-
-      <Box width={'full'}>
-        <Flex
-          width={'full'}
-          shadow={'Up Small'}
-          borderRadius={'full'}
-          p={1}
-          pl={4}
-          align="center"
-          fontWeight="bold"
-        >
-          {formatFixed(props.currentValue)}
+          {value}
         </Flex>
       </Box>
     </HStack>
