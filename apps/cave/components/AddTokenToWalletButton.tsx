@@ -18,7 +18,7 @@ export const AddTokenToWalletButton = ({ token }: { token: Token }) => {
           address,
           symbol,
           image,
-          decimals /* base connector type does not declare decimals */,
+          decimals /* base connector type does not declare decimals so we type as any to avoid compiler errors */,
         } as any)
       }
       leftIcon={<Image src={image} width="24px" height="24px" alt={`${symbol} icon`} />}
