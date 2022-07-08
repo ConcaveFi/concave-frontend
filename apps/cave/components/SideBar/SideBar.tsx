@@ -16,11 +16,17 @@ import { motion } from 'framer-motion'
 import SideBarTop from './SideBarTop'
 import SideBarBottom from './SideBarBottom'
 import PageNav from './PageNav'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 
-export let onCloseSidebar = () => void null
 export function SideBar() {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  onCloseSidebar = onClose
+
+  // close on route change
+  const router = useRouter()
+  useEffect(() => {
+    onClose()
+  }, [router.asPath, onClose])
 
   return (
     <>

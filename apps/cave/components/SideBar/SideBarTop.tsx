@@ -5,7 +5,6 @@ import { ButtonLink } from 'components/ButtonLink'
 import { ConnectButton, UserWallet } from 'components/ConnectWallet'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useAccount, useBalance } from 'wagmi'
-import { onCloseSidebar } from './SideBar'
 
 const UserCnvBalance = () => {
   const { address } = useAccount()
@@ -48,7 +47,6 @@ function SideBarTop() {
 
       <Stack gap="1" align="flex-end" mt={7}>
         <ButtonLink
-          onClick={onCloseSidebar} // the click will close the sidebar
           href="/treasury" // and redirect to the treasury page
           variant="primary.outline"
           size="medium"
