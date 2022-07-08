@@ -1,6 +1,5 @@
 import { SpinIcon } from '@concave/icons'
 import { Box, Card, Flex, Text } from '@concave/ui'
-import { purchaseBond } from 'components/Bond/BondState'
 import { formatDistanceStrict } from 'date-fns'
 import { commify } from 'ethers/lib/utils'
 import { useGet_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql'

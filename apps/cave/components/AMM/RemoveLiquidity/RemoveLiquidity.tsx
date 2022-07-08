@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, NATIVE, ROUTER_ADDRESS, Token, Percent } from '@concave/core'
+import { Currency, CurrencyAmount, NATIVE, Percent, ROUTER_ADDRESS, Token } from '@concave/core'
 import { Pair } from '@concave/gemswap-sdk'
 import {
   Box,
@@ -20,7 +20,7 @@ import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { Transaction } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { RemoveLiquidityState, useRemoveLiquidity } from 'hooks/useRemoveLiquidity'
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 export const RemoveLiquidityModalButton = ({
   liquidityInfo,

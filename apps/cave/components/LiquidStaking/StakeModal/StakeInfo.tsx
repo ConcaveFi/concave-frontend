@@ -1,5 +1,4 @@
-import { Box, Text, Stack } from '@concave/ui'
-import React from 'react'
+import { Box, Stack, Text } from '@concave/ui'
 
 const periodToBondRevenueMapping = {
   '360 days': '100%',

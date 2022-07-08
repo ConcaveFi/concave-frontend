@@ -1,7 +1,7 @@
 import { Currency, CurrencyAmount } from '@concave/core'
+import { useMemo } from 'react'
 import { useAccount, useBalance } from 'wagmi'
 import { toAmount } from '../utils/toAmount'
-import { useMemo } from 'react'
 
 export const useCurrencyBalance = (
   currency: Currency,

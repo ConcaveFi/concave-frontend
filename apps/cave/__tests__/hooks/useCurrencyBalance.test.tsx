@@ -1,11 +1,11 @@
 import * as dotenv from 'dotenv'
 dotenv.config()
 
-import { renderHook, waitFor } from '@testing-library/react'
 import { CNV, NATIVE } from '@concave/core'
-import { useCurrencyBalanceOfAddress } from '../../hooks/useCurrencyBalance'
-import { WagmiProvider } from '../../contexts/WagmiContext'
+import { renderHook, waitFor } from '@testing-library/react'
 import { chain } from 'wagmi'
+import { WagmiProvider } from '../../contexts/WagmiContext'
+import { useCurrencyBalanceOfAddress } from '../../hooks/useCurrencyBalance'
 
 describe('Check useCurrencyBalanceOfAddress', () => {
   const options = { wrapper: WagmiProvider }

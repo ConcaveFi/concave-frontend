@@ -1,5 +1,4 @@
-import React from 'react'
-import { Link, Text, VStack, HStack, Image } from '@concave/ui'
+import { HStack, Image, Link, Text, VStack } from '@concave/ui'
 
 interface MediaProps {
   icon: string

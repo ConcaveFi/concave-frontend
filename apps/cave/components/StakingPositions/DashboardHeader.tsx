@@ -1,5 +1,4 @@
 import { Flex, Heading, Text } from '@concave/ui'
-import React from 'react'
 
 export function DashboardHeader() {
   return (

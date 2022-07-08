@@ -1,11 +1,11 @@
-import { isAddress } from 'ethers/lib/utils'
 import { ChainId, Currency, NATIVE, Token } from '@concave/core'
 import { Fetcher } from '@concave/gemswap-sdk'
+import { LinkedCurrencyFields } from 'components/CurrencyAmountField/useLinkedCurrencyFields'
+import { isAddress } from 'ethers/lib/utils'
 import { concaveProvider } from 'lib/providers'
 import Router, { useRouter } from 'next/router'
+import { useCallback, useEffect } from 'react'
 import { useNetwork } from 'wagmi'
-import { LinkedCurrencyFields } from 'components/CurrencyAmountField/useLinkedCurrencyFields'
-import { useCallback, useEffect, useMemo } from 'react'
 
 const getAddressOrSymbol = (currency: Currency) => {
   return currency.isNative ? currency.symbol : currency.wrapped.address

@@ -1,10 +1,9 @@
-import { Flex, Text, useDisclosure } from '@concave/ui'
 import { CNV } from '@concave/core'
+import { Flex, Text, useDisclosure } from '@concave/ui'
+import { ComingSoonDialog } from 'components/ComingSoonDialog'
 import useAddTokenToWallet, { injectedTokenResponse } from 'hooks/useAddTokenToWallet'
 import { useState } from 'react'
-import { useConnect } from 'wagmi'
 import { GlassPanel } from '../TreasuryManagementCard'
-import { ComingSoonDialog } from 'components/ComingSoonDialog'
 import ACNVRedemptionDialog from '../VestedTokensDialogs/ACNVRedemptionDialog'
 import BBBTCNVRedemptionDialog from '../VestedTokensDialogs/bbtCNV/BBTCNVRedemptionDialog'
 

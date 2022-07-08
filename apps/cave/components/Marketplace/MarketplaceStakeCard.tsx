@@ -1,4 +1,4 @@
-import { Card, Flex, useBreakpointValue, useMediaQuery } from '@concave/ui'
+import { Flex, useBreakpointValue } from '@concave/ui'
 import { GlassPanel } from 'components/Treasury/TreasuryManagementCard'
 import { useEffect, useState } from 'react'
 import StakeAprCard from './StakeAprCard'

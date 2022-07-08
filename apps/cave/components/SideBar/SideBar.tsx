@@ -1,21 +1,21 @@
+import { HamburgerIcon } from '@concave/icons'
 import {
-  Drawer,
-  useDisclosure,
+  Box,
   Card,
-  Stack,
   CardProps,
+  Drawer,
   DrawerContent,
   DrawerOverlay,
   Flex,
-  Image,
   forwardRef,
-  Box,
+  Image,
+  Stack,
+  useDisclosure,
 } from '@concave/ui'
-import { HamburgerIcon } from '@concave/icons'
 import { motion } from 'framer-motion'
-import SideBarTop from './SideBarTop'
-import SideBarBottom from './SideBarBottom'
 import PageNav from './PageNav'
+import SideBarBottom from './SideBarBottom'
+import SideBarTop from './SideBarTop'
 
 export function SideBar() {
   const { isOpen, onOpen, onClose } = useDisclosure()

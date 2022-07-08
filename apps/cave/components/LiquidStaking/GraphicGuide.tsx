@@ -1,6 +1,5 @@
-import { Flex, HStack, Image, Stack, Text } from '@concave/ui'
 import { ChevronRightIcon } from '@concave/icons'
-import React from 'react'
+import { Flex, HStack, Image, Stack, Text } from '@concave/ui'
 
 function GraphicGuide() {
   return (

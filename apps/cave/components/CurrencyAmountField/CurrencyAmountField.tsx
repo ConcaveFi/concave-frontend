@@ -1,7 +1,7 @@
 import { Currency, CurrencyAmount } from '@concave/core'
 import { FlexProps, HStack, NumericInput, Stack, useMultiStyleConfig } from '@concave/ui'
 import { CurrencySelectorComponent } from 'components/CurrencySelector/CurrencySelector'
-import React, { ReactNode, useCallback, useRef, useState } from 'react'
+import { ReactNode, useCallback, useRef, useState } from 'react'
 import { useDebounce } from 'react-use'
 import { toAmount } from 'utils/toAmount'
 

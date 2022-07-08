@@ -1,11 +1,11 @@
 import { CheckIcon, CloseIcon, SpinnerIcon } from '@concave/icons'
 import { Flex, keyframes, Link, Text } from '@concave/ui'
-import { getTxExplorer } from 'lib/getTransactionExplorer'
 import {
-  useTransactionRegistry,
   getTransactionStatusLabel,
   TrackedTransaction,
+  useTransactionRegistry,
 } from 'hooks/TransactionsRegistry'
+import { getTxExplorer } from 'lib/getTransactionExplorer'
 
 export default function RecentTransactionsContainer() {
   const { recentTransactions } = useTransactionRegistry()

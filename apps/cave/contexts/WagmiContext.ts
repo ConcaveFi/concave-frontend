@@ -1,9 +1,9 @@
 import { ReactNode } from 'react'
 import { chain, createClient, defaultChains, WagmiConfig } from 'wagmi'
-import { InjectedConnector } from 'wagmi/connectors/injected'
-import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
+import { InjectedConnector } from 'wagmi/connectors/injected'
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
+import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import { concaveProvider, concaveRPC, concaveWSProvider } from '../lib/providers'
 
 const chains = [chain.mainnet, chain.rinkeby] // app supported chains
