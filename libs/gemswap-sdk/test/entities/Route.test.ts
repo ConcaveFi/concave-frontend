@@ -1,4 +1,4 @@
-import { WETH9, CurrencyAmount, Ether, Token } from '@concave/core'
+import { CurrencyAmount, Ether, Token, WETH9 } from '@concave/core'
 import { Pair, Route } from '../../src/entities'
 
 describe('Route', () => {

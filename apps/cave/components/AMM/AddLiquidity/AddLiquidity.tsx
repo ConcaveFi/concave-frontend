@@ -12,7 +12,7 @@ import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import { useAccount } from 'wagmi'
 import { useQueryCurrencies } from '../hooks/useQueryCurrencies'
 import { NetworkMismatch } from '../NetworkMismatch'
@@ -175,12 +175,10 @@ export const AddLiquidityModalButton = ({
   label = 'Add liquidity',
   ...buttonProps
 }: { label?: string; pair?: Pair } & ButtonProps) => {
-  const { data: account } = useAccount()
+  const { isDisconnected } = useAccount()
   const addLiquidityDisclosure = useDisclosure()
   const currencies = useMemo(() => [pair?.token0, pair?.token1], [pair?.token0, pair?.token1])
-  if (!account?.address) {
-    return <ConnectWallet />
-  }
+  if (isDisconnected) return <ConnectWallet />
   return (
     <>
       <Button

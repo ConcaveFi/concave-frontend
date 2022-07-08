@@ -1,9 +1,9 @@
-import { BigNumber, BigNumberish, ethers, Contract } from 'ethers'
 import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/providers'
-import { StakingV1Abi } from './StakingV1Abi'
-import { BaseProvider } from '@ethersproject/providers'
 import { STAKING_CONTRACT } from '@concave/core'
-import { Position, StakePool, StakingPosition, StakingReward } from 'src/entities'
+import { BaseProvider } from '@ethersproject/providers'
+import { BigNumber, BigNumberish, Contract, ethers } from 'ethers'
+import { Position, StakePool, StakingReward } from 'src/entities'
+import { StakingV1Abi } from './StakingV1Abi'
 
 export class StakingV1Contract {
   private readonly contract: ethers.Contract

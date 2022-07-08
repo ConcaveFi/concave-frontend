@@ -4,7 +4,7 @@ import { Flex, Input, ListItem, Spinner, Stack, Text, UnorderedList } from '@con
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { isAddress } from 'ethers/lib/utils'
 import { useTokenList } from 'hooks/useTokenList'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useQuery } from 'react-query'
 import { useProvider } from 'wagmi'
 

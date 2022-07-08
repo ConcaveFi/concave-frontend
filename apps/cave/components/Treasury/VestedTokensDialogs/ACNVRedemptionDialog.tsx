@@ -1,15 +1,16 @@
-import { Modal, Card, Text, Flex, Button, useDisclosure, Link } from '@concave/ui'
+import { Button, Card, Flex, Link, Modal, Text, useDisclosure } from '@concave/ui'
+import { TransactionResponse } from '@ethersproject/abstract-provider'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { aCNV_REDEEM_CONTRACT } from 'contracts/VestedTokens/addresses'
-import { Contract, Transaction } from 'ethers'
+import { Contract } from 'ethers'
 import { useGet_User_Acnv_RedeemedQuery } from 'graphql/generated/graphql'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { aCNVredeemabi } from 'lib/contractoABI'
 import { concaveProvider as provider } from 'lib/providers'
 import { useState } from 'react'
-import { useAccount, useConnect, useSigner } from 'wagmi'
+import { useAccount, useSigner } from 'wagmi'
 import useVestedTokens from '../Hooks/useVestedTokens'
 
 interface ACNVRedemptionDialogProps {
@@ -24,14 +25,13 @@ export default function ACNVRedemptionDialog(props: ACNVRedemptionDialogProps) {
   const { onClose, isOpen } = props
 
   const { data: signer } = useSigner()
-  const { data: account } = useAccount()
-  const { isConnected } = useConnect()
+  const { address, isConnected } = useAccount()
 
-  const [tx, setTx] = useState<Transaction>()
+  const [tx, setTx] = useState<TransactionResponse>()
   const [error, setError] = useState('')
 
   const { data, isLoading } = useGet_User_Acnv_RedeemedQuery({
-    address: account?.address,
+    address: address,
   })
   const redeemed: number = data?.logACNVRedemption[0]?.amount || 0
   const txHash = data?.logACNVRedemption[0]?.txHash || ''
@@ -48,7 +48,7 @@ export default function ACNVRedemptionDialog(props: ACNVRedemptionDialogProps) {
     onOpenConfirm()
     aCNVContract
       .connect(signer)
-      .redeem(account?.address)
+      .redeem(address)
       .then((tx) => {
         onCloseConfirm()
         registerTransaction(tx, {

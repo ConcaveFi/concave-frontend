@@ -1,9 +1,10 @@
+import { ROUTER_ADDRESS } from '@concave/core'
 import { ButtonProps } from '@concave/ui'
+import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { isAddress } from 'ethers/lib/utils'
-import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { swapSupportedChains } from 'pages/gemswap'
 import { toPercent } from 'utils/toPercent'
-import { useNetwork } from 'wagmi'
+import { useAccount, useNetwork } from 'wagmi'
 import { NoValidPairsError } from '../hooks/usePair'
 import { InsufficientLiquidityError, UseTradeResult } from '../hooks/useTrade'
 import { SwapSettings } from './Settings'
@@ -19,16 +20,20 @@ export const useSwapButtonProps = ({
   settings: SwapSettings
   onSwapClick: () => void
 }): ButtonProps => {
-  const network = useNetwork()
+  const { isConnecting } = useAccount()
+  const { chain } = useNetwork()
   const inputAmount = trade.data.inputAmount
   const outputAmount = trade.data.outputAmount
   const currencyIn = inputAmount?.currency
-  const currencyInBalance = useCurrencyBalance(currencyIn, { watch: true })
+  const useCurrencyState = useCurrencyButtonState(
+    trade.data.inputAmount,
+    ROUTER_ADDRESS[trade.data.inputAmount.currency?.chainId],
+  )
 
   /*
     Not Connected
   */
-  if (network.isLoading) return { isLoading: true }
+  if (isConnecting) return { isLoading: true }
 
   /*
     Select a token
@@ -39,9 +44,8 @@ export const useSwapButtonProps = ({
   /*
     Network Stuff
   */
-  if (network.activeChain?.id !== currencyIn.chainId)
-    return { children: 'Network mismatch', isDisabled: true }
-  if (!swapSupportedChains.includes(network.activeChain?.id))
+  if (chain?.id !== currencyIn.chainId) return { children: 'Network mismatch', isDisabled: true }
+  if (!swapSupportedChains.includes(chain?.id))
     return {
       children: 'Unsupported chain',
       isDisabled: true,
@@ -85,16 +89,9 @@ export const useSwapButtonProps = ({
   if (!inputAmount || inputAmount?.equalTo(0))
     return { isDisabled: true, children: 'Enter an amount' }
 
-  /*
-    Insufficient Funds
-  */
-  if (currencyInBalance.data?.lessThan(inputAmount))
-    return {
-      children: `Insufficient ${inputAmount.currency.symbol}`,
-      isDisabled: true,
-    }
-
   if (recipient && !isAddress(recipient)) return { children: 'Invalid recipient', isDisabled: true }
+
+  if (!useCurrencyState.approved) return useCurrencyState.state
 
   // /*
   //   Wrap / Unwrap, ETH <-> WETH

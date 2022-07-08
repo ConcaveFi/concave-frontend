@@ -1,5 +1,5 @@
-import { providers } from 'ethers'
 import { providers as multicallProvider } from '@0xsequence/multicall'
+import { providers } from 'ethers'
 import {
   NEXT_PUBLIC_ALCHEMY_ID,
   NEXT_PUBLIC_CONCAVE_RPC_KEY,

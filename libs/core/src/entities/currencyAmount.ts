@@ -1,13 +1,13 @@
+import _Big from 'big.js'
+import JSBI from 'jsbi'
+import invariant from 'tiny-invariant'
+import toFormat from 'toformat'
+import { MaxUint256 } from '../constants'
+import { Rounding } from '../enums'
 import { BigintIsh } from '../types'
 import { Currency } from './currency'
 import { Fraction } from './fraction'
-import JSBI from 'jsbi'
-import { MaxUint256 } from '../constants'
-import { Rounding } from '../enums'
 import { Token } from './token'
-import _Big from 'big.js'
-import invariant from 'tiny-invariant'
-import toFormat from 'toformat'
 
 const Big = toFormat(_Big)
 

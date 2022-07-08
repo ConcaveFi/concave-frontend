@@ -1,6 +1,6 @@
 import { JSBI } from '@concave/core'
 import { BigNumber } from 'ethers'
-import { useCurrencyBalance, UseCurrencyBalanceData } from 'hooks/useCurrencyBalance'
+import { UseCurrencyBalanceData } from 'hooks/useCurrencyBalance'
 
 export const truncateNumber = (
   valueToTruncate: number | UseCurrencyBalanceData | JSBI | BigNumber,

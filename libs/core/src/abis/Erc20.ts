@@ -1,5 +1,3 @@
-import { Interface } from '@ethersproject/abi'
-
 export const Erc20Abi = [
   'function totalSupply() view returns (uint256)',
   'function decimals() external pure returns (uint8)',

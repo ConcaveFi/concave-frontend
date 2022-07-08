@@ -1,6 +1,5 @@
 import { Box, Card, Flex, Text } from '@concave/ui'
 import { formatDistanceStrict } from 'date-fns'
-import { commify } from 'ethers/lib/utils'
 import { useGet_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql'
 import { useCNVPrice } from 'hooks/useCNVPrice'
 import { numberMask } from 'utils/numberMask'

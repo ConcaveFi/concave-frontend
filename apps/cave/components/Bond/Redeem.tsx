@@ -1,4 +1,4 @@
-import { Card, Button } from '@concave/ui'
+import { Button, Card } from '@concave/ui'
 import { utils } from 'ethers'
 
 export const Redeem = ({

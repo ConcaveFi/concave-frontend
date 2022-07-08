@@ -1,20 +1,21 @@
 import {
+  BigintIsh,
+  Currency,
+  CurrencyAmount,
   FIVE,
+  ONE,
+  Percent,
+  Token,
   ZERO,
   _1000,
   _997,
-  BigintIsh,
-  CurrencyAmount,
-  Token,
-  Currency,
-  Percent,
 } from '@concave/core'
 import { InsufficientInputAmountError, InsufficientReservesError } from '../errors'
 
 import JSBI from 'jsbi'
-import { Price } from './price'
 import invariant from 'tiny-invariant'
 import { sqrt } from '../functions'
+import { Price } from './price'
 
 const FEE = _997
 const MINIMUM_LIQUIDITY = _1000
@@ -149,7 +150,7 @@ export class Pair {
     )
     const inputAmount = CurrencyAmount.fromRawAmount(
       outputAmount.currency.equals(this.token0) ? this.token1 : this.token0,
-      JSBI.divide(numerator, denominator),
+      JSBI.add(JSBI.divide(numerator, denominator), ONE),
     )
     return [
       inputAmount,

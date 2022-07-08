@@ -20,6 +20,15 @@ export const bbtCNV_REDEMPTION_V2_ABI = [
   {
     anonymous: false,
     inputs: [
+      { indexed: true, internalType: 'address', name: 'caller', type: 'address' },
+      { indexed: false, internalType: 'bool', name: 'isPaused', type: 'bool' },
+    ],
+    name: 'Paused',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
       { indexed: true, internalType: 'address', name: '_from', type: 'address' },
       { indexed: true, internalType: 'uint256', name: '_amount', type: 'uint256' },
     ],
