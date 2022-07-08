@@ -27,7 +27,7 @@
     "@graphql-codegen/typescript": "^2.4.11",
     "@graphql-codegen/typescript-operations": "^2.4.3",
     "@graphql-codegen/typescript-react-query": "^3.5.15",
-    "@next/bundle-analyzer": "^12.2.0",
+    "@next/bundle-analyzer": "^12.2.1",
     "@testing-library/jest-dom": "^5.16.3",
     "@testing-library/react": "^13.2.0",
     "date-fns": "^2.28.0",
