@@ -1,6 +1,9 @@
 import { ROUTER_ADDRESS } from '@concave/core'
 import { ButtonProps } from '@concave/ui'
-import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
+import {
+  CurrencyButtonState,
+  useCurrencyButtonState,
+} from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { isAddress } from 'ethers/lib/utils'
 import { swapSupportedChains } from 'pages/gemswap'
 import { toPercent } from 'utils/toPercent'
@@ -29,7 +32,7 @@ export const useSwapButtonProps = ({
     trade.data.inputAmount,
     ROUTER_ADDRESS[trade.data.inputAmount.currency?.chainId],
   )
-
+  if (useCurrencyState.stateKey === CurrencyButtonState.disconected) return useCurrencyState.state
   /*
     Not Connected
   */
