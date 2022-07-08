@@ -117,8 +117,8 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
         align="center"
         alignContent="center"
         w="100%"
+        minH="100vh"
         gap={10}
-        pt={{ base: '100px', lg: 0 }}
       >
         <LayoutGroup>
           <CandleStickCard
