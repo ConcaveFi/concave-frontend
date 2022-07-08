@@ -1,29 +1,28 @@
 import { CNV } from '@concave/core'
-import { Box, Flex, Image, Stack, Text } from '@concave/ui'
 import { DashboardIcon } from '@concave/icons'
+import { Box, Flex, Image, Stack, Text } from '@concave/ui'
 import { ButtonLink } from 'components/ButtonLink'
 import { ConnectButton, UserWallet } from 'components/ConnectWallet'
+import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { useAccount, useBalance } from 'wagmi'
+import { useAccount } from 'wagmi'
 
 const UserCnvBalance = () => {
-  const { address } = useAccount()
   const networkId = useCurrentSupportedNetworkId()
-  const { data } = useBalance({
-    addressOrName: address,
-    token: CNV[networkId].address,
-    formatUnits: CNV[networkId].decimals,
-    enabled: !!address,
-  })
+  const { data: cnvAmount, isSuccess } = useCurrencyBalance(CNV[networkId], { watch: true })
 
   return (
-    data?.formatted && (
-      <Flex justifyContent="space-between" p={2} mt={2}>
-        <Text color="text.low" fontWeight="bold" fontSize="md" lineHeight="100%">
-          Your CNV Balance
+    isSuccess && (
+      <Flex pt={2} pb={3} px={4} mt={2} color="text.low" fontWeight="bold" fontSize="sm">
+        <Text w="100%">
+          Your CNV
+          <br />
+          Balance
         </Text>
-        <Text color="text.low" fontWeight="bold" fontSize="md" lineHeight="100%">
-          {(+data?.formatted).toFixed(2)} CNV
+        <Text w="100%" textAlign="right">
+          {cnvAmount.toSignificant(6, { groupSeparator: ',' })}
+          <br />
+          CNV
         </Text>
       </Flex>
     )
