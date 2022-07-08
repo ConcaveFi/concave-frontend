@@ -8,6 +8,7 @@ import {
   Token,
   Currency,
   Percent,
+  ONE,
 } from '@concave/core'
 import { InsufficientInputAmountError, InsufficientReservesError } from '../errors'
 
@@ -149,7 +150,7 @@ export class Pair {
     )
     const inputAmount = CurrencyAmount.fromRawAmount(
       outputAmount.currency.equals(this.token0) ? this.token1 : this.token0,
-      JSBI.divide(numerator, denominator),
+      JSBI.add(JSBI.divide(numerator, denominator), ONE),
     )
     return [
       inputAmount,

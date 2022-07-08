@@ -4,7 +4,7 @@ import { InjectedConnector } from 'wagmi/connectors/injected'
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
-import { concaveProvider, concaveRPC, concaveWSProvider } from 'lib/providers'
+import { concaveProvider, concaveRPC, concaveWSProvider } from '../lib/providers'
 
 const chains = [chain.mainnet, chain.rinkeby] // app supported chains
 
@@ -38,6 +38,5 @@ const client = createClient({
   webSocketProvider,
 })
 
-export const WagmiProvider = ({ children }: { children: ReactNode }) => (
-  <WagmiConfig client={client}>{children}</WagmiConfig>
-)
+export const WagmiProvider = ({ children }: { children: ReactNode }) =>
+  WagmiConfig({ client, children })

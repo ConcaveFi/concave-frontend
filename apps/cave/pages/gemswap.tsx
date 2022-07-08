@@ -1,4 +1,4 @@
-import { ChainId, CHAIN_NAME, CNV, Currency, DAI, ROUTER_ADDRESS } from '@concave/core'
+import { ChainId, CHAIN_NAME, CNV, Currency, DAI } from '@concave/core'
 import { Trade, TradeType } from '@concave/gemswap-sdk'
 import { ExpandArrowIcon } from '@concave/icons'
 import { Button, Card, Collapse, Flex, HStack, Stack, Text, useDisclosure } from '@concave/ui'
@@ -28,14 +28,12 @@ import { NetworkMismatch } from 'components/AMM/NetworkMismatch'
 import { ExpectedOutput, MinExpectedOutput } from 'components/AMM/Swap/ExpectedOutput'
 import { useSwapSettings } from 'components/AMM/Swap/Settings'
 import { TradeRoute } from 'components/AMM/Swap/TradeRoute'
-import { ApproveButton } from 'components/ApproveButton/ApproveButton'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
 import { withPageTransition } from 'components/PageTransition'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { LayoutGroup } from 'framer-motion'
-import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { GetServerSideProps } from 'next'
 import { useEffect, useMemo, useReducer, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
@@ -88,29 +86,9 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
     onChangeCurrencies,
   )
 
-  /*
-    temporary workaround for unknow issue with swapTokenForExactToken
-    all trades are submited as exact input for now
-  */
-  const exactInTrade = useMemo(
-    () =>
-      trade.data.route &&
-      new Trade(trade.data.route, trade.data.inputAmount, TradeType.EXACT_INPUT),
-    [trade],
-  )
-
-  const { registerTransaction } = useTransactionRegistry()
-
   const [recipient, setRecipient] = useState('')
-  const swapTx = useSwapTransaction(exactInTrade, settings, recipient, {
-    onTransactionSent: (tx) => {
-      onChangeInput(toAmount(0, trade.data.inputAmount.currency))
-      registerTransaction(tx, {
-        type: 'swap',
-        amountIn: trade.data.inputAmount.toString(),
-        amountOut: trade.data.outputAmount.toString(),
-      })
-    },
+  const swapTx = useSwapTransaction(trade.data, settings, recipient, {
+    onSuccess: () => onChangeInput(toAmount(0, trade.data.inputAmount.currency)),
   })
 
   const confirmationModal = useDisclosure()
@@ -118,7 +96,7 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
     trade,
     recipient,
     settings,
-    onSwapClick: settings.expertMode ? swapTx.submit : confirmationModal.onOpen,
+    onSwapClick: settings.expertMode ? () => swapTx.write() : confirmationModal.onOpen,
   })
 
   /*
@@ -133,7 +111,15 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
 
   return (
     <>
-      <Flex wrap="wrap" justify="center" align="center" alignContent="center" w="100%" gap={10}>
+      <Flex
+        wrap="wrap"
+        justify="center"
+        align="center"
+        alignContent="center"
+        w="100%"
+        gap={10}
+        pt={{ base: '100px', lg: 0 }}
+      >
         <LayoutGroup>
           <CandleStickCard
             from={trade.data.inputAmount?.currency}
@@ -200,17 +186,7 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
               <TradeDetails trade={trade.data} settings={settings} />
             </Collapse>
 
-            <ApproveButton
-              variant="primary"
-              size="large"
-              w="full"
-              approveArgs={{
-                currency: trade.data.inputAmount.currency,
-                amount: trade.data.inputAmount.numerator,
-                spender: ROUTER_ADDRESS[trade.data.inputAmount.currency?.chainId],
-              }}
-              {...swapButtonProps}
-            />
+            <Button variant="primary" size="large" w="full" {...swapButtonProps} />
 
             <NetworkMismatch
               isOpen={isNetworkMismatch && queryHasCurrency}
@@ -228,17 +204,17 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
       </Flex>
 
       <ConfirmSwapModal
-        trade={exactInTrade}
+        trade={swapTx.trade}
         settings={settings}
         isOpen={confirmationModal.isOpen}
         onClose={confirmationModal.onClose}
         onConfirm={() => {
           confirmationModal.onClose()
-          swapTx.submit()
+          swapTx.write()
         }}
       />
 
-      <WaitingConfirmationDialog isOpen={swapTx.isWaitingForConfirmation}>
+      <WaitingConfirmationDialog isOpen={swapTx.isLoading}>
         <Text fontSize="lg" color="text.accent">
           Swapping {swapTx.trade?.inputAmount.toSignificant(6, { groupSeparator: ',' })}{' '}
           {swapTx.trade?.inputAmount.currency.symbol} for{' '}

@@ -12,7 +12,7 @@ interface YourWalletModalProps {
 }
 
 export default function YourWalletModal(props: YourWalletModalProps) {
-  const { data: account } = useAccount()
+  const { address } = useAccount()
   const { disconnect } = useDisconnect()
 
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -38,7 +38,7 @@ export default function YourWalletModal(props: YourWalletModalProps) {
         p={6}
         shadow={'up'}
       >
-        <YourWalletContainer onClose={props.onClose} value={ellipseAddress(account?.address)} />
+        <YourWalletContainer onClose={props.onClose} value={ellipseAddress(address)} />
         <ConnectedAreasContainer />
       </Flex>
 
