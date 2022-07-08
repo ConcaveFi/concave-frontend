@@ -19,7 +19,10 @@ export const StakeCard = (props: StakeCardProps) => {
   const { data, isLoading } = useLiquidValues(chainId, poolId)
   const { stakingV1Pools, stakingV1Cap } = data || {}
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const percent = new Percent(stakingV1Pools?.balance?.toString(), stakingV1Cap?.toString())
+  const percent = new Percent(
+    stakingV1Pools?.balance?.toString() || '0',
+    stakingV1Cap?.toString() || '0',
+  )
 
   return (
     <>
