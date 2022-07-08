@@ -14,11 +14,11 @@ export const TreasuryAssetsCard: React.FC<TreasuryAssetsCardProps> = ({ assets }
   const { convex, tokens } = assets || {}
   return (
     <Card
-      width={{ md: '540px', lg: '790px', xl: '900px' }}
+      width={{ base: '340px', md: '540px', lg: '790px', xl: '900px' }}
       height="fit"
       backdropFilter={'blur(6px)'}
       pb={6}
-      px="12"
+      px="6"
     >
       <AssetsTitle />
       <Flex
@@ -33,9 +33,9 @@ export const TreasuryAssetsCard: React.FC<TreasuryAssetsCardProps> = ({ assets }
           tokenImage={convex?.tokenImage}
           total={convex?.total}
         />
-        <TokenContainer tokens={tokens?.slice(0, 3)} />
+        <TokenContainer tokens={tokens?.slice(0, 4)} />
       </Flex>
-      <TokenContainer direction="row" tokens={tokens?.slice(4)} />
+      <TokenContainer direction="row" tokens={tokens?.slice(5)} />
     </Card>
   )
 }
@@ -61,7 +61,7 @@ type FarmingContainerProps = {
   images: string[]
 }
 const FarmingContainer: React.FC<FarmingContainerProps> = ({ images, tokenImage, total }) => (
-  <Card w={'342px'} h="159px" variant="secondary">
+  <Card w={'full'} h="160px" variant="secondary">
     <Card direction={'row'} w={'full'} h="48%" justify={'center'} align="center" gap={3}>
       <Avatar src={tokenImage} size="sm" />
       <Text fontWeight={'bold'} fontSize="3xl">
@@ -81,7 +81,13 @@ const FarmingContainer: React.FC<FarmingContainerProps> = ({ images, tokenImage,
 
 type TokensContainerProps = { tokens: TreasuryTokenInfo[]; direction?: 'row' | 'column' }
 const TokenContainer: React.FC<TokensContainerProps> = ({ tokens, direction }) => (
-  <Flex gap={3} wrap={'wrap'} justify={'space-between'} direction={direction || 'column'}>
+  <Flex
+    w={'full'}
+    gap={3}
+    wrap={'wrap'}
+    justify={'space-between'}
+    direction={direction || 'column'}
+  >
     {tokens?.map((token, index) => (
       <TokenInfo key={index} token={token} />
     ))}
@@ -91,7 +97,7 @@ const TokenContainer: React.FC<TokensContainerProps> = ({ tokens, direction }) =
 const TokenInfo: React.FC<{ token: TreasuryTokenInfo }> = ({ token }) => (
   <Card
     mx={{ base: 'auto', lg: '0' }}
-    w={'340px'}
+    w={'full'}
     h="52px"
     variant="secondary"
     direction={'row'}
