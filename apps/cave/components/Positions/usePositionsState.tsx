@@ -7,7 +7,6 @@ import { useQuery } from 'react-query'
 import { useAccount } from 'wagmi'
 
 export const usePositionsState = () => {
-  const [view, setView] = useState<'user' | 'all'>('user')
   const { address } = useAccount()
   const chainId = useCurrentSupportedNetworkId()
   const allPairs = useQuery(['fetchPairs', chainId], () => {
@@ -17,6 +16,7 @@ export const usePositionsState = () => {
   const userPairs = (allPairs?.data || []).filter((p) =>
     tokens?.find((t) => p.liquidityToken.address === t.address),
   )
+  const [view, setView] = useState<'user' | 'all'>(userPairs.length ? 'user' : 'all')
 
   const loading = (() => {
     if (userPoolsLoading) {
@@ -29,6 +29,7 @@ export const usePositionsState = () => {
 
   return {
     loading,
+    user: address,
     error: allPairs.error,
     allPairs,
     pairs: view === 'user' ? userPairs : allPairs.data,
