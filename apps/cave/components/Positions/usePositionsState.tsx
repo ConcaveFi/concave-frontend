@@ -19,9 +19,6 @@ export const usePositionsState = () => {
   )
 
   const loading = (() => {
-    if (!address) {
-      return `Loading Account`
-    }
     if (userPoolsLoading) {
       return `Loading user pools`
     }
