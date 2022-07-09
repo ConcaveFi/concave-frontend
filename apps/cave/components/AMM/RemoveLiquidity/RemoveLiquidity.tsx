@@ -222,7 +222,11 @@ const RemoveLiquidityActions = ({
         Confirm withdrawal
       </Button>
 
-      <WaitingConfirmationDialog isOpen={waitingForConfirm} title={'Confirm Liquidity Removal'}>
+      <WaitingConfirmationDialog
+        isOpen={waitingForConfirm}
+        onClose={() => setWaitingForConfirm(false)}
+        title={'Confirm Withdrawal'}
+      >
         <Flex
           width={'200px'}
           height="107px"
