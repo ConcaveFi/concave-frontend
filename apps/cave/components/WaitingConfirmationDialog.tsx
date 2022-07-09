@@ -15,11 +15,13 @@ export const WaitingConfirmationDialog = ({
   isOpen: isOpenProp,
   title,
   disableCloseButton = false,
+  ...props
 }: {
   children?: ReactNode
   isOpen: boolean
   title?: string
   disableCloseButton?: boolean
+  onClose?: VoidFunction
 }) => {
   const [isOpen, setIsOpen] = useState(isOpenProp)
   useEffect(() => {
@@ -31,7 +33,7 @@ export const WaitingConfirmationDialog = ({
       bluryOverlay={true}
       title={title || 'Confirm Swap'}
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={() => [props.onClose?.(), onClose()]}
       bodyProps={{ align: 'center', gap: 1, w: '400px' }}
     >
       <SpinIcon __css={spinnerStyles} w={10} my={6} />
