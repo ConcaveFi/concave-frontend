@@ -1,4 +1,4 @@
-import { Box, Card, Flex, FlexProps, gradientBorder, Text } from '@concave/ui'
+import { Card, Flex, FlexProps, gradientBorder, Text } from '@concave/ui'
 import { numberMask } from 'utils/numberMask'
 import { LastBondSolds, TreasuryData } from './Hooks/useTreasuryData'
 

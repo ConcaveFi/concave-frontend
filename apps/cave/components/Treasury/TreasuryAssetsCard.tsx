@@ -1,6 +1,4 @@
 import { Avatar, AvatarGroup, Card, Flex, Text } from '@concave/ui'
-import { utils } from 'ethers'
-import { formatEther, parseEther, parseUnits } from 'ethers/lib/utils'
 import { numberMask } from 'utils/numberMask'
 import { TreasuryTokenInfo } from './Hooks/useTreasuryData'
 

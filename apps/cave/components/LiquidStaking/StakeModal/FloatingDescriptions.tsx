@@ -1,5 +1,4 @@
-import { Modal, StackProps, Text, VStack } from '@concave/ui'
-import { Card } from '@concave/ui'
+import { Card, Modal, StackProps, Text, VStack } from '@concave/ui'
 
 type FloatingDescriptionsProps = { type: string; isOpen: boolean; onClose: VoidFunction }
 export const FloatingDescriptions: React.FC<FloatingDescriptionsProps> = ({
