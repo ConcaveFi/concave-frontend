@@ -13,8 +13,8 @@ import { numberMask } from 'utils/numberMask'
 import { StakeData } from '../hooks/useLiquidStakeData'
 import { Emissions } from './Emissions'
 import { FloatingDescriptions } from './FloatingDescriptions'
-import StakeInfo from './StakeInfo'
-import StakeInput from './StakeInput'
+import { StakeInfo } from './StakeInfo'
+import { StakeInput } from './StakeInput'
 
 type StakeModalProps = {
   isOpen: boolean
