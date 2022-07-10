@@ -1,12 +1,12 @@
-import { Button, Image, gradientBorder, Modal, Flex, useDisclosure } from '@concave/ui'
-import { useAccount, useConnect } from 'wagmi'
-import { useIsMounted } from 'hooks/useIsMounted'
-import { useModals } from 'contexts/ModalsContext'
-import YourWalletModal from './YourWalletModal'
 import { SpinnerIcon } from '@concave/icons'
-import { spinAnimation } from './Treasury/Mobile/TreasuryManagementMobile'
-import { useRouter } from 'next/router'
+import { Button, Flex, gradientBorder, Image, Modal, useDisclosure } from '@concave/ui'
+import { useModals } from 'contexts/ModalsContext'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
+import { useIsMounted } from 'hooks/useIsMounted'
+import { useRouter } from 'next/router'
+import { useAccount, useConnect } from 'wagmi'
+import { spinAnimation } from './Treasury/Mobile/TreasuryManagementMobile'
+import YourWalletModal from './YourWalletModal'
 
 /** Transform a wallet address
  *  {6first keys}{...}{4 keys}
@@ -18,9 +18,9 @@ export function ellipseAddress(hash: string, length = 38): string {
 
 export const ConnectWalletModal = ({ isOpen, onClose }) => {
   const router = useRouter()
-  const { connectors, connect, activeConnector } = useConnect({
+  const { connectors, connect, pendingConnector } = useConnect({
     chainId: +router.query.chainId,
-    onConnect: () => onClose(),
+    onSuccess: () => onClose(),
   })
   const isMounted = useIsMounted()
   /*
@@ -42,7 +42,7 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
       {isMounted &&
         _connectors.map((connector) => {
           if (!connector.ready) return null
-          const itsConnect = connector.id === activeConnector?.id
+          const itsConnect = connector.id === pendingConnector?.id
           return (
             <Button
               cursor={itsConnect ? 'default' : 'pointer'}
@@ -61,7 +61,7 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
               }
               key={connector.id}
               onClick={() => {
-                if (!itsConnect) connect(connector)
+                if (!itsConnect) connect({ connector })
               }}
             >
               {connector.name}
@@ -92,11 +92,9 @@ const ConnectButton = () => {
 }
 
 export function ConnectWallet(): JSX.Element {
-  const { isConnected } = useConnect()
-
-  const { data: account } = useAccount()
+  const { address, isConnected } = useAccount()
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { lastTransactions } = useTransactionRegistry()
+  const { recentTransactions } = useTransactionRegistry()
 
   if (isConnected)
     return (
@@ -112,9 +110,9 @@ export function ConnectWallet(): JSX.Element {
           rounded={'2xl'}
         >
           <Flex fontWeight="bold" mx={'auto'}>
-            {ellipseAddress(account?.address)}
+            {ellipseAddress(address)}
           </Flex>
-          {lastTransactions.some((tx) => tx.status === 'pending') && (
+          {recentTransactions.some((tx) => tx.status === 'pending') && (
             <Flex position={'absolute'} width="80%" justify={'end'}>
               <SpinnerIcon color={'text.low'} animation={spinAnimation(4)} boxSize={'20px'} />
             </Flex>

@@ -1,4 +1,4 @@
-import { Flex, Text, useBreakpoint, useBreakpointValue } from '@chakra-ui/react'
+import { Flex, useBreakpointValue } from '@chakra-ui/react'
 import { Card } from '@concave/ui'
 
 type BondGraphicCardProps = { title: string; src: string }

@@ -1,10 +1,10 @@
-import { useState } from 'react'
-import { RouterAbi, ROUTER_ADDRESS, Currency, CurrencyAmount, Percent } from '@concave/core'
+import { Currency, CurrencyAmount, Percent, RouterAbi, ROUTER_ADDRESS } from '@concave/core'
 import { Contract } from 'ethers'
-import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { useContract, UserRejectedRequestError, useSigner } from 'wagmi'
 import { parseUnits } from 'ethers/lib/utils'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import { useState } from 'react'
+import { useContract, useSigner } from 'wagmi'
 const currencyAmountToBigNumber = (currency: CurrencyAmount<Currency>) => {
   return parseUnits(currency.toFixed(currency.currency.decimals))
 }

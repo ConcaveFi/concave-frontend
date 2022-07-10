@@ -1,8 +1,8 @@
+import invariant from 'tiny-invariant'
+import { WNATIVE } from '../../constants/tokens'
 import { Currency } from '../currency'
 import { NativeCurrency } from '../nativeCurrency'
 import { Token } from '../token'
-import { WNATIVE } from '../../constants/tokens'
-import invariant from 'tiny-invariant'
 
 export class Glmr extends NativeCurrency {
   protected constructor(chainId: number) {

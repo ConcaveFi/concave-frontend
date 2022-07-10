@@ -1,6 +1,8 @@
+import { CurrencyAmount, MaxUint256, Token } from '@concave/core'
+import { TransactionReceipt } from '@ethersproject/abstract-provider'
 import { BigNumberish } from 'ethers'
 import { formatUnits } from 'ethers/lib/utils'
-import { CurrencyAmount, Token, MaxUint256 } from '@concave/core'
+import { useTransactionRegistry } from 'hooks/TransactionsRegistry/'
 import {
   erc20ABI,
   useAccount,
@@ -8,8 +10,6 @@ import {
   useContractWrite,
   useWaitForTransaction,
 } from 'wagmi'
-import { TransactionReceipt } from '@ethersproject/abstract-provider'
-import { useTransactionRegistry } from 'hooks/TransactionsRegistry/'
 
 export const useAllowance = (token: Token, spender: string, userAddress: string) => {
   const {
@@ -19,7 +19,10 @@ export const useAllowance = (token: Token, spender: string, userAddress: string)
     error,
     isSuccess,
     refetch,
-  } = useContractRead({ addressOrName: token?.address, contractInterface: erc20ABI }, 'allowance', {
+  } = useContractRead({
+    addressOrName: token?.address,
+    contractInterface: erc20ABI,
+    functionName: 'allowance',
     args: [userAddress, spender],
     chainId: token.chainId,
     enabled: !!(token?.address && spender && userAddress),
@@ -51,7 +54,10 @@ export const useContractApprove = (
     isError,
     error,
     writeAsync: sendApproveTx,
-  } = useContractWrite({ contractInterface: erc20ABI, addressOrName: token?.address }, 'approve', {
+  } = useContractWrite({
+    contractInterface: erc20ABI,
+    addressOrName: token?.address,
+    functionName: 'approve',
     args: [spender, amountToApprove],
     onSuccess: (tx) => {
       registerTransaction(tx, { type: 'approve', tokenSymbol: token.symbol })
@@ -80,11 +86,11 @@ export const useApprove = (
   spender: string,
   amount: BigNumberish = MaxUint256.toString(),
 ) => {
-  const { data: account, isLoading } = useAccount()
-  const allowance = useAllowance(token, spender, account?.address)
+  const { address, isConnecting } = useAccount()
+  const allowance = useAllowance(token, spender, address)
   const approve = useContractApprove(token, spender, amount, {
     onSuccess: () => allowance.refetch(),
   })
 
-  return { allowance, ...approve, isFeching: isLoading || allowance.isLoading }
+  return { allowance, ...approve, isFetching: isConnecting || allowance.isLoading }
 }

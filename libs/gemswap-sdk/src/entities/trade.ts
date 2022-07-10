@@ -1,10 +1,10 @@
-import { ONE, ZERO, Currency, CurrencyAmount, Fraction, Percent, Token } from '@concave/core'
+import { Currency, CurrencyAmount, Fraction, ONE, Percent, Token, ZERO } from '@concave/core'
+import invariant from 'tiny-invariant'
+import { computePriceImpact } from '../functions/computePriceImpact'
+import { sortedInsert } from '../functions/sortedInsert'
 import { Pair } from './pair'
 import { Price } from './price'
 import { Route } from './route'
-import { computePriceImpact } from '../functions/computePriceImpact'
-import invariant from 'tiny-invariant'
-import { sortedInsert } from '../functions/sortedInsert'
 
 // minimal interface so the input output comparator may be shared across types
 interface InputOutput<TInput extends Currency, TOutput extends Currency> {

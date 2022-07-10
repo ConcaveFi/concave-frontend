@@ -19,7 +19,7 @@ import { getTxExplorer } from 'lib/getTransactionExplorer'
 import { concaveProvider } from 'lib/providers'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
-import { chain, useAccount, useContractWrite, useNetwork } from 'wagmi'
+import { useAccount, useContractWrite, useNetwork } from 'wagmi'
 import { useWorthyUser } from './DevelopGateway'
 
 const faucetKey = process.env.NEXT_PUBLIC_FAUCET_PK
@@ -38,7 +38,7 @@ const sendSomeEth = async (recipient) => {
 }
 
 const ETHFaucet = () => {
-  const { data: account } = useAccount()
+  const { address } = useAccount()
 
   const { data: ethBalance, isLoading } = useCurrencyBalance(NATIVE[ChainId.RINKEBY])
 
@@ -51,7 +51,7 @@ const ETHFaucet = () => {
     isSuccess: ethSentSuccess,
     isLoading: isSendingEth,
     refetch: sendEth,
-  } = useQuery('send eth', () => sendSomeEth(account?.address), { enabled: false })
+  } = useQuery('send eth', () => sendSomeEth(address), { enabled: false })
 
   if (faucetBalance?.lt(parseEther('0.1')))
     return (
@@ -97,20 +97,18 @@ const ETHFaucet = () => {
 }
 
 const DAIMinter = () => {
-  const { data: account } = useAccount()
+  const { address } = useAccount()
 
   const {
     data: mintDaiTx,
     isLoading,
     write: mintDAI,
-  } = useContractWrite(
-    {
-      addressOrName: DAI[ChainId.RINKEBY].address,
-      contractInterface: ['function mint(address guy, uint256 wad) external'],
-    },
-    'mint',
-    { args: [account.address, parseUnits('69420', 18)] },
-  )
+  } = useContractWrite({
+    addressOrName: DAI[ChainId.RINKEBY].address,
+    contractInterface: ['function mint(address guy, uint256 wad) external'],
+    functionName: 'mint',
+    args: [address, parseUnits('69420', 18)],
+  })
 
   if (!!mintDaiTx)
     return (
@@ -162,15 +160,15 @@ const Faucet = ({ isOpen, onClose }) => {
 }
 
 export const TestnetIndicator = () => {
-  const { activeChain } = useNetwork()
+  const { chain } = useNetwork()
   const { isUserWorthy } = useWorthyUser()
 
-  const [isOpen, setIsOpen] = useState(activeChain?.testnet && isUserWorthy)
+  const [isOpen, setIsOpen] = useState(chain?.testnet && isUserWorthy)
   const onClose = () => setIsOpen(false)
 
   useEffect(() => {
-    setIsOpen(activeChain?.testnet && isUserWorthy)
-  }, [isUserWorthy, activeChain?.testnet])
+    setIsOpen(chain?.testnet && isUserWorthy)
+  }, [isUserWorthy, chain?.testnet])
 
   const minterModal = useDisclosure()
 
@@ -197,7 +195,7 @@ export const TestnetIndicator = () => {
                 filter="drop-shadow(0px 0px 10px rgba(240, 255, 245, 0.3))"
                 bgClip="text"
               >
-                {activeChain?.name}
+                {chain?.name}
               </Text>{' '}
               testnet
             </Text>
