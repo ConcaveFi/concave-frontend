@@ -67,8 +67,7 @@ const HeaderInfo: React.FC<HeaderInfoProps> = ({ info, title }) => (
 type LoadBarProps = { percent: Percent; currentlyStaked: string; stakingCap: string }
 const LoadBar: React.FC<LoadBarProps> = ({ currentlyStaked, percent, stakingCap }) => (
   <>
-    {' '}
-    <Stack px={4} color="text.low" fontSize={12} isInline justify="space-between" mt={6}>
+    <Stack px={4} color="text.low" fontSize={'xs'} isInline justify="space-between" mt={6}>
       <Text fontSize="sm">Currently staked</Text>
       <Text fontSize="sm">Staking cap</Text>
     </Stack>
