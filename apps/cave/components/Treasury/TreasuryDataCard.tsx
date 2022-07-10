@@ -12,7 +12,7 @@ export const TreasuryDataCard = ({ treasuryData, lastBondSolds }: TreasuryDataCa
   return (
     <Card
       backdropFilter="blur(8px)"
-      w={{ base: '340px', md: '510px', xl: '600px' }}
+      w={'full'}
       h={{ base: '610px', md: '330px' }}
       justify={'space-between'}
     >
@@ -20,7 +20,7 @@ export const TreasuryDataCard = ({ treasuryData, lastBondSolds }: TreasuryDataCa
         data={[
           { title: 'Market cap', info: marketCap && '$' + numberMask(marketCap) },
           { title: 'CNV price', info: cnvPrice && '$' + numberMask(cnvPrice), applyBorder: true },
-          { title: 'Treasury value', info: valuePerCNV && '$' + numberMask(valuePerCNV) },
+          { title: 'Treasury value per CNV', info: valuePerCNV && '$' + numberMask(valuePerCNV) },
         ]}
       />{' '}
       <TreasuryDataContainer
@@ -68,7 +68,6 @@ const LastBondInfo: React.FC<LastBondInfoProps & FlexProps> = ({
     fontWeight="semibold"
     direction={{ base: 'row', md: 'column' }}
     justify="space-around"
-    w="full"
     {...props}
   >
     <Text fontSize={'12px'}>{timestamp}</Text>

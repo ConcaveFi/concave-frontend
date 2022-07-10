@@ -8,7 +8,7 @@ export default function DividendsCard() {
     <Card
       direction={{ base: 'column', lg: 'row' }}
       align="center"
-      width={{ base: '340px', md: '540px', lg: '800px', xl: '900px' }}
+      w={'full'}
       variant="secondary"
       height={{ base: '260px', lg: '179px' }}
       py={{ base: 2, lg: 0 }}

@@ -1,4 +1,4 @@
-import { Avatar, AvatarGroup, Card, Flex, Text } from '@concave/ui'
+import { Avatar, AvatarGroup, Card, Flex, FlexProps, Text } from '@concave/ui'
 import { numberMask } from 'utils/numberMask'
 import { TreasuryTokenInfo } from './Hooks/useTreasuryData'
 
@@ -11,13 +11,7 @@ type TreasuryAssetsCardProps = {
 export const TreasuryAssetsCard: React.FC<TreasuryAssetsCardProps> = ({ assets }) => {
   const { convex, tokens } = assets || {}
   return (
-    <Card
-      width={{ base: '340px', md: '540px', lg: '790px', xl: '900px' }}
-      height="fit"
-      backdropFilter={'blur(6px)'}
-      pb={6}
-      px="6"
-    >
+    <Card w="full" height="fit" backdropFilter={'blur(6px)'} pb={6} px="6">
       <AssetsTitle />
       <Flex
         direction={{ base: 'column', lg: 'row' }}
@@ -33,7 +27,7 @@ export const TreasuryAssetsCard: React.FC<TreasuryAssetsCardProps> = ({ assets }
         />
         <TokenContainer tokens={tokens?.slice(0, 4)} />
       </Flex>
-      <TokenContainer direction="row" tokens={tokens?.slice(5)} />
+      <TokenContainer direction={{ base: 'column', lg: 'row' }} tokens={tokens?.slice(5)} />
     </Card>
   )
 }
@@ -77,15 +71,9 @@ const FarmingContainer: React.FC<FarmingContainerProps> = ({ images, tokenImage,
   </Card>
 )
 
-type TokensContainerProps = { tokens: TreasuryTokenInfo[]; direction?: 'row' | 'column' }
-const TokenContainer: React.FC<TokensContainerProps> = ({ tokens, direction }) => (
-  <Flex
-    w={'full'}
-    gap={3}
-    wrap={'wrap'}
-    justify={'space-between'}
-    direction={direction || 'column'}
-  >
+type TokensContainerProps = { tokens: TreasuryTokenInfo[] }
+const TokenContainer: React.FC<TokensContainerProps & FlexProps> = ({ tokens, ...props }) => (
+  <Flex w={'full'} gap={3} justify={'space-between'} direction={'column'} {...props}>
     {tokens?.map((token, index) => (
       <TokenInfo key={index} token={token} />
     ))}

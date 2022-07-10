@@ -10,8 +10,18 @@ export function Treasury() {
   const { treasuryData, lastBondSolds, assets } = useTreasuryData()
 
   return (
-    <Flex direction={'column'} align="center" gap={6} justify={'center'} w={'full'}>
+    <Flex
+      maxW={{ base: '340px', md: '520px', lg: '740px', xl: '900px' }}
+      mx="auto"
+      py={6}
+      direction={'column'}
+      align="center"
+      gap={6}
+      justify={'center'}
+      w={'full'}
+    >
       <Flex
+        w={'full'}
         direction={{ base: 'column', lg: 'row' }}
         gap={6}
         width="full"

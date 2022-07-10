@@ -14,11 +14,11 @@ export const TreasuryRedeemCard = () => {
     tokenAddress: CNV[chaindId].address,
     tokenChainId: CNV[chaindId].chainId,
   })
-  const { data, connectors } = useConnect()
+  const { data } = useConnect()
   return (
     <Card
       variant="secondary"
-      w={{ sm: '340px', md: '510px', lg: '258px' }}
+      w={{ base: 'full', lg: '45%', xl: '40%' }}
       h={{ sm: '329px', md: '200px', lg: '329px' }}
     >
       <Text fontSize={'2xl'} fontWeight="bold" mx={'auto'} mt={8}>
