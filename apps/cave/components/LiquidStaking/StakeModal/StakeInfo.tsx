@@ -49,7 +49,7 @@ const Paragraph = ({ poolId, staking }: ParagraphProps) => (
     fontSize={{ base: 'xs', md: 'sm' }}
     align="justify"
   >
-    The {poolId} staking term will accrue CNV from bond emissions by capturing{` `}
+    The {staking.days} days staking term will accrue CNV from bond emissions by capturing{` `}
     {staking.bondRevenue} of the growth generated from purchased bonds every 8 hours. Additionally,
     the {poolId} term receives a{` `}
     {staking.rewardsBoost} boost on base CNV emissions and a {staking.quarterlyBoost} boost on the
