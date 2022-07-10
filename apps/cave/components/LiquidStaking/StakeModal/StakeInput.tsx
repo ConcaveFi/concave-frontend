@@ -16,7 +16,7 @@ import { poolIdToDays } from 'utils/contants'
 import { toAmount } from 'utils/toAmount'
 import { useAccount, useSigner } from 'wagmi'
 
-function StakeInput(props: { poolId: number; period: string; onClose: () => void }) {
+function StakeInput(props: { poolId: number; onClose: () => void }) {
   const { address } = useAccount()
   const netWorkdId = useCurrentSupportedNetworkId()
   const { data: signer } = useSigner()
@@ -102,21 +102,6 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
             mx="auto"
             {...stakeButton}
           />
-
-          {/* <Button
-          mt={5}
-          onClick={() => router.push('/dashboard')}
-          fontWeight="bold"
-          fontSize="md"
-          variant="primary.outline"
-          bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
-          w="100%"
-          h="40px"
-          size="large"
-          mx="auto"
-          >
-          Check position
-        </Button> */}
         </Box>
       </Box>
 
