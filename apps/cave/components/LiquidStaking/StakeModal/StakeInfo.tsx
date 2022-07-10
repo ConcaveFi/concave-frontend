@@ -34,7 +34,6 @@ function StakeInfo({ currentlyStaked, poolId, stakingPool, stakingCap, percent }
     </Flex>
   )
 }
-
 export default StakeInfo
 
 type ParagraphProps = { poolId: number; staking: StakingPool }
@@ -42,7 +41,7 @@ const Paragraph = ({ poolId, staking }: ParagraphProps) => (
   <Text
     mt={{ base: 3, md: 6 }}
     color="text.low"
-    fontSize={{ base: '12px', md: 'sm' }}
+    fontSize={{ base: 'xs', md: 'sm' }}
     align="justify"
   >
     The {poolId} staking term will accrue CNV from bond emissions by capturing{` `}
