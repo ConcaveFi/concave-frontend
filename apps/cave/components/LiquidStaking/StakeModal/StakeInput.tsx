@@ -15,7 +15,11 @@ import { useState } from 'react'
 import { toAmount } from 'utils/toAmount'
 import { useAccount, useSigner } from 'wagmi'
 
-function StakeInput(props: { stakingPool: StakingPool; poolId: number; onClose: () => void }) {
+export function StakeInput(props: {
+  stakingPool: StakingPool
+  poolId: number
+  onClose: () => void
+}) {
   const { address } = useAccount()
   const netWorkdId = useCurrentSupportedNetworkId()
   const { data: signer } = useSigner()
@@ -137,5 +141,3 @@ function StakeInput(props: { stakingPool: StakingPool; poolId: number; onClose: 
     </>
   )
 }
-
-export default StakeInput

@@ -8,7 +8,7 @@ type EmissionsProps = {
   stakeInformationType: 'hover' | 'click'
 } & StakeData
 
-function Emissions({
+export function Emissions({
   onCloseDescription,
   onOpenDescription,
   stakeInformationType,
@@ -92,5 +92,3 @@ const Info = ({ title, info }: InfoProps) => (
     </Text>
   </>
 )
-
-export default Emissions

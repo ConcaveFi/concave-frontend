@@ -16,7 +16,13 @@ type StakeInfoProps = {
   stakingCap: string
   percent: Percent
 }
-function StakeInfo({ currentlyStaked, poolId, stakingPool, stakingCap, percent }: StakeInfoProps) {
+export function StakeInfo({
+  currentlyStaked,
+  poolId,
+  stakingPool,
+  stakingCap,
+  percent,
+}: StakeInfoProps) {
   return (
     <Flex w={{ base: '300px', md: '350px' }} rounded="3xl" shadow={'up'} p={4} direction="column">
       <Flex justify={'space-between'} w="full">
@@ -34,7 +40,6 @@ function StakeInfo({ currentlyStaked, poolId, stakingPool, stakingCap, percent }
     </Flex>
   )
 }
-export default StakeInfo
 
 type ParagraphProps = { poolId: number; staking: StakingPool }
 const Paragraph = ({ poolId, staking }: ParagraphProps) => (
