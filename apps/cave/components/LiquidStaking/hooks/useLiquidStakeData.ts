@@ -1,4 +1,4 @@
-import { stakingPools, StakingPool } from '@concave/marketplace'
+import { StakingPool, stakingPools } from '@concave/marketplace'
 import { useGet_All_Total_Pools_VaprQuery } from 'graphql/generated/graphql'
 
 export const useLiquidStakeData = () => {

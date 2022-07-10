@@ -3,8 +3,8 @@ import { stakingPools } from '@concave/marketplace'
 import { Box, Card, Collapse, Flex, keyframes, Text, useDisclosure } from '@concave/ui'
 import { formatDistanceStrict } from 'date-fns'
 import {
-  useGet_Stakingv1_Last100_LockQuery,
   Get_Stakingv1_Last100_LockQuery,
+  useGet_Stakingv1_Last100_LockQuery,
 } from 'graphql/generated/graphql'
 import { useEffect, useState } from 'react'
 import { formatFixed } from 'utils/formatFixed'
