@@ -14,8 +14,7 @@ export const TreasuryRedeemCard = () => {
     tokenAddress: CNV[chaindId].address,
     tokenChainId: CNV[chaindId].chainId,
   })
-  const { data } = useConnect()
-
+  const { data, connectors } = useConnect()
   return (
     <Card
       variant="secondary"
@@ -28,7 +27,7 @@ export const TreasuryRedeemCard = () => {
       <Text color="text.low" textAlign={'center'} px={10} fontWeight="bold">
         Redeem your tokens for CNV below
       </Text>
-      <Flex direction={{ sm: 'column', md: 'row', lg: 'column' }}>
+      <Flex direction={{ sm: 'column', md: 'row', lg: 'column' }} w="full">
         <VestedTokenButton title="aCNV" VestedTokenDialog={ACNVRedemptionDialog} />
         <VestedTokenButton title="pCNV" VestedTokenDialog={PCNVRedemptionDialog} />
         <VestedTokenButton title="bbtCNV" VestedTokenDialog={BBBTCNVRedemptionDialog} />
@@ -44,7 +43,7 @@ export const TreasuryRedeemCard = () => {
         variant="primary.outline"
         p={2}
       >
-        Add CNV to {data?.connector?.name || 'wallet'}
+        Add CNV to {data?.account}
       </Button>
     </Card>
   )
