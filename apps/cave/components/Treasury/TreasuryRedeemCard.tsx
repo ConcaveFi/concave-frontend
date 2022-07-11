@@ -20,7 +20,7 @@ export const TreasuryRedeemCard = () => {
     <Card
       variant="secondary"
       w={{ base: 'full', lg: '45%', xl: '40%' }}
-      h={{ sm: '329px', md: '200px', lg: '329px' }}
+      h={{ base: '315px', md: '200px', lg: '329px' }}
       px={10}
     >
       <Text fontSize={'2xl'} fontWeight="bold" mx={'auto'} mt={8}>
