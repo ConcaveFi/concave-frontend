@@ -1,16 +1,18 @@
-import { Flex, Heading, Text } from '@concave/ui'
+import { SpinIcon } from '@concave/icons'
+import { Card, Flex, Heading, keyframes, Text } from '@concave/ui'
 import GraphicGuide from 'components/LiquidStaking/GraphicGuide'
 import { useLiquidStakeData } from 'components/LiquidStaking/hooks/useLiquidStakeData'
 import LiquidLocksCards from 'components/LiquidStaking/LiquidLocksCards'
 import { StakeCard } from 'components/LiquidStaking/StakeCard'
 import { withPageTransition } from 'components/PageTransition'
 function LiquidStaking() {
-  const { stakeData } = useLiquidStakeData()
+  const { stakeData, isLoading } = useLiquidStakeData()
   return (
     <Flex
-      width={{ base: 'full', xl: 'full', lg: 'full', md: 'full' }}
+      width={{ base: '340px', md: '420px', xl: '900px' }}
       justify={'start'}
       align="center"
+      mx={'auto'}
       direction={'column'}
       p="0px"
     >
@@ -41,23 +43,15 @@ function LiquidStaking() {
         </Text>
         <GraphicGuide />
       </Flex>
-      <Flex
-        alignItems="center"
-        justifyContent="center"
-        maxW={{ base: '330px', md: '420px', lg: '450px', xl: 'full' }}
-        height={{ xl: '550px', base: '1100px' }}
-      >
-        <Flex
-          gap={{ xl: 8, lg: 8, base: 1, md: 3 }}
-          justifyContent="center"
-          alignItems="center"
-          wrap={{ xl: 'nowrap', base: 'wrap' }}
-        >
+      {isLoading && <LoadingState />}
+
+      {!isLoading && (
+        <Flex my={6} justify={'space-between'} gap={{ base: 2, md: 4 }} w="full" wrap={'wrap'}>
           {stakeData?.map((stake, index) => (
             <StakeCard key={index} stakeData={stake} />
           ))}
         </Flex>
-      </Flex>
+      )}
       <LiquidLocksCards />
     </Flex>
   )
@@ -69,3 +63,16 @@ LiquidStaking.Meta = {
 }
 
 export default withPageTransition(LiquidStaking)
+
+const LoadingState = () => (
+  <Card my={6} width={'full'} height="483px" align={'center'} justify="center" variant="secondary">
+    <Text fontSize={'5xl'} color="text.low" fontWeight="bold" mx="auto">
+      Loading
+    </Text>
+    <SpinIcon animation={`2s linear infinite ${spinAnimation}`} boxSize={'60px'} />
+  </Card>
+)
+const spinAnimation = keyframes({
+  '0%': { transform: 'rotate(0deg)' },
+  '100%': { transform: 'rotate(360deg)' },
+})
