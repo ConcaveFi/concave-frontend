@@ -61,15 +61,6 @@ function AddLiquidityContent({
   } = useAddLiquidityState(currencies, onChangeCurrencies)
 
   const addLPTx = useAddLiquidityTransaction(firstFieldAmount, secondFieldAmount)
-  console.log(
-    'first  field',
-    firstFieldAmount?.toFixed(2),
-    '2nd field',
-    secondFieldAmount?.toFixed(2),
-  )
-
-  let reset = firstFieldAmount
-  console.log(reset, 'reset variable')
 
   const supplyLiquidityDisclosure = useDisclosure()
   const addLiquidityButtonProps = useAddLiquidityButtonProps(
@@ -95,7 +86,7 @@ function AddLiquidityContent({
     <>
       <Flex direction="column" p={4} gap={2}>
         <CurrencyInputField
-          currencyAmountIn={reset}
+          currencyAmountIn={firstFieldAmount}
           onChangeAmount={onChangeFirstField}
           CurrencySelector={SelectAMMCurrency}
         />
