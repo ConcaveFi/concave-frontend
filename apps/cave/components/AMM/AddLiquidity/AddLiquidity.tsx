@@ -17,7 +17,7 @@ import { useAccount } from 'wagmi'
 import { useQueryCurrencies } from '../hooks/useQueryCurrencies'
 import { NetworkMismatch } from '../NetworkMismatch'
 import useLiquidityData from './useLiquidityData'
-
+import { toAmount } from 'utils/toAmount'
 const AddSymbol = () => (
   <Flex align="center" justify="center">
     <Flex
@@ -170,7 +170,7 @@ function AddLiquidityContent({
         tx={addLPTx.data}
         isOpen={addLPTx.isTransactionSent}
         closeParentComponent={() => {
-          setExactAmountInLiquidityState(firstFieldAmount.multiply(0))
+          setExactAmountInLiquidityState(toAmount(0, firstFieldAmount.currency))
           if (liquidityModalClose) {
             liquidityModalClose()
           } else {
