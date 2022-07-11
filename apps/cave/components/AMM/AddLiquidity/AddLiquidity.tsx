@@ -170,7 +170,7 @@ function AddLiquidityContent({
         tx={addLPTx.data}
         isOpen={addLPTx.isTransactionSent}
         closeParentComponent={() => {
-          setExactAmountInLiquidityState(toAmount(0, firstFieldAmount.currency))
+          onChangeFirstField(toAmount(0, firstFieldAmount.currency))
           if (liquidityModalClose) {
             liquidityModalClose()
           } else {
