@@ -4,7 +4,7 @@ export type TransactionMeta =
   | { type: 'add liquidity'; amount0: string; amount1: string; pairSymbol: string }
   | { type: 'remove liquidity'; amount0: string; amount1: string; pairSymbol: string }
   | { type: 'bond'; amountIn: string; amountOut: string }
-  | { type: 'stake'; amount: string; days: number }
+  | { type: 'stake'; amount: string; pool: number }
   | { type: 'redeem'; amount: string }
 
 export type TrackedTransaction = {
