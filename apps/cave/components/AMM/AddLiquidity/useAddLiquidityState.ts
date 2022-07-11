@@ -27,7 +27,7 @@ const deriveAmount = (
 export const useAddLiquidityState = () => {
   const { currencies } = useQueryCurrencies()
 
-  const pair = usePair(currencies[0].wrapped, currencies[1].wrapped)
+  const pair = usePair(currencies[0]?.wrapped, currencies[1]?.wrapped)
 
   const { amounts, onChangeField } = useLinkedCurrencyAmounts({
     onDerive: useCallback(

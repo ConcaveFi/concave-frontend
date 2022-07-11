@@ -1,4 +1,4 @@
-import { Currency } from '@concave/core'
+import { Currency, CurrencyAmount } from '@concave/core'
 import { Trade, TradeType } from '@concave/gemswap-sdk'
 import { ExpandArrowIcon } from '@concave/icons'
 import { Button, Collapse, HStack, Stack } from '@concave/ui'
@@ -23,7 +23,15 @@ const TradeDetailsExpanded = ({
     </Stack>
   )
 
-export function TradeDetails({ trade }: { trade: Trade<Currency, Currency, TradeType> }) {
+export function TradeDetails({
+  trade,
+  inputAmount,
+  outputAmount,
+}: {
+  trade: Trade<Currency, Currency, TradeType>
+  inputAmount: CurrencyAmount<Currency>
+  outputAmount: CurrencyAmount<Currency>
+}) {
   const { settings, onClose, setSetting, isDefaultSettings } = useSwapSettings()
 
   /*
@@ -37,8 +45,8 @@ export function TradeDetails({ trade }: { trade: Trade<Currency, Currency, Trade
     <>
       <HStack justify="center" align="center" py={2} px={3} my="auto" rounded="xl" h="46px">
         <RelativePrice
-          currency0={trade?.inputAmount.currency}
-          currency1={trade?.outputAmount.currency}
+          currency0={inputAmount.currency}
+          currency1={outputAmount.currency}
           mr="auto"
         />
 

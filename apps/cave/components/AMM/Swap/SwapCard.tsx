@@ -24,15 +24,8 @@ import { NetworkMismatch } from '../NetworkMismatch'
 import { TradeDetails } from './TradeDetails'
 
 export function SwapCard() {
-  const {
-    trade,
-    error,
-    inputAmount,
-    outputAmount,
-    onChangeInput,
-    onChangeOutput,
-    switchCurrencies,
-  } = useSwapState()
+  const { trade, error, inputAmount, outputAmount, onChangeInput, onChangeOutput, switchFields } =
+    useSwapState()
 
   /*
     temporary workaround for unknow issue with swapTokenForExactToken
@@ -88,7 +81,7 @@ export function SwapCard() {
           CurrencySelector={SelectAMMCurrency}
         />
 
-        <SwitchCurrencies onClick={switchCurrencies} />
+        <SwitchCurrencies onClick={switchFields} />
 
         <CurrencyOutputField
           currencyAmountOut={outputAmount}
@@ -100,7 +93,7 @@ export function SwapCard() {
           <CustomRecipient onChangeRecipient={setRecipient} />
         </Collapse>
 
-        <TradeDetails trade={trade} />
+        <TradeDetails trade={trade} inputAmount={inputAmount} outputAmount={outputAmount} />
 
         <ApproveButton
           variant="primary"

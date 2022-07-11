@@ -50,7 +50,7 @@ export const CurrencyInputField = ({
             `$${inputFiat.value.toFixed(2, { groupSeparator: ',' })}`}
         </Text>
         <Balance
-          currency={currencyAmountIn.currency}
+          currency={currencyAmountIn?.currency}
           onMax={(balance) => onChangeAmount(maxAmount(balance))}
         />
       </HStack>

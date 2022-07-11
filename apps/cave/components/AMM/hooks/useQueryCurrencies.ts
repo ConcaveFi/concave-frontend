@@ -61,9 +61,8 @@ export const useQueryCurrencies = (defaultCurrencies?: {
     },
     {
       enabled: Boolean(query.currency0 || query.currency1),
-      initialData: defaultCurrencies?.[chainId] || defaultCurrencies?.[ChainId.ETHEREUM],
-      // placeholderData: defaultCurrencies?.[chainId] || defaultCurrencies?.[ChainId.ETHEREUM],
-      // cacheTime: 0,
+      initialData: defaultCurrencies?.[chainId] ||
+        defaultCurrencies?.[ChainId.ETHEREUM] || [undefined, undefined],
       staleTime: 0,
     },
   )

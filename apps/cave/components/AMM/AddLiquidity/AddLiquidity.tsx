@@ -41,18 +41,9 @@ export type LiquidityPool = {
   amount1: CurrencyAmount<Currency>
 }
 
-function AddLiquidityContent({
-  currencies,
-  liquidityModalClose,
-}: {
-  currencies: Currency[]
-  liquidityModalClose?: VoidFunction
-}) {
-  const { onChangeCurrencies, isNetworkMismatch, queryHasCurrency, currentChainId, queryChainId } =
-    useQueryCurrencies()
-
+function AddLiquidityContent({ liquidityModalClose }: { liquidityModalClose?: VoidFunction }) {
   const { pair, firstFieldAmount, secondFieldAmount, onChangeFirstField, onChangeSecondField } =
-    useAddLiquidityState(currencies, onChangeCurrencies)
+    useAddLiquidityState()
 
   const addLPTx = useAddLiquidityTransaction(firstFieldAmount, secondFieldAmount)
 
@@ -101,15 +92,13 @@ function AddLiquidityContent({
         {...addLiquidityButtonProps}
       />
 
-      <NetworkMismatch
-        isOpen={isNetworkMismatch && queryHasCurrency}
-        expectedChainId={queryChainId}
-        currentChainId={currentChainId}
-      >
-        <Text color="text.low">
-          Do you wanna drop this {CHAIN_NAME[queryChainId]} LP <br />
-          and restart on {CHAIN_NAME[currentChainId]}?
-        </Text>
+      <NetworkMismatch>
+        {({ queryChainId, activeChainId }) => (
+          <Text color="text.low">
+            Do you wanna drop this {CHAIN_NAME[queryChainId]} LP <br />
+            and restart on {CHAIN_NAME[activeChainId]}?
+          </Text>
+        )}
       </NetworkMismatch>
 
       <SupplyLiquidityModal
@@ -212,16 +201,13 @@ export const AddLiquidityModalButton = ({
           gap: 6,
         }}
       >
-        <AddLiquidityContent
-          currencies={currencies}
-          liquidityModalClose={addLiquidityDisclosure.onClose}
-        />
+        <AddLiquidityContent liquidityModalClose={addLiquidityDisclosure.onClose} />
       </Modal>
     </>
   )
 }
 
-export const AddLiquidityCard = ({ currencies }: { currencies: Currency[] }) => {
+export const AddLiquidityCard = () => {
   return (
     <Card
       borderWidth={2}
@@ -231,7 +217,7 @@ export const AddLiquidityCard = ({ currencies }: { currencies: Currency[] }) => 
       gap={6}
       shadow="Up for Blocks"
     >
-      <AddLiquidityContent currencies={currencies} />
+      <AddLiquidityContent />
     </Card>
   )
 }
