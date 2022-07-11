@@ -3,7 +3,7 @@ import { Button, Card, Flex, Text, useDisclosure } from '@concave/ui'
 import useAddTokenToWallet, { injectedTokenResponse } from 'hooks/useAddTokenToWallet'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { FC } from 'react'
-import { useConnect } from 'wagmi'
+import { useAccount } from 'wagmi'
 import { ACNVRedemptionDialog } from './VestedTokensDialogs/ACNVRedemptionDialog'
 import { BBBTCNVRedemptionDialog } from './VestedTokensDialogs/bbtCNV/BBTCNVRedemptionDialog'
 import { PCNVRedemptionDialog } from './VestedTokensDialogs/PCNVRedemptionDialog'
@@ -14,20 +14,22 @@ export const TreasuryRedeemCard = () => {
     tokenAddress: CNV[chaindId].address,
     tokenChainId: CNV[chaindId].chainId,
   })
-  const { data } = useConnect()
+
+  const { connector } = useAccount()
   return (
     <Card
       variant="secondary"
       w={{ base: 'full', lg: '45%', xl: '40%' }}
       h={{ sm: '329px', md: '200px', lg: '329px' }}
+      px={10}
     >
       <Text fontSize={'2xl'} fontWeight="bold" mx={'auto'} mt={8}>
         Redeem CNV
       </Text>
-      <Text color="text.low" textAlign={'center'} px={10} fontWeight="bold">
+      <Text color="text.low" textAlign={'center'} fontWeight="bold">
         Redeem your tokens for CNV below
       </Text>
-      <Flex direction={{ sm: 'column', md: 'row', lg: 'column' }} w="full">
+      <Flex direction={{ base: 'column', md: 'row', lg: 'column' }} w="full">
         <VestedTokenButton title="aCNV" VestedTokenDialog={ACNVRedemptionDialog} />
         <VestedTokenButton title="pCNV" VestedTokenDialog={PCNVRedemptionDialog} />
         <VestedTokenButton title="bbtCNV" VestedTokenDialog={BBBTCNVRedemptionDialog} />
@@ -39,11 +41,13 @@ export const TreasuryRedeemCard = () => {
         cursor="pointer"
         mx={'auto'}
         my="auto"
-        fontSize={{ base: '22px', lg: 'md' }}
+        fontSize={{ base: '22px', lg: 'sm' }}
         variant="primary.outline"
-        p={2}
+        size={'md'}
+        px={2}
+        w="full"
       >
-        Add CNV to {data?.account}
+        Add CNV to {connector?.name || 'wallet'}
       </Button>
     </Card>
   )
@@ -59,8 +63,9 @@ const VestedTokenButton: React.FC<VestedTokenButton> = ({ title, VestedTokenDial
       <Button
         mt={3}
         mx={'auto'}
-        w={{ sm: '180px', md: '150px', lg: '180px' }}
-        h="38px"
+        w="full"
+        size="md"
+        // h="38px"
         _hover={{ transform: 'scale(1.05)' }}
         _active={{}}
         _focus={{}}
