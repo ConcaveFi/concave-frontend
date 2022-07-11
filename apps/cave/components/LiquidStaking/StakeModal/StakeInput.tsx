@@ -61,7 +61,7 @@ export function StakeInput(props: {
         registerTransaction(x, {
           type: 'stake',
           amount: stakeInput.toString(),
-          days: props.stakingPool.days,
+          pool: props.stakingPool.days,
         })
         setTx(x)
         setWaitingForConfirm(false)
