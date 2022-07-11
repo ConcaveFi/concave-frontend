@@ -5,8 +5,13 @@ import { useQuery } from 'react-query'
 export const useLiquidValues = (chainId: number, poolId: number) => {
   const { data, isLoading } = useQuery(['LiquidValues', chainId, poolId], async () => {
     const stakingV1Contract = new StakingV1Contract(concaveProvider(chainId))
-    const stakingV1Pools = await stakingV1Contract.pools(poolId)
-    const stakingV1Cap = await stakingV1Contract.viewStakingCap(poolId)
+    const contractReads = await Promise.all([
+      stakingV1Contract.pools(poolId),
+      stakingV1Contract.viewStakingCap(poolId),
+    ])
+
+    const stakingV1Pools = contractReads[0]
+    const stakingV1Cap = contractReads[1]
     return {
       stakingV1Pools,
       stakingV1Cap,

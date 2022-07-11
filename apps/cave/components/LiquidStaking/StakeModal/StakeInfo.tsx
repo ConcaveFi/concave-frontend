@@ -1,42 +1,45 @@
 import { Percent } from '@concave/core'
 import { StakingPool } from '@concave/marketplace'
 import { Flex, Stack, Text } from '@concave/ui'
+import { BigNumber, utils } from 'ethers'
 import React from 'react'
+import { numberMask } from 'utils/numberMask'
 
-function addDays(date, days) {
+function getRedeemDateString(date, days) {
   var result = new Date(date)
   result.setDate(result.getDate() + days)
   return result
 }
 
 type StakeInfoProps = {
-  poolId: number
   stakingPool: StakingPool
-  currentlyStaked: string
-  stakingCap: string
-  percent: Percent
+  stakeValues: {
+    currentlyStaked: BigNumber
+    stakingCap: BigNumber
+    percent: Percent
+  }
 }
-export function StakeInfo({
-  currentlyStaked,
-  poolId,
-  stakingPool,
-  stakingCap,
-  percent,
-}: StakeInfoProps) {
+export function StakeInfo({ stakingPool, stakeValues }: StakeInfoProps) {
   return (
     <Flex w={{ base: '300px', md: '350px' }} rounded="3xl" shadow={'up'} p={4} direction="column">
       <Flex justify={'space-between'} w="full">
-        <HeaderInfo title={stakingPool.rewardsBoost} info="Rewards boost" />
-        <HeaderInfo title={stakingPool.bondRevenue} info="Share of bond growth" />
+        <HeaderInfo title={stakingPool?.rewardsBoost} info="Rewards boost" />
+        <HeaderInfo title={stakingPool?.bondRevenue} info="Share of bond growth" />
       </Flex>
-      <Paragraph poolId={poolId} staking={stakingPool} />
+      <Paragraph poolId={stakingPool?.poolId} staking={stakingPool} />
       <Flex mt={{ base: 3, md: 5 }} align="center" gap={1} fontWeight="semibold">
         <Text color="text.low" fontSize="md">
           Redeem date:
         </Text>
-        <Text fontSize="md">{addDays(Date(), stakingPool.days).toISOString().slice(0, 10)}</Text>
+        <Text fontSize="md">
+          {getRedeemDateString(Date(), stakingPool.days).toISOString().slice(0, 10)}
+        </Text>
       </Flex>
-      <LoadBar currentlyStaked={currentlyStaked} percent={percent} stakingCap={stakingCap} />
+      <LoadBar
+        currentlyStaked={numberMask(+utils.formatEther(stakeValues?.currentlyStaked || 0))}
+        percent={stakeValues?.percent}
+        stakingCap={numberMask(+utils.formatEther(stakeValues?.stakingCap || 0))}
+      />
     </Flex>
   )
 }
