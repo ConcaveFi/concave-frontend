@@ -21,13 +21,12 @@ import { Loading } from 'components/Loading'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
-import React from 'react'
 import { useQuery } from 'react-query'
-import { PositionsState } from './usePositionsState'
 import { useAccount } from 'wagmi'
+import { PositionsState } from './usePositionsState'
 
 export const MyPositions = ({ state }: { state: PositionsState }) => {
-  const { loading, error, setView, view, pairs } = state
+  const { loading, error, setView, view, pairs, user } = state
   if (loading) {
     return <Loading size="lg" label={loading} />
   }
@@ -46,24 +45,26 @@ export const MyPositions = ({ state }: { state: PositionsState }) => {
       p={6}
       shadow="Up for Blocks"
     >
-      <HStack w={'auto'} gap={4} justifyContent={'space-between'}>
-        <LiquidityOptionButton
-          label={'Your Pools'}
-          active={view === 'user'}
-          onClick={() => setView('user')}
-        />
-        <LiquidityOptionButton
-          label={'All Pools'}
-          active={view === 'all'}
-          onClick={() => setView('all')}
-        />
-      </HStack>
+      {!!user && (
+        <HStack w={'auto'} gap={4} justifyContent={'space-between'}>
+          <LiquidityOptionButton
+            label={'Your Pools'}
+            active={view === 'user'}
+            onClick={() => setView('user')}
+          />
+          <LiquidityOptionButton
+            label={'All Pools'}
+            active={view === 'all'}
+            onClick={() => setView('all')}
+          />
+        </HStack>
+      )}
       <PairsAccordion pairs={pairs} />
     </Card>
   )
 }
 
-const LiquidityOptionButton = ({ active, onClick, label }) => {
+const LiquidityOptionButton = ({ active = false, onClick = () => {}, label = '' }) => {
   return (
     <Box
       justifyContent={'center'}

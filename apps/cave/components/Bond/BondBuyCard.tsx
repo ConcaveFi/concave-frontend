@@ -1,5 +1,6 @@
 import { BOND_ADDRESS, CNV, Currency, CurrencyAmount, DAI } from '@concave/core'
 import { Button, Card, Flex, HStack, Text, useDisclosure, VStack } from '@concave/ui'
+import { AddTokenToWalletButton } from 'components/AddTokenToWalletButton'
 import { GasPrice } from 'components/AMM'
 import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { CurrencyInputField as BondInput } from 'components/CurrencyAmountField'
@@ -8,7 +9,7 @@ import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialo
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useCNVPrice } from 'hooks/useCNVPrice'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import { toAmount } from 'utils/toAmount'
 import { BondOutput } from './BondOutput'
@@ -16,7 +17,6 @@ import { getBondAmountOut, getBondSpotPrice, purchaseBond, useBondState } from '
 import { ConfirmBondModal } from './ConfirmBond'
 import { DownwardIcon } from './DownwardIcon'
 import { Settings, useBondSettings } from './Settings'
-import { AddTokenToWalletButton } from 'components/AddTokenToWalletButton'
 
 import { numberMask } from 'utils/numberMask'
 
@@ -62,7 +62,7 @@ export function BondBuyCard(props: {
         onClick: confirmModal.onOpen,
         children: 'Bond',
       }
-    : useCurrencyState.state
+    : useCurrencyState.buttonProps
 
   return (
     <Card

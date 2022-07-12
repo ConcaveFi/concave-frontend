@@ -1,5 +1,3 @@
-import { Interface } from '@ethersproject/abi'
-
 export const BondAbi = [
   'event BeneficiarySet(address indexed caller, address beneficiary)',
   'event BondRedeemed(address indexed bonder, uint256 indexed bondId, uint256 output)',

@@ -1,4 +1,4 @@
-import { Token, Currency, DAI, WETH9, ChainId, NATIVE } from '@concave/core'
+import { ChainId, Currency, DAI, NATIVE, Token, WETH9 } from '@concave/core'
 
 type ChainTokenList = { readonly [chainId: number]: Token[] }
 type ChainCurrencyList = { readonly [chainId: number]: Currency[] }

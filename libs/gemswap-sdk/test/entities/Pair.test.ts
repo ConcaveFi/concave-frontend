@@ -1,4 +1,4 @@
-import { WETH9, CurrencyAmount, Token } from '@concave/core'
+import { CurrencyAmount, Token, WETH9 } from '@concave/core'
 import { Pair, Price } from '../../src/entities'
 
 import { InsufficientInputAmountError } from '../../src/errors'

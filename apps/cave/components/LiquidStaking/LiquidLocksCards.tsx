@@ -1,13 +1,10 @@
 import { ExpandArrowIcon, SpinnerIcon } from '@concave/icons'
-import { Box, Card, Collapse, Flex, keyframes, Spinner, Text, useDisclosure } from '@concave/ui'
-// import { GlassPanel } from 'components/Treasury/TreasuryManagementCard'
+import { Box, Card, Collapse, Flex, keyframes, Text, useDisclosure } from '@concave/ui'
 import { formatDistanceStrict } from 'date-fns'
-import { BigNumber } from 'ethers'
-import { formatEther } from 'ethers/lib/utils'
 import { useGet_Stakingv1_Last100_LockQuery } from 'graphql/generated/graphql'
 import { useEffect, useState } from 'react'
+import { poolIdToDays } from 'utils/contants'
 import { formatFixed } from 'utils/formatFixed'
-import { PARAMETER_TO_POOL_PERIOD, PERIOD_TO_POOL_PARAMETER } from './StakeCard'
 
 const LiquidLocksCards = () => {
   const [stakingLocks, setStakingLocks] = useState([])
@@ -26,7 +23,7 @@ const LiquidLocksCards = () => {
   }, [stakingData])
 
   stakingData.isLoading
-  const amounts = stakingLocks
+  const amountStaked = stakingLocks
     .map((value, index) => (
       <Text opacity={1 - (index / 10) * (isOpen ? 1 : 3)} key={index}>
         {formatFixed(value.amount) + ' CNV'}
@@ -34,10 +31,10 @@ const LiquidLocksCards = () => {
     ))
     .splice(0, 9)
 
-  const poolIds = stakingLocks
+  const stakePools = stakingLocks
     .map((value, index) => (
       <Text opacity={1 - (index / 10) * (isOpen ? 1 : 3)} key={index}>
-        {PARAMETER_TO_POOL_PERIOD[value.poolID]}
+        {poolIdToDays[value.poolID]}
       </Text>
     ))
     .splice(0, 9)
@@ -52,7 +49,6 @@ const LiquidLocksCards = () => {
 
   return (
     <Card
-      mt={4}
       mx={'auto'}
       width={{ base: '330px', md: '430px', xl: '900px' }}
       variant="secondary"
@@ -61,43 +57,11 @@ const LiquidLocksCards = () => {
     >
       <Collapse startingHeight={isLoading ? '60px' : '100px'} in={isOpen}>
         <Flex fontWeight="700" width={'full'} flex={1} height="full">
-          <Flex direction={'column'} flex={1} height="full" align={'center'}>
-            <Text mt={2} fontSize={{ base: 'sm', md: 'md' }}>
-              When
-            </Text>
-            <Flex
-              direction={'column'}
-              textColor="text.accent"
-              fontSize={{ base: '12px', md: '14px' }}
-              align="center"
-            >
-              {relativeTime}
-            </Flex>
-          </Flex>
-
+          <LocksColumn title="When" values={relativeTime} />
           <Box w="1px" bg="stroke.primary" />
-          <Flex direction={'column'} flex={1} align={'center'} height="full">
-            <Text mt={2} fontSize={{ base: 'sm', md: 'md' }}>
-              Amount Staked
-            </Text>
-            <Flex
-              direction={'column'}
-              textColor="text.accent"
-              fontSize={{ base: '12px', md: '14px' }}
-              align="center"
-            >
-              {amounts}
-            </Flex>
-          </Flex>
+          <LocksColumn title="Amount staked" values={amountStaked} />
           <Box w="1px" bg="stroke.primary" />
-          <Flex direction={'column'} flex={1} align={'center'} height="full">
-            <Text mt={2} fontSize={{ base: 'sm', md: 'md' }}>
-              Stake Pool
-            </Text>
-            <Flex direction={'column'} textColor="text.low" fontSize={{ base: '12px', md: '14px' }}>
-              {poolIds}
-            </Flex>
-          </Flex>
+          <LocksColumn title="Stake pool" values={stakePools} />
         </Flex>
       </Collapse>
 
@@ -130,6 +94,23 @@ const LiquidLocksCards = () => {
   )
 }
 export default LiquidLocksCards
+
+type LocksColumnProps = { title: string; values: JSX.Element[] }
+const LocksColumn: React.FC<LocksColumnProps> = ({ title, values }) => (
+  <Flex direction={'column'} flex={1} height="full" align={'center'}>
+    <Text mt={2} fontSize={{ base: 'sm', md: 'md' }}>
+      {title}
+    </Text>
+    <Flex
+      direction={'column'}
+      textColor="text.accent"
+      fontSize={{ base: '12px', md: '14px' }}
+      align="center"
+    >
+      {values}
+    </Flex>
+  </Flex>
+)
 
 const spinAnimation = keyframes({
   '0%': { transform: 'rotate(0deg)' },

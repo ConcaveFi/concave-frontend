@@ -1,14 +1,14 @@
+import { Currency, CurrencyAmount, NATIVE, Percent, WETH9 } from '@concave/core'
+import { Pair } from '@concave/gemswap-sdk'
+import { BigNumber } from 'ethers'
 import { parseUnits } from 'ethers/lib/utils'
-import { Currency, CurrencyAmount, NATIVE, Percent, WETH9, WETH9_ADDRESS } from '@concave/core'
-import { Pair, toHex } from '@concave/gemswap-sdk'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { Router } from 'lib/Router'
 import { useState } from 'react'
-import { useAccount, useSigner } from 'wagmi'
-import { toPercent } from 'utils/toPercent'
-import { BigNumber } from 'ethers'
-import { useTransactionRegistry } from './TransactionsRegistry'
 import { toAmount } from 'utils/toAmount'
+import { toPercent } from 'utils/toPercent'
+import { useAccount, useSigner } from 'wagmi'
+import { useTransactionRegistry } from './TransactionsRegistry'
 
 const currencyAmountToBigNumber = (currency: CurrencyAmount<Currency>) => {
   return parseUnits(currency.toFixed(currency.currency.decimals))

@@ -1,6 +1,5 @@
 import {
   Button,
-  Collapse,
   Flex,
   Popover,
   PopoverContent,
@@ -8,7 +7,6 @@ import {
   Portal,
   useDisclosure,
 } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
 import { DropdownCard } from '../DropdownCard'
 import { StakePoolFilterEnum } from './hooks/useFilterByStakePool'
 import { StakeToggleButton } from './StakeToggleButton'

@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, NATIVE, ROUTER_ADDRESS, Token, Percent } from '@concave/core'
+import { Currency, CurrencyAmount, NATIVE, Percent, ROUTER_ADDRESS, Token } from '@concave/core'
 import { Pair } from '@concave/gemswap-sdk'
 import {
   Box,
@@ -11,6 +11,7 @@ import {
   Text,
   useDisclosure,
 } from '@concave/ui'
+import { TransactionResponse } from '@ethersproject/abstract-provider'
 import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { PositionInfoItem } from 'components/Positions/MyPositions'
@@ -20,7 +21,6 @@ import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { RemoveLiquidityState, useRemoveLiquidity } from 'hooks/useRemoveLiquidity'
 import { useState } from 'react'
-import { TransactionResponse } from '@ethersproject/abstract-provider'
 
 export const RemoveLiquidityModalButton = ({
   liquidityInfo,
@@ -208,7 +208,7 @@ const RemoveLiquidityActions = ({
     <Flex gap={4} h={45} justifyContent={'center'}>
       <Button
         disabled={!removeLiquidityState.percentToRemove}
-        {...useCurrencyState.state}
+        {...useCurrencyState.buttonProps}
         w={250}
         variant={'primary'}
       />
@@ -222,7 +222,11 @@ const RemoveLiquidityActions = ({
         Confirm withdrawal
       </Button>
 
-      <WaitingConfirmationDialog isOpen={waitingForConfirm} title={'Confirm Liquidity Removal'}>
+      <WaitingConfirmationDialog
+        isOpen={waitingForConfirm}
+        onClose={() => setWaitingForConfirm(false)}
+        title={'Confirm Withdrawal'}
+      >
         <Flex
           width={'200px'}
           height="107px"

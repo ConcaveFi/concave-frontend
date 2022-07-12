@@ -1,5 +1,3 @@
-import { Interface } from '@ethersproject/abi'
-
 export const RouterAbi = [
   'constructor(address _factory, address _implementation, address _WETH)',
   'function WETH() view returns (address)',

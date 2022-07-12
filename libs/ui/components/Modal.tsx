@@ -1,3 +1,4 @@
+import { HStack } from '@chakra-ui/layout'
 import {
   Modal as ChakraModal,
   ModalCloseButton,
@@ -6,7 +7,6 @@ import {
   ModalOverlay,
   ModalProps as ChakraModalProps,
 } from '@chakra-ui/modal'
-import { HStack } from '@chakra-ui/layout'
 import { ReactNode } from 'react'
 import { Card, CardProps } from './Card'
 

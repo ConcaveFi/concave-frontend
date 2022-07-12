@@ -2,10 +2,10 @@ import { CNV } from '@concave/core'
 import { Box, Flex, Image, Stack, Text } from '@concave/ui'
 import { ButtonLink } from 'components/ButtonLink'
 import { ConnectWallet } from 'components/ConnectWallet'
+import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { MdOutlineDashboard } from 'react-icons/md'
 import { formatFixed } from 'utils/formatFixed'
-import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 
 function SideBarTop() {
   const networkId = useCurrentSupportedNetworkId()

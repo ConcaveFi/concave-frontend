@@ -1,9 +1,9 @@
+import { CurrencyAmount, FACTORY_ADDRESS, Token } from '@concave/core'
 import { Contract } from '@ethersproject/contracts'
 import { getNetwork } from '@ethersproject/networks'
 import { getDefaultProvider } from '@ethersproject/providers'
-import { Pair } from './entities'
 import invariant from 'tiny-invariant'
-import { FACTORY_ADDRESS, Token, CurrencyAmount } from '@concave/core'
+import { Pair } from './entities'
 
 const TOKENS_CACHE: { [chainId: number]: { [address: string]: Token } } = {}
 

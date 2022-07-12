@@ -19,7 +19,7 @@ import { getTxExplorer } from 'lib/getTransactionExplorer'
 import { concaveProvider } from 'lib/providers'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
-import { chain, useAccount, useContractWrite, useNetwork } from 'wagmi'
+import { useAccount, useContractWrite, useNetwork } from 'wagmi'
 import { useWorthyUser } from './DevelopGateway'
 
 const faucetKey = process.env.NEXT_PUBLIC_FAUCET_PK

@@ -1,49 +1,12 @@
 import { Flex, Heading, Text } from '@concave/ui'
-import StakeCard from 'components/LiquidStaking/StakeCard'
 import GraphicGuide from 'components/LiquidStaking/GraphicGuide'
+import { useLiquidStakeData } from 'components/LiquidStaking/hooks/useLiquidStakeData'
 import LiquidLocksCards from 'components/LiquidStaking/LiquidLocksCards'
+import { StakeCard } from 'components/LiquidStaking/StakeCard'
 import { withPageTransition } from 'components/PageTransition'
-
-interface StakingGroupProps {
-  icon: string
-  period: string
-  vapr: string
-  stakingLink: string
-  poolID: number
-}
-
-const StakingGroup: Array<StakingGroupProps> = [
-  {
-    icon: '360d',
-    period: '360 days',
-    vapr: '6,342',
-    stakingLink: '',
-    poolID: 0,
-  },
-  {
-    icon: '180d',
-    period: '180 days',
-    vapr: '1,002',
-    stakingLink: '',
-    poolID: 1,
-  },
-  {
-    icon: '90d',
-    period: '90 days',
-    vapr: '266',
-    stakingLink: '',
-    poolID: 2,
-  },
-  {
-    icon: '45d',
-    period: '45 days',
-    vapr: '17',
-    stakingLink: '',
-    poolID: 3,
-  },
-]
-
 function LiquidStaking() {
+  const { stakeData } = useLiquidStakeData()
+
   return (
     <Flex
       width={{ base: 'full', xl: 'full', lg: 'full', md: 'full' }}
@@ -53,7 +16,7 @@ function LiquidStaking() {
       p="0px"
     >
       <Heading as="h1" mt={{ base: 12, md: 8 }} fontSize={{ base: '4xl', sm: '5xl' }}>
-        Liquid Staking
+        Liquid staking
       </Heading>
       <Flex
         align={'center'}
@@ -80,7 +43,7 @@ function LiquidStaking() {
         <GraphicGuide />
       </Flex>
       <Flex
-        alignItems="start"
+        alignItems="center"
         justifyContent="center"
         maxW={{ base: '330px', md: '420px', lg: '450px', xl: 'full' }}
         height={{ xl: '550px', base: '1100px' }}
@@ -91,17 +54,9 @@ function LiquidStaking() {
           alignItems="center"
           wrap={{ xl: 'nowrap', base: 'wrap' }}
         >
-          {StakingGroup.map((i) => {
-            return (
-              <StakeCard
-                icon={i.icon}
-                period={i.period}
-                poolId={i.poolID}
-                stakingLink={i.stakingLink}
-                key={i.period}
-              />
-            )
-          })}
+          {stakeData?.map((stake, index) => (
+            <StakeCard key={index} stakeData={stake} />
+          ))}
         </Flex>
       </Flex>
       <LiquidLocksCards />
