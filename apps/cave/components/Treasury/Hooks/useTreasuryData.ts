@@ -68,10 +68,10 @@ export const useTreasuryData = () => {
         tokenImage:
           'https://static.debank.com/image/eth_token/logo_url/0x4e3fbd56cd56c3e72c1403e103b45db9da5b9d2b/be2a9b05a223d6dfca3dc88b1838fcd4.png',
         images: [
-          convertGithubUrl(convexToken?.image || ''),
-          convertGithubUrl(convexToken?.imageP1 || ''),
-          convertGithubUrl(convexToken?.imageP2 || ''),
-          convertGithubUrl(convexToken?.imageP3 || ''),
+          convertToJsDelivrPath(convexToken?.image || ''),
+          convertToJsDelivrPath(convexToken?.imageP1 || ''),
+          convertToJsDelivrPath(convexToken?.imageP2 || ''),
+          convertToJsDelivrPath(convexToken?.imageP3 || ''),
         ],
       },
     },
@@ -110,5 +110,6 @@ export type LastBondSolds = {
   outputAmount: string
 }[]
 
-const convertGithubUrl = (url: string) =>
-  url.replace('github', 'raw.githubusercontent').replace('blob/', '')
+// url.slice(48) will cut the string to get only the image path on github page.
+const convertToJsDelivrPath = (url: string) =>
+  'https://cdn.jsdelivr.net/gh/concavefi/assets@latest/' + url.slice(48)

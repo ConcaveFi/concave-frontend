@@ -91,8 +91,8 @@ const TokenInfo: React.FC<{ token: TreasuryTokenInfo }> = ({ token }) => (
   >
     <Card w={'45%'} h="full" direction={'row'} align="center">
       <AvatarGroup width={'42%'} size={'sm'} justifyContent="center">
-        <Avatar src={convertGithubUrl(token?.image)} />
-        {token?.isLP && <Avatar src={convertGithubUrl(token?.imageP1)} />}
+        <Avatar src={convertToJsDelivrPath(token?.image)} />
+        {token?.isLP && <Avatar src={convertToJsDelivrPath(token?.imageP1)} />}
       </AvatarGroup>
       <Text fontSize={'lg'} fontWeight="bold">
         {token.name}
@@ -103,5 +103,6 @@ const TokenInfo: React.FC<{ token: TreasuryTokenInfo }> = ({ token }) => (
     </Text>
   </Card>
 )
-const convertGithubUrl = (url: string) =>
-  url.replace('github', 'raw.githubusercontent').replace('blob/', '')
+// url.slice(48) will cut the string to get only the image path on github page.
+const convertToJsDelivrPath = (url: string) =>
+  'https://cdn.jsdelivr.net/gh/concavefi/assets@latest/' + url.slice(48)
