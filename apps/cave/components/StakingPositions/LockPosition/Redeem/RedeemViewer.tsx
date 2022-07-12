@@ -1,5 +1,5 @@
 import { StakingPosition, StakingV1Contract } from '@concave/marketplace'
-import { Box, Button, Flex, FlexProps, Text, TextProps } from '@concave/ui'
+import { Box, Button, Flex, FlexProps, Spinner, Text, TextProps } from '@concave/ui'
 import { BigNumber } from 'ethers'
 import { formatEther } from 'ethers/lib/utils'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
@@ -23,13 +23,16 @@ interface RedeemCardViewerProps {
 }
 const RedeemCardViewer = ({ stakingPosition }: RedeemCardViewerProps) => {
   const [status, setStatus] = useState<'default' | 'approve'>('default')
-  const readyForReedem = stakingPosition.maturity < Date.now() / 1000
+  const readyForReedem = stakingPosition.maturity <= Date.now() / 1000
   const chaindID = useCurrentSupportedNetworkId()
   const { data: signer } = useSigner()
   const { address } = useAccount()
   const redeem = () => {
     const stakingContract = new StakingV1Contract(concaveProvider(chaindID))
-    stakingContract.unlock(signer, address, stakingPosition.tokenId)
+    setStatus('approve')
+    stakingContract
+      .unlock(signer, address, stakingPosition.tokenId)
+      .finally(() => setStatus('default'))
   }
   return (
     <Box
@@ -59,24 +62,7 @@ const RedeemCardViewer = ({ stakingPosition }: RedeemCardViewerProps) => {
             value={bigNumberMask(stakingPosition.initialValue) + ' CNV'}
           />
         </Flex>
-        <Button
-          size={'md'}
-          minW={{ base: '280px', md: '160px' }}
-          cursor={readyForReedem ? 'default' : 'pointer'}
-          variant={readyForReedem ? 'primary.outline' : 'primary'}
-          shadow={readyForReedem ? 'down' : 'up'}
-          _hover={{}}
-          mx="auto"
-          onClick={redeem}
-          my={'auto'}
-          mt="2px"
-          _active={readyForReedem && { transform: 'scale(0.9)' }}
-          _focus={{}}
-        >
-          <Text color={readyForReedem ? 'text.low' : 'white'} fontSize={{ base: '2xl', md: 'sm' }}>
-            {readyForReedem ? 'Not redeemable' : 'Redeem'}
-          </Text>
-        </Button>
+        <Button onClick={redeem} {...getRedeemButtonProps(readyForReedem)[status]} />
       </Flex>
     </Box>
   )
@@ -100,3 +86,27 @@ export const Info: React.FC<Info> = ({ ...props }) => {
   )
 }
 export default RedeemCardViewer
+
+const getRedeemButtonProps = (readyForRedeem?: boolean) => {
+  const defaultProps = {
+    children: !readyForRedeem ? 'Not redeemable' : 'Redeem',
+    variant: 'primary',
+    size: 'md',
+    minW: { base: '280px', md: '160px' },
+    m: 'auto',
+    mt: '2px',
+  }
+  return {
+    default: { ...defaultProps, disabled: !readyForRedeem },
+    approve: {
+      ...defaultProps,
+      disabled: true,
+      children: (
+        <Flex gap={2}>
+          <Spinner />
+          <Text>{'Approve in your wallet...'}</Text>
+        </Flex>
+      ),
+    },
+  }
+}
