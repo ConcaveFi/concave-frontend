@@ -14,6 +14,7 @@ import { FilterContainer } from './FilterContainer'
 import { UserDividendCard } from './UserDividendCard'
 
 export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePositionsState }) => {
+  console.log(`UserDashboardCard`)
   const { isConnected } = useAccount()
   const { userNonFungibleTokensInfo, totalLocked, isLoading } = stakePosition
   const hasPositions = userNonFungibleTokensInfo.length !== 0

@@ -11,6 +11,7 @@ interface MarketplaceInfoProps {
 }
 
 export const MarketListing = (props: MarketplaceInfoProps) => {
+  console.debug(`MarketListing`)
   const marketItemState = useMarketInfo(props)
   const { marketItem } = marketItemState
   if (marketItem.isLoading) {
@@ -81,7 +82,7 @@ export const ListForSaleModal = ({ marketItemState }: { marketItemState: UserMar
       isCentered
       hideClose
       bodyProps={{
-        minW: 350,
+        minW: 450,
         p: 0,
         rounded: '2xl',
         shadow: 'up',
