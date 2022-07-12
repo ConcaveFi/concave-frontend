@@ -5,7 +5,7 @@ import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId
 import { FC } from 'react'
 import { useAccount } from 'wagmi'
 import { ACNVRedemptionDialog } from './VestedTokensDialogs/ACNVRedemptionDialog'
-import { BBBTCNVRedemptionDialog } from './VestedTokensDialogs/bbtCNV/BBTCNVRedemptionDialog'
+import { BBBTCNVRedemptionDialog } from './VestedTokensDialogs/BBTCNVRedemptionDialog'
 import { PCNVRedemptionDialog } from './VestedTokensDialogs/PCNVRedemptionDialog'
 
 export const TreasuryRedeemCard = () => {
