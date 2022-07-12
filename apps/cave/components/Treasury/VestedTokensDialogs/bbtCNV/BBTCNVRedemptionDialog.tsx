@@ -4,6 +4,7 @@ import { TransactionResponse } from '@ethersproject/abstract-provider'
 import { ToggleButton } from 'components/ToggleButton'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
+import { VestedTokenDialogProps } from 'components/Treasury/TreasuryRedeemCard'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { bbtCNV_REDEMPTION_V2 } from 'contracts/VestedTokens/addresses'
 import { bbtCNV_REDEMPTION_V2_ABI } from 'contracts/VestedTokens/BBTCNV_V2_ABI'
@@ -14,16 +15,11 @@ import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId
 import { concaveProvider as provider } from 'lib/providers'
 import { useState } from 'react'
 import { useAccount, useSigner } from 'wagmi'
-
 import useBBTCNVRedeemable from '../../Hooks/useBBTCNVRedeemable'
 import useVestedTokens from '../../Hooks/useVestedTokens'
 import { BBT_CNVDialogInput } from './BbtCNVDialogInput'
-interface BBBTCNVRedemptionDialogProps {
-  onClose: () => void
-  isOpen: boolean
-}
 
-export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogProps) {
+export const BBBTCNVRedemptionDialog: React.FC<VestedTokenDialogProps> = (props) => {
   const { isOpen: isConfirmOpen, onOpen: onOpenConfirm, onClose: onCloseConfirm } = useDisclosure()
   const { isOpen: isSubOpen, onOpen: onOpenSub, onClose: onCloseSub } = useDisclosure()
   const { isOpen: isErrorOpen, onOpen: onOpenError, onClose: onCloseError } = useDisclosure()

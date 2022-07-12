@@ -1,31 +1,11 @@
-import { Box, Stack, Text } from '@concave/ui'
-
-const periodToBondRevenueMapping = {
-  '360 days': '100%',
-  '180 days': '75%',
-  '90 days': '50%',
-  '45 days': '25%',
-}
-
-const periodToDaysMapping = {
-  '360 days': 360,
-  '180 days': 180,
-  '90 days': 90,
-  '45 days': 45,
-}
-
-const periodToRewardsBoost = {
-  '360 days': '4x',
-  '180 days': '2x',
-  '90 days': '1.5x',
-  '45 days': '1.25x',
-}
-const quaterlyBoost = {
-  '360 days': '2x',
-  '180 days': '1.75x',
-  '90 days': '1.5x',
-  '45 days': '1.25x',
-}
+import { Flex, Stack, Text } from '@concave/ui'
+import React from 'react'
+import {
+  poolIdToBondRevenueMapping,
+  poolIdToDays,
+  poolIdToquaterlyBoost,
+  poolIdToRewardsBoost,
+} from 'utils/contants'
 
 function addDays(date, days) {
   var result = new Date(date)
@@ -33,73 +13,83 @@ function addDays(date, days) {
   return result
 }
 
-function StakeInfo(props: any) {
+type StakeInfoProps = {
+  poolId: number
+  currentlyStaked: string
+  stakingCap: string
+  percent: number
+}
+function StakeInfo({ currentlyStaked, poolId, stakingCap, percent }: StakeInfoProps) {
   return (
-    <Box shadow="up" px={2} py={4} borderRadius="3xl" filter="drop-shadow(0px 0px 27px #81b3ff4f)">
-      <Box px={4}>
-        <Stack isInline justifyContent="space-between">
-          <Stack spacing="1px">
-            <Text textAlign="left" fontSize={{ base: '2xl', sm: '3xl' }} fontWeight="bold">
-              {periodToRewardsBoost[`${props.period}`]}
-            </Text>
-            <Text color="text.low" fontSize="sm">
-              Rewards Boost
-            </Text>
-          </Stack>
-          <Stack spacing="1px">
-            <Text textAlign="left" fontSize={{ base: '2xl', sm: '3xl' }} fontWeight="bold">
-              {periodToBondRevenueMapping[`${props.period}`]}
-            </Text>
-            <Text color="text.low" fontSize="sm">
-              Share of Bond Growth
-            </Text>
-          </Stack>
-        </Stack>
-        <Text
-          mt={{ base: 3, sm: 6 }}
-          color="text.low"
-          fontSize={{ base: '12px', sm: 'sm' }}
-          align="justify"
-        >
-          The {props.period} staking term will accrue CNV from bond emissions by capturing{` `}
-          {periodToBondRevenueMapping[props.period]} of the growth generated from purchased bonds
-          every 8 hours. Additionally, the {props.period} term receives a{` `}
-          {periodToRewardsBoost[props.period]} boost on base CNV emissions and a{' '}
-          {quaterlyBoost[props.period]} the quarterly dividend derived from protocol profits in non
-          CNV assets.
+    <Flex w={{ base: '300px', md: '350px' }} rounded="3xl" shadow={'up'} p={4} direction="column">
+      <Flex justify={'space-between'} w="full">
+        <HeaderInfo title={poolIdToRewardsBoost[`${poolId}`]} info="Rewards boost" />
+        <HeaderInfo title={poolIdToBondRevenueMapping[`${poolId}`]} info="Share of bond growth" />
+      </Flex>
+      <Paragraph poolId={poolId} />
+      <Flex mt={{ base: 3, md: 5 }} align="center" gap={1} fontWeight="semibold">
+        <Text color="text.low" fontSize="md">
+          Redeem date:
         </Text>
-        <Text mt={{ base: 3, sm: 5 }} color="text.low" fontSize="sm" fontWeight="semibold">
-          Redeem Date:{' '}
-          {addDays(Date(), periodToDaysMapping[`${props.period}`]).toISOString().slice(0, 10)}
+        <Text fontSize="md">
+          {addDays(Date(), poolIdToDays[`${poolId}`]).toISOString().slice(0, 10)}
         </Text>
-      </Box>
-
-      <Stack mt={{ base: 0, sm: 4 }}>
-        <Stack px={4} color="text.low" fontSize={12} isInline justify="space-between" mt={3}>
-          <Text fontSize="sm">Currently Staked</Text>
-          <Text fontSize="sm">Staking Cap</Text>
-        </Stack>
-        <Box shadow="down" borderRadius="2xl" p={1} position="relative">
-          <Box
-            shadow="up"
-            px={4}
-            py={1}
-            borderRadius="2xl"
-            textAlign="left"
-            bg="secondary.50"
-            w={`${props.capPercentage}%`}
-            fontSize="sm"
-          >
-            <Text w="150px">{props.stakedCNV} CNV</Text>
-          </Box>
-
-          <Text position="absolute" right="4" top="2" fontSize="sm">
-            {props.CNVCap} CNV
-          </Text>
-        </Box>
-      </Stack>
-    </Box>
+      </Flex>
+      <LoadBar currentlyStaked={currentlyStaked} percent={percent} stakingCap={stakingCap} />
+    </Flex>
   )
 }
 
 export default StakeInfo
+
+type ParagraphProps = { poolId: number }
+const Paragraph = ({ poolId }: ParagraphProps) => (
+  <Text
+    mt={{ base: 3, md: 6 }}
+    color="text.low"
+    fontSize={{ base: '12px', md: 'sm' }}
+    align="justify"
+  >
+    The {poolId} staking term will accrue CNV from bond emissions by capturing{` `}
+    {poolIdToBondRevenueMapping[poolId]} of the growth generated from purchased bonds every 8 hours.
+    Additionally, the {poolId} term receives a{` `}
+    {poolIdToRewardsBoost[poolId]} boost on base CNV emissions and a {poolIdToquaterlyBoost[poolId]}{' '}
+    the quarterly dividend derived from protocol profits in non CNV assets.
+  </Text>
+)
+
+type HeaderInfoProps = { title: string; info: string }
+const HeaderInfo: React.FC<HeaderInfoProps> = ({ info, title }) => (
+  <Stack spacing="1px">
+    <Text textAlign="left" fontSize={{ base: '2xl', md: '3xl' }} fontWeight="bold">
+      {title}
+    </Text>
+    <Text color="text.low" fontSize="sm">
+      {info}
+    </Text>
+  </Stack>
+)
+
+type LoadBarProps = { percent: number; currentlyStaked: string; stakingCap: string }
+const LoadBar: React.FC<LoadBarProps> = ({ currentlyStaked, percent, stakingCap }) => (
+  <>
+    {' '}
+    <Stack px={4} color="text.low" fontSize={12} isInline justify="space-between" mt={6}>
+      <Text fontSize="sm">Currently staked</Text>
+      <Text fontSize="sm">Staking cap</Text>
+    </Stack>
+    <Flex w="full" h="30px" shadow={'down'} rounded="2xl" mt={3} p={1}>
+      <Flex
+        h={'full'}
+        width={`${percent}%`}
+        apply="background.metalBrighter"
+        rounded={'2xl'}
+        shadow="up"
+      />
+    </Flex>
+    <Flex justify={'space-between'} px={4} mt={'-27px'}>
+      <Text>{currentlyStaked}</Text>
+      <Text>{stakingCap}</Text>
+    </Flex>
+  </>
+)

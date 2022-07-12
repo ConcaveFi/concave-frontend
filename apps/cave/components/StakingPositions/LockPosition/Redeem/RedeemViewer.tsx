@@ -32,7 +32,7 @@ const RedeemCardViewer = ({ stakingPosition }: RedeemCardViewerProps) => {
       <Flex gap={3} flex={1} direction={{ base: 'column', md: 'row' }}>
         <Flex ml={{ lg: 7 }} mx="auto">
           <Info
-            label="Current Value"
+            label="Current value"
             valueFontSize={{ base: 'sm', md: 'lg' }}
             value={bigNumberMask(stakingPosition.currentValue) + ' CNV'}
           />
