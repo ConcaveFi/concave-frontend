@@ -1,12 +1,12 @@
 import _Big from 'big.js'
 
-import { BigintIsh } from '../types'
-import JSBI from 'jsbi'
-import { Rounding } from '../enums'
 import _Decimal from 'decimal.js-light'
+import JSBI from 'jsbi'
 import invariant from 'tiny-invariant'
 import toFormat from 'toformat'
 import { ZERO } from '../constants'
+import { Rounding } from '../enums'
+import { BigintIsh } from '../types'
 
 const Decimal = toFormat(_Decimal)
 const Big = toFormat(_Big)

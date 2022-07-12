@@ -1,4 +1,4 @@
-import { useToast, Stack, CloseButton, Card, Link, Text, CardProps, RenderProps } from '@concave/ui'
+import { Card, CardProps, CloseButton, Link, RenderProps, Stack, Text, useToast } from '@concave/ui'
 import { getTransactionStatusLabel, TrackedTransaction } from 'hooks/TransactionsRegistry'
 import { getTxExplorer } from 'lib/getTransactionExplorer'
 import ms from 'ms'

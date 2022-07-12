@@ -1,6 +1,6 @@
 import { forwardRef, Stack, StackProps, useStyleConfig } from '@chakra-ui/react'
-import { GradientBorderStyleProps } from 'theme/utils/gradientBorder'
 import { motion, MotionProps } from 'framer-motion'
+import { GradientBorderStyleProps } from 'theme/utils/gradientBorder'
 
 type Merge<M, N> = Omit<M, Extract<keyof M, keyof N>> & N
 

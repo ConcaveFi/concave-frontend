@@ -19,7 +19,7 @@ jobs:
 
       - name: Set up packages
         run: yarn && yarn build
-        
+
       - name: '@concave/core'
         run: cd libs/core/ && yarn test && cd ../..
 

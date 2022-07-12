@@ -1,7 +1,8 @@
-import { ChainId, CHAIN_NAME, CNV, Currency, DAI, ROUTER_ADDRESS } from '@concave/core'
+import { ChainId, CHAIN_NAME, CNV, Currency, DAI } from '@concave/core'
 import { Trade, TradeType } from '@concave/gemswap-sdk'
 import { ExpandArrowIcon } from '@concave/icons'
 import { Button, Card, Collapse, Flex, HStack, Stack, Text, useDisclosure } from '@concave/ui'
+import { AddTokenToWalletButton } from 'components/AddTokenToWalletButton'
 import {
   CandleStickCard,
   ConfirmSwapModal,
@@ -28,7 +29,6 @@ import { ExpectedOutput, MinExpectedOutput } from 'components/AMM/Swap/ExpectedO
 import { PriceImpact } from 'components/AMM/Swap/PriceImpact'
 import { useSwapSettings } from 'components/AMM/Swap/Settings'
 import { TradeRoute } from 'components/AMM/Swap/TradeRoute'
-import { ApproveButton } from 'components/ApproveButton/ApproveButton'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
 import { withPageTransition } from 'components/PageTransition'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
@@ -118,8 +118,8 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
         align="center"
         alignContent="center"
         w="100%"
+        minH="100vh"
         gap={10}
-        pt={{ base: '100px', lg: 0 }}
       >
         <LayoutGroup>
           <CandleStickCard
@@ -196,17 +196,7 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
               <TradeDetails trade={trade.data} settings={settings} />
             </Collapse>
 
-            <ApproveButton
-              variant="primary"
-              size="large"
-              w="full"
-              approveArgs={{
-                currency: trade.data.inputAmount.currency,
-                amount: trade.data.inputAmount.numerator,
-                spender: ROUTER_ADDRESS[trade.data.inputAmount.currency?.chainId],
-              }}
-              {...swapButtonProps}
-            />
+            <Button variant="primary" size="large" w="full" {...swapButtonProps} />
 
             <NetworkMismatch
               isOpen={isNetworkMismatch && queryHasCurrency}
@@ -243,12 +233,11 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
         </Text>
       </WaitingConfirmationDialog>
 
-      <TransactionSubmittedDialog
-        tx={swapTx.data}
-        isOpen={swapTx.isSuccess}
-        tokenSymbol={swapTx.trade?.outputAmount.currency.symbol}
-        tokenOutAddress={swapTx.trade?.outputAmount.currency.wrapped.address} // workaround for type error
-      />
+      <TransactionSubmittedDialog title="Swap Submitted" tx={swapTx.data} isOpen={swapTx.isSuccess}>
+        {swapTx.trade?.outputAmount.currency.isToken && (
+          <AddTokenToWalletButton token={swapTx.trade.outputAmount.currency.wrapped} />
+        )}
+      </TransactionSubmittedDialog>
       <TransactionErrorDialog error={swapTx.error?.message} isOpen={swapTx.isError} />
     </>
   )

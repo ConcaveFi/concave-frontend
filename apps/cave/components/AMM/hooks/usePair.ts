@@ -1,12 +1,12 @@
-import { useQuery, UseQueryOptions, UseQueryResult } from 'react-query'
-import { concaveProvider } from 'lib/providers'
 import { Token } from '@concave/core'
 import { Fetcher, Pair } from '@concave/gemswap-sdk'
-import { useBlockNumber } from 'wagmi'
 import {
   BASES_TO_CHECK_TRADES_AGAINST,
   INTERMEDIARY_PAIRS_FOR_MULTI_HOPS,
 } from 'components/AMM/constants/routing'
+import { concaveProvider } from 'lib/providers'
+import { useQuery, UseQueryOptions, UseQueryResult } from 'react-query'
+import { useBlockNumber } from 'wagmi'
 
 const filterRepeatedPairs = (pairs: [Token, Token][]) =>
   pairs.filter(

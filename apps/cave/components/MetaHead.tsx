@@ -1,6 +1,5 @@
 import NextHead from 'next/head'
 import { useRouter } from 'next/router'
-import React from 'react'
 
 export const HOST_URL = 'https://app.concave.lol/app'
 export const TWITTER_USER = '@concavefi'

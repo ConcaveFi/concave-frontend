@@ -1,6 +1,7 @@
+import { ROUTER_ADDRESS } from '@concave/core'
 import { ButtonProps } from '@concave/ui'
+import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { isAddress } from 'ethers/lib/utils'
-import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { swapSupportedChains } from 'pages/gemswap'
 import { toPercent } from 'utils/toPercent'
 import { useAccount, useNetwork } from 'wagmi'
@@ -24,8 +25,11 @@ export const useSwapButtonProps = ({
   const inputAmount = trade.data.inputAmount
   const outputAmount = trade.data.outputAmount
   const currencyIn = inputAmount?.currency
-  const currencyInBalance = useCurrencyBalance(currencyIn, { watch: true })
-
+  const useCurrencyState = useCurrencyButtonState(
+    trade.data.inputAmount,
+    ROUTER_ADDRESS[trade.data.inputAmount.currency?.chainId],
+  )
+  if (useCurrencyState.state === 'disconected') return useCurrencyState.buttonProps
   /*
     Not Connected
   */
@@ -85,16 +89,9 @@ export const useSwapButtonProps = ({
   if (!inputAmount || inputAmount?.equalTo(0))
     return { isDisabled: true, children: 'Enter an amount' }
 
-  /*
-    Insufficient Funds
-  */
-  if (currencyInBalance.data?.lessThan(inputAmount))
-    return {
-      children: `Insufficient ${inputAmount.currency.symbol}`,
-      isDisabled: true,
-    }
-
   if (recipient && !isAddress(recipient)) return { children: 'Invalid recipient', isDisabled: true }
+
+  if (!useCurrencyState.approved) return useCurrencyState.buttonProps
 
   // /*
   //   Wrap / Unwrap, ETH <-> WETH

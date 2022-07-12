@@ -1,8 +1,8 @@
+import { NoValidPairsError } from 'components/AMM/hooks/usePair'
+import { InsufficientLiquidityError, InvalidTradeError } from 'components/AMM/hooks/useTrade'
+import ms from 'ms'
 import { useState } from 'react'
 import { QueryClient, QueryClientProvider, setLogger } from 'react-query'
-import ms from 'ms'
-import { InsufficientLiquidityError, InvalidTradeError } from 'components/AMM/hooks/useTrade'
-import { NoValidPairsError } from 'components/AMM/hooks/usePair'
 
 setLogger({
   log: console.log,

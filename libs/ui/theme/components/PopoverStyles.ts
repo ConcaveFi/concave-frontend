@@ -1,5 +1,5 @@
-import { ComponentMultiStyleConfig } from '@chakra-ui/react'
 import { popoverAnatomy } from '@chakra-ui/anatomy'
+import { ComponentMultiStyleConfig } from '@chakra-ui/react'
 
 export const PopoverStyles: ComponentMultiStyleConfig = {
   parts: popoverAnatomy.keys,

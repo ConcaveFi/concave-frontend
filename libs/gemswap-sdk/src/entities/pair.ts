@@ -1,21 +1,21 @@
 import {
+  BigintIsh,
+  Currency,
+  CurrencyAmount,
   FIVE,
+  ONE,
+  Percent,
+  Token,
   ZERO,
   _1000,
   _997,
-  BigintIsh,
-  CurrencyAmount,
-  Token,
-  Currency,
-  Percent,
-  ONE,
 } from '@concave/core'
 import { InsufficientInputAmountError, InsufficientReservesError } from '../errors'
 
 import JSBI from 'jsbi'
-import { Price } from './price'
 import invariant from 'tiny-invariant'
 import { sqrt } from '../functions'
+import { Price } from './price'
 
 const FEE = _997
 const MINIMUM_LIQUIDITY = _1000
