@@ -51,14 +51,8 @@ function AddLiquidityContent({
   const { onChangeCurrencies, isNetworkMismatch, queryHasCurrency, currentChainId, queryChainId } =
     useQueryCurrencies()
 
-  const {
-    pair,
-    firstFieldAmount,
-    secondFieldAmount,
-    onChangeFirstField,
-    onChangeSecondField,
-    setExactAmountInLiquidityState,
-  } = useAddLiquidityState(currencies, onChangeCurrencies)
+  const { pair, firstFieldAmount, secondFieldAmount, onChangeFirstField, onChangeSecondField } =
+    useAddLiquidityState(currencies, onChangeCurrencies)
 
   const addLPTx = useAddLiquidityTransaction(firstFieldAmount, secondFieldAmount)
 
