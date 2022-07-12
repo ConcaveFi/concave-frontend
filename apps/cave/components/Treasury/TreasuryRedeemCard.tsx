@@ -21,9 +21,11 @@ export const TreasuryRedeemCard = () => {
       variant="secondary"
       w={{ base: 'full', lg: '45%', xl: '40%' }}
       h={{ base: '315px', md: '200px', lg: '329px' }}
+      // justify="center"
       px={10}
+      py={6}
     >
-      <Text fontSize={'2xl'} fontWeight="bold" mx={'auto'} mt={8}>
+      <Text fontSize={'2xl'} fontWeight="bold" mx={'auto'}>
         Redeem CNV
       </Text>
       <Text color="text.low" textAlign={'center'} fontWeight="bold">
@@ -40,9 +42,8 @@ export const TreasuryRedeemCard = () => {
         fontWeight={'bold'}
         cursor="pointer"
         mx={'auto'}
-        my="auto"
+        // my="auto"
         fontSize={{ base: '22px', lg: 'sm' }}
-        variant="primary.outline"
         size={'md'}
         px={2}
         w="full"
