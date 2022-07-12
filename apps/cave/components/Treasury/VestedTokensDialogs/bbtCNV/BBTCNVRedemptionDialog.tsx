@@ -4,7 +4,7 @@ import { TransactionResponse } from '@ethersproject/abstract-provider'
 import { ToggleButton } from 'components/ToggleButton'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
-import { VestedTokenDialogProps } from 'components/Treasury/TreasuryRedeemCard'
+import { VestedTokenButtonProps } from 'components/Treasury/TreasuryRedeemCard'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { bbtCNV_REDEMPTION_V2 } from 'contracts/VestedTokens/addresses'
 import { bbtCNV_REDEMPTION_V2_ABI } from 'contracts/VestedTokens/BBTCNV_V2_ABI'
@@ -19,7 +19,7 @@ import useBBTCNVRedeemable from '../../Hooks/useBBTCNVRedeemable'
 import useVestedTokens from '../../Hooks/useVestedTokens'
 import { BBT_CNVDialogInput } from './BbtCNVDialogInput'
 
-export const BBBTCNVRedemptionDialog: React.FC<VestedTokenDialogProps> = (props) => {
+export const BBBTCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) => {
   const { isOpen: isConfirmOpen, onOpen: onOpenConfirm, onClose: onCloseConfirm } = useDisclosure()
   const { isOpen: isSubOpen, onOpen: onOpenSub, onClose: onCloseSub } = useDisclosure()
   const { isOpen: isErrorOpen, onOpen: onOpenError, onClose: onCloseError } = useDisclosure()
