@@ -6,7 +6,7 @@ export type ButtonLinkProps = ButtonProps & LinkProps
 export function ButtonLink({ href, ...props }: ButtonLinkProps) {
   return (
     <Link href={href} passHref>
-      <Button as="a" {...props} />
+      <Button {...props} />
     </Link>
   )
 }
