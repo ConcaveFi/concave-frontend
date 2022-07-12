@@ -1,5 +1,5 @@
-import { Button, Image } from '@concave/ui'
 import { Token } from '@concave/core'
+import { Button, Image } from '@concave/ui'
 import { useAccount } from 'wagmi'
 import { getCurrencyLogoURI } from './CurrencyIcon'
 
