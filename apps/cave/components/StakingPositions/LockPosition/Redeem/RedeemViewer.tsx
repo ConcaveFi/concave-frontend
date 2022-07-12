@@ -1,8 +1,12 @@
-import { StakingPosition } from '@concave/marketplace'
+import { StakingPosition, StakingV1Contract } from '@concave/marketplace'
 import { Box, Button, Flex, FlexProps, Text, TextProps } from '@concave/ui'
 import { BigNumber } from 'ethers'
 import { formatEther } from 'ethers/lib/utils'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import { concaveProvider } from 'lib/providers'
+import { useState } from 'react'
 import { formatFixed } from 'utils/formatFixed'
+import { useAccount, useSigner } from 'wagmi'
 
 const bigNumberMask = (number: BigNumber) => {
   if (number.eq(0)) {
@@ -18,7 +22,15 @@ interface RedeemCardViewerProps {
   stakingPosition: StakingPosition
 }
 const RedeemCardViewer = ({ stakingPosition }: RedeemCardViewerProps) => {
+  const [status, setStatus] = useState<'default' | 'approve'>('default')
   const readyForReedem = stakingPosition.maturity < Date.now() / 1000
+  const chaindID = useCurrentSupportedNetworkId()
+  const { data: signer } = useSigner()
+  const { address } = useAccount()
+  const redeem = () => {
+    const stakingContract = new StakingV1Contract(concaveProvider(chaindID))
+    stakingContract.unlock(signer, address, stakingPosition.tokenId)
+  }
   return (
     <Box
       borderRadius="2xl"
@@ -50,18 +62,19 @@ const RedeemCardViewer = ({ stakingPosition }: RedeemCardViewerProps) => {
         <Button
           size={'md'}
           minW={{ base: '280px', md: '160px' }}
-          cursor={!readyForReedem ? 'default' : 'pointer'}
-          variant={!readyForReedem ? 'primary.outline' : 'primary'}
-          shadow={!readyForReedem ? 'down' : 'up'}
+          cursor={readyForReedem ? 'default' : 'pointer'}
+          variant={readyForReedem ? 'primary.outline' : 'primary'}
+          shadow={readyForReedem ? 'down' : 'up'}
           _hover={{}}
           mx="auto"
+          onClick={redeem}
           my={'auto'}
           mt="2px"
           _active={readyForReedem && { transform: 'scale(0.9)' }}
           _focus={{}}
         >
-          <Text color={!readyForReedem ? 'text.low' : 'white'} fontSize={{ base: '2xl', md: 'sm' }}>
-            {!readyForReedem ? 'Not redeemable' : 'Redeem'}
+          <Text color={readyForReedem ? 'text.low' : 'white'} fontSize={{ base: '2xl', md: 'sm' }}>
+            {readyForReedem ? 'Not redeemable' : 'Redeem'}
           </Text>
         </Button>
       </Flex>
