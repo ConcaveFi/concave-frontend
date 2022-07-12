@@ -21,7 +21,6 @@ export const TreasuryRedeemCard = () => {
       variant="secondary"
       w={{ base: 'full', lg: '45%', xl: '40%' }}
       h={{ base: '315px', md: '200px', lg: '329px' }}
-      // justify="center"
       px={10}
       py={6}
     >
