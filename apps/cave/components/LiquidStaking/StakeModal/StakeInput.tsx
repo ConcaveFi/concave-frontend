@@ -1,5 +1,5 @@
 import { CNV, Currency, CurrencyAmount, STAKING_CONTRACT } from '@concave/core'
-import { StakingV1Contract } from '@concave/marketplace'
+import { StakingPool, StakingV1Contract } from '@concave/marketplace'
 import { Box, Button, Card, Flex, Text, useDisclosure } from '@concave/ui'
 import { TransactionResponse } from '@ethersproject/abstract-provider'
 import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
@@ -12,11 +12,14 @@ import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
 import { useState } from 'react'
-import { poolIdToDays } from 'utils/contants'
 import { toAmount } from 'utils/toAmount'
 import { useAccount, useSigner } from 'wagmi'
 
-function StakeInput(props: { poolId: number; onClose: () => void }) {
+export function StakeInput(props: {
+  stakingPool: StakingPool
+  poolId: number
+  onClose: () => void
+}) {
   const { address } = useAccount()
   const netWorkdId = useCurrentSupportedNetworkId()
   const { data: signer } = useSigner()
@@ -58,7 +61,7 @@ function StakeInput(props: { poolId: number; onClose: () => void }) {
         registerTransaction(x, {
           type: 'stake',
           amount: stakeInput.toString(),
-          pool: poolIdToDays[props.poolId],
+          pool: props.stakingPool.days,
         })
         setTx(x)
         setWaitingForConfirm(false)
@@ -121,7 +124,7 @@ function StakeInput(props: { poolId: number; onClose: () => void }) {
           <Text fontWeight={'700'} textColor="text.accent">
             {stakeInput.wrapped.toExact() + ' CNV'}
           </Text>
-          <Text textColor={'text.low'}>For {poolIdToDays[props.poolId] + ' days'}</Text>
+          <Text textColor={'text.low'}>For {props.stakingPool.days + ' days'}</Text>
         </Flex>
       </WaitingConfirmationDialog>
 
@@ -138,5 +141,3 @@ function StakeInput(props: { poolId: number; onClose: () => void }) {
     </>
   )
 }
-
-export default StakeInput

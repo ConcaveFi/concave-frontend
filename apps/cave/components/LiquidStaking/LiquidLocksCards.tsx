@@ -1,13 +1,18 @@
 import { ExpandArrowIcon, SpinnerIcon } from '@concave/icons'
+import { stakingPools } from '@concave/marketplace'
 import { Box, Card, Collapse, Flex, keyframes, Text, useDisclosure } from '@concave/ui'
 import { formatDistanceStrict } from 'date-fns'
-import { useGet_Stakingv1_Last100_LockQuery } from 'graphql/generated/graphql'
+import {
+  Get_Stakingv1_Last100_LockQuery,
+  useGet_Stakingv1_Last100_LockQuery,
+} from 'graphql/generated/graphql'
 import { useEffect, useState } from 'react'
-import { poolIdToDays } from 'utils/contants'
 import { formatFixed } from 'utils/formatFixed'
 
 const LiquidLocksCards = () => {
-  const [stakingLocks, setStakingLocks] = useState([])
+  const [stakingLocks, setStakingLocks] = useState<
+    Get_Stakingv1_Last100_LockQuery['logStakingV1_Lock']
+  >([])
   const { isOpen, onToggle } = useDisclosure()
 
   const stakingData = useGet_Stakingv1_Last100_LockQuery()
@@ -34,7 +39,7 @@ const LiquidLocksCards = () => {
   const stakePools = stakingLocks
     .map((value, index) => (
       <Text opacity={1 - (index / 10) * (isOpen ? 1 : 3)} key={index}>
-        {poolIdToDays[value.poolID]}
+        {stakingPools[+value.poolID].days}
       </Text>
     ))
     .splice(0, 9)
@@ -50,7 +55,7 @@ const LiquidLocksCards = () => {
   return (
     <Card
       mx={'auto'}
-      width={{ base: '330px', md: '430px', xl: '900px' }}
+      width={'full'}
       variant="secondary"
       direction={'column'}
       textShadow={'0px 0px 27px rgba(129, 179, 255, 0.31)'}

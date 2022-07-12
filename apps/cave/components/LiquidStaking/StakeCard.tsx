@@ -1,9 +1,10 @@
 import { Box, Button, Flex, Image, Stack, Text, TextProps, useDisclosure } from '@chakra-ui/react'
+import { Percent } from '@concave/core'
+import { StakingPool } from '@concave/marketplace'
 import { Card } from '@concave/ui'
 import { utils } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { poolIdToDays } from 'utils/contants'
-import { truncateNumber } from 'utils/truncateNumber'
+import { numberMask } from 'utils/numberMask'
 import { useAccount } from 'wagmi'
 import { StakeData } from './hooks/useLiquidStakeData'
 import { useLiquidValues } from './hooks/useLiquidValues'
@@ -18,8 +19,18 @@ export const StakeCard = (props: StakeCardProps) => {
   const { data, isLoading } = useLiquidValues(chainId, poolId)
   const { stakingV1Pools, stakingV1Cap } = data || {}
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const percent =
-    (+utils.formatEther(stakingV1Pools?.balance || 0) / +utils.formatEther(stakingV1Cap || 0)) * 100
+
+  const loadBarPercent = new Percent(
+    stakingV1Pools?.balance?.toString() || '0',
+    stakingV1Cap?.toString() || '0',
+  )
+
+  const loadBarProps = {
+    percent: loadBarPercent,
+    loading: isLoading,
+    currentlyStaked: numberMask(+utils.formatEther(stakingV1Pools?.balance || 0)),
+    stakingCap: numberMask(+utils.formatEther(stakingV1Pools?.balance?.add(stakingV1Cap) || 0)),
+  } as const
 
   return (
     <>
@@ -30,13 +41,8 @@ export const StakeCard = (props: StakeCardProps) => {
         fontWeight={'bold'}
         align="center"
       >
-        <ImageContainer poolId={poolId} totalVAPR={totalVAPR?.toFixed(2) + '%'} />
-        <LoadBard
-          percent={percent}
-          loading={isLoading}
-          currentlyStaked={truncateNumber(stakingV1Pools?.balance || 0, 1)}
-          stakingCap={truncateNumber(stakingV1Pools?.balance?.add(stakingV1Cap) || 0, 1)}
-        />
+        <ImageContainer stakingPool={props.stakeData} totalVAPR={totalVAPR?.toFixed(2) + '%'} />
+        <LoadBar variant="primary" {...loadBarProps} />
         <Button
           mt={4}
           onClick={onOpen}
@@ -50,11 +56,7 @@ export const StakeCard = (props: StakeCardProps) => {
         </Button>
       </Card>
       <StakeModal
-        stakeValues={{
-          currentlyStaked: stakingV1Pools?.balance,
-          percent,
-          stakingCap: stakingV1Cap,
-        }}
+        loadBar={<LoadBar variant="secondary" {...loadBarProps} />}
         isOpen={isOpen}
         onClose={onClose}
         stakeData={props.stakeData}
@@ -63,13 +65,13 @@ export const StakeCard = (props: StakeCardProps) => {
   )
 }
 
-type ImageContainerProps = { poolId: number; totalVAPR: string }
-const ImageContainer: React.FC<ImageContainerProps> = ({ poolId, totalVAPR }) => (
+type ImageContainerProps = { stakingPool: StakingPool; totalVAPR: string }
+const ImageContainer: React.FC<ImageContainerProps> = ({ stakingPool, totalVAPR }) => (
   <Box py={5} h={{ base: '290px', md: '333px' }} shadow="down" borderRadius="100px/90px">
-    <Info title="Stake pool" label={poolIdToDays[poolId] + ' days'} textAlign="center" />
+    <Info title="Stake pool" label={stakingPool.days + ' days'} textAlign="center" />
     <Image
       userSelect={'none'}
-      src={`/assets/liquidstaking/${poolIdToDays[poolId]}d-logo.svg`}
+      src={`/assets/liquidstaking/${stakingPool.days}d-logo.svg`}
       alt="stake period logo"
     />
     <Info title="Total vAPR" label={totalVAPR} textAlign="center" />
@@ -77,12 +79,13 @@ const ImageContainer: React.FC<ImageContainerProps> = ({ poolId, totalVAPR }) =>
 )
 
 type LoadBarProps = {
-  percent: number
+  percent: Percent
   loading: boolean
   currentlyStaked: string
   stakingCap: string
+  variant: 'primary' | 'secondary'
 }
-const LoadBard = ({ percent, currentlyStaked, loading, stakingCap }: LoadBarProps) => (
+const LoadBar = ({ percent, currentlyStaked, loading, stakingCap, variant }: LoadBarProps) => (
   <>
     {/* Header */}
     <Stack color="text.low" fontSize={12} isInline justify="space-between" mt={3}>
@@ -90,27 +93,57 @@ const LoadBard = ({ percent, currentlyStaked, loading, stakingCap }: LoadBarProp
       <Text fontWeight={'bold'}>Staking cap</Text>
     </Stack>
     {/* Loading Bar */}
-    <Flex width={'full'} height="28px" shadow={'down'} rounded="2xl" my={2} p={1}>
-      <Flex width={`${percent}%`} height="full" apply={'background.metalBrighter'} rounded="full" />
+    <Flex
+      width={'full'}
+      position="relative"
+      height="32px"
+      shadow={'down'}
+      rounded="2xl"
+      my={2}
+      p={1}
+    >
+      <Flex
+        width={`${percent.toSignificant(3)}%`}
+        height="full"
+        apply={'background.metalBrighter'}
+        rounded="full"
+      />
+      <Flex
+        position={'absolute'}
+        mx={-1}
+        fontSize={loadBarFontSize[variant]}
+        justify={loadBarTextJustify[variant]}
+        width="full"
+        px={loadBarTextPx[variant]}
+        fontWeight={'bold'}
+      >
+        {loading && <Text>Loading...</Text>}
+        {!loading && (
+          <>
+            <Text>{currentlyStaked}</Text>
+            <Text>{stakingCap}</Text>
+          </>
+        )}
+      </Flex>
     </Flex>
     {/* Values */}
-    <Flex
-      fontSize={{ base: '11px', md: '14px' }}
-      justify={'space-around'}
-      width="full"
-      mt={'-30px'}
-    >
-      {loading ? (
-        <Text>Loading...</Text>
-      ) : (
-        <>
-          <Text>{currentlyStaked}</Text>
-          <Text>{stakingCap}</Text>
-        </>
-      )}
-    </Flex>
   </>
 )
+
+const loadBarFontSize = {
+  primary: { base: 'xs', md: 'sm' },
+  secondary: 'md',
+}
+
+const loadBarTextPx = {
+  primary: '0',
+  secondary: '10',
+} as const
+
+const loadBarTextJustify = {
+  primary: 'space-around',
+  secondary: 'space-between',
+} as const
 
 type InfoProps = { title: string; label: string }
 const Info: React.FC<InfoProps & TextProps> = ({ title, label, ...props }) => (

@@ -31,8 +31,8 @@ const Descriptions: React.FC<StackProps> = ({ ...props }) => (
     <Description
       title="Bonding emissions"
       description="Anti-Dilutive bond emissions ensure staking positions are rewarded with a share of any new
-        supply minted from bonds that are purchased. Staking positions recieve a share of this
-        growth compounded at 8hr intervals."
+        supply minted from bonds that are purchased. Staking positions receive a share of this
+        growth compounded at 8 hour intervals."
     />
     <Description
       title="Base emissions"
@@ -40,7 +40,7 @@ const Descriptions: React.FC<StackProps> = ({ ...props }) => (
         term. Staking positions receive a boost in base emissions as a function of term length."
     />
     <Description
-      title="Quaterly dividend"
+      title="Quarterly dividend"
       description="Quarterly dividends ensure that stakers receive a share of profits in non CNV assets from
         all yield bearing products and services. Staking positions receive a boost in dividend as a
         function of term length."
