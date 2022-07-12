@@ -41,7 +41,7 @@ export default function DividendsCard() {
       >
         <Text fontSize={'2xl'}>Coming Soon</Text>
         <Text textColor={'text.low'} fontSize="14px">
-          Next Distribution Date
+          Distribution date TBD
         </Text>
       </Card>
     </Card>
