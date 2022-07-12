@@ -35,7 +35,7 @@ export const CandleStickCard = ({ from: _from, to: _to }: { from?: Currency; to?
       style={hasData && { width: '100%', maxWidth: '520px' }}
     >
       {hasData && (
-        <Card variant="secondary" gap={2} p={6} w="100%" maxW="100vw" h="min">
+        <Card variant="secondary" gap={2} p={6} w="100%" h="min">
           <Flex justifyContent="space-between" w="100%" gap={8}>
             <CandleStickTokenOptions from={from} to={to} />
             <CandleStickTimeOptions
