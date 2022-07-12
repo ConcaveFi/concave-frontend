@@ -32,7 +32,8 @@ export const ACNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) =>
   const txHash = data?.logACNVRedemption[0]?.txHash || ''
   const aCNVContract = new Contract(ACNV_REDEEM[1], ACNV_REDEMPTION_ABI, provider(1))
 
-  const { aCNVData, loadingACNV } = useVestedTokens()
+  const { aCNV } = useVestedTokens()
+  const { data: aCNVData } = aCNV
   const validBalance = +aCNVData?.formatted > 0
   const alreadyRedeemed = redeemed === +aCNVData?.formatted
   const canRedeem = validBalance && !alreadyRedeemed
@@ -88,8 +89,8 @@ export const ACNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) =>
                 Current balance:
               </Text>
               <Text textColor={'text.accent'} fontWeight="bold">
-                {(!loadingACNV && aCNVData?.formatted) || '0'}
-                {loadingACNV && 'Loading...'}
+                {(!aCNV?.isLoading && aCNVData?.formatted) || '0'}
+                {aCNV?.isLoading && 'Loading...'}
               </Text>
             </Flex>
             <Flex gap={2}>

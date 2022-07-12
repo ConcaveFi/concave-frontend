@@ -25,7 +25,8 @@ export const BBBTCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props)
   const [error, setError] = useState('')
 
   const { data: redeemableData, isLoading } = useBBTCNVRedeemable()
-  const { bbtCNVData } = useVestedTokens()
+  const { bbtCNV } = useVestedTokens()
+  const { data: bbtCNVData } = bbtCNV
 
   const { registerTransaction } = useTransactionRegistry()
   const [redeemMax, setRedeemMax] = useState(true)

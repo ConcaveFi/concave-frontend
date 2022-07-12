@@ -17,9 +17,7 @@ export default function useVestedTokens() {
   })
 
   return {
-    aCNVData,
-    loadingACNV,
-    bbtCNVData,
-    loadingBBTCNV,
+    aCNV: { data: aCNVData, isLoading: loadingACNV },
+    bbtCNV: { data: bbtCNVData, isLoading: loadingBBTCNV },
   }
 }
