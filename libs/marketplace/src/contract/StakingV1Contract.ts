@@ -38,7 +38,7 @@ export class StakingV1Contract {
     address: string,
     tokenId: BigNumberish,
   ): Promise<ethers.Transaction & { wait: (confirmations) => unknown }> {
-    return this.contract.connect(signer).unlock(address, tokenId, { gasLimit: 50000000 })
+    return this.contract.connect(signer).unlock(address, tokenId, { gasLimit: 10000000 })
   }
 
   public async pools(poolId: number): Promise<PoolState> {
