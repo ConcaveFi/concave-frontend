@@ -1,5 +1,4 @@
-import { Flex, useBreakpointValue } from '@concave/ui'
-import { GlassPanel } from 'components/Treasury/TreasuryManagementCard'
+import { Card, Flex, useBreakpointValue } from '@concave/ui'
 import { useEffect, useState } from 'react'
 import StakeAprCard from './StakeAprCard'
 
@@ -58,7 +57,7 @@ function MarketplaceStakeCard(props: any) {
   }, [isLargerLayout])
 
   return (
-    <GlassPanel
+    <Card
       zIndex={2}
       gap={2}
       shadow="Block Up"
@@ -66,7 +65,7 @@ function MarketplaceStakeCard(props: any) {
       h={{ base: '283px', md: '168px', xl: '283px' }}
       style={{ alignContent: 'center', justifyContent: 'center' }}
       justify="center"
-      // variant="secondary"
+      variant="secondary"
     >
       <Flex
         direction={{ md: 'row', base: 'column', xl: 'column' }}
@@ -75,7 +74,7 @@ function MarketplaceStakeCard(props: any) {
       >
         {periods}
       </Flex>
-    </GlassPanel>
+    </Card>
   )
 }
 

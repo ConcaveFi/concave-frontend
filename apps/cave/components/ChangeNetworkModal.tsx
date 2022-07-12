@@ -1,7 +1,6 @@
 import { SpinIcon } from '@concave/icons'
-import { Button, Flex, Modal, Text } from '@concave/ui'
+import { Button, Flex, keyframes, Modal, Text } from '@concave/ui'
 import { useNetwork, useSwitchNetwork } from 'wagmi'
-import { spinAnimation } from './Treasury/Mobile/TreasuryManagementMobile'
 
 interface ChangeNetworkModalProps {
   isOpen: boolean
@@ -101,7 +100,15 @@ export const WaitingChangeNetworkDialog = ({
           <Text mb={2} fontWeight={'bold'} textColor={'text.low'} fontSize={'sm'}>
             Confirm the switch on your wallet.
           </Text>
-          <SpinIcon color={'text.low'} width={'60px'} height="60px" animation={spinAnimation(3)} />
+          <SpinIcon
+            color={'text.low'}
+            width={'60px'}
+            height="60px"
+            animation={` ${keyframes({
+              '0%': { transform: 'rotate(0deg)' },
+              '100%': { transform: 'rotate(360deg)' },
+            })} ${3}s linear infinite`}
+          />
         </Flex>
 
         <Flex width={'90%'} mt={3} justify="space-between">
