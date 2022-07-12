@@ -13,8 +13,6 @@ import {
   useDisclosure,
 } from '@concave/ui'
 import { motion } from 'framer-motion'
-import { useRouter } from 'next/router'
-import { useEffect } from 'react'
 import PageNav from './PageNav'
 import SideBarBottom from './SideBarBottom'
 import SideBarTop from './SideBarTop'
@@ -22,25 +20,19 @@ import SideBarTop from './SideBarTop'
 export function SideBar() {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  // close on route change
-  const router = useRouter()
-  useEffect(() => {
-    onClose()
-  }, [router.asPath, onClose])
-
   return (
     <>
       {/* show on bigger screens like not mobile lol */}
-      <SidebarContent display={{ base: 'none', lg: 'flex' }} />
+      <SidebarContent display={{ base: 'none', md: 'flex' }} />
 
       {/* show on small devices (mobile) */}
-      <Box>
+      <Box mb={20}>
         <Flex
           align="center"
           position="fixed"
           zIndex={5}
           p={4}
-          display={{ base: 'flex', lg: 'none' }}
+          display={{ base: 'flex', md: 'none' }}
           onClick={onOpen}
           filter="drop-shadow(0px 0px 12px #81b3ff4f)"
           bg="blackAlpha.100"
@@ -59,11 +51,11 @@ export function SideBar() {
         closeOnOverlayClick={true}
         isOpen={isOpen}
         placement="left"
-        blockScrollOnMount={false}
         onClose={onClose}
       >
         <DrawerOverlay backdropFilter="blur(8px)" />
         <DrawerContent
+          maxW="min"
           bg="none"
           shadow="none"
           overflow="auto"
@@ -99,7 +91,7 @@ const SidebarContent = forwardRef<CardProps, 'div'>((props, ref) => {
       p={3}
       minH="100vh"
       h="auto"
-      w={{ base: 'auto', sm: '300px', lg: '250px' }}
+      w={{ base: '250px', md: '250px' }}
       minW="250px"
       overflowY="auto"
       overflowX="hidden"
@@ -107,7 +99,7 @@ const SidebarContent = forwardRef<CardProps, 'div'>((props, ref) => {
       {...props}
     >
       <SideBarTop />
-      <Stack spacing="50px" mt="50px" mr={-3} ml="auto" pb={8} w="80%">
+      <Stack spacing="50px" mt="50px" mr={-3} ml="auto" pb={8} w="max">
         <PageNav />
       </Stack>
       <Flex mt={5}>

@@ -15,7 +15,7 @@ import {
 
 import { AddLiquidityModalButton } from 'components/AMM/AddLiquidity/AddLiquidity'
 import { RemoveLiquidityModalButton } from 'components/AMM/RemoveLiquidity/RemoveLiquidity'
-import { ConnectButton } from 'components/ConnectWallet'
+import { ConnectWallet } from 'components/ConnectWallet'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { Loading } from 'components/Loading'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
@@ -92,7 +92,7 @@ const PairsAccordion = ({ pairs }: { pairs: Pair[] }) => {
           label: 'You are not in any pools',
           Button: <AddLiquidityModalButton />,
         }
-      : { label: 'You are disconnected.', Button: <ConnectButton /> }
+      : { label: 'You are disconnected.', Button: <ConnectWallet /> }
 
     return (
       <Box borderRadius={'2xl'} p={6} shadow={'down'}>
