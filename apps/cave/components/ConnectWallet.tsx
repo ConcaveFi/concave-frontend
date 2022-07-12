@@ -70,8 +70,8 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
     </Modal>
   )
 }
-// commit
-const ConnectButton = () => {
+
+export const ConnectButton = () => {
   const { connectModal } = useModals()
 
   return (
@@ -90,43 +90,38 @@ const ConnectButton = () => {
   )
 }
 
-export function ConnectWallet(): JSX.Element {
-  const { address, isConnected } = useAccount()
+const spinAnimation = (time = 3) =>
+  `${keyframes({
+    '0%': { transform: 'rotate(0deg)' },
+    '100%': { transform: 'rotate(360deg)' },
+  })} ${time}s linear infinite`
+
+export const UserWallet = () => {
+  const { address } = useAccount()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { recentTransactions } = useTransactionRegistry()
-
-  if (isConnected)
-    return (
-      <>
-        <Button
-          onClick={onOpen}
-          height="40px"
-          shadow="up"
-          fontFamily="heading"
-          color="text.low"
-          _focus={{ color: 'text.high', shadow: 'up' }}
-          w="100%"
-          rounded={'2xl'}
-        >
-          <Flex fontWeight="bold" mx={'auto'}>
-            {ellipseAddress(address)}
+  return (
+    <>
+      <Button
+        onClick={onOpen}
+        height="40px"
+        shadow="up"
+        fontFamily="heading"
+        color="text.low"
+        _focus={{ color: 'text.high', shadow: 'up' }}
+        w="100%"
+        rounded={'2xl'}
+      >
+        <Flex fontWeight="bold" mx={'auto'}>
+          {ellipseAddress(address)}
+        </Flex>
+        {recentTransactions.some((tx) => tx.status === 'pending') && (
+          <Flex position={'absolute'} width="80%" justify={'end'}>
+            <SpinnerIcon color={'text.low'} animation={spinAnimation(4)} boxSize={'20px'} />
           </Flex>
-          {recentTransactions.some((tx) => tx.status === 'pending') && (
-            <Flex position={'absolute'} width="80%" justify={'end'}>
-              <SpinnerIcon
-                color={'text.low'}
-                animation={` ${keyframes({
-                  '0%': { transform: 'rotate(0deg)' },
-                  '100%': { transform: 'rotate(360deg)' },
-                })} 3s linear infinite`}
-                boxSize={'20px'}
-              />
-            </Flex>
-          )}
-        </Button>
-        <YourWalletModal onClose={onClose} isOpen={isOpen} />
-      </>
-    )
-
-  return <ConnectButton />
+        )}
+      </Button>
+      <YourWalletModal onClose={onClose} isOpen={isOpen} />
+    </>
+  )
 }
