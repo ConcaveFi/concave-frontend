@@ -51,9 +51,9 @@ export const TreasuryRedeemCard = () => {
   )
 }
 
-export type VestedTokenDialogProps = { onClose: VoidFunction; isOpen: boolean }
+export type VestedTokenButtonProps = { onClose: VoidFunction; isOpen: boolean }
 
-type VestedTokenButton = { title: string; VestedTokenDialog: FC<VestedTokenDialogProps> }
+type VestedTokenButton = { title: string; VestedTokenDialog: FC<VestedTokenButtonProps> }
 const VestedTokenButton: React.FC<VestedTokenButton> = ({ title, VestedTokenDialog }) => {
   const { isOpen, onClose, onOpen } = useDisclosure()
   return (
