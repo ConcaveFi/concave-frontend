@@ -1,5 +1,5 @@
 import { SpinnerIcon } from '@concave/icons'
-import { Button, Flex, gradientBorder, Image, Modal, useDisclosure } from '@concave/ui'
+import { Button, Flex, gradientBorder, Image, keyframes, Modal, useDisclosure } from '@concave/ui'
 import { useModals } from 'contexts/ModalsContext'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useIsMounted } from 'hooks/useIsMounted'
@@ -89,6 +89,12 @@ export const ConnectButton = () => {
     </>
   )
 }
+
+const spinAnimation = (time = 3) =>
+  `${keyframes({
+    '0%': { transform: 'rotate(0deg)' },
+    '100%': { transform: 'rotate(360deg)' },
+  })} ${time}s linear infinite`
 
 export const UserWallet = () => {
   const { address } = useAccount()
