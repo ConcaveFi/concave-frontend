@@ -11,6 +11,9 @@ const nextConfig = {
   images: {
     formats: ['image/avif', 'image/webp'],
   },
+  experimental: {
+    nextScriptWorkers: true,
+  },
   async rewrites() {
     return [
       { source: '/', destination: '/gemswap' },
