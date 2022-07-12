@@ -1,7 +1,6 @@
+import { BBTCNV_REDEMPTION_V2, BBTCNV_REDEMPTION_V2_ABI } from '@concave/core'
 import { Flex, Text, useDisclosure } from '@concave/ui'
 import { TransactionResponse } from '@ethersproject/abstract-provider'
-import { bbtCNV_REDEMPTION_V2 } from 'contracts/VestedTokens/addresses'
-import { bbtCNV_REDEMPTION_V2_ABI } from 'contracts/VestedTokens/BBTCNV_V2_ABI'
 import { Contract, utils } from 'ethers'
 import { parseEther } from 'ethers/lib/utils'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
@@ -45,8 +44,8 @@ export const BBBTCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props)
   const networdId = useCurrentSupportedNetworkId()
 
   const bbtCNVContract = new Contract(
-    bbtCNV_REDEMPTION_V2[networdId],
-    bbtCNV_REDEMPTION_V2_ABI,
+    BBTCNV_REDEMPTION_V2[networdId],
+    BBTCNV_REDEMPTION_V2_ABI,
     provider(networdId),
   )
 

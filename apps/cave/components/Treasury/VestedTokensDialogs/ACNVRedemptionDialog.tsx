@@ -1,13 +1,12 @@
+import { ACNV_REDEEM_CONTRACT, ACNV_REDEMPTION_ABI } from '@concave/core'
 import { Button, Card, Flex, Link, Modal, Text, useDisclosure } from '@concave/ui'
 import { TransactionResponse } from '@ethersproject/abstract-provider'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
-import { aCNV_REDEEM_CONTRACT } from 'contracts/VestedTokens/addresses'
 import { Contract } from 'ethers'
 import { useGet_User_Acnv_RedeemedQuery } from 'graphql/generated/graphql'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
-import { aCNVredeemabi } from 'lib/contractoABI'
 import { concaveProvider as provider } from 'lib/providers'
 import { useState } from 'react'
 import { useAccount, useSigner } from 'wagmi'
@@ -31,7 +30,7 @@ export const ACNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) =>
   })
   const redeemed: number = data?.logACNVRedemption[0]?.amount || 0
   const txHash = data?.logACNVRedemption[0]?.txHash || ''
-  const aCNVContract = new Contract(aCNV_REDEEM_CONTRACT[1], aCNVredeemabi, provider(1))
+  const aCNVContract = new Contract(ACNV_REDEEM_CONTRACT[1], ACNV_REDEMPTION_ABI, provider(1))
 
   const { aCNVData, loadingACNV } = useVestedTokens()
   const validBalance = +aCNVData?.formatted > 0
