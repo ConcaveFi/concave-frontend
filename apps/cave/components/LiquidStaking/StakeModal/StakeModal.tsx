@@ -7,29 +7,27 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { Card } from '@concave/ui'
-import { BigNumber } from 'ethers'
-import { truncateNumber } from 'utils/truncateNumber'
 import { StakeData } from '../hooks/useLiquidStakeData'
-import Emissions from './Emissions'
+import { Emissions } from './Emissions'
 import { FloatingDescriptions } from './FloatingDescriptions'
-import StakeInfo from './StakeInfo'
-import StakeInput from './StakeInput'
+import { StakeInfo } from './StakeInfo'
+import { StakeInput } from './StakeInput'
 
 type StakeModalProps = {
   isOpen: boolean
   onClose: VoidFunction
   stakeData: StakeData
-  stakeValues: { currentlyStaked: BigNumber; stakingCap: BigNumber; percent: number }
+  loadBar: JSX.Element
 }
-export const StakeModal = ({ isOpen, onClose, stakeData, stakeValues }: StakeModalProps) => {
-  const { baseEmissions, bondEmissions, poolId, totalVAPR } = stakeData || {}
+export const StakeModal = ({ isOpen, onClose, stakeData, loadBar }: StakeModalProps) => {
+  const { poolId } = stakeData || {}
   const {
     isOpen: isDescritionsOpen,
     onOpen: onOpenDescriptions,
     onClose: onCloseDescription,
   } = useDisclosure()
-  const type = useBreakpointValue<'modal' | 'card'>({ base: 'modal', xl: 'card' })
-
+  const descriptionType = useBreakpointValue<'modal' | 'card'>({ base: 'modal', xl: 'card' })
+  const informationType = { modal: 'click', card: 'hover' } as const
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="4xl" isCentered>
       <ModalOverlay backdropFilter={'blur(15px)'} />
@@ -47,24 +45,18 @@ export const StakeModal = ({ isOpen, onClose, stakeData, stakeValues }: StakeMod
           <FloatingDescriptions
             onClose={onCloseDescription}
             isOpen={isDescritionsOpen}
-            type={type}
+            type={descriptionType}
           />
           <Emissions
             onCloseDescription={onCloseDescription}
             onOpenDescription={onOpenDescriptions}
-            totalVAPR={totalVAPR?.toFixed(2) + '%'}
-            baseEmissions={baseEmissions?.toFixed(2) + '%'}
-            bondEmissions={bondEmissions?.toFixed(2) + '%'}
-            poolid={poolId}
+            poolId={poolId}
+            stakeInformationType={informationType[descriptionType]}
+            {...stakeData}
           />
           <VStack gap={4} w="full" justify={'center'} align="center">
-            <StakeInfo
-              currentlyStaked={truncateNumber(stakeValues?.currentlyStaked || 0)}
-              percent={stakeValues?.percent}
-              poolId={stakeData?.poolId}
-              stakingCap={truncateNumber(stakeValues?.stakingCap || 0)}
-            />
-            <StakeInput onClose={onClose} poolId={poolId} />
+            <StakeInfo stakingPool={stakeData} loadBar={loadBar} />
+            <StakeInput onClose={onClose} poolId={poolId} stakingPool={stakeData} />
           </VStack>
         </Card>
       </ModalContent>

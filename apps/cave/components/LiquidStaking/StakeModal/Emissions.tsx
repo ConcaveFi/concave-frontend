@@ -1,23 +1,18 @@
 import { Flex, Image, Text, useBreakpointValue } from '@concave/ui'
-import { poolIdToDays } from 'utils/contants'
-import { StakeInformations } from './StakeInformations'
+import { StakeData } from '../hooks/useLiquidStakeData'
+import { StakeInformation } from './StakeInformation'
 
 type EmissionsProps = {
-  baseEmissions: string
-  bondEmissions: string
-  totalVAPR: string
-  poolid: number
   onOpenDescription: VoidFunction
   onCloseDescription: VoidFunction
-}
+  stakeInformationType: 'hover' | 'click'
+} & StakeData
 
-function Emissions({
-  baseEmissions,
-  bondEmissions,
-  poolid,
-  totalVAPR,
+export function Emissions({
   onCloseDescription,
   onOpenDescription,
+  stakeInformationType,
+  ...stakeData
 }: EmissionsProps) {
   const mobileUI = useBreakpointValue({ base: true, md: false })
   return (
@@ -36,13 +31,13 @@ function Emissions({
         justify="center"
         direction={'column'}
       >
-        <Info info={poolIdToDays[poolid] + ' days'} title="Stake period" />
+        <Info info={stakeData.days + ' days'} title="Stake period" />
         <Image
           mx="auto"
-          src={`/assets/liquidstaking/${poolIdToDays[poolid]}d-logo.svg`}
+          src={`/assets/liquidstaking/${stakeData.days}d-logo.svg`}
           alt="stake period logo"
         />
-        <Info title="Total vAPR" info={totalVAPR} />
+        <Info title="Total vAPR" info={stakeData.totalVAPR?.toFixed(2) + '%'} />
         <Image
           mx="auto"
           src={`/assets/liquidstaking/modal-moreinfo-logo.svg`}
@@ -55,11 +50,12 @@ function Emissions({
           alt="arrow down logo"
         />
         {!mobileUI && (
-          <StakeInformations
+          <StakeInformation
+            type={stakeInformationType}
             onDisable={onCloseDescription}
             onShow={onOpenDescription}
-            bondingEmissions={bondEmissions}
-            baseEmissions={baseEmissions}
+            bondingEmissions={stakeData.bondEmissions}
+            baseEmissions={stakeData.baseEmissions}
           />
         )}
       </Flex>
@@ -73,18 +69,19 @@ function Emissions({
         transform={'rotate(-90deg)'}
       />
       {mobileUI && (
-        <StakeInformations
+        <StakeInformation
+          type={stakeInformationType}
           onDisable={onCloseDescription}
           onShow={onOpenDescription}
-          bondingEmissions={bondEmissions}
-          baseEmissions={baseEmissions}
+          bondingEmissions={stakeData.bondEmissions}
+          baseEmissions={stakeData.baseEmissions}
         />
       )}
     </Flex>
   )
 }
 
-type InfoProps = { title: string; info: string }
+type InfoProps = { title: string; info: string | number }
 const Info = ({ title, info }: InfoProps) => (
   <>
     <Text color="text.low" fontSize="sm">
@@ -95,5 +92,3 @@ const Info = ({ title, info }: InfoProps) => (
     </Text>
   </>
 )
-
-export default Emissions
