@@ -10,8 +10,9 @@ import Modal from './components/ModalStyles'
 import Popover from './components/PopoverStyles'
 import Switch from './components/SwitchStyles'
 import Tooltip from './components/TooltipStyles'
-import { fonts, shadows } from './foundations'
+import { fonts } from './foundations'
 import scrollbar from './scrollbars'
+import shadows from './shadows'
 
 const theme = extendTheme({
   config: { initialColorMode: 'dark', cssVarPrefix: 'concave' },

@@ -21,8 +21,8 @@ export const Layout = ({ children }) => {
         display="flex"
         maxWidth="container.xl"
         position="relative"
-        p={'0px'}
-        pb={{ base: '300px', md: '0' }} // add a lil padding to the bottom on small screens (mobile)
+        p={2}
+        pb="300px" // add a lil padding to the bottom of the page for better scroll experience
       >
         <TestnetIndicator />
         <SecurityBanner />

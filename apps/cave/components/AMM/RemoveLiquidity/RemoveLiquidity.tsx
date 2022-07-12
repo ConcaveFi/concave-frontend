@@ -11,13 +11,13 @@ import {
   Text,
   useDisclosure,
 } from '@concave/ui'
+import { TransactionResponse } from '@ethersproject/abstract-provider'
 import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { PositionInfoItem } from 'components/Positions/MyPositions'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
-import { Transaction } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { RemoveLiquidityState, useRemoveLiquidity } from 'hooks/useRemoveLiquidity'
 import { useState } from 'react'
@@ -255,7 +255,7 @@ const RemoveLiquidityActions = ({
       <TransactionSubmittedDialog
         title="Withdraw"
         subtitle="Withdraw"
-        tx={{ hash: removeLiquidityState.hash } as Transaction}
+        tx={{ hash: removeLiquidityState.hash } as TransactionResponse}
         isOpen={isOpenSubmitted}
         closeParentComponent={closeParentComponent}
       />
