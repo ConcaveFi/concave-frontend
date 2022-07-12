@@ -1,6 +1,5 @@
-import { Box, Button, Collapse, Flex, useDisclosure } from '@chakra-ui/react'
-import { gradientBorder, NumericInput } from '@concave/ui'
-import { ChooseButton } from 'components/Marketplace/ChooseButton'
+import { Box, Button, Flex } from '@chakra-ui/react'
+import { NumericInput } from '@concave/ui'
 import { useState } from 'react'
 import { RangeFilter } from './hooks/useFilterByRange'
 

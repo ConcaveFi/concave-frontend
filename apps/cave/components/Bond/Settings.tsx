@@ -1,4 +1,4 @@
-import { TransactionSettings, SlippageTolerance, Deadline } from 'components/TransactionSettings'
+import { Deadline, SlippageTolerance, TransactionSettings } from 'components/TransactionSettings'
 import { useTransactionSettings } from 'components/TransactionSettings/TransactionSettings'
 
 const defaultSettings = {

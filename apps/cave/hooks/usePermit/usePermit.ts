@@ -1,7 +1,7 @@
+import { DAI, Token } from '@concave/core'
 import { Signer } from 'ethers'
-import { useSigner } from 'wagmi'
-import { CNV, DAI, Token } from '@concave/core'
 import { useQuery } from 'react-query'
+import { useSigner } from 'wagmi'
 import { signPermitAllowed, signPermitAmount } from './permit'
 
 const signPermit = async (signer: Signer, token: Token, spenderAddress: string) => {

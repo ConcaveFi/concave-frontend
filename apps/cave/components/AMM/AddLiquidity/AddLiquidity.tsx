@@ -12,12 +12,12 @@ import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
+import { toAmount } from 'utils/toAmount'
 import { useAccount } from 'wagmi'
 import { useQueryCurrencies } from '../hooks/useQueryCurrencies'
 import { NetworkMismatch } from '../NetworkMismatch'
 import useLiquidityData from './useLiquidityData'
-
 const AddSymbol = () => (
   <Flex align="center" justify="center">
     <Flex
@@ -163,7 +163,14 @@ function AddLiquidityContent({
       <TransactionSubmittedDialog
         tx={addLPTx.data}
         isOpen={addLPTx.isTransactionSent}
-        closeParentComponent={liquidityModalClose || supplyLiquidityDisclosure.onClose}
+        closeParentComponent={() => {
+          onChangeFirstField(toAmount(0, firstFieldAmount.currency))
+          if (liquidityModalClose) {
+            liquidityModalClose()
+          } else {
+            supplyLiquidityDisclosure.onClose()
+          }
+        }}
       />
       <TransactionErrorDialog error={addLPTx.error?.message} isOpen={addLPTx.isError} />
     </>

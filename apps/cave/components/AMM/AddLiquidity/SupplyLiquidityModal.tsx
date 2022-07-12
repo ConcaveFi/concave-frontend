@@ -2,7 +2,6 @@ import { ROUTER_ADDRESS } from '@concave/core'
 import { Box, Button, Flex, HStack, Modal, Text } from '@concave/ui'
 import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { CurrencyIcon } from 'components/CurrencyIcon'
-import React from 'react'
 import { UseLiquidityData } from './useLiquidityData'
 
 const PositionInfoItem = ({ color = '', label = '', value, mt = 0, children = <></> }) => (
@@ -88,11 +87,11 @@ const SupplyLiquidityContent = ({
       </Box>
 
       {!approve0.approved && (
-        <Button size="large" w="full" variant={'primary'} {...approve0.state} />
+        <Button size="large" w="full" variant={'primary'} {...approve0.buttonProps} />
       )}
 
       {!approve1.approved && (
-        <Button size="large" w="full" variant={'primary'} {...approve1.state} />
+        <Button size="large" w="full" variant={'primary'} {...approve1.buttonProps} />
       )}
 
       {approve0.approved && approve1.approved && (

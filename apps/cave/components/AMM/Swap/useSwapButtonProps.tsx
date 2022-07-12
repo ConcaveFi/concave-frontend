@@ -29,7 +29,7 @@ export const useSwapButtonProps = ({
     trade.data.inputAmount,
     ROUTER_ADDRESS[trade.data.inputAmount.currency?.chainId],
   )
-
+  if (useCurrencyState.state === 'disconected') return useCurrencyState.buttonProps
   /*
     Not Connected
   */
@@ -91,7 +91,7 @@ export const useSwapButtonProps = ({
 
   if (recipient && !isAddress(recipient)) return { children: 'Invalid recipient', isDisabled: true }
 
-  if (!useCurrencyState.approved) return useCurrencyState.state
+  if (!useCurrencyState.approved) return useCurrencyState.buttonProps
 
   // /*
   //   Wrap / Unwrap, ETH <-> WETH

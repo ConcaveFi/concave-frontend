@@ -1,12 +1,11 @@
-import { Button, Image, gradientBorder, Modal, Flex, useDisclosure } from '@concave/ui'
-import { useAccount, useConnect } from 'wagmi'
-import { useIsMounted } from 'hooks/useIsMounted'
-import { useModals } from 'contexts/ModalsContext'
-import YourWalletModal from './YourWalletModal'
 import { SpinnerIcon } from '@concave/icons'
-import { spinAnimation } from './Treasury/Mobile/TreasuryManagementMobile'
-import { useRouter } from 'next/router'
+import { Button, Flex, gradientBorder, Image, Modal, useDisclosure } from '@concave/ui'
+import { useModals } from 'contexts/ModalsContext'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
+import { useIsMounted } from 'hooks/useIsMounted'
+import { useRouter } from 'next/router'
+import { useAccount, useConnect } from 'wagmi'
+import YourWalletModal from './YourWalletModal'
 
 /** Transform a wallet address
  *  {6first keys}{...}{4 keys}

@@ -1,5 +1,6 @@
 import { BOND_ADDRESS, CNV, Currency, CurrencyAmount, DAI } from '@concave/core'
 import { Button, Card, Flex, HStack, Text, useDisclosure, VStack } from '@concave/ui'
+import { AddTokenToWalletButton } from 'components/AddTokenToWalletButton'
 import { GasPrice } from 'components/AMM'
 import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { CurrencyInputField as BondInput } from 'components/CurrencyAmountField'
@@ -8,7 +9,7 @@ import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialo
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useCNVPrice } from 'hooks/useCNVPrice'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import { toAmount } from 'utils/toAmount'
 import { BondOutput } from './BondOutput'
@@ -61,7 +62,7 @@ export function BondBuyCard(props: {
         onClick: confirmModal.onOpen,
         children: 'Bond',
       }
-    : useCurrencyState.state
+    : useCurrencyState.buttonProps
 
   return (
     <Card
@@ -178,11 +179,12 @@ export function BondBuyCard(props: {
         </Text>
       </WaitingConfirmationDialog>
       <TransactionSubmittedDialog
+        title="Bond Submitted"
         tx={bondTransaction}
         isOpen={bondTransaction}
-        tokenSymbol={currencyOut.symbol}
-        tokenOutAddress={currencyOut.address}
-      />
+      >
+        <AddTokenToWalletButton token={currencyOut} />
+      </TransactionSubmittedDialog>
       <TransactionErrorDialog error={txError} isOpen={isOpenRejected} />
     </Card>
   )

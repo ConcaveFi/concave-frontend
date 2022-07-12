@@ -2,6 +2,7 @@ import { ChainId, CHAIN_NAME, CNV, Currency, DAI } from '@concave/core'
 import { Trade, TradeType } from '@concave/gemswap-sdk'
 import { ExpandArrowIcon } from '@concave/icons'
 import { Button, Card, Collapse, Flex, HStack, Stack, Text, useDisclosure } from '@concave/ui'
+import { AddTokenToWalletButton } from 'components/AddTokenToWalletButton'
 import {
   CandleStickCard,
   ConfirmSwapModal,
@@ -116,8 +117,8 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
         align="center"
         alignContent="center"
         w="100%"
+        minH="100vh"
         gap={10}
-        pt={{ base: '100px', lg: 0 }}
       >
         <LayoutGroup>
           <CandleStickCard
@@ -222,12 +223,11 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
         </Text>
       </WaitingConfirmationDialog>
 
-      <TransactionSubmittedDialog
-        tx={swapTx.data}
-        isOpen={swapTx.isSuccess}
-        tokenSymbol={swapTx.trade?.outputAmount.currency.symbol}
-        tokenOutAddress={swapTx.trade?.outputAmount.currency.wrapped.address} // workaround for type error
-      />
+      <TransactionSubmittedDialog title="Swap Submitted" tx={swapTx.data} isOpen={swapTx.isSuccess}>
+        {swapTx.trade?.outputAmount.currency.isToken && (
+          <AddTokenToWalletButton token={swapTx.trade.outputAmount.currency.wrapped} />
+        )}
+      </TransactionSubmittedDialog>
       <TransactionErrorDialog error={swapTx.error?.message} isOpen={swapTx.isError} />
     </>
   )

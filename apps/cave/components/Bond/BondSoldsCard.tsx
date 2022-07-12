@@ -1,15 +1,10 @@
 import { ExpandArrowIcon } from '@concave/icons'
 import { Box, Card, Collapse, Flex, keyframes, Text } from '@concave/ui'
 import { formatDistanceStrict } from 'date-fns'
-import { commify } from 'ethers/lib/utils'
-import { BigNumber } from 'ethers'
-import {
-  Get_Accrualbondv1_Last10_SoldQuery,
-  useGet_Amm_Cnv_PriceQuery,
-} from 'graphql/generated/graphql'
+import { Get_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql'
+import { useCNVPrice } from 'hooks/useCNVPrice'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useEffect, useState } from 'react'
-import { useCNVPrice } from 'hooks/useCNVPrice'
 import { numberMask } from 'utils/numberMask'
 
 interface BoldSoldsCardProps {

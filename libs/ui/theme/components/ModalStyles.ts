@@ -1,5 +1,5 @@
-import { ComponentMultiStyleConfig } from '@chakra-ui/react'
 import { modalAnatomy } from '@chakra-ui/anatomy'
+import { ComponentMultiStyleConfig } from '@chakra-ui/react'
 
 export const ModalStyles: ComponentMultiStyleConfig = {
   parts: modalAnatomy.keys,
