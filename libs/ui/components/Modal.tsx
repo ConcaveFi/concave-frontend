@@ -1,15 +1,12 @@
+import { HStack } from '@chakra-ui/layout'
 import {
-  Box,
-  HStack,
   Modal as ChakraModal,
   ModalCloseButton,
   ModalContent,
   ModalHeader,
   ModalOverlay,
   ModalProps as ChakraModalProps,
-  Text,
-  VStack,
-} from '@chakra-ui/react'
+} from '@chakra-ui/modal'
 import { ReactNode } from 'react'
 import { Card, CardProps } from './Card'
 
@@ -18,16 +15,16 @@ export interface ModalProps extends ChakraModalProps {
   bluryOverlay?: boolean
   titleAlign?: 'left' | 'center' | 'right'
   children: ReactNode
-  childrenLeftNeighbor?: ReactNode
-  showchildrenLeftNeighbor?: boolean
+  left?: ReactNode
+  right?: ReactNode
   bodyProps?: CardProps
   hideClose?: boolean
 }
 
 export function Modal({
   children,
-  childrenLeftNeighbor,
-  showchildrenLeftNeighbor,
+  left,
+  right,
   title,
   bluryOverlay = false,
   titleAlign = 'left',
@@ -38,14 +35,15 @@ export function Modal({
   return (
     <ChakraModal {...props}>
       <ModalOverlay backdropBlur={bluryOverlay ? '16px' : '0px'} />
-      <ModalContent w="auto">
+      <ModalContent w="auto" maxW="auto" h="auto" maxH="auto">
         <ModalHeader textAlign={titleAlign}>{title}</ModalHeader>
         {!hideClose && <ModalCloseButton />}
-        <HStack spacing={showchildrenLeftNeighbor ? 2 : 0}>
-          <Box>{showchildrenLeftNeighbor && childrenLeftNeighbor}</Box>
+        <HStack spacing={2} align="start">
+          {left}
           <Card variant="primary" p="6" shadow="Up for Blocks" {...bodyProps}>
             {children}
           </Card>
+          {right}
         </HStack>
       </ModalContent>
     </ChakraModal>

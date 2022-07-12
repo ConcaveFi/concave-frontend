@@ -1,5 +1,4 @@
-import { ExpandArrowIcon } from '@concave/icons'
-import { Button, Flex } from '@concave/ui'
+import { Flex } from '@concave/ui'
 
 export const DownwardIcon = ({}) => {
   return (

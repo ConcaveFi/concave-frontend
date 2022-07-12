@@ -414,7 +414,7 @@ export enum LogStakingV1_Lock_Select_Column {
   /** column name */
   PoolId = 'poolID',
   /** column name */
-  PoolRewardsPerShare = 'poolRewardsPerShare',
+  StakingPoolPerShare = 'poolRewardsPerShare',
   /** column name */
   PoolSupply = 'poolSupply',
   /** column name */

@@ -1,4 +1,4 @@
-import { Text, Modal, Input } from '@concave/ui'
+import { Input, Modal, Text } from '@concave/ui'
 import dynamic from 'next/dynamic'
 import { useLocalStorage } from 'react-use'
 

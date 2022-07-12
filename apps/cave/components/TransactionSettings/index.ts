@@ -1,3 +1,3 @@
-export { TransactionSettings } from './TransactionSettings'
-export { SlippageTolerance } from './SlippageTolerance'
 export { Deadline } from './Deadline'
+export { SlippageTolerance } from './SlippageTolerance'
+export { TransactionSettings } from './TransactionSettings'

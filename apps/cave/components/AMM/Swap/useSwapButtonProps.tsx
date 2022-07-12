@@ -1,11 +1,11 @@
-import { Currency, CurrencyAmount } from '@concave/core'
+import { Currency, CurrencyAmount, ROUTER_ADDRESS } from '@concave/core'
 import { Trade, TradeType } from '@concave/gemswap-sdk'
 import { ButtonProps } from '@concave/ui'
+import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { isAddress } from 'ethers/lib/utils'
-import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { swapSupportedChains } from 'pages/gemswap'
 import { toPercent } from 'utils/toPercent'
-import { useNetwork } from 'wagmi'
+import { useAccount, useNetwork } from 'wagmi'
 import { NoValidPairsError } from '../hooks/usePair'
 import { InsufficientLiquidityError } from '../hooks/useTrade'
 import { SwapSettings } from './Settings'
@@ -27,14 +27,18 @@ export const useSwapButtonProps = ({
   settings: SwapSettings
   onSwapClick: () => void
 }): ButtonProps => {
-  const network = useNetwork()
+  const { isConnecting } = useAccount()
+  const { chain } = useNetwork()
   const currencyIn = inputAmount?.currency
-  const currencyInBalance = useCurrencyBalance(currencyIn, { watch: true })
-
+  const useCurrencyState = useCurrencyButtonState(
+    inputAmount,
+    ROUTER_ADDRESS[inputAmount.currency?.chainId],
+  )
+  if (useCurrencyState.state === 'disconected') return useCurrencyState.buttonProps
   /*
     Not Connected
   */
-  if (network.isLoading) return { isLoading: true }
+  if (isConnecting) return { isLoading: true }
 
   /*
     Select a token
@@ -45,10 +49,12 @@ export const useSwapButtonProps = ({
   /*
     Network Stuff
   */
-  if (network.activeChain?.id !== currencyIn.chainId)
-    return { children: 'Network mismatch', isDisabled: true }
-  if (!swapSupportedChains.includes(network.activeChain?.id))
-    return { children: 'Unsupported chain', isDisabled: true }
+  if (chain?.id !== currencyIn.chainId) return { children: 'Network mismatch', isDisabled: true }
+  if (!swapSupportedChains.includes(chain?.id))
+    return {
+      children: 'Unsupported chain',
+      isDisabled: true,
+    }
 
   /* 
     SOON Wrap / Unwrap
@@ -83,16 +89,9 @@ export const useSwapButtonProps = ({
   if (!inputAmount || inputAmount?.equalTo(0))
     return { isDisabled: true, children: 'Enter an amount' }
 
-  /*
-    Insufficient Funds
-  */
-  if (currencyInBalance.data?.lessThan(inputAmount))
-    return {
-      children: `Insufficient ${inputAmount.currency.symbol}`,
-      isDisabled: true,
-    }
-
   if (recipient && !isAddress(recipient)) return { children: 'Invalid recipient', isDisabled: true }
+
+  if (!useCurrencyState.approved) return useCurrencyState.buttonProps
 
   /*
     Swap

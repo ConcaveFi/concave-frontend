@@ -2,10 +2,9 @@ import { Currency, CurrencyAmount } from '@concave/core'
 import { HStack, Text } from '@concave/ui'
 import { useFiatValue } from 'components/AMM/hooks/useFiatPrice'
 import {
-  CurrencySelectorComponent,
   CurrencySelector as DisabledCurrencySelector,
+  CurrencySelectorComponent,
 } from 'components/CurrencySelector/CurrencySelector'
-import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { toAmount } from 'utils/toAmount'
 import { CurrencyAmountField } from '../CurrencyAmountField'
 import { Balance } from './Balance'

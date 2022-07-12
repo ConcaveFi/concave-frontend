@@ -1,10 +1,10 @@
 import { Currency, CurrencyAmount } from '@concave/core'
 import { Pair } from '@concave/gemswap-sdk'
-import { useLinkedCurrencyAmounts } from 'components/CurrencyAmountField'
 import { usePair } from 'components/AMM/hooks/usePair'
+import { useLinkedCurrencyAmounts } from 'components/CurrencyAmountField'
+import { useCallback } from 'react'
 import { toAmount } from 'utils/toAmount'
 import { useQueryCurrencies } from '../hooks/useQueryCurrencies'
-import { useCallback } from 'react'
 
 const deriveAmount = (
   pair: Pair,

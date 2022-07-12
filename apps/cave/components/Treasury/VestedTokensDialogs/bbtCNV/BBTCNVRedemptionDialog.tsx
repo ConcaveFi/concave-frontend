@@ -1,45 +1,33 @@
 import { InfoIcon } from '@concave/icons'
-import {
-  Button,
-  Card,
-  Flex,
-  InputLeftAddon,
-  Modal,
-  Text,
-  Tooltip,
-  useDisclosure,
-} from '@concave/ui'
+import { Button, Card, Flex, Modal, Text, Tooltip, useDisclosure } from '@concave/ui'
+import { TransactionResponse } from '@ethersproject/abstract-provider'
 import { ToggleButton } from 'components/ToggleButton'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
+import { VestedTokenDialogProps } from 'components/Treasury/TreasuryRedeemCard'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { bbtCNV_REDEMPTION_V2 } from 'contracts/VestedTokens/addresses'
 import { bbtCNV_REDEMPTION_V2_ABI } from 'contracts/VestedTokens/BBTCNV_V2_ABI'
-import { Contract, Transaction, utils } from 'ethers'
-import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
+import { Contract, utils } from 'ethers'
 import { parseEther } from 'ethers/lib/utils'
+import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider as provider } from 'lib/providers'
 import { useState } from 'react'
-import { useAccount, useBalance, useConnect, useSigner } from 'wagmi'
+import { useAccount, useSigner } from 'wagmi'
 import useBBTCNVRedeemable from '../../Hooks/useBBTCNVRedeemable'
 import useVestedTokens from '../../Hooks/useVestedTokens'
 import { BBT_CNVDialogInput } from './BbtCNVDialogInput'
-interface BBBTCNVRedemptionDialogProps {
-  onClose: () => void
-  isOpen: boolean
-}
 
-export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogProps) {
+export const BBBTCNVRedemptionDialog: React.FC<VestedTokenDialogProps> = (props) => {
   const { isOpen: isConfirmOpen, onOpen: onOpenConfirm, onClose: onCloseConfirm } = useDisclosure()
   const { isOpen: isSubOpen, onOpen: onOpenSub, onClose: onCloseSub } = useDisclosure()
   const { isOpen: isErrorOpen, onOpen: onOpenError, onClose: onCloseError } = useDisclosure()
   const { onClose, isOpen } = props
   const { data: signer } = useSigner()
-  const { data: account } = useAccount()
-  const { isConnected } = useConnect()
+  const { address, isConnected } = useAccount()
 
-  const [tx, setTx] = useState<Transaction>()
+  const [tx, setTx] = useState<TransactionResponse>()
   const [error, setError] = useState('')
 
   const { data: redeemableData, isLoading } = useBBTCNVRedeemable()
@@ -121,7 +109,7 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
               onOpenConfirm()
               bbtCNVContract
                 .connect(signer)
-                .redeem(parseEther(String(value || '0')), account?.address, redeemMax)
+                .redeem(parseEther(String(value || '0')), address, redeemMax)
                 .then((tx) => {
                   onCloseConfirm()
                   // registerTransaction(tx, {

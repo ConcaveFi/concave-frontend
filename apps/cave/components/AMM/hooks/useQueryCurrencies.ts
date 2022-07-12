@@ -1,12 +1,12 @@
-import { isAddress } from 'ethers/lib/utils'
 import { ChainId, Currency, NATIVE } from '@concave/core'
 import { Fetcher } from '@concave/gemswap-sdk'
+import { isAddress } from 'ethers/lib/utils'
 import { concaveProvider } from 'lib/providers'
 import Router, { useRouter } from 'next/router'
-import { useNetwork } from 'wagmi'
 import { useEffect, useMemo } from 'react'
 import { useQuery, useQueryClient } from 'react-query'
 import { getQueryValue } from 'utils/getQueryValue'
+import { useNetwork } from 'wagmi'
 
 const getAddressOrSymbol = (currency: Currency) => {
   if (!currency) return undefined
@@ -43,9 +43,9 @@ export const useQueryCurrencies = (defaultCurrencies?: {
   [chain in ChainId]?: [Currency, Currency]
 }) => {
   const { query } = useRouter()
-  const { activeChain } = useNetwork()
+  const { chain } = useNetwork()
 
-  const chainId = (getQueryValue(query, 'chainId') || activeChain?.id) as ChainId
+  const chainId = (getQueryValue(query, 'chainId') || chain?.id) as ChainId
 
   const queryClient = useQueryClient()
 
@@ -70,10 +70,10 @@ export const useQueryCurrencies = (defaultCurrencies?: {
   const queryHasCurrency = query.currency0 || query.currency1
   // run on network change
   useEffect(() => {
-    if (!queryHasCurrency && activeChain?.id) updateQuery({ chainId: activeChain.id })
+    if (!queryHasCurrency && chain?.id) updateQuery({ chainId: chain.id })
     /* if the query has currencies, wait for a user action to change it
         (so that he won't loose his input by mistake) */
-  }, [activeChain?.id, queryHasCurrency])
+  }, [chain?.id, queryHasCurrency])
 
   return useMemo(
     () => ({

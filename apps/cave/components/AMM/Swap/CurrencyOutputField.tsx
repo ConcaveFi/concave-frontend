@@ -1,11 +1,10 @@
 import { Currency, CurrencyAmount, Percent } from '@concave/core'
 import { Flex, HStack, Text } from '@concave/ui'
-import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
-import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { CurrencyAmountField } from 'components/CurrencyAmountField'
 import { Balance } from 'components/CurrencyAmountField/Balance'
-import { useFiatValue } from '../hooks/useFiatPrice'
+import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
 import { percentDifference } from 'utils/percentDifference'
+import { useFiatValue } from '../hooks/useFiatPrice'
 
 type CurrencyOutputFieldProps = {
   currencyAmountIn: CurrencyAmount<Currency>

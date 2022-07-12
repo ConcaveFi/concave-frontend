@@ -3,19 +3,19 @@ import { Button, Card, Flex, SlideFade, Text } from '@concave/ui'
 import { useRouter } from 'next/router'
 import { ReactNode } from 'react'
 import { getQueryValue } from 'utils/getQueryValue'
-import { useNetwork } from 'wagmi'
+import { useNetwork, useSwitchNetwork } from 'wagmi'
 
 export function NetworkMismatch({
   children,
 }: {
   children: (props: { activeChainId; queryChainId }) => ReactNode
 }) {
-  const { switchNetwork, error } = useNetwork()
+  const { switchNetwork, error } = useSwitchNetwork()
 
   const { query, push } = useRouter()
-  const { activeChain } = useNetwork()
+  const { chain } = useNetwork()
 
-  const activeChainId = activeChain?.id
+  const activeChainId = chain?.id
   const queryChainId = getQueryValue(query, 'chainId')
 
   const isNetworkMismatch = +queryChainId && activeChainId && +queryChainId !== activeChainId
@@ -42,7 +42,6 @@ export function NetworkMismatch({
           <Button
             variant="secondary"
             size="medium"
-            px={3}
             onClick={() =>
               push({ query: { chainId: activeChainId } }, undefined, { shallow: true })
             }

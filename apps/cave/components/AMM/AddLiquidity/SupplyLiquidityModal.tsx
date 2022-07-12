@@ -1,8 +1,7 @@
 import { ROUTER_ADDRESS } from '@concave/core'
 import { Box, Button, Flex, HStack, Modal, Text } from '@concave/ui'
-import { ApproveButton } from 'components/ApproveButton/ApproveButton'
+import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { CurrencyIcon } from 'components/CurrencyIcon'
-import React from 'react'
 import { UseLiquidityData } from './useLiquidityData'
 
 const PositionInfoItem = ({ color = '', label = '', value, mt = 0, children = <></> }) => (
@@ -22,6 +21,14 @@ const SupplyLiquidityContent = ({
   lpData: UseLiquidityData
   onConfirm: () => void
 }) => {
+  const approve0 = useCurrencyButtonState(
+    lpData.amount0,
+    ROUTER_ADDRESS[lpData.amount0.wrapped.currency.chainId],
+  )
+  const approve1 = useCurrencyButtonState(
+    lpData.amount1,
+    ROUTER_ADDRESS[lpData.amount0.wrapped.currency.chainId],
+  )
   return (
     <>
       <Text fontSize="2xl"> You will receive</Text>
@@ -79,32 +86,15 @@ const SupplyLiquidityContent = ({
         />
       </Box>
 
-      <ApproveButton
-        size="large"
-        w="full"
-        variant={'primary'}
-        autoHide
-        approveArgs={{
-          currency: lpData.amount0.currency,
-          amount: lpData.amount0.numerator,
-          spender: ROUTER_ADDRESS[lpData.amount0.currency.chainId],
-          onSuccess: () => lpData.setApprove0(true),
-        }}
-      />
+      {!approve0.approved && (
+        <Button size="large" w="full" variant={'primary'} {...approve0.buttonProps} />
+      )}
 
-      <ApproveButton
-        size="large"
-        w="full"
-        variant={'primary'}
-        autoHide
-        approveArgs={{
-          currency: lpData.amount1.currency,
-          spender: ROUTER_ADDRESS[lpData.amount0.currency.chainId],
-          amount: lpData.amount1.numerator,
-          onSuccess: () => lpData.setApprove1(true),
-        }}
-      />
-      {lpData.approve0 && lpData.approve1 && (
+      {!approve1.approved && (
+        <Button size="large" w="full" variant={'primary'} {...approve1.buttonProps} />
+      )}
+
+      {approve0.approved && approve1.approved && (
         <Button size="large" w="full" fontSize="2xl" variant={'primary'} onClick={onConfirm}>
           Confirm Supply
         </Button>

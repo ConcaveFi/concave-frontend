@@ -6,7 +6,7 @@ import { withPageTransition } from 'components/PageTransition'
 import { Contract } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useAccount, useSigner } from 'wagmi'
 
 const Faucet = () => {
@@ -14,7 +14,7 @@ const Faucet = () => {
   const [inputAmount, setInputAmout] = useState<CurrencyAmount<Currency>>(
     CurrencyAmount.fromRawAmount(CNV[chainId], '0'),
   )
-  const { data: account } = useAccount()
+  const { address } = useAccount()
   const { data: signer } = useSigner()
 
   const mint = () => {
@@ -26,7 +26,7 @@ const Faucet = () => {
     ).connect(signer)
 
     console.log(contract)
-    contract.mint(account.address, inputAmount.numerator.toString())
+    contract.mint(address, inputAmount.numerator.toString())
   }
 
   return (

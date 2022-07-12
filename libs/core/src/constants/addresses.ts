@@ -1,5 +1,5 @@
-import { AddressMap } from '../types'
 import { ChainId } from '../enums'
+import { AddressMap } from '../types'
 
 export const MARKETPLACE_CONTRACT: AddressMap = {
   [ChainId.ETHEREUM]: '',

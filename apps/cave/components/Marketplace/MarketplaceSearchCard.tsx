@@ -1,5 +1,4 @@
 import { Box, Flex } from '@concave/ui'
-import { useState } from 'react'
 import MarketplaceFilterContainer from './MarketplaceFilterContainer'
 import NftPositionCard from './NftPositionCard'
 

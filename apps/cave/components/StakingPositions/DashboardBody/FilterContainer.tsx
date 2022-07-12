@@ -5,7 +5,6 @@ import { InitialCNVFilter } from 'components/NftFilters/Filters/InitialCNVFilter
 import { StakePoolFilterCard } from 'components/NftFilters/Filters/StakePoolFilter'
 import { NftSort } from 'components/NftFilters/Sorters/hooks/useNftSort'
 import { SortCard } from 'components/NftFilters/Sorters/SortCard'
-import { useState } from 'react'
 
 interface FilterContainerProps {
   onEnableStakeFilter: (filter: StakePoolFilterEnum) => void
@@ -40,7 +39,7 @@ export function FilterContainer({
       px={4}
       gap={{ base: 4 }}
       my={2}
-      apply={mobileUI && 'background.metalBrighter'}
+      apply={mobileUI && 'background.metal'}
     >
       <Flex align="center " gap={2} fontWeight={'bold'}>
         <Text textColor="text.low">Filter by:</Text>

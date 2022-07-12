@@ -15,11 +15,11 @@ import {
   Text,
 } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { usePreviousDistinct } from 'react-use'
+import { percentDifference } from 'utils/percentDifference'
 import { useFiatValue } from '../hooks/useFiatPrice'
 import { SwapSettings } from '../Swap/Settings'
-import { percentDifference } from 'utils/percentDifference'
 import { ExpectedOutput, MinExpectedOutput } from './ExpectedOutput'
 import { RelativePrice } from './RelativePrice'
 

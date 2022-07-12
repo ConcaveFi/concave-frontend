@@ -1,5 +1,4 @@
-import { ChainId } from '../enums'
-import { ChainName } from '../enums'
+import { ChainId, ChainName } from '../enums'
 
 export const CHAIN_NAME: { [chainId: number]: ChainName } = {
   [ChainId.ETHEREUM]: ChainName.ETHEREUM,

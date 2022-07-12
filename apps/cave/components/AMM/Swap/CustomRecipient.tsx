@@ -7,13 +7,7 @@ export const CustomRecipient = ({ onChangeRecipient }) => {
   return (
     <Flex direction="column" align="center" w="100%">
       {isOpen ? (
-        <Button
-          onClick={() => (toggle(), onChangeRecipient())}
-          variant="select"
-          px={3}
-          py={1}
-          mb={2}
-        >
+        <Button onClick={() => (toggle(), onChangeRecipient())} variant="select" px={3} mb={2}>
           <ExpandArrowIcon w="12px" />
         </Button>
       ) : (

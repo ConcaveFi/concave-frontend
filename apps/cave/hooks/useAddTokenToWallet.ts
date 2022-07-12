@@ -1,8 +1,7 @@
-import { Erc20Abi } from '@concave/core'
+import { CHAIN_NAME, Erc20Abi } from '@concave/core'
 import { Contract } from 'ethers'
 import { concaveProvider } from 'lib/providers'
-import { useState, useEffect } from 'react'
-import { CHAIN_NAME } from '@concave/core'
+import { useEffect, useState } from 'react'
 
 interface injectedToken {
   tokenAddress: string

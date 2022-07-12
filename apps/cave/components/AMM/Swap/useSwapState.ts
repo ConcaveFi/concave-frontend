@@ -1,11 +1,11 @@
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { Currency, CurrencyAmount } from '@concave/core'
 import { BestTradeOptions, Pair, Trade, TradeType } from '@concave/gemswap-sdk'
-import { getBestTrade } from '../hooks/useTrade'
-import { useSwapSettings } from '../Swap/Settings'
 import { useLinkedCurrencyAmounts } from 'components/CurrencyAmountField'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { usePairs } from '../hooks/usePair'
 import { useQueryCurrencies } from '../hooks/useQueryCurrencies'
-import { Currency, CurrencyAmount } from '@concave/core'
+import { getBestTrade } from '../hooks/useTrade'
+import { useSwapSettings } from '../Swap/Settings'
 
 const derive = (
   enteredAmount: CurrencyAmount<Currency>,

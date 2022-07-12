@@ -7,14 +7,14 @@ import {
 import { NftSort, NftSortMethod } from 'components/NftFilters/Sorters/hooks/useNftSort'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import { useConnect } from 'wagmi'
+import { useAccount } from 'wagmi'
 import { UserPositionCard } from '../LockPosition/Card/UserPositionCard'
 import { UseStakePositionsState } from './DashBoardState'
 import { FilterContainer } from './FilterContainer'
 import { UserDividendCard } from './UserDividendCard'
 
 export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePositionsState }) => {
-  const { isConnected } = useConnect()
+  const { isConnected } = useAccount()
   const { userNonFungibleTokensInfo, totalLocked, isLoading } = stakePosition
   const hasPositions = userNonFungibleTokensInfo.length !== 0
 

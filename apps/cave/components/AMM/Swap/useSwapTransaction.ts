@@ -1,63 +1,60 @@
-import { useState } from 'react'
-import { RouterAbi, ROUTER_ADDRESS, Currency } from '@concave/core'
-import { Router, TradeType, Trade } from '@concave/gemswap-sdk'
-import { SwapSettings } from '../Swap/Settings'
+import { Currency, RouterAbi, ROUTER_ADDRESS } from '@concave/core'
+import { Router, Trade, TradeType } from '@concave/gemswap-sdk'
 import { TransactionResponse } from '@ethersproject/abstract-provider'
-import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { useAccount, useContract, useSigner } from 'wagmi'
+import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
+import { useMemo } from 'react'
 import { toPercent } from 'utils/toPercent'
+import { useAccount, useContractWrite, useNetwork } from 'wagmi'
+import { SwapSettings } from '../Swap/Settings'
 
-const initialState = {
-  isWaitingForConfirmation: false,
-  isError: false,
-  error: undefined,
-  isTransactionSent: false,
-  data: undefined,
-  trade: undefined,
-}
+export const useSwapTransaction = (
+  _trade: Trade<Currency, Currency, TradeType>,
+  settings: SwapSettings,
+  recipient: string,
+  { onSuccess }: { onSuccess?: (tx: TransactionResponse) => void },
+) => {
+  const { address } = useAccount()
+  const { chain } = useNetwork()
 
-export const useSwapTransaction = ({
-  onTransactionSent,
-}: {
-  onTransactionSent?: (tx: TransactionResponse) => void
-}) => {
-  const networkId = useCurrentSupportedNetworkId()
-  const { data: account } = useAccount()
-  const { data: signer } = useSigner()
-  const routerContract = useContract({
-    addressOrName: ROUTER_ADDRESS[networkId],
-    contractInterface: RouterAbi,
-    signerOrProvider: signer,
-  })
+  /*
+    temporary workaround for unknow issue with swapTokenForExactToken
+    all trades are submited as exact input for now
+  */
+  const trade = useMemo(
+    () => _trade.route && new Trade(_trade.route, _trade.inputAmount, TradeType.EXACT_INPUT),
+    [_trade],
+  )
 
-  const [state, setState] = useState(initialState)
-  const submit = async ({
-    trade,
-    settings,
-    recipient,
-  }: {
-    trade: Trade<Currency, Currency, TradeType>
-    settings: SwapSettings
-    recipient: string
-  }) => {
-    setState({ ...initialState, trade, isWaitingForConfirmation: true })
-    try {
-      const { methodName, args, value } = Router.swapCallParameters(trade, {
+  const swapParams = useMemo(() => {
+    if (trade && address)
+      return Router.swapCallParameters(trade, {
         allowedSlippage: toPercent(settings.slippageTolerance),
         ttl: +settings.deadline * 60,
         feeOnTransfer: trade.tradeType === TradeType.EXACT_INPUT,
-        recipient: recipient || account.address,
+        recipient: recipient || address,
       })
-      const tx: TransactionResponse = await routerContract[methodName](...args, { value })
-      setState({ ...initialState, trade, isTransactionSent: true, data: tx })
-      onTransactionSent(tx)
-    } catch (error) {
-      if (error.message === 'User rejected the transaction')
-        return setState({ ...initialState, trade, isWaitingForConfirmation: false })
+  }, [trade, settings, recipient, address])
 
-      setState({ ...initialState, trade, isError: true, error })
-    }
-  }
+  const { registerTransaction } = useTransactionRegistry()
 
-  return { submit, ...state }
+  const { reset, ...rest } = useContractWrite({
+    addressOrName: ROUTER_ADDRESS[chain?.id],
+    contractInterface: RouterAbi,
+    functionName: swapParams?.methodName,
+    args: swapParams?.args,
+    overrides: { value: swapParams?.value },
+    onSuccess: (tx) => {
+      onSuccess?.(tx)
+      registerTransaction(tx, {
+        type: 'swap',
+        amountIn: trade.inputAmount.toString(),
+        amountOut: trade.outputAmount.toString(),
+      })
+    },
+    onError: (error) => {
+      if (error.name === 'UserRejectedRequestError') reset()
+    },
+  })
+
+  return { trade, ...rest }
 }
