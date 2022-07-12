@@ -19,7 +19,7 @@ export const withPageTransition = (Page) => {
       exit="exit"
       variants={getVariant()}
       transition={{ type: 'linear', duration: 0.1 }}
-      style={{ display: 'flex', flex: 1 }}
+      style={{ display: 'flex', flex: 1, width: '100%' }}
     >
       <Page {...pageProps} />
     </motion.main>

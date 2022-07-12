@@ -7,8 +7,8 @@ export type CurrencyIconProps = {
   currency: Currency
 } & AvatarProps
 
-const concaveAssetsSrc = 'https://raw.githubusercontent.com/concavefi/assets/master/blockchains'
-const getCurrencyLogoURI = (currency: Currency) => {
+const concaveAssetsSrc = 'https://cdn.jsdelivr.net/gh/concavefi/assets@latest/blockchains/'
+export const getCurrencyLogoURI = (currency: Currency) => {
   const networkName = CHAIN_NAME[currency.chainId]
   if (networkName === 'rinkeby') {
     return `/assets/tokens/${currency.symbol.toLowerCase()}.svg`

@@ -13,11 +13,11 @@ import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { useMemo } from 'react'
+import { toAmount } from 'utils/toAmount'
 import { useAccount } from 'wagmi'
 import { useQueryCurrencies } from '../hooks/useQueryCurrencies'
 import { NetworkMismatch } from '../NetworkMismatch'
 import useLiquidityData from './useLiquidityData'
-import { toAmount } from 'utils/toAmount'
 const AddSymbol = () => (
   <Flex align="center" justify="center">
     <Flex
