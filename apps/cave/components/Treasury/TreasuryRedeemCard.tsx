@@ -30,7 +30,7 @@ export const TreasuryRedeemCard = () => {
       <Text color="text.low" textAlign={'center'} fontWeight="bold">
         Redeem your tokens for CNV below
       </Text>
-      <Flex direction={{ base: 'column', md: 'row', lg: 'column' }} w="full">
+      <Flex direction={{ base: 'column', md: 'row', lg: 'column' }} w="full" gap={3} py={3}>
         <VestedTokenButton title="aCNV" VestedTokenDialog={ACNVRedemptionDialog} />
         <VestedTokenButton title="pCNV" VestedTokenDialog={PCNVRedemptionDialog} />
         <VestedTokenButton title="bbtCNV" VestedTokenDialog={BBBTCNVRedemptionDialog} />
@@ -40,10 +40,8 @@ export const TreasuryRedeemCard = () => {
         textColor={'text.low'}
         fontWeight={'bold'}
         cursor="pointer"
-        mx={'auto'}
         // my="auto"
         fontSize={{ base: '22px', lg: 'sm' }}
-        size={'md'}
         px={2}
         w="full"
       >
@@ -61,7 +59,6 @@ const VestedTokenButton: React.FC<VestedTokenButton> = ({ title, VestedTokenDial
   return (
     <>
       <Button
-        mt={3}
         mx={'auto'}
         w="full"
         size="md"

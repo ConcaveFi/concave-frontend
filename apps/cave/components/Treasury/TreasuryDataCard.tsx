@@ -31,7 +31,7 @@ export const TreasuryDataCard = ({ treasuryData, lastBondSolds }: TreasuryDataCa
             info: treasuryValue && '$' + numberMask(treasuryValue),
             applyBorder: true,
           },
-          { title: 'CNV Total suply', info: cnvTotalSupply && '$' + numberMask(cnvTotalSupply) },
+          { title: 'CNV total suply', info: cnvTotalSupply && numberMask(cnvTotalSupply) },
         ]}
       />
       <LastBondsContainer lastBondSolds={lastBondSolds} />

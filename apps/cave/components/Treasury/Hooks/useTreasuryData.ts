@@ -47,6 +47,7 @@ export const useTreasuryData = () => {
 
   const convexToken = treasuryData?.treasury?.find((token) => token.name === 'cvxDOLA3POOL')
 
+  console.log(convexToken?.image)
   return {
     lastBondSolds,
     treasuryData: {
