@@ -6,9 +6,7 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
-import { Percent } from '@concave/core'
 import { Card } from '@concave/ui'
-import { BigNumber } from 'ethers'
 import { StakeData } from '../hooks/useLiquidStakeData'
 import { Emissions } from './Emissions'
 import { FloatingDescriptions } from './FloatingDescriptions'
@@ -19,9 +17,9 @@ type StakeModalProps = {
   isOpen: boolean
   onClose: VoidFunction
   stakeData: StakeData
-  stakeValues: { currentlyStaked: BigNumber; stakingCap: BigNumber; percent: Percent }
+  loadBar: JSX.Element
 }
-export const StakeModal = ({ isOpen, onClose, stakeData, stakeValues }: StakeModalProps) => {
+export const StakeModal = ({ isOpen, onClose, stakeData, loadBar }: StakeModalProps) => {
   const { poolId } = stakeData || {}
   const {
     isOpen: isDescritionsOpen,
@@ -57,7 +55,7 @@ export const StakeModal = ({ isOpen, onClose, stakeData, stakeValues }: StakeMod
             {...stakeData}
           />
           <VStack gap={4} w="full" justify={'center'} align="center">
-            <StakeInfo stakingPool={stakeData} stakeValues={stakeValues} />
+            <StakeInfo stakingPool={stakeData} loadBar={loadBar} />
             <StakeInput onClose={onClose} poolId={poolId} stakingPool={stakeData} />
           </VStack>
         </Card>

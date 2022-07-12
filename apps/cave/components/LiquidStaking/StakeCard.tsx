@@ -19,10 +19,18 @@ export const StakeCard = (props: StakeCardProps) => {
   const { data, isLoading } = useLiquidValues(chainId, poolId)
   const { stakingV1Pools, stakingV1Cap } = data || {}
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const percent = new Percent(
+
+  const loadBarPercent = new Percent(
     stakingV1Pools?.balance?.toString() || '0',
     stakingV1Cap?.toString() || '0',
   )
+
+  const loadBarProps = {
+    percent: loadBarPercent,
+    loading: isLoading,
+    currentlyStaked: numberMask(+utils.formatEther(stakingV1Pools?.balance || 0)),
+    stakingCap: numberMask(+utils.formatEther(stakingV1Pools?.balance?.add(stakingV1Cap) || 0)),
+  } as const
 
   return (
     <>
@@ -34,14 +42,7 @@ export const StakeCard = (props: StakeCardProps) => {
         align="center"
       >
         <ImageContainer stakingPool={props.stakeData} totalVAPR={totalVAPR?.toFixed(2) + '%'} />
-        <LoadBard
-          percent={percent}
-          loading={isLoading}
-          currentlyStaked={numberMask(+utils.formatEther(stakingV1Pools?.balance || 0))}
-          stakingCap={numberMask(
-            +utils.formatEther(stakingV1Pools?.balance?.add(stakingV1Cap) || 0),
-          )}
-        />
+        <LoadBard variant="primary" {...loadBarProps} />
         <Button
           mt={4}
           onClick={onOpen}
@@ -55,11 +56,7 @@ export const StakeCard = (props: StakeCardProps) => {
         </Button>
       </Card>
       <StakeModal
-        stakeValues={{
-          currentlyStaked: stakingV1Pools?.balance,
-          percent,
-          stakingCap: stakingV1Cap,
-        }}
+        loadBar={<LoadBard variant="secondary" {...loadBarProps} />}
         isOpen={isOpen}
         onClose={onClose}
         stakeData={props.stakeData}
@@ -86,8 +83,9 @@ type LoadBarProps = {
   loading: boolean
   currentlyStaked: string
   stakingCap: string
+  variant: 'primary' | 'secondary'
 }
-const LoadBard = ({ percent, currentlyStaked, loading, stakingCap }: LoadBarProps) => (
+const LoadBard = ({ percent, currentlyStaked, loading, stakingCap, variant }: LoadBarProps) => (
   <>
     {/* Header */}
     <Stack color="text.low" fontSize={12} isInline justify="space-between" mt={3}>
@@ -95,32 +93,57 @@ const LoadBard = ({ percent, currentlyStaked, loading, stakingCap }: LoadBarProp
       <Text fontWeight={'bold'}>Staking cap</Text>
     </Stack>
     {/* Loading Bar */}
-    <Flex width={'full'} height="28px" shadow={'down'} rounded="2xl" my={2} p={1}>
+    <Flex
+      width={'full'}
+      position="relative"
+      height="32px"
+      shadow={'down'}
+      rounded="2xl"
+      my={2}
+      p={1}
+    >
       <Flex
         width={`${percent.toSignificant(3)}%`}
         height="full"
         apply={'background.metalBrighter'}
         rounded="full"
       />
+      <Flex
+        position={'absolute'}
+        mx={-1}
+        fontSize={loadBarFontSize[variant]}
+        justify={loadBarTextJustify[variant]}
+        width="full"
+        px={loadBarTextPx[variant]}
+        fontWeight={'bold'}
+      >
+        {loading && <Text>Loading...</Text>}
+        {!loading && (
+          <>
+            <Text>{currentlyStaked}</Text>
+            <Text>{stakingCap}</Text>
+          </>
+        )}
+      </Flex>
     </Flex>
     {/* Values */}
-    <Flex
-      fontSize={{ base: '11px', md: '14px' }}
-      justify={'space-around'}
-      width="full"
-      mt={'-32px'}
-    >
-      {loading ? (
-        <Text>Loading...</Text>
-      ) : (
-        <>
-          <Text>{currentlyStaked}</Text>
-          <Text>{stakingCap}</Text>
-        </>
-      )}
-    </Flex>
   </>
 )
+
+const loadBarFontSize = {
+  primary: { base: 'xs', md: 'sm' },
+  secondary: 'md',
+}
+
+const loadBarTextPx = {
+  primary: '0',
+  secondary: '10',
+} as const
+
+const loadBarTextJustify = {
+  primary: 'space-around',
+  secondary: 'space-between',
+} as const
 
 type InfoProps = { title: string; label: string }
 const Info: React.FC<InfoProps & TextProps> = ({ title, label, ...props }) => (

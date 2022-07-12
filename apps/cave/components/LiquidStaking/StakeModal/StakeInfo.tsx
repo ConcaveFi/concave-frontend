@@ -1,25 +1,18 @@
-import { Percent } from '@concave/core'
 import { StakingPool } from '@concave/marketplace'
 import { Flex, Stack, Text } from '@concave/ui'
-import { BigNumber, utils } from 'ethers'
 import React from 'react'
-import { numberMask } from 'utils/numberMask'
 
 function getRedeemDateString(date, days) {
-  var result = new Date(date)
+  const result = new Date(date)
   result.setDate(result.getDate() + days)
-  return result
+  return result.toISOString().slice(0, 10)
 }
 
 type StakeInfoProps = {
   stakingPool: StakingPool
-  stakeValues: {
-    currentlyStaked: BigNumber
-    stakingCap: BigNumber
-    percent: Percent
-  }
+  loadBar: JSX.Element
 }
-export function StakeInfo({ stakingPool, stakeValues }: StakeInfoProps) {
+export function StakeInfo({ stakingPool, loadBar }: StakeInfoProps) {
   return (
     <Flex w={{ base: '300px', md: '350px' }} rounded="3xl" shadow={'up'} p={4} direction="column">
       <Flex justify={'space-between'} w="full">
@@ -31,15 +24,9 @@ export function StakeInfo({ stakingPool, stakeValues }: StakeInfoProps) {
         <Text color="text.low" fontSize="md">
           Redeem date:
         </Text>
-        <Text fontSize="md">
-          {getRedeemDateString(Date(), stakingPool.days).toISOString().slice(0, 10)}
-        </Text>
+        <Text fontSize="md">{getRedeemDateString(Date(), stakingPool.days)}</Text>
       </Flex>
-      <LoadBar
-        currentlyStaked={numberMask(+utils.formatEther(stakeValues?.currentlyStaked || 0))}
-        percent={stakeValues?.percent}
-        stakingCap={numberMask(+utils.formatEther(stakeValues?.stakingCap || 0))}
-      />
+      {loadBar}
     </Flex>
   )
 }
@@ -70,27 +57,4 @@ const HeaderInfo: React.FC<HeaderInfoProps> = ({ info, title }) => (
       {info}
     </Text>
   </Stack>
-)
-
-type LoadBarProps = { percent: Percent; currentlyStaked: string; stakingCap: string }
-const LoadBar: React.FC<LoadBarProps> = ({ currentlyStaked, percent, stakingCap }) => (
-  <>
-    <Stack px={4} color="text.low" fontSize={'xs'} isInline justify="space-between" mt={6}>
-      <Text fontSize="sm">Currently staked</Text>
-      <Text fontSize="sm">Staking cap</Text>
-    </Stack>
-    <Flex w="full" h="30px" shadow={'down'} rounded="2xl" mt={3} p={1}>
-      <Flex
-        h={'full'}
-        width={`${percent.toSignificant(3)}%`}
-        apply="background.metalBrighter"
-        rounded={'2xl'}
-        shadow="up"
-      />
-    </Flex>
-    <Flex justify={'space-between'} px={4} mt={'-27px'}>
-      <Text>{currentlyStaked}</Text>
-      <Text>{stakingCap}</Text>
-    </Flex>
-  </>
 )
