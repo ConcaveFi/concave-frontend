@@ -6,10 +6,12 @@ import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { percentDifference } from 'utils/percentDifference'
 import { useFiatValue } from '../hooks/useFiatPrice'
+import { PriceImpact } from './PriceImpact'
 
 type CurrencyOutputFieldProps = {
   currencyAmountIn: CurrencyAmount<Currency>
   currencyAmountOut: CurrencyAmount<Currency>
+  priceImpact: Percent
   updateOutputValue: (value: CurrencyAmount<Currency>) => void
 }
 
@@ -19,6 +21,7 @@ export const CurrencyOutputField = ({
   currencyAmountIn,
   currencyAmountOut,
   updateOutputValue,
+  priceImpact,
 }: CurrencyOutputFieldProps) => {
   const inputFiat = useFiatValue(currencyAmountIn)
   const outputFiat = useFiatValue(currencyAmountOut)
@@ -39,9 +42,10 @@ export const CurrencyOutputField = ({
             {!!outputFiat.value?.greaterThan(0) &&
               `$${outputFiat.value.toFixed(2, { groupSeparator: ',' })}`}
           </Text>
-          <Text fontSize="xs" opacity={0.7}>
-            {(fiatPriceImpact?.greaterThan(_01) || fiatPriceImpact?.lessThan(_01.multiply(-1))) &&
-              `(${fiatPriceImpact?.toFixed(2, { groupSeparator: ',' })}%)`}{' '}
+          <Text fontSize="sm" opacity={0.5}>
+            {(fiatPriceImpact?.greaterThan(_01) || fiatPriceImpact?.lessThan(_01.multiply(-1))) && (
+              <PriceImpact priceImpact={priceImpact} />
+            )}
           </Text>
         </Flex>
         {balance.isSuccess && <Balance value={balance.data.toFixed(2, { groupSeparator: ',' })} />}

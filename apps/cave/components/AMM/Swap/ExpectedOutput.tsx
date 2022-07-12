@@ -55,7 +55,9 @@ export const ExpectedOutput = ({
           {outputAmount.currency.symbol}
         </Text>
       </Flex>
-      <PriceImpact priceImpact={priceImpact}></PriceImpact>
+      <PriceImpact priceImpact={priceImpact}>
+        <Text>Price Impact</Text>
+      </PriceImpact>
     </Stack>
   )
 }
