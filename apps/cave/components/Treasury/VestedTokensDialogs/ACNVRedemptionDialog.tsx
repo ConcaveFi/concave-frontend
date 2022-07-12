@@ -1,4 +1,4 @@
-import { ACNV_REDEEM_CONTRACT, ACNV_REDEMPTION_ABI } from '@concave/core'
+import { ACNV_REDEEM, ACNV_REDEMPTION_ABI } from '@concave/core'
 import { Button, Card, Flex, Link, Modal, Text, useDisclosure } from '@concave/ui'
 import { TransactionResponse } from '@ethersproject/abstract-provider'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
@@ -30,7 +30,7 @@ export const ACNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) =>
   })
   const redeemed: number = data?.logACNVRedemption[0]?.amount || 0
   const txHash = data?.logACNVRedemption[0]?.txHash || ''
-  const aCNVContract = new Contract(ACNV_REDEEM_CONTRACT[1], ACNV_REDEMPTION_ABI, provider(1))
+  const aCNVContract = new Contract(ACNV_REDEEM[1], ACNV_REDEMPTION_ABI, provider(1))
 
   const { aCNVData, loadingACNV } = useVestedTokens()
   const validBalance = +aCNVData?.formatted > 0
