@@ -50,11 +50,11 @@ const Paragraph = ({ poolId }: ParagraphProps) => (
     fontSize={{ base: '12px', md: 'sm' }}
     align="justify"
   >
-    The {poolId} staking term will accrue CNV from bond emissions by capturing{` `}
+    The {poolId} staking term will accrue CNV from bond emissions by capturing{` `}{' '}
     {poolIdToBondRevenueMapping[poolId]} of the growth generated from purchased bonds every 8 hours.
-    Additionally, the {poolId} term receives a{` `}
-    {poolIdToRewardsBoost[poolId]} boost on base CNV emissions and a {poolIdToquaterlyBoost[poolId]}{' '}
-    the quarterly dividend derived from protocol profits in non CNV assets.
+    Additionally, the {poolId} term receives a{` `} {poolIdToRewardsBoost[poolId]} boost on base CNV
+    emissions and a {poolIdToquaterlyBoost[poolId]} the quarterly dividend derived from protocol
+    profits in non CNV assets.
   </Text>
 )
 
@@ -64,6 +64,7 @@ const HeaderInfo: React.FC<HeaderInfoProps> = ({ info, title }) => (
     <Text textAlign="left" fontSize={{ base: '2xl', md: '3xl' }} fontWeight="bold">
       {title}
     </Text>
+
     <Text color="text.low" fontSize="sm">
       {info}
     </Text>
