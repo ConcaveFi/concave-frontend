@@ -1,9 +1,9 @@
 import { ACNVRedeemContract, ChainId } from '@concave/core'
 import { Button, Card, Flex, Link, Modal, Text, useDisclosure } from '@concave/ui'
-import { TransactionResponse } from '@ethersproject/providers'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
+import { Transaction } from 'ethers'
 import { useGet_User_Acnv_RedeemedQuery } from 'graphql/generated/graphql'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useState } from 'react'
@@ -21,7 +21,7 @@ export const ACNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) =>
   const { data: signer } = useSigner()
   const { address, isConnected } = useAccount()
 
-  const [tx, setTx] = useState<TransactionResponse>()
+  const [tx, setTx] = useState<Transaction>()
   const [error, setError] = useState('')
 
   const { data, isLoading } = useGet_User_Acnv_RedeemedQuery({
