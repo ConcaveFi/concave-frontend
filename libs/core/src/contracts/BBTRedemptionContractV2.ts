@@ -3,9 +3,11 @@ import { BaseProvider } from '@ethersproject/providers'
 import { BigNumber, Contract, ethers } from 'ethers'
 import { BBTCNV_REDEMPTION_V2_ABI } from 'src/abis'
 import { BBTCNV_REDEMPTION_V2 } from 'src/constants'
+import { ChainId } from 'src/enums'
 
 export class BBTRedemptionContractV2 {
   private readonly bbtCNVContract: ethers.Contract
+
   constructor(private readonly provider: BaseProvider | MulticallProvider) {
     if (!provider) {
       throw 'Provider is undefined to constructor of BBTRedemptionContractV2'
@@ -17,10 +19,22 @@ export class BBTRedemptionContractV2 {
       provider,
     )
   }
-  public async redeemable(address: string): Promise<BigNumber> {
+
+  /**
+   It's not correct connect signer before reading a contract function
+   but the unique way to read bbt redemption functions on mainnet
+   it's connecting the signer before, we don't know why yet, but for now it's working
+  */
+  public async redeemable(signer: ethers.Signer, address: string): Promise<BigNumber> {
+    if (this.provider.network.chainId === ChainId.ETHEREUM) {
+      return this.bbtCNVContract.connect(signer).redeemable(address)
+    }
     return this.bbtCNVContract.redeemable(address)
   }
-  public async redeemed(address: string): Promise<BigNumber> {
+  public async redeemed(signer: ethers.Signer, address: string): Promise<BigNumber> {
+    if (this.provider.network.chainId === ChainId.ETHEREUM) {
+      return this.bbtCNVContract.connect(signer).redeemed(address)
+    }
     return this.bbtCNVContract.redeemed(address)
   }
   public async redeem(

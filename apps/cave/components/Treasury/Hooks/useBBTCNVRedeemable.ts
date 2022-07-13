@@ -14,8 +14,8 @@ export default function useBBTCNVRedeemable() {
     ['bbtRedeemable', address, networkdId],
     async () =>
       Promise.all([
-        bbtCNVRedemptionV2.redeemable(address),
-        bbtCNVRedemptionV2.redeemed(address),
+        bbtCNVRedemptionV2.redeemable(signer, address),
+        bbtCNVRedemptionV2.redeemed(signer, address),
       ]).then((values) => ({
         redeemable: values[0],
         redeemed: values[1],
