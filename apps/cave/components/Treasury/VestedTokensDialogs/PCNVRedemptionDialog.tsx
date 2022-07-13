@@ -1,25 +1,25 @@
-import { Flex, Modal, Text } from '@concave/ui'
+import { parseEther } from 'ethers/lib/utils'
+import { usePCNVUserData } from '../Hooks/usePCNVUserData'
+import useVestedTokens from '../Hooks/useVestedTokens'
 import { VestedTokenButtonProps } from '../TreasuryRedeemCard'
+import { VestedTokenDialog } from './VestedTokenDialog'
 
 export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen, onClose }) => {
+  const { data: pCNVRedeemableData, isLoading } = usePCNVUserData()
+  const { pCNV } = useVestedTokens()
+
+  const balance = parseEther(pCNV?.data?.formatted || '0')
   return (
-    <Modal
-      isCentered
-      motionPreset="slideInBottom"
-      preserveScrollBarGap
-      title={''}
-      hideClose
-      onClose={onClose}
-      isOpen={isOpen}
-    >
-      <Flex width={'220px'} height="140px" direction={'column'} px="3">
-        <Text fontSize={'2xl'} fontWeight="bold" mx={'auto'} mt="2">
-          {`pCNV`}
-        </Text>
-        <Text textAlign={'center'} textColor={'text.low'} fontWeight="bold" fontSize={'lg'}>
-          {`We're busy mining the pCNV token, come back later.`}
-        </Text>
-      </Flex>
-    </Modal>
+    <>
+      <VestedTokenDialog
+        isLoading={isLoading}
+        isOpen={isOpen}
+        onClose={onClose}
+        onRedeem={() => {}}
+        status={'default'}
+        tokenUserData={{ ...pCNVRedeemableData, balance }}
+        title="Redeem pCNV"
+      />
+    </>
   )
 }

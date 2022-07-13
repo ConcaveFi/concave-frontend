@@ -1,4 +1,4 @@
-import { ACNV_ADDRESS, BBTCNV_ADDRESS } from '@concave/core'
+import { PCNV_CONTRACT } from '@concave/core'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useAccount, useBalance } from 'wagmi'
 
@@ -14,8 +14,14 @@ export default function useVestedTokens() {
     token: ACNV_ADDRESS[networkId],
   })
 
+  const { data: pCNVData, isLoading: loadingPCNV } = useBalance({
+    addressOrName: address,
+    token: PCNV_CONTRACT[networkId],
+  })
+
   return {
     aCNV: { data: aCNVData, isLoading: loadingACNV },
     bbtCNV: { data: bbtCNVData, isLoading: loadingBBTCNV },
+    pCNV: { data: pCNVData, isLoading: loadingPCNV },
   }
 }
