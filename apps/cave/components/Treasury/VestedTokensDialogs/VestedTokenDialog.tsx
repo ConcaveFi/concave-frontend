@@ -9,23 +9,24 @@ import { useAccount } from 'wagmi'
 import { VestedTokenInput } from './VestedTokenDialogInput'
 
 type VestedTokenDialogProps = {
-  pCNVData: { redeemable: BigNumber; redeemed: BigNumber }
-  balance: BigNumber
+  tokenUserData: { redeemable: BigNumber; redeemed: BigNumber; balance: BigNumber }
+
   isLoading: boolean
   onRedeem: (amount: BigNumber, redeemMax: boolean) => void
   status: 'default' | 'approve' | 'rejected' | 'error'
+  title?: string
 }
 export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDialogProps> = ({
   onClose,
   isOpen,
-  balance,
-  pCNVData,
+  tokenUserData,
   isLoading,
   onRedeem,
   status,
+  title,
 }) => {
   const { isConnected } = useAccount()
-  const { redeemable, redeemed } = pCNVData || {}
+  const { redeemable, redeemed, balance } = tokenUserData || {}
   const [value, setValue] = useState<string>()
   const [redeemMax, setRedeemMax] = useState(true)
 
@@ -40,7 +41,7 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
   return (
     <>
       <Modal
-        title="Redeem bbtCNV"
+        title={title}
         bluryOverlay
         preserveScrollBarGap
         isOpen={isOpen}
@@ -50,7 +51,7 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
       >
         <Card width={'340px'} height="280px" m={-6} px={6} gap={2} justify="center">
           <VestedTokenInput
-            redeemable={String(redeemable)}
+            redeemable={redeemable}
             redeemMax={redeemMax}
             balance={formatEther(balance)}
             onChangeValue={setValue}

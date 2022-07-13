@@ -30,17 +30,17 @@ export const BBBTCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props)
 
   const networdId = useCurrentSupportedNetworkId()
   const bbtCNVContract = new BBTRedemptionContractV2(concaveProvider(networdId))
-
+  const balance = parseEther(bbtCNV?.data?.formatted || '0')
   return (
     <>
       <VestedTokenDialog
         status={status}
-        balance={parseEther(bbtCNV?.data?.formatted || '0')}
         isLoading={isLoading}
         isOpen={isOpen}
         onClose={onClose}
         onRedeem={redeem}
-        pCNVData={redeemableData}
+        tokenUserData={{ ...redeemableData, balance }}
+        title={'Redeem bbtCNV'}
       />
       <TransactionSubmittedDialog
         closeParentComponent={onCloseTransactionModal}
