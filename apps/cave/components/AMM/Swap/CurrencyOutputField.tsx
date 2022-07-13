@@ -4,12 +4,10 @@ import { CurrencyAmountField } from 'components/CurrencyAmountField'
 import { Balance } from 'components/CurrencyAmountField/Balance'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
-import { percentDifference } from 'utils/percentDifference'
 import { useFiatValue } from '../hooks/useFiatPrice'
 import { PriceImpact } from './PriceImpact'
 
 type CurrencyOutputFieldProps = {
-  currencyAmountIn: CurrencyAmount<Currency>
   currencyAmountOut: CurrencyAmount<Currency>
   priceImpact: Percent
   updateOutputValue: (value: CurrencyAmount<Currency>) => void
@@ -18,15 +16,11 @@ type CurrencyOutputFieldProps = {
 const _01 = new Percent(1, 10000) // 0.01%
 
 export const CurrencyOutputField = ({
-  currencyAmountIn,
   currencyAmountOut,
   updateOutputValue,
   priceImpact,
 }: CurrencyOutputFieldProps) => {
-  const inputFiat = useFiatValue(currencyAmountIn)
   const outputFiat = useFiatValue(currencyAmountOut)
-
-  const fiatPriceImpact = percentDifference(inputFiat.value, outputFiat.value)
 
   const balance = useCurrencyBalance(currencyAmountOut?.currency, { watch: true })
 

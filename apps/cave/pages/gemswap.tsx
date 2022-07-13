@@ -147,7 +147,6 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
 
             <CurrencyOutputField
               currencyAmountOut={trade.data.outputAmount}
-              currencyAmountIn={trade.data.inputAmount}
               updateOutputValue={onChangeOutput}
               priceImpact={trade.data?.priceImpact}
             />
