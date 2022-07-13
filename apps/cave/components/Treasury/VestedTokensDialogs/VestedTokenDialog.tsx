@@ -89,9 +89,9 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
             onClick={() => onRedeem(redeemMax ? redeemable : parseEther(value || '0'), redeemMax)}
             gap={4}
           >
+            {(status === 'approve' || isLoading) && <Spinner color="text.low" />}
             {isConnected && !isLoading && (
               <>
-                {status === 'approve' && <Spinner color="text.low" />}
                 <Text>
                   {nothingToRedeem && 'Nothing to redeem'}
                   {insufficientFunds && 'Insufficient funds'}
