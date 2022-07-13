@@ -1,18 +1,19 @@
 import { InfoIcon } from '@concave/icons'
-import { Button, Card, Flex, Modal, Text, Tooltip } from '@concave/ui'
+import { Button, Card, Flex, Modal, Spinner, Text, Tooltip } from '@concave/ui'
 import { ToggleButton } from 'components/ToggleButton'
 import { VestedTokenButtonProps } from 'components/Treasury/TreasuryRedeemCard'
 import { BigNumber } from 'ethers'
 import { formatEther, parseEther } from 'ethers/lib/utils'
 import { useState } from 'react'
 import { useAccount } from 'wagmi'
-import { VestedDialogInput } from './VestedDialogInput'
+import { VestedTokenInput } from './VestedTokenDialogInput'
 
 type VestedTokenDialogProps = {
   pCNVData: { redeemable: BigNumber; redeemed: BigNumber }
   balance: BigNumber
   isLoading: boolean
   onRedeem: (amount: BigNumber, redeemMax: boolean) => void
+  status: 'default' | 'approve' | 'rejected'
 }
 export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDialogProps> = ({
   onClose,
@@ -21,17 +22,20 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
   pCNVData,
   isLoading,
   onRedeem,
+  status,
 }) => {
   const { isConnected } = useAccount()
   const { redeemable, redeemed } = pCNVData || {}
   const [value, setValue] = useState<string>()
   const [redeemMax, setRedeemMax] = useState(true)
 
-  // Conditions
   const insufficientFunds = +balance === 0 || +value > +balance
   const nothingToRedeem = (redeemable?.isZero() || redeemable?.eq(balance)) && !insufficientFunds
   const redeemableExceeded =
-    parseEther(value || '0')?.gt(redeemable || 0) && !insufficientFunds && !nothingToRedeem
+    !redeemMax &&
+    parseEther(value || '0')?.gt(redeemable || 0) &&
+    !insufficientFunds &&
+    !nothingToRedeem
   const validValue = !insufficientFunds && !nothingToRedeem && !redeemableExceeded
   return (
     <>
@@ -45,7 +49,7 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
         motionPreset="slideInBottom"
       >
         <Card width={'340px'} height="280px" m={-6} px={6} gap={2} justify="center">
-          <VestedDialogInput
+          <VestedTokenInput
             redeemable={String(redeemable)}
             redeemMax={redeemMax}
             balance={formatEther(balance)}
@@ -53,8 +57,14 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
             value={value}
           />
           <Flex direction={'column'} fontSize="14px">
-            <Info title="Redeemable:" value={isLoading ? 'Loading...' : formatEther(redeemable)} />
-            <Info title="Redeemed:" value={isLoading ? 'Loading...' : formatEther(redeemed)} />
+            <Info
+              title="Redeemable:"
+              value={isLoading ? 'Loading...' : formatEther(redeemable || '0')}
+            />
+            <Info
+              title="Redeemed:"
+              value={isLoading ? 'Loading...' : formatEther(redeemed || '0')}
+            />
           </Flex>
           <Flex gap={2} fontWeight={'bold'} pl={2} align="center">
             <Text textColor={'gray.200'}>Redeem max</Text>
@@ -72,25 +82,22 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
             </Tooltip>
           </Flex>
           <Button
-            cursor={!validValue && 'default'}
-            shadow={'Up Small'}
-            fontSize={'20'}
             height={'55px'}
             width="full"
-            variant={'secondary'}
-            textColor={!validValue && 'text.low'}
-            _active={validValue && { transform: 'scale(0.9)' }}
-            _hover={validValue && { shadow: 'up' }}
-            _focus={{}}
+            {...redeemButtonProps(validValue)[status]}
             onClick={() => onRedeem(parseEther(value || '0'), redeemMax)}
+            gap={4}
           >
             {isConnected && !isLoading && (
-              <Text>
-                {nothingToRedeem && 'Nothing to redeem'}
-                {insufficientFunds && 'Insufficient funds'}
-                {redeemableExceeded && 'Redeemable exceeded'}
-                {validValue && 'Redeem'}
-              </Text>
+              <>
+                {status === 'approve' && <Spinner color="text.low" />}
+                <Text>
+                  {nothingToRedeem && 'Nothing to redeem'}
+                  {insufficientFunds && 'Insufficient funds'}
+                  {redeemableExceeded && 'Redeemable exceeded'}
+                  {validValue && redeemButtonText[status]}
+                </Text>
+              </>
             )}
             {isConnected && isLoading && 'Loading...'}
             {!isConnected && 'Not connected'}
@@ -100,7 +107,30 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
     </>
   )
 }
+const redeemButtonProps = (validValue: boolean) => {
+  const defaultProps = {
+    variant: 'secondary',
+    fontSize: 20,
+    shadow: 'Up Small',
+    cursor: !validValue && 'default',
+    textColor: !validValue && 'text.low',
+    _active: validValue && { transform: 'scale(0.9)' },
+    _hover: validValue && { shadow: 'up' },
+    _focus: {},
+  }
+  const disabledProps = { ...defaultProps, disabled: true, _hover: {}, variant: 'primary.outline' }
+  return {
+    default: { ...defaultProps },
+    approve: { ...disabledProps },
+    rejected: { ...disabledProps },
+  }
+}
 
+const redeemButtonText = {
+  default: 'Redeem',
+  approve: 'Aprove in your wallet...',
+  rejected: 'Transaction rejected',
+}
 const Info = ({ title, value }: { title: string; value: string | number }) => (
   <Flex gap={2} fontWeight={'bold'} pl={2}>
     <Text textColor={'text.low'}>{title}</Text>

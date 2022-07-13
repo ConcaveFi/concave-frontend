@@ -1,10 +1,9 @@
-import { ACNV_REDEEM, ACNV_REDEMPTION_ABI } from '@concave/core'
+import { ACNVRedeemContract } from '@concave/core'
 import { Button, Card, Flex, Link, Modal, Text, useDisclosure } from '@concave/ui'
-import { TransactionResponse } from '@ethersproject/abstract-provider'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
-import { Contract } from 'ethers'
+import { ethers } from 'ethers'
 import { useGet_User_Acnv_RedeemedQuery } from 'graphql/generated/graphql'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { concaveProvider as provider } from 'lib/providers'
@@ -22,7 +21,7 @@ export const ACNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) =>
   const { data: signer } = useSigner()
   const { address, isConnected } = useAccount()
 
-  const [tx, setTx] = useState<TransactionResponse>()
+  const [tx, setTx] = useState<ethers.Transaction>()
   const [error, setError] = useState('')
 
   const { data, isLoading } = useGet_User_Acnv_RedeemedQuery({
@@ -30,7 +29,7 @@ export const ACNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) =>
   })
   const redeemed: number = data?.logACNVRedemption[0]?.amount || 0
   const txHash = data?.logACNVRedemption[0]?.txHash || ''
-  const aCNVContract = new Contract(ACNV_REDEEM[1], ACNV_REDEMPTION_ABI, provider(1))
+  const aCNVContract = new ACNVRedeemContract(provider(1))
 
   const { aCNV } = useVestedTokens()
   const { data: aCNVData } = aCNV
@@ -43,8 +42,7 @@ export const ACNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) =>
   function redeem() {
     onOpenConfirm()
     aCNVContract
-      .connect(signer)
-      .redeem(address)
+      .redeem(signer, address)
       .then((tx) => {
         onCloseConfirm()
         registerTransaction(tx, {
