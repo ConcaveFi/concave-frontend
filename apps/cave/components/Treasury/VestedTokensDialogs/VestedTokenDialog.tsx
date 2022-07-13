@@ -13,7 +13,7 @@ type VestedTokenDialogProps = {
   balance: BigNumber
   isLoading: boolean
   onRedeem: (amount: BigNumber, redeemMax: boolean) => void
-  status: 'default' | 'approve' | 'rejected'
+  status: 'default' | 'approve' | 'rejected' | 'error'
 }
 export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDialogProps> = ({
   onClose,
@@ -84,7 +84,7 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
           <Button
             height={'55px'}
             width="full"
-            {...redeemButtonProps(validValue)[status]}
+            {...redeemButtonProps(validValue, status)}
             onClick={() => onRedeem(parseEther(value || '0'), redeemMax)}
             gap={4}
           >
@@ -107,7 +107,7 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
     </>
   )
 }
-const redeemButtonProps = (validValue: boolean) => {
+const redeemButtonProps = (validValue: boolean, status) => {
   const defaultProps = {
     variant: 'secondary',
     fontSize: 20,
@@ -119,17 +119,15 @@ const redeemButtonProps = (validValue: boolean) => {
     _focus: {},
   }
   const disabledProps = { ...defaultProps, disabled: true, _hover: {}, variant: 'primary.outline' }
-  return {
-    default: { ...defaultProps },
-    approve: { ...disabledProps },
-    rejected: { ...disabledProps },
-  }
+  if (status === 'default') return { ...defaultProps }
+  return { ...disabledProps }
 }
 
 const redeemButtonText = {
   default: 'Redeem',
   approve: 'Aprove in your wallet...',
   rejected: 'Transaction rejected',
+  error: 'Ocurred an error',
 }
 const Info = ({ title, value }: { title: string; value: string | number }) => (
   <Flex gap={2} fontWeight={'bold'} pl={2}>

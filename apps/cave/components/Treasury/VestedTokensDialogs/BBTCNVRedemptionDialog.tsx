@@ -1,5 +1,5 @@
 import { BBTRedemptionContractV2 } from '@concave/core'
-import { Flex, Text, useDisclosure } from '@concave/ui'
+import { useDisclosure } from '@concave/ui'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { BigNumber } from 'ethers'
 import { parseEther } from 'ethers/lib/utils'
@@ -19,34 +19,17 @@ export const BBBTCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props)
     onOpen: SubmitTransactionModal,
   } = useDisclosure()
   const { onClose, isOpen } = props
-  const { data: signer } = useSigner()
+
   const { address } = useAccount()
+  const { data: signer } = useSigner()
   const { data: redeemableData, isLoading } = useBBTCNVRedeemable()
   const { bbtCNV } = useVestedTokens()
-  const [status, setStatus] = useState<'default' | 'approve' | 'rejected'>('default')
 
+  const [status, setStatus] = useState<'default' | 'approve' | 'rejected' | 'error'>('default')
   const [tx, setTx] = useState(undefined)
 
   const networdId = useCurrentSupportedNetworkId()
   const bbtCNVContract = new BBTRedemptionContractV2(concaveProvider(networdId))
-
-  const redeem = (amount: BigNumber, redeemMax: boolean) => {
-    setStatus('approve')
-    bbtCNVContract
-      .redeem(signer, amount, address, redeemMax)
-      .then((transaction) => {
-        setTx(transaction)
-        SubmitTransactionModal()
-        setStatus('default')
-      })
-      .catch((error) => {
-        console.log('teste')
-        setStatus('rejected')
-        setTimeout(() => {
-          setStatus('default')
-        }, 3000)
-      })
-  }
 
   return (
     <>
@@ -66,11 +49,22 @@ export const BBBTCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props)
       />
     </>
   )
-}
 
-const Info = ({ title, value }: { title: string; value: string | number }) => (
-  <Flex gap={2} fontWeight={'bold'} pl={2}>
-    <Text textColor={'text.low'}>{title}</Text>
-    <Text textColor={'text.accent'}>{value}</Text>
-  </Flex>
-)
+  function redeem(amount: BigNumber, redeemMax: boolean) {
+    setStatus('approve')
+    bbtCNVContract
+      .redeem(signer, amount, address, redeemMax)
+      .then((transaction) => {
+        setTx(transaction)
+        SubmitTransactionModal()
+        setStatus('default')
+      })
+      .catch((error) => {
+        if (error.code === 4001) setStatus('rejected')
+        else setStatus('error')
+        setTimeout(() => {
+          setStatus('default')
+        }, 3000)
+      })
+  }
+}
