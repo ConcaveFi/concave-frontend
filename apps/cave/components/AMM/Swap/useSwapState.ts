@@ -21,12 +21,27 @@ const derive = (
   return tradeType === TradeType.EXACT_INPUT ? trade.outputAmount : trade.inputAmount
 }
 
-const useSwitchFields = (onChangeField, amounts) => {
-  const _amounts = useRef(amounts)
+/*
+  lets say you filled the swap card with 100 dai in and it derived 3 cnv out
+  click switch and the trade becomes 2.98 cnv in for 100 dai out (because of price impact etc)
+  now you click switch again, you'd expect it to become 100 dai in for 3 cnv out
+  
+  for this reason we can't just grab the first field amount and throw it in the second and let it derive again, 
+  in the example above the initial 100dai -> 3cnv would switch to 2.98cnv -> 100dai and then to 97.435dai -> 2.98cnv ...
+
+  the solution implemented below in the first click sends the first field amount to the second 
+  and in the second click it sends the second field amount back to the first
+*/
+const useSwitchFields = (
+  onChangeField: (field: 0 | 1) => (newAmount: CurrencyAmount<Currency>) => void,
+  amounts: readonly [CurrencyAmount<Currency>, CurrencyAmount<Currency>],
+) => {
+  const switchToField = useRef<0 | 1>(1)
 
   const switchFields = useCallback(() => {
-    onChangeField(1)(_amounts[0])
-    _amounts.current = amounts
+    const otherField = switchToField.current ? 0 : 1
+    onChangeField(switchToField.current)(amounts[otherField])
+    switchToField.current = otherField
   }, [amounts, onChangeField])
 
   return switchFields
