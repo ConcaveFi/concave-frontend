@@ -53,7 +53,7 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
           <VestedTokenInput
             redeemable={redeemable}
             redeemMax={redeemMax}
-            balance={formatEther(balance)}
+            balance={balance}
             onChangeValue={setValue}
             value={value}
           />

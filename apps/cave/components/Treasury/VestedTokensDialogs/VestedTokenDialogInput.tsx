@@ -1,12 +1,14 @@
 import { Flex, Text, useDisclosure } from '@chakra-ui/react'
 import { NumericInput } from '@concave/ui'
+import { BigNumber } from 'ethers'
+import { formatEther } from 'ethers/lib/utils'
 
 type VestedTokenInputProps = {
   onChangeValue: (value: string) => void
   value: string
-  balance: string
+  balance: BigNumber
   redeemMax: boolean
-  redeemable: string
+  redeemable: BigNumber
 }
 export const VestedTokenInput = ({
   balance,
@@ -24,15 +26,15 @@ export const VestedTokenInput = ({
             fontSize={'18px'}
             value={!redeemMax && value}
             disabled={redeemMax}
-            placeholder={redeemMax ? redeemable : '0.0'}
+            placeholder={redeemMax ? formatEther(redeemable || '0') : '0.0'}
             onValueChange={({ value }) => !redeemMax && onChangeValue(value)}
           />
         </Flex>
         <Flex width={'full'} justify="space-between" align={'center'}>
           <BalanceButton
             redeemMax={redeemMax}
-            amount={balance}
-            onClick={() => onChangeValue(balance)}
+            amount={formatEther(balance || 0)}
+            onClick={() => onChangeValue(formatEther(balance))}
           />
         </Flex>
       </Flex>
