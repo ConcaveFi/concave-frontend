@@ -86,7 +86,7 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
             height={'55px'}
             width="full"
             {...redeemButtonProps(validValue, status)}
-            onClick={() => onRedeem(parseEther(value || '0'), redeemMax)}
+            onClick={() => onRedeem(redeemMax ? redeemable : parseEther(value || '0'), redeemMax)}
             gap={4}
           >
             {isConnected && !isLoading && (
