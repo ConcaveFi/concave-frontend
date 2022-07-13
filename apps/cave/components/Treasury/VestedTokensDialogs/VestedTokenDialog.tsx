@@ -128,7 +128,7 @@ const redeemButtonText = {
   default: 'Redeem',
   approve: 'Approve in your wallet...',
   rejected: 'Transaction rejected',
-  error: 'An error occurred',
+  error: 'Ocurred an error',
 }
 const Info = ({ title, value }: { title: string; value: string | number }) => (
   <Flex gap={2} fontWeight={'bold'} pl={2}>
