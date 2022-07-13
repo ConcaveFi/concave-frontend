@@ -1,11 +1,17 @@
 import { Percent, Rounding } from '@concave/core'
 import { Flex, FlexProps, Text } from '@concave/ui'
+import type { ReactNode } from 'react'
 
 export const PriceImpact = ({
   priceImpact,
+  fontSize,
+  opacity,
   children,
 }: {
   priceImpact?: Percent
+  fontSize?: string
+  opacity?: number
+  children?: ReactNode
 } & FlexProps) => {
   let color = `text.low`
   if (!priceImpact) return <></>
@@ -26,7 +32,9 @@ export const PriceImpact = ({
   return (
     <Flex justify="space-between" color={color}>
       {children}
-      {priceImpactString} {emoji}
+      <Text fontSize={fontSize} opacity={opacity}>
+        {priceImpactString} {emoji}
+      </Text>
     </Flex>
   )
 }

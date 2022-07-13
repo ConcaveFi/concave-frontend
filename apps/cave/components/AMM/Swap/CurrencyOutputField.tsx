@@ -42,11 +42,11 @@ export const CurrencyOutputField = ({
             {!!outputFiat.value?.greaterThan(0) &&
               `$${outputFiat.value.toFixed(2, { groupSeparator: ',' })}`}
           </Text>
-          <Text fontSize="sm" opacity={0.5}>
-            {(fiatPriceImpact?.greaterThan(_01) || fiatPriceImpact?.lessThan(_01.multiply(-1))) && (
-              <PriceImpact priceImpact={priceImpact} />
+          <>
+            {(priceImpact?.greaterThan(_01) || priceImpact?.lessThan(_01.multiply(-1))) && (
+              <PriceImpact fontSize={'sm'} opacity={0.5} priceImpact={priceImpact} />
             )}
-          </Text>
+          </>
         </Flex>
         {balance.isSuccess && <Balance value={balance.data.toFixed(2, { groupSeparator: ',' })} />}
       </HStack>
