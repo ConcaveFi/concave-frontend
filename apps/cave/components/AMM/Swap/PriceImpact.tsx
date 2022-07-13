@@ -13,15 +13,15 @@ export const PriceImpact = ({
   opacity?: number
   children?: ReactNode
 } & FlexProps) => {
-  let color = `text.low`
   if (!priceImpact) return <></>
-  if (priceImpact.toSignificant() === `0`) return <></>
+  if (priceImpact.toSignificant() === '0') return <></>
 
   const fivePercent = new Percent(5, 100)
-  if (priceImpact.greaterThan(fivePercent)) color = `orange`
-
   const tenPercent = new Percent(99, 1000)
-  if (priceImpact.greaterThan(tenPercent)) color = `red`
+
+  let color = 'text.low'
+  if (priceImpact.greaterThan(fivePercent)) color = 'orange'
+  if (priceImpact.greaterThan(tenPercent)) color = 'red'
 
   const emoji = priceImpact.greaterThan(new Percent(98, 100)) ? `😱` : ``
 
