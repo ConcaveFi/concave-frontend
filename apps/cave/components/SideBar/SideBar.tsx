@@ -34,7 +34,7 @@ export function SideBar() {
       <SidebarContent display={{ base: 'none', lg: 'flex' }} />
 
       {/* show on small devices (mobile) */}
-      <Box>
+      <Box h="60px">
         <Flex
           align="center"
           position="fixed"
