@@ -1,12 +1,12 @@
 import { StakingPosition, StakingV1Contract } from '@concave/marketplace'
 import { Box, Button, Flex, FlexProps, Spinner, Text, TextProps } from '@concave/ui'
-import { BigNumber } from 'ethers'
+import { BigNumber, Transaction } from 'ethers'
 import { formatEther } from 'ethers/lib/utils'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { formatFixed } from 'utils/formatFixed'
-import { useAccount, useSigner } from 'wagmi'
+import { useAccount, useSigner, useWaitForTransaction } from 'wagmi'
 
 const bigNumberMask = (number: BigNumber) => {
   if (number.eq(0)) {
@@ -21,19 +21,59 @@ const bigNumberMask = (number: BigNumber) => {
 interface RedeemCardViewerProps {
   stakingPosition: StakingPosition
 }
+type RecentRedeemedTransaction = {
+  [key: number]: {
+    tx: Transaction
+    position: StakingPosition
+  }
+}
 export const RedeemCardViewer = ({ stakingPosition }: RedeemCardViewerProps) => {
-  const [status, setStatus] = useState<'default' | 'approve'>('default')
+  const [status, setStatus] = useState<'default' | 'approve' | 'waitingTx' | 'rejected'>('default')
   const readyForReedem = stakingPosition.maturity <= Date.now() / 1000
   const chaindID = useCurrentSupportedNetworkId()
   const { data: signer } = useSigner()
   const { address } = useAccount()
+  const tokenId = +stakingPosition?.tokenId.toString()
+  const recentRedeemed = getRecentRedeemedTransactions()[tokenId]
+
+  const { status: txStatus } = useWaitForTransaction({
+    chainId: stakingPosition.chainId,
+    hash: recentRedeemed?.tx?.hash,
+  })
+
   const redeem = () => {
     const stakingContract = new StakingV1Contract(concaveProvider(chaindID))
     setStatus('approve')
     stakingContract
       .unlock(signer, address, stakingPosition.tokenId)
-      .finally(() => setStatus('default'))
+      .then((tx) => {
+        setStatus('waitingTx')
+        localStorage.setItem(
+          'positionsRedeemed',
+          JSON.stringify({ ...recentRedeemed, [tokenId]: { tx, position: stakingPosition } }),
+        )
+      })
+      .catch((error) => {
+        if (error.code === 4001) {
+          setStatus('rejected')
+          const interval = setInterval(() => {
+            setStatus('default')
+            clearInterval(interval)
+          }, 3000)
+        }
+      })
   }
+
+  useEffect(() => {
+    if (recentRedeemed) {
+      if (txStatus === 'loading') setStatus('waitingTx')
+      if (txStatus === 'error' || txStatus === 'success') {
+        const { [tokenId]: finishedTransaction, ...transactions } = getRecentRedeemedTransactions()
+        localStorage.setItem('positionsRedeemed', JSON.stringify(transactions))
+        setStatus('default')
+      }
+    }
+  }, [txStatus])
   return (
     <Box
       borderRadius="2xl"
@@ -106,5 +146,24 @@ const getRedeemButtonProps = (readyForRedeem?: boolean) => {
         </Flex>
       ),
     },
+    waitingTx: {
+      ...defaultProps,
+      disabled: true,
+      children: (
+        <Flex gap={2}>
+          <Spinner />
+          <Text>{'Waiting for transaction...'}</Text>
+        </Flex>
+      ),
+    },
+    rejected: {
+      ...defaultProps,
+      disabled: true,
+      children: 'Transaction rejected',
+    },
   }
+}
+
+function getRecentRedeemedTransactions() {
+  return JSON.parse(localStorage.getItem('positionsRedeemed') || '{}') as RecentRedeemedTransaction
 }
