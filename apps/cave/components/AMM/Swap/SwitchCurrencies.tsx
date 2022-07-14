@@ -1,5 +1,5 @@
 import { ExpandArrowIcon } from '@concave/icons'
-import { Flex, Button } from '@concave/ui'
+import { Button, Flex } from '@concave/ui'
 
 export const SwitchCurrencies = ({ onClick }) => {
   return (

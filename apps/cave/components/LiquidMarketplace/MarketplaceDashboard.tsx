@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { Flex, VStack, Text, HStack } from '@chakra-ui/react'
+=======
+import { Flex, Text, VStack } from '@chakra-ui/react'
+>>>>>>> 487c38971d9fa0eb17e5b5902f30c56b7cd08383
 import { Loading } from 'components/Loading'
 import { MarketplaceFilterContainer } from 'components/Marketplace/MarketplaceFilterContainer'
 import { useMarketplaceDashbord } from 'components/Marketplace/UseMarkeplaceState'

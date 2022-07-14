@@ -1,30 +1,32 @@
-import { createAlchemyWeb3, Nft } from '@alch/alchemy-web3'
-import { StakingV1Contract } from './contract'
+import type { Nft } from '@alch/alchemy-web3'
 import { STAKING_CONTRACT } from '@concave/core'
+<<<<<<< HEAD
 import { MarketItem } from './entities'
 import { ConcaveNFTMarketplace } from './contract'
+=======
+>>>>>>> 487c38971d9fa0eb17e5b5902f30c56b7cd08383
 import { BaseProvider } from '@ethersproject/providers'
-import { StakingPosition } from './entities'
+import { ConcaveNFTMarketplace, StakingV1Contract } from './contract'
+import { MarketItem, StakingPosition } from './entities'
 
 export const listAllNonFungibleTokensOnAddress = async (
   owner: string,
   chainId: number,
-  alchemy: string,
-  contractAddresses?: string[],
+  alchemyKey: string,
+  contractAddresses?: string,
   pageKey?: string,
 ) => {
   const network = chainId === 1 ? 'mainnet' : 'rinkeby'
-  const web3 = createAlchemyWeb3(`https://eth-${network}.alchemyapi.io/v2/${alchemy}`)
-  const response = await web3.alchemy.getNfts({
-    owner,
-    contractAddresses,
-    pageKey,
-  })
+  const url = new URL(`/${alchemyKey}/v1/getNFTs/`, `https://eth-${network}.alchemyapi.io`)
+  url.searchParams.append('owner', owner)
+  url.searchParams.append('contractAddresses[]', contractAddresses)
+  pageKey && url.searchParams.append('pageKey', pageKey)
+  const response = await fetch(url.toString()).then((r) => r.json())
   if (!response.pageKey) return response.ownedNfts
   const nexPage = await listAllNonFungibleTokensOnAddress(
     owner,
     chainId,
-    alchemy,
+    alchemyKey,
     contractAddresses,
     response.pageKey,
   )
@@ -50,9 +52,12 @@ export const listUserPositions = async (
 ) => {
   const stakingV1Contract = new StakingV1Contract(provider)
   const chainId = provider.network.chainId
-  const usersNft = await listAllNonFungibleTokensOnAddress(userAddress, chainId, alchemy, [
+  const usersNft = await listAllNonFungibleTokensOnAddress(
+    userAddress,
+    chainId,
+    alchemy,
     STAKING_CONTRACT[chainId],
-  ])
+  )
   return Promise.all(
     usersNft.map(async ({ id }: Nft) => {
       const position = stakingV1Contract.positions(id.tokenId)

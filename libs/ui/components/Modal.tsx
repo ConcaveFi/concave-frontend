@@ -7,8 +7,6 @@ import {
   ModalHeader,
   ModalOverlay,
   ModalProps as ChakraModalProps,
-  Text,
-  VStack,
 } from '@chakra-ui/react'
 import { ReactNode } from 'react'
 import { Card, CardProps } from './Card'

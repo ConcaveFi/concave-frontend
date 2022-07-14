@@ -21,12 +21,12 @@ import { Loading } from 'components/Loading'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
-import React from 'react'
 import { useQuery } from 'react-query'
+import { useAccount } from 'wagmi'
 import { PositionsState } from './usePositionsState'
 
 export const MyPositions = ({ state }: { state: PositionsState }) => {
-  const { loading, error, setView, view, account, pairs } = state
+  const { loading, error, setView, view, pairs, user } = state
   if (loading) {
     return <Loading size="lg" label={loading} />
   }
@@ -45,24 +45,26 @@ export const MyPositions = ({ state }: { state: PositionsState }) => {
       p={6}
       shadow="Up for Blocks"
     >
-      <HStack w={'auto'} gap={4} justifyContent={'space-between'}>
-        <LiquidityOptionButton
-          label={'Your Pools'}
-          active={view === 'user'}
-          onClick={() => setView('user')}
-        />
-        <LiquidityOptionButton
-          label={'All Pools'}
-          active={view === 'all'}
-          onClick={() => setView('all')}
-        />
-      </HStack>
-      <PairsAccordion userAddress={account?.address} pairs={pairs} />
+      {!!user && (
+        <HStack w={'auto'} gap={4} justifyContent={'space-between'}>
+          <LiquidityOptionButton
+            label={'Your Pools'}
+            active={view === 'user'}
+            onClick={() => setView('user')}
+          />
+          <LiquidityOptionButton
+            label={'All Pools'}
+            active={view === 'all'}
+            onClick={() => setView('all')}
+          />
+        </HStack>
+      )}
+      <PairsAccordion pairs={pairs} />
     </Card>
   )
 }
 
-const LiquidityOptionButton = ({ active, onClick, label }) => {
+const LiquidityOptionButton = ({ active = false, onClick = () => {}, label = '' }) => {
   return (
     <Box
       justifyContent={'center'}
@@ -81,13 +83,11 @@ const LiquidityOptionButton = ({ active, onClick, label }) => {
   )
 }
 
-interface PairsAccordionProps {
-  userAddress?: string
-  pairs: Pair[]
-}
-const PairsAccordion = ({ userAddress, pairs }: PairsAccordionProps) => {
+const PairsAccordion = ({ pairs }: { pairs: Pair[] }) => {
+  const { address } = useAccount()
+
   if (!pairs.length) {
-    const { label, Button } = userAddress
+    const { label, Button } = address
       ? {
           label: 'You are not in any pools',
           Button: <AddLiquidityModalButton />,

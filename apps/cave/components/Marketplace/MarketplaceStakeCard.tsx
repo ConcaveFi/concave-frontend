@@ -1,8 +1,69 @@
+<<<<<<< HEAD
 import { SpinIcon } from '@concave/icons'
 import { Card, Flex, Text } from '@concave/ui'
 import { spinAnimation } from 'components/Treasury/Mobile/TreasuryManagementMobile'
 import { useGet_All_Total_Pools_VaprQuery } from 'graphql/generated/graphql'
 import { StakeAprCard } from './StakeAprCard'
+=======
+import { Flex, useBreakpointValue } from '@concave/ui'
+import { GlassPanel } from 'components/Treasury/TreasuryManagementCard'
+import { useEffect, useState } from 'react'
+import StakeAprCard from './StakeAprCard'
+
+function MarketplaceStakeCard(props: any) {
+  const isLargerLayout = useBreakpointValue({ xl: true, base: true, md: false })
+
+  const filters = [
+    {
+      title: '360 Days',
+      length: '12m',
+      marketvapr: 'Calculating',
+      image: '/assets/marketplace/12mposition.png',
+      diluted: true,
+    },
+    {
+      title: '180 Days',
+      length: '6m',
+      marketvapr: 'Calculating',
+      image: '/assets/marketplace/6mposition.png',
+      diluted: false,
+    },
+    {
+      title: '90 Days',
+      length: '3m',
+      marketvapr: 'Calculating',
+      image: '/assets/marketplace/3mposition.png',
+      diluted: false,
+    },
+    {
+      title: '45 Days',
+      length: '1m',
+      marketvapr: 'Calculating',
+      image: '/assets/marketplace/1mposition.png',
+      diluted: false,
+    },
+  ]
+
+  const [periods, setPeriods] = useState(null)
+
+  useEffect(() => {
+    setPeriods(
+      filters.map((e, k) => {
+        return (
+          <StakeAprCard
+            isLargerLayout={isLargerLayout}
+            key={k}
+            title={e.title}
+            length={e.length}
+            image={e.image}
+            text={e.marketvapr}
+            diluted={e.diluted}
+          />
+        )
+      }),
+    )
+  }, [isLargerLayout])
+>>>>>>> 487c38971d9fa0eb17e5b5902f30c56b7cd08383
 
 export function MarketplaceStakeCard() {
   const { data, isLoading } = useGet_All_Total_Pools_VaprQuery()

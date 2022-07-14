@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { Flex, Image, Text, useBreakpointValue } from '@concave/ui'
+=======
+import { Flex, Image, Text } from '@concave/ui'
+>>>>>>> 487c38971d9fa0eb17e5b5902f30c56b7cd08383
 
 interface StakeAprCardProps {
   poolId: number

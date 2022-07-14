@@ -1,28 +1,23 @@
-import { CNV, Currency, CurrencyAmount, DAI } from '@concave/core'
-import { Card, Flex, HStack, Text, useDisclosure, VStack } from '@concave/ui'
-import { ApproveButton } from 'components/ApproveButton/ApproveButton'
+import { BOND_ADDRESS, CNV, Currency, CurrencyAmount, DAI } from '@concave/core'
+import { Button, Card, Flex, HStack, Text, useDisclosure, VStack } from '@concave/ui'
+import { GasPrice } from 'components/AMM'
+import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { CurrencyInputField as BondInput } from 'components/CurrencyAmountField'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
-import { BOND_ADDRESS } from '@concave/core'
-import React, { useEffect, useState } from 'react'
+import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
+import { useCNVPrice } from 'hooks/useCNVPrice'
+import { useEffect, useState } from 'react'
+import { useQuery } from 'react-query'
 import { toAmount } from 'utils/toAmount'
-import { truncateNumber } from 'utils/truncateNumber'
 import { BondOutput } from './BondOutput'
 import { getBondAmountOut, getBondSpotPrice, purchaseBond, useBondState } from './BondState'
 import { ConfirmBondModal } from './ConfirmBond'
 import { DownwardIcon } from './DownwardIcon'
 import { Settings, useBondSettings } from './Settings'
-import { useQuery } from 'react-query'
-import { GasPrice } from 'components/AMM'
-import { useCNVPrice } from 'hooks/useCNVPrice'
-import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 
-export const twoDecimals = (s: string | number) => {
-  const a = s.toString()
-  return a.indexOf('.') > -1 ? a.slice(0, a.indexOf('.') + 3) : a
-}
+import { numberMask } from 'utils/numberMask'
 
 export function BondBuyCard(props: {
   bondTransaction?: any
@@ -46,7 +41,6 @@ export function BondBuyCard(props: {
   const [hasClickedConfirm, setHasClickedConfirm] = useState(false)
 
   const cnvPrice = useCNVPrice()
-
   const { data: bondSpotPrice } = useQuery(
     ['bondSpotPrice', networkId],
     async () => await getBondSpotPrice(networkId),
@@ -61,6 +55,13 @@ export function BondBuyCard(props: {
   } = useDisclosure()
 
   const { registerTransaction } = useTransactionRegistry()
+  const useCurrencyState = useCurrencyButtonState(amountIn, BOND_ADDRESS[networkId])
+  const bondButtonState = useCurrencyState.approved
+    ? {
+        onClick: confirmModal.onOpen,
+        children: 'Bond',
+      }
+    : useCurrencyState.buttonProps
 
   return (
     <Card
@@ -97,7 +98,7 @@ export function BondBuyCard(props: {
           <HStack alignSelf={'start'}>
             <Text textColor={'text.low'}>Current Price:</Text>
             <Text textColor={'text.low'} opacity="0.7">
-              {cnvPrice.price ? '$' + cnvPrice.price?.toFixed(2) + ' CNV' : 'Loading . . .'}
+              {cnvPrice.price ? '$' + cnvPrice.price?.toFixed(3) + ' CNV' : 'Loading . . .'}
             </Text>
           </HStack>
           <HStack alignSelf={'start'}>
@@ -105,9 +106,7 @@ export function BondBuyCard(props: {
               Bond Price:
             </Text>
             <Text textColor={'text.low'} opacity="0.7">
-              {bondSpotPrice
-                ? '$' + truncateNumber(+bondSpotPrice * 10 ** 18, 3) + ' CNV'
-                : 'Loading . . .'}
+              {bondSpotPrice ? '$' + numberMask(+bondSpotPrice, 3) + ' CNV' : 'Loading . . .'}
             </Text>
           </HStack>
         </VStack>
@@ -124,22 +123,7 @@ export function BondBuyCard(props: {
         </Flex>
       </Flex>
 
-      <ApproveButton
-        variant="primary"
-        size="large"
-        w="full"
-        approveArgs={{
-          currency: currencyIn,
-          amount: amountIn.numerator,
-          spender: BOND_ADDRESS[networkId],
-        }}
-        isDisabled={amountIn.equalTo(0) || balance.data?.lessThan(amountIn)}
-        onClick={confirmModal.onOpen}
-      >
-        {balance.data?.lessThan(amountIn.numerator)
-          ? `Insufficient ${amountIn.currency.symbol}`
-          : 'Bond'}
-      </ApproveButton>
+      <Button variant="primary" size="large" w="full" {...bondButtonState} />
 
       <ConfirmBondModal
         currencyIn={currencyIn}
@@ -190,8 +174,7 @@ export function BondBuyCard(props: {
       />
       <WaitingConfirmationDialog isOpen={hasClickedConfirm} title={'Confirm Bond'}>
         <Text fontSize="lg" color="text.accent">
-          Bonding {truncateNumber(+amountIn.numerator.toString(), 4)} {currencyIn.symbol} for{' '}
-          {truncateNumber(+amountOut * 10 ** 18, 4)}CNV.
+          Bonding {amountIn.toString()} for {amountOut} CNV.
         </Text>
       </WaitingConfirmationDialog>
       <TransactionSubmittedDialog

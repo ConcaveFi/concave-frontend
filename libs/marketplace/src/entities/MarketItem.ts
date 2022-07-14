@@ -1,6 +1,10 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { Offer } from './Offer'
+<<<<<<< HEAD
 import { NFT, StakingPosition } from './StakingPosition'
+=======
+import { StakingPosition } from './StakingPosition'
+>>>>>>> 487c38971d9fa0eb17e5b5902f30c56b7cd08383
 
 export type MarketItemArgs = {
   readonly offer: Offer

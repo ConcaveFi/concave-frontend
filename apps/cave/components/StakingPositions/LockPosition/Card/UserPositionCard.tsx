@@ -22,7 +22,7 @@ export const UserPositionCard = (props: NftPositionCardProps) => {
         md: 'linear-gradient(265.73deg, #274C63 0%, #182F3E 100%)',
       }}
       mr={1}
-      mb={3}
+      my={3}
     >
       <Flex bgSize="20% 30%" bgImage={'/assets/textures/metal.png'} shadow={'up'} rounded="2xl">
         <Flex w={'full'} direction={'column'}>
@@ -37,6 +37,7 @@ export const UserPositionCard = (props: NftPositionCardProps) => {
           </VStack>
         </Flex>
       </Flex>
+      {/* </Flex> */}
     </Box>
   )
 }

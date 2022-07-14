@@ -1,12 +1,11 @@
-import { Box, Card, Flex, Text, Image } from '@concave/ui'
-import { SpinIcon } from '@concave/icons'
 import { keyframes } from '@chakra-ui/system'
+import { SpinIcon } from '@concave/icons'
+import { Box, Card, Flex, Image, Text } from '@concave/ui'
+import { utils } from 'ethers'
 const spin = keyframes({
   '0%': { transform: 'rotate(0deg)' },
   '100%': { transform: 'rotate(360deg)' },
 })
-import { utils } from 'ethers'
-// import { truncateNumber } from 'utils/truncateNumber'
 
 export const InfoItem = ({ value, label, ...props }) => (
   <Flex
@@ -49,9 +48,6 @@ export const UserBondPositionInfo = (props) => {
   const redeemable = parse?.parseRedeemable
   const totalOwed = parse?.totalOwed.toFixed(2)
   const totalPending = parse?.totalPending.toFixed(2)
-  // const bigIntRedeemable = BigInt(redeemable)
-
-  // const formatRedeemable = truncateNumber(redeemable)
   const formatRedeemable =
     Math.sign(parseInt(redeemable)) === 1
       ? (+utils.formatEther(BigInt(parseInt(redeemable)))).toFixed(2)

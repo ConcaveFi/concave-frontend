@@ -1,6 +1,6 @@
 import { useDisclosure } from '@concave/ui'
 import { ConnectWalletModal } from 'components/ConnectWallet'
-import { DevelopGateway } from 'components/DevelopGateway'
+// import { DevelopGateway } from 'components/DevelopGateway'
 import { UnsupportedNetworkModal } from 'components/UnsupportedNetworkModal'
 import React, { createContext, useContext } from 'react'
 
@@ -19,7 +19,7 @@ export const ModalsProvider: React.FC<React.PropsWithChildren<unknown>> = ({ chi
 
   return (
     <ModalsContext.Provider value={{ connectModal }}>
-      <DevelopGateway />
+      {/* <DevelopGateway /> */}
       <UnsupportedNetworkModal />
       <ConnectWalletModal isOpen={connectModal.isOpen} onClose={connectModal.onClose} />
       {children}

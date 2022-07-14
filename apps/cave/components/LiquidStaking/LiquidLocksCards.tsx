@@ -1,13 +1,11 @@
 import { ExpandArrowIcon, SpinnerIcon } from '@concave/icons'
-import { Box, Card, Collapse, Flex, keyframes, Spinner, Text, useDisclosure } from '@concave/ui'
+import { Box, Card, Collapse, Flex, keyframes, Text, useDisclosure } from '@concave/ui'
 // import { GlassPanel } from 'components/Treasury/TreasuryManagementCard'
 import { formatDistanceStrict } from 'date-fns'
-import { BigNumber } from 'ethers'
-import { formatEther } from 'ethers/lib/utils'
 import { useGet_Stakingv1_Last100_LockQuery } from 'graphql/generated/graphql'
 import { useEffect, useState } from 'react'
-import { truncateNumber } from 'utils/truncateNumber'
-import { PARAMETER_TO_POOL_PERIOD, PERIOD_TO_POOL_PARAMETER } from './StakeCard'
+import { formatFixed } from 'utils/formatFixed'
+import { PARAMETER_TO_POOL_PERIOD } from './StakeCard'
 
 const LiquidLocksCards = () => {
   const [stakingLocks, setStakingLocks] = useState([])
@@ -29,7 +27,7 @@ const LiquidLocksCards = () => {
   const amounts = stakingLocks
     .map((value, index) => (
       <Text opacity={1 - (index / 10) * (isOpen ? 1 : 3)} key={index}>
-        {truncateNumber(BigNumber.from(value.amount)) + ' CNV'}
+        {formatFixed(value.amount) + ' CNV'}
       </Text>
     ))
     .splice(0, 9)

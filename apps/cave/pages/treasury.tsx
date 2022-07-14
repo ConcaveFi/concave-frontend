@@ -1,7 +1,8 @@
-import { SpinIcon, SpinnerIcon } from '@concave/icons'
-import { Card, Flex, keyframes, ScaleFade, Text } from '@concave/ui'
+import { SpinnerIcon } from '@concave/icons'
+import { Card, Flex, ScaleFade, Text } from '@concave/ui'
 import { withPageTransition } from 'components/PageTransition'
 import DividendsCard from 'components/Treasury/DividendsCard'
+import { BondGraphics } from 'components/Treasury/GraphicsContainer'
 import DividendsCardMobile from 'components/Treasury/Mobile/DividendsCardMobile'
 import RedeemMobileCard from 'components/Treasury/Mobile/RedeemMobileCard'
 import TreasuryManagementMobile, {
@@ -11,7 +12,7 @@ import TreasuryRevenueMobile from 'components/Treasury/Mobile/TreasuryRevenueMob
 import TreasuryManagementCard from 'components/Treasury/TreasuryManagementCard'
 import TreasuryRedeemCard from 'components/Treasury/TreasuryRedeemCard'
 import TreasuryRevenueCard from 'components/Treasury/TreasuryRevenueCard'
-import { useGet_TreasuryQuery, useGet_Amm_Cnv_InfosQuery } from 'graphql/generated/graphql'
+import { useGet_Amm_Cnv_InfosQuery, useGet_TreasuryQuery } from 'graphql/generated/graphql'
 
 export function Treasury() {
   const { status: treaStatus, data: treaData } = useGet_TreasuryQuery()
@@ -33,6 +34,7 @@ export function Treasury() {
       >
         <TreasuryRevenueMobile cnv={cnvData} treasury={treaData} loading={!revenueCardLoaded} />
         <RedeemMobileCard />
+        <BondGraphics />
         <TreasuryManagementMobile
           loading={cnvStatus !== 'success' && !cnvData}
           treaData={treaData}
@@ -68,6 +70,7 @@ export function Treasury() {
             />
             <TreasuryRedeemCard />
           </Flex>
+          <BondGraphics />
           {/* for treasury assets  */}
           <ScaleFade in={revenueCardLoaded}>
             {cnvStatus === 'success' && cnvData && <TreasuryManagementCard assets={treaData} />}

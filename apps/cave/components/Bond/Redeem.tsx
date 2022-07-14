@@ -1,6 +1,5 @@
-import { Card, Button } from '@concave/ui'
+import { Button, Card } from '@concave/ui'
 import { utils } from 'ethers'
-// import { truncateNumber } from 'utils/truncateNumber'
 
 export const Redeem = ({
   onConfirm,

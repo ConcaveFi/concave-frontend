@@ -1,6 +1,6 @@
 import { CloseIcon, InfoOutlineIcon } from '@concave/icons'
 import { Box, Button, Card, Stack, Text } from '@concave/ui'
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 function SecurityBanner() {
   const [isOpen, setIsOpen] = useState(true)

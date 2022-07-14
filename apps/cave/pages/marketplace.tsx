@@ -2,9 +2,13 @@ import { Box, Button, Card, Flex, Heading, Text, useBreakpointValue } from '@con
 import { MarketplaceDashboard } from 'components/LiquidMarketplace/MarketplaceDashboard'
 import GraphicGuide from 'components/LiquidStaking/GraphicGuide'
 import MarketplaceActivityCard from 'components/Marketplace/MarketplaceActivityCard'
+<<<<<<< HEAD
 import { MarketplaceStakeCard } from 'components/Marketplace/MarketplaceStakeCard'
+=======
+import MarketplaceStakeCard from 'components/Marketplace/MarketplaceStakeCard'
+>>>>>>> 487c38971d9fa0eb17e5b5902f30c56b7cd08383
 import { withPageTransition } from 'components/PageTransition'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const Marketplace = () => {
   const isLargerLayout = useBreakpointValue({

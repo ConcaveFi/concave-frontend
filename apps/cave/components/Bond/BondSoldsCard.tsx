@@ -1,16 +1,12 @@
 import { ExpandArrowIcon } from '@concave/icons'
 import { Box, Card, Collapse, Flex, keyframes, Text } from '@concave/ui'
 import { formatDistanceStrict } from 'date-fns'
-import { commify } from 'ethers/lib/utils'
-import { BigNumber } from 'ethers'
-import {
-  Get_Accrualbondv1_Last10_SoldQuery,
-  useGet_Amm_Cnv_PriceQuery,
-} from 'graphql/generated/graphql'
+import { Get_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql'
+import { useCNVPrice } from 'hooks/useCNVPrice'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useEffect, useState } from 'react'
-import { truncateNumber } from 'utils/truncateNumber'
-import { useCNVPrice } from 'hooks/useCNVPrice'
+import { numberMask } from 'utils/numberMask'
+
 interface BoldSoldsCardProps {
   data: Get_Accrualbondv1_Last10_SoldQuery
   error: any
@@ -46,10 +42,7 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
       key={index}
       opacity={1 - (isOpen ? index / 10 : (index / 10) * 3)}
     >
-      {
-        truncateNumber(+value.output * 10 ** 18)
-        /* {commify(parseFloat(value.output).toFixed()) + ' CNV'} */
-      }
+      {numberMask(value.output) + ' CNV'}
     </Text>
   ))
   const inputAmounts = solds.map((value, index) => (
@@ -58,7 +51,7 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
       key={index}
       opacity={1 - (isOpen ? index / 10 : (index / 10) * 3)}
     >
-      {`${commify(parseFloat(value.inputAmount).toFixed(3))} DAI`}
+      {`${numberMask(value.inputAmount)} DAI`}
     </Text>
   ))
 

@@ -1,4 +1,4 @@
-import { ComponentSingleStyleConfig, ButtonProps } from '@chakra-ui/react'
+import { ComponentSingleStyleConfig } from '@chakra-ui/react'
 import { gradientBorder } from '../utils/gradientBorder'
 
 const HoverRadialGradient =

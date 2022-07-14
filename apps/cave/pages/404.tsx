@@ -1,4 +1,4 @@
-import { Card, Flex, Heading, Image } from '@concave/ui'
+import { Flex, Heading, Image } from '@concave/ui'
 import { useEffect, useState } from 'react'
 
 const NotFoundPage = () => {

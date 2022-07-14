@@ -1,4 +1,4 @@
-import { BondAbi, BOND_ADDRESS, CNV, DAI, DAI_ADDRESS } from '@concave/core'
+import { BondAbi, BOND_ADDRESS, CNV, DAI, DAI_ADDRESS, Token } from '@concave/core'
 import { Contract, ethers, utils } from 'ethers'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
@@ -19,8 +19,10 @@ export const getBondAmountOut = async (
   const formattedInput = ethers.utils.parseUnits(input.toString(), 18)
   const amountOut = await bondingContract.getAmountOut(DAI, formattedInput)
   console.log(amountOut)
-  const ethValue = ethers.utils.formatEther(amountOut)
-  const cleanedOutput = parseFloat(ethValue).toFixed(6)
+  const ethValue = +ethers.utils.formatEther(amountOut)
+
+  const cleanedOutput = ethValue.toFixed(4)
+
   return cleanedOutput
 }
 
@@ -138,14 +140,13 @@ export const getUserBondPositions = async (
 }
 
 export const useBondState = () => {
-  const { data: account } = useAccount()
+  const { address: userAddress } = useAccount()
   const { data: signer } = useSigner()
   const [recipient, setRecipient] = useState<string>('')
   const networkId = useCurrentSupportedNetworkId()
-  const currencyIn = DAI[networkId]
-  const currencyOut = CNV[networkId]
+  const currencyIn: Token = DAI[networkId]
+  const currencyOut: Token = CNV[networkId]
   const balance = useCurrencyBalance(currencyIn, { watch: true })
-  const userAddress = account?.address
 
   return useMemo(
     () => ({

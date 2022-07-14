@@ -1,7 +1,7 @@
-import { AbstractCurrency } from './AbstractCurrency'
-import { Currency } from './currency'
 import invariant from 'tiny-invariant'
 import { validateAndParseAddress } from '../functions/validateAndParseAddress'
+import { AbstractCurrency } from './AbstractCurrency'
+import { Currency } from './currency'
 import { CurrencyAmount } from './currencyAmount'
 
 /**

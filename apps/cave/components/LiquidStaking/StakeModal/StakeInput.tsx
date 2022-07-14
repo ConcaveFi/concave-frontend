@@ -1,8 +1,8 @@
 import { CNV, Currency, CurrencyAmount, STAKING_CONTRACT } from '@concave/core'
 import { StakingV1Contract } from '@concave/marketplace'
-import { Box, Card, Flex, Text, useDisclosure } from '@concave/ui'
+import { Box, Button, Card, Flex, Text, useDisclosure } from '@concave/ui'
 import { TransactionResponse } from '@ethersproject/abstract-provider'
-import { ApproveButton } from 'components/ApproveButton/ApproveButton'
+import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { CurrencyInputField } from 'components/CurrencyAmountField'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
@@ -11,13 +11,13 @@ import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { toAmount } from 'utils/toAmount'
 import { useAccount, useSigner } from 'wagmi'
 import { PARAMETER_TO_POOL_PERIOD } from '../StakeCard'
 
 function StakeInput(props: { poolId: number; period: string; onClose: () => void }) {
-  const { data: account } = useAccount()
+  const { address } = useAccount()
   const netWorkdId = useCurrentSupportedNetworkId()
   const { data: signer } = useSigner()
   const [stakeInput, setStakeInput] = useState<CurrencyAmount<Currency>>(
@@ -53,7 +53,7 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
     const contract = new StakingV1Contract(concaveProvider(netWorkdId))
     setWaitingForConfirm(true)
     contract
-      .lock(signer, account?.address, stakeInput.numerator.toString(), props.poolId)
+      .lock(signer, address, stakeInput.numerator.toString(), props.poolId)
       .then((x: TransactionResponse) => {
         registerTransaction(x, {
           type: 'stake',
@@ -67,6 +67,20 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
       .catch(onError)
   }
 
+  const useCurrencyState = useCurrencyButtonState(
+    stakeInput,
+    STAKING_CONTRACT[stakeInput.currency.chainId],
+  )
+  const stakeButton = useCurrencyState.approved
+    ? {
+        disabled:
+          !cnvBalance.data ||
+          +cnvBalance.data?.numerator.toString() === 0 ||
+          +stakeInput.numerator.toString() === 0 ||
+          stakeInput.greaterThan(cnvBalance.data?.numerator),
+        children: 'Stake CNV',
+      }
+    : useCurrencyState.buttonProps
   return (
     <>
       <Box>
@@ -77,12 +91,7 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
         </Card>
 
         <Box mt={{ base: 4, sm: 10 }} width="350px">
-          <ApproveButton
-            approveArgs={{
-              currency: stakeInput.currency,
-              amount: stakeInput.numerator,
-              spender: STAKING_CONTRACT[stakeInput.currency.chainId],
-            }}
+          <Button
             mt={5}
             onClick={lock}
             fontWeight="bold"
@@ -93,18 +102,8 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
             h="50px"
             size="large"
             mx="auto"
-            disabled={
-              !cnvBalance.data ||
-              +cnvBalance.data?.numerator.toString() === 0 ||
-              +stakeInput.numerator.toString() === 0 ||
-              stakeInput.greaterThan(cnvBalance.data?.numerator)
-            }
-          >
-            {+stakeInput.numerator?.toString() > +cnvBalance.data?.numerator.toString() ||
-            +cnvBalance.data?.numerator.toString() === 0
-              ? 'Insufficient CNV'
-              : 'Stake CNV'}
-          </ApproveButton>
+            {...stakeButton}
+          />
 
           {/* <Button
           mt={5}

@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 import { formatFixed } from 'utils/formatFixed'
 import { toAmount } from 'utils/toAmount'
 import { truncateNumber } from 'utils/truncateNumber'
+
 import { useAccount } from 'wagmi'
 import { UserMarketInfoState } from './LockPosition/MarketLockInfo/useMarketPlaceInfo'
 
@@ -16,7 +17,11 @@ type UserListPositionCardProps = {
 type ListForSaleState = ReturnType<typeof useListeForSaleState>
 
 export const useListeForSaleState = ({ marketItemState }: UserListPositionCardProps) => {
+<<<<<<< HEAD
   const { data: account } = useAccount()
+=======
+  const { address } = useAccount()
+>>>>>>> 487c38971d9fa0eb17e5b5902f30c56b7cd08383
   const [method, setMethod] = useState<'Sale' | 'Auction'>('Sale')
   const marketItem = marketItemState.marketItem.data
   const selectedToken = CNV[marketItemState.chainId]
@@ -26,7 +31,7 @@ export const useListeForSaleState = ({ marketItemState }: UserListPositionCardPr
       ERC20Token: selectedToken.address,
       buyNowPrice: marketItem.position.currentValue,
       feePercentages: [10000],
-      feeRecipients: [account.address],
+      feeRecipients: [address],
     }),
   )
 

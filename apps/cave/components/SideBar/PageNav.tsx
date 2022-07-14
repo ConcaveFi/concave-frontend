@@ -5,7 +5,7 @@ import { useCNVPrice } from 'hooks/useCNVPrice'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useDevice } from 'hooks/useDevice'
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useQuery } from 'react-query'
 import getROI from 'utils/getROI'
 

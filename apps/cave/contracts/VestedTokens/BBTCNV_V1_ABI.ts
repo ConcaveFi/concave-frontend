@@ -1,4 +1,4 @@
-export const RedeemBBT_CNV_Abi = [
+export const bbtCNV_REDEMPTION_V1_ABI = [
   {
     inputs: [
       { internalType: 'address', name: '_bbtCNV', type: 'address' },
@@ -18,24 +18,12 @@ export const RedeemBBT_CNV_Abi = [
   },
   {
     anonymous: false,
-    inputs: [{ indexed: false, internalType: 'address', name: 'account', type: 'address' }],
-    name: 'Paused',
-    type: 'event',
-  },
-  {
-    anonymous: false,
     inputs: [
       { indexed: true, internalType: 'address', name: '_from', type: 'address' },
       { indexed: true, internalType: 'address', name: '_who', type: 'address' },
       { indexed: true, internalType: 'uint256', name: '_amount', type: 'uint256' },
     ],
     name: 'Redemption',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [{ indexed: false, internalType: 'address', name: 'account', type: 'address' }],
-    name: 'Unpaused',
     type: 'event',
   },
   {
@@ -100,7 +88,7 @@ export const RedeemBBT_CNV_Abi = [
     type: 'function',
   },
   {
-    inputs: [{ internalType: 'bool', name: '_toPause', type: 'bool' }],
+    inputs: [{ internalType: 'bool', name: '_paused', type: 'bool' }],
     name: 'setPause',
     outputs: [],
     stateMutability: 'nonpayable',
