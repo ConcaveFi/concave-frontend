@@ -1,6 +1,5 @@
 import { fechMarketInfo, listUserPositions } from '@concave/marketplace'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { NEXT_PUBLIC_ALCHEMY_ID } from 'lib/env.conf'
 import { concaveProvider } from 'lib/providers'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
@@ -12,12 +11,8 @@ export const useMarketplaceDashbord = () => {
     ['sales', owner, chainId],
     async () => {
       const provider = concaveProvider(chainId)
-      const tokens = await listUserPositions(owner, provider, NEXT_PUBLIC_ALCHEMY_ID)
-      const marketInfos = await Promise.all(
-        tokens.map(async (t) => {
-          return fechMarketInfo(provider, t)
-        }),
-      )
+      const tokens = await listUserPositions({ owner, provider })
+      const marketInfos = await Promise.all(tokens.map(async (t) => fechMarketInfo(provider, t)))
       return marketInfos.filter((m) => m.isListed)
     },
     { enabled: !!owner && !!chainId },

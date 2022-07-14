@@ -82,7 +82,7 @@ export const ListForSaleModal = ({ marketItemState }: { marketItemState: UserMar
       isCentered
       hideClose
       bodyProps={{
-        minW: 450,
+        minW: 350,
         p: 0,
         rounded: '2xl',
         shadow: 'up',
