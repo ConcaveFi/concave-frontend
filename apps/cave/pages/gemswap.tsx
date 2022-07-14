@@ -26,7 +26,6 @@ import {
 } from 'components/AMM/hooks/useQueryCurrencies'
 import { NetworkMismatch } from 'components/AMM/NetworkMismatch'
 import { ExpectedOutput, MinExpectedOutput } from 'components/AMM/Swap/ExpectedOutput'
-import { PriceImpact } from 'components/AMM/Swap/PriceImpact'
 import { useSwapSettings } from 'components/AMM/Swap/Settings'
 import { TradeRoute } from 'components/AMM/Swap/TradeRoute'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
