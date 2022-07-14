@@ -7,16 +7,26 @@ import { withPageTransition } from 'components/PageTransition'
 import { LayoutGroup } from 'framer-motion'
 
 export const swapSupportedChains = [ChainId.ETHEREUM, ChainId.RINKEBY] as const
-const defaultCurrencies: { [chain in typeof swapSupportedChains[number]]: [Currency, Currency] } = {
+export const swapDefaultCurrencies: {
+  [chain in typeof swapSupportedChains[number]]: [Currency, Currency]
+} = {
   [ChainId.ETHEREUM]: [DAI[1], CNV[1]],
   [ChainId.RINKEBY]: [DAI[4], CNV[4]],
 }
 
 export function SwapPage() {
-  const { currencies } = useQueryCurrencies(defaultCurrencies)
+  const { currencies } = useQueryCurrencies(swapDefaultCurrencies)
 
   return (
-    <Flex wrap="wrap" justify="center" align="center" alignContent="center" w="100%" gap={10}>
+    <Flex
+      wrap="wrap"
+      justify="center"
+      align="center"
+      alignContent="center"
+      w="100%"
+      minH="100vh"
+      gap={10}
+    >
       <LayoutGroup>
         <CandleStickCard from={currencies[0]} to={currencies[1]} />
         <SwapCard />
