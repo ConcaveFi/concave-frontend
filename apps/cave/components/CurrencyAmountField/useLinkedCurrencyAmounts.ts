@@ -35,10 +35,11 @@ export const useLinkedCurrencyAmounts = ({
   )
 
   const currencyAmounts = useMemo(
-    () => [
-      currencies[0] && CurrencyAmount.fromRawAmount(currencies[0], amounts[0]),
-      currencies[1] && CurrencyAmount.fromRawAmount(currencies[1], amounts[1]),
-    ],
+    () =>
+      [
+        currencies[0] && CurrencyAmount.fromRawAmount(currencies[0], amounts[0]),
+        currencies[1] && CurrencyAmount.fromRawAmount(currencies[1], amounts[1]),
+      ] as const,
     [currencies, amounts],
   )
   const onChangeField = useCallback(

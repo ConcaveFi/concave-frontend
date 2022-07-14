@@ -3,7 +3,7 @@ import { Fetcher } from '@concave/gemswap-sdk'
 import { isAddress } from 'ethers/lib/utils'
 import { concaveProvider } from 'lib/providers'
 import Router, { useRouter } from 'next/router'
-import { useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { useQuery, useQueryClient } from 'react-query'
 import { getQueryValue } from 'utils/getQueryValue'
 import { useNetwork } from 'wagmi'
@@ -49,11 +49,14 @@ export const useQueryCurrencies = (defaultCurrencies?: {
 
   const queryClient = useQueryClient()
 
-  const { data: currencies } = useQuery<[Currency, Currency]>(
+  const queryHasCurrency = Router.query.currency0 || Router.query.currency1
+
+  const { data: currencies, isFetching } = useQuery<[Currency, Currency]>(
     queryCurrenciesQueryKey,
     async () => {
       const currency0 = getQueryValue(query, 'currency0')
       const currency1 = getQueryValue(query, 'currency1')
+      // we're letting the token fetcher do the caching
       return [
         await fetchTokenOrNativeData(currency0, chainId),
         await fetchTokenOrNativeData(currency1, chainId),
@@ -67,7 +70,14 @@ export const useQueryCurrencies = (defaultCurrencies?: {
     },
   )
 
-  const queryHasCurrency = query.currency0 || query.currency1
+  const onChangeCurrencies = useCallback(
+    (currencies: [Currency, Currency]) => {
+      updateQuery({ currency0: currencies[0], currency1: currencies[1] })
+      queryClient.setQueryData(queryCurrenciesQueryKey, currencies)
+    },
+    [queryClient],
+  )
+
   // run on network change
   useEffect(() => {
     if (!queryHasCurrency && chain?.id) updateQuery({ chainId: chain.id })
@@ -76,13 +86,7 @@ export const useQueryCurrencies = (defaultCurrencies?: {
   }, [chain?.id, queryHasCurrency])
 
   return useMemo(
-    () => ({
-      currencies,
-      onChangeCurrencies: (currencies: [Currency, Currency]) => {
-        updateQuery({ currency0: currencies[0], currency1: currencies[1] })
-        queryClient.setQueryData(queryCurrenciesQueryKey, currencies)
-      },
-    }),
-    [currencies, queryClient],
+    () => ({ currencies, onChangeCurrencies, isLoading: isFetching }),
+    [currencies, onChangeCurrencies, isFetching],
   )
 }

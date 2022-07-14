@@ -1,6 +1,6 @@
-import { CHAIN_NAME, ROUTER_ADDRESS } from '@concave/core'
-import { Trade, TradeType } from '@concave/gemswap-sdk'
-import { Card, Collapse, Text, useDisclosure } from '@concave/ui'
+import { CHAIN_NAME } from '@concave/core'
+import { Button, Card, Collapse, Text, useDisclosure } from '@concave/ui'
+import { AddTokenToWalletButton } from 'components/AddTokenToWalletButton'
 import {
   ConfirmSwapModal,
   CurrencyInputField,
@@ -12,43 +12,32 @@ import {
   useSwapTransaction,
 } from 'components/AMM'
 import { useSwapSettings } from 'components/AMM/Swap/Settings'
-import { ApproveButton } from 'components/ApproveButton/ApproveButton'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
-import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
-import { useMemo, useState } from 'react'
+import { swapDefaultCurrencies } from 'pages/gemswap'
+import { useState } from 'react'
 import { toAmount } from 'utils/toAmount'
+import { useQueryCurrencies } from '../hooks/useQueryCurrencies'
 import { NetworkMismatch } from '../NetworkMismatch'
 import { TradeDetails } from './TradeDetails'
 
 export function SwapCard() {
+  const { onChangeCurrencies } = useQueryCurrencies()
+
   const { trade, error, inputAmount, outputAmount, onChangeInput, onChangeOutput, switchFields } =
     useSwapState()
 
-  /*
-    temporary workaround for unknow issue with swapTokenForExactToken
-    all trades are submited as exact input for now
-  */
-  const exactInTrade = useMemo(
-    () => trade && new Trade(trade.route, trade.inputAmount, TradeType.EXACT_INPUT),
-    [trade],
-  )
-  const { registerTransaction } = useTransactionRegistry()
-  const swapTx = useSwapTransaction({
-    onTransactionSent: (tx) => {
+  const [recipient, setRecipient] = useState('')
+
+  const swapTx = useSwapTransaction(trade, recipient, {
+    onSuccess: (tx) => {
       onChangeInput(toAmount(0, trade.inputAmount.currency))
-      registerTransaction(tx, {
-        type: 'swap',
-        amountIn: trade.inputAmount.toString(),
-        amountOut: trade.outputAmount.toString(),
-      })
     },
   })
 
   const { settings } = useSwapSettings()
-  const [recipient, setRecipient] = useState('')
   const confirmationModal = useDisclosure()
   const swapButtonProps = useSwapButtonProps({
     trade,
@@ -57,10 +46,7 @@ export function SwapCard() {
     error,
     recipient,
     settings,
-    onSwapClick: () =>
-      settings.expertMode
-        ? () => swapTx.submit({ trade: exactInTrade, settings, recipient })
-        : confirmationModal.onOpen,
+    onSwapClick: () => (settings.expertMode ? swapTx.write : confirmationModal.onOpen),
   })
 
   return (
@@ -95,19 +81,13 @@ export function SwapCard() {
 
         <TradeDetails trade={trade} inputAmount={inputAmount} outputAmount={outputAmount} />
 
-        <ApproveButton
-          variant="primary"
-          size="large"
-          w="full"
-          approveArgs={{
-            currency: inputAmount.currency,
-            amount: inputAmount.numerator,
-            spender: ROUTER_ADDRESS[inputAmount.currency?.chainId],
-          }}
-          {...swapButtonProps}
-        />
+        <Button variant="primary" size="large" w="full" {...swapButtonProps} />
 
-        <NetworkMismatch>
+        <NetworkMismatch
+          onReset={(resetingToChainId) =>
+            onChangeCurrencies(swapDefaultCurrencies[resetingToChainId])
+          }
+        >
           {({ queryChainId, activeChainId }) => (
             <Text color="text.low">
               Do you wanna drop this {CHAIN_NAME[queryChainId]} trade
@@ -119,17 +99,17 @@ export function SwapCard() {
       </Card>
 
       <ConfirmSwapModal
-        trade={exactInTrade}
+        trade={swapTx.trade}
         settings={settings}
         isOpen={confirmationModal.isOpen}
         onClose={confirmationModal.onClose}
         onConfirm={() => {
           confirmationModal.onClose()
-          swapTx.submit({ trade: exactInTrade, settings, recipient })
+          swapTx.write()
         }}
       />
 
-      <WaitingConfirmationDialog isOpen={swapTx.isWaitingForConfirmation}>
+      <WaitingConfirmationDialog isOpen={swapTx.isLoading}>
         <Text fontSize="lg" color="text.accent">
           Swapping {swapTx.trade?.inputAmount.toSignificant(6, { groupSeparator: ',' })}{' '}
           {swapTx.trade?.inputAmount.currency.symbol} for{' '}
@@ -138,12 +118,11 @@ export function SwapCard() {
         </Text>
       </WaitingConfirmationDialog>
 
-      <TransactionSubmittedDialog
-        tx={swapTx.data}
-        isOpen={swapTx.isTransactionSent}
-        tokenSymbol={swapTx.trade?.outputAmount.currency.symbol}
-        tokenOutAddress={swapTx.trade?.outputAmount.currency.address} // workaround for type error
-      />
+      <TransactionSubmittedDialog title="Swap Submitted" tx={swapTx.data} isOpen={swapTx.isSuccess}>
+        {swapTx.trade?.outputAmount.currency.isToken && (
+          <AddTokenToWalletButton token={swapTx.trade.outputAmount.currency.wrapped} />
+        )}
+      </TransactionSubmittedDialog>
       <TransactionErrorDialog error={swapTx.error?.message} isOpen={swapTx.isError} />
     </>
   )
