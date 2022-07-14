@@ -18,6 +18,7 @@ export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePo
   const { userNonFungibleTokensInfo, totalLocked, isLoading } = stakePosition
   const hasPositions = userNonFungibleTokensInfo.length !== 0
 
+  console.log(userNonFungibleTokensInfo)
   // Sorters && filters
   const [stakeFilters, setStakeFilters] = useState([
     StakePoolFilterEnum.FILTER_BY_45_DAYS,

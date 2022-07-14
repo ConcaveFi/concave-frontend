@@ -11,6 +11,7 @@ interface NftPositionCardProps {
 
 export const UserPositionCard = (props: NftPositionCardProps) => {
   const { toogleActive, active, stakingPosition } = useUserPositionState(props)
+
   return (
     <Box
       pos={'relative'}
