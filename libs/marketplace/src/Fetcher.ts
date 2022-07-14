@@ -1,5 +1,4 @@
 import type { Nft } from '@alch/alchemy-web3'
-import { STAKING_CONTRACT } from '@concave/core'
 import { BaseProvider } from '@ethersproject/providers'
 import { ConcaveNFTMarketplace, StakingV1Contract } from './contract'
 import { MarketItem, StakingPosition } from './entities'
@@ -40,29 +39,87 @@ export const fechMarketInfo = async (provider: BaseProvider, position: StakingPo
   })
 }
 
-export const listUserPositions = async (
-  userAddress: string,
-  provider: BaseProvider,
-  alchemy: string,
-) => {
+const getHasuraEndpoint = ({ chainId = 1 }) => {
+  if (chainId === 1) {
+    return `https://concave.hasura.app/v1/graphql`
+  }
+  return 'https://dev-concave.hasura.app/v1/graphql'
+}
+export const listUserPositions = async ({
+  provider,
+  owner,
+}: {
+  owner: string
+  provider: BaseProvider
+}) => {
   const stakingV1Contract = new StakingV1Contract(provider)
   const chainId = provider.network.chainId
-  const usersNft = await listAllNonFungibleTokensOnAddress(
-    userAddress,
-    chainId,
-    alchemy,
-    STAKING_CONTRACT[chainId],
-  )
+  const logs = await fetch(getHasuraEndpoint(provider.network), {
+    method: 'POST',
+    body: JSON.stringify({
+      query: fetchUserPositionsQuery,
+      variables: { owner },
+    }),
+  })
+    .then((r) => r.json())
+    .then((r) => r.data.logStakingV1_Lock as LogStakingV1Lock[])
+
   return Promise.all(
-    usersNft.map(async ({ id }: Nft) => {
-      const position = stakingV1Contract.positions(id.tokenId)
-      const reward = stakingV1Contract.viewPositionRewards(id.tokenId)
+    logs.map(async (log) => {
+      console.log(log)
+      const position = stakingV1Contract.positions(log.positionID)
+      const reward = stakingV1Contract.viewPositionRewards(log.positionID)
       return new StakingPosition({
         chainId,
-        tokenId: id.tokenId,
+        tokenId: log.positionID,
         position: await position,
         reward: await reward,
       })
     }),
   )
+}
+
+export const fetchUserPositionsQuery = `
+    query GET_NFT_LOCK_POSITION($owner: String!) {
+  logStakingV1_Lock(order_by: {created_at: desc}, where: {to: {_eq: $owner}}) {
+    to
+    created_at
+    amount
+    deposit
+    maturity
+    poolBalance
+    poolExcessRatio
+    poolG
+    poolID
+    poolRewardsPerShare
+    poolSupply
+    poolTerm
+    positionID
+    rewardDebt
+    shares
+    timestamp
+    txBlockNumber
+    txHash
+  }
+}`
+
+export interface LogStakingV1Lock {
+  to: string
+  created_at: Date
+  amount: string
+  deposit: string
+  maturity: number
+  poolBalance: string
+  poolExcessRatio: any
+  poolG: any
+  poolID: number
+  poolRewardsPerShare: string
+  poolSupply: string
+  poolTerm: number
+  positionID: number
+  rewardDebt: string
+  shares: string
+  timestamp: number
+  txBlockNumber: number
+  txHash: string
 }

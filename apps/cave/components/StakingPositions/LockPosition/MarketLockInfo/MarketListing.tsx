@@ -11,7 +11,6 @@ interface MarketplaceInfoProps {
 }
 
 export const MarketListing = (props: MarketplaceInfoProps) => {
-  console.debug(`MarketListing`)
   const marketItemState = useMarketInfo(props)
   const { marketItem } = marketItemState
   if (marketItem.isLoading) {
@@ -23,6 +22,9 @@ export const MarketListing = (props: MarketplaceInfoProps) => {
         width={{ base: '340px', md: '490px', lg: '650px' }}
       />
     )
+  }
+  if (marketItem.isError) {
+    return <></>
   }
 
   const buttonState = getMarketPlaceButtonProps(marketItemState)
