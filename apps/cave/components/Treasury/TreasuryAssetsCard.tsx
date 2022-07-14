@@ -63,7 +63,7 @@ const FarmingContainer: React.FC<FarmingContainerProps> = ({ images, tokenImage,
     <Text mx={'auto'} color="text.low" fontSize={'2xl'} fontWeight="bold" mt={3}>
       {total ? `$${numberMask(total)}` : 'loading...'}
     </Text>
-    <AvatarGroup size={'sm'} opacity={0.4} mx="auto" mt={'-12px'} zIndex="-1">
+    <AvatarGroup size={'sm'} opacity={0.8} mx="auto" mt={'-6px'} zIndex="-1">
       {images?.map((image, index) => (
         <Avatar key={index} src={image} />
       ))}
