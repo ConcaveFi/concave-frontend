@@ -23,7 +23,7 @@ export const numberMask = (number: Number, decimals?: number): string => {
     return `0`
   }
   if (number < 0.01) {
-    return `<.01`
+    return `< 0.01`
   }
   const decimalCount = decimals || 2
   return commify(numSplice(number, decimalCount))
