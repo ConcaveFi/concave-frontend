@@ -1,11 +1,34 @@
-import { CurrencyAmount, FACTORY_ADDRESS, Token } from '@concave/core'
+import {
+  AddressMap,
+  ChainId,
+  CNV,
+  CNV_ADDRESS,
+  CurrencyAmount,
+  DAI,
+  DAI_ADDRESS,
+  FACTORY_ADDRESS,
+  Token,
+  TokenMap,
+  USDC,
+  USDC_ADDRESS,
+  WNATIVE,
+  WNATIVE_ADDRESS,
+} from '@concave/core'
 import { Contract } from '@ethersproject/contracts'
 import { getNetwork } from '@ethersproject/networks'
 import { getDefaultProvider } from '@ethersproject/providers'
 import invariant from 'tiny-invariant'
 import { Pair } from './entities'
 
-const TOKENS_CACHE: { [chainId: number]: { [address: string]: Token } } = {}
+const makeTokenCacheItem = (addresses: AddressMap, tokenMap: TokenMap) =>
+  Object.values(addresses).reduce((a, address) => ({ ...a, [address]: tokenMap }), {})
+// preload some tokens we already know
+const TOKENS_CACHE: { [address: string]: { [chainId in ChainId]: Token } } = {
+  ...makeTokenCacheItem(CNV_ADDRESS, CNV),
+  ...makeTokenCacheItem(DAI_ADDRESS, DAI),
+  ...makeTokenCacheItem(WNATIVE_ADDRESS, WNATIVE),
+  ...makeTokenCacheItem(USDC_ADDRESS, USDC),
+}
 
 const PAIR_ADDRESSES_CACHE: { [tokenAddresses: string]: string } = {}
 
@@ -29,7 +52,7 @@ export abstract class Fetcher {
     provider = getDefaultProvider(getNetwork(1)),
   ): Promise<Token> {
     const chainId = await provider.getNetwork().then((n) => n.chainId)
-    if (TOKENS_CACHE[chainId]?.[address]) return TOKENS_CACHE[chainId][address]
+    if (TOKENS_CACHE[address]?.[chainId]) return TOKENS_CACHE[address][chainId]
 
     const tokenContract = new Contract(
       address,
@@ -50,9 +73,9 @@ export abstract class Fetcher {
 
     const token = new Token(chainId, address, decimals, symbol, name, totalSupply)
 
-    TOKENS_CACHE[chainId] = {
-      ...TOKENS_CACHE[chainId],
-      [address]: token,
+    TOKENS_CACHE[address] = {
+      ...TOKENS_CACHE[address],
+      [chainId]: token,
     }
 
     return token
