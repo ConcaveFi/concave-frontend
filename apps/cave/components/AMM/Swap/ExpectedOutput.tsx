@@ -1,6 +1,6 @@
 import { Currency, CurrencyAmount, Percent, Rounding } from '@concave/core'
 import { Trade, TradeType } from '@concave/gemswap-sdk'
-import { Box, Flex, Stack, Text } from '@concave/ui'
+import { Box, Flex, FlexProps, Stack, Text } from '@concave/ui'
 import { toPercent } from 'utils/toPercent'
 import { PriceImpact } from './PriceImpact'
 

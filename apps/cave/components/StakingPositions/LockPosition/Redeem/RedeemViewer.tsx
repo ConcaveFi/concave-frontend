@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react'
 import { formatFixed } from 'utils/formatFixed'
 import { useAccount, useSigner, useWaitForTransaction } from 'wagmi'
 
+
 const bigNumberMask = (number: BigNumber) => {
   if (number.eq(0)) {
     return `0`
@@ -22,6 +23,7 @@ const bigNumberMask = (number: BigNumber) => {
 interface RedeemCardViewerProps {
   stakingPosition: StakingPosition
 }
+
 type RecentRedeemedTransaction = {
   [key: number]: {
     tx: Transaction
@@ -31,6 +33,7 @@ type RecentRedeemedTransaction = {
 type RedeemedStatus = 'default' | 'approve' | 'waitingTx' | 'rejected' | 'redeemed' | 'error'
 export const RedeemCardViewer = ({ stakingPosition }: RedeemCardViewerProps) => {
   const [status, setStatus] = useState<RedeemedStatus>('default')
+
   const readyForReedem = stakingPosition.maturity <= Date.now() / 1000
   const chaindID = useCurrentSupportedNetworkId()
   const { data: signer } = useSigner()
@@ -83,6 +86,7 @@ export const RedeemCardViewer = ({ stakingPosition }: RedeemCardViewerProps) => 
       }
     }
   }, [txStatus])
+
   return (
     <Box
       borderRadius="2xl"
@@ -112,6 +116,7 @@ export const RedeemCardViewer = ({ stakingPosition }: RedeemCardViewerProps) => 
           />
         </Flex>
         <Button onClick={redeem} {...getRedeemButtonProps(readyForReedem, status)} />
+
       </Flex>
     </Box>
   )
@@ -134,6 +139,7 @@ export const Info: React.FC<Info> = ({ ...props }) => {
     </Flex>
   )
 }
+
 
 function getRecentRedeemedTransactions() {
   return JSON.parse(localStorage.getItem('positionsRedeemed') || '{}') as RecentRedeemedTransaction
@@ -162,6 +168,7 @@ const getRedeemButtonProps = (readyForRedeem: boolean, status: RedeemedStatus) =
   return {
     children: buttonLabels[status],
     disabled: defaultState ? !readyForRedeem : true,
+
     variant: 'primary',
     size: 'md',
     minW: { base: '280px', md: '160px' },
