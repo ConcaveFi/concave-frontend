@@ -33,6 +33,14 @@ export class StakingV1Contract {
     return this.contract.connect(signer).lock(address, amount, poolId)
   }
 
+  public async unlock(
+    signer: ethers.Signer,
+    address: string,
+    tokenId: BigNumberish,
+  ): Promise<ethers.Transaction & { wait: (confirmations) => unknown }> {
+    return this.contract.connect(signer).unlock(address, tokenId, { gasLimit: 10000000 })
+  }
+
   public async pools(poolId: number): Promise<PoolState> {
     return this.contract.pools(poolId).then((p) => new PoolState({ poolId, ...p }))
   }
