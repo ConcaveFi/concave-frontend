@@ -19,7 +19,6 @@ const NavButton = (props: ButtonLinkProps) => {
       h="50px"
       rightIcon={<Box roundedLeft="lg" shadow="Up Big" mr={-5} w="16px" h="36px" />}
       isActive={Router.route === props.href}
-      data-peer
       {...props}
     >
       <Flex w="100%" align="center" justify="center">
@@ -36,7 +35,6 @@ const SubnavButton = ({ children, ...props }: ButtonLinkProps) => {
       px={4}
       sx={subNavVisibleStyles}
       isActive={Router.route === props.href}
-      data-peer
       w="100%"
       color="text.low"
       variant="secondary"
