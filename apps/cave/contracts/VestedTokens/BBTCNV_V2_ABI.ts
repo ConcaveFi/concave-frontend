@@ -1,4 +1,3 @@
-// v2
 export const bbtCNV_REDEMPTION_V2_ABI = [
   {
     inputs: [
