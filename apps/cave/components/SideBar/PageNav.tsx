@@ -28,12 +28,11 @@ const NavButton = (props: ButtonLinkProps) => {
   )
 }
 
-const subNavVisibleStyles = { maxH: 'unset', opacity: 1, p: '10px' }
 const SubnavButton = ({ children, ...props }: ButtonLinkProps) => {
   return (
     <ButtonLink
       px={4}
-      sx={subNavVisibleStyles}
+      sx={{ maxH: 'unset', opacity: 1, p: '10px' }}
       isActive={Router.route === props.href}
       w="100%"
       color="text.low"
