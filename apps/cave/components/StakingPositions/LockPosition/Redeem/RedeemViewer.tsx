@@ -28,8 +28,9 @@ type RecentRedeemedTransaction = {
     position: StakingPosition
   }
 }
+type RedeemedStatus = 'default' | 'approve' | 'waitingTx' | 'rejected' | 'redeemed' | 'error'
 export const RedeemCardViewer = ({ stakingPosition }: RedeemCardViewerProps) => {
-  const [status, setStatus] = useState<'default' | 'approve' | 'waitingTx' | 'rejected'>('default')
+  const [status, setStatus] = useState<RedeemedStatus>('default')
   const readyForReedem = stakingPosition.maturity <= Date.now() / 1000
   const chaindID = useCurrentSupportedNetworkId()
   const { data: signer } = useSigner()
@@ -61,13 +62,13 @@ export const RedeemCardViewer = ({ stakingPosition }: RedeemCardViewerProps) => 
         )
       })
       .catch((error) => {
-        if (error.code === 4001) {
-          setStatus('rejected')
-          const interval = setInterval(() => {
-            setStatus('default')
-            clearInterval(interval)
-          }, 3000)
-        }
+        if (error.code === 4001) setStatus('rejected')
+        else setStatus('error')
+
+        const interval = setInterval(() => {
+          setStatus('default')
+          clearInterval(interval)
+        }, 3000)
       })
   }
 
@@ -77,7 +78,8 @@ export const RedeemCardViewer = ({ stakingPosition }: RedeemCardViewerProps) => 
       if (txStatus === 'error' || txStatus === 'success') {
         const { [tokenId]: finishedTransaction, ...transactions } = getRecentRedeemedTransactions()
         localStorage.setItem('positionsRedeemed', JSON.stringify(transactions))
-        setStatus('default')
+        if (txStatus === 'success') setStatus('redeemed')
+        if (txStatus === 'error') setStatus('default')
       }
     }
   }, [txStatus])
@@ -109,7 +111,7 @@ export const RedeemCardViewer = ({ stakingPosition }: RedeemCardViewerProps) => 
             value={bigNumberMask(stakingPosition.initialValue) + ' CNV'}
           />
         </Flex>
-        <Button onClick={redeem} {...getRedeemButtonProps(readyForReedem)[status]} />
+        <Button onClick={redeem} {...getRedeemButtonProps(readyForReedem, status)} />
       </Flex>
     </Box>
   )
@@ -132,45 +134,38 @@ export const Info: React.FC<Info> = ({ ...props }) => {
     </Flex>
   )
 }
-const getRedeemButtonProps = (readyForRedeem?: boolean) => {
-  const defaultProps = {
-    children: !readyForRedeem ? 'Not redeemable' : 'Redeem',
+
+function getRecentRedeemedTransactions() {
+  return JSON.parse(localStorage.getItem('positionsRedeemed') || '{}') as RecentRedeemedTransaction
+}
+const getRedeemButtonProps = (readyForRedeem: boolean, status: RedeemedStatus) => {
+  const defaultState = status === 'default'
+  const buttonLabels = {
+    default: !readyForRedeem ? 'Not redeemable' : 'Redeem',
+    approve: (
+      <Flex gap={2}>
+        <Spinner />
+        <Text>{'Approve in your wallet...'}</Text>
+      </Flex>
+    ),
+    waitingTx: (
+      <Flex gap={2}>
+        <Spinner />
+        <Text>{'Waiting for transaction...'}</Text>
+      </Flex>
+    ),
+    rejected: 'Transaction rejected',
+    error: 'Ocurred an error',
+    redeemed: 'Transaction redeemed',
+  }
+
+  return {
+    children: buttonLabels[status],
+    disabled: defaultState ? !readyForRedeem : true,
     variant: 'primary',
     size: 'md',
     minW: { base: '280px', md: '160px' },
     m: 'auto',
     mt: '2px',
   }
-  return {
-    default: { ...defaultProps, disabled: !readyForRedeem },
-    approve: {
-      ...defaultProps,
-      disabled: true,
-      children: (
-        <Flex gap={2}>
-          <Spinner />
-          <Text>{'Approve in your wallet...'}</Text>
-        </Flex>
-      ),
-    },
-    waitingTx: {
-      ...defaultProps,
-      disabled: true,
-      children: (
-        <Flex gap={2}>
-          <Spinner />
-          <Text>{'Waiting for transaction...'}</Text>
-        </Flex>
-      ),
-    },
-    rejected: {
-      ...defaultProps,
-      disabled: true,
-      children: 'Transaction rejected',
-    },
-  }
-}
-
-function getRecentRedeemedTransactions() {
-  return JSON.parse(localStorage.getItem('positionsRedeemed') || '{}') as RecentRedeemedTransaction
 }
