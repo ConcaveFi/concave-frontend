@@ -2,6 +2,7 @@ import { StakingPosition, StakingV1Contract } from '@concave/marketplace'
 import { Box, Button, Flex, FlexProps, Spinner, Text, TextProps } from '@concave/ui'
 import { BigNumber, Transaction } from 'ethers'
 import { formatEther } from 'ethers/lib/utils'
+import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
 import { useEffect, useState } from 'react'
@@ -36,6 +37,8 @@ export const RedeemCardViewer = ({ stakingPosition }: RedeemCardViewerProps) => 
   const tokenId = +stakingPosition?.tokenId.toString()
   const recentRedeemed = getRecentRedeemedTransactions()[tokenId]
 
+  const { registerTransaction } = useTransactionRegistry()
+
   const { status: txStatus } = useWaitForTransaction({
     chainId: stakingPosition.chainId,
     hash: recentRedeemed?.tx?.hash,
@@ -48,6 +51,10 @@ export const RedeemCardViewer = ({ stakingPosition }: RedeemCardViewerProps) => 
       .unlock(signer, address, stakingPosition.tokenId)
       .then((tx) => {
         setStatus('waitingTx')
+        registerTransaction(tx, {
+          type: 'redeem',
+          amount: bigNumberMask(stakingPosition.currentValue) + ' from token id: ' + tokenId,
+        })
         localStorage.setItem(
           'positionsRedeemed',
           JSON.stringify({ ...recentRedeemed, [tokenId]: { tx, position: stakingPosition } }),
