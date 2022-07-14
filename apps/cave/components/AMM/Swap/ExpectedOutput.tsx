@@ -1,7 +1,8 @@
 import { Currency, CurrencyAmount, Percent, Rounding } from '@concave/core'
 import { Trade, TradeType } from '@concave/gemswap-sdk'
-import { Box, Flex, Stack, Text } from '@concave/ui'
+import { Box, Flex, FlexProps, Stack, Text } from '@concave/ui'
 import { toPercent } from 'utils/toPercent'
+import { PriceImpact } from './PriceImpact'
 
 export const MinExpectedOutput = ({
   trade,
@@ -54,10 +55,9 @@ export const ExpectedOutput = ({
           {outputAmount.currency.symbol}
         </Text>
       </Flex>
-      <Flex justify="space-between">
+      <PriceImpact priceImpact={priceImpact}>
         <Text>Price Impact</Text>
-        <Text>{priceImpact.toFixed(2, { groupSeparator: ',' }, Rounding.ROUND_UP)}%</Text>
-      </Flex>
+      </PriceImpact>
     </Stack>
   )
 }

@@ -1,105 +1,60 @@
-import { Box, Stack, Text } from '@concave/ui'
+import { StakingPool } from '@concave/marketplace'
+import { Flex, Stack, Text } from '@concave/ui'
+import React from 'react'
 
-const periodToBondRevenueMapping = {
-  '360 days': '100%',
-  '180 days': '75%',
-  '90 days': '50%',
-  '45 days': '25%',
-}
-
-const periodToDaysMapping = {
-  '360 days': 360,
-  '180 days': 180,
-  '90 days': 90,
-  '45 days': 45,
-}
-
-const periodToRewardsBoost = {
-  '360 days': '4x',
-  '180 days': '2x',
-  '90 days': '1.5x',
-  '45 days': '1.25x',
-}
-const quaterlyBoost = {
-  '360 days': '2x',
-  '180 days': '1.75x',
-  '90 days': '1.5x',
-  '45 days': '1.25x',
-}
-
-function addDays(date, days) {
-  var result = new Date(date)
+function getRedeemDateString(date, days) {
+  const result = new Date(date)
   result.setDate(result.getDate() + days)
-  return result
+  return result.toISOString().slice(0, 10)
 }
 
-function StakeInfo(props: any) {
+type StakeInfoProps = {
+  stakingPool: StakingPool
+  loadBar: JSX.Element
+}
+export function StakeInfo({ stakingPool, loadBar }: StakeInfoProps) {
   return (
-    <Box shadow="up" px={2} py={4} borderRadius="3xl" filter="drop-shadow(0px 0px 27px #81b3ff4f)">
-      <Box px={4}>
-        <Stack isInline justifyContent="space-between">
-          <Stack spacing="1px">
-            <Text textAlign="left" fontSize={{ base: '2xl', sm: '3xl' }} fontWeight="bold">
-              {periodToRewardsBoost[`${props.period}`]}
-            </Text>
-            <Text color="text.low" fontSize="sm">
-              Rewards Boost
-            </Text>
-          </Stack>
-          <Stack spacing="1px">
-            <Text textAlign="left" fontSize={{ base: '2xl', sm: '3xl' }} fontWeight="bold">
-              {periodToBondRevenueMapping[`${props.period}`]}
-            </Text>
-            <Text color="text.low" fontSize="sm">
-              Share of Bond Growth
-            </Text>
-          </Stack>
-        </Stack>
-        <Text
-          mt={{ base: 3, sm: 6 }}
-          color="text.low"
-          fontSize={{ base: '12px', sm: 'sm' }}
-          align="justify"
-        >
-          The {props.period} staking term will accrue CNV from bond emissions by capturing{` `}
-          {periodToBondRevenueMapping[props.period]} of the growth generated from purchased bonds
-          every 8 hours. Additionally, the {props.period} term receives a{` `}
-          {periodToRewardsBoost[props.period]} boost on base CNV emissions and a{' '}
-          {quaterlyBoost[props.period]} the quarterly dividend derived from protocol profits in non
-          CNV assets.
+    <Flex w={{ base: '300px', md: '350px' }} rounded="3xl" shadow={'up'} p={4} direction="column">
+      <Flex justify={'space-between'} w="full">
+        <HeaderInfo title={stakingPool?.rewardsBoost} info="Rewards boost" />
+        <HeaderInfo title={stakingPool?.bondRevenue} info="Share of bond growth" />
+      </Flex>
+      <Paragraph poolId={stakingPool?.poolId} staking={stakingPool} />
+      <Flex mt={{ base: 3, md: 5 }} align="center" gap={1} fontWeight="semibold">
+        <Text color="text.low" fontSize="md">
+          Redeem date:
         </Text>
-        <Text mt={{ base: 3, sm: 5 }} color="text.low" fontSize="sm" fontWeight="semibold">
-          Redeem Date:{' '}
-          {addDays(Date(), periodToDaysMapping[`${props.period}`]).toISOString().slice(0, 10)}
-        </Text>
-      </Box>
-
-      <Stack mt={{ base: 0, sm: 4 }}>
-        <Stack px={4} color="text.low" fontSize={12} isInline justify="space-between" mt={3}>
-          <Text fontSize="sm">Currently Staked</Text>
-          <Text fontSize="sm">Staking Cap</Text>
-        </Stack>
-        <Box shadow="down" borderRadius="2xl" p={1} position="relative">
-          <Box
-            shadow="up"
-            px={4}
-            py={1}
-            borderRadius="2xl"
-            textAlign="left"
-            bg="secondary.50"
-            w={`${props.capPercentage}%`}
-            fontSize="sm"
-          >
-            <Text w="150px">{props.stakedCNV} CNV</Text>
-          </Box>
-
-          <Text position="absolute" right="4" top="2" fontSize="sm">
-            {props.CNVCap} CNV
-          </Text>
-        </Box>
-      </Stack>
-    </Box>
+        <Text fontSize="md">{getRedeemDateString(Date(), stakingPool.days)}</Text>
+      </Flex>
+      {loadBar}
+    </Flex>
   )
 }
 
-export default StakeInfo
+type ParagraphProps = { poolId: number; staking: StakingPool }
+const Paragraph = ({ poolId, staking }: ParagraphProps) => (
+  <Text
+    mt={{ base: 3, md: 6 }}
+    color="text.low"
+    fontSize={{ base: 'xs', md: 'sm' }}
+    align="justify"
+  >
+    The {staking.days} days staking term will accrue CNV from bond emissions by capturing{` `}
+    {staking.bondRevenue} of the growth generated from purchased bonds every 8 hours. Additionally,
+    the {poolId} term receives a{` `}
+    {staking.rewardsBoost} boost on base CNV emissions and a {staking.quarterlyBoost} boost on the
+    quarterly dividend derived from protocol profits in non CNV assets.
+  </Text>
+)
+
+type HeaderInfoProps = { title: string; info: string }
+const HeaderInfo: React.FC<HeaderInfoProps> = ({ info, title }) => (
+  <Stack spacing="1px">
+    <Text textAlign="left" fontSize={{ base: '2xl', md: '3xl' }} fontWeight="bold">
+      {title}
+    </Text>
+    <Text color="text.low" fontSize="sm">
+      {info}
+    </Text>
+  </Stack>
+)

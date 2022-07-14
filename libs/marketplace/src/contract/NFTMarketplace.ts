@@ -1,5 +1,6 @@
 import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/providers'
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { ContractABI } from './NFTMarketplaceAbi'
 import { Signer } from 'ethers'
 import { MarketItem, Offer, StakingPosition } from './../entities'
@@ -9,6 +10,8 @@ import { NFT } from 'src/entities'
 import { CurrencyAmount } from '@concave/core'
 import { Currency } from '@concave/core'
 =======
+=======
+>>>>>>> 5b8c2fabfe3fdf2264e3679e12c51bb9e925fec1
 import { Currency, CurrencyAmount, MARKETPLACE_CONTRACT } from '@concave/core'
 import { BaseProvider } from '@ethersproject/providers'
 import { BigNumber, BigNumberish, ethers, Signer, Transaction } from 'ethers'

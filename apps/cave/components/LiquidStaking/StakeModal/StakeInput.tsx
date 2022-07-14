@@ -1,5 +1,5 @@
 import { CNV, Currency, CurrencyAmount, STAKING_CONTRACT } from '@concave/core'
-import { StakingV1Contract } from '@concave/marketplace'
+import { StakingPool, StakingV1Contract } from '@concave/marketplace'
 import { Box, Button, Card, Flex, Text, useDisclosure } from '@concave/ui'
 import { TransactionResponse } from '@ethersproject/abstract-provider'
 import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
@@ -14,9 +14,12 @@ import { concaveProvider } from 'lib/providers'
 import { useState } from 'react'
 import { toAmount } from 'utils/toAmount'
 import { useAccount, useSigner } from 'wagmi'
-import { PARAMETER_TO_POOL_PERIOD } from '../StakeCard'
 
-function StakeInput(props: { poolId: number; period: string; onClose: () => void }) {
+export function StakeInput(props: {
+  stakingPool: StakingPool
+  poolId: number
+  onClose: () => void
+}) {
   const { address } = useAccount()
   const netWorkdId = useCurrentSupportedNetworkId()
   const { data: signer } = useSigner()
@@ -58,7 +61,7 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
         registerTransaction(x, {
           type: 'stake',
           amount: stakeInput.toString(),
-          pool: PARAMETER_TO_POOL_PERIOD[props.poolId],
+          pool: props.stakingPool.days,
         })
         setTx(x)
         setWaitingForConfirm(false)
@@ -84,10 +87,8 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
   return (
     <>
       <Box>
-        <Card shadow="down" w="350px" px={0} py={0}>
-          <Flex>
-            <CurrencyInputField currencyAmountIn={stakeInput} onChangeAmount={setStakeInput} />
-          </Flex>
+        <Card shadow="down" mx={'auto'} w={{ base: '300px', md: '350px' }} px={0} py={0}>
+          <CurrencyInputField currencyAmountIn={stakeInput} onChangeAmount={setStakeInput} />
         </Card>
 
         <Box mt={{ base: 4, sm: 10 }} width="350px">
@@ -98,27 +99,12 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
             fontSize="md"
             variant="primary"
             bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
-            w={{ base: '60%', sm: '80%', md: '100%' }}
+            w={{ base: '300px', md: '100%' }}
             h="50px"
             size="large"
             mx="auto"
             {...stakeButton}
           />
-
-          {/* <Button
-          mt={5}
-          onClick={() => router.push('/dashboard')}
-          fontWeight="bold"
-          fontSize="md"
-          variant="primary.outline"
-          bgGradient="linear(90deg, #72639B 0%, #44B9DE 100%)"
-          w="100%"
-          h="40px"
-          size="large"
-          mx="auto"
-          >
-          Check position
-        </Button> */}
         </Box>
       </Box>
 
@@ -138,7 +124,7 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
           <Text fontWeight={'700'} textColor="text.accent">
             {stakeInput.wrapped.toExact() + ' CNV'}
           </Text>
-          <Text textColor={'text.low'}>For {props.period}</Text>
+          <Text textColor={'text.low'}>For {props.stakingPool.days + ' days'}</Text>
         </Flex>
       </WaitingConfirmationDialog>
 
@@ -155,5 +141,3 @@ function StakeInput(props: { poolId: number; period: string; onClose: () => void
     </>
   )
 }
-
-export default StakeInput

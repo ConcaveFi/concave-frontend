@@ -23,6 +23,9 @@ export const MarketListing = (props: MarketplaceInfoProps) => {
       />
     )
   }
+  if (marketItem.isError) {
+    return <></>
+  }
 
   const buttonState = getMarketPlaceButtonProps(marketItemState)
   const marketData = marketItem.data
@@ -32,6 +35,17 @@ export const MarketListing = (props: MarketplaceInfoProps) => {
       })
     : '--.--.--'
 
+<<<<<<< HEAD
+  const buttonState = getMarketPlaceButtonProps(marketItemState)
+  const marketData = marketItem.data
+  const auctionEnd = marketData.offer.auctionEnd.gt(0)
+    ? formatDistanceToNow(new Date(+marketData.offer.auctionEnd.toString() * 1000), {
+        addSuffix: false,
+      })
+    : '--.--.--'
+
+=======
+>>>>>>> 5b8c2fabfe3fdf2264e3679e12c51bb9e925fec1
   return (
     <Box shadow={marketData?.isListed ? '' : 'down'} borderRadius="2xl" width={'full'} p={4}>
       <Flex justify={{ lg: 'left', base: 'center' }}>

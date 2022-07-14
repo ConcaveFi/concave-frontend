@@ -42,35 +42,3 @@ function GraphicGuide() {
 }
 
 export default GraphicGuide
-
-{
-  /* <Stack textColor={'white'} fontSize={{ base: 'sm', sm: 'md' }}>
-      <Flex justify={'space-between'}>
-        <Text fontWeight="extrabold">CNV</Text>
-        <ChevronRightIcon boxSize={6} />
-        <Text fontWeight="extrabold">Mint NFT</Text>
-        <ChevronRightIcon boxSize={6} />
-        <Text fontWeight="extrabold">NFT Marketplace</Text>
-      </Flex>
-      <HStack pt={6}></HStack>
-    </Stack> */
-}
-// <Image
-//           width={{ base: '40px', sm: '60px' }}
-//           height={{ base: '40px', sm: '60px' }}
-//           alt=""
-//           src="/assets/liquidstaking/coins-logo.svg"
-//           mx={'auto'}
-//         />
-//         <Image
-//           width={{ base: '40px', sm: '60px' }}
-//           height={{ base: '40px', sm: '60px' }}
-//           alt=""
-//           src="/assets/liquidstaking/nft-logo.svg"
-//         />
-//         <Image
-//           width={{ base: '40px', sm: '70px' }}
-//           height={{ base: '40px', sm: '70px' }}
-//           alt=""
-//           src="/assets/liquidstaking/marketplace-logo.svg"
-//         />

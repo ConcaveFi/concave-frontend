@@ -414,7 +414,7 @@ export enum LogStakingV1_Lock_Select_Column {
   /** column name */
   PoolId = 'poolID',
   /** column name */
-  PoolRewardsPerShare = 'poolRewardsPerShare',
+  StakingPoolPerShare = 'poolRewardsPerShare',
   /** column name */
   PoolSupply = 'poolSupply',
   /** column name */
@@ -1223,6 +1223,35 @@ export type Get_User_Acnv_RedeemedQuery = {
   }>
 }
 
+export type Get_Nft_Lock_PositionQueryVariables = Exact<{
+  address: Scalars['String']
+}>
+
+export type Get_Nft_Lock_PositionQuery = {
+  __typename?: 'query_root'
+  logStakingV1_Lock: Array<{
+    __typename?: 'logStakingV1_Lock'
+    to?: string | null
+    created_at: any
+    amount?: string | null
+    deposit?: string | null
+    maturity?: any | null
+    poolBalance?: string | null
+    poolExcessRatio?: any | null
+    poolG?: any | null
+    poolID?: any | null
+    poolRewardsPerShare?: string | null
+    poolSupply?: string | null
+    poolTerm?: any | null
+    positionID?: any | null
+    rewardDebt?: string | null
+    shares?: string | null
+    timestamp?: any | null
+    txBlockNumber?: any | null
+    txHash?: string | null
+  }>
+}
+
 export type Get_TreasuryQueryVariables = Exact<{ [key: string]: never }>
 
 export type Get_TreasuryQuery = {
@@ -1602,6 +1631,42 @@ export const useGet_User_Acnv_RedeemedQuery = <
     ['GET_USER_ACNV_REDEEMED', variables],
     fetcher<Get_User_Acnv_RedeemedQuery, Get_User_Acnv_RedeemedQueryVariables>(
       Get_User_Acnv_RedeemedDocument,
+      variables,
+    ),
+    options,
+  )
+export const Get_Nft_Lock_PositionDocument = `
+    query GET_NFT_LOCK_POSITION($address: String!) {
+  logStakingV1_Lock(order_by: {created_at: desc}, where: {to: {_eq: $address}}) {
+    to
+    created_at
+    amount
+    deposit
+    maturity
+    poolBalance
+    poolExcessRatio
+    poolG
+    poolID
+    poolRewardsPerShare
+    poolSupply
+    poolTerm
+    positionID
+    rewardDebt
+    shares
+    timestamp
+    txBlockNumber
+    txHash
+  }
+}
+    `
+export const useGet_Nft_Lock_PositionQuery = <TData = Get_Nft_Lock_PositionQuery, TError = unknown>(
+  variables: Get_Nft_Lock_PositionQueryVariables,
+  options?: UseQueryOptions<Get_Nft_Lock_PositionQuery, TError, TData>,
+) =>
+  useQuery<Get_Nft_Lock_PositionQuery, TError, TData>(
+    ['GET_NFT_LOCK_POSITION', variables],
+    fetcher<Get_Nft_Lock_PositionQuery, Get_Nft_Lock_PositionQueryVariables>(
+      Get_Nft_Lock_PositionDocument,
       variables,
     ),
     options,

@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { SpinIcon } from '@concave/icons'
 import { Card, Flex, Text } from '@concave/ui'
 import { spinAnimation } from 'components/Treasury/Mobile/TreasuryManagementMobile'
@@ -7,6 +8,9 @@ import { StakeAprCard } from './StakeAprCard'
 =======
 import { Flex, useBreakpointValue } from '@concave/ui'
 import { GlassPanel } from 'components/Treasury/TreasuryManagementCard'
+=======
+import { Card, Flex, useBreakpointValue } from '@concave/ui'
+>>>>>>> 5b8c2fabfe3fdf2264e3679e12c51bb9e925fec1
 import { useEffect, useState } from 'react'
 import StakeAprCard from './StakeAprCard'
 
@@ -69,13 +73,17 @@ export function MarketplaceStakeCard() {
   const { data, isLoading } = useGet_All_Total_Pools_VaprQuery()
   return (
     <Card
+<<<<<<< HEAD
       px={6}
       py={10}
+=======
+>>>>>>> 5b8c2fabfe3fdf2264e3679e12c51bb9e925fec1
       zIndex={2}
       shadow="Block Up"
       w={{ base: '300px', md: '460px', xl: '300px' }}
       h={{ base: '283px', md: '168px', xl: '283px' }}
       style={{ alignContent: 'center', justifyContent: 'center' }}
+<<<<<<< HEAD
       variant="secondary"
     >
       {!isLoading ? (
@@ -99,6 +107,18 @@ export function MarketplaceStakeCard() {
           <SpinIcon animation={spinAnimation(2)} />
         </Flex>
       )}
+=======
+      justify="center"
+      variant="secondary"
+    >
+      <Flex
+        direction={{ md: 'row', base: 'column', xl: 'column' }}
+        gap={{ base: -10, md: 5, xl: -10 }}
+        position="relative"
+      >
+        {periods}
+      </Flex>
+>>>>>>> 5b8c2fabfe3fdf2264e3679e12c51bb9e925fec1
     </Card>
   )
 }
