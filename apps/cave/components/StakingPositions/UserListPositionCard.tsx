@@ -5,11 +5,13 @@ import {
   FIXED_ORDER_MARKET_CONTRACT,
   STAKING_CONTRACT,
 } from '@concave/core'
+import { FixedOrderMarketContract } from '@concave/marketplace'
 import { Box, Button, Flex, HStack, Input, NumericInput, Text, VStack } from '@concave/ui'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
 import { ChooseButton } from 'components/Marketplace/ChooseButton'
 import { BigNumber } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import { concaveProvider } from 'lib/providers'
 import { useState } from 'react'
 import { toAmount } from 'utils/toAmount'
 import { truncateNumber } from 'utils/truncateNumber'
@@ -22,7 +24,7 @@ type UserListPositionCardProps = { marketItemState: UserMarketInfoState }
 type ListForSaleState = ReturnType<typeof useListeForSaleState>
 
 const domain = {
-  name: 'Fixed Order Market',
+  name: 'Fixed',
   version: '1',
   chainId: chain.rinkeby.id,
   verifyingContract: FIXED_ORDER_MARKET_CONTRACT[chain.rinkeby.id],
@@ -57,11 +59,11 @@ export const useListeForSaleState = ({ marketItemState }: UserListPositionCardPr
     seller,
     erc721: STAKING_CONTRACT[4],
     erc20: price.wrapped.currency.address,
-    tokenId: marketItemState.marketItem.data.position.tokenId,
-    startPrice: BigNumber.from(price.wrapped.numerator.toString()),
-    endPrice: BigNumber.from(0),
-    nonce: BigNumber.from(0),
-    start: BigNumber.from(0),
+    tokenId: marketItemState.marketItem.data.position.tokenId.toString(),
+    startPrice: BigNumber.from(price.wrapped.numerator.toString()).toString(),
+    endPrice: BigNumber.from(0).toString(),
+    nonce: BigNumber.from(0).toString(),
+    start: BigNumber.from(0).toString(),
     deadline,
   }
 
@@ -72,31 +74,25 @@ export const useListeForSaleState = ({ marketItemState }: UserListPositionCardPr
   })
 
   const create = () => {
+    console.log(value)
     signTypedDataAsync()
-      .then((data) => {
+      .then(async (data) => {
         const signature = data.substring(2)
         const r = `0x${signature.substring(0, 64)}`
         const s = `0x${signature.substring(64, 128)}`
         const v = parseInt(signature.substring(128, 130), 16)
-        console.log()
-        console.log(
-          JSON.stringify({
-            r,
-            s,
-            v,
-            data,
-            types,
-            domain,
-            value: {
-              ...value,
-              start: value.start.toString(),
-              startPrice: value.startPrice.toString(),
-              endPrice: value.endPrice.toString(),
-              nonce: value.nonce.toString(),
-              deadline: value.deadline.toString(),
-            },
-          }),
-        )
+        const cavemart = new FixedOrderMarketContract(concaveProvider(chain.rinkeby.id))
+        const user = await cavemart.computeSigner({
+          r,
+          s,
+          v,
+          value,
+        })
+        console.log('domainName', domain.name)
+        console.log('user', user)
+        console.log('r', r)
+        console.log('s', s)
+        console.log('v', v)
       })
       .catch(console.error)
   }

@@ -66,7 +66,6 @@ export const listUserPositions = async ({
 
   return Promise.all(
     logs.map(async (log) => {
-      console.log(log)
       const position = stakingV1Contract.positions(log.positionID)
       const reward = stakingV1Contract.viewPositionRewards(log.positionID)
       return new StakingPosition({
