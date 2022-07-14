@@ -26,6 +26,7 @@ import {
 } from 'components/AMM/hooks/useQueryCurrencies'
 import { NetworkMismatch } from 'components/AMM/NetworkMismatch'
 import { ExpectedOutput, MinExpectedOutput } from 'components/AMM/Swap/ExpectedOutput'
+import { PriceImpact } from 'components/AMM/Swap/PriceImpact'
 import { useSwapSettings } from 'components/AMM/Swap/Settings'
 import { TradeRoute } from 'components/AMM/Swap/TradeRoute'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
@@ -147,18 +148,18 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
 
             <CurrencyOutputField
               currencyAmountOut={trade.data.outputAmount}
-              currencyAmountIn={trade.data.inputAmount}
               updateOutputValue={onChangeOutput}
+              priceImpact={trade.data?.priceImpact}
             />
-
             {settings.expertMode && <CustomRecipient onChangeRecipient={setRecipient} />}
 
             <HStack justify="center" align="center" py={2} px={3} my="auto" rounded="xl">
-              <RelativePrice
-                currency0={trade.data.inputAmount?.currency}
-                currency1={trade.data.outputAmount?.currency}
-                mr="auto"
-              />
+              <Flex mr={'auto'} flexDirection="column">
+                <RelativePrice
+                  currency0={trade.data.inputAmount?.currency}
+                  currency1={trade.data.outputAmount?.currency}
+                />
+              </Flex>
               <GasPrice />
               <Collapse in={hasDetails} animateOpacity>
                 <Button
