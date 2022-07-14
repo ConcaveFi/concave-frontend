@@ -21,7 +21,7 @@ const bigNumberMask = (number: BigNumber) => {
 interface RedeemCardViewerProps {
   stakingPosition: StakingPosition
 }
-const RedeemCardViewer = ({ stakingPosition }: RedeemCardViewerProps) => {
+export const RedeemCardViewer = ({ stakingPosition }: RedeemCardViewerProps) => {
   const [status, setStatus] = useState<'default' | 'approve'>('default')
   const readyForReedem = stakingPosition.maturity <= Date.now() / 1000
   const chaindID = useCurrentSupportedNetworkId()
@@ -85,8 +85,6 @@ export const Info: React.FC<Info> = ({ ...props }) => {
     </Flex>
   )
 }
-export default RedeemCardViewer
-
 const getRedeemButtonProps = (readyForRedeem?: boolean) => {
   const defaultProps = {
     children: !readyForRedeem ? 'Not redeemable' : 'Redeem',
