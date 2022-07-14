@@ -1,5 +1,6 @@
 import { BOND_ADDRESS, CNV, Currency, CurrencyAmount, DAI } from '@concave/core'
 import { Button, Card, Flex, HStack, Text, useDisclosure, VStack } from '@concave/ui'
+import { AddTokenToWalletButton } from 'components/AddTokenToWalletButton'
 import { GasPrice } from 'components/AMM'
 import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { CurrencyInputField as BondInput } from 'components/CurrencyAmountField'
@@ -178,11 +179,12 @@ export function BondBuyCard(props: {
         </Text>
       </WaitingConfirmationDialog>
       <TransactionSubmittedDialog
+        title="Bond Submitted"
         tx={bondTransaction}
         isOpen={bondTransaction}
-        tokenSymbol={currencyOut.symbol}
-        tokenOutAddress={currencyOut.address}
-      />
+      >
+        <AddTokenToWalletButton token={currencyOut} />
+      </TransactionSubmittedDialog>
       <TransactionErrorDialog error={txError} isOpen={isOpenRejected} />
     </Card>
   )

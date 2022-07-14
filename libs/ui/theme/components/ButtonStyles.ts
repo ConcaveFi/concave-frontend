@@ -98,6 +98,7 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
     },
     medium: {
       height: '40px',
+      px: 3,
     },
   },
   variants: {

@@ -42,7 +42,7 @@ export const StakeCard = (props: StakeCardProps) => {
         align="center"
       >
         <ImageContainer stakingPool={props.stakeData} totalVAPR={totalVAPR?.toFixed(2) + '%'} />
-        <LoadBard variant="primary" {...loadBarProps} />
+        <LoadBar variant="primary" {...loadBarProps} />
         <Button
           mt={4}
           onClick={onOpen}
@@ -56,7 +56,7 @@ export const StakeCard = (props: StakeCardProps) => {
         </Button>
       </Card>
       <StakeModal
-        loadBar={<LoadBard variant="secondary" {...loadBarProps} />}
+        loadBar={<LoadBar variant="secondary" {...loadBarProps} />}
         isOpen={isOpen}
         onClose={onClose}
         stakeData={props.stakeData}
@@ -85,7 +85,7 @@ type LoadBarProps = {
   stakingCap: string
   variant: 'primary' | 'secondary'
 }
-const LoadBard = ({ percent, currentlyStaked, loading, stakingCap, variant }: LoadBarProps) => (
+const LoadBar = ({ percent, currentlyStaked, loading, stakingCap, variant }: LoadBarProps) => (
   <>
     {/* Header */}
     <Stack color="text.low" fontSize={12} isInline justify="space-between" mt={3}>

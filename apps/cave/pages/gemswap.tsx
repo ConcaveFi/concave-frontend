@@ -2,6 +2,7 @@ import { ChainId, CHAIN_NAME, CNV, Currency, DAI } from '@concave/core'
 import { Trade, TradeType } from '@concave/gemswap-sdk'
 import { ExpandArrowIcon } from '@concave/icons'
 import { Button, Card, Collapse, Flex, HStack, Stack, Text, useDisclosure } from '@concave/ui'
+import { AddTokenToWalletButton } from 'components/AddTokenToWalletButton'
 import {
   CandleStickCard,
   ConfirmSwapModal,
@@ -25,6 +26,7 @@ import {
 } from 'components/AMM/hooks/useQueryCurrencies'
 import { NetworkMismatch } from 'components/AMM/NetworkMismatch'
 import { ExpectedOutput, MinExpectedOutput } from 'components/AMM/Swap/ExpectedOutput'
+import { PriceImpact } from 'components/AMM/Swap/PriceImpact'
 import { useSwapSettings } from 'components/AMM/Swap/Settings'
 import { TradeRoute } from 'components/AMM/Swap/TradeRoute'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
@@ -116,8 +118,8 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
         align="center"
         alignContent="center"
         w="100%"
+        minH="100vh"
         gap={10}
-        pt={{ base: '100px', lg: 0 }}
       >
         <LayoutGroup>
           <CandleStickCard
@@ -145,18 +147,18 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
 
             <CurrencyOutputField
               currencyAmountOut={trade.data.outputAmount}
-              currencyAmountIn={trade.data.inputAmount}
               updateOutputValue={onChangeOutput}
+              priceImpact={trade.data?.priceImpact}
             />
-
             {settings.expertMode && <CustomRecipient onChangeRecipient={setRecipient} />}
 
             <HStack justify="center" align="center" py={2} px={3} my="auto" rounded="xl">
-              <RelativePrice
-                currency0={trade.data.inputAmount?.currency}
-                currency1={trade.data.outputAmount?.currency}
-                mr="auto"
-              />
+              <Flex mr={'auto'} flexDirection="column">
+                <RelativePrice
+                  currency0={trade.data.inputAmount?.currency}
+                  currency1={trade.data.outputAmount?.currency}
+                />
+              </Flex>
               <GasPrice />
               <Collapse in={hasDetails} animateOpacity>
                 <Button
@@ -222,12 +224,11 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
         </Text>
       </WaitingConfirmationDialog>
 
-      <TransactionSubmittedDialog
-        tx={swapTx.data}
-        isOpen={swapTx.isSuccess}
-        tokenSymbol={swapTx.trade?.outputAmount.currency.symbol}
-        tokenOutAddress={swapTx.trade?.outputAmount.currency.wrapped.address} // workaround for type error
-      />
+      <TransactionSubmittedDialog title="Swap Submitted" tx={swapTx.data} isOpen={swapTx.isSuccess}>
+        {swapTx.trade?.outputAmount.currency.isToken && (
+          <AddTokenToWalletButton token={swapTx.trade.outputAmount.currency.wrapped} />
+        )}
+      </TransactionSubmittedDialog>
       <TransactionErrorDialog error={swapTx.error?.message} isOpen={swapTx.isError} />
     </>
   )
