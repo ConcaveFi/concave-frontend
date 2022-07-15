@@ -8,7 +8,7 @@ export const MARKETPLACE_CONTRACT: AddressMap = {
 
 export const FIXED_ORDER_MARKET_CONTRACT: AddressMap = {
   [ChainId.ETHEREUM]: '',
-  [ChainId.RINKEBY]: '0x67cB8469Ea1F689E149b2c4c245ba47E56cd6041',
+  [ChainId.RINKEBY]: '0x31d62dfaf58845c26ba3074e4b30c6db829d731d',
 }
 
 export const STAKING_CONTRACT: AddressMap = {

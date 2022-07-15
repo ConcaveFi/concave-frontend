@@ -1,11 +1,10 @@
 import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/providers'
 import { FIXED_ORDER_MARKET_CONTRACT } from '@concave/core'
-import { BigNumberish } from '@ethersproject/bignumber'
 import { BaseProvider } from '@ethersproject/providers'
 import { ethers } from 'ethers'
 import { FixedOrderMarketAbi } from './FixedOrderMarketAbi'
 
-export class FixedOrderMarketContract {
+export class TestContract {
   private readonly contract: ethers.Contract
   public readonly address: string
   constructor(private readonly provider: BaseProvider | MulticallProvider) {
@@ -17,37 +16,17 @@ export class FixedOrderMarketContract {
     this.contract = new ethers.Contract(this.address, FixedOrderMarketAbi, this.provider)
   }
 
-  public computeSigner({
-    value,
-    ...props
-  }: {
-    r: string
-    s: string
-    v: number
-    value: ComputeSigner
-  }) {
-    const splitValue = [
-      value.seller.toString(),
-      value.erc721.toString(),
-      value.erc20.toString(),
-      value.tokenId.toString(),
-      value.startPrice.toString(),
-      value.endPrice.toString(),
-      value.start.toString(),
-      value.deadline.toString(),
-    ]
-    console.log(splitValue)
-    console.log(props)
-    return this.contract.computeSigner(splitValue, 0, props.v, props.r, props.s)
+  public executeSetIfSignatureMatch(
+    si: ethers.Signer,
+    {
+      v,
+      r,
+      s,
+      signer,
+      deadline,
+      x,
+    }: { r: string; s: string; v: number; signer: string; deadline: number; x: number },
+  ) {
+    return this.contract.connect(si).executeSetIfSignatureMatch(v, r, s, signer, deadline, x)
   }
-}
-export type ComputeSigner = {
-  seller: string
-  erc721: string
-  erc20: string
-  tokenId: BigNumberish
-  startPrice: BigNumberish
-  endPrice: BigNumberish
-  start: BigNumberish
-  deadline: BigNumberish
 }
