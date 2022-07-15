@@ -17,14 +17,18 @@ export class FixedOrderMarketContract {
     this.contract = new ethers.Contract(this.address, FixedOrderMarketAbi, this.provider)
   }
 
-  public computeSigner({
+  public getContract() {
+    return this.contract
+  }
+
+  public async computeSigner({
     value,
     ...props
   }: {
     r: string
     s: string
     v: number
-    value: ComputeSigner
+    value: SwapMetadata
   }) {
     const splitValue = [
       value.seller.toString(),
@@ -37,11 +41,15 @@ export class FixedOrderMarketContract {
       value.deadline.toString(),
     ]
     console.log(splitValue)
-    console.log(props)
-    return this.contract.computeSigner(splitValue, 0, props.v, props.r, props.s)
+    return this.contract.tmpComputeSigner(
+      splitValue,
+      props.r.toString(),
+      props.s.toString(),
+      props.v.toString(),
+    )
   }
 }
-export type ComputeSigner = {
+export type SwapMetadata = {
   seller: string
   erc721: string
   erc20: string

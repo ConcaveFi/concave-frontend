@@ -7,50 +7,23 @@ export const FixedOrderMarketAbi = [
   {
     anonymous: false,
     inputs: [
-      {
-        indexed: false,
-        internalType: 'address',
-        name: 'collection',
-        type: 'address',
-      },
-      {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'percent',
-        type: 'uint256',
-      },
+      { indexed: false, internalType: 'address', name: 'collection', type: 'address' },
+      { indexed: false, internalType: 'uint256', name: 'percent', type: 'uint256' },
     ],
     name: 'CollectionFeeUpdated',
     type: 'event',
   },
   {
     anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: 'address',
-        name: 'newFeeAddress',
-        type: 'address',
-      },
-    ],
+    inputs: [{ indexed: false, internalType: 'address', name: 'newFeeAddress', type: 'address' }],
     name: 'FeeAddressUpdated',
     type: 'event',
   },
   {
     anonymous: false,
     inputs: [
-      {
-        indexed: false,
-        internalType: 'address',
-        name: 'token',
-        type: 'address',
-      },
-      {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'amount',
-        type: 'uint256',
-      },
+      { indexed: false, internalType: 'address', name: 'token', type: 'address' },
+      { indexed: false, internalType: 'uint256', name: 'amount', type: 'uint256' },
     ],
     name: 'FeeCollection',
     type: 'event',
@@ -259,6 +232,32 @@ export const FixedOrderMarketAbi = [
         type: 'uint256',
       },
     ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        components: [
+          { internalType: 'address', name: 'seller', type: 'address' },
+          { internalType: 'address', name: 'erc721', type: 'address' },
+          { internalType: 'address', name: 'erc20', type: 'address' },
+          { internalType: 'uint256', name: 'tokenId', type: 'uint256' },
+          { internalType: 'uint256', name: 'startPrice', type: 'uint256' },
+          { internalType: 'uint256', name: 'endPrice', type: 'uint256' },
+          { internalType: 'uint256', name: 'start', type: 'uint256' },
+          { internalType: 'uint256', name: 'deadline', type: 'uint256' },
+        ],
+        internalType: 'struct Cavemart.SwapMetadata',
+        name: 'data',
+        type: 'tuple',
+      },
+      { internalType: 'bytes32', name: 'r', type: 'bytes32' },
+      { internalType: 'bytes32', name: 's', type: 'bytes32' },
+      { internalType: 'uint8', name: 'v', type: 'uint8' },
+    ],
+    name: 'tmpComputeSigner',
+    outputs: [{ internalType: 'address', name: 'signer', type: 'address' }],
     stateMutability: 'view',
     type: 'function',
   },
