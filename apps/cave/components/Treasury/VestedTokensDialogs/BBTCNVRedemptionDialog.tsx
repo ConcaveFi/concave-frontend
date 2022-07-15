@@ -1,7 +1,7 @@
 import { BBTRedemptionContractV2 } from '@concave/core'
 import { useDisclosure } from '@concave/ui'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
-import { BigNumber } from 'ethers'
+import { BigNumber, Transaction } from 'ethers'
 import { formatEther, parseEther } from 'ethers/lib/utils'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
@@ -27,7 +27,7 @@ export const BBBTCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props)
   const { bbtCNV } = useVestedTokens()
 
   const [status, setStatus] = useState<'default' | 'approve' | 'rejected' | 'error'>('default')
-  const [tx, setTx] = useState(undefined)
+  const [tx, setTx] = useState<Transaction>()
 
   const networdId = useCurrentSupportedNetworkId()
   const bbtCNVContract = new BBTRedemptionContractV2(concaveProvider(networdId))
@@ -46,7 +46,7 @@ export const BBBTCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props)
       />
       <TransactionSubmittedDialog
         closeParentComponent={onCloseTransactionModal}
-        isOpen={transactionSubmitted && tx}
+        isOpen={transactionSubmitted && Boolean(tx)}
         tx={tx}
       />
     </>
