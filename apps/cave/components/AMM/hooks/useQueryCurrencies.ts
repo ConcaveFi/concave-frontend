@@ -20,7 +20,8 @@ const fetchTokenOrNativeData = (
   if (!addressOrSymbol) return
   if (isAddress(addressOrSymbol))
     return Fetcher.fetchTokenData(addressOrSymbol, concaveProvider(+chainId))
-  return NATIVE[chainId]
+  if (NATIVE[chainId].symbol === addressOrSymbol) return NATIVE[chainId]
+  return undefined
 }
 
 type UpdateCurrenciesQuery = {
@@ -45,11 +46,11 @@ export const useQueryCurrencies = (defaultCurrencies?: {
   const { query } = useRouter()
   const { chain } = useNetwork()
 
-  const chainId = (getQueryValue(query, 'chainId') || chain?.id) as ChainId
+  const chainId = (getQueryValue(query, 'chainId') || chain?.id || ChainId.ETHEREUM) as ChainId
 
   const queryClient = useQueryClient()
 
-  const queryHasCurrency = Router.query.currency0 || Router.query.currency1
+  const queryHasCurrency = query.currency0 || query.currency1
 
   const { data: currencies, isFetching } = useQuery<[Currency, Currency]>(
     queryCurrenciesQueryKey,
@@ -63,7 +64,7 @@ export const useQueryCurrencies = (defaultCurrencies?: {
       ]
     },
     {
-      enabled: Boolean(query.currency0 || query.currency1),
+      enabled: !!queryHasCurrency,
       initialData: defaultCurrencies?.[chainId] ||
         defaultCurrencies?.[ChainId.ETHEREUM] || [undefined, undefined],
       staleTime: 0,
