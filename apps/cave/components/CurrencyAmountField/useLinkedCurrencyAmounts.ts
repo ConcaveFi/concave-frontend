@@ -63,6 +63,7 @@ export const useLinkedCurrencyAmounts = ({
         ...currencies,
         [field]: newAmount?.currency,
       })
+      setAmounts((a) => updateArr({ ...a, [field]: newAmount?.quotient }))
       onChangeCurrencies(newCurrencies)
       derive(newAmount, newCurrencies)
     },
