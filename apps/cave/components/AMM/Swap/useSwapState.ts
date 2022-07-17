@@ -53,7 +53,7 @@ export const useSwapState = () => {
   const { settings } = useSwapSettings()
   const maxHops = settings.multihops ? 3 : 1
 
-  const pairs = usePairs(currencies[0].wrapped, currencies[1].wrapped, maxHops)
+  const pairs = usePairs(currencies[0]?.wrapped, currencies[1]?.wrapped, maxHops)
   const trade = useRef<Trade<Currency, Currency, TradeType>>(null)
 
   const [error, setError] = useState()
@@ -64,7 +64,6 @@ export const useSwapState = () => {
         try {
           return derive(enteredAmount, _currencies, pairs.data, { maxHops })
         } catch (e) {
-          console.log(e)
           setError(e)
           return undefined
         }

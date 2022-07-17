@@ -26,7 +26,7 @@ export const CurrencyIcon = ({ currency, size = 'sm', ...props }: CurrencyIconPr
     <Box as="span" w={_size} {...props}>
       <Image
         src={src}
-        alt={`${currency.symbol} icon`}
+        alt={`${currency?.symbol} icon`}
         w={_size}
         h={_size}
         maxW={_size}
@@ -45,7 +45,7 @@ export const CurrencyIcon = ({ currency, size = 'sm', ...props }: CurrencyIconPr
             rounded="full"
             bg="whiteAlpha.200"
           >
-            {currency.symbol}
+            {currency?.symbol}
           </Flex>
         }
         fallbackStrategy="onError"

@@ -37,13 +37,16 @@ const updateQuery = ({ currency0, currency1, chainId }: UpdateCurrenciesQuery) =
   Router.replace({ query }, undefined, { shallow: true })
 }
 
-const queryCurrenciesQueryKey = 'query currencies'
+const getQueryCurrenciesKey = () => `${Router.pathname} query currencies`
+
+type CurrencyChainMap = { [chain in ChainId]?: [Currency, Currency] }
+const defaultCurrencies: Record<string, CurrencyChainMap> = {}
+export const setRouteDefaultCurrencies = (pathname: `/${string}`, currencies: CurrencyChainMap) =>
+  (defaultCurrencies[pathname] = currencies)
 
 // https://react-query.tanstack.com/guides/ssr#caveat-for-nextjs-rewrites
-export const useQueryCurrencies = (defaultCurrencies?: {
-  [chain in ChainId]?: [Currency, Currency]
-}) => {
-  const { query } = useRouter()
+export const useQueryCurrencies = () => {
+  const { query, pathname } = useRouter()
   const { chain } = useNetwork()
 
   const chainId = (getQueryValue(query, 'chainId') || chain?.id || ChainId.ETHEREUM) as ChainId
@@ -53,7 +56,7 @@ export const useQueryCurrencies = (defaultCurrencies?: {
   const queryHasCurrency = query.currency0 || query.currency1
 
   const { data: currencies, isFetching } = useQuery<[Currency, Currency]>(
-    queryCurrenciesQueryKey,
+    getQueryCurrenciesKey(),
     async () => {
       const currency0 = getQueryValue(query, 'currency0')
       const currency1 = getQueryValue(query, 'currency1')
@@ -65,16 +68,19 @@ export const useQueryCurrencies = (defaultCurrencies?: {
     },
     {
       enabled: !!queryHasCurrency,
-      initialData: defaultCurrencies?.[chainId] ||
-        defaultCurrencies?.[ChainId.ETHEREUM] || [undefined, undefined],
+      initialData: defaultCurrencies[pathname]?.[chainId] ||
+        defaultCurrencies[pathname]?.[ChainId.ETHEREUM] || [undefined, undefined],
       staleTime: 0,
+      refetchOnMount: true,
+      refetchOnReconnect: false,
+      refetchOnWindowFocus: false,
     },
   )
 
   const onChangeCurrencies = useCallback(
     (currencies: [Currency, Currency]) => {
       updateQuery({ currency0: currencies[0], currency1: currencies[1] })
-      queryClient.setQueryData(queryCurrenciesQueryKey, currencies)
+      queryClient.setQueryData(getQueryCurrenciesKey(), currencies)
     },
     [queryClient],
   )

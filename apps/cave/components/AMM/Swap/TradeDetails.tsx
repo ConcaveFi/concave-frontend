@@ -45,8 +45,8 @@ export function TradeDetails({
     <>
       <HStack justify="center" align="center" py={2} px={3} my="auto" rounded="xl" h="46px">
         <RelativePrice
-          currency0={inputAmount.currency}
-          currency1={outputAmount.currency}
+          currency0={inputAmount?.currency}
+          currency1={outputAmount?.currency}
           mr="auto"
         />
 

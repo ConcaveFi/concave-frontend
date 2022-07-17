@@ -1,7 +1,10 @@
 import { ChainId, CNV, Currency, DAI } from '@concave/core'
 import { Flex } from '@concave/ui'
 import { CandleStickCard } from 'components/AMM'
-import { useQueryCurrencies } from 'components/AMM/hooks/useQueryCurrencies'
+import {
+  setRouteDefaultCurrencies,
+  useQueryCurrencies,
+} from 'components/AMM/hooks/useQueryCurrencies'
 import { SwapCard } from 'components/AMM/Swap/SwapCard'
 import { withPageTransition } from 'components/PageTransition'
 import { LayoutGroup } from 'framer-motion'
@@ -14,8 +17,10 @@ export const swapDefaultCurrencies: {
   [ChainId.RINKEBY]: [DAI[4], CNV[4]],
 }
 
+setRouteDefaultCurrencies('/gemswap', swapDefaultCurrencies)
+
 export function SwapPage() {
-  const { currencies } = useQueryCurrencies(swapDefaultCurrencies)
+  const { currencies } = useQueryCurrencies()
 
   return (
     <Flex

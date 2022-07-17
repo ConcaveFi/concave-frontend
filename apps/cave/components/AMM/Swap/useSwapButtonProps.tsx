@@ -32,7 +32,7 @@ export const useSwapButtonProps = ({
   const currencyIn = inputAmount?.currency
   const useCurrencyState = useCurrencyButtonState(
     inputAmount,
-    ROUTER_ADDRESS[inputAmount.currency?.chainId],
+    ROUTER_ADDRESS[inputAmount?.currency.chainId],
   )
   if (useCurrencyState.state === 'disconected') return useCurrencyState.buttonProps
   /*

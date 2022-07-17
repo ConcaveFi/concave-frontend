@@ -24,7 +24,7 @@ export const useAllowance = (token: Token, spender: string, userAddress: string)
     contractInterface: erc20ABI,
     functionName: 'allowance',
     args: [userAddress, spender],
-    chainId: token.chainId,
+    chainId: token?.chainId,
     enabled: !!(token?.address && spender && userAddress),
   })
 
