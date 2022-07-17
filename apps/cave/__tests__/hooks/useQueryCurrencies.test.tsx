@@ -1,6 +1,9 @@
 import { ChainId, CNV, Currency, DAI, Ether, USDC, WNATIVE } from '@concave/core'
 import { act, renderHook, waitFor } from '@testing-library/react'
-import { useQueryCurrencies } from 'components/AMM/hooks/useQueryCurrencies'
+import {
+  setRouteDefaultCurrencies,
+  useQueryCurrencies,
+} from 'components/AMM/hooks/useQueryCurrencies'
 import { QueryClient, QueryClientProvider, setLogger } from 'react-query'
 
 import { WagmiProvider } from 'contexts/WagmiContext'
@@ -27,12 +30,18 @@ setLogger({
   error: () => {},
 })
 
+beforeEach(() => {
+  mockRouter.setCurrentUrl('/')
+})
+
 describe('useQueryCurrencies', () => {
   it('defaults when there is no query params', async () => {
     const defaultCurrencies = { [ChainId.ETHEREUM]: [CNV[1], DAI[1]] as [Currency, Currency] }
-    const { result } = renderHook(() => useQueryCurrencies(defaultCurrencies), {
-      wrapper: createWrapper(),
-    })
+
+    mockRouter.setCurrentUrl('/testRoute')
+    setRouteDefaultCurrencies('/testRoute', defaultCurrencies)
+
+    const { result } = renderHook(() => useQueryCurrencies(), { wrapper: createWrapper() })
 
     expect(result.current.currencies).toBe(defaultCurrencies[ChainId.ETHEREUM])
   })
@@ -103,8 +112,6 @@ describe('useQueryCurrencies', () => {
       const chainId = ChainId.ETHEREUM
       const currency0 = USDC[chainId]
       const currency1 = WNATIVE[chainId]
-
-      mockRouter.setCurrentUrl(`/`) // reset from previous test
 
       const { result } = renderHook(() => useQueryCurrencies(), { wrapper: createWrapper() })
       await waitFor(() => expect(result.current.isLoading).toBeFalsy())
