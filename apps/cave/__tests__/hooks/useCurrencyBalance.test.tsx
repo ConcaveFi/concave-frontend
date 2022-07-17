@@ -1,6 +1,3 @@
-import * as dotenv from 'dotenv'
-dotenv.config()
-
 import { CNV, NATIVE } from '@concave/core'
 import { renderHook, waitFor } from '@testing-library/react'
 import { chain } from 'wagmi'
