@@ -1,5 +1,5 @@
 import { StakingPosition } from '@concave/marketplace'
-import { formatDistanceToNowStrict } from 'date-fns'
+import { formatDistanceToNow } from 'date-fns'
 
 export interface NFTPositionHeaderProps {
   stakingPosition: StakingPosition
@@ -13,7 +13,8 @@ export const useNFTLockedPositionState = ({
   toogleActive,
 }: NFTPositionHeaderProps) => {
   const { poolID, maturity, tokenId } = stakingPosition
-  const redeemInDays = !maturity || formatDistanceToNowStrict(maturity * 1000, { unit: 'day' })
+  const redeemInDays = !maturity || formatDistanceToNow(maturity * 1000).replace('about', '')
+
   const period = {
     0: '360 Days',
     1: '180 Days',
@@ -39,4 +40,12 @@ export const useNFTLockedPositionState = ({
     active,
     toogleActive,
   }
+}
+
+function getUnit(time: number): 'hour' | 'minute' | 'day' {
+  // 86400000 = 24 hours in miliseconds
+  // 3600000 = 1 hours in miliseconds
+  if (time < 86400000) return 'hour'
+  if (time < 3600000) return 'minute'
+  return 'day'
 }

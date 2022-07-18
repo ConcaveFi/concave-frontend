@@ -4,6 +4,9 @@ import { NFTPositionHeaderProps, useNFTLockedPositionState } from './useNFTPosit
 export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
   const { period, redeemInDays, imgNameByPeriod, redeemDate, active, toogleActive, tokenId } =
     useNFTLockedPositionState(props)
+  const { stakingPosition } = props
+  const readyForReedem = stakingPosition.maturity <= Date.now() / 1000
+
   return (
     <Flex
       width={'full'}
@@ -59,11 +62,14 @@ export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
                   : redeemDate.toString().slice(4, 16)}
               </Text>
               <Flex justify={'center'} align="end" gap={1}>
-                <Text fontSize="sm" textColor="text.low">
-                  In:
-                </Text>
+                {!readyForReedem && (
+                  <Text fontSize="sm" textColor="text.low">
+                    In:
+                  </Text>
+                )}
                 <Text fontSize="sm" fontWeight={'bold'} textColor="text.accent">
-                  {redeemInDays}
+                  {!readyForReedem && redeemInDays}
+                  {readyForReedem && 'redeemable'}
                 </Text>
               </Flex>
             </>

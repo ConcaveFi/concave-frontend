@@ -1,8 +1,13 @@
-import { StakingPosition } from '@concave/marketplace'
-import { Box, Button, Flex, FlexProps, Text, TextProps } from '@concave/ui'
-import { BigNumber } from 'ethers'
+import { StakingPosition, StakingV1Contract } from '@concave/marketplace'
+import { Box, Button, Flex, FlexProps, Spinner, Text, TextProps } from '@concave/ui'
+import { BigNumber, Transaction } from 'ethers'
 import { formatEther } from 'ethers/lib/utils'
+import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import { concaveProvider } from 'lib/providers'
+import { useEffect, useState } from 'react'
 import { formatFixed } from 'utils/formatFixed'
+import { useAccount, useSigner, useWaitForTransaction } from 'wagmi'
 
 const bigNumberMask = (number: BigNumber) => {
   if (number.eq(0)) {
@@ -17,8 +22,70 @@ const bigNumberMask = (number: BigNumber) => {
 interface RedeemCardViewerProps {
   stakingPosition: StakingPosition
 }
-const RedeemCardViewer = ({ stakingPosition }: RedeemCardViewerProps) => {
-  const readyForReedem = stakingPosition.maturity < Date.now() / 1000
+
+type RecentRedeemedTransaction = {
+  [key: number]: {
+    tx: Transaction
+    position: StakingPosition
+  }
+}
+type RedeemedStatus = 'default' | 'approve' | 'waitingTx' | 'rejected' | 'redeemed' | 'error'
+export const RedeemCardViewer = ({ stakingPosition }: RedeemCardViewerProps) => {
+  const [status, setStatus] = useState<RedeemedStatus>('default')
+
+  const readyForReedem = stakingPosition.maturity <= Date.now() / 1000
+  const chaindID = useCurrentSupportedNetworkId()
+  const { data: signer } = useSigner()
+  const { address } = useAccount()
+  const tokenId = +stakingPosition?.tokenId.toString()
+  const recentRedeemed = getRecentRedeemedTransactions()[tokenId]
+
+  const { registerTransaction } = useTransactionRegistry()
+
+  const { status: txStatus } = useWaitForTransaction({
+    chainId: stakingPosition.chainId,
+    hash: recentRedeemed?.tx?.hash,
+  })
+
+  const redeem = () => {
+    const stakingContract = new StakingV1Contract(concaveProvider(chaindID))
+    setStatus('approve')
+    stakingContract
+      .unlock(signer, address, stakingPosition.tokenId)
+      .then((tx) => {
+        setStatus('waitingTx')
+        registerTransaction(tx, {
+          type: 'redeem',
+          amount: bigNumberMask(stakingPosition.currentValue) + ' from token id: ' + tokenId,
+        })
+        localStorage.setItem(
+          'positionsRedeemed',
+          JSON.stringify({ ...recentRedeemed, [tokenId]: { tx, position: stakingPosition } }),
+        )
+      })
+      .catch((error) => {
+        if (error.code === 4001) setStatus('rejected')
+        else setStatus('error')
+
+        const interval = setInterval(() => {
+          setStatus('default')
+          clearInterval(interval)
+        }, 3000)
+      })
+  }
+
+  useEffect(() => {
+    if (recentRedeemed) {
+      if (txStatus === 'loading') setStatus('waitingTx')
+      if (txStatus === 'error' || txStatus === 'success') {
+        const { [tokenId]: finishedTransaction, ...transactions } = getRecentRedeemedTransactions()
+        localStorage.setItem('positionsRedeemed', JSON.stringify(transactions))
+        if (txStatus === 'success') setStatus('redeemed')
+        if (txStatus === 'error') setStatus('default')
+      }
+    }
+  }, [txStatus])
+
   return (
     <Box
       borderRadius="2xl"
@@ -47,23 +114,7 @@ const RedeemCardViewer = ({ stakingPosition }: RedeemCardViewerProps) => {
             value={bigNumberMask(stakingPosition.initialValue) + ' CNV'}
           />
         </Flex>
-        <Button
-          size={'md'}
-          minW={{ base: '280px', md: '160px' }}
-          cursor={!readyForReedem ? 'default' : 'pointer'}
-          variant={!readyForReedem ? 'primary.outline' : 'primary'}
-          shadow={!readyForReedem ? 'down' : 'up'}
-          _hover={{}}
-          mx="auto"
-          my={'auto'}
-          mt="2px"
-          _active={readyForReedem && { transform: 'scale(0.9)' }}
-          _focus={{}}
-        >
-          <Text color={!readyForReedem ? 'text.low' : 'white'} fontSize={{ base: '2xl', md: 'sm' }}>
-            {!readyForReedem ? 'Not redeemable' : 'Redeem'}
-          </Text>
-        </Button>
+        <Button onClick={redeem} {...getRedeemButtonProps(readyForReedem, status)} />
       </Flex>
     </Box>
   )
@@ -86,4 +137,39 @@ export const Info: React.FC<Info> = ({ ...props }) => {
     </Flex>
   )
 }
-export default RedeemCardViewer
+
+function getRecentRedeemedTransactions() {
+  return JSON.parse(localStorage.getItem('positionsRedeemed') || '{}') as RecentRedeemedTransaction
+}
+const getRedeemButtonProps = (readyForRedeem: boolean, status: RedeemedStatus) => {
+  const defaultState = status === 'default'
+  const buttonLabels = {
+    default: !readyForRedeem ? 'Not redeemable' : 'Redeem',
+    approve: (
+      <Flex gap={2}>
+        <Spinner />
+        <Text>{'Approve in your wallet...'}</Text>
+      </Flex>
+    ),
+    waitingTx: (
+      <Flex gap={2}>
+        <Spinner />
+        <Text>{'Waiting for transaction...'}</Text>
+      </Flex>
+    ),
+    rejected: 'Transaction rejected',
+    error: 'Ocurred an error',
+    redeemed: 'Transaction redeemed',
+  }
+
+  return {
+    children: buttonLabels[status],
+    disabled: defaultState ? !readyForRedeem : true,
+
+    variant: 'primary',
+    size: 'md',
+    minW: { base: '280px', md: '160px' },
+    m: 'auto',
+    mt: '2px',
+  }
+}

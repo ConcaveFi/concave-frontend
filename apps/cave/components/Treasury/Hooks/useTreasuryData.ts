@@ -65,7 +65,7 @@ export const useTreasuryData = () => {
       convex: {
         total: convexToken?.total || 0,
         tokenImage:
-          'https://static.debank.com/image/eth_token/logo_url/0x4e3fbd56cd56c3e72c1403e103b45db9da5b9d2b/be2a9b05a223d6dfca3dc88b1838fcd4.png',
+          'https://cdn.jsdelivr.net/gh/concavefi/assets@latest/blockchains/ethereum/assets/0x4e3FBD56CD56c3e72c1403e103b45Db9da5B9D2B/logo.png',
         images: [
           convertToJsDelivrPath(convexToken?.image || ''),
           convertToJsDelivrPath(convexToken?.imageP1 || ''),

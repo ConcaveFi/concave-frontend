@@ -17,7 +17,6 @@ export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePo
   const { isConnected } = useAccount()
   const { userNonFungibleTokensInfo, totalLocked, isLoading } = stakePosition
   const hasPositions = userNonFungibleTokensInfo.length !== 0
-
   // Sorters && filters
   const [stakeFilters, setStakeFilters] = useState([
     StakePoolFilterEnum.FILTER_BY_45_DAYS,
@@ -75,6 +74,8 @@ export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePo
             {userNonFungibleTokensInfo
               .filter(filterByStakePool)
               .filter(filterByRange)
+              .filter((position) => position.maturity > 0)
+
               .sort(sortFunction)
               .map((nonFungibleTokenInfo) => (
                 <UserPositionCard

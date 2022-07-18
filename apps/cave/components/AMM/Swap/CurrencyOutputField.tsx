@@ -3,26 +3,23 @@ import { Flex, HStack, Text } from '@concave/ui'
 import { CurrencyAmountField } from 'components/CurrencyAmountField'
 import { Balance } from 'components/CurrencyAmountField/Balance'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
-import { percentDifference } from 'utils/percentDifference'
 import { useFiatValue } from '../hooks/useFiatPrice'
+import { PriceImpact } from './PriceImpact'
 
 type CurrencyOutputFieldProps = {
-  currencyAmountIn: CurrencyAmount<Currency>
   currencyAmountOut: CurrencyAmount<Currency>
+  priceImpact: Percent
   updateOutputValue: (value: CurrencyAmount<Currency>) => void
 }
 
 const _01 = new Percent(1, 10000) // 0.01%
 
 export const CurrencyOutputField = ({
-  currencyAmountIn,
   currencyAmountOut,
   updateOutputValue,
+  priceImpact,
 }: CurrencyOutputFieldProps) => {
-  const inputFiat = useFiatValue(currencyAmountIn)
   const outputFiat = useFiatValue(currencyAmountOut)
-
-  const fiatPriceImpact = percentDifference(inputFiat.value, outputFiat.value)
 
   return (
     <CurrencyAmountField
@@ -36,10 +33,11 @@ export const CurrencyOutputField = ({
             {!!outputFiat.value?.greaterThan(0) &&
               `$${outputFiat.value.toFixed(2, { groupSeparator: ',' })}`}
           </Text>
-          <Text fontSize="xs" opacity={0.7}>
-            {(fiatPriceImpact?.greaterThan(_01) || fiatPriceImpact?.lessThan(_01.multiply(-1))) &&
-              `(${fiatPriceImpact?.toFixed(2, { groupSeparator: ',' })}%)`}{' '}
-          </Text>
+          <>
+            {(priceImpact?.greaterThan(_01) || priceImpact?.lessThan(_01.multiply(-1))) && (
+              <PriceImpact fontSize={'sm'} opacity={0.5} priceImpact={priceImpact} />
+            )}
+          </>
         </Flex>
         <Balance currency={currencyAmountOut?.currency} />
       </HStack>
