@@ -163,12 +163,12 @@ export const TestnetIndicator = () => {
   const { chain } = useNetwork()
   const { isUserWorthy } = useWorthyUser()
 
-  const [isOpen, setIsOpen] = useState(chain?.testnet && isUserWorthy)
+  const [isOpen, setIsOpen] = useState(isUserWorthy)
   const onClose = () => setIsOpen(false)
 
   useEffect(() => {
-    setIsOpen(chain?.testnet && isUserWorthy)
-  }, [isUserWorthy, chain?.testnet])
+    setIsOpen(isUserWorthy)
+  }, [isUserWorthy])
 
   const minterModal = useDisclosure()
 
