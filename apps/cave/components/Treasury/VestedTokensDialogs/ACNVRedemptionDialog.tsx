@@ -75,7 +75,6 @@ export const ACNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) =>
           <Flex
             direction={'column'}
             width="full"
-            shadow={'Down Medium'}
             rounded="2xl"
             height={'100px'}
             justify={'center'}
@@ -87,7 +86,7 @@ export const ACNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) =>
               <Text textColor={'text.low'} fontWeight="bold">
                 Current balance:
               </Text>
-              <Text textColor={'text.accent'} fontWeight="bold">
+              <Text textColor={'text.accent'} fontWeight="bold" flex={1} textAlign="end">
                 {unsupportedNetwork && '0'}
                 {!unsupportedNetwork && !aCNV?.isLoading && (aCNVData?.formatted || '0')}
                 {!unsupportedNetwork && !unsupportedNetwork && aCNV?.isLoading && 'Loading...'}
@@ -97,7 +96,7 @@ export const ACNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) =>
               <Text color={'text.low'} fontWeight="bold">
                 Redeemed:
               </Text>
-              <Text textColor={'text.accent'} fontWeight="bold">
+              <Text textColor={'text.accent'} fontWeight="bold" flex={1} textAlign="end">
                 {!isLoading && redeemed}
                 {isLoading && 'Loading...'}
               </Text>
