@@ -3,7 +3,7 @@ import { Button, Card, Flex, Link, Modal, Text, useDisclosure } from '@concave/u
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
-import { ethers } from 'ethers'
+import { Transaction } from 'ethers'
 import { useGet_User_Acnv_RedeemedQuery } from 'graphql/generated/graphql'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { concaveProvider as provider } from 'lib/providers'
@@ -21,7 +21,7 @@ export const ACNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) =>
   const { data: signer } = useSigner()
   const { address, isConnected } = useAccount()
 
-  const [tx, setTx] = useState<ethers.Transaction>()
+  const [tx, setTx] = useState<Transaction>()
   const [error, setError] = useState('')
 
   const { data, isLoading } = useGet_User_Acnv_RedeemedQuery({

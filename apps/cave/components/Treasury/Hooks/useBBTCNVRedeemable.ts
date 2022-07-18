@@ -1,14 +1,14 @@
 import { BBTRedemptionContractV2 } from '@concave/core'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { concaveProvider } from 'lib/providers'
 import { useQuery } from 'react-query'
-import { useAccount, useSigner } from 'wagmi'
+import { useAccount, useProvider, useSigner } from 'wagmi'
 
 export default function useBBTCNVRedeemable() {
   const { address } = useAccount()
   const { data: signer } = useSigner()
   const networkdId = useCurrentSupportedNetworkId()
-  const bbtCNVRedemptionV2 = new BBTRedemptionContractV2(concaveProvider(networkdId))
+  const provider = useProvider()
+  const bbtCNVRedemptionV2 = new BBTRedemptionContractV2(provider)
 
   const { data, isLoading } = useQuery(
     ['bbtRedeemable', address, networkdId],
@@ -16,9 +16,9 @@ export default function useBBTCNVRedeemable() {
       Promise.all([
         bbtCNVRedemptionV2.redeemable(signer, address),
         bbtCNVRedemptionV2.redeemed(signer, address),
-      ]).then((values) => ({
-        redeemable: values[0],
-        redeemed: values[1],
+      ]).then(([redeemable, redeemed]) => ({
+        redeemable,
+        redeemed,
       })),
     { enabled: !!address && !!signer },
   )

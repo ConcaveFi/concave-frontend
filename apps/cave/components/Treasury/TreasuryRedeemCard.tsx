@@ -5,7 +5,7 @@ import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId
 import { FC } from 'react'
 import { useAccount } from 'wagmi'
 import { ACNVRedemptionDialog } from './VestedTokensDialogs/ACNVRedemptionDialog'
-import { BBBTCNVRedemptionDialog } from './VestedTokensDialogs/BBTCNVRedemptionDialog'
+import { BBTCNVRedemptionDialog } from './VestedTokensDialogs/BBTCNVRedemptionDialog'
 import { PCNVRedemptionDialog } from './VestedTokensDialogs/PCNVRedemptionDialog'
 
 export const TreasuryRedeemCard = () => {
@@ -33,7 +33,7 @@ export const TreasuryRedeemCard = () => {
       <Flex direction={{ base: 'column', md: 'row', lg: 'column' }} w="full" gap={3} py={3}>
         <VestedTokenButton title="aCNV" VestedTokenDialog={ACNVRedemptionDialog} />
         <VestedTokenButton title="pCNV" VestedTokenDialog={PCNVRedemptionDialog} />
-        <VestedTokenButton title="bbtCNV" VestedTokenDialog={BBBTCNVRedemptionDialog} />
+        <VestedTokenButton title="bbtCNV" VestedTokenDialog={BBTCNVRedemptionDialog} />
       </Flex>
       <Button
         onClick={addingToWallet}

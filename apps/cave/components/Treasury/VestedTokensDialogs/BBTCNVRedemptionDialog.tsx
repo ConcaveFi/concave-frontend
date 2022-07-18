@@ -13,11 +13,11 @@ import useVestedTokens from '../Hooks/useVestedTokens'
 import { VestedTokenButtonProps } from '../TreasuryRedeemCard'
 import { VestedTokenDialog } from './VestedTokenDialog'
 
-export const BBBTCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) => {
+export const BBTCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) => {
   const {
     isOpen: transactionSubmitted,
     onClose: onCloseTransactionModal,
-    onOpen: SubmitTransactionModal,
+    onOpen: submitTransactionModal,
   } = useDisclosure()
   const { onClose, isOpen } = props
 
@@ -30,7 +30,6 @@ export const BBBTCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props)
   const [tx, setTx] = useState<Transaction>()
 
   const networdId = useCurrentSupportedNetworkId()
-  const bbtCNVContract = new BBTRedemptionContractV2(concaveProvider(networdId))
   const balance = parseEther(bbtCNV?.data?.formatted || '0')
   const { registerTransaction } = useTransactionRegistry()
   return (
@@ -53,6 +52,7 @@ export const BBBTCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props)
   )
 
   function redeem(amount: BigNumber, redeemMax: boolean) {
+    const bbtCNVContract = new BBTRedemptionContractV2(concaveProvider(networdId))
     setStatus('approve')
     bbtCNVContract
       .redeem(signer, amount, address, redeemMax)
@@ -62,15 +62,16 @@ export const BBBTCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props)
           amount: formatEther(amount) + ' bbtCNV',
         })
         setTx(transaction)
-        SubmitTransactionModal()
+        submitTransactionModal()
         setStatus('default')
       })
       .catch((error) => {
         if (error.code === 4001) setStatus('rejected')
         else setStatus('error')
 
-        setTimeout(() => {
+        const cleanButtonState = setTimeout(() => {
           setStatus('default')
+          clearTimeout(cleanButtonState)
         }, 3000)
       })
   }
