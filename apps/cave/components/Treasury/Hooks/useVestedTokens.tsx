@@ -9,8 +9,6 @@ export default function useVestedTokens() {
     addressOrName: address,
     token: BBTCNV_ADDRESS[networkId],
   })
-  // aCNV token it's not deployed on rinkeby, so it's better pass the
-  // networkd hardcoded intead using the networkId
   const { data: aCNVData, isLoading: loadingBBTCNV } = useBalance({
     addressOrName: address,
     token: ACNV_ADDRESS[networkId],
