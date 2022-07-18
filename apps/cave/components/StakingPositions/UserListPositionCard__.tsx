@@ -1,20 +1,48 @@
-import { CNV, Currency, CurrencyAmount, STAKING_CONTRACT } from '@concave/core'
+import {
+  CNV,
+  Currency,
+  CurrencyAmount,
+  FIXED_ORDER_MARKET_CONTRACT,
+  STAKING_CONTRACT,
+} from '@concave/core'
+import { ComputeSigner, FixedOrderMarketContract } from '@concave/marketplace'
 import { Box, Button, Flex, HStack, Input, NumericInput, Text, VStack } from '@concave/ui'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
 import { ChooseButton } from 'components/Marketplace/ChooseButton'
 import { BigNumber } from 'ethers'
 import { verifyTypedData } from 'ethers/lib/utils'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import { concaveProvider } from 'lib/providers'
 import { useState } from 'react'
 import { toAmount } from 'utils/toAmount'
 import { truncateNumber } from 'utils/truncateNumber'
-import { useAccount, useSignTypedData } from 'wagmi'
+import { chain, useAccount, useSignTypedData } from 'wagmi'
 
 import { UserMarketInfoState } from './LockPosition/MarketLockInfo/useMarketPlaceInfo'
 
 type UserListPositionCardProps = { marketItemState: UserMarketInfoState }
 
 type ListForSaleState = ReturnType<typeof useListeForSaleState>
+
+const domain = {
+  name: 'Test',
+  version: '1',
+  chainId: chain.rinkeby.id,
+  verifyingContract: FIXED_ORDER_MARKET_CONTRACT[chain.rinkeby.id],
+}
+
+const types = {
+  SwapMetadata: [
+    { name: 'seller', type: 'address' },
+    { name: 'erc721', type: 'address' },
+    { name: 'erc20', type: 'address' },
+    { name: 'tokenId', type: 'uint256' },
+    { name: 'startPrice', type: 'uint256' },
+    { name: 'endPrice', type: 'uint256' }, // 0
+    { name: 'start', type: 'uint256' }, // 0
+    { name: 'deadline', type: 'uint256' },
+  ],
+}
 
 export const useListeForSaleState = ({ marketItemState }: UserListPositionCardProps) => {
   const selectedToken = CNV[marketItemState.chainId]
@@ -27,43 +55,15 @@ export const useListeForSaleState = ({ marketItemState }: UserListPositionCardPr
       marketItemState.marketItem.data.position.currentValue.toString(),
     ),
   )
-  const value = {
-    action: 'LISTING_NFT',
-    tokenId: marketItemState.marketItem.data.position.tokenId.toString(),
-    buyPrice: BigNumber.from(price.wrapped.numerator.toString()).toString(),
-    owner: seller,
-    erc20: price.wrapped.currency.address,
+  const value: ComputeSigner = {
+    seller,
     erc721: STAKING_CONTRACT[4],
-    amount: '33',
-    deadline: '1659139200',
-    txHash: '0xEeEEeeEeeeeEeEEeeEeeeeEeEEeeEeeeeEeEEeeE',
-  }
-
-  const domain = {
-    name: 'nftsupermarket.eth',
-    version: '1',
-    chainId: 4,
-    verifyingContract: '0x67cB8469Ea1F689E149b2c4c245ba47E56cd6041',
-  }
-  const x = {
-    name: 'nftsupermarket.eth',
-    version: '1',
-    chainId: 4,
-    verifyingContract: '0x67cB8469Ea1F689E149b2c4c245ba47E56cd6041',
-  }
-
-  const types = {
-    NFT: [
-      { name: 'action', type: 'string' },
-      { name: 'tokenId', type: 'string' },
-      { name: 'buyPrice', type: 'string' },
-      { name: 'owner', type: 'string' },
-      { name: 'erc20', type: 'string' },
-      { name: 'amount', type: 'string' },
-      { name: 'erc721', type: 'string' },
-      { name: 'txHash', type: 'string' },
-      { name: 'deadline', type: 'string' },
-    ],
+    erc20: price.wrapped.currency.address,
+    tokenId: marketItemState.marketItem.data.position.tokenId.toString(),
+    startPrice: BigNumber.from(price.wrapped.numerator.toString()).toString(),
+    endPrice: BigNumber.from(0).toString(),
+    start: BigNumber.from(0).toString(),
+    deadline,
   }
 
   const { signTypedDataAsync } = useSignTypedData({
@@ -73,17 +73,9 @@ export const useListeForSaleState = ({ marketItemState }: UserListPositionCardPr
   })
 
   const create = () => {
-    console.log(1)
-    console.log({
-      types,
-      domain,
-      value,
-    })
     signTypedDataAsync()
       .then(async (data) => {
-        console.log('data', data)
         const signature = data.substring(2)
-        console.log('signature', signature)
         const r = `0x${signature.substring(0, 64)}`
         const s = `0x${signature.substring(64, 128)}`
         const v = parseInt(signature.substring(128, 130), 16)
@@ -93,11 +85,22 @@ export const useListeForSaleState = ({ marketItemState }: UserListPositionCardPr
           v,
         })
         console.log('signerAddress', signerAddress)
-        console.log({
+
+        const cavemart = new FixedOrderMarketContract(concaveProvider(chain.rinkeby.id))
+        const user = await cavemart.computeSigner({
           r,
           s,
           v,
+          value,
         })
+
+        console.log(`user`, user)
+        // console.log('domain', domain)
+        // console.log('types', types)
+        // console.log('value', value)
+        // console.log('r', r)
+        // console.log('s', s)
+        // console.log('v', v)
       })
       .catch(console.error)
   }
