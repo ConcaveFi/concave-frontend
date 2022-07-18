@@ -34,8 +34,8 @@ export const ACNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) =>
   const { data: aCNVData } = aCNV
   const validBalance = +aCNVData?.formatted > 0
   const alreadyRedeemed = redeemed === +aCNVData?.formatted
-  const canRedeem = validBalance && !alreadyRedeemed
   const unsupportedNetwork = provider?.network?.chainId !== ChainId.ETHEREUM
+  const canRedeem = validBalance && !alreadyRedeemed && !unsupportedNetwork
 
   const { registerTransaction } = useTransactionRegistry()
 
