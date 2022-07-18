@@ -13,7 +13,7 @@ export default function useVestedTokens() {
   // networkd hardcoded intead using the networkId
   const { data: aCNVData, isLoading: loadingBBTCNV } = useBalance({
     addressOrName: address,
-    token: ACNV_ADDRESS[1],
+    token: ACNV_ADDRESS[networkId],
   })
 
   return {

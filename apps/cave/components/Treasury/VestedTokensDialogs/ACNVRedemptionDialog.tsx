@@ -1,4 +1,4 @@
-import { ACNVRedeemContract } from '@concave/core'
+import { ACNVRedeemContract, ChainId } from '@concave/core'
 import { Button, Card, Flex, Link, Modal, Text, useDisclosure } from '@concave/ui'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
@@ -6,13 +6,13 @@ import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { Transaction } from 'ethers'
 import { useGet_User_Acnv_RedeemedQuery } from 'graphql/generated/graphql'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
-import { concaveProvider as provider } from 'lib/providers'
 import { useState } from 'react'
-import { useAccount, useSigner } from 'wagmi'
+import { useAccount, useProvider, useSigner } from 'wagmi'
 import useVestedTokens from '../Hooks/useVestedTokens'
 import { VestedTokenButtonProps } from '../TreasuryRedeemCard'
 
 export const ACNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) => {
+  const provider = useProvider()
   const { isOpen: isConfirmOpen, onOpen: onOpenConfirm, onClose: onCloseConfirm } = useDisclosure()
   const { isOpen: isSubOpen, onOpen: onOpenSub, onClose: onCloseSub } = useDisclosure()
   const { isOpen: isErrorOpen, onOpen: onOpenError, onClose: onCloseError } = useDisclosure()
@@ -29,18 +29,19 @@ export const ACNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) =>
   })
   const redeemed: number = data?.logACNVRedemption[0]?.amount || 0
   const txHash = data?.logACNVRedemption[0]?.txHash || ''
-  const aCNVContract = new ACNVRedeemContract(provider(1))
 
   const { aCNV } = useVestedTokens()
   const { data: aCNVData } = aCNV
   const validBalance = +aCNVData?.formatted > 0
   const alreadyRedeemed = redeemed === +aCNVData?.formatted
   const canRedeem = validBalance && !alreadyRedeemed
+  const unsupportedNetwork = provider?.network?.chainId !== ChainId.ETHEREUM
 
   const { registerTransaction } = useTransactionRegistry()
 
   function redeem() {
     onOpenConfirm()
+    const aCNVContract = new ACNVRedeemContract(provider)
     aCNVContract
       .redeem(signer, address)
       .then((tx) => {
@@ -87,8 +88,9 @@ export const ACNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) =>
                 Current balance:
               </Text>
               <Text textColor={'text.accent'} fontWeight="bold">
-                {(!aCNV?.isLoading && aCNVData?.formatted) || '0'}
-                {aCNV?.isLoading && 'Loading...'}
+                {unsupportedNetwork && '0'}
+                {!unsupportedNetwork && !aCNV?.isLoading && (aCNVData?.formatted || '0')}
+                {!unsupportedNetwork && !unsupportedNetwork && aCNV?.isLoading && 'Loading...'}
               </Text>
             </Flex>
             <Flex gap={2}>
@@ -119,19 +121,24 @@ export const ACNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) =>
             }}
             py={2}
             fontSize="22"
-            variant={'primary.outline'}
+            variant={'primary'}
             width="full"
+            size={'large'}
             shadow={'Up Small'}
+            disabled={!canRedeem}
             textColor={!canRedeem && 'text.low'}
             _hover={canRedeem && { shadow: 'up' }}
             cursor={!canRedeem && 'default'}
-            _active={{}}
-            _focus={{}}
           >
-            {!isConnected && 'Not Connected'}
-            {!validBalance && isConnected && 'Insufficient Balance'}
-            {isConnected && canRedeem && 'Redeem'}
-            {isConnected && !canRedeem && validBalance && 'Nothing To Redeem'}
+            {unsupportedNetwork && 'Unsupported network'}
+            {!unsupportedNetwork && (
+              <Text>
+                {!isConnected && 'Not Connected'}
+                {!validBalance && isConnected && 'Insufficient Balance'}
+                {isConnected && canRedeem && 'Redeem'}
+                {isConnected && !canRedeem && validBalance && 'Nothing To Redeem'}
+              </Text>
+            )}
           </Button>
         </Card>
       </Modal>
