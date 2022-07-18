@@ -4,14 +4,12 @@ import { AddressMap } from '../types'
 export const MARKETPLACE_CONTRACT: AddressMap = {
   [ChainId.ETHEREUM]: '',
   [ChainId.RINKEBY]: '0xF9b97A491Be443E525D2CB32AE4Bb700f2489746',
-<<<<<<< HEAD
-=======
+
 }
 
 export const FIXED_ORDER_MARKET_CONTRACT: AddressMap = {
   [ChainId.ETHEREUM]: '',
   [ChainId.RINKEBY]: '0xF9b97A491Be443E525D2CB32AE4Bb700f2489746',
->>>>>>> 5b8c2fabfe3fdf2264e3679e12c51bb9e925fec1
 }
 
 export const STAKING_CONTRACT: AddressMap = {

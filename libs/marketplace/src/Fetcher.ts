@@ -1,13 +1,4 @@
 import type { Nft } from '@alch/alchemy-web3'
-<<<<<<< HEAD
-import { STAKING_CONTRACT } from '@concave/core'
-<<<<<<< HEAD
-import { MarketItem } from './entities'
-import { ConcaveNFTMarketplace } from './contract'
-=======
->>>>>>> 487c38971d9fa0eb17e5b5902f30c56b7cd08383
-=======
->>>>>>> 5b8c2fabfe3fdf2264e3679e12c51bb9e925fec1
 import { BaseProvider } from '@ethersproject/providers'
 import { ConcaveNFTMarketplace, StakingV1Contract } from './contract'
 import { MarketItem, StakingPosition } from './entities'

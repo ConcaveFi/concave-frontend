@@ -2,14 +2,7 @@ import { Box, Button, Card, Flex, Heading, Text, useBreakpointValue } from '@con
 import { MarketplaceDashboard } from 'components/LiquidMarketplace/MarketplaceDashboard'
 import GraphicGuide from 'components/LiquidStaking/GraphicGuide'
 import MarketplaceActivityCard from 'components/Marketplace/MarketplaceActivityCard'
-<<<<<<< HEAD
-<<<<<<< HEAD
-import { MarketplaceStakeCard } from 'components/Marketplace/MarketplaceStakeCard'
-=======
-=======
->>>>>>> 5b8c2fabfe3fdf2264e3679e12c51bb9e925fec1
 import MarketplaceStakeCard from 'components/Marketplace/MarketplaceStakeCard'
->>>>>>> 487c38971d9fa0eb17e5b5902f30c56b7cd08383
 import { withPageTransition } from 'components/PageTransition'
 import { useEffect, useState } from 'react'
 
@@ -25,13 +18,10 @@ const Marketplace = () => {
   useEffect(() => {
     if (isLargerLayout && viewTransactions == true) setViewTransactions(false)
   }, [isLargerLayout])
-<<<<<<< HEAD
-=======
   // const positions = useGet_Nft_Lock_PositionQuery({
   //   address: `0xD93736a5c4D45eE3E887698301AE9B67082ce9D0`,
   // })
   // console.log(positions.data)
->>>>>>> 5b8c2fabfe3fdf2264e3679e12c51bb9e925fec1
 
   return (
     <Flex width={{ base: 'full' }} borderRadius={0} textAlign="center" direction="column">
