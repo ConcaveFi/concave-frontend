@@ -1,7 +1,8 @@
 import type { Nft } from '@alch/alchemy-web3'
+import { BigNumber } from '@ethersproject/bignumber'
 import { BaseProvider } from '@ethersproject/providers'
 import { ConcaveNFTMarketplace, StakingV1Contract } from './contract'
-import { MarketItem, StakingPosition } from './entities'
+import { MarketItem, Position, StakingPosition } from './entities'
 
 export const listAllNonFungibleTokensOnAddress = async (
   owner: string,
@@ -66,13 +67,24 @@ export const listUserPositions = async ({
 
   return Promise.all(
     logs.map(async (log) => {
-      const position = stakingV1Contract.positions(log.positionID)
+      if (log.positionID === 148) {
+        console.log(log)
+      }
+      const position: Position = {
+        deposit: BigNumber.from(log.deposit),
+        maturity: log.maturity,
+        rewardDebt: BigNumber.from(log.rewardDebt),
+        shares: BigNumber.from(log.shares),
+        chainId,
+        poolID: log.poolID,
+      }
       const reward = stakingV1Contract.viewPositionRewards(log.positionID)
       return new StakingPosition({
         chainId,
         tokenId: log.positionID,
-        position: await position,
+        position,
         reward: await reward,
+        market: log.cavemarts[0],
       })
     }),
   )
@@ -99,6 +111,27 @@ export const fetchUserPositionsQuery = `
     timestamp
     txBlockNumber
     txHash
+    cavemarts {
+      created_at
+      signatureHash
+      start
+      startPrice
+      endPrice
+      tokenID
+      tokenOwner
+      tokenIsListed
+      deadline
+    }
+  }
+}`
+
+export const Insert_Cavemart_ListingDocument = `
+    mutation INSERT_CAVEMART_LISTING($signatureHash: String!, $start: String!, $startPrice: String, $endPrice: String, $tokenID: numeric!, $tokenOwner: String!, $tokenIsListed: Boolean = true) {
+  insert_cavemart_one(
+    object: {signatureHash: $signatureHash, start: $start, startPrice: $startPrice, endPrice: $endPrice, tokenID: $tokenID, tokenIsListed: $tokenIsListed, tokenOwner: $tokenOwner}
+  ) {
+    tokenID
+    tokenIsListed
   }
 }`
 
@@ -121,4 +154,17 @@ export interface LogStakingV1Lock {
   timestamp: number
   txBlockNumber: number
   txHash: string
+  cavemarts: Cavemart[]
+}
+
+export type Cavemart = {
+  created_at: string
+  signatureHash: string
+  start: string
+  startPrice?: string
+  endPrice?: string
+  tokenID: number
+  tokenOwner: string
+  tokenIsListed: boolean
+  deadline?: number
 }

@@ -40,7 +40,34 @@ export class FixedOrderMarketContract {
       value.start.toString(),
       value.deadline.toString(),
     ]
-    console.log(splitValue)
+    return this.contract.computeSigner(
+      splitValue,
+      value.nonce.toString(),
+      props.v.toString(),
+      props.r.toString(),
+      props.s.toString(),
+    )
+  }
+
+  public async tmpComputeSigner({
+    value,
+    ...props
+  }: {
+    r: string
+    s: string
+    v: number
+    value: SwapMetadata
+  }) {
+    const splitValue = [
+      value.seller.toString(),
+      value.erc721.toString(),
+      value.erc20.toString(),
+      value.tokenId.toString(),
+      value.startPrice.toString(),
+      value.endPrice.toString(),
+      value.start.toString(),
+      value.deadline.toString(),
+    ]
     return this.contract.tmpComputeSigner(
       splitValue,
       props.r.toString(),
@@ -58,4 +85,5 @@ export type SwapMetadata = {
   endPrice: BigNumberish
   start: BigNumberish
   deadline: BigNumberish
+  nonce: BigNumberish
 }

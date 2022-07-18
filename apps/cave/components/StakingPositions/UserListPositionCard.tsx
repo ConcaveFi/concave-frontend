@@ -10,6 +10,7 @@ import { Box, Button, Flex, HStack, Input, NumericInput, Text, VStack } from '@c
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
 import { ChooseButton } from 'components/Marketplace/ChooseButton'
 import { BigNumber } from 'ethers'
+import { useInsert_Cavemart_ListingMutation } from 'graphql/generated/graphql'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
 import { useState } from 'react'
@@ -47,6 +48,7 @@ const types = {
 export const useListeForSaleState = ({ marketItemState }: UserListPositionCardProps) => {
   const selectedToken = CNV[marketItemState.chainId]
   const { address: seller } = useAccount()
+  const { mutate } = useInsert_Cavemart_ListingMutation()
   const [deadline, setDeadline] = useState(BigNumber.from(Date.now()))
   const [method, setMethod] = useState<'Sale' | 'Auction'>('Sale')
   const [price, setPrice] = useState<CurrencyAmount<Currency>>(
@@ -55,6 +57,8 @@ export const useListeForSaleState = ({ marketItemState }: UserListPositionCardPr
       marketItemState.marketItem.data.position.currentValue.toString(),
     ),
   )
+
+  // Sign with nonce
   const value: SwapMetadata = {
     seller,
     erc721: STAKING_CONTRACT[4],
@@ -63,17 +67,14 @@ export const useListeForSaleState = ({ marketItemState }: UserListPositionCardPr
     startPrice: BigNumber.from(price.wrapped.numerator.toString()).toString(),
     endPrice: BigNumber.from(0).toString(),
     start: BigNumber.from(0).toString(),
+    nonce: BigNumber.from(0).toString(),
     deadline,
   }
 
   const { signTypedDataAsync } = useSignTypedData({
-    types: {
-      MyFunction: [{ name: 'owner', type: 'address' }],
-    },
+    types,
     domain,
-    value: {
-      owner: value.seller,
-    },
+    value,
   })
 
   const create = () => {
@@ -85,8 +86,14 @@ export const useListeForSaleState = ({ marketItemState }: UserListPositionCardPr
         const v = parseInt(signature.substring(128, 130), 16)
         const cavemart = new FixedOrderMarketContract(concaveProvider(chain.rinkeby.id))
         const user = await cavemart.computeSigner({ r, s, v, value })
-        console.log(`user`, user)
-        console.log(`works`, user === value.seller)
+        mutate({
+          tokenID: value.tokenId,
+          signatureHash: signature,
+          start: value.start.toString(),
+          startPrice: value.startPrice.toString(),
+          tokenOwner: value.seller,
+          tokenIsListed: true,
+        })
       })
       .catch(console.error)
   }
@@ -142,7 +149,7 @@ export const ListPositionForSale = ({
 
       {/* {!listForSaleState.offer.isValid && (
         <Text mr="auto" fontSize="sm" color="#c32417" fontWeight="medium">
-          {listForSaleState.method === 'Sale' ? 'Invalid sell price' : 'Invalid reserve price'}
+          {listForSaleState.method === 'Sale' ? 'Invalid rice' : 'Invalid reserve price'}
         </Text>
       )} */}
       <Flex pt={4} justifyContent="center">
