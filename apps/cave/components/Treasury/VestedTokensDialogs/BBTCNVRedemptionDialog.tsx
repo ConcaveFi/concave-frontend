@@ -7,7 +7,7 @@ import { formatEther, parseEther } from 'ethers/lib/utils'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAccount, useSigner } from 'wagmi'
 import useBBTCNVRedeemable from '../Hooks/useBBTCNVRedeemable'
 import useVestedTokens from '../Hooks/useVestedTokens'
@@ -32,6 +32,13 @@ export const BBTCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) 
   const networdId = useCurrentSupportedNetworkId()
   const balance = parseEther(bbtCNV?.data?.formatted || '0')
   const { registerTransaction } = useTransactionRegistry()
+
+  useEffect(() => {
+    if (status !== 'error' && status !== 'rejected') return
+    const clearButtonTimeout = setTimeout(() => setStatus('default'), 3000)
+    return () => clearTimeout(clearButtonTimeout)
+  }, [status])
+
   return (
     <>
       <VestedTokenDialog
@@ -68,11 +75,6 @@ export const BBTCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) 
       .catch((error) => {
         if (error.code === 4001) setStatus('rejected')
         else setStatus('error')
-
-        const cleanButtonState = setTimeout(() => {
-          setStatus('default')
-          clearTimeout(cleanButtonState)
-        }, 3000)
       })
   }
 }
