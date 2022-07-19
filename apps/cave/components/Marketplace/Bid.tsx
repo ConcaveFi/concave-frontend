@@ -2,15 +2,7 @@ import { CNV, Currency, CurrencyAmount, MARKETPLACE_CONTRACT } from '@concave/co
 import { ChevronDownIcon } from '@concave/icons'
 import { ConcaveNFTMarketplace, Offer, StakingPosition } from '@concave/marketplace'
 import { Button, ButtonProps, Collapse, HStack, IconButton, Modal, Text, VStack } from '@concave/ui'
-<<<<<<< HEAD
-<<<<<<< HEAD
-import { ApproveButton } from 'components/ApproveButton/ApproveButton'
-=======
 import { CurrencyAmountButton } from 'components/CurrencyAmountButton/CurrencyAmountButton'
->>>>>>> 487c38971d9fa0eb17e5b5902f30c56b7cd08383
-=======
-import { CurrencyAmountButton } from 'components/CurrencyAmountButton/CurrencyAmountButton'
->>>>>>> 5b8c2fabfe3fdf2264e3679e12c51bb9e925fec1
 import { CurrencyInputField } from 'components/CurrencyAmountField'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { PositionInfoItem } from 'components/Positions/MyPositions'
@@ -145,24 +137,9 @@ export const BidButton = ({ position, offer }: { position: StakingPosition; offe
           </VStack>
 
           <HStack w={'full'}>
-<<<<<<< HEAD
-<<<<<<< HEAD
-            <ApproveButton
-              approveArgs={{
-                currency: amount.currency,
-                spender: MARKETPLACE_CONTRACT[position.chainId],
-                amount: amount.numerator.toString(),
-              }}
-=======
             <CurrencyAmountButton
               currencyAmount={amount}
               spender={MARKETPLACE_CONTRACT[position.chainId]}
->>>>>>> 487c38971d9fa0eb17e5b5902f30c56b7cd08383
-=======
-            <CurrencyAmountButton
-              currencyAmount={amount}
-              spender={MARKETPLACE_CONTRACT[position.chainId]}
->>>>>>> 5b8c2fabfe3fdf2264e3679e12c51bb9e925fec1
               width={'full'}
               variant={'primary'}
               size={'large'}

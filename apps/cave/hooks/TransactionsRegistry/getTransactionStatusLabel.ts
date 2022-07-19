@@ -10,7 +10,7 @@ type TransactionMetaToStatusLabel = {
 const fallback = () => ({
   pending: `Unknown Transaction pending`,
   success: `Unknown Transaction successfully`,
-  error: ` Unknown Transaction failed`,
+  error: `Unknown Transaction failed`,
 })
 
 export const getTransactionStatusLabel = ({ status, meta }: Partial<TrackedTransaction>) => {

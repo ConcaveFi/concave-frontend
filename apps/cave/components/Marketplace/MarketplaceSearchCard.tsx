@@ -1,10 +1,6 @@
 import { Box, Flex } from '@concave/ui'
 import { MarketplaceFilterContainer } from './MarketplaceFilterContainer'
-<<<<<<< HEAD
-import NftPositionCard from './NftPositionCard'
-=======
 import { NftPositionCard } from './NftPositionCard'
->>>>>>> 5b8c2fabfe3fdf2264e3679e12c51bb9e925fec1
 import { useMarketplaceDashbord } from './UseMarkeplaceState'
 
 export default function MarketplaceSearchCard() {
