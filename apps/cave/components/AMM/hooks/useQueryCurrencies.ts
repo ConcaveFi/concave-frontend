@@ -3,13 +3,13 @@ import { Fetcher } from '@concave/gemswap-sdk'
 import { isAddress } from 'ethers/lib/utils'
 import { concaveProvider } from 'lib/providers'
 import Router, { useRouter } from 'next/router'
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useQuery, useQueryClient } from 'react-query'
 import { getQueryValue } from 'utils/getQueryValue'
 import { useNetwork } from 'wagmi'
 
 const getAddressOrSymbol = (currency: Currency) => {
-  if (!currency) return undefined
+  if (!currency) return null
   return currency.isNative ? currency.symbol : currency.wrapped.address
 }
 
@@ -79,18 +79,11 @@ export const useQueryCurrencies = () => {
 
   const onChangeCurrencies = useCallback(
     (currencies: [Currency, Currency]) => {
-      updateQuery({ currency0: currencies[0], currency1: currencies[1] })
+      updateQuery({ chainId: chain?.id, currency0: currencies[0], currency1: currencies[1] })
       queryClient.setQueryData(getQueryCurrenciesKey(), currencies)
     },
-    [queryClient],
+    [queryClient, chain?.id],
   )
-
-  // run on network change
-  useEffect(() => {
-    if (!queryHasCurrency && chain?.id) updateQuery({ chainId: chain.id })
-    /* if the query has currencies, wait for a user action to change it
-        (so that he won't loose his input by mistake) */
-  }, [chain?.id, queryHasCurrency])
 
   return useMemo(
     () => ({ currencies, onChangeCurrencies, isLoading: isFetching }),

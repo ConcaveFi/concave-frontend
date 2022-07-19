@@ -25,6 +25,6 @@ export class Ether extends NativeCurrency {
   }
 
   public equals(other: Currency): boolean {
-    return other.isNative && other.chainId === this.chainId
+    return other && other.isNative && other.chainId === this.chainId
   }
 }

@@ -37,11 +37,12 @@ export const useLinkedCurrencyAmounts = ({
   const currencyAmounts = useMemo(
     () =>
       [
-        currencies[0] && CurrencyAmount.fromRawAmount(currencies[0], amounts[0]),
-        currencies[1] && CurrencyAmount.fromRawAmount(currencies[1], amounts[1]),
+        currencies[0] && amounts[0] && CurrencyAmount.fromRawAmount(currencies[0], amounts[0]),
+        currencies[1] && amounts[1] && CurrencyAmount.fromRawAmount(currencies[1], amounts[1]),
       ] as const,
     [currencies, amounts],
   )
+
   const onChangeField = useCallback(
     (field: 0 | 1) => (newAmount: CurrencyAmount<Currency>) => {
       if (currencies[field]?.equals(newAmount?.currency)) {
@@ -65,7 +66,7 @@ export const useLinkedCurrencyAmounts = ({
       })
       setAmounts((a) => updateArr({ ...a, [field]: newAmount?.quotient }))
       onChangeCurrencies(newCurrencies)
-      derive(newAmount, newCurrencies)
+      if (newAmount) derive(newAmount, newCurrencies)
     },
     [currencies, derive, onChangeCurrencies],
   )

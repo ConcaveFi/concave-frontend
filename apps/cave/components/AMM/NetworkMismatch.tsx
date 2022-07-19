@@ -37,17 +37,25 @@ export function NetworkMismatch({
         justifyContent: 'center',
       }}
     >
-      <Card variant="secondary" p={4} gap={1} fontSize="md" fontWeight="medium" textAlign="start">
+      <Card
+        variant="secondary"
+        borderGradient="secondary"
+        p={4}
+        gap={1}
+        fontSize="md"
+        fontWeight="medium"
+        textAlign="start"
+      >
         <Text fontWeight="bold">Network changed</Text>
         {children({ queryChainId, activeChainId })}
         <Flex justify="center" gap={2} mt={2}>
           <Button
             variant="secondary"
             size="medium"
-            onClick={() => (
-              push({ query: { chainId: activeChainId } }, undefined, { shallow: true }),
+            onClick={() => {
+              push({ query: { chainId: activeChainId } }, undefined, { shallow: true })
               onReset?.(activeChainId)
-            )}
+            }}
           >
             Restart on {CHAIN_NAME[activeChainId]}
           </Button>

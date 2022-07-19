@@ -41,8 +41,14 @@ export type LiquidityPool = {
 }
 
 function AddLiquidityContent({ liquidityModalClose }: { liquidityModalClose?: VoidFunction }) {
-  const { pair, firstFieldAmount, secondFieldAmount, onChangeFirstField, onChangeSecondField } =
-    useAddLiquidityState()
+  const {
+    pair,
+    firstFieldAmount,
+    secondFieldAmount,
+    onChangeFirstField,
+    onChangeSecondField,
+    onReset,
+  } = useAddLiquidityState()
 
   const addLPTx = useAddLiquidityTransaction(firstFieldAmount, secondFieldAmount)
 
@@ -91,7 +97,7 @@ function AddLiquidityContent({ liquidityModalClose }: { liquidityModalClose?: Vo
         {...addLiquidityButtonProps}
       />
 
-      <NetworkMismatch>
+      <NetworkMismatch onReset={onReset}>
         {({ queryChainId, activeChainId }) => (
           <Text color="text.low">
             Do you wanna drop this {CHAIN_NAME[queryChainId]} LP <br />

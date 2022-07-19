@@ -16,18 +16,22 @@ import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
-import { swapDefaultCurrencies } from 'pages/gemswap'
 import { useState } from 'react'
 import { toAmount } from 'utils/toAmount'
-import { useQueryCurrencies } from '../hooks/useQueryCurrencies'
 import { NetworkMismatch } from '../NetworkMismatch'
 import { TradeDetails } from './TradeDetails'
 
 export function SwapCard() {
-  const { onChangeCurrencies } = useQueryCurrencies()
-
-  const { trade, error, inputAmount, outputAmount, onChangeInput, onChangeOutput, switchFields } =
-    useSwapState()
+  const {
+    trade,
+    error,
+    inputAmount,
+    outputAmount,
+    onChangeInput,
+    onChangeOutput,
+    switchFields,
+    onReset,
+  } = useSwapState()
 
   const [recipient, setRecipient] = useState('')
 
@@ -71,7 +75,7 @@ export function SwapCard() {
 
         <CurrencyOutputField
           currencyAmountOut={outputAmount}
-          currencyAmountIn={inputAmount}
+          priceImpact={trade?.priceImpact}
           updateOutputValue={onChangeOutput}
         />
 
@@ -83,11 +87,7 @@ export function SwapCard() {
 
         <Button variant="primary" size="large" w="full" {...swapButtonProps} />
 
-        <NetworkMismatch
-          onReset={(resetingToChainId) =>
-            onChangeCurrencies(swapDefaultCurrencies[resetingToChainId])
-          }
-        >
+        <NetworkMismatch onReset={onReset}>
           {({ queryChainId, activeChainId }) => (
             <Text color="text.low">
               Do you wanna drop this {CHAIN_NAME[queryChainId]} trade

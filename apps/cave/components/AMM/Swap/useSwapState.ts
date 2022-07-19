@@ -1,6 +1,7 @@
 import { Currency, CurrencyAmount } from '@concave/core'
 import { BestTradeOptions, Pair, Trade, TradeType } from '@concave/gemswap-sdk'
 import { useLinkedCurrencyAmounts } from 'components/CurrencyAmountField'
+import { swapDefaultCurrencies } from 'pages/gemswap'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { usePairs } from '../hooks/usePair'
 import { useQueryCurrencies } from '../hooks/useQueryCurrencies'
@@ -48,7 +49,7 @@ const useSwitchFields = (
 }
 
 export const useSwapState = () => {
-  const { currencies } = useQueryCurrencies()
+  const { currencies, onChangeCurrencies } = useQueryCurrencies()
 
   const { settings } = useSwapSettings()
   const maxHops = settings.multihops ? 3 : 1
@@ -83,7 +84,8 @@ export const useSwapState = () => {
       onChangeInput: onChangeField(0),
       onChangeOutput: onChangeField(1),
       switchFields,
+      onReset: (chainId) => onChangeCurrencies(swapDefaultCurrencies[chainId]),
     }),
-    [error, amounts, onChangeField, switchFields],
+    [error, amounts, onChangeField, switchFields, onChangeCurrencies],
   )
 }

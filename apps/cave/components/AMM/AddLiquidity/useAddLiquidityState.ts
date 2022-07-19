@@ -25,7 +25,7 @@ const deriveAmount = (
 }
 
 export const useAddLiquidityState = () => {
-  const { currencies } = useQueryCurrencies()
+  const { currencies, onChangeCurrencies } = useQueryCurrencies()
 
   const pair = usePair(currencies[0]?.wrapped, currencies[1]?.wrapped)
 
@@ -47,5 +47,6 @@ export const useAddLiquidityState = () => {
     pair: pair,
     onChangeFirstField: onChangeField(0),
     onChangeSecondField: onChangeField(1),
+    onReset: () => onChangeCurrencies([undefined, undefined]),
   }
 }
