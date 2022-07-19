@@ -7,17 +7,16 @@ import { SupplyLiquidityModal } from 'components/AMM/AddLiquidity/SupplyLiquidit
 import { useAddLiquidityButtonProps } from 'components/AMM/AddLiquidity/useAddLiquidityButtonProps'
 import { useAddLiquidityState } from 'components/AMM/AddLiquidity/useAddLiquidityState'
 import { useAddLiquidityTransaction } from 'components/AMM/AddLiquidity/useAddLiquidityTransaction'
-import { ConnectWallet } from 'components/ConnectWallet'
+import { ConnectButton } from 'components/ConnectWallet'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
+import { toAmount } from 'utils/toAmount'
 import { useAccount } from 'wagmi'
-import { useQueryCurrencies } from '../hooks/useQueryCurrencies'
 import { NetworkMismatch } from '../NetworkMismatch'
 import useLiquidityData from './useLiquidityData'
-
 const AddSymbol = () => (
   <Flex align="center" justify="center">
     <Flex
@@ -41,18 +40,15 @@ export type LiquidityPool = {
   amount1: CurrencyAmount<Currency>
 }
 
-function AddLiquidityContent({
-  currencies,
-  liquidityModalClose,
-}: {
-  currencies: Currency[]
-  liquidityModalClose?: VoidFunction
-}) {
-  const { onChangeCurrencies, isNetworkMismatch, queryHasCurrency, currentChainId, queryChainId } =
-    useQueryCurrencies()
-
-  const { pair, firstFieldAmount, secondFieldAmount, onChangeFirstField, onChangeSecondField } =
-    useAddLiquidityState(currencies, onChangeCurrencies)
+function AddLiquidityContent({ liquidityModalClose }: { liquidityModalClose?: VoidFunction }) {
+  const {
+    pair,
+    firstFieldAmount,
+    secondFieldAmount,
+    onChangeFirstField,
+    onChangeSecondField,
+    onReset,
+  } = useAddLiquidityState()
 
   const addLPTx = useAddLiquidityTransaction(firstFieldAmount, secondFieldAmount)
 
@@ -101,15 +97,13 @@ function AddLiquidityContent({
         {...addLiquidityButtonProps}
       />
 
-      <NetworkMismatch
-        isOpen={isNetworkMismatch && queryHasCurrency}
-        expectedChainId={queryChainId}
-        currentChainId={currentChainId}
-      >
-        <Text color="text.low">
-          Do you wanna drop this {CHAIN_NAME[queryChainId]} LP <br />
-          and restart on {CHAIN_NAME[currentChainId]}?
-        </Text>
+      <NetworkMismatch onReset={onReset}>
+        {({ queryChainId, activeChainId }) => (
+          <Text color="text.low">
+            Do you wanna drop this {CHAIN_NAME[queryChainId]} LP <br />
+            and restart on {CHAIN_NAME[activeChainId]}?
+          </Text>
+        )}
       </NetworkMismatch>
 
       <SupplyLiquidityModal
@@ -163,7 +157,14 @@ function AddLiquidityContent({
       <TransactionSubmittedDialog
         tx={addLPTx.data}
         isOpen={addLPTx.isTransactionSent}
-        closeParentComponent={liquidityModalClose || supplyLiquidityDisclosure.onClose}
+        closeParentComponent={() => {
+          onChangeFirstField(toAmount(0, firstFieldAmount.currency))
+          if (liquidityModalClose) {
+            liquidityModalClose()
+          } else {
+            supplyLiquidityDisclosure.onClose()
+          }
+        }}
       />
       <TransactionErrorDialog error={addLPTx.error?.message} isOpen={addLPTx.isError} />
     </>
@@ -178,7 +179,7 @@ export const AddLiquidityModalButton = ({
   const { isDisconnected } = useAccount()
   const addLiquidityDisclosure = useDisclosure()
   const currencies = useMemo(() => [pair?.token0, pair?.token1], [pair?.token0, pair?.token1])
-  if (isDisconnected) return <ConnectWallet />
+  if (isDisconnected) return <ConnectButton />
   return (
     <>
       <Button
@@ -210,16 +211,13 @@ export const AddLiquidityModalButton = ({
           gap: 6,
         }}
       >
-        <AddLiquidityContent
-          currencies={currencies}
-          liquidityModalClose={addLiquidityDisclosure.onClose}
-        />
+        <AddLiquidityContent liquidityModalClose={addLiquidityDisclosure.onClose} />
       </Modal>
     </>
   )
 }
 
-export const AddLiquidityCard = ({ currencies }: { currencies: Currency[] }) => {
+export const AddLiquidityCard = () => {
   return (
     <Card
       borderWidth={2}
@@ -229,7 +227,7 @@ export const AddLiquidityCard = ({ currencies }: { currencies: Currency[] }) => 
       gap={6}
       shadow="Up for Blocks"
     >
-      <AddLiquidityContent currencies={currencies} />
+      <AddLiquidityContent />
     </Card>
   )
 }

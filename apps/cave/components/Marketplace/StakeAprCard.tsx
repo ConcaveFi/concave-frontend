@@ -1,5 +1,4 @@
-import { Text, VStack, HStack, Flex, Image, useMediaQuery, Box } from '@concave/ui'
-import { useEffect, useState } from 'react'
+import { Flex, Image, Text } from '@concave/ui'
 
 interface StakeAprCardProps {
   title: string

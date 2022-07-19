@@ -1,5 +1,5 @@
-import { ComponentMultiStyleConfig } from '@chakra-ui/react'
 import { accordionAnatomy } from '@chakra-ui/anatomy'
+import { ComponentMultiStyleConfig } from '@chakra-ui/react'
 
 export const AccordionStyles: ComponentMultiStyleConfig = {
   parts: accordionAnatomy.keys,

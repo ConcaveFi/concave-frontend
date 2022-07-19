@@ -4,9 +4,12 @@ import { NFTPositionHeaderProps, useNFTLockedPositionState } from './useNFTPosit
 export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
   const { period, redeemInDays, imgNameByPeriod, redeemDate, active, toogleActive, tokenId } =
     useNFTLockedPositionState(props)
+  const { stakingPosition } = props
+  const readyForReedem = stakingPosition.maturity <= Date.now() / 1000
+
   return (
     <Flex
-      width={{ base: '353px', md: '512px', lg: '692px' }}
+      width={'full'}
       boxShadow={'up'}
       direction={{ base: 'column', md: 'row' }}
       borderRadius={'2xl'}
@@ -23,7 +26,7 @@ export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
       >
         <Flex direction="column" maxW={'90px'} h="full" justifyContent={'center'} w="full">
           <Text fontSize="xs" color="text.low" fontWeight="medium">
-            Stake Pool
+            Stake pool
           </Text>
           <Text fontSize="s" color="white" whiteSpace={'nowrap'} fontWeight="bold">
             {period}
@@ -49,17 +52,30 @@ export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
           mt={2}
         >
           <Text color="text.low" fontSize="sm">
-            Redeem Date
+            Redeem date
           </Text>
-          <Text fontSize="md">{redeemDate.toString().slice(4, 16)}</Text>
-          <Flex justify={'center'} align="end" gap={1}>
-            <Text fontSize="sm" textColor="text.low">
-              In:
-            </Text>
-            <Text fontSize="sm" fontWeight={'bold'} textColor="text.accent">
-              {redeemInDays}
-            </Text>
-          </Flex>
+          {redeemInDays ? (
+            <>
+              <Text fontSize="md">
+                {redeemDate.toString().slice(11, 15) === '1969'
+                  ? '-'
+                  : redeemDate.toString().slice(4, 16)}
+              </Text>
+              <Flex justify={'center'} align="end" gap={1}>
+                {!readyForReedem && (
+                  <Text fontSize="sm" textColor="text.low">
+                    In:
+                  </Text>
+                )}
+                <Text fontSize="sm" fontWeight={'bold'} textColor="text.accent">
+                  {!readyForReedem && redeemInDays}
+                  {readyForReedem && 'redeemable'}
+                </Text>
+              </Flex>
+            </>
+          ) : (
+            <Text>Loading...</Text>
+          )}
         </Flex>
         <Flex
           lineHeight="18px"
@@ -70,7 +86,7 @@ export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
           justifyContent={'start'}
         >
           <Text color="text.low" fontSize="sm">
-            Token Id:
+            Token id:
           </Text>
           <Text fontSize="md" fontWeight="bold">
             {+tokenId?.toString()}

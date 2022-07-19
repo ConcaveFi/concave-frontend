@@ -9,7 +9,7 @@ import {
   SeriesOptionsCommon,
   WhitespaceData,
 } from 'lightweight-charts'
-import React, { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 
 const chartOptions = ({ color, font }): DeepPartial<ChartOptions> => ({
   width: 0, // If 0, then the size will be calculated based its container's size

@@ -10,9 +10,9 @@ import {
   Portal,
   Stack,
 } from '@concave/ui'
+import { useLocalStorage } from 'hooks/useLocalStorage'
 import { ReactNode, useCallback } from 'react'
 import { shallowEqualObjects } from 'react-query/lib/core/utils'
-import { useLocalStorage } from 'react-use'
 
 export const useTransactionSettings = <T extends Object>(
   transactionType: string,
@@ -23,7 +23,10 @@ export const useTransactionSettings = <T extends Object>(
   onClose: () => void
   isDefaultSettings: boolean
 } => {
-  const [settings, setSettings] = useLocalStorage(`${transactionType}-tx-settings`, defaultSettings)
+  const { data: settings, mutateAsync: setSettings } = useLocalStorage(
+    `${transactionType}-tx-settings`,
+    defaultSettings,
+  )
   const onClose = useCallback(() => {
     setSettings({ ...defaultSettings, ...settings })
   }, [defaultSettings, setSettings, settings])

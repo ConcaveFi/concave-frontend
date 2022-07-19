@@ -1,17 +1,18 @@
 import { ChakraTheme, extendTheme } from '@chakra-ui/react'
+import background from './backgrounds'
 import colors from './colors'
+import Accordion from './components/AccordionStyles'
 import Button from './components/ButtonStyles'
-import Tooltip from './components/TooltipStyles'
+import Card from './components/CardStyles'
 import CloseButton from './components/CloseButtonStyles'
 import Input from './components/InputStyles'
 import Modal from './components/ModalStyles'
 import Popover from './components/PopoverStyles'
-import Card from './components/CardStyles'
 import Switch from './components/SwitchStyles'
-import Accordion from './components/AccordionStyles'
+import Tooltip from './components/TooltipStyles'
+import { fonts } from './foundations'
 import scrollbar from './scrollbars'
-import background from './backgrounds'
-import { fonts, shadows } from './foundations'
+import shadows from './shadows'
 
 const theme = extendTheme({
   config: { initialColorMode: 'dark', cssVarPrefix: 'concave' },

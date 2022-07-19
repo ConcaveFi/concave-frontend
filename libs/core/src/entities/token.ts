@@ -1,7 +1,7 @@
-import { AbstractCurrency } from './AbstractCurrency'
-import { Currency } from './currency'
 import invariant from 'tiny-invariant'
 import { validateAndParseAddress } from '../functions/validateAndParseAddress'
+import { AbstractCurrency } from './AbstractCurrency'
+import { Currency } from './currency'
 import { CurrencyAmount } from './currencyAmount'
 
 /**
@@ -36,7 +36,9 @@ export class Token extends AbstractCurrency {
    * @param other other token to compare
    */
   public equals(other: Currency): boolean {
-    return other.isToken && this.chainId === other.chainId && this.address === other.address
+    return (
+      other && other.isToken && this.chainId === other.chainId && this.address === other.address
+    )
   }
 
   /**

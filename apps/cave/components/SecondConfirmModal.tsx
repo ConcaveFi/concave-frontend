@@ -1,5 +1,5 @@
 import { CloseIcon } from '@concave/icons'
-import { Card, Flex, Text, Modal, ModalContent, ModalOverlay, ModalBody, Button } from '@concave/ui'
+import { Button, Flex, Modal, Text } from '@concave/ui'
 
 interface SecondConfirmModal {
   isOpen: boolean

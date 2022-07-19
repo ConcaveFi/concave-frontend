@@ -1,27 +1,28 @@
-import { useMemo } from 'react'
-import { RouterAbi, ROUTER_ADDRESS, Currency } from '@concave/core'
-import { Router, TradeType, Trade } from '@concave/gemswap-sdk'
-import { SwapSettings } from '../Swap/Settings'
+import { Currency, RouterAbi, ROUTER_ADDRESS } from '@concave/core'
+import { Router, Trade, TradeType } from '@concave/gemswap-sdk'
 import { TransactionResponse } from '@ethersproject/abstract-provider'
-import { useAccount, useContractWrite, useNetwork } from 'wagmi'
-import { toPercent } from 'utils/toPercent'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
+import { useMemo } from 'react'
+import { toPercent } from 'utils/toPercent'
+import { useAccount, useContractWrite, useNetwork } from 'wagmi'
+import { useSwapSettings } from '../Swap/Settings'
 
 export const useSwapTransaction = (
   _trade: Trade<Currency, Currency, TradeType>,
-  settings: SwapSettings,
   recipient: string,
   { onSuccess }: { onSuccess?: (tx: TransactionResponse) => void },
 ) => {
   const { address } = useAccount()
   const { chain } = useNetwork()
 
+  const { settings } = useSwapSettings()
+
   /*
     temporary workaround for unknow issue with swapTokenForExactToken
     all trades are submited as exact input for now
   */
   const trade = useMemo(
-    () => _trade.route && new Trade(_trade.route, _trade.inputAmount, TradeType.EXACT_INPUT),
+    () => _trade?.route && new Trade(_trade.route, _trade.inputAmount, TradeType.EXACT_INPUT),
     [_trade],
   )
 
@@ -52,7 +53,7 @@ export const useSwapTransaction = (
       })
     },
     onError: (error) => {
-      if (error.name === 'UserRejectedRequest') reset()
+      if (error.name === 'UserRejectedRequestError') reset()
     },
   })
 

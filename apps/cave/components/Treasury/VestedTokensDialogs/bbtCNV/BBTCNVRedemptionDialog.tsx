@@ -1,24 +1,16 @@
 import { InfoIcon } from '@concave/icons'
-import {
-  Button,
-  Card,
-  Flex,
-  InputLeftAddon,
-  Modal,
-  Text,
-  Tooltip,
-  useDisclosure,
-} from '@concave/ui'
+import { Button, Card, Flex, Modal, Text, Tooltip, useDisclosure } from '@concave/ui'
+import { TransactionResponse } from '@ethersproject/abstract-provider'
 import { ToggleButton } from 'components/ToggleButton'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
+import { VestedTokenDialogProps } from 'components/Treasury/TreasuryRedeemCard'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { bbtCNV_REDEMPTION_V2 } from 'contracts/VestedTokens/addresses'
 import { bbtCNV_REDEMPTION_V2_ABI } from 'contracts/VestedTokens/BBTCNV_V2_ABI'
 import { Contract, utils } from 'ethers'
-import { TransactionResponse } from '@ethersproject/abstract-provider'
-import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { parseEther } from 'ethers/lib/utils'
+import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider as provider } from 'lib/providers'
 import { useState } from 'react'
@@ -26,12 +18,8 @@ import { useAccount, useSigner } from 'wagmi'
 import useBBTCNVRedeemable from '../../Hooks/useBBTCNVRedeemable'
 import useVestedTokens from '../../Hooks/useVestedTokens'
 import { BBT_CNVDialogInput } from './BbtCNVDialogInput'
-interface BBBTCNVRedemptionDialogProps {
-  onClose: () => void
-  isOpen: boolean
-}
 
-export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogProps) {
+export const BBBTCNVRedemptionDialog: React.FC<VestedTokenDialogProps> = (props) => {
   const { isOpen: isConfirmOpen, onOpen: onOpenConfirm, onClose: onCloseConfirm } = useDisclosure()
   const { isOpen: isSubOpen, onOpen: onOpenSub, onClose: onCloseSub } = useDisclosure()
   const { isOpen: isErrorOpen, onOpen: onOpenError, onClose: onCloseError } = useDisclosure()
@@ -46,7 +34,7 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
   const { bbtCNVData } = useVestedTokens()
 
   const { registerTransaction } = useTransactionRegistry()
-  const [redeemMax, setRedeemMax] = useState(false)
+  const [redeemMax, setRedeemMax] = useState(true)
   const [value, setValue] = useState<string>()
 
   const balance = bbtCNVData?.formatted || '0'
@@ -55,10 +43,9 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
 
   // Conditions
   const insufficientFunds = +balance === 0 || +value > +balance
-  const redeemableExceeded = +value > redeemable && !insufficientFunds
-  const invalidValue = utils.parseEther(value || '0').isZero() && !redeemMax
   const nothingToRedeem = (redeemable === 0 || redeemable === +balance) && !insufficientFunds
-  const validValue = !insufficientFunds && !nothingToRedeem && !invalidValue && !redeemableExceeded
+  const redeemableExceeded = +value > redeemable && !insufficientFunds && !nothingToRedeem
+  const validValue = !insufficientFunds && !nothingToRedeem && !redeemableExceeded
 
   const networdId = useCurrentSupportedNetworkId()
 
@@ -92,11 +79,8 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
             <Info title="Redeemed:" value={isLoading ? 'Loading...' : redeemed} />
           </Flex>
           <Flex gap={2} fontWeight={'bold'} pl={2} align="center">
-            <Text textColor={'gray.200'}>Redeem max?</Text>
-            <ToggleButton
-              onActivate={() => setRedeemMax(true)}
-              onDisable={() => setRedeemMax(false)}
-            />
+            <Text textColor={'gray.200'}>Redeem max</Text>
+            <ToggleButton enabled={redeemMax} onToggle={setRedeemMax} />
             <Tooltip
               textColor={'white'}
               bg="text.low"
@@ -128,10 +112,10 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
                 .redeem(parseEther(String(value || '0')), address, redeemMax)
                 .then((tx) => {
                   onCloseConfirm()
-                  registerTransaction(tx, {
-                    type: 'redeem',
-                    amount: `${bbtCNVData.formatted} bbtCNV`,
-                  })
+                  // registerTransaction(tx, {
+                  //   type: 'redeem',
+                  //   amount: `${bbtCNVData.formatted} bbtCNV`,
+                  // })
                   setTx(tx)
                   onOpenSub()
                 })
@@ -144,13 +128,16 @@ export default function BBBTCNVRedemptionDialog(props: BBBTCNVRedemptionDialogPr
             }}
           >
             {isConnected ? (
-              <Text>
-                {invalidValue && 'Invalid Value'}
-                {redeemableExceeded && 'Redeemable Exceeded'}
-                {nothingToRedeem && 'Nothing To Redeem'}
-                {insufficientFunds && 'Insufficient Funds'}
-                {validValue && 'Redeem'}
-              </Text>
+              isLoading ? (
+                <Text>{'Loading'}</Text>
+              ) : (
+                <Text>
+                  {redeemableExceeded && 'Redeemable Exceeded'}
+                  {nothingToRedeem && 'Nothing To Redeem'}
+                  {insufficientFunds && 'Insufficient Funds'}
+                  {validValue && 'Redeem'}
+                </Text>
+              )
             ) : (
               'Not Connected'
             )}

@@ -1,4 +1,4 @@
-import { Session } from 'next-auth'
+import 'next-auth'
 
 /**
  * Session object need to be crafted and returned inside api/auth/[...nextauth].ts

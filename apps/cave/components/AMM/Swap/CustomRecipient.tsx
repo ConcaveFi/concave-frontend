@@ -1,5 +1,5 @@
 import { ExpandArrowIcon } from '@concave/icons'
-import { Button, Flex, Input, ScaleFade } from '@concave/ui'
+import { Button, Collapse, Flex, Input } from '@concave/ui'
 import { useReducer } from 'react'
 
 export const CustomRecipient = ({ onChangeRecipient }) => {
@@ -7,13 +7,7 @@ export const CustomRecipient = ({ onChangeRecipient }) => {
   return (
     <Flex direction="column" align="center" w="100%">
       {isOpen ? (
-        <Button
-          onClick={() => (toggle(), onChangeRecipient())}
-          variant="select"
-          px={3}
-          py={1}
-          mb={2}
-        >
+        <Button onClick={() => (toggle(), onChangeRecipient())} variant="select" px={3} mb={2}>
           <ExpandArrowIcon w="12px" />
         </Button>
       ) : (
@@ -30,12 +24,12 @@ export const CustomRecipient = ({ onChangeRecipient }) => {
           Custom recipient
         </Button>
       )}
-      <ScaleFade in={isOpen} unmountOnExit style={{ width: '100%' }}>
+      <Collapse in={isOpen} unmountOnExit style={{ overflow: 'visible', width: '100%' }}>
         <Input
           onChange={(e) => onChangeRecipient(e.target.value)}
           placeholder="Recipient address"
         />
-      </ScaleFade>
+      </Collapse>
     </Flex>
   )
 }

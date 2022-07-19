@@ -6,7 +6,7 @@ import { withPageTransition } from 'components/PageTransition'
 import { Contract } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useAccount, useSigner } from 'wagmi'
 
 const Faucet = () => {

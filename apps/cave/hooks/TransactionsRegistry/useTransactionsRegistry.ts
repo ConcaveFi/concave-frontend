@@ -1,12 +1,12 @@
 import { TransactionResponse } from '@ethersproject/abstract-provider'
 import { useTransactionStatusToast } from 'components/TransactionStatusToast'
+import { Transaction } from 'ethers'
+import { useLocalStorage } from 'hooks/useLocalStorage'
 import { concaveProvider } from 'lib/providers'
 import { useCallback, useEffect, useRef } from 'react'
 import { QueriesObserver, useQueryClient } from 'react-query'
 import { useAccount, useNetwork } from 'wagmi'
-import { useLocalStorage } from 'hooks/useLocalStorage'
 import { TrackedTransaction } from './TrackedTransactions'
-import { Transaction } from 'ethers'
 
 const hrs2 = 2 * 60 * 60 * 1000 // 2 hours
 const useTrackedTransactions = () => {

@@ -1,56 +1,91 @@
-import { useState, useMemo, useCallback } from 'react'
-import { Currency } from '@concave/core'
-import { TradeType } from '@concave/gemswap-sdk'
-import { useTrade, UseTradeResult } from '../hooks/useTrade'
-import { SwapSettings } from '../Swap/Settings'
-import { toAmount } from 'utils/toAmount'
-import { useLinkedCurrencyFields } from 'components/CurrencyAmountField'
-import { LinkedCurrencyFields } from 'components/CurrencyAmountField/useLinkedCurrencyFields'
+import { Currency, CurrencyAmount } from '@concave/core'
+import { BestTradeOptions, Pair, Trade, TradeType } from '@concave/gemswap-sdk'
+import { useLinkedCurrencyAmounts } from 'components/CurrencyAmountField'
+import { swapDefaultCurrencies } from 'pages/gemswap'
+import { useCallback, useMemo, useRef, useState } from 'react'
+import { usePairs } from '../hooks/usePair'
+import { useQueryCurrencies } from '../hooks/useQueryCurrencies'
+import { getBestTrade } from '../hooks/useTrade'
+import { useSwapSettings } from '../Swap/Settings'
 
-const makeTradePlaceholder = (exactAmount, otherCurrency, tradeType) =>
-  tradeType === TradeType.EXACT_INPUT
-    ? { inputAmount: exactAmount, outputAmount: toAmount(0, otherCurrency) }
-    : { inputAmount: toAmount(0, otherCurrency), outputAmount: exactAmount }
-
-export const useSwapState = (
-  { multihops }: SwapSettings,
-  initialCurrencies: Currency[],
-  onChangeCurrencies: (currencies: LinkedCurrencyFields) => void,
+const derive = (
+  enteredAmount: CurrencyAmount<Currency>,
+  currencies: [Currency, Currency],
+  pairs: Pair[],
+  options: BestTradeOptions,
 ) => {
-  // the input user typed in, the other input value is then derived from it
-  const [exactAmount, setExactAmount] = useState(toAmount(0, initialCurrencies[0]))
+  const [otherCurrency, tradeType] = enteredAmount.currency.equals(currencies[0])
+    ? [currencies[1], TradeType.EXACT_INPUT]
+    : [currencies[0], TradeType.EXACT_OUTPUT]
 
-  const { onChangeField, switchCurrencies, currencies, lastUpdated } = useLinkedCurrencyFields(
-    initialCurrencies,
-    useCallback((newAmount) => setExactAmount(newAmount), []),
-    onChangeCurrencies,
-  )
+  const trade = getBestTrade(pairs, tradeType, enteredAmount, otherCurrency, options)
+  return tradeType === TradeType.EXACT_INPUT ? trade.outputAmount : trade.inputAmount
+}
 
-  const tradeType = lastUpdated === 'first' ? TradeType.EXACT_INPUT : TradeType.EXACT_OUTPUT
-  const otherCurrency = currencies[lastUpdated === 'first' ? 'second' : 'first']
+/*
+  lets say you filled the swap card with 100 dai in and it derived 3 cnv out
+  click switch and the trade becomes 2.98 cnv in for 100 dai out (because of price impact etc)
+  now you click switch again, you'd expect it to become 100 dai in for 3 cnv out
+  
+  for this reason we can't just grab the first field amount and throw it in the second and let it derive again, 
+  in the example above the initial 100dai -> 3cnv would switch to 2.98cnv -> 100dai and then to 97.435dai -> 2.98cnv ...
 
-  const trade = useTrade(exactAmount, otherCurrency, {
-    tradeType,
-    maxHops: multihops ? 3 : 1,
+  the solution implemented below in the first click sends the first field amount to the second 
+  and in the second click it sends the second field amount back to the first
+*/
+const useSwitchFields = (
+  onChangeField: (field: 0 | 1) => (newAmount: CurrencyAmount<Currency>) => void,
+  amounts: readonly [CurrencyAmount<Currency>, CurrencyAmount<Currency>],
+) => {
+  const switchToField = useRef<0 | 1>(1)
+
+  const switchFields = useCallback(() => {
+    const otherField = switchToField.current ? 0 : 1
+    onChangeField(switchToField.current)(amounts[otherField])
+    switchToField.current = otherField
+  }, [amounts, onChangeField])
+
+  return switchFields
+}
+
+export const useSwapState = () => {
+  const { currencies, onChangeCurrencies } = useQueryCurrencies()
+
+  const { settings } = useSwapSettings()
+  const maxHops = settings.multihops ? 3 : 1
+
+  const pairs = usePairs(currencies[0]?.wrapped, currencies[1]?.wrapped, maxHops)
+  const trade = useRef<Trade<Currency, Currency, TradeType>>(null)
+
+  const [error, setError] = useState()
+
+  const { amounts, onChangeField } = useLinkedCurrencyAmounts({
+    onDerive: useCallback(
+      (enteredAmount: CurrencyAmount<Currency>, _currencies: typeof currencies) => {
+        try {
+          return derive(enteredAmount, _currencies, pairs.data, { maxHops })
+        } catch (e) {
+          setError(e)
+          return undefined
+        }
+      },
+      [maxHops, pairs.data],
+    ),
   })
 
-  // return this partial just to show some data while loading (like currencies icons) if needed
-  const partialTrade = useMemo(
-    () =>
-      ({
-        ...trade,
-        data: makeTradePlaceholder(exactAmount, otherCurrency, tradeType),
-      } as UseTradeResult),
-    [exactAmount, otherCurrency, tradeType, trade],
-  )
+  const switchFields = useSwitchFields(onChangeField, amounts)
 
   return useMemo(
     () => ({
-      trade: trade.isSuccess ? trade : partialTrade,
-      onChangeInput: onChangeField('first'),
-      onChangeOutput: onChangeField('second'),
-      switchCurrencies,
+      trade: trade.current,
+      error,
+      inputAmount: amounts[0],
+      outputAmount: amounts[1],
+      onChangeInput: onChangeField(0),
+      onChangeOutput: onChangeField(1),
+      switchFields,
+      onReset: (chainId) => onChangeCurrencies(swapDefaultCurrencies[chainId]),
     }),
-    [trade, partialTrade, switchCurrencies, onChangeField],
+    [error, amounts, onChangeField, switchFields, onChangeCurrencies],
   )
 }

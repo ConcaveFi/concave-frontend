@@ -4,7 +4,7 @@ import MarketplaceActivityCard from 'components/Marketplace/MarketplaceActivityC
 import MarketplaceSearchCard from 'components/Marketplace/MarketplaceSearchCard'
 import MarketplaceStakeCard from 'components/Marketplace/MarketplaceStakeCard'
 import { withPageTransition } from 'components/PageTransition'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const Marketplace = () => {
   const isLargerLayout = useBreakpointValue({

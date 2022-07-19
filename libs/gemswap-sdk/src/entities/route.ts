@@ -1,6 +1,6 @@
 import { Currency, Token } from '@concave/core'
-import { Pair, Price } from '.'
 import invariant from 'tiny-invariant'
+import { Pair, Price } from '.'
 
 export class Route<TInput extends Currency, TOutput extends Currency> {
   public readonly pairs: Pair[]

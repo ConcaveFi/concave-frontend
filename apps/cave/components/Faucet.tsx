@@ -19,7 +19,7 @@ import { getTxExplorer } from 'lib/getTransactionExplorer'
 import { concaveProvider } from 'lib/providers'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
-import { chain, useAccount, useContractWrite, useNetwork } from 'wagmi'
+import { useAccount, useContractWrite, useNetwork } from 'wagmi'
 import { useWorthyUser } from './DevelopGateway'
 
 const faucetKey = process.env.NEXT_PUBLIC_FAUCET_PK
@@ -163,12 +163,12 @@ export const TestnetIndicator = () => {
   const { chain } = useNetwork()
   const { isUserWorthy } = useWorthyUser()
 
-  const [isOpen, setIsOpen] = useState(chain?.testnet && isUserWorthy)
+  const [isOpen, setIsOpen] = useState(isUserWorthy)
   const onClose = () => setIsOpen(false)
 
   useEffect(() => {
-    setIsOpen(chain?.testnet && isUserWorthy)
-  }, [isUserWorthy, chain?.testnet])
+    setIsOpen(isUserWorthy)
+  }, [isUserWorthy])
 
   const minterModal = useDisclosure()
 
