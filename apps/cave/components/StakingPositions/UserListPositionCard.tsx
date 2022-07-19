@@ -1,23 +1,23 @@
 import {
   CNV,
+  CNV_ADDRESS,
   Currency,
   CurrencyAmount,
   FIXED_ORDER_MARKET_CONTRACT,
-  STAKING_CONTRACT,
 } from '@concave/core'
-import { FixedOrderMarketContract, SwapMetadata } from '@concave/marketplace'
+import { FixedOrderMarketContract, MarketItem } from '@concave/marketplace'
 import { Box, Button, Flex, HStack, Input, NumericInput, Text, VStack } from '@concave/ui'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
 import { ChooseButton } from 'components/Marketplace/ChooseButton'
 import { BigNumber } from 'ethers'
+import { formatEther } from 'ethers/lib/utils'
 import { useInsert_Cavemart_ListingMutation } from 'graphql/generated/graphql'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
 import { useState } from 'react'
+import { formatFixed } from 'utils/formatFixed'
 import { toAmount } from 'utils/toAmount'
-import { truncateNumber } from 'utils/truncateNumber'
 import { chain, useAccount, useSignTypedData } from 'wagmi'
-
 import { UserMarketInfoState } from './LockPosition/MarketLockInfo/useMarketPlaceInfo'
 
 type UserListPositionCardProps = { marketItemState: UserMarketInfoState }
@@ -31,90 +31,69 @@ const domain = {
   verifyingContract: FIXED_ORDER_MARKET_CONTRACT[chain.rinkeby.id],
 }
 
-const types = {
-  SwapMetadata: [
-    { name: 'seller', type: 'address' },
-    { name: 'erc721', type: 'address' },
-    { name: 'erc20', type: 'address' },
-    { name: 'tokenId', type: 'uint256' },
-    { name: 'startPrice', type: 'uint256' },
-    { name: 'endPrice', type: 'uint256' },
-    { name: 'nonce', type: 'uint256' },
-    { name: 'start', type: 'uint256' },
-    { name: 'deadline', type: 'uint256' },
-  ],
-}
-
 export const useListeForSaleState = ({ marketItemState }: UserListPositionCardProps) => {
-  const selectedToken = CNV[marketItemState.chainId]
+  const stakingPosition = marketItemState.stakingPosition
   const { address: seller } = useAccount()
   const { mutate } = useInsert_Cavemart_ListingMutation()
-  const [deadline, setDeadline] = useState(BigNumber.from(Date.now()))
-  const [method, setMethod] = useState<'Sale' | 'Auction'>('Sale')
-  const [price, setPrice] = useState<CurrencyAmount<Currency>>(
-    CurrencyAmount.fromRawAmount(
-      selectedToken,
-      marketItemState.marketItem.data.position.currentValue.toString(),
-    ),
+  const [marketItem, setMarketItem] = useState(
+    new MarketItem({
+      seller,
+      erc721: stakingPosition.address,
+      erc20: CNV_ADDRESS[stakingPosition.chainId],
+      tokenId: stakingPosition.tokenId.toString(),
+      startPrice: stakingPosition.currentValue,
+      endPrice: BigNumber.from(0),
+      start: BigNumber.from(0),
+      nonce: BigNumber.from(0),
+      deadline: 0,
+      isListed: false,
+      signature: '',
+    }),
   )
 
-  // Sign with nonce
-  const value: SwapMetadata = {
-    seller,
-    erc721: STAKING_CONTRACT[4],
-    erc20: price.wrapped.currency.address,
-    tokenId: marketItemState.marketItem.data.position.tokenId.toString(),
-    startPrice: BigNumber.from(price.wrapped.numerator.toString()).toString(),
-    endPrice: BigNumber.from(0).toString(),
-    start: BigNumber.from(0).toString(),
-    nonce: BigNumber.from(0).toString(),
-    deadline,
-  }
-
   const { signTypedDataAsync } = useSignTypedData({
-    types,
     domain,
-    value,
+    types: marketItem.datatypeForSignature,
+    value: marketItem.dataForSignature,
   })
 
   const create = () => {
     signTypedDataAsync()
       .then(async (data) => {
         const signature = data.substring(2)
-        const r = `0x${signature.substring(0, 64)}`
-        const s = `0x${signature.substring(64, 128)}`
-        const v = parseInt(signature.substring(128, 130), 16)
         const cavemart = new FixedOrderMarketContract(concaveProvider(chain.rinkeby.id))
-        const user = await cavemart.computeSigner({ r, s, v, value })
+        const user = await cavemart.computeSigner(marketItem.new({ signature }))
+        alert(user)
+        if (user != seller) {
+          return
+        }
         mutate({
-          tokenID: value.tokenId,
+          tokenID: marketItem.tokenId.toString(),
           signatureHash: signature,
-          start: value.start.toString(),
-          startPrice: value.startPrice.toString(),
-          tokenOwner: value.seller,
-          tokenIsListed: true,
+          start: marketItem.start.toString(),
+          startPrice: marketItem.startPrice.toString(),
+          tokenOwner: marketItem.seller,
+          tokenIsListed: false,
+          deadline: marketItem.deadline,
         })
       })
       .catch(console.error)
   }
 
-  const handleMethod = () => {
-    /**
-     * Uncomment to enable auctions
-     * setMethod((old) => (old === 'Auction' ? 'Sale' : 'Auction'))
-     */
-  }
-
   return {
-    method,
-    setDeadline,
-    deadline,
-    position: marketItemState.marketItem.data.position,
-    marketItem: marketItemState.marketItem.data,
-    price,
-    setPrice,
-    handleMethod,
+    method: `Sale`,
+    stakingPosition,
+    marketItem,
     create,
+    setPrice: (price: CurrencyAmount<Currency>) => {
+      setMarketItem(
+        marketItem.new({
+          startPrice: price.numerator.toString(),
+          erc20: price.wrapped.currency.address,
+        }),
+      )
+    },
+    setDeadline: (deadline: BigNumber) => setMarketItem(marketItem.new({ deadline })),
   }
 }
 
@@ -123,18 +102,16 @@ export const ListPositionForSale = ({
 }: {
   listForSaleState: ListForSaleState
 }) => {
-  console.log(`ListPositionForSale`)
   return (
     <VStack direction={'column'} gap={1} pt={8} px={8} pb={0}>
       <Type state={listForSaleState} />
       <Info
         label="Current value:"
-        value={truncateNumber(listForSaleState.position.currentValue)}
+        value={formatFixed(listForSaleState.stakingPosition.currentValue)}
       ></Info>
 
       <CurrencySelector state={listForSaleState}></CurrencySelector>
       <BuyNowPrice state={listForSaleState} />
-      <ListenPrice state={listForSaleState} />
       <Deadline state={listForSaleState} />
       {/* <Info
         label="Discount:"
@@ -165,8 +142,6 @@ export const ListPositionForSale = ({
 }
 
 const Deadline = (props: { state: ListForSaleState }) => {
-  const { marketItem, setPrice } = props.state
-  const chainId = useCurrentSupportedNetworkId()
   return (
     <HStack justifyContent={'center'} width={'full'}>
       <Text textColor={'text.low'} textAlign={'right'} fontWeight="bold" width={'full'}>
@@ -200,7 +175,6 @@ const Type = ({ state }: { state: ListForSaleState }) => {
           width={'110px'}
           height={'30px'}
           shadow={'Up Small'}
-          onClick={state.handleMethod}
           rounded={'2xl'}
           fontWeight="bold"
           cursor={'not-allowed'}
@@ -213,7 +187,7 @@ const Type = ({ state }: { state: ListForSaleState }) => {
 }
 
 const ListenPrice = (props: { state: ListForSaleState }) => {
-  const { marketItem, setPrice } = props.state
+  const { setPrice } = props.state
   const chainId = useCurrentSupportedNetworkId()
   if (props.state.method === 'Sale') {
     return <></>
@@ -240,8 +214,8 @@ const ListenPrice = (props: { state: ListForSaleState }) => {
     </HStack>
   )
 }
-const BuyNowPrice = (props: { state: ListForSaleState }) => {
-  const { marketItem, setPrice } = props.state
+const BuyNowPrice = ({ state }: { state: ListForSaleState }) => {
+  const { setPrice } = state
   const chainId = useCurrentSupportedNetworkId()
   return (
     <HStack justifyContent={'center'} width={'full'}>
@@ -253,22 +227,20 @@ const BuyNowPrice = (props: { state: ListForSaleState }) => {
           width={'full'}
           shadow={'Down Big'}
           borderRadius={'full'}
-          value={props.state.price.toSignificant(5)}
+          value={formatEther(state.marketItem.startPrice)}
           p={1}
           pl={4}
           onValueChange={(values, sourceInfo) => {
             if (sourceInfo.source === 'prop') return
             const value = values.value || '0'
-            setPrice(toAmount(value, props.state.price.currency))
+            setPrice(toAmount(value, CNV[chainId]))
           }}
         />
       </Box>
     </HStack>
   )
 }
-const CurrencySelector = (props: { state: ListForSaleState }) => {
-  const { marketItem, setPrice } = props.state
-  const chainId = useCurrentSupportedNetworkId()
+const CurrencySelector = ({ state }: { state: ListForSaleState }) => {
   return (
     <HStack justifyContent={'center'} width={'full'}>
       <Text textColor={'text.low'} textAlign={'right'} fontWeight="bold" width={'full'}>
@@ -276,9 +248,9 @@ const CurrencySelector = (props: { state: ListForSaleState }) => {
       </Text>
       <Box width={'full'}>
         <SelectAMMCurrency
-          selected={props.state.price.currency}
+          selected={CNV[state.stakingPosition.chainId]}
           onSelect={(token) => {
-            props.state.setPrice(CurrencyAmount.fromRawAmount(token, `0`))
+            state.setPrice(CurrencyAmount.fromRawAmount(token, `0`))
           }}
         ></SelectAMMCurrency>
       </Box>

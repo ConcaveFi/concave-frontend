@@ -145,6 +145,12 @@ export enum Cavemart_Constraint {
   CavemartPkey = 'cavemart_pkey',
 }
 
+/** input type for incrementing numeric columns in table "cavemart" */
+export type Cavemart_Inc_Input = {
+  deadline?: InputMaybe<Scalars['numeric']>
+  tokenID?: InputMaybe<Scalars['numeric']>
+}
+
 /** input type for inserting data into table "cavemart" */
 export type Cavemart_Insert_Input = {
   created_at?: InputMaybe<Scalars['timestamptz']>
@@ -241,6 +247,20 @@ export enum Cavemart_Select_Column {
   UpdatedAt = 'updated_at',
 }
 
+/** input type for updating data in table "cavemart" */
+export type Cavemart_Set_Input = {
+  created_at?: InputMaybe<Scalars['timestamptz']>
+  deadline?: InputMaybe<Scalars['numeric']>
+  endPrice?: InputMaybe<Scalars['String']>
+  signatureHash?: InputMaybe<Scalars['String']>
+  start?: InputMaybe<Scalars['String']>
+  startPrice?: InputMaybe<Scalars['String']>
+  tokenID?: InputMaybe<Scalars['numeric']>
+  tokenIsListed?: InputMaybe<Scalars['Boolean']>
+  tokenOwner?: InputMaybe<Scalars['String']>
+  updated_at?: InputMaybe<Scalars['timestamptz']>
+}
+
 /** order by stddev() on columns of table "cavemart" */
 export type Cavemart_Stddev_Order_By = {
   deadline?: InputMaybe<Order_By>
@@ -265,10 +285,28 @@ export type Cavemart_Sum_Order_By = {
   tokenID?: InputMaybe<Order_By>
 }
 
-/** placeholder for update columns of table "cavemart" (current role has no relevant permissions) */
+/** update columns of table "cavemart" */
 export enum Cavemart_Update_Column {
-  /** placeholder (do not use) */
-  Placeholder = '_PLACEHOLDER',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Deadline = 'deadline',
+  /** column name */
+  EndPrice = 'endPrice',
+  /** column name */
+  SignatureHash = 'signatureHash',
+  /** column name */
+  Start = 'start',
+  /** column name */
+  StartPrice = 'startPrice',
+  /** column name */
+  TokenId = 'tokenID',
+  /** column name */
+  TokenIsListed = 'tokenIsListed',
+  /** column name */
+  TokenOwner = 'tokenOwner',
+  /** column name */
+  UpdatedAt = 'updated_at',
 }
 
 /** order by var_pop() on columns of table "cavemart" */
@@ -801,6 +839,8 @@ export type Mutation_Root = {
   insert_cavemart?: Maybe<Cavemart_Mutation_Response>
   /** insert a single row into the table: "cavemart" */
   insert_cavemart_one?: Maybe<Cavemart>
+  /** update data of the table: "cavemart" */
+  update_cavemart?: Maybe<Cavemart_Mutation_Response>
 }
 
 /** mutation root */
@@ -813,6 +853,13 @@ export type Mutation_RootInsert_CavemartArgs = {
 export type Mutation_RootInsert_Cavemart_OneArgs = {
   object: Cavemart_Insert_Input
   on_conflict?: InputMaybe<Cavemart_On_Conflict>
+}
+
+/** mutation root */
+export type Mutation_RootUpdate_CavemartArgs = {
+  _inc?: InputMaybe<Cavemart_Inc_Input>
+  _set?: InputMaybe<Cavemart_Set_Input>
+  where: Cavemart_Bool_Exp
 }
 
 /** Boolean expression to compare columns of type "numeric". All fields are combined with logical 'AND'. */
@@ -1348,6 +1395,21 @@ export type Get_All_Total_Pools_VaprQuery = {
   }>
 }
 
+export type Update_Cavemart_Listin_By_IdMutationVariables = Exact<{
+  tokenId: Scalars['numeric']
+  deadline?: InputMaybe<Scalars['numeric']>
+  start?: InputMaybe<Scalars['String']>
+  startPrice?: InputMaybe<Scalars['String']>
+  endPrice?: InputMaybe<Scalars['String']>
+  signatureHash: Scalars['String']
+  tokenIsListed?: InputMaybe<Scalars['Boolean']>
+}>
+
+export type Update_Cavemart_Listin_By_IdMutation = {
+  __typename?: 'mutation_root'
+  update_cavemart?: { __typename?: 'cavemart_mutation_response'; affected_rows: number } | null
+}
+
 export type Insert_Cavemart_ListingMutationVariables = Exact<{
   signatureHash: Scalars['String']
   start: Scalars['String']
@@ -1355,6 +1417,7 @@ export type Insert_Cavemart_ListingMutationVariables = Exact<{
   endPrice?: InputMaybe<Scalars['String']>
   tokenID: Scalars['numeric']
   tokenOwner: Scalars['String']
+  deadline: Scalars['numeric']
   tokenIsListed?: InputMaybe<Scalars['Boolean']>
 }>
 
@@ -1685,10 +1748,42 @@ export const useGet_All_Total_Pools_VaprQuery = <
     ),
     options,
   )
+export const Update_Cavemart_Listin_By_IdDocument = `
+    mutation UPDATE_CAVEMART_LISTIN_BY_ID($tokenId: numeric!, $deadline: numeric, $start: String, $startPrice: String, $endPrice: String, $signatureHash: String!, $tokenIsListed: Boolean) {
+  update_cavemart(
+    where: {tokenID: {_eq: $tokenId}}
+    _set: {deadline: $deadline, endPrice: $endPrice, signatureHash: $signatureHash, start: $start, startPrice: $startPrice, tokenIsListed: $tokenIsListed}
+  ) {
+    affected_rows
+  }
+}
+    `
+export const useUpdate_Cavemart_Listin_By_IdMutation = <TError = unknown, TContext = unknown>(
+  options?: UseMutationOptions<
+    Update_Cavemart_Listin_By_IdMutation,
+    TError,
+    Update_Cavemart_Listin_By_IdMutationVariables,
+    TContext
+  >,
+) =>
+  useMutation<
+    Update_Cavemart_Listin_By_IdMutation,
+    TError,
+    Update_Cavemart_Listin_By_IdMutationVariables,
+    TContext
+  >(
+    ['UPDATE_CAVEMART_LISTIN_BY_ID'],
+    (variables?: Update_Cavemart_Listin_By_IdMutationVariables) =>
+      fetcher<Update_Cavemart_Listin_By_IdMutation, Update_Cavemart_Listin_By_IdMutationVariables>(
+        Update_Cavemart_Listin_By_IdDocument,
+        variables,
+      )(),
+    options,
+  )
 export const Insert_Cavemart_ListingDocument = `
-    mutation INSERT_CAVEMART_LISTING($signatureHash: String!, $start: String!, $startPrice: String, $endPrice: String, $tokenID: numeric!, $tokenOwner: String!, $tokenIsListed: Boolean = true) {
+    mutation INSERT_CAVEMART_LISTING($signatureHash: String!, $start: String!, $startPrice: String, $endPrice: String, $tokenID: numeric!, $tokenOwner: String!, $deadline: numeric!, $tokenIsListed: Boolean = true) {
   insert_cavemart_one(
-    object: {signatureHash: $signatureHash, start: $start, startPrice: $startPrice, endPrice: $endPrice, tokenID: $tokenID, tokenIsListed: $tokenIsListed, tokenOwner: $tokenOwner}
+    object: {signatureHash: $signatureHash, start: $start, startPrice: $startPrice, endPrice: $endPrice, tokenID: $tokenID, tokenIsListed: $tokenIsListed, tokenOwner: $tokenOwner, deadline: $deadline}
   ) {
     tokenID
     tokenIsListed

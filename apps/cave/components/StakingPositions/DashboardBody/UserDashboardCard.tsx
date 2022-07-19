@@ -73,11 +73,11 @@ export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePo
             mb={3}
           >
             {userNonFungibleTokensInfo
-              .filter(filterByStakePool)
-              .filter(filterByRange)
-              .filter((position) => position.maturity > 0)
+              // .filter(filterByStakePool)
+              // .filter(filterByRange)
+              // .filter((position) => position.maturity > 0)
 
-              .sort(sortFunction)
+              // .sort(sortFunction)
               .map((nonFungibleTokenInfo) => (
                 <UserPositionCard
                   key={+nonFungibleTokenInfo.tokenId.toString()}

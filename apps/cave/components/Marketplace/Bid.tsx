@@ -35,6 +35,7 @@ export const BidButton = ({ position, offer }: { position: StakingPosition; offe
     if (bidAmountOverflow) return { children: 'Bid is too high', disabled: true }
 
     const onClick = async () => {
+      console.log(`??`)
       const contract = new ConcaveNFTMarketplace(concaveProvider(position.chainId))
       const tx = await contract.makeBid(signer, position, amount)
       registerTransaction(tx, {

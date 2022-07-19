@@ -1,4 +1,4 @@
-import { fechMarketInfo, listUserPositions } from '@concave/marketplace'
+import { listListedPositions } from '@concave/marketplace'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
 import { useState } from 'react'
@@ -8,14 +8,13 @@ export const useMarketplaceDashbord = () => {
   const chainId = useCurrentSupportedNetworkId()
   const [owner, setOwner] = useState('0x8522093305253EfB2685241dc0C587CDD9B10e4B')
   const { data, isLoading, isFetching } = useQuery(
-    ['sales', owner, chainId],
+    ['sales', chainId],
     async () => {
       const provider = concaveProvider(chainId)
-      const tokens = await listUserPositions({ owner, provider })
-      const marketInfos = await Promise.all(tokens.map(async (t) => fechMarketInfo(provider, t)))
-      return marketInfos.filter((m) => m.isListed)
+      const result = await listListedPositions({ provider })
+      return result
     },
-    { enabled: !!owner && !!chainId },
+    { enabled: !!chainId },
   )
   const salePositions = data || []
   return {

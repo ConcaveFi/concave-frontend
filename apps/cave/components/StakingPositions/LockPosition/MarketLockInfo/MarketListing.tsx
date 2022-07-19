@@ -1,6 +1,5 @@
 import { StakingPosition } from '@concave/marketplace'
 import { Box, Button, Flex, Modal, Text } from '@concave/ui'
-import { Loading } from 'components/Loading'
 import { formatDistanceToNow } from 'date-fns'
 import { formatFixed } from 'utils/formatFixed'
 import { ListPositionForSale, useListeForSaleState } from '../../UserListPositionCard'
@@ -12,31 +11,17 @@ interface MarketplaceInfoProps {
 
 export const MarketListing = (props: MarketplaceInfoProps) => {
   const marketItemState = useMarketInfo(props)
-  const { marketItem } = marketItemState
-  if (marketItem.isLoading) {
-    return (
-      <Loading
-        m={4}
-        size="sm"
-        rLabel="Loading market info"
-        width={{ base: '340px', md: '490px', lg: '650px' }}
-      />
-    )
-  }
-  if (marketItem.isError) {
-    return <></>
-  }
-
+  const { stakingPosition } = marketItemState
   const buttonState = getMarketPlaceButtonProps(marketItemState)
-  const marketData = marketItem.data
-  const auctionEnd = marketData.offer.auctionEnd.gt(0)
-    ? formatDistanceToNow(new Date(+marketData.offer.auctionEnd.toString() * 1000), {
+  const market = stakingPosition.market
+  const auctionEnd = market?.deadline.gt(0)
+    ? formatDistanceToNow(new Date(+market?.deadline.toString() * 1000), {
         addSuffix: false,
       })
     : '--.--.--'
 
   return (
-    <Box shadow={marketData?.isListed ? '' : 'down'} borderRadius="2xl" width={'full'} p={4}>
+    <Box shadow={market?.isListed ? '' : 'down'} borderRadius="2xl" width={'full'} p={4}>
       <Flex justify={{ lg: 'left', base: 'center' }}>
         <Text color="text.low" fontSize="lg" as="b">
           Your Marketplace Listing
@@ -49,25 +34,19 @@ export const MarketListing = (props: MarketplaceInfoProps) => {
             width={'full'}
             valueFontSize={'lg'}
             value={
-              marketData?.isListed
-                ? `${formatFixed(marketData?.listPrice, { places: 4 })} CNV`
-                : '---'
+              market?.isListed ? `${formatFixed(market.startPrice, { places: 4 })} CNV` : '---'
             }
           />
           <Info
             label={'Discount:'}
             width={'full'}
-            value={
-              marketData?.isListed
-                ? `${formatFixed(marketData?.discount, { decimals: 2 })} %`
-                : '---'
-            }
+            value={market?.isListed ? `${formatFixed(0, { decimals: 2 })} %` : '---'}
           />
           <Info label={'Expiration Date:'} width={'full'} value={auctionEnd} />
         </Flex>
         <Button variant={'primary'} minW={'160px'} size={'md'} width={'full'} {...buttonState} />
       </Flex>
-      {marketData && <ListForSaleModal marketItemState={marketItemState} />}
+      <ListForSaleModal marketItemState={marketItemState} />
     </Box>
   )
 }

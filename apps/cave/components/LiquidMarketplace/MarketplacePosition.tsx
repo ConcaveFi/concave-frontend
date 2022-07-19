@@ -9,31 +9,34 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react'
-import { ConcaveNFTMarketplace, MarketItem } from '@concave/marketplace'
+import { FixedOrderMarketContract, StakingPosition } from '@concave/marketplace'
 import { format, formatDistanceToNowStrict } from 'date-fns'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { concaveProvider } from 'lib/providers'
 import { formatFixed } from 'utils/formatFixed'
 import { useSigner } from 'wagmi'
 
-type MarketplacePositionProps = { marketItem: MarketItem }
-export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ marketItem }) => {
+type MarketplacePositionProps = { stakingPosition: StakingPosition }
+export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakingPosition }) => {
   const { data: signer } = useSigner()
-  const currentValue = formatFixed(marketItem.position?.currentValue)
-  const discount = formatFixed(marketItem.discount, { decimals: 2 })
-  const price = formatFixed(marketItem.listPrice)
-  const positionDate = new Date(marketItem.position?.maturity * 1000)
+  const currentValue = formatFixed(stakingPosition?.currentValue)
+  const discount = formatFixed(stakingPosition.discount, { decimals: 2 })
+  const price = formatFixed(stakingPosition.market.startPrice)
+  const positionDate = new Date(stakingPosition.maturity * 1000)
   const relativePositionTime = formatDistanceToNowStrict(positionDate, { unit: 'day' })
   const percent = Math.abs(positionDate.getTime() / new Date().getTime())
   const { registerTransaction } = useTransactionRegistry()
 
   const buyAction = async () => {
-    const contract = new ConcaveNFTMarketplace(concaveProvider(marketItem.position.chainId))
-    const tx = await contract.buyNow(signer, marketItem?.position, marketItem?.offer)
-    registerTransaction(tx, {
-      type: 'offer marketplace',
-      tokenId: +marketItem.position.tokenId.toString(),
-    })
+    console.log('buyAction')
+    console.log(stakingPosition)
+    const contract = new FixedOrderMarketContract(concaveProvider(stakingPosition.chainId))
+    contract.computeSigner(stakingPosition.market).then(alert)
+    // const tx = await contract.buyNow(signer, stakingPosition. , marketItem?.offer)
+    // registerTransaction(tx, {
+    //   type: 'offer marketplace',
+    //   tokenId: +marketItem.position.tokenId.toString(),
+    // })
   }
 
   return (
@@ -50,10 +53,10 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ market
       justify="space-between"
     >
       <Flex align="center" maxH={'95px'} gap={1} width={'full'} justify="space-between">
-        <ImageContainer stakePeriod={marketItem?.position?.poolID} />
+        <ImageContainer stakePeriod={stakingPosition?.poolID} />
         <Info title="Current value" info={`${currentValue}`} />
         <Info title="Discount" info={`${discount}%`} />
-        <Info title="Token id" info={'' + +marketItem?.position.tokenId.toString()} />
+        <Info title="Token id" info={stakingPosition.tokenId.toString()} />
         <BuyContainer price={price} onClick={buyAction} />
       </Flex>
       <LoadBard

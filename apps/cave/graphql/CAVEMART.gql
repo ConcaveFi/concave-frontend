@@ -1,3 +1,30 @@
+
+
+mutation UPDATE_CAVEMART_LISTIN_BY_ID(
+  $tokenId: numeric!, 
+  $deadline: numeric, 
+  $start: String, 
+  $startPrice: String, 
+  $endPrice: String, 
+  $signatureHash: String!, 
+  $tokenIsListed: Boolean
+  ) {
+    update_cavemart(
+      where: {
+        tokenID: {_eq: $tokenId}
+      }, 
+      _set: { 
+        deadline: $deadline, 
+        endPrice: $endPrice, 
+        signatureHash: $signatureHash, 
+        start: $start, 
+        startPrice: $startPrice, 
+        tokenIsListed: $tokenIsListed
+      },
+    ) {
+    affected_rows
+  }
+}
 mutation INSERT_CAVEMART_LISTING(
   $signatureHash: String!
   $start: String!
@@ -5,6 +32,7 @@ mutation INSERT_CAVEMART_LISTING(
   $endPrice: String
   $tokenID: numeric!
   $tokenOwner: String!
+  $deadline: numeric!
   $tokenIsListed: Boolean = true
 ) {
   insert_cavemart_one(
@@ -16,6 +44,7 @@ mutation INSERT_CAVEMART_LISTING(
       tokenID: $tokenID
       tokenIsListed: $tokenIsListed
       tokenOwner: $tokenOwner
+      deadline: $deadline
     }
   ) {
     tokenID
@@ -45,3 +74,4 @@ query GET_ALL_CAVEMART_LISTINGS {
     }
   }
 }
+
