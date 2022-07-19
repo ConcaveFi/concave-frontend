@@ -5,7 +5,7 @@ import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialo
 import { BigNumber } from 'ethers'
 import { formatEther, parseEther } from 'ethers/lib/utils'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAccount, useProvider, useSigner } from 'wagmi'
 import { usePCNVUserData } from '../Hooks/usePCNVUserData'
 import useVestedTokens from '../Hooks/useVestedTokens'
@@ -31,6 +31,13 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
 
   const balance = parseEther(pCNV?.data?.formatted || '0')
   const { registerTransaction } = useTransactionRegistry()
+
+  useEffect(() => {
+    if (status !== 'error' && status !== 'rejected') return
+    const clearButtonTimeout = setTimeout(() => setStatus('default'), 3000)
+    return () => clearTimeout(clearButtonTimeout)
+  }, [status])
+
   return (
     <>
       <VestedTokenDialog
@@ -67,11 +74,6 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
       .catch((error) => {
         if (error.code === 4001) setStatus('rejected')
         else setStatus('error')
-
-        const cleanButtonState = setTimeout(() => {
-          setStatus('default')
-          clearTimeout(cleanButtonState)
-        }, 3000)
       })
   }
 }
