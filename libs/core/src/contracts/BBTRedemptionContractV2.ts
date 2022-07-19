@@ -42,7 +42,7 @@ export class BBTRedemptionContractV2 {
     amount: BigNumber,
     address: string,
     redeemMax?: boolean,
-  ): Promise<ethers.Transaction> {
+  ): Promise<ethers.Transaction & { wait: (confirmations) => unknown }> {
     return this.bbtCNVContract.connect(signer).redeem(amount, address, redeemMax)
   }
 }
