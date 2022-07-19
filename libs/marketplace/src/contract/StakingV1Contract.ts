@@ -1,9 +1,9 @@
-import { BigNumber, BigNumberish, ethers, Contract } from 'ethers'
 import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/providers'
-import { StakingV1Abi } from './StakingV1Abi'
-import { BaseProvider } from '@ethersproject/providers'
 import { STAKING_CONTRACT } from '@concave/core'
-import { Position, StakePool, StakingPosition, StakingReward } from 'src/entities'
+import { BaseProvider } from '@ethersproject/providers'
+import { BigNumber, BigNumberish, Contract, ethers } from 'ethers'
+import { PoolState, Position, StakingReward } from 'src/entities'
+import { StakingV1Abi } from './StakingV1Abi'
 
 export class StakingV1Contract {
   private readonly contract: ethers.Contract
@@ -33,8 +33,16 @@ export class StakingV1Contract {
     return this.contract.connect(signer).lock(address, amount, poolId)
   }
 
-  public async pools(index: string): Promise<StakePool> {
-    return this.contract.pools(index).then((p) => ({ ...p }))
+  public async unlock(
+    signer: ethers.Signer,
+    address: string,
+    tokenId: BigNumberish,
+  ): Promise<ethers.Transaction & { wait: (confirmations) => unknown }> {
+    return this.contract.connect(signer).unlock(address, tokenId)
+  }
+
+  public async pools(poolId: number): Promise<PoolState> {
+    return this.contract.pools(poolId).then((p) => new PoolState({ poolId, ...p }))
   }
 
   public async positions(tokenId: BigNumberish): Promise<Position> {

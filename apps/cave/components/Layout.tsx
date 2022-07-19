@@ -1,9 +1,9 @@
 import { Container, Flex } from '@concave/ui'
 import { AnimatePresence } from 'framer-motion'
-import dynamic from 'next/dynamic'
-import { SideBar } from './SideBar/SideBar'
 import { useIsMounted } from 'hooks/useIsMounted'
+import dynamic from 'next/dynamic'
 import SecurityBanner from './SecurityBanner'
+import { SideBar } from './SideBar/SideBar'
 
 const TestnetIndicator = dynamic(() => import('./Faucet').then((module) => module.TestnetIndicator))
 

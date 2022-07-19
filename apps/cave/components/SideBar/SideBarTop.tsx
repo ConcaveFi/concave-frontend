@@ -1,21 +1,36 @@
 import { CNV } from '@concave/core'
-import { Box, Flex, Image, Stack, Text } from '@concave/ui'
 import { DashboardIcon } from '@concave/icons'
+import { Box, Flex, Image, Stack, Text } from '@concave/ui'
 import { ButtonLink } from 'components/ButtonLink'
-import { ConnectButton, UserWallet } from 'components/UserWallet/ConnectWallet'
+import { ConnectButton, UserWallet } from 'components/ConnectWallet'
+import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { useAccount, useBalance } from 'wagmi'
-import { onCloseSidebar } from './SideBar'
+import { useAccount } from 'wagmi'
 
 const UserCnvBalance = () => {
-  const { address } = useAccount()
   const networkId = useCurrentSupportedNetworkId()
-  const { data } = useBalance({
-    addressOrName: address,
-    token: CNV[networkId].address,
-    formatUnits: CNV[networkId].decimals,
-    enabled: !!address,
-  })
+  const { data: cnvAmount, isSuccess } = useCurrencyBalance(CNV[networkId], { watch: true })
+
+  return (
+    isSuccess && (
+      <Flex pt={2} pb={3} px={4} mt={2} color="text.low" fontWeight="bold" fontSize="sm">
+        <Text w="100%">
+          Your CNV
+          <br />
+          Balance
+        </Text>
+        <Text w="100%" textAlign="right">
+          {cnvAmount.toSignificant(6, { groupSeparator: ',' })}
+          <br />
+          CNV
+        </Text>
+      </Flex>
+    )
+  )
+}
+
+function SideBarTop() {
+  const { isConnected } = useAccount()
 
   return (
     data?.formatted && (
@@ -48,7 +63,6 @@ function SideBarTop() {
 
       <Stack gap="1" align="flex-end" mt={7}>
         <ButtonLink
-          onClick={onCloseSidebar} // the click will close the sidebar
           href="/treasury" // and redirect to the treasury page
           variant="primary.outline"
           size="medium"
@@ -59,14 +73,7 @@ function SideBarTop() {
           Treasury
         </ButtonLink>
         <Box shadow="down" w="full" p={1} rounded="2xl">
-          {isConnected ? (
-            <UserWallet />
-          ) : (
-            // non intrusive way of closing the sidebar, the click will bubble up from the connect button
-            <Box onClick={onCloseSidebar}>
-              <ConnectButton />
-            </Box>
-          )}
+          {isConnected ? <UserWallet /> : <ConnectButton />}
           <UserCnvBalance />
         </Box>
       </Stack>

@@ -1,11 +1,11 @@
-import { useMemo } from 'react'
-import { RouterAbi, ROUTER_ADDRESS, Currency } from '@concave/core'
-import { Router, TradeType, Trade } from '@concave/gemswap-sdk'
-import { SwapSettings } from '../Swap/Settings'
+import { Currency, RouterAbi, ROUTER_ADDRESS } from '@concave/core'
+import { Router, Trade, TradeType } from '@concave/gemswap-sdk'
 import { TransactionResponse } from '@ethersproject/abstract-provider'
-import { useAccount, useContractWrite, useNetwork } from 'wagmi'
-import { toPercent } from 'utils/toPercent'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
+import { useMemo } from 'react'
+import { toPercent } from 'utils/toPercent'
+import { useAccount, useContractWrite, useNetwork } from 'wagmi'
+import { SwapSettings } from '../Swap/Settings'
 
 export const useSwapTransaction = (
   _trade: Trade<Currency, Currency, TradeType>,
@@ -52,7 +52,7 @@ export const useSwapTransaction = (
       })
     },
     onError: (error) => {
-      if (error.name === 'UserRejectedRequest') reset()
+      if (error.name === 'UserRejectedRequestError') reset()
     },
   })
 

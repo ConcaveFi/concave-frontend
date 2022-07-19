@@ -1,6 +1,8 @@
+import { CurrencyAmount, MaxUint256, Token } from '@concave/core'
+import { TransactionReceipt } from '@ethersproject/abstract-provider'
 import { BigNumberish } from 'ethers'
 import { formatUnits } from 'ethers/lib/utils'
-import { CurrencyAmount, Token, MaxUint256 } from '@concave/core'
+import { useTransactionRegistry } from 'hooks/TransactionsRegistry/'
 import {
   erc20ABI,
   useAccount,
@@ -8,8 +10,6 @@ import {
   useContractWrite,
   useWaitForTransaction,
 } from 'wagmi'
-import { TransactionReceipt } from '@ethersproject/abstract-provider'
-import { useTransactionRegistry } from 'hooks/TransactionsRegistry/'
 
 export const useAllowance = (token: Token, spender: string, userAddress: string) => {
   const {

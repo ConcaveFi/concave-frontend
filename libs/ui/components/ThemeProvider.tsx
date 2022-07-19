@@ -1,9 +1,9 @@
-import { ChakraProvider } from '@chakra-ui/provider'
 import {
   ColorModeScript as ChakraColorModeScript,
   createCookieStorageManager,
   localStorageManager,
 } from '@chakra-ui/color-mode'
+import { ChakraProvider } from '@chakra-ui/provider'
 import { Styles } from '@chakra-ui/theme-tools'
 import { ReactNode } from 'react'
 

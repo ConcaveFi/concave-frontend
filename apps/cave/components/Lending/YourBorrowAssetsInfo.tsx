@@ -1,5 +1,4 @@
 import { Flex, Stack, Text } from '@concave/ui'
-import React from 'react'
 
 const YourSuppAssets = ({ balance }) => (
   <Flex

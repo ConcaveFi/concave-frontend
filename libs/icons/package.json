@@ -1,3 +1,4 @@
+
 {
   "name": "@concave/icons",
   "version": "0.0.0",
@@ -16,7 +17,7 @@
   },
   "devDependencies": {
     "@types/react": "^18.0.14",
-    "@types/react-dom": "^18.0.2"
+    "@types/react-dom": "^18.0.6"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.0.2",

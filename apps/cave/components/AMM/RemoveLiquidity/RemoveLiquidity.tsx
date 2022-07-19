@@ -1,12 +1,4 @@
-import {
-  Currency,
-  CurrencyAmount,
-  MaxUint256,
-  NATIVE,
-  ROUTER_ADDRESS,
-  Token,
-  Percent,
-} from '@concave/core'
+import { Currency, CurrencyAmount, NATIVE, Percent, ROUTER_ADDRESS, Token } from '@concave/core'
 import { Pair } from '@concave/gemswap-sdk'
 import {
   Box,
@@ -20,7 +12,7 @@ import {
   useDisclosure,
 } from '@concave/ui'
 import { TransactionResponse } from '@ethersproject/abstract-provider'
-import { ApproveButton } from 'components/ApproveButton/ApproveButton'
+import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { PositionInfoItem } from 'components/Positions/MyPositions'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
@@ -180,7 +172,6 @@ const RemoveLiquidityActions = ({
   closeParentComponent: VoidFunction
 }) => {
   const networkId = useCurrentSupportedNetworkId()
-  const [currencyApproved, setCurrencyApproved] = useState(false)
 
   const {
     isOpen: isOpenSubmitted,
@@ -207,31 +198,35 @@ const RemoveLiquidityActions = ({
       onOpenError()
     }
   }
+  const currencyAmount = CurrencyAmount.fromRawAmount(
+    removeLiquidityState.pair.liquidityToken,
+    removeLiquidityState.amountToRemove.toString(),
+  )
+  const useCurrencyState = useCurrencyButtonState(currencyAmount, ROUTER_ADDRESS[networkId])
 
   return (
     <Flex gap={4} h={45} justifyContent={'center'}>
-      <ApproveButton
-        approveArgs={{
-          currency: removeLiquidityState.pair.liquidityToken,
-          amount: MaxUint256.toString(),
-          spender: ROUTER_ADDRESS[networkId],
-          onSuccess: () => setCurrencyApproved(true),
-        }}
+      <Button
         disabled={!removeLiquidityState.percentToRemove}
+        {...useCurrencyState.buttonProps}
         w={250}
         variant={'primary'}
       />
 
       <Button
-        disabled={!currencyApproved || !removeLiquidityState.percentToRemove}
+        disabled={!useCurrencyState.approved || !removeLiquidityState.percentToRemove}
         w={250}
         variant={'primary'}
         onClick={confirmedWithdrawal}
       >
-        Confirm Withdrawal
+        Confirm withdrawal
       </Button>
 
-      <WaitingConfirmationDialog isOpen={waitingForConfirm} title={'Confirm Liquidity Removal'}>
+      <WaitingConfirmationDialog
+        isOpen={waitingForConfirm}
+        onClose={() => setWaitingForConfirm(false)}
+        title={'Confirm Withdrawal'}
+      >
         <Flex
           width={'200px'}
           height="107px"
@@ -289,10 +284,7 @@ const YourPosition = ({ pair, userPoolShare }: { pair: Pair; userPoolShare: Perc
         p={4}
         spacing={3}
       >
-        <PositionInfoItem
-          label="Your pool share:"
-          value={`${userPoolShare.multiply(100).toFixed(2)}%`}
-        />
+        <PositionInfoItem label="Your pool share:" value={`${userPoolShare.toFixed(2)}%`} />
         <PositionInfoItem
           label={pair.token0.symbol}
           value={pair.reserve0.multiply(userPoolShare).toFixed(2)}

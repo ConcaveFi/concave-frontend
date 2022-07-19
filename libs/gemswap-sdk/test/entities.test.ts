@@ -1,4 +1,4 @@
-import { WETH9 as _WETH9, CurrencyAmount, Token } from '@concave/core'
+import { CurrencyAmount, Token, WETH9 as _WETH9 } from '@concave/core'
 import { Pair, Route, Trade, TradeType } from '../src/entities'
 
 import JSBI from 'jsbi'

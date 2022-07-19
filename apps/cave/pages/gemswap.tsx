@@ -1,4 +1,4 @@
-import { ChainId, CHAIN_NAME, CNV, Currency, DAI, ROUTER_ADDRESS } from '@concave/core'
+import { ChainId, CHAIN_NAME, CNV, Currency, DAI } from '@concave/core'
 import { Trade, TradeType } from '@concave/gemswap-sdk'
 import { ExpandArrowIcon } from '@concave/icons'
 import { Button, Card, Collapse, Flex, HStack, Stack, Text, useDisclosure } from '@concave/ui'
@@ -28,7 +28,6 @@ import { NetworkMismatch } from 'components/AMM/NetworkMismatch'
 import { ExpectedOutput, MinExpectedOutput } from 'components/AMM/Swap/ExpectedOutput'
 import { useSwapSettings } from 'components/AMM/Swap/Settings'
 import { TradeRoute } from 'components/AMM/Swap/TradeRoute'
-import { ApproveButton } from 'components/ApproveButton/ApproveButton'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
 import { withPageTransition } from 'components/PageTransition'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
@@ -97,7 +96,7 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
     trade,
     recipient,
     settings,
-    onSwapClick: settings.expertMode ? swapTx.write : confirmationModal.onOpen,
+    onSwapClick: settings.expertMode ? () => swapTx.write() : confirmationModal.onOpen,
   })
 
   /*
@@ -118,8 +117,8 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
         align="center"
         alignContent="center"
         w="100%"
+        minH="100vh"
         gap={10}
-        pt={{ base: '100px', lg: 0 }}
       >
         <LayoutGroup>
           <CandleStickCard
@@ -147,18 +146,18 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
 
             <CurrencyOutputField
               currencyAmountOut={trade.data.outputAmount}
-              currencyAmountIn={trade.data.inputAmount}
               updateOutputValue={onChangeOutput}
+              priceImpact={trade.data?.priceImpact}
             />
-
             {settings.expertMode && <CustomRecipient onChangeRecipient={setRecipient} />}
 
             <HStack justify="center" align="center" py={2} px={3} my="auto" rounded="xl">
-              <RelativePrice
-                currency0={trade.data.inputAmount?.currency}
-                currency1={trade.data.outputAmount?.currency}
-                mr="auto"
-              />
+              <Flex mr={'auto'} flexDirection="column">
+                <RelativePrice
+                  currency0={trade.data.inputAmount?.currency}
+                  currency1={trade.data.outputAmount?.currency}
+                />
+              </Flex>
               <GasPrice />
               <Collapse in={hasDetails} animateOpacity>
                 <Button
@@ -187,17 +186,7 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
               <TradeDetails trade={trade.data} settings={settings} />
             </Collapse>
 
-            <ApproveButton
-              variant="primary"
-              size="large"
-              w="full"
-              approveArgs={{
-                currency: trade.data.inputAmount.currency,
-                amount: trade.data.inputAmount.numerator,
-                spender: ROUTER_ADDRESS[trade.data.inputAmount.currency?.chainId],
-              }}
-              {...swapButtonProps}
-            />
+            <Button variant="primary" size="large" w="full" {...swapButtonProps} />
 
             <NetworkMismatch
               isOpen={isNetworkMismatch && queryHasCurrency}

@@ -4,6 +4,13 @@ on: [pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_ALCHEMY_ID: ${{ secrets.NEXT_PUBLIC_ALCHEMY_ID }}
+      NEXT_PUBLIC_CONCAVE_RPC_KEY: ${{ secrets.NEXT_PUBLIC_CONCAVE_RPC_KEY }}
+      NEXT_PUBLIC_INFURA_ID: ${{ secrets.NEXT_PUBLIC_INFURA_ID }}
+      NEXT_PUBLIC_MORALIS_TOKEN: ${{ secrets.NEXT_PUBLIC_MORALIS_TOKEN }}
+      NEXT_PUBLIC_UNIVERSAL_GA: ${{ secrets.NEXT_PUBLIC_UNIVERSAL_GA }}
+
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
@@ -11,7 +18,7 @@ jobs:
           node-version: 16
 
       - name: Set up packages
-        run: yarn
+        run: yarn && yarn build
 
       - name: '@concave/core'
         run: cd libs/core/ && yarn test && cd ../..

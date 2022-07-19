@@ -3,7 +3,6 @@ import { getBondSpotPrice } from 'components/Bond/BondState'
 import { ButtonLink, ButtonLinkProps } from 'components/ButtonLink'
 import { useCNVPrice } from 'hooks/useCNVPrice'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { isMobile } from 'utils/isMobile'
 import Router from 'next/router'
 import { useQuery } from 'react-query'
 import getROI from 'utils/getROI'
@@ -22,7 +21,6 @@ const NavButton = (props: ButtonLinkProps) => {
       h="50px"
       rightIcon={<Box roundedLeft="lg" shadow="Up Big" mr={-5} w="16px" h="36px" />}
       isActive={Router.route === props.href}
-      data-peer
       {...props}
     >
       <Flex w="100%" align="center" justify="center">
@@ -38,13 +36,8 @@ const SubnavButton = ({ children, ...props }: ButtonLinkProps) => {
     <ButtonLink
       onClick={onCloseSidebar}
       px={4}
-      sx={isMobile() || Router.route === props.href ? { p: '10px' } : { maxH: 0, opacity: 0, p: 0 }}
-      transition="all 0.1s ease-in"
-      _groupHover={subnavVisibleStyles}
-      _groupFocusWithin={subnavVisibleStyles}
+      sx={{ maxH: 'unset', opacity: 1, p: '10px' }}
       isActive={Router.route === props.href}
-      data-peer
-      _peerActive={subnavVisibleStyles}
       w="100%"
       color="text.low"
       variant="secondary"
@@ -150,7 +143,6 @@ function PageNav() {
           >
             Swap
           </NavButton>
-
           <SubnavButton href="/addliquidity">Add liquidity</SubnavButton>
           <SubnavButton href="/pools">Your Pools</SubnavButton>
         </Box>

@@ -6,7 +6,7 @@ import { usePositionsState } from 'components/Positions/usePositionsState'
 const Pools = () => {
   const state = usePositionsState()
   return (
-    <Box maxH={'100vh'} w={'100%'} overflowY={'hidden'} apply="scrollbar.secondary">
+    <Box w={'100%'} overflowY={'hidden'} apply="scrollbar.secondary">
       <Flex
         align={'center'}
         w={'100%'}

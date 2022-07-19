@@ -1,5 +1,5 @@
-export * from './errors'
 export * from './entities'
+export * from './errors'
+export * from './fetcher'
 export * from './functions'
 export * from './router'
-export * from './fetcher'

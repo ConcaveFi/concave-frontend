@@ -1,9 +1,9 @@
 import { SubmittedIcon } from '@concave/icons'
 import { Button, Link, Modal, Text } from '@concave/ui'
+import { TransactionResponse } from '@ethersproject/abstract-provider'
 import { getTxExplorer } from 'lib/getTransactionExplorer'
 import { ReactNode, useEffect, useState } from 'react'
 import { useNetwork } from 'wagmi'
-import { TransactionResponse } from '@ethersproject/abstract-provider'
 
 const TxSubmitted = ({ title, tx }: { title: string; tx: TransactionResponse }) => {
   const { chain } = useNetwork()

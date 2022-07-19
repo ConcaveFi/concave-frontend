@@ -1,6 +1,5 @@
-import { Button, Flex, Text, Tooltip, useDisclosure } from '@chakra-ui/react'
+import { Flex, Text, useDisclosure } from '@chakra-ui/react'
 import { NumericInput } from '@concave/ui'
-import { BigNumber, utils } from 'ethers'
 
 type BBT_CNVDialogInput = {
   onChangeValue: (value: string) => void
@@ -19,7 +18,7 @@ export const BBT_CNVDialogInput = ({
   return (
     <Flex height={'85px'} direction="column">
       <Flex height={'85px'} shadow={'down'} rounded="2xl" px={4} py={2} direction="column">
-        <Flex alignSelf="start" align={'center'}>
+        <Flex alignSelf="start" align={'center'} w="full">
           <NumericInput
             py={2}
             fontSize={'18px'}

@@ -1,7 +1,7 @@
-import { Contract } from '@ethersproject/contracts'
-import { MaxUint256 } from '@ethersproject/constants'
-import { Wallet } from '@ethersproject/wallet'
 import { Signer } from '@ethersproject/abstract-signer'
+import { MaxUint256 } from '@ethersproject/constants'
+import { Contract } from '@ethersproject/contracts'
+import { Wallet } from '@ethersproject/wallet'
 
 interface PermitAllowedMessage {
   holder: string
