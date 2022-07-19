@@ -21,7 +21,6 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
 
   const { address } = useAccount()
   const { data: signer } = useSigner()
-  const { bbtCNV } = useVestedTokens()
   const provider = useProvider()
 
   const [status, setStatus] = useState<'default' | 'approve' | 'rejected' | 'error'>('default')
@@ -52,9 +51,9 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
     </>
   )
   function redeem(amount: BigNumber, redeemMax: boolean) {
-    const bbtCNVContract = new PCNVContract(provider)
+    const pCNVContract = new PCNVContract(provider)
     setStatus('approve')
-    bbtCNVContract
+    pCNVContract
       .redeem(signer, amount, address, redeemMax)
       .then((transaction) => {
         registerTransaction(transaction, {
