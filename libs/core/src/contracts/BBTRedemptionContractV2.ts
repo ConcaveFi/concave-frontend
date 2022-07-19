@@ -1,5 +1,5 @@
 import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/providers'
-import { BaseProvider } from '@ethersproject/providers'
+import { BaseProvider, TransactionResponse } from '@ethersproject/providers'
 import { BigNumber, Contract, ethers } from 'ethers'
 import { BBTCNV_REDEMPTION_V2_ABI } from 'src/abis'
 import { BBTCNV_REDEMPTION_V2 } from 'src/constants'
@@ -42,7 +42,7 @@ export class BBTRedemptionContractV2 {
     amount: BigNumber,
     address: string,
     redeemMax?: boolean,
-  ): Promise<ethers.Transaction & { wait: (confirmations) => unknown }> {
+  ): Promise<TransactionResponse> {
     return this.bbtCNVContract.connect(signer).redeem(amount, address, redeemMax)
   }
 }

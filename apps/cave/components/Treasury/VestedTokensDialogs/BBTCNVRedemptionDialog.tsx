@@ -1,7 +1,8 @@
 import { BBTRedemptionContractV2 } from '@concave/core'
 import { useDisclosure } from '@concave/ui'
+import { TransactionResponse } from '@ethersproject/providers'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
-import { BigNumber, Transaction } from 'ethers'
+import { BigNumber } from 'ethers'
 import { formatEther, parseEther } from 'ethers/lib/utils'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
@@ -12,7 +13,6 @@ import useBBTCNVRedeemable from '../Hooks/useBBTCNVRedeemable'
 import useVestedTokens from '../Hooks/useVestedTokens'
 import { VestedTokenButtonProps } from '../TreasuryRedeemCard'
 import { VestedTokenDialog } from './VestedTokenDialog'
-
 export const BBTCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) => {
   const {
     isOpen: transactionSubmitted,
@@ -27,7 +27,7 @@ export const BBTCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) 
   const { bbtCNV } = useVestedTokens()
 
   const [status, setStatus] = useState<'default' | 'approve' | 'rejected' | 'error'>('default')
-  const [tx, setTx] = useState<Transaction>()
+  const [tx, setTx] = useState<TransactionResponse>()
 
   const networdId = useCurrentSupportedNetworkId()
   const balance = parseEther(bbtCNV?.data?.formatted || '0')
