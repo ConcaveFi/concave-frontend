@@ -10,7 +10,7 @@
     "local-build": "next build",
     "start": "next start",
     "lint": "next lint --fix",
-    "test": "jest --watch",
+    "test": "jest",
     "test:watch": "tsdx test --watch",
     "gen": "DOTENV_CONFIG_PATH=./.env graphql-codegen --config codegen.yml -r dotenv/config"
   },
