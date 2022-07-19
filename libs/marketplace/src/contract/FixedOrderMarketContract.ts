@@ -1,7 +1,7 @@
 import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/providers'
 import { FIXED_ORDER_MARKET_CONTRACT } from '@concave/core'
 import { BaseProvider } from '@ethersproject/providers'
-import { ethers } from 'ethers'
+import { ethers, Signer } from 'ethers'
 import { MarketItem } from 'src/entities'
 import { FixedOrderMarketAbi } from './FixedOrderMarketAbi'
 
@@ -23,7 +23,7 @@ export class FixedOrderMarketContract {
   }
 
   public async computeSigner(marketItem: MarketItem) {
-    console.log(marketItem)
+    console.log(this.getContract())
     const signature = marketItem.signature
     const r = '0x' + signature.substring(0, 64)
     const s = '0x' + signature.substring(64, 128)
@@ -47,5 +47,24 @@ export class FixedOrderMarketContract {
       r.toString(),
       s.toString(),
     )
+  }
+  public async swap(signer: Signer, marketItem: MarketItem) {
+    const signature = marketItem.signature
+    const r = '0x' + signature.substring(0, 64)
+    const s = '0x' + signature.substring(64, 128)
+    const v = parseInt(signature.substring(128, 130), 16)
+    const splitValue = [
+      marketItem.seller.toString(),
+      marketItem.erc721.toString(),
+      marketItem.erc20.toString(),
+      marketItem.tokenId.toString(),
+      marketItem.startPrice.toString(),
+      marketItem.endPrice.toString(),
+      marketItem.start.toString(),
+      marketItem.deadline.toString(),
+    ]
+    console.log(JSON.stringify({ nonce: marketItem.nonce, r, s, v, splitValue }))
+
+    return this.contract.connect(signer).swap(splitValue, v.toString(), r.toString(), s.toString())
   }
 }

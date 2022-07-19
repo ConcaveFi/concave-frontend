@@ -28,10 +28,8 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakin
   const { registerTransaction } = useTransactionRegistry()
 
   const buyAction = async () => {
-    console.log('buyAction')
-    console.log(stakingPosition)
     const contract = new FixedOrderMarketContract(concaveProvider(stakingPosition.chainId))
-    contract.computeSigner(stakingPosition.market).then(alert)
+    contract.swap(signer, stakingPosition.market).then(alert)
     // const tx = await contract.buyNow(signer, stakingPosition. , marketItem?.offer)
     // registerTransaction(tx, {
     //   type: 'offer marketplace',
