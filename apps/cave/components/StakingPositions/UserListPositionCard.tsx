@@ -70,11 +70,12 @@ export const useListeForSaleState = ({ marketItemState }: UserListPositionCardPr
         mutate({
           tokenID: marketItem.tokenId.toString(),
           signatureHash: signature,
+          endPrice: marketItem.endPrice.toString(),
           start: marketItem.start.toString(),
           startPrice: marketItem.startPrice.toString(),
           tokenOwner: marketItem.seller,
           tokenIsListed: false,
-          deadline: marketItem.deadline,
+          deadline: marketItem.deadline.toString(),
         })
       })
       .catch(console.error)

@@ -100,10 +100,10 @@ export const getMarketPlaceButtonProps = (marketItemState: UserMarketInfoState):
     return { loadingText: 'Approve in wallet', disabled: true, isLoading: true }
   }
   const market = stakingPosition.market
-  if (market.isListed && market?.type === `dutch auction`) {
+  if (market?.isListed && market?.type === `dutch auction`) {
     return { children: 'Unlist auction', onClick: withdraw, variant: 'primary.outline' }
   }
-  if (market.isListed && market?.type === `list`) {
+  if (market?.isListed && market?.type === `list`) {
     return { children: 'Unlist sale', onClick: withdraw, variant: 'primary.outline' }
   }
   return { children: 'List for sale', onClick: offerDisclosure.onOpen }
