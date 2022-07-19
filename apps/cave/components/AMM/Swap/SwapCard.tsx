@@ -50,7 +50,7 @@ export function SwapCard() {
     error,
     recipient,
     settings,
-    onSwapClick: () => (settings.expertMode ? swapTx.write : confirmationModal.onOpen),
+    onSwapClick: () => (settings.expertMode ? swapTx.write() : confirmationModal.onOpen()),
   })
 
   return (

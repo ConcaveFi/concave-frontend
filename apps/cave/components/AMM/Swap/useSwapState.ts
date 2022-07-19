@@ -1,26 +1,13 @@
 import { Currency, CurrencyAmount } from '@concave/core'
-import { BestTradeOptions, Pair, Trade, TradeType } from '@concave/gemswap-sdk'
+import { Trade, TradeType } from '@concave/gemswap-sdk'
 import { useLinkedCurrencyAmounts } from 'components/CurrencyAmountField'
 import { swapDefaultCurrencies } from 'pages/gemswap'
 import { useCallback, useMemo, useRef, useState } from 'react'
+import { toAmount } from 'utils/toAmount'
 import { usePairs } from '../hooks/usePair'
 import { useQueryCurrencies } from '../hooks/useQueryCurrencies'
 import { getBestTrade } from '../hooks/useTrade'
 import { useSwapSettings } from '../Swap/Settings'
-
-const derive = (
-  enteredAmount: CurrencyAmount<Currency>,
-  currencies: [Currency, Currency],
-  pairs: Pair[],
-  options: BestTradeOptions,
-) => {
-  const [otherCurrency, tradeType] = enteredAmount.currency.equals(currencies[0])
-    ? [currencies[1], TradeType.EXACT_INPUT]
-    : [currencies[0], TradeType.EXACT_OUTPUT]
-
-  const trade = getBestTrade(pairs, tradeType, enteredAmount, otherCurrency, options)
-  return tradeType === TradeType.EXACT_INPUT ? trade.outputAmount : trade.inputAmount
-}
 
 /*
   lets say you filled the swap card with 100 dai in and it derived 3 cnv out
@@ -63,13 +50,28 @@ export const useSwapState = () => {
     onDerive: useCallback(
       (enteredAmount: CurrencyAmount<Currency>, _currencies: typeof currencies) => {
         try {
-          return derive(enteredAmount, _currencies, pairs.data, { maxHops })
+          trade.current = null
+
+          const [otherCurrency, tradeType] = enteredAmount.currency.equals(currencies[0])
+            ? [currencies[1], TradeType.EXACT_INPUT]
+            : [currencies[0], TradeType.EXACT_OUTPUT]
+
+          if (enteredAmount.equalTo(0)) return toAmount(0, otherCurrency)
+
+          const bestTrade = getBestTrade(pairs.data, tradeType, enteredAmount, otherCurrency, {
+            maxHops,
+          })
+          trade.current = bestTrade
+
+          return tradeType === TradeType.EXACT_INPUT
+            ? bestTrade.outputAmount
+            : bestTrade.inputAmount
         } catch (e) {
           setError(e)
           return undefined
         }
       },
-      [maxHops, pairs.data],
+      [currencies, maxHops, pairs.data],
     ),
   })
 

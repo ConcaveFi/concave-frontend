@@ -35,6 +35,7 @@ export const WaitingConfirmationDialog = ({
       isOpen={isOpen}
       onClose={() => [props.onClose?.(), onClose()]}
       bodyProps={{ align: 'center', gap: 1, w: '400px' }}
+      preserveScrollBarGap
     >
       <SpinIcon __css={spinnerStyles} w={10} my={6} />
       <Heading fontSize="xl" fontWeight="bold">
