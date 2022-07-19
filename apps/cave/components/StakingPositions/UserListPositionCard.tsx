@@ -74,7 +74,7 @@ export const useListeForSaleState = ({ marketItemState }: UserListPositionCardPr
           start: marketItem.start.toString(),
           startPrice: marketItem.startPrice.toString(),
           tokenOwner: marketItem.seller,
-          tokenIsListed: false,
+          tokenIsListed: true,
           deadline: marketItem.deadline.toString(),
         })
       })
