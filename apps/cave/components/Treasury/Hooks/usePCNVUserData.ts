@@ -12,9 +12,9 @@ export const usePCNVUserData = () => {
     ['pCNVUserData', address, chaindId],
     () =>
       Promise.all([pCNVContract.redeemable(address), pCNVContract.redeemed(address)]).then(
-        (values) => ({
-          redeemable: values[0],
-          redeemed: values[1],
+        ([redeemable, redeemed]) => ({
+          redeemable,
+          redeemed,
         }),
       ),
     {
