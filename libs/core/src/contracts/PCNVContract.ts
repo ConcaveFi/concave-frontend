@@ -1,4 +1,4 @@
-import { BaseProvider } from '@ethersproject/providers'
+import { BaseProvider, TransactionResponse } from '@ethersproject/providers'
 import { BigNumber, Contract, ethers } from 'ethers'
 import { PCNV_REDEMPTION_ABI } from 'src/abis/PcnvRedemptionAbi'
 import { PCNV_CONTRACT } from 'src/constants'
@@ -24,7 +24,7 @@ export class PCNVContract {
     amount: BigNumber,
     address: string,
     redeemMax?: boolean,
-  ): Promise<ethers.Transaction> {
+  ): Promise<TransactionResponse> {
     return this.pCNVContract.connect(signer).redeem(amount, address, address, redeemMax)
   }
 }
