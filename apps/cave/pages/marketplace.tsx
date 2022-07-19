@@ -18,10 +18,6 @@ const Marketplace = () => {
   useEffect(() => {
     if (isLargerLayout && viewTransactions == true) setViewTransactions(false)
   }, [isLargerLayout])
-  // const positions = useGet_Nft_Lock_PositionQuery({
-  //   address: `0xD93736a5c4D45eE3E887698301AE9B67082ce9D0`,
-  // })
-  // console.log(positions.data)
 
   return (
     <Flex width={{ base: 'full' }} borderRadius={0} textAlign="center" direction="column">

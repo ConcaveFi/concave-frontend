@@ -1,5 +1,6 @@
 import { STAKING_CONTRACT } from '@concave/core'
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
+import { MarketItem } from './MarketItem'
 import { StakingReward } from './StakingReward'
 
 export type NFT = {
@@ -14,17 +15,20 @@ export class StakingPosition implements NFT {
   public readonly tokenId: BigNumberish
   public readonly chainId: number
   public readonly reward: StakingReward
+  public readonly market?: MarketItem
 
   constructor({
     position,
     reward,
     chainId,
     tokenId,
+    market,
   }: {
     tokenId: BigNumberish
     chainId: number
     position: Position
     reward: StakingReward
+    market?: MarketItem
   }) {
     this.tokenId = tokenId
     this.chainId = chainId
@@ -32,6 +36,7 @@ export class StakingPosition implements NFT {
     this.maturity = position.maturity
     this.poolID = position.poolID
     this.reward = reward
+    this.market = market
   }
 
   get initialValue() {
@@ -48,6 +53,10 @@ export class StakingPosition implements NFT {
 
   get totalRewards() {
     return this.currentValue.sub(this.initialValue)
+  }
+
+  get discount() {
+    return BigNumber.from(0)
   }
 }
 

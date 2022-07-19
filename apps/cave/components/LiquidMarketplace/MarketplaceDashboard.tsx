@@ -12,6 +12,7 @@ import { MarketplacePosition } from './MarketplacePosition'
 
 export const MarketplaceDashboard = () => {
   const { isFetching, salePositions, owner, setOwner } = useMarketplaceDashbord()
+<<<<<<< HEAD
   const [sort, setSort] = useState<NftSort>({ sort: 'REDEEM_DATE', order: 'ASC' })
   const sortFunction = sort ? NftSortMethod[sort.sort][sort.order] : () => 0
   const [stakeFilters, setStakeFilters] = useState([
@@ -27,6 +28,14 @@ export const MarketplaceDashboard = () => {
     .map((marketItem) => (
       <MarketplacePosition key={+marketItem.position.tokenId.toString()} marketItem={marketItem} />
     ))
+=======
+  const nftPositions = salePositions.map((stakingPosition) => (
+    <MarketplacePosition
+      key={+stakingPosition.tokenId.toString()}
+      stakingPosition={stakingPosition}
+    />
+  ))
+>>>>>>> fbcb463148d6b250f51e5162081c6dad0707d06b
 
   return (
     <VStack

@@ -1,16 +1,15 @@
 import {
   ConcaveNFTMarketplace,
-  fechMarketInfo,
   Offer,
   StakingPosition,
   StakingV1Contract,
 } from '@concave/marketplace'
 import { ButtonProps, useDisclosure } from '@concave/ui'
 import { Transaction } from 'ethers'
+import { useUpdate_Cavemart_Listin_By_IdMutation } from 'graphql/generated/graphql'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { concaveProvider } from 'lib/providers'
 import { useState } from 'react'
-import { useQuery } from 'react-query'
 import { useSigner, useWaitForTransaction } from 'wagmi'
 
 export type UserMarketInfoState = ReturnType<typeof useMarketInfo>
@@ -23,11 +22,7 @@ export const useMarketInfo = ({ stakingPosition }: { stakingPosition: StakingPos
   const [transaction, setTransaction] = useState<Transaction>()
   const [isWaitingForWallet, setIsWaitingForWallet] = useState<boolean>(false)
   const tx = useWaitForTransaction({ hash: transaction?.hash })
-  const marketItem = useQuery(
-    ['MarketInfo', tx.data, chainId, stakingPosition.tokenId],
-    async () => fechMarketInfo(concaveProvider(chainId), stakingPosition),
-    { enabled: chainId != undefined, refetchOnWindowFocus: false },
-  )
+  const { mutate } = useUpdate_Cavemart_Listin_By_IdMutation()
 
   const transactionWrapper = async (fn: () => Promise<Transaction>) => {
     setIsWaitingForWallet(true)
@@ -37,28 +32,28 @@ export const useMarketInfo = ({ stakingPosition }: { stakingPosition: StakingPos
     } catch {}
     setIsWaitingForWallet(false)
   }
-
-  const createMarketItem = () =>
-    transactionWrapper(() =>
-      new ConcaveNFTMarketplace(concaveProvider(chainId)).createMarketItem(signer, stakingPosition),
-    )
-
-  const withdrawOffer = () =>
-    transactionWrapper(async () => {
-      const tx = await new ConcaveNFTMarketplace(concaveProvider(chainId)).withdrawAuction(
-        signer,
-        stakingPosition,
-      )
-      registerTransaction(tx, {
-        type: 'unlist position',
-        tokenId: +stakingPosition.tokenId.toString(),
-      })
-      return tx
+  const withdraw = () => {
+    const marketItem = stakingPosition.market
+    mutate({
+      tokenId: marketItem.tokenId.toString(),
+      signatureHash: ``,
+      start: marketItem.start.toString(),
+      startPrice: marketItem.startPrice.toString(),
+      tokenIsListed: false,
+      deadline: marketItem.deadline.toString(),
+      endPrice: `0`,
     })
+    alert(`withdraw ok`)
+    // registerTransaction(tx, {
+    //   type: 'unlist position',
+    //   tokenId: +stakingPosition.tokenId.toString(),
+    // })
+  }
 
   const createOffer = async (offer: Offer) => {
     transactionWrapper(async () => {
       try {
+        console.log(123)
         const market = new ConcaveNFTMarketplace(concaveProvider(chainId))
         const staking = new StakingV1Contract(concaveProvider(chainId))
         const marketplaceHasPermission = await staking.isApprovedForAll(
@@ -85,41 +80,31 @@ export const useMarketInfo = ({ stakingPosition }: { stakingPosition: StakingPos
   }
 
   return {
-    marketItem,
+    stakingPosition,
     tx,
     isWaitingForWallet,
     offerDisclosure,
     chainId,
     createOffer,
     setTransaction,
-    withdrawOffer,
-    createMarketItem,
+    withdraw,
   }
 }
 
 export const getMarketPlaceButtonProps = (marketItemState: UserMarketInfoState): ButtonProps => {
-  const { tx, marketItem, isWaitingForWallet, offerDisclosure, createMarketItem, withdrawOffer } =
-    marketItemState
+  const { tx, stakingPosition, isWaitingForWallet, offerDisclosure, withdraw } = marketItemState
   if (tx?.isLoading) {
     return { loadingText: 'Loading', disabled: true, isLoading: true }
   }
   if (isWaitingForWallet) {
     return { loadingText: 'Approve in wallet', disabled: true, isLoading: true }
   }
-  if (marketItem.isLoading) {
-    return { loadingText: 'Loading market item', disabled: true, isLoading: true }
+  const market = stakingPosition.market
+  if (market?.isListed && market?.type === `dutch auction`) {
+    return { children: 'Unlist auction', onClick: withdraw, variant: 'primary.outline' }
   }
-  if (marketItem.error) {
-    return { children: 'Coming soon', disabled: true }
-  }
-  // if (!marketItem.data.isMarketItem) {
-  //   return { children: 'Create market item', onClick: createMarketItem }
-  // }
-  if (marketItem.data.isAuction) {
-    return { children: 'Unlist auction', onClick: withdrawOffer, variant: 'primary.outline' }
-  }
-  if (marketItem.data.isSale) {
-    return { children: 'Unlist sale', onClick: withdrawOffer, variant: 'primary.outline' }
+  if (market?.isListed && market?.type === `list`) {
+    return { children: 'Unlist sale', onClick: withdraw, variant: 'primary.outline' }
   }
   return { children: 'List for sale', onClick: offerDisclosure.onOpen }
 }

@@ -1,0 +1,77 @@
+
+
+mutation UPDATE_CAVEMART_LISTIN_BY_ID(
+  $tokenId: numeric!, 
+  $deadline: numeric, 
+  $start: String, 
+  $startPrice: String, 
+  $endPrice: String, 
+  $signatureHash: String!, 
+  $tokenIsListed: Boolean
+  ) {
+    update_cavemart(
+      where: {
+        tokenID: {_eq: $tokenId}
+      }, 
+      _set: { 
+        deadline: $deadline, 
+        endPrice: $endPrice, 
+        signatureHash: $signatureHash, 
+        start: $start, 
+        startPrice: $startPrice, 
+        tokenIsListed: $tokenIsListed
+      },
+    ) {
+    affected_rows
+  }
+}
+mutation INSERT_CAVEMART_LISTING(
+  $signatureHash: String!
+  $start: String!
+  $startPrice: String
+  $endPrice: String
+  $tokenID: numeric!
+  $tokenOwner: String!
+  $deadline: numeric!
+  $tokenIsListed: Boolean = true
+) {
+  insert_cavemart_one(
+    object: {
+      signatureHash: $signatureHash
+      start: $start
+      startPrice: $startPrice
+      endPrice: $endPrice
+      tokenID: $tokenID
+      tokenIsListed: $tokenIsListed
+      tokenOwner: $tokenOwner
+      deadline: $deadline
+    }
+  ) {
+    tokenID
+    tokenIsListed
+  }
+}
+
+query GET_ALL_CAVEMART_LISTINGS {
+  logStakingV1_Lock(where: { cavemarts: { tokenIsListed: { _eq: true } } }) {
+    txHash
+    timestamp
+    positionID
+    poolID
+    maturity
+    deposit
+    amount
+    cavemarts {
+      created_at
+      signatureHash
+      start
+      startPrice
+      endPrice
+      tokenID
+      tokenOwner
+      tokenIsListed
+      deadline
+    }
+  }
+}
+
