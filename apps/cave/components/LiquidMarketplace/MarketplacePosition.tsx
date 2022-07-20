@@ -9,7 +9,9 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react'
+import { CNV, CurrencyAmount, FIXED_ORDER_MARKET_CONTRACT } from '@concave/core'
 import { FixedOrderMarketContract, StakingPosition } from '@concave/marketplace'
+import { CurrencyAmountButton } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { format, formatDistanceToNowStrict } from 'date-fns'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { concaveProvider } from 'lib/providers'
@@ -86,32 +88,41 @@ const ImageContainer: React.FC<ImageContainerProps> = ({ stakePeriod }) => (
 )
 
 type BuyContainerProps = { price: string; onClick: VoidFunction }
-const BuyContainer = ({ price, onClick }: BuyContainerProps) => (
-  <Box p={'2px'} bg="linear-gradient(90deg, #72639B 0%, #44B9DE 100%)" rounded={'2xl'}>
-    <Flex
-      w="152px"
-      h="49px"
-      rounded={'2xl'}
-      shadow="up"
-      apply="background.metalBrighter"
-      justify="end"
-    >
-      <Flex flex={1} align="center" justify="center">
-        <Info title="Price" info={price} infoSize={12} />
-      </Flex>
-      <Button
-        shadow={'up'}
-        width={'45%'}
-        height="full"
-        bg="linear-gradient(90deg, #72639B 0%, #44B9DE 100%)"
+const BuyContainer = ({ price, onClick }: BuyContainerProps) => {
+  const currencyAmount = CurrencyAmount.fromRawAmount(CNV[4], `1000`)
+
+  return (
+    <Box p={'2px'} bg="linear-gradient(90deg, #72639B 0%, #44B9DE 100%)" rounded={'2xl'}>
+      <Flex
+        w="152px"
+        h="49px"
         rounded={'2xl'}
-        onClick={onClick}
+        shadow="up"
+        apply="background.metalBrighter"
+        justify="end"
       >
-        Buy
-      </Button>
-    </Flex>
-  </Box>
-)
+        <Flex flex={1} align="center" justify="center">
+          <Info title="Price" info={price} infoSize={12} />
+        </Flex>
+        <CurrencyAmountButton
+          currencyAmount={currencyAmount}
+          spender={FIXED_ORDER_MARKET_CONTRACT[4]}
+        ></CurrencyAmountButton>
+        <Button
+          shadow={'up'}
+          width={'45%'}
+          height="full"
+          bg="linear-gradient(90deg, #72639B 0%, #44B9DE 100%)"
+          rounded={'2xl'}
+          onClick={onClick}
+        >
+          Buy
+        </Button>
+      </Flex>
+    </Box>
+  )
+}
+
 type LoadBarProps = { percent: number; date: string; relativeDate: string }
 const LoadBard = ({ percent, date, relativeDate }: LoadBarProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure()

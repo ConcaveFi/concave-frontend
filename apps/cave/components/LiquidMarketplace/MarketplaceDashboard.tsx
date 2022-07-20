@@ -46,6 +46,7 @@ export const MarketplaceDashboard = () => {
         onChangeSort={setSort}
         onChangeStakeFilters={setStakeFilters}
       />
+
       {/* Positions Container */}
       <Flex
         as={Loading}

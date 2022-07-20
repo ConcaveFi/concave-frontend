@@ -1,3 +1,4 @@
+import { FIXED_ORDER_MARKET_CONTRACT } from '@concave/core'
 import {
   ConcaveNFTMarketplace,
   Offer,
@@ -24,6 +25,15 @@ export const useMarketInfo = ({ stakingPosition }: { stakingPosition: StakingPos
   const tx = useWaitForTransaction({ hash: transaction?.hash })
   const { mutate } = useUpdate_Cavemart_Listin_By_IdMutation()
 
+  const approveContract = () => {
+    const provider = concaveProvider(chainId)
+    new StakingV1Contract(provider).setApprovalForAll(
+      signer,
+      FIXED_ORDER_MARKET_CONTRACT[chainId],
+      true,
+    )
+  }
+
   const transactionWrapper = async (fn: () => Promise<Transaction>) => {
     setIsWaitingForWallet(true)
     try {
@@ -43,17 +53,11 @@ export const useMarketInfo = ({ stakingPosition }: { stakingPosition: StakingPos
       deadline: marketItem.deadline.toString(),
       endPrice: `0`,
     })
-    alert(`withdraw ok`)
-    // registerTransaction(tx, {
-    //   type: 'unlist position',
-    //   tokenId: +stakingPosition.tokenId.toString(),
-    // })
   }
 
   const createOffer = async (offer: Offer) => {
     transactionWrapper(async () => {
       try {
-        console.log(123)
         const market = new ConcaveNFTMarketplace(concaveProvider(chainId))
         const staking = new StakingV1Contract(concaveProvider(chainId))
         const marketplaceHasPermission = await staking.isApprovedForAll(
@@ -85,6 +89,7 @@ export const useMarketInfo = ({ stakingPosition }: { stakingPosition: StakingPos
     isWaitingForWallet,
     offerDisclosure,
     chainId,
+    approveContract,
     createOffer,
     setTransaction,
     withdraw,
@@ -104,7 +109,11 @@ export const getMarketPlaceButtonProps = (marketItemState: UserMarketInfoState):
     return { children: 'Unlist auction', onClick: withdraw, variant: 'primary.outline' }
   }
   if (market?.isListed && market?.type === `list`) {
-    return { children: 'Unlist sale', onClick: withdraw, variant: 'primary.outline' }
+    return {
+      children: 'Approve contract',
+      onClick: marketItemState.approveContract,
+      variant: 'primary.outline',
+    }
   }
   return { children: 'List for sale', onClick: offerDisclosure.onOpen }
 }

@@ -9,7 +9,6 @@ export class FixedOrderMarketContract {
   private readonly contract: ethers.Contract
   public readonly address: string
   constructor(private readonly provider: BaseProvider | MulticallProvider) {
-    console.log(provider.network.chainId)
     if (!provider.network.chainId)
       throw 'ChainID is undefined for constructor of contract FixedOrderMarketContract'
     this.address = FIXED_ORDER_MARKET_CONTRACT[provider.network.chainId]
@@ -22,8 +21,11 @@ export class FixedOrderMarketContract {
     return this.contract
   }
 
+  public async nonce(address: string): Promise<string> {
+    return this.contract.nonces(address)
+  }
+
   public async computeSigner(marketItem: MarketItem) {
-    console.log(this.getContract())
     const signature = marketItem.signature
     const r = '0x' + signature.substring(0, 64)
     const s = '0x' + signature.substring(64, 128)
@@ -38,8 +40,7 @@ export class FixedOrderMarketContract {
       marketItem.start.toString(),
       marketItem.deadline.toString(),
     ]
-    console.log(JSON.stringify({ nonce: marketItem.nonce, r, s, v, splitValue }))
-
+    console.log('nonce', marketItem.nonce.toString())
     return this.contract.computeSigner(
       splitValue,
       marketItem.nonce.toString(),
@@ -64,7 +65,6 @@ export class FixedOrderMarketContract {
       marketItem.deadline.toString(),
     ]
     console.log(JSON.stringify({ nonce: marketItem.nonce, r, s, v, splitValue }))
-
     return this.contract.connect(signer).swap(splitValue, v.toString(), r.toString(), s.toString())
   }
 }

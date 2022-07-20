@@ -1,3 +1,4 @@
+
 import { Box, Flex, Text } from '@concave/ui'
 import { StakePoolFilterEnum } from 'components/NftFilters/Filters/hooks/useFilterByStakePool'
 import { StakePoolFilterCard } from 'components/NftFilters/Filters/StakePoolFilter'
@@ -37,7 +38,6 @@ export function MarketplaceFilterContainer({
         bgSize="40% 50%"
         rounded={'2xl'}
       />
-
       <Flex
         rounded={'2xl'}
         py="6"
