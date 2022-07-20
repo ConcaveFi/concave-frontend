@@ -13,12 +13,11 @@ export function Treasury() {
     <Flex
       maxW={{ base: '340px', md: '520px', lg: '740px', xl: '900px' }}
       mx="auto"
-      py={6}
       direction={'column'}
       align="center"
       gap={6}
+      pt={{ base: 12, lg: 6 }}
       justify={'center'}
-      w={'full'}
     >
       <Flex
         w={'full'}
