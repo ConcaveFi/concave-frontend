@@ -35,13 +35,13 @@ export const TreasuryAssetsCard: React.FC<TreasuryAssetsCardProps> = ({ assets }
 const AssetsTitle = () => (
   <Card
     variant="secondary"
-    w="395px"
+    w={{ base: 'full', lg: '62%', xl: '50%' }}
     h={'60px'}
     textShadow={'0px 0px 27px rgba(129, 179, 255, 0.31)'}
     mx="auto"
     rounded={'0px 0px 16px 16px'}
   >
-    <Text fontSize={'xl'} m={'auto'} fontWeight={'black'}>
+    <Text fontSize={{ base: 'lg', md: 'xl' }} m={'auto'} fontWeight={'black'}>
       Treasury assets and activity
     </Text>
   </Card>
