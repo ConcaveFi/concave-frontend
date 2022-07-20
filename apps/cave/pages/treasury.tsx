@@ -16,7 +16,7 @@ export function Treasury() {
       direction={'column'}
       align="center"
       gap={6}
-      pt={{ base: 12, lg: 6 }}
+      pt={{ base: 16, lg: 6 }}
       justify={'center'}
     >
       <Flex
