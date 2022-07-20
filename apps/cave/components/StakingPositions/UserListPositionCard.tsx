@@ -14,7 +14,7 @@ import { formatEther } from 'ethers/lib/utils'
 import { useInsert_Cavemart_ListingMutation } from 'graphql/generated/graphql'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import { formatFixed } from 'utils/formatFixed'
 import { toAmount } from 'utils/toAmount'
@@ -32,7 +32,6 @@ export const useListeForSaleState = ({ marketItemState }: UserListPositionCardPr
     const cavemart = new FixedOrderMarketContract(concaveProvider(chain.rinkeby.id))
     return cavemart.nonce(seller)
   })
-
   const { mutate } = useInsert_Cavemart_ListingMutation()
   const [marketItem, setMarketItem] = useState(
     new MarketItem({
@@ -78,15 +77,17 @@ export const useListeForSaleState = ({ marketItemState }: UserListPositionCardPr
       startPrice: marketItem.startPrice.toString(),
       endPrice: marketItem.endPrice.toString(),
       start: marketItem.start.toString(),
-      nonce: `0`,
+      nonce: nonce.data || 0,
       deadline: marketItem.deadline.toString(),
     },
   })
 
+  useEffect(() => {
+    setMarketItem(marketItem.new({ nonce: nonce.data }))
+  }, [nonce, setMarketItem])
   const create = () => {
     signTypedDataAsync()
       .then(async (data) => {
-        console.log(data)
         const signature = data.substring(2)
         const user = await cavemart.computeSigner(marketItem.new({ signature }))
         alert(user)

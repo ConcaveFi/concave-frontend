@@ -40,7 +40,7 @@ export class FixedOrderMarketContract {
       marketItem.start.toString(),
       marketItem.deadline.toString(),
     ]
-
+    console.log('nonce', marketItem.nonce.toString())
     return this.contract.computeSigner(
       splitValue,
       marketItem.nonce.toString(),
