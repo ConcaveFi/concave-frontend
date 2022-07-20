@@ -2,9 +2,77 @@ import { Box, Card, Flex } from '@concave/ui'
 import { useEffect, useState } from 'react'
 import { MarketplaceTransactionCard } from './MarketplaceTransactionCard'
 
+type Data = {
+  type: 'sale' | `listing`
+  date: number
+  event: string
+  length: string
+  cnv: number
+  link: string
+}
+const mockData: Data[] = [
+  {
+    type: 'listing',
+    date: 1650615494,
+    event: 'listed',
+    length: '3 month',
+    cnv: 700,
+    link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
+  },
+  {
+    type: 'sale',
+    date: 1650615494,
+    event: 'sold',
+    length: '6 month',
+    cnv: 200,
+    link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
+  },
+  {
+    type: 'listing',
+    date: 1650615494,
+    event: 'listed',
+    length: '1 year',
+    cnv: 340,
+    link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
+  },
+  {
+    type: 'sale',
+    date: 1650615494,
+    event: 'listed',
+    length: '1 year',
+    cnv: 340,
+    link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
+  },
+  {
+    type: 'sale',
+    date: 1650615494,
+    event: 'listed',
+    length: '1 year',
+    cnv: 340,
+    link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
+  },
+  {
+    type: 'listing',
+    date: 1650615494,
+    event: 'listed',
+    length: '1 year',
+    cnv: 340,
+    link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
+  },
+  {
+    type: 'sale',
+    date: 1650615494,
+    event: 'listed',
+    length: '1 year',
+    cnv: 340,
+    link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
+  },
+]
+
 const MarketplaceActivityCard = () => {
   const [loading, setLoading] = useState(false)
-  const [data, setData] = useState(null)
+
+  const [data, setData] = useState<Data[]>([])
   const [error, setError] = useState(false)
   const [filter, setFilter] = useState<'all' | 'listing' | 'sale'>('all')
 
@@ -17,64 +85,7 @@ const MarketplaceActivityCard = () => {
     // fetch with the trigger filter and setData
     setLoading(true)
     setData(
-      [
-        {
-          type: 'listing',
-          date: 1650615494,
-          event: 'listed',
-          length: '3 month',
-          cnv: 700,
-          link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
-        },
-        {
-          type: 'sale',
-          date: 1650615494,
-          event: 'sold',
-          length: '6 month',
-          cnv: 200,
-          link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
-        },
-        {
-          type: 'listing',
-          date: 1650615494,
-          event: 'listed',
-          length: '1 year',
-          cnv: 340,
-          link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
-        },
-        {
-          type: 'sale',
-          date: 1650615494,
-          event: 'listed',
-          length: '1 year',
-          cnv: 340,
-          link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
-        },
-        {
-          type: 'sale',
-          date: 1650615494,
-          event: 'listed',
-          length: '1 year',
-          cnv: 340,
-          link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
-        },
-        {
-          type: 'listing',
-          date: 1650615494,
-          event: 'listed',
-          length: '1 year',
-          cnv: 340,
-          link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
-        },
-        {
-          type: 'sale',
-          date: 1650615494,
-          event: 'listed',
-          length: '1 year',
-          cnv: 340,
-          link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
-        },
-      ].filter((value) => {
+      mockData.filter((value) => {
         if (filter === 'all') return true
         else return value.type === filter
       }),
@@ -122,12 +133,13 @@ const MarketplaceActivityCard = () => {
           {loading && <span>loading...</span>}
           {data &&
             !error &&
-            data.map(
-              (
-                e: any,
-                k, //TODO: FIX this type
-              ) => <MarketplaceTransactionCard type={e.type} key={k} filter={e} />,
-            )}
+            data.map((e, index) => (
+              <MarketplaceTransactionCard
+                type={e.type as `listing` | `sale`}
+                key={index}
+                filter={e}
+              />
+            ))}
         </div>
       </Box>
     </Card>
