@@ -20,10 +20,10 @@ export const StakeCard = (props: StakeCardProps) => {
   const { stakingV1Pools, stakingV1Cap } = data || {}
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const loadBarPercent = new Percent(
-    stakingV1Pools?.balance?.toString() || '0',
-    stakingV1Cap?.toString() || '0',
-  )
+  const pools = stakingV1Pools?.balance.toString() || '0'
+  const poolsCapacity = stakingV1Cap?.add(stakingV1Pools?.balance).toString() || '0'
+
+  const loadBarPercent = new Percent(pools, poolsCapacity)
 
   const loadBarProps = {
     percent: loadBarPercent,
