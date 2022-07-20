@@ -1,13 +1,6 @@
-import { Search2Icon } from '@concave/icons'
-import { Box, Flex, Input, InputGroup, InputLeftElement } from '@concave/ui'
+import { Box, Flex } from '@concave/ui'
 
-export function MarketplaceFilterContainer({
-  address,
-  setAddress,
-}: {
-  address: string
-  setAddress: (address: string) => void
-}) {
+export function MarketplaceFilterContainer() {
   return (
     <Flex
       width="full"
@@ -29,19 +22,6 @@ export function MarketplaceFilterContainer({
         rounded={'2xl'}
       />
       {/* Search Container */}
-      <InputGroup>
-        <InputLeftElement pointerEvents="none">
-          <Search2Icon color="gray.300" />
-        </InputLeftElement>
-        <Input
-          type="text"
-          defaultValue={address}
-          onChange={(element) => {
-            setAddress(element.target.value)
-          }}
-          placeholder="Address"
-        />
-      </InputGroup>
     </Flex>
   )
 }

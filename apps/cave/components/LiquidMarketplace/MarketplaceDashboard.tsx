@@ -5,7 +5,7 @@ import { useMarketplaceDashbord } from 'components/Marketplace/UseMarkeplaceStat
 import { MarketplacePosition } from './MarketplacePosition'
 
 export const MarketplaceDashboard = () => {
-  const { isFetching, salePositions, owner, setOwner } = useMarketplaceDashbord()
+  const { isFetching, salePositions } = useMarketplaceDashbord()
   const nftPositions = salePositions.map((stakingPosition) => (
     <MarketplacePosition
       key={+stakingPosition.tokenId.toString()}
@@ -23,7 +23,7 @@ export const MarketplaceDashboard = () => {
       gap={5}
       p={5}
     >
-      <MarketplaceFilterContainer address={owner} setAddress={setOwner} />
+      <MarketplaceFilterContainer />
       {/* Positions Container */}
       <Flex
         as={Loading}

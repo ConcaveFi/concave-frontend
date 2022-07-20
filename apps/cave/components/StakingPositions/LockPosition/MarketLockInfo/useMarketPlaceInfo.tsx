@@ -26,8 +26,12 @@ export const useMarketInfo = ({ stakingPosition }: { stakingPosition: StakingPos
   const { mutate } = useUpdate_Cavemart_Listin_By_IdMutation()
 
   const approveContract = () => {
-    const provider = concaveProvider(4)
-    new StakingV1Contract(provider).setApprovalForAll(signer, FIXED_ORDER_MARKET_CONTRACT[4], true)
+    const provider = concaveProvider(chainId)
+    new StakingV1Contract(provider).setApprovalForAll(
+      signer,
+      FIXED_ORDER_MARKET_CONTRACT[chainId],
+      true,
+    )
   }
 
   const transactionWrapper = async (fn: () => Promise<Transaction>) => {
@@ -49,16 +53,11 @@ export const useMarketInfo = ({ stakingPosition }: { stakingPosition: StakingPos
       deadline: marketItem.deadline.toString(),
       endPrice: `0`,
     })
-    // registerTransaction(tx, {
-    //   type: 'unlist position',
-    //   tokenId: +stakingPosition.tokenId.toString(),
-    // })
   }
 
   const createOffer = async (offer: Offer) => {
     transactionWrapper(async () => {
       try {
-        console.log(123)
         const market = new ConcaveNFTMarketplace(concaveProvider(chainId))
         const staking = new StakingV1Contract(concaveProvider(chainId))
         const marketplaceHasPermission = await staking.isApprovedForAll(

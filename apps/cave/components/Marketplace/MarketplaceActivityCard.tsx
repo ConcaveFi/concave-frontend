@@ -8,7 +8,7 @@ type Data = {
   event: string
   length: string
   cnv: number
-  link: string
+  transactionHash: string
 }
 const mockData: Data[] = [
   {
@@ -17,7 +17,7 @@ const mockData: Data[] = [
     event: 'listed',
     length: '3 month',
     cnv: 700,
-    link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
+    transactionHash: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
   },
   {
     type: 'sale',
@@ -25,7 +25,7 @@ const mockData: Data[] = [
     event: 'sold',
     length: '6 month',
     cnv: 200,
-    link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
+    transactionHash: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
   },
   {
     type: 'listing',
@@ -33,7 +33,7 @@ const mockData: Data[] = [
     event: 'listed',
     length: '1 year',
     cnv: 340,
-    link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
+    transactionHash: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
   },
   {
     type: 'sale',
@@ -41,7 +41,7 @@ const mockData: Data[] = [
     event: 'listed',
     length: '1 year',
     cnv: 340,
-    link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
+    transactionHash: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
   },
   {
     type: 'sale',
@@ -49,7 +49,7 @@ const mockData: Data[] = [
     event: 'listed',
     length: '1 year',
     cnv: 340,
-    link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
+    transactionHash: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
   },
   {
     type: 'listing',
@@ -57,7 +57,7 @@ const mockData: Data[] = [
     event: 'listed',
     length: '1 year',
     cnv: 340,
-    link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
+    transactionHash: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
   },
   {
     type: 'sale',
@@ -65,7 +65,7 @@ const mockData: Data[] = [
     event: 'listed',
     length: '1 year',
     cnv: 340,
-    link: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
+    transactionHash: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
   },
 ]
 

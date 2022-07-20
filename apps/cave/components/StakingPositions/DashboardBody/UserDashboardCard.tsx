@@ -14,7 +14,6 @@ import { FilterContainer } from './FilterContainer'
 import { UserDividendCard } from './UserDividendCard'
 
 export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePositionsState }) => {
-  console.log(`UserDashboardCard`)
   const { isConnected } = useAccount()
   const { userNonFungibleTokensInfo, totalLocked, isLoading } = stakePosition
   const hasPositions = userNonFungibleTokensInfo.length !== 0
@@ -73,11 +72,9 @@ export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePo
             mb={3}
           >
             {userNonFungibleTokensInfo
-              // .filter(filterByStakePool)
-              // .filter(filterByRange)
-              // .filter((position) => position.maturity > 0)
-
-              // .sort(sortFunction)
+              .filter(filterByStakePool)
+              .filter(filterByRange)
+              .sort(sortFunction)
               .map((nonFungibleTokenInfo) => (
                 <UserPositionCard
                   key={+nonFungibleTokenInfo.tokenId.toString()}
