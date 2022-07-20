@@ -41,7 +41,14 @@ export const TreasuryDataCard = ({ treasuryData, lastBondSolds }: TreasuryDataCa
 
 type LastBondsContainerProps = { lastBondSolds: LastBondSolds }
 const LastBondsContainer: React.FC<LastBondsContainerProps> = ({ lastBondSolds }) => (
-  <Flex mt={'-4'} flex={0.75} align="center" w="full" direction={{ base: 'column', md: 'row' }}>
+  <Flex
+    mt={'-4'}
+    mb={{ base: 4, lg: 0 }}
+    flex={{ base: 0.6, lg: 0.75 }}
+    align="center"
+    w="full"
+    direction={{ base: 'column', md: 'row' }}
+  >
     {lastBondSolds?.map(({ timesTamp, inputAmount, outputAmount }, index) => (
       <LastBondInfo
         opacity={{ base: 1 - index / 3.2, md: 1 }}

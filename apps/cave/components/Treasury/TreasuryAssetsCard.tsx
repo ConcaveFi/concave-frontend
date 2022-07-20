@@ -35,13 +35,13 @@ export const TreasuryAssetsCard: React.FC<TreasuryAssetsCardProps> = ({ assets }
 const AssetsTitle = () => (
   <Card
     variant="secondary"
-    w="395px"
+    w={{ base: 'full', lg: '62%', xl: '50%' }}
     h={'60px'}
     textShadow={'0px 0px 27px rgba(129, 179, 255, 0.31)'}
     mx="auto"
     rounded={'0px 0px 16px 16px'}
   >
-    <Text fontSize={'xl'} m={'auto'} fontWeight={'black'}>
+    <Text fontSize={{ base: 'lg', md: 'xl' }} m={'auto'} fontWeight={'black'}>
       Treasury assets and activity
     </Text>
   </Card>
@@ -87,18 +87,18 @@ const TokenInfo: React.FC<{ token: TreasuryTokenInfo }> = ({ token }) => (
     h="52px"
     variant="secondary"
     direction={'row'}
-    gap={4}
+    gap={2}
   >
-    <Card w={'45%'} h="full" direction={'row'} align="center">
+    <Card w={'48%'} h="full" direction={'row'} align="center">
       <AvatarGroup width={'42%'} size={'sm'} justifyContent="center">
         <Avatar src={convertToJsDelivrPath(token?.image)} />
         {token?.isLP && <Avatar src={convertToJsDelivrPath(token?.imageP1)} />}
       </AvatarGroup>
-      <Text fontSize={'lg'} fontWeight="bold">
+      <Text fontSize={'md'} fontWeight="bold">
         {token.name}
       </Text>
     </Card>
-    <Text fontSize={'xl'} my="auto" fontWeight={'bold'} color="text.low">
+    <Text fontSize={'lg'} my="auto" fontWeight={'bold'} color="text.low">
       {` $${numberMask(token?.total)}`}
     </Text>
   </Card>
