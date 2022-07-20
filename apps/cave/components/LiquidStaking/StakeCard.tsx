@@ -102,12 +102,16 @@ const LoadBar = ({ percent, currentlyStaked, loading, stakingCap, variant }: Loa
       my={2}
       p={1}
     >
-      <Flex
-        width={`${percent.toSignificant(3)}%`}
-        height="full"
-        apply={'background.metalBrighter'}
-        rounded="full"
-      />
+      <Flex w="full" height={'full'} overflow="hidden" rounded={'inherit'}>
+        <Flex
+          transform={`translateX(-${100 - +percent.toSignificant(3)}%)`}
+          width={`full`}
+          height="full"
+          apply={'background.metalBrighter'}
+          rounded="full"
+        />
+      </Flex>
+
       <Flex
         position={'absolute'}
         mx={-1}
