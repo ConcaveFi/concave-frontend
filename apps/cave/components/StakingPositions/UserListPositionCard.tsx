@@ -15,6 +15,7 @@ import { useInsert_Cavemart_ListingMutation } from 'graphql/generated/graphql'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
 import { useState } from 'react'
+import { useQuery } from 'react-query'
 import { formatFixed } from 'utils/formatFixed'
 import { toAmount } from 'utils/toAmount'
 import { chain, useAccount, useSignTypedData } from 'wagmi'
@@ -24,16 +25,14 @@ type UserListPositionCardProps = { marketItemState: UserMarketInfoState }
 
 type ListForSaleState = ReturnType<typeof useListeForSaleState>
 
-const domain = {
-  name: 'MyContractName',
-  version: '1',
-  chainId: chain.rinkeby.id,
-  verifyingContract: FIXED_ORDER_MARKET_CONTRACT[chain.rinkeby.id],
-}
-
 export const useListeForSaleState = ({ marketItemState }: UserListPositionCardProps) => {
   const stakingPosition = marketItemState.stakingPosition
   const { address: seller } = useAccount()
+  const nonce = useQuery([`nonce`, seller], () => {
+    const cavemart = new FixedOrderMarketContract(concaveProvider(chain.rinkeby.id))
+    return cavemart.nonce(seller)
+  })
+
   const { mutate } = useInsert_Cavemart_ListingMutation()
   const [marketItem, setMarketItem] = useState(
     new MarketItem({
@@ -42,26 +41,53 @@ export const useListeForSaleState = ({ marketItemState }: UserListPositionCardPr
       erc20: CNV_ADDRESS[stakingPosition.chainId],
       tokenId: stakingPosition.tokenId.toString(),
       startPrice: stakingPosition.currentValue,
-      endPrice: BigNumber.from(0),
-      start: BigNumber.from(0),
-      nonce: BigNumber.from(0),
+      endPrice: 0,
+      start: 0,
+      nonce: 0,
       deadline: 0,
       isListed: false,
       signature: '',
     }),
   )
-
+  const cavemart = new FixedOrderMarketContract(concaveProvider(chain.rinkeby.id))
   const { signTypedDataAsync } = useSignTypedData({
-    domain,
-    types: marketItem.datatypeForSignature,
-    value: marketItem.dataForSignature,
+    domain: {
+      name: 'Fixed Order Market',
+      version: '1',
+      chainId: chain.rinkeby.id,
+      verifyingContract: FIXED_ORDER_MARKET_CONTRACT[chain.rinkeby.id],
+    },
+    types: {
+      Swap: [
+        { name: 'seller', type: 'address' },
+        { name: 'erc721', type: 'address' },
+        { name: 'erc20', type: 'address' },
+        { name: 'tokenId', type: 'uint256' },
+        { name: 'startPrice', type: 'uint256' },
+        { name: 'endPrice', type: 'uint256' },
+        { name: 'nonce', type: 'uint256' },
+        { name: 'start', type: 'uint256' },
+        { name: 'deadline', type: 'uint256' },
+      ],
+    },
+    value: {
+      seller: marketItem.seller,
+      erc721: marketItem.erc721,
+      erc20: marketItem.erc20,
+      tokenId: marketItem.tokenId.toString(),
+      startPrice: marketItem.startPrice.toString(),
+      endPrice: marketItem.endPrice.toString(),
+      start: marketItem.start.toString(),
+      nonce: `0`,
+      deadline: marketItem.deadline.toString(),
+    },
   })
 
   const create = () => {
     signTypedDataAsync()
       .then(async (data) => {
+        console.log(data)
         const signature = data.substring(2)
-        const cavemart = new FixedOrderMarketContract(concaveProvider(chain.rinkeby.id))
         const user = await cavemart.computeSigner(marketItem.new({ signature }))
         alert(user)
         if (user != seller) {

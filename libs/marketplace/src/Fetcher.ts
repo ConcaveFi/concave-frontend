@@ -82,8 +82,8 @@ export const listUserPositions = async ({
               endPrice: cavemart.endPrice,
               erc20: CNV_ADDRESS[chainId],
               erc721: STAKING_CONTRACT[chainId],
-              nonce: BigNumber.from(0),
               seller: cavemart.tokenOwner,
+              nonce: 0,
               start: cavemart.start,
               startPrice: cavemart.startPrice,
               tokenId: cavemart.tokenID,
@@ -99,7 +99,6 @@ export const listUserPositions = async ({
 export const listListedPositions = async ({ provider }: { provider: BaseProvider }) => {
   const stakingV1Contract = new StakingV1Contract(provider)
   const chainId = provider.network.chainId
-  console.log(provider.network.chainId)
   const logs = await fetch(getHasuraEndpoint(provider.network), {
     method: 'POST',
     body: JSON.stringify({ query: listCavemartListingDocuments }),
@@ -129,8 +128,8 @@ export const listListedPositions = async ({ provider }: { provider: BaseProvider
               endPrice: cavemart.endPrice,
               erc20: CNV_ADDRESS[chainId],
               erc721: STAKING_CONTRACT[chainId],
-              nonce: BigNumber.from(0),
               seller: cavemart.tokenOwner,
+              nonce: 0,
               start: cavemart.start,
               startPrice: cavemart.startPrice,
               tokenId: cavemart.tokenID,
