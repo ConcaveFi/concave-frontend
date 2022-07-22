@@ -1,0 +1,55 @@
+mutation INSERT_CAVEMART_LISTING(
+  $signatureHash: String
+  $start: String
+  $startPrice: String
+  $endPrice: String
+  $tokenID: numeric!
+  $tokenOwner: String!
+  $deadline: numeric
+  $tokenIsListed: Boolean
+  $newOwner: String
+  $soldFor: String
+  $txHash: String
+) {
+  insert_cavemart_one(
+    object: {
+      signatureHash: $signatureHash
+      start: $start
+      startPrice: $startPrice
+      endPrice: $endPrice
+      tokenID: $tokenID
+      tokenIsListed: $tokenIsListed
+      tokenOwner: $tokenOwner
+      deadline: $deadline
+      newOwner: $newOwner
+      soldFor: $soldFor
+      txHash: $txHash
+    }
+  ) {
+    tokenID
+    tokenIsListed
+  }
+}
+
+query GET_ALL_CAVEMART_LISTINGS {
+  logStakingV1_Lock(where: { cavemarts: { tokenIsListed: { _eq: true } } }) {
+    txHash
+    timestamp
+    positionID
+    poolID
+    maturity
+    deposit
+    amount
+    cavemarts {
+      created_at
+      signatureHash
+      start
+      startPrice
+      endPrice
+      tokenID
+      tokenOwner
+      tokenIsListed
+      deadline
+    }
+  }
+}

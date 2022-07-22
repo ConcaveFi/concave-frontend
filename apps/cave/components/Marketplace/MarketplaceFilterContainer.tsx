@@ -1,15 +1,22 @@
-import { Search2Icon } from '@concave/icons'
 import { Box, Flex, Text } from '@concave/ui'
+import { StakePoolFilterEnum } from 'components/NftFilters/Filters/hooks/useFilterByStakePool'
+import { StakePoolFilterCard } from 'components/NftFilters/Filters/StakePoolFilter'
+import { NftSort } from 'components/NftFilters/Sorters/hooks/useNftSort'
+import { SortCard } from 'components/NftFilters/Sorters/SortCard'
 
-interface MarketplaceFilterContainerProps {}
-
-export default function MarketplaceFilterContainer(props: MarketplaceFilterContainerProps) {
+export function MarketplaceFilterContainer({
+  stakeFilters,
+  onChangeSort,
+  onChangeStakeFilters,
+}: {
+  stakeFilters: StakePoolFilterEnum[]
+  onChangeStakeFilters: (stakeFilters: StakePoolFilterEnum[]) => void
+  onChangeSort: (sorter: NftSort) => void
+}) {
   return (
     <Flex
-      height={{ base: '140px', md: '100px' }}
       width="full"
       direction={'column'}
-      mt={4}
       bg={{ base: 'linear-gradient(239.18deg, #19394C 27.18%, #0A161F 96.11%)', md: 'transparent' }}
       justify={'center'}
       align="center"
@@ -26,23 +33,33 @@ export default function MarketplaceFilterContainer(props: MarketplaceFilterConta
         bgSize="40% 50%"
         rounded={'2xl'}
       />
-      {/* Search Container */}
-      <Flex height={'40px'} justify="center">
-        <Flex width={{ md: '380px', base: '280px' }} height="30px" rounded={'full'} shadow="down">
-          <Search2Icon color="text.low" boxSize={'20px'} my="auto" ml={2} />
-          <Text my={'auto'} fontWeight="bold" textColor={'text.low'} ml={3}>
-            {/* Coming soon! */}
-          </Text>
+      <Flex
+        rounded={'2xl'}
+        py="6"
+        shadow={{ base: 'up', md: 'none' }}
+        width="full"
+        direction={{ base: 'column', md: 'row' }}
+        justify={'space-between'}
+        px={4}
+        gap={{ base: 4 }}
+        my={2}
+      >
+        <Flex align="center " gap={2} fontWeight={'bold'}>
+          <Text textColor="text.low">Filter by:</Text>
+          <StakePoolFilterCard
+            onResetFilter={onChangeStakeFilters}
+            stakePoolFilters={stakeFilters}
+            onDisableFilter={(removedFilter) =>
+              onChangeStakeFilters(stakeFilters.filter((filter) => filter !== removedFilter))
+            }
+            onEnableFilter={(addedFilter) => onChangeStakeFilters([...stakeFilters, addedFilter])}
+          />
+        </Flex>
+        <Flex ml={2} align={'center'} gap={2} fontWeight={'bold'}>
+          <Text textColor="text.low">Sort by:</Text>
+          <SortCard onChangeSort={onChangeSort} />
         </Flex>
       </Flex>
-
-      {/* Filters Container */}
-      <Flex
-        justify={'center'}
-        align="center"
-        flex={{ base: 0, md: 1 }}
-        gap={{ base: 0, md: 4 }}
-      ></Flex>
     </Flex>
   )
 }

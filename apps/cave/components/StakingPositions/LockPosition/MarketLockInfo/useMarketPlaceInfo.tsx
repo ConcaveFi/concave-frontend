@@ -1,31 +1,32 @@
-import {
-  ConcaveNFTMarketplace,
-  fechMarketInfo,
-  MarketItemInfo,
-  Offer,
-  StakingPosition,
-} from '@concave/marketplace'
+import { FIXED_ORDER_MARKET_CONTRACT } from '@concave/core'
+import { StakingPosition, StakingV1Contract } from '@concave/marketplace'
 import { ButtonProps, useDisclosure } from '@concave/ui'
 import { Transaction } from 'ethers'
+import { useInsert_Cavemart_ListingMutation } from 'graphql/generated/graphql'
 import { concaveProvider } from 'lib/providers'
 import { useState } from 'react'
-import { useQuery } from 'react-query'
-import { useSigner, useWaitForTransaction } from 'wagmi'
+import { useAccount, useQuery, useSigner, useWaitForTransaction } from 'wagmi'
 
 export type UserMarketInfoState = ReturnType<typeof useMarketInfo>
 export const useMarketInfo = ({ stakingPosition }: { stakingPosition: StakingPosition }) => {
-  const offerDisclosure = useDisclosure()
   const chainId = stakingPosition.chainId
+  const { address: userAddress } = useAccount()
+  const offerDisclosure = useDisclosure()
   const { data: signer } = useSigner()
   const [transaction, setTransaction] = useState<Transaction>()
   const [isWaitingForWallet, setIsWaitingForWallet] = useState<boolean>(false)
   const tx = useWaitForTransaction({ hash: transaction?.hash })
-  const marketInfo = useQuery(
-    ['MarketInfo', tx.data, chainId, stakingPosition.tokenId],
-    async () => fechMarketInfo(concaveProvider(chainId), stakingPosition),
-    { enabled: chainId != undefined, refetchOnWindowFocus: false },
+  const insertCavemart = useInsert_Cavemart_ListingMutation()
+  const cavemartCanHandleTokens = useQuery(
+    [chainId, `CAVEMART_CAN_HANDLE`, stakingPosition.address, tx],
+    () => {
+      const provider = concaveProvider(chainId)
+      return new StakingV1Contract(provider).isApprovedForAll(
+        userAddress,
+        FIXED_ORDER_MARKET_CONTRACT[chainId],
+      )
+    },
   )
-
   const transactionWrapper = async (fn: () => Promise<Transaction>) => {
     setIsWaitingForWallet(true)
     try {
@@ -34,62 +35,69 @@ export const useMarketInfo = ({ stakingPosition }: { stakingPosition: StakingPos
     } catch {}
     setIsWaitingForWallet(false)
   }
-
-  const createMarketItem = () =>
-    transactionWrapper(() =>
-      new ConcaveNFTMarketplace(concaveProvider(chainId)).createMarketItem(signer, stakingPosition),
-    )
-
-  const withdrawOffer = () =>
-    transactionWrapper(() =>
-      new ConcaveNFTMarketplace(concaveProvider(chainId)).withdrawAuction(signer, stakingPosition),
-    )
-
-  const createOffer = async (offer: Offer) => {
-    transactionWrapper(() => {
-      const contract = new ConcaveNFTMarketplace(concaveProvider(chainId))
-      const marketItemInfo = new MarketItemInfo({ ...marketInfo.data, offer })
-      return contract.createOffer(signer, marketItemInfo)
+  const withdraw = async () => {
+    const marketItem = stakingPosition.market
+    await insertCavemart.mutateAsync({
+      tokenID: marketItem.tokenId.toString(),
+      signatureHash: marketItem.tokenId.toString(),
+      endPrice: marketItem.endPrice.toString(),
+      start: marketItem.start.toString(),
+      startPrice: marketItem.startPrice.toString(),
+      tokenOwner: marketItem.seller,
+      deadline: marketItem.deadline.toString(),
+      tokenIsListed: false,
     })
-    offerDisclosure.onClose()
   }
 
+  const approveContract = () => {
+    transactionWrapper(() => {
+      const provider = concaveProvider(chainId)
+      return new StakingV1Contract(provider).setApprovalForAll(
+        signer,
+        FIXED_ORDER_MARKET_CONTRACT[chainId],
+        true,
+      )
+    })
+  }
+  const [waiting, setWaiting] = useState(false)
+  const isLoading = tx?.isLoading || cavemartCanHandleTokens.isLoading || waiting
+
   return {
-    marketInfo,
+    isLoading,
+    stakingPosition,
     tx,
     isWaitingForWallet,
     offerDisclosure,
     chainId,
-    createOffer,
+    cavemartCanHandleTokens,
+    setWaiting,
+    approveContract,
     setTransaction,
-    withdrawOffer,
-    createMarketItem,
+    withdraw,
   }
 }
 
-export const getMarketPlaceButtonProps = (marketInfoState: UserMarketInfoState): ButtonProps => {
-  const { tx, marketInfo, isWaitingForWallet, offerDisclosure, createMarketItem, withdrawOffer } =
-    marketInfoState
-  if (tx?.isLoading) {
+export const getMarketPlaceButtonProps = (marketItemState: UserMarketInfoState): ButtonProps => {
+  const { stakingPosition, isWaitingForWallet, offerDisclosure, withdraw } = marketItemState
+  if (marketItemState.isLoading) {
     return { loadingText: 'Loading', disabled: true, isLoading: true }
   }
   if (isWaitingForWallet) {
     return { loadingText: 'Approve in wallet', disabled: true, isLoading: true }
   }
-  if (marketInfo.isLoading) {
-    return { loadingText: 'Loading Market Item', disabled: true, isLoading: true }
+  const market = stakingPosition.market
+  if (market?.isListed && market?.type === `dutch auction`) {
+    return { children: 'Unlist auction', onClick: withdraw, variant: 'primary.outline' }
   }
-  if (marketInfo.error) {
-    return { children: 'Coming Soon', disabled: true }
+  if (market?.isListed && market?.type === `list`) {
+    return { children: 'Unlist', onClick: withdraw, variant: 'primary.outline' }
   }
-  if (!marketInfo.data.isMarketItem) {
-    return { children: 'Create Market Item', onClick: createMarketItem }
+  if (!marketItemState.cavemartCanHandleTokens.data) {
+    return {
+      children: 'Approve contract',
+      onClick: marketItemState.approveContract,
+      variant: 'primary.outline',
+    }
   }
-  if (marketInfo.data.isAuction) {
-    return { children: 'Unlist Auction', onClick: withdrawOffer, variant: 'primary.outline' }
-  }
-  if (marketInfo.data.isSale) {
-    return { children: 'Unlist Sale', onClick: withdrawOffer, variant: 'primary.outline' }
-  }
-  return { children: 'List For Sale', onClick: offerDisclosure.onOpen }
+  return { children: 'List for sale', onClick: offerDisclosure.onOpen }
 }
