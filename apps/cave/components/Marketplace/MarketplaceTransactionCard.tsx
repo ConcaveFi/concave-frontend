@@ -1,26 +1,28 @@
 import { TransactionIcon } from '@concave/icons'
 import { Flex, Image, Link, Text, useMediaQuery, VStack } from '@concave/ui'
-import { format } from 'date-fns'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useEffect, useState } from 'react'
-
+import { chain } from 'wagmi'
 interface MarketplaceTransactionCardProps {
   type: 'sale' | 'listing'
-  filter?: any
+  filter?: { transactionHash: string }
 }
 
 export const MarketplaceTransactionCard = (props: MarketplaceTransactionCardProps) => {
   const { filter, type } = props
-  const cleanDate = format(new Date(filter.date), 'PPpp')
   const labelType = type === 'sale' ? 'sale' : 'listing'
   const labelColor = type === 'sale' ? '#7AF0CD' : '#2E97E2'
-
+  const chainId = useCurrentSupportedNetworkId()
+  const etherscanBaseUrl =
+    chainId === chain.mainnet.id ? `https://etherscan.io` : `https://rinkeby.etherscan.io`
+  const etherscanLink = etherscanBaseUrl + `/tx/${filter.transactionHash}`
   const [isLargerThan770] = useMediaQuery('(min-width: 770px)')
 
   const [width, setWidth] = useState('0')
 
   useEffect(() => {
     setWidth(isLargerThan770 ? '' : '180px')
-  })
+  }, [isLargerThan770])
 
   return (
     <Flex
@@ -70,7 +72,7 @@ export const MarketplaceTransactionCard = (props: MarketplaceTransactionCardProp
         <Flex width={'full'} mt={1} justify={'start'}>
           <Link
             pb={1}
-            href={`https://etherscan.io/tx/${filter.link}`}
+            href={etherscanLink}
             target="_blank"
             rel="noreferrer"
             textColor={'blue.300'}

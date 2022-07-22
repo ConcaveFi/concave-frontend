@@ -1,2 +1,2 @@
-export * from './NFTMarketplace'
+export * from './FixedOrderMarketContract'
 export * from './StakingV1Contract'

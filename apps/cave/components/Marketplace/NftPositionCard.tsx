@@ -102,7 +102,7 @@ const NftPositionBox = (props: NftPositionBoxProps) => {
     </Flex>
   )
 }
-const NftPositionCard = (props: NftPositionBoxProps) => {
+export const NftPositionCard = (props: NftPositionBoxProps) => {
   const [active, setActive] = useState(false)
   const { discount, price, redeemIn, stakePool } = props
 
@@ -241,5 +241,3 @@ const BuyButton = () => {
     </Button>
   )
 }
-
-export default NftPositionCard

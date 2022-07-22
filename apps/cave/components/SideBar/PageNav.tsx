@@ -136,10 +136,10 @@ function PageNav() {
 
       <NavButton
         leftIcon={<NotInteractableImage src="/assets/sidebar/page-marketplace.svg" />}
-        href=""
+        href="/marketplace"
         mt="26px"
       >
-        Marketplace <br></br>(Coming Soon)
+        Marketplace <br></br>
       </NavButton>
 
       <Box height={'120px'}>
