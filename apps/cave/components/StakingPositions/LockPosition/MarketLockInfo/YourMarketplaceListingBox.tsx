@@ -123,7 +123,7 @@ export const MarketListing = ({ stakingPosition }: { stakingPosition: StakingPos
         staking={stakingPosition}
         market={market}
         setMarket={setMarket}
-        onClose={() => marketItemState.setState(``)}
+        onClose={() => marketItemState.setState('')}
         state={marketItemState.state}
       />
     </Box>

@@ -13,12 +13,11 @@ import { FixedOrderMarketContract, StakingPosition } from '@concave/marketplace'
 import { Button } from '@concave/ui'
 import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { format, formatDistanceToNowStrict } from 'date-fns'
-import { Transaction } from 'ethers'
-import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
+import { useTransaction } from 'hooks/TransactionsRegistry/useTransaction'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useFetchTokenData } from 'hooks/useTokenList'
 import { concaveProvider } from 'lib/providers'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { formatFixed } from 'utils/formatFixed'
 import { useSigner } from 'wagmi'
 
@@ -29,6 +28,7 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakin
   const positionDate = new Date(stakingPosition.maturity * 1000)
   const relativePositionTime = formatDistanceToNowStrict(positionDate, { unit: 'day' })
   const percent = Math.abs(positionDate.getTime() / new Date().getTime())
+
   return (
     <Flex
       width={'full'}
@@ -77,38 +77,56 @@ const ImageContainer: React.FC<ImageContainerProps> = ({ stakePeriod }) => (
   </Flex>
 )
 
-type BuyContainerProps = { stakingPosition: StakingPosition }
-const BuyContainer = ({ stakingPosition }: BuyContainerProps) => {
+type BuyContainerProps = { stakingPosition: StakingPosition; onSucess?: () => void }
+const BuyContainer = ({ stakingPosition, onSucess }: BuyContainerProps) => {
   const chainId = useCurrentSupportedNetworkId()
+  const tokenId = stakingPosition.tokenId
   const currency = useFetchTokenData(chainId, stakingPosition.market.erc20)
   const price = CurrencyAmount.fromRawAmount(
     currency.data || NATIVE[chainId],
     stakingPosition.market.startPrice.toString(),
   )
-  const { registerTransaction } = useTransactionRegistry()
   const { data: signer } = useSigner()
-  const [tx, setTx] = useState<Transaction>()
-  const buyAction = async () => {
-    const contract = new FixedOrderMarketContract(concaveProvider(stakingPosition.chainId))
-    const tx = await contract.swap(signer, stakingPosition.market)
-    setTx(tx)
-    registerTransaction(tx, {
-      type: 'offer marketplace',
-      tokenId: +stakingPosition.tokenId.toString(),
-    })
-  }
+
+  const swap = useTransaction(
+    async () => {
+      const contract = new FixedOrderMarketContract(concaveProvider(stakingPosition.chainId))
+      return contract.swap(signer, stakingPosition.market)
+    },
+    { meta: { type: 'offer marketplace', tokenId: +tokenId.toString() } },
+  )
+
   const useCurrencyState = useCurrencyButtonState(price, FIXED_ORDER_MARKET_CONTRACT[chainId])
   const buttonProps = useMemo(() => {
-    if (tx) return { loadingText: 'Waiting', isLoading: true, minWidth: '45%' }
+    if (swap.isWaitingForConfirmation)
+      return { loadingText: 'Confirm', isLoading: true, minWidth: '45%' }
 
+    if (swap.isWaitingTransactionReceipt)
+      return { loadingText: 'Waiting', isLoading: true, minWidth: '45%' }
+
+    if (swap.isSucess) {
+      return { onClick: swap.sendApproveTx, children: 'Buy', minWidth: '45%' }
+    }
+    if (swap.isError) {
+      return { children: 'Unavailable', minWidth: '45%' }
+    }
     if (useCurrencyState.approved) {
-      return { onClick: buyAction, children: 'Buy', minWidth: '45%' }
+      return { onClick: swap.sendApproveTx, children: 'Buy', minWidth: '45%' }
     }
     return {
       ...useCurrencyState.buttonProps,
       minWidth: useCurrencyState.state === 'default' ? '45%' : '100%',
     }
-  }, [useCurrencyState])
+  }, [
+    swap.isError,
+    swap.isSucess,
+    swap.isWaitingForConfirmation,
+    swap.isWaitingTransactionReceipt,
+    swap.sendApproveTx,
+    useCurrencyState.approved,
+    useCurrencyState.buttonProps,
+    useCurrencyState.state,
+  ])
 
   return (
     <Box p={'2px'} bg="linear-gradient(90deg, #72639B 0%, #44B9DE 100%)" rounded={'2xl'}>
