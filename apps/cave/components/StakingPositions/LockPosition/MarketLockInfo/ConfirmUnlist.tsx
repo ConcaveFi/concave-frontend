@@ -5,7 +5,7 @@ import { Dispatch, SetStateAction } from 'react'
 import { formatFixed } from 'utils/formatFixed'
 import { Info } from './Info'
 
-export const ConfirmSignature = ({
+export const ConfirmUnlist = ({
   market,
   staking,
   setMarket,
@@ -17,25 +17,27 @@ export const ConfirmSignature = ({
   market: MarketItem
 }) => {
   const insertCavemart = useInsert_Cavemart_ListingMutation()
+
   const onSubmit = async () => {
+    const marketItem = staking.market
     await insertCavemart.mutateAsync({
-      tokenID: market.tokenId.toString(),
-      signatureHash: market.signature,
-      endPrice: market.endPrice.toString(),
-      start: market.start.toString(),
-      startPrice: market.startPrice.toString(),
-      tokenOwner: market.seller,
-      tokenIsListed: true,
-      deadline: market.deadline.toString(),
+      tokenID: marketItem.tokenId.toString(),
+      signatureHash: marketItem.tokenId.toString(),
+      endPrice: marketItem.endPrice.toString(),
+      start: marketItem.start.toString(),
+      startPrice: marketItem.startPrice.toString(),
+      tokenOwner: marketItem.seller,
+      deadline: marketItem.deadline.toString(),
+      tokenIsListed: false,
     })
-    setMarket(market.new({ isListed: true }))
+    setMarket(market.new({ isListed: false }))
     onClose()
   }
 
   return (
     <VStack direction={'column'} gap={4} p={4}>
       <Text fontSize={`xl`} textAlign={'center'} fontWeight="bold" width={'full'}>
-        Confirm signature
+        Confirm unlist
       </Text>
       <Box p={4} shadow={`Down Medium`} w={'full'} borderRadius={'3xl'}>
         <Info label="Item:" value={`#` + market.tokenId.toString()}></Info>
@@ -48,7 +50,7 @@ export const ConfirmSignature = ({
       </Box>
       <HStack w={'full'} gap={2}>
         <Button w={'full'} onClick={onSubmit} variant={`primary`} size={`md`}>
-          Submit
+          Confirm
         </Button>
         <Button
           w={'full'}

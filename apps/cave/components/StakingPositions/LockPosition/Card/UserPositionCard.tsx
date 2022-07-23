@@ -1,6 +1,6 @@
 import { StakingPosition } from '@concave/marketplace'
 import { Box, Collapse, Flex, VStack } from '@concave/ui'
-import { MarketListing } from '../MarketLockInfo/MarketListing'
+import { MarketListing } from '../MarketLockInfo/YourMarketplaceListingBox'
 import { NFTPositionHeader } from '../NFTPositionHeader/NFTPositionHeader'
 import { RedeemCardViewer } from '../Redeem/RedeemViewer'
 import { useUserPositionState } from './useUserPositionState'

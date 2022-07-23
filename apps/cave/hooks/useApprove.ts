@@ -5,6 +5,7 @@ import { formatUnits } from 'ethers/lib/utils'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry/'
 import {
   erc20ABI,
+  erc721ABI,
   useAccount,
   useContractRead,
   useContractWrite,
@@ -93,4 +94,46 @@ export const useApprove = (
   })
 
   return { allowance, ...approve, isFetching: isConnecting || allowance.isLoading }
+}
+
+export const useApproveForAll = (props: {
+  erc721: string
+  operator: string
+  approved: boolean
+}) => {
+  const account = useAccount()
+  const owner = account.address
+  const approve = useContractRead({
+    addressOrName: props.erc721,
+    contractInterface: erc721ABI,
+    functionName: 'isApprovedForAll',
+    args: [owner, props.operator],
+    enabled: !!(props?.erc721 && props.operator && props.approved),
+  })
+
+  const {
+    data: tx,
+    isLoading: isWaitingForConfirmation,
+    isSuccess: isTransactionSent,
+    isError,
+    error,
+    writeAsync: sendApproveTx,
+  } = useContractWrite({
+    addressOrName: props.erc721,
+    contractInterface: erc721ABI,
+    functionName: 'setApprovalForAll',
+    args: [props.operator, props.approved],
+  })
+
+  return {
+    approve,
+    isWaitingTransactionReceipt: approve.isLoading,
+    isLoading: approve.isLoading,
+    tx,
+    isWaitingForConfirmation,
+    isTransactionSent,
+    isError,
+    error,
+    sendApproveTx,
+  }
 }

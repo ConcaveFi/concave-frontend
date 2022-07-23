@@ -1,5 +1,5 @@
 import { CNV, Currency, CurrencyAmount } from '@concave/core'
-import { listUserPositions, StakingPosition } from '@concave/marketplace'
+import { listPositons, StakingPosition } from '@concave/marketplace'
 import { BigNumber } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
@@ -12,7 +12,7 @@ export const useStakePositions = () => {
   const chainId = useCurrentSupportedNetworkId()
   const { data: stakingPositions, isLoading } = useQuery(
     ['listUserPositions', address, chainId],
-    () => listUserPositions({ owner: address, provider: concaveProvider(chainId) }),
+    () => listPositons({ owner: address, provider: concaveProvider(chainId) }),
     { enabled: !!address && !!chainId },
   )
   const totalLocked = getTotalLocked(stakingPositions, CNV[chainId])

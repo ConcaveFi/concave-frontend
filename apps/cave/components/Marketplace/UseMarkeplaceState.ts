@@ -21,6 +21,7 @@ export const useMarketplaceDashbord = () => {
     { enabled: !!chainId, refetchOnWindowFocus: false },
   )
   const salePositions = data || []
+  console.log(salePositions)
   const { address: currentUserAddress } = useAccount()
   const [sort, setSort] = useState<NftSort>({ sort: 'REDEEM_DATE', order: 'ASC' })
   const sortFunction = sort ? NftSortMethod[sort.sort][sort.order] : () => 0

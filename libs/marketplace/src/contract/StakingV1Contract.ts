@@ -7,10 +7,11 @@ import { StakingV1Abi } from './StakingV1Abi'
 
 export class StakingV1Contract {
   private readonly contract: ethers.Contract
+  public readonly chainId: number
   constructor(private readonly provider: BaseProvider | MulticallProvider) {
-    if (!provider.network.chainId)
-      throw 'ChainID is undefined for constructor of contract StakingV1Contract'
-    const address = STAKING_CONTRACT[provider.network.chainId]
+    this.chainId = provider.network.chainId
+    if (!this.chainId) throw 'ChainID is undefined for constructor of contract StakingV1Contract'
+    const address = STAKING_CONTRACT[this.chainId]
     if (!address) throw 'Address is undefined for constructor of contract StakingV1Contract'
     this.contract = new Contract(address, StakingV1Abi, this.provider)
   }

@@ -66,7 +66,7 @@ export class MarketItem {
     this.seller = args.seller
     this.erc721 = args.erc721
     this.erc20 = args.erc20
-    this.tokenId = BigNumber.from(args.tokenId)
+    this.tokenId = BigNumber.from(args.tokenId || 0)
     this.startPrice = BigNumber.from(args.startPrice || 0)
     this.endPrice = BigNumber.from(args.endPrice || 0)
     this.start = BigNumber.from(args.start || 0)
@@ -75,7 +75,7 @@ export class MarketItem {
     this.signature = args.signature
   }
 
-  public new(parial: Partial<MarketArgs>) {
+  public new(parial: Partial<MarketArgs> = {}) {
     return new MarketItem({ ...this, ...parial })
   }
 
