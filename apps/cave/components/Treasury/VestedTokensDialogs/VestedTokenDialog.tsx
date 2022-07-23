@@ -1,5 +1,5 @@
 import { InfoIcon } from '@concave/icons'
-import { Button, Card, Flex, Modal, Spinner, Text, Tooltip } from '@concave/ui'
+import { Button, Card, Collapse, Flex, Modal, Spinner, Text, Tooltip } from '@concave/ui'
 import { ToggleButton } from 'components/ToggleButton'
 import { VestedTokenButtonProps } from 'components/Treasury/TreasuryRedeemCard'
 import { BigNumber } from 'ethers'
@@ -10,11 +10,13 @@ import { VestedTokenInput } from './VestedTokenDialogInput'
 
 type VestedTokenDialogProps = {
   tokenUserData: { redeemable: BigNumber; redeemed: BigNumber; balance: BigNumber }
-
+  tokenName?: string
   isLoading: boolean
   onRedeem: (amount: BigNumber, redeemMax: boolean) => void
   status: 'default' | 'approve' | 'rejected' | 'error' | 'submitted'
   title?: string
+  conversionLabel?: string
+  conversionValue?: BigNumber
 }
 export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDialogProps> = ({
   onClose,
@@ -24,20 +26,24 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
   onRedeem,
   status,
   title,
+  tokenName,
+  conversionLabel,
+  conversionValue,
 }) => {
   const { isConnected } = useAccount()
   const { redeemable, redeemed, balance } = tokenUserData || {}
   const [value, setValue] = useState<string>()
   const [redeemMax, setRedeemMax] = useState(true)
 
-  const insufficientFunds = +balance === 0 || +value > +balance
+  const insufficientFunds = balance?.isZero() || parseEther(value || '0.0').gt(balance)
+  const invalidAmount = !insufficientFunds && parseEther(value || '0.0')?.isZero() && !redeemMax
   const nothingToRedeem = (redeemable?.isZero() || redeemable?.eq(balance)) && !insufficientFunds
   const redeemableExceeded =
     !redeemMax &&
     parseEther(value || '0')?.gt(redeemable || 0) &&
     !insufficientFunds &&
     !nothingToRedeem
-  const validValue = !insufficientFunds && !nothingToRedeem && !redeemableExceeded
+  const validValue = !invalidAmount && !insufficientFunds && !nothingToRedeem && !redeemableExceeded
   return (
     <>
       <Modal
@@ -49,7 +55,7 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
         isCentered
         motionPreset="slideInBottom"
       >
-        <Card width={'340px'} height="280px" m={-6} px={6} gap={2} justify="center">
+        <Card width={'340px'} minW="280px" m={-6} px={6} gap={2} justify="center" py={6}>
           <VestedTokenInput
             redeemable={redeemable}
             redeemMax={redeemMax}
@@ -57,7 +63,7 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
             onChangeValue={setValue}
             value={value}
           />
-          <Flex direction={'column'} fontSize="14px">
+          <Flex direction={'column'} fontSize="14px" px={2}>
             <Info
               title="Redeemable:"
               value={isLoading ? 'Loading...' : formatEther(redeemable || '0')}
@@ -66,6 +72,21 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
               title="Redeemed:"
               value={isLoading ? 'Loading...' : formatEther(redeemed || '0')}
             />
+            <Collapse
+              in={!!conversionValue && (validValue || (redeemMax && !redeemable?.isZero()))}
+            >
+              {conversionValue && (
+                <Info
+                  title="You will receive:"
+                  value={formatEther(parseEther(value || '0').mul(conversionValue)) + ' CNV'}
+                />
+              )}
+            </Collapse>
+            {conversionLabel && (
+              <Text fontWeight={'bold'} opacity="0.3" fontSize={'xs'}>
+                {conversionLabel}
+              </Text>
+            )}
           </Flex>
           <Flex gap={2} fontWeight={'bold'} pl={2} align="center">
             <Text textColor={'gray.200'}>Redeem max</Text>
@@ -77,11 +98,12 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
               fontWeight={'bold'}
               fontSize="13px"
               textAlign="center"
-              label="Attempts to redeem all of your currently available bbtCNV."
+              label={`Attempts to redeem all of your currently available ${tokenName || 'amount'}`}
             >
               <InfoIcon color={'text.low'} cursor="pointer" />
             </Tooltip>
           </Flex>
+
           <Button
             height={'55px'}
             width="full"
@@ -93,6 +115,7 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
             {isConnected && !isLoading && (
               <>
                 <Text>
+                  {invalidAmount && 'Invalid amount'}
                   {nothingToRedeem && 'Nothing to redeem'}
                   {insufficientFunds && 'Insufficient funds'}
                   {redeemableExceeded && 'Redeemable exceeded'}
@@ -131,7 +154,7 @@ const redeemButtonText = {
   error: 'Ocurred an error',
 }
 const Info = ({ title, value }: { title: string; value: string | number }) => (
-  <Flex gap={2} fontWeight={'bold'} pl={2}>
+  <Flex gap={2} fontWeight={'bold'}>
     <Text textColor={'text.low'}>{title}</Text>
     <Text textColor={'text.accent'}>{value}</Text>
   </Flex>

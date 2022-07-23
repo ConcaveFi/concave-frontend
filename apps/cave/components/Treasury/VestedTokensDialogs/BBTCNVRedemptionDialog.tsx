@@ -50,6 +50,7 @@ export const BBTCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) 
         onRedeem={redeem}
         tokenUserData={{ ...redeemableData, balance }}
         title={'Redeem bbtCNV'}
+        conversionValue={parseEther('0.01')}
       />
       <TransactionErrorDialog
         error={{ rejected: 'Transaction rejected' }[status] || 'An error occurred'}
