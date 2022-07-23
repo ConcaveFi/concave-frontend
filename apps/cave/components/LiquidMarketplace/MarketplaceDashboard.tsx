@@ -22,7 +22,7 @@ export const MarketplaceDashboard = () => {
       rounded={'2xl'}
       apply="background.metalBrighter"
       shadow={'up'}
-      gap={5}
+      // gap={5}
       p={5}
     >
       <MarketplaceFilterContainer
@@ -39,12 +39,14 @@ export const MarketplaceDashboard = () => {
         shadow="down"
         w="full"
         maxW="900px"
-        m={4}
-        p={4}
+        px={4}
+        py={6}
+        justify="start"
         overflowY={'auto'}
         direction="column"
         apply="scrollbar.big"
         bg={'linear-gradient(238.35deg, #19394C 9.11%, #0A161F 92.45%)'}
+        gap={2}
       >
         {positions.length == 0 ? (
           <>

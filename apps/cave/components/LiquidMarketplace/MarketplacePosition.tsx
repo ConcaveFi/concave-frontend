@@ -35,7 +35,6 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakin
       h="114px"
       rounded={'2xl'}
       shadow="up"
-      my={'1.5'}
       apply="background.metalBrighter"
       direction={'column'}
       px={1}
