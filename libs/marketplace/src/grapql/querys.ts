@@ -50,3 +50,31 @@ export const fetchUserPositionsQuery = `query GET_ALL_USERS_POSITIONS {
     }
   }
 }`
+
+export const fetchAllCavemart = `query ListCavemart {
+  logStakingV1(where: {cavemart: {updated_at: {_is_null: false}}}) {
+    created_at
+    to
+    amountLocked
+    poolID
+    tokenID
+    txHash
+    lockedUntil
+    cavemart {
+      tokenID
+      updated_at
+      newOwner
+      start
+      startPrice
+      endPrice
+      deadline
+      soldFor
+      tokenOwner
+      txHash
+      tokenIsListed
+      signatureHash
+      created_at
+    }
+  }
+}
+`

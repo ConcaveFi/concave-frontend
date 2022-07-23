@@ -1,98 +1,48 @@
+import { marketplaceActivity } from '@concave/marketplace'
 import { Box, Card, Flex } from '@concave/ui'
-import { useEffect, useState } from 'react'
+import { BigNumber } from '@ethersproject/bignumber'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import { concaveProvider } from 'lib/providers'
+import { useState } from 'react'
+import { useQuery } from 'react-query'
 import { MarketplaceTransactionCard } from './MarketplaceTransactionCard'
 
-type Data = {
+export type Data = {
   type: 'sale' | `listing`
-  date: number
-  event: string
-  length: string
-  cnv: number
+  date: Date
+  poolID: number
+  amount: BigNumber
   transactionHash: string
 }
-const mockData: Data[] = [
-  {
-    type: 'listing',
-    date: 1650615494,
-    event: 'listed',
-    length: '3 month',
-    cnv: 700,
-    transactionHash: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
-  },
-  {
-    type: 'sale',
-    date: 1650615494,
-    event: 'sold',
-    length: '6 month',
-    cnv: 200,
-    transactionHash: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
-  },
-  {
-    type: 'listing',
-    date: 1650615494,
-    event: 'listed',
-    length: '1 year',
-    cnv: 340,
-    transactionHash: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
-  },
-  {
-    type: 'sale',
-    date: 1650615494,
-    event: 'listed',
-    length: '1 year',
-    cnv: 340,
-    transactionHash: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
-  },
-  {
-    type: 'sale',
-    date: 1650615494,
-    event: 'listed',
-    length: '1 year',
-    cnv: 340,
-    transactionHash: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
-  },
-  {
-    type: 'listing',
-    date: 1650615494,
-    event: 'listed',
-    length: '1 year',
-    cnv: 340,
-    transactionHash: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
-  },
-  {
-    type: 'sale',
-    date: 1650615494,
-    event: 'listed',
-    length: '1 year',
-    cnv: 340,
-    transactionHash: '0xe15891caf71e104dc1f70a003ff60fc2160edc0a9a3040e98702874bc000a9b4',
-  },
-]
 
 const MarketplaceActivityCard = () => {
-  const [loading, setLoading] = useState(false)
-
-  const [data, setData] = useState<Data[]>([])
-  const [error, setError] = useState(false)
   const [filter, setFilter] = useState<'all' | 'listing' | 'sale'>('all')
+  const chainId = useCurrentSupportedNetworkId()
 
-  useEffect(() => {
-    handleClick(filter)
-  }, [filter])
-
-  // TODO create types for data later on
-  const handleClick = (filter: string) => {
-    // fetch with the trigger filter and setData
-    setLoading(true)
-    setData(
-      mockData.filter((value) => {
-        if (filter === 'all') return true
-        else return value.type === filter
-      }),
-    )
-    setLoading(false)
-  }
-
+  const { data, isLoading, isFetching } = useQuery(
+    ['marketplaceActivity', chainId],
+    async () => {
+      const provider = concaveProvider(chainId)
+      const positions = await marketplaceActivity({ provider })
+      return positions.map((log) => {
+        const item = log.cavemart.at(-1)
+        const type = item.soldFor ? `sale` : `listing`
+        const value = type === 'sale' ? item.soldFor : item.startPrice
+        const data: Data = {
+          type,
+          poolID: log.poolID,
+          date: new Date(item.updated_at),
+          amount: BigNumber.from(value),
+          transactionHash: item.txHash,
+        }
+        return data
+      })
+    },
+    { enabled: !!chainId, refetchOnWindowFocus: false },
+  )
+  const filtred = (data || []).filter((item) => {
+    return filter === `all` || filter === item.type
+  })
   return (
     <Card
       width={{ base: '300px', md: '360px', xl: '300px' }}
@@ -129,18 +79,9 @@ const MarketplaceActivityCard = () => {
         __css={scrollBar}
         pt={0}
       >
-        <div>
-          {loading && <span>loading...</span>}
-          {data &&
-            !error &&
-            data.map((e, index) => (
-              <MarketplaceTransactionCard
-                type={e.type as `listing` | `sale`}
-                key={index}
-                filter={e}
-              />
-            ))}
-        </div>
+        {filtred.map((data, index) => {
+          return <MarketplaceTransactionCard key={index} data={data} />
+        })}
       </Box>
     </Card>
   )

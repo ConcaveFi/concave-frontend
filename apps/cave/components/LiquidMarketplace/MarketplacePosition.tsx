@@ -105,13 +105,13 @@ const BuyContainer = ({ stakingPosition, onSucess }: BuyContainerProps) => {
       return { loadingText: 'Waiting', isLoading: true, minWidth: '45%' }
 
     if (swap.isSucess) {
-      return { onClick: swap.sendApproveTx, children: 'Buy', minWidth: '45%' }
+      return { children: 'Bought', minWidth: '45%' }
     }
     if (swap.isError) {
       return { children: 'Unavailable', minWidth: '45%' }
     }
     if (useCurrencyState.approved) {
-      return { onClick: swap.sendApproveTx, children: 'Buy', minWidth: '45%' }
+      return { onClick: swap.sendApproveTx, variant: 'primary', children: 'Buy', minWidth: '45%' }
     }
     return {
       ...useCurrencyState.buttonProps,
@@ -149,7 +149,6 @@ const BuyContainer = ({ stakingPosition, onSucess }: BuyContainerProps) => {
             textOverflow={'ellipsis'}
             px={2}
             height="full"
-            bg="linear-gradient(90deg, #72639B 0%, #44B9DE 100%)"
             rounded={'2xl'}
             {...buttonProps}
           />

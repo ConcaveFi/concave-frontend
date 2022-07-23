@@ -1,7 +1,11 @@
 import { BaseProvider } from '@ethersproject/providers'
 import { StakingV1Contract } from './contract'
 import { parser } from './grapql/parser'
-import { fetchUserPositionsQuery, listCavemartListingDocuments } from './grapql/querys'
+import {
+  fetchAllCavemart,
+  fetchUserPositionsQuery,
+  listCavemartListingDocuments,
+} from './grapql/querys'
 import { fetcher } from './util'
 
 const getHasuraEndpoint = ({ chainId = 1 }) => {
@@ -48,6 +52,17 @@ export const listListedPositions = async ({ provider }: { provider: BaseProvider
   return Promise.all(data.logStakingV1.map(stakingV1ToStakingPosition))
 }
 
+export const marketplaceActivity = async ({ provider }: { provider: BaseProvider }) => {
+  const { data } = await fetcher<{ data: { logStakingV1: LogStakingV1[] } }>(
+    getHasuraEndpoint(provider.network),
+    {
+      method: 'POST',
+      body: JSON.stringify({ query: fetchAllCavemart }),
+    },
+  )
+  return data.logStakingV1
+}
+
 export interface LogStakingV1 {
   to: string
   poolID: number
@@ -65,4 +80,8 @@ export type Cavemart = {
   tokenOwner: string
   tokenIsListed: boolean
   deadline?: number
+  updated_at: string
+  soldFor: string
+  txHash: string
+  newOwner: string
 }
