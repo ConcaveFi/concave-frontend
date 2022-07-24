@@ -49,7 +49,7 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakin
         <BuyContainer stakingPosition={stakingPosition} />
       </Flex>
       <LoadBard
-        date={format(positionDate, 'mm/dd/yyyy')}
+        date={format(positionDate, 'MM/dd/yyyy')}
         relativeDate={relativePositionTime}
         percent={percentToMaturity}
       />
