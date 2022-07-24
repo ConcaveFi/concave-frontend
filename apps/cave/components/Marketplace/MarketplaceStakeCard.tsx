@@ -3,7 +3,7 @@ import { useLiquidStakeData } from 'components/LiquidStaking/hooks/useLiquidStak
 import { Loading } from 'components/Loading'
 import StakeAprCard from './StakeAprCard'
 
-function MarketplaceStakeCard(props: any) {
+export function MarketplaceStakeCard() {
   const { stakeData, isLoading } = useLiquidStakeData()
   return (
     <Card
@@ -33,5 +33,3 @@ function MarketplaceStakeCard(props: any) {
     </Card>
   )
 }
-
-export default MarketplaceStakeCard

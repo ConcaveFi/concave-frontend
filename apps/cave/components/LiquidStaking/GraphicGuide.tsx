@@ -1,7 +1,7 @@
 import { ChevronRightIcon } from '@concave/icons'
 import { Flex, HStack, Image, Stack, Text } from '@concave/ui'
 
-function GraphicGuide() {
+export function GraphicGuide() {
   return (
     <Stack textColor={'white'} fontSize={{ base: 'sm', sm: 'md' }}>
       <Flex justify={'space-between'}>
@@ -40,5 +40,3 @@ function GraphicGuide() {
     </Stack>
   )
 }
-
-export default GraphicGuide

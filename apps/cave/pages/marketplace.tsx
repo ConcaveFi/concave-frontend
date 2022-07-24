@@ -1,8 +1,8 @@
 import { Box, Button, Card, Flex, Heading, Text, useBreakpointValue } from '@concave/ui'
 import { MarketplaceDashboard } from 'components/LiquidMarketplace/MarketplaceDashboard'
-import GraphicGuide from 'components/LiquidStaking/GraphicGuide'
-import MarketplaceActivityCard from 'components/Marketplace/MarketplaceActivityCard'
-import MarketplaceStakeCard from 'components/Marketplace/MarketplaceStakeCard'
+import { GraphicGuide } from 'components/LiquidStaking/GraphicGuide'
+import { MarketplaceActivityCard } from 'components/Marketplace/MarketplaceActivityCard'
+import { MarketplaceStakeCard } from 'components/Marketplace/MarketplaceStakeCard'
 import { withPageTransition } from 'components/PageTransition'
 import { useEffect, useState } from 'react'
 

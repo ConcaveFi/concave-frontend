@@ -8,11 +8,11 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react'
-import { CurrencyAmount, FIXED_ORDER_MARKET_CONTRACT, NATIVE } from '@concave/core'
-import { FixedOrderMarketContract, StakingPosition } from '@concave/marketplace'
+import { CurrencyAmount, FIXED_ORDER_MARKET_CONTRACT, NATIVE, Percent } from '@concave/core'
+import { FixedOrderMarketContract, stakingPools, StakingPosition } from '@concave/marketplace'
 import { Button } from '@concave/ui'
 import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
-import { format, formatDistanceToNowStrict } from 'date-fns'
+import { differenceInDays, format, formatDistanceToNowStrict } from 'date-fns'
 import { useTransaction } from 'hooks/TransactionsRegistry/useTransaction'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useFetchTokenData } from 'hooks/useTokenList'
@@ -27,8 +27,9 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakin
   const discount = formatFixed(stakingPosition.calculateDiscount(), { decimals: 2 })
   const positionDate = new Date(stakingPosition.maturity * 1000)
   const relativePositionTime = formatDistanceToNowStrict(positionDate, { unit: 'day' })
-  const percent = Math.abs(positionDate.getTime() / new Date().getTime())
-
+  const days = stakingPosition.pool.days
+  const diff = (differenceInDays(positionDate, Date.now()) - days) * -1
+  const percentToMaturity = new Percent(diff, days)
   return (
     <Flex
       width={'full'}
@@ -51,30 +52,41 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakin
       <LoadBard
         date={format(positionDate, 'mm/dd/yyyy')}
         relativeDate={relativePositionTime}
-        percent={percent}
+        percent={percentToMaturity}
       />
     </Flex>
   )
 }
+
+const stakeImage = {
+  0: '12mposition.png',
+  1: '6mposition.png',
+  2: '3mposition.png',
+  3: '1mposition.png',
+}
 type ImageContainerProps = { stakePeriod: number }
-const ImageContainer: React.FC<ImageContainerProps> = ({ stakePeriod }) => (
-  <Flex
-    align={'center'}
-    height={'76px'}
-    w="196px"
-    rounded={'2xl'}
-    shadow="Down Medium"
-    px={'2'}
-    justify="space-around"
-  >
-    <Info info={stakeDayPeriod[stakePeriod]} title="Stake period" />
-    <Image
-      width={{ base: '90px', lg: '70px' }}
-      height={{ base: '90px', lg: '70px' }}
-      src={`/assets/marketplace/${stakeImage[stakePeriod]}`}
-    />
-  </Flex>
-)
+const ImageContainer: React.FC<ImageContainerProps> = ({ stakePeriod }) => {
+  const label = `${stakingPools[stakePeriod].days} Days`
+  return (
+    <Flex
+      align={'center'}
+      height={'76px'}
+      w="196px"
+      rounded={'2xl'}
+      shadow="Down Medium"
+      px={'2'}
+      justify="space-around"
+    >
+      <Info info={`${label}`} title="Stake period" />
+      <Image
+        width={{ base: '90px', lg: '70px' }}
+        height={{ base: '90px', lg: '70px' }}
+        alt={`Image of stake ${label}`}
+        src={`/assets/marketplace/${stakeImage[stakePeriod]}`}
+      />
+    </Flex>
+  )
+}
 
 type BuyContainerProps = { stakingPosition: StakingPosition; onSucess?: () => void }
 const BuyContainer = ({ stakingPosition, onSucess }: BuyContainerProps) => {
@@ -157,7 +169,7 @@ const BuyContainer = ({ stakingPosition, onSucess }: BuyContainerProps) => {
   )
 }
 
-type LoadBarProps = { percent: number; date: string; relativeDate: string }
+type LoadBarProps = { percent: Percent; date: string; relativeDate: string }
 const LoadBard = ({ percent, date, relativeDate }: LoadBarProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
@@ -174,7 +186,7 @@ const LoadBard = ({ percent, date, relativeDate }: LoadBarProps) => {
       <Popover isOpen={isOpen}>
         <PopoverTrigger>
           <Box
-            width={`${percent}%`}
+            width={`${percent.toFixed()}%`}
             height="full"
             bg={'linear-gradient(90deg, #375FC2 0%, #46CFF3 100%)'}
             rounded="2xl"
@@ -214,22 +226,3 @@ const Info = ({ info, infoSize, title }: InfoProps) => (
     <Text fontSize={infoSize || 16}>{info}</Text>
   </Flex>
 )
-const stakeImage = {
-  0: '12mposition.png',
-  1: '6mposition.png',
-  2: '3mposition.png',
-  3: '1mposition.png',
-}
-
-const stakeDayPeriod = {
-  0: '360 Days',
-  1: '180 Days',
-  2: '90 Days',
-  3: '45 Days',
-}
-const stakeNumberPeriod = {
-  0: 360,
-  1: 180,
-  2: 90,
-  3: 45,
-}

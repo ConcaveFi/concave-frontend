@@ -1,6 +1,7 @@
 import { STAKING_CONTRACT } from '@concave/core'
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
 import { MarketItem } from './MarketItem'
+import { stakingPools } from './PoolState'
 import { StakingReward } from './StakingReward'
 
 export type NFT = {
@@ -48,6 +49,10 @@ export class StakingPosition implements NFT {
 
   get totalRewards() {
     return this.currentValue.sub(this.initialValue)
+  }
+
+  get pool() {
+    return stakingPools[this.poolID]
   }
 
   /**

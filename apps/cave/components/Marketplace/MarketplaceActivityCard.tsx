@@ -15,7 +15,7 @@ export type Data = {
   transactionHash: string
 }
 
-const MarketplaceActivityCard = () => {
+export const MarketplaceActivityCard = () => {
   const [filter, setFilter] = useState<'all' | 'listing' | 'sale'>('all')
   const chainId = useCurrentSupportedNetworkId()
 
@@ -118,8 +118,6 @@ const TransactionButton = (props: TransactionButtonProps) => {
     </Flex>
   )
 }
-
-export default MarketplaceActivityCard
 
 const scrollBar = {
   '&::-webkit-scrollbar': {
