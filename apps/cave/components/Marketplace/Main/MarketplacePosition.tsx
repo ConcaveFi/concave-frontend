@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react'
 import { CurrencyAmount, FIXED_ORDER_MARKET_CONTRACT, NATIVE, Percent } from '@concave/core'
 import { FixedOrderMarketContract, stakingPools, StakingPosition } from '@concave/marketplace'
-import { Button } from '@concave/ui'
+import { Button, FlexProps } from '@concave/ui'
 import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { differenceInDays, format, formatDistanceToNowStrict } from 'date-fns'
 import { useTransaction } from 'hooks/TransactionsRegistry/useTransaction'
@@ -33,17 +33,16 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakin
   return (
     <Flex
       width={'full'}
-      h="114px"
       rounded={'2xl'}
       shadow="up"
       apply="background.metalBrighter"
       direction={'column'}
-      px={1}
-      py={2}
+      p={2}
+      gap={2}
       justify="space-between"
     >
-      <Flex align="center" maxH={'95px'} gap={1} width={'full'} justify="space-between">
-        <ImageContainer stakePeriod={stakingPosition?.poolID} />
+      <Flex align="center" gap={1} width={'full'} justify="space-between">
+        <ImageContainer stakePeriod={stakingPosition?.poolID} px={3} />
         <Info title="Current value" info={`${currentValue}`} />
         <Info title="Discount" info={`${discount}%`} />
         <Info title="Token id" info={stakingPosition.tokenId.toString()} />
@@ -64,20 +63,18 @@ const stakeImage = {
   2: '3mposition.png',
   3: '1mposition.png',
 }
-type ImageContainerProps = { stakePeriod: number }
-const ImageContainer: React.FC<ImageContainerProps> = ({ stakePeriod }) => {
+type ImageContainerProps = { stakePeriod: number } & FlexProps
+const ImageContainer: React.FC<ImageContainerProps> = ({ stakePeriod, ...flexProps }) => {
   const label = `${stakingPools[stakePeriod].days} Days`
   return (
     <Flex
       align={'center'}
-      height={'76px'}
-      w="196px"
       rounded={'2xl'}
       shadow="Down Medium"
-      px={'2'}
       justify="space-around"
+      {...flexProps}
     >
-      <Info info={`${label}`} title="Stake period" />
+      <Info info={`${label}`} title="Stake period" ml={2} />
       <Image
         width={{ base: '90px', lg: '70px' }}
         height={{ base: '90px', lg: '70px' }}
@@ -173,53 +170,52 @@ type LoadBarProps = { percent: Percent; date: string; relativeDate: string }
 const LoadBard = ({ percent, date, relativeDate }: LoadBarProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
-    <Flex
-      w={'95%'}
-      mx="auto"
-      h="12px"
-      rounded={'2xl'}
-      shadow="down"
-      p={'3px'}
-      onMouseEnter={onOpen}
-      onMouseLeave={onClose}
-    >
-      <Popover isOpen={isOpen}>
-        <PopoverTrigger>
+    <Popover isOpen={isOpen}>
+      <PopoverTrigger>
+        <Flex
+          w={'full'}
+          mx="auto"
+          rounded={'2xl'}
+          shadow="down"
+          h={2.5}
+          p={0.5}
+          onMouseEnter={onOpen}
+          onMouseLeave={onClose}
+        >
           <Box
             width={`${percent.toFixed()}%`}
             height="full"
             bg={'linear-gradient(90deg, #375FC2 0%, #46CFF3 100%)'}
-            rounded="2xl"
+            rounded="full"
           />
-        </PopoverTrigger>
-
-        <PopoverContent width={'100px'}>
-          <Flex
-            direction={'column'}
-            w={'140px'}
-            h="85px"
-            rounded="inherit"
-            apply={'background.glass'}
-            shadow="up"
-            fontWeight="bold"
-          >
-            <Text mx={'auto'} mt={2} color="text.low">
-              Redeem date:
-            </Text>
-            <Text>{date}</Text>
-            <Flex justify={'center'} gap={2}>
-              <Text color={'text.low'}>in</Text>
-              <Text color={'text.accent'}>{relativeDate}</Text>
-            </Flex>
+        </Flex>
+      </PopoverTrigger>
+      <PopoverContent>
+        <Flex
+          direction={'column'}
+          w={'140px'}
+          p={2}
+          rounded="inherit"
+          apply={'background.glass'}
+          shadow="up"
+          fontWeight="bold"
+        >
+          <Text mx={'auto'} mt={2} color="text.low">
+            Redeem date:
+          </Text>
+          <Text>{date}</Text>
+          <Flex justify={'center'} gap={2}>
+            <Text color={'text.low'}>in</Text>
+            <Text color={'text.accent'}>{relativeDate}</Text>
           </Flex>
-        </PopoverContent>
-      </Popover>
-    </Flex>
+        </Flex>
+      </PopoverContent>
+    </Popover>
   )
 }
 type InfoProps = { title: string; info: string; infoSize?: number }
-const Info = ({ info, infoSize, title }: InfoProps) => (
-  <Flex direction={'column'} align="center" fontWeight={'bold'}>
+const Info = ({ info, infoSize, title, ...flexProps }: InfoProps & FlexProps) => (
+  <Flex direction={'column'} align="center" fontWeight={'bold'} {...flexProps}>
     <Text fontSize={'12px'} color="text.low">
       {title}
     </Text>
