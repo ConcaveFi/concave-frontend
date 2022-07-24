@@ -1,8 +1,8 @@
 import { Flex, Text, VStack } from '@chakra-ui/react'
 import { Loading } from 'components/Loading'
-import { MarketplaceFilterContainer } from 'components/Marketplace/MarketplaceFilterContainer'
-import { useMarketplaceDashbord } from 'components/Marketplace/UseMarkeplaceState'
+import { MarketplaceFilterContainer } from 'components/Marketplace/Main/MarketplaceFilterContainer'
 import { MarketplacePosition } from './MarketplacePosition'
+import { useMarketplaceDashbord } from './UseMarkeplaceState'
 
 export const MarketplaceDashboard = () => {
   const { isFetching, nftPositions, stakeFilters, setSort, setStakeFilters } =
@@ -22,7 +22,6 @@ export const MarketplaceDashboard = () => {
       rounded={'2xl'}
       apply="background.metalBrighter"
       shadow={'up'}
-      // gap={5}
       p={5}
     >
       <MarketplaceFilterContainer
@@ -39,7 +38,7 @@ export const MarketplaceDashboard = () => {
         shadow="down"
         w="full"
         maxW="900px"
-        px={4}
+        p={4}
         py={6}
         justify="start"
         overflowY={'auto'}
