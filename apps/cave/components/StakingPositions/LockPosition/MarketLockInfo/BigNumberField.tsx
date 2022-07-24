@@ -3,16 +3,8 @@ import { BigNumber, utils } from 'ethers'
 import { parseUnits } from 'ethers/lib/utils'
 import { useEffect, useState } from 'react'
 
-export const BigNumberField = ({
-  label,
-  defaultValue,
-  onChange,
-}: {
-  label: string
-  defaultValue: BigNumber
-  onChange: (number: BigNumber) => void
-}) => {
-  const [value, setValue] = useState(utils.formatEther(defaultValue))
+const useBignumberField = (defaultValue: BigNumber, onChange: (n: BigNumber) => void) => {
+  const [value, setValue] = useState(+utils.formatEther(defaultValue))
   useEffect(() => {
     try {
       const bigNumber = parseUnits(value.toString() || `0`, 18)
@@ -21,6 +13,26 @@ export const BigNumberField = ({
       onChange(BigNumber.from(0))
     }
   }, [value, onChange])
+
+  const onValueChange = (values, sourceInfo) => {
+    if (sourceInfo.source === 'prop') return
+    setValue(values.value)
+  }
+  return { value, onValueChange }
+}
+
+export const BigNumberField = ({
+  label,
+  defaultValue,
+  onChange,
+  decimalScale = 5,
+}: {
+  label: string
+  decimalScale: number
+  defaultValue: BigNumber
+  onChange: (number: BigNumber) => void
+}) => {
+  const state = useBignumberField(defaultValue, onChange)
 
   return (
     <HStack justifyContent={'center'} width={'full'}>
@@ -32,14 +44,10 @@ export const BigNumberField = ({
           width={'full'}
           shadow={'Down Big'}
           borderRadius={'full'}
-          value={value}
-          decimalScale={5}
+          decimalScale={decimalScale}
           p={1}
           pl={4}
-          onValueChange={(values, sourceInfo) => {
-            if (sourceInfo.source === 'prop') return
-            setValue(values.value)
-          }}
+          {...state}
         />
       </Box>
     </HStack>

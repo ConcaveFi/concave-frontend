@@ -174,7 +174,12 @@ export const ListPositionForSale = ({
       <Type />
       <Info label="Current value:" value={formatFixed(staking.currentValue)}></Info>
       <CurrencySelector onChange={setCurrency} />
-      <BigNumberField label="Price:" defaultValue={staking.currentValue} onChange={setPrice} />
+      <BigNumberField
+        label="Price:"
+        defaultValue={staking.currentValue}
+        onChange={setPrice}
+        decimalScale={4}
+      />
       <EpochDateField
         label="Deadline:"
         onChange={setDeadline}
