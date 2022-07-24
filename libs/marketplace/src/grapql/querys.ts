@@ -52,7 +52,10 @@ export const fetchUserPositionsQuery = `query GET_ALL_USERS_POSITIONS {
 }`
 
 export const fetchAllCavemart = `query ListCavemart {
-  logStakingV1(where: {cavemart: {updated_at: {_is_null: false}}}) {
+  logStakingV1(
+    where: {cavemart: {updated_at: {_is_null: false}}}
+    order_by: { updated_at: desc}
+  ) {
     created_at
     to
     amountLocked
