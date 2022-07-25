@@ -78,12 +78,12 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
               {conversionValue && (
                 <Info
                   title="You will receive:"
-                  value={formatEther(parseEther(value || '0').mul(conversionValue)) + ' CNV'}
+                  value={formatEther(parseEther(value || '0').mul(conversionValue || 1)) + ' CNV'}
                 />
               )}
             </Collapse>
             {conversionLabel && (
-              <Text fontWeight={'bold'} opacity="0.3" fontSize={'xs'}>
+              <Text fontWeight={'bold'} textColor="text.accent" opacity="0.5" fontSize={'xs'}>
                 {conversionLabel}
               </Text>
             )}
