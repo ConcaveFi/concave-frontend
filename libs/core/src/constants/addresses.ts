@@ -17,6 +17,26 @@ export const BOND_ADDRESS: AddressMap = {
   [ChainId.RINKEBY]: '0x9B4147eb30daFc75CF4A5E33d1Ee72156790c917',
 }
 
+export const ACNV_ADDRESS: AddressMap = {
+  [ChainId.ETHEREUM]: '0x6Ff0106D34FEEe8A8aCF2e7b9168480f86B82E2f',
+  [ChainId.RINKEBY]: '',
+}
+
+export const ACNV_REDEEMPTION: AddressMap = {
+  [ChainId.ETHEREUM]: '0x38baBedCb1f226B49b2089DA0b84e52b6181Ca59',
+  [ChainId.RINKEBY]: '',
+}
+
+export const BBTCNV_ADDRESS: AddressMap = {
+  [ChainId.ETHEREUM]: '0x0000000012a0592C154D552C410030E724b2eA00',
+  [ChainId.RINKEBY]: '0x03eebe71dca9cdfc71d5f9a50f48a52ca5662526',
+}
+
+export const BBTCNV_REDEMPTION_V2: AddressMap = {
+  [ChainId.ETHEREUM]: '0xc3CBd1e850D431adC583f14f03b9B8B651e62A61',
+  [ChainId.RINKEBY]: '0xCf6B82Ca69bE4272d457c246FAF380f88af34f69',
+}
+
 /*
   AMM LP Factory
 */
