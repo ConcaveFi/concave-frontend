@@ -1,12 +1,12 @@
 import { CNV, Currency, FIXED_ORDER_MARKET_CONTRACT } from '@concave/core'
 import { FixedOrderMarketContract, MarketItem, StakingPosition } from '@concave/marketplace'
 import { Box, Button, Flex, HStack, Modal, Text, VStack } from '@concave/ui'
-import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
+import { SelectMarketCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
 import { ChooseButton } from 'components/Marketplace/ChooseButton'
 import { BigNumber, BigNumberish } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
-import { Dispatch, SetStateAction, useCallback } from 'react'
+import { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react'
 import { formatFixed } from 'utils/formatFixed'
 import { chain, useSignTypedData } from 'wagmi'
 import { BigNumberField } from './BigNumberField'
@@ -76,6 +76,7 @@ export const useListeForSaleState = ({
   market: MarketItem
   setMarket: Dispatch<SetStateAction<MarketItem>>
 }) => {
+  const chaindId = useCurrentSupportedNetworkId()
   const { signTypedDataAsync } = useSignTypedData({
     domain: {
       name: 'Cavemart',
@@ -121,14 +122,14 @@ export const useListeForSaleState = ({
       console.error(e)
     }
   }
+  const [currency, setCurrency] = useState<Currency>(CNV[chaindId])
+
+  useEffect(() => {
+    setMarket((m) => m.new({ erc20: toAddr(currency) }))
+  }, [currency, setMarket])
 
   const setPrice = useCallback(
     (startPrice: BigNumber) => setMarket((m) => m.new({ startPrice })),
-    [],
-  )
-
-  const setCurrency = useCallback(
-    (currency: Currency) => setMarket((m) => m.new({ erc20: toAddr(currency) })),
     [],
   )
   const setDeadline = useCallback(
@@ -138,6 +139,7 @@ export const useListeForSaleState = ({
 
   return {
     market,
+    currency,
     create,
     setCurrency,
     setPrice,
@@ -153,6 +155,7 @@ const toAddr = (currency: Currency) => {
 export const ListPositionForSale = ({
   market,
   staking,
+  currency,
   setMarket,
   onClose,
   create,
@@ -173,7 +176,7 @@ export const ListPositionForSale = ({
     <VStack direction={'column'} gap={1} pt={8} px={8} pb={0}>
       <Type />
       <Info label="Current value:" value={formatFixed(staking.currentValue)}></Info>
-      <CurrencySelector onChange={setCurrency} />
+      <CurrencySelector value={currency} onChange={setCurrency} />
       <BigNumberField
         label="Price:"
         defaultValue={staking.currentValue}
@@ -217,7 +220,13 @@ const Type = () => {
   )
 }
 
-const CurrencySelector = ({ onChange }: { onChange: (currency: Currency) => void }) => {
+const CurrencySelector = ({
+  value,
+  onChange,
+}: {
+  value: Currency
+  onChange: (currency: Currency) => void
+}) => {
   const chainId = useCurrentSupportedNetworkId()
   return (
     <HStack justifyContent={'center'} width={'full'}>
@@ -225,7 +234,7 @@ const CurrencySelector = ({ onChange }: { onChange: (currency: Currency) => void
         Currency:
       </Text>
       <Box width={'full'}>
-        <SelectAMMCurrency selected={CNV[chainId]} onSelect={onChange}></SelectAMMCurrency>
+        <SelectMarketCurrency selected={value} onSelect={onChange} />
       </Box>
     </HStack>
   )
