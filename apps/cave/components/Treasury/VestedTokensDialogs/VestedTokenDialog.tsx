@@ -126,9 +126,9 @@ const redeemButtonProps = (validValue: boolean, status) => {
 
 const redeemButtonText = {
   default: 'Redeem',
-  approve: 'Aprove in your wallet...',
+  approve: 'Approve in your wallet...',
   rejected: 'Transaction rejected',
-  error: 'Ocurred an error',
+  error: 'An error occurred',
 }
 const Info = ({ title, value }: { title: string; value: string | number }) => (
   <Flex gap={2} fontWeight={'bold'} pl={2}>

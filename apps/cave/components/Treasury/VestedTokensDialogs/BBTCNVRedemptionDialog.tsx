@@ -52,7 +52,7 @@ export const BBTCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) 
         title={'Redeem bbtCNV'}
       />
       <TransactionErrorDialog
-        error={{ rejected: 'Transaction rejected' }[status] || 'Ocurred an error'}
+        error={{ rejected: 'Transaction rejected' }[status] || 'An error occurred'}
         isOpen={(transactionSubmitted && status === 'error') || status === 'rejected'}
         closeParentComponent={onCloseModal}
       />
