@@ -3,7 +3,12 @@ import { Flex, Spinner, Text } from '@concave/ui'
 import { useFeeData } from 'wagmi'
 
 export const GasPrice = () => {
-  const { data, isError } = useFeeData({ formatUnits: 'gwei', watch: true })
+  const { data, isError } = useFeeData({
+    formatUnits: 'gwei',
+    staleTime: 1000,
+    cacheTime: Infinity,
+    watch: true,
+  })
   if (isError) return null
   return (
     <Flex>
