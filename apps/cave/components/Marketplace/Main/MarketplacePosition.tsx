@@ -23,7 +23,7 @@ import { useSigner } from 'wagmi'
 type MarketplacePositionProps = { stakingPosition: StakingPosition }
 export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakingPosition }) => {
   const currentValue = formatFixed(stakingPosition?.currentValue)
-  const discount = formatFixed(stakingPosition.calculateDiscount(), { decimals: 2 })
+  const discount = formatFixed(stakingPosition.calculateDiscount(), { decimals: 2, places: 0 })
   const positionDate = new Date(stakingPosition.maturity * 1000)
   const relativePositionTime = formatDistanceToNowStrict(positionDate, { unit: 'day' })
   const days = stakingPosition.pool.days
@@ -42,8 +42,8 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakin
     >
       <Flex align="center" gap={1} width={'full'} justify="space-between">
         <ImageContainer stakePeriod={stakingPosition?.poolID} px={3} />
-        <Info title="Current value" info={`${currentValue}`} />
-        <Info title="Discount" info={`${discount}%`} />
+        <Info title="Current value" info={`${currentValue} CNV`} />
+        {/* <Info title="Discount" info={`${discount}%`} /> */}
         <Info title="Token id" info={stakingPosition.tokenId.toString()} />
         <BuyContainer stakingPosition={stakingPosition} />
       </Flex>
@@ -138,7 +138,8 @@ const BuyContainer = ({ stakingPosition, onSucess }: BuyContainerProps) => {
   return (
     <Box p={'2px'} bg="linear-gradient(90deg, #72639B 0%, #44B9DE 100%)" rounded={'2xl'}>
       <Flex
-        w="152px"
+        w="auto"
+        minW="162px"
         h="49px"
         rounded={'2xl'}
         shadow="up"
@@ -146,8 +147,12 @@ const BuyContainer = ({ stakingPosition, onSucess }: BuyContainerProps) => {
         justify="end"
       >
         {buttonProps.minWidth === '45%' && (
-          <Flex flex={1} align="center" justify="center">
-            <Info title="Price" info={price.toSignificant()} infoSize={12} />
+          <Flex flex={1} m={2} align="center" justify="center">
+            <Info
+              title="Price"
+              info={price.toSignificant() + ` ${stakingPosition.market.currency.symbol}`}
+              infoSize={12}
+            />
           </Flex>
         )}
         <Button

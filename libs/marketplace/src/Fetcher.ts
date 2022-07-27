@@ -49,9 +49,7 @@ export const listListedPositions = async ({ provider }: { provider: BaseProvider
     },
   )
   const { stakingV1ToStakingPosition } = parser(stakingV1Contract, provider)
-  return Promise.all(
-    data.logStakingV1.filter((a) => a.tokenID == 449).map(stakingV1ToStakingPosition),
-  )
+  return Promise.all(data.logStakingV1.map(stakingV1ToStakingPosition))
 }
 
 export const marketplaceActivity = async ({ provider }: { provider: BaseProvider }) => {
