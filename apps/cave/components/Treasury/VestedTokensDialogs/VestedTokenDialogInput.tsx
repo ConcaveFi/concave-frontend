@@ -27,7 +27,15 @@ export const VestedTokenInput = ({
             value={!redeemMax && value}
             disabled={redeemMax}
             placeholder={redeemMax ? formatEther(redeemable || '0') : '0.0'}
-            onValueChange={({ value }) => !redeemMax && onChangeValue(value)}
+            onValueChange={({ value }) => {
+              if (!redeemMax) {
+                if (value === '.') {
+                  onChangeValue('0.')
+                  return
+                }
+                onChangeValue(value)
+              }
+            }}
           />
         </Flex>
         <Flex width={'full'} justify="space-between" align={'center'}>
