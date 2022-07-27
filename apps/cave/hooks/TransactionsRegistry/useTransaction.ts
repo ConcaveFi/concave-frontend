@@ -8,7 +8,7 @@ export type UseTransaction = ReturnType<typeof useTransaction>
 export const useTransaction = (
   fn: () => Promise<Transaction>,
   extra: {
-    onSended?: () => void
+    onSend?: () => void
     onSuccess?: (tx: Transaction) => void
     onError?: (e: unknown) => void
     meta?: TrackedTransaction['meta']
