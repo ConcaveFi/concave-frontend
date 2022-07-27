@@ -13,7 +13,7 @@ type VestedTokenDialogProps = {
   tokenUserData: { redeemable: BigNumber; redeemed: BigNumber; balance: BigNumber }
   isLoading: boolean
   onRedeem: (amount: BigNumber, redeemMax: boolean) => void
-  status: 'default' | 'approve' | 'rejected' | 'error'
+  status: 'default' | 'approve' | 'rejected' | 'error' | 'submitted'
   token: Token
 }
 export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDialogProps> = ({
