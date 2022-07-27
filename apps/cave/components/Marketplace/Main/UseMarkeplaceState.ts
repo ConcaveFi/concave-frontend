@@ -35,7 +35,6 @@ export const useMarketplaceDashbord = () => {
     .filter((position) => position.market.seller != currentUserAddress)
     .filter((stakingPosition) => filterByStakePool(stakingPosition))
     .sort((current, previous) => sortFunction(current, previous))
-
   return {
     nftPositions,
     stakeFilters,

@@ -89,7 +89,6 @@ const BuyContainer = ({ stakingPosition, onSucess }: BuyContainerProps) => {
   const chainId = useCurrentSupportedNetworkId()
   const tokenId = stakingPosition.tokenId
   const currency = stakingPosition.market.currency
-  console.log(currency)
   const price = CurrencyAmount.fromRawAmount(
     currency || NATIVE[chainId],
     stakingPosition.market.startPrice.toString(),
@@ -151,16 +150,14 @@ const BuyContainer = ({ stakingPosition, onSucess }: BuyContainerProps) => {
             <Info title="Price" info={price.toSignificant()} infoSize={12} />
           </Flex>
         )}
-        {!currency.isLoading && (
-          <Button
-            shadow={'up'}
-            textOverflow={'ellipsis'}
-            px={2}
-            height="full"
-            rounded={'2xl'}
-            {...buttonProps}
-          />
-        )}
+        <Button
+          shadow={'up'}
+          textOverflow={'ellipsis'}
+          px={2}
+          height="full"
+          rounded={'2xl'}
+          {...buttonProps}
+        />
       </Flex>
     </Box>
   )

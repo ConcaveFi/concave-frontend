@@ -70,6 +70,7 @@ export class FixedOrderMarketContract {
     const r = '0x' + signature.substring(0, 64)
     const s = '0x' + signature.substring(64, 128)
     const v = parseInt(signature.substring(128, 130), 16)
+
     const splitValue = [
       marketItem.seller.toString(),
       marketItem.erc721.toString(),
@@ -80,6 +81,10 @@ export class FixedOrderMarketContract {
       marketItem.start.toString(),
       marketItem.deadline.toString(),
     ]
-    return this.contract.connect(signer).swap(splitValue, v.toString(), r.toString(), s.toString())
+    return this.contract
+      .connect(signer)
+      .swap(splitValue, v.toString(), r.toString(), s.toString(), {
+        value: marketItem.startPrice.toString(),
+      })
   }
 }

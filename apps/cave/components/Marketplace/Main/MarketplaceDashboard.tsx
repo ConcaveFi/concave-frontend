@@ -14,7 +14,6 @@ export const MarketplaceDashboard = () => {
       stakingPosition={stakingPosition}
     />
   ))
-
   return (
     <VStack
       width={'640px'}
