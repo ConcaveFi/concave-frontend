@@ -27,7 +27,7 @@ export const useTransaction = (
 
   useEffect(() => {
     if (status === 'loading') {
-      onSended?.()
+      onSend?.()
     }
     if (status === 'success') {
       onSuccess?.(tx.current)
