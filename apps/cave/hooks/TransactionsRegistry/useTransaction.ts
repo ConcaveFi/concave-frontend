@@ -6,7 +6,7 @@ import { TrackedTransaction, useTransactionRegistry } from '.'
 export type UseTransaction = ReturnType<typeof useTransaction>
 
 export const useTransaction = (
-  fn: () => Promise<Transaction>,
+  doTx: () => Promise<Transaction>,
   extra: {
     onSend?: () => void
     onSuccess?: (tx: Transaction) => void
@@ -18,7 +18,7 @@ export const useTransaction = (
     current: { onError, onSend, onSuccess },
   } = useRef(extra)
   const { registerTransaction } = useTransactionRegistry()
-  const [isWaitingForConfirmation, setisWaitingForConfirmation] = useState(false)
+  const [isWaitingForConfirmation, setIsWaitingForConfirmation] = useState(false)
   const [error, setError] = useState()
   const tx = useRef<Transaction>()
   const { status } = useWaitForTransaction({
@@ -32,13 +32,12 @@ export const useTransaction = (
     if (status === 'success') {
       onSuccess?.(tx.current)
     }
-  }, [onSended, onSuccess, status])
+  }, [onSend, onSuccess, status])
 
   const sendTx = async () => {
-    setisWaitingForConfirmation(true)
+    setIsWaitingForConfirmation(true)
     try {
-      const transaction = await fn()
-      setisWaitingForConfirmation(false)
+      const transaction = await doTx()
       tx.current = transaction
       registerTransaction(transaction, extra.meta)
     } catch (e) {
@@ -46,8 +45,8 @@ export const useTransaction = (
         onError?.(e)
         setError(e)
       }
-      setisWaitingForConfirmation(false)
     }
+    setIsWaitingForConfirmation(false)
   }
   return {
     tx: tx.current,
