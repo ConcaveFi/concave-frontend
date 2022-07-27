@@ -15,7 +15,7 @@ export const useTransaction = (
   } = {},
 ) => {
   const {
-    current: { onError, onSended, onSuccess },
+    current: { onError, onSend, onSuccess },
   } = useRef(extra)
   const { registerTransaction } = useTransactionRegistry()
   const [isWaitingForConfirmation, setisWaitingForConfirmation] = useState(false)
