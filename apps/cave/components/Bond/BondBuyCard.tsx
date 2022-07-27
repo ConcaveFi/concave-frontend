@@ -7,7 +7,6 @@ import { CurrencyInputField as BondInput } from 'components/CurrencyAmountField'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
-import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useCNVPrice } from 'hooks/useCNVPrice'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
@@ -18,51 +17,57 @@ import { ConfirmBondModal } from './ConfirmBond'
 import { DownwardIcon } from './DownwardIcon'
 import { Settings, useBondSettings } from './Settings'
 
+import { useTransaction } from 'hooks/TransactionsRegistry/useTransaction'
 import { numberMask } from 'utils/numberMask'
 
 export function BondBuyCard(props: {
-  bondTransaction?: any
-  setBondTransaction?: any
-  setAmountInAndOut?: any
-  updateBondPositions?: any
-  setRedeemButtonDisabled?: any
+  updateBondPositions?: VoidFunction
+  setRedeemButtonDisabled?: (b: boolean) => void
 }) {
+  const confirmModal = useDisclosure()
+  const rejectDisclosure = useDisclosure()
+  const cnvPrice = useCNVPrice()
   const { currencyIn, currencyOut, userAddress, balance, signer, networkId } = useBondState()
-  const [bondTransaction, setBondTransaction] = useState()
-
   const { settings, setSetting, isDefaultSettings, onClose } = useBondSettings()
+  const [amountOut, setAmountOut] = useState<string>()
   const [amountIn, setAmountIn] = useState<CurrencyAmount<Currency>>(toAmount('0', DAI[networkId]))
+  const useCurrencyState = useCurrencyButtonState(amountIn, BOND_ADDRESS[networkId])
 
   useEffect(() => {
     setAmountIn(toAmount(0, DAI[networkId]))
   }, [networkId])
 
-  const [amountOut, setAmountOut] = useState<string>()
-  const confirmModal = useDisclosure()
-  const [hasClickedConfirm, setHasClickedConfirm] = useState(false)
-
-  const cnvPrice = useCNVPrice()
   const { data: bondSpotPrice } = useQuery(
     ['bondSpotPrice', networkId],
     async () => await getBondSpotPrice(networkId),
     { enabled: !!networkId, refetchInterval: 17000 },
   )
+  const bondButtonState = !useCurrencyState.approved
+    ? useCurrencyState.buttonProps
+    : { onClick: confirmModal.onOpen, children: 'Bond' }
 
-  const [txError, setTxError] = useState('')
-  const {
-    isOpen: isOpenRejected,
-    onClose: onCloseRejected,
-    onOpen: onOpenRejected,
-  } = useDisclosure()
-
-  const { registerTransaction } = useTransactionRegistry()
-  const useCurrencyState = useCurrencyButtonState(amountIn, BOND_ADDRESS[networkId])
-  const bondButtonState = useCurrencyState.approved
-    ? {
-        onClick: confirmModal.onOpen,
-        children: 'Bond',
-      }
-    : useCurrencyState.buttonProps
+  const bondTransaction = useTransaction(
+    () => {
+      confirmModal.onClose()
+      return purchaseBond(networkId, amountIn.toFixed(), userAddress, signer, settings, amountOut)
+    },
+    {
+      onSended: () => {
+        setAmountIn(toAmount('0', DAI[networkId]))
+        setAmountOut('')
+      },
+      onSuccess: () => {
+        props.setRedeemButtonDisabled(true)
+        props.updateBondPositions()
+      },
+      onError: rejectDisclosure.onOpen,
+      meta: {
+        type: 'bond',
+        amountIn: amountIn.toString(),
+        amountOut: toAmount(amountOut, CNV[networkId]).toString(),
+      },
+    },
+  )
 
   return (
     <Card
@@ -77,13 +82,20 @@ export function BondBuyCard(props: {
     >
       <BondInput
         currencyAmountIn={amountIn}
-        onChangeAmount={(v) => {
+        onChangeAmount={async (v) => {
           setAmountIn(v)
-          getBondAmountOut(currencyOut.address, currencyOut.decimals, networkId, v.toExact()).then(
-            (amountOut) => {
-              setAmountOut(amountOut)
-            },
-          )
+          try {
+            const amountOut = await getBondAmountOut(
+              currencyOut.address,
+              currencyOut.decimals,
+              networkId,
+              v.toExact(),
+            )
+            setAmountOut(amountOut)
+          } catch (e) {
+            console.log(e)
+            setAmountOut('')
+          }
         }}
       />
       <DownwardIcon />
@@ -135,57 +147,29 @@ export function BondBuyCard(props: {
         tokenInRelativePriceToTokenOut={''}
         isOpen={confirmModal.isOpen}
         onClose={confirmModal.onClose}
-        hasClickedConfirm={hasClickedConfirm}
-        setHasClickedConfirm={setHasClickedConfirm}
-        onConfirm={() => {
-          confirmModal.onClose()
-          const amountInTemp = amountIn.toFixed()
-          const amountOutTemp = amountOut
-          purchaseBond(networkId, amountInTemp, userAddress, signer, settings, amountOutTemp)
-            .then(async (tx) => {
-              setBondTransaction(tx)
-              registerTransaction(tx, {
-                type: 'bond',
-                amountIn: amountIn.toString(),
-                amountOut: toAmount(amountOut, CNV[networkId]).toString(),
-              })
-              props.setBondTransaction?.(tx)
-              props.setAmountInAndOut?.({
-                in: parseFloat(String(amountIn.toFixed())).toFixed(2),
-                out: parseFloat(amountOut).toFixed(2),
-              })
-              setHasClickedConfirm(false)
-              setAmountIn(toAmount('0', DAI[networkId]))
-              setAmountOut('')
-              await tx.wait(1)
-              props.setRedeemButtonDisabled(true)
-              props.updateBondPositions()
-            })
-            .catch((e) => {
-              setTxError(e.message)
-              onOpenRejected()
-              setHasClickedConfirm(false)
-            })
-        }}
+        transaction={bondTransaction}
         bondPrice={bondSpotPrice}
         minimumAmountOut={(+amountOut - (+settings.slippageTolerance / 100) * +amountOut).toFixed(
           3,
         )}
         slippage={settings.slippageTolerance?.toString()}
       />
-      <WaitingConfirmationDialog isOpen={hasClickedConfirm} title={'Confirm Bond'}>
+      <WaitingConfirmationDialog
+        isOpen={bondTransaction.isWaitingForConfirmation}
+        title={'Confirm Bond'}
+      >
         <Text fontSize="lg" color="text.accent">
           Bonding {amountIn.toString()} for {amountOut} CNV.
         </Text>
       </WaitingConfirmationDialog>
       <TransactionSubmittedDialog
         title="Bond Submitted"
-        tx={bondTransaction}
-        isOpen={bondTransaction}
+        tx={bondTransaction.tx}
+        isOpen={bondTransaction.isWaitingTransactionReceipt}
       >
         <AddTokenToWalletButton token={currencyOut} />
       </TransactionSubmittedDialog>
-      <TransactionErrorDialog error={txError} isOpen={isOpenRejected} />
+      <TransactionErrorDialog error={bondTransaction.error} {...rejectDisclosure} />
     </Card>
   )
 }
