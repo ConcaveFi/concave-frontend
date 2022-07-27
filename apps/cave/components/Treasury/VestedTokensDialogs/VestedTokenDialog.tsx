@@ -1,3 +1,4 @@
+import { Token } from '@concave/core'
 import { InfoIcon } from '@concave/icons'
 import { Button, Card, Collapse, Flex, Modal, Spinner, Text, Tooltip } from '@concave/ui'
 import { ToggleButton } from 'components/ToggleButton'
@@ -10,13 +11,10 @@ import { VestedTokenInput } from './VestedTokenDialogInput'
 
 type VestedTokenDialogProps = {
   tokenUserData: { redeemable: BigNumber; redeemed: BigNumber; balance: BigNumber }
-  tokenName?: string
   isLoading: boolean
   onRedeem: (amount: BigNumber, redeemMax: boolean) => void
-  status: 'default' | 'approve' | 'rejected' | 'error' | 'submitted'
-  title?: string
-  conversionLabel?: string
-  conversionValue?: BigNumber
+  status: 'default' | 'approve' | 'rejected' | 'error'
+  token: Token
 }
 export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDialogProps> = ({
   onClose,
@@ -25,10 +23,7 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
   isLoading,
   onRedeem,
   status,
-  title,
-  tokenName,
-  conversionLabel,
-  conversionValue,
+  token,
 }) => {
   const { isConnected } = useAccount()
   const { redeemable, redeemed, balance } = tokenUserData || {}
@@ -47,7 +42,7 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
   return (
     <>
       <Modal
-        title={title}
+        title={`Redeem ${token?.symbol}`}
         bluryOverlay
         preserveScrollBarGap
         isOpen={isOpen}
@@ -72,21 +67,22 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
               title="Redeemed:"
               value={isLoading ? 'Loading...' : formatEther(redeemed || '0')}
             />
-            <Collapse
-              in={!!conversionValue && (validValue || (redeemMax && !redeemable?.isZero()))}
-            >
-              {conversionValue && (
+            <Collapse in={validValue || (redeemMax && !redeemable?.isZero())}>
+              {
                 <Info
                   title="You will receive:"
-                  value={formatEther(parseEther(value || '0').mul(conversionValue || 1)) + ' CNV'}
+                  value={formatEther(parseEther(value || '0')) + ' CNV'}
                 />
-              )}
+              }
             </Collapse>
-            {conversionLabel && (
-              <Text fontWeight={'bold'} textColor="text.accent" opacity="0.5" fontSize={'xs'}>
-                {conversionLabel}
-              </Text>
-            )}
+            {
+              <Text
+                fontWeight={'bold'}
+                textColor="text.accent"
+                opacity="0.5"
+                fontSize={'xs'}
+              ></Text>
+            }
           </Flex>
           <Flex gap={2} fontWeight={'bold'} pl={2} align="center">
             <Text textColor={'gray.200'}>Redeem max</Text>
@@ -98,7 +94,9 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
               fontWeight={'bold'}
               fontSize="13px"
               textAlign="center"
-              label={`Attempts to redeem all of your currently available ${tokenName || 'amount'}`}
+              label={`Attempts to redeem all of your currently available ${
+                token?.symbol || 'amount'
+              }`}
             >
               <InfoIcon color={'text.low'} cursor="pointer" />
             </Tooltip>

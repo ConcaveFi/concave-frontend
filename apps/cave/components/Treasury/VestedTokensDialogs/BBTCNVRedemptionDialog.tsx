@@ -1,4 +1,4 @@
-import { BBTRedemptionContractV2 } from '@concave/core'
+import { BBTCNV_ADDRESS, BBTRedemptionContractV2, Token } from '@concave/core'
 import { useDisclosure } from '@concave/ui'
 import { TransactionResponse } from '@ethersproject/providers'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
@@ -49,8 +49,7 @@ export const BBTCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) 
         onClose={onClose}
         onRedeem={redeem}
         tokenUserData={{ ...redeemableData, balance }}
-        title={'Redeem bbtCNV'}
-        conversionValue={parseEther('0.01')}
+        token={new Token(networdId, BBTCNV_ADDRESS[networdId], 18, 'bbtCNV')}
       />
       <TransactionErrorDialog
         error={{ rejected: 'Transaction rejected' }[status] || 'An error occurred'}

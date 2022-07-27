@@ -1,10 +1,11 @@
-import { PCNVContract } from '@concave/core'
+import { PCNVContract, PCNV_CONTRACT, Token } from '@concave/core'
 import { useDisclosure } from '@concave/ui'
 import { TransactionResponse } from '@ethersproject/providers'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { BigNumber } from 'ethers'
 import { formatEther, parseEther } from 'ethers/lib/utils'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useEffect, useState } from 'react'
 import { useAccount, useProvider, useSigner } from 'wagmi'
 import { usePCNVUserData } from '../Hooks/usePCNVUserData'
@@ -29,6 +30,7 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
   const { data: pCNVRedeemableData, isLoading } = usePCNVUserData()
   const { pCNV } = useVestedTokens()
 
+  const chainId = useCurrentSupportedNetworkId()
   const balance = parseEther(pCNV?.data?.formatted || '0')
   const { registerTransaction } = useTransactionRegistry()
 
@@ -47,8 +49,7 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
         onRedeem={redeem}
         status={status}
         tokenUserData={{ ...pCNVRedeemableData, balance }}
-        title="Redeem pCNV"
-        conversionLabel="1 pCNV = 0.01 CNV"
+        token={new Token(chainId, PCNV_CONTRACT[chainId], 18, 'pCNV')}
       />
 
       <TransactionSubmittedDialog
