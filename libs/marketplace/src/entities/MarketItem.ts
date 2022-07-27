@@ -1,9 +1,10 @@
+import { Currency } from '@concave/core'
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
 
 type MarketArgs = {
   seller: string
   erc721: string
-  erc20: string
+  currency: Currency
   tokenId: BigNumberish
   startPrice: BigNumberish
   endPrice: BigNumberish
@@ -53,7 +54,6 @@ type MarketArgs = {
 export class MarketItem {
   readonly seller: string
   readonly erc721: string
-  readonly erc20: string
   readonly tokenId: BigNumber
   readonly startPrice: BigNumber
   readonly endPrice: BigNumber
@@ -61,11 +61,12 @@ export class MarketItem {
   readonly deadline: BigNumber
   readonly isListed: boolean
   readonly signature: string
+  readonly currency: Currency
 
   constructor(args: MarketArgs) {
     this.seller = args.seller
     this.erc721 = args.erc721
-    this.erc20 = args.erc20
+    this.currency = args.currency
     this.tokenId = BigNumber.from(args.tokenId || 0)
     this.startPrice = BigNumber.from(args.startPrice || 0)
     this.endPrice = BigNumber.from(args.endPrice || 0)
@@ -74,7 +75,15 @@ export class MarketItem {
     this.isListed = args.isListed
     this.signature = args.signature
   }
-
+  get erc20() {
+    if (!this.currency) {
+      return ``
+    }
+    if (this.currency.isNative) {
+      return `0x0000000000000000000000000000000000000000`
+    }
+    return this.currency.wrapped.address
+  }
   public new(parial: Partial<MarketArgs> = {}) {
     return new MarketItem({ ...this, ...parial })
   }

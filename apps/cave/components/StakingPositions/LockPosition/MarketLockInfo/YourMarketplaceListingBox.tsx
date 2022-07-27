@@ -1,4 +1,4 @@
-import { CNV_ADDRESS, FIXED_ORDER_MARKET_CONTRACT } from '@concave/core'
+import { CNV, FIXED_ORDER_MARKET_CONTRACT } from '@concave/core'
 import { MarketItem, StakingPosition } from '@concave/marketplace'
 import { Box, Button, ButtonProps, Flex, Text } from '@concave/ui'
 import { formatDistanceToNow } from 'date-fns'
@@ -79,13 +79,14 @@ export const getMarketPlaceButtonProps = (
 export const MarketListing = ({ stakingPosition }: { stakingPosition: StakingPosition }) => {
   const marketItemState = useYourMarketPlaceListing({ stakingPosition })
   const account = useAccount()
-  const [market, setMarket] = useState(
-    generateDefaultMarket(stakingPosition).new({ seller: account.address, signature: '' }),
-  )
+  const tmp = generateDefaultMarket(stakingPosition).new({ seller: account.address, signature: '' })
+  const [market, setMarket] = useState(tmp.new())
   const buttonState = getMarketPlaceButtonProps({ ...marketItemState, market })
   const auctionEnd = formatDistanceToNow(new Date(+market?.deadline.toString() * 1000), {
     addSuffix: false,
   })
+  console.log(stakingPosition.market?.currency)
+  console.log(market?.currency)
 
   return (
     <Box shadow={market?.isListed ? '' : 'down'} borderRadius="2xl" width={'full'} p={4}>
@@ -100,7 +101,11 @@ export const MarketListing = ({ stakingPosition }: { stakingPosition: StakingPos
             label={'List Price:'}
             width={'full'}
             fontSize={'lg'}
-            value={market?.isListed ? `${formatFixed(market.startPrice)} CNV` : '---'}
+            value={
+              market?.isListed
+                ? `${formatFixed(market.startPrice)} ${market.currency?.symbol}`
+                : '---'
+            }
           />
           <Info
             label={'Discount:'}
@@ -136,7 +141,7 @@ const generateDefaultMarket = (staking: StakingPosition) => {
     new MarketItem({
       seller: '',
       erc721: staking.address,
-      erc20: CNV_ADDRESS[staking.chainId],
+      currency: CNV[staking.chainId],
       tokenId: staking.tokenId.toString(),
       startPrice: staking.currentValue,
       endPrice: 0,

@@ -15,7 +15,6 @@ import { useCurrencyButtonState } from 'components/CurrencyAmountButton/Currency
 import { differenceInDays, format, formatDistanceToNowStrict } from 'date-fns'
 import { useTransaction } from 'hooks/TransactionsRegistry/useTransaction'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { useFetchTokenData } from 'hooks/useTokenList'
 import { concaveProvider } from 'lib/providers'
 import { useMemo } from 'react'
 import { formatFixed } from 'utils/formatFixed'
@@ -89,9 +88,10 @@ type BuyContainerProps = { stakingPosition: StakingPosition; onSucess?: () => vo
 const BuyContainer = ({ stakingPosition, onSucess }: BuyContainerProps) => {
   const chainId = useCurrentSupportedNetworkId()
   const tokenId = stakingPosition.tokenId
-  const currency = useFetchTokenData(chainId, stakingPosition.market.erc20)
+  const currency = stakingPosition.market.currency
+  console.log(currency)
   const price = CurrencyAmount.fromRawAmount(
-    currency.data || NATIVE[chainId],
+    currency || NATIVE[chainId],
     stakingPosition.market.startPrice.toString(),
   )
   const { data: signer } = useSigner()
@@ -119,7 +119,7 @@ const BuyContainer = ({ stakingPosition, onSucess }: BuyContainerProps) => {
       return { children: 'Unavailable', minWidth: '45%' }
     }
     if (useCurrencyState.approved) {
-      return { onClick: swap.sendApproveTx, variant: 'primary', children: 'Buy', minWidth: '45%' }
+      return { onClick: swap.sendTx, variant: 'primary', children: 'Buy', minWidth: '45%' }
     }
     return {
       ...useCurrencyState.buttonProps,
@@ -130,7 +130,7 @@ const BuyContainer = ({ stakingPosition, onSucess }: BuyContainerProps) => {
     swap.isSucess,
     swap.isWaitingForConfirmation,
     swap.isWaitingTransactionReceipt,
-    swap.sendApproveTx,
+    swap.sendTx,
     useCurrencyState.approved,
     useCurrencyState.buttonProps,
     useCurrencyState.state,

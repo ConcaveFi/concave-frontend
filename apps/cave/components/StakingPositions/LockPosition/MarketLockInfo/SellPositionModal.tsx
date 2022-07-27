@@ -1,4 +1,4 @@
-import { CNV, Currency, FIXED_ORDER_MARKET_CONTRACT } from '@concave/core'
+import { Currency, FIXED_ORDER_MARKET_CONTRACT } from '@concave/core'
 import { FixedOrderMarketContract, MarketItem, StakingPosition } from '@concave/marketplace'
 import { Box, Button, Flex, HStack, Modal, Text, VStack } from '@concave/ui'
 import { SelectMarketCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
@@ -6,7 +6,7 @@ import { ChooseButton } from 'components/Marketplace/ChooseButton'
 import { BigNumber, BigNumberish } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
-import { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useCallback } from 'react'
 import { formatFixed } from 'utils/formatFixed'
 import { chain, useSignTypedData } from 'wagmi'
 import { BigNumberField } from './BigNumberField'
@@ -122,11 +122,7 @@ export const useListeForSaleState = ({
       console.error(e)
     }
   }
-  const [currency, setCurrency] = useState<Currency>(CNV[chaindId])
-
-  useEffect(() => {
-    setMarket((m) => m.new({ erc20: toAddr(currency) }))
-  }, [currency, setMarket])
+  const setCurrency = useCallback((currency: Currency) => setMarket((m) => m.new({ currency })), [])
 
   const setPrice = useCallback(
     (startPrice: BigNumber) => setMarket((m) => m.new({ startPrice })),
@@ -139,7 +135,6 @@ export const useListeForSaleState = ({
 
   return {
     market,
-    currency,
     create,
     setCurrency,
     setPrice,
@@ -147,15 +142,9 @@ export const useListeForSaleState = ({
   }
 }
 
-const toAddr = (currency: Currency) => {
-  if (currency.isNative) return '0x0000000000000000000000000000000000000000'
-  return currency.wrapped.address
-}
-
 export const ListPositionForSale = ({
   market,
   staking,
-  currency,
   setMarket,
   onClose,
   create,
@@ -176,7 +165,7 @@ export const ListPositionForSale = ({
     <VStack direction={'column'} gap={1} pt={8} px={8} pb={0}>
       <Type />
       <Info label="Current value:" value={formatFixed(staking.currentValue)}></Info>
-      <CurrencySelector value={currency} onChange={setCurrency} />
+      <CurrencySelector value={market.currency} onChange={setCurrency} />
       <BigNumberField
         label="Price:"
         defaultValue={staking.currentValue}

@@ -35,7 +35,7 @@ export const listPositons = async ({
   const preFilter = data.logStakingV1
     .filter((l) => l.tokenID)
     .filter((l) => !owner || l.to === owner)
-  const { stakingV1ToStakingPosition } = parser(stakingV1Contract)
+  const { stakingV1ToStakingPosition } = parser(stakingV1Contract, provider)
   return Promise.all(preFilter.map(stakingV1ToStakingPosition))
 }
 
@@ -48,8 +48,10 @@ export const listListedPositions = async ({ provider }: { provider: BaseProvider
       body: JSON.stringify({ query: listCavemartListingDocuments }),
     },
   )
-  const { stakingV1ToStakingPosition } = parser(stakingV1Contract)
-  return Promise.all(data.logStakingV1.map(stakingV1ToStakingPosition))
+  const { stakingV1ToStakingPosition } = parser(stakingV1Contract, provider)
+  return Promise.all(
+    data.logStakingV1.filter((a) => a.tokenID == 448).map(stakingV1ToStakingPosition),
+  )
 }
 
 export const marketplaceActivity = async ({ provider }: { provider: BaseProvider }) => {
@@ -84,4 +86,5 @@ export type Cavemart = {
   soldFor: string
   txHash: string
   newOwner: string
+  tokenOption: string
 }

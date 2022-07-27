@@ -1,14 +1,25 @@
-import { CNV_ADDRESS, STAKING_CONTRACT } from '@concave/core'
+import { Currency, NATIVE, STAKING_CONTRACT } from '@concave/core'
+import { Fetcher } from '@concave/gemswap-sdk'
+import { BaseProvider } from '@ethersproject/providers'
 import { StakingV1Contract } from 'src/contract'
 import { MarketItem, StakingPosition } from 'src/entities'
 import { Cavemart, LogStakingV1 } from 'src/Fetcher'
 
-export const parser = (stakingV1Contract: StakingV1Contract) => {
-  const cavemartToMarket = (cavemart: Cavemart) => {
+export const parser = (stakingV1Contract: StakingV1Contract, provider: BaseProvider) => {
+  const cavemartToMarket = async (cavemart: Cavemart) => {
+    let currency: Currency = NATIVE[stakingV1Contract.chainId]
+    console.log(cavemart.tokenOption)
+    try {
+      if (cavemart.tokenOption != `0x0000000000000000000000000000000000000000`)
+        currency = await Fetcher.fetchTokenData(cavemart.tokenOption, provider)
+    } catch (e) {
+      console.error(e)
+    }
+    console.log(currency)
     return new MarketItem({
       deadline: cavemart.deadline,
       endPrice: cavemart.endPrice,
-      erc20: CNV_ADDRESS[stakingV1Contract.chainId],
+      currency,
       erc721: STAKING_CONTRACT[stakingV1Contract.chainId],
       seller: cavemart.tokenOwner,
       start: cavemart.start,
@@ -26,7 +37,7 @@ export const parser = (stakingV1Contract: StakingV1Contract) => {
       stakingV1Contract.viewPositionRewards(log.tokenID),
     ])
     const cavemart = log.cavemart.at(-1)
-    const market = !cavemart ? undefined : cavemartToMarket(cavemart)
+    const market = !cavemart ? undefined : await cavemartToMarket(cavemart)
 
     return new StakingPosition({
       chainId,

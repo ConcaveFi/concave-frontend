@@ -20,6 +20,7 @@ query GET_ALL_CAVEMART_USERS_LISTINGS {
       txHash
       tokenIsListed
       signatureHash
+      tokenOption
       created_at
     }
   }
@@ -44,6 +45,7 @@ export const fetchUserPositionsQuery = `query GET_ALL_USERS_POSITIONS {
       soldFor
       tokenOwner
       txHash
+      tokenOption
       tokenIsListed
       signatureHash
       created_at

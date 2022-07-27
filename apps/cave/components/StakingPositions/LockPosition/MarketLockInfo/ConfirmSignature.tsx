@@ -27,6 +27,7 @@ export const ConfirmSignature = ({
       tokenOwner: market.seller,
       tokenIsListed: true,
       deadline: market.deadline.toString(),
+      tokenOption: market.erc20,
     })
     setMarket(market.new({ isListed: true }))
     onClose()
@@ -53,7 +54,6 @@ export const ConfirmSignature = ({
         <Button
           w={'full'}
           onClick={() => {
-            console.log(staking.market)
             setMarket(market.new({ isListed: false, signature: '' }))
             onClose()
           }}

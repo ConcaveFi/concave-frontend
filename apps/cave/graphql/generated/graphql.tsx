@@ -89,15 +89,14 @@ export type Cavemart = {
   created_at: Scalars['timestamptz']
   deadline?: Maybe<Scalars['numeric']>
   endPrice?: Maybe<Scalars['String']>
-  /** An object relationship */
-  logStakingV1_Lock: LogStakingV1_Lock
   newOwner?: Maybe<Scalars['String']>
   signatureHash?: Maybe<Scalars['String']>
   soldFor?: Maybe<Scalars['String']>
-  start: Scalars['String']
+  start?: Maybe<Scalars['String']>
   startPrice?: Maybe<Scalars['String']>
   tokenID: Scalars['numeric']
   tokenIsListed: Scalars['Boolean']
+  tokenOption?: Maybe<Scalars['String']>
   tokenOwner: Scalars['String']
   txHash?: Maybe<Scalars['String']>
   updated_at: Scalars['timestamptz']
@@ -132,7 +131,6 @@ export type Cavemart_Bool_Exp = {
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>
   deadline?: InputMaybe<Numeric_Comparison_Exp>
   endPrice?: InputMaybe<String_Comparison_Exp>
-  logStakingV1_Lock?: InputMaybe<LogStakingV1_Lock_Bool_Exp>
   newOwner?: InputMaybe<String_Comparison_Exp>
   signatureHash?: InputMaybe<String_Comparison_Exp>
   soldFor?: InputMaybe<String_Comparison_Exp>
@@ -140,6 +138,7 @@ export type Cavemart_Bool_Exp = {
   startPrice?: InputMaybe<String_Comparison_Exp>
   tokenID?: InputMaybe<Numeric_Comparison_Exp>
   tokenIsListed?: InputMaybe<Boolean_Comparison_Exp>
+  tokenOption?: InputMaybe<String_Comparison_Exp>
   tokenOwner?: InputMaybe<String_Comparison_Exp>
   txHash?: InputMaybe<String_Comparison_Exp>
   updated_at?: InputMaybe<Timestamptz_Comparison_Exp>
@@ -149,12 +148,6 @@ export type Cavemart_Bool_Exp = {
 export enum Cavemart_Constraint {
   /** unique or primary key constraint on columns "id" */
   CavemartPkey = 'cavemart_pkey',
-}
-
-/** input type for incrementing numeric columns in table "cavemart" */
-export type Cavemart_Inc_Input = {
-  deadline?: InputMaybe<Scalars['numeric']>
-  tokenID?: InputMaybe<Scalars['numeric']>
 }
 
 /** input type for inserting data into table "cavemart" */
@@ -170,6 +163,7 @@ export type Cavemart_Insert_Input = {
   startPrice?: InputMaybe<Scalars['String']>
   tokenID?: InputMaybe<Scalars['numeric']>
   tokenIsListed?: InputMaybe<Scalars['Boolean']>
+  tokenOption?: InputMaybe<Scalars['String']>
   tokenOwner?: InputMaybe<Scalars['String']>
   txHash?: InputMaybe<Scalars['String']>
   updated_at?: InputMaybe<Scalars['timestamptz']>
@@ -186,6 +180,7 @@ export type Cavemart_Max_Order_By = {
   start?: InputMaybe<Order_By>
   startPrice?: InputMaybe<Order_By>
   tokenID?: InputMaybe<Order_By>
+  tokenOption?: InputMaybe<Order_By>
   tokenOwner?: InputMaybe<Order_By>
   txHash?: InputMaybe<Order_By>
   updated_at?: InputMaybe<Order_By>
@@ -202,6 +197,7 @@ export type Cavemart_Min_Order_By = {
   start?: InputMaybe<Order_By>
   startPrice?: InputMaybe<Order_By>
   tokenID?: InputMaybe<Order_By>
+  tokenOption?: InputMaybe<Order_By>
   tokenOwner?: InputMaybe<Order_By>
   txHash?: InputMaybe<Order_By>
   updated_at?: InputMaybe<Order_By>
@@ -228,7 +224,6 @@ export type Cavemart_Order_By = {
   created_at?: InputMaybe<Order_By>
   deadline?: InputMaybe<Order_By>
   endPrice?: InputMaybe<Order_By>
-  logStakingV1_Lock?: InputMaybe<LogStakingV1_Lock_Order_By>
   newOwner?: InputMaybe<Order_By>
   signatureHash?: InputMaybe<Order_By>
   soldFor?: InputMaybe<Order_By>
@@ -236,6 +231,7 @@ export type Cavemart_Order_By = {
   startPrice?: InputMaybe<Order_By>
   tokenID?: InputMaybe<Order_By>
   tokenIsListed?: InputMaybe<Order_By>
+  tokenOption?: InputMaybe<Order_By>
   tokenOwner?: InputMaybe<Order_By>
   txHash?: InputMaybe<Order_By>
   updated_at?: InputMaybe<Order_By>
@@ -264,28 +260,13 @@ export enum Cavemart_Select_Column {
   /** column name */
   TokenIsListed = 'tokenIsListed',
   /** column name */
+  TokenOption = 'tokenOption',
+  /** column name */
   TokenOwner = 'tokenOwner',
   /** column name */
   TxHash = 'txHash',
   /** column name */
   UpdatedAt = 'updated_at',
-}
-
-/** input type for updating data in table "cavemart" */
-export type Cavemart_Set_Input = {
-  created_at?: InputMaybe<Scalars['timestamptz']>
-  deadline?: InputMaybe<Scalars['numeric']>
-  endPrice?: InputMaybe<Scalars['String']>
-  newOwner?: InputMaybe<Scalars['String']>
-  signatureHash?: InputMaybe<Scalars['String']>
-  soldFor?: InputMaybe<Scalars['String']>
-  start?: InputMaybe<Scalars['String']>
-  startPrice?: InputMaybe<Scalars['String']>
-  tokenID?: InputMaybe<Scalars['numeric']>
-  tokenIsListed?: InputMaybe<Scalars['Boolean']>
-  tokenOwner?: InputMaybe<Scalars['String']>
-  txHash?: InputMaybe<Scalars['String']>
-  updated_at?: InputMaybe<Scalars['timestamptz']>
 }
 
 /** order by stddev() on columns of table "cavemart" */
@@ -312,34 +293,10 @@ export type Cavemart_Sum_Order_By = {
   tokenID?: InputMaybe<Order_By>
 }
 
-/** update columns of table "cavemart" */
+/** placeholder for update columns of table "cavemart" (current role has no relevant permissions) */
 export enum Cavemart_Update_Column {
-  /** column name */
-  CreatedAt = 'created_at',
-  /** column name */
-  Deadline = 'deadline',
-  /** column name */
-  EndPrice = 'endPrice',
-  /** column name */
-  NewOwner = 'newOwner',
-  /** column name */
-  SignatureHash = 'signatureHash',
-  /** column name */
-  SoldFor = 'soldFor',
-  /** column name */
-  Start = 'start',
-  /** column name */
-  StartPrice = 'startPrice',
-  /** column name */
-  TokenId = 'tokenID',
-  /** column name */
-  TokenIsListed = 'tokenIsListed',
-  /** column name */
-  TokenOwner = 'tokenOwner',
-  /** column name */
-  TxHash = 'txHash',
-  /** column name */
-  UpdatedAt = 'updated_at',
+  /** placeholder (do not use) */
+  Placeholder = '_PLACEHOLDER',
 }
 
 /** order by var_pop() on columns of table "cavemart" */
@@ -581,6 +538,8 @@ export enum LogCnvData_Select_Column {
 export type LogStakingV1 = {
   __typename?: 'logStakingV1'
   amountLocked?: Maybe<Scalars['String']>
+  /** An array relationship */
+  cavemart: Array<Cavemart>
   created_at: Scalars['timestamptz']
   from?: Maybe<Scalars['String']>
   id: Scalars['uuid']
@@ -594,12 +553,19 @@ export type LogStakingV1 = {
   updated_at: Scalars['timestamptz']
 }
 
+/** get Transfer events for Staking V1 */
+export type LogStakingV1CavemartArgs = {
+  distinct_on?: InputMaybe<Array<Cavemart_Select_Column>>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  order_by?: InputMaybe<Array<Cavemart_Order_By>>
+  where?: InputMaybe<Cavemart_Bool_Exp>
+}
+
 /** get Lock events from Staking V1 */
 export type LogStakingV1_Lock = {
   __typename?: 'logStakingV1_Lock'
   amount?: Maybe<Scalars['String']>
-  /** An array relationship */
-  cavemarts: Array<Cavemart>
   created_at: Scalars['timestamptz']
   deposit?: Maybe<Scalars['String']>
   id: Scalars['uuid']
@@ -621,22 +587,12 @@ export type LogStakingV1_Lock = {
   updated_at: Scalars['timestamptz']
 }
 
-/** get Lock events from Staking V1 */
-export type LogStakingV1_LockCavemartsArgs = {
-  distinct_on?: InputMaybe<Array<Cavemart_Select_Column>>
-  limit?: InputMaybe<Scalars['Int']>
-  offset?: InputMaybe<Scalars['Int']>
-  order_by?: InputMaybe<Array<Cavemart_Order_By>>
-  where?: InputMaybe<Cavemart_Bool_Exp>
-}
-
 /** Boolean expression to filter rows from the table "logStakingV1_Lock". All fields are combined with a logical 'AND'. */
 export type LogStakingV1_Lock_Bool_Exp = {
   _and?: InputMaybe<Array<LogStakingV1_Lock_Bool_Exp>>
   _not?: InputMaybe<LogStakingV1_Lock_Bool_Exp>
   _or?: InputMaybe<Array<LogStakingV1_Lock_Bool_Exp>>
   amount?: InputMaybe<String_Comparison_Exp>
-  cavemarts?: InputMaybe<Cavemart_Bool_Exp>
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>
   deposit?: InputMaybe<String_Comparison_Exp>
   id?: InputMaybe<Uuid_Comparison_Exp>
@@ -661,7 +617,6 @@ export type LogStakingV1_Lock_Bool_Exp = {
 /** Ordering options when selecting data from "logStakingV1_Lock". */
 export type LogStakingV1_Lock_Order_By = {
   amount?: InputMaybe<Order_By>
-  cavemarts_aggregate?: InputMaybe<Cavemart_Aggregate_Order_By>
   created_at?: InputMaybe<Order_By>
   deposit?: InputMaybe<Order_By>
   id?: InputMaybe<Order_By>
@@ -808,6 +763,7 @@ export type LogStakingV1_Bool_Exp = {
   _not?: InputMaybe<LogStakingV1_Bool_Exp>
   _or?: InputMaybe<Array<LogStakingV1_Bool_Exp>>
   amountLocked?: InputMaybe<String_Comparison_Exp>
+  cavemart?: InputMaybe<Cavemart_Bool_Exp>
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>
   from?: InputMaybe<String_Comparison_Exp>
   id?: InputMaybe<Uuid_Comparison_Exp>
@@ -824,6 +780,7 @@ export type LogStakingV1_Bool_Exp = {
 /** Ordering options when selecting data from "logStakingV1". */
 export type LogStakingV1_Order_By = {
   amountLocked?: InputMaybe<Order_By>
+  cavemart_aggregate?: InputMaybe<Cavemart_Aggregate_Order_By>
   created_at?: InputMaybe<Order_By>
   from?: InputMaybe<Order_By>
   id?: InputMaybe<Order_By>
@@ -872,8 +829,6 @@ export type Mutation_Root = {
   insert_cavemart?: Maybe<Cavemart_Mutation_Response>
   /** insert a single row into the table: "cavemart" */
   insert_cavemart_one?: Maybe<Cavemart>
-  /** update data of the table: "cavemart" */
-  update_cavemart?: Maybe<Cavemart_Mutation_Response>
 }
 
 /** mutation root */
@@ -886,13 +841,6 @@ export type Mutation_RootInsert_CavemartArgs = {
 export type Mutation_RootInsert_Cavemart_OneArgs = {
   object: Cavemart_Insert_Input
   on_conflict?: InputMaybe<Cavemart_On_Conflict>
-}
-
-/** mutation root */
-export type Mutation_RootUpdate_CavemartArgs = {
-  _inc?: InputMaybe<Cavemart_Inc_Input>
-  _set?: InputMaybe<Cavemart_Set_Input>
-  where: Cavemart_Bool_Exp
 }
 
 /** Boolean expression to compare columns of type "numeric". All fields are combined with logical 'AND'. */
@@ -926,7 +874,7 @@ export enum Order_By {
 
 export type Query_Root = {
   __typename?: 'query_root'
-  /** fetch data from the table: "cavemart" */
+  /** An array relationship */
   cavemart: Array<Cavemart>
   cnvData?: Maybe<CnvDataOutput>
   /** fetch data from the table: "logACNVRedemption" */
@@ -1118,7 +1066,7 @@ export enum RebaseStakingV1_Select_Column {
 
 export type Subscription_Root = {
   __typename?: 'subscription_root'
-  /** fetch data from the table: "cavemart" */
+  /** An array relationship */
   cavemart: Array<Cavemart>
   /** fetch data from the table: "logACNVRedemption" */
   logACNVRedemption: Array<LogAcnvRedemption>
@@ -1440,39 +1388,12 @@ export type Insert_Cavemart_ListingMutationVariables = Exact<{
   newOwner?: InputMaybe<Scalars['String']>
   soldFor?: InputMaybe<Scalars['String']>
   txHash?: InputMaybe<Scalars['String']>
+  tokenOption?: InputMaybe<Scalars['String']>
 }>
 
 export type Insert_Cavemart_ListingMutation = {
   __typename?: 'mutation_root'
   insert_cavemart_one?: { __typename?: 'cavemart'; tokenID: any; tokenIsListed: boolean } | null
-}
-
-export type Get_All_Cavemart_ListingsQueryVariables = Exact<{ [key: string]: never }>
-
-export type Get_All_Cavemart_ListingsQuery = {
-  __typename?: 'query_root'
-  logStakingV1_Lock: Array<{
-    __typename?: 'logStakingV1_Lock'
-    txHash?: string | null
-    timestamp?: any | null
-    positionID?: any | null
-    poolID?: any | null
-    maturity?: any | null
-    deposit?: string | null
-    amount?: string | null
-    cavemarts: Array<{
-      __typename?: 'cavemart'
-      created_at: any
-      signatureHash?: string | null
-      start: string
-      startPrice?: string | null
-      endPrice?: string | null
-      tokenID: any
-      tokenOwner: string
-      tokenIsListed: boolean
-      deadline?: any | null
-    }>
-  }>
 }
 
 export type Get_Amm_Cnv_PriceQueryVariables = Exact<{ [key: string]: never }>
@@ -1770,9 +1691,9 @@ export const useGet_All_Total_Pools_VaprQuery = <
     options,
   )
 export const Insert_Cavemart_ListingDocument = `
-    mutation INSERT_CAVEMART_LISTING($signatureHash: String, $start: String, $startPrice: String, $endPrice: String, $tokenID: numeric!, $tokenOwner: String!, $deadline: numeric, $tokenIsListed: Boolean, $newOwner: String, $soldFor: String, $txHash: String) {
+    mutation INSERT_CAVEMART_LISTING($signatureHash: String, $start: String, $startPrice: String, $endPrice: String, $tokenID: numeric!, $tokenOwner: String!, $deadline: numeric, $tokenIsListed: Boolean, $newOwner: String, $soldFor: String, $txHash: String, $tokenOption: String) {
   insert_cavemart_one(
-    object: {signatureHash: $signatureHash, start: $start, startPrice: $startPrice, endPrice: $endPrice, tokenID: $tokenID, tokenIsListed: $tokenIsListed, tokenOwner: $tokenOwner, deadline: $deadline, newOwner: $newOwner, soldFor: $soldFor, txHash: $txHash}
+    object: {signatureHash: $signatureHash, start: $start, startPrice: $startPrice, endPrice: $endPrice, tokenID: $tokenID, tokenIsListed: $tokenIsListed, tokenOwner: $tokenOwner, deadline: $deadline, newOwner: $newOwner, soldFor: $soldFor, txHash: $txHash, tokenOption: $tokenOption}
   ) {
     tokenID
     tokenIsListed
@@ -1799,47 +1720,6 @@ export const useInsert_Cavemart_ListingMutation = <TError = unknown, TContext = 
         Insert_Cavemart_ListingDocument,
         variables,
       )(),
-    options,
-  )
-export const Get_All_Cavemart_ListingsDocument = `
-    query GET_ALL_CAVEMART_LISTINGS {
-  logStakingV1_Lock(where: {cavemarts: {tokenIsListed: {_eq: true}}}) {
-    txHash
-    timestamp
-    positionID
-    poolID
-    maturity
-    deposit
-    amount
-    cavemarts {
-      created_at
-      signatureHash
-      start
-      startPrice
-      endPrice
-      tokenID
-      tokenOwner
-      tokenIsListed
-      deadline
-    }
-  }
-}
-    `
-export const useGet_All_Cavemart_ListingsQuery = <
-  TData = Get_All_Cavemart_ListingsQuery,
-  TError = unknown,
->(
-  variables?: Get_All_Cavemart_ListingsQueryVariables,
-  options?: UseQueryOptions<Get_All_Cavemart_ListingsQuery, TError, TData>,
-) =>
-  useQuery<Get_All_Cavemart_ListingsQuery, TError, TData>(
-    variables === undefined
-      ? ['GET_ALL_CAVEMART_LISTINGS']
-      : ['GET_ALL_CAVEMART_LISTINGS', variables],
-    fetcher<Get_All_Cavemart_ListingsQuery, Get_All_Cavemart_ListingsQueryVariables>(
-      Get_All_Cavemart_ListingsDocument,
-      variables,
-    ),
     options,
   )
 export const Get_Amm_Cnv_PriceDocument = `

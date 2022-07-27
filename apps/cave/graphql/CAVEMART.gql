@@ -10,6 +10,7 @@ mutation INSERT_CAVEMART_LISTING(
   $newOwner: String
   $soldFor: String
   $txHash: String
+  $tokenOption: String
 ) {
   insert_cavemart_one(
     object: {
@@ -24,32 +25,10 @@ mutation INSERT_CAVEMART_LISTING(
       newOwner: $newOwner
       soldFor: $soldFor
       txHash: $txHash
+      tokenOption: $tokenOption
     }
   ) {
     tokenID
     tokenIsListed
-  }
-}
-
-query GET_ALL_CAVEMART_LISTINGS {
-  logStakingV1_Lock(where: { cavemarts: { tokenIsListed: { _eq: true } } }) {
-    txHash
-    timestamp
-    positionID
-    poolID
-    maturity
-    deposit
-    amount
-    cavemarts {
-      created_at
-      signatureHash
-      start
-      startPrice
-      endPrice
-      tokenID
-      tokenOwner
-      tokenIsListed
-      deadline
-    }
   }
 }
