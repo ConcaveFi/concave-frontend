@@ -52,7 +52,7 @@ export function BondBuyCard(props: {
       return purchaseBond(networkId, amountIn.toFixed(), userAddress, signer, settings, amountOut)
     },
     {
-      onSended: () => {
+      onSend: () => {
         setAmountIn(toAmount('0', DAI[networkId]))
         setAmountOut('')
       },
