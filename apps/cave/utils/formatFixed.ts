@@ -1,5 +1,4 @@
-import { BigNumberish } from 'ethers'
-import { utils } from 'ethers'
+import { BigNumberish, utils } from 'ethers'
 
 const fixParams = (params: { decimals?: number; places?: number }) => ({
   places: params.places !== undefined ? params.places : 2,

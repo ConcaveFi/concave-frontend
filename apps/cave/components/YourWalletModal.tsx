@@ -1,10 +1,10 @@
-import { Modal, useDisclosure, Flex, Button, Text } from '@concave/ui'
+import { Button, Flex, Modal, Text, useDisclosure } from '@concave/ui'
 import { useAccount, useDisconnect } from 'wagmi'
-import YourWalletContainer from './YourWallet/Containers/YourWalletContainer'
-import ConnectedAreasContainer from './YourWallet/Containers/ConnectedsAreaContainer'
-import RecentTransactionsContainer from './YourWallet/Containers/RecentTransactionsContainer'
 import { ellipseAddress } from './ConnectWallet'
 import SecondConfirmModal from './SecondConfirmModal'
+import ConnectedAreasContainer from './YourWallet/Containers/ConnectedsAreaContainer'
+import RecentTransactionsContainer from './YourWallet/Containers/RecentTransactionsContainer'
+import YourWalletContainer from './YourWallet/Containers/YourWalletContainer'
 
 interface YourWalletModalProps {
   isOpen: boolean
@@ -12,7 +12,7 @@ interface YourWalletModalProps {
 }
 
 export default function YourWalletModal(props: YourWalletModalProps) {
-  const { data: account } = useAccount()
+  const { address } = useAccount()
   const { disconnect } = useDisconnect()
 
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -38,7 +38,7 @@ export default function YourWalletModal(props: YourWalletModalProps) {
         p={6}
         shadow={'up'}
       >
-        <YourWalletContainer onClose={props.onClose} value={ellipseAddress(account?.address)} />
+        <YourWalletContainer onClose={props.onClose} value={ellipseAddress(address)} />
         <ConnectedAreasContainer />
       </Flex>
 

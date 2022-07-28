@@ -1,6 +1,6 @@
 import { SubmittedIcon } from '@concave/icons'
 import { Button, Flex, Modal, Text } from '@concave/ui'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 const TransactionError = ({ error, onClose }: { error: string; onClose: () => void }) => (
   <>
@@ -40,7 +40,7 @@ export const TransactionErrorDialog = ({
   }, [isOpenProp])
   const onClose = () => {
     setIsOpen(false)
-    // closeParentComponent()
+    closeParentComponent()
   }
   return (
     <Modal

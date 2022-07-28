@@ -1,8 +1,8 @@
 import { Currency, CurrencyAmount, Ether, NativeCurrency, Percent, Token } from '../../src/entities'
 
-import { ChainId } from '../../src/enums'
 import JSBI from 'jsbi'
 import { MaxUint256 } from '../../src/constants'
+import { ChainId } from '../../src/enums'
 
 describe('CurrencyAmount', () => {
   const ADDRESS_ONE = '0x0000000000000000000000000000000000000001'

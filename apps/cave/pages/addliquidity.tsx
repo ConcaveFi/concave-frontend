@@ -6,10 +6,9 @@ import {
   fetchQueryCurrencies,
 } from 'components/AMM/hooks/useQueryCurrencies'
 import { withPageTransition } from 'components/PageTransition'
-import { NODE_ENV } from 'lib/env.conf'
 import { GetServerSideProps } from 'next'
 
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 
 export const getServerSideProps: GetServerSideProps = async ({ query, res }) => {
   const currencies = await fetchQueryCurrencies(query)

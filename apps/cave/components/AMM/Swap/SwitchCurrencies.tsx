@@ -1,5 +1,5 @@
 import { ExpandArrowIcon } from '@concave/icons'
-import { Flex, Button } from '@concave/ui'
+import { Button, Flex } from '@concave/ui'
 
 export const SwitchCurrencies = ({ onClick }) => {
   return (
@@ -9,7 +9,6 @@ export const SwitchCurrencies = ({ onClick }) => {
         px={3.5}
         py={2}
         bgColor="blackAlpha.100"
-        rounded="3xl"
         onClick={onClick}
         aria-label="switch currencies"
       >

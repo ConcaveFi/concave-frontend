@@ -1,8 +1,8 @@
-import { WagmiProvider } from 'contexts/WagmiContext'
 import { ThemeProvider } from '@concave/ui'
-import { ReactQueryProvider } from './ReactQueryContext'
-import { ModalsProvider } from './ModalsContext'
+import { WagmiProvider } from 'contexts/WagmiContext'
 import { MotionConfig } from 'framer-motion'
+import { ModalsProvider } from './ModalsContext'
+import { ReactQueryProvider } from './ReactQueryContext'
 
 export const AppProviders = ({ children, globalStyles, cookies }) => {
   return (

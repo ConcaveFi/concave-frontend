@@ -13,7 +13,12 @@ const gasLimit = {
 
 // plz refator this estimate limit thing
 export const GasPrice = ({ estimate }) => {
-  const { data, isError } = useFeeData({ formatUnits: 'gwei', watch: true })
+  const { data, isError } = useFeeData({
+    formatUnits: 'gwei',
+    staleTime: 1000,
+    cacheTime: Infinity,
+    watch: true,
+  })
   const networkId = useCurrentSupportedNetworkId()
   const { price: etherPrice, stablecoin } = useFiatPrice(WETH9[networkId])
 

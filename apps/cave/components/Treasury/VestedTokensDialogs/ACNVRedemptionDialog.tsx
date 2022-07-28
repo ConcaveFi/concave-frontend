@@ -1,54 +1,49 @@
-import { Modal, Card, Text, Flex, Button, useDisclosure, Link } from '@concave/ui'
+import { ACNVRedeemContract, ChainId } from '@concave/core'
+import { Button, Card, Flex, Link, Modal, Text, useDisclosure } from '@concave/ui'
+import { TransactionResponse } from '@ethersproject/providers'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
-import { aCNV_REDEEM_CONTRACT } from 'contracts/VestedTokens/addresses'
-import { Contract, Transaction } from 'ethers'
 import { useGet_User_Acnv_RedeemedQuery } from 'graphql/generated/graphql'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
-import { aCNVredeemabi } from 'lib/contractoABI'
-import { concaveProvider as provider } from 'lib/providers'
 import { useState } from 'react'
-import { useAccount, useConnect, useSigner } from 'wagmi'
+import { useAccount, useProvider, useSigner } from 'wagmi'
 import useVestedTokens from '../Hooks/useVestedTokens'
+import { VestedTokenButtonProps } from '../TreasuryRedeemCard'
 
-interface ACNVRedemptionDialogProps {
-  onClose: () => void
-  isOpen: boolean
-}
-
-export default function ACNVRedemptionDialog(props: ACNVRedemptionDialogProps) {
+export const ACNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) => {
+  const provider = useProvider()
   const { isOpen: isConfirmOpen, onOpen: onOpenConfirm, onClose: onCloseConfirm } = useDisclosure()
   const { isOpen: isSubOpen, onOpen: onOpenSub, onClose: onCloseSub } = useDisclosure()
   const { isOpen: isErrorOpen, onOpen: onOpenError, onClose: onCloseError } = useDisclosure()
   const { onClose, isOpen } = props
 
   const { data: signer } = useSigner()
-  const { data: account } = useAccount()
-  const { isConnected } = useConnect()
+  const { address, isConnected } = useAccount()
 
-  const [tx, setTx] = useState<Transaction>()
+  const [tx, setTx] = useState<TransactionResponse>()
   const [error, setError] = useState('')
 
   const { data, isLoading } = useGet_User_Acnv_RedeemedQuery({
-    address: account?.address,
+    address: address,
   })
   const redeemed: number = data?.logACNVRedemption[0]?.amount || 0
   const txHash = data?.logACNVRedemption[0]?.txHash || ''
-  const aCNVContract = new Contract(aCNV_REDEEM_CONTRACT[1], aCNVredeemabi, provider(1))
 
-  const { aCNVData, loadingACNV } = useVestedTokens()
+  const { aCNV } = useVestedTokens()
+  const { data: aCNVData } = aCNV
   const validBalance = +aCNVData?.formatted > 0
   const alreadyRedeemed = redeemed === +aCNVData?.formatted
-  const canRedeem = validBalance && !alreadyRedeemed
+  const unsupportedNetwork = provider?.network?.chainId !== ChainId.ETHEREUM
+  const canRedeem = validBalance && !alreadyRedeemed && !unsupportedNetwork
 
   const { registerTransaction } = useTransactionRegistry()
 
   function redeem() {
     onOpenConfirm()
+    const aCNVContract = new ACNVRedeemContract(provider)
     aCNVContract
-      .connect(signer)
-      .redeem(account?.address)
+      .redeem(signer, address)
       .then((tx) => {
         onCloseConfirm()
         registerTransaction(tx, {
@@ -80,7 +75,6 @@ export default function ACNVRedemptionDialog(props: ACNVRedemptionDialogProps) {
           <Flex
             direction={'column'}
             width="full"
-            shadow={'Down Medium'}
             rounded="2xl"
             height={'100px'}
             justify={'center'}
@@ -92,16 +86,17 @@ export default function ACNVRedemptionDialog(props: ACNVRedemptionDialogProps) {
               <Text textColor={'text.low'} fontWeight="bold">
                 Current balance:
               </Text>
-              <Text textColor={'text.accent'} fontWeight="bold">
-                {(!loadingACNV && aCNVData?.formatted) || '0'}
-                {loadingACNV && 'Loading...'}
+              <Text textColor={'text.accent'} fontWeight="bold" flex={1} textAlign="end">
+                {unsupportedNetwork && '0'}
+                {!unsupportedNetwork && !aCNV?.isLoading && (aCNVData?.formatted || '0')}
+                {!unsupportedNetwork && !unsupportedNetwork && aCNV?.isLoading && 'Loading...'}
               </Text>
             </Flex>
             <Flex gap={2}>
               <Text color={'text.low'} fontWeight="bold">
                 Redeemed:
               </Text>
-              <Text textColor={'text.accent'} fontWeight="bold">
+              <Text textColor={'text.accent'} fontWeight="bold" flex={1} textAlign="end">
                 {!isLoading && redeemed}
                 {isLoading && 'Loading...'}
               </Text>
@@ -125,19 +120,24 @@ export default function ACNVRedemptionDialog(props: ACNVRedemptionDialogProps) {
             }}
             py={2}
             fontSize="22"
-            variant={'primary.outline'}
+            variant={'primary'}
             width="full"
+            size={'large'}
             shadow={'Up Small'}
+            disabled={!canRedeem}
             textColor={!canRedeem && 'text.low'}
             _hover={canRedeem && { shadow: 'up' }}
             cursor={!canRedeem && 'default'}
-            _active={{}}
-            _focus={{}}
           >
-            {!isConnected && 'Not Connected'}
-            {!validBalance && isConnected && 'Insufficient Balance'}
-            {isConnected && canRedeem && 'Redeem'}
-            {isConnected && !canRedeem && validBalance && 'Nothing To Redeem'}
+            {unsupportedNetwork && 'Unsupported network'}
+            {!unsupportedNetwork && (
+              <Text>
+                {!isConnected && 'Not Connected'}
+                {!validBalance && isConnected && 'Insufficient Balance'}
+                {isConnected && canRedeem && 'Redeem'}
+                {isConnected && !canRedeem && validBalance && 'Nothing To Redeem'}
+              </Text>
+            )}
           </Button>
         </Card>
       </Modal>

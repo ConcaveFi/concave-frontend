@@ -1,5 +1,5 @@
-import { AddressMap } from '../types'
 import { ChainId } from '../enums'
+import { AddressMap } from '../types'
 
 export const MARKETPLACE_CONTRACT: AddressMap = {
   [ChainId.ETHEREUM]: '',
@@ -15,6 +15,26 @@ export const BOND_ADDRESS: AddressMap = {
   [ChainId.ETHEREUM]: '0xe42bce7bd1a94f99a099ee9242Aa0f3B2F5b1D50',
   [ChainId.ROPSTEN]: '0x82335F5F77D04b95AA09543Bc37Fa70269b0E1d1',
   [ChainId.RINKEBY]: '0x9B4147eb30daFc75CF4A5E33d1Ee72156790c917',
+}
+
+export const ACNV_ADDRESS: AddressMap = {
+  [ChainId.ETHEREUM]: '0x6Ff0106D34FEEe8A8aCF2e7b9168480f86B82E2f',
+  [ChainId.RINKEBY]: '',
+}
+
+export const ACNV_REDEEMPTION: AddressMap = {
+  [ChainId.ETHEREUM]: '0x38baBedCb1f226B49b2089DA0b84e52b6181Ca59',
+  [ChainId.RINKEBY]: '',
+}
+
+export const BBTCNV_ADDRESS: AddressMap = {
+  [ChainId.ETHEREUM]: '0x0000000012a0592C154D552C410030E724b2eA00',
+  [ChainId.RINKEBY]: '0x03eebe71dca9cdfc71d5f9a50f48a52ca5662526',
+}
+
+export const BBTCNV_REDEMPTION_V2: AddressMap = {
+  [ChainId.ETHEREUM]: '0xc3CBd1e850D431adC583f14f03b9B8B651e62A61',
+  [ChainId.RINKEBY]: '0xCf6B82Ca69bE4272d457c246FAF380f88af34f69',
 }
 
 /*
@@ -39,7 +59,7 @@ export const CNV_ADDRESS: AddressMap = {
   [ChainId.ETHEREUM]: '0x000000007a58f5f58E697e51Ab0357BC9e260A04',
   [ChainId.ROPSTEN]: '0xB9CED3eB5Ce9d40A735cA3345978aB62Eca0c4d0',
   [ChainId.RINKEBY]: '0x4A8b871784A8e6344126F47d48283a87Ea987f27',
-  
+
   // 0xFA027BE606C3c4Bb5551513f77A91a5982E61681 <- new tCNV Rinkeby?
 }
 

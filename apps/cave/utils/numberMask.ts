@@ -13,7 +13,7 @@ const numSplice = (number: string | Number, decimalCount?: number): string => {
 }
 
 /**
- * Format normal numbers to `X` decimal places to make them readable.
+ * Format normal numbers to `x` amount of decimal places to make them human readable
  * @param number - a number to be formatted
  * @param decimals - the number of decimal places to use
  * @returns a number in string format
@@ -23,7 +23,7 @@ export const numberMask = (number: Number, decimals?: number): string => {
     return `0`
   }
   if (number < 0.01) {
-    return `<.01`
+    return `< 0.01`
   }
   const decimalCount = decimals || 2
   return commify(numSplice(number, decimalCount))

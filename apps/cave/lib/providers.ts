@@ -1,5 +1,5 @@
-import { providers } from 'ethers'
 import { providers as multicallProvider } from '@0xsequence/multicall'
+import { providers } from 'ethers'
 import {
   NEXT_PUBLIC_ALCHEMY_ID,
   NEXT_PUBLIC_CONCAVE_RPC_KEY,
@@ -13,7 +13,7 @@ const NoProviderKeyError = `Concave Provider
   You need to set at least one provider key in your .env file, examples in .env.example`
 
 const stallTimeout = 500 // timeout in milliseconds after which another provider will be attempted.
-const getFallbackProviders = (chainId: number) => {
+const getFallbackProvider = (chainId: number) => {
   const providerConfigs = []
 
   if (NEXT_PUBLIC_CONCAVE_RPC_KEY && chainId === 1)
@@ -39,21 +39,19 @@ const getFallbackProviders = (chainId: number) => {
 
   if (providerConfigs.length === 0) throw NoProviderKeyError
 
-  return providerConfigs
+  return new providers.FallbackProvider(providerConfigs, 1)
 }
 
-class ConcaveProvider extends multicallProvider.MulticallProvider {
-  constructor(chainId: number) {
-    // TODO: should be fixed on @0xsequence/multicall side
-    // wagmi expects provider.network to exist,
-    // but when wrapping with multicall it waits a promise to resolve
-    const p = new providers.FallbackProvider(getFallbackProviders(chainId), 1)
-    super(p)
-    this._network = p.network
-  }
-}
+const singletonProvider = {}
 
-export const concaveProvider = (chainId: number) => new ConcaveProvider(chainId)
+export const concaveProvider = (chainId: number) => {
+  if (singletonProvider[chainId]) return singletonProvider[chainId]
+  const f = getFallbackProvider(chainId)
+  const p = new multicallProvider.MulticallProvider(f, { timeWindow: 1000 })
+  p._network = f._network
+  singletonProvider[chainId] = p
+  return singletonProvider[chainId]
+}
 
 export const concaveWSProvider = (chainId: number) => {
   if (NEXT_PUBLIC_CONCAVE_RPC_KEY) return new providers.WebSocketProvider(concaveWSS, chainId)

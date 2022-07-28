@@ -1,20 +1,20 @@
-import { Text, Button, Modal, Image } from '@concave/ui'
+import { ChainId } from '@concave/core'
+import { Button, Image, Modal, Text } from '@concave/ui'
 import dynamic from 'next/dynamic'
-import { chain, useNetwork } from 'wagmi'
+import { useNetwork, useSwitchNetwork } from 'wagmi'
 
 export const UnsupportedNetworkModal = dynamic(
   () =>
     Promise.resolve(() => {
-      const { activeChain, switchNetwork, isSuccess } = useNetwork()
+      const { chain } = useNetwork()
+      const { switchNetwork, isSuccess } = useSwitchNetwork()
 
       return (
         <Modal
           bluryOverlay={true}
           title="Unsupported Network"
           titleAlign="center"
-          isOpen={
-            activeChain?.id && ![chain.mainnet.id, chain.rinkeby.id].includes(activeChain?.id)
-          }
+          isOpen={chain?.id && ![ChainId.ETHEREUM, ChainId.RINKEBY].includes(chain?.id)}
           onClose={() => {}}
           bodyProps={{ w: '350px', gap: 2 }}
           hideClose
@@ -22,7 +22,7 @@ export const UnsupportedNetworkModal = dynamic(
           <Text fontWeight="bold">Please switch to Ethereum</Text>
           <Button
             leftIcon={<Image w="20px" src={`/assets/tokens/eth.svg`} alt="" />}
-            onClick={() => switchNetwork?.(chain.mainnet.id)}
+            onClick={() => switchNetwork?.(ChainId.ETHEREUM)}
             isDisabled={!switchNetwork}
             variant="secondary"
             p={3}

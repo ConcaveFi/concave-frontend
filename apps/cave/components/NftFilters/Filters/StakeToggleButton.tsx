@@ -1,5 +1,5 @@
 import { Flex, Text } from '@chakra-ui/react'
-import { PARAMETER_TO_POOL_PERIOD } from 'components/LiquidStaking/StakeCard'
+import { stakingPools } from '@concave/marketplace'
 import { ToggleButton } from 'components/ToggleButton'
 import { StakePoolFilterEnum } from './hooks/useFilterByStakePool'
 type StakeToggleButton = {
@@ -18,7 +18,7 @@ export const StakeToggleButton: React.FC<StakeToggleButton> = ({
   return (
     <Flex textColor={'white'} fontWeight="bold" width={'full'} justify="space-between" px={4}>
       <Text textAlign={'end'} width="70px">
-        {PARAMETER_TO_POOL_PERIOD[filter]}
+        {stakingPools[filter].days + ' days'}
       </Text>
       <ToggleButton
         enabled={enabled}

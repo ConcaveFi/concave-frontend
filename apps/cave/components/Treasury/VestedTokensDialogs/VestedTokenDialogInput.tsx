@@ -1,20 +1,22 @@
 import { Flex, Text, useDisclosure } from '@chakra-ui/react'
 import { NumericInput } from '@concave/ui'
+import { BigNumber } from 'ethers'
+import { formatEther } from 'ethers/lib/utils'
 
-type BBT_CNVDialogInput = {
+type VestedTokenInputProps = {
   onChangeValue: (value: string) => void
   value: string
   balance: string
   redeemMax: boolean
-  redeemable: string
+  redeemable: BigNumber
 }
-export const BBT_CNVDialogInput = ({
+export const VestedTokenInput = ({
   balance,
   value,
   redeemMax,
   redeemable,
   onChangeValue,
-}: BBT_CNVDialogInput) => {
+}: VestedTokenInputProps) => {
   return (
     <Flex height={'85px'} direction="column">
       <Flex height={'85px'} shadow={'down'} rounded="2xl" px={4} py={2} direction="column">
@@ -22,9 +24,10 @@ export const BBT_CNVDialogInput = ({
           <NumericInput
             py={2}
             fontSize={'18px'}
+            _placeholder={{ textColor: redeemMax && 'white' }}
             value={!redeemMax && value}
             disabled={redeemMax}
-            placeholder={redeemMax ? redeemable : '0.0'}
+            placeholder={redeemMax ? formatEther(redeemable || '0') : '0.0'}
             onValueChange={({ value }) => !redeemMax && onChangeValue(value)}
           />
         </Flex>

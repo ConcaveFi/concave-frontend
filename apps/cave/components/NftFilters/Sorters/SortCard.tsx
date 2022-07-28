@@ -1,7 +1,6 @@
 import {
   Button,
   Flex,
-  gradientBorder,
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -10,7 +9,7 @@ import {
 } from '@concave/ui'
 import { useState } from 'react'
 import { DropdownCard } from '../DropdownCard'
-import { NftSort, NftSortMethod } from './hooks/useNftSort'
+import { NftSort } from './hooks/useNftSort'
 import { SortOption } from './SortOption'
 
 type SortCardProps = {

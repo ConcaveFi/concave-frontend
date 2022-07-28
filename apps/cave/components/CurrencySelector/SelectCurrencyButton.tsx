@@ -2,7 +2,6 @@ import { Currency } from '@concave/core'
 import { DownIcon } from '@concave/icons'
 import { Button, ButtonProps } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
-import React from 'react'
 import { defaultChains } from 'wagmi'
 
 export const SelectCurrencyButton = ({

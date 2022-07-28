@@ -1,16 +1,7 @@
 import { Flex, Modal, Text } from '@concave/ui'
+import { VestedTokenButtonProps } from '../TreasuryRedeemCard'
 
-export const ComingSoonDialog = ({
-  isOpen,
-  desc,
-  title,
-  onClose,
-}: {
-  isOpen: boolean
-  title: string
-  desc: string
-  onClose: () => void
-}) => {
+export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen, onClose }) => {
   return (
     <Modal
       isCentered
@@ -23,13 +14,11 @@ export const ComingSoonDialog = ({
     >
       <Flex width={'220px'} height="140px" direction={'column'} px="3">
         <Text fontSize={'2xl'} fontWeight="bold" mx={'auto'} mt="2">
-          {title}
+          {`pCNV`}
         </Text>
-        <Flex width={'full'} height="full" textAlign="center" wordBreak={'break-word'}>
-          <Text textColor={'text.low'} fontWeight="bold" fontSize={'lg'}>
-            {desc}
-          </Text>
-        </Flex>
+        <Text textAlign={'center'} textColor={'text.low'} fontWeight="bold" fontSize={'lg'}>
+          {`We're busy mining the pCNV token, come back later.`}
+        </Text>
       </Flex>
     </Modal>
   )
