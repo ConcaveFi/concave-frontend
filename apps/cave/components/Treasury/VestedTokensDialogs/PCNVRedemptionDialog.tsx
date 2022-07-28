@@ -1,6 +1,7 @@
 import { PCNVContract, PCNV_CONTRACT, Token } from '@concave/core'
 import { useDisclosure } from '@concave/ui'
 import { TransactionResponse } from '@ethersproject/providers'
+import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { BigNumber } from 'ethers'
 import { formatEther, parseEther } from 'ethers/lib/utils'
@@ -27,7 +28,9 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
   const { data: signer } = useSigner()
   const provider = useProvider()
 
-  const [status, setStatus] = useState<'default' | 'approve' | 'rejected' | 'error'>('default')
+  const [status, setStatus] = useState<'default' | 'approve' | 'rejected' | 'error' | 'submitted'>(
+    'default',
+  )
   const [tx, setTx] = useState<TransactionResponse>()
 
   const { pCNV } = useVestedTokens()
@@ -39,7 +42,10 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
   const chainId = useCurrentSupportedNetworkId()
   const balance = parseEther(pCNV?.data?.formatted || '0')
   const { registerTransaction } = useTransactionRegistry()
-
+  const onCloseModal = () => {
+    setStatus('default')
+    onCloseTransactionModal()
+  }
   return (
     <>
       <VestedTokenDialog
@@ -53,9 +59,14 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
         conversionToCNV={pCNVToCNVDifference || 1}
       />
 
+      <TransactionErrorDialog
+        error={{ rejected: 'Transaction rejected' }[status] || 'An error occurred'}
+        isOpen={(transactionSubmitted && status === 'error') || status === 'rejected'}
+        closeParentComponent={onCloseModal}
+      />
       <TransactionSubmittedDialog
-        closeParentComponent={onCloseTransactionModal}
-        isOpen={transactionSubmitted && Boolean(tx)}
+        closeParentComponent={onCloseModal}
+        isOpen={transactionSubmitted && Boolean(tx) && status === 'submitted'}
         tx={tx}
       />
     </>
@@ -72,7 +83,7 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
         })
         setTx(transaction)
         submitTransactionModal()
-        setStatus('default')
+        setStatus('submitted')
       })
       .catch((error) => {
         if (error.code === 4001) setStatus('rejected')
