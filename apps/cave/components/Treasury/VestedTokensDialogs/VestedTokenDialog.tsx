@@ -118,11 +118,10 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
             {isConnected && !isLoading && (
               <>
                 <Text>
-                  {invalidAmount && 'Invalid amount'}
                   {nothingToRedeem && 'Nothing to redeem'}
                   {insufficientFunds && 'Insufficient funds'}
                   {redeemableExceeded && 'Redeemable exceeded'}
-                  {validValue && redeemButtonText[status]}
+                  {invalidAmount || (validValue && redeemButtonText[status])}
                 </Text>
               </>
             )}
@@ -154,7 +153,7 @@ const redeemButtonText = {
   default: 'Redeem',
   approve: 'Approve in your wallet...',
   rejected: 'Transaction rejected',
-  error: 'Ocurred an error',
+  error: 'An error occurred',
 }
 const Info = ({ title, value }: { title: string; value: string | number }) => (
   <Flex gap={2} fontWeight={'bold'}>
