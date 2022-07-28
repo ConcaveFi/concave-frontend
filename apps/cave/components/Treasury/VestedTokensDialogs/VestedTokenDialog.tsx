@@ -41,6 +41,7 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
     !insufficientFunds &&
     !nothingToRedeem
   const validValue = !invalidAmount && !insufficientFunds && !nothingToRedeem && !redeemableExceeded
+  const currentValue = redeemMax ? redeemable : parseEther(value || '0')
   return (
     <>
       <Modal
@@ -71,7 +72,12 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
             />
             <Collapse in={validValue || (redeemMax && !redeemable?.isZero())}>
               {conversionToCNV && (
-                <Info title="You will receive:" value={+value * conversionToCNV + ' CNV'} />
+                <Info
+                  title="You will receive:"
+                  value={
+                    (+formatEther(currentValue || 0) * conversionToCNV).toPrecision(2) + ' CNV'
+                  }
+                />
               )}
             </Collapse>
             {conversionToCNV && (

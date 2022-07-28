@@ -48,7 +48,7 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
         status={status}
         tokenUserData={{ ...pCNVRedeemableData, balance }}
         token={new Token(chainId, PCNV_CONTRACT[chainId], 18, 'pCNV')}
-        conversionToCNV={pCNVToCNVDifference || 0}
+        conversionToCNV={pCNVToCNVDifference || 1}
       />
 
       <TransactionSubmittedDialog
