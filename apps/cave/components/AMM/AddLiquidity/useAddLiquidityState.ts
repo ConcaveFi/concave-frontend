@@ -1,10 +1,9 @@
-import { Currency, CurrencyAmount } from '@concave/core'
+import { Currency, CurrencyAmount, JSBI, ZERO } from '@concave/core'
 import { Pair } from '@concave/gemswap-sdk'
 import { usePair } from 'components/AMM/hooks/usePair'
-import { useLinkedCurrencyAmounts } from 'components/CurrencyAmountField'
-import { useCallback } from 'react'
-import { toAmount } from 'utils/toAmount'
-import { useQueryCurrencies } from '../hooks/useQueryCurrencies'
+import { useLinkedCurrencyFields } from 'components/CurrencyAmountField'
+import { useCallback, useState } from 'react'
+import { updateArray } from 'utils/updateArray'
 
 const deriveAmount = (
   pair: Pair,
@@ -20,33 +19,59 @@ const deriveAmount = (
     return
   const price = pair.priceOf(exactAmount.currency.wrapped)
   const quoteAmount = price.quote(exactAmount.wrapped)
-  if (otherCurrency.isNative) return toAmount(quoteAmount.toExact(), otherCurrency)
-  return quoteAmount
+  return quoteAmount.quotient
 }
 
-export const useAddLiquidityState = () => {
-  const { currencies, onChangeCurrencies } = useQueryCurrencies()
+const newAmount = (currency: Currency, amount: JSBI = ZERO) =>
+  currency && CurrencyAmount.fromRawAmount(currency, amount)
 
-  const pair = usePair(currencies[0]?.wrapped, currencies[1]?.wrapped)
+export const useAddLiquidityState = (
+  currencies: [Currency, Currency],
+  onChangeCurrencies?: (currencies: [Currency, Currency]) => void,
+) => {
+  const [amounts, setAmounts] = useState([ZERO, ZERO])
 
-  const { amounts, onChangeField } = useLinkedCurrencyAmounts({
-    onDerive: useCallback(
-      (enteredAmount, _currencies) => {
-        const otherCurrency = enteredAmount.currency.equals(_currencies[0])
-          ? _currencies[1]
-          : _currencies[0]
-        return deriveAmount(pair.data, enteredAmount, otherCurrency)
-      },
-      [pair.data],
-    ),
+  const pair = usePair(currencies[0]?.wrapped, currencies[1]?.wrapped, {
+    onSuccess(pair) {
+      const otherField = lastUpdated === 0 ? 1 : 0
+      const derivedAmount = deriveAmount(
+        pair,
+        newAmount(currencies[lastUpdated], amounts[lastUpdated]),
+        currencies[otherField],
+      )
+      setAmounts((amounts) =>
+        updateArray({
+          [lastUpdated]: amounts[lastUpdated],
+          [otherField]: derivedAmount || amounts[otherField],
+        }),
+      )
+    },
+  })
+
+  const { onChangeField, lastUpdated } = useLinkedCurrencyFields({
+    currencies,
+    onChangeCurrencies,
+    onChangeAmount: (enteredAmount) => {
+      const otherField = lastUpdated === 0 ? 1 : 0
+      setAmounts((amounts) =>
+        updateArray({
+          [lastUpdated]: enteredAmount.quotient,
+          [otherField]:
+            deriveAmount(pair.data, enteredAmount, currencies[otherField]) || amounts[otherField],
+        }),
+      )
+    },
   })
 
   return {
-    firstFieldAmount: amounts[0],
-    secondFieldAmount: amounts[1],
+    firstFieldAmount: newAmount(currencies[0], amounts[0]),
+    secondFieldAmount: newAmount(currencies[1], amounts[1]),
     pair: pair,
     onChangeFirstField: onChangeField(0),
     onChangeSecondField: onChangeField(1),
-    onReset: () => onChangeCurrencies([undefined, undefined]),
+    onReset: useCallback(() => {
+      onChangeCurrencies([undefined, undefined])
+      setAmounts([ZERO, ZERO])
+    }, [onChangeCurrencies]),
   }
 }

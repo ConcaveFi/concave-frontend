@@ -60,6 +60,8 @@ export const useQueryCurrencies = () => {
     async () => {
       const currency0 = getQueryValue(query, 'currency0')
       const currency1 = getQueryValue(query, 'currency1')
+      if (currency0 === currency1)
+        return [await fetchTokenOrNativeData(currency0, chainId), undefined]
       // we're letting the token fetcher do the caching
       return [
         await fetchTokenOrNativeData(currency0, chainId),

@@ -22,16 +22,7 @@ import { NetworkMismatch } from '../NetworkMismatch'
 import { TradeDetails } from './TradeDetails'
 
 export function SwapCard() {
-  const {
-    trade,
-    error,
-    inputAmount,
-    outputAmount,
-    onChangeInput,
-    onChangeOutput,
-    switchFields,
-    onReset,
-  } = useSwapState()
+  const { trade, error, onChangeInput, onChangeOutput, switchFields, onReset } = useSwapState()
 
   const [recipient, setRecipient] = useState('')
 
@@ -45,8 +36,6 @@ export function SwapCard() {
   const confirmationModal = useDisclosure()
   const swapButtonProps = useSwapButtonProps({
     trade,
-    inputAmount,
-    outputAmount,
     error,
     recipient,
     settings,
@@ -66,7 +55,7 @@ export function SwapCard() {
         maxW="420px"
       >
         <CurrencyInputField
-          currencyAmountIn={inputAmount}
+          currencyAmountIn={trade.inputAmount}
           onChangeAmount={onChangeInput}
           CurrencySelector={SelectAMMCurrency}
         />
@@ -74,7 +63,7 @@ export function SwapCard() {
         <SwitchCurrencies onClick={switchFields} />
 
         <CurrencyOutputField
-          currencyAmountOut={outputAmount}
+          currencyAmountOut={trade.outputAmount}
           priceImpact={trade?.priceImpact}
           updateOutputValue={onChangeOutput}
         />
@@ -83,7 +72,11 @@ export function SwapCard() {
           <CustomRecipient onChangeRecipient={setRecipient} />
         </Collapse>
 
-        <TradeDetails trade={trade} inputAmount={inputAmount} outputAmount={outputAmount} />
+        <TradeDetails
+          trade={trade}
+          inputAmount={trade.inputAmount}
+          outputAmount={trade.outputAmount}
+        />
 
         <Button variant="primary" size="large" w="full" {...swapButtonProps} />
 

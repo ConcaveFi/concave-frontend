@@ -1,3 +1,3 @@
 export { CurrencyAmountField } from './CurrencyAmountField'
 export { CurrencyInputField } from './CurrencyInputField'
-export { useLinkedCurrencyAmounts } from './useLinkedCurrencyAmounts'
+export { useLinkedCurrencyFields } from './useLinkedCurrencyFields'

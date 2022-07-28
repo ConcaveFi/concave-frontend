@@ -12,11 +12,12 @@ import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
-import { useMemo } from 'react'
 import { toAmount } from 'utils/toAmount'
 import { useAccount } from 'wagmi'
+import { useQueryCurrencies } from '../hooks/useQueryCurrencies'
 import { NetworkMismatch } from '../NetworkMismatch'
 import useLiquidityData from './useLiquidityData'
+
 const AddSymbol = () => (
   <Flex align="center" justify="center">
     <Flex
@@ -40,7 +41,15 @@ export type LiquidityPool = {
   amount1: CurrencyAmount<Currency>
 }
 
-function AddLiquidityContent({ liquidityModalClose }: { liquidityModalClose?: VoidFunction }) {
+function AddLiquidityContent({
+  liquidityModalClose,
+  currencies,
+  onChangeCurrencies,
+}: {
+  currencies: [Currency, Currency]
+  onChangeCurrencies?: (currencies: [Currency, Currency]) => void
+  liquidityModalClose?: VoidFunction
+}) {
   const {
     pair,
     firstFieldAmount,
@@ -48,7 +57,7 @@ function AddLiquidityContent({ liquidityModalClose }: { liquidityModalClose?: Vo
     onChangeFirstField,
     onChangeSecondField,
     onReset,
-  } = useAddLiquidityState()
+  } = useAddLiquidityState(currencies, onChangeCurrencies)
 
   const addLPTx = useAddLiquidityTransaction(firstFieldAmount, secondFieldAmount)
 
@@ -78,13 +87,13 @@ function AddLiquidityContent({ liquidityModalClose }: { liquidityModalClose?: Vo
         <CurrencyInputField
           currencyAmountIn={firstFieldAmount}
           onChangeAmount={onChangeFirstField}
-          CurrencySelector={SelectAMMCurrency}
+          CurrencySelector={onChangeCurrencies ? SelectAMMCurrency : undefined}
         />
         <AddSymbol />
         <CurrencyInputField
           currencyAmountIn={secondFieldAmount}
           onChangeAmount={onChangeSecondField}
-          CurrencySelector={SelectAMMCurrency}
+          CurrencySelector={onChangeCurrencies ? SelectAMMCurrency : undefined}
         />
       </Flex>
 
@@ -178,7 +187,6 @@ export const AddLiquidityModalButton = ({
 }: { label?: string; pair?: Pair } & ButtonProps) => {
   const { isDisconnected } = useAccount()
   const addLiquidityDisclosure = useDisclosure()
-  const currencies = useMemo(() => [pair?.token0, pair?.token1], [pair?.token0, pair?.token1])
   if (isDisconnected) return <ConnectButton />
   return (
     <>
@@ -211,13 +219,17 @@ export const AddLiquidityModalButton = ({
           gap: 6,
         }}
       >
-        <AddLiquidityContent liquidityModalClose={addLiquidityDisclosure.onClose} />
+        <AddLiquidityContent
+          currencies={[pair?.token0, pair?.token1]}
+          liquidityModalClose={addLiquidityDisclosure.onClose}
+        />
       </Modal>
     </>
   )
 }
 
 export const AddLiquidityCard = () => {
+  const { currencies, onChangeCurrencies } = useQueryCurrencies()
   return (
     <Card
       borderWidth={2}
@@ -227,7 +239,7 @@ export const AddLiquidityCard = () => {
       gap={6}
       shadow="Up for Blocks"
     >
-      <AddLiquidityContent />
+      <AddLiquidityContent currencies={currencies} onChangeCurrencies={onChangeCurrencies} />
     </Card>
   )
 }
