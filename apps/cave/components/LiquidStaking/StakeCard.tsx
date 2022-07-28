@@ -20,10 +20,10 @@ export const StakeCard = (props: StakeCardProps) => {
   const { stakingV1Pools, stakingV1Cap } = data || {}
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const loadBarPercent = new Percent(
-    stakingV1Pools?.balance?.toString() || '0',
-    stakingV1Cap?.toString() || '0',
-  )
+  const pools = stakingV1Pools?.balance.toString() || '0'
+  const poolsCapacity = stakingV1Cap?.add(stakingV1Pools?.balance).toString() || '0'
+
+  const loadBarPercent = new Percent(pools, poolsCapacity)
 
   const loadBarProps = {
     percent: loadBarPercent,
@@ -102,12 +102,16 @@ const LoadBar = ({ percent, currentlyStaked, loading, stakingCap, variant }: Loa
       my={2}
       p={1}
     >
-      <Flex
-        width={`${percent.toSignificant(3)}%`}
-        height="full"
-        apply={'background.metalBrighter'}
-        rounded="full"
-      />
+      <Flex w="full" height={'full'} overflow="hidden" rounded={'inherit'}>
+        <Flex
+          transform={`translateX(-${100 - +percent.toSignificant(3)}%)`}
+          width={`full`}
+          height="full"
+          apply={'background.metalBrighter'}
+          rounded="full"
+        />
+      </Flex>
+
       <Flex
         position={'absolute'}
         mx={-1}

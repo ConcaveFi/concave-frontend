@@ -7,8 +7,8 @@ describe('Test numberMask', () => {
     expect(numberMask(1.01, 3)).toBe('1.01')
   })
   it('check min values', () => {
-    expect(numberMask(0.001, 8)).toBe('<.01')
-    expect(numberMask(0.009, 2)).toBe('<.01')
+    expect(numberMask(0.001, 8)).toBe('< 0.01')
+    expect(numberMask(0.009, 2)).toBe('< 0.01')
     expect(numberMask(0.01, 2)).toBe('0.01')
   })
   it('check commas', () => {
