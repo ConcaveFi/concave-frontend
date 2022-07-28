@@ -104,7 +104,9 @@ const BuyContainer = ({ stakingPosition, onSucess }: BuyContainerProps) => {
     { meta: { type: 'offer marketplace', tokenId: +tokenId.toString() }, onError: console.error },
   )
 
-  const useCurrencyState = useCurrencyButtonState(price, FIXED_ORDER_MARKET_CONTRACT[chainId])
+  const useCurrencyState = useCurrencyButtonState(price, FIXED_ORDER_MARKET_CONTRACT[chainId], {
+    amountInfo: true,
+  })
   const buttonProps = useMemo(() => {
     if (swap.isWaitingForConfirmation)
       return { loadingText: 'Confirm', isLoading: true, minWidth: '45%' }

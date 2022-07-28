@@ -169,6 +169,7 @@ export const ListPositionForSale = ({
       <CurrencySelector value={market.currency} onChange={setCurrency} />
       <BigNumberField
         label="Price:"
+        currency={market.currency}
         defaultValue={staking.currentValue}
         onChange={setPrice}
         decimalScale={4}

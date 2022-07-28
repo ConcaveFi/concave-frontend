@@ -5,7 +5,11 @@ import { useApprove } from 'hooks/useApprove'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useAccount } from 'wagmi'
 
-export const useCurrencyButtonState = (amount: CurrencyAmount<Currency>, spender: string) => {
+export const useCurrencyButtonState = (
+  amount: CurrencyAmount<Currency>,
+  spender: string,
+  { amountInfo = false } = {},
+) => {
   const { address } = useAccount()
   const { connectModal } = useModals()
   const currency = amount.currency
@@ -22,7 +26,10 @@ export const useCurrencyButtonState = (amount: CurrencyAmount<Currency>, spender
     error: { disabled, children: 'Error occurred' },
     default: { children: `Approve ${symbol}`, onClick: () => approve.sendApproveTx() },
     fetching: { disabled, isLoading, loadingText: `Loading ${symbol} info` },
-    insufficient: { disabled, children: `Insufficient ${symbol}` },
+    insufficient: {
+      disabled,
+      children: `Insufficient ${amountInfo ? amount.toSignificant(6) : ''} ${symbol}`,
+    },
     waitingWallet: { disabled, isLoading, loadingText: 'Approve in wallet' },
     successful: { disabled, children: 'Approved' },
   } as const

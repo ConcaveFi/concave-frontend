@@ -1,18 +1,23 @@
+import { Currency } from '@concave/core'
 import { Box, HStack, NumericInput, Text } from '@concave/ui'
 import { BigNumber, utils } from 'ethers'
 import { parseUnits } from 'ethers/lib/utils'
 import { useEffect, useState } from 'react'
 
-const useBignumberField = (defaultValue: BigNumber, onChange: (n: BigNumber) => void) => {
+const useBignumberField = (
+  defaultValue: BigNumber,
+  currency: Currency,
+  onChange: (n: BigNumber) => void,
+) => {
   const [value, setValue] = useState(+utils.formatEther(defaultValue))
   useEffect(() => {
     try {
-      const bigNumber = parseUnits(value.toString() || `0`, 18)
+      const bigNumber = parseUnits(value.toString() || `0`, currency.decimals)
       onChange(bigNumber)
     } catch (e) {
       onChange(BigNumber.from(0))
     }
-  }, [value, onChange])
+  }, [value, onChange, currency.decimals])
 
   const onValueChange = (values, sourceInfo) => {
     if (sourceInfo.source === 'prop') return
@@ -25,14 +30,16 @@ export const BigNumberField = ({
   label,
   defaultValue,
   onChange,
+  currency,
   decimalScale = 5,
 }: {
   label: string
+  currency: Currency
   decimalScale: number
   defaultValue: BigNumber
   onChange: (number: BigNumber) => void
 }) => {
-  const state = useBignumberField(defaultValue, onChange)
+  const state = useBignumberField(defaultValue, currency, onChange)
 
   return (
     <HStack justifyContent={'center'} width={'full'}>

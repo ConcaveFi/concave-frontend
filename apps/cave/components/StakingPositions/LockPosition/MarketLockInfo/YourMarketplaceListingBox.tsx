@@ -103,7 +103,9 @@ export const MarketListing = ({ stakingPosition }: { stakingPosition: StakingPos
             fontSize={'lg'}
             value={
               market?.isListed
-                ? `${formatFixed(market.startPrice)} ${market.currency?.symbol}`
+                ? `${formatFixed(market.startPrice, { decimals: market.currency.decimals })} ${
+                    market.currency?.symbol
+                  }`
                 : '---'
             }
           />
