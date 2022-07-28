@@ -4,9 +4,10 @@ import { TransactionResponse } from '@ethersproject/providers'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { BigNumber } from 'ethers'
 import { formatEther, parseEther } from 'ethers/lib/utils'
+import { useGet_Amm_Cnv_InfosQuery } from 'graphql/generated/graphql'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useAccount, useProvider, useSigner } from 'wagmi'
 import { usePCNVUserData } from '../Hooks/usePCNVUserData'
 import useVestedTokens from '../Hooks/useVestedTokens'
@@ -19,6 +20,9 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
     onClose: onCloseTransactionModal,
     onOpen: submitTransactionModal,
   } = useDisclosure()
+
+  const { data } = useGet_Amm_Cnv_InfosQuery()
+  const pCNVToCNVDifference = ((data?.cnvData?.data?.totalSupply || 0) * 0.1) / 33000000
 
   const { address } = useAccount()
   const { data: signer } = useSigner()
@@ -34,12 +38,6 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
   const balance = parseEther(pCNV?.data?.formatted || '0')
   const { registerTransaction } = useTransactionRegistry()
 
-  useEffect(() => {
-    if (status !== 'error' && status !== 'rejected') return
-    const clearButtonTimeout = setTimeout(() => setStatus('default'), 3000)
-    return () => clearTimeout(clearButtonTimeout)
-  }, [status])
-
   return (
     <>
       <VestedTokenDialog
@@ -50,6 +48,7 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
         status={status}
         tokenUserData={{ ...pCNVRedeemableData, balance }}
         token={new Token(chainId, PCNV_CONTRACT[chainId], 18, 'pCNV')}
+        conversionToCNV={pCNVToCNVDifference || 0}
       />
 
       <TransactionSubmittedDialog

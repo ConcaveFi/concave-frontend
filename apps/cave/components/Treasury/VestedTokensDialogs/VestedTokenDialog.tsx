@@ -15,6 +15,7 @@ type VestedTokenDialogProps = {
   onRedeem: (amount: BigNumber, redeemMax: boolean) => void
   status: 'default' | 'approve' | 'rejected' | 'error' | 'submitted'
   token: Token
+  conversionToCNV?: number
 }
 export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDialogProps> = ({
   onClose,
@@ -24,6 +25,7 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
   onRedeem,
   status,
   token,
+  conversionToCNV,
 }) => {
   const { isConnected } = useAccount()
   const { redeemable, redeemed, balance } = tokenUserData || {}
@@ -68,21 +70,18 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
               value={isLoading ? 'Loading...' : formatEther(redeemed || '0')}
             />
             <Collapse in={validValue || (redeemMax && !redeemable?.isZero())}>
-              {
-                <Info
-                  title="You will receive:"
-                  value={formatEther(parseEther(value || '0')) + ' CNV'}
-                />
-              }
+              {conversionToCNV && (
+                <Info title="You will receive:" value={+value * conversionToCNV + ' CNV'} />
+              )}
             </Collapse>
-            {
+            {conversionToCNV && (
               <Text
-                fontWeight={'bold'}
-                textColor="text.accent"
-                opacity="0.5"
-                fontSize={'xs'}
-              ></Text>
-            }
+                color={'text.accent'}
+                fontWeight="bold"
+                opacity={0.5}
+              >{`${conversionToCNV.toPrecision(2)} ${token?.symbol} = 1 CNV`}</Text>
+            )}
+            <Text fontWeight={'bold'} textColor="text.accent" opacity="0.5" fontSize={'xs'}></Text>
           </Flex>
           <Flex gap={2} fontWeight={'bold'} pl={2} align="center">
             <Text textColor={'gray.200'}>Redeem max</Text>
