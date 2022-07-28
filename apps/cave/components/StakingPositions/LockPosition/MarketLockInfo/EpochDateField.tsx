@@ -1,17 +1,25 @@
 import { Box, HStack, Input, Text } from '@concave/ui'
-import { useState } from 'react'
+import { useUnixTimestamp } from 'hooks/useUnixTimestamp'
 
 export const EpochDateField = ({
-  unixTimestap,
+  minDate,
+  maxDate,
+  date,
   label,
   onChange,
 }: {
   label: string
-  unixTimestap: number | Date
+  minDate: number
+  maxDate: number
+  date: number
   onChange: (value: number) => void
 }) => {
-  const date = unixTimestap instanceof Date ? unixTimestap : new Date(unixTimestap * 1000)
-  const [value, setValue] = useState(date)
+  const unixTimestamp = useUnixTimestamp({
+    min: new Date(minDate * 1000),
+    max: new Date(maxDate * 1000),
+    date: new Date(date * 1000),
+    onChange: (date) => onChange(date.getTime() / 100),
+  })
   return (
     <HStack justifyContent={'center'} width={'full'}>
       <Text textColor={'text.low'} textAlign={'right'} fontWeight="bold" width={'full'}>
@@ -24,11 +32,7 @@ export const EpochDateField = ({
           padding={2}
           borderRadius="full"
           type="date"
-          value={value.toISOString().substring(0, 10)}
-          onChange={({ target }) => {
-            setValue(target.valueAsDate)
-            onChange(target.valueAsDate.getTime() / 1000)
-          }}
+          {...unixTimestamp.inputDateProps}
         ></Input>
       </Box>
     </HStack>

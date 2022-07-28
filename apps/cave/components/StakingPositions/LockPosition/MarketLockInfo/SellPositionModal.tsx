@@ -176,7 +176,9 @@ export const ListPositionForSale = ({
       <EpochDateField
         label="Deadline:"
         onChange={setDeadline}
-        unixTimestap={market.deadline.toNumber()}
+        minDate={Date.now() / 1000}
+        maxDate={staking.maturity}
+        date={market.deadline.toNumber()}
       />
       {discount.isSuccess && (
         <Info
