@@ -1,4 +1,4 @@
-import { CNV, FIXED_ORDER_MARKET_CONTRACT } from '@concave/core'
+import { FIXED_ORDER_MARKET_CONTRACT, NATIVE } from '@concave/core'
 import { MarketItem, StakingPosition } from '@concave/marketplace'
 import { Box, Button, ButtonProps, Flex, Text } from '@concave/ui'
 import { formatDistanceToNow } from 'date-fns'
@@ -143,7 +143,7 @@ const generateDefaultMarket = (staking: StakingPosition) => {
     new MarketItem({
       seller: '',
       erc721: staking.address,
-      currency: CNV[staking.chainId],
+      currency: NATIVE[staking.chainId],
       tokenId: staking.tokenId.toString(),
       startPrice: staking.currentValue,
       endPrice: 0,

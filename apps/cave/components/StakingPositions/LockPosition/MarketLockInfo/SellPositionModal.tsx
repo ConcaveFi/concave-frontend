@@ -4,7 +4,6 @@ import { Box, Button, Flex, HStack, Modal, Text, VStack } from '@concave/ui'
 import { SelectMarketCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
 import { ChooseButton } from 'components/Marketplace/ChooseButton'
 import { BigNumber, BigNumberish } from 'ethers'
-import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
 import { Dispatch, SetStateAction, useCallback } from 'react'
 import { formatFixed } from 'utils/formatFixed'
@@ -77,7 +76,6 @@ export const useListeForSaleState = ({
   market: MarketItem
   setMarket: Dispatch<SetStateAction<MarketItem>>
 }) => {
-  const chaindId = useCurrentSupportedNetworkId()
   const { signTypedDataAsync } = useSignTypedData({
     domain: {
       name: 'Cavemart',
@@ -221,7 +219,6 @@ const CurrencySelector = ({
   value: Currency
   onChange: (currency: Currency) => void
 }) => {
-  const chainId = useCurrentSupportedNetworkId()
   return (
     <HStack justifyContent={'center'} width={'full'}>
       <Text textColor={'text.low'} textAlign={'right'} fontWeight="bold" width={'full'}>

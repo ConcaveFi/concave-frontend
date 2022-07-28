@@ -1,4 +1,4 @@
-import { CNV, Currency, DAI, NATIVE, USDC, WETH9 } from '@concave/core'
+import { CNV, Currency, DAI, FRAX, NATIVE, USDC, WETH9 } from '@concave/core'
 import { QuestionIcon } from '@concave/icons'
 import { Button, Flex, Heading, Modal } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
@@ -95,7 +95,7 @@ const MarketTokens = ({
   onSelect: (currency: Currency) => void
 }) => {
   const networkId = useCurrentSupportedNetworkId()
-  const currencies = [DAI, CNV, NATIVE, USDC].map((c) => c[networkId]).filter((c) => c)
+  const currencies = [DAI, NATIVE, USDC, FRAX].map((c) => c[networkId]).filter((c) => c)
   return GenericTokens({
     selected,
     currencies,
