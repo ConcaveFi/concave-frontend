@@ -1,7 +1,7 @@
 import { keyframes } from '@chakra-ui/system'
 import { SpinIcon } from '@concave/icons'
 import { Heading, Modal, Text } from '@concave/ui'
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode } from 'react'
 
 const spin = keyframes({
   '0%': { transform: 'rotate(0deg)' },
@@ -12,7 +12,7 @@ const spinnerStyles = { animation: `${spin} 2s linear infinite` }
 
 export const WaitingConfirmationDialog = ({
   children,
-  isOpen: isOpenProp,
+  isOpen,
   title,
   disableCloseButton = false,
   ...props
@@ -23,17 +23,13 @@ export const WaitingConfirmationDialog = ({
   disableCloseButton?: boolean
   onClose?: VoidFunction
 }) => {
-  const [isOpen, setIsOpen] = useState(isOpenProp)
-  useEffect(() => {
-    setIsOpen(isOpenProp)
-  }, [isOpenProp])
-  const onClose = () => setIsOpen(false)
   return (
     <Modal
       bluryOverlay={true}
       title={title || 'Confirm Swap'}
       isOpen={isOpen}
-      onClose={() => [props.onClose?.(), onClose()]}
+      hideClose
+      onClose={() => {}}
       bodyProps={{ align: 'center', gap: 1, w: '400px' }}
     >
       <SpinIcon __css={spinnerStyles} w={10} my={6} />

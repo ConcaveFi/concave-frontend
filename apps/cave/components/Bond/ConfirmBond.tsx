@@ -2,7 +2,7 @@ import { Currency } from '@concave/core'
 import { ExpandArrowIcon } from '@concave/icons'
 import { Box, Button, Flex, HStack, Modal, NumericInput, StackDivider, Text } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
-import { Dispatch, SetStateAction } from 'react'
+import { UseTransaction } from 'hooks/TransactionsRegistry/useTransaction'
 
 const TokenInfo = ({
   currency,
@@ -60,13 +60,12 @@ export const ConfirmBondModal = ({
   amountOut,
   isOpen,
   onClose,
-  onConfirm,
   bondPrice,
   minimumAmountOut,
   slippage,
-  hasClickedConfirm,
-  setHasClickedConfirm,
+  transaction,
 }: {
+  transaction: UseTransaction
   currencyIn: Currency
   currencyOut: Currency
   amountIn: string | number
@@ -75,12 +74,9 @@ export const ConfirmBondModal = ({
   tokenInRelativePriceToTokenOut: string
   isOpen: boolean
   onClose: () => void
-  onConfirm: () => void
   bondPrice: string
   minimumAmountOut: string
   slippage: string
-  hasClickedConfirm: boolean
-  setHasClickedConfirm: Dispatch<SetStateAction<boolean>>
 }) => {
   return (
     <Modal bluryOverlay={true} title="Confirm Bond" isOpen={isOpen} onClose={onClose}>
@@ -103,44 +99,27 @@ export const ConfirmBondModal = ({
       </div>
 
       <Flex fontSize="sm" fontWeight="bold" my={6} justify="center" flexWrap="wrap">
-        <Text>
-          {/* 1 {currencyOut.symbol} = {tokenInRelativePriceToTokenOut}
-          {currencyIn.symbol} */}{' '}
-          Bond Price CNV: ${parseFloat(bondPrice).toFixed(2)}
-        </Text>
+        <Text>Bond Price CNV: ${parseFloat(bondPrice).toFixed(2)}</Text>
       </Flex>
 
       <Flex direction="column" borderRadius="3xl" mb={8} p={6} shadow="Down Medium">
-        {/* <ExpectedOutput
-          value={meta.expectedOutput}
-          symbol={currencyOut.symbol}
-          priceImpact={trade.priceImpact.toSignificant(2)}
-        /> */}
         <Text align="center" fontSize="sm" fontWeight="bold">
           Min CNV Out: {minimumAmountOut}
         </Text>
         <StackDivider borderRadius="full" mx={-4} my={4} h={0.5} bg="stroke.secondary" />
-        {/* <MinExpectedOutput
-          value={meta.worstExecutionPrice}
-          symbol={currencyOut.symbol}
-          // estimatedFee={'11'}
-        /> */}
         <Text align="center" fontSize="sm" fontWeight="bold">
           Slippage: {slippage}%
         </Text>
       </Flex>
 
       <Button
-        disabled={hasClickedConfirm}
         variant="primary"
         size="large"
-        onClick={() => {
-          setHasClickedConfirm(true)
-          onConfirm()
-        }}
+        onClick={transaction.sendTx}
+        disabled={transaction.isWaitingForConfirmation}
         w="full"
       >
-        {hasClickedConfirm ? 'Confirm in wallet' : 'Confirm bond'}
+        {transaction.isWaitingForConfirmation ? 'Confirm in wallet' : 'Confirm bond'}
       </Button>
     </Modal>
   )
