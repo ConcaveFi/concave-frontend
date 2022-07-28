@@ -14,6 +14,7 @@ import { ConfirmSignature } from './ConfirmSignature'
 import { ConfirmUnlist } from './ConfirmUnlist'
 import { EpochDateField } from './EpochDateField'
 import { Info } from './Info'
+import { usePositionDiscount } from './usePositionDiscount'
 
 type ListForSaleState = ReturnType<typeof useListeForSaleState>
 
@@ -156,6 +157,8 @@ export const ListPositionForSale = ({
   onClose: VoidFunction
   setMarket: Dispatch<SetStateAction<MarketItem>>
 }) => {
+  const discount = usePositionDiscount(staking, market)
+
   if (market.signature) {
     return (
       <ConfirmSignature market={market} staking={staking} setMarket={setMarket} onClose={onClose} />
@@ -177,10 +180,12 @@ export const ListPositionForSale = ({
         onChange={setDeadline}
         unixTimestap={market.deadline.toNumber()}
       />
-      <Info
-        label="Discount:"
-        value={formatFixed(staking.calculateDiscount(market), { decimals: 2 }) + '%'}
-      ></Info>
+      {discount.isSuccess && (
+        <Info
+          label="Discount:"
+          value={formatFixed(discount.discount, { decimals: 2 }) + '%'}
+        ></Info>
+      )}
       <Flex pt={4} justifyContent="center">
         <ChooseButton onClick={create} title={`List`} backgroundType="blue" />
       </Flex>

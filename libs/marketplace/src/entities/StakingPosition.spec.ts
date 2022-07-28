@@ -3,6 +3,22 @@ import { MarketItem } from './MarketItem'
 import { StakingPosition, StakingPositionArgs } from './StakingPosition'
 
 describe('StakingPosition', () => {
+  it('percent2', () => {
+    const args = {
+      position: {},
+      reward: {
+        totalRewards: BigNumber.from(`9` + `999999999999999999`),
+      },
+    } as StakingPositionArgs
+    const staking = new StakingPosition(args)
+
+    const market10 = new MarketItem({
+      tokenId: BigNumber.from(1),
+      startPrice: BigNumber.from(BigNumber.from(`0` + `000319229873079570`)),
+    } as MarketItem)
+    expect(staking.calculateDiscount(market10).toString()).toEqual(BigNumber.from(9000).toString())
+  })
+
   it('percent', () => {
     const args = {
       position: {},

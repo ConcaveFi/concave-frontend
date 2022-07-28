@@ -4,6 +4,7 @@ import { useInsert_Cavemart_ListingMutation } from 'graphql/generated/graphql'
 import { Dispatch, SetStateAction } from 'react'
 import { formatFixed } from 'utils/formatFixed'
 import { Info } from './Info'
+import { usePositionDiscount } from './usePositionDiscount'
 
 export const ConfirmUnlist = ({
   market,
@@ -33,6 +34,7 @@ export const ConfirmUnlist = ({
     setMarket(market.new({ isListed: false }))
     onClose()
   }
+  const discount = usePositionDiscount(staking, market)
 
   return (
     <VStack direction={'column'} gap={4} p={4}>
@@ -45,7 +47,8 @@ export const ConfirmUnlist = ({
         <Info label="Listed price:" value={formatFixed(market.startPrice) + ` CNV`}></Info>
         <Info
           label="Discount:"
-          value={formatFixed(staking.calculateDiscount(market), { decimals: 2 }) + `%`}
+          isLoading={discount.isLoading}
+          value={formatFixed(discount.discount, { decimals: 2 }) + `%`}
         ></Info>
       </Box>
       <HStack w={'full'} gap={2}>

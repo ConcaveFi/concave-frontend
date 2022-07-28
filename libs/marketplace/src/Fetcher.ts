@@ -31,10 +31,15 @@ export const listPositons = async ({
         query: fetchUserPositionsQuery,
       }),
     },
-  )
+  ).catch((e) => {
+    console.error(e)
+    return { data: { logStakingV1: [] } }
+  })
+  console.log(data.logStakingV1)
   const preFilter = data.logStakingV1
     .filter((l) => l.tokenID)
     .filter((l) => !owner || l.to === owner)
+  console.log(preFilter)
   const { stakingV1ToStakingPosition } = parser(stakingV1Contract, provider)
   return Promise.all(preFilter.map(stakingV1ToStakingPosition))
 }
@@ -49,7 +54,9 @@ export const listListedPositions = async ({ provider }: { provider: BaseProvider
     },
   )
   const { stakingV1ToStakingPosition } = parser(stakingV1Contract, provider)
-  return Promise.all(data.logStakingV1.map(stakingV1ToStakingPosition))
+  const dirtyResults = data.logStakingV1
+  const cleanResults = dirtyResults.filter((c) => c.to === c.cavemart.at(-1).tokenOwner)
+  return await Promise.all(cleanResults.map(stakingV1ToStakingPosition))
 }
 
 export const marketplaceActivity = async ({ provider }: { provider: BaseProvider }) => {

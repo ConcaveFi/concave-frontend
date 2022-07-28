@@ -1,5 +1,5 @@
 import { StakingPosition, StakingV1Contract } from '@concave/marketplace'
-import { Box, Button, Flex, FlexProps, Spinner, Text, TextProps } from '@concave/ui'
+import { Box, Button, Flex, FlexProps, HStack, Spinner, Text, TextProps } from '@concave/ui'
 import { BigNumber, Transaction } from 'ethers'
 import { formatEther } from 'ethers/lib/utils'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
@@ -115,6 +115,7 @@ export const RedeemCardViewer = ({ stakingPosition }: RedeemCardViewerProps) => 
 interface Info extends FlexProps {
   label: string
   value: string
+  isLoading?: boolean
   fontSize?: TextProps['fontSize']
 }
 export const Info: React.FC<Info> = ({ ...props }) => {
@@ -123,9 +124,12 @@ export const Info: React.FC<Info> = ({ ...props }) => {
       <Text color="text.low" fontSize="sm" lineHeight={'12px'} noOfLines={1}>
         {props.label}
       </Text>
-      <Text fontSize={props.fontSize || 'md'} fontWeight="bold" noOfLines={1}>
-        {props.value}
-      </Text>
+      <HStack>
+        {props.isLoading && <Spinner size="xs" />}
+        <Text fontSize={props.fontSize || 'md'} fontWeight="bold" noOfLines={1}>
+          {props.value}
+        </Text>
+      </HStack>
     </Flex>
   )
 }

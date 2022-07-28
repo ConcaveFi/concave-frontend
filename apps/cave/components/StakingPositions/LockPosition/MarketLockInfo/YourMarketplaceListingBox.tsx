@@ -2,12 +2,14 @@ import { CNV, FIXED_ORDER_MARKET_CONTRACT } from '@concave/core'
 import { MarketItem, StakingPosition } from '@concave/marketplace'
 import { Box, Button, ButtonProps, Flex, Text } from '@concave/ui'
 import { formatDistanceToNow } from 'date-fns'
+import { BigNumber } from 'ethers'
 import { useApproveForAll } from 'hooks/useApprove'
 import { useState } from 'react'
 import { formatFixed } from 'utils/formatFixed'
 import { useAccount } from 'wagmi'
 import { Info } from '../Redeem/RedeemViewer'
 import { SaleModal } from './SellPositionModal'
+import { usePositionDiscount } from './usePositionDiscount'
 
 export type UserMarketInfoState = ReturnType<typeof useYourMarketPlaceListing>
 export const useYourMarketPlaceListing = ({
@@ -85,8 +87,7 @@ export const MarketListing = ({ stakingPosition }: { stakingPosition: StakingPos
   const auctionEnd = formatDistanceToNow(new Date(+market?.deadline.toString() * 1000), {
     addSuffix: false,
   })
-  console.log(stakingPosition.market?.currency)
-  console.log(market?.currency)
+  const discount = usePositionDiscount(stakingPosition, market)
 
   return (
     <Box shadow={market?.isListed ? '' : 'down'} borderRadius="2xl" width={'full'} p={4}>
@@ -110,9 +111,10 @@ export const MarketListing = ({ stakingPosition }: { stakingPosition: StakingPos
           <Info
             label={'Discount:'}
             width={'full'}
+            isLoading={discount.isLoading}
             value={
               market?.isListed
-                ? `${formatFixed(stakingPosition.calculateDiscount(market), { decimals: 2 })} %`
+                ? `${formatFixed(discount.discount || BigNumber.from(0), { decimals: 2 })} %`
                 : '---'
             }
           />

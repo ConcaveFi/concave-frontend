@@ -1,4 +1,4 @@
-import { Currency, NATIVE, STAKING_CONTRACT } from '@concave/core'
+import { CNV, Currency, NATIVE, STAKING_CONTRACT } from '@concave/core'
 import { Fetcher } from '@concave/gemswap-sdk'
 import { BaseProvider } from '@ethersproject/providers'
 import { StakingV1Contract } from 'src/contract'
@@ -8,14 +8,13 @@ import { Cavemart, LogStakingV1 } from 'src/Fetcher'
 export const parser = (stakingV1Contract: StakingV1Contract, provider: BaseProvider) => {
   const cavemartToMarket = async (cavemart: Cavemart) => {
     let currency: Currency = NATIVE[stakingV1Contract.chainId]
-    console.log(cavemart.tokenOption)
     try {
       if (cavemart.tokenOption != `0x0000000000000000000000000000000000000000`)
         currency = await Fetcher.fetchTokenData(cavemart.tokenOption, provider)
     } catch (e) {
-      console.error(e)
+      currency = CNV[stakingV1Contract.chainId]
     }
-    console.log(currency)
+
     return new MarketItem({
       deadline: cavemart.deadline,
       endPrice: cavemart.endPrice,
