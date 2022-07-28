@@ -22,7 +22,6 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
   } = useDisclosure()
 
   const { data } = useGet_Amm_Cnv_InfosQuery()
-  const pCNVToCNVDifference = ((data?.cnvData?.data?.totalSupply || 0) * 0.1) / 33000000
 
   const { address } = useAccount()
   const { data: signer } = useSigner()
@@ -31,8 +30,10 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
   const [status, setStatus] = useState<'default' | 'approve' | 'rejected' | 'error'>('default')
   const [tx, setTx] = useState<TransactionResponse>()
 
-  const { data: pCNVRedeemableData, isLoading } = usePCNVUserData()
   const { pCNV } = useVestedTokens()
+  const { data: pCNVData, isLoading } = usePCNVUserData()
+  const pCNVTotalSupply = +formatEther(pCNVData.totalSupply || 0)
+  const pCNVToCNVDifference = ((data?.cnvData?.data?.totalSupply || 0) * 0.1) / pCNVTotalSupply
 
   const chainId = useCurrentSupportedNetworkId()
   const balance = parseEther(pCNV?.data?.formatted || '0')
@@ -46,7 +47,7 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
         onClose={onClose}
         onRedeem={redeem}
         status={status}
-        tokenUserData={{ ...pCNVRedeemableData, balance }}
+        tokenUserData={{ ...pCNVData, balance }}
         token={new Token(chainId, PCNV_CONTRACT[chainId], 18, 'pCNV')}
         conversionToCNV={pCNVToCNVDifference || 1}
       />

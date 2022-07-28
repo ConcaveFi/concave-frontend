@@ -11,12 +11,15 @@ export const usePCNVUserData = () => {
   const { data, isLoading } = useQuery(
     ['pCNVUserData', address, chaindId],
     () =>
-      Promise.all([pCNVContract.redeemable(address), pCNVContract.redeemed(address)]).then(
-        ([redeemable, redeemed]) => ({
-          redeemable,
-          redeemed,
-        }),
-      ),
+      Promise.all([
+        pCNVContract.redeemable(address),
+        pCNVContract.redeemed(address),
+        pCNVContract.totalSupply(),
+      ]).then(([redeemable, redeemed, totalSupply]) => ({
+        redeemable,
+        redeemed,
+        totalSupply,
+      })),
     {
       enabled: Boolean(address) && Boolean(chaindId),
     },
