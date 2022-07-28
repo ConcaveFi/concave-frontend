@@ -81,11 +81,9 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
               )}
             </Collapse>
             {conversionToCNV && (
-              <Text
-                color={'text.accent'}
-                fontWeight="bold"
-                opacity={0.5}
-              >{`${conversionToCNV.toPrecision(2)} CNV = 1 ${token?.symbol}`}</Text>
+              <Text color={'text.accent'} fontWeight="bold" opacity={0.5}>{`1 ${
+                token?.symbol
+              } = ${conversionToCNV.toPrecision(2)} CNV`}</Text>
             )}
             <Text fontWeight={'bold'} textColor="text.accent" opacity="0.5" fontSize={'xs'}></Text>
           </Flex>
