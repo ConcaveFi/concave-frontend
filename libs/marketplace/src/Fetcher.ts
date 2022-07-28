@@ -50,9 +50,7 @@ export const listListedPositions = async ({ provider }: { provider: BaseProvider
   )
   const { stakingV1ToStakingPosition } = parser(stakingV1Contract, provider)
   const dirtyResults = data.logStakingV1
-  const cleanResults = dirtyResults
-    .filter((c) => c.to === c.cavemart.at(-1).tokenOwner)
-    .filter((c) => c.tokenID == 137)
+  const cleanResults = dirtyResults.filter((c) => c.to === c.cavemart.at(-1).tokenOwner)
   return await Promise.all(cleanResults.map(stakingV1ToStakingPosition))
 }
 
