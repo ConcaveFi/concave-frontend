@@ -165,7 +165,7 @@ export const ListPositionForSale = ({
   return (
     <VStack direction={'column'} gap={1} pt={8} px={8} pb={0}>
       <Type />
-      <Info label="Current value:" value={formatFixed(staking.currentValue)}></Info>
+      <Info label="Current value:" value={formatFixed(staking.currentValue) + ' CNV'}></Info>
       <CurrencySelector value={market.currency} onChange={setCurrency} />
       <BigNumberField
         label="Price:"

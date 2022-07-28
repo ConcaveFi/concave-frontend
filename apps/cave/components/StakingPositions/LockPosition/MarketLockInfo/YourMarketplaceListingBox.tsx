@@ -28,7 +28,6 @@ export const useYourMarketPlaceListing = ({
 
   return {
     stakingPosition,
-    isTransactionSent: approveContractInfo.isTransactionSent,
     isWaitingForConfirmation: approveContractInfo.isWaitingForConfirmation,
     isWaitingTransactionReceipt: approveContractInfo.isWaitingTransactionReceipt,
     state,
@@ -42,20 +41,20 @@ export const getMarketPlaceButtonProps = (
   marketItemState: UserMarketInfoState & { market: MarketItem },
 ): ButtonProps => {
   const {
-    stakingPosition,
-    state,
     market,
     setState,
     isWaitingForConfirmation,
-    isTransactionSent,
     isWaitingTransactionReceipt,
     approveContractInfo,
   } = marketItemState
 
-  if (isWaitingForConfirmation) {
+  if (approveContractInfo.isLoading) {
+    return { loadingText: '', disabled: true, isLoading: true }
+  }
+  if (isWaitingForConfirmation || approveContractInfo.isWaitingForConfirmation) {
     return { loadingText: 'Approve in wallet', disabled: true, isLoading: true }
   }
-  if (isWaitingTransactionReceipt) {
+  if (isWaitingTransactionReceipt || approveContractInfo.isWaitingTransactionReceipt) {
     return { loadingText: 'Waiting receipt', disabled: true, isLoading: true }
   }
   if (market?.isListed && market?.type === `dutch auction`) {
@@ -68,10 +67,10 @@ export const getMarketPlaceButtonProps = (
   if (market?.isListed && market?.type === `list`) {
     return { children: 'Unlist', onClick: () => setState(`unlist`), variant: 'primary.outline' }
   }
-  if (!approveContractInfo.approve.data) {
+  if (!approveContractInfo.isOK) {
     return {
       children: 'Approve contract',
-      onClick: () => approveContractInfo.sendApproveTx(),
+      onClick: () => approveContractInfo.sendTx(),
       variant: 'primary.outline',
     }
   }
