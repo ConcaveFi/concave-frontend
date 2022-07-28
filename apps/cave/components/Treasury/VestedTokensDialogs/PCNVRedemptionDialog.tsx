@@ -32,8 +32,9 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
 
   const { pCNV } = useVestedTokens()
   const { data: pCNVData, isLoading } = usePCNVUserData()
-  const pCNVTotalSupply = +formatEther(pCNVData.totalSupply || 0)
-  const pCNVToCNVDifference = ((data?.cnvData?.data?.totalSupply || 0) * 0.1) / pCNVTotalSupply
+  const pCNVInitialSupply = 33300000
+  const pCNV10PercentClaim = (data?.cnvData?.data?.totalSupply || 0) * 0.1
+  const pCNVToCNVDifference = pCNV10PercentClaim / pCNVInitialSupply
 
   const chainId = useCurrentSupportedNetworkId()
   const balance = parseEther(pCNV?.data?.formatted || '0')
