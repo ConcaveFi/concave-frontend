@@ -24,8 +24,6 @@ import { useSigner } from 'wagmi'
 type MarketplacePositionProps = { stakingPosition: StakingPosition }
 export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakingPosition }) => {
   const currentValue = formatFixed(stakingPosition?.currentValue)
-  const discount = formatFixed(stakingPosition.calculateDiscount(), { decimals: 2, places: 0 })
-
   const positionDate = new Date(stakingPosition.maturity * 1000)
   const relativePositionTime = formatDistanceToNowStrict(positionDate, { unit: 'day' })
   const days = stakingPosition.pool.days
@@ -44,9 +42,9 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakin
     >
       <Flex align="center" gap={1} width={'full'} justify="space-between">
         <ImageContainer stakePeriod={stakingPosition?.poolID} px={3} />
+        <Info title="Token id" info={stakingPosition.tokenId.toString()} />
         <Info title="Current value" info={`${currentValue} CNV`} />
         {/* <Info title="Discount" info={`${discount}%`} /> */}
-        <Info title="Token id" info={stakingPosition.tokenId.toString()} />
         <BuyContainer stakingPosition={stakingPosition} />
       </Flex>
       <LoadBard
@@ -149,6 +147,7 @@ const BuyContainer = ({ stakingPosition, onSucess }: BuyContainerProps) => {
       <Flex
         w="auto"
         minW="162px"
+        p={0.5}
         h={'full'}
         rounded={'2xl'}
         shadow="up"
@@ -157,8 +156,8 @@ const BuyContainer = ({ stakingPosition, onSucess }: BuyContainerProps) => {
       >
         {buttonProps.minWidth === '45%' && (
           <Flex flex={1} align="center" justify="center">
-            <Flex direction={'column'} align="center" fontWeight={'bold'}>
-              <Text fontSize={'14px'}>
+            <Flex direction={'column'} align="center" fontWeight={'bold'} p={2}>
+              <Text fontSize={'14px'} noOfLines={1}>
                 {price.toSignificant() + ` ${stakingPosition.market.currency.symbol}`}
               </Text>
               <HStack>
@@ -237,6 +236,5 @@ const Info = ({ info, infoSize, title, ...flexProps }: InfoProps & FlexProps) =>
       {title}
     </Text>
     <Text fontSize={infoSize || 16}>{info}</Text>
-    {flexProps.children}
   </Flex>
 )

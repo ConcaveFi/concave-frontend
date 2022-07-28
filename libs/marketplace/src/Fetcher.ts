@@ -31,15 +31,10 @@ export const listPositons = async ({
         query: fetchUserPositionsQuery,
       }),
     },
-  ).catch((e) => {
-    console.error(e)
-    return { data: { logStakingV1: [] } }
-  })
-  console.log(data.logStakingV1)
+  )
   const preFilter = data.logStakingV1
     .filter((l) => l.tokenID)
     .filter((l) => !owner || l.to === owner)
-  console.log(preFilter)
   const { stakingV1ToStakingPosition } = parser(stakingV1Contract, provider)
   return Promise.all(preFilter.map(stakingV1ToStakingPosition))
 }
