@@ -42,6 +42,11 @@ export const BBTCNV_REDEMPTION_V2: AddressMap = {
   [ChainId.RINKEBY]: '0xCf6B82Ca69bE4272d457c246FAF380f88af34f69',
 }
 
+export const PCNV_CONTRACT: AddressMap = {
+  [ChainId.ETHEREUM]: '0xCfF79e48a2dc2f213F23d03b2BFFBbc541CeEF22',
+  [ChainId.RINKEBY]: '0xC82cC6a1f946D20ea88Fe9C04A1b258cA6F25E98',
+}
+
 /*
   AMM LP Factory
 */

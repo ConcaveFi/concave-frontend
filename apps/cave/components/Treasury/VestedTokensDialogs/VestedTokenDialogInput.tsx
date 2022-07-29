@@ -6,7 +6,7 @@ import { formatEther } from 'ethers/lib/utils'
 type VestedTokenInputProps = {
   onChangeValue: (value: string) => void
   value: string
-  balance: string
+  balance: BigNumber
   redeemMax: boolean
   redeemable: BigNumber
 }
@@ -24,18 +24,25 @@ export const VestedTokenInput = ({
           <NumericInput
             py={2}
             fontSize={'18px'}
-            _placeholder={{ textColor: redeemMax && 'white' }}
             value={!redeemMax && value}
             disabled={redeemMax}
             placeholder={redeemMax ? formatEther(redeemable || '0') : '0.0'}
-            onValueChange={({ value }) => !redeemMax && onChangeValue(value)}
+            onValueChange={({ value }) => {
+              if (!redeemMax) {
+                if (value === '.') {
+                  onChangeValue('0.')
+                  return
+                }
+                onChangeValue(value)
+              }
+            }}
           />
         </Flex>
         <Flex width={'full'} justify="space-between" align={'center'}>
           <BalanceButton
             redeemMax={redeemMax}
-            amount={balance}
-            onClick={() => onChangeValue(balance)}
+            amount={formatEther(balance || 0)}
+            onClick={() => onChangeValue(formatEther(balance))}
           />
         </Flex>
       </Flex>
