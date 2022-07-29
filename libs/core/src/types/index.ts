@@ -1,6 +1,5 @@
 export * from './AddressMap'
 export * from './BigIntIsh'
 export * from './ChainTokenList'
-export * from './ChainTokenMap'
 export * from './NativeMap'
 export * from './TokenMap'
