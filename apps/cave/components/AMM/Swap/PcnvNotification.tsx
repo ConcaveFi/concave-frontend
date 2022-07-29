@@ -1,15 +1,17 @@
+import { Currency, CurrencyAmount } from '@concave/core'
 import { Flex, Text } from '@concave/ui'
 import React from 'react'
 
 type PcnvNotificationProps = {
   isOpen?: boolean
+  tokenAmount: CurrencyAmount<Currency>
 }
 export const PcnvNotification: React.FC<PcnvNotificationProps> = ({ isOpen }) => {
   return (
     <Flex
       transition="all 0.6s"
       w="full"
-      h={!isOpen ? '389px' : '0px'}
+      h={isOpen ? '389px' : '0px'}
       position="relative"
       overflow={'hidden'}
       shadow="up"
