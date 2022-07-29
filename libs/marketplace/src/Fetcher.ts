@@ -1,11 +1,11 @@
 import { BaseProvider } from '@ethersproject/providers'
 import { StakingV1Contract } from './contract'
-import { parser } from './grapql/parser'
+import { parser } from './graphql/parser'
 import {
   fetchAllCavemart,
   fetchUserPositionsQuery,
   listCavemartListingDocuments,
-} from './grapql/querys'
+} from './graphql/querys'
 import { fetcher } from './util'
 
 const getHasuraEndpoint = ({ chainId = 1 }) => {
