@@ -1,7 +1,7 @@
 import { CNV, Currency, CurrencyAmount } from '@concave/core'
 import { Box, Button, Card, Flex, Heading, Text } from '@concave/ui'
 import { CurrencyInputField } from 'components/CurrencyAmountField'
-import { SelectFaucetCurrency } from 'components/CurrencySelector/SelectFaucetCurrency'
+import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
 import { withPageTransition } from 'components/PageTransition'
 import { Contract } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
@@ -71,7 +71,7 @@ const Faucet = () => {
               <CurrencyInputField
                 currencyAmountIn={inputAmount}
                 onChangeAmount={setInputAmout}
-                CurrencySelector={SelectFaucetCurrency}
+                CurrencySelector={SelectAMMCurrency}
               />
 
               <Button variant="primary" size="large" w="full" onClick={mint}>
