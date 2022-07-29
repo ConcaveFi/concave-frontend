@@ -31,9 +31,10 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
   const { redeemable, redeemed, balance } = tokenUserData || {}
   const [value, setValue] = useState<string>()
   const [redeemMax, setRedeemMax] = useState(true)
+  const currentValue = redeemMax ? redeemable : parseEther(value || '0')
 
   const insufficientFunds = balance?.isZero() || parseEther(value || '0.0').gt(balance)
-  const invalidAmount = !insufficientFunds && parseEther(value || '0.0')?.isZero() && !redeemMax
+  const invalidAmount = !insufficientFunds && currentValue?.isZero()
   const nothingToRedeem = (redeemable?.isZero() || redeemable?.eq(balance)) && !insufficientFunds
   const redeemableExceeded =
     !redeemMax &&
@@ -41,7 +42,6 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
     !insufficientFunds &&
     !nothingToRedeem
   const validValue = !invalidAmount && !insufficientFunds && !nothingToRedeem && !redeemableExceeded
-  const currentValue = redeemMax ? redeemable : parseEther(value || '0')
   return (
     <>
       <Modal
@@ -119,7 +119,7 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
                   {nothingToRedeem && 'Nothing to redeem'}
                   {insufficientFunds && 'Insufficient funds'}
                   {redeemableExceeded && 'Redeemable exceeded'}
-                  {invalidAmount || (validValue && redeemButtonText[status])}
+                  {(invalidAmount || validValue) && redeemButtonText[status]}
                 </Text>
               </>
             )}
