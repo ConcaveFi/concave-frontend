@@ -3,7 +3,12 @@ import { AddressMap } from '../types'
 
 export const MARKETPLACE_CONTRACT: AddressMap = {
   [ChainId.ETHEREUM]: '',
-  [ChainId.RINKEBY]: '0x6Cc7F744f720e01834F0b497519e22e921FDF161',
+  [ChainId.RINKEBY]: '0xF9b97A491Be443E525D2CB32AE4Bb700f2489746',
+}
+
+export const FIXED_ORDER_MARKET_CONTRACT: AddressMap = {
+  [ChainId.ETHEREUM]: '',
+  [ChainId.RINKEBY]: '0xA40c734108F1f97Cd7417Fde5eF0BFC1294Bbc91',
 }
 
 export const STAKING_CONTRACT: AddressMap = {
@@ -35,6 +40,11 @@ export const BBTCNV_ADDRESS: AddressMap = {
 export const BBTCNV_REDEMPTION_V2: AddressMap = {
   [ChainId.ETHEREUM]: '0xc3CBd1e850D431adC583f14f03b9B8B651e62A61',
   [ChainId.RINKEBY]: '0xCf6B82Ca69bE4272d457c246FAF380f88af34f69',
+}
+
+export const PCNV_CONTRACT: AddressMap = {
+  [ChainId.ETHEREUM]: '0xCfF79e48a2dc2f213F23d03b2BFFBbc541CeEF22',
+  [ChainId.RINKEBY]: '0xC82cC6a1f946D20ea88Fe9C04A1b258cA6F25E98',
 }
 
 /*
