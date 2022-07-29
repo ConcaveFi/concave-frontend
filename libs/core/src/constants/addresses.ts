@@ -74,8 +74,8 @@ export const CNV_ADDRESS: AddressMap = {
 }
 
 export const FRAX_ADDRESS: AddressMap = {
-  [ChainId.ETHEREUM]: '0x853d955acef822db058eb8505911ed77f175b99e',
-  [ChainId.RINKEBY]: '0xd6db3d4a10c360010f9afed2dbc8406f39060ac1',
+  [ChainId.ETHEREUM]: '0x853d955aCEf822Db058eb8505911ED77F175b99e',
+  [ChainId.RINKEBY]: '0x0AB5E11697B755AfFF5aea9B16beB82f8F656c3e',
 }
 
 export const DAI_ADDRESS: AddressMap = {

@@ -1,5 +1,6 @@
 import { Token } from '../entities/token'
 import { AddressMap, ChainTokenMap, TokenMap } from '../types'
+
 import {
   CNV_ADDRESS,
   DAI_ADDRESS,
@@ -28,7 +29,7 @@ const makeTokenMap = (
 
 const getAddressesChains = (addresses) => Object.keys(addresses).map((chainId) => +chainId)
 
-export const CNV: ChainTokenMap = makeTokenMap(
+export const CNV: TokenMap = makeTokenMap(
   getAddressesChains(CNV_ADDRESS),
   CNV_ADDRESS,
   18,
@@ -41,6 +42,14 @@ export const FRAX: ChainTokenMap = makeTokenMap(
   18,
   'FRAX',
   'FRAX',
+)
+
+export const FRAX: TokenMap = makeTokenMap(
+  getAddressesChains(FRAX_ADDRESS),
+  FRAX_ADDRESS,
+  18,
+  'FRAX',
+  'Frax',
 )
 
 export const USDC: TokenMap = {
