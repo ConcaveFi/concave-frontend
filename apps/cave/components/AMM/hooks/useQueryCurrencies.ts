@@ -56,7 +56,7 @@ export const useQueryCurrencies = () => {
   const queryHasCurrency = query.currency0 || query.currency1
 
   const { data: currencies, isFetching } = useQuery<[Currency, Currency]>(
-    getQueryCurrenciesKey(),
+    [getQueryCurrenciesKey(), chainId],
     async () => {
       const currency0 = getQueryValue(query, 'currency0')
       const currency1 = getQueryValue(query, 'currency1')
@@ -82,7 +82,7 @@ export const useQueryCurrencies = () => {
   const onChangeCurrencies = useCallback(
     (currencies: [Currency, Currency]) => {
       updateQuery({ chainId: chain?.id, currency0: currencies[0], currency1: currencies[1] })
-      queryClient.setQueryData(getQueryCurrenciesKey(), currencies)
+      queryClient.setQueryData([getQueryCurrenciesKey(), chain?.id], currencies)
     },
     [queryClient, chain?.id],
   )

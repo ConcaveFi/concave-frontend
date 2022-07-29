@@ -18,7 +18,7 @@ export function NetworkMismatch({
   const { chain } = useNetwork()
 
   const activeChainId = chain?.id
-  const queryChainId = getQueryValue(query, 'chainId')
+  const queryChainId = getQueryValue(query, 'chainId') || ChainId.ETHEREUM // if it's not set, default to eth mainnet
 
   const isNetworkMismatch = +queryChainId && activeChainId && +queryChainId !== activeChainId
   const queryHasCurrency = !!query.currency0 || !!query.currency1

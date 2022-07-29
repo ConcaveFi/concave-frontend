@@ -25,15 +25,17 @@ export function SwapCard() {
   const { trade, error, onChangeInput, onChangeOutput, switchFields, onReset } = useSwapState()
 
   const [recipient, setRecipient] = useState('')
+  const confirmationModal = useDisclosure()
 
   const swapTx = useSwapTransaction(trade, recipient, {
     onSuccess: (tx) => {
       onChangeInput(toAmount(0, trade.inputAmount.currency))
+      confirmationModal.onClose()
     },
   })
 
   const { settings } = useSwapSettings()
-  const confirmationModal = useDisclosure()
+
   const swapButtonProps = useSwapButtonProps({
     trade,
     error,
@@ -96,10 +98,7 @@ export function SwapCard() {
         settings={settings}
         isOpen={confirmationModal.isOpen}
         onClose={confirmationModal.onClose}
-        onConfirm={() => {
-          confirmationModal.onClose()
-          swapTx.write()
-        }}
+        onConfirm={() => swapTx.write()}
       />
 
       <WaitingConfirmationDialog isOpen={swapTx.isLoading}>

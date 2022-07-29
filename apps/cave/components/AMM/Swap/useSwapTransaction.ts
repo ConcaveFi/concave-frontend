@@ -21,14 +21,10 @@ export const useSwapTransaction = (
     temporary workaround for unknow issue with swapTokenForExactToken
     all trades are submited as exact input for now
   */
-  const trade = useMemo(() => {
-    if (_trade?.route) return undefined
-    try {
-      return new Trade(_trade.route, _trade.inputAmount, TradeType.EXACT_INPUT)
-    } catch {
-      return undefined
-    }
-  }, [_trade])
+  const trade = useMemo(
+    () => _trade?.route && new Trade(_trade.route, _trade.inputAmount, TradeType.EXACT_INPUT),
+    [_trade],
+  )
 
   const swapParams = useMemo(() => {
     if (trade && address)

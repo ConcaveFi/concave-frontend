@@ -42,7 +42,7 @@ export type UsePairsQueryOptions<T> = UseQueryOptions<Pair[], any, T>
 export const NoValidPairsError = 'No valid pairs found'
 
 const sortAddresses = (a: Token, b: Token) => {
-  if (!a || !b || a.equals(b)) return
+  if (!a || !b || a.equals(b) || a.chainId !== b.chainId) return
   return a?.sortsBefore(b) ? `${a.address}-${b.address}` : `${b.address}-${a.address}`
 }
 
