@@ -39,7 +39,6 @@ export const fetchTokenData = (
   address: string,
   provider: any,
 ): Promise<Currency> => {
-  console.log(address)
   if (!address) return undefined
   if (address === '0x0000000000000000000000000000000000000000')
     return Promise.resolve(NATIVE[chainID])
