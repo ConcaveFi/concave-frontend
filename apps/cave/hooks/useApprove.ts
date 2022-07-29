@@ -1,15 +1,21 @@
 import { CurrencyAmount, MaxUint256, Token } from '@concave/core'
+import { StakingV1Contract } from '@concave/marketplace'
 import { TransactionReceipt } from '@ethersproject/abstract-provider'
 import { BigNumberish } from 'ethers'
 import { formatUnits } from 'ethers/lib/utils'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry/'
+import { concaveProvider } from 'lib/providers'
 import {
   erc20ABI,
+  erc721ABI,
   useAccount,
   useContractRead,
   useContractWrite,
+  useSigner,
   useWaitForTransaction,
 } from 'wagmi'
+import { useTransaction } from './TransactionsRegistry/useTransaction'
+import { useCurrentSupportedNetworkId } from './useCurrentSupportedNetworkId'
 
 export const useAllowance = (token: Token, spender: string, userAddress: string) => {
   const {
@@ -93,4 +99,33 @@ export const useApprove = (
   })
 
   return { allowance, ...approve, isFetching: isConnecting || allowance.isLoading }
+}
+
+export const useApproveForAll = (props: {
+  erc721: string
+  operator: string
+  approved: boolean
+}) => {
+  const account = useAccount()
+  const owner = account.address
+  const approve = useContractRead({
+    addressOrName: props.erc721,
+    contractInterface: erc721ABI,
+    functionName: 'isApprovedForAll',
+    args: [owner, props.operator],
+    enabled: !!(props?.erc721 && props.operator),
+  })
+  const { data: signer } = useSigner()
+  const chainId = useCurrentSupportedNetworkId()
+
+  const approveTx = useTransaction(() => {
+    const contract = new StakingV1Contract(concaveProvider(chainId))
+    return contract.setApprovalForAll(signer, props.operator, props.approved)
+  })
+
+  return {
+    isLoading: approve.isLoading,
+    isOK: !approve.isLoading && !!approve.data === props.approved,
+    ...approveTx,
+  }
 }

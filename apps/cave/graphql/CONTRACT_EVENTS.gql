@@ -79,3 +79,25 @@ query GET_USER_ACNV_REDEEMED($address: String!) {
     txHash
   }
 }
+query GET_NFT_LOCK_POSITION($address: String!) {
+  logStakingV1_Lock(order_by: { created_at: desc }, where: { to: { _eq: $address } }) {
+    to
+    created_at
+    amount
+    deposit
+    maturity
+    poolBalance
+    poolExcessRatio
+    poolG
+    poolID
+    poolRewardsPerShare
+    poolSupply
+    poolTerm
+    positionID
+    rewardDebt
+    shares
+    timestamp
+    txBlockNumber
+    txHash
+  }
+}

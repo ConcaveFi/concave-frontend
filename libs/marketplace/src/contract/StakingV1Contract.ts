@@ -7,10 +7,11 @@ import { StakingV1Abi } from './StakingV1Abi'
 
 export class StakingV1Contract {
   private readonly contract: ethers.Contract
+  public readonly chainId: number
   constructor(private readonly provider: BaseProvider | MulticallProvider) {
-    if (!provider.network.chainId)
-      throw 'ChainID is undefined for constructor of contract StakingV1Contract'
-    const address = STAKING_CONTRACT[provider.network.chainId]
+    this.chainId = provider.network.chainId
+    if (!this.chainId) throw 'ChainID is undefined for constructor of contract StakingV1Contract'
+    const address = STAKING_CONTRACT[this.chainId]
     if (!address) throw 'Address is undefined for constructor of contract StakingV1Contract'
     this.contract = new Contract(address, StakingV1Abi, this.provider)
   }
@@ -39,6 +40,30 @@ export class StakingV1Contract {
     tokenId: BigNumberish,
   ): Promise<ethers.Transaction & { wait: (confirmations) => unknown }> {
     return this.contract.connect(signer).unlock(address, tokenId)
+  }
+
+  public async getApproved(tokenId: BigNumberish): Promise<string[]> {
+    return this.contract.getApproved(tokenId)
+  }
+
+  public async approve(
+    signer: ethers.Signer,
+    address: string,
+    tokenId: BigNumberish,
+  ): Promise<ethers.Transaction> {
+    return this.contract.connect(signer).approve(address, tokenId)
+  }
+
+  public async setApprovalForAll(
+    signer: ethers.Signer,
+    address: string,
+    bool: boolean,
+  ): Promise<ethers.Transaction> {
+    return this.contract.connect(signer).setApprovalForAll(address, bool)
+  }
+
+  public async isApprovedForAll(owner: string, operator: string): Promise<boolean> {
+    return this.contract.isApprovedForAll(owner, operator)
   }
 
   public async pools(poolId: number): Promise<PoolState> {

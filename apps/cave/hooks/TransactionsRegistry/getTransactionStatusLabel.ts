@@ -51,6 +51,21 @@ export const getTransactionStatusLabel = ({ status, meta }: Partial<TrackedTrans
         success: `Successfully redeemed ${amount}`,
         error: `Failed to redeem ${amount}`,
       }),
+      'list position': ({ tokenId, action }) => ({
+        pending: `Listing position #${tokenId} in the marketplace for ${action}`,
+        success: `Successfully listed #${tokenId}`,
+        error: `Failed to list #${tokenId}`,
+      }),
+      'unlist position': ({ tokenId }) => ({
+        pending: `Unlisting position #${tokenId} from the marketplace`,
+        success: `Successfully listed #${tokenId}`,
+        error: `Failed to list #${tokenId}`,
+      }),
+      'offer marketplace': ({ tokenId }) => ({
+        pending: `Making an offer for position #${tokenId}`,
+        success: `Successfully offer to #${tokenId}`,
+        error: `Failed to make a offer to #${tokenId}`,
+      }),
       fallback,
     })[meta.type] || fallback
   )(meta as UnionToIntersection<TransactionMeta>)[status]

@@ -1,5 +1,5 @@
 export const BBTCNV_REDEMPTION_V2_ABI = [
-  ' constructor(address _bbtCNV, address _CNV, address _redeemBBTV1)',
+  'constructor(address _bbtCNV, address _CNV, address _redeemBBTV1)',
   'event OwnerUpdated(address indexed user, address indexed newOwner)',
   'event Paused(address indexed caller, bool isPaused)',
   'event Redemption(address indexed _from, uint256 indexed _amount)',

@@ -9,7 +9,7 @@ import {
 import { useEffect, useState } from 'react'
 import { formatFixed } from 'utils/formatFixed'
 
-const LiquidLocksCards = () => {
+export const LiquidLocksCards = () => {
   const [stakingLocks, setStakingLocks] = useState<
     Get_Stakingv1_Last100_LockQuery['logStakingV1_Lock']
   >([])
@@ -98,7 +98,6 @@ const LiquidLocksCards = () => {
     </Card>
   )
 }
-export default LiquidLocksCards
 
 type LocksColumnProps = { title: string; values: JSX.Element[] }
 const LocksColumn: React.FC<LocksColumnProps> = ({ title, values }) => (

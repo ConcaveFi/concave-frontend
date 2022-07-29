@@ -1,6 +1,15 @@
 import { Token } from '../entities/token'
-import { AddressMap, ChainTokenMap, TokenMap } from '../types'
-import { CNV_ADDRESS, DAI_ADDRESS, USDC_ADDRESS, WETH9_ADDRESS, WNATIVE_ADDRESS } from './addresses'
+import { AddressMap, TokenMap } from '../types'
+
+import {
+  CNV_ADDRESS,
+  DAI_ADDRESS,
+  FRAX_ADDRESS,
+  PCNV_ADDRESS,
+  USDC_ADDRESS,
+  WETH9_ADDRESS,
+  WNATIVE_ADDRESS,
+} from './addresses'
 
 import { ChainId } from '../enums'
 
@@ -21,12 +30,20 @@ const makeTokenMap = (
 
 const getAddressesChains = (addresses) => Object.keys(addresses).map((chainId) => +chainId)
 
-export const CNV: ChainTokenMap = makeTokenMap(
+export const CNV: TokenMap = makeTokenMap(
   getAddressesChains(CNV_ADDRESS),
   CNV_ADDRESS,
   18,
   'CNV',
   'Concave',
+)
+
+export const PCNV: TokenMap = makeTokenMap(
+  getAddressesChains(PCNV_ADDRESS),
+  PCNV_ADDRESS,
+  18,
+  'pCNV',
+  'Concave pCNV',
 )
 
 export const USDC: TokenMap = {
@@ -43,6 +60,13 @@ export const DAI: TokenMap = makeTokenMap(
   'Dai Stablecoin',
 )
 
+export const FRAX: TokenMap = makeTokenMap(
+  getAddressesChains(FRAX_ADDRESS),
+  FRAX_ADDRESS,
+  18,
+  'FRAX',
+  'Frax',
+)
 export const WETH9: TokenMap = makeTokenMap(
   getAddressesChains(WETH9_ADDRESS),
   WETH9_ADDRESS,
