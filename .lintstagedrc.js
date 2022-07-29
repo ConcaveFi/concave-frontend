@@ -25,7 +25,7 @@ module.exports = {
       // when autofixing staged-files disable react-hooks/exhaustive-deps,
       // a change here can potentially break things without proper visibility
       rules: ['react-hooks/exhaustive-deps: off'],
-      maxWarnings: 25,
+      maxWarnings: 1, //👌🏼
     }),
     'yarn format',
   ],

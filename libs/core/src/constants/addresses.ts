@@ -3,7 +3,12 @@ import { AddressMap } from '../types'
 
 export const MARKETPLACE_CONTRACT: AddressMap = {
   [ChainId.ETHEREUM]: '',
-  [ChainId.RINKEBY]: '0x6Cc7F744f720e01834F0b497519e22e921FDF161',
+  [ChainId.RINKEBY]: '0xF9b97A491Be443E525D2CB32AE4Bb700f2489746',
+}
+
+export const FIXED_ORDER_MARKET_CONTRACT: AddressMap = {
+  [ChainId.ETHEREUM]: '',
+  [ChainId.RINKEBY]: '0xA40c734108F1f97Cd7417Fde5eF0BFC1294Bbc91',
 }
 
 export const STAKING_CONTRACT: AddressMap = {
@@ -63,6 +68,11 @@ export const CNV_ADDRESS: AddressMap = {
   // 0xFA027BE606C3c4Bb5551513f77A91a5982E61681 <- new tCNV Rinkeby?
 }
 
+export const FRAX_ADDRESS: AddressMap = {
+  [ChainId.ETHEREUM]: '0x853d955acef822db058eb8505911ed77f175b99e',
+  [ChainId.RINKEBY]: '0xd6db3d4a10c360010f9afed2dbc8406f39060ac1',
+}
+
 export const DAI_ADDRESS: AddressMap = {
   [ChainId.ETHEREUM]: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
   [ChainId.RINKEBY]: '0xe1776Da3FBe3bBf198263Cb053d589FC3cfe1b30',
@@ -85,6 +95,7 @@ export const DAI_ADDRESS: AddressMap = {
 
 export const USDC_ADDRESS: AddressMap = {
   [ChainId.ETHEREUM]: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+  [ChainId.RINKEBY]: '0xeb8f08a975Ab53E34D8a0330E0D34de942C95926',
   [ChainId.ROPSTEN]: '0x0D9C8723B343A8368BebE0B5E89273fF8D712e3C',
   [ChainId.KOVAN]: '0xb7a4F3E9097C08dA09517b5aB877F7a917224ede',
   [ChainId.MATIC]: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',

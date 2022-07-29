@@ -1,26 +1,34 @@
 import { TransactionIcon } from '@concave/icons'
 import { Flex, Image, Link, Text, useMediaQuery, VStack } from '@concave/ui'
-import { format } from 'date-fns'
+import { formatDistanceToNowStrict } from 'date-fns'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useEffect, useState } from 'react'
-
+import { formatFixed } from 'utils/formatFixed'
+import { chain } from 'wagmi'
+import { Data } from './MarketplaceActivityCard'
 interface MarketplaceTransactionCardProps {
-  type: 'sale' | 'listing'
-  filter?: any
+  data?: Data
 }
 
-export const MarketplaceTransactionCard = (props: MarketplaceTransactionCardProps) => {
-  const { filter, type } = props
-  const cleanDate = format(new Date(filter.date), 'PPpp')
-  const labelType = type === 'sale' ? 'sale' : 'listing'
-  const labelColor = type === 'sale' ? '#7AF0CD' : '#2E97E2'
-
+export const MarketplaceTransactionCard = ({ data }: MarketplaceTransactionCardProps) => {
+  const labelColor = data.type === 'sale' ? '#7AF0CD' : '#2E97E2'
+  const chainId = useCurrentSupportedNetworkId()
+  const etherscanBaseUrl =
+    chainId === chain.mainnet.id ? `https://etherscan.io` : `https://rinkeby.etherscan.io`
+  const etherscanLink = etherscanBaseUrl + `/tx/${data.transactionHash}`
   const [isLargerThan770] = useMediaQuery('(min-width: 770px)')
 
   const [width, setWidth] = useState('0')
 
+  const imgNameByPeriod = {
+    0: '12mposition.png',
+    1: '6mposition.png',
+    2: '3mposition.png',
+    3: '1mposition.png',
+  }[data.poolID]
   useEffect(() => {
     setWidth(isLargerThan770 ? '' : '180px')
-  })
+  }, [isLargerThan770])
 
   return (
     <Flex
@@ -35,10 +43,10 @@ export const MarketplaceTransactionCard = (props: MarketplaceTransactionCardProp
       <Flex direction={'column'} width={'83px'} justify="end">
         <VStack height={'full'} mt={2}>
           <Text position={'absolute'} fontWeight={700} textColor={labelColor}>
-            {labelType}
+            {data.type}
           </Text>
         </VStack>
-        <Image sizes="100%" src={'/assets/marketplace/3mposition.png'} alt="position" />
+        <Image sizes="100%" src={`/assets/marketplace/${imgNameByPeriod}`} alt="position" />
       </Flex>
       <Flex
         width={width}
@@ -52,7 +60,7 @@ export const MarketplaceTransactionCard = (props: MarketplaceTransactionCardProp
         alignItems="start"
         fontSize={14}
       >
-        <Text pt={1}>Mar 4, 2022, 2:33:24 PM</Text>
+        <Text pt={1}>{formatDistanceToNowStrict(data.date)}</Text>
         <Flex direction={'column'}>
           <Flex alignItems={'end'} width={'full'}>
             <Text fontSize={14} textColor={'white'} fontWeight="700">
@@ -63,15 +71,15 @@ export const MarketplaceTransactionCard = (props: MarketplaceTransactionCardProp
           <Flex alignItems={'end'} width={'full'}>
             <Text> listed at</Text>
             <Text pl={1} fontSize={14} textColor={'white'} fontWeight="700">
-              700 CNV
+              {formatFixed(data.amount)} CNV
             </Text>
           </Flex>
         </Flex>
         <Flex width={'full'} mt={1} justify={'start'}>
           <Link
             pb={1}
-            href={`https://etherscan.io/tx/${filter.link}`}
-            target="_blank"
+            href={data.transactionHash ? etherscanLink : ''}
+            target={data.transactionHash ? '_blank' : ''}
             rel="noreferrer"
             textColor={'blue.300'}
             textDecoration="underline"

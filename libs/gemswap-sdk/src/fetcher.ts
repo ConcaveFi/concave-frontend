@@ -21,7 +21,6 @@ export abstract class Fetcher {
   /**
    * Fetch information for a given token on the given chain, using the given ethers provider.
    * @param address address of the token on the chain
-   * @param chainId chain of the token
    * @param provider provider used to fetch the token
    */
   public static async fetchTokenData(

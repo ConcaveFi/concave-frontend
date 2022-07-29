@@ -5,7 +5,11 @@ import { useApprove } from 'hooks/useApprove'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useAccount } from 'wagmi'
 
-export const useCurrencyButtonState = (amount: CurrencyAmount<Currency>, spender: string) => {
+export const useCurrencyButtonState = (
+  amount: CurrencyAmount<Currency>,
+  spender: string,
+  { amountInfo = false } = {},
+) => {
   const { address } = useAccount()
   const { connectModal } = useModals()
   const currency = amount.currency
@@ -21,8 +25,11 @@ export const useCurrencyButtonState = (amount: CurrencyAmount<Currency>, spender
     pending: { disabled, isLoading, loadingText: 'Approval pending' },
     error: { disabled, children: 'Error occurred' },
     default: { children: `Approve ${symbol}`, onClick: () => approve.sendApproveTx() },
-    feching: { disabled, isLoading, loadingText: `Loading ${symbol} info` },
-    insufficient: { disabled, children: `Insufficient ${symbol}` },
+    fetching: { disabled, isLoading, loadingText: `Loading ${symbol} info` },
+    insufficient: {
+      disabled,
+      children: `Insufficient ${amountInfo ? amount.toSignificant(6) : ''} ${symbol}`,
+    },
     waitingWallet: { disabled, isLoading, loadingText: 'Approve in wallet' },
     successful: { disabled, children: 'Approved' },
   } as const
@@ -37,7 +44,7 @@ export const useCurrencyButtonState = (amount: CurrencyAmount<Currency>, spender
     if (allowance?.amount?.greaterThan(amount)) return 'successful'
     if (approve.isWaitingForConfirmation) return 'waitingWallet'
     if (approve.isWaitingTransactionReceipt) return 'pending'
-    if (approve.isFetching) return 'feching'
+    if (approve.isFetching) return 'fetching'
     if (allowance?.amount?.lessThan(amount)) return 'default'
     if (amount.equalTo(0)) return 'successful'
   })()
