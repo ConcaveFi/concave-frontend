@@ -1,5 +1,5 @@
 import { Token } from '../entities/token'
-import { AddressMap, ChainTokenMap, TokenMap } from '../types'
+import { AddressMap, TokenMap } from '../types'
 
 import {
   CNV_ADDRESS,
@@ -36,21 +36,6 @@ export const CNV: TokenMap = makeTokenMap(
   'CNV',
   'Concave',
 )
-export const FRAX: ChainTokenMap = makeTokenMap(
-  getAddressesChains(FRAX_ADDRESS),
-  FRAX_ADDRESS,
-  18,
-  'FRAX',
-  'FRAX',
-)
-
-export const FRAX: TokenMap = makeTokenMap(
-  getAddressesChains(FRAX_ADDRESS),
-  FRAX_ADDRESS,
-  18,
-  'FRAX',
-  'Frax',
-)
 
 export const USDC: TokenMap = {
   ...makeTokenMap(getAddressesChains(USDC_ADDRESS), USDC_ADDRESS, 6, 'USDC', 'USD Coin'),
@@ -66,6 +51,13 @@ export const DAI: TokenMap = makeTokenMap(
   'Dai Stablecoin',
 )
 
+export const FRAX: TokenMap = makeTokenMap(
+  getAddressesChains(FRAX_ADDRESS),
+  FRAX_ADDRESS,
+  18,
+  'FRAX',
+  'Frax',
+)
 export const WETH9: TokenMap = makeTokenMap(
   getAddressesChains(WETH9_ADDRESS),
   WETH9_ADDRESS,
