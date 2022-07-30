@@ -62,11 +62,16 @@ const chartOptions = ({ color, font }): DeepPartial<ChartOptions> => ({
   },
 })
 
+export const candlestickColors = {
+  up: '#4bffb5',
+  down: '#ff4976',
+}
+
 const candlestickSeries = ({
   color,
 }): DeepPartial<CandlestickSeriesOptions & SeriesOptionsCommon> => ({
-  upColor: '#4bffb5',
-  downColor: '#ff4976',
+  upColor: candlestickColors.up,
+  downColor: candlestickColors.down,
   borderVisible: false,
   wickDownColor: color,
   wickUpColor: color,

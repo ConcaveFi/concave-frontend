@@ -8,7 +8,7 @@ import { useAccount, useContractWrite, useNetwork } from 'wagmi'
 import { useSwapSettings } from '../Swap/Settings'
 
 export const useSwapTransaction = (
-  _trade: Trade<Currency, Currency, TradeType>,
+  trade: Trade<Currency, Currency, TradeType>,
   recipient: string,
   { onSuccess }: { onSuccess?: (tx: TransactionResponse) => void },
 ) => {
@@ -21,10 +21,10 @@ export const useSwapTransaction = (
     temporary workaround for unknow issue with swapTokenForExactToken
     all trades are submited as exact input for now
   */
-  const trade = useMemo(
-    () => _trade?.route && new Trade(_trade.route, _trade.inputAmount, TradeType.EXACT_INPUT),
-    [_trade],
-  )
+  // const trade = useMemo(
+  //   () => _trade?.route && new Trade(_trade.route, _trade.inputAmount, TradeType.EXACT_INPUT),
+  //   [_trade],
+  // )
 
   const swapParams = useMemo(() => {
     if (trade && address)
