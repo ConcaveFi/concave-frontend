@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react'
 import { CurrencyAmount, FIXED_ORDER_MARKET_CONTRACT, NATIVE, Percent } from '@concave/core'
 import { FixedOrderMarketContract, stakingPools, StakingPosition } from '@concave/marketplace'
-import { Button, FlexProps, HStack, Spinner } from '@concave/ui'
+import { BoxProps, Button, FlexProps, HStack, Spinner } from '@concave/ui'
 import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { usePositionDiscount } from 'components/StakingPositions/LockPosition/MarketLockInfo/usePositionDiscount'
 import { differenceInDays, format, formatDistanceToNowStrict } from 'date-fns'
@@ -40,12 +40,12 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakin
       gap={2}
       justify="space-between"
     >
-      <Flex align="center" gap={1} width={'full'} justify="space-between">
+      <Flex align="center" gap={0} width={'full'} justify="space-between">
         <ImageContainer stakePeriod={stakingPosition?.poolID} px={3} />
         <Info title="Token id" info={stakingPosition.tokenId.toString()} />
         <Info title="Current value" info={`${currentValue} CNV`} />
         {/* <Info title="Discount" info={`${discount}%`} /> */}
-        <BuyContainer stakingPosition={stakingPosition} />
+        <BuyContainer w={'210px'} stakingPosition={stakingPosition} />
       </Flex>
       <LoadBard
         date={format(positionDate, 'MM/dd/yyyy')}
@@ -84,8 +84,8 @@ const ImageContainer: React.FC<ImageContainerProps> = ({ stakePeriod, ...flexPro
   )
 }
 
-type BuyContainerProps = { stakingPosition: StakingPosition; onSucess?: () => void }
-const BuyContainer = ({ stakingPosition, onSucess }: BuyContainerProps) => {
+type BuyContainerProps = { stakingPosition: StakingPosition } & BoxProps
+const BuyContainer = ({ stakingPosition, ...boxProps }: BuyContainerProps) => {
   const chainId = useCurrentSupportedNetworkId()
   const tokenId = stakingPosition.tokenId
   const market = stakingPosition.market
@@ -140,11 +140,11 @@ const BuyContainer = ({ stakingPosition, onSucess }: BuyContainerProps) => {
 
   return (
     <Box
-      p={'2px'}
+      p={0.5}
       bg="linear-gradient(90deg, #72639B 0%, #44B9DE 100%)"
-      // border={'1px solid white'}
       h={'full'}
       rounded={'2xl'}
+      {...boxProps}
     >
       <Flex
         w="auto"
@@ -160,7 +160,7 @@ const BuyContainer = ({ stakingPosition, onSucess }: BuyContainerProps) => {
           <Flex flex={1} align="center" justify="center">
             <Flex direction={'column'} align="center" fontWeight={'bold'} p={2}>
               <Text fontSize={'14px'} noOfLines={1}>
-                {price.toSignificant() + ` ${stakingPosition.market.currency.symbol}`}
+                {price.toSignificant(5) + ` ${stakingPosition.market.currency.symbol}`}
               </Text>
               <HStack>
                 {discount.isLoading && <Spinner size="xs" />}

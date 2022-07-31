@@ -55,8 +55,7 @@ export const fetchUserPositionsQuery = `query GET_ALL_USERS_POSITIONS {
 
 export const fetchAllCavemart = `query ListCavemart {
   logStakingV1(
-    where: {cavemart: {updated_at: {_is_null: false}}}
-    order_by: { updated_at: desc}
+    where: {cavemart: {} }
   ) {
     created_at
     to
@@ -65,7 +64,7 @@ export const fetchAllCavemart = `query ListCavemart {
     tokenID
     txHash
     lockedUntil
-    cavemart {
+    cavemart(order_by: {updated_at: desc_nulls_last}) {
       tokenID
       updated_at
       newOwner
@@ -79,6 +78,7 @@ export const fetchAllCavemart = `query ListCavemart {
       tokenIsListed
       signatureHash
       created_at
+      tokenOption
     }
   }
 }
