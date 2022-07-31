@@ -1,0 +1,17 @@
+export const BBTCNV_REDEMPTION_V2_ABI = [
+  'constructor(address _bbtCNV, address _CNV, address _redeemBBTV1)',
+  'event OwnerUpdated(address indexed user, address indexed newOwner)',
+  'event Paused(address indexed caller, bool isPaused)',
+  'event Redemption(address indexed _from, uint256 indexed _amount)',
+  'function CNV() view returns (address)',
+  'function bbtCNV() view returns (address)',
+  'function owner() view returns (address)',
+  'function paused() view returns (bool)',
+  'function redeem(uint256 _amount, address _to, bool _max) returns (uint256 amountOut)',
+  'function redeemBBTV1() view returns (address)',
+  'function redeemable(address _who) view returns (uint256)',
+  'function redeemed(address) view returns (uint256)',
+  'function setOwner(address newOwner)',
+  'function setPause(bool _paused)',
+  'function vestedPercent(uint256 _time) pure returns (uint256 vpct)',
+]

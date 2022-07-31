@@ -1,68 +1,105 @@
-import type { Nft } from '@alch/alchemy-web3'
-import { STAKING_CONTRACT } from '@concave/core'
 import { BaseProvider } from '@ethersproject/providers'
-import { ConcaveNFTMarketplace, StakingV1Contract } from './contract'
-import { MarketItemInfo, StakingPosition } from './entities'
+import { StakingV1Contract } from './contract'
+import { StakingPool, stakingPools } from './entities'
+import { parser } from './graphql/parser'
+import {
+  fetchAllCavemart,
+  fetchUserPositionsQuery,
+  listCavemartListingDocuments,
+} from './graphql/querys'
+import { fetcher } from './util'
 
-export const listAllNonFungibleTokensOnAddress = async (
-  owner: string,
-  chainId: number,
-  alchemyKey: string,
-  contractAddresses?: string,
-  pageKey?: string,
-) => {
-  const network = chainId === 1 ? 'mainnet' : 'rinkeby'
-  const url = new URL(`/${alchemyKey}/v1/getNFTs/`, `https://eth-${network}.alchemyapi.io`)
-  url.searchParams.append('owner', owner)
-  url.searchParams.append('contractAddresses[]', contractAddresses)
-  pageKey && url.searchParams.append('pageKey', pageKey)
-  const response = await fetch(url.toString()).then((r) => r.json())
-  if (!response.pageKey) return response.ownedNfts
-  const nexPage = await listAllNonFungibleTokensOnAddress(
-    owner,
-    chainId,
-    alchemyKey,
-    contractAddresses,
-    response.pageKey,
-  )
-  const nfts: Nft[] = []
-  nfts.push(...response.ownedNfts)
-  nfts.push(...nexPage)
-  return nfts
+const getHasuraEndpoint = ({ chainId = 1 }) => {
+  if (chainId === 1) {
+    return `https://concave.hasura.app/v1/graphql`
+  }
+  return 'https://dev-concave.hasura.app/v1/graphql'
 }
 
-export const fechMarketInfo = async (provider: BaseProvider, position: StakingPosition) => {
-  const contract = new ConcaveNFTMarketplace(provider)
-  return MarketItemInfo.from({
-    offer: contract.nftContractAuctions(position),
-    itemId: contract.tokenIdToItemIds(position),
-    position,
-  })
-}
-
-export const listUserPositions = async (
-  userAddress: string,
-  provider: BaseProvider,
-  alchemy: string,
-) => {
+export const listPositons = async ({
+  provider,
+  owner,
+}: {
+  owner?: string
+  provider: BaseProvider
+}) => {
   const stakingV1Contract = new StakingV1Contract(provider)
-  const chainId = provider.network.chainId
-  const usersNft = await listAllNonFungibleTokensOnAddress(
-    userAddress,
-    chainId,
-    alchemy,
-    STAKING_CONTRACT[chainId],
+  const { data } = await fetcher<{ data: { logStakingV1: LogStakingV1[] } }>(
+    getHasuraEndpoint(provider.network),
+    {
+      method: 'POST',
+      body: JSON.stringify({
+        query: fetchUserPositionsQuery,
+      }),
+    },
   )
-  return Promise.all(
-    usersNft.map(async ({ id }: Nft) => {
-      const position = stakingV1Contract.positions(id.tokenId)
-      const reward = stakingV1Contract.viewPositionRewards(id.tokenId)
-      return new StakingPosition({
-        chainId,
-        tokenId: id.tokenId,
-        position: await position,
-        reward: await reward,
-      })
-    }),
+  const preFilter = data.logStakingV1
+    .filter((l) => l.tokenID)
+    .filter((l) => !owner || l.to === owner)
+  const { stakingV1ToStakingPosition } = parser(stakingV1Contract, provider)
+  return Promise.all(preFilter.map(stakingV1ToStakingPosition))
+}
+
+export const listListedPositions = async ({ provider }: { provider: BaseProvider }) => {
+  const stakingV1Contract = new StakingV1Contract(provider)
+  const { data } = await fetcher<{ data: { logStakingV1: LogStakingV1[] } }>(
+    getHasuraEndpoint(provider.network),
+    {
+      method: 'POST',
+      body: JSON.stringify({ query: listCavemartListingDocuments }),
+    },
   )
+  const { stakingV1ToStakingPosition } = parser(stakingV1Contract, provider)
+  const dirtyResults = data.logStakingV1
+  const cleanResults = dirtyResults.filter((c) => c.to === c.cavemart.at(-1).tokenOwner)
+  return await Promise.all(cleanResults.map(stakingV1ToStakingPosition))
+}
+
+export const marketplaceActivity = async ({ provider }: { provider: BaseProvider }) => {
+  const { data } = await fetcher<{ data: { logStakingV1: LogStakingV1[] } }>(
+    getHasuraEndpoint(provider.network),
+    {
+      method: 'POST',
+      body: JSON.stringify({ query: fetchAllCavemart }),
+    },
+  )
+  const dirtyResults = data.logStakingV1
+
+  const activity: (Cavemart & StakingPool & LogStakingV1)[] = dirtyResults.reduce((a, b) => {
+    const marketplaceActivity = b.cavemart.map((c) => {
+      const stakingPool: StakingPool = stakingPools[b.poolID]
+      return { ...b, ...c, ...stakingPool, cavemart: undefined } as Cavemart &
+        StakingPool &
+        LogStakingV1
+    })
+    return [...a, ...marketplaceActivity]
+  }, [])
+
+  activity.sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
+  console.log(activity)
+  return activity
+}
+
+export interface LogStakingV1 {
+  to: string
+  poolID: number
+  tokenID?: number
+  cavemart: Cavemart[]
+}
+
+export type Cavemart = {
+  created_at: string
+  signatureHash: string
+  start: string
+  startPrice?: string
+  endPrice?: string
+  tokenID: number
+  tokenOwner: string
+  tokenIsListed: boolean
+  deadline?: number
+  updated_at: string
+  soldFor: string
+  txHash: string
+  newOwner: string
+  tokenOption: string
 }

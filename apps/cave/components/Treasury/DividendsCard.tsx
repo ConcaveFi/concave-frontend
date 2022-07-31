@@ -23,6 +23,7 @@ export default function DividendsCard() {
           textColor={'text.low'}
           fontSize="14px"
           maxW={'350px'}
+          px={{ base: 12, md: 0 }}
         >
           Dividends are distributed on a quarterly basis to the holders. You may redeem these
           dividends upon the distribution date on the Your Stake Position page.

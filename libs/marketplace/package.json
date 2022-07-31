@@ -13,11 +13,13 @@
   "scripts": {
     "build": "tsup src/index.ts --format esm,cjs --dts",
     "dev": "tsup src/index.ts --format esm,cjs --watch --dts",
-    "test": "tsdx test --passWithNoTests"
+    "test": "tsdx test --passWithNoTests",
+    "test:watch": "tsdx test --passWithNoTests --watch"
   },
   "dependencies": {
     "@alch/alchemy-web3": "^1.4.4",
     "@concave/core": "*",
+    "@concave/gemswap-sdk": "*",
     "@ethersproject/address": "^5.6.1",
     "@ethersproject/bignumber": "^5.6.2",
     "@ethersproject/contracts": "^5.6.2",

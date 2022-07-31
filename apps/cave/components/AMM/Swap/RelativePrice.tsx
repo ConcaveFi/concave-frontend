@@ -55,7 +55,7 @@ export const RelativePrice = ({
       {relativePrice.isSuccess && (
         <Flex gap={1} align="center" wrap="wrap">
           <Text>
-            1 {relativePrice.price?.quoteCurrency.symbol} ={' '}
+            1 {relativePrice.price?.quoteCurrency.symbol} =
             {relativePrice.price?.invert().toFixed(2)} {relativePrice.price?.baseCurrency.symbol}
           </Text>
           {outputFiat.price && (
