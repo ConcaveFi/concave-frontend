@@ -1,9 +1,11 @@
-import { Currency, CurrencyAmount } from '@concave/core'
+import { Currency, CurrencyAmount, PCNVContract } from '@concave/core'
 import { Flex, Text } from '@concave/ui'
 import { formatFixed } from '@ethersproject/bignumber'
-import { parseEther } from 'ethers/lib/utils'
+import { formatEther, parseEther } from 'ethers/lib/utils'
 import { useGet_Amm_Cnv_InfosQuery } from 'graphql/generated/graphql'
 import React from 'react'
+import { useQuery } from 'react-query'
+import { useProvider } from 'wagmi'
 
 type PcnvNotificationProps = {
   isOpen?: boolean
@@ -11,13 +13,27 @@ type PcnvNotificationProps = {
 }
 export const PcnvNotification: React.FC<PcnvNotificationProps> = ({ isOpen, tokenAmount }) => {
   const { data } = useGet_Amm_Cnv_InfosQuery()
+  const provider = useProvider()
   const pCNVInitialSupply = 33300000
   const pCNV10PercentClaim = (data?.cnvData?.data?.totalSupply || 0) * 0.1
   const pCNVToCNVDifference = pCNV10PercentClaim / pCNVInitialSupply
 
-  const pCNVAmount = parseFloat(tokenAmount?.toSignificant())
+  const { data: vestedPercent, status } = useQuery(['VestedPercent'], async () => {
+    const pCNVContract = new PCNVContract(provider)
+    const time = +(Date.now() / 1000).toString().split('.')[0]
+    console.log(time)
+
+    return await pCNVContract.vestedPercent(time)
+  })
+  const pCNVAmount = parseFloat(tokenAmount?.toSignificant()) * +formatEther(vestedPercent)
   const CNVAmount = pCNVAmount * pCNVToCNVDifference
 
+  console.log(formatEther(vestedPercent))
+  const pCNVUnlockedLabel = {
+    loading: 'Loading ...',
+    success: `${formatEther(vestedPercent?.mul(100) || 0)}%`,
+    error: 'An error occurred',
+  }
   return (
     <Flex
       transition="all 0.6s"
@@ -36,7 +52,7 @@ export const PcnvNotification: React.FC<PcnvNotificationProps> = ({ isOpen, toke
         justify="space-around"
         p={6}
       >
-        <Info title={'Unlocked pCNV:'} info={'50%'} />
+        <Info title={'Unlocked pCNV:'} info={pCNVUnlockedLabel[status]} />
         <TokenInfoContainer label={`${pCNVAmount} pCNV`} />
         <Text color={'text.low'} fontSize="sm">
           pCNV purchased is unlocked over time. CNV can be redeemed with unlocked pCNV.
@@ -44,7 +60,7 @@ export const PcnvNotification: React.FC<PcnvNotificationProps> = ({ isOpen, toke
         <Info
           title={'Exchange Rate:'}
           info={`1 pCNV = ${formatFixed(
-            parseEther(pCNVToCNVDifference.toString().slice(0, 8)),
+            parseEther(pCNVToCNVDifference?.toString().slice(0, 8)),
             18,
           )} CNV`}
         />
