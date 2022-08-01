@@ -3,7 +3,7 @@ import {
   BBTCNV_ADDRESS,
   BOND_ADDRESS,
   CNV_ADDRESS,
-  PCNV_CONTRACT,
+  PCNV_ADDRESS,
   STAKING_CONTRACT,
 } from '@concave/core'
 import { AddressTypeEnum } from './types'
@@ -33,7 +33,7 @@ export const nodes = [
   },
   {
     id: 'pCNV',
-    data: { label: 'pCNV', addressType: AddressTypeEnum.TOKEN, address: PCNV_CONTRACT[1] },
+    data: { label: 'pCNV', addressType: AddressTypeEnum.TOKEN, address: PCNV_ADDRESS[1] },
     position: { x: 375, y: 0 },
     type: 'TriangleNode',
   },
