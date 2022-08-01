@@ -1,19 +1,25 @@
-import { BOND_ADDRESS, CNV_ADDRESS, STAKING_CONTRACT } from '@concave/core'
-import { aCNV_ADDRESS, bbtCNV_ADDRESS } from 'contracts/VestedTokens/addresses'
+import {
+  ACNV_ADDRESS,
+  BBTCNV_ADDRESS,
+  BOND_ADDRESS,
+  CNV_ADDRESS,
+  PCNV_CONTRACT,
+  STAKING_CONTRACT,
+} from '@concave/core'
 
 export const nodes = [
   {
     id: 'bbtCNV',
     data: {
       label: 'bbtCNV',
-      address: bbtCNV_ADDRESS[1],
+      address: BBTCNV_ADDRESS[1],
     },
     position: { x: 0, y: 0 },
     type: 'TriangleNode',
   },
   {
     id: 'aCNV',
-    data: { label: 'aCNV', address: aCNV_ADDRESS[1] },
+    data: { label: 'aCNV', address: ACNV_ADDRESS[1] },
     position: { x: 125, y: 0 },
     type: 'TriangleNode',
   },
@@ -25,13 +31,13 @@ export const nodes = [
   },
   {
     id: 'pCNV',
-    data: { label: 'pCNV', address: CNV_ADDRESS[1] },
+    data: { label: 'pCNV', address: PCNV_CONTRACT[1] },
     position: { x: 375, y: 0 },
     type: 'TriangleNode',
   },
   {
     id: 'lsdCNV',
-    data: { label: 'lsdCNV', address: '0x93c3a816242e50ea8871a29bf62cc3df58787fbd' },
+    data: { label: 'lsdCNV', address: STAKING_CONTRACT[1] },
     position: { x: 700, y: 0 },
     type: 'TriangleNode',
   },
