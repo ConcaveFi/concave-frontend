@@ -1,4 +1,4 @@
-import { marketplaceActivity } from '@concave/marketplace'
+import { Cavemart, LogStakingV1, marketplaceActivity, StakingPool } from '@concave/marketplace'
 import { Box, Card, Flex } from '@concave/ui'
 import { BigNumber } from '@ethersproject/bignumber'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
@@ -24,13 +24,13 @@ export const MarketplaceActivityCard = () => {
     async () => {
       const provider = concaveProvider(chainId)
       const positions = await marketplaceActivity({ provider })
-      return positions.map((log) => {
-        const item = log.cavemart.at(-1)
+      return positions.map((item) => {
         const type = item.soldFor ? `sale` : `listing`
         const value = type === 'sale' ? item.soldFor : item.startPrice
-        const data: Data = {
+        const data: Data & Cavemart & StakingPool & LogStakingV1 = {
+          ...item,
           type,
-          poolID: log.poolID,
+          poolID: item.poolId,
           date: new Date(item.updated_at),
           amount: BigNumber.from(value),
           transactionHash: item.txHash,

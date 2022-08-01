@@ -1,5 +1,6 @@
 import { BaseProvider } from '@ethersproject/providers'
 import { StakingV1Contract } from './contract'
+import { StakingPool, stakingPools } from './entities'
 import { parser } from './graphql/parser'
 import {
   fetchAllCavemart,
@@ -62,7 +63,21 @@ export const marketplaceActivity = async ({ provider }: { provider: BaseProvider
       body: JSON.stringify({ query: fetchAllCavemart }),
     },
   )
-  return data.logStakingV1
+  const dirtyResults = data.logStakingV1
+
+  const activity: (Cavemart & StakingPool & LogStakingV1)[] = dirtyResults.reduce((a, b) => {
+    const marketplaceActivity = b.cavemart.map((c) => {
+      const stakingPool: StakingPool = stakingPools[b.poolID]
+      return { ...b, ...c, ...stakingPool, cavemart: undefined } as Cavemart &
+        StakingPool &
+        LogStakingV1
+    })
+    return [...a, ...marketplaceActivity]
+  }, [])
+
+  activity.sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
+  console.log(activity)
+  return activity
 }
 
 export interface LogStakingV1 {

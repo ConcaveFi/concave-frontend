@@ -44,7 +44,10 @@ export const ConfirmUnlist = ({
       <Box p={4} shadow={`Down Medium`} w={'full'} borderRadius={'3xl'}>
         <Info label="Item:" value={`#` + market.tokenId.toString()}></Info>
         <Info label="Current price:" value={formatFixed(staking.currentValue) + ` CNV`}></Info>
-        <Info label="Listed price:" value={formatFixed(market.startPrice) + ` CNV`}></Info>
+        <Info
+          label="Listed price:"
+          value={formatFixed(market.startPrice, market.currency) + ` ${market.currency.symbol}`}
+        ></Info>
         <Info
           label="Discount:"
           isLoading={discount.isLoading}
