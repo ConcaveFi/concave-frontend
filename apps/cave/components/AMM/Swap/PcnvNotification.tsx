@@ -21,14 +21,11 @@ export const PcnvNotification: React.FC<PcnvNotificationProps> = ({ isOpen, toke
   const { data: vestedPercent, status } = useQuery(['VestedPercent'], async () => {
     const pCNVContract = new PCNVContract(provider)
     const time = +(Date.now() / 1000).toString().split('.')[0]
-    console.log(time)
-
     return await pCNVContract.vestedPercent(time)
   })
   const pCNVAmount = parseFloat(tokenAmount?.toSignificant()) * +formatEther(vestedPercent)
   const CNVAmount = pCNVAmount * pCNVToCNVDifference
 
-  console.log(formatEther(vestedPercent))
   const pCNVUnlockedLabel = {
     loading: 'Loading ...',
     success: `${formatEther(vestedPercent?.mul(100) || 0)}%`,
