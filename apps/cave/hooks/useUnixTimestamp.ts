@@ -23,6 +23,7 @@ export const useUnixTimestamp = ({
     onChange: ({ target }: ButtonEventType) => {
       handleDate(target.valueAsDate)
     },
+    min: min?.toISOString().substring(0, 10),
     value: date.toISOString().substring(0, 10),
   }
   return {
