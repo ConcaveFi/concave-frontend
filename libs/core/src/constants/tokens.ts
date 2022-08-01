@@ -5,6 +5,7 @@ import {
   CNV_ADDRESS,
   DAI_ADDRESS,
   FRAX_ADDRESS,
+  PCNV_ADDRESS,
   USDC_ADDRESS,
   WETH9_ADDRESS,
   WNATIVE_ADDRESS,
@@ -35,6 +36,14 @@ export const CNV: TokenMap = makeTokenMap(
   18,
   'CNV',
   'Concave',
+)
+
+export const PCNV: TokenMap = makeTokenMap(
+  getAddressesChains(PCNV_ADDRESS),
+  PCNV_ADDRESS,
+  18,
+  'pCNV',
+  'Concave pCNV',
 )
 
 export const USDC: TokenMap = {
