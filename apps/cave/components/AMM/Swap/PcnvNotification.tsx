@@ -23,7 +23,7 @@ export const PcnvNotification: React.FC<PcnvNotificationProps> = ({ isOpen, toke
     const time = +(Date.now() / 1000).toString().split('.')[0]
     return await pCNVContract.vestedPercent(time)
   })
-  const pCNVAmount = parseFloat(tokenAmount?.toSignificant()) * +formatEther(vestedPercent)
+  const pCNVAmount = parseFloat(tokenAmount?.toSignificant()) * +formatEther(vestedPercent || 0)
   const CNVAmount = pCNVAmount * pCNVToCNVDifference
 
   const pCNVUnlockedLabel = {
