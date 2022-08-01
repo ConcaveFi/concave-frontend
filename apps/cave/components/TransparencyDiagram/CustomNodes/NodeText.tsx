@@ -24,7 +24,7 @@ export const NodeText = ({
         {data.label}
       </Text>
       <Text color={'white'} fontSize={'0.65rem'} fontWeight={''}>
-        <Link href={`https://etherscan.io/address/${data.address}`} target="_blank">
+        <Link href={`https://etherscan.io/${data.addressType}/${data.address}`} target="_blank">
           View {contractMultiLine && <br />} contract
         </Link>
       </Text>

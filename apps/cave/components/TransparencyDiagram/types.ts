@@ -1,4 +1,18 @@
-export type NodeDisplayData = { label: string; address: string }
+export enum AddressTypeEnum {
+  TOKEN = 'token',
+  CONTRACT = 'address',
+}
+
+// export enum ChainEnum {
+//   AVAX = 'snowtrace.io',
+// }
+
+export type NodeDisplayData = {
+  label: string
+  // chain?: ChainEnum
+  address: string
+  addressType: AddressTypeEnum
+}
 
 export type ShapeSettingsType = {
   path: string
