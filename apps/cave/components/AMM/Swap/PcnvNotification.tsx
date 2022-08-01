@@ -51,7 +51,7 @@ export const PcnvNotification: React.FC<PcnvNotificationProps> = ({ isOpen, toke
         <TokenInfoContainer label={`${CNVAmount} CNV`} />
         <Text color={'text.low'} fontSize="sm">
           The amount of CNV redeemable for each pCNV grows as the total supply of CNV increases. For
-          more infromation on these mechanics
+          more information on these mechanics
         </Text>
       </Flex>
     </Flex>
