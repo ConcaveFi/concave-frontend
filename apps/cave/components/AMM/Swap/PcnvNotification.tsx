@@ -7,23 +7,26 @@ import React from 'react'
 import { useQuery } from 'react-query'
 import { useProvider } from 'wagmi'
 
-type PcnvNotificationProps = {
-  isOpen?: boolean
-  tokenAmount: CurrencyAmount<Currency>
-}
-export const PcnvNotification: React.FC<PcnvNotificationProps> = ({ isOpen, tokenAmount }) => {
+type PcnvNotificationProps = { currencyAmount: CurrencyAmount<Currency> }
+export const PcnvNotification: React.FC<PcnvNotificationProps> = ({ currencyAmount }) => {
   const { data } = useGet_Amm_Cnv_InfosQuery()
+  const tokenSymbol = currencyAmount?.currency.symbol
   const provider = useProvider()
   const pCNVInitialSupply = 33300000
   const pCNV10PercentClaim = (data?.cnvData?.data?.totalSupply || 0) * 0.1
   const pCNVToCNVDifference = pCNV10PercentClaim / pCNVInitialSupply
+  const isOpen = {
+    pCNV: true,
+    tpCNV: true,
+  }[tokenSymbol]
+  console.log(tokenSymbol)
 
   const { data: vestedPercent, status } = useQuery(['VestedPercent'], async () => {
     const pCNVContract = new PCNVContract(provider)
     const time = +(Date.now() / 1000).toString().split('.')[0]
     return await pCNVContract.vestedPercent(time)
   })
-  const pCNVAmount = parseFloat(tokenAmount?.toSignificant()) * +formatEther(vestedPercent || 0)
+  const pCNVAmount = parseFloat(currencyAmount?.toSignificant()) * +formatEther(vestedPercent || 0)
   const CNVAmount = pCNVAmount * pCNVToCNVDifference
 
   const pCNVUnlockedLabel = {

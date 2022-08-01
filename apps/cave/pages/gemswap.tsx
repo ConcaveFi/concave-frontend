@@ -187,10 +187,7 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
               <TradeDetails trade={trade.data} settings={settings} />
             </Collapse>
 
-            <PcnvNotification
-              isOpen={trade?.data?.outputAmount.currency?.symbol === 'pCNV'}
-              tokenAmount={trade?.data?.outputAmount}
-            />
+            <PcnvNotification currencyAmount={trade?.data?.outputAmount} />
 
             <Button variant="primary" size="large" w="full" {...swapButtonProps} />
 
