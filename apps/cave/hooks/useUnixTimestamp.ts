@@ -15,7 +15,7 @@ export const useUnixTimestamp = ({
   const handleDate = (value: Date) => {
     if (!value) return
     if (min && value.getTime() < min.getTime()) return
-    if (max && value.getTime() > max.getTime()) return
+    if (max && value.getTime() > max.getTime() && max.getTime() > Date.now()) return
     setDate(value)
     onChange(value)
   }
