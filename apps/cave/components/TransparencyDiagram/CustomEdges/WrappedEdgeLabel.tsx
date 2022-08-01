@@ -42,7 +42,7 @@ export function WrappedEdgeLabel({
         <tspan
           key={id + '-' + i}
           x="0"
-          dy={i === 0 ? '0px' : '10px'}
+          dy={i === 0 ? '0px' : '13px'}
           textAnchor="middle"
           {...labelStyle}
         >

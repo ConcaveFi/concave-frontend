@@ -1,10 +1,15 @@
 import { WrappedEdgeLabel } from './CustomEdges/WrappedEdgeLabel'
 
-const labelStyle = {
+export const labelStyle = {
   fill: 'white',
   stroke: 'black',
   strokeWidth: '3',
   paintOrder: 'stroke',
+  fontSize: '0.75rem',
+}
+
+export const edgeStyle = {
+  strokeWidth: 2.25,
 }
 
 export const edges = [
@@ -75,6 +80,7 @@ export const edges = [
     targetHandle: 'leftTarget',
     label: '',
     animated: true,
+    style: { ...edgeStyle, stroke: 'orange' },
   },
   {
     id: 'CO-OP Treasury-AccrualBondsV1 (Proxy)',
@@ -84,6 +90,7 @@ export const edges = [
     targetHandle: 'leftTarget',
     label: '',
     animated: true,
+    style: { ...edgeStyle, stroke: 'orange' },
   },
   {
     id: 'Policy Multisig-AccrualBondsV1 (Proxy)',
@@ -93,6 +100,37 @@ export const edges = [
     targetHandle: 'leftTarget',
     label: '',
     animated: true,
+    style: { ...edgeStyle, stroke: 'orange' },
+  },
+  {
+    id: 'Concave Treasury-StakingV1 (Proxy)',
+    source: 'Concave Treasury',
+    target: 'StakingV1 (Proxy)',
+    sourceHandle: 'rightSource',
+    targetHandle: 'leftTarget',
+    label: '',
+    animated: true,
+    style: { ...edgeStyle, stroke: 'orange' },
+  },
+  {
+    id: 'CO-OP Treasury-StakingV1 (Proxy)',
+    source: 'CO-OP Treasury',
+    target: 'StakingV1 (Proxy)',
+    sourceHandle: 'rightSource',
+    targetHandle: 'leftTarget',
+    label: '',
+    animated: true,
+    style: { ...edgeStyle, stroke: 'orange' },
+  },
+  {
+    id: 'Policy Multisig-StakingV1 (Proxy)',
+    source: 'Policy Multisig',
+    target: 'StakingV1 (Proxy)',
+    sourceHandle: 'rightSource',
+    targetHandle: 'leftTarget',
+    label: '',
+    animated: true,
+    style: { ...edgeStyle, stroke: 'orange' },
   },
 
   {
@@ -130,6 +168,7 @@ export const edges = [
     target: 'AccrualBondsV1 (Impl)',
     sourceHandle: 'bottomSource',
     targetHandle: 'topTarget',
+    style: { ...edgeStyle, stroke: '#079D7C' },
     animated: true,
   },
 
@@ -140,6 +179,7 @@ export const edges = [
     sourceHandle: 'bottomSource',
     targetHandle: 'topTarget',
     label: 'Value goes into shuttle',
+    style: { ...edgeStyle, stroke: '#079D7C' },
     animated: true,
   },
 
@@ -154,6 +194,7 @@ export const edges = [
       transform: 'translate(-100px, 10px)',
       ...labelStyle,
     },
+    style: { ...edgeStyle, stroke: 'cornflowerblue' },
     animated: true,
   },
 
@@ -165,9 +206,10 @@ export const edges = [
     targetHandle: 'rightTarget',
     label: 'CNV minted from Staking',
     labelStyle: {
-      transform: 'translate(-120px, 2.5px)',
+      transform: 'translate(70px, 0px)',
       ...labelStyle,
     },
+    style: { ...edgeStyle, stroke: 'cornflowerblue' },
     animated: true,
   },
 
@@ -178,6 +220,7 @@ export const edges = [
     sourceHandle: 'rightSource',
     targetHandle: 'bottomTarget',
     label: '',
+    style: { ...edgeStyle, stroke: 'cornflowerblue' },
     animated: true,
   },
   {

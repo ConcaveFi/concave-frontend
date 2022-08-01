@@ -1,5 +1,5 @@
 import ReactFlow, { ConnectionLineType } from 'react-flow-renderer'
-import { edges } from './edges'
+import { edges, edgeStyle, labelStyle } from './edges'
 import { nodes } from './nodes'
 
 import { CylinderNode } from './CustomNodes/Cylinder'
@@ -33,15 +33,8 @@ export function TransparencyDiagram() {
       fitView
       defaultEdgeOptions={{
         type: ConnectionLineType.SimpleBezier,
-        style: {
-          strokeWidth: 2,
-        },
-        labelStyle: {
-          fill: 'white',
-          stroke: 'black',
-          strokeWidth: '3',
-          paintOrder: 'stroke',
-        },
+        style: { ...edgeStyle },
+        labelStyle: { ...labelStyle },
         labelShowBg: false,
       }}
     />

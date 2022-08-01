@@ -46,13 +46,13 @@ export function RectangleNode({ data }: { data: NodeDisplayData }) {
         type="source"
         position={Position.Right}
         id="rightSource"
-        style={{ ...sharedNodeHandleStyle, top: '48%' }}
+        style={{ ...sharedNodeHandleStyle, top: '40%' }}
       />
       <Handle
         type="target"
         position={Position.Right}
         id="rightTarget"
-        style={{ ...sharedNodeHandleStyle, top: '52%' }}
+        style={{ ...sharedNodeHandleStyle, top: '60%' }}
       />{' '}
       <Handle
         type="source"

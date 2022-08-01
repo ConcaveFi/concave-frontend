@@ -70,7 +70,7 @@ export const nodes = [
     data: {
       label: 'Policy Multisig',
       addressType: AddressTypeEnum.CONTRACT,
-      address: '0x0000000000000000000000000000000000000000',
+      address: '0x4461f141a47e2858B49e7A3572E08Acb6b43F8a9',
     },
     position: { x: 0, y: 400 },
     type: 'RectangleNode',
@@ -93,7 +93,7 @@ export const nodes = [
       addressType: AddressTypeEnum.CONTRACT,
       address: BOND_ADDRESS[1],
     },
-    position: { x: 450, y: 200 },
+    position: { x: 450, y: 150 },
     type: 'DiamondNode',
   },
   {
@@ -103,7 +103,7 @@ export const nodes = [
       addressType: AddressTypeEnum.CONTRACT,
       address: STAKING_CONTRACT[1],
     },
-    position: { x: 650, y: 200 },
+    position: { x: 650, y: 230 },
     type: 'DiamondNode',
   },
 
@@ -114,7 +114,7 @@ export const nodes = [
       addressType: AddressTypeEnum.CONTRACT,
       address: '0x9Eb0ad4eEC37CE219081b94Cc41290AbfB58ee5a',
     },
-    position: { x: 450, y: 350 },
+    position: { x: 450, y: 400 },
     type: 'DiamondNode',
   },
   {
@@ -124,7 +124,7 @@ export const nodes = [
       addressType: AddressTypeEnum.CONTRACT,
       address: '0xd3a72248298739e52b0fd01fd753025fe98493c7',
     },
-    position: { x: 650, y: 350 },
+    position: { x: 650, y: 400 },
     type: 'DiamondNode',
   },
 
