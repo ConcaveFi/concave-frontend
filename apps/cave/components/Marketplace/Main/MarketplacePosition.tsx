@@ -19,7 +19,7 @@ import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId
 import { concaveProvider } from 'lib/providers'
 import { useMemo } from 'react'
 import { formatFixed } from 'utils/formatFixed'
-import { useSigner } from 'wagmi'
+import { useAccount, useSigner } from 'wagmi'
 
 type MarketplacePositionProps = { stakingPosition: StakingPosition }
 export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakingPosition }) => {
@@ -87,6 +87,7 @@ const ImageContainer: React.FC<ImageContainerProps> = ({ stakePeriod, ...flexPro
 type BuyContainerProps = { stakingPosition: StakingPosition } & BoxProps
 const BuyContainer = ({ stakingPosition, ...boxProps }: BuyContainerProps) => {
   const chainId = useCurrentSupportedNetworkId()
+  const account = useAccount()
   const tokenId = stakingPosition.tokenId
   const market = stakingPosition.market
   const currency = market.currency
@@ -107,7 +108,11 @@ const BuyContainer = ({ stakingPosition, ...boxProps }: BuyContainerProps) => {
   const useCurrencyState = useCurrencyButtonState(price, FIXED_ORDER_MARKET_CONTRACT[chainId], {
     amountInfo: true,
   })
+
   const buttonProps = useMemo(() => {
+    if (account.address === stakingPosition.market.seller) {
+      return { children: 'Your position', minWidth: '45%' }
+    }
     if (swap.isWaitingForConfirmation)
       return { loadingText: 'Confirm', isLoading: true, minWidth: '45%' }
 

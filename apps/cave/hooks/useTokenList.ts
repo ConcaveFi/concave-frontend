@@ -19,7 +19,8 @@ export const useTokenList = () => {
 
   return useQuery(
     ['token-list', activeChain?.id || 1],
-    async () => fetchTokenList(activeChain?.unsupported ? chain.mainnet : activeChain),
+    async () =>
+      fetchTokenList(activeChain?.unsupported ? chain.mainnet : activeChain || chain.mainnet),
     { placeholderData: [], refetchOnWindowFocus: false },
   )
 }
