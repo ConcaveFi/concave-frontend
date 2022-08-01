@@ -189,10 +189,15 @@ export const edges = [
     target: 'StakingV1 (Impl)',
     sourceHandle: 'bottomSource',
     targetHandle: 'topTarget',
-    label: 'Proxy delegates calls to implementation',
+    label: (
+      <WrappedEdgeLabel
+        id={'Concave Treasury-CNV'}
+        label={'Proxy delegates calls to implementation'}
+        labelStyle={labelStyle}
+      />
+    ),
     labelStyle: {
-      transform: 'translate(-100px, 10px)',
-      ...labelStyle,
+      transform: 'translate(-39.5px, 20px)',
     },
     style: { ...edgeStyle, stroke: 'cornflowerblue' },
     animated: true,
