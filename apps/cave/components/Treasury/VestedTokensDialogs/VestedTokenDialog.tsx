@@ -6,6 +6,7 @@ import { VestedTokenButtonProps } from 'components/Treasury/TreasuryRedeemCard'
 import { BigNumber } from 'ethers'
 import { formatEther, parseEther } from 'ethers/lib/utils'
 import { useState } from 'react'
+import { formatFixed } from 'utils/formatFixed'
 import { useAccount } from 'wagmi'
 import { VestedTokenInput } from './VestedTokenDialogInput'
 
@@ -42,6 +43,7 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
     !insufficientFunds &&
     !nothingToRedeem
   const validValue = !invalidAmount && !insufficientFunds && !nothingToRedeem && !redeemableExceeded
+  const convertedValue = (+formatEther(currentValue || 0) * conversionToCNV)?.toFixed(12) || '0'
   return (
     <>
       <Modal
@@ -74,16 +76,14 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
               {conversionToCNV && (
                 <Info
                   title="You will receive:"
-                  value={
-                    (+formatEther(currentValue || 0) * conversionToCNV).toPrecision(2) + ' CNV'
-                  }
+                  value={formatFixed(parseEther(convertedValue), { places: 5 }) + ' CNV'}
                 />
               )}
             </Collapse>
             {conversionToCNV && (
               <Text color={'text.accent'} fontWeight="bold" opacity={0.5}>{`1 ${
                 token?.symbol
-              } = ${conversionToCNV.toPrecision(2)} CNV`}</Text>
+              } = ${conversionToCNV.toString().slice(0, 7)} CNV`}</Text>
             )}
             <Text fontWeight={'bold'} textColor="text.accent" opacity="0.5" fontSize={'xs'}></Text>
           </Flex>
