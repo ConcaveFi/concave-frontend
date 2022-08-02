@@ -17,7 +17,6 @@ import { CurrencyIcon } from 'components/CurrencyIcon'
 import { useEffect, useState } from 'react'
 import { usePreviousDistinct } from 'react-use'
 import { percentDifference } from 'utils/percentDifference'
-import { candlestickColors } from '../Chart/CandleStickChart'
 import { useFiatValue } from '../hooks/useFiatPrice'
 import { SwapSettings } from '../Swap/Settings'
 import { ExpectedOutput, MinExpectedOutput } from './ExpectedOutput'
@@ -84,9 +83,9 @@ const PricesUpdated = ({
   if (!prevTrade) return null
   const difference = percentDifference(prevTrade.outputAmount, currentTrade.outputAmount)
   const StatArrow = difference?.greaterThan(0) ? (
-    <TriangleUpIcon w="10px" color={candlestickColors.up} />
+    <TriangleUpIcon w="10px" color="#4bffb5" />
   ) : (
-    <TriangleDownIcon w="10px" color={candlestickColors.down} />
+    <TriangleDownIcon w="10px" color="#ff4976" />
   )
   return (
     <Flex

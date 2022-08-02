@@ -62,16 +62,11 @@ const chartOptions = ({ color, font }): DeepPartial<ChartOptions> => ({
   },
 })
 
-export const candlestickColors = {
-  up: '#4bffb5',
-  down: '#ff4976',
-}
-
 const candlestickSeries = ({
   color,
 }): DeepPartial<CandlestickSeriesOptions & SeriesOptionsCommon> => ({
-  upColor: candlestickColors.up,
-  downColor: candlestickColors.down,
+  upColor: '#4bffb5',
+  downColor: '#ff4976',
   borderVisible: false,
   wickDownColor: color,
   wickUpColor: color,
@@ -100,4 +95,5 @@ export const CandleStickChart = ({ data }: { data: (CandlestickData | Whitespace
 
   return <Box ref={chartContainerRef} />
 }
+
 export default CandleStickChart
