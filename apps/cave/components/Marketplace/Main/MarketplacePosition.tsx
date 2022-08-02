@@ -11,7 +11,6 @@ import {
 import { CurrencyAmount, FIXED_ORDER_MARKET_CONTRACT, NATIVE, Percent } from '@concave/core'
 import { FixedOrderMarketContract, stakingPools, StakingPosition } from '@concave/marketplace'
 import { BoxProps, Button, ButtonProps, FlexProps, HStack, Spinner } from '@concave/ui'
-import { ButtonLink } from 'components/ButtonLink'
 import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { usePositionDiscount } from 'components/StakingPositions/LockPosition/MarketLockInfo/usePositionDiscount'
 import { differenceInDays, format, formatDistanceToNowStrict } from 'date-fns'
@@ -116,9 +115,9 @@ const BuyContainer = ({ stakingPosition, ...boxProps }: BuyContainerProps) => {
       return {
         children: 'Your listing',
         minWidth: '45%',
-        as: ButtonLink,
-        href: '/liquid-stake-positions',
-      } as unknown as ButtonProps
+        _hover: {},
+        disabled: true,
+      } as ButtonProps
     }
     if (swap.isWaitingForConfirmation)
       return { loadingText: 'Confirm', isLoading: true, minWidth: '45%' }
