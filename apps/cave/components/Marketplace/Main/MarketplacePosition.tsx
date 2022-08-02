@@ -113,13 +113,12 @@ const BuyContainer = ({ stakingPosition, ...boxProps }: BuyContainerProps) => {
 
   const buttonProps = useMemo(() => {
     if (account.address === stakingPosition.market.seller) {
-      const x: ButtonProps = {}
       return {
         children: 'Your listing',
         minWidth: '45%',
         as: ButtonLink,
         href: '/liquid-stake-positions',
-      }
+      } as unknown as ButtonProps
     }
     if (swap.isWaitingForConfirmation)
       return { loadingText: 'Confirm', isLoading: true, minWidth: '45%' }
