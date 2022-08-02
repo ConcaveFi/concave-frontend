@@ -44,6 +44,7 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
     !nothingToRedeem
   const validValue = !invalidAmount && !insufficientFunds && !nothingToRedeem && !redeemableExceeded
   const convertedValue = (+formatEther(currentValue || 0) * conversionToCNV)?.toFixed(12) || '0'
+  const CNVAmount = formatFixed(parseEther(conversionToCNV?.toFixed(12) || '0'), { places: 5 })
   return (
     <>
       <Modal
@@ -81,9 +82,11 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
               )}
             </Collapse>
             {conversionToCNV && (
-              <Text color={'text.accent'} fontWeight="bold" opacity={0.5}>{`1 ${
-                token?.symbol
-              } = ${conversionToCNV.toFixed(5)} CNV`}</Text>
+              <Text
+                color={'text.accent'}
+                fontWeight="bold"
+                opacity={0.5}
+              >{`1 ${token?.symbol} = ${CNVAmount} CNV`}</Text>
             )}
             <Text fontWeight={'bold'} textColor="text.accent" opacity="0.5" fontSize={'xs'}></Text>
           </Flex>
