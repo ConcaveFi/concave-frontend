@@ -77,7 +77,7 @@ const useAddTokenToWallet = ({ tokenAddress, tokenChainId, tokenImage }: injecte
             })
           }
 
-          const image = `https://raw.githubusercontent.com/ConcaveFi/assets/master/blockchains/${CHAIN_NAME[tokenChainId]}/assets/${tokenAddress}/logo.png`
+          const image = `https://cdn.jsdelivr.net/gh/ConcaveFi/assets@master/blockchains/${CHAIN_NAME[tokenChainId]}/assets/${tokenAddress}/logo.png`
 
           const addToWallet = async (symbol: string, decimals: number) => {
             await window.ethereum?.request({

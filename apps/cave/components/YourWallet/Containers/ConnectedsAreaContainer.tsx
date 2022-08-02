@@ -31,8 +31,8 @@ export default function ConnectedAreasContainer() {
             h="25px"
             src={
               chain.id == 1
-                ? 'https://raw.githubusercontent.com/ConcaveFi/assets/master/blockchains/ethereum/info/logo.png'
-                : 'https://raw.githubusercontent.com/ConcaveFi/assets/master/blockchains/arbitrum/info/logo.png'
+                ? 'https://cdn.jsdelivr.net/gh/ConcaveFi/assets@master/blockchains/ethereum/info/logo.png'
+                : 'https://cdn.jsdelivr.net/gh/ConcaveFi/assets@master/blockchains/arbitrum/info/logo.png'
             }
           />
           <Text mx={2} fontWeight={'bold'} fontSize={{ base: '14px', sm: 'lg' }}>
