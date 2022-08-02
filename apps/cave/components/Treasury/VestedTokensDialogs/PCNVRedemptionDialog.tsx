@@ -1,4 +1,4 @@
-import { PCNVContract, PCNV_CONTRACT, Token } from '@concave/core'
+import { PCNV, PCNVContract } from '@concave/core'
 import { useDisclosure } from '@concave/ui'
 import { TransactionResponse } from '@ethersproject/providers'
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
@@ -55,7 +55,7 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
         onRedeem={redeem}
         status={status}
         tokenUserData={{ ...pCNVData, balance }}
-        token={new Token(chainId, PCNV_CONTRACT[chainId], 18, 'pCNV')}
+        token={PCNV[chainId]}
         conversionToCNV={pCNVToCNVDifference || 1}
       />
 

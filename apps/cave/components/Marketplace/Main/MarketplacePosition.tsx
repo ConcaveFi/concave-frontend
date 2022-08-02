@@ -18,17 +18,18 @@ import { useTransaction } from 'hooks/TransactionsRegistry/useTransaction'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
 import { useMemo } from 'react'
-import { formatFixed } from 'utils/formatFixed'
+import { compactFormat, formatFixed } from 'utils/formatFixed'
 import { useAccount, useSigner } from 'wagmi'
 
 type MarketplacePositionProps = { stakingPosition: StakingPosition }
 export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakingPosition }) => {
-  const currentValue = formatFixed(stakingPosition?.currentValue)
+  const currentValue = compactFormat(stakingPosition?.currentValue)
   const positionDate = new Date(stakingPosition.maturity * 1000)
   const relativePositionTime = formatDistanceToNowStrict(positionDate, { unit: 'day' })
   const days = stakingPosition.pool.days
   const diff = (differenceInDays(positionDate, Date.now()) - days) * -1
   const percentToMaturity = new Percent(diff, days)
+
   return (
     <Flex
       width={'full'}
@@ -133,6 +134,8 @@ const BuyContainer = ({ stakingPosition, ...boxProps }: BuyContainerProps) => {
       minWidth: useCurrencyState.state === 'default' ? '45%' : '100%',
     }
   }, [
+    account.address,
+    stakingPosition.market.seller,
     swap.isError,
     swap.isSucess,
     swap.isWaitingForConfirmation,
@@ -164,8 +167,17 @@ const BuyContainer = ({ stakingPosition, ...boxProps }: BuyContainerProps) => {
         {buttonProps.minWidth === '45%' && (
           <Flex flex={1} align="center" justify="center">
             <Flex direction={'column'} align="center" fontWeight={'bold'} p={2}>
-              <Text fontSize={'14px'} noOfLines={1}>
-                {price.toSignificant(5) + ` ${stakingPosition.market.currency.symbol}`}
+              <Text
+                fontSize={'14px'}
+                noOfLines={1}
+                title={
+                  formatFixed(price.quotient.toString(), {
+                    ...currency,
+                    places: 6,
+                  }) + ` ${currency.symbol}`
+                }
+              >
+                {compactFormat(price.quotient.toString(), currency) + ` ${currency.symbol}`}
               </Text>
               <HStack>
                 {discount.isLoading && <Spinner size="xs" />}

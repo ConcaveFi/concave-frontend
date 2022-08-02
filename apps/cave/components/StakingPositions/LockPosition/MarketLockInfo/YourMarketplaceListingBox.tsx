@@ -139,19 +139,19 @@ export const MarketListing = ({ stakingPosition }: { stakingPosition: StakingPos
 }
 
 const generateDefaultMarket = (staking: StakingPosition) => {
-  return (
-    staking.market ||
-    new MarketItem({
-      seller: '',
-      erc721: staking.address,
-      currency: NATIVE[staking.chainId],
-      tokenId: staking.tokenId.toString(),
-      startPrice: staking.currentValue,
-      endPrice: 0,
-      start: 0,
-      deadline: staking.maturity,
-      isListed: false,
-      signature: '',
-    })
-  )
+  if (staking?.market?.isListed) {
+    return staking.market
+  }
+  return new MarketItem({
+    seller: '',
+    erc721: staking.address,
+    currency: NATIVE[staking.chainId],
+    tokenId: staking.tokenId.toString(),
+    startPrice: staking.currentValue,
+    endPrice: 0,
+    start: 0,
+    deadline: staking.maturity,
+    isListed: false,
+    signature: '',
+  })
 }
