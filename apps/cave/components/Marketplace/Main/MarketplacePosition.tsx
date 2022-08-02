@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react'
 import { CurrencyAmount, FIXED_ORDER_MARKET_CONTRACT, NATIVE, Percent } from '@concave/core'
 import { FixedOrderMarketContract, stakingPools, StakingPosition } from '@concave/marketplace'
-import { BoxProps, Button, FlexProps, HStack, Spinner } from '@concave/ui'
+import { BoxProps, Button, ButtonProps, FlexProps, HStack, Spinner } from '@concave/ui'
 import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { usePositionDiscount } from 'components/StakingPositions/LockPosition/MarketLockInfo/usePositionDiscount'
 import { differenceInDays, format, formatDistanceToNowStrict } from 'date-fns'
@@ -112,7 +112,12 @@ const BuyContainer = ({ stakingPosition, ...boxProps }: BuyContainerProps) => {
 
   const buttonProps = useMemo(() => {
     if (account.address === stakingPosition.market.seller) {
-      return { children: 'Your position', minWidth: '45%' }
+      return {
+        children: 'Your listing',
+        minWidth: '45%',
+        _hover: {},
+        disabled: true,
+      } as ButtonProps
     }
     if (swap.isWaitingForConfirmation)
       return { loadingText: 'Confirm', isLoading: true, minWidth: '45%' }
