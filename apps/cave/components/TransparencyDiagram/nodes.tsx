@@ -7,6 +7,20 @@ import {
   STAKING_CONTRACT,
 } from '@concave/core'
 
+import { CylinderNode } from './CustomNodes/Cylinder'
+import { DiamondNode } from './CustomNodes/Diamond'
+import { FolderNode } from './CustomNodes/Folder'
+import { RectangleNode } from './CustomNodes/Rectangle'
+import { TriangleNode } from './CustomNodes/Triangle'
+
+export const nodeTypes = {
+  CylinderNode: CylinderNode,
+  DiamondNode: DiamondNode,
+  FolderNode: FolderNode,
+  RectangleNode: RectangleNode,
+  TriangleNode: TriangleNode,
+}
+
 const enum NodeTypeEnum {
   CylinderNode = 'CylinderNode',
   DiamondNode = 'DiamondNode',
