@@ -173,8 +173,8 @@ export const TestnetIndicator = () => {
   const minterModal = useDisclosure()
 
   return (
-    <SlideFade in={isOpen} unmountOnExit offsetY={-10}>
-      <Box pos="fixed" insetX={0} bottom={8} maxW="min" mx="auto" zIndex={10}>
+    <Box pos="fixed" insetX={0} bottom={8} maxW="min" mx="auto" zIndex={10}>
+      <SlideFade in={isOpen} unmountOnExit offsetY={-10}>
         <Card
           variant="secondary"
           p={5}
@@ -223,8 +223,8 @@ export const TestnetIndicator = () => {
             <CloseIcon w="8px" h="8px" />
           </Button>
         </Card>
-        <Faucet isOpen={minterModal.isOpen} onClose={minterModal.onClose} />
-      </Box>
-    </SlideFade>
+      </SlideFade>
+      <Faucet isOpen={minterModal.isOpen} onClose={minterModal.onClose} />
+    </Box>
   )
 }
