@@ -27,7 +27,7 @@ export class PCNVContract {
   ): Promise<TransactionResponse> {
     return this.pCNVContract.connect(signer).redeem(amount, address, address, redeemMax)
   }
-  public async totalSupply(): Promise<BigNumber> {
-    return this.pCNVContract.totalSupply()
+  public async vestedPercent(time: number): Promise<BigNumber> {
+    return this.pCNVContract.vestedPercent(time)
   }
 }
