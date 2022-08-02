@@ -6,7 +6,7 @@ import { formatDistanceToNowStrict } from 'date-fns'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useFetchTokenData } from 'hooks/useTokenList'
 import { useEffect, useState } from 'react'
-import { formatFixed } from 'utils/formatFixed'
+import { compactFormat } from 'utils/formatFixed'
 import { chain } from 'wagmi'
 import { Data } from './MarketplaceActivityCard'
 interface MarketplaceTransactionCardProps {
@@ -72,7 +72,7 @@ export const MarketplaceTransactionCard = ({ data }: MarketplaceTransactionCardP
           <Flex alignItems={'end'} width={'full'}>
             <Text> listed at</Text>
             <Text pl={1} fontSize={14} textColor={'white'} fontWeight="700">
-              {formatFixed(data.amount, { decimals: curreny?.decimals })} {curreny?.symbol}
+              {compactFormat(data.amount, { decimals: curreny?.decimals })} {curreny?.symbol}
             </Text>
           </Flex>
         </Flex>
