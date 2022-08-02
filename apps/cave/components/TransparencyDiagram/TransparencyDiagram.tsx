@@ -31,6 +31,7 @@ export function TransparencyDiagram() {
         console.log(e, n)
       }}
       fitView
+      fitViewOptions={{ padding: 0, includeHiddenNodes: false }}
       defaultEdgeOptions={{
         type: ConnectionLineType.SimpleBezier,
         style: { ...edgeStyle },
