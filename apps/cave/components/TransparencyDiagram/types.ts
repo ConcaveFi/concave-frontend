@@ -1,7 +1,4 @@
-export enum AddressTypeEnum {
-  TOKEN = 'token',
-  CONTRACT = 'address',
-}
+import { AddressTypeEnum } from './nodes'
 
 // export enum ChainEnum {
 //   AVAX = 'snowtrace.io',

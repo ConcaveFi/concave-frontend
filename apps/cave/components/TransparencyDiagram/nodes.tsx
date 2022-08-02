@@ -6,7 +6,12 @@ import {
   PCNV_ADDRESS,
   STAKING_CONTRACT,
 } from '@concave/core'
-import { AddressTypeEnum } from './types'
+
+export const enum AddressTypeEnum {
+  TOKEN = 'token',
+  CONTRACT = 'address',
+  MULTISIG = 'address',
+}
 
 export const nodes = [
   {
@@ -48,7 +53,7 @@ export const nodes = [
     id: 'Concave Treasury',
     data: {
       label: 'Concave Treasury',
-      addressType: AddressTypeEnum.CONTRACT,
+      addressType: AddressTypeEnum.MULTISIG,
       address: '0x226e7AF139a0F34c6771DeB252F9988876ac1Ced',
     },
     position: { x: 0, y: 200 },
@@ -59,7 +64,7 @@ export const nodes = [
     id: 'CO-OP Treasury',
     data: {
       label: 'CO-OP Treasury',
-      addressType: AddressTypeEnum.CONTRACT,
+      addressType: AddressTypeEnum.MULTISIG,
       address: '0x93249d69636124ab311798f047dc1a8a94dd0a9e',
     },
     position: { x: 0, y: 300 },
@@ -69,7 +74,7 @@ export const nodes = [
     id: 'Policy Multisig',
     data: {
       label: 'Policy Multisig',
-      addressType: AddressTypeEnum.CONTRACT,
+      addressType: AddressTypeEnum.MULTISIG,
       address: '0x4461f141a47e2858B49e7A3572E08Acb6b43F8a9',
     },
     position: { x: 0, y: 400 },
