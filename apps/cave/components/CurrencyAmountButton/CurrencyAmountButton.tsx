@@ -3,6 +3,7 @@ import { Button, ButtonProps } from '@concave/ui'
 import { useModals } from 'contexts/ModalsContext'
 import { useApprove } from 'hooks/useApprove'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
+import { compactFormat } from 'utils/formatFixed'
 import { useAccount } from 'wagmi'
 
 export const useCurrencyButtonState = (
@@ -28,7 +29,9 @@ export const useCurrencyButtonState = (
     fetching: { disabled, isLoading, loadingText: `Loading ${symbol} info` },
     insufficient: {
       disabled,
-      children: `Insufficient ${amountInfo ? amount.toSignificant(6) : ''} ${symbol}`,
+      children: `Insufficient ${
+        amountInfo ? compactFormat(amount.quotient.toString(), amount.currency) : ''
+      } ${symbol}`,
     },
     waitingWallet: { disabled, isLoading, loadingText: 'Approve in wallet' },
     successful: { disabled, children: 'Approved' },

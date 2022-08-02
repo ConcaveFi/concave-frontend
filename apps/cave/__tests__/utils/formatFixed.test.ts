@@ -1,5 +1,5 @@
 import { BigNumber } from 'ethers'
-import { formatFixed } from '../../utils/formatFixed'
+import { compactFormat, formatFixed } from '../../utils/formatFixed'
 
 describe('test numberMask', () => {
   it('test with string', async () => {
@@ -18,5 +18,19 @@ describe('test numberMask', () => {
     expect(formatFixed('0199900000000000000', { places: 2, decimals: 17 })).toBe('1.99')
     expect(formatFixed('0199900000000000000', { places: 2, decimals: 16 })).toBe('19.99')
     expect(formatFixed('10', { places: 2, decimals: 0 })).toBe('10.00')
+  })
+})
+
+describe('compactFormat K, M, B ...', () => {
+  it('Test K, M, B', async () => {
+    expect(compactFormat('9000', { decimals: 1 })).toBe('900')
+    expect(compactFormat('1000', { decimals: 0 })).toBe('1K')
+    expect(compactFormat('1000000', { decimals: 0 })).toBe('1M')
+    expect(compactFormat('1000000000', { decimals: 0 })).toBe('1B')
+    expect(compactFormat('1100', { decimals: 0 })).toBe('1.1K')
+  })
+
+  it('Small number', async () => {
+    expect(compactFormat('0000001', { decimals: 6 })).toBe('< 0.01')
   })
 })
