@@ -1,4 +1,4 @@
-import { WrappedEdgeLabel } from './CustomEdges/WrappedEdgeLabel'
+import { WrappedEdgeLabel } from './WrappedEdgeLabel'
 
 export const labelStyle = {
   fill: 'white',
