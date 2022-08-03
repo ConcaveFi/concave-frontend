@@ -35,7 +35,7 @@ const TestnetIndicator = () => {
     chain?.testnet && (
       <Box textAlign={'center'} pt={3}>
         <Text color={'goldenrod'} fontWeight={'semibold'}>
-          Connected to Rinkeby
+          Connected to {chain.name}
         </Text>
         <ButtonLink variant="secondary" size="medium" fontSize={'lg'} href="/faucet">
           Go to faucet
