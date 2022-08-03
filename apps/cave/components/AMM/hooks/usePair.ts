@@ -52,7 +52,7 @@ export const usePairs = <T = Pair[]>(
   maxHops = 3,
   queryOptions?: UsePairsQueryOptions<T>,
 ) => {
-  const enabled = tokenA && tokenB && !tokenA?.equals(tokenB)
+  const enabled = !!tokenA?.address && !!tokenB?.address && !tokenA.equals(tokenB)
   const provider = useProvider()
   const result = useQuery(
     ['pairs', sortAddresses(tokenA, tokenB), maxHops, tokenA?.chainId],
@@ -77,7 +77,7 @@ export const usePairs = <T = Pair[]>(
     },
   )
 
-  useBlockNumber({ watch: true, onBlock: () => !!enabled && result.refetch() })
+  useBlockNumber({ watch: true, onBlock: () => result.refetch(), enabled })
 
   return result
 }

@@ -1,4 +1,4 @@
-import { Currency } from '@concave/core'
+import { Currency, CurrencyAmount, ZERO } from '@concave/core'
 import { Trade, TradeType } from '@concave/gemswap-sdk'
 import { useLinkedCurrencyFields } from 'components/CurrencyAmountField'
 import { useCallback, useMemo, useState } from 'react'
@@ -23,46 +23,42 @@ export const useSwapState = () => {
   const maxHops = settings.multihops ? 3 : 1
 
   // the input user typed in, the other input value is then derived from it
-  const [exactAmount, setExactAmount] = useState(toAmount(0, currencies[0]))
+  const [exactAmount, setExactAmount] = useState(ZERO)
 
   const { onChangeField, lastUpdated } = useLinkedCurrencyFields({
     currencies,
     onChangeCurrencies,
-    onChangeAmount: setExactAmount,
+    onChangeAmount: (enteredAmount) => setExactAmount(enteredAmount.quotient),
   })
 
   const tradeType = lastUpdated === 0 ? TradeType.EXACT_INPUT : TradeType.EXACT_OUTPUT
   const otherCurrency = currencies[lastUpdated === 0 ? 1 : 0]
+  const exactCurrencyAmount = CurrencyAmount.fromRawAmount(currencies[lastUpdated], exactAmount)
 
-  const trade = useTrade(exactAmount, otherCurrency, { tradeType, maxHops })
+  const trade = useTrade(exactCurrencyAmount, otherCurrency, { tradeType, maxHops })
+
+  const _trade = useMemo(
+    () =>
+      trade.isSuccess
+        ? trade.data
+        : makeTradePlaceholder(exactCurrencyAmount, otherCurrency, tradeType),
+    [exactCurrencyAmount, otherCurrency, trade.data, trade.isSuccess, tradeType],
+  )
 
   const switchFields = useCallback(() => {
     const otherField = lastUpdated === 0 ? 1 : 0
-    // const newAmount = CurrencyAmount.fromRawAmount(currencies[lastUpdated], amounts[lastUpdated])
-    onChangeField(otherField)(trade.data.outputAmount)
-  }, [trade, lastUpdated, onChangeField])
+    onChangeField(otherField)(otherField === 0 ? _trade.outputAmount : _trade.inputAmount)
+  }, [_trade, lastUpdated, onChangeField])
 
   return useMemo(
     () => ({
       error: trade.error as string,
-      trade: trade.isSuccess
-        ? trade.data
-        : makeTradePlaceholder(exactAmount, otherCurrency, tradeType),
+      trade: _trade,
       onChangeInput: onChangeField(0),
       onChangeOutput: onChangeField(1),
       switchFields,
       onReset: () => onChangeField(0)(toAmount(0, currencies[0])),
     }),
-    [
-      trade.error,
-      trade.isSuccess,
-      trade.data,
-      exactAmount,
-      otherCurrency,
-      tradeType,
-      onChangeField,
-      switchFields,
-      currencies,
-    ],
+    [trade.error, _trade, onChangeField, switchFields, currencies],
   )
 }

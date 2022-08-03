@@ -37,14 +37,13 @@ const updateQuery = ({ currency0, currency1, chainId }: UpdateCurrenciesQuery) =
   Router.replace({ query }, undefined, { shallow: true })
 }
 
-const getQueryCurrenciesKey = () => `${Router.pathname} query currencies`
+const getQueryCurrenciesKey = (chainId = 1) => `${Router.pathname} query currencies ${chainId}`
 
 type CurrencyChainMap = { [chain in ChainId]?: [Currency, Currency] }
 const defaultCurrencies: Record<string, CurrencyChainMap> = {}
 export const setRouteDefaultCurrencies = (pathname: `/${string}`, currencies: CurrencyChainMap) =>
   (defaultCurrencies[pathname] = currencies)
 
-// https://react-query.tanstack.com/guides/ssr#caveat-for-nextjs-rewrites
 export const useQueryCurrencies = () => {
   const { query, pathname } = useRouter()
   const { chain } = useNetwork()
@@ -56,7 +55,7 @@ export const useQueryCurrencies = () => {
   const queryHasCurrency = query.currency0 || query.currency1
 
   const { data: currencies, isFetching } = useQuery<[Currency, Currency]>(
-    [getQueryCurrenciesKey(), chainId],
+    getQueryCurrenciesKey(chainId),
     async () => {
       const currency0 = getQueryValue(query, 'currency0')
       const currency1 = getQueryValue(query, 'currency1')
@@ -76,13 +75,14 @@ export const useQueryCurrencies = () => {
       refetchOnMount: true,
       refetchOnReconnect: false,
       refetchOnWindowFocus: false,
+      notifyOnChangeProps: 'tracked',
     },
   )
 
   const onChangeCurrencies = useCallback(
     (currencies: [Currency, Currency]) => {
       updateQuery({ chainId: chain?.id, currency0: currencies[0], currency1: currencies[1] })
-      queryClient.setQueryData([getQueryCurrenciesKey(), chain?.id], currencies)
+      queryClient.setQueryData(getQueryCurrenciesKey(chain?.id), currencies)
     },
     [queryClient, chain?.id],
   )

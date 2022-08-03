@@ -53,7 +53,7 @@ export function NetworkMismatch({
             variant="secondary"
             size="medium"
             onClick={() => {
-              push({ query: { chainId: activeChainId } }, undefined, { shallow: true })
+              push({ query: {} }, undefined, { shallow: true })
               onReset?.(activeChainId)
             }}
           >
