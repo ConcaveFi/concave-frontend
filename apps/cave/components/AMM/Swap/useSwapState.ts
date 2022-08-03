@@ -33,7 +33,8 @@ export const useSwapState = () => {
 
   const tradeType = lastUpdated === 0 ? TradeType.EXACT_INPUT : TradeType.EXACT_OUTPUT
   const otherCurrency = currencies[lastUpdated === 0 ? 1 : 0]
-  const exactCurrencyAmount = CurrencyAmount.fromRawAmount(currencies[lastUpdated], exactAmount)
+  const exactCurrencyAmount =
+    currencies[lastUpdated] && CurrencyAmount.fromRawAmount(currencies[lastUpdated], exactAmount)
 
   const trade = useTrade(exactCurrencyAmount, otherCurrency, { tradeType, maxHops })
 
