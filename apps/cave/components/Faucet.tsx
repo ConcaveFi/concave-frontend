@@ -1,26 +1,12 @@
 import { ChainId, DAI, NATIVE } from '@concave/core'
-import { CloseIcon } from '@concave/icons'
-import {
-  Box,
-  Button,
-  Card,
-  Image,
-  Link,
-  Modal,
-  SlideFade,
-  Stack,
-  Text,
-  useDisclosure,
-} from '@concave/ui'
+import { Button, Image, Link, Modal, Stack, Text } from '@concave/ui'
 import { Wallet } from 'ethers'
 import { hexlify, parseEther, parseUnits } from 'ethers/lib/utils'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { getTxExplorer } from 'lib/getTransactionExplorer'
 import { concaveProvider } from 'lib/providers'
-import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
-import { useAccount, useContractWrite, useNetwork } from 'wagmi'
-import { useWorthyUser } from './DevelopGateway'
+import { useAccount, useContractWrite } from 'wagmi'
 
 const faucetKey = process.env.NEXT_PUBLIC_FAUCET_PK
 const faucet = faucetKey && new Wallet(faucetKey, concaveProvider(ChainId.RINKEBY))
@@ -156,75 +142,5 @@ const Faucet = ({ isOpen, onClose }) => {
         On the swap page you can exchange tDai for CNV to start messing around!
       </Text>
     </Modal>
-  )
-}
-
-export const TestnetIndicator = () => {
-  const { chain } = useNetwork()
-  const { isUserWorthy } = useWorthyUser()
-
-  const [isOpen, setIsOpen] = useState(chain?.testnet && isUserWorthy)
-  const onClose = () => setIsOpen(false)
-
-  useEffect(() => {
-    setIsOpen(chain?.testnet && isUserWorthy)
-  }, [isUserWorthy, chain?.testnet])
-
-  const minterModal = useDisclosure()
-
-  return (
-    <SlideFade in={isOpen} unmountOnExit offsetY={-10}>
-      <Box pos="fixed" insetX={0} bottom={8} maxW="min" mx="auto" zIndex={10}>
-        <Card
-          variant="secondary"
-          p={5}
-          direction={{ base: 'column', sm: 'row' }}
-          align="center"
-          rounded="3xl"
-          shadow="Up for Blocks"
-          pos="relative"
-          overflow="visible"
-          gap={2}
-        >
-          <Stack spacing={0}>
-            <Text fontWeight="bold" whiteSpace="nowrap">
-              {`You're`} currently on{' '}
-              <Text
-                as="span"
-                bgGradient="linear(to-r, #7a58d6, #7DE0FF, #7a58d6, #84E2FF)"
-                filter="drop-shadow(0px 0px 10px rgba(240, 255, 245, 0.3))"
-                bgClip="text"
-              >
-                {chain?.name}
-              </Text>{' '}
-              testnet
-            </Text>
-
-            <Text color="text.low" fontWeight="medium">
-              Get some test tokens on the faucet!
-            </Text>
-          </Stack>
-          <Stack spacing={1} align="center" ml={{ base: 0, sm: 4 }}>
-            <Button variant="primary" px={4} py={2} h="min" onClick={minterModal.onOpen}>
-              Open Faucet
-            </Button>
-          </Stack>
-
-          <Button
-            bg="blackAlpha.700"
-            border="2px solid white"
-            p={1.5}
-            rounded="full"
-            pos="absolute"
-            top="-4px"
-            right="-4px"
-            onClick={onClose}
-          >
-            <CloseIcon w="8px" h="8px" />
-          </Button>
-        </Card>
-        <Faucet isOpen={minterModal.isOpen} onClose={minterModal.onClose} />
-      </Box>
-    </SlideFade>
   )
 }

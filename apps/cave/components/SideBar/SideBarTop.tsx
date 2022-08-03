@@ -5,7 +5,7 @@ import { ButtonLink } from 'components/ButtonLink'
 import { ConnectButton, UserWallet } from 'components/ConnectWallet'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { useAccount } from 'wagmi'
+import { useAccount, useNetwork } from 'wagmi'
 
 const UserCnvBalance = () => {
   const networkId = useCurrentSupportedNetworkId()
@@ -25,6 +25,22 @@ const UserCnvBalance = () => {
           CNV
         </Text>
       </Flex>
+    )
+  )
+}
+
+const TestnetIndicator = () => {
+  const { chain } = useNetwork()
+  return (
+    chain?.testnet && (
+      <Box textAlign={'center'} pt={3}>
+        <Text color={'goldenrod'} fontWeight={'semibold'}>
+          Connected to {chain.name}
+        </Text>
+        <ButtonLink variant="secondary" size="medium" fontSize={'lg'} href="/faucet">
+          Go to faucet
+        </ButtonLink>
+      </Box>
     )
   )
 }
@@ -60,6 +76,7 @@ function SideBarTop() {
           <UserCnvBalance />
         </Box>
       </Stack>
+      <TestnetIndicator />
     </Box>
   )
 }
