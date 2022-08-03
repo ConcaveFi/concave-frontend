@@ -20,9 +20,16 @@ export const PCNVConfirmationModal: React.FC<PCNVConfirmationModalProps> = ({
   redeemMax,
 }) => {
   const convertedValue = (+formatEther(amount || 0) * difference)?.toFixed(12) || '0'
-  const CNVAmount = formatFixed(parseEther(difference?.toFixed(12) || '0'), { places: 5 })
   return (
-    <Modal isOpen={isOpen} title="" hideClose onClose={onClose}>
+    <Modal
+      isOpen={isOpen}
+      title=""
+      hideClose
+      onClose={onClose}
+      isCentered
+      bluryOverlay
+      motionPreset="slideInBottom"
+    >
       <Flex w="300px" h="320px" rounded={'inherit'} direction="column" gap={4}>
         <ImageContainer />
         <Flex
