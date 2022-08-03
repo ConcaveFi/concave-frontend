@@ -110,6 +110,11 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
     if (!hasDetails) toggleDetails()
   }, [hasDetails])
 
+  const allowedpCNVTokens = {
+    pCNV: true,
+    tpCNV: true,
+  }
+
   return (
     <>
       <Flex
@@ -187,7 +192,13 @@ export function SwapPage({ currencies: serverPropsCurrencies }) {
               <TradeDetails trade={trade.data} settings={settings} />
             </Collapse>
 
-            <PcnvNotification currencyAmount={trade?.data?.outputAmount} />
+            <PcnvNotification
+              isOpen={
+                allowedpCNVTokens[trade?.data?.inputAmount?.currency?.symbol] ||
+                allowedpCNVTokens[trade?.data?.outputAmount?.currency?.symbol]
+              }
+              currencyAmount={trade?.data?.outputAmount}
+            />
 
             <Button variant="primary" size="large" w="full" {...swapButtonProps} />
 
