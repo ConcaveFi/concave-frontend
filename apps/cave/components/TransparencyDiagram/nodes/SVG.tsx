@@ -1,6 +1,12 @@
 import { ShapeSettingsType } from '../types'
 
-export const SVG = ({ shapeSettings }: { shapeSettings: ShapeSettingsType }) => {
+export const SVG = ({
+  shapeSettings,
+  children,
+}: {
+  shapeSettings: ShapeSettingsType
+  children?: JSX.Element
+}) => {
   return (
     <svg
       style={{ margin: 'auto', overflow: 'visible' }}
@@ -9,7 +15,7 @@ export const SVG = ({ shapeSettings }: { shapeSettings: ShapeSettingsType }) => 
       viewBox={shapeSettings.viewBox}
       fill="none"
     >
-      <path d={shapeSettings.path} fill={shapeSettings.fill} />
+      {children ? children : <path d={shapeSettings.path} fill={shapeSettings.fill} />}
     </svg>
   )
 }

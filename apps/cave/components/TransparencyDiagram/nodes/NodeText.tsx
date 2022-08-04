@@ -10,6 +10,7 @@ export const NodeText = ({
   shapeSettings: ShapeSettingsType
   contractMultiLine?: boolean
 }) => {
+  const explorerURL = data.chain ? data.chain : 'etherscan.io'
   return (
     <Box
       sx={{
@@ -23,11 +24,13 @@ export const NodeText = ({
       <Text color={'white'} fontSize={'0.75rem'} fontWeight={'bold'}>
         {data.label}
       </Text>
-      <Text color={'white'} fontSize={'0.65rem'} fontWeight={''}>
-        <Link href={`https://etherscan.io/${data.addressType}/${data.address}`} target="_blank">
-          View {contractMultiLine && <br />} contract
-        </Link>
-      </Text>
+      {data.address && (
+        <Text color={'white'} fontSize={'0.65rem'} fontWeight={''}>
+          <Link href={`https://${explorerURL}/${data.addressType}/${data.address}`} target="_blank">
+            View {contractMultiLine && <br />} contract
+          </Link>
+        </Text>
+      )}
     </Box>
   )
 }

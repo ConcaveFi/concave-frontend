@@ -1,18 +1,7 @@
+import { EdgeColors, edgeStyle, labelStyle } from './edgeStyles'
 import { WrappedEdgeLabel } from './WrappedEdgeLabel'
 
-export const labelStyle = {
-  fill: 'white',
-  stroke: 'black',
-  strokeWidth: '3',
-  paintOrder: 'stroke',
-  fontSize: '0.75rem',
-}
-
-export const edgeStyle = {
-  strokeWidth: 2.25,
-}
-
-export const edges = [
+export const generalEdges = [
   {
     id: 'aCNV-CNV',
     source: 'aCNV',
@@ -79,7 +68,7 @@ export const edges = [
     sourceHandle: 'rightSource',
     targetHandle: 'leftTarget',
     animated: true,
-    style: { ...edgeStyle, stroke: 'orange' },
+    style: { ...edgeStyle, stroke: EdgeColors.Orange },
   },
   {
     id: 'CO-OP Treasury-AccrualBondsV1 (Proxy)',
@@ -88,7 +77,7 @@ export const edges = [
     sourceHandle: 'rightSource',
     targetHandle: 'leftTarget',
     animated: true,
-    style: { ...edgeStyle, stroke: 'orange' },
+    style: { ...edgeStyle, stroke: EdgeColors.Orange },
   },
   {
     id: 'Policy Multisig-AccrualBondsV1 (Proxy)',
@@ -97,7 +86,7 @@ export const edges = [
     sourceHandle: 'rightSource',
     targetHandle: 'leftTarget',
     animated: true,
-    style: { ...edgeStyle, stroke: 'orange' },
+    style: { ...edgeStyle, stroke: EdgeColors.Orange },
   },
   {
     id: 'Concave Treasury-StakingV1 (Proxy)',
@@ -106,7 +95,7 @@ export const edges = [
     sourceHandle: 'rightSource',
     targetHandle: 'leftTarget',
     animated: true,
-    style: { ...edgeStyle, stroke: 'orange' },
+    style: { ...edgeStyle, stroke: EdgeColors.Orange },
   },
   {
     id: 'CO-OP Treasury-StakingV1 (Proxy)',
@@ -115,7 +104,7 @@ export const edges = [
     sourceHandle: 'rightSource',
     targetHandle: 'leftTarget',
     animated: true,
-    style: { ...edgeStyle, stroke: 'orange' },
+    style: { ...edgeStyle, stroke: EdgeColors.Orange },
   },
   {
     id: 'Policy Multisig-StakingV1 (Proxy)',
@@ -124,7 +113,7 @@ export const edges = [
     sourceHandle: 'rightSource',
     targetHandle: 'leftTarget',
     animated: true,
-    style: { ...edgeStyle, stroke: 'orange' },
+    style: { ...edgeStyle, stroke: EdgeColors.Orange },
   },
 
   {
@@ -159,7 +148,7 @@ export const edges = [
     target: 'AccrualBondsV1 (Impl)',
     sourceHandle: 'bottomSource',
     targetHandle: 'topTarget',
-    style: { ...edgeStyle, stroke: '#079D7C' },
+    style: { ...edgeStyle, stroke: EdgeColors.Green },
     animated: true,
   },
 
@@ -170,7 +159,7 @@ export const edges = [
     sourceHandle: 'bottomSource',
     targetHandle: 'topTarget',
     label: 'Value goes into shuttle',
-    style: { ...edgeStyle, stroke: '#079D7C' },
+    style: { ...edgeStyle, stroke: EdgeColors.Green },
     animated: true,
   },
 
@@ -182,7 +171,7 @@ export const edges = [
     targetHandle: 'topTarget',
     label: (
       <WrappedEdgeLabel
-        id={'Concave Treasury-CNV'}
+        id={'StakingV1 (Proxy)-StakingV1 (Impl)'}
         label={'Proxy delegates calls to implementation'}
         labelStyle={labelStyle}
       />
@@ -190,7 +179,7 @@ export const edges = [
     labelStyle: {
       transform: 'translate(-39.5px, 20px)',
     },
-    style: { ...edgeStyle, stroke: 'cornflowerblue' },
+    style: { ...edgeStyle, stroke: EdgeColors.CornflowerBlue },
     animated: true,
   },
 
@@ -205,7 +194,7 @@ export const edges = [
       transform: 'translate(70px, 0px)',
       ...labelStyle,
     },
-    style: { ...edgeStyle, stroke: 'cornflowerblue' },
+    style: { ...edgeStyle, stroke: EdgeColors.CornflowerBlue },
     animated: true,
   },
 
@@ -215,7 +204,7 @@ export const edges = [
     target: 'StakingV1 (Impl)',
     sourceHandle: 'rightSource',
     targetHandle: 'bottomTarget',
-    style: { ...edgeStyle, stroke: 'cornflowerblue' },
+    style: { ...edgeStyle, stroke: EdgeColors.CornflowerBlue },
     animated: true,
   },
   {

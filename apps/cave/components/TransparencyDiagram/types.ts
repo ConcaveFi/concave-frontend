@@ -1,19 +1,21 @@
-import { AddressTypeEnum } from './nodes'
+import { AddressTypeEnum } from './nodes/nodes'
 
-// export enum ChainEnum {
-//   AVAX = 'snowtrace.io',
-// }
+export enum ChainEnum {
+  ETH = 'etherscan.io',
+  AVAX = 'snowtrace.io',
+  BSC = 'bscscan.com/',
+}
 
 export type NodeDisplayData = {
   label: string
-  // chain?: ChainEnum
+  chain?: ChainEnum
   address: string
   addressType: AddressTypeEnum
 }
 
 export type ShapeSettingsType = {
-  path: string
-  fill: string
+  path?: string
+  fill?: string
   height: string
   width: string
   viewBox: string
