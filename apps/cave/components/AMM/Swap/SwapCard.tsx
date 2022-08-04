@@ -1,4 +1,4 @@
-import { CHAIN_NAME } from '@concave/core'
+import { CHAIN_NAME, PCNV } from '@concave/core'
 import { Button, Card, Collapse, Text, useDisclosure } from '@concave/ui'
 import { AddTokenToWalletButton } from 'components/AddTokenToWalletButton'
 import {
@@ -16,9 +16,11 @@ import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useState } from 'react'
 import { toAmount } from 'utils/toAmount'
 import { NetworkMismatch } from '../NetworkMismatch'
+import { PcnvNotification } from './PcnvNotification'
 import { TradeDetails } from './TradeDetails'
 
 export function SwapCard() {
@@ -42,6 +44,8 @@ export function SwapCard() {
     recipient,
     onSwapClick: () => (isExpertMode ? swapTx.write() : confirmationModal.onOpen()),
   })
+
+  const networkId = useCurrentSupportedNetworkId()
 
   return (
     <>
@@ -77,6 +81,14 @@ export function SwapCard() {
           trade={trade}
           inputAmount={trade.inputAmount}
           outputAmount={trade.outputAmount}
+        />
+
+        <PcnvNotification
+          isOpen={
+            PCNV[networkId].equals(trade.inputAmount?.currency) ||
+            PCNV[networkId].equals(trade.outputAmount?.currency)
+          }
+          currencyAmount={trade.outputAmount}
         />
 
         <Button variant="primary" size="large" w="full" {...swapButtonProps} />
