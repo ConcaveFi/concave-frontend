@@ -1,7 +1,6 @@
 import { Container, Flex } from '@concave/ui'
 import { AnimatePresence } from 'framer-motion'
 import { useIsMounted } from 'hooks/useIsMounted'
-import { useNetwork } from 'wagmi'
 import SecurityBanner from './SecurityBanner'
 import { SideBar } from './SideBar/SideBar'
 
@@ -12,7 +11,6 @@ export const DefaultLayout = ({ children }) => {
 }
 
 export const Layout = ({ children }) => {
-  const { chain } = useNetwork()
   return (
     <Flex direction={{ base: 'column', md: 'row' }}>
       <SideBar />
