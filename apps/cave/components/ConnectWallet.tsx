@@ -44,12 +44,12 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
           const itsConnect = connector.id === pendingConnector?.id
           return (
             <Button
-              cursor={itsConnect ? 'default' : 'pointer'}
+              cursor={'pointer'}
               w="100%"
-              shadow={itsConnect ? 'down' : 'Up Small'}
-              _hover={!itsConnect && { shadow: 'Up Big' }}
-              _active={!itsConnect && { shadow: 'down' }}
-              _focus={!itsConnect && { shadow: 'Up Big' }}
+              shadow={'Up Small'}
+              _hover={{ shadow: 'Up Big' }}
+              _active={{ shadow: 'down' }}
+              _focus={{ shadow: 'Up Big' }}
               size="large"
               leftIcon={
                 <Image
@@ -60,7 +60,7 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
               }
               key={connector.id}
               onClick={() => {
-                if (!itsConnect) connect({ connector })
+                connect({ connector })
               }}
             >
               {connector.name}
