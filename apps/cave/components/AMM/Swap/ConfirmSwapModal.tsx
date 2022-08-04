@@ -133,7 +133,7 @@ const PricesUpdated = ({
 }
 
 function useAcceptNewTrades(trade: Trade<Currency, Currency, TradeType>) {
-  const [isAccepted, setIsAccepted] = useState(false)
+  const [isAccepted, setIsAccepted] = useState(true)
 
   const previousTrade = useRef<typeof trade>()
   const currentTrade = useRef(trade)
