@@ -4,6 +4,7 @@ import {
   useFilterByStakePool,
 } from 'components/NftFilters/Filters/hooks/useFilterByStakePool'
 import { NftSort, NftSortMethod } from 'components/NftFilters/Sorters/hooks/useNftSort'
+import { BigNumber } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
 import { useState } from 'react'
@@ -30,8 +31,10 @@ export const useMarketplaceDashbord = () => {
     StakePoolFilterEnum.FILTER_BY_180_DAYS,
     StakePoolFilterEnum.FILTER_BY_360_DAYS,
   ])
+  const now = BigNumber.from(Date.now()).div(1000)
   const { filterByStakePool } = useFilterByStakePool(stakeFilters)
   const nftPositions = salePositions
+    .filter((stakingPosition) => stakingPosition.market.deadline.gt(now))
     .filter((stakingPosition) => filterByStakePool(stakingPosition))
     .sort((current, previous) => sortFunction(current, previous))
   return {
