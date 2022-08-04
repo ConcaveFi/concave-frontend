@@ -14,11 +14,12 @@ import {
   Text,
 } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
-import { useEffect, useState } from 'react'
-import { usePreviousDistinct } from 'react-use'
+import { useCallback, useRef, useState } from 'react'
+import { useFirstMountState } from 'react-use'
 import { percentDifference } from 'utils/percentDifference'
+import { toPercent } from 'utils/toPercent'
 import { useFiatValue } from '../hooks/useFiatPrice'
-import { SwapSettings } from '../Swap/Settings'
+import { useSwapSettings } from '../Swap/Settings'
 import { ExpectedOutput, MinExpectedOutput } from './ExpectedOutput'
 import { RelativePrice } from './RelativePrice'
 
@@ -131,15 +132,37 @@ const PricesUpdated = ({
   )
 }
 
-const twoPercent = new Percent(2, 100) // 2%
+function useAcceptNewTrades(trade: Trade<Currency, Currency, TradeType>) {
+  const [isAccepted, setIsAccepted] = useState(false)
+
+  const previousTrade = useRef<typeof trade>()
+  const currentTrade = useRef(trade)
+  const isFirstMount = useFirstMountState()
+
+  const userSlippageTolerance = useSwapSettings((s) => s.settings.slippageTolerance)
+  const diff = percentDifference(trade.outputAmount, currentTrade.current?.outputAmount)
+
+  // if original trade, and new updated prices one, difference is more than users allowed slippage,
+  // asks to review before confirmation
+  if (!isFirstMount && diff?.greaterThan(toPercent(userSlippageTolerance))) {
+    previousTrade.current = currentTrade.current
+    currentTrade.current = trade
+    setIsAccepted(false)
+  }
+
+  const onAccept = useCallback(() => {
+    previousTrade.current = undefined
+    setIsAccepted(true)
+  }, [])
+
+  return { previousTrade: previousTrade.current, onAccept, isAccepted }
+}
 
 const ConfirmSwap = ({
   trade,
-  settings,
   onConfirm,
 }: {
   trade: Trade<Currency, Currency, TradeType>
-  settings: SwapSettings
   onConfirm: () => void
 }) => {
   const inputFiat = useFiatValue(trade.inputAmount)
@@ -147,15 +170,11 @@ const ConfirmSwap = ({
 
   const fiatPriceImpact = percentDifference(inputFiat.value, outputFiat.value)
 
-  const prevTrade = usePreviousDistinct(trade, (t) => {
-    const diff = percentDifference(t.outputAmount, trade.outputAmount)
-    return diff && diff.lessThan(twoPercent) && diff.greaterThan(twoPercent.multiply(-1))
-  })
+  const { slippageTolerance } = useSwapSettings((s) => ({
+    slippageTolerance: s.settings.slippageTolerance,
+  }))
 
-  const [hasAcceptedNewPrices, setAcceptedNewPrices] = useState(true)
-  useEffect(() => {
-    if (prevTrade?.outputAmount && hasAcceptedNewPrices) setAcceptedNewPrices(false)
-  }, [hasAcceptedNewPrices, prevTrade?.outputAmount])
+  const { previousTrade, onAccept, isAccepted } = useAcceptNewTrades(trade)
 
   return (
     <>
@@ -178,25 +197,15 @@ const ConfirmSwap = ({
       <Flex direction="column" rounded="2xl" mb={6} p={6} shadow="Down Medium" bg="blackAlpha.100">
         <ExpectedOutput outputAmount={trade.outputAmount} priceImpact={trade.priceImpact} />
         <StackDivider borderRadius="full" mx={-4} my={4} h={0.5} bg="stroke.secondary" />
-        <MinExpectedOutput trade={trade} slippageTolerance={settings.slippageTolerance} />
+        <MinExpectedOutput trade={trade} slippageTolerance={slippageTolerance} />
       </Flex>
 
-      <SlideFade in={prevTrade && !hasAcceptedNewPrices} offsetY={-20} unmountOnExit>
-        <PricesUpdated
-          prevTrade={prevTrade}
-          currentTrade={trade}
-          onAccept={() => setAcceptedNewPrices(true)}
-        />
+      <SlideFade in={!isAccepted} offsetY={-20} unmountOnExit>
+        <PricesUpdated prevTrade={previousTrade} currentTrade={trade} onAccept={onAccept} />
       </SlideFade>
 
-      <Button
-        isDisabled={!hasAcceptedNewPrices}
-        variant="primary"
-        size="large"
-        onClick={onConfirm}
-        w="full"
-      >
-        {hasAcceptedNewPrices ? 'Confirm Swap' : 'Accept new prices first'}
+      <Button isDisabled={!isAccepted} variant="primary" size="large" onClick={onConfirm} w="full">
+        {isAccepted ? 'Confirm Swap' : 'Accept new prices first'}
       </Button>
     </>
   )
@@ -204,7 +213,6 @@ const ConfirmSwap = ({
 
 export const ConfirmSwapModal = ({
   trade,
-  settings,
   isOpen,
   onClose,
   onConfirm,
@@ -212,7 +220,6 @@ export const ConfirmSwapModal = ({
   isOpen: boolean
   onClose: () => void
   trade: Trade<Currency, Currency, TradeType>
-  settings: SwapSettings
   onConfirm: () => void
 }) => {
   return (
@@ -223,7 +230,7 @@ export const ConfirmSwapModal = ({
       onClose={onClose}
       bodyProps={{ w: '400px' }}
     >
-      <ConfirmSwap trade={trade} settings={settings} onConfirm={onConfirm} />
+      <ConfirmSwap trade={trade} onConfirm={onConfirm} />
     </Modal>
   )
 }
