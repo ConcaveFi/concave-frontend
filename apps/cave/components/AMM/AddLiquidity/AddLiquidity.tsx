@@ -12,12 +12,12 @@ import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency
 import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
-import { useMemo } from 'react'
 import { toAmount } from 'utils/toAmount'
 import { useAccount } from 'wagmi'
 import { useQueryCurrencies } from '../hooks/useQueryCurrencies'
 import { NetworkMismatch } from '../NetworkMismatch'
 import useLiquidityData from './useLiquidityData'
+
 const AddSymbol = () => (
   <Flex align="center" justify="center">
     <Flex
@@ -42,17 +42,22 @@ export type LiquidityPool = {
 }
 
 function AddLiquidityContent({
-  currencies,
   liquidityModalClose,
+  currencies,
+  onChangeCurrencies,
 }: {
-  currencies: Currency[]
+  currencies: [Currency, Currency]
+  onChangeCurrencies?: (currencies: [Currency, Currency]) => void
   liquidityModalClose?: VoidFunction
 }) {
-  const { onChangeCurrencies, isNetworkMismatch, queryHasCurrency, currentChainId, queryChainId } =
-    useQueryCurrencies()
-
-  const { pair, firstFieldAmount, secondFieldAmount, onChangeFirstField, onChangeSecondField } =
-    useAddLiquidityState(currencies, onChangeCurrencies)
+  const {
+    pair,
+    firstFieldAmount,
+    secondFieldAmount,
+    onChangeFirstField,
+    onChangeSecondField,
+    onReset,
+  } = useAddLiquidityState(currencies, onChangeCurrencies)
 
   const addLPTx = useAddLiquidityTransaction(firstFieldAmount, secondFieldAmount)
 
@@ -82,13 +87,13 @@ function AddLiquidityContent({
         <CurrencyInputField
           currencyAmountIn={firstFieldAmount}
           onChangeAmount={onChangeFirstField}
-          CurrencySelector={SelectAMMCurrency}
+          CurrencySelector={onChangeCurrencies ? SelectAMMCurrency : undefined}
         />
         <AddSymbol />
         <CurrencyInputField
           currencyAmountIn={secondFieldAmount}
           onChangeAmount={onChangeSecondField}
-          CurrencySelector={SelectAMMCurrency}
+          CurrencySelector={onChangeCurrencies ? SelectAMMCurrency : undefined}
         />
       </Flex>
 
@@ -101,15 +106,13 @@ function AddLiquidityContent({
         {...addLiquidityButtonProps}
       />
 
-      <NetworkMismatch
-        isOpen={isNetworkMismatch && queryHasCurrency}
-        expectedChainId={queryChainId}
-        currentChainId={currentChainId}
-      >
-        <Text color="text.low">
-          Do you wanna drop this {CHAIN_NAME[queryChainId]} LP <br />
-          and restart on {CHAIN_NAME[currentChainId]}?
-        </Text>
+      <NetworkMismatch onReset={onReset}>
+        {({ queryChainId, activeChainId }) => (
+          <Text color="text.low">
+            Do you wanna drop this {CHAIN_NAME[queryChainId]} LP <br />
+            and restart on {CHAIN_NAME[activeChainId]}?
+          </Text>
+        )}
       </NetworkMismatch>
 
       <SupplyLiquidityModal
@@ -184,7 +187,6 @@ export const AddLiquidityModalButton = ({
 }: { label?: string; pair?: Pair } & ButtonProps) => {
   const { isDisconnected } = useAccount()
   const addLiquidityDisclosure = useDisclosure()
-  const currencies = useMemo(() => [pair?.token0, pair?.token1], [pair?.token0, pair?.token1])
   if (isDisconnected) return <ConnectButton />
   return (
     <>
@@ -218,7 +220,7 @@ export const AddLiquidityModalButton = ({
         }}
       >
         <AddLiquidityContent
-          currencies={currencies}
+          currencies={[pair?.token0, pair?.token1]}
           liquidityModalClose={addLiquidityDisclosure.onClose}
         />
       </Modal>
@@ -226,7 +228,8 @@ export const AddLiquidityModalButton = ({
   )
 }
 
-export const AddLiquidityCard = ({ currencies }: { currencies: Currency[] }) => {
+export const AddLiquidityCard = () => {
+  const { currencies, onChangeCurrencies } = useQueryCurrencies()
   return (
     <Card
       borderWidth={2}
@@ -236,7 +239,7 @@ export const AddLiquidityCard = ({ currencies }: { currencies: Currency[] }) => 
       gap={6}
       shadow="Up for Blocks"
     >
-      <AddLiquidityContent currencies={currencies} />
+      <AddLiquidityContent currencies={currencies} onChangeCurrencies={onChangeCurrencies} />
     </Card>
   )
 }

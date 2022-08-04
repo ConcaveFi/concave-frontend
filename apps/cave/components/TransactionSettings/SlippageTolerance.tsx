@@ -48,7 +48,9 @@ export const SlippageTolerance = ({
                 value === '' || (floatValue < maxSlippage && !!toPercent(floatValue))
               }
               size="medium"
-              onValueChange={({ floatValue }) => onValueChange(floatValue)}
+              onValueChange={({ floatValue }, { source }) =>
+                source === 'event' && onValueChange(floatValue)
+              }
             />
             <InputRightAddon color="text.low" fontWeight="semibold">
               %

@@ -28,7 +28,7 @@ export function BondBuyCard(props: {
   const rejectDisclosure = useDisclosure()
   const cnvPrice = useCNVPrice()
   const { currencyIn, currencyOut, userAddress, balance, signer, networkId } = useBondState()
-  const { settings, setSetting, isDefaultSettings, onClose } = useBondSettings()
+  const settings = useBondSettings((s) => s.settings)
   const [amountOut, setAmountOut] = useState<string>()
   const [amountIn, setAmountIn] = useState<CurrencyAmount<Currency>>(toAmount('0', DAI[networkId]))
   const useCurrencyState = useCurrencyButtonState(amountIn, BOND_ADDRESS[networkId])
@@ -126,12 +126,7 @@ export function BondBuyCard(props: {
         <Flex flex={1} align={'center'} justify="end" minWidth={100} gap={2}>
           <GasPrice />
           <HStack align="center" justify="end" py={{ base: 0, md: 5, lg: 0, xl: 5 }}>
-            <Settings
-              settings={settings}
-              setSetting={setSetting}
-              isDefaultSettings={isDefaultSettings}
-              onClose={onClose}
-            />
+            <Settings />
           </HStack>
         </Flex>
       </Flex>

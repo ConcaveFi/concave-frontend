@@ -12,19 +12,19 @@ const joinData = ({
   inputData: CandlestickData[]
   outputData: CandlestickData[]
 }) => {
-  return inputData.map((input, index) => {
-    const output = outputData.find((o) => o.time === input.time)
-    if (!output) {
-      return { time: input.time }
-    }
-    return {
-      time: input.time,
-      close: input.close / output.close,
-      high: input.high / output.high,
-      low: input.low / output.low,
-      open: input.open / output.open,
-    }
-  })
+  return inputData
+    .map((input, index) => {
+      const output = outputData.find((o) => o.time === input.time)
+      if (!output) return
+      return {
+        time: input.time,
+        close: input.close / output.close,
+        high: input.high / output.high,
+        low: input.low / output.low,
+        open: input.open / output.open,
+      }
+    })
+    .filter(Boolean)
 }
 
 export const useCandleStickChart = (
@@ -43,8 +43,16 @@ export const useCandleStickChart = (
   return useMemo(
     () => ({
       isLoading: fromQuery.isLoading || toQuery.isLoading,
+      isRefetching: fromQuery.isRefetching || toQuery.isRefetching,
       data: joinData({ inputData: fromQuery.data, outputData: toQuery.data }),
     }),
-    [fromQuery.isLoading, toQuery.isLoading, fromQuery.data, toQuery.data],
+    [
+      fromQuery.isLoading,
+      fromQuery.isRefetching,
+      fromQuery.data,
+      toQuery.isLoading,
+      toQuery.isRefetching,
+      toQuery.data,
+    ],
   )
 }
