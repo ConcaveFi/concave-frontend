@@ -40,7 +40,7 @@ export const TransactionErrorDialog = ({
   }, [isOpenProp])
   const onClose = () => {
     setIsOpen(false)
-    closeParentComponent()
+    closeParentComponent?.()
   }
   return (
     <Modal

@@ -19,6 +19,9 @@ export const getBestTrade = (
 ) => {
   if (!pairs || pairs.length === 0 || !exactAmount?.currency || !otherCurrency) return
 
+  // swap to receive 0 back?
+  if (exactAmount.equalTo(0) && tradeType === TradeType.EXACT_OUTPUT) throw InvalidTradeError
+
   // if the exact amount is 0, we search for the best route with some arbitrary amount
   const searchableTradeAmount = exactAmount.equalTo(0)
     ? toAmount(500, exactAmount.currency)

@@ -1,6 +1,7 @@
 import { CNV, Currency, DAI, FRAX, NATIVE, PCNV, USDC, WETH9 } from '@concave/core'
 import { QuestionIcon } from '@concave/icons'
-import { Button, Flex, Heading, Modal } from '@concave/ui'
+import { Button, Flex, Heading, Modal, Skeleton } from '@concave/ui'
+import { useQueryCurrencies } from 'components/AMM/hooks/useQueryCurrencies'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { defaultChains } from 'wagmi'
@@ -87,6 +88,9 @@ const AMMCurrencySelectorModal = ({
   )
 }
 
+const LoadingCurrencySelector = () => (
+  <Skeleton w="130px" h="30px" rounded="full" opacity={0.1} shadow="Up Small" />
+)
 const MarketTokens = ({
   selected,
   onSelect,
@@ -138,6 +142,10 @@ export const SelectAMMCurrency = ({
   selected?: Currency
   onSelect: (token: Currency) => void
 }) => {
+  const { isLoading } = useQueryCurrencies()
+
+  if (isLoading) return <LoadingCurrencySelector />
+
   return (
     <CurrencySelector
       selected={selected}

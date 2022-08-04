@@ -13,11 +13,11 @@ export const useCurrencyButtonState = (
 ) => {
   const { address } = useAccount()
   const { connectModal } = useModals()
-  const currency = amount.currency
-  const symbol = currency.symbol
-  const totalSupply = currency.wrapped.totalSupply
+  const currency = amount?.currency
+  const symbol = currency?.symbol
+  const totalSupply = currency?.wrapped.totalSupply
   const balance = useCurrencyBalance(currency, { watch: true })
-  const { allowance, ...approve } = useApprove(currency.wrapped, spender)
+  const { allowance, ...approve } = useApprove(currency?.wrapped, spender)
 
   const disabled = true
   const isLoading = true
@@ -35,11 +35,13 @@ export const useCurrencyButtonState = (
     },
     waitingWallet: { disabled, isLoading, loadingText: 'Approve in wallet' },
     successful: { disabled, children: 'Approved' },
+    'no currency': { disabled, children: 'Select a token' },
   } as const
 
   const state: keyof typeof props = (() => {
     if (!address) return 'disconected'
     if (balance.data?.lessThan(amount)) return 'insufficient'
+    if (!currency) return 'no currency'
     if (currency.isNative) return 'successful'
     if (approve.isError && approve.error['code'] !== 4001) return 'error'
     if (totalSupply.greaterThan(0) && allowance?.amount?.greaterThan(totalSupply))
