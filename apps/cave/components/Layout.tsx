@@ -1,11 +1,8 @@
 import { Container, Flex } from '@concave/ui'
 import { AnimatePresence } from 'framer-motion'
 import { useIsMounted } from 'hooks/useIsMounted'
-import dynamic from 'next/dynamic'
 import SecurityBanner from './SecurityBanner'
 import { SideBar } from './SideBar/SideBar'
-
-const TestnetIndicator = dynamic(() => import('./Faucet').then((module) => module.TestnetIndicator))
 
 export const DefaultLayout = ({ children }) => {
   const isMounted = useIsMounted()
@@ -24,7 +21,6 @@ export const Layout = ({ children }) => {
         p={2}
         pb="300px" // add a lil padding to the bottom of the page for better scroll experience
       >
-        <TestnetIndicator />
         <SecurityBanner />
         <AnimatePresence
           exitBeforeEnter
