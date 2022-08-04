@@ -1,7 +1,7 @@
 import { QuestionIcon } from '@concave/icons'
 import { HStack, Stack, Switch, Text, Tooltip } from '@concave/ui'
 import { Deadline, SlippageTolerance, TransactionSettings } from 'components/TransactionSettings'
-import { useTransactionSettings } from 'components/TransactionSettings/TransactionSettings'
+import { createTransactionSettingsStore } from 'components/TransactionSettings/TransactionSettings'
 
 const ToggleExpertMode = ({ isChecked, onToggle }) => {
   return (
@@ -47,17 +47,19 @@ const defaultSettings = {
 
 export type SwapSettings = typeof defaultSettings
 
-export const useSwapSettings = () => useTransactionSettings('swap', defaultSettings)
+export const useSwapSettings = createTransactionSettingsStore('swap', defaultSettings)
 
 // TODO: implement auto slippage
 const calculateAutoSlippage = () => 0.96
 
-export const Settings = ({
-  settings: { slippageTolerance, deadline, multihops, expertMode },
-  setSetting,
-  isDefaultSettings = true,
-  onClose,
-}) => {
+export const Settings = () => {
+  const {
+    settings: { slippageTolerance, deadline, multihops, expertMode },
+    onClose,
+    setSetting,
+    isDefaultSettings,
+  } = useSwapSettings()
+
   return (
     <TransactionSettings isDefaultSettings={isDefaultSettings} onClose={onClose}>
       <SlippageTolerance

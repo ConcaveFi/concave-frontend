@@ -8,19 +8,17 @@ import { toPercent } from 'utils/toPercent'
 import { useAccount, useNetwork } from 'wagmi'
 import { NoValidPairsError } from '../hooks/usePair'
 import { InsufficientLiquidityError } from '../hooks/useTrade'
-import { SwapSettings } from './Settings'
+import { useSwapSettings } from './Settings'
 
 export const useSwapButtonProps = ({
   trade,
   error,
   recipient,
-  settings,
   onSwapClick,
 }: {
   trade: Trade<Currency, Currency, TradeType>
   error: string
   recipient: string
-  settings: SwapSettings
   onSwapClick: () => void
 }): ButtonProps => {
   const { isConnecting } = useAccount()
@@ -30,6 +28,7 @@ export const useSwapButtonProps = ({
     trade.inputAmount,
     ROUTER_ADDRESS[trade.inputAmount?.currency.chainId],
   )
+  const isExpertMode = useSwapSettings((s) => s.settings.expertMode)
   if (useCurrencyState.state === 'disconected') return useCurrencyState.buttonProps
   /*
     Not Connected
@@ -64,7 +63,7 @@ export const useSwapButtonProps = ({
   /*
     Price impact
   */
-  if (!settings.expertMode && trade.priceImpact?.greaterThan(toPercent(20)))
+  if (!isExpertMode && trade.priceImpact?.greaterThan(toPercent(20)))
     return { children: 'Price impact is too high', isDisabled: true }
 
   /*

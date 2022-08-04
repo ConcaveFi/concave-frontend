@@ -2,26 +2,24 @@ import { Currency, CurrencyAmount } from '@concave/core'
 import { Trade, TradeType } from '@concave/gemswap-sdk'
 import { ExpandArrowIcon } from '@concave/icons'
 import { Button, Collapse, HStack, Stack } from '@concave/ui'
-import { GasPrice, RelativePrice, Settings, SwapSettings } from 'components/AMM'
+import { GasPrice, RelativePrice, Settings } from 'components/AMM'
 import { ExpectedOutput, MinExpectedOutput } from 'components/AMM/Swap/ExpectedOutput'
 import { TradeRoute } from 'components/AMM/Swap/TradeRoute'
 import { useReducer } from 'react'
 import { useSwapSettings } from './Settings'
 
-const TradeDetailsExpanded = ({
-  trade,
-  settings,
-}: {
-  trade: Trade<Currency, Currency, TradeType>
-  settings: SwapSettings
-}) =>
-  trade?.route && (
-    <Stack mb={4} p={4} w="full" shadow="Down Big" rounded="2xl">
-      <ExpectedOutput outputAmount={trade.outputAmount} priceImpact={trade.priceImpact} />
-      <MinExpectedOutput trade={trade} slippageTolerance={settings.slippageTolerance} />
-      <TradeRoute route={trade.route} />
-    </Stack>
+const TradeDetailsExpanded = ({ trade }: { trade: Trade<Currency, Currency, TradeType> }) => {
+  const settings = useSwapSettings((s) => ({ slippageTolerance: s.settings.slippageTolerance }))
+  return (
+    trade?.route && (
+      <Stack mb={4} p={4} w="full" shadow="Down Big" rounded="2xl">
+        <ExpectedOutput outputAmount={trade.outputAmount} priceImpact={trade.priceImpact} />
+        <MinExpectedOutput trade={trade} slippageTolerance={settings.slippageTolerance} />
+        <TradeRoute route={trade.route} />
+      </Stack>
+    )
   )
+}
 
 export function TradeDetails({
   trade,
@@ -32,8 +30,6 @@ export function TradeDetails({
   inputAmount: CurrencyAmount<Currency>
   outputAmount: CurrencyAmount<Currency>
 }) {
-  const { settings, onClose, setSetting, isDefaultSettings } = useSwapSettings()
-
   /*
     toggle trade details, only toggleable when there is a valid trade 
     auto hide when there is no details to show (inputs are emptied)
@@ -58,16 +54,11 @@ export function TradeDetails({
           </Button>
         </Collapse>
 
-        <Settings
-          settings={settings}
-          setSetting={setSetting}
-          isDefaultSettings={isDefaultSettings}
-          onClose={onClose}
-        />
+        <Settings />
       </HStack>
 
       <Collapse style={{ overflow: 'visible' }} in={hasDetails && isDetailsOpen}>
-        <TradeDetailsExpanded trade={trade} settings={settings} />
+        <TradeDetailsExpanded trade={trade} />
       </Collapse>
     </>
   )

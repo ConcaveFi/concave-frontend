@@ -15,7 +15,10 @@ export const useSwapTransaction = (
   const { address } = useAccount()
   const { chain } = useNetwork()
 
-  const { settings } = useSwapSettings()
+  const settings = useSwapSettings((s) => ({
+    deadline: s.settings.deadline,
+    slippageTolerance: s.settings.slippageTolerance,
+  }))
 
   /*
     temporary workaround for unknow issue with swapTokenForExactToken

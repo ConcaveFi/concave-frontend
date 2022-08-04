@@ -34,14 +34,13 @@ export function SwapCard() {
     },
   })
 
-  const { settings } = useSwapSettings()
+  const isExpertMode = useSwapSettings((s) => s.settings.expertMode)
 
   const swapButtonProps = useSwapButtonProps({
     trade,
     error,
     recipient,
-    settings,
-    onSwapClick: () => (settings.expertMode ? swapTx.write() : confirmationModal.onOpen()),
+    onSwapClick: () => (isExpertMode ? swapTx.write() : confirmationModal.onOpen()),
   })
 
   return (
@@ -70,7 +69,7 @@ export function SwapCard() {
           updateOutputValue={onChangeOutput}
         />
 
-        <Collapse in={settings.expertMode} style={{ overflow: 'visible' }}>
+        <Collapse in={isExpertMode} style={{ overflow: 'visible' }}>
           <CustomRecipient onChangeRecipient={setRecipient} />
         </Collapse>
 
@@ -95,7 +94,6 @@ export function SwapCard() {
 
       <ConfirmSwapModal
         trade={swapTx.trade}
-        settings={settings}
         isOpen={confirmationModal.isOpen}
         onClose={confirmationModal.onClose}
         onConfirm={() => swapTx.write()}

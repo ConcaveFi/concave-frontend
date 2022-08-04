@@ -10,33 +10,37 @@ import {
   Portal,
   Stack,
 } from '@concave/ui'
-import { useLocalStorage } from 'hooks/useLocalStorage'
-import { ReactNode, useCallback } from 'react'
+
+import { ReactNode } from 'react'
 import { shallowEqualObjects } from 'react-query/lib/core/utils'
 
-export const useTransactionSettings = <T extends Object>(
+import create from 'zustand'
+import { combine, persist } from 'zustand/middleware'
+
+export const createTransactionSettingsStore = <T extends Object>(
   transactionType: string,
   defaultSettings: T,
-): {
-  settings: T
-  setSetting: (v: Partial<T>) => void
-  onClose: () => void
-  isDefaultSettings: boolean
-} => {
-  const { data: settings, mutateAsync: setSettings } = useLocalStorage(
-    `${transactionType}-tx-settings`,
-    defaultSettings,
+) =>
+  create(
+    persist(
+      combine({ settings: defaultSettings, isDefaultSettings: true }, (set) => ({
+        setSetting: (settings: Partial<T>) =>
+          set((s) => ({ settings: { ...s.settings, ...settings } })),
+        onClose: () =>
+          set((s) => {
+            const settings = { ...defaultSettings, ...s.settings }
+            return {
+              settings,
+              isDefaultSettings: shallowEqualObjects(settings, defaultSettings),
+            }
+          }),
+      })),
+      {
+        name: `${transactionType}-tx-settings`,
+        partialize: (s) => ({ settings: s.settings, isDefaultSettings: s.isDefaultSettings }),
+      },
+    ),
   )
-  const onClose = useCallback(() => {
-    setSettings({ ...defaultSettings, ...settings })
-  }, [defaultSettings, setSettings, settings])
-  return {
-    settings,
-    setSetting: (s) => setSettings({ ...settings, ...s }),
-    onClose,
-    isDefaultSettings: shallowEqualObjects(settings, defaultSettings),
-  }
-}
 
 export const TransactionSettings = ({
   trigger,

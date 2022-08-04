@@ -19,7 +19,7 @@ const makeTradePlaceholder = (exactAmount, otherCurrency, tradeType) =>
 export const useSwapState = () => {
   const { currencies, onChangeCurrencies } = useQueryCurrencies()
 
-  const { settings } = useSwapSettings()
+  const settings = useSwapSettings((s) => ({ multihops: s.settings.multihops }))
   const maxHops = settings.multihops ? 3 : 1
 
   // the input user typed in, the other input value is then derived from it
