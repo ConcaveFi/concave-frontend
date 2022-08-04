@@ -1,10 +1,9 @@
-import { Currency, CurrencyAmount } from '@concave/core'
+import { Currency, CurrencyAmount, JSBI, ZERO } from '@concave/core'
 import { Pair } from '@concave/gemswap-sdk'
 import { usePair } from 'components/AMM/hooks/usePair'
 import { useLinkedCurrencyFields } from 'components/CurrencyAmountField'
-import { LinkedCurrencyFields } from 'components/CurrencyAmountField/useLinkedCurrencyFields'
-import { useCallback, useEffect, useState } from 'react'
-import { toAmount } from 'utils/toAmount'
+import { useCallback, useState } from 'react'
+import { updateArray } from 'utils/updateArray'
 
 const deriveAmount = (
   pair: Pair,
@@ -20,50 +19,59 @@ const deriveAmount = (
     return
   const price = pair.priceOf(exactAmount.currency.wrapped)
   const quoteAmount = price.quote(exactAmount.wrapped)
-  if (otherCurrency.isNative) return toAmount(quoteAmount.toExact(), otherCurrency)
-  return quoteAmount
+  return quoteAmount.quotient
 }
 
-type CurrencyAmountFields = {
-  first?: CurrencyAmount<Currency>
-  second?: CurrencyAmount<Currency>
-}
+const newAmount = (currency: Currency, amount: JSBI = ZERO) =>
+  currency && CurrencyAmount.fromRawAmount(currency, amount)
 
 export const useAddLiquidityState = (
-  initialCurrencies: Currency[],
-  onChangeCurrencies: (currencies: LinkedCurrencyFields) => void,
+  currencies: [Currency, Currency],
+  onChangeCurrencies?: (currencies: [Currency, Currency]) => void,
 ) => {
-  const [amounts, setAmounts] = useState<CurrencyAmountFields>({
-    first: toAmount(0, initialCurrencies[0]),
-    second: toAmount(0, initialCurrencies[1]),
+  const [amounts, setAmounts] = useState([ZERO, ZERO])
+
+  const pair = usePair(currencies[0]?.wrapped, currencies[1]?.wrapped, {
+    onSuccess(pair) {
+      const otherField = lastUpdated === 0 ? 1 : 0
+      const derivedAmount = deriveAmount(
+        pair,
+        newAmount(currencies[lastUpdated], amounts[lastUpdated]),
+        currencies[otherField],
+      )
+      setAmounts((amounts) =>
+        updateArray({
+          [lastUpdated]: amounts[lastUpdated],
+          [otherField]: derivedAmount || amounts[otherField],
+        }),
+      )
+    },
   })
 
-  const pair = usePair(amounts.first?.currency.wrapped, amounts.second?.currency.wrapped)
-
-  // last updated field amount
-  const [exactAmount, setExactAmount] = useState(amounts.first)
-
-  const { onChangeField, lastUpdated, currencies } = useLinkedCurrencyFields(
-    initialCurrencies,
-    useCallback((newAmount) => setExactAmount(newAmount), []),
+  const { onChangeField, lastUpdated } = useLinkedCurrencyFields({
+    currencies,
     onChangeCurrencies,
-  )
-
-  useEffect(() => {
-    const otherField = lastUpdated === 'first' ? 'second' : 'first'
-    setAmounts((amounts) => ({
-      [lastUpdated]: exactAmount,
-      [otherField]:
-        deriveAmount(pair.data, exactAmount, currencies[otherField]) ||
-        toAmount(amounts[otherField]?.toExact() || 0, currencies[otherField]),
-    }))
-  }, [exactAmount, pair.data, lastUpdated, currencies])
+    onChangeAmount: (enteredAmount) => {
+      const otherField = lastUpdated === 0 ? 1 : 0
+      setAmounts((amounts) =>
+        updateArray({
+          [lastUpdated]: enteredAmount.quotient,
+          [otherField]:
+            deriveAmount(pair.data, enteredAmount, currencies[otherField]) || amounts[otherField],
+        }),
+      )
+    },
+  })
 
   return {
-    firstFieldAmount: amounts.first,
-    secondFieldAmount: amounts.second,
+    firstFieldAmount: newAmount(currencies[0], amounts[0]),
+    secondFieldAmount: newAmount(currencies[1], amounts[1]),
     pair: pair,
-    onChangeFirstField: onChangeField('first'),
-    onChangeSecondField: onChangeField('second'),
+    onChangeFirstField: onChangeField(0),
+    onChangeSecondField: onChangeField(1),
+    onReset: useCallback(() => {
+      onChangeCurrencies([undefined, undefined])
+      setAmounts([ZERO, ZERO])
+    }, [onChangeCurrencies]),
   }
 }

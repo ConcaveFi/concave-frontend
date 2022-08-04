@@ -5,25 +5,33 @@ import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useMemo } from 'react'
 import { toPercent } from 'utils/toPercent'
 import { useAccount, useContractWrite, useNetwork } from 'wagmi'
-import { SwapSettings } from '../Swap/Settings'
+import { useSwapSettings } from '../Swap/Settings'
 
 export const useSwapTransaction = (
   _trade: Trade<Currency, Currency, TradeType>,
-  settings: SwapSettings,
   recipient: string,
   { onSuccess }: { onSuccess?: (tx: TransactionResponse) => void },
 ) => {
   const { address } = useAccount()
   const { chain } = useNetwork()
 
+  const settings = useSwapSettings((s) => ({
+    deadline: s.settings.deadline,
+    slippageTolerance: s.settings.slippageTolerance,
+  }))
+
   /*
     temporary workaround for unknow issue with swapTokenForExactToken
     all trades are submited as exact input for now
   */
-  const trade = useMemo(
-    () => _trade.route && new Trade(_trade.route, _trade.inputAmount, TradeType.EXACT_INPUT),
-    [_trade],
-  )
+  const trade = useMemo(() => {
+    if (!_trade?.route) return
+    try {
+      return new Trade(_trade.route, _trade.inputAmount, TradeType.EXACT_INPUT)
+    } catch {
+      return undefined
+    }
+  }, [_trade])
 
   const swapParams = useMemo(() => {
     if (trade && address)
