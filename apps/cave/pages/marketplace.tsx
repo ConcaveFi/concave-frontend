@@ -1,4 +1,4 @@
-import { Box, Button, Card, Flex, Text, useBreakpointValue } from '@concave/ui'
+import { Button, Card, Flex, Text, useBreakpointValue, VStack } from '@concave/ui'
 import { MarketplaceActivityCard } from 'components/Marketplace/Activity/MarketplaceActivityCard'
 import { MarketplaceAPRCard } from 'components/Marketplace/APR/MarketplaceAPRCard'
 import { MarketplaceHeader } from 'components/Marketplace/Header/MarketplaceHeader'
@@ -20,32 +20,20 @@ const Marketplace = () => {
   }, [isLargerLayout])
 
   return (
-    <Flex width={{ base: 'full' }} borderRadius={0} textAlign="center" direction="column">
+    <Flex width={{ base: 'full' }} textAlign="center" direction="column">
       {!viewTransactions ? (
         <>
           <MarketplaceHeader />
           <Flex
+            border={`1px solid white`}
             direction={{ xl: 'row', base: 'column-reverse' }}
+            p={4}
+            gap={4}
             justify="center"
-            gap={{ base: 1, md: 8 }}
             width="full"
           >
-            <Flex
-              direction="column"
-              float={'left'}
-              position="relative"
-              align="center"
-              mt={{ xl: 12, md: 6, base: 0 }}
-            >
-              <MarketplaceDashboard />
-            </Flex>
-            <Flex
-              direction="column"
-              gap={{ xl: 8, base: 0 }}
-              align="center"
-              position="relative"
-              mt={{ xl: 14, base: 0, md: 6 }}
-            >
+            <MarketplaceDashboard />
+            <VStack>
               <MarketplaceAPRCard />
               <SwitchView
                 title="View Transactions"
@@ -53,10 +41,8 @@ const Marketplace = () => {
                 rounded="0px 0px 16px 16px"
                 onClick={() => setViewTransactions(true)}
               />
-              <Box display={{ xl: 'flex', base: 'none' }}>
-                <MarketplaceActivityCard />
-              </Box>
-            </Flex>
+              <MarketplaceActivityCard />
+            </VStack>
           </Flex>
         </>
       ) : (

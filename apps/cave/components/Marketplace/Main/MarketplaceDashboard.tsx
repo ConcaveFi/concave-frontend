@@ -16,12 +16,13 @@ export const MarketplaceDashboard = () => {
   ))
   return (
     <VStack
-      width={'640px'}
+      width={'full'}
       maxHeight="940px"
       rounded={'2xl'}
       apply="background.metalBrighter"
       shadow={'up'}
-      p={5}
+      p={4}
+      gap={4}
     >
       <MarketplaceFilterContainer
         stakeFilters={stakeFilters}
