@@ -1,6 +1,7 @@
 import { Currency, RouterAbi, ROUTER_ADDRESS } from '@concave/core'
 import { Router, Trade, TradeType } from '@concave/gemswap-sdk'
 import { TransactionResponse } from '@ethersproject/abstract-provider'
+import { isAddress } from 'ethers/lib/utils'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useMemo } from 'react'
 import { toPercent } from 'utils/toPercent'
@@ -39,7 +40,7 @@ export const useSwapTransaction = (
         allowedSlippage: toPercent(settings.slippageTolerance),
         ttl: +settings.deadline * 60,
         feeOnTransfer: trade.tradeType === TradeType.EXACT_INPUT,
-        recipient: recipient || address,
+        recipient: isAddress(recipient) ? recipient : address,
       })
   }, [trade, settings, recipient, address])
 
