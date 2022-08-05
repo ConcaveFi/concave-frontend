@@ -17,7 +17,7 @@ export const MarketplaceDashboard = () => {
   return (
     <VStack
       width={'full'}
-      maxHeight="940px"
+      maxW={'740px'}
       rounded={'2xl'}
       apply="background.metalBrighter"
       shadow={'up'}
@@ -37,6 +37,7 @@ export const MarketplaceDashboard = () => {
         rounded={'inherit'}
         shadow="down"
         w="full"
+        h={'full'}
         maxW="900px"
         p={4}
         py={6}

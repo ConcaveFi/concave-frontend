@@ -5,7 +5,7 @@ export const MarketplaceHeader = () => {
   return (
     <>
       {' '}
-      <Heading as="h1" mt={16} mb={3} fontSize="5xl">
+      <Heading as="h1" mt={4} mb={3} fontSize="5xl">
         {'Marketplace'}
       </Heading>
       <Flex
