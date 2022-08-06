@@ -10,7 +10,7 @@
     "local-build": "next build",
     "start": "next start",
     "lint": "next lint --fix",
-    "test": "jest",
+    "test": "tsdx test --runInBand  --detectOpenHandles --forceExit",
     "test:watch": "tsdx test --watch",
     "gen": "DOTENV_CONFIG_PATH=./.env graphql-codegen --config codegen.yml -r dotenv/config"
   },
@@ -57,7 +57,7 @@
     "zustand": "^4.0.0"
   },
   "devDependencies": {
-    "@chakra-ui/cli": "^2.0.0",
+    "@chakra-ui/cli": "^2.1.4",
     "@graphql-codegen/cli": "^2.7.0",
     "@graphql-codegen/introspection": "^2.1.1",
     "@graphql-codegen/typescript": "^2.4.11",
