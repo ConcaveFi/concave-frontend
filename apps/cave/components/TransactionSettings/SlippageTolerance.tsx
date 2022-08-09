@@ -33,7 +33,7 @@ export const SlippageTolerance = ({
           label="Your transaction will revert if the price changes unfavorably by more than this percentage."
           shouldWrapChildren
         >
-          <QuestionIcon w="18px" h="18px" />
+          <QuestionIcon />
         </Tooltip>
       </HStack>
       <HStack>
