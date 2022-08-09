@@ -14,6 +14,7 @@ export const MarketplaceDashboard = () => {
       stakingPosition={stakingPosition}
     />
   ))
+
   return (
     <VStack
       width={'full'}
@@ -25,7 +26,6 @@ export const MarketplaceDashboard = () => {
     >
       <MarketplaceFilterContainer
         stakeFilters={stakeFilters}
-        onChangeSort={setSort}
         onChangeStakeFilters={setStakeFilters}
       />
       <Flex
