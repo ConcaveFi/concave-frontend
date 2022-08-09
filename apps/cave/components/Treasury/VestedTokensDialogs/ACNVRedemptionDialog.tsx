@@ -1,8 +1,9 @@
 import { ACNVRedeemContract, ChainId } from '@concave/core'
 import { Button, Card, Flex, Link, Modal, Text, useDisclosure } from '@concave/ui'
 import { TransactionResponse } from '@ethersproject/providers'
-import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
-import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
+import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
+import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
+
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { useGet_User_Acnv_RedeemedQuery } from 'graphql/generated/graphql'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
