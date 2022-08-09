@@ -1,6 +1,5 @@
-import { Box, Button, Card, Flex, Text, useBreakpointValue } from '@concave/ui'
+import { Button, Card, Flex, Text, useBreakpointValue } from '@concave/ui'
 import { MarketplaceActivityCard } from 'components/Marketplace/Activity/MarketplaceActivityCard'
-import { MarketplaceAPRCard } from 'components/Marketplace/APR/MarketplaceAPRCard'
 import { MarketplaceHeader } from 'components/Marketplace/Header/MarketplaceHeader'
 import { MarketplaceDashboard } from 'components/Marketplace/Main/MarketplaceDashboard'
 import { withPageTransition } from 'components/PageTransition'
@@ -20,43 +19,25 @@ const Marketplace = () => {
   }, [isLargerLayout])
 
   return (
-    <Flex width={{ base: 'full' }} borderRadius={0} textAlign="center" direction="column">
+    <Flex
+      width={{ base: 'full' }}
+      textAlign="center"
+      direction="column"
+      // overflowX={`scroll`}
+      // h={'100vh'}
+    >
       {!viewTransactions ? (
         <>
           <MarketplaceHeader />
           <Flex
             direction={{ xl: 'row', base: 'column-reverse' }}
+            gap={4}
+            maxH={'90vh'}
             justify="center"
-            gap={{ base: 1, md: 8 }}
             width="full"
           >
-            <Flex
-              direction="column"
-              float={'left'}
-              position="relative"
-              align="center"
-              mt={{ xl: 12, md: 6, base: 0 }}
-            >
-              <MarketplaceDashboard />
-            </Flex>
-            <Flex
-              direction="column"
-              gap={{ xl: 8, base: 0 }}
-              align="center"
-              position="relative"
-              mt={{ xl: 14, base: 0, md: 6 }}
-            >
-              <MarketplaceAPRCard />
-              <SwitchView
-                title="View Transactions"
-                px={{ base: '40px', md: '140px' }}
-                rounded="0px 0px 16px 16px"
-                onClick={() => setViewTransactions(true)}
-              />
-              <Box display={{ xl: 'flex', base: 'none' }}>
-                <MarketplaceActivityCard />
-              </Box>
-            </Flex>
+            <MarketplaceDashboard />
+            <MarketplaceActivityCard />
           </Flex>
         </>
       ) : (
@@ -109,7 +90,6 @@ const SwitchView = (props: SwitchViewProps) => {
         height={'32px'}
         rounded={props.rounded}
         variant="secondary"
-        px={px}
         justify="center"
         fontSize={'18px'}
       >
