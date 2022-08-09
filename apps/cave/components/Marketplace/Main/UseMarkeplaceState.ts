@@ -38,6 +38,7 @@ export const useMarketplaceDashbord = () => {
     .filter((stakingPosition) => filterByStakePool(stakingPosition))
     .sort((current, previous) => sortFunction(current, previous))
   return {
+    sort,
     nftPositions,
     stakeFilters,
     setStakeFilters,

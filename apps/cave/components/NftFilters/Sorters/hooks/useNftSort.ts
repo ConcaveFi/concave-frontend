@@ -2,6 +2,7 @@ import { StakingPosition } from '@concave/marketplace'
 
 export type NftOrder = 'ASC' | 'DESC'
 export type NftSort = { sort: keyof typeof NftSortMethod; order: NftOrder }
+export type NftSortType = keyof typeof NftSortMethod
 
 export const NftSortMethod = {
   STAKE_POOL: {
@@ -19,5 +20,11 @@ export const NftSortMethod = {
       current?.initialValue.gt(previus?.initialValue) ? 1 : -1,
     DESC: (current: StakingPosition, previus: StakingPosition) =>
       previus?.initialValue.gt(current?.initialValue) ? 1 : -1,
+  },
+  PRICE: {
+    ASC: (current: StakingPosition, previus: StakingPosition) =>
+      current?.market.endPrice.gt(previus?.market.endPrice) ? 1 : -1,
+    DESC: (current: StakingPosition, previus: StakingPosition) =>
+      previus?.market.endPrice.gt(current?.market.endPrice) ? 1 : -1,
   },
 }

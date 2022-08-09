@@ -19,11 +19,11 @@ export function MarketplaceFilterContainer({
     }
   }
   return (
-    <Flex direction={'column'} mt={8} align="start" rounded={'inherit'}>
+    <Flex direction={'column'} mt={8} align="start" rounded={'inherit'} width="full">
       <Text fontWeight={'bold'} fontSize="lg" color="text.low">
         Filter by:
       </Text>
-      <Flex mt={2} height={'full'} width="full" rounded={'inherit'} shadow="down" p={2} gap={2}>
+      <Flex mt={2} height={'100px'} width="full" rounded={'inherit'} shadow="down" p={2} gap={2}>
         {stakeData?.map((stakeData) => (
           <MakeplaceStakeFilter
             key={stakeData.poolId}

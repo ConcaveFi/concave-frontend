@@ -2,10 +2,11 @@ import { Flex, Text, VStack } from '@chakra-ui/react'
 import { Loading } from 'components/Loading'
 import { MarketplaceFilterContainer } from 'components/Marketplace/Main/MarketplaceFilterContainer'
 import { MarketplacePosition } from './MarketplacePosition'
+import { MarketplaceSortConainer } from './MarketplaceSortContainer'
 import { useMarketplaceDashbord } from './UseMarkeplaceState'
 
 export const MarketplaceDashboard = () => {
-  const { isFetching, nftPositions, stakeFilters, setSort, setStakeFilters } =
+  const { isFetching, nftPositions, stakeFilters, sort, setSort, setStakeFilters } =
     useMarketplaceDashbord()
 
   const positions = nftPositions.map((stakingPosition) => (
@@ -28,6 +29,7 @@ export const MarketplaceDashboard = () => {
         stakeFilters={stakeFilters}
         onChangeStakeFilters={setStakeFilters}
       />
+      <MarketplaceSortConainer onChangeSort={setSort} currentSort={sort} />
       <Flex
         as={Loading}
         size="md"
