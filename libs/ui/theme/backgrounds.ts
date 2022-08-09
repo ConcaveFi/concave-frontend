@@ -1,4 +1,3 @@
-import { CSSObject } from '@chakra-ui/react'
 import { colors } from './colors'
 
 const textures = {
@@ -6,7 +5,7 @@ const textures = {
   glass: 'url("/assets/textures/glass.jpg")',
 }
 
-export const backgrounds: CSSObject = {
+export const backgrounds = {
   metal: {
     bg: `${textures.metal}, linear-gradient(to bottom left, ${colors.secondary[75]} 30%, ${colors.secondary[150]} 96%)`,
     bgPos: '50% 50%, 0px 0px',
@@ -39,5 +38,4 @@ export const backgrounds: CSSObject = {
     filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
   },
 }
-
 export default backgrounds

@@ -1,9 +1,23 @@
-import { Currency, FIXED_ORDER_MARKET_CONTRACT } from '@concave/core'
+import { Currency, DAI, FIXED_ORDER_MARKET_CONTRACT, FRAX, NATIVE, USDC } from '@concave/core'
+import { DownIcon } from '@concave/icons'
 import { FixedOrderMarketContract, MarketItem, StakingPosition } from '@concave/marketplace'
-import { Box, Button, Flex, HStack, Modal, Text, VStack } from '@concave/ui'
-import { SelectMarketCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
+import {
+  Box,
+  Button,
+  Flex,
+  HStack,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Modal,
+  Text,
+  VStack,
+} from '@concave/ui'
+import { CurrencyIcon } from 'components/CurrencyIcon'
 import { ChooseButton } from 'components/Marketplace/ChooseButton'
 import { BigNumber, BigNumberish } from 'ethers'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
 import { Dispatch, SetStateAction, useCallback } from 'react'
 import { formatFixed } from 'utils/formatFixed'
@@ -163,7 +177,15 @@ export const ListPositionForSale = ({
     )
   }
   return (
-    <VStack direction={'column'} gap={1} pt={8} px={8} pb={0}>
+    <VStack
+      direction={'column'}
+      justifyContent={'space-between'}
+      // minH={'400px'}
+      gap={1}
+      pt={8}
+      px={8}
+      pb={0}
+    >
       <Type />
       <Info label="Current value:" value={formatFixed(staking.currentValue) + ' CNV'}></Info>
       <CurrencySelector value={market.currency} onChange={setCurrency} />
@@ -227,9 +249,49 @@ const CurrencySelector = ({
       <Text textColor={'text.low'} textAlign={'right'} fontWeight="bold" width={'full'}>
         Currency:
       </Text>
-      <Box width={'full'}>
-        <SelectMarketCurrency selected={value} onSelect={onChange} />
-      </Box>
+      <SelectMarketCurrency selected={value} onSelect={onChange} />
     </HStack>
+  )
+}
+
+export const SelectMarketCurrency = ({
+  selected,
+  onSelect,
+}: {
+  selected?: Currency
+  onSelect: (token: Currency) => void
+}) => {
+  const networkId = useCurrentSupportedNetworkId()
+  const currencies = [DAI, NATIVE, USDC, FRAX].map((c) => c[networkId]).filter((c) => c)
+  return (
+    <Menu>
+      <MenuButton
+        width={'full'}
+        shadow={'Up Big'}
+        borderRadius={'full'}
+        _active={{
+          shadow: 'Down Big',
+        }}
+        px={4}
+        py={1.5}
+        as={Button}
+        rightIcon={<DownIcon w={`16px`} />}
+      >
+        <HStack>
+          <CurrencyIcon size="xs" currency={selected} />
+          <span>{selected.symbol}</span>
+        </HStack>
+      </MenuButton>
+      <MenuList>
+        {currencies.map((c) => {
+          return (
+            <MenuItem key={c.symbol} onClick={() => onSelect(c)} gap={2}>
+              <CurrencyIcon size="xs" currency={c} />
+              <span>{c.symbol}</span>
+            </MenuItem>
+          )
+        })}
+      </MenuList>
+    </Menu>
   )
 }
