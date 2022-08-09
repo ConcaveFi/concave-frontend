@@ -77,5 +77,3 @@ export const SlippageTolerance = ({
     </Stack>
   )
 }
-
-//
