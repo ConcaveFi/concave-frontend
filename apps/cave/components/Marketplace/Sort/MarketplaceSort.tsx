@@ -41,7 +41,7 @@ export const MarketplaceSort: FC<MarketplaceSortProps> = ({
         }
       }}
     >
-      <Text userSelect={'none'} fontWeight={'bold'} color={!isSelected && 'text.low'}>
+      <Text userSelect={'none'} color={!isSelected && 'text.low'}>
         {sortName[nftSort]}
       </Text>
       <LinesIcon

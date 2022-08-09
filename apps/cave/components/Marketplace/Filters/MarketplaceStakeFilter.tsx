@@ -23,11 +23,10 @@ export const MakeplaceStakeFilter: FC<MakeplaceStakeFilterProps> = ({
   }
   return (
     <Flex
-      bg="linear-gradient(265.73deg, #364E6A 0%, #1C2E3E 100%)"
       flex={1}
       height="full"
       rounded={'2xl'}
-      shadow="up"
+      shadow="Up Small"
       fontSize={'sm'}
       cursor="pointer"
       sx={isOpen && { ...gradientBorder({ borderWidth: 2 }) }}
