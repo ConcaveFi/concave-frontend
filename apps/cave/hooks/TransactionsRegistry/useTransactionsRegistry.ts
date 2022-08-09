@@ -1,5 +1,6 @@
 import { TransactionResponse } from '@ethersproject/abstract-provider'
-import { useTransactionStatusToast } from 'components/TransactionStatusToast'
+import { useTransactionStatusToast } from 'components/TransactionDialog/TransactionStatusToast'
+
 import { Transaction } from 'ethers'
 import { useLocalStorage } from 'hooks/useLocalStorage'
 import { concaveProvider } from 'lib/providers'
