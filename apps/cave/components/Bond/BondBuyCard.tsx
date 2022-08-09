@@ -4,8 +4,8 @@ import { AddTokenToWalletButton } from 'components/AddTokenToWalletButton'
 import { GasPrice } from 'components/AMM'
 import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { CurrencyInputField as BondInput } from 'components/CurrencyAmountField'
-import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
-import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
+import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
+\
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { useCNVPrice } from 'hooks/useCNVPrice'
 import { useEffect, useState } from 'react'
@@ -19,6 +19,7 @@ import { Settings, useBondSettings } from './Settings'
 
 import { useTransaction } from 'hooks/TransactionsRegistry/useTransaction'
 import { numberMask } from 'utils/numberMask'
+import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
 
 export function BondBuyCard(props: {
   updateBondPositions?: VoidFunction

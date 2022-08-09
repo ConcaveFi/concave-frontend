@@ -14,9 +14,10 @@ import {
 import { TransactionResponse } from '@ethersproject/abstract-provider'
 import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { CurrencyIcon } from 'components/CurrencyIcon'
-import { PositionInfoItem } from 'components/Positions/MyPositions'
-import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
-import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
+import { PositionInfoItem } from 'components/LiquidityPoolPositions/MyPositions'
+import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
+import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
+
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { RemoveLiquidityState, useRemoveLiquidity } from 'hooks/useRemoveLiquidity'

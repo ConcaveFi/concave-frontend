@@ -25,8 +25,9 @@ import {
 import { Redeem } from 'components/Bond/Redeem'
 import { SelectedBondType } from 'components/Bond/SelectedBondType'
 import { withPageTransition } from 'components/PageTransition'
-import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
-import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
+import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
+import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
+
 import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
 import { utils } from 'ethers'
 import { useGet_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql'
