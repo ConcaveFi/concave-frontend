@@ -25,20 +25,20 @@ const whitelist = [
 ]
 const tokenToCoingeckId = (currency: Currency) => {
   if (currency.isNative) return `ethereum`
-  if (currency.symbol === CNV[currency.chainId].symbol) return `concave`
-  if (currency.symbol === FRAX[currency.chainId].symbol) return `frax`
-  if (currency.symbol === USDC[currency.chainId].symbol) return `usd-coin`
-  if (currency.symbol === DAI[currency.chainId].symbol) return `dai`
+  const address = currency.wrapped.address
+  if (address === CNV[currency.chainId].address) return `concave`
+  if (address === FRAX[currency.chainId].address) return `frax`
+  if (address === USDC[currency.chainId].address) return `usd-coin`
+  if (address === DAI[currency.chainId].address) return `dai`
 }
 
 class TokenService {
   constructor(private networkName: string = chain.mainnet.name) {}
   async getTokenPrice(currency: Currency) {
-    // Check if currency is inside whitelist
-    if (!whitelist.includes(currency.wrapped.address)) {
-      return undefined
-    }
     const coingecko = tokenToCoingeckId(currency)
+    if (!coingecko) {
+      throw `token not in whitelist`
+    }
     return Promise.resolve(
       coingeckoApi.tokenPrice({
         currency: 'usd',
