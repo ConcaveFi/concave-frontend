@@ -17,7 +17,6 @@ export const MarketplaceDashboard = () => {
   return (
     <VStack
       width={'full'}
-      maxW={'740px'}
       rounded={'2xl'}
       apply="background.metalBrighter"
       shadow={'up'}
@@ -46,7 +45,7 @@ export const MarketplaceDashboard = () => {
         direction="column"
         apply="scrollbar.big"
         bg={'linear-gradient(238.35deg, #19394C 9.11%, #0A161F 92.45%)'}
-        gap={2}
+        gap={4}
       >
         {positions.length == 0 ? (
           <>

@@ -1,6 +1,6 @@
 import { MarketItem, StakingPosition } from '@concave/marketplace'
 import { Box, Button, HStack, Text, VStack } from '@concave/ui'
-import { useInsert_Cavemart_ListingMutation } from 'graphql/generated/graphql'
+import { useInsert_Marketplace_ListingMutation } from 'graphql/generated/graphql'
 import { Dispatch, SetStateAction } from 'react'
 import { formatFixed } from 'utils/formatFixed'
 import { Info } from './Info'
@@ -17,9 +17,9 @@ export const ConfirmSignature = ({
   staking: StakingPosition
   market: MarketItem
 }) => {
-  const insertCavemart = useInsert_Cavemart_ListingMutation()
+  const insertMarketplace = useInsert_Marketplace_ListingMutation()
   const onSubmit = async () => {
-    await insertCavemart.mutateAsync({
+    await insertMarketplace.mutateAsync({
       tokenID: market.tokenId.toString(),
       signatureHash: market.signature,
       endPrice: market.endPrice.toString(),

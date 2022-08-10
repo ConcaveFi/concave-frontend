@@ -1,6 +1,6 @@
 import { NATIVE } from '@concave/core'
 import { TransactionIcon } from '@concave/icons'
-import { Cavemart, LogStakingV1, StakingPool } from '@concave/marketplace'
+import { LogStakingV1, Marketplace, StakingPool } from '@concave/marketplace'
 import { Flex, Image, Link, Text, useMediaQuery, VStack } from '@concave/ui'
 import { formatDistanceToNowStrict } from 'date-fns'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
@@ -10,7 +10,7 @@ import { compactFormat } from 'utils/formatFixed'
 import { chain } from 'wagmi'
 import { Data } from './MarketplaceActivityCard'
 interface MarketplaceTransactionCardProps {
-  data?: Data & StakingPool & Cavemart & LogStakingV1
+  data?: Data & StakingPool & Marketplace & LogStakingV1
 }
 
 export const MarketplaceTransactionCard = ({ data }: MarketplaceTransactionCardProps) => {
