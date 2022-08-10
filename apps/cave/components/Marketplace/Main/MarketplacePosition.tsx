@@ -55,7 +55,7 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakin
           justify="space-between"
         >
           <HStack align="center" gap={0} width={'full'} justify="space-between">
-            <ImageContainer w={'228px'} h={'59px'} stakingPosition={stakingPosition} px={3} />
+            <ImageContainer w={'250px'} h={'59px'} stakingPosition={stakingPosition} px={3} />
             <Info title="Current value" info={`${currentValue} CNV`} />
             <Info
               title="Discount"
@@ -186,6 +186,7 @@ const BuyContainer = ({ stakingPosition, ...boxProps }: BuyContainerProps) => {
         onClick: swap.sendTx,
         children: 'Buy',
         minWidth: '45%',
+        fontSize: 'xl',
         m: -0.5,
       }
     }
@@ -223,9 +224,9 @@ const BuyContainer = ({ stakingPosition, ...boxProps }: BuyContainerProps) => {
     <Card p={0.5} h={'full'} rounded={'2xl'} {...boxProps} boxShadow={'Up Big'}>
       <Flex w="auto" h={'59px'} rounded={'2xl'} shadow="up" justify="end">
         {buttonProps.minWidth === '45%' && (
-          <Flex flex={1} align="center" justify="center">
-            <Flex direction={'column'} align="revert" fontWeight={'bold'} p={2}>
-              <Text fontSize={'12px'} color="text.low">
+          <HStack flex={1} align="center" justify="center">
+            <Flex direction={'column'} fontWeight={'bold'} p={2}>
+              <Text fontSize={'12px'} color="text.low" mr={`auto`}>
                 Price
               </Text>
               <Text
@@ -241,7 +242,7 @@ const BuyContainer = ({ stakingPosition, ...boxProps }: BuyContainerProps) => {
                 {compactFormat(price.quotient.toString(), currency) + ` ${currency.symbol}`}
               </Text>
             </Flex>
-          </Flex>
+          </HStack>
         )}
         <Button
           boxShadow={'Up Big'}

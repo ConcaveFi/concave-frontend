@@ -1,4 +1,4 @@
-import { Cavemart, LogStakingV1, marketplaceActivity, StakingPool } from '@concave/marketplace'
+import { LogStakingV1, Marketplace, marketplaceActivity, StakingPool } from '@concave/marketplace'
 import { Box, Card, Flex } from '@concave/ui'
 import { BigNumber } from '@ethersproject/bignumber'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
@@ -27,7 +27,7 @@ export const MarketplaceActivityCard = () => {
       return positions.map((item) => {
         const type = item.soldFor ? `sale` : `listing`
         const value = type === 'sale' ? item.soldFor : item.startPrice
-        const data: Data & Cavemart & StakingPool & LogStakingV1 = {
+        const data: Data & Marketplace & StakingPool & LogStakingV1 = {
           ...item,
           type,
           poolID: item.poolId,
@@ -45,7 +45,8 @@ export const MarketplaceActivityCard = () => {
   })
   return (
     <Card
-      width={{ base: '300px', md: '360px', xl: '300px' }}
+      width={{ base: '350px' }}
+      p={2}
       shadow="Block Up"
       height={'full'}
       position="relative"
