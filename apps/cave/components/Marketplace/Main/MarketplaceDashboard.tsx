@@ -1,6 +1,9 @@
 import { Flex, Text, VStack } from '@chakra-ui/react'
+import { ChevronRightIcon } from '@concave/icons'
+import { gradientBorder } from '@concave/ui'
 import { Loading } from 'components/Loading'
 import { MarketplaceFilterContainer } from 'components/Marketplace/Main/MarketplaceFilterContainer'
+import { useRouter } from 'next/router'
 import { MarketplacePosition } from './MarketplacePosition'
 import { MarketplaceSortConainer } from './MarketplaceSortContainer'
 import { TokenIdSearchBar } from './TokenIdSearchBar'
@@ -23,6 +26,7 @@ export const MarketplaceDashboard = () => {
       stakingPosition={stakingPosition}
     />
   ))
+  const { push } = useRouter()
 
   return (
     <VStack
@@ -33,6 +37,23 @@ export const MarketplaceDashboard = () => {
       p={4}
       gap={4}
     >
+      <Flex
+        mb={-10}
+        align={'center'}
+        sx={{ ...gradientBorder({ borderWidth: 2, variant: 'secondary' }) }}
+        alignSelf={'end'}
+        rounded="2xl"
+        shadow={'up'}
+        px={3}
+        py={'2'}
+        cursor="pointer"
+        onClick={() => push('liquid-stake-positions')}
+      >
+        <Text userSelect={'none'} color={'text.low'} fontWeight="bold">
+          Your positions
+        </Text>
+        <ChevronRightIcon boxSize={'30px'} color="text.low" />
+      </Flex>
       <MarketplaceFilterContainer
         stakeFilters={stakeFilters}
         onChangeStakeFilters={setStakeFilters}
