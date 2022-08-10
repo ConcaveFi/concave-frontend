@@ -83,240 +83,6 @@ export type String_Comparison_Exp = {
   _similar?: InputMaybe<Scalars['String']>
 }
 
-/** take signature history of a lsd NFT token ID */
-export type Cavemart = {
-  __typename?: 'cavemart'
-  created_at: Scalars['timestamptz']
-  deadline?: Maybe<Scalars['numeric']>
-  endPrice?: Maybe<Scalars['String']>
-  newOwner?: Maybe<Scalars['String']>
-  signatureHash?: Maybe<Scalars['String']>
-  soldFor?: Maybe<Scalars['String']>
-  start?: Maybe<Scalars['String']>
-  startPrice?: Maybe<Scalars['String']>
-  tokenID: Scalars['numeric']
-  tokenIsListed: Scalars['Boolean']
-  tokenOption?: Maybe<Scalars['String']>
-  tokenOwner: Scalars['String']
-  txHash?: Maybe<Scalars['String']>
-  updated_at: Scalars['timestamptz']
-}
-
-/** order by aggregate values of table "cavemart" */
-export type Cavemart_Aggregate_Order_By = {
-  avg?: InputMaybe<Cavemart_Avg_Order_By>
-  count?: InputMaybe<Order_By>
-  max?: InputMaybe<Cavemart_Max_Order_By>
-  min?: InputMaybe<Cavemart_Min_Order_By>
-  stddev?: InputMaybe<Cavemart_Stddev_Order_By>
-  stddev_pop?: InputMaybe<Cavemart_Stddev_Pop_Order_By>
-  stddev_samp?: InputMaybe<Cavemart_Stddev_Samp_Order_By>
-  sum?: InputMaybe<Cavemart_Sum_Order_By>
-  var_pop?: InputMaybe<Cavemart_Var_Pop_Order_By>
-  var_samp?: InputMaybe<Cavemart_Var_Samp_Order_By>
-  variance?: InputMaybe<Cavemart_Variance_Order_By>
-}
-
-/** order by avg() on columns of table "cavemart" */
-export type Cavemart_Avg_Order_By = {
-  deadline?: InputMaybe<Order_By>
-  tokenID?: InputMaybe<Order_By>
-}
-
-/** Boolean expression to filter rows from the table "cavemart". All fields are combined with a logical 'AND'. */
-export type Cavemart_Bool_Exp = {
-  _and?: InputMaybe<Array<Cavemart_Bool_Exp>>
-  _not?: InputMaybe<Cavemart_Bool_Exp>
-  _or?: InputMaybe<Array<Cavemart_Bool_Exp>>
-  created_at?: InputMaybe<Timestamptz_Comparison_Exp>
-  deadline?: InputMaybe<Numeric_Comparison_Exp>
-  endPrice?: InputMaybe<String_Comparison_Exp>
-  newOwner?: InputMaybe<String_Comparison_Exp>
-  signatureHash?: InputMaybe<String_Comparison_Exp>
-  soldFor?: InputMaybe<String_Comparison_Exp>
-  start?: InputMaybe<String_Comparison_Exp>
-  startPrice?: InputMaybe<String_Comparison_Exp>
-  tokenID?: InputMaybe<Numeric_Comparison_Exp>
-  tokenIsListed?: InputMaybe<Boolean_Comparison_Exp>
-  tokenOption?: InputMaybe<String_Comparison_Exp>
-  tokenOwner?: InputMaybe<String_Comparison_Exp>
-  txHash?: InputMaybe<String_Comparison_Exp>
-  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>
-}
-
-/** unique or primary key constraints on table "cavemart" */
-export enum Cavemart_Constraint {
-  /** unique or primary key constraint on columns "id" */
-  CavemartPkey = 'cavemart_pkey',
-}
-
-/** input type for inserting data into table "cavemart" */
-export type Cavemart_Insert_Input = {
-  created_at?: InputMaybe<Scalars['timestamptz']>
-  deadline?: InputMaybe<Scalars['numeric']>
-  endPrice?: InputMaybe<Scalars['String']>
-  id?: InputMaybe<Scalars['uuid']>
-  newOwner?: InputMaybe<Scalars['String']>
-  signatureHash?: InputMaybe<Scalars['String']>
-  soldFor?: InputMaybe<Scalars['String']>
-  start?: InputMaybe<Scalars['String']>
-  startPrice?: InputMaybe<Scalars['String']>
-  tokenID?: InputMaybe<Scalars['numeric']>
-  tokenIsListed?: InputMaybe<Scalars['Boolean']>
-  tokenOption?: InputMaybe<Scalars['String']>
-  tokenOwner?: InputMaybe<Scalars['String']>
-  txHash?: InputMaybe<Scalars['String']>
-  updated_at?: InputMaybe<Scalars['timestamptz']>
-}
-
-/** order by max() on columns of table "cavemart" */
-export type Cavemart_Max_Order_By = {
-  created_at?: InputMaybe<Order_By>
-  deadline?: InputMaybe<Order_By>
-  endPrice?: InputMaybe<Order_By>
-  newOwner?: InputMaybe<Order_By>
-  signatureHash?: InputMaybe<Order_By>
-  soldFor?: InputMaybe<Order_By>
-  start?: InputMaybe<Order_By>
-  startPrice?: InputMaybe<Order_By>
-  tokenID?: InputMaybe<Order_By>
-  tokenOption?: InputMaybe<Order_By>
-  tokenOwner?: InputMaybe<Order_By>
-  txHash?: InputMaybe<Order_By>
-  updated_at?: InputMaybe<Order_By>
-}
-
-/** order by min() on columns of table "cavemart" */
-export type Cavemart_Min_Order_By = {
-  created_at?: InputMaybe<Order_By>
-  deadline?: InputMaybe<Order_By>
-  endPrice?: InputMaybe<Order_By>
-  newOwner?: InputMaybe<Order_By>
-  signatureHash?: InputMaybe<Order_By>
-  soldFor?: InputMaybe<Order_By>
-  start?: InputMaybe<Order_By>
-  startPrice?: InputMaybe<Order_By>
-  tokenID?: InputMaybe<Order_By>
-  tokenOption?: InputMaybe<Order_By>
-  tokenOwner?: InputMaybe<Order_By>
-  txHash?: InputMaybe<Order_By>
-  updated_at?: InputMaybe<Order_By>
-}
-
-/** response of any mutation on the table "cavemart" */
-export type Cavemart_Mutation_Response = {
-  __typename?: 'cavemart_mutation_response'
-  /** number of rows affected by the mutation */
-  affected_rows: Scalars['Int']
-  /** data from the rows affected by the mutation */
-  returning: Array<Cavemart>
-}
-
-/** on_conflict condition type for table "cavemart" */
-export type Cavemart_On_Conflict = {
-  constraint: Cavemart_Constraint
-  update_columns?: Array<Cavemart_Update_Column>
-  where?: InputMaybe<Cavemart_Bool_Exp>
-}
-
-/** Ordering options when selecting data from "cavemart". */
-export type Cavemart_Order_By = {
-  created_at?: InputMaybe<Order_By>
-  deadline?: InputMaybe<Order_By>
-  endPrice?: InputMaybe<Order_By>
-  newOwner?: InputMaybe<Order_By>
-  signatureHash?: InputMaybe<Order_By>
-  soldFor?: InputMaybe<Order_By>
-  start?: InputMaybe<Order_By>
-  startPrice?: InputMaybe<Order_By>
-  tokenID?: InputMaybe<Order_By>
-  tokenIsListed?: InputMaybe<Order_By>
-  tokenOption?: InputMaybe<Order_By>
-  tokenOwner?: InputMaybe<Order_By>
-  txHash?: InputMaybe<Order_By>
-  updated_at?: InputMaybe<Order_By>
-}
-
-/** select columns of table "cavemart" */
-export enum Cavemart_Select_Column {
-  /** column name */
-  CreatedAt = 'created_at',
-  /** column name */
-  Deadline = 'deadline',
-  /** column name */
-  EndPrice = 'endPrice',
-  /** column name */
-  NewOwner = 'newOwner',
-  /** column name */
-  SignatureHash = 'signatureHash',
-  /** column name */
-  SoldFor = 'soldFor',
-  /** column name */
-  Start = 'start',
-  /** column name */
-  StartPrice = 'startPrice',
-  /** column name */
-  TokenId = 'tokenID',
-  /** column name */
-  TokenIsListed = 'tokenIsListed',
-  /** column name */
-  TokenOption = 'tokenOption',
-  /** column name */
-  TokenOwner = 'tokenOwner',
-  /** column name */
-  TxHash = 'txHash',
-  /** column name */
-  UpdatedAt = 'updated_at',
-}
-
-/** order by stddev() on columns of table "cavemart" */
-export type Cavemart_Stddev_Order_By = {
-  deadline?: InputMaybe<Order_By>
-  tokenID?: InputMaybe<Order_By>
-}
-
-/** order by stddev_pop() on columns of table "cavemart" */
-export type Cavemart_Stddev_Pop_Order_By = {
-  deadline?: InputMaybe<Order_By>
-  tokenID?: InputMaybe<Order_By>
-}
-
-/** order by stddev_samp() on columns of table "cavemart" */
-export type Cavemart_Stddev_Samp_Order_By = {
-  deadline?: InputMaybe<Order_By>
-  tokenID?: InputMaybe<Order_By>
-}
-
-/** order by sum() on columns of table "cavemart" */
-export type Cavemart_Sum_Order_By = {
-  deadline?: InputMaybe<Order_By>
-  tokenID?: InputMaybe<Order_By>
-}
-
-/** placeholder for update columns of table "cavemart" (current role has no relevant permissions) */
-export enum Cavemart_Update_Column {
-  /** placeholder (do not use) */
-  Placeholder = '_PLACEHOLDER',
-}
-
-/** order by var_pop() on columns of table "cavemart" */
-export type Cavemart_Var_Pop_Order_By = {
-  deadline?: InputMaybe<Order_By>
-  tokenID?: InputMaybe<Order_By>
-}
-
-/** order by var_samp() on columns of table "cavemart" */
-export type Cavemart_Var_Samp_Order_By = {
-  deadline?: InputMaybe<Order_By>
-  tokenID?: InputMaybe<Order_By>
-}
-
-/** order by variance() on columns of table "cavemart" */
-export type Cavemart_Variance_Order_By = {
-  deadline?: InputMaybe<Order_By>
-  tokenID?: InputMaybe<Order_By>
-}
-
 export type CnvData = {
   __typename?: 'cnvData'
   baseVolume?: Maybe<Scalars['String']>
@@ -538,12 +304,12 @@ export enum LogCnvData_Select_Column {
 export type LogStakingV1 = {
   __typename?: 'logStakingV1'
   amountLocked?: Maybe<Scalars['String']>
-  /** An array relationship */
-  cavemart: Array<Cavemart>
   created_at: Scalars['timestamptz']
   from?: Maybe<Scalars['String']>
   id: Scalars['uuid']
   lockedUntil?: Maybe<Scalars['numeric']>
+  /** An array relationship */
+  marketplace: Array<Marketplace>
   poolID?: Maybe<Scalars['numeric']>
   sold?: Maybe<Scalars['Boolean']>
   to?: Maybe<Scalars['String']>
@@ -554,12 +320,12 @@ export type LogStakingV1 = {
 }
 
 /** get Transfer events for Staking V1 */
-export type LogStakingV1CavemartArgs = {
-  distinct_on?: InputMaybe<Array<Cavemart_Select_Column>>
+export type LogStakingV1MarketplaceArgs = {
+  distinct_on?: InputMaybe<Array<Marketplace_Select_Column>>
   limit?: InputMaybe<Scalars['Int']>
   offset?: InputMaybe<Scalars['Int']>
-  order_by?: InputMaybe<Array<Cavemart_Order_By>>
-  where?: InputMaybe<Cavemart_Bool_Exp>
+  order_by?: InputMaybe<Array<Marketplace_Order_By>>
+  where?: InputMaybe<Marketplace_Bool_Exp>
 }
 
 /** get Lock events from Staking V1 */
@@ -763,11 +529,11 @@ export type LogStakingV1_Bool_Exp = {
   _not?: InputMaybe<LogStakingV1_Bool_Exp>
   _or?: InputMaybe<Array<LogStakingV1_Bool_Exp>>
   amountLocked?: InputMaybe<String_Comparison_Exp>
-  cavemart?: InputMaybe<Cavemart_Bool_Exp>
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>
   from?: InputMaybe<String_Comparison_Exp>
   id?: InputMaybe<Uuid_Comparison_Exp>
   lockedUntil?: InputMaybe<Numeric_Comparison_Exp>
+  marketplace?: InputMaybe<Marketplace_Bool_Exp>
   poolID?: InputMaybe<Numeric_Comparison_Exp>
   sold?: InputMaybe<Boolean_Comparison_Exp>
   to?: InputMaybe<String_Comparison_Exp>
@@ -780,11 +546,11 @@ export type LogStakingV1_Bool_Exp = {
 /** Ordering options when selecting data from "logStakingV1". */
 export type LogStakingV1_Order_By = {
   amountLocked?: InputMaybe<Order_By>
-  cavemart_aggregate?: InputMaybe<Cavemart_Aggregate_Order_By>
   created_at?: InputMaybe<Order_By>
   from?: InputMaybe<Order_By>
   id?: InputMaybe<Order_By>
   lockedUntil?: InputMaybe<Order_By>
+  marketplace_aggregate?: InputMaybe<Marketplace_Aggregate_Order_By>
   poolID?: InputMaybe<Order_By>
   sold?: InputMaybe<Order_By>
   to?: InputMaybe<Order_By>
@@ -822,25 +588,275 @@ export enum LogStakingV1_Select_Column {
   UpdatedAt = 'updated_at',
 }
 
+/** take signature history of a lsd NFT token ID */
+export type Marketplace = {
+  __typename?: 'marketplace'
+  created_at: Scalars['timestamptz']
+  deadline?: Maybe<Scalars['numeric']>
+  endPrice?: Maybe<Scalars['String']>
+  newOwner?: Maybe<Scalars['String']>
+  signatureHash?: Maybe<Scalars['String']>
+  soldFor?: Maybe<Scalars['String']>
+  start?: Maybe<Scalars['String']>
+  startPrice?: Maybe<Scalars['String']>
+  tokenID: Scalars['numeric']
+  tokenIsListed: Scalars['Boolean']
+  tokenOption?: Maybe<Scalars['String']>
+  tokenOwner: Scalars['String']
+  txBlockNumber?: Maybe<Scalars['numeric']>
+  txHash?: Maybe<Scalars['String']>
+  updated_at: Scalars['timestamptz']
+}
+
+/** order by aggregate values of table "marketplace" */
+export type Marketplace_Aggregate_Order_By = {
+  avg?: InputMaybe<Marketplace_Avg_Order_By>
+  count?: InputMaybe<Order_By>
+  max?: InputMaybe<Marketplace_Max_Order_By>
+  min?: InputMaybe<Marketplace_Min_Order_By>
+  stddev?: InputMaybe<Marketplace_Stddev_Order_By>
+  stddev_pop?: InputMaybe<Marketplace_Stddev_Pop_Order_By>
+  stddev_samp?: InputMaybe<Marketplace_Stddev_Samp_Order_By>
+  sum?: InputMaybe<Marketplace_Sum_Order_By>
+  var_pop?: InputMaybe<Marketplace_Var_Pop_Order_By>
+  var_samp?: InputMaybe<Marketplace_Var_Samp_Order_By>
+  variance?: InputMaybe<Marketplace_Variance_Order_By>
+}
+
+/** order by avg() on columns of table "marketplace" */
+export type Marketplace_Avg_Order_By = {
+  deadline?: InputMaybe<Order_By>
+  tokenID?: InputMaybe<Order_By>
+  txBlockNumber?: InputMaybe<Order_By>
+}
+
+/** Boolean expression to filter rows from the table "marketplace". All fields are combined with a logical 'AND'. */
+export type Marketplace_Bool_Exp = {
+  _and?: InputMaybe<Array<Marketplace_Bool_Exp>>
+  _not?: InputMaybe<Marketplace_Bool_Exp>
+  _or?: InputMaybe<Array<Marketplace_Bool_Exp>>
+  created_at?: InputMaybe<Timestamptz_Comparison_Exp>
+  deadline?: InputMaybe<Numeric_Comparison_Exp>
+  endPrice?: InputMaybe<String_Comparison_Exp>
+  newOwner?: InputMaybe<String_Comparison_Exp>
+  signatureHash?: InputMaybe<String_Comparison_Exp>
+  soldFor?: InputMaybe<String_Comparison_Exp>
+  start?: InputMaybe<String_Comparison_Exp>
+  startPrice?: InputMaybe<String_Comparison_Exp>
+  tokenID?: InputMaybe<Numeric_Comparison_Exp>
+  tokenIsListed?: InputMaybe<Boolean_Comparison_Exp>
+  tokenOption?: InputMaybe<String_Comparison_Exp>
+  tokenOwner?: InputMaybe<String_Comparison_Exp>
+  txBlockNumber?: InputMaybe<Numeric_Comparison_Exp>
+  txHash?: InputMaybe<String_Comparison_Exp>
+  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>
+}
+
+/** unique or primary key constraints on table "marketplace" */
+export enum Marketplace_Constraint {
+  /** unique or primary key constraint on columns "id" */
+  CavemartPkey = 'cavemart_pkey',
+}
+
+/** input type for inserting data into table "marketplace" */
+export type Marketplace_Insert_Input = {
+  created_at?: InputMaybe<Scalars['timestamptz']>
+  deadline?: InputMaybe<Scalars['numeric']>
+  endPrice?: InputMaybe<Scalars['String']>
+  id?: InputMaybe<Scalars['uuid']>
+  newOwner?: InputMaybe<Scalars['String']>
+  signatureHash?: InputMaybe<Scalars['String']>
+  soldFor?: InputMaybe<Scalars['String']>
+  start?: InputMaybe<Scalars['String']>
+  startPrice?: InputMaybe<Scalars['String']>
+  tokenID?: InputMaybe<Scalars['numeric']>
+  tokenIsListed?: InputMaybe<Scalars['Boolean']>
+  tokenOption?: InputMaybe<Scalars['String']>
+  tokenOwner?: InputMaybe<Scalars['String']>
+  txBlockNumber?: InputMaybe<Scalars['numeric']>
+  txHash?: InputMaybe<Scalars['String']>
+  updated_at?: InputMaybe<Scalars['timestamptz']>
+}
+
+/** order by max() on columns of table "marketplace" */
+export type Marketplace_Max_Order_By = {
+  created_at?: InputMaybe<Order_By>
+  deadline?: InputMaybe<Order_By>
+  endPrice?: InputMaybe<Order_By>
+  newOwner?: InputMaybe<Order_By>
+  signatureHash?: InputMaybe<Order_By>
+  soldFor?: InputMaybe<Order_By>
+  start?: InputMaybe<Order_By>
+  startPrice?: InputMaybe<Order_By>
+  tokenID?: InputMaybe<Order_By>
+  tokenOption?: InputMaybe<Order_By>
+  tokenOwner?: InputMaybe<Order_By>
+  txBlockNumber?: InputMaybe<Order_By>
+  txHash?: InputMaybe<Order_By>
+  updated_at?: InputMaybe<Order_By>
+}
+
+/** order by min() on columns of table "marketplace" */
+export type Marketplace_Min_Order_By = {
+  created_at?: InputMaybe<Order_By>
+  deadline?: InputMaybe<Order_By>
+  endPrice?: InputMaybe<Order_By>
+  newOwner?: InputMaybe<Order_By>
+  signatureHash?: InputMaybe<Order_By>
+  soldFor?: InputMaybe<Order_By>
+  start?: InputMaybe<Order_By>
+  startPrice?: InputMaybe<Order_By>
+  tokenID?: InputMaybe<Order_By>
+  tokenOption?: InputMaybe<Order_By>
+  tokenOwner?: InputMaybe<Order_By>
+  txBlockNumber?: InputMaybe<Order_By>
+  txHash?: InputMaybe<Order_By>
+  updated_at?: InputMaybe<Order_By>
+}
+
+/** response of any mutation on the table "marketplace" */
+export type Marketplace_Mutation_Response = {
+  __typename?: 'marketplace_mutation_response'
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int']
+  /** data from the rows affected by the mutation */
+  returning: Array<Marketplace>
+}
+
+/** on_conflict condition type for table "marketplace" */
+export type Marketplace_On_Conflict = {
+  constraint: Marketplace_Constraint
+  update_columns?: Array<Marketplace_Update_Column>
+  where?: InputMaybe<Marketplace_Bool_Exp>
+}
+
+/** Ordering options when selecting data from "marketplace". */
+export type Marketplace_Order_By = {
+  created_at?: InputMaybe<Order_By>
+  deadline?: InputMaybe<Order_By>
+  endPrice?: InputMaybe<Order_By>
+  newOwner?: InputMaybe<Order_By>
+  signatureHash?: InputMaybe<Order_By>
+  soldFor?: InputMaybe<Order_By>
+  start?: InputMaybe<Order_By>
+  startPrice?: InputMaybe<Order_By>
+  tokenID?: InputMaybe<Order_By>
+  tokenIsListed?: InputMaybe<Order_By>
+  tokenOption?: InputMaybe<Order_By>
+  tokenOwner?: InputMaybe<Order_By>
+  txBlockNumber?: InputMaybe<Order_By>
+  txHash?: InputMaybe<Order_By>
+  updated_at?: InputMaybe<Order_By>
+}
+
+/** select columns of table "marketplace" */
+export enum Marketplace_Select_Column {
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Deadline = 'deadline',
+  /** column name */
+  EndPrice = 'endPrice',
+  /** column name */
+  NewOwner = 'newOwner',
+  /** column name */
+  SignatureHash = 'signatureHash',
+  /** column name */
+  SoldFor = 'soldFor',
+  /** column name */
+  Start = 'start',
+  /** column name */
+  StartPrice = 'startPrice',
+  /** column name */
+  TokenId = 'tokenID',
+  /** column name */
+  TokenIsListed = 'tokenIsListed',
+  /** column name */
+  TokenOption = 'tokenOption',
+  /** column name */
+  TokenOwner = 'tokenOwner',
+  /** column name */
+  TxBlockNumber = 'txBlockNumber',
+  /** column name */
+  TxHash = 'txHash',
+  /** column name */
+  UpdatedAt = 'updated_at',
+}
+
+/** order by stddev() on columns of table "marketplace" */
+export type Marketplace_Stddev_Order_By = {
+  deadline?: InputMaybe<Order_By>
+  tokenID?: InputMaybe<Order_By>
+  txBlockNumber?: InputMaybe<Order_By>
+}
+
+/** order by stddev_pop() on columns of table "marketplace" */
+export type Marketplace_Stddev_Pop_Order_By = {
+  deadline?: InputMaybe<Order_By>
+  tokenID?: InputMaybe<Order_By>
+  txBlockNumber?: InputMaybe<Order_By>
+}
+
+/** order by stddev_samp() on columns of table "marketplace" */
+export type Marketplace_Stddev_Samp_Order_By = {
+  deadline?: InputMaybe<Order_By>
+  tokenID?: InputMaybe<Order_By>
+  txBlockNumber?: InputMaybe<Order_By>
+}
+
+/** order by sum() on columns of table "marketplace" */
+export type Marketplace_Sum_Order_By = {
+  deadline?: InputMaybe<Order_By>
+  tokenID?: InputMaybe<Order_By>
+  txBlockNumber?: InputMaybe<Order_By>
+}
+
+/** placeholder for update columns of table "marketplace" (current role has no relevant permissions) */
+export enum Marketplace_Update_Column {
+  /** placeholder (do not use) */
+  Placeholder = '_PLACEHOLDER',
+}
+
+/** order by var_pop() on columns of table "marketplace" */
+export type Marketplace_Var_Pop_Order_By = {
+  deadline?: InputMaybe<Order_By>
+  tokenID?: InputMaybe<Order_By>
+  txBlockNumber?: InputMaybe<Order_By>
+}
+
+/** order by var_samp() on columns of table "marketplace" */
+export type Marketplace_Var_Samp_Order_By = {
+  deadline?: InputMaybe<Order_By>
+  tokenID?: InputMaybe<Order_By>
+  txBlockNumber?: InputMaybe<Order_By>
+}
+
+/** order by variance() on columns of table "marketplace" */
+export type Marketplace_Variance_Order_By = {
+  deadline?: InputMaybe<Order_By>
+  tokenID?: InputMaybe<Order_By>
+  txBlockNumber?: InputMaybe<Order_By>
+}
+
 /** mutation root */
 export type Mutation_Root = {
   __typename?: 'mutation_root'
-  /** insert data into the table: "cavemart" */
-  insert_cavemart?: Maybe<Cavemart_Mutation_Response>
-  /** insert a single row into the table: "cavemart" */
-  insert_cavemart_one?: Maybe<Cavemart>
+  /** insert data into the table: "marketplace" */
+  insert_marketplace?: Maybe<Marketplace_Mutation_Response>
+  /** insert a single row into the table: "marketplace" */
+  insert_marketplace_one?: Maybe<Marketplace>
 }
 
 /** mutation root */
-export type Mutation_RootInsert_CavemartArgs = {
-  objects: Array<Cavemart_Insert_Input>
-  on_conflict?: InputMaybe<Cavemart_On_Conflict>
+export type Mutation_RootInsert_MarketplaceArgs = {
+  objects: Array<Marketplace_Insert_Input>
+  on_conflict?: InputMaybe<Marketplace_On_Conflict>
 }
 
 /** mutation root */
-export type Mutation_RootInsert_Cavemart_OneArgs = {
-  object: Cavemart_Insert_Input
-  on_conflict?: InputMaybe<Cavemart_On_Conflict>
+export type Mutation_RootInsert_Marketplace_OneArgs = {
+  object: Marketplace_Insert_Input
+  on_conflict?: InputMaybe<Marketplace_On_Conflict>
 }
 
 /** Boolean expression to compare columns of type "numeric". All fields are combined with logical 'AND'. */
@@ -874,8 +890,6 @@ export enum Order_By {
 
 export type Query_Root = {
   __typename?: 'query_root'
-  /** An array relationship */
-  cavemart: Array<Cavemart>
   cnvData?: Maybe<CnvDataOutput>
   /** fetch data from the table: "logACNVRedemption" */
   logACNVRedemption: Array<LogAcnvRedemption>
@@ -899,6 +913,8 @@ export type Query_Root = {
   logStakingV1_PoolRewarded_by_pk?: Maybe<LogStakingV1_PoolRewarded>
   /** fetch data from the table: "logStakingV1" using primary key columns */
   logStakingV1_by_pk?: Maybe<LogStakingV1>
+  /** An array relationship */
+  marketplace: Array<Marketplace>
   /** fetch data from the table: "rebaseStakingV1" */
   rebaseStakingV1: Array<RebaseStakingV1>
   totalVapr?: Maybe<TotalVaprOutput>
@@ -906,14 +922,6 @@ export type Query_Root = {
   treasury: Array<Treasury>
   /** fetch data from the table: "treasury" using primary key columns */
   treasury_by_pk?: Maybe<Treasury>
-}
-
-export type Query_RootCavemartArgs = {
-  distinct_on?: InputMaybe<Array<Cavemart_Select_Column>>
-  limit?: InputMaybe<Scalars['Int']>
-  offset?: InputMaybe<Scalars['Int']>
-  order_by?: InputMaybe<Array<Cavemart_Order_By>>
-  where?: InputMaybe<Cavemart_Bool_Exp>
 }
 
 export type Query_RootLogAcnvRedemptionArgs = {
@@ -982,6 +990,14 @@ export type Query_RootLogStakingV1_PoolRewarded_By_PkArgs = {
 
 export type Query_RootLogStakingV1_By_PkArgs = {
   id: Scalars['uuid']
+}
+
+export type Query_RootMarketplaceArgs = {
+  distinct_on?: InputMaybe<Array<Marketplace_Select_Column>>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  order_by?: InputMaybe<Array<Marketplace_Order_By>>
+  where?: InputMaybe<Marketplace_Bool_Exp>
 }
 
 export type Query_RootRebaseStakingV1Args = {
@@ -1066,8 +1082,6 @@ export enum RebaseStakingV1_Select_Column {
 
 export type Subscription_Root = {
   __typename?: 'subscription_root'
-  /** An array relationship */
-  cavemart: Array<Cavemart>
   /** fetch data from the table: "logACNVRedemption" */
   logACNVRedemption: Array<LogAcnvRedemption>
   /** fetch data from the table: "logAccrualBondsV1_BondSold" */
@@ -1090,20 +1104,14 @@ export type Subscription_Root = {
   logStakingV1_PoolRewarded_by_pk?: Maybe<LogStakingV1_PoolRewarded>
   /** fetch data from the table: "logStakingV1" using primary key columns */
   logStakingV1_by_pk?: Maybe<LogStakingV1>
+  /** An array relationship */
+  marketplace: Array<Marketplace>
   /** fetch data from the table: "rebaseStakingV1" */
   rebaseStakingV1: Array<RebaseStakingV1>
   /** fetch data from the table: "treasury" */
   treasury: Array<Treasury>
   /** fetch data from the table: "treasury" using primary key columns */
   treasury_by_pk?: Maybe<Treasury>
-}
-
-export type Subscription_RootCavemartArgs = {
-  distinct_on?: InputMaybe<Array<Cavemart_Select_Column>>
-  limit?: InputMaybe<Scalars['Int']>
-  offset?: InputMaybe<Scalars['Int']>
-  order_by?: InputMaybe<Array<Cavemart_Order_By>>
-  where?: InputMaybe<Cavemart_Bool_Exp>
 }
 
 export type Subscription_RootLogAcnvRedemptionArgs = {
@@ -1172,6 +1180,14 @@ export type Subscription_RootLogStakingV1_PoolRewarded_By_PkArgs = {
 
 export type Subscription_RootLogStakingV1_By_PkArgs = {
   id: Scalars['uuid']
+}
+
+export type Subscription_RootMarketplaceArgs = {
+  distinct_on?: InputMaybe<Array<Marketplace_Select_Column>>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  order_by?: InputMaybe<Array<Marketplace_Order_By>>
+  where?: InputMaybe<Marketplace_Bool_Exp>
 }
 
 export type Subscription_RootRebaseStakingV1Args = {
@@ -1376,26 +1392,6 @@ export type Get_All_Total_Pools_VaprQuery = {
   }>
 }
 
-export type Insert_Cavemart_ListingMutationVariables = Exact<{
-  signatureHash?: InputMaybe<Scalars['String']>
-  start?: InputMaybe<Scalars['String']>
-  startPrice?: InputMaybe<Scalars['String']>
-  endPrice?: InputMaybe<Scalars['String']>
-  tokenID: Scalars['numeric']
-  tokenOwner: Scalars['String']
-  deadline?: InputMaybe<Scalars['numeric']>
-  tokenIsListed?: InputMaybe<Scalars['Boolean']>
-  newOwner?: InputMaybe<Scalars['String']>
-  soldFor?: InputMaybe<Scalars['String']>
-  txHash?: InputMaybe<Scalars['String']>
-  tokenOption?: InputMaybe<Scalars['String']>
-}>
-
-export type Insert_Cavemart_ListingMutation = {
-  __typename?: 'mutation_root'
-  insert_cavemart_one?: { __typename?: 'cavemart'; tokenID: any; tokenIsListed: boolean } | null
-}
-
 export type Get_Amm_Cnv_PriceQueryVariables = Exact<{ [key: string]: never }>
 
 export type Get_Amm_Cnv_PriceQuery = {
@@ -1560,6 +1556,30 @@ export type Get_Nft_Lock_PositionQuery = {
   }>
 }
 
+export type Insert_Marketplace_ListingMutationVariables = Exact<{
+  signatureHash?: InputMaybe<Scalars['String']>
+  start?: InputMaybe<Scalars['String']>
+  startPrice?: InputMaybe<Scalars['String']>
+  endPrice?: InputMaybe<Scalars['String']>
+  tokenID: Scalars['numeric']
+  tokenOwner: Scalars['String']
+  deadline?: InputMaybe<Scalars['numeric']>
+  tokenIsListed?: InputMaybe<Scalars['Boolean']>
+  newOwner?: InputMaybe<Scalars['String']>
+  soldFor?: InputMaybe<Scalars['String']>
+  txHash?: InputMaybe<Scalars['String']>
+  tokenOption?: InputMaybe<Scalars['String']>
+}>
+
+export type Insert_Marketplace_ListingMutation = {
+  __typename?: 'mutation_root'
+  insert_marketplace_one?: {
+    __typename?: 'marketplace'
+    tokenID: any
+    tokenIsListed: boolean
+  } | null
+}
+
 export type Get_TreasuryQueryVariables = Exact<{ [key: string]: never }>
 
 export type Get_TreasuryQuery = {
@@ -1688,38 +1708,6 @@ export const useGet_All_Total_Pools_VaprQuery = <
       Get_All_Total_Pools_VaprDocument,
       variables,
     ),
-    options,
-  )
-export const Insert_Cavemart_ListingDocument = `
-    mutation INSERT_CAVEMART_LISTING($signatureHash: String, $start: String, $startPrice: String, $endPrice: String, $tokenID: numeric!, $tokenOwner: String!, $deadline: numeric, $tokenIsListed: Boolean, $newOwner: String, $soldFor: String, $txHash: String, $tokenOption: String) {
-  insert_cavemart_one(
-    object: {signatureHash: $signatureHash, start: $start, startPrice: $startPrice, endPrice: $endPrice, tokenID: $tokenID, tokenIsListed: $tokenIsListed, tokenOwner: $tokenOwner, deadline: $deadline, newOwner: $newOwner, soldFor: $soldFor, txHash: $txHash, tokenOption: $tokenOption}
-  ) {
-    tokenID
-    tokenIsListed
-  }
-}
-    `
-export const useInsert_Cavemart_ListingMutation = <TError = unknown, TContext = unknown>(
-  options?: UseMutationOptions<
-    Insert_Cavemart_ListingMutation,
-    TError,
-    Insert_Cavemart_ListingMutationVariables,
-    TContext
-  >,
-) =>
-  useMutation<
-    Insert_Cavemart_ListingMutation,
-    TError,
-    Insert_Cavemart_ListingMutationVariables,
-    TContext
-  >(
-    ['INSERT_CAVEMART_LISTING'],
-    (variables?: Insert_Cavemart_ListingMutationVariables) =>
-      fetcher<Insert_Cavemart_ListingMutation, Insert_Cavemart_ListingMutationVariables>(
-        Insert_Cavemart_ListingDocument,
-        variables,
-      )(),
     options,
   )
 export const Get_Amm_Cnv_PriceDocument = `
@@ -2009,6 +1997,38 @@ export const useGet_Nft_Lock_PositionQuery = <TData = Get_Nft_Lock_PositionQuery
       Get_Nft_Lock_PositionDocument,
       variables,
     ),
+    options,
+  )
+export const Insert_Marketplace_ListingDocument = `
+    mutation INSERT_MARKETPLACE_LISTING($signatureHash: String, $start: String, $startPrice: String, $endPrice: String, $tokenID: numeric!, $tokenOwner: String!, $deadline: numeric, $tokenIsListed: Boolean, $newOwner: String, $soldFor: String, $txHash: String, $tokenOption: String) {
+  insert_marketplace_one(
+    object: {signatureHash: $signatureHash, start: $start, startPrice: $startPrice, endPrice: $endPrice, tokenID: $tokenID, tokenIsListed: $tokenIsListed, tokenOwner: $tokenOwner, deadline: $deadline, newOwner: $newOwner, soldFor: $soldFor, txHash: $txHash, tokenOption: $tokenOption}
+  ) {
+    tokenID
+    tokenIsListed
+  }
+}
+    `
+export const useInsert_Marketplace_ListingMutation = <TError = unknown, TContext = unknown>(
+  options?: UseMutationOptions<
+    Insert_Marketplace_ListingMutation,
+    TError,
+    Insert_Marketplace_ListingMutationVariables,
+    TContext
+  >,
+) =>
+  useMutation<
+    Insert_Marketplace_ListingMutation,
+    TError,
+    Insert_Marketplace_ListingMutationVariables,
+    TContext
+  >(
+    ['INSERT_MARKETPLACE_LISTING'],
+    (variables?: Insert_Marketplace_ListingMutationVariables) =>
+      fetcher<Insert_Marketplace_ListingMutation, Insert_Marketplace_ListingMutationVariables>(
+        Insert_Marketplace_ListingDocument,
+        variables,
+      )(),
     options,
   )
 export const Get_TreasuryDocument = `

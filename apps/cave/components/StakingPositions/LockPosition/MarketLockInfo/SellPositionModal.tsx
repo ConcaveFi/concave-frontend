@@ -125,8 +125,8 @@ export const useListeForSaleState = ({
     try {
       const data = await signTypedDataAsync()
       const signature = data.substring(2)
-      const cavemart = new FixedOrderMarketContract(concaveProvider(chain.rinkeby.id))
-      const computedSigner = await cavemart.computeSigner(market.new({ signature }))
+      const marketplaceContract = new FixedOrderMarketContract(concaveProvider(chain.rinkeby.id))
+      const computedSigner = await marketplaceContract.computeSigner(market.new({ signature }))
       if (computedSigner !== market.seller) {
         throw `Invalid signature`
       }

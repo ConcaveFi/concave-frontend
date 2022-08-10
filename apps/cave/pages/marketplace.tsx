@@ -32,6 +32,7 @@ const Marketplace = () => {
           <Flex
             direction={{ xl: 'row', base: 'column-reverse' }}
             gap={4}
+            m={2}
             maxH={'90vh'}
             justify="center"
             width="full"

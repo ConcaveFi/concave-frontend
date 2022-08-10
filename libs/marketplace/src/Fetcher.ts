@@ -51,7 +51,7 @@ export const listListedPositions = async ({ provider }: { provider: BaseProvider
   )
   const { stakingV1ToStakingPosition } = parser(stakingV1Contract, provider)
   const dirtyResults = data.logStakingV1
-  const cleanResults = dirtyResults.filter((c) => c.to === c.cavemart.at(-1).tokenOwner)
+  const cleanResults = dirtyResults.filter((c) => c.to === c.marketplace.at(-1).tokenOwner)
   return await Promise.all(cleanResults.map(stakingV1ToStakingPosition))
 }
 
@@ -65,10 +65,10 @@ export const marketplaceActivity = async ({ provider }: { provider: BaseProvider
   )
   const dirtyResults = data.logStakingV1
 
-  const activity: (Cavemart & StakingPool & LogStakingV1)[] = dirtyResults.reduce((a, b) => {
-    const marketplaceActivity = b.cavemart.map((c) => {
+  const activity: (Marketplace & StakingPool & LogStakingV1)[] = dirtyResults.reduce((a, b) => {
+    const marketplaceActivity = b.marketplace.map((c) => {
       const stakingPool: StakingPool = stakingPools[b.poolID]
-      return { ...b, ...c, ...stakingPool, cavemart: undefined } as Cavemart &
+      return { ...b, ...c, ...stakingPool, cavemart: undefined } as Marketplace &
         StakingPool &
         LogStakingV1
     })
@@ -76,7 +76,6 @@ export const marketplaceActivity = async ({ provider }: { provider: BaseProvider
   }, [])
 
   activity.sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
-  console.log(activity)
   return activity
 }
 
@@ -84,10 +83,10 @@ export interface LogStakingV1 {
   to: string
   poolID: number
   tokenID?: number
-  cavemart: Cavemart[]
+  marketplace: Marketplace[]
 }
 
-export type Cavemart = {
+export type Marketplace = {
   created_at: string
   signatureHash: string
   start: string
