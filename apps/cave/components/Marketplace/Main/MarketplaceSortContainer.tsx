@@ -18,11 +18,16 @@ export const MarketplaceSortConainer: FC<MarketplaceSortConainerProps> = ({
         isSelected={currentSort?.sort === 'STAKE_POOL'}
         nftSort={'STAKE_POOL'}
       />
-      {/* <MarketplaceSort
+      <MarketplaceSort
+        onChangeSort={onChangeSort}
+        isSelected={currentSort?.sort === 'DISCOUNT'}
+        nftSort={'DISCOUNT'}
+      />
+      <MarketplaceSort
         onChangeSort={onChangeSort}
         isSelected={currentSort?.sort === 'PRICE'}
         nftSort={'PRICE'}
-      /> */}
+      />
       <MarketplaceSort
         onChangeSort={onChangeSort}
         isSelected={currentSort?.sort === 'REDEEM_DATE'}

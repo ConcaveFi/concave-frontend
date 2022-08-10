@@ -21,6 +21,7 @@ export const useMarketplaceDashbord = () => {
     },
     { enabled: !!chainId, refetchOnWindowFocus: false },
   )
+
   const salePositions = data || []
   const { address: currentUserAddress } = useAccount()
   const [tokenIdFilter, setTokenIdFilter] = useState<number>()

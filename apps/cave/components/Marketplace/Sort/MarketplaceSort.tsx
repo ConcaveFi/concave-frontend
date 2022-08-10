@@ -62,4 +62,5 @@ const sortName = {
   STAKE_POOL: 'Stake period',
   PRICE: 'Price',
   REDEEM_DATE: 'Redeem in',
+  DISCOUNT: 'Discount',
 }

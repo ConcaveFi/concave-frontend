@@ -23,8 +23,14 @@ export const NftSortMethod = {
   },
   PRICE: {
     ASC: (current: StakingPosition, previus: StakingPosition) =>
-      current?.market.endPrice.gt(previus?.market.endPrice) ? 1 : -1,
+      current?.market.startPrice.gt(previus?.market.startPrice) ? 1 : -1,
     DESC: (current: StakingPosition, previus: StakingPosition) =>
-      previus?.market.endPrice.gt(current?.market.endPrice) ? 1 : -1,
+      previus?.market.startPrice.gt(current?.market.startPrice) ? 1 : -1,
+  },
+  DISCOUNT: {
+    ASC: (current: StakingPosition, previous: StakingPosition) =>
+      current.calculateDiscount().gt(previous.calculateDiscount()) ? 1 : -1,
+    DESC: (current: StakingPosition, previous: StakingPosition) =>
+      previous.calculateDiscount().gt(current.calculateDiscount()) ? 1 : -1,
   },
 }
