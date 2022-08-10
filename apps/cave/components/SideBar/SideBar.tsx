@@ -104,15 +104,14 @@ const SidebarContent = forwardRef<CardProps, 'div'>((props, ref) => {
       overflowY="auto"
       overflowX="hidden"
       sx={{ '::-webkit-scrollbar': { display: 'none' }, scrollbarWidth: 'none' }}
+      align="center"
       {...props}
     >
       <SideBarTop />
-      <Stack spacing="50px" mt="50px" mr={-3} ml="auto" pb={8} w="80%">
+      <Stack spacing="50px" mt="50px" pb={8} w="80%">
         <PageNav />
       </Stack>
-      <Flex mt={5}>
-        <SideBarBottom />
-      </Flex>
+      <SideBarBottom mt={5} />
     </Card>
   )
 })

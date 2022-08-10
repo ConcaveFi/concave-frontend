@@ -1,4 +1,4 @@
-import { CNV, Currency, DAI, FRAX, NATIVE, PCNV, USDC, WETH9 } from '@concave/core'
+import { CNV, Currency, DAI, NATIVE, PCNV, WETH9 } from '@concave/core'
 import { QuestionIcon } from '@concave/icons'
 import { Button, Flex, Heading, Modal, Skeleton } from '@concave/ui'
 import { useQueryCurrencies } from 'components/AMM/hooks/useQueryCurrencies'
@@ -91,49 +91,6 @@ const AMMCurrencySelectorModal = ({
 const LoadingCurrencySelector = () => (
   <Skeleton w="130px" h="30px" rounded="full" opacity={0.1} shadow="Up Small" />
 )
-const MarketTokens = ({
-  selected,
-  onSelect,
-}: {
-  selected?: Currency
-  onSelect: (currency: Currency) => void
-}) => {
-  const networkId = useCurrentSupportedNetworkId()
-  const currencies = [DAI, NATIVE, USDC, FRAX].map((c) => c[networkId]).filter((c) => c)
-  return GenericTokens({
-    selected,
-    currencies,
-    label: 'Common pairs',
-    onSelect,
-  })
-}
-
-const MarketCurrencySelectorModal = ({
-  selected,
-  onSelect,
-  isOpen,
-  onClose,
-}: {
-  selected: Currency
-  onSelect: (token: Currency) => void
-  isOpen: boolean
-  onClose: () => void
-}) => {
-  const selectAndClose = (token) => (onSelect(token), onClose())
-
-  return (
-    <Modal
-      bluryOverlay
-      title="Select a Token"
-      size="md"
-      isOpen={isOpen}
-      onClose={onClose}
-      bodyProps={{ gap: 4, w: ['350px', '420px'] }}
-    >
-      <MarketTokens selected={selected} onSelect={selectAndClose} />
-    </Modal>
-  )
-}
 
 export const SelectAMMCurrency = ({
   selected,
@@ -151,22 +108,6 @@ export const SelectAMMCurrency = ({
       selected={selected}
       onSelect={onSelect}
       CurrencySelectorModal={AMMCurrencySelectorModal}
-    />
-  )
-}
-
-export const SelectMarketCurrency = ({
-  selected,
-  onSelect,
-}: {
-  selected?: Currency
-  onSelect: (token: Currency) => void
-}) => {
-  return (
-    <CurrencySelector
-      selected={selected}
-      onSelect={onSelect}
-      CurrencySelectorModal={MarketCurrencySelectorModal}
     />
   )
 }

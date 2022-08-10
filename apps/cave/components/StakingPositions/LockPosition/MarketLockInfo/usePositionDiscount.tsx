@@ -13,16 +13,15 @@ export const useCoingeckoPrice = (base: Currency, quote: Currency) => {
 
     const denominator = quotePrice.value * 10 ** base.decimals
     const numerator = basePrice.value * 10 ** quote.decimals
-
     return new Price(base, quote, denominator, numerator)
   })
 }
 
 export const usePositionDiscount = (staking: StakingPosition, market?: MarketItem) => {
   const m = market || staking.market
-  const price = useCoingeckoPrice(m.currency, CNV[staking.chainId])
   const marketCurrencyAmount = CurrencyAmount.fromRawAmount(m.currency, m.startPrice.toString())
-  if (!price.data) return { ...price, discount: 0 }
+  const price = useCoingeckoPrice(m.currency, CNV[staking.chainId])
+  if (!price.data) return { ...price, discount: undefined }
   const cnvPrice = price.data.quote(marketCurrencyAmount)
   return {
     ...price,

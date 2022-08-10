@@ -49,7 +49,7 @@ function SideBarTop() {
   const { isConnected } = useAccount()
 
   return (
-    <Box shadow="down" px={2} pt={10} pb={3} rounded="2xl">
+    <Box shadow="down" px={2} pt={10} pb={3} rounded="2xl" w="100%">
       <Flex
         alignItems="center"
         justify="center"
@@ -63,7 +63,8 @@ function SideBarTop() {
       <Stack gap="1" align="flex-end" mt={7}>
         <ButtonLink
           href="/treasury" // and redirect to the treasury page
-          variant="primary.outline"
+          variant="secondary"
+          border="primary"
           size="medium"
           w="full"
           alignItems="center"

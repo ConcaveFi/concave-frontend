@@ -16,12 +16,12 @@ export const MarketplaceDashboard = () => {
   ))
   return (
     <VStack
-      width={'640px'}
-      maxHeight="940px"
+      width={'full'}
       rounded={'2xl'}
       apply="background.metalBrighter"
       shadow={'up'}
-      p={5}
+      p={4}
+      gap={4}
     >
       <MarketplaceFilterContainer
         stakeFilters={stakeFilters}
@@ -36,6 +36,7 @@ export const MarketplaceDashboard = () => {
         rounded={'inherit'}
         shadow="down"
         w="full"
+        h={'full'}
         maxW="900px"
         p={4}
         py={6}
@@ -44,7 +45,7 @@ export const MarketplaceDashboard = () => {
         direction="column"
         apply="scrollbar.big"
         bg={'linear-gradient(238.35deg, #19394C 9.11%, #0A161F 92.45%)'}
-        gap={2}
+        gap={4}
       >
         {positions.length == 0 ? (
           <>
