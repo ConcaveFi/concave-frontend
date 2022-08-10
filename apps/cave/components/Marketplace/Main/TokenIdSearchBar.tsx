@@ -12,6 +12,7 @@ export const TokenIdSearchBar: FC<TokenIdSearchBarProps> = ({ onApplyFilter }) =
         thousandSeparator={false}
         value={value}
         onValueChange={(event) => setValue(event.value)}
+        placeholder="Enter token id"
         onKeyDown={(event) => {
           if (event.code !== 'Enter') return
           onApplyFilter(value ? Number(value) : undefined)
