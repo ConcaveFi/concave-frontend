@@ -21,7 +21,7 @@ export const MarketplaceSort: FC<MarketplaceSortProps> = ({
   return (
     <Flex
       h={'30px'}
-      px={3}
+      px={4}
       rounded="full"
       shadow={'up'}
       align="center"
@@ -41,7 +41,7 @@ export const MarketplaceSort: FC<MarketplaceSortProps> = ({
         }
       }}
     >
-      <Text userSelect={'none'} color={!isSelected && 'text.low'}>
+      <Text fontSize={'sm'} userSelect={'none'} color={!isSelected && 'text.low'}>
         {sortName[nftSort]}
       </Text>
       <LinesIcon

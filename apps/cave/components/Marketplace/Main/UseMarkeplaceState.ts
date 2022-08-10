@@ -23,6 +23,7 @@ export const useMarketplaceDashbord = () => {
   )
   const salePositions = data || []
   const { address: currentUserAddress } = useAccount()
+  const [tokenIdFilter, setTokenIdFilter] = useState<number>()
   const [sort, setSort] = useState<NftSort>({ sort: 'REDEEM_DATE', order: 'ASC' })
   const sortFunction = sort ? NftSortMethod[sort.sort][sort.order] : () => 0
   const [stakeFilters, setStakeFilters] = useState([
@@ -34,15 +35,21 @@ export const useMarketplaceDashbord = () => {
   const now = BigNumber.from(Date.now()).div(1000)
   const { filterByStakePool } = useFilterByStakePool(stakeFilters)
   const nftPositions = salePositions
+    .filter((stakingPosition) => {
+      if (!tokenIdFilter) return true
+      return stakingPosition.tokenId === tokenIdFilter
+    })
     .filter((stakingPosition) => stakingPosition.market.deadline.gt(now))
     .filter((stakingPosition) => filterByStakePool(stakingPosition))
     .sort((current, previous) => sortFunction(current, previous))
   return {
+    tokenIdFilter,
     sort,
     nftPositions,
     stakeFilters,
     setStakeFilters,
     setSort,
+    setTokenIdFilter,
     isLoading,
     isFetching,
   }

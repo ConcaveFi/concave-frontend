@@ -10,17 +10,19 @@ export const MarketplaceSortConainer: FC<MarketplaceSortConainerProps> = ({
 }) => {
   return (
     <Flex align={'center'} justify="start" width={'full'} gap={4}>
-      <Text>Sort by:</Text>
+      <Text fontSize={'lg'} color="text.low" fontWeight={'bold'}>
+        Sort by:
+      </Text>
       <MarketplaceSort
         onChangeSort={onChangeSort}
         isSelected={currentSort?.sort === 'STAKE_POOL'}
         nftSort={'STAKE_POOL'}
       />
-      <MarketplaceSort
+      {/* <MarketplaceSort
         onChangeSort={onChangeSort}
         isSelected={currentSort?.sort === 'PRICE'}
         nftSort={'PRICE'}
-      />
+      /> */}
       <MarketplaceSort
         onChangeSort={onChangeSort}
         isSelected={currentSort?.sort === 'REDEEM_DATE'}

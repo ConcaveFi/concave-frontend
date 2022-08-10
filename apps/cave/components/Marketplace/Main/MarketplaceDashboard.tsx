@@ -3,11 +3,19 @@ import { Loading } from 'components/Loading'
 import { MarketplaceFilterContainer } from 'components/Marketplace/Main/MarketplaceFilterContainer'
 import { MarketplacePosition } from './MarketplacePosition'
 import { MarketplaceSortConainer } from './MarketplaceSortContainer'
+import { TokenIdSearchBar } from './TokenIdSearchBar'
 import { useMarketplaceDashbord } from './UseMarkeplaceState'
 
 export const MarketplaceDashboard = () => {
-  const { isFetching, nftPositions, stakeFilters, sort, setSort, setStakeFilters } =
-    useMarketplaceDashbord()
+  const {
+    isFetching,
+    nftPositions,
+    stakeFilters,
+    sort,
+    setTokenIdFilter,
+    setSort,
+    setStakeFilters,
+  } = useMarketplaceDashbord()
 
   const positions = nftPositions.map((stakingPosition) => (
     <MarketplacePosition
@@ -29,7 +37,10 @@ export const MarketplaceDashboard = () => {
         stakeFilters={stakeFilters}
         onChangeStakeFilters={setStakeFilters}
       />
-      <MarketplaceSortConainer onChangeSort={setSort} currentSort={sort} />
+      <Flex width={'full'}>
+        <MarketplaceSortConainer onChangeSort={setSort} currentSort={sort} />
+        <TokenIdSearchBar onApplyFilter={setTokenIdFilter} />
+      </Flex>
       <Flex
         as={Loading}
         size="md"
