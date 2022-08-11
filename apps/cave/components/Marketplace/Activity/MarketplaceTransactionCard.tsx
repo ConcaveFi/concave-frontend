@@ -2,7 +2,6 @@ import { NATIVE } from '@concave/core'
 import { TransactionIcon } from '@concave/icons'
 import { LogStakingV1, Marketplace, StakingPool } from '@concave/marketplace'
 import { Flex, Image, Link, Text, useMediaQuery, VStack } from '@concave/ui'
-import { formatDistanceToNowStrict } from 'date-fns'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useFetchTokenData } from 'hooks/useTokenList'
 import { useEffect, useState } from 'react'
@@ -15,6 +14,7 @@ interface MarketplaceTransactionCardProps {
 
 export const MarketplaceTransactionCard = ({ data }: MarketplaceTransactionCardProps) => {
   const labelColor = data.type === 'sale' ? '#7AF0CD' : '#2E97E2'
+  const cardListing = data.type === 'sale' ? 'is sold for' : 'is listed at'
   const chainId = useCurrentSupportedNetworkId()
   const etherscanBaseUrl =
     chainId === chain.mainnet.id ? `https://etherscan.io` : `https://rinkeby.etherscan.io`
@@ -33,6 +33,7 @@ export const MarketplaceTransactionCard = ({ data }: MarketplaceTransactionCardP
 
   const currencyInfo = useFetchTokenData(chainId, data.tokenOption)
   const curreny = currencyInfo.isError ? NATIVE[chainId] : currencyInfo.data
+  const formatedDate = new Date(data.date).toString().slice(4, 21)
 
   return (
     <Flex
@@ -45,7 +46,7 @@ export const MarketplaceTransactionCard = ({ data }: MarketplaceTransactionCardP
       bg="#33333309"
     >
       <Flex direction={'column'} width={130} justify="end">
-        <VStack height={'full'} mt={2}>
+        <VStack height={'full'} mt={2} border="2px solid white">
           <Text position={'absolute'} fontWeight={700} textColor={labelColor}>
             {data.type}
           </Text>
@@ -61,16 +62,16 @@ export const MarketplaceTransactionCard = ({ data }: MarketplaceTransactionCardP
         align="start"
         fontSize={14}
       >
-        <Text pt={1}>{formatDistanceToNowStrict(data.date)}</Text>
+        <Text pt={1}>{formatedDate}</Text>
         <Flex direction={'column'}>
           <Flex alignItems={'end'} width={'full'}>
             <Text fontSize={14} textColor={'white'} fontWeight="700">
-              {data.days} Days,
+              {data.days / 30} month
             </Text>
-            <Text pl={1}> positions is</Text>
+            <Text pl={1}> position</Text>
           </Flex>
           <Flex alignItems={'end'} width={'full'}>
-            <Text> listed at</Text>
+            <Text> {cardListing}</Text>
             <Text pl={1} fontSize={14} textColor={'white'} fontWeight="700">
               {compactFormat(data.amount, { decimals: curreny?.decimals })} {curreny?.symbol}
             </Text>
