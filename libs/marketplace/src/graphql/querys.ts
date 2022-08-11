@@ -1,6 +1,10 @@
 export const listCavemartListingDocuments = `
 query GET_ALL_CAVEMART_USERS_LISTINGS {
-  logStakingV1(where: {marketplace: {tokenID: {_is_null: false}}}, order_by: {tokenID: desc, created_at: desc}, distinct_on: tokenID) {
+  logStakingV1(
+    where: {marketplace: {tokenID: {_is_null: false}}}
+    distinct_on: [tokenID]
+    order_by: [{tokenID: asc}, {txBlockNumber: desc}, {created_at: desc}], 
+  ) {
     created_at
     to
     amountLocked
@@ -27,7 +31,10 @@ query GET_ALL_CAVEMART_USERS_LISTINGS {
 }
 `
 export const fetchUserPositionsQuery = `query GET_ALL_USERS_POSITIONS {
-  logStakingV1(order_by: {tokenID: asc, txBlockNumber: desc, created_at: desc}, distinct_on: tokenID) {
+  logStakingV1(
+    distinct_on: [tokenID]
+    order_by: [{tokenID: asc}, {txBlockNumber: desc}, {created_at: desc}], 
+  ) {
     created_at
     to
     amountLocked
