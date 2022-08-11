@@ -1,4 +1,4 @@
-import { Currency } from '@concave/core'
+import { Currency, CurrencyAmount } from '@concave/core'
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
 
 type MarketArgs = {
@@ -87,7 +87,9 @@ export class MarketItem {
   public new(parial: Partial<MarketArgs> = {}) {
     return new MarketItem({ ...this, ...parial })
   }
-
+  get currencyAmount() {
+    return CurrencyAmount.fromRawAmount(this.currency, this.startPrice.toString())
+  }
   get datatypeForSignature() {
     return {
       SwapMetadata: [

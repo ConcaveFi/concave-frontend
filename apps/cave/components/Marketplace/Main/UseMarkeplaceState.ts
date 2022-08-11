@@ -3,17 +3,16 @@ import {
   StakePoolFilterEnum,
   useFilterByStakePool,
 } from 'components/NftFilters/Filters/hooks/useFilterByStakePool'
-import { NftSort, NftSortMethod } from 'components/NftFilters/Sorters/hooks/useNftSort'
+import { NftSort, usePositionSorter } from 'components/NftFilters/Sorters/hooks/useNftSort'
 import { BigNumber } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
-import { useAccount } from 'wagmi'
 
 export const useMarketplaceDashbord = () => {
   const chainId = useCurrentSupportedNetworkId()
-  const { data, isLoading, isFetching } = useQuery(
+  const positions = useQuery(
     ['sales', chainId],
     async () => {
       const provider = concaveProvider(chainId)
@@ -21,12 +20,12 @@ export const useMarketplaceDashbord = () => {
     },
     { enabled: !!chainId, refetchOnWindowFocus: false },
   )
-
-  const salePositions = data || []
-  const { address: currentUserAddress } = useAccount()
+  const positionSorter = usePositionSorter()
+  const salePositions = positions.data || []
   const [tokenIdFilter, setTokenIdFilter] = useState<number>()
   const [sort, setSort] = useState<NftSort>({ sort: 'REDEEM_DATE', order: 'ASC' })
-  const sortFunction = sort ? NftSortMethod[sort.sort][sort.order] : () => 0
+  const sortFunction = sort ? positionSorter.data?.[sort.sort][sort.order] : () => 0
+
   const [stakeFilters, setStakeFilters] = useState([
     StakePoolFilterEnum.FILTER_BY_45_DAYS,
     StakePoolFilterEnum.FILTER_BY_90_DAYS,
@@ -51,7 +50,7 @@ export const useMarketplaceDashbord = () => {
     setStakeFilters,
     setSort,
     setTokenIdFilter,
-    isLoading,
-    isFetching,
+    isLoading: positions.isLoading || positionSorter.isLoading,
+    isFetching: positions.isFetching || positionSorter.isFetching,
   }
 }
