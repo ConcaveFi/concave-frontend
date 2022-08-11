@@ -3,7 +3,7 @@ import { useTransactionStatusToast } from 'components/TransactionStatusToast'
 import { Transaction } from 'ethers'
 import { useLocalStorage } from 'hooks/useLocalStorage'
 import { concaveProvider } from 'lib/providers'
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect } from 'react'
 import { QueriesObserver, useQueryClient } from 'react-query'
 import { useAccount, useNetwork } from 'wagmi'
 import { TrackedTransaction } from './TrackedTransactions'
@@ -73,10 +73,8 @@ export const useTransactionRegistry = () => {
   }
 }
 
-/**
-  CAUTION: this component should be called only once in the app (preferably at _app), 
-  each time it's called it spawns a new tracked transactions listener
-  
+let TransactionsObserverSingleton: QueriesObserver
+/**  
   await resolution of pending transactions saved to localstorage
   (ex user closed the app while pending, when he connects again, will load localstorage, 
    and await resolution of his pending transactions, so we can show toasts etc)
@@ -86,15 +84,13 @@ export const TransactionsObserver = () => {
 
   const queryClient = useQueryClient()
 
-  const observer = useRef<QueriesObserver>()
-
   useEffect(() => {
-    if (observer.current) observer.current.destroy()
+    if (TransactionsObserverSingleton) TransactionsObserverSingleton.destroy()
 
     const pendingTxs = transactions?.filter((tx) => tx.status === 'pending')
     if (!pendingTxs || pendingTxs.length === 0) return
 
-    observer.current = new QueriesObserver(
+    TransactionsObserverSingleton = new QueriesObserver(
       queryClient,
       pendingTxs.map((tx) => ({
         queryKey: tx.hash,
@@ -108,10 +104,10 @@ export const TransactionsObserver = () => {
         },
         refetchOnWindowFocus: false,
         refetchOnReconnect: false,
-      })) || [],
+      })),
     )
 
-    const unsubscribe = observer.current.subscribe()
+    const unsubscribe = TransactionsObserverSingleton.subscribe()
 
     // Clean up subscription on unmount
     return () => unsubscribe()

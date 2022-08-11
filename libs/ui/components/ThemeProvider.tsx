@@ -4,10 +4,13 @@ import {
   localStorageManager,
 } from '@chakra-ui/color-mode'
 import { ChakraProvider } from '@chakra-ui/provider'
+import { createStandaloneToast } from '@chakra-ui/react'
 import { Styles } from '@chakra-ui/theme-tools'
 import { ReactNode } from 'react'
 
 import theme from '../theme'
+
+const { ToastContainer } = createStandaloneToast({ theme })
 
 export const ThemeProvider = ({
   cookies,
@@ -27,6 +30,7 @@ export const ThemeProvider = ({
       theme={{ ...theme, styles: globalStyles }}
       colorModeManager={colorModeManager}
     >
+      <ToastContainer />
       {children}
     </ChakraProvider>
   )
