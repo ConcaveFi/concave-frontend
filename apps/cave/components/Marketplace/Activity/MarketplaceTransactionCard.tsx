@@ -1,8 +1,7 @@
 import { NATIVE } from '@concave/core'
 import { TransactionIcon } from '@concave/icons'
 import { LogStakingV1, Marketplace, StakingPool } from '@concave/marketplace'
-import { Flex, Image, Link, Text, useMediaQuery, VStack } from '@concave/ui'
-import { formatDistanceToNowStrict } from 'date-fns'
+import { Flex, gradientBorder, Image, Link, Text, useMediaQuery, VStack } from '@concave/ui'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useFetchTokenData } from 'hooks/useTokenList'
 import { useEffect, useState } from 'react'
@@ -15,6 +14,7 @@ interface MarketplaceTransactionCardProps {
 
 export const MarketplaceTransactionCard = ({ data }: MarketplaceTransactionCardProps) => {
   const labelColor = data.type === 'sale' ? '#7AF0CD' : '#2E97E2'
+  const cardListing = data.type === 'sale' ? 'sold for' : 'listed at'
   const chainId = useCurrentSupportedNetworkId()
   const etherscanBaseUrl =
     chainId === chain.mainnet.id ? `https://etherscan.io` : `https://rinkeby.etherscan.io`
@@ -33,6 +33,15 @@ export const MarketplaceTransactionCard = ({ data }: MarketplaceTransactionCardP
 
   const currencyInfo = useFetchTokenData(chainId, data.tokenOption)
   const curreny = currencyInfo.isError ? NATIVE[chainId] : currencyInfo.data
+  const formatedDate = new Date(data.date).toLocaleString([], {
+    hour12: true,
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  })
 
   return (
     <Flex
@@ -41,16 +50,35 @@ export const MarketplaceTransactionCard = ({ data }: MarketplaceTransactionCardP
       rounded="2xl"
       mb={2}
       shadow="Up Small"
+      sx={{ ...gradientBorder({ variant: 'secondary', borderWidth: 2 }) }}
       justify={'space-between'}
       bg="#33333309"
     >
-      <Flex direction={'column'} width={130} justify="end">
-        <VStack height={'full'} mt={2}>
-          <Text position={'absolute'} fontWeight={700} textColor={labelColor}>
+      <Flex direction={'column'} justify="start" width={130} position={'relative'}>
+        <VStack
+          height={'28px'}
+          width="80px"
+          borderRadius={'16px 0px 16px 0px'}
+          sx={{ ...gradientBorder({ variant: 'secondary', borderWidth: 2 }) }}
+          justify="center"
+        >
+          <Text
+            position={'absolute'}
+            style={{ textTransform: 'capitalize' }}
+            fontWeight={700}
+            textColor={labelColor}
+          >
             {data.type}
           </Text>
         </VStack>
-        <Image sizes="100%" src={`/assets/marketplace/${imgNameByPeriod}`} alt="position" />
+        <Image
+          position={'absolute'}
+          mt={4}
+          justifySelf={'center'}
+          boxSize="90px"
+          src={`/assets/marketplace/${imgNameByPeriod}`}
+          alt="position"
+        />
       </Flex>
       <Flex
         width={'full'}
@@ -61,16 +89,18 @@ export const MarketplaceTransactionCard = ({ data }: MarketplaceTransactionCardP
         align="start"
         fontSize={14}
       >
-        <Text pt={1}>{formatDistanceToNowStrict(data.date)}</Text>
+        <Text pt={1} fontSize={12}>
+          {formatedDate}
+        </Text>
         <Flex direction={'column'}>
           <Flex alignItems={'end'} width={'full'}>
             <Text fontSize={14} textColor={'white'} fontWeight="700">
-              {data.days} Days,
+              {data.days / 30} month
             </Text>
-            <Text pl={1}> positions is</Text>
+            <Text pl={1}> position</Text>
           </Flex>
           <Flex alignItems={'end'} width={'full'}>
-            <Text> listed at</Text>
+            <Text> {cardListing}</Text>
             <Text pl={1} fontSize={14} textColor={'white'} fontWeight="700">
               {compactFormat(data.amount, { decimals: curreny?.decimals })} {curreny?.symbol}
             </Text>
