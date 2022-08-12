@@ -23,7 +23,7 @@ import { useMemo } from 'react'
 import { compactFormat, formatFixed } from 'utils/formatFixed'
 import { useAccount, useSigner } from 'wagmi'
 
-const border = gradientBorder({ borderWidth: 2 })
+const border = gradientBorder({ borderWidth: 1 })
 
 type MarketplacePositionProps = { stakingPosition: StakingPosition }
 export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakingPosition }) => {
@@ -229,10 +229,17 @@ const BuyContainer = ({ stakingPosition, ...boxProps }: BuyContainerProps) => {
   ])
 
   return (
-    <Card p={0.5} h={'full'} rounded={'2xl'} {...boxProps} boxShadow={'Up Big'}>
+    <Card
+      p={0.5}
+      h={'full'}
+      borderGradient="secondary"
+      rounded={'2xl'}
+      {...boxProps}
+      boxShadow={'Up Big'}
+    >
       <Flex w="auto" h={'59px'} rounded={'2xl'} shadow="up" justify="end">
         {buttonProps.minWidth === '45%' && (
-          <HStack flex={1} align="center" justify="center">
+          <HStack flex={1} align="center" mr={6} justify="center">
             <Flex direction={'column'} fontWeight={'bold'} p={2}>
               <Text fontSize={'12px'} color="text.low" mr={`auto`}>
                 Price
