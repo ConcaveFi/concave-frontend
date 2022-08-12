@@ -1,7 +1,7 @@
 import { NATIVE } from '@concave/core'
 import { TransactionIcon } from '@concave/icons'
 import { LogStakingV1, Marketplace, StakingPool } from '@concave/marketplace'
-import { Flex, Image, Link, Text, useMediaQuery, VStack } from '@concave/ui'
+import { Flex, gradientBorder, Image, Link, Text, useMediaQuery, VStack } from '@concave/ui'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useFetchTokenData } from 'hooks/useTokenList'
 import { useEffect, useState } from 'react'
@@ -50,21 +50,30 @@ export const MarketplaceTransactionCard = ({ data }: MarketplaceTransactionCardP
       rounded="2xl"
       mb={2}
       shadow="Up Small"
+      sx={{ ...gradientBorder({ variant: 'secondary', borderWidth: 2 }) }}
       justify={'space-between'}
       bg="#33333309"
     >
-      <Flex direction={'column'} width={130} justify="end">
-        <VStack height={'full'} mt={2}>
-          <Text
-            position={'absolute'}
-            fontWeight={700}
-            style={{ textTransform: 'capitalize' }}
-            textColor={labelColor}
-          >
+      <Flex direction={'column'} justify="start" width={130} position={'relative'}>
+        <VStack
+          height={'28px'}
+          width="80px"
+          borderRadius={'16px 0px 16px 0px'}
+          sx={{ ...gradientBorder({ variant: 'secondary', borderWidth: 2 }) }}
+          justify="center"
+        >
+          <Text position={'absolute'} fontWeight={700} textColor={labelColor}>
             {data.type}
           </Text>
         </VStack>
-        <Image sizes="100%" src={`/assets/marketplace/${imgNameByPeriod}`} alt="position" />
+        <Image
+          position={'absolute'}
+          mt={4}
+          justifySelf={'center'}
+          boxSize="90px"
+          src={`/assets/marketplace/${imgNameByPeriod}`}
+          alt="position"
+        />
       </Flex>
       <Flex
         width={'full'}
