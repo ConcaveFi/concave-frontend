@@ -67,6 +67,6 @@ export const getTransactionStatusLabel = ({ status, meta }: Partial<TrackedTrans
         error: `Failed to make a offer to #${tokenId}`,
       }),
       fallback,
-    })[meta.type] || fallback
+    })[meta?.type] || fallback
   )(meta as UnionToIntersection<TransactionMeta>)[status]
 }

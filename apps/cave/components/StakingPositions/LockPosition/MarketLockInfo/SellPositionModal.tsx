@@ -92,7 +92,7 @@ export const useListeForSaleState = ({
 }) => {
   const { signTypedDataAsync } = useSignTypedData({
     domain: {
-      name: 'Cavemart',
+      name: 'Marketplace',
       version: '1',
       chainId: chain.rinkeby.id,
       verifyingContract: FIXED_ORDER_MARKET_CONTRACT[chain.rinkeby.id],
