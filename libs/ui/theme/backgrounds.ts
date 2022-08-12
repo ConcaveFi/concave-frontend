@@ -9,6 +9,7 @@ export const textures = {
   glass: {
     bg: 'url("/assets/textures/glass.jpg")',
   },
+  glassBig: 'url("/assets/textures/glassBig.jpg")',
 }
 
 export const backgrounds = {
@@ -39,6 +40,22 @@ export const backgrounds = {
     },
     backdropFilter: 'blur(8px)', // it's technically blur(15px) on figma but visually 8px looks better
     filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
+  },
+  glassBig: {
+    pos: 'relative',
+    '::after': {
+      borderRadius: 'inherit',
+      content: '""',
+      bg: `${textures.glassBig}`,
+      opacity: 0.5,
+      inset: 0,
+      pos: 'absolute',
+      zIndex: -1,
+      bgSize: 'cover',
+      shadow: 'inset -30px 30px 20px rgba(0, 0, 0, 0.35)',
+    },
+    filter:
+      'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25)) drop-shadow(-20px 30px 20px rgba(6, 9, 12, 0.5)) drop-shadow(4px -7px 20px rgba(174, 177, 255, 0.13))',
   },
 }
 export default backgrounds

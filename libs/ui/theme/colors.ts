@@ -11,6 +11,9 @@ export const colors = {
     medium: '#D7E9FF',
     low: '#5f7a99',
     accent: '#2E97E2',
+    small: '#748CA9',
+    bright: '#79B2F4',
+    brightGreen: '#24C9B5',
   },
 
   stroke: {
@@ -18,8 +21,8 @@ export const colors = {
       'linear-gradient(41.89deg, #53399B 0.69%, #7DE0FF 38.19%, #504179 72.85%, #84E2FF 100%)',
     secondary:
       'linear-gradient(57deg, #171E27 -7.38%, #435F81 29.46%, #202D3D 71.39%, #93C5FF 107.62%)',
-
-    accent: `linear-gradient(90deg, #72639B 0%, #44B9DE 100%)`,
+    accent: 'linear-gradient(90deg, #72639B 0%, #44B9DE 100%)',
+    brightGreen: 'linear-gradient( 180deg, #7AF0CD 0%, #24C9B5 100% )',
   },
 
   primary: /* purple & blue */ {
