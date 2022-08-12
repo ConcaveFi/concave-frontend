@@ -9,7 +9,6 @@ import {
   Flex,
   forwardRef,
   Image,
-  Stack,
   useDisclosure,
 } from '@concave/ui'
 import { motion } from 'framer-motion'
@@ -105,13 +104,12 @@ const SidebarContent = forwardRef<CardProps, 'div'>((props, ref) => {
       overflowX="hidden"
       sx={{ '::-webkit-scrollbar': { display: 'none' }, scrollbarWidth: 'none' }}
       align="center"
+      gap="30px"
       {...props}
     >
       <SideBarTop />
-      <Stack spacing="50px" mt="50px" pb={8} w="80%">
-        <PageNav />
-      </Stack>
-      <SideBarBottom mt={5} />
+      <PageNav />
+      <SideBarBottom mt={6} />
     </Card>
   )
 })
