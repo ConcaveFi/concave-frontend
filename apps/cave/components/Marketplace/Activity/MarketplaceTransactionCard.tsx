@@ -14,7 +14,7 @@ interface MarketplaceTransactionCardProps {
 
 export const MarketplaceTransactionCard = ({ data }: MarketplaceTransactionCardProps) => {
   const labelColor = data.type === 'sale' ? '#7AF0CD' : '#2E97E2'
-  const cardListing = data.type === 'sale' ? 'is sold for' : 'is listed at'
+  const cardListing = data.type === 'sale' ? 'sold for' : 'listed at'
   const chainId = useCurrentSupportedNetworkId()
   const etherscanBaseUrl =
     chainId === chain.mainnet.id ? `https://etherscan.io` : `https://rinkeby.etherscan.io`
@@ -33,7 +33,15 @@ export const MarketplaceTransactionCard = ({ data }: MarketplaceTransactionCardP
 
   const currencyInfo = useFetchTokenData(chainId, data.tokenOption)
   const curreny = currencyInfo.isError ? NATIVE[chainId] : currencyInfo.data
-  const formatedDate = new Date(data.date).toString().slice(4, 21)
+  const formatedDate = new Date(data.date).toLocaleString([], {
+    hour12: true,
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  })
 
   return (
     <Flex
@@ -46,8 +54,13 @@ export const MarketplaceTransactionCard = ({ data }: MarketplaceTransactionCardP
       bg="#33333309"
     >
       <Flex direction={'column'} width={130} justify="end">
-        <VStack height={'full'} mt={2} border="2px solid white">
-          <Text position={'absolute'} fontWeight={700} textColor={labelColor}>
+        <VStack height={'full'} mt={2}>
+          <Text
+            position={'absolute'}
+            fontWeight={700}
+            style={{ textTransform: 'capitalize' }}
+            textColor={labelColor}
+          >
             {data.type}
           </Text>
         </VStack>
@@ -62,7 +75,9 @@ export const MarketplaceTransactionCard = ({ data }: MarketplaceTransactionCardP
         align="start"
         fontSize={14}
       >
-        <Text pt={1}>{formatedDate}</Text>
+        <Text pt={1} fontSize={12}>
+          {formatedDate}
+        </Text>
         <Flex direction={'column'}>
           <Flex alignItems={'end'} width={'full'}>
             <Text fontSize={14} textColor={'white'} fontWeight="700">
