@@ -62,7 +62,12 @@ export const MarketplaceTransactionCard = ({ data }: MarketplaceTransactionCardP
           sx={{ ...gradientBorder({ variant: 'secondary', borderWidth: 2 }) }}
           justify="center"
         >
-          <Text position={'absolute'} fontWeight={700} textColor={labelColor}>
+          <Text
+            position={'absolute'}
+            style={{ textTransform: 'capitalize' }}
+            fontWeight={700}
+            textColor={labelColor}
+          >
             {data.type}
           </Text>
         </VStack>
