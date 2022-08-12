@@ -29,18 +29,11 @@ export const MarketplaceDashboard = () => {
   const { push } = useRouter()
 
   return (
-    <VStack
-      width={'full'}
-      rounded={'2xl'}
-      apply="background.metalBrighter"
-      shadow={'up'}
-      p={4}
-      gap={4}
-    >
+    <VStack width={'full'} rounded={'2xl'} apply="background.metal" shadow={'up'} p={4} gap={4}>
       <Flex
         mb={-10}
         align={'center'}
-        sx={{ ...gradientBorder({ borderWidth: 2, variant: 'secondary' }) }}
+        sx={{ ...gradientBorder({ borderWidth: 1 }) }}
         alignSelf={'end'}
         rounded="2xl"
         shadow={'up'}
@@ -71,14 +64,12 @@ export const MarketplaceDashboard = () => {
         shadow="down"
         w="full"
         h={'full'}
-        maxW="900px"
         p={4}
         py={6}
         justify="start"
         overflowY={'auto'}
         direction="column"
         apply="scrollbar.big"
-        bg={'linear-gradient(238.35deg, #19394C 9.11%, #0A161F 92.45%)'}
         gap={4}
       >
         {positions.length == 0 ? (
