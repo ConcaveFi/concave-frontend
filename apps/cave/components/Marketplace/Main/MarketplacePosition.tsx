@@ -11,6 +11,7 @@ import {
   gradientBorder,
   HStack,
   Spinner,
+  useDisclosure,
 } from '@concave/ui'
 import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { usePositionDiscount } from 'components/StakingPositions/LockPosition/MarketLockInfo/usePositionDiscount'
@@ -34,16 +35,21 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakin
   const diff = (differenceInDays(positionDate, Date.now()) - days) * -1
   const percentToMaturity = new Percent(diff, days)
   const discount = usePositionDiscount(stakingPosition)
+  const { isOpen, onClose, onOpen } = useDisclosure()
 
   return (
-    <Popover placement="right" trigger="hover">
+    <Popover placement="right" isOpen={isOpen}>
       <PopoverTrigger>
         <Flex
+          onMouseOver={onOpen}
+          onMouseOut={onClose}
           width={'full'}
           rounded={'2xl'}
           shadow="up"
           transition={`0.15s`}
-          apply="background.metalBrighter"
+          bg="url(assets/textures/metal.png), linear-gradient(180deg, #16222E 0.7%, #28394D 55.07%)"
+          bgPos={'50% 50%, 0px 0px'}
+          bgSize="120px, auto"
           direction={'column'}
           _hover={{
             boxShadow: 'Blue Light',
@@ -80,6 +86,7 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakin
       <PopoverContent w={'350px'}>
         <Flex
           direction={'column'}
+          onMouseLeave={onClose}
           p={4}
           rounded="inherit"
           apply={'background.glass'}
@@ -87,6 +94,7 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakin
           fontWeight="bold"
           borderRadius={'2xl'}
           justifyContent={'left'}
+          sx={{ ...gradientBorder({ borderWidth: 1 }) }}
         >
           <HStack>
             <Text color="text.low">Listing expiration date:</Text>
