@@ -25,16 +25,7 @@ export default function ConnectedAreasContainer() {
           Change Network
         </Text>
         <Button onClick={onOpenChangeNetwork} p={2} rounded="3xl" shadow="Up Big" h="40px">
-          <Avatar
-            shadow="up"
-            w="25px"
-            h="25px"
-            src={
-              chain.id == 1
-                ? 'https://raw.githubusercontent.com/ConcaveFi/assets/master/blockchains/ethereum/info/logo.png'
-                : 'https://raw.githubusercontent.com/ConcaveFi/assets/master/blockchains/arbitrum/info/logo.png'
-            }
-          />
+          <Avatar shadow="up" w="25px" h="25px" src="/assets/tokens/eth.svg" />
           <Text mx={2} fontWeight={'bold'} fontSize={{ base: '14px', sm: 'lg' }}>
             {chain?.name}
           </Text>

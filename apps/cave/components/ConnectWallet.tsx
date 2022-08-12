@@ -107,14 +107,12 @@ export const UserWallet = () => {
         height="40px"
         shadow="up"
         fontFamily="heading"
-        color="text.low"
         _focus={{ color: 'text.high', shadow: 'up' }}
         w="100%"
-        rounded={'2xl'}
+        rounded="2xl"
       >
-        <Flex fontWeight="bold" mx={'auto'}>
-          {ellipseAddress(address)}
-        </Flex>
+        <Image src="/assets/tokens/eth.svg" alt="ethereum icon" w="22px" h="22px" mr={2} />
+        <Flex fontWeight="bold">{ellipseAddress(address)}</Flex>
         {recentTransactions.some((tx) => tx.status === 'pending') && (
           <Flex position={'absolute'} width="80%" justify={'end'}>
             <SpinnerIcon color={'text.low'} animation={spinAnimation(4)} boxSize={'20px'} />
