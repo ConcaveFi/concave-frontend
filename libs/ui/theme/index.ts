@@ -12,6 +12,7 @@ import Modal from './components/ModalStyles'
 import Popover from './components/PopoverStyles'
 import Switch from './components/SwitchStyles'
 import Tooltip from './components/TooltipStyles'
+import font from './fontPresets'
 import { fonts } from './foundations'
 import scrollbar from './scrollbars'
 import shadows from './shadows'
@@ -23,6 +24,7 @@ const theme = extendTheme({
   shadows,
   scrollbar,
   background,
+  font,
   components: {
     Input,
     Button,
