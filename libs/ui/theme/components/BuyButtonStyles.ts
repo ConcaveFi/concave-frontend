@@ -4,7 +4,7 @@ import { gradientBorder } from '../utils/gradientBorder'
 export const BuyButtonStyles: ComponentStyleConfig = {
   parts: ['card', 'button'],
   baseStyle: ({
-    borderWidth = 2,
+    borderWidth = 1,
     borderRadius = '2xl',
     borderColor = `linear-gradient(45deg, #122235 0%, #7DADD0 30.74%, #272138 67.72%, #7D9EC6 100%)`,
     borderGradient,
@@ -36,7 +36,12 @@ export const BuyButtonStyles: ComponentStyleConfig = {
       px: 4,
       borderColor,
       borderRadius,
-      ...gradientBorder({ borderRadius, borderWidth, ...props, variant: borderGradient }),
+      ...gradientBorder({
+        borderRadius,
+        borderWidth: borderWidth * 2,
+        ...props,
+        variant: borderGradient,
+      }),
     },
   }),
   sizes: {

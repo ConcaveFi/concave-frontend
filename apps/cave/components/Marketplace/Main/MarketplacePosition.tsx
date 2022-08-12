@@ -2,17 +2,8 @@ import { Box, Flex, Image, Popover, PopoverContent, PopoverTrigger, Text } from 
 import { CurrencyAmount, FIXED_ORDER_MARKET_CONTRACT, NATIVE, Percent } from '@concave/core'
 import { LockedIcon, UnlockedIcon } from '@concave/icons'
 import { FixedOrderMarketContract, StakingPosition } from '@concave/marketplace'
-import {
-  Button,
-  ButtonProps,
-  Card,
-  CardProps,
-  FlexProps,
-  gradientBorder,
-  HStack,
-  Spinner,
-  useDisclosure,
-} from '@concave/ui'
+import { FlexProps, gradientBorder, HStack, Spinner } from '@concave/ui'
+import { BuyButton } from 'components/BuyButton/BuyButton'
 import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { usePositionDiscount } from 'components/StakingPositions/LockPosition/MarketLockInfo/usePositionDiscount'
 import { differenceInDays, format, formatDistanceToNowStrict } from 'date-fns'
@@ -169,7 +160,12 @@ const BuyContainer = ({ stakingPosition, active = false }: BuyContainerProps) =>
 
   const buttonProps = useMemo(() => {
     if (account.address === stakingPosition.market.seller)
-      return { children: 'Your listing', disabled: false, fontSize: '14px' }
+      return {
+        children: 'Your listing',
+        disabled: false,
+        variant: 'primary.outline',
+        fontSize: '14px',
+      }
     if (swap.isWaitingForConfirmation)
       return { loadingText: 'Approve in wallet', disabled: true, isLoading: true }
     if (swap.isWaitingTransactionReceipt)
@@ -217,23 +213,24 @@ const BuyContainer = ({ stakingPosition, active = false }: BuyContainerProps) =>
     >
       {buttonProps[`children`]}
       {buttonProps[`disabled`] ? null : (
-        <Flex w={`full`} direction={'column'} fontWeight={'bold'} p={2}>
-          <Text fontSize={'12px'} color="text.low" mr={`auto`}>
-            Price
-          </Text>
-          <Text
-            fontSize={'14px'}
-            noOfLines={1}
-            mr={`auto`}
-            title={
-              formatFixed(price.quotient.toString(), {
-                ...currency,
-                places: 6,
-              }) + ` ${currency.symbol}`
-            }
-          >
-            {compactFormat(price.quotient.toString(), currency) + ` ${currency.symbol}`}
-          </Text>
+        <Flex w={`full`} direction={'column'} fontWeight={'bold'}>
+          <Box>
+            <Text fontSize={'12px'} color="text.low" mr={`auto`}>
+              Price
+            </Text>
+            <Text
+              fontSize={'14px'}
+              noOfLines={1}
+              title={
+                formatFixed(price.quotient.toString(), {
+                  ...currency,
+                  places: 6,
+                }) + ` ${currency.symbol}`
+              }
+            >
+              {compactFormat(price.quotient.toString(), currency) + ` ${currency.symbol}`}
+            </Text>
+          </Box>
         </Flex>
       )}
     </BuyButton>
