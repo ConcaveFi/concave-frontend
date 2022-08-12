@@ -84,7 +84,7 @@ export const MarketplaceDashboard = () => {
         {positions.length == 0 ? (
           <>
             <Text size={'lg'} fontWeight={'bold'}>
-              Not found results
+              No results found
             </Text>
             <Text>Check your filters</Text>
           </>
