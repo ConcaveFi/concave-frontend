@@ -1,5 +1,5 @@
 import { LogStakingV1, Marketplace, marketplaceActivity, StakingPool } from '@concave/marketplace'
-import { Box, Card, Flex } from '@concave/ui'
+import { Box, Card, Flex, Text } from '@concave/ui'
 import { BigNumber } from '@ethersproject/bignumber'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
@@ -46,6 +46,7 @@ export const MarketplaceActivityCard = () => {
   return (
     <Card
       width={{ base: '380px' }}
+      h={'full'}
       p={2}
       shadow="Block Up"
       height={'full'}
@@ -69,9 +70,9 @@ export const MarketplaceActivityCard = () => {
       <Box
         backdropFilter="blur(8px)"
         pos="relative"
-        h="100%"
+        h="full"
         overflowY={'auto'}
-        width={'95%'}
+        width={'full'}
         mx={'auto'}
         boxSizing="border-box"
         borderRadius="12px"
@@ -99,6 +100,7 @@ const TransactionButton = (props: TransactionButtonProps) => {
   const textColor = !!active ? 'white' : 'text.low'
   return (
     <Flex
+      as={active ? Card : Flex}
       onClick={props.onClick}
       textColor={textColor}
       fontSize="14"
@@ -115,7 +117,7 @@ const TransactionButton = (props: TransactionButtonProps) => {
       shadow={'Up Big'}
       userSelect="none"
     >
-      {label}
+      <Text>{label}</Text>
     </Flex>
   )
 }

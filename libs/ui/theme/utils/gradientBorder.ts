@@ -12,11 +12,13 @@ type GradientBorderVariants = keyof typeof variants
 // type LiteralUnion<T extends string> = T | Omit<T, T>
 export interface GradientBorderStyleProps extends BoxProps {
   borderWidth?: number
+  borderColor?: string
   variant?: GradientBorderVariants | Omit<string, GradientBorderVariants>
 }
 
 export const gradientBorder = ({
   borderWidth = 1,
+  borderColor = 'linear-gradient(#fff 0 0)',
   variant = 'primary',
 }: GradientBorderStyleProps = {}): SystemStyleInterpolation => {
   return {
@@ -28,7 +30,7 @@ export const gradientBorder = ({
         position: 'absolute',
         inset: 0,
         p: toPx(borderWidth),
-        WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+        WebkitMask: `${borderColor} content-box, linear-gradient(#fff 0 0)`,
         WebkitMaskComposite: 'source-out',
         maskComposite: 'exclude',
         pointerEvents: 'none',

@@ -18,7 +18,7 @@ export const useMarketplaceDashbord = () => {
       const provider = concaveProvider(chainId)
       return listListedPositions({ provider })
     },
-    { enabled: !!chainId, refetchOnWindowFocus: false },
+    { enabled: !!chainId, refetchOnWindowFocus: false, refetchIntervalInBackground: true },
   )
   const positionSorter = usePositionSorter()
   const salePositions = positions.data || []
@@ -42,6 +42,7 @@ export const useMarketplaceDashbord = () => {
     .filter((stakingPosition) => stakingPosition.market.deadline.gt(now))
     .filter((stakingPosition) => filterByStakePool(stakingPosition))
     .sort((current, previous) => sortFunction(current, previous))
+
   return {
     tokenIdFilter,
     sort,

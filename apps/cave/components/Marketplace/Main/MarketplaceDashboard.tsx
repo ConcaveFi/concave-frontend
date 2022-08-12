@@ -29,7 +29,16 @@ export const MarketplaceDashboard = () => {
   const { push } = useRouter()
 
   return (
-    <VStack width={'full'} rounded={'2xl'} apply="background.metal" shadow={'up'} p={4} gap={4}>
+    <VStack
+      width={'full'}
+      maxWidth={'850px'}
+      minH={`600px`}
+      rounded={'2xl'}
+      apply="background.metal"
+      shadow={'up'}
+      p={4}
+      gap={4}
+    >
       <Flex
         mb={-10}
         align={'center'}
