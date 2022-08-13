@@ -12,7 +12,11 @@ query GET_ALL_CAVEMART_USERS_LISTINGS {
     tokenID
     txHash
     lockedUntil
-    marketplace(order_by: {created_at: asc}, where: {tokenID: {_is_null: false}}) {
+    marketplace(
+      where: {tokenID: {_is_null: false}}
+      distinct_on: [tokenID]
+      order_by: [{tokenID: asc},{created_at: desc}]
+    ) {
       tokenID
       newOwner
       start
