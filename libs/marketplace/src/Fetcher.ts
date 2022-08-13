@@ -64,18 +64,31 @@ export const marketplaceActivity = async ({ provider }: { provider: BaseProvider
     },
   )
   const dirtyResults = data.logStakingV1
+  const keys = (obj: Marketplace & StakingPool & LogStakingV1) => {
+    return JSON.stringify({ a: obj.tokenID, soldFor: obj.soldFor })
+  }
 
-  const activity: (Marketplace & StakingPool & LogStakingV1)[] = dirtyResults.reduce((a, b) => {
-    const marketplaceActivity = b.marketplace.map((c) => {
-      const stakingPool: StakingPool = stakingPools[b.poolID]
-      return { ...b, ...c, ...stakingPool, cavemart: undefined } as Marketplace &
-        StakingPool &
-        LogStakingV1
+  const activity: (Marketplace & StakingPool & LogStakingV1)[] = dirtyResults
+    .reduce((previousValue, currentValue) => {
+      const marketplaceActivity = currentValue.marketplace.map((marketplace) => {
+        const stakingPool: StakingPool = stakingPools[currentValue.poolID]
+        return {
+          ...currentValue,
+          ...stakingPool,
+          ...marketplace,
+          marketplace: undefined,
+        } as Marketplace & StakingPool & LogStakingV1
+      })
+      return [...previousValue, ...marketplaceActivity]
+    }, [])
+    .filter((value, index, arr) => {
+      const _value = keys(value)
+      return index === arr.findIndex((obj) => keys(obj) === _value)
     })
-    return [...a, ...marketplaceActivity]
-  }, [])
-
-  activity.sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
+  activity.sort(
+    (first, seccond) =>
+      new Date(seccond.updated_at).getTime() - new Date(first.updated_at).getTime(),
+  )
   return activity
 }
 
