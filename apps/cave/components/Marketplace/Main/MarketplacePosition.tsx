@@ -1,5 +1,11 @@
 import { Box, Flex, Image, Popover, PopoverContent, PopoverTrigger, Text } from '@chakra-ui/react'
-import { CurrencyAmount, FIXED_ORDER_MARKET_CONTRACT, NATIVE, Percent } from '@concave/core'
+import {
+  Currency,
+  CurrencyAmount,
+  FIXED_ORDER_MARKET_CONTRACT,
+  NATIVE,
+  Percent,
+} from '@concave/core'
 import { LockedIcon, UnlockedIcon } from '@concave/icons'
 import { FixedOrderMarketContract, StakingPosition } from '@concave/marketplace'
 import { FlexProps, gradientBorder, HStack, Spinner } from '@concave/ui'
@@ -162,7 +168,8 @@ const BuyContainer = ({ stakingPosition, active = false }: BuyContainerProps) =>
     if (account.address === stakingPosition.market.seller)
       return {
         children: 'Your listing',
-        disabled: false,
+        disabled: true,
+        showPrice: true,
         variant: 'primary.outline',
         fontSize: '14px',
       }
@@ -174,6 +181,7 @@ const BuyContainer = ({ stakingPosition, active = false }: BuyContainerProps) =>
     if (swap.isError) return { children: 'Unavailable', disabled: true }
     if (useCurrencyState.approved) {
       return {
+        showPrice: true,
         onClick: swap.sendTx,
         children: 'Buy',
         fontSize: 'lg',
@@ -183,6 +191,7 @@ const BuyContainer = ({ stakingPosition, active = false }: BuyContainerProps) =>
     if (useCurrencyState.state === 'default')
       return {
         ...useCurrencyState.buttonProps,
+        showPrice: true,
         fontSize: '14px',
       }
 
@@ -212,31 +221,37 @@ const BuyContainer = ({ stakingPosition, active = false }: BuyContainerProps) =>
       {...buttonProps}
     >
       {buttonProps[`children`]}
-      {buttonProps[`disabled`] ? null : (
-        <Flex w={`full`} direction={'column'} fontWeight={'bold'}>
-          <Box>
-            <Text fontSize={'12px'} color="text.low" mr={`auto`}>
-              Price
-            </Text>
-            <Text
-              fontSize={'14px'}
-              noOfLines={1}
-              title={
-                formatFixed(price.quotient.toString(), {
-                  ...currency,
-                  places: 6,
-                }) + ` ${currency.symbol}`
-              }
-            >
-              {compactFormat(price.quotient.toString(), currency) + ` ${currency.symbol}`}
-            </Text>
-          </Box>
-        </Flex>
-      )}
+      {buttonProps[`showPrice`] ? <PriceComponent price={price} /> : null}
     </BuyButton>
   )
 }
 
+const PriceComponent = ({ price }: { price: CurrencyAmount<Currency> }) => {
+  const currency = price.currency
+  const value = price.quotient
+
+  return (
+    <Flex w={`full`} direction={'column'} fontWeight={'bold'}>
+      <Box>
+        <Text fontSize={'12px'} color="text.low" mr={`auto`}>
+          Price
+        </Text>
+        <Text
+          fontSize={'14px'}
+          noOfLines={1}
+          title={
+            formatFixed(value.toString(), {
+              ...currency,
+              places: 6,
+            }) + ` ${currency.symbol}`
+          }
+        >
+          {`${compactFormat(value.toString(), currency)} ${currency.symbol}`}
+        </Text>
+      </Box>
+    </Flex>
+  )
+}
 type LoadBarProps = { percent: Percent; date: string; relativeDate: string }
 const LoadBard = ({ percent, date, relativeDate }: LoadBarProps) => {
   return (
