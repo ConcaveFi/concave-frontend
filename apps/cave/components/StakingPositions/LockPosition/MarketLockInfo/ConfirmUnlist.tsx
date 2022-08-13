@@ -61,8 +61,6 @@ export const ConfirmUnlist = ({
         <Button
           w={'full'}
           onClick={() => {
-            console.log(staking.market)
-            setMarket(market.new({ isListed: false, signature: '' }))
             onClose()
           }}
           variant={`secondary`}
