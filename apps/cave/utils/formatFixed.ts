@@ -16,7 +16,7 @@ export const formatFixed = (
   return integerValue + (fixedDecimalValue ? '.' + fixedDecimalValue : '')
 }
 
-const formatter = Intl.NumberFormat('en', { notation: 'compact' })
+const formatter = Intl.NumberFormat('en', { notation: 'compact', maximumSignificantDigits: 4 })
 export const compactFormat = (bigNumber: BigNumberish, params: { decimals?: number } = {}) => {
   const { decimals } = fixParams(params)
   const input = utils.formatUnits(bigNumber, decimals)

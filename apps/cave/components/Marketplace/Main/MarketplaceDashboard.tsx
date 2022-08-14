@@ -1,6 +1,6 @@
 import { Flex, Text, VStack } from '@chakra-ui/react'
 import { ChevronRightIcon } from '@concave/icons'
-import { gradientBorder } from '@concave/ui'
+import { BoxProps, gradientBorder } from '@concave/ui'
 import { Loading } from 'components/Loading'
 import { MarketplaceFilterContainer } from 'components/Marketplace/Main/MarketplaceFilterContainer'
 import { useRouter } from 'next/router'
@@ -9,7 +9,7 @@ import { MarketplaceSortConainer } from './MarketplaceSortContainer'
 import { TokenIdSearchBar } from './TokenIdSearchBar'
 import { useMarketplaceDashbord } from './UseMarkeplaceState'
 
-export const MarketplaceDashboard = () => {
+export const MarketplaceDashboard = (props: BoxProps) => {
   const {
     isFetching,
     nftPositions,
@@ -29,16 +29,7 @@ export const MarketplaceDashboard = () => {
   const { push } = useRouter()
 
   return (
-    <VStack
-      width={'full'}
-      maxWidth={'850px'}
-      minH={`600px`}
-      rounded={'2xl'}
-      apply="background.metal"
-      shadow={'up'}
-      p={4}
-      gap={4}
-    >
+    <VStack apply="background.metal" {...props}>
       <Flex
         mb={-10}
         align={'center'}
@@ -72,11 +63,11 @@ export const MarketplaceDashboard = () => {
         rounded={'inherit'}
         shadow="down"
         w="full"
-        h={'full'}
         p={4}
         py={6}
         justify="start"
-        overflowY={'auto'}
+        overflowY={'scroll'}
+        h={'auto'}
         direction="column"
         apply="scrollbar.big"
         gap={4}

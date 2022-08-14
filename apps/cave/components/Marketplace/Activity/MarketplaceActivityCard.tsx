@@ -46,8 +46,9 @@ export const MarketplaceActivityCard = () => {
   return (
     <Card
       width={{ base: '380px' }}
-      h={'full'}
+      h={'auto'}
       p={2}
+      gap={2}
       shadow="Block Up"
       height={'full'}
       position="relative"
@@ -70,10 +71,9 @@ export const MarketplaceActivityCard = () => {
       <Box
         backdropFilter="blur(8px)"
         pos="relative"
-        h="full"
-        overflowY={'auto'}
+        h="auto"
+        overflowY={'scroll'}
         width={'full'}
-        mx={'auto'}
         boxSizing="border-box"
         borderRadius="12px"
         px={'0.5rem'}
