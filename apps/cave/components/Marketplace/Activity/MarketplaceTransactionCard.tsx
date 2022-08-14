@@ -46,9 +46,8 @@ export const MarketplaceTransactionCard = ({ data }: MarketplaceTransactionCardP
   return (
     <Flex
       width={'full'}
-      height="100"
       rounded="2xl"
-      mb={2}
+      pb={2}
       shadow="Up Small"
       sx={{ ...gradientBorder({ variant: 'secondary', borderWidth: 2 }) }}
       justify={'space-between'}
@@ -107,7 +106,7 @@ export const MarketplaceTransactionCard = ({ data }: MarketplaceTransactionCardP
           </Flex>
         </Flex>
         {data.transactionHash ? (
-          <Flex width={'full'} mt={1} justify={'start'}>
+          <Flex width={'full'} justify={'start'}>
             <Link
               pb={1}
               href={data.transactionHash ? etherscanLink : ''}
@@ -118,7 +117,7 @@ export const MarketplaceTransactionCard = ({ data }: MarketplaceTransactionCardP
             >
               Transaction
             </Link>
-            <TransactionIcon ml={2} mt={'6px'} viewBox="0 0 30 30" />
+            <TransactionIcon ml={2} mt={'6px'} width={`18px`} h={`9px`} />
           </Flex>
         ) : (
           <Text>#{`${data.tokenID} `}</Text>
