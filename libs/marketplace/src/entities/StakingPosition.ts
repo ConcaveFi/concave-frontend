@@ -63,7 +63,6 @@ export class StakingPosition implements NFT {
   public calculateDiscount(market: MarketItem = this.market) {
     if (!market) return BigNumber.from(0)
     if (!market.startPrice.gt(0)) return BigNumber.from(0)
-    if (market.startPrice.gte(this.currentValue)) return BigNumber.from(0)
     return market.startPrice.mul(10000).div(this.currentValue).sub(10000).mul(-1)
   }
 }

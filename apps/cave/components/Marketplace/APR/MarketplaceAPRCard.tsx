@@ -1,4 +1,4 @@
-import { Card } from '@concave/ui'
+import { Box, Card } from '@concave/ui'
 import { useLiquidStakeData } from 'components/LiquidStaking/hooks/useLiquidStakeData'
 import StakeAprCard from './StakeAprCard'
 
@@ -15,11 +15,13 @@ export function MarketplaceAPRCard() {
       justify="center"
       variant="secondary"
     >
-      {stakeData
-        ?.sort(({ poolId: cur }, { poolId: previus }) => previus - cur)
-        ?.map(({ totalVAPR, poolId }) => (
-          <StakeAprCard APR={totalVAPR} poolId={poolId} key={poolId} />
-        ))}
+      <Box>
+        {stakeData
+          ?.sort(({ poolId: cur }, { poolId: previus }) => previus - cur)
+          ?.map(({ totalVAPR, poolId }) => (
+            <StakeAprCard APR={totalVAPR} poolId={poolId} key={poolId} />
+          ))}
+      </Box>
     </Card>
   )
 }
