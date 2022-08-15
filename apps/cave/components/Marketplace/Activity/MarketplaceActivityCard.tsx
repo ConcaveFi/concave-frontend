@@ -46,7 +46,6 @@ export const MarketplaceActivityCard = () => {
   })
   return (
     <Card
-      width={{ base: '380px' }}
       h={'auto'}
       px={2}
       py={4}
