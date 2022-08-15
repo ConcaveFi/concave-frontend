@@ -1,6 +1,7 @@
 import { LogStakingV1, Marketplace, marketplaceActivity, StakingPool } from '@concave/marketplace'
-import { Box, Card, Flex, Text } from '@concave/ui'
+import { Card, Flex, Text, VStack } from '@concave/ui'
 import { BigNumber } from '@ethersproject/bignumber'
+import { Loading } from 'components/Loading'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
 import { useState } from 'react'
@@ -46,8 +47,9 @@ export const MarketplaceActivityCard = () => {
   return (
     <Card
       width={{ base: '380px' }}
-      h={'full'}
+      h={'auto'}
       p={2}
+      gap={2}
       shadow="Block Up"
       height={'full'}
       position="relative"
@@ -67,24 +69,26 @@ export const MarketplaceActivityCard = () => {
           label="Sale"
         />
       </Flex>
-      <Box
+      <Loading size={'md'} label={'Loading activities'} isLoading={isLoading} />
+      <VStack
         backdropFilter="blur(8px)"
         pos="relative"
-        h="full"
-        overflowY={'auto'}
+        h="auto"
+        overflowY={'scroll'}
         width={'full'}
-        mx={'auto'}
         boxSizing="border-box"
-        borderRadius="12px"
-        px={'0.5rem'}
-        py={'0.5rem'}
+        borderRadius="2xl"
+        px={1}
+        py={1}
         __css={scrollBar}
+        gap={2}
         pt={0}
+        flexDirection={'column'}
       >
         {filtred.map((data, index) => {
           return <MarketplaceTransactionCard key={index} data={data} />
         })}
-      </Box>
+      </VStack>
     </Card>
   )
 }

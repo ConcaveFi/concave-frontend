@@ -19,6 +19,7 @@ import { concaveProvider } from 'lib/providers'
 import { useMemo, useState } from 'react'
 import { compactFormat, formatFixed } from 'utils/formatFixed'
 import { useAccount, useSigner } from 'wagmi'
+import { ConfirmPurchaseModal } from './ConfirmBuy'
 
 const border = gradientBorder({ borderWidth: 2 })
 
@@ -33,7 +34,6 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakin
   const percentToMaturity = new Percent(diff, days)
   const discount = usePositionDiscount(stakingPosition)
   const [active, setActive] = useState(false)
-
   return (
     <Popover placement="right" trigger="hover">
       <PopoverTrigger>
@@ -62,6 +62,7 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakin
             <Info title="Current value" info={`${currentValue} CNV`} />
             <Info
               title="Discount"
+              color={discount.discount > 0 ? 'text.low' : `red.700`}
               info={
                 discount.discount
                   ? `${formatFixed(discount.discount, { decimals: 2, places: 0 })}%`
@@ -211,18 +212,21 @@ const BuyContainer = ({ stakingPosition, active = false }: BuyContainerProps) =>
     useCurrencyState.state,
   ])
   return (
-    <BuyButton
-      boxShadow={'Up Big'}
-      shadow="up"
-      variant={active ? 'primary' : 'primary.outline'}
-      colorScheme={'brighter'}
-      w={`180px`}
-      size={`md`}
-      {...buttonProps}
-    >
-      {buttonProps[`children`]}
-      {buttonProps[`showPrice`] ? <PriceComponent price={price} /> : null}
-    </BuyButton>
+    <>
+      <ConfirmPurchaseModal isOpen={swap.isWaitingForConfirmation} staking={stakingPosition} />
+      <BuyButton
+        boxShadow={'Up Big'}
+        shadow="up"
+        variant={active ? 'primary' : 'primary.outline'}
+        colorScheme={'brighter'}
+        w={`180px`}
+        size={`md`}
+        {...buttonProps}
+      >
+        {buttonProps[`children`]}
+        {buttonProps[`showPrice`] ? <PriceComponent price={price} /> : null}
+      </BuyButton>
+    </>
   )
 }
 
@@ -280,12 +284,12 @@ const LoadBard = ({ percent, date, relativeDate }: LoadBarProps) => {
   )
 }
 type InfoProps = { title: string; info: string; isLoading?: boolean }
-const Info = ({ info, title, isLoading, ...flexProps }: InfoProps & FlexProps) => (
+const Info = ({ info, title, isLoading, color, ...flexProps }: InfoProps & FlexProps) => (
   <Flex direction={'column'} align="center" {...flexProps}>
     <Text fontSize={'xs'} color="text.low">
       {title}
     </Text>
-    <Text fontWeight={'bold'} fontSize={'sm'}>
+    <Text color={color} fontWeight={'bold'} fontSize={'sm'}>
       {isLoading && <Spinner size="xs" />}
       {info}
     </Text>

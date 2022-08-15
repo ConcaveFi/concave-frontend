@@ -24,9 +24,6 @@ const Faucet = () => {
       ['function mint(address guy, uint256 wad) external'],
       provider,
     ).connect(signer)
-
-    console.log(contract)
-    contract.mint(address, inputAmount.numerator.toString())
   }
 
   return (
