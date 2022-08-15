@@ -11,7 +11,7 @@ import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency
 import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
 
-import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
+import { WaitingConfirmationDialog } from 'components/TransactionDialog/TransactionWaitingConfirmationDialog'
 import { toAmount } from 'utils/toAmount'
 import { useAccount } from 'wagmi'
 import { useAddLiquidityState } from '../hooks/useAddLiquidityState'

@@ -18,7 +18,7 @@ import { PositionInfoItem } from 'components/LiquidityPoolPositions/MyPositions'
 import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
 
-import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
+import { WaitingConfirmationDialog } from 'components/TransactionDialog/TransactionWaitingConfirmationDialog'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { RemoveLiquidityState, useRemoveLiquidity } from 'hooks/useRemoveLiquidity'
 import { useState } from 'react'

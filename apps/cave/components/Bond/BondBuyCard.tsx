@@ -6,7 +6,7 @@ import { useCurrencyButtonState } from 'components/CurrencyAmountButton/Currency
 import { CurrencyInputField as BondInput } from 'components/CurrencyAmountField'
 import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
 
-import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
+import { WaitingConfirmationDialog } from 'components/TransactionDialog/TransactionWaitingConfirmationDialog'
 import { useCNVPrice } from 'hooks/useCNVPrice'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
