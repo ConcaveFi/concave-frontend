@@ -1,5 +1,5 @@
 import { LogStakingV1, Marketplace, marketplaceActivity, StakingPool } from '@concave/marketplace'
-import { Card, Flex, Text, VStack } from '@concave/ui'
+import { Card, Flex, HStack, Text, VStack } from '@concave/ui'
 import { BigNumber } from '@ethersproject/bignumber'
 import { Loading } from 'components/Loading'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
@@ -48,7 +48,8 @@ export const MarketplaceActivityCard = () => {
     <Card
       width={{ base: '380px' }}
       h={'auto'}
-      p={2}
+      px={2}
+      py={4}
       gap={2}
       shadow="Block Up"
       height={'full'}
@@ -56,7 +57,7 @@ export const MarketplaceActivityCard = () => {
       rounded="2xl"
       variant="secondary"
     >
-      <Flex justify={'center'} align="center" height={'70px'} gap={1}>
+      <HStack justify={'center'} align="center" height={'70px'} gap={1}>
         <TransactionButton onClick={() => setFilter('all')} active={filter === 'all'} label="All" />
         <TransactionButton
           onClick={() => setFilter('listing')}
@@ -68,7 +69,7 @@ export const MarketplaceActivityCard = () => {
           active={filter === 'sale'}
           label="Sale"
         />
-      </Flex>
+      </HStack>
       <Loading size={'md'} label={'Loading activities'} isLoading={isLoading} />
       <VStack
         backdropFilter="blur(8px)"

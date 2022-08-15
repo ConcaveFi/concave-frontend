@@ -16,7 +16,7 @@ export const BuyButtonStyles: ComponentStyleConfig = {
       borderRadius,
       ...gradientBorder({
         borderRadius,
-        borderWidth: borderWidth,
+        borderWidth,
         borderColor,
         ...props,
         variant: borderGradient,

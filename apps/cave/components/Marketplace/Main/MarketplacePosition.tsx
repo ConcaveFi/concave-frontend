@@ -1,11 +1,5 @@
 import { Box, Flex, Image, Popover, PopoverContent, PopoverTrigger, Text } from '@chakra-ui/react'
-import {
-  Currency,
-  CurrencyAmount,
-  FIXED_ORDER_MARKET_CONTRACT,
-  NATIVE,
-  Percent,
-} from '@concave/core'
+import { Currency, CurrencyAmount, MARKETPLACE_CONTRACT, NATIVE, Percent } from '@concave/core'
 import { LockedIcon, UnlockedIcon } from '@concave/icons'
 import { FixedOrderMarketContract, StakingPosition } from '@concave/marketplace'
 import { FlexProps, gradientBorder, HStack, Spinner } from '@concave/ui'
@@ -62,7 +56,7 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakin
             <Info title="Current value" info={`${currentValue} CNV`} />
             <Info
               title="Discount"
-              color={discount.discount > 0 ? 'text.low' : `red.700`}
+              color={discount.discount > 0 ? '#7AF0CD' : `red.700`}
               info={
                 discount.discount
                   ? `${formatFixed(discount.discount, { decimals: 2, places: 0 })}%`
@@ -161,7 +155,7 @@ const BuyContainer = ({ stakingPosition, active = false }: BuyContainerProps) =>
     { meta: { type: 'offer marketplace', tokenId: +tokenId.toString() }, onError: console.error },
   )
 
-  const useCurrencyState = useCurrencyButtonState(price, FIXED_ORDER_MARKET_CONTRACT[chainId], {
+  const useCurrencyState = useCurrencyButtonState(price, MARKETPLACE_CONTRACT[chainId], {
     amountInfo: true,
   })
 

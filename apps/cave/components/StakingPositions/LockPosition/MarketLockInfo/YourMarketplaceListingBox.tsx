@@ -1,4 +1,4 @@
-import { FIXED_ORDER_MARKET_CONTRACT, NATIVE } from '@concave/core'
+import { MARKETPLACE_CONTRACT, NATIVE } from '@concave/core'
 import { MarketItem, StakingPosition } from '@concave/marketplace'
 import { Box, Button, ButtonProps, Flex, Text } from '@concave/ui'
 import { formatDistanceToNow } from 'date-fns'
@@ -22,7 +22,7 @@ export const useYourMarketPlaceListing = ({
 
   const approveContractInfo = useApproveForAll({
     erc721: stakingPosition.address,
-    operator: FIXED_ORDER_MARKET_CONTRACT[chainId],
+    operator: MARKETPLACE_CONTRACT[chainId],
     approved: true,
   })
 
