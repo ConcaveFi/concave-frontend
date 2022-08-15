@@ -4,7 +4,7 @@ import {
   StakePoolFilterEnum,
   useFilterByStakePool,
 } from 'components/NftFilters/Filters/hooks/useFilterByStakePool'
-import { NftSort, NftSortMethod } from 'components/NftFilters/Sorters/hooks/useNftSort'
+import { NftSort, usePositionSorter } from 'components/NftFilters/Sorters/hooks/useNftSort'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useAccount } from 'wagmi'
@@ -25,13 +25,17 @@ export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePo
     StakePoolFilterEnum.FILTER_BY_360_DAYS,
   ])
   const { filterByStakePool } = useFilterByStakePool(stakeFilters)
+  const positionSorter = usePositionSorter()
 
   const [rangeFilter, setRangeFilter] = useState<RangeFilter>({})
   const { filterByRange } = useFilterByRange(rangeFilter)
 
   const [sort, setSort] = useState<NftSort>({ sort: 'REDEEM_DATE', order: 'ASC' })
-  const sortFunction = sort ? NftSortMethod[sort.sort][sort.order] : () => 0
-
+  const sortFunction = sort ? positionSorter.data?.[sort.sort][sort.order] : () => 0
+  if (!positionSorter.data) {
+    //create a loading
+    return null
+  }
   return (
     <Flex display={{ lg: 'flex', md: 'flex' }}>
       <Flex

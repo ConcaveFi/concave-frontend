@@ -49,11 +49,11 @@ function SideBarTop() {
   const { isConnected } = useAccount()
 
   return (
-    <Box shadow="down" px={2} pt={10} pb={3} rounded="2xl" w="100%">
+    <Box shadow="down" px={2} pb={3} rounded="2xl" w="100%">
       <Flex
         alignItems="center"
         justify="center"
-        my={4}
+        my="58px"
         filter="drop-shadow(0px 0px 27px #81b3ff4f)"
       >
         <Image src="/assets/concave/logomark.svg" alt="concave logo" maxWidth="52px" />

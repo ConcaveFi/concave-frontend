@@ -92,7 +92,7 @@ export const useListeForSaleState = ({
 }) => {
   const { signTypedDataAsync } = useSignTypedData({
     domain: {
-      name: 'Cavemart',
+      name: 'Marketplace',
       version: '1',
       chainId: chain.rinkeby.id,
       verifyingContract: FIXED_ORDER_MARKET_CONTRACT[chain.rinkeby.id],
@@ -125,8 +125,8 @@ export const useListeForSaleState = ({
     try {
       const data = await signTypedDataAsync()
       const signature = data.substring(2)
-      const cavemart = new FixedOrderMarketContract(concaveProvider(chain.rinkeby.id))
-      const computedSigner = await cavemart.computeSigner(market.new({ signature }))
+      const marketplaceContract = new FixedOrderMarketContract(concaveProvider(chain.rinkeby.id))
+      const computedSigner = await marketplaceContract.computeSigner(market.new({ signature }))
       if (computedSigner !== market.seller) {
         throw `Invalid signature`
       }

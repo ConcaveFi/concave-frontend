@@ -1,26 +1,25 @@
 import { Box, Flex, Image, Popover, PopoverContent, PopoverTrigger, Text } from '@chakra-ui/react'
-import { CurrencyAmount, FIXED_ORDER_MARKET_CONTRACT, NATIVE, Percent } from '@concave/core'
+import {
+  Currency,
+  CurrencyAmount,
+  FIXED_ORDER_MARKET_CONTRACT,
+  NATIVE,
+  Percent,
+} from '@concave/core'
 import { LockedIcon, UnlockedIcon } from '@concave/icons'
 import { FixedOrderMarketContract, StakingPosition } from '@concave/marketplace'
-import {
-  Button,
-  ButtonProps,
-  Card,
-  CardProps,
-  FlexProps,
-  gradientBorder,
-  HStack,
-  Spinner,
-} from '@concave/ui'
+import { FlexProps, gradientBorder, HStack, Spinner } from '@concave/ui'
+import { BuyButton } from 'components/BuyButton/BuyButton'
 import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { usePositionDiscount } from 'components/StakingPositions/LockPosition/MarketLockInfo/usePositionDiscount'
 import { differenceInDays, format, formatDistanceToNowStrict } from 'date-fns'
 import { useTransaction } from 'hooks/TransactionsRegistry/useTransaction'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { compactFormat, formatFixed } from 'utils/formatFixed'
 import { useAccount, useSigner } from 'wagmi'
+import { ConfirmPurchaseModal } from './ConfirmBuy'
 
 const border = gradientBorder({ borderWidth: 2 })
 
@@ -34,7 +33,7 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakin
   const diff = (differenceInDays(positionDate, Date.now()) - days) * -1
   const percentToMaturity = new Percent(diff, days)
   const discount = usePositionDiscount(stakingPosition)
-
+  const [active, setActive] = useState(false)
   return (
     <Popover placement="right" trigger="hover">
       <PopoverTrigger>
@@ -43,7 +42,9 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakin
           rounded={'2xl'}
           shadow="up"
           transition={`0.15s`}
-          apply="background.metalBrighter"
+          bg="url(assets/textures/metal.png), linear-gradient(180deg, #16222E 0.7%, #28394D 55.07%)"
+          bgPos={'50% 50%, 0px 0px'}
+          bgSize="120px, auto"
           direction={'column'}
           _hover={{
             boxShadow: 'Blue Light',
@@ -51,14 +52,17 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakin
           }}
           p={1.5}
           px={2.5}
-          gap={2}
+          gap={1.5}
           justify="space-between"
+          onMouseOver={() => setActive(true)}
+          onMouseLeave={() => setActive(false)}
         >
           <HStack align="center" gap={0} width={'full'} justify="space-between">
-            <ImageContainer w={'228px'} h={'59px'} stakingPosition={stakingPosition} px={3} />
+            <ImageContainer w={'250px'} h={'60px'} stakingPosition={stakingPosition} px={4} />
             <Info title="Current value" info={`${currentValue} CNV`} />
             <Info
               title="Discount"
+              color={discount.discount > 0 ? 'text.low' : `red.700`}
               info={
                 discount.discount
                   ? `${formatFixed(discount.discount, { decimals: 2, places: 0 })}%`
@@ -68,7 +72,7 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakin
             />
 
             {/* <Info title="Token id" info={stakingPosition.tokenId.toString()} /> */}
-            <BuyContainer w={'210px'} stakingPosition={stakingPosition} />
+            <BuyContainer active={active} stakingPosition={stakingPosition} />
           </HStack>
           <LoadBard
             date={format(positionDate, 'MM/dd/yyyy')}
@@ -87,6 +91,7 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakin
           fontWeight="bold"
           borderRadius={'2xl'}
           justifyContent={'left'}
+          sx={{ ...gradientBorder({ borderWidth: 1 }) }}
         >
           <HStack>
             <Text color="text.low">Listing expiration date:</Text>
@@ -95,7 +100,9 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakin
           <HStack>
             <Text color="text.low">Redeem date:</Text>
             <Text> {format(positionDate, 'MM/dd/yyyy')}</Text>
-            <Text>{formatDistanceToNowStrict(positionDate, { addSuffix: true })} </Text>
+            <Text color={'#79B2F4'}>
+              {formatDistanceToNowStrict(positionDate, { addSuffix: true })}{' '}
+            </Text>
           </HStack>
         </Flex>
       </PopoverContent>
@@ -120,7 +127,7 @@ const ImageContainer: React.FC<ImageContainerProps> = ({ stakingPosition, ...fle
       justify="space-around"
       {...flexProps}
     >
-      <Info info={`${stakingPosition.tokenId}`} title="Token id" ml={2} />
+      <Info info={`${stakingPosition.tokenId}`} title="Token id" />
       <Flex>
         <Image
           width={'auto'}
@@ -129,13 +136,13 @@ const ImageContainer: React.FC<ImageContainerProps> = ({ stakingPosition, ...fle
           src={`/assets/marketplace/${stakeImage[stakingPosition.poolID]}`}
         />
       </Flex>
-      <Info info={`${label}`} title="Stake period" ml={2} />
+      <Info info={`${label}`} title="Stake period" />
     </Flex>
   )
 }
 
-type BuyContainerProps = { stakingPosition: StakingPosition } & CardProps
-const BuyContainer = ({ stakingPosition, ...boxProps }: BuyContainerProps) => {
+type BuyContainerProps = { stakingPosition: StakingPosition; active: boolean }
+const BuyContainer = ({ stakingPosition, active = false }: BuyContainerProps) => {
   const chainId = useCurrentSupportedNetworkId()
   const account = useAccount()
   const tokenId = stakingPosition.tokenId
@@ -159,52 +166,38 @@ const BuyContainer = ({ stakingPosition, ...boxProps }: BuyContainerProps) => {
   })
 
   const buttonProps = useMemo(() => {
-    if (account.address === stakingPosition.market.seller) {
+    if (account.address === stakingPosition.market.seller)
       return {
         children: 'Your listing',
-        minWidth: '45%',
-        _hover: {},
-        m: -0.5,
-        borderWidth: 0,
         disabled: true,
-      } as ButtonProps
-    }
+        showPrice: true,
+        variant: 'primary.outline',
+        fontSize: '14px',
+      }
     if (swap.isWaitingForConfirmation)
-      return { loadingText: 'Confirm', isLoading: true, minWidth: '45%' }
-
+      return { loadingText: 'Approve in wallet', disabled: true, isLoading: true }
     if (swap.isWaitingTransactionReceipt)
-      return { loadingText: 'Waiting', isLoading: true, minWidth: '45%' }
-
-    if (swap.isSucess) {
-      return { children: 'Bought', minWidth: '45%' }
-    }
-    if (swap.isError) {
-      return { children: 'Unavailable', minWidth: '45%' }
-    }
+      return { loadingText: 'Waiting confirmation', disabled: true, isLoading: true }
+    if (swap.isSucess) return { children: 'Bought', disabled: true }
+    if (swap.isError) return { children: 'Unavailable', disabled: true }
     if (useCurrencyState.approved) {
       return {
+        showPrice: true,
         onClick: swap.sendTx,
         children: 'Buy',
-        minWidth: '45%',
-        m: -0.5,
+        fontSize: 'lg',
       }
     }
 
-    if (useCurrencyState.state === 'default') {
+    if (useCurrencyState.state === 'default')
       return {
         ...useCurrencyState.buttonProps,
-        m: -0.5,
-        minWidth: '45%',
+        showPrice: true,
+        fontSize: '14px',
       }
-    }
 
     return {
       ...useCurrencyState.buttonProps,
-      my: 0,
-      p: 2,
-      variant: ``,
-      borderWidth: 0,
-      minWidth: '100%',
     }
   }, [
     account.address,
@@ -218,44 +211,51 @@ const BuyContainer = ({ stakingPosition, ...boxProps }: BuyContainerProps) => {
     useCurrencyState.buttonProps,
     useCurrencyState.state,
   ])
-
   return (
-    <Card p={0.5} h={'full'} rounded={'2xl'} {...boxProps} boxShadow={'Up Big'}>
-      <Flex w="auto" h={'59px'} rounded={'2xl'} shadow="up" justify="end">
-        {buttonProps.minWidth === '45%' && (
-          <Flex flex={1} align="center" justify="center">
-            <Flex direction={'column'} align="revert" fontWeight={'bold'} p={2}>
-              <Text fontSize={'12px'} color="text.low">
-                Price
-              </Text>
-              <Text
-                fontSize={'14px'}
-                noOfLines={1}
-                title={
-                  formatFixed(price.quotient.toString(), {
-                    ...currency,
-                    places: 6,
-                  }) + ` ${currency.symbol}`
-                }
-              >
-                {compactFormat(price.quotient.toString(), currency) + ` ${currency.symbol}`}
-              </Text>
-            </Flex>
-          </Flex>
-        )}
-        <Button
-          boxShadow={'Up Big'}
-          px={2}
-          h={'63px'}
-          rounded={'2xl'}
-          variant={'primary.outline'}
-          {...buttonProps}
-        />
-      </Flex>
-    </Card>
+    <>
+      <ConfirmPurchaseModal isOpen={swap.isWaitingForConfirmation} staking={stakingPosition} />
+      <BuyButton
+        boxShadow={'Up Big'}
+        shadow="up"
+        variant={active ? 'primary' : 'primary.outline'}
+        colorScheme={'brighter'}
+        w={`180px`}
+        size={`md`}
+        {...buttonProps}
+      >
+        {buttonProps[`children`]}
+        {buttonProps[`showPrice`] ? <PriceComponent price={price} /> : null}
+      </BuyButton>
+    </>
   )
 }
 
+const PriceComponent = ({ price }: { price: CurrencyAmount<Currency> }) => {
+  const currency = price.currency
+  const value = price.quotient
+
+  return (
+    <Flex w={`full`} direction={'column'} fontWeight={'bold'}>
+      <Box>
+        <Text fontSize={'12px'} color="text.low" mr={`auto`}>
+          Price
+        </Text>
+        <Text
+          fontSize={'14px'}
+          noOfLines={1}
+          title={
+            formatFixed(value.toString(), {
+              ...currency,
+              places: 6,
+            }) + ` ${currency.symbol}`
+          }
+        >
+          {`${compactFormat(value.toString(), currency)} ${currency.symbol}`}
+        </Text>
+      </Box>
+    </Flex>
+  )
+}
 type LoadBarProps = { percent: Percent; date: string; relativeDate: string }
 const LoadBard = ({ percent, date, relativeDate }: LoadBarProps) => {
   return (
@@ -274,7 +274,7 @@ const LoadBard = ({ percent, date, relativeDate }: LoadBarProps) => {
             width={`${percent.toFixed()}%`}
             maxW={`full`}
             height="full"
-            bg={'linear-gradient(90deg, #375FC2 0%, #46CFF3 100%)'}
+            bg={'stroke.accent'}
             rounded="full"
           />
         </Box>
@@ -284,12 +284,12 @@ const LoadBard = ({ percent, date, relativeDate }: LoadBarProps) => {
   )
 }
 type InfoProps = { title: string; info: string; isLoading?: boolean }
-const Info = ({ info, title, isLoading, ...flexProps }: InfoProps & FlexProps) => (
+const Info = ({ info, title, isLoading, color, ...flexProps }: InfoProps & FlexProps) => (
   <Flex direction={'column'} align="center" {...flexProps}>
-    <Text fontSize={'12px'} color="text.low">
+    <Text fontSize={'xs'} color="text.low">
       {title}
     </Text>
-    <Text fontWeight={'bold'} fontSize={'18px'}>
+    <Text color={color} fontWeight={'bold'} fontSize={'sm'}>
       {isLoading && <Spinner size="xs" />}
       {info}
     </Text>

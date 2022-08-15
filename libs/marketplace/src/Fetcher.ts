@@ -51,7 +51,9 @@ export const listListedPositions = async ({ provider }: { provider: BaseProvider
   )
   const { stakingV1ToStakingPosition } = parser(stakingV1Contract, provider)
   const dirtyResults = data.logStakingV1
-  const cleanResults = dirtyResults.filter((c) => c.to === c.cavemart.at(-1).tokenOwner)
+  const cleanResults = dirtyResults
+    .filter((c) => c.to === c.marketplace.at(-1).tokenOwner)
+    .filter((c) => c.marketplace[0].tokenIsListed)
   return await Promise.all(cleanResults.map(stakingV1ToStakingPosition))
 }
 
@@ -64,19 +66,31 @@ export const marketplaceActivity = async ({ provider }: { provider: BaseProvider
     },
   )
   const dirtyResults = data.logStakingV1
+  const keys = (obj: Marketplace & StakingPool & LogStakingV1) => {
+    return JSON.stringify({ a: obj.tokenID, soldFor: obj.soldFor })
+  }
 
-  const activity: (Cavemart & StakingPool & LogStakingV1)[] = dirtyResults.reduce((a, b) => {
-    const marketplaceActivity = b.cavemart.map((c) => {
-      const stakingPool: StakingPool = stakingPools[b.poolID]
-      return { ...b, ...c, ...stakingPool, cavemart: undefined } as Cavemart &
-        StakingPool &
-        LogStakingV1
+  const activity: (Marketplace & StakingPool & LogStakingV1)[] = dirtyResults
+    .reduce((previousValue, currentValue) => {
+      const marketplaceActivity = currentValue.marketplace.map((marketplace) => {
+        const stakingPool: StakingPool = stakingPools[currentValue.poolID]
+        return {
+          ...currentValue,
+          ...stakingPool,
+          ...marketplace,
+          marketplace: undefined,
+        } as Marketplace & StakingPool & LogStakingV1
+      })
+      return [...previousValue, ...marketplaceActivity]
+    }, [])
+    .filter((value, index, arr) => {
+      const _value = keys(value)
+      return index === arr.findIndex((obj) => keys(obj) === _value)
     })
-    return [...a, ...marketplaceActivity]
-  }, [])
-
-  activity.sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
-  console.log(activity)
+  activity.sort(
+    (first, seccond) =>
+      new Date(seccond.updated_at).getTime() - new Date(first.updated_at).getTime(),
+  )
   return activity
 }
 
@@ -84,10 +98,10 @@ export interface LogStakingV1 {
   to: string
   poolID: number
   tokenID?: number
-  cavemart: Cavemart[]
+  marketplace: Marketplace[]
 }
 
-export type Cavemart = {
+export type Marketplace = {
   created_at: string
   signatureHash: string
   start: string

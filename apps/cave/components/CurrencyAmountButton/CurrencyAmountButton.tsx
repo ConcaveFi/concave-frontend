@@ -25,7 +25,10 @@ export const useCurrencyButtonState = (
     disconected: { children: 'Connect wallet', onClick: connectModal.onOpen },
     pending: { disabled, isLoading, loadingText: 'Approval pending' },
     error: { disabled, children: 'Error occurred' },
-    default: { children: `Approve ${symbol}`, onClick: () => approve.sendApproveTx() },
+    default: {
+      children: `Approve ${symbol}`,
+      onClick: () => approve.sendApproveTx().catch(console.error),
+    },
     fetching: { disabled, isLoading, loadingText: `Loading ${symbol} info` },
     insufficient: {
       disabled,

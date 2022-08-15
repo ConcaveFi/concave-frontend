@@ -44,12 +44,12 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
           const itsConnect = connector.id === pendingConnector?.id
           return (
             <Button
-              cursor={itsConnect ? 'default' : 'pointer'}
+              cursor={'pointer'}
               w="100%"
-              shadow={itsConnect ? 'down' : 'Up Small'}
-              _hover={!itsConnect && { shadow: 'Up Big' }}
-              _active={!itsConnect && { shadow: 'down' }}
-              _focus={!itsConnect && { shadow: 'Up Big' }}
+              shadow={'Up Small'}
+              _hover={{ shadow: 'Up Big' }}
+              _active={{ shadow: 'down' }}
+              _focus={{ shadow: 'Up Big' }}
               size="large"
               leftIcon={
                 <Image
@@ -60,7 +60,7 @@ export const ConnectWalletModal = ({ isOpen, onClose }) => {
               }
               key={connector.id}
               onClick={() => {
-                if (!itsConnect) connect({ connector })
+                connect({ connector })
               }}
             >
               {connector.name}
@@ -107,14 +107,12 @@ export const UserWallet = () => {
         height="40px"
         shadow="up"
         fontFamily="heading"
-        color="text.low"
         _focus={{ color: 'text.high', shadow: 'up' }}
         w="100%"
-        rounded={'2xl'}
+        rounded="2xl"
       >
-        <Flex fontWeight="bold" mx={'auto'}>
-          {ellipseAddress(address)}
-        </Flex>
+        <Image src="/assets/tokens/eth.svg" alt="ethereum icon" w="22px" h="22px" mr={2} />
+        <Flex fontWeight="bold">{ellipseAddress(address)}</Flex>
         {recentTransactions.some((tx) => tx.status === 'pending') && (
           <Flex position={'absolute'} width="80%" justify={'end'}>
             <SpinnerIcon color={'text.low'} animation={spinAnimation(4)} boxSize={'20px'} />

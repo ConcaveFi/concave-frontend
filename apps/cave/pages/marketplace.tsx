@@ -19,36 +19,33 @@ const Marketplace = () => {
   }, [isLargerLayout])
 
   return (
-    <Flex
-      width={{ base: 'full' }}
-      textAlign="center"
-      direction="column"
-      // overflowX={`scroll`}
-      // h={'100vh'}
-    >
+    <Flex width={{ base: 'full' }} h={'full'} textAlign="center" direction="column">
       {!viewTransactions ? (
         <>
           <MarketplaceHeader />
           <Flex
             direction={{ xl: 'row', base: 'column-reverse' }}
             gap={4}
-            maxH={'90vh'}
+            m={2}
             justify="center"
+            maxH={'90vh'}
             width="full"
           >
-            <MarketplaceDashboard />
+            <MarketplaceDashboard
+              width={'full'}
+              maxWidth={'850px'}
+              rounded={'2xl'}
+              mb={'auto'}
+              maxH={`90vh`}
+              shadow={'up'}
+              p={4}
+              gap={4}
+            />
             <MarketplaceActivityCard />
           </Flex>
         </>
       ) : (
-        <Flex
-          border={'2px solid white'}
-          direction={'column'}
-          width="full"
-          justify="center"
-          align={'center'}
-          gap={4}
-        >
+        <Flex direction={'column'} width="full" justify="center" align={'center'} gap={4}>
           <Flex height="120px" position="relative">
             <Flex mt={20} grow={1} justify="center" align={'center'}>
               <Text fontWeight={700} fontSize={{ base: '2xl', md: '3xl' }}>

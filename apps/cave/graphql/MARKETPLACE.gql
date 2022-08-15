@@ -1,4 +1,4 @@
-mutation INSERT_CAVEMART_LISTING(
+mutation INSERT_MARKETPLACE_LISTING(
   $signatureHash: String
   $start: String
   $startPrice: String
@@ -12,7 +12,7 @@ mutation INSERT_CAVEMART_LISTING(
   $txHash: String
   $tokenOption: String
 ) {
-  insert_cavemart_one(
+  insert_marketplace_one(
     object: {
       signatureHash: $signatureHash
       start: $start
