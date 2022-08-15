@@ -1,4 +1,4 @@
-import { Currency, DAI, FIXED_ORDER_MARKET_CONTRACT, FRAX, NATIVE, USDC } from '@concave/core'
+import { Currency, DAI, FRAX, MARKETPLACE_CONTRACT, NATIVE, USDC } from '@concave/core'
 import { DownIcon } from '@concave/icons'
 import { FixedOrderMarketContract, MarketItem, StakingPosition } from '@concave/marketplace'
 import {
@@ -95,7 +95,7 @@ export const useListeForSaleState = ({
       name: 'Marketplace',
       version: '1',
       chainId: chain.rinkeby.id,
-      verifyingContract: FIXED_ORDER_MARKET_CONTRACT[chain.rinkeby.id],
+      verifyingContract: MARKETPLACE_CONTRACT[chain.rinkeby.id],
     },
     types: {
       Swap: [
@@ -155,6 +155,12 @@ export const useListeForSaleState = ({
   }
 }
 
+function addDays(date: Date, days: number) {
+  var result = new Date(date)
+  result.setDate(result.getDate() + days)
+  return result
+}
+
 export const ListPositionForSale = ({
   market,
   staking,
@@ -170,6 +176,7 @@ export const ListPositionForSale = ({
   setMarket: Dispatch<SetStateAction<MarketItem>>
 }) => {
   const discount = usePositionDiscount(staking, market)
+  const tomorrow = addDays(new Date(), 1)
 
   if (market.signature) {
     return (
@@ -177,15 +184,7 @@ export const ListPositionForSale = ({
     )
   }
   return (
-    <VStack
-      direction={'column'}
-      justifyContent={'space-between'}
-      // minH={'400px'}
-      gap={1}
-      pt={8}
-      px={8}
-      pb={0}
-    >
+    <VStack direction={'column'} justifyContent={'space-between'} gap={1} pt={8} px={8} pb={0}>
       <Type />
       <Info label="Current value:" value={formatFixed(staking.currentValue) + ' CNV'}></Info>
       <CurrencySelector value={market.currency} onChange={setCurrency} />
@@ -199,9 +198,8 @@ export const ListPositionForSale = ({
       <EpochDateField
         label="Deadline:"
         onChange={setDeadline}
-        minDate={Date.now() / 1000}
+        minDate={tomorrow.getTime() / 1000}
         maxDate={staking.maturity}
-        date={market.deadline.toNumber()}
       />
       {discount.isSuccess && (
         <Info
@@ -210,7 +208,12 @@ export const ListPositionForSale = ({
         ></Info>
       )}
       <Flex pt={4} justifyContent="center">
-        <ChooseButton onClick={create} title={`List`} backgroundType="blue" />
+        <ChooseButton
+          onClick={create}
+          disabled={market.deadline?.mul(1000).lt(Date.now())}
+          title={`List`}
+          backgroundType="blue"
+        />
       </Flex>
     </VStack>
   )
