@@ -1,8 +1,8 @@
 import { SpinIcon } from '@concave/icons'
 import { Card, Flex, Heading, keyframes, Text } from '@concave/ui'
-import GraphicGuide from 'components/LiquidStaking/GraphicGuide'
+import { GraphicGuide } from 'components/LiquidStaking/GraphicGuide'
 import { useLiquidStakeData } from 'components/LiquidStaking/hooks/useLiquidStakeData'
-import LiquidLocksCards from 'components/LiquidStaking/LiquidLocksCards'
+import { LiquidLocksCards } from 'components/LiquidStaking/LiquidLocksCards'
 import { StakeCard } from 'components/LiquidStaking/StakeCard'
 import { withPageTransition } from 'components/PageTransition'
 function LiquidStaking() {

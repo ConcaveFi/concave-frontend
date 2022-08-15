@@ -1,9 +1,9 @@
-import { Modal, Flex, Button, Text } from '@concave/ui'
+import { CloseIcon } from '@concave/icons'
+import { Button, Flex, Modal, Text } from '@concave/ui'
+import { formatAddress } from 'utils/formatAddress'
 import { useAccount, useDisconnect } from 'wagmi'
 import ConnectedAreasContainer from '../YourWallet/Containers/ConnectedsAreaContainer'
 import RecentTransactionsContainer from './RecentTransactions'
-import { formatAddress } from 'utils/formatAddress'
-import { CloseIcon } from '@concave/icons'
 
 export default function YourWalletModal({
   isOpen,

@@ -1,11 +1,11 @@
 import { SubmittedIcon } from '@concave/icons'
 import { Button, Link, Modal, Text } from '@concave/ui'
-import { TransactionResponse } from '@ethersproject/abstract-provider'
+import { Transaction } from 'ethers'
 import { getTxExplorer } from 'lib/getTransactionExplorer'
 import { ReactNode, useEffect, useState } from 'react'
 import { useNetwork } from 'wagmi'
 
-const TxSubmitted = ({ title, tx }: { title: string; tx: TransactionResponse }) => {
+const TxSubmitted = ({ title, tx }: { title: string; tx: Transaction }) => {
   const { chain } = useNetwork()
   return (
     <>
@@ -23,7 +23,7 @@ const TxSubmitted = ({ title, tx }: { title: string; tx: TransactionResponse }) 
 type TransactionSubmittedDialogProps = {
   title?: string
   subtitle?: string
-  tx: TransactionResponse
+  tx: Transaction
   isOpen: boolean
   closeParentComponent?: VoidFunction
   children?: ReactNode

@@ -1,29 +1,44 @@
+import {
+  CNV,
+  CNV_ADDRESS,
+  Currency,
+  DAI,
+  DAI_ADDRESS,
+  FRAX,
+  FRAX_ADDRESS,
+  USDC,
+  USDC_ADDRESS,
+  WETH9_ADDRESS,
+} from '@concave/core'
 import { chain } from 'wagmi'
 import { coingeckoApi } from './coingecko.api'
 
 export const chartIntervals = ['5m', '15m', '1H', '4H', '1D'] as const
 export type ChartInterval = typeof chartIntervals[number]
 
+const whitelist = [
+  ...Object.values(FRAX_ADDRESS),
+  ...Object.values(CNV_ADDRESS),
+  ...Object.values(DAI_ADDRESS),
+  ...Object.values(USDC_ADDRESS),
+  ...Object.values(WETH9_ADDRESS),
+]
+const tokenToCoingeckId = (currency: Currency) => {
+  if (currency.isNative) return `ethereum`
+  const address = currency.wrapped.address
+  if (address === CNV[currency.chainId].address) return `concave`
+  if (address === FRAX[currency.chainId].address) return `frax`
+  if (address === USDC[currency.chainId].address) return `usd-coin`
+  if (address === DAI[currency.chainId].address) return `dai`
+}
+
 class TokenService {
   constructor(private networkName: string = chain.mainnet.name) {}
-
-  async getTokenPrice(symbol: string) {
-    if (this.networkName === chain.rinkeby.name) {
-      const values = {
-        DAI: 1,
-        WETH: 3402,
-        MATIC: 1.68,
-        FRAX: 1,
-        Tether: 1.2,
-      }
-      return {
-        token: symbol,
-        currency: 'usd',
-        value: values[symbol],
-      }
+  async getTokenPrice(currency: Currency) {
+    const coingecko = tokenToCoingeckId(currency)
+    if (!coingecko) {
+      throw `token not in whitelist`
     }
-
-    const coingecko = symbol?.toLowerCase()
     return Promise.resolve(
       coingeckoApi.tokenPrice({
         currency: 'usd',

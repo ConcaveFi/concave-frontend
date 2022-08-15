@@ -2,10 +2,10 @@ import { CNV } from '@concave/core'
 import { DashboardIcon } from '@concave/icons'
 import { Box, Flex, Image, Stack, Text } from '@concave/ui'
 import { ButtonLink } from 'components/ButtonLink'
-import { ConnectButton, UserWallet } from 'components/ConnectWallet'
+import { ConnectButton, UserWallet } from 'components/UserWallet/ConnectWallet'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { useAccount } from 'wagmi'
+import { useAccount, useNetwork } from 'wagmi'
 
 const UserCnvBalance = () => {
   const networkId = useCurrentSupportedNetworkId()
@@ -29,19 +29,18 @@ const UserCnvBalance = () => {
   )
 }
 
-function SideBarTop() {
-  const { isConnected } = useAccount()
-
+const TestnetIndicator = () => {
+  const { chain } = useNetwork()
   return (
-    data?.formatted && (
-      <Flex justifyContent="space-between" p={2} mt={2}>
-        <Text color="text.low" fontWeight="bold" fontSize="md" lineHeight="100%">
-          Your CNV Balance
+    chain?.testnet && (
+      <Box textAlign={'center'} pt={3}>
+        <Text color={'goldenrod'} fontWeight={'semibold'}>
+          Connected to {chain.name}
         </Text>
-        <Text color="text.low" fontWeight="bold" fontSize="md" lineHeight="100%">
-          {(+data?.formatted).toFixed(2)} CNV
-        </Text>
-      </Flex>
+        <ButtonLink variant="secondary" size="medium" fontSize={'lg'} href="/faucet">
+          Go to faucet
+        </ButtonLink>
+      </Box>
     )
   )
 }
@@ -50,11 +49,11 @@ function SideBarTop() {
   const { isConnected } = useAccount()
 
   return (
-    <Box shadow="down" px={2} pt={10} pb={3} rounded="2xl">
+    <Box shadow="down" px={2} pb={3} rounded="2xl" w="100%">
       <Flex
         alignItems="center"
         justify="center"
-        my={4}
+        my="58px"
         filter="drop-shadow(0px 0px 27px #81b3ff4f)"
       >
         <Image src="/assets/concave/logomark.svg" alt="concave logo" maxWidth="52px" />
@@ -64,7 +63,8 @@ function SideBarTop() {
       <Stack gap="1" align="flex-end" mt={7}>
         <ButtonLink
           href="/treasury" // and redirect to the treasury page
-          variant="primary.outline"
+          variant="secondary"
+          border="primary"
           size="medium"
           w="full"
           alignItems="center"
@@ -77,6 +77,7 @@ function SideBarTop() {
           <UserCnvBalance />
         </Box>
       </Stack>
+      <TestnetIndicator />
     </Box>
   )
 }

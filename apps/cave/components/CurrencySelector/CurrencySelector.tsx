@@ -1,5 +1,5 @@
 import { Currency } from '@concave/core'
-import { useDisclosure } from '@concave/ui'
+import { Skeleton, useDisclosure } from '@concave/ui'
 import { FC } from 'react'
 import { SelectCurrencyButton } from './SelectCurrencyButton'
 
@@ -38,3 +38,7 @@ export const CurrencySelector = ({
     </>
   )
 }
+
+export const LoadingCurrencySelector = () => (
+  <Skeleton w="130px" h="30px" rounded="full" opacity={0.1} shadow="Up Small" />
+)

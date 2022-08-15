@@ -15,3 +15,13 @@ export const formatFixed = (
   const fixedDecimalValue = (decimalValue || '').padEnd(places, '0').substring(0, places)
   return integerValue + (fixedDecimalValue ? '.' + fixedDecimalValue : '')
 }
+
+const formatter = Intl.NumberFormat('en', { notation: 'compact', maximumSignificantDigits: 4 })
+export const compactFormat = (bigNumber: BigNumberish, params: { decimals?: number } = {}) => {
+  const { decimals } = fixParams(params)
+  const input = utils.formatUnits(bigNumber, decimals)
+  if (+input < 0.01) {
+    return `< 0.01`
+  }
+  return formatter.format(+input)
+}

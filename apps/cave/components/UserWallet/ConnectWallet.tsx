@@ -1,11 +1,10 @@
-import { Button, gradientBorder, Flex, useDisclosure, Text } from '@concave/ui'
-import { useAccount, useEnsName } from 'wagmi'
-import { useModals } from 'contexts/ModalsContext'
-import YourWalletModal from './YourWallet'
 import { SpinnerIcon } from '@concave/icons'
-import { spinAnimation } from '../Treasury/Mobile/TreasuryManagementMobile'
+import { Button, Flex, gradientBorder, Image, keyframes, Text, useDisclosure } from '@concave/ui'
+import { useModals } from 'contexts/ModalsContext'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { formatAddress } from 'utils/formatAddress'
+import { useAccount, useEnsName, useNetwork } from 'wagmi'
+import YourWalletModal from './YourWallet'
 
 export const ConnectButton = () => {
   const { connectModal } = useModals()
@@ -24,8 +23,15 @@ export const ConnectButton = () => {
   )
 }
 
+const spinAnimation = (time = 3) =>
+  `${keyframes({
+    '0%': { transform: 'rotate(0deg)' },
+    '100%': { transform: 'rotate(360deg)' },
+  })} ${time}s linear infinite`
+
 export const UserWallet = () => {
   const { address } = useAccount()
+  const { chain } = useNetwork()
   const { data: ens } = useEnsName({ address })
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { hasPendingTransactions } = useTransactionRegistry()
@@ -34,16 +40,21 @@ export const UserWallet = () => {
     <>
       <Button
         onClick={onOpen}
-        size="medium"
+        height="40px"
         shadow="up"
         fontFamily="heading"
-        color="text.low"
         _focus={{ color: 'text.high', shadow: 'up' }}
         w="100%"
         rounded="2xl"
-        fontWeight="bold"
-        justifyContent="center"
       >
+        <Image
+          filter={chain.testnet ? 'grayscale(1)' : ''}
+          src="/assets/tokens/eth.svg"
+          alt="ethereum icon"
+          w="22px"
+          h="22px"
+          mr={2}
+        />
         <Text noOfLines={1} wordBreak="break-all" whiteSpace="normal" maxW="60%">
           {ens || formatAddress(address)}
         </Text>

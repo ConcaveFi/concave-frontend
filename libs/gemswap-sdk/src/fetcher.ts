@@ -1,13 +1,50 @@
-import { CurrencyAmount, FACTORY_ADDRESS, Token } from '@concave/core'
+import {
+  AddressMap,
+  ChainId,
+  CNV,
+  CNV_ADDRESS,
+  CurrencyAmount,
+  DAI,
+  DAI_ADDRESS,
+  FACTORY_ADDRESS,
+  Token,
+  TokenMap,
+  USDC,
+  USDC_ADDRESS,
+  WNATIVE,
+  WNATIVE_ADDRESS,
+} from '@concave/core'
 import { Contract } from '@ethersproject/contracts'
 import { getNetwork } from '@ethersproject/networks'
 import { getDefaultProvider } from '@ethersproject/providers'
 import invariant from 'tiny-invariant'
 import { Pair } from './entities'
 
-const TOKENS_CACHE: { [chainId: number]: { [address: string]: Token } } = {}
+const makeTokenCacheItem = (addresses: AddressMap, tokenMap: TokenMap) =>
+  Object.values(addresses).reduce((a, address) => ({ ...a, [address]: tokenMap }), {})
+// preload some tokens we already know
+const TOKENS_CACHE: { [address: string]: { [chainId in ChainId]: Token } } = {
+  ...makeTokenCacheItem(CNV_ADDRESS, CNV),
+  ...makeTokenCacheItem(DAI_ADDRESS, DAI),
+  ...makeTokenCacheItem(WNATIVE_ADDRESS, WNATIVE),
+  ...makeTokenCacheItem(USDC_ADDRESS, USDC),
+}
 
-const PAIR_ADDRESSES_CACHE: { [tokenAddresses: string]: string } = {}
+const PAIR_ADDRESSES_CACHE: { [tokenAddresses: string]: string } = {
+  // ethereum
+  ['0x000000007a58f5f58E697e51Ab0357BC9e260A04-0x6B175474E89094C44Da98b954EedeAC495271d0F']:
+    '0x84d53CBA013d0163BB07D65d5123D1634bc2a575', // CNV - DAI
+  ['0x000000007a58f5f58E697e51Ab0357BC9e260A04-0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2']:
+    '0x0635380165F7693B7A9D5D6693dF5c860376aEe7', // WETH - CNV
+  ['0x6B175474E89094C44Da98b954EedeAC495271d0F-0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2']:
+    '0x7f7AE4cb07a81fE810D7Bee9500B2b9eDdC5Ea1A', // WETH - DAI
+
+  // rinkeby
+  ['0x4A8b871784A8e6344126F47d48283a87Ea987f27-0xe1776Da3FBe3bBf198263Cb053d589FC3cfe1b30']:
+    '0x804A9Be7b60310245Bcf2e50d59c28A2Fa862Eb0', // CNV - DAI
+  ['0x4A8b871784A8e6344126F47d48283a87Ea987f27-0xc778417E063141139Fce010982780140Aa0cD5Ab']:
+    '0x60d8A6B6D11d03c2674229EA1Ad17600f5a3A60E', // WETH - CNV
+}
 
 /**
  * Contains methods for constructing instances of pairs and tokens from on-chain data.
@@ -21,7 +58,6 @@ export abstract class Fetcher {
   /**
    * Fetch information for a given token on the given chain, using the given ethers provider.
    * @param address address of the token on the chain
-   * @param chainId chain of the token
    * @param provider provider used to fetch the token
    */
   public static async fetchTokenData(
@@ -29,7 +65,7 @@ export abstract class Fetcher {
     provider = getDefaultProvider(getNetwork(1)),
   ): Promise<Token> {
     const chainId = await provider.getNetwork().then((n) => n.chainId)
-    if (TOKENS_CACHE[chainId]?.[address]) return TOKENS_CACHE[chainId][address]
+    if (TOKENS_CACHE[address]?.[chainId]) return TOKENS_CACHE[address][chainId]
 
     const tokenContract = new Contract(
       address,
@@ -50,9 +86,9 @@ export abstract class Fetcher {
 
     const token = new Token(chainId, address, decimals, symbol, name, totalSupply)
 
-    TOKENS_CACHE[chainId] = {
-      ...TOKENS_CACHE[chainId],
-      [address]: token,
+    TOKENS_CACHE[address] = {
+      ...TOKENS_CACHE[address],
+      [chainId]: token,
     }
 
     return token

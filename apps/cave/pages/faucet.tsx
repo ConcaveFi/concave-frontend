@@ -1,7 +1,7 @@
 import { CNV, Currency, CurrencyAmount } from '@concave/core'
 import { Box, Button, Card, Flex, Heading, Text } from '@concave/ui'
 import { CurrencyInputField } from 'components/CurrencyAmountField'
-import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
+import { SelectFaucetCurrency } from 'components/CurrencySelector/SelectFaucetCurrency'
 import { withPageTransition } from 'components/PageTransition'
 import { Contract } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
@@ -24,9 +24,6 @@ const Faucet = () => {
       ['function mint(address guy, uint256 wad) external'],
       provider,
     ).connect(signer)
-
-    console.log(contract)
-    contract.mint(address, inputAmount.numerator.toString())
   }
 
   return (
@@ -71,7 +68,7 @@ const Faucet = () => {
               <CurrencyInputField
                 currencyAmountIn={inputAmount}
                 onChangeAmount={setInputAmout}
-                CurrencySelector={SelectAMMCurrency}
+                CurrencySelector={SelectFaucetCurrency}
               />
 
               <Button variant="primary" size="large" w="full" onClick={mint}>

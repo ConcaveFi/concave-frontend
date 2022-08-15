@@ -3,7 +3,6 @@ import { Flex, HStack, Text } from '@concave/ui'
 import { CurrencyAmountField } from 'components/CurrencyAmountField'
 import { Balance } from 'components/CurrencyAmountField/Balance'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
-import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useFiatValue } from '../hooks/useFiatPrice'
 import { PriceImpact } from './PriceImpact'
 
@@ -21,8 +20,6 @@ export const CurrencyOutputField = ({
   priceImpact,
 }: CurrencyOutputFieldProps) => {
   const outputFiat = useFiatValue(currencyAmountOut)
-
-  const balance = useCurrencyBalance(currencyAmountOut?.currency, { watch: true })
 
   return (
     <CurrencyAmountField
@@ -42,7 +39,7 @@ export const CurrencyOutputField = ({
             )}
           </>
         </Flex>
-        {balance.isSuccess && <Balance value={balance.data.toFixed(2, { groupSeparator: ',' })} />}
+        <Balance currency={currencyAmountOut?.currency} />
       </HStack>
     </CurrencyAmountField>
   )

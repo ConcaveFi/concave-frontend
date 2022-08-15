@@ -1,4 +1,5 @@
-import { ROUTER_ADDRESS } from '@concave/core'
+import { Currency, ROUTER_ADDRESS } from '@concave/core'
+import { Trade, TradeType } from '@concave/gemswap-sdk'
 import { ButtonProps } from '@concave/ui'
 import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { isAddress } from 'ethers/lib/utils'
@@ -6,29 +7,28 @@ import { swapSupportedChains } from 'pages/gemswap'
 import { toPercent } from 'utils/toPercent'
 import { useAccount, useNetwork } from 'wagmi'
 import { NoValidPairsError } from '../hooks/usePair'
-import { InsufficientLiquidityError, UseTradeResult } from '../hooks/useTrade'
-import { SwapSettings } from './Settings'
+import { InsufficientLiquidityError } from '../hooks/useTrade'
+import { useSwapSettings } from './Settings'
 
 export const useSwapButtonProps = ({
   trade,
+  error,
   recipient,
-  settings,
   onSwapClick,
 }: {
-  trade: UseTradeResult
+  trade: Trade<Currency, Currency, TradeType>
+  error: string
   recipient: string
-  settings: SwapSettings
   onSwapClick: () => void
 }): ButtonProps => {
   const { isConnecting } = useAccount()
   const { chain } = useNetwork()
-  const inputAmount = trade.data.inputAmount
-  const outputAmount = trade.data.outputAmount
-  const currencyIn = inputAmount?.currency
+  const currencyIn = trade.inputAmount?.currency
   const useCurrencyState = useCurrencyButtonState(
-    trade.data.inputAmount,
-    ROUTER_ADDRESS[trade.data.inputAmount.currency?.chainId],
+    trade.inputAmount,
+    ROUTER_ADDRESS[trade.inputAmount?.currency.chainId],
   )
+  const isExpertMode = useSwapSettings((s) => s.settings.expertMode)
   if (useCurrencyState.state === 'disconected') return useCurrencyState.buttonProps
   /*
     Not Connected
@@ -38,7 +38,7 @@ export const useSwapButtonProps = ({
   /*
     Select a token
   */
-  if (!currencyIn || !outputAmount?.currency)
+  if (!currencyIn || !trade.outputAmount?.currency)
     return { children: 'Select a token', isDisabled: true }
 
   /*
@@ -54,7 +54,7 @@ export const useSwapButtonProps = ({
   /* 
     SOON Wrap / Unwrap
   */
-  const currencyOut = outputAmount?.currency
+  const currencyOut = trade.outputAmount?.currency
   if (currencyIn.isNative && currencyIn.wrapped.equals(currencyOut))
     return { children: 'Wrap (soon)', isDisabled: true }
   if (currencyOut?.isNative && currencyIn.equals(currencyOut.wrapped))
@@ -63,44 +63,30 @@ export const useSwapButtonProps = ({
   /*
     Price impact
   */
-  if (!settings.expertMode && trade.data.priceImpact?.greaterThan(toPercent(20)))
+  if (!isExpertMode && trade.priceImpact?.greaterThan(toPercent(20)))
     return { children: 'Price impact is too high', isDisabled: true }
-
-  /*
-    Trade loaded
-  */
-  if (trade.isLoading) return { isLoading: true }
 
   /*
     Trade Error
   */
-  if (trade.error === NoValidPairsError)
+  if (error === NoValidPairsError)
     return {
       isDisabled: true,
       children: `No liquidity`, // Try enabling multi-hop trades
     }
 
-  if (trade.error === InsufficientLiquidityError)
+  if (error === InsufficientLiquidityError)
     return { children: `Not enough liquidity`, isDisabled: true }
 
   /*
     Enter an amount
   */
-  if (!inputAmount || inputAmount?.equalTo(0))
+  if (!trade.inputAmount || trade.inputAmount?.equalTo(0))
     return { isDisabled: true, children: 'Enter an amount' }
 
   if (recipient && !isAddress(recipient)) return { children: 'Invalid recipient', isDisabled: true }
 
   if (!useCurrencyState.approved) return useCurrencyState.buttonProps
-
-  // /*
-  //   Wrap / Unwrap, ETH <-> WETH
-  // */
-  // const currencyOut = outputAmount?.currency
-  // if (currencyIn.isNative && currencyIn.wrapped.equals(currencyOut))
-  //   return { children: 'Wrap', isDisabled: true }
-  // if (currencyOut?.isNative && currencyIn.equals(currencyOut.wrapped))
-  //   return { children: 'Unwrap', isDisabled: true }
 
   /*
     Swap

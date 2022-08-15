@@ -19,7 +19,8 @@ export const useTokenList = () => {
 
   return useQuery(
     ['token-list', activeChain?.id || 1],
-    async () => fetchTokenList(activeChain?.unsupported ? chain.mainnet : activeChain),
+    async () =>
+      fetchTokenList(activeChain?.unsupported ? chain.mainnet : activeChain || chain.mainnet),
     { placeholderData: [], refetchOnWindowFocus: false },
   )
 }
@@ -40,6 +41,8 @@ export const fetchTokenData = (
   provider: any,
 ): Promise<Currency> => {
   if (!address) return undefined
+  if (address === '0x0000000000000000000000000000000000000000')
+    return Promise.resolve(NATIVE[chainID])
   if (address === NATIVE[chainID].symbol) return Promise.resolve(NATIVE[chainID])
   return Fetcher.fetchTokenData(address, provider)
 }

@@ -1,6 +1,7 @@
-import { CNV, Currency, DAI, NATIVE, WETH9 } from '@concave/core'
+import { CNV, Currency, DAI, NATIVE, PCNV, WETH9 } from '@concave/core'
 import { QuestionIcon } from '@concave/icons'
-import { Button, Flex, Heading, Modal } from '@concave/ui'
+import { Button, Flex, Heading, Modal, Skeleton } from '@concave/ui'
+import { useQueryCurrencies } from 'components/AMM/hooks/useQueryCurrencies'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { defaultChains } from 'wagmi'
@@ -15,11 +16,30 @@ const CommonTokens = ({
   onSelect: (currency: Currency) => void
 }) => {
   const networkId = useCurrentSupportedNetworkId()
-  const currencies = [DAI, CNV, NATIVE, WETH9].map((c) => c[networkId])
+  const currencies = [DAI, CNV, NATIVE, WETH9, PCNV].map((c) => c[networkId])
+  return GenericTokens({
+    selected,
+    currencies,
+    label: 'Common pairs',
+    onSelect,
+  })
+}
+
+const GenericTokens = ({
+  currencies,
+  label,
+  selected,
+  onSelect,
+}: {
+  label: string
+  selected?: Currency
+  currencies: Currency[]
+  onSelect: (currency: Currency) => void
+}) => {
   return (
     <>
       <Heading size="sm">
-        Common pairs <QuestionIcon w="22px" h="22px" ml={2} />
+        {label} <QuestionIcon w="22px" h="22px" ml={2} />
       </Heading>
       <Flex gap={2} wrap="wrap">
         {currencies.map((currency) => (
@@ -68,6 +88,10 @@ const AMMCurrencySelectorModal = ({
   )
 }
 
+const LoadingCurrencySelector = () => (
+  <Skeleton w="130px" h="30px" rounded="full" opacity={0.1} shadow="Up Small" />
+)
+
 export const SelectAMMCurrency = ({
   selected,
   onSelect,
@@ -75,6 +99,10 @@ export const SelectAMMCurrency = ({
   selected?: Currency
   onSelect: (token: Currency) => void
 }) => {
+  const { isLoading } = useQueryCurrencies()
+
+  if (isLoading) return <LoadingCurrencySelector />
+
   return (
     <CurrencySelector
       selected={selected}

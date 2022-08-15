@@ -1,10 +1,8 @@
 import { useDisclosure } from '@concave/ui'
-import { ConnectWalletModal } from 'components/ConnectWallet'
-// import { DevelopGateway } from 'components/DevelopGateway'
 import { UnsupportedNetworkModal } from 'components/UnsupportedNetworkModal'
-import React, { ComponentType, createContext, useContext } from 'react'
-import { useAccount, useConnect } from 'wagmi'
 import dynamic from 'next/dynamic'
+import React, { ComponentType, createContext, useContext } from 'react'
+import { useAccount } from 'wagmi'
 
 type ModalsDisclosure = Record<
   string,
@@ -32,7 +30,6 @@ export const ModalsProvider: React.FC<React.PropsWithChildren<unknown>> = ({ chi
 
   return (
     <ModalsContext.Provider value={{ connectModal }}>
-      {/* <DevelopGateway /> */}
       <UnsupportedNetworkModal />
       {shouldFetchConnectWalletModal && (
         <ConnectWalletModal isOpen={connectModal.isOpen} onClose={connectModal.onClose} />

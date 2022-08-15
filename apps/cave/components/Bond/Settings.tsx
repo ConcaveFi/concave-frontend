@@ -1,5 +1,5 @@
 import { Deadline, SlippageTolerance, TransactionSettings } from 'components/TransactionSettings'
-import { useTransactionSettings } from 'components/TransactionSettings/TransactionSettings'
+import { createTransactionSettingsStore } from 'components/TransactionSettings/TransactionSettings'
 
 const defaultSettings = {
   slippageTolerance: 1,
@@ -8,17 +8,19 @@ const defaultSettings = {
 
 export type BondSettings = typeof defaultSettings
 
-export const useBondSettings = () => useTransactionSettings('bond', defaultSettings)
+export const useBondSettings = createTransactionSettingsStore('bond', defaultSettings)
 
 // TODO: implement auto slippage
 const calculateAutoSlippage = () => 1.2
 
-export const Settings = ({
-  settings: { slippageTolerance, deadline },
-  setSetting,
-  isDefaultSettings = true,
-  onClose,
-}) => {
+export const Settings = () => {
+  const {
+    settings: { slippageTolerance, deadline },
+    onClose,
+    setSetting,
+    isDefaultSettings,
+  } = useBondSettings()
+
   return (
     <TransactionSettings isDefaultSettings={isDefaultSettings} onClose={onClose}>
       <SlippageTolerance

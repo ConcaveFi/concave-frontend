@@ -1,0 +1,34 @@
+mutation INSERT_MARKETPLACE_LISTING(
+  $signatureHash: String
+  $start: String
+  $startPrice: String
+  $endPrice: String
+  $tokenID: numeric!
+  $tokenOwner: String!
+  $deadline: numeric
+  $tokenIsListed: Boolean
+  $newOwner: String
+  $soldFor: String
+  $txHash: String
+  $tokenOption: String
+) {
+  insert_marketplace_one(
+    object: {
+      signatureHash: $signatureHash
+      start: $start
+      startPrice: $startPrice
+      endPrice: $endPrice
+      tokenID: $tokenID
+      tokenIsListed: $tokenIsListed
+      tokenOwner: $tokenOwner
+      deadline: $deadline
+      newOwner: $newOwner
+      soldFor: $soldFor
+      txHash: $txHash
+      tokenOption: $tokenOption
+    }
+  ) {
+    tokenID
+    tokenIsListed
+  }
+}

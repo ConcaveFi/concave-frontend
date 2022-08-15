@@ -1,29 +1,29 @@
 import {
+  Box,
   Button,
+  calc,
+  Card,
+  CloseButton,
+  Drawer,
+  DrawerContent,
+  DrawerOverlay,
+  Flex,
+  HStack,
   Image,
   Modal,
-  Text,
-  Card,
-  HStack,
-  Stack,
-  Box,
-  CloseButton,
-  Spinner,
   ScaleFade,
-  Flex,
-  useToken,
-  calc,
-  Drawer,
-  DrawerOverlay,
-  DrawerContent,
   SimpleGrid,
+  Spinner,
+  Stack,
+  Text,
+  useToken,
 } from '@concave/ui'
-import { Connector, useConnect } from 'wagmi'
-import { useRouter } from 'next/router'
-import { useQuery } from 'react-query'
-import { QRCode } from 'react-qrcode-logo'
-import { isMobile } from 'utils/isMobile'
 import { fetchWalletConnectRegistry, uriToLink } from 'lib/walletConnect'
+import { useRouter } from 'next/router'
+import { QRCode } from 'react-qrcode-logo'
+import { useQuery } from 'react-query'
+import { isMobile } from 'utils/isMobile'
+import { Connector, useConnect } from 'wagmi'
 
 const getConnectorLogo = (connectorName: Connector['name']) =>
   `/assets/connectors/${connectorName.toLowerCase().replace(' ', '-')}.png`
@@ -277,11 +277,8 @@ const MobileConnect = ({ isOpen, onClose }) => {
           align="center"
           pb="100px"
           m={1}
-          // mx={-1}
-          // mb={-1}
-          // roundedBottom={0}
           gap={8}
-          h="50vh"
+          h="60vh"
         >
           <Text fontFamily="heading" fontWeight="bold" fontSize="xl">
             Connect a Wallet
@@ -304,7 +301,9 @@ const MobileConnect = ({ isOpen, onClose }) => {
                         fallback={<Box w="48px" h="48px" bg="subtle" opacity={0.5} rounded="xl" />}
                         alt={wallet.name}
                       />
-                      <Text>{wallet.metadata.shortName}</Text>
+                      <Text color="text.low" fontWeight="normal">
+                        {wallet.metadata.shortName}
+                      </Text>
                     </Stack>
                   </Button>
                 ))}

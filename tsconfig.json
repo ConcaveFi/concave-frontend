@@ -2,7 +2,7 @@
   "compilerOptions": {
     "strict": false,
     "allowJs": true,
-    "target": "es6",
+    "target": "es2022",
     "lib": ["dom", "dom.iterable", "esnext"],
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,

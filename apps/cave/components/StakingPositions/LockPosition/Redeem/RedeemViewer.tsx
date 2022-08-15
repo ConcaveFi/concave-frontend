@@ -1,5 +1,5 @@
 import { StakingPosition, StakingV1Contract } from '@concave/marketplace'
-import { Box, Button, Flex, FlexProps, Spinner, Text, TextProps } from '@concave/ui'
+import { Box, Button, Flex, FlexProps, HStack, Spinner, Text, TextProps } from '@concave/ui'
 import { BigNumber, Transaction } from 'ethers'
 import { formatEther } from 'ethers/lib/utils'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
@@ -87,30 +87,22 @@ export const RedeemCardViewer = ({ stakingPosition }: RedeemCardViewerProps) => 
   }, [txStatus])
 
   return (
-    <Box
-      borderRadius="2xl"
-      mt={{ lg: 1, md: 3 }}
-      mb={3}
-      mx={{ base: 0, md: '0px', lg: 2 }}
-      pt={{ base: 6, md: 3 }}
-      px={{ base: 0, md: 0 }}
-      maxW={{ base: '353px', md: '500px', lg: '720px' }}
-    >
+    <Box borderRadius="2xl" maxW={{ base: '353px', md: '500px', lg: '720px' }}>
       <Flex gap={3} flex={1} direction={{ base: 'column', md: 'row' }}>
         <Flex ml={{ lg: 7 }} mx="auto">
           <Info
             label="Current value"
-            valueFontSize={{ base: 'sm', md: 'lg' }}
+            fontSize={{ base: 'sm', md: 'lg' }}
             value={bigNumberMask(stakingPosition.currentValue) + ' CNV'}
           />
           <Info
             label="Gained"
-            valueFontSize={{ base: 'sm', md: 'lg' }}
+            fontSize={{ base: 'sm', md: 'lg' }}
             value={bigNumberMask(stakingPosition.totalRewards) + ' CNV'}
           />
           <Info
             label="Initial"
-            valueFontSize={{ base: 'sm', md: 'lg' }}
+            fontSize={{ base: 'sm', md: 'lg' }}
             value={bigNumberMask(stakingPosition.initialValue) + ' CNV'}
           />
         </Flex>
@@ -123,7 +115,8 @@ export const RedeemCardViewer = ({ stakingPosition }: RedeemCardViewerProps) => 
 interface Info extends FlexProps {
   label: string
   value: string
-  valueFontSize?: TextProps['fontSize']
+  isLoading?: boolean
+  fontSize?: TextProps['fontSize']
 }
 export const Info: React.FC<Info> = ({ ...props }) => {
   return (
@@ -131,9 +124,12 @@ export const Info: React.FC<Info> = ({ ...props }) => {
       <Text color="text.low" fontSize="sm" lineHeight={'12px'} noOfLines={1}>
         {props.label}
       </Text>
-      <Text fontSize={props.valueFontSize || 'md'} fontWeight="bold" noOfLines={1}>
-        {props.value}
-      </Text>
+      <HStack>
+        {props.isLoading && <Spinner size="xs" />}
+        <Text fontSize={props.fontSize || 'md'} fontWeight="bold" noOfLines={1}>
+          {props.value}
+        </Text>
+      </HStack>
     </Flex>
   )
 }
