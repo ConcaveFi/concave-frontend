@@ -6,10 +6,8 @@ export const textures = {
     bgPos: '50% 50%, 0px 0px',
     bgSize: '120px, auto',
   },
-  glass: {
-    bg: 'url("/assets/textures/glass.jpg")',
-  },
-  glassBig: 'url("/assets/textures/glassBig.jpg")',
+  glass: 'url("/assets/textures/glass.jpg")',
+  glassHQ: 'url("/assets/textures/glassHQ.jpg")',
 }
 
 export const backgrounds = {
@@ -34,8 +32,24 @@ export const backgrounds = {
     '::after': {
       borderRadius: 'inherit',
       content: '""',
-      bg: `${textures.glassBig}`,
+      bg: `${textures.glass}`,
       opacity: 0.5,
+      inset: 0,
+      pos: 'absolute',
+      zIndex: -1,
+      bgSize: 'cover',
+      shadow: 'inset -30px 30px 20px rgba(0, 0, 0, 0.35)',
+    },
+    filter:
+      'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25)) drop-shadow(-20px 30px 20px rgba(6, 9, 12, 0.5)) drop-shadow(4px -7px 20px rgba(174, 177, 255, 0.13))',
+  },
+  glassHQ: {
+    pos: 'relative',
+    '::after': {
+      borderRadius: 'inherit',
+      content: '""',
+      bg: `${textures.glass}`,
+      opacity: 0.4,
       inset: 0,
       pos: 'absolute',
       zIndex: -1,
