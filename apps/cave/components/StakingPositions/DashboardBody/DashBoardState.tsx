@@ -1,6 +1,6 @@
 import { CNV, Currency, CurrencyAmount } from '@concave/core'
-import { listPositons, StakingPosition } from '@concave/marketplace'
-import { BigNumber } from 'ethers'
+import { listPositons, StakingPosition, StakingV1Abi } from '@concave/marketplace'
+import { BigNumber, ethers } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
 import { useQuery } from 'react-query'
@@ -10,16 +10,37 @@ export type UseStakePositionsState = ReturnType<typeof useStakePositions>
 export const useStakePositions = () => {
   const { address } = useAccount()
   const chainId = useCurrentSupportedNetworkId()
+
+  const { data: unlockedTokenIds } = useQuery(['listUnlockedIds', chainId], async () => {
+    const provider = new ethers.providers.EtherscanProvider(chainId)
+    const history = await provider.getHistory('0xdd11Ae83B49ee68B37fF3E6442f994Fc037bb4a1')
+    return history
+      .filter((data) => data.data.includes('0x7eee288d'))
+      .map((data) => {
+        const iface = new ethers.utils.Interface(StakingV1Abi)
+        const t = iface.parseTransaction({ data: data.data, value: data.value })
+        return +t.args.tokenId
+      })
+  })
+
   const { data: stakingPositions, isLoading } = useQuery(
     ['listUserPositions', address, chainId],
-    () => listPositons({ owner: address, provider: concaveProvider(chainId) }),
+    () =>
+      listPositons({
+        owner: '0xdd11Ae83B49ee68B37fF3E6442f994Fc037bb4a1',
+        provider: concaveProvider(chainId),
+      }),
     { enabled: !!address && !!chainId },
   )
   const totalLocked = getTotalLocked(stakingPositions, CNV[chainId])
+  const filteredPositions = stakingPositions?.filter(
+    ({ tokenId }) => !unlockedTokenIds.includes(+tokenId.toString()),
+  )
+
   return {
     isLoading,
     totalLocked,
-    userNonFungibleTokensInfo: stakingPositions || [],
+    userNonFungibleTokensInfo: filteredPositions || [],
     netWorkId: chainId,
   }
 }
