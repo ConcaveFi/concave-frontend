@@ -4,22 +4,14 @@ interface ChooseButtonProps {
   title: string
   onClick: () => void
   disabled?: boolean
-  backgroundType?: 'default' | 'blue'
 }
 
-export function ChooseButton({
-  title,
-  backgroundType,
-  onClick,
-  ...props
-}: ChooseButtonProps & ButtonProps) {
-  const background =
-    backgroundType == 'blue' ? 'linear-gradient(90deg, #72639B 0%, #44B9DE 100%)' : ''
+export function ChooseButton({ title, onClick, ...props }: ChooseButtonProps & ButtonProps) {
   return (
     <Button
       disabled={props.disabled}
+      variant={'primary'}
       onClick={() => onClick()}
-      background={background}
       fontWeight={'bold'}
       shadow={'up'}
       size={'sm'}

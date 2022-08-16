@@ -178,6 +178,7 @@ export const ListPositionForSale = ({
 }) => {
   const discount = usePositionDiscount(staking, market)
   const tomorrow = addDays(new Date(), 1)
+  const disabled = market.deadline?.mul(1000).lt(Date.now()) || market.startPrice.eq(0)
 
   if (market.signature) {
     return (
@@ -192,7 +193,6 @@ export const ListPositionForSale = ({
       <BigNumberField
         label="Price:"
         currency={market.currency}
-        defaultValue={staking.currentValue}
         onChange={setPrice}
         decimalScale={4}
       />
@@ -209,12 +209,7 @@ export const ListPositionForSale = ({
         ></Info>
       )}
       <Flex pt={4} justifyContent="center">
-        <ChooseButton
-          onClick={create}
-          disabled={market.deadline?.mul(1000).lt(Date.now())}
-          title={`List`}
-          backgroundType="blue"
-        />
+        <ChooseButton onClick={create} disabled={disabled} title={`List`} />
       </Flex>
     </VStack>
   )
