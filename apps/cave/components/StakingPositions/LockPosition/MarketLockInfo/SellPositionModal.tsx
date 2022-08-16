@@ -208,7 +208,10 @@ export const ListPositionForSale = ({
           value={formatFixed(discount.discount, { decimals: 2 }) + '%'}
         ></Info>
       )}
-      <Flex pt={4} justifyContent="center">
+      <Text textColor={'text.low'} as="em" fontSize={'xs'}>
+        1.5% sale fee
+      </Text>
+      <Flex pt={3} justifyContent="center">
         <ChooseButton onClick={create} disabled={disabled} title={`List`} />
       </Flex>
     </VStack>
