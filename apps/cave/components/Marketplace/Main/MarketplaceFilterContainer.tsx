@@ -1,4 +1,4 @@
-import { Flex, Text } from '@concave/ui'
+import { Flex, Text, useBreakpointValue } from '@concave/ui'
 import { useLiquidStakeData } from 'components/LiquidStaking/hooks/useLiquidStakeData'
 import { StakePoolFilterEnum } from 'components/NftFilters/Filters/hooks/useFilterByStakePool'
 import { MakeplaceStakeFilter } from '../Filters/MarketplaceStakeFilter'
@@ -17,6 +17,10 @@ export function MarketplaceFilterContainer({
     } else if (type === 'remove') {
       onChangeStakeFilters(stakeFilters.filter((filter) => filter !== changedFilder))
     }
+  }
+  const mobileUI = useBreakpointValue({ base: true, md: false })
+  if (mobileUI) {
+    return <></>
   }
   return (
     <Flex direction={'column'} mt={8} align="start" rounded={'inherit'} width="full">

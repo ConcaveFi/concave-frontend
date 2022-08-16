@@ -2,7 +2,7 @@ import { Box, Flex, Image, Popover, PopoverContent, PopoverTrigger, Text } from 
 import { Currency, CurrencyAmount, MARKETPLACE_CONTRACT, NATIVE, Percent } from '@concave/core'
 import { LockedIcon, UnlockedIcon } from '@concave/icons'
 import { FixedOrderMarketContract, StakingPosition } from '@concave/marketplace'
-import { FlexProps, gradientBorder, HStack, Spinner } from '@concave/ui'
+import { FlexProps, gradientBorder, HStack, Spinner, useBreakpointValue } from '@concave/ui'
 import { BuyButton } from 'components/BuyButton/BuyButton'
 import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { usePositionDiscount } from 'components/StakingPositions/LockPosition/MarketLockInfo/usePositionDiscount'
@@ -28,6 +28,12 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakin
   const percentToMaturity = new Percent(diff, days)
   const discount = usePositionDiscount(stakingPosition)
   const [active, setActive] = useState(false)
+
+  const mobileUI = useBreakpointValue({ base: true, md: false })
+  if (mobileUI) {
+    return <></>
+  }
+
   return (
     <Popover placement="right" trigger="hover">
       <PopoverTrigger>

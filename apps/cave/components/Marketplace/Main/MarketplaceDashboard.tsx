@@ -1,6 +1,5 @@
 import { Flex, Text, VStack } from '@chakra-ui/react'
-import { ChevronRightIcon } from '@concave/icons'
-import { BoxProps, gradientBorder } from '@concave/ui'
+import { BoxProps } from '@concave/ui'
 import { Loading } from 'components/Loading'
 import { MarketplaceFilterContainer } from 'components/Marketplace/Main/MarketplaceFilterContainer'
 import { useRouter } from 'next/router'
@@ -19,6 +18,7 @@ export const MarketplaceDashboard = (props: BoxProps) => {
     setSort,
     setStakeFilters,
   } = useMarketplaceDashbord()
+  const { push } = useRouter()
 
   const positions = nftPositions.map((stakingPosition) => (
     <MarketplacePosition
@@ -26,27 +26,9 @@ export const MarketplaceDashboard = (props: BoxProps) => {
       stakingPosition={stakingPosition}
     />
   ))
-  const { push } = useRouter()
 
   return (
     <VStack apply="background.metal" {...props}>
-      <Flex
-        mb={-10}
-        align={'center'}
-        sx={{ ...gradientBorder({ borderWidth: 1 }) }}
-        alignSelf={'end'}
-        rounded="2xl"
-        shadow={'up'}
-        px={3}
-        py={'2'}
-        cursor="pointer"
-        onClick={() => push('liquid-stake-positions')}
-      >
-        <Text userSelect={'none'} color={'text.low'} fontWeight="bold">
-          Your positions
-        </Text>
-        <ChevronRightIcon boxSize={'30px'} color="text.low" />
-      </Flex>
       <MarketplaceFilterContainer
         stakeFilters={stakeFilters}
         onChangeStakeFilters={setStakeFilters}
