@@ -15,8 +15,9 @@ export const useStakePositions = () => {
     const provider = new ethers.providers.EtherscanProvider(chainId)
     const history = await provider.getHistory(address)
     const iface = new ethers.utils.Interface(StakingV1Abi)
+    const unlockedFuncHash = '0x7eee288d'
     return history
-      .filter((data) => data.data.includes('0x7eee288d'))
+      .filter((data) => data.data.includes(unlockedFuncHash))
       .map((data) => {
         const transaction = iface.parseTransaction({ data: data.data, value: data.value })
         return +transaction.args.tokenId
