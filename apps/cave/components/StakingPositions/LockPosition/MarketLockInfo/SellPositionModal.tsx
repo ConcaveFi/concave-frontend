@@ -21,7 +21,7 @@ import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId
 import { concaveProvider } from 'lib/providers'
 import { Dispatch, SetStateAction, useCallback } from 'react'
 import { formatFixed } from 'utils/formatFixed'
-import { chain, useSignTypedData } from 'wagmi'
+import { useSignTypedData } from 'wagmi'
 import { BigNumberField } from './BigNumberField'
 import { ConfirmSignature } from './ConfirmSignature'
 import { ConfirmUnlist } from './ConfirmUnlist'
@@ -90,12 +90,13 @@ export const useListeForSaleState = ({
   market: MarketItem
   setMarket: Dispatch<SetStateAction<MarketItem>>
 }) => {
+  const chainId = useCurrentSupportedNetworkId()
   const { signTypedDataAsync } = useSignTypedData({
     domain: {
       name: 'Marketplace',
       version: '1',
-      chainId: chain.rinkeby.id,
-      verifyingContract: MARKETPLACE_CONTRACT[chain.rinkeby.id],
+      chainId,
+      verifyingContract: MARKETPLACE_CONTRACT[chainId],
     },
     types: {
       Swap: [
@@ -125,7 +126,7 @@ export const useListeForSaleState = ({
     try {
       const data = await signTypedDataAsync()
       const signature = data.substring(2)
-      const marketplaceContract = new FixedOrderMarketContract(concaveProvider(chain.rinkeby.id))
+      const marketplaceContract = new FixedOrderMarketContract(concaveProvider(chainId))
       const computedSigner = await marketplaceContract.computeSigner(market.new({ signature }))
       if (computedSigner !== market.seller) {
         throw `Invalid signature`
