@@ -13,19 +13,19 @@ export const textures = {
 export const backgrounds = {
   metal: {
     ...textures.metal,
-    bg: `${textures.metal.bg}, linear-gradient(225deg, #142E3D 9.27%, #08141D 92.62%)`,
+    bg: `${textures.metal.bg}, linear-gradient(225deg, ${colors.secondary[150]} 9.27%, ${colors.secondary[25]} 92.62%)`,
   },
   metalBrighter: {
     ...textures.metal,
-    bg: `${textures.metal.bg}, linear-gradient(225deg, #2F4359 0.16%, #162534 100.16%)`,
+    bg: `${textures.metal.bg}, linear-gradient(225deg, ${colors.secondary[200]} 0%, ${colors.secondary[100]} 100.16%)`,
   },
   'metal(ALT)': {
     ...textures.metal,
-    bg: `${textures.metal.bg}, linear-gradient(225deg, #2B3C50 0.16%, #0A1722 100.16%)`,
+    bg: `${textures.metal.bg}, linear-gradient(225deg, ${colors.secondary[175]} 0%, ${colors.secondary[50]} 100.16%)`,
   },
   sidebar: {
     ...textures.metal,
-    bg: `${textures.metal.bg}, radial-gradient(circle farthest-corner at 100% 50%, ${colors.secondary[75]} 20%, ${colors.secondary[150]})`,
+    bg: `${textures.metal.bg}, linear-gradient(270deg, ${colors.secondary[125]} 0%,${colors.secondary[75]} 100%)`,
   },
   glass: {
     pos: 'relative',
