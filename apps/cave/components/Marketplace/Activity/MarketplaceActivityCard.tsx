@@ -1,5 +1,5 @@
 import { LogStakingV1, Marketplace, marketplaceActivity, StakingPool } from '@concave/marketplace'
-import { Card, Flex, HStack, Text, VStack } from '@concave/ui'
+import { Card, Flex, HStack, Text, useBreakpointValue, VStack } from '@concave/ui'
 import { BigNumber } from '@ethersproject/bignumber'
 import { Loading } from 'components/Loading'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
@@ -44,9 +44,13 @@ export const MarketplaceActivityCard = () => {
   const filtred = (data || []).filter((item) => {
     return filter === `all` || filter === item.type
   })
+  const mobileUI = useBreakpointValue({ base: true, xl: false, '2xl': false })
+
+  if (mobileUI) {
+    return <></>
+  }
   return (
     <Card
-      h={'auto'}
       px={2}
       py={4}
       gap={2}
@@ -54,9 +58,12 @@ export const MarketplaceActivityCard = () => {
       height={'full'}
       position="relative"
       rounded="2xl"
+      maxH={'1000px'}
+      maxW={`300px`}
+      minW={'280px'}
       variant="secondary"
     >
-      <HStack justify={'center'} align="center" height={'70px'} gap={1}>
+      <HStack justify={'center'} align="center" gap={1}>
         <TransactionButton onClick={() => setFilter('all')} active={filter === 'all'} label="All" />
         <TransactionButton
           onClick={() => setFilter('listing')}

@@ -28,43 +28,52 @@ export const MarketplaceDashboard = (props: BoxProps) => {
   ))
 
   return (
-    <VStack apply="background.metal" {...props}>
-      <MarketplaceFilterContainer
-        stakeFilters={stakeFilters}
-        onChangeStakeFilters={setStakeFilters}
-      />
-      <Flex width={'full'}>
-        <MarketplaceSortConainer onChangeSort={setSort} currentSort={sort} />
-        <TokenIdSearchBar onApplyFilter={setTokenIdFilter} />
-      </Flex>
-      <Flex
-        as={Loading}
-        size="md"
-        isLoading={isFetching}
-        rLabel=""
-        rounded={'inherit'}
-        shadow="down"
-        w="full"
+    <>
+      <VStack
+        apply="background.metal"
+        width={['100%', '100%', '100%', '100%', `800px`]}
+        maxH={'1000px'}
         p={4}
-        py={6}
-        justify="start"
-        overflowY={'scroll'}
-        h={'auto'}
-        direction="column"
-        apply="scrollbar.big"
-        gap={4}
+        borderRadius={'3xl'}
+        w={'full'}
       >
-        {positions.length == 0 ? (
-          <>
-            <Text size={'lg'} fontWeight={'bold'}>
-              No results found
-            </Text>
-            <Text>Check your filters</Text>
-          </>
-        ) : (
-          <>{positions}</>
-        )}
-      </Flex>
-    </VStack>
+        <MarketplaceFilterContainer
+          stakeFilters={stakeFilters}
+          onChangeStakeFilters={setStakeFilters}
+        />
+        <Flex width={'full'}>
+          <MarketplaceSortConainer onChangeSort={setSort} currentSort={sort} />
+          <TokenIdSearchBar onApplyFilter={setTokenIdFilter} />
+        </Flex>
+        <Flex
+          as={Loading}
+          size="md"
+          isLoading={isFetching}
+          rLabel=""
+          rounded={'inherit'}
+          shadow="down"
+          w="full"
+          p={4}
+          py={6}
+          justify="start"
+          overflowY={'scroll'}
+          h={'auto'}
+          direction="column"
+          apply="scrollbar.big"
+          gap={4}
+        >
+          {positions.length == 0 ? (
+            <>
+              <Text size={'lg'} fontWeight={'bold'}>
+                No results found
+              </Text>
+              <Text>Check your filters</Text>
+            </>
+          ) : (
+            <>{positions}</>
+          )}
+        </Flex>
+      </VStack>
+    </>
   )
 }

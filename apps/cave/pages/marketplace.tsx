@@ -1,14 +1,16 @@
-import { Flex } from '@concave/ui'
+import { Flex, HStack } from '@concave/ui'
 import { MarketplaceActivityCard } from 'components/Marketplace/Activity/MarketplaceActivityCard'
 import { MarketplaceHeader } from 'components/Marketplace/Header/MarketplaceHeader'
 import { MarketplaceDashboard } from 'components/Marketplace/Main/MarketplaceDashboard'
 import { withPageTransition } from 'components/PageTransition'
 const Marketplace = () => {
   return (
-    <Flex width={{ base: 'full' }} h={'full'} gap={2} textAlign="center" direction="column">
+    <Flex width={`full`} h={'full'} gap={2} direction="column">
       <MarketplaceHeader />
-      <MarketplaceDashboard />
-      <MarketplaceActivityCard />
+      <HStack flexWrap={'nowrap'} alignItems={'flex-start'}>
+        <MarketplaceDashboard />
+        <MarketplaceActivityCard />
+      </HStack>
     </Flex>
   )
 }
