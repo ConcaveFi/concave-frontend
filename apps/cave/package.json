@@ -32,6 +32,7 @@
     "@testing-library/react": "^13.3.0",
     "date-fns": "^2.28.0",
     "debounce": "^1.2.1",
+    "detect-browser": "^5.3.0",
     "eth-permit": "^0.2.1",
     "ethers": "^5.6.9",
     "graphql": "^16.4.0",

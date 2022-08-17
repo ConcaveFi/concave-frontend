@@ -1,8 +1,10 @@
-export const isAndroid = () =>
-  typeof navigator !== 'undefined' && /android/i.test(navigator.userAgent)
-export const isSmallIOS = () =>
-  typeof navigator !== 'undefined' && /iPhone|iPod/.test(navigator.userAgent)
-export const isLargeIOS = () => typeof navigator !== 'undefined' && /iPad/.test(navigator.userAgent)
+import { detect } from 'detect-browser'
 
-export const isIOS = () => isSmallIOS() || isLargeIOS()
-export const isMobile = () => isAndroid() || isSmallIOS()
+export const detectEnv = (userAgent?: string) => detect(userAgent)
+export const detectOS = (env = detectEnv()) => env.os.toLowerCase()
+
+export const isAndroid = (os = detectOS()) => os.includes('android')
+export const isIOS = (os = detectOS()) =>
+  os.includes('ios') || (os.includes('mac') && navigator.maxTouchPoints > 1)
+
+export const isMobile = () => isAndroid() || isIOS()

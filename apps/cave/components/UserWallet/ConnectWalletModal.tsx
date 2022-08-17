@@ -228,35 +228,60 @@ const useWalletConnectRegistry = () =>
     cacheTime: Infinity,
   })
 
-const MobileConnect = ({ isOpen, onClose }) => {
+const ConnectWithWalletConnect = () => {
   const { data: wallets, isSuccess, isError, isLoading } = useWalletConnectRegistry()
   const { connectors, connect, pendingConnector } = _connectCtx
 
   const walletConnectConnector = connectors.find((connector) => connector.id === 'walletConnect')
 
-  // useEffectOnce(() => {
-  //   connect({ connector: walletConnectConnector, chainId: 4 })
-
-  //   walletConnectConnector.on('message', ({ type }) => {
-  //     if (type === 'connecting') return ''
-  //   })
-
-  //   return () => {
-  //     walletConnectConnector.off('message')
-  //   }
-  // })
-
   const { data: uri } = useQuery(
     `wallet connect uri`,
     async () => {
-      connect({ connector: walletConnectConnector, chainId: 1 })
       const provider = await walletConnectConnector.getProvider()
-
-      // await connectorProvider.connector.createSession({ chainId: 1 })
       return provider.connector.uri
     },
     { enabled: !!walletConnectConnector },
   )
+
+  return (
+    <SimpleGrid columns={4} rowGap={6} columnGap={4} mx="auto" overflow="initial">
+      {isLoading && <Spinner size="sm" color="text.low" />}
+      {isError && <Text color="text.low">Error loading wallets</Text>}
+      {isSuccess &&
+        wallets.map((wallet) => (
+          <ConnectorButton
+            key={wallet.name}
+            name={wallet.name}
+            href={uriToLink(uri, wallet)}
+            image={wallet.image_url.lg}
+            shortName={wallet.metadata.shortName}
+          />
+        ))}
+    </SimpleGrid>
+  )
+}
+
+const ConnectorButton = ({ name, href, image, shortName = name }) => (
+  <Button key={name} as="a" href={href}>
+    <Stack align="center">
+      <Image
+        w="48px"
+        minW="48px"
+        shadow="up"
+        rounded="xl"
+        src={image}
+        fallback={<Box w="48px" h="48px" bg="subtle" opacity={0.5} rounded="xl" />}
+        alt={name}
+      />
+      <Text color="text.low" fontWeight="normal">
+        {shortName}
+      </Text>
+    </Stack>
+  </Button>
+)
+
+const MobileConnect = ({ isOpen, onClose }) => {
+  const { connectors, connect, pendingConnector } = _connectCtx
 
   return (
     <Drawer
@@ -273,6 +298,7 @@ const MobileConnect = ({ isOpen, onClose }) => {
           variant="secondary"
           shadow="Up for Blocks"
           borderGradient="secondary"
+          borderWidth={3}
           p={4}
           align="center"
           pb="100px"
@@ -283,31 +309,15 @@ const MobileConnect = ({ isOpen, onClose }) => {
           <Text fontFamily="heading" fontWeight="bold" fontSize="xl">
             Connect a Wallet
           </Text>
-          {/* <Box w="300px" h="1px" bg="stroke.secondary" rounded="1px" /> */}
           <Flex w="100%">
-            <SimpleGrid columns={4} rowGap={6} columnGap={4} mx="auto" overflow="initial">
-              {isLoading && <Spinner size="sm" color="text.low" />}
-              {isError && <Text color="text.low">Error loading wallets</Text>}
-              {isSuccess &&
-                wallets.map((wallet) => (
-                  <Button key={wallet.name} as="a" href={uriToLink(uri, wallet)}>
-                    <Stack align="center">
-                      <Image
-                        w="48px"
-                        minW="48px"
-                        shadow="up"
-                        rounded="xl"
-                        src={wallet.image_url.lg}
-                        fallback={<Box w="48px" h="48px" bg="subtle" opacity={0.5} rounded="xl" />}
-                        alt={wallet.name}
-                      />
-                      <Text color="text.low" fontWeight="normal">
-                        {wallet.metadata.shortName}
-                      </Text>
-                    </Stack>
+            {connectors.map(
+              (c) =>
+                c.ready && (
+                  <Button key={c.id} onClick={() => connect({ connector: c })}>
+                    {c.name}
                   </Button>
-                ))}
-            </SimpleGrid>
+                ),
+            )}
           </Flex>
         </Card>
       </DrawerContent>
