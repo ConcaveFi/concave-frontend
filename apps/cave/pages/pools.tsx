@@ -1,7 +1,7 @@
 import { Box, Flex, Heading, Text } from '@concave/ui'
 import { withPageTransition } from 'components/PageTransition'
 import { MyPositions } from 'components/LiquidityPoolPositions/MyPositions'
-import { usePositionsState } from 'components/LiquidityPoolPositions/usePositionsState'
+import { usePositionsState } from 'components/LiquidityPoolPositions/hooks/usePositionsState'
 
 const Pools = () => {
   const state = usePositionsState()

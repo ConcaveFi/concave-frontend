@@ -23,7 +23,7 @@ import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId
 import { concaveProvider } from 'lib/providers'
 import { useQuery } from 'react-query'
 import { useAccount } from 'wagmi'
-import { PositionsState } from './usePositionsState'
+import { PositionsState } from './hooks/usePositionsState'
 
 export const MyPositions = ({ state }: { state: PositionsState }) => {
   const { loading, error, setView, view, pairs, user } = state
