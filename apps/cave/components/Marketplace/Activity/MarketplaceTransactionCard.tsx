@@ -2,6 +2,7 @@ import { NATIVE } from '@concave/core'
 import { TransactionIcon } from '@concave/icons'
 import { LogStakingV1, Marketplace, StakingPool } from '@concave/marketplace'
 import { Flex, gradientBorder, Image, Link, Text, useMediaQuery, VStack } from '@concave/ui'
+import { formatDistanceToNowStrict } from 'date-fns'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useFetchTokenData } from 'hooks/useTokenList'
 import { useEffect, useState } from 'react'
@@ -33,15 +34,7 @@ export const MarketplaceTransactionCard = ({ data }: MarketplaceTransactionCardP
 
   const currencyInfo = useFetchTokenData(chainId, data.tokenOption)
   const curreny = currencyInfo.isError ? NATIVE[chainId] : currencyInfo.data
-  const formatedDate = new Date(data.date).toLocaleString([], {
-    hour12: true,
-    hour: 'numeric',
-    minute: 'numeric',
-    second: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-  })
+  const formatedDate = formatDistanceToNowStrict(new Date(data.date), { addSuffix: true })
 
   return (
     <Flex
@@ -53,28 +46,21 @@ export const MarketplaceTransactionCard = ({ data }: MarketplaceTransactionCardP
       justify={'space-between'}
       bg="#33333309"
     >
-      <Flex direction={'column'} justify="start" width={130} position={'relative'}>
+      <Flex direction={'column'} justify="start" width={130}>
         <VStack
-          height={'28px'}
-          width="80px"
-          borderRadius={'16px 0px 16px 0px'}
+          borderRadius={'16px 4px 16px 0px'}
           sx={{ ...gradientBorder({ variant: 'secondary', borderWidth: 2 }) }}
           justify="center"
         >
-          <Text
-            position={'absolute'}
-            style={{ textTransform: 'capitalize' }}
-            fontWeight={700}
-            textColor={labelColor}
-          >
+          <Text style={{ textTransform: 'capitalize' }} fontWeight={700} textColor={labelColor}>
             {data.type}
           </Text>
         </VStack>
         <Image
-          position={'absolute'}
-          mt={4}
           justifySelf={'center'}
-          boxSize="90px"
+          h={'60px'}
+          pt={2}
+          objectFit={`cover`}
           src={`/assets/marketplace/${imgNameByPeriod}`}
           alt="position"
         />
@@ -84,7 +70,7 @@ export const MarketplaceTransactionCard = ({ data }: MarketplaceTransactionCardP
         height="full"
         direction={'column'}
         textColor={'text.low'}
-        ml={'1'}
+        ml={2}
         align="start"
         fontSize={14}
       >
@@ -108,7 +94,6 @@ export const MarketplaceTransactionCard = ({ data }: MarketplaceTransactionCardP
         {data.transactionHash ? (
           <Flex width={'full'} justify={'start'}>
             <Link
-              pb={1}
               href={data.transactionHash ? etherscanLink : ''}
               target={data.transactionHash ? '_blank' : ''}
               rel="noreferrer"
@@ -120,7 +105,10 @@ export const MarketplaceTransactionCard = ({ data }: MarketplaceTransactionCardP
             <TransactionIcon ml={2} mt={'6px'} width={`18px`} h={`9px`} />
           </Flex>
         ) : (
-          <Text>#{`${data.tokenID} `}</Text>
+          <Text>
+            Expiration{' '}
+            {formatDistanceToNowStrict(new Date(data.deadline * 1000), { addSuffix: true })}{' '}
+          </Text>
         )}
       </Flex>
     </Flex>

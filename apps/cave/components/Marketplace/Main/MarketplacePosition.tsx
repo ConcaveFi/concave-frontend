@@ -1,11 +1,5 @@
 import { Box, Flex, Image, Popover, PopoverContent, PopoverTrigger, Text } from '@chakra-ui/react'
-import {
-  Currency,
-  CurrencyAmount,
-  FIXED_ORDER_MARKET_CONTRACT,
-  NATIVE,
-  Percent,
-} from '@concave/core'
+import { Currency, CurrencyAmount, MARKETPLACE_CONTRACT, NATIVE, Percent } from '@concave/core'
 import { LockedIcon, UnlockedIcon } from '@concave/icons'
 import { FixedOrderMarketContract, StakingPosition } from '@concave/marketplace'
 import { FlexProps, gradientBorder, HStack, Spinner } from '@concave/ui'
@@ -34,8 +28,9 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakin
   const percentToMaturity = new Percent(diff, days)
   const discount = usePositionDiscount(stakingPosition)
   const [active, setActive] = useState(false)
+
   return (
-    <Popover placement="right" trigger="hover">
+    <Popover trigger="hover">
       <PopoverTrigger>
         <Flex
           width={'full'}
@@ -57,16 +52,27 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakin
           onMouseOver={() => setActive(true)}
           onMouseLeave={() => setActive(false)}
         >
-          <HStack align="center" gap={0} width={'full'} justify="space-between">
-            <ImageContainer w={'250px'} h={'60px'} stakingPosition={stakingPosition} px={4} />
+          <HStack
+            align="center"
+            textAlign={'center'}
+            alignContent={`center`}
+            gap={2}
+            width={'full'}
+            justify="space-evenly"
+            flexWrap={`wrap`}
+          >
+            <ImageContainer
+              w={['100%', '100%', '100%', '250px']}
+              h={'60px'}
+              stakingPosition={stakingPosition}
+              px={4}
+            />
             <Info title="Current value" info={`${currentValue} CNV`} />
             <Info
               title="Discount"
-              color={discount.discount > 0 ? 'text.low' : `red.700`}
+              color={discount.discount > 0 ? '#7AF0CD' : `red.700`}
               info={
-                discount.discount
-                  ? `${formatFixed(discount.discount, { decimals: 2, places: 0 })}%`
-                  : '-'
+                discount.discount ? `${compactFormat(discount.discount, { decimals: 2 })}%` : '-'
               }
               isLoading={discount.isLoading}
             />
@@ -161,7 +167,7 @@ const BuyContainer = ({ stakingPosition, active = false }: BuyContainerProps) =>
     { meta: { type: 'offer marketplace', tokenId: +tokenId.toString() }, onError: console.error },
   )
 
-  const useCurrencyState = useCurrencyButtonState(price, FIXED_ORDER_MARKET_CONTRACT[chainId], {
+  const useCurrencyState = useCurrencyButtonState(price, MARKETPLACE_CONTRACT[chainId], {
     amountInfo: true,
   })
 
@@ -219,7 +225,7 @@ const BuyContainer = ({ stakingPosition, active = false }: BuyContainerProps) =>
         shadow="up"
         variant={active ? 'primary' : 'primary.outline'}
         colorScheme={'brighter'}
-        w={`180px`}
+        w={['100%', '150px', '180px']}
         size={`md`}
         {...buttonProps}
       >

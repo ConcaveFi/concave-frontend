@@ -27,10 +27,7 @@ export const ConfirmPurchaseModal = ({
           You are buying a LSDCNV token, please review this transaction information before confirm.
         </Text>
         <VStack p={4} shadow={`Down Medium`} w={'full'} gap={1} borderRadius={'3xl'}>
-          <ConfirmBuyInfo
-            label="Position ID:"
-            value={`#` + market.tokenId.toString()}
-          ></ConfirmBuyInfo>
+          <ConfirmBuyInfo label="Position ID:" value={market.tokenId.toString()}></ConfirmBuyInfo>
           <ConfirmBuyInfo
             label="Stake period:"
             value={` ${staking.pool.days} days`}
@@ -55,7 +52,7 @@ export const ConfirmPurchaseModal = ({
           <ConfirmBuyInfo
             label="Discount:"
             isLoading={discount.isLoading}
-            color={discount.discount > 0 ? 'text.low' : `red.700`}
+            color={discount.discount > 0 ? '#7AF0CD' : `red.700`}
             value={formatFixed(discount.discount || 0, { decimals: 2 }) + `%`}
           />
         </VStack>

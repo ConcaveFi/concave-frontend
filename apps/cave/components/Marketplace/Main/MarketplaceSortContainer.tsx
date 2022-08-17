@@ -1,4 +1,4 @@
-import { Flex, Text } from '@concave/ui'
+import { Flex, Text, useBreakpointValue } from '@concave/ui'
 import { NftSort } from 'components/NftFilters/Sorters/hooks/useNftSort'
 import { FC } from 'react'
 import { MarketplaceSort } from '../Sort/MarketplaceSort'
@@ -8,9 +8,13 @@ export const MarketplaceSortConainer: FC<MarketplaceSortConainerProps> = ({
   currentSort,
   onChangeSort,
 }) => {
+  const mobileUI = useBreakpointValue({ base: true, xl: false, '2xl': false })
+  if (mobileUI) {
+    return <></>
+  }
   return (
-    <Flex align={'center'} justify="start" width={'full'} gap={4}>
-      <Text fontSize={'lg'} color="text.low" fontWeight={'bold'}>
+    <Flex justifyContent={'space-between'} width={'full'} gap={1}>
+      <Text color={'text.low'} noOfLines={1} fontWeight={`bold`}>
         Sort by:
       </Text>
       <MarketplaceSort

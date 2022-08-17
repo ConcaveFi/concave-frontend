@@ -1,4 +1,4 @@
-import { Currency, DAI, FIXED_ORDER_MARKET_CONTRACT, FRAX, NATIVE, USDC } from '@concave/core'
+import { Currency, DAI, FRAX, MARKETPLACE_CONTRACT, NATIVE, USDC } from '@concave/core'
 import { DownIcon } from '@concave/icons'
 import { FixedOrderMarketContract, MarketItem, StakingPosition } from '@concave/marketplace'
 import {
@@ -21,7 +21,7 @@ import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId
 import { concaveProvider } from 'lib/providers'
 import { Dispatch, SetStateAction, useCallback } from 'react'
 import { formatFixed } from 'utils/BigNumberMasks'
-import { chain, useSignTypedData } from 'wagmi'
+import { useSignTypedData } from 'wagmi'
 import { BigNumberField } from './BigNumberField'
 import { ConfirmSignature } from './ConfirmSignature'
 import { ConfirmUnlist } from './ConfirmUnlist'
@@ -90,12 +90,13 @@ export const useListeForSaleState = ({
   market: MarketItem
   setMarket: Dispatch<SetStateAction<MarketItem>>
 }) => {
+  const chainId = useCurrentSupportedNetworkId()
   const { signTypedDataAsync } = useSignTypedData({
     domain: {
       name: 'Marketplace',
       version: '1',
-      chainId: chain.rinkeby.id,
-      verifyingContract: FIXED_ORDER_MARKET_CONTRACT[chain.rinkeby.id],
+      chainId,
+      verifyingContract: MARKETPLACE_CONTRACT[chainId],
     },
     types: {
       Swap: [
@@ -125,7 +126,7 @@ export const useListeForSaleState = ({
     try {
       const data = await signTypedDataAsync()
       const signature = data.substring(2)
-      const marketplaceContract = new FixedOrderMarketContract(concaveProvider(chain.rinkeby.id))
+      const marketplaceContract = new FixedOrderMarketContract(concaveProvider(chainId))
       const computedSigner = await marketplaceContract.computeSigner(market.new({ signature }))
       if (computedSigner !== market.seller) {
         throw `Invalid signature`
@@ -155,6 +156,12 @@ export const useListeForSaleState = ({
   }
 }
 
+function addDays(date: Date, days: number) {
+  var result = new Date(date)
+  result.setDate(result.getDate() + days)
+  return result
+}
+
 export const ListPositionForSale = ({
   market,
   staking,
@@ -170,6 +177,8 @@ export const ListPositionForSale = ({
   setMarket: Dispatch<SetStateAction<MarketItem>>
 }) => {
   const discount = usePositionDiscount(staking, market)
+  const tomorrow = addDays(new Date(), 1)
+  const disabled = market.deadline?.mul(1000).lt(Date.now()) || market.startPrice.eq(0)
 
   if (market.signature) {
     return (
@@ -177,31 +186,21 @@ export const ListPositionForSale = ({
     )
   }
   return (
-    <VStack
-      direction={'column'}
-      justifyContent={'space-between'}
-      // minH={'400px'}
-      gap={1}
-      pt={8}
-      px={8}
-      pb={0}
-    >
+    <VStack direction={'column'} justifyContent={'space-between'} gap={1} pt={8} px={8} pb={0}>
       <Type />
       <Info label="Current value:" value={formatFixed(staking.currentValue) + ' CNV'}></Info>
       <CurrencySelector value={market.currency} onChange={setCurrency} />
       <BigNumberField
         label="Price:"
         currency={market.currency}
-        defaultValue={staking.currentValue}
         onChange={setPrice}
         decimalScale={4}
       />
       <EpochDateField
         label="Deadline:"
         onChange={setDeadline}
-        minDate={Date.now() / 1000}
+        minDate={tomorrow.getTime() / 1000}
         maxDate={staking.maturity}
-        date={market.deadline.toNumber()}
       />
       {discount.isSuccess && (
         <Info
@@ -209,8 +208,11 @@ export const ListPositionForSale = ({
           value={formatFixed(discount.discount, { decimals: 2 }) + '%'}
         ></Info>
       )}
-      <Flex pt={4} justifyContent="center">
-        <ChooseButton onClick={create} title={`List`} backgroundType="blue" />
+      <Text textColor={'text.low'} as="em" fontSize={'xs'}>
+        1.5% sale fee
+      </Text>
+      <Flex pt={3} justifyContent="center">
+        <ChooseButton onClick={create} disabled={disabled} title={`List`} />
       </Flex>
     </VStack>
   )

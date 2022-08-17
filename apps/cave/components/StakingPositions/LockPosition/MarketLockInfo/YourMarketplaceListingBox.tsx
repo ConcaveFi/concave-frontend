@@ -1,4 +1,4 @@
-import { FIXED_ORDER_MARKET_CONTRACT, NATIVE } from '@concave/core'
+import { DAI, MARKETPLACE_CONTRACT } from '@concave/core'
 import { MarketItem, StakingPosition } from '@concave/marketplace'
 import { Box, Button, ButtonProps, Flex, Text } from '@concave/ui'
 import { formatDistanceToNow } from 'date-fns'
@@ -22,7 +22,7 @@ export const useYourMarketPlaceListing = ({
 
   const approveContractInfo = useApproveForAll({
     erc721: stakingPosition.address,
-    operator: FIXED_ORDER_MARKET_CONTRACT[chainId],
+    operator: MARKETPLACE_CONTRACT[chainId],
     approved: true,
   })
 
@@ -145,12 +145,12 @@ const generateDefaultMarket = (staking: StakingPosition) => {
   return new MarketItem({
     seller: '',
     erc721: staking.address,
-    currency: NATIVE[staking.chainId],
+    currency: DAI[staking.chainId],
     tokenId: staking.tokenId.toString(),
-    startPrice: staking.currentValue,
+    startPrice: 0,
     endPrice: 0,
     start: 0,
-    deadline: staking.maturity,
+    deadline: 0,
     isListed: false,
     signature: '',
   })
