@@ -1,5 +1,5 @@
 import { useDisclosure } from '@concave/ui'
-import { ConnectWalletModal } from 'components/ConnectWallet'
+import { ConnectWalletModal } from 'components/YourWallet/ConnectWallet'
 // import { DevelopGateway } from 'components/DevelopGateway'
 import { UnsupportedNetworkModal } from 'components/UnsupportedNetworkModal'
 import React, { createContext, useContext } from 'react'

@@ -4,7 +4,7 @@ import { Flex, HStack, Modal, Spinner, Text, VStack } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { usePositionDiscount } from 'components/StakingPositions/LockPosition/MarketLockInfo/usePositionDiscount'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { formatFixed } from 'utils/formatFixed'
+import { formatFixed } from 'utils/BigNumberMasks'
 
 export const ConfirmPurchaseModal = ({
   staking,

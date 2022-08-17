@@ -1,7 +1,7 @@
 import { Button, Card, Flex, Image, Modal, Text } from '@concave/ui'
 import { BigNumber } from 'ethers'
 import { formatEther, parseEther } from 'ethers/lib/utils'
-import { formatFixed } from 'utils/formatFixed'
+import { formatFixed } from 'utils/BigNumberMasks'
 
 type PCNVConfirmationModalProps = {
   redeemMax?: boolean

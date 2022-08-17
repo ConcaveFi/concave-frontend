@@ -5,7 +5,7 @@ import { Flex, gradientBorder, Image, Link, Text, useMediaQuery, VStack } from '
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useFetchTokenData } from 'hooks/useTokenList'
 import { useEffect, useState } from 'react'
-import { compactFormat } from 'utils/formatFixed'
+import { compactFormat } from 'utils/BigNumberMasks'
 import { chain } from 'wagmi'
 import { Data } from './MarketplaceActivityCard'
 interface MarketplaceTransactionCardProps {
