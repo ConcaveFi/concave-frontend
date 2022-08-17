@@ -264,7 +264,7 @@ export const bondingNodes = [
   coopTreasury(0, 400),
   proxyAdmin(400, 0),
   accrualBondsV1Proxy(400, 150),
-  accrualBondsV1Impl(300, 350),
-  user(450, 450),
-  valueShuttle(225, 500),
+  accrualBondsV1Impl(225, 325),
+  user(475, 400),
+  valueShuttle(275, 475),
 ]

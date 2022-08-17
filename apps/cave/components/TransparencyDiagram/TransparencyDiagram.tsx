@@ -11,7 +11,7 @@ const SelectionButton = ({ diagramShown, setDiagramShown, chartId, chartName }) 
   <Button
     variant={diagramShown === chartId ? 'primary.outline' : 'secondary'}
     size={'lg'}
-    disabled={diagramShown === chartId}
+    // disabled={diagramShown === chartId}
     onClick={() => setDiagramShown(chartId)}
   >
     {chartName} Diagram

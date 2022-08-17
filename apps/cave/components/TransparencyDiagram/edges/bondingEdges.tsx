@@ -41,6 +41,15 @@ export const bondingEdges = [
     animated: true,
   },
   {
+    id: 'Concave Treasury-AccrualBondsV1 (Proxy)',
+    source: 'Concave Treasury',
+    target: 'AccrualBondsV1 (Proxy)',
+    sourceHandle: 'rightSource',
+    targetHandle: 'leftTarget',
+    label: 'Bond management',
+    animated: true,
+  },
+  {
     id: 'Policy Multisig-AccrualBondsV1 (Proxy)',
     source: 'Policy Multisig',
     target: 'AccrualBondsV1 (Proxy)',
@@ -75,13 +84,22 @@ export const bondingEdges = [
       <WrappedEdgeLabel
         maxLineLength={12}
         id={'AccrualBondsV1 (Proxy)-user'}
-        label={'Emits CNV vested over 5 days'}
+        label={'User bonds, receives CNV vested over 5 days'}
         labelStyle={labelStyle}
       />
     ),
     labelStyle: {
-      transform: 'translate(40px, 0px)',
+      transform: 'translate(50px, 0px)',
     },
+    style: { ...edgeStyle, stroke: EdgeColors.CornflowerBlue },
+    animated: true,
+  },
+  {
+    id: 'user-AccrualBondsV1 (Proxy)',
+    source: 'user',
+    target: 'AccrualBondsV1 (Proxy)',
+    sourceHandle: 'topSource',
+    targetHandle: 'bottomTarget',
     style: { ...edgeStyle, stroke: EdgeColors.CornflowerBlue },
     animated: true,
   },
@@ -112,32 +130,12 @@ export const bondingEdges = [
     animated: true,
   },
   {
-    id: 'AccrualBondsV1 (Impl)-ValueShuttle',
-    source: 'AccrualBondsV1 (Impl)',
+    id: 'AccrualBondsV1 (Proxy)-ValueShuttle',
+    source: 'AccrualBondsV1 (Proxy)',
     target: 'ValueShuttle',
     sourceHandle: 'bottomSource',
     targetHandle: 'topTarget',
     label: 'Value into shuttle',
-    animated: true,
-  },
-  {
-    id: 'user-ValueShuttle',
-    source: 'user',
-    target: 'ValueShuttle',
-    sourceHandle: 'leftSource',
-    targetHandle: 'rightTarget',
-    label: 'Staked CNV',
-    style: { ...edgeStyle, stroke: EdgeColors.CornflowerBlue },
-    animated: true,
-  },
-  {
-    id: 'ValueShuttle-Concave Treasury',
-    source: 'ValueShuttle',
-    target: 'Concave Treasury',
-    sourceHandle: 'leftSource',
-    targetHandle: 'rightTarget',
-    label: 'Bonded DAI',
-    style: { ...edgeStyle, stroke: EdgeColors.Orange },
     animated: true,
   },
   {
@@ -146,7 +144,7 @@ export const bondingEdges = [
     target: 'CO-OP Treasury',
     sourceHandle: 'leftSource',
     targetHandle: 'bottomTarget',
-    label: 'Redploy bonded DAI',
+    label: 'Shuttle bonded DAI',
     style: { ...edgeStyle, stroke: EdgeColors.Orange },
     animated: true,
   },
