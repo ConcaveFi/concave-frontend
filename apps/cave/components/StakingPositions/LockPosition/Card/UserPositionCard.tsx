@@ -1,8 +1,7 @@
 import { StakingPosition } from '@concave/marketplace'
-import { Box, Collapse, Flex, VStack } from '@concave/ui'
+import { Flex } from '@concave/ui'
 import { MarketListing } from '../MarketLockInfo/YourMarketplaceListingBox'
 import { NFTPositionHeader } from '../NFTPositionHeader/NFTPositionHeader'
-import { RedeemCardViewer } from '../Redeem/RedeemViewer'
 import { useUserPositionState } from './useUserPositionState'
 
 interface NftPositionCardProps {
@@ -13,32 +12,20 @@ export const UserPositionCard = (props: NftPositionCardProps) => {
   const { toogleActive, active, stakingPosition } = useUserPositionState(props)
 
   return (
-    <Box
-      pos={'relative'}
-      borderRadius={'2xl'}
-      maxHeight={{ lg: '300px', md: '400px' }}
-      maxWidth={{ lg: '100%', md: '100%', base: '352px' }}
-      bg={{
-        base: 'linear-gradient(223.18deg, #19394C 27.18%, #0A161F 96.11%)',
-        md: 'linear-gradient(265.73deg, #274C63 0%, #182F3E 100%)',
-      }}
-      mr={1}
-      my={3}
+    <Flex
+      w={'full'}
+      height="200px"
+      rounded={'2xl'}
+      bg="url(assets/textures/metal.png), linear-gradient(180deg, #16222E 0.07%, #28394D 80.07%)"
+      bgSize={'120px auto'}
+      my={2}
+      shadow={
+        '0px 5px 14px rgba(0, 0, 0, 0.47), 4px -7px 15px rgba(174, 177, 255, 0.15), inset -1px 1px 2px rgba(128, 186, 255, 0.4)'
+      }
+      direction="column"
     >
-      <Flex bgSize="20% 30%" bgImage={'/assets/textures/metal.png'} shadow={'up'} rounded="2xl">
-        <Flex w={'full'} direction={'column'}>
-          <NFTPositionHeader
-            stakingPosition={stakingPosition}
-            active={active}
-            toogleActive={toogleActive}
-          />
-          <VStack m={4} as={Collapse} in={active}>
-            <RedeemCardViewer stakingPosition={stakingPosition} />
-            {active && <MarketListing stakingPosition={stakingPosition} />}
-          </VStack>
-        </Flex>
-      </Flex>
-      {/* </Flex> */}
-    </Box>
+      <NFTPositionHeader active={true} stakingPosition={stakingPosition} toogleActive={() => {}} />
+      <MarketListing stakingPosition={stakingPosition} />
+    </Flex>
   )
 }
