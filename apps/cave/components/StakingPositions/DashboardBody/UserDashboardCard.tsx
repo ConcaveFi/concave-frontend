@@ -64,9 +64,8 @@ export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePo
         />
         <Collapse in={hasPositions}>
           <Box
-            pos="relative"
             maxH={{ lg: '675px', md: '740px', base: '800px' }}
-            overflowY={'auto'}
+            overflowY={'scroll'}
             overflowX="hidden"
             borderRadius="xl"
             px={{ base: 0, md: '0.5rem' }}
