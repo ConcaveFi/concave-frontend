@@ -8,6 +8,7 @@ import {
   Text,
   useDisclosure,
 } from '@concave/ui'
+import { format, formatDistanceToNow } from 'date-fns'
 import { MarketListing } from '../MarketLockInfo/YourMarketplaceListingBox'
 import { NFTPositionHeader } from '../NFTPositionHeader/NFTPositionHeader'
 import { useUserPositionState } from './useUserPositionState'
@@ -19,8 +20,9 @@ interface NftPositionCardProps {
 export const UserPositionCard = (props: NftPositionCardProps) => {
   const { stakingPosition } = useUserPositionState(props)
   const { isOpen, onClose, onOpen } = useDisclosure()
+  const redeemable = stakingPosition.maturity <= Date.now() / 1000
   return (
-    <Popover isOpen={true} placement="right">
+    <Popover isOpen={isOpen} placement="right">
       <PopoverTrigger>
         <Flex
           w={'full'}
@@ -53,10 +55,19 @@ export const UserPositionCard = (props: NftPositionCardProps) => {
           sx={{ ...gradientBorder({ borderWidth: 2 }) }}
         >
           <Flex direction={'column'} justify="center" px={6}>
-            <Text color={'text.low'} fontSize="sm">
-              Start date:
-            </Text>
-            {/* <Text>{stakingPosition}</Text> */}
+            <Flex align={'center'} gap={2}>
+              <Text color={'text.low'}>Redeem date:</Text>
+              <Text fontWeight={'bold'}>
+                {format(new Date(stakingPosition.maturity * 1000), 'MM/dd/yyyy')}
+              </Text>
+            </Flex>
+            <Flex align={'center'} gap={2}>
+              {!redeemable && <Text color={'text.low'}>Redeem in:</Text>}
+              <Text fontWeight={'bold'} color="text.accent">
+                {!redeemable && formatDistanceToNow(new Date(stakingPosition.maturity * 1000))}
+                {redeemable && 'Redeemable'}
+              </Text>
+            </Flex>
           </Flex>
         </Flex>
       </PopoverContent>
