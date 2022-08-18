@@ -28,8 +28,9 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakin
   const percentToMaturity = new Percent(diff, days)
   const discount = usePositionDiscount(stakingPosition)
   const [active, setActive] = useState(false)
+
   return (
-    <Popover placement="right" trigger="hover">
+    <Popover trigger="hover">
       <PopoverTrigger>
         <Flex
           width={'full'}
@@ -51,16 +52,27 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakin
           onMouseOver={() => setActive(true)}
           onMouseLeave={() => setActive(false)}
         >
-          <HStack align="center" gap={0} width={'full'} justify="space-between">
-            <ImageContainer w={'250px'} h={'60px'} stakingPosition={stakingPosition} px={4} />
+          <HStack
+            align="center"
+            textAlign={'center'}
+            alignContent={`center`}
+            gap={2}
+            width={'full'}
+            justify="space-evenly"
+            flexWrap={`wrap`}
+          >
+            <ImageContainer
+              w={['100%', '100%', '100%', '250px']}
+              h={'60px'}
+              stakingPosition={stakingPosition}
+              px={4}
+            />
             <Info title="Current value" info={`${currentValue} CNV`} />
             <Info
               title="Discount"
               color={discount.discount > 0 ? '#7AF0CD' : `red.700`}
               info={
-                discount.discount
-                  ? `${formatFixed(discount.discount, { decimals: 2, places: 0 })}%`
-                  : '-'
+                discount.discount ? `${compactFormat(discount.discount, { decimals: 2 })}%` : '-'
               }
               isLoading={discount.isLoading}
             />
@@ -213,7 +225,7 @@ const BuyContainer = ({ stakingPosition, active = false }: BuyContainerProps) =>
         shadow="up"
         variant={active ? 'primary' : 'primary.outline'}
         colorScheme={'brighter'}
-        w={`180px`}
+        w={['100%', '150px', '180px']}
         size={`md`}
         {...buttonProps}
       >

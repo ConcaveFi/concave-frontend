@@ -1,4 +1,4 @@
-import { MARKETPLACE_CONTRACT, NATIVE } from '@concave/core'
+import { DAI, MARKETPLACE_CONTRACT } from '@concave/core'
 import { MarketItem, StakingPosition } from '@concave/marketplace'
 import { Box, Button, ButtonProps, Flex, Text } from '@concave/ui'
 import { formatDistanceToNow } from 'date-fns'
@@ -64,7 +64,8 @@ export const getMarketPlaceButtonProps = (
       variant: 'primary.outline',
     }
   }
-  if (market?.isListed && market?.type === `list`) {
+  const isListed = market?.isListed && market.deadline.mul(1000).gte(Date.now())
+  if (isListed && market?.type === `list`) {
     return { children: 'Unlist', onClick: () => setState(`unlist`), variant: 'primary.outline' }
   }
   if (!approveContractInfo.isOK) {
@@ -87,9 +88,9 @@ export const MarketListing = ({ stakingPosition }: { stakingPosition: StakingPos
     addSuffix: false,
   })
   const discount = usePositionDiscount(stakingPosition, market)
-
+  const isListed = market?.isListed && market.deadline.mul(1000).gte(Date.now())
   return (
-    <Box shadow={market?.isListed ? '' : 'down'} borderRadius="2xl" width={'full'} p={4}>
+    <Box shadow={isListed ? '' : 'down'} borderRadius="2xl" width={'full'} p={4}>
       <Flex justify={{ lg: 'left', base: 'center' }}>
         <Text color="text.low" fontSize="lg" as="b">
           Your Marketplace Listing
@@ -102,7 +103,7 @@ export const MarketListing = ({ stakingPosition }: { stakingPosition: StakingPos
             width={'full'}
             fontSize={'lg'}
             value={
-              market?.isListed
+              isListed
                 ? `${formatFixed(market.startPrice, { decimals: market.currency.decimals })} ${
                     market.currency?.symbol
                   }`
@@ -114,7 +115,7 @@ export const MarketListing = ({ stakingPosition }: { stakingPosition: StakingPos
             width={'full'}
             isLoading={discount.isLoading}
             value={
-              market?.isListed
+              isListed
                 ? `${formatFixed(discount.discount || BigNumber.from(0), { decimals: 2 })} %`
                 : '---'
             }
@@ -122,7 +123,7 @@ export const MarketListing = ({ stakingPosition }: { stakingPosition: StakingPos
           <Info
             label={'Expiration Date:'}
             width={'full'}
-            value={market?.isListed ? auctionEnd : '--.--.--'}
+            value={isListed ? auctionEnd : '--.--.--'}
           />
         </Flex>
         <Button variant={'primary'} minW={'160px'} size={'md'} width={'full'} {...buttonState} />
@@ -145,12 +146,12 @@ const generateDefaultMarket = (staking: StakingPosition) => {
   return new MarketItem({
     seller: '',
     erc721: staking.address,
-    currency: NATIVE[staking.chainId],
+    currency: DAI[staking.chainId],
     tokenId: staking.tokenId.toString(),
-    startPrice: staking.currentValue,
+    startPrice: 0,
     endPrice: 0,
     start: 0,
-    deadline: staking.maturity,
+    deadline: 0,
     isListed: false,
     signature: '',
   })
