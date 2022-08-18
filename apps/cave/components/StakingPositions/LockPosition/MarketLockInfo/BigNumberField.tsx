@@ -51,6 +51,7 @@ export const BigNumberField = ({
           width={'full'}
           shadow={'Down Big'}
           borderRadius={'full'}
+          maxLength={12}
           decimalScale={decimalScale}
           p={1}
           pl={4}
