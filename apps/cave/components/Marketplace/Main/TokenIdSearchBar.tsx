@@ -8,8 +8,8 @@ export const TokenIdSearchBar: FC<TokenIdSearchBarProps> = ({ onApplyFilter }) =
   const [appliedNumber, setAppliedNumber] = useState('')
   const hasAppliedFilter = appliedNumber !== ''
 
-  const mobileUI = useBreakpointValue({ base: true, '2xl': false })
-  if (mobileUI) {
+  const hideFilters = useBreakpointValue({ base: true, md: false, xl: false, '2xl': false })
+  if (hideFilters) {
     return <></>
   }
 

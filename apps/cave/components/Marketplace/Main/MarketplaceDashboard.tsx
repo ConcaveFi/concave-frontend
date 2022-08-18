@@ -32,7 +32,7 @@ export const MarketplaceDashboard = (props: BoxProps) => {
       <VStack
         apply="background.metal"
         width={['100%', '100%', '100%', '100%', `800px`]}
-        maxH={'1000px'}
+        maxH={['full', 'full', 'full', 'full', '1000px']}
         p={4}
         borderRadius={'3xl'}
         w={'full'}
@@ -41,7 +41,7 @@ export const MarketplaceDashboard = (props: BoxProps) => {
           stakeFilters={stakeFilters}
           onChangeStakeFilters={setStakeFilters}
         />
-        <Flex width={'full'}>
+        <Flex width={'full'} gap={4}>
           <MarketplaceSortConainer onChangeSort={setSort} currentSort={sort} />
           <TokenIdSearchBar onApplyFilter={setTokenIdFilter} />
         </Flex>
