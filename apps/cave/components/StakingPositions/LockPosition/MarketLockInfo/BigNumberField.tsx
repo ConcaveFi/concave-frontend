@@ -5,11 +5,11 @@ import { parseUnits } from 'ethers/lib/utils'
 import { useEffect, useState } from 'react'
 
 const useBignumberField = (
-  defaultValue: BigNumber,
   currency: Currency,
   onChange: (n: BigNumber) => void,
+  defaultValue?: BigNumber,
 ) => {
-  const [value, setValue] = useState(+utils.formatEther(defaultValue))
+  const [value, setValue] = useState(defaultValue ? +utils.formatEther(defaultValue) : ``)
   useEffect(() => {
     try {
       const bigNumber = parseUnits(value.toString() || `0`, currency.decimals)
@@ -36,10 +36,10 @@ export const BigNumberField = ({
   label: string
   currency: Currency
   decimalScale: number
-  defaultValue: BigNumber
+  defaultValue?: BigNumber
   onChange: (number: BigNumber) => void
 }) => {
-  const state = useBignumberField(defaultValue, currency, onChange)
+  const state = useBignumberField(currency, onChange, defaultValue)
 
   return (
     <HStack justifyContent={'center'} width={'full'}>
