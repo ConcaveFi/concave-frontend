@@ -55,6 +55,7 @@ export const MarketplaceDashboard = (props: BoxProps) => {
           w="full"
           p={4}
           py={6}
+          textAlign={`center`}
           justify="start"
           overflowY={'scroll'}
           h={'auto'}
@@ -64,7 +65,7 @@ export const MarketplaceDashboard = (props: BoxProps) => {
         >
           {positions.length == 0 ? (
             <>
-              <Text size={'lg'} fontWeight={'bold'}>
+              <Text size={'lg'} w={`full`} fontWeight={'bold'}>
                 No results found
               </Text>
               <Text>Check your filters</Text>
