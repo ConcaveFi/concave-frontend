@@ -8,15 +8,15 @@ export const MarketplaceSortConainer: FC<MarketplaceSortConainerProps> = ({
   currentSort,
   onChangeSort,
 }) => {
-  const mobileUI = useBreakpointValue({ base: true, xl: false, '2xl': false })
-  if (mobileUI) {
-    return <></>
-  }
+  const hideLabel = useBreakpointValue({ base: false, md: false, xl: false, '2xl': false })
+
   return (
-    <Flex justifyContent={'space-between'} width={'full'} gap={1}>
-      <Text color={'text.low'} noOfLines={1} fontWeight={`bold`}>
-        Sort by:
-      </Text>
+    <Flex justifyContent={'space-evenly'} flexWrap={'wrap'} width={'full'} gap={4}>
+      {hideLabel && (
+        <Text color={'text.low'} noOfLines={1} fontWeight={`bold`}>
+          Sort by:
+        </Text>
+      )}
       <MarketplaceSort
         onChangeSort={onChangeSort}
         isSelected={currentSort?.sort === 'STAKE_POOL'}
