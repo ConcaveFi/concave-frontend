@@ -1,4 +1,4 @@
-import { listListedPositions } from '@concave/marketplace'
+import { FixedOrderMarketContract, listListedPositions } from '@concave/marketplace'
 import {
   StakePoolFilterEnum,
   useFilterByStakePool,
@@ -16,7 +16,16 @@ export const useMarketplaceDashbord = () => {
     ['sales', chainId],
     async () => {
       const provider = concaveProvider(chainId)
-      return listListedPositions({ provider })
+      const marketplace = new FixedOrderMarketContract(provider)
+      const itens = await listListedPositions({ provider })
+      const nonExecutedItens = await Promise.all(
+        itens.map(async (i) => {
+          const isExecuted = await marketplace.isExecuted(i.market)
+          if (isExecuted) return undefined
+          return i
+        }),
+      )
+      return nonExecutedItens.filter(Boolean)
     },
     { enabled: !!chainId, refetchOnWindowFocus: false, refetchIntervalInBackground: true },
   )

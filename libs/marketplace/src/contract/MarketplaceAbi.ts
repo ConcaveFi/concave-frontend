@@ -1,4 +1,4 @@
-export const FixedOrderMarketAbi = [
+export const MarketplaceABI = [
   { inputs: [], stateMutability: 'nonpayable', type: 'constructor' },
   {
     anonymous: false,
@@ -101,7 +101,7 @@ export const FixedOrderMarketAbi = [
           { internalType: 'uint256', name: 'start', type: 'uint256' },
           { internalType: 'uint256', name: 'deadline', type: 'uint256' },
         ],
-        internalType: 'struct Cavemart.SwapMetadata',
+        internalType: 'struct Marketplace.SwapMetadata',
         name: 'data',
         type: 'tuple',
       },
@@ -124,7 +124,7 @@ export const FixedOrderMarketAbi = [
           { internalType: 'uint256', name: 'start', type: 'uint256' },
           { internalType: 'uint256', name: 'deadline', type: 'uint256' },
         ],
-        internalType: 'struct Cavemart.SwapMetadata',
+        internalType: 'struct Marketplace.SwapMetadata',
         name: 'data',
         type: 'tuple',
       },
@@ -153,6 +153,29 @@ export const FixedOrderMarketAbi = [
   },
   {
     inputs: [
+      {
+        components: [
+          { internalType: 'address', name: 'seller', type: 'address' },
+          { internalType: 'address', name: 'erc721', type: 'address' },
+          { internalType: 'address', name: 'erc20', type: 'address' },
+          { internalType: 'uint256', name: 'tokenId', type: 'uint256' },
+          { internalType: 'uint256', name: 'startPrice', type: 'uint256' },
+          { internalType: 'uint256', name: 'endPrice', type: 'uint256' },
+          { internalType: 'uint256', name: 'start', type: 'uint256' },
+          { internalType: 'uint256', name: 'deadline', type: 'uint256' },
+        ],
+        internalType: 'struct Marketplace.SwapMetadata',
+        name: 'data',
+        type: 'tuple',
+      },
+    ],
+    name: 'isExecuted',
+    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
       { internalType: 'address', name: '', type: 'address' },
       { internalType: 'address', name: '', type: 'address' },
       { internalType: 'uint256', name: '', type: 'uint256' },
@@ -176,7 +199,7 @@ export const FixedOrderMarketAbi = [
           { internalType: 'uint256', name: 'start', type: 'uint256' },
           { internalType: 'uint256', name: 'deadline', type: 'uint256' },
         ],
-        internalType: 'struct Cavemart.SwapMetadata',
+        internalType: 'struct Marketplace.SwapMetadata',
         name: 'data',
         type: 'tuple',
       },
@@ -226,7 +249,7 @@ export const FixedOrderMarketAbi = [
           { internalType: 'uint256', name: 'start', type: 'uint256' },
           { internalType: 'uint256', name: 'deadline', type: 'uint256' },
         ],
-        internalType: 'struct Cavemart.SwapMetadata',
+        internalType: 'struct Marketplace.SwapMetadata',
         name: 'data',
         type: 'tuple',
       },
