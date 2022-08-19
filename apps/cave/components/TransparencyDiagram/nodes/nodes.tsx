@@ -8,29 +8,32 @@ import {
 } from '@concave/core'
 import type { Node } from 'react-flow-renderer'
 import { ChainEnum } from '../types'
-import { CircleNode } from './Circle'
-import { CylinderNode } from './Cylinder'
-import { DiamondNode } from './Diamond'
-import { FolderNode } from './Folder'
-import { RectangleNode } from './Rectangle'
-import { TriangleNode } from './Triangle'
+import { Bond } from './CustomShapes/Bond'
+import { Multisig } from './CustomShapes/Multisig'
+import { ProxyAdmin } from './CustomShapes/ProxyAdmin'
+import { Stake } from './CustomShapes/Stake'
+import { Token } from './CustomShapes/Token'
+import { User } from './CustomShapes/User'
+import { ValueShuttle } from './CustomShapes/ValueShuttle'
 
 export const nodeTypes = {
-  CircleNode: CircleNode,
-  CylinderNode: CylinderNode,
-  DiamondNode: DiamondNode,
-  FolderNode: FolderNode,
-  RectangleNode: RectangleNode,
-  TriangleNode: TriangleNode,
+  Bond: Bond,
+  Multisig: Multisig,
+  ProxyAdmin: ProxyAdmin,
+  Token: Token,
+  Stake: Stake,
+  User: User,
+  ValueShuttle: ValueShuttle,
 }
 
 const enum NodeTypeEnum {
-  CircleNode = 'CircleNode',
-  CylinderNode = 'CylinderNode',
-  DiamondNode = 'DiamondNode',
-  FolderNode = 'FolderNode',
-  RectangleNode = 'RectangleNode',
-  TriangleNode = 'TriangleNode',
+  Bond = 'Bond',
+  Multisig = 'Multisig',
+  ProxyAdmin = 'ProxyAdmin',
+  Stake = 'Stake',
+  Token = 'Token',
+  User = 'User',
+  ValueShuttle = 'ValueShuttle',
 }
 
 export const enum AddressTypeEnum {
@@ -45,7 +48,7 @@ const user = (x: number, y: number): Node => ({
     label: 'User',
   },
   position: { x: x, y: y },
-  type: NodeTypeEnum.CircleNode,
+  type: NodeTypeEnum.User,
 })
 
 const bbtCNV = (x: number, y: number): Node => ({
@@ -56,34 +59,34 @@ const bbtCNV = (x: number, y: number): Node => ({
     address: BBTCNV_ADDRESS[1],
   },
   position: { x: x, y: y },
-  type: NodeTypeEnum.TriangleNode,
+  type: NodeTypeEnum.Token,
 })
 
 const aCNV = (x: number, y: number): Node => ({
   id: 'aCNV',
   data: { label: 'aCNV', addressType: AddressTypeEnum.TOKEN, address: ACNV_ADDRESS[1] },
   position: { x: x, y: y },
-  type: NodeTypeEnum.TriangleNode,
+  type: NodeTypeEnum.Token,
 })
 
 const cnv = (x: number, y: number): Node => ({
   id: 'CNV',
   data: { label: 'CNV', addressType: AddressTypeEnum.TOKEN, address: CNV_ADDRESS[1] },
   position: { x: x, y: y },
-  type: NodeTypeEnum.TriangleNode,
+  type: NodeTypeEnum.Token,
 })
 const pCNV = (x: number, y: number): Node => ({
   id: 'pCNV',
   data: { label: 'pCNV', addressType: AddressTypeEnum.TOKEN, address: PCNV_ADDRESS[1] },
   position: { x: x, y: y },
-  type: NodeTypeEnum.TriangleNode,
+  type: NodeTypeEnum.Token,
 })
 
 const lsdCNV = (x: number, y: number): Node => ({
   id: 'lsdCNV',
   data: { label: 'lsdCNV', addressType: AddressTypeEnum.TOKEN, address: STAKING_CONTRACT[1] },
   position: { x: x, y: y },
-  type: NodeTypeEnum.TriangleNode,
+  type: NodeTypeEnum.Token,
 })
 
 const concaveTreasury = (x: number, y: number): Node => ({
@@ -94,7 +97,7 @@ const concaveTreasury = (x: number, y: number): Node => ({
     address: '0x226e7AF139a0F34c6771DeB252F9988876ac1Ced',
   },
   position: { x: x, y: y },
-  type: NodeTypeEnum.RectangleNode,
+  type: NodeTypeEnum.Multisig,
 })
 
 const coopTreasury = (x: number, y: number): Node => ({
@@ -105,7 +108,7 @@ const coopTreasury = (x: number, y: number): Node => ({
     address: '0x93249d69636124ab311798f047dc1a8a94dd0a9e',
   },
   position: { x: x, y: y },
-  type: NodeTypeEnum.RectangleNode,
+  type: NodeTypeEnum.Multisig,
 })
 
 const policyMultisig = (x: number, y: number): Node => ({
@@ -116,7 +119,7 @@ const policyMultisig = (x: number, y: number): Node => ({
     address: '0x4461f141a47e2858B49e7A3572E08Acb6b43F8a9',
   },
   position: { x: x, y: y },
-  type: NodeTypeEnum.RectangleNode,
+  type: NodeTypeEnum.Multisig,
 })
 
 const proxyAdmin = (x: number, y: number): Node => ({
@@ -127,7 +130,7 @@ const proxyAdmin = (x: number, y: number): Node => ({
     address: '0xe2E552EF2f99400d93f25C2A7B3692eE1548B66D',
   },
   position: { x: x, y: y },
-  type: NodeTypeEnum.DiamondNode,
+  type: NodeTypeEnum.ProxyAdmin,
 })
 const accrualBondsV1Proxy = (x: number, y: number): Node => ({
   id: 'AccrualBondsV1 (Proxy)',
@@ -137,7 +140,7 @@ const accrualBondsV1Proxy = (x: number, y: number): Node => ({
     address: BOND_ADDRESS[1],
   },
   position: { x: x, y: y },
-  type: NodeTypeEnum.DiamondNode,
+  type: NodeTypeEnum.Bond,
 })
 
 const stakingV1Proxy = (x: number, y: number): Node => ({
@@ -148,7 +151,7 @@ const stakingV1Proxy = (x: number, y: number): Node => ({
     address: STAKING_CONTRACT[1],
   },
   position: { x: x, y: y },
-  type: NodeTypeEnum.DiamondNode,
+  type: NodeTypeEnum.Stake,
 })
 const accrualBondsV1Impl = (x: number, y: number): Node => ({
   id: 'AccrualBondsV1 (Impl)',
@@ -158,7 +161,7 @@ const accrualBondsV1Impl = (x: number, y: number): Node => ({
     address: '0x9Eb0ad4eEC37CE219081b94Cc41290AbfB58ee5a',
   },
   position: { x: x, y: y },
-  type: NodeTypeEnum.DiamondNode,
+  type: NodeTypeEnum.Bond,
 })
 const stakingV1Impl = (x: number, y: number): Node => ({
   id: 'StakingV1 (Impl)',
@@ -168,7 +171,7 @@ const stakingV1Impl = (x: number, y: number): Node => ({
     address: '0xd3a72248298739e52b0fd01fd753025fe98493c7',
   },
   position: { x: x, y: y },
-  type: NodeTypeEnum.DiamondNode,
+  type: NodeTypeEnum.Stake,
 })
 
 const valueShuttle = (x: number, y: number): Node => ({
@@ -179,23 +182,7 @@ const valueShuttle = (x: number, y: number): Node => ({
     address: '0x8f639597f658691c2f500156486631a1b163d238',
   },
   position: { x: x, y: y },
-  type: NodeTypeEnum.CylinderNode,
-})
-
-const crossChainContainer = (x: number, y: number): Node => ({
-  id: 'crossChainContainer',
-  data: null,
-  position: { x: x, y: y },
-  style: {
-    border: 'dashed',
-    borderColor: 'orange',
-    backgroundColor: 'transparent',
-    borderWidth: '2px',
-    borderRadius: '8px',
-    width: 180,
-    height: 180,
-  },
-  type: 'group',
+  type: NodeTypeEnum.ValueShuttle,
 })
 
 const bscSafe = (x: number, y: number): Node => ({
@@ -207,8 +194,7 @@ const bscSafe = (x: number, y: number): Node => ({
     chain: ChainEnum.BSC,
   },
   position: { x: x, y: y },
-  type: NodeTypeEnum.RectangleNode,
-  parentNode: 'crossChainContainer',
+  type: NodeTypeEnum.Multisig,
 })
 
 const avaxSafe = (x: number, y: number): Node => ({
@@ -220,51 +206,49 @@ const avaxSafe = (x: number, y: number): Node => ({
     chain: ChainEnum.AVAX,
   },
   position: { x: x, y: y },
-  type: NodeTypeEnum.RectangleNode,
-  parentNode: 'crossChainContainer',
+  type: NodeTypeEnum.Multisig,
 })
 
 export const generalNodes = [
-  bbtCNV(0, 0),
-  aCNV(125, 0),
-  cnv(250, 0),
-  pCNV(375, 0),
-  lsdCNV(700, 0),
-  concaveTreasury(0, 200),
-  coopTreasury(0, 300),
-  policyMultisig(0, 400),
-  proxyAdmin(550, 0),
-  accrualBondsV1Proxy(450, 145),
-  accrualBondsV1Impl(450, 400),
-  stakingV1Proxy(650, 230),
-  stakingV1Impl(650, 400),
-  valueShuttle(325, 600),
-  crossChainContainer(40, 500),
-  bscSafe(20, 15),
-  avaxSafe(20, 105),
-]
-
-export const stakingNodes = [
-  cnv(15, 0),
-  lsdCNV(500, 250),
-  concaveTreasury(0, 200),
-  policyMultisig(0, 300),
-  coopTreasury(0, 400),
-  proxyAdmin(250, 50),
-  stakingV1Proxy(250, 250),
-  stakingV1Impl(375, 425),
-  user(500, 550),
-  valueShuttle(150, 500),
+  bbtCNV(650, 400),
+  aCNV(385, 600),
+  cnv(650, 600),
+  pCNV(385, 400),
+  lsdCNV(385, 1016),
+  concaveTreasury(975, 480),
+  coopTreasury(1225, 480),
+  policyMultisig(1475, 480),
+  proxyAdmin(0, 485),
+  accrualBondsV1Proxy(700, 0),
+  accrualBondsV1Impl(1150, 0),
+  stakingV1Proxy(760, 1000),
+  stakingV1Impl(1150, 1000),
+  valueShuttle(1650, 1020),
+  bscSafe(100, 0),
+  avaxSafe(375, 0),
 ]
 
 export const bondingNodes = [
-  cnv(15, 0),
-  concaveTreasury(0, 200),
-  policyMultisig(0, 300),
+  user(660, 0),
+  proxyAdmin(900, 0),
+  cnv(1200, 0),
   coopTreasury(0, 400),
-  proxyAdmin(400, 0),
-  accrualBondsV1Proxy(400, 150),
-  accrualBondsV1Impl(225, 325),
-  user(475, 400),
-  valueShuttle(275, 475),
+  valueShuttle(300, 425),
+  accrualBondsV1Proxy(600, 400),
+  concaveTreasury(1200, 400),
+  accrualBondsV1Impl(600, 800),
+  policyMultisig(1200, 800),
+]
+
+export const stakingNodes = [
+  lsdCNV(0, 20),
+  proxyAdmin(570, 20),
+  concaveTreasury(900, 0),
+  cnv(1200, 24),
+  user(17, 400),
+  valueShuttle(250, 420),
+  stakingV1Proxy(600, 400),
+  policyMultisig(900, 392),
+  stakingV1Impl(600, 800),
+  coopTreasury(900, 800),
 ]

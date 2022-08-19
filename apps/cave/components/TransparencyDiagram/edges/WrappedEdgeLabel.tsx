@@ -1,16 +1,18 @@
 import { SVGProps } from 'react'
-
+import { labelStyle } from '../styles'
 export function WrappedEdgeLabel({
   id,
   maxLineLength = 25,
   label,
-  labelStyle,
+  customStyle,
 }: {
   id: string
   maxLineLength?: number
   label: string
-  labelStyle: SVGProps<SVGTSpanElement>
+  customStyle?: SVGProps<SVGTSpanElement>
 }) {
+  const style = customStyle || labelStyle
+
   const wordArray = label.trim().split(/\s+/)
   const wordArrayLength = wordArray.length
 
@@ -42,9 +44,9 @@ export function WrappedEdgeLabel({
         <tspan
           key={id + '-' + i}
           x="0"
-          dy={i === 0 ? '0px' : '13px'}
+          dy={i === 0 ? '0px' : '18px'}
           textAnchor="middle"
-          {...labelStyle}
+          {...style}
         >
           {textLine}
         </tspan>

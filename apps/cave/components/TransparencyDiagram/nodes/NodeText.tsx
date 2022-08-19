@@ -1,5 +1,5 @@
 import { Box, Link, Text } from '@concave/ui'
-import { NodeDisplayData, ShapeSettingsType } from '../types'
+import { NodeDisplayData, ShapeLabelSettingsType } from '../types'
 
 export const NodeText = ({
   data,
@@ -7,7 +7,7 @@ export const NodeText = ({
   contractMultiLine = false,
 }: {
   data: NodeDisplayData
-  shapeSettings: ShapeSettingsType
+  shapeSettings: ShapeLabelSettingsType
   contractMultiLine?: boolean
 }) => {
   const explorerURL = data.chain ? data.chain : 'etherscan.io'
@@ -17,15 +17,15 @@ export const NodeText = ({
         position: 'fixed',
         left: shapeSettings.labelLeft,
         bottom: shapeSettings.labelBottom,
-        width: '100%',
+        width: 'max-content',
         textAnchor: 'middle',
       }}
     >
-      <Text color={'white'} fontSize={'0.75rem'} fontWeight={'bold'}>
+      <Text color={'white'} fontSize={'1.6rem'}>
         {data.label}
       </Text>
       {data.address && (
-        <Text color={'white'} fontSize={'0.65rem'} fontWeight={''}>
+        <Text color={'white'} fontSize={'1.15rem'} lineHeight={'0.75rem'}>
           <Link href={`https://${explorerURL}/${data.addressType}/${data.address}`} target="_blank">
             View {contractMultiLine && <br />} contract
           </Link>

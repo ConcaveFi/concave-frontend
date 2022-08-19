@@ -14,3 +14,23 @@ export const sharedNodeContainerStyle = {
   alignItems: 'center',
   cursor: 'default',
 }
+
+export const labelStyle = {
+  fill: 'white',
+  stroke: 'black',
+  strokeWidth: '2',
+  paintOrder: 'stroke',
+  fontSize: '1.10rem',
+}
+
+export const edgeStyle = {
+  strokeWidth: 3,
+}
+
+export const EdgeColors = {
+  CornflowerBlue: '#3F79FC',
+  Green: '#079D7C',
+  Orange: '#FFA500',
+  Purple: '#6D25B6',
+  Teal: '#4EDEF3',
+}

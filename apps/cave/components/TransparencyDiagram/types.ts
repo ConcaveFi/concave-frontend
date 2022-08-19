@@ -13,12 +13,7 @@ export type NodeDisplayData = {
   addressType: AddressTypeEnum
 }
 
-export type ShapeSettingsType = {
-  path?: string
-  fill?: string
-  height: string
-  width: string
-  viewBox: string
-  labelLeft: string
+export type ShapeLabelSettingsType = {
+  labelLeft?: string
   labelBottom: string
 }

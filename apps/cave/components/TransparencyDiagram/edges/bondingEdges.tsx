@@ -1,4 +1,4 @@
-import { EdgeColors, edgeStyle, labelStyle } from './edgeStyles'
+import { EdgeColors, edgeStyle, labelStyle } from '../styles'
 import { WrappedEdgeLabel } from './WrappedEdgeLabel'
 
 export const bondingEdges = [
@@ -13,22 +13,23 @@ export const bondingEdges = [
         maxLineLength={22}
         id={'Concave Treasury-CNV'}
         label="Concave Treasury admins token contracts"
-        labelStyle={labelStyle}
       />
     ),
     labelStyle: {
       ...labelStyle,
-      transform: 'translate(60px,0)',
+      transform: 'translate(90px,0)',
     },
+    style: { ...edgeStyle, stroke: EdgeColors.CornflowerBlue },
     animated: true,
   },
   {
     id: 'Concave Treasury-Proxy Admin',
     source: 'Concave Treasury',
     target: 'Proxy Admin',
-    sourceHandle: 'rightSource',
-    targetHandle: 'leftTarget',
+    sourceHandle: 'leftSource',
+    targetHandle: 'bottomTarget',
     label: 'Upgrade call',
+    style: { ...edgeStyle, stroke: EdgeColors.Orange },
     animated: true,
   },
   {
@@ -38,24 +39,31 @@ export const bondingEdges = [
     sourceHandle: 'bottomSource',
     targetHandle: 'topTarget',
     label: 'CNV mint allowance',
+    labelStyle: {
+      ...labelStyle,
+      transform: 'translate(-10px,0)',
+    },
+    style: { ...edgeStyle, stroke: EdgeColors.Orange },
     animated: true,
   },
   {
     id: 'Concave Treasury-AccrualBondsV1 (Proxy)',
     source: 'Concave Treasury',
     target: 'AccrualBondsV1 (Proxy)',
-    sourceHandle: 'rightSource',
-    targetHandle: 'leftTarget',
+    sourceHandle: 'leftSource',
+    targetHandle: 'rightTarget',
     label: 'Bond management',
+    style: { ...edgeStyle, stroke: EdgeColors.Orange },
     animated: true,
   },
   {
     id: 'Policy Multisig-AccrualBondsV1 (Proxy)',
     source: 'Policy Multisig',
     target: 'AccrualBondsV1 (Proxy)',
-    sourceHandle: 'rightSource',
-    targetHandle: 'leftTarget',
+    sourceHandle: 'leftSource',
+    targetHandle: 'rightTarget',
     label: 'Bond management',
+    style: { ...edgeStyle, stroke: EdgeColors.Orange },
     animated: true,
   },
   {
@@ -64,6 +72,7 @@ export const bondingEdges = [
     target: 'AccrualBondsV1 (Proxy)',
     sourceHandle: 'bottomSource',
     targetHandle: 'topTarget',
+    style: { ...edgeStyle, stroke: EdgeColors.Teal },
     animated: true,
   },
   {
@@ -72,25 +81,15 @@ export const bondingEdges = [
     target: 'Proxy Admin',
     sourceHandle: 'topSource',
     targetHandle: 'bottomTarget',
+    style: { ...edgeStyle, stroke: EdgeColors.Teal },
     animated: true,
   },
   {
     id: 'AccrualBondsV1 (Proxy)-user',
     source: 'AccrualBondsV1 (Proxy)',
     target: 'user',
-    sourceHandle: 'bottomSource',
-    targetHandle: 'topTarget',
-    label: (
-      <WrappedEdgeLabel
-        maxLineLength={12}
-        id={'AccrualBondsV1 (Proxy)-user'}
-        label={'User bonds, receives CNV vested over 5 days'}
-        labelStyle={labelStyle}
-      />
-    ),
-    labelStyle: {
-      transform: 'translate(50px, 0px)',
-    },
+    sourceHandle: 'topSource',
+    targetHandle: 'bottomTarget',
     style: { ...edgeStyle, stroke: EdgeColors.CornflowerBlue },
     animated: true,
   },
@@ -98,8 +97,18 @@ export const bondingEdges = [
     id: 'user-AccrualBondsV1 (Proxy)',
     source: 'user',
     target: 'AccrualBondsV1 (Proxy)',
-    sourceHandle: 'topSource',
-    targetHandle: 'bottomTarget',
+    sourceHandle: 'bottomSource',
+    targetHandle: 'topTarget',
+    label: (
+      <WrappedEdgeLabel
+        maxLineLength={18}
+        id={'AccrualBondsV1 (Proxy)-user'}
+        label={'User bonds, receives CNV vested over 5 days'}
+      />
+    ),
+    labelStyle: {
+      transform: 'translate(70px, -50px)',
+    },
     style: { ...edgeStyle, stroke: EdgeColors.CornflowerBlue },
     animated: true,
   },
@@ -109,6 +118,7 @@ export const bondingEdges = [
     target: 'AccrualBondsV1 (Impl)',
     sourceHandle: 'bottomSource',
     targetHandle: 'topTarget',
+    style: { ...edgeStyle, stroke: EdgeColors.Purple },
     animated: true,
   },
   {
@@ -121,21 +131,29 @@ export const bondingEdges = [
       <WrappedEdgeLabel
         id={'AccrualBondsV1 (Impl)-AccrualBondsV1 (Proxy)'}
         label={'Proxy delegates calls to implementation'}
-        labelStyle={labelStyle}
       />
     ),
     labelStyle: {
-      transform: 'translate(45px, 0px)',
+      transform: 'translate(90px, 0px)',
     },
+    style: { ...edgeStyle, stroke: EdgeColors.Purple },
     animated: true,
   },
   {
     id: 'AccrualBondsV1 (Proxy)-ValueShuttle',
     source: 'AccrualBondsV1 (Proxy)',
     target: 'ValueShuttle',
-    sourceHandle: 'bottomSource',
-    targetHandle: 'topTarget',
-    label: 'Value into shuttle',
+    sourceHandle: 'leftSource',
+    targetHandle: 'rightTarget',
+    label: (
+      <WrappedEdgeLabel
+        maxLineLength={10}
+        id={'AccrualBondsV1 (Proxy)-ValueShuttle'}
+        label="Value into shuttle"
+      />
+    ),
+    labelStyle: { transform: 'translate(27px,-12px)' },
+    style: { ...edgeStyle, stroke: EdgeColors.Purple },
     animated: true,
   },
   {
@@ -143,9 +161,16 @@ export const bondingEdges = [
     source: 'ValueShuttle',
     target: 'CO-OP Treasury',
     sourceHandle: 'leftSource',
-    targetHandle: 'bottomTarget',
-    label: 'Shuttle bonded DAI',
-    style: { ...edgeStyle, stroke: EdgeColors.Orange },
+    targetHandle: 'rightTarget',
+    label: (
+      <WrappedEdgeLabel
+        maxLineLength={10}
+        id={'ValueShuttle-CO-OP Treasury'}
+        label={'Shuttle bonded DAI'}
+      />
+    ),
+    labelStyle: { transform: 'translate(46px,0)' },
+    style: { ...edgeStyle, stroke: EdgeColors.Green },
     animated: true,
   },
 ]

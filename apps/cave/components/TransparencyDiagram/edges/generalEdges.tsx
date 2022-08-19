@@ -1,4 +1,4 @@
-import { EdgeColors, edgeStyle, labelStyle } from './edgeStyles'
+import { EdgeColors, edgeStyle, labelStyle } from '../styles'
 import { WrappedEdgeLabel } from './WrappedEdgeLabel'
 
 export const generalEdges = [
@@ -6,37 +6,39 @@ export const generalEdges = [
     id: 'aCNV-CNV',
     source: 'aCNV',
     target: 'CNV',
-    sourceHandle: 'leftSource',
-    targetHandle: 'rightTarget',
+    sourceHandle: 'rightSource',
+    targetHandle: 'leftTarget',
     label: 'Mints',
     animated: true,
+    style: { ...edgeStyle, stroke: EdgeColors.CornflowerBlue },
   },
   {
     id: 'pCNV-CNV',
     source: 'pCNV',
     target: 'CNV',
-    sourceHandle: 'leftSource',
-    targetHandle: 'rightTarget',
+    sourceHandle: 'rightSource',
+    targetHandle: 'leftTarget',
     label: 'Mints',
     animated: true,
+    style: { ...edgeStyle, stroke: EdgeColors.CornflowerBlue },
   },
   {
     id: 'Concave Treasury-bbtCNV',
     source: 'Concave Treasury',
     target: 'bbtCNV',
-    sourceHandle: 'topSource',
-    targetHandle: 'bottomTarget',
+    sourceHandle: 'leftSource',
+    targetHandle: 'rightTarget',
     label: (
       <WrappedEdgeLabel
         maxLineLength={22}
         id={'Concave Treasury-bbtCNV'}
         label="Concave Treasury admins token contracts"
-        labelStyle={labelStyle}
       />
     ),
     animated: true,
+    style: { ...edgeStyle, stroke: EdgeColors.Orange },
     labelStyle: {
-      transform: 'translate(45px, -10px)',
+      transform: 'translate(90px, 10px)',
       ...labelStyle,
     },
   },
@@ -44,17 +46,17 @@ export const generalEdges = [
     id: 'Concave Treasury-CNV',
     source: 'Concave Treasury',
     target: 'CNV',
-    sourceHandle: 'topSource',
-    targetHandle: 'bottomTarget',
+    sourceHandle: 'leftSource',
+    targetHandle: 'rightTarget',
     label: (
       <WrappedEdgeLabel
         maxLineLength={22}
         id={'Concave Treasury-CNV'}
         label="Concave Treasury admins token contracts"
-        labelStyle={labelStyle}
       />
     ),
     animated: true,
+    style: { ...edgeStyle, stroke: EdgeColors.Orange },
     labelStyle: {
       transform: 'translate(90px, -10px)',
       ...labelStyle,
@@ -65,8 +67,8 @@ export const generalEdges = [
     id: 'Concave Treasury-AccrualBondsV1 (Proxy)',
     source: 'Concave Treasury',
     target: 'AccrualBondsV1 (Proxy)',
-    sourceHandle: 'rightSource',
-    targetHandle: 'leftTarget',
+    sourceHandle: 'topSource',
+    targetHandle: 'bottomTarget',
     animated: true,
     style: { ...edgeStyle, stroke: EdgeColors.Orange },
   },
@@ -74,8 +76,8 @@ export const generalEdges = [
     id: 'CO-OP Treasury-AccrualBondsV1 (Proxy)',
     source: 'CO-OP Treasury',
     target: 'AccrualBondsV1 (Proxy)',
-    sourceHandle: 'rightSource',
-    targetHandle: 'leftTarget',
+    sourceHandle: 'topSource',
+    targetHandle: 'bottomTarget',
     animated: true,
     style: { ...edgeStyle, stroke: EdgeColors.Orange },
   },
@@ -83,8 +85,8 @@ export const generalEdges = [
     id: 'Policy Multisig-AccrualBondsV1 (Proxy)',
     source: 'Policy Multisig',
     target: 'AccrualBondsV1 (Proxy)',
-    sourceHandle: 'rightSource',
-    targetHandle: 'leftTarget',
+    sourceHandle: 'topSource',
+    targetHandle: 'bottomTarget',
     animated: true,
     style: { ...edgeStyle, stroke: EdgeColors.Orange },
   },
@@ -92,8 +94,8 @@ export const generalEdges = [
     id: 'Concave Treasury-StakingV1 (Proxy)',
     source: 'Concave Treasury',
     target: 'StakingV1 (Proxy)',
-    sourceHandle: 'rightSource',
-    targetHandle: 'leftTarget',
+    sourceHandle: 'bottomSource',
+    targetHandle: 'topTarget',
     animated: true,
     style: { ...edgeStyle, stroke: EdgeColors.Orange },
   },
@@ -101,8 +103,8 @@ export const generalEdges = [
     id: 'CO-OP Treasury-StakingV1 (Proxy)',
     source: 'CO-OP Treasury',
     target: 'StakingV1 (Proxy)',
-    sourceHandle: 'rightSource',
-    targetHandle: 'leftTarget',
+    sourceHandle: 'bottomSource',
+    targetHandle: 'topTarget',
     animated: true,
     style: { ...edgeStyle, stroke: EdgeColors.Orange },
   },
@@ -110,8 +112,8 @@ export const generalEdges = [
     id: 'Policy Multisig-StakingV1 (Proxy)',
     source: 'Policy Multisig',
     target: 'StakingV1 (Proxy)',
-    sourceHandle: 'rightSource',
-    targetHandle: 'leftTarget',
+    sourceHandle: 'bottomSource',
+    targetHandle: 'topTarget',
     animated: true,
     style: { ...edgeStyle, stroke: EdgeColors.Orange },
   },
@@ -120,17 +122,19 @@ export const generalEdges = [
     id: 'Proxy Admin-AccrualBondsV1 (Proxy)',
     source: 'Proxy Admin',
     target: 'AccrualBondsV1 (Proxy)',
-    sourceHandle: 'bottomSource',
-    targetHandle: 'topTarget',
+    sourceHandle: 'topSource',
+    targetHandle: 'bottomTarget',
     animated: true,
+    style: { ...edgeStyle, stroke: EdgeColors.Teal },
   },
   {
     id: 'AccrualBondsV1 (Proxy)-Proxy Admin',
     source: 'AccrualBondsV1 (Proxy)',
     target: 'Proxy Admin',
-    sourceHandle: 'topSource',
-    targetHandle: 'bottomTarget',
+    sourceHandle: 'bottomSource',
+    targetHandle: 'topTarget',
     animated: true,
+    style: { ...edgeStyle, stroke: EdgeColors.Teal },
   },
 
   {
@@ -140,96 +144,95 @@ export const generalEdges = [
     sourceHandle: 'bottomSource',
     targetHandle: 'topTarget',
     animated: true,
+    style: { ...edgeStyle, stroke: EdgeColors.Teal },
   },
 
   {
     id: 'AccrualBondsV1 (Proxy)-AccrualBondsV1 (Impl)',
     source: 'AccrualBondsV1 (Proxy)',
     target: 'AccrualBondsV1 (Impl)',
-    sourceHandle: 'bottomSource',
-    targetHandle: 'topTarget',
-    style: { ...edgeStyle, stroke: EdgeColors.Green },
+    sourceHandle: 'rightSource',
+    targetHandle: 'leftTarget',
     animated: true,
+    style: { ...edgeStyle, stroke: EdgeColors.Purple },
   },
 
   {
     id: 'AccrualBondsV1 (Impl)-ValueShuttle',
     source: 'AccrualBondsV1 (Impl)',
     target: 'ValueShuttle',
-    sourceHandle: 'bottomSource',
+    sourceHandle: 'rightSource',
     targetHandle: 'topTarget',
     label: 'Value goes into shuttle',
-    style: { ...edgeStyle, stroke: EdgeColors.Green },
     animated: true,
+    style: { ...edgeStyle, stroke: EdgeColors.Purple },
   },
 
   {
     id: 'StakingV1 (Proxy)-StakingV1 (Impl)',
     source: 'StakingV1 (Proxy)',
     target: 'StakingV1 (Impl)',
-    sourceHandle: 'bottomSource',
-    targetHandle: 'topTarget',
+    sourceHandle: 'rightSource',
+    targetHandle: 'leftTarget',
     label: (
       <WrappedEdgeLabel
         id={'StakingV1 (Proxy)-StakingV1 (Impl)'}
         label={'Proxy delegates calls to implementation'}
-        labelStyle={labelStyle}
       />
     ),
     labelStyle: {
-      transform: 'translate(-39.5px, 20px)',
+      transform: 'translate(90px, 0px)',
     },
-    style: { ...edgeStyle, stroke: EdgeColors.CornflowerBlue },
     animated: true,
+    style: { ...edgeStyle, stroke: EdgeColors.Teal },
   },
 
   {
     id: 'StakingV1 (Proxy)-CO-OP Treasury',
     source: 'StakingV1 (Proxy)',
     target: 'CO-OP Treasury',
-    sourceHandle: 'bottomSource',
-    targetHandle: 'rightTarget',
+    sourceHandle: 'topSource',
+    targetHandle: 'bottomTarget',
     label: 'CNV minted from Staking',
-    labelStyle: {
-      transform: 'translate(70px, 0px)',
-      ...labelStyle,
-    },
-    style: { ...edgeStyle, stroke: EdgeColors.CornflowerBlue },
     animated: true,
+    style: { ...edgeStyle, stroke: EdgeColors.Orange },
   },
 
   {
     id: 'ValueShuttle-StakingV1 (Impl)',
     source: 'ValueShuttle',
     target: 'StakingV1 (Impl)',
-    sourceHandle: 'rightSource',
-    targetHandle: 'bottomTarget',
-    style: { ...edgeStyle, stroke: EdgeColors.CornflowerBlue },
+    sourceHandle: 'leftSource',
+    targetHandle: 'rightTarget',
     animated: true,
+    style: { ...edgeStyle, stroke: EdgeColors.Green },
   },
   {
     id: 'ValueShuttle-Concave Treasury',
     source: 'ValueShuttle',
     target: 'Concave Treasury',
     sourceHandle: 'leftSource',
-    targetHandle: 'rightTarget',
+    targetHandle: 'bottomTarget',
     animated: true,
+    style: { ...edgeStyle, stroke: EdgeColors.Green },
   },
 
   {
     id: 'lsdCNV-StakingV1 (Proxy)',
     source: 'lsdCNV',
     target: 'StakingV1 (Proxy)',
-    sourceHandle: 'bottomSource',
-    targetHandle: 'topTarget',
+    sourceHandle: 'rightSource',
+    targetHandle: 'leftTarget',
     animated: true,
+    style: { ...edgeStyle, stroke: EdgeColors.CornflowerBlue },
   },
   {
     id: 'StakingV1 (Proxy)-lsdCNV',
     source: 'StakingV1 (Proxy)',
     target: 'lsdCNV',
-    sourceHandle: 'topSource',
-    targetHandle: 'bottomTarget',
+    sourceHandle: 'leftSource',
+    targetHandle: 'rightTarget',
     animated: true,
+    style: { ...edgeStyle, stroke: EdgeColors.CornflowerBlue },
   },
 ]

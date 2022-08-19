@@ -11,8 +11,7 @@ const TransparencyDiagram = () => {
         </Heading>
         <Flex mt={0} align="center" gap={10} width="full" justify="center" alignItems={'center'}>
           <Text maxW={520} textAlign={'center'}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. In a enim sed sem porttitor
-            rhoncus.
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. In a enim sed sem.
           </Text>
         </Flex>
         <TransparencyDiagramComponent />

@@ -2,20 +2,39 @@ import { Box, Button, Flex, VStack } from '@concave/ui'
 import { useState } from 'react'
 import ReactFlow, { ConnectionLineType, Controls } from 'react-flow-renderer'
 import { bondingEdges } from './edges/bondingEdges'
-import { edgeStyle, labelStyle } from './edges/edgeStyles'
 import { generalEdges } from './edges/generalEdges'
 import { stakingEdges } from './edges/stakingEdges'
 import { bondingNodes, generalNodes, nodeTypes, stakingNodes } from './nodes/nodes'
+import { edgeStyle, labelStyle } from './styles'
 
 const SelectionButton = ({ diagramShown, setDiagramShown, chartId, chartName }) => (
   <Button
     variant={diagramShown === chartId ? 'primary.outline' : 'secondary'}
     size={'lg'}
-    // disabled={diagramShown === chartId}
     onClick={() => setDiagramShown(chartId)}
   >
     {chartName} Diagram
   </Button>
+)
+
+const ReactFlowDiagram = ({ edges, nodes }) => (
+  <ReactFlow
+    edges={edges}
+    nodes={nodes}
+    nodeTypes={nodeTypes}
+    attributionPosition="top-left"
+    elevateEdgesOnSelect
+    fitView
+    fitViewOptions={{ padding: 0.15 }}
+    defaultEdgeOptions={{
+      type: ConnectionLineType.SimpleBezier,
+      style: { ...edgeStyle },
+      labelStyle: { ...labelStyle },
+      labelShowBg: false,
+    }}
+  >
+    <Controls showInteractive={false} />
+  </ReactFlow>
 )
 
 export function TransparencyDiagram() {
@@ -25,9 +44,8 @@ export function TransparencyDiagram() {
     <>
       <VStack
         minWidth={'700px'}
-        width={'80%'}
-        h="100%"
-        maxHeight="1080px"
+        width={'100%'}
+        height={'850px'}
         rounded={'2xl'}
         apply="background.metalBrighter"
         shadow={'up'}
@@ -86,69 +104,9 @@ export function TransparencyDiagram() {
               rounded={'2xl'}
             />
           )}
-          {diagramShown === 1 && (
-            <ReactFlow
-              edges={generalEdges}
-              nodes={generalNodes}
-              nodeTypes={nodeTypes}
-              elevateEdgesOnSelect
-              onNodeClick={(e, n) => {
-                console.log(e, n)
-              }}
-              fitView
-              fitViewOptions={{ padding: 0.05, includeHiddenNodes: false }}
-              defaultEdgeOptions={{
-                type: ConnectionLineType.SimpleBezier,
-                style: { ...edgeStyle },
-                labelStyle: { ...labelStyle },
-                labelShowBg: false,
-              }}
-            >
-              <Controls showInteractive={false} />
-            </ReactFlow>
-          )}
-          {diagramShown === 2 && (
-            <ReactFlow
-              edges={bondingEdges}
-              nodes={bondingNodes}
-              nodeTypes={nodeTypes}
-              elevateEdgesOnSelect
-              onNodeClick={(e, n) => {
-                console.log(e, n)
-              }}
-              fitView
-              fitViewOptions={{ padding: 0.05, includeHiddenNodes: false }}
-              defaultEdgeOptions={{
-                type: ConnectionLineType.SimpleBezier,
-                style: { ...edgeStyle },
-                labelStyle: { ...labelStyle },
-                labelShowBg: false,
-              }}
-            >
-              <Controls showInteractive={false} />
-            </ReactFlow>
-          )}
-          {diagramShown === 3 && (
-            <ReactFlow
-              edges={stakingEdges}
-              nodes={stakingNodes}
-              nodeTypes={nodeTypes}
-              elevateEdgesOnSelect
-              onNodeClick={(e, n) => {
-                console.log(e, n)
-              }}
-              fitView
-              fitViewOptions={{ padding: 0.05, includeHiddenNodes: false }}
-              defaultEdgeOptions={{
-                type: ConnectionLineType.SimpleBezier,
-                style: { ...edgeStyle },
-                labelStyle: { ...labelStyle },
-                labelShowBg: false,
-              }}
-            >
-              <Controls showInteractive={false} />
-            </ReactFlow>
-          )}
+          {diagramShown === 1 && <ReactFlowDiagram edges={generalEdges} nodes={generalNodes} />}
+          {diagramShown === 2 && <ReactFlowDiagram edges={bondingEdges} nodes={bondingNodes} />}
+          {diagramShown === 3 && <ReactFlowDiagram edges={stakingEdges} nodes={stakingNodes} />}
         </Flex>
       </VStack>
     </>
