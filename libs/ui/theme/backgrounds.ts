@@ -33,12 +33,12 @@ export const backgrounds = {
       borderRadius: 'inherit',
       content: '""',
       bg: `${textures.glass}`,
-      opacity: 0.5,
+      opacity: 0.4,
       inset: 0,
       pos: 'absolute',
       zIndex: -1,
       bgSize: 'cover',
-      shadow: 'inset -30px 30px 20px rgba(0, 0, 0, 0.35)',
+      pointerEvents: 'none',
     },
     filter:
       'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25)) drop-shadow(-20px 30px 20px rgba(6, 9, 12, 0.5)) drop-shadow(4px -7px 20px rgba(174, 177, 255, 0.13))',
@@ -48,16 +48,17 @@ export const backgrounds = {
     '::after': {
       borderRadius: 'inherit',
       content: '""',
-      bg: `${textures.glass}`,
-      opacity: 0.4,
+      bg: `${textures.glassHQ}`,
+      opacity: 0.5,
       inset: 0,
       pos: 'absolute',
       zIndex: -1,
       bgSize: 'cover',
-      shadow: 'inset -30px 30px 20px rgba(0, 0, 0, 0.35)',
+      pointerEvents: 'none',
+      shadow:
+        'inset 0px 0px 20px rgba(94, 162, 224, 0.05), inset -1px 1px 2px rgba(128, 186, 255, 0.1)',
     },
-    filter:
-      'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25)) drop-shadow(-20px 30px 20px rgba(6, 9, 12, 0.5)) drop-shadow(4px -7px 20px rgba(174, 177, 255, 0.13))',
+    filter: 'drop-shadow(-2px 6px 6px rgba(13, 17, 22, 0.33))',
   },
 }
 export default backgrounds
