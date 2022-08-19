@@ -1,5 +1,5 @@
 import { Currency, CurrencyAmount } from '@concave/core'
-import { Box, Button, ButtonProps, Flex, Spinner, Text, useBreakpointValue } from '@concave/ui'
+import { Button, ButtonProps, Flex, Spinner, Text, useBreakpointValue } from '@concave/ui'
 
 interface UserDividendCardProps {
   totalLocked: CurrencyAmount<Currency>
@@ -11,40 +11,37 @@ export const UserDividendCard = (props: UserDividendCardProps) => {
   const mediumLayout = useBreakpointValue({ base: false, md: true, lg: false })
   const largeLayout = useBreakpointValue({ base: false, lg: true })
   return (
-    <Box
-      apply={mobileLayout && 'background.glass'}
-      borderRadius="2xl"
-      shadow={'down'}
-      width="800px"
-      height={{ lg: '136px', md: '130px' }}
-    >
-      <Flex>
-        <Text
-          textAlign={'start'}
-          ml={{ lg: 6, md: 12 }}
-          mx={{ base: 'auto', md: 'none' }}
-          textColor={'text.low'}
-          fontSize={'lg'}
-          fontWeight={'bold'}
-          my={5}
-        >
-          Your dividends share
-        </Text>
-        {mediumLayout && <RedeemButton m="auto" />}
+    <Flex direction={'column'} w="full">
+      <Text
+        textAlign={'start'}
+        ml={{ lg: 6, md: 12 }}
+        mx={{ base: 'auto', md: 'none' }}
+        textColor={'text.low'}
+        fontSize={'lg'}
+        fontWeight={'bold'}
+        my={5}
+      >
+        Your dividends share
+      </Text>
+      <Flex
+        apply={mobileLayout && 'background.glass'}
+        borderRadius="2xl"
+        shadow={'down'}
+        width="full"
+        py={6}
+        px={4}
+        justify={'space-between'}
+        gap={{ base: 4 }}
+        overflow="hidden"
+        wrap={'wrap'}
+      >
+        <Info title="Total locked" label={totalLocked.toFixed(2, { groupSeparator: ',' })} />
+        <Info title="Next dividend date" label="Coming soon" />
+        <Info title="Available dividends" label="0.0" />
+        <Info title="Your dividends share" label="0.0" />
+        <RedeemButton my={'auto'} />
       </Flex>
-      <Flex justify={'center'} gap={{ base: 4 }} overflow="hidden" minW={320}>
-        <Flex direction={{ base: 'column', md: 'row' }} gap={6}>
-          <Info title="Total locked" label={totalLocked.toFixed(2, { groupSeparator: ',' })} />
-          <Info title="Next dividend date" label="Coming soon" />
-        </Flex>
-        <Flex direction={{ base: 'column', md: 'row' }} gap={6}>
-          <Info title="Available dividends" label="0.0" />
-          <Info title="Your dividends share" label="0.0" />
-        </Flex>
-        {largeLayout && <RedeemButton my={'auto'} />}
-      </Flex>
-      {mobileLayout && <RedeemButton mx={'auto'} my={'4'} />}
-    </Box>
+    </Flex>
   )
 }
 
@@ -58,7 +55,6 @@ const RedeemButton = ({ ...props }: ButtonProps) => {
       variant={redeemable ? 'primary.outline' : ''}
       size="md"
       shadow="down"
-      mx={6}
       _active={redeemable ? { transform: 'scale(0.95)' } : {}}
       {...props}
     >
