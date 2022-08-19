@@ -4,9 +4,8 @@ import {
   BASES_TO_CHECK_TRADES_AGAINST,
   INTERMEDIARY_PAIRS_FOR_MULTI_HOPS,
 } from 'components/AMM/constants/routing'
-import { concaveProvider } from 'lib/providers'
 import { useQuery, UseQueryOptions, UseQueryResult } from 'react-query'
-import { useBlockNumber } from 'wagmi'
+import { useBlockNumber, useProvider } from 'wagmi'
 
 const filterRepeatedPairs = (pairs: [Token, Token][]) =>
   pairs.filter(
@@ -42,6 +41,11 @@ export type UsePairsQueryOptions<T> = UseQueryOptions<Pair[], any, T>
 
 export const NoValidPairsError = 'No valid pairs found'
 
+const sortAddresses = (a: Token, b: Token) => {
+  if (!a || !b || a.equals(b) || a.chainId !== b.chainId) return
+  return a?.sortsBefore(b) ? `${a.address}-${b.address}` : `${b.address}-${a.address}`
+}
+
 export const usePairs = <T = Pair[]>(
   tokenA?: Token,
   tokenB?: Token,
@@ -49,15 +53,14 @@ export const usePairs = <T = Pair[]>(
   queryOptions?: UsePairsQueryOptions<T>,
 ) => {
   const enabled = !!tokenA?.address && !!tokenB?.address && !tokenA.equals(tokenB)
+  const provider = useProvider()
   const result = useQuery(
-    ['pairs', tokenA?.address, tokenB?.address, maxHops, tokenA?.chainId],
+    ['pairs', sortAddresses(tokenA, tokenB), maxHops, tokenA?.chainId],
     async () => {
       const commonPairs = getAllCommonPairs(tokenA, tokenB, maxHops)
       const pairs: Pair[] = (
         await Promise.all(
-          commonPairs.map(([a, b]) =>
-            Fetcher.fetchPairData(a, b, concaveProvider(a.chainId)).catch(() => null),
-          ),
+          commonPairs.map(([a, b]) => Fetcher.fetchPairData(a, b, provider).catch(() => null)),
         )
       ).filter(Boolean)
 
@@ -74,7 +77,7 @@ export const usePairs = <T = Pair[]>(
     },
   )
 
-  useBlockNumber({ watch: true, onSuccess: () => !!enabled && result.refetch() })
+  useBlockNumber({ watch: true, onBlock: () => result.refetch(), enabled })
 
   return result
 }

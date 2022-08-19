@@ -33,7 +33,7 @@ export const SlippageTolerance = ({
           label="Your transaction will revert if the price changes unfavorably by more than this percentage."
           shouldWrapChildren
         >
-          <QuestionIcon w="18px" h="18px" />
+          <QuestionIcon />
         </Tooltip>
       </HStack>
       <HStack>
@@ -48,7 +48,9 @@ export const SlippageTolerance = ({
                 value === '' || (floatValue < maxSlippage && !!toPercent(floatValue))
               }
               size="medium"
-              onValueChange={({ floatValue }) => onValueChange(floatValue)}
+              onValueChange={({ floatValue }, { source }) =>
+                source === 'event' && onValueChange(floatValue)
+              }
             />
             <InputRightAddon color="text.low" fontWeight="semibold">
               %

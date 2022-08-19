@@ -95,4 +95,5 @@ export const CandleStickChart = ({ data }: { data: (CandlestickData | Whitespace
 
   return <Box ref={chartContainerRef} />
 }
+
 export default CandleStickChart

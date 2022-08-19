@@ -5,7 +5,7 @@ import { ButtonLink } from 'components/ButtonLink'
 import { ConnectButton, UserWallet } from 'components/ConnectWallet'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { useAccount } from 'wagmi'
+import { useAccount, useNetwork } from 'wagmi'
 
 const UserCnvBalance = () => {
   const networkId = useCurrentSupportedNetworkId()
@@ -29,15 +29,31 @@ const UserCnvBalance = () => {
   )
 }
 
+const TestnetIndicator = () => {
+  const { chain } = useNetwork()
+  return (
+    chain?.testnet && (
+      <Box textAlign={'center'} pt={3}>
+        <Text color={'goldenrod'} fontWeight={'semibold'}>
+          Connected to {chain.name}
+        </Text>
+        <ButtonLink variant="secondary" size="medium" fontSize={'lg'} href="/faucet">
+          Go to faucet
+        </ButtonLink>
+      </Box>
+    )
+  )
+}
+
 function SideBarTop() {
   const { isConnected } = useAccount()
 
   return (
-    <Box shadow="down" px={2} pt={10} pb={3} rounded="2xl">
+    <Box shadow="down" px={2} pb={3} rounded="2xl" w="100%">
       <Flex
         alignItems="center"
         justify="center"
-        my={4}
+        my="58px"
         filter="drop-shadow(0px 0px 27px #81b3ff4f)"
       >
         <Image src="/assets/concave/logomark.svg" alt="concave logo" maxWidth="52px" />
@@ -47,7 +63,8 @@ function SideBarTop() {
       <Stack gap="1" align="flex-end" mt={7}>
         <ButtonLink
           href="/treasury" // and redirect to the treasury page
-          variant="primary.outline"
+          variant="secondary"
+          border="primary"
           size="medium"
           w="full"
           alignItems="center"
@@ -60,6 +77,7 @@ function SideBarTop() {
           <UserCnvBalance />
         </Box>
       </Stack>
+      <TestnetIndicator />
     </Box>
   )
 }

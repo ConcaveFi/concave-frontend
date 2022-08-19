@@ -1,13 +1,27 @@
-import { Currency, FIXED_ORDER_MARKET_CONTRACT } from '@concave/core'
+import { Currency, DAI, FRAX, MARKETPLACE_CONTRACT, NATIVE, USDC } from '@concave/core'
+import { DownIcon } from '@concave/icons'
 import { FixedOrderMarketContract, MarketItem, StakingPosition } from '@concave/marketplace'
-import { Box, Button, Flex, HStack, Modal, Text, VStack } from '@concave/ui'
-import { SelectMarketCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
+import {
+  Box,
+  Button,
+  Flex,
+  HStack,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Modal,
+  Text,
+  VStack,
+} from '@concave/ui'
+import { CurrencyIcon } from 'components/CurrencyIcon'
 import { ChooseButton } from 'components/Marketplace/ChooseButton'
 import { BigNumber, BigNumberish } from 'ethers'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
 import { Dispatch, SetStateAction, useCallback } from 'react'
 import { formatFixed } from 'utils/formatFixed'
-import { chain, useSignTypedData } from 'wagmi'
+import { useSignTypedData } from 'wagmi'
 import { BigNumberField } from './BigNumberField'
 import { ConfirmSignature } from './ConfirmSignature'
 import { ConfirmUnlist } from './ConfirmUnlist'
@@ -76,12 +90,13 @@ export const useListeForSaleState = ({
   market: MarketItem
   setMarket: Dispatch<SetStateAction<MarketItem>>
 }) => {
+  const chainId = useCurrentSupportedNetworkId()
   const { signTypedDataAsync } = useSignTypedData({
     domain: {
-      name: 'Cavemart',
+      name: 'Marketplace',
       version: '1',
-      chainId: chain.rinkeby.id,
-      verifyingContract: FIXED_ORDER_MARKET_CONTRACT[chain.rinkeby.id],
+      chainId,
+      verifyingContract: MARKETPLACE_CONTRACT[chainId],
     },
     types: {
       Swap: [
@@ -111,8 +126,8 @@ export const useListeForSaleState = ({
     try {
       const data = await signTypedDataAsync()
       const signature = data.substring(2)
-      const cavemart = new FixedOrderMarketContract(concaveProvider(chain.rinkeby.id))
-      const computedSigner = await cavemart.computeSigner(market.new({ signature }))
+      const marketplaceContract = new FixedOrderMarketContract(concaveProvider(chainId))
+      const computedSigner = await marketplaceContract.computeSigner(market.new({ signature }))
       if (computedSigner !== market.seller) {
         throw `Invalid signature`
       }
@@ -141,6 +156,12 @@ export const useListeForSaleState = ({
   }
 }
 
+function addDays(date: Date, days: number) {
+  var result = new Date(date)
+  result.setDate(result.getDate() + days)
+  return result
+}
+
 export const ListPositionForSale = ({
   market,
   staking,
@@ -156,6 +177,8 @@ export const ListPositionForSale = ({
   setMarket: Dispatch<SetStateAction<MarketItem>>
 }) => {
   const discount = usePositionDiscount(staking, market)
+  const tomorrow = addDays(new Date(), 1)
+  const disabled = market.deadline?.mul(1000).lt(Date.now()) || market.startPrice.eq(0)
 
   if (market.signature) {
     return (
@@ -163,23 +186,21 @@ export const ListPositionForSale = ({
     )
   }
   return (
-    <VStack direction={'column'} gap={1} pt={8} px={8} pb={0}>
+    <VStack direction={'column'} justifyContent={'space-between'} gap={1} pt={8} px={8} pb={0}>
       <Type />
       <Info label="Current value:" value={formatFixed(staking.currentValue) + ' CNV'}></Info>
       <CurrencySelector value={market.currency} onChange={setCurrency} />
       <BigNumberField
         label="Price:"
         currency={market.currency}
-        defaultValue={staking.currentValue}
         onChange={setPrice}
         decimalScale={4}
       />
       <EpochDateField
         label="Deadline:"
         onChange={setDeadline}
-        minDate={Date.now() / 1000}
+        minDate={tomorrow.getTime() / 1000}
         maxDate={staking.maturity}
-        date={market.deadline.toNumber()}
       />
       {discount.isSuccess && (
         <Info
@@ -187,8 +208,11 @@ export const ListPositionForSale = ({
           value={formatFixed(discount.discount, { decimals: 2 }) + '%'}
         ></Info>
       )}
-      <Flex pt={4} justifyContent="center">
-        <ChooseButton onClick={create} title={`List`} backgroundType="blue" />
+      <Text textColor={'text.low'} as="em" fontSize={'xs'}>
+        1.5% sale fee
+      </Text>
+      <Flex pt={3} justifyContent="center">
+        <ChooseButton onClick={create} disabled={disabled} title={`List`} />
       </Flex>
     </VStack>
   )
@@ -227,9 +251,49 @@ const CurrencySelector = ({
       <Text textColor={'text.low'} textAlign={'right'} fontWeight="bold" width={'full'}>
         Currency:
       </Text>
-      <Box width={'full'}>
-        <SelectMarketCurrency selected={value} onSelect={onChange} />
-      </Box>
+      <SelectMarketCurrency selected={value} onSelect={onChange} />
     </HStack>
+  )
+}
+
+export const SelectMarketCurrency = ({
+  selected,
+  onSelect,
+}: {
+  selected?: Currency
+  onSelect: (token: Currency) => void
+}) => {
+  const networkId = useCurrentSupportedNetworkId()
+  const currencies = [DAI, NATIVE, USDC, FRAX].map((c) => c[networkId]).filter((c) => c)
+  return (
+    <Menu>
+      <MenuButton
+        width={'full'}
+        shadow={'Up Big'}
+        borderRadius={'full'}
+        _active={{
+          shadow: 'Down Big',
+        }}
+        px={4}
+        py={1.5}
+        as={Button}
+        rightIcon={<DownIcon w={`16px`} />}
+      >
+        <HStack>
+          <CurrencyIcon size="xs" currency={selected} />
+          <span>{selected.symbol}</span>
+        </HStack>
+      </MenuButton>
+      <MenuList>
+        {currencies.map((c) => {
+          return (
+            <MenuItem key={c.symbol} onClick={() => onSelect(c)} gap={2}>
+              <CurrencyIcon size="xs" currency={c} />
+              <span>{c.symbol}</span>
+            </MenuItem>
+          )
+        })}
+      </MenuList>
+    </Menu>
   )
 }

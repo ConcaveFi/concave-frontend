@@ -33,7 +33,7 @@ const Media: Array<MediaProps> = [
   },
 ]
 
-function SideBarBottom() {
+function SideBarBottom({ ...props }) {
   return (
     <VStack
       w={'100%'}
@@ -42,9 +42,16 @@ function SideBarBottom() {
       py={7}
       textColor="text.low"
       fontSize="sm"
+      {...props}
     >
       {Media.map((m) => (
-        <Link href={m.link} isExternal key={m.name} _focus={{ color: 'text.high' }}>
+        <Link
+          href={m.link}
+          isExternal
+          key={m.name}
+          _focus={{ color: 'text.high' }}
+          _hover={{ filter: 'brightness(3)' }}
+        >
           <HStack spacing="2px" textAlign="left" w="150px" gap={2}>
             <Image src={`/assets/sidebar/${m.icon}.svg`} alt="" ml={-3} />
             <Text fontSize="base" fontWeight="bold">

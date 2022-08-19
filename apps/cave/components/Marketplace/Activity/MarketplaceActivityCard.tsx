@@ -1,6 +1,7 @@
-import { Cavemart, LogStakingV1, marketplaceActivity, StakingPool } from '@concave/marketplace'
-import { Box, Card, Flex } from '@concave/ui'
+import { LogStakingV1, Marketplace, marketplaceActivity, StakingPool } from '@concave/marketplace'
+import { Card, Flex, HStack, Text, useBreakpointValue, VStack } from '@concave/ui'
 import { BigNumber } from '@ethersproject/bignumber'
+import { Loading } from 'components/Loading'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
 import { useState } from 'react'
@@ -27,7 +28,7 @@ export const MarketplaceActivityCard = () => {
       return positions.map((item) => {
         const type = item.soldFor ? `sale` : `listing`
         const value = type === 'sale' ? item.soldFor : item.startPrice
-        const data: Data & Cavemart & StakingPool & LogStakingV1 = {
+        const data: Data & Marketplace & StakingPool & LogStakingV1 = {
           ...item,
           type,
           poolID: item.poolId,
@@ -43,16 +44,26 @@ export const MarketplaceActivityCard = () => {
   const filtred = (data || []).filter((item) => {
     return filter === `all` || filter === item.type
   })
+  const mobileUI = useBreakpointValue({ base: true, xl: false, '2xl': false })
+
+  if (mobileUI) {
+    return <></>
+  }
   return (
     <Card
-      width={{ base: '300px', md: '360px', xl: '300px' }}
+      px={2}
+      py={4}
+      gap={2}
       shadow="Block Up"
-      height={642}
+      height={'full'}
       position="relative"
       rounded="2xl"
+      maxH={'1000px'}
+      maxW={`300px`}
+      minW={'280px'}
       variant="secondary"
     >
-      <Flex justify={'center'} align="center" height={'70px'} gap={1}>
+      <HStack justify={'center'} align="center" gap={1}>
         <TransactionButton onClick={() => setFilter('all')} active={filter === 'all'} label="All" />
         <TransactionButton
           onClick={() => setFilter('listing')}
@@ -64,25 +75,27 @@ export const MarketplaceActivityCard = () => {
           active={filter === 'sale'}
           label="Sale"
         />
-      </Flex>
-      <Box
+      </HStack>
+      <Loading size={'md'} label={'Loading activities'} isLoading={isLoading} />
+      <VStack
         backdropFilter="blur(8px)"
         pos="relative"
-        h="100%"
-        overflowY={'auto'}
-        width={'95%'}
-        mx={'auto'}
+        h="auto"
+        overflowY={'scroll'}
+        width={'full'}
         boxSizing="border-box"
-        borderRadius="12px"
-        px={'0.5rem'}
-        py={'0.5rem'}
+        borderRadius="2xl"
+        px={1}
+        py={1}
         __css={scrollBar}
+        gap={2}
         pt={0}
+        flexDirection={'column'}
       >
         {filtred.map((data, index) => {
           return <MarketplaceTransactionCard key={index} data={data} />
         })}
-      </Box>
+      </VStack>
     </Card>
   )
 }
@@ -98,6 +111,7 @@ const TransactionButton = (props: TransactionButtonProps) => {
   const textColor = !!active ? 'white' : 'text.low'
   return (
     <Flex
+      as={active ? Card : Flex}
       onClick={props.onClick}
       textColor={textColor}
       fontSize="14"
@@ -114,7 +128,7 @@ const TransactionButton = (props: TransactionButtonProps) => {
       shadow={'Up Big'}
       userSelect="none"
     >
-      {label}
+      <Text>{label}</Text>
     </Flex>
   )
 }

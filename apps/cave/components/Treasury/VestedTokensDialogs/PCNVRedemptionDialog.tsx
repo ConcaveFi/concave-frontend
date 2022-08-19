@@ -13,6 +13,7 @@ import { useAccount, useProvider, useSigner } from 'wagmi'
 import { usePCNVUserData } from '../Hooks/usePCNVUserData'
 import useVestedTokens from '../Hooks/useVestedTokens'
 import { VestedTokenButtonProps } from '../TreasuryRedeemCard'
+import { PCNVConfirmationModal } from './PCNVConfirmatioModal'
 import { VestedTokenDialog } from './VestedTokenDialog'
 
 export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen, onClose }) => {
@@ -22,6 +23,7 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
     onOpen: submitTransactionModal,
   } = useDisclosure()
 
+  const confirmModal = useDisclosure()
   const { data } = useGet_Amm_Cnv_InfosQuery()
 
   const { address } = useAccount()
@@ -46,13 +48,15 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
     setStatus('default')
     onCloseTransactionModal()
   }
+  const [amount, setAmount] = useState<BigNumber>(BigNumber.from(0))
+  const [redeemMax, setRedeemMax] = useState(false)
   return (
     <>
       <VestedTokenDialog
         isLoading={isLoading}
         isOpen={isOpen}
         onClose={onClose}
-        onRedeem={redeem}
+        onRedeem={openConfirmModal}
         status={status}
         tokenUserData={{ ...pCNVData, balance }}
         token={PCNV[chainId]}
@@ -69,8 +73,21 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
         isOpen={transactionSubmitted && Boolean(tx) && status === 'submitted'}
         tx={tx}
       />
+      <PCNVConfirmationModal
+        redeemMax={redeemMax}
+        difference={pCNVToCNVDifference}
+        amount={amount}
+        isOpen={confirmModal.isOpen && Boolean(amount)}
+        onClose={confirmModal.onClose}
+        onAccept={redeem}
+      />
     </>
   )
+  function openConfirmModal(amount: BigNumber, redeemMax: boolean) {
+    setAmount(amount)
+    setRedeemMax(redeemMax)
+    confirmModal.onOpen()
+  }
   function redeem(amount: BigNumber, redeemMax: boolean) {
     const pCNVContract = new PCNVContract(provider)
     setStatus('approve')

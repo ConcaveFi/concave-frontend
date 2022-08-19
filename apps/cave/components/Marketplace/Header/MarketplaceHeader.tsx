@@ -1,12 +1,11 @@
-import { Flex, Heading, Text } from '@concave/ui'
+import { Flex, Heading, Text, VStack } from '@concave/ui'
 import { GraphicGuide } from 'components/LiquidStaking/GraphicGuide'
 
 export const MarketplaceHeader = () => {
   return (
-    <>
-      {' '}
-      <Heading as="h1" mt={16} mb={3} fontSize="5xl">
-        {'Marketplace'}
+    <VStack>
+      <Heading as="h1" mt={4} mb={3} fontSize="5xl">
+        Marketplace
       </Heading>
       <Flex
         direction={{ xl: 'row', base: 'column' }}
@@ -23,6 +22,6 @@ export const MarketplaceHeader = () => {
         </Text>
         <GraphicGuide />
       </Flex>
-    </>
+    </VStack>
   )
 }

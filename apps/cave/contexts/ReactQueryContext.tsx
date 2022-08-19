@@ -7,10 +7,10 @@ import { QueryClient, QueryClientProvider, setLogger } from 'react-query'
 setLogger({
   log: console.log,
   warn: console.warn,
-  error: (error) => {
+  error: (message, ...optionalParams) => {
     // stop logging expected errors
-    if ([InvalidTradeError, InsufficientLiquidityError, NoValidPairsError].includes(error)) return
-    console.error(error)
+    if ([InvalidTradeError, InsufficientLiquidityError, NoValidPairsError].includes(message)) return
+    console.error(message, ...optionalParams)
   },
 })
 

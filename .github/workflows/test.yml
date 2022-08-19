@@ -4,6 +4,7 @@ on: [pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     env:
       NEXT_PUBLIC_ALCHEMY_ID: ${{ secrets.NEXT_PUBLIC_ALCHEMY_ID }}
       NEXT_PUBLIC_CONCAVE_RPC_KEY: ${{ secrets.NEXT_PUBLIC_CONCAVE_RPC_KEY }}
