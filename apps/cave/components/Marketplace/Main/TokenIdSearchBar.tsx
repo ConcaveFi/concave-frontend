@@ -1,5 +1,5 @@
 import { CloseIcon, Search2Icon } from '@concave/icons'
-import { Flex, NumericInput, Tooltip } from '@concave/ui'
+import { Flex, NumericInput, Tooltip, useBreakpointValue } from '@concave/ui'
 import { FC, useState } from 'react'
 
 type TokenIdSearchBarProps = { onApplyFilter: (id: number) => void }
@@ -7,6 +7,12 @@ export const TokenIdSearchBar: FC<TokenIdSearchBarProps> = ({ onApplyFilter }) =
   const [value, setValue] = useState('')
   const [appliedNumber, setAppliedNumber] = useState('')
   const hasAppliedFilter = appliedNumber !== ''
+
+  const hideFilters = useBreakpointValue({ base: true, md: false, xl: false, '2xl': false })
+  if (hideFilters) {
+    return <></>
+  }
+
   return (
     <Flex align={'center'} w="30%" maxH="30px" rounded={'2xl'} shadow="down" px={4} gap={2}>
       <Search2Icon color={'text.low'} />

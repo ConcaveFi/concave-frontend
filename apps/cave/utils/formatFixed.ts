@@ -20,7 +20,7 @@ const formatter = Intl.NumberFormat('en', { notation: 'compact', maximumSignific
 export const compactFormat = (bigNumber: BigNumberish, params: { decimals?: number } = {}) => {
   const { decimals } = fixParams(params)
   const input = utils.formatUnits(bigNumber, decimals)
-  if (+input < 0.01) {
+  if (+input < 0.01 && +input > 0) {
     return `< 0.01`
   }
   return formatter.format(+input)

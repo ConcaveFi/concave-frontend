@@ -118,7 +118,7 @@ function PageNav() {
 
       <ButtonContainer>
         <NavButton href="/marketplace">Marketplace</NavButton>
-        <SubnavButton href="/liquid-stake-positions">Your Stake Positions</SubnavButton>
+        <SubnavButton href="/liquid-stake-positions">Your Staked Positions</SubnavButton>
       </ButtonContainer>
 
       <ButtonContainer>
