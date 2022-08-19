@@ -1,27 +1,9 @@
 import { SpinnerIcon } from '@concave/icons'
-import { Button, Flex, gradientBorder, Image, keyframes, Text, useDisclosure } from '@concave/ui'
-import { useModals } from 'contexts/ModalsContext'
+import { Button, Flex, Image, keyframes, Text, useDisclosure } from '@concave/ui'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { formatAddress } from 'utils/formatAddress'
 import { useAccount, useEnsName, useNetwork } from 'wagmi'
 import YourWalletModal from './YourWallet'
-
-export const ConnectButton = () => {
-  const { connectModal } = useModals()
-
-  return (
-    <Button
-      sx={{ ...gradientBorder({ borderWidth: 2, borderRadius: '2xl' }) }}
-      fontFamily="heading"
-      variant="primary"
-      size="medium"
-      w="100%"
-      onClick={connectModal.onOpen}
-    >
-      Connect wallet
-    </Button>
-  )
-}
 
 const spinAnimation = (time = 3) =>
   `${keyframes({
