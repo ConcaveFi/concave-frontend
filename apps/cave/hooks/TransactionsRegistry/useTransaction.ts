@@ -39,7 +39,9 @@ export const useTransaction = (
     try {
       const transaction = await doTx()
       tx.current = transaction
-      registerTransaction(transaction, extra.meta)
+      if (extra.meta) {
+        registerTransaction(transaction, extra.meta)
+      }
     } catch (e) {
       if (e[`code`] !== 4001) {
         onError?.(e)
