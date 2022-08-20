@@ -14,7 +14,6 @@ export const BuyButton = (props: BuyButtonProps) => {
     )
   }
   return (
-    //@ts-ignore
     <Card __css={card}>
       <HStack justifyContent={`space-between`} justifyItems="center">
         {SideElement}

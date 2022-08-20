@@ -62,9 +62,9 @@ export const getTransactionStatusLabel = ({ status, meta }: Partial<TrackedTrans
         error: `Failed to list #${tokenId}`,
       }),
       'offer marketplace': ({ tokenId }) => ({
-        pending: `Making an offer for position #${tokenId}`,
-        success: `Successfully offer to #${tokenId}`,
-        error: `Failed to make a offer to #${tokenId}`,
+        pending: `Purchasing position #${tokenId}`,
+        success: `Successfully purchased position #${tokenId}`,
+        error: `Failed to purchased position #${tokenId}`,
       }),
       fallback,
     })[meta?.type] || fallback

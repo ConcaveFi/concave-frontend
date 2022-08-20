@@ -1,5 +1,5 @@
 import { Box, Flex, Image, Popover, PopoverContent, PopoverTrigger, Text } from '@chakra-ui/react'
-import { CurrencyAmount, FIXED_ORDER_MARKET_CONTRACT, NATIVE, Percent } from '@concave/core'
+import { Currency, CurrencyAmount, MARKETPLACE_CONTRACT, NATIVE, Percent } from '@concave/core'
 import { LockedIcon, UnlockedIcon } from '@concave/icons'
 import { FixedOrderMarketContract, StakingPosition } from '@concave/marketplace'
 import { FlexProps, gradientBorder, HStack, Spinner } from '@concave/ui'
@@ -13,6 +13,7 @@ import { concaveProvider } from 'lib/providers'
 import { useMemo, useState } from 'react'
 import { compactFormat, formatFixed } from 'utils/formatFixed'
 import { useAccount, useSigner } from 'wagmi'
+import { ConfirmPurchaseModal } from './ConfirmBuy'
 
 const border = gradientBorder({ borderWidth: 2 })
 
@@ -29,7 +30,7 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakin
   const [active, setActive] = useState(false)
 
   return (
-    <Popover placement="right" trigger="hover">
+    <Popover trigger="hover">
       <PopoverTrigger>
         <Flex
           width={'full'}
@@ -51,15 +52,27 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakin
           onMouseOver={() => setActive(true)}
           onMouseLeave={() => setActive(false)}
         >
-          <HStack align="center" gap={0} width={'full'} justify="space-between">
-            <ImageContainer w={'250px'} h={'60px'} stakingPosition={stakingPosition} px={4} />
+          <HStack
+            align="center"
+            textAlign={'center'}
+            alignContent={`center`}
+            gap={2}
+            width={'full'}
+            justify="space-evenly"
+            flexWrap={`wrap`}
+          >
+            <ImageContainer
+              w={['100%', '100%', '100%', '250px']}
+              h={'60px'}
+              stakingPosition={stakingPosition}
+              px={4}
+            />
             <Info title="Current value" info={`${currentValue} CNV`} />
             <Info
               title="Discount"
+              color={discount.discount > 0 ? '#7AF0CD' : `red.700`}
               info={
-                discount.discount
-                  ? `${formatFixed(discount.discount, { decimals: 2, places: 0 })}%`
-                  : '-'
+                discount.discount ? `${compactFormat(discount.discount, { decimals: 2 })}%` : '-'
               }
               isLoading={discount.isLoading}
             />
@@ -154,7 +167,7 @@ const BuyContainer = ({ stakingPosition, active = false }: BuyContainerProps) =>
     { meta: { type: 'offer marketplace', tokenId: +tokenId.toString() }, onError: console.error },
   )
 
-  const useCurrencyState = useCurrencyButtonState(price, FIXED_ORDER_MARKET_CONTRACT[chainId], {
+  const useCurrencyState = useCurrencyButtonState(price, MARKETPLACE_CONTRACT[chainId], {
     amountInfo: true,
   })
 
@@ -162,7 +175,8 @@ const BuyContainer = ({ stakingPosition, active = false }: BuyContainerProps) =>
     if (account.address === stakingPosition.market.seller)
       return {
         children: 'Your listing',
-        disabled: false,
+        disabled: true,
+        showPrice: true,
         variant: 'primary.outline',
         fontSize: '14px',
       }
@@ -174,6 +188,7 @@ const BuyContainer = ({ stakingPosition, active = false }: BuyContainerProps) =>
     if (swap.isError) return { children: 'Unavailable', disabled: true }
     if (useCurrencyState.approved) {
       return {
+        showPrice: true,
         onClick: swap.sendTx,
         children: 'Buy',
         fontSize: 'lg',
@@ -183,6 +198,7 @@ const BuyContainer = ({ stakingPosition, active = false }: BuyContainerProps) =>
     if (useCurrencyState.state === 'default')
       return {
         ...useCurrencyState.buttonProps,
+        showPrice: true,
         fontSize: '14px',
       }
 
@@ -202,41 +218,50 @@ const BuyContainer = ({ stakingPosition, active = false }: BuyContainerProps) =>
     useCurrencyState.state,
   ])
   return (
-    <BuyButton
-      boxShadow={'Up Big'}
-      shadow="up"
-      variant={active ? 'primary' : 'primary.outline'}
-      colorScheme={'brighter'}
-      w={`180px`}
-      size={`md`}
-      {...buttonProps}
-    >
-      {buttonProps[`children`]}
-      {buttonProps[`disabled`] ? null : (
-        <Flex w={`full`} direction={'column'} fontWeight={'bold'}>
-          <Box>
-            <Text fontSize={'12px'} color="text.low" mr={`auto`}>
-              Price
-            </Text>
-            <Text
-              fontSize={'14px'}
-              noOfLines={1}
-              title={
-                formatFixed(price.quotient.toString(), {
-                  ...currency,
-                  places: 6,
-                }) + ` ${currency.symbol}`
-              }
-            >
-              {compactFormat(price.quotient.toString(), currency) + ` ${currency.symbol}`}
-            </Text>
-          </Box>
-        </Flex>
-      )}
-    </BuyButton>
+    <>
+      <ConfirmPurchaseModal isOpen={swap.isWaitingForConfirmation} staking={stakingPosition} />
+      <BuyButton
+        boxShadow={'Up Big'}
+        shadow="up"
+        variant={active ? 'primary' : 'primary.outline'}
+        colorScheme={'brighter'}
+        w={['100%', '150px', '180px']}
+        size={`md`}
+        {...buttonProps}
+      >
+        {buttonProps[`children`]}
+        {buttonProps[`showPrice`] ? <PriceComponent price={price} /> : null}
+      </BuyButton>
+    </>
   )
 }
 
+const PriceComponent = ({ price }: { price: CurrencyAmount<Currency> }) => {
+  const currency = price.currency
+  const value = price.quotient
+
+  return (
+    <Flex w={`full`} direction={'column'} fontWeight={'bold'}>
+      <Box>
+        <Text fontSize={'12px'} color="text.low" mr={`auto`}>
+          Price
+        </Text>
+        <Text
+          fontSize={'14px'}
+          noOfLines={1}
+          title={
+            formatFixed(value.toString(), {
+              ...currency,
+              places: 6,
+            }) + ` ${currency.symbol}`
+          }
+        >
+          {`${compactFormat(value.toString(), currency)} ${currency.symbol}`}
+        </Text>
+      </Box>
+    </Flex>
+  )
+}
 type LoadBarProps = { percent: Percent; date: string; relativeDate: string }
 const LoadBard = ({ percent, date, relativeDate }: LoadBarProps) => {
   return (
@@ -265,12 +290,12 @@ const LoadBard = ({ percent, date, relativeDate }: LoadBarProps) => {
   )
 }
 type InfoProps = { title: string; info: string; isLoading?: boolean }
-const Info = ({ info, title, isLoading, ...flexProps }: InfoProps & FlexProps) => (
+const Info = ({ info, title, isLoading, color, ...flexProps }: InfoProps & FlexProps) => (
   <Flex direction={'column'} align="center" {...flexProps}>
     <Text fontSize={'xs'} color="text.low">
       {title}
     </Text>
-    <Text fontWeight={'bold'} fontSize={'sm'}>
+    <Text color={color} fontWeight={'bold'} fontSize={'sm'}>
       {isLoading && <Spinner size="xs" />}
       {info}
     </Text>
