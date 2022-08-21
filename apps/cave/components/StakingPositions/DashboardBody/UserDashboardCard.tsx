@@ -41,11 +41,10 @@ export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePo
       <Flex
         gap={2}
         direction={'column'}
-        shadow={{ base: '', md: 'down' }}
         maxW={{ lg: '760px', md: '580px', base: '358px' }}
         justify="center"
         rounded={'2xl'}
-        apply={{ base: '', md: 'background.metalBrighter' }}
+        apply={'background.metal'}
       >
         <Flex justify="center" px={4} pt={4} position={'relative'}>
           <UserDividendCard isLoading={isLoading} totalLocked={totalLocked} />
@@ -68,9 +67,9 @@ export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePo
             overflowY={'scroll'}
             overflowX="hidden"
             borderRadius="xl"
-            px={{ base: 0, md: '0.5rem' }}
-            mx={{ base: 0, md: 4 }}
-            shadow={{ base: '', md: 'down' }}
+            px={'0.5rem'}
+            mx={4}
+            shadow={'down'}
             apply="scrollbar.big"
             mb={3}
           >

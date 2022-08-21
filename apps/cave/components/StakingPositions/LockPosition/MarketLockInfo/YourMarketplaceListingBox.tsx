@@ -99,14 +99,35 @@ export const MarketListing = ({ stakingPosition }: { stakingPosition: StakingPos
 
   return (
     <Flex direction={'column'} height="full" position={'relative'}>
-      <Flex boxSize={'full'} p={3} justify="space-between" align={'center'}>
+      <Flex
+        direction={{ base: 'column', md: 'row' }}
+        boxSize={'full'}
+        p={3}
+        gap={{ base: 3, md: 0 }}
+        justify="space-between"
+        align={'center'}
+      >
         <Text fontSize={'lg'} fontWeight={'bold'} color="text.low">
           Marketplace:
         </Text>
-        <Info title="Token Id" info={stakingPosition.tokenId.toString()} />
-        <Info title="List price" info={listPrice} />
-        <Info title="Discount" info={discountText} />
-        <Info title="Expiration date" info={market?.isListed ? auctionEnd : '--.--.--'} />
+        <Flex justify={'space-between'} w="80%">
+          <Flex
+            flex={{ base: '', md: 1 }}
+            justify={'space-around'}
+            direction={{ base: 'column', md: 'row' }}
+          >
+            <Info title="Token Id" info={stakingPosition.tokenId.toString()} />
+            <Info title="List price" info={listPrice} />
+          </Flex>
+          <Flex
+            flex={{ base: '', md: 1 }}
+            justify={'space-around'}
+            direction={{ base: 'column', md: 'row' }}
+          >
+            <Info title="Discount" info={discountText} />
+            <Info title="Expiration date" info={market?.isListed ? auctionEnd : '--.--.--'} />
+          </Flex>
+        </Flex>
         <Button
           height={'50px'}
           variant={'primary'}

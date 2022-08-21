@@ -1,5 +1,5 @@
 import { Currency, CurrencyAmount } from '@concave/core'
-import { Button, ButtonProps, Flex, Spinner, Text, useBreakpointValue } from '@concave/ui'
+import { Button, ButtonProps, Flex, Spinner, Text } from '@concave/ui'
 
 interface UserDividendCardProps {
   totalLocked: CurrencyAmount<Currency>
@@ -7,9 +7,6 @@ interface UserDividendCardProps {
 }
 export const UserDividendCard = (props: UserDividendCardProps) => {
   const { totalLocked } = props
-  const mobileLayout = useBreakpointValue({ base: true, md: false })
-  const mediumLayout = useBreakpointValue({ base: false, md: true, lg: false })
-  const largeLayout = useBreakpointValue({ base: false, lg: true })
   return (
     <Flex direction={'column'} w="full">
       <Text
@@ -24,7 +21,6 @@ export const UserDividendCard = (props: UserDividendCardProps) => {
         Your dividends share
       </Text>
       <Flex
-        apply={mobileLayout && 'background.glass'}
         borderRadius="2xl"
         shadow={'down'}
         width="full"

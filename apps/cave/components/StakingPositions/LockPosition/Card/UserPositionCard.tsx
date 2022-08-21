@@ -26,7 +26,7 @@ export const UserPositionCard = (props: NftPositionCardProps) => {
       <PopoverTrigger>
         <Flex
           w={'full'}
-          height="200px"
+          minH="200px"
           rounded={'2xl'}
           bg="url(assets/textures/metal.png), linear-gradient(180deg, #16222E 0.07%, #28394D 80.07%)"
           bgSize={'120px auto'}

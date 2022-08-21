@@ -1,17 +1,7 @@
 import { Percent } from '@concave/core'
 import { LockedIcon, UnlockedIcon } from '@concave/icons'
 import { StakingPosition, StakingV1Contract } from '@concave/marketplace'
-import {
-  Box,
-  Button,
-  ButtonProps,
-  Flex,
-  FlexProps,
-  HStack,
-  Image,
-  Spinner,
-  Text,
-} from '@concave/ui'
+import { Box, Button, Flex, FlexProps, HStack, Image, Spinner, Text } from '@concave/ui'
 import { differenceInDays } from 'date-fns'
 import { BigNumber, Transaction } from 'ethers'
 import { formatEther } from 'ethers/lib/utils'
@@ -82,6 +72,7 @@ export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
         }, 3000)
       })
   }
+
   return (
     <Flex
       shadow={
@@ -89,32 +80,37 @@ export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
       }
       bg="url(assets/textures/metal.png), linear-gradient(180deg, #16222E 0.07%, #28394D 80.07%)"
       bgSize={'120px auto'}
-      height="54%"
+      // minHeight="54%"
       width={'full'}
       rounded="2xl"
       p={3}
       direction="column"
     >
-      <Flex width={'full'} justify="space-between" mb={2} align="center">
-        <ImageContainer src={`/assets/marketplace/${imgNameByPeriod}`} period={period} />
-        <Flex>
-          <Info
-            minW={'110px'}
-            title="Initial"
-            info={`${bigNumberMask(stakingPosition.initialValue)} CNV`}
+      <Flex
+        width={'full'}
+        justify="space-between"
+        mb={2}
+        align="center"
+        direction={{ base: 'column', md: 'row' }}
+      >
+        <ImageContainer src={`/assets/marketplace/${imgNameByPeriod}`} period={period}>
+          <Button
+            display={{ base: 'flex', md: 'none' }}
+            w={'90px'}
+            py={4}
+            px={4}
+            onClick={redeem}
+            {...getRedeemButtonProps(readyForReedem, status)}
           />
-          <Info
-            minW={'110px'}
-            title="Gained"
-            info={`${bigNumberMask(stakingPosition.totalRewards)} CNV`}
-          />
-          <Info
-            minW={'110px'}
-            title="Current value"
-            info={`${bigNumberMask(stakingPosition.currentValue)} CNV`}
-          />
+        </ImageContainer>
+        <Flex w="full" justify="space-around">
+          <Info title="Initial" info={`${bigNumberMask(stakingPosition.initialValue)} CNV`} />
+          <Info title="Gained" info={`${bigNumberMask(stakingPosition.totalRewards)} CNV`} />
+          <Info title="Current value" info={`${bigNumberMask(stakingPosition.currentValue)} CNV`} />
         </Flex>
+
         <Button
+          display={{ base: 'none', md: 'flex' }}
           w={'150px'}
           py={4}
           px={4}
@@ -126,12 +122,6 @@ export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
     </Flex>
   )
 }
-
-const RedeemButton: FC<ButtonProps> = () => (
-  <Button w={'150px'} py={4} px={4} variant="primary" disabled>
-    Not Redeemable
-  </Button>
-)
 
 type InfoProps = { title: string; info: string }
 const Info: FC<InfoProps & FlexProps> = ({ info, title, ...props }) => (
@@ -145,19 +135,20 @@ const Info: FC<InfoProps & FlexProps> = ({ info, title, ...props }) => (
   </Flex>
 )
 
-type ImageContainerProps = { period: string; src: string }
-const ImageContainer: FC<ImageContainerProps> = ({ period, src }) => (
+type ImageContainerProps = { period: string; src: string; children?: JSX.Element }
+const ImageContainer: FC<ImageContainerProps> = ({ period, src, children }) => (
   <Flex
-    w={'150px'}
+    minW={'150px'}
+    width={{ base: 'full', md: '150px' }}
     px={4}
-    justify={'center'}
-    maxH="60px"
+    justify={{ base: 'space-around', md: 'center' }}
     shadow={'Down Medium'}
     align="center"
     rounded={'2xl'}
   >
     <Image ml={-5} boxSize={'70px'} src={src} alt={period} />
     <Info title="Stake period" info={period} />
+    {children}
   </Flex>
 )
 type LoadBarProps = { percent: Percent }

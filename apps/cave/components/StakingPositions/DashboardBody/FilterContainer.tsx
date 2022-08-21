@@ -1,4 +1,4 @@
-import { Flex, Text, useBreakpointValue } from '@concave/ui'
+import { Flex, Text } from '@concave/ui'
 import { RangeFilter } from 'components/NftFilters/Filters/hooks/useFilterByRange'
 import { StakePoolFilterEnum } from 'components/NftFilters/Filters/hooks/useFilterByStakePool'
 import { InitialCNVFilter } from 'components/NftFilters/Filters/InitialCNVFilter'
@@ -27,19 +27,16 @@ export function FilterContainer({
   stakePoolFilters,
   currentInitalCNVFilter,
 }: FilterContainerProps) {
-  const mobileUI = useBreakpointValue({ base: true, md: false })
   return (
     <Flex
       rounded={'2xl'}
       py="6"
-      shadow={{ base: 'up', md: 'none' }}
       width="full"
       direction={{ base: 'column', md: 'row' }}
       justify={'space-between'}
       px={4}
       gap={{ base: 4 }}
       my={2}
-      apply={mobileUI && 'background.metal'}
     >
       <Flex align="center " gap={2} fontWeight={'bold'}>
         <Text textColor="text.low">Filter by:</Text>
