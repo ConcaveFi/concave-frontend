@@ -1,6 +1,14 @@
 import { DAI, MARKETPLACE_CONTRACT } from '@concave/core'
 import { MarketItem, StakingPosition } from '@concave/marketplace'
-import { Button, ButtonProps, Flex, FlexProps, Text } from '@concave/ui'
+import {
+  Button,
+  ButtonProps,
+  Flex,
+  FlexProps,
+  Text,
+  useBreakpointValue,
+  useDisclosure,
+} from '@concave/ui'
 import { formatDistanceToNow } from 'date-fns'
 import { BigNumber } from 'ethers'
 import { useApproveForAll } from 'hooks/useApprove'
@@ -83,6 +91,7 @@ export const MarketListing = ({ stakingPosition }: { stakingPosition: StakingPos
   const tmp = generateDefaultMarket(stakingPosition).new({ seller: account.address, signature: '' })
   const [market, setMarket] = useState(tmp.new())
   const buttonState = getMarketPlaceButtonProps({ ...marketItemState, market })
+  const { isOpen, onToggle } = useDisclosure()
   const auctionEnd = formatDistanceToNow(new Date(+market?.deadline.toString() * 1000), {
     addSuffix: false,
   })
@@ -97,45 +106,64 @@ export const MarketListing = ({ stakingPosition }: { stakingPosition: StakingPos
     ? `${formatFixed(discount.discount || BigNumber.from(0), { decimals: 2 })} %`
     : '---'
 
+  const layoutIsMobile = useBreakpointValue({ base: true, md: false })
   return (
     <Flex direction={'column'} height="full" position={'relative'}>
       <Flex
-        direction={{ base: 'column', md: 'row' }}
+        direction={{ base: 'column-reverse', md: 'row' }}
         boxSize={'full'}
         p={3}
-        gap={{ base: 3, md: 0 }}
+        gap={{ base: 0, md: 0 }}
         justify="space-between"
         align={'center'}
       >
-        <Text fontSize={'lg'} fontWeight={'bold'} color="text.low">
-          Marketplace:
+        <Text
+          onClick={layoutIsMobile && onToggle}
+          cursor={'pointer'}
+          fontSize={'lg'}
+          fontWeight={'bold'}
+          color="text.low"
+        >
+          {layoutIsMobile && `Marketplace`}
+          {!layoutIsMobile && `Marketplace:`}
         </Text>
-        <Flex justify={'space-between'} w="80%">
-          <Flex
-            flex={{ base: '', md: 1 }}
-            justify={'space-around'}
-            direction={{ base: 'column', md: 'row' }}
-          >
-            <Info title="Token Id" info={stakingPosition.tokenId.toString()} />
-            <Info title="List price" info={listPrice} />
+        <Flex
+          gap={{ base: 3, md: 0 }}
+          align={'center'}
+          direction={{ base: 'column', md: 'row' }}
+          h={{ base: isOpen ? '150px' : '0px', md: '50px' }}
+          overflow={{ base: !isOpen && 'hidden', md: 'visible' }}
+          w="80%"
+          transition={'.3s all'}
+        >
+          <Flex justify={'space-between'} w="full">
+            <Flex
+              flex={{ base: '', md: 1 }}
+              justify={'space-around'}
+              direction={{ base: 'column', md: 'row' }}
+            >
+              <Info title="Token Id" info={stakingPosition.tokenId.toString()} />
+              <Info title="List price" info={listPrice} />
+            </Flex>
+            <Flex
+              flex={{ base: '', md: 1 }}
+              justify={'space-around'}
+              direction={{ base: 'column', md: 'row' }}
+            >
+              <Info title="Discount" info={discountText} />
+              <Info title="Expiration date" info={market?.isListed ? auctionEnd : '--.--.--'} />
+            </Flex>
           </Flex>
-          <Flex
-            flex={{ base: '', md: 1 }}
-            justify={'space-around'}
-            direction={{ base: 'column', md: 'row' }}
-          >
-            <Info title="Discount" info={discountText} />
-            <Info title="Expiration date" info={market?.isListed ? auctionEnd : '--.--.--'} />
-          </Flex>
+          <Button
+            height={{ base: '40px', md: '50px' }}
+            variant={'primary'}
+            minW={{ base: '200px', md: '110px' }}
+            maxW={{ base: '200px', md: '110px' }}
+            size={'sm'}
+            width={'full'}
+            {...buttonState}
+          />
         </Flex>
-        <Button
-          height={'50px'}
-          variant={'primary'}
-          w="150px"
-          size={'sm'}
-          width={'full'}
-          {...buttonState}
-        />
       </Flex>
       <SaleModal
         staking={stakingPosition}

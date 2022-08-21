@@ -111,9 +111,8 @@ export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
 
         <Button
           display={{ base: 'none', md: 'flex' }}
-          w={'150px'}
+          minW={'110px'}
           py={4}
-          px={4}
           onClick={redeem}
           {...getRedeemButtonProps(readyForReedem, status)}
         />

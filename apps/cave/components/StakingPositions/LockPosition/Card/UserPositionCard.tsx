@@ -50,7 +50,7 @@ export const UserPositionCard = (props: NftPositionCardProps) => {
         <Flex
           w={'290px'}
           h="100px"
-          apply="background.glass"
+          apply="background.glassHQ"
           rounded={'2xl'}
           sx={{ ...gradientBorder({ borderWidth: 2 }) }}
         >
