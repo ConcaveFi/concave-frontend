@@ -32,6 +32,8 @@ export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePo
   const [rangeFilter, setRangeFilter] = useState<RangeFilter>({})
   const { filterByRange } = useFilterByRange(rangeFilter)
 
+  const [tokenIdFilter, setTokenIdFilter] = useState<number>()
+
   const [sort, setSort] = useState<NftSort>({ sort: 'REDEEM_DATE', order: 'ASC' })
   const sortFunction = sort ? positionSorter.data?.[sort.sort][sort.order] : () => 0
   if (!positionSorter.data) {
@@ -48,37 +50,46 @@ export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePo
         rounded={'2xl'}
         apply={'background.metal'}
       >
-        <Flex direction={'column'} align="center" px={4} pt={4} position={'relative'}>
-          <Button
-            color="text.low"
-            shadow={'up'}
-            px={4}
-            py={2}
-            rounded="2xl"
-            sx={{ ...gradientBorder({ variant: 'secondary' }) }}
-            onClick={() => router.push('/marketplace')}
-            mb={-10}
-            alignSelf={{ base: 'end', md: 'end' }}
-          >
-            <ChevronLeftIcon boxSize={{ base: '20px', md: '30px' }} />
-            <Text variant={'ParagraphBold'} fontSize={{ base: 'sm', md: 'lg' }}>
-              Marketplace
-            </Text>
-          </Button>
-          <UserDividendCard isLoading={isLoading} totalLocked={totalLocked} />
+        <Flex
+          direction={'column'}
+          shadow="up"
+          rounded={'2xl'}
+          pb={2}
+          sx={{ ...gradientBorder({ variant: 'secondary' }) }}
+        >
+          <Flex direction={'column'} align="center" px={4} pt={4} position={'relative'}>
+            <Button
+              color="text.low"
+              shadow={'up'}
+              px={4}
+              py={2}
+              rounded="2xl"
+              sx={{ ...gradientBorder({ variant: 'secondary' }) }}
+              onClick={() => router.push('/marketplace')}
+              mb={-10}
+              alignSelf={{ base: 'end', md: 'end' }}
+            >
+              <ChevronLeftIcon boxSize={{ base: '20px', md: '30px' }} />
+              <Text variant={'ParagraphBold'} fontSize={{ base: 'sm', md: 'lg' }}>
+                Marketplace
+              </Text>
+            </Button>
+            <UserDividendCard isLoading={isLoading} totalLocked={totalLocked} />
+          </Flex>
+          <FilterContainer
+            onChangeTokenIdFilter={setTokenIdFilter}
+            onResetStakeFilters={setStakeFilters}
+            stakePoolFilters={stakeFilters}
+            tokenIdFilter={tokenIdFilter}
+            currentInitalCNVFilter={rangeFilter}
+            onChangeInitialCNVFilter={setRangeFilter}
+            onChangeSort={(sort) => setSort(sort)}
+            onToggleStakeFilter={(filter, type) => {
+              if (type === 'enable') setStakeFilters([...stakeFilters, filter])
+              else setStakeFilters(stakeFilters.filter((stakeFilter) => stakeFilter !== filter))
+            }}
+          />
         </Flex>
-        <FilterContainer
-          onResetStakeFilters={setStakeFilters}
-          stakePoolFilters={stakeFilters}
-          currentInitalCNVFilter={rangeFilter}
-          onApplyInitalCNVFilter={setRangeFilter}
-          onResetInitialCNVFilter={() => setRangeFilter({})}
-          onChangeSort={(sort) => setSort(sort)}
-          onEnableStakeFilter={(filter) => setStakeFilters([...stakeFilters, filter])}
-          onDisableStakeFilter={(disabledFilter) =>
-            setStakeFilters(stakeFilters.filter((stakeFilter) => stakeFilter !== disabledFilter))
-          }
-        />
         <Collapse in={hasPositions}>
           <Box
             maxH={{ lg: '675px', md: '740px', base: '800px' }}
@@ -94,6 +105,10 @@ export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePo
             {userNonFungibleTokensInfo
               .filter(filterByStakePool)
               .filter(filterByRange)
+              .filter((position) => {
+                if (!tokenIdFilter) return true
+                return position.tokenId === tokenIdFilter
+              })
               .sort(sortFunction)
               .map((nonFungibleTokenInfo) => (
                 <UserPositionCard

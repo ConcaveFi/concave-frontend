@@ -118,7 +118,7 @@ export const MarketListing = ({ stakingPosition }: { stakingPosition: StakingPos
         align={'center'}
       >
         <Text
-          onClick={layoutIsMobile && onToggle}
+          onClick={layoutIsMobile ? onToggle : undefined}
           cursor={'pointer'}
           fontSize={'lg'}
           fontWeight={'bold'}
