@@ -6,7 +6,7 @@ import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
 import { useEffect, useState } from 'react'
-import { formatFixed } from 'utils/BigNumberMasks'
+import { formatFixed } from 'utils/bigNumberMasks'
 import { useAccount, useSigner, useWaitForTransaction } from 'wagmi'
 
 const bigNumberMask = (number: BigNumber) => {

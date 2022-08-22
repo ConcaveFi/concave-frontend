@@ -1,5 +1,5 @@
 import { BigNumber } from 'ethers'
-import { compactFormat, formatFixed } from '../../utils/BigNumberMasks'
+import { compactFormat, formatFixed } from '../../utils/bigNumberMasks'
 
 describe('test numberMask', () => {
   it('test with string', async () => {

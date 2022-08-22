@@ -7,7 +7,7 @@ import {
   useGet_Stakingv1_Last100_LockQuery,
 } from 'graphql/generated/graphql'
 import { useEffect, useState } from 'react'
-import { formatFixed } from 'utils/BigNumberMasks'
+import { formatFixed } from 'utils/bigNumberMasks'
 
 export const LiquidLocksCards = () => {
   const [stakingLocks, setStakingLocks] = useState<

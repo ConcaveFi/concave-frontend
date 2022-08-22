@@ -2,9 +2,9 @@ import { CNV } from '@concave/core'
 import { StakingPosition } from '@concave/marketplace'
 import { Flex, HStack, Modal, Spinner, Text, VStack } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
-import { usePositionDiscount } from 'components/StakingPositions/LockPosition/MarketLockInfo/usePositionDiscount'
+import { usePositionDiscount } from 'components/StakingPositions/LockPosition/MarketLockInfo/hooks/usePositionDiscount'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { formatFixed } from 'utils/BigNumberMasks'
+import { formatFixed } from 'utils/bigNumberMasks'
 
 export const ConfirmPurchaseModal = ({
   staking,

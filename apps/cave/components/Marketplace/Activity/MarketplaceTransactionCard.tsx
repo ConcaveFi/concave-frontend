@@ -6,7 +6,7 @@ import { formatDistanceToNowStrict } from 'date-fns'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useFetchTokenData } from 'hooks/useTokenList'
 import { useEffect, useState } from 'react'
-import { compactFormat } from 'utils/BigNumberMasks'
+import { compactFormat } from 'utils/bigNumberMasks'
 import { chain } from 'wagmi'
 import { Data } from './MarketplaceActivityCard'
 interface MarketplaceTransactionCardProps {

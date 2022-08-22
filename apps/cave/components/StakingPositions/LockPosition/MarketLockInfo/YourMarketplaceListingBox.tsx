@@ -5,11 +5,11 @@ import { formatDistanceToNow } from 'date-fns'
 import { BigNumber } from 'ethers'
 import { useApproveForAll } from 'hooks/useApprove'
 import { useState } from 'react'
-import { formatFixed } from 'utils/BigNumberMasks'
+import { formatFixed } from 'utils/bigNumberMasks'
 import { useAccount } from 'wagmi'
 import { Info } from '../Redeem/RedeemViewer'
 import { SaleModal } from './SellPositionModal'
-import { usePositionDiscount } from './usePositionDiscount'
+import { usePositionDiscount } from './hooks/usePositionDiscount'
 
 export type UserMarketInfoState = ReturnType<typeof useYourMarketPlaceListing>
 export const useYourMarketPlaceListing = ({
