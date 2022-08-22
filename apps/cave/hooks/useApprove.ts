@@ -118,13 +118,20 @@ export const useApproveForAll = (props: {
   const { data: signer } = useSigner()
   const chainId = useCurrentSupportedNetworkId()
 
-  const approveTx = useTransaction(() => {
-    const contract = new StakingV1Contract(concaveProvider(chainId))
-    return contract.setApprovalForAll(signer, props.operator, props.approved)
-  })
+  const approveTx = useTransaction(
+    () => {
+      const contract = new StakingV1Contract(concaveProvider(chainId))
+      return contract.setApprovalForAll(signer, props.operator, props.approved)
+    },
+    {
+      onSuccess: (tx) => {
+        approve.refetch()
+      },
+    },
+  )
 
   return {
-    isLoading: approve.isLoading,
+    isLoading: approve.isLoading || approve.isRefetching,
     isOK: !approve.isLoading && !!approve.data === props.approved,
     ...approveTx,
   }
