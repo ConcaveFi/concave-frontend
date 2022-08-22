@@ -8,7 +8,7 @@ import { formatEther } from 'ethers/lib/utils'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { formatFixed } from 'utils/formatFixed'
 import { useAccount, useSigner, useWaitForTransaction } from 'wagmi'
 import { NFTPositionHeaderProps, useNFTLockedPositionState } from './useNFTPositionViewer'
@@ -43,6 +43,19 @@ export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
     hash: recentRedeemed?.tx?.hash,
   })
 
+  useEffect(() => {
+    if (recentRedeemed) {
+      if (txStatus === 'loading') setStatus('waitingTx')
+      else if (txStatus === 'error' || txStatus === 'success') {
+        const { [+tokenId.toString()]: finishedTransaction, ...transactions } =
+          getRecentRedeemedTransactions()
+        localStorage.setItem('positionsRedeemed', JSON.stringify(transactions))
+        if (txStatus === 'success') setStatus('redeemed')
+        else if (txStatus === 'error') setStatus('default')
+      }
+    }
+  }, [txStatus])
+
   const redeem = () => {
     const stakingContract = new StakingV1Contract(concaveProvider(chainId))
     setStatus('approve')
@@ -75,12 +88,9 @@ export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
 
   return (
     <Flex
-      shadow={
-        '0px 5px 14px rgba(0, 0, 0, 0.47), 4px -7px 15px rgba(174, 177, 255, 0.15), inset -1px 1px 2px rgba(128, 186, 255, 0.4)'
-      }
+      shadow="up"
       bg="url(assets/textures/metal.png), linear-gradient(180deg, #16222E 0.07%, #28394D 80.07%)"
       bgSize={'120px auto'}
-      // minHeight="54%"
       width={'full'}
       rounded="2xl"
       p={3}
@@ -97,7 +107,7 @@ export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
           <Button
             display={{ base: 'flex', md: 'none' }}
             w={'90px'}
-            py={4}
+            py={!readyForReedem ? 3 : 4}
             px={4}
             onClick={redeem}
             {...getRedeemButtonProps(readyForReedem, status)}
@@ -128,7 +138,7 @@ const Info: FC<InfoProps & FlexProps> = ({ info, title, ...props }) => (
     <Text fontSize="xs" color={'text.low'}>
       {title}
     </Text>
-    <Text fontSize="sm" fontWeight={'bold'}>
+    <Text fontSize={{ base: 'xs', lg: 'sm' }} fontWeight={'bold'}>
       {info}
     </Text>
   </Flex>
@@ -190,21 +200,44 @@ function getRecentRedeemedTransactions() {
 const getRedeemButtonProps = (readyForRedeem: boolean, status: RedeemedStatus) => {
   const defaultState = status === 'default'
   const buttonLabels = {
-    default: !readyForRedeem ? 'Not redeemable' : 'Redeem',
+    default: !readyForRedeem ? (
+      <Text fontSize={'xs'}>
+        Not <br /> redeemable
+      </Text>
+    ) : (
+      'Redeem'
+    ),
     approve: (
-      <Flex gap={1}>
-        <Text>{'Pending approval'}</Text>
+      <Flex gap={1} align="center">
+        <Text fontSize={'xs'}>
+          Pending <br /> approval
+        </Text>
         <Spinner size={'sm'} />
       </Flex>
     ),
     waitingTx: (
-      <Flex gap={2}>
-        <Text>{'Waiting transaction'}</Text>
+      <Flex gap={2} align="center">
+        <Text fontSize={'xs'}>
+          Waiting for <br /> transaction
+        </Text>
+        <Spinner size={'sm'} />
       </Flex>
     ),
-    rejected: 'Transaction rejected',
-    error: 'Ocurred an error',
-    redeemed: 'Transaction redeemed',
+    rejected: (
+      <Text fontSize={'xs'}>
+        Transaction <br /> rejected
+      </Text>
+    ),
+    error: (
+      <Text fontSize={'xs'}>
+        Ocurred an <br /> error
+      </Text>
+    ),
+    redeemed: (
+      <Text fontSize={'xs'}>
+        Transaction <br /> redeemed
+      </Text>
+    ),
   }
 
   return {

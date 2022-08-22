@@ -1,5 +1,5 @@
 import { Currency, CurrencyAmount } from '@concave/core'
-import { Button, ButtonProps, Flex, Spinner, Text } from '@concave/ui'
+import { Button, ButtonProps, Flex, gradientBorder, Spinner, Text } from '@concave/ui'
 
 interface UserDividendCardProps {
   totalLocked: CurrencyAmount<Currency>
@@ -8,33 +8,49 @@ interface UserDividendCardProps {
 export const UserDividendCard = (props: UserDividendCardProps) => {
   const { totalLocked } = props
   return (
-    <Flex direction={'column'} w="full">
+    <Flex direction={'column'} w="100%">
       <Text
         textAlign={'start'}
-        ml={{ lg: 6, md: 12 }}
-        mx={{ base: 'auto', md: 'none' }}
+        ml={{ base: 0, lg: 6, md: 8 }}
         textColor={'text.low'}
         fontSize={'lg'}
         fontWeight={'bold'}
-        my={5}
+        my={3}
       >
         Your dividends share
       </Text>
       <Flex
         borderRadius="2xl"
-        shadow={'down'}
+        shadow={'up'}
+        apply="background.metal(ALT)"
         width="full"
-        py={6}
+        py={{ base: 3, lg: 6 }}
         px={4}
-        justify={'space-between'}
-        gap={{ base: 4 }}
+        gap={4}
         overflow="hidden"
-        wrap={'wrap'}
+        sx={{ ...gradientBorder({ variant: 'secondary', borderWidth: 2 }) }}
+        direction={{ base: 'column', lg: 'row' }}
       >
-        <Info title="Total locked" label={totalLocked.toFixed(2, { groupSeparator: ',' })} />
-        <Info title="Next dividend date" label="Coming soon" />
-        <Info title="Available dividends" label="0.0" />
-        <Info title="Your dividends share" label="0.0" />
+        <Flex flex={1} justify={'space-around'}>
+          <Flex
+            gap={4}
+            flex={{ base: '', md: 1 }}
+            justify="space-around"
+            direction={{ base: 'column', md: 'row' }}
+          >
+            <Info title="Total locked" label={totalLocked.toFixed(2, { groupSeparator: ',' })} />
+            <Info title="Next dividend date" label="Coming soon" />
+          </Flex>
+          <Flex
+            gap={4}
+            flex={{ base: '', md: 1 }}
+            justify="space-around"
+            direction={{ base: 'column', md: 'row' }}
+          >
+            <Info title="Available dividends" label="0.0" />
+            <Info title="Your dividends share" label="0.0" />
+          </Flex>
+        </Flex>
         <RedeemButton my={'auto'} />
       </Flex>
     </Flex>

@@ -40,6 +40,7 @@ export const SortCard = ({ onChangeSort }: SortCardProps) => {
             boxShadow="up"
             direction="column"
             apply={'background.glass'}
+            css={{ '::after': { opacity: 0.9 } }}
             border="2px solid"
             borderColor={'text.low'}
             overflow={'hidden'}

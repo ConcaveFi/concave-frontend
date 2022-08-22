@@ -30,7 +30,6 @@ export function FilterContainer({
   return (
     <Flex
       rounded={'2xl'}
-      py="6"
       width="full"
       direction={{ base: 'column', md: 'row' }}
       justify={'space-between'}

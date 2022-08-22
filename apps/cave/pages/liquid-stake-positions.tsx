@@ -7,9 +7,21 @@ import { LiquidDashboardHeader } from 'components/StakingPositions/LiquidDashboa
 export function LiquidStakePositions() {
   const stakePosition = useStakePositions()
   return (
-    <Flex align={'center'} justify="start" direction={'column'} width={'full'} textAlign="center">
+    <Flex
+      mx="auto"
+      maxW={{ lg: '760px', md: '580px', base: '358px' }}
+      align={'center'}
+      justify="start"
+      direction={'column'}
+      position="relative"
+      textAlign="center"
+    >
       <LiquidDashboardHeader />
-      <Flex justify={'center'} position="relative">
+      <Flex
+        maxW={{ lg: '760px', md: '580px', base: '358px' }}
+        justify={'center'}
+        position="relative"
+      >
         <UserDashboardCard stakePosition={stakePosition} />
         {/* <DashboardMobile data={data} /> */}
       </Flex>
