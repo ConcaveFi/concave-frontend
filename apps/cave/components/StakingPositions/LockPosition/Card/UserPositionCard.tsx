@@ -22,7 +22,7 @@ export const UserPositionCard = (props: NftPositionCardProps) => {
   const { isOpen, onClose, onOpen } = useDisclosure()
   const redeemable = stakingPosition.maturity <= Date.now() / 1000
   return (
-    <Popover isOpen={isOpen} placement="right">
+    <Popover isOpen={isOpen}>
       <PopoverTrigger>
         <Flex
           w={'full'}
@@ -46,11 +46,12 @@ export const UserPositionCard = (props: NftPositionCardProps) => {
           <MarketListing stakingPosition={stakingPosition} />
         </Flex>
       </PopoverTrigger>
-      <PopoverContent width="20px">
+      <PopoverContent>
         <Flex
           w={'290px'}
           h="100px"
-          apply="background.glassHQ"
+          apply="background.glass"
+          css={{ '::after': { opacity: 1 } }}
           rounded={'2xl'}
           sx={{ ...gradientBorder({ borderWidth: 2 }) }}
         >
