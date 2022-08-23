@@ -161,7 +161,7 @@ export const DesktopConnect = ({ isOpen, onClose }) => {
                   size="medium"
                   justifyContent="start"
                   px={4}
-                  leftIcon={<ConnectorIcon name={connector.name} />}
+                  leftIcon={<ConnectorIcon name={connector.name} rounded="md" />}
                   key={connector.id}
                   onClick={() => connect({ connector, chainId: ChainId.ETHEREUM })}
                 >
