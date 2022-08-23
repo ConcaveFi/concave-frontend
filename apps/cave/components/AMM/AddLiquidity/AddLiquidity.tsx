@@ -9,7 +9,7 @@ import { useAddLiquidityButtonProps } from 'components/AMM/hooks/useAddLiquidity
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
 import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
-import { ConnectButton } from 'components/YourWallet/ConnectWallet'
+import { ConnectButton } from 'components/UserWallet/ConnectButton'
 
 import { WaitingConfirmationDialog } from 'components/TransactionDialog/TransactionWaitingConfirmationDialog'
 import { toAmount } from 'utils/toAmount'
