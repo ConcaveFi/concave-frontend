@@ -3,11 +3,7 @@ import { ButtonProps } from '@concave/ui'
 import { useConnectModal } from 'components/Modals'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useAccount } from 'wagmi'
-<<<<<<<< HEAD:apps/cave/components/AMM/AddLiquidity/hooks/useAddLiquidityButtonProps.ts
 import { NoValidPairsError, UsePairResult } from '../../hooks/usePair'
-========
-import { NoValidPairsError, UsePairResult } from './usePair'
->>>>>>>> 3f7e77a4 (CE 631: Refactor file structure (#490)):apps/cave/components/AMM/hooks/useAddLiquidityButtonProps.ts
 
 export const useAddLiquidityButtonProps = (
   pair: UsePairResult,
