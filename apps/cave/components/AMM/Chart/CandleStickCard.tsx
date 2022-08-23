@@ -9,7 +9,6 @@ import { useCandleStickChart } from '../hooks/useCandleStickChart'
 import { CandleStickTimeOptions } from './CandleStickTimeOptions'
 import { CandleStickTokenOptions } from './CandleStickTokenOptions'
 
-
 const CandleStickChart = dynamic(() => import('./CandleStickChart'), {
   loading: () => <p>Loading ...</p>,
   ssr: false,

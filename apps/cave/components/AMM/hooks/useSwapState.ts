@@ -7,7 +7,6 @@ import { useSwapSettings } from '../Swap/Settings'
 import { useQueryCurrencies } from './useQueryCurrencies'
 import { useTrade } from './useTrade'
 
-
 const makeTradePlaceholder = (exactAmount, otherCurrency, tradeType) =>
   (tradeType === TradeType.EXACT_INPUT
     ? { inputAmount: exactAmount, outputAmount: toAmount(0, otherCurrency) }
