@@ -1,6 +1,6 @@
 import { Currency, CurrencyAmount } from '@concave/core'
 import { ButtonProps } from '@concave/ui'
-import { useConnectModal } from 'components/Modals'
+import { useModals } from 'contexts/ModalsContext'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useAccount } from 'wagmi'
 <<<<<<<< HEAD:apps/cave/components/AMM/AddLiquidity/hooks/useAddLiquidityButtonProps.ts
@@ -20,7 +20,7 @@ export const useAddLiquidityButtonProps = (
   const currency0Balance = useCurrencyBalance(amount0?.currency, { watch: true })
   const currency1Balance = useCurrencyBalance(amount1?.currency, { watch: true })
 
-  const connectModal = useConnectModal()
+  const { connectModal } = useModals()
 
   /*
     Not Connected

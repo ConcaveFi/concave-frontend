@@ -10,6 +10,14 @@ import {
   useSwapTransaction,
 } from 'components/AMM'
 import { useSwapSettings } from 'components/AMM/Swap/Settings'
+<<<<<<< HEAD
+=======
+import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
+import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
+import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
+
+import { WaitingConfirmationDialog } from 'components/TransactionDialog/TransactionWaitingConfirmationDialog'
+>>>>>>> 3f7e77a4 (CE 631: Refactor file structure (#490))
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import dynamic from 'next/dynamic'
 import { useState } from 'react'

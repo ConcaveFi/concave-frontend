@@ -5,9 +5,10 @@ import { motion } from 'framer-motion'
 import { ChartInterval, chartIntervals } from 'lib/token.service'
 import dynamic from 'next/dynamic'
 import { useState } from 'react'
+import { useCandleStickChart } from '../hooks/useCandleStickChart'
 import { CandleStickTimeOptions } from './CandleStickTimeOptions'
 import { CandleStickTokenOptions } from './CandleStickTokenOptions'
-import { useCandleStickChart } from './useCandleStickChart'
+
 
 const CandleStickChart = dynamic(() => import('./CandleStickChart'), {
   loading: () => <p>Loading ...</p>,
