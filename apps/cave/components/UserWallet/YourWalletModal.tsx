@@ -2,7 +2,6 @@ import { CloseIcon } from '@concave/icons'
 import { Button, Flex, Modal, Text } from '@concave/ui'
 import { formatAddress } from 'utils/formatAddress'
 import { useAccount, useDisconnect } from 'wagmi'
-import ConnectedAreasContainer from '../YourWallet/Containers/ConnectedsAreaContainer'
 import RecentTransactionsContainer from './RecentTransactions'
 
 export function YourWalletModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
@@ -38,7 +37,6 @@ export function YourWalletModal({ isOpen, onClose }: { isOpen: boolean; onClose:
           </Flex>
           <CloseIcon color={'text.low'} cursor="pointer" onClick={onClose} />
         </Flex>
-        <ConnectedAreasContainer />
       </Flex>
 
       <RecentTransactionsContainer />

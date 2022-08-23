@@ -1,4 +1,4 @@
-export { DashboardIcon, DashboardIcon } from './DashboardIcon'
+export { DashboardIcon } from './DashboardIcon'
 export { DiscountIcon } from './DiscountIcon'
 export { DownIcon } from './DownIcon'
 export { ExpandArrowIcon } from './ExpandArrowIcon'
