@@ -32,7 +32,7 @@ export const useCurrencyBalanceOfAddress = (
       ...balance,
       data: toAmount(balance.data?.formatted, currency),
     }),
-    [balance.data, currency?.chainId, currency?.symbol],
+    [balance, currency],
   )
 }
 
