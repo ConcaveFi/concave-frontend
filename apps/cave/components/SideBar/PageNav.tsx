@@ -6,12 +6,10 @@ import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId
 import Router from 'next/router'
 import { useQuery } from 'react-query'
 import getROI from 'utils/getROI'
-import { onCloseSidebar } from './SideBar'
 
 const NavButton = (props: ButtonLinkProps) => {
   return (
     <ButtonLink
-      onClick={onCloseSidebar}
       iconSpacing={2}
       px={4}
       variant="secondary"
@@ -41,7 +39,6 @@ const subnavVisibleStyles = { maxH: 'unset', opacity: 1, p: '10px' }
 const SubnavButton = ({ children, ...props }: ButtonLinkProps) => {
   return (
     <ButtonLink
-      onClick={onCloseSidebar}
       px={4}
       m="-3px"
       mt="0"
