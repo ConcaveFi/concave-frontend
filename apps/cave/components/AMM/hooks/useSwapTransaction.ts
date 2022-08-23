@@ -66,5 +66,5 @@ export const useSwapTransaction = (
     },
   })
 
-  return useMemo(() => ({ trade, ...rest }), [trade, rest])
+  return { trade, ...rest }
 }
