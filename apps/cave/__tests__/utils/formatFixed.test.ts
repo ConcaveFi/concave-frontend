@@ -34,3 +34,4 @@ describe('compactFormat K, M, B ...', () => {
     expect(compactFormat('0000001', { decimals: 6 })).toBe('< 0.01')
   })
 })
+
