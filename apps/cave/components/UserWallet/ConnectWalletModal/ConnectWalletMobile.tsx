@@ -1,24 +1,32 @@
+import { ChainId } from '@concave/core'
+import { ArrowBackIcon, PlusIcon } from '@concave/icons'
 import {
-  Box,
   Button,
+  ButtonProps,
   Card,
+  chakra,
   CloseButton,
+  Collapse,
   Drawer,
   DrawerContent,
   DrawerOverlay,
   Flex,
-  Image,
+  HStack,
+  IconButton,
+  Input,
   SimpleGrid,
   Spinner,
   Stack,
   Text,
 } from '@concave/ui'
-import { onCloseSidebar } from 'components/SideBar/SideBar'
+import { supportedChainsId } from 'contexts/WagmiContext'
+import { AnimatePresence, isValidMotionProp, motion, MotionProps } from 'framer-motion'
 import { useIsMounted } from 'hooks/useIsMounted'
 import { fetchWalletConnectRegistry, uriToLink } from 'lib/walletConnect'
 import { useRouter } from 'next/router'
+import { useState } from 'react'
 import { useQuery } from 'react-query'
-import { useConnect } from 'wagmi'
+import { Connector, useConnect } from 'wagmi'
 import { ConnectorIcon } from './ConnectorIcon'
 import { useConnectorUri } from './useConnectorUri'
 import { WhatConnectWalletMeans } from './WhatConnectWalletMeans'
@@ -29,61 +37,221 @@ const useWalletConnectRegistry = () =>
     cacheTime: Infinity,
   })
 
-const ConnectWithWalletConnect = ({ walletConnectConnector }) => {
-  const { data: wallets, isSuccess, isError, isLoading } = useWalletConnectRegistry()
-
-  const { uri } = useConnectorUri(walletConnectConnector)
-
-  return (
-    <SimpleGrid columns={4} rowGap={6} columnGap={4} mx="auto" overflow="initial">
-      {isLoading && <Spinner size="sm" color="text.low" />}
-      {isError && <Text color="text.low">Error loading wallets</Text>}
-      {isSuccess &&
-        wallets.map((wallet) => (
-          <ConnectorButton
-            key={wallet.name}
-            name={wallet.name}
-            href={uriToLink(uri, wallet)}
-            image={wallet.image_url.lg}
-            shortName={wallet.metadata.shortName}
-          />
-        ))}
-    </SimpleGrid>
-  )
-}
-
-const ConnectorButton = ({ name, href, image, shortName = name }) => (
-  <Button key={name} as="a" href={href}>
-    <Stack align="center">
-      <Image
-        w="48px"
-        minW="48px"
-        shadow="up"
-        rounded="xl"
-        src={image}
-        fallback={<Box w="48px" h="48px" bg="subtle" opacity={0.5} rounded="xl" />}
-        alt={name}
-      />
-      <Text color="text.low" fontWeight="normal">
-        {shortName}
-      </Text>
-    </Stack>
+const MoreWallets = (props) => (
+  <Button flexDirection="column" alignItems="center" gap={2} {...props}>
+    <Flex
+      align="center"
+      justify="center"
+      w="48px"
+      h="48px"
+      bg="subtle"
+      shadow="up"
+      opacity={0.6}
+      rounded="xl"
+      {...props}
+    >
+      <PlusIcon />
+    </Flex>
+    <Text color="text.low" fontSize="xs" align="center">
+      More
+    </Text>
   </Button>
 )
 
-// `https://metamask.app.link/dapp/${window.location.href}`
+const ConnectWithWalletConnect = ({ walletConnectConnector, onBack }) => {
+  const {
+    data: wallets,
+    isSuccess,
+    isError,
+    isLoading: isLoadingRegistry,
+  } = useWalletConnectRegistry()
+
+  const { uri, isLoading: isLoadingUri } = useConnectorUri(walletConnectConnector)
+
+  const [showingMore, toggleShowMore] = useState(false)
+  const [search, setSearch] = useState('')
+
+  const walletsList = wallets
+    ?.slice(0, showingMore ? undefined : 11)
+    .filter(({ name }) => name.toLowerCase().includes(search.toLowerCase()))
+
+  return (
+    <MotionDiv
+      p={4}
+      display="flex"
+      alignItems="center"
+      gap={4}
+      flexDirection="column"
+      w="100% "
+      initial={{ x: 300 }}
+      animate={{ x: 0 }}
+      exit={{ x: -300 }}
+      transition={{ type: 'easeIn' }}
+    >
+      <HStack alignSelf="start" onClick={() => onBack()}>
+        <IconButton icon={<ArrowBackIcon fontSize="lg" />} aria-label="back" />
+        <ConnectorIcon name="walletConnect" rounded="md" />
+        <Text fontFamily="heading" fontWeight="bold" fontSize="xl">
+          Wallet Connect
+        </Text>
+      </HStack>
+      <Stack
+        spacing={6}
+        align="center"
+        overflow={showingMore ? 'scroll' : 'initial'}
+        h="400px"
+        pb="100px"
+        w="100%"
+      >
+        <Collapse in={showingMore} unmountOnExit style={{ width: '90%', overflow: 'visible' }}>
+          <Input
+            size="small"
+            h="32px"
+            placeholder="Search for a wallet"
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </Collapse>
+        <SimpleGrid
+          as={motion.div}
+          variants={container}
+          initial="hidden"
+          animate="show"
+          w="100%"
+          columns={4}
+          rowGap={5}
+          overflow="visible"
+        >
+          {isLoadingRegistry && <Spinner size="sm" color="text.low" />}
+          {isError && <Text color="text.low">Error loading wallets</Text>}
+          {isSuccess && [
+            ...walletsList.map((wallet) => (
+              <ConnectorButton
+                key={wallet.name}
+                variants={item}
+                color="text.low"
+                name={wallet.name}
+                onClick={() => {
+                  window.location.href = uriToLink(uri, wallet)
+                }}
+                isDisabled={isLoadingUri}
+                image={wallet.image_url.lg}
+                shortName={wallet.metadata.shortName}
+              />
+            )),
+            !showingMore && <MoreWallets key="more" onClick={() => toggleShowMore(!showingMore)} />,
+          ]}
+        </SimpleGrid>
+      </Stack>
+    </MotionDiv>
+  )
+}
+
+const MotionButton = motion<ButtonProps>(Button)
+
+const ConnectorButton = ({
+  name,
+  shortName = name,
+  image = '',
+  ...props
+}: { name: string; shortName?: string; image?: string } & ButtonProps & MotionProps) => (
+  <MotionButton flexDirection="column" alignItems="center" gap={2} {...props}>
+    <ConnectorIcon src={image} name={name} size="48px" />
+    <Text whiteSpace="break-spaces" fontSize="xs" align="center">
+      {shortName || name}
+    </Text>
+  </MotionButton>
+)
+
+const MotionDiv = chakra(motion.div, {
+  shouldForwardProp: (prop) => isValidMotionProp(prop) || prop === 'children',
+})
+
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.02,
+    },
+  },
+}
+
+const item = {
+  hidden: { opacity: 0, scale: 0.6 },
+  show: { opacity: 1, scale: 1 },
+}
+
+const ConnectWalletsDefaultView = ({
+  connectors,
+  onConnect,
+}: {
+  connectors: Connector[]
+  onConnect: (c: Connector) => void
+}) => {
+  const isMounted = useIsMounted()
+  return (
+    <MotionDiv
+      p={4}
+      display="flex"
+      alignItems="center"
+      gap={4}
+      flexDirection="column"
+      initial={{ x: -300 }}
+      animate={{ x: 0 }}
+      exit={{ x: 300 }}
+      transition={{ type: 'easeIn' }}
+    >
+      <Text fontFamily="heading" fontWeight="bold" fontSize="xl" mb={1}>
+        Connect a Wallet
+      </Text>
+      <MotionDiv initial="hidden" animate="show" display="flex" w="100%" gap={2} alignItems="start">
+        {isMounted &&
+          connectors.map((c) => {
+            if (c.id === 'injected' && !c.ready) return null
+            return (
+              <ConnectorButton
+                key={c.id}
+                variants={item}
+                name={c.name}
+                onClick={() => onConnect(c)}
+                maxW="80px"
+                minW="80px"
+              />
+            )
+          })}
+      </MotionDiv>
+      <WhatConnectWalletMeans />
+    </MotionDiv>
+  )
+}
 
 export const MobileConnect = ({ isOpen, onClose }) => {
   const router = useRouter()
-  const chainId = +router.query.chainId
+  const queryChainId = +router.query.chainId
+  const chainId = supportedChainsId.includes(queryChainId) ? queryChainId : ChainId.ETHEREUM
 
   const { connectors, connect } = useConnect({
     chainId,
     onSuccess: () => onClose(),
   })
-  const isMounted = useIsMounted()
 
-  if (isOpen) onCloseSidebar()
+  // handles wallet connect tab
+  const [tab, setTab] = useState<'default' | 'walletConnect'>('default')
+
+  const onConnect = async (connector: Connector) => {
+    if (connector.id === 'metaMask' && !connector.ready) {
+      // open on metamask app
+      window.location.href = 'https://metamask.app.link/dapp/' + window.location.href
+      return
+    }
+    if (connector.id === 'walletConnect') {
+      connect({ connector })
+      setTab('walletConnect')
+      return
+    }
+
+    connect({ connector })
+  }
 
   return (
     <Drawer
@@ -93,7 +261,7 @@ export const MobileConnect = ({ isOpen, onClose }) => {
       placement="bottom"
       onClose={onClose}
     >
-      <DrawerOverlay backdropFilter="blur(8px)" />
+      <DrawerOverlay backdropFilter="blur(2px)" />
       <DrawerContent bg="none" overflow="visible">
         <Card
           rounded="3xl"
@@ -102,36 +270,30 @@ export const MobileConnect = ({ isOpen, onClose }) => {
           shadow="Up for Blocks"
           borderGradient="secondary"
           borderWidth={3}
-          p={4}
           align="center"
           m={1}
-          gap={4}
-          h="60vh"
+          h={'60vh'}
+          bottom={0}
+          drag="y"
+          onDragEnd={(a, i) => {
+            if (i.offset.y > 120) onClose()
+          }}
+          dragElastic={{ top: 0, bottom: 0.5 }}
+          dragSnapToOrigin
+          dragMomentum={false}
+          dragConstraints={{ top: 0, bottom: 0 }}
         >
-          <Text fontFamily="heading" fontWeight="bold" fontSize="xl">
-            Connect a Wallet
-          </Text>
-          <Flex w="100%" gap={2} align="start">
-            {isMounted &&
-              connectors.map((c) => (
-                <Button
-                  p={2}
-                  key={c.id}
-                  onClick={() => connect({ connector: c })}
-                  flexDirection="column"
-                  alignItems="center"
-                  maxW="80px"
-                  textAlign="center"
-                  gap={2}
-                >
-                  <ConnectorIcon name={c.name} size="48px" />
-                  <Text whiteSpace="break-spaces" fontSize="xs" align="center" w="100%">
-                    {c.name}
-                  </Text>
-                </Button>
-              ))}
-          </Flex>
-          <WhatConnectWalletMeans />
+          <AnimatePresence initial={false} exitBeforeEnter>
+            {tab === 'default' && (
+              <ConnectWalletsDefaultView connectors={connectors} onConnect={onConnect} />
+            )}
+            {tab === 'walletConnect' && (
+              <ConnectWithWalletConnect
+                onBack={() => setTab('default')}
+                walletConnectConnector={connectors.find((c) => c.id === 'walletConnect')}
+              />
+            )}
+          </AnimatePresence>
           <CloseButton variant="subtle" onClick={onClose} pos="absolute" top={4} right={4} />
         </Card>
       </DrawerContent>

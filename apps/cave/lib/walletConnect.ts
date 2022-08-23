@@ -34,9 +34,12 @@ type WalletConnectRegistryData = {
 
 const walletRegistryURL = `https://registry.walletconnect.org/data/wallets.json`
 
+const weirdRegistryWalletsWeWillIgnore = ['Wallet 3', 'Bitpie', 'Wallet3']
 export const fetchWalletConnectRegistry = async (): Promise<WalletConnectRegistryData[]> => {
   const registry = await fetch(walletRegistryURL).then((res) => res.json())
-  return Object.values(registry)
+  return (Object.values(registry) as WalletConnectRegistryData[]).filter(
+    ({ name }) => !!name && !weirdRegistryWalletsWeWillIgnore.includes(name),
+  )
 }
 
 export function uriToLink(uri: string, registry: WalletConnectRegistryData) {

@@ -18,10 +18,8 @@ import PageNav from './PageNav'
 import SideBarBottom from './SideBarBottom'
 import SideBarTop from './SideBarTop'
 
-export let onCloseSidebar = () => void null
 export function SideBar() {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  onCloseSidebar = onClose
 
   // close on route change
   const router = useRouter()
@@ -71,6 +69,7 @@ export function SideBar() {
           sx={{ '::-webkit-scrollbar': { display: 'none' }, scrollbarWidth: 'none' }}
         >
           <SidebarContent
+            closeSidebar={onClose}
             drag="x"
             onDragEnd={(a, i) => {
               if (i.offset.x < -150) onClose()
@@ -86,7 +85,9 @@ export function SideBar() {
   )
 }
 
-const SidebarContent = forwardRef<CardProps, 'div'>((props, ref) => {
+type SidebarProps = { closeSidebar?: () => void } & CardProps
+
+const SidebarContent = forwardRef<SidebarProps, 'div'>(({ closeSidebar, ...props }, ref) => {
   return (
     <Card
       as={motion.aside}
@@ -109,7 +110,7 @@ const SidebarContent = forwardRef<CardProps, 'div'>((props, ref) => {
       gap="30px"
       {...props}
     >
-      <SideBarTop />
+      <SideBarTop closeSidebar={closeSidebar} />
       <PageNav />
       <SideBarBottom mt={6} />
     </Card>

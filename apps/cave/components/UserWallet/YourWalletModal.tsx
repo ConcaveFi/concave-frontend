@@ -5,13 +5,7 @@ import { useAccount, useDisconnect } from 'wagmi'
 import ConnectedAreasContainer from '../YourWallet/Containers/ConnectedsAreaContainer'
 import RecentTransactionsContainer from './RecentTransactions'
 
-export default function YourWalletModal({
-  isOpen,
-  onClose,
-}: {
-  isOpen: boolean
-  onClose: () => void
-}) {
+export function YourWalletModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const { address } = useAccount()
   const { disconnect } = useDisconnect()
 

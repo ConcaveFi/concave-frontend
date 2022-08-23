@@ -3,7 +3,7 @@ import { Button, Flex, Image, keyframes, Text, useDisclosure } from '@concave/ui
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { formatAddress } from 'utils/formatAddress'
 import { useAccount, useEnsName, useNetwork } from 'wagmi'
-import YourWalletModal from './YourWallet'
+import { YourWalletModal } from './YourWalletModal'
 
 const spinAnimation = (time = 3) =>
   `${keyframes({
@@ -11,7 +11,7 @@ const spinAnimation = (time = 3) =>
     '100%': { transform: 'rotate(360deg)' },
   })} ${time}s linear infinite`
 
-export const UserWallet = () => {
+export const ConnectedUserButton = () => {
   const { address } = useAccount()
   const { chain } = useNetwork()
   const { data: ens } = useEnsName({ address })
