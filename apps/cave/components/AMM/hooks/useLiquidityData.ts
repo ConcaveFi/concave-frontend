@@ -1,9 +1,10 @@
-import { LiquidityPool } from './AddLiquidity'
 
 /**
  * Helper to get data for SupplyLiquidityModal.
  * Amounts also used in AddLiquidity confirmed modal
  */
+
+import { LiquidityPool } from "../AddLiquidity/AddLiquidity"
 
 export type UseLiquidityData = ReturnType<typeof useLiquidityData>
 

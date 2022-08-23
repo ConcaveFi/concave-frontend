@@ -20,14 +20,14 @@ import { BigNumber, BigNumberish } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
 import { Dispatch, SetStateAction, useCallback } from 'react'
-import { formatFixed } from 'utils/formatFixed'
+import { formatFixed } from 'utils/bigNumberMask'
 import { useSignTypedData } from 'wagmi'
 import { BigNumberField } from './BigNumberField'
 import { ConfirmSignature } from './ConfirmSignature'
 import { ConfirmUnlist } from './ConfirmUnlist'
 import { EpochDateField } from './EpochDateField'
 import { Info } from './Info'
-import { usePositionDiscount } from './usePositionDiscount'
+import { usePositionDiscount } from './hooks/usePositionDiscount'
 
 type ListForSaleState = ReturnType<typeof useListeForSaleState>
 

@@ -19,7 +19,7 @@ import { useFirstMountState } from 'react-use'
 import { percentDifference } from 'utils/percentDifference'
 import { toPercent } from 'utils/toPercent'
 import { useFiatValue } from '../hooks/useFiatPrice'
-import { useSwapSettings } from '../Swap/Settings'
+import { useSwapSettings } from './Settings'
 import { ExpectedOutput, MinExpectedOutput } from './ExpectedOutput'
 import { RelativePrice } from './RelativePrice'
 

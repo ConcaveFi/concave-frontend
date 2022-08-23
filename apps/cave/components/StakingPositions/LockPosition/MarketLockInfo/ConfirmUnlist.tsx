@@ -2,9 +2,9 @@ import { MarketItem, StakingPosition } from '@concave/marketplace'
 import { Box, Button, HStack, Text, VStack } from '@concave/ui'
 import { useInsert_Marketplace_ListingMutation } from 'graphql/generated/graphql'
 import { Dispatch, SetStateAction } from 'react'
-import { formatFixed } from 'utils/formatFixed'
+import { formatFixed } from 'utils/bigNumberMask'
 import { Info } from './Info'
-import { usePositionDiscount } from './usePositionDiscount'
+import { usePositionDiscount } from './hooks/usePositionDiscount'
 
 export const ConfirmUnlist = ({
   market,
