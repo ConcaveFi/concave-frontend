@@ -6,15 +6,9 @@ import { isAddress } from 'ethers/lib/utils'
 import { swapSupportedChains } from 'pages/gemswap'
 import { toPercent } from 'utils/toPercent'
 import { useAccount, useNetwork } from 'wagmi'
-<<<<<<<< HEAD:apps/cave/components/AMM/Swap/hooks/useSwapButtonProps.tsx
 import { NoValidPairsError } from '../../hooks/usePair'
 import { InsufficientLiquidityError } from '../../hooks/useTrade'
 import { useSwapSettings } from '../Settings'
-========
-import { NoValidPairsError } from './usePair'
-import { InsufficientLiquidityError } from './useTrade'
-import { useSwapSettings } from '../Swap/Settings'
->>>>>>>> 3f7e77a4 (CE 631: Refactor file structure (#490)):apps/cave/components/AMM/hooks/useSwapButtonProps.tsx
 
 export const useSwapButtonProps = ({
   trade,
