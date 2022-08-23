@@ -6,7 +6,7 @@ import { VestedTokenButtonProps } from 'components/Treasury/TreasuryRedeemCard'
 import { BigNumber } from 'ethers'
 import { formatEther, parseEther } from 'ethers/lib/utils'
 import { useState } from 'react'
-import { formatFixed } from 'utils/formatFixed'
+import { formatFixed } from 'utils/bigNumberMask'
 import { useAccount } from 'wagmi'
 import { VestedTokenInput } from './VestedTokenDialogInput'
 
