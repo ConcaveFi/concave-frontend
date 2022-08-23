@@ -11,7 +11,7 @@ import { useTransaction } from 'hooks/TransactionsRegistry/useTransaction'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
 import { useMemo, useState } from 'react'
-import { compactFormat, formatFixed } from 'utils/bigNumberMasks'
+import { compactFormat, formatFixed } from 'utils/bigNumberMask'
 import { useAccount, useSigner } from 'wagmi'
 import { ConfirmPurchaseModal } from './ConfirmBuy'
 

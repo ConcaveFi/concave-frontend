@@ -3,7 +3,7 @@ import { Button, ButtonProps } from '@concave/ui'
 import { useModals } from 'contexts/ModalsContext'
 import { useApprove } from 'hooks/useApprove'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
-import { compactFormat } from 'utils/bigNumberMasks'
+import { compactFormat } from 'utils/bigNumberMask'
 import { useAccount } from 'wagmi'
 
 export const useCurrencyButtonState = (
