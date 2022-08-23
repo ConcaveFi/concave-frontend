@@ -6,9 +6,9 @@ import { isAddress } from 'ethers/lib/utils'
 import { swapSupportedChains } from 'pages/gemswap'
 import { toPercent } from 'utils/toPercent'
 import { useAccount, useNetwork } from 'wagmi'
-import { useSwapSettings } from '../Swap/Settings'
-import { NoValidPairsError } from './usePair'
-import { InsufficientLiquidityError } from './useTrade'
+import { NoValidPairsError } from '../../hooks/usePair'
+import { InsufficientLiquidityError } from '../../hooks/useTrade'
+import { useSwapSettings } from '../Settings'
 
 export const useSwapButtonProps = ({
   trade,

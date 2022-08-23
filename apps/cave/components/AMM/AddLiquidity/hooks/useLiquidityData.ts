@@ -3,7 +3,7 @@
  * Amounts also used in AddLiquidity confirmed modal
  */
 
-import { LiquidityPool } from '../AddLiquidity/AddLiquidity'
+import { LiquidityPool } from '../AddLiquidity'
 
 export type UseLiquidityData = ReturnType<typeof useLiquidityData>
 
