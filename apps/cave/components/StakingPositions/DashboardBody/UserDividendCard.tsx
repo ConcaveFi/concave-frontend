@@ -1,5 +1,5 @@
 import { Currency, CurrencyAmount } from '@concave/core'
-import { Button, ButtonProps, Flex, gradientBorder, Spinner, Text } from '@concave/ui'
+import { Button, ButtonProps, Flex, Spinner, Text } from '@concave/ui'
 
 interface UserDividendCardProps {
   totalLocked: CurrencyAmount<Currency>
@@ -21,14 +21,13 @@ export const UserDividendCard = (props: UserDividendCardProps) => {
       </Text>
       <Flex
         borderRadius="2xl"
-        shadow={'up'}
+        shadow={'down'}
         apply="background.metal(ALT)"
         width="full"
         py={{ base: 3, lg: 6 }}
         px={4}
         gap={4}
         overflow="hidden"
-        sx={{ ...gradientBorder({ variant: 'secondary', borderWidth: 2 }) }}
         direction={{ base: 'column', lg: 'row' }}
       >
         <Flex flex={1} justify={'space-around'}>

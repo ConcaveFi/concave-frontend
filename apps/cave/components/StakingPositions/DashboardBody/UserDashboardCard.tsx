@@ -50,13 +50,7 @@ export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePo
         rounded={'2xl'}
         apply={'background.metal'}
       >
-        <Flex
-          direction={'column'}
-          shadow="up"
-          rounded={'2xl'}
-          pb={2}
-          sx={{ ...gradientBorder({ variant: 'secondary' }) }}
-        >
+        <Flex direction={'column'} shadow="up" rounded={'2xl'} pb={2}>
           <Flex direction={'column'} align="center" px={4} pt={4} position={'relative'}>
             <Button
               color="text.low"
