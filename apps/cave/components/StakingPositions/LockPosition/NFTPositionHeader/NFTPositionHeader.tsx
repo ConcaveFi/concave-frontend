@@ -1,5 +1,5 @@
 import { Flex, Image, Text } from '@concave/ui'
-import { NFTPositionHeaderProps, useNFTLockedPositionState } from './useNFTPositionViewer'
+import { NFTPositionHeaderProps, useNFTLockedPositionState } from './hooks/useNFTPositionViewer'
 
 export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
   const { period, redeemInDays, imgNameByPeriod, redeemDate, active, toogleActive, tokenId } =

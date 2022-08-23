@@ -15,7 +15,7 @@ import {
 
 import { AddLiquidityModalButton } from 'components/AMM/AddLiquidity/AddLiquidity'
 import { RemoveLiquidityModalButton } from 'components/AMM/RemoveLiquidity/RemoveLiquidity'
-import { ConnectButton } from 'components/ConnectWallet'
+import { ConnectButton } from 'components/YourWallet/ConnectWallet'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { Loading } from 'components/Loading'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
@@ -23,7 +23,7 @@ import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId
 import { concaveProvider } from 'lib/providers'
 import { useQuery } from 'react-query'
 import { useAccount } from 'wagmi'
-import { PositionsState } from './usePositionsState'
+import { PositionsState } from './hooks/usePositionsState'
 
 export const MyPositions = ({ state }: { state: PositionsState }) => {
   const { loading, error, setView, view, pairs, user } = state
