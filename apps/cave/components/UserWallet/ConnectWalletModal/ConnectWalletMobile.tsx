@@ -15,7 +15,7 @@ import {
   IconButton,
   Input,
   SimpleGrid,
-  Spinner,
+  Skeleton,
   Stack,
   Text,
 } from '@concave/ui'
@@ -30,6 +30,36 @@ import { Connector, useConnect } from 'wagmi'
 import { ConnectorIcon } from './ConnectorIcon'
 import { useConnectorUri } from './useConnectorUri'
 import { WhatConnectWalletMeans } from './WhatConnectWalletMeans'
+
+const MotionButton = motion<ButtonProps>(Button)
+const ConnectorButton = ({
+  name,
+  shortName = name,
+  image = '',
+  ...props
+}: { name: string; shortName?: string; image?: string } & ButtonProps & MotionProps) => (
+  <MotionButton
+    flexDirection="column"
+    alignItems="center"
+    gap={2}
+    _disabled={{ filter: 'grayscale(1)' }}
+    {...props}
+  >
+    <ConnectorIcon src={image} name={name} size="48px" />
+    <Text whiteSpace="break-spaces" fontSize="xs" align="center">
+      {shortName || name}
+    </Text>
+  </MotionButton>
+)
+
+const SkeletonConnectorButton = ({ ...props }) => (
+  <Flex direction="column" alignItems="center" gap={2} {...props}>
+    <Skeleton w="48px" h="48px" opacity={0.1} rounded="xl" />
+    <Text fontSize="xs" align="center">
+      {' '}
+    </Text>
+  </Flex>
+)
 
 const useWalletConnectRegistry = () =>
   useQuery('wallet connect registry', fetchWalletConnectRegistry, {
@@ -57,6 +87,26 @@ const MoreWallets = (props) => (
     </Text>
   </Button>
 )
+
+const MotionDiv = chakra(motion.div, {
+  shouldForwardProp: (prop) => isValidMotionProp(prop) || prop === 'children',
+})
+
+const listVariants = {
+  container: {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.02,
+      },
+    },
+  },
+  item: {
+    hidden: { opacity: 0, scale: 0.6 },
+    show: { opacity: 1, scale: 1 },
+  },
+}
 
 const ConnectWithWalletConnect = ({ walletConnectConnector, onBack }) => {
   const {
@@ -113,7 +163,7 @@ const ConnectWithWalletConnect = ({ walletConnectConnector, onBack }) => {
         </Collapse>
         <SimpleGrid
           as={motion.div}
-          variants={container}
+          variants={listVariants.container}
           initial="hidden"
           animate="show"
           w="100%"
@@ -121,13 +171,18 @@ const ConnectWithWalletConnect = ({ walletConnectConnector, onBack }) => {
           rowGap={5}
           overflow="visible"
         >
-          {isLoadingRegistry && <Spinner size="sm" color="text.low" />}
-          {isError && <Text color="text.low">Error loading wallets</Text>}
+          {isLoadingRegistry &&
+            Array.from({ length: 12 }).map((_, i) => <SkeletonConnectorButton key={`scb-${i}`} />)}
+          {isError && (
+            <Text w="100%" textAlign="center" color="text.low">
+              Error loading wallets
+            </Text>
+          )}
           {isSuccess && [
             ...walletsList.map((wallet) => (
               <ConnectorButton
                 key={wallet.name}
-                variants={item}
+                variants={listVariants.item}
                 color="text.low"
                 name={wallet.name}
                 onClick={() => {
@@ -144,41 +199,6 @@ const ConnectWithWalletConnect = ({ walletConnectConnector, onBack }) => {
       </Stack>
     </MotionDiv>
   )
-}
-
-const MotionButton = motion<ButtonProps>(Button)
-
-const ConnectorButton = ({
-  name,
-  shortName = name,
-  image = '',
-  ...props
-}: { name: string; shortName?: string; image?: string } & ButtonProps & MotionProps) => (
-  <MotionButton flexDirection="column" alignItems="center" gap={2} {...props}>
-    <ConnectorIcon src={image} name={name} size="48px" />
-    <Text whiteSpace="break-spaces" fontSize="xs" align="center">
-      {shortName || name}
-    </Text>
-  </MotionButton>
-)
-
-const MotionDiv = chakra(motion.div, {
-  shouldForwardProp: (prop) => isValidMotionProp(prop) || prop === 'children',
-})
-
-const container = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.02,
-    },
-  },
-}
-
-const item = {
-  hidden: { opacity: 0, scale: 0.6 },
-  show: { opacity: 1, scale: 1 },
 }
 
 const ConnectWalletsDefaultView = ({
@@ -204,14 +224,22 @@ const ConnectWalletsDefaultView = ({
       <Text fontFamily="heading" fontWeight="bold" fontSize="xl" mb={1}>
         Connect a Wallet
       </Text>
-      <MotionDiv initial="hidden" animate="show" display="flex" w="100%" gap={2} alignItems="start">
+      <MotionDiv
+        variants={listVariants.container}
+        initial="hidden"
+        animate="show"
+        display="flex"
+        w="100%"
+        gap={2}
+        alignItems="start"
+      >
         {isMounted &&
           connectors.map((c) => {
             if (c.id === 'injected' && !c.ready) return null
             return (
               <ConnectorButton
                 key={c.id}
-                variants={item}
+                variants={listVariants.item}
                 name={c.name}
                 onClick={() => onConnect(c)}
                 maxW="80px"
@@ -275,7 +303,7 @@ export const MobileConnect = ({ isOpen, onClose }) => {
           h={'60vh'}
           bottom={0}
           drag="y"
-          onDragEnd={(a, i) => {
+          onDragEnd={(_, i) => {
             if (i.offset.y > 120) onClose()
           }}
           dragElastic={{ top: 0, bottom: 0.5 }}
