@@ -3,22 +3,20 @@ import { Pair } from '@concave/gemswap-sdk'
 import { PlusIcon } from '@concave/icons'
 import { Button, ButtonProps, Card, Flex, Modal, Text, useDisclosure } from '@concave/ui'
 import { CurrencyInputField } from 'components/AMM'
+import { useAddLiquidityButtonProps } from 'components/AMM/AddLiquidity/hooks/useAddLiquidityButtonProps'
 import { SupplyLiquidityModal } from 'components/AMM/AddLiquidity/SupplyLiquidityModal'
-import { useAddLiquidityButtonProps } from 'components/AMM/hooks/useAddLiquidityButtonProps'
-
-import { ConnectButton } from 'components/YourWallet/ConnectWallet'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
 import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
-
+import { ConnectButton } from 'components/YourWallet/ConnectWallet'
 import { WaitingConfirmationDialog } from 'components/TransactionDialog/TransactionWaitingConfirmationDialog'
 import { toAmount } from 'utils/toAmount'
 import { useAccount } from 'wagmi'
-import { useAddLiquidityState } from '../hooks/useAddLiquidityState'
-import { useAddLiquidityTransaction } from '../hooks/useAddLiquidityTransaction'
-import useLiquidityData from '../hooks/useLiquidityData'
 import { useQueryCurrencies } from '../hooks/useQueryCurrencies'
 import { NetworkMismatch } from '../NetworkMismatch'
+import { useAddLiquidityState } from './hooks/useAddLiquidityState'
+import { useAddLiquidityTransaction } from './hooks/useAddLiquidityTransaction'
+import useLiquidityData from './hooks/useLiquidityData'
 
 const AddSymbol = () => (
   <Flex align="center" justify="center">

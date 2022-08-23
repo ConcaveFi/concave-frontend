@@ -6,7 +6,7 @@ import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useMemo } from 'react'
 import { toPercent } from 'utils/toPercent'
 import { useAccount, useContractWrite, useNetwork } from 'wagmi'
-import { useSwapSettings } from '../Swap/Settings'
+import { useSwapSettings } from '../Settings'
 
 
 export const useSwapTransaction = (
