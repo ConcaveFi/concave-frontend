@@ -8,6 +8,7 @@ import { SupplyLiquidityModal } from 'components/AMM/AddLiquidity/SupplyLiquidit
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
 import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
+
 import { WaitingConfirmationDialog } from 'components/TransactionDialog/TransactionWaitingConfirmationDialog'
 import { ConnectButton } from 'components/UserWallet/ConnectButton'
 import { toAmount } from 'utils/toAmount'
