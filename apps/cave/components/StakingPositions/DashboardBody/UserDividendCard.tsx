@@ -1,5 +1,5 @@
 import { Currency, CurrencyAmount } from '@concave/core'
-import { Button, ButtonProps, Flex, Spinner, Text } from '@concave/ui'
+import { Flex, Spinner, Text } from '@concave/ui'
 
 interface UserDividendCardProps {
   totalLocked: CurrencyAmount<Currency>
@@ -50,29 +50,8 @@ export const UserDividendCard = (props: UserDividendCardProps) => {
             <Info title="Your dividends share" label="0.0" />
           </Flex>
         </Flex>
-        <RedeemButton my={'auto'} />
       </Flex>
     </Flex>
-  )
-}
-
-const RedeemButton = ({ ...props }: ButtonProps) => {
-  const redeemable = false
-  return (
-    <Button
-      cursor={redeemable ? 'pointer' : 'default'}
-      fontWeight="bold"
-      fontSize="md"
-      variant={redeemable ? 'primary.outline' : ''}
-      size="md"
-      shadow="down"
-      _active={redeemable ? { transform: 'scale(0.95)' } : {}}
-      {...props}
-    >
-      <Text color={redeemable ? 'white' : 'text.low'} fontSize="sm">
-        {redeemable ? 'Redeem' : 'Not Redeemable'}
-      </Text>
-    </Button>
   )
 }
 
