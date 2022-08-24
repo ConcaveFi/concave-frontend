@@ -75,7 +75,10 @@ export const fetchAllCavemart = `query ListCavemart {
     tokenID
     txHash
     lockedUntil
-    marketplace(order_by: {updated_at: desc_nulls_last}) {
+    marketplace(
+      order_by: {updated_at: desc_nulls_last}
+      where: {tokenOption: {_is_null: false}}
+    ) {
       tokenID
       updated_at
       newOwner
