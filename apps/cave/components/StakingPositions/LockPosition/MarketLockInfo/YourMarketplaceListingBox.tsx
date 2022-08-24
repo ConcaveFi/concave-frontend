@@ -12,7 +12,7 @@ import {
 import { formatDistanceToNow } from 'date-fns'
 import { BigNumber } from 'ethers'
 import { useApproveForAll } from 'hooks/useApprove'
-import { useState } from 'react'
+import { FC, useState } from 'react'
 import { formatFixed } from 'utils/bigNumberMask'
 import { useAccount } from 'wagmi'
 import { usePositionDiscount } from './hooks/usePositionDiscount'

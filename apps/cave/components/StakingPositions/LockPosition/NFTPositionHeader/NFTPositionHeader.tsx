@@ -9,9 +9,9 @@ import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
 import { FC, useEffect, useState } from 'react'
-import { formatFixed } from 'utils/formatFixed'
+import { formatFixed } from 'utils/bigNumberMask'
 import { useAccount, useSigner, useWaitForTransaction } from 'wagmi'
-import { NFTPositionHeaderProps, useNFTLockedPositionState } from './useNFTPositionViewer'
+import { NFTPositionHeaderProps, useNFTLockedPositionState } from './hooks/useNFTPositionViewer'
 const bigNumberMask = (number: BigNumber) => {
   if (number.eq(0)) {
     return `0`
