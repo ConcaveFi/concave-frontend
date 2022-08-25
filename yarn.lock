@@ -1334,24 +1334,25 @@
     "@chakra-ui/visually-hidden" "2.0.2"
     "@zag-js/focus-visible" "0.1.0"
 
-"@chakra-ui/cli@^2.0.0", "@chakra-ui/cli@^2.1.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@chakra-ui/cli/-/cli-2.1.0.tgz#f0e2a4574326627226373b4cbd04633d46418a9c"
-  integrity sha512-d0dr/kGBnwm9o66cVxwnO91OJ0fNcrinyPNOSa2a1UalRf++PeFs/8cl1oy07kQVpWQAGxeIjrT2CdjqQ1Si7Q==
+"@chakra-ui/cli@^2.1.7":
+  version "2.1.7"
+  resolved "https://registry.yarnpkg.com/@chakra-ui/cli/-/cli-2.1.7.tgz#cc91b002ba589f878372cc3b58aac4935a262ce2"
+  integrity sha512-AcPXTCCcGzG3TySs+0PxHU1PsXysPahlVMM53oiEQKrvrAGHOfJcXlYG2VsCZ4pqfYKfbyW+woSw7sYTc/MKNQ==
   dependencies:
-    "@chakra-ui/utils" "^2.0.2"
+    "@chakra-ui/utils" "2.0.9"
     "@swc/core" "^1.2.177"
     chokidar "^3.5.3"
     cli-check-node "^1.3.4"
     cli-handle-unhandled "^1.1.1"
     cli-welcome "^2.2.2"
-    commander "^6.2.1"
+    commander "^9.3.0"
+    lodash.throttle "^4.1.1"
     module-alias "^2.2.2"
     ora "^5.3.0"
-    prettier "^2.4.1"
+    prettier "^2.7.1"
     regenerator-runtime "^0.13.7"
     ts-node "^10.7.0"
-    tsconfig-paths "^3.11.0"
+    tsconfig-paths "^4.0.0"
     update-notifier "^5.0.1"
 
 "@chakra-ui/clickable@2.0.2":
@@ -1829,10 +1830,20 @@
   dependencies:
     "@chakra-ui/utils" "2.0.2"
 
-"@chakra-ui/utils@2.0.2", "@chakra-ui/utils@^2.0.2":
+"@chakra-ui/utils@2.0.2":
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/@chakra-ui/utils/-/utils-2.0.2.tgz#130ba1647ea2b94ad956ae4cbcf685838d350593"
   integrity sha512-9AC/ir9zm0shgFG7kdzOKUH2Wx5VB71M3uRMEsMZf75YlhhiU7AvBNtWXnJu+CBiTi41rKa5A+2ImMOsuPfGbA==
+  dependencies:
+    "@types/lodash.mergewith" "4.6.6"
+    css-box-model "1.2.1"
+    framesync "5.3.0"
+    lodash.mergewith "4.6.2"
+
+"@chakra-ui/utils@2.0.9", "@chakra-ui/utils@^2.0.2":
+  version "2.0.9"
+  resolved "https://registry.yarnpkg.com/@chakra-ui/utils/-/utils-2.0.9.tgz#1af3882b31fb46e0a411998d8e3607656f8d5043"
+  integrity sha512-7ct5562Jw6pZdtj63XfUkEUXXsCCVqdqIXyLtQ9VgOKtRQWwDxzc8uPI5Zjdw9AleEITZFUH8TNKWn75nm54kQ==
   dependencies:
     "@types/lodash.mergewith" "4.6.6"
     css-box-model "1.2.1"
@@ -5867,7 +5878,7 @@ commander@^4.0.0:
   resolved "https://registry.yarnpkg.com/commander/-/commander-4.1.1.tgz#9fd602bd936294e9e9ef46a3f4d6964044b18068"
   integrity sha512-NOKm8xhkzAjzFx8B2v5OAHT+u5pRQc2UCa2Vq9jYL/31o2wi9mxBA7LIFs3sV5VSC49z6pEhfbMULvShKj26WA==
 
-commander@^6.2.0, commander@^6.2.1:
+commander@^6.2.0:
   version "6.2.1"
   resolved "https://registry.yarnpkg.com/commander/-/commander-6.2.1.tgz#0792eb682dfbc325999bb2b84fddddba110ac73c"
   integrity sha512-U7VdrJFnJgo4xjrHpTzu0yrHPGImdsmD95ZlgYSEajAn2JKzDhDTPG9kBTefmObL2w/ngeZnilk+OV9CG3d7UA==
@@ -10919,6 +10930,11 @@ lodash.sortby@^4.7.0:
   resolved "https://registry.yarnpkg.com/lodash.sortby/-/lodash.sortby-4.7.0.tgz#edd14c824e2cc9c1e0b0a1b42bb5210516a42438"
   integrity sha512-HDWXG8isMntAyRF5vZ7xKuEvOhT4AhlRt/3czTSjvGUxjYCBVRQY48ViDHyfYz9VIoBkW4TMGQNapx+l3RUwdA==
 
+lodash.throttle@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/lodash.throttle/-/lodash.throttle-4.1.1.tgz#c23e91b710242ac70c37f1e1cda9274cc39bf2f4"
+  integrity sha512-wIkUCfVKpVsWo3JSZlc+8MB5it+2AN5W8J7YVMST30UrvcQNZ1Okbj+rbVniijTWE6FGYy4XJq/rHkas8qJMLQ==
+
 lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.20, lodash@^4.17.21, lodash@~4.17.0:
   version "4.17.21"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
@@ -12305,12 +12321,7 @@ prettier@^1.19.1:
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.19.1.tgz#f7d7f5ff8a9cd872a7be4ca142095956a60797cb"
   integrity sha512-s7PoyDv/II1ObgQunCbB9PdLmUcBZcnWOcxDh7O0N/UwDEsHyqkW+Qh28jW+mVuCdx7gLB0BotYI1Y6uI9iyew==
 
-prettier@^2.0.5, prettier@^2.4.1:
-  version "2.6.2"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.6.2.tgz#e26d71a18a74c3d0f0597f55f01fb6c06c206032"
-  integrity sha512-PkUpF+qoXTqhOeWL9fu7As8LXsIUZ1WYaJiY/a7McAQzxjk82OF0tibkFXVCDImZtWxbvojFjerkiLb0/q8mew==
-
-prettier@^2.7.1:
+prettier@^2.0.5, prettier@^2.7.1:
   version "2.7.1"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.7.1.tgz#e235806850d057f97bb08368a4f7d899f7760c64"
   integrity sha512-ujppO+MkdPqoVINuDFDRLClm7D78qbDt0/NR+wp5FqEZOoTNAjPHWj17QRhu7geIHJfcNhRk1XVQmF8Bp3ye+g==
@@ -14501,13 +14512,22 @@ ts-node@^9:
     source-map-support "^0.5.17"
     yn "3.1.1"
 
-tsconfig-paths@^3.11.0, tsconfig-paths@^3.14.1:
+tsconfig-paths@^3.14.1:
   version "3.14.1"
   resolved "https://registry.yarnpkg.com/tsconfig-paths/-/tsconfig-paths-3.14.1.tgz#ba0734599e8ea36c862798e920bcf163277b137a"
   integrity sha512-fxDhWnFSLt3VuTwtvJt5fpwxBHg5AdKWMsgcPOOIilyjymcYVZoCQF8fvFRezCNfblEXmi+PcM1eYHeOAgXCOQ==
   dependencies:
     "@types/json5" "^0.0.29"
     json5 "^1.0.1"
+    minimist "^1.2.6"
+    strip-bom "^3.0.0"
+
+tsconfig-paths@^4.0.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/tsconfig-paths/-/tsconfig-paths-4.1.0.tgz#f8ef7d467f08ae3a695335bf1ece088c5538d2c1"
+  integrity sha512-AHx4Euop/dXFC+Vx589alFba8QItjF+8hf8LtmuiCwHyI4rHXQtOOENaM8kvYf5fR0dRChy3wzWIZ9WbB7FWow==
+  dependencies:
+    json5 "^2.2.1"
     minimist "^1.2.6"
     strip-bom "^3.0.0"
 
