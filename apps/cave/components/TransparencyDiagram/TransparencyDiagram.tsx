@@ -19,7 +19,7 @@ const SelectionButton = ({ diagramShown, setDiagramShown, chartId, chartName }) 
 )
 
 export function TransparencyDiagram() {
-  const [diagramShown, setDiagramShown] = useState<0 | 1 | 2>(0)
+  const [diagramShown, setDiagramShown] = useState<0 | 1 | 2 | 3>(0)
 
   return (
     <>
@@ -36,18 +36,24 @@ export function TransparencyDiagram() {
         <Box display={'flex'} flexDirection={'row'} gap={'1rem'}>
           <SelectionButton
             chartId={0}
-            chartName={'General'}
+            chartName={'Treasury'}
             diagramShown={diagramShown}
             setDiagramShown={setDiagramShown}
           />
           <SelectionButton
             chartId={1}
-            chartName={'Bonding'}
+            chartName={'General'}
             diagramShown={diagramShown}
             setDiagramShown={setDiagramShown}
           />
           <SelectionButton
             chartId={2}
+            chartName={'Bonding'}
+            diagramShown={diagramShown}
+            setDiagramShown={setDiagramShown}
+          />
+          <SelectionButton
+            chartId={3}
             chartName={'Staking'}
             diagramShown={diagramShown}
             setDiagramShown={setDiagramShown}
@@ -68,6 +74,18 @@ export function TransparencyDiagram() {
           gap={2}
         >
           {diagramShown === 0 && (
+            <Flex
+              src={
+                'https://datastudio.google.com/embed/reporting/4edd5ce9-f0d8-44cb-b79c-f14605c26218/page/p_0h786h6otc'
+              }
+              as={'iframe'}
+              w={'full'}
+              h={'full'}
+              overflow={'hidden'}
+              rounded={'2xl'}
+            />
+          )}
+          {diagramShown === 1 && (
             <ReactFlow
               edges={generalEdges}
               nodes={generalNodes}
@@ -88,7 +106,7 @@ export function TransparencyDiagram() {
               <Controls showInteractive={false} />
             </ReactFlow>
           )}
-          {diagramShown === 1 && (
+          {diagramShown === 2 && (
             <ReactFlow
               edges={bondingEdges}
               nodes={bondingNodes}
@@ -109,7 +127,7 @@ export function TransparencyDiagram() {
               <Controls showInteractive={false} />
             </ReactFlow>
           )}
-          {diagramShown === 2 && (
+          {diagramShown === 3 && (
             <ReactFlow
               edges={stakingEdges}
               nodes={stakingNodes}
