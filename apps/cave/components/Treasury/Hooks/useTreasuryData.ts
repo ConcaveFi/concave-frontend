@@ -38,7 +38,7 @@ export const useTreasuryData = () => {
   // get total Treasury
   const SEED_ROUND = 600000
   const sumTotal = treasuryData?.treasury?.map((i: any) => i.total)
-  const total = sumTotal.reduce((current, previous) => current + previous) + SEED_ROUND
+  const total = sumTotal?.reduce((current, previous) => current + previous) + SEED_ROUND
 
   const marketCap = cnvData?.cnvData?.data.marketCap || 0
   const treasuryValuePerCNV = total / cnvData?.cnvData?.data?.totalSupply || 0
