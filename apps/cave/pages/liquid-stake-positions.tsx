@@ -6,6 +6,7 @@ import { LiquidDashboardHeader } from 'components/StakingPositions/LiquidDashboa
 
 export function LiquidStakePositions() {
   const stakePosition = useStakePositions()
+  const test = ''
   return (
     <Flex
       mx="auto"
