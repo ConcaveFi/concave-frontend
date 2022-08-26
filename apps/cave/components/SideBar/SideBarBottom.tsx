@@ -53,7 +53,13 @@ function SideBarBottom({ ...props }) {
           _hover={{ filter: 'brightness(3)' }}
         >
           <HStack spacing="2px" textAlign="left" w="150px" gap={2}>
-            <Image src={`/assets/sidebar/${m.icon}.svg`} alt="" ml={-3} />
+            <Image
+              src={`/assets/sidebar/${m.icon}.svg`}
+              alt={`${m.name} logo`}
+              width="20px"
+              height="20px"
+              ml={-3}
+            />
             <Text fontSize="base" fontWeight="bold">
               {m.name}
             </Text>

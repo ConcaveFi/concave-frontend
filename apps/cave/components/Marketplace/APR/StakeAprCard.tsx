@@ -9,7 +9,13 @@ interface StakeAprCardProps {
 const StakeAprCard = ({ APR, poolId }: StakeAprCardProps) => (
   <Flex direction={{ base: 'row', md: 'column', xl: 'row' }} align="center" justify={'center'}>
     <Info title="Stake pool" info={`${stakingPools[poolId].days} days`} />
-    <Image my="-1" boxSize={'70px'} src={imageByStakepool[poolId]} alt={`stake-period-${length}`} />
+    <Image
+      my="-1"
+      width="70px"
+      height="70px"
+      src={imageByStakepool[poolId]}
+      alt={`stake-period-${length}`}
+    />
     <Info title="APR" info={`${numberMask(APR)}%`} />
   </Flex>
 )

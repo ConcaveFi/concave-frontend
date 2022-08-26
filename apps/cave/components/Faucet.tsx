@@ -56,7 +56,7 @@ const ETHFaucet = () => {
   return (
     <>
       <Button
-        leftIcon={<Image w="20px" src={`/assets/tokens/eth.svg`} alt="" />}
+        leftIcon={<Image width="20px" height="20px" src={`/assets/tokens/eth.svg`} alt="" />}
         onClick={() => sendEth()}
         isLoading={isSendingEth || isLoading}
         loadingText={isSendingEth && 'sending 0.1 ETH'}
@@ -113,7 +113,7 @@ const DAIMinter = () => {
 
   return (
     <Button
-      leftIcon={<Image w="20px" src={`/assets/tokens/dai.svg`} alt="" />}
+      leftIcon={<Image width="20px" height="20px" src={`/assets/tokens/dai.svg`} alt="" />}
       onClick={() => mintDAI()}
       isLoading={isLoading}
       loadingText="Confirm in your wallet"

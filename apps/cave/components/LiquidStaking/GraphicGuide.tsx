@@ -1,5 +1,5 @@
 import { ChevronRightIcon } from '@concave/icons'
-import { Flex, HStack, Image, Stack, Text } from '@concave/ui'
+import { Box, Flex, HStack, Image, Stack, Text } from '@concave/ui'
 
 export function GraphicGuide() {
   return (
@@ -7,33 +7,36 @@ export function GraphicGuide() {
       <Flex justify={'space-between'}>
         <Flex direction={'column'} align="center" gap={'5'}>
           <Text fontWeight="extrabold">CNV</Text>
-          <Image
+          <Box
             width={{ base: '40px', sm: '60px' }}
             height={{ base: '40px', sm: '60px' }}
-            alt=""
-            src="/assets/liquidstaking/coins-logo.svg"
+            pos="relative"
             mx={'auto'}
-          />
+          >
+            <Image alt="" src="/assets/liquidstaking/coins-logo.svg" layout="fill" />
+          </Box>
         </Flex>
         <ChevronRightIcon boxSize={12} my="auto" />
         <Flex direction={'column'} align="center" gap={'5'}>
           <Text fontWeight="extrabold">Mint NFT</Text>
-          <Image
+          <Box
             width={{ base: '40px', sm: '60px' }}
             height={{ base: '40px', sm: '60px' }}
-            alt=""
-            src="/assets/liquidstaking/nft-logo.svg"
-          />
+            pos="relative"
+          >
+            <Image alt="" src="/assets/liquidstaking/nft-logo.svg" layout="fill" />
+          </Box>
         </Flex>
         <ChevronRightIcon boxSize={12} my="auto" />
         <Flex direction={'column'} align="center" gap={{ base: '3', sm: '3' }}>
           <Text fontWeight="extrabold">NFT Marketplace</Text>
-          <Image
+          <Box
             width={{ base: '50px', sm: '70px' }}
             height={{ base: '50px', sm: '70px' }}
-            alt=""
-            src="/assets/liquidstaking/marketplace-logo.svg"
-          />
+            pos="relative"
+          >
+            <Image alt="" src="/assets/liquidstaking/marketplace-logo.svg" layout="fill" />
+          </Box>
         </Flex>
       </Flex>
       <HStack pt={6}></HStack>

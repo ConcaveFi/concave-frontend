@@ -1,13 +1,14 @@
-import { Flex, Image, Spinner, Text } from '@concave/ui'
-import { getBondSpotPrice } from 'components/Bond/BondState'
+import { Box, Flex, Image, Spinner, Text } from '@concave/ui'
+import { getBondSpotPrice } from 'components/Bond/getBondSpotPrice'
 import { ButtonLink, ButtonLinkProps } from 'components/ButtonLink'
 import { useCNVPrice } from 'hooks/useCNVPrice'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import Router from 'next/router'
+import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
 import getROI from 'utils/getROI'
 
 const NavButton = (props: ButtonLinkProps) => {
+  const router = useRouter()
   return (
     <ButtonLink
       iconSpacing={2}
@@ -16,18 +17,21 @@ const NavButton = (props: ButtonLinkProps) => {
       color="text.low"
       w="100%"
       h="50px"
-      isActive={Router.route === props.href}
+      isActive={router.route === props.href}
       overflow="hidden"
       role="group"
-      leftIcon={
+      pos="relative"
+      {...props}
+    >
+      <Flex pos="absolute" align="center" left={4} top="50%" transform="translateY(-50%)">
         <NotInteractableImage
+          height="21px"
+          width="21px"
           src={`/assets/sidebar${props.href}.svg`}
           _groupHover={{ filter: 'brightness(3)' }}
           _groupActive={{ filter: 'brightness(3)' }}
         />
-      }
-      {...props}
-    >
+      </Flex>
       <Flex w="100%" align="center" justify="center">
         {props.children}
       </Flex>
@@ -36,13 +40,14 @@ const NavButton = (props: ButtonLinkProps) => {
 }
 
 const SubnavButton = ({ children, ...props }: ButtonLinkProps) => {
+  const router = useRouter()
   return (
     <ButtonLink
       px={4}
       m="-3px"
       mt="0"
       sx={{ maxH: 'unset', opacity: 1, p: '10px' }}
-      isActive={Router.route === props.href}
+      isActive={router.route === props.href}
       minW="100%"
       color="text.low"
       variant="secondary"
@@ -95,12 +100,9 @@ const ButtonContainer = ({ children, ...props }) => (
 function PageNav() {
   return (
     <Flex direction="column" position="relative" gap="10px" w="100%" pl="32px">
-      <NotInteractableImage
-        src="/assets/sidebar/linkage.svg"
-        position="absolute"
-        left={0}
-        top={6}
-      />
+      <Box position="absolute" left={0} top={6}>
+        <NotInteractableImage src="/assets/sidebar/linkage.svg" width="36px" height="291px" />
+      </Box>
       <ButtonContainer mb="11px">
         <NavButton href="/liquid-staking" border="primary">
           Stake

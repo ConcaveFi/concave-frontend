@@ -10,6 +10,7 @@ const nextConfig = {
   trailingSlash: false,
   images: {
     formats: ['image/avif', 'image/webp'],
+    domains: ['cdn.jsdelivr.net', 'registry.walletconnect.org'],
   },
   async rewrites() {
     return [

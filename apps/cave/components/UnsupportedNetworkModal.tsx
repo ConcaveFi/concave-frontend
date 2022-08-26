@@ -21,7 +21,7 @@ export const UnsupportedNetworkModal = dynamic(
         >
           <Text fontWeight="bold">Please switch to Ethereum</Text>
           <Button
-            leftIcon={<Image w="20px" src={`/assets/tokens/eth.svg`} alt="" />}
+            leftIcon={<Image width="20px" height="20px" src={`/assets/tokens/eth.svg`} alt="" />}
             onClick={() => switchNetwork?.(ChainId.ETHEREUM)}
             isDisabled={!switchNetwork}
             variant="secondary"

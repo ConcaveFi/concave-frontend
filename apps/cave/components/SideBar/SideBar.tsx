@@ -55,9 +55,10 @@ export function SideBar() {
           direction="row"
           w="100%"
           roundedBottom="xl"
+          gap={2}
         >
           <HamburgerIcon />
-          <Image src="/assets/concave/logotype.svg" alt="concave" width="100px" ml={2} />
+          <Image src="/assets/concave/logotype.svg" alt="concave" width="100px" height="30px" />
         </Flex>
       </Box>
 

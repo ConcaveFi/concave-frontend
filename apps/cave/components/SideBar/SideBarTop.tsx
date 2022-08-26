@@ -56,9 +56,10 @@ function SideBarTop({ closeSidebar }: { closeSidebar: VoidFunction }) {
         justify="center"
         my="58px"
         filter="drop-shadow(0px 0px 27px #81b3ff4f)"
+        gap={3}
       >
-        <Image src="/assets/concave/logomark.svg" alt="concave logo" maxWidth="52px" />
-        <Image src="/assets/concave/logotype.svg" alt="concave logo" width="100px" ml={3} />
+        <Image src="/assets/concave/logomark.svg" alt="concave logo" width="52px" height="28px" />
+        <Image src="/assets/concave/logotype.svg" alt="concave logo" width="100px" height="15px" />
       </Flex>
 
       <Stack gap="1" align="flex-end" mt={7}>

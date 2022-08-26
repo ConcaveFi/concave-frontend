@@ -2,12 +2,12 @@ import { colors } from './colors'
 
 export const textures = {
   metal: {
-    bg: 'url("/assets/textures/metal.png")',
+    bg: 'url("/assets/textures/metal.webp")',
     bgPos: '50% 50%, 0px 0px',
     bgSize: '120px, auto',
   },
-  glass: 'url("/assets/textures/glass.jpg")',
-  glassHQ: 'url("/assets/textures/glassHQ.jpg")',
+  glass: 'url("/assets/textures/glass.webp")',
+  glassHQ: 'url("/assets/textures/glassHQ.webp")',
 }
 
 export const backgrounds = {

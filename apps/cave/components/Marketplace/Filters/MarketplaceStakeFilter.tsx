@@ -36,7 +36,7 @@ export const MakeplaceStakeFilter: FC<MakeplaceStakeFilterProps> = ({
     >
       <Image
         my={'auto'}
-        width={'auto'}
+        width={'90px'}
         height={'90px'}
         alt={`Image of stake ${stakingPools[poolId]?.days}`}
         src={`/assets/marketplace/${stakeImage[poolId]}`}

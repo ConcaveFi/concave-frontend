@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import { toAmount } from 'utils/toAmount'
 import { BondOutput } from './BondOutput'
-import { getBondAmountOut, getBondSpotPrice, purchaseBond, useBondState } from './BondState'
+import { getBondAmountOut, purchaseBond, useBondState } from './BondState'
 import { ConfirmBondModal } from './ConfirmBond'
 import { DownwardIcon } from './DownwardIcon'
 import { Settings, useBondSettings } from './Settings'
@@ -20,6 +20,7 @@ import { Settings, useBondSettings } from './Settings'
 import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
 import { useTransaction } from 'hooks/TransactionsRegistry/useTransaction'
 import { numberMask } from 'utils/numberMask'
+import { getBondSpotPrice } from './getBondSpotPrice'
 
 export function BondBuyCard(props: {
   updateBondPositions?: VoidFunction

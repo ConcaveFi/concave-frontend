@@ -58,7 +58,8 @@ export const MarketplaceTransactionCard = ({ data }: MarketplaceTransactionCardP
         </VStack>
         <Image
           justifySelf={'center'}
-          h={'60px'}
+          height={'60px'}
+          width="60px"
           pt={2}
           objectFit={`cover`}
           src={`/assets/marketplace/${imgNameByPeriod}`}

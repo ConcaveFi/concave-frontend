@@ -1,7 +1,18 @@
-import { Box, Flex, Image, Popover, PopoverContent, PopoverTrigger, Text } from '@chakra-ui/react'
 import { Currency, CurrencyAmount, MARKETPLACE_CONTRACT, NATIVE, Percent } from '@concave/core'
 import { FixedOrderMarketContract, StakingPosition } from '@concave/marketplace'
-import { FlexProps, gradientBorder, HStack, Spinner } from '@concave/ui'
+import {
+  Box,
+  Flex,
+  FlexProps,
+  gradientBorder,
+  HStack,
+  Image,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  Spinner,
+  Text,
+} from '@concave/ui'
 import { BuyButton } from 'components/BuyButton/BuyButton'
 import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { ProgressBar } from 'components/ProgressBar'
@@ -130,10 +141,9 @@ const ImageContainer: React.FC<ImageContainerProps> = ({ stakingPosition, ...fle
       {...flexProps}
     >
       <Info info={`${stakingPosition.tokenId}`} title="Token id" />
-      <Flex>
+      <Flex width={'auto'} height={{ base: '90px', lg: '70px' }} pos="relative">
         <Image
-          width={'auto'}
-          height={{ base: '90px', lg: '70px' }}
+          layout="fill"
           alt={`Image of stake ${label}`}
           src={`/assets/marketplace/${stakeImage[stakingPosition.poolID]}`}
         />
