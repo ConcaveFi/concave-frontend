@@ -8,7 +8,6 @@ import { toPercent } from 'utils/toPercent'
 import { useAccount, useContractWrite, useNetwork } from 'wagmi'
 import { useSwapSettings } from '../Settings'
 
-
 export const useSwapTransaction = (
   _trade: Trade<Currency, Currency, TradeType>,
   recipient: string,
