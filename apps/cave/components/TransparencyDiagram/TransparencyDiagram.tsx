@@ -24,6 +24,7 @@ export function TransparencyDiagram() {
   return (
     <>
       <VStack
+        minWidth={'700px'}
         width={'80%'}
         h="100%"
         maxHeight="1080px"
