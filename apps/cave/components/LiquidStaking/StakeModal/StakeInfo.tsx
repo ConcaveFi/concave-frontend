@@ -1,4 +1,4 @@
-import { StakingPool } from '@concave/marketplace'
+import { StakingPool, stakingPools } from '@concave/marketplace'
 import { Flex, Stack, Text } from '@concave/ui'
 import React from 'react'
 
@@ -10,21 +10,24 @@ function getRedeemDateString(date, days) {
 
 type StakeInfoProps = {
   stakingPool: StakingPool
+  status: 'loading' | 'error' | 'idle' | 'success'
+  poolId: number
   loadBar: JSX.Element
 }
-export function StakeInfo({ stakingPool, loadBar }: StakeInfoProps) {
+export function StakeInfo({ stakingPool, loadBar, status, poolId }: StakeInfoProps) {
+  const statusLab = { loading: 'loading', error: 'error fetching' }[status]
   return (
     <Flex w={{ base: '300px', md: '350px' }} rounded="3xl" shadow={'up'} p={4} direction="column">
       <Flex justify={'space-between'} w="full">
-        <HeaderInfo title={stakingPool?.rewardsBoost} info="Rewards boost" />
-        <HeaderInfo title={stakingPool?.bondRevenue} info="Share of bond growth" />
+        <HeaderInfo title={statusLab || stakingPool?.rewardsBoost} info="Rewards boost" />
+        <HeaderInfo title={statusLab || stakingPool?.bondRevenue} info="Share of bond growth" />
       </Flex>
-      <Paragraph poolId={stakingPool?.poolId} staking={stakingPool} />
+      <Paragraph poolId={poolId} staking={stakingPool} />
       <Flex mt={{ base: 3, md: 5 }} align="center" gap={1} fontWeight="semibold">
         <Text color="text.low" fontSize="md">
           Redeem date:
         </Text>
-        <Text fontSize="md">{getRedeemDateString(Date(), stakingPool.days)}</Text>
+        <Text fontSize="md">{getRedeemDateString(Date(), stakingPools[poolId].days)}</Text>
       </Flex>
       {loadBar}
     </Flex>
@@ -39,10 +42,11 @@ const Paragraph = ({ poolId, staking }: ParagraphProps) => (
     fontSize={{ base: 'xs', md: 'sm' }}
     align="justify"
   >
-    The {staking.days} days staking term will accrue CNV from bond emissions by capturing{` `}
-    {staking.bondRevenue} of the growth generated from purchased bonds every 8 hours. Additionally,
+    The {stakingPools[poolId].days} days staking term will accrue CNV from bond emissions by
+    capturing{` `}
+    {staking?.bondRevenue} of the growth generated from purchased bonds every 8 hours. Additionally,
     the {poolId} term receives a{` `}
-    {staking.rewardsBoost} boost on base CNV emissions and a {staking.quarterlyBoost} boost on the
+    {staking?.rewardsBoost} boost on base CNV emissions and a {staking?.quarterlyBoost} boost on the
     quarterly dividend derived from protocol profits in non CNV assets.
   </Text>
 )

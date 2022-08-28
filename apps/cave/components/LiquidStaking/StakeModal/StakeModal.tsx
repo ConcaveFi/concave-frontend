@@ -64,7 +64,7 @@ export const StakeModal = ({
             {...stakeData}
           />
           <VStack gap={4} w="full" justify={'center'} align="center">
-            <StakeInfo stakingPool={stakeData} loadBar={loadBar} />
+            <StakeInfo poolId={poolId} status={status} stakingPool={stakeData} loadBar={loadBar} />
             <StakeInput onClose={onClose} poolId={poolId} />
           </VStack>
         </Card>
