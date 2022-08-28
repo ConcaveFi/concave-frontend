@@ -3,10 +3,9 @@ import { Trade, TradeType } from '@concave/gemswap-sdk'
 import { useLinkedCurrencyFields } from 'components/CurrencyAmountField'
 import { useCallback, useMemo, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
-import { useSwapSettings } from '../Settings'
 import { useQueryCurrencies } from '../../hooks/useQueryCurrencies'
 import { useTrade } from '../../hooks/useTrade'
-
+import { useSwapSettings } from '../Settings'
 
 const makeTradePlaceholder = (exactAmount, otherCurrency, tradeType) =>
   (tradeType === TradeType.EXACT_INPUT

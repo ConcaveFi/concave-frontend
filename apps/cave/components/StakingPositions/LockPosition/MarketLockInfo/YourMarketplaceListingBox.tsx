@@ -8,8 +8,8 @@ import { useState } from 'react'
 import { formatFixed } from 'utils/bigNumberMask'
 import { useAccount } from 'wagmi'
 import { Info } from '../Redeem/RedeemViewer'
-import { SaleModal } from './SellPositionModal'
 import { usePositionDiscount } from './hooks/usePositionDiscount'
+import { SaleModal } from './SellPositionModal'
 
 export type UserMarketInfoState = ReturnType<typeof useYourMarketPlaceListing>
 export const useYourMarketPlaceListing = ({

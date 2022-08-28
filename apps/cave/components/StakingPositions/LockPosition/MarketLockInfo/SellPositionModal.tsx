@@ -26,8 +26,8 @@ import { BigNumberField } from './BigNumberField'
 import { ConfirmSignature } from './ConfirmSignature'
 import { ConfirmUnlist } from './ConfirmUnlist'
 import { EpochDateField } from './EpochDateField'
-import { Info } from './Info'
 import { usePositionDiscount } from './hooks/usePositionDiscount'
+import { Info } from './Info'
 
 type ListForSaleState = ReturnType<typeof useListeForSaleState>
 
