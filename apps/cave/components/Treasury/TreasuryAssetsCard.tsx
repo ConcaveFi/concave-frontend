@@ -21,12 +21,6 @@ export const TreasuryAssetsCard: React.FC<TreasuryAssetsCardProps> = ({ assets, 
         justify="space-between"
         align={'center'}
       >
-        <FarmingContainer
-          images={convex?.images || []}
-          tokenImage={convex?.tokenImage}
-          total={convex?.total}
-          status={status}
-        />
         {
           {
             loading: (
@@ -36,10 +30,18 @@ export const TreasuryAssetsCard: React.FC<TreasuryAssetsCardProps> = ({ assets, 
               </Flex>
             ),
             success: (
-              <TokenContainer
-                direction={{ base: 'column', lg: 'column' }}
-                tokens={tokens?.slice(0, 4)}
-              />
+              <>
+                <FarmingContainer
+                  images={convex?.images || []}
+                  tokenImage={convex?.tokenImage}
+                  total={convex?.total}
+                  status={status}
+                />
+                <TokenContainer
+                  direction={{ base: 'column', lg: 'column' }}
+                  tokens={tokens?.slice(0, 4)}
+                />
+              </>
             ),
             error: (
               <Text w="full" textAlign={'center'} color={'text.bright'} fontSize="2xl">
