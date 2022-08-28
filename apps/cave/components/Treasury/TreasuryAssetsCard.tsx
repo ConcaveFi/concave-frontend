@@ -1,4 +1,4 @@
-import { Avatar, AvatarGroup, Card, Flex, FlexProps, Text } from '@concave/ui'
+import { Avatar, AvatarGroup, Card, Flex, FlexProps, Spinner, Text } from '@concave/ui'
 import { numberMask } from 'utils/numberMask'
 import { TreasuryTokenInfo } from './Hooks/useTreasuryData'
 
@@ -27,9 +27,31 @@ export const TreasuryAssetsCard: React.FC<TreasuryAssetsCardProps> = ({ assets, 
           total={convex?.total}
           status={status}
         />
-        <TokenContainer tokens={tokens?.slice(0, 4)} />
+        {
+          {
+            loading: (
+              <Card color={'text.bright'} w={'full'} h="52px" gap={2}>
+                <Text fontSize={'2xl'}>Loading tokens</Text>
+                <Spinner size={'lg'} />
+              </Card>
+            ),
+            success: (
+              <TokenContainer
+                direction={{ base: 'column', lg: 'column' }}
+                tokens={tokens?.slice(0, 4)}
+              />
+            ),
+            error: (
+              <Text color={'text.bright'} fontSize="2xl">
+                Error fetching treasury
+              </Text>
+            ),
+          }[status]
+        }
       </Flex>
-      <TokenContainer direction={{ base: 'column', lg: 'row' }} tokens={tokens?.slice(5)} />
+      {status === 'success' && (
+        <TokenContainer direction={{ base: 'column', lg: 'row' }} tokens={tokens?.slice(5)} />
+      )}
     </Card>
   )
 }
