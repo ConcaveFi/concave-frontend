@@ -3,12 +3,13 @@ import { numberMask } from 'utils/numberMask'
 import { TreasuryTokenInfo } from './Hooks/useTreasuryData'
 
 type TreasuryAssetsCardProps = {
+  status: 'error' | 'idle' | 'loading' | 'success'
   assets: {
     tokens: TreasuryTokenInfo[]
     convex: FarmingContainerProps
   }
 }
-export const TreasuryAssetsCard: React.FC<TreasuryAssetsCardProps> = ({ assets }) => {
+export const TreasuryAssetsCard: React.FC<TreasuryAssetsCardProps> = ({ assets, status }) => {
   const { convex, tokens } = assets || {}
   return (
     <Card w="full" height="fit" backdropFilter={'blur(6px)'} pb={6} px="6">
@@ -24,6 +25,7 @@ export const TreasuryAssetsCard: React.FC<TreasuryAssetsCardProps> = ({ assets }
           images={convex?.images || []}
           tokenImage={convex?.tokenImage}
           total={convex?.total}
+          status={status}
         />
         <TokenContainer tokens={tokens?.slice(0, 4)} />
       </Flex>
@@ -52,7 +54,9 @@ type FarmingContainerProps = {
   tokenImage: string
   images: string[]
 }
-const FarmingContainer: React.FC<FarmingContainerProps> = ({ images, tokenImage, total }) => (
+const FarmingContainer: React.FC<
+  FarmingContainerProps & { status: 'error' | 'idle' | 'loading' | 'success' }
+> = ({ images, tokenImage, total, status }) => (
   <Card w={'full'} h="160px" variant="secondary">
     <Card direction={'row'} w={'full'} h="48%" justify={'center'} align="center" gap={3}>
       <Avatar src={tokenImage} size="sm" />
@@ -61,13 +65,17 @@ const FarmingContainer: React.FC<FarmingContainerProps> = ({ images, tokenImage,
       </Text>
     </Card>
     <Text mx={'auto'} color="text.low" fontSize={'2xl'} fontWeight="bold" mt={3}>
-      {total ? `$${numberMask(total)}` : 'loading...'}
+      {status === 'loading' && 'Loading ...'}
+      {status === 'success' && `$${numberMask(total)}`}
+      {status === 'error' && 'Error fetching'}
     </Text>
-    <AvatarGroup size={'sm'} opacity={0.8} mx="auto" mt={'-6px'} zIndex="-1">
-      {images?.map((image, index) => (
-        <Avatar key={index} src={image} />
-      ))}
-    </AvatarGroup>
+    {status === 'success' && (
+      <AvatarGroup size={'sm'} opacity={0.8} mx="auto" mt={'-6px'} zIndex="-1">
+        {images?.map((image, index) => (
+          <Avatar key={index} src={image} />
+        ))}
+      </AvatarGroup>
+    )}
   </Card>
 )
 
