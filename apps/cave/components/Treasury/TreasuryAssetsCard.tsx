@@ -24,8 +24,15 @@ export const TreasuryAssetsCard: React.FC<TreasuryAssetsCardProps> = ({ assets, 
         {
           {
             loading: (
-              <Flex justify={'center'} color={'text.bright'} w={'full'} h="52px" gap={2}>
-                <Text fontSize={'2xl'}>Loading tokens</Text>
+              <Flex
+                justify={'center'}
+                align="center"
+                color={'text.bright'}
+                w={'full'}
+                h="100px"
+                gap={2}
+              >
+                <Text fontSize={'3xl'}>Loading tokens</Text>
                 <Spinner size={'lg'} />
               </Flex>
             ),
@@ -44,14 +51,14 @@ export const TreasuryAssetsCard: React.FC<TreasuryAssetsCardProps> = ({ assets, 
               </>
             ),
             error: (
-              <Text w="full" textAlign={'center'} color={'text.bright'} fontSize="2xl">
-                Error fetching treasury
-              </Text>
+              <Flex justify={'center'} align="center" color={'text.bright'} w={'full'} h="100px">
+                <Text fontSize="2xl">Error fetching treasury</Text>
+              </Flex>
             ),
           }[status]
         }
       </Flex>
-      {status === 'success' && (
+      {status === 'loading' && (
         <TokenContainer direction={{ base: 'column', lg: 'row' }} tokens={tokens?.slice(5)} />
       )}
     </Card>
