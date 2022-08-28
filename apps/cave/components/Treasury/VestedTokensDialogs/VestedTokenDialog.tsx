@@ -17,7 +17,7 @@ type VestedTokenDialogProps = {
   status?: 'default' | 'approve' | 'rejected' | 'error' | 'submitted'
   token: Token
   conversionToCNV?: number
-  cnvDataStatus: 'error' | 'idle' | 'loading' | 'success'
+  cnvDataStatus?: 'error' | 'idle' | 'loading' | 'success'
 }
 export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDialogProps> = ({
   onClose,
