@@ -104,7 +104,7 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
                 ),
                 error: (
                   <Text my={1} mx="auto" color="text.bright" fontWeight={'bold'}>
-                    Loading cnv data
+                    Error fetching data
                   </Text>
                 ),
               }[cnvDataStatus]
