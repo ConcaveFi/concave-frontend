@@ -15,7 +15,7 @@ type StakeInfoProps = {
   loadBar: JSX.Element
 }
 export function StakeInfo({ stakingPool, loadBar, status, poolId }: StakeInfoProps) {
-  const statusLab = { loading: 'loading', error: 'error fetching' }[status]
+  const statusLab = { loading: 'loading', error: '---' }[status]
   return (
     <Flex w={{ base: '300px', md: '350px' }} rounded="3xl" shadow={'up'} p={4} direction="column">
       <Flex justify={'space-between'} w="full">
