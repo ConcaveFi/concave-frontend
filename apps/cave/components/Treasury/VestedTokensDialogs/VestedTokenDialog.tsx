@@ -17,6 +17,7 @@ type VestedTokenDialogProps = {
   status: 'default' | 'approve' | 'rejected' | 'error' | 'submitted'
   token: Token
   conversionToCNV?: number
+  cnvDataStatus: 'error' | 'idle' | 'loading' | 'success'
 }
 export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDialogProps> = ({
   onClose,
@@ -27,6 +28,7 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
   status,
   token,
   conversionToCNV,
+  cnvDataStatus,
 }) => {
   const { isConnected } = useAccount()
   const { redeemable, redeemed, balance } = tokenUserData || {}
@@ -73,7 +75,11 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
               title="Redeemed:"
               value={isLoading ? 'Loading...' : formatEther(redeemed || '0')}
             />
-            <Collapse in={validValue || (redeemMax && !redeemable?.isZero())}>
+            <Collapse
+              in={
+                cnvDataStatus === 'success' && (validValue || (redeemMax && !redeemable?.isZero()))
+              }
+            >
               {conversionToCNV && (
                 <Info
                   title="You will receive:"
@@ -81,13 +87,28 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
                 />
               )}
             </Collapse>
-            {conversionToCNV && (
-              <Text
-                color={'text.accent'}
-                fontWeight="bold"
-                opacity={0.5}
-              >{`1 ${token?.symbol} = ${CNVAmount} CNV`}</Text>
-            )}
+            {
+              {
+                loading: (
+                  <Flex mx="auto" color="text.bright" align={'center'} my={1} gap={2}>
+                    <Text fontWeight={'bold'}>Loading cnv data</Text>
+                    <Spinner size={'sm'} />
+                  </Flex>
+                ),
+                success: conversionToCNV && (
+                  <Text
+                    color={'text.accent'}
+                    fontWeight="bold"
+                    opacity={0.5}
+                  >{`1 ${token?.symbol} = ${CNVAmount} CNV`}</Text>
+                ),
+                error: (
+                  <Text my={1} mx="auto" color="text.bright" fontWeight={'bold'}>
+                    Loading cnv data
+                  </Text>
+                ),
+              }[cnvDataStatus]
+            }
             <Text fontWeight={'bold'} textColor="text.accent" opacity="0.5" fontSize={'xs'}></Text>
           </Flex>
           <Flex gap={2} fontWeight={'bold'} pl={2} align="center">
