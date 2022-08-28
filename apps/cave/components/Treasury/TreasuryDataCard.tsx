@@ -86,7 +86,7 @@ const LastBondsContainer: React.FC<LastBondSolds> = ({ solds, status }) => {
             />
           )),
           error: (
-            <Text fontSize={'2xl'} color="text.bright">
+            <Text mx="auto" fontSize={'2xl'} color="text.bright">
               Error fetching last bond solds
             </Text>
           ),
