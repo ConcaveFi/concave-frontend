@@ -1,4 +1,4 @@
-import { Card, Flex, FlexProps, gradientBorder, Text } from '@concave/ui'
+import { Card, Flex, FlexProps, gradientBorder, Spinner, Text } from '@concave/ui'
 import { numberMask } from 'utils/numberMask'
 import { LastBondSolds, TreasuryData } from './Hooks/useTreasuryData'
 
@@ -53,32 +53,48 @@ export const TreasuryDataCard = ({ treasuryData, lastBondSolds }: TreasuryDataCa
           { title: 'CNV total supply', info: cnvTotalSupplyLab },
         ]}
       />
-      <LastBondsContainer lastBondSolds={lastBondSolds} />
+      <LastBondsContainer {...lastBondSolds} />
     </Card>
   )
 }
 
-type LastBondsContainerProps = { lastBondSolds: LastBondSolds }
-const LastBondsContainer: React.FC<LastBondsContainerProps> = ({ lastBondSolds }) => (
-  <Flex
-    mt={'-4'}
-    mb={{ base: 4, lg: 0 }}
-    flex={{ base: 0.6, lg: 0.75 }}
-    align="center"
-    w="full"
-    direction={{ base: 'column', md: 'row' }}
-  >
-    {lastBondSolds?.map(({ timesTamp, inputAmount, outputAmount }, index) => (
-      <LastBondInfo
-        opacity={{ base: 1 - index / 3.2, md: 1 }}
-        key={index}
-        timestamp={timesTamp}
-        outputAmount={outputAmount}
-        inputAmount={inputAmount}
-      />
-    ))}
-  </Flex>
-)
+const LastBondsContainer: React.FC<LastBondSolds> = ({ solds, status }) => {
+  return (
+    <Flex
+      mt={'-4'}
+      mb={{ base: 4, lg: 0 }}
+      flex={{ base: 0.6, lg: 0.75 }}
+      align="center"
+      w="full"
+      direction={{ base: 'column', md: 'row' }}
+    >
+      {
+        {
+          loading: (
+            <Flex mx="auto" gap={2} color="text.bright">
+              <Text fontSize={'2xl'}>Loading last solds</Text>
+              <Spinner size={'lg'} />
+            </Flex>
+          ),
+          success: solds?.map(({ timesTamp, inputAmount, outputAmount }, index) => (
+            <LastBondInfo
+              opacity={{ base: 1 - index / 3.2, md: 1 }}
+              key={index}
+              timestamp={timesTamp}
+              outputAmount={outputAmount}
+              inputAmount={inputAmount}
+            />
+          )),
+          error: (
+            <Text fontSize={'2xl'} color="text.bright">
+              Error fetching last bond solds
+            </Text>
+          ),
+        }[status]
+      }
+    </Flex>
+  )
+}
 
 type LastBondInfoProps = { timestamp: string; inputAmount: string; outputAmount: String }
 const LastBondInfo: React.FC<LastBondInfoProps & FlexProps> = ({

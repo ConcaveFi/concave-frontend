@@ -8,7 +8,7 @@ import { useCNVPrice } from 'hooks/useCNVPrice'
 import { numberMask } from 'utils/numberMask'
 
 const useLastBondSolds = () => {
-  const { data } = useGet_Accrualbondv1_Last10_SoldQuery()
+  const { data, status } = useGet_Accrualbondv1_Last10_SoldQuery()
 
   const lastBondSoldsData = data?.logAccrualBondsV1_BondSold
   const lastBondSolds = lastBondSoldsData
@@ -20,6 +20,7 @@ const useLastBondSolds = () => {
     .splice(0, 3)
   return {
     lastBondSolds,
+    status,
   }
 }
 
@@ -35,7 +36,7 @@ export const useTreasuryData = () => {
     status: cnvDataStatus,
   } = useGet_Amm_Cnv_InfosQuery()
   const { price: cnvPrice, status: cnvPriceStatus } = useCNVPrice()
-  const { lastBondSolds } = useLastBondSolds()
+  const { lastBondSolds, status: bondSoldsStatus } = useLastBondSolds()
 
   // get total Treasury
   const SEED_ROUND = 600000
@@ -50,7 +51,10 @@ export const useTreasuryData = () => {
   const convexToken = treasuryData?.treasury?.find((token) => token.name === 'cvxDOLA3POOL')
 
   return {
-    lastBondSolds,
+    lastBondSolds: {
+      solds: lastBondSolds,
+      status: bondSoldsStatus,
+    },
     treasuryData: {
       marketCap: marketCap,
       cnvPrice: +cnvPrice?.toFixed(2),
@@ -112,10 +116,13 @@ export type TreasuryTokenInfo = {
 }
 
 export type LastBondSolds = {
-  timesTamp: string
-  inputAmount: string
-  outputAmount: string
-}[]
+  solds: {
+    timesTamp: string
+    inputAmount: string
+    outputAmount: string
+  }[]
+  status: 'error' | 'idle' | 'loading' | 'success'
+}
 
 // url.slice(48) will cut the string to get only the image path on github page.
 const convertToJsDelivrPath = (url: string) =>
