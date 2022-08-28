@@ -6,7 +6,7 @@ import { LiquidLocksCards } from 'components/LiquidStaking/LiquidLocksCards'
 import { StakeCard } from 'components/LiquidStaking/StakeCard'
 import { withPageTransition } from 'components/PageTransition'
 function LiquidStaking() {
-  const { stakeData, isLoading } = useLiquidStakeData()
+  const { stakeData, status } = useLiquidStakeData()
   return (
     <Flex
       width={{ base: '340px', md: '420px', xl: '900px' }}
@@ -43,15 +43,19 @@ function LiquidStaking() {
         </Text>
         <GraphicGuide />
       </Flex>
-      {isLoading && <LoadingState />}
-
-      {!isLoading && (
-        <Flex my={6} justify={'space-between'} gap={{ base: 2, md: 4 }} w="full" wrap={'wrap'}>
-          {stakeData?.map((stake, index) => (
-            <StakeCard key={index} stakeData={stake} />
-          ))}
-        </Flex>
-      )}
+      {
+        {
+          loading: <LoadingState />,
+          success: (
+            <Flex my={6} justify={'space-between'} gap={{ base: 2, md: 4 }} w="full" wrap={'wrap'}>
+              {stakeData?.map((stake, index) => (
+                <StakeCard key={index} stakeData={stake} />
+              ))}
+            </Flex>
+          ),
+          error: <ErrorState />,
+        }[status]
+      }
       <LiquidLocksCards />
     </Flex>
   )
@@ -64,6 +68,13 @@ LiquidStaking.Meta = {
 
 export default withPageTransition(LiquidStaking)
 
+const ErrorState = () => (
+  <Card my={6} width={'full'} height="483px" align={'center'} justify="center" variant="secondary">
+    <Text fontSize={'5xl'} color="text.low" fontWeight="bold" mx="auto">
+      Error fetching daya
+    </Text>
+  </Card>
+)
 const LoadingState = () => (
   <Card my={6} width={'full'} height="483px" align={'center'} justify="center" variant="secondary">
     <Text fontSize={'5xl'} color="text.low" fontWeight="bold" mx="auto">

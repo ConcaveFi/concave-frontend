@@ -16,7 +16,7 @@ export const LiquidLocksCards = () => {
   const { isOpen, onToggle } = useDisclosure()
 
   const stakingData = useGet_Stakingv1_Last100_LockQuery()
-  const { isLoading } = stakingData
+  const { isLoading, status } = stakingData
   useEffect(() => {
     if (stakingData?.data?.logStakingV1_Lock) {
       setStakingLocks(
@@ -27,7 +27,6 @@ export const LiquidLocksCards = () => {
     }
   }, [stakingData])
 
-  stakingData.isLoading
   const amountStaked = stakingLocks
     .map((value, index) => (
       <Text opacity={1 - (index / 10) * (isOpen ? 1 : 3)} key={index}>
@@ -77,23 +76,33 @@ export const LiquidLocksCards = () => {
         justify="center"
         align={'center'}
       >
-        {isLoading ? (
-          <Flex align={'center'} gap={2}>
-            <Text fontSize={'18px'} fontWeight="700">
-              Loading tracks
-            </Text>
-            <SpinnerIcon animation={`${spinAnimation} 2s linear infinite`} />
-          </Flex>
-        ) : (
-          <ExpandArrowIcon
-            width={12}
-            height={12}
-            cursor="pointer"
-            transition={'all 0.3s'}
-            transform={isOpen ? 'rotate(180deg)' : ''}
-            onClick={onToggle}
-          />
-        )}
+        {
+          {
+            loading: (
+              <Flex align={'center'} gap={2}>
+                <Text fontSize={'18px'} fontWeight="700">
+                  Loading tracks
+                </Text>
+                <SpinnerIcon animation={`${spinAnimation} 2s linear infinite`} />
+              </Flex>
+            ),
+            success: (
+              <ExpandArrowIcon
+                width={12}
+                height={12}
+                cursor="pointer"
+                transition={'all 0.3s'}
+                transform={isOpen ? 'rotate(180deg)' : ''}
+                onClick={onToggle}
+              />
+            ),
+            error: (
+              <Text m="auto" fontSize={'18px'} fontWeight="700">
+                Error fetching
+              </Text>
+            ),
+          }[status]
+        }
       </Card>
     </Card>
   )
