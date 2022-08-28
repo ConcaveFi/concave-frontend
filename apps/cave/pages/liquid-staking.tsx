@@ -1,5 +1,4 @@
-import { SpinIcon } from '@concave/icons'
-import { Card, Flex, Heading, keyframes, Text } from '@concave/ui'
+import { Flex, Heading, keyframes, Text } from '@concave/ui'
 import { GraphicGuide } from 'components/LiquidStaking/GraphicGuide'
 import { useLiquidStakeData } from 'components/LiquidStaking/hooks/useLiquidStakeData'
 import { LiquidLocksCards } from 'components/LiquidStaking/LiquidLocksCards'
@@ -43,19 +42,17 @@ function LiquidStaking() {
         </Text>
         <GraphicGuide />
       </Flex>
-      {
-        {
-          loading: <LoadingState />,
-          success: (
-            <Flex my={6} justify={'space-between'} gap={{ base: 2, md: 4 }} w="full" wrap={'wrap'}>
-              {stakeData?.map((stake, index) => (
-                <StakeCard key={index} stakeData={stake} />
-              ))}
-            </Flex>
-          ),
-          error: <ErrorState />,
-        }[status]
-      }
+
+      <Flex my={6} justify={'space-between'} gap={{ base: 2, md: 4 }} w="full" wrap={'wrap'}>
+        {[0, 1, 2, 3]?.map((id, index) => (
+          <StakeCard
+            status={status}
+            stakeData={stakeData && stakeData[0]}
+            key={index}
+            poolId={id}
+          />
+        ))}
+      </Flex>
       <LiquidLocksCards />
     </Flex>
   )
@@ -68,21 +65,6 @@ LiquidStaking.Meta = {
 
 export default withPageTransition(LiquidStaking)
 
-const ErrorState = () => (
-  <Card my={6} width={'full'} height="283px" align={'center'} justify="center" variant="secondary">
-    <Text fontSize={'5xl'} color="text.low" fontWeight="bold" mx="auto">
-      Error fetching data
-    </Text>
-  </Card>
-)
-const LoadingState = () => (
-  <Card my={6} width={'full'} height="483px" align={'center'} justify="center" variant="secondary">
-    <Text fontSize={'5xl'} color="text.low" fontWeight="bold" mx="auto">
-      Loading
-    </Text>
-    <SpinIcon animation={`2s linear infinite ${spinAnimation}`} boxSize={'60px'} />
-  </Card>
-)
 const spinAnimation = keyframes({
   '0%': { transform: 'rotate(0deg)' },
   '100%': { transform: 'rotate(360deg)' },
