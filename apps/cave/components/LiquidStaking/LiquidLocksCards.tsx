@@ -98,7 +98,7 @@ export const LiquidLocksCards = () => {
             ),
             error: (
               <Text m="auto" fontSize={'18px'} fontWeight="700">
-                Error fetching last solds
+                Error fetching tracks
               </Text>
             ),
           }[status]
