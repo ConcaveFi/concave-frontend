@@ -68,6 +68,8 @@ export const StakeCard = ({ status, poolId, stakeData }: StakeCardProps) => {
       </Card>
       <StakeModal
         loadBar={<LoadBar variant="secondary" {...loadBarProps} />}
+        status={status}
+        poolId={poolId}
         isOpen={isOpen}
         onClose={onClose}
         stakeData={stakeData}
