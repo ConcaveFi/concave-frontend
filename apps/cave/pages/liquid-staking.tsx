@@ -69,9 +69,9 @@ LiquidStaking.Meta = {
 export default withPageTransition(LiquidStaking)
 
 const ErrorState = () => (
-  <Card my={6} width={'full'} height="483px" align={'center'} justify="center" variant="secondary">
+  <Card my={6} width={'full'} height="283px" align={'center'} justify="center" variant="secondary">
     <Text fontSize={'5xl'} color="text.low" fontWeight="bold" mx="auto">
-      Error fetching daya
+      Error fetching data
     </Text>
   </Card>
 )

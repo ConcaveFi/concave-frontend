@@ -59,7 +59,7 @@ export const LiquidLocksCards = () => {
       direction={'column'}
       textShadow={'0px 0px 27px rgba(129, 179, 255, 0.31)'}
     >
-      <Collapse startingHeight={isLoading ? '60px' : '100px'} in={isOpen}>
+      <Collapse startingHeight={status === 'success' ? '100px' : '55px'} in={isOpen}>
         <Flex fontWeight="700" width={'full'} flex={1} height="full">
           <LocksColumn title="When" values={relativeTime} />
           <Box w="1px" bg="stroke.primary" />
@@ -98,7 +98,7 @@ export const LiquidLocksCards = () => {
             ),
             error: (
               <Text m="auto" fontSize={'18px'} fontWeight="700">
-                Error fetching
+                Error fetching last solds
               </Text>
             ),
           }[status]
