@@ -90,7 +90,7 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
             {
               {
                 loading: (
-                  <Flex mx="auto" color="text.bright" align={'center'} my={1} gap={2}>
+                  <Flex color="text.bright" my={1} gap={2}>
                     <Text fontWeight={'bold'}>Loading cnv data</Text>
                     <Spinner size={'sm'} />
                   </Flex>
@@ -103,7 +103,7 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
                   >{`1 ${token?.symbol} = ${CNVAmount} CNV`}</Text>
                 ),
                 error: (
-                  <Text my={1} mx="auto" color="text.bright" fontWeight={'bold'}>
+                  <Text my={1} color="text.bright" fontWeight={'bold'}>
                     Error fetching data
                   </Text>
                 ),
