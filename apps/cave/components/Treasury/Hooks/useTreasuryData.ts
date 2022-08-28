@@ -24,17 +24,19 @@ const useLastBondSolds = () => {
 }
 
 export const useTreasuryData = () => {
-  const { isLoading: isLoadingTreasury, data: treasuryData } = useGet_TreasuryQuery()
-  const { isLoading: isLoadingCNV, data: cnvData } = useGet_Amm_Cnv_InfosQuery()
-  const { price: cnvPrice } = useCNVPrice()
+  const {
+    isLoading: isLoadingTreasury,
+    data: treasuryData,
+    status: treasuryDataStatus,
+  } = useGet_TreasuryQuery()
+  const {
+    isLoading: isLoadingCNV,
+    data: cnvData,
+    status: cnvDataStatus,
+  } = useGet_Amm_Cnv_InfosQuery()
+  const { price: cnvPrice, status: cnvPriceStatus } = useCNVPrice()
   const { lastBondSolds } = useLastBondSolds()
 
-  if (isLoadingTreasury || isLoadingCNV) {
-    return {
-      revenueData: {},
-      isLoading: true,
-    }
-  }
   // get total Treasury
   const SEED_ROUND = 600000
   const sumTotal = treasuryData?.treasury?.map((i: any) => i.total)
@@ -56,6 +58,9 @@ export const useTreasuryData = () => {
       treasuryRevenue: 0,
       treasuryValue: treasuryValue,
       cnvTotalSupply: cnvTotalSupply,
+      cnvStatus: cnvDataStatus,
+      cnvPriceStatus,
+      treasuryStatus: treasuryDataStatus,
     },
     isloading: false,
     assets: {
@@ -84,6 +89,9 @@ export type TreasuryData = {
   treasuryRevenue: number
   treasuryValue: number
   cnvTotalSupply: number
+  cnvStatus: 'error' | 'idle' | 'loading' | 'success'
+  cnvPriceStatus: 'error' | 'idle' | 'loading' | 'success'
+  treasuryStatus: 'error' | 'idle' | 'loading' | 'success'
 }
 
 export type TreasuryTokenInfo = {

@@ -7,8 +7,27 @@ type TreasuryDataCardProps = {
   lastBondSolds: LastBondSolds
 }
 export const TreasuryDataCard = ({ treasuryData, lastBondSolds }: TreasuryDataCardProps) => {
-  const { cnvPrice, marketCap, valuePerCNV, cnvTotalSupply, treasuryRevenue, treasuryValue } =
-    treasuryData || {}
+  const {
+    cnvPrice,
+    marketCap,
+    valuePerCNV,
+    cnvTotalSupply,
+    treasuryRevenue,
+    treasuryValue,
+    cnvStatus,
+    treasuryStatus,
+    cnvPriceStatus,
+  } = treasuryData || {}
+  const statusLabel = {
+    loading: 'loading ...',
+    error: 'error fetching',
+  }
+  const marketCapLab = statusLabel[cnvStatus] || (marketCap && '$' + numberMask(marketCap))
+  const cnvPriceLab = statusLabel[cnvPriceStatus] || (cnvPrice && '$' + numberMask(cnvPrice))
+  const valuePerCNVLab = statusLabel[cnvStatus] || (valuePerCNV && '$' + numberMask(valuePerCNV))
+  const treasuryValueLab =
+    statusLabel[treasuryStatus] || (treasuryValue && '$' + numberMask(treasuryValue))
+  const cnvTotalSupplyLab = statusLabel[cnvStatus] || (cnvTotalSupply && numberMask(cnvTotalSupply))
   return (
     <Card
       backdropFilter="blur(8px)"
@@ -18,9 +37,9 @@ export const TreasuryDataCard = ({ treasuryData, lastBondSolds }: TreasuryDataCa
     >
       <TreasuryDataContainer
         data={[
-          { title: 'Market cap', info: marketCap && '$' + numberMask(marketCap) },
-          { title: 'CNV price', info: cnvPrice && '$' + numberMask(cnvPrice), applyBorder: true },
-          { title: 'Treasury value per CNV', info: valuePerCNV && '$' + numberMask(valuePerCNV) },
+          { title: 'Market cap', info: marketCapLab },
+          { title: 'CNV price', info: cnvPriceLab, applyBorder: true },
+          { title: 'Treasury value per CNV', info: valuePerCNVLab },
         ]}
       />{' '}
       <TreasuryDataContainer
@@ -28,10 +47,10 @@ export const TreasuryDataCard = ({ treasuryData, lastBondSolds }: TreasuryDataCa
           { title: 'Treasury revenue', info: 'Coming soon' },
           {
             title: 'Treasury value',
-            info: treasuryValue && '$' + numberMask(treasuryValue),
+            info: treasuryValueLab,
             applyBorder: true,
           },
-          { title: 'CNV total supply', info: cnvTotalSupply && numberMask(cnvTotalSupply) },
+          { title: 'CNV total supply', info: cnvTotalSupplyLab },
         ]}
       />
       <LastBondsContainer lastBondSolds={lastBondSolds} />
