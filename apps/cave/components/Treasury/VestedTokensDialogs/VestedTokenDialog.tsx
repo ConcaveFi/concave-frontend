@@ -14,7 +14,7 @@ type VestedTokenDialogProps = {
   tokenUserData: { redeemable: BigNumber; redeemed: BigNumber; balance: BigNumber }
   isLoading: boolean
   onRedeem: (amount: BigNumber, redeemMax: boolean) => void
-  status: 'default' | 'approve' | 'rejected' | 'error' | 'submitted'
+  status?: 'default' | 'approve' | 'rejected' | 'error' | 'submitted'
   token: Token
   conversionToCNV?: number
   cnvDataStatus: 'error' | 'idle' | 'loading' | 'success'
