@@ -3,20 +3,36 @@
   "version": "0.0.0",
   "description": "Secret concave ui library",
   "license": "MIT",
+  "scripts": {
+    "gen:theme-typings": "chakra-cli tokens ./src/theme/index.ts",
+    "postinstall": "yarn gen:theme-typings",
+    "build": "tsup --inject inject-react.js",
+    "dev": "tsup --watch --inject inject-react.js",
+    "prepack": "yarn gen:theme-typings && yarn build",
+    "publish": "yarn npm publish"
+  },
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "sideEffects": false,
   "files": [
-    "dist/**"
+    "dist"
   ],
-  "scripts": {
-    "gen:theme-typings": "chakra-cli tokens ./theme/index.ts",
-    "postinstall": "yarn gen:theme-typings",
-    "build": "tsup index.tsx --format esm,cjs --dts --external react --inject inject-react.js",
-    "dev": "tsup index.tsx --format esm,cjs --watch --dts --external react --inject inject-react.js",
-    "prepack": "yarn gen:theme-typings && yarn build",
-    "publish": "yarn npm publish"
+  "tsup": {
+    "entry": [
+      "src/index.tsx",
+      "src/components/*"
+    ],
+    "format": [
+      "esm",
+      "cjs"
+    ],
+    "dts": true,
+    "splitting": true,
+    "treeshake": true,
+    "sourcemap": true,
+    "clean": true,
+    "silent": true
   },
   "devDependencies": {
     "@types/react": "^18.0.14",

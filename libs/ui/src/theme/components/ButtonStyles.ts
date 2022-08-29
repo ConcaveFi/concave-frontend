@@ -1,5 +1,5 @@
 import { ComponentSingleStyleConfig } from '@chakra-ui/react'
-import { textures } from '../../theme/backgrounds'
+import { textures } from '../backgrounds'
 import { gradientBorder } from '../utils/gradientBorder'
 
 const HoverRadialGradient = {
