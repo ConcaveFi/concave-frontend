@@ -8,12 +8,26 @@
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "sideEffects": false,
-  "files": [
-    "dist/**"
-  ],
   "scripts": {
-    "build": "tsup index.tsx --format esm,cjs --dts --external react --inject inject-react.js",
-    "dev": "tsup index.tsx --format esm,cjs --watch --dts --external react --inject inject-react.js"
+    "build": "tsup --inject inject-react.js",
+    "dev": "tsup --watch --inject inject-react.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "tsup": {
+    "entry": [
+      "src/**"
+    ],
+    "format": [
+      "esm"
+    ],
+    "dts": true,
+    "splitting": true,
+    "treeshake": true,
+    "sourcemap": true,
+    "clean": true,
+    "silent": true
   },
   "devDependencies": {
     "@types/react": "^18.0.14",
