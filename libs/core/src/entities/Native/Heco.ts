@@ -1,8 +1,6 @@
 import invariant from 'tiny-invariant'
 import { WNATIVE } from '../../constants/tokens'
-import { Currency } from '../currency'
-import { NativeCurrency } from '../nativeCurrency'
-import { Token } from '../token'
+import { Currency, NativeCurrency, Token } from '../index'
 
 export class Heco extends NativeCurrency {
   protected constructor(chainId: number) {

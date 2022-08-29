@@ -1,4 +1,4 @@
-import { Token } from '../entities/token'
+import { Token } from '../entities'
 import { AddressMap, TokenMap } from '../types'
 
 import {

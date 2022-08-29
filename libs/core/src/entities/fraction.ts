@@ -4,9 +4,9 @@ import _Decimal from 'decimal.js-light'
 import JSBI from 'jsbi'
 import invariant from 'tiny-invariant'
 import toFormat from 'toformat'
-import { ZERO } from '../constants'
-import { Rounding } from '../enums'
-import { BigintIsh } from '../types'
+import { ZERO } from '../constants/numbers'
+import { Rounding } from '../enums/Rounding'
+import { BigintIsh } from '../types/BigIntIsh'
 
 const Decimal = toFormat(_Decimal)
 const Big = toFormat(_Big)
@@ -172,3 +172,5 @@ export class Fraction {
     return new Fraction(this.numerator, this.denominator)
   }
 }
+
+export default Fraction

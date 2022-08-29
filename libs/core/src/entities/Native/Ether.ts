@@ -1,8 +1,6 @@
 import invariant from 'tiny-invariant'
 import { WETH9 } from '../../constants/tokens'
-import { Currency } from '../currency'
-import { NativeCurrency } from '../nativeCurrency'
-import { Token } from '../token'
+import { Currency, NativeCurrency, Token } from '../index'
 
 /**
  * Ether is the main usage of a 'native' currency, i.e. for Ethereum mainnet and all testnets

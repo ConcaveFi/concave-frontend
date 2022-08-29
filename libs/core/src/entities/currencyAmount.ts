@@ -2,12 +2,11 @@ import _Big from 'big.js'
 import JSBI from 'jsbi'
 import invariant from 'tiny-invariant'
 import toFormat from 'toformat'
-import { MaxUint256 } from '../constants'
-import { Rounding } from '../enums'
-import { BigintIsh } from '../types'
-import { Currency } from './currency'
+import { MaxUint256 } from '../constants/numbers'
+import { Rounding } from '../enums/Rounding'
+import { BigintIsh } from '../types/BigIntIsh'
+import { Currency, Token } from './currency'
 import { Fraction } from './fraction'
-import { Token } from './token'
 
 const Big = toFormat(_Big)
 
@@ -43,7 +42,11 @@ export class CurrencyAmount<T extends Currency> extends Fraction {
     return new CurrencyAmount(currency, numerator, denominator)
   }
 
-  protected constructor(currency: T, numerator: BigintIsh, denominator?: BigintIsh) {
+  protected constructor(
+    currency: T,
+    numerator: BigintIsh,
+    denominator: BigintIsh = JSBI.BigInt(1),
+  ) {
     super(numerator, denominator)
     invariant(JSBI.lessThanOrEqual(this.quotient, MaxUint256), 'AMOUNT')
     this.currency = currency
