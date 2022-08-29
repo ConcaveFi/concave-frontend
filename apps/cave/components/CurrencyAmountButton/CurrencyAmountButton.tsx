@@ -16,7 +16,6 @@ export const useCurrencyButtonState = (
   const connectModal = useConnectModal()
   const currency = amount?.currency
   const symbol = currency?.symbol
-  const totalSupply = currency?.wrapped.totalSupply
   const balance = useCurrencyBalance(currency, { watch: true })
   const approve = useApprove(currency?.wrapped, spender)
 
@@ -52,8 +51,8 @@ export const useCurrencyButtonState = (
     if (!currency) return 'no currency'
     if (currency.isNative) return 'successful'
     if (approve.isError && approve.error['code'] !== 4001) return 'error'
-    if (totalSupply.greaterThan(0) && approve.allowance?.amount?.greaterThan(totalSupply))
-      return 'successful'
+    // if (totalSupply.greaterThan(0) && allowance?.amount?.greaterThan(totalSupply))
+    //   return 'successful'
     if (approve.allowance?.amount?.greaterThan(amount)) return 'successful'
     if (approve.isWaitingForConfirmation) return 'waitingWallet'
     if (approve.isWaitingTransactionReceipt) return 'pending'

@@ -20,6 +20,7 @@ import { Loading } from 'components/Loading'
 import { ConnectButton } from 'components/UserWallet/ConnectButton'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import { useTotalSupply } from 'hooks/useTotalSupply'
 import { concaveProvider } from 'lib/providers'
 import { useQuery } from 'react-query'
 import { useAccount } from 'wagmi'
@@ -147,6 +148,9 @@ export const LiquidityPoolPainel = (props: LPPosition) => {
   )
 
   const pair = pairData.data
+
+  const lpTotalSupply = useTotalSupply(pair.liquidityToken)
+
   if (userBalance.isLoading || pairData.isLoading || !userBalance.data) {
     return (
       <AccordionPanel>
@@ -161,8 +165,8 @@ export const LiquidityPoolPainel = (props: LPPosition) => {
   const balance = userBalance.data || CurrencyAmount.fromRawAmount(pair.liquidityToken, '0')
 
   const userPoolShare =
-    pair.liquidityToken?.totalSupply &&
-    new Percent(userBalance.data.quotient, pair.liquidityToken.totalSupply.quotient)
+    lpTotalSupply.isSuccess && new Percent(userBalance.data.quotient, lpTotalSupply.data.quotient)
+
   return (
     <AccordionPanel>
       <Stack

@@ -4,7 +4,6 @@ import {
   CurrencyAmount,
   FIVE,
   ONE,
-  Percent,
   Token,
   ZERO,
   _1000,
@@ -259,22 +258,5 @@ export class Pair {
       `Concave LP | ${currencyAmount1.currency.symbol}-${currencyAmount2.currency.symbol}`,
     )
     return new Pair(currencyAmount1.wrapped, currencyAmount2.wrapped, liquidityToken)
-  }
-
-  public calculatePoolShare(amount0: CurrencyAmount<Currency>, amount1: CurrencyAmount<Currency>) {
-    const poolShareAmount =
-      this.liquidityToken.totalSupply &&
-      amount0?.greaterThan(0) &&
-      amount1?.greaterThan(0) &&
-      this.getLiquidityMinted(this.liquidityToken.totalSupply, amount0.wrapped, amount1.wrapped)
-    if (!poolShareAmount) return undefined
-    const mewTotalSuppy = this.liquidityToken.totalSupply.add(poolShareAmount)
-    return {
-      amount: poolShareAmount,
-      percent: new Percent(poolShareAmount.numerator, mewTotalSuppy.numerator),
-    } as {
-      amount: CurrencyAmount<Token>
-      percent: Percent
-    }
   }
 }

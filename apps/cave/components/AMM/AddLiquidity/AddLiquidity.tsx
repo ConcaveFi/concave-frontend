@@ -1,4 +1,4 @@
-import { CHAIN_NAME, Currency, CurrencyAmount } from '@concave/core'
+import { CHAIN_NAME, Currency } from '@concave/core'
 import { Pair } from '@concave/gemswap-sdk'
 import { PlusIcon } from '@concave/icons'
 import { Button, ButtonProps, Card, Flex, Modal, Text, useDisclosure } from '@concave/ui'
@@ -16,7 +16,7 @@ import { useQueryCurrencies } from '../hooks/useQueryCurrencies'
 import { NetworkMismatch } from '../NetworkMismatch'
 import { useAddLiquidityState } from './hooks/useAddLiquidityState'
 import { useAddLiquidityTransaction } from './hooks/useAddLiquidityTransaction'
-import useLiquidityData from './hooks/useLiquidityData'
+import { useLiquidityData } from './hooks/useLiquidityData'
 
 const AddSymbol = () => (
   <Flex align="center" justify="center">
@@ -34,12 +34,6 @@ const AddSymbol = () => (
     </Flex>
   </Flex>
 )
-
-export type LiquidityPool = {
-  pair: Pair
-  amount0: CurrencyAmount<Currency>
-  amount1: CurrencyAmount<Currency>
-}
 
 function AddLiquidityContent({
   liquidityModalClose,

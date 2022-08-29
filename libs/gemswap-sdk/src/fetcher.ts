@@ -73,18 +73,16 @@ export abstract class Fetcher {
         'function symbol() external view returns (string)',
         'function decimals() external view returns (uint8)',
         'function name() external view returns (string)',
-        'function totalSupply() external view returns (uint256)',
       ],
       provider,
     )
-    const [symbol, decimals, name, totalSupply] = await Promise.all([
+    const [symbol, decimals, name] = await Promise.all([
       tokenContract.symbol(),
       tokenContract.decimals(),
       tokenContract.name(),
-      tokenContract.totalSupply(),
     ])
 
-    const token = new Token(chainId, address, decimals, symbol, name, totalSupply)
+    const token = new Token(chainId, address, decimals, symbol, name)
 
     TOKENS_CACHE[address] = {
       ...TOKENS_CACHE[address],
