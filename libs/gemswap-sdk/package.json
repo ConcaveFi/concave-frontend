@@ -8,12 +8,26 @@
   "types": "./dist/index.d.ts",
   "sideEffects": false,
   "files": [
-    "dist/**"
+    "dist"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format esm,cjs --dts",
-    "dev": "tsup src/index.ts --format esm,cjs --watch --dts",
-    "test": "tsdx test"
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "tsdx test --passWithNoTests"
+  },
+  "tsup": {
+    "entry": [
+      "src/**"
+    ],
+    "format": [
+      "esm"
+    ],
+    "dts": true,
+    "splitting": true,
+    "treeshake": true,
+    "sourcemap": true,
+    "clean": true,
+    "silent": true
   },
   "dependencies": {
     "@concave/core": "*",
