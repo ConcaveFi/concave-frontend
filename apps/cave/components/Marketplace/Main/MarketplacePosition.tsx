@@ -180,7 +180,7 @@ const BuyContainer = ({ stakingPosition, active = false }: BuyContainerProps) =>
       return { loadingText: 'Approve in wallet', disabled: true, isLoading: true }
     if (swap.isWaitingTransactionReceipt)
       return { loadingText: 'Waiting confirmation', disabled: true, isLoading: true }
-    if (swap.isSucess) return { children: 'Bought', disabled: true }
+    if (swap.isSucess) return { children: 'Purchased', disabled: true }
     if (swap.isError) return { children: 'Unavailable', disabled: true }
     if (useCurrencyState.approved) {
       return {
