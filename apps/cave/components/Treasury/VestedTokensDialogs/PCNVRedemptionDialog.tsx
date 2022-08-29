@@ -82,6 +82,7 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
         isOpen={confirmModal.isOpen && Boolean(amount)}
         onClose={confirmModal.onClose}
         onAccept={redeem}
+        status={cnvDataStatus}
       />
     </>
   )
