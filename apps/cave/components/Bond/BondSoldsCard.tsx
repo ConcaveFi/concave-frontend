@@ -113,7 +113,7 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
                 <Spinner />
               </Flex>
             ),
-            error: <Text>error fetching tracks</Text>,
+            error: <Text color={'text.bright'}>error fetching tracks</Text>,
             success: (
               <ExpandArrowIcon
                 width={12}
