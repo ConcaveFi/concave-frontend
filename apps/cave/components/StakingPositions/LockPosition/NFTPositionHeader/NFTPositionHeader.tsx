@@ -1,7 +1,7 @@
 import { Percent } from '@concave/core'
-import { LockedIcon, UnlockedIcon } from '@concave/icons'
 import { StakingPosition, StakingV1Contract } from '@concave/marketplace'
-import { Box, Button, Flex, FlexProps, HStack, Image, Spinner, Text } from '@concave/ui'
+import { Button, Flex, FlexProps, Image, Spinner, Text } from '@concave/ui'
+import { ProgressBar } from 'components/ProgressBar'
 import { differenceInDays } from 'date-fns'
 import { BigNumber, Transaction } from 'ethers'
 import { formatEther } from 'ethers/lib/utils'
@@ -127,7 +127,7 @@ export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
           {...getRedeemButtonProps(readyForReedem, status)}
         />
       </Flex>
-      <LoadBard percent={loadBarPercent} />
+      <ProgressBar percent={loadBarPercent} />
     </Flex>
   )
 }
@@ -160,33 +160,6 @@ const ImageContainer: FC<ImageContainerProps> = ({ period, src, children }) => (
     {children}
   </Flex>
 )
-type LoadBarProps = { percent: Percent }
-const LoadBard = ({ percent }: LoadBarProps) => {
-  return (
-    <HStack mx={2}>
-      <LockedIcon h={`18px`} w={'18px'} />
-      <Flex w={'full'} mx="auto" rounded={'2xl'} shadow="down" h={3} p={0.5}>
-        <Box
-          width={`100%`}
-          height="full"
-          backgroundImage={'/assets/liquidstaking/progress.svg'}
-          backgroundRepeat={'repeat-x'}
-          rounded="full"
-          backgroundPosition={'center'}
-        >
-          <Box
-            width={`${percent.toFixed()}%`}
-            maxW={`full`}
-            height="full"
-            bg={'stroke.accent'}
-            rounded="full"
-          />
-        </Box>
-      </Flex>
-      <UnlockedIcon />
-    </HStack>
-  )
-}
 type RecentRedeemedTransaction = {
   [key: number]: {
     tx: Transaction

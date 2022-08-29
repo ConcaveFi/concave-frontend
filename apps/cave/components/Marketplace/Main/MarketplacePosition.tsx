@@ -1,10 +1,10 @@
 import { Box, Flex, Image, Popover, PopoverContent, PopoverTrigger, Text } from '@chakra-ui/react'
 import { Currency, CurrencyAmount, MARKETPLACE_CONTRACT, NATIVE, Percent } from '@concave/core'
-import { LockedIcon, UnlockedIcon } from '@concave/icons'
 import { FixedOrderMarketContract, StakingPosition } from '@concave/marketplace'
 import { FlexProps, gradientBorder, HStack, Spinner } from '@concave/ui'
 import { BuyButton } from 'components/BuyButton/BuyButton'
 import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
+import { ProgressBar } from 'components/ProgressBar'
 import { usePositionDiscount } from 'components/StakingPositions/LockPosition/MarketLockInfo/hooks/usePositionDiscount'
 import { differenceInDays, format, formatDistanceToNowStrict } from 'date-fns'
 import { useTransaction } from 'hooks/TransactionsRegistry/useTransaction'
@@ -80,11 +80,7 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakin
             {/* <Info title="Token id" info={stakingPosition.tokenId.toString()} /> */}
             <BuyContainer active={active} stakingPosition={stakingPosition} />
           </HStack>
-          <LoadBard
-            date={format(positionDate, 'MM/dd/yyyy')}
-            relativeDate={relativePositionTime}
-            percent={percentToMaturity}
-          />
+          <ProgressBar percent={percentToMaturity} />
         </Flex>
       </PopoverTrigger>
       <PopoverContent w={'350px'}>
@@ -262,33 +258,7 @@ const PriceComponent = ({ price }: { price: CurrencyAmount<Currency> }) => {
     </Flex>
   )
 }
-type LoadBarProps = { percent: Percent; date: string; relativeDate: string }
-const LoadBard = ({ percent, date, relativeDate }: LoadBarProps) => {
-  return (
-    <HStack mx={2}>
-      <LockedIcon h={`18px`} w={'18px'} />
-      <Flex w={'full'} mx="auto" rounded={'2xl'} shadow="down" h={3} p={0.5}>
-        <Box
-          width={`100%`}
-          height="full"
-          backgroundImage={'/assets/liquidstaking/progress.svg'}
-          backgroundRepeat={'repeat-x'}
-          rounded="full"
-          backgroundPosition={'center'}
-        >
-          <Box
-            width={`${percent.toFixed()}%`}
-            maxW={`full`}
-            height="full"
-            bg={'stroke.accent'}
-            rounded="full"
-          />
-        </Box>
-      </Flex>
-      <UnlockedIcon />
-    </HStack>
-  )
-}
+
 type InfoProps = { title: string; info: string; isLoading?: boolean }
 const Info = ({ info, title, isLoading, color, ...flexProps }: InfoProps & FlexProps) => (
   <Flex direction={'column'} align="center" {...flexProps}>
