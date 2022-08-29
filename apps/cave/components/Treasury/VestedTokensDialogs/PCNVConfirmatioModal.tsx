@@ -63,7 +63,7 @@ export const PCNVConfirmationModal: React.FC<PCNVConfirmationModalProps> = ({
                     places: 5,
                   })}  pCNV?`}</Text>
                   <Text color={'red.300'}>
-                    Conversion to CNV could not be calculated in the moment.
+                    Conversion to CNV could not be calculated at the moment.
                   </Text>
                 </>
               ),
