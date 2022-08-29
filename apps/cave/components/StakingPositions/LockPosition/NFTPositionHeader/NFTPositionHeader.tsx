@@ -208,7 +208,7 @@ const getRedeemButtonProps = (readyForRedeem: boolean, status: RedeemedStatus) =
     ),
     redeemed: (
       <Text fontSize={'xs'}>
-        Transaction <br /> redeemed
+        Position <br /> redeemed
       </Text>
     ),
   }
