@@ -77,7 +77,7 @@ export function TransparencyDiagram() {
           {diagramShown === 0 && (
             <Flex
               src={
-                'https://datastudio.google.com/embed/reporting/4edd5ce9-f0d8-44cb-b79c-f14605c26218/page/p_0h786h6otc'
+                'https://datastudio.google.com/embed/reporting/f0ba2360-88f4-468a-8306-1923dd49f8a8/page/p_0h786h6otc'
               }
               as={'iframe'}
               w={'full'}
