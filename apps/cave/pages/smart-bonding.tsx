@@ -15,13 +15,13 @@ import { BondBuyCard } from 'components/Bond/BondBuyCard'
 import { BondInfo, UserBondPositionInfo } from 'components/Bond/BondInfo'
 import BondSoldsCard from 'components/Bond/BondSoldsCard'
 import {
-  getBondSpotPrice,
   getBondTermLength,
   getCurrentBlockTimestamp,
   getUserBondPositions,
   redeemBondBatch,
   useBondState,
 } from 'components/Bond/BondState'
+import { getBondSpotPrice } from 'components/Bond/getBondSpotPrice'
 import { Redeem } from 'components/Bond/Redeem'
 import { SelectedBondType } from 'components/Bond/SelectedBondType'
 import { withPageTransition } from 'components/PageTransition'
