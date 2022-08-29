@@ -1,14 +1,19 @@
+import { stakingPools } from '@concave/marketplace'
 import { Flex, Image, Text, useBreakpointValue } from '@concave/ui'
 import { StakeData } from '../hooks/useLiquidStakeData'
 import { StakeInformation } from './StakeInformation'
 
 type EmissionsProps = {
+  status: 'loading' | 'error' | 'idle' | 'success'
+  poolId: number
   onOpenDescription: VoidFunction
   onCloseDescription: VoidFunction
   stakeInformationType: 'hover' | 'click'
 } & StakeData
 
 export function Emissions({
+  poolId,
+  status,
   onCloseDescription,
   onOpenDescription,
   stakeInformationType,
@@ -31,13 +36,22 @@ export function Emissions({
         justify="center"
         direction={'column'}
       >
-        <Info info={stakeData.days + ' days'} title="Stake period" />
+        <Info info={stakingPools[poolId].days + ' days'} title="Stake period" />
         <Image
           mx="auto"
-          src={`/assets/liquidstaking/${stakeData.days}d-logo.svg`}
+          src={`/assets/liquidstaking/${stakingPools[poolId].days}d-logo.svg`}
           alt="stake period logo"
         />
-        <Info title="Total vAPR" info={stakeData.totalVAPR?.toFixed(2) + '%'} />
+        <Info
+          title="Total vAPR"
+          info={
+            {
+              loading: 'loading',
+              error: 'error fetching',
+              success: stakeData?.totalVAPR?.toFixed(2) + '%',
+            }[status]
+          }
+        />
         <Image
           mx="auto"
           src={`/assets/liquidstaking/modal-moreinfo-logo.svg`}
@@ -51,11 +65,12 @@ export function Emissions({
         />
         {!mobileUI && (
           <StakeInformation
+            status={status}
             type={stakeInformationType}
             onDisable={onCloseDescription}
             onShow={onOpenDescription}
-            bondingEmissions={stakeData.bondEmissions}
-            baseEmissions={stakeData.baseEmissions}
+            bondingEmissions={stakeData?.bondEmissions}
+            baseEmissions={stakeData?.baseEmissions}
           />
         )}
       </Flex>
@@ -70,6 +85,7 @@ export function Emissions({
       />
       {mobileUI && (
         <StakeInformation
+          status={status}
           type={stakeInformationType}
           onDisable={onCloseDescription}
           onShow={onOpenDescription}

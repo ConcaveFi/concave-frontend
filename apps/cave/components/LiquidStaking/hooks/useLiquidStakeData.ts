@@ -2,7 +2,7 @@ import { StakingPool, stakingPools } from '@concave/marketplace'
 import { useGet_All_Total_Pools_VaprQuery } from 'graphql/generated/graphql'
 
 export const useLiquidStakeData = () => {
-  const { data: stakingV1, isLoading } = useGet_All_Total_Pools_VaprQuery()
+  const { data: stakingV1, isLoading, status } = useGet_All_Total_Pools_VaprQuery()
   const poolRewards = stakingV1?.logStakingV1_PoolRewarded
   const stakeData = poolRewards
     ?.map((poolReward) => {
@@ -21,7 +21,7 @@ export const useLiquidStakeData = () => {
     })
     .sort((current, previus) => current.poolId - previus.poolId)
 
-  return { stakeData, isLoading }
+  return { stakeData, status }
 }
 export type StakeData = {
   poolId: number
