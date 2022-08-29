@@ -1,5 +1,5 @@
-import { ExpandArrowIcon } from '@concave/icons'
-import { Flex, FlexProps, Text } from '@concave/ui'
+import { ChevronDownIcon } from '@concave/icons'
+import { Flex, FlexProps, gradientBorder, Text } from '@concave/ui'
 
 type DropdownCard = {
   isOpen: boolean
@@ -26,8 +26,9 @@ export const DropdownCard: React.FC<DropdownCard & FlexProps> = ({
       minW="110px"
       height={'30px'}
       userSelect="none"
-      border="2px solid"
-      borderColor={highlighted ? 'text.accent' : 'text.low'}
+      shadow={'Up Small'}
+      apply={'background.metalBrighter'}
+      sx={{ ...gradientBorder({ variant: 'secondary', borderWidth: 2 }) }}
     >
       <Text
         transition={'.4s all'}
@@ -39,12 +40,11 @@ export const DropdownCard: React.FC<DropdownCard & FlexProps> = ({
         {title}
       </Text>
       {placeholder && <Text>{placeholder}</Text>}
-      <ExpandArrowIcon
-        color={'text.low'}
-        width="16px"
-        height={'30px'}
+      <ChevronDownIcon
+        boxSize={'25px'}
         transform={isOpen && 'rotate(180deg)'}
         transition="0.3s all"
+        mx={-2}
       />
     </Flex>
   )
