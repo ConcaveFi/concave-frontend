@@ -21,15 +21,11 @@ const TradeDetailsExpanded = ({ trade }: { trade: Trade<Currency, Currency, Trad
   )
 }
 
-export function TradeDetails({
-  trade,
-  inputAmount,
-  outputAmount,
-}: {
+export const TradeDetails: React.FC<{
   trade: Trade<Currency, Currency, TradeType>
   inputAmount: CurrencyAmount<Currency>
   outputAmount: CurrencyAmount<Currency>
-}) {
+}> = ({ trade, inputAmount, outputAmount }) => {
   /*
     toggle trade details, only toggleable when there is a valid trade 
     auto hide when there is no details to show (inputs are emptied)

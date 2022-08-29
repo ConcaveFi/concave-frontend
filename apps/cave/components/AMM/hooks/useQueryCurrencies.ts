@@ -37,7 +37,8 @@ const updateQuery = ({ currency0, currency1, chainId }: UpdateCurrenciesQuery) =
   Router.replace({ query }, undefined, { shallow: true })
 }
 
-const getQueryCurrenciesKey = (chainId = 1) => `${Router.pathname} query currencies ${chainId}`
+const getQueryCurrenciesKey = (pathname: string, chainId = 1) =>
+  `${pathname} query currencies ${chainId}`
 
 type CurrencyChainMap = { [chain in ChainId]?: [Currency, Currency] }
 const defaultCurrencies: Record<string, CurrencyChainMap> = {}
@@ -55,7 +56,7 @@ export const useQueryCurrencies = () => {
   const queryHasCurrency = query.currency0 || query.currency1
 
   const { data: currencies, isFetching } = useQuery<[Currency, Currency]>(
-    getQueryCurrenciesKey(chainId),
+    getQueryCurrenciesKey(pathname, chainId),
     async () => {
       const currency0 = getQueryValue(query, 'currency0')
       const currency1 = getQueryValue(query, 'currency1')
@@ -82,9 +83,9 @@ export const useQueryCurrencies = () => {
   const onChangeCurrencies = useCallback(
     (currencies: [Currency, Currency]) => {
       updateQuery({ chainId: chain?.id, currency0: currencies[0], currency1: currencies[1] })
-      queryClient.setQueryData(getQueryCurrenciesKey(chain?.id), currencies)
+      queryClient.setQueryData(getQueryCurrenciesKey(pathname, chain?.id), currencies)
     },
-    [queryClient, chain?.id],
+    [queryClient, pathname, chain?.id],
   )
 
   return useMemo(

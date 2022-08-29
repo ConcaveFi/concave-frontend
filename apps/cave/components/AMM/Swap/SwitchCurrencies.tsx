@@ -1,7 +1,7 @@
 import { ExpandArrowIcon } from '@concave/icons'
 import { Button, Flex } from '@concave/ui'
 
-export const SwitchCurrencies = ({ onClick }) => {
+export const SwitchCurrencies: React.FC<{ onClick: VoidFunction }> = ({ onClick }) => {
   return (
     <Flex align="center" justify="center">
       <Button

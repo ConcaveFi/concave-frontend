@@ -3,8 +3,9 @@ import { HStack, Text } from '@concave/ui'
 import { useFiatValue } from 'components/AMM/hooks/useFiatPrice'
 import {
   CurrencySelector as DisabledCurrencySelector,
-  CurrencySelectorComponent,
+  CurrencySelectorProps,
 } from 'components/CurrencySelector/CurrencySelector'
+import { ComponentType } from 'react'
 import { toAmount } from 'utils/toAmount'
 import { CurrencyAmountField } from '../CurrencyAmountField'
 import { Balance } from './Balance'
@@ -13,7 +14,7 @@ type CurrencyInputFieldProps = {
   currencyAmountIn: CurrencyAmount<Currency>
   isCurrencyLoading?: boolean
   onChangeAmount: (value: CurrencyAmount<Currency>) => void
-  CurrencySelector?: CurrencySelectorComponent
+  CurrencySelector?: ComponentType<CurrencySelectorProps>
   debounce?: number
 }
 

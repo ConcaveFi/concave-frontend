@@ -14,7 +14,9 @@ import { isAddress } from 'ethers/lib/utils'
 import { useReducer, useRef, useState } from 'react'
 import { useEnsAddress } from 'wagmi'
 
-export const CustomRecipient = ({ onChangeRecipient }) => {
+export const CustomRecipient: React.FC<{ onChangeRecipient: (address?: string) => void }> = ({
+  onChangeRecipient,
+}) => {
   const [isOpen, toggle] = useReducer((s) => !s, false)
 
   const [recipient, setRecipient] = useState('')
@@ -83,3 +85,5 @@ export const CustomRecipient = ({ onChangeRecipient }) => {
     </Flex>
   )
 }
+
+export default CustomRecipient

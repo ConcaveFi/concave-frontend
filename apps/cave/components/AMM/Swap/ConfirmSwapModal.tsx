@@ -211,17 +211,12 @@ const ConfirmSwap = ({
   )
 }
 
-export const ConfirmSwapModal = ({
-  trade,
-  isOpen,
-  onClose,
-  onConfirm,
-}: {
+export const ConfirmSwapModal: React.FC<{
   isOpen: boolean
   onClose: () => void
   trade: Trade<Currency, Currency, TradeType>
   onConfirm: () => void
-}) => {
+}> = ({ trade, isOpen, onClose, onConfirm }) => {
   return (
     <Modal
       bluryOverlay={true}
@@ -234,3 +229,5 @@ export const ConfirmSwapModal = ({
     </Modal>
   )
 }
+
+export default ConfirmSwapModal

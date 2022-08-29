@@ -6,6 +6,7 @@ import {
   useQueryCurrencies,
 } from 'components/AMM/hooks/useQueryCurrencies'
 import { SwapCard } from 'components/AMM/Swap/SwapCard'
+import { Layout } from 'components/Layout'
 import { withPageTransition } from 'components/PageTransition'
 import { LayoutGroup } from 'framer-motion'
 
@@ -39,6 +40,8 @@ export function SwapPage() {
     </Flex>
   )
 }
+
+SwapPage.Layout = Layout
 
 SwapPage.Meta = {
   title: 'Concave | Gemswap (AMM)',

@@ -10,19 +10,13 @@ const spin = keyframes({
 
 const spinnerStyles = { animation: `${spin} 2s linear infinite` }
 
-export const WaitingConfirmationDialog = ({
-  children,
-  isOpen,
-  title,
-  disableCloseButton = false,
-  ...props
-}: {
+export const WaitingConfirmationDialog: React.FC<{
   children?: ReactNode
   isOpen: boolean
   title?: string
   disableCloseButton?: boolean
   onClose?: VoidFunction
-}) => {
+}> = ({ children, isOpen, title, disableCloseButton = false, ...props }) => {
   return (
     <Modal
       bluryOverlay={true}
@@ -51,3 +45,5 @@ export const WaitingConfirmationDialog = ({
     </Modal>
   )
 }
+
+export default WaitingConfirmationDialog

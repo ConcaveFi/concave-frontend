@@ -1,5 +1,6 @@
 import { GasIcon } from '@concave/icons'
 import { Flex, Spinner, Text } from '@concave/ui'
+import { useIsMounted } from 'hooks/useIsMounted'
 import { useFeeData } from 'wagmi'
 
 export const GasPrice = () => {
@@ -9,7 +10,8 @@ export const GasPrice = () => {
     cacheTime: Infinity,
     watch: true,
   })
-  if (isError) return null
+  const isMounted = useIsMounted()
+  if (!isMounted || isError) return null
   return (
     <Flex>
       <GasIcon viewBox="0 0 16 16" mr={2} />

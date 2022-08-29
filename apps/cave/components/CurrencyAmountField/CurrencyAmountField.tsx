@@ -1,7 +1,7 @@
 import { Currency, CurrencyAmount } from '@concave/core'
 import { FlexProps, HStack, NumericInput, Stack, useMultiStyleConfig } from '@concave/ui'
-import { CurrencySelectorComponent } from 'components/CurrencySelector/CurrencySelector'
-import { ReactNode, useCallback, useRef, useState } from 'react'
+import { CurrencySelectorProps } from 'components/CurrencySelector/CurrencySelector'
+import { ComponentType, ReactNode, useCallback, useRef, useState } from 'react'
 import { useDebounce } from 'react-use'
 import { toAmount } from 'utils/toAmount'
 
@@ -18,7 +18,7 @@ export function CurrencyAmountField({
   disabled?: boolean
   onChangeAmount: (value: CurrencyAmount<Currency>) => void
   debounce?: number
-  CurrencySelector: CurrencySelectorComponent
+  CurrencySelector: ComponentType<CurrencySelectorProps>
   disableCurrencySelector?: boolean
 } & FlexProps) {
   const styles = useMultiStyleConfig('Input', { variant: 'primary', size: 'large' })

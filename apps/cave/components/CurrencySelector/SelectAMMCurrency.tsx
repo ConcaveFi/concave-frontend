@@ -5,7 +5,7 @@ import { useQueryCurrencies } from 'components/AMM/hooks/useQueryCurrencies'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { defaultChains } from 'wagmi'
-import { CurrencySelector } from './CurrencySelector'
+import { CurrencySelector, CurrencySelectorProps } from './CurrencySelector'
 import { SearchableTokenList } from './SearchableTokenList'
 
 const CommonTokens = ({
@@ -92,13 +92,7 @@ const LoadingCurrencySelector = () => (
   <Skeleton w="130px" h="30px" rounded="full" opacity={0.1} shadow="Up Small" />
 )
 
-export const SelectAMMCurrency = ({
-  selected,
-  onSelect,
-}: {
-  selected?: Currency
-  onSelect: (token: Currency) => void
-}) => {
+export const SelectAMMCurrency: React.FC<CurrencySelectorProps> = ({ selected, onSelect }) => {
   const { isLoading } = useQueryCurrencies()
 
   if (isLoading) return <LoadingCurrencySelector />
@@ -111,3 +105,5 @@ export const SelectAMMCurrency = ({
     />
   )
 }
+
+export default SelectAMMCurrency

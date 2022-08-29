@@ -25,15 +25,11 @@ const TransactionError = ({ error, onClose }: { error: string; onClose: () => vo
   </>
 )
 
-export const TransactionErrorDialog = ({
-  error,
-  isOpen: isOpenProp,
-  closeParentComponent,
-}: {
+export const TransactionErrorDialog: React.FC<{
   error: string
   isOpen: boolean
   closeParentComponent?: VoidFunction
-}) => {
+}> = ({ error, isOpen: isOpenProp, closeParentComponent }) => {
   const [isOpen, setIsOpen] = useState(isOpenProp)
   useEffect(() => {
     setIsOpen(isOpenProp)
@@ -54,3 +50,5 @@ export const TransactionErrorDialog = ({
     </Modal>
   )
 }
+
+export default TransactionErrorDialog

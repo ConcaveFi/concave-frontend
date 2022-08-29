@@ -29,14 +29,14 @@ type TransactionSubmittedDialogProps = {
   children?: ReactNode
 }
 
-export const TransactionSubmittedDialog = ({
+export const TransactionSubmittedDialog: React.FC<TransactionSubmittedDialogProps> = ({
   title,
   subtitle,
   tx,
   isOpen: isOpenProp,
   closeParentComponent,
   children,
-}: TransactionSubmittedDialogProps) => {
+}) => {
   const [isOpen, setIsOpen] = useState(isOpenProp)
 
   useEffect(() => {
@@ -63,3 +63,5 @@ export const TransactionSubmittedDialog = ({
     </Modal>
   )
 }
+
+export default TransactionSubmittedDialog

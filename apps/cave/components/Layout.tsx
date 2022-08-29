@@ -1,8 +1,10 @@
 import { Container, Flex } from '@concave/ui'
 import { AnimatePresence } from 'framer-motion'
 import { useIsMounted } from 'hooks/useIsMounted'
-import SecurityBanner from './SecurityBanner'
+import dynamic from 'next/dynamic'
 import { SideBar } from './SideBar/SideBar'
+
+const SecurityBanner = dynamic(() => import('./SecurityBanner'))
 
 export const DefaultLayout = ({ children }) => {
   const isMounted = useIsMounted()

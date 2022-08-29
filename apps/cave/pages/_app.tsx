@@ -5,10 +5,10 @@ import { DefaultLayout } from 'components/Layout'
 import { MetaHead, MetaProps } from 'components/MetaHead'
 import { Modals } from 'components/Modals'
 import { AppProviders } from 'contexts'
-import { TransactionsObserver } from 'hooks/TransactionsRegistry'
 import { NODE_ENV } from 'lib/env.conf'
 import { NextPage } from 'next'
 import type { AppProps } from 'next/app'
+import dynamic from 'next/dynamic'
 import Router, { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import * as gtag from '../lib/analytics'
@@ -42,6 +42,11 @@ const progress = new ProgressBar({
 Router.events.on('routeChangeStart', progress.start)
 Router.events.on('routeChangeComplete', progress.finish)
 Router.events.on('routeChangeError', progress.finish)
+
+const TransactionsObserver = dynamic(
+  () => import('hooks/TransactionsRegistry').then((m) => m.TransactionsObserver),
+  { ssr: false },
+)
 
 type NextPageWithLayout = NextPage & {
   Layout?: React.FC

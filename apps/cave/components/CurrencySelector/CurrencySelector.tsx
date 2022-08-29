@@ -3,14 +3,12 @@ import { Skeleton, useDisclosure } from '@concave/ui'
 import { FC } from 'react'
 import { SelectCurrencyButton } from './SelectCurrencyButton'
 
-export type CurrencySelectorComponent = FC<{ selected: Currency; onSelect: (c: Currency) => void }>
+export type CurrencySelectorProps = { selected?: Currency; onSelect: (c: Currency) => void }
 export const CurrencySelector = ({
   selected,
   onSelect,
   CurrencySelectorModal,
-}: {
-  selected?: Currency
-  onSelect: (token: Currency) => void
+}: CurrencySelectorProps & {
   CurrencySelectorModal?: FC<{
     selected: Currency
     onSelect: (token: Currency) => void

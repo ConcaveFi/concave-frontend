@@ -2,27 +2,34 @@ import { CHAIN_NAME, PCNV } from '@concave/core'
 import { Button, Card, Collapse, Text, useDisclosure } from '@concave/ui'
 import { AddTokenToWalletButton } from 'components/AddTokenToWalletButton'
 import {
-  ConfirmSwapModal,
   CurrencyInputField,
   CurrencyOutputField,
-  CustomRecipient,
   SwitchCurrencies,
   useSwapButtonProps,
   useSwapState,
   useSwapTransaction,
 } from 'components/AMM'
 import { useSwapSettings } from 'components/AMM/Swap/Settings'
-import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
-import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
-import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
-
-import { WaitingConfirmationDialog } from 'components/TransactionDialog/TransactionWaitingConfirmationDialog'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { useCallback, useState } from 'react'
+import dynamic from 'next/dynamic'
+import { useState } from 'react'
 import { toAmount } from 'utils/toAmount'
-import { NetworkMismatch } from '../NetworkMismatch'
 import { PcnvNotification } from './PcnvNotification'
 import { TradeDetails } from './TradeDetails'
+
+const ConfirmSwapModal = dynamic(() => import('components/AMM/Swap/ConfirmSwapModal'))
+const CustomRecipient = dynamic(() => import('components/AMM/Swap/CustomRecipient'))
+const NetworkMismatch = dynamic(() => import('../NetworkMismatch'))
+const SelectAMMCurrency = dynamic(() => import('components/CurrencySelector/SelectAMMCurrency'))
+const WaitingConfirmationDialog = dynamic(
+  () => import('components/TransactionDialog/TransactionWaitingConfirmationDialog'),
+)
+const TransactionSubmittedDialog = dynamic(
+  () => import('components/TransactionDialog/TransactionSubmittedDialog'),
+)
+const TransactionErrorDialog = dynamic(
+  () => import('components/TransactionDialog/TransactionErrorDialog'),
+)
 
 export function SwapCard() {
   const { trade, error, onChangeInput, onChangeOutput, switchFields, onReset } = useSwapState()

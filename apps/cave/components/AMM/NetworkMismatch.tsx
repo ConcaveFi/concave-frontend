@@ -5,13 +5,10 @@ import { ReactNode } from 'react'
 import { getQueryValue } from 'utils/getQueryValue'
 import { useNetwork, useSwitchNetwork } from 'wagmi'
 
-export function NetworkMismatch({
-  onReset,
-  children,
-}: {
+export const NetworkMismatch: React.FC<{
   onReset?: (resetingToChainId: ChainId) => void
   children: (props: { activeChainId; queryChainId }) => ReactNode
-}) {
+}> = ({ onReset, children }) => {
   const { switchNetwork, error } = useSwitchNetwork()
 
   const { query, push } = useRouter()
@@ -77,3 +74,5 @@ export function NetworkMismatch({
     </SlideFade>
   )
 }
+
+export default NetworkMismatch

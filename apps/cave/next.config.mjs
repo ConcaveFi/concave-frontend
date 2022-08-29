@@ -12,6 +12,11 @@ const nextConfig = {
     formats: ['image/avif', 'image/webp'],
     domains: ['cdn.jsdelivr.net', 'registry.walletconnect.org'],
   },
+  // webpack: (config) => {
+  //   config.plugins.push(new DuplicatePackageCheckerPlugin())
+  //   return config
+  // },
+  productionBrowserSourceMaps: true,
   async rewrites() {
     return [
       { source: '/', destination: '/gemswap' },
