@@ -63,7 +63,12 @@ export function Bond() {
     onOpen: onOpenSubmitted,
   } = useDisclosure()
   const { isOpen: isOpenError, onClose: onCloseError, onOpen: onOpenError } = useDisclosure()
-  const { data: last10SoldsData, isLoading, error } = useGet_Accrualbondv1_Last10_SoldQuery()
+  const {
+    data: last10SoldsData,
+    isLoading,
+    error,
+    status,
+  } = useGet_Accrualbondv1_Last10_SoldQuery()
 
   function updateBondPositions() {
     getUserBondPositions(networkId, userAddress, currentBlockTs)
@@ -234,7 +239,7 @@ export function Bond() {
                   </>
                 )}
               </Card>
-              <BondSoldsCard loading={isLoading} error={error} data={last10SoldsData} />
+              <BondSoldsCard loading={isLoading} status={status} data={last10SoldsData} />
             </Card>
           </Box>
           <BondBuyCard
