@@ -81,8 +81,8 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
                   title="You will receive:"
                   value={
                     {
-                      loading: 'calculating',
-                      error: 'error calculating',
+                      loading: 'calculating`',
+                      error: '---',
                       success: formatFixed(parseEther(convertedValue), { places: 5 }) + ' CNV',
                     }[cnvDataStatus]
                   }
@@ -93,7 +93,7 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
               <Text color={'text.accent'} fontWeight="bold" opacity={0.5}>
                 {
                   {
-                    loading: `1 ${token.symbol} = calculating...`,
+                    loading: `1 ${token.symbol} = calculating`,
                     error: 'error calculating conversion',
                     success: `1 ${token?.symbol} = ${CNVAmount} CNV`,
                   }[cnvDataStatus]
