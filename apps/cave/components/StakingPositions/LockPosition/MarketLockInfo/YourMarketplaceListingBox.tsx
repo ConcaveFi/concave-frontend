@@ -15,7 +15,6 @@ import { useApproveForAll } from 'hooks/useApprove'
 import { FC, useState } from 'react'
 import { formatFixed } from 'utils/bigNumberMask'
 import { useAccount } from 'wagmi'
-import { Info } from '../Redeem/RedeemViewer'
 import { usePositionDiscount } from './hooks/usePositionDiscount'
 import { SaleModal } from './SellPositionModal'
 
