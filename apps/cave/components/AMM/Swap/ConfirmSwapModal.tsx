@@ -19,13 +19,9 @@ import { useFirstMountState } from 'react-use'
 import { percentDifference } from 'utils/percentDifference'
 import { toPercent } from 'utils/toPercent'
 import { useFiatValue } from '../hooks/useFiatPrice'
-<<<<<<< HEAD
-=======
 import { useSwapSettings } from './Settings'
->>>>>>> 3f7e77a4 (CE 631: Refactor file structure (#490))
 import { ExpectedOutput, MinExpectedOutput } from './ExpectedOutput'
 import { RelativePrice } from './RelativePrice'
-import { useSwapSettings } from './Settings'
 
 type TradeCurrencyInfoProps = {
   currencyAmount: CurrencyAmount<Currency>
