@@ -39,5 +39,3 @@ export const ThemeProvider = ({
 export const ColorModeScript = (props) => (
   <ChakraColorModeScript initialColorMode={theme.config.initialColorMode} {...props} />
 )
-
-export default ThemeProvider

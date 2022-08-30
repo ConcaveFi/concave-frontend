@@ -15,8 +15,9 @@
     "gen": "DOTENV_CONFIG_PATH=./.env graphql-codegen --config codegen.yml -r dotenv/config"
   },
   "dependencies": {
-    "@0xsequence/multicall": "^0.39.6",
+    "@0xsequence/multicall": "^0.40.6",
     "@badrap/bar-of-progress": "^0.2.1",
+    "@chakra-ui/cli": "^2.1.7",
     "@concave/gemswap-sdk": "*",
     "@concave/icons": "*",
     "@concave/marketplace": "*",
@@ -30,7 +31,9 @@
     "@next/bundle-analyzer": "^12.2.0",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
-    "date-fns": "^2.28.0",
+    "@types/node": "^18.7.13",
+    "@types/react": "^18.0.17",
+    "date-fns": "^2.29.2",
     "debounce": "^1.2.1",
     "detect-browser": "^5.3.0",
     "eth-permit": "^0.2.1",
@@ -47,11 +50,11 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-qrcode-logo": "^2.7.0",
-    "react-query": "^3.39.0",
+    "react-query": "^3.39.2",
     "react-use": "^17.3.2",
     "sharp": "^0.30.7",
     "wagmi": "^0.5.9",
-    "zustand": "^4.0.0"
+    "zustand": "^4.1.1"
   },
   "devDependencies": {
     "@chakra-ui/cli": "^2.0.0",

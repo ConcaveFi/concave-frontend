@@ -1,5 +1,6 @@
 import { providers as multicallProvider } from '@0xsequence/multicall'
-import { providers } from 'ethers'
+import { ChainId } from '@concave/core'
+import { ethers, providers } from 'ethers'
 import {
   NEXT_PUBLIC_ALCHEMY_ID,
   NEXT_PUBLIC_CONCAVE_RPC_KEY,
@@ -42,9 +43,9 @@ const getFallbackProvider = (chainId: number) => {
   return new providers.FallbackProvider(providerConfigs, 1)
 }
 
-const singletonProvider = {}
+const singletonProvider: { [chain in ChainId]?: ethers.providers.BaseProvider } = {}
 
-export const concaveProvider = (chainId: number) => {
+export const concaveProvider = (chainId: number): typeof singletonProvider[ChainId] => {
   if (singletonProvider[chainId]) return singletonProvider[chainId]
   const f = getFallbackProvider(chainId)
   const p = new multicallProvider.MulticallProvider(f, { timeWindow: 1000 })

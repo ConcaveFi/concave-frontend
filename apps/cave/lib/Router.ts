@@ -1,4 +1,3 @@
-import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/providers'
 import { CurrencyAmount, RouterAbi, ROUTER_ADDRESS, Token } from '@concave/core'
 import { BigNumber, ethers } from 'ethers'
 import { parseUnits } from 'ethers/lib/utils'
@@ -6,7 +5,7 @@ import { concaveProvider } from 'lib/providers'
 
 export class Router {
   private readonly contract: ethers.Contract
-  private readonly provider: MulticallProvider
+  private readonly provider: ReturnType<typeof concaveProvider>
 
   constructor(chainId: number, private readonly signer: ethers.Signer) {
     this.provider = concaveProvider(chainId)
