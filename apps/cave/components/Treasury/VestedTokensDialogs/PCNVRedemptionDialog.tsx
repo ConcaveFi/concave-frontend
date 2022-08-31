@@ -25,7 +25,7 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
   } = useDisclosure()
 
   const confirmModal = useDisclosure()
-  const { data } = useGet_Amm_Cnv_InfosQuery()
+  const { data, status: cnvDataStatus } = useGet_Amm_Cnv_InfosQuery()
 
   const { address } = useAccount()
   const { data: signer } = useSigner()
@@ -61,7 +61,8 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
         status={status}
         tokenUserData={{ ...pCNVData, balance }}
         token={PCNV[chainId]}
-        conversionToCNV={pCNVToCNVDifference || 1}
+        conversionToCNV={pCNVToCNVDifference || 0}
+        cnvDataStatus={cnvDataStatus}
       />
 
       <TransactionErrorDialog
@@ -81,6 +82,7 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
         isOpen={confirmModal.isOpen && Boolean(amount)}
         onClose={confirmModal.onClose}
         onAccept={redeem}
+        status={cnvDataStatus}
       />
     </>
   )

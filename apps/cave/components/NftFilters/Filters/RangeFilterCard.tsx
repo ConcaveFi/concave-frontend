@@ -1,5 +1,5 @@
 import { Box, Button, Flex } from '@chakra-ui/react'
-import { NumericInput } from '@concave/ui'
+import { gradientBorder, NumericInput } from '@concave/ui'
 import { useState } from 'react'
 import { RangeFilter } from './hooks/useFilterByRange'
 
@@ -43,8 +43,7 @@ export const RangeFilterCard = ({ onApplyFilter, onResetFilter }: RangeFilterCar
       height={'114px'}
       rounded={'lg'}
       apply="background.metalBrighter"
-      border={'2px solid'}
-      borderColor="text.low"
+      sx={{ ...gradientBorder({ borderWidth: 2, variant: 'secondary' }) }}
       direction={'column'}
       overflow="hidden"
       shadow={'up'}

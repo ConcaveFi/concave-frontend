@@ -33,7 +33,7 @@ export function Treasury() {
         <TreasuryRedeemCard />
       </Flex>
       <BondGraphics />
-      <TreasuryAssetsCard assets={assets} />
+      <TreasuryAssetsCard status={treasuryData?.treasuryStatus} assets={assets} />
       <DividendsCard />
     </Flex>
   )

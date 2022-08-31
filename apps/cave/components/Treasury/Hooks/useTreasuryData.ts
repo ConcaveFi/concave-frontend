@@ -8,7 +8,7 @@ import { useCNVPrice } from 'hooks/useCNVPrice'
 import { numberMask } from 'utils/numberMask'
 
 const useLastBondSolds = () => {
-  const { data } = useGet_Accrualbondv1_Last10_SoldQuery()
+  const { data, status } = useGet_Accrualbondv1_Last10_SoldQuery()
 
   const lastBondSoldsData = data?.logAccrualBondsV1_BondSold
   const lastBondSolds = lastBondSoldsData
@@ -20,25 +20,28 @@ const useLastBondSolds = () => {
     .splice(0, 3)
   return {
     lastBondSolds,
+    status,
   }
 }
 
 export const useTreasuryData = () => {
-  const { isLoading: isLoadingTreasury, data: treasuryData } = useGet_TreasuryQuery()
-  const { isLoading: isLoadingCNV, data: cnvData } = useGet_Amm_Cnv_InfosQuery()
-  const { price: cnvPrice } = useCNVPrice()
-  const { lastBondSolds } = useLastBondSolds()
+  const {
+    isLoading: isLoadingTreasury,
+    data: treasuryData,
+    status: treasuryDataStatus,
+  } = useGet_TreasuryQuery()
+  const {
+    isLoading: isLoadingCNV,
+    data: cnvData,
+    status: cnvDataStatus,
+  } = useGet_Amm_Cnv_InfosQuery()
+  const { price: cnvPrice, status: cnvPriceStatus } = useCNVPrice()
+  const { lastBondSolds, status: bondSoldsStatus } = useLastBondSolds()
 
-  if (isLoadingTreasury || isLoadingCNV) {
-    return {
-      revenueData: {},
-      isLoading: true,
-    }
-  }
   // get total Treasury
   const SEED_ROUND = 600000
-  const sumTotal = treasuryData.treasury.map((i: any) => i.total)
-  const total = sumTotal.reduce((current, previous) => current + previous) + SEED_ROUND
+  const sumTotal = treasuryData?.treasury?.map((i: any) => i.total)
+  const total = sumTotal?.reduce((current, previous) => current + previous) + SEED_ROUND
 
   const marketCap = cnvData?.cnvData?.data.marketCap || 0
   const treasuryValuePerCNV = total / cnvData?.cnvData?.data?.totalSupply || 0
@@ -48,7 +51,10 @@ export const useTreasuryData = () => {
   const convexToken = treasuryData?.treasury?.find((token) => token.name === 'cvxDOLA3POOL')
 
   return {
-    lastBondSolds,
+    lastBondSolds: {
+      solds: lastBondSolds,
+      status: bondSoldsStatus,
+    },
     treasuryData: {
       marketCap: marketCap,
       cnvPrice: +cnvPrice?.toFixed(2),
@@ -56,6 +62,9 @@ export const useTreasuryData = () => {
       treasuryRevenue: 0,
       treasuryValue: treasuryValue,
       cnvTotalSupply: cnvTotalSupply,
+      cnvStatus: cnvDataStatus,
+      cnvPriceStatus,
+      treasuryStatus: treasuryDataStatus,
     },
     isloading: false,
     assets: {
@@ -84,6 +93,9 @@ export type TreasuryData = {
   treasuryRevenue: number
   treasuryValue: number
   cnvTotalSupply: number
+  cnvStatus: 'error' | 'idle' | 'loading' | 'success'
+  cnvPriceStatus: 'error' | 'idle' | 'loading' | 'success'
+  treasuryStatus: 'error' | 'idle' | 'loading' | 'success'
 }
 
 export type TreasuryTokenInfo = {
@@ -104,10 +116,13 @@ export type TreasuryTokenInfo = {
 }
 
 export type LastBondSolds = {
-  timesTamp: string
-  inputAmount: string
-  outputAmount: string
-}[]
+  solds: {
+    timesTamp: string
+    inputAmount: string
+    outputAmount: string
+  }[]
+  status: 'error' | 'idle' | 'loading' | 'success'
+}
 
 // url.slice(48) will cut the string to get only the image path on github page.
 const convertToJsDelivrPath = (url: string) =>

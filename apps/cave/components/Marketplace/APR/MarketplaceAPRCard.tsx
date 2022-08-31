@@ -3,7 +3,7 @@ import { useLiquidStakeData } from 'components/LiquidStaking/hooks/useLiquidStak
 import StakeAprCard from './StakeAprCard'
 
 export function MarketplaceAPRCard() {
-  const { stakeData, isLoading } = useLiquidStakeData()
+  const { stakeData } = useLiquidStakeData()
   return (
     <Card
       gap={0}
