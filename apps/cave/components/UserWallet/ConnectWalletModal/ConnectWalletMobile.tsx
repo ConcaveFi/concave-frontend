@@ -211,6 +211,7 @@ const ConnectWalletsDefaultView = ({
   const isMounted = useIsMounted()
   return (
     <MotionDiv
+      willChange="transform"
       p={4}
       display="flex"
       alignItems="center"
@@ -292,6 +293,7 @@ export const MobileConnect = ({ isOpen, onClose }) => {
       <DrawerOverlay backdropFilter="blur(2px)" />
       <DrawerContent bg="none" overflow="visible">
         <Card
+          willChange="transform"
           rounded="3xl"
           variant="secondary"
           bg="whiteAlpha.200"

@@ -66,6 +66,7 @@ export function SwapCard() {
         shadow="Block Up"
         w="100%"
         maxW="420px"
+        willChange="transform"
       >
         <CurrencyInputField
           currencyAmountIn={trade.inputAmount}

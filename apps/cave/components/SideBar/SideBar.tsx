@@ -9,6 +9,7 @@ import {
   Flex,
   forwardRef,
   Image,
+  useBreakpointValue,
   useDisclosure,
 } from '@concave/ui'
 import { motion } from 'framer-motion'
@@ -27,12 +28,20 @@ export function SideBar() {
     onClose()
   }, [router.asPath, onClose])
 
+  const isDrawer = useBreakpointValue(
+    {
+      base: true,
+      lg: false,
+    },
+    { fallback: 'lg' },
+  )
+
+  /* show on bigger screens like not mobile lol */
+  if (!isDrawer) return <SidebarContent display={{ base: 'none', lg: 'flex' }} />
+
+  /* show on small devices (mobile) */
   return (
     <>
-      {/* show on bigger screens like not mobile lol */}
-      <SidebarContent display={{ base: 'none', lg: 'flex' }} />
-
-      {/* show on small devices (mobile) */}
       <Box h="60px">
         <Flex
           align="center"
@@ -58,7 +67,6 @@ export function SideBar() {
         closeOnOverlayClick={true}
         isOpen={isOpen}
         placement="left"
-        blockScrollOnMount={false}
         onClose={onClose}
       >
         <DrawerOverlay backdropFilter="blur(8px)" />
@@ -90,6 +98,7 @@ type SidebarProps = { closeSidebar?: () => void } & CardProps
 const SidebarContent = forwardRef<SidebarProps, 'div'>(({ closeSidebar, ...props }, ref) => {
   return (
     <Card
+      willChange="transform"
       as={motion.aside}
       ref={ref}
       variant="primary"
