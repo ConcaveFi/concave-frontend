@@ -1,8 +1,13 @@
 import { Box, Image } from '@concave/ui'
 import { Connector } from 'wagmi'
 
-export const getConnectorLogo = (connectorName: Connector['name']) =>
-  `/assets/connectors/${connectorName.toLowerCase()}.svg`
+const knownConnectors = ['walletconnect', 'metamask', 'brave wallet', 'coinbase wallet']
+
+export const getConnectorLogo = (connectorName: Connector['name']) => {
+  const cName = connectorName.toLowerCase()
+  if (knownConnectors.includes(cName)) return `/assets/connectors/${cName}.svg`
+  return `/assets/connectors/injected.svg`
+}
 
 export const ConnectorIcon = ({
   name,
