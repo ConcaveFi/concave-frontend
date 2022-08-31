@@ -108,7 +108,7 @@ const listVariants = {
   },
 }
 
-const ConnectWithWalletConnect = ({ walletConnectConnector, onBack }) => {
+const ConnectWithWalletConnect = ({ walletConnectConnector, onCancel }) => {
   const {
     data: wallets,
     isSuccess,
@@ -138,7 +138,7 @@ const ConnectWithWalletConnect = ({ walletConnectConnector, onBack }) => {
       exit={{ x: -300 }}
       transition={{ type: 'easeIn' }}
     >
-      <HStack alignSelf="start" onClick={() => onBack()}>
+      <HStack alignSelf="start" onClick={onCancel}>
         <IconButton icon={<ArrowBackIcon fontSize="lg" />} aria-label="back" />
         <ConnectorIcon name="walletConnect" rounded="md" />
         <Text fontFamily="heading" fontWeight="bold" fontSize="xl">
@@ -259,23 +259,15 @@ export const MobileConnect = ({ isOpen, onClose }) => {
   const queryChainId = +router.query.chainId
   const chainId = supportedChainsId.includes(queryChainId) ? queryChainId : ChainId.ETHEREUM
 
-  const { connectors, connect } = useConnect({
+  const { connectors, connect, pendingConnector, reset } = useConnect({
     chainId,
     onSuccess: onClose,
   })
-
-  // handles wallet connect tab
-  const [tab, setTab] = useState<'default' | 'walletConnect'>('default')
 
   const onConnect = async (connector: Connector) => {
     if (connector.id === 'metaMask' && !connector.ready) {
       // open on metamask app
       window.location.href = 'https://metamask.app.link/dapp/' + window.location.href
-      return
-    }
-    if (connector.id === 'walletConnect') {
-      connect({ connector })
-      setTab('walletConnect')
       return
     }
     connect({ connector })
@@ -288,6 +280,7 @@ export const MobileConnect = ({ isOpen, onClose }) => {
       isOpen={isOpen}
       placement="bottom"
       onClose={onClose}
+      trapFocus={false}
     >
       <DrawerOverlay backdropFilter="blur(2px)" />
       <DrawerContent bg="none" overflow="visible">
@@ -313,14 +306,13 @@ export const MobileConnect = ({ isOpen, onClose }) => {
           dragConstraints={{ top: 0, bottom: 0 }}
         >
           <AnimatePresence initial={false} exitBeforeEnter>
-            {tab === 'default' && (
-              <ConnectWalletsDefaultView connectors={connectors} onConnect={onConnect} />
-            )}
-            {tab === 'walletConnect' && (
+            {pendingConnector?.id === 'walletConnect' ? (
               <ConnectWithWalletConnect
-                onBack={() => setTab('default')}
-                walletConnectConnector={connectors.find((c) => c.id === 'walletConnect')}
+                onCancel={reset}
+                walletConnectConnector={pendingConnector}
               />
+            ) : (
+              <ConnectWalletsDefaultView connectors={connectors} onConnect={onConnect} />
             )}
           </AnimatePresence>
           <CloseButton variant="subtle" onClick={onClose} pos="absolute" top={4} right={4} />

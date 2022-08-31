@@ -68,6 +68,7 @@ export function SideBar() {
         isOpen={isOpen}
         placement="left"
         onClose={onClose}
+        trapFocus={false}
       >
         <DrawerOverlay backdropFilter="blur(8px)" />
         <DrawerContent

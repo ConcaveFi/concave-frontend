@@ -1,7 +1,7 @@
 import { useDisclosure } from '@concave/ui'
 import { UnsupportedNetworkModal } from 'components/UnsupportedNetworkModal'
 import dynamic from 'next/dynamic'
-import React, { ComponentType, createContext, useContext } from 'react'
+import React, { ComponentType, createContext, useContext, useMemo } from 'react'
 import { useAccount } from 'wagmi'
 
 type ModalsDisclosure = Record<
@@ -29,11 +29,11 @@ export const ModalsProvider: React.FC<React.PropsWithChildren<unknown>> = ({ chi
     shouldFetchConnectWalletModal || (!isReconnecting && isDisconnected)
 
   return (
-    <ModalsContext.Provider value={{ connectModal }}>
+    <ModalsContext.Provider value={useMemo(() => ({ connectModal }), [connectModal])}>
       <UnsupportedNetworkModal />
-      {shouldFetchConnectWalletModal && (
-        <ConnectWalletModal isOpen={connectModal.isOpen} onClose={connectModal.onClose} />
-      )}
+      {/* {shouldFetchConnectWalletModal && ( */}
+      <ConnectWalletModal isOpen={connectModal.isOpen} onClose={connectModal.onClose} />
+      {/* )} */}
       {children}
     </ModalsContext.Provider>
   )

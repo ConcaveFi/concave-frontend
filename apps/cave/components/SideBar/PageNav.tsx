@@ -35,7 +35,6 @@ const NavButton = (props: ButtonLinkProps) => {
   )
 }
 
-const subnavVisibleStyles = { maxH: 'unset', opacity: 1, p: '10px' }
 const SubnavButton = ({ children, ...props }: ButtonLinkProps) => {
   return (
     <ButtonLink
