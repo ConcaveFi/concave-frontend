@@ -261,7 +261,7 @@ export const MobileConnect = ({ isOpen, onClose }) => {
 
   const { connectors, connect } = useConnect({
     chainId,
-    onSuccess: () => onClose(),
+    onSuccess: onClose,
   })
 
   // handles wallet connect tab
@@ -278,7 +278,6 @@ export const MobileConnect = ({ isOpen, onClose }) => {
       setTab('walletConnect')
       return
     }
-
     connect({ connector })
   }
 
