@@ -3,9 +3,9 @@ import { Trade, TradeType } from '@concave/gemswap-sdk'
 import { useLinkedCurrencyFields } from 'components/CurrencyAmountField'
 import { useCallback, useMemo, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
-import { useSwapSettings } from '../Settings'
 import { useQueryCurrencies } from '../../hooks/useQueryCurrencies'
 import { useTrade } from '../../hooks/useTrade'
+import { useSwapSettings } from '../Settings'
 
 const makeTradePlaceholder = (exactAmount, otherCurrency, tradeType) =>
   (tradeType === TradeType.EXACT_INPUT
@@ -43,9 +43,12 @@ export const useSwapState = () => {
       trade.isSuccess
         ? trade.data
         : makeTradePlaceholder(exactCurrencyAmount, otherCurrency, tradeType),
-    [exactCurrencyAmount, otherCurrency, trade.data, trade.isSuccess, tradeType],
+    // disable exhaustive-deps just because of .serialize() it's all fine
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [exactCurrencyAmount.serialize(), otherCurrency, trade.data, trade.isSuccess, tradeType],
   )
 
+  // useEvent (?)
   const switchFields = useCallback(() => {
     const otherField = lastUpdated === 0 ? 1 : 0
     onChangeField(otherField)(otherField === 0 ? _trade.outputAmount : _trade.inputAmount)
@@ -60,6 +63,7 @@ export const useSwapState = () => {
       switchFields,
       onReset: () => onChangeField(0)(toAmount(0, currencies[0])),
     }),
-    [trade.error, _trade, onChangeField, switchFields, currencies],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [trade.error, JSON.stringify(_trade), onChangeField, switchFields, currencies],
   )
 }

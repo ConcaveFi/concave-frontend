@@ -65,5 +65,6 @@ export const useSwapTransaction = (
     },
   })
 
-  return { trade, ...rest }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  return useMemo(() => ({ trade, ...rest }), [JSON.stringify({ trade, ...rest })])
 }

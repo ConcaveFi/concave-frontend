@@ -6,12 +6,8 @@ import Router, { useRouter } from 'next/router'
 import { useCallback, useMemo } from 'react'
 import { useQuery, useQueryClient } from 'react-query'
 import { getQueryValue } from 'utils/getQueryValue'
+import { getAddressOrSymbol, serializeCurrency } from 'utils/serializeCurrency'
 import { useNetwork } from 'wagmi'
-
-const getAddressOrSymbol = (currency: Currency) => {
-  if (!currency) return null
-  return currency.isNative ? currency.symbol : currency.wrapped.address
-}
 
 const fetchTokenOrNativeData = (
   addressOrSymbol: string,
@@ -43,6 +39,9 @@ type CurrencyChainMap = { [chain in ChainId]?: [Currency, Currency] }
 const defaultCurrencies: Record<string, CurrencyChainMap> = {}
 export const setRouteDefaultCurrencies = (pathname: `/${string}`, currencies: CurrencyChainMap) =>
   (defaultCurrencies[pathname] = currencies)
+
+const serializeCurrencies = (currencies: Currency[]) =>
+  currencies.reduce((a, c) => `${a} ${serializeCurrency(c)}`, '')
 
 export const useQueryCurrencies = () => {
   const { query, pathname } = useRouter()
@@ -89,6 +88,7 @@ export const useQueryCurrencies = () => {
 
   return useMemo(
     () => ({ currencies, onChangeCurrencies, isLoading: isFetching }),
-    [currencies, onChangeCurrencies, isFetching],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [serializeCurrencies(currencies), onChangeCurrencies, isFetching],
   )
 }

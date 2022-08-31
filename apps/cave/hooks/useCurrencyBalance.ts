@@ -1,12 +1,17 @@
 import { Currency, CurrencyAmount } from '@concave/core'
 import { useMemo } from 'react'
+import { serializeCurrency } from 'utils/serializeCurrency'
+import { toAmount } from 'utils/toAmount'
 import { useAccount, useBalance } from 'wagmi'
-import { toAmount } from '../utils/toAmount'
+
+export type UseCurrencyBalanceData = Omit<ReturnType<typeof useBalance>, 'data'> & {
+  data: CurrencyAmount<Currency>
+}
 
 export const useCurrencyBalance = (
   currency: Currency,
   { watch = false } = {},
-): Omit<ReturnType<typeof useBalance>, 'data'> & { data: CurrencyAmount<Currency> } => {
+): UseCurrencyBalanceData => {
   const { address } = useAccount()
   return useCurrencyBalanceOfAddress(currency, address, { watch })
 }
@@ -15,7 +20,7 @@ export const useCurrencyBalanceOfAddress = (
   currency: Currency,
   address: string,
   { watch = false } = {},
-): Omit<ReturnType<typeof useBalance>, 'data'> & { data: CurrencyAmount<Currency> } => {
+): UseCurrencyBalanceData => {
   const enabled = !!currency && !!address
   const balance = useBalance({
     addressOrName: address,
@@ -32,8 +37,7 @@ export const useCurrencyBalanceOfAddress = (
       ...balance,
       data: toAmount(balance.data?.formatted, currency),
     }),
-    [balance, currency],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [balance, serializeCurrency(currency)],
   )
 }
-
-export type UseCurrencyBalanceData = ReturnType<typeof useCurrencyBalance>
