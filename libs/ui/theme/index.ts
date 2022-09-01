@@ -6,11 +6,13 @@ import Button from './components/ButtonStyles'
 import BuyButton from './components/BuyButtonStyles'
 import Card from './components/CardStyles'
 import CloseButton from './components/CloseButtonStyles'
+import Heading from './components/HeadingStyles'
 import Input from './components/InputStyles'
 import Menu from './components/MenuStyles'
 import Modal from './components/ModalStyles'
 import Popover from './components/PopoverStyles'
 import Switch from './components/SwitchStyles'
+import Text from './components/TextStyles'
 import Tooltip from './components/TooltipStyles'
 import { fonts } from './foundations'
 import scrollbar from './scrollbars'
@@ -24,8 +26,10 @@ const theme = extendTheme({
   scrollbar,
   background,
   components: {
+    Text,
     Input,
     Button,
+    Heading,
     Switch,
     Tooltip,
     CloseButton,

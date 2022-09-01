@@ -1,6 +1,6 @@
 import { CNV, DAI, FRAX, NATIVE, USDC } from '@concave/core'
 import { MarketItem, StakingPosition } from '@concave/marketplace'
-import { coingeckoPrice } from 'components/StakingPositions/LockPosition/MarketLockInfo/usePositionDiscount'
+import { coingeckoPrice } from 'components/StakingPositions/LockPosition/MarketLockInfo/hooks/usePositionDiscount'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useQuery } from 'react-query'
 

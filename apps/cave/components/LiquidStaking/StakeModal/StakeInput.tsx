@@ -1,12 +1,13 @@
 import { CNV, Currency, CurrencyAmount, STAKING_CONTRACT } from '@concave/core'
-import { StakingPool, StakingV1Contract } from '@concave/marketplace'
+import { stakingPools, StakingV1Contract } from '@concave/marketplace'
 import { Box, Button, Card, Flex, Text, useDisclosure } from '@concave/ui'
 import { TransactionResponse } from '@ethersproject/abstract-provider'
 import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { CurrencyInputField } from 'components/CurrencyAmountField'
-import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
-import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
-import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
+import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
+import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
+
+import { WaitingConfirmationDialog } from 'components/TransactionDialog/TransactionWaitingConfirmationDialog'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
@@ -15,11 +16,7 @@ import { useState } from 'react'
 import { toAmount } from 'utils/toAmount'
 import { useAccount, useSigner } from 'wagmi'
 
-export function StakeInput(props: {
-  stakingPool: StakingPool
-  poolId: number
-  onClose: () => void
-}) {
+export function StakeInput({ onClose, poolId }: { poolId: number; onClose: () => void }) {
   const { address } = useAccount()
   const netWorkdId = useCurrentSupportedNetworkId()
   const { data: signer } = useSigner()
@@ -56,12 +53,12 @@ export function StakeInput(props: {
     const contract = new StakingV1Contract(concaveProvider(netWorkdId))
     setWaitingForConfirm(true)
     contract
-      .lock(signer, address, stakeInput.numerator.toString(), props.poolId)
+      .lock(signer, address, stakeInput.numerator.toString(), poolId)
       .then((x: TransactionResponse) => {
         registerTransaction(x, {
           type: 'stake',
           amount: stakeInput.toString(),
-          pool: props.stakingPool.days,
+          pool: stakingPools[poolId].days,
         })
         setTx(x)
         setWaitingForConfirm(false)
@@ -124,19 +121,15 @@ export function StakeInput(props: {
           <Text fontWeight={'700'} textColor="text.accent">
             {stakeInput.wrapped.toExact() + ' CNV'}
           </Text>
-          <Text textColor={'text.low'}>For {props.stakingPool.days + ' days'}</Text>
+          <Text textColor={'text.low'}>For {stakingPools[poolId].days + ' days'}</Text>
         </Flex>
       </WaitingConfirmationDialog>
 
-      <TransactionSubmittedDialog
-        isOpen={isOpenSubmitted}
-        tx={tx}
-        closeParentComponent={props.onClose}
-      />
+      <TransactionSubmittedDialog isOpen={isOpenSubmitted} tx={tx} closeParentComponent={onClose} />
       <TransactionErrorDialog
         error={txError}
         isOpen={isOpenRejected}
-        closeParentComponent={props.onClose}
+        closeParentComponent={onClose}
       />
     </>
   )

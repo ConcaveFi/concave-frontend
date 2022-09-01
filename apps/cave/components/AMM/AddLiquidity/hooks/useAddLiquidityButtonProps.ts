@@ -3,7 +3,7 @@ import { ButtonProps } from '@concave/ui'
 import { useModals } from 'contexts/ModalsContext'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useAccount } from 'wagmi'
-import { NoValidPairsError, UsePairResult } from '../hooks/usePair'
+import { NoValidPairsError, UsePairResult } from '../../hooks/usePair'
 
 export const useAddLiquidityButtonProps = (
   pair: UsePairResult,

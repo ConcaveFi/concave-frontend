@@ -1,10 +1,10 @@
 import { Button, Flex, Modal, Text, useDisclosure } from '@concave/ui'
 import { useAccount, useDisconnect } from 'wagmi'
 import { ellipseAddress } from './ConnectWallet'
+import ConnectedAreasContainer from './Containers/ConnectedsAreaContainer'
+import RecentTransactionsContainer from './Containers/RecentTransactionsContainer'
+import YourWalletContainer from './Containers/YourWalletContainer'
 import SecondConfirmModal from './SecondConfirmModal'
-import ConnectedAreasContainer from './YourWallet/Containers/ConnectedsAreaContainer'
-import RecentTransactionsContainer from './YourWallet/Containers/RecentTransactionsContainer'
-import YourWalletContainer from './YourWallet/Containers/YourWalletContainer'
 
 interface YourWalletModalProps {
   isOpen: boolean

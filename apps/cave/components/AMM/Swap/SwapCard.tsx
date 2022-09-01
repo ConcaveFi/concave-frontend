@@ -13,9 +13,10 @@ import {
 } from 'components/AMM'
 import { useSwapSettings } from 'components/AMM/Swap/Settings'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
-import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
-import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
-import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
+import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
+import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
+
+import { WaitingConfirmationDialog } from 'components/TransactionDialog/TransactionWaitingConfirmationDialog'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useState } from 'react'
 import { toAmount } from 'utils/toAmount'

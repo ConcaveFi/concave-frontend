@@ -1,7 +1,7 @@
-import { Button, Card, Flex, Image, Modal, Text } from '@concave/ui'
+import { Button, Card, Flex, Image, Modal, Spinner, Text } from '@concave/ui'
 import { BigNumber } from 'ethers'
 import { formatEther, parseEther } from 'ethers/lib/utils'
-import { formatFixed } from 'utils/formatFixed'
+import { formatFixed } from 'utils/bigNumberMask'
 
 type PCNVConfirmationModalProps = {
   redeemMax?: boolean
@@ -10,6 +10,7 @@ type PCNVConfirmationModalProps = {
   onAccept: (amount: BigNumber, redeemMax: boolean) => void
   amount: BigNumber
   difference: number
+  status: 'error' | 'idle' | 'loading' | 'success'
 }
 export const PCNVConfirmationModal: React.FC<PCNVConfirmationModalProps> = ({
   isOpen,
@@ -18,6 +19,7 @@ export const PCNVConfirmationModal: React.FC<PCNVConfirmationModalProps> = ({
   difference,
   onAccept,
   redeemMax,
+  status,
 }) => {
   const convertedValue = (+formatEther(amount || 0) * difference)?.toFixed(12) || '0'
   return (
@@ -44,10 +46,44 @@ export const PCNVConfirmationModal: React.FC<PCNVConfirmationModalProps> = ({
           justify="center"
           textAlign={'center'}
         >
-          <Text color={'text.low'}>{`You sure you want to swap `}</Text>
-          <Text color={'text.accent'}>{`${formatFixed(amount, { places: 5 })}  pCNV`}</Text>
-          <Text color={'text.low'}>{`for`}</Text>
-          <Text>{`${formatFixed(parseEther(convertedValue), { places: 5 })} CNV?`}</Text>
+          {
+            {
+              success: (
+                <>
+                  <Text color={'text.low'}>{`You sure you want to swap `}</Text>
+                  <Text color={'text.accent'}>{`${formatFixed(amount, { places: 5 })}  pCNV`}</Text>
+                  <Text color={'text.low'}>{`for`}</Text>
+                  <Text>{`${formatFixed(parseEther(convertedValue), { places: 5 })} CNV?`}</Text>
+                </>
+              ),
+              error: (
+                <>
+                  <Text color={'text.low'}>{`You sure you want to redeem `}</Text>
+                  <Text color={'text.accent'}>{`${formatFixed(amount, {
+                    places: 5,
+                  })}  pCNV?`}</Text>
+                  <Text color={'red.300'}>
+                    Conversion to CNV could not be calculated at the moment.
+                  </Text>
+                </>
+              ),
+              loading: (
+                <>
+                  <>
+                    <Text color={'text.low'}>{`You sure you want to swap `}</Text>
+                    <Text color={'text.accent'}>{`${formatFixed(amount, {
+                      places: 5,
+                    })}  pCNV`}</Text>
+                    <Text color={'text.low'}>{`for`}</Text>
+                    <Flex gap={2} color="text.low" justify={'center'}>
+                      <Text>{'calculating'}</Text>
+                      <Spinner />
+                    </Flex>
+                  </>
+                </>
+              ),
+            }[status]
+          }
         </Flex>
         <Flex my={'auto'} justify="space-around">
           <Button onClick={onClose} variant={'secondary'} w={'135px'} h="40px">

@@ -2,7 +2,7 @@ import { ROUTER_ADDRESS } from '@concave/core'
 import { Box, Button, Flex, HStack, Modal, Text } from '@concave/ui'
 import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { CurrencyIcon } from 'components/CurrencyIcon'
-import { UseLiquidityData } from './useLiquidityData'
+import { UseLiquidityData } from './hooks/useLiquidityData'
 
 const PositionInfoItem = ({ color = '', label = '', value, mt = 0, children = <></> }) => (
   <Flex justify="space-between" align={'center'} mt={mt}>

@@ -1,5 +1,5 @@
 import { Avatar, Button, Flex, Text, useDisclosure } from '@concave/ui'
-import { ChangeNetworkModal } from 'components/ChangeNetworkModal'
+import { ChangeNetworkModal } from 'components/YourWallet/ChangeNetworkModal'
 import { useNetwork } from 'wagmi'
 
 export default function ConnectedAreasContainer() {

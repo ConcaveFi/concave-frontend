@@ -1,8 +1,9 @@
 import { BBTCNV_ADDRESS, BBTRedemptionContractV2, Token } from '@concave/core'
 import { useDisclosure } from '@concave/ui'
 import { TransactionResponse } from '@ethersproject/providers'
-import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
-import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
+import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
+import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
+
 import { BigNumber } from 'ethers'
 import { formatEther, parseEther } from 'ethers/lib/utils'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
