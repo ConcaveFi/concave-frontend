@@ -1,6 +1,6 @@
 import { Currency, CurrencyAmount } from '@concave/core'
 import { Button, ButtonProps } from '@concave/ui'
-import { useModals } from 'contexts/ModalsContext'
+import { useConnectModal } from 'components/Modals'
 import { useApprove } from 'hooks/useApprove'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useMemo } from 'react'
@@ -13,7 +13,7 @@ export const useCurrencyButtonState = (
   { amountInfo = false } = {},
 ) => {
   const { address } = useAccount()
-  const { connectModal } = useModals()
+  const connectModal = useConnectModal()
   const currency = amount?.currency
   const symbol = currency?.symbol
   const totalSupply = currency?.wrapped.totalSupply

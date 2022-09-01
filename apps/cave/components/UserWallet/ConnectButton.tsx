@@ -1,8 +1,8 @@
 import { Button, gradientBorder } from '@concave/ui'
-import { useModals } from 'contexts/ModalsContext'
+import { useConnectModal } from 'components/Modals'
 
 export const ConnectButton = () => {
-  const { connectModal } = useModals()
+  const connectModal = useConnectModal()
 
   return (
     <Button

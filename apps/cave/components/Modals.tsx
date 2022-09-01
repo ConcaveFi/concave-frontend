@@ -1,44 +1,40 @@
-import { useDisclosure } from '@concave/ui'
 import { UnsupportedNetworkModal } from 'components/UnsupportedNetworkModal'
 import dynamic from 'next/dynamic'
-import React, { ComponentType, createContext, useContext, useMemo } from 'react'
+import { ComponentType } from 'react'
 import { useAccount } from 'wagmi'
-
-type ModalsDisclosure = Record<
-  string,
-  {
-    isOpen: boolean
-    onOpen: () => void
-    onClose: () => void
-  }
->
-const ModalsContext = createContext({} as ModalsDisclosure)
+import create from 'zustand'
+import { combine } from 'zustand/middleware'
 
 const ConnectWalletModal: ComponentType<{ isOpen: boolean; onClose: () => void }> = dynamic(
   () => import('components/UserWallet/ConnectWalletModal').then((m) => m.ConnectWalletModal),
   { ssr: false },
 )
 
+const createModalStore = () =>
+  create(
+    combine({ isOpen: false }, (set) => ({
+      onClose: () => set((s) => ({ isOpen: false })),
+      onOpen: () => set((s) => ({ isOpen: true })),
+    })),
+  )
+
+export const useConnectModal = createModalStore()
+
 let shouldFetchConnectWalletModal = false
-export const ModalsProvider: React.FC<React.PropsWithChildren<unknown>> = ({ children }) => {
+export const Modals = () => {
   const { isReconnecting, isDisconnected } = useAccount()
-  const connectModal = useDisclosure()
+  const connectModal = useConnectModal()
 
   /* lazy load ConnectWalletModal only if couldn't restore a session */
   shouldFetchConnectWalletModal =
     shouldFetchConnectWalletModal || (!isReconnecting && isDisconnected)
 
   return (
-    <ModalsContext.Provider value={useMemo(() => ({ connectModal }), [connectModal])}>
+    <>
       <UnsupportedNetworkModal />
       {shouldFetchConnectWalletModal && (
         <ConnectWalletModal isOpen={connectModal.isOpen} onClose={connectModal.onClose} />
       )}
-      {children}
-    </ModalsContext.Provider>
+    </>
   )
 }
-
-export const useModals = () => useContext(ModalsContext)
-
-export default ModalsProvider

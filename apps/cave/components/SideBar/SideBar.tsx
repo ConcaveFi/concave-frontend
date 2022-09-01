@@ -7,7 +7,6 @@ import {
   DrawerContent,
   DrawerOverlay,
   Flex,
-  forwardRef,
   Image,
   useBreakpointValue,
   useDisclosure,
@@ -68,7 +67,6 @@ export function SideBar() {
         isOpen={isOpen}
         placement="left"
         onClose={onClose}
-        trapFocus={false}
       >
         <DrawerOverlay backdropFilter="blur(8px)" />
         <DrawerContent
@@ -96,12 +94,11 @@ export function SideBar() {
 
 type SidebarProps = { closeSidebar?: () => void } & CardProps
 
-const SidebarContent = forwardRef<SidebarProps, 'div'>(({ closeSidebar, ...props }, ref) => {
+const SidebarContent = ({ closeSidebar, ...props }: SidebarProps) => {
   return (
     <Card
       willChange="transform"
       as={motion.aside}
-      ref={ref}
       variant="primary"
       apply="background.sidebar"
       borderWidth={0}
@@ -125,4 +122,4 @@ const SidebarContent = forwardRef<SidebarProps, 'div'>(({ closeSidebar, ...props
       <SideBarBottom mt={6} />
     </Card>
   )
-})
+}

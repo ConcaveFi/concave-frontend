@@ -3,6 +3,7 @@ import { Styles } from '@chakra-ui/theme-tools'
 import { ConcaveFonts } from '@concave/ui'
 import { DefaultLayout } from 'components/Layout'
 import { MetaHead, MetaProps } from 'components/MetaHead'
+import { Modals } from 'components/Modals'
 import { AppProviders } from 'contexts'
 import { TransactionsObserver } from 'hooks/TransactionsRegistry'
 import { NODE_ENV } from 'lib/env.conf'
@@ -70,6 +71,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
       <TransactionsObserver />
       <ConcaveFonts />
       <MetaHead meta={Component.Meta} />
+      <Modals />
       <Layout>
         <Component {...pageProps} key={router.pathname} />
       </Layout>
