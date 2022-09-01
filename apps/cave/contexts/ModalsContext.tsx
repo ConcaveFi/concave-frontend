@@ -31,9 +31,9 @@ export const ModalsProvider: React.FC<React.PropsWithChildren<unknown>> = ({ chi
   return (
     <ModalsContext.Provider value={useMemo(() => ({ connectModal }), [connectModal])}>
       <UnsupportedNetworkModal />
-      {/* {shouldFetchConnectWalletModal && ( */}
-      <ConnectWalletModal isOpen={connectModal.isOpen} onClose={connectModal.onClose} />
-      {/* )} */}
+      {shouldFetchConnectWalletModal && (
+        <ConnectWalletModal isOpen={connectModal.isOpen} onClose={connectModal.onClose} />
+      )}
       {children}
     </ModalsContext.Provider>
   )

@@ -63,7 +63,6 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
       router.events.off('routeChangeComplete', handleRouteChange)
       router.events.off('hashChangeComplete', handleRouteChange)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.events])
 
   return (

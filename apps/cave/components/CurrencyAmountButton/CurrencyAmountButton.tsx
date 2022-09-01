@@ -43,8 +43,7 @@ export const useCurrencyButtonState = (
         successful: { disabled, children: 'Approved' },
         'no currency': { disabled, children: 'Select a token' },
       } as const),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [amount.serialize(), amountInfo, approve, connectModal.onOpen, disabled, isLoading, symbol],
+    [amount, amountInfo, approve, connectModal.onOpen, disabled, isLoading, symbol],
   )
 
   const state: keyof typeof props = (() => {

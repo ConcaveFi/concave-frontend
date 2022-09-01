@@ -1,6 +1,5 @@
 import { Currency, CurrencyAmount } from '@concave/core'
 import { useMemo } from 'react'
-import { serializeCurrency } from 'utils/serializeCurrency'
 import { toAmount } from 'utils/toAmount'
 import { useAccount, useBalance } from 'wagmi'
 
@@ -37,7 +36,6 @@ export const useCurrencyBalanceOfAddress = (
       ...balance,
       data: toAmount(balance.data?.formatted, currency),
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [balance, serializeCurrency(currency)],
+    [balance, currency],
   )
 }

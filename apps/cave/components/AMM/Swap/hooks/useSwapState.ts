@@ -33,8 +33,11 @@ export const useSwapState = () => {
 
   const tradeType = lastUpdated === 0 ? TradeType.EXACT_INPUT : TradeType.EXACT_OUTPUT
   const otherCurrency = currencies[lastUpdated === 0 ? 1 : 0]
-  const exactCurrencyAmount =
-    currencies[lastUpdated] && CurrencyAmount.fromRawAmount(currencies[lastUpdated], exactAmount)
+  const exactCurrencyAmount = useMemo(
+    () =>
+      currencies[lastUpdated] && CurrencyAmount.fromRawAmount(currencies[lastUpdated], exactAmount),
+    [currencies, exactAmount, lastUpdated],
+  )
 
   const trade = useTrade(exactCurrencyAmount, otherCurrency, { tradeType, maxHops })
 
@@ -43,9 +46,7 @@ export const useSwapState = () => {
       trade.isSuccess
         ? trade.data
         : makeTradePlaceholder(exactCurrencyAmount, otherCurrency, tradeType),
-    // disable exhaustive-deps just because of .serialize() it's all fine
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [exactCurrencyAmount.serialize(), otherCurrency, trade.data, trade.isSuccess, tradeType],
+    [exactCurrencyAmount, otherCurrency, trade.data, trade.isSuccess, tradeType],
   )
 
   // useEvent (?)
@@ -63,7 +64,6 @@ export const useSwapState = () => {
       switchFields,
       onReset: () => onChangeField(0)(toAmount(0, currencies[0])),
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [trade.error, JSON.stringify(_trade), onChangeField, switchFields, currencies],
+    [trade.error, _trade, onChangeField, switchFields, currencies],
   )
 }
