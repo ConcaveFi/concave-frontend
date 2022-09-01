@@ -15,6 +15,7 @@ import {
   useToken,
 } from '@concave/ui'
 import { useRouter } from 'next/router'
+import { FC, PropsWithChildren } from 'react'
 import { QRCode } from 'react-qrcode-logo'
 import { MutationStatus } from 'react-query'
 import { Connector, useConnect } from 'wagmi'
@@ -23,7 +24,7 @@ import { useConnectorUri } from './useConnectorUri'
 import { WhatConnectWalletMeans } from './WhatConnectWalletMeans'
 
 const QrCodeSize = 250
-const ScanQrCode = ({ qrCode, connector }) => {
+const ScanQrCode: FC<{ qrCode: string; connector: Connector }> = ({ qrCode, connector }) => {
   return (
     <>
       <Text fontFamily="heading" fontWeight="bold" fontSize="xl" textAlign="center">
@@ -45,7 +46,7 @@ const ScanQrCode = ({ qrCode, connector }) => {
   )
 }
 
-const LoadingLabel = ({ children }) => (
+const LoadingLabel: FC<PropsWithChildren> = ({ children }) => (
   <HStack align="center">
     <Spinner size="xs" color="text.low" />
     <Text color="text.low">{children}</Text>
@@ -107,9 +108,12 @@ const SelectAWallet = () => (
   </Stack>
 )
 
-export const DesktopConnect = ({ isOpen, onClose }) => {
+export const DesktopConnect: FC<{ isOpen: boolean; onClose: VoidFunction }> = ({
+  isOpen,
+  onClose,
+}) => {
   const router = useRouter()
-  const chainId = +router.query.chainId
+  const chainId = +router.query.chainId || ChainId.ETHEREUM
 
   const {
     connectors,

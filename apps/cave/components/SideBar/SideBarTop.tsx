@@ -46,7 +46,7 @@ const TestnetIndicator = () => {
   )
 }
 
-function SideBarTop({ closeSidebar }) {
+function SideBarTop({ closeSidebar }: { closeSidebar: VoidFunction }) {
   const { isConnected } = useAccount()
 
   return (

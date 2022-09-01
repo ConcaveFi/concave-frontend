@@ -24,7 +24,7 @@ import { AnimatePresence, isValidMotionProp, motion, MotionProps } from 'framer-
 import { useIsMounted } from 'hooks/useIsMounted'
 import { fetchWalletConnectRegistry, uriToLink } from 'lib/walletConnect'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { FC, useState } from 'react'
 import { useQuery } from 'react-query'
 import { Connector, useConnect } from 'wagmi'
 import { ConnectorIcon } from './ConnectorIcon'
@@ -67,7 +67,7 @@ const useWalletConnectRegistry = () =>
     cacheTime: Infinity,
   })
 
-const MoreWallets = (props) => (
+const MoreWallets = (props: ButtonProps) => (
   <Button flexDirection="column" alignItems="center" gap={2} {...props}>
     <Flex
       align="center"
@@ -78,7 +78,6 @@ const MoreWallets = (props) => (
       shadow="up"
       opacity={0.6}
       rounded="xl"
-      {...props}
     >
       <PlusIcon />
     </Flex>
@@ -254,7 +253,10 @@ const ConnectWalletsDefaultView = ({
   )
 }
 
-export const MobileConnect = ({ isOpen, onClose }) => {
+export const MobileConnect: FC<{ isOpen: booelan; onClose: VoidFunction }> = ({
+  isOpen,
+  onClose,
+}) => {
   const router = useRouter()
   const queryChainId = +router.query.chainId
   const chainId = supportedChainsId.includes(queryChainId) ? queryChainId : ChainId.ETHEREUM
