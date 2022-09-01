@@ -19,34 +19,37 @@ export const TreasuryRedeemCard = () => {
   return (
     <Card
       variant="secondary"
-      w={{ base: 'full', lg: '45%', xl: '40%' }}
-      h={{ base: '315px', md: '200px', lg: '329px' }}
-      px={10}
+      w={{ base: 'full' }}
+      h={{ base: '315px', md: '200px', lg: '200px' }}
+      px={{ base: 10, xl: '125px' }}
       py={6}
+      direction={{ base: 'column', xl: 'row' }}
     >
-      <Text fontSize={'2xl'} fontWeight="bold" mx={'auto'}>
+      <Text my={'auto'} fontSize={'3xl'} fontWeight="bold">
         Redeem CNV
       </Text>
-      <Text color="text.low" textAlign={'center'} fontWeight="bold">
-        Redeem your tokens for CNV below
-      </Text>
-      <Flex direction={{ base: 'column', md: 'row', lg: 'column' }} w="full" gap={3} py={3}>
-        <VestedTokenButton title="aCNV" VestedTokenDialog={ACNVRedemptionDialog} />
-        <VestedTokenButton title="pCNV" VestedTokenDialog={PCNVRedemptionDialog} />
-        <VestedTokenButton title="bbtCNV" VestedTokenDialog={BBTCNVRedemptionDialog} />
+      <Flex w={{ base: 'full', xl: '80%' }} px={6} direction={'column'} mx="auto" my={'auto'}>
+        <Text color="text.low" textAlign={'center'} fontWeight="bold">
+          Redeem your tokens for CNV below
+        </Text>
+
+        <Flex direction={{ base: 'column', md: 'row', lg: 'row' }} w="full" gap={3} py={3}>
+          <VestedTokenButton title="aCNV" VestedTokenDialog={ACNVRedemptionDialog} />
+          <VestedTokenButton title="pCNV" VestedTokenDialog={PCNVRedemptionDialog} />
+          <VestedTokenButton title="bbtCNV" VestedTokenDialog={BBTCNVRedemptionDialog} />
+        </Flex>
+        <Button
+          onClick={addingToWallet}
+          textColor={'text.low'}
+          fontWeight={'bold'}
+          cursor="pointer"
+          // my="auto"
+          fontSize={{ base: '22px', lg: 'sm' }}
+          px={2}
+        >
+          Add CNV to {connector?.name || 'wallet'}
+        </Button>
       </Flex>
-      <Button
-        onClick={addingToWallet}
-        textColor={'text.low'}
-        fontWeight={'bold'}
-        cursor="pointer"
-        // my="auto"
-        fontSize={{ base: '22px', lg: 'sm' }}
-        px={2}
-        w="full"
-      >
-        Add CNV to {connector?.name || 'wallet'}
-      </Button>
     </Card>
   )
 }
