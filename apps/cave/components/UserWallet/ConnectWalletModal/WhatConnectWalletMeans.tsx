@@ -1,6 +1,6 @@
-import { Stack, Text } from '@concave/ui'
+import { Stack, StackProps, Text } from '@concave/ui'
 
-export const WhatConnectWalletMeans = (props) => (
+export const WhatConnectWalletMeans = (props: StackProps) => (
   <Stack textAlign="center" alignSelf="center" fontSize="sm" {...props}>
     <Text color="text.low" fontWeight="medium" w="320px">
       Connecting your wallet means the app can see your address and ask for signatures
