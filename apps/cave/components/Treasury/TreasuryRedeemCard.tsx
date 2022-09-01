@@ -20,7 +20,7 @@ export const TreasuryRedeemCard = () => {
     <Card
       variant="secondary"
       w={{ base: 'full' }}
-      h={{ base: '315px', md: '150px', lg: '150px' }}
+      h={{ base: '315px', md: '200px', xl: '150px' }}
       px={{ base: 10, xl: '125px' }}
       py={6}
       direction={{ base: 'column', xl: 'row' }}
@@ -28,7 +28,7 @@ export const TreasuryRedeemCard = () => {
       <Text my={'auto'} fontSize={'3xl'} fontWeight="bold">
         Redeem CNV
       </Text>
-      <Flex w={{ base: 'full', xl: '80%' }} px={6} direction={'column'} mx="auto" my={'auto'}>
+      <Flex w={{ base: 'full', xl: '60%' }} px={6} direction={'column'} mx="auto" my={'auto'}>
         <Text color="text.low" textAlign={'center'} fontWeight="bold">
           Redeem your tokens for CNV below
         </Text>
