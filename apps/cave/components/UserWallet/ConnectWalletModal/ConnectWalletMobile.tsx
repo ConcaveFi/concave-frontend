@@ -281,6 +281,7 @@ export const MobileConnect: FC<{ isOpen: boolean; onClose: VoidFunction }> = ({
       closeOnOverlayClick={true}
       isOpen={isOpen}
       placement="bottom"
+      preserveScrollBarGap={true}
       onClose={onClose}
       trapFocus={false}
     >
