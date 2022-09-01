@@ -253,7 +253,7 @@ const ConnectWalletsDefaultView = ({
   )
 }
 
-export const MobileConnect: FC<{ isOpen: booelan; onClose: VoidFunction }> = ({
+export const MobileConnect: FC<{ isOpen: boolean; onClose: VoidFunction }> = ({
   isOpen,
   onClose,
 }) => {
