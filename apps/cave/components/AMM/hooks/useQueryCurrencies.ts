@@ -6,8 +6,12 @@ import Router, { useRouter } from 'next/router'
 import { useCallback, useMemo } from 'react'
 import { useQuery, useQueryClient } from 'react-query'
 import { getQueryValue } from 'utils/getQueryValue'
-import { getAddressOrSymbol } from 'utils/serializeCurrency'
 import { useNetwork } from 'wagmi'
+
+const getAddressOrSymbol = (c: Currency) => {
+  if (!c) return null
+  return c.isNative ? c.symbol : c.wrapped.address
+}
 
 const fetchTokenOrNativeData = (
   addressOrSymbol: string,
