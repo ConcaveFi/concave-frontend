@@ -18,9 +18,11 @@ const TransparencyDiagram = () => {
           </Text>
         </Flex>
         <TransparencyDiagramComponent />
-        <BondGraphics />
-        <DividendsCard />
-        <TreasuryRedeemCard />
+        <Flex direction={'column'} maxW="80%" gap={6}>
+          <BondGraphics />
+          <DividendsCard />
+          <TreasuryRedeemCard />
+        </Flex>
       </>
     </Flex>
   )
