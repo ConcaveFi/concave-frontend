@@ -1,6 +1,9 @@
 import { Flex, Heading, Text } from '@concave/ui'
 import { withPageTransition } from 'components/PageTransition'
 import { TransparencyDiagram as TransparencyDiagramComponent } from 'components/TransparencyDiagram/TransparencyDiagram'
+import { BondGraphics } from 'components/Treasury/BondGraphics'
+import DividendsCard from 'components/Treasury/DividendsCard'
+import { TreasuryRedeemCard } from 'components/Treasury/TreasuryRedeemCard'
 
 const TransparencyDiagram = () => {
   return (
@@ -15,6 +18,11 @@ const TransparencyDiagram = () => {
           </Text>
         </Flex>
         <TransparencyDiagramComponent />
+        <Flex direction={'column'} maxW="80%" gap={6}>
+          <BondGraphics />
+          <DividendsCard />
+          <TreasuryRedeemCard />
+        </Flex>
       </>
     </Flex>
   )
