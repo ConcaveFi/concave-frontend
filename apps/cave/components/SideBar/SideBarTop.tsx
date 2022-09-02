@@ -63,7 +63,7 @@ function SideBarTop({ closeSidebar }: { closeSidebar: VoidFunction }) {
 
       <Stack gap="1" align="flex-end" mt={7}>
         <ButtonLink
-          href="/transparency-diagram" // and redirect to the treasury page
+          href="/transparency" // and redirect to the treasury page
           variant="secondary"
           border="primary"
           size="medium"

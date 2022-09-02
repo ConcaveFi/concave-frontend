@@ -13,7 +13,7 @@ const SelectionButton = ({ diagramShown, setDiagramShown, chartId, chartName }) 
     size={'lg'}
     onClick={() => setDiagramShown(chartId)}
   >
-    {chartName} Diagram
+    {chartName}
   </Button>
 )
 
@@ -61,19 +61,19 @@ export function TransparencyDiagram() {
           />
           <SelectionButton
             chartId={1}
-            chartName={'General'}
+            chartName={'General Diagram'}
             diagramShown={diagramShown}
             setDiagramShown={setDiagramShown}
           />
           <SelectionButton
             chartId={2}
-            chartName={'Bonding'}
+            chartName={'Bonding Diagram'}
             diagramShown={diagramShown}
             setDiagramShown={setDiagramShown}
           />
           <SelectionButton
             chartId={3}
-            chartName={'Staking'}
+            chartName={'Staking Diagram'}
             diagramShown={diagramShown}
             setDiagramShown={setDiagramShown}
           />

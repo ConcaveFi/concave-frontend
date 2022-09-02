@@ -10,11 +10,13 @@ const TransparencyDiagram = () => {
     <Flex align={'center'} w={'100%'} h={'100%'} gap={4} textAlign="center" direction="column">
       <>
         <Heading as="h1" mt={16} mb={3} fontSize="5xl">
-          Transparency Diagram
+          Transparency Dashboard
         </Heading>
         <Flex mt={0} align="center" gap={10} width="full" justify="center" alignItems={'center'}>
           <Text maxW={520} textAlign={'center'}>
-          Concave&apos;s Treasury works to increase itself via investments, yield farming and bonding. Take a look at our stats, backing areas and diagrams on this comprehensive page.
+            Concave&apos;s Treasury works to increase itself via investments, yield farming and
+            bonding. Take a look at our stats, backing areas and diagrams on this comprehensive
+            page.
           </Text>
         </Flex>
         <TransparencyDiagramComponent />
