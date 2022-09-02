@@ -16,7 +16,7 @@ const nextConfig = {
   //   config.plugins.push(new DuplicatePackageCheckerPlugin())
   //   return config
   // },
-  productionBrowserSourceMaps: true,
+  // productionBrowserSourceMaps: true,
   async rewrites() {
     return [
       { source: '/', destination: '/gemswap' },
