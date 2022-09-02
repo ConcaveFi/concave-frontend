@@ -1,3 +1,4 @@
+import { CurrencyAmount, Token } from '@concave/core'
 import { Signer } from '@ethersproject/abstract-signer'
 import { MaxUint256 } from '@ethersproject/constants'
 import { Contract } from '@ethersproject/contracts'
@@ -132,13 +133,13 @@ export const signPermitAllowed = async (
 
 export const signPermitAmount = async (
   signer: Signer,
-  tokenAddress: string,
+  currencyAmount: CurrencyAmount<Token>,
   spenderAddress: string,
-  deadline: string = MaxUint256.toString(),
-  value: string = MaxUint256.toString(),
+  deadline: number,
 ): Promise<SignedPermitAmount> => {
+  const tokenAddress = currencyAmount.currency.address
   const [userAddress, chainId] = await Promise.all([signer.getAddress(), signer.getChainId()])
-
+  const value = currencyAmount.quotient.toString()
   const { name, nonce } = await fetchTokenNameAndNonce(userAddress, tokenAddress, signer.provider)
   const domain = { name, version: '1', chainId, verifyingContract: tokenAddress }
 

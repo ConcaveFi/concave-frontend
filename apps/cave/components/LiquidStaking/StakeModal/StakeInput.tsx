@@ -9,7 +9,7 @@ import { WaitingConfirmationDialog } from 'components/TransactionDialog/Transact
 import { useTransaction } from 'hooks/TransactionsRegistry/useTransaction'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { signPermitAmount } from 'hooks/usePermit/permit'
+import { usePermit } from 'hooks/usePermit'
 import { concaveProvider } from 'lib/providers'
 import { useState } from 'react'
 import { toAmount } from 'utils/toAmount'
@@ -20,20 +20,22 @@ export function StakeInput({ onClose, poolId }: { poolId: number; onClose: () =>
   const chainId = useCurrentSupportedNetworkId()
   const { data: signer } = useSigner()
   const [stakeInput, setStakeInput] = useState<CurrencyAmount<Currency>>(toAmount(0, CNV[chainId]))
+  const contract = new StakingV1Contract(concaveProvider(chainId))
+  const permit = usePermit(stakeInput.wrapped, contract.address)
   const cnvBalance = useCurrencyBalance(stakeInput?.currency, { watch: true })
   const lockTransaction = useTransaction(
     async () => {
-      const deadline = Date.now()
       const amount = stakeInput.numerator.toString()
-      const contract = new StakingV1Contract(concaveProvider(chainId))
-      const { r, s, v } = await signPermitAmount(
+      return contract.lockWithPermit(
         signer,
-        stakeInput.currency.wrapped.address,
-        contract.address,
-        deadline.toString(),
+        address,
         amount,
+        poolId,
+        permit.signedPermit.deadline,
+        permit.signedPermit.v,
+        permit.signedPermit.r,
+        permit.signedPermit.s,
       )
-      return contract.lockWithPermit(signer, address, amount, poolId, deadline, v, r, s)
     },
     {
       meta: {
@@ -47,7 +49,14 @@ export function StakeInput({ onClose, poolId }: { poolId: number; onClose: () =>
     disabled: stakeInput?.greaterThan(cnvBalance.data?.numerator),
     children: 'Stake CNV',
   }
-
+  const permitButton = {
+    isLoading: permit.isFetching,
+    disabled: permit.isFetching,
+    onClick: () => permit.signPermit(),
+    children: 'Approve CNV',
+  }
+  const permitOk =
+    permit.isSuccess && permit.signedPermit.value.toString() === stakeInput.quotient.toString()
   return (
     <>
       <Box>
@@ -67,7 +76,7 @@ export function StakeInput({ onClose, poolId }: { poolId: number; onClose: () =>
             h="50px"
             size="large"
             mx="auto"
-            {...stakeButton}
+            {...(permitOk ? stakeButton : permitButton)}
           />
         </Box>
       </Box>
