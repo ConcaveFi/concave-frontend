@@ -46,17 +46,19 @@ export function StakeInput({ onClose, poolId }: { poolId: number; onClose: () =>
     },
   )
   const stakeButton = {
-    disabled: stakeInput?.greaterThan(cnvBalance.data?.numerator),
+    disabled: stakeInput?.greaterThan(cnvBalance.data?.numerator) || stakeInput.equalTo(0),
     children: 'Stake CNV',
   }
   const permitButton = {
     isLoading: permit.isFetching,
+    loadingText: 'Approve in wallet',
     disabled: permit.isFetching || stakeInput.equalTo(0),
     onClick: () => permit.signPermit(),
     children: 'Approve CNV',
   }
   const permitOk =
-    permit.isSuccess && permit.signedPermit.value.toString() === stakeInput.quotient.toString()
+    stakeInput.equalTo(0) ||
+    (permit.isSuccess && permit.signedPermit.value.toString() === stakeInput.quotient.toString())
   return (
     <>
       <Box>
