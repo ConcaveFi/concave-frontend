@@ -14,7 +14,7 @@ const TransparencyDiagram = () => {
         </Heading>
         <Flex mt={0} align="center" gap={10} width="full" justify="center" alignItems={'center'}>
           <Text maxW={520} textAlign={'center'}>
-          Concave's Treasury works to increase itself via investments, yield farming and bonding. Take a look at our stats, backing areas and diagrams on this comprehensive page.
+          Concave&apos;s Treasury works to increase itself via investments, yield farming and bonding. Take a look at our stats, backing areas and diagrams on this comprehensive page.
           </Text>
         </Flex>
         <TransparencyDiagramComponent />
@@ -29,7 +29,7 @@ const TransparencyDiagram = () => {
 }
 
 TransparencyDiagram.Meta = {
-  title: `Concave | Transparency Overview`,
+  title: 'Concave | Transparency Overview',
   description: `Concave CO-OP's Treasury is fully transparent and managed to increase its value and generate quarterly dividends for CNV Stakers or pToken holders. Earn some Real Yield with DeFi 3.0`,
 }
 
