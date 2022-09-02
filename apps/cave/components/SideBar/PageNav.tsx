@@ -1,6 +1,6 @@
 import { Box, Flex, Image, Spinner, Text } from '@concave/ui'
 import { getBondSpotPrice } from 'components/Bond/getBondSpotPrice'
-import { ButtonLink, ButtonLinkProps } from 'components/SideBar/ButtonLink'
+import { ButtonLink, ButtonLinkProps } from 'components/ButtonLink'
 import { useCNVPrice } from 'hooks/useCNVPrice'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useRouter } from 'next/router'

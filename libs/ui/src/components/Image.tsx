@@ -1,7 +1,8 @@
-import { chakra } from '@chakra-ui/react'
+import { Box, chakra } from '@chakra-ui/react'
 import NextImage from 'next/image'
+import { ComponentPropsWithRef, ReactNode, useState } from 'react'
 
-export const Image = chakra(NextImage, {
+const NextChakraImage = chakra(NextImage, {
   shouldForwardProp: (prop) =>
     [
       'width',
@@ -16,15 +17,19 @@ export const Image = chakra(NextImage, {
     ].includes(prop),
 })
 
-// const ResponsiveImage = ({ src, alt, ...props }) => {
-//   return (
-//     <Box position="relative" {...props}>
-//       <NextImage objectFit="cover" layout="fill" src={src} alt={alt} />
-//     </Box>
-//   )
-// }
+type ImageProps = ComponentPropsWithRef<typeof NextChakraImage> & { fallback?: ReactNode }
 
-// export const Image = ({ w, h, width = w, height = h, ...props }:ImageProps & BoxProps & NextImageProps) => {
-//   if (!width || !height) return <ResponsiveImage width={width} height={height} {...props} />
-//   return <UnresponsiveImage width={width} height={height} {...props} />
-// }
+export const Image = ({ fallback, ...props }: ImageProps) => {
+  const [isBadSrc, setBadSrc] = useState(false)
+  const width = props.w || props.width
+  const height = props.h || props.height
+  return (
+    <Box as="span" w={width} h={height}>
+      {!!fallback && (!props.src || isBadSrc) ? (
+        fallback
+      ) : (
+        <NextChakraImage onError={() => setBadSrc(true)} {...props} height={height} width={width} />
+      )}
+    </Box>
+  )
+}

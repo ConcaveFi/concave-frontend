@@ -1,6 +1,5 @@
 import { CHAIN_NAME, Currency } from '@concave/core'
-import { AvatarProps, Box, calc, Flex, Image } from '@concave/ui'
-import { useState } from 'react'
+import { AvatarProps, calc, Flex, Image } from '@concave/ui'
 
 export type CurrencyIconProps = {
   size?: string
@@ -39,24 +38,17 @@ const sizes = {
 export const CurrencyIcon = ({ currency, size = 'sm', ...props }: CurrencyIconProps) => {
   const src = currency && getCurrencyLogoURI(currency)
   const _size = sizes[size]
-  const [isBadSrc, setBadSrc] = useState(false)
   return (
-    <Box as="span" w={_size} h={_size} {...props}>
-      {!src || isBadSrc ? (
-        <FallbackIcon size={_size} symbol={currency?.symbol} />
-      ) : (
-        <Image
-          src={src}
-          alt={`${currency?.symbol} icon`}
-          width={_size}
-          height={_size}
-          maxW={_size}
-          maxH={_size}
-          draggable={false}
-          userSelect="none"
-          onError={() => setBadSrc(true)}
-        />
-      )}
-    </Box>
+    <Image
+      src={src}
+      alt={`${currency?.symbol} icon`}
+      width={_size}
+      height={_size}
+      maxW={_size}
+      maxH={_size}
+      draggable={false}
+      userSelect="none"
+      fallback={<FallbackIcon size={_size} symbol={currency?.symbol} />}
+    />
   )
 }
