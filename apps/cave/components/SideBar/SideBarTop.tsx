@@ -63,7 +63,7 @@ function SideBarTop({ closeSidebar }: { closeSidebar: VoidFunction }) {
 
       <Stack gap="1" align="flex-end" mt={7}>
         <ButtonLink
-          href="/treasury" // and redirect to the treasury page
+          href="/transparency" // and redirect to the treasury page
           variant="secondary"
           border="primary"
           size="medium"
@@ -71,7 +71,7 @@ function SideBarTop({ closeSidebar }: { closeSidebar: VoidFunction }) {
           alignItems="center"
           leftIcon={<DashboardIcon h="20px" w="20px" />}
         >
-          Treasury
+          Transparency
         </ButtonLink>
         <Box shadow="down" w="full" p={1} rounded="2xl">
           {isConnected ? (
