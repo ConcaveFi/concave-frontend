@@ -24,7 +24,7 @@ export const TreasuryDataCard = ({ treasuryData, lastBondSolds }: TreasuryDataCa
   }
   const marketCapLab = statusLabel[cnvStatus] || (marketCap && '$' + numberMask(marketCap))
   const cnvPriceLab = statusLabel[cnvPriceStatus] || (cnvPrice && '$' + numberMask(cnvPrice))
-  const valuePerCNVLab = statusLabel[cnvStatus] || '$4.20'
+  const valuePerCNVLab = statusLabel[cnvStatus] || (valuePerCNV && '$' + numberMask(valuePerCNV))
   const treasuryValueLab =
     statusLabel[treasuryStatus] || (treasuryValue && '$' + numberMask(treasuryValue))
   const cnvTotalSupplyLab = statusLabel[cnvStatus] || (cnvTotalSupply && numberMask(cnvTotalSupply))
@@ -39,7 +39,7 @@ export const TreasuryDataCard = ({ treasuryData, lastBondSolds }: TreasuryDataCa
         data={[
           { title: 'Market cap', info: marketCapLab },
           { title: 'CNV price', info: cnvPriceLab, applyBorder: true },
-          { title: 'Treasury value per CNV', info: valuePerCNVLab },
+          { title: 'Treasury value per CNV', info: '$4.20' },
         ]}
       />{' '}
       <TreasuryDataContainer
