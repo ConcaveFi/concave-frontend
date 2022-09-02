@@ -51,7 +51,7 @@ export function StakeInput({ onClose, poolId }: { poolId: number; onClose: () =>
   }
   const permitButton = {
     isLoading: permit.isFetching,
-    disabled: permit.isFetching,
+    disabled: permit.isFetching || stakeInput.equalTo(0),
     onClick: () => permit.signPermit(),
     children: 'Approve CNV',
   }
