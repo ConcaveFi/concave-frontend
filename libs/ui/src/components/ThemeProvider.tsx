@@ -19,7 +19,7 @@ export const ThemeProvider = ({
 }: {
   children: ReactNode
   globalStyles: Styles
-  cookies: string
+  cookies?: string
 }) => {
   // this ensures the theme will be right even on ssr pages (won't flash wrong theme)
   const colorModeManager =

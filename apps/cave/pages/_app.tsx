@@ -74,7 +74,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   }, [router.events])
 
   return (
-    <AppProviders globalStyles={globalStyles} cookies={pageProps?.cookies}>
+    <AppProviders globalStyles={globalStyles}>
       <TransactionsObserver />
       <ConcaveFonts />
       <MetaHead meta={Component.Meta} />
@@ -84,8 +84,4 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
       </Layout>
     </AppProviders>
   )
-}
-
-export function getServerSideProps({ req }) {
-  return { props: { cookies: req.headers.cookie ?? '' } }
 }
