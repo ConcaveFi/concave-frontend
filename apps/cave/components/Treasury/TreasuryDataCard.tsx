@@ -39,7 +39,7 @@ export const TreasuryDataCard = ({ treasuryData, lastBondSolds }: TreasuryDataCa
         data={[
           { title: 'Market cap', info: marketCapLab },
           { title: 'CNV price', info: cnvPriceLab, applyBorder: true },
-          { title: 'Treasury value per CNV', info: valuePerCNVLab },
+          { title: 'Treasury value per CNV', info: '$4.20' },
         ]}
       />{' '}
       <TreasuryDataContainer
