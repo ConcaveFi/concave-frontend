@@ -79,7 +79,9 @@ const baseStyle: PartsStyleFunction<typeof parts> = (props) => ({
   divider: baseStyleDivider,
 })
 
-export default {
+const menuStyles = {
   parts: parts.keys,
   baseStyle,
 }
+
+export default menuStyles

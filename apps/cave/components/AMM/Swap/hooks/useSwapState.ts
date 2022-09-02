@@ -33,8 +33,11 @@ export const useSwapState = () => {
 
   const tradeType = lastUpdated === 0 ? TradeType.EXACT_INPUT : TradeType.EXACT_OUTPUT
   const otherCurrency = currencies[lastUpdated === 0 ? 1 : 0]
-  const exactCurrencyAmount =
-    currencies[lastUpdated] && CurrencyAmount.fromRawAmount(currencies[lastUpdated], exactAmount)
+  const exactCurrencyAmount = useMemo(
+    () =>
+      currencies[lastUpdated] && CurrencyAmount.fromRawAmount(currencies[lastUpdated], exactAmount),
+    [currencies, exactAmount, lastUpdated],
+  )
 
   const trade = useTrade(exactCurrencyAmount, otherCurrency, { tradeType, maxHops })
 
@@ -46,6 +49,7 @@ export const useSwapState = () => {
     [exactCurrencyAmount, otherCurrency, trade.data, trade.isSuccess, tradeType],
   )
 
+  // useEvent (?)
   const switchFields = useCallback(() => {
     const otherField = lastUpdated === 0 ? 1 : 0
     onChangeField(otherField)(otherField === 0 ? _trade.outputAmount : _trade.inputAmount)

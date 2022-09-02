@@ -5,6 +5,7 @@ import { BigNumberish } from 'ethers'
 import { formatUnits } from 'ethers/lib/utils'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry/'
 import { concaveProvider } from 'lib/providers'
+import { useMemo } from 'react'
 import {
   erc20ABI,
   erc721ABI,
@@ -98,7 +99,10 @@ export const useApprove = (
     onSuccess: () => allowance.refetch(),
   })
 
-  return { allowance, ...approve, isFetching: isConnecting || allowance.isLoading }
+  return useMemo(
+    () => ({ allowance, ...approve, isFetching: isConnecting || allowance.isLoading }),
+    [allowance, approve, isConnecting],
+  )
 }
 
 export const useApproveForAll = (props: {

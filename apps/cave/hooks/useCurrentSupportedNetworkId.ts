@@ -8,7 +8,6 @@ export const useCurrentSupportedNetworkId = (onChangeNetwork?: (chainId: ChainId
 
   useUpdateEffect(() => {
     onChangeNetwork?.(chainId)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chainId])
 
   return chainId

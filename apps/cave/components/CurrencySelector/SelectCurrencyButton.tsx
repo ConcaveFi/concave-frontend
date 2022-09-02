@@ -2,9 +2,10 @@ import { Currency } from '@concave/core'
 import { DownIcon } from '@concave/icons'
 import { Button, ButtonProps } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
+import { memo } from 'react'
 import { defaultChains } from 'wagmi'
 
-export const SelectCurrencyButton = ({
+const _SelectCurrencyButton = ({
   selected,
   onClick,
   ...props
@@ -30,3 +31,5 @@ export const SelectCurrencyButton = ({
     {selected?.symbol || `Select a token`}
   </Button>
 )
+
+export const SelectCurrencyButton = memo(_SelectCurrencyButton)

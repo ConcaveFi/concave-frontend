@@ -7,8 +7,8 @@ import {
   DrawerContent,
   DrawerOverlay,
   Flex,
-  forwardRef,
   Image,
+  useBreakpointValue,
   useDisclosure,
 } from '@concave/ui'
 import { motion } from 'framer-motion'
@@ -27,12 +27,20 @@ export function SideBar() {
     onClose()
   }, [router.asPath, onClose])
 
+  const isDrawer = useBreakpointValue(
+    {
+      base: true,
+      lg: false,
+    },
+    { fallback: 'lg' },
+  )
+
+  /* show on bigger screens like not mobile lol */
+  if (!isDrawer) return <SidebarContent display={{ base: 'none', lg: 'flex' }} />
+
+  /* show on small devices (mobile) */
   return (
     <>
-      {/* show on bigger screens like not mobile lol */}
-      <SidebarContent display={{ base: 'none', lg: 'flex' }} />
-
-      {/* show on small devices (mobile) */}
       <Box h="60px">
         <Flex
           align="center"
@@ -58,7 +66,6 @@ export function SideBar() {
         closeOnOverlayClick={true}
         isOpen={isOpen}
         placement="left"
-        blockScrollOnMount={false}
         onClose={onClose}
       >
         <DrawerOverlay backdropFilter="blur(8px)" />
@@ -69,6 +76,7 @@ export function SideBar() {
           sx={{ '::-webkit-scrollbar': { display: 'none' }, scrollbarWidth: 'none' }}
         >
           <SidebarContent
+            closeSidebar={onClose}
             drag="x"
             onDragEnd={(a, i) => {
               if (i.offset.x < -150) onClose()
@@ -84,11 +92,13 @@ export function SideBar() {
   )
 }
 
-const SidebarContent = forwardRef<CardProps, 'div'>((props, ref) => {
+type SidebarProps = { closeSidebar?: () => void } & CardProps
+
+const SidebarContent = ({ closeSidebar, ...props }: SidebarProps) => {
   return (
     <Card
+      willChange="transform"
       as={motion.aside}
-      ref={ref}
       variant="primary"
       apply="background.sidebar"
       borderWidth={0}
@@ -107,9 +117,9 @@ const SidebarContent = forwardRef<CardProps, 'div'>((props, ref) => {
       gap="30px"
       {...props}
     >
-      <SideBarTop />
+      <SideBarTop closeSidebar={closeSidebar} />
       <PageNav />
       <SideBarBottom mt={6} />
     </Card>
   )
-})
+}

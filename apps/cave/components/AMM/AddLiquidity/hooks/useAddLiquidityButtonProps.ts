@@ -1,6 +1,6 @@
 import { Currency, CurrencyAmount } from '@concave/core'
 import { ButtonProps } from '@concave/ui'
-import { useModals } from 'contexts/ModalsContext'
+import { useConnectModal } from 'components/Modals'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useAccount } from 'wagmi'
 import { NoValidPairsError, UsePairResult } from '../../hooks/usePair'
@@ -16,7 +16,7 @@ export const useAddLiquidityButtonProps = (
   const currency0Balance = useCurrencyBalance(amount0?.currency, { watch: true })
   const currency1Balance = useCurrencyBalance(amount1?.currency, { watch: true })
 
-  const { connectModal } = useModals()
+  const connectModal = useConnectModal()
 
   /*
     Not Connected

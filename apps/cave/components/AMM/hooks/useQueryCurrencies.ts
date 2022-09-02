@@ -8,9 +8,9 @@ import { useQuery, useQueryClient } from 'react-query'
 import { getQueryValue } from 'utils/getQueryValue'
 import { useNetwork } from 'wagmi'
 
-const getAddressOrSymbol = (currency: Currency) => {
-  if (!currency) return null
-  return currency.isNative ? currency.symbol : currency.wrapped.address
+const getAddressOrSymbol = (c: Currency) => {
+  if (!c) return null
+  return c.isNative ? c.symbol : c.wrapped.address
 }
 
 const fetchTokenOrNativeData = (

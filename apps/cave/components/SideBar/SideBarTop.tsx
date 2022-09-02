@@ -1,8 +1,9 @@
 import { CNV } from '@concave/core'
 import { DashboardIcon } from '@concave/icons'
 import { Box, Flex, Image, Stack, Text } from '@concave/ui'
-import { ButtonLink } from 'components/SideBar/ButtonLink'
-import { ConnectButton, UserWallet } from 'components/YourWallet/ConnectWallet'
+import { ButtonLink } from 'components/ButtonLink'
+import { ConnectButton } from 'components/UserWallet/ConnectButton'
+import { ConnectedUserButton } from 'components/UserWallet/ConnectedUserButton'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useAccount, useNetwork } from 'wagmi'
@@ -45,7 +46,7 @@ const TestnetIndicator = () => {
   )
 }
 
-function SideBarTop() {
+function SideBarTop({ closeSidebar }: { closeSidebar: VoidFunction }) {
   const { isConnected } = useAccount()
 
   return (
@@ -73,7 +74,13 @@ function SideBarTop() {
           Treasury
         </ButtonLink>
         <Box shadow="down" w="full" p={1} rounded="2xl">
-          {isConnected ? <UserWallet /> : <ConnectButton />}
+          {isConnected ? (
+            <ConnectedUserButton />
+          ) : (
+            <div onClick={closeSidebar}>
+              <ConnectButton />
+            </div>
+          )}
           <UserCnvBalance />
         </Box>
       </Stack>
