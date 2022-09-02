@@ -1,4 +1,4 @@
-import { CNV, CurrencyAmount, DAI, Token } from '@concave/core'
+import { CNV_ADDRESS, CurrencyAmount, DAI, DAI_ADDRESS, Token } from '@concave/core'
 import { Signer } from 'ethers'
 import { useQuery } from 'react-query'
 import { chain, useSigner } from 'wagmi'
@@ -14,8 +14,9 @@ const signPermit = async (
   if (token.equals(DAI[token.chainId])) {
     const { holder, spender, nonce, expiry, allowed, v, r, s } = await signPermitAllowed(
       signer,
-      token.address,
+      currencyAmount,
       spenderAddress,
+      deadline,
     )
     return { holder, spender, nonce, expiry, allowed, v, r, s }
   }
@@ -29,21 +30,22 @@ const signPermit = async (
   return { owner, spender, value, deadline, v, r, s }
 }
 
-const PERMITTABLE_TOKENS = [CNV[chain.rinkeby.id], CNV[chain.mainnet.id]] //[DAI, CNV]
-
-const isTokenPermissible = (token: Token) =>
-  !!PERMITTABLE_TOKENS.find((t) => token.equals(t[token.chainId]))
-
+/**
+ * Our rinkeby DAI dont implements PermitAllowed
+ */
+const PERMITTABLE_TOKENS = [...Object.values(CNV_ADDRESS), DAI_ADDRESS[chain.mainnet.id]]
+const isTokenPermissible = (token: Token) => {
+  return !!PERMITTABLE_TOKENS.includes(token?.address)
+}
+export type UsePermiReturn = ReturnType<typeof usePermit>
 export const usePermit = (
   currencyAmount: CurrencyAmount<Token>,
   spender: string,
   deadline: number = Date.now(),
 ) => {
   const { data: signer } = useSigner()
-  const token = currencyAmount.currency
-  // TODO: check contract for permit method
+  const token = currencyAmount?.currency
   const supportsPermit = isTokenPermissible(token)
-
   const {
     data: signedPermit,
     isLoading,
@@ -68,6 +70,7 @@ export const usePermit = (
     isSuccess,
     isError,
     isIdle,
+    currencyAmount,
     signedPermit,
     signPermit: refetch,
   }
