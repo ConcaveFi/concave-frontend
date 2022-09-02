@@ -12,7 +12,7 @@ import {
 import { useSwapSettings } from 'components/AMM/Swap/Settings'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import dynamic from 'next/dynamic'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
 import { PcnvNotification } from './PcnvNotification'
 import { TradeDetails } from './TradeDetails'
