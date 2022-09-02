@@ -1,5 +1,5 @@
 import { Currency, CurrencyAmount } from '@concave/core'
-import { useCallback, useRef } from 'react'
+import { useCallback, useMemo, useRef } from 'react'
 import { updateArray } from 'utils/updateArray'
 
 export const useLinkedCurrencyFields = ({
@@ -39,8 +39,11 @@ export const useLinkedCurrencyFields = ({
     [currencies, onChangeAmount, onChangeCurrencies],
   )
 
-  return {
-    lastUpdated: lastUpdated.current,
-    onChangeField,
-  }
+  return useMemo(
+    () => ({
+      lastUpdated: lastUpdated.current,
+      onChangeField,
+    }),
+    [onChangeField],
+  )
 }

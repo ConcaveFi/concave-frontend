@@ -117,7 +117,7 @@ const ImageContainer = () => (
     gap={1}
     direction="row"
   >
-    <Image src={'/assets/tokens/pcnv.svg'} />
+    <Image src={'/assets/tokens/pcnv.svg'} alt="pcnv logo" />
     <Text my={'auto'} fontSize="2xl" fontWeight={'bold'}>
       pCNV redemption
     </Text>

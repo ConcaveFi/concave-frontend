@@ -17,7 +17,7 @@ import { AddLiquidityModalButton } from 'components/AMM/AddLiquidity/AddLiquidit
 import { RemoveLiquidityModalButton } from 'components/AMM/RemoveLiquidity/RemoveLiquidity'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { Loading } from 'components/Loading'
-import { ConnectButton } from 'components/YourWallet/ConnectWallet'
+import { ConnectButton } from 'components/UserWallet/ConnectButton'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
