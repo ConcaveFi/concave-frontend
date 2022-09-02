@@ -9,8 +9,8 @@ export enum ChainEnum {
 export type NodeDisplayData = {
   label: string
   chain?: ChainEnum
-  address: string
-  addressType: AddressTypeEnum
+  address?: string
+  addressType?: AddressTypeEnum
 }
 
 export type ShapeLabelSettingsType = {

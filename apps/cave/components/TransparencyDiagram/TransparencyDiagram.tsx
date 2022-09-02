@@ -2,9 +2,20 @@ import { Box, Button, Flex, useBreakpointValue, VStack } from '@concave/ui'
 import { useState } from 'react'
 import ReactFlow, { ConnectionLineType, Controls } from 'react-flow-renderer'
 import { bondingEdges } from './edges/bondingEdges'
+import { bondingEdgesMobile } from './edges/bondingEdgesMobile'
 import { generalEdges } from './edges/generalEdges'
+import { generalEdgesMobile } from './edges/generalEdgesMobile'
 import { stakingEdges } from './edges/stakingEdges'
-import { bondingNodes, generalNodes, nodeTypes, stakingNodes } from './nodes/nodes'
+import { stakingEdgesMobile } from './edges/stakingEdgesMobile'
+import {
+  bondingNodes,
+  bondingNodesMobile,
+  generalNodes,
+  generalNodesMobile,
+  nodeTypes,
+  stakingNodes,
+  stakingNodesMobile,
+} from './nodes/nodes'
 import { edgeStyle, labelStyle } from './styles'
 
 const SelectionButton = ({ diagramShown, setDiagramShown, chartId, chartName }) => (
@@ -17,7 +28,7 @@ const SelectionButton = ({ diagramShown, setDiagramShown, chartId, chartName }) 
   </Button>
 )
 
-const ReactFlowDiagram = ({ edges, nodes }) => (
+const ReactFlowDiagram = ({ edges, nodes, isMobile }) => (
   <ReactFlow
     edges={edges}
     nodes={nodes}
@@ -26,6 +37,9 @@ const ReactFlowDiagram = ({ edges, nodes }) => (
     elevateEdgesOnSelect
     fitView
     fitViewOptions={{ padding: 0.15 }}
+    minZoom={0}
+    zoomOnPinch
+    panOnDrag
     defaultEdgeOptions={{
       type: ConnectionLineType.SimpleBezier,
       style: { ...edgeStyle },
@@ -33,7 +47,7 @@ const ReactFlowDiagram = ({ edges, nodes }) => (
       labelShowBg: false,
     }}
   >
-    <Controls showInteractive={false} />
+    {isMobile ? <></> : <Controls showInteractive={false} />}
   </ReactFlow>
 )
 
@@ -84,8 +98,8 @@ export function TransparencyDiagram() {
           shadow="down"
           w="100%"
           h="full"
-          p={4}
-          py={6}
+          p={isMobile ? 2 : 4}
+          py={isMobile ? 2 : 6}
           justify="start"
           overflowY={'auto'}
           direction="column"
@@ -107,9 +121,27 @@ export function TransparencyDiagram() {
               rounded={'2xl'}
             />
           )}
-          {diagramShown === 1 && <ReactFlowDiagram edges={generalEdges} nodes={generalNodes} />}
-          {diagramShown === 2 && <ReactFlowDiagram edges={bondingEdges} nodes={bondingNodes} />}
-          {diagramShown === 3 && <ReactFlowDiagram edges={stakingEdges} nodes={stakingNodes} />}
+          {diagramShown === 1 && (
+            <ReactFlowDiagram
+              edges={isMobile ? generalEdgesMobile : generalEdges}
+              nodes={isMobile ? generalNodesMobile : generalNodes}
+              isMobile={isMobile}
+            />
+          )}
+          {diagramShown === 2 && (
+            <ReactFlowDiagram
+              edges={isMobile ? bondingEdgesMobile : bondingEdges}
+              nodes={isMobile ? bondingNodesMobile : bondingNodes}
+              isMobile={isMobile}
+            />
+          )}
+          {diagramShown === 3 && (
+            <ReactFlowDiagram
+              edges={isMobile ? stakingEdgesMobile : stakingEdges}
+              nodes={isMobile ? stakingNodesMobile : stakingNodes}
+              isMobile={isMobile}
+            />
+          )}
         </Flex>
       </VStack>
     </>

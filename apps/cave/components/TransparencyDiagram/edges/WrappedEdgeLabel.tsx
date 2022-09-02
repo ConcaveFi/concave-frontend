@@ -1,5 +1,6 @@
 import { SVGProps } from 'react'
 import { labelStyle } from '../styles'
+import { wrapText } from '../utils'
 export function WrappedEdgeLabel({
   id,
   maxLineLength = 25,
@@ -12,31 +13,7 @@ export function WrappedEdgeLabel({
   customStyle?: SVGProps<SVGTSpanElement>
 }) {
   const style = customStyle || labelStyle
-
-  const wordArray = label.trim().split(/\s+/)
-  const wordArrayLength = wordArray.length
-
-  let currentLine = ''
-  let labelLines: string[] = []
-
-  for (let i = 0; i <= wordArrayLength; i++) {
-    // case 0. last iteration
-    if (i === wordArrayLength) {
-      labelLines.push(currentLine)
-    } else {
-      const currentWord = wordArray[i]
-      const nextLine = currentLine + ' ' + currentWord
-      // case 1. add to current line
-      if (nextLine.length <= maxLineLength) {
-        currentLine = nextLine
-      }
-      // case 2. make new line
-      else {
-        labelLines.push(currentLine)
-        currentLine = currentWord
-      }
-    }
-  }
+  const labelLines = wrapText(label, maxLineLength)
 
   return (
     <>
