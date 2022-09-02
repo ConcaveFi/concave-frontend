@@ -1,8 +1,9 @@
 import { PCNV, PCNVContract } from '@concave/core'
 import { useDisclosure } from '@concave/ui'
 import { TransactionResponse } from '@ethersproject/providers'
-import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
-import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
+import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
+import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
+
 import { BigNumber } from 'ethers'
 import { formatEther, parseEther } from 'ethers/lib/utils'
 import { useGet_Amm_Cnv_InfosQuery } from 'graphql/generated/graphql'
@@ -24,7 +25,7 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
   } = useDisclosure()
 
   const confirmModal = useDisclosure()
-  const { data } = useGet_Amm_Cnv_InfosQuery()
+  const { data, status: cnvDataStatus } = useGet_Amm_Cnv_InfosQuery()
 
   const { address } = useAccount()
   const { data: signer } = useSigner()
@@ -60,7 +61,8 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
         status={status}
         tokenUserData={{ ...pCNVData, balance }}
         token={PCNV[chainId]}
-        conversionToCNV={pCNVToCNVDifference || 1}
+        conversionToCNV={pCNVToCNVDifference || 0}
+        cnvDataStatus={cnvDataStatus}
       />
 
       <TransactionErrorDialog
@@ -80,6 +82,7 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
         isOpen={confirmModal.isOpen && Boolean(amount)}
         onClose={confirmModal.onClose}
         onAccept={redeem}
+        status={cnvDataStatus}
       />
     </>
   )

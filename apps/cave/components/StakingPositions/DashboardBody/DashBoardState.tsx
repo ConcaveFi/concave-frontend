@@ -38,7 +38,7 @@ export const useStakePositions = () => {
   )
 
   return {
-    isLoading: isLoading || loadingTokens,
+    isLoading: isLoading,
     totalLocked,
     userNonFungibleTokensInfo: filteredPositions || [],
     netWorkId: chainId,

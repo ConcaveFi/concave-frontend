@@ -6,7 +6,7 @@ import { VestedTokenButtonProps } from 'components/Treasury/TreasuryRedeemCard'
 import { BigNumber } from 'ethers'
 import { formatEther, parseEther } from 'ethers/lib/utils'
 import { useState } from 'react'
-import { formatFixed } from 'utils/formatFixed'
+import { formatFixed } from 'utils/bigNumberMask'
 import { useAccount } from 'wagmi'
 import { VestedTokenInput } from './VestedTokenDialogInput'
 
@@ -14,9 +14,10 @@ type VestedTokenDialogProps = {
   tokenUserData: { redeemable: BigNumber; redeemed: BigNumber; balance: BigNumber }
   isLoading: boolean
   onRedeem: (amount: BigNumber, redeemMax: boolean) => void
-  status: 'default' | 'approve' | 'rejected' | 'error' | 'submitted'
+  status?: 'default' | 'approve' | 'rejected' | 'error' | 'submitted'
   token: Token
   conversionToCNV?: number
+  cnvDataStatus?: 'error' | 'idle' | 'loading' | 'success'
 }
 export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDialogProps> = ({
   onClose,
@@ -27,6 +28,7 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
   status,
   token,
   conversionToCNV,
+  cnvDataStatus,
 }) => {
   const { isConnected } = useAccount()
   const { redeemable, redeemed, balance } = tokenUserData || {}
@@ -74,19 +76,29 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
               value={isLoading ? 'Loading...' : formatEther(redeemed || '0')}
             />
             <Collapse in={validValue || (redeemMax && !redeemable?.isZero())}>
-              {conversionToCNV && (
+              {!!cnvDataStatus && (
                 <Info
                   title="You will receive:"
-                  value={formatFixed(parseEther(convertedValue), { places: 5 }) + ' CNV'}
+                  value={
+                    {
+                      loading: 'calculating',
+                      error: '---',
+                      success: formatFixed(parseEther(convertedValue), { places: 5 }) + ' CNV',
+                    }[cnvDataStatus]
+                  }
                 />
               )}
             </Collapse>
-            {conversionToCNV && (
-              <Text
-                color={'text.accent'}
-                fontWeight="bold"
-                opacity={0.5}
-              >{`1 ${token?.symbol} = ${CNVAmount} CNV`}</Text>
+            {!!cnvDataStatus && (
+              <Text color={'text.accent'} fontWeight="bold" opacity={0.5}>
+                {
+                  {
+                    loading: `1 ${token.symbol} = calculating`,
+                    error: 'error calculating conversion',
+                    success: `1 ${token?.symbol} = ${CNVAmount} CNV`,
+                  }[cnvDataStatus]
+                }
+              </Text>
             )}
             <Text fontWeight={'bold'} textColor="text.accent" opacity="0.5" fontSize={'xs'}></Text>
           </Flex>

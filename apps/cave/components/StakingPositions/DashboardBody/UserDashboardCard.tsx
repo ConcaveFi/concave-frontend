@@ -1,4 +1,5 @@
-import { Box, Button, Collapse, Flex, Spinner, Text } from '@concave/ui'
+import { ChevronLeftIcon } from '@concave/icons'
+import { Box, Button, Collapse, Flex, gradientBorder, Spinner, Text } from '@concave/ui'
 import { RangeFilter, useFilterByRange } from 'components/NftFilters/Filters/hooks/useFilterByRange'
 import {
   StakePoolFilterEnum,
@@ -14,6 +15,7 @@ import { FilterContainer } from './FilterContainer'
 import { UserDividendCard } from './UserDividendCard'
 
 export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePositionsState }) => {
+  const router = useRouter()
   const { isConnected } = useAccount()
   const { userNonFungibleTokensInfo, totalLocked, isLoading } = stakePosition
   const hasPositions = userNonFungibleTokensInfo.length !== 0
@@ -30,6 +32,8 @@ export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePo
   const [rangeFilter, setRangeFilter] = useState<RangeFilter>({})
   const { filterByRange } = useFilterByRange(rangeFilter)
 
+  const [tokenIdFilter, setTokenIdFilter] = useState<number>()
+
   const [sort, setSort] = useState<NftSort>({ sort: 'REDEEM_DATE', order: 'ASC' })
   const sortFunction = sort ? positionSorter.data?.[sort.sort][sort.order] : () => 0
   if (!positionSorter.data) {
@@ -37,47 +41,68 @@ export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePo
     return null
   }
   return (
-    <Flex display={{ lg: 'flex', md: 'flex' }}>
+    <Flex w="900px">
       <Flex
         gap={2}
         direction={'column'}
-        shadow={{ base: '', md: 'down' }}
-        maxW={{ lg: '760px', md: '580px', base: '358px' }}
+        w="full"
         justify="center"
         rounded={'2xl'}
-        apply={{ base: '', md: 'background.metalBrighter' }}
+        apply={'background.metal'}
       >
-        <Flex justify="center" px={4} pt={4} position={'relative'}>
-          <UserDividendCard isLoading={isLoading} totalLocked={totalLocked} />
+        <Flex direction={'column'} shadow="up" rounded={'2xl'} pb={2}>
+          <Flex direction={'column'} align="center" px={4} pt={4} position={'relative'}>
+            <Button
+              color="text.low"
+              shadow={'up'}
+              px={4}
+              py={2}
+              rounded="2xl"
+              sx={{ ...gradientBorder({ variant: 'secondary' }) }}
+              onClick={() => router.push('/marketplace')}
+              mb={-10}
+              alignSelf={{ base: 'end', md: 'end' }}
+            >
+              <ChevronLeftIcon boxSize={{ base: '20px', md: '30px' }} />
+              <Text variant={'ParagraphBold'} fontSize={{ base: 'sm', md: 'lg' }}>
+                Marketplace
+              </Text>
+            </Button>
+            <UserDividendCard isLoading={isLoading} totalLocked={totalLocked} />
+          </Flex>
+          <FilterContainer
+            onChangeTokenIdFilter={setTokenIdFilter}
+            onResetStakeFilters={setStakeFilters}
+            stakePoolFilters={stakeFilters}
+            tokenIdFilter={tokenIdFilter}
+            currentInitalCNVFilter={rangeFilter}
+            onChangeInitialCNVFilter={setRangeFilter}
+            onChangeSort={(sort) => setSort(sort)}
+            onToggleStakeFilter={(filter, type) => {
+              if (type === 'enable') setStakeFilters([...stakeFilters, filter])
+              else setStakeFilters(stakeFilters.filter((stakeFilter) => stakeFilter !== filter))
+            }}
+          />
         </Flex>
-        <FilterContainer
-          onResetStakeFilters={setStakeFilters}
-          stakePoolFilters={stakeFilters}
-          currentInitalCNVFilter={rangeFilter}
-          onApplyInitalCNVFilter={setRangeFilter}
-          onResetInitialCNVFilter={() => setRangeFilter({})}
-          onChangeSort={(sort) => setSort(sort)}
-          onEnableStakeFilter={(filter) => setStakeFilters([...stakeFilters, filter])}
-          onDisableStakeFilter={(disabledFilter) =>
-            setStakeFilters(stakeFilters.filter((stakeFilter) => stakeFilter !== disabledFilter))
-          }
-        />
         <Collapse in={hasPositions}>
           <Box
-            pos="relative"
             maxH={{ lg: '675px', md: '740px', base: '800px' }}
-            overflowY={'auto'}
+            overflowY={'scroll'}
             overflowX="hidden"
             borderRadius="xl"
-            px={{ base: 0, md: '0.5rem' }}
-            mx={{ base: 0, md: 4 }}
-            shadow={{ base: '', md: 'down' }}
+            px={'0.5rem'}
+            mx={4}
+            shadow={'down'}
             apply="scrollbar.big"
             mb={3}
           >
             {userNonFungibleTokensInfo
               .filter(filterByStakePool)
               .filter(filterByRange)
+              .filter((position) => {
+                if (!tokenIdFilter) return true
+                return position.tokenId === tokenIdFilter
+              })
               .sort(sortFunction)
               .map((nonFungibleTokenInfo) => (
                 <UserPositionCard

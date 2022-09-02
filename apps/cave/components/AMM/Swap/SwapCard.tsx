@@ -13,11 +13,12 @@ import {
 } from 'components/AMM'
 import { useSwapSettings } from 'components/AMM/Swap/Settings'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
-import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
-import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
-import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
+import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
+import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
+
+import { WaitingConfirmationDialog } from 'components/TransactionDialog/TransactionWaitingConfirmationDialog'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
 import { NetworkMismatch } from '../NetworkMismatch'
 import { PcnvNotification } from './PcnvNotification'
@@ -27,12 +28,16 @@ export function SwapCard() {
   const { trade, error, onChangeInput, onChangeOutput, switchFields, onReset } = useSwapState()
 
   const [recipient, setRecipient] = useState('')
-  const confirmationModal = useDisclosure()
+  const {
+    onOpen: openConfirmationModal,
+    onClose: closeConfirmationModal,
+    isOpen: isConfirmationModalOpen,
+  } = useDisclosure()
 
   const swapTx = useSwapTransaction(trade, recipient, {
     onSuccess: (tx) => {
       onChangeInput(toAmount(0, trade.inputAmount.currency))
-      confirmationModal.onClose()
+      closeConfirmationModal()
     },
   })
 
@@ -42,7 +47,10 @@ export function SwapCard() {
     trade,
     error,
     recipient,
-    onSwapClick: () => (isExpertMode ? swapTx.write() : confirmationModal.onOpen()),
+    onSwapClick: useCallback(
+      () => (isExpertMode ? swapTx.write() : openConfirmationModal()),
+      [isExpertMode, swapTx, openConfirmationModal],
+    ),
   })
 
   const networkId = useCurrentSupportedNetworkId()
@@ -58,6 +66,7 @@ export function SwapCard() {
         shadow="Block Up"
         w="100%"
         maxW="420px"
+        willChange="transform"
       >
         <CurrencyInputField
           currencyAmountIn={trade.inputAmount}
@@ -106,8 +115,8 @@ export function SwapCard() {
 
       <ConfirmSwapModal
         trade={swapTx.trade}
-        isOpen={confirmationModal.isOpen}
-        onClose={confirmationModal.onClose}
+        isOpen={isConfirmationModalOpen}
+        onClose={closeConfirmationModal}
         onConfirm={() => swapTx.write()}
       />
 

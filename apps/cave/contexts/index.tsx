@@ -1,7 +1,6 @@
 import { ThemeProvider } from '@concave/ui'
 import { WagmiProvider } from 'contexts/WagmiContext'
 import { MotionConfig } from 'framer-motion'
-import { ModalsProvider } from './ModalsContext'
 import { ReactQueryProvider } from './ReactQueryContext'
 
 export const AppProviders = ({ children, globalStyles, cookies }) => {
@@ -9,9 +8,7 @@ export const AppProviders = ({ children, globalStyles, cookies }) => {
     <ThemeProvider globalStyles={globalStyles} cookies={cookies}>
       <MotionConfig reducedMotion="user">
         <ReactQueryProvider>
-          <WagmiProvider>
-            <ModalsProvider>{children}</ModalsProvider>
-          </WagmiProvider>
+          <WagmiProvider>{children}</WagmiProvider>
         </ReactQueryProvider>
       </MotionConfig>
     </ThemeProvider>

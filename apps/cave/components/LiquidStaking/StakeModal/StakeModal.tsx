@@ -14,13 +14,21 @@ import { StakeInfo } from './StakeInfo'
 import { StakeInput } from './StakeInput'
 
 type StakeModalProps = {
+  status: 'loading' | 'error' | 'idle' | 'success'
+  poolId: number
   isOpen: boolean
   onClose: VoidFunction
   stakeData: StakeData
   loadBar: JSX.Element
 }
-export const StakeModal = ({ isOpen, onClose, stakeData, loadBar }: StakeModalProps) => {
-  const { poolId } = stakeData || {}
+export const StakeModal = ({
+  status,
+  poolId,
+  isOpen,
+  onClose,
+  stakeData,
+  loadBar,
+}: StakeModalProps) => {
   const {
     isOpen: isDescritionsOpen,
     onOpen: onOpenDescriptions,
@@ -48,6 +56,7 @@ export const StakeModal = ({ isOpen, onClose, stakeData, loadBar }: StakeModalPr
             type={descriptionType}
           />
           <Emissions
+            status={status}
             onCloseDescription={onCloseDescription}
             onOpenDescription={onOpenDescriptions}
             poolId={poolId}
@@ -55,8 +64,8 @@ export const StakeModal = ({ isOpen, onClose, stakeData, loadBar }: StakeModalPr
             {...stakeData}
           />
           <VStack gap={4} w="full" justify={'center'} align="center">
-            <StakeInfo stakingPool={stakeData} loadBar={loadBar} />
-            <StakeInput onClose={onClose} poolId={poolId} stakingPool={stakeData} />
+            <StakeInfo poolId={poolId} status={status} stakingPool={stakeData} loadBar={loadBar} />
+            <StakeInput onClose={onClose} poolId={poolId} />
           </VStack>
         </Card>
       </ModalContent>

@@ -1,5 +1,5 @@
 import { ExpandArrowIcon } from '@concave/icons'
-import { Box, Card, Collapse, Flex, keyframes, Text } from '@concave/ui'
+import { Box, Card, Collapse, Flex, keyframes, Spinner, Text } from '@concave/ui'
 import { formatDistanceStrict } from 'date-fns'
 import { Get_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql'
 import { useCNVPrice } from 'hooks/useCNVPrice'
@@ -9,13 +9,13 @@ import { numberMask } from 'utils/numberMask'
 
 interface BoldSoldsCardProps {
   data: Get_Accrualbondv1_Last10_SoldQuery
-  error: any
+  status: 'error' | 'idle' | 'success' | 'loading'
   loading: boolean
 }
 
 const BoldSoldsCard = (props: BoldSoldsCardProps) => {
   const netWorkdId = useCurrentSupportedNetworkId()
-  const { data, loading: isLoading, error } = props
+  const { data, loading: isLoading, status } = props
   const AMMData = useCNVPrice()
   const [bondSpotPrice, setBondSpotPrice] = useState('0')
   const [solds, setSolds] = useState([])
@@ -105,14 +105,27 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
         fontWeight="700"
         fontSize={'18px'}
       >
-        <ExpandArrowIcon
-          width={12}
-          height={12}
-          cursor="pointer"
-          transition={'all 0.3s'}
-          transform={isOpen ? 'rotate(180deg)' : ''}
-          onClick={() => setIsOpen(!isOpen)}
-        />
+        {
+          {
+            loading: (
+              <Flex gap={2} color={'text.bright'}>
+                <Text>loading tracks</Text>
+                <Spinner />
+              </Flex>
+            ),
+            error: <Text color={'text.bright'}>error fetching tracks</Text>,
+            success: (
+              <ExpandArrowIcon
+                width={12}
+                height={12}
+                cursor="pointer"
+                transition={'all 0.3s'}
+                transform={isOpen ? 'rotate(180deg)' : ''}
+                onClick={() => setIsOpen(!isOpen)}
+              />
+            ),
+          }[status]
+        }
       </Card>
     </Flex>
   )

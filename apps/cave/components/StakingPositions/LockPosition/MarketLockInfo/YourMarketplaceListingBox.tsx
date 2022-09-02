@@ -1,15 +1,22 @@
 import { DAI, MARKETPLACE_CONTRACT } from '@concave/core'
 import { MarketItem, StakingPosition } from '@concave/marketplace'
-import { Box, Button, ButtonProps, Flex, Text } from '@concave/ui'
+import {
+  Button,
+  ButtonProps,
+  Flex,
+  FlexProps,
+  Text,
+  useBreakpointValue,
+  useDisclosure,
+} from '@concave/ui'
 import { formatDistanceToNow } from 'date-fns'
 import { BigNumber } from 'ethers'
 import { useApproveForAll } from 'hooks/useApprove'
-import { useState } from 'react'
-import { formatFixed } from 'utils/formatFixed'
+import { FC, useState } from 'react'
+import { formatFixed } from 'utils/bigNumberMask'
 import { useAccount } from 'wagmi'
-import { Info } from '../Redeem/RedeemViewer'
+import { usePositionDiscount } from './hooks/usePositionDiscount'
 import { SaleModal } from './SellPositionModal'
-import { usePositionDiscount } from './usePositionDiscount'
 
 export type UserMarketInfoState = ReturnType<typeof useYourMarketPlaceListing>
 export const useYourMarketPlaceListing = ({
@@ -72,7 +79,7 @@ export const getMarketPlaceButtonProps = (
     return {
       children: 'Approve contract',
       onClick: () => approveContractInfo.sendTx(),
-      variant: 'primary.outline',
+      variant: 'primary',
     }
   }
   return { children: 'List for sale', onClick: () => setState(`list`) }
@@ -84,49 +91,79 @@ export const MarketListing = ({ stakingPosition }: { stakingPosition: StakingPos
   const tmp = generateDefaultMarket(stakingPosition).new({ seller: account.address, signature: '' })
   const [market, setMarket] = useState(tmp.new())
   const buttonState = getMarketPlaceButtonProps({ ...marketItemState, market })
+  const { isOpen, onToggle } = useDisclosure()
   const auctionEnd = formatDistanceToNow(new Date(+market?.deadline.toString() * 1000), {
     addSuffix: false,
   })
   const discount = usePositionDiscount(stakingPosition, market)
-  const isListed = market?.isListed && market.deadline.mul(1000).gte(Date.now())
+
+  const listPrice = market?.isListed
+    ? `${formatFixed(market.startPrice, { decimals: market.currency.decimals })} ${
+        market.currency?.symbol
+      }`
+    : '---'
+  const discountText = market?.isListed
+    ? `${formatFixed(discount.discount || BigNumber.from(0), { decimals: 2 })} %`
+    : '---'
+
+  const layoutIsMobile = useBreakpointValue({ base: true, md: false })
   return (
-    <Box shadow={isListed ? '' : 'down'} borderRadius="2xl" width={'full'} p={4}>
-      <Flex justify={{ lg: 'left', base: 'center' }}>
-        <Text color="text.low" fontSize="lg" as="b">
-          Your Marketplace Listing
+    <Flex direction={'column'} height="full" position={'relative'}>
+      <Flex
+        direction={{ base: 'column-reverse', md: 'row' }}
+        boxSize={'full'}
+        p={3}
+        gap={{ base: 0, md: 0 }}
+        justify="space-between"
+        align={'center'}
+      >
+        <Text
+          onClick={layoutIsMobile ? onToggle : undefined}
+          cursor={'pointer'}
+          fontSize={'lg'}
+          fontWeight={'bold'}
+          color="text.low"
+        >
+          {layoutIsMobile && `Marketplace`}
+          {!layoutIsMobile && `Marketplace:`}
         </Text>
-      </Flex>
-      <Flex justify={{ lg: 'left', md: 'center' }} direction={{ base: 'column', lg: 'row' }}>
-        <Flex flexBasis={'200%'}>
-          <Info
-            label={'List Price:'}
+        <Flex
+          gap={{ base: 3, md: 0 }}
+          align={'center'}
+          direction={{ base: 'column', md: 'row' }}
+          h={{ base: isOpen ? '150px' : '0px', md: '50px' }}
+          overflow={{ base: !isOpen && 'hidden', md: 'visible' }}
+          w="80%"
+          transition={'.3s all'}
+        >
+          <Flex justify={'space-between'} w="full">
+            <Flex
+              flex={{ base: '', md: 1 }}
+              justify={'space-around'}
+              direction={{ base: 'column', md: 'row' }}
+            >
+              <Info title="Token Id" info={stakingPosition.tokenId.toString()} />
+              <Info title="List price" info={listPrice} />
+            </Flex>
+            <Flex
+              flex={{ base: '', md: 1 }}
+              justify={'space-around'}
+              direction={{ base: 'column', md: 'row' }}
+            >
+              <Info title="Discount" info={discountText} />
+              <Info title="Expiration date" info={market?.isListed ? auctionEnd : '--.--.--'} />
+            </Flex>
+          </Flex>
+          <Button
+            height={{ base: '40px', md: '50px' }}
+            variant={'primary'}
+            minW={{ base: '200px', md: '110px' }}
+            maxW={{ base: '200px', md: '110px' }}
+            size={'sm'}
             width={'full'}
-            fontSize={'lg'}
-            value={
-              isListed
-                ? `${formatFixed(market.startPrice, { decimals: market.currency.decimals })} ${
-                    market.currency?.symbol
-                  }`
-                : '---'
-            }
-          />
-          <Info
-            label={'Discount:'}
-            width={'full'}
-            isLoading={discount.isLoading}
-            value={
-              isListed
-                ? `${formatFixed(discount.discount || BigNumber.from(0), { decimals: 2 })} %`
-                : '---'
-            }
-          />
-          <Info
-            label={'Expiration Date:'}
-            width={'full'}
-            value={isListed ? auctionEnd : '--.--.--'}
+            {...buttonState}
           />
         </Flex>
-        <Button variant={'primary'} minW={'160px'} size={'md'} width={'full'} {...buttonState} />
       </Flex>
       <SaleModal
         staking={stakingPosition}
@@ -135,10 +172,20 @@ export const MarketListing = ({ stakingPosition }: { stakingPosition: StakingPos
         onClose={() => marketItemState.setState('')}
         state={marketItemState.state}
       />
-    </Box>
+    </Flex>
   )
 }
-
+type InfoProps = { title: string; info: string }
+const Info: FC<InfoProps & FlexProps> = ({ info, title, ...props }) => (
+  <Flex direction={'column'} align="start" {...props}>
+    <Text fontSize="xs" color={'text.low'}>
+      {title}
+    </Text>
+    <Text fontSize="sm" fontWeight={'bold'}>
+      {info}
+    </Text>
+  </Flex>
+)
 const generateDefaultMarket = (staking: StakingPosition) => {
   if (staking?.market?.isListed) {
     return staking.market
