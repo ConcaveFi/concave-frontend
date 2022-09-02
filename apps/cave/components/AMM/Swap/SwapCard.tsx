@@ -25,7 +25,8 @@ import { PcnvNotification } from './PcnvNotification'
 import { TradeDetails } from './TradeDetails'
 
 export function SwapCard() {
-  const { trade, error, onChangeInput, onChangeOutput, switchFields, onReset } = useSwapState()
+  const { trade, error, permit, onChangeInput, onChangeOutput, switchFields, onReset } =
+    useSwapState()
 
   const [recipient, setRecipient] = useState('')
   const {
@@ -34,17 +35,22 @@ export function SwapCard() {
     isOpen: isConfirmationModalOpen,
   } = useDisclosure()
 
-  const swapTx = useSwapTransaction(trade, recipient, {
-    onSuccess: (tx) => {
-      onChangeInput(toAmount(0, trade.inputAmount.currency))
-      closeConfirmationModal()
+  const swapTx = useSwapTransaction(
+    trade,
+    recipient,
+    {
+      onSuccess: (tx) => {
+        onChangeInput(toAmount(0, trade.inputAmount.currency))
+        closeConfirmationModal()
+      },
     },
-  })
+    permit,
+  )
 
   const isExpertMode = useSwapSettings((s) => s.settings.expertMode)
-
   const swapButtonProps = useSwapButtonProps({
     trade,
+    permit,
     error,
     recipient,
     onSwapClick: useCallback(
