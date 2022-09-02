@@ -1,4 +1,4 @@
-import { Box, Button, Flex, VStack } from '@concave/ui'
+import { Box, Button, Flex, useBreakpointValue, VStack } from '@concave/ui'
 import { useState } from 'react'
 import ReactFlow, { ConnectionLineType, Controls } from 'react-flow-renderer'
 import { bondingEdges } from './edges/bondingEdges'
@@ -39,11 +39,12 @@ const ReactFlowDiagram = ({ edges, nodes }) => (
 
 export function TransparencyDiagram() {
   const [diagramShown, setDiagramShown] = useState<0 | 1 | 2 | 3>(0)
+  const isMobile = useBreakpointValue({ base: true, md: false })
 
   return (
     <>
       <VStack
-        minWidth={'700px'}
+        minWidth={isMobile ? '300px' : '700px'}
         width={'100%'}
         height={'850px'}
         rounded={'2xl'}
@@ -52,7 +53,7 @@ export function TransparencyDiagram() {
         p={5}
         gap={5}
       >
-        <Box display={'flex'} flexDirection={'row'} gap={'1rem'}>
+        <Box display={'flex'} flexDirection={isMobile ? 'column' : 'row'} gap={'1rem'}>
           <SelectionButton
             chartId={0}
             chartName={'Treasury'}
@@ -95,7 +96,9 @@ export function TransparencyDiagram() {
           {diagramShown === 0 && (
             <Flex
               src={
-                'https://datastudio.google.com/embed/reporting/f0ba2360-88f4-468a-8306-1923dd49f8a8/page/p_0h786h6otc'
+                isMobile
+                  ? 'https://datastudio.google.com/embed/reporting/8f3baa69-b193-41be-9d4f-ffcbc08d691a/page/p_0h786h6otc'
+                  : 'https://datastudio.google.com/embed/reporting/f0ba2360-88f4-468a-8306-1923dd49f8a8/page/p_0h786h6otc'
               }
               as={'iframe'}
               w={'full'}
