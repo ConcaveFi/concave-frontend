@@ -3,6 +3,7 @@ import { Button, ButtonProps } from '@concave/ui'
 import { useConnectModal } from 'components/Modals'
 import { useApprove } from 'hooks/useApprove'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
+import { UsePermiReturn } from 'hooks/usePermit'
 import { useMemo } from 'react'
 import { compactFormat } from 'utils/bigNumberMask'
 import { useAccount } from 'wagmi'
@@ -11,6 +12,7 @@ export const useCurrencyButtonState = (
   amount: CurrencyAmount<Currency>,
   spender: string,
   { amountInfo = false } = {},
+  permit?: UsePermiReturn,
 ) => {
   const { address } = useAccount()
   const connectModal = useConnectModal()
@@ -39,11 +41,15 @@ export const useCurrencyButtonState = (
             amountInfo ? compactFormat(amount.quotient.toString(), amount.currency) : ''
           } ${symbol}`,
         },
+        permit: {
+          children: `Approve ${symbol}`,
+          onClick: () => permit.signPermit(),
+        },
         waitingWallet: { disabled, isLoading, loadingText: 'Approve in wallet' },
         successful: { disabled, children: 'Approved' },
         'no currency': { disabled, children: 'Select a token' },
       } as const),
-    [amount, amountInfo, approve, connectModal.onOpen, disabled, isLoading, symbol],
+    [amount, amountInfo, permit, approve, connectModal.onOpen, disabled, isLoading, symbol],
   )
 
   const state: keyof typeof props = (() => {
@@ -52,11 +58,13 @@ export const useCurrencyButtonState = (
     if (!currency) return 'no currency'
     if (currency.isNative) return 'successful'
     if (approve.isError && approve.error['code'] !== 4001) return 'error'
+    if (permit?.isSuccess && amount.equalTo(permit.currencyAmount)) return 'successful'
     if (totalSupply.greaterThan(0) && approve.allowance?.amount?.greaterThan(totalSupply))
       return 'successful'
     if (approve.allowance?.amount?.greaterThan(amount)) return 'successful'
-    if (approve.isWaitingForConfirmation) return 'waitingWallet'
+    if (approve.isWaitingForConfirmation || permit.isFetching) return 'waitingWallet'
     if (approve.isWaitingTransactionReceipt) return 'pending'
+    if (permit.isSupported) return 'permit'
     if (approve.isFetching) return 'fetching'
     if (approve.allowance?.amount?.lessThan(amount)) return 'default'
     if (amount.equalTo(0)) return 'successful'
