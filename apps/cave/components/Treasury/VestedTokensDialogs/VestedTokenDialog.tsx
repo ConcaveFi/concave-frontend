@@ -1,12 +1,11 @@
 import { Token } from '@concave/core'
 import { InfoIcon } from '@concave/icons'
-import { Button, Card, Collapse, Flex, Modal, Spinner, Text, Tooltip } from '@concave/ui'
+import { Button, Card, Flex, Modal, Spinner, Text, Tooltip } from '@concave/ui'
 import { ToggleButton } from 'components/ToggleButton'
 import { VestedTokenButtonProps } from 'components/Treasury/TreasuryRedeemCard'
 import { BigNumber } from 'ethers'
 import { formatEther, parseEther } from 'ethers/lib/utils'
-import { useState } from 'react'
-import { formatFixed } from 'utils/bigNumberMask'
+import { useEffect, useState } from 'react'
 import { useAccount } from 'wagmi'
 import { VestedTokenInput } from './VestedTokenDialogInput'
 
@@ -14,21 +13,21 @@ type VestedTokenDialogProps = {
   tokenUserData: { redeemable: BigNumber; redeemed: BigNumber; balance: BigNumber }
   isLoading: boolean
   onRedeem: (amount: BigNumber, redeemMax: boolean) => void
+  onChangeValue?: (value: BigNumber) => void
   status?: 'default' | 'approve' | 'rejected' | 'error' | 'submitted'
+  children?: JSX.Element | JSX.Element[]
   token: Token
-  conversionToCNV?: number
-  cnvDataStatus?: 'error' | 'idle' | 'loading' | 'success'
 }
 export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDialogProps> = ({
   onClose,
+  onRedeem,
+  onChangeValue,
   isOpen,
   tokenUserData,
   isLoading,
-  onRedeem,
   status,
   token,
-  conversionToCNV,
-  cnvDataStatus,
+  children,
 }) => {
   const { isConnected } = useAccount()
   const { redeemable, redeemed, balance } = tokenUserData || {}
@@ -45,8 +44,7 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
     !insufficientFunds &&
     !nothingToRedeem
   const validValue = !invalidAmount && !insufficientFunds && !nothingToRedeem && !redeemableExceeded
-  const convertedValue = (+formatEther(currentValue || 0) * conversionToCNV)?.toFixed(12) || '0'
-  const CNVAmount = formatFixed(parseEther(conversionToCNV?.toFixed(12) || '0'), { places: 5 })
+  useEffect(() => (onChangeValue ? onChangeValue(currentValue) : undefined), [redeemMax, value])
   return (
     <>
       <Modal
@@ -75,31 +73,7 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
               title="Redeemed:"
               value={isLoading ? 'Loading...' : formatEther(redeemed || '0')}
             />
-            <Collapse in={validValue || (redeemMax && !redeemable?.isZero())}>
-              {!!cnvDataStatus && (
-                <Info
-                  title="You will receive:"
-                  value={
-                    {
-                      loading: 'calculating',
-                      error: '---',
-                      success: formatFixed(parseEther(convertedValue), { places: 5 }) + ' CNV',
-                    }[cnvDataStatus]
-                  }
-                />
-              )}
-            </Collapse>
-            {!!cnvDataStatus && (
-              <Text color={'text.accent'} fontWeight="bold" opacity={0.5}>
-                {
-                  {
-                    loading: `1 ${token.symbol} = calculating`,
-                    error: 'error calculating conversion',
-                    success: `1 ${token?.symbol} = ${CNVAmount} CNV`,
-                  }[cnvDataStatus]
-                }
-              </Text>
-            )}
+            {children}
             <Text fontWeight={'bold'} textColor="text.accent" opacity="0.5" fontSize={'xs'}></Text>
           </Flex>
           <Flex gap={2} fontWeight={'bold'} pl={2} align="center">

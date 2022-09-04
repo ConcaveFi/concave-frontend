@@ -1,5 +1,6 @@
 import { PCNV, PCNVContract } from '@concave/core'
-import { useDisclosure } from '@concave/ui'
+import { QuestionIcon } from '@concave/icons'
+import { Flex, Text, Tooltip, useDisclosure } from '@concave/ui'
 import { TransactionResponse } from '@ethersproject/providers'
 import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
@@ -10,6 +11,7 @@ import { useGet_Amm_Cnv_InfosQuery } from 'graphql/generated/graphql'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useState } from 'react'
+import { formatFixed } from 'utils/bigNumberMask'
 import { useAccount, useProvider, useSigner } from 'wagmi'
 import { usePCNVUserData } from '../Hooks/usePCNVUserData'
 import useVestedTokens from '../Hooks/useVestedTokens'
@@ -51,6 +53,14 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
   }
   const [amount, setAmount] = useState<BigNumber>(BigNumber.from(0))
   const [redeemMax, setRedeemMax] = useState(false)
+
+  const [curValue, setCurValue] = useState(BigNumber.from('0'))
+  const cnvAmount = (+formatEther(curValue || 0) * pCNVToCNVDifference)?.toFixed(12) || '0'
+  const conversion = formatFixed(parseEther(pCNVToCNVDifference?.toFixed(12) || '0'), { places: 5 })
+  const totalSupplyFormatted = formatFixed(
+    parseEther(data?.cnvData?.data?.totalSupply?.toString() || '0'),
+  )
+  const pCNVToken = PCNV[chainId]
   return (
     <>
       <VestedTokenDialog
@@ -60,10 +70,49 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
         onRedeem={openConfirmModal}
         status={status}
         tokenUserData={{ ...pCNVData, balance }}
-        token={PCNV[chainId]}
-        conversionToCNV={pCNVToCNVDifference || 0}
-        cnvDataStatus={cnvDataStatus}
-      />
+        token={pCNVToken}
+        onChangeValue={setCurValue}
+      >
+        {!!cnvDataStatus && (
+          <Flex gap={2} fontWeight={'bold'}>
+            <Text textColor={'text.low'}>{'You will receive'}</Text>
+            <Text textColor={'text.accent'}>
+              {
+                {
+                  loading: 'calculating',
+                  error: '---',
+                  success: formatFixed(parseEther(cnvAmount), { places: 5 }) + ' CNV',
+                }[cnvDataStatus]
+              }
+            </Text>
+          </Flex>
+        )}
+        {!!cnvDataStatus && (
+          <Flex gap={2} align="center">
+            <Text fontSize={'sm'} color={'text.accent'} fontWeight="bold" opacity={0.5}>
+              {
+                {
+                  loading: `1 ${pCNVToken.symbol} = calculating`,
+                  error: 'error calculating conversion',
+                  success: `1 ${pCNVToken?.symbol} = ${conversion} CNV`,
+                }[cnvDataStatus]
+              }
+            </Text>
+
+            <Tooltip
+              textShadow={'0px 0px 10px #333'}
+              textAlign="center"
+              bg="stroke.brightGreen"
+              placement="right"
+              label={<Text fontSize={'sm'}>{`333.000.000 / ${totalSupplyFormatted}`}</Text>}
+            >
+              <Flex cursor={'pointer'} rounded="full">
+                <QuestionIcon />
+              </Flex>
+            </Tooltip>
+          </Flex>
+        )}
+      </VestedTokenDialog>
 
       <TransactionErrorDialog
         error={{ rejected: 'Transaction rejected' }[status] || 'An error occurred'}
