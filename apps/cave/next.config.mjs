@@ -17,6 +17,9 @@ const nextConfig = {
       { source: '/swap', destination: '/gemswap' },
     ]
   },
+  async redirects() {
+    return [{ source: '/treasury', destination: '/transparency', permanent: true }]
+  },
 }
 
 export default withBundleAnalyzer(nextConfig)
