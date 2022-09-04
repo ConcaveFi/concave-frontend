@@ -15,6 +15,7 @@ const nextConfig = {
     return [
       { source: '/', destination: '/gemswap' },
       { source: '/swap', destination: '/gemswap' },
+      { source: '/treasury', destination: '/transparency' },
     ]
   },
 }
