@@ -15,8 +15,10 @@ const nextConfig = {
     return [
       { source: '/', destination: '/gemswap' },
       { source: '/swap', destination: '/gemswap' },
-      { source: '/treasury', destination: '/transparency' },
     ]
+  },
+  async redirects() {
+    return [{ source: '/treasury', destination: '/transparency', permanent: true }]
   },
 }
 
