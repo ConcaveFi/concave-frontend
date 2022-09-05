@@ -54,7 +54,7 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
   const [amount, setAmount] = useState<BigNumber>(BigNumber.from(0))
   const [redeemMax, setRedeemMax] = useState(false)
 
-  const [curValue, setCurValue] = useState(pCNVData.redeemable || BigNumber.from('0'))
+  const [curValue, setCurValue] = useState(pCNVData?.redeemable || BigNumber.from('0'))
   const cnvAmount = (+formatEther(curValue || 0) * pCNVToCNVDifference)?.toFixed(12) || '0'
   const conversion = formatFixed(parseEther(pCNVToCNVDifference?.toFixed(12) || '0'), { places: 5 })
   const totalSupplyFormatted = formatFixed(
