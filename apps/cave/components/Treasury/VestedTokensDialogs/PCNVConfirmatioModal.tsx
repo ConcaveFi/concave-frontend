@@ -53,7 +53,9 @@ export const PCNVConfirmationModal: React.FC<PCNVConfirmationModalProps> = ({
                   <Text color={'text.low'}>{`You sure you want to swap `}</Text>
                   <Text color={'text.accent'}>{`${formatFixed(amount, { places: 5 })}  pCNV`}</Text>
                   <Text color={'text.low'}>{`for`}</Text>
-                  <Text>{`${formatFixed(parseEther(convertedValue), { places: 5 })} CNV?`}</Text>
+                  <Text>{`${formatFixed(parseEther(convertedValue), {
+                    places: 5,
+                  })} CNV right now?`}</Text>
                 </>
               ),
               error: (
@@ -61,7 +63,7 @@ export const PCNVConfirmationModal: React.FC<PCNVConfirmationModalProps> = ({
                   <Text color={'text.low'}>{`You sure you want to redeem `}</Text>
                   <Text color={'text.accent'}>{`${formatFixed(amount, {
                     places: 5,
-                  })}  pCNV?`}</Text>
+                  })}  pCNV right now?`}</Text>
                   <Text color={'red.300'}>
                     Conversion to CNV could not be calculated at the moment.
                   </Text>
