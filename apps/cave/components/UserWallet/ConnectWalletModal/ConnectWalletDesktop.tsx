@@ -20,6 +20,7 @@ import { QRCode } from 'react-qrcode-logo'
 import { MutationStatus } from 'react-query'
 import { Connector, useConnect } from 'wagmi'
 import { ConnectorIcon, getConnectorLogo } from './ConnectorIcon'
+import { filterConnectors } from './filterConnectors'
 import { useConnectorUri } from './useConnectorUri'
 import { WhatConnectWalletMeans } from './WhatConnectWalletMeans'
 
@@ -151,28 +152,25 @@ export const DesktopConnect: FC<{ isOpen: boolean; onClose: VoidFunction }> = ({
           <Text fontFamily="heading" fontWeight="bold" fontSize="xl">
             Connect a Wallet
           </Text>
-          {connectors.map(
-            (connector) =>
-              connector.ready && (
-                <Button
-                  isDisabled={connector.id === pendingConnector?.id}
-                  w="200px"
-                  shadow="Up Small"
-                  _hover={{ shadow: 'Up Big', _disabled: { shadow: 'down' } }}
-                  _active={{ shadow: 'down' }}
-                  _focus={{ shadow: 'Up Big' }}
-                  _disabled={{ shadow: 'down', cursor: 'default' }}
-                  size="medium"
-                  justifyContent="start"
-                  px={4}
-                  leftIcon={<ConnectorIcon name={connector.name} rounded="md" />}
-                  key={connector.id}
-                  onClick={() => connect({ connector, chainId: ChainId.ETHEREUM })}
-                >
-                  {connector.name}
-                </Button>
-              ),
-          )}
+          {filterConnectors(connectors).map((connector) => (
+            <Button
+              isDisabled={connector.id === pendingConnector?.id}
+              w="200px"
+              shadow="Up Small"
+              _hover={{ shadow: 'Up Big', _disabled: { shadow: 'down' } }}
+              _active={{ shadow: 'down' }}
+              _focus={{ shadow: 'Up Big' }}
+              _disabled={{ shadow: 'down', cursor: 'default' }}
+              size="medium"
+              justifyContent="start"
+              px={4}
+              leftIcon={<ConnectorIcon name={connector.name} rounded="md" />}
+              key={connector.id}
+              onClick={() => connect({ connector, chainId: ChainId.ETHEREUM })}
+            >
+              {connector.name}
+            </Button>
+          ))}
         </Stack>
 
         <Box w="1px" h="320px" bg="stroke.secondary" rounded="1px" mx={modalPadding} />

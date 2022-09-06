@@ -28,6 +28,7 @@ import { FC, useState } from 'react'
 import { useQuery } from 'react-query'
 import { Connector, useConnect } from 'wagmi'
 import { ConnectorIcon } from './ConnectorIcon'
+import { filterConnectors } from './filterConnectors'
 import { useConnectorUri } from './useConnectorUri'
 import { WhatConnectWalletMeans } from './WhatConnectWalletMeans'
 
@@ -234,19 +235,16 @@ const ConnectWalletsDefaultView = ({
         alignItems="start"
       >
         {isMounted &&
-          connectors.map((c) => {
-            if (c.id === 'injected' && !c.ready) return null
-            return (
-              <ConnectorButton
-                key={c.id}
-                variants={listVariants.item}
-                name={c.name}
-                onClick={() => onConnect(c)}
-                maxW="80px"
-                minW="80px"
-              />
-            )
-          })}
+          filterConnectors(connectors).map((c) => (
+            <ConnectorButton
+              key={c.id}
+              variants={listVariants.item}
+              name={c.name}
+              onClick={() => onConnect(c)}
+              maxW="80px"
+              minW="80px"
+            />
+          ))}
       </MotionDiv>
       <WhatConnectWalletMeans />
     </MotionDiv>
