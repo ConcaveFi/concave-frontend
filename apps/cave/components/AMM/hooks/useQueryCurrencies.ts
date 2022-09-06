@@ -3,7 +3,7 @@ import { Fetcher } from '@concave/gemswap-sdk'
 import { isAddress } from 'ethers/lib/utils'
 import { concaveProvider } from 'lib/providers'
 import Router, { useRouter } from 'next/router'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useRef } from 'react'
 import { useQuery, useQueryClient } from 'react-query'
 import { getQueryValue } from 'utils/getQueryValue'
 import { useNetwork } from 'wagmi'
@@ -46,6 +46,7 @@ export const setRouteDefaultCurrencies = (pathname: `/${string}`, currencies: Cu
 
 export const useQueryCurrencies = () => {
   const { query, pathname } = useRouter()
+  const { current: path } = useRef(pathname)
   const { chain } = useNetwork()
 
   const chainId = (getQueryValue(query, 'chainId') || chain?.id || ChainId.ETHEREUM) as ChainId
@@ -69,8 +70,8 @@ export const useQueryCurrencies = () => {
     },
     {
       enabled: !!queryHasCurrency,
-      initialData: defaultCurrencies[pathname]?.[chainId] ||
-        defaultCurrencies[pathname]?.[ChainId.ETHEREUM] || [undefined, undefined],
+      initialData: defaultCurrencies[path]?.[chainId] ||
+        defaultCurrencies[path]?.[ChainId.ETHEREUM] || [undefined, undefined],
       staleTime: 0,
       refetchOnMount: true,
       refetchOnReconnect: false,
@@ -87,8 +88,5 @@ export const useQueryCurrencies = () => {
     [queryClient, chain?.id],
   )
 
-  return useMemo(
-    () => ({ currencies, onChangeCurrencies, isLoading: isFetching }),
-    [currencies, onChangeCurrencies, isFetching],
-  )
+  return { currencies, onChangeCurrencies, isLoading: isFetching }
 }
