@@ -7,9 +7,9 @@ import { TransactionSubmittedDialog } from 'components/TransactionDialog/Transac
 
 import { WaitingConfirmationDialog } from 'components/TransactionDialog/TransactionWaitingConfirmationDialog'
 import { useTransaction } from 'hooks/TransactionsRegistry/useTransaction'
+import { useApprove } from 'hooks/useApprove'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { usePermit } from 'hooks/usePermit'
 import { concaveProvider } from 'lib/providers'
 import { useState } from 'react'
 import { toAmount } from 'utils/toAmount'
@@ -21,7 +21,11 @@ export function StakeInput({ onClose, poolId }: { poolId: number; onClose: () =>
   const { data: signer } = useSigner()
   const [stakeInput, setStakeInput] = useState<CurrencyAmount<Currency>>(toAmount(0, CNV[chainId]))
   const contract = new StakingV1Contract(concaveProvider(chainId))
-  const permit = usePermit(stakeInput.wrapped, contract.address)
+  const { permit } = useApprove(
+    stakeInput.wrapped.currency,
+    contract.address,
+    stakeInput.quotient.toString(),
+  )
   const cnvBalance = useCurrencyBalance(stakeInput?.currency, { watch: true })
   const lockTransaction = useTransaction(
     async () => {
