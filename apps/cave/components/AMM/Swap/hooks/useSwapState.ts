@@ -1,7 +1,6 @@
-import { Currency, CurrencyAmount, ROUTER_ADDRESS, ZERO } from '@concave/core'
+import { Currency, CurrencyAmount, ZERO } from '@concave/core'
 import { Trade, TradeType } from '@concave/gemswap-sdk'
 import { useLinkedCurrencyFields } from 'components/CurrencyAmountField'
-import { usePermit } from 'hooks/usePermit'
 import { useCallback, useMemo, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
 import { useQueryCurrencies } from '../../hooks/useQueryCurrencies'
@@ -41,10 +40,6 @@ export const useSwapState = () => {
   )
 
   const trade = useTrade(exactCurrencyAmount, otherCurrency, { tradeType, maxHops })
-  const permit = usePermit(
-    trade?.data?.inputAmount?.wrapped,
-    ROUTER_ADDRESS[trade.data?.inputAmount.currency.chainId],
-  )
 
   const _trade = useMemo(
     () =>
@@ -62,7 +57,6 @@ export const useSwapState = () => {
 
   return useMemo(
     () => ({
-      permit,
       error: trade.error as string,
       trade: _trade,
       onChangeInput: onChangeField(0),
@@ -70,6 +64,6 @@ export const useSwapState = () => {
       switchFields,
       onReset: () => onChangeField(0)(toAmount(0, currencies[0])),
     }),
-    [trade.error, permit, _trade, onChangeField, switchFields, currencies],
+    [trade.error, _trade, onChangeField, switchFields, currencies],
   )
 }

@@ -55,7 +55,7 @@ export const usePermit = (
     isIdle,
     refetch,
   } = useQuery(
-    ['permit', token?.address, spender],
+    ['permit', token?.address, currencyAmount.quotient.toString(), spender],
     () => signPermit(signer, currencyAmount, spender, deadline),
     {
       enabled: false,
