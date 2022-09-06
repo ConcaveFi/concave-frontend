@@ -1,9 +1,8 @@
-import { Currency, ROUTER_ADDRESS } from '@concave/core'
+import { Currency } from '@concave/core'
 import { Trade, TradeType } from '@concave/gemswap-sdk'
 import { ButtonProps } from '@concave/ui'
-import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
+import { CurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { isAddress } from 'ethers/lib/utils'
-import { UsePermiReturn } from 'hooks/usePermit'
 import { swapSupportedChains } from 'pages/gemswap'
 import { toPercent } from 'utils/toPercent'
 import { useAccount, useNetwork } from 'wagmi'
@@ -15,24 +14,19 @@ export const useSwapButtonProps = ({
   trade,
   error,
   recipient,
+  useCurrencyState,
   onSwapClick,
-  permit,
 }: {
   trade: Trade<Currency, Currency, TradeType>
   error: string
+  useCurrencyState: CurrencyButtonState
   recipient: string
   onSwapClick: () => void
-  permit?: UsePermiReturn
 }): ButtonProps => {
   const { isConnecting } = useAccount()
   const { chain } = useNetwork()
   const currencyIn = trade.inputAmount?.currency
-  const useCurrencyState = useCurrencyButtonState(
-    trade.inputAmount,
-    ROUTER_ADDRESS[trade.inputAmount?.currency.chainId],
-    {},
-    permit,
-  )
+
   const isExpertMode = useSwapSettings((s) => s.settings.expertMode)
   if (useCurrencyState.state === 'disconected') return useCurrencyState.buttonProps
   /*

@@ -3,16 +3,15 @@ import { Button, ButtonProps } from '@concave/ui'
 import { useConnectModal } from 'components/Modals'
 import { useApprove } from 'hooks/useApprove'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
-import { UsePermiReturn } from 'hooks/usePermit'
 import { useMemo } from 'react'
 import { compactFormat } from 'utils/bigNumberMask'
 import { useAccount } from 'wagmi'
 
+export type CurrencyButtonState = ReturnType<typeof useCurrencyButtonState>
 export const useCurrencyButtonState = (
   amount: CurrencyAmount<Currency>,
   spender: string,
   { amountInfo = false } = {},
-  permit?: UsePermiReturn,
 ) => {
   const { address } = useAccount()
   const connectModal = useConnectModal()
@@ -20,8 +19,7 @@ export const useCurrencyButtonState = (
   const symbol = currency?.symbol
   const totalSupply = currency?.wrapped.totalSupply
   const balance = useCurrencyBalance(currency, { watch: true })
-  const approve = useApprove(currency?.wrapped, spender)
-
+  const { permit, ...approve } = useApprove(currency?.wrapped, spender, amount.quotient.toString())
   const disabled = true
   const isLoading = true
   const props = useMemo(
@@ -62,6 +60,7 @@ export const useCurrencyButtonState = (
     if (totalSupply.greaterThan(0) && approve.allowance?.amount?.greaterThan(totalSupply))
       return 'successful'
     if (approve.allowance?.amount?.greaterThan(amount)) return 'successful'
+    if (approve.allowance?.amount?.equalTo(amount)) return 'successful'
     if (approve.isWaitingForConfirmation || permit.isFetching) return 'waitingWallet'
     if (approve.isWaitingTransactionReceipt) return 'pending'
     if (permit.isSupported) return 'permit'
@@ -74,9 +73,11 @@ export const useCurrencyButtonState = (
     () => ({
       approved: state === 'successful',
       state,
+      permit,
+      approve,
       buttonProps: props[state],
     }),
-    [props, state],
+    [approve, permit, props, state],
   )
 }
 
