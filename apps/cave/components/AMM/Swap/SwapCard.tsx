@@ -58,6 +58,7 @@ export function SwapCard() {
   return (
     <>
       <Card
+        key={`swap-${networkId}`}
         p={6}
         gap={2}
         variant="primary"
