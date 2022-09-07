@@ -53,7 +53,7 @@ export const PCNVConfirmationModal: React.FC<PCNVConfirmationModalProps> = ({
                   <Text color={'text.low'}>{`You sure you want to swap `}</Text>
                   <Text color={'text.accent'}>{`${formatFixed(amount, {
                     places: 5,
-                  })}  pCNV right now?`}</Text>
+                  })}  pCNV`}</Text>
                   <Text color={'text.low'}>{`for`}</Text>
                   <Text>{`${formatFixed(parseEther(convertedValue), {
                     places: 5,
