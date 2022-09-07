@@ -1,13 +1,13 @@
 import { CNV, Currency, CurrencyAmount } from '@concave/core'
 import { stakingPools, StakingV1Contract } from '@concave/marketplace'
 import { Box, Button, Card, Flex, Text } from '@concave/ui'
+import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { CurrencyInputField } from 'components/CurrencyAmountField'
 import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
 
 import { WaitingConfirmationDialog } from 'components/TransactionDialog/TransactionWaitingConfirmationDialog'
 import { useTransaction } from 'hooks/TransactionsRegistry/useTransaction'
-import { useApprove } from 'hooks/useApprove'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
@@ -21,25 +21,17 @@ export function StakeInput({ onClose, poolId }: { poolId: number; onClose: () =>
   const { data: signer } = useSigner()
   const [stakeInput, setStakeInput] = useState<CurrencyAmount<Currency>>(toAmount(0, CNV[chainId]))
   const contract = new StakingV1Contract(concaveProvider(chainId))
-  const { permit } = useApprove(
-    stakeInput.wrapped.currency,
-    contract.address,
-    stakeInput.quotient.toString(),
-  )
+  const currencyState = useCurrencyButtonState(stakeInput.wrapped, contract.address, {
+    enablePermit: true,
+  })
   const cnvBalance = useCurrencyBalance(stakeInput?.currency, { watch: true })
   const lockTransaction = useTransaction(
     async () => {
       const amount = stakeInput.numerator.toString()
-      return contract.lockWithPermit(
-        signer,
-        address,
-        amount,
-        poolId,
-        permit.signedPermit.deadline,
-        permit.signedPermit.v,
-        permit.signedPermit.r,
-        permit.signedPermit.s,
-      )
+      return contract.lockWithPermit(signer, address, amount, poolId, {
+        deadline: currencyState.permit.signedPermit.expiry,
+        ...currencyState.permit.signedPermit,
+      })
     },
     {
       meta: {
@@ -53,16 +45,7 @@ export function StakeInput({ onClose, poolId }: { poolId: number; onClose: () =>
     disabled: stakeInput?.greaterThan(cnvBalance.data?.numerator) || stakeInput.equalTo(0),
     children: 'Stake CNV',
   }
-  const permitButton = {
-    isLoading: permit.isFetching,
-    loadingText: 'Approve in wallet',
-    disabled: permit.isFetching || stakeInput.equalTo(0),
-    onClick: () => permit.signPermit(),
-    children: 'Approve CNV',
-  }
-  const permitOk =
-    stakeInput.equalTo(0) ||
-    (permit.isSuccess && permit.signedPermit.value.toString() === stakeInput.quotient.toString())
+
   return (
     <>
       <Box>
@@ -82,7 +65,7 @@ export function StakeInput({ onClose, poolId }: { poolId: number; onClose: () =>
             h="50px"
             size="large"
             mx="auto"
-            {...(permitOk ? stakeButton : permitButton)}
+            {...(currencyState.approved ? stakeButton : currencyState.buttonProps)}
           />
         </Box>
       </Box>
