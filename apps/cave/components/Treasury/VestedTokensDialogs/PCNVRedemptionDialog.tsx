@@ -51,7 +51,7 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
     setStatus('default')
     onCloseTransactionModal()
   }
-  const [amount, setAmount] = useState<BigNumber>(BigNumber.from(0))
+  const [amount, setAmount] = useState<BigNumber>(pCNVData?.redeemable || BigNumber.from(0))
   const [redeemMax, setRedeemMax] = useState(false)
 
   const [curValue, setCurValue] = useState(pCNVData?.redeemable || BigNumber.from('0'))
@@ -99,13 +99,13 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
               textShadow={'0px 0px 10px #333'}
               textAlign="center"
               bg="stroke.brightGreen"
-              placement="right"
-              maxW={'300px'}
+              overflow={'visible'}
+              placement="bottom"
+              maxW={'350px'}
               label={
                 <Text
-                  noOfLines={1}
                   fontSize={'sm'}
-                >{`( 10% of ${totalSupplyFormatted} ) / 333,000,000`}</Text>
+                >{`pCNV is a claim on 10% of the total current CNV supply and is on a 24 month full vest cycle.`}</Text>
               }
             >
               <Flex cursor={'pointer'} rounded="full">
