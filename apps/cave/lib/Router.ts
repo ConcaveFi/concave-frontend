@@ -1,5 +1,5 @@
 import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/providers'
-import { CurrencyAmount, RouterAbi, ROUTER_ADDRESS, Token } from '@concave/core'
+import { CurrencyAmount, NATIVE, RouterAbi, ROUTER_ADDRESS, Token } from '@concave/core'
 import { BigNumber, ethers } from 'ethers'
 import { parseUnits } from 'ethers/lib/utils'
 import { concaveProvider } from 'lib/providers'
@@ -29,7 +29,7 @@ export class Router {
       '0',
       to,
       deadLine,
-      { ...extra, value: ethAmount.sub(9000000000000).toString() },
+      { ...extra, value: ethAmount },
     )
   }
 
@@ -69,52 +69,60 @@ export class Router {
         parseUnits('0', amountA.currency.decimals),
         to,
         deadLine,
-        { ...extra, gasPrice: 50000000, value: 0.01 },
+        { ...extra },
       )
   }
 
-  public async removeLiquidity(
+  public async removeLiquidityWithPermit(
     tokenA: Token,
     tokenB: Token,
     liquidity: BigNumber,
     to: string,
+    { r, s, v, deadline }: { deadline: number; v: number; r: string; s: string },
     extra: {
       gasLimit?: number
     } = {},
   ): Promise<ethers.Transaction> {
-    const deadLine = Math.round(Date.now() / 1000) + 86400
     return this.contract
       .connect(this.signer)
-      .removeLiquidity(
+      .removeLiquidityWithPermit(
         tokenA.address,
         tokenB.address,
         liquidity,
         parseUnits(`0`, tokenA.decimals),
         parseUnits(`0`, tokenB.decimals),
         to,
-        deadLine,
+        deadline,
+        false,
+        v,
+        r,
+        s,
         extra,
       )
   }
 
-  public async removeLiquidityETH(
+  public async removeLiquidityETHWithPermit(
     token: Token,
     liquidity: BigNumber,
     to: string,
+    { r, s, v, deadline }: { deadline: number; v: number; r: string; s: string },
     extra: {
       gasLimit?: number
     } = {},
   ): Promise<ethers.Transaction> {
-    const deadLine = Math.round(Date.now() / 1000) + 86400
     return this.contract
       .connect(this.signer)
-      .removeLiquidityETH(
+      .removeLiquidityETHWithPermit(
         token.address,
         liquidity,
         parseUnits(`0`, token.decimals),
-        parseUnits(`0`, 18),
+        parseUnits(`0`, NATIVE[token.chainId].decimals),
         to,
-        deadLine,
+        deadline,
+        false,
+        v,
+        r,
+        s,
         extra,
       )
   }

@@ -19,9 +19,11 @@ import { TransactionErrorDialog } from 'components/TransactionDialog/Transaction
 import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
 
 import { WaitingConfirmationDialog } from 'components/TransactionDialog/TransactionWaitingConfirmationDialog'
+import { useTransaction } from 'hooks/TransactionsRegistry/useTransaction'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { RemoveLiquidityState, useRemoveLiquidity } from 'hooks/useRemoveLiquidity'
-import { useState } from 'react'
+import { Router } from 'lib/Router'
+import { useAccount, useSigner } from 'wagmi'
 
 export const RemoveLiquidityModalButton = ({
   liquidityInfo,
@@ -173,59 +175,79 @@ const RemoveLiquidityActions = ({
   closeParentComponent: VoidFunction
 }) => {
   const networkId = useCurrentSupportedNetworkId()
-
-  const {
-    isOpen: isOpenSubmitted,
-    onClose: onCloseSubmitted,
-    onOpen: onOpenSubmitted,
-  } = useDisclosure()
-
-  const [txError, setTxError] = useState('')
-  const { isOpen: isOpenError, onClose: onCloseError, onOpen: onOpenError } = useDisclosure()
-
-  const [waitingForConfirm, setWaitingForConfirm] = useState(false)
-
-  const confirmedWithdrawal = async () => {
-    try {
-      setWaitingForConfirm(true)
-      await removeLiquidityState.removeLiquidity().then(() => {
-        onOpenSubmitted()
-        setWaitingForConfirm(false)
-      })
-    } catch (err) {
-      setWaitingForConfirm(false)
-      onCloseSubmitted()
-      setTxError(err.message)
-      onOpenError()
-    }
-  }
+  const { address } = useAccount()
   const currencyAmount = CurrencyAmount.fromRawAmount(
     removeLiquidityState.pair.liquidityToken,
     removeLiquidityState.amountToRemove.toString(),
   )
   const currencyApprove = useCurrencyApprove(currencyAmount, ROUTER_ADDRESS[networkId])
+  const { data: signer } = useSigner()
+
+  const {
+    receiveInNativeToken,
+    tokenAIsNativeWrapper,
+    tokenBIsNativeWrapper,
+    amountAMin,
+    amountBMin,
+    amountToRemove,
+  } = removeLiquidityState
+
+  const meta = {
+    type: `remove liquidity`,
+    amount0: amountAMin.toString(),
+    amount1: amountBMin.toString(),
+    pairSymbol: `${amountAMin.currency.symbol}-${amountBMin.currency.symbol}`,
+  } as const
+
+  const removeTransaction = useTransaction(
+    () => {
+      const router = new Router(networkId, signer)
+      const permit = {
+        deadline: 0,
+        ...currencyApprove.permit.signedPermit,
+      }
+      if (receiveInNativeToken && (tokenAIsNativeWrapper || tokenBIsNativeWrapper)) {
+        return router.removeLiquidityETHWithPermit(
+          tokenAIsNativeWrapper ? amountBMin.currency.wrapped : amountAMin.currency.wrapped,
+          amountToRemove,
+          address,
+          permit,
+        )
+      }
+      return router.removeLiquidityWithPermit(
+        amountAMin.currency.wrapped,
+        amountBMin.currency.wrapped,
+        amountToRemove,
+        address,
+        permit,
+      )
+    },
+    {
+      meta,
+    },
+  )
 
   return (
     <Flex gap={4} h={45} justifyContent={'center'}>
       <Button
         disabled={!removeLiquidityState.percentToRemove}
         {...currencyApprove.buttonProps}
-        w={250}
+        onClick={() => currencyApprove.permit.signPermit()}
+        w={`full`}
         variant={'primary'}
       />
 
       <Button
         disabled={!currencyApprove.approved || !removeLiquidityState.percentToRemove}
-        w={250}
+        w={`full`}
         variant={'primary'}
-        onClick={confirmedWithdrawal}
+        onClick={removeTransaction.sendTx}
       >
         Confirm withdrawal
       </Button>
 
       <WaitingConfirmationDialog
-        isOpen={waitingForConfirm}
-        onClose={() => setWaitingForConfirm(false)}
+        isOpen={removeTransaction.isWaitingForConfirmation}
         title={'Confirm Withdrawal'}
       >
         <Flex
@@ -235,32 +257,28 @@ const RemoveLiquidityActions = ({
           mt={4}
           shadow={'Down Medium'}
           align={'center'}
+          fontWeight="700"
           direction={'column'}
         >
-          <Text textColor={'text.low'} fontWeight="700" fontSize={18} mt={4}>
+          <Text textColor={'text.low'} fontSize={18} mt={4}>
             You will receive
           </Text>
-          <Text fontWeight={'700'} textColor="text.accent">
-            {`${removeLiquidityState.amountAMin.toFixed(2)} ${
-              removeLiquidityState.pair.token0.symbol
-            }`}
-          </Text>
-          <Text fontWeight={'700'} textColor="text.accent">
-            {`${removeLiquidityState.amountBMin.toFixed(2)} ${
-              removeLiquidityState.pair.token1.symbol
-            }`}
-          </Text>
+          <Text textColor="text.accent">{`${removeLiquidityState.amountAMin.toString()}`}</Text>
+          <Text textColor="text.accent">{`${removeLiquidityState.amountBMin.toString()}`}</Text>
         </Flex>
       </WaitingConfirmationDialog>
 
       <TransactionSubmittedDialog
         title="Withdraw"
         subtitle="Withdraw"
-        tx={{ hash: removeLiquidityState.hash } as TransactionResponse}
-        isOpen={isOpenSubmitted}
+        tx={{ hash: removeTransaction.tx?.hash } as TransactionResponse}
+        isOpen={removeTransaction.isWaitingTransactionReceipt}
         closeParentComponent={closeParentComponent}
       />
-      <TransactionErrorDialog error={txError} isOpen={isOpenError} />
+      <TransactionErrorDialog
+        error={JSON.stringify(removeTransaction.error)}
+        isOpen={removeTransaction.isError}
+      />
     </Flex>
   )
 }
