@@ -11,7 +11,7 @@ export type CurrencyButtonState = ReturnType<typeof useCurrencyButtonState>
 export const useCurrencyButtonState = (
   amount: CurrencyAmount<Currency>,
   spender: string,
-  { amountInfo = false } = {},
+  { amountInfo = false, enablePermit = false } = {},
 ) => {
   const { address } = useAccount()
   const connectModal = useConnectModal()
@@ -19,7 +19,7 @@ export const useCurrencyButtonState = (
   const symbol = currency?.symbol
   const totalSupply = currency?.wrapped.totalSupply
   const balance = useCurrencyBalance(currency, { watch: true })
-  const { permit, ...approve } = useApprove(currency?.wrapped, spender, amount.quotient.toString())
+  const { permit, ...approve } = useApprove(currency?.wrapped, spender, amount?.quotient.toString())
   const disabled = true
   const isLoading = true
   const props = useMemo(
@@ -63,7 +63,7 @@ export const useCurrencyButtonState = (
     if (approve.allowance?.amount?.equalTo(amount)) return 'successful'
     if (approve.isWaitingForConfirmation || permit.isFetching) return 'waitingWallet'
     if (approve.isWaitingTransactionReceipt) return 'pending'
-    if (permit.isSupported) return 'permit'
+    if (permit.isSupported && enablePermit) return 'permit'
     if (approve.isFetching) return 'fetching'
     if (approve.allowance?.amount?.lessThan(amount)) return 'default'
     if (amount.equalTo(0)) return 'successful'
