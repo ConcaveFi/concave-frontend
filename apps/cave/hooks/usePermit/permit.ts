@@ -7,7 +7,7 @@ interface PermitAllowedMessage {
   holder: string
   spender: string
   nonce: number
-  expiry: number | string
+  expiry: number
   allowed?: boolean
 }
 
@@ -16,7 +16,7 @@ interface PermitAmountMessage {
   spender: string
   value: number | string
   nonce: number | string
-  deadline: number | string
+  deadline: number
 }
 
 interface Domain {

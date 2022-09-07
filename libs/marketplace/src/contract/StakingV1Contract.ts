@@ -40,14 +40,19 @@ export class StakingV1Contract {
     address: string,
     amount: BigNumberish,
     poolId: BigNumberish,
-    permitDeadline: BigNumberish,
-    v: number,
-    r: string,
-    s: string,
+    {
+      deadline,
+      r,
+      s,
+      v,
+    }: {
+      deadline?: number
+      v: number
+      r: string
+      s: string
+    },
   ): Promise<ethers.Transaction & { wait: (confirmations) => unknown }> {
-    return this.contract
-      .connect(signer)
-      .lockWithPermit(address, amount, poolId, permitDeadline, v, r, s)
+    return this.contract.connect(signer).lockWithPermit(address, amount, poolId, deadline, v, r, s)
   }
 
   public async unlock(
