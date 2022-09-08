@@ -2,9 +2,9 @@ import { Box, Button, Flex, Image, Stack, Text, TextProps, useDisclosure } from 
 import { Percent } from '@concave/core'
 import { stakingPools } from '@concave/marketplace'
 import { Card } from '@concave/ui'
-import { utils } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { numberMask } from 'utils/numberMask'
+import { compactFormat } from 'utils/bigNumberMask'
+
 import { useAccount } from 'wagmi'
 import { StakeData } from './hooks/useLiquidStakeData'
 import { useLiquidValues } from './hooks/useLiquidValues'
@@ -18,22 +18,20 @@ type StakeCardProps = {
 export const StakeCard = ({ status, poolId, stakeData }: StakeCardProps) => {
   const chainId = useCurrentSupportedNetworkId()
   const { address } = useAccount()
-  const { totalVAPR } = stakeData || {}
-
   const { data, isLoading } = useLiquidValues(chainId, poolId)
-  const { stakingV1Pools, stakingV1Cap } = data || {}
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const { stakingV1Pools, stakingV1Cap } = data || {}
+  if (!stakingV1Pools?.balance) return null
 
+  const { totalVAPR } = stakeData || {}
   const pools = stakingV1Pools?.balance.toString() || '0'
   const poolsCapacity = stakingV1Cap?.add(stakingV1Pools?.balance).toString() || '0'
-
   const loadBarPercent = new Percent(pools, poolsCapacity)
-
   const loadBarProps = {
     percent: loadBarPercent,
     loading: isLoading,
-    currentlyStaked: numberMask(+utils.formatEther(stakingV1Pools?.balance || 0)),
-    stakingCap: numberMask(+utils.formatEther(stakingV1Pools?.balance?.add(stakingV1Cap) || 0)),
+    currentlyStaked: compactFormat(stakingV1Pools?.balance),
+    stakingCap: compactFormat(stakingV1Pools?.balance?.add(stakingV1Cap)),
   } as const
 
   return (

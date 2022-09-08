@@ -47,7 +47,7 @@ function LiquidStaking() {
         {[0, 1, 2, 3]?.map((id, index) => (
           <StakeCard
             status={status}
-            stakeData={stakeData && stakeData[0]}
+            stakeData={stakeData && stakeData[id]}
             key={index}
             poolId={id}
           />
