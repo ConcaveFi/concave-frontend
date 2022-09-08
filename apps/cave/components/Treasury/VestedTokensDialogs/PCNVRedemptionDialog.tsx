@@ -18,7 +18,7 @@ import { formatEther, parseEther } from 'ethers/lib/utils'
 import { useGet_Amm_Cnv_InfosQuery } from 'graphql/generated/graphql'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { formatFixed } from 'utils/bigNumberMask'
 import { useAccount, useProvider, useSigner } from 'wagmi'
 import { usePCNVUserData } from '../Hooks/usePCNVUserData'
@@ -62,7 +62,7 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
   const [amount, setAmount] = useState<BigNumber>(pCNVData?.redeemable || BigNumber.from(0))
   const [redeemMax, setRedeemMax] = useState(false)
 
-  const [curValue, setCurValue] = useState(pCNVData?.redeemable || BigNumber.from('0'))
+  const [curValue, setCurValue] = useState(pCNVData?.redeemable)
   const cnvAmount = (+formatEther(curValue || 0) * pCNVToCNVDifference)?.toFixed(12) || '0'
   const conversion = formatFixed(parseEther(pCNVToCNVDifference?.toFixed(12) || '0'), { places: 5 })
   const totalSupplyFormatted = formatFixed(
@@ -79,6 +79,16 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
     error: 'error calculating conversion',
     success: `1 ${pCNVToken?.symbol} = ${conversion} CNV`,
   }[cnvDataStatus]
+  const [updatedCurValue, setUpdatedCurValue] = useState(false)
+  useEffect(() => {
+    if (!pCNVData?.redeemable) return
+    if (updatedCurValue) return
+    console.log('teste')
+
+    setCurValue(pCNVData.redeemable)
+    setUpdatedCurValue(true)
+  }, [pCNVData])
+
   return (
     <>
       <VestedTokenDialog
