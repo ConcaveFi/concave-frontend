@@ -12,7 +12,7 @@ import {
   useSwapTransaction,
 } from 'components/AMM'
 import { useSwapSettings } from 'components/AMM/Swap/Settings'
-import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
+import { useCurrencyApprove } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
 import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
@@ -28,7 +28,7 @@ import { TradeDetails } from './TradeDetails'
 export function SwapCard() {
   const { trade, error, onChangeInput, onChangeOutput, switchFields, onReset } = useSwapState()
 
-  const useCurrencyState = useCurrencyButtonState(
+  const useCurrencyState = useCurrencyApprove(
     trade.inputAmount,
     ROUTER_ADDRESS[trade.inputAmount?.currency.chainId],
     { enablePermit: true },

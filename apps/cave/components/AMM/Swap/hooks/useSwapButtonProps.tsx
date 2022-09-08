@@ -1,7 +1,7 @@
 import { Currency } from '@concave/core'
 import { Trade, TradeType } from '@concave/gemswap-sdk'
 import { ButtonProps } from '@concave/ui'
-import { CurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
+import { CurrencyApproveState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { isAddress } from 'ethers/lib/utils'
 import { swapSupportedChains } from 'pages/gemswap'
 import { toPercent } from 'utils/toPercent'
@@ -19,7 +19,7 @@ export const useSwapButtonProps = ({
 }: {
   trade: Trade<Currency, Currency, TradeType>
   error: string
-  useCurrencyState: CurrencyButtonState
+  useCurrencyState: CurrencyApproveState
   recipient: string
   onSwapClick: () => void
 }): ButtonProps => {

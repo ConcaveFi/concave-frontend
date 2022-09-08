@@ -1,7 +1,7 @@
 import { CNV, Currency, CurrencyAmount } from '@concave/core'
 import { stakingPools, StakingV1Contract } from '@concave/marketplace'
 import { Box, Button, Card, Flex, Text } from '@concave/ui'
-import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
+import { useCurrencyApprove } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { CurrencyInputField } from 'components/CurrencyAmountField'
 import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
@@ -21,7 +21,7 @@ export function StakeInput({ onClose, poolId }: { poolId: number; onClose: () =>
   const { data: signer } = useSigner()
   const [stakeInput, setStakeInput] = useState<CurrencyAmount<Currency>>(toAmount(0, CNV[chainId]))
   const contract = new StakingV1Contract(concaveProvider(chainId))
-  const currencyState = useCurrencyButtonState(stakeInput.wrapped, contract.address, {
+  const currencyState = useCurrencyApprove(stakeInput.wrapped, contract.address, {
     enablePermit: true,
   })
   const cnvBalance = useCurrencyBalance(stakeInput?.currency, { watch: true })
