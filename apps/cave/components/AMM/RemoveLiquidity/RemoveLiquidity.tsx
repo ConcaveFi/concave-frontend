@@ -12,7 +12,7 @@ import {
   useDisclosure,
 } from '@concave/ui'
 import { TransactionResponse } from '@ethersproject/abstract-provider'
-import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
+import { useCurrencyApprove } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { PositionInfoItem } from 'components/LiquidityPoolPositions/MyPositions'
 import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
@@ -203,7 +203,7 @@ const RemoveLiquidityActions = ({
     removeLiquidityState.pair.liquidityToken,
     removeLiquidityState.amountToRemove.toString(),
   )
-  const useCurrencyState = useCurrencyButtonState(currencyAmount, ROUTER_ADDRESS[networkId])
+  const useCurrencyState = useCurrencyApprove(currencyAmount, ROUTER_ADDRESS[networkId])
 
   return (
     <Flex gap={4} h={45} justifyContent={'center'}>
