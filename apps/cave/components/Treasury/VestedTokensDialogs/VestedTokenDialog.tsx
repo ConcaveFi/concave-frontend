@@ -1,4 +1,4 @@
-import { Modal, ModalContent, ModalOverlay } from '@chakra-ui/react'
+import { CloseButton, Modal, ModalContent, ModalOverlay } from '@chakra-ui/react'
 import { Token } from '@concave/core'
 import { InfoIcon } from '@concave/icons'
 import { Button, Card, Flex, Spinner, Text, Tooltip } from '@concave/ui'
@@ -46,6 +46,7 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
     !nothingToRedeem
   const validValue = !invalidAmount && !insufficientFunds && !nothingToRedeem && !redeemableExceeded
   useEffect(() => (onChangeValue ? onChangeValue(currentValue) : undefined), [redeemMax, value])
+
   return (
     <>
       <Modal
@@ -54,8 +55,9 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
         onClose={onClose}
         isCentered
         motionPreset="slideInBottom"
+        closeOnOverlayClick
       >
-        <ModalOverlay backdropBlur={'8px'} />
+        <ModalOverlay backdropBlur={'8px'} />4
         <ModalContent>
           <Card
             overflow={'visible'}
@@ -67,6 +69,19 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
             justify="center"
             py={6}
           >
+            <Flex position={'relative'} align="start" justify={'end'}>
+              <Text fontSize={'2xl'} fontWeight={'bold'} mx="auto">
+                Redeem {token?.symbol}
+              </Text>
+              <CloseButton
+                onClick={onClose}
+                color={'text.small'}
+                mt={-5}
+                mr={-5}
+                position={'absolute'}
+                size="md"
+              />
+            </Flex>
             <VestedTokenInput
               redeemable={redeemable}
               redeemMax={redeemMax}
