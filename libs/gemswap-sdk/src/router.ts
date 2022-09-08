@@ -78,6 +78,22 @@ export function toHex(currencyAmount: CurrencyAmount<Currency>) {
 
 const ZERO_HEX = '0x0'
 
+const decoreWithPermit = (
+  method: string,
+  args: (string | number | string[])[],
+  { signature }: TradeOptions,
+): [string, (string | number | string[])[]] => {
+  if (!signature) {
+    return [method, args]
+  }
+  const { v, r, s } = signature
+  if (`owner` in signature) {
+    return [`${method}UsingPermit`, [...args, v, r, s]]
+  }
+  if ('holder' in signature) {
+    return [`${method}UsingPermitAllowed`, [...args, signature.nonce.toString(), v, r, s]]
+  }
+}
 /**
  * Represents the Uniswap V2 Router, and has static methods for helping execute trades.
  */
@@ -134,16 +150,6 @@ export abstract class Router {
           // (uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline)
           args = [amountIn, amountOut, path, to, deadline]
           value = ZERO_HEX
-          if (methodName === 'swapExactTokensForTokens' && signature && `owner` in signature) {
-            const { v, r, s } = signature
-            methodName = 'swapExactTokensForTokensUsingPermit'
-            args = [...args, v, r, s]
-          }
-          if (methodName === 'swapExactTokensForTokens' && signature && 'holder' in signature) {
-            const { v, r, s } = signature
-            methodName = 'swapExactTokensForTokensUsingPermitAllowed'
-            args = [...args, signature.nonce.toString(), v, r, s]
-          }
         }
         break
       case TradeType.EXACT_OUTPUT:
@@ -166,9 +172,10 @@ export abstract class Router {
         }
         break
     }
+    const [permitMethod, permitArgs] = decoreWithPermit(methodName, args, options)
     return {
-      methodName,
-      args,
+      methodName: permitMethod,
+      args: permitArgs,
       value,
     }
   }
