@@ -174,6 +174,7 @@ const PCNVInfoIcon = () => {
 
       <PopoverContent w="220px">
         <Card
+          shadow={'up'}
           css={{ ':after': { opacity: 1 } }}
           py={3}
           px={5}
@@ -183,7 +184,7 @@ const PCNVInfoIcon = () => {
           justify={'center'}
           variant="secondary"
         >
-          <Text fontSize="xs" textAlign={'justify'} fontWeight="bold">
+          <Text color={'text.small'} fontSize="xs" textAlign={'justify'} fontWeight="bold">
             pCNV is a claim on 10% of the total current CNV supply and is on a 24 month full vest
             cycle.
           </Text>
