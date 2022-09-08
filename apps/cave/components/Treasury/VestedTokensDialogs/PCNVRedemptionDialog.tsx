@@ -1,6 +1,14 @@
 import { PCNV, PCNVContract } from '@concave/core'
 import { QuestionIcon } from '@concave/icons'
-import { Flex, Text, Tooltip, useDisclosure } from '@concave/ui'
+import {
+  Card,
+  Flex,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  Text,
+  useDisclosure,
+} from '@concave/ui'
 import { TransactionResponse } from '@ethersproject/providers'
 import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
@@ -94,24 +102,7 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
             <Text fontSize={'sm'} color={'text.accent'} fontWeight="bold" opacity={0.5}>
               {conversionLabel}
             </Text>
-
-            <Tooltip
-              textShadow={'0px 0px 10px #333'}
-              textAlign="center"
-              bg="stroke.brightGreen"
-              overflow={'visible'}
-              placement="bottom"
-              maxW={'350px'}
-              label={
-                <Text
-                  fontSize={'sm'}
-                >{`pCNV is a claim on 10% of the total current CNV supply and is on a 24 month full vest cycle.`}</Text>
-              }
-            >
-              <Flex cursor={'pointer'} rounded="full">
-                <QuestionIcon />
-              </Flex>
-            </Tooltip>
+            <PCNVInfoIcon />
           </Flex>
         )}
       </VestedTokenDialog>
@@ -161,4 +152,32 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
         else setStatus('error')
       })
   }
+}
+const PCNVInfoIcon = () => {
+  return (
+    <Popover trigger="hover">
+      <PopoverTrigger>
+        <Flex cursor={'pointer'} rounded="full">
+          <QuestionIcon />
+        </Flex>
+      </PopoverTrigger>
+
+      <PopoverContent w="200px">
+        <Card
+          css={{ ':after': { opacity: 1 } }}
+          px={3}
+          position={'absolute'}
+          width={'200px'}
+          height="80px"
+          justify={'center'}
+          variant="secondary"
+        >
+          <Text fontSize="xs" textAlign={'justify'} fontWeight="bold">
+            pCNV is a claim on 10% of the total current CNV supply and is on a 24 month full vest
+            cycle.
+          </Text>
+        </Card>
+      </PopoverContent>
+    </Popover>
+  )
 }
