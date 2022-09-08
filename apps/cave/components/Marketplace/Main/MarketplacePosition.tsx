@@ -3,7 +3,7 @@ import { Currency, CurrencyAmount, MARKETPLACE_CONTRACT, NATIVE, Percent } from 
 import { FixedOrderMarketContract, StakingPosition } from '@concave/marketplace'
 import { FlexProps, gradientBorder, HStack, Spinner } from '@concave/ui'
 import { BuyButton } from 'components/BuyButton/BuyButton'
-import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
+import { useCurrencyApprove } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { ProgressBar } from 'components/ProgressBar'
 import { usePositionDiscount } from 'components/StakingPositions/LockPosition/MarketLockInfo/hooks/usePositionDiscount'
 import { differenceInDays, format, formatDistanceToNowStrict } from 'date-fns'
@@ -163,7 +163,7 @@ const BuyContainer = ({ stakingPosition, active = false }: BuyContainerProps) =>
     { meta: { type: 'offer marketplace', tokenId: +tokenId.toString() }, onError: console.error },
   )
 
-  const useCurrencyState = useCurrencyButtonState(price, MARKETPLACE_CONTRACT[chainId], {
+  const useCurrencyState = useCurrencyApprove(price, MARKETPLACE_CONTRACT[chainId], {
     amountInfo: true,
   })
 

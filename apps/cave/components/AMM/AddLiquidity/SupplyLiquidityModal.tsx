@@ -1,6 +1,6 @@
 import { ROUTER_ADDRESS } from '@concave/core'
 import { Box, Button, Flex, HStack, Modal, Text } from '@concave/ui'
-import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
+import { useCurrencyApprove } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { UseLiquidityData } from './hooks/useLiquidityData'
 
@@ -21,11 +21,11 @@ const SupplyLiquidityContent = ({
   lpData: UseLiquidityData
   onConfirm: () => void
 }) => {
-  const approve0 = useCurrencyButtonState(
+  const approve0 = useCurrencyApprove(
     lpData.amount0,
     ROUTER_ADDRESS[lpData.amount0.wrapped.currency.chainId],
   )
-  const approve1 = useCurrencyButtonState(
+  const approve1 = useCurrencyApprove(
     lpData.amount1,
     ROUTER_ADDRESS[lpData.amount0.wrapped.currency.chainId],
   )

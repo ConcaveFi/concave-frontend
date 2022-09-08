@@ -7,8 +7,8 @@ import { useMemo } from 'react'
 import { compactFormat } from 'utils/bigNumberMask'
 import { useAccount } from 'wagmi'
 
-export type CurrencyButtonState = ReturnType<typeof useCurrencyButtonState>
-export const useCurrencyButtonState = (
+export type CurrencyApproveState = ReturnType<typeof useCurrencyApprove>
+export const useCurrencyApprove = (
   amount: CurrencyAmount<Currency>,
   spender: string,
   { amountInfo = false, enablePermit = false } = {},
@@ -74,10 +74,9 @@ export const useCurrencyButtonState = (
       approved: state === 'successful',
       state,
       permit,
-      approve,
       buttonProps: props[state],
     }),
-    [approve, permit, props, state],
+    [permit, props, state],
   )
 }
 
@@ -102,7 +101,7 @@ export const CurrencyAmountButton = ({
   autoHide,
   ...buttonProps
 }: ButtonProps & CurrencyAmountButton) => {
-  const currencyButtonState = useCurrencyButtonState(currencyAmount, spender)
+  const currencyButtonState = useCurrencyApprove(currencyAmount, spender)
 
   // if the button is disabled, we must not intervene
   if (buttonProps.disabled) {
