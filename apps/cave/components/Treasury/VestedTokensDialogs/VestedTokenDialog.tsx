@@ -1,12 +1,12 @@
+import { CloseButton, Modal, ModalContent, ModalOverlay } from '@chakra-ui/react'
 import { Token } from '@concave/core'
 import { InfoIcon } from '@concave/icons'
-import { Button, Card, Collapse, Flex, Modal, Spinner, Text, Tooltip } from '@concave/ui'
+import { Button, Card, Flex, Spinner, Text, Tooltip } from '@concave/ui'
 import { ToggleButton } from 'components/ToggleButton'
 import { VestedTokenButtonProps } from 'components/Treasury/TreasuryRedeemCard'
 import { BigNumber } from 'ethers'
 import { formatEther, parseEther } from 'ethers/lib/utils'
-import { useState } from 'react'
-import { formatFixed } from 'utils/bigNumberMask'
+import { useEffect, useState } from 'react'
 import { useAccount } from 'wagmi'
 import { VestedTokenInput } from './VestedTokenDialogInput'
 
@@ -14,21 +14,21 @@ type VestedTokenDialogProps = {
   tokenUserData: { redeemable: BigNumber; redeemed: BigNumber; balance: BigNumber }
   isLoading: boolean
   onRedeem: (amount: BigNumber, redeemMax: boolean) => void
+  onChangeValue?: (value: BigNumber) => void
   status?: 'default' | 'approve' | 'rejected' | 'error' | 'submitted'
+  children?: JSX.Element | JSX.Element[]
   token: Token
-  conversionToCNV?: number
-  cnvDataStatus?: 'error' | 'idle' | 'loading' | 'success'
 }
 export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDialogProps> = ({
   onClose,
+  onRedeem,
+  onChangeValue,
   isOpen,
   tokenUserData,
   isLoading,
-  onRedeem,
   status,
   token,
-  conversionToCNV,
-  cnvDataStatus,
+  children,
 }) => {
   const { isConnected } = useAccount()
   const { redeemable, redeemed, balance } = tokenUserData || {}
@@ -45,103 +45,108 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
     !insufficientFunds &&
     !nothingToRedeem
   const validValue = !invalidAmount && !insufficientFunds && !nothingToRedeem && !redeemableExceeded
-  const convertedValue = (+formatEther(currentValue || 0) * conversionToCNV)?.toFixed(12) || '0'
-  const CNVAmount = formatFixed(parseEther(conversionToCNV?.toFixed(12) || '0'), { places: 5 })
+  useEffect(() => (onChangeValue ? onChangeValue(currentValue) : undefined), [redeemMax, value])
+
   return (
     <>
       <Modal
-        title={`Redeem ${token?.symbol}`}
-        bluryOverlay
         preserveScrollBarGap
         isOpen={isOpen}
         onClose={onClose}
         isCentered
         motionPreset="slideInBottom"
+        closeOnOverlayClick
       >
-        <Card width={'340px'} minW="280px" m={-6} px={6} gap={2} justify="center" py={6}>
-          <VestedTokenInput
-            redeemable={redeemable}
-            redeemMax={redeemMax}
-            balance={balance}
-            onChangeValue={setValue}
-            value={value}
-          />
-          <Flex direction={'column'} fontSize="14px" px={2}>
-            <Info
-              title="Redeemable:"
-              value={isLoading ? 'Loading...' : formatEther(redeemable || '0')}
-            />
-            <Info
-              title="Redeemed:"
-              value={isLoading ? 'Loading...' : formatEther(redeemed || '0')}
-            />
-            <Collapse in={validValue || (redeemMax && !redeemable?.isZero())}>
-              {!!cnvDataStatus && (
-                <Info
-                  title="You will receive:"
-                  value={
-                    {
-                      loading: 'calculating',
-                      error: '---',
-                      success: formatFixed(parseEther(convertedValue), { places: 5 }) + ' CNV',
-                    }[cnvDataStatus]
-                  }
-                />
-              )}
-            </Collapse>
-            {!!cnvDataStatus && (
-              <Text color={'text.accent'} fontWeight="bold" opacity={0.5}>
-                {
-                  {
-                    loading: `1 ${token.symbol} = calculating`,
-                    error: 'error calculating conversion',
-                    success: `1 ${token?.symbol} = ${CNVAmount} CNV`,
-                  }[cnvDataStatus]
-                }
-              </Text>
-            )}
-            <Text fontWeight={'bold'} textColor="text.accent" opacity="0.5" fontSize={'xs'}></Text>
-          </Flex>
-          <Flex gap={2} fontWeight={'bold'} pl={2} align="center">
-            <Text textColor={'gray.200'}>Redeem max</Text>
-            <ToggleButton enabled={redeemMax} onToggle={setRedeemMax} />
-            <Tooltip
-              textColor={'white'}
-              bg="text.low"
-              textShadow={'0px 0px 10px #333'}
-              fontWeight={'bold'}
-              fontSize="13px"
-              textAlign="center"
-              label={`Attempts to redeem all of your currently available ${
-                token?.symbol || 'amount'
-              }`}
-            >
-              <InfoIcon color={'text.low'} cursor="pointer" />
-            </Tooltip>
-          </Flex>
-
-          <Button
-            height={'55px'}
-            width="full"
-            {...redeemButtonProps(validValue, status)}
-            onClick={() => onRedeem(redeemMax ? redeemable : parseEther(value || '0'), redeemMax)}
-            gap={4}
+        <ModalOverlay backdropBlur={'8px'} />4
+        <ModalContent>
+          <Card
+            overflow={'visible'}
+            width={'340px'}
+            minW="280px"
+            variant="primary"
+            px={6}
+            gap={2}
+            justify="center"
+            py={6}
           >
-            {(status === 'approve' || isLoading) && <Spinner color="text.low" />}
-            {isConnected && !isLoading && (
-              <>
-                <Text>
-                  {nothingToRedeem && 'Nothing to redeem'}
-                  {insufficientFunds && 'Insufficient funds'}
-                  {redeemableExceeded && 'Redeemable exceeded'}
-                  {(invalidAmount || validValue) && redeemButtonText[status]}
-                </Text>
-              </>
-            )}
-            {isConnected && isLoading && 'Loading...'}
-            {!isConnected && 'Not connected'}
-          </Button>
-        </Card>
+            <Flex position={'relative'} align="start" justify={'end'}>
+              <Text fontSize={'2xl'} fontWeight={'bold'} mx="auto">
+                Redeem {token?.symbol}
+              </Text>
+              <CloseButton
+                onClick={onClose}
+                color={'text.small'}
+                mt={-5}
+                mr={-5}
+                position={'absolute'}
+                size="md"
+              />
+            </Flex>
+            <VestedTokenInput
+              redeemable={redeemable}
+              redeemMax={redeemMax}
+              balance={balance}
+              onChangeValue={setValue}
+              value={value}
+            />
+            <Flex zIndex={2} direction={'column'} fontSize="14px" px={2}>
+              <Info
+                title="Redeemable:"
+                value={isLoading ? 'Loading...' : formatEther(redeemable || '0')}
+              />
+              <Info
+                title="Redeemed:"
+                value={isLoading ? 'Loading...' : formatEther(redeemed || '0')}
+              />
+              {children}
+              <Text
+                fontWeight={'bold'}
+                textColor="text.accent"
+                opacity="0.5"
+                fontSize={'xs'}
+              ></Text>
+            </Flex>
+            <Flex gap={2} fontWeight={'bold'} pl={2} align="center">
+              <Text textColor={'gray.200'}>Redeem max</Text>
+              <ToggleButton enabled={redeemMax} onToggle={setRedeemMax} />
+              <Tooltip
+                textColor={'white'}
+                bg="text.low"
+                textShadow={'0px 0px 10px #333'}
+                fontWeight={'bold'}
+                fontSize="13px"
+                textAlign="center"
+                label={`Attempts to redeem all of your currently available ${
+                  token?.symbol || 'amount'
+                }`}
+              >
+                <InfoIcon color={'text.low'} cursor="pointer" />
+              </Tooltip>
+            </Flex>
+
+            <Button
+              height={'55px'}
+              width="full"
+              {...redeemButtonProps(validValue, status)}
+              onClick={() => onRedeem(redeemMax ? redeemable : parseEther(value || '0'), redeemMax)}
+              gap={4}
+            >
+              {(status === 'approve' || isLoading) && <Spinner color="text.low" />}
+              {isConnected && !isLoading && (
+                <>
+                  <Text>
+                    {nothingToRedeem && 'Nothing to redeem'}
+                    {insufficientFunds && 'Insufficient funds'}
+                    {redeemableExceeded && 'Redeemable exceeded'}
+                    {(invalidAmount || validValue) && redeemButtonText[status]}
+                  </Text>
+                </>
+              )}
+              {isConnected && isLoading && 'Loading...'}
+              {!isConnected && 'Not connected'}
+            </Button>
+          </Card>
+        </ModalContent>
       </Modal>
     </>
   )
