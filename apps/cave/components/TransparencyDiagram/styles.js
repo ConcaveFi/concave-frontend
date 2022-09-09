@@ -31,6 +31,6 @@ export const EdgeColors = {
   CornflowerBlue: '#3F79FC',
   Green: '#079D7C',
   Orange: '#FFA500',
-  Purple: '#6D25B6',
+  Purple: '#7D42EB',
   Teal: '#4EDEF3',
 }
