@@ -122,7 +122,7 @@ export abstract class Router {
     const path: string[] = trade.route.path.map((token: Token) => token.address)
     const deadline =
       signature?.['expiry'] || signature?.['deadline'] || Math.floor(Date.now() / 1000 + 300)
-    const useFeeOnTransfer = Boolean(options.feeOnTransfer)
+    const useFeeOnTransfer = Boolean(options.feeOnTransfer) && !signature
 
     let methodName: string
     let args: (string | number | string[])[]
