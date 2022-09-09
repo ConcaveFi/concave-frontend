@@ -32,7 +32,7 @@ export function BondBuyCard(props: {
   const settings = useBondSettings((s) => s.settings)
   const [amountOut, setAmountOut] = useState<string>()
   const [amountIn, setAmountIn] = useState<CurrencyAmount<Currency>>(toAmount('0', DAI[networkId]))
-  const useCurrencyState = useCurrencyApprove(amountIn, BOND_ADDRESS[networkId])
+  const currencyApprove = useCurrencyApprove(amountIn, BOND_ADDRESS[networkId])
 
   useEffect(() => {
     setAmountIn(toAmount(0, DAI[networkId]))
@@ -43,8 +43,8 @@ export function BondBuyCard(props: {
     async () => await getBondSpotPrice(networkId),
     { enabled: !!networkId, refetchInterval: 17000 },
   )
-  const bondButtonState = !useCurrencyState.approved
-    ? useCurrencyState.buttonProps
+  const bondButtonState = !currencyApprove.approved
+    ? currencyApprove.buttonProps
     : { onClick: confirmModal.onOpen, children: 'Bond' }
 
   const bondTransaction = useTransaction(

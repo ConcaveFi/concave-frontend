@@ -14,12 +14,12 @@ export const useSwapButtonProps = ({
   trade,
   error,
   recipient,
-  useCurrencyState,
+  currencyApprove,
   onSwapClick,
 }: {
   trade: Trade<Currency, Currency, TradeType>
   error: string
-  useCurrencyState: CurrencyApproveState
+  currencyApprove: CurrencyApproveState
   recipient: string
   onSwapClick: () => void
 }): ButtonProps => {
@@ -28,7 +28,7 @@ export const useSwapButtonProps = ({
   const currencyIn = trade.inputAmount?.currency
 
   const isExpertMode = useSwapSettings((s) => s.settings.expertMode)
-  if (useCurrencyState.state === 'disconected') return useCurrencyState.buttonProps
+  if (currencyApprove.state === 'disconected') return currencyApprove.buttonProps
   /*
     Not Connected
   */
@@ -85,7 +85,7 @@ export const useSwapButtonProps = ({
 
   if (recipient && !isAddress(recipient)) return { children: 'Invalid recipient', isDisabled: true }
 
-  if (!useCurrencyState.approved) return useCurrencyState.buttonProps
+  if (!currencyApprove.approved) return currencyApprove.buttonProps
 
   /*
     Swap

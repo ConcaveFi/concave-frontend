@@ -203,19 +203,19 @@ const RemoveLiquidityActions = ({
     removeLiquidityState.pair.liquidityToken,
     removeLiquidityState.amountToRemove.toString(),
   )
-  const useCurrencyState = useCurrencyApprove(currencyAmount, ROUTER_ADDRESS[networkId])
+  const currencyApprove = useCurrencyApprove(currencyAmount, ROUTER_ADDRESS[networkId])
 
   return (
     <Flex gap={4} h={45} justifyContent={'center'}>
       <Button
         disabled={!removeLiquidityState.percentToRemove}
-        {...useCurrencyState.buttonProps}
+        {...currencyApprove.buttonProps}
         w={250}
         variant={'primary'}
       />
 
       <Button
-        disabled={!useCurrencyState.approved || !removeLiquidityState.percentToRemove}
+        disabled={!currencyApprove.approved || !removeLiquidityState.percentToRemove}
         w={250}
         variant={'primary'}
         onClick={confirmedWithdrawal}
