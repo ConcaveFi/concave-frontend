@@ -28,7 +28,7 @@ import { PositionsState } from './hooks/usePositionsState'
 export const MyPositions = ({ state }: { state: PositionsState }) => {
   const { loading, error, setView, view, pairs, user } = state
   if (loading) {
-    return <Loading size="lg" label={loading} />
+    return <Loading size="lg" isLoading={true} label={loading} />
   }
   if (error) {
     return <Text>error</Text>
@@ -150,7 +150,7 @@ export const LiquidityPoolPainel = (props: LPPosition) => {
   if (userBalance.isLoading || pairData.isLoading || !userBalance.data) {
     return (
       <AccordionPanel>
-        <Loading size="sm" />
+        <Loading isLoading size="sm" />
       </AccordionPanel>
     )
   }
