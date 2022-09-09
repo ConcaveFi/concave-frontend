@@ -228,6 +228,25 @@ export const generalNodes = [
   avaxSafe(375, 0),
 ]
 
+export const generalNodesMobile = [
+  bbtCNV(540, -80),
+  aCNV(540, 110),
+  cnv(540, 300),
+  pCNV(540, 490),
+  lsdCNV(540, -260),
+  concaveTreasury(300, 390),
+  coopTreasury(150, 390),
+  policyMultisig(0, 390),
+  proxyAdmin(525, 650),
+  accrualBondsV1Proxy(250, 765),
+  accrualBondsV1Impl(0, 765),
+  stakingV1Proxy(375, 50),
+  stakingV1Impl(225, 50),
+  valueShuttle(0, 70),
+  bscSafe(28, -290),
+  avaxSafe(250, -290),
+]
+
 export const bondingNodes = [
   user(660, 0),
   proxyAdmin(900, 0),
@@ -238,6 +257,18 @@ export const bondingNodes = [
   concaveTreasury(1200, 400),
   accrualBondsV1Impl(600, 800),
   policyMultisig(1200, 800),
+]
+
+export const bondingNodesMobile = [
+  user(660, 0),
+  proxyAdmin(900, 0),
+  cnv(1200, 0),
+  coopTreasury(641, 1050),
+  valueShuttle(620, 700),
+  accrualBondsV1Proxy(600, 350),
+  concaveTreasury(1200, 350),
+  accrualBondsV1Impl(900, 700),
+  policyMultisig(1200, 700),
 ]
 
 export const stakingNodes = [
@@ -251,4 +282,17 @@ export const stakingNodes = [
   policyMultisig(900, 392),
   stakingV1Impl(600, 800),
   coopTreasury(900, 800),
+]
+
+export const stakingNodesMobile = [
+  lsdCNV(900, 20),
+  proxyAdmin(880, 410),
+  concaveTreasury(893, 800),
+  cnv(600, 1100),
+  user(600, 0),
+  valueShuttle(250, 20),
+  stakingV1Proxy(600, 400),
+  policyMultisig(583, 800),
+  stakingV1Impl(250, 400),
+  coopTreasury(250, 800),
 ]

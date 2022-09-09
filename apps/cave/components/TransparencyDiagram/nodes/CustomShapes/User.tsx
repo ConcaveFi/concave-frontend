@@ -6,7 +6,7 @@ import { NodeText } from '../NodeText'
 
 export function User({ data }: { data: NodeDisplayData }) {
   const shapeSettings: ShapeLabelSettingsType = {
-    labelBottom: '-37px',
+    labelBottom: '-45px',
   }
 
   return (
@@ -59,7 +59,7 @@ export function User({ data }: { data: NodeDisplayData }) {
         id="leftTarget"
         style={{ ...sharedNodeHandleStyle, left: -15 }}
       />
-      <NodeText data={data} shapeSettings={shapeSettings} contractMultiLine />
+      <NodeText data={data} shapeSettings={shapeSettings} />
       <svg
         width="89"
         height="127"
