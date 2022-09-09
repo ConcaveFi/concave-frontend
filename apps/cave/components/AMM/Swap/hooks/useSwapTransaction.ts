@@ -40,7 +40,7 @@ export const useSwapTransaction = (
       return Router.swapCallParameters(trade, {
         allowedSlippage: toPercent(settings.slippageTolerance),
         deadline: permit.signedPermit?.deadline,
-        feeOnTransfer: false, // trade.tradeType === TradeType.EXACT_INPUT,
+        feeOnTransfer: trade.tradeType === TradeType.EXACT_INPUT,
         recipient: isAddress(recipient) ? recipient : address,
         signature: permit.signedPermit,
       })

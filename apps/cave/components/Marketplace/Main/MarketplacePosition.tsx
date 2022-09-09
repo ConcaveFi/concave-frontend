@@ -163,7 +163,7 @@ const BuyContainer = ({ stakingPosition, active = false }: BuyContainerProps) =>
     { meta: { type: 'offer marketplace', tokenId: +tokenId.toString() }, onError: console.error },
   )
 
-  const useCurrencyState = useCurrencyApprove(price, MARKETPLACE_CONTRACT[chainId], {
+  const currencyApprove = useCurrencyApprove(price, MARKETPLACE_CONTRACT[chainId], {
     amountInfo: true,
   })
 
@@ -182,7 +182,7 @@ const BuyContainer = ({ stakingPosition, active = false }: BuyContainerProps) =>
       return { loadingText: 'Waiting confirmation', disabled: true, isLoading: true }
     if (swap.isSucess) return { children: 'Purchased', disabled: true }
     if (swap.isError) return { children: 'Unavailable', disabled: true }
-    if (useCurrencyState.approved) {
+    if (currencyApprove.approved) {
       return {
         showPrice: true,
         onClick: swap.sendTx,
@@ -191,15 +191,15 @@ const BuyContainer = ({ stakingPosition, active = false }: BuyContainerProps) =>
       }
     }
 
-    if (useCurrencyState.state === 'default')
+    if (currencyApprove.state === 'default')
       return {
-        ...useCurrencyState.buttonProps,
+        ...currencyApprove.buttonProps,
         showPrice: true,
         fontSize: '14px',
       }
 
     return {
-      ...useCurrencyState.buttonProps,
+      ...currencyApprove.buttonProps,
     }
   }, [
     account.address,
@@ -209,9 +209,9 @@ const BuyContainer = ({ stakingPosition, active = false }: BuyContainerProps) =>
     swap.isWaitingForConfirmation,
     swap.isWaitingTransactionReceipt,
     swap.sendTx,
-    useCurrencyState.approved,
-    useCurrencyState.buttonProps,
-    useCurrencyState.state,
+    currencyApprove.approved,
+    currencyApprove.buttonProps,
+    currencyApprove.state,
   ])
   return (
     <>

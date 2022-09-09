@@ -28,7 +28,7 @@ import { TradeDetails } from './TradeDetails'
 export function SwapCard() {
   const { trade, error, onChangeInput, onChangeOutput, switchFields, onReset } = useSwapState()
 
-  const useCurrencyState = useCurrencyApprove(
+  const currencyApprove = useCurrencyApprove(
     trade.inputAmount,
     ROUTER_ADDRESS[trade.inputAmount?.currency.chainId],
     { enablePermit: true },
@@ -49,7 +49,7 @@ export function SwapCard() {
         closeConfirmationModal()
       },
     },
-    useCurrencyState.permit,
+    currencyApprove.permit,
   )
 
   const isExpertMode = useSwapSettings((s) => s.settings.expertMode)
@@ -57,7 +57,7 @@ export function SwapCard() {
     trade,
     error,
     recipient,
-    useCurrencyState,
+    currencyApprove,
     onSwapClick: useCallback(
       () => (isExpertMode ? swapTx.write() : openConfirmationModal()),
       [isExpertMode, swapTx, openConfirmationModal],
