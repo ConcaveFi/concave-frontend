@@ -28,10 +28,14 @@ import { TradeDetails } from './TradeDetails'
 export function SwapCard() {
   const { trade, error, onChangeInput, onChangeOutput, switchFields, onReset } = useSwapState()
 
+  const { deadline: ttl } = useSwapSettings((s) => ({
+    deadline: s.settings.deadline,
+  }))
+
   const currencyApprove = useCurrencyApprove(
     trade.inputAmount,
     ROUTER_ADDRESS[trade.inputAmount?.currency.chainId],
-    { enablePermit: true },
+    { enablePermit: true, ttl },
   )
   const [recipient, setRecipient] = useState('')
   const {

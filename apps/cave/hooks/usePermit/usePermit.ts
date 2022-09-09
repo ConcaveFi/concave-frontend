@@ -41,7 +41,7 @@ export type UsePermiReturn = ReturnType<typeof usePermit>
 export const usePermit = (
   currencyAmount: CurrencyAmount<Token>,
   spender: string,
-  deadline: number = Date.now(),
+  deadline: number,
 ) => {
   const { data: signer } = useSigner()
   const token = currencyAmount?.currency
