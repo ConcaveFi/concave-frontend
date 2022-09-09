@@ -1,5 +1,6 @@
 import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/providers'
-import { CurrencyAmount, NATIVE, RouterAbi, ROUTER_ADDRESS, Token } from '@concave/core'
+import { Currency, CurrencyAmount, RouterAbi, ROUTER_ADDRESS, Token } from '@concave/core'
+import { PermitSignature } from '@concave/gemswap-sdk'
 import { BigNumber, ethers } from 'ethers'
 import { parseUnits } from 'ethers/lib/utils'
 import { concaveProvider } from 'lib/providers'
@@ -24,9 +25,9 @@ export class Router {
     const tmp = this.contract.connect(this.signer)
     return tmp.addLiquidityETH(
       tokenAmount.currency.address,
-      parseUnits(tokenAmount.toFixed(tokenAmount.currency.decimals)),
-      '0',
-      '0',
+      tokenAmount.quotient.toString(),
+      0,
+      0,
       to,
       deadLine,
       { ...extra, value: ethAmount },
@@ -63,67 +64,89 @@ export class Router {
       .addLiquidity(
         amountA.currency.wrapped.address,
         amountB.currency.wrapped.address,
-        parseUnits(amountA.toFixed(amountA.currency.decimals)),
-        parseUnits(amountA.toFixed(amountA.currency.decimals)),
-        parseUnits('0', amountA.currency.decimals),
-        parseUnits('0', amountA.currency.decimals),
+        amountA.quotient.toString(),
+        amountB.quotient.toString(),
+        0,
+        0,
         to,
         deadLine,
         { ...extra },
       )
   }
 
-  public async removeLiquidityWithPermit(
-    tokenA: Token,
-    tokenB: Token,
+  public async removeLiquidity(
+    amountA: CurrencyAmount<Currency>,
+    amountB: CurrencyAmount<Currency>,
     liquidity: BigNumber,
     to: string,
-    { r, s, v, deadline }: { deadline: number; v: number; r: string; s: string },
-    extra: {
-      gasLimit?: number
-    } = {},
+    signature?: PermitSignature,
   ): Promise<ethers.Transaction> {
+    if (amountB.currency.isNative || amountA.currency.isNative) {
+      return this.removeLiquidityETH([amountA, amountB], liquidity, to, signature)
+    }
+    if (signature)
+      return this.contract
+        .connect(this.signer)
+        .removeLiquidityWithPermit(
+          amountA.currency.wrapped.address,
+          amountB.currency.wrapped.address,
+          liquidity,
+          amountA.quotient.toString(),
+          amountB.quotient.toString(),
+          to,
+          signature.deadline,
+          false,
+          signature.v,
+          signature.r,
+          signature.s,
+        )
     return this.contract
       .connect(this.signer)
-      .removeLiquidityWithPermit(
-        tokenA.address,
-        tokenB.address,
+      .removeLiquidity(
+        amountA.currency.wrapped.address,
+        amountB.currency.wrapped.address,
         liquidity,
-        parseUnits(`0`, tokenA.decimals),
-        parseUnits(`0`, tokenB.decimals),
+        amountA.quotient.toString(),
+        amountB.quotient.toString(),
         to,
-        deadline,
-        false,
-        v,
-        r,
-        s,
-        extra,
+        Math.floor(Date.now() / 1000 + 300),
       )
   }
 
-  public async removeLiquidityETHWithPermit(
-    token: Token,
+  private async removeLiquidityETH(
+    [amountA, amountB]: CurrencyAmount<Currency>[],
     liquidity: BigNumber,
     to: string,
-    { r, s, v, deadline }: { deadline: number; v: number; r: string; s: string },
-    extra: {
-      gasLimit?: number
-    } = {},
+    signature?: PermitSignature,
   ): Promise<ethers.Transaction> {
+    const [nativeAmount, tokenAmount] = amountA.currency.isNative
+      ? [amountA, amountB.wrapped]
+      : [amountB, amountA.wrapped]
+
+    if (signature)
+      return this.contract
+        .connect(this.signer)
+        .removeLiquidityETHWithPermit(
+          tokenAmount.currency.address,
+          liquidity,
+          tokenAmount.quotient.toString(),
+          nativeAmount.quotient.toString(),
+          to,
+          signature.deadline,
+          false,
+          signature.v,
+          signature.r,
+          signature.s,
+        )
     return this.contract
       .connect(this.signer)
-      .removeLiquidityETHWithPermit(
-        token.address,
+      .removeLiquidityETH(
+        tokenAmount.currency.address,
         liquidity,
-        parseUnits(`0`, token.decimals),
-        parseUnits(`0`, NATIVE[token.chainId].decimals),
+        tokenAmount.quotient.toString(),
+        nativeAmount.quotient.toString(),
         to,
-        deadline,
-        false,
-        v,
-        r,
-        s,
-        extra,
+        Math.floor(Date.now() / 1000 + 300),
       )
   }
 }

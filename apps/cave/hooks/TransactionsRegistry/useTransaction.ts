@@ -19,7 +19,7 @@ export const useTransaction = (
   } = useRef(extra)
   const { registerTransaction } = useTransactionRegistry()
   const [isWaitingForConfirmation, setIsWaitingForConfirmation] = useState(false)
-  const [error, setError] = useState()
+  const [error, setError] = useState<{ code: number; reason: string }>()
   const tx = useRef<Transaction>()
   const { status } = useWaitForTransaction({
     hash: tx.current?.hash,

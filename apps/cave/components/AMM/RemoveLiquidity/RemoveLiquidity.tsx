@@ -1,5 +1,5 @@
 import { Currency, CurrencyAmount, NATIVE, Percent, ROUTER_ADDRESS, Token } from '@concave/core'
-import { Pair } from '@concave/gemswap-sdk'
+import { Pair, PermitSignature } from '@concave/gemswap-sdk'
 import {
   Box,
   Button,
@@ -57,8 +57,7 @@ export const RemoveLiquidityModalButton = ({
       <Modal
         bluryOverlay={true}
         title="Remove Liquidity"
-        isOpen={removeLiquidityDisclosure.isOpen}
-        onClose={removeLiquidityDisclosure.onClose}
+        {...removeLiquidityDisclosure}
         isCentered
         size={'2xl'}
         bodyProps={{
@@ -106,7 +105,6 @@ const AmountToRemove = ({ onChange }: { onChange: (n: number) => void }) => {
     </Flex>
   )
 }
-
 const YouWillReceive = ({
   pair,
   amountAMin,
@@ -183,15 +181,7 @@ const RemoveLiquidityActions = ({
   const currencyApprove = useCurrencyApprove(currencyAmount, ROUTER_ADDRESS[networkId])
   const { data: signer } = useSigner()
 
-  const {
-    receiveInNativeToken,
-    tokenAIsNativeWrapper,
-    tokenBIsNativeWrapper,
-    amountAMin,
-    amountBMin,
-    amountToRemove,
-  } = removeLiquidityState
-
+  const { amountAMin, amountBMin, amountToRemove } = removeLiquidityState
   const meta = {
     type: `remove liquidity`,
     amount0: amountAMin.toString(),
@@ -202,24 +192,12 @@ const RemoveLiquidityActions = ({
   const removeTransaction = useTransaction(
     () => {
       const router = new Router(networkId, signer)
-      const permit = {
-        deadline: 0,
-        ...currencyApprove.permit.signedPermit,
-      }
-      if (receiveInNativeToken && (tokenAIsNativeWrapper || tokenBIsNativeWrapper)) {
-        return router.removeLiquidityETHWithPermit(
-          tokenAIsNativeWrapper ? amountBMin.currency.wrapped : amountAMin.currency.wrapped,
-          amountToRemove,
-          address,
-          permit,
-        )
-      }
-      return router.removeLiquidityWithPermit(
-        amountAMin.currency.wrapped,
-        amountBMin.currency.wrapped,
+      return router.removeLiquidity(
+        amountAMin,
+        amountBMin,
         amountToRemove,
         address,
-        permit,
+        currencyApprove.permit.signedPermit as PermitSignature,
       )
     },
     {
@@ -276,7 +254,7 @@ const RemoveLiquidityActions = ({
         closeParentComponent={closeParentComponent}
       />
       <TransactionErrorDialog
-        error={JSON.stringify(removeTransaction.error)}
+        error={removeTransaction.error?.reason}
         isOpen={removeTransaction.isError}
       />
     </Flex>
@@ -303,7 +281,7 @@ const YourPosition = ({ pair, userPoolShare }: { pair: Pair; userPoolShare: Perc
         p={4}
         spacing={3}
       >
-        <PositionInfoItem label="Your pool share:" value={`${userPoolShare.toFixed(2)}%`} />
+        <PositionInfoItem label="Your pool share:" value={`${userPoolShare.toFixed(4)}%`} />
         <PositionInfoItem
           label={pair.token0.symbol}
           value={pair.reserve0.multiply(userPoolShare).toFixed(2)}

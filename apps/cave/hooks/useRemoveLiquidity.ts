@@ -1,10 +1,11 @@
-import { Currency, CurrencyAmount, NATIVE, Percent, WETH9 } from '@concave/core'
+import { Currency, CurrencyAmount, Fraction, NATIVE, Percent, WETH9 } from '@concave/core'
 import { Pair } from '@concave/gemswap-sdk'
 import { BigNumber } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useMemo, useState } from 'react'
 import { toPercent } from 'utils/toPercent'
 
+const slippage = new Fraction(99999, 100000)
 export const useRemoveLiquidity = ({
   pair,
   userPoolShare,
@@ -26,7 +27,7 @@ export const useRemoveLiquidity = ({
   const amountToRemove = BigNumber.from(userBalance.multiply(ratioToRemove).quotient.toString())
 
   const amountAMin = useMemo(() => {
-    const amount = pair.reserve0.multiply(userPoolShare).multiply(ratioToRemove)
+    const amount = pair.reserve0.multiply(userPoolShare).multiply(ratioToRemove).multiply(slippage)
     if (tokenAIsNativeWrapper && receiveInNativeToken)
       return CurrencyAmount.fromRawAmount(
         NATIVE[amount.currency.chainId],
@@ -36,7 +37,7 @@ export const useRemoveLiquidity = ({
   }, [pair.reserve0, ratioToRemove, receiveInNativeToken, tokenAIsNativeWrapper, userPoolShare])
 
   const amountBMin = useMemo(() => {
-    const amount = pair.reserve1.multiply(userPoolShare).multiply(ratioToRemove)
+    const amount = pair.reserve1.multiply(userPoolShare).multiply(ratioToRemove).multiply(slippage)
     if (tokenBIsNativeWrapper && receiveInNativeToken)
       return CurrencyAmount.fromRawAmount(
         NATIVE[amount.currency.chainId],

@@ -165,7 +165,7 @@ export function BondBuyCard(props: {
       >
         <AddTokenToWalletButton token={currencyOut} />
       </TransactionSubmittedDialog>
-      <TransactionErrorDialog error={bondTransaction.error} {...rejectDisclosure} />
+      <TransactionErrorDialog error={bondTransaction.error?.reason} {...rejectDisclosure} />
     </Card>
   )
 }
