@@ -99,7 +99,7 @@ export function StakeInput({ onClose, poolId }: { poolId: number; onClose: () =>
         closeParentComponent={onClose}
       />
       <TransactionErrorDialog
-        error={lockTransaction.error}
+        error={lockTransaction.error?.reason}
         isOpen={lockTransaction.isError}
         closeParentComponent={onClose}
       />
