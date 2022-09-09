@@ -11,7 +11,7 @@ export type CurrencyApproveState = ReturnType<typeof useCurrencyApprove>
 export const useCurrencyApprove = (
   amount: CurrencyAmount<Currency>,
   spender: string,
-  { amountInfo = false, enablePermit = false } = {},
+  { amountInfo = false, enablePermit = false, ttl = 60 * 30 } = {},
 ) => {
   const { address } = useAccount()
   const connectModal = useConnectModal()
@@ -19,7 +19,12 @@ export const useCurrencyApprove = (
   const symbol = currency?.symbol
   const totalSupply = currency?.wrapped.totalSupply
   const balance = useCurrencyBalance(currency, { watch: true })
-  const { permit, ...approve } = useApprove(currency?.wrapped, spender, amount?.quotient.toString())
+  const { permit, ...approve } = useApprove(
+    currency?.wrapped,
+    spender,
+    amount?.quotient.toString(),
+    { deadline: Math.floor(new Date().getTime() / 1000) + ttl },
+  )
   const disabled = true
   const isLoading = true
   const props = useMemo(

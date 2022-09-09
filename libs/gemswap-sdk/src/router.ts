@@ -29,6 +29,11 @@ export interface TradeOptions {
   feeOnTransfer?: boolean
 
   /**
+   * This will be used to produce a `deadline` parameter which is computed from when the swap call parameters
+   * are generated.
+   */
+  ttl: number
+  /**
    * Signature, if present it will use other method
    */
   signature?: PermitSignature | PermitAllowSignature
@@ -120,8 +125,8 @@ export abstract class Router {
     const amountIn: string = toHex(trade.maximumAmountIn(options.allowedSlippage))
     const amountOut: string = toHex(trade.minimumAmountOut(options.allowedSlippage))
     const path: string[] = trade.route.path.map((token: Token) => token.address)
-    const deadline =
-      signature?.['expiry'] || signature?.['deadline'] || Math.floor(Date.now() / 1000 + 300)
+
+    const deadline = options.deadline || Math.floor(Date.now() / 1000 + options.ttl)
     const useFeeOnTransfer = Boolean(options.feeOnTransfer) && !signature
 
     let methodName: string
