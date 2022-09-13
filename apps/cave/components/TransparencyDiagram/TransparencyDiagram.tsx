@@ -28,6 +28,10 @@ const SelectionButton = ({ diagramShown, setDiagramShown, chartId, chartName }) 
   </Button>
 )
 
+const DataStudio = ({ src }: { src: string }) => (
+  <Flex src={src} as={'iframe'} w={'full'} h={'full'} overflow={'hidden'} rounded={'2xl'} />
+)
+
 const ReactFlowDiagram = ({ edges, nodes, isMobile }) => (
   <ReactFlow
     edges={edges}
@@ -52,7 +56,7 @@ const ReactFlowDiagram = ({ edges, nodes, isMobile }) => (
 )
 
 export function TransparencyDiagram() {
-  const [diagramShown, setDiagramShown] = useState<0 | 1 | 2 | 3>(0)
+  const [diagramShown, setDiagramShown] = useState<number>(0)
   const isMobile = useBreakpointValue({ base: true, md: false })
 
   return (
@@ -70,24 +74,30 @@ export function TransparencyDiagram() {
         <Box display={'flex'} flexDirection={isMobile ? 'column' : 'row'} gap={'1rem'}>
           <SelectionButton
             chartId={0}
-            chartName={'Treasury'}
+            chartName={'Treasury Overview'}
             diagramShown={diagramShown}
             setDiagramShown={setDiagramShown}
           />
           <SelectionButton
             chartId={1}
-            chartName={'General Diagram'}
+            chartName={'CO-OP Treasury'}
             diagramShown={diagramShown}
             setDiagramShown={setDiagramShown}
           />
           <SelectionButton
             chartId={2}
-            chartName={'Bonding Diagram'}
+            chartName={'General Diagram'}
             diagramShown={diagramShown}
             setDiagramShown={setDiagramShown}
           />
           <SelectionButton
             chartId={3}
+            chartName={'Bonding Diagram'}
+            diagramShown={diagramShown}
+            setDiagramShown={setDiagramShown}
+          />
+          <SelectionButton
+            chartId={4}
             chartName={'Staking Diagram'}
             diagramShown={diagramShown}
             setDiagramShown={setDiagramShown}
@@ -108,34 +118,36 @@ export function TransparencyDiagram() {
           gap={2}
         >
           {diagramShown === 0 && (
-            <Flex
+            <DataStudio
               src={
                 isMobile
                   ? 'https://datastudio.google.com/embed/reporting/8f3baa69-b193-41be-9d4f-ffcbc08d691a/page/p_0h786h6otc'
                   : 'https://datastudio.google.com/embed/reporting/f0ba2360-88f4-468a-8306-1923dd49f8a8/page/p_0h786h6otc'
               }
-              as={'iframe'}
-              w={'full'}
-              h={'full'}
-              overflow={'hidden'}
-              rounded={'2xl'}
             />
           )}
           {diagramShown === 1 && (
+            <DataStudio
+              src={
+                'https://datastudio.google.com/embed/reporting/f0ba2360-88f4-468a-8306-1923dd49f8a8/page/p_va7gtbqnyc'
+              }
+            />
+          )}
+          {diagramShown === 2 && (
             <ReactFlowDiagram
               edges={isMobile ? generalEdgesMobile : generalEdges}
               nodes={isMobile ? generalNodesMobile : generalNodes}
               isMobile={isMobile}
             />
           )}
-          {diagramShown === 2 && (
+          {diagramShown === 3 && (
             <ReactFlowDiagram
               edges={isMobile ? bondingEdgesMobile : bondingEdges}
               nodes={isMobile ? bondingNodesMobile : bondingNodes}
               isMobile={isMobile}
             />
           )}
-          {diagramShown === 3 && (
+          {diagramShown === 4 && (
             <ReactFlowDiagram
               edges={isMobile ? stakingEdgesMobile : stakingEdges}
               nodes={isMobile ? stakingNodesMobile : stakingNodes}
