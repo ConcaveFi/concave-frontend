@@ -129,7 +129,9 @@ export function TransparencyDiagram() {
           {diagramShown === 1 && (
             <DataStudio
               src={
-                'https://datastudio.google.com/embed/reporting/f0ba2360-88f4-468a-8306-1923dd49f8a8/page/p_va7gtbqnyc'
+                isMobile
+                  ? 'https://datastudio.google.com/embed/reporting/8f3baa69-b193-41be-9d4f-ffcbc08d691a/page/p_hjeiqnsnyc'
+                  : 'https://datastudio.google.com/embed/reporting/f0ba2360-88f4-468a-8306-1923dd49f8a8/page/p_va7gtbqnyc'
               }
             />
           )}
