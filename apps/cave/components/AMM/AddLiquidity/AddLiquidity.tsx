@@ -41,15 +41,16 @@ export type LiquidityPool = {
   amount1: CurrencyAmount<Currency>
 }
 
-function AddLiquidityContent({
-  liquidityModalClose,
-  currencies,
-  onChangeCurrencies,
-}: {
+export type AddLiquidityContentProps = {
   currencies: [Currency, Currency]
   onChangeCurrencies?: (currencies: [Currency, Currency]) => void
   liquidityModalClose?: VoidFunction
-}) {
+}
+function AddLiquidityContent({
+  currencies,
+  onChangeCurrencies,
+  liquidityModalClose,
+}: AddLiquidityContentProps) {
   const {
     pair,
     firstFieldAmount,
@@ -181,6 +182,11 @@ export const AddLiquidityModalButton = ({
 }: { label?: string; pair?: Pair } & ButtonProps) => {
   const { isDisconnected } = useAccount()
   const addLiquidityDisclosure = useDisclosure()
+  const queryCurrencies = useQueryCurrencies()
+  const currencies: [Currency, Currency] = pair
+    ? [pair?.token0, pair?.token1]
+    : queryCurrencies.currencies
+
   if (isDisconnected) return <ConnectButton />
   return (
     <>
@@ -214,7 +220,8 @@ export const AddLiquidityModalButton = ({
         }}
       >
         <AddLiquidityContent
-          currencies={[pair?.token0, pair?.token1]}
+          currencies={currencies}
+          onChangeCurrencies={!pair ? queryCurrencies.onChangeCurrencies : undefined}
           liquidityModalClose={addLiquidityDisclosure.onClose}
         />
       </Modal>
