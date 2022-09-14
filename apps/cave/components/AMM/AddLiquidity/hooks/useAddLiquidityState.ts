@@ -51,11 +51,11 @@ export const useAddLiquidityState = (
   const { onChangeField, lastUpdated } = useLinkedCurrencyFields({
     currencies,
     onChangeCurrencies,
-    onChangeAmount: (enteredAmount) => {
-      const otherField = lastUpdated === 0 ? 1 : 0
+    onChangeAmount: (enteredAmount, field) => {
+      const otherField = field === 0 ? 1 : 0
       setAmounts((amounts) =>
         updateArray({
-          [lastUpdated]: enteredAmount.quotient,
+          [field]: enteredAmount.quotient,
           [otherField]:
             deriveAmount(pair.data, enteredAmount, currencies[otherField]) || amounts[otherField],
         }),
