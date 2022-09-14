@@ -16,7 +16,7 @@ import { useQueryCurrencies } from '../hooks/useQueryCurrencies'
 import { NetworkMismatch } from '../NetworkMismatch'
 import { useAddLiquidityState } from './hooks/useAddLiquidityState'
 import { useAddLiquidityTransaction } from './hooks/useAddLiquidityTransaction'
-import useLiquidityData from './hooks/useLiquidityData'
+import { useLiquidityData } from './hooks/useLiquidityData'
 
 const AddSymbol = () => (
   <Flex align="center" justify="center">
@@ -36,7 +36,7 @@ const AddSymbol = () => (
 )
 
 export type LiquidityPool = {
-  pair: Pair
+  pair?: Pair
   amount0: CurrencyAmount<Currency>
   amount1: CurrencyAmount<Currency>
 }
@@ -69,14 +69,8 @@ function AddLiquidityContent({
     supplyLiquidityDisclosure.onOpen,
   )
 
-  let fixedPair = pair.data
-
-  if (firstFieldAmount?.currency && secondFieldAmount?.currency && !pair.data) {
-    fixedPair = Pair.createVirtualPair(firstFieldAmount, secondFieldAmount)
-  }
-
   const lpData = useLiquidityData({
-    pair: fixedPair,
+    pair: pair.data,
     amount0: firstFieldAmount,
     amount1: secondFieldAmount,
   })
