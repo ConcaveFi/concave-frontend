@@ -1,6 +1,7 @@
 import { SpinnerIcon } from '@concave/icons'
 import { Button, Flex, Image, keyframes, Text, useDisclosure } from '@concave/ui'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
+import { useUnstoppableDomain } from 'hooks/useUnstoppableDomain'
 import { formatAddress } from 'utils/formatAddress'
 import { useAccount, useEnsName, useNetwork } from 'wagmi'
 import { YourWalletModal } from './YourWalletModal'
@@ -15,6 +16,7 @@ export const ConnectedUserButton = () => {
   const { address } = useAccount()
   const { chain } = useNetwork()
   const { data: ens } = useEnsName({ address })
+  const { data: uns } = useUnstoppableDomain({ address })
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { hasPendingTransactions } = useTransactionRegistry()
 
@@ -38,7 +40,7 @@ export const ConnectedUserButton = () => {
           mr={2}
         />
         <Text noOfLines={1} wordBreak="break-all" whiteSpace="normal" maxW="60%">
-          {ens || formatAddress(address)}
+          {ens || uns || formatAddress(address)}
         </Text>
         {hasPendingTransactions && (
           <Flex position="absolute" right={4}>
