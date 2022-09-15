@@ -11,7 +11,7 @@ export type CurrencyApproveState = ReturnType<typeof useCurrencyApprove>
 export const useCurrencyApprove = (
   amount: CurrencyAmount<Currency>,
   spender: string,
-  { amountInfo = false, enablePermit = false, ttl = 60 * 30 } = {},
+  { amountInfo = false, enablePermit = false, ttl = 30 } = {},
 ) => {
   const { address } = useAccount()
   const connectModal = useConnectModal()
@@ -23,7 +23,7 @@ export const useCurrencyApprove = (
     currency?.wrapped,
     spender,
     amount?.quotient.toString(),
-    { deadline: Math.floor(new Date().getTime() / 1000) + ttl },
+    { deadline: Math.floor(new Date().getTime() / 1000) + ttl * 60 },
   )
   const disabled = true
   const isLoading = true
