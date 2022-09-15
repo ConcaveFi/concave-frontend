@@ -28,10 +28,7 @@ export function StakeInput({ onClose, poolId }: { poolId: number; onClose: () =>
   const lockTransaction = useTransaction(
     async () => {
       const amount = stakeInput.numerator.toString()
-      return contract.lockWithPermit(signer, address, amount, poolId, {
-        deadline: currencyState.permit.signedPermit.expiry,
-        ...currencyState.permit.signedPermit,
-      })
+      return contract.lock(signer, address, amount, poolId, currencyState.permit.signedPermit)
     },
     {
       meta: {

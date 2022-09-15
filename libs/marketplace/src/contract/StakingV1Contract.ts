@@ -31,10 +31,18 @@ export class StakingV1Contract {
     address: string,
     amount: BigNumberish,
     poolId: BigNumberish,
+    signature?: {
+      deadline?: number
+      v: number
+      r: string
+      s: string
+    },
   ): Promise<ethers.Transaction & { wait: (confirmations) => unknown }> {
+    if (signature) {
+      return this.lockWithPermit(signer, address, amount, poolId, signature)
+    }
     return this.contract.connect(signer).lock(address, amount, poolId)
   }
-
   public async lockWithPermit(
     signer: ethers.Signer,
     address: string,
