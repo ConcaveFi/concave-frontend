@@ -1,5 +1,6 @@
 import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/providers'
-import { CurrencyAmount, RouterAbi, ROUTER_ADDRESS, Token } from '@concave/core'
+import { Currency, CurrencyAmount, RouterAbi, ROUTER_ADDRESS, Token } from '@concave/core'
+import { PermitSignature } from '@concave/gemswap-sdk'
 import { BigNumber, ethers } from 'ethers'
 import { parseUnits } from 'ethers/lib/utils'
 import { concaveProvider } from 'lib/providers'
@@ -24,12 +25,12 @@ export class Router {
     const tmp = this.contract.connect(this.signer)
     return tmp.addLiquidityETH(
       tokenAmount.currency.address,
-      parseUnits(tokenAmount.toFixed(tokenAmount.currency.decimals)),
-      '0',
-      '0',
+      tokenAmount.quotient.toString(),
+      0,
+      0,
       to,
       deadLine,
-      { ...extra, value: ethAmount.sub(9000000000000).toString() },
+      { ...extra, value: ethAmount },
     )
   }
 
@@ -63,59 +64,89 @@ export class Router {
       .addLiquidity(
         amountA.currency.wrapped.address,
         amountB.currency.wrapped.address,
-        parseUnits(amountA.toFixed(amountA.currency.decimals)),
-        parseUnits(amountA.toFixed(amountA.currency.decimals)),
-        parseUnits('0', amountA.currency.decimals),
-        parseUnits('0', amountA.currency.decimals),
+        amountA.quotient.toString(),
+        amountB.quotient.toString(),
+        0,
+        0,
         to,
         deadLine,
-        { ...extra, gasPrice: 50000000, value: 0.01 },
+        { ...extra },
       )
   }
 
   public async removeLiquidity(
-    tokenA: Token,
-    tokenB: Token,
+    amountA: CurrencyAmount<Currency>,
+    amountB: CurrencyAmount<Currency>,
     liquidity: BigNumber,
     to: string,
-    extra: {
-      gasLimit?: number
-    } = {},
+    signature?: PermitSignature,
   ): Promise<ethers.Transaction> {
-    const deadLine = Math.round(Date.now() / 1000) + 86400
+    if (amountB.currency.isNative || amountA.currency.isNative) {
+      return this.removeLiquidityETH([amountA, amountB], liquidity, to, signature)
+    }
+    if (signature)
+      return this.contract
+        .connect(this.signer)
+        .removeLiquidityWithPermit(
+          amountA.currency.wrapped.address,
+          amountB.currency.wrapped.address,
+          liquidity,
+          amountA.quotient.toString(),
+          amountB.quotient.toString(),
+          to,
+          signature.deadline,
+          false,
+          signature.v,
+          signature.r,
+          signature.s,
+        )
     return this.contract
       .connect(this.signer)
       .removeLiquidity(
-        tokenA.address,
-        tokenB.address,
+        amountA.currency.wrapped.address,
+        amountB.currency.wrapped.address,
         liquidity,
-        parseUnits(`0`, tokenA.decimals),
-        parseUnits(`0`, tokenB.decimals),
+        amountA.quotient.toString(),
+        amountB.quotient.toString(),
         to,
-        deadLine,
-        extra,
+        Math.floor(Date.now() / 1000 + 300),
       )
   }
 
-  public async removeLiquidityETH(
-    token: Token,
+  private async removeLiquidityETH(
+    [amountA, amountB]: CurrencyAmount<Currency>[],
     liquidity: BigNumber,
     to: string,
-    extra: {
-      gasLimit?: number
-    } = {},
+    signature?: PermitSignature,
   ): Promise<ethers.Transaction> {
-    const deadLine = Math.round(Date.now() / 1000) + 86400
+    const [nativeAmount, tokenAmount] = amountA.currency.isNative
+      ? [amountA, amountB.wrapped]
+      : [amountB, amountA.wrapped]
+
+    if (signature)
+      return this.contract
+        .connect(this.signer)
+        .removeLiquidityETHWithPermit(
+          tokenAmount.currency.address,
+          liquidity,
+          tokenAmount.quotient.toString(),
+          nativeAmount.quotient.toString(),
+          to,
+          signature.deadline,
+          false,
+          signature.v,
+          signature.r,
+          signature.s,
+        )
     return this.contract
       .connect(this.signer)
       .removeLiquidityETH(
-        token.address,
+        tokenAmount.currency.address,
         liquidity,
-        parseUnits(`0`, token.decimals),
-        parseUnits(`0`, 18),
+        tokenAmount.quotient.toString(),
+        nativeAmount.quotient.toString(),
         to,
-        deadLine,
-        extra,
+        Math.floor(Date.now() / 1000 + 300),
       )
   }
 }

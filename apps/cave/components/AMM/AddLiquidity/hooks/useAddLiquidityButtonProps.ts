@@ -62,6 +62,12 @@ export const useAddLiquidityButtonProps = (
     }
 
   /*
+    Invalid Native
+  */
+  if (amount0.currency.wrapped.address === amount1.currency.wrapped.address)
+    return { children: 'Invalid pair', isDisabled: true }
+
+  /*
     Create Pair
   */
   if (!pair.data)

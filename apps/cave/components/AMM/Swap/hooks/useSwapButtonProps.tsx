@@ -1,7 +1,7 @@
-import { Currency, ROUTER_ADDRESS } from '@concave/core'
+import { Currency } from '@concave/core'
 import { Trade, TradeType } from '@concave/gemswap-sdk'
 import { ButtonProps } from '@concave/ui'
-import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
+import { CurrencyApproveState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { isAddress } from 'ethers/lib/utils'
 import { swapSupportedChains } from 'pages/gemswap'
 import { toPercent } from 'utils/toPercent'
@@ -14,22 +14,21 @@ export const useSwapButtonProps = ({
   trade,
   error,
   recipient,
+  currencyApprove,
   onSwapClick,
 }: {
   trade: Trade<Currency, Currency, TradeType>
   error: string
+  currencyApprove: CurrencyApproveState
   recipient: string
   onSwapClick: () => void
 }): ButtonProps => {
   const { isConnecting } = useAccount()
   const { chain } = useNetwork()
   const currencyIn = trade.inputAmount?.currency
-  const useCurrencyState = useCurrencyButtonState(
-    trade.inputAmount,
-    ROUTER_ADDRESS[trade.inputAmount?.currency.chainId],
-  )
+
   const isExpertMode = useSwapSettings((s) => s.settings.expertMode)
-  if (useCurrencyState.state === 'disconected') return useCurrencyState.buttonProps
+  if (currencyApprove.state === 'disconected') return currencyApprove.buttonProps
   /*
     Not Connected
   */
@@ -86,7 +85,7 @@ export const useSwapButtonProps = ({
 
   if (recipient && !isAddress(recipient)) return { children: 'Invalid recipient', isDisabled: true }
 
-  if (!useCurrencyState.approved) return useCurrencyState.buttonProps
+  if (!currencyApprove.approved) return currencyApprove.buttonProps
 
   /*
     Swap

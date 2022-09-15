@@ -17,6 +17,7 @@ import {
 } from 'wagmi'
 import { useTransaction } from './TransactionsRegistry/useTransaction'
 import { useCurrentSupportedNetworkId } from './useCurrentSupportedNetworkId'
+import { usePermit } from './usePermit'
 
 export const useAllowance = (token: Token, spender: string, userAddress: string) => {
   const {
@@ -92,16 +93,21 @@ export const useApprove = (
   token: Token,
   spender: string,
   amount: BigNumberish = MaxUint256.toString(),
+  { deadline }: { deadline: number },
 ) => {
   const { address, isConnecting } = useAccount()
   const allowance = useAllowance(token, spender, address)
   const approve = useContractApprove(token, spender, amount, {
     onSuccess: () => allowance.refetch(),
   })
-
+  const permit = usePermit(
+    CurrencyAmount.fromRawAmount(token, amount.toString()),
+    spender,
+    deadline,
+  )
   return useMemo(
-    () => ({ allowance, ...approve, isFetching: isConnecting || allowance.isLoading }),
-    [allowance, approve, isConnecting],
+    () => ({ allowance, ...approve, permit, isFetching: isConnecting || allowance.isLoading }),
+    [allowance, approve, isConnecting, permit],
   )
 }
 

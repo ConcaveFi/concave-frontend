@@ -16,7 +16,7 @@ import { useQueryCurrencies } from '../hooks/useQueryCurrencies'
 import { NetworkMismatch } from '../NetworkMismatch'
 import { useAddLiquidityState } from './hooks/useAddLiquidityState'
 import { useAddLiquidityTransaction } from './hooks/useAddLiquidityTransaction'
-import useLiquidityData from './hooks/useLiquidityData'
+import { useLiquidityData } from './hooks/useLiquidityData'
 
 const AddSymbol = () => (
   <Flex align="center" justify="center">
@@ -36,20 +36,21 @@ const AddSymbol = () => (
 )
 
 export type LiquidityPool = {
-  pair: Pair
+  pair?: Pair
   amount0: CurrencyAmount<Currency>
   amount1: CurrencyAmount<Currency>
 }
 
-function AddLiquidityContent({
-  liquidityModalClose,
-  currencies,
-  onChangeCurrencies,
-}: {
+export type AddLiquidityContentProps = {
   currencies: [Currency, Currency]
   onChangeCurrencies?: (currencies: [Currency, Currency]) => void
   liquidityModalClose?: VoidFunction
-}) {
+}
+function AddLiquidityContent({
+  currencies,
+  onChangeCurrencies,
+  liquidityModalClose,
+}: AddLiquidityContentProps) {
   const {
     pair,
     firstFieldAmount,
@@ -69,14 +70,8 @@ function AddLiquidityContent({
     supplyLiquidityDisclosure.onOpen,
   )
 
-  let fixedPair = pair.data
-
-  if (firstFieldAmount?.currency && secondFieldAmount?.currency && !pair.data) {
-    fixedPair = Pair.createVirtualPair(firstFieldAmount, secondFieldAmount)
-  }
-
   const lpData = useLiquidityData({
-    pair: fixedPair,
+    pair: pair.data,
     amount0: firstFieldAmount,
     amount1: secondFieldAmount,
   })
@@ -187,6 +182,11 @@ export const AddLiquidityModalButton = ({
 }: { label?: string; pair?: Pair } & ButtonProps) => {
   const { isDisconnected } = useAccount()
   const addLiquidityDisclosure = useDisclosure()
+  const queryCurrencies = useQueryCurrencies()
+  const currencies: [Currency, Currency] = pair
+    ? [pair?.token0, pair?.token1]
+    : queryCurrencies.currencies
+
   if (isDisconnected) return <ConnectButton />
   return (
     <>
@@ -220,7 +220,8 @@ export const AddLiquidityModalButton = ({
         }}
       >
         <AddLiquidityContent
-          currencies={[pair?.token0, pair?.token1]}
+          currencies={currencies}
+          onChangeCurrencies={!pair ? queryCurrencies.onChangeCurrencies : undefined}
           liquidityModalClose={addLiquidityDisclosure.onClose}
         />
       </Modal>

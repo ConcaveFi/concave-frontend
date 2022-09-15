@@ -3,6 +3,7 @@ import { Router, Trade, TradeType } from '@concave/gemswap-sdk'
 import { TransactionResponse } from '@ethersproject/abstract-provider'
 import { isAddress } from 'ethers/lib/utils'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
+import { UsePermiReturn } from 'hooks/usePermit'
 import { useMemo } from 'react'
 import { toPercent } from 'utils/toPercent'
 import { useAccount, useContractWrite, useNetwork } from 'wagmi'
@@ -12,6 +13,7 @@ export const useSwapTransaction = (
   _trade: Trade<Currency, Currency, TradeType>,
   recipient: string,
   { onSuccess }: { onSuccess?: (tx: TransactionResponse) => void },
+  permit?: UsePermiReturn,
 ) => {
   const { address } = useAccount()
   const { chain } = useNetwork()
@@ -33,16 +35,18 @@ export const useSwapTransaction = (
       return undefined
     }
   }, [_trade])
-
   const swapParams = useMemo(() => {
+    const { signedPermit } = permit
     if (trade && address)
       return Router.swapCallParameters(trade, {
         allowedSlippage: toPercent(settings.slippageTolerance),
-        ttl: +settings.deadline * 60,
+        ttl: settings.deadline * 60,
         feeOnTransfer: trade.tradeType === TradeType.EXACT_INPUT,
         recipient: isAddress(recipient) ? recipient : address,
+        signature: signedPermit,
+        deadline: signedPermit?.deadline || signedPermit?.expiry,
       })
-  }, [trade, settings, recipient, address])
+  }, [permit, trade, address, settings.slippageTolerance, settings.deadline, recipient])
 
   const { registerTransaction } = useTransactionRegistry()
 

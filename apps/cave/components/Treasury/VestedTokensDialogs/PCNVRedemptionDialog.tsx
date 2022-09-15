@@ -1,5 +1,14 @@
 import { PCNV, PCNVContract } from '@concave/core'
-import { useDisclosure } from '@concave/ui'
+import { QuestionIcon } from '@concave/icons'
+import {
+  Card,
+  Flex,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  Text,
+  useDisclosure,
+} from '@concave/ui'
 import { TransactionResponse } from '@ethersproject/providers'
 import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
@@ -9,7 +18,8 @@ import { formatEther, parseEther } from 'ethers/lib/utils'
 import { useGet_Amm_Cnv_InfosQuery } from 'graphql/generated/graphql'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { formatFixed } from 'utils/bigNumberMask'
 import { useAccount, useProvider, useSigner } from 'wagmi'
 import { usePCNVUserData } from '../Hooks/usePCNVUserData'
 import useVestedTokens from '../Hooks/useVestedTokens'
@@ -49,8 +59,36 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
     setStatus('default')
     onCloseTransactionModal()
   }
-  const [amount, setAmount] = useState<BigNumber>(BigNumber.from(0))
+  const [amount, setAmount] = useState<BigNumber>(pCNVData?.redeemable || BigNumber.from(0))
   const [redeemMax, setRedeemMax] = useState(false)
+
+  const [curValue, setCurValue] = useState(pCNVData?.redeemable)
+  const cnvAmount = (+formatEther(curValue || 0) * pCNVToCNVDifference)?.toFixed(12) || '0'
+  const conversion = formatFixed(parseEther(pCNVToCNVDifference?.toFixed(12) || '0'), { places: 5 })
+  const totalSupplyFormatted = formatFixed(
+    parseEther(data?.cnvData?.data?.totalSupply?.toString() || '0'),
+  )
+  const pCNVToken = PCNV[chainId]
+  const amountToReceive = {
+    loading: 'calculating',
+    error: '---',
+    success: formatFixed(parseEther(cnvAmount), { places: 5 }) + ' CNV',
+  }[cnvDataStatus]
+  const conversionLabel = {
+    loading: `1 ${pCNVToken.symbol} = calculating`,
+    error: 'error calculating conversion',
+    success: `1 ${pCNVToken?.symbol} = ${conversion} CNV`,
+  }[cnvDataStatus]
+  const [updatedCurValue, setUpdatedCurValue] = useState(false)
+  useEffect(() => {
+    if (!pCNVData?.redeemable) return
+    if (updatedCurValue) return
+    console.log('teste')
+
+    setCurValue(pCNVData.redeemable)
+    setUpdatedCurValue(true)
+  }, [pCNVData])
+
   return (
     <>
       <VestedTokenDialog
@@ -60,10 +98,24 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
         onRedeem={openConfirmModal}
         status={status}
         tokenUserData={{ ...pCNVData, balance }}
-        token={PCNV[chainId]}
-        conversionToCNV={pCNVToCNVDifference || 0}
-        cnvDataStatus={cnvDataStatus}
-      />
+        token={pCNVToken}
+        onChangeValue={setCurValue}
+      >
+        {!!cnvDataStatus && (
+          <Flex gap={2} fontWeight={'bold'}>
+            <Text textColor={'text.low'}>{'You will receive'}</Text>
+            <Text textColor={'text.accent'}>{amountToReceive}</Text>
+          </Flex>
+        )}
+        {!!cnvDataStatus && (
+          <Flex gap={2} align="center">
+            <Text fontSize={'sm'} color={'text.accent'} fontWeight="bold" opacity={0.5}>
+              {conversionLabel}
+            </Text>
+            <PCNVInfoIcon />
+          </Flex>
+        )}
+      </VestedTokenDialog>
 
       <TransactionErrorDialog
         error={{ rejected: 'Transaction rejected' }[status] || 'An error occurred'}
@@ -110,4 +162,34 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
         else setStatus('error')
       })
   }
+}
+const PCNVInfoIcon = () => {
+  return (
+    <Popover trigger="hover">
+      <PopoverTrigger>
+        <Flex cursor={'pointer'} rounded="full">
+          <QuestionIcon />
+        </Flex>
+      </PopoverTrigger>
+
+      <PopoverContent w="220px">
+        <Card
+          shadow={'up'}
+          css={{ ':after': { opacity: 1 } }}
+          py={3}
+          px={5}
+          position={'absolute'}
+          width={'220px'}
+          height="80px"
+          justify={'center'}
+          variant="secondary"
+        >
+          <Text color={'text.small'} fontSize="xs" textAlign={'justify'} fontWeight="bold">
+            pCNV is a claim on 10% of the total current CNV supply and is on a 24 month full vest
+            cycle.
+          </Text>
+        </Card>
+      </PopoverContent>
+    </Popover>
+  )
 }

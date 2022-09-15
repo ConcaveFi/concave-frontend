@@ -1,4 +1,4 @@
-import { CHAIN_NAME, PCNV } from '@concave/core'
+import { CHAIN_NAME, PCNV, ROUTER_ADDRESS } from '@concave/core'
 import { Button, Card, Collapse, Text, useDisclosure } from '@concave/ui'
 import { AddTokenToWalletButton } from 'components/AddTokenToWalletButton'
 import {
@@ -12,6 +12,7 @@ import {
   useSwapTransaction,
 } from 'components/AMM'
 import { useSwapSettings } from 'components/AMM/Swap/Settings'
+import { useCurrencyApprove } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
 import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
@@ -27,6 +28,15 @@ import { TradeDetails } from './TradeDetails'
 export function SwapCard() {
   const { trade, error, onChangeInput, onChangeOutput, switchFields, onReset } = useSwapState()
 
+  const { deadline: ttl } = useSwapSettings((s) => ({
+    deadline: s.settings.deadline,
+  }))
+
+  const currencyApprove = useCurrencyApprove(
+    trade.inputAmount,
+    ROUTER_ADDRESS[trade.inputAmount?.currency.chainId],
+    { enablePermit: true, ttl },
+  )
   const [recipient, setRecipient] = useState('')
   const {
     onOpen: openConfirmationModal,
@@ -34,19 +44,24 @@ export function SwapCard() {
     isOpen: isConfirmationModalOpen,
   } = useDisclosure()
 
-  const swapTx = useSwapTransaction(trade, recipient, {
-    onSuccess: (tx) => {
-      onChangeInput(toAmount(0, trade.inputAmount.currency))
-      closeConfirmationModal()
+  const swapTx = useSwapTransaction(
+    trade,
+    recipient,
+    {
+      onSuccess: (tx) => {
+        onChangeInput(toAmount(0, trade.inputAmount.currency))
+        closeConfirmationModal()
+      },
     },
-  })
+    currencyApprove.permit,
+  )
 
   const isExpertMode = useSwapSettings((s) => s.settings.expertMode)
-
   const swapButtonProps = useSwapButtonProps({
     trade,
     error,
     recipient,
+    currencyApprove,
     onSwapClick: useCallback(
       () => (isExpertMode ? swapTx.write() : openConfirmationModal()),
       [isExpertMode, swapTx, openConfirmationModal],
@@ -58,6 +73,7 @@ export function SwapCard() {
   return (
     <>
       <Card
+        key={`swap-${networkId}`}
         p={6}
         gap={2}
         variant="primary"

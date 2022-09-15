@@ -2,7 +2,7 @@ import { BOND_ADDRESS, CNV, Currency, CurrencyAmount, DAI } from '@concave/core'
 import { Button, Card, Flex, HStack, Text, useDisclosure, VStack } from '@concave/ui'
 import { AddTokenToWalletButton } from 'components/AddTokenToWalletButton'
 import { GasPrice } from 'components/AMM'
-import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
+import { useCurrencyApprove } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { CurrencyInputField as BondInput } from 'components/CurrencyAmountField'
 import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
 
@@ -32,7 +32,7 @@ export function BondBuyCard(props: {
   const settings = useBondSettings((s) => s.settings)
   const [amountOut, setAmountOut] = useState<string>()
   const [amountIn, setAmountIn] = useState<CurrencyAmount<Currency>>(toAmount('0', DAI[networkId]))
-  const useCurrencyState = useCurrencyButtonState(amountIn, BOND_ADDRESS[networkId])
+  const currencyApprove = useCurrencyApprove(amountIn, BOND_ADDRESS[networkId])
 
   useEffect(() => {
     setAmountIn(toAmount(0, DAI[networkId]))
@@ -43,8 +43,8 @@ export function BondBuyCard(props: {
     async () => await getBondSpotPrice(networkId),
     { enabled: !!networkId, refetchInterval: 17000 },
   )
-  const bondButtonState = !useCurrencyState.approved
-    ? useCurrencyState.buttonProps
+  const bondButtonState = !currencyApprove.approved
+    ? currencyApprove.buttonProps
     : { onClick: confirmModal.onOpen, children: 'Bond' }
 
   const bondTransaction = useTransaction(
@@ -165,7 +165,7 @@ export function BondBuyCard(props: {
       >
         <AddTokenToWalletButton token={currencyOut} />
       </TransactionSubmittedDialog>
-      <TransactionErrorDialog error={bondTransaction.error} {...rejectDisclosure} />
+      <TransactionErrorDialog error={bondTransaction.error?.reason} {...rejectDisclosure} />
     </Card>
   )
 }

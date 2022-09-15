@@ -1,5 +1,5 @@
+import { CurrencyAmount, Token } from '@concave/core'
 import { Signer } from '@ethersproject/abstract-signer'
-import { MaxUint256 } from '@ethersproject/constants'
 import { Contract } from '@ethersproject/contracts'
 import { Wallet } from '@ethersproject/wallet'
 
@@ -7,7 +7,7 @@ interface PermitAllowedMessage {
   holder: string
   spender: string
   nonce: number
-  expiry: number | string
+  expiry: number
   allowed?: boolean
 }
 
@@ -16,7 +16,7 @@ interface PermitAmountMessage {
   spender: string
   value: number | string
   nonce: number | string
-  deadline: number | string
+  deadline: number
 }
 
 interface Domain {
@@ -107,10 +107,11 @@ const fetchTokenNameAndNonce = async (userAddress, tokenAddress, provider) => {
 
 export const signPermitAllowed = async (
   signer: Signer,
-  tokenAddress: string,
+  currencyAmount: CurrencyAmount<Token>,
   spenderAddress: string,
-  deadline: string = MaxUint256.toString(),
+  deadline: number,
 ): Promise<SignedPermitAllowed> => {
+  const tokenAddress = currencyAmount.currency.address
   const [userAddress, chainId] = await Promise.all([signer.getAddress(), signer.getChainId()])
 
   const { name, nonce } = await fetchTokenNameAndNonce(userAddress, tokenAddress, signer.provider)
@@ -132,13 +133,13 @@ export const signPermitAllowed = async (
 
 export const signPermitAmount = async (
   signer: Signer,
-  tokenAddress: string,
+  currencyAmount: CurrencyAmount<Token>,
   spenderAddress: string,
-  deadline: string = MaxUint256.toString(),
-  value: string = MaxUint256.toString(),
+  deadline: number,
 ): Promise<SignedPermitAmount> => {
+  const tokenAddress = currencyAmount.currency.address
   const [userAddress, chainId] = await Promise.all([signer.getAddress(), signer.getChainId()])
-
+  const value = currencyAmount.quotient.toString()
   const { name, nonce } = await fetchTokenNameAndNonce(userAddress, tokenAddress, signer.provider)
   const domain = { name, version: '1', chainId, verifyingContract: tokenAddress }
 

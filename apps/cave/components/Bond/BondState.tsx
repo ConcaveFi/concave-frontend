@@ -18,7 +18,6 @@ export const getBondAmountOut = async (
   // pass decimals argument where 18 is hardcoded
   const formattedInput = ethers.utils.parseUnits(input.toString(), 18)
   const amountOut = await bondingContract.getAmountOut(DAI, formattedInput)
-  console.log(amountOut)
   const ethValue = +ethers.utils.formatEther(amountOut)
 
   const cleanedOutput = ethValue.toFixed(4)

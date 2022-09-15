@@ -1,4 +1,5 @@
 import { Currency, CurrencyAmount, Percent, Token, validateAndParseAddress } from '@concave/core'
+import { BigNumberish } from '@ethersproject/bignumber'
 import invariant from 'tiny-invariant'
 import { Trade, TradeType } from './entities'
 
@@ -15,7 +16,8 @@ export interface TradeOptions {
    * This will be used to produce a `deadline` parameter which is computed from when the swap call parameters
    * are generated.
    */
-  ttl: number
+  deadline: number
+
   /**
    * The account that should receive the output of the swap.
    */
@@ -25,14 +27,36 @@ export interface TradeOptions {
    * Whether any of the tokens in the path are fee on transfer tokens, which should be handled with special methods
    */
   feeOnTransfer?: boolean
+
+  /**
+   * This will be used to produce a `deadline` parameter which is computed from when the swap call parameters
+   * are generated.
+   */
+  ttl: number
+  /**
+   * Signature, if present it will use other method
+   */
+  signature?: PermitSignature | PermitAllowSignature
 }
 
-export interface TradeOptionsDeadline extends Omit<TradeOptions, 'ttl'> {
-  /**
-   * When the transaction expires.
-   * This is an atlernate to specifying the ttl, for when you do not want to use local time.
-   */
-  deadline: number
+type VSR = {
+  v: number
+  r: string
+  s: string
+}
+export type PermitSignature = VSR & {
+  owner: string
+  spender: string
+  value: BigNumberish
+  deadline: BigNumberish
+}
+
+export type PermitAllowSignature = VSR & {
+  holder: string
+  spender: string
+  nonce: BigNumberish
+  expiry: BigNumberish
+  allowed: boolean
 }
 
 /**
@@ -46,7 +70,7 @@ export interface SwapParameters {
   /**
    * The arguments to pass to the method, all hex encoded.
    */
-  args: (string | string[])[]
+  args: (string | number | string[])[]
   /**
    * The amount of wei to send in hex.
    */
@@ -59,6 +83,22 @@ export function toHex(currencyAmount: CurrencyAmount<Currency>) {
 
 const ZERO_HEX = '0x0'
 
+const decoreWithPermit = (
+  method: string,
+  args: (string | number | string[])[],
+  { signature }: TradeOptions,
+): [string, (string | number | string[])[]] => {
+  if (!signature) {
+    return [method, args]
+  }
+  const { v, r, s } = signature
+  if (`owner` in signature) {
+    return [`${method}UsingPermit`, [...args, v, r, s]]
+  }
+  if ('holder' in signature) {
+    return [`${method}UsingPermitAllowed`, [...args, signature.nonce.toString(), v, r, s]]
+  }
+}
 /**
  * Represents the Uniswap V2 Router, and has static methods for helping execute trades.
  */
@@ -75,27 +115,22 @@ export abstract class Router {
    */
   public static swapCallParameters(
     trade: Trade<Currency, Currency, TradeType>,
-    options: TradeOptions | TradeOptionsDeadline,
+    options: TradeOptions,
   ): SwapParameters {
     const etherIn = trade.inputAmount.currency.isNative
     const etherOut = trade.outputAmount.currency.isNative
-    // the router does not support both ether in and out
+    const signature = options.signature
     invariant(!(etherIn && etherOut), 'ETHER_IN_OUT')
-    invariant(!('ttl' in options) || options.ttl > 0, 'TTL')
-
     const to: string = validateAndParseAddress(options.recipient)
     const amountIn: string = toHex(trade.maximumAmountIn(options.allowedSlippage))
     const amountOut: string = toHex(trade.minimumAmountOut(options.allowedSlippage))
     const path: string[] = trade.route.path.map((token: Token) => token.address)
-    const deadline =
-      'ttl' in options
-        ? `0x${(Math.floor(new Date().getTime() / 1000) + options.ttl).toString(16)}`
-        : `0x${options.deadline.toString(16)}`
 
-    const useFeeOnTransfer = Boolean(options.feeOnTransfer)
+    const deadline = options.deadline || Math.floor(Date.now() / 1000 + options.ttl)
+    const useFeeOnTransfer = Boolean(options.feeOnTransfer) && !signature
 
     let methodName: string
-    let args: (string | string[])[]
+    let args: (string | number | string[])[]
     let value: string
     switch (trade.tradeType) {
       case TradeType.EXACT_INPUT:
@@ -142,9 +177,10 @@ export abstract class Router {
         }
         break
     }
+    const [permitMethod, permitArgs] = decoreWithPermit(methodName, args, options)
     return {
-      methodName,
-      args,
+      methodName: permitMethod,
+      args: permitArgs,
       value,
     }
   }
