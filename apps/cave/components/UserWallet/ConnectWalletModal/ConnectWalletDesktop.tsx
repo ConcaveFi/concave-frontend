@@ -14,8 +14,9 @@ import {
   Text,
   useToken,
 } from '@concave/ui'
+import copy from 'copy-to-clipboard'
 import { useRouter } from 'next/router'
-import { FC, PropsWithChildren } from 'react'
+import { FC, PropsWithChildren, useCallback, useRef, useState } from 'react'
 import { QRCode } from 'react-qrcode-logo'
 import { MutationStatus } from 'react-query'
 import { Connector, useConnect } from 'wagmi'
@@ -24,8 +25,28 @@ import { filterConnectors } from './filterConnectors'
 import { useConnectorUri } from './useConnectorUri'
 import { WhatConnectWalletMeans } from './WhatConnectWalletMeans'
 
+const useCopyToClipboard = (contentToCopy, resetAfterMs = 1000): [boolean, VoidFunction] => {
+  const timeoutRef = useRef<NodeJS.Timeout>()
+  const [isCopied, setIsCopied] = useState(false)
+
+  const onCopy = useCallback(() => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+      setIsCopied(false)
+    }
+
+    copy(contentToCopy, { format: 'text/plain' })
+
+    setIsCopied(true)
+    timeoutRef.current = setTimeout(() => setIsCopied(false), resetAfterMs)
+  }, [contentToCopy, resetAfterMs])
+
+  return [isCopied, onCopy]
+}
+
 const QrCodeSize = 250
 const ScanQrCode: FC<{ qrCode: string; connector: Connector }> = ({ qrCode, connector }) => {
+  const [isCopied, onCopy] = useCopyToClipboard(qrCode)
   return (
     <>
       <Text fontFamily="heading" fontWeight="bold" fontSize="xl" textAlign="center">
@@ -43,6 +64,25 @@ const ScanQrCode: FC<{ qrCode: string; connector: Connector }> = ({ qrCode, conn
           size={QrCodeSize}
         />
       </Card>
+      {connector.id === 'walletConnect' && (
+        <Button
+          onClick={onCopy}
+          color={isCopied ? 'text.high' : 'text.low'}
+          position="absolute"
+          apply="background.metalBrighter"
+          shadow="up"
+          bottom={3.5}
+          px={4}
+          py={1}
+          fontSize="xs"
+          fontWeight="medium"
+          cursor="pointer"
+          _hover={{ color: 'text.high' }}
+          _focus={{ color: 'text.high', shadow: 'up' }}
+        >
+          {isCopied ? 'Copied!' : 'Copy to clipboard'}
+        </Button>
+      )}
     </>
   )
 }
