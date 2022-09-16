@@ -16,6 +16,7 @@ const calculateAutoSlippage = () => 1.2
 export const Settings = () => {
   const {
     settings: { slippageTolerance, deadline },
+    defaultSettings,
     onClose,
     setSetting,
     isDefaultSettings,
@@ -25,10 +26,15 @@ export const Settings = () => {
     <TransactionSettings isDefaultSettings={isDefaultSettings} onClose={onClose}>
       <SlippageTolerance
         value={slippageTolerance}
+        placeholder={defaultSettings.slippageTolerance}
         onValueChange={(slippageTolerance) => setSetting({ slippageTolerance })}
         onClickAuto={() => setSetting({ slippageTolerance: calculateAutoSlippage() })}
       />
-      <Deadline value={deadline} onValueChange={(deadline) => setSetting({ deadline })} />
+      <Deadline
+        value={deadline}
+        placeholder={defaultSettings.deadline}
+        onValueChange={(deadline) => setSetting({ deadline })}
+      />
     </TransactionSettings>
   )
 }

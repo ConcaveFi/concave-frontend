@@ -19,8 +19,8 @@ export const useSwapTransaction = (
   const { chain } = useNetwork()
 
   const settings = useSwapSettings((s) => ({
-    deadline: s.settings.deadline,
-    slippageTolerance: s.settings.slippageTolerance,
+    ...s.defaultSettings,
+    ...JSON.parse(JSON.stringify(s.settings)),
   }))
 
   /*

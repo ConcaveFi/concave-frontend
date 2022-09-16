@@ -14,6 +14,7 @@ import { toPercent } from 'utils/toPercent'
 
 type SlippageToleranceProps = {
   value: number
+  placeholder: number | string
   onValueChange: (value: number) => void
   onClickAuto: () => void
   maxSlippage?: number
@@ -21,6 +22,7 @@ type SlippageToleranceProps = {
 
 export const SlippageTolerance = ({
   value,
+  placeholder,
   onValueChange,
   onClickAuto,
   maxSlippage = 50,
@@ -41,7 +43,7 @@ export const SlippageTolerance = ({
           <InputGroup px={3} variant="unstyled" size="sm" h="full">
             <NumericInput
               value={value}
-              placeholder="0.50"
+              placeholder={`${placeholder}`}
               variant="unstyled"
               decimalScale={2}
               isAllowed={({ value, floatValue }) =>
