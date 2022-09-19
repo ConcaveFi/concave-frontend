@@ -11,7 +11,7 @@ export const MarketplaceSortConainer: FC<MarketplaceSortConainerProps> = ({
   const hideLabel = useBreakpointValue({ base: false, md: false, xl: false, '2xl': false })
 
   return (
-    <Flex justifyContent={'space-evenly'} flexWrap={'wrap'} width={'full'} gap={4}>
+    <Flex justifyContent={'space-between'} flexWrap={'wrap'} width={'full'} gap={4}>
       {hideLabel && (
         <Text color={'text.low'} noOfLines={1} fontWeight={`bold`}>
           Sort by:
