@@ -27,7 +27,7 @@ export function MarketplaceFilterContainer({
         justifyContent={'space-evenly'}
         flexWrap={'wrap'}
         width={'full'}
-        gap={4}
+        gap={1.5}
         rounded={'inherit'}
         shadow="down"
         p={2}
