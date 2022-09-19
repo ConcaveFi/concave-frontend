@@ -28,6 +28,8 @@ export const MakeplaceStakeFilter: FC<MakeplaceStakeFilterProps> = ({
       rounded={'2xl'}
       minW={'175px'}
       w={`full`}
+      py={2}
+      pr={2}
       shadow="Up Small"
       fontSize={'sm'}
       cursor="pointer"
@@ -36,13 +38,22 @@ export const MakeplaceStakeFilter: FC<MakeplaceStakeFilterProps> = ({
     >
       <Image
         my={'auto'}
-        width={'auto'}
-        height={'90px'}
+        width={{
+          base: '100px',
+          sm: '80px',
+        }}
+        height={{
+          base: '50px',
+          sm: '40px',
+        }}
+        objectFit={`cover`}
         alt={`Image of stake ${stakingPools[poolId]?.days}`}
         src={`/assets/marketplace/${stakeImage[poolId]}`}
       />
-      <Flex ml={-1} direction={'column'} justify="center" align="start" lineHeight={'18px'}>
-        <Text color={'text.low'}>Stake period</Text>
+      <Flex direction={'column'} justify="center" align="start" lineHeight={'18px'}>
+        <Text fontSize={'sm'} color={'text.low'}>
+          Stake period
+        </Text>
         <Text fontWeight={'bold'}>{stakingPools[poolId]?.days} days</Text>
         <Text fontSize={'sm'} color={'text.low'}>
           APR

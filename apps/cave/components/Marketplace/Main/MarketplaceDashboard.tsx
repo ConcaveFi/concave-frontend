@@ -34,6 +34,7 @@ export const MarketplaceDashboard = (props: BoxProps) => {
         width={['100%', '100%', '100%', '100%', `800px`]}
         maxH={['full', 'full', 'full', 'full', '1000px']}
         p={4}
+        gap={4}
         borderRadius={'3xl'}
         w={'full'}
       >
@@ -54,7 +55,7 @@ export const MarketplaceDashboard = (props: BoxProps) => {
           shadow="down"
           w="full"
           p={4}
-          py={6}
+          py={4}
           textAlign={`center`}
           justify="start"
           overflowY={'scroll'}
