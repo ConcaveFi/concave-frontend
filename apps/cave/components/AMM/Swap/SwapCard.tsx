@@ -35,7 +35,7 @@ export function SwapCard() {
   const currencyApprove = useCurrencyApprove(
     trade.inputAmount,
     ROUTER_ADDRESS[trade.inputAmount?.currency.chainId],
-    { enablePermit: true, ttl },
+    { enablePermit: false, ttl },
   )
   const [recipient, setRecipient] = useState('')
   const {
