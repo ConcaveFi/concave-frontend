@@ -20,7 +20,7 @@ export const ConfirmUnlist = ({
   const insertMarketplace = useInsert_Marketplace_ListingMutation()
 
   const onSubmit = async () => {
-    const marketItem = staking.market
+    const marketItem = staking.market || market
     await insertMarketplace.mutateAsync({
       tokenID: marketItem.tokenId.toString(),
       signatureHash: marketItem.tokenId.toString(),
