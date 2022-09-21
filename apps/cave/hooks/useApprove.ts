@@ -97,7 +97,7 @@ export const useApprove = (
 ) => {
   const { address, isConnecting } = useAccount()
   const allowance = useAllowance(token, spender, address)
-  const approve = useContractApprove(token, spender, amount, {
+  const approve = useContractApprove(token, spender, MaxUint256.toString(), {
     onSuccess: () => allowance.refetch(),
   })
   const permit = usePermit(

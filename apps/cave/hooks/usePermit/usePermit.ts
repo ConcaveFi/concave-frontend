@@ -1,7 +1,7 @@
-import { CNV_ADDRESS, CurrencyAmount, DAI, DAI_ADDRESS, Token } from '@concave/core'
+import { CNV_ADDRESS, CurrencyAmount, DAI, Token } from '@concave/core'
 import { Signer } from 'ethers'
 import { useQuery } from 'react-query'
-import { chain, useSigner } from 'wagmi'
+import { useSigner } from 'wagmi'
 import { signPermitAllowed, signPermitAmount } from './permit'
 
 const signPermit = async (
@@ -33,7 +33,10 @@ const signPermit = async (
 /**
  * Our rinkeby DAI dont implements PermitAllowed
  */
-const PERMITTABLE_TOKENS = [...Object.values(CNV_ADDRESS), DAI_ADDRESS[chain.mainnet.id]]
+const PERMITTABLE_TOKENS = [
+  ...Object.values(CNV_ADDRESS),
+  // DAI_ADDRESS[chain.mainnet.id]
+]
 const isTokenPermissible = (token: Token) => {
   return !!PERMITTABLE_TOKENS.includes(token?.address)
 }
