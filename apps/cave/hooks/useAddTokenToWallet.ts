@@ -17,7 +17,7 @@ export interface injectedTokenResponse {
 }
 
 /**
- * tool to transform a number to a hex value for chain Id
+ * Tool to transform a number to a hex value for chain Id
  */
 export const toHex = (num: number) => {
   return '0x' + num.toString(16)
