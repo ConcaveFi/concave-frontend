@@ -6,6 +6,7 @@ import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId
 import Router from 'next/router'
 import { useQuery } from 'react-query'
 import getROI from 'utils/getROI'
+import { useAccount } from 'wagmi'
 
 const NavButton = (props: ButtonLinkProps) => {
   return (
@@ -93,6 +94,7 @@ const ButtonContainer = ({ children, ...props }) => (
 )
 
 function PageNav() {
+  const { address } = useAccount()
   return (
     <Flex direction="column" position="relative" gap="10px" w="100%" pl="32px">
       <NotInteractableImage
@@ -120,7 +122,7 @@ function PageNav() {
       <ButtonContainer>
         <NavButton href="/gemswap">Swap</NavButton>
         <SubnavButton href="/addliquidity">Add liquidity</SubnavButton>
-        <SubnavButton href="/pools">Your Pools</SubnavButton>
+        <SubnavButton href="/pools">{address ? `Your ` : ``}Pools</SubnavButton>
       </ButtonContainer>
     </Flex>
   )
