@@ -1,12 +1,24 @@
 import { Flex, Text, VStack } from '@chakra-ui/react'
+import { BoxProps } from '@concave/ui'
 import { Loading } from 'components/Loading'
 import { MarketplaceFilterContainer } from 'components/Marketplace/Main/MarketplaceFilterContainer'
+import { useRouter } from 'next/router'
 import { MarketplacePosition } from './MarketplacePosition'
+import { MarketplaceSortConainer } from './MarketplaceSortContainer'
+import { TokenIdSearchBar } from './TokenIdSearchBar'
 import { useMarketplaceDashbord } from './UseMarkeplaceState'
 
-export const MarketplaceDashboard = () => {
-  const { isFetching, nftPositions, stakeFilters, setSort, setStakeFilters } =
-    useMarketplaceDashbord()
+export const MarketplaceDashboard = (props: BoxProps) => {
+  const {
+    isFetching,
+    nftPositions,
+    stakeFilters,
+    sort,
+    setTokenIdFilter,
+    setSort,
+    setStakeFilters,
+  } = useMarketplaceDashbord()
+  const { push } = useRouter()
 
   const positions = nftPositions.map((stakingPosition) => (
     <MarketplacePosition
@@ -14,50 +26,56 @@ export const MarketplaceDashboard = () => {
       stakingPosition={stakingPosition}
     />
   ))
+
   return (
-    <VStack
-      width={'full'}
-      rounded={'2xl'}
-      apply="background.metalBrighter"
-      shadow={'up'}
-      p={4}
-      gap={4}
-    >
-      <MarketplaceFilterContainer
-        stakeFilters={stakeFilters}
-        onChangeSort={setSort}
-        onChangeStakeFilters={setStakeFilters}
-      />
-      <Flex
-        as={Loading}
-        size="md"
-        isLoading={isFetching}
-        rLabel=""
-        rounded={'inherit'}
-        shadow="down"
-        w="full"
-        h={'full'}
-        maxW="900px"
+    <>
+      <VStack
+        apply="background.metal"
+        width={['100%', '100%', '100%', '100%', `800px`]}
+        maxH={['full', 'full', 'full', 'full', '1000px']}
         p={4}
-        py={6}
-        justify="start"
-        overflowY={'auto'}
-        direction="column"
-        apply="scrollbar.big"
-        bg={'linear-gradient(238.35deg, #19394C 9.11%, #0A161F 92.45%)'}
         gap={4}
+        borderRadius={'3xl'}
+        w={'full'}
       >
-        {positions.length == 0 ? (
-          <>
-            <Text size={'lg'} fontWeight={'bold'}>
-              Not found results
-            </Text>
-            <Text>Check your filters</Text>
-          </>
-        ) : (
-          <>{positions}</>
-        )}
-      </Flex>
-    </VStack>
+        <MarketplaceFilterContainer
+          stakeFilters={stakeFilters}
+          onChangeStakeFilters={setStakeFilters}
+        />
+        <Flex width={'full'} gap={4}>
+          <MarketplaceSortConainer onChangeSort={setSort} currentSort={sort} />
+          <TokenIdSearchBar onApplyFilter={setTokenIdFilter} />
+        </Flex>
+        <Flex
+          as={Loading}
+          size="md"
+          isLoading={isFetching}
+          rLabel=""
+          rounded={'inherit'}
+          shadow="down"
+          w="full"
+          p={4}
+          py={4}
+          textAlign={`center`}
+          justify="start"
+          overflowY={'scroll'}
+          h={'auto'}
+          direction="column"
+          apply="scrollbar.big"
+          gap={4}
+        >
+          {positions.length == 0 ? (
+            <>
+              <Text size={'lg'} w={`full`} fontWeight={'bold'}>
+                No results found
+              </Text>
+              <Text>Check your filters</Text>
+            </>
+          ) : (
+            <>{positions}</>
+          )}
+        </Flex>
+      </VStack>
+    </>
   )
 }

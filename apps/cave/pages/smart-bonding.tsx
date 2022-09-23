@@ -25,9 +25,10 @@ import {
 import { Redeem } from 'components/Bond/Redeem'
 import { SelectedBondType } from 'components/Bond/SelectedBondType'
 import { withPageTransition } from 'components/PageTransition'
-import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
-import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
-import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
+import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
+import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
+
+import { WaitingConfirmationDialog } from 'components/TransactionDialog/TransactionWaitingConfirmationDialog'
 import { utils } from 'ethers'
 import { useGet_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
@@ -62,7 +63,12 @@ export function Bond() {
     onOpen: onOpenSubmitted,
   } = useDisclosure()
   const { isOpen: isOpenError, onClose: onCloseError, onOpen: onOpenError } = useDisclosure()
-  const { data: last10SoldsData, isLoading, error } = useGet_Accrualbondv1_Last10_SoldQuery()
+  const {
+    data: last10SoldsData,
+    isLoading,
+    error,
+    status,
+  } = useGet_Accrualbondv1_Last10_SoldQuery()
 
   function updateBondPositions() {
     getUserBondPositions(networkId, userAddress, currentBlockTs)
@@ -233,7 +239,7 @@ export function Bond() {
                   </>
                 )}
               </Card>
-              <BondSoldsCard loading={isLoading} error={error} data={last10SoldsData} />
+              <BondSoldsCard loading={isLoading} status={status} data={last10SoldsData} />
             </Card>
           </Box>
           <BondBuyCard

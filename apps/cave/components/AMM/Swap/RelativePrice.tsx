@@ -54,12 +54,12 @@ export const RelativePrice = ({
       {indicators === 'all' && <StatusIndicators query={relativePrice} />}
       {relativePrice.isSuccess && (
         <Flex gap={1} align="center" wrap="wrap">
-          <Text>
+          <Text fontSize={{ base: '12px', md: 'sm' }}>
             1 {relativePrice.price?.quoteCurrency.symbol} ={' '}
             {relativePrice.price?.invert().toFixed(2)} {relativePrice.price?.baseCurrency.symbol}
           </Text>
           {outputFiat.price && (
-            <Text textColor="text.low">
+            <Text fontSize={{ base: '12px', md: 'sm' }} textColor="text.low">
               (${outputFiat.price.toFixed(2, { groupSeparator: ',' })})
             </Text>
           )}

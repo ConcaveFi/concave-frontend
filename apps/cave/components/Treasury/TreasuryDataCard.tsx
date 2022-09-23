@@ -1,4 +1,4 @@
-import { Card, Flex, FlexProps, gradientBorder, Text } from '@concave/ui'
+import { Card, Flex, FlexProps, gradientBorder, Spinner, Text } from '@concave/ui'
 import { numberMask } from 'utils/numberMask'
 import { LastBondSolds, TreasuryData } from './Hooks/useTreasuryData'
 
@@ -7,8 +7,27 @@ type TreasuryDataCardProps = {
   lastBondSolds: LastBondSolds
 }
 export const TreasuryDataCard = ({ treasuryData, lastBondSolds }: TreasuryDataCardProps) => {
-  const { cnvPrice, marketCap, valuePerCNV, cnvTotalSupply, treasuryRevenue, treasuryValue } =
-    treasuryData || {}
+  const {
+    cnvPrice,
+    marketCap,
+    valuePerCNV,
+    cnvTotalSupply,
+    treasuryRevenue,
+    treasuryValue,
+    cnvStatus,
+    treasuryStatus,
+    cnvPriceStatus,
+  } = treasuryData || {}
+  const statusLabel = {
+    loading: 'loading ...',
+    error: 'error fetching',
+  }
+  const marketCapLab = statusLabel[cnvStatus] || (marketCap && '$' + numberMask(marketCap))
+  const cnvPriceLab = statusLabel[cnvPriceStatus] || (cnvPrice && '$' + numberMask(cnvPrice))
+  const valuePerCNVLab = statusLabel[cnvStatus] || (valuePerCNV && '$' + numberMask(valuePerCNV))
+  const treasuryValueLab =
+    statusLabel[treasuryStatus] || (treasuryValue && '$' + numberMask(treasuryValue))
+  const cnvTotalSupplyLab = statusLabel[cnvStatus] || (cnvTotalSupply && numberMask(cnvTotalSupply))
   return (
     <Card
       backdropFilter="blur(8px)"
@@ -18,9 +37,9 @@ export const TreasuryDataCard = ({ treasuryData, lastBondSolds }: TreasuryDataCa
     >
       <TreasuryDataContainer
         data={[
-          { title: 'Market cap', info: marketCap && '$' + numberMask(marketCap) },
-          { title: 'CNV price', info: cnvPrice && '$' + numberMask(cnvPrice), applyBorder: true },
-          { title: 'Treasury value per CNV', info: valuePerCNV && '$' + numberMask(valuePerCNV) },
+          { title: 'Market cap', info: marketCapLab },
+          { title: 'CNV price', info: cnvPriceLab, applyBorder: true },
+          { title: 'Treasury value per CNV', info: '$4.20' },
         ]}
       />{' '}
       <TreasuryDataContainer
@@ -28,38 +47,54 @@ export const TreasuryDataCard = ({ treasuryData, lastBondSolds }: TreasuryDataCa
           { title: 'Treasury revenue', info: 'Coming soon' },
           {
             title: 'Treasury value',
-            info: treasuryValue && '$' + numberMask(treasuryValue),
+            info: treasuryValueLab,
             applyBorder: true,
           },
-          { title: 'CNV total supply', info: cnvTotalSupply && numberMask(cnvTotalSupply) },
+          { title: 'CNV total supply', info: cnvTotalSupplyLab },
         ]}
       />
-      <LastBondsContainer lastBondSolds={lastBondSolds} />
+      <LastBondsContainer {...lastBondSolds} />
     </Card>
   )
 }
 
-type LastBondsContainerProps = { lastBondSolds: LastBondSolds }
-const LastBondsContainer: React.FC<LastBondsContainerProps> = ({ lastBondSolds }) => (
-  <Flex
-    mt={'-4'}
-    mb={{ base: 4, lg: 0 }}
-    flex={{ base: 0.6, lg: 0.75 }}
-    align="center"
-    w="full"
-    direction={{ base: 'column', md: 'row' }}
-  >
-    {lastBondSolds?.map(({ timesTamp, inputAmount, outputAmount }, index) => (
-      <LastBondInfo
-        opacity={{ base: 1 - index / 3.2, md: 1 }}
-        key={index}
-        timestamp={timesTamp}
-        outputAmount={outputAmount}
-        inputAmount={inputAmount}
-      />
-    ))}
-  </Flex>
-)
+const LastBondsContainer: React.FC<LastBondSolds> = ({ solds, status }) => {
+  return (
+    <Flex
+      mt={'-4'}
+      mb={{ base: 4, lg: 0 }}
+      flex={{ base: 0.6, lg: 0.75 }}
+      align="center"
+      w="full"
+      direction={{ base: 'column', md: 'row' }}
+    >
+      {
+        {
+          loading: (
+            <Flex mx="auto" gap={2} color="text.bright">
+              <Text fontSize={'2xl'}>Loading last solds</Text>
+              <Spinner size={'lg'} />
+            </Flex>
+          ),
+          success: solds?.map(({ timesTamp, inputAmount, outputAmount }, index) => (
+            <LastBondInfo
+              opacity={{ base: 1 - index / 3.2, md: 1 }}
+              key={index}
+              timestamp={timesTamp}
+              outputAmount={outputAmount}
+              inputAmount={inputAmount}
+            />
+          )),
+          error: (
+            <Text mx="auto" fontSize={'2xl'} color="text.bright">
+              Error fetching last bond solds
+            </Text>
+          ),
+        }[status]
+      }
+    </Flex>
+  )
+}
 
 type LastBondInfoProps = { timestamp: string; inputAmount: string; outputAmount: String }
 const LastBondInfo: React.FC<LastBondInfoProps & FlexProps> = ({

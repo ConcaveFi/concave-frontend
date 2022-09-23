@@ -1,13 +1,13 @@
-import { CNV, Currency, CurrencyAmount, STAKING_CONTRACT } from '@concave/core'
-import { StakingPool, StakingV1Contract } from '@concave/marketplace'
-import { Box, Button, Card, Flex, Text, useDisclosure } from '@concave/ui'
-import { TransactionResponse } from '@ethersproject/abstract-provider'
-import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
+import { CNV, Currency, CurrencyAmount } from '@concave/core'
+import { stakingPools, StakingV1Contract } from '@concave/marketplace'
+import { Box, Button, Card, Flex, Text } from '@concave/ui'
+import { useCurrencyApprove } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { CurrencyInputField } from 'components/CurrencyAmountField'
-import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
-import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
-import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
-import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
+import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
+import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
+
+import { WaitingConfirmationDialog } from 'components/TransactionDialog/TransactionWaitingConfirmationDialog'
+import { useTransaction } from 'hooks/TransactionsRegistry/useTransaction'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
@@ -15,75 +15,34 @@ import { useState } from 'react'
 import { toAmount } from 'utils/toAmount'
 import { useAccount, useSigner } from 'wagmi'
 
-export function StakeInput(props: {
-  stakingPool: StakingPool
-  poolId: number
-  onClose: () => void
-}) {
+export function StakeInput({ onClose, poolId }: { poolId: number; onClose: () => void }) {
   const { address } = useAccount()
-  const netWorkdId = useCurrentSupportedNetworkId()
+  const chainId = useCurrentSupportedNetworkId()
   const { data: signer } = useSigner()
-  const [stakeInput, setStakeInput] = useState<CurrencyAmount<Currency>>(
-    toAmount(0, CNV[netWorkdId]),
-  )
+  const [stakeInput, setStakeInput] = useState<CurrencyAmount<Currency>>(toAmount(0, CNV[chainId]))
+  const contract = new StakingV1Contract(concaveProvider(chainId))
+  const currencyState = useCurrencyApprove(stakeInput.wrapped, contract.address, {
+    enablePermit: true,
+  })
   const cnvBalance = useCurrencyBalance(stakeInput?.currency, { watch: true })
-  const [tx, setTx] = useState(undefined)
-  const [txError, setTxError] = useState('')
-  const [waitingForConfirm, setWaitingForConfirm] = useState(false)
-
-  const { registerTransaction } = useTransactionRegistry()
-
-  const {
-    isOpen: isOpenSubmitted,
-    onClose: onCloseSubmitted,
-    onOpen: onOpenSubmitted,
-  } = useDisclosure()
-
-  const {
-    isOpen: isOpenRejected,
-    onClose: onCloseRejected,
-    onOpen: onOpenRejected,
-  } = useDisclosure()
-
-  const onError = (e: { code: number; message: string }) => {
-    const errorMessage = e.code === 4001 ? 'Transaction Rejected' : e.message
-    setTxError(errorMessage)
-    setWaitingForConfirm(false)
-    onOpenRejected()
-  }
-
-  const lock = () => {
-    const contract = new StakingV1Contract(concaveProvider(netWorkdId))
-    setWaitingForConfirm(true)
-    contract
-      .lock(signer, address, stakeInput.numerator.toString(), props.poolId)
-      .then((x: TransactionResponse) => {
-        registerTransaction(x, {
-          type: 'stake',
-          amount: stakeInput.toString(),
-          pool: props.stakingPool.days,
-        })
-        setTx(x)
-        setWaitingForConfirm(false)
-        onOpenSubmitted()
-      })
-      .catch(onError)
-  }
-
-  const useCurrencyState = useCurrencyButtonState(
-    stakeInput,
-    STAKING_CONTRACT[stakeInput.currency.chainId],
+  const lockTransaction = useTransaction(
+    async () => {
+      const amount = stakeInput.numerator.toString()
+      return contract.lock(signer, address, amount, poolId, currencyState.permit.signedPermit)
+    },
+    {
+      meta: {
+        type: 'stake',
+        amount: stakeInput.toString(),
+        pool: stakingPools[poolId].days,
+      },
+    },
   )
-  const stakeButton = useCurrencyState.approved
-    ? {
-        disabled:
-          !cnvBalance.data ||
-          +cnvBalance.data?.numerator.toString() === 0 ||
-          +stakeInput.numerator.toString() === 0 ||
-          stakeInput.greaterThan(cnvBalance.data?.numerator),
-        children: 'Stake CNV',
-      }
-    : useCurrencyState.buttonProps
+  const stakeButton = {
+    disabled: stakeInput?.greaterThan(cnvBalance.data?.numerator) || stakeInput.equalTo(0),
+    children: 'Stake CNV',
+  }
+
   return (
     <>
       <Box>
@@ -94,7 +53,7 @@ export function StakeInput(props: {
         <Box mt={{ base: 4, sm: 10 }} width="350px">
           <Button
             mt={5}
-            onClick={lock}
+            onClick={lockTransaction.sendTx}
             fontWeight="bold"
             fontSize="md"
             variant="primary"
@@ -103,12 +62,15 @@ export function StakeInput(props: {
             h="50px"
             size="large"
             mx="auto"
-            {...stakeButton}
+            {...(currencyState.approved ? stakeButton : currencyState.buttonProps)}
           />
         </Box>
       </Box>
 
-      <WaitingConfirmationDialog isOpen={waitingForConfirm} title={'Confirm Stake'}>
+      <WaitingConfirmationDialog
+        isOpen={lockTransaction.isWaitingForConfirmation}
+        title={'Confirm Stake'}
+      >
         <Flex
           width={'200px'}
           height="107px"
@@ -124,19 +86,19 @@ export function StakeInput(props: {
           <Text fontWeight={'700'} textColor="text.accent">
             {stakeInput.wrapped.toExact() + ' CNV'}
           </Text>
-          <Text textColor={'text.low'}>For {props.stakingPool.days + ' days'}</Text>
+          <Text textColor={'text.low'}>For {stakingPools[poolId].days + ' days'}</Text>
         </Flex>
       </WaitingConfirmationDialog>
 
       <TransactionSubmittedDialog
-        isOpen={isOpenSubmitted}
-        tx={tx}
-        closeParentComponent={props.onClose}
+        isOpen={lockTransaction.isWaitingTransactionReceipt}
+        tx={lockTransaction.tx}
+        closeParentComponent={onClose}
       />
       <TransactionErrorDialog
-        error={txError}
-        isOpen={isOpenRejected}
-        closeParentComponent={props.onClose}
+        error={lockTransaction.error?.reason}
+        isOpen={lockTransaction.isError}
+        closeParentComponent={onClose}
       />
     </>
   )

@@ -1,14 +1,15 @@
-import { Avatar, AvatarGroup, Card, Flex, FlexProps, Text } from '@concave/ui'
+import { Avatar, AvatarGroup, Card, Flex, FlexProps, Spinner, Text } from '@concave/ui'
 import { numberMask } from 'utils/numberMask'
 import { TreasuryTokenInfo } from './Hooks/useTreasuryData'
 
 type TreasuryAssetsCardProps = {
+  status: 'error' | 'idle' | 'loading' | 'success'
   assets: {
     tokens: TreasuryTokenInfo[]
     convex: FarmingContainerProps
   }
 }
-export const TreasuryAssetsCard: React.FC<TreasuryAssetsCardProps> = ({ assets }) => {
+export const TreasuryAssetsCard: React.FC<TreasuryAssetsCardProps> = ({ assets, status }) => {
   const { convex, tokens } = assets || {}
   return (
     <Card w="full" height="fit" backdropFilter={'blur(6px)'} pb={6} px="6">
@@ -20,14 +21,46 @@ export const TreasuryAssetsCard: React.FC<TreasuryAssetsCardProps> = ({ assets }
         justify="space-between"
         align={'center'}
       >
-        <FarmingContainer
-          images={convex?.images || []}
-          tokenImage={convex?.tokenImage}
-          total={convex?.total}
-        />
-        <TokenContainer tokens={tokens?.slice(0, 4)} />
+        {
+          {
+            loading: (
+              <Flex
+                justify={'center'}
+                align="center"
+                color={'text.bright'}
+                w={'full'}
+                h="100px"
+                gap={2}
+              >
+                <Text fontSize={'3xl'}>Loading tokens</Text>
+                <Spinner size={'lg'} />
+              </Flex>
+            ),
+            success: (
+              <>
+                <FarmingContainer
+                  images={convex?.images || []}
+                  tokenImage={convex?.tokenImage}
+                  total={convex?.total}
+                  status={status}
+                />
+                <TokenContainer
+                  direction={{ base: 'column', lg: 'column' }}
+                  tokens={tokens?.slice(0, 4)}
+                />
+              </>
+            ),
+            error: (
+              <Flex justify={'center'} align="center" color={'text.bright'} w={'full'} h="100px">
+                <Text fontSize="2xl">Error fetching treasury</Text>
+              </Flex>
+            ),
+          }[status]
+        }
       </Flex>
-      <TokenContainer direction={{ base: 'column', lg: 'row' }} tokens={tokens?.slice(5)} />
+      {status === 'loading' && (
+        <TokenContainer direction={{ base: 'column', lg: 'row' }} tokens={tokens?.slice(5)} />
+      )}
     </Card>
   )
 }
@@ -52,7 +85,9 @@ type FarmingContainerProps = {
   tokenImage: string
   images: string[]
 }
-const FarmingContainer: React.FC<FarmingContainerProps> = ({ images, tokenImage, total }) => (
+const FarmingContainer: React.FC<
+  FarmingContainerProps & { status: 'error' | 'idle' | 'loading' | 'success' }
+> = ({ images, tokenImage, total, status }) => (
   <Card w={'full'} h="160px" variant="secondary">
     <Card direction={'row'} w={'full'} h="48%" justify={'center'} align="center" gap={3}>
       <Avatar src={tokenImage} size="sm" />
@@ -61,13 +96,17 @@ const FarmingContainer: React.FC<FarmingContainerProps> = ({ images, tokenImage,
       </Text>
     </Card>
     <Text mx={'auto'} color="text.low" fontSize={'2xl'} fontWeight="bold" mt={3}>
-      {total ? `$${numberMask(total)}` : 'loading...'}
+      {status === 'loading' && 'Loading ...'}
+      {status === 'success' && `$${numberMask(total)}`}
+      {status === 'error' && 'Error fetching'}
     </Text>
-    <AvatarGroup size={'sm'} opacity={0.8} mx="auto" mt={'-6px'} zIndex="-1">
-      {images?.map((image, index) => (
-        <Avatar key={index} src={image} />
-      ))}
-    </AvatarGroup>
+    {status === 'success' && (
+      <AvatarGroup size={'sm'} opacity={0.8} mx="auto" mt={'-6px'} zIndex="-1">
+        {images?.map((image, index) => (
+          <Avatar key={index} src={image} />
+        ))}
+      </AvatarGroup>
+    )}
   </Card>
 )
 

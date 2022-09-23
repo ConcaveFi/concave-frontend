@@ -3,20 +3,20 @@ import { Pair } from '@concave/gemswap-sdk'
 import { PlusIcon } from '@concave/icons'
 import { Button, ButtonProps, Card, Flex, Modal, Text, useDisclosure } from '@concave/ui'
 import { CurrencyInputField } from 'components/AMM'
+import { useAddLiquidityButtonProps } from 'components/AMM/AddLiquidity/hooks/useAddLiquidityButtonProps'
 import { SupplyLiquidityModal } from 'components/AMM/AddLiquidity/SupplyLiquidityModal'
-import { useAddLiquidityButtonProps } from 'components/AMM/AddLiquidity/useAddLiquidityButtonProps'
-import { useAddLiquidityState } from 'components/AMM/AddLiquidity/useAddLiquidityState'
-import { useAddLiquidityTransaction } from 'components/AMM/AddLiquidity/useAddLiquidityTransaction'
-import { ConnectButton } from 'components/ConnectWallet'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
-import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
-import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
-import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
+import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
+import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
+import { WaitingConfirmationDialog } from 'components/TransactionDialog/TransactionWaitingConfirmationDialog'
+import { ConnectButton } from 'components/UserWallet/ConnectButton'
 import { toAmount } from 'utils/toAmount'
 import { useAccount } from 'wagmi'
 import { useQueryCurrencies } from '../hooks/useQueryCurrencies'
 import { NetworkMismatch } from '../NetworkMismatch'
-import useLiquidityData from './useLiquidityData'
+import { useAddLiquidityState } from './hooks/useAddLiquidityState'
+import { useAddLiquidityTransaction } from './hooks/useAddLiquidityTransaction'
+import { useLiquidityData } from './hooks/useLiquidityData'
 
 const AddSymbol = () => (
   <Flex align="center" justify="center">
@@ -36,20 +36,21 @@ const AddSymbol = () => (
 )
 
 export type LiquidityPool = {
-  pair: Pair
+  pair?: Pair
   amount0: CurrencyAmount<Currency>
   amount1: CurrencyAmount<Currency>
 }
 
-function AddLiquidityContent({
-  liquidityModalClose,
-  currencies,
-  onChangeCurrencies,
-}: {
+export type AddLiquidityContentProps = {
   currencies: [Currency, Currency]
   onChangeCurrencies?: (currencies: [Currency, Currency]) => void
   liquidityModalClose?: VoidFunction
-}) {
+}
+function AddLiquidityContent({
+  currencies,
+  onChangeCurrencies,
+  liquidityModalClose,
+}: AddLiquidityContentProps) {
   const {
     pair,
     firstFieldAmount,
@@ -69,14 +70,8 @@ function AddLiquidityContent({
     supplyLiquidityDisclosure.onOpen,
   )
 
-  let fixedPair = pair.data
-
-  if (firstFieldAmount?.currency && secondFieldAmount?.currency && !pair.data) {
-    fixedPair = Pair.createVirtualPair(firstFieldAmount, secondFieldAmount)
-  }
-
   const lpData = useLiquidityData({
-    pair: fixedPair,
+    pair: pair.data,
     amount0: firstFieldAmount,
     amount1: secondFieldAmount,
   })
@@ -187,6 +182,11 @@ export const AddLiquidityModalButton = ({
 }: { label?: string; pair?: Pair } & ButtonProps) => {
   const { isDisconnected } = useAccount()
   const addLiquidityDisclosure = useDisclosure()
+  const queryCurrencies = useQueryCurrencies()
+  const currencies: [Currency, Currency] = pair
+    ? [pair?.token0, pair?.token1]
+    : queryCurrencies.currencies
+
   if (isDisconnected) return <ConnectButton />
   return (
     <>
@@ -220,7 +220,8 @@ export const AddLiquidityModalButton = ({
         }}
       >
         <AddLiquidityContent
-          currencies={[pair?.token0, pair?.token1]}
+          currencies={currencies}
+          onChangeCurrencies={!pair ? queryCurrencies.onChangeCurrencies : undefined}
           liquidityModalClose={addLiquidityDisclosure.onClose}
         />
       </Modal>

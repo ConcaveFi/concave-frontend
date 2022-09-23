@@ -55,6 +55,7 @@ export const StakePoolFilterCard = ({
             borderColor={'text.low'}
             direction="column"
             apply={'background.glass'}
+            css={{ '::after': { opacity: 0.9 } }}
             overflow="hidden"
             transition={'0.3s all'}
             pt={4}

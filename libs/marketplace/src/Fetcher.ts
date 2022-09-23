@@ -35,9 +35,10 @@ export const listPositons = async ({
   )
   const preFilter = data.logStakingV1
     .filter((l) => l.tokenID)
-    .filter((l) => !owner || l.to === owner)
+    .filter((l) => !owner || l.to.toLocaleLowerCase() === owner.toLocaleLowerCase())
   const { stakingV1ToStakingPosition } = parser(stakingV1Contract, provider)
-  return Promise.all(preFilter.map(stakingV1ToStakingPosition))
+  const result = await Promise.all(preFilter.map(stakingV1ToStakingPosition))
+  return result.filter((p) => !p.currentValue.eq(0)) //remove redeemeds
 }
 
 export const listListedPositions = async ({ provider }: { provider: BaseProvider }) => {
@@ -51,8 +52,15 @@ export const listListedPositions = async ({ provider }: { provider: BaseProvider
   )
   const { stakingV1ToStakingPosition } = parser(stakingV1Contract, provider)
   const dirtyResults = data.logStakingV1
-  const cleanResults = dirtyResults.filter((c) => c.to === c.marketplace.at(-1).tokenOwner)
-  return await Promise.all(cleanResults.map(stakingV1ToStakingPosition))
+  const cleanResults = dirtyResults
+    .filter(({ marketplace, to }) => {
+      const [lastMarket] = [...marketplace].reverse()
+      const tokenOwner = to === lastMarket.tokenOwner
+      return tokenOwner
+    })
+    .filter((c) => c.marketplace[0].tokenIsListed)
+  const result = await Promise.all(cleanResults.map(stakingV1ToStakingPosition))
+  return result.filter((p) => !p.currentValue.eq(0)) //remove redeemeds
 }
 
 export const marketplaceActivity = async ({ provider }: { provider: BaseProvider }) => {
@@ -64,18 +72,31 @@ export const marketplaceActivity = async ({ provider }: { provider: BaseProvider
     },
   )
   const dirtyResults = data.logStakingV1
+  const keys = (obj: Marketplace & StakingPool & LogStakingV1) => {
+    return JSON.stringify({ a: obj.tokenID, soldFor: obj.soldFor })
+  }
 
-  const activity: (Marketplace & StakingPool & LogStakingV1)[] = dirtyResults.reduce((a, b) => {
-    const marketplaceActivity = b.marketplace.map((c) => {
-      const stakingPool: StakingPool = stakingPools[b.poolID]
-      return { ...b, ...c, ...stakingPool, cavemart: undefined } as Marketplace &
-        StakingPool &
-        LogStakingV1
+  const activity: (Marketplace & StakingPool & LogStakingV1)[] = dirtyResults
+    .reduce((previousValue, currentValue) => {
+      const marketplaceActivity = currentValue.marketplace.map((marketplace) => {
+        const stakingPool: StakingPool = stakingPools[currentValue.poolID]
+        return {
+          ...currentValue,
+          ...stakingPool,
+          ...marketplace,
+          marketplace: undefined,
+        } as Marketplace & StakingPool & LogStakingV1
+      })
+      return [...previousValue, ...marketplaceActivity]
+    }, [])
+    .filter((value, index, arr) => {
+      const _value = keys(value)
+      return index === arr.findIndex((obj) => keys(obj) === _value)
     })
-    return [...a, ...marketplaceActivity]
-  }, [])
-
-  activity.sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
+  activity.sort(
+    (first, seccond) =>
+      new Date(seccond.updated_at).getTime() - new Date(first.updated_at).getTime(),
+  )
   return activity
 }
 

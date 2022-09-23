@@ -2,9 +2,9 @@ import { MarketItem, StakingPosition } from '@concave/marketplace'
 import { Box, Button, HStack, Text, VStack } from '@concave/ui'
 import { useInsert_Marketplace_ListingMutation } from 'graphql/generated/graphql'
 import { Dispatch, SetStateAction } from 'react'
-import { formatFixed } from 'utils/formatFixed'
+import { formatFixed } from 'utils/bigNumberMask'
+import { usePositionDiscount } from './hooks/usePositionDiscount'
 import { Info } from './Info'
-import { usePositionDiscount } from './usePositionDiscount'
 
 export const ConfirmUnlist = ({
   market,
@@ -20,7 +20,7 @@ export const ConfirmUnlist = ({
   const insertMarketplace = useInsert_Marketplace_ListingMutation()
 
   const onSubmit = async () => {
-    const marketItem = staking.market
+    const marketItem = staking.market || market
     await insertMarketplace.mutateAsync({
       tokenID: marketItem.tokenId.toString(),
       signatureHash: marketItem.tokenId.toString(),
@@ -61,8 +61,6 @@ export const ConfirmUnlist = ({
         <Button
           w={'full'}
           onClick={() => {
-            console.log(staking.market)
-            setMarket(market.new({ isListed: false, signature: '' }))
             onClose()
           }}
           variant={`secondary`}

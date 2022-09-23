@@ -35,6 +35,7 @@ export const SortOption = ({ sorter, title, enabled, onClick }: SortOptionProps)
           fontWeight={'bold'}
         >
           <CloseIcon
+            mt={-1}
             width={'12px'}
             height="12px"
             cursor={'pointer'}

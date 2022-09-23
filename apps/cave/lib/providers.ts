@@ -19,21 +19,21 @@ const getFallbackProvider = (chainId: number) => {
   if (NEXT_PUBLIC_CONCAVE_RPC_KEY && chainId === 1)
     providerConfigs.push({
       provider: new providers.StaticJsonRpcProvider(concaveRPC, chainId),
-      priority: 0,
+      priority: 2,
       stallTimeout,
     })
 
   if (NEXT_PUBLIC_INFURA_ID)
     providerConfigs.push({
       provider: new providers.InfuraProvider(chainId, NEXT_PUBLIC_INFURA_ID),
-      priority: 1,
+      priority: 0,
       stallTimeout,
     })
 
   if (NEXT_PUBLIC_ALCHEMY_ID)
     providerConfigs.push({
       provider: new providers.AlchemyProvider(chainId, NEXT_PUBLIC_ALCHEMY_ID),
-      priority: 2,
+      priority: 1,
       stallTimeout,
     })
 

@@ -37,17 +37,14 @@ const ButtonSecondaryTheme = (props) => ({
     ...HoverRadialGradient,
     color: 'text.high',
     transform: 'scale(1)',
-    ...gradientBorder({ borderRadius: '2xl', ...props, variant: 'primary' }),
   },
   _focus: {
     ...HoverRadialGradient,
     color: 'text.high',
-    ...gradientBorder({ borderRadius: '2xl', ...props, variant: 'primary' }),
   },
   _hover: {
     ...HoverRadialGradient,
     color: 'text.high',
-    ...gradientBorder({ borderRadius: '2xl', ...props, variant: 'primary' }),
   },
 })
 

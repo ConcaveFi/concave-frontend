@@ -5,6 +5,7 @@ import { BigNumberish } from 'ethers'
 import { formatUnits } from 'ethers/lib/utils'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry/'
 import { concaveProvider } from 'lib/providers'
+import { useMemo } from 'react'
 import {
   erc20ABI,
   erc721ABI,
@@ -16,6 +17,7 @@ import {
 } from 'wagmi'
 import { useTransaction } from './TransactionsRegistry/useTransaction'
 import { useCurrentSupportedNetworkId } from './useCurrentSupportedNetworkId'
+import { usePermit } from './usePermit'
 
 export const useAllowance = (token: Token, spender: string, userAddress: string) => {
   const {
@@ -91,14 +93,22 @@ export const useApprove = (
   token: Token,
   spender: string,
   amount: BigNumberish = MaxUint256.toString(),
+  { deadline }: { deadline: number },
 ) => {
   const { address, isConnecting } = useAccount()
   const allowance = useAllowance(token, spender, address)
-  const approve = useContractApprove(token, spender, amount, {
+  const approve = useContractApprove(token, spender, MaxUint256.toString(), {
     onSuccess: () => allowance.refetch(),
   })
-
-  return { allowance, ...approve, isFetching: isConnecting || allowance.isLoading }
+  const permit = usePermit(
+    CurrencyAmount.fromRawAmount(token, amount.toString()),
+    spender,
+    deadline,
+  )
+  return useMemo(
+    () => ({ allowance, ...approve, permit, isFetching: isConnecting || allowance.isLoading }),
+    [allowance, approve, isConnecting, permit],
+  )
 }
 
 export const useApproveForAll = (props: {
@@ -118,13 +128,20 @@ export const useApproveForAll = (props: {
   const { data: signer } = useSigner()
   const chainId = useCurrentSupportedNetworkId()
 
-  const approveTx = useTransaction(() => {
-    const contract = new StakingV1Contract(concaveProvider(chainId))
-    return contract.setApprovalForAll(signer, props.operator, props.approved)
-  })
+  const approveTx = useTransaction(
+    () => {
+      const contract = new StakingV1Contract(concaveProvider(chainId))
+      return contract.setApprovalForAll(signer, props.operator, props.approved)
+    },
+    {
+      onSuccess: (tx) => {
+        approve.refetch()
+      },
+    },
+  )
 
   return {
-    isLoading: approve.isLoading,
+    isLoading: approve.isLoading || approve.isRefetching,
     isOK: !approve.isLoading && !!approve.data === props.approved,
     ...approveTx,
   }

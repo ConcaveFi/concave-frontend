@@ -1,4 +1,4 @@
-import { CHAIN_NAME, PCNV } from '@concave/core'
+import { CHAIN_NAME, PCNV, ROUTER_ADDRESS } from '@concave/core'
 import { Button, Card, Collapse, Text, useDisclosure } from '@concave/ui'
 import { AddTokenToWalletButton } from 'components/AddTokenToWalletButton'
 import {
@@ -12,12 +12,14 @@ import {
   useSwapTransaction,
 } from 'components/AMM'
 import { useSwapSettings } from 'components/AMM/Swap/Settings'
+import { useCurrencyApprove } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
-import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
-import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
-import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
+import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
+import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
+
+import { WaitingConfirmationDialog } from 'components/TransactionDialog/TransactionWaitingConfirmationDialog'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
 import { NetworkMismatch } from '../NetworkMismatch'
 import { PcnvNotification } from './PcnvNotification'
@@ -26,23 +28,44 @@ import { TradeDetails } from './TradeDetails'
 export function SwapCard() {
   const { trade, error, onChangeInput, onChangeOutput, switchFields, onReset } = useSwapState()
 
-  const [recipient, setRecipient] = useState('')
-  const confirmationModal = useDisclosure()
+  const { deadline: ttl } = useSwapSettings((s) => ({
+    deadline: s.settings.deadline,
+  }))
 
-  const swapTx = useSwapTransaction(trade, recipient, {
-    onSuccess: (tx) => {
-      onChangeInput(toAmount(0, trade.inputAmount.currency))
-      confirmationModal.onClose()
+  const currencyApprove = useCurrencyApprove(
+    trade.inputAmount,
+    ROUTER_ADDRESS[trade.inputAmount?.currency.chainId],
+    { enablePermit: false, ttl },
+  )
+  const [recipient, setRecipient] = useState('')
+  const {
+    onOpen: openConfirmationModal,
+    onClose: closeConfirmationModal,
+    isOpen: isConfirmationModalOpen,
+  } = useDisclosure()
+
+  const swapTx = useSwapTransaction(
+    trade,
+    recipient,
+    {
+      onSuccess: (tx) => {
+        onChangeInput(toAmount(0, trade.inputAmount.currency))
+        closeConfirmationModal()
+      },
     },
-  })
+    currencyApprove.permit,
+  )
 
   const isExpertMode = useSwapSettings((s) => s.settings.expertMode)
-
   const swapButtonProps = useSwapButtonProps({
     trade,
     error,
     recipient,
-    onSwapClick: () => (isExpertMode ? swapTx.write() : confirmationModal.onOpen()),
+    currencyApprove,
+    onSwapClick: useCallback(
+      () => (isExpertMode ? swapTx.write() : openConfirmationModal()),
+      [isExpertMode, swapTx, openConfirmationModal],
+    ),
   })
 
   const networkId = useCurrentSupportedNetworkId()
@@ -50,6 +73,7 @@ export function SwapCard() {
   return (
     <>
       <Card
+        key={`swap-${networkId}`}
         p={6}
         gap={2}
         variant="primary"
@@ -58,6 +82,7 @@ export function SwapCard() {
         shadow="Block Up"
         w="100%"
         maxW="420px"
+        willChange="transform"
       >
         <CurrencyInputField
           currencyAmountIn={trade.inputAmount}
@@ -106,8 +131,8 @@ export function SwapCard() {
 
       <ConfirmSwapModal
         trade={swapTx.trade}
-        isOpen={confirmationModal.isOpen}
-        onClose={confirmationModal.onClose}
+        isOpen={isConfirmationModalOpen}
+        onClose={closeConfirmationModal}
         onConfirm={() => swapTx.write()}
       />
 

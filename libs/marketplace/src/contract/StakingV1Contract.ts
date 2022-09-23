@@ -8,12 +8,13 @@ import { StakingV1Abi } from './StakingV1Abi'
 export class StakingV1Contract {
   private readonly contract: ethers.Contract
   public readonly chainId: number
+  public readonly address: string
   constructor(private readonly provider: BaseProvider | MulticallProvider) {
     this.chainId = provider.network.chainId
     if (!this.chainId) throw 'ChainID is undefined for constructor of contract StakingV1Contract'
-    const address = STAKING_CONTRACT[this.chainId]
-    if (!address) throw 'Address is undefined for constructor of contract StakingV1Contract'
-    this.contract = new Contract(address, StakingV1Abi, this.provider)
+    this.address = STAKING_CONTRACT[this.chainId]
+    if (!this.address) throw 'Address is undefined for constructor of contract StakingV1Contract'
+    this.contract = new Contract(this.address, StakingV1Abi, this.provider)
   }
 
   public async viewStakingCap(tokenId: BigNumberish): Promise<BigNumber> {
@@ -30,8 +31,36 @@ export class StakingV1Contract {
     address: string,
     amount: BigNumberish,
     poolId: BigNumberish,
+    signature?: {
+      deadline?: number
+      v: number
+      r: string
+      s: string
+    },
   ): Promise<ethers.Transaction & { wait: (confirmations) => unknown }> {
+    if (signature) {
+      return this.lockWithPermit(signer, address, amount, poolId, signature)
+    }
     return this.contract.connect(signer).lock(address, amount, poolId)
+  }
+  public async lockWithPermit(
+    signer: ethers.Signer,
+    address: string,
+    amount: BigNumberish,
+    poolId: BigNumberish,
+    {
+      deadline,
+      r,
+      s,
+      v,
+    }: {
+      deadline?: number
+      v: number
+      r: string
+      s: string
+    },
+  ): Promise<ethers.Transaction & { wait: (confirmations) => unknown }> {
+    return this.contract.connect(signer).lockWithPermit(address, amount, poolId, deadline, v, r, s)
   }
 
   public async unlock(

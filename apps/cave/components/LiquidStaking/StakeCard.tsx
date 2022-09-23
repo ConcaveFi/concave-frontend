@@ -1,35 +1,37 @@
 import { Box, Button, Flex, Image, Stack, Text, TextProps, useDisclosure } from '@chakra-ui/react'
 import { Percent } from '@concave/core'
-import { StakingPool } from '@concave/marketplace'
+import { stakingPools } from '@concave/marketplace'
 import { Card } from '@concave/ui'
-import { utils } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { numberMask } from 'utils/numberMask'
+import { compactFormat } from 'utils/bigNumberMask'
+
 import { useAccount } from 'wagmi'
 import { StakeData } from './hooks/useLiquidStakeData'
 import { useLiquidValues } from './hooks/useLiquidValues'
 import { StakeModal } from './StakeModal/StakeModal'
 
-type StakeCardProps = { stakeData: StakeData }
-export const StakeCard = (props: StakeCardProps) => {
+type StakeCardProps = {
+  status: 'loading' | 'error' | 'idle' | 'success'
+  poolId: number
+  stakeData: StakeData
+}
+export const StakeCard = ({ status, poolId, stakeData }: StakeCardProps) => {
   const chainId = useCurrentSupportedNetworkId()
-  const { poolId, totalVAPR } = props.stakeData
   const { address } = useAccount()
-
   const { data, isLoading } = useLiquidValues(chainId, poolId)
-  const { stakingV1Pools, stakingV1Cap } = data || {}
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const { stakingV1Pools, stakingV1Cap } = data || {}
+  if (!stakingV1Pools?.balance) return null
 
+  const { totalVAPR } = stakeData || {}
   const pools = stakingV1Pools?.balance.toString() || '0'
   const poolsCapacity = stakingV1Cap?.add(stakingV1Pools?.balance).toString() || '0'
-
   const loadBarPercent = new Percent(pools, poolsCapacity)
-
   const loadBarProps = {
     percent: loadBarPercent,
     loading: isLoading,
-    currentlyStaked: numberMask(+utils.formatEther(stakingV1Pools?.balance || 0)),
-    stakingCap: numberMask(+utils.formatEther(stakingV1Pools?.balance?.add(stakingV1Cap) || 0)),
+    currentlyStaked: compactFormat(stakingV1Pools?.balance),
+    stakingCap: compactFormat(stakingV1Pools?.balance?.add(stakingV1Cap)),
   } as const
 
   return (
@@ -41,7 +43,14 @@ export const StakeCard = (props: StakeCardProps) => {
         fontWeight={'bold'}
         align="center"
       >
-        <ImageContainer stakingPool={props.stakeData} totalVAPR={totalVAPR?.toFixed(2) + '%'} />
+        <ImageContainer
+          poolId={poolId}
+          totalVAPR={
+            { loading: 'loading', error: 'error fetching', success: totalVAPR?.toFixed(2) + '%' }[
+              status
+            ]
+          }
+        />
         <LoadBar variant="primary" {...loadBarProps} />
         <Button
           mt={4}
@@ -57,21 +66,26 @@ export const StakeCard = (props: StakeCardProps) => {
       </Card>
       <StakeModal
         loadBar={<LoadBar variant="secondary" {...loadBarProps} />}
+        status={status}
+        poolId={poolId}
         isOpen={isOpen}
         onClose={onClose}
-        stakeData={props.stakeData}
+        stakeData={stakeData}
       />
     </>
   )
 }
 
-type ImageContainerProps = { stakingPool: StakingPool; totalVAPR: string }
-const ImageContainer: React.FC<ImageContainerProps> = ({ stakingPool, totalVAPR }) => (
-  <Box py={5} h={{ base: '290px', md: '333px' }} shadow="down" borderRadius="100px/90px">
-    <Info title="Stake pool" label={stakingPool.days + ' days'} textAlign="center" />
+type ImageContainerProps = {
+  poolId: number
+  totalVAPR: string
+}
+const ImageContainer: React.FC<ImageContainerProps> = ({ poolId, totalVAPR }) => (
+  <Box w="full" py={5} h={{ base: '290px', md: '333px' }} shadow="down" borderRadius="100px/90px">
+    <Info title="Stake pool" label={stakingPools[poolId].days + ' days'} textAlign="center" />
     <Image
       userSelect={'none'}
-      src={`/assets/liquidstaking/${stakingPool.days}d-logo.svg`}
+      src={`/assets/liquidstaking/${stakingPools[poolId].days}d-logo.svg`}
       alt="stake period logo"
     />
     <Info title="Total vAPR" label={totalVAPR} textAlign="center" />

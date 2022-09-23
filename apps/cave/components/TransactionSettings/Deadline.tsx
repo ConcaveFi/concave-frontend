@@ -10,7 +10,15 @@ import {
   Tooltip,
 } from '@concave/ui'
 
-export const Deadline = ({ value, onValueChange }) => {
+export const Deadline = ({
+  value,
+  placeholder,
+  onValueChange,
+}: {
+  value: number
+  placeholder: number
+  onValueChange: (n: number) => void
+}) => {
   return (
     <Stack align="start">
       <HStack>
@@ -27,7 +35,7 @@ export const Deadline = ({ value, onValueChange }) => {
           <NumericInput
             value={value}
             isNumericString
-            placeholder="30"
+            placeholder={`${placeholder}`}
             decimalScale={4}
             maxLength={7}
             size="medium"

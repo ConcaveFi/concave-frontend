@@ -2,6 +2,7 @@ import { Box, Flex, Image, Text } from '@chakra-ui/react'
 import { AddIcon } from '@concave/icons'
 
 type StakeInformationProps = {
+  status: 'loading' | 'error' | 'idle' | 'success'
   bondingEmissions: number
   baseEmissions: number
   onShow: VoidFunction
@@ -10,13 +11,15 @@ type StakeInformationProps = {
 }
 export const StakeInformation = ({
   baseEmissions,
+  status,
   bondingEmissions,
   type,
   onShow,
   onDisable,
 }: StakeInformationProps) => {
-  const bondEmissionsFormatted = bondingEmissions?.toFixed(2) + '%'
-  const baseEmissionsFormatted = baseEmissions?.toFixed(2) + '%'
+  const statusLabel = { loading: 'loading...', error: 'error fetching' }
+  const bondEmissionsFormatted = statusLabel[status] || bondingEmissions?.toFixed(2) + '%'
+  const baseEmissionsFormatted = statusLabel[status] || baseEmissions?.toFixed(2) + '%'
   const hasToClick = type === 'click'
   const hasToHover = type === 'hover'
   return (

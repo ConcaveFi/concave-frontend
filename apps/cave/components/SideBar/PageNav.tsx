@@ -6,6 +6,7 @@ import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId
 import Router from 'next/router'
 import { useQuery } from 'react-query'
 import getROI from 'utils/getROI'
+import { useAccount } from 'wagmi'
 
 const NavButton = (props: ButtonLinkProps) => {
   return (
@@ -39,9 +40,11 @@ const SubnavButton = ({ children, ...props }: ButtonLinkProps) => {
   return (
     <ButtonLink
       px={4}
+      m="-3px"
+      mt="0"
       sx={{ maxH: 'unset', opacity: 1, p: '10px' }}
       isActive={Router.route === props.href}
-      w="100%"
+      minW="100%"
       color="text.low"
       variant="secondary"
       bg="none"
@@ -75,28 +78,29 @@ const BondROI = () => {
   )
 
   return (
-    <>
-      <Text fontSize="xs" fontWeight="bold" py={2}>
+    <Flex justify="center" align="center" textColor="text.low" p="9px" m="-3px" mt="0">
+      <Text fontSize="xs" fontWeight="bold" mr={1}>
         {`CNV-DAI ${roi.data || ''}`} {roi.isError ? 'error' : ''}
       </Text>
       {(roi.isFetching || roi.isIdle) && <Spinner size={'xs'} />}
-    </>
+    </Flex>
   )
 }
 
 const ButtonContainer = ({ children, ...props }) => (
-  <Flex flexDir="column" shadow="Down Big" rounded="2xl" p="3px" gap="3px" {...props}>
+  <Flex flexDir="column" shadow="Down Big" rounded="2xl" p="3px" overflow="hidden" {...props}>
     {children}
   </Flex>
 )
 
 function PageNav() {
+  const { address } = useAccount()
   return (
-    <Flex direction="column" position="relative" gap="10px">
+    <Flex direction="column" position="relative" gap="10px" w="100%" pl="32px">
       <NotInteractableImage
         src="/assets/sidebar/linkage.svg"
         position="absolute"
-        left={-8}
+        left={0}
         top={6}
       />
       <ButtonContainer mb="11px">
@@ -105,26 +109,20 @@ function PageNav() {
         </NavButton>
       </ButtonContainer>
 
-      <ButtonContainer mb="-2px">
+      <ButtonContainer>
         <NavButton href="/smart-bonding">Bond</NavButton>
-        <Flex gap={1} justify="center" align="center" textColor="text.low">
-          <BondROI />
-        </Flex>
+        <BondROI />
       </ButtonContainer>
 
-      <ButtonContainer mb="">
-        <NavButton href="/marketplace">
-          Marketplace <br></br>
-        </NavButton>
-        <SubnavButton href="/liquid-stake-positions" mt="1px">
-          Your Stake Positions
-        </SubnavButton>
+      <ButtonContainer>
+        <NavButton href="/marketplace">Marketplace</NavButton>
+        <SubnavButton href="/liquid-stake-positions">Your Staked Positions</SubnavButton>
       </ButtonContainer>
 
       <ButtonContainer>
         <NavButton href="/gemswap">Swap</NavButton>
         <SubnavButton href="/addliquidity">Add liquidity</SubnavButton>
-        <SubnavButton href="/pools">Your Pools</SubnavButton>
+        <SubnavButton href="/pools">{address ? `Your ` : ``}Pools</SubnavButton>
       </ButtonContainer>
     </Flex>
   )

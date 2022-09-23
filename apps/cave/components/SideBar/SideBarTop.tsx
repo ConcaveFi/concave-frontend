@@ -2,7 +2,8 @@ import { CNV } from '@concave/core'
 import { DashboardIcon } from '@concave/icons'
 import { Box, Flex, Image, Stack, Text } from '@concave/ui'
 import { ButtonLink } from 'components/ButtonLink'
-import { ConnectButton, UserWallet } from 'components/ConnectWallet'
+import { ConnectButton } from 'components/UserWallet/ConnectButton'
+import { ConnectedUserButton } from 'components/UserWallet/ConnectedUserButton'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useAccount, useNetwork } from 'wagmi'
@@ -45,15 +46,15 @@ const TestnetIndicator = () => {
   )
 }
 
-function SideBarTop() {
+function SideBarTop({ closeSidebar }: { closeSidebar: VoidFunction }) {
   const { isConnected } = useAccount()
 
   return (
-    <Box shadow="down" px={2} pt={10} pb={3} rounded="2xl" w="100%">
+    <Box shadow="down" px={2} pb={3} rounded="2xl" w="100%">
       <Flex
         alignItems="center"
         justify="center"
-        my={4}
+        my="58px"
         filter="drop-shadow(0px 0px 27px #81b3ff4f)"
       >
         <Image src="/assets/concave/logomark.svg" alt="concave logo" maxWidth="52px" />
@@ -62,7 +63,7 @@ function SideBarTop() {
 
       <Stack gap="1" align="flex-end" mt={7}>
         <ButtonLink
-          href="/treasury" // and redirect to the treasury page
+          href="/transparency" // and redirect to the treasury page
           variant="secondary"
           border="primary"
           size="medium"
@@ -70,10 +71,16 @@ function SideBarTop() {
           alignItems="center"
           leftIcon={<DashboardIcon h="20px" w="20px" />}
         >
-          Treasury
+          Transparency
         </ButtonLink>
         <Box shadow="down" w="full" p={1} rounded="2xl">
-          {isConnected ? <UserWallet /> : <ConnectButton />}
+          {isConnected ? (
+            <ConnectedUserButton />
+          ) : (
+            <div onClick={closeSidebar}>
+              <ConnectButton />
+            </div>
+          )}
           <UserCnvBalance />
         </Box>
       </Stack>

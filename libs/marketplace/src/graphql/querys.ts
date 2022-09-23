@@ -1,6 +1,10 @@
 export const listCavemartListingDocuments = `
 query GET_ALL_CAVEMART_USERS_LISTINGS {
-  logStakingV1(where: {marketplace: {tokenID: {_is_null: false}}}, order_by: {tokenID: desc, created_at: desc}, distinct_on: tokenID) {
+  logStakingV1(
+    where: {marketplace: {tokenID: {_is_null: false}}}
+    distinct_on: [tokenID]
+    order_by: [{tokenID: asc}, {txBlockNumber: desc}, {created_at: desc}], 
+  ) {
     created_at
     to
     amountLocked
@@ -8,7 +12,11 @@ query GET_ALL_CAVEMART_USERS_LISTINGS {
     tokenID
     txHash
     lockedUntil
-    marketplace(order_by: {created_at: asc}, where: {tokenID: {_is_null: false}}) {
+    marketplace(
+      where: {tokenID: {_is_null: false}}
+      distinct_on: [tokenID]
+      order_by: [{tokenID: asc},{created_at: desc}]
+    ) {
       tokenID
       newOwner
       start
@@ -27,7 +35,10 @@ query GET_ALL_CAVEMART_USERS_LISTINGS {
 }
 `
 export const fetchUserPositionsQuery = `query GET_ALL_USERS_POSITIONS {
-  logStakingV1(order_by: {tokenID: asc, txBlockNumber: desc, created_at: desc}, distinct_on: tokenID) {
+  logStakingV1(
+    distinct_on: [tokenID]
+    order_by: [{tokenID: asc}, {txBlockNumber: desc}, {created_at: desc}], 
+  ) {
     created_at
     to
     amountLocked
@@ -64,7 +75,10 @@ export const fetchAllCavemart = `query ListCavemart {
     tokenID
     txHash
     lockedUntil
-    marketplace(order_by: {updated_at: desc_nulls_last}) {
+    marketplace(
+      order_by: {updated_at: desc_nulls_last}
+      where: {tokenOption: {_is_null: false}}
+    ) {
       tokenID
       updated_at
       newOwner

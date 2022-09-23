@@ -23,7 +23,7 @@ export const createTransactionSettingsStore = <T extends Object>(
 ) =>
   create(
     persist(
-      combine({ settings: defaultSettings, isDefaultSettings: true }, (set) => ({
+      combine({ settings: defaultSettings, defaultSettings, isDefaultSettings: true }, (set) => ({
         setSetting: (settings: Partial<T>) =>
           set((s) => ({ settings: { ...s.settings, ...settings } })),
         onClose: () =>

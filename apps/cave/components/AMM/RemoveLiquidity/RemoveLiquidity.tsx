@@ -1,5 +1,5 @@
 import { Currency, CurrencyAmount, NATIVE, Percent, ROUTER_ADDRESS, Token } from '@concave/core'
-import { Pair } from '@concave/gemswap-sdk'
+import { Pair, PermitSignature } from '@concave/gemswap-sdk'
 import {
   Box,
   Button,
@@ -12,15 +12,18 @@ import {
   useDisclosure,
 } from '@concave/ui'
 import { TransactionResponse } from '@ethersproject/abstract-provider'
-import { useCurrencyButtonState } from 'components/CurrencyAmountButton/CurrencyAmountButton'
+import { useCurrencyApprove } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { CurrencyIcon } from 'components/CurrencyIcon'
-import { PositionInfoItem } from 'components/Positions/MyPositions'
-import { TransactionErrorDialog } from 'components/TransactionErrorDialog'
-import { TransactionSubmittedDialog } from 'components/TransactionSubmittedDialog'
-import { WaitingConfirmationDialog } from 'components/WaitingConfirmationDialog'
+import { PositionInfoItem } from 'components/LiquidityPoolPositions/MyPositions'
+import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
+import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
+
+import { WaitingConfirmationDialog } from 'components/TransactionDialog/TransactionWaitingConfirmationDialog'
+import { useTransaction } from 'hooks/TransactionsRegistry/useTransaction'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { RemoveLiquidityState, useRemoveLiquidity } from 'hooks/useRemoveLiquidity'
-import { useState } from 'react'
+import { Router } from 'lib/Router'
+import { useAccount, useSigner } from 'wagmi'
 
 export const RemoveLiquidityModalButton = ({
   liquidityInfo,
@@ -54,19 +57,19 @@ export const RemoveLiquidityModalButton = ({
       <Modal
         bluryOverlay={true}
         title="Remove Liquidity"
-        isOpen={removeLiquidityDisclosure.isOpen}
-        onClose={removeLiquidityDisclosure.onClose}
+        {...removeLiquidityDisclosure}
         isCentered
-        size={'2xl'}
         bodyProps={{
           variant: 'primary',
           borderRadius: '3xl',
           borderWidth: 2,
-          p: 6,
+          p: { base: 4, md: 6 },
+          maxW: '100%',
+          w: { base: `auto`, sm: `500px` },
           shadow: 'Up for Blocks',
           fontWeight: 'bold',
           fontSize: 'lg',
-          gap: 6,
+          gap: 4,
         }}
       >
         <AmountToRemove onChange={removeLiquidityState.setPercentToRemove} />
@@ -83,8 +86,8 @@ export const RemoveLiquidityModalButton = ({
 
 const AmountToRemove = ({ onChange }: { onChange: (n: number) => void }) => {
   return (
-    <Flex shadow="Up Big" px={6} py={3} borderRadius="2xl" justify="space-between" align="center">
-      <Text>Amount to remove</Text>
+    <Flex shadow="Up Big" p={2} gap={2} borderRadius="2xl" justify="space-between" align="center">
+      <Text px={2}>Amount to remove</Text>
       <NumericInput
         autoFocus={true}
         shadow="down"
@@ -103,7 +106,6 @@ const AmountToRemove = ({ onChange }: { onChange: (n: number) => void }) => {
     </Flex>
   )
 }
-
 const YouWillReceive = ({
   pair,
   amountAMin,
@@ -115,9 +117,9 @@ const YouWillReceive = ({
   handleNativeToken,
 }: RemoveLiquidityState) => {
   return (
-    <HStack gap={7} shadow="Up Big" px={6} py={3} borderRadius="2xl" align="center">
-      <Box>
-        <Text>You will receive:</Text>
+    <HStack gap={2} shadow="Up Big" p={2} borderRadius="2xl" align="center">
+      <Box px={2} w={'full'}>
+        <Text fontSize={{ base: '12px', md: 'md' }}>You will receive:</Text>
         {hasNativeToken && (
           <Button onClick={handleNativeToken}>
             <Text fontWeight={400} fontStyle={'md'} color={'#2E97E2'} fontSize={'14px'}>
@@ -151,13 +153,18 @@ const ReceiveBox = ({
 }) => {
   const currency = receiveInNative ? NATIVE[token.chainId] : token
   return (
-    <HStack shadow="down" borderRadius="2xl" p={3}>
-      <CurrencyIcon size="sm" currency={currency} />
-      <Box>
-        <Text fontFamily={'heading'} fontWeight={600}>
-          {amount ? amount?.toFixed(4) : 0}
+    <HStack w={'full'} shadow="down" borderRadius="2xl" p={2}>
+      <CurrencyIcon link size="sm" currency={currency} />
+      <Box w={'full'}>
+        <Text fontSize={{ base: '12px', md: 'md' }} fontFamily={'heading'} fontWeight={600}>
+          {amount ? amount.toSignificant(5, { groupSeparator: ',' }) : 0}
         </Text>
-        <Text title={currency?.name} fontWeight={700} fontSize={'sm'} color={'text.low'}>
+        <Text
+          fontSize={{ base: '12px', md: 'sm' }}
+          title={currency?.name}
+          fontWeight={700}
+          color={'text.low'}
+        >
           {currency?.symbol}
         </Text>
       </Box>
@@ -172,94 +179,90 @@ const RemoveLiquidityActions = ({
   closeParentComponent: VoidFunction
 }) => {
   const networkId = useCurrentSupportedNetworkId()
-
-  const {
-    isOpen: isOpenSubmitted,
-    onClose: onCloseSubmitted,
-    onOpen: onOpenSubmitted,
-  } = useDisclosure()
-
-  const [txError, setTxError] = useState('')
-  const { isOpen: isOpenError, onClose: onCloseError, onOpen: onOpenError } = useDisclosure()
-
-  const [waitingForConfirm, setWaitingForConfirm] = useState(false)
-
-  const confirmedWithdrawal = async () => {
-    try {
-      setWaitingForConfirm(true)
-      await removeLiquidityState.removeLiquidity().then(() => {
-        onOpenSubmitted()
-        setWaitingForConfirm(false)
-      })
-    } catch (err) {
-      setWaitingForConfirm(false)
-      onCloseSubmitted()
-      setTxError(err.message)
-      onOpenError()
-    }
-  }
+  const { address } = useAccount()
   const currencyAmount = CurrencyAmount.fromRawAmount(
     removeLiquidityState.pair.liquidityToken,
     removeLiquidityState.amountToRemove.toString(),
   )
-  const useCurrencyState = useCurrencyButtonState(currencyAmount, ROUTER_ADDRESS[networkId])
+  const currencyApprove = useCurrencyApprove(currencyAmount, ROUTER_ADDRESS[networkId])
+  const { data: signer } = useSigner()
+
+  const { amountAMin, amountBMin, amountToRemove } = removeLiquidityState
+  const meta = {
+    type: `remove liquidity`,
+    amount0: amountAMin.toString(),
+    amount1: amountBMin.toString(),
+    pairSymbol: `${amountAMin.currency.symbol}-${amountBMin.currency.symbol}`,
+  } as const
+
+  const removeTransaction = useTransaction(
+    () => {
+      const router = new Router(networkId, signer)
+      return router.removeLiquidity(
+        amountAMin,
+        amountBMin,
+        amountToRemove,
+        address,
+        currencyApprove.permit.signedPermit as PermitSignature,
+      )
+    },
+    {
+      meta,
+    },
+  )
 
   return (
     <Flex gap={4} h={45} justifyContent={'center'}>
       <Button
         disabled={!removeLiquidityState.percentToRemove}
-        {...useCurrencyState.buttonProps}
-        w={250}
+        {...currencyApprove.buttonProps}
+        onClick={() => currencyApprove.permit.signPermit()}
+        w={`full`}
         variant={'primary'}
       />
 
       <Button
-        disabled={!useCurrencyState.approved || !removeLiquidityState.percentToRemove}
-        w={250}
+        disabled={!currencyApprove.approved || !removeLiquidityState.percentToRemove}
+        w={`full`}
         variant={'primary'}
-        onClick={confirmedWithdrawal}
+        onClick={removeTransaction.sendTx}
       >
         Confirm withdrawal
       </Button>
 
       <WaitingConfirmationDialog
-        isOpen={waitingForConfirm}
-        onClose={() => setWaitingForConfirm(false)}
+        isOpen={removeTransaction.isWaitingForConfirmation}
         title={'Confirm Withdrawal'}
       >
         <Flex
-          width={'200px'}
+          w={'full'}
           height="107px"
           rounded={'2xl'}
           mt={4}
           shadow={'Down Medium'}
           align={'center'}
+          fontWeight="700"
           direction={'column'}
         >
-          <Text textColor={'text.low'} fontWeight="700" fontSize={18} mt={4}>
+          <Text textColor={'text.low'} fontSize={18} mt={4}>
             You will receive
           </Text>
-          <Text fontWeight={'700'} textColor="text.accent">
-            {`${removeLiquidityState.amountAMin.toFixed(2)} ${
-              removeLiquidityState.pair.token0.symbol
-            }`}
-          </Text>
-          <Text fontWeight={'700'} textColor="text.accent">
-            {`${removeLiquidityState.amountBMin.toFixed(2)} ${
-              removeLiquidityState.pair.token1.symbol
-            }`}
-          </Text>
+          <Text textColor="text.accent">{`${removeLiquidityState.amountAMin.toString()}`}</Text>
+          <Text textColor="text.accent">{`${removeLiquidityState.amountBMin.toString()}`}</Text>
         </Flex>
       </WaitingConfirmationDialog>
 
       <TransactionSubmittedDialog
         title="Withdraw"
         subtitle="Withdraw"
-        tx={{ hash: removeLiquidityState.hash } as TransactionResponse}
-        isOpen={isOpenSubmitted}
+        tx={{ hash: removeTransaction.tx?.hash } as TransactionResponse}
+        isOpen={removeTransaction.isWaitingTransactionReceipt}
         closeParentComponent={closeParentComponent}
       />
-      <TransactionErrorDialog error={txError} isOpen={isOpenError} />
+      <TransactionErrorDialog
+        error={removeTransaction.error?.reason}
+        isOpen={removeTransaction.isError}
+      />
     </Flex>
   )
 }
@@ -284,18 +287,18 @@ const YourPosition = ({ pair, userPoolShare }: { pair: Pair; userPoolShare: Perc
         p={4}
         spacing={3}
       >
-        <PositionInfoItem label="Your pool share:" value={`${userPoolShare.toFixed(2)}%`} />
+        <PositionInfoItem label="Your pool share:" value={`${userPoolShare.toFixed(4)}%`} />
         <PositionInfoItem
           label={pair.token0.symbol}
           value={pair.reserve0.multiply(userPoolShare).toFixed(2)}
         >
-          <CurrencyIcon size="sm" currency={pair.token0} />
+          <CurrencyIcon link size="sm" currency={pair.token0} />
         </PositionInfoItem>
         <PositionInfoItem
           label={pair.token1.symbol}
           value={pair.reserve1.multiply(userPoolShare).toFixed(2)}
         >
-          <CurrencyIcon size="sm" currency={pair.token1} />
+          <CurrencyIcon link size="sm" currency={pair.token1} />
         </PositionInfoItem>
       </Stack>
     </Flex>

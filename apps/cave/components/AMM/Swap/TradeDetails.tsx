@@ -58,7 +58,7 @@ export function TradeDetails({
       </HStack>
 
       <Collapse style={{ overflow: 'visible' }} in={hasDetails && isDetailsOpen}>
-        <TradeDetailsExpanded trade={trade} />
+        {isDetailsOpen && <TradeDetailsExpanded trade={trade} />}
       </Collapse>
     </>
   )

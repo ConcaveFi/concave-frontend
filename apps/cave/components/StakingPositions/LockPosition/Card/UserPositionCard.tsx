@@ -1,8 +1,16 @@
 import { StakingPosition } from '@concave/marketplace'
-import { Box, Collapse, Flex, VStack } from '@concave/ui'
+import {
+  Flex,
+  gradientBorder,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  Text,
+  useDisclosure,
+} from '@concave/ui'
+import { format, formatDistanceToNow } from 'date-fns'
 import { MarketListing } from '../MarketLockInfo/YourMarketplaceListingBox'
 import { NFTPositionHeader } from '../NFTPositionHeader/NFTPositionHeader'
-import { RedeemCardViewer } from '../Redeem/RedeemViewer'
 import { useUserPositionState } from './useUserPositionState'
 
 interface NftPositionCardProps {
@@ -10,35 +18,60 @@ interface NftPositionCardProps {
 }
 
 export const UserPositionCard = (props: NftPositionCardProps) => {
-  const { toogleActive, active, stakingPosition } = useUserPositionState(props)
-
+  const { stakingPosition } = useUserPositionState(props)
+  const { isOpen, onClose, onOpen } = useDisclosure()
+  const redeemable = stakingPosition.maturity <= Date.now() / 1000
   return (
-    <Box
-      pos={'relative'}
-      borderRadius={'2xl'}
-      maxHeight={{ lg: '300px', md: '400px' }}
-      maxWidth={{ lg: '100%', md: '100%', base: '352px' }}
-      bg={{
-        base: 'linear-gradient(223.18deg, #19394C 27.18%, #0A161F 96.11%)',
-        md: 'linear-gradient(265.73deg, #274C63 0%, #182F3E 100%)',
-      }}
-      mr={1}
-      my={3}
-    >
-      <Flex bgSize="20% 30%" bgImage={'/assets/textures/metal.png'} shadow={'up'} rounded="2xl">
-        <Flex w={'full'} direction={'column'}>
+    <Popover isOpen={isOpen}>
+      <PopoverTrigger>
+        <Flex
+          w={'full'}
+          minH="200px"
+          rounded={'2xl'}
+          bg="url(assets/textures/metal.png), linear-gradient(180deg, #16222E 0.07%, #28394D 80.07%)"
+          bgSize={'120px auto'}
+          my={2}
+          shadow={'up'}
+          direction="column"
+          onMouseOverCapture={onOpen}
+          onMouseOutCapture={onClose}
+          _hover={{ ...gradientBorder({ borderWidth: 2 }), shadow: 'Blue Light' }}
+          p={'2px'}
+        >
           <NFTPositionHeader
+            active={true}
             stakingPosition={stakingPosition}
-            active={active}
-            toogleActive={toogleActive}
+            toogleActive={() => {}}
           />
-          <VStack m={4} as={Collapse} in={active}>
-            <RedeemCardViewer stakingPosition={stakingPosition} />
-            {active && <MarketListing stakingPosition={stakingPosition} />}
-          </VStack>
+          <MarketListing stakingPosition={stakingPosition} />
         </Flex>
-      </Flex>
-      {/* </Flex> */}
-    </Box>
+      </PopoverTrigger>
+      <PopoverContent>
+        <Flex
+          w={'290px'}
+          h="100px"
+          apply="background.glass"
+          css={{ '::after': { opacity: 1 } }}
+          rounded={'2xl'}
+          sx={{ ...gradientBorder({ borderWidth: 2 }) }}
+        >
+          <Flex direction={'column'} justify="center" px={6}>
+            <Flex align={'center'} gap={2}>
+              <Text color={'text.low'}>Redeem date:</Text>
+              <Text fontWeight={'bold'}>
+                {format(new Date(stakingPosition.maturity * 1000), 'MM/dd/yyyy')}
+              </Text>
+            </Flex>
+            <Flex align={'center'} gap={2}>
+              {!redeemable && <Text color={'text.low'}>Redeem in:</Text>}
+              <Text fontWeight={'bold'} color="text.accent">
+                {!redeemable && formatDistanceToNow(new Date(stakingPosition.maturity * 1000))}
+                {redeemable && 'Redeemable'}
+              </Text>
+            </Flex>
+          </Flex>
+        </Flex>
+      </PopoverContent>
+    </Popover>
   )
 }
