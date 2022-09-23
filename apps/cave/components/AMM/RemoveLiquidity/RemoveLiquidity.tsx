@@ -59,16 +59,17 @@ export const RemoveLiquidityModalButton = ({
         title="Remove Liquidity"
         {...removeLiquidityDisclosure}
         isCentered
-        size={'2xl'}
         bodyProps={{
           variant: 'primary',
           borderRadius: '3xl',
           borderWidth: 2,
-          p: 6,
+          p: { base: 4, md: 6 },
+          maxW: '100%',
+          w: { base: `auto`, sm: `500px` },
           shadow: 'Up for Blocks',
           fontWeight: 'bold',
           fontSize: 'lg',
-          gap: 6,
+          gap: 4,
         }}
       >
         <AmountToRemove onChange={removeLiquidityState.setPercentToRemove} />
@@ -85,8 +86,8 @@ export const RemoveLiquidityModalButton = ({
 
 const AmountToRemove = ({ onChange }: { onChange: (n: number) => void }) => {
   return (
-    <Flex shadow="Up Big" px={6} py={3} borderRadius="2xl" justify="space-between" align="center">
-      <Text>Amount to remove</Text>
+    <Flex shadow="Up Big" p={2} gap={2} borderRadius="2xl" justify="space-between" align="center">
+      <Text px={2}>Amount to remove</Text>
       <NumericInput
         autoFocus={true}
         shadow="down"
@@ -116,9 +117,9 @@ const YouWillReceive = ({
   handleNativeToken,
 }: RemoveLiquidityState) => {
   return (
-    <HStack gap={7} shadow="Up Big" px={6} py={3} borderRadius="2xl" align="center">
-      <Box>
-        <Text>You will receive:</Text>
+    <HStack gap={2} shadow="Up Big" p={2} borderRadius="2xl" align="center">
+      <Box px={2} w={'full'}>
+        <Text fontSize={{ base: '12px', md: 'md' }}>You will receive:</Text>
         {hasNativeToken && (
           <Button onClick={handleNativeToken}>
             <Text fontWeight={400} fontStyle={'md'} color={'#2E97E2'} fontSize={'14px'}>
@@ -152,13 +153,18 @@ const ReceiveBox = ({
 }) => {
   const currency = receiveInNative ? NATIVE[token.chainId] : token
   return (
-    <HStack shadow="down" borderRadius="2xl" p={3}>
-      <CurrencyIcon size="sm" currency={currency} />
-      <Box>
-        <Text fontFamily={'heading'} fontWeight={600}>
-          {amount ? amount?.toFixed(4) : 0}
+    <HStack w={'full'} shadow="down" borderRadius="2xl" p={2}>
+      <CurrencyIcon link size="sm" currency={currency} />
+      <Box w={'full'}>
+        <Text fontSize={{ base: '12px', md: 'md' }} fontFamily={'heading'} fontWeight={600}>
+          {amount ? amount.toSignificant(5, { groupSeparator: ',' }) : 0}
         </Text>
-        <Text title={currency?.name} fontWeight={700} fontSize={'sm'} color={'text.low'}>
+        <Text
+          fontSize={{ base: '12px', md: 'sm' }}
+          title={currency?.name}
+          fontWeight={700}
+          color={'text.low'}
+        >
           {currency?.symbol}
         </Text>
       </Box>
@@ -229,7 +235,7 @@ const RemoveLiquidityActions = ({
         title={'Confirm Withdrawal'}
       >
         <Flex
-          width={'200px'}
+          w={'full'}
           height="107px"
           rounded={'2xl'}
           mt={4}
@@ -286,13 +292,13 @@ const YourPosition = ({ pair, userPoolShare }: { pair: Pair; userPoolShare: Perc
           label={pair.token0.symbol}
           value={pair.reserve0.multiply(userPoolShare).toFixed(2)}
         >
-          <CurrencyIcon size="sm" currency={pair.token0} />
+          <CurrencyIcon link size="sm" currency={pair.token0} />
         </PositionInfoItem>
         <PositionInfoItem
           label={pair.token1.symbol}
           value={pair.reserve1.multiply(userPoolShare).toFixed(2)}
         >
-          <CurrencyIcon size="sm" currency={pair.token1} />
+          <CurrencyIcon link size="sm" currency={pair.token1} />
         </PositionInfoItem>
       </Stack>
     </Flex>
