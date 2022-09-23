@@ -47,7 +47,7 @@ const TransactionInfo = ({ meta, status, chainId, hash }: TrackedTransaction) =>
   return (
     <Flex justify="space-between" align="center" gap={1} mb={2}>
       <Flex fontSize="sm" fontWeight="bold" direction="column">
-        <Text textTransform="capitalize">{meta.type}</Text>
+        <Text textTransform="capitalize">{meta?.type}</Text>
         <Link isExternal href={getTxExplorer(hash, chainId)} textColor={'text.low'}>
           {getTransactionStatusLabel({ status, meta })}
         </Link>

@@ -17,7 +17,6 @@ export const getCurrencyLogoURI = (currency: Currency) => {
 
 const etherscanCurrencyLink = (currency: Token) => {
   const base = `etherscan.io/token/${currency.address}`
-  console.log(currency.chainId)
   if (currency.chainId === 1) return `https://${base}`
   return `https://${ChainId[currency.chainId].toLocaleLowerCase()}.${base}`
 }
