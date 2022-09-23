@@ -35,7 +35,9 @@ export const parser = (stakingV1Contract: StakingV1Contract, provider: BaseProvi
       stakingV1Contract.positions(log.tokenID),
       stakingV1Contract.viewPositionRewards(log.tokenID),
     ])
-    const cavemart = log.marketplace.at(-1)
+
+    const [cavemart] = [...log.marketplace].reverse()
+    //const cavemart = log.marketplace.at(-1)
     const market = !cavemart ? undefined : await cavemartToMarket(cavemart)
 
     return new StakingPosition({

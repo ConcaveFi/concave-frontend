@@ -35,7 +35,7 @@ export const listPositons = async ({
   )
   const preFilter = data.logStakingV1
     .filter((l) => l.tokenID)
-    .filter((l) => !owner || l.to === owner)
+    .filter((l) => !owner || l.to.toLocaleLowerCase() === owner.toLocaleLowerCase())
   const { stakingV1ToStakingPosition } = parser(stakingV1Contract, provider)
   const result = await Promise.all(preFilter.map(stakingV1ToStakingPosition))
   return result.filter((p) => !p.currentValue.eq(0)) //remove redeemeds
@@ -53,7 +53,11 @@ export const listListedPositions = async ({ provider }: { provider: BaseProvider
   const { stakingV1ToStakingPosition } = parser(stakingV1Contract, provider)
   const dirtyResults = data.logStakingV1
   const cleanResults = dirtyResults
-    .filter((c) => c.to === c.marketplace.at(-1).tokenOwner)
+    .filter(({ marketplace, to }) => {
+      const [lastMarket] = [...marketplace].reverse()
+      const tokenOwner = to === lastMarket.tokenOwner
+      return tokenOwner
+    })
     .filter((c) => c.marketplace[0].tokenIsListed)
   const result = await Promise.all(cleanResults.map(stakingV1ToStakingPosition))
   return result.filter((p) => !p.currentValue.eq(0)) //remove redeemeds
