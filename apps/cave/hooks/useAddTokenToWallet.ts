@@ -17,7 +17,7 @@ export interface injectedTokenResponse {
 }
 
 /**
- * tool to transform a number to a hex value for chain Id
+ * Tool to transform a number to a hex value for chain Id
  */
 export const toHex = (num: number) => {
   return '0x' + num.toString(16)
@@ -77,7 +77,7 @@ const useAddTokenToWallet = ({ tokenAddress, tokenChainId, tokenImage }: injecte
             })
           }
 
-          const image = `https://raw.githubusercontent.com/ConcaveFi/assets/master/blockchains/${CHAIN_NAME[tokenChainId]}/assets/${tokenAddress}/logo.png`
+          const image = `https://cdn.jsdelivr.net/gh/concavefi/assets@latest/blockchains/${CHAIN_NAME[tokenChainId]}/assets/${tokenAddress}/logo.png`
 
           const addToWallet = async (symbol: string, decimals: number) => {
             await window.ethereum?.request({
