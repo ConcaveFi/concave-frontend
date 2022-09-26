@@ -1,8 +1,19 @@
 import { Currency } from '@concave/core'
-import { ExpandArrowIcon } from '@concave/icons'
-import { Box, Button, Flex, HStack, Modal, NumericInput, StackDivider, Text } from '@concave/ui'
+import { ExpandArrowIcon, WarningTwoIcon } from '@concave/icons'
+import {
+  Box,
+  Button,
+  Checkbox,
+  Flex,
+  HStack,
+  Modal,
+  NumericInput,
+  StackDivider,
+  Text,
+} from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { UseTransaction } from 'hooks/TransactionsRegistry/useTransaction'
+import { useState } from 'react'
 
 const TokenInfo = ({
   currency,
@@ -64,6 +75,7 @@ export const ConfirmBondModal = ({
   minimumAmountOut,
   slippage,
   transaction,
+  roi,
 }: {
   transaction: UseTransaction
   currencyIn: Currency
@@ -77,9 +89,18 @@ export const ConfirmBondModal = ({
   bondPrice: string
   minimumAmountOut: string
   slippage: string
+  roi?: number
 }) => {
+  const [agree, setAgree] = useState(false)
+  const negativeRoi = roi < 0
+
+  const onCloseModal = () => {
+    setAgree(false)
+    onClose()
+  }
+
   return (
-    <Modal bluryOverlay={true} title="Confirm Bond" isOpen={isOpen} onClose={onClose}>
+    <Modal bluryOverlay={true} title="Confirm Bond" isOpen={isOpen} onClose={onCloseModal}>
       <div>
         <TokenInfo
           currency={currencyIn}
@@ -112,11 +133,35 @@ export const ConfirmBondModal = ({
         </Text>
       </Flex>
 
+      {negativeRoi && (
+        <Flex color={'yellow.100'} direction="column" align={'center'}>
+          <WarningTwoIcon boxSize={'25px'} color="yellow.100" />
+          <Text textAlign={'center'}>
+            Current bond roi Is{' '}
+            <Text color={'red.300'} as="strong">
+              negative
+            </Text>
+            , <br /> are you sure you want to bond anyway? <br /> You may lose money.
+          </Text>
+        </Flex>
+      )}
+      {negativeRoi && (
+        <Flex px={2} gap={4} mt={3} mb={1}>
+          <Checkbox defaultChecked={agree} onChange={(v) => setAgree(!agree)} />
+          <Text color={'text.low'}>
+            I understand that bond roi is{' '}
+            <Text as={'strong'} color="red.300">
+              {roi.toFixed(2) || '0'}%
+            </Text>
+          </Text>
+        </Flex>
+      )}
+
       <Button
         variant="primary"
         size="large"
         onClick={transaction.sendTx}
-        disabled={transaction.isWaitingForConfirmation}
+        disabled={transaction.isWaitingForConfirmation || (roi < 0 && !agree)}
         w="full"
       >
         {transaction.isWaitingForConfirmation ? 'Confirm in wallet' : 'Confirm bond'}

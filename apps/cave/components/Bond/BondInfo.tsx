@@ -2,6 +2,7 @@ import { keyframes } from '@chakra-ui/system'
 import { SpinIcon } from '@concave/icons'
 import { Box, Card, Flex, Image, Text } from '@concave/ui'
 import { utils } from 'ethers'
+import { getRoiWarnColor } from 'utils/getRoiWarnColor'
 const spin = keyframes({
   '0%': { transform: 'rotate(0deg)' },
   '100%': { transform: 'rotate(360deg)' },
@@ -33,7 +34,15 @@ export const BondInfo = ({ asset, roi, vestingTerm, icon }) => {
         <InfoItem value={asset.toUpperCase()} label="Asset" />
       </Flex>
       <Box w="1px" mx={0} my={-4} bg="stroke.primary" />
-      <InfoItem value={roi} label="ROI" flexGrow={1} pl={3} pr={3} flexBasis="25%" />
+      <InfoItem
+        value={+roi.toFixed(2) + '%'}
+        label="ROI"
+        flexGrow={1}
+        pl={3}
+        pr={3}
+        flexBasis="25%"
+        color={getRoiWarnColor(+roi)}
+      />
       <Box w="1px" mx={0} my={-4} bg="stroke.primary" />
       <InfoItem value={vestingTerm} label="Vesting Term" px={5} flexBasis="35%" />
     </Card>
