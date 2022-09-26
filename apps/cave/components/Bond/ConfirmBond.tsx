@@ -142,7 +142,7 @@ export const ConfirmBondModal = ({
       )}
       {negativeRoi && (
         <Flex px={2} gap={4} mt={3} mb={1}>
-          <Checkbox onChange={(v) => setAgree(!agree)} />
+          <Checkbox defaultChecked={false} onChange={(v) => setAgree(!agree)} />
           <Text color={'text.low'}>
             I understand that bond roi is{' '}
             <Text as={'strong'} color="red.300">
