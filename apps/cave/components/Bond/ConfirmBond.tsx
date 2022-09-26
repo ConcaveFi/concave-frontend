@@ -94,8 +94,13 @@ export const ConfirmBondModal = ({
   const [agree, setAgree] = useState(false)
   const negativeRoi = roi < 0
 
+  const onCloseModal = () => {
+    setAgree(false)
+    onClose()
+  }
+
   return (
-    <Modal bluryOverlay={true} title="Confirm Bond" isOpen={isOpen} onClose={onClose}>
+    <Modal bluryOverlay={true} title="Confirm Bond" isOpen={isOpen} onClose={onCloseModal}>
       <div>
         <TokenInfo
           currency={currencyIn}
@@ -142,7 +147,7 @@ export const ConfirmBondModal = ({
       )}
       {negativeRoi && (
         <Flex px={2} gap={4} mt={3} mb={1}>
-          <Checkbox defaultChecked={false} onChange={(v) => setAgree(!agree)} />
+          <Checkbox defaultChecked={agree} onChange={(v) => setAgree(!agree)} />
           <Text color={'text.low'}>
             I understand that bond roi is{' '}
             <Text as={'strong'} color="red.300">
