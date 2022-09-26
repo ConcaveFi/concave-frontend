@@ -1,13 +1,14 @@
 import { ChainId, CNV, Currency, DAI, Ether, USDC, WNATIVE } from '@concave/core'
 import { act, renderHook, waitFor } from '@testing-library/react'
+import { QueryClient, QueryClientProvider, setLogger } from 'react-query'
 import {
   setRouteDefaultCurrencies,
   useQueryCurrencies,
-} from 'components/AMM/hooks/useQueryCurrencies'
-import { QueryClient, QueryClientProvider, setLogger } from 'react-query'
+} from '../../components/AMM/hooks/useQueryCurrencies'
 
-import { WagmiProvider } from 'contexts/WagmiContext'
 import mockRouter from 'next-router-mock'
+import React from 'react'
+import { WagmiProvider } from '../../contexts/WagmiContext'
 
 jest.mock('next/router', () => require('next-router-mock'))
 
