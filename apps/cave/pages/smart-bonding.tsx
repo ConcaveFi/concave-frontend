@@ -34,7 +34,6 @@ import { useGet_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useCNVPrice } from 'hooks/useCNVPrice'
 import { useEffect, useState } from 'react'
-import getROI from 'utils/getROI'
 const spin = keyframes({
   '0%': { transform: 'rotate(0deg)' },
   '100%': { transform: 'rotate(360deg)' },
@@ -211,7 +210,7 @@ export function Bond() {
                         <BondInfo
                           asset="CNV"
                           icon="/assets/tokens/cnv.svg"
-                          roi={getROI(cnvPrice.price?.toSignificant(8), bondSpotPrice)}
+                          roi={(1 - +bondSpotPrice / +cnvPrice.price?.toSignificant(8)) * 100}
                           vestingTerm={`${termLength} Days`}
                         />
                       </Collapse>
