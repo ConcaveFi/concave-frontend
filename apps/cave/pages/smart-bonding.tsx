@@ -152,6 +152,7 @@ export function Bond() {
         setButtonDisabled(false)
       })
   }
+  const roi = (1 - +bondSpotPrice / +cnvPrice.price?.toSignificant(8)) * 100
 
   return (
     <Container maxW="container.lg" p={'4px'}>
@@ -210,7 +211,7 @@ export function Bond() {
                         <BondInfo
                           asset="CNV"
                           icon="/assets/tokens/cnv.svg"
-                          roi={(1 - +bondSpotPrice / +cnvPrice.price?.toSignificant(8)) * 100}
+                          roi={roi}
                           vestingTerm={`${termLength} Days`}
                         />
                       </Collapse>
@@ -242,6 +243,7 @@ export function Bond() {
             </Card>
           </Box>
           <BondBuyCard
+            roi={roi}
             updateBondPositions={updateBondPositions}
             setRedeemButtonDisabled={setButtonDisabled}
           />
