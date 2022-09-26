@@ -8,7 +8,7 @@ import { ACNVRedemptionDialog } from './VestedTokensDialogs/ACNVRedemptionDialog
 import { BBTCNVRedemptionDialog } from './VestedTokensDialogs/BBTCNVRedemptionDialog'
 import { PCNVRedemptionDialog } from './VestedTokensDialogs/PCNVRedemptionDialog'
 
-export const TreasuryRedeemCard = () => {
+export const TreasuryRedeemCard = ({ width }: { width: string }) => {
   const chaindId = useCurrentSupportedNetworkId()
   const { addingToWallet }: injectedTokenResponse = useAddTokenToWallet({
     tokenAddress: CNV[chaindId].address,
@@ -19,7 +19,7 @@ export const TreasuryRedeemCard = () => {
   return (
     <Card
       variant="secondary"
-      w={{ base: 'full' }}
+      w={{ base: width }}
       h={{ base: '315px', md: '200px', xl: '150px' }}
       px={{ base: 0, md: 10, xl: '6' }}
       py={6}

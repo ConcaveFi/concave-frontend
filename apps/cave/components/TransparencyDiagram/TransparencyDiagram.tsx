@@ -64,7 +64,7 @@ export function TransparencyDiagram() {
       <VStack
         minWidth={isMobile ? '300px' : '700px'}
         width={'100%'}
-        height={'850px'}
+        height={'800px'}
         rounded={'2xl'}
         apply="background.metalBrighter"
         shadow={'up'}

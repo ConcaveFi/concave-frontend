@@ -2,13 +2,13 @@ import { Card, Flex, Text } from '@concave/ui'
 interface DividendsCardProps {
   onChange: () => void
 }
-// go live
-export default function DividendsCard() {
+
+export default function DividendsCard({ width }: { width: string }) {
   return (
     <Card
       direction={{ base: 'column', lg: 'row' }}
       align="center"
-      w={'full'}
+      w={width}
       variant="secondary"
       height={{ base: '260px', lg: '179px' }}
       py={{ base: 2, lg: 0 }}
