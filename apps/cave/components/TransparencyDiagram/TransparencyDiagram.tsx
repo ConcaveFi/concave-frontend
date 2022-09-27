@@ -21,6 +21,7 @@ import { edgeStyle, labelStyle } from './styles'
 enum DiagramButtons {
   TreasuryOverview = 'Treasury Overview',
   COOPTreasury = 'CO-OP Treasury',
+  ConcaveTreasury = 'Concave Treasury',
   GeneralDiagram = 'General Diagram',
   BondingDiagram = 'Bonding Diagram',
   StakingDiagram = 'Staking Diagram',
@@ -91,6 +92,11 @@ export function TransparencyDiagram() {
             setDiagramShown={setDiagramShown}
           />
           <SelectionButton
+            chartName={DiagramButtons.ConcaveTreasury}
+            diagramShown={diagramShown}
+            setDiagramShown={setDiagramShown}
+          />
+          <SelectionButton
             chartName={DiagramButtons.GeneralDiagram}
             diagramShown={diagramShown}
             setDiagramShown={setDiagramShown}
@@ -135,6 +141,15 @@ export function TransparencyDiagram() {
                 isMobile
                   ? 'https://datastudio.google.com/embed/reporting/8f3baa69-b193-41be-9d4f-ffcbc08d691a/page/p_hjeiqnsnyc'
                   : 'https://datastudio.google.com/embed/reporting/f0ba2360-88f4-468a-8306-1923dd49f8a8/page/p_va7gtbqnyc'
+              }
+            />
+          )}
+          {diagramShown === DiagramButtons.ConcaveTreasury && (
+            <DataStudio
+              src={
+                isMobile
+                  ? 'https://datastudio.google.com/embed/reporting/8f3baa69-b193-41be-9d4f-ffcbc08d691a/page/p_k60ihuz1yc'
+                  : 'https://datastudio.google.com/embed/reporting/f0ba2360-88f4-468a-8306-1923dd49f8a8/page/p_65t8ugz1yc'
               }
             />
           )}
