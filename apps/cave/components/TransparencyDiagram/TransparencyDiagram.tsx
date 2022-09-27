@@ -18,11 +18,19 @@ import {
 } from './nodes/nodes'
 import { edgeStyle, labelStyle } from './styles'
 
-const SelectionButton = ({ diagramShown, setDiagramShown, chartId, chartName }) => (
+enum DiagramButtons {
+  TreasuryOverview = 'Treasury Overview',
+  COOPTreasury = 'CO-OP Treasury',
+  GeneralDiagram = 'General Diagram',
+  BondingDiagram = 'Bonding Diagram',
+  StakingDiagram = 'Staking Diagram',
+}
+
+const SelectionButton = ({ diagramShown, setDiagramShown, chartName }) => (
   <Button
-    variant={diagramShown === chartId ? 'primary.outline' : 'secondary'}
+    variant={diagramShown === chartName ? 'primary.outline' : 'secondary'}
     size={'lg'}
-    onClick={() => setDiagramShown(chartId)}
+    onClick={() => setDiagramShown(chartName)}
   >
     {chartName}
   </Button>
@@ -56,7 +64,7 @@ const ReactFlowDiagram = ({ edges, nodes, isMobile }) => (
 )
 
 export function TransparencyDiagram() {
-  const [diagramShown, setDiagramShown] = useState<number>(0)
+  const [diagramShown, setDiagramShown] = useState<DiagramButtons>(DiagramButtons.TreasuryOverview)
   const isMobile = useBreakpointValue({ base: true, md: false })
 
   return (
@@ -73,32 +81,27 @@ export function TransparencyDiagram() {
       >
         <Box display={'flex'} flexDirection={isMobile ? 'column' : 'row'} gap={'1rem'}>
           <SelectionButton
-            chartId={0}
-            chartName={'Treasury Overview'}
+            chartName={DiagramButtons.TreasuryOverview}
             diagramShown={diagramShown}
             setDiagramShown={setDiagramShown}
           />
           <SelectionButton
-            chartId={1}
-            chartName={'CO-OP Treasury'}
+            chartName={DiagramButtons.COOPTreasury}
             diagramShown={diagramShown}
             setDiagramShown={setDiagramShown}
           />
           <SelectionButton
-            chartId={2}
-            chartName={'General Diagram'}
+            chartName={DiagramButtons.GeneralDiagram}
             diagramShown={diagramShown}
             setDiagramShown={setDiagramShown}
           />
           <SelectionButton
-            chartId={3}
-            chartName={'Bonding Diagram'}
+            chartName={DiagramButtons.BondingDiagram}
             diagramShown={diagramShown}
             setDiagramShown={setDiagramShown}
           />
           <SelectionButton
-            chartId={4}
-            chartName={'Staking Diagram'}
+            chartName={DiagramButtons.StakingDiagram}
             diagramShown={diagramShown}
             setDiagramShown={setDiagramShown}
           />
@@ -117,7 +120,7 @@ export function TransparencyDiagram() {
           bg={'linear-gradient(238.35deg, #19394C 9.11%, #0A161F 92.45%)'}
           gap={2}
         >
-          {diagramShown === 0 && (
+          {diagramShown === DiagramButtons.TreasuryOverview && (
             <DataStudio
               src={
                 isMobile
@@ -126,7 +129,7 @@ export function TransparencyDiagram() {
               }
             />
           )}
-          {diagramShown === 1 && (
+          {diagramShown === DiagramButtons.COOPTreasury && (
             <DataStudio
               src={
                 isMobile
@@ -135,21 +138,21 @@ export function TransparencyDiagram() {
               }
             />
           )}
-          {diagramShown === 2 && (
+          {diagramShown === DiagramButtons.GeneralDiagram && (
             <ReactFlowDiagram
               edges={isMobile ? generalEdgesMobile : generalEdges}
               nodes={isMobile ? generalNodesMobile : generalNodes}
               isMobile={isMobile}
             />
           )}
-          {diagramShown === 3 && (
+          {diagramShown === DiagramButtons.BondingDiagram && (
             <ReactFlowDiagram
               edges={isMobile ? bondingEdgesMobile : bondingEdges}
               nodes={isMobile ? bondingNodesMobile : bondingNodes}
               isMobile={isMobile}
             />
           )}
-          {diagramShown === 4 && (
+          {diagramShown === DiagramButtons.StakingDiagram && (
             <ReactFlowDiagram
               edges={isMobile ? stakingEdgesMobile : stakingEdges}
               nodes={isMobile ? stakingNodesMobile : stakingNodes}
