@@ -1,6 +1,7 @@
 import ProgressBar from '@badrap/bar-of-progress'
 import { Styles } from '@chakra-ui/theme-tools'
 import { ConcaveFonts } from '@concave/ui'
+import ErrorBoundary from 'components/ErrorBoundary'
 import { DefaultLayout } from 'components/Layout'
 import { MetaHead, MetaProps } from 'components/MetaHead'
 import { Modals } from 'components/Modals'
@@ -12,6 +13,7 @@ import type { AppProps } from 'next/app'
 import Router, { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import * as gtag from '../lib/analytics'
+import ErrorPage from './500'
 
 const globalStyles: Styles = {
   global: {
@@ -53,7 +55,6 @@ type AppPropsWithLayout = AppProps & {
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const Layout = Component.Layout || DefaultLayout
   const router = useRouter()
-
   useEffect(() => {
     const handleRouteChange = (url: URL) => {
       if (NODE_ENV === 'production') gtag.trackPageview(url)
@@ -73,7 +74,9 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
       <MetaHead meta={Component.Meta} />
       <Modals />
       <Layout>
-        <Component {...pageProps} key={router.pathname} />
+        <ErrorBoundary FallbackComponent={ErrorPage}>
+          <Component {...pageProps} key={router.pathname} />
+        </ErrorBoundary>
       </Layout>
     </AppProviders>
   )

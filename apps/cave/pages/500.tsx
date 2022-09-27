@@ -1,7 +1,7 @@
 import { Card, Flex, Heading, Text } from '@concave/ui'
 
 // TODO: Find way of notificating devs lol
-const ErrorPage = () => {
+export const ErrorPage = () => {
   return (
     <Flex justify="center" align="center" w="100%">
       <Card variant="secondary" p={6} gap={2} textAlign="center">

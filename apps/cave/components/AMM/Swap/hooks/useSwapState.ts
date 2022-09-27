@@ -50,6 +50,7 @@ export const useSwapState = () => {
 
   // useEvent (?)
   const switchFields = useCallback(() => {
+    if (lastUpdated > -1) throw 'swap'
     const otherField = lastUpdated === 0 ? 1 : 0
     onChangeField(otherField)(otherField === 0 ? _trade.outputAmount : _trade.inputAmount)
   }, [_trade, lastUpdated, onChangeField])
