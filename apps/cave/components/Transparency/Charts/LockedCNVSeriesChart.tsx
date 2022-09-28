@@ -14,18 +14,18 @@ import { ChartTooltip } from './ChartTooltip'
 import { fetchData } from './fetchData'
 import { CHART_COLORS } from './style'
 
-type LockedCNVSeriesType = {
+type LockedCNVSeriesData = {
   timestamp: number
   locked: number
 }
 
 export const LockedCNVSeriesChart = () => {
-  const [data, setData] = useState<undefined | LockedCNVSeriesType[]>()
+  const [data, setData] = useState<undefined | LockedCNVSeriesData[]>()
   const [dataLoaded, setDataLoaded] = useState(false)
 
   useEffect(() => {
     fetchData('locked-series')
-      .then((data) => setData(data.lockedCNV))
+      .then((data: { lockedCNV: LockedCNVSeriesData[] }) => setData(data.lockedCNV))
       .then(() => setDataLoaded(true))
   }, [])
 

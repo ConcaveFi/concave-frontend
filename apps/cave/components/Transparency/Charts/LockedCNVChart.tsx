@@ -3,19 +3,19 @@ import { useEffect, useState } from 'react'
 import { ChartCard } from './ChartCard'
 import { fetchData } from './fetchData'
 
-type LockedCNVType = {
+type LockedCNVData = {
   ConcaveTokenTotalSupply: number
   sumAmountLocked: number
   ratioStaked: number
 }
 
 export function LockedCNVChart() {
-  const [data, setData] = useState<undefined | LockedCNVType>()
+  const [data, setData] = useState<undefined | LockedCNVData>()
   const [dataLoaded, setDataLoaded] = useState(false)
 
   useEffect(() => {
     fetchData('locked')
-      .then((data) => setData(data))
+      .then((data: LockedCNVData) => setData(data))
       .then(() => setDataLoaded(true))
   }, [])
 

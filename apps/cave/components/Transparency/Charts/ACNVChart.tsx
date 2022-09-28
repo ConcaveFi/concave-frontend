@@ -6,13 +6,19 @@ import { ChartTooltip } from './ChartTooltip'
 import { fetchData } from './fetchData'
 import { CHART_COLORS } from './style'
 
+type ACNVChartData = {
+  aCNVRedeemed: number
+  aCNVRedeemedPercent: number
+  TOTAL_ACNV: number
+}
+
 export function ACNVChart() {
-  const [data, setData] = useState<undefined | any>()
+  const [data, setData] = useState<undefined | ACNVChartData[]>()
   const [dataLoaded, setDataLoaded] = useState(false)
 
   useEffect(() => {
     fetchData('acnv-redeemed')
-      .then((data) => setData([data]))
+      .then((data: ACNVChartData) => setData([data]))
       .then(() => setDataLoaded(true))
   }, [])
 

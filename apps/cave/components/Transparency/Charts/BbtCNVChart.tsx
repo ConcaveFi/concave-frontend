@@ -15,14 +15,21 @@ import { ChartTooltip } from './ChartTooltip'
 import { fetchData } from './fetchData'
 import { CHART_COLORS } from './style'
 
+type BbtCNVChartData = {
+  bbtCNVRedeemable: number
+  bbtCNVRedeemed: number
+  bbtCNVToVest: number
+  TOTAL_BBTCNV: number
+}
+
 export function BbtCNVChart() {
-  const [data, setData] = useState<undefined | any>()
+  const [data, setData] = useState<undefined | BbtCNVChartData[]>()
   const [dataLoaded, setDataLoaded] = useState(false)
   const isMobile = useBreakpointValue({ base: true, md: false })
 
   useEffect(() => {
     fetchData('bbtcnv-redeemed')
-      .then((data) => setData([data]))
+      .then((data: BbtCNVChartData) => setData([data]))
       .then(() => setDataLoaded(true))
   }, [])
 
