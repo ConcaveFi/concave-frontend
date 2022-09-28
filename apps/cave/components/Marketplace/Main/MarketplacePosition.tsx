@@ -45,9 +45,8 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakin
             boxShadow: 'Blue Light',
             ...border,
           }}
-          p={1.5}
-          px={2.5}
-          gap={1.5}
+          p={3}
+          gap={3}
           justify="space-between"
           onMouseOver={() => setActive(true)}
           onMouseLeave={() => setActive(false)}
@@ -58,7 +57,10 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakin
             alignContent={`center`}
             gap={2}
             width={'full'}
-            justify="space-evenly"
+            justify={{
+              base: 'space-evenly',
+              lg: 'space-between',
+            }}
             flexWrap={`wrap`}
           >
             <ImageContainer
