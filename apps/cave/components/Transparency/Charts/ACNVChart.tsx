@@ -51,7 +51,7 @@ export function ACNVChart() {
               <XAxis
                 type="number"
                 dataKey="TOTAL_ACNV"
-                tickCount={4}
+                ticks={[0, Math.ceil(data[0].TOTAL_ACNV) / 2, Math.ceil(data[0].TOTAL_ACNV)]}
                 domain={[0, Math.ceil(data[0].TOTAL_ACNV)]}
               />
               <Tooltip cursor={false} content={<ChartTooltip />} />
