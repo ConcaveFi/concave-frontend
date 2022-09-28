@@ -6,6 +6,8 @@ import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId
 import Router from 'next/router'
 import { useQuery } from 'react-query'
 import getROI from 'utils/getROI'
+import { getRoiWarnColor } from 'utils/getRoiWarnColor'
+import { useAccount } from 'wagmi'
 
 const NavButton = (props: ButtonLinkProps) => {
   return (
@@ -66,22 +68,29 @@ const NotInteractableImage = ({ src, ...props }) => (
 const BondROI = () => {
   const currentSupportedNetworkId = useCurrentSupportedNetworkId()
   const cnvPrice = useCNVPrice()
-  const roi = useQuery(
+  const { isError, isFetching, isIdle, data } = useQuery(
     ['bondROI', currentSupportedNetworkId, cnvPrice.price],
     async () => {
       const cnvMarketPrice = cnvPrice?.price?.toSignificant(8)
       const bondSpotPrice = await getBondSpotPrice(currentSupportedNetworkId)
-      return getROI(cnvMarketPrice, bondSpotPrice)
+      return {
+        amount: (1 - +bondSpotPrice / +cnvMarketPrice) * 100,
+        formatted: getROI(cnvMarketPrice, bondSpotPrice),
+      }
     },
     { enabled: cnvPrice.isSuccess && !!currentSupportedNetworkId, refetchInterval: 17000 },
   )
-
+  const { amount, formatted } = data || {}
   return (
     <Flex justify="center" align="center" textColor="text.low" p="9px" m="-3px" mt="0">
       <Text fontSize="xs" fontWeight="bold" mr={1}>
-        {`CNV-DAI ${roi.data || ''}`} {roi.isError ? 'error' : ''}
+        {`CNV-DAI `}
+        <Text as={'span'} color={getRoiWarnColor(amount)} fontSize="xs" fontWeight="bold">
+          {formatted}
+        </Text>
+        {isError ? 'error' : ''}
       </Text>
-      {(roi.isFetching || roi.isIdle) && <Spinner size={'xs'} />}
+      {(isFetching || isIdle) && <Spinner size={'xs'} />}
     </Flex>
   )
 }
@@ -93,6 +102,7 @@ const ButtonContainer = ({ children, ...props }) => (
 )
 
 function PageNav() {
+  const { address } = useAccount()
   return (
     <Flex direction="column" position="relative" gap="10px" w="100%" pl="32px">
       <NotInteractableImage
@@ -120,7 +130,7 @@ function PageNav() {
       <ButtonContainer>
         <NavButton href="/gemswap">Swap</NavButton>
         <SubnavButton href="/addliquidity">Add liquidity</SubnavButton>
-        <SubnavButton href="/pools">Your Pools</SubnavButton>
+        <SubnavButton href="/pools">{address ? `Your ` : ``}Pools</SubnavButton>
       </ButtonContainer>
     </Flex>
   )
