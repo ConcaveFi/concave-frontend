@@ -1,8 +1,19 @@
 import { useLiquidValues } from 'components/LiquidStaking/hooks/useLiquidValues'
 import { ethers } from 'ethers'
 import { useEffect, useState } from 'react'
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Label,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts'
 import { ChartCard } from './ChartCard'
+import { ChartTooltip } from './ChartTooltip'
+import { CHART_COLORS } from './style'
 
 type PoolIdCountDataType = {
   poolId: number
@@ -15,7 +26,7 @@ type PoolIdCountDataType = {
 
 const PoolIdMap = { 0: '360 Day', 1: '180 Day', 2: '90 Day', 3: '45 Day' }
 
-function getPoolData(poolId: number): PoolIdCountDataType {
+function GetPoolData(poolId: number): PoolIdCountDataType {
   const { data, isLoading } = useLiquidValues(1, poolId)
   const { stakingV1Pools, stakingV1Cap } = data || {}
   if (!stakingV1Pools?.balance) return null
@@ -35,10 +46,10 @@ function getPoolData(poolId: number): PoolIdCountDataType {
 export const PoolIdChart = () => {
   const [data, setData] = useState<undefined | PoolIdCountDataType[]>()
   const [dataLoaded, setDataLoaded] = useState(false)
-  const pool0 = getPoolData(0)
-  const pool1 = getPoolData(1)
-  const pool2 = getPoolData(2)
-  const pool3 = getPoolData(3)
+  const pool0 = GetPoolData(0)
+  const pool1 = GetPoolData(1)
+  const pool2 = GetPoolData(2)
+  const pool3 = GetPoolData(3)
 
   useEffect(() => {
     if (!dataLoaded && pool0 !== null && pool1 !== null && pool2 !== null && pool3 !== null) {
@@ -48,25 +59,62 @@ export const PoolIdChart = () => {
   }, [pool0, pool1, pool2, pool3])
 
   return (
-    <ChartCard dataLoaded={dataLoaded} chartTitle="CNV Locked by Pool">
+    <ChartCard
+      dataLoaded={dataLoaded}
+      chartTitle="CNV Stake Pool Engagement"
+      tooltipDescription="This chart visualizes the amount of CNV staked in each pool relative to the pool's staking cap."
+    >
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           width={500}
           height={300}
           data={data}
           margin={{
-            top: 5,
-            right: 30,
-            left: 20,
-            bottom: 5,
+            top: 20,
+            right: 20,
+            left: 10,
+            bottom: 20,
           }}
         >
           <CartesianGrid strokeDasharray="5" style={{ opacity: 0.25 }} />
-          <XAxis dataKey="poolId" tickFormatter={(v) => PoolIdMap[v]} />
-          <YAxis scale="sqrt" />
-          <Tooltip cursor={false} />
-          <Bar dataKey="percentStaked" stackId="a" fill="#8884d8" />
-          <Bar dataKey="percentNotStaked" stackId="a" fill="#505050" opacity={0.5} />
+          <XAxis
+            dataKey="poolId"
+            tickFormatter={(v) => PoolIdMap[v]}
+            style={{ fill: CHART_COLORS.TextLow, fontSize: '0.9rem' }}
+          >
+            <Label
+              fill={CHART_COLORS.TextLow}
+              value={'Pool'}
+              style={{
+                textAnchor: 'middle',
+                transform: 'translateY(22.5px)',
+              }}
+            />
+          </XAxis>
+          <YAxis style={{ fill: CHART_COLORS.TextLow }}>
+            <Label
+              fill={CHART_COLORS.TextLow}
+              value={'Percentage of Pool Occupied'}
+              style={{
+                textAnchor: 'middle',
+                transform: 'translate(-120px, 165px) rotate(-90deg)',
+              }}
+            />
+          </YAxis>
+          <Tooltip cursor={false} content={<ChartTooltip />} />
+          <Bar
+            name="Percent Staked"
+            dataKey="percentStaked"
+            stackId="a"
+            fill={CHART_COLORS.LightBlue}
+          />
+          <Bar
+            name="Percent Not Staked"
+            dataKey="percentNotStaked"
+            stackId="a"
+            fill={CHART_COLORS.Blue}
+            opacity={0.15}
+          />
         </BarChart>
       </ResponsiveContainer>
     </ChartCard>

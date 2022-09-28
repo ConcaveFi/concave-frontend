@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import {
   CartesianGrid,
+  Label,
   Line,
   LineChart,
   ResponsiveContainer,
@@ -9,7 +10,9 @@ import {
   YAxis,
 } from 'recharts'
 import { ChartCard } from './ChartCard'
+import { ChartTooltip } from './ChartTooltip'
 import { fetchData } from './fetchData'
+import { CHART_COLORS } from './style'
 
 type LockedCNVSeriesType = {
   timestamp: number
@@ -34,10 +37,10 @@ export const LockedCNVSeriesChart = () => {
           height={300}
           data={data}
           margin={{
-            top: 5,
-            right: 30,
-            left: 20,
-            bottom: 5,
+            top: 20,
+            right: 20,
+            left: 40,
+            bottom: 20,
           }}
         >
           <CartesianGrid strokeDasharray="5" style={{ opacity: 0.15 }} />
@@ -48,11 +51,35 @@ export const LockedCNVSeriesChart = () => {
               const date = new Date(tickData)
               return date.toLocaleString('default', { month: 'short' }) + '/' + date.getDate()
             }}
-            style={{ fontSize: '0.8rem' }}
+            style={{ fill: CHART_COLORS.TextLow, fontSize: '0.8rem' }}
+          >
+            <Label
+              fill={CHART_COLORS.TextLow}
+              value={'Date'}
+              style={{
+                textAnchor: 'middle',
+                transform: 'translateY(22.5px)',
+              }}
+            />
+          </XAxis>
+          <YAxis style={{ fill: CHART_COLORS.TextLow }}>
+            <Label
+              fill={CHART_COLORS.TextLow}
+              value={'CNV Locked'}
+              style={{
+                textAnchor: 'middle',
+                transform: 'translate(-120px, 200px) rotate(-90deg)',
+              }}
+            />
+          </YAxis>
+          <Tooltip content={<ChartTooltip />} />
+          <Line
+            dot={false}
+            dataKey="locked"
+            name="Locked CNV"
+            stroke={CHART_COLORS.LightBlue}
+            strokeWidth={2.25}
           />
-          <YAxis />
-          <Tooltip />
-          <Line dot={false} dataKey="locked" name="Locked CNV" stroke="#8884d8" strokeWidth={2} />
         </LineChart>
       </ResponsiveContainer>
     </ChartCard>

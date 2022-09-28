@@ -26,6 +26,9 @@ export function LockedCNVChart() {
       tooltipDescription="Calculated using amountLocked / totalSupply."
     >
       <>
+        <Text color={'text.low'} lineHeight={'100%'}>
+          {data?.sumAmountLocked.toFixed(4)} / {data?.ConcaveTokenTotalSupply.toFixed(4)} CNV
+        </Text>
         <Text lineHeight={'100%'} fontSize={'8xl'}>
           {(data?.ratioStaked * 100).toFixed(2)}%
         </Text>

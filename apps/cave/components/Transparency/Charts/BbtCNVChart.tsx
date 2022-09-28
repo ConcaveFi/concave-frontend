@@ -1,3 +1,4 @@
+import { Flex, Text, useBreakpointValue } from '@concave/ui'
 import { useEffect, useState } from 'react'
 import {
   Bar,
@@ -10,11 +11,14 @@ import {
   YAxis,
 } from 'recharts'
 import { ChartCard } from './ChartCard'
+import { ChartTooltip } from './ChartTooltip'
 import { fetchData } from './fetchData'
+import { CHART_COLORS } from './style'
 
 export function BbtCNVChart() {
   const [data, setData] = useState<undefined | any>()
   const [dataLoaded, setDataLoaded] = useState(false)
+  const isMobile = useBreakpointValue({ base: true, md: false })
 
   useEffect(() => {
     fetchData('bbtcnv-redeemed')
@@ -25,10 +29,36 @@ export function BbtCNVChart() {
   return (
     <ChartCard
       dataLoaded={dataLoaded}
-      chartTitle="bbtCNV Redeem Tracker"
-      tooltipDescription="Track bbtCNV redeems."
+      chartTitle="bbtCNV Redeem Counter"
+      tooltipDescription="bbtCNV redeem counter."
     >
-      <ResponsiveContainer width="100%" height="100%">
+      <Flex direction={'row'} gap={6} justifyContent={'space-evenly'}>
+        <Flex direction={'column'} gap={1}>
+          {dataLoaded && (
+            <Text fontSize={isMobile ? 'md' : '2xl'} lineHeight={'100%'}>
+              {data[0].bbtCNVRedeemable.toFixed(4)}
+            </Text>
+          )}
+          <Text lineHeight={'100%'}>bbtCNV Redeemable</Text>
+        </Flex>
+        <Flex direction={'column'} gap={1}>
+          {dataLoaded && (
+            <Text fontSize={isMobile ? 'md' : '2xl'} lineHeight={'100%'}>
+              {data[0].bbtCNVRedeemed.toFixed(4)}
+            </Text>
+          )}
+          <Text lineHeight={'100%'}>bbtCNV Redeemed</Text>
+        </Flex>
+        <Flex direction={'column'} gap={1}>
+          {dataLoaded && (
+            <Text fontSize={isMobile ? 'md' : '2xl'} lineHeight={'100%'}>
+              {data[0].bbtCNVToVest.toFixed(4)}
+            </Text>
+          )}
+          <Text lineHeight={'100%'}>Vesting bbtCNV</Text>
+        </Flex>
+      </Flex>
+      <ResponsiveContainer width="100%" height="50%">
         <BarChart
           layout="vertical"
           width={500}
@@ -49,11 +79,27 @@ export function BbtCNVChart() {
             domain={[0, Math.ceil(dataLoaded && data[0].TOTAL_BBTCNV)]}
             tickLine={false}
           />
-          <Tooltip cursor={false} />
+          <Tooltip cursor={false} content={<ChartTooltip />} />
           <Legend />
-          <Bar name="Redeemable bbtCNV" dataKey="bbtCNVRedeemable" stackId="a" fill="#8884d8" />
-          <Bar name="Redeemed bbtCNV" dataKey="bbtCNVRedeemed" stackId="a" fill="#82ca9d" />
-          <Bar name="Vesting bbtCNV" dataKey="bbtCNVToVest" stackId="a" fill="grey" />
+          <Bar
+            name="Redeemable bbtCNV"
+            dataKey="bbtCNVRedeemable"
+            stackId="a"
+            fill={CHART_COLORS.GreenYellow}
+          />
+          <Bar
+            name="Redeemed bbtCNV"
+            dataKey="bbtCNVRedeemed"
+            stackId="a"
+            fill={CHART_COLORS.LightBlue}
+          />
+          <Bar
+            name="Vesting bbtCNV"
+            dataKey="bbtCNVToVest"
+            stackId="a"
+            fill={CHART_COLORS.Orange}
+            opacity={0.5}
+          />
         </BarChart>
       </ResponsiveContainer>
     </ChartCard>
