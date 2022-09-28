@@ -74,7 +74,7 @@ export function BbtCNVChart() {
                 bottom: 5,
               }}
             >
-              <CartesianGrid strokeDasharray="3" />
+              <CartesianGrid strokeDasharray="5" opacity={0.2} />
               <YAxis type="category" domain={[0]} axisLine={false} width={0} />
               <XAxis
                 type="number"

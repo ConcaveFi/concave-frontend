@@ -76,7 +76,7 @@ export const PoolIdChart = () => {
             bottom: 20,
           }}
         >
-          <CartesianGrid strokeDasharray="5" style={{ opacity: 0.25 }} />
+          <CartesianGrid strokeDasharray="5" opacity={0.15} />
           <XAxis
             dataKey="poolId"
             tickFormatter={(v) => PoolIdMap[v]}

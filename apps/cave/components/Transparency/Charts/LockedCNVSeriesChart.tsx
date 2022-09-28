@@ -43,7 +43,7 @@ export const LockedCNVSeriesChart = () => {
             bottom: 20,
           }}
         >
-          <CartesianGrid strokeDasharray="5" style={{ opacity: 0.15 }} />
+          <CartesianGrid strokeDasharray="5" opacity={0.15} />
           <XAxis
             dataKey="timestamp"
             scale="time"
