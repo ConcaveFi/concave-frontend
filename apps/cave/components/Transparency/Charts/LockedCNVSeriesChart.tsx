@@ -30,7 +30,7 @@ export const LockedCNVSeriesChart = () => {
   }, [])
 
   return (
-    <ChartCard dataLoaded={dataLoaded} chartTitle="CNV Locked over Time">
+    <ChartCard dataLoaded={dataLoaded} chartTitle="CNV locked over time">
       <ResponsiveContainer width="100%" height="100%">
         <LineChart
           width={500}
@@ -65,7 +65,7 @@ export const LockedCNVSeriesChart = () => {
           <YAxis tickFormatter={(v) => v.toLocaleString()} style={{ fill: CHART_COLORS.TextLow }}>
             <Label
               fill={CHART_COLORS.TextLow}
-              value={'CNV Locked'}
+              value={'CNV locked'}
               style={{
                 textAnchor: 'middle',
                 transform: 'translate(-120px, 200px) rotate(-90deg)',

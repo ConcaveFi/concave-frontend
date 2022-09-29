@@ -61,7 +61,7 @@ export const PoolIdChart = () => {
   return (
     <ChartCard
       dataLoaded={dataLoaded}
-      chartTitle="CNV Stake Pool Engagement"
+      chartTitle="CNV stake pool engagement"
       tooltipDescription="This chart visualizes the amount of CNV staked in each pool relative to the pool's staking cap."
     >
       <ResponsiveContainer width="100%" height="100%">
@@ -94,7 +94,7 @@ export const PoolIdChart = () => {
           <YAxis style={{ fill: CHART_COLORS.TextLow }}>
             <Label
               fill={CHART_COLORS.TextLow}
-              value={'Percentage of Pool Occupied'}
+              value={'Percentage of pool occupied'}
               style={{
                 textAnchor: 'middle',
                 transform: 'translate(-120px, 165px) rotate(-90deg)',
@@ -103,13 +103,13 @@ export const PoolIdChart = () => {
           </YAxis>
           <Tooltip cursor={false} content={<ChartTooltip />} />
           <Bar
-            name="Percent Staked"
+            name="Percent staked"
             dataKey="percentStaked"
             stackId="a"
             fill={CHART_COLORS.LightBlue}
           />
           <Bar
-            name="Percent Not Staked"
+            name="Percent not staked"
             dataKey="percentNotStaked"
             stackId="a"
             fill={CHART_COLORS.Blue}

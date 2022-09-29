@@ -23,7 +23,7 @@ export function ACNVChart() {
   }, [])
 
   return (
-    <ChartCard dataLoaded={dataLoaded} chartTitle="aCNV Redeem Counter">
+    <ChartCard dataLoaded={dataLoaded} chartTitle="aCNV redeem counter">
       {dataLoaded && (
         <>
           <Text color={'text.low'} lineHeight={'100%'}>
