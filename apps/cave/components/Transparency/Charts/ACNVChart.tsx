@@ -27,7 +27,9 @@ export function ACNVChart() {
       {dataLoaded && (
         <>
           <Text color={'text.low'} lineHeight={'100%'}>
-            {Math.ceil(data[0].aCNVRedeemed)} / {Math.ceil(data[0].TOTAL_ACNV)} aCNV redeemed
+            {Math.ceil(data[0].aCNVRedeemed).toLocaleString()}
+            {' / '}
+            {Math.ceil(data[0].TOTAL_ACNV).toLocaleString()} aCNV redeemed
           </Text>
           <Text lineHeight={'100%'} fontSize={'8xl'} display={'flex'} justifyContent={'center'}>
             {data[0].aCNVRedeemedPercent.toFixed(2)}%
@@ -53,6 +55,7 @@ export function ACNVChart() {
                 dataKey="TOTAL_ACNV"
                 ticks={[0, Math.ceil(data[0].TOTAL_ACNV) / 2, Math.ceil(data[0].TOTAL_ACNV)]}
                 domain={[0, Math.ceil(data[0].TOTAL_ACNV)]}
+                tickFormatter={(v) => v.toLocaleString()}
               />
               <Tooltip cursor={false} content={<ChartTooltip />} />
               <Bar

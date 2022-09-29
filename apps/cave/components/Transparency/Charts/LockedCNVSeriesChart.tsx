@@ -62,7 +62,7 @@ export const LockedCNVSeriesChart = () => {
               }}
             />
           </XAxis>
-          <YAxis style={{ fill: CHART_COLORS.TextLow }}>
+          <YAxis tickFormatter={(v) => v.toLocaleString()} style={{ fill: CHART_COLORS.TextLow }}>
             <Label
               fill={CHART_COLORS.TextLow}
               value={'CNV Locked'}

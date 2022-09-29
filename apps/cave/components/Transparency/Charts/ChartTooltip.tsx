@@ -1,4 +1,5 @@
 import { Card, Text } from '@concave/ui'
+import { numberWithCommas } from 'utils/numbersWithCommas'
 
 type PayloadObject = {
   color: string
@@ -27,7 +28,7 @@ export const ChartTooltip = ({
       <Card variant="secondary" p={5}>
         {payload.map((current, index: number) => (
           <Text fontSize={'lg'} key={index}>
-            {`${current.name}: ${current.value.toFixed(4)}`}
+            {`${current.name}: ${numberWithCommas(current.value.toFixed(4))}`}
           </Text>
         ))}
       </Card>

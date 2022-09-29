@@ -10,6 +10,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
+import { numberWithCommas } from 'utils/numbersWithCommas'
 import { ChartCard } from './ChartCard'
 import { ChartTooltip } from './ChartTooltip'
 import { fetchData } from './fetchData'
@@ -44,19 +45,19 @@ export function BbtCNVChart() {
           <Flex direction={'row'} gap={6} justifyContent={'space-evenly'}>
             <Flex direction={'column'} gap={1}>
               <Text fontSize={isMobile ? 'md' : '2xl'} lineHeight={'100%'}>
-                {data[0].bbtCNVRedeemable.toFixed(4)}
+                {numberWithCommas(data[0].bbtCNVRedeemable.toFixed(4))}
               </Text>
               <Text lineHeight={'100%'}>bbtCNV Redeemable</Text>
             </Flex>
             <Flex direction={'column'} gap={1}>
               <Text fontSize={isMobile ? 'md' : '2xl'} lineHeight={'100%'}>
-                {data[0].bbtCNVRedeemed.toFixed(4)}
+                {numberWithCommas(data[0].bbtCNVRedeemed.toFixed(4))}
               </Text>
               <Text lineHeight={'100%'}>bbtCNV Redeemed</Text>
             </Flex>
             <Flex direction={'column'} gap={1}>
               <Text fontSize={isMobile ? 'md' : '2xl'} lineHeight={'100%'}>
-                {data[0].bbtCNVToVest.toFixed(4)}
+                {numberWithCommas(data[0].bbtCNVToVest.toFixed(4))}
               </Text>
               <Text lineHeight={'100%'}>Vesting bbtCNV</Text>
             </Flex>
@@ -80,6 +81,7 @@ export function BbtCNVChart() {
                 type="number"
                 dataKey="TOTAL_BBTCNV"
                 domain={[0, Math.ceil(data[0].TOTAL_BBTCNV)]}
+                tickFormatter={(v) => v.toLocaleString()}
                 tickLine={false}
               />
               <Tooltip cursor={false} content={<ChartTooltip />} />

@@ -1,5 +1,6 @@
 import { Text } from '@concave/ui'
 import { useEffect, useState } from 'react'
+import { numberWithCommas } from 'utils/numbersWithCommas'
 import { ChartCard } from './ChartCard'
 import { fetchData } from './fetchData'
 
@@ -28,7 +29,9 @@ export function LockedCNVChart() {
       {dataLoaded && (
         <>
           <Text color={'text.low'} lineHeight={'100%'}>
-            {data.sumAmountLocked.toFixed(4)} / {data.ConcaveTokenTotalSupply.toFixed(4)} CNV
+            {numberWithCommas(data.sumAmountLocked.toFixed(4))}
+            {' / '}
+            {numberWithCommas(data.ConcaveTokenTotalSupply.toFixed(4))} CNV
           </Text>
           <Text lineHeight={'100%'} fontSize={'8xl'}>
             {(data.ratioStaked * 100).toFixed(2)}%
