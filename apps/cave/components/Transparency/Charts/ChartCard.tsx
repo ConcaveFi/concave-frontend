@@ -7,20 +7,24 @@ export const ChartCard = ({
   dataLoaded,
   tooltipDescription,
   variant = 'secondary',
+  width = 'full',
   height = '350px',
   p = 4,
+  overflow = 'hidden',
   children,
 }: {
   chartTitle: string
   dataLoaded: boolean
   tooltipDescription?: string
   variant?: 'primary' | 'secondary'
+  width?: string
   height?: string
   p?: number
+  overflow?: 'hidden' | 'visible'
   children: JSX.Element | JSX.Element[]
 }) => {
   return (
-    <Card fontWeight={'bold'} variant={variant} w={'full'} p={p} h={height}>
+    <Card fontWeight={'bold'} variant={variant} w={width} p={p} h={height}>
       <Box display={'flex'} flexDir={'row'} width={'full'} justifyContent={'space-between'}>
         <Text>{chartTitle}</Text>
         {tooltipDescription && (
@@ -34,8 +38,9 @@ export const ChartCard = ({
         w={'100%'}
         h={'100%'}
         rounded={'2xl'}
-        overflow={'hidden'}
+        overflow={overflow}
         justifyContent={'center'}
+        alignItems={overflow === 'visible' ? 'center' : 'unset'}
       >
         {dataLoaded ? <>{children}</> : <Loading size={'md'} label={'Loading data'} isLoading />}
       </Flex>

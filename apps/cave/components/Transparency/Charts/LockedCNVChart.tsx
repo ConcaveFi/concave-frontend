@@ -25,6 +25,8 @@ export function LockedCNVChart() {
       dataLoaded={dataLoaded}
       chartTitle="CNV in lsdCNV"
       tooltipDescription="Calculated using amountLocked / totalSupply."
+      width={'60%'}
+      overflow={'visible'}
     >
       {dataLoaded && (
         <>
