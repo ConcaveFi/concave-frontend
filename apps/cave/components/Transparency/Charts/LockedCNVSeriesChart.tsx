@@ -51,6 +51,8 @@ export const LockedCNVSeriesChart = () => {
               const date = new Date(tickData)
               return date.toLocaleString('default', { month: 'short' }) + '/' + date.getDate()
             }}
+            axisLine={{ stroke: CHART_COLORS.TextLow }}
+            tickLine={{ stroke: CHART_COLORS.TextLow }}
             style={{ fill: CHART_COLORS.TextLow, fontSize: '0.8rem' }}
           >
             <Label
@@ -62,13 +64,18 @@ export const LockedCNVSeriesChart = () => {
               }}
             />
           </XAxis>
-          <YAxis tickFormatter={(v) => v.toLocaleString()} style={{ fill: CHART_COLORS.TextLow }}>
+          <YAxis
+            axisLine={{ stroke: CHART_COLORS.TextLow }}
+            tickLine={{ stroke: CHART_COLORS.TextLow }}
+            tickFormatter={(v) => v.toLocaleString()}
+            style={{ fill: CHART_COLORS.TextLow }}
+          >
             <Label
               fill={CHART_COLORS.TextLow}
               value={'CNV locked'}
               style={{
                 textAnchor: 'middle',
-                transform: 'translate(-120px, 200px) rotate(-90deg)',
+                transform: 'translate(-120px, 205px) rotate(-90deg)',
               }}
             />
           </YAxis>

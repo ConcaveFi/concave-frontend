@@ -82,7 +82,9 @@ export function BbtCNVChart() {
                 dataKey="TOTAL_BBTCNV"
                 domain={[0, Math.ceil(data[0].TOTAL_BBTCNV)]}
                 tickFormatter={(v) => v.toLocaleString()}
-                tickLine={false}
+                tickLine={{ stroke: CHART_COLORS.TextLow }}
+                axisLine={{ stroke: CHART_COLORS.TextLow }}
+                style={{ fill: CHART_COLORS.TextLow }}
               />
               <Tooltip cursor={false} content={<ChartTooltip />} />
               <Legend />

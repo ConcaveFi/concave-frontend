@@ -80,6 +80,8 @@ export const PoolIdChart = () => {
           <XAxis
             dataKey="poolId"
             tickFormatter={(v) => PoolIdMap[v]}
+            tickLine={{ stroke: CHART_COLORS.TextLow }}
+            axisLine={{ stroke: CHART_COLORS.TextLow }}
             style={{ fill: CHART_COLORS.TextLow, fontSize: '0.9rem' }}
           >
             <Label
@@ -91,13 +93,17 @@ export const PoolIdChart = () => {
               }}
             />
           </XAxis>
-          <YAxis style={{ fill: CHART_COLORS.TextLow }}>
+          <YAxis
+            style={{ fill: CHART_COLORS.TextLow }}
+            tickLine={{ stroke: CHART_COLORS.TextLow }}
+            axisLine={{ stroke: CHART_COLORS.TextLow }}
+          >
             <Label
               fill={CHART_COLORS.TextLow}
               value={'Percentage of pool occupied'}
               style={{
                 textAnchor: 'middle',
-                transform: 'translate(-120px, 165px) rotate(-90deg)',
+                transform: 'translate(-120px, 175px) rotate(-90deg)',
               }}
             />
           </YAxis>

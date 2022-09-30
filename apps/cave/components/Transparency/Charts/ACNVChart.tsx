@@ -56,6 +56,9 @@ export function ACNVChart() {
                 ticks={[0, Math.ceil(data[0].TOTAL_ACNV) / 2, Math.ceil(data[0].TOTAL_ACNV)]}
                 domain={[0, Math.ceil(data[0].TOTAL_ACNV)]}
                 tickFormatter={(v) => v.toLocaleString()}
+                tickLine={{ stroke: CHART_COLORS.TextLow }}
+                axisLine={{ stroke: CHART_COLORS.TextLow }}
+                style={{ fill: CHART_COLORS.TextLow }}
               />
               <Tooltip cursor={false} content={<ChartTooltip />} />
               <Bar
