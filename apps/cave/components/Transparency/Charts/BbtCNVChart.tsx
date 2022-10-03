@@ -39,6 +39,7 @@ export function BbtCNVChart() {
       dataLoaded={dataLoaded}
       chartTitle="bbtCNV redeem counter"
       tooltipDescription="bbtCNV redeem counter."
+      overflow="visible"
     >
       {dataLoaded && (
         <>
