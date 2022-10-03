@@ -10,7 +10,7 @@ type LockedCNVData = {
   ratioStaked: number
 }
 
-export function LockedCNVChart() {
+export function LockedCNVChart({ width, fontSize }: { width: string; fontSize: string }) {
   const [data, setData] = useState<undefined | LockedCNVData>()
   const [dataLoaded, setDataLoaded] = useState(false)
 
@@ -25,7 +25,7 @@ export function LockedCNVChart() {
       dataLoaded={dataLoaded}
       chartTitle="CNV in lsdCNV"
       tooltipDescription="Calculated using amountLocked / totalSupply."
-      width={'60%'}
+      width={width}
       overflow={'visible'}
     >
       {dataLoaded && (
@@ -35,7 +35,7 @@ export function LockedCNVChart() {
             {' / '}
             {numberWithCommas(data.ConcaveTokenTotalSupply.toFixed(4))} CNV
           </Text>
-          <Text lineHeight={'100%'} fontSize={'8xl'}>
+          <Text lineHeight={'100%'} fontSize={fontSize}>
             {(data.ratioStaked * 100).toFixed(2)}%
           </Text>
           <Text fontSize={'large'}>CNV locked in lsdCNV</Text>

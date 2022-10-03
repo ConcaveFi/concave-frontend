@@ -9,7 +9,7 @@ type LsdCNVHoldersData = {
   }
 }
 
-export function LsdCNVHoldersChart() {
+export function LsdCNVHoldersChart({ width, fontSize }: { width: string; fontSize: string }) {
   const [data, setData] = useState<undefined | LsdCNVHoldersData>()
   const [dataLoaded, setDataLoaded] = useState(false)
 
@@ -24,11 +24,11 @@ export function LsdCNVHoldersChart() {
       dataLoaded={dataLoaded}
       chartTitle="lsdCNV holders"
       tooltipDescription="The amount of unique lsdCNV holders."
-      width={'50%'}
+      width={width}
     >
       {dataLoaded && (
         <>
-          <Text lineHeight={'100%'} fontSize={'8xl'}>
+          <Text lineHeight={'100%'} fontSize={fontSize}>
             {data.aggregate.count}
           </Text>
           <Text fontSize={'large'}>lsdCNV holders</Text>

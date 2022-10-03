@@ -12,7 +12,7 @@ type ACNVChartData = {
   TOTAL_ACNV: number
 }
 
-export function ACNVChart() {
+export function ACNVChart({ fontSize }: { fontSize: string }) {
   const [data, setData] = useState<undefined | ACNVChartData[]>()
   const [dataLoaded, setDataLoaded] = useState(false)
 
@@ -31,7 +31,7 @@ export function ACNVChart() {
             {' / '}
             {Math.ceil(data[0].TOTAL_ACNV).toLocaleString()} aCNV redeemed
           </Text>
-          <Text lineHeight={'100%'} fontSize={'8xl'} display={'flex'} justifyContent={'center'}>
+          <Text lineHeight={'100%'} fontSize={fontSize} display={'flex'} justifyContent={'center'}>
             {data[0].aCNVRedeemedPercent.toFixed(2)}%
           </Text>
           <Text fontSize={'large'}>aCNV redeemed</Text>
