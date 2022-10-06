@@ -92,7 +92,7 @@ export const LockedCNVSeriesChart = () => {
               }}
             />
           </YAxis>
-          <Tooltip content={<ChartTooltip />} />
+          <Tooltip content={<ChartTooltip accessPayloadKeys payloadKeys={['date']} />} />
           <Line
             dot={false}
             dataKey="locked"
