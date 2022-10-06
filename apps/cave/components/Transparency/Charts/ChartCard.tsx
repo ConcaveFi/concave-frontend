@@ -21,7 +21,7 @@ export const ChartCard = ({
   height?: string
   p?: number
   overflow?: 'hidden' | 'visible'
-  children: JSX.Element | JSX.Element[]
+  children?: JSX.Element | JSX.Element[]
 }) => {
   return (
     <Card fontWeight={'bold'} variant={variant} w={width} p={p} h={height}>
