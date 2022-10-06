@@ -14,20 +14,26 @@ import { ChartTooltip } from './ChartTooltip'
 import { fetchData } from './fetchData'
 import { CHART_COLORS } from './style'
 
+type lockedCNVDatum = { timestamp: number; locked: number; date: string }
+
 type LockedCNVSeriesData = {
-  timestamp: number
-  locked: number
+  lockedCNV: lockedCNVDatum[]
+  ticks: { ticksObject: { [key: string]: string }; ticksArray: number[] }
 }
 
 export const LockedCNVSeriesChart = () => {
-  const [data, setData] = useState<undefined | LockedCNVSeriesData[]>()
+  const [data, setData] = useState<undefined | LockedCNVSeriesData>()
   const [dataLoaded, setDataLoaded] = useState(false)
 
   useEffect(() => {
     fetchData('locked-series')
-      .then((data: { lockedCNV: LockedCNVSeriesData[] }) => setData(data.lockedCNV))
+      .then((data: LockedCNVSeriesData) => setData(data))
       .then(() => setDataLoaded(true))
   }, [])
+
+  if (!dataLoaded) {
+    return <ChartCard dataLoaded={dataLoaded} chartTitle="CNV locked over time" />
+  }
 
   return (
     <ChartCard dataLoaded={dataLoaded} chartTitle="CNV locked over time">
@@ -35,10 +41,10 @@ export const LockedCNVSeriesChart = () => {
         <LineChart
           width={500}
           height={300}
-          data={data}
+          data={data.lockedCNV}
           margin={{
             top: 20,
-            right: 20,
+            right: 40,
             left: 40,
             bottom: 20,
           }}
@@ -47,17 +53,24 @@ export const LockedCNVSeriesChart = () => {
           <XAxis
             dataKey="timestamp"
             scale="time"
+            tickCount={6}
+            ticks={data.ticks.ticksArray}
+            interval={0}
             tickFormatter={(tickData) => {
-              const date = new Date(tickData)
-              return date.toLocaleString('default', { month: 'short' }) + '/' + date.getDate()
+              const value = data.ticks.ticksObject[tickData]
+              if (value !== undefined) return value
             }}
             axisLine={{ stroke: CHART_COLORS.TextLow }}
             tickLine={{ stroke: CHART_COLORS.TextLow }}
-            style={{ fill: CHART_COLORS.TextLow, fontSize: '0.8rem' }}
+            tickMargin={7}
+            style={{
+              fill: CHART_COLORS.TextLow,
+              fontSize: '0.8rem',
+            }}
           >
             <Label
               fill={CHART_COLORS.TextLow}
-              value={'Date'}
+              value={'Date (MM-DD-YY)'}
               style={{
                 textAnchor: 'middle',
                 transform: 'translateY(22.5px)',
@@ -68,7 +81,7 @@ export const LockedCNVSeriesChart = () => {
             axisLine={{ stroke: CHART_COLORS.TextLow }}
             tickLine={{ stroke: CHART_COLORS.TextLow }}
             tickFormatter={(v) => v.toLocaleString()}
-            style={{ fill: CHART_COLORS.TextLow }}
+            style={{ fill: CHART_COLORS.TextLow, fontSize: '0.8rem' }}
           >
             <Label
               fill={CHART_COLORS.TextLow}
