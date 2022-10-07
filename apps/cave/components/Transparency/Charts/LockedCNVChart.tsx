@@ -4,19 +4,19 @@ import { numberWithCommas } from 'utils/numbersWithCommas'
 import { ChartCard } from './ChartCard'
 import { fetchData } from './fetchData'
 
-type LockedCNVData = {
+type AmountCNVLockedData = {
   ConcaveTokenTotalSupply: number
   sumAmountLocked: number
   ratioStaked: number
 }
 
 export function LockedCNVChart({ width, fontSize }: { width: string; fontSize: string }) {
-  const [data, setData] = useState<undefined | LockedCNVData>()
+  const [data, setData] = useState<undefined | AmountCNVLockedData>()
   const [dataLoaded, setDataLoaded] = useState(false)
 
   useEffect(() => {
     fetchData('locked')
-      .then((data: LockedCNVData) => setData(data))
+      .then((data: AmountCNVLockedData) => setData(data))
       .then(() => setDataLoaded(true))
   }, [])
 
