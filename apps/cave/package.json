@@ -60,7 +60,7 @@
     "zustand": "^4.0.0"
   },
   "devDependencies": {
-    "@chakra-ui/cli": "^2.0.0",
+    "@chakra-ui/cli": "^2.1.8",
     "@graphql-codegen/cli": "^2.7.0",
     "@graphql-codegen/introspection": "^2.1.1",
     "@graphql-codegen/typescript": "^2.4.11",
