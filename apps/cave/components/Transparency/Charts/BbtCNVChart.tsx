@@ -25,13 +25,15 @@ type BbtCNVChartData = {
 
 export function BbtCNVChart() {
   const [data, setData] = useState<undefined | BbtCNVChartData[]>()
+  const [error, setError] = useState<undefined | string>()
   const [dataLoaded, setDataLoaded] = useState(false)
   const isMobile = useBreakpointValue({ base: true, md: false })
 
   useEffect(() => {
     fetchData('bbtcnv-redeemed')
       .then((data: BbtCNVChartData) => setData([data]))
-      .then(() => setDataLoaded(true))
+      .catch((error: Error) => setError(error.message))
+      .finally(() => setDataLoaded(true))
   }, [])
 
   return (
@@ -41,7 +43,8 @@ export function BbtCNVChart() {
       tooltipDescription="bbtCNV redeem counter."
       overflow="visible"
     >
-      {dataLoaded && (
+      {dataLoaded && error && <Text>{error}</Text>}
+      {dataLoaded && !error && (
         <>
           <Flex direction={'row'} gap={6} justifyContent={'space-evenly'}>
             <Flex direction={'column'} gap={1}>

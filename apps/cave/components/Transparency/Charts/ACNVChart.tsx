@@ -14,17 +14,20 @@ type ACNVChartData = {
 
 export function ACNVChart({ fontSize }: { fontSize: string }) {
   const [data, setData] = useState<undefined | ACNVChartData[]>()
+  const [error, setError] = useState<undefined | string>()
   const [dataLoaded, setDataLoaded] = useState(false)
 
   useEffect(() => {
     fetchData('acnv-redeemed')
       .then((data: ACNVChartData) => setData([data]))
-      .then(() => setDataLoaded(true))
+      .catch((error: Error) => setError(error.message))
+      .finally(() => setDataLoaded(true))
   }, [])
 
   return (
     <ChartCard dataLoaded={dataLoaded} chartTitle="aCNV redeem counter">
-      {dataLoaded && (
+      {dataLoaded && error && <Text>{error}</Text>}
+      {dataLoaded && !error && (
         <>
           <Text color={'text.low'} lineHeight={'100%'}>
             {Math.ceil(data[0].aCNVRedeemed).toLocaleString()}

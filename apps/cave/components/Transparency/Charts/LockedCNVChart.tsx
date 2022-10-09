@@ -12,12 +12,14 @@ type AmountCNVLockedData = {
 
 export function LockedCNVChart({ width, fontSize }: { width: string; fontSize: string }) {
   const [data, setData] = useState<undefined | AmountCNVLockedData>()
+  const [error, setError] = useState<undefined | string>()
   const [dataLoaded, setDataLoaded] = useState(false)
 
   useEffect(() => {
     fetchData('locked')
       .then((data: AmountCNVLockedData) => setData(data))
-      .then(() => setDataLoaded(true))
+      .catch((error: Error) => setError(error.message))
+      .finally(() => setDataLoaded(true))
   }, [])
 
   return (
@@ -28,7 +30,8 @@ export function LockedCNVChart({ width, fontSize }: { width: string; fontSize: s
       width={width}
       overflow={'visible'}
     >
-      {dataLoaded && (
+      {dataLoaded && error && <Text>{error}</Text>}
+      {dataLoaded && !error && (
         <>
           <Text color={'text.low'} lineHeight={'100%'}>
             {numberWithCommas(data.sumAmountLocked.toFixed(4))}

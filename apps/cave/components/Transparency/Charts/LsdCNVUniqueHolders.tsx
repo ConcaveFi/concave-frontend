@@ -11,12 +11,14 @@ type LsdCNVHoldersData = {
 
 export function LsdCNVHoldersChart({ width, fontSize }: { width: string; fontSize: string }) {
   const [data, setData] = useState<undefined | LsdCNVHoldersData>()
+  const [error, setError] = useState<undefined | string>()
   const [dataLoaded, setDataLoaded] = useState(false)
 
   useEffect(() => {
     fetchData('lsdcnv-unique-holders')
       .then((data: LsdCNVHoldersData) => setData(data))
-      .then(() => setDataLoaded(true))
+      .catch((error: Error) => setError(error.message))
+      .finally(() => setDataLoaded(true))
   }, [])
 
   return (
@@ -26,7 +28,8 @@ export function LsdCNVHoldersChart({ width, fontSize }: { width: string; fontSiz
       tooltipDescription="The amount of unique lsdCNV holders."
       width={width}
     >
-      {dataLoaded && (
+      {dataLoaded && error && <Text>{error}</Text>}
+      {dataLoaded && !error && (
         <>
           <Text lineHeight={'100%'} fontSize={fontSize}>
             {data.aggregate.count}

@@ -12,7 +12,13 @@ export async function fetchData(
       'Content-Type': 'application/json',
     },
     body: bodyData ? JSON.stringify(bodyData) : null,
-  })
-    .then((response) => response.json().then((responseJson) => responseJson.data))
-    .catch((error) => console.log('error', error))
+  }).then((response) =>
+    response.json().then((responseJson) => {
+      const data = responseJson.data
+      if (data.status === 400) {
+        throw new Error(data.msg)
+      }
+      return data
+    }),
+  )
 }
