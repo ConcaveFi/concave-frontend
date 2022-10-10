@@ -79,6 +79,7 @@ export const PoolIdChart = () => {
           <CartesianGrid strokeDasharray="5" opacity={0.15} />
           <XAxis
             dataKey="poolId"
+            interval={0}
             tickFormatter={(v) => PoolIdMap[v]}
             tickLine={{ stroke: CHART_COLORS.TextLow }}
             axisLine={{ stroke: CHART_COLORS.TextLow }}
