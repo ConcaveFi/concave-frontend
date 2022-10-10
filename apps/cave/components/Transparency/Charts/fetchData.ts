@@ -1,6 +1,8 @@
+import { NEXT_PUBLIC_CHART_ENDPOINT } from 'lib/env.conf'
+
 export async function fetchData(
   route: string,
-  url: string = 'https://devcnv-charts.vercel.app/api',
+  url: string = NEXT_PUBLIC_CHART_ENDPOINT,
   method?: string,
   bodyData?: object,
 ): Promise<any> {
