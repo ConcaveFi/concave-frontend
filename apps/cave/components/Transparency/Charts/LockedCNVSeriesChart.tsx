@@ -1,4 +1,4 @@
-import { Text } from '@concave/ui'
+import { Text, useBreakpointValue } from '@concave/ui'
 import { useEffect, useState } from 'react'
 import {
   CartesianGrid,
@@ -12,6 +12,7 @@ import {
 } from 'recharts'
 import { ChartCard } from './ChartCard'
 import { ChartTooltip } from './ChartTooltip'
+import { CustomizedAxisTick } from './CustomizedAxisTick'
 import { fetchData } from './fetchData'
 import { CHART_COLORS } from './style'
 
@@ -26,6 +27,22 @@ export const LockedCNVSeriesChart = () => {
   const [data, setData] = useState<undefined | LockedCNVSeriesData>()
   const [error, setError] = useState<undefined | string>()
   const [dataLoaded, setDataLoaded] = useState(false)
+  const isMobile = useBreakpointValue({ base: true, md: false })
+
+  let chartMargin = {
+    top: 20,
+    right: 30,
+    left: 30,
+    bottom: 20,
+  }
+  let xLabelPos = { y: '22.5px' }
+  let yLabelPos = { x: '-120px', y: '205px' }
+
+  if (isMobile) {
+    chartMargin = { ...chartMargin, bottom: 50 }
+    xLabelPos = { y: '47.5px' }
+    yLabelPos = { x: '-105px', y: '180px' }
+  }
 
   useEffect(() => {
     fetchData('locked-series')
@@ -39,17 +56,7 @@ export const LockedCNVSeriesChart = () => {
       {dataLoaded && error && <Text>{error}</Text>}
       {dataLoaded && !error && (
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart
-            width={500}
-            height={300}
-            data={data.lockedCNV}
-            margin={{
-              top: 20,
-              right: 40,
-              left: 40,
-              bottom: 20,
-            }}
-          >
+          <LineChart width={500} height={300} data={data.lockedCNV} margin={chartMargin}>
             <CartesianGrid strokeDasharray="5" opacity={0.15} />
             <XAxis
               dataKey="timestamp"
@@ -57,24 +64,22 @@ export const LockedCNVSeriesChart = () => {
               tickCount={6}
               ticks={data.ticks.ticksArray}
               interval={0}
-              tickFormatter={(tickData) => {
-                const value = data.ticks.ticksObject[tickData]
-                if (value !== undefined) return value
+              tick={(tickData) => {
+                const customValue = data.ticks.ticksObject[tickData.payload.value]
+                return (
+                  <CustomizedAxisTick customValue={customValue} isMobile={isMobile} {...tickData} />
+                )
               }}
               axisLine={{ stroke: CHART_COLORS.TextLow }}
               tickLine={{ stroke: CHART_COLORS.TextLow }}
               tickMargin={7}
-              style={{
-                fill: CHART_COLORS.TextLow,
-                fontSize: '0.8rem',
-              }}
             >
               <Label
                 fill={CHART_COLORS.TextLow}
                 value={'Date (MM-DD-YY)'}
                 style={{
                   textAnchor: 'middle',
-                  transform: 'translateY(22.5px)',
+                  transform: `translateY(${xLabelPos.y})`,
                 }}
               />
             </XAxis>
@@ -89,7 +94,7 @@ export const LockedCNVSeriesChart = () => {
                 value={'CNV locked'}
                 style={{
                   textAnchor: 'middle',
-                  transform: 'translate(-120px, 205px) rotate(-90deg)',
+                  transform: `translate(${yLabelPos.x}, ${yLabelPos.y}) rotate(-90deg)`,
                 }}
               />
             </YAxis>
