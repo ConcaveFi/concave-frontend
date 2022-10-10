@@ -29,7 +29,7 @@ export const ChartTooltip = ({
 }) => {
   if (active && payload && payload.length) {
     return (
-      <Card variant="secondary" p={5} alignItems={'flex-start'}>
+      <Card variant="secondary" p={5} alignItems={'flex-start'} textAlign={'left'}>
         {payload.map((current, index: number) => (
           <Box key={current.name + '-box'}>
             {accessPayloadKeys ? (
