@@ -20,12 +20,16 @@ export const ChartTooltip = ({
   label,
   accessPayloadKeys,
   payloadKeys,
+  decimalPlaces = 4,
+  postfix = '',
 }: {
   active?: boolean
   payload?: PayloadObject[]
   label?: string
   accessPayloadKeys?: boolean
   payloadKeys?: string[]
+  decimalPlaces?: number
+  postfix?: string
 }) => {
   if (active && payload && payload.length) {
     return (
@@ -42,7 +46,9 @@ export const ChartTooltip = ({
               <></>
             )}
             <Text fontSize={'lg'} key={index}>
-              {`${current.name}: ${numberWithCommas(current.value.toFixed(4))}`}
+              {`${current.name}: ${numberWithCommas(
+                current.value.toFixed(decimalPlaces),
+              )}${postfix}`}
             </Text>
           </Box>
         ))}

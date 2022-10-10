@@ -108,15 +108,10 @@ export const PoolIdChart = () => {
               }}
             />
           </YAxis>
-          <Tooltip cursor={false} content={<ChartTooltip />} />
+          <Tooltip cursor={false} content={<ChartTooltip decimalPlaces={2} postfix={'%'} />} />
+          <Bar name="Staked" dataKey="percentStaked" stackId="a" fill={CHART_COLORS.LightBlue} />
           <Bar
-            name="Percent staked"
-            dataKey="percentStaked"
-            stackId="a"
-            fill={CHART_COLORS.LightBlue}
-          />
-          <Bar
-            name="Percent not staked"
+            name="Unstaked"
             dataKey="percentNotStaked"
             stackId="a"
             fill={CHART_COLORS.Blue}
