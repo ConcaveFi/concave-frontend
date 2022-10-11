@@ -1,11 +1,12 @@
 import { Flex, Heading, Text } from '@concave/ui'
 import { withPageTransition } from 'components/PageTransition'
+import TransparencyCharts from 'components/Transparency/Charts/TransparencyCharts'
+import DividendsCard from 'components/Transparency/DividendsCard'
+import { TreasuryRedeemCard } from 'components/Transparency/TreasuryRedeemCard'
 import { TransparencyDiagram as TransparencyDiagramComponent } from 'components/TransparencyDiagram/TransparencyDiagram'
-import { BondGraphics } from 'components/Treasury/BondGraphics'
-import DividendsCard from 'components/Treasury/DividendsCard'
-import { TreasuryRedeemCard } from 'components/Treasury/TreasuryRedeemCard'
 
 const TransparencyDiagram = () => {
+  const narrow = '60%'
   return (
     <Flex align={'center'} w={'100%'} h={'100%'} gap={4} textAlign="center" direction="column">
       <>
@@ -13,17 +14,17 @@ const TransparencyDiagram = () => {
           Transparency Dashboard
         </Heading>
         <Flex mt={0} align="center" gap={10} width="full" justify="center" alignItems={'center'}>
-          <Text maxW={520} textAlign={'center'}>
+          <Text maxW={620} textAlign={'center'}>
             Concave&apos;s Treasury works to increase itself via investments, yield farming and
             bonding. Take a look at our stats, backing areas and diagrams on this comprehensive
             page.
           </Text>
         </Flex>
         <TransparencyDiagramComponent />
-        <Flex direction={'column'} maxW="80%" gap={6}>
-          <BondGraphics />
-          <DividendsCard />
-          <TreasuryRedeemCard />
+        <Flex w={'100%'} direction={'column'} gap={6} alignItems={'center'}>
+          <TransparencyCharts />
+          <DividendsCard width={narrow} />
+          <TreasuryRedeemCard width={narrow} />
         </Flex>
       </>
     </Flex>

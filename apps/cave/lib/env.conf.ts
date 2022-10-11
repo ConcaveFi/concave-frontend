@@ -30,3 +30,9 @@ export const AUTH_EXP_DATE = process.env.AUTH_EXP_DATE
 // ##### HASURA
 export const GRAPHQL_ADMIN_SECRET = process.env.GRAPHQL_ADMIN_SECRET
 export const NEXT_PUBLIC_GRAPHQL_ENDPOINT = process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT
+
+// #### API ENDPOINTS
+export const NEXT_PUBLIC_CHART_ENDPOINT =
+  process.env.NODE_ENV !== 'development'
+    ? process.env.NEXT_PUBLIC_CHART_API
+    : process.env.NEXT_PUBLIC_CHART_API_DEV
