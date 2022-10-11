@@ -18,11 +18,20 @@ import {
 } from './nodes/nodes'
 import { edgeStyle, labelStyle } from './styles'
 
-const SelectionButton = ({ diagramShown, setDiagramShown, chartId, chartName }) => (
+enum DiagramButtons {
+  TreasuryOverview = 'Treasury Overview',
+  COOPTreasury = 'CO-OP Treasury',
+  ConcaveTreasury = 'Concave Treasury',
+  GeneralDiagram = 'General Diagram',
+  BondingDiagram = 'Bonding Diagram',
+  StakingDiagram = 'Staking Diagram',
+}
+
+const SelectionButton = ({ diagramShown, setDiagramShown, chartName }) => (
   <Button
-    variant={diagramShown === chartId ? 'primary.outline' : 'secondary'}
+    variant={diagramShown === chartName ? 'primary.outline' : 'secondary'}
     size={'lg'}
-    onClick={() => setDiagramShown(chartId)}
+    onClick={() => setDiagramShown(chartName)}
   >
     {chartName}
   </Button>
@@ -56,7 +65,7 @@ const ReactFlowDiagram = ({ edges, nodes, isMobile }) => (
 )
 
 export function TransparencyDiagram() {
-  const [diagramShown, setDiagramShown] = useState<number>(0)
+  const [diagramShown, setDiagramShown] = useState<DiagramButtons>(DiagramButtons.TreasuryOverview)
   const isMobile = useBreakpointValue({ base: true, md: false })
 
   return (
@@ -64,7 +73,7 @@ export function TransparencyDiagram() {
       <VStack
         minWidth={isMobile ? '300px' : '700px'}
         width={'100%'}
-        height={'850px'}
+        height={'800px'}
         rounded={'2xl'}
         apply="background.metalBrighter"
         shadow={'up'}
@@ -73,32 +82,32 @@ export function TransparencyDiagram() {
       >
         <Box display={'flex'} flexDirection={isMobile ? 'column' : 'row'} gap={'1rem'}>
           <SelectionButton
-            chartId={0}
-            chartName={'Treasury Overview'}
+            chartName={DiagramButtons.TreasuryOverview}
             diagramShown={diagramShown}
             setDiagramShown={setDiagramShown}
           />
           <SelectionButton
-            chartId={1}
-            chartName={'CO-OP Treasury'}
+            chartName={DiagramButtons.COOPTreasury}
             diagramShown={diagramShown}
             setDiagramShown={setDiagramShown}
           />
           <SelectionButton
-            chartId={2}
-            chartName={'General Diagram'}
+            chartName={DiagramButtons.ConcaveTreasury}
             diagramShown={diagramShown}
             setDiagramShown={setDiagramShown}
           />
           <SelectionButton
-            chartId={3}
-            chartName={'Bonding Diagram'}
+            chartName={DiagramButtons.GeneralDiagram}
             diagramShown={diagramShown}
             setDiagramShown={setDiagramShown}
           />
           <SelectionButton
-            chartId={4}
-            chartName={'Staking Diagram'}
+            chartName={DiagramButtons.BondingDiagram}
+            diagramShown={diagramShown}
+            setDiagramShown={setDiagramShown}
+          />
+          <SelectionButton
+            chartName={DiagramButtons.StakingDiagram}
             diagramShown={diagramShown}
             setDiagramShown={setDiagramShown}
           />
@@ -117,7 +126,7 @@ export function TransparencyDiagram() {
           bg={'linear-gradient(238.35deg, #19394C 9.11%, #0A161F 92.45%)'}
           gap={2}
         >
-          {diagramShown === 0 && (
+          {diagramShown === DiagramButtons.TreasuryOverview && (
             <DataStudio
               src={
                 isMobile
@@ -126,7 +135,7 @@ export function TransparencyDiagram() {
               }
             />
           )}
-          {diagramShown === 1 && (
+          {diagramShown === DiagramButtons.COOPTreasury && (
             <DataStudio
               src={
                 isMobile
@@ -135,21 +144,30 @@ export function TransparencyDiagram() {
               }
             />
           )}
-          {diagramShown === 2 && (
+          {diagramShown === DiagramButtons.ConcaveTreasury && (
+            <DataStudio
+              src={
+                isMobile
+                  ? 'https://datastudio.google.com/embed/reporting/8f3baa69-b193-41be-9d4f-ffcbc08d691a/page/p_k60ihuz1yc'
+                  : 'https://datastudio.google.com/embed/reporting/f0ba2360-88f4-468a-8306-1923dd49f8a8/page/p_65t8ugz1yc'
+              }
+            />
+          )}
+          {diagramShown === DiagramButtons.GeneralDiagram && (
             <ReactFlowDiagram
               edges={isMobile ? generalEdgesMobile : generalEdges}
               nodes={isMobile ? generalNodesMobile : generalNodes}
               isMobile={isMobile}
             />
           )}
-          {diagramShown === 3 && (
+          {diagramShown === DiagramButtons.BondingDiagram && (
             <ReactFlowDiagram
               edges={isMobile ? bondingEdgesMobile : bondingEdges}
               nodes={isMobile ? bondingNodesMobile : bondingNodes}
               isMobile={isMobile}
             />
           )}
-          {diagramShown === 4 && (
+          {diagramShown === DiagramButtons.StakingDiagram && (
             <ReactFlowDiagram
               edges={isMobile ? stakingEdgesMobile : stakingEdges}
               nodes={isMobile ? stakingNodesMobile : stakingNodes}
