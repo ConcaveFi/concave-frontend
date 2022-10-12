@@ -1,5 +1,5 @@
 import { Box, Button, Flex, useBreakpointValue, VStack } from '@concave/ui'
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import ReactFlow, { ConnectionLineType, Controls } from 'react-flow-renderer'
 import { bondingEdges } from './edges/bondingEdges'
 import { bondingEdgesMobile } from './edges/bondingEdgesMobile'
@@ -80,38 +80,11 @@ export function TransparencyDiagram() {
         p={5}
         gap={5}
       >
-        <Box display={'flex'} flexDirection={isMobile ? 'column' : 'row'} gap={'1rem'}>
-          <SelectionButton
-            chartName={DiagramButtons.TreasuryOverview}
-            diagramShown={diagramShown}
-            setDiagramShown={setDiagramShown}
-          />
-          <SelectionButton
-            chartName={DiagramButtons.COOPTreasury}
-            diagramShown={diagramShown}
-            setDiagramShown={setDiagramShown}
-          />
-          <SelectionButton
-            chartName={DiagramButtons.ConcaveTreasury}
-            diagramShown={diagramShown}
-            setDiagramShown={setDiagramShown}
-          />
-          <SelectionButton
-            chartName={DiagramButtons.GeneralDiagram}
-            diagramShown={diagramShown}
-            setDiagramShown={setDiagramShown}
-          />
-          <SelectionButton
-            chartName={DiagramButtons.BondingDiagram}
-            diagramShown={diagramShown}
-            setDiagramShown={setDiagramShown}
-          />
-          <SelectionButton
-            chartName={DiagramButtons.StakingDiagram}
-            diagramShown={diagramShown}
-            setDiagramShown={setDiagramShown}
-          />
-        </Box>
+        {isMobile ? (
+          <MobileMenu diagramShown={diagramShown} setDiagramShown={setDiagramShown} />
+        ) : (
+          <DesktopMenu diagramShown={diagramShown} setDiagramShown={setDiagramShown} />
+        )}
         <Flex
           rounded={'inherit'}
           shadow="down"
@@ -179,3 +152,52 @@ export function TransparencyDiagram() {
     </>
   )
 }
+
+const DesktopMenu = ({
+  diagramShown,
+  setDiagramShown,
+}: {
+  diagramShown: DiagramButtons
+  setDiagramShown: Dispatch<SetStateAction<DiagramButtons>>
+}) => (
+  <Box display={'flex'} flexDirection={'row'} gap={'1rem'}>
+    <SelectionButton
+      chartName={DiagramButtons.TreasuryOverview}
+      diagramShown={diagramShown}
+      setDiagramShown={setDiagramShown}
+    />
+    <SelectionButton
+      chartName={DiagramButtons.COOPTreasury}
+      diagramShown={diagramShown}
+      setDiagramShown={setDiagramShown}
+    />
+    <SelectionButton
+      chartName={DiagramButtons.ConcaveTreasury}
+      diagramShown={diagramShown}
+      setDiagramShown={setDiagramShown}
+    />
+    <SelectionButton
+      chartName={DiagramButtons.GeneralDiagram}
+      diagramShown={diagramShown}
+      setDiagramShown={setDiagramShown}
+    />
+    <SelectionButton
+      chartName={DiagramButtons.BondingDiagram}
+      diagramShown={diagramShown}
+      setDiagramShown={setDiagramShown}
+    />
+    <SelectionButton
+      chartName={DiagramButtons.StakingDiagram}
+      diagramShown={diagramShown}
+      setDiagramShown={setDiagramShown}
+    />
+  </Box>
+)
+
+const MobileMenu = ({
+  diagramShown,
+  setDiagramShown,
+}: {
+  diagramShown: DiagramButtons
+  setDiagramShown: Dispatch<SetStateAction<DiagramButtons>>
+}) => <></>
