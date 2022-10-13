@@ -15,7 +15,7 @@ export function ChooseButton({ title, onClick, ...props }: ChooseButtonProps & B
       fontWeight={'bold'}
       shadow={'up'}
       size={'sm'}
-      width="120px"
+      minW="120px"
       borderBottomRadius={0}
       {...props}
     >

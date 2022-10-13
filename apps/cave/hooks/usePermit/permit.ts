@@ -1,5 +1,6 @@
 import { CurrencyAmount, Token } from '@concave/core'
 import { Signer } from '@ethersproject/abstract-signer'
+import { splitSignature } from '@ethersproject/bytes'
 import { Contract } from '@ethersproject/contracts'
 import { Wallet } from '@ethersproject/wallet'
 
@@ -85,10 +86,7 @@ export const signData = async (
   const { EIP712Domain: _unused, ...types } = typeData.types
   const signature = await signer._signTypedData(typeData.domain, types, typeData.message)
 
-  const r = '0x' + signature.substring(2).substring(0, 64)
-  const s = '0x' + signature.substring(2).substring(64, 128)
-  const v = parseInt(signature.substring(2).substring(128, 130), 16)
-
+  const { r, s, v } = splitSignature(signature)
   return { r, s, v }
 }
 

@@ -158,7 +158,7 @@ export const MarketListing = ({ stakingPosition }: { stakingPosition: StakingPos
             height={{ base: '40px', md: '50px' }}
             variant={'primary'}
             minW={{ base: '200px', md: '110px' }}
-            maxW={{ base: '200px', md: '110px' }}
+            maxW={{ md: '150px' }}
             size={'sm'}
             width={'full'}
             {...buttonState}

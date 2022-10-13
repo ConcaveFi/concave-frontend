@@ -91,7 +91,7 @@ export const useListeForSaleState = ({
   setMarket: Dispatch<SetStateAction<MarketItem>>
 }) => {
   const chainId = useCurrentSupportedNetworkId()
-  const { signTypedDataAsync } = useSignTypedData({
+  const { signTypedDataAsync, isLoading, isIdle } = useSignTypedData({
     domain: {
       name: 'Marketplace',
       version: '1',
@@ -124,13 +124,10 @@ export const useListeForSaleState = ({
 
   const create = async () => {
     try {
-      const data = await signTypedDataAsync()
-      const signature = data.substring(2)
+      const signature = await signTypedDataAsync()
       const marketplaceContract = new FixedOrderMarketContract(concaveProvider(chainId))
       const computedSigner = await marketplaceContract.computeSigner(market.new({ signature }))
-      if (computedSigner !== market.seller) {
-        throw `Invalid signature`
-      }
+      if (computedSigner !== market.seller) throw `Invalid signature`
       setMarket(market.new({ signature }))
     } catch (e) {
       console.error(e)
@@ -148,6 +145,8 @@ export const useListeForSaleState = ({
   )
 
   return {
+    isLoading,
+    isIdle,
     market,
     create,
     setCurrency,
@@ -163,6 +162,8 @@ function addDays(date: Date, days: number) {
 }
 
 export const ListPositionForSale = ({
+  isLoading,
+  isIdle,
   market,
   staking,
   setMarket,
@@ -212,7 +213,13 @@ export const ListPositionForSale = ({
         1.5% sale fee
       </Text>
       <Flex pt={3} justifyContent="center">
-        <ChooseButton onClick={create} disabled={disabled} title={`List`} />
+        <ChooseButton
+          onClick={create}
+          isLoading={!isIdle}
+          disabled={disabled}
+          loadingText={'Confirm on wallet'}
+          title={`List`}
+        />
       </Flex>
     </VStack>
   )
