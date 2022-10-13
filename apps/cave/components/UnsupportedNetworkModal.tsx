@@ -1,5 +1,6 @@
 import { ChainId } from '@concave/core'
 import { Button, Image, Modal, Text } from '@concave/ui'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import dynamic from 'next/dynamic'
 import { useNetwork, useSwitchNetwork } from 'wagmi'
 
@@ -7,14 +8,15 @@ export const UnsupportedNetworkModal = dynamic(
   () =>
     Promise.resolve(() => {
       const { chain } = useNetwork()
+      const chainId = useCurrentSupportedNetworkId()
       const { switchNetwork, isSuccess } = useSwitchNetwork()
 
       return (
         <Modal
           bluryOverlay={true}
-          title="Unsupported Network"
+          title={`Unsupported Network ${chain?.id}`}
           titleAlign="center"
-          isOpen={chain?.id && ![ChainId.ETHEREUM, ChainId.RINKEBY].includes(chain?.id)}
+          isOpen={chain?.id && ![ChainId.ETHEREUM, ChainId.RINKEBY, 1337].includes(chain?.id)}
           onClose={() => {}}
           bodyProps={{ w: '350px', gap: 2 }}
           hideClose

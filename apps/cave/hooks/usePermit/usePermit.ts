@@ -1,8 +1,22 @@
-import { CNV_ADDRESS, CurrencyAmount, DAI, Token } from '@concave/core'
-import { Signer } from 'ethers'
+import { CNV_ADDRESS, CurrencyAmount, Token } from '@concave/core'
+import { Provider } from '@ethersproject/abstract-provider'
+import { Contract, Signer } from 'ethers'
 import { useQuery } from 'react-query'
 import { useSigner } from 'wagmi'
 import { signPermitAllowed, signPermitAmount } from './permit'
+
+const PERMIT_TYPEHASH = '0x6e71edae12b1b97f4d1f60370fef10105fa2faae0126114a169c64845d6126c9'
+const DAI_TYPEHASH = '0xea2aa0a1be11a07ed86d755c93467f4f82362b452371d1ba94d1715123511acb'
+
+const fetchPermitTypeHash = async (tokenAddress: string, provider: Provider) => {
+  const tokenContract = new Contract(
+    tokenAddress,
+    ['function PERMIT_TYPEHASH() external view returns (bytes32)'],
+    provider,
+  )
+  const [type] = await Promise.all([tokenContract.PERMIT_TYPEHASH()])
+  return { type }
+}
 
 const signPermit = async (
   signer: Signer,
@@ -10,8 +24,8 @@ const signPermit = async (
   spenderAddress: string,
   deadline: number,
 ) => {
-  const token = currencyAmount.currency
-  if (token.equals(DAI[token.chainId])) {
+  const { type } = await fetchPermitTypeHash(currencyAmount.currency.address, signer.provider)
+  if (type === DAI_TYPEHASH) {
     const { holder, spender, nonce, expiry, allowed, v, r, s } = await signPermitAllowed(
       signer,
       currencyAmount,
@@ -20,14 +34,16 @@ const signPermit = async (
     )
     return { holder, spender, nonce, expiry, allowed, v, r, s }
   }
-
-  const { owner, spender, value, v, r, s } = await signPermitAmount(
-    signer,
-    currencyAmount,
-    spenderAddress,
-    deadline,
-  )
-  return { owner, spender, value, deadline, v, r, s }
+  if (type === PERMIT_TYPEHASH) {
+    const { owner, spender, value, v, r, s } = await signPermitAmount(
+      signer,
+      currencyAmount,
+      spenderAddress,
+      deadline,
+    )
+    return { owner, spender, value, deadline, v, r, s }
+  }
+  throw 'Unsuportable'
 }
 
 /**

@@ -1,8 +1,8 @@
 import { CurrencyAmount, Token } from '@concave/core'
 import { Signer } from '@ethersproject/abstract-signer'
+import { splitSignature } from '@ethersproject/bytes'
 import { Contract } from '@ethersproject/contracts'
 import { Wallet } from '@ethersproject/wallet'
-
 interface PermitAllowedMessage {
   holder: string
   spender: string
@@ -83,13 +83,15 @@ export const signData = async (
   }
 
   const { EIP712Domain: _unused, ...types } = typeData.types
+  console.log(signer)
   const signature = await signer._signTypedData(typeData.domain, types, typeData.message)
-
+  const a = splitSignature(signature)
   const r = '0x' + signature.substring(2).substring(0, 64)
   const s = '0x' + signature.substring(2).substring(64, 128)
   const v = parseInt(signature.substring(2).substring(128, 130), 16)
+  console.log(a.r === r, a.v === v, a.s === s)
 
-  return { r, s, v }
+  return { r, s, v: a.v }
 }
 
 const fetchTokenNameAndNonce = async (userAddress, tokenAddress, provider) => {
@@ -113,7 +115,6 @@ export const signPermitAllowed = async (
 ): Promise<SignedPermitAllowed> => {
   const tokenAddress = currencyAmount.currency.address
   const [userAddress, chainId] = await Promise.all([signer.getAddress(), signer.getChainId()])
-
   const { name, nonce } = await fetchTokenNameAndNonce(userAddress, tokenAddress, signer.provider)
   const domain = { name, version: '1', chainId, verifyingContract: tokenAddress }
 

@@ -1,5 +1,6 @@
 import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/providers'
 import { MARKETPLACE_CONTRACT } from '@concave/core'
+import { splitSignature } from '@ethersproject/bytes'
 import { BaseProvider } from '@ethersproject/providers'
 import { ethers, Signer, Transaction } from 'ethers'
 import { MarketItem } from 'src/entities'
@@ -8,10 +9,13 @@ import { MarketplaceABI } from './MarketplaceAbi'
 export class FixedOrderMarketContract {
   private readonly contract: ethers.Contract
   public readonly address: string
-  constructor(private readonly provider: BaseProvider | MulticallProvider) {
+  constructor(
+    private readonly provider: BaseProvider | MulticallProvider,
+    { address }: { address?: string } = {},
+  ) {
     if (!provider.network.chainId)
       throw 'ChainID is undefined for constructor of contract FixedOrderMarketContract'
-    this.address = MARKETPLACE_CONTRACT[provider.network.chainId]
+    this.address = address || MARKETPLACE_CONTRACT[provider.network.chainId]
     if (!this.address)
       throw 'Address is undefined for constructor of contract ConcaveNFTMarketplace'
     this.contract = new ethers.Contract(this.address, MarketplaceABI, this.provider)
@@ -65,6 +69,7 @@ export class FixedOrderMarketContract {
     if (!marketItem) {
       return ''
     }
+
     const signature = marketItem.signature
     const r = '0x' + signature.substring(0, 64)
     const s = '0x' + signature.substring(64, 128)
@@ -83,9 +88,7 @@ export class FixedOrderMarketContract {
   }
   public async swap(signer: Signer, marketItem: MarketItem): Promise<Transaction> {
     const signature = marketItem.signature
-    const r = '0x' + signature.substring(0, 64)
-    const s = '0x' + signature.substring(64, 128)
-    const v = parseInt(signature.substring(128, 130), 16)
+    const { r, s, v } = splitSignature(signature)
     const splitValue = [
       marketItem.seller.toString(),
       marketItem.erc721.toString(),

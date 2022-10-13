@@ -1,0 +1,27 @@
+{
+  "name": "web3-contracts",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "npx hardhat node",
+    "build": "npx hardhat run scripts/deploy.js --network localhost"
+  },
+  "dependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.2.0",
+    "@nomiclabs/hardhat-waffle": "^2.0.3",
+    "@openzeppelin/contracts": "^4.7.3",
+    "@walletconnect/web3-provider": "^1.8.0",
+    "chai": "^4.3.6",
+    "easymde": "^2.18.0",
+    "ethereum-waffle": "^3.4.4",
+    "ethers": "^5.7.1",
+    "hardhat": "^2.12.0",
+    "ipfs-http-client": "^58.0.1",
+    "next": "12.3.1",
+    "web3modal": "^1.9.9"
+  },
+  "devDependencies": {
+    "eslint": "8.25.0",
+    "eslint-config-next": "12.3.1"
+  }
+}

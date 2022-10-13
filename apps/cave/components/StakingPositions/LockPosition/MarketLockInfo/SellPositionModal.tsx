@@ -19,9 +19,10 @@ import { ChooseButton } from 'components/Marketplace/ChooseButton'
 import { BigNumber, BigNumberish } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
+import { useSignTypedData } from 'pages/signature'
 import { Dispatch, SetStateAction, useCallback } from 'react'
 import { formatFixed } from 'utils/bigNumberMask'
-import { useSignTypedData } from 'wagmi'
+import { contractAddress } from '../../../../../../contracts/config'
 import { BigNumberField } from './BigNumberField'
 import { ConfirmSignature } from './ConfirmSignature'
 import { ConfirmUnlist } from './ConfirmUnlist'
@@ -91,14 +92,21 @@ export const useListeForSaleState = ({
   setMarket: Dispatch<SetStateAction<MarketItem>>
 }) => {
   const chainId = useCurrentSupportedNetworkId()
-  const { signTypedDataAsync } = useSignTypedData({
+  const { signV4, signature, verify, signer } = useSignTypedData({
     domain: {
       name: 'Marketplace',
       version: '1',
       chainId,
       verifyingContract: MARKETPLACE_CONTRACT[chainId],
     },
+    primaryType: 'Swap',
     types: {
+      EIP712Domain: [
+        { name: 'name', type: 'string' },
+        { name: 'version', type: 'string' },
+        { name: 'chainId', type: 'uint256' },
+        { name: 'verifyingContract', type: 'address' },
+      ],
       Swap: [
         { name: 'seller', type: 'address' },
         { name: 'erc721', type: 'address' },
@@ -110,7 +118,7 @@ export const useListeForSaleState = ({
         { name: 'deadline', type: 'uint256' },
       ],
     },
-    value: {
+    message: {
       seller: market.seller,
       erc721: market.erc721,
       erc20: market.erc20,
@@ -124,13 +132,19 @@ export const useListeForSaleState = ({
 
   const create = async () => {
     try {
-      const data = await signTypedDataAsync()
-      const signature = data.substring(2)
-      const marketplaceContract = new FixedOrderMarketContract(concaveProvider(chainId))
+      const data = await signV4()
+      const signature = `${data.signature}`.substring(2)
+      console.log(signature)
+      const marketplaceContract = new FixedOrderMarketContract(concaveProvider(chainId), {
+        address: contractAddress,
+      })
       const computedSigner = await marketplaceContract.computeSigner(market.new({ signature }))
-      if (computedSigner !== market.seller) {
-        throw `Invalid signature`
-      }
+      console.log(computedSigner)
+      console.table({
+        signer: data.recoveredAddr,
+        computedSigner,
+        seller: market.seller,
+      })
       setMarket(market.new({ signature }))
     } catch (e) {
       console.error(e)
