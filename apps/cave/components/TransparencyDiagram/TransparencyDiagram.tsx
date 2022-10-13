@@ -1,5 +1,17 @@
-import { Box, Button, Flex, useBreakpointValue, VStack } from '@concave/ui'
-import { useState } from 'react'
+import { ChevronDownIcon } from '@concave/icons'
+import {
+  Box,
+  Button,
+  Flex,
+  gradientBorder,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  useBreakpointValue,
+  VStack,
+} from '@concave/ui'
+import { Dispatch, SetStateAction, useState } from 'react'
 import ReactFlow, { ConnectionLineType, Controls } from 'react-flow-renderer'
 import { bondingEdges } from './edges/bondingEdges'
 import { bondingEdgesMobile } from './edges/bondingEdgesMobile'
@@ -46,7 +58,6 @@ const ReactFlowDiagram = ({ edges, nodes, isMobile }) => (
     edges={edges}
     nodes={nodes}
     nodeTypes={nodeTypes}
-    attributionPosition="top-left"
     elevateEdgesOnSelect
     fitView
     fitViewOptions={{ padding: 0.15 }}
@@ -80,38 +91,11 @@ export function TransparencyDiagram() {
         p={5}
         gap={5}
       >
-        <Box display={'flex'} flexDirection={isMobile ? 'column' : 'row'} gap={'1rem'}>
-          <SelectionButton
-            chartName={DiagramButtons.TreasuryOverview}
-            diagramShown={diagramShown}
-            setDiagramShown={setDiagramShown}
-          />
-          <SelectionButton
-            chartName={DiagramButtons.COOPTreasury}
-            diagramShown={diagramShown}
-            setDiagramShown={setDiagramShown}
-          />
-          <SelectionButton
-            chartName={DiagramButtons.ConcaveTreasury}
-            diagramShown={diagramShown}
-            setDiagramShown={setDiagramShown}
-          />
-          <SelectionButton
-            chartName={DiagramButtons.GeneralDiagram}
-            diagramShown={diagramShown}
-            setDiagramShown={setDiagramShown}
-          />
-          <SelectionButton
-            chartName={DiagramButtons.BondingDiagram}
-            diagramShown={diagramShown}
-            setDiagramShown={setDiagramShown}
-          />
-          <SelectionButton
-            chartName={DiagramButtons.StakingDiagram}
-            diagramShown={diagramShown}
-            setDiagramShown={setDiagramShown}
-          />
-        </Box>
+        {isMobile ? (
+          <MobileMenu diagramShown={diagramShown} setDiagramShown={setDiagramShown} />
+        ) : (
+          <DesktopMenu diagramShown={diagramShown} setDiagramShown={setDiagramShown} />
+        )}
         <Flex
           rounded={'inherit'}
           shadow="down"
@@ -179,3 +163,86 @@ export function TransparencyDiagram() {
     </>
   )
 }
+
+const DesktopMenu = ({
+  diagramShown,
+  setDiagramShown,
+}: {
+  diagramShown: DiagramButtons
+  setDiagramShown: Dispatch<SetStateAction<DiagramButtons>>
+}) => (
+  <Box display={'flex'} flexDirection={'row'} gap={'1rem'}>
+    <SelectionButton
+      chartName={DiagramButtons.TreasuryOverview}
+      diagramShown={diagramShown}
+      setDiagramShown={setDiagramShown}
+    />
+    <SelectionButton
+      chartName={DiagramButtons.COOPTreasury}
+      diagramShown={diagramShown}
+      setDiagramShown={setDiagramShown}
+    />
+    <SelectionButton
+      chartName={DiagramButtons.ConcaveTreasury}
+      diagramShown={diagramShown}
+      setDiagramShown={setDiagramShown}
+    />
+    <SelectionButton
+      chartName={DiagramButtons.GeneralDiagram}
+      diagramShown={diagramShown}
+      setDiagramShown={setDiagramShown}
+    />
+    <SelectionButton
+      chartName={DiagramButtons.BondingDiagram}
+      diagramShown={diagramShown}
+      setDiagramShown={setDiagramShown}
+    />
+    <SelectionButton
+      chartName={DiagramButtons.StakingDiagram}
+      diagramShown={diagramShown}
+      setDiagramShown={setDiagramShown}
+    />
+  </Box>
+)
+
+const MobileMenu = ({
+  diagramShown,
+  setDiagramShown,
+}: {
+  diagramShown: DiagramButtons
+  setDiagramShown: Dispatch<SetStateAction<DiagramButtons>>
+}) => (
+  <Menu isLazy matchWidth>
+    {({ isOpen }) => (
+      <>
+        <MenuButton
+          width={'full'}
+          py={3}
+          transition="all 0.4s"
+          rounded={'xl'}
+          fontSize={'lg'}
+          shadow={'Up Small'}
+          apply={'background.metalBrighter'}
+          _expanded={{ bg: 'text.accent' }}
+          sx={{ ...gradientBorder({ variant: 'secondary', borderWidth: 2 }) }}
+        >
+          {diagramShown}
+          <ChevronDownIcon transition="0.4s all" transform={isOpen && 'rotate(180deg)'} />
+        </MenuButton>
+        <MenuList zIndex={5} py={3}>
+          {Object.keys(DiagramButtons).map((buttonOption) => (
+            <MenuItem
+              justifyContent={'center'}
+              py={3}
+              fontSize={'lg'}
+              key={buttonOption}
+              onClick={() => setDiagramShown(DiagramButtons[buttonOption])}
+            >
+              {DiagramButtons[buttonOption]}
+            </MenuItem>
+          ))}
+        </MenuList>
+      </>
+    )}
+  </Menu>
+)
