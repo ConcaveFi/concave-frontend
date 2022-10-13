@@ -46,7 +46,6 @@ const ReactFlowDiagram = ({ edges, nodes, isMobile }) => (
     edges={edges}
     nodes={nodes}
     nodeTypes={nodeTypes}
-    attributionPosition="top-left"
     elevateEdgesOnSelect
     fitView
     fitViewOptions={{ padding: 0.15 }}
