@@ -1,4 +1,16 @@
-import { Box, Button, Flex, useBreakpointValue, VStack } from '@concave/ui'
+import { ChevronDownIcon } from '@concave/icons'
+import {
+  Box,
+  Button,
+  Flex,
+  gradientBorder,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  useBreakpointValue,
+  VStack,
+} from '@concave/ui'
 import { Dispatch, SetStateAction, useState } from 'react'
 import ReactFlow, { ConnectionLineType, Controls } from 'react-flow-renderer'
 import { bondingEdges } from './edges/bondingEdges'
@@ -199,4 +211,38 @@ const MobileMenu = ({
 }: {
   diagramShown: DiagramButtons
   setDiagramShown: Dispatch<SetStateAction<DiagramButtons>>
-}) => <></>
+}) => (
+  <Menu isLazy matchWidth>
+    {({ isOpen }) => (
+      <>
+        <MenuButton
+          width={'full'}
+          py={3}
+          transition="all 0.4s"
+          rounded={'xl'}
+          fontSize={'lg'}
+          shadow={'Up Small'}
+          apply={'background.metalBrighter'}
+          _expanded={{ bg: 'text.accent' }}
+          sx={{ ...gradientBorder({ variant: 'secondary', borderWidth: 2 }) }}
+        >
+          {diagramShown}
+          <ChevronDownIcon transition="0.4s all" transform={isOpen && 'rotate(180deg)'} />
+        </MenuButton>
+        <MenuList zIndex={5} py={3}>
+          {Object.keys(DiagramButtons).map((buttonOption) => (
+            <MenuItem
+              justifyContent={'center'}
+              py={3}
+              fontSize={'lg'}
+              key={buttonOption}
+              onClick={() => setDiagramShown(DiagramButtons[buttonOption])}
+            >
+              {DiagramButtons[buttonOption]}
+            </MenuItem>
+          ))}
+        </MenuList>
+      </>
+    )}
+  </Menu>
+)
