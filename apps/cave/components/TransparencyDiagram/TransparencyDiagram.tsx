@@ -1,5 +1,17 @@
-import { Box, Button, Flex, useBreakpointValue, VStack } from '@concave/ui'
-import { useState } from 'react'
+import { ChevronDownIcon } from '@concave/icons'
+import {
+  Box,
+  Button,
+  Flex,
+  gradientBorder,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  useBreakpointValue,
+  VStack,
+} from '@concave/ui'
+import { Dispatch, SetStateAction, useState } from 'react'
 import ReactFlow, { ConnectionLineType, Controls } from 'react-flow-renderer'
 import { bondingEdges } from './edges/bondingEdges'
 import { bondingEdgesMobile } from './edges/bondingEdgesMobile'
@@ -18,11 +30,20 @@ import {
 } from './nodes/nodes'
 import { edgeStyle, labelStyle } from './styles'
 
-const SelectionButton = ({ diagramShown, setDiagramShown, chartId, chartName }) => (
+enum DiagramButtons {
+  TreasuryOverview = 'Treasury Overview',
+  COOPTreasury = 'CO-OP Treasury',
+  ConcaveTreasury = 'Concave Treasury',
+  GeneralDiagram = 'General Diagram',
+  BondingDiagram = 'Bonding Diagram',
+  StakingDiagram = 'Staking Diagram',
+}
+
+const SelectionButton = ({ diagramShown, setDiagramShown, chartName }) => (
   <Button
-    variant={diagramShown === chartId ? 'primary.outline' : 'secondary'}
+    variant={diagramShown === chartName ? 'primary.outline' : 'secondary'}
     size={'lg'}
-    onClick={() => setDiagramShown(chartId)}
+    onClick={() => setDiagramShown(chartName)}
   >
     {chartName}
   </Button>
@@ -37,7 +58,6 @@ const ReactFlowDiagram = ({ edges, nodes, isMobile }) => (
     edges={edges}
     nodes={nodes}
     nodeTypes={nodeTypes}
-    attributionPosition="top-left"
     elevateEdgesOnSelect
     fitView
     fitViewOptions={{ padding: 0.15 }}
@@ -56,7 +76,7 @@ const ReactFlowDiagram = ({ edges, nodes, isMobile }) => (
 )
 
 export function TransparencyDiagram() {
-  const [diagramShown, setDiagramShown] = useState<number>(0)
+  const [diagramShown, setDiagramShown] = useState<DiagramButtons>(DiagramButtons.TreasuryOverview)
   const isMobile = useBreakpointValue({ base: true, md: false })
 
   return (
@@ -64,45 +84,18 @@ export function TransparencyDiagram() {
       <VStack
         minWidth={isMobile ? '300px' : '700px'}
         width={'100%'}
-        height={'850px'}
+        height={'800px'}
         rounded={'2xl'}
         apply="background.metalBrighter"
         shadow={'up'}
         p={5}
         gap={5}
       >
-        <Box display={'flex'} flexDirection={isMobile ? 'column' : 'row'} gap={'1rem'}>
-          <SelectionButton
-            chartId={0}
-            chartName={'Treasury Overview'}
-            diagramShown={diagramShown}
-            setDiagramShown={setDiagramShown}
-          />
-          <SelectionButton
-            chartId={1}
-            chartName={'CO-OP Treasury'}
-            diagramShown={diagramShown}
-            setDiagramShown={setDiagramShown}
-          />
-          <SelectionButton
-            chartId={2}
-            chartName={'General Diagram'}
-            diagramShown={diagramShown}
-            setDiagramShown={setDiagramShown}
-          />
-          <SelectionButton
-            chartId={3}
-            chartName={'Bonding Diagram'}
-            diagramShown={diagramShown}
-            setDiagramShown={setDiagramShown}
-          />
-          <SelectionButton
-            chartId={4}
-            chartName={'Staking Diagram'}
-            diagramShown={diagramShown}
-            setDiagramShown={setDiagramShown}
-          />
-        </Box>
+        {isMobile ? (
+          <MobileMenu diagramShown={diagramShown} setDiagramShown={setDiagramShown} />
+        ) : (
+          <DesktopMenu diagramShown={diagramShown} setDiagramShown={setDiagramShown} />
+        )}
         <Flex
           rounded={'inherit'}
           shadow="down"
@@ -117,7 +110,7 @@ export function TransparencyDiagram() {
           bg={'linear-gradient(238.35deg, #19394C 9.11%, #0A161F 92.45%)'}
           gap={2}
         >
-          {diagramShown === 0 && (
+          {diagramShown === DiagramButtons.TreasuryOverview && (
             <DataStudio
               src={
                 isMobile
@@ -126,7 +119,7 @@ export function TransparencyDiagram() {
               }
             />
           )}
-          {diagramShown === 1 && (
+          {diagramShown === DiagramButtons.COOPTreasury && (
             <DataStudio
               src={
                 isMobile
@@ -135,21 +128,30 @@ export function TransparencyDiagram() {
               }
             />
           )}
-          {diagramShown === 2 && (
+          {diagramShown === DiagramButtons.ConcaveTreasury && (
+            <DataStudio
+              src={
+                isMobile
+                  ? 'https://datastudio.google.com/embed/reporting/8f3baa69-b193-41be-9d4f-ffcbc08d691a/page/p_k60ihuz1yc'
+                  : 'https://datastudio.google.com/embed/reporting/f0ba2360-88f4-468a-8306-1923dd49f8a8/page/p_65t8ugz1yc'
+              }
+            />
+          )}
+          {diagramShown === DiagramButtons.GeneralDiagram && (
             <ReactFlowDiagram
               edges={isMobile ? generalEdgesMobile : generalEdges}
               nodes={isMobile ? generalNodesMobile : generalNodes}
               isMobile={isMobile}
             />
           )}
-          {diagramShown === 3 && (
+          {diagramShown === DiagramButtons.BondingDiagram && (
             <ReactFlowDiagram
               edges={isMobile ? bondingEdgesMobile : bondingEdges}
               nodes={isMobile ? bondingNodesMobile : bondingNodes}
               isMobile={isMobile}
             />
           )}
-          {diagramShown === 4 && (
+          {diagramShown === DiagramButtons.StakingDiagram && (
             <ReactFlowDiagram
               edges={isMobile ? stakingEdgesMobile : stakingEdges}
               nodes={isMobile ? stakingNodesMobile : stakingNodes}
@@ -161,3 +163,86 @@ export function TransparencyDiagram() {
     </>
   )
 }
+
+const DesktopMenu = ({
+  diagramShown,
+  setDiagramShown,
+}: {
+  diagramShown: DiagramButtons
+  setDiagramShown: Dispatch<SetStateAction<DiagramButtons>>
+}) => (
+  <Box display={'flex'} flexDirection={'row'} gap={'1rem'}>
+    <SelectionButton
+      chartName={DiagramButtons.TreasuryOverview}
+      diagramShown={diagramShown}
+      setDiagramShown={setDiagramShown}
+    />
+    <SelectionButton
+      chartName={DiagramButtons.COOPTreasury}
+      diagramShown={diagramShown}
+      setDiagramShown={setDiagramShown}
+    />
+    <SelectionButton
+      chartName={DiagramButtons.ConcaveTreasury}
+      diagramShown={diagramShown}
+      setDiagramShown={setDiagramShown}
+    />
+    <SelectionButton
+      chartName={DiagramButtons.GeneralDiagram}
+      diagramShown={diagramShown}
+      setDiagramShown={setDiagramShown}
+    />
+    <SelectionButton
+      chartName={DiagramButtons.BondingDiagram}
+      diagramShown={diagramShown}
+      setDiagramShown={setDiagramShown}
+    />
+    <SelectionButton
+      chartName={DiagramButtons.StakingDiagram}
+      diagramShown={diagramShown}
+      setDiagramShown={setDiagramShown}
+    />
+  </Box>
+)
+
+const MobileMenu = ({
+  diagramShown,
+  setDiagramShown,
+}: {
+  diagramShown: DiagramButtons
+  setDiagramShown: Dispatch<SetStateAction<DiagramButtons>>
+}) => (
+  <Menu isLazy matchWidth>
+    {({ isOpen }) => (
+      <>
+        <MenuButton
+          width={'full'}
+          py={3}
+          transition="all 0.4s"
+          rounded={'xl'}
+          fontSize={'lg'}
+          shadow={'Up Small'}
+          apply={'background.metalBrighter'}
+          _expanded={{ bg: 'text.accent' }}
+          sx={{ ...gradientBorder({ variant: 'secondary', borderWidth: 2 }) }}
+        >
+          {diagramShown}
+          <ChevronDownIcon transition="0.4s all" transform={isOpen && 'rotate(180deg)'} />
+        </MenuButton>
+        <MenuList zIndex={5} py={3}>
+          {Object.keys(DiagramButtons).map((buttonOption) => (
+            <MenuItem
+              justifyContent={'center'}
+              py={3}
+              fontSize={'lg'}
+              key={buttonOption}
+              onClick={() => setDiagramShown(DiagramButtons[buttonOption])}
+            >
+              {DiagramButtons[buttonOption]}
+            </MenuItem>
+          ))}
+        </MenuList>
+      </>
+    )}
+  </Menu>
+)

@@ -22,6 +22,7 @@ import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
 import { useQuery } from 'react-query'
+import { compactFormat } from 'utils/bigNumberMask'
 import { useAccount } from 'wagmi'
 import { PositionsState } from './hooks/usePositionsState'
 
@@ -175,24 +176,26 @@ export const LiquidityPoolPainel = (props: LPPosition) => {
         spacing={4}
       >
         {balance.greaterThan(0) && (
-          <PositionInfoItem label="Your total pool tokens:" value={balance.toSignificant()} />
+          <PositionInfoItem
+            label="Your total pool tokens:"
+            value={compactFormat(balance.quotient.toString(), balance.currency)}
+          />
         )}
-        <PositionInfoItem
-          label={`Pooled ${pair.token0.symbol}:`}
-          value={pair.reserve0.toSignificant(6, { groupSeparator: ',' })}
-        >
-          <CurrencyIcon h={'32px'} size="sm" currency={pair.token0} />
-        </PositionInfoItem>
-        <PositionInfoItem
-          label={`Pooled ${pair.token1.symbol}:`}
-          value={pair.reserve1.toSignificant(6, { groupSeparator: ',' })}
-        >
-          <CurrencyIcon h={'32px'} size="sm" currency={pair.token1} />
-        </PositionInfoItem>
-
         {balance.greaterThan(0) && (
           <PositionInfoItem label="Your pool share:" value={`${userPoolShare.toFixed()}%`} />
         )}
+        <PositionInfoItem
+          label={`Pooled ${pair.token0.symbol}:`}
+          value={compactFormat(pair.reserve0.quotient.toString(), pair.token0)}
+        >
+          <CurrencyIcon link h={'32px'} size="sm" currency={pair.token0} />
+        </PositionInfoItem>
+        <PositionInfoItem
+          label={`Pooled ${pair.token1.symbol}:`}
+          value={compactFormat(pair.reserve1.quotient.toString(), pair.token1)}
+        >
+          <CurrencyIcon link h={'32px'} size="sm" currency={pair.token1} />
+        </PositionInfoItem>
       </Stack>
       <Flex gap={5} justify="center" mt={6}>
         <AddLiquidityModalButton pair={pair} />
@@ -224,15 +227,16 @@ const LPPositionItem = (props: LPPosition) => {
 }
 
 export const PositionInfoItem = ({ color = '', label, value, mt = 0, children = <></> }) => (
-  <Flex
-    direction={{ base: 'column', sm: 'row' }}
-    w={'full'}
-    justify="space-between"
-    align={'center'}
-    mt={mt}
-  >
-    <Text color={color}>{label}</Text>
-    <HStack gap={{ base: 0, sm: 2 }} align={'center'} alignContent={'center'}>
+  <Flex direction={{ sm: 'row' }} w={'full'} justify="space-between" align={'center'} mt={mt}>
+    <Text fontSize={{ base: '12px', md: 'md' }} color={color}>
+      {label}
+    </Text>
+    <HStack
+      fontSize={{ base: '12px', md: 'md' }}
+      gap={{ base: 0, sm: 2 }}
+      align={'center'}
+      alignContent={'center'}
+    >
       <Text>{value}</Text>
       {children}
     </HStack>
