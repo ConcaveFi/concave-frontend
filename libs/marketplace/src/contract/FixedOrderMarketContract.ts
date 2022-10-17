@@ -1,5 +1,6 @@
 import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/providers'
 import { MARKETPLACE_CONTRACT } from '@concave/core'
+import { splitSignature } from '@ethersproject/bytes'
 import { BaseProvider } from '@ethersproject/providers'
 import { ethers, Signer, Transaction } from 'ethers'
 import { MarketItem } from 'src/entities'
@@ -30,9 +31,7 @@ export class FixedOrderMarketContract {
       return false
     }
     const signature = marketItem.signature
-    const r = '0x' + signature.substring(0, 64)
-    const s = '0x' + signature.substring(64, 128)
-    const v = parseInt(signature.substring(128, 130), 16)
+    const { r, s, v } = splitSignature(signature)
     const splitValue = [
       marketItem.seller.toString(),
       marketItem.erc721.toString(),
@@ -66,9 +65,7 @@ export class FixedOrderMarketContract {
       return ''
     }
     const signature = marketItem.signature
-    const r = '0x' + signature.substring(0, 64)
-    const s = '0x' + signature.substring(64, 128)
-    const v = parseInt(signature.substring(128, 130), 16)
+    const { r, s, v } = splitSignature(signature)
     const splitValue = [
       marketItem.seller.toString(),
       marketItem.erc721.toString(),
@@ -83,9 +80,7 @@ export class FixedOrderMarketContract {
   }
   public async swap(signer: Signer, marketItem: MarketItem): Promise<Transaction> {
     const signature = marketItem.signature
-    const r = '0x' + signature.substring(0, 64)
-    const s = '0x' + signature.substring(64, 128)
-    const v = parseInt(signature.substring(128, 130), 16)
+    const { r, s, v } = splitSignature(signature)
     const splitValue = [
       marketItem.seller.toString(),
       marketItem.erc721.toString(),
