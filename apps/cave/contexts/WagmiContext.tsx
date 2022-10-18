@@ -1,5 +1,6 @@
-import { ReactNode } from 'react'
-import { chain, createClient, defaultChains, WagmiConfig } from 'wagmi'
+import { SafeConnector } from '@gnosis.pm/safe-apps-wagmi'
+import { ReactNode, useEffect } from 'react'
+import { chain, Connector, createClient, defaultChains, useConnect, WagmiConfig } from 'wagmi'
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
@@ -10,6 +11,7 @@ const chains = [chain.mainnet, chain.rinkeby] // app supported chains
 export const supportedChainsId = chains.map((c) => c.id)
 
 const connectors = [
+  new SafeConnector({ chains }),
   new InjectedConnector({ chains }),
   new MetaMaskConnector({ chains }),
   new WalletConnectConnector({ chains, options: { qrcode: false } }),
@@ -23,7 +25,7 @@ const connectors = [
       headlessMode: true,
     },
   }),
-]
+] as Connector[]
 
 const isChainSupported = (chainId?: number) => defaultChains.some((x) => x.id === chainId)
 
@@ -33,12 +35,29 @@ const provider = ({ chainId }) =>
 const webSocketProvider = ({ chainId }) =>
   concaveWSProvider(isChainSupported(chainId) ? chainId : chain.mainnet.id)
 
+const isServer = typeof window === 'undefined'
+const isIframe = !isServer && window?.parent !== window
+
 const client = createClient({
-  autoConnect: true,
+  autoConnect: !isIframe,
   connectors,
   provider,
   webSocketProvider,
 })
 
-export const WagmiProvider = ({ children }: { children: ReactNode }) =>
-  WagmiConfig({ client, children })
+const AutoConnect = () => {
+  // auto connects to gnosis safe if in context
+  const { connect, connectors } = useConnect()
+  useEffect(() => {
+    const safeConnector = connectors.find((c) => c.id === 'safe' && c.ready)
+    if (safeConnector) connect({ connector: safeConnector })
+  }, [connectors, connect])
+  return null
+}
+
+export const WagmiProvider = ({ children }: { children: ReactNode }) => (
+  <WagmiConfig client={client}>
+    {isIframe && <AutoConnect />}
+    {children}
+  </WagmiConfig>
+)
