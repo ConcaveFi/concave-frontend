@@ -1,0 +1,16 @@
+{
+    "short_name": "Concave",
+    "name": "Concave",
+    "description": "Sustainable Dividends for Stakeholders using the Magic Number Machine.",
+    "icons": [
+      {
+        "src": "/assets/tokens/cnv.svg",
+        "sizes": "any",
+        "type": "image/svg+xml"
+      }
+    ],
+    "start_url": ".",
+    "display": "standalone",
+    "theme_color": "#000000",
+    "background_color": "#121115"
+  }
