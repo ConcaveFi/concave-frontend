@@ -16,7 +16,7 @@ const CommonTokens = ({
   onSelect: (currency: Currency) => void
 }) => {
   const networkId = useCurrentSupportedNetworkId()
-  const currencies = [DAI, CNV, NATIVE, WETH9, PCNV].map((c) => c[networkId])
+  const currencies = [DAI, CNV, NATIVE, WETH9, PCNV].map((c) => c[networkId]).filter(Boolean)
   return GenericTokens({
     selected,
     currencies,
