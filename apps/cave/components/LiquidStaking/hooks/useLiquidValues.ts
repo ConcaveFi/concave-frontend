@@ -1,4 +1,5 @@
 import { StakingV1Contract } from '@concave/marketplace'
+import { BigNumber } from 'ethers'
 import { concaveProvider } from 'lib/providers'
 import { useQuery } from 'react-query'
 
@@ -7,7 +8,9 @@ export const useLiquidValues = (chainId: number, poolId: number) => {
     const stakingV1Contract = new StakingV1Contract(concaveProvider(chainId))
     const contractReads = await Promise.all([
       stakingV1Contract.pools(poolId),
-      stakingV1Contract.viewStakingCap(poolId),
+      stakingV1Contract.viewStakingCap(poolId).catch(() => {
+        return BigNumber.from(poolId)
+      }),
     ])
 
     const stakingV1Pools = contractReads[0]
