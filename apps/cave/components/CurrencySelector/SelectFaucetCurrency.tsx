@@ -18,7 +18,8 @@ const FaucetCurrencySelectorModal = ({
 }) => {
   const selectAndClose = (token) => (onSelect(token), onClose())
   const networkId = useCurrentSupportedNetworkId()
-  const currencies = [DAI, CNV, USDC, FRAX].map((c) => c[networkId])
+  const currencies = [DAI, CNV, USDC, FRAX].map((c) => c[networkId]).filter(Boolean)
+
   return (
     <Modal
       bluryOverlay
