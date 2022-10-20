@@ -6,6 +6,7 @@ export const getTxExplorer = (hash: string, chainId: ChainId) => {
     {
       [ChainId.ETHEREUM]: etherscanBlockExplorers.mainnet.url,
       [ChainId.RINKEBY]: etherscanBlockExplorers.rinkeby.url,
+      [ChainId.GÖRLI]: etherscanBlockExplorers.goerli.url,
     }[chainId] || etherscanBlockExplorers.mainnet.url
 
   return `${explorerUrl}/tx/${hash}`
