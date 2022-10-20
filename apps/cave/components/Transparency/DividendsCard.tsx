@@ -15,7 +15,7 @@ export default function DividendsCard() {
       <Text textAlign={'center'} w={{ base: '100%', lg: '33%' }} fontSize={'3xl'} fontWeight={700}>
         Dividends
       </Text>
-      <Flex justifyContent={'center'} w={{ base: '100%', lg: '33%' }}>
+      <Flex justifyContent={'center'} w={{ base: '100%', lg: '33%' }} mb={{ base: 3, lg: 0 }}>
         <Text
           textAlign={'center'}
           fontWeight={700}

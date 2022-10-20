@@ -30,12 +30,22 @@ export const TreasuryRedeemCard = () => {
       <Text w={{ base: '100%', lg: '33%' }} fontSize={'3xl'} fontWeight={700}>
         Redeem CNV
       </Text>
-      <Flex justifyContent={'center'} w={{ base: '100%', lg: '66%' }} direction={'column'}>
+      <Flex
+        justifyContent={'center'}
+        w={{ base: '100%', lg: '66%' }}
+        direction={'column'}
+        gap={{ base: 2, lg: 0 }}
+      >
         <Text color="text.low" textAlign={'center'} fontWeight="bold">
           Redeem your tokens for CNV below
         </Text>
 
-        <Flex direction={{ base: 'column', md: 'row', lg: 'row' }} w="full" gap={3} py={3}>
+        <Flex
+          direction={{ base: 'column', md: 'row', lg: 'row' }}
+          w="full"
+          gap={{ base: 6, lg: 3 }}
+          py={3}
+        >
           <VestedTokenButton title="aCNV" VestedTokenDialog={ACNVRedemptionDialog} />
           <VestedTokenButton title="pCNV" VestedTokenDialog={PCNVRedemptionDialog} />
           <VestedTokenButton title="bbtCNV" VestedTokenDialog={BBTCNVRedemptionDialog} />
