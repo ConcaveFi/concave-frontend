@@ -79,7 +79,7 @@ describe('useQueryCurrencies', () => {
     })
 
     it('uses right chain', async () => {
-      const chainId = ChainId.RINKEBY
+      const chainId = ChainId.GÖRLI
       const currency0 = DAI[chainId]
       const currency1 = CNV[chainId]
 

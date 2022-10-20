@@ -7,7 +7,7 @@ import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import { concaveProvider, concaveRPC, concaveWSProvider } from '../lib/providers'
 
-const chains = [chain.mainnet, chain.rinkeby] // app supported chains
+const chains = [chain.mainnet, chain.goerli] // app supported chains
 export const supportedChainsId = chains.map((c) => c.id)
 
 const connectors = [

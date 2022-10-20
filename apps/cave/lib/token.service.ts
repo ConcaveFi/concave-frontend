@@ -61,4 +61,4 @@ const daysOptions = {
   '4H': '30',
   '1D': '365',
 } as const
-export const tokenService = new TokenService(chain.rinkeby.name)
+export const tokenService = new TokenService(chain.goerli.name)

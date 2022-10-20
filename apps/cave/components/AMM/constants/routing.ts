@@ -6,12 +6,14 @@ type ChainCurrencyList = { readonly [chainId: number]: Currency[] }
 export const STABLES = {
   [ChainId.ETHEREUM]: [DAI[ChainId.ETHEREUM]],
   [ChainId.RINKEBY]: [DAI[ChainId.RINKEBY]],
+  [ChainId.GÖRLI]: [DAI[ChainId.GÖRLI]],
 }
 
 // used to construct intermediary pairs for trading
 export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
   [ChainId.ETHEREUM]: [WETH9[ChainId.ETHEREUM], ...STABLES[ChainId.ETHEREUM]],
   [ChainId.RINKEBY]: [WETH9[ChainId.RINKEBY], ...STABLES[ChainId.RINKEBY]],
+  [ChainId.GÖRLI]: [WETH9[ChainId.GÖRLI], ...STABLES[ChainId.GÖRLI]],
 }
 
 const permutate = (tokenList: ChainTokenList[number]): [Token, Token][] =>
