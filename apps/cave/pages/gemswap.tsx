@@ -9,12 +9,12 @@ import { SwapCard } from 'components/AMM/Swap/SwapCard'
 import { withPageTransition } from 'components/PageTransition'
 import { LayoutGroup } from 'framer-motion'
 
-export const swapSupportedChains = [ChainId.ETHEREUM, ChainId.RINKEBY] as const
+export const swapSupportedChains = [ChainId.ETHEREUM, ChainId.GÖRLI] as const
 export const swapDefaultCurrencies: {
   [chain in typeof swapSupportedChains[number]]: [Currency, Currency]
 } = {
-  [ChainId.ETHEREUM]: [DAI[1], CNV[1]],
-  [ChainId.RINKEBY]: [DAI[4], CNV[4]],
+  [ChainId.ETHEREUM]: [DAI[ChainId.ETHEREUM], CNV[ChainId.ETHEREUM]],
+  [ChainId.GÖRLI]: [DAI[ChainId.GÖRLI], CNV[ChainId.GÖRLI]],
 }
 
 setRouteDefaultCurrencies('/gemswap', swapDefaultCurrencies)

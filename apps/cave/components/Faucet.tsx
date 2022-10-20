@@ -9,7 +9,7 @@ import { useQuery } from 'react-query'
 import { useAccount, useContractWrite } from 'wagmi'
 
 const faucetKey = process.env.NEXT_PUBLIC_FAUCET_PK
-const faucet = faucetKey && new Wallet(faucetKey, concaveProvider(ChainId.RINKEBY))
+const faucet = faucetKey && new Wallet(faucetKey, concaveProvider(ChainId.GÖRLI))
 
 const sendSomeEth = async (recipient) => {
   const tx = {
@@ -26,7 +26,7 @@ const sendSomeEth = async (recipient) => {
 const ETHFaucet = () => {
   const { address } = useAccount()
 
-  const { data: ethBalance, isLoading } = useCurrencyBalance(NATIVE[ChainId.RINKEBY])
+  const { data: ethBalance, isLoading } = useCurrencyBalance(NATIVE[ChainId.GÖRLI])
 
   const { data: faucetBalance } = useQuery('faucet balance', () => faucet.getBalance(), {
     enabled: !!faucet,
@@ -90,7 +90,7 @@ const DAIMinter = () => {
     isLoading,
     write: mintDAI,
   } = useContractWrite({
-    addressOrName: DAI[ChainId.RINKEBY].address,
+    addressOrName: DAI[ChainId.GÖRLI].address,
     contractInterface: ['function mint(address guy, uint256 wad) external'],
     functionName: 'mint',
     args: [address, parseUnits('69420', 18)],
