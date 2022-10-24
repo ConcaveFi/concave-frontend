@@ -80,7 +80,7 @@ const ScanQrCode: FC<{ qrCode: string; connector: Connector }> = ({ qrCode, conn
           _hover={{ color: 'text.high' }}
           _focus={{ color: 'text.high', shadow: 'up' }}
         >
-          {isCopied ? 'Copied!' : 'Copy to clipboard'}
+          {isCopied ? 'Copied to clipboard!' : 'Copy to clipboard'}
         </Button>
       )}
     </>
