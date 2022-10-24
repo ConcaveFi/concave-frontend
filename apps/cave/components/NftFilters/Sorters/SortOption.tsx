@@ -28,7 +28,7 @@ export const SortOption = ({ sorter, title, enabled, onClick }: SortOptionProps)
       </Text>
       {enabled && (
         <Tooltip
-          label="Remove Sort"
+          label="Remove sort"
           textColor={'white'}
           textShadow="0px 0px 10px #333"
           bg="text.low"
