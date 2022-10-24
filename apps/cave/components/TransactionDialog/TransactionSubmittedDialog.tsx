@@ -11,7 +11,7 @@ const TxSubmitted = ({ title, tx }: { title: string; tx: Transaction }) => {
     <>
       <SubmittedIcon w={10} my={4} />
       <Text align="center" fontSize="md" fontWeight="bold">
-        {title || `Transaction Submitted`} <br />
+        {title || `Transaction submitted`} <br />
         <Link href={getTxExplorer(tx.hash, chain.id)} fontSize="sm" color="text.accent" isExternal>
           View on explorer
         </Link>
@@ -50,7 +50,7 @@ export const TransactionSubmittedDialog = ({
   return (
     <Modal
       bluryOverlay={true}
-      title={title || 'Tx Submitted'}
+      title={title || 'Tx submitted'}
       isOpen={isOpen}
       onClose={onClose}
       bodyProps={{ align: 'center', w: '300px', gap: 4 }}

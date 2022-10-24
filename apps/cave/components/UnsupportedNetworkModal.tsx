@@ -12,7 +12,7 @@ export const UnsupportedNetworkModal = dynamic(
       return (
         <Modal
           bluryOverlay={true}
-          title="Unsupported Network"
+          title="Unsupported network"
           titleAlign="center"
           isOpen={chain?.id && ![ChainId.ETHEREUM, ChainId.RINKEBY].includes(chain?.id)}
           onClose={() => {}}
