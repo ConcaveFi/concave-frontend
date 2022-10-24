@@ -130,7 +130,7 @@ function PageNav() {
       <ButtonContainer>
         <NavButton href="/gemswap">Swap</NavButton>
         <SubnavButton href="/addliquidity">Add liquidity</SubnavButton>
-        <SubnavButton href="/pools">{address ? `Your ` : ``}Pools</SubnavButton>
+        <SubnavButton href="/pools">{address ? `Your pools` : `Pools`}</SubnavButton>
       </ButtonContainer>
     </Flex>
   )
