@@ -12,7 +12,7 @@ const PairsError = ({ error }) => {
       {{
         [NoValidPairsError]: `No liquidity in pair`,
         [InsufficientLiquidityError]: `No liquidity in pair`,
-      }[error] || 'Error Fetching Pairs'}
+      }[error] || 'Error fetching pairs'}
     </Text>
   )
 }
