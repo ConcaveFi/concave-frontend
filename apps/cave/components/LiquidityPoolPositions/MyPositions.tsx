@@ -49,12 +49,12 @@ export const MyPositions = ({ state }: { state: PositionsState }) => {
       {!!user && (
         <HStack w={'auto'} gap={4} justifyContent={'space-between'}>
           <LiquidityOptionButton
-            label={'Your Pools'}
+            label={'Your pools'}
             active={view === 'user'}
             onClick={() => setView('user')}
           />
           <LiquidityOptionButton
-            label={'All Pools'}
+            label={'All pools'}
             active={view === 'all'}
             onClick={() => setView('all')}
           />

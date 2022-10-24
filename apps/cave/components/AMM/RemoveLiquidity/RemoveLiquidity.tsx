@@ -56,7 +56,7 @@ export const RemoveLiquidityModalButton = ({
       </Button>
       <Modal
         bluryOverlay={true}
-        title="Remove Liquidity"
+        title="Remove liquidity"
         {...removeLiquidityDisclosure}
         isCentered
         bodyProps={{
@@ -232,7 +232,7 @@ const RemoveLiquidityActions = ({
 
       <WaitingConfirmationDialog
         isOpen={removeTransaction.isWaitingForConfirmation}
-        title={'Confirm Withdrawal'}
+        title={'Confirm withdrawal'}
       >
         <Flex
           w={'full'}
@@ -270,7 +270,7 @@ const RemoveLiquidityActions = ({
 const YourPosition = ({ pair, userPoolShare }: { pair: Pair; userPoolShare: Percent }) => {
   return (
     <Flex gap={7} direction={'column'} shadow="Up Big" px={4} py={4} borderRadius="2xl">
-      <Text fontSize={'lg'}>Your Position</Text>
+      <Text fontSize={'lg'}>Your position</Text>
       <Flex gap={2} align={'center'}>
         <CurrencyIcon size="sm" currency={pair.token0} />
         <CurrencyIcon size="sm" currency={pair.token1} />
