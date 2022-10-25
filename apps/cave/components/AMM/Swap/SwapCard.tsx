@@ -21,6 +21,7 @@ import { WaitingConfirmationDialog } from 'components/TransactionDialog/Transact
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useCallback, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
+import { useWaitForTransaction } from 'wagmi'
 import { NetworkMismatch } from '../NetworkMismatch'
 import { PcnvNotification } from './PcnvNotification'
 import { TradeDetails } from './TradeDetails'
@@ -53,12 +54,17 @@ export function SwapCard() {
     {
       onSuccess: (tx) => {
         onChangeInput(toAmount(0, trade.inputAmount.currency))
-        requestDBSync()
         closeConfirmationModal()
       },
     },
     currencyApprove.permit,
   )
+
+  useWaitForTransaction({
+    wait: swapTx.data?.wait,
+    onSuccess: requestDBSync,
+    enabled: swapTx.isSuccess,
+  })
 
   const isExpertMode = useSwapSettings((s) => s.settings.expertMode)
   const swapButtonProps = useSwapButtonProps({
