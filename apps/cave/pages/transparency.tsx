@@ -1,4 +1,4 @@
-import { Flex, Heading, Text } from '@concave/ui'
+import { Container, Flex, Heading, Text } from '@concave/ui'
 import { withPageTransition } from 'components/PageTransition'
 import TransparencyCharts from 'components/Transparency/Charts/TransparencyCharts'
 import DividendsCard from 'components/Transparency/DividendsCard'
@@ -7,8 +7,8 @@ import { TransparencyDiagram as TransparencyDiagramComponent } from 'components/
 
 const TransparencyDiagram = () => {
   return (
-    <Flex align={'center'} w={'100%'} h={'100%'} gap={4} textAlign="center" direction="column">
-      <>
+    <Container maxW={{ base: '60ch', sm: 'container.sm', lg: '90%' }} centerContent>
+      <Flex align={'center'} w={'100%'} h={'100%'} gap={4} textAlign="center" direction="column">
         <Heading as="h1" mt={16} mb={3} fontSize="5xl">
           Transparency Dashboard
         </Heading>
@@ -25,8 +25,8 @@ const TransparencyDiagram = () => {
           <DividendsCard />
           <TreasuryRedeemCard />
         </Flex>
-      </>
-    </Flex>
+      </Flex>
+    </Container>
   )
 }
 
