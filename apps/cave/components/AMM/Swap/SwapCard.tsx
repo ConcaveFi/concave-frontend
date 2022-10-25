@@ -25,6 +25,9 @@ import { NetworkMismatch } from '../NetworkMismatch'
 import { PcnvNotification } from './PcnvNotification'
 import { TradeDetails } from './TradeDetails'
 
+/** webhook to start a db syncronization with the blockchain */
+const requestDBSync = () => fetch('https://cnv-amm.vercel.app/api/gemswap', { keepalive: true })
+
 export function SwapCard() {
   const { trade, error, onChangeInput, onChangeOutput, switchFields, onReset } = useSwapState()
 
@@ -50,6 +53,7 @@ export function SwapCard() {
     {
       onSuccess: (tx) => {
         onChangeInput(toAmount(0, trade.inputAmount.currency))
+        requestDBSync()
         closeConfirmationModal()
       },
     },
