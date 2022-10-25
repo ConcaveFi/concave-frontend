@@ -48,22 +48,28 @@ export function BbtCNVChart() {
         <>
           <Flex direction={'row'} gap={6} justifyContent={'space-evenly'}>
             <Flex direction={'column'} gap={1}>
-              <Text fontSize={isMobile ? 'md' : '2xl'} lineHeight={'100%'}>
+              <Text fontSize={isMobile ? 'md' : '1.25rem'} lineHeight={'100%'}>
                 {numberWithCommas(data[0].bbtCNVRedeemable.toFixed(4))}
               </Text>
-              <Text lineHeight={'100%'}>bbtCNV redeemable</Text>
+              <Text fontSize={'sm'} lineHeight={'100%'}>
+                bbtCNV redeemable
+              </Text>
             </Flex>
             <Flex direction={'column'} gap={1}>
-              <Text fontSize={isMobile ? 'md' : '2xl'} lineHeight={'100%'}>
+              <Text fontSize={isMobile ? 'md' : '1.25rem'} lineHeight={'100%'}>
                 {numberWithCommas(data[0].bbtCNVRedeemed.toFixed(4))}
               </Text>
-              <Text lineHeight={'100%'}>bbtCNV redeemed</Text>
+              <Text fontSize={'sm'} lineHeight={'100%'}>
+                bbtCNV redeemed
+              </Text>
             </Flex>
             <Flex direction={'column'} gap={1}>
-              <Text fontSize={isMobile ? 'md' : '2xl'} lineHeight={'100%'}>
+              <Text fontSize={isMobile ? 'md' : '1.25rem'} lineHeight={'100%'}>
                 {numberWithCommas(data[0].bbtCNVToVest.toFixed(4))}
               </Text>
-              <Text lineHeight={'100%'}>bbtCNV vesting</Text>
+              <Text fontSize={'sm'} lineHeight={'100%'}>
+                bbtCNV vesting
+              </Text>
             </Flex>
           </Flex>
           <ResponsiveContainer width="100%" height="50%">
