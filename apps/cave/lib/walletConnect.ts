@@ -42,9 +42,9 @@ export const fetchWalletConnectRegistry = async (): Promise<WalletConnectRegistr
   )
 }
 
-export function uriToLink(uri: string, registry: WalletConnectRegistryData) {
+export function uriToLink(uri: string, wcLinks: Partial<WalletConnectRegistryData['mobile']>) {
   const encodedUri = encodeURIComponent(uri)
-  const { universal: universalLink, native: deepLink } = registry.mobile
+  const { universal: universalLink, native: deepLink } = wcLinks
 
   if (universalLink) return `${universalLink}/wc?uri=${encodedUri}`
   if (deepLink) return `${deepLink}${deepLink.endsWith(':') ? '//' : '/'}wc?uri=${encodedUri}`

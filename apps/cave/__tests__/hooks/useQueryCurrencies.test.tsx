@@ -6,7 +6,7 @@ import {
 } from 'components/AMM/hooks/useQueryCurrencies'
 import { QueryClient, QueryClientProvider, setLogger } from 'react-query'
 
-import { WagmiProvider } from 'contexts/WagmiContext'
+import { WagmiProvider } from 'contexts/Wagmi/WagmiContext'
 import mockRouter from 'next-router-mock'
 
 jest.mock('next/router', () => require('next-router-mock'))

@@ -5,7 +5,8 @@ import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
-import { concaveProvider, concaveRPC, concaveWSProvider } from '../lib/providers'
+import { concaveProvider, concaveRPC, concaveWSProvider } from '../../lib/providers'
+import { UnstoppableConnector } from './Connectors/UnstoppableConnector'
 
 const chains = [chain.mainnet, chain.rinkeby] // app supported chains
 export const supportedChainsId = chains.map((c) => c.id)
@@ -15,6 +16,7 @@ const connectors = [
   new InjectedConnector({ chains }),
   new MetaMaskConnector({ chains }),
   new WalletConnectConnector({ chains, options: { qrcode: false } }),
+  new UnstoppableConnector({ chains }),
   new CoinbaseWalletConnector({
     chains,
     options: {

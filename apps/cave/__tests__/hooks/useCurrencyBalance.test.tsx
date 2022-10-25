@@ -1,7 +1,7 @@
 import { CNV, NATIVE } from '@concave/core'
 import { renderHook, waitFor } from '@testing-library/react'
 import { chain } from 'wagmi'
-import { WagmiProvider } from '../../contexts/WagmiContext'
+import { WagmiProvider } from '../../contexts/Wagmi/WagmiContext'
 import { useCurrencyBalanceOfAddress } from '../../hooks/useCurrencyBalance'
 
 describe('Check useCurrencyBalanceOfAddress', () => {
