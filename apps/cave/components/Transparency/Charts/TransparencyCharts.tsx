@@ -8,11 +8,12 @@ import { LsdCNVHoldersChart } from './LsdCNVUniqueHolders'
 import { PoolIdChart } from './PoolIdChart'
 
 export default function TransparencyCharts() {
-  const isMobile = useBreakpointValue({ base: true, md: false })
+  const isMobile = useBreakpointValue({ base: true, xl: false })
 
   let style
   if (isMobile) {
     style = {
+      groupDirection: 'column',
       textChartFontSize: '7xl',
       lockedCnv: {
         width: 'full',
@@ -23,7 +24,8 @@ export default function TransparencyCharts() {
     }
   } else {
     style = {
-      textChartFontSize: '7xl',
+      groupDirection: 'row',
+      textChartFontSize: '6xl',
       lockedCnv: {
         width: '60%',
       },
@@ -34,17 +36,17 @@ export default function TransparencyCharts() {
   }
 
   return (
-    <Flex w={'inherit'} direction={'column'} gap={6}>
-      <Flex gap={6} direction={{ base: 'column', lg: 'row' }}>
+    <Flex w={'100%'} direction={'column'} gap={6}>
+      <Flex gap={6} direction={style.groupDirection}>
         <LockedCNVChart width={style.lockedCnv.width} fontSize={style.textChartFontSize} />
         <LockedCNVSeriesChart />
         <LsdCNVHoldersChart width={style.lsdCnv.width} fontSize={style.textChartFontSize} />
       </Flex>
-      <Flex gap={6} direction={{ base: 'column', lg: 'row' }}>
+      <Flex gap={6} direction={style.groupDirection}>
         <PoolIdChart />
         <DuneChartCard src="https://dune.com/embeds/975956/1690648/39547f93-eb48-4ed3-8dfd-fcb14390d86b" />
       </Flex>
-      <Flex gap={6} direction={{ base: 'column', lg: 'row' }}>
+      <Flex gap={6} direction={style.groupDirection}>
         <ACNVChart fontSize={style.textChartFontSize} />
         <BbtCNVChart />
       </Flex>
