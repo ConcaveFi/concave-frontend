@@ -77,13 +77,12 @@ const ReactFlowDiagram = ({ edges, nodes, isMobile }) => (
 
 export function TransparencyDiagram() {
   const [diagramShown, setDiagramShown] = useState<DiagramButtons>(DiagramButtons.TreasuryOverview)
-  const isMobile = useBreakpointValue({ base: true, md: false })
+  const isMobile = useBreakpointValue({ base: true, xl: false })
 
   return (
     <>
       <VStack
-        minWidth={isMobile ? '300px' : '700px'}
-        width={'100%'}
+        w={'100%'}
         height={'800px'}
         rounded={'2xl'}
         apply="background.metalBrighter"
@@ -99,7 +98,7 @@ export function TransparencyDiagram() {
         <Flex
           rounded={'inherit'}
           shadow="down"
-          w="100%"
+          w={'100%'}
           h="full"
           p={isMobile ? 2 : 4}
           py={isMobile ? 2 : 6}
@@ -171,7 +170,14 @@ const DesktopMenu = ({
   diagramShown: DiagramButtons
   setDiagramShown: Dispatch<SetStateAction<DiagramButtons>>
 }) => (
-  <Box display={'flex'} flexDirection={'row'} gap={'1rem'}>
+  <Box
+    justifyContent={'space-between'}
+    flexWrap={'wrap'}
+    w={'620px'}
+    display={'flex'}
+    flexDirection={'row'}
+    gap={'1rem'}
+  >
     <SelectionButton
       chartName={DiagramButtons.TreasuryOverview}
       diagramShown={diagramShown}
