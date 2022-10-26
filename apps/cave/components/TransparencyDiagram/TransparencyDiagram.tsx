@@ -8,7 +8,6 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
-  useBreakpointValue,
   VStack,
 } from '@concave/ui'
 import { Dispatch, SetStateAction, useState } from 'react'
@@ -75,9 +74,8 @@ const ReactFlowDiagram = ({ edges, nodes, isMobile }) => (
   </ReactFlow>
 )
 
-export function TransparencyDiagram() {
+export function TransparencyDiagram({ isMobile }: { isMobile: boolean }) {
   const [diagramShown, setDiagramShown] = useState<DiagramButtons>(DiagramButtons.TreasuryOverview)
-  const isMobile = useBreakpointValue({ base: true, xl: false })
 
   return (
     <>

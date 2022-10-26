@@ -1,4 +1,4 @@
-import { Flex, useBreakpointValue } from '@concave/ui'
+import { Flex } from '@concave/ui'
 import { ACNVChart } from './ACNVChart'
 import { BbtCNVChart } from './BbtCNVChart'
 import { DuneChartCard } from './DuneChartCard'
@@ -7,9 +7,7 @@ import { LockedCNVSeriesChart } from './LockedCNVSeriesChart'
 import { LsdCNVHoldersChart } from './LsdCNVUniqueHolders'
 import { PoolIdChart } from './PoolIdChart'
 
-export default function TransparencyCharts() {
-  const isMobile = useBreakpointValue({ base: true, xl: false })
-
+export default function TransparencyCharts({ isMobile }: { isMobile: boolean }) {
   let style
   if (isMobile) {
     style = {
