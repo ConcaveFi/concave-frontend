@@ -6,7 +6,7 @@ import { CurrencyIcon } from 'components/CurrencyIcon'
 export const TradeRoute = ({ route }: { route: Route<Currency, Currency> }) => {
   return (
     <Stack fontFamily="heading" fontWeight="bold">
-      <Text>Trade Route:</Text>
+      <Text>Trade route:</Text>
       <HStack spacing={2}>
         <CurrencyIcon size="xs" currency={route.input} />
         <Box w="100%" h="2px" rounded="2px" bg="stroke.secondary" />

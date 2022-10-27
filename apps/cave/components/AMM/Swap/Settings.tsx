@@ -7,7 +7,7 @@ const ToggleExpertMode = ({ isChecked, onToggle }) => {
   return (
     <HStack justifyContent="space-between" width="100%">
       <HStack>
-        <Text fontSize="sm">Expert Mode</Text>
+        <Text fontSize="sm">Expert mode</Text>
         <Tooltip
           label="Expert mode allows high slippage trades and custom recipients without the confirmation screen. Use at your own risk."
           shouldWrapChildren
@@ -76,7 +76,7 @@ export const Settings = () => {
       />
       <Stack gap={1} w="full">
         <Text fontWeight="bold" fontSize="sm">
-          Interface Settings
+          Interface settings
         </Text>
         <ToggleExpertMode
           isChecked={expertMode}

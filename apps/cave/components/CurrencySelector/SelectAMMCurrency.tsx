@@ -76,7 +76,7 @@ const AMMCurrencySelectorModal = ({
   return (
     <Modal
       bluryOverlay
-      title="Select a Token"
+      title="Select a token"
       size="md"
       isOpen={isOpen}
       onClose={onClose}
