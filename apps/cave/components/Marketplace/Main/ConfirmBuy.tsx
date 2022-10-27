@@ -22,7 +22,7 @@ export const ConfirmPurchaseModal = ({
   if (!isOpen) return null
   return (
     <Modal bluryOverlay title="Confirm purchase" hideClose isOpen={isOpen} onClose={onClose}>
-      <VStack direction={'column'} w={`sm`} gap={2}>
+      <VStack direction={'column'} w={`sm`} width={{ base: 'full', md: 'auto' }} gap={2}>
         <Text as="em" fontSize={'sm'} textAlign={'center'} width={'full'}>
           You are buying a LSDCNV token, please review this transaction information before confirm.
         </Text>

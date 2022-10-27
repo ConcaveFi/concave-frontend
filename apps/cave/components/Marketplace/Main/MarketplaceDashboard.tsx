@@ -1,8 +1,7 @@
 import { Flex, Text, VStack } from '@chakra-ui/react'
-import { BoxProps } from '@concave/ui'
+import { BoxProps, HStack, useBreakpointValue } from '@concave/ui'
 import { Loading } from 'components/Loading'
 import { MarketplaceFilterContainer } from 'components/Marketplace/Main/MarketplaceFilterContainer'
-import { useRouter } from 'next/router'
 import { MarketplacePosition } from './MarketplacePosition'
 import { MarketplaceSortConainer } from './MarketplaceSortContainer'
 import { TokenIdSearchBar } from './TokenIdSearchBar'
@@ -18,7 +17,6 @@ export const MarketplaceDashboard = (props: BoxProps) => {
     setSort,
     setStakeFilters,
   } = useMarketplaceDashbord()
-  const { push } = useRouter()
 
   const positions = nftPositions.map((stakingPosition) => (
     <MarketplacePosition
@@ -26,6 +24,8 @@ export const MarketplaceDashboard = (props: BoxProps) => {
       stakingPosition={stakingPosition}
     />
   ))
+
+  const isMobile = useBreakpointValue({ base: true, sm: false })
 
   return (
     <>
@@ -38,14 +38,16 @@ export const MarketplaceDashboard = (props: BoxProps) => {
         borderRadius={'3xl'}
         w={'full'}
       >
-        <MarketplaceFilterContainer
-          stakeFilters={stakeFilters}
-          onChangeStakeFilters={setStakeFilters}
-        />
-        <Flex width={'full'} gap={4}>
-          <MarketplaceSortConainer onChangeSort={setSort} currentSort={sort} />
-          <TokenIdSearchBar onApplyFilter={setTokenIdFilter} />
-        </Flex>
+        <>
+          <MarketplaceFilterContainer
+            stakeFilters={stakeFilters}
+            onChangeStakeFilters={setStakeFilters}
+          />
+          <HStack w={'full'} flex={1} gap={2} flexWrap={'wrap'} justifyContent={'space-around'}>
+            <MarketplaceSortConainer onChangeSort={setSort} currentSort={sort} />
+            {!isMobile && <TokenIdSearchBar onApplyFilter={setTokenIdFilter} />}
+          </HStack>
+        </>
         <Flex
           as={Loading}
           size="md"

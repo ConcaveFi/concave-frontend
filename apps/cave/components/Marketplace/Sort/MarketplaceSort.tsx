@@ -20,8 +20,8 @@ export const MarketplaceSort: FC<MarketplaceSortProps> = ({
   }, [isSelected])
   return (
     <Flex
-      h={'30px'}
       px={4}
+      py={2}
       rounded="full"
       shadow={'up'}
       align="center"
