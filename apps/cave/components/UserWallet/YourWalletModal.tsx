@@ -31,7 +31,7 @@ export function YourWalletModal({ isOpen, onClose }: { isOpen: boolean; onClose:
         <Flex justify="space-between">
           <Flex fontWeight="bold" direction="column" justify="center" p={4}>
             <Text textColor="text.low" fontSize="xl">
-              Your Wallet
+              Your wallet
             </Text>
             <Text fontSize={'3xl'}>{formatAddress(address)}</Text>
           </Flex>
