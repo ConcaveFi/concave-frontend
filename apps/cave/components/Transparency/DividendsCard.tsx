@@ -24,7 +24,7 @@ export default function DividendsCard() {
           w={{ base: '70%', lg: '90%' }}
         >
           Dividends are distributed on a quarterly basis to the holders. You may redeem these
-          dividends upon the distribution date on the Your Stake Position page.
+          dividends upon the distribution date on the <em>Your stake position</em> page.
         </Text>
       </Flex>
       <Flex justifyContent={'center'} w={{ base: '100%', lg: '33%' }}>
@@ -39,7 +39,7 @@ export default function DividendsCard() {
           my={'auto'}
           shadow={'up'}
         >
-          <Text fontSize={'2xl'}>Coming Soon</Text>
+          <Text fontSize={'2xl'}>Coming soon</Text>
           <Text textColor={'text.low'} fontSize="14px">
             Distribution date TBD
           </Text>
