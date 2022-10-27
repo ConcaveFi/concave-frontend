@@ -19,17 +19,22 @@ export function MarketplaceFilterContainer({
     }
   }
 
+  const isReady = !!stakeData?.length
+  if (!isReady) {
+    return null
+  }
+
   return (
     <Flex direction={'column'} mt={0} align="start" rounded={'inherit'} width="full">
       <Flex
         mt={2}
         height={'auto'}
-        justifyContent={'space-evenly'}
+        justifyContent={'space-between'}
         flexWrap={'wrap'}
         width={'full'}
-        gap={1.5}
         rounded={'inherit'}
         shadow="down"
+        gap={2}
         p={2}
       >
         {stakeData?.map((stakeData) => (

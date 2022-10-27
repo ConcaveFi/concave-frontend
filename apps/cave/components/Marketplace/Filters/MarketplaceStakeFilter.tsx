@@ -1,5 +1,5 @@
 import { stakingPools } from '@concave/marketplace'
-import { Flex, gradientBorder, Image, Text, useDisclosure } from '@concave/ui'
+import { Box, Flex, gradientBorder, Image, SlideFade, Text, useDisclosure } from '@concave/ui'
 import { FC } from 'react'
 import { numberMask } from 'utils/numberMask'
 
@@ -21,46 +21,53 @@ export const MakeplaceStakeFilter: FC<MakeplaceStakeFilterProps> = ({
     const type: 'add' | 'remove' = isOpen ? 'remove' : 'add'
     onToggleFilter(poolId, type)
   }
+
   return (
-    <Flex
-      flex={1}
-      height="full"
-      rounded={'2xl'}
-      minW={'175px'}
-      w={`full`}
-      py={2}
-      pr={2}
-      shadow="Up Small"
-      fontSize={'sm'}
-      cursor="pointer"
-      sx={isOpen && { ...gradientBorder({ borderWidth: 2 }) }}
-      onClick={onClick}
+    <Box
+      as={SlideFade}
+      in={true}
+      offsetY="-80px"
+      w={{ base: 'full', sm: 'auto' }}
+      minW={{ base: '175px', sm: '49%', md: '24%' }}
     >
-      <Image
-        my={'auto'}
-        width={{
-          base: '100px',
-          sm: '80px',
-        }}
-        height={{
-          base: '50px',
-          sm: '40px',
-        }}
-        objectFit={`cover`}
-        alt={`Image of stake ${stakingPools[poolId]?.days}`}
-        src={`/assets/marketplace/${stakeImage[poolId]}`}
-      />
-      <Flex direction={'column'} justify="center" align="start" lineHeight={'18px'}>
-        <Text fontSize={'sm'} color={'text.low'}>
-          Stake period
-        </Text>
-        <Text fontWeight={'bold'}>{stakingPools[poolId]?.days} days</Text>
-        <Text fontSize={'sm'} color={'text.low'}>
-          APR
-        </Text>
-        <Text fontWeight={'bold'}>{numberMask(totalVAPR)}%</Text>
+      <Flex
+        height="full"
+        rounded={'2xl'}
+        minW={{ base: '175px', sm: '49%', md: '24%' }}
+        py={2}
+        pr={2}
+        shadow="Up Small"
+        fontSize={'sm'}
+        cursor="pointer"
+        sx={isOpen && { ...gradientBorder({ borderWidth: 2 }) }}
+        onClick={onClick}
+      >
+        <Image
+          my={'auto'}
+          width={{
+            base: '100px',
+            sm: '80px',
+          }}
+          height={{
+            base: '50px',
+            sm: '40px',
+          }}
+          objectFit={`cover`}
+          alt={`Image of stake ${stakingPools[poolId]?.days}`}
+          src={`/assets/marketplace/${stakeImage[poolId]}`}
+        />
+        <Flex direction={'column'} justify="center" align="start" lineHeight={'18px'}>
+          <Text fontSize={'sm'} color={'text.low'}>
+            Stake period
+          </Text>
+          <Text fontWeight={'bold'}>{stakingPools[poolId]?.days} days</Text>
+          <Text fontSize={'sm'} color={'text.low'}>
+            APR
+          </Text>
+          <Text fontWeight={'bold'}>{numberMask(totalVAPR)}%</Text>
+        </Flex>
       </Flex>
-    </Flex>
+    </Box>
   )
 }
 const stakeImage = {
