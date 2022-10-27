@@ -72,7 +72,7 @@ const SupplyLiquidityContent = ({
         />
         <PositionInfoItem
           color={'text.low'}
-          label="Share Pool"
+          label="Share pool"
           value={`${poolShare?.percent?.toSignificant(4)}%`}
         />
       </Box>

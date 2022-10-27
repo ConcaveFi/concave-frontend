@@ -119,7 +119,7 @@ function AddLiquidityContent({
 
       <WaitingConfirmationDialog
         isOpen={addLPTx.isWaitingForConfirmation}
-        title={'Confirm Liquidity'}
+        title={'Confirm liquidity'}
       >
         <Flex
           width={'220px'}
@@ -203,7 +203,7 @@ export const AddLiquidityModalButton = ({
 
       <Modal
         bluryOverlay={true}
-        title="Add Liquidity"
+        title="Add liquidity"
         isOpen={addLiquidityDisclosure.isOpen}
         onClose={addLiquidityDisclosure.onClose}
         isCentered
