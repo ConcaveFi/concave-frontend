@@ -1,4 +1,4 @@
-import { Flex, Text, useBreakpointValue } from '@concave/ui'
+import { Text, useBreakpointValue } from '@concave/ui'
 import { NftSort } from 'components/NftFilters/Sorters/hooks/useNftSort'
 import { FC } from 'react'
 import { MarketplaceSort } from '../Sort/MarketplaceSort'
@@ -11,7 +11,7 @@ export const MarketplaceSortConainer: FC<MarketplaceSortConainerProps> = ({
   const hideLabel = useBreakpointValue({ base: false, md: false, xl: false, '2xl': false })
 
   return (
-    <Flex justifyContent={'space-between'} flexWrap={'wrap'} width={'full'} gap={4}>
+    <>
       {hideLabel && (
         <Text color={'text.low'} noOfLines={1} fontWeight={`bold`}>
           Sort by:
@@ -37,6 +37,6 @@ export const MarketplaceSortConainer: FC<MarketplaceSortConainerProps> = ({
         isSelected={currentSort?.sort === 'REDEEM_DATE'}
         nftSort={'REDEEM_DATE'}
       />
-    </Flex>
+    </>
   )
 }
