@@ -6,7 +6,7 @@ import { LiquidDashboardHeader } from 'components/StakingPositions/LiquidDashboa
 
 export function LiquidStakePositions() {
   const stakePosition = useStakePositions()
-  const test = ''
+
   return (
     <Flex
       mx="auto"
@@ -24,7 +24,6 @@ export function LiquidStakePositions() {
         position="relative"
       >
         <UserDashboardCard stakePosition={stakePosition} />
-        {/* <DashboardMobile data={data} /> */}
       </Flex>
     </Flex>
   )
