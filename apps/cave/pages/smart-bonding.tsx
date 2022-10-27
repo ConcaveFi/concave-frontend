@@ -249,7 +249,7 @@ export function Bond() {
           />
         </Flex>
       </Flex>
-      <WaitingConfirmationDialog isOpen={openConfirmDialog} title={'Confirm Redeem'}>
+      <WaitingConfirmationDialog isOpen={openConfirmDialog} title={'Confirm redeem'}>
         <Text fontSize="lg" color="text.accent">
           {bondSigma && bondSigma['parseRedeemable']
             ? `Redeeming ` +
