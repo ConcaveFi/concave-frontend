@@ -21,7 +21,7 @@ export const ConfirmPurchaseModal = ({
   const stakingPostion = CNV[chainId]
   if (!isOpen) return null
   return (
-    <Modal bluryOverlay title="Confirm Purchase" hideClose isOpen={isOpen} onClose={onClose}>
+    <Modal bluryOverlay title="Confirm purchase" hideClose isOpen={isOpen} onClose={onClose}>
       <VStack direction={'column'} w={`sm`} gap={2}>
         <Text as="em" fontSize={'sm'} textAlign={'center'} width={'full'}>
           You are buying a LSDCNV token, please review this transaction information before confirm.
