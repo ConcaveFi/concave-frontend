@@ -44,11 +44,11 @@ export const BondInfo = ({ asset, roi, vestingTerm, icon }) => {
         color={getRoiWarnColor(+roi)}
       />
       <Box w="1px" mx={0} my={-4} bg="stroke.primary" />
-      <InfoItem value={vestingTerm} label="Vesting Term" px={5} flexBasis="35%" />
+      <InfoItem value={vestingTerm} label="Vesting term" px={5} flexBasis="35%" />
     </Card>
   )
 }
-// commi
+
 export const UserBondPositionInfo = (props) => {
   const spinnerStyles = { animation: `${spin} 2s linear infinite`, size: 'sm' }
   const parse = props?.bondSigma
@@ -67,7 +67,7 @@ export const UserBondPositionInfo = (props) => {
       {claimed ? (
         <Card bg="none" py={4} w="100%" h="79px" direction="row" shadow="Glass Up Medium">
           <Flex justify="center" flexBasis="100%">
-            <InfoItem value={'No Current Bond Positions'} label={''} />
+            <InfoItem value={'No current bond positions'} label={''} />
           </Flex>
         </Card>
       ) : totalOwed ? (
@@ -75,13 +75,13 @@ export const UserBondPositionInfo = (props) => {
           <Flex justify="center" flexBasis="40%">
             <InfoItem
               value={totalOwed ? oldestBond.replace('2022', '') : 'N/A'}
-              label={oldestBond ? 'Fully Vested' : ''}
+              label={oldestBond ? 'Fully vested' : ''}
             />
           </Flex>
           <Box w="1px" mx={0} my={-4} bg="stroke.primary" />
           <InfoItem
             value={(totalOwed - totalPending).toFixed(2)}
-            label={totalOwed ? 'Pending' : 'No Bonds to Claim'}
+            label={totalOwed ? 'Pending' : 'No bonds to claim'}
             flexGrow={1}
             pl={3}
             pr={3}
