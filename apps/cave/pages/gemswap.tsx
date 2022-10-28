@@ -27,7 +27,16 @@ export function SwapPage() {
   const { currencies } = useQueryCurrencies()
 
   return (
-    <Flex direction="column" align="center" justify="center" w="100%" minH="100vh" gap={8}>
+    <Flex
+      direction="column"
+      align="center"
+      justify="center"
+      w="100%"
+      mx="auto"
+      maxW="980px"
+      minH="100vh"
+      gap={8}
+    >
       <Flex wrap="wrap" gap={10} justify="center" w="full">
         <LayoutGroup>
           <CandleStickCard from={currencies[0]} to={currencies[1]} />
