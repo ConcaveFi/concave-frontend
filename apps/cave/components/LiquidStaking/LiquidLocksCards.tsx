@@ -20,9 +20,9 @@ export const LiquidLocksCards = () => {
   useEffect(() => {
     if (stakingData?.data?.logStakingV1_Lock) {
       setStakingLocks(
-        stakingData?.data?.logStakingV1_Lock.sort((current, before) => {
-          if (current.timestamp > before.timestamp) return 1
-        }),
+        stakingData?.data?.logStakingV1_Lock.sort(
+          (current, before) => before.timestamp - current.timestamp,
+        ),
       )
     }
   }, [stakingData])
