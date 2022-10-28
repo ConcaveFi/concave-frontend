@@ -1,5 +1,6 @@
 import { Card, Flex, Link, SlideFade, Stack, Text } from '@concave/ui'
 import { formatDistance, fromUnixTime } from 'date-fns'
+import { commify } from 'ethers/lib/utils'
 import { gql, request } from 'graphql-request'
 import { getTxExplorer } from 'lib/getTransactionExplorer'
 import { useQuery } from 'react-query'
@@ -25,7 +26,7 @@ const AmountText = ({ value }: { value: Amount }) => (
     fontSize="sm"
     noOfLines={1}
   >
-    {(+value.amount).toFixed(2)} {value.symbol}
+    {commify((+value.amount).toFixed(2))} {value.symbol}
   </Text>
 )
 
