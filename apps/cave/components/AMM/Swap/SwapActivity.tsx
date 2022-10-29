@@ -33,9 +33,14 @@ const AmountText = ({ value }: { value: Amount }) => (
 const ActivityRow = ({ type, bought, sold, when, by, txHash }: Activity) => {
   const isBuy = type === 'buy'
   return (
-    <Link href={getTxExplorer(txHash, 1)}>
-      <Flex gap={3} fontSize="sm" justify="space-between" _hover={{ color: 'text.high' }}>
-        <AmountText value={isBuy ? bought : sold} />
+    <Link
+      href={getTxExplorer(txHash, 1)}
+      isExternal
+      py={2}
+      rounded="lg"
+      _hover={{ textDecoration: 'none', bg: 'blackAlpha.200' }}
+    >
+      <Flex gap={3} fontSize="sm" justify="space-around">
         <Text
           fontSize="sm"
           w="50px"
@@ -43,16 +48,11 @@ const ActivityRow = ({ type, bought, sold, when, by, txHash }: Activity) => {
           fontWeight="bold"
           color={isBuy ? 'green.300' : 'red.300'}
         >
-          {isBuy ? 'Bought' : 'Sold'}
+          {isBuy ? 'Buy' : 'Sell'}
         </Text>
-        <Text fontSize="sm" w="40px" textAlign="center" fontWeight="medium" color="text.low">
-          {isBuy ? 'with' : 'for'}
-        </Text>
-        <AmountText value={isBuy ? sold : bought} />
-        <Text fontSize="sm" textAlign="center" w="120px" fontWeight="medium" color="text.low">
-          by {by}
-        </Text>
-        <Text fontSize="sm" fontWeight="medium" color="text.low" w="124px">
+        <AmountText value={bought} />
+        <AmountText value={sold} />
+        <Text fontSize="sm" fontWeight="medium" color="text.low" w="124px" textAlign="center">
           {formatDistance(fromUnixTime(when), Date.now(), { addSuffix: true })}
         </Text>
       </Flex>
@@ -90,7 +90,21 @@ export const SwapActivity = () => {
       px={5}
       py={3}
     >
-      <Stack overflowY="scroll" gap={1} w="full" apply="scrollbar.big">
+      <Stack overflowY="scroll" gap={0} spacing={0} w="full" apply="scrollbar.big">
+        <Flex gap={3} textAlign="center" justify="space-around" fontWeight="bold" color="text.low">
+          <Text fontSize="sm" w="50px">
+            Type
+          </Text>
+          <Text fontSize="sm" w="100px">
+            CNV Amount
+          </Text>
+          <Text fontSize="sm" w="100px">
+            DAI Amount
+          </Text>
+          <Text fontSize="sm" w="124px">
+            Date
+          </Text>
+        </Flex>
         {isSuccess &&
           data.logAmm.map(
             ({
