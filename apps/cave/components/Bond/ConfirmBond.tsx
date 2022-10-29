@@ -100,7 +100,7 @@ export const ConfirmBondModal = ({
   }
 
   return (
-    <Modal bluryOverlay={true} title="Confirm Bond" isOpen={isOpen} onClose={onCloseModal}>
+    <Modal bluryOverlay={true} title="Confirm bond" isOpen={isOpen} onClose={onCloseModal}>
       <div>
         <TokenInfo
           currency={currencyIn}

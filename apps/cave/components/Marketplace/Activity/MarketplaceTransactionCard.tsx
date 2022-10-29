@@ -18,7 +18,7 @@ export const MarketplaceTransactionCard = ({ data }: MarketplaceTransactionCardP
   const cardListing = data.type === 'sale' ? 'sold for' : 'listed at'
   const chainId = useCurrentSupportedNetworkId()
   const etherscanBaseUrl =
-    chainId === chain.mainnet.id ? `https://etherscan.io` : `https://rinkeby.etherscan.io`
+    chainId === chain.mainnet.id ? `https://etherscan.io` : `https://goerli.etherscan.io`
   const etherscanLink = etherscanBaseUrl + `/tx/${data.transactionHash}`
   const [isLargerThan770] = useMediaQuery('(min-width: 770px)')
   const [width, setWidth] = useState('0')

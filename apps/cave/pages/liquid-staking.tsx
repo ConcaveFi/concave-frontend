@@ -16,7 +16,7 @@ function LiquidStaking() {
       p="0px"
     >
       <Heading as="h1" mt={{ base: 12, md: 8 }} fontSize={{ base: '4xl', sm: '5xl' }}>
-        Liquid staking
+        Liquid Staking
       </Heading>
       <Flex
         align={'center'}

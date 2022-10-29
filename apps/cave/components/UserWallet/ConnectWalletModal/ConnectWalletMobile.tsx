@@ -142,7 +142,7 @@ const ConnectWithWalletConnect = ({ walletConnectConnector, onCancel }) => {
         <IconButton icon={<ArrowBackIcon fontSize="lg" />} aria-label="back" />
         <ConnectorIcon name="walletConnect" rounded="md" />
         <Text fontFamily="heading" fontWeight="bold" fontSize="xl">
-          Wallet Connect
+          Wallet connect
         </Text>
       </HStack>
       <Stack

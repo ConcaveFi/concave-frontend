@@ -18,7 +18,7 @@ export const SelectedBondType = ({ bondType }) => {
     >
       <Text>Selected</Text>
       <Text mx={1}>|</Text>
-      <Text color="text.low">Bond Type:</Text>
+      <Text color="text.low">Bond type:</Text>
       <Text>{bondType}</Text>
     </Card>
   )

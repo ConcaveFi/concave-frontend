@@ -104,7 +104,7 @@ const useAddTokenToWallet = ({ tokenAddress, tokenChainId, tokenImage }: injecte
           setError(!!error)
           setData(false)
           if (error.code === 4902) {
-            alert("It'seems you don't have a Web3 wallet!")
+            alert("It seems you don't have a Web3 wallet!")
           }
         }
       }

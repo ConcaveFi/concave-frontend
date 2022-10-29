@@ -22,7 +22,6 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakin
   const currentValue = compactFormat(stakingPosition?.currentValue)
   const positionDate = new Date(stakingPosition.maturity * 1000)
   const deadlineDate = new Date(stakingPosition.market.deadline.mul(1000).toNumber())
-  const relativePositionTime = formatDistanceToNowStrict(positionDate, { unit: 'day' })
   const days = stakingPosition.pool.days
   const diff = (differenceInDays(positionDate, Date.now()) - days) * -1
   const percentToMaturity = new Percent(diff, days)
@@ -52,20 +51,11 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakin
           onMouseOver={() => setActive(true)}
           onMouseLeave={() => setActive(false)}
         >
-          <HStack
-            align="center"
-            textAlign={'center'}
-            alignContent={`center`}
-            gap={2}
-            width={'full'}
-            justify="space-evenly"
-            flexWrap={`wrap`}
-          >
+          <HStack flex={1} gap={2} justify="space-between" flexWrap={`wrap`}>
             <ImageContainer
               w={['100%', '100%', '100%', '250px']}
               h={'60px'}
               stakingPosition={stakingPosition}
-              px={4}
             />
             <Info title="Current value" info={`${currentValue} CNV`} />
             <Info

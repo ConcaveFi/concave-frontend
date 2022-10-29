@@ -145,7 +145,7 @@ export function SwapCard() {
         </Text>
       </WaitingConfirmationDialog>
 
-      <TransactionSubmittedDialog title="Swap Submitted" tx={swapTx.data} isOpen={swapTx.isSuccess}>
+      <TransactionSubmittedDialog title="Swap submitted" tx={swapTx.data} isOpen={swapTx.isSuccess}>
         {swapTx.trade?.outputAmount.currency.isToken && (
           <AddTokenToWalletButton token={swapTx.trade.outputAmount.currency.wrapped} />
         )}

@@ -29,7 +29,7 @@ export const usePositionSorter = () => {
 
   const getCNVPrice = (market: MarketItem) => {
     if (prices.error) throw prices.error
-    if (!prices.data) throw 'NO PRICES DATA, is it loading?'
+    if (!prices.data) throw 'No price data'
     const price = prices.data[market.currency.symbol]
     return price.quote(market.currencyAmount)
   }
