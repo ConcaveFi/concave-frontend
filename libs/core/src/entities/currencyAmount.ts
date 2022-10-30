@@ -13,7 +13,7 @@ const Big = toFormat(_Big)
 
 Big.strict = true
 
-export class CurrencyAmount<T extends Currency> extends Fraction {
+export class CurrencyAmount<T extends Currency = Currency> extends Fraction {
   public readonly currency: T
   public readonly decimalScale: JSBI
 
