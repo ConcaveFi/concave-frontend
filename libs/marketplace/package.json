@@ -17,7 +17,7 @@
     "test:watch": "tsdx test --passWithNoTests --watch"
   },
   "dependencies": {
-    "@alch/alchemy-web3": "^1.4.4",
+    "@alch/alchemy-web3": "^1.4.7",
     "@concave/core": "*",
     "@concave/gemswap-sdk": "*",
     "@ethersproject/address": "^5.6.1",
