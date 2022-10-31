@@ -16,7 +16,7 @@ describe('StakingPosition', () => {
       tokenId: BigNumber.from(1),
       startPrice: BigNumber.from(BigNumber.from(`0` + `000319229873079570`)),
     } as MarketItem)
-    expect(staking.calculateDiscount(market10).toString()).toEqual(BigNumber.from(9000).toString())
+    expect(staking.calculateDiscount(market10).toString()).toEqual(BigNumber.from(10000).toString())
   })
 
   it('percent', () => {

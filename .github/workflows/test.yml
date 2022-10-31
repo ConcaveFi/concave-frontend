@@ -18,8 +18,5 @@ jobs:
         with:
           node-version: 16
 
-      - name: Set up packages
-        run: yarn && yarn build
-
-      - name: '@concave/core'
-        run: cd libs/core/ && yarn test && cd ../..
+      - name: Test
+        run: yarn && yarn test

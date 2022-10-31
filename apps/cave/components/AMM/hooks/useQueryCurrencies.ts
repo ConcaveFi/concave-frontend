@@ -1,12 +1,12 @@
 import { ChainId, Currency, NATIVE } from '@concave/core'
 import { Fetcher } from '@concave/gemswap-sdk'
 import { isAddress } from 'ethers/lib/utils'
-import { concaveProvider } from 'lib/providers'
 import Router, { useRouter } from 'next/router'
 import { useCallback, useRef } from 'react'
 import { useQuery, useQueryClient } from 'react-query'
-import { getQueryValue } from 'utils/getQueryValue'
 import { useNetwork } from 'wagmi'
+import { concaveProvider } from '../../../lib/providers'
+import { getQueryValue } from '../../../utils/getQueryValue'
 
 const getAddressOrSymbol = (c: Currency) => {
   if (!c) return null

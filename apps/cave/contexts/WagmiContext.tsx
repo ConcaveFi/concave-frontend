@@ -55,9 +55,5 @@ const AutoConnect = () => {
   return null
 }
 
-export const WagmiProvider = ({ children }: { children: ReactNode }) => (
-  <WagmiConfig client={client}>
-    {isIframe && <AutoConnect />}
-    {children}
-  </WagmiConfig>
-)
+export const WagmiProvider = ({ children }: { children: ReactNode }) =>
+  WagmiConfig({ client, children: [isIframe && AutoConnect(), children] })

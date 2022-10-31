@@ -16,7 +16,7 @@ export interface TradeOptions {
    * This will be used to produce a `deadline` parameter which is computed from when the swap call parameters
    * are generated.
    */
-  deadline: number
+  deadline?: number
 
   /**
    * The account that should receive the output of the swap.

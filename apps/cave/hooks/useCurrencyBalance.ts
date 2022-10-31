@@ -1,7 +1,7 @@
 import { Currency, CurrencyAmount } from '@concave/core'
 import { useMemo } from 'react'
-import { toAmount } from 'utils/toAmount'
 import { useAccount, useBalance } from 'wagmi'
+import { toAmount } from '../utils/toAmount'
 
 export type UseCurrencyBalanceData = Omit<ReturnType<typeof useBalance>, 'data'> & {
   data: CurrencyAmount<Currency>
