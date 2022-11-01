@@ -1,12 +1,12 @@
 import { NEXT_PUBLIC_CHART_ENDPOINT } from 'lib/env.conf'
 
-export async function fetchData(
+export async function fetchData<T = unknown>(
   route: string,
   url: string = NEXT_PUBLIC_CHART_ENDPOINT,
   method?: string,
   bodyData?: object,
-): Promise<any> {
-  return fetch(`${url}/${route}`, {
+): Promise<T> {
+  const response = await fetch(`${url}/${route}`, {
     method: method || 'GET',
     mode: 'cors',
     redirect: 'follow',
@@ -14,13 +14,11 @@ export async function fetchData(
       'Content-Type': 'application/json',
     },
     body: bodyData ? JSON.stringify(bodyData) : null,
-  }).then((response) =>
-    response.json().then((responseJson) => {
-      const data = responseJson.data
-      if (data.status === 400) {
-        throw new Error(data.msg)
-      }
-      return data
-    }),
-  )
+  })
+  const responseJson = await response.json()
+  const data = responseJson.data
+  if (data.status === 400) {
+    throw new Error(data.msg)
+  }
+  return data as T
 }
