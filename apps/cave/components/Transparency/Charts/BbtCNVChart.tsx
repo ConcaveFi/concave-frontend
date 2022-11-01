@@ -1,5 +1,4 @@
 import { Flex, Text, useBreakpointValue } from '@concave/ui'
-import { useEffect, useState } from 'react'
 import {
   Bar,
   BarChart,
@@ -13,8 +12,8 @@ import {
 import { numberWithCommas } from 'utils/numbersWithCommas'
 import { ChartCard } from './ChartCard'
 import { ChartTooltip } from './ChartTooltip'
-import { fetchData } from './fetchData'
 import { CHART_COLORS } from './style'
+import { useFetchData } from './useFetchData'
 
 type BbtCNVChartData = {
   bbtCNVRedeemable: number
@@ -24,44 +23,37 @@ type BbtCNVChartData = {
 }
 
 export function BbtCNVChart() {
-  const [data, setData] = useState<undefined | BbtCNVChartData[]>()
-  const [error, setError] = useState<undefined | string>()
-  const [dataLoaded, setDataLoaded] = useState(false)
   const isMobile = useBreakpointValue({ base: true, md: false })
-
-  useEffect(() => {
-    fetchData('bbtcnv-redeemed')
-      .then((data: BbtCNVChartData) => setData([data]))
-      .catch((error: Error) => setError(error.message))
-      .finally(() => setDataLoaded(true))
-  }, [])
-
+  const bbtCNVData = useFetchData<BbtCNVChartData>('bbtcnv-redeemed')
+  const dataLoaded = !bbtCNVData.isLoading
+  const data = bbtCNVData.data
+  const error = bbtCNVData.error
   return (
     <ChartCard
-      dataLoaded={dataLoaded}
+      {...bbtCNVData}
       chartTitle="bbtCNV redeem counter"
       tooltipDescription="bbtCNV redeem counter."
       overflow="visible"
     >
-      {dataLoaded && error && <Text>{error}</Text>}
+      {dataLoaded && error && <Text>{`Error to fetch result, we will refetch`}</Text>}
       {dataLoaded && !error && (
         <>
           <Flex direction={'row'} gap={6} justifyContent={'space-evenly'}>
             <Flex direction={'column'} gap={1}>
               <Text fontSize={isMobile ? 'md' : '2xl'} lineHeight={'100%'}>
-                {numberWithCommas(data[0].bbtCNVRedeemable.toFixed(4))}
+                {numberWithCommas(data.bbtCNVRedeemable.toFixed(4))}
               </Text>
               <Text lineHeight={'100%'}>bbtCNV redeemable</Text>
             </Flex>
             <Flex direction={'column'} gap={1}>
               <Text fontSize={isMobile ? 'md' : '2xl'} lineHeight={'100%'}>
-                {numberWithCommas(data[0].bbtCNVRedeemed.toFixed(4))}
+                {numberWithCommas(data.bbtCNVRedeemed.toFixed(4))}
               </Text>
               <Text lineHeight={'100%'}>bbtCNV redeemed</Text>
             </Flex>
             <Flex direction={'column'} gap={1}>
               <Text fontSize={isMobile ? 'md' : '2xl'} lineHeight={'100%'}>
-                {numberWithCommas(data[0].bbtCNVToVest.toFixed(4))}
+                {numberWithCommas(data.bbtCNVToVest.toFixed(4))}
               </Text>
               <Text lineHeight={'100%'}>bbtCNV vesting</Text>
             </Flex>
@@ -71,7 +63,7 @@ export function BbtCNVChart() {
               layout="vertical"
               width={500}
               height={150}
-              data={data}
+              data={[data]}
               margin={{
                 top: 20,
                 right: 30,
@@ -84,7 +76,7 @@ export function BbtCNVChart() {
               <XAxis
                 type="number"
                 dataKey="TOTAL_BBTCNV"
-                domain={[0, Math.ceil(data[0].TOTAL_BBTCNV)]}
+                domain={[0, Math.ceil(data.TOTAL_BBTCNV)]}
                 tickFormatter={(v) => v.toLocaleString()}
                 tickLine={{ stroke: CHART_COLORS.TextLow }}
                 axisLine={{ stroke: CHART_COLORS.TextLow }}
