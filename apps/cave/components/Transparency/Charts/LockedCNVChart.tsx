@@ -4,13 +4,15 @@ import { ChartCard } from './ChartCard'
 import { useFetchData } from './useFetchData'
 
 type AmountCNVLockedData = {
-  ConcaveTokenTotalSupply: number
-  sumAmountLocked: number
+  ratioSupply: number
+  ratio: number
   ratioStaked: number
 }
-
 export function LockedCNVChart({ width, fontSize }: { width: string; fontSize: string }) {
-  const amountLocked = useFetchData<AmountCNVLockedData>('locked')
+  const amountLocked = useFetchData<AmountCNVLockedData>(
+    'ratio',
+    'https://cnv-data.concave.lol/api',
+  )
   const dataLoaded = !amountLocked.isLoading
   const data = amountLocked.data
   const error = amountLocked.error
@@ -26,12 +28,12 @@ export function LockedCNVChart({ width, fontSize }: { width: string; fontSize: s
       {dataLoaded && !error && (
         <>
           <Text color={'text.low'} lineHeight={'100%'}>
-            {numberWithCommas(data.sumAmountLocked.toFixed(4))}
+            {numberWithCommas(data.ratioStaked.toFixed(4))}
             {' / '}
-            {numberWithCommas(data.ConcaveTokenTotalSupply.toFixed(4))} CNV
+            {numberWithCommas(data.ratioSupply.toFixed(4))} CNV
           </Text>
           <Text lineHeight={'100%'} fontSize={fontSize}>
-            {(data.ratioStaked * 100).toFixed(2)}%
+            {(data.ratio * 100).toFixed(2)}%
           </Text>
           <Text fontSize={'large'}>CNV locked in lsdCNV</Text>
         </>
