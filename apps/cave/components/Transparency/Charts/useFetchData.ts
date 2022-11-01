@@ -20,7 +20,7 @@ export const useFetchData = <T>(
     () => fetchData<T>(route, url, method, bodyData),
     {
       retry: 3,
-      refetchInterval: 15000,
+      refetchInterval: 60000,
       retryDelay: 5000,
       refetchOnWindowFocus: false,
       refetchOnMount: false,

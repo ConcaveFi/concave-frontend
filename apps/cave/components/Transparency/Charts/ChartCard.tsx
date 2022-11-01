@@ -3,6 +3,7 @@ import { Box, Card, Flex, Spinner, Text, Tooltip } from '@concave/ui'
 import { Loading } from 'components/Loading'
 
 export const ChartCard = ({
+  isLoading,
   isFetching,
   isRefetching,
   chartTitle,
@@ -19,6 +20,7 @@ export const ChartCard = ({
   data: unknown
   chartTitle: string
   isFetching?: boolean
+  isLoading?: boolean
   isRefetching?: boolean
   failureCount?: number
   tooltipDescription?: string
@@ -51,11 +53,7 @@ export const ChartCard = ({
         justifyContent={'center'}
         alignItems={overflow === 'visible' ? 'center' : 'unset'}
       >
-        {data != undefined ? (
-          <>{children}</>
-        ) : (
-          <Loading size={'md'} label={loadingMessage} isLoading />
-        )}
+        {!isLoading ? <>{children}</> : <Loading size={'md'} label={loadingMessage} isLoading />}
       </Flex>
     </Card>
   )
