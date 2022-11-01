@@ -24,7 +24,7 @@ export function LockedCNVChart({ width, fontSize }: { width: string; fontSize: s
       width={width}
       overflow={'visible'}
     >
-      {dataLoaded && error && <Text>{`Error to fetch result, we will refetch`}</Text>}
+      {dataLoaded && error && <Text>{`Error fetching data, retrying`}</Text>}
       {dataLoaded && !error && (
         <>
           <Text color={'text.low'} lineHeight={'100%'}>
