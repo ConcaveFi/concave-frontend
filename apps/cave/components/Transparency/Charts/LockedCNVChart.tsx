@@ -1,45 +1,37 @@
 import { Text } from '@concave/ui'
-import { useEffect, useState } from 'react'
 import { numberWithCommas } from 'utils/numbersWithCommas'
 import { ChartCard } from './ChartCard'
-import { fetchData } from './fetchData'
+import { useFetchData } from './useFetchData'
 
 type AmountCNVLockedData = {
-  ratioSupply: number
-  ratio: number
+  ConcaveTokenTotalSupply: number
+  sumAmountLocked: number
   ratioStaked: number
 }
 
 export function LockedCNVChart({ width, fontSize }: { width: string; fontSize: string }) {
-  const [data, setData] = useState<undefined | AmountCNVLockedData>()
-  const [error, setError] = useState<undefined | string>()
-  const [dataLoaded, setDataLoaded] = useState(false)
-
-  useEffect(() => {
-    fetchData('ratio', 'https://cnv-data.concave.lol/api')
-      .then((data: AmountCNVLockedData) => setData(data))
-      .catch((error: Error) => setError(error.message))
-      .finally(() => setDataLoaded(true))
-  }, [])
-
+  const amountLocked = useFetchData<AmountCNVLockedData>('locked')
+  const dataLoaded = !amountLocked.isLoading
+  const data = amountLocked.data
+  const error = amountLocked.error
   return (
     <ChartCard
-      dataLoaded={dataLoaded}
+      {...amountLocked}
       chartTitle="CNV in lsdCNV"
       tooltipDescription="Calculated using amountLocked / totalSupply."
       width={width}
       overflow={'visible'}
     >
-      {dataLoaded && error && <Text>{error}</Text>}
+      {dataLoaded && error && <Text>{`Error to fetch result, we will refetch`}</Text>}
       {dataLoaded && !error && (
         <>
           <Text color={'text.low'} lineHeight={'100%'}>
-            {numberWithCommas(data.ratioStaked.toFixed(4))}
+            {numberWithCommas(data.sumAmountLocked.toFixed(4))}
             {' / '}
-            {numberWithCommas(data.ratioSupply.toFixed(4))} CNV
+            {numberWithCommas(data.ConcaveTokenTotalSupply.toFixed(4))} CNV
           </Text>
           <Text lineHeight={'100%'} fontSize={fontSize}>
-            {(data.ratio * 100).toFixed(2)}%
+            {(data.ratioStaked * 100).toFixed(2)}%
           </Text>
           <Text fontSize={'large'}>CNV locked in lsdCNV</Text>
         </>
