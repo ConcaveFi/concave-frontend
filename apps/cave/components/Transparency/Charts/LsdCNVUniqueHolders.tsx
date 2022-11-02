@@ -9,19 +9,21 @@ type LsdCNVHoldersData = {
 }
 
 export function LsdCNVHoldersChart({ width, fontSize }: { width: string; fontSize: string }) {
-  const fetchResult = useFetchData<LsdCNVHoldersData>('lsdcnv-unique-holders')
-  const dataLoaded = !fetchResult.isLoading
-  const data = fetchResult.data
-  const error = fetchResult.error
+  const lsdCNVHolders = useFetchData<LsdCNVHoldersData>('lsdcnv-unique-holders')
+  const dataLoaded = !lsdCNVHolders.isLoading
+  const data = lsdCNVHolders.data
+  const error = lsdCNVHolders.error
 
   return (
     <ChartCard
-      {...fetchResult}
+      {...lsdCNVHolders}
       chartTitle="lsdCNV holders"
       tooltipDescription="The amount of unique lsdCNV holders."
       width={width}
     >
-      {dataLoaded && error && <Text>{`Error fetching data, retrying`}</Text>}
+      {dataLoaded && error && (
+        <Text>{`Error fetching data, retrying in ${lsdCNVHolders.nextTriggerByError} seconds`}</Text>
+      )}
       {dataLoaded && !error && (
         <>
           <Text lineHeight={'100%'} fontSize={fontSize}>

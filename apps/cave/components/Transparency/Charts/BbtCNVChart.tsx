@@ -35,7 +35,9 @@ export function BbtCNVChart() {
       tooltipDescription="bbtCNV redeem counter."
       overflow="visible"
     >
-      {dataLoaded && error && <Text>{`Error fetching data, retrying`}</Text>}
+      {dataLoaded && error && (
+        <Text>{`Error fetching data, retrying in ${bbtCNVData.nextTriggerByError} seconds`}</Text>
+      )}
       {dataLoaded && !error && (
         <>
           <Flex direction={'row'} gap={6} justifyContent={'space-evenly'}>

@@ -31,7 +31,7 @@ export const ChartCard = ({
   overflow?: 'hidden' | 'visible'
   children?: JSX.Element | JSX.Element[]
 }) => {
-  const loadingMessage = failureCount ? `Retrying ... ( ${failureCount} )` : 'Loading data'
+  const loadingMessage = failureCount ? `Retrying...` : 'Loading data'
 
   return (
     <Card fontWeight={'bold'} variant={variant} w={width} p={p} h={height}>

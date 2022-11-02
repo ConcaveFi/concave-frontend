@@ -46,7 +46,9 @@ export const LockedCNVSeriesChart = () => {
 
   return (
     <ChartCard {...lockedCNVSeries} chartTitle="CNV locked over time">
-      {dataLoaded && error && <Text>{`Error fetching data, retrying`}</Text>}
+      {dataLoaded && error && (
+        <Text>{`Error fetching data, retrying in ${lockedCNVSeries.nextTriggerByError} seconds`}</Text>
+      )}
       {dataLoaded && !error && (
         <ResponsiveContainer width="100%" height="100%">
           <LineChart width={500} height={300} data={data.lockedCNV} margin={chartMargin}>

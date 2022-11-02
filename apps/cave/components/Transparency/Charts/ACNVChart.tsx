@@ -18,7 +18,9 @@ export function ACNVChart({ fontSize }: { fontSize: string }) {
   const error = acnvData.error
   return (
     <ChartCard {...acnvData} chartTitle="aCNV redeem counter">
-      {dataLoaded && error && <Text>{`Error fetching data, retrying`}</Text>}
+      {dataLoaded && error && (
+        <Text>{`Error fetching data, retrying in ${acnvData.nextTriggerByError} seconds`}</Text>
+      )}
       {dataLoaded && !error && (
         <>
           <Text color={'text.low'} lineHeight={'100%'}>
