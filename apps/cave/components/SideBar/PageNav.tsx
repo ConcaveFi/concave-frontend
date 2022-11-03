@@ -132,6 +132,10 @@ function PageNav() {
         <SubnavButton href="/addliquidity">Add liquidity</SubnavButton>
         <SubnavButton href="/pools">{address ? `Your pools` : `Pools`}</SubnavButton>
       </ButtonContainer>
+
+      <ButtonContainer>
+        <NavButton href="/delta-neutral">Delta neutral</NavButton>
+      </ButtonContainer>
     </Flex>
   )
 }
