@@ -1,36 +1,32 @@
 import { Text } from '@concave/ui'
-import { useEffect, useState } from 'react'
 import { numberWithCommas } from 'utils/numbersWithCommas'
 import { ChartCard } from './ChartCard'
-import { fetchData } from './fetchData'
+import { useFetchData } from './useFetchData'
 
 type AmountCNVLockedData = {
   ratioSupply: number
   ratio: number
   ratioStaked: number
 }
-
 export function LockedCNVChart({ width, fontSize }: { width: string; fontSize: string }) {
-  const [data, setData] = useState<undefined | AmountCNVLockedData>()
-  const [error, setError] = useState<undefined | string>()
-  const [dataLoaded, setDataLoaded] = useState(false)
-
-  useEffect(() => {
-    fetchData('ratio', 'https://cnv-data.concave.lol/api')
-      .then((data: AmountCNVLockedData) => setData(data))
-      .catch((error: Error) => setError(error.message))
-      .finally(() => setDataLoaded(true))
-  }, [])
-
+  const amountLocked = useFetchData<AmountCNVLockedData>(
+    'ratio',
+    'https://cnv-data.concave.lol/api',
+  )
+  const dataLoaded = !amountLocked.isLoading
+  const data = amountLocked.data
+  const error = amountLocked.error
   return (
     <ChartCard
-      dataLoaded={dataLoaded}
+      {...amountLocked}
       chartTitle="CNV in lsdCNV"
       tooltipDescription="Calculated using amountLocked / totalSupply."
       width={width}
       overflow={'visible'}
     >
-      {dataLoaded && error && <Text>{error}</Text>}
+      {dataLoaded && error && (
+        <Text>{`Error fetching data, retrying in ${amountLocked.nextTriggerByError} seconds`}</Text>
+      )}
       {dataLoaded && !error && (
         <>
           <Text color={'text.low'} lineHeight={'100%'}>
