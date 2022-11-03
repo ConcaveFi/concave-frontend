@@ -1,5 +1,4 @@
 import { Text, useBreakpointValue } from '@concave/ui'
-import { useEffect, useState } from 'react'
 import {
   CartesianGrid,
   Label,
@@ -13,8 +12,8 @@ import {
 import { ChartCard } from './ChartCard'
 import { ChartTooltip } from './ChartTooltip'
 import { CustomizedAxisTick } from './CustomizedAxisTick'
-import { fetchData } from './fetchData'
 import { CHART_COLORS } from './style'
+import { useFetchData } from './useFetchData'
 
 type lockedCNVDatum = { timestamp: number; locked: number; date: string }
 
@@ -24,9 +23,6 @@ type LockedCNVSeriesData = {
 }
 
 export const LockedCNVSeriesChart = () => {
-  const [data, setData] = useState<undefined | LockedCNVSeriesData>()
-  const [error, setError] = useState<undefined | string>()
-  const [dataLoaded, setDataLoaded] = useState(false)
   const isMobile = useBreakpointValue({ base: true, md: false })
 
   let chartMargin = {
@@ -43,17 +39,16 @@ export const LockedCNVSeriesChart = () => {
     xLabelPos = { y: '47.5px' }
     yLabelPos = { x: '-105px', y: '180px' }
   }
-
-  useEffect(() => {
-    fetchData('locked-series')
-      .then((data: LockedCNVSeriesData) => setData(data))
-      .catch((error: Error) => setError(error.message))
-      .finally(() => setDataLoaded(true))
-  }, [])
+  const lockedCNVSeries = useFetchData<LockedCNVSeriesData>('locked-series')
+  const dataLoaded = !lockedCNVSeries.isLoading
+  const data = lockedCNVSeries.data
+  const error = lockedCNVSeries.error
 
   return (
-    <ChartCard dataLoaded={dataLoaded} chartTitle="CNV locked over time">
-      {dataLoaded && error && <Text>{error}</Text>}
+    <ChartCard {...lockedCNVSeries} chartTitle="CNV locked over time">
+      {dataLoaded && error && (
+        <Text>{`Error fetching data, retrying in ${lockedCNVSeries.nextTriggerByError} seconds`}</Text>
+      )}
       {dataLoaded && !error && (
         <ResponsiveContainer width="100%" height="100%">
           <LineChart width={500} height={300} data={data.lockedCNV} margin={chartMargin}>

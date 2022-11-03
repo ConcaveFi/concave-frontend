@@ -1,7 +1,6 @@
 import { Text } from '@concave/ui'
-import { useEffect, useState } from 'react'
 import { ChartCard } from './ChartCard'
-import { fetchData } from './fetchData'
+import { useFetchData } from './useFetchData'
 
 type LsdCNVHoldersData = {
   aggregate: {
@@ -10,25 +9,21 @@ type LsdCNVHoldersData = {
 }
 
 export function LsdCNVHoldersChart({ width, fontSize }: { width: string; fontSize: string }) {
-  const [data, setData] = useState<undefined | LsdCNVHoldersData>()
-  const [error, setError] = useState<undefined | string>()
-  const [dataLoaded, setDataLoaded] = useState(false)
-
-  useEffect(() => {
-    fetchData('lsdcnv-unique-holders')
-      .then((data: LsdCNVHoldersData) => setData(data))
-      .catch((error: Error) => setError(error.message))
-      .finally(() => setDataLoaded(true))
-  }, [])
+  const lsdCNVHolders = useFetchData<LsdCNVHoldersData>('lsdcnv-unique-holders')
+  const dataLoaded = !lsdCNVHolders.isLoading
+  const data = lsdCNVHolders.data
+  const error = lsdCNVHolders.error
 
   return (
     <ChartCard
-      dataLoaded={dataLoaded}
+      {...lsdCNVHolders}
       chartTitle="lsdCNV holders"
       tooltipDescription="The amount of unique lsdCNV holders."
       width={width}
     >
-      {dataLoaded && error && <Text>{error}</Text>}
+      {dataLoaded && error && (
+        <Text>{`Error fetching data, retrying in ${lsdCNVHolders.nextTriggerByError} seconds`}</Text>
+      )}
       {dataLoaded && !error && (
         <>
           <Text lineHeight={'100%'} fontSize={fontSize}>

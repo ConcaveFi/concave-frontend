@@ -1,10 +1,9 @@
 import { Text } from '@concave/ui'
-import { useEffect, useState } from 'react'
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { ChartCard } from './ChartCard'
 import { ChartTooltip } from './ChartTooltip'
-import { fetchData } from './fetchData'
 import { CHART_COLORS } from './style'
+import { useFetchData } from './useFetchData'
 
 type ACNVChartData = {
   aCNVRedeemed: number
@@ -13,35 +12,30 @@ type ACNVChartData = {
 }
 
 export function ACNVChart({ fontSize }: { fontSize: string }) {
-  const [data, setData] = useState<undefined | ACNVChartData[]>()
-  const [error, setError] = useState<undefined | string>()
-  const [dataLoaded, setDataLoaded] = useState(false)
-
-  useEffect(() => {
-    fetchData('acnv-redeemed')
-      .then((data: ACNVChartData) => setData([data]))
-      .catch((error: Error) => setError(error.message))
-      .finally(() => setDataLoaded(true))
-  }, [])
-
+  const acnvData = useFetchData<ACNVChartData>('acnv-redeemed')
+  const dataLoaded = !acnvData.isLoading
+  const data = acnvData.data
+  const error = acnvData.error
   return (
-    <ChartCard dataLoaded={dataLoaded} chartTitle="aCNV redeem counter">
-      {dataLoaded && error && <Text>{error}</Text>}
+    <ChartCard {...acnvData} chartTitle="aCNV redeem counter">
+      {dataLoaded && error && (
+        <Text>{`Error fetching data, retrying in ${acnvData.nextTriggerByError} seconds`}</Text>
+      )}
       {dataLoaded && !error && (
         <>
           <Text color={'text.low'} lineHeight={'100%'}>
-            {Math.ceil(data[0].aCNVRedeemed).toLocaleString()}
+            {Math.ceil(data.aCNVRedeemed).toLocaleString()}
             {' / '}
-            {Math.ceil(data[0].TOTAL_ACNV).toLocaleString()} aCNV redeemed
+            {Math.ceil(data.TOTAL_ACNV).toLocaleString()} aCNV redeemed
           </Text>
           <Text lineHeight={'100%'} fontSize={fontSize} display={'flex'} justifyContent={'center'}>
-            {data[0].aCNVRedeemedPercent.toFixed(2)}%
+            {data.aCNVRedeemedPercent.toFixed(2)}%
           </Text>
           <Text fontSize={'large'}>aCNV redeemed</Text>
           <ResponsiveContainer width="100%" height="30%">
             <BarChart
               layout="vertical"
-              data={data}
+              data={[data]}
               width={500}
               height={150}
               margin={{
@@ -56,8 +50,8 @@ export function ACNVChart({ fontSize }: { fontSize: string }) {
               <XAxis
                 type="number"
                 dataKey="TOTAL_ACNV"
-                ticks={[0, Math.ceil(data[0].TOTAL_ACNV) / 2, Math.ceil(data[0].TOTAL_ACNV)]}
-                domain={[0, Math.ceil(data[0].TOTAL_ACNV)]}
+                ticks={[0, Math.ceil(data.TOTAL_ACNV) / 2, Math.ceil(data.TOTAL_ACNV)]}
+                domain={[0, Math.ceil(data.TOTAL_ACNV)]}
                 tickFormatter={(v) => v.toLocaleString()}
                 tickLine={{ stroke: CHART_COLORS.TextLow }}
                 axisLine={{ stroke: CHART_COLORS.TextLow }}
