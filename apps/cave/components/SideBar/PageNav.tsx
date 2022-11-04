@@ -119,7 +119,7 @@ function PageNav() {
 
       <ButtonContainer>
         <NavButton href="/smart-bonding">Bond</NavButton>
-        <BondROI />
+        <SubnavButton href="/smart-bonding">DAI/CNV</SubnavButton>
       </ButtonContainer>
 
       <ButtonContainer>
