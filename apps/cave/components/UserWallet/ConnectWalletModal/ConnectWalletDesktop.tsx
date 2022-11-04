@@ -149,6 +149,33 @@ const SelectAWallet = () => (
   </Stack>
 )
 
+const ConnectorButton = ({
+  name,
+  onConnect,
+  isPending,
+}: {
+  name: string
+  onConnect: () => void
+  isPending: boolean
+}) => (
+  <Button
+    isDisabled={isPending}
+    w="200px"
+    shadow="Up Small"
+    _hover={{ shadow: 'Up Big', _disabled: { shadow: 'down' } }}
+    _active={{ shadow: 'down' }}
+    _focus={{ shadow: 'Up Big' }}
+    _disabled={{ shadow: 'down', cursor: 'default' }}
+    size="medium"
+    justifyContent="start"
+    px={4}
+    leftIcon={<ConnectorIcon name={name} rounded="md" />}
+    onClick={onConnect}
+  >
+    {name}
+  </Button>
+)
+
 export const DesktopConnect: FC<{ isOpen: boolean; onClose: VoidFunction }> = ({
   isOpen,
   onClose,
@@ -168,7 +195,9 @@ export const DesktopConnect: FC<{ isOpen: boolean; onClose: VoidFunction }> = ({
     onSuccess: () => onClose(),
   })
 
-  const isQRConnector = ['walletConnect', 'coinbaseWallet'].includes(pendingConnector?.id)
+  const isQRConnector = ['walletConnect', 'coinbaseWallet', 'unstoppable'].includes(
+    pendingConnector?.id,
+  )
 
   const status =
     !isLoading && !pendingConnector ? 'idle' : isQRConnector ? 'pending qr' : 'pending injected'
@@ -192,24 +221,13 @@ export const DesktopConnect: FC<{ isOpen: boolean; onClose: VoidFunction }> = ({
           <Text fontFamily="heading" fontWeight="bold" fontSize="xl">
             Connect a Wallet
           </Text>
-          {filterConnectors(connectors).map((connector) => (
-            <Button
-              isDisabled={connector.id === pendingConnector?.id}
-              w="200px"
-              shadow="Up Small"
-              _hover={{ shadow: 'Up Big', _disabled: { shadow: 'down' } }}
-              _active={{ shadow: 'down' }}
-              _focus={{ shadow: 'Up Big' }}
-              _disabled={{ shadow: 'down', cursor: 'default' }}
-              size="medium"
-              justifyContent="start"
-              px={4}
-              leftIcon={<ConnectorIcon name={connector.name} rounded="md" />}
-              key={connector.id}
-              onClick={() => connect({ connector, chainId: ChainId.ETHEREUM })}
-            >
-              {connector.name}
-            </Button>
+          {filterConnectors(connectors).map((c) => (
+            <ConnectorButton
+              key={c.id}
+              name={c.name}
+              onConnect={() => connect({ connector: c, chainId: ChainId.ETHEREUM })}
+              isPending={c.id === pendingConnector?.id}
+            />
           ))}
         </Stack>
 
