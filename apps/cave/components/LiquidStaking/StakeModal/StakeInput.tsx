@@ -69,7 +69,7 @@ export function StakeInput({ onClose, poolId }: { poolId: number; onClose: () =>
 
       <WaitingConfirmationDialog
         isOpen={lockTransaction.isWaitingForConfirmation}
-        title={'Confirm Stake'}
+        title={'Confirm stake'}
       >
         <Flex
           width={'200px'}

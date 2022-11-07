@@ -119,18 +119,18 @@ function PageNav() {
 
       <ButtonContainer>
         <NavButton href="/smart-bonding">Bond</NavButton>
-        <BondROI />
+        <SubnavButton href="/smart-bonding">DAI/CNV</SubnavButton>
       </ButtonContainer>
 
       <ButtonContainer>
         <NavButton href="/marketplace">Marketplace</NavButton>
-        <SubnavButton href="/liquid-stake-positions">Your Staked Positions</SubnavButton>
+        <SubnavButton href="/liquid-stake-positions">Your staked positions</SubnavButton>
       </ButtonContainer>
 
       <ButtonContainer>
         <NavButton href="/gemswap">Swap</NavButton>
         <SubnavButton href="/addliquidity">Add liquidity</SubnavButton>
-        <SubnavButton href="/pools">{address ? `Your ` : ``}Pools</SubnavButton>
+        <SubnavButton href="/pools">{address ? `Your pools` : `Pools`}</SubnavButton>
       </ButtonContainer>
     </Flex>
   )

@@ -26,7 +26,7 @@ export const WaitingConfirmationDialog = ({
   return (
     <Modal
       bluryOverlay={true}
-      title={title || 'Confirm Swap'}
+      title={title || 'Confirm swap'}
       isOpen={isOpen}
       hideClose
       onClose={() => {}}

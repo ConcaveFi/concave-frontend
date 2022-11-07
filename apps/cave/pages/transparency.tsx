@@ -6,7 +6,6 @@ import { TreasuryRedeemCard } from 'components/Transparency/TreasuryRedeemCard'
 import { TransparencyDiagram as TransparencyDiagramComponent } from 'components/TransparencyDiagram/TransparencyDiagram'
 
 const TransparencyDiagram = () => {
-  const narrow = '60%'
   return (
     <Flex align={'center'} w={'100%'} h={'100%'} gap={4} textAlign="center" direction="column">
       <>
@@ -23,8 +22,8 @@ const TransparencyDiagram = () => {
         <TransparencyDiagramComponent />
         <Flex w={'100%'} direction={'column'} gap={6} alignItems={'center'}>
           <TransparencyCharts />
-          <DividendsCard width={narrow} />
-          <TreasuryRedeemCard width={narrow} />
+          <DividendsCard />
+          <TreasuryRedeemCard />
         </Flex>
       </>
     </Flex>

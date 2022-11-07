@@ -19,7 +19,7 @@ export default function RecentTransactionsContainer() {
         height={hasRecentTransactions ? '20px' : '40px'}
       >
         <Text fontWeight={'700'} fontSize="md" textColor={'text.low'}>
-          {hasRecentTransactions ? 'Recent Transactions:' : 'You do not have recent transactions.'}
+          {hasRecentTransactions ? 'Recent transactions:' : 'You do not have recent transactions.'}
         </Text>
       </Flex>
       {hasRecentTransactions && (

@@ -109,11 +109,11 @@ const BoldSoldsCard = (props: BoldSoldsCardProps) => {
           {
             loading: (
               <Flex gap={2} color={'text.bright'}>
-                <Text>loading tracks</Text>
+                <Text>Loading data</Text>
                 <Spinner />
               </Flex>
             ),
-            error: <Text color={'text.bright'}>error fetching tracks</Text>,
+            error: <Text color={'text.bright'}>Error loading data</Text>,
             success: (
               <ExpandArrowIcon
                 width={12}

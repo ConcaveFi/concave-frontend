@@ -1,7 +1,7 @@
 import { CNV, NATIVE } from '@concave/core'
 import { renderHook, waitFor } from '@testing-library/react'
 import { chain } from 'wagmi'
-import { WagmiProvider } from '../../contexts/WagmiContext'
+import { WagmiProvider } from '../../contexts/Wagmi/WagmiContext'
 import { useCurrencyBalanceOfAddress } from '../../hooks/useCurrencyBalance'
 
 describe('Check useCurrencyBalanceOfAddress', () => {
@@ -20,8 +20,8 @@ describe('Check useCurrencyBalanceOfAddress', () => {
     expect(currencyAmount.toSignificant()).toEqual('0') // 🥲
   })
 
-  it('CNV on rinkeby', async () => {
-    const currency = CNV[chain.rinkeby.id]
+  it('CNV on goerli', async () => {
+    const currency = CNV[chain.goerli.id]
     const options = { wrapper: WagmiProvider }
     const { result } = renderHook(() => useCurrencyBalanceOfAddress(currency, wallet), options)
     await waitFor(() => expect(result.current.isSuccess).toBeTruthy(), { timeout })
@@ -31,8 +31,8 @@ describe('Check useCurrencyBalanceOfAddress', () => {
     expect(currencyAmount.greaterThan(0)).toBeTruthy()
   })
 
-  it('Check useCurrencyBalanceOfAddress with native on rinkeby', async () => {
-    const currency = NATIVE[chain.rinkeby.id]
+  it('Check useCurrencyBalanceOfAddress with native on goerli', async () => {
+    const currency = NATIVE[chain.goerli.id]
     const { result } = renderHook(() => useCurrencyBalanceOfAddress(currency, wallet), options)
     const { data: currencyAmount } = result.current
     await waitFor(() => expect(result.current.isSuccess).toBeTruthy(), { timeout })

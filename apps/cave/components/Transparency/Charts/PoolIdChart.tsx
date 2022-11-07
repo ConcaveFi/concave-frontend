@@ -1,6 +1,6 @@
-import { useLiquidValues } from 'components/LiquidStaking/hooks/useLiquidValues'
+import { liquidityValues } from 'components/LiquidStaking/hooks/useLiquidValues'
 import { ethers } from 'ethers'
-import { useEffect, useState } from 'react'
+import { useQuery } from 'react-query'
 import {
   Bar,
   BarChart,
@@ -19,16 +19,14 @@ type PoolIdCountDataType = {
   poolId: number
   percentStaked: number
   percentNotStaked: number
-  isLoading: boolean
   currentlyStaked: number
   stakingCap: number
 }
 
 const PoolIdMap = { 0: '360 Day', 1: '180 Day', 2: '90 Day', 3: '45 Day' }
 
-function GetPoolData(poolId: number): PoolIdCountDataType {
-  const { data, isLoading } = useLiquidValues(1, poolId)
-  const { stakingV1Pools, stakingV1Cap } = data || {}
+async function getPoolData(poolId: number): Promise<PoolIdCountDataType> {
+  const { stakingV1Pools, stakingV1Cap } = await liquidityValues(1, poolId)
   if (!stakingV1Pools?.balance) return null
   const currentlyStaked = +ethers.utils.formatEther(stakingV1Pools?.balance)
   const stakingCap = +ethers.utils.formatEther(stakingV1Pools?.balance?.add(stakingV1Cap))
@@ -37,30 +35,23 @@ function GetPoolData(poolId: number): PoolIdCountDataType {
     poolId,
     percentStaked,
     percentNotStaked: 100 - percentStaked,
-    isLoading,
     currentlyStaked,
     stakingCap,
   }
 }
 
-export const PoolIdChart = () => {
-  const [data, setData] = useState<undefined | PoolIdCountDataType[]>()
-  const [dataLoaded, setDataLoaded] = useState(false)
-  const pool0 = GetPoolData(0)
-  const pool1 = GetPoolData(1)
-  const pool2 = GetPoolData(2)
-  const pool3 = GetPoolData(3)
+const usePoolData = (pools: number[]) => {
+  return useQuery(['usePoolData'], () => {
+    return Promise.all(pools.map(getPoolData))
+  })
+}
 
-  useEffect(() => {
-    if (!dataLoaded && pool0 !== null && pool1 !== null && pool2 !== null && pool3 !== null) {
-      setData([pool0, pool1, pool2, pool3])
-      setDataLoaded(true)
-    }
-  }, [pool0, pool1, pool2, pool3])
+export const PoolIdChart = () => {
+  const poolResult = usePoolData([0, 1, 2, 3])
 
   return (
     <ChartCard
-      dataLoaded={dataLoaded}
+      {...poolResult}
       chartTitle="CNV stake pool engagement"
       tooltipDescription="This chart visualizes the amount of CNV staked in each pool relative to the pool's staking cap."
     >
@@ -68,7 +59,7 @@ export const PoolIdChart = () => {
         <BarChart
           width={500}
           height={300}
-          data={data}
+          data={poolResult.data}
           margin={{
             top: 20,
             right: 20,

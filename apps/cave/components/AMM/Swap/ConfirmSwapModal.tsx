@@ -205,7 +205,7 @@ const ConfirmSwap = ({
       </SlideFade>
 
       <Button isDisabled={!isAccepted} variant="primary" size="large" onClick={onConfirm} w="full">
-        {isAccepted ? 'Confirm Swap' : 'Accept new prices first'}
+        {isAccepted ? 'Confirm swap' : 'Accept new prices first'}
       </Button>
     </>
   )
@@ -225,7 +225,7 @@ export const ConfirmSwapModal = ({
   return (
     <Modal
       bluryOverlay={true}
-      title="Confirm Swap"
+      title="Confirm swap"
       isOpen={isOpen}
       onClose={onClose}
       bodyProps={{ w: '400px' }}

@@ -53,7 +53,7 @@ export const PcnvNotification: React.FC<PcnvNotificationProps> = ({ isOpen, curr
           pCNV purchased is unlocked over time. CNV can be redeemed with unlocked pCNV.
         </Text>
         <Info
-          title={'Exchange Rate:'}
+          title={'Exchange rate:'}
           info={`1 pCNV = ${formatFixed(
             parseEther(pCNVToCNVDifference?.toString().slice(0, 8)),
             18,
