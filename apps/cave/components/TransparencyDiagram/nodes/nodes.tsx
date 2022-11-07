@@ -228,23 +228,36 @@ export const generalNodes = [
   avaxSafe(375, 0),
 ]
 
+/**
+ * every node has 230 by default
+ * this chart has 6 lines, 6 x 230 = 1380
+ */
 export const generalNodesMobile = [
-  bbtCNV(540, -80),
-  aCNV(540, 110),
-  cnv(540, 300),
-  pCNV(540, 490),
-  lsdCNV(540, -260),
-  concaveTreasury(300, 390),
-  coopTreasury(150, 390),
-  policyMultisig(0, 390),
-  proxyAdmin(525, 650),
-  accrualBondsV1Proxy(250, 765),
-  accrualBondsV1Impl(0, 765),
-  stakingV1Proxy(375, 50),
-  stakingV1Impl(225, 50),
-  valueShuttle(0, 70),
-  bscSafe(28, -290),
-  avaxSafe(250, -290),
+  //sidebar
+  bbtCNV(580, 230),
+  aCNV(580, 460),
+  cnv(580, 690),
+  pCNV(580, 920),
+  lsdCNV(580, 0),
+
+  //line 1
+  bscSafe(28, 0 + 30),
+  avaxSafe(250, 0 + 30),
+
+  //line 2
+  stakingV1Proxy(375, 383 + 20),
+  stakingV1Impl(207, 383 + 20),
+  valueShuttle(0, 383 + 20),
+
+  //line 3
+  policyMultisig(0, 767 + 10),
+  concaveTreasury(300, 767 + 10),
+  coopTreasury(150, 767 + 10),
+
+  //line 4
+  accrualBondsV1Proxy(250, 1150),
+  accrualBondsV1Impl(0, 1150),
+  proxyAdmin(525, 1150),
 ]
 
 export const bondingNodes = [
@@ -261,14 +274,14 @@ export const bondingNodes = [
 
 export const bondingNodesMobile = [
   user(660, 0),
-  proxyAdmin(900, 0),
-  cnv(1200, 0),
+  proxyAdmin(850, 0),
+  cnv(1100, 0),
   coopTreasury(641, 1050),
   valueShuttle(620, 700),
   accrualBondsV1Proxy(600, 350),
-  concaveTreasury(1200, 350),
-  accrualBondsV1Impl(900, 700),
-  policyMultisig(1200, 700),
+  concaveTreasury(1100, 350),
+  accrualBondsV1Impl(840, 700),
+  policyMultisig(1100, 700),
 ]
 
 export const stakingNodes = [
@@ -285,14 +298,17 @@ export const stakingNodes = [
 ]
 
 export const stakingNodesMobile = [
-  lsdCNV(900, 20),
-  proxyAdmin(880, 410),
-  concaveTreasury(893, 800),
-  cnv(600, 1100),
-  user(600, 0),
-  valueShuttle(250, 20),
-  stakingV1Proxy(600, 400),
-  policyMultisig(583, 800),
-  stakingV1Impl(250, 400),
+  valueShuttle(250, 0),
+  user(530, 0),
+  lsdCNV(740, 25),
+
+  stakingV1Impl(260, 400),
+  stakingV1Proxy(504, 400),
+  proxyAdmin(690, 400),
+
   coopTreasury(250, 800),
+  policyMultisig(483, 800),
+  concaveTreasury(700, 800),
+
+  cnv(500, 1100),
 ]

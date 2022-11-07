@@ -52,7 +52,7 @@ const DataStudio = ({ src }: { src: string }) => (
 )
 
 export function TransparencyDiagram() {
-  const [diagramShown, setDiagramShown] = useState<DiagramButtons>(DiagramButtons.GeneralDiagram)
+  const [diagramShown, setDiagramShown] = useState<DiagramButtons>(DiagramButtons.TreasuryOverview)
   const isMobile = useBreakpointValue({ base: true, md: false })
 
   return (
