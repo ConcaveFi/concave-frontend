@@ -8,10 +8,10 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  useBreakpointValue,
   VStack,
 } from '@concave/ui'
 import { Dispatch, SetStateAction, useState } from 'react'
-import ReactFlow, { ConnectionLineType, Controls } from 'react-flow-renderer'
 import { bondingEdges } from './edges/bondingEdges'
 import { bondingEdgesMobile } from './edges/bondingEdgesMobile'
 import { generalEdges } from './edges/generalEdges'
@@ -23,11 +23,10 @@ import {
   bondingNodesMobile,
   generalNodes,
   generalNodesMobile,
-  nodeTypes,
   stakingNodes,
   stakingNodesMobile,
 } from './nodes/nodes'
-import { edgeStyle, labelStyle } from './styles'
+import { ReactFlowDiagram } from './ReactFlowDiagram'
 
 enum DiagramButtons {
   TreasuryOverview = 'Treasury Overview',
@@ -52,36 +51,17 @@ const DataStudio = ({ src }: { src: string }) => (
   <Flex src={src} as={'iframe'} w={'full'} h={'full'} overflow={'hidden'} rounded={'2xl'} />
 )
 
-const ReactFlowDiagram = ({ edges, nodes, isMobile }) => (
-  <ReactFlow
-    edges={edges}
-    nodes={nodes}
-    nodeTypes={nodeTypes}
-    elevateEdgesOnSelect
-    fitView
-    fitViewOptions={{ padding: 0.15 }}
-    minZoom={0}
-    zoomOnPinch
-    panOnDrag
-    defaultEdgeOptions={{
-      type: ConnectionLineType.SimpleBezier,
-      style: { ...edgeStyle },
-      labelStyle: { ...labelStyle },
-      labelShowBg: false,
-    }}
-  >
-    {isMobile ? <></> : <Controls showInteractive={false} />}
-  </ReactFlow>
-)
-
-export function TransparencyDiagram({ isMobile }: { isMobile: boolean }) {
-  const [diagramShown, setDiagramShown] = useState<DiagramButtons>(DiagramButtons.TreasuryOverview)
+export function TransparencyDiagram() {
+  const [diagramShown, setDiagramShown] = useState<DiagramButtons>(DiagramButtons.GeneralDiagram)
+  const isMobile = useBreakpointValue({ base: true, md: false })
 
   return (
     <>
-      <VStack
-        w={'100%'}
+      <Flex
+        direction={'column'}
+        width={'100%'}
         height={'800px'}
+        maxHeight={'90vh'}
         rounded={'2xl'}
         apply="background.metalBrighter"
         shadow={'up'}
@@ -98,8 +78,6 @@ export function TransparencyDiagram({ isMobile }: { isMobile: boolean }) {
           shadow="down"
           w={'100%'}
           h="full"
-          p={isMobile ? 2 : 4}
-          py={isMobile ? 2 : 6}
           justify="start"
           overflowY={'auto'}
           direction="column"
@@ -156,7 +134,7 @@ export function TransparencyDiagram({ isMobile }: { isMobile: boolean }) {
             />
           )}
         </Flex>
-      </VStack>
+      </Flex>
     </>
   )
 }

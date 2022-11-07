@@ -1,14 +1,8 @@
 import { Box, Link, Text, useBreakpointValue } from '@concave/ui'
-import { NodeDisplayData, ShapeLabelSettingsType } from '../types'
+import { NodeDisplayData } from '../types'
 import { getExplorerURL, wrapText } from '../utils'
 
-export const NodeText = ({
-  data,
-  shapeSettings,
-}: {
-  data: NodeDisplayData
-  shapeSettings: ShapeLabelSettingsType
-}) => {
+export const NodeText = ({ data }: { data: NodeDisplayData }) => {
   const isMobile = useBreakpointValue({ base: true, md: false })
 
   let style: {
@@ -38,16 +32,7 @@ export const NodeText = ({
   const explorerURL: string | undefined = getExplorerURL(data)
 
   return (
-    <Box
-      sx={{
-        position: 'fixed',
-        left: shapeSettings.labelLeft,
-        bottom: shapeSettings.labelBottom,
-        width: 'max-content',
-        textAnchor: 'middle',
-        transform: style.textTransform,
-      }}
-    >
+    <Box mt={2}>
       {isMobile && data.address && typeof label !== 'string' ? (
         <Link href={explorerURL} target="_blank" lineHeight={style.lineHeight}>
           {label.map((textLine, i) => (

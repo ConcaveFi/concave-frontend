@@ -2,14 +2,10 @@ import { Box, Link } from '@concave/ui'
 import { getExplorerURL } from 'components/TransparencyDiagram/utils'
 import { Handle, Position } from 'react-flow-renderer'
 import { sharedNodeContainerStyle, sharedNodeHandleStyle } from '../../styles'
-import { NodeDisplayData, ShapeLabelSettingsType } from '../../types'
+import { NodeDisplayData } from '../../types'
 import { NodeText } from '../NodeText'
 
 export function ValueShuttle({ data }: { data: NodeDisplayData }) {
-  const shapeSettings: ShapeLabelSettingsType = {
-    labelBottom: '-55px',
-  }
-
   const explorerURL = getExplorerURL(data)
 
   return (
@@ -18,51 +14,50 @@ export function ValueShuttle({ data }: { data: NodeDisplayData }) {
         type="target"
         position={Position.Top}
         id="topTarget"
-        style={{ ...sharedNodeHandleStyle, top: -15, left: '50%' }}
+        style={{ ...sharedNodeHandleStyle }}
       />
       <Handle
         type="source"
         position={Position.Top}
         id="topSource"
-        style={{ ...sharedNodeHandleStyle, top: -15, left: '50%' }}
+        style={{ ...sharedNodeHandleStyle }}
       />
       <Handle
         type="target"
         position={Position.Bottom}
         id="bottomTarget"
-        style={{ ...sharedNodeHandleStyle, bottom: '-66px', left: '50%' }}
+        style={{ ...sharedNodeHandleStyle }}
       />
       <Handle
         type="source"
         position={Position.Bottom}
         id="bottomSource"
-        style={{ ...sharedNodeHandleStyle, bottom: '-66px', left: '50%' }}
+        style={{ ...sharedNodeHandleStyle }}
       />
       <Handle
         type="source"
         position={Position.Right}
         id="rightSource"
-        style={{ ...sharedNodeHandleStyle, top: '50%', right: -8 }}
+        style={{ ...sharedNodeHandleStyle }}
       />
       <Handle
         type="target"
         position={Position.Right}
         id="rightTarget"
-        style={{ ...sharedNodeHandleStyle, top: '50%', right: -8 }}
+        style={{ ...sharedNodeHandleStyle }}
       />
       <Handle
         type="source"
         position={Position.Left}
         id="leftSource"
-        style={{ ...sharedNodeHandleStyle, top: '50%', left: -15 }}
+        style={{ ...sharedNodeHandleStyle }}
       />
       <Handle
         type="target"
         position={Position.Left}
         id="leftTarget"
-        style={{ ...sharedNodeHandleStyle, top: '50%', left: -15 }}
+        style={{ ...sharedNodeHandleStyle }}
       />
-      <NodeText data={data} shapeSettings={shapeSettings} />
       <Link href={explorerURL} target="_blank">
         <svg
           width="167"
@@ -179,6 +174,7 @@ export function ValueShuttle({ data }: { data: NodeDisplayData }) {
           </defs>
         </svg>
       </Link>
+      <NodeText data={data} />
     </Box>
   )
 }

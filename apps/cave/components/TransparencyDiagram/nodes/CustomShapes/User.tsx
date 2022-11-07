@@ -1,65 +1,60 @@
 import { Box } from '@concave/ui'
 import { Handle, Position } from 'react-flow-renderer'
 import { sharedNodeContainerStyle, sharedNodeHandleStyle } from '../../styles'
-import { NodeDisplayData, ShapeLabelSettingsType } from '../../types'
+import { NodeDisplayData } from '../../types'
 import { NodeText } from '../NodeText'
 
 export function User({ data }: { data: NodeDisplayData }) {
-  const shapeSettings: ShapeLabelSettingsType = {
-    labelBottom: '-45px',
-  }
-
   return (
     <Box sx={{ ...sharedNodeContainerStyle }}>
       <Handle
         type="target"
         position={Position.Top}
         id="topTarget"
-        style={{ ...sharedNodeHandleStyle, top: -15 }}
+        style={{ ...sharedNodeHandleStyle }}
       />
       <Handle
         type="source"
         position={Position.Top}
         id="topSource"
-        style={{ ...sharedNodeHandleStyle, top: -15 }}
+        style={{ ...sharedNodeHandleStyle }}
       />
       <Handle
         type="target"
         position={Position.Bottom}
         id="bottomTarget"
-        style={{ ...sharedNodeHandleStyle, bottom: -45 }}
+        style={{ ...sharedNodeHandleStyle }}
       />
       <Handle
         type="source"
         position={Position.Bottom}
         id="bottomSource"
-        style={{ ...sharedNodeHandleStyle, bottom: -45 }}
+        style={{ ...sharedNodeHandleStyle }}
       />
       <Handle
         type="source"
         position={Position.Right}
         id="rightSource"
-        style={{ ...sharedNodeHandleStyle, right: -15 }}
+        style={{ ...sharedNodeHandleStyle }}
       />
       <Handle
         type="target"
         position={Position.Right}
         id="rightTarget"
-        style={{ ...sharedNodeHandleStyle, right: -15 }}
+        style={{ ...sharedNodeHandleStyle }}
       />
       <Handle
         type="source"
         position={Position.Left}
         id="leftSource"
-        style={{ ...sharedNodeHandleStyle, left: -15 }}
+        style={{ ...sharedNodeHandleStyle }}
       />
       <Handle
         type="target"
         position={Position.Left}
         id="leftTarget"
-        style={{ ...sharedNodeHandleStyle, left: -15 }}
+        style={{ ...sharedNodeHandleStyle }}
       />
-      <NodeText data={data} shapeSettings={shapeSettings} />
       <svg
         width="89"
         height="127"
@@ -112,6 +107,7 @@ export function User({ data }: { data: NodeDisplayData }) {
           </radialGradient>
         </defs>
       </svg>
+      <NodeText data={data} />
     </Box>
   )
 }

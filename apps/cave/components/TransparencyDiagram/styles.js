@@ -13,6 +13,8 @@ export const sharedNodeContainerStyle = {
   justifyContent: 'center',
   alignItems: 'center',
   cursor: 'default',
+  minHeight: '230px',
+  // border: '1px solid white'
 }
 
 export const labelStyle = {
