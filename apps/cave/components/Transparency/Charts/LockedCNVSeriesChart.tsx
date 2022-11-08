@@ -1,4 +1,4 @@
-import { Text, useBreakpointValue } from '@concave/ui'
+import { Text } from '@concave/ui'
 import {
   CartesianGrid,
   Label,
@@ -23,22 +23,16 @@ type LockedCNVSeriesData = {
 }
 
 export const LockedCNVSeriesChart = () => {
-  const isMobile = useBreakpointValue({ base: true, md: false })
-
-  let chartMargin = {
+  const chartMargin = {
     top: 20,
     right: 30,
     left: 30,
-    bottom: 20,
+    bottom: 50,
   }
-  let xLabelPos = { y: '22.5px' }
-  let yLabelPos = { x: '-120px', y: '205px' }
 
-  if (isMobile) {
-    chartMargin = { ...chartMargin, bottom: 50 }
-    xLabelPos = { y: '47.5px' }
-    yLabelPos = { x: '-105px', y: '180px' }
-  }
+  const xLabelPos = { y: '47.5px' }
+  const yLabelPos = { x: '-105px', y: '180px' }
+
   const lockedCNVSeries = useFetchData<LockedCNVSeriesData>('locked-series')
   const dataLoaded = !lockedCNVSeries.isLoading
   const data = lockedCNVSeries.data
@@ -61,9 +55,7 @@ export const LockedCNVSeriesChart = () => {
               interval={0}
               tick={(tickData) => {
                 const customValue = data.ticks.ticksObject[tickData.payload.value]
-                return (
-                  <CustomizedAxisTick customValue={customValue} isMobile={isMobile} {...tickData} />
-                )
+                return <CustomizedAxisTick customValue={customValue} {...tickData} />
               }}
               axisLine={{ stroke: CHART_COLORS.TextLow }}
               tickLine={{ stroke: CHART_COLORS.TextLow }}
