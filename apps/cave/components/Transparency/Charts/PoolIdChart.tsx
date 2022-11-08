@@ -23,7 +23,7 @@ type PoolIdCountDataType = {
   stakingCap: number
 }
 
-const PoolIdMap = { 0: '360 Day', 1: '180 Day', 2: '90 Day', 3: '45 Day' }
+const PoolIdMap = { 0: '360 day', 1: '180 day', 2: '90 day', 3: '45 day' }
 
 async function getPoolData(poolId: number): Promise<PoolIdCountDataType> {
   const { stakingV1Pools, stakingV1Cap } = await liquidityValues(1, poolId)
@@ -78,7 +78,7 @@ export const PoolIdChart = () => {
           >
             <Label
               fill={CHART_COLORS.TextLow}
-              value={'Pool'}
+              value={'Stake pool'}
               style={{
                 textAnchor: 'middle',
                 transform: 'translateY(35px)',
