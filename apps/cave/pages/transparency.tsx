@@ -38,5 +38,3 @@ TransparencyDiagram.Meta = {
 }
 
 export default withPageTransition(TransparencyDiagram)
-
-//
