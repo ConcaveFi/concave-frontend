@@ -40,7 +40,7 @@ export function BbtCNVChart() {
       )}
       {dataLoaded && !error && (
         <>
-          <Flex direction={'row'} gap={6} justifyContent={'space-evenly'}>
+          <Flex direction={'row'} gap={6} justifyContent={'space-evenly'} flexWrap={'wrap'}>
             <Flex direction={'column'} gap={1}>
               <Text fontSize={isMobile ? 'md' : '1.25rem'} lineHeight={'100%'}>
                 {numberWithCommas(data.bbtCNVRedeemable.toFixed(4))}
