@@ -48,7 +48,7 @@ export const ExpectedOutput = ({
     <Stack fontWeight="bold" fontSize="md" w="100%">
       <Flex justify="space-between">
         <Text whiteSpace={'pre-wrap'} mr={4}>
-          Expected Output
+          Expected output
         </Text>
         <Text>
           {outputAmount.toSignificant(6, { groupSeparator: ',' }, Rounding.ROUND_HALF_UP)}{' '}
@@ -56,7 +56,7 @@ export const ExpectedOutput = ({
         </Text>
       </Flex>
       <PriceImpact priceImpact={priceImpact}>
-        <Text>Price Impact</Text>
+        <Text>Price impact</Text>
       </PriceImpact>
     </Stack>
   )

@@ -1,7 +1,8 @@
 import { Box, Button, Flex, Image, Stack, Text, TextProps, useDisclosure } from '@chakra-ui/react'
 import { Percent } from '@concave/core'
 import { stakingPools } from '@concave/marketplace'
-import { Card } from '@concave/ui'
+import { Card, HStack } from '@concave/ui'
+import { Loading } from 'components/Loading'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { compactFormat } from 'utils/bigNumberMask'
 
@@ -21,7 +22,12 @@ export const StakeCard = ({ status, poolId, stakeData }: StakeCardProps) => {
   const { data, isLoading } = useLiquidValues(chainId, poolId)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { stakingV1Pools, stakingV1Cap } = data || {}
-  if (!stakingV1Pools?.balance) return null
+  if (!stakingV1Pools?.balance)
+    return (
+      <HStack justifyContent={`space-around`} flex={1}>
+        <Loading size="sm" isLoading={true} />
+      </HStack>
+    )
 
   const { totalVAPR } = stakeData || {}
   const pools = stakingV1Pools?.balance.toString() || '0'

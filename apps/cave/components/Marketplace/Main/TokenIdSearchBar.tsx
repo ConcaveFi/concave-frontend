@@ -14,8 +14,8 @@ export const TokenIdSearchBar: FC<TokenIdSearchBarProps> = ({ onApplyFilter }) =
   }
 
   return (
-    <Flex align={'center'} w="30%" maxH="30px" rounded={'2xl'} shadow="down" px={4} gap={2}>
-      <Search2Icon color={'text.low'} />
+    <Flex align={'center'} px={4} py={2} rounded={'2xl'} w={'160px'} shadow="down">
+      <Search2Icon color={'text.low'} mr={2} />
       <NumericInput
         thousandSeparator={false}
         value={value}

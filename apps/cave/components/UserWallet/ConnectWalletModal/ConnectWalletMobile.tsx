@@ -19,7 +19,7 @@ import {
   Stack,
   Text,
 } from '@concave/ui'
-import { supportedChainsId } from 'contexts/WagmiContext'
+import { supportedChainsId } from 'contexts/Wagmi/WagmiContext'
 import { AnimatePresence, isValidMotionProp, motion, MotionProps } from 'framer-motion'
 import { useIsMounted } from 'hooks/useIsMounted'
 import { fetchWalletConnectRegistry, uriToLink } from 'lib/walletConnect'
@@ -142,7 +142,7 @@ const ConnectWithWalletConnect = ({ walletConnectConnector, onCancel }) => {
         <IconButton icon={<ArrowBackIcon fontSize="lg" />} aria-label="back" />
         <ConnectorIcon name="walletConnect" rounded="md" />
         <Text fontFamily="heading" fontWeight="bold" fontSize="xl">
-          Wallet Connect
+          Wallet connect
         </Text>
       </HStack>
       <Stack
@@ -186,7 +186,7 @@ const ConnectWithWalletConnect = ({ walletConnectConnector, onCancel }) => {
                 color="text.low"
                 name={wallet.name}
                 onClick={() => {
-                  window.location.href = uriToLink(uri, wallet)
+                  window.location.href = uriToLink(uri, wallet.mobile)
                 }}
                 isDisabled={isLoadingUri}
                 image={wallet.image_url.lg}
@@ -270,6 +270,7 @@ export const MobileConnect: FC<{ isOpen: boolean; onClose: VoidFunction }> = ({
       window.location.href = 'https://metamask.app.link/dapp/' + window.location.href
       return
     }
+
     connect({ connector })
   }
 

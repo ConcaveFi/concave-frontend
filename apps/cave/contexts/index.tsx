@@ -1,5 +1,5 @@
 import { ThemeProvider } from '@concave/ui'
-import { WagmiProvider } from 'contexts/WagmiContext'
+import { WagmiProvider } from 'contexts/Wagmi/WagmiContext'
 import { MotionConfig } from 'framer-motion'
 import { ReactQueryProvider } from './ReactQueryContext'
 

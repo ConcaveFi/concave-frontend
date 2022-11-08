@@ -56,7 +56,7 @@ export const ACNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) =>
       })
       .catch((e) => {
         onCloseConfirm()
-        setError('Transaction Rejected')
+        setError('Transaction rejected')
         onOpenError()
       })
   }
@@ -133,10 +133,10 @@ export const ACNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) =>
             {unsupportedNetwork && 'Unsupported network'}
             {!unsupportedNetwork && (
               <Text>
-                {!isConnected && 'Not Connected'}
-                {!validBalance && isConnected && 'Insufficient Balance'}
+                {!isConnected && 'Not connected'}
+                {!validBalance && isConnected && 'Insufficient balance'}
                 {isConnected && canRedeem && 'Redeem'}
-                {isConnected && !canRedeem && validBalance && 'Nothing To Redeem'}
+                {isConnected && !canRedeem && validBalance && 'Nothing to redeem'}
               </Text>
             )}
           </Button>

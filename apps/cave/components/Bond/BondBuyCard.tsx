@@ -111,14 +111,14 @@ export function BondBuyCard(props: {
       >
         <VStack spacing={0} fontSize="13px" justify={'end'} fontWeight="500">
           <HStack alignSelf={'start'}>
-            <Text textColor={'text.low'}>Current Price:</Text>
+            <Text textColor={'text.low'}>Current price:</Text>
             <Text textColor={'text.low'} opacity="0.7">
               {cnvPrice.price ? '$' + cnvPrice.price?.toFixed(3) + ' CNV' : 'Loading . . .'}
             </Text>
           </HStack>
           <HStack alignSelf={'start'}>
             <Text ml={4} textColor={'text.low'}>
-              Bond Price:
+              Bond price:
             </Text>
             <Text textColor={'text.low'} opacity="0.7">
               {bondSpotPrice ? '$' + numberMask(+bondSpotPrice, 3) + ' CNV' : 'Loading . . .'}
@@ -154,14 +154,14 @@ export function BondBuyCard(props: {
       />
       <WaitingConfirmationDialog
         isOpen={bondTransaction.isWaitingForConfirmation}
-        title={'Confirm Bond'}
+        title={'Confirm bond'}
       >
         <Text fontSize="lg" color="text.accent">
           Bonding {amountIn.toString()} for {amountOut} CNV.
         </Text>
       </WaitingConfirmationDialog>
       <TransactionSubmittedDialog
-        title="Bond Submitted"
+        title="Bond submitted"
         tx={bondTransaction.tx}
         isOpen={bondTransaction.isWaitingTransactionReceipt}
       >

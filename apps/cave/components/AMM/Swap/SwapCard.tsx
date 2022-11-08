@@ -21,9 +21,13 @@ import { WaitingConfirmationDialog } from 'components/TransactionDialog/Transact
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useCallback, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
+import { useWaitForTransaction } from 'wagmi'
 import { NetworkMismatch } from '../NetworkMismatch'
 import { PcnvNotification } from './PcnvNotification'
 import { TradeDetails } from './TradeDetails'
+
+/** webhook to start a db syncronization with the blockchain */
+const requestDBSync = () => fetch('https://cnv-amm.vercel.app/api/gemswap', { keepalive: true })
 
 export function SwapCard() {
   const { trade, error, onChangeInput, onChangeOutput, switchFields, onReset } = useSwapState()
@@ -55,6 +59,12 @@ export function SwapCard() {
     },
     currencyApprove.permit,
   )
+
+  useWaitForTransaction({
+    wait: swapTx.data?.wait,
+    onSuccess: requestDBSync,
+    enabled: swapTx.isSuccess,
+  })
 
   const isExpertMode = useSwapSettings((s) => s.settings.expertMode)
   const swapButtonProps = useSwapButtonProps({
@@ -145,7 +155,7 @@ export function SwapCard() {
         </Text>
       </WaitingConfirmationDialog>
 
-      <TransactionSubmittedDialog title="Swap Submitted" tx={swapTx.data} isOpen={swapTx.isSuccess}>
+      <TransactionSubmittedDialog title="Swap submitted" tx={swapTx.data} isOpen={swapTx.isSuccess}>
         {swapTx.trade?.outputAmount.currency.isToken && (
           <AddTokenToWalletButton token={swapTx.trade.outputAmount.currency.wrapped} />
         )}

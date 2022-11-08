@@ -16,10 +16,10 @@ export const useNFTLockedPositionState = ({
   const redeemInDays = !maturity || formatDistanceToNow(maturity * 1000).replace('about', '')
 
   const period = {
-    0: '360 Days',
-    1: '180 Days',
-    2: '90 Days',
-    3: '45 Days',
+    0: '360 days',
+    1: '180 days',
+    2: '90 days',
+    3: '45 days',
   }[poolID]
 
   const imgNameByPeriod = {
@@ -40,12 +40,4 @@ export const useNFTLockedPositionState = ({
     active,
     toogleActive,
   }
-}
-
-function getUnit(time: number): 'hour' | 'minute' | 'day' {
-  // 86400000 = 24 hours in miliseconds
-  // 3600000 = 1 hours in miliseconds
-  if (time < 86400000) return 'hour'
-  if (time < 3600000) return 'minute'
-  return 'day'
 }

@@ -5,37 +5,45 @@ import {
   setRouteDefaultCurrencies,
   useQueryCurrencies,
 } from 'components/AMM/hooks/useQueryCurrencies'
+import { SwapActivity } from 'components/AMM/Swap/SwapActivity'
 import { SwapCard } from 'components/AMM/Swap/SwapCard'
 import { withPageTransition } from 'components/PageTransition'
 import { LayoutGroup } from 'framer-motion'
 
-export const swapSupportedChains = [ChainId.ETHEREUM, ChainId.RINKEBY] as const
+export const swapSupportedChains = [ChainId.ETHEREUM, ChainId.GÖRLI] as const
 export const swapDefaultCurrencies: {
   [chain in typeof swapSupportedChains[number]]: [Currency, Currency]
 } = {
-  [ChainId.ETHEREUM]: [DAI[1], CNV[1]],
-  [ChainId.RINKEBY]: [DAI[4], CNV[4]],
+  [ChainId.ETHEREUM]: [DAI[ChainId.ETHEREUM], CNV[ChainId.ETHEREUM]],
+  [ChainId.GÖRLI]: [DAI[ChainId.GÖRLI], CNV[ChainId.GÖRLI]],
 }
 
 setRouteDefaultCurrencies('/gemswap', swapDefaultCurrencies)
+
+const shouldShowActivity = (currencies: [Currency, Currency]) =>
+  currencies.includes(DAI[1]) && currencies.includes(CNV[1]) // is dai-cnv mainnet pair
 
 export function SwapPage() {
   const { currencies } = useQueryCurrencies()
 
   return (
     <Flex
-      wrap="wrap"
-      justify="center"
+      direction="column"
       align="center"
-      alignContent="center"
+      justify="center"
       w="100%"
+      mx="auto"
+      maxW="980px"
       minH="100vh"
-      gap={10}
+      gap={8}
     >
-      <LayoutGroup>
-        <CandleStickCard from={currencies[0]} to={currencies[1]} />
-        <SwapCard />
-      </LayoutGroup>
+      <Flex wrap="wrap" gap={10} justify="center" w="full">
+        <LayoutGroup>
+          <CandleStickCard from={currencies[0]} to={currencies[1]} />
+          <SwapCard />
+        </LayoutGroup>
+      </Flex>
+      {shouldShowActivity(currencies) && <SwapActivity />}
     </Flex>
   )
 }

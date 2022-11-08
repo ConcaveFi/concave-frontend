@@ -20,9 +20,9 @@ export const LiquidLocksCards = () => {
   useEffect(() => {
     if (stakingData?.data?.logStakingV1_Lock) {
       setStakingLocks(
-        stakingData?.data?.logStakingV1_Lock.sort((current, before) => {
-          if (current.timestamp > before.timestamp) return 1
-        }),
+        stakingData?.data?.logStakingV1_Lock.sort(
+          (current, before) => before.timestamp - current.timestamp,
+        ),
       )
     }
   }, [stakingData])
@@ -81,7 +81,7 @@ export const LiquidLocksCards = () => {
             loading: (
               <Flex align={'center'} gap={2}>
                 <Text fontSize={'18px'} fontWeight="700">
-                  Loading tracks
+                  Loading data
                 </Text>
                 <SpinnerIcon animation={`${spinAnimation} 2s linear infinite`} />
               </Flex>
@@ -98,7 +98,7 @@ export const LiquidLocksCards = () => {
             ),
             error: (
               <Text m="auto" fontSize={'18px'} fontWeight="700">
-                Error fetching tracks
+                Error loading data
               </Text>
             ),
           }[status]
