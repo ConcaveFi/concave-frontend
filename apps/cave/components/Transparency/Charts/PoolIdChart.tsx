@@ -62,9 +62,9 @@ export const PoolIdChart = () => {
           data={poolResult.data}
           margin={{
             top: 20,
-            right: 20,
-            left: 10,
-            bottom: 20,
+            right: 30,
+            left: 30,
+            bottom: 50,
           }}
         >
           <CartesianGrid strokeDasharray="5" opacity={0.15} />
@@ -81,7 +81,7 @@ export const PoolIdChart = () => {
               value={'Pool'}
               style={{
                 textAnchor: 'middle',
-                transform: 'translateY(22.5px)',
+                transform: 'translateY(35px)',
               }}
             />
           </XAxis>
@@ -95,7 +95,7 @@ export const PoolIdChart = () => {
               value={'Percentage of pool occupied'}
               style={{
                 textAnchor: 'middle',
-                transform: 'translate(-120px, 175px) rotate(-90deg)',
+                transform: 'translate(-90px, 178px) rotate(-90deg)',
               }}
             />
           </YAxis>
