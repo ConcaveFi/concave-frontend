@@ -5,7 +5,7 @@ import { DuneChartCard } from './DuneChartCard'
 import { LockedCNVChart } from './LockedCNVChart'
 import { LockedCNVSeriesChart } from './LockedCNVSeriesChart'
 import { LsdCNVHoldersChart } from './LsdCNVUniqueHolders'
-import { PoolIdChart } from './PoolIdChart'
+import { StakePoolEngagementChart } from './StakePoolEngagementChart'
 
 export default function TransparencyCharts({ isMobile }: { isMobile: boolean }) {
   let style
@@ -41,7 +41,7 @@ export default function TransparencyCharts({ isMobile }: { isMobile: boolean }) 
         <LsdCNVHoldersChart width={style.lsdCnv.width} fontSize={style.textChartFontSize} />
       </Flex>
       <Flex gap={6} direction={style.groupDirection}>
-        <PoolIdChart />
+        <StakePoolEngagementChart />
         <DuneChartCard src="https://dune.com/embeds/975956/1690648/39547f93-eb48-4ed3-8dfd-fcb14390d86b" />
       </Flex>
       <Flex gap={6} direction={style.groupDirection}>

@@ -46,7 +46,7 @@ const usePoolData = (pools: number[]) => {
   })
 }
 
-export const PoolIdChart = () => {
+export const StakePoolEngagementChart = () => {
   const poolResult = usePoolData([0, 1, 2, 3])
 
   return (
