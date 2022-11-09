@@ -35,16 +35,11 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakin
           width={'full'}
           rounded={'2xl'}
           shadow="up"
-          transition={`0.15s`}
           bg="url(assets/textures/metal.png), linear-gradient(180deg, #16222E 0.7%, #28394D 55.07%)"
           bgPos={'50% 50%, 0px 0px'}
           bgSize="120px, auto"
           direction={'column'}
-          _hover={{
-            boxShadow: 'Blue Light',
-            ...border,
-          }}
-          p={1.5}
+          p={2.5}
           px={2.5}
           gap={1.5}
           justify="space-between"
@@ -181,6 +176,13 @@ const BuyContainer = ({ stakingPosition, active = false }: BuyContainerProps) =>
       }
     }
 
+    if (currencyApprove.state === 'disconected')
+      return {
+        ...currencyApprove.buttonProps,
+        children: 'Buy',
+        showPrice: true,
+        fontSize: '14px',
+      }
     if (currencyApprove.state === 'default')
       return {
         ...currencyApprove.buttonProps,
@@ -210,7 +212,6 @@ const BuyContainer = ({ stakingPosition, active = false }: BuyContainerProps) =>
         boxShadow={'Up Big'}
         shadow="up"
         variant={active ? 'primary' : 'primary.outline'}
-        colorScheme={'brighter'}
         w={['100%', '150px', '180px']}
         size={`md`}
         {...buttonProps}
