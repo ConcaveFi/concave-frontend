@@ -27,7 +27,13 @@ export const useMarketplaceDashbord = () => {
       )
       return nonExecutedItens.filter(Boolean)
     },
-    { enabled: !!chainId, refetchOnWindowFocus: false, refetchIntervalInBackground: true },
+    {
+      enabled: !!chainId,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchIntervalInBackground: true,
+      refetchOnMount: false,
+    },
   )
   const positionSorter = usePositionSorter()
   const salePositions = positions.data || []
