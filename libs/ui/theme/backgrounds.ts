@@ -40,8 +40,7 @@ export const backgrounds = {
       bgSize: 'cover',
       pointerEvents: 'none',
     },
-    filter:
-      'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25)) drop-shadow(-20px 30px 20px rgba(6, 9, 12, 0.5)) drop-shadow(4px -7px 20px rgba(174, 177, 255, 0.13))',
+    filter: 'drop-shadow(-2px 6px 6px rgba(13, 17, 22, 0.33))',
   },
   glassHQ: {
     pos: 'relative',
