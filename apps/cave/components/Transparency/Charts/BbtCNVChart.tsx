@@ -27,10 +27,7 @@ type BbtCNVChartData = {
 
 export function BbtCNVChart() {
   const isMobile = useBreakpointValue({ base: true, md: false })
-  const bbtCNVData = useFetchData<BbtCNVChartData>(
-    'bbtcnv-redeemed',
-    'https://devcnv-charts.vercel.app/api',
-  )
+  const bbtCNVData = useFetchData<BbtCNVChartData>('bbtcnv-redeemed')
   const dataLoaded = !bbtCNVData.isLoading
   const data = bbtCNVData.data
   const error = bbtCNVData.error
