@@ -16,22 +16,28 @@ import { CHART_COLORS } from './style'
 import { useFetchData } from './useFetchData'
 
 type BbtCNVChartData = {
-  bbtCNVRedeemable: number
-  bbtCNVRedeemed: number
-  bbtCNVToVest: number
+  bbtCNVRedeemedV1: number
+  bbtCNVRedeemedV2: number
+  bbtCNVVesting: number
+  totalBbtCNVRedeemed: number
+  currentBbtCNVRedeemable: number
   TOTAL_BBTCNV: number
+  vPCT: number
 }
 
 export function BbtCNVChart() {
   const isMobile = useBreakpointValue({ base: true, md: false })
-  const bbtCNVData = useFetchData<BbtCNVChartData>('bbtcnv-redeemed')
+  const bbtCNVData = useFetchData<BbtCNVChartData>(
+    'bbtcnv-redeemed',
+    'https://devcnv-charts.vercel.app/api',
+  )
   const dataLoaded = !bbtCNVData.isLoading
   const data = bbtCNVData.data
   const error = bbtCNVData.error
   return (
     <ChartCard
       {...bbtCNVData}
-      chartTitle="bbtCNV redeem counter"
+      chartTitle="BBT redeem counter"
       tooltipDescription="bbtCNV redeem counter."
       overflow="visible"
     >
@@ -43,26 +49,26 @@ export function BbtCNVChart() {
           <Flex direction={'row'} gap={6} justifyContent={'space-evenly'} flexWrap={'wrap'}>
             <Flex direction={'column'} gap={1}>
               <Text fontSize={isMobile ? 'md' : '1.25rem'} lineHeight={'100%'}>
-                {numberWithCommas(data.bbtCNVRedeemable.toFixed(4))}
+                {numberWithCommas(data.totalBbtCNVRedeemed.toFixed(0))}
               </Text>
               <Text fontSize={'sm'} lineHeight={'100%'}>
-                bbtCNV redeemable
+                CNV redeemed
               </Text>
             </Flex>
             <Flex direction={'column'} gap={1}>
               <Text fontSize={isMobile ? 'md' : '1.25rem'} lineHeight={'100%'}>
-                {numberWithCommas(data.bbtCNVRedeemed.toFixed(4))}
+                {numberWithCommas(data.currentBbtCNVRedeemable.toFixed(0))}
               </Text>
               <Text fontSize={'sm'} lineHeight={'100%'}>
-                bbtCNV redeemed
+                CNV redeemable
               </Text>
             </Flex>
             <Flex direction={'column'} gap={1}>
               <Text fontSize={isMobile ? 'md' : '1.25rem'} lineHeight={'100%'}>
-                {numberWithCommas(data.bbtCNVToVest.toFixed(4))}
+                {numberWithCommas(data.bbtCNVVesting.toFixed(0))}
               </Text>
               <Text fontSize={'sm'} lineHeight={'100%'}>
-                bbtCNV vesting
+                CNV vesting
               </Text>
             </Flex>
           </Flex>
@@ -93,20 +99,20 @@ export function BbtCNVChart() {
               <Tooltip cursor={false} content={<ChartTooltip />} />
               <Legend />
               <Bar
-                name="Redeemable bbtCNV"
-                dataKey="bbtCNVRedeemable"
-                stackId="a"
-                fill={CHART_COLORS.GreenYellow}
-              />
-              <Bar
-                name="Redeemed bbtCNV"
-                dataKey="bbtCNVRedeemed"
+                name="Redeemed"
+                dataKey="totalBbtCNVRedeemed"
                 stackId="a"
                 fill={CHART_COLORS.LightBlue}
               />
               <Bar
-                name="Vesting bbtCNV"
-                dataKey="bbtCNVToVest"
+                name="Redeemable"
+                dataKey="currentBbtCNVRedeemable"
+                stackId="a"
+                fill={CHART_COLORS.GreenYellow}
+              />
+              <Bar
+                name="Vesting"
+                dataKey="bbtCNVVesting"
                 stackId="a"
                 fill={CHART_COLORS.Orange}
                 opacity={0.5}
