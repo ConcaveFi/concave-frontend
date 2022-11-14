@@ -1,6 +1,8 @@
 export * from './AcnvRedemptionAbi'
 export * from './BbtCNVRedemptionV2Abi'
 export { BondAbi } from './Bond'
+export { DN_STRATEGY_ABI } from './DnStrategyAbi'
+export { DN_VAULT_ABI } from './DnVaultAbi'
 export { Erc20Abi } from './Erc20'
 export { Erc721Abi } from './Erc721'
 export { RouterAbi } from './Router'
