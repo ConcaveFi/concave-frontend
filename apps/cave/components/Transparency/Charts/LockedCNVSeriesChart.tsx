@@ -1,9 +1,9 @@
 import { Text } from '@concave/ui'
 import {
+  Area,
+  AreaChart,
   CartesianGrid,
   Label,
-  Line,
-  LineChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -42,7 +42,13 @@ export const LockedCNVSeriesChart = () => {
       )}
       {dataLoaded && !error && (
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart width={500} height={300} data={data.lockedCNV} margin={chartMargin}>
+          <AreaChart width={500} height={300} data={data.lockedCNV} margin={chartMargin}>
+            <defs>
+              <linearGradient id="gradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor={CHART_COLORS.LightBlue} stopOpacity={0.9} />
+                <stop offset="100%" stopColor={CHART_COLORS.LightBlue} stopOpacity={0.05} />
+              </linearGradient>
+            </defs>
             <CartesianGrid strokeDasharray="5" opacity={0.15} />
             <XAxis
               dataKey="timestamp"
@@ -83,14 +89,15 @@ export const LockedCNVSeriesChart = () => {
               />
             </YAxis>
             <Tooltip content={<ChartTooltip accessPayloadKeys payloadKeys={['date']} />} />
-            <Line
+            <Area
               dot={false}
               dataKey="locked"
               name="Locked CNV"
               stroke={CHART_COLORS.LightBlue}
               strokeWidth={2.25}
+              fill="url(#gradient)"
             />
-          </LineChart>
+          </AreaChart>
         </ResponsiveContainer>
       )}
     </ChartCard>

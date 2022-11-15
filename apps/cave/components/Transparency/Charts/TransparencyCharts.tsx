@@ -1,7 +1,6 @@
 import { Flex } from '@concave/ui'
 import { ACNVChart } from './ACNVChart'
 import { BbtCNVChart } from './BbtCNVChart'
-import { DuneChartCard } from './DuneChartCard'
 import { LockedCNVChart } from './LockedCNVChart'
 import { LockedCNVSeriesChart } from './LockedCNVSeriesChart'
 import { LsdCNVHoldersChart } from './LsdCNVUniqueHolders'
@@ -42,7 +41,6 @@ export default function TransparencyCharts({ isMobile }: { isMobile: boolean }) 
       </Flex>
       <Flex gap={6} direction={style.groupDirection}>
         <StakePoolEngagementChart />
-        <DuneChartCard src="https://dune.com/embeds/975956/1690648/39547f93-eb48-4ed3-8dfd-fcb14390d86b" />
       </Flex>
       <Flex gap={6} direction={style.groupDirection}>
         <ACNVChart fontSize={style.textChartFontSize} />
