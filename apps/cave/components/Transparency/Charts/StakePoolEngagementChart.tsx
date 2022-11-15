@@ -64,7 +64,7 @@ export const StakePoolEngagementChart = () => {
             top: 20,
             right: 30,
             left: 30,
-            bottom: 50,
+            bottom: 30,
           }}
         >
           <CartesianGrid strokeDasharray="5" opacity={0.15} />
@@ -81,7 +81,7 @@ export const StakePoolEngagementChart = () => {
               value={'Stake pool'}
               style={{
                 textAnchor: 'middle',
-                transform: 'translateY(35px)',
+                transform: 'translateY(27px)',
               }}
             />
           </XAxis>
@@ -95,7 +95,7 @@ export const StakePoolEngagementChart = () => {
               value={'Percentage of pool occupied'}
               style={{
                 textAnchor: 'middle',
-                transform: 'translate(-90px, 178px) rotate(-90deg)',
+                transform: 'translate(-101px, 185px) rotate(-90deg)',
               }}
             />
           </YAxis>
