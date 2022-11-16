@@ -8,7 +8,6 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
-  useBreakpointValue,
   VStack,
 } from '@concave/ui'
 import { Dispatch, SetStateAction, useState } from 'react'
@@ -51,22 +50,21 @@ const DataStudio = ({ src }: { src: string }) => (
   <Flex src={src} as={'iframe'} w={'full'} h={'full'} overflow={'hidden'} rounded={'2xl'} />
 )
 
-export function TransparencyDiagram() {
+export function TransparencyDiagram({ isMobile }: { isMobile: boolean }) {
   const [diagramShown, setDiagramShown] = useState<DiagramButtons>(DiagramButtons.TreasuryOverview)
-  const isMobile = useBreakpointValue({ base: true, md: false })
 
   return (
     <>
-      <Flex
-        direction={'column'}
-        width={'100%'}
+      <VStack
+        w={'100%'}
         height={'800px'}
-        maxHeight={'90vh'}
         rounded={'2xl'}
         apply="background.metalBrighter"
         shadow={'up'}
-        p={5}
-        gap={5}
+        minH={'500px'}
+        maxH={{ base: '90vh', md: '800px' }}
+        p={{ base: 4, sm: 5 }}
+        gap={{ base: 2, sm: 5 }}
       >
         {isMobile ? (
           <MobileMenu diagramShown={diagramShown} setDiagramShown={setDiagramShown} />
@@ -78,6 +76,8 @@ export function TransparencyDiagram() {
           shadow="down"
           w={'100%'}
           h="full"
+          p={isMobile ? 2 : 4}
+          py={isMobile ? 2 : 6}
           justify="start"
           overflowY={'auto'}
           direction="column"
@@ -134,7 +134,7 @@ export function TransparencyDiagram() {
             />
           )}
         </Flex>
-      </Flex>
+      </VStack>
     </>
   )
 }

@@ -14,7 +14,7 @@ export const NodeText = ({ data }: { data: NodeDisplayData }) => {
   let label: string | string[]
 
   if (isMobile) {
-    label = wrapText(data.label, 12)
+    label = wrapText(data.label, 10)
     style = {
       labelFontSize: '2rem',
       lineHeight: '2.75rem',
@@ -43,11 +43,16 @@ export const NodeText = ({ data }: { data: NodeDisplayData }) => {
         </Link>
       ) : (
         <>
-          <Text color={'white'} fontSize={style.labelFontSize}>
+          <Text color={'white'} whiteSpace={'nowrap'} fontSize={style.labelFontSize}>
             {label}
           </Text>
           {data.address && (
-            <Text color={'white'} fontSize={style.linkFontSize} lineHeight={style.lineHeight}>
+            <Text
+              color={'white'}
+              fontSize={style.linkFontSize}
+              whiteSpace={'nowrap'}
+              lineHeight={style.lineHeight}
+            >
               <Link href={explorerURL} target="_blank">
                 View contract
               </Link>

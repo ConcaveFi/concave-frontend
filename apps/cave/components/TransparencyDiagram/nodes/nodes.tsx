@@ -214,16 +214,16 @@ export const generalNodes = [
   aCNV(385, 600),
   cnv(650, 600),
   pCNV(385, 400),
-  lsdCNV(385, 1016),
+  lsdCNV(385, 1010),
   concaveTreasury(975, 480),
   coopTreasury(1225, 480),
   policyMultisig(1475, 480),
-  proxyAdmin(0, 485),
+  proxyAdmin(0, 500),
   accrualBondsV1Proxy(700, 0),
   accrualBondsV1Impl(1150, 0),
   stakingV1Proxy(760, 1000),
   stakingV1Impl(1150, 1000),
-  valueShuttle(1650, 1020),
+  valueShuttle(1650, 1019),
   bscSafe(100, 0),
   avaxSafe(375, 0),
 ]
@@ -241,46 +241,46 @@ export const generalNodesMobile = [
   lsdCNV(580, 0),
 
   //line 1
-  bscSafe(28, 0 + 30),
-  avaxSafe(250, 0 + 30),
+  bscSafe(28, 0),
+  avaxSafe(250, 0),
 
   //line 2
-  stakingV1Proxy(375, 383 + 20),
-  stakingV1Impl(207, 383 + 20),
-  valueShuttle(0, 383 + 20),
+  valueShuttle(0, 402 + 20),
+  stakingV1Proxy(365, 383 + 20),
+  stakingV1Impl(219, 383 + 20),
 
   //line 3
   policyMultisig(0, 767 + 10),
-  concaveTreasury(300, 767 + 10),
-  coopTreasury(150, 767 + 10),
+  coopTreasury(155, 767 + 10),
+  concaveTreasury(310, 767 + 10),
 
   //line 4
-  accrualBondsV1Proxy(250, 1150),
+  accrualBondsV1Proxy(280, 1150),
   accrualBondsV1Impl(0, 1150),
-  proxyAdmin(525, 1150),
+  proxyAdmin(565, 1160),
 ]
 
 export const bondingNodes = [
-  user(660, 0),
+  user(688, 0),
   proxyAdmin(900, 0),
   cnv(1200, 0),
   coopTreasury(0, 400),
   valueShuttle(300, 425),
   accrualBondsV1Proxy(600, 400),
   concaveTreasury(1200, 400),
-  accrualBondsV1Impl(600, 800),
+  accrualBondsV1Impl(607, 800),
   policyMultisig(1200, 800),
 ]
 
 export const bondingNodesMobile = [
   user(660, 0),
-  proxyAdmin(850, 0),
+  proxyAdmin(863, 0),
   cnv(1100, 0),
-  coopTreasury(641, 1050),
-  valueShuttle(620, 700),
-  accrualBondsV1Proxy(600, 350),
+  coopTreasury(645, 1000),
+  valueShuttle(620, 720),
+  accrualBondsV1Proxy(593, 358),
   concaveTreasury(1100, 350),
-  accrualBondsV1Impl(840, 700),
+  accrualBondsV1Impl(826, 705),
   policyMultisig(1100, 700),
 ]
 
@@ -298,17 +298,17 @@ export const stakingNodes = [
 ]
 
 export const stakingNodesMobile = [
-  valueShuttle(250, 0),
-  user(530, 0),
-  lsdCNV(740, 25),
+  valueShuttle(225, 50),
+  user(510, 29),
+  lsdCNV(722, 41),
 
   stakingV1Impl(260, 400),
   stakingV1Proxy(504, 400),
-  proxyAdmin(690, 400),
+  proxyAdmin(710, 410),
 
   coopTreasury(250, 800),
-  policyMultisig(483, 800),
-  concaveTreasury(700, 800),
+  policyMultisig(492, 800),
+  concaveTreasury(724, 800),
 
   cnv(500, 1100),
 ]

@@ -1,63 +1,16 @@
 import { Box, Link } from '@concave/ui'
 import { getExplorerURL } from 'components/TransparencyDiagram/utils'
-import { Handle, Position } from 'react-flow-renderer'
-import { sharedNodeContainerStyle, sharedNodeHandleStyle } from '../../styles'
+import { sharedNodeContainerStyle } from '../../styles'
 import { NodeDisplayData } from '../../types'
 import { NodeText } from '../NodeText'
+import { Handles } from './Handles'
 
 export function ProxyAdmin({ data }: { data: NodeDisplayData }) {
   const explorerURL = getExplorerURL(data)
 
   return (
     <Box sx={{ ...sharedNodeContainerStyle }}>
-      <Handle
-        type="target"
-        position={Position.Top}
-        id="topTarget"
-        style={{ ...sharedNodeHandleStyle }}
-      />
-      <Handle
-        type="source"
-        position={Position.Top}
-        id="topSource"
-        style={{ ...sharedNodeHandleStyle }}
-      />
-      <Handle
-        type="target"
-        position={Position.Bottom}
-        id="bottomTarget"
-        style={{ ...sharedNodeHandleStyle }}
-      />
-      <Handle
-        type="source"
-        position={Position.Bottom}
-        id="bottomSource"
-        style={{ ...sharedNodeHandleStyle }}
-      />
-      <Handle
-        type="source"
-        position={Position.Right}
-        id="rightSource"
-        style={{ ...sharedNodeHandleStyle }}
-      />
-      <Handle
-        type="target"
-        position={Position.Right}
-        id="rightTarget"
-        style={{ ...sharedNodeHandleStyle }}
-      />{' '}
-      <Handle
-        type="source"
-        position={Position.Left}
-        id="leftSource"
-        style={{ ...sharedNodeHandleStyle }}
-      />
-      <Handle
-        type="target"
-        position={Position.Left}
-        id="leftTarget"
-        style={{ ...sharedNodeHandleStyle }}
-      />
+      <Handles top={51} />
       <Link href={explorerURL} target="_blank">
         <svg
           width="149"
