@@ -1,6 +1,6 @@
 import { ExpandArrowIcon, SpinnerIcon } from '@concave/icons'
 import { stakingPools } from '@concave/marketplace'
-import { Box, Card, Collapse, Flex, keyframes, Text, useDisclosure } from '@concave/ui'
+import { Card, Collapse, Flex, keyframes, Text, useDisclosure } from '@concave/ui'
 import { formatDistanceStrict } from 'date-fns'
 import {
   Get_Stakingv1_Last100_LockQuery,
@@ -62,9 +62,7 @@ export const LiquidLocksCards = () => {
       <Collapse startingHeight={status === 'success' ? '100px' : '55px'} in={isOpen}>
         <Flex fontWeight="700" width={'full'} flex={1} height="full">
           <LocksColumn title="When" values={relativeTime} />
-          <Box w="1px" bg="stroke.primary" />
           <LocksColumn title="Amount staked" values={amountStaked} />
-          <Box w="1px" bg="stroke.primary" />
           <LocksColumn title="Stake pool" values={stakePools} />
         </Flex>
       </Collapse>

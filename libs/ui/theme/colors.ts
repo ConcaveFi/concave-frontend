@@ -28,6 +28,7 @@ export const colors = {
       'linear-gradient(57deg, #171E27 -7.38%, #435F81 29.46%, #202D3D 71.39%, #93C5FF 107.62%)',
     accent: 'linear-gradient(90deg, #72639B 0%, #44B9DE 100%)',
     brightGreen: 'linear-gradient( 180deg, #7AF0CD 0%, #24C9B5 100% )',
+    brightBlue: 'linear-gradient(90.08deg, #92B7FF 0.13%, #FFFFFF 99.87%), #FFFFFF',
   },
 
   primary: /* purple & blue */ {

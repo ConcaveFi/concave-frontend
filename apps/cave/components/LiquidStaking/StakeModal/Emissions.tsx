@@ -39,7 +39,7 @@ export function Emissions({
         <Info info={stakingPools[poolId].days + ' days'} title="Stake period" />
         <Image
           mx="auto"
-          src={`/assets/liquidstaking/${stakingPools[poolId].days}d-logo.svg`}
+          src={`/assets/liquidstaking/${stakingPools[poolId].days}d-logo.png`}
           alt="stake period logo"
         />
         <Info

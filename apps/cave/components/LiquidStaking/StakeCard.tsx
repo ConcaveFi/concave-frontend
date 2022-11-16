@@ -45,7 +45,7 @@ export const StakeCard = ({ status, poolId, stakeData }: StakeCardProps) => {
       <Card
         variant="primary"
         p={[6, 4]}
-        maxW={{ base: '160px', md: '200px' }}
+        maxW={{ base: '180px', md: '240px' }}
         fontWeight={'bold'}
         align="center"
       >
@@ -57,7 +57,7 @@ export const StakeCard = ({ status, poolId, stakeData }: StakeCardProps) => {
             ]
           }
         />
-        <LoadBar variant="primary" {...loadBarProps} />
+        <LoadBar {...loadBarProps} />
         <Button
           mt={4}
           onClick={onOpen}
@@ -71,7 +71,7 @@ export const StakeCard = ({ status, poolId, stakeData }: StakeCardProps) => {
         </Button>
       </Card>
       <StakeModal
-        loadBar={<LoadBar variant="secondary" {...loadBarProps} />}
+        loadBar={<LoadBar {...loadBarProps} />}
         status={status}
         poolId={poolId}
         isOpen={isOpen}
@@ -87,11 +87,12 @@ type ImageContainerProps = {
   totalVAPR: string
 }
 const ImageContainer: React.FC<ImageContainerProps> = ({ poolId, totalVAPR }) => (
-  <Box w="full" py={5} h={{ base: '290px', md: '333px' }} shadow="down" borderRadius="100px/90px">
+  <Box w="full" py={5} shadow="down" borderRadius="full">
     <Info title="Stake pool" label={stakingPools[poolId].days + ' days'} textAlign="center" />
     <Image
+      w={'120%'}
       userSelect={'none'}
-      src={`/assets/liquidstaking/${stakingPools[poolId].days}d-logo.svg`}
+      src={`/assets/liquidstaking/${stakingPools[poolId].days}d-logo.png`}
       alt="stake period logo"
     />
     <Info title="Total vAPR" label={totalVAPR} textAlign="center" />
@@ -103,14 +104,17 @@ type LoadBarProps = {
   loading: boolean
   currentlyStaked: string
   stakingCap: string
-  variant: 'primary' | 'secondary'
 }
-const LoadBar = ({ percent, currentlyStaked, loading, stakingCap, variant }: LoadBarProps) => (
+const LoadBar = ({ percent, currentlyStaked, loading, stakingCap }: LoadBarProps) => (
   <>
     {/* Header */}
-    <Stack color="text.low" fontSize={12} isInline justify="space-between" mt={3}>
-      <Text fontWeight={'bold'}>Currently staked</Text>
-      <Text fontWeight={'bold'}>Staking cap</Text>
+    <Stack color="text.low" w="full" px={1} isInline justify="space-between" mt={3}>
+      <Text fontSize={'xs'} fontWeight={'bold'}>
+        Currently staked
+      </Text>
+      <Text fontSize={'xs'} fontWeight={'bold'}>
+        Staking cap
+      </Text>
     </Stack>
     {/* Loading Bar */}
     <Flex
@@ -132,15 +136,7 @@ const LoadBar = ({ percent, currentlyStaked, loading, stakingCap, variant }: Loa
         />
       </Flex>
 
-      <Flex
-        position={'absolute'}
-        mx={-1}
-        fontSize={loadBarFontSize[variant]}
-        justify={loadBarTextJustify[variant]}
-        width="full"
-        px={loadBarTextPx[variant]}
-        fontWeight={'bold'}
-      >
+      <Flex position={'absolute'} mx={-1} width="full" justify={'space-between'} px={3}>
         {loading && <Text>Loading...</Text>}
         {!loading && (
           <>
@@ -156,16 +152,16 @@ const LoadBar = ({ percent, currentlyStaked, loading, stakingCap, variant }: Loa
 
 const loadBarFontSize = {
   primary: { base: 'xs', md: 'sm' },
-  secondary: 'md',
+  secondary: 'sm',
 }
 
 const loadBarTextPx = {
-  primary: '0',
+  primary: '3',
   secondary: '10',
 } as const
 
 const loadBarTextJustify = {
-  primary: 'space-around',
+  primary: 'space-between',
   secondary: 'space-between',
 } as const
 

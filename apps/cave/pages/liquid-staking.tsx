@@ -8,14 +8,20 @@ function LiquidStaking() {
   const { stakeData, status } = useLiquidStakeData()
   return (
     <Flex
-      width={{ base: '340px', md: '420px', xl: '900px' }}
+      width={{ base: '340px', md: '420px', xl: '1100px' }}
       justify={'start'}
       align="center"
       mx={'auto'}
       direction={'column'}
       p="0px"
     >
-      <Heading as="h1" mt={{ base: 12, md: 8 }} fontSize={{ base: '4xl', sm: '5xl' }}>
+      <Heading
+        as="h1"
+        apply={'background.text-brightBlue'}
+        fontWeight={'semibold'}
+        mt={{ base: 12, md: 8 }}
+        fontSize={{ base: '4xl', sm: '5xl' }}
+      >
         Liquid Staking
       </Heading>
       <Flex
@@ -28,6 +34,7 @@ function LiquidStaking() {
       >
         <Text
           maxW={520}
+          apply={'background.text-brightBlue'}
           textAlign={{ xl: 'justify', base: 'center' }}
           fontSize={{ base: 'sm', sm: 'md' }}
         >
