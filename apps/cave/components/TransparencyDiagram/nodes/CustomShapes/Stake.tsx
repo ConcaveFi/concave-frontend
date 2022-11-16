@@ -1,73 +1,21 @@
-import { Box, Link, useBreakpointValue } from '@concave/ui'
+import { Box, Link } from '@concave/ui'
 import { getExplorerURL } from 'components/TransparencyDiagram/utils'
-import { Handle, Position } from 'react-flow-renderer'
-import { sharedNodeContainerStyle, sharedNodeHandleStyle } from '../../styles'
-import { NodeDisplayData, ShapeLabelSettingsType } from '../../types'
+import { sharedNodeContainerStyle } from '../../styles'
+import { NodeDisplayData } from '../../types'
 import { NodeText } from '../NodeText'
+import { Handles } from './Handles'
 
 export function Stake({ data }: { data: NodeDisplayData }) {
-  const isMobile = useBreakpointValue({ base: true, md: false })
-  const shapeSettings: ShapeLabelSettingsType = {
-    labelBottom: '-55px',
-  }
-
   const explorerURL = getExplorerURL(data)
 
   return (
-    <Box sx={{ ...sharedNodeContainerStyle }}>
-      <Handle
-        type="target"
-        position={Position.Top}
-        id="topTarget"
-        style={{ ...sharedNodeHandleStyle, top: -15 }}
-      />
-      <Handle
-        type="source"
-        position={Position.Top}
-        id="topSource"
-        style={{ ...sharedNodeHandleStyle, top: -15 }}
-      />
-      <Handle
-        type="target"
-        position={Position.Bottom}
-        id="bottomTarget"
-        style={{ ...sharedNodeHandleStyle, bottom: isMobile ? '-110px' : '-66px' }}
-      />
-      <Handle
-        type="source"
-        position={Position.Bottom}
-        id="bottomSource"
-        style={{ ...sharedNodeHandleStyle, bottom: isMobile ? '-110px' : '-66px' }}
-      />
-      <Handle
-        type="source"
-        position={Position.Right}
-        id="rightSource"
-        style={{ ...sharedNodeHandleStyle, right: -15 }}
-      />
-      <Handle
-        type="target"
-        position={Position.Right}
-        id="rightTarget"
-        style={{ ...sharedNodeHandleStyle, right: -15 }}
-      />
-      <Handle
-        type="source"
-        position={Position.Left}
-        id="leftSource"
-        style={{ ...sharedNodeHandleStyle, left: -15 }}
-      />
-      <Handle
-        type="target"
-        position={Position.Left}
-        id="leftTarget"
-        style={{ ...sharedNodeHandleStyle, left: -15 }}
-      />
-      <NodeText data={data} shapeSettings={shapeSettings} />
+    <Box sx={{ ...sharedNodeContainerStyle }} maxW={'99px'}>
+      <Handles top={60} />
+
       <Link href={explorerURL} target="_blank">
         <svg
           width="89"
-          height="122"
+          height="120"
           viewBox="0 0 89 122"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
@@ -180,6 +128,7 @@ export function Stake({ data }: { data: NodeDisplayData }) {
           </defs>
         </svg>
       </Link>
+      <NodeText data={data} />
     </Box>
   )
 }
