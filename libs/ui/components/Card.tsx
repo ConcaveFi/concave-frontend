@@ -25,7 +25,6 @@ export const Card = forwardRef<CardProps, 'div'>(
       <Stack
         as={motion.div}
         layout="position"
-        bg="bg.primary"
         ref={ref}
         overflow="hidden"
         __css={styles}
