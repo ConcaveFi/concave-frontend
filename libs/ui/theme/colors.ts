@@ -16,6 +16,11 @@ export const colors = {
     brightGreen: '#24C9B5',
   },
 
+  bg: {
+    primary:
+      'linear-gradient(180deg, rgba(10, 18, 38, 0.05) 0%, rgba(5, 11, 26, 0.05) 33.33%, rgba(29, 50, 104, 0.05) 66.67%, rgba(45, 141, 255, 0.15) 100%), linear-gradient(90deg, #050D1C 0%, #151A33 50%, #003053 100%)',
+  },
+
   stroke: {
     primary:
       'linear-gradient(41.89deg, #53399B 0.69%, #7DE0FF 38.19%, #504179 72.85%, #84E2FF 100%)',
