@@ -32,7 +32,7 @@ export const ChartCard = ({
   children?: JSX.Element | JSX.Element[]
 }) => {
   const loadingMessage = failureCount ? `Retrying` : 'Loading data'
-  const isMobile = useBreakpointValue({ base: true, sm: false })
+  const isMobile = useBreakpointValue({ base: true, xl: false })
   const [open, setOpen] = useState(false)
 
   return (
