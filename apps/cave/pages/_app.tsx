@@ -20,7 +20,7 @@ const globalStyles: Styles = {
       color: 'text.high',
       lineHeight: 'base',
       colorScheme: 'dark',
-      bgImage: 'url(/background.jpg)',
+      // bgImage: 'url(/background.jpg)',
       bgColor: '#121115',
     },
     '::selection': {
