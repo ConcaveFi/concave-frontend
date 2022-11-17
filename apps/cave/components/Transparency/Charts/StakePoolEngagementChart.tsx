@@ -13,6 +13,7 @@ import {
 } from 'recharts'
 import { ChartCard } from './ChartCard'
 import { ChartTooltip } from './ChartTooltip'
+import { CustomizedAxisTick } from './CustomizedAxisTick'
 import { CHART_COLORS } from './style'
 
 type PoolIdCountDataType = {
@@ -71,7 +72,10 @@ export const StakePoolEngagementChart = ({ isMobile }: { isMobile: boolean }) =>
           <XAxis
             dataKey="poolId"
             interval={0}
-            tickFormatter={(v) => PoolIdMap[v]}
+            tick={(tickData) => {
+              const customValue = PoolIdMap[tickData.payload.value]
+              return <CustomizedAxisTick customValue={customValue} {...tickData} />
+            }}
             tickLine={{ stroke: CHART_COLORS.TextLow }}
             axisLine={{ stroke: CHART_COLORS.TextLow }}
             style={{ fill: CHART_COLORS.TextLow, fontSize: '0.9rem' }}
