@@ -1,4 +1,4 @@
-import { Button, Card } from '@concave/ui'
+import { Button, gradientBorder, Text } from '@concave/ui'
 import { utils } from 'ethers'
 
 export const Redeem = ({
@@ -29,16 +29,21 @@ export const Redeem = ({
       : 0
   return (
     <>
-      <Card mb={-12} bottom={bottom} fontWeight="bold" fontSize={fontSize} w="100%">
-        <Button
-          disabled={buttonDisabled || +formatRedeemable === 0}
-          variant="primary"
-          size="lg"
-          w="full"
-          onClick={onConfirm}
-          fontSize={'inherit'}
-          {...customHeightSetting}
-        >
+      {/* <Card mb={-12} bottom={bottom} fontWeight="bold" fontSize={fontSize} w="100%"> */}
+      <Button
+        sx={formatRedeemable === 0 && { ...gradientBorder({ borderWidth: 2 }) }}
+        rounded={formatRedeemable === 0 && '16px 16px 0px 0px'}
+        disabled={buttonDisabled || +formatRedeemable === 0}
+        apply={formatRedeemable === 0 && 'background.glass'}
+        maxH={formatRedeemable === 0 ? '35px' : '60px'}
+        w={formatRedeemable === 0 ? '65%' : 'full'}
+        mb={formatRedeemable !== 0 && 4}
+        fontSize={'inherit'}
+        onClick={onConfirm}
+        variant="primary"
+        {...customHeightSetting}
+      >
+        <Text textColor={'text.bright'} opacity={0.6}>
           {buttonDisabled && isRedeeming
             ? 'Redeeming'
             : buttonDisabled && !isRedeeming
@@ -46,8 +51,9 @@ export const Redeem = ({
             : formatRedeemable === 0
             ? 'No CNV redeemable'
             : 'Redeem'}
-        </Button>
-      </Card>
+        </Text>
+      </Button>
+      {/* </Card> */}
     </>
   )
 }
