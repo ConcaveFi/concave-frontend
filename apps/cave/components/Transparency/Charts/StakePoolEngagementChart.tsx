@@ -46,7 +46,7 @@ const usePoolData = (pools: number[]) => {
   })
 }
 
-export const StakePoolEngagementChart = () => {
+export const StakePoolEngagementChart = ({ isMobile }: { isMobile: boolean }) => {
   const poolResult = usePoolData([0, 1, 2, 3])
 
   return (

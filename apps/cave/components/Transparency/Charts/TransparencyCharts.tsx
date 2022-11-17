@@ -40,7 +40,7 @@ export default function TransparencyCharts({ isMobile }: { isMobile: boolean }) 
         <LsdCNVHoldersChart width={style.lsdCnv.width} fontSize={style.textChartFontSize} />
       </Flex>
       <Flex gap={6} direction={style.groupDirection}>
-        <StakePoolEngagementChart />
+        <StakePoolEngagementChart isMobile={isMobile} />
       </Flex>
       <Flex gap={6} direction={style.groupDirection}>
         <ACNVChart fontSize={style.textChartFontSize} />
