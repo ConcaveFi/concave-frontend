@@ -78,7 +78,6 @@ export const StakePoolEngagementChart = ({ isMobile }: { isMobile: boolean }) =>
             }}
             tickLine={{ stroke: CHART_COLORS.TextLow }}
             axisLine={{ stroke: CHART_COLORS.TextLow }}
-            style={{ fill: CHART_COLORS.TextLow, fontSize: '0.9rem' }}
           >
             <Label
               fill={CHART_COLORS.TextLow}
@@ -90,7 +89,8 @@ export const StakePoolEngagementChart = ({ isMobile }: { isMobile: boolean }) =>
             />
           </XAxis>
           <YAxis
-            style={{ fill: CHART_COLORS.TextLow }}
+            tickFormatter={(tickData) => tickData + '%'}
+            style={{ fill: CHART_COLORS.TextLow, fontSize: '0.8rem' }}
             tickLine={{ stroke: CHART_COLORS.TextLow }}
             axisLine={{ stroke: CHART_COLORS.TextLow }}
           >
