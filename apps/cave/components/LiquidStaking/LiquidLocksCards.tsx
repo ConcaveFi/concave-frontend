@@ -33,7 +33,7 @@ export const LiquidLocksCards = () => {
 type LocksColumnProps = { title: string; values: string[] | number[] }
 const LocksColumn: React.FC<LocksColumnProps> = ({ title, values = [] }) => (
   <Flex direction={'column'} flex={1} height="full" align={'center'}>
-    <Text mt={2} fontSize={{ base: 'sm', md: 'md' }}>
+    <Text mt={2} textColor="text.low" fontSize={{ base: 'sm', md: 'md' }}>
       {title}
     </Text>
     <Flex
@@ -43,7 +43,9 @@ const LocksColumn: React.FC<LocksColumnProps> = ({ title, values = [] }) => (
       align="center"
     >
       {values.map((value, index) => (
-        <Text key={value + index}>{value}</Text>
+        <Text key={value + index} opacity={title === 'When' && '0.7'}>
+          {value}
+        </Text>
       ))}
     </Flex>
   </Flex>
