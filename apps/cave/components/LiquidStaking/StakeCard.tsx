@@ -1,7 +1,7 @@
 import { Box, Button, Flex, Image, Stack, Text, TextProps, useDisclosure } from '@chakra-ui/react'
 import { Percent } from '@concave/core'
 import { stakingPools } from '@concave/marketplace'
-import { Card, HStack } from '@concave/ui'
+import { Card, gradientBorder, HStack } from '@concave/ui'
 import { Loading } from 'components/Loading'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { compactFormat } from 'utils/bigNumberMask'
@@ -129,10 +129,12 @@ const LoadBar = ({ percent, currentlyStaked, loading, stakingCap }: LoadBarProps
       <Flex w="full" height={'full'} overflow="hidden" rounded={'inherit'}>
         <Flex
           transform={`translateX(-${100 - +percent.toSignificant(3)}%)`}
+          sx={{ ...gradientBorder({ variant: 'secondary' }) }}
+          bg={'bg.primary'}
+          rounded="full"
           width={`full`}
           height="full"
-          apply={'background.metalBrighter'}
-          rounded="full"
+          shadow="up"
         />
       </Flex>
 

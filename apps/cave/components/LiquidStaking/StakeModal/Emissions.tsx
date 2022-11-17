@@ -24,8 +24,7 @@ export function Emissions({
     <Flex direction={{ base: 'row', md: 'column' }}>
       <Flex
         mx="auto"
-        pt={5}
-        pb={3}
+        p={4}
         w="240px"
         h="full"
         maxW={mobileUI && '120px'}

@@ -24,14 +24,16 @@ export const StakeInformation = ({
   const hasToHover = type === 'hover'
   return (
     <Box
-      borderTopRadius="xl"
-      borderBottomRadius="full"
+      filter="drop-shadow(0px 0px 27px #81b3ff4f)"
+      borderBottomRadius={'200px'}
+      borderTopRadius={'80px'}
       mt={{ base: '8', md: '' }}
       pt={4}
       pb={{ base: 0, md: 10 }}
       px={{ base: 0, md: 3 }}
       mx="auto"
-      filter="drop-shadow(0px 0px 27px #81b3ff4f)"
+      w={'full'}
+      shadow={{ md: 'down' }}
     >
       <Flex textAlign={'center'} direction={'column'} justify={'center'} align="center">
         <Info title="Bonding emissions" info={bondEmissionsFormatted} />
