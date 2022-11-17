@@ -1,68 +1,16 @@
 import { Box, Link } from '@concave/ui'
 import { getExplorerURL } from 'components/TransparencyDiagram/utils'
-import { Handle, Position } from 'react-flow-renderer'
-import { sharedNodeContainerStyle, sharedNodeHandleStyle } from '../../styles'
-import { NodeDisplayData, ShapeLabelSettingsType } from '../../types'
+import { sharedNodeContainerStyle } from '../../styles'
+import { NodeDisplayData } from '../../types'
 import { NodeText } from '../NodeText'
+import { Handles } from './Handles'
 
 export function ProxyAdmin({ data }: { data: NodeDisplayData }) {
-  const shapeSettings: ShapeLabelSettingsType = {
-    labelBottom: '-50',
-  }
-
   const explorerURL = getExplorerURL(data)
 
   return (
     <Box sx={{ ...sharedNodeContainerStyle }}>
-      <Handle
-        type="target"
-        position={Position.Top}
-        id="topTarget"
-        style={{ ...sharedNodeHandleStyle, top: -15 }}
-      />
-      <Handle
-        type="source"
-        position={Position.Top}
-        id="topSource"
-        style={{ ...sharedNodeHandleStyle, top: -15 }}
-      />
-      <Handle
-        type="target"
-        position={Position.Bottom}
-        id="bottomTarget"
-        style={{ ...sharedNodeHandleStyle, bottom: '-66px' }}
-      />
-      <Handle
-        type="source"
-        position={Position.Bottom}
-        id="bottomSource"
-        style={{ ...sharedNodeHandleStyle, bottom: '-66px' }}
-      />
-      <Handle
-        type="source"
-        position={Position.Right}
-        id="rightSource"
-        style={{ ...sharedNodeHandleStyle, right: -15 }}
-      />
-      <Handle
-        type="target"
-        position={Position.Right}
-        id="rightTarget"
-        style={{ ...sharedNodeHandleStyle, right: -15 }}
-      />{' '}
-      <Handle
-        type="source"
-        position={Position.Left}
-        id="leftSource"
-        style={{ ...sharedNodeHandleStyle, left: -15 }}
-      />
-      <Handle
-        type="target"
-        position={Position.Left}
-        id="leftTarget"
-        style={{ ...sharedNodeHandleStyle, left: -15 }}
-      />
-      <NodeText data={data} shapeSettings={shapeSettings} />
+      <Handles top={51} />
       <Link href={explorerURL} target="_blank">
         <svg
           width="149"
@@ -233,6 +181,7 @@ export function ProxyAdmin({ data }: { data: NodeDisplayData }) {
           </defs>
         </svg>
       </Link>
+      <NodeText data={data} />
     </Box>
   )
 }

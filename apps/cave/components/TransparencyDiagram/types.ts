@@ -12,8 +12,3 @@ export type NodeDisplayData = {
   address?: string
   addressType?: AddressTypeEnum
 }
-
-export type ShapeLabelSettingsType = {
-  labelLeft?: string
-  labelBottom: string
-}

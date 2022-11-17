@@ -11,7 +11,6 @@ import {
   VStack,
 } from '@concave/ui'
 import { Dispatch, SetStateAction, useState } from 'react'
-import ReactFlow, { ConnectionLineType, Controls } from 'react-flow-renderer'
 import { bondingEdges } from './edges/bondingEdges'
 import { bondingEdgesMobile } from './edges/bondingEdgesMobile'
 import { generalEdges } from './edges/generalEdges'
@@ -23,11 +22,10 @@ import {
   bondingNodesMobile,
   generalNodes,
   generalNodesMobile,
-  nodeTypes,
   stakingNodes,
   stakingNodesMobile,
 } from './nodes/nodes'
-import { edgeStyle, labelStyle } from './styles'
+import { ReactFlowDiagram } from './ReactFlowDiagram'
 
 enum DiagramButtons {
   TreasuryOverview = 'Treasury Overview',
@@ -52,28 +50,6 @@ const DataStudio = ({ src }: { src: string }) => (
   <Flex src={src} as={'iframe'} w={'full'} h={'full'} overflow={'hidden'} rounded={'2xl'} />
 )
 
-const ReactFlowDiagram = ({ edges, nodes, isMobile }) => (
-  <ReactFlow
-    edges={edges}
-    nodes={nodes}
-    nodeTypes={nodeTypes}
-    elevateEdgesOnSelect
-    fitView
-    fitViewOptions={{ padding: 0.15 }}
-    minZoom={0}
-    zoomOnPinch
-    panOnDrag
-    defaultEdgeOptions={{
-      type: ConnectionLineType.SimpleBezier,
-      style: { ...edgeStyle },
-      labelStyle: { ...labelStyle },
-      labelShowBg: false,
-    }}
-  >
-    {isMobile ? <></> : <Controls showInteractive={false} />}
-  </ReactFlow>
-)
-
 export function TransparencyDiagram({ isMobile }: { isMobile: boolean }) {
   const [diagramShown, setDiagramShown] = useState<DiagramButtons>(DiagramButtons.TreasuryOverview)
 
@@ -85,8 +61,10 @@ export function TransparencyDiagram({ isMobile }: { isMobile: boolean }) {
         rounded={'2xl'}
         apply="background.metalBrighter"
         shadow={'up'}
-        p={5}
-        gap={5}
+        minH={'500px'}
+        maxH={{ base: '90vh', md: '800px' }}
+        p={{ base: 4, sm: 5 }}
+        gap={{ base: 2, sm: 5 }}
       >
         {isMobile ? (
           <MobileMenu diagramShown={diagramShown} setDiagramShown={setDiagramShown} />

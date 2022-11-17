@@ -28,38 +28,37 @@ export const MarketplaceDashboard = (props: BoxProps) => {
   const isMobile = useBreakpointValue({ base: true, sm: false })
 
   return (
-    <>
-      <VStack
-        apply="background.metal"
-        width={['100%', '100%', '100%', '100%', `800px`]}
-        maxH={['full', 'full', 'full', 'full', '1000px']}
+    <VStack apply="background.metal" p={4} gap={4} borderRadius={'3xl'} maxH={'1000px'}>
+      <>
+        <MarketplaceFilterContainer
+          stakeFilters={stakeFilters}
+          onChangeStakeFilters={setStakeFilters}
+        />
+        <HStack w={'full'} flex={1} gap={2} flexWrap={'wrap'} justifyContent={'space-around'}>
+          <MarketplaceSortConainer onChangeSort={setSort} currentSort={sort} />
+          {!isMobile && <TokenIdSearchBar onApplyFilter={setTokenIdFilter} />}
+        </HStack>
+      </>
+      <Flex
+        as={Loading}
+        size="md"
+        isLoading={isFetching && !nftPositions.length}
+        rLabel=""
+        rounded={'inherit'}
+        shadow="down"
+        w="full"
+        textAlign={`center`}
+        justify="start"
         p={4}
-        gap={4}
-        borderRadius={'3xl'}
-        w={'full'}
+        overflow={'scroll'}
+        direction="column"
       >
-        <>
-          <MarketplaceFilterContainer
-            stakeFilters={stakeFilters}
-            onChangeStakeFilters={setStakeFilters}
-          />
-          <HStack w={'full'} flex={1} gap={2} flexWrap={'wrap'} justifyContent={'space-around'}>
-            <MarketplaceSortConainer onChangeSort={setSort} currentSort={sort} />
-            {!isMobile && <TokenIdSearchBar onApplyFilter={setTokenIdFilter} />}
-          </HStack>
-        </>
         <Flex
-          as={Loading}
-          size="md"
-          isLoading={isFetching}
-          rLabel=""
-          rounded={'inherit'}
-          shadow="down"
-          w="full"
-          p={4}
-          py={4}
-          textAlign={`center`}
-          justify="start"
+          mt={-2}
+          mx={-2}
+          pt={4}
+          pr={2}
+          borderRadius={'2xl'}
           overflowY={'scroll'}
           h={'auto'}
           direction="column"
@@ -77,7 +76,7 @@ export const MarketplaceDashboard = (props: BoxProps) => {
             <>{positions}</>
           )}
         </Flex>
-      </VStack>
-    </>
+      </Flex>
+    </VStack>
   )
 }

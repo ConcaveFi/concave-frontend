@@ -16,9 +16,17 @@ export const coingeckoPrice = async (base: Currency, quote: Currency) => {
 }
 
 export const useCoingeckoPrice = (base: Currency, quote: Currency) => {
-  return useQuery([`coingecko`, `price`, base.wrapped.address, quote.wrapped.address], async () => {
-    return coingeckoPrice(base, quote)
-  })
+  return useQuery(
+    [`coingecko`, `price`, base.wrapped.address, quote.wrapped.address],
+    async () => {
+      return coingeckoPrice(base, quote)
+    },
+    {
+      refetchOnMount: false,
+      keepPreviousData: true,
+      refetchOnWindowFocus: false,
+    },
+  )
 }
 
 export const usePositionDiscount = (staking: StakingPosition, market?: MarketItem) => {
