@@ -1,3 +1,4 @@
+import { useBreakpointValue } from '@concave/ui'
 import { liquidityValues } from 'components/LiquidStaking/hooks/useLiquidValues'
 import { ethers } from 'ethers'
 import { useQuery } from 'react-query'
@@ -49,7 +50,19 @@ const usePoolData = (pools: number[]) => {
 
 export const StakePoolEngagementChart = ({ isMobile }: { isMobile: boolean }) => {
   const poolResult = usePoolData([0, 1, 2, 3])
+  const mobileTick = useBreakpointValue({ base: true, sm: false })
 
+  const chartMargin = {
+    top: 20,
+    right: isMobile ? 20 : 30,
+    left: isMobile ? 20 : 30,
+    bottom: 30,
+  }
+  const xLabelPos = isMobile ? 35 : 27
+  const yLabelPos = {
+    x: isMobile ? -110 : -101,
+    y: isMobile ? 176 : 185,
+  }
   return (
     <ChartCard
       {...poolResult}
@@ -57,24 +70,16 @@ export const StakePoolEngagementChart = ({ isMobile }: { isMobile: boolean }) =>
       tooltipDescription="This chart visualizes the amount of CNV staked in each pool relative to the pool's staking cap."
     >
       <ResponsiveContainer width="100%" height="100%">
-        <BarChart
-          width={500}
-          height={300}
-          data={poolResult.data}
-          margin={{
-            top: 20,
-            right: 30,
-            left: 30,
-            bottom: 30,
-          }}
-        >
+        <BarChart width={500} height={300} data={poolResult.data} margin={chartMargin}>
           <CartesianGrid strokeDasharray="5" opacity={0.15} />
           <XAxis
             dataKey="poolId"
             interval={0}
             tick={(tickData) => {
               const customValue = PoolIdMap[tickData.payload.value]
-              return <CustomizedAxisTick customValue={customValue} {...tickData} />
+              return (
+                <CustomizedAxisTick customValue={customValue} isMobile={mobileTick} {...tickData} />
+              )
             }}
             tickLine={{ stroke: CHART_COLORS.TextLow }}
             axisLine={{ stroke: CHART_COLORS.TextLow }}
@@ -84,7 +89,7 @@ export const StakePoolEngagementChart = ({ isMobile }: { isMobile: boolean }) =>
               value={'Stake pool'}
               style={{
                 textAnchor: 'middle',
-                transform: 'translateY(27px)',
+                transform: `translateY(${xLabelPos}px)`,
               }}
             />
           </XAxis>
@@ -99,7 +104,7 @@ export const StakePoolEngagementChart = ({ isMobile }: { isMobile: boolean }) =>
               value={'Percentage of pool occupied'}
               style={{
                 textAnchor: 'middle',
-                transform: 'translate(-101px, 185px) rotate(-90deg)',
+                transform: `translate(${yLabelPos.x}px, ${yLabelPos.y}px) rotate(-90deg)`,
               }}
             />
           </YAxis>
