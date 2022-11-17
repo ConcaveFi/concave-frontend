@@ -1,55 +1,17 @@
-import { ExpandArrowIcon, SpinnerIcon } from '@concave/icons'
 import { stakingPools } from '@concave/marketplace'
-import { Card, Collapse, Flex, keyframes, Text, useDisclosure } from '@concave/ui'
+import { Card, Flex, Text } from '@concave/ui'
 import { formatDistanceStrict } from 'date-fns'
 import {
   Get_Stakingv1_Last100_LockQuery,
   useGet_Stakingv1_Last100_LockQuery,
 } from 'graphql/generated/graphql'
-import { useEffect, useState } from 'react'
+import { useMemo } from 'react'
+import { UseQueryResult } from 'react-query'
 import { formatFixed } from 'utils/bigNumberMask'
 
 export const LiquidLocksCards = () => {
-  const [stakingLocks, setStakingLocks] = useState<
-    Get_Stakingv1_Last100_LockQuery['logStakingV1_Lock']
-  >([])
-  const { isOpen, onToggle } = useDisclosure()
-
-  const stakingData = useGet_Stakingv1_Last100_LockQuery()
-  const { isLoading, status } = stakingData
-  useEffect(() => {
-    if (stakingData?.data?.logStakingV1_Lock) {
-      setStakingLocks(
-        stakingData?.data?.logStakingV1_Lock.sort(
-          (current, before) => before.timestamp - current.timestamp,
-        ),
-      )
-    }
-  }, [stakingData])
-
-  const amountStaked = stakingLocks
-    .map((value, index) => (
-      <Text opacity={1 - (index / 10) * (isOpen ? 1 : 3)} key={index}>
-        {formatFixed(value.amount) + ' CNV'}
-      </Text>
-    ))
-    .splice(0, 9)
-
-  const stakePools = stakingLocks
-    .map((value, index) => (
-      <Text opacity={1 - (index / 10) * (isOpen ? 1 : 3)} key={index}>
-        {stakingPools[+value.poolID].days}
-      </Text>
-    ))
-    .splice(0, 9)
-
-  const relativeTime = stakingLocks
-    .map((value, index) => (
-      <Text opacity={1 - (index / 10) * (isOpen ? 1 : 3)} key={index}>
-        {`${formatDistanceStrict(value.timestamp * 1000, Date.now())}  ago`}
-      </Text>
-    ))
-    .splice(0, 9)
+  const stakeData = useGet_Stakingv1_Last100_LockQuery()
+  const stakingLocks = useMemo(() => prepareStakingData(stakeData), [stakeData])
 
   return (
     <Card
@@ -59,71 +21,48 @@ export const LiquidLocksCards = () => {
       direction={'column'}
       textShadow={'0px 0px 27px rgba(129, 179, 255, 0.31)'}
     >
-      <Collapse startingHeight={status === 'success' ? '100px' : '55px'} in={isOpen}>
-        <Flex fontWeight="700" width={'full'} flex={1} height="full">
-          <LocksColumn title="When" values={relativeTime} />
-          <LocksColumn title="Amount staked" values={amountStaked} />
-          <LocksColumn title="Stake pool" values={stakePools} />
-        </Flex>
-      </Collapse>
-
-      <Card
-        height={'35px'}
-        width="full"
-        rounded={'0px 0px 16px 16px'}
-        justify="center"
-        align={'center'}
-      >
-        {
-          {
-            loading: (
-              <Flex align={'center'} gap={2}>
-                <Text fontSize={'18px'} fontWeight="700">
-                  Loading data
-                </Text>
-                <SpinnerIcon animation={`${spinAnimation} 2s linear infinite`} />
-              </Flex>
-            ),
-            success: (
-              <ExpandArrowIcon
-                width={12}
-                height={12}
-                cursor="pointer"
-                transition={'all 0.3s'}
-                transform={isOpen ? 'rotate(180deg)' : ''}
-                onClick={onToggle}
-              />
-            ),
-            error: (
-              <Text m="auto" fontSize={'18px'} fontWeight="700">
-                Error loading data
-              </Text>
-            ),
-          }[status]
-        }
-      </Card>
+      <Flex fontWeight="700" width={'full'} flex={1} height="full" p={4}>
+        <LocksColumn title="When" values={stakingLocks?.map(mapTimestamp)} />
+        <LocksColumn title="Amount staked" values={stakingLocks?.map(mapAmount)} />
+        <LocksColumn title="Stake pool" values={stakingLocks?.map(mapPoolId)} />
+      </Flex>
     </Card>
   )
 }
 
-type LocksColumnProps = { title: string; values: JSX.Element[] }
-const LocksColumn: React.FC<LocksColumnProps> = ({ title, values }) => (
+type LocksColumnProps = { title: string; values: string[] | number[] }
+const LocksColumn: React.FC<LocksColumnProps> = ({ title, values = [] }) => (
   <Flex direction={'column'} flex={1} height="full" align={'center'}>
     <Text mt={2} fontSize={{ base: 'sm', md: 'md' }}>
       {title}
     </Text>
     <Flex
       direction={'column'}
-      textColor="text.accent"
+      textColor="text.bright"
       fontSize={{ base: '12px', md: '14px' }}
       align="center"
     >
-      {values}
+      {values.map((value, index) => (
+        <Text key={value + index}>{value}</Text>
+      ))}
     </Flex>
   </Flex>
 )
 
-const spinAnimation = keyframes({
-  '0%': { transform: 'rotate(0deg)' },
-  '100%': { transform: 'rotate(360deg)' },
-})
+function prepareStakingData(stakeData: UseQueryResult<Get_Stakingv1_Last100_LockQuery, unknown>) {
+  return stakeData?.data?.logStakingV1_Lock
+    .sort((current, before) => before.timestamp - current.timestamp)
+    .splice(0, 15)
+}
+
+function mapTimestamp(value: { timestamp: any }) {
+  return `${formatDistanceStrict(value.timestamp * 1000, Date.now())} ago`
+}
+
+function mapAmount(value: { amount: any }) {
+  return `${formatFixed(value.amount || 0)} CNV`
+}
+
+function mapPoolId(value: { poolID: any }) {
+  return stakingPools[+value.poolID].days
+}
