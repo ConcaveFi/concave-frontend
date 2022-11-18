@@ -45,7 +45,7 @@ export const ChartCard = ({
       >
         <Tooltip closeDelay={500} label={tooltipDescription} isOpen={open}>
           <Box display={'flex'} flexDir={'row'} width={'full'} justifyContent={'space-between'}>
-            <Text apply={isMobile && tooltipDescription ? 'background.dashed' : ''} pb={0.5}>
+            <Text borderBottom={isMobile && tooltipDescription ? '1px solid white' : ''}>
               {chartTitle}
             </Text>
             {(isFetching || isRefetching) && <Spinner mx={1} mt={1} size={'sm'} mr={'auto'} />}
