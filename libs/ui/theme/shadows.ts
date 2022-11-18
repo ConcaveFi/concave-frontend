@@ -32,6 +32,8 @@ export const shadows = {
 
   'Blue Light':
     '0px 0px 20px rgba(56, 124, 255, 0.48), 0px 20px 20px rgba(0, 0, 0, 0.25), 4px -7px 15px rgba(174, 177, 255, 0.1), inset -1px 1px 2px rgba(128, 186, 255, 0.5)',
+  'Glass Inner':
+    '-2px 6px 6px rgba(13, 17, 22, 0.33), inset 0px -5px 20px rgba(108, 131, 255, 0.8), inset 0px 0px 20px rgba(94, 162, 224, 0.05), inset -1px 1px 2px rgba(128, 186, 255, 0.1)',
 }
 
 export default shadows

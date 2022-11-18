@@ -10,17 +10,22 @@ import { getRoiWarnColor } from 'utils/getRoiWarnColor'
 import { useAccount } from 'wagmi'
 
 const NavButton = (props: ButtonLinkProps) => {
+  const active = Router.route === props.href
+
   return (
     <ButtonLink
-      iconSpacing={2}
-      px={4}
-      variant="secondary"
+      overflow="hidden"
       color="text.low"
+      iconSpacing={2}
+      role="group"
       w="100%"
       h="50px"
-      isActive={Router.route === props.href}
-      overflow="hidden"
-      role="group"
+      px={4}
+      bg={active && 'linear-gradient(270deg, #08448C -0.12%, #070C1E 99.82%)'}
+      border={active && '1px solid rgba(81, 192, 255, 1)'}
+      shadow={active ? 'Glass Inner' : 'up'}
+      rounded={'20px'}
+      _hover={{ textDecoration: 'underline', textColor: 'text.bright' }}
       leftIcon={
         <NotInteractableImage
           src={`/assets/sidebar${props.href}.svg`}
@@ -30,7 +35,7 @@ const NavButton = (props: ButtonLinkProps) => {
       }
       {...props}
     >
-      <Flex w="100%" align="center" justify="center">
+      <Flex w="100%" textColor={active && 'text.bright'} align="center" justify="center">
         {props.children}
       </Flex>
     </ButtonLink>
@@ -38,23 +43,27 @@ const NavButton = (props: ButtonLinkProps) => {
 }
 
 const SubnavButton = ({ children, ...props }: ButtonLinkProps) => {
+  const active = Router.route === props.href
+
   return (
     <ButtonLink
-      px={4}
-      m="-3px"
-      mt="0"
+      _hover={{ textDecoration: 'underline', textColor: 'text.bright' }}
       sx={{ maxH: 'unset', opacity: 1, p: '10px' }}
-      isActive={Router.route === props.href}
-      minW="100%"
-      color="text.low"
       variant="secondary"
-      bg="none"
-      shadow="none"
       borderRadius="xl"
+      color="text.low"
       fontSize="xs"
+      shadow="none"
+      _active={{}}
+      _focus={{}}
+      minW="100%"
+      bg="none"
+      m="-3px"
+      px={4}
+      mt="0"
       {...props}
     >
-      <Flex w="100%" align="center" justify="center">
+      <Flex w="100%" textColor={active && 'text.bright'} align="center" justify="center">
         {children}
       </Flex>
     </ButtonLink>
@@ -96,13 +105,14 @@ const BondROI = () => {
 }
 
 const ButtonContainer = ({ children, ...props }) => (
-  <Flex flexDir="column" shadow="Down Big" rounded="2xl" p="3px" overflow="hidden" {...props}>
+  <Flex flexDir="column" shadow="Down Big" rounded="24px" p="3px" overflow="hidden" {...props}>
     {children}
   </Flex>
 )
 
 function PageNav() {
   const { address } = useAccount()
+
   return (
     <Flex direction="column" position="relative" gap="10px" w="100%" pl="32px">
       <NotInteractableImage
