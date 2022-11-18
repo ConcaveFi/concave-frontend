@@ -1,137 +1,75 @@
-import { ExpandArrowIcon } from '@concave/icons'
-import { Box, Card, Collapse, Flex, keyframes, Spinner, Text } from '@concave/ui'
+import { Card, Flex, Text } from '@concave/ui'
 import { formatDistanceStrict } from 'date-fns'
-import { Get_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql'
-import { useCNVPrice } from 'hooks/useCNVPrice'
-import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { useEffect, useState } from 'react'
+import { useGet_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql'
+import { useMemo } from 'react'
 import { numberMask } from 'utils/numberMask'
 
-interface BoldSoldsCardProps {
-  data: Get_Accrualbondv1_Last10_SoldQuery
-  status: 'error' | 'idle' | 'success' | 'loading'
-  loading: boolean
-}
+interface BoldSoldsCardProps {}
 
-const BoldSoldsCard = (props: BoldSoldsCardProps) => {
-  const netWorkdId = useCurrentSupportedNetworkId()
-  const { data, loading: isLoading, status } = props
-  const AMMData = useCNVPrice()
-  const [bondSpotPrice, setBondSpotPrice] = useState('0')
-  const [solds, setSolds] = useState([])
-  const [isOpen, setIsOpen] = useState(false)
+export const BondSoldsCard = (props: BoldSoldsCardProps) => {
+  const { data, isLoading, error, status } = useGet_Accrualbondv1_Last10_SoldQuery()
+  const solds = useMemo(() => data?.logAccrualBondsV1_BondSold || [], [data])
 
-  useEffect(() => {
-    if (data) {
-      setSolds(data.logAccrualBondsV1_BondSold)
-    }
-  }, [data])
-
-  const relatives = solds.map((value, index) => (
-    <Text
-      fontSize={{ base: '12px', md: 'sm' }}
-      key={index}
-      opacity={1 - (isOpen ? index / 10 : (index / 10) * 3)}
-    >
-      {formatDistanceStrict(value.timestamp * 1000, new Date().getTime()) + ' ago'}
-    </Text>
-  ))
   const purchases = solds.map((value, index) => (
-    <Text
-      fontSize={{ base: '12px', md: 'sm' }}
-      key={index}
-      opacity={1 - (isOpen ? index / 10 : (index / 10) * 3)}
-    >
-      {numberMask(value.output) + ' CNV'}
+    <Text fontSize={{ base: '12px', md: 'sm' }} key={index}>
+      {numberMask(+value.output) + ' CNV'}
     </Text>
   ))
   const inputAmounts = solds.map((value, index) => (
-    <Text
-      fontSize={{ base: '12px', md: 'sm' }}
-      key={index}
-      opacity={1 - (isOpen ? index / 10 : (index / 10) * 3)}
-    >
-      {`${numberMask(value.inputAmount)} DAI`}
+    <Text fontSize={{ base: '12px', md: 'sm' }} key={index}>
+      {`${numberMask(+value.inputAmount)} DAI`}
     </Text>
   ))
 
   return (
-    <Flex direction="column">
-      <Collapse
-        in={isOpen}
-        startingHeight={isLoading ? '50px' : solds.length == 0 ? '36px' : '100px'}
+    <Card variant="secondary">
+      <Flex
+        width={'full'}
+        height="full"
+        flex={1}
+        textShadow={'0px 0px 27px rgba(129, 179, 255, 0.31)'}
+        textColor="text.accent"
+        fontWeight={500}
+        my={2}
       >
-        <Flex
-          width={'full'}
-          height="full"
-          flex={1}
-          textShadow={'0px 0px 27px rgba(129, 179, 255, 0.31)'}
-          textColor="text.accent"
-          fontWeight={500}
-          my={2}
-        >
-          <Flex flex={1.2} direction="column" align={'center'} fontSize="14px">
-            <Text fontSize="16px" textColor={'white'} fontWeight="700">
-              When
-            </Text>
-            {relatives}
-          </Flex>
-          <Box w="1px" my={-2} bg="stroke.primary" />
-          <Flex flex={1.3} direction="column" align={'center'} fontSize="14px">
-            <Text fontSize="16px" textColor={'white'} fontWeight="700">
-              Amount
-            </Text>
-            {inputAmounts}
-          </Flex>
+        <Column title="When" values={solds.map(mapDistanceStrict)} />
+        <Column title="Amount" values={solds.map(mapInput)} />
+        <Column title="Bonded" values={solds.map(mapOutput)} />
+      </Flex>
+    </Card>
+  )
+}
 
-          <Box w="1px" my={-2} bg="stroke.primary" />
-          <Flex flex={1.3}>
-            <Flex flex={0.9} direction="column" align={'center'} fontSize="14px">
-              <Text fontSize="16px" textColor={'white'} fontWeight="700">
-                Bonded
-              </Text>
-              {purchases}
-            </Flex>
-          </Flex>
-        </Flex>
-      </Collapse>
-      <Card
-        height={'40px'}
-        width="full"
-        variant="secondary"
-        rounded={'0px'}
-        justify="center"
-        align={'center'}
-        fontWeight="700"
-        fontSize={'18px'}
-      >
-        {
-          {
-            loading: (
-              <Flex gap={2} color={'text.bright'}>
-                <Text>Loading data</Text>
-                <Spinner />
-              </Flex>
-            ),
-            error: <Text color={'text.bright'}>Error loading data</Text>,
-            success: (
-              <ExpandArrowIcon
-                width={12}
-                height={12}
-                cursor="pointer"
-                transition={'all 0.3s'}
-                transform={isOpen ? 'rotate(180deg)' : ''}
-                onClick={() => setIsOpen(!isOpen)}
-              />
-            ),
-          }[status]
-        }
-      </Card>
+interface ColumnProps {
+  title: string
+  values: string[] | number[]
+}
+function Column({ title, values }: ColumnProps) {
+  return (
+    <Flex flex={1} direction="column" align={'center'} fontSize="14px">
+      <Text fontSize="16px" textColor={'text.low'} fontWeight="700">
+        {title}
+      </Text>
+      {values.map((val, index) => (
+        <Text
+          opacity={title.toLowerCase() === 'when' && 0.7}
+          fontSize={{ base: '12px', md: 'sm' }}
+          key={index}
+          textColor="text.bright"
+        >
+          {val}
+        </Text>
+      ))}
     </Flex>
   )
 }
-const spin = keyframes({
-  '0%': { transform: 'rotate(0deg)' },
-  '100%': { transform: 'rotate(360deg)' },
-})
-export default BoldSoldsCard
+
+function mapDistanceStrict(val: { timestamp: any }) {
+  return formatDistanceStrict(val.timestamp * 1000, new Date().getTime()) + ' ago'
+}
+function mapOutput(val: { output: any }) {
+  return `${numberMask(+val.output)} CNV`
+}
+function mapInput(val: { inputAmount: any }) {
+  return `${numberMask(+val.inputAmount)} DAI`
+}

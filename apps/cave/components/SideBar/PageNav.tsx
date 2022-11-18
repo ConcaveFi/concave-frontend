@@ -29,7 +29,7 @@ const NavButton = (props: ButtonLinkProps) => {
       leftIcon={
         <NotInteractableImage
           src={`/assets/sidebar${props.href}.svg`}
-          _groupHover={{ filter: 'brightness(3)' }}
+          _groupHover={{ filter: 'brightness(2)' }}
           _groupActive={{ filter: 'brightness(3)' }}
         />
       }

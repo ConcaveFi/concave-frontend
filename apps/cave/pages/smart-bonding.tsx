@@ -1,8 +1,9 @@
 import { keyframes } from '@chakra-ui/system'
 import { SpinIcon } from '@concave/icons'
-import { Box, Card, Container, Flex, Heading, Stack, Text, useDisclosure } from '@concave/ui'
+import { Box, Card, Flex, Heading, Stack, Text, useDisclosure } from '@concave/ui'
 import { BondBuyCard } from 'components/Bond/BondBuyCard'
 import { BondInfo, UserBondPositionInfo } from 'components/Bond/BondInfo'
+import { BondSoldsCard } from 'components/Bond/BondSoldsCard'
 import {
   getBondSpotPrice,
   getBondTermLength,
@@ -19,7 +20,6 @@ import { TransactionSubmittedDialog } from 'components/TransactionDialog/Transac
 
 import { WaitingConfirmationDialog } from 'components/TransactionDialog/TransactionWaitingConfirmationDialog'
 import { utils } from 'ethers'
-import { useGet_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useCNVPrice } from 'hooks/useCNVPrice'
 import { useEffect, useState } from 'react'
@@ -51,12 +51,6 @@ export function Bond() {
     onOpen: onOpenSubmitted,
   } = useDisclosure()
   const { isOpen: isOpenError, onClose: onCloseError, onOpen: onOpenError } = useDisclosure()
-  const {
-    data: last10SoldsData,
-    isLoading,
-    error,
-    status,
-  } = useGet_Accrualbondv1_Last10_SoldQuery()
 
   function updateBondPositions() {
     getUserBondPositions(networkId, userAddress, currentBlockTs)
@@ -144,84 +138,92 @@ export function Bond() {
   const roi = (1 - +bondSpotPrice / +cnvPrice.price?.toSignificant(8)) * 100
 
   return (
-    <Container maxW="container.lg" p={'4px'}>
-      <Flex direction="column" gap={10}>
-        <BondDescription />
-        <Flex
-          gap={{ base: 3, md: 10 }}
-          direction={{ lg: 'row', base: 'column' }}
-          align={{ lg: 'start', base: 'center' }}
-          justify={'center'}
+    <Flex
+      direction={'column'}
+      mx="auto"
+      p={0}
+      gap={{ base: 3, lg: 2, xl: 10 }}
+      w={{ base: '430px', lg: '720px', xl: '900px' }}
+    >
+      <BondDescription />
+      <Flex
+        // gap={{ base: 3, md: 10 }}
+        direction={{ lg: 'row', base: 'column' }}
+        // align={{ lg: 'start', base: 'center' }}
+        // justify={'space-between'}
+        gap={{ base: 3, lg: 2, xl: 10 }}
+        w="full"
+      >
+        <Card
+          // minW={{ base: '340px', md: '430px' }}
+          w="full"
+          px={{ base: 0, md: 6 }}
+          variant="secondary"
+          shadow="Glow Inner"
+          height="386px"
+          align="center"
+          gap={12}
         >
-          <Card
-            w={{ base: '340px', md: '430px' }}
-            px={{ base: 0, md: 6 }}
-            variant="secondary"
-            shadow="Glow Inner"
-            height="386px"
-            align="center"
-            gap={12}
-          >
-            <SelectedBondType bondType="Classic" />
-            {!userAddress && isLoadingBondSigma ? (
-              <Box
-                position={'relative'}
-                top={'32.5%'}
-                display={'flex'}
-                flexDirection="column"
-                alignItems={'center'}
-                gap={10}
-              >
-                Wallet not connected
-              </Box>
-            ) : isLoadingBondSigma ? (
-              <Box
-                position={'relative'}
-                top={'32.5%'}
-                display={'flex'}
-                flexDirection="column"
-                alignItems={'center'}
-                gap={10}
-              >
-                Checking positions...
-                <SpinIcon __css={spinnerStyles} width={'10'} height={'10'} />
-              </Box>
-            ) : (
-              ''
-            )}
-            {!isLoadingBondSigma && (
-              <>
-                <BondInfo
-                  asset="CNV"
-                  icon="/assets/tokens/cnv.svg"
-                  roi={roi}
-                  vestingTerm={`${termLength} Days`}
+          <SelectedBondType bondType="Classic" />
+          {!userAddress && isLoadingBondSigma ? (
+            <Box
+              position={'relative'}
+              top={'32.5%'}
+              display={'flex'}
+              flexDirection="column"
+              alignItems={'center'}
+              gap={10}
+            >
+              Wallet not connected
+            </Box>
+          ) : isLoadingBondSigma ? (
+            <Box
+              position={'relative'}
+              top={'32.5%'}
+              display={'flex'}
+              flexDirection="column"
+              alignItems={'center'}
+              gap={10}
+            >
+              Checking positions...
+              <SpinIcon __css={spinnerStyles} width={'10'} height={'10'} />
+            </Box>
+          ) : (
+            ''
+          )}
+          {!isLoadingBondSigma && (
+            <>
+              <BondInfo
+                asset="CNV"
+                icon="/assets/tokens/cnv.svg"
+                roi={roi}
+                vestingTerm={`${termLength} Days`}
+              />
+              <UserBondPositionInfo bondSigma={bondSigma} userAddress={userAddress} />
+              {showUserPosition && (
+                <Redeem
+                  bondSigma={bondSigma}
+                  buttonDisabled={buttonDisabled}
+                  onConfirm={() => {
+                    onRedeemConfirm()
+                  }}
+                  isRedeeming={clickedRedeemButton}
+                  largeFont
+                  setBottom
+                  customHeight
                 />
-                <UserBondPositionInfo bondSigma={bondSigma} userAddress={userAddress} />
-                {showUserPosition && (
-                  <Redeem
-                    bondSigma={bondSigma}
-                    buttonDisabled={buttonDisabled}
-                    onConfirm={() => {
-                      onRedeemConfirm()
-                    }}
-                    isRedeeming={clickedRedeemButton}
-                    largeFont
-                    setBottom
-                    customHeight
-                  />
-                )}
-              </>
-            )}
-          </Card>
+              )}
+            </>
+          )}
+        </Card>
 
-          <BondBuyCard
-            roi={roi}
-            updateBondPositions={updateBondPositions}
-            setRedeemButtonDisabled={setButtonDisabled}
-          />
-        </Flex>
+        <BondBuyCard
+          roi={roi}
+          updateBondPositions={updateBondPositions}
+          setRedeemButtonDisabled={setButtonDisabled}
+        />
       </Flex>
+      <BondSoldsCard />
       <WaitingConfirmationDialog isOpen={openConfirmDialog} title={'Confirm redeem'}>
         <Text fontSize="lg" color="text.accent">
           {bondSigma && bondSigma['parseRedeemable']
@@ -233,7 +235,7 @@ export function Bond() {
       </WaitingConfirmationDialog>
       <TransactionSubmittedDialog tx={redeemTx} isOpen={isOpenSubmitted} />
       <TransactionErrorDialog error={txError} isOpen={isOpenError} />
-    </Container>
+    </Flex>
   )
 }
 
