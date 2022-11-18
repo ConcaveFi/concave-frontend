@@ -39,11 +39,11 @@ const ButtonSecondaryTheme = (props) => ({
     transform: 'scale(1)',
   },
   _focus: {
-    ...HoverRadialGradient,
+    shadow: 'Glass Inner',
     color: 'text.high',
   },
   _hover: {
-    ...HoverRadialGradient,
+    shadow: 'Glass Inner',
     color: 'text.high',
   },
 })

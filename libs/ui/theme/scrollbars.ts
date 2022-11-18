@@ -6,11 +6,11 @@ const scrollbar = {
       width: '8px',
       boxShadow: 'Down Big',
       borderRadius: '8px',
-      backgroundColor: `rgba(0, 0, 0, 0.05)`,
+      background: colors.bg.primary,
     },
     '&::-webkit-scrollbar-thumb': {
       borderRadius: '8px',
-      backgroundColor: `text.low`,
+      background: colors.bg.primary,
     },
   },
   big: {

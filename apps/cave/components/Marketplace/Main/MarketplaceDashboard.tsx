@@ -31,17 +31,16 @@ export const MarketplaceDashboard = (props: BoxProps) => {
   ))
 
   return (
-    <VStack apply="background.metal" p={4} gap={4} borderRadius={'3xl'} maxH={'1000px'}>
-      <>
-        <MarketplaceFilterContainer
-          stakeFilters={stakeFilters}
-          onChangeStakeFilters={setStakeFilters}
-        />
-        <HStack w={'full'} flex={1} gap={2} flexWrap={'wrap'} justifyContent={'space-around'}>
-          <MarketplaceSortConainer onChangeSort={setSort} currentSort={sort} />
-          {!isMobile && <TokenIdSearchBar onApplyFilter={setTokenIdFilter} />}
-        </HStack>
-      </>
+    <VStack bg="bg.primary" shadow={'up'} p={4} gap={4} borderRadius={'3xl'} maxH={'1000px'}>
+      <MarketplaceFilterContainer
+        stakeFilters={stakeFilters}
+        onChangeStakeFilters={setStakeFilters}
+      />
+      <HStack w={'full'} flex={1} gap={2} flexWrap={'wrap'} justifyContent={'space-around'}>
+        <MarketplaceSortConainer onChangeSort={setSort} currentSort={sort} />
+        {!isMobile && <TokenIdSearchBar onApplyFilter={setTokenIdFilter} />}
+      </HStack>
+
       <Flex
         as={Loading}
         size="md"
@@ -55,6 +54,7 @@ export const MarketplaceDashboard = (props: BoxProps) => {
         h={'full'}
         overflowY={'hidden'}
         p={4}
+        overflow={'hidden'}
         direction="column"
       >
         <Flex
