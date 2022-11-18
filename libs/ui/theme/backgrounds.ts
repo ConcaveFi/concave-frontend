@@ -42,16 +42,6 @@ export const backgrounds = {
     },
     filter: 'drop-shadow(-2px 6px 6px rgba(13, 17, 22, 0.33))',
   },
-  dashed: {
-    backgroundImage: `
-    repeating-linear-gradient(180deg, white, white 10px, transparent 10px, transparent 20px, blue 20px),
-    repeating-linear-gradient(270deg, red, red 10px, transparent 10px, transparent 20px, red 20px),
-    repeating-linear-gradient(45deg, white, white 10px, transparent 10px, transparent 20px, orange 20px),
-    repeating-linear-gradient(90deg, white, white 7px, transparent 7px, transparent 10px, white 10px)`,
-    backgroundSize: `2px 2px, 0% 2px, 2px 2px , 100% 2px;`,
-    backgroundPosition: `0 100%, 0 0, 100% 100%, 0 100%`,
-    backgroundRepeat: `no-repeat`,
-  },
   glassHQ: {
     pos: 'relative',
     '::after': {
