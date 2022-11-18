@@ -54,7 +54,7 @@ export const StakePoolEngagementChart = ({ isMobile }: { isMobile: boolean }) =>
 
   const chartMargin = {
     top: 20,
-    right: isMobile ? 20 : 30,
+    right: isMobile ? 10 : 30,
     left: isMobile ? 20 : 30,
     bottom: 30,
   }
