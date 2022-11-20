@@ -1,6 +1,7 @@
 import { Container, Flex } from '@concave/ui'
 import { AnimatePresence } from 'framer-motion'
 import { useIsMounted } from 'hooks/useIsMounted'
+import { AirdropClaimBanner } from './Airdrop/AirdropClaimBanner'
 import SecurityBanner from './SecurityBanner'
 import { SideBar } from './SideBar/SideBar'
 
@@ -36,6 +37,7 @@ export const Layout = ({ children }) => {
         pb="300px" // add a lil padding to the bottom of the page for better scroll experience
       >
         <SecurityBanner />
+        <AirdropClaimBanner />
         <AnimatePresence
           exitBeforeEnter
           initial={false}
