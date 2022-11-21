@@ -30,19 +30,22 @@ const ButtonPrimaryTheme = (props) => ({
 })
 
 const ButtonSecondaryTheme = (props) => ({
-  apply: 'background.metalBrighter',
+  bg: 'bg.primary',
   shadow: 'Up Big',
   borderRadius: '2xl',
   _active: {
-    ...HoverRadialGradient,
+    bg: 'bg.secondary',
+    shadow: 'Glass Inner',
     color: 'text.high',
     transform: 'scale(1)',
   },
   _focus: {
+    bg: 'bg.secondary',
     shadow: 'Glass Inner',
     color: 'text.high',
   },
   _hover: {
+    bg: 'bg.secondary',
     shadow: 'Glass Inner',
     color: 'text.high',
   },

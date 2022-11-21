@@ -59,7 +59,7 @@ export function TransparencyDiagram({ isMobile }: { isMobile: boolean }) {
         w={'100%'}
         height={'800px'}
         rounded={'2xl'}
-        apply="background.metalBrighter"
+        bg="bg.primary"
         shadow={'up'}
         minH={'500px'}
         maxH={{ base: '90vh', md: '800px' }}
@@ -82,7 +82,6 @@ export function TransparencyDiagram({ isMobile }: { isMobile: boolean }) {
           overflowY={'auto'}
           direction="column"
           apply="scrollbar.big"
-          bg={'linear-gradient(238.35deg, #19394C 9.11%, #0A161F 92.45%)'}
           gap={2}
         >
           {diagramShown === DiagramButtons.TreasuryOverview && (

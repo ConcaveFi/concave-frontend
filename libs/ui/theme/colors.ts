@@ -19,6 +19,7 @@ export const colors = {
   bg: {
     primary:
       'linear-gradient(180deg, rgba(10, 18, 38, 0.05) 0%, rgba(5, 11, 26, 0.05) 33.33%, rgba(29, 50, 104, 0.05) 66.67%, rgba(45, 141, 255, 0.15) 100%), linear-gradient(90deg, #050D1C 0%, #151A33 50%, #003053 100%)',
+    secondary: 'linear-gradient(270deg, #08448C -0.12%, #070C1E 99.82%)',
   },
 
   stroke: {
