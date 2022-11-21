@@ -1,6 +1,9 @@
-import { Card, Flex, Text } from '@concave/ui'
+import { Card, Flex, Text, TextProps } from '@concave/ui'
 import { formatDistanceStrict } from 'date-fns'
-import { useGet_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql'
+import {
+  Get_Accrualbondv1_Last10_SoldQuery,
+  useGet_Accrualbondv1_Last10_SoldQuery,
+} from 'graphql/generated/graphql'
 import { useMemo } from 'react'
 import { numberMask } from 'utils/numberMask'
 
@@ -8,35 +11,53 @@ interface BoldSoldsCardProps {}
 
 export const BondSoldsCard = (props: BoldSoldsCardProps) => {
   const { data, isLoading, error, status } = useGet_Accrualbondv1_Last10_SoldQuery()
-  const solds = useMemo(() => data?.logAccrualBondsV1_BondSold || [], [data])
-
-  const purchases = solds.map((value, index) => (
-    <Text fontSize={{ base: '12px', md: 'sm' }} key={index}>
-      {numberMask(+value.output) + ' CNV'}
-    </Text>
-  ))
-  const inputAmounts = solds.map((value, index) => (
-    <Text fontSize={{ base: '12px', md: 'sm' }} key={index}>
-      {`${numberMask(+value.inputAmount)} DAI`}
-    </Text>
-  ))
+  const activity = useMemo(() => prepareData(data), [data])
 
   return (
-    <Card variant="secondary">
+    <Card variant="secondary" borderGradient={'secondary'} p={4} overflow="hidden">
       <Flex
-        width={'full'}
-        height="full"
-        flex={1}
-        textShadow={'0px 0px 27px rgba(129, 179, 255, 0.31)'}
-        textColor="text.accent"
+        direction={'column'}
         fontWeight={500}
-        my={2}
+        maxH="200px"
+        overflowY={'auto'}
+        apply="scrollbar.big"
+        width={'full'}
       >
-        <Column title="When" values={solds.map(mapDistanceStrict)} />
-        <Column title="Amount" values={solds.map(mapInput)} />
-        <Column title="Bonded" values={solds.map(mapOutput)} />
+        <TableHeader />
+        <TableRows data={activity} />
       </Flex>
     </Card>
+  )
+}
+
+function TableHeader() {
+  return (
+    <Flex w="full" color="text.low">
+      <Text {...columnProps}>When</Text>
+      <Text {...columnProps}>Amount</Text>
+      <Text {...columnProps}>Bonded</Text>
+    </Flex>
+  )
+}
+interface TableRowProps {
+  data: { timestamp: string; output: string; inputAmount: string }[]
+}
+
+function TableRows({ data }: TableRowProps) {
+  return (
+    <Flex direction={'column'} textColor="text.bright" fontSize={{ base: '12px', md: '14px' }}>
+      {data?.map((val, index) => (
+        <Flex rounded="5px" key={index} w="full">
+          <Text {...columnProps}>{val.timestamp}</Text>
+          <Text {...columnProps} color="white">
+            {val.inputAmount}
+          </Text>
+          <Text {...columnProps} color="white">
+            {val.output}
+          </Text>
+        </Flex>
+      ))}
+    </Flex>
   )
 }
 
@@ -64,12 +85,19 @@ function Column({ title, values }: ColumnProps) {
   )
 }
 
-function mapDistanceStrict(val: { timestamp: any }) {
-  return formatDistanceStrict(val.timestamp * 1000, new Date().getTime()) + ' ago'
+function prepareData(data: Get_Accrualbondv1_Last10_SoldQuery) {
+  const newData = data?.logAccrualBondsV1_BondSold
+  if (!newData) return []
+  return newData.map((val) => ({
+    timestamp: formatDistanceStrict(val.timestamp * 1000, new Date().getTime()) + ' ago',
+    output: `${numberMask(+val.output)} CNV`,
+    inputAmount: `${numberMask(+val.inputAmount)} DAI`,
+  }))
 }
-function mapOutput(val: { output: any }) {
-  return `${numberMask(+val.output)} CNV`
-}
-function mapInput(val: { inputAmount: any }) {
-  return `${numberMask(+val.inputAmount)} DAI`
+
+const columnProps: TextProps = {
+  fontSize: { base: 'sm', md: 'md' },
+  justifyContent: 'center',
+  display: 'flex',
+  flex: 1,
 }

@@ -1,10 +1,11 @@
 import { stakingPools } from '@concave/marketplace'
-import { Card, Flex, Text } from '@concave/ui'
+import { Card, Flex, Link, Text, TextProps } from '@concave/ui'
 import { formatDistanceStrict } from 'date-fns'
 import {
   Get_Stakingv1_Last100_LockQuery,
   useGet_Stakingv1_Last100_LockQuery,
 } from 'graphql/generated/graphql'
+import { getTxExplorer } from 'lib/getTransactionExplorer'
 import { useMemo } from 'react'
 import { UseQueryResult } from 'react-query'
 import { formatFixed } from 'utils/bigNumberMask'
@@ -15,56 +16,82 @@ export const LiquidLocksCards = () => {
 
   return (
     <Card
-      mx={'auto'}
-      width={'full'}
-      variant="secondary"
-      direction={'column'}
       textShadow={'0px 0px 27px rgba(129, 179, 255, 0.31)'}
+      borderGradient="secondary"
+      direction={'column'}
+      variant="secondary"
+      overflow="hidden"
+      width={'full'}
+      mx={'auto'}
+      p="4"
     >
-      <Flex fontWeight="700" width={'full'} flex={1} height="full" p={4}>
-        <LocksColumn title="When" values={stakingLocks?.map(mapTimestamp)} />
-        <LocksColumn title="Amount staked" values={stakingLocks?.map(mapAmount)} />
-        <LocksColumn title="Stake pool" values={stakingLocks?.map(mapPoolId)} />
+      <Flex
+        apply="scrollbar.big"
+        direction={'column'}
+        overflowY={'auto'}
+        fontWeight="700"
+        width={'full'}
+        height="full"
+        maxH="200px"
+        flex={1}
+      >
+        <TableHeader />
+        <TableRows data={stakingLocks} />
       </Flex>
     </Card>
   )
 }
 
-type LocksColumnProps = { title: string; values: string[] | number[] }
-const LocksColumn: React.FC<LocksColumnProps> = ({ title, values = [] }) => (
-  <Flex direction={'column'} flex={1} height="full" align={'center'}>
-    <Text mt={2} textColor="text.low" fontSize={{ base: 'sm', md: 'md' }}>
-      {title}
-    </Text>
-    <Flex
-      direction={'column'}
-      textColor="text.bright"
-      fontSize={{ base: '12px', md: '14px' }}
-      align="center"
-    >
-      {values.map((value, index) => (
-        <Text key={value + index} opacity={title === 'When' && '0.7'}>
-          {value}
-        </Text>
+function TableHeader() {
+  return (
+    <Flex w="full" align={'center'} color="text.low">
+      <Text {...columnProps}>When</Text>
+      <Text {...columnProps}>Amount staked</Text>
+      <Text {...columnProps}>Stake pool</Text>
+    </Flex>
+  )
+}
+
+interface TableRowsProps {
+  data: { txHash?: string; poolID?: 360 | 180 | 90 | 45; timestamp?: string; amount?: string }[]
+}
+function TableRows({ data }: TableRowsProps) {
+  return (
+    <Flex direction={'column'} textColor="text.bright" fontSize={{ base: '12px', md: '14px' }}>
+      {data?.map((val) => (
+        <Link _hover={{}} key={val.txHash} href={getTxExplorer(val.txHash, 1)} isExternal>
+          <Flex _hover={{ bg: '#0004' }} rounded="5px" cursor="pointer" key={val.txHash} w="full">
+            <Text {...columnProps}>{val.timestamp}</Text>
+            <Text {...columnProps} color="white">
+              {val.amount}
+            </Text>
+            <Text {...columnProps} color="white">
+              {val.poolID}
+            </Text>
+          </Flex>
+        </Link>
       ))}
     </Flex>
-  </Flex>
-)
+  )
+}
+
+const columnProps: TextProps = {
+  fontSize: { base: 'sm', md: 'md' },
+  justifyContent: 'center',
+  display: 'flex',
+  flex: 1,
+}
 
 function prepareStakingData(stakeData: UseQueryResult<Get_Stakingv1_Last100_LockQuery, unknown>) {
   return stakeData?.data?.logStakingV1_Lock
     .sort((current, before) => before.timestamp - current.timestamp)
-    .splice(0, 15)
-}
-
-function mapTimestamp(value: { timestamp: any }) {
-  return `${formatDistanceStrict(value.timestamp * 1000, Date.now())} ago`
-}
-
-function mapAmount(value: { amount: any }) {
-  return `${formatFixed(value.amount || 0)} CNV`
-}
-
-function mapPoolId(value: { poolID: any }) {
-  return stakingPools[+value.poolID].days
+    .map((val) => {
+      return {
+        timestamp: `${formatDistanceStrict(val.timestamp * 1000, Date.now())} ago`,
+        amount: `${formatFixed(val.amount || 0)} CNV`,
+        poolID: stakingPools[+val.poolID].days,
+        txHash: val.txHash,
+      }
+    })
+    .splice(0, 30)
 }
