@@ -28,8 +28,7 @@ export const UserPositionCard = (props: NftPositionCardProps) => {
           w={'full'}
           minH="200px"
           rounded={'2xl'}
-          bg="url(assets/textures/metal.png), linear-gradient(180deg, #16222E 0.07%, #28394D 80.07%)"
-          bgSize={'120px auto'}
+          bg="bg.primary"
           my={2}
           shadow={'up'}
           direction="column"
