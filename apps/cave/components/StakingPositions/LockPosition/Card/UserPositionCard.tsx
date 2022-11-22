@@ -35,7 +35,6 @@ export const UserPositionCard = (props: NftPositionCardProps) => {
           onMouseOverCapture={onOpen}
           onMouseOutCapture={onClose}
           _hover={{ ...gradientBorder({ borderWidth: 2 }), shadow: 'Blue Light' }}
-          p={'2px'}
         >
           <NFTPositionHeader
             active={true}
