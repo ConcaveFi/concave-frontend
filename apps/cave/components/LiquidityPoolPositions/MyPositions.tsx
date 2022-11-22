@@ -43,7 +43,7 @@ export const MyPositions = ({ state }: { state: PositionsState }) => {
       h={'auto'}
       maxW={'2xl'}
       w={'full'}
-      p={6}
+      p={{ base: 4, sm: 6 }}
       shadow="Up for Blocks"
     >
       {!!user && (
@@ -71,7 +71,7 @@ const LiquidityOptionButton = ({ active = false, onClick = () => {}, label = '' 
       justifyContent={'center'}
       cursor={'pointer'}
       p={2}
-      px={8}
+      px={{ base: 4, sm: 8 }}
       shadow={active ? 'Down Big' : 'Up Big'}
       borderRadius="2xl"
       alignItems="center"
@@ -96,7 +96,7 @@ const PairsAccordion = ({ pairs }: { pairs: Pair[] }) => {
       : { label: 'You are disconnected.', Button: <ConnectButton /> }
 
     return (
-      <Box borderRadius={'2xl'} p={6} shadow={'down'}>
+      <Box borderRadius={'2xl'} p={{ base: 4, sm: 6 }} shadow={'down'}>
         <Flex gap={4} direction={'column'} justify="center" align={'center'}>
           <Text>{label}</Text>
           {Button}
@@ -118,7 +118,6 @@ const PairsAccordion = ({ pairs }: { pairs: Pair[] }) => {
           {pairs.map((pair) => (
             <AccordionItem
               key={pair.liquidityToken.address}
-              p={2}
               shadow="Up Big"
               borderRadius="2xl"
               alignItems="center"
@@ -213,7 +212,7 @@ const LPPositionItem = (props: LPPosition) => {
   return (
     <>
       <AccordionButton>
-        <HStack>
+        <HStack py={1.5}>
           <CurrencyIcon size={'sm'} currency={props.pair.token0} />
           <CurrencyIcon size={'sm'} currency={props.pair.token1} />
           <Text ml="24px" fontWeight="semibold" fontSize="lg">

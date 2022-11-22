@@ -47,7 +47,7 @@ const SupplyLiquidityContent = ({
       >{`Output is estimated. You will receive approximately ${poolShare?.amount.toSignificant(6, {
         groupSeparator: ',',
       })} ${pair.liquidityToken.symbol} or the transaction will revert.`}</Text>
-      <Box borderRadius={'2xl'} p={6} shadow={'down'}>
+      <Box borderRadius={'2xl'} p={{ base: 4, sm: 6 }} shadow={'down'}>
         <PositionInfoItem
           label="Rates"
           value={`1  ${token0.symbol} = ${pair.token0Price.toSignificant(6, {
@@ -112,7 +112,7 @@ export const SupplyLiquidityModal = ({
       isOpen={isOpen}
       onClose={onClose}
       isCentered
-      bodyProps={{ gap: 6, borderWidth: 2, maxW: '400px' }}
+      bodyProps={{ gap: { base: 4, sm: 6 }, py: { base: 4, sm: 6 }, maxW: '400px' }}
     >
       <SupplyLiquidityContent lpData={lpData} onConfirm={onConfirm} />
     </Modal>
