@@ -43,7 +43,7 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakin
           px={2.5}
           gap={1.5}
           justify="space-between"
-          onMouseOver={() => setActive(true)}
+          onMouseEnter={() => setActive(true)}
           onMouseLeave={() => setActive(false)}
         >
           <HStack flex={1} gap={2} justify="space-between" flexWrap={`wrap`}>
