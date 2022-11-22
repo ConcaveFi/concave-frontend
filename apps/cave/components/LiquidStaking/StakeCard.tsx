@@ -44,8 +44,10 @@ export const StakeCard = ({ status, poolId, stakeData }: StakeCardProps) => {
     <>
       <Card
         variant="primary"
-        p={[6, 4]}
-        maxW={{ base: '180px', md: '240px' }}
+        p={[3, 3, 4]}
+        // maxW={{ base: '180px', md: '220px', lg: '220px', xl: '240px' }}
+        maxW={['180px', '220px', '240px', '240px', '240px', '240px']}
+        // ['380px', '400px', '200px', '500px', 'none', 'none']
         fontWeight={'bold'}
         align="center"
       >

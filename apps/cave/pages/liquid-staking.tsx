@@ -8,11 +8,15 @@ function LiquidStaking() {
   const { stakeData, status } = useLiquidStakeData()
   return (
     <Flex
-      width={{ base: '340px', md: '420px', xl: '1100px' }}
-      justify={'start'}
+      // width={{ base: 'full', lg: '500px', xl: 'full' }}
+
+      // maxW={['380px', 'none', '500px', '600px', '510px', '1100px']}
+      w="full"
+      direction={'column'}
+      justify={'center'}
+      border="solid"
       align="center"
       mx={'auto'}
-      direction={'column'}
       p="0px"
     >
       <Heading
@@ -50,7 +54,14 @@ function LiquidStaking() {
         <GraphicGuide />
       </Flex>
 
-      <Flex my={6} justify={'space-between'} gap={{ base: 2, md: 4 }} w="full" wrap={'wrap'}>
+      <Flex
+        maxW={['380px', '450px', '500px', '500px', 'none', 'none']}
+        justify={['center', 'space-between']}
+        gap={[2, 2, 4, 5]}
+        wrap={'wrap'}
+        w="full"
+        my={6}
+      >
         {[0, 1, 2, 3]?.map((id, index) => (
           <StakeCard
             status={status}
