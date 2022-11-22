@@ -228,7 +228,7 @@ export const ConfirmSwapModal = ({
       title="Confirm swap"
       isOpen={isOpen}
       onClose={onClose}
-      bodyProps={{ w: '400px' }}
+      bodyProps={{ maxW: '400px' }}
     >
       <ConfirmSwap trade={trade} onConfirm={onConfirm} />
     </Modal>
