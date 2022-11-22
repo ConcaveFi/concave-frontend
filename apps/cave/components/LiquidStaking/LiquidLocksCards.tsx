@@ -16,7 +16,7 @@ export const LiquidLocksCards = () => {
 
   return (
     <Card
-      textShadow={'0px 0px 27px rgba(129, 179, 255, 0.31)'}
+      maxW={['380px', '450px', '500px', '500px', '1100px', '1100px']}
       borderGradient="secondary"
       direction={'column'}
       variant="secondary"

@@ -7,34 +7,23 @@ import { withPageTransition } from 'components/PageTransition'
 function LiquidStaking() {
   const { stakeData, status } = useLiquidStakeData()
   return (
-    <Flex
-      // width={{ base: 'full', lg: '500px', xl: 'full' }}
-
-      // maxW={['380px', 'none', '500px', '600px', '510px', '1100px']}
-      w="full"
-      direction={'column'}
-      justify={'center'}
-      border="solid"
-      align="center"
-      mx={'auto'}
-      p="0px"
-    >
+    <Flex w="full" direction={'column'} justify={'center'} align="center" mx={'auto'} p="0px">
       <Heading
-        as="h1"
-        apply={'background.text-brightBlue'}
-        fontWeight={'semibold'}
-        mt={{ base: 12, md: 8 }}
         fontSize={{ base: '4xl', sm: '5xl' }}
+        apply={'background.text-brightBlue'}
+        mt={{ base: 12, md: 8 }}
+        fontWeight={'semibold'}
+        as="h1"
       >
         Liquid Staking
       </Heading>
       <Flex
+        direction={{ xl: 'row', base: 'column' }}
+        gap={{ xl: 24, base: 2 }}
+        mt={{ xl: 8, base: 0 }}
+        textColor="white"
         align={'center'}
         justify="center"
-        direction={{ xl: 'row', base: 'column' }}
-        mt={{ xl: 8, base: 0 }}
-        gap={{ xl: 24, base: 2 }}
-        textColor="white"
       >
         <Text
           maxW={520}
@@ -55,9 +44,9 @@ function LiquidStaking() {
       </Flex>
 
       <Flex
-        maxW={['380px', '450px', '500px', '500px', 'none', 'none']}
+        maxW={['380px', '450px', '500px', '500px', 'none', '1100px']}
         justify={['center', 'space-between']}
-        gap={[2, 2, 4, 5]}
+        gap={[2, 2, 4, 0]}
         wrap={'wrap'}
         w="full"
         my={6}

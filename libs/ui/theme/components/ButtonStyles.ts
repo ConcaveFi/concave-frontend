@@ -11,19 +11,20 @@ const PrimaryButtonShadow =
   '20px -20px 39px rgba(120, 182, 255, 0.25), 0px 5px 14px rgba(0, 0, 0, 0.47), inset 0px -10px 20px rgba(117, 164, 255, 0.5)'
 
 const ButtonPrimaryTheme = (props) => ({
-  px: props.px,
-  py: props.py,
-  borderRadius: '2xl',
-  fontFamily: 'heading',
-  fontWeight: 'bold',
-  shadow: PrimaryButtonShadow,
   _focus: { shadow: PrimaryButtonShadow, transform: 'scale(1.05)' },
   _hover: { _disabled: { opacity: 1 } },
+  shadow: PrimaryButtonShadow,
+  fontFamily: 'heading',
+  borderRadius: '2xl',
+  fontWeight: 'bold',
+  px: props.px,
+  py: props.py,
   '&:enabled': {
     ...gradientBorder({ borderRadius: '2xl', borderWidth: props.borderWidth }),
     bgGradient: 'linear(to-r, primary.1, primary.2)',
   },
   _disabled: {
+    bg: 'none',
     shadow: 'Up Big',
     color: 'text.low',
   },
