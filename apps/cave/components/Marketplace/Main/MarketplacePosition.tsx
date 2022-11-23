@@ -10,15 +10,17 @@ import { differenceInDays, format, formatDistanceToNowStrict } from 'date-fns'
 import { useTransaction } from 'hooks/TransactionsRegistry/useTransaction'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { compactFormat, formatFixed } from 'utils/bigNumberMask'
 import { useAccount, useSigner } from 'wagmi'
 import { ConfirmPurchaseModal } from './ConfirmBuy'
 
-const border = gradientBorder({ borderWidth: 2 })
-
-type MarketplacePositionProps = { stakingPosition: StakingPosition }
-export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakingPosition }) => {
+type MarketplacePositionProps = { stakingPosition: StakingPosition; isActive: boolean } & FlexProps
+export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({
+  stakingPosition,
+  isActive,
+  ...flexProps
+}) => {
   const currentValue = compactFormat(stakingPosition?.currentValue)
   const positionDate = new Date(stakingPosition.maturity * 1000)
   const deadlineDate = new Date(stakingPosition.market.deadline.mul(1000).toNumber())
@@ -26,10 +28,9 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakin
   const diff = (differenceInDays(positionDate, Date.now()) - days) * -1
   const percentToMaturity = new Percent(diff, days)
   const discount = usePositionDiscount(stakingPosition)
-  const [active, setActive] = useState(false)
 
   return (
-    <Popover trigger="hover">
+    <Popover trigger="hover" isOpen={isActive}>
       <PopoverTrigger>
         <Flex
           width={'full'}
@@ -43,8 +44,7 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakin
           px={2.5}
           gap={1.5}
           justify="space-between"
-          onMouseEnter={() => setActive(true)}
-          onMouseLeave={() => setActive(false)}
+          {...flexProps}
         >
           <HStack flex={1} gap={2} justify="space-between" flexWrap={`wrap`}>
             <ImageContainer
@@ -61,9 +61,7 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({ stakin
               }
               isLoading={discount.isLoading}
             />
-
-            {/* <Info title="Token id" info={stakingPosition.tokenId.toString()} /> */}
-            <BuyContainer active={active} stakingPosition={stakingPosition} />
+            <BuyContainer active={isActive} stakingPosition={stakingPosition} />
           </HStack>
           <ProgressBar percent={percentToMaturity} />
         </Flex>
@@ -252,7 +250,7 @@ const PriceComponent = ({ price }: { price: CurrencyAmount<Currency> }) => {
 
 type InfoProps = { title: string; info: string; isLoading?: boolean }
 const Info = ({ info, title, isLoading, color, ...flexProps }: InfoProps & FlexProps) => (
-  <Flex direction={'column'} align="center" {...flexProps}>
+  <Flex minW={'80px'} direction={'column'} align="center" {...flexProps}>
     <Text fontSize={'xs'} color="text.low">
       {title}
     </Text>

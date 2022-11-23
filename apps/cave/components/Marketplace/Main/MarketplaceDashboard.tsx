@@ -2,6 +2,7 @@ import { Flex, Text, VStack } from '@chakra-ui/react'
 import { BoxProps, HStack, useBreakpointValue } from '@concave/ui'
 import { Loading } from 'components/Loading'
 import { MarketplaceFilterContainer } from 'components/Marketplace/Main/MarketplaceFilterContainer'
+import { useState } from 'react'
 import { MarketplacePosition } from './MarketplacePosition'
 import { MarketplaceSortConainer } from './MarketplaceSortContainer'
 import { TokenIdSearchBar } from './TokenIdSearchBar'
@@ -17,15 +18,17 @@ export const MarketplaceDashboard = (props: BoxProps) => {
     setSort,
     setStakeFilters,
   } = useMarketplaceDashbord()
-
+  const isMobile = useBreakpointValue({ base: true, sm: false })
+  const [activePosition, setActivePosition] = useState('')
   const positions = nftPositions.map((stakingPosition) => (
     <MarketplacePosition
-      key={+stakingPosition.tokenId.toString()}
+      key={stakingPosition.tokenId.toString()}
       stakingPosition={stakingPosition}
+      onMouseEnter={() => setActivePosition(stakingPosition.tokenId.toString())}
+      onMouseLeave={() => setActivePosition('')}
+      isActive={stakingPosition.tokenId.toString() === activePosition}
     />
   ))
-
-  const isMobile = useBreakpointValue({ base: true, sm: false })
 
   return (
     <VStack apply="background.metal" p={4} gap={4} borderRadius={'3xl'} maxH={'1000px'}>
@@ -49,8 +52,9 @@ export const MarketplaceDashboard = (props: BoxProps) => {
         w="full"
         textAlign={`center`}
         justify="start"
+        h={'full'}
+        overflowY={'hidden'}
         p={4}
-        overflow={'scroll'}
         direction="column"
       >
         <Flex
@@ -58,12 +62,12 @@ export const MarketplaceDashboard = (props: BoxProps) => {
           mx={-2}
           pt={4}
           pr={2}
+          direction="column"
+          gap={4}
+          onScroll={() => setActivePosition('')}
           borderRadius={'2xl'}
           overflowY={'scroll'}
-          h={'auto'}
-          direction="column"
           apply="scrollbar.big"
-          gap={4}
         >
           {positions.length == 0 ? (
             <>
