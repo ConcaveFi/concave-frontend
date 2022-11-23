@@ -49,6 +49,7 @@ export function AirdropClaimModal() {
         Claim
       </Button>
       <CloseButton
+        zIndex={10}
         onClick={onClose}
         pos="absolute"
         left="93.5%"
