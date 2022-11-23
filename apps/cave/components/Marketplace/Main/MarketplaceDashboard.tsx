@@ -41,7 +41,7 @@ export const MarketplaceDashboard = (props: BoxProps) => {
         {!isMobile && <TokenIdSearchBar onApplyFilter={setTokenIdFilter} />}
       </HStack>
 
-      <Flex rounded={'2xl'} shadow="down" w="full" h={'full'} p={2} overflow={'hidden'}>
+      <Flex w="full" shadow="down" rounded={'16px'} p={2} overflow="hidden">
         <Flex
           isLoading={isFetching}
           apply="scrollbar.big"
@@ -55,6 +55,7 @@ export const MarketplaceDashboard = (props: BoxProps) => {
           rLabel=""
           size="md"
           w="full"
+          gap={4}
           p={2}
         >
           {positions.length == 0 ? (

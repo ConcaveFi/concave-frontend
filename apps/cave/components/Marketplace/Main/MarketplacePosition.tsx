@@ -30,7 +30,7 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({
   const discount = usePositionDiscount(stakingPosition)
 
   return (
-    <Popover trigger="hover" isOpen={isActive}>
+    <Popover trigger="hover">
       <PopoverTrigger>
         <Flex
           width={'full'}
