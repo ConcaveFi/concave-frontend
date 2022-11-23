@@ -55,7 +55,7 @@ export const MarketplaceActivityCard = () => {
       py={4}
       gap={2}
       shadow="Block Up"
-      height={'full'}
+      // height={'full'}
       position="relative"
       rounded="2xl"
       maxH={'1000px'}

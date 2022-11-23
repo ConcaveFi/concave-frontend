@@ -41,33 +41,21 @@ export const MarketplaceDashboard = (props: BoxProps) => {
         {!isMobile && <TokenIdSearchBar onApplyFilter={setTokenIdFilter} />}
       </HStack>
 
-      <Flex
-        as={Loading}
-        size="md"
-        isLoading={isFetching && !nftPositions.length}
-        rLabel=""
-        rounded={'inherit'}
-        shadow="down"
-        w="full"
-        textAlign={`center`}
-        justify="start"
-        h={'full'}
-        overflowY={'hidden'}
-        p={4}
-        overflow={'hidden'}
-        direction="column"
-      >
+      <Flex rounded={'2xl'} shadow="down" w="full" h={'full'} p={2} overflow={'hidden'}>
         <Flex
-          mt={-2}
-          mx={-2}
-          pt={4}
-          pr={2}
-          direction="column"
-          gap={4}
-          onScroll={() => setActivePosition('')}
-          borderRadius={'2xl'}
-          overflowY={'scroll'}
+          isLoading={isFetching}
           apply="scrollbar.big"
+          textAlign={`center`}
+          overflowY={'scroll'}
+          rounded={'inherit'}
+          direction="column"
+          justify="start"
+          as={Loading}
+          h={'auto'}
+          rLabel=""
+          size="md"
+          w="full"
+          p={2}
         >
           {positions.length == 0 ? (
             <>

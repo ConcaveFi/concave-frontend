@@ -10,25 +10,24 @@ export const UserDividendCard = (props: UserDividendCardProps) => {
   return (
     <Flex direction={'column'} w="100%">
       <Text
-        textAlign={'start'}
         ml={{ base: 0, lg: 6, md: 8 }}
         textColor={'text.low'}
-        fontSize={'lg'}
+        textAlign={'start'}
         fontWeight={'bold'}
+        fontSize={'lg'}
         my={3}
       >
         Your dividends share
       </Text>
       <Flex
-        borderRadius="2xl"
-        shadow={'down'}
-        apply="background.metal(ALT)"
-        width="full"
-        py={{ base: 3, lg: 6 }}
-        px={4}
-        gap={4}
-        overflow="hidden"
         direction={{ base: 'column', lg: 'row' }}
+        py={{ base: 3, lg: 6 }}
+        borderRadius="2xl"
+        overflow="hidden"
+        shadow="down"
+        width="full"
+        gap={4}
+        px={4}
       >
         <Flex flex={1} justify={'space-around'}>
           <Flex

@@ -1,9 +1,10 @@
-import { Card, Flex, Text, TextProps } from '@concave/ui'
+import { Card, Flex, Link, Text, TextProps } from '@concave/ui'
 import { formatDistanceStrict } from 'date-fns'
 import {
   Get_Accrualbondv1_Last10_SoldQuery,
   useGet_Accrualbondv1_Last10_SoldQuery,
 } from 'graphql/generated/graphql'
+import { getTxExplorer } from 'lib/getTransactionExplorer'
 import { useMemo } from 'react'
 import { numberMask } from 'utils/numberMask'
 
@@ -40,46 +41,30 @@ function TableHeader() {
   )
 }
 interface TableRowProps {
-  data: { timestamp: string; output: string; inputAmount: string }[]
+  data: { timestamp: string; output: string; inputAmount: string; txHash: string }[]
 }
 
 function TableRows({ data }: TableRowProps) {
   return (
     <Flex direction={'column'} textColor="text.bright" fontSize={{ base: '12px', md: '14px' }}>
       {data?.map((val, index) => (
-        <Flex rounded="5px" key={index} w="full">
-          <Text {...columnProps}>{val.timestamp}</Text>
-          <Text {...columnProps} color="white">
-            {val.inputAmount}
-          </Text>
-          <Text {...columnProps} color="white">
-            {val.output}
-          </Text>
-        </Flex>
-      ))}
-    </Flex>
-  )
-}
-
-interface ColumnProps {
-  title: string
-  values: string[] | number[]
-}
-function Column({ title, values }: ColumnProps) {
-  return (
-    <Flex flex={1} direction="column" align={'center'} fontSize="14px">
-      <Text fontSize="16px" textColor={'text.low'} fontWeight="700">
-        {title}
-      </Text>
-      {values.map((val, index) => (
-        <Text
-          opacity={title.toLowerCase() === 'when' && 0.7}
-          fontSize={{ base: '12px', md: 'sm' }}
+        <Link
+          href={getTxExplorer(val.txHash, 1)}
+          _hover={{ bg: '#0005' }}
+          rounded="md"
           key={index}
-          textColor="text.bright"
+          isExternal
         >
-          {val}
-        </Text>
+          <Flex rounded="5px" w="full">
+            <Text {...columnProps}>{val.timestamp}</Text>
+            <Text {...columnProps} color="white">
+              {val.inputAmount}
+            </Text>
+            <Text {...columnProps} color="white">
+              {val.output}
+            </Text>
+          </Flex>
+        </Link>
       ))}
     </Flex>
   )
@@ -90,8 +75,9 @@ function prepareData(data: Get_Accrualbondv1_Last10_SoldQuery) {
   if (!newData) return []
   return newData.map((val) => ({
     timestamp: formatDistanceStrict(val.timestamp * 1000, new Date().getTime()) + ' ago',
-    output: `${numberMask(+val.output)} CNV`,
     inputAmount: `${numberMask(+val.inputAmount)} DAI`,
+    output: `${numberMask(+val.output)} CNV`,
+    txHash: val.txHash,
   }))
 }
 
