@@ -1,9 +1,10 @@
 import { CNV } from '@concave/core'
-import { DashboardIcon } from '@concave/icons'
-import { Box, Flex, Image, Stack, Text } from '@concave/ui'
+import { AirdropIcon, DashboardIcon } from '@concave/icons'
+import { Box, Button, Flex, Image, Stack, Text } from '@concave/ui'
 import { ButtonLink } from 'components/ButtonLink'
 import { ConnectButton } from 'components/UserWallet/ConnectButton'
 import { ConnectedUserButton } from 'components/UserWallet/ConnectedUserButton'
+import { useAirdrop } from 'contexts/AirdropContext'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useAccount, useNetwork } from 'wagmi'
@@ -48,6 +49,7 @@ const TestnetIndicator = () => {
 
 function SideBarTop({ closeSidebar }: { closeSidebar: VoidFunction }) {
   const { isConnected } = useAccount()
+  const { onOpen } = useAirdrop()
 
   return (
     <Box shadow="down" px={2} pb={3} rounded="2xl" w="100%">
@@ -73,6 +75,10 @@ function SideBarTop({ closeSidebar }: { closeSidebar: VoidFunction }) {
         >
           Transparency
         </ButtonLink>
+        <Button mt={4} onClick={onOpen} variant={'secondary'} gap={2} shadow="up" w="100%" h="40px">
+          <AirdropIcon fill="white" boxSize={'25px'} ml="-9" />
+          Airdrop
+        </Button>
         <Box shadow="down" w="full" p={1} rounded="2xl">
           {isConnected ? (
             <ConnectedUserButton />

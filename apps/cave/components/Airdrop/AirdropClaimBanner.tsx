@@ -1,21 +1,22 @@
 import { AirdropIcon, CloseIcon } from '@concave/icons'
 import { Button, ButtonProps, Card, CardProps, Flex, Heading, useDisclosure } from '@concave/ui'
-import { AirdropClaimModal } from './ClaimModal/AirdropClaimModal'
+import { useAirdrop } from 'contexts/AirdropContext'
+import { useIsMounted } from 'hooks/useIsMounted'
 
 export function AirdropClaimBanner() {
   const { isOpen, onClose } = useDisclosure({ defaultIsOpen: true })
-  const claimModal = useDisclosure()
+  const isMounted = useIsMounted()
+  const { onOpen } = useAirdrop()
 
   if (!isOpen) return <></>
   return (
     <Flex
-      pt={{ base: 9, md: 5 }}
       justify={'end'}
-      pos="absolute"
+      pos="fixed"
       mx={'auto'}
-      w="full"
-      left={0}
-      px={7}
+      left={'83%'}
+      transition="all .5s ease"
+      top={isMounted ? '88%' : '95%'}
     >
       <Card {...airdropBanner}>
         {/* Icon */}
@@ -26,7 +27,7 @@ export function AirdropClaimBanner() {
           <Heading color={'text.low'} fontWeight="semibold">
             Airdrop
           </Heading>
-          <Button onClick={claimModal.onOpen} size={'sm'} rounded="full" variant={'primary'}>
+          <Button onClick={onOpen} size={'sm'} rounded="full" variant={'primary'}>
             Claim rewards
           </Button>
         </Flex>
@@ -34,7 +35,6 @@ export function AirdropClaimBanner() {
           <CloseIcon w="8px" h="8px" />
         </Button>
       </Card>
-      <AirdropClaimModal isOpen={claimModal.isOpen} onClose={claimModal.onClose} />
     </Flex>
   )
 }

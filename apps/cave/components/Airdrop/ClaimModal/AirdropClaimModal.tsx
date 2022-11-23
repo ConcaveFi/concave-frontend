@@ -1,13 +1,9 @@
 import { AirdropIcon, CloseIcon } from '@concave/icons'
 import { Box, Button, Card, Flex, Heading, Image, Modal, Text } from '@concave/ui'
+import { useAirdrop } from 'contexts/AirdropContext'
 
-interface AirdropClaimModalProps {
-  onClose?: VoidFunction
-  isOpen?: boolean
-}
-
-export function AirdropClaimModal(props: AirdropClaimModalProps) {
-  const { onClose, isOpen } = props
+export function AirdropClaimModal() {
+  const { isOpen, onClose } = useAirdrop()
   return (
     <Modal
       bodyProps={{ p: 0, variant: 'secondary' }}

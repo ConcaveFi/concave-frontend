@@ -27,11 +27,13 @@ const NavButton = (props: ButtonLinkProps) => {
       rounded={'20px'}
       _hover={{ textDecoration: 'underline', textColor: 'text.bright' }}
       leftIcon={
-        <NotInteractableImage
-          src={`/assets/sidebar${props.href}.svg`}
-          _groupHover={{ filter: 'brightness(2)' }}
-          _groupActive={{ filter: 'brightness(3)' }}
-        />
+        props.leftIcon || (
+          <NotInteractableImage
+            src={`/assets/sidebar${props.href}.svg`}
+            _groupHover={{ filter: 'brightness(3)' }}
+            _groupActive={{ filter: 'brightness(3)' }}
+          />
+        )
       }
       {...props}
     >
