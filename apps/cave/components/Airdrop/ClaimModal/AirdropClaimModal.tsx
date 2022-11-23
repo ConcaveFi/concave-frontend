@@ -7,6 +7,7 @@ export function AirdropClaimModal() {
   return (
     <Modal
       bodyProps={{
+        overflow: 'visible',
         borderGradient: '',
         variant: 'primary',
         justify: 'center',
@@ -25,6 +26,13 @@ export function AirdropClaimModal() {
       title=""
     >
       {/* <ModalHeader onClose={onClose} /> */}
+      <Image
+        src="./assets/airdrops_background.png"
+        position={'absolute'}
+        alt="airdrop rain"
+        zIndex={10}
+        mt="-92%"
+      />
       <Heading mt={10} fontWeight={'bold'} fontSize="3xl">
         Claim your airdrop now!
       </Heading>
