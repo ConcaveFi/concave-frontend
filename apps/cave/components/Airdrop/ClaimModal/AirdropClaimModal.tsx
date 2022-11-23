@@ -1,12 +1,21 @@
 import { AirdropIcon, CloseIcon } from '@concave/icons'
-import { Box, Button, Card, Flex, Heading, Image, Modal, Text } from '@concave/ui'
+import { Box, Button, Card, CloseButton, Flex, Heading, Image, Modal, Text } from '@concave/ui'
 import { useAirdrop } from 'contexts/AirdropContext'
 
 export function AirdropClaimModal() {
   const { isOpen, onClose } = useAirdrop()
   return (
     <Modal
-      bodyProps={{ p: 0, variant: 'secondary' }}
+      bodyProps={{
+        borderGradient: '',
+        variant: 'primary',
+        justify: 'center',
+        align: 'center',
+        shadow: 'up',
+        h: '350px',
+        w: '540px',
+        p: 0,
+      }}
       motionPreset="slideInBottom"
       onClose={onClose}
       isOpen={isOpen}
@@ -15,36 +24,39 @@ export function AirdropClaimModal() {
       hideClose
       title=""
     >
-      <Flex w="350px" direction={'column'}>
-        <ModalHeader onClose={onClose} />
-        <Flex py="7" position={'relative'} justify="space-between" px="5">
-          <ItemInfo info="234.00 USDC" title="Total amount" />
-          <Box h="48px" w="2px" bg="gray.600" />
-          <ItemInfo info="120.29 USDC" title="Redeemable" />
-        </Flex>
-        <ProgressBar />
-        <Flex px="4" gap="4" py="7">
-          <Button
-            w="full"
-            h="45px"
-            bg="linear-gradient(-90deg, #f56666 0%, #de7c7c 0%, #8d3030 100%)"
-          >
-            Decline
-          </Button>
-          <Button w="full" h="45px" bg="stroke.brightGreen">
-            Confirm
-          </Button>
-        </Flex>
+      {/* <ModalHeader onClose={onClose} /> */}
+      <Heading mt={10} fontWeight={'bold'} fontSize="3xl">
+        Claim your airdrop now!
+      </Heading>
+      <Text textAlign={'center'} px={24} mt={2} color="text.bright">
+        lorem ipsum dolor sit amet sed lectus. lorem ipsum dolor sit amet sed lectus.{' '}
+      </Text>
+      <Flex py="4" position={'relative'} w="full" justify="center" gap={10} px="20">
+        <ItemInfo info="234.00 USDC" title="Total amount" />
+        <Box h="48px" w="2px" bg="gray.600" />
+        <ItemInfo info="120.29 USDC" title="Redeemable" />
       </Flex>
+      <ProgressBar />
+      <Button mt={7} w="fit-content" px="7" h="45px" bg="stroke.brightGreen">
+        Claim
+      </Button>
+      <CloseButton
+        onClick={onClose}
+        pos="absolute"
+        left="93.5%"
+        color="text.low"
+        top="1%"
+        size={'md'}
+      ></CloseButton>
     </Modal>
   )
 }
 
 function ProgressBar() {
   return (
-    <Flex w="90%" mx="auto" rounded={'xl'} h="22px" shadow={'down'} position="relative">
-      <Box w="50%" h="full" bg="stroke.accent" rounded={'inherit'} />
-      <Flex position={'absolute'} w="full" justify={'center'}>
+    <Flex p="5px" w="60%" mx="auto" rounded={'xl'} h="22px" shadow={'down'} position="relative">
+      <Box w="50%" h="full" bg="stroke.accent" shadow={'up'} rounded={'inherit'} />
+      <Flex m="-5px" position={'absolute'} w="full" justify={'center'}>
         <Text fontWeight="semibold">65%</Text>
       </Flex>
     </Flex>

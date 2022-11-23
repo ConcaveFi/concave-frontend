@@ -17,6 +17,20 @@ export const Layout = ({ children }) => {
   return (
     <AirdropProvider>
       <Flex direction={{ base: 'column', md: 'row' }}>
+        <Flex
+          position={'absolute'}
+          w="full"
+          h="full"
+          bg="url(/background.webp)"
+          bgSize={'100%'}
+          filter={'blur(10px)'}
+        ></Flex>
+        <Flex
+          position={'absolute'}
+          w="full"
+          h="full"
+          bg="radial-gradient(100% 211.23% at 100% 0%, rgba(0, 148, 255, 0.3) 0%, rgba(27, 61, 148, 0.1) 50%, rgba(2, 42, 65, 0.01) 100%)"
+        ></Flex>
         <SideBar />
         <AirdropClaimBanner />
         <Container

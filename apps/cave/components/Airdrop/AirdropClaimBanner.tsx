@@ -1,5 +1,13 @@
-import { AirdropIcon, CloseIcon } from '@concave/icons'
-import { Button, ButtonProps, Card, CardProps, Flex, Heading, useDisclosure } from '@concave/ui'
+import {
+  Button,
+  ButtonProps,
+  Card,
+  CardProps,
+  Flex,
+  Heading,
+  Image,
+  useDisclosure,
+} from '@concave/ui'
 import { useAirdrop } from 'contexts/AirdropContext'
 import { useIsMounted } from 'hooks/useIsMounted'
 
@@ -14,26 +22,33 @@ export function AirdropClaimBanner() {
       justify={'end'}
       pos="fixed"
       mx={'auto'}
-      left={'83%'}
-      transition="all .5s ease"
-      top={isMounted ? '88%' : '95%'}
+      left={'40%'}
+      transition="all .8s ease"
+      opacity={isMounted ? 1 : 0}
+      top={isMounted ? '3%' : '-2%'}
+      zIndex={10}
     >
       <Card {...airdropBanner}>
-        {/* Icon */}
-        <AirdropIcon w={'50px'} h={'50px'} fill={'text.bright'} mx={6} />
-
-        {/* Content */}
-        <Flex flex={1} direction={'column'} gap={2}>
-          <Heading color={'text.low'} fontWeight="semibold">
-            Airdrop
+        <Image pr="4" src="./assets/icons8-airdrop-64.png" w="55px" alt="airdrop-icon" />
+        <Flex flex={1} direction={'column'}>
+          <Heading fontSize={'md'} fontWeight="semibold">
+            Airdrop is here!
           </Heading>
-          <Button onClick={onOpen} size={'sm'} rounded="full" variant={'primary'}>
-            Claim rewards
+          <Heading fontSize={'md'} fontWeight="medium" textColor={'text.low'}>
+            click to redeem now
+          </Heading>
+        </Flex>
+        <Flex gap={2}>
+          <Button onClick={onOpen} w="70px" h="35px" bg="stroke.brightGreen">
+            Claim
+          </Button>
+          <Button onClick={onClose} textColor="text.low">
+            Dismiss
           </Button>
         </Flex>
-        <Button {...closeButtonProps} onClick={onClose}>
+        {/* <Button {...closeButtonProps} onClick={onClose}>
           <CloseIcon w="8px" h="8px" />
-        </Button>
+        </Button> */}
       </Card>
     </Flex>
   )
@@ -46,11 +61,11 @@ const airdropBanner: CardProps = {
   overflow: 'visible',
   direction: 'row',
   align: 'center',
-  rounded: '3xl',
+  rounded: '2xl',
   zIndex: 10,
-  w: '300px',
-  h: '90px',
-  pr: 8,
+  w: '500px',
+  h: '63px',
+  px: 6,
 }
 
 const closeButtonProps: ButtonProps = {
