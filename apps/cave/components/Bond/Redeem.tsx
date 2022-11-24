@@ -32,7 +32,7 @@ export const Redeem = ({
       {/* <Card mb={-12} bottom={bottom} fontWeight="bold" fontSize={fontSize} w="100%"> */}
       <Button
         sx={formatRedeemable === 0 && { ...gradientBorder({ borderWidth: 2 }) }}
-        rounded={formatRedeemable === 0 && '16px 16px 0px 0px'}
+        rounded={formatRedeemable === 0 ? '16px 16px 0px 0px' : 'xl'}
         disabled={buttonDisabled || +formatRedeemable === 0}
         apply={formatRedeemable === 0 && 'background.glass'}
         maxH={formatRedeemable === 0 ? '35px' : '60px'}
@@ -43,7 +43,7 @@ export const Redeem = ({
         variant="primary"
         {...customHeightSetting}
       >
-        <Text textColor={'text.bright'} opacity={0.6}>
+        <Text textColor={formatRedeemable ? '#fff' : 'text.low'}>
           {buttonDisabled && isRedeeming
             ? 'Redeeming'
             : buttonDisabled && !isRedeeming

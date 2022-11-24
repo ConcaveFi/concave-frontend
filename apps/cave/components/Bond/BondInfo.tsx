@@ -65,12 +65,10 @@ export const UserBondPositionInfo = (props) => {
   return (
     <>
       {claimed ? (
-        <Card bg="none" py={4} w="100%" h="80px" flex={1} direction="row" shadow="Glass Up Medium">
-          <Flex justify="center" align={'center'} flexBasis="100%">
-            <Text fontWeight={'semibold'} textColor={'text.bright'} opacity={0.6}>
-              No current bond positions
-            </Text>
-          </Flex>
+        <Card bg="none" w="100%" maxH="120px" flex={1} shadow="Glass Up Medium">
+          <Text fontWeight={'semibold'} textColor={'text.bright'} m="auto" opacity={0.6}>
+            No current bond positions
+          </Text>
         </Card>
       ) : totalOwed ? (
         <Card bg="none" py={4} w="100%" direction="row" shadow="Glass Up Medium">

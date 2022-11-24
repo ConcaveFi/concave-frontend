@@ -162,59 +162,67 @@ export function Bond() {
           shadow="Glow Inner"
           height="386px"
           align="center"
-          gap={12}
         >
           <SelectedBondType bondType="Classic" />
-          {!userAddress && isLoadingBondSigma ? (
-            <Box
-              position={'relative'}
-              top={'32.5%'}
-              display={'flex'}
-              flexDirection="column"
-              alignItems={'center'}
-              gap={10}
-            >
-              Wallet not connected
-            </Box>
-          ) : isLoadingBondSigma ? (
-            <Box
-              position={'relative'}
-              top={'32.5%'}
-              display={'flex'}
-              flexDirection="column"
-              alignItems={'center'}
-              gap={10}
-            >
-              Checking positions...
-              <SpinIcon __css={spinnerStyles} width={'10'} height={'10'} />
-            </Box>
-          ) : (
-            ''
-          )}
-          {!isLoadingBondSigma && (
-            <>
-              <BondInfo
-                asset="CNV"
-                icon="/assets/tokens/cnv.svg"
-                roi={roi}
-                vestingTerm={`${termLength} Days`}
-              />
-              <UserBondPositionInfo bondSigma={bondSigma} userAddress={userAddress} />
-              {showUserPosition && (
-                <Redeem
-                  bondSigma={bondSigma}
-                  buttonDisabled={buttonDisabled}
-                  onConfirm={() => {
-                    onRedeemConfirm()
-                  }}
-                  isRedeeming={clickedRedeemButton}
-                  largeFont
-                  setBottom
-                  customHeight
+          <Flex
+            flex={1}
+            align="center"
+            direction={'column'}
+            justify="space-between"
+            w="full"
+            gap={4}
+            pt={6}
+          >
+            {!userAddress && isLoadingBondSigma ? (
+              <Box
+                position={'relative'}
+                top={'32.5%'}
+                display={'flex'}
+                flexDirection="column"
+                alignItems={'center'}
+                gap={10}
+              >
+                Wallet not connected
+              </Box>
+            ) : isLoadingBondSigma ? (
+              <Flex
+                position={'relative'}
+                flexDirection="column"
+                my="auto"
+                alignItems={'center'}
+                gap={5}
+              >
+                Checking positions...
+                <SpinIcon __css={spinnerStyles} width={'10'} height={'10'} />
+              </Flex>
+            ) : (
+              ''
+            )}
+            {!isLoadingBondSigma && (
+              <>
+                <BondInfo
+                  asset="CNV"
+                  icon="/assets/tokens/cnv.svg"
+                  roi={roi}
+                  vestingTerm={`${termLength} Days`}
                 />
-              )}
-            </>
-          )}
+                <UserBondPositionInfo bondSigma={bondSigma} userAddress={userAddress} />
+                {showUserPosition && (
+                  <Redeem
+                    bondSigma={bondSigma}
+                    buttonDisabled={buttonDisabled}
+                    onConfirm={() => {
+                      onRedeemConfirm()
+                    }}
+                    isRedeeming={clickedRedeemButton}
+                    largeFont
+                    setBottom
+                    customHeight
+                  />
+                )}
+              </>
+            )}
+          </Flex>
         </Card>
 
         <BondBuyCard
