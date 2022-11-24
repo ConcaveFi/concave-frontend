@@ -146,23 +146,8 @@ export function Bond() {
       w={{ base: '430px', lg: '720px', xl: '900px' }}
     >
       <BondDescription />
-      <Flex
-        // gap={{ base: 3, md: 10 }}
-        direction={{ lg: 'row', base: 'column' }}
-        // align={{ lg: 'start', base: 'center' }}
-        // justify={'space-between'}
-        gap={{ base: 3, lg: 2, xl: 10 }}
-        w="full"
-      >
-        <Card
-          // minW={{ base: '340px', md: '430px' }}
-          w="full"
-          px={{ base: 0, md: 6 }}
-          variant="secondary"
-          shadow="Glow Inner"
-          height="386px"
-          align="center"
-        >
+      <Flex direction={{ lg: 'row', base: 'column' }} gap={{ base: 3, lg: 2, xl: 10 }} w="full">
+        <Card px={{ base: 0, md: 6 }} variant="secondary" height="386px" align="center" w="full">
           <SelectedBondType bondType="Classic" />
           <Flex
             flex={1}
