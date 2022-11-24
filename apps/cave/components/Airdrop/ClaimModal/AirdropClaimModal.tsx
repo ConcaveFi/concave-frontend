@@ -1,9 +1,33 @@
-import { AirdropIcon, CloseIcon } from '@concave/icons'
-import { Box, Button, Card, CloseButton, Flex, Heading, Image, Modal, Text } from '@concave/ui'
+import { AirdropClaimContract } from '@concave/core'
+import { Button, CloseButton, Flex, Heading, Image, Modal, Text } from '@concave/ui'
 import { useAirdrop } from 'contexts/AirdropContext'
+import { parseEther } from 'ethers/lib/utils'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import { concaveProvider } from 'lib/providers'
+import { useQuery } from 'react-query'
+import { useAccount, useSigner } from 'wagmi'
+import { getAirdropClaimableAmount, getProof, isWhitelisted } from '../airdrop'
 
 export function AirdropClaimModal() {
   const { isOpen, onClose } = useAirdrop()
+  const { address } = useAccount()
+  const networkId = useCurrentSupportedNetworkId()
+  const { data: signer } = useSigner()
+
+  const proof = getProof(address)
+  const isOnWhiteList = isWhitelisted(address)
+  const amount = getAirdropClaimableAmount(address)
+
+  const { data: claimed } = useQuery([''], async () => {
+    const airdrop = new AirdropClaimContract(concaveProvider(networkId))
+    return await airdrop.claimed(address)
+  })
+
+  function claimAirdrop() {
+    const airdrop = new AirdropClaimContract(concaveProvider(networkId))
+    airdrop.claim(signer, proof, parseEther(String(amount)))
+  }
+
   return (
     <Modal
       bodyProps={{
@@ -25,7 +49,6 @@ export function AirdropClaimModal() {
       hideClose
       title=""
     >
-      {/* <ModalHeader onClose={onClose} /> */}
       <Image
         src="./assets/airdrops_background.png"
         position={'absolute'}
@@ -36,39 +59,37 @@ export function AirdropClaimModal() {
       <Heading mt={10} fontWeight={'bold'} fontSize="3xl">
         Claim your airdrop now!
       </Heading>
-      <Text textAlign={'center'} px={24} mt={2} color="text.bright">
+      <Text pb="6" textAlign={'center'} px={24} mt={2} color="text.bright">
         lorem ipsum dolor sit amet sed lectus. lorem ipsum dolor sit amet sed lectus.{' '}
       </Text>
-      <Flex py="4" position={'relative'} w="full" justify="center" gap={10} px="20">
-        <ItemInfo info="234.00 USDC" title="Total amount" />
-        <Box h="48px" w="2px" bg="gray.600" />
-        <ItemInfo info="120.29 USDC" title="Redeemable" />
-      </Flex>
-      <ProgressBar />
-      <Button mt={7} w="fit-content" px="7" h="45px" bg="stroke.brightGreen">
-        Claim
+      <ItemInfo info={`${amount} USDC`} title="Redeemable amount" />
+      <Button
+        disabled={claimed || !isOnWhiteList}
+        shadow="0px 0px 20px #0006"
+        bg="stroke.brightGreen"
+        onClick={claimAirdrop}
+        position="relative"
+        w="fit-content"
+        h="50px"
+        mt={7}
+        px="8"
+      >
+        <Text id="btn-text" color="white">
+          {claimed && 'Already claimed'}
+          {!isOnWhiteList && 'You are not on white list'}
+          {!claimed && isOnWhiteList && 'Claim'}
+        </Text>
       </Button>
       <CloseButton
-        zIndex={10}
         onClick={onClose}
+        color="text.low"
         pos="absolute"
         left="93.5%"
-        color="text.low"
-        top="1%"
+        zIndex={10}
         size={'md'}
+        top="1%"
       ></CloseButton>
     </Modal>
-  )
-}
-
-function ProgressBar() {
-  return (
-    <Flex p="5px" w="60%" mx="auto" rounded={'xl'} h="22px" shadow={'down'} position="relative">
-      <Box w="50%" h="full" bg="stroke.accent" shadow={'up'} rounded={'inherit'} />
-      <Flex m="-5px" position={'absolute'} w="full" justify={'center'}>
-        <Text fontWeight="semibold">65%</Text>
-      </Flex>
-    </Flex>
   )
 }
 
@@ -88,46 +109,5 @@ function ItemInfo(props: ItemInfoProps) {
         <Image src="/assets/tokens/usdc-logo.webp" boxSize={'22px'} alt="usdc token icon" />
       </Flex>
     </Flex>
-  )
-}
-
-interface ModalHeaderProps {
-  onClose?: VoidFunction
-}
-
-function ModalHeader(props: ModalHeaderProps) {
-  const { onClose } = props
-  return (
-    <Card
-      shadow="0px 0px 30px #000"
-      justify={'center'}
-      direction={'row'}
-      variant="primary"
-      align="center"
-      h="100px"
-      w="full"
-      gap={2}
-    >
-      <AirdropIcon fill={'text.bright'} h="60px" w="60px" filter={'blur(0px)'} />
-      <Flex direction={'column'}>
-        <Heading color="text.bright" fontWeight={'semibold'} fontSize="3xl">
-          Airdrop
-        </Heading>
-        <Text color="text.low" fontWeight={'500'}>
-          Rewards
-        </Text>
-      </Flex>
-      <Button
-        onClick={onClose}
-        pos="absolute"
-        left="90%"
-        top="7%"
-        p="10px"
-        _hover={{ bg: '#0005' }}
-        rounded={'full'}
-      >
-        <CloseIcon color={'text.low'} boxSize="10px"></CloseIcon>
-      </Button>
-    </Card>
   )
 }

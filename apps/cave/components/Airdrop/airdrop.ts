@@ -13,12 +13,12 @@ const normalizeWhitelist = (whitelist) =>
 const whitelist = normalizeWhitelist(_whitelist)
 
 export const isWhitelisted = (address: string): boolean => !!whitelist[getAddress(address)]
-export const getClaimableAmount = (address: string): number => whitelist[getAddress(address)]
+export const getAirdropClaimableAmount = (address: string): number => whitelist[getAddress(address)]
 
 const airdropToken = USDC[ChainId.ETHEREUM]
 
 const leafOf = (address: string) => {
-  const claimableQuantiy = getClaimableAmount(address)
+  const claimableQuantiy = getAirdropClaimableAmount(address)
   return Buffer.from(
     solidityKeccak256(
       ['address', 'uint256'],
@@ -35,5 +35,3 @@ const merkleTree = new MerkleTree(Object.keys(whitelist).map(leafOf), keccak256,
 })
 
 export const getProof = (userAddress: string) => merkleTree.getHexProof(leafOf(userAddress))
-
-console.log(merkleTree.getHexRoot())

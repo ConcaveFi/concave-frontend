@@ -1,4 +1,5 @@
 export * from './AcnvRedemptionAbi'
+export { AIRDROP_CLAIM_ABI } from './AirdropClaimAbi'
 export * from './BbtCNVRedemptionV2Abi'
 export { BondAbi } from './Bond'
 export { Erc20Abi } from './Erc20'
