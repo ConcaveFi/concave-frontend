@@ -1,5 +1,6 @@
 import { CloseIcon, Search2Icon } from '@concave/icons'
-import { Flex, NumericInput, Tooltip, useBreakpointValue } from '@concave/ui'
+import { Flex, NumericInput, useBreakpointValue } from '@concave/ui'
+import { ConcaveTooltip } from 'components/ConcaveTooltip/ConcaveTooltip'
 import { FC, useState } from 'react'
 
 type TokenIdSearchBarProps = { onApplyFilter: (id: number) => void }
@@ -28,17 +29,21 @@ export const TokenIdSearchBar: FC<TokenIdSearchBarProps> = ({ onApplyFilter }) =
         }}
       />
       {hasAppliedFilter && (
-        <Tooltip label="Clear filter">
-          <CloseIcon
-            color={'text.low'}
-            cursor="pointer"
-            onClick={() => {
-              onApplyFilter(undefined)
-              setAppliedNumber('')
-              setValue('')
-            }}
-          />
-        </Tooltip>
+        <ConcaveTooltip
+          label={'Clear filter'}
+          w={''}
+          icon={
+            <CloseIcon
+              color={'text.low'}
+              cursor="pointer"
+              onClick={() => {
+                onApplyFilter(undefined)
+                setAppliedNumber('')
+                setValue('')
+              }}
+            />
+          }
+        />
       )}
     </Flex>
   )
