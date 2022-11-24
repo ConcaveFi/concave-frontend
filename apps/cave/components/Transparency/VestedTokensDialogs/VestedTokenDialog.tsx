@@ -1,7 +1,8 @@
 import { CloseButton, Modal, ModalContent, ModalOverlay } from '@chakra-ui/react'
 import { Token } from '@concave/core'
 import { InfoIcon } from '@concave/icons'
-import { Button, Card, Flex, Spinner, Text, Tooltip } from '@concave/ui'
+import { Button, Card, Flex, Spinner, Text } from '@concave/ui'
+import { ConcaveTooltip } from 'components/ConcaveTooltip/ConcaveTooltip'
 import { ToggleButton } from 'components/ToggleButton'
 import { VestedTokenButtonProps } from 'components/Transparency/TreasuryRedeemCard'
 import { BigNumber } from 'ethers'
@@ -106,25 +107,19 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
                 fontSize={'xs'}
               ></Text>
             </Flex>
-            <Flex gap={2} fontWeight={'bold'} pl={2} align="center">
+            <Flex gap={2} fontWeight={'bold'} pl={2} align="center" zIndex={1}>
               <Text textColor={'gray.200'}>Redeem max</Text>
               <ToggleButton enabled={redeemMax} onToggle={setRedeemMax} />
-              <Tooltip
-                textColor={'white'}
-                bg="text.low"
-                textShadow={'0px 0px 10px #333'}
-                fontWeight={'bold'}
-                fontSize="13px"
-                textAlign="center"
+              <ConcaveTooltip
                 label={`Attempts to redeem all of your currently available ${
                   token?.symbol || 'amount'
                 }`}
-              >
-                <InfoIcon color={'text.low'} cursor="pointer" />
-              </Tooltip>
+                icon={<InfoIcon color={'text.low'} cursor="pointer" />}
+              />
             </Flex>
 
             <Button
+              zIndex={0}
               height={'55px'}
               width="full"
               {...redeemButtonProps(validValue, status)}

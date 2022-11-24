@@ -172,7 +172,7 @@ const PCNVInfoIcon = () => {
         </Flex>
       </PopoverTrigger>
 
-      <PopoverContent w="220px">
+      <PopoverContent w="220px" zIndex={4}>
         <Card
           shadow={'up'}
           css={{ ':after': { opacity: 1 } }}
