@@ -1,6 +1,7 @@
 import { CHART_COLORS } from './style'
 
 export const CustomizedAxisTick = (props: any) => {
+
   const { x, y, stroke, payload, customValue, isMobile } = props
   const fill = CHART_COLORS.TextLow
 

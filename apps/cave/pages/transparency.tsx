@@ -11,6 +11,7 @@ const TransparencyDiagram = () => {
   return (
     <Container maxW={{ base: '60ch', sm: 'container.sm', lg: '90%' }} centerContent>
       <Flex align={'center'} w={'100%'} h={'100%'} gap={4} textAlign="center" direction="column">
+
         <Heading
           as="h1"
           apply="background.text-brightBlue"
@@ -19,6 +20,7 @@ const TransparencyDiagram = () => {
           mb={3}
           fontSize="5xl"
         >
+
           Transparency Dashboard
         </Heading>
         <Flex mt={0} align="center" gap={10} width="full" justify="center" alignItems={'center'}>

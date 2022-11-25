@@ -59,6 +59,7 @@ export const LockedCNVSeriesChart = () => {
               tick={(tickData) => {
                 const customValue = data.ticks.ticksObject[tickData.payload.value]
                 return <CustomizedAxisTick customValue={customValue} isMobile {...tickData} />
+
               }}
               axisLine={{ stroke: CHART_COLORS.TextLow }}
               tickLine={{ stroke: CHART_COLORS.TextLow }}
