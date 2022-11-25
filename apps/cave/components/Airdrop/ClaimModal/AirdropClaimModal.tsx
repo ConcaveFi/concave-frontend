@@ -8,7 +8,7 @@ import { useIsMounted } from 'hooks/useIsMounted'
 import { concaveProvider } from 'lib/providers'
 import { useEffect } from 'react'
 import { useQuery } from 'react-query'
-import { useAccount, useContractWrite, useSigner, useWaitForTransaction } from 'wagmi'
+import { useAccount, useContractWrite, useWaitForTransaction } from 'wagmi'
 import { airdropToken, getAirdropClaimableAmount, getProof, isWhitelisted } from '../airdrop'
 
 export function AirdropClaimModal() {
@@ -16,7 +16,6 @@ export function AirdropClaimModal() {
   const { address, isConnected } = useAccount()
   const { registerTransaction } = useTransactionRegistry()
   const networkId = useCurrentSupportedNetworkId()
-  const { data: signer } = useSigner()
 
   const isMounted = useIsMounted()
 
@@ -82,7 +81,7 @@ export function AirdropClaimModal() {
       </Text>
       <ItemInfo info={`${amount} USDC`} title="Redeemable amount" />
       <Button
-        // isLoading={status === 'loading'}
+        isLoading={status === 'loading'}
         onClick={() => claimAirdrop()}
         shadow="0px 0px 20px #0006"
         loadingText="Claiming..."
@@ -94,8 +93,7 @@ export function AirdropClaimModal() {
         px="8"
       >
         <Text id="btn-text" color="white">
-          {/* {getButtonLabel({ status, isConnected, claimed, isOnWhitelist })} */}
-          Claim
+          {getButtonLabel({ status, isConnected, claimed, isOnWhitelist })}
         </Text>
       </Button>
       <CloseButton
