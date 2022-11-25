@@ -15,11 +15,5 @@ export const backgrounds = {
     '-webkit-text-fill-color': 'transparent',
     backgroundClip: 'text',
   },
-  'text-brightBlue': {
-    bg: colors.stroke.brightBlue,
-    '-webkit-background-clip': 'text',
-    '-webkit-text-fill-color': 'transparent',
-    backgroundClip: 'text',
-  },
 }
 export default backgrounds
