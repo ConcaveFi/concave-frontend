@@ -180,6 +180,41 @@ export function Bond() {
                 Checking positions...
                 <SpinIcon __css={spinnerStyles} width={'10'} height={'10'} />
               </Flex>
+            ) : (
+              ''
+            )}
+            {!isLoadingBondSigma && (
+              <>
+                <BondInfo
+                  asset="CNV"
+                  icon="/assets/tokens/cnv.svg"
+                  roi={roi}
+                  vestingTerm={`${termLength} Days`}
+                />
+                <UserBondPositionInfo bondSigma={bondSigma} userAddress={userAddress} />
+                {showUserPosition && (
+                  <Redeem
+                    bondSigma={bondSigma}
+                    buttonDisabled={buttonDisabled}
+                    onConfirm={() => {
+                      onRedeemConfirm()
+                    }}
+                    isRedeeming={clickedRedeemButton}
+                    largeFont
+                    setBottom
+                    customHeight
+                  />
+                )}
+              </>
+            )}
+          </Flex>
+        </Card>
+
+        <BondBuyCard
+          roi={roi}
+          updateBondPositions={updateBondPositions}
+          setRedeemButtonDisabled={setButtonDisabled}
+        />
       </Flex>
       <BondSoldsCard />
       <WaitingConfirmationDialog isOpen={openConfirmDialog} title={'Confirm redeem'}>
