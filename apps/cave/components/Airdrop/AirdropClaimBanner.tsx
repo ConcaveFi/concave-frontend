@@ -38,11 +38,11 @@ export function AirdropClaimBanner() {
             click to redeem now
           </Heading>
         </Flex>
-        <Flex gap={2}>
-          <Button onClick={onOpen} w="70px" h="35px" bg="stroke.brightGreen">
+        <Flex gap={3}>
+          <Button onClick={onOpen} w="85px" h="38px" bg="stroke.brightGreen">
             Claim
           </Button>
-          <Button onClick={onClose} textColor="text.low">
+          <Button _hover={{ textDecor: 'underline' }} onClick={onClose} textColor="text.low">
             Dismiss
           </Button>
         </Flex>

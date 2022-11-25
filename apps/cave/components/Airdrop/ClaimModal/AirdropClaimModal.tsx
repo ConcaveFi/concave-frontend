@@ -1,9 +1,10 @@
 import { AirdropClaimContract, AIRDROP_CLAIM, AIRDROP_CLAIM_ABI } from '@concave/core'
-import { Button, CloseButton, Flex, Heading, Image, Modal, Text } from '@concave/ui'
+import { Button, CloseButton, Flex, Heading, Image, Link, Modal, Text } from '@concave/ui'
 import { useAirdrop } from 'contexts/AirdropContext'
 import { parseUnits } from 'ethers/lib/utils'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import { useIsMounted } from 'hooks/useIsMounted'
 import { concaveProvider } from 'lib/providers'
 import { useEffect } from 'react'
 import { useQuery } from 'react-query'
@@ -12,14 +13,16 @@ import { airdropToken, getAirdropClaimableAmount, getProof, isWhitelisted } from
 
 export function AirdropClaimModal() {
   const { isOpen, onClose } = useAirdrop()
-  const { address } = useAccount()
+  const { address, isConnected } = useAccount()
   const { registerTransaction } = useTransactionRegistry()
   const networkId = useCurrentSupportedNetworkId()
   const { data: signer } = useSigner()
 
-  const proof = getProof(address)
-  const isOnWhiteList = isWhitelisted(address)
-  const amount = getAirdropClaimableAmount(address)
+  const isMounted = useIsMounted()
+
+  const proof = isMounted ? getProof(address) : []
+  const isOnWhitelist = isMounted ? isWhitelisted(address) : false
+  const amount = isMounted ? getAirdropClaimableAmount(address) : 0
 
   const { data: claimed } = useQuery([''], async () => {
     const airdrop = new AirdropClaimContract(concaveProvider(networkId))
@@ -33,9 +36,10 @@ export function AirdropClaimModal() {
   } = useContractWrite({
     addressOrName: AIRDROP_CLAIM[networkId],
     contractInterface: AIRDROP_CLAIM_ABI,
-    args: [proof, parseUnits(amount.toString(), airdropToken.decimals)],
+    args: [proof, parseUnits(amount?.toString() || '0', airdropToken.decimals)],
     functionName: 'claim',
   })
+  console.log(status)
 
   useEffect(() => {
     if (!tx?.hash) return
@@ -73,15 +77,20 @@ export function AirdropClaimModal() {
       <Heading mt={10} fontWeight={'bold'} fontSize="3xl">
         Claim your airdrop now!
       </Heading>
-      <Text pb="6" textAlign={'center'} px={24} mt={2} color="text.bright">
-        lorem ipsum dolor sit amet sed lectus. lorem ipsum dolor sit amet sed lectus.{' '}
+      <Text pb="6" textAlign={'center'} px={24} mt={2} color="text.low">
+        Happy one year Concaverssary! <br />{' '}
+        <Link color={'text.bright'} href="https://spoon.fyi/proofOfGemInfo" isExternal>
+          Click here
+        </Link>{' '}
+        to find out more about this airdrop!
       </Text>
       <ItemInfo info={`${amount} USDC`} title="Redeemable amount" />
       <Button
-        disabled={claimed || !isOnWhiteList || status === 'loading'}
+        disabled={!claimed || !isOnWhitelist || status === 'loading'}
         isLoading={status === 'loading'}
         onClick={() => claimAirdrop()}
         shadow="0px 0px 20px #0006"
+        loadingText="Claiming..."
         bg="stroke.brightGreen"
         position="relative"
         w="fit-content"
@@ -89,16 +98,9 @@ export function AirdropClaimModal() {
         mt={7}
         px="8"
       >
-        {status === 'idle' && (
-          <Text id="btn-text" color="white">
-            {claimed && 'Already claimed'}
-            {!isOnWhiteList && 'You are not on white list'}
-            {!claimed && isOnWhiteList && 'Claim'}
-          </Text>
-        )}
-        {status === 'loading' && 'claiming...'}
-        {status === 'error' && 'Ocurred an error.'}
-        {status === 'success' && 'Airdrop claimed'}
+        <Text id="btn-text" color="white">
+          {getButtonLabel({ status, isConnected, claimed, isOnWhitelist })}
+        </Text>
       </Button>
       <CloseButton
         onClick={onClose}
@@ -111,6 +113,22 @@ export function AirdropClaimModal() {
       ></CloseButton>
     </Modal>
   )
+}
+type StatusProps = {
+  status: 'error' | 'success' | 'idle' | 'loading'
+  isConnected: boolean
+  claimed: boolean
+  isOnWhitelist: boolean
+}
+function getButtonLabel({ claimed, isConnected, isOnWhitelist, status }: StatusProps) {
+  if (!isConnected) return 'You are not connected'
+  if (status === 'idle') {
+    if (claimed) return 'Already claimed'
+    if (!isOnWhitelist) return 'Nothing to claim'
+    return 'claim'
+  }
+  if (status === 'error') return 'Ocurred an error'
+  if (status === 'success') return 'Airdrop claimed'
 }
 
 interface ItemInfoProps {
