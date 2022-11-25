@@ -8,7 +8,7 @@ import { useIsMounted } from 'hooks/useIsMounted'
 import { concaveProvider } from 'lib/providers'
 import { useEffect } from 'react'
 import { useQuery } from 'react-query'
-import { useAccount, useContractWrite, useSigner } from 'wagmi'
+import { useAccount, useContractWrite, useSigner, useWaitForTransaction } from 'wagmi'
 import { airdropToken, getAirdropClaimableAmount, getProof, isWhitelisted } from '../airdrop'
 
 export function AirdropClaimModal() {
@@ -29,16 +29,14 @@ export function AirdropClaimModal() {
     return await airdrop.claimed(address)
   })
 
-  const {
-    write: claimAirdrop,
-    data: tx,
-    status,
-  } = useContractWrite({
+  const { write: claimAirdrop, data: tx } = useContractWrite({
     addressOrName: AIRDROP_CLAIM[networkId],
     contractInterface: AIRDROP_CLAIM_ABI,
     args: [proof, parseUnits(amount?.toString() || '0', airdropToken.decimals)],
     functionName: 'claim',
   })
+  const { status } = useWaitForTransaction({ hash: tx?.hash })
+
   useEffect(() => {
     if (!tx?.hash) return
     registerTransaction(tx, { type: 'airdrop', amount })
@@ -76,7 +74,7 @@ export function AirdropClaimModal() {
         Claim your airdrop now!
       </Heading>
       <Text pb="6" textAlign={'center'} px={24} mt={2} color="text.low">
-        Happy One Year Concaverssary! <br />{' '}
+        Happy One Year Concaversary! <br />{' '}
         <Link color={'text.bright'} href="https://spoon.fyi/proofOfGemInfo" isExternal>
           Click here
         </Link>{' '}
@@ -84,8 +82,7 @@ export function AirdropClaimModal() {
       </Text>
       <ItemInfo info={`${amount} USDC`} title="Redeemable amount" />
       <Button
-        disabled={claimed || !isOnWhitelist || status === 'loading'}
-        isLoading={status === 'loading'}
+        // isLoading={status === 'loading'}
         onClick={() => claimAirdrop()}
         shadow="0px 0px 20px #0006"
         loadingText="Claiming..."
@@ -97,7 +94,8 @@ export function AirdropClaimModal() {
         px="8"
       >
         <Text id="btn-text" color="white">
-          {getButtonLabel({ status, isConnected, claimed, isOnWhitelist })}
+          {/* {getButtonLabel({ status, isConnected, claimed, isOnWhitelist })} */}
+          Claim
         </Text>
       </Button>
       <CloseButton
