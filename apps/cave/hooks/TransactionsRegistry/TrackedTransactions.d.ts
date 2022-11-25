@@ -9,6 +9,7 @@ export type TransactionMeta =
   | { type: 'offer marketplace'; tokenId: number }
   | { type: 'list position'; tokenId: number; action: 'auction' | 'sale' }
   | { type: 'unlist position'; tokenId: number }
+  | { type: 'airdrop'; amount: string | number }
 
 export type TrackedTransaction = {
   from: string
