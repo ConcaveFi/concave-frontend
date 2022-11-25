@@ -10,6 +10,7 @@ import {
  * TODO: review it @gregs
  */
 export const concaveRPC = `https://mainnet.infura.io/v3/${NEXT_PUBLIC_INFURA_ID}`
+
 export const concaveWSS = `wss://mainnet.infura.io/ws/v3/${NEXT_PUBLIC_INFURA_ID}`
 
 const NoProviderKeyError = `Concave Provider
