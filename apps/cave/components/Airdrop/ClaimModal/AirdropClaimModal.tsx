@@ -81,7 +81,7 @@ export function AirdropClaimModal() {
       </Text>
       <ItemInfo info={`${amount} USDC`} title="Redeemable amount" />
       <Button
-        disabled={!claimed || !isOnWhitelist || status === 'loading'}
+        disabled={claimed || !isOnWhitelist || status === 'loading'}
         isLoading={status === 'loading'}
         onClick={() => claimAirdrop()}
         shadow="0px 0px 20px #0006"
@@ -120,7 +120,7 @@ function getButtonLabel({ claimed, isConnected, isOnWhitelist, status }: StatusP
   if (status === 'idle') {
     if (claimed) return 'Already claimed'
     if (!isOnWhitelist) return 'Nothing to claim'
-    return 'claim'
+    return 'Claim'
   }
   if (status === 'error') return 'Ocurred an error'
   if (status === 'success') return 'Airdrop claimed'
