@@ -28,7 +28,7 @@ const leafOf = (address: string) => {
       ['address', 'uint256'],
       [
         getAddress(address), // normalizes to checksum address
-        parseUnits(claimableQuantiy.toString(), airdropToken.decimals).toString(), // parse claimable amount to token decimals
+        parseUnits(claimableQuantiy?.toString() || '0', airdropToken.decimals).toString(), // parse claimable amount to token decimals
       ],
     ).slice(2),
     'hex',
