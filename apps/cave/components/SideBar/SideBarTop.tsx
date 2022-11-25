@@ -1,5 +1,5 @@
 import { CNV } from '@concave/core'
-import { AirdropIcon, DashboardIcon } from '@concave/icons'
+import { DashboardIcon } from '@concave/icons'
 import { Box, Button, Flex, Image, Stack, Text } from '@concave/ui'
 import { ButtonLink } from 'components/ButtonLink'
 import { ConnectButton } from 'components/UserWallet/ConnectButton'
@@ -75,8 +75,15 @@ function SideBarTop({ closeSidebar }: { closeSidebar: VoidFunction }) {
         >
           Transparency
         </ButtonLink>
-        <Button mt={4} onClick={onOpen} variant={'secondary'} gap={2} shadow="up" w="100%" h="40px">
-          <AirdropIcon fill="white" boxSize={'25px'} ml="-9" />
+        <Button mt={4} onClick={onOpen} variant={'secondary'} shadow="up" w="100%" h="40px">
+          <Image
+            pr="4"
+            src="./assets/airdrop/airdrop-white.png"
+            w="28px"
+            ml="-8"
+            mr="-1"
+            alt="airdrop-icon"
+          />
           Airdrop
         </Button>
         <Box shadow="down" w="full" p={1} rounded="2xl">

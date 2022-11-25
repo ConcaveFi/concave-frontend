@@ -52,7 +52,7 @@ export function AirdropClaimModal() {
       title=""
     >
       <Image
-        src="./assets/airdrops_background.png"
+        src="./assets/airdrop/airdrops.png"
         position={'absolute'}
         alt="airdrop rain"
         zIndex={10}

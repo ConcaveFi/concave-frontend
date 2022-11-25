@@ -29,7 +29,7 @@ export function AirdropClaimBanner() {
       zIndex={10}
     >
       <Card {...airdropBanner}>
-        <Image pr="4" src="./assets/icons8-airdrop-64.png" w="55px" alt="airdrop-icon" />
+        <Image pr="4" src="./assets/airdrop/airdrop.png" w="35px" alt="airdrop-icon" />
         <Flex flex={1} direction={'column'}>
           <Heading fontSize={'md'} fontWeight="semibold">
             Airdrop is here!
