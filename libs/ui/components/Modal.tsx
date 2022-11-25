@@ -35,7 +35,7 @@ export function Modal({
   return (
     <ChakraModal {...props}>
       <ModalOverlay backdropBlur={bluryOverlay ? '16px' : '0px'} />
-      <ModalContent w="auto" maxW="auto" h="auto" maxH="auto">
+      <ModalContent mx={2} w="auto" maxW="auto" h="auto" maxH="auto">
         <ModalHeader textAlign={titleAlign}>{title}</ModalHeader>
         {!hideClose && <ModalCloseButton />}
         <HStack spacing={2} align="start">

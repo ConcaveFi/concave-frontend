@@ -49,6 +49,7 @@ export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePo
         justify="center"
         rounded={'2xl'}
         apply={'background.metal'}
+        bg="bg.primary"
       >
         <Flex direction={'column'} shadow="up" rounded={'2xl'} pb={2}>
           <Flex direction={'column'} align="center" px={4} pt={4} position={'relative'}>

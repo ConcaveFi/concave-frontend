@@ -1,3 +1,4 @@
+export { AirdropIcon } from './AirdropIcon'
 export { DashboardIcon } from './DashboardIcon'
 export { DiscountIcon } from './DiscountIcon'
 export { DownIcon } from './DownIcon'

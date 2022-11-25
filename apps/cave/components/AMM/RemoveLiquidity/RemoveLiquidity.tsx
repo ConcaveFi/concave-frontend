@@ -9,6 +9,7 @@ import {
   NumericInput,
   Stack,
   Text,
+  useBreakpointValue,
   useDisclosure,
 } from '@concave/ui'
 import { TransactionResponse } from '@ethersproject/abstract-provider'
@@ -64,7 +65,7 @@ export const RemoveLiquidityModalButton = ({
           borderRadius: '3xl',
           borderWidth: 2,
           p: { base: 4, md: 6 },
-          maxW: '100%',
+          maxW: '400px',
           w: { base: `auto`, sm: `500px` },
           shadow: 'Up for Blocks',
           fontWeight: 'bold',
@@ -151,13 +152,14 @@ const ReceiveBox = ({
   token: Token
   receiveInNative?: boolean
 }) => {
+  const isMobile = useBreakpointValue({ base: true, sm: false })
   const currency = receiveInNative ? NATIVE[token.chainId] : token
   return (
     <HStack w={'full'} shadow="down" borderRadius="2xl" p={2}>
       <CurrencyIcon link size="sm" currency={currency} />
-      <Box w={'full'}>
+      <Box w={'full'} minW={'45px'}>
         <Text fontSize={{ base: '12px', md: 'md' }} fontFamily={'heading'} fontWeight={600}>
-          {amount ? amount.toSignificant(5, { groupSeparator: ',' }) : 0}
+          {amount ? amount.toSignificant(isMobile ? 3 : 5, { groupSeparator: ',' }) : 0}
         </Text>
         <Text
           fontSize={{ base: '12px', md: 'sm' }}

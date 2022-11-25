@@ -128,7 +128,9 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
               height={'55px'}
               width="full"
               {...redeemButtonProps(validValue, status)}
-              onClick={() => onRedeem(redeemMax ? redeemable : parseEther(value || '0'), redeemMax)}
+              onClick={() =>
+                validValue && onRedeem(redeemMax ? redeemable : parseEther(value || '0'), redeemMax)
+              }
               gap={4}
             >
               {(status === 'approve' || isLoading) && <Spinner color="text.low" />}
@@ -153,14 +155,15 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
 }
 const redeemButtonProps = (validValue: boolean, status) => {
   const defaultProps = {
+    transition: 'all .5s',
     variant: 'secondary',
     fontSize: 20,
-    shadow: 'Up Small',
+    shadow: 'up',
     cursor: !validValue && 'default',
     textColor: !validValue && 'text.low',
-    _active: validValue && { transform: 'scale(0.9)' },
-    _hover: validValue && { shadow: 'up' },
-    _focus: {},
+    _active: validValue ? { transform: 'scale(0.9)' } : {},
+    _hover: validValue && { bg: 'bg.secondary', shadow: 'Glass Inner' },
+    _focus: !validValue && {},
   }
   const disabledProps = { ...defaultProps, disabled: true, _hover: {}, variant: 'primary.outline' }
   if (status === 'default') return { ...defaultProps }

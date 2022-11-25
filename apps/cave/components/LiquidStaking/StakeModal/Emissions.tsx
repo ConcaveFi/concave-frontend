@@ -24,8 +24,7 @@ export function Emissions({
     <Flex direction={{ base: 'row', md: 'column' }}>
       <Flex
         mx="auto"
-        pt={5}
-        pb={3}
+        p={4}
         w="240px"
         h="full"
         maxW={mobileUI && '120px'}
@@ -39,7 +38,7 @@ export function Emissions({
         <Info info={stakingPools[poolId].days + ' days'} title="Stake period" />
         <Image
           mx="auto"
-          src={`/assets/liquidstaking/${stakingPools[poolId].days}d-logo.svg`}
+          src={`/assets/liquidstaking/${stakingPools[poolId].days}d-logo.png`}
           alt="stake period logo"
         />
         <Info

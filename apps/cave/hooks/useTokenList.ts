@@ -2,6 +2,7 @@ import { Currency, NATIVE, Token } from '@concave/core'
 import { Fetcher } from '@concave/gemswap-sdk'
 import { fetchJson } from 'ethers/lib/utils'
 import { concaveProvider } from 'lib/providers'
+import ms from 'ms'
 import { useQuery, UseQueryResult } from 'react-query'
 import { Chain, chain, useNetwork } from 'wagmi'
 
@@ -14,15 +15,51 @@ const fetchTokenList = async (chain: Chain) => {
   return chainTokens.map((t) => new Token(t.chainId, t.address, t.decimals, t.symbol, t.name))
 }
 
-export const useTokenList = () => {
-  const { chain: activeChain } = useNetwork()
+const fetchLiquidityTokenList = async (chain: Chain) => {
+  const [tokenList, pairs] = await Promise.all([
+    fetchJson(concaveTokenList(chain.name)) as Promise<{ tokens: Token[] }>,
+    Fetcher.fetchPairs(chain.id, concaveProvider(chain.id)),
+  ])
+  const chainTokens = tokenList.tokens.filter((t) => t.chainId === chain.id)
+  const liquidityTokens = chainTokens.filter((t) => {
+    const address = t.address.toUpperCase()
+    return pairs.find((p) => {
+      return (
+        p.token0.address.toUpperCase() === address || p.token1.address.toUpperCase() === address
+      )
+    })
+  })
+  return liquidityTokens.map((t) => new Token(t.chainId, t.address, t.decimals, t.symbol, t.name))
+}
 
-  return useQuery(
-    ['token-list', activeChain?.id || 1],
-    async () =>
-      fetchTokenList(activeChain?.unsupported ? chain.mainnet : activeChain || chain.mainnet),
+export const useLiquidityTokenList = () => {
+  const network = useNetwork()
+  const activeChain = network.chain?.unsupported ? chain.mainnet : network.chain || chain.mainnet
+
+  const tokens = useQuery(
+    ['token-liqidity-list', activeChain.id],
+    async () => fetchLiquidityTokenList(activeChain),
+    {
+      cacheTime: ms('10h'),
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+      staleTime: Infinity,
+      keepPreviousData: true,
+      refetchOnWindowFocus: false,
+    },
+  )
+  return tokens
+}
+
+export const useTokenList = () => {
+  const network = useNetwork()
+  const activeChain = network.chain?.unsupported ? chain.mainnet : network.chain || chain.mainnet
+  const tokens = useQuery(
+    ['token-list', activeChain.id],
+    async () => fetchLiquidityTokenList(activeChain),
     { placeholderData: [], refetchOnWindowFocus: false },
   )
+  return tokens
 }
 
 export const useFetchTokenData = (chainID: number | string, address: string) => {

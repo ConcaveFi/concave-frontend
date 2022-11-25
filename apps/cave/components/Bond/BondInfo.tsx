@@ -28,7 +28,7 @@ export const InfoItem = ({ value, label, ...props }) => (
 
 export const BondInfo = ({ asset, roi, vestingTerm, icon }) => {
   return (
-    <Card bg="none" py={3} w="100%" direction="row" shadow="Glass Up Medium">
+    <Card bg="none" h="80px" w="100%" direction="row" shadow="Glass Up Medium">
       <Flex justify="center" flexBasis="40%" alignItems={'center'}>
         <Image src={icon} alt="" w="55px" h="55px" mr={3} />
         <InfoItem value={asset.toUpperCase()} label="Asset" />
@@ -65,10 +65,10 @@ export const UserBondPositionInfo = (props) => {
   return (
     <>
       {claimed ? (
-        <Card bg="none" py={4} w="100%" h="79px" direction="row" shadow="Glass Up Medium">
-          <Flex justify="center" flexBasis="100%">
-            <InfoItem value={'No current bond positions'} label={''} />
-          </Flex>
+        <Card bg="none" w="100%" maxH="120px" flex={1} shadow="Glass Up Medium">
+          <Text fontWeight={'semibold'} textColor={'text.bright'} m="auto" opacity={0.6}>
+            No current bond positions
+          </Text>
         </Card>
       ) : totalOwed ? (
         <Card bg="none" py={4} w="100%" direction="row" shadow="Glass Up Medium">

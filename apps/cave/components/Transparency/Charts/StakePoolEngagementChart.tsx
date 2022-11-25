@@ -1,3 +1,4 @@
+import { useBreakpointValue } from '@concave/ui'
 import { liquidityValues } from 'components/LiquidStaking/hooks/useLiquidValues'
 import { ethers } from 'ethers'
 import { useQuery } from 'react-query'
@@ -13,6 +14,7 @@ import {
 } from 'recharts'
 import { ChartCard } from './ChartCard'
 import { ChartTooltip } from './ChartTooltip'
+import { CustomizedAxisTick } from './CustomizedAxisTick'
 import { CHART_COLORS } from './style'
 
 type PoolIdCountDataType = {
@@ -23,7 +25,7 @@ type PoolIdCountDataType = {
   stakingCap: number
 }
 
-const PoolIdMap = { 0: '360 Day', 1: '180 Day', 2: '90 Day', 3: '45 Day' }
+const PoolIdMap = { 0: '360 day', 1: '180 day', 2: '90 day', 3: '45 day' }
 
 async function getPoolData(poolId: number): Promise<PoolIdCountDataType> {
   const { stakingV1Pools, stakingV1Cap } = await liquidityValues(1, poolId)
@@ -46,9 +48,21 @@ const usePoolData = (pools: number[]) => {
   })
 }
 
-export const PoolIdChart = () => {
+export const StakePoolEngagementChart = ({ isMobile }: { isMobile: boolean }) => {
   const poolResult = usePoolData([0, 1, 2, 3])
+  const mobileTick = useBreakpointValue({ base: true, sm: false })
 
+  const chartMargin = {
+    top: 20,
+    right: isMobile ? 10 : 30,
+    left: isMobile ? 20 : 30,
+    bottom: 30,
+  }
+  const xLabelPos = isMobile ? 35 : 27
+  const yLabelPos = {
+    x: isMobile ? -110 : -101,
+    y: isMobile ? 176 : 185,
+  }
   return (
     <ChartCard
       {...poolResult}
@@ -56,37 +70,32 @@ export const PoolIdChart = () => {
       tooltipDescription="This chart visualizes the amount of CNV staked in each pool relative to the pool's staking cap."
     >
       <ResponsiveContainer width="100%" height="100%">
-        <BarChart
-          width={500}
-          height={300}
-          data={poolResult.data}
-          margin={{
-            top: 20,
-            right: 20,
-            left: 10,
-            bottom: 20,
-          }}
-        >
+        <BarChart width={500} height={300} data={poolResult.data} margin={chartMargin}>
           <CartesianGrid strokeDasharray="5" opacity={0.15} />
           <XAxis
             dataKey="poolId"
             interval={0}
-            tickFormatter={(v) => PoolIdMap[v]}
+            tick={(tickData) => {
+              const customValue = PoolIdMap[tickData.payload.value]
+              return (
+                <CustomizedAxisTick customValue={customValue} isMobile={mobileTick} {...tickData} />
+              )
+            }}
             tickLine={{ stroke: CHART_COLORS.TextLow }}
             axisLine={{ stroke: CHART_COLORS.TextLow }}
-            style={{ fill: CHART_COLORS.TextLow, fontSize: '0.9rem' }}
           >
             <Label
               fill={CHART_COLORS.TextLow}
-              value={'Pool'}
+              value={'Stake pool'}
               style={{
                 textAnchor: 'middle',
-                transform: 'translateY(22.5px)',
+                transform: `translateY(${xLabelPos}px)`,
               }}
             />
           </XAxis>
           <YAxis
-            style={{ fill: CHART_COLORS.TextLow }}
+            tickFormatter={(tickData) => tickData + '%'}
+            style={{ fill: CHART_COLORS.TextLow, fontSize: '0.8rem' }}
             tickLine={{ stroke: CHART_COLORS.TextLow }}
             axisLine={{ stroke: CHART_COLORS.TextLow }}
           >
@@ -95,7 +104,7 @@ export const PoolIdChart = () => {
               value={'Percentage of pool occupied'}
               style={{
                 textAnchor: 'middle',
-                transform: 'translate(-120px, 175px) rotate(-90deg)',
+                transform: `translate(${yLabelPos.x}px, ${yLabelPos.y}px) rotate(-90deg)`,
               }}
             />
           </YAxis>

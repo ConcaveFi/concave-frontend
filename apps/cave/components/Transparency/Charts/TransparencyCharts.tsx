@@ -4,7 +4,8 @@ import { BbtCNVChart } from './BbtCNVChart'
 import { LockedCNVChart } from './LockedCNVChart'
 import { LockedCNVSeriesChart } from './LockedCNVSeriesChart'
 import { LsdCNVHoldersChart } from './LsdCNVUniqueHolders'
-import { PoolIdChart } from './PoolIdChart'
+import { StakePoolEngagementChart } from './StakePoolEngagementChart'
+
 
 export default function TransparencyCharts({ isMobile }: { isMobile: boolean }) {
   let style
@@ -40,7 +41,8 @@ export default function TransparencyCharts({ isMobile }: { isMobile: boolean }) 
         <LsdCNVHoldersChart width={style.lsdCnv.width} fontSize={style.textChartFontSize} />
       </Flex>
       <Flex gap={6} direction={style.groupDirection}>
-        <PoolIdChart />
+        <StakePoolEngagementChart isMobile={isMobile} />
+
       </Flex>
       <Flex gap={6} direction={style.groupDirection}>
         <ACNVChart fontSize={style.textChartFontSize} />

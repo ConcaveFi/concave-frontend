@@ -30,9 +30,6 @@ export const LockedCNVSeriesChart = () => {
     bottom: 50,
   }
 
-  const xLabelPos = { y: '47.5px' }
-  const yLabelPos = { x: '-105px', y: '180px' }
-
   const lockedCNVSeries = useFetchData<LockedCNVSeriesData>('locked-series')
   const dataLoaded = !lockedCNVSeries.isLoading
   const data = lockedCNVSeries.data
@@ -61,7 +58,8 @@ export const LockedCNVSeriesChart = () => {
               interval={0}
               tick={(tickData) => {
                 const customValue = data.ticks.ticksObject[tickData.payload.value]
-                return <CustomizedAxisTick customValue={customValue} {...tickData} />
+                return <CustomizedAxisTick customValue={customValue} isMobile {...tickData} />
+
               }}
               axisLine={{ stroke: CHART_COLORS.TextLow }}
               tickLine={{ stroke: CHART_COLORS.TextLow }}
@@ -72,7 +70,7 @@ export const LockedCNVSeriesChart = () => {
                 value={'Date (MM-DD-YY)'}
                 style={{
                   textAnchor: 'middle',
-                  transform: `translateY(${xLabelPos.y})`,
+                  transform: 'translateY(48px)',
                 }}
               />
             </XAxis>
@@ -87,7 +85,7 @@ export const LockedCNVSeriesChart = () => {
                 value={'CNV locked'}
                 style={{
                   textAnchor: 'middle',
-                  transform: `translate(${yLabelPos.x}, ${yLabelPos.y}) rotate(-90deg)`,
+                  transform: 'translate(-107px, 176px) rotate(-90deg)',
                 }}
               />
             </YAxis>

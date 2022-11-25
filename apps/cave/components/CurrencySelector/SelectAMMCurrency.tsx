@@ -8,6 +8,7 @@ import { defaultChains } from 'wagmi'
 import { CurrencySelector } from './CurrencySelector'
 import { SearchableTokenList } from './SearchableTokenList'
 
+export const commonTokens = [DAI, CNV, NATIVE, WETH9, PCNV]
 const CommonTokens = ({
   selected,
   onSelect,
@@ -16,7 +17,7 @@ const CommonTokens = ({
   onSelect: (currency: Currency) => void
 }) => {
   const networkId = useCurrentSupportedNetworkId()
-  const currencies = [DAI, CNV, NATIVE, WETH9, PCNV].map((c) => c[networkId]).filter(Boolean)
+  const currencies = commonTokens.map((c) => c[networkId]).filter(Boolean)
   return GenericTokens({
     selected,
     currencies,

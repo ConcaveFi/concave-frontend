@@ -1,137 +1,89 @@
-import { ExpandArrowIcon } from '@concave/icons'
-import { Box, Card, Collapse, Flex, keyframes, Spinner, Text } from '@concave/ui'
+import { Card, Flex, Link, Text, TextProps } from '@concave/ui'
 import { formatDistanceStrict } from 'date-fns'
-import { Get_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql'
-import { useCNVPrice } from 'hooks/useCNVPrice'
-import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { useEffect, useState } from 'react'
+import {
+  Get_Accrualbondv1_Last10_SoldQuery,
+  useGet_Accrualbondv1_Last10_SoldQuery,
+} from 'graphql/generated/graphql'
+import { getTxExplorer } from 'lib/getTransactionExplorer'
+import { useMemo } from 'react'
 import { numberMask } from 'utils/numberMask'
 
-interface BoldSoldsCardProps {
-  data: Get_Accrualbondv1_Last10_SoldQuery
-  status: 'error' | 'idle' | 'success' | 'loading'
-  loading: boolean
-}
+interface BoldSoldsCardProps {}
 
-const BoldSoldsCard = (props: BoldSoldsCardProps) => {
-  const netWorkdId = useCurrentSupportedNetworkId()
-  const { data, loading: isLoading, status } = props
-  const AMMData = useCNVPrice()
-  const [bondSpotPrice, setBondSpotPrice] = useState('0')
-  const [solds, setSolds] = useState([])
-  const [isOpen, setIsOpen] = useState(false)
-
-  useEffect(() => {
-    if (data) {
-      setSolds(data.logAccrualBondsV1_BondSold)
-    }
-  }, [data])
-
-  const relatives = solds.map((value, index) => (
-    <Text
-      fontSize={{ base: '12px', md: 'sm' }}
-      key={index}
-      opacity={1 - (isOpen ? index / 10 : (index / 10) * 3)}
-    >
-      {formatDistanceStrict(value.timestamp * 1000, new Date().getTime()) + ' ago'}
-    </Text>
-  ))
-  const purchases = solds.map((value, index) => (
-    <Text
-      fontSize={{ base: '12px', md: 'sm' }}
-      key={index}
-      opacity={1 - (isOpen ? index / 10 : (index / 10) * 3)}
-    >
-      {numberMask(value.output) + ' CNV'}
-    </Text>
-  ))
-  const inputAmounts = solds.map((value, index) => (
-    <Text
-      fontSize={{ base: '12px', md: 'sm' }}
-      key={index}
-      opacity={1 - (isOpen ? index / 10 : (index / 10) * 3)}
-    >
-      {`${numberMask(value.inputAmount)} DAI`}
-    </Text>
-  ))
+export const BondSoldsCard = (props: BoldSoldsCardProps) => {
+  const { data, isLoading, error, status } = useGet_Accrualbondv1_Last10_SoldQuery()
+  const activity = useMemo(() => prepareData(data), [data])
 
   return (
-    <Flex direction="column">
-      <Collapse
-        in={isOpen}
-        startingHeight={isLoading ? '50px' : solds.length == 0 ? '36px' : '100px'}
+    <Card variant="secondary" borderGradient={'secondary'} p={4} overflow="hidden">
+      <Flex
+        direction={'column'}
+        fontWeight={500}
+        maxH="200px"
+        overflowY={'auto'}
+        apply="scrollbar.big"
+        width={'full'}
       >
-        <Flex
-          width={'full'}
-          height="full"
-          flex={1}
-          textShadow={'0px 0px 27px rgba(129, 179, 255, 0.31)'}
-          textColor="text.accent"
-          fontWeight={500}
-          my={2}
-        >
-          <Flex flex={1.2} direction="column" align={'center'} fontSize="14px">
-            <Text fontSize="16px" textColor={'white'} fontWeight="700">
-              When
-            </Text>
-            {relatives}
-          </Flex>
-          <Box w="1px" my={-2} bg="stroke.primary" />
-          <Flex flex={1.3} direction="column" align={'center'} fontSize="14px">
-            <Text fontSize="16px" textColor={'white'} fontWeight="700">
-              Amount
-            </Text>
-            {inputAmounts}
-          </Flex>
+        <TableHeader />
+        <TableRows data={activity} />
+      </Flex>
+    </Card>
+  )
+}
 
-          <Box w="1px" my={-2} bg="stroke.primary" />
-          <Flex flex={1.3}>
-            <Flex flex={0.9} direction="column" align={'center'} fontSize="14px">
-              <Text fontSize="16px" textColor={'white'} fontWeight="700">
-                Bonded
-              </Text>
-              {purchases}
-            </Flex>
-          </Flex>
-        </Flex>
-      </Collapse>
-      <Card
-        height={'40px'}
-        width="full"
-        variant="secondary"
-        rounded={'0px'}
-        justify="center"
-        align={'center'}
-        fontWeight="700"
-        fontSize={'18px'}
-      >
-        {
-          {
-            loading: (
-              <Flex gap={2} color={'text.bright'}>
-                <Text>Loading data</Text>
-                <Spinner />
-              </Flex>
-            ),
-            error: <Text color={'text.bright'}>Error loading data</Text>,
-            success: (
-              <ExpandArrowIcon
-                width={12}
-                height={12}
-                cursor="pointer"
-                transition={'all 0.3s'}
-                transform={isOpen ? 'rotate(180deg)' : ''}
-                onClick={() => setIsOpen(!isOpen)}
-              />
-            ),
-          }[status]
-        }
-      </Card>
+function TableHeader() {
+  return (
+    <Flex w="full" color="text.low">
+      <Text {...columnProps}>When</Text>
+      <Text {...columnProps}>Amount</Text>
+      <Text {...columnProps}>Bonded</Text>
     </Flex>
   )
 }
-const spin = keyframes({
-  '0%': { transform: 'rotate(0deg)' },
-  '100%': { transform: 'rotate(360deg)' },
-})
-export default BoldSoldsCard
+interface TableRowProps {
+  data: { timestamp: string; output: string; inputAmount: string; txHash: string }[]
+}
+
+function TableRows({ data }: TableRowProps) {
+  return (
+    <Flex direction={'column'} textColor="text.bright" fontSize={{ base: '12px', md: '14px' }}>
+      {data?.map((val, index) => (
+        <Link
+          href={getTxExplorer(val.txHash, 1)}
+          _hover={{ bg: '#0005' }}
+          rounded="md"
+          key={index}
+          isExternal
+        >
+          <Flex rounded="5px" w="full">
+            <Text {...columnProps}>{val.timestamp}</Text>
+            <Text {...columnProps} color="white">
+              {val.inputAmount}
+            </Text>
+            <Text {...columnProps} color="white">
+              {val.output}
+            </Text>
+          </Flex>
+        </Link>
+      ))}
+    </Flex>
+  )
+}
+
+function prepareData(data: Get_Accrualbondv1_Last10_SoldQuery) {
+  const newData = data?.logAccrualBondsV1_BondSold
+  if (!newData) return []
+  return newData.map((val) => ({
+    timestamp: formatDistanceStrict(val.timestamp * 1000, new Date().getTime()) + ' ago',
+    inputAmount: `${numberMask(+val.inputAmount)} DAI`,
+    output: `${numberMask(+val.output)} CNV`,
+    txHash: val.txHash,
+  }))
+}
+
+const columnProps: TextProps = {
+  fontSize: { base: 'sm', md: 'md' },
+  justifyContent: 'center',
+  display: 'flex',
+  flex: 1,
+}

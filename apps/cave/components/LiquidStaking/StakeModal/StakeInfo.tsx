@@ -54,7 +54,12 @@ const Paragraph = ({ poolId, staking }: ParagraphProps) => (
 type HeaderInfoProps = { title: string; info: string }
 const HeaderInfo: React.FC<HeaderInfoProps> = ({ info, title }) => (
   <Stack spacing="1px">
-    <Text textAlign="left" fontSize={{ base: '2xl', md: '3xl' }} fontWeight="bold">
+    <Text
+      apply="background.text-brightBlue"
+      textAlign="left"
+      fontSize={{ base: '2xl', md: '3xl' }}
+      fontWeight="bold"
+    >
       {title}
     </Text>
     <Text color="text.low" fontSize="sm">

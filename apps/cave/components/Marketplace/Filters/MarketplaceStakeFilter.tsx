@@ -1,20 +1,16 @@
 import { stakingPools } from '@concave/marketplace'
 import { Box, Flex, gradientBorder, Image, SlideFade, Text, useDisclosure } from '@concave/ui'
-import { FC } from 'react'
 import { numberMask } from 'utils/numberMask'
 
-type MakeplaceStakeFilterProps = {
+interface MakeplaceStakeFilterProps {
   poolId: number
   days: number
   totalVAPR: number
   onToggleFilter: (poolId: number, type: 'add' | 'remove') => void
 }
-export const MakeplaceStakeFilter: FC<MakeplaceStakeFilterProps> = ({
-  poolId,
-  totalVAPR,
-  onToggleFilter,
-}) => {
+export function MakeplaceStakeFilter(props: MakeplaceStakeFilterProps) {
   const { isOpen, onToggle } = useDisclosure({ defaultIsOpen: true })
+  const { days, onToggleFilter, poolId, totalVAPR } = props
 
   const onClick = () => {
     onToggle()
@@ -29,6 +25,9 @@ export const MakeplaceStakeFilter: FC<MakeplaceStakeFilterProps> = ({
       offsetY="-80px"
       w={{ base: 'full', sm: 'auto' }}
       minW={{ base: '175px', sm: '49%', md: '24%' }}
+      shadow={isOpen ? 'Glow Inner' : 'up'}
+      bg={isOpen && 'linear-gradient(270deg, #08448C50 -0.12%, #070C1E50 99.82%)'}
+      rounded={'2xl'}
     >
       <Flex
         height="full"
@@ -36,10 +35,9 @@ export const MakeplaceStakeFilter: FC<MakeplaceStakeFilterProps> = ({
         minW={{ base: '175px', sm: '49%', md: '24%' }}
         py={2}
         pr={2}
-        shadow="Up Small"
         fontSize={'sm'}
         cursor="pointer"
-        sx={isOpen && { ...gradientBorder({ borderWidth: 2 }) }}
+        sx={isOpen && { ...gradientBorder({ borderWidth: 2, variant: 'primary' }) }}
         onClick={onClick}
       >
         <Image

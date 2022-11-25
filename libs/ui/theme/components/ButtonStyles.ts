@@ -1,49 +1,47 @@
 import { ComponentSingleStyleConfig } from '@chakra-ui/react'
-import { textures } from '../../theme/backgrounds'
 import { gradientBorder } from '../utils/gradientBorder'
-
-const HoverRadialGradient = {
-  ...textures.metal,
-  bg: `${textures.metal.bg}, radial-gradient(80% 232.61% at 52.27% 160%, #578CF2C4 0%, #895FFF1C 100%)`,
-}
 
 const PrimaryButtonShadow =
   '20px -20px 39px rgba(120, 182, 255, 0.25), 0px 5px 14px rgba(0, 0, 0, 0.47), inset 0px -10px 20px rgba(117, 164, 255, 0.5)'
 
 const ButtonPrimaryTheme = (props) => ({
-  px: props.px,
-  py: props.py,
-  borderRadius: '2xl',
-  ...gradientBorder({ borderRadius: '2xl', borderWidth: props.borderWidth }),
-  bgGradient: 'linear(to-r, primary.1, primary.2)',
-  fontFamily: 'heading',
-  fontWeight: 'bold',
-  shadow: PrimaryButtonShadow,
   _focus: { shadow: PrimaryButtonShadow, transform: 'scale(1.05)' },
   _hover: { _disabled: { opacity: 1 } },
+  shadow: PrimaryButtonShadow,
+  fontFamily: 'heading',
+  borderRadius: '2xl',
+  fontWeight: 'bold',
+  px: props.px,
+  py: props.py,
+  '&:enabled': {
+    ...gradientBorder({ borderRadius: '2xl', borderWidth: props.borderWidth }),
+    bgGradient: 'linear(to-r, primary.1, primary.2)',
+  },
   _disabled: {
-    apply: 'background.metalBrighter',
-    ...gradientBorder({ borderRadius: '2xl', variant: 'secondary' }),
+    bg: 'none',
     shadow: 'Up Big',
     color: 'text.low',
   },
 })
 
 const ButtonSecondaryTheme = (props) => ({
-  apply: 'background.metalBrighter',
+  bg: 'bg.primary',
   shadow: 'Up Big',
   borderRadius: '2xl',
   _active: {
-    ...HoverRadialGradient,
+    bg: 'bg.secondary',
+    shadow: 'Glass Inner',
     color: 'text.high',
     transform: 'scale(1)',
   },
   _focus: {
-    ...HoverRadialGradient,
+    bg: 'bg.secondary',
+    shadow: 'Glass Inner',
     color: 'text.high',
   },
   _hover: {
-    ...HoverRadialGradient,
+    bg: 'bg.secondary',
+    shadow: 'Glass Inner',
     color: 'text.high',
   },
 })
@@ -111,7 +109,7 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
       bg: 'none',
       fontWeight: 'bold',
       shadow: 'Up Big',
-      _hover: { bg: HoverRadialGradient, color: 'text.high' },
+      _hover: { color: 'text.high' },
     }),
     secondary: ButtonSecondaryTheme,
     select: ButtonSelectTheme,

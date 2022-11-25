@@ -2,6 +2,7 @@ import { Flex, Text, VStack } from '@chakra-ui/react'
 import { BoxProps, HStack, useBreakpointValue } from '@concave/ui'
 import { Loading } from 'components/Loading'
 import { MarketplaceFilterContainer } from 'components/Marketplace/Main/MarketplaceFilterContainer'
+import { useState } from 'react'
 import { MarketplacePosition } from './MarketplacePosition'
 import { MarketplaceSortConainer } from './MarketplaceSortContainer'
 import { TokenIdSearchBar } from './TokenIdSearchBar'
@@ -17,54 +18,46 @@ export const MarketplaceDashboard = (props: BoxProps) => {
     setSort,
     setStakeFilters,
   } = useMarketplaceDashbord()
-
+  const isMobile = useBreakpointValue({ base: true, sm: false })
+  const [activePosition, setActivePosition] = useState('')
   const positions = nftPositions.map((stakingPosition) => (
     <MarketplacePosition
-      key={+stakingPosition.tokenId.toString()}
+      key={stakingPosition.tokenId.toString()}
       stakingPosition={stakingPosition}
+      onMouseEnter={() => setActivePosition(stakingPosition.tokenId.toString())}
+      onMouseLeave={() => setActivePosition('')}
+      isActive={stakingPosition.tokenId.toString() === activePosition}
     />
   ))
 
-  const isMobile = useBreakpointValue({ base: true, sm: false })
-
   return (
-    <>
-      <VStack
-        apply="background.metal"
-        width={['100%', '100%', '100%', '100%', `800px`]}
-        maxH={['full', 'full', 'full', 'full', '1000px']}
-        p={4}
-        gap={4}
-        borderRadius={'3xl'}
-        w={'full'}
-      >
-        <>
-          <MarketplaceFilterContainer
-            stakeFilters={stakeFilters}
-            onChangeStakeFilters={setStakeFilters}
-          />
-          <HStack w={'full'} flex={1} gap={2} flexWrap={'wrap'} justifyContent={'space-around'}>
-            <MarketplaceSortConainer onChangeSort={setSort} currentSort={sort} />
-            {!isMobile && <TokenIdSearchBar onApplyFilter={setTokenIdFilter} />}
-          </HStack>
-        </>
+    <VStack bg="bg.primary" shadow={'up'} p={4} gap={4} borderRadius={'3xl'} maxH={'1000px'}>
+      <MarketplaceFilterContainer
+        stakeFilters={stakeFilters}
+        onChangeStakeFilters={setStakeFilters}
+      />
+      <HStack w={'full'} flex={1} gap={2} flexWrap={'wrap'} justifyContent={'space-around'}>
+        <MarketplaceSortConainer onChangeSort={setSort} currentSort={sort} />
+        {!isMobile && <TokenIdSearchBar onApplyFilter={setTokenIdFilter} />}
+      </HStack>
+
+      <Flex w="full" shadow="down" rounded={'16px'} p={2} overflow="hidden">
         <Flex
-          as={Loading}
-          size="md"
+          onScroll={() => setActivePosition('')}
           isLoading={isFetching}
-          rLabel=""
-          rounded={'inherit'}
-          shadow="down"
-          w="full"
-          p={4}
-          py={4}
-          textAlign={`center`}
-          justify="start"
-          overflowY={'scroll'}
-          h={'auto'}
-          direction="column"
           apply="scrollbar.big"
+          textAlign={`center`}
+          overflowY={'scroll'}
+          rounded={'inherit'}
+          direction="column"
+          justify="start"
+          as={Loading}
+          h={'auto'}
+          rLabel=""
+          size="md"
+          w="full"
           gap={4}
+          p={2}
         >
           {positions.length == 0 ? (
             <>
@@ -77,7 +70,7 @@ export const MarketplaceDashboard = (props: BoxProps) => {
             <>{positions}</>
           )}
         </Flex>
-      </VStack>
-    </>
+      </Flex>
+    </VStack>
   )
 }

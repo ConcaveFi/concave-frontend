@@ -1,12 +1,12 @@
 import { Currency, CurrencyAmount, Percent, RouterAbi, ROUTER_ADDRESS } from '@concave/core'
-import { Contract } from 'ethers'
-import { parseUnits } from 'ethers/lib/utils'
+import { BigNumber, Contract } from 'ethers'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useState } from 'react'
 import { useContract, useSigner } from 'wagmi'
-const currencyAmountToBigNumber = (currency: CurrencyAmount<Currency>) => {
-  return parseUnits(currency.toFixed(currency.currency.decimals))
+
+const currencyAmountToBigNumber = (amount: CurrencyAmount<Currency>) => {
+  return BigNumber.from(amount.quotient.toString())
 }
 
 const getMinAmountParam = (amount: CurrencyAmount<Currency>) =>
@@ -62,7 +62,6 @@ export const useAddLiquidityTransaction = (
   const { data: signer } = useSigner()
   const routerContract = useContract<Contract>({
     addressOrName: ROUTER_ADDRESS[networkId],
-    // @ts-ignore
     contractInterface: RouterAbi,
     signerOrProvider: signer,
   })

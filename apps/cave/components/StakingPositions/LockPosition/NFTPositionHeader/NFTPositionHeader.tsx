@@ -87,15 +87,7 @@ export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
   }
 
   return (
-    <Flex
-      shadow="up"
-      bg="url(assets/textures/metal.png), linear-gradient(180deg, #16222E 0.07%, #28394D 80.07%)"
-      bgSize={'120px auto'}
-      width={'full'}
-      rounded="2xl"
-      p={3}
-      direction="column"
-    >
+    <Flex shadow="up" width={'full'} rounded="2xl" p={3} direction="column">
       <Flex
         width={'full'}
         justify="space-between"

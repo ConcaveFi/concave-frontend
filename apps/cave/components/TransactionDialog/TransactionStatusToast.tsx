@@ -1,4 +1,14 @@
-import { Card, CardProps, CloseButton, Link, RenderProps, Stack, Text, useToast } from '@concave/ui'
+import {
+  Card,
+  CardProps,
+  CloseButton,
+  Link,
+  RenderProps,
+  Stack,
+  Text,
+  useBreakpointValue,
+  useToast,
+} from '@concave/ui'
 import { getTransactionStatusLabel, TrackedTransaction } from 'hooks/TransactionsRegistry'
 import { getTxExplorer } from 'lib/getTransactionExplorer'
 import ms from 'ms'
@@ -68,6 +78,8 @@ const makeTransactionStatusToast = (tx: TrackedTransaction) =>
   https://github.com/chakra-ui/chakra-ui/issues/2736#issuecomment-743159129
 */
 export const useTransactionStatusToast = () => {
+  const isMobile = useBreakpointValue({ base: true, md: false })
+
   const toast = useToast({
     position: 'top-right',
     containerStyle: { margin: 8, marginBottom: 0 },
@@ -75,6 +87,7 @@ export const useTransactionStatusToast = () => {
 
   return useCallback(
     (tx: TrackedTransaction) => {
+      if (isMobile) return
       /* no idea why, maybe bug on chakra, 
         it's not auto closing when adding two toasts with same id
         tried using tx.hash as the id but toast.close(tx.hash) closes the new one being created

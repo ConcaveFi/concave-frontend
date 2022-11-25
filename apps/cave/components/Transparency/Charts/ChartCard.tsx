@@ -1,6 +1,7 @@
 import { QuestionIcon } from '@concave/icons'
-import { Box, Card, Flex, Spinner, Text, Tooltip } from '@concave/ui'
+import { Box, Card, Flex, Spinner, Text, Tooltip, useBreakpointValue, WrapItem } from '@concave/ui'
 import { Loading } from 'components/Loading'
+import { useState } from 'react'
 
 export const ChartCard = ({
   isLoading,
@@ -15,7 +16,6 @@ export const ChartCard = ({
   overflow = 'hidden',
   children,
   failureCount,
-  data,
 }: {
   data: unknown
   chartTitle: string
@@ -32,18 +32,29 @@ export const ChartCard = ({
   children?: JSX.Element | JSX.Element[]
 }) => {
   const loadingMessage = failureCount ? `Retrying` : 'Loading data'
+  const isMobile = useBreakpointValue({ base: true, xl: false })
+  const [open, setOpen] = useState(false)
 
   return (
     <Card fontWeight={'bold'} variant={variant} w={width} p={p} h={height}>
-      <Box display={'flex'} flexDir={'row'} width={'full'} justifyContent={'space-between'}>
-        <Text mr={2}>{chartTitle}</Text>
-        {(isFetching || isRefetching) && <Spinner size={'sm'} mr={'auto'} />}
-        {tooltipDescription && (
-          <Tooltip label={tooltipDescription} shouldWrapChildren>
-            <QuestionIcon />
-          </Tooltip>
-        )}
-      </Box>
+      <WrapItem
+        as={Box}
+        tabindex="0"
+        onClick={() => setOpen((o) => !o)}
+        onBlur={() => setOpen(false)}
+      >
+        <Tooltip closeDelay={500} label={tooltipDescription} isOpen={open}>
+          <Box display={'flex'} flexDir={'row'} width={'full'} justifyContent={'space-between'}>
+            <Text borderBottom={isMobile && tooltipDescription ? '1px solid white' : ''}>
+              {chartTitle}
+            </Text>
+            {(isFetching || isRefetching) && <Spinner mx={1} mt={1} size={'sm'} mr={'auto'} />}
+            {tooltipDescription && !isMobile && (
+              <QuestionIcon w={{ base: 6, sm: 5 }} h={{ base: 6, sm: 5 }} />
+            )}
+          </Box>
+        </Tooltip>
+      </WrapItem>
       <Flex
         direction={'column'}
         w={'100%'}

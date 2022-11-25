@@ -1,69 +1,16 @@
-import { Box, Link, useBreakpointValue } from '@concave/ui'
+import { Box, Link } from '@concave/ui'
 import { getExplorerURL } from 'components/TransparencyDiagram/utils'
-import { Handle, Position } from 'react-flow-renderer'
-import { sharedNodeContainerStyle, sharedNodeHandleStyle } from '../../styles'
-import { NodeDisplayData, ShapeLabelSettingsType } from '../../types'
+import { sharedNodeContainerStyle } from '../../styles'
+import { NodeDisplayData } from '../../types'
 import { NodeText } from '../NodeText'
+import { Handles } from './Handles'
 
 export function Multisig({ data }: { data: NodeDisplayData }) {
-  const isMobile = useBreakpointValue({ base: true, md: false })
-  const shapeSettings: ShapeLabelSettingsType = {
-    labelBottom: '-50',
-  }
-
   const explorerURL = getExplorerURL(data)
 
   return (
-    <Box sx={{ ...sharedNodeContainerStyle }}>
-      <Handle
-        type="target"
-        position={Position.Top}
-        id="topTarget"
-        style={{ ...sharedNodeHandleStyle, top: -20 }}
-      />
-      <Handle
-        type="source"
-        position={Position.Top}
-        id="topSource"
-        style={{ ...sharedNodeHandleStyle, top: -20 }}
-      />
-      <Handle
-        type="target"
-        position={Position.Bottom}
-        id="bottomTarget"
-        style={{ ...sharedNodeHandleStyle, bottom: isMobile ? -110 : -66 }}
-      />
-      <Handle
-        type="source"
-        position={Position.Bottom}
-        id="bottomSource"
-        style={{ ...sharedNodeHandleStyle, bottom: isMobile ? -110 : -66 }}
-      />
-      <Handle
-        type="source"
-        position={Position.Right}
-        id="rightSource"
-        style={{ ...sharedNodeHandleStyle, right: -18 }}
-      />
-      <Handle
-        type="target"
-        position={Position.Right}
-        id="rightTarget"
-        style={{ ...sharedNodeHandleStyle, right: -18 }}
-      />{' '}
-      <Handle
-        type="source"
-        position={Position.Left}
-        id="leftSource"
-        style={{ ...sharedNodeHandleStyle, left: -15 }}
-      />
-      <Handle
-        type="target"
-        position={Position.Left}
-        id="leftTarget"
-        style={{ ...sharedNodeHandleStyle, left: -15 }}
-      />
-      <NodeText data={data} shapeSettings={shapeSettings} />
+    <Box sx={{ ...sharedNodeContainerStyle }} maxW={'133px'}>
+      <Handles top={70} />
       <Link href={explorerURL} target="_blank">
         <svg
           width="123"
@@ -203,6 +150,7 @@ export function Multisig({ data }: { data: NodeDisplayData }) {
           </defs>
         </svg>
       </Link>
+      <NodeText data={data} />
     </Box>
   )
 }
