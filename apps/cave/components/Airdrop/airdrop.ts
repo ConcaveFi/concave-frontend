@@ -15,7 +15,7 @@ const whitelist = normalizeWhitelist(_whitelist)
 export const isWhitelisted = (address: string): boolean => !!whitelist[getAddress(address)]
 export const getAirdropClaimableAmount = (address: string): number => whitelist[getAddress(address)]
 
-const airdropToken = USDC[ChainId.ETHEREUM]
+export const airdropToken = USDC[ChainId.ETHEREUM]
 
 const leafOf = (address: string) => {
   const claimableQuantiy = getAirdropClaimableAmount(address)

@@ -1,12 +1,12 @@
-import { AirdropClaimContract } from '@concave/core'
+import { AirdropClaimContract, AIRDROP_CLAIM, AIRDROP_CLAIM_ABI } from '@concave/core'
 import { Button, CloseButton, Flex, Heading, Image, Modal, Text } from '@concave/ui'
 import { useAirdrop } from 'contexts/AirdropContext'
-import { parseEther } from 'ethers/lib/utils'
+import { parseUnits } from 'ethers/lib/utils'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
 import { useQuery } from 'react-query'
-import { useAccount, useSigner } from 'wagmi'
-import { getAirdropClaimableAmount, getProof, isWhitelisted } from '../airdrop'
+import { useAccount, useContractWrite, useSigner } from 'wagmi'
+import { airdropToken, getAirdropClaimableAmount, getProof, isWhitelisted } from '../airdrop'
 
 export function AirdropClaimModal() {
   const { isOpen, onClose } = useAirdrop()
@@ -23,10 +23,12 @@ export function AirdropClaimModal() {
     return await airdrop.claimed(address)
   })
 
-  function claimAirdrop() {
-    const airdrop = new AirdropClaimContract(concaveProvider(networkId))
-    airdrop.claim(signer, proof, parseEther(String(amount)))
-  }
+  const { write: claimAirdrop, status } = useContractWrite({
+    addressOrName: AIRDROP_CLAIM[networkId],
+    contractInterface: AIRDROP_CLAIM_ABI,
+    args: [proof, parseUnits(amount.toString(), airdropToken.decimals)],
+    functionName: 'claim',
+  })
 
   return (
     <Modal
@@ -64,21 +66,27 @@ export function AirdropClaimModal() {
       </Text>
       <ItemInfo info={`${amount} USDC`} title="Redeemable amount" />
       <Button
-        disabled={claimed || !isOnWhiteList}
+        disabled={claimed || !isOnWhiteList || status === 'loading'}
+        isLoading={status === 'loading'}
+        onClick={() => claimAirdrop()}
         shadow="0px 0px 20px #0006"
         bg="stroke.brightGreen"
-        onClick={claimAirdrop}
         position="relative"
         w="fit-content"
         h="50px"
         mt={7}
         px="8"
       >
-        <Text id="btn-text" color="white">
-          {claimed && 'Already claimed'}
-          {!isOnWhiteList && 'You are not on white list'}
-          {!claimed && isOnWhiteList && 'Claim'}
-        </Text>
+        {status === 'idle' && (
+          <Text id="btn-text" color="white">
+            {claimed && 'Already claimed'}
+            {!isOnWhiteList && 'You are not on white list'}
+            {!claimed && isOnWhiteList && 'Claim'}
+          </Text>
+        )}
+        {status === 'loading' && 'claiming...'}
+        {status === 'error' && 'Ocurred an error.'}
+        {status === 'success' && 'Airdrop claimed'}
       </Button>
       <CloseButton
         onClick={onClose}
