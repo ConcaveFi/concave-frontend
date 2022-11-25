@@ -39,8 +39,6 @@ export function AirdropClaimModal() {
     args: [proof, parseUnits(amount?.toString() || '0', airdropToken.decimals)],
     functionName: 'claim',
   })
-  console.log(status)
-
   useEffect(() => {
     if (!tx?.hash) return
     registerTransaction(tx, { type: 'airdrop', amount })
