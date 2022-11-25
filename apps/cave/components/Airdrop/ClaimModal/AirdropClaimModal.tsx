@@ -79,9 +79,9 @@ export function AirdropClaimModal() {
         </Link>{' '}
         to find out more about this airdrop!
       </Text>
-      <ItemInfo info={`${amount} USDC`} title="Redeemable amount" />
+      <ItemInfo info={`${amount || 0} USDC`} title="Redeemable amount" />
       <Button
-        disabled={claimed || !isOnWhitelist || status === 'loading'}
+        disabled={claimed || !isOnWhitelist || status === 'loading' || !amount}
         isLoading={status === 'loading'}
         onClick={() => claimAirdrop()}
         shadow="0px 0px 20px #0006"
