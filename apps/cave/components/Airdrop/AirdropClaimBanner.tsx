@@ -1,13 +1,4 @@
-import {
-  Button,
-  ButtonProps,
-  Card,
-  CardProps,
-  Flex,
-  Heading,
-  Image,
-  useDisclosure,
-} from '@concave/ui'
+import { Button, Card, CardProps, Flex, Heading, Image, useDisclosure } from '@concave/ui'
 import { useAirdrop } from 'contexts/AirdropContext'
 import { useIsMounted } from 'hooks/useIsMounted'
 
@@ -22,7 +13,7 @@ export function AirdropClaimBanner() {
       justify={'end'}
       pos="fixed"
       mx={'auto'}
-      left={'40%'}
+      left={'68%'}
       transition="all .8s ease"
       opacity={isMounted ? 1 : 0}
       top={isMounted ? '3%' : '-2%'}
@@ -46,9 +37,6 @@ export function AirdropClaimBanner() {
             Dismiss
           </Button>
         </Flex>
-        {/* <Button {...closeButtonProps} onClick={onClose}>
-          <CloseIcon w="8px" h="8px" />
-        </Button> */}
       </Card>
     </Flex>
   )
@@ -66,14 +54,4 @@ const airdropBanner: CardProps = {
   w: '500px',
   h: '63px',
   px: 6,
-}
-
-const closeButtonProps: ButtonProps = {
-  border: '2px solid',
-  rounded: 'full',
-  pos: 'absolute',
-  bg: '#0009',
-  left: '94%',
-  top: '-5%',
-  p: '6px',
 }
