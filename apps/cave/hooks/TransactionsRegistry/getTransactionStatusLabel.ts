@@ -66,6 +66,11 @@ export const getTransactionStatusLabel = ({ status, meta }: Partial<TrackedTrans
         success: `Successfully purchased position #${tokenId}`,
         error: `Failed to purchased position #${tokenId}`,
       }),
+      airdrop: ({ amount }) => ({
+        pending: `Claming  #${amount} from airdrop`,
+        success: `Successfully claimed #${amount}`,
+        error: `Failed to claim #${amount}`,
+      }),
       fallback,
     })[meta?.type] || fallback
   )(meta as UnionToIntersection<TransactionMeta>)[status]
