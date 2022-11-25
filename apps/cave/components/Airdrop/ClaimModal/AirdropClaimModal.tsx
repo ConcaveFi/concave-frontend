@@ -76,7 +76,7 @@ export function AirdropClaimModal() {
         Claim your airdrop now!
       </Heading>
       <Text pb="6" textAlign={'center'} px={24} mt={2} color="text.low">
-        Happy one year Concaverssary! <br />{' '}
+        Happy One Year Concaverssary! <br />{' '}
         <Link color={'text.bright'} href="https://spoon.fyi/proofOfGemInfo" isExternal>
           Click here
         </Link>{' '}
