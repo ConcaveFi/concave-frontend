@@ -43,6 +43,7 @@ export const MarketplaceDashboard = (props: BoxProps) => {
 
       <Flex w="full" shadow="down" rounded={'16px'} p={2} overflow="hidden">
         <Flex
+          onScroll={() => setActivePosition('')}
           isLoading={isFetching}
           apply="scrollbar.big"
           textAlign={`center`}
