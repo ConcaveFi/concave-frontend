@@ -2,8 +2,10 @@ import { AirdropClaimContract, AIRDROP_CLAIM, AIRDROP_CLAIM_ABI } from '@concave
 import { Button, CloseButton, Flex, Heading, Image, Modal, Text } from '@concave/ui'
 import { useAirdrop } from 'contexts/AirdropContext'
 import { parseUnits } from 'ethers/lib/utils'
+import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
+import { useEffect } from 'react'
 import { useQuery } from 'react-query'
 import { useAccount, useContractWrite, useSigner } from 'wagmi'
 import { airdropToken, getAirdropClaimableAmount, getProof, isWhitelisted } from '../airdrop'
@@ -11,6 +13,7 @@ import { airdropToken, getAirdropClaimableAmount, getProof, isWhitelisted } from
 export function AirdropClaimModal() {
   const { isOpen, onClose } = useAirdrop()
   const { address } = useAccount()
+  const { registerTransaction } = useTransactionRegistry()
   const networkId = useCurrentSupportedNetworkId()
   const { data: signer } = useSigner()
 
@@ -23,12 +26,21 @@ export function AirdropClaimModal() {
     return await airdrop.claimed(address)
   })
 
-  const { write: claimAirdrop, status } = useContractWrite({
+  const {
+    write: claimAirdrop,
+    data: tx,
+    status,
+  } = useContractWrite({
     addressOrName: AIRDROP_CLAIM[networkId],
     contractInterface: AIRDROP_CLAIM_ABI,
     args: [proof, parseUnits(amount.toString(), airdropToken.decimals)],
     functionName: 'claim',
   })
+
+  useEffect(() => {
+    if (!tx?.hash) return
+    registerTransaction(tx, { type: 'airdrop', amount })
+  }, [tx])
 
   return (
     <Modal
