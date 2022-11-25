@@ -55,7 +55,7 @@ export const MarketplaceActivityCard = () => {
       py={4}
       gap={2}
       shadow="Block Up"
-      height={'full'}
+      // height={'full'}
       position="relative"
       rounded="2xl"
       maxH={'1000px'}
@@ -87,7 +87,7 @@ export const MarketplaceActivityCard = () => {
         borderRadius="2xl"
         px={1}
         py={1}
-        __css={scrollBar}
+        apply="scrollbar.big"
         gap={2}
         pt={0}
         flexDirection={'column'}
@@ -125,7 +125,7 @@ const TransactionButton = (props: TransactionButtonProps) => {
       rounded={'full'}
       width={'90px'}
       height="37px"
-      shadow={'Up Big'}
+      shadow={active ? 'Glow Inner' : 'Up Big'}
       userSelect="none"
     >
       <Text>{label}</Text>

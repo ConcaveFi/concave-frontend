@@ -31,43 +31,33 @@ export const MarketplaceDashboard = (props: BoxProps) => {
   ))
 
   return (
-    <VStack apply="background.metal" p={4} gap={4} borderRadius={'3xl'} maxH={'1000px'}>
-      <>
-        <MarketplaceFilterContainer
-          stakeFilters={stakeFilters}
-          onChangeStakeFilters={setStakeFilters}
-        />
-        <HStack w={'full'} flex={1} gap={2} flexWrap={'wrap'} justifyContent={'space-around'}>
-          <MarketplaceSortConainer onChangeSort={setSort} currentSort={sort} />
-          {!isMobile && <TokenIdSearchBar onApplyFilter={setTokenIdFilter} />}
-        </HStack>
-      </>
-      <Flex
-        as={Loading}
-        size="md"
-        isLoading={isFetching && !nftPositions.length}
-        rLabel=""
-        rounded={'inherit'}
-        shadow="down"
-        w="full"
-        textAlign={`center`}
-        justify="start"
-        h={'full'}
-        overflowY={'hidden'}
-        p={4}
-        direction="column"
-      >
+    <VStack bg="bg.primary" shadow={'up'} p={4} gap={4} borderRadius={'3xl'} maxH={'1000px'}>
+      <MarketplaceFilterContainer
+        stakeFilters={stakeFilters}
+        onChangeStakeFilters={setStakeFilters}
+      />
+      <HStack w={'full'} flex={1} gap={2} flexWrap={'wrap'} justifyContent={'space-around'}>
+        <MarketplaceSortConainer onChangeSort={setSort} currentSort={sort} />
+        {!isMobile && <TokenIdSearchBar onApplyFilter={setTokenIdFilter} />}
+      </HStack>
+
+      <Flex w="full" shadow="down" rounded={'16px'} p={2} overflow="hidden">
         <Flex
-          mt={-2}
-          mx={-2}
-          pt={4}
-          pr={2}
-          direction="column"
-          gap={4}
           onScroll={() => setActivePosition('')}
-          borderRadius={'2xl'}
-          overflowY={'scroll'}
+          isLoading={isFetching}
           apply="scrollbar.big"
+          textAlign={`center`}
+          overflowY={'scroll'}
+          rounded={'inherit'}
+          direction="column"
+          justify="start"
+          as={Loading}
+          h={'auto'}
+          rLabel=""
+          size="md"
+          w="full"
+          gap={4}
+          p={2}
         >
           {positions.length == 0 ? (
             <>

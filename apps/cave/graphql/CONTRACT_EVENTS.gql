@@ -51,6 +51,7 @@ query GET_ACCRUALBONDV1_LAST10_SOLD {
     timestamp
     inputToken
     inputAmount
+    txHash
     method
     output
   }

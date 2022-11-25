@@ -3,19 +3,23 @@ import { useLiquidStakeData } from 'components/LiquidStaking/hooks/useLiquidStak
 import { StakePoolFilterEnum } from 'components/NftFilters/Filters/hooks/useFilterByStakePool'
 import { MakeplaceStakeFilter } from '../Filters/MarketplaceStakeFilter'
 
-export function MarketplaceFilterContainer({
-  stakeFilters,
-  onChangeStakeFilters,
-}: {
+interface FilterContainerProps {
   stakeFilters: StakePoolFilterEnum[]
   onChangeStakeFilters: (stakeFilters: StakePoolFilterEnum[]) => void
-}) {
+}
+
+export function MarketplaceFilterContainer(props: FilterContainerProps) {
+  const { onChangeStakeFilters, stakeFilters } = props
   const { stakeData } = useLiquidStakeData()
-  const onChangeFilters = (changedFilder, type) => {
-    if (type === 'add') {
-      onChangeStakeFilters([...stakeFilters, changedFilder])
-    } else if (type === 'remove') {
-      onChangeStakeFilters(stakeFilters.filter((filter) => filter !== changedFilder))
+
+  function onChangeFilters(changedFilder, type) {
+    switch (type) {
+      case 'add': {
+        onChangeStakeFilters([...stakeFilters, changedFilder])
+      }
+      case 'remove': {
+        onChangeStakeFilters(stakeFilters.filter((filter) => filter !== changedFilder))
+      }
     }
   }
 

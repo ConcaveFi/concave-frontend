@@ -88,7 +88,7 @@ export function SwapCard() {
         gap={2}
         variant="primary"
         h="fit-content"
-        minH="400px" // match candlestick
+        maxH="400px" // match candlestick
         shadow="Block Up"
         w="100%"
         maxW="420px"

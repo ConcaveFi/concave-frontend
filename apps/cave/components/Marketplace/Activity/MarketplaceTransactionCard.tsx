@@ -44,7 +44,7 @@ export const MarketplaceTransactionCard = ({ data }: MarketplaceTransactionCardP
       shadow="Up Small"
       sx={{ ...gradientBorder({ variant: 'secondary', borderWidth: 2 }) }}
       justify={'space-between'}
-      bg="#33333309"
+      apply="background.glass"
     >
       <Flex direction={'column'} justify="start" width={130}>
         <VStack

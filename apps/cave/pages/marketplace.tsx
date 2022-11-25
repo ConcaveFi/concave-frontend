@@ -7,7 +7,7 @@ const Marketplace = () => {
   return (
     <Flex width={`full`} h={'full'} gap={2} direction="column">
       <MarketplaceHeader />
-      <HStack justifyContent={'space-evenly'} flexWrap={'nowrap'} alignItems={'flex-start'}>
+      <HStack align={'start'} justify={'center'} flexWrap={'nowrap'}>
         <MarketplaceDashboard />
         <MarketplaceActivityCard />
       </HStack>

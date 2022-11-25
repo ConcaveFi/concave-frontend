@@ -9,7 +9,7 @@ export const CardStyles: ComponentStyleConfig = {
   sizes: {},
   variants: {
     primary: (props) => ({
-      apply: props.colorScheme === 'brighter' ? 'background.metalBrighter' : 'background.metal',
+      bg: 'bg.primary',
     }),
     secondary: {
       apply: 'background.glass',

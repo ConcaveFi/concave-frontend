@@ -11,11 +11,18 @@ const TransparencyDiagram = () => {
   return (
     <Container maxW={{ base: '60ch', sm: 'container.sm', lg: '90%' }} centerContent>
       <Flex align={'center'} w={'100%'} h={'100%'} gap={4} textAlign="center" direction="column">
-        <Heading as="h1" mt={16} mb={3} fontSize="5xl">
+        <Heading
+          as="h1"
+          apply="background.text-brightBlue"
+          fontWeight={'semibold'}
+          mt={16}
+          mb={3}
+          fontSize="5xl"
+        >
           Transparency Dashboard
         </Heading>
         <Flex mt={0} align="center" gap={10} width="full" justify="center" alignItems={'center'}>
-          <Text maxW={620} textAlign={'center'}>
+          <Text apply="background.text-brightBlue" maxW={620} textAlign={'center'}>
             Concave&apos;s Treasury works to increase itself via investments, yield farming and
             bonding. Take a look at our stats, backing areas and diagrams on this comprehensive
             page.
