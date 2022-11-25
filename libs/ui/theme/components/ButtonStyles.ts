@@ -1,11 +1,5 @@
 import { ComponentSingleStyleConfig } from '@chakra-ui/react'
-import { textures } from '../../theme/backgrounds'
 import { gradientBorder } from '../utils/gradientBorder'
-
-const HoverRadialGradient = {
-  ...textures.metal,
-  bg: `${textures.metal.bg}, radial-gradient(80% 232.61% at 52.27% 160%, #578CF2C4 0%, #895FFF1C 100%)`,
-}
 
 const PrimaryButtonShadow =
   '20px -20px 39px rgba(120, 182, 255, 0.25), 0px 5px 14px rgba(0, 0, 0, 0.47), inset 0px -10px 20px rgba(117, 164, 255, 0.5)'
@@ -115,7 +109,7 @@ export const ButtonStyles: ComponentSingleStyleConfig = {
       bg: 'none',
       fontWeight: 'bold',
       shadow: 'Up Big',
-      _hover: { bg: HoverRadialGradient, color: 'text.high' },
+      _hover: { color: 'text.high' },
     }),
     secondary: ButtonSecondaryTheme,
     select: ButtonSelectTheme,
