@@ -7,7 +7,7 @@ import {
 } from './env.conf'
 
 export const concaveRPC = `https://rpc.concave.lol/v1/${NEXT_PUBLIC_CONCAVE_RPC_KEY}`
-export const concaveWSS = `wss://rpc.concave.lol/ws/v1/${NEXT_PUBLIC_CONCAVE_RPC_KEY}`
+export const concaveWSS = `wss://mainnet.infura.io/ws/v3/${NEXT_PUBLIC_INFURA_ID}`
 
 const NoProviderKeyError = `Concave Provider
   You need to set at least one provider key in your .env file, examples in .env.example`
