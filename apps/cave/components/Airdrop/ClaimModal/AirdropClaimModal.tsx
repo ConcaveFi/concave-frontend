@@ -23,7 +23,7 @@ export function AirdropClaimModal() {
   const isOnWhitelist = isMounted ? isWhitelisted(address) : false
   const amount = isMounted ? getAirdropClaimableAmount(address) : 0
 
-  const { data: claimed } = useQuery([''], async () => {
+  const { data: claimed } = useQuery(['AirdropClaimContract', networkId], async () => {
     const airdrop = new AirdropClaimContract(concaveProvider(networkId))
     return await airdrop.claimed(address)
   })
