@@ -1,9 +1,9 @@
 import { Currency, NATIVE, STAKING_CONTRACT } from '@concave/core'
 import { Fetcher } from '@concave/gemswap-sdk'
 import { BaseProvider } from '@ethersproject/providers'
-import { StakingV1Contract } from 'src/contract'
-import { MarketItem, StakingPosition } from 'src/entities'
-import { LogStakingV1, Marketplace } from 'src/Fetcher'
+import { StakingV1Contract } from '../contract'
+import { MarketItem, StakingPosition } from '../entities'
+import { LogStakingV1, Marketplace } from '../Fetcher'
 
 export const parser = (stakingV1Contract: StakingV1Contract, provider: BaseProvider) => {
   const cavemartToMarket = async (marketplace: Marketplace) => {

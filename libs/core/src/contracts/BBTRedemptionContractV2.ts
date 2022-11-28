@@ -1,9 +1,9 @@
 import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/providers'
 import { BaseProvider, TransactionResponse } from '@ethersproject/providers'
 import { BigNumber, Contract, ethers } from 'ethers'
-import { BBTCNV_REDEMPTION_V2_ABI } from 'src/abis'
-import { BBTCNV_REDEMPTION_V2 } from 'src/constants'
-import { ChainId } from 'src/enums'
+import { BBTCNV_REDEMPTION_V2_ABI } from '../abis'
+import { BBTCNV_REDEMPTION_V2 } from '../constants'
+import { ChainId } from '../enums'
 
 export class BBTRedemptionContractV2 {
   private readonly bbtCNVContract: ethers.Contract

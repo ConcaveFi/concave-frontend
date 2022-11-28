@@ -1,7 +1,7 @@
 import { BaseProvider } from '@ethersproject/providers'
 import { Contract, ethers } from 'ethers'
-import { AIRDROP_CLAIM_ABI } from 'src/abis/AirdropClaimAbi'
-import { AIRDROP_CLAIM } from 'src/constants'
+import { AIRDROP_CLAIM_ABI } from '../abis/AirdropClaimAbi'
+import { AIRDROP_CLAIM } from '../constants'
 
 export class AirdropClaimContract {
   private readonly airdropClaimContrat: ethers.Contract
