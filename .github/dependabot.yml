@@ -6,9 +6,8 @@ updates:
     reviewers:
       - 'ConcaveFi/frontend'
     schedule:
-      interval: 'daily'
-      time: '04:00'
+      interval: 'monthly'
     labels:
-      - "dependabot"
-      - "dependencies"
+      - 'dependabot'
+      - 'dependencies'
     target-branch: 'develop'
