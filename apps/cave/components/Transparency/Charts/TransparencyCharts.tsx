@@ -6,7 +6,6 @@ import { LockedCNVSeriesChart } from './LockedCNVSeriesChart'
 import { LsdCNVHoldersChart } from './LsdCNVUniqueHolders'
 import { StakePoolEngagementChart } from './StakePoolEngagementChart'
 
-
 export default function TransparencyCharts({ isMobile }: { isMobile: boolean }) {
   let style
   if (isMobile) {
@@ -42,7 +41,6 @@ export default function TransparencyCharts({ isMobile }: { isMobile: boolean }) 
       </Flex>
       <Flex gap={6} direction={style.groupDirection}>
         <StakePoolEngagementChart isMobile={isMobile} />
-
       </Flex>
       <Flex gap={6} direction={style.groupDirection}>
         <ACNVChart fontSize={style.textChartFontSize} />
