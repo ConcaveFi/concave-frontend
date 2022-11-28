@@ -25,6 +25,6 @@ export class AirdropClaimContract {
     proof: string[],
     amount: ethers.BigNumber,
   ): Promise<TransactionResponse> {
-    return this.airdropClaimContrat.connect(signer).claim(proof, amount, { gasLimit: 1000000 })
+    return this.airdropClaimContrat.connect(signer).claim(proof, amount)
   }
 }
