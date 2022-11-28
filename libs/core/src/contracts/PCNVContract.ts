@@ -1,7 +1,7 @@
 import { BaseProvider, TransactionResponse } from '@ethersproject/providers'
 import { BigNumber, Contract, ethers } from 'ethers'
-import { PCNV_REDEMPTION_ABI } from 'src/abis/PcnvRedemptionAbi'
-import { PCNV_ADDRESS } from 'src/constants'
+import { PCNV_REDEMPTION_ABI } from '../abis/PcnvRedemptionAbi'
+import { PCNV_ADDRESS } from '../constants'
 
 export class PCNVContract {
   private readonly pCNVContract: ethers.Contract

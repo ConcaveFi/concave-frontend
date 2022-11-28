@@ -1,8 +1,8 @@
 import { BaseProvider, TransactionResponse } from '@ethersproject/providers'
 import { Contract, ethers } from 'ethers'
-import { ACNV_REDEMPTION_ABI } from 'src/abis'
-import { ACNV_REDEEMPTION } from 'src/constants'
-import { ChainId } from 'src/enums'
+import { ACNV_REDEMPTION_ABI } from '../abis'
+import { ACNV_REDEEMPTION } from '../constants'
+import { ChainId } from '../enums'
 
 export class ACNVRedeemContract {
   private readonly aCNVContract: ethers.Contract
