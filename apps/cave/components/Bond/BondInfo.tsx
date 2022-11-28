@@ -28,23 +28,28 @@ export const InfoItem = ({ value, label, ...props }) => (
 
 export const BondInfo = ({ asset, roi, vestingTerm, icon }) => {
   return (
-    <Card bg="none" h="80px" w="100%" direction="row" shadow="Glass Up Medium">
-      <Flex justify="center" flexBasis="40%" alignItems={'center'}>
-        <Image src={icon} alt="" w="55px" h="55px" mr={3} />
-        <InfoItem value={asset.toUpperCase()} label="Asset" />
+    <Card bg="none" w="100%" shadow="Glass Up Medium">
+      <Flex h="65px">
+        <Flex justify="center" flexBasis="40%" alignItems={'center'}>
+          <Image src={icon} alt="" w="45px" h="45px" mr={3} />
+          <InfoItem value={asset.toUpperCase()} label="Asset" />
+        </Flex>
+        <InfoItem
+          value={+roi.toFixed(2) + '%'}
+          label="ROI"
+          flexGrow={1}
+          pl={3}
+          pr={3}
+          flexBasis="25%"
+          color={getRoiWarnColor(+roi)}
+        />
+        <InfoItem value={vestingTerm} label="Vesting term" px={5} flexBasis="35%" />
       </Flex>
-      <Box w="1px" mx={0} my={-4} bg="stroke.primary" />
-      <InfoItem
-        value={+roi.toFixed(2) + '%'}
-        label="ROI"
-        flexGrow={1}
-        pl={3}
-        pr={3}
-        flexBasis="25%"
-        color={getRoiWarnColor(+roi)}
-      />
-      <Box w="1px" mx={0} my={-4} bg="stroke.primary" />
-      <InfoItem value={vestingTerm} label="Vesting term" px={5} flexBasis="35%" />
+      <Box my="-1" w="90%" h="2px" bg="stroke.accent" opacity={0.5} mx="auto" />
+      <Flex h="60px" justify={'space-around'}>
+        <InfoItem value={'current price'} label="$7.263 CNV" />
+        <InfoItem value={'current price'} label="$7.263 CNV" />
+      </Flex>
     </Card>
   )
 }
@@ -65,7 +70,7 @@ export const UserBondPositionInfo = (props) => {
   return (
     <>
       {claimed ? (
-        <Card bg="none" w="100%" maxH="120px" flex={1} shadow="Glass Up Medium">
+        <Card bg="none" w="100%" maxH="110px" flex={1} shadow="Glass Up Medium">
           <Text fontWeight={'semibold'} textColor={'text.bright'} m="auto" opacity={0.6}>
             No current bond positions
           </Text>
