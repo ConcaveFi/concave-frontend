@@ -4,24 +4,16 @@ import { useAirdrop } from 'contexts/AirdropContext'
 import { parseUnits } from 'ethers/lib/utils'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { useIsMounted } from 'hooks/useIsMounted'
 import { concaveProvider } from 'lib/providers'
-import { useEffect } from 'react'
 import { useQuery } from 'react-query'
 import { useAccount, useContractWrite, useWaitForTransaction } from 'wagmi'
-import { airdropToken, getAirdropClaimableAmount, getProof, isWhitelisted } from '../airdrop'
+import { airdropToken } from '../airdrop'
 
 export function AirdropClaimModal() {
-  const { isOpen, onClose } = useAirdrop()
+  const { isOpen, onClose, proof, redeemable, whiteListed } = useAirdrop()
   const { address, isConnected } = useAccount()
   const { registerTransaction } = useTransactionRegistry()
   const networkId = useCurrentSupportedNetworkId()
-
-  const isMounted = useIsMounted()
-
-  const proof = isMounted ? getProof(address) : []
-  const isOnWhitelist = isMounted ? isWhitelisted(address) : false
-  const amount = isMounted ? getAirdropClaimableAmount(address) : 0
 
   const { data: claimed } = useQuery(['AirdropClaimContract', networkId], async () => {
     const airdrop = new AirdropClaimContract(concaveProvider(networkId))
@@ -31,15 +23,11 @@ export function AirdropClaimModal() {
   const { write: claimAirdrop, data: tx } = useContractWrite({
     addressOrName: AIRDROP_CLAIM[networkId],
     contractInterface: AIRDROP_CLAIM_ABI,
-    args: [proof, parseUnits(amount?.toString() || '0', airdropToken.decimals)],
+    args: [proof, parseUnits(redeemable?.toString() || '0', airdropToken.decimals)],
     functionName: 'claim',
+    onSuccess: (tx) => registerTransaction(tx, { type: 'airdrop', amount: redeemable }),
   })
   const { status } = useWaitForTransaction({ hash: tx?.hash })
-
-  useEffect(() => {
-    if (!tx?.hash) return
-    registerTransaction(tx, { type: 'airdrop', amount })
-  }, [tx])
 
   return (
     <Modal
@@ -79,9 +67,9 @@ export function AirdropClaimModal() {
         </Link>{' '}
         to find out more about this airdrop!
       </Text>
-      <ItemInfo info={`${amount || 0} USDC`} title="Redeemable amount" />
+      <ItemInfo info={`${redeemable || 0} USDC`} title="Redeemable amount" />
       <Button
-        disabled={claimed || !isOnWhitelist || status === 'loading' || !amount}
+        disabled={claimed || !whiteListed || status === 'loading' || !redeemable}
         isLoading={status === 'loading'}
         onClick={() => claimAirdrop()}
         shadow="0px 0px 20px #0006"
@@ -94,7 +82,7 @@ export function AirdropClaimModal() {
         px="8"
       >
         <Text id="btn-text" color="white">
-          {getButtonLabel({ status, isConnected, claimed, isOnWhitelist })}
+          {getButtonLabel({ status, isConnected, claimed, whiteListed })}
         </Text>
       </Button>
       <CloseButton
@@ -113,13 +101,13 @@ type StatusProps = {
   status: 'error' | 'success' | 'idle' | 'loading'
   isConnected: boolean
   claimed: boolean
-  isOnWhitelist: boolean
+  whiteListed: boolean
 }
-function getButtonLabel({ claimed, isConnected, isOnWhitelist, status }: StatusProps) {
+function getButtonLabel({ claimed, isConnected, whiteListed, status }: StatusProps) {
   if (!isConnected) return 'You are not connected'
   if (status === 'idle') {
     if (claimed) return 'Already claimed'
-    if (!isOnWhitelist) return 'Nothing to claim'
+    if (!whiteListed) return 'Nothing to claim'
     return 'Claim'
   }
   if (status === 'error') return 'Ocurred an error'
