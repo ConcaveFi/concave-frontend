@@ -1,33 +1,31 @@
-import { AirdropClaimContract, AIRDROP_CLAIM, AIRDROP_CLAIM_ABI } from '@concave/core'
+import { AirdropClaimContract } from '@concave/core'
 import { Button, CloseButton, Flex, Heading, Image, Link, Modal, Text } from '@concave/ui'
 import { useAirdrop } from 'contexts/AirdropContext'
 import { parseUnits } from 'ethers/lib/utils'
-import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
+import { useTransaction } from 'hooks/TransactionsRegistry/useTransaction'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
 import { useQuery } from 'react-query'
-import { useAccount, useContractWrite, useWaitForTransaction } from 'wagmi'
+import { useAccount, useSigner } from 'wagmi'
 import { airdropToken } from '../airdrop'
 
 export function AirdropClaimModal() {
   const { isOpen, onClose, proof, redeemable, whiteListed } = useAirdrop()
   const { address, isConnected } = useAccount()
-  const { registerTransaction } = useTransactionRegistry()
   const networkId = useCurrentSupportedNetworkId()
+  const { data: signer } = useSigner()
 
   const { data: claimed } = useQuery(['AirdropClaimContract', networkId], async () => {
     const airdrop = new AirdropClaimContract(concaveProvider(networkId))
     return await airdrop.claimed(address)
   })
 
-  const { write: claimAirdrop, data: tx } = useContractWrite({
-    addressOrName: AIRDROP_CLAIM[networkId],
-    contractInterface: AIRDROP_CLAIM_ABI,
-    args: [proof, parseUnits(redeemable?.toString() || '0', airdropToken.decimals)],
-    functionName: 'claim',
-    onSuccess: (tx) => registerTransaction(tx, { type: 'airdrop', amount: redeemable }),
-  })
-  const { status } = useWaitForTransaction({ hash: tx?.hash })
+  async function claimAidrop() {
+    const airdrop = new AirdropClaimContract(concaveProvider(networkId))
+    const convertedAmount = parseUnits(redeemable?.toString() || '0', airdropToken.decimals)
+    return airdrop.claim(signer, proof, convertedAmount)
+  }
+  const airdrop = useTransaction(claimAidrop, { meta: { type: 'airdrop', amount: redeemable } })
 
   return (
     <Modal
@@ -71,7 +69,7 @@ export function AirdropClaimModal() {
       <Button
         disabled={claimed || !whiteListed || status === 'loading' || !redeemable}
         isLoading={status === 'loading'}
-        onClick={() => claimAirdrop()}
+        onClick={() => airdrop.sendTx()}
         shadow="0px 0px 20px #0006"
         loadingText="Claiming..."
         bg="stroke.brightGreen"
@@ -82,7 +80,7 @@ export function AirdropClaimModal() {
         px="8"
       >
         <Text id="btn-text" color="white">
-          {getButtonLabel({ status, isConnected, claimed, whiteListed })}
+          {getButtonLabel({ status: airdrop.status, isConnected, claimed, whiteListed })}
         </Text>
       </Button>
       <CloseButton

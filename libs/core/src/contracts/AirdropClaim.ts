@@ -1,4 +1,4 @@
-import { BaseProvider } from '@ethersproject/providers'
+import { BaseProvider, TransactionResponse } from '@ethersproject/providers'
 import { Contract, ethers } from 'ethers'
 import { AIRDROP_CLAIM_ABI } from 'src/abis/AirdropClaimAbi'
 import { AIRDROP_CLAIM } from 'src/constants'
@@ -24,7 +24,7 @@ export class AirdropClaimContract {
     signer: ethers.Signer,
     proof: string[],
     amount: ethers.BigNumber,
-  ): Promise<void> {
-    this.airdropClaimContrat.connect(signer).claim(proof, amount, { gasLimit: 1000000 })
+  ): Promise<TransactionResponse> {
+    return this.airdropClaimContrat.connect(signer).claim(proof, amount, { gasLimit: 1000000 })
   }
 }
