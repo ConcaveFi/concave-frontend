@@ -3,7 +3,7 @@ import { MARKETPLACE_CONTRACT } from '@concave/core'
 import { splitSignature } from '@ethersproject/bytes'
 import { BaseProvider } from '@ethersproject/providers'
 import { ethers, Signer, Transaction } from 'ethers'
-import { MarketItem } from 'src/entities'
+import { MarketItem } from '../entities'
 import { MarketplaceABI } from './MarketplaceAbi'
 
 export class FixedOrderMarketContract {
