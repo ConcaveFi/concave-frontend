@@ -1,18 +1,15 @@
 {
   "name": "@concave/gemswap-sdk",
-  "version": "0.0.0",
   "description": "Concave Gemswap library",
-  "license": "MIT",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
   "sideEffects": false,
   "files": [
     "dist/**"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format esm,cjs --dts",
-    "dev": "tsup src/index.ts --format esm,cjs --watch --dts",
     "test": "tsdx test"
   },
   "dependencies": {
