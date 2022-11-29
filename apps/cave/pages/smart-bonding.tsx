@@ -38,13 +38,20 @@ const useBondSpotPrice = (networkId: number) => {
     enabled: networkId != undefined
   });  
 }
+
+const useBondTerm = (networkId: number) => {
+  const enabled = networkId != undefined;
+  return useQuery(['useBondTerm', networkId], () => 
+    getBondTermLength(networkId), { enabled }
+  )
+}
+
 export function Bond() {
   const { userAddress, signer, networkId } = useBondState()
   const spinnerStyles = { animation: `${spin} 2s linear infinite`, size: 'sm' }
-  const [termLength, setTermLength] = useState<number>(0)
   
   const bondSpotPrice = useBondSpotPrice(networkId);
-
+  const termLength = useBondTerm(networkId)
   const [currentBlockTs, setCurrentBlockTs] = useState<number>(0)
   const [bondSigma, setBondSigma] = useState<any>()
   const [intervalID, setIntervalID] = useState<any>()
@@ -78,17 +85,7 @@ export function Bond() {
     updateBondPositions()
   }, [userAddress, currentBlockTs])
 
-  useEffect(() => {
-    getBondTermLength(networkId)
-      .then((termLength) => {
-        setTermLength(termLength)
-      })
-      .catch((e) => {
-        console.log(e)
-      })
-      
-  }, [networkId])
-  
+
   useEffect(() => {
     if (bondSigma && isLoadingBondSigma) {
       setIsLoadingBondSigma(false)
@@ -121,7 +118,6 @@ export function Bond() {
         setButtonDisabled(false)
       })
   }
-
 
   const roi = (1 - +(bondSpotPrice.data || 0) / +cnvPrice.price?.toSignificant(8)) * 100
 
@@ -177,7 +173,7 @@ export function Bond() {
                   asset="CNV"
                   icon="/assets/tokens/cnv.svg"
                   roi={roi}
-                  vestingTerm={`${termLength} Days`}
+                  vestingTerm={`${termLength.data} Days`}
                 />
                 <UserBondPositionInfo bondSigma={bondSigma} userAddress={userAddress} />
                 {showUserPosition && (
