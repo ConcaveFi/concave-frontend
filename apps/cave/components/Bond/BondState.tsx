@@ -89,6 +89,16 @@ export async function redeemBondBatch(
   })
 }
 
+export type ReturnBondPositions = {
+  parseOldest: string;
+  totalOwed: number;
+  totalPending: number;
+  batchRedeemArray: any[];
+  claimed: boolean;
+  parseRedeemable: number;
+  address: string;
+}
+
 export const getUserBondPositions = async (
   networkId: number,
   address: string,
