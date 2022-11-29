@@ -1,131 +1,97 @@
-import { ExpandArrowIcon, SpinnerIcon } from '@concave/icons'
 import { stakingPools } from '@concave/marketplace'
-import { Box, Card, Collapse, Flex, keyframes, Text, useDisclosure } from '@concave/ui'
+import { Card, Flex, Link, Text, TextProps } from '@concave/ui'
 import { formatDistanceStrict } from 'date-fns'
 import {
   Get_Stakingv1_Last100_LockQuery,
   useGet_Stakingv1_Last100_LockQuery,
 } from 'graphql/generated/graphql'
-import { useEffect, useState } from 'react'
+import { getTxExplorer } from 'lib/getTransactionExplorer'
+import { useMemo } from 'react'
+import { UseQueryResult } from 'react-query'
 import { formatFixed } from 'utils/bigNumberMask'
 
 export const LiquidLocksCards = () => {
-  const [stakingLocks, setStakingLocks] = useState<
-    Get_Stakingv1_Last100_LockQuery['logStakingV1_Lock']
-  >([])
-  const { isOpen, onToggle } = useDisclosure()
-
-  const stakingData = useGet_Stakingv1_Last100_LockQuery()
-  const { isLoading, status } = stakingData
-  useEffect(() => {
-    if (stakingData?.data?.logStakingV1_Lock) {
-      setStakingLocks(
-        stakingData?.data?.logStakingV1_Lock.sort(
-          (current, before) => before.timestamp - current.timestamp,
-        ),
-      )
-    }
-  }, [stakingData])
-
-  const amountStaked = stakingLocks
-    .map((value, index) => (
-      <Text opacity={1 - (index / 10) * (isOpen ? 1 : 3)} key={index}>
-        {formatFixed(value.amount) + ' CNV'}
-      </Text>
-    ))
-    .splice(0, 9)
-
-  const stakePools = stakingLocks
-    .map((value, index) => (
-      <Text opacity={1 - (index / 10) * (isOpen ? 1 : 3)} key={index}>
-        {stakingPools[+value.poolID].days}
-      </Text>
-    ))
-    .splice(0, 9)
-
-  const relativeTime = stakingLocks
-    .map((value, index) => (
-      <Text opacity={1 - (index / 10) * (isOpen ? 1 : 3)} key={index}>
-        {`${formatDistanceStrict(value.timestamp * 1000, Date.now())}  ago`}
-      </Text>
-    ))
-    .splice(0, 9)
+  const stakeData = useGet_Stakingv1_Last100_LockQuery()
+  const stakingLocks = useMemo(() => prepareStakingData(stakeData), [stakeData])
 
   return (
     <Card
-      mx={'auto'}
-      width={'full'}
-      variant="secondary"
+      maxW={['380px', '450px', '500px', '500px', '1100px', '1100px']}
+      borderGradient="secondary"
       direction={'column'}
-      textShadow={'0px 0px 27px rgba(129, 179, 255, 0.31)'}
+      variant="secondary"
+      overflow="hidden"
+      width={'full'}
+      mx={'auto'}
+      p="4"
     >
-      <Collapse startingHeight={status === 'success' ? '100px' : '55px'} in={isOpen}>
-        <Flex fontWeight="700" width={'full'} flex={1} height="full">
-          <LocksColumn title="When" values={relativeTime} />
-          <Box w="1px" bg="stroke.primary" />
-          <LocksColumn title="Amount staked" values={amountStaked} />
-          <Box w="1px" bg="stroke.primary" />
-          <LocksColumn title="Stake pool" values={stakePools} />
-        </Flex>
-      </Collapse>
-
-      <Card
-        height={'35px'}
-        width="full"
-        rounded={'0px 0px 16px 16px'}
-        justify="center"
-        align={'center'}
+      <Flex
+        apply="scrollbar.big"
+        direction={'column'}
+        overflowY={'auto'}
+        fontWeight="700"
+        width={'full'}
+        height="full"
+        maxH="200px"
+        flex={1}
       >
-        {
-          {
-            loading: (
-              <Flex align={'center'} gap={2}>
-                <Text fontSize={'18px'} fontWeight="700">
-                  Loading data
-                </Text>
-                <SpinnerIcon animation={`${spinAnimation} 2s linear infinite`} />
-              </Flex>
-            ),
-            success: (
-              <ExpandArrowIcon
-                width={12}
-                height={12}
-                cursor="pointer"
-                transition={'all 0.3s'}
-                transform={isOpen ? 'rotate(180deg)' : ''}
-                onClick={onToggle}
-              />
-            ),
-            error: (
-              <Text m="auto" fontSize={'18px'} fontWeight="700">
-                Error loading data
-              </Text>
-            ),
-          }[status]
-        }
-      </Card>
+        <TableHeader />
+        <TableRows data={stakingLocks} />
+      </Flex>
     </Card>
   )
 }
 
-type LocksColumnProps = { title: string; values: JSX.Element[] }
-const LocksColumn: React.FC<LocksColumnProps> = ({ title, values }) => (
-  <Flex direction={'column'} flex={1} height="full" align={'center'}>
-    <Text mt={2} fontSize={{ base: 'sm', md: 'md' }}>
-      {title}
-    </Text>
-    <Flex
-      direction={'column'}
-      textColor="text.accent"
-      fontSize={{ base: '12px', md: '14px' }}
-      align="center"
-    >
-      {values}
+function TableHeader() {
+  return (
+    <Flex w="full" align={'center'} color="text.low">
+      <Text {...columnProps}>When</Text>
+      <Text {...columnProps}>Amount staked</Text>
+      <Text {...columnProps}>Stake pool</Text>
     </Flex>
-  </Flex>
-)
+  )
+}
 
-const spinAnimation = keyframes({
-  '0%': { transform: 'rotate(0deg)' },
-  '100%': { transform: 'rotate(360deg)' },
-})
+interface TableRowsProps {
+  data: { txHash?: string; poolID?: 360 | 180 | 90 | 45; timestamp?: string; amount?: string }[]
+}
+function TableRows({ data }: TableRowsProps) {
+  return (
+    <Flex direction={'column'} textColor="text.bright" fontSize={{ base: '12px', md: '14px' }}>
+      {data?.map((val) => (
+        <Link _hover={{}} key={val.txHash} href={getTxExplorer(val.txHash, 1)} isExternal>
+          <Flex _hover={{ bg: '#0004' }} rounded="5px" cursor="pointer" key={val.txHash} w="full">
+            <Text {...columnProps}>{val.timestamp}</Text>
+            <Text {...columnProps} color="white">
+              {val.amount}
+            </Text>
+            <Text {...columnProps} color="white">
+              {val.poolID}
+            </Text>
+          </Flex>
+        </Link>
+      ))}
+    </Flex>
+  )
+}
+
+const columnProps: TextProps = {
+  fontSize: { base: 'sm', md: 'md' },
+  justifyContent: 'center',
+  display: 'flex',
+  flex: 1,
+}
+
+function prepareStakingData(stakeData: UseQueryResult<Get_Stakingv1_Last100_LockQuery, unknown>) {
+  return stakeData?.data?.logStakingV1_Lock
+    .sort((current, before) => before.timestamp - current.timestamp)
+    .map((val) => {
+      return {
+        timestamp: `${formatDistanceStrict(val.timestamp * 1000, Date.now())} ago`,
+        amount: `${formatFixed(val.amount || 0)} CNV`,
+        poolID: stakingPools[+val.poolID].days,
+        txHash: val.txHash,
+      }
+    })
+    .splice(0, 30)
+}

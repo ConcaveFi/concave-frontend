@@ -11,7 +11,7 @@ import { gradientBorder } from '../utils/gradientBorder'
 const baseStyleList: SystemStyleFunction = (props) => {
   const border = gradientBorder({ borderWidth: 2 })
   return {
-    ...backgrounds.metal,
+    ...backgrounds.glass,
     boxShadow: mode('sm', 'dark-lg')(props),
     color: 'inherit',
     minW: '3xs',

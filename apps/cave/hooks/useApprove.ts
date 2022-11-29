@@ -1,6 +1,7 @@
 import { CurrencyAmount, MaxUint256, Token } from '@concave/core'
 import { StakingV1Contract } from '@concave/marketplace'
 import { TransactionReceipt } from '@ethersproject/abstract-provider'
+import { useErrorModal } from 'contexts/ErrorModal'
 import { BigNumberish } from 'ethers'
 import { formatUnits } from 'ethers/lib/utils'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry/'
@@ -55,6 +56,7 @@ export const useContractApprove = (
   { onSuccess }: { onSuccess: (receipt: TransactionReceipt) => void },
 ) => {
   const { registerTransaction } = useTransactionRegistry()
+  const errorModal = useErrorModal()
   const {
     data: tx,
     isLoading: isWaitingForConfirmation,
@@ -67,6 +69,7 @@ export const useContractApprove = (
     addressOrName: token?.address,
     functionName: 'approve',
     args: [spender, amountToApprove],
+    onError: (e) => errorModal.onOpen(e, { spender, amountToApprove: amountToApprove.toString() }),
     onSuccess: (tx) => {
       registerTransaction(tx, { type: 'approve', tokenSymbol: token.symbol })
     },

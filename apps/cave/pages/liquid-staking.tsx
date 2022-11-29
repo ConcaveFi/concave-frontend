@@ -7,27 +7,27 @@ import { withPageTransition } from 'components/PageTransition'
 function LiquidStaking() {
   const { stakeData, status } = useLiquidStakeData()
   return (
-    <Flex
-      width={{ base: '340px', md: '420px', xl: '900px' }}
-      justify={'start'}
-      align="center"
-      mx={'auto'}
-      direction={'column'}
-      p="0px"
-    >
-      <Heading as="h1" mt={{ base: 12, md: 8 }} fontSize={{ base: '4xl', sm: '5xl' }}>
+    <Flex w="full" direction={'column'} justify={'center'} align="center" mx={'auto'} p="0px">
+      <Heading
+        fontSize={{ base: '4xl', sm: '5xl' }}
+        apply={'background.text-brightBlue'}
+        mt={{ base: 12, md: 8 }}
+        fontWeight={'semibold'}
+        as="h1"
+      >
         Liquid Staking
       </Heading>
       <Flex
+        direction={{ xl: 'row', base: 'column' }}
+        gap={{ xl: 24, base: 2 }}
+        mt={{ xl: 8, base: 0 }}
+        textColor="white"
         align={'center'}
         justify="center"
-        direction={{ xl: 'row', base: 'column' }}
-        mt={{ xl: 8, base: 0 }}
-        gap={{ xl: 24, base: 2 }}
-        textColor="white"
       >
         <Text
           maxW={520}
+          apply={'background.text-brightBlue'}
           textAlign={{ xl: 'justify', base: 'center' }}
           fontSize={{ base: 'sm', sm: 'md' }}
         >
@@ -43,7 +43,14 @@ function LiquidStaking() {
         <GraphicGuide />
       </Flex>
 
-      <Flex my={6} justify={'space-between'} gap={{ base: 2, md: 4 }} w="full" wrap={'wrap'}>
+      <Flex
+        maxW={['380px', '450px', '500px', '500px', 'none', '1100px']}
+        justify={['center', 'space-between']}
+        gap={[2, 2, 4, 0]}
+        wrap={'wrap'}
+        w="full"
+        my={6}
+      >
         {[0, 1, 2, 3]?.map((id, index) => (
           <StakeCard
             status={status}

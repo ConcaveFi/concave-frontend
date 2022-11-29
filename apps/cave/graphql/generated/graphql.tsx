@@ -110,6 +110,14 @@ export type CnvDataOutput = {
   msg?: Maybe<Scalars['String']>
 }
 
+/** ordering argument of a cursor */
+export enum Cursor_Ordering {
+  /** ascending ordering of the cursor */
+  Asc = 'ASC',
+  /** descending ordering of the cursor */
+  Desc = 'DESC',
+}
+
 /** columns and relationships of "logACNVRedemption" */
 export type LogAcnvRedemption = {
   __typename?: 'logACNVRedemption'
@@ -148,6 +156,22 @@ export enum LogAcnvRedemption_Select_Column {
   TxBlockNumber = 'txBlockNumber',
   /** column name */
   TxHash = 'txHash',
+}
+
+/** Streaming cursor of the table "logACNVRedemption" */
+export type LogAcnvRedemption_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: LogAcnvRedemption_Stream_Cursor_Value_Input
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>
+}
+
+/** Initial value of the column from where the streaming should start */
+export type LogAcnvRedemption_Stream_Cursor_Value_Input = {
+  address?: InputMaybe<Scalars['String']>
+  amount?: InputMaybe<Scalars['numeric']>
+  txBlockNumber?: InputMaybe<Scalars['numeric']>
+  txHash?: InputMaybe<Scalars['String']>
 }
 
 /** get BondSold events from AccrualBondsV1 */
@@ -225,6 +249,316 @@ export enum LogAccrualBondsV1_BondSold_Select_Column {
   UpdatedAt = 'updated_at',
 }
 
+/** Streaming cursor of the table "logAccrualBondsV1_BondSold" */
+export type LogAccrualBondsV1_BondSold_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: LogAccrualBondsV1_BondSold_Stream_Cursor_Value_Input
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>
+}
+
+/** Initial value of the column from where the streaming should start */
+export type LogAccrualBondsV1_BondSold_Stream_Cursor_Value_Input = {
+  created_at?: InputMaybe<Scalars['timestamptz']>
+  id?: InputMaybe<Scalars['uuid']>
+  inputAmount?: InputMaybe<Scalars['String']>
+  inputToken?: InputMaybe<Scalars['String']>
+  method?: InputMaybe<Scalars['String']>
+  output?: InputMaybe<Scalars['String']>
+  timestamp?: InputMaybe<Scalars['numeric']>
+  to?: InputMaybe<Scalars['String']>
+  txBlockNumber?: InputMaybe<Scalars['numeric']>
+  txHash?: InputMaybe<Scalars['String']>
+  updated_at?: InputMaybe<Scalars['timestamptz']>
+}
+
+/** get Gemswap tx */
+export type LogAmm = {
+  __typename?: 'logAmm'
+  buyGetCNVAmount?: Maybe<Scalars['numeric']>
+  buyInDaiAmount?: Maybe<Scalars['numeric']>
+  chainId?: Maybe<Scalars['numeric']>
+  cnvPrice?: Maybe<Scalars['numeric']>
+  from?: Maybe<Scalars['String']>
+  router?: Maybe<Scalars['String']>
+  routerName?: Maybe<Scalars['String']>
+  sellCNVAmount?: Maybe<Scalars['numeric']>
+  sellGetDAIAmount?: Maybe<Scalars['numeric']>
+  symbol?: Maybe<Scalars['String']>
+  timestamp?: Maybe<Scalars['numeric']>
+  txBlockNumber: Scalars['numeric']
+  txHash?: Maybe<Scalars['String']>
+  type?: Maybe<Scalars['String']>
+}
+
+/** aggregated selection of "logAmm" */
+export type LogAmm_Aggregate = {
+  __typename?: 'logAmm_aggregate'
+  aggregate?: Maybe<LogAmm_Aggregate_Fields>
+  nodes: Array<LogAmm>
+}
+
+/** aggregate fields of "logAmm" */
+export type LogAmm_Aggregate_Fields = {
+  __typename?: 'logAmm_aggregate_fields'
+  avg?: Maybe<LogAmm_Avg_Fields>
+  count: Scalars['Int']
+  max?: Maybe<LogAmm_Max_Fields>
+  min?: Maybe<LogAmm_Min_Fields>
+  stddev?: Maybe<LogAmm_Stddev_Fields>
+  stddev_pop?: Maybe<LogAmm_Stddev_Pop_Fields>
+  stddev_samp?: Maybe<LogAmm_Stddev_Samp_Fields>
+  sum?: Maybe<LogAmm_Sum_Fields>
+  var_pop?: Maybe<LogAmm_Var_Pop_Fields>
+  var_samp?: Maybe<LogAmm_Var_Samp_Fields>
+  variance?: Maybe<LogAmm_Variance_Fields>
+}
+
+/** aggregate fields of "logAmm" */
+export type LogAmm_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<LogAmm_Select_Column>>
+  distinct?: InputMaybe<Scalars['Boolean']>
+}
+
+/** aggregate avg on columns */
+export type LogAmm_Avg_Fields = {
+  __typename?: 'logAmm_avg_fields'
+  buyGetCNVAmount?: Maybe<Scalars['Float']>
+  buyInDaiAmount?: Maybe<Scalars['Float']>
+  chainId?: Maybe<Scalars['Float']>
+  cnvPrice?: Maybe<Scalars['Float']>
+  sellCNVAmount?: Maybe<Scalars['Float']>
+  sellGetDAIAmount?: Maybe<Scalars['Float']>
+  timestamp?: Maybe<Scalars['Float']>
+  txBlockNumber?: Maybe<Scalars['Float']>
+}
+
+/** Boolean expression to filter rows from the table "logAmm". All fields are combined with a logical 'AND'. */
+export type LogAmm_Bool_Exp = {
+  _and?: InputMaybe<Array<LogAmm_Bool_Exp>>
+  _not?: InputMaybe<LogAmm_Bool_Exp>
+  _or?: InputMaybe<Array<LogAmm_Bool_Exp>>
+  buyGetCNVAmount?: InputMaybe<Numeric_Comparison_Exp>
+  buyInDaiAmount?: InputMaybe<Numeric_Comparison_Exp>
+  chainId?: InputMaybe<Numeric_Comparison_Exp>
+  cnvPrice?: InputMaybe<Numeric_Comparison_Exp>
+  from?: InputMaybe<String_Comparison_Exp>
+  router?: InputMaybe<String_Comparison_Exp>
+  routerName?: InputMaybe<String_Comparison_Exp>
+  sellCNVAmount?: InputMaybe<Numeric_Comparison_Exp>
+  sellGetDAIAmount?: InputMaybe<Numeric_Comparison_Exp>
+  symbol?: InputMaybe<String_Comparison_Exp>
+  timestamp?: InputMaybe<Numeric_Comparison_Exp>
+  txBlockNumber?: InputMaybe<Numeric_Comparison_Exp>
+  txHash?: InputMaybe<String_Comparison_Exp>
+  type?: InputMaybe<String_Comparison_Exp>
+}
+
+/** aggregate max on columns */
+export type LogAmm_Max_Fields = {
+  __typename?: 'logAmm_max_fields'
+  buyGetCNVAmount?: Maybe<Scalars['numeric']>
+  buyInDaiAmount?: Maybe<Scalars['numeric']>
+  chainId?: Maybe<Scalars['numeric']>
+  cnvPrice?: Maybe<Scalars['numeric']>
+  from?: Maybe<Scalars['String']>
+  router?: Maybe<Scalars['String']>
+  routerName?: Maybe<Scalars['String']>
+  sellCNVAmount?: Maybe<Scalars['numeric']>
+  sellGetDAIAmount?: Maybe<Scalars['numeric']>
+  symbol?: Maybe<Scalars['String']>
+  timestamp?: Maybe<Scalars['numeric']>
+  txBlockNumber?: Maybe<Scalars['numeric']>
+  txHash?: Maybe<Scalars['String']>
+  type?: Maybe<Scalars['String']>
+}
+
+/** aggregate min on columns */
+export type LogAmm_Min_Fields = {
+  __typename?: 'logAmm_min_fields'
+  buyGetCNVAmount?: Maybe<Scalars['numeric']>
+  buyInDaiAmount?: Maybe<Scalars['numeric']>
+  chainId?: Maybe<Scalars['numeric']>
+  cnvPrice?: Maybe<Scalars['numeric']>
+  from?: Maybe<Scalars['String']>
+  router?: Maybe<Scalars['String']>
+  routerName?: Maybe<Scalars['String']>
+  sellCNVAmount?: Maybe<Scalars['numeric']>
+  sellGetDAIAmount?: Maybe<Scalars['numeric']>
+  symbol?: Maybe<Scalars['String']>
+  timestamp?: Maybe<Scalars['numeric']>
+  txBlockNumber?: Maybe<Scalars['numeric']>
+  txHash?: Maybe<Scalars['String']>
+  type?: Maybe<Scalars['String']>
+}
+
+/** Ordering options when selecting data from "logAmm". */
+export type LogAmm_Order_By = {
+  buyGetCNVAmount?: InputMaybe<Order_By>
+  buyInDaiAmount?: InputMaybe<Order_By>
+  chainId?: InputMaybe<Order_By>
+  cnvPrice?: InputMaybe<Order_By>
+  from?: InputMaybe<Order_By>
+  router?: InputMaybe<Order_By>
+  routerName?: InputMaybe<Order_By>
+  sellCNVAmount?: InputMaybe<Order_By>
+  sellGetDAIAmount?: InputMaybe<Order_By>
+  symbol?: InputMaybe<Order_By>
+  timestamp?: InputMaybe<Order_By>
+  txBlockNumber?: InputMaybe<Order_By>
+  txHash?: InputMaybe<Order_By>
+  type?: InputMaybe<Order_By>
+}
+
+/** select columns of table "logAmm" */
+export enum LogAmm_Select_Column {
+  /** column name */
+  BuyGetCnvAmount = 'buyGetCNVAmount',
+  /** column name */
+  BuyInDaiAmount = 'buyInDaiAmount',
+  /** column name */
+  ChainId = 'chainId',
+  /** column name */
+  CnvPrice = 'cnvPrice',
+  /** column name */
+  From = 'from',
+  /** column name */
+  Router = 'router',
+  /** column name */
+  RouterName = 'routerName',
+  /** column name */
+  SellCnvAmount = 'sellCNVAmount',
+  /** column name */
+  SellGetDaiAmount = 'sellGetDAIAmount',
+  /** column name */
+  Symbol = 'symbol',
+  /** column name */
+  Timestamp = 'timestamp',
+  /** column name */
+  TxBlockNumber = 'txBlockNumber',
+  /** column name */
+  TxHash = 'txHash',
+  /** column name */
+  Type = 'type',
+}
+
+/** aggregate stddev on columns */
+export type LogAmm_Stddev_Fields = {
+  __typename?: 'logAmm_stddev_fields'
+  buyGetCNVAmount?: Maybe<Scalars['Float']>
+  buyInDaiAmount?: Maybe<Scalars['Float']>
+  chainId?: Maybe<Scalars['Float']>
+  cnvPrice?: Maybe<Scalars['Float']>
+  sellCNVAmount?: Maybe<Scalars['Float']>
+  sellGetDAIAmount?: Maybe<Scalars['Float']>
+  timestamp?: Maybe<Scalars['Float']>
+  txBlockNumber?: Maybe<Scalars['Float']>
+}
+
+/** aggregate stddev_pop on columns */
+export type LogAmm_Stddev_Pop_Fields = {
+  __typename?: 'logAmm_stddev_pop_fields'
+  buyGetCNVAmount?: Maybe<Scalars['Float']>
+  buyInDaiAmount?: Maybe<Scalars['Float']>
+  chainId?: Maybe<Scalars['Float']>
+  cnvPrice?: Maybe<Scalars['Float']>
+  sellCNVAmount?: Maybe<Scalars['Float']>
+  sellGetDAIAmount?: Maybe<Scalars['Float']>
+  timestamp?: Maybe<Scalars['Float']>
+  txBlockNumber?: Maybe<Scalars['Float']>
+}
+
+/** aggregate stddev_samp on columns */
+export type LogAmm_Stddev_Samp_Fields = {
+  __typename?: 'logAmm_stddev_samp_fields'
+  buyGetCNVAmount?: Maybe<Scalars['Float']>
+  buyInDaiAmount?: Maybe<Scalars['Float']>
+  chainId?: Maybe<Scalars['Float']>
+  cnvPrice?: Maybe<Scalars['Float']>
+  sellCNVAmount?: Maybe<Scalars['Float']>
+  sellGetDAIAmount?: Maybe<Scalars['Float']>
+  timestamp?: Maybe<Scalars['Float']>
+  txBlockNumber?: Maybe<Scalars['Float']>
+}
+
+/** Streaming cursor of the table "logAmm" */
+export type LogAmm_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: LogAmm_Stream_Cursor_Value_Input
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>
+}
+
+/** Initial value of the column from where the streaming should start */
+export type LogAmm_Stream_Cursor_Value_Input = {
+  buyGetCNVAmount?: InputMaybe<Scalars['numeric']>
+  buyInDaiAmount?: InputMaybe<Scalars['numeric']>
+  chainId?: InputMaybe<Scalars['numeric']>
+  cnvPrice?: InputMaybe<Scalars['numeric']>
+  from?: InputMaybe<Scalars['String']>
+  router?: InputMaybe<Scalars['String']>
+  routerName?: InputMaybe<Scalars['String']>
+  sellCNVAmount?: InputMaybe<Scalars['numeric']>
+  sellGetDAIAmount?: InputMaybe<Scalars['numeric']>
+  symbol?: InputMaybe<Scalars['String']>
+  timestamp?: InputMaybe<Scalars['numeric']>
+  txBlockNumber?: InputMaybe<Scalars['numeric']>
+  txHash?: InputMaybe<Scalars['String']>
+  type?: InputMaybe<Scalars['String']>
+}
+
+/** aggregate sum on columns */
+export type LogAmm_Sum_Fields = {
+  __typename?: 'logAmm_sum_fields'
+  buyGetCNVAmount?: Maybe<Scalars['numeric']>
+  buyInDaiAmount?: Maybe<Scalars['numeric']>
+  chainId?: Maybe<Scalars['numeric']>
+  cnvPrice?: Maybe<Scalars['numeric']>
+  sellCNVAmount?: Maybe<Scalars['numeric']>
+  sellGetDAIAmount?: Maybe<Scalars['numeric']>
+  timestamp?: Maybe<Scalars['numeric']>
+  txBlockNumber?: Maybe<Scalars['numeric']>
+}
+
+/** aggregate var_pop on columns */
+export type LogAmm_Var_Pop_Fields = {
+  __typename?: 'logAmm_var_pop_fields'
+  buyGetCNVAmount?: Maybe<Scalars['Float']>
+  buyInDaiAmount?: Maybe<Scalars['Float']>
+  chainId?: Maybe<Scalars['Float']>
+  cnvPrice?: Maybe<Scalars['Float']>
+  sellCNVAmount?: Maybe<Scalars['Float']>
+  sellGetDAIAmount?: Maybe<Scalars['Float']>
+  timestamp?: Maybe<Scalars['Float']>
+  txBlockNumber?: Maybe<Scalars['Float']>
+}
+
+/** aggregate var_samp on columns */
+export type LogAmm_Var_Samp_Fields = {
+  __typename?: 'logAmm_var_samp_fields'
+  buyGetCNVAmount?: Maybe<Scalars['Float']>
+  buyInDaiAmount?: Maybe<Scalars['Float']>
+  chainId?: Maybe<Scalars['Float']>
+  cnvPrice?: Maybe<Scalars['Float']>
+  sellCNVAmount?: Maybe<Scalars['Float']>
+  sellGetDAIAmount?: Maybe<Scalars['Float']>
+  timestamp?: Maybe<Scalars['Float']>
+  txBlockNumber?: Maybe<Scalars['Float']>
+}
+
+/** aggregate variance on columns */
+export type LogAmm_Variance_Fields = {
+  __typename?: 'logAmm_variance_fields'
+  buyGetCNVAmount?: Maybe<Scalars['Float']>
+  buyInDaiAmount?: Maybe<Scalars['Float']>
+  chainId?: Maybe<Scalars['Float']>
+  cnvPrice?: Maybe<Scalars['Float']>
+  sellCNVAmount?: Maybe<Scalars['Float']>
+  sellGetDAIAmount?: Maybe<Scalars['Float']>
+  timestamp?: Maybe<Scalars['Float']>
+  txBlockNumber?: Maybe<Scalars['Float']>
+}
+
 /** get daily cnv metrics */
 export type LogCnvData = {
   __typename?: 'logCnvData'
@@ -300,6 +634,29 @@ export enum LogCnvData_Select_Column {
   UpdatedAt = 'updated_at',
 }
 
+/** Streaming cursor of the table "logCnvData" */
+export type LogCnvData_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: LogCnvData_Stream_Cursor_Value_Input
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>
+}
+
+/** Initial value of the column from where the streaming should start */
+export type LogCnvData_Stream_Cursor_Value_Input = {
+  chainID?: InputMaybe<Scalars['String']>
+  circulatingSupply?: InputMaybe<Scalars['numeric']>
+  contract?: InputMaybe<Scalars['String']>
+  created_at?: InputMaybe<Scalars['timestamptz']>
+  id?: InputMaybe<Scalars['uuid']>
+  last?: InputMaybe<Scalars['numeric']>
+  marketCap?: InputMaybe<Scalars['numeric']>
+  removedTokens?: InputMaybe<Scalars['numeric']>
+  ticker?: InputMaybe<Scalars['String']>
+  totalSupply?: InputMaybe<Scalars['numeric']>
+  updated_at?: InputMaybe<Scalars['timestamptz']>
+}
+
 /** get Transfer events for Staking V1 */
 export type LogStakingV1 = {
   __typename?: 'logStakingV1'
@@ -308,7 +665,7 @@ export type LogStakingV1 = {
   from?: Maybe<Scalars['String']>
   id: Scalars['uuid']
   lockedUntil?: Maybe<Scalars['numeric']>
-  /** An array relationship */
+  /** fetch data from the table: "marketplace" */
   marketplace: Array<Marketplace>
   poolID?: Maybe<Scalars['numeric']>
   sold?: Maybe<Scalars['Boolean']>
@@ -448,6 +805,38 @@ export enum LogStakingV1_Lock_Select_Column {
   UpdatedAt = 'updated_at',
 }
 
+/** Streaming cursor of the table "logStakingV1_Lock" */
+export type LogStakingV1_Lock_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: LogStakingV1_Lock_Stream_Cursor_Value_Input
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>
+}
+
+/** Initial value of the column from where the streaming should start */
+export type LogStakingV1_Lock_Stream_Cursor_Value_Input = {
+  amount?: InputMaybe<Scalars['String']>
+  created_at?: InputMaybe<Scalars['timestamptz']>
+  deposit?: InputMaybe<Scalars['String']>
+  id?: InputMaybe<Scalars['uuid']>
+  maturity?: InputMaybe<Scalars['numeric']>
+  poolBalance?: InputMaybe<Scalars['String']>
+  poolExcessRatio?: InputMaybe<Scalars['numeric']>
+  poolG?: InputMaybe<Scalars['numeric']>
+  poolID?: InputMaybe<Scalars['numeric']>
+  poolRewardsPerShare?: InputMaybe<Scalars['String']>
+  poolSupply?: InputMaybe<Scalars['String']>
+  poolTerm?: InputMaybe<Scalars['numeric']>
+  positionID?: InputMaybe<Scalars['numeric']>
+  rewardDebt?: InputMaybe<Scalars['String']>
+  shares?: InputMaybe<Scalars['String']>
+  timestamp?: InputMaybe<Scalars['numeric']>
+  to?: InputMaybe<Scalars['String']>
+  txBlockNumber?: InputMaybe<Scalars['numeric']>
+  txHash?: InputMaybe<Scalars['String']>
+  updated_at?: InputMaybe<Scalars['timestamptz']>
+}
+
 /** get PoolRewarded events from staking V1  */
 export type LogStakingV1_PoolRewarded = {
   __typename?: 'logStakingV1_PoolRewarded'
@@ -523,6 +912,29 @@ export enum LogStakingV1_PoolRewarded_Select_Column {
   UpdatedAt = 'updated_at',
 }
 
+/** Streaming cursor of the table "logStakingV1_PoolRewarded" */
+export type LogStakingV1_PoolRewarded_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: LogStakingV1_PoolRewarded_Stream_Cursor_Value_Input
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>
+}
+
+/** Initial value of the column from where the streaming should start */
+export type LogStakingV1_PoolRewarded_Stream_Cursor_Value_Input = {
+  balance?: InputMaybe<Scalars['String']>
+  baseObligation?: InputMaybe<Scalars['String']>
+  base_vAPR?: InputMaybe<Scalars['numeric']>
+  created_at?: InputMaybe<Scalars['timestamptz']>
+  excessObligation?: InputMaybe<Scalars['String']>
+  id?: InputMaybe<Scalars['uuid']>
+  poolID?: InputMaybe<Scalars['numeric']>
+  to?: InputMaybe<Scalars['String']>
+  txBlockNumber?: InputMaybe<Scalars['numeric']>
+  txHash?: InputMaybe<Scalars['String']>
+  updated_at?: InputMaybe<Scalars['timestamptz']>
+}
+
 /** Boolean expression to filter rows from the table "logStakingV1". All fields are combined with a logical 'AND'. */
 export type LogStakingV1_Bool_Exp = {
   _and?: InputMaybe<Array<LogStakingV1_Bool_Exp>>
@@ -586,6 +998,30 @@ export enum LogStakingV1_Select_Column {
   TxHash = 'txHash',
   /** column name */
   UpdatedAt = 'updated_at',
+}
+
+/** Streaming cursor of the table "logStakingV1" */
+export type LogStakingV1_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: LogStakingV1_Stream_Cursor_Value_Input
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>
+}
+
+/** Initial value of the column from where the streaming should start */
+export type LogStakingV1_Stream_Cursor_Value_Input = {
+  amountLocked?: InputMaybe<Scalars['String']>
+  created_at?: InputMaybe<Scalars['timestamptz']>
+  from?: InputMaybe<Scalars['String']>
+  id?: InputMaybe<Scalars['uuid']>
+  lockedUntil?: InputMaybe<Scalars['numeric']>
+  poolID?: InputMaybe<Scalars['numeric']>
+  sold?: InputMaybe<Scalars['Boolean']>
+  to?: InputMaybe<Scalars['String']>
+  tokenID?: InputMaybe<Scalars['numeric']>
+  txBlockNumber?: InputMaybe<Scalars['numeric']>
+  txHash?: InputMaybe<Scalars['String']>
+  updated_at?: InputMaybe<Scalars['timestamptz']>
 }
 
 /** take signature history of a lsd NFT token ID */
@@ -804,6 +1240,33 @@ export type Marketplace_Stddev_Samp_Order_By = {
   txBlockNumber?: InputMaybe<Order_By>
 }
 
+/** Streaming cursor of the table "marketplace" */
+export type Marketplace_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Marketplace_Stream_Cursor_Value_Input
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>
+}
+
+/** Initial value of the column from where the streaming should start */
+export type Marketplace_Stream_Cursor_Value_Input = {
+  created_at?: InputMaybe<Scalars['timestamptz']>
+  deadline?: InputMaybe<Scalars['numeric']>
+  endPrice?: InputMaybe<Scalars['String']>
+  newOwner?: InputMaybe<Scalars['String']>
+  signatureHash?: InputMaybe<Scalars['String']>
+  soldFor?: InputMaybe<Scalars['String']>
+  start?: InputMaybe<Scalars['String']>
+  startPrice?: InputMaybe<Scalars['String']>
+  tokenID?: InputMaybe<Scalars['numeric']>
+  tokenIsListed?: InputMaybe<Scalars['Boolean']>
+  tokenOption?: InputMaybe<Scalars['String']>
+  tokenOwner?: InputMaybe<Scalars['String']>
+  txBlockNumber?: InputMaybe<Scalars['numeric']>
+  txHash?: InputMaybe<Scalars['String']>
+  updated_at?: InputMaybe<Scalars['timestamptz']>
+}
+
 /** order by sum() on columns of table "marketplace" */
 export type Marketplace_Sum_Order_By = {
   deadline?: InputMaybe<Order_By>
@@ -897,6 +1360,10 @@ export type Query_Root = {
   logAccrualBondsV1_BondSold: Array<LogAccrualBondsV1_BondSold>
   /** fetch data from the table: "logAccrualBondsV1_BondSold" using primary key columns */
   logAccrualBondsV1_BondSold_by_pk?: Maybe<LogAccrualBondsV1_BondSold>
+  /** fetch data from the table: "logAmm" */
+  logAmm: Array<LogAmm>
+  /** fetch aggregated fields from the table: "logAmm" */
+  logAmm_aggregate: LogAmm_Aggregate
   /** fetch data from the table: "logCnvData" */
   logCnvData: Array<LogCnvData>
   /** fetch data from the table: "logCnvData" using primary key columns */
@@ -913,7 +1380,7 @@ export type Query_Root = {
   logStakingV1_PoolRewarded_by_pk?: Maybe<LogStakingV1_PoolRewarded>
   /** fetch data from the table: "logStakingV1" using primary key columns */
   logStakingV1_by_pk?: Maybe<LogStakingV1>
-  /** An array relationship */
+  /** fetch data from the table: "marketplace" */
   marketplace: Array<Marketplace>
   /** fetch data from the table: "rebaseStakingV1" */
   rebaseStakingV1: Array<RebaseStakingV1>
@@ -942,6 +1409,22 @@ export type Query_RootLogAccrualBondsV1_BondSoldArgs = {
 
 export type Query_RootLogAccrualBondsV1_BondSold_By_PkArgs = {
   id: Scalars['uuid']
+}
+
+export type Query_RootLogAmmArgs = {
+  distinct_on?: InputMaybe<Array<LogAmm_Select_Column>>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  order_by?: InputMaybe<Array<LogAmm_Order_By>>
+  where?: InputMaybe<LogAmm_Bool_Exp>
+}
+
+export type Query_RootLogAmm_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<LogAmm_Select_Column>>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  order_by?: InputMaybe<Array<LogAmm_Order_By>>
+  where?: InputMaybe<LogAmm_Bool_Exp>
 }
 
 export type Query_RootLogCnvDataArgs = {
@@ -1080,38 +1563,82 @@ export enum RebaseStakingV1_Select_Column {
   TxHash = 'txHash',
 }
 
+/** Streaming cursor of the table "rebaseStakingV1" */
+export type RebaseStakingV1_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: RebaseStakingV1_Stream_Cursor_Value_Input
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>
+}
+
+/** Initial value of the column from where the streaming should start */
+export type RebaseStakingV1_Stream_Cursor_Value_Input = {
+  bondVaprPool0?: InputMaybe<Scalars['numeric']>
+  bondVaprPool1?: InputMaybe<Scalars['numeric']>
+  bondVaprPool2?: InputMaybe<Scalars['numeric']>
+  bondVaprPool3?: InputMaybe<Scalars['numeric']>
+  created_at?: InputMaybe<Scalars['timestamptz']>
+  indexRebase?: InputMaybe<Scalars['numeric']>
+  txBlockNumber?: InputMaybe<Scalars['numeric']>
+  txHash?: InputMaybe<Scalars['String']>
+}
+
 export type Subscription_Root = {
   __typename?: 'subscription_root'
   /** fetch data from the table: "logACNVRedemption" */
   logACNVRedemption: Array<LogAcnvRedemption>
+  /** fetch data from the table in a streaming manner: "logACNVRedemption" */
+  logACNVRedemption_stream: Array<LogAcnvRedemption>
   /** fetch data from the table: "logAccrualBondsV1_BondSold" */
   logAccrualBondsV1_BondSold: Array<LogAccrualBondsV1_BondSold>
   /** fetch data from the table: "logAccrualBondsV1_BondSold" using primary key columns */
   logAccrualBondsV1_BondSold_by_pk?: Maybe<LogAccrualBondsV1_BondSold>
+  /** fetch data from the table in a streaming manner: "logAccrualBondsV1_BondSold" */
+  logAccrualBondsV1_BondSold_stream: Array<LogAccrualBondsV1_BondSold>
+  /** fetch data from the table: "logAmm" */
+  logAmm: Array<LogAmm>
+  /** fetch aggregated fields from the table: "logAmm" */
+  logAmm_aggregate: LogAmm_Aggregate
+  /** fetch data from the table in a streaming manner: "logAmm" */
+  logAmm_stream: Array<LogAmm>
   /** fetch data from the table: "logCnvData" */
   logCnvData: Array<LogCnvData>
   /** fetch data from the table: "logCnvData" using primary key columns */
   logCnvData_by_pk?: Maybe<LogCnvData>
+  /** fetch data from the table in a streaming manner: "logCnvData" */
+  logCnvData_stream: Array<LogCnvData>
   /** fetch data from the table: "logStakingV1" */
   logStakingV1: Array<LogStakingV1>
   /** fetch data from the table: "logStakingV1_Lock" */
   logStakingV1_Lock: Array<LogStakingV1_Lock>
   /** fetch data from the table: "logStakingV1_Lock" using primary key columns */
   logStakingV1_Lock_by_pk?: Maybe<LogStakingV1_Lock>
+  /** fetch data from the table in a streaming manner: "logStakingV1_Lock" */
+  logStakingV1_Lock_stream: Array<LogStakingV1_Lock>
   /** fetch data from the table: "logStakingV1_PoolRewarded" */
   logStakingV1_PoolRewarded: Array<LogStakingV1_PoolRewarded>
   /** fetch data from the table: "logStakingV1_PoolRewarded" using primary key columns */
   logStakingV1_PoolRewarded_by_pk?: Maybe<LogStakingV1_PoolRewarded>
+  /** fetch data from the table in a streaming manner: "logStakingV1_PoolRewarded" */
+  logStakingV1_PoolRewarded_stream: Array<LogStakingV1_PoolRewarded>
   /** fetch data from the table: "logStakingV1" using primary key columns */
   logStakingV1_by_pk?: Maybe<LogStakingV1>
-  /** An array relationship */
+  /** fetch data from the table in a streaming manner: "logStakingV1" */
+  logStakingV1_stream: Array<LogStakingV1>
+  /** fetch data from the table: "marketplace" */
   marketplace: Array<Marketplace>
+  /** fetch data from the table in a streaming manner: "marketplace" */
+  marketplace_stream: Array<Marketplace>
   /** fetch data from the table: "rebaseStakingV1" */
   rebaseStakingV1: Array<RebaseStakingV1>
+  /** fetch data from the table in a streaming manner: "rebaseStakingV1" */
+  rebaseStakingV1_stream: Array<RebaseStakingV1>
   /** fetch data from the table: "treasury" */
   treasury: Array<Treasury>
   /** fetch data from the table: "treasury" using primary key columns */
   treasury_by_pk?: Maybe<Treasury>
+  /** fetch data from the table in a streaming manner: "treasury" */
+  treasury_stream: Array<Treasury>
 }
 
 export type Subscription_RootLogAcnvRedemptionArgs = {
@@ -1119,6 +1646,12 @@ export type Subscription_RootLogAcnvRedemptionArgs = {
   limit?: InputMaybe<Scalars['Int']>
   offset?: InputMaybe<Scalars['Int']>
   order_by?: InputMaybe<Array<LogAcnvRedemption_Order_By>>
+  where?: InputMaybe<LogAcnvRedemption_Bool_Exp>
+}
+
+export type Subscription_RootLogAcnvRedemption_StreamArgs = {
+  batch_size: Scalars['Int']
+  cursor: Array<InputMaybe<LogAcnvRedemption_Stream_Cursor_Input>>
   where?: InputMaybe<LogAcnvRedemption_Bool_Exp>
 }
 
@@ -1134,6 +1667,34 @@ export type Subscription_RootLogAccrualBondsV1_BondSold_By_PkArgs = {
   id: Scalars['uuid']
 }
 
+export type Subscription_RootLogAccrualBondsV1_BondSold_StreamArgs = {
+  batch_size: Scalars['Int']
+  cursor: Array<InputMaybe<LogAccrualBondsV1_BondSold_Stream_Cursor_Input>>
+  where?: InputMaybe<LogAccrualBondsV1_BondSold_Bool_Exp>
+}
+
+export type Subscription_RootLogAmmArgs = {
+  distinct_on?: InputMaybe<Array<LogAmm_Select_Column>>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  order_by?: InputMaybe<Array<LogAmm_Order_By>>
+  where?: InputMaybe<LogAmm_Bool_Exp>
+}
+
+export type Subscription_RootLogAmm_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<LogAmm_Select_Column>>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  order_by?: InputMaybe<Array<LogAmm_Order_By>>
+  where?: InputMaybe<LogAmm_Bool_Exp>
+}
+
+export type Subscription_RootLogAmm_StreamArgs = {
+  batch_size: Scalars['Int']
+  cursor: Array<InputMaybe<LogAmm_Stream_Cursor_Input>>
+  where?: InputMaybe<LogAmm_Bool_Exp>
+}
+
 export type Subscription_RootLogCnvDataArgs = {
   distinct_on?: InputMaybe<Array<LogCnvData_Select_Column>>
   limit?: InputMaybe<Scalars['Int']>
@@ -1144,6 +1705,12 @@ export type Subscription_RootLogCnvDataArgs = {
 
 export type Subscription_RootLogCnvData_By_PkArgs = {
   id: Scalars['uuid']
+}
+
+export type Subscription_RootLogCnvData_StreamArgs = {
+  batch_size: Scalars['Int']
+  cursor: Array<InputMaybe<LogCnvData_Stream_Cursor_Input>>
+  where?: InputMaybe<LogCnvData_Bool_Exp>
 }
 
 export type Subscription_RootLogStakingV1Args = {
@@ -1166,6 +1733,12 @@ export type Subscription_RootLogStakingV1_Lock_By_PkArgs = {
   id: Scalars['uuid']
 }
 
+export type Subscription_RootLogStakingV1_Lock_StreamArgs = {
+  batch_size: Scalars['Int']
+  cursor: Array<InputMaybe<LogStakingV1_Lock_Stream_Cursor_Input>>
+  where?: InputMaybe<LogStakingV1_Lock_Bool_Exp>
+}
+
 export type Subscription_RootLogStakingV1_PoolRewardedArgs = {
   distinct_on?: InputMaybe<Array<LogStakingV1_PoolRewarded_Select_Column>>
   limit?: InputMaybe<Scalars['Int']>
@@ -1178,8 +1751,20 @@ export type Subscription_RootLogStakingV1_PoolRewarded_By_PkArgs = {
   id: Scalars['uuid']
 }
 
+export type Subscription_RootLogStakingV1_PoolRewarded_StreamArgs = {
+  batch_size: Scalars['Int']
+  cursor: Array<InputMaybe<LogStakingV1_PoolRewarded_Stream_Cursor_Input>>
+  where?: InputMaybe<LogStakingV1_PoolRewarded_Bool_Exp>
+}
+
 export type Subscription_RootLogStakingV1_By_PkArgs = {
   id: Scalars['uuid']
+}
+
+export type Subscription_RootLogStakingV1_StreamArgs = {
+  batch_size: Scalars['Int']
+  cursor: Array<InputMaybe<LogStakingV1_Stream_Cursor_Input>>
+  where?: InputMaybe<LogStakingV1_Bool_Exp>
 }
 
 export type Subscription_RootMarketplaceArgs = {
@@ -1190,11 +1775,23 @@ export type Subscription_RootMarketplaceArgs = {
   where?: InputMaybe<Marketplace_Bool_Exp>
 }
 
+export type Subscription_RootMarketplace_StreamArgs = {
+  batch_size: Scalars['Int']
+  cursor: Array<InputMaybe<Marketplace_Stream_Cursor_Input>>
+  where?: InputMaybe<Marketplace_Bool_Exp>
+}
+
 export type Subscription_RootRebaseStakingV1Args = {
   distinct_on?: InputMaybe<Array<RebaseStakingV1_Select_Column>>
   limit?: InputMaybe<Scalars['Int']>
   offset?: InputMaybe<Scalars['Int']>
   order_by?: InputMaybe<Array<RebaseStakingV1_Order_By>>
+  where?: InputMaybe<RebaseStakingV1_Bool_Exp>
+}
+
+export type Subscription_RootRebaseStakingV1_StreamArgs = {
+  batch_size: Scalars['Int']
+  cursor: Array<InputMaybe<RebaseStakingV1_Stream_Cursor_Input>>
   where?: InputMaybe<RebaseStakingV1_Bool_Exp>
 }
 
@@ -1208,6 +1805,12 @@ export type Subscription_RootTreasuryArgs = {
 
 export type Subscription_RootTreasury_By_PkArgs = {
   id: Scalars['uuid']
+}
+
+export type Subscription_RootTreasury_StreamArgs = {
+  batch_size: Scalars['Int']
+  cursor: Array<InputMaybe<Treasury_Stream_Cursor_Input>>
+  where?: InputMaybe<Treasury_Bool_Exp>
 }
 
 /** Boolean expression to compare columns of type "timestamptz". All fields are combined with logical 'AND'. */
@@ -1324,6 +1927,33 @@ export enum Treasury_Select_Column {
   UpdatedAt = 'updated_at',
   /** column name */
   Value = 'value',
+}
+
+/** Streaming cursor of the table "treasury" */
+export type Treasury_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Treasury_Stream_Cursor_Value_Input
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>
+}
+
+/** Initial value of the column from where the streaming should start */
+export type Treasury_Stream_Cursor_Value_Input = {
+  amount?: InputMaybe<Scalars['numeric']>
+  chainId?: InputMaybe<Scalars['String']>
+  contract?: InputMaybe<Scalars['String']>
+  created_at?: InputMaybe<Scalars['timestamptz']>
+  id?: InputMaybe<Scalars['uuid']>
+  image?: InputMaybe<Scalars['String']>
+  imageP1?: InputMaybe<Scalars['String']>
+  imageP2?: InputMaybe<Scalars['String']>
+  imageP3?: InputMaybe<Scalars['String']>
+  isLP?: InputMaybe<Scalars['Boolean']>
+  name?: InputMaybe<Scalars['String']>
+  rewards?: InputMaybe<Scalars['numeric']>
+  total?: InputMaybe<Scalars['numeric']>
+  updated_at?: InputMaybe<Scalars['timestamptz']>
+  value?: InputMaybe<Scalars['numeric']>
 }
 
 /** Boolean expression to compare columns of type "uuid". All fields are combined with logical 'AND'. */
@@ -1492,6 +2122,7 @@ export type Get_Accrualbondv1_Last10_SoldQuery = {
     timestamp?: any | null
     inputToken?: string | null
     inputAmount?: string | null
+    txHash?: string | null
     method?: string | null
     output?: string | null
   }>
@@ -1891,6 +2522,7 @@ export const Get_Accrualbondv1_Last10_SoldDocument = `
     timestamp
     inputToken
     inputAmount
+    txHash
     method
     output
   }

@@ -1,19 +1,9 @@
 import { keyframes } from '@chakra-ui/system'
 import { SpinIcon } from '@concave/icons'
-import {
-  Box,
-  Card,
-  Collapse,
-  Container,
-  Flex,
-  Heading,
-  Stack,
-  Text,
-  useDisclosure,
-} from '@concave/ui'
+import { Box, Card, Flex, Heading, Stack, Text, useDisclosure } from '@concave/ui'
 import { BondBuyCard } from 'components/Bond/BondBuyCard'
 import { BondInfo, UserBondPositionInfo } from 'components/Bond/BondInfo'
-import BondSoldsCard from 'components/Bond/BondSoldsCard'
+import { BondSoldsCard } from 'components/Bond/BondSoldsCard'
 import {
   getBondSpotPrice,
   getBondTermLength,
@@ -30,7 +20,6 @@ import { TransactionSubmittedDialog } from 'components/TransactionDialog/Transac
 
 import { WaitingConfirmationDialog } from 'components/TransactionDialog/TransactionWaitingConfirmationDialog'
 import { utils } from 'ethers'
-import { useGet_Accrualbondv1_Last10_SoldQuery } from 'graphql/generated/graphql'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useCNVPrice } from 'hooks/useCNVPrice'
 import { useEffect, useState } from 'react'
@@ -62,12 +51,6 @@ export function Bond() {
     onOpen: onOpenSubmitted,
   } = useDisclosure()
   const { isOpen: isOpenError, onClose: onCloseError, onOpen: onOpenError } = useDisclosure()
-  const {
-    data: last10SoldsData,
-    isLoading,
-    error,
-    status,
-  } = useGet_Accrualbondv1_Last10_SoldQuery()
 
   function updateBondPositions() {
     getUserBondPositions(networkId, userAddress, currentBlockTs)
@@ -155,100 +138,85 @@ export function Bond() {
   const roi = (1 - +bondSpotPrice / +cnvPrice.price?.toSignificant(8)) * 100
 
   return (
-    <Container maxW="container.lg" p={'4px'}>
-      <Flex direction="column" gap={10}>
-        <BondDescription />
-        <Flex
-          gap={{ base: 3, md: 10 }}
-          direction={{ lg: 'row', base: 'column' }}
-          align={{ lg: 'start', base: 'center' }}
-          justify={'center'}
-        >
-          <Box pos="relative" h="fit-content" w={{ base: '340px', md: '430px' }}>
-            <Card variant="secondary" w={{ base: '340px', md: '430px' }}>
-              <Card
-                variant="secondary"
-                borderWidth={1}
-                // px={{ base: 0, md: 6 }}
-                w={{ base: '340px', md: '430px' }}
-                py={20}
-                shadow="Glow Inner"
+    <Flex
+      direction={'column'}
+      mx="auto"
+      p={0}
+      gap={{ base: 3, lg: 2, xl: 10 }}
+      w={{ base: '430px', lg: '720px', xl: '900px' }}
+    >
+      <BondDescription />
+      <Flex direction={{ lg: 'row', base: 'column' }} gap={{ base: 3, lg: 2, xl: 10 }} w="full">
+        <Card px={{ base: 0, md: 6 }} variant="secondary" height="386px" align="center" w="full">
+          <SelectedBondType bondType="Classic" />
+          <Flex
+            flex={1}
+            align="center"
+            direction={'column'}
+            justify="space-between"
+            w="full"
+            gap={4}
+            pt={6}
+          >
+            {!userAddress && isLoadingBondSigma ? (
+              <Box
+                position={'relative'}
+                top={'32.5%'}
+                display={'flex'}
+                flexDirection="column"
+                alignItems={'center'}
                 gap={10}
-                align="center"
-                height="386px"
               >
-                <SelectedBondType bondType="Classic" />
-                {!userAddress && isLoadingBondSigma ? (
-                  <Box
-                    position={'relative'}
-                    top={'32.5%'}
-                    display={'flex'}
-                    flexDirection="column"
-                    alignItems={'center'}
-                    gap={10}
-                  >
-                    Wallet not connected
-                  </Box>
-                ) : isLoadingBondSigma ? (
-                  <Box
-                    position={'relative'}
-                    top={'32.5%'}
-                    display={'flex'}
-                    flexDirection="column"
-                    alignItems={'center'}
-                    gap={10}
-                  >
-                    Checking positions...
-                    <SpinIcon __css={spinnerStyles} width={'10'} height={'10'} />
-                  </Box>
-                ) : (
-                  ''
+                Wallet not connected
+              </Box>
+            ) : isLoadingBondSigma ? (
+              <Flex
+                position={'relative'}
+                flexDirection="column"
+                my="auto"
+                alignItems={'center'}
+                gap={5}
+              >
+                Checking positions...
+                <SpinIcon __css={spinnerStyles} width={'10'} height={'10'} />
+              </Flex>
+            ) : (
+              ''
+            )}
+            {!isLoadingBondSigma && (
+              <>
+                <BondInfo
+                  asset="CNV"
+                  icon="/assets/tokens/cnv.svg"
+                  roi={roi}
+                  vestingTerm={`${termLength} Days`}
+                />
+                <UserBondPositionInfo bondSigma={bondSigma} userAddress={userAddress} />
+                {showUserPosition && (
+                  <Redeem
+                    bondSigma={bondSigma}
+                    buttonDisabled={buttonDisabled}
+                    onConfirm={() => {
+                      onRedeemConfirm()
+                    }}
+                    isRedeeming={clickedRedeemButton}
+                    largeFont
+                    setBottom
+                    customHeight
+                  />
                 )}
-                {!isLoadingBondSigma && (
-                  <>
-                    <Box w="100%">
-                      <Collapse in={showUserPosition}>
-                        <BondInfo
-                          asset="CNV"
-                          icon="/assets/tokens/cnv.svg"
-                          roi={roi}
-                          vestingTerm={`${termLength} Days`}
-                        />
-                      </Collapse>
-                    </Box>
+              </>
+            )}
+          </Flex>
+        </Card>
 
-                    <Box w="100%">
-                      <Collapse in={showUserPosition}>
-                        <UserBondPositionInfo bondSigma={bondSigma} userAddress={userAddress} />
-                      </Collapse>
-                    </Box>
-
-                    {showUserPosition && (
-                      <Redeem
-                        bondSigma={bondSigma}
-                        buttonDisabled={buttonDisabled}
-                        onConfirm={() => {
-                          onRedeemConfirm()
-                        }}
-                        isRedeeming={clickedRedeemButton}
-                        largeFont
-                        setBottom
-                        customHeight
-                      />
-                    )}
-                  </>
-                )}
-              </Card>
-              <BondSoldsCard loading={isLoading} status={status} data={last10SoldsData} />
-            </Card>
-          </Box>
-          <BondBuyCard
-            roi={roi}
-            updateBondPositions={updateBondPositions}
-            setRedeemButtonDisabled={setButtonDisabled}
-          />
-        </Flex>
+        <BondBuyCard
+          roi={roi}
+          updateBondPositions={updateBondPositions}
+          setRedeemButtonDisabled={setButtonDisabled}
+        />
       </Flex>
+      <BondSoldsCard />
       <WaitingConfirmationDialog isOpen={openConfirmDialog} title={'Confirm redeem'}>
         <Text fontSize="lg" color="text.accent">
           {bondSigma && bondSigma['parseRedeemable']
@@ -260,7 +228,7 @@ export function Bond() {
       </WaitingConfirmationDialog>
       <TransactionSubmittedDialog tx={redeemTx} isOpen={isOpenSubmitted} />
       <TransactionErrorDialog error={txError} isOpen={isOpenError} />
-    </Container>
+    </Flex>
   )
 }
 
@@ -273,10 +241,22 @@ export default withPageTransition(Bond)
 
 const BondDescription = () => (
   <Stack mt={10} maxW="100%" align="center" textAlign="center">
-    <Heading as="h1" mb={3} fontSize="5xl">
+    <Heading
+      apply="background.text-brightBlue"
+      fontWeight="semibold"
+      variant={'H2'}
+      fontSize="5xl"
+      mb={3}
+    >
       Dynamic Bond Market
     </Heading>
-    <Flex align={'center'} justify="center" direction={{ lg: 'row', md: 'column' }} maxW={550}>
+    <Flex
+      direction={{ lg: 'row', md: 'column' }}
+      apply="background.text-brightBlue"
+      align={'center'}
+      justify="center"
+      maxW={550}
+    >
       Bonds allow new CNV supply to be minted at a discount. All funds raised through bonds are
       added to the Concave treasury and invested to generate returns for quarterly dividends.
     </Flex>

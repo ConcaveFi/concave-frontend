@@ -1,6 +1,9 @@
 import { Container, Flex } from '@concave/ui'
+import { AirdropProvider } from 'contexts/AirdropContext'
 import { AnimatePresence } from 'framer-motion'
 import { useIsMounted } from 'hooks/useIsMounted'
+import { AirdropClaimBanner } from './Airdrop/AirdropClaimBanner'
+import { AirdropClaimModal } from './Airdrop/ClaimModal/AirdropClaimModal'
 import SecurityBanner from './SecurityBanner'
 import { SideBar } from './SideBar/SideBar'
 
@@ -13,7 +16,25 @@ export const DefaultLayout = ({ children }) => {
 export const Layout = ({ children }) => {
   return (
     <Flex direction={{ base: 'column', md: 'row' }}>
-      <SideBar />
+      <Flex
+        position={'absolute'}
+        w="full"
+        h="full"
+        bg="url(/background.webp)"
+        bgSize={'100%'}
+        filter={'blur(10px)'}
+      ></Flex>
+      <Flex
+        position={'absolute'}
+        w="full"
+        h="full"
+        bg="radial-gradient(100% 211.23% at 100% 0%, rgba(0, 148, 255, 0.3) 0%, rgba(27, 61, 148, 0.1) 50%, rgba(2, 42, 65, 0.01) 100%)"
+      ></Flex>
+      <AirdropProvider>
+        <SideBar />
+        <AirdropClaimBanner />
+        <AirdropClaimModal />
+      </AirdropProvider>
       <Container
         display="flex"
         maxWidth="container.xl"

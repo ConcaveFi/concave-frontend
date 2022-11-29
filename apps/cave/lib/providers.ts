@@ -6,8 +6,12 @@ import {
   NEXT_PUBLIC_INFURA_ID,
 } from './env.conf'
 
-export const concaveRPC = `https://rpc.concave.lol/v1/${NEXT_PUBLIC_CONCAVE_RPC_KEY}`
-export const concaveWSS = `wss://rpc.concave.lol/ws/v1/${NEXT_PUBLIC_CONCAVE_RPC_KEY}`
+/**
+ * TODO: review it @gregs
+ */
+export const concaveRPC = `https://mainnet.infura.io/v3/${NEXT_PUBLIC_INFURA_ID}`
+
+export const concaveWSS = `wss://mainnet.infura.io/ws/v3/${NEXT_PUBLIC_INFURA_ID}`
 
 const NoProviderKeyError = `Concave Provider
   You need to set at least one provider key in your .env file, examples in .env.example`
@@ -15,10 +19,12 @@ const NoProviderKeyError = `Concave Provider
 const stallTimeout = 500 // timeout in milliseconds after which another provider will be attempted.
 const getFallbackProvider = (chainId: number) => {
   const providerConfigs = []
-
+  /**
+   * TODO: review it @gregs
+   */
   if (NEXT_PUBLIC_CONCAVE_RPC_KEY && chainId === 1)
     providerConfigs.push({
-      provider: new providers.StaticJsonRpcProvider(concaveRPC, chainId),
+      provider: new providers.InfuraProvider(chainId, NEXT_PUBLIC_INFURA_ID),
       priority: 2,
       stallTimeout,
     })

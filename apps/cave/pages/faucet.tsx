@@ -1,37 +1,41 @@
-import { useBreakpointValue } from '@concave/ui'
+import { Button, VStack } from '@concave/ui'
+import { purchaseBond } from 'components/Bond/BondState'
 import { withPageTransition } from 'components/PageTransition'
-import { LockedCNVChart } from 'components/Transparency/Charts/LockedCNVChart'
+import { useErrorModal } from 'contexts/ErrorModal'
+import { useTransaction } from 'hooks/TransactionsRegistry/useTransaction'
+import { useAccount, useSigner } from 'wagmi'
 
 const Faucet = () => {
-  const isMobile = useBreakpointValue({ base: true, md: false })
-
-  let style
-  if (isMobile) {
-    style = {
-      textChartFontSize: '7xl',
-      lockedCnv: {
-        width: 'full',
-      },
-      lsdCnv: {
-        width: 'full',
-      },
-    }
-  } else {
-    style = {
-      textChartFontSize: '7xl',
-      lockedCnv: {
-        width: '60%',
-      },
-      lsdCnv: {
-        width: '50%',
-      },
-    }
+  const account = useAccount()
+  const { data: signer } = useSigner()
+  const defaultSettings = {
+    slippageTolerance: 1,
+    deadline: 30,
   }
+  const errorModal = useErrorModal()
+
+  const bondTransaction = useTransaction(
+    () => {
+      return purchaseBond(
+        1,
+        '99999999999999999999999',
+        account.address,
+        signer,
+        defaultSettings,
+        '12312132',
+      )
+    },
+    {
+      onError: errorModal.onOpen,
+    },
+  )
 
   return (
-    <>
-      <LockedCNVChart width={style.lockedCnv.width} fontSize={style.textChartFontSize} />
-    </>
+    <VStack pt={20}>
+      <Button variant={'primary'} p={4} onClick={bondTransaction.sendTx}>
+        CreateError
+      </Button>
+    </VStack>
   )
 }
 

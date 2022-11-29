@@ -29,6 +29,11 @@ export const ACNV_REDEEMPTION: AddressMap = {
   [ChainId.RINKEBY]: '',
 }
 
+export const AIRDROP_CLAIM: AddressMap = {
+  [ChainId.ETHEREUM]: '0x8b8be4848934812d6e24af1ae9aad01d3c0ef3fd',
+  [ChainId.GÖRLI]: '0xC0044Db759B013a6A0885100231BD5ba8b9aa839',
+}
+
 export const BBTCNV_ADDRESS: AddressMap = {
   [ChainId.ETHEREUM]: '0x0000000012a0592C154D552C410030E724b2eA00',
   [ChainId.RINKEBY]: '0x03eebe71dca9cdfc71d5f9a50f48a52ca5662526',

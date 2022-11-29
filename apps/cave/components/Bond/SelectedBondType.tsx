@@ -7,14 +7,14 @@ export const SelectedBondType = ({ bondType }) => {
       colorScheme="brighter"
       shadow="Magic Big"
       direction="row"
-      mt={-20}
-      py={1}
+      h={'35px'}
+      align="center"
       fontWeight="bold"
       fontSize="sm"
       borderTopRadius="0"
       justify="center"
       gap={1}
-      w="250px"
+      w="65%"
     >
       <Text>Selected</Text>
       <Text mx={1}>|</Text>

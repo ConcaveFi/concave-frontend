@@ -2,7 +2,7 @@ import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/p
 import { STAKING_CONTRACT } from '@concave/core'
 import { BaseProvider } from '@ethersproject/providers'
 import { BigNumber, BigNumberish, Contract, ethers } from 'ethers'
-import { PoolState, Position, StakingReward } from 'src/entities'
+import { PoolState, Position, StakingReward } from '../entities'
 import { StakingV1Abi } from './StakingV1Abi'
 
 export class StakingV1Contract {
