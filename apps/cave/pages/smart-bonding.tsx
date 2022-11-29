@@ -10,6 +10,7 @@ import {
   getCurrentBlockTimestamp,
   getUserBondPositions,
   redeemBondBatch,
+  ReturnBondPositions,
   useBondState,
 } from 'components/Bond/BondState'
 import { Redeem } from 'components/Bond/Redeem'
@@ -24,6 +25,7 @@ import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useCNVPrice } from 'hooks/useCNVPrice'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
+import { chainId } from 'wagmi'
 const spin = keyframes({
   '0%': { transform: 'rotate(0deg)' },
   '100%': { transform: 'rotate(360deg)' },
@@ -46,51 +48,45 @@ const useBondTerm = (networkId: number) => {
   )
 }
 
+const useCurrentBlockTs = (networkId:number) => {
+  const enabled = networkId != undefined;
+  return useQuery(['useCurrentBlockTs', networkId], () => 
+  getCurrentBlockTimestamp(networkId)
+  , { enabled }
+)}
+
 export function Bond() {
   const { userAddress, signer, networkId } = useBondState()
   const spinnerStyles = { animation: `${spin} 2s linear infinite`, size: 'sm' }
-  
   const bondSpotPrice = useBondSpotPrice(networkId);
   const termLength = useBondTerm(networkId)
-  const [currentBlockTs, setCurrentBlockTs] = useState<number>(0)
-  const [bondSigma, setBondSigma] = useState<any>()
-  const [showUserPosition, setShowUserPosition] = useState(false)
-  const [isLoadingBondSigma, setIsLoadingBondSigma] = useState(true)
+  const [bondSigma, setBondSigma] = useState<ReturnBondPositions>()
+  const [showUserPosition, setShowUserPosition] = useState(true)
   const [buttonDisabled, setButtonDisabled] = useState(false)
   const [redeemTx, setRedeemTx] = useState<any>()
   const [clickedRedeemButton, setClickedRedeemButton] = useState(false)
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
   const [txError, setTxError] = useState('')
-
   const cnvPrice = useCNVPrice()
   const {
     isOpen: isOpenSubmitted,
     onOpen: onOpenSubmitted,
   } = useDisclosure()
-  const { isOpen: isOpenError, onClose: onCloseError, onOpen: onOpenError } = useDisclosure()
+  const { isOpen: isOpenError, onOpen: onOpenError } = useDisclosure()
+  const currentBlockTs = useCurrentBlockTs(networkId)
+  const isLoadingBondSigma = currentBlockTs.isFetching && !!currentBlockTs.data
 
   const updateBondPositions = async () => {
-    const bondSigma = await getUserBondPositions(networkId, userAddress, currentBlockTs)
+    const bondSigma = await getUserBondPositions(networkId, userAddress, currentBlockTs.data)
     setBondSigma(bondSigma)
     setButtonDisabled(false)
+    setShowUserPosition(true)
   }
 
   useEffect(() => {
-    setIsLoadingBondSigma(true)
-    getCurrentBlockTimestamp(networkId).then((x) => {
-      setCurrentBlockTs(x)
-    })
+    if ( !currentBlockTs.data ) return
     updateBondPositions()
-  }, [userAddress, currentBlockTs])
-
-
-  useEffect(() => {
-    if (bondSigma && isLoadingBondSigma) {
-      setIsLoadingBondSigma(false)
-      setShowUserPosition(true)
-    }
-  }, [bondSigma])
-
+  }, [userAddress, currentBlockTs.data])
   const { registerTransaction } = useTransactionRegistry()
 
   function onRedeemConfirm() {
@@ -116,7 +112,6 @@ export function Bond() {
         setButtonDisabled(false)
       })
   }
-
   const roi = (1 - +(bondSpotPrice.data || 0) / +cnvPrice.price?.toSignificant(8)) * 100
 
   return (
@@ -203,7 +198,7 @@ export function Bond() {
         <Text fontSize="lg" color="text.accent">
           {bondSigma && bondSigma['parseRedeemable']
             ? `Redeeming ` +
-              (+utils.formatEther(BigInt(parseInt(bondSigma.parseRedeemable)))).toFixed(2) +
+              (+utils.formatEther(BigInt(bondSigma.parseRedeemable))).toFixed(2) +
               ` CNV`
             : ''}
         </Text>
