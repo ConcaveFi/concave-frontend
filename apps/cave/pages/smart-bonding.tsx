@@ -54,7 +54,6 @@ export function Bond() {
   const termLength = useBondTerm(networkId)
   const [currentBlockTs, setCurrentBlockTs] = useState<number>(0)
   const [bondSigma, setBondSigma] = useState<any>()
-  const [intervalID, setIntervalID] = useState<any>()
   const [showUserPosition, setShowUserPosition] = useState(false)
   const [isLoadingBondSigma, setIsLoadingBondSigma] = useState(true)
   const [buttonDisabled, setButtonDisabled] = useState(false)
@@ -66,7 +65,6 @@ export function Bond() {
   const cnvPrice = useCNVPrice()
   const {
     isOpen: isOpenSubmitted,
-    onClose: onCloseSubmitted,
     onOpen: onOpenSubmitted,
   } = useDisclosure()
   const { isOpen: isOpenError, onClose: onCloseError, onOpen: onOpenError } = useDisclosure()
