@@ -1,5 +1,5 @@
 import { QuestionIcon } from '@chakra-ui/icons'
-import { Flex, Popover, PopoverContent, PopoverTrigger, Text } from '@chakra-ui/react'
+import { Flex, Popover, PopoverContent, PopoverTrigger, Portal, Text } from '@chakra-ui/react'
 import { Card } from './Card'
 
 export function Tooltip({
@@ -16,19 +16,21 @@ export function Tooltip({
       <PopoverTrigger>
         <Flex rounded="full">{icon}</Flex>
       </PopoverTrigger>
-      <PopoverContent w={w}>
-        <Card
-          shadow={'up'}
-          css={{ ':after': { opacity: 1 } }}
-          py={3}
-          px={5}
-          position={'absolute'}
-          justify={'center'}
-          variant="secondary"
-        >
-          <Text fontSize="sm">{label}</Text>
-        </Card>
-      </PopoverContent>
+      <Portal>
+        <PopoverContent w={w} zIndex={9999} overflow="visible">
+          <Card
+            shadow={'up'}
+            css={{ ':after': { opacity: 1 } }}
+            py={3}
+            px={5}
+            position={'absolute'}
+            justify={'center'}
+            variant="secondary"
+          >
+            <Text fontSize="sm">{label}</Text>
+          </Card>
+        </PopoverContent>
+      </Portal>
     </Popover>
   )
 }
