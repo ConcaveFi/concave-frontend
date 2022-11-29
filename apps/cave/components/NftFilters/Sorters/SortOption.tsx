@@ -1,6 +1,6 @@
 import { Flex, Text } from '@chakra-ui/react'
 import { CloseIcon } from '@concave/icons'
-import { ConcaveTooltip } from 'components/ConcaveTooltip/ConcaveTooltip'
+import { Tooltip } from '@concave/ui'
 import { NftSort } from './hooks/useNftSort'
 
 type SortOptionProps = {
@@ -28,7 +28,7 @@ export const SortOption = ({ sorter, title, enabled, onClick }: SortOptionProps)
         {title}
       </Text>
       {enabled && (
-        <ConcaveTooltip
+        <Tooltip
           label="Remove sort"
           w={''}
           icon={

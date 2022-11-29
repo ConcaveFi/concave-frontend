@@ -1,5 +1,13 @@
-import { Card, HStack, InputGroup, InputRightAddon, NumericInput, Stack, Text } from '@concave/ui'
-import { ConcaveTooltip } from 'components/ConcaveTooltip/ConcaveTooltip'
+import {
+  Card,
+  HStack,
+  InputGroup,
+  InputRightAddon,
+  NumericInput,
+  Stack,
+  Text,
+  Tooltip,
+} from '@concave/ui'
 
 export const Deadline = ({
   value,
@@ -14,7 +22,7 @@ export const Deadline = ({
     <Stack align="start">
       <HStack>
         <Text fontSize="sm">Transaction deadline</Text>
-        <ConcaveTooltip label="Your transaction will revert if it is pending for more than this period of time." />
+        <Tooltip label="Your transaction will revert if it is pending for more than this period of time." />
       </HStack>
       <Card shadow="Down Big" borderRadius="xl">
         <InputGroup px={3} variant="unstyled" size="sm">
