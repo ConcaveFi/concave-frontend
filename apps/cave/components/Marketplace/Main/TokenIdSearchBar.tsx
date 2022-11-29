@@ -30,7 +30,6 @@ export const TokenIdSearchBar: FC<TokenIdSearchBarProps> = ({ onApplyFilter }) =
       {hasAppliedFilter && (
         <Tooltip
           label={'Clear filter'}
-          w={''}
           icon={
             <CloseIcon
               color={'text.low'}
