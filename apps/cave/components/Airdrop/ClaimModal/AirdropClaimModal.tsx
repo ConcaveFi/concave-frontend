@@ -1,6 +1,7 @@
 import { AirdropClaimContract } from '@concave/core'
 import { Button, CloseButton, Flex, Heading, Image, Link, Modal, Text } from '@concave/ui'
 import { useAirdrop } from 'contexts/AirdropContext'
+import { useErrorModal } from 'contexts/ErrorModal'
 import { parseUnits } from 'ethers/lib/utils'
 import { useTransaction } from 'hooks/TransactionsRegistry/useTransaction'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
@@ -14,6 +15,7 @@ export function AirdropClaimModal() {
   const { address, isConnected } = useAccount()
   const networkId = useCurrentSupportedNetworkId()
   const { data: signer } = useSigner()
+  const errorModal = useErrorModal()
 
   const { data: claimed } = useQuery(['AirdropClaimContract', networkId], async () => {
     const airdrop = new AirdropClaimContract(concaveProvider(networkId))
@@ -25,7 +27,12 @@ export function AirdropClaimModal() {
     const convertedAmount = parseUnits(redeemable?.toString() || '0', airdropToken.decimals)
     return airdrop.claim(signer, proof, convertedAmount)
   }
-  const airdrop = useTransaction(claimAidrop, { meta: { type: 'airdrop', amount: redeemable } })
+  const meta = { type: 'airdrop', amount: redeemable } as const
+  const onError = (e: unknown) => errorModal.onOpen(e, { 
+    redeemable: redeemable?.toString(),
+    proof: JSON.stringify(proof)
+  })
+  const airdrop = useTransaction(claimAidrop, { meta, onError })
 
   return (
     <Modal
