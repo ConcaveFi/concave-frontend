@@ -32,7 +32,7 @@ export const getBondTermLength = async (networkId: number) => {
   return formattedTermLength / 60 / 60 / 24
 }
 
-export const getBondSpotPrice = async (networkId: number, tokenAddress?: string) => {
+export const getBondSpotPrice = async (networkId: number) => {
   const bondingContract = new Contract(BOND_ADDRESS[networkId], BondAbi, providers(networkId))
   const DAI = DAI_ADDRESS[networkId]
   const spotPrice = await bondingContract.getSpotPrice(DAI)

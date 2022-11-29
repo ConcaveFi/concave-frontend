@@ -23,16 +23,28 @@ import { utils } from 'ethers'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useCNVPrice } from 'hooks/useCNVPrice'
 import { useEffect, useState } from 'react'
+import { useQuery } from 'react-query'
 const spin = keyframes({
   '0%': { transform: 'rotate(0deg)' },
   '100%': { transform: 'rotate(360deg)' },
 })
 
+
+const useBondSpotPrice = (networkId: number) => {
+  return useQuery(['getBondSpotPrice', networkId], () => {
+    return getBondSpotPrice(networkId)
+  }, {
+    refetchInterval: 10000,
+    enabled: networkId != undefined
+  });  
+}
 export function Bond() {
   const { userAddress, signer, networkId } = useBondState()
   const spinnerStyles = { animation: `${spin} 2s linear infinite`, size: 'sm' }
   const [termLength, setTermLength] = useState<number>(0)
-  const [bondSpotPrice, setBondSpotPrice] = useState<string>('0')
+  
+  const bondSpotPrice = useBondSpotPrice(networkId);
+
   const [currentBlockTs, setCurrentBlockTs] = useState<number>(0)
   const [bondSigma, setBondSigma] = useState<any>()
   const [intervalID, setIntervalID] = useState<any>()
@@ -52,15 +64,10 @@ export function Bond() {
   } = useDisclosure()
   const { isOpen: isOpenError, onClose: onCloseError, onOpen: onOpenError } = useDisclosure()
 
-  function updateBondPositions() {
-    getUserBondPositions(networkId, userAddress, currentBlockTs)
-      .then((bondSigma) => {
-        setBondSigma(bondSigma)
-        setButtonDisabled(false)
-      })
-      .catch((e) => {
-        console.log('user bond fail', e)
-      })
+  const updateBondPositions = async () => {
+    const bondSigma = await getUserBondPositions(networkId, userAddress, currentBlockTs)
+    setBondSigma(bondSigma)
+    setButtonDisabled(false)
   }
 
   useEffect(() => {
@@ -79,30 +86,9 @@ export function Bond() {
       .catch((e) => {
         console.log(e)
       })
-    getBondSpotPrice(networkId, '')
-      .then((bondSpotPrice) => {
-        setBondSpotPrice(bondSpotPrice)
-      })
-      .catch((e) => {
-        console.log(e)
-      })
+      
   }, [networkId])
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      getBondSpotPrice(networkId, '')
-        .then((bondSpotPrice) => {
-          setBondSpotPrice(bondSpotPrice)
-        })
-        .catch(() => {})
-    }, 10000)
-    if (intervalID !== interval) {
-      clearTimeout(intervalID)
-      setIntervalID(interval)
-    }
-    return clearInterval(interval)
-  }, [networkId])
-
+  
   useEffect(() => {
     if (bondSigma && isLoadingBondSigma) {
       setIsLoadingBondSigma(false)
@@ -135,7 +121,9 @@ export function Bond() {
         setButtonDisabled(false)
       })
   }
-  const roi = (1 - +bondSpotPrice / +cnvPrice.price?.toSignificant(8)) * 100
+
+
+  const roi = (1 - +(bondSpotPrice.data || 0) / +cnvPrice.price?.toSignificant(8)) * 100
 
   return (
     <Flex
