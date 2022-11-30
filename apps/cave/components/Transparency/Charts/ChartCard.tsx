@@ -1,5 +1,6 @@
+import { Tooltip } from '@chakra-ui/react'
 import { QuestionIcon } from '@concave/icons'
-import { Box, Card, Flex, Spinner, Text, Tooltip, useBreakpointValue, WrapItem } from '@concave/ui'
+import { Box, Card, Flex, Spinner, Text, useBreakpointValue, WrapItem } from '@concave/ui'
 import { Loading } from 'components/Loading'
 import { useState } from 'react'
 

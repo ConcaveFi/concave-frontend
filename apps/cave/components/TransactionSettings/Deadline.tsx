@@ -1,4 +1,3 @@
-import { QuestionIcon } from '@concave/icons'
 import {
   Card,
   HStack,
@@ -23,12 +22,7 @@ export const Deadline = ({
     <Stack align="start">
       <HStack>
         <Text fontSize="sm">Transaction deadline</Text>
-        <Tooltip
-          label="Your transaction will revert if it is pending for more than this period of time."
-          shouldWrapChildren
-        >
-          <QuestionIcon />
-        </Tooltip>
+        <Tooltip label="Your transaction will revert if it is pending for more than this period of time." />
       </HStack>
       <Card shadow="Down Big" borderRadius="xl">
         <InputGroup px={3} variant="unstyled" size="sm">
