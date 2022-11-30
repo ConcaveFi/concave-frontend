@@ -1,4 +1,3 @@
-import { QuestionIcon } from '@concave/icons'
 import {
   Button,
   Card,
@@ -31,12 +30,7 @@ export const SlippageTolerance = ({
     <Stack align="flex-start">
       <HStack>
         <Text fontSize="sm">Slippage tolerance</Text>
-        <Tooltip
-          label="Your transaction will revert if the price changes unfavorably by more than this percentage."
-          shouldWrapChildren
-        >
-          <QuestionIcon />
-        </Tooltip>
+        <Tooltip label="Your transaction will revert if the price changes unfavorably by more than this percentage." />
       </HStack>
       <HStack>
         <Card shadow="Down Big" borderRadius="xl">
