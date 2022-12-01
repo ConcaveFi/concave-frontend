@@ -1,6 +1,7 @@
 import { keyframes } from '@chakra-ui/system'
 import { SpinIcon } from '@concave/icons'
 import { Box, Card, Flex, Image, Spinner, Text } from '@concave/ui'
+import { Loading } from 'components/Loading'
 import { utils } from 'ethers'
 import { useCNVPrice } from 'hooks/useCNVPrice'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
@@ -87,8 +88,15 @@ export const BondInfo = ({ asset, icon }) => {
   )
 }
 
+
+const NoBonds = () => {
+  return <Card bg="none" w="100%" maxH="120px" flex={1} shadow="Glass Up Medium">
+  <Text fontWeight={'semibold'} textColor={'text.bright'} m="auto" opacity={0.6}>
+    No current bond positions
+  </Text>
+</Card>
+}
 export const UserBondPositionInfo = (props) => {
-  const spinnerStyles = { animation: `${spin} 2s linear infinite`, size: 'sm' }
   const parse = props?.bondSigma
   const oldestBond = parse?.parseOldest
   const claimed = parse?.claimed
@@ -103,11 +111,7 @@ export const UserBondPositionInfo = (props) => {
   return (
     <>
       {claimed ? (
-        <Card bg="none" w="100%" maxH="120px" flex={1} shadow="Glass Up Medium">
-          <Text fontWeight={'semibold'} textColor={'text.bright'} m="auto" opacity={0.6}>
-            No current bond positions
-          </Text>
-        </Card>
+        <NoBonds />
       ) : totalOwed ? (
         <Card bg="none" py={4} w="100%" direction="row" shadow="Glass Up Medium">
           <Flex justify="center" flexBasis="40%">
@@ -129,10 +133,7 @@ export const UserBondPositionInfo = (props) => {
           <InfoItem value={formatRedeemable} label={'Redeemable'} px={5} pl={2} flexBasis="35%" />
         </Card>
       ) : !!props.userAddress ? (
-        <>
-          Checking wallet...
-          <SpinIcon __css={spinnerStyles} width={'10'} height={'10'} />
-        </>
+          <Loading size='sm' isLoading={!!props.userAddress} label='Fetching bonds...'></Loading>
       ) : (
         ''
       )}

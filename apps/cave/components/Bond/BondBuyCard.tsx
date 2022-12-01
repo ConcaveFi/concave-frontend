@@ -23,7 +23,6 @@ import { numberMask } from 'utils/numberMask'
 
 export function BondBuyCard(props: {
   updateBondPositions?: VoidFunction
-  setRedeemButtonDisabled?: (b: boolean) => void
 }) {
   const confirmModal = useDisclosure()
   const rejectDisclosure = useDisclosure()
@@ -58,7 +57,6 @@ export function BondBuyCard(props: {
         setAmountOut('')
       },
       onSuccess: () => {
-        props.setRedeemButtonDisabled(true)
         props.updateBondPositions()
       },
       onError: rejectDisclosure.onOpen,
