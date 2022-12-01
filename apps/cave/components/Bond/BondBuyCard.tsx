@@ -24,7 +24,6 @@ import { numberMask } from 'utils/numberMask'
 export function BondBuyCard(props: {
   updateBondPositions?: VoidFunction
   setRedeemButtonDisabled?: (b: boolean) => void
-  roi?: number
 }) {
   const confirmModal = useDisclosure()
   const rejectDisclosure = useDisclosure()
@@ -149,7 +148,6 @@ export function BondBuyCard(props: {
         minimumAmountOut={(+amountOut - (+settings.slippageTolerance / 100) * +amountOut).toFixed(
           3,
         )}
-        roi={props.roi}
         slippage={settings.slippageTolerance?.toString()}
       />
       <WaitingConfirmationDialog
