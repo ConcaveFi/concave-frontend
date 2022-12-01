@@ -7,10 +7,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   res.status(200).json(result)
 }
 
-export type ReportBody = { userDescription?: string; extra: Record<string, string> }
+export type ReportBody = { userDescription?: string; error: string, extra: Record<string, string> }
 
-const buildBody = ({ extra }: ReportBody) => {
-  const content = 'User reported an error'
+const buildBody = ({ extra, error }: ReportBody) => {
+  const content = `User reported an error
+  \`\`\`
+  ${error}
+  \`\`\`  
+  `
   const entry = Object.entries(extra)
   const fields = entry.filter(a => a[1]).map((a) => ({ name: a[0], value: a[1] }))
   return {
