@@ -18,7 +18,7 @@ const fetchTokenList = async (chain: Chain) => {
 const fetchLiquidityTokenList = async (chain: Chain) => {
   const [tokenList, pairs] = await Promise.all([
     fetchJson(concaveTokenList(chain.name)) as Promise<{ tokens: Token[] }>,
-    Fetcher.fetchPairs(chain.id, concaveProvider(chain.id)),
+    Fetcher.fetchPairs(chain.id, concaveProvider(chain.id), localStorage),
   ])
   const chainTokens = tokenList.tokens.filter((t) => t.chainId === chain.id)
   const liquidityTokens = chainTokens.filter((t) => {
