@@ -31,7 +31,8 @@ export const useErrorModal = () => {
     onConfirm: (report: { userDescription: string, extra: Record<string, string> }) => {
       sendReport({
         userDescription: report.userDescription,
-        extra: { ...errorContext.extra, error: JSON.stringify(error), ...infos, ...report.extra }
+        error: JSON.stringify(error),
+        extra: { ...errorContext.extra, ...infos, ...report.extra }
       })
       errorContext.onClose()
     },
