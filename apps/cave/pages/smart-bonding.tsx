@@ -5,8 +5,6 @@ import { BondBuyCard } from 'components/Bond/BondBuyCard'
 import { BondInfo, UserBondPositionInfo } from 'components/Bond/BondInfo'
 import { BondSoldsCard } from 'components/Bond/BondSoldsCard'
 import {
-  getBondSpotPrice,
-  getBondTermLength,
   getCurrentBlockTimestamp,
   getUserBondPositions,
   redeemBondBatch,
@@ -22,31 +20,13 @@ import { TransactionSubmittedDialog } from 'components/TransactionDialog/Transac
 import { WaitingConfirmationDialog } from 'components/TransactionDialog/TransactionWaitingConfirmationDialog'
 import { utils } from 'ethers'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
-import { useCNVPrice } from 'hooks/useCNVPrice'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
-import { chainId } from 'wagmi'
+
 const spin = keyframes({
   '0%': { transform: 'rotate(0deg)' },
   '100%': { transform: 'rotate(360deg)' },
 })
-
-
-const useBondSpotPrice = (networkId: number) => {
-  return useQuery(['getBondSpotPrice', networkId], () => {
-    return getBondSpotPrice(networkId)
-  }, {
-    refetchInterval: 10000,
-    enabled: networkId != undefined
-  });  
-}
-
-const useBondTerm = (networkId: number) => {
-  const enabled = networkId != undefined;
-  return useQuery(['useBondTerm', networkId], () => 
-    getBondTermLength(networkId), { enabled }
-  )
-}
 
 const useCurrentBlockTs = (networkId:number) => {
   const enabled = networkId != undefined;
@@ -58,8 +38,6 @@ const useCurrentBlockTs = (networkId:number) => {
 export function Bond() {
   const { userAddress, signer, networkId } = useBondState()
   const spinnerStyles = { animation: `${spin} 2s linear infinite`, size: 'sm' }
-  const bondSpotPrice = useBondSpotPrice(networkId);
-  const termLength = useBondTerm(networkId)
   const [bondSigma, setBondSigma] = useState<ReturnBondPositions>()
   const [showUserPosition, setShowUserPosition] = useState(true)
   const [buttonDisabled, setButtonDisabled] = useState(false)
@@ -67,7 +45,6 @@ export function Bond() {
   const [clickedRedeemButton, setClickedRedeemButton] = useState(false)
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
   const [txError, setTxError] = useState('')
-  const cnvPrice = useCNVPrice()
   const {
     isOpen: isOpenSubmitted,
     onOpen: onOpenSubmitted,
@@ -84,6 +61,7 @@ export function Bond() {
   }
 
   useEffect(() => {
+    if ( !userAddress ) return
     if ( !currentBlockTs.data ) return
     updateBondPositions()
   }, [userAddress, currentBlockTs.data])
@@ -112,7 +90,6 @@ export function Bond() {
         setButtonDisabled(false)
       })
   }
-  const roi = (1 - +(bondSpotPrice.data || 0) / +cnvPrice.price?.toSignificant(8)) * 100
 
   return (
     <Flex
@@ -165,8 +142,6 @@ export function Bond() {
                 <BondInfo
                   asset="CNV"
                   icon="/assets/tokens/cnv.svg"
-                  roi={roi}
-                  vestingTerm={`${termLength.data} Days`}
                 />
                 <UserBondPositionInfo bondSigma={bondSigma} userAddress={userAddress} />
                 {showUserPosition && (
@@ -188,7 +163,6 @@ export function Bond() {
         </Card>
 
         <BondBuyCard
-          roi={roi}
           updateBondPositions={updateBondPositions}
           setRedeemButtonDisabled={setButtonDisabled}
         />
