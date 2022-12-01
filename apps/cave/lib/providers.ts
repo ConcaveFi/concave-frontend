@@ -53,7 +53,7 @@ const singletonProvider = {}
 export const concaveProvider = (chainId: number) => {
   if (singletonProvider[chainId]) return singletonProvider[chainId]
   const f = getFallbackProvider(chainId)
-  const p = new multicallProvider.MulticallProvider(f, { timeWindow: 1000 })
+  const p = new multicallProvider.MulticallProvider(f)
   p._network = f._network
   singletonProvider[chainId] = p
   return singletonProvider[chainId]
