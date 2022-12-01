@@ -14,6 +14,7 @@ import {
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { UseTransaction } from 'hooks/TransactionsRegistry/useTransaction'
 import { useState } from 'react'
+import { useRoi } from './BondInfo'
 
 const TokenInfo = ({
   currency,
@@ -75,7 +76,6 @@ export const ConfirmBondModal = ({
   minimumAmountOut,
   slippage,
   transaction,
-  roi,
 }: {
   transaction: UseTransaction
   currencyIn: Currency
@@ -89,10 +89,11 @@ export const ConfirmBondModal = ({
   bondPrice: string
   minimumAmountOut: string
   slippage: string
-  roi?: number
 }) => {
   const [agree, setAgree] = useState(false)
-  const negativeRoi = roi < 0
+  const roi = useRoi()
+
+  const negativeRoi = roi.data < 0
 
   const onCloseModal = () => {
     setAgree(false)
@@ -151,7 +152,7 @@ export const ConfirmBondModal = ({
           <Text color={'text.low'}>
             I understand that bond roi is{' '}
             <Text as={'strong'} color="red.300">
-              {roi.toFixed(2) || '0'}%
+              {roi.data.toFixed(2) || '0'}%
             </Text>
           </Text>
         </Flex>
@@ -161,7 +162,7 @@ export const ConfirmBondModal = ({
         variant="primary"
         size="large"
         onClick={transaction.sendTx}
-        disabled={transaction.isWaitingForConfirmation || (roi < 0 && !agree)}
+        disabled={transaction.isWaitingForConfirmation || (roi.data < 0 && !agree)}
         w="full"
       >
         {transaction.isWaitingForConfirmation ? 'Confirm in wallet' : 'Confirm bond'}

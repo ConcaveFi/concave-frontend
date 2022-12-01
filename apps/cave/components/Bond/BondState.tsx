@@ -116,6 +116,7 @@ export const getUserBondPositions = async (
   const bondingContract = new Contract(BOND_ADDRESS[networkId], BondAbi, providers(networkId))
   const getUserPositionsLength = await bondingContract.getUserPositionCount(address)
   const termData = await bondingContract.term()
+console.log(bondingContract)
   for (let i = 0; i < +getUserPositionsLength; i++) {
     batchRedeemArray.push(+i)
     const positionData = await bondingContract.positions(address, i)
