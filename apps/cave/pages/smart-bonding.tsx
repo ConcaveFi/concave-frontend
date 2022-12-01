@@ -19,7 +19,7 @@ import { TransactionSubmittedDialog } from 'components/TransactionDialog/Transac
 
 import { WaitingConfirmationDialog } from 'components/TransactionDialog/TransactionWaitingConfirmationDialog'
 import { utils } from 'ethers'
-import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
+import { useTransaction } from 'hooks/TransactionsRegistry/useTransaction'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 
@@ -40,57 +40,33 @@ export function Bond() {
   const spinnerStyles = { animation: `${spin} 2s linear infinite`, size: 'sm' }
   const [bondSigma, setBondSigma] = useState<ReturnBondPositions>()
   const [showUserPosition, setShowUserPosition] = useState(true)
-  const [buttonDisabled, setButtonDisabled] = useState(false)
-  const [redeemTx, setRedeemTx] = useState<any>()
-  const [clickedRedeemButton, setClickedRedeemButton] = useState(false)
-  const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
-  const [txError, setTxError] = useState('')
-  const {
-    isOpen: isOpenSubmitted,
-    onOpen: onOpenSubmitted,
-  } = useDisclosure()
-  const { isOpen: isOpenError, onOpen: onOpenError } = useDisclosure()
   const currentBlockTs = useCurrentBlockTs(networkId)
   const isLoadingBondSigma = currentBlockTs.isFetching && !!currentBlockTs.data
 
   const updateBondPositions = async () => {
     const bondSigma = await getUserBondPositions(networkId, userAddress, currentBlockTs.data)
     setBondSigma(bondSigma)
-    setButtonDisabled(false)
     setShowUserPosition(true)
   }
 
+  const redeemBond = useTransaction(()=> {
+    const batchRedeemIDArray = bondSigma.batchRedeemArray
+    return redeemBondBatch(networkId, batchRedeemIDArray, userAddress, signer)
+  },{
+    meta: { type: 'redeem', amount: 'CNV Bonds' },
+    onSuccess: () => {
+      updateBondPositions()
+    }
+  })
+  const buttonDisabled =  redeemBond.isWaitingForConfirmation || redeemBond.isWaitingTransactionReceipt
+  const isRedeeming =  redeemBond.isWaitingForConfirmation || redeemBond.isWaitingTransactionReceipt
+
   useEffect(() => {
-    if ( !userAddress ) return
-    if ( !currentBlockTs.data ) return
+    if (!userAddress) return
+    if (!currentBlockTs.data) return
     updateBondPositions()
   }, [userAddress, currentBlockTs.data])
-  const { registerTransaction } = useTransactionRegistry()
-
-  function onRedeemConfirm() {
-    setButtonDisabled(true)
-    const batchRedeemIDArray = bondSigma.batchRedeemArray
-    setClickedRedeemButton(true)
-    setOpenConfirmDialog(true)
-    redeemBondBatch(networkId, batchRedeemIDArray, userAddress, signer)
-      .then(async (tx) => {
-        setRedeemTx(tx)
-        setOpenConfirmDialog(false)
-        onOpenSubmitted()
-        registerTransaction(tx, { type: 'redeem', amount: 'CNV Bonds' })
-        await tx.wait(1)
-        updateBondPositions()
-        setClickedRedeemButton(false)
-        setButtonDisabled(false)
-      })
-      .catch((err) => {
-        setTxError(err.message)
-        setClickedRedeemButton(false)
-        onOpenError()
-        setButtonDisabled(false)
-      })
-  }
-
+  
   return (
     <Flex
       direction={'column'}
@@ -148,12 +124,8 @@ export function Bond() {
                   <Redeem
                     bondSigma={bondSigma}
                     buttonDisabled={buttonDisabled}
-                    onConfirm={() => {
-                      onRedeemConfirm()
-                    }}
-                    isRedeeming={clickedRedeemButton}
-                    largeFont
-                    setBottom
+                    onConfirm={redeemBond.sendTx}
+                    isRedeeming={isRedeeming}
                     customHeight
                   />
                 )}
@@ -164,21 +136,20 @@ export function Bond() {
 
         <BondBuyCard
           updateBondPositions={updateBondPositions}
-          setRedeemButtonDisabled={setButtonDisabled}
         />
       </Flex>
       <BondSoldsCard />
-      <WaitingConfirmationDialog isOpen={openConfirmDialog} title={'Confirm redeem'}>
+      <WaitingConfirmationDialog isOpen={redeemBond.isWaitingForConfirmation} title={'Confirm redeem'}>
         <Text fontSize="lg" color="text.accent">
           {bondSigma && bondSigma['parseRedeemable']
             ? `Redeeming ` +
-              (+utils.formatEther(BigInt(bondSigma.parseRedeemable))).toFixed(2) +
+              (+utils.formatEther(BigInt(Math.floor(bondSigma.parseRedeemable)))).toFixed(2) +
               ` CNV`
             : ''}
         </Text>
       </WaitingConfirmationDialog>
-      <TransactionSubmittedDialog tx={redeemTx} isOpen={isOpenSubmitted} />
-      <TransactionErrorDialog error={txError} isOpen={isOpenError} />
+      <TransactionSubmittedDialog tx={redeemBond.tx} isOpen={redeemBond.isWaitingTransactionReceipt} />
+      <TransactionErrorDialog error={redeemBond?.error?.reason} isOpen={!!redeemBond?.error?.reason} />
     </Flex>
   )
 }
