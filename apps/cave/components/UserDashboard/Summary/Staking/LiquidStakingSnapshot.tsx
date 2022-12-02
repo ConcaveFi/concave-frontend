@@ -1,6 +1,7 @@
 import { Flex } from '@concave/ui'
 import { useStakePositions } from 'components/StakingPositions/DashboardBody/DashBoardState'
 import { FilterContainer } from 'components/StakingPositions/DashboardBody/FilterContainer'
+import { SnapshotLineChart } from 'components/UserDashboard/SnapshotLineChart'
 import { SnapshotTextCard } from 'components/UserDashboard/SnapshotTextCard'
 import { useState } from 'react'
 import { UserPositionCard } from '../../../StakingPositions/LockPosition/Card/UserPositionCard'
@@ -9,7 +10,6 @@ import { DataTableCard } from '../../DataTableCard'
 import { SnapshotCard } from '../../SnapshotCard'
 import { SnapshotText } from '../../SnapshotText'
 import { stakechartdata } from '../dummyChartData'
-import { LiquidStakingSnapshotChart } from './LiquidStakingSnapshotChart'
 
 export const LiquidStakingSnapshot = () => {
   const [isExpanded, setExpand] = useState(false)
@@ -19,7 +19,7 @@ export const LiquidStakingSnapshot = () => {
   return (
     <Flex flexDir={'column'} w={'100%'} justifyContent={'space-between'}>
       <SnapshotCard isExpanded={!isExpanded}>
-        <LiquidStakingSnapshotChart data={stakechartdata} />
+        <SnapshotLineChart data={stakechartdata} dataKeys={['Airdrop', 'Locked CNV']} />
         <SnapshotTextCard>
           <SnapshotText title={'Total locked'} data={'6,132.42 CNV'} />
           <SnapshotText title={'Airdrop'} data={'435.53 CNV'} />

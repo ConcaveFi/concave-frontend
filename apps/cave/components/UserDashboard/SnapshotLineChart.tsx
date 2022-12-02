@@ -10,7 +10,9 @@ import {
   YAxis,
 } from 'recharts'
 
-export function LiquidStakingSnapshotChart({ data }) {
+const COLORS = ['#D49F60', '#4E7DB5']
+
+export function SnapshotLineChart({ data, dataKeys }: { data: any[]; dataKeys: string[] }) {
   return (
     <Flex w={'75%'} height={'100%'}>
       <ResponsiveContainer width={'90%'} height={350}>
@@ -20,8 +22,9 @@ export function LiquidStakingSnapshotChart({ data }) {
           <YAxis />
           <Tooltip />
           <Legend />
-          <Line dot={false} type="monotone" dataKey="Airdrop" stroke="#D49F60" strokeWidth={4} />
-          <Line dot={false} type="monotone" dataKey="Locked CNV" stroke="#4E7DB5" strokeWidth={4} />
+          {dataKeys.map((key, i) => (
+            <Line dot={false} type="monotone" dataKey={key} stroke={COLORS[i]} strokeWidth={4} />
+          ))}
         </LineChart>
       </ResponsiveContainer>
     </Flex>
