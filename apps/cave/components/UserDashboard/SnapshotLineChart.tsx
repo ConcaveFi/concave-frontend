@@ -22,8 +22,15 @@ export function SnapshotLineChart({ data, dataKeys }: { data: any[]; dataKeys: s
           <YAxis />
           <Tooltip />
           <Legend />
-          {dataKeys.map((key, i) => (
-            <Line dot={false} type="monotone" dataKey={key} stroke={COLORS[i]} strokeWidth={4} />
+          {dataKeys.map((currentKey, i) => (
+            <Line
+              dot={false}
+              key={currentKey}
+              type="monotone"
+              dataKey={currentKey}
+              stroke={COLORS[i]}
+              strokeWidth={4}
+            />
           ))}
         </LineChart>
       </ResponsiveContainer>
