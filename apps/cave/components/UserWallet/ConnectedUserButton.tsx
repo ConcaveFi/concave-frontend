@@ -12,7 +12,7 @@ const spinAnimation = (time = 3) =>
     '100%': { transform: 'rotate(360deg)' },
   })} ${time}s linear infinite`
 
-export const ConnectedUserButton = () => {
+export const ConnectedUserButton = ({ w = '100%' }: { w?: number | string }) => {
   const { address } = useAccount()
   const { chain } = useNetwork()
   const { data: ens } = useEnsName({ address })
@@ -28,7 +28,7 @@ export const ConnectedUserButton = () => {
         shadow="up"
         fontFamily="heading"
         _focus={{ color: 'text.high', shadow: 'up' }}
-        w="100%"
+        w={w}
         rounded="2xl"
       >
         <Image
