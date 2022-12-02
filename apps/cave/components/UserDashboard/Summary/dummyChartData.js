@@ -29,27 +29,27 @@ export const bondchartdata = [
 export const stakechartdata = [
   {
     date: '12/4',
-    Airdrop: 5,
-    'Locked CNV': 2.5,
+    Airdrop: 15,
+    'Locked CNV': 320.5,
   },
   {
     date: '13/4',
     Airdrop: 3.5,
-    'Locked CNV': 3.5,
+    'Locked CNV': 50.5,
   },
   {
     date: '14/4',
-    Airdrop: 2.6,
-    'Locked CNV': 5,
+    Airdrop: 20.6,
+    'Locked CNV': 100,
   },
   {
     date: '15/4',
-    Airdrop: 7.7,
-    'Locked CNV': 10,
+    Airdrop: 700.7,
+    'Locked CNV': 400,
   },
   {
     date: '16/4',
     Airdrop: 11,
-    'Locked CNV': 8.3,
+    'Locked CNV': 18.3,
   },
 ]
