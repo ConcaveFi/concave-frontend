@@ -1,6 +1,6 @@
 import { ExpandArrowIcon } from '@concave/icons'
 import { Button, Card, Collapse, Flex, Text } from '@concave/ui'
-import { ButtonLink } from 'components/ButtonLink'
+import router from 'next/router'
 
 export function DataTableCard({
   setExpand,
@@ -10,6 +10,7 @@ export function DataTableCard({
   dataTableLabel,
   SortComponent,
   children,
+  buttonWidth = 'auto',
 }: {
   route: string
   buttonLabel: string
@@ -18,6 +19,7 @@ export function DataTableCard({
   isExpanded: boolean
   SortComponent: JSX.Element
   children: JSX.Element | JSX.Element[]
+  buttonWidth?: string | number
 }) {
   return (
     <Collapse in={isExpanded} startingHeight={'49%'} endingHeight={'100%'}>
@@ -63,17 +65,17 @@ export function DataTableCard({
               </Button>
             </Flex>
             <Flex w={'33%'} justifyContent={'flex-end'}>
-              <ButtonLink
-                href={route}
-                w={'auto'}
+              <Button
+                onClick={() => router.push('/' + route)}
+                w={buttonWidth}
                 h={'45px'}
                 variant={'secondary'}
                 justifyContent={'space-between'}
                 px={6}
               >
-                <Text>Go to {buttonLabel}</Text>
+                <Text mr={2}>Go to {buttonLabel}</Text>
                 <ExpandArrowIcon transform={'rotate(270deg)'} />
-              </ButtonLink>
+              </Button>
             </Flex>
           </Flex>
           <Flex width={'100%'} ml={2} align={'center'} gap={2} fontWeight={'bold'}>
