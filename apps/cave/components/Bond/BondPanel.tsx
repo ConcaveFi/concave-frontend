@@ -28,8 +28,8 @@ export function BondPanel(props: BondPanelProps) {
   const { data: signer } = useSigner()
   const redeemBond = useTransaction(
     () => {
-      const batchRedeemIDArray = props.bondSigma.batchRedeemArray
-      return redeemBondBatch(networkId, batchRedeemIDArray, props.userAddress, signer)
+      const batchRedeemIDArray = props?.bondSigma.batchRedeemArray
+      return redeemBondBatch(networkId, batchRedeemIDArray, props?.userAddress, signer)
     },
     {
       meta: { type: 'redeem', amount: 'CNV Bonds' },
@@ -55,7 +55,7 @@ export function BondPanel(props: BondPanelProps) {
         gap={4}
         pt={6}
       >
-        {!props.userAddress && props.isLoadingBondSigma ? (
+        {!props?.userAddress && props?.isLoadingBondSigma ? (
           <Box
             position={'relative'}
             top={'32.5%'}
@@ -83,10 +83,10 @@ export function BondPanel(props: BondPanelProps) {
         {!props.isLoadingBondSigma && (
           <>
             <BondInfo asset="CNV" icon="/assets/tokens/cnv.svg" />
-            <UserBondPositionInfo bondSigma={props.bondSigma} userAddress={props.userAddress} />
-            {props.showUserPosition && (
+            <UserBondPositionInfo bondSigma={props?.bondSigma} userAddress={props?.userAddress} />
+            {props?.showUserPosition && (
               <Redeem
-                bondSigma={props.bondSigma}
+                bondSigma={props?.bondSigma}
                 buttonDisabled={buttonDisabled}
                 onConfirm={redeemBond.sendTx}
                 isRedeeming={isRedeeming}
@@ -111,9 +111,11 @@ export function BondPanel(props: BondPanelProps) {
         title={'Confirm redeem'}
       >
         <Text fontSize="lg" color="text.accent">
-          {props.bondSigma && props.bondSigma['parseRedeemable']
+          {props?.bondSigma && props?.bondSigma['parseRedeemable']
             ? `Redeeming ` +
-              (+utils.formatEther(BigInt(Math.floor(props.bondSigma.parseRedeemable)))).toFixed(2) +
+              (+utils.formatEther(BigInt(Math.floor(props?.bondSigma.parseRedeemable)))).toFixed(
+                2,
+              ) +
               ` CNV`
             : ''}
         </Text>

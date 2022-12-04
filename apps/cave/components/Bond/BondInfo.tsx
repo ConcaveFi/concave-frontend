@@ -4,7 +4,7 @@ import { Loading } from 'components/Loading'
 import { utils } from 'ethers'
 import { useCNVPrice } from 'hooks/useCNVPrice'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { useQuery } from 'react-query'
+import { useQuery, UseQueryResult } from 'react-query'
 import { getRoiWarnColor } from 'utils/getRoiWarnColor'
 import { chainId } from 'wagmi'
 import { getBondSpotPrice, getBondTermLength } from './BondState'
@@ -50,8 +50,7 @@ const useBondSpotPrice = () => {
   )
 }
 
-export const useRoi = () => {
-  const bondSpotPrice = useBondSpotPrice()
+export const useRoi = (bondSpotPrice: UseQueryResult<string, unknown>) => {
   const cnvPrice = useCNVPrice()
   return useQuery(
     ['CNV', 'ROI', chainId],
@@ -61,7 +60,7 @@ export const useRoi = () => {
     },
     {
       cacheTime: 50000,
-      enabled: cnvPrice.isSuccess && bondSpotPrice.isSuccess,
+      enabled: cnvPrice.isSuccess && bondSpotPrice?.isSuccess,
     },
   )
 }
@@ -69,32 +68,51 @@ export const useRoi = () => {
 export const BondInfo = ({ asset, icon }) => {
   const termLength = useBondTerm()
   const vestingTerm = `${termLength.data} Days`
-  const roi = useRoi()
+  const bondSpotPrice = useBondSpotPrice()
+  const roi = useRoi(bondSpotPrice)
+
+  const cnvPrice = useCNVPrice()
+
   return (
-    <Card bg="none" h="80px" w="100%" direction="row" shadow="Glass Up Medium">
-      <Flex justify="center" flexBasis="40%" alignItems={'center'}>
-        <Image src={icon} alt="" w="55px" h="55px" mr={3} />
-        <InfoItem isLoading={false} value={asset.toUpperCase()} label="Asset" />
+    <Card bg="none" w="100%" gap={0} shadow="Glass Up Medium" py="2">
+      <Flex h="fit-content" w="100%">
+        <Flex justify="center" flexBasis="40%" alignItems={'center'}>
+          <Image src={icon} alt="" w="55px" h="55px" mr={3} />
+          <InfoItem isLoading={false} value={asset.toUpperCase()} label="Asset" />
+        </Flex>
+
+        <InfoItem
+          value={roi.data?.toFixed(2) + '%'}
+          label="ROI"
+          isLoading={!roi.data}
+          flexGrow={1}
+          pl={3}
+          pr={3}
+          flexBasis="25%"
+          color={getRoiWarnColor(roi.data)}
+        />
+
+        <InfoItem
+          isLoading={termLength.isFetching}
+          value={vestingTerm}
+          label="Vesting term"
+          px={5}
+          flexBasis="35%"
+        />
       </Flex>
-      <Box w="1px" mx={0} my={-4} bg="stroke.primary" />
-      <InfoItem
-        value={roi.data?.toFixed(2) + '%'}
-        label="ROI"
-        isLoading={!roi.data}
-        flexGrow={1}
-        pl={3}
-        pr={3}
-        flexBasis="25%"
-        color={getRoiWarnColor(roi.data)}
-      />
-      <Box w="1px" mx={0} my={-4} bg="stroke.primary" />
-      <InfoItem
-        isLoading={termLength.isFetching}
-        value={vestingTerm}
-        label="Vesting term"
-        px={5}
-        flexBasis="35%"
-      />
+      <Box w="90%" h="2px" bg="gray.600" mx="auto" opacity={0.4} my="0.5" />
+      <Flex justify={'space-around'}>
+        <InfoItem
+          value={'Current price'}
+          isLoading={cnvPrice?.isLoading}
+          label={`$${cnvPrice.price?.toFixed(3)} CNV`}
+        />
+        <InfoItem
+          value={'Bond price'}
+          isLoading={bondSpotPrice.isLoading}
+          label={`$${(+bondSpotPrice.data || 0).toFixed(2)} CNV`}
+        />
+      </Flex>
     </Card>
   )
 }
