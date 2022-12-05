@@ -36,7 +36,7 @@ const useBondTerm = () => {
   const enabled = chainId != undefined
   return useQuery(['useBondTerm', chainId], () => getBondTermLength(chainId), { enabled })
 }
-const useBondSpotPrice = () => {
+export const useBondSpotPrice = () => {
   const chainId = useCurrentSupportedNetworkId()
   return useQuery(
     ['getBondSpotPrice', chainId],

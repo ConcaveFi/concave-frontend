@@ -14,7 +14,7 @@ import {
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { UseTransaction } from 'hooks/TransactionsRegistry/useTransaction'
 import { useState } from 'react'
-import { useRoi } from './BondInfo'
+import { useBondSpotPrice, useRoi } from './BondInfo'
 
 const TokenInfo = ({
   currency,
@@ -91,7 +91,8 @@ export const ConfirmBondModal = ({
   slippage: string
 }) => {
   const [agree, setAgree] = useState(false)
-  const roi = useRoi()
+  const bondSpot = useBondSpotPrice()
+  const roi = useRoi(bondSpot)
 
   const negativeRoi = roi.data < 0
 
