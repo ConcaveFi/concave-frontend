@@ -1,5 +1,5 @@
 import { BOND_ADDRESS, CNV, Currency, CurrencyAmount, DAI } from '@concave/core'
-import { Button, Card, Flex, HStack, Text, useDisclosure, VStack } from '@concave/ui'
+import { Button, Card, Flex, HStack, Text, useDisclosure } from '@concave/ui'
 import { AddTokenToWalletButton } from 'components/AddTokenToWalletButton'
 import { GasPrice } from 'components/AMM'
 import { useCurrencyApprove } from 'components/CurrencyAmountButton/CurrencyAmountButton'
@@ -7,7 +7,6 @@ import { CurrencyInputField as BondInput } from 'components/CurrencyAmountField'
 import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
 
 import { WaitingConfirmationDialog } from 'components/TransactionDialog/TransactionWaitingConfirmationDialog'
-import { useCNVPrice } from 'hooks/useCNVPrice'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import { toAmount } from 'utils/toAmount'
@@ -19,14 +18,10 @@ import { Settings, useBondSettings } from './Settings'
 
 import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
 import { useTransaction } from 'hooks/TransactionsRegistry/useTransaction'
-import { numberMask } from 'utils/numberMask'
 
-export function BondBuyCard(props: {
-  updateBondPositions?: VoidFunction
-}) {
+export function BondBuyCard(props: { updateBondPositions?: VoidFunction }) {
   const confirmModal = useDisclosure()
   const rejectDisclosure = useDisclosure()
-  const cnvPrice = useCNVPrice()
   const { currencyIn, currencyOut, userAddress, balance, signer, networkId } = useBondState()
   const settings = useBondSettings((s) => s.settings)
   const [amountOut, setAmountOut] = useState<string>()
@@ -79,55 +74,33 @@ export function BondBuyCard(props: {
       maxW="430px"
       height="386px"
     >
-      <BondInput
-        currencyAmountIn={amountIn}
-        onChangeAmount={async (v) => {
-          setAmountIn(v)
-          try {
-            const amountOut = await getBondAmountOut(
-              currencyOut.address,
-              currencyOut.decimals,
-              networkId,
-              v.toExact(),
-            )
-            setAmountOut(amountOut)
-          } catch (e) {
-            console.log(e)
-            setAmountOut('')
-          }
-        }}
-      />
-      <DownwardIcon />
-      <BondOutput disabled={true} currency={currencyOut} value={amountOut} />
-      <Flex
-        ml={{ base: 0, md: 4 }}
-        align="center"
-        justify="space-around"
-        direction={{ base: 'column', md: 'row', lg: 'column', xl: 'row' }}
-        flex={1}
-      >
-        <VStack spacing={0} fontSize="13px" justify={'end'} fontWeight="500">
-          <HStack alignSelf={'start'}>
-            <Text textColor={'text.low'}>Current price:</Text>
-            <Text textColor={'text.low'} opacity="0.7">
-              {cnvPrice.price ? '$' + cnvPrice.price?.toFixed(3) + ' CNV' : 'Loading . . .'}
-            </Text>
-          </HStack>
-          <HStack alignSelf={'start'}>
-            <Text ml={4} textColor={'text.low'}>
-              Bond price:
-            </Text>
-            <Text textColor={'text.low'} opacity="0.7">
-              {bondSpotPrice ? '$' + numberMask(+bondSpotPrice, 3) + ' CNV' : 'Loading . . .'}
-            </Text>
-          </HStack>
-        </VStack>
-        <Flex flex={1} align={'center'} justify="end" minWidth={100} gap={2}>
-          <GasPrice />
-          <HStack align="center" justify="end" py={{ base: 0, md: 5, lg: 0, xl: 5 }}>
-            <Settings />
-          </HStack>
-        </Flex>
+      <Flex direction={'column'} flex={1} justify={'space-between'} py={5}>
+        <BondInput
+          currencyAmountIn={amountIn}
+          onChangeAmount={async (v) => {
+            setAmountIn(v)
+            try {
+              const amountOut = await getBondAmountOut(
+                currencyOut.address,
+                currencyOut.decimals,
+                networkId,
+                v.toExact(),
+              )
+              setAmountOut(amountOut)
+            } catch (e) {
+              console.log(e)
+              setAmountOut('')
+            }
+          }}
+        />
+        <DownwardIcon />
+        <BondOutput disabled={true} currency={currencyOut} value={amountOut} />
+      </Flex>
+      <Flex pb={5} align={'center'} justify="center" minWidth={100} gap={2}>
+        <GasPrice />
+        <HStack align="center" justify="end">
+          <Settings />
+        </HStack>
       </Flex>
 
       <Button variant="primary" size="large" w="full" {...bondButtonState} />

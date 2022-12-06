@@ -1,11 +1,10 @@
 import { keyframes } from '@chakra-ui/system'
-import { SpinIcon } from '@concave/icons'
 import { Box, Card, Flex, Image, Spinner, Text } from '@concave/ui'
 import { Loading } from 'components/Loading'
 import { utils } from 'ethers'
 import { useCNVPrice } from 'hooks/useCNVPrice'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { useQuery } from 'react-query'
+import { useQuery, UseQueryResult } from 'react-query'
 import { getRoiWarnColor } from 'utils/getRoiWarnColor'
 import { chainId } from 'wagmi'
 import { getBondSpotPrice, getBondTermLength } from './BondState'
@@ -24,7 +23,7 @@ export const InfoItem = ({ value, isLoading = false, label, ...props }) => (
     {...props}
   >
     <Text fontSize="sm" fontFamily="heading">
-     { isLoading ? <Spinner size={'xs'}></Spinner> : value }
+      {isLoading ? <Spinner size={'xs'}></Spinner> : value}
     </Text>
     <Text fontSize="sm" color="text.low" userSelect={'none'}>
       {label}
@@ -34,67 +33,98 @@ export const InfoItem = ({ value, isLoading = false, label, ...props }) => (
 
 const useBondTerm = () => {
   const chainId = useCurrentSupportedNetworkId()
-  const enabled = chainId != undefined;
-  return useQuery(['useBondTerm', chainId], () => 
-    getBondTermLength(chainId), { enabled }
+  const enabled = chainId != undefined
+  return useQuery(['useBondTerm', chainId], () => getBondTermLength(chainId), { enabled })
+}
+export const useBondSpotPrice = () => {
+  const chainId = useCurrentSupportedNetworkId()
+  return useQuery(
+    ['getBondSpotPrice', chainId],
+    () => {
+      return getBondSpotPrice(chainId)
+    },
+    {
+      refetchInterval: 50000,
+      enabled: chainId != undefined,
+    },
   )
 }
-const useBondSpotPrice = () => {
-  const chainId = useCurrentSupportedNetworkId()
-  return useQuery(['getBondSpotPrice', chainId], () => {
-    return getBondSpotPrice(chainId)
-  }, {
-    refetchInterval: 50000,
-    enabled: chainId != undefined
-  });  
-}
 
-export const useRoi = () => {
-  const bondSpotPrice = useBondSpotPrice();
+export const useRoi = (bondSpotPrice: UseQueryResult<string, unknown>) => {
   const cnvPrice = useCNVPrice()
-  return useQuery(['CNV','ROI',chainId], () => {
-    const roi = (1 - +(bondSpotPrice.data || 0) / +cnvPrice.price?.toSignificant(8)) * 100
-    return roi
-  }, { 
-    cacheTime: 50000,
-    enabled: cnvPrice.isSuccess && bondSpotPrice.isSuccess
-  })
+  return useQuery(
+    ['CNV', 'ROI', chainId],
+    () => {
+      const roi = (1 - +(bondSpotPrice.data || 0) / +cnvPrice.price?.toSignificant(8)) * 100
+      return roi
+    },
+    {
+      cacheTime: 50000,
+      enabled: cnvPrice.isSuccess && bondSpotPrice?.isSuccess,
+    },
+  )
 }
 
 export const BondInfo = ({ asset, icon }) => {
   const termLength = useBondTerm()
-  const vestingTerm = `${termLength.data} Days`;
-  const roi = useRoi()
+  const vestingTerm = `${termLength.data} Days`
+  const bondSpotPrice = useBondSpotPrice()
+  const roi = useRoi(bondSpotPrice)
+
+  const cnvPrice = useCNVPrice()
+
   return (
-    <Card bg="none" h="80px" w="100%" direction="row" shadow="Glass Up Medium">
-      <Flex justify="center" flexBasis="40%" alignItems={'center'}>
-        <Image src={icon} alt="" w="55px" h="55px" mr={3} />
-        <InfoItem isLoading={false} value={asset.toUpperCase()} label="Asset" />
+    <Card bg="none" w="100%" gap={0} shadow="Glass Up Medium" py="2">
+      <Flex h="fit-content" w="100%">
+        <Flex justify="center" flexBasis="40%" alignItems={'center'}>
+          <Image src={icon} alt="" w="55px" h="55px" mr={3} />
+          <InfoItem isLoading={false} value={asset.toUpperCase()} label="Asset" />
+        </Flex>
+
+        <InfoItem
+          value={roi.data?.toFixed(2) + '%'}
+          label="ROI"
+          isLoading={!roi.data}
+          flexGrow={1}
+          pl={3}
+          pr={3}
+          flexBasis="25%"
+          color={getRoiWarnColor(roi.data)}
+        />
+
+        <InfoItem
+          isLoading={termLength.isFetching}
+          value={vestingTerm}
+          label="Vesting term"
+          px={5}
+          flexBasis="35%"
+        />
       </Flex>
-      <Box w="1px" mx={0} my={-4} bg="stroke.primary" />
-      <InfoItem
-        value={roi.data?.toFixed(2) + '%'}
-        label="ROI"
-        isLoading={!roi.data}
-        flexGrow={1}
-        pl={3}
-        pr={3}
-        flexBasis="25%"
-        color={getRoiWarnColor(roi.data)}
-      />
-      <Box w="1px" mx={0} my={-4} bg="stroke.primary" />
-      <InfoItem isLoading={termLength.isFetching} value={vestingTerm} label="Vesting term" px={5} flexBasis="35%" />
+      <Box w="90%" h="2px" bg="gray.600" mx="auto" opacity={0.4} my="0.5" />
+      <Flex justify={'space-around'}>
+        <InfoItem
+          value={'Current price'}
+          isLoading={cnvPrice?.isLoading}
+          label={`$${(cnvPrice.price || 0).toFixed(2)} CNV`}
+        />
+        <InfoItem
+          value={'Bond price'}
+          isLoading={bondSpotPrice.isLoading}
+          label={`$${(+bondSpotPrice.data || 0).toFixed(2)} CNV`}
+        />
+      </Flex>
     </Card>
   )
 }
 
-
 const NoBonds = () => {
-  return <Card bg="none" w="100%" maxH="120px" flex={1} shadow="Glass Up Medium">
-  <Text fontWeight={'semibold'} textColor={'text.bright'} m="auto" opacity={0.6}>
-    No current bond positions
-  </Text>
-</Card>
+  return (
+    <Card bg="none" w="100%" maxH="120px" flex={1} shadow="Glass Up Medium">
+      <Text fontWeight={'semibold'} textColor={'text.bright'} m="auto" opacity={0.6}>
+        No current bond positions
+      </Text>
+    </Card>
+  )
 }
 export const UserBondPositionInfo = (props) => {
   const parse = props?.bondSigma
@@ -133,7 +163,7 @@ export const UserBondPositionInfo = (props) => {
           <InfoItem value={formatRedeemable} label={'Redeemable'} px={5} pl={2} flexBasis="35%" />
         </Card>
       ) : !!props.userAddress ? (
-          <Loading size='sm' isLoading={!!props.userAddress} label='Fetching bonds...'></Loading>
+        <Loading size="sm" isLoading={!!props.userAddress} label="Fetching bonds..."></Loading>
       ) : (
         ''
       )}
