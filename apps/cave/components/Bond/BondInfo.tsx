@@ -105,7 +105,7 @@ export const BondInfo = ({ asset, icon }) => {
         <InfoItem
           value={'Current price'}
           isLoading={cnvPrice?.isLoading}
-          label={`$${cnvPrice.price?.toFixed(3)} CNV`}
+          label={`$${(cnvPrice.price || 0).toFixed(2)} CNV`}
         />
         <InfoItem
           value={'Bond price'}
