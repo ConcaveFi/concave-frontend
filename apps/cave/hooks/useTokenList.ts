@@ -96,7 +96,7 @@ export const useAddressTokenList: (address?: string) => UseQueryResult<Token[], 
         (tokens || []).map(
           (token: MoralisERC20Token) =>
             new Token(
-              chain.goerli.id,
+              activeChain.id,
               token.token_address,
               +token.decimals,
               token.symbol,
@@ -111,32 +111,6 @@ export const prefetchTokenList = () => queryClient.prefetchQuery({
   queryKey: ['token-liqidity-list', 1],
   queryFn: async () => fetchLiquidityTokenList(chain.mainnet),
 })
-
-
-type Version = {
-  major: number
-  minor: number
-  patch: number
-}
-
-type Tags = {}
-
-type ConcaveTokenList = {
-  name: string
-  timestamp: Date
-  version: Version
-  tags: Tags
-  logoURI: string
-  keywords: string[]
-  tokens: {
-    chainId: number
-    address: string
-    name: string
-    symbol: string
-    decimals: number
-    logoURI: string
-  }[]
-}
 
 type MoralisERC20Token = {
   token_address: string
