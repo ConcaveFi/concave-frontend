@@ -87,7 +87,7 @@ export abstract class Fetcher {
       FROM_STORAGE.name || tokenContract.name(),
       tokenContract.totalSupply(),
     ])
-    storage?.setItem(KEY, JSON.stringify({ symbol, decimals, name, totalSupply: totalSupply.toString() }))
+    storage?.setItem(KEY, JSON.stringify({ symbol, decimals, name }))
     const token = new Token(chainId, address, decimals, symbol, name, totalSupply)
 
     TOKENS_CACHE[address] = {

@@ -14,17 +14,15 @@ setLogger({
   },
 })
 
-export const ReactQueryProvider = ({ children }) => {
-  const [queryClient] = useState(
-    () =>
-      new QueryClient({
-        defaultOptions: {
-          queries: {
-            staleTime: ms('20s'),
-          },
-        },
-      }),
-  )
 
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: ms('20s'),
+    },
+  },
+})
+
+export const ReactQueryProvider = ({ children }) => {
   return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
 }
