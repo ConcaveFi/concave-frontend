@@ -78,13 +78,14 @@ export function SideBar() {
           <SidebarContent
             closeSidebar={onClose}
             drag="x"
-            onDragEnd={(a, i) => {
-              if (i.offset.x < -150) onClose()
+            dragDirectionLock
+            onDragEnd={(a, { velocity, offset }) => {
+              if ((offset.x < -150 || velocity.x < -200) && Math.abs(offset.y) < 50) onClose()
             }}
             dragElastic={{ left: 0.3, right: 0 }}
             dragSnapToOrigin
             dragMomentum={false}
-            dragConstraints={{ left: 0, right: 0 }}
+            dragConstraints={{ left: -200, right: 0 }}
           />
         </DrawerContent>
       </Drawer>
