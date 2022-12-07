@@ -1,5 +1,6 @@
 import { Currency, NATIVE, Token } from '@concave/core'
 import { Fetcher } from '@concave/gemswap-sdk'
+import { queryClient } from 'contexts/ReactQueryContext'
 import { fetchJson } from 'ethers/lib/utils'
 import { concaveProvider } from 'lib/providers'
 import ms from 'ms'
@@ -8,12 +9,6 @@ import { Chain, chain, useNetwork } from 'wagmi'
 
 const concaveTokenList = (networkName: string) =>
   `/assets/tokenlists/${networkName.toLowerCase()}/concave.json`
-
-const fetchTokenList = async (chain: Chain) => {
-  const tokenList = await fetchJson(concaveTokenList(chain.name))
-  const chainTokens = tokenList.tokens.filter((t) => t.chainId === chain.id)
-  return chainTokens.map((t) => new Token(t.chainId, t.address, t.decimals, t.symbol, t.name))
-}
 
 const fetchLiquidityTokenList = async (chain: Chain) => {
   const [tokenList, pairs] = await Promise.all([
@@ -111,6 +106,12 @@ export const useAddressTokenList: (address?: string) => UseQueryResult<Token[], 
       )
   })
 }
+
+export const prefetchTokenList = () => queryClient.prefetchQuery({
+  queryKey: ['token-liqidity-list', 1],
+  queryFn: async () => fetchLiquidityTokenList(chain.mainnet),
+})
+
 
 type Version = {
   major: number

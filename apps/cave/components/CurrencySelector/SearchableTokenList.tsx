@@ -3,11 +3,13 @@ import { Fetcher } from '@concave/gemswap-sdk'
 import { Flex, Input, ListItem, Spinner, Stack, Text, UnorderedList } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { isAddress } from 'ethers/lib/utils'
-import { useLiquidityTokenList } from 'hooks/useTokenList'
+import { prefetchTokenList, useLiquidityTokenList } from 'hooks/useTokenList'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
 import { useProvider } from 'wagmi'
 import { commonTokens } from './SelectAMMCurrency'
+
+prefetchTokenList();
 
 const TokenListItem = ({ currency, onClick }: { currency: Currency; onClick: () => void }) => (
   <ListItem
