@@ -28,17 +28,20 @@ export const TokenIdSearchBar: FC<TokenIdSearchBarProps> = ({ onApplyFilter }) =
         }}
       />
       {hasAppliedFilter && (
-        <Tooltip label="Clear filter">
-          <CloseIcon
-            color={'text.low'}
-            cursor="pointer"
-            onClick={() => {
-              onApplyFilter(undefined)
-              setAppliedNumber('')
-              setValue('')
-            }}
-          />
-        </Tooltip>
+        <Tooltip
+          label={'Clear filter'}
+          icon={
+            <CloseIcon
+              color={'text.low'}
+              cursor="pointer"
+              onClick={() => {
+                onApplyFilter(undefined)
+                setAppliedNumber('')
+                setValue('')
+              }}
+            />
+          }
+        />
       )}
     </Flex>
   )

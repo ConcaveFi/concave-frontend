@@ -32,7 +32,7 @@ export const getBondTermLength = async (networkId: number) => {
   return formattedTermLength / 60 / 60 / 24
 }
 
-export const getBondSpotPrice = async (networkId: number, tokenAddress?: string) => {
+export const getBondSpotPrice = async (networkId: number) => {
   const bondingContract = new Contract(BOND_ADDRESS[networkId], BondAbi, providers(networkId))
   const DAI = DAI_ADDRESS[networkId]
   const spotPrice = await bondingContract.getSpotPrice(DAI)
@@ -89,6 +89,16 @@ export async function redeemBondBatch(
   })
 }
 
+export type ReturnBondPositions = {
+  parseOldest: string;
+  totalOwed: number;
+  totalPending: number;
+  batchRedeemArray: any[];
+  claimed: boolean;
+  parseRedeemable: number;
+  address: string;
+}
+
 export const getUserBondPositions = async (
   networkId: number,
   address: string,
@@ -106,6 +116,7 @@ export const getUserBondPositions = async (
   const bondingContract = new Contract(BOND_ADDRESS[networkId], BondAbi, providers(networkId))
   const getUserPositionsLength = await bondingContract.getUserPositionCount(address)
   const termData = await bondingContract.term()
+console.log(bondingContract)
   for (let i = 0; i < +getUserPositionsLength; i++) {
     batchRedeemArray.push(+i)
     const positionData = await bondingContract.positions(address, i)

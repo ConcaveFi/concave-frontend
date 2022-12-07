@@ -4,7 +4,7 @@ const withBundleAnalyzer = BundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
 })
 
-/** * @type {import('next').NextConfig} **/
+/** @type {import('next').NextConfig} **/
 const nextConfig = {
   reactStrictMode: true,
   trailingSlash: false,
@@ -19,6 +19,15 @@ const nextConfig = {
   },
   async redirects() {
     return [{ source: '/treasury', destination: '/transparency', permanent: true }]
+  },
+  experimental: {
+    transpilePackages: [
+      '@concave/core',
+      '@concave/gemswap-sdk',
+      '@concave/marketplace',
+      '@concave/icons',
+      '@concave/ui',
+    ],
   },
 }
 

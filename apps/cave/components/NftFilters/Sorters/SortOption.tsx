@@ -1,5 +1,6 @@
-import { Flex, Text, Tooltip } from '@chakra-ui/react'
+import { Flex, Text } from '@chakra-ui/react'
 import { CloseIcon } from '@concave/icons'
+import { Tooltip } from '@concave/ui'
 import { NftSort } from './hooks/useNftSort'
 
 type SortOptionProps = {
@@ -29,20 +30,18 @@ export const SortOption = ({ sorter, title, enabled, onClick }: SortOptionProps)
       {enabled && (
         <Tooltip
           label="Remove sort"
-          textColor={'white'}
-          textShadow="0px 0px 10px #333"
-          bg="text.low"
-          fontWeight={'bold'}
-        >
-          <CloseIcon
-            mt={-1}
-            width={'12px'}
-            height="12px"
-            cursor={'pointer'}
-            color="text.low"
-            onClick={() => onClick(undefined)}
-          />
-        </Tooltip>
+          w={''}
+          icon={
+            <CloseIcon
+              mt={-1}
+              width={'12px'}
+              height="12px"
+              cursor={'pointer'}
+              color="text.low"
+              onClick={() => onClick(undefined)}
+            />
+          }
+        />
       )}
     </Flex>
   )

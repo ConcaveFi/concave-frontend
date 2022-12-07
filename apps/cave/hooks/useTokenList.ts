@@ -1,5 +1,6 @@
 import { Currency, NATIVE, Token } from '@concave/core'
 import { Fetcher } from '@concave/gemswap-sdk'
+import { queryClient } from 'contexts/ReactQueryContext'
 import { fetchJson } from 'ethers/lib/utils'
 import { concaveProvider } from 'lib/providers'
 import ms from 'ms'
@@ -9,16 +10,10 @@ import { Chain, chain, useNetwork } from 'wagmi'
 const concaveTokenList = (networkName: string) =>
   `/assets/tokenlists/${networkName.toLowerCase()}/concave.json`
 
-const fetchTokenList = async (chain: Chain) => {
-  const tokenList = await fetchJson(concaveTokenList(chain.name))
-  const chainTokens = tokenList.tokens.filter((t) => t.chainId === chain.id)
-  return chainTokens.map((t) => new Token(t.chainId, t.address, t.decimals, t.symbol, t.name))
-}
-
 const fetchLiquidityTokenList = async (chain: Chain) => {
   const [tokenList, pairs] = await Promise.all([
     fetchJson(concaveTokenList(chain.name)) as Promise<{ tokens: Token[] }>,
-    Fetcher.fetchPairs(chain.id, concaveProvider(chain.id)),
+    Fetcher.fetchPairs(chain.id, concaveProvider(chain.id), localStorage),
   ])
   const chainTokens = tokenList.tokens.filter((t) => t.chainId === chain.id)
   const liquidityTokens = chainTokens.filter((t) => {
@@ -101,7 +96,7 @@ export const useAddressTokenList: (address?: string) => UseQueryResult<Token[], 
         (tokens || []).map(
           (token: MoralisERC20Token) =>
             new Token(
-              chain.goerli.id,
+              activeChain.id,
               token.token_address,
               +token.decimals,
               token.symbol,
@@ -112,30 +107,10 @@ export const useAddressTokenList: (address?: string) => UseQueryResult<Token[], 
   })
 }
 
-type Version = {
-  major: number
-  minor: number
-  patch: number
-}
-
-type Tags = {}
-
-type ConcaveTokenList = {
-  name: string
-  timestamp: Date
-  version: Version
-  tags: Tags
-  logoURI: string
-  keywords: string[]
-  tokens: {
-    chainId: number
-    address: string
-    name: string
-    symbol: string
-    decimals: number
-    logoURI: string
-  }[]
-}
+export const prefetchTokenList = () => queryClient.prefetchQuery({
+  queryKey: ['token-liqidity-list', 1],
+  queryFn: async () => fetchLiquidityTokenList(chain.mainnet),
+})
 
 type MoralisERC20Token = {
   token_address: string
