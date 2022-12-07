@@ -5,11 +5,17 @@ import { UserDashboardContainer } from 'components/UserDashboard/UserDashboardCo
 const UserDashboard = () => (
   <Container maxW={{ base: '60ch', sm: 'container.sm', lg: '100%' }} centerContent>
     <Flex align={'center'} w={'100%'} h={'100%'} gap={4} textAlign="center" direction="column">
-      <Heading as="h1" mt={16} mb={3} fontSize="5xl">
+      <Heading
+        mt={16}
+        mb={3}
+        fontSize="5xl"
+        apply={'background.text-brightBlue'}
+        fontWeight="semibold"
+      >
         Management Dashboard
       </Heading>
       <Flex mt={0} align="center" gap={10} width="full" justify="center" alignItems={'center'}>
-        <Text maxW={620} textAlign={'center'}>
+        <Text apply="background.text-brightBlue" maxW={620} textAlign={'center'}>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam sollicitudin, est id
           euismod aliquet, erat magna aliquet turpis, sed blandit purus dolor nec velit. Integer
           iaculis justo fringilla sem gravida dignissim sed sed dui.
