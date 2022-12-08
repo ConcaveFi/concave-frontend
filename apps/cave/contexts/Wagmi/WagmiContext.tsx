@@ -1,4 +1,5 @@
 import { SafeConnector } from '@gnosis.pm/safe-apps-wagmi'
+import { NEXT_PUBLIC_ALCHEMY_ID, NEXT_PUBLIC_INFURA_ID } from 'lib/env.conf'
 import { ReactNode, useEffect } from 'react'
 import { chain, Connector, createClient, defaultChains, useConnect, WagmiConfig } from 'wagmi'
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
@@ -15,7 +16,13 @@ const connectors = [
   new SafeConnector({ chains }),
   new InjectedConnector({ chains }),
   new MetaMaskConnector({ chains }),
-  new WalletConnectConnector({ chains, options: { qrcode: false } }),
+  new WalletConnectConnector({ chains, options: { 
+    qrcode: false,
+    infuraId: NEXT_PUBLIC_INFURA_ID,
+    rpc: {
+      1: `https://eth-mainnet.alchemyapi.io/v2/${NEXT_PUBLIC_ALCHEMY_ID}`,
+    },
+ } }),
   new UnstoppableConnector({ chains }),
   new CoinbaseWalletConnector({
     chains,
