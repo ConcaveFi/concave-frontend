@@ -1,6 +1,8 @@
 import { Currency, CurrencyAmount, Percent, RouterAbi, ROUTER_ADDRESS } from '@concave/core'
+import { useErrorModal } from 'contexts/ErrorModal'
 import { BigNumber, Contract } from 'ethers'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
+import { useTransaction } from 'hooks/TransactionsRegistry/useTransaction'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useState } from 'react'
 import { useContract, useSigner } from 'wagmi'
@@ -65,42 +67,19 @@ export const useAddLiquidityTransaction = (
     contractInterface: RouterAbi,
     signerOrProvider: signer,
   })
-
-  const [state, setState] = useState({
-    isWaitingForConfirmation: false,
-    isError: false,
-    error: undefined,
-    isTransactionSent: false,
-    data: undefined,
-  })
-
-  const { registerTransaction } = useTransactionRegistry()
-
-  const submit = async () => {
-    setState((s) => ({ ...s, isWaitingForConfirmation: true }))
-    try {
-      const to = recipient || (await signer.getAddress())
-      const tx = await addLiquidity(tokenAmountA, tokenAmountB, routerContract, to)
-      setState((s) => ({
-        ...s,
-        isTransactionSent: true,
-        data: tx,
-        isWaitingForConfirmation: false,
-      }))
-
-      registerTransaction(tx, {
-        type: 'add liquidity',
-        amount0: tokenAmountA.toString(),
-        amount1: tokenAmountB.toString(),
-        pairSymbol: `${tokenAmountA.currency.symbol}-${tokenAmountB.currency.symbol}`,
-      })
-    } catch (error) {
-      if (error.message === 'User rejected the transaction')
-        return setState((s) => ({ ...s, isWaitingForConfirmation: false }))
-
-      setState((s) => ({ ...s, isError: true, error, isWaitingForConfirmation: false }))
+  const errorModal = useErrorModal();
+  return useTransaction(async () => {
+    const to = recipient || (await signer.getAddress())
+    return await addLiquidity(tokenAmountA, tokenAmountB, routerContract, to)
+  }, {
+    onError: (e) => {
+      errorModal.onOpen(e)
+    },
+    meta: {
+      type: 'add liquidity',
+      amount0: tokenAmountA.toString(),
+      amount1: tokenAmountB.toString(),
+      pairSymbol: `${tokenAmountA.currency.symbol}-${tokenAmountB.currency.symbol}`,
     }
-  }
-
-  return { submit, ...state }
+  })
 }
