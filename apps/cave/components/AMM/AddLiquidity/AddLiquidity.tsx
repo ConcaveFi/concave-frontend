@@ -60,7 +60,7 @@ function AddLiquidityContent({
     onReset,
   } = useAddLiquidityState(currencies, onChangeCurrencies)
 
-  const addLPTx = useAddLiquidityTransaction(firstFieldAmount, secondFieldAmount)
+  const addLiquidityTransaction = useAddLiquidityTransaction(firstFieldAmount, secondFieldAmount)
 
   const supplyLiquidityDisclosure = useDisclosure()
   const addLiquidityButtonProps = useAddLiquidityButtonProps(
@@ -114,11 +114,11 @@ function AddLiquidityContent({
         lpData={lpData}
         isOpen={supplyLiquidityDisclosure.isOpen}
         onClose={liquidityModalClose || supplyLiquidityDisclosure.onClose}
-        onConfirm={addLPTx.submit}
+        onConfirm={addLiquidityTransaction.sendTx}
       />
 
       <WaitingConfirmationDialog
-        isOpen={addLPTx.isWaitingForConfirmation}
+        isOpen={addLiquidityTransaction.isWaitingForConfirmation}
         title={'Confirm liquidity'}
       >
         <Flex
@@ -159,8 +159,8 @@ function AddLiquidityContent({
         </Flex>
       </WaitingConfirmationDialog>
       <TransactionSubmittedDialog
-        tx={addLPTx.data}
-        isOpen={addLPTx.isTransactionSent}
+        tx={addLiquidityTransaction.tx}
+        isOpen={addLiquidityTransaction.isWaitingTransactionReceipt}
         closeParentComponent={() => {
           onChangeFirstField(toAmount(0, firstFieldAmount.currency))
           if (liquidityModalClose) {
@@ -170,7 +170,6 @@ function AddLiquidityContent({
           }
         }}
       />
-      <TransactionErrorDialog error={addLPTx.error?.message} isOpen={addLPTx.isError} />
     </>
   )
 }
