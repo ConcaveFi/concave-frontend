@@ -18,6 +18,7 @@ import { TransactionErrorDialog } from 'components/TransactionDialog/Transaction
 import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
 
 import { WaitingConfirmationDialog } from 'components/TransactionDialog/TransactionWaitingConfirmationDialog'
+import { useErrorModal } from 'contexts/ErrorModal'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useCallback, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
@@ -65,6 +66,7 @@ export function Swap(props: SwapState) {
         onChangeInput(toAmount(0, trade.inputAmount.currency))
         closeConfirmationModal()
       },
+      onError:  (e: unknown) => errorModal.onOpen(e)
     },
     currencyApprove.permit,
   )
@@ -88,7 +90,7 @@ export function Swap(props: SwapState) {
   })
 
   const networkId = useCurrentSupportedNetworkId()
-
+  const errorModal = useErrorModal()
   return (
     <>
       <Card
@@ -169,7 +171,6 @@ export function Swap(props: SwapState) {
           <AddTokenToWalletButton token={swapTx.trade.outputAmount.currency.wrapped} />
         )}
       </TransactionSubmittedDialog>
-      <TransactionErrorDialog error={swapTx.error?.message} isOpen={swapTx.isError} />
     </>
   )
 }
