@@ -3,7 +3,6 @@ import { useAccount, useNetwork } from 'wagmi'
 import { ErrorModalContext } from './ErrorModalContext'
 import { sendReport } from './sendReport'
 import { detect } from 'detect-browser'
-import { info } from 'console'
 
 export const useErrorModal = () => {
   const errorContext = useContext(ErrorModalContext)
