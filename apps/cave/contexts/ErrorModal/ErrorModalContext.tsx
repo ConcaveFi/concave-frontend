@@ -23,9 +23,9 @@ const useErrorHandle = () => {
   const [error, setError] = useState<Partial<TransactionError>>()
   const [extra, setExtraInfo] = useState<Record<string, string>>()
   const onOpen = (e: TransactionError, extra?: Record<string, string>) => {
+    const { host, pathname } = location
     setError(e)
-    console.table(extra)
-    setExtraInfo(extra)
+    setExtraInfo({ ...extra, host, pathname })
     modalInfo.onOpen()
   }
   return {
