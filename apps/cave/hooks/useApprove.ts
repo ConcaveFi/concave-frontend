@@ -69,7 +69,11 @@ export const useContractApprove = (
     addressOrName: token?.address,
     functionName: 'approve',
     args: [spender, amountToApprove],
-    onError: (e) => errorModal.onOpen(e, { spender, amountToApprove: amountToApprove.toString() }),
+    onError: (e) => {
+      if (error.name !== 'UserRejectedRequestError')
+        errorModal.onOpen(e, { spender, amountToApprove: amountToApprove.toString() })
+    },
+
     onSuccess: (tx) => {
       registerTransaction(tx, { type: 'approve', tokenSymbol: token.symbol })
     },
