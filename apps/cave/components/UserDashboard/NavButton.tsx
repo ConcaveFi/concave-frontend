@@ -1,14 +1,16 @@
-import { Flex, gradientBorder, Text } from '@concave/ui'
+import { Flex, gradientBorder, Spinner, Text } from '@concave/ui'
 import { useAccount } from 'wagmi'
 
 export const NavButton = ({
   title,
+  isLoading,
   isSelected,
   onClick,
   summaryArray,
   isDisabled,
 }: {
   title: string
+  isLoading?: boolean
   isSelected?: boolean
   onClick?: VoidFunction
   summaryArray?: { label: string; data: string }[]
@@ -59,9 +61,9 @@ export const NavButton = ({
             mt={settings.textMt}
             mb={settings.textMb}
           >
-            {title}
+            {title} {isLoading && <Spinner mx={1} mt={1} size={'sm'} mr={'auto'} />}
           </Text>
-          {isConnected ? (
+          {isConnected && !isLoading ? (
             <>
               {summaryArray?.map((summaryObject, index) => (
                 <Text key={index + title} fontSize={'sm'}>
