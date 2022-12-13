@@ -1,4 +1,5 @@
 import { Flex } from '@concave/ui'
+import { useStakePositions } from 'components/StakingPositions/DashboardBody/DashBoardState'
 import { NavButton } from './NavButton'
 import { SnapshotOption } from './UserDashboardContainer'
 
@@ -9,6 +10,10 @@ export const UserDashboardNav = ({
   currentSnapshot: SnapshotOption
   changeSnapshot: (snapshotSelected: SnapshotOption) => void
 }) => {
+  // Staking
+  const stakePosition = useStakePositions()
+  const { userNonFungibleTokensInfo, totalLocked, isLoading: cnvDataIsLoading } = stakePosition
+
   return (
     <Flex
       w={'25%'}
@@ -22,9 +27,10 @@ export const UserDashboardNav = ({
       <NavButton
         title={'Liquid Staking'}
         isSelected={currentSnapshot === SnapshotOption.LiquidStaking}
+        isLoading={cnvDataIsLoading}
         summaryArray={[
-          { label: 'Locked', data: '12,345 CNV' },
-          { label: 'Positions', data: '100' },
+          { label: 'Locked', data: `${totalLocked.toFixed(2, { groupSeparator: ',' })} CNV` },
+          { label: 'Positions', data: userNonFungibleTokensInfo.length.toString() },
         ]}
         onClick={() => changeSnapshot(SnapshotOption.LiquidStaking)}
       />
