@@ -5,11 +5,9 @@ import { SnapshotOption } from './UserDashboardContainer'
 export const UserDashboardNav = ({
   currentSnapshot,
   changeSnapshot,
-  snapshotData,
 }: {
   currentSnapshot: SnapshotOption
   changeSnapshot: (snapshotSelected: SnapshotOption) => void
-  snapshotData: any
 }) => {
   return (
     <Flex

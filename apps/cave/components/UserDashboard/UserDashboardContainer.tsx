@@ -43,11 +43,7 @@ export const UserDashboardContainer = () => {
       >
         <UserDashboardWallet />
         <Flex w={'95%'} maxH={'100%'} flexGrow={1} flexDirection={'row'} gap={6} mb={4}>
-          <UserDashboardNav
-            currentSnapshot={currentSnapshot}
-            changeSnapshot={changeSnapshot}
-            snapshotData
-          />
+          <UserDashboardNav currentSnapshot={currentSnapshot} changeSnapshot={changeSnapshot} />
           <UserDashboardContent />
         </Flex>
       </Card>
