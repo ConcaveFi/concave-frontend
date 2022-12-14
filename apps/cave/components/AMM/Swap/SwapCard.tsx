@@ -18,11 +18,13 @@ import { TransactionErrorDialog } from 'components/TransactionDialog/Transaction
 import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
 
 import { WaitingConfirmationDialog } from 'components/TransactionDialog/TransactionWaitingConfirmationDialog'
+import { useErrorModal } from 'contexts/ErrorModal'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useCallback, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
 import { useWaitForTransaction } from 'wagmi'
 import { NetworkMismatch } from '../NetworkMismatch'
+import { SwapState } from './hooks/useSwapState'
 import { PcnvNotification } from './PcnvNotification'
 import { TradeDetails } from './TradeDetails'
 
@@ -30,8 +32,18 @@ import { TradeDetails } from './TradeDetails'
 const requestDBSync = () => fetch('https://cnv-amm.vercel.app/api/gemswap', { keepalive: true })
 
 export function SwapCard() {
-  const { trade, error, onChangeInput, onChangeOutput, switchFields, onReset } = useSwapState()
+  const swapState: SwapState = useSwapState()
 
+  if ( !swapState.trade.inputAmount ) {
+    return <></>
+  }
+  return <Swap {...swapState}></Swap> 
+}
+
+export function Swap(props: SwapState) {
+  const { trade, error, onChangeInput, onChangeOutput, switchFields, onReset } = props;
+  const errorModal = useErrorModal();
+  
   const { deadline: ttl } = useSwapSettings((s) => ({
     deadline: s.settings.deadline,
   }))
@@ -56,6 +68,7 @@ export function SwapCard() {
         onChangeInput(toAmount(0, trade.inputAmount.currency))
         closeConfirmationModal()
       },
+      onError: errorModal.onOpen
     },
     currencyApprove.permit,
   )
@@ -79,7 +92,6 @@ export function SwapCard() {
   })
 
   const networkId = useCurrentSupportedNetworkId()
-
   return (
     <>
       <Card
@@ -160,7 +172,6 @@ export function SwapCard() {
           <AddTokenToWalletButton token={swapTx.trade.outputAmount.currency.wrapped} />
         )}
       </TransactionSubmittedDialog>
-      <TransactionErrorDialog error={swapTx.error?.message} isOpen={swapTx.isError} />
     </>
   )
 }

@@ -18,6 +18,7 @@ import { CurrencyIcon } from 'components/CurrencyIcon'
 import { PositionInfoItem } from 'components/LiquidityPoolPositions/MyPositions'
 import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
+import { useErrorModal } from 'contexts/ErrorModal'
 
 import { WaitingConfirmationDialog } from 'components/TransactionDialog/TransactionWaitingConfirmationDialog'
 import { useTransaction } from 'hooks/TransactionsRegistry/useTransaction'
@@ -196,7 +197,7 @@ const RemoveLiquidityActions = ({
     amount1: amountBMin.toString(),
     pairSymbol: `${amountAMin.currency.symbol}-${amountBMin.currency.symbol}`,
   } as const
-
+  const errorModal = useErrorModal()
   const removeTransaction = useTransaction(
     () => {
       const router = new Router(networkId, signer)
@@ -210,6 +211,7 @@ const RemoveLiquidityActions = ({
     },
     {
       meta,
+      onError: errorModal.onOpen
     },
   )
 
@@ -260,10 +262,6 @@ const RemoveLiquidityActions = ({
         tx={{ hash: removeTransaction.tx?.hash } as TransactionResponse}
         isOpen={removeTransaction.isWaitingTransactionReceipt}
         closeParentComponent={closeParentComponent}
-      />
-      <TransactionErrorDialog
-        error={removeTransaction.error?.reason}
-        isOpen={removeTransaction.isError}
       />
     </Flex>
   )

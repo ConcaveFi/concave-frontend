@@ -1,4 +1,5 @@
 import { CNV_ADDRESS, CurrencyAmount, DAI, DAI_ADDRESS, Token } from '@concave/core'
+import { ErrorModalContext, useErrorModal } from 'contexts/ErrorModal'
 import { Signer } from 'ethers'
 import { useQuery } from 'react-query'
 import { chain, useSigner } from 'wagmi'
@@ -46,6 +47,7 @@ export const usePermit = (
   const { data: signer } = useSigner()
   const token = currencyAmount?.currency
   const supportsPermit = isTokenPermissible(token)
+  const errorModal = useErrorModal()
   const {
     data: signedPermit,
     isLoading,
@@ -60,6 +62,7 @@ export const usePermit = (
     {
       enabled: false,
       retry: 0,
+      onError: errorModal.onOpen
     },
   )
 

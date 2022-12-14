@@ -4,8 +4,6 @@ import { AddTokenToWalletButton } from 'components/AddTokenToWalletButton'
 import { GasPrice } from 'components/AMM'
 import { useCurrencyApprove } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { CurrencyInputField as BondInput } from 'components/CurrencyAmountField'
-import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
-
 import { WaitingConfirmationDialog } from 'components/TransactionDialog/TransactionWaitingConfirmationDialog'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
@@ -15,18 +13,18 @@ import { getBondAmountOut, getBondSpotPrice, purchaseBond, useBondState } from '
 import { ConfirmBondModal } from './ConfirmBond'
 import { DownwardIcon } from './DownwardIcon'
 import { Settings, useBondSettings } from './Settings'
-
 import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
 import { useTransaction } from 'hooks/TransactionsRegistry/useTransaction'
+import { useErrorModal } from 'contexts/ErrorModal'
 
 export function BondBuyCard(props: { updateBondPositions?: VoidFunction }) {
   const confirmModal = useDisclosure()
-  const rejectDisclosure = useDisclosure()
   const { currencyIn, currencyOut, userAddress, balance, signer, networkId } = useBondState()
   const settings = useBondSettings((s) => s.settings)
   const [amountOut, setAmountOut] = useState<string>()
   const [amountIn, setAmountIn] = useState<CurrencyAmount<Currency>>(toAmount('0', DAI[networkId]))
   const currencyApprove = useCurrencyApprove(amountIn, BOND_ADDRESS[networkId])
+  const errorModal = useErrorModal()
 
   useEffect(() => {
     setAmountIn(toAmount(0, DAI[networkId]))
@@ -54,7 +52,7 @@ export function BondBuyCard(props: { updateBondPositions?: VoidFunction }) {
       onSuccess: () => {
         props.updateBondPositions()
       },
-      onError: rejectDisclosure.onOpen,
+      onError: errorModal.onOpen,
       meta: {
         type: 'bond',
         amountIn: amountIn.toString(),
@@ -136,7 +134,6 @@ export function BondBuyCard(props: { updateBondPositions?: VoidFunction }) {
       >
         <AddTokenToWalletButton token={currencyOut} />
       </TransactionSubmittedDialog>
-      <TransactionErrorDialog error={bondTransaction.error?.reason} {...rejectDisclosure} />
     </Card>
   )
 }
