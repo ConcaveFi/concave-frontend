@@ -66,7 +66,7 @@ export function Swap(props: SwapState) {
         onChangeInput(toAmount(0, trade.inputAmount.currency))
         closeConfirmationModal()
       },
-      onError:  (e: unknown) => errorModal.onOpen(e)
+      onError: errorModal.onOpen
     },
     currencyApprove.permit,
   )
@@ -90,7 +90,6 @@ export function Swap(props: SwapState) {
   })
 
   const networkId = useCurrentSupportedNetworkId()
-  const errorModal = useErrorModal()
   return (
     <>
       <Card

@@ -211,9 +211,7 @@ const RemoveLiquidityActions = ({
     },
     {
       meta,
-      onError(e) {
-        errorModal.onOpen(e)
-      },
+      onError: errorModal.onOpen
     },
   )
 
