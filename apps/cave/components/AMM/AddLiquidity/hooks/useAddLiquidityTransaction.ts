@@ -72,9 +72,7 @@ export const useAddLiquidityTransaction = (
     const to = recipient || (await signer.getAddress())
     return await addLiquidity(tokenAmountA, tokenAmountB, routerContract, to)
   }, {
-    onError: (e) => {
-      errorModal.onOpen(e)
-    },
+    onError: errorModal.onOpen,
     meta: {
       type: 'add liquidity',
       amount0: tokenAmountA.toString(),

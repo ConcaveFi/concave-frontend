@@ -35,9 +35,7 @@ export function BondPanel(props: BondPanelProps) {
     {
       meta: { type: 'redeem', amount: 'CNV Bonds' },
       onSuccess: updateBondPositions,
-      onError: (e) => {
-        errorModal.onOpen(e)
-      }
+      onError: errorModal.onOpen
     },
   )
   const buttonDisabled = redeemBond.isWaitingForConfirmation || redeemBond.isWaitingTransactionReceipt
