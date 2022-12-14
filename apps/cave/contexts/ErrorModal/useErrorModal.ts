@@ -16,10 +16,6 @@ export const useErrorModal = () => {
     OS: os,
     Browser: `${name} ${version}`,
     Chain: chain.chain?.name,
-    Contract: error.transaction?.to || '',
-    Method: error.method,
-    Reason: error.reason,
-    Code: error.code,
   }
   return {
     infos,

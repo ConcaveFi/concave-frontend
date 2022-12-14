@@ -42,6 +42,8 @@ export function SwapCard() {
 
 export function Swap(props: SwapState) {
   const { trade, error, onChangeInput, onChangeOutput, switchFields, onReset } = props;
+  const errorModal = useErrorModal();
+  
   const { deadline: ttl } = useSwapSettings((s) => ({
     deadline: s.settings.deadline,
   }))

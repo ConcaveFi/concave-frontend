@@ -62,9 +62,7 @@ export const usePermit = (
     {
       enabled: false,
       retry: 0,
-      onError: (e) => {
-        if ("Failed or Rejected Request" !== e) errorModal.onOpen(e)
-      }
+      onError: errorModal.onOpen
     },
   )
 

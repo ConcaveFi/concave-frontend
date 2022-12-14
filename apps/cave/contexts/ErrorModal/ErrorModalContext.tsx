@@ -7,7 +7,7 @@ type TransactionError = {
   method: string
   code: string
   transaction: { from: string; to: string }
-}
+} | "Failed or Rejected Request"
 type ErrorModalContextType = {
   isOpen: boolean
   extra?:Record<string, string>,
@@ -23,6 +23,7 @@ const useErrorHandle = () => {
   const [error, setError] = useState<Partial<TransactionError>>()
   const [extra, setExtraInfo] = useState<Record<string, string>>()
   const onOpen = (e: TransactionError, extra?: Record<string, string>) => {
+    if ( typeof e === "string" && e.includes("Failed or Rejected Request")) return
     const { host, pathname } = location
     setError(e)
     setExtraInfo({ ...extra, host, pathname })
