@@ -23,6 +23,7 @@ import { useCallback, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
 import { useWaitForTransaction } from 'wagmi'
 import { NetworkMismatch } from '../NetworkMismatch'
+import { SwapState } from './hooks/useSwapState'
 import { PcnvNotification } from './PcnvNotification'
 import { TradeDetails } from './TradeDetails'
 
@@ -30,8 +31,16 @@ import { TradeDetails } from './TradeDetails'
 const requestDBSync = () => fetch('https://cnv-amm.vercel.app/api/gemswap', { keepalive: true })
 
 export function SwapCard() {
-  const { trade, error, onChangeInput, onChangeOutput, switchFields, onReset } = useSwapState()
+  const swapState: SwapState = useSwapState()
 
+  if ( !swapState.trade.inputAmount ) {
+    return <></>
+  }
+  return <Swap {...swapState}></Swap> 
+}
+
+export function Swap(props: SwapState) {
+  const { trade, error, onChangeInput, onChangeOutput, switchFields, onReset } = props;
   const { deadline: ttl } = useSwapSettings((s) => ({
     deadline: s.settings.deadline,
   }))
