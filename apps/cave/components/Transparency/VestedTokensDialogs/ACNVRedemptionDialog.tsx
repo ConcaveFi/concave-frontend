@@ -32,7 +32,7 @@ export const ACNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) =>
   }, {
     meta: {
       type: 'redeem',
-      amount: `${aCNVData.formatted} aCNV`,
+      amount: `${aCNVData?.formatted} aCNV`,
     }
   });
 
