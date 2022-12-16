@@ -1,14 +1,19 @@
 import { Flex } from '@concave/ui'
 import { StakeSettingsProvider } from 'contexts/PositionsFilterProvider'
 import { useRouter } from 'next/router'
+import { RedeemTokens } from './RedeemTokens'
+import { SnapshotOptions } from './SnapshotOptions'
 import { BondingSnapshot } from './Summary/Bonding/BondingSnapshot'
 import { MarketplaceSnapshot } from './Summary/Marketplace/MarketplaceSnapshot'
+import { LiquiditySnapshot } from './Summary/Pools/LiquiditySnapshot'
 import { LiquidStakingSnapshot } from './Summary/Staking/LiquidStakingSnapshot'
-import { SnapshotOption } from './UserDashboardContainer'
+import { TxHistory } from './Summary/TxHistory/TxHistory'
 
 export function UserDashboardContent() {
   const router = useRouter()
-  const selectedView = getView(SnapshotOption[router.query.view as string])
+  const selectedView = getView(SnapshotOptions[router.query.view as string])
+  console.log(router.query.view as string)
+
   return (
     <Flex w={'100%'} flexGrow={1}>
       {selectedView}
@@ -16,21 +21,28 @@ export function UserDashboardContent() {
   )
 }
 
-function getView(selectedSnapshot: SnapshotOption) {
+function getView(selectedSnapshot: SnapshotOptions) {
   switch (selectedSnapshot) {
-    case SnapshotOption.AMM:
-      return <>AMM</>
-    case SnapshotOption.DynamicBonds:
+    case SnapshotOptions.TxHistory:
+      return <TxHistory />
+    case SnapshotOptions.Liquidity:
+      console.log('teste')
+
+      return <LiquiditySnapshot />
+    case SnapshotOptions.DynamicBonds:
       return <BondingSnapshot />
-    case SnapshotOption.LiquidStaking:
+    case SnapshotOptions.LiquidStaking:
       return (
         <StakeSettingsProvider>
           <LiquidStakingSnapshot />
         </StakeSettingsProvider>
       )
-    case SnapshotOption.Marketplace:
+    case SnapshotOptions.Marketplace:
       return <MarketplaceSnapshot />
-    case SnapshotOption.Global:
+    case SnapshotOptions.Redeem:
+      return <RedeemTokens />
+    case SnapshotOptions.Global:
+
     default:
       return <>Global Summary</>
   }
