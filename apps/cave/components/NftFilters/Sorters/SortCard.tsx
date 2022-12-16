@@ -7,17 +7,17 @@ import {
   Portal,
   useDisclosure,
 } from '@concave/ui'
+import { useStakeSettings } from 'contexts/PositionsFilterProvider'
 import { useState } from 'react'
 import { DropdownCard } from '../DropdownCard'
 import { NftSort } from './hooks/useNftSort'
 import { SortOption } from './SortOption'
 
-type SortCardProps = {
-  onChangeSort: (sorter: NftSort) => void
-}
-export const SortCard = ({ onChangeSort }: SortCardProps) => {
+export const SortCard = () => {
   const { isOpen, onToggle, onClose } = useDisclosure()
   const [title, setTitle] = useState<string>('Redeem date (ASC)')
+  const { setSorter } = useStakeSettings()
+
   return (
     <Popover onClose={onClose}>
       <PopoverTrigger>
@@ -52,7 +52,7 @@ export const SortCard = ({ onChangeSort }: SortCardProps) => {
                 onClick={(clickedSorter) => {
                   if (clickedSorter === undefined) setTitle('None')
                   else setTitle(sorter.title)
-                  onChangeSort(clickedSorter)
+                  setSorter(clickedSorter)
                 }}
                 sorter={sorter.nftSort}
                 title={sorter.title}
