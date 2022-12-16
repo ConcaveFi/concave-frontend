@@ -2,6 +2,7 @@ import { Flex } from '@concave/ui'
 import { StakeSettingsProvider } from 'contexts/PositionsFilterProvider'
 import { useRouter } from 'next/router'
 import { BondingSnapshot } from './Summary/Bonding/BondingSnapshot'
+import { LiquiditySnapshot } from './Summary/Pools/LiquiditySnapshot'
 import { LiquidStakingSnapshot } from './Summary/Staking/LiquidStakingSnapshot'
 import { SnapshotOption } from './UserDashboardContainer'
 
@@ -18,7 +19,7 @@ export function UserDashboardContent() {
 function getView(selectedSnapshot: SnapshotOption) {
   switch (selectedSnapshot) {
     case SnapshotOption.AMM:
-      return <>AMM</>
+      return <LiquiditySnapshot />
     case SnapshotOption.DynamicBonds:
       return <BondingSnapshot />
     case SnapshotOption.LiquidStaking:
@@ -30,6 +31,7 @@ function getView(selectedSnapshot: SnapshotOption) {
     case SnapshotOption.Marketplace:
       return <>Marketplace</>
     case SnapshotOption.Global:
+
     default:
       return <>Global Summary</>
   }
