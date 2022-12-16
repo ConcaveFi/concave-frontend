@@ -1,14 +1,16 @@
 import { Flex, Text, VStack } from '@chakra-ui/react'
+import { StakingPosition } from '@concave/marketplace'
 import { BoxProps, HStack, useBreakpointValue } from '@concave/ui'
 import { Loading } from 'components/Loading'
 import { MarketplaceFilterContainer } from 'components/Marketplace/Main/MarketplaceFilterContainer'
 import { useState } from 'react'
+import { useAccount } from 'wagmi'
 import { MarketplacePosition } from './MarketplacePosition'
 import { MarketplaceSortConainer } from './MarketplaceSortContainer'
 import { TokenIdSearchBar } from './TokenIdSearchBar'
 import { useMarketplaceDashbord } from './UseMarkeplaceState'
 
-export const MarketplaceDashboard = (props: BoxProps) => {
+export const MarketplaceDashboard = (props: BoxProps | any) => {
   const {
     isFetching,
     nftPositions,
@@ -20,7 +22,19 @@ export const MarketplaceDashboard = (props: BoxProps) => {
   } = useMarketplaceDashbord()
   const isMobile = useBreakpointValue({ base: true, sm: false })
   const [activePosition, setActivePosition] = useState('')
-  const positions = nftPositions.map((stakingPosition) => (
+
+  let nftPositionsArray: StakingPosition[]
+  if (props.filterUserPositions) {
+    const { address } = useAccount()
+    nftPositionsArray = nftPositions.filter((stakingPosition) => {
+      if (stakingPosition.market?.seller.toUpperCase() === address.toUpperCase())
+        return stakingPosition
+    })
+  } else {
+    nftPositionsArray = nftPositions
+  }
+
+  const positions = nftPositionsArray.map((stakingPosition) => (
     <MarketplacePosition
       key={stakingPosition.tokenId.toString()}
       stakingPosition={stakingPosition}
@@ -31,17 +45,32 @@ export const MarketplaceDashboard = (props: BoxProps) => {
   ))
 
   return (
-    <VStack bg="bg.primary" shadow={'up'} p={4} gap={4} borderRadius={'3xl'} maxH={'1000px'}>
+    <VStack
+      bg="bg.primary"
+      shadow={'up'}
+      p={4}
+      gap={4}
+      borderRadius={'3xl'}
+      w={props.w || props.width}
+      h={props.h || props.height}
+      maxH={'1000px'}
+    >
       <MarketplaceFilterContainer
         stakeFilters={stakeFilters}
         onChangeStakeFilters={setStakeFilters}
       />
-      <HStack w={'full'} flex={1} gap={2} flexWrap={'wrap'} justifyContent={'space-around'}>
+      <HStack
+        w={'full'}
+        flex={1}
+        gap={2}
+        flexWrap={'wrap'}
+        justifyContent={props.justifyContentSort || 'space-around'}
+      >
         <MarketplaceSortConainer onChangeSort={setSort} currentSort={sort} />
         {!isMobile && <TokenIdSearchBar onApplyFilter={setTokenIdFilter} />}
       </HStack>
 
-      <Flex w="full" shadow="down" rounded={'16px'} p={2} overflow="hidden">
+      <Flex flexGrow={100} w="full" shadow="down" rounded={'16px'} p={2} overflow="hidden">
         <Flex
           onScroll={() => setActivePosition('')}
           isLoading={isFetching}

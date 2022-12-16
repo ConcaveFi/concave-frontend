@@ -13,7 +13,7 @@ export const NavButton = ({
   isLoading?: boolean
   isSelected?: boolean
   onClick?: VoidFunction
-  summaryArray?: { label: string; data: string }[]
+  summaryArray?: { label: string; data: string | number }[]
   isDisabled?: boolean
 }) => {
   const { isConnected } = useAccount()

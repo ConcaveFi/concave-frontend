@@ -1,6 +1,7 @@
 import { Flex } from '@concave/ui'
 import { useRouter } from 'next/router'
 import { BondingSnapshot } from './Summary/Bonding/BondingSnapshot'
+import { MarketplaceSnapshot } from './Summary/Marketplace/MarketplaceSnapshot'
 import { LiquidStakingSnapshot } from './Summary/Staking/LiquidStakingSnapshot'
 import { SnapshotOption } from './UserDashboardContainer'
 
@@ -23,7 +24,7 @@ function getView(selectedSnapshot: SnapshotOption) {
     case SnapshotOption.LiquidStaking:
       return <LiquidStakingSnapshot />
     case SnapshotOption.Marketplace:
-      return <>Marketplace</>
+      return <MarketplaceSnapshot />
     case SnapshotOption.Global:
     default:
       return <>Global Summary</>
