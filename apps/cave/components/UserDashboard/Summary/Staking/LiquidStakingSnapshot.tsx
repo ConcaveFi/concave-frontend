@@ -78,7 +78,7 @@ export const LiquidStakingSnapshot = () => {
             .filter(filterByRange)
             .filter(filterByStakePool)
             .sort(sortFunction)
-            .map((nonFungibleTokenInfo) => (
+            .map((nonFungibleTokenInfo, i) => (
               <UserPositionCard
                 key={+nonFungibleTokenInfo.tokenId.toString() + i}
                 stakingPosition={nonFungibleTokenInfo}
