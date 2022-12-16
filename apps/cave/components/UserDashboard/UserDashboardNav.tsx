@@ -1,5 +1,7 @@
 import { Flex } from '@concave/ui'
+import { useMarketplaceDashbord } from 'components/Marketplace/Main/UseMarkeplaceState'
 import { useStakePositions } from 'components/StakingPositions/DashboardBody/DashBoardState'
+import { useAccount } from 'wagmi'
 import { NavButton } from './NavButton'
 import { SnapshotOption } from './UserDashboardContainer'
 
@@ -13,6 +15,14 @@ export const UserDashboardNav = ({
   // Staking
   const stakePosition = useStakePositions()
   const { userNonFungibleTokensInfo, totalLocked, isLoading: cnvDataIsLoading } = stakePosition
+  const lsdCNVPositions = userNonFungibleTokensInfo.length
+
+  const { address } = useAccount()
+  const { isFetching: marketplaceIsLoading, nftPositions } = useMarketplaceDashbord()
+  const nftPositionCount = nftPositions.filter((stakingPosition) => {
+    if (stakingPosition.market?.seller.toUpperCase() === address.toUpperCase())
+      return stakingPosition
+  }).length
 
   return (
     <Flex
@@ -30,7 +40,7 @@ export const UserDashboardNav = ({
         isLoading={cnvDataIsLoading}
         summaryArray={[
           { label: 'Locked', data: `${totalLocked.toFixed(2, { groupSeparator: ',' })} CNV` },
-          { label: 'Positions', data: userNonFungibleTokensInfo.length.toString() },
+          { label: 'Positions', data: lsdCNVPositions },
         ]}
         onClick={() => changeSnapshot(SnapshotOption.LiquidStaking)}
       />
@@ -46,7 +56,11 @@ export const UserDashboardNav = ({
       <NavButton
         title={'Marketplace'}
         isSelected={currentSnapshot === SnapshotOption.Marketplace}
-        summaryArray={[{ label: 'Positions Listed', data: '100' }]}
+        isLoading={cnvDataIsLoading && marketplaceIsLoading}
+        summaryArray={[
+          { label: 'Positions', data: lsdCNVPositions },
+          { label: 'Positions Listed', data: nftPositionCount },
+        ]}
         onClick={() => changeSnapshot(SnapshotOption.Marketplace)}
       />
       <NavButton
