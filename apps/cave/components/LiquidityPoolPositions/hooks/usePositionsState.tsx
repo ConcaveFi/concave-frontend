@@ -5,7 +5,7 @@ import { concaveProvider } from 'lib/providers'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
 
-export const usePositionsState = (props: { initialView?: 'user' | 'all' }) => {
+export const usePositionsState = (initialView: 'user' | 'all' | undefined) => {
   // const { address } = useAccount()
   const address = '0xdd11ae83b49ee68b37ff3e6442f994fc037bb4a1'
   const chainId = useCurrentSupportedNetworkId()
@@ -16,9 +16,7 @@ export const usePositionsState = (props: { initialView?: 'user' | 'all' }) => {
   const userPairs = (allPairs?.data || []).filter((p) =>
     tokens?.find((t) => p.liquidityToken.address === t.address),
   )
-  const [view, setView] = useState<'user' | 'all'>(
-    props?.initialView || userPairs.length ? 'user' : 'all',
-  )
+  const [view, setView] = useState<'user' | 'all'>(initialView || userPairs.length ? 'user' : 'all')
 
   const loading = (() => {
     if (userPoolsLoading) {
