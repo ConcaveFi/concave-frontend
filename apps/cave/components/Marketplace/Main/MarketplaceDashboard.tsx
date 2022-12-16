@@ -22,10 +22,10 @@ export const MarketplaceDashboard = (props: BoxProps | any) => {
   } = useMarketplaceDashbord()
   const isMobile = useBreakpointValue({ base: true, sm: false })
   const [activePosition, setActivePosition] = useState('')
+  const { address } = useAccount()
 
   let nftPositionsArray: StakingPosition[]
   if (props.filterUserPositions) {
-    const { address } = useAccount()
     nftPositionsArray = nftPositions.filter((stakingPosition) => {
       if (stakingPosition.market?.seller.toUpperCase() === address.toUpperCase())
         return stakingPosition
