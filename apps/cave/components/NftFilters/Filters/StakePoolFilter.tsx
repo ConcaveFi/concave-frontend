@@ -7,24 +7,14 @@ import {
   Portal,
   useDisclosure,
 } from '@chakra-ui/react'
+import { initialPoolFilterValues, useStakeSettings } from 'contexts/PositionsFilterProvider'
 import { DropdownCard } from '../DropdownCard'
 import { StakePoolFilterEnum } from './hooks/useFilterByStakePool'
 import { StakeToggleButton } from './StakeToggleButton'
 
-type StakePoolFilterCard = {
-  onEnableFilter: (filter: StakePoolFilterEnum) => void
-  onDisableFilter: (filter: StakePoolFilterEnum) => void
-  onResetFilter: (filter: StakePoolFilterEnum[]) => void
-  stakePoolFilters: StakePoolFilterEnum[]
-}
-
-export const StakePoolFilterCard = ({
-  onDisableFilter,
-  onEnableFilter,
-  onResetFilter,
-  stakePoolFilters,
-}: StakePoolFilterCard) => {
+export const StakePoolFilterCard = () => {
   const { isOpen, onClose, onToggle } = useDisclosure()
+  const { stakePoolFilters, setStakePoolFilters } = useStakeSettings()
 
   const canShowReset = stakePoolFilters.length <= 3
 
@@ -68,19 +58,14 @@ export const StakePoolFilterCard = ({
                   filter={+filter}
                   enabled={stakePoolFilters.includes(+filter)}
                   key={index}
-                  onDisableFilter={onDisableFilter}
-                  onEnableFilter={onEnableFilter}
+                  onDisableFilter={(val) =>
+                    setStakePoolFilters(stakePoolFilters.filter((filter) => filter !== val))
+                  }
+                  onEnableFilter={(val) => setStakePoolFilters([...stakePoolFilters, val])}
                 />
               ))}
             <Button
-              onClick={() =>
-                onResetFilter([
-                  StakePoolFilterEnum.FILTER_BY_45_DAYS,
-                  StakePoolFilterEnum.FILTER_BY_90_DAYS,
-                  StakePoolFilterEnum.FILTER_BY_180_DAYS,
-                  StakePoolFilterEnum.FILTER_BY_360_DAYS,
-                ])
-              }
+              onClick={() => setStakePoolFilters(initialPoolFilterValues)}
               mt={1}
               width="90px"
               height={'30px'}

@@ -1,4 +1,5 @@
 import { Flex } from '@concave/ui'
+import { StakeSettingsProvider } from 'contexts/PositionsFilterProvider'
 import { useRouter } from 'next/router'
 import { BondingSnapshot } from './Summary/Bonding/BondingSnapshot'
 import { LiquidStakingSnapshot } from './Summary/Staking/LiquidStakingSnapshot'
@@ -21,7 +22,11 @@ function getView(selectedSnapshot: SnapshotOption) {
     case SnapshotOption.DynamicBonds:
       return <BondingSnapshot />
     case SnapshotOption.LiquidStaking:
-      return <LiquidStakingSnapshot />
+      return (
+        <StakeSettingsProvider>
+          <LiquidStakingSnapshot />
+        </StakeSettingsProvider>
+      )
     case SnapshotOption.Marketplace:
       return <>Marketplace</>
     case SnapshotOption.Global:
