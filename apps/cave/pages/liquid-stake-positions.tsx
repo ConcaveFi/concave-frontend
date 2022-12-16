@@ -3,6 +3,7 @@ import { withPageTransition } from 'components/PageTransition'
 import { useStakePositions } from 'components/StakingPositions/DashboardBody/DashBoardState'
 import { UserDashboardCard } from 'components/StakingPositions/DashboardBody/UserDashboardCard'
 import { LiquidDashboardHeader } from 'components/StakingPositions/LiquidDashboardHeader'
+import { StakeSettingsProvider } from 'contexts/PositionsFilterProvider'
 
 export function LiquidStakePositions() {
   const stakePosition = useStakePositions()
@@ -23,7 +24,9 @@ export function LiquidStakePositions() {
         justify={'center'}
         position="relative"
       >
-        <UserDashboardCard stakePosition={stakePosition} />
+        <StakeSettingsProvider>
+          <UserDashboardCard stakePosition={stakePosition} />
+        </StakeSettingsProvider>
       </Flex>
     </Flex>
   )

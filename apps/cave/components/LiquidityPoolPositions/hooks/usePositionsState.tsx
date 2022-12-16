@@ -4,10 +4,10 @@ import { useAddressTokenList } from 'hooks/useTokenList'
 import { concaveProvider } from 'lib/providers'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
-import { useAccount } from 'wagmi'
 
-export const usePositionsState = () => {
-  const { address } = useAccount()
+export const usePositionsState = (props: { initialView?: 'user' | 'all' }) => {
+  // const { address } = useAccount()
+  const address = '0xdd11ae83b49ee68b37ff3e6442f994fc037bb4a1'
   const chainId = useCurrentSupportedNetworkId()
   const allPairs = useQuery(['fetchPairs', chainId], () => {
     return Fetcher.fetchPairs(chainId, concaveProvider(chainId))
@@ -16,7 +16,9 @@ export const usePositionsState = () => {
   const userPairs = (allPairs?.data || []).filter((p) =>
     tokens?.find((t) => p.liquidityToken.address === t.address),
   )
-  const [view, setView] = useState<'user' | 'all'>(userPairs.length ? 'user' : 'all')
+  const [view, setView] = useState<'user' | 'all'>(
+    props?.initialView || userPairs.length ? 'user' : 'all',
+  )
 
   const loading = (() => {
     if (userPoolsLoading) {

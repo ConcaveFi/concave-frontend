@@ -84,7 +84,7 @@ const LiquidityOptionButton = ({ active = false, onClick = () => {}, label = '' 
   )
 }
 
-const PairsAccordion = ({ pairs }: { pairs: Pair[] }) => {
+export const PairsAccordion = ({ pairs, maxH }: { pairs: Pair[]; maxH?: string }) => {
   const { address } = useAccount()
 
   if (!pairs.length) {
@@ -109,7 +109,7 @@ const PairsAccordion = ({ pairs }: { pairs: Pair[] }) => {
       <Box
         borderRadius={'2xl'}
         p={{ base: 2, sm: 4 }}
-        maxH={'55vh'}
+        maxH={maxH || '55vh'}
         apply="scrollbar.secondary"
         w={'100%'}
         overflowY={'auto'}

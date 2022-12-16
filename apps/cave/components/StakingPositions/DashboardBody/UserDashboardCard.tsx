@@ -1,13 +1,10 @@
 import { ChevronLeftIcon } from '@concave/icons'
 import { Box, Button, Collapse, Flex, gradientBorder, Spinner, Text } from '@concave/ui'
-import { RangeFilter, useFilterByRange } from 'components/NftFilters/Filters/hooks/useFilterByRange'
-import {
-  StakePoolFilterEnum,
-  useFilterByStakePool,
-} from 'components/NftFilters/Filters/hooks/useFilterByStakePool'
-import { NftSort, usePositionSorter } from 'components/NftFilters/Sorters/hooks/useNftSort'
+import { useFilterByRange } from 'components/NftFilters/Filters/hooks/useFilterByRange'
+import { useFilterByStakePool } from 'components/NftFilters/Filters/hooks/useFilterByStakePool'
+import { usePositionSorter } from 'components/NftFilters/Sorters/hooks/useNftSort'
+import { useStakeSettings } from 'contexts/PositionsFilterProvider'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
 import { useAccount } from 'wagmi'
 import { UserPositionCard } from '../LockPosition/Card/UserPositionCard'
 import { UseStakePositionsState } from './DashBoardState'
@@ -19,23 +16,12 @@ export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePo
   const { isConnected } = useAccount()
   const { userNonFungibleTokensInfo, totalLocked, isLoading } = stakePosition
   const hasPositions = userNonFungibleTokensInfo.length !== 0
-  // Sorters && filters
-  const [stakeFilters, setStakeFilters] = useState([
-    StakePoolFilterEnum.FILTER_BY_45_DAYS,
-    StakePoolFilterEnum.FILTER_BY_90_DAYS,
-    StakePoolFilterEnum.FILTER_BY_180_DAYS,
-    StakePoolFilterEnum.FILTER_BY_360_DAYS,
-  ])
-  const { filterByStakePool } = useFilterByStakePool(stakeFilters)
   const positionSorter = usePositionSorter()
 
-  const [rangeFilter, setRangeFilter] = useState<RangeFilter>({})
-  const { filterByRange } = useFilterByRange(rangeFilter)
-
-  const [tokenIdFilter, setTokenIdFilter] = useState<number>()
-
-  const [sort, setSort] = useState<NftSort>({ sort: 'REDEEM_DATE', order: 'ASC' })
-  const sortFunction = sort ? positionSorter.data?.[sort.sort][sort.order] : () => 0
+  const { initialCNVFilter, stakePoolFilters, tokenIdFilter, sorter } = useStakeSettings()
+  const { filterByRange } = useFilterByRange(initialCNVFilter)
+  const { filterByStakePool } = useFilterByStakePool(stakePoolFilters)
+  const sortFunction = sorter ? positionSorter.data?.[sorter.sort][sorter.order] : () => 0
   if (!positionSorter.data) {
     //create a loading
     return null
@@ -71,19 +57,7 @@ export const UserDashboardCard = ({ stakePosition }: { stakePosition: UseStakePo
             </Button>
             <UserDividendCard isLoading={isLoading} totalLocked={totalLocked} />
           </Flex>
-          <FilterContainer
-            onChangeTokenIdFilter={setTokenIdFilter}
-            onResetStakeFilters={setStakeFilters}
-            stakePoolFilters={stakeFilters}
-            tokenIdFilter={tokenIdFilter}
-            currentInitalCNVFilter={rangeFilter}
-            onChangeInitialCNVFilter={setRangeFilter}
-            onChangeSort={(sort) => setSort(sort)}
-            onToggleStakeFilter={(filter, type) => {
-              if (type === 'enable') setStakeFilters([...stakeFilters, filter])
-              else setStakeFilters(stakeFilters.filter((stakeFilter) => stakeFilter !== filter))
-            }}
-          />
+          <FilterContainer />
         </Flex>
         <Collapse in={hasPositions}>
           <Box
