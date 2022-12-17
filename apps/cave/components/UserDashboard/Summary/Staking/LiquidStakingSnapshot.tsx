@@ -1,13 +1,11 @@
 import { AirdropClaimContract } from '@concave/core'
 import { Flex } from '@concave/ui'
-import { airdropToken, getAirdropClaimableAmount } from 'components/Airdrop/airdrop'
+import { getAirdropClaimableAmount } from 'components/Airdrop/airdrop'
 import { useFilterByRange } from 'components/NftFilters/Filters/hooks/useFilterByRange'
 import { useFilterByStakePool } from 'components/NftFilters/Filters/hooks/useFilterByStakePool'
 import { usePositionSorter } from 'components/NftFilters/Sorters/hooks/useNftSort'
 import { useStakePositions } from 'components/StakingPositions/DashboardBody/DashBoardState'
 import { FilterContainer } from 'components/StakingPositions/DashboardBody/FilterContainer'
-import { SnapshotLineChart } from 'components/UserDashboard/SnapshotLineChart'
-import { SnapshotTextCard } from 'components/UserDashboard/SnapshotTextCard'
 import { useStakeSettings } from 'contexts/PositionsFilterProvider'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
@@ -17,9 +15,6 @@ import { useAccount } from 'wagmi'
 import { UserPositionCard } from '../../../StakingPositions/LockPosition/Card/UserPositionCard'
 import { DataTable } from '../../DataTable'
 import { DataTableCard } from '../../DataTableCard'
-import { SnapshotCard } from '../../SnapshotCard'
-import { SnapshotText } from '../../SnapshotText'
-import { stakechartdata } from '../dummyChartData'
 
 export const LiquidStakingSnapshot = () => {
   const [isExpanded, setExpand] = useState(false)
@@ -46,7 +41,7 @@ export const LiquidStakingSnapshot = () => {
   const sortFunction = sorter ? positionSorter.data?.[sorter.sort][sorter.order] : () => 0
   return (
     <Flex flexDir={'column'} w={'100%'} justifyContent={'space-between'}>
-      <SnapshotCard isExpanded={!isExpanded}>
+      {/* <SnapshotCard isExpanded={!isExpanded}>
         <SnapshotLineChart data={stakechartdata} dataKeys={['Airdrop', 'Locked CNV']} />
         <SnapshotTextCard>
           <SnapshotText
@@ -60,7 +55,7 @@ export const LiquidStakingSnapshot = () => {
           <SnapshotText title={'Airdrop share'} data={airdropShare + '%'} />
           <SnapshotText title={'Airdrop'} data={<SnapshotButton claimed={claimed} />} />
         </SnapshotTextCard>
-      </SnapshotCard>
+      </SnapshotCard> */}
       <DataTableCard
         dataTableLabel={'CNV Positions'}
         route={'/marketplace'}
@@ -92,7 +87,7 @@ export const LiquidStakingSnapshot = () => {
 
 const SortComponent = () => <FilterContainer />
 
-const SnapshotButton = ({ claimed }) => (
+export const SnapshotButton = ({ claimed }) => (
   <Flex
     textColor={claimed ? 'text.low' : ''}
     justifyContent={'center'}

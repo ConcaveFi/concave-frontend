@@ -16,17 +16,12 @@ function formatNumber2DP(value: number) {
 
 const WalletSurface = ({ children }: { children: JSX.Element | JSX.Element[] }) => (
   <Flex
-    shadow={'down'}
-    w={'95%'}
+    w={'full'}
     h={'72px'}
     borderRadius={'50px'}
     flexDir={'row'}
     justifyContent={'space-evenly'}
     alignItems={'center'}
-    gap={6}
-    p={6}
-    mt={3.5}
-    mb={8}
   >
     {children}
   </Flex>
@@ -101,7 +96,13 @@ const TokenButton = ({
   return (
     <Tooltip
       label={`Click to add ${token.symbol} to your wallet`}
-      w={'150px'}
+      w="fit-content"
+      cardProps={{
+        position: 'relative',
+        fontWeight: 'semibold',
+        color: 'text.low',
+        px: '',
+      }}
       icon={<WalletButton token={token} tokenAmount={tokenAmount} isDisabled={isDisabled} />}
     />
   )
@@ -114,17 +115,22 @@ const WalletButton = ({ token, tokenAmount, isDisabled }) => {
   })
   return (
     <Button
-      height="40px"
-      shadow="up"
-      fontFamily="heading"
-      _active={{ shadow: 'down' }}
       w={'auto'}
       rounded="2xl"
       px={4}
+      height="40px"
       disabled={isDisabled}
       onClick={addingToWallet}
+      _hover={{ textDecor: 'underline' }}
     >
-      <Text fontWeight={'normal'} overflow={'hidden'} textOverflow={'ellipsis'}>
+      <Text
+        variant={'Paragraph'}
+        fontWeight={'bold'}
+        color="text.medium"
+        fontSize="md"
+        overflow={'hidden'}
+        textOverflow={'ellipsis'}
+      >
         {tokenAmount} {token.symbol}
       </Text>
     </Button>

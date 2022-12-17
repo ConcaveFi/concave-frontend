@@ -1,4 +1,4 @@
-import { Flex, gradientBorder, Spinner, Text } from '@concave/ui'
+import { Button, Card, Flex, gradientBorder, Spinner, Text } from '@concave/ui'
 import { useAccount } from 'wagmi'
 
 export const NavButton = ({
@@ -39,35 +39,50 @@ export const NavButton = ({
   }
 
   return (
-    <button onClick={onClick}>
-      <Flex
-        minH={'100px'}
-        height="full"
-        rounded={'3xl'}
-        w={'100%'}
-        p={3}
-        shadow={isSelected ? 'up' : 'down'}
-        fontSize={'sm'}
-        cursor={isDisabled ? 'default' : 'pointer'}
+    <Button
+      onClick={onClick}
+      transition="all .3s ease"
+      opacity={!isSelected && 0.6}
+      _hover={{
+        transform: 'scale(1.05)',
+        shadow: 'Glow Inner',
+        opacity: 1,
+      }}
+    >
+      <Card
+        h={'85px'}
+        w={'165px'}
+        bgSize="150%"
+        rounded={'xl'}
+        shadow={isSelected ? 'Block Up' : '0px 0px 10px #0008'}
+        variant={'secondary'}
         sx={isSelected && { ...gradientBorder({ borderWidth: 2 }) }}
+        borderGradient={isSelected ? 'primary' : ''}
+        cursor={isDisabled ? 'default' : 'pointer'}
         alignItems={settings.alignItems}
-        justifyContent={settings.justifyContent}
+        justifyContent={'center'}
+        fontSize={'sm'}
       >
-        <Flex direction={'column'} align="start" lineHeight={'1.25rem'} ml={settings.flexMl}>
-          <Text
-            color={settings.textColor}
-            fontSize={'lg'}
-            fontWeight={'bold'}
-            mt={settings.textMt}
-            mb={settings.textMb}
-          >
-            {title} {isLoading && <Spinner mx={1} mt={1} size={'sm'} mr={'auto'} />}
+        <Flex direction={'column'} align="center" w="full" lineHeight={'1rem'}>
+          <Text color={settings.textColor} fontSize={'md'} fontWeight={'bold'} mt={settings.textMt}>
+            {title} {isLoading && <Spinner mx={1} size={'sm'} mr={'auto'} />}
           </Text>
           {isConnected && !isLoading ? (
             <>
               {summaryArray?.map((summaryObject, index) => (
-                <Text key={index + title} fontSize={'sm'}>
-                  {summaryObject.label}: {summaryObject.data}
+                <Text
+                  display={'flex'}
+                  gap={1}
+                  fontWeight={'semibold'}
+                  key={index + title}
+                  fontSize={'xs'}
+                  color="text.low"
+                >
+                  {summaryObject.label}:{' '}
+                  <Text color="white" fontSize={'xs'}>
+                    {' '}
+                    {summaryObject.data}
+                  </Text>
                 </Text>
               ))}
             </>
@@ -75,7 +90,7 @@ export const NavButton = ({
             <></>
           )}
         </Flex>
-      </Flex>
-    </button>
+      </Card>
+    </Button>
   )
 }

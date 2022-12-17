@@ -29,15 +29,7 @@ export const UserDashboardNav = ({
   const userBondState = useUserBondState()
 
   return (
-    <Flex
-      w={'25%'}
-      flexGrow={0}
-      flexDirection={'column'}
-      borderRadius={'3xl'}
-      p={3}
-      shadow={'down'}
-      gap={3}
-    >
+    <Flex h="full" w="28%" wrap="wrap" align={'center'} flexDirection={'column'} gap={3}>
       <NavButton
         title={'Liquid Staking'}
         isSelected={currentSnapshot === SnapshotOptions.LiquidStaking}
@@ -63,8 +55,8 @@ export const UserDashboardNav = ({
         isSelected={currentSnapshot === SnapshotOptions.Marketplace}
         isLoading={cnvDataIsLoading && marketplaceIsLoading}
         summaryArray={[
-          { label: 'Positions', data: lsdCNVPositions },
           { label: 'Positions Listed', data: nftPositionCount },
+          { label: 'Positions', data: lsdCNVPositions },
         ]}
         onClick={() => changeSnapshot(SnapshotOptions.Marketplace)}
       />

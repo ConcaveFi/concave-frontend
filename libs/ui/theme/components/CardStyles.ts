@@ -14,6 +14,9 @@ export const CardStyles: ComponentStyleConfig = {
     secondary: {
       apply: 'background.glass',
     },
+    'secondary.transparent': {
+      apply: 'background.glass-transparent',
+    },
   },
   defaultProps: {},
 }

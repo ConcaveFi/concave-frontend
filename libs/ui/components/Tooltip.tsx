@@ -8,18 +8,20 @@ import {
   Portal,
   Text,
 } from '@chakra-ui/react'
-import { Card } from './Card'
+import { Card, CardProps } from './Card'
 
 export function Tooltip({
   label,
   icon = <QuestionIcon />,
   w = '220px',
   placement = 'bottom',
+  cardProps,
 }: {
   label: string
   icon?: JSX.Element
   w?: string | number
   placement?: PlacementWithLogical
+  cardProps?: CardProps
 }) {
   return (
     <Popover trigger="hover" placement={placement}>
@@ -36,8 +38,11 @@ export function Tooltip({
             position={'absolute'}
             justify={'center'}
             variant="secondary"
+            {...cardProps}
           >
-            <Text fontSize="sm">{label}</Text>
+            <Text px="5" fontSize="sm">
+              {label}
+            </Text>
           </Card>
         </PopoverContent>
       </Portal>

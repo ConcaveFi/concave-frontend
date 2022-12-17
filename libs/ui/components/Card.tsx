@@ -5,7 +5,7 @@ import { GradientBorderStyleProps } from '../theme/utils/gradientBorder'
 type Merge<M, N> = Omit<M, Extract<keyof M, keyof N>> & N
 
 export type CardProps = {
-  variant?: 'primary' | 'secondary'
+  variant?: 'primary' | 'secondary' | 'secondary.transparent'
   borderGradient?: GradientBorderStyleProps['variant']
   colorScheme?: 'brighter' | 'default'
 } & Merge<StackProps, MotionProps>

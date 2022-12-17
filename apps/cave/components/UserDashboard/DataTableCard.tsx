@@ -1,5 +1,5 @@
 import { ExpandArrowIcon } from '@concave/icons'
-import { Button, Card, Collapse, Flex, Text } from '@concave/ui'
+import { Button, Card, Flex, Text } from '@concave/ui'
 import router from 'next/router'
 
 export function DataTableCard({
@@ -22,68 +22,65 @@ export function DataTableCard({
   buttonWidth?: string | number
 }) {
   return (
-    <Collapse in={isExpanded} startingHeight={'49%'} endingHeight={'100%'}>
-      <Card
-        variant={'primary'}
-        w={'100%'}
-        h={isExpanded ? '100%' : '390px'}
-        p={4}
-        borderRadius={'3xl'}
-        alignItems={'center'}
-        gap={4}
-      >
-        <Flex w={'100%'} h={isExpanded ? '15%' : '22%'} flexDir={'column'}>
-          <Flex
-            w={'95%'}
-            alignSelf={'center'}
-            alignItems={'center'}
-            justifyContent={'space-between'}
+    // <Collapse in={isExpanded} startingHeight={'49%'} endingHeight={'100%'}>
+    <Card
+      variant={'primary'}
+      shadow="down"
+      borderGradient=""
+      w={'100%'}
+      minH={isExpanded ? '100%' : '390px'}
+      p={4}
+      borderRadius={'3xl'}
+      alignItems={'center'}
+      gap={4}
+    >
+      <Flex w={'100%'} h={isExpanded ? '15%' : '22%'} flexDir={'column'}>
+        <Flex w={'95%'} alignSelf={'center'} alignItems={'center'} justifyContent={'space-between'}>
+          <Text
+            fontWeight={'700'}
+            color={'text.low'}
+            w={'33%'}
+            alignItems={'flex-start'}
+            textAlign={'left'}
           >
-            <Text
-              fontWeight={'700'}
-              color={'text.low'}
-              w={'33%'}
-              alignItems={'flex-start'}
-              textAlign={'left'}
+            {dataTableLabel}
+          </Text>
+          <Flex w={'33%'} justifyContent={'center'}>
+            <Button
+              w={'150px'}
+              h={'45px'}
+              variant={'secondary'}
+              onClick={() => setExpand(!isExpanded)}
+              justifyContent={'space-between'}
+              px={6}
             >
-              {dataTableLabel}
-            </Text>
-            <Flex w={'33%'} justifyContent={'center'}>
-              <Button
-                w={'150px'}
-                h={'45px'}
-                variant={'secondary'}
-                onClick={() => setExpand(!isExpanded)}
-                justifyContent={'space-between'}
-                px={6}
-              >
-                <ExpandArrowIcon
-                  transition="all 0.7s"
-                  transform={isExpanded ? 'rotate(0deg)' : 'rotate(180deg)'}
-                />
-                <Text>Show more</Text>
-              </Button>
-            </Flex>
-            <Flex w={'33%'} justifyContent={'flex-end'}>
-              <Button
-                onClick={() => router.push('/' + route)}
-                w={buttonWidth}
-                h={'45px'}
-                variant={'secondary'}
-                justifyContent={'space-between'}
-                px={6}
-              >
-                <Text mr={2}>Go to {buttonLabel}</Text>
-                <ExpandArrowIcon transform={'rotate(270deg)'} />
-              </Button>
-            </Flex>
+              <ExpandArrowIcon
+                transition="all 0.7s"
+                transform={isExpanded ? 'rotate(0deg)' : 'rotate(180deg)'}
+              />
+              <Text>Show more</Text>
+            </Button>
           </Flex>
-          <Flex width={'100%'} ml={2} align={'center'} gap={2} fontWeight={'bold'}>
-            {SortComponent}
+          <Flex w={'33%'} justifyContent={'flex-end'}>
+            <Button
+              onClick={() => router.push('/' + route)}
+              w={buttonWidth}
+              h={'45px'}
+              variant={'secondary'}
+              justifyContent={'space-between'}
+              px={6}
+            >
+              <Text mr={2}>Go to {buttonLabel}</Text>
+              <ExpandArrowIcon transform={'rotate(270deg)'} />
+            </Button>
           </Flex>
         </Flex>
-        {children}
-      </Card>
-    </Collapse>
+        <Flex width={'100%'} ml={2} align={'center'} gap={2} fontWeight={'bold'}>
+          {SortComponent}
+        </Flex>
+      </Flex>
+      {children}
+    </Card>
+    // </Collapse>
   )
 }
