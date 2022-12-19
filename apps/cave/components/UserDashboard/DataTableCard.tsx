@@ -1,6 +1,7 @@
 import { ExpandArrowIcon } from '@concave/icons'
-import { Button, Card, Collapse, Flex, Text } from '@concave/ui'
+import { Button, Card, Collapse, Flex, Spinner, Text } from '@concave/ui'
 import router from 'next/router'
+import { NoPositions } from './Summary/NoPositions'
 
 export function DataTableCard({
   setExpand,
@@ -11,6 +12,8 @@ export function DataTableCard({
   SortComponent,
   children,
   buttonWidth = 'auto',
+  isLoading,
+  hasPositions,
 }: {
   route: string
   buttonLabel: string
@@ -20,6 +23,8 @@ export function DataTableCard({
   SortComponent?: JSX.Element
   children: JSX.Element | JSX.Element[]
   buttonWidth?: string | number
+  isLoading?: boolean
+  hasPositions?: boolean | number
 }) {
   return (
     <Collapse in={isExpanded} startingHeight={'49%'} endingHeight={'100%'}>
@@ -82,7 +87,7 @@ export function DataTableCard({
             {SortComponent}
           </Flex>
         </Flex>
-        {children}
+        {isLoading ? <Spinner /> : hasPositions ? children : <NoPositions />}
       </Card>
     </Collapse>
   )

@@ -1,4 +1,4 @@
-import { Flex, Spinner } from '@concave/ui'
+import { Flex } from '@concave/ui'
 import { useBondSpotPrice, useRoi } from 'components/Bond/BondInfo'
 import { DataTable } from 'components/UserDashboard/DataTable'
 import { SnapshotLineChart } from 'components/UserDashboard/SnapshotLineChart'
@@ -56,16 +56,14 @@ export const BondingSnapshot = () => {
         buttonLabel={'Dynamic Bonds'}
         setExpand={setExpand}
         isExpanded={isExpanded}
+        isLoading={userBondState.isLoading}
+        hasPositions={userBondState.data?.positions.length}
       >
-        {userBondState.isLoading ? (
-          <Spinner />
-        ) : (
-          <DataTable>
-            {userBondState.data?.positions.map((position, i) => (
-              <BondPositionCard key={i} {...position} />
-            ))}
-          </DataTable>
-        )}
+        <DataTable>
+          {userBondState.data?.positions.map((position, i) => (
+            <BondPositionCard key={i} {...position} />
+          ))}
+        </DataTable>
       </DataTableCard>
     </Flex>
   )

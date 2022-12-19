@@ -69,6 +69,8 @@ export const LiquidStakingSnapshot = () => {
         setExpand={setExpand}
         isExpanded={isExpanded}
         SortComponent={<SortComponent />}
+        isLoading={isLoading}
+        hasPositions={userNonFungibleTokensInfo.length}
       >
         <DataTable>
           {userNonFungibleTokensInfo
