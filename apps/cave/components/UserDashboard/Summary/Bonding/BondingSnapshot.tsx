@@ -20,7 +20,7 @@ export const BondingSnapshot = () => {
   const cnvPrice = useCNVPrice()
 
   return (
-    <Flex flexDir={'column'} w={'100%'} justifyContent={'space-between'}>
+    <>
       <SnapshotCard isExpanded={!isExpanded}>
         <SnapshotLineChart data={bondchartdata} dataKeys={['CNV Price', 'Bond Price']} />
         <SnapshotTextCard>
@@ -50,23 +50,25 @@ export const BondingSnapshot = () => {
           </Flex>
         </SnapshotTextCard>
       </SnapshotCard>
-      <DataTableCard
-        dataTableLabel={'Bonding Positions'}
-        route={'/smart-bonding'}
-        buttonLabel={'Dynamic Bonds'}
-        setExpand={setExpand}
-        isExpanded={isExpanded}
-      >
-        {userBondState.isLoading ? (
-          <Spinner />
-        ) : (
-          <DataTable>
-            {userBondState.data?.positions.map((position, i) => (
-              <BondPositionCard key={i} {...position} />
-            ))}
-          </DataTable>
-        )}
-      </DataTableCard>
-    </Flex>
+      <Flex flexDir={'column'} w={'100%'} justifyContent={'space-between'}>
+        <DataTableCard
+          dataTableLabel={'Bonding Positions'}
+          route={'/smart-bonding'}
+          buttonLabel={'Dynamic Bonds'}
+          setExpand={setExpand}
+          isExpanded={isExpanded}
+        >
+          {userBondState.isLoading ? (
+            <Spinner />
+          ) : (
+            <DataTable>
+              {userBondState.data?.positions.map((position, i) => (
+                <BondPositionCard key={i} {...position} />
+              ))}
+            </DataTable>
+          )}
+        </DataTableCard>
+      </Flex>
+    </>
   )
 }

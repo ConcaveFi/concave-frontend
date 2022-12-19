@@ -29,7 +29,15 @@ export const UserDashboardNav = ({
   const userBondState = useUserBondState()
 
   return (
-    <Flex h="full" w="28%" wrap="wrap" align={'center'} flexDirection={'column'} gap={3}>
+    <Flex
+      h="full"
+      maxH={'380px'}
+      w="30%"
+      wrap="wrap"
+      align={'center'}
+      flexDirection={'column'}
+      gap={3}
+    >
       <NavButton
         title={'Liquid Staking'}
         isSelected={currentSnapshot === SnapshotOptions.LiquidStaking}

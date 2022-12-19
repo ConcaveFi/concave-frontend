@@ -1,4 +1,3 @@
-import { Flex } from '@concave/ui'
 import { StakeSettingsProvider } from 'contexts/PositionsFilterProvider'
 import { useRouter } from 'next/router'
 import { RedeemTokens } from './RedeemTokens'
@@ -11,11 +10,7 @@ import { LiquidStakingSnapshot } from './Summary/Staking/LiquidStakingSnapshot'
 export function UserDashboardContent() {
   const router = useRouter()
   const selectedView = getView(SnapshotOptions[router.query.view as string])
-  return (
-    <Flex w={'100%'} flexGrow={1}>
-      {selectedView}
-    </Flex>
-  )
+  return selectedView
 }
 
 function getView(selectedSnapshot: SnapshotOptions) {

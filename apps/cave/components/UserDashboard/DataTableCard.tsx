@@ -28,7 +28,7 @@ export function DataTableCard({
       shadow="down"
       borderGradient=""
       w={'100%'}
-      minH={isExpanded ? '100%' : '390px'}
+      minH={'390px'}
       p={4}
       borderRadius={'3xl'}
       alignItems={'center'}

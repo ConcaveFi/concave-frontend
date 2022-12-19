@@ -15,6 +15,7 @@ export const backgrounds = {
       inset: 0,
       position: 'absolute',
       bg: `linear-gradient(180deg, rgba(0, 0, 0, 0.002) 0%, rgba(0, 0, 0, 0.002) 50%, rgba(31, 94, 255, 0.124) 100%), ${textures.glass}`,
+      bgSize: 'cover',
       zIndex: 0,
       shadow: 'Glow Inner',
       opacity: 0.7,

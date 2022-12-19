@@ -21,6 +21,7 @@ const UserDashboard = () => (
           iaculis justo fringilla sem gravida dignissim sed sed dui.
         </Text>
       </Flex>
+
       <UserDashboardContainer />
     </Flex>
   </Container>
