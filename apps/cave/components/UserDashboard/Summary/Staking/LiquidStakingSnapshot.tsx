@@ -30,7 +30,8 @@ export const LiquidStakingSnapshot = () => {
   const { userNonFungibleTokensInfo, totalLocked, isLoading } = stakePosition
   const networkId = useCurrentSupportedNetworkId()
 
-  const airdropAmount = getAirdropClaimableAmount(address)
+  const airdropClaimableAmount = getAirdropClaimableAmount(address)
+  const airdropAmount = airdropClaimableAmount || 0
   const { data: claimed } = useQuery(['AirdropClaimContract', networkId], async () => {
     const airdrop = new AirdropClaimContract(concaveProvider(networkId))
     return await airdrop.claimed(address)
