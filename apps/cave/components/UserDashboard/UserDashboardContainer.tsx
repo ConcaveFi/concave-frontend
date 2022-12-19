@@ -12,6 +12,7 @@ export enum SnapshotOption {
   Marketplace = 'Marketplace',
   AMM = 'AMM',
   DeltaNeutral = 'DeltaNeutral',
+  Redeem = 'Redeem',
 }
 
 export const UserDashboardContainer = () => {

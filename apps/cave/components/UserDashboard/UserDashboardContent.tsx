@@ -1,6 +1,7 @@
 import { Flex } from '@concave/ui'
 import { StakeSettingsProvider } from 'contexts/PositionsFilterProvider'
 import { useRouter } from 'next/router'
+import { RedeemTokens } from './RedeemTokens'
 import { BondingSnapshot } from './Summary/Bonding/BondingSnapshot'
 import { MarketplaceSnapshot } from './Summary/Marketplace/MarketplaceSnapshot'
 import { LiquiditySnapshot } from './Summary/Pools/LiquiditySnapshot'
@@ -31,6 +32,8 @@ function getView(selectedSnapshot: SnapshotOption) {
       )
     case SnapshotOption.Marketplace:
       return <MarketplaceSnapshot />
+    case SnapshotOption.Redeem:
+      return <RedeemTokens />
     case SnapshotOption.Global:
 
     default:
