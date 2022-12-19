@@ -42,10 +42,10 @@ export const useMarketplaceDashbord = () => {
   const sortFunction = sort ? positionSorter.data?.[sort.sort][sort.order] : () => 0
 
   const [stakeFilters, setStakeFilters] = useState([
-    StakePoolFilterEnum.FILTER_BY_45_DAYS,
-    StakePoolFilterEnum.FILTER_BY_90_DAYS,
-    StakePoolFilterEnum.FILTER_BY_180_DAYS,
-    StakePoolFilterEnum.FILTER_BY_360_DAYS,
+    StakePoolFilterEnum['45_DAYS'],
+    StakePoolFilterEnum['180_DAYS'],
+    StakePoolFilterEnum['180_DAYS'],
+    StakePoolFilterEnum['360_DAYS'],
   ])
   const now = BigNumber.from(Date.now()).div(1000)
   const { filterByStakePool } = useFilterByStakePool(stakeFilters)
