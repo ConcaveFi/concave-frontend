@@ -16,7 +16,7 @@ export enum SnapshotOption {
 
 export const UserDashboardContainer = () => {
   const router = useRouter()
-  const [currentSnapshot, setSnapshot] = useState<SnapshotOption>(SnapshotOption.LiquidStaking)
+  const [currentSnapshot, setSnapshot] = useState<SnapshotOption>(SnapshotOption.Global)
   const [isLoading, setIsLoading] = useState(true)
 
   const changeSnapshot = (snapshotSelected: SnapshotOption) => {
