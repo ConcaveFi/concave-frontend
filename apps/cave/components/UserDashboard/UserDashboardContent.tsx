@@ -2,15 +2,15 @@ import { Flex } from '@concave/ui'
 import { StakeSettingsProvider } from 'contexts/PositionsFilterProvider'
 import { useRouter } from 'next/router'
 import { RedeemTokens } from './RedeemTokens'
+import { SnapshotOptions } from './SnapshotOptions'
 import { BondingSnapshot } from './Summary/Bonding/BondingSnapshot'
 import { MarketplaceSnapshot } from './Summary/Marketplace/MarketplaceSnapshot'
 import { LiquiditySnapshot } from './Summary/Pools/LiquiditySnapshot'
 import { LiquidStakingSnapshot } from './Summary/Staking/LiquidStakingSnapshot'
-import { SnapshotOption } from './UserDashboardContainer'
 
 export function UserDashboardContent() {
   const router = useRouter()
-  const selectedView = getView(SnapshotOption[router.query.view as string])
+  const selectedView = getView(SnapshotOptions[router.query.view as string])
   return (
     <Flex w={'100%'} flexGrow={1}>
       {selectedView}
@@ -18,23 +18,23 @@ export function UserDashboardContent() {
   )
 }
 
-function getView(selectedSnapshot: SnapshotOption) {
+function getView(selectedSnapshot: SnapshotOptions) {
   switch (selectedSnapshot) {
-    case SnapshotOption.AMM:
+    case SnapshotOptions.AMM:
       return <LiquiditySnapshot />
-    case SnapshotOption.DynamicBonds:
+    case SnapshotOptions.DynamicBonds:
       return <BondingSnapshot />
-    case SnapshotOption.LiquidStaking:
+    case SnapshotOptions.LiquidStaking:
       return (
         <StakeSettingsProvider>
           <LiquidStakingSnapshot />
         </StakeSettingsProvider>
       )
-    case SnapshotOption.Marketplace:
+    case SnapshotOptions.Marketplace:
       return <MarketplaceSnapshot />
-    case SnapshotOption.Redeem:
+    case SnapshotOptions.Redeem:
       return <RedeemTokens />
-    case SnapshotOption.Global:
+    case SnapshotOptions.Global:
 
     default:
       return <>Global Summary</>

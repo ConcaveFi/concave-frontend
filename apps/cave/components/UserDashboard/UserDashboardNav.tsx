@@ -3,14 +3,14 @@ import { useMarketplaceDashbord } from 'components/Marketplace/Main/UseMarkeplac
 import { useStakePositions } from 'components/StakingPositions/DashboardBody/DashBoardState'
 import { useAccount } from 'wagmi'
 import { NavButton } from './NavButton'
-import { SnapshotOption } from './UserDashboardContainer'
+import { SnapshotOptions } from './SnapshotOptions'
 
 export const UserDashboardNav = ({
   currentSnapshot,
   changeSnapshot,
 }: {
-  currentSnapshot: SnapshotOption
-  changeSnapshot: (snapshotSelected: SnapshotOption) => void
+  currentSnapshot: SnapshotOptions
+  changeSnapshot: (snapshotSelected: SnapshotOptions) => void
 }) => {
   // Staking
   const stakePosition = useStakePositions()
@@ -36,50 +36,50 @@ export const UserDashboardNav = ({
     >
       <NavButton
         title={'Liquid Staking'}
-        isSelected={currentSnapshot === SnapshotOption.LiquidStaking}
+        isSelected={currentSnapshot === SnapshotOptions.LiquidStaking}
         isLoading={cnvDataIsLoading}
         summaryArray={[
           { label: 'Locked', data: `${totalLocked.toFixed(2, { groupSeparator: ',' })} CNV` },
           { label: 'Positions', data: lsdCNVPositions },
         ]}
-        onClick={() => changeSnapshot(SnapshotOption.LiquidStaking)}
+        onClick={() => changeSnapshot(SnapshotOptions.LiquidStaking)}
       />
       <NavButton
         title={'Dynamic Bonds'}
-        isSelected={currentSnapshot === SnapshotOption.DynamicBonds}
+        isSelected={currentSnapshot === SnapshotOptions.DynamicBonds}
         summaryArray={[
           { label: 'Bonded', data: '12,345 CNV' },
           { label: 'Pending', data: '1,000 CNV' },
         ]}
-        onClick={() => changeSnapshot(SnapshotOption.DynamicBonds)}
+        onClick={() => changeSnapshot(SnapshotOptions.DynamicBonds)}
       />
       <NavButton
         title={'Marketplace'}
-        isSelected={currentSnapshot === SnapshotOption.Marketplace}
+        isSelected={currentSnapshot === SnapshotOptions.Marketplace}
         isLoading={cnvDataIsLoading && marketplaceIsLoading}
         summaryArray={[
           { label: 'Positions', data: lsdCNVPositions },
           { label: 'Positions Listed', data: nftPositionCount },
         ]}
-        onClick={() => changeSnapshot(SnapshotOption.Marketplace)}
+        onClick={() => changeSnapshot(SnapshotOptions.Marketplace)}
       />
       <NavButton
         title={'AMM'}
-        isSelected={currentSnapshot === SnapshotOption.AMM}
+        isSelected={currentSnapshot === SnapshotOptions.AMM}
         summaryArray={[
           { label: 'row0', data: 'data row0' },
           { label: 'row1', data: 'data row1' },
         ]}
-        onClick={() => changeSnapshot(SnapshotOption.AMM)}
+        onClick={() => changeSnapshot(SnapshotOptions.AMM)}
       />
       <NavButton
         title={'Delta Neutral'}
-        isSelected={currentSnapshot === SnapshotOption.DeltaNeutral}
+        isSelected={currentSnapshot === SnapshotOptions.DeltaNeutral}
         summaryArray={[
           { label: 'row0', data: 'data row0' },
           { label: 'row1', data: 'data row1' },
         ]}
-        onClick={() => changeSnapshot(SnapshotOption.DeltaNeutral)}
+        onClick={() => changeSnapshot(SnapshotOptions.DeltaNeutral)}
       />
       <NavButton title={'Coming Soon'} isDisabled />
       <NavButton title={'Coming Soon'} isDisabled />

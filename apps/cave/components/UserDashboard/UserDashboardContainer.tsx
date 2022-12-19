@@ -1,28 +1,19 @@
 import { Card, Flex } from '@concave/ui'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import { SnapshotOptions } from './SnapshotOptions'
 import { UserDashboardContent } from './UserDashboardContent'
 import { UserDashboardNav } from './UserDashboardNav'
 import { UserDashboardWallet } from './UserDashboardWallet'
 
-export enum SnapshotOption {
-  Global = 'Global',
-  LiquidStaking = 'LiquidStaking',
-  DynamicBonds = 'DynamicBonds',
-  Marketplace = 'Marketplace',
-  AMM = 'AMM',
-  DeltaNeutral = 'DeltaNeutral',
-  Redeem = 'Redeem',
-}
-
 export const UserDashboardContainer = () => {
   const router = useRouter()
-  const [currentSnapshot, setSnapshot] = useState<SnapshotOption>(SnapshotOption.Global)
+  const [currentSnapshot, setSnapshot] = useState<SnapshotOptions>(SnapshotOptions.Global)
   const [isLoading, setIsLoading] = useState(true)
 
-  const changeSnapshot = (snapshotSelected: SnapshotOption) => {
+  const changeSnapshot = (snapshotSelected: SnapshotOptions) => {
     if (snapshotSelected === currentSnapshot) {
-      setSnapshot(SnapshotOption.Global)
+      setSnapshot(SnapshotOptions.Global)
     } else {
       setSnapshot(snapshotSelected)
     }
