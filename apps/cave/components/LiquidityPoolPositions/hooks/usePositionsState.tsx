@@ -5,7 +5,7 @@ import { concaveProvider } from 'lib/providers'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
 
-export const usePositionsState = (initialView: 'user' | 'all' | undefined) => {
+export const usePositionsState = (initialView?: 'user' | 'all' | undefined) => {
   // const { address } = useAccount()
   const address = '0xdd11ae83b49ee68b37ff3e6442f994fc037bb4a1'
   const chainId = useCurrentSupportedNetworkId()
