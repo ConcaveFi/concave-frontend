@@ -75,8 +75,7 @@ const Info: FC<InfoProps & FlexProps> = ({ info, title, ...props }) => (
   </Flex>
 )
 
-type ImageContainerProps = { period?: string; children?: JSX.Element }
-const ImageContainer: FC<ImageContainerProps> = ({ period, children }) => (
+const ImageContainer = () => (
   <Flex
     minW={'150px'}
     width={{ base: 'full', md: '150px' }}
@@ -86,8 +85,7 @@ const ImageContainer: FC<ImageContainerProps> = ({ period, children }) => (
     align="center"
     rounded={'2xl'}
   >
-    <Image ml={-5} boxSize={'70px'} src={`/assets/marketplace/12mposition.png`} alt={period} />
-    {children}
+    <Image ml={-5} boxSize={'70px'} src={`/assets/marketplace/12mposition.png`} />
   </Flex>
 )
 
