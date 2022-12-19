@@ -1,30 +1,40 @@
-import { Flex, Text } from '@concave/ui'
-import { SortCard } from 'components/NftFilters/Sorters/SortCard'
-import { useStakePositions } from 'components/StakingPositions/DashboardBody/DashBoardState'
+import { Flex, Spinner } from '@concave/ui'
+import { useBondSpotPrice, useRoi } from 'components/Bond/BondInfo'
+import { DataTable } from 'components/UserDashboard/DataTable'
 import { SnapshotLineChart } from 'components/UserDashboard/SnapshotLineChart'
 import { SnapshotTextCard } from 'components/UserDashboard/SnapshotTextCard'
+import { useCNVPrice } from 'hooks/useCNVPrice'
 import { useState } from 'react'
-import { UserPositionCard } from '../../../StakingPositions/LockPosition/Card/UserPositionCard'
-import { DataTable } from '../../DataTable'
 import { DataTableCard } from '../../DataTableCard'
+import { useUserBondState } from '../../hooks/useUserBondState'
 import { SnapshotCard } from '../../SnapshotCard'
 import { SnapshotText } from '../../SnapshotText'
 import { bondchartdata } from '../dummyChartData'
+import { BondPositionCard } from './BondPositionCard'
 
 export const BondingSnapshot = () => {
   const [isExpanded, setExpand] = useState(false)
-  const stakePosition = useStakePositions()
-  const { userNonFungibleTokensInfo, totalLocked, isLoading } = stakePosition
+  const userBondState = useUserBondState()
+  const bondSpotPrice = useBondSpotPrice()
+  const roi = useRoi(bondSpotPrice)
+  const cnvPrice = useCNVPrice()
 
   return (
     <Flex flexDir={'column'} w={'100%'} justifyContent={'space-between'}>
       <SnapshotCard isExpanded={!isExpanded}>
         <SnapshotLineChart data={bondchartdata} dataKeys={['CNV Price', 'Bond Price']} />
         <SnapshotTextCard>
-          <SnapshotText title={'Current Bond Price'} data={'12.42 USD'} />
-          <SnapshotText title={'CNV Market Price'} data={'3.23 USD'} />
-          <SnapshotText title={'Current ROI'} data={'12.32%'} />
-          <SnapshotText title={'All Claimable'} data={'32.42 CNV'} />
+          <SnapshotText
+            title={'Current Bond Price'}
+            data={`${(+bondSpotPrice.data || 0).toFixed(2)} USD`}
+          />
+          <SnapshotText
+            title={'CNV Market Price'}
+            data={`${(cnvPrice.price || 0).toFixed(2)} USD`}
+          />
+          <SnapshotText title={'Current ROI'} data={roi.data?.toFixed(2) + '%'} />
+          <SnapshotText title={'CNV Bonding'} data={`${+userBondState.data?.totalPending} CNV`} />
+          <SnapshotText title={'CNV Owed'} data={`${+userBondState.data?.totalOwed} CNV`} />
           <Flex
             userSelect={'none'}
             justifyContent={'center'}
@@ -41,30 +51,22 @@ export const BondingSnapshot = () => {
         </SnapshotTextCard>
       </SnapshotCard>
       <DataTableCard
-        SortComponent={<SortComponent />}
         dataTableLabel={'Bonding Positions'}
         route={'/smart-bonding'}
         buttonLabel={'Dynamic Bonds'}
         setExpand={setExpand}
         isExpanded={isExpanded}
       >
-        <DataTable>
-          {userNonFungibleTokensInfo.map((nonFungibleTokenInfo) => (
-            <>
-              <UserPositionCard
-                key={+nonFungibleTokenInfo.tokenId.toString()}
-                stakingPosition={nonFungibleTokenInfo}
-              />
-            </>
-          ))}
-        </DataTable>
+        {userBondState.isLoading ? (
+          <Spinner />
+        ) : (
+          <DataTable>
+            {userBondState.data?.positions.map((position, i) => (
+              <BondPositionCard key={i} {...position} />
+            ))}
+          </DataTable>
+        )}
       </DataTableCard>
     </Flex>
   )
 }
-
-const SortComponent = () => (
-  <>
-    <Text color={'text.low'}>Sort by:</Text> <SortCard onChangeSort={() => {}} />
-  </>
-)

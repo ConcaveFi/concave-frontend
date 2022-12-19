@@ -2,6 +2,7 @@ import { Flex } from '@concave/ui'
 import { useMarketplaceDashbord } from 'components/Marketplace/Main/UseMarkeplaceState'
 import { useStakePositions } from 'components/StakingPositions/DashboardBody/DashBoardState'
 import { useAccount } from 'wagmi'
+import { useUserBondState } from './hooks/useUserBondState'
 import { NavButton } from './NavButton'
 import { SnapshotOptions } from './SnapshotOptions'
 
@@ -23,6 +24,9 @@ export const UserDashboardNav = ({
     if (stakingPosition.market?.seller.toUpperCase() === address.toUpperCase())
       return stakingPosition
   }).length
+
+  // Bonding
+  const userBondState = useUserBondState()
 
   return (
     <Flex
@@ -47,9 +51,10 @@ export const UserDashboardNav = ({
       <NavButton
         title={'Dynamic Bonds'}
         isSelected={currentSnapshot === SnapshotOptions.DynamicBonds}
+        isLoading={userBondState.isLoading}
         summaryArray={[
-          { label: 'Bonded', data: '12,345 CNV' },
-          { label: 'Pending', data: '1,000 CNV' },
+          { label: 'Bonding', data: userBondState.data?.totalPending + ' CNV' },
+          { label: 'Claimable', data: userBondState.data?.totalOwed + ' CNV' },
         ]}
         onClick={() => changeSnapshot(SnapshotOptions.DynamicBonds)}
       />
