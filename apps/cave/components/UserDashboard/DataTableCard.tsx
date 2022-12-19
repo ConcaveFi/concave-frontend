@@ -17,7 +17,7 @@ export function DataTableCard({
   dataTableLabel: string
   setExpand: Function
   isExpanded: boolean
-  SortComponent: JSX.Element
+  SortComponent?: JSX.Element
   children: JSX.Element | JSX.Element[]
   buttonWidth?: string | number
 }) {
