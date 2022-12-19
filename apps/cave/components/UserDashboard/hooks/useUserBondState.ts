@@ -9,7 +9,6 @@ import { useAccount } from 'wagmi'
 type BondPosition = {
   creationTimestamp: number
   creationDate: string
-  length: number
   elapsed: number
   owed: number
   redeemed: number
@@ -49,7 +48,6 @@ export const useUserBondState = () => {
       positionDataArray.push({
         creationTimestamp: creationTimestampMs,
         creationDate: new Date(creationTimestampMs).toLocaleDateString(),
-        length: length,
         elapsed: elapsed,
         owed: +(+utils.formatEther(positionData.owed)).toFixed(4),
         redeemed: +(+utils.formatEther(positionData.redeemed)).toFixed(4),
