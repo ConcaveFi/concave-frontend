@@ -34,7 +34,7 @@ export const UserDashboardContainer = () => {
         alignItems={'center'}
       >
         <UserDashboardWallet />
-        <Flex w={'95%'} maxH={'100%'} flexGrow={1} flexDirection={'row'} gap={6} mb={4}>
+        <Flex w={'95%'} maxH={796} flexGrow={1} flexDirection={'row'} gap={6} mb={4}>
           <UserDashboardNav currentSnapshot={currentSnapshot} changeSnapshot={changeSnapshot} />
           <UserDashboardContent />
         </Flex>
