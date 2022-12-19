@@ -6,6 +6,14 @@ import { concaveProvider as providers } from 'lib/providers'
 import { useQuery } from 'react-query'
 import { useAccount } from 'wagmi'
 
+type BondPosition = {
+  creationTimestamp: number
+  creationDate: string
+  length: number
+  elapsed: number
+  owed: number
+  redeemed: number
+}
 export const useUserBondState = () => {
   const { address } = useAccount()
   const networkId = useCurrentSupportedNetworkId()
@@ -22,7 +30,7 @@ export const useUserBondState = () => {
 
     let totalPending = 0
     let totalOwed = 0
-    let positionDataArray = []
+    let positionDataArray: BondPosition[] = []
 
     for (let i = 0; i < +getUserPositionsLength; i++) {
       const positionData = await bondingContract.positions(address, i)
