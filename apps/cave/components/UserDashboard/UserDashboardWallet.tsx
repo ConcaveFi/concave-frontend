@@ -1,13 +1,4 @@
-import {
-  ACNV_ADDRESS,
-  BBTCNV_ADDRESS,
-  CNV,
-  Currency,
-  DAI,
-  NATIVE,
-  PCNV,
-  Token,
-} from '@concave/core'
+import { ACNV_ADDRESS, BBTCNV_ADDRESS, CNV, DAI, NATIVE, PCNV, Token } from '@concave/core'
 import { Button, Flex, Text, Tooltip } from '@concave/ui'
 import useVestedTokens from 'components/Transparency/Hooks/useVestedTokens'
 import { ConnectedUserButton } from 'components/UserWallet/ConnectedUserButton'
@@ -21,11 +12,6 @@ function formatNumber2DP(value: number) {
   return value.toLocaleString(undefined, {
     maximumFractionDigits: 2,
   })
-}
-
-function getFormattedCurrencyBalance(token: Currency) {
-  const tokenData = useCurrencyBalance(token, { watch: true })
-  return formatNumber2DP(+tokenData.data.toSignificant(6, { groupSeparator: ',' }))
 }
 
 const WalletSurface = ({ children }: { children: JSX.Element | JSX.Element[] }) => (
@@ -67,9 +53,13 @@ export function UserDashboardWallet() {
   const daiToken = DAI[networkId]
   const pCNVToken = PCNV[networkId]
 
-  const cnvBalance = getFormattedCurrencyBalance(cnvToken)
-  const ethBalance = getFormattedCurrencyBalance(nativeToken)
-  const daiBalance = getFormattedCurrencyBalance(daiToken)
+  const cnvCurrencyBalance = useCurrencyBalance(cnvToken, { watch: true }).data.toExact()
+  const nativeCurrencyBalance = useCurrencyBalance(nativeToken, { watch: true }).data.toExact()
+  const daiCurrencyBalance = useCurrencyBalance(daiToken, { watch: true }).data.toExact()
+
+  const cnvBalance = formatNumber2DP(+cnvCurrencyBalance)
+  const nativeBalance = formatNumber2DP(+nativeCurrencyBalance)
+  const daiBalance = formatNumber2DP(+daiCurrencyBalance)
 
   const { aCNV: aCNVData, bbtCNV: bbtCNVData, pCNV: pCNVData } = useVestedTokens()
   const aCNVBalance = formatNumber2DP(+aCNVData?.data?.formatted)
@@ -86,7 +76,7 @@ export function UserDashboardWallet() {
           <TokenButton token={aCNVToken} tokenAmount={aCNVBalance} />
           <TokenButton token={bbtCNVToken} tokenAmount={bbtCNVBalance} />
           <TokenButton token={daiToken} tokenAmount={daiBalance} />
-          <TokenButton token={nativeToken} tokenAmount={ethBalance} isDisabled />
+          <TokenButton token={nativeToken} tokenAmount={nativeBalance} isDisabled />
         </>
       ) : (
         <Text>Please connect wallet</Text>
