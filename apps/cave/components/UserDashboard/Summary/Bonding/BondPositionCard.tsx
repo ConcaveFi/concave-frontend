@@ -47,9 +47,7 @@ export const BondPositionCard = (props) => {
           <Flex direction={'column'} justify="center" px={6}>
             <Flex align={'center'} gap={2}>
               <Text color={'text.low'}>Redeem date:</Text>
-              <Text fontWeight={'bold'}>
-                {new Date(props.creationTimestamp).toLocaleDateString()}
-              </Text>
+              <Text fontWeight={'bold'}>{props.creationDate}</Text>
             </Flex>
             <Flex align={'center'} gap={2}>
               {<Text color={'text.low'}>Redeem in:</Text>}
