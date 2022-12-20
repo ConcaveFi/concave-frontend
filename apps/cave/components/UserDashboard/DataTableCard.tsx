@@ -3,8 +3,6 @@ import { Button, Card, Flex, Text } from '@concave/ui'
 import router from 'next/router'
 
 export function DataTableCard({
-  setExpand,
-  isExpanded,
   route,
   buttonLabel,
   dataTableLabel,
@@ -15,8 +13,6 @@ export function DataTableCard({
   route: string
   buttonLabel: string
   dataTableLabel: string
-  setExpand: Function
-  isExpanded: boolean
   SortComponent?: JSX.Element
   children: JSX.Element | JSX.Element[]
   buttonWidth?: string | number
@@ -32,9 +28,9 @@ export function DataTableCard({
       p={4}
       borderRadius={'3xl'}
       alignItems={'center'}
-      gap={4}
+      // gap={4}
     >
-      <Flex w={'100%'} h={isExpanded ? '15%' : '22%'} flexDir={'column'}>
+      <Flex w={'100%'} h={'120px'} flexDir={'column'}>
         <Flex w={'95%'} alignSelf={'center'} alignItems={'center'} justifyContent={'space-between'}>
           <Text
             fontWeight={'700'}
@@ -46,7 +42,7 @@ export function DataTableCard({
             {dataTableLabel}
           </Text>
           <Flex w={'33%'} justifyContent={'center'}>
-            <Button
+            {/* <Button
               w={'150px'}
               h={'45px'}
               variant={'secondary'}
@@ -59,7 +55,7 @@ export function DataTableCard({
                 transform={isExpanded ? 'rotate(0deg)' : 'rotate(180deg)'}
               />
               <Text>Show more</Text>
-            </Button>
+            </Button> */}
           </Flex>
           <Flex w={'33%'} justifyContent={'flex-end'}>
             <Button

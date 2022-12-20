@@ -1,6 +1,6 @@
 import { Flex } from '@concave/ui'
 
-export const SnapshotCard = ({ isExpanded, children }) => (
+export const SnapshotCard = ({ children }) => (
   <Flex
     flex={1}
     p={4}

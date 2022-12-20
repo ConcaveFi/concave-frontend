@@ -30,12 +30,13 @@ export const UserDashboardContainer = () => {
         alignItems={'center'}
         borderRadius={'35px'}
         justify={'end'}
-        h={'940px'}
+        // minH={'940px'}
+        h="fit-content"
         w={'100%'}
       >
         <UserDashboardWallet />
 
-        <Card w="full" h="93%" rounded={'inherit'} variant="primary">
+        <Card w="full" h="100%" rounded={'inherit'} variant="primary">
           <Flex w="full" wrap={'wrap'} p={8} gap={8}>
             <UserDashboardNav currentSnapshot={currentSnapshot} changeSnapshot={changeSnapshot} />
             {/* <Flex flex={1}>Teste</Flex>

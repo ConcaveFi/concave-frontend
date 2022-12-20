@@ -13,7 +13,6 @@ import { SnapshotTextCard } from 'components/UserDashboard/SnapshotTextCard'
 import { useStakeSettings } from 'contexts/PositionsFilterProvider'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
-import { useState } from 'react'
 import { useQuery } from 'react-query'
 import { useAccount } from 'wagmi'
 import { UserPositionCard } from '../../../StakingPositions/LockPosition/Card/UserPositionCard'
@@ -22,10 +21,8 @@ import { DataTableCard } from '../../DataTableCard'
 import { stakechartdata } from '../dummyChartData'
 
 export const LiquidStakingSnapshot = () => {
-  const [isExpanded, setExpand] = useState(false)
   const { address } = useAccount()
   const stakePosition = useStakePositions()
-  const positionSorter = usePositionSorter()
 
   const { userNonFungibleTokensInfo, totalLocked, isLoading } = stakePosition
   const networkId = useCurrentSupportedNetworkId()
@@ -35,18 +32,18 @@ export const LiquidStakingSnapshot = () => {
     const airdrop = new AirdropClaimContract(concaveProvider(networkId))
     return await airdrop.claimed(address)
   })
-
   const airdropTotal = 510691.11 //TODO
   const airdropShare = (airdropAmount / airdropTotal).toLocaleString(undefined, {
     maximumFractionDigits: 4,
   })
+  const positionSorter = usePositionSorter()
   const { initialCNVFilter, stakePoolFilters, tokenIdFilter, sorter } = useStakeSettings()
   const { filterByRange } = useFilterByRange(initialCNVFilter)
   const { filterByStakePool } = useFilterByStakePool(stakePoolFilters)
   const sortFunction = sorter ? positionSorter.data?.[sorter.sort][sorter.order] : () => 0
   return (
     <>
-      <SnapshotCard isExpanded={!isExpanded}>
+      <SnapshotCard>
         <SnapshotLineChart data={stakechartdata} dataKeys={['Airdrop', 'Locked CNV']} />
         <SnapshotTextCard>
           <SnapshotText
@@ -66,22 +63,20 @@ export const LiquidStakingSnapshot = () => {
         dataTableLabel={'CNV Positions'}
         route={'/marketplace'}
         buttonLabel={'Marketplace'}
-        setExpand={setExpand}
-        isExpanded={isExpanded}
         SortComponent={<SortComponent />}
       >
         <DataTable>
           {userNonFungibleTokensInfo
+            .filter(filterByStakePool)
+            .filter(filterByRange)
             .filter((position) => {
               if (!tokenIdFilter) return true
               return position.tokenId === tokenIdFilter
             })
-            .filter(filterByRange)
-            .filter(filterByStakePool)
             .sort(sortFunction)
-            .map((nonFungibleTokenInfo, i) => (
+            .map((nonFungibleTokenInfo) => (
               <UserPositionCard
-                key={+nonFungibleTokenInfo.tokenId.toString() + i}
+                key={+nonFungibleTokenInfo.tokenId.toString()}
                 stakingPosition={nonFungibleTokenInfo}
               />
             ))}
