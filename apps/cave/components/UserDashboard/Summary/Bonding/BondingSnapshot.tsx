@@ -21,7 +21,7 @@ export const BondingSnapshot = () => {
 
   return (
     <>
-      <SnapshotCard isExpanded={!isExpanded}>
+      <SnapshotCard>
         <SnapshotLineChart data={bondchartdata} dataKeys={['CNV Price', 'Bond Price']} />
         <SnapshotTextCard>
           <SnapshotText
@@ -55,8 +55,6 @@ export const BondingSnapshot = () => {
           dataTableLabel={'Bonding Positions'}
           route={'/smart-bonding'}
           buttonLabel={'Dynamic Bonds'}
-          setExpand={setExpand}
-          isExpanded={isExpanded}
         >
           {userBondState.isLoading ? (
             <Spinner />
