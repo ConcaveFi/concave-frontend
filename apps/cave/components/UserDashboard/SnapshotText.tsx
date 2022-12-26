@@ -1,12 +1,12 @@
-import { Text } from '@concave/ui'
+import { Flex, Text } from '@concave/ui'
 
 export const SnapshotText = ({ title, data }) => (
-  <>
-    <Text color={'text.low'} mb={-2} fontSize={'sm'}>
+  <Flex direction="column" align={{ base: 'center', lg: 'start' }} gap={1}>
+    <Text color={'text.low'} fontSize={'sm'}>
       {title}
     </Text>
-    <Text mb={2} fontWeight={'bold'} fontSize={'lg'}>
+    <Text lineHeight={'14px'} mb={2} fontWeight={'bold'} fontSize={'lg'}>
       {data}
     </Text>
-  </>
+  </Flex>
 )

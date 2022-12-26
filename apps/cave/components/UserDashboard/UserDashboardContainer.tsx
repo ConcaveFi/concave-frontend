@@ -35,16 +35,11 @@ export const UserDashboardContainer = () => {
         w={'100%'}
       >
         <UserDashboardWallet />
-
         <Card w="full" h="100%" rounded={'inherit'} variant="primary">
-          <Flex w="full" wrap={'wrap'} p={8} gap={8}>
+          <Flex w="full" wrap={'wrap'} p={8} gap={8} justify="space-between">
             <UserDashboardNav currentSnapshot={currentSnapshot} changeSnapshot={changeSnapshot} />
-            {/* <Flex flex={1}>Teste</Flex>
-            <Flex width={'100%'}>Teste2</Flex> */}
             <UserDashboardContent />
           </Flex>
-          {/* <Flex w={'100%'} px={8} id="dashboard-content" flexGrow={1} flexDirection={'row'} gap={6}>
-          </Flex> */}
         </Card>
       </Card>
     </Flex>

@@ -28,9 +28,8 @@ export function DataTableCard({
       p={4}
       borderRadius={'3xl'}
       alignItems={'center'}
-      // gap={4}
     >
-      <Flex w={'100%'} h={'120px'} flexDir={'column'}>
+      <Flex w={'100%'} h={'fit-content'} flexDir={'column'}>
         <Flex w={'95%'} alignSelf={'center'} alignItems={'center'} justifyContent={'space-between'}>
           <Text
             fontWeight={'700'}
@@ -41,22 +40,6 @@ export function DataTableCard({
           >
             {dataTableLabel}
           </Text>
-          <Flex w={'33%'} justifyContent={'center'}>
-            {/* <Button
-              w={'150px'}
-              h={'45px'}
-              variant={'secondary'}
-              onClick={() => setExpand(!isExpanded)}
-              justifyContent={'space-between'}
-              px={6}
-            >
-              <ExpandArrowIcon
-                transition="all 0.7s"
-                transform={isExpanded ? 'rotate(0deg)' : 'rotate(180deg)'}
-              />
-              <Text>Show more</Text>
-            </Button> */}
-          </Flex>
           <Flex w={'33%'} justifyContent={'flex-end'}>
             <Button
               onClick={() => router.push('/' + route)}

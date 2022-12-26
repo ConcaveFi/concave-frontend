@@ -50,8 +50,8 @@ export const NavButton = ({
       }}
     >
       <Card
-        h={'85px'}
-        w={'165px'}
+        h={{ base: '60px', md: '70px', lg: '85px' }}
+        w={{ base: '135px', md: '145', lg: '165px' }}
         bgSize="150%"
         rounded={'xl'}
         shadow={isSelected ? 'Block Up' : '0px 0px 10px #0008'}

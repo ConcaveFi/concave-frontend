@@ -101,6 +101,7 @@ export const SnapshotButton = ({ claimed }) => (
     borderRadius={'3xl'}
     cursor={claimed ? 'default' : 'pointer'}
     userSelect={'none'}
+    // mt={3}
   >
     {claimed ? 'Claimed' : 'Claim'}
   </Flex>
