@@ -18,7 +18,6 @@ export function DataTableCard({
   buttonWidth?: string | number
 }) {
   return (
-    // <Collapse in={isExpanded} startingHeight={'49%'} endingHeight={'100%'}>
     <Card
       variant={'primary'}
       shadow="down"
@@ -34,22 +33,25 @@ export function DataTableCard({
           <Text
             fontWeight={'700'}
             color={'text.low'}
-            w={'33%'}
+            flex={1}
             alignItems={'flex-start'}
             textAlign={'left'}
+            fontSize={['sm', 'lg']}
           >
             {dataTableLabel}
           </Text>
-          <Flex w={'33%'} justifyContent={'flex-end'}>
+          <Flex flex={1} justifyContent={'flex-end'}>
             <Button
               onClick={() => router.push('/' + route)}
               w={buttonWidth}
               h={'45px'}
               variant={'secondary'}
               justifyContent={'space-between'}
-              px={6}
+              px={[2, 6]}
             >
-              <Text mr={2}>Go to {buttonLabel}</Text>
+              <Text fontSize={['xs', 'lg']} mr={2}>
+                Go to {buttonLabel}
+              </Text>
               <ExpandArrowIcon transform={'rotate(270deg)'} />
             </Button>
           </Flex>
@@ -60,6 +62,5 @@ export function DataTableCard({
       </Flex>
       {children}
     </Card>
-    // </Collapse>
   )
 }

@@ -1,5 +1,5 @@
 import { ACNV_ADDRESS, BBTCNV_ADDRESS, CNV, DAI, NATIVE, PCNV, Token } from '@concave/core'
-import { Button, Flex, Text, Tooltip } from '@concave/ui'
+import { Button, Flex, Text, Tooltip, useBreakpointValue } from '@concave/ui'
 import useVestedTokens from 'components/Transparency/Hooks/useVestedTokens'
 import { ConnectedUserButton } from 'components/UserWallet/ConnectedUserButton'
 import useAddTokenToWallet, { injectedTokenResponse } from 'hooks/useAddTokenToWallet'
@@ -18,8 +18,7 @@ const WalletSurface = ({ children }: { children: JSX.Element | JSX.Element[] }) 
   <Flex
     h={{ base: '120px', lg: '72px' }}
     wrap="wrap"
-    borderRadius={'50px'}
-    px={{ base: 20, lg: 0 }}
+    px={{ base: 0, sm: 20, lg: 0 }}
     justifyContent={{ base: 'center', lg: 'space-evenly' }}
     alignItems={'center'}
   >
@@ -60,12 +59,16 @@ export function UserDashboardWallet() {
   const aCNVBalance = formatNumber2DP(+aCNVData?.data?.formatted)
   const bbtCNVBalance = formatNumber2DP(+bbtCNVData?.data?.formatted)
   const pCNVBalance = formatNumber2DP(+pCNVData?.data?.formatted)
-
+  const isMobile = useBreakpointValue({ base: true, xl: false })
   return (
     <WalletSurface>
       {isConnected ? (
         <>
-          <Tooltip label={ens || uns || address} icon={<ConnectedUserButton w={'190px'} />} />
+          <Tooltip
+            label={ens || uns || address}
+            cardProps={{ hidden: isMobile }}
+            icon={<ConnectedUserButton w={'190px'} />}
+          />
           <TokenButton token={cnvToken} tokenAmount={cnvBalance} />
           <TokenButton token={pCNVToken} tokenAmount={pCNVBalance} />
           <TokenButton token={aCNVToken} tokenAmount={aCNVBalance} />

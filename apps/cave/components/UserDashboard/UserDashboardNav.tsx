@@ -30,14 +30,14 @@ export const UserDashboardNav = ({
 
   return (
     <Flex
-      h="full"
-      maxH={{ base: '190px', md: '235px', lg: '190px', '2xl': '384px' }}
-      minW={{ base: 'full', md: '450px', lg: '750px', '2xl': '350px' }}
+      // h="full"
+      maxH={{ base: '260px', sm: '240px', lg: '190px', '2xl': '384px' }}
+      minW={{ base: 'full', sm: 'full', md: 'full', lg: '750px', '2xl': '350px' }}
       mx="auto"
       wrap="wrap"
       align={'center'}
       flexDirection={'column'}
-      gap={{ base: 1, md: 3 }}
+      gap={{ base: 1, sm: 3 }}
     >
       <NavButton
         title={'Liquid Staking'}

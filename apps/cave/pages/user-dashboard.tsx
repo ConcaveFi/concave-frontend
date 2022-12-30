@@ -3,19 +3,19 @@ import { withPageTransition } from 'components/PageTransition'
 import { UserDashboardContainer } from 'components/UserDashboard/UserDashboardContainer'
 
 const UserDashboard = () => (
-  <Container maxW={{ base: '60ch', sm: 'container.sm', lg: '100%' }} centerContent>
+  <Container maxW={{ base: '100%', sm: 'container.sm', lg: '100%' }} p={[0, 4]} centerContent>
     <Flex align={'center'} w={'100%'} h={'100%'} gap={4} textAlign="center" direction="column">
       <Heading
-        mt={16}
+        mt={{ base: 0, md: 16 }}
         mb={3}
-        fontSize="5xl"
+        fontSize={{ base: 'xl', md: '5xl' }}
         apply={'background.text-brightBlue'}
         fontWeight="semibold"
       >
         Management Dashboard
       </Heading>
       <Flex mt={0} align="center" gap={10} width="full" justify="center" alignItems={'center'}>
-        <Text apply="background.text-brightBlue" maxW={620} textAlign={'center'}>
+        <Text fontSize={{ base: 'xs', md: 'md' }} apply="background.text-brightBlue" maxW={620}>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam sollicitudin, est id
           euismod aliquet, erat magna aliquet turpis, sed blandit purus dolor nec velit. Integer
           iaculis justo fringilla sem gravida dignissim sed sed dui.

@@ -50,10 +50,10 @@ export const NavButton = ({
       }}
     >
       <Card
-        h={{ base: '60px', md: '70px', lg: '85px' }}
-        w={{ base: '135px', md: '145', lg: '165px' }}
+        h={{ base: '60px', sm: '70px', lg: '85px' }}
+        w={{ base: '135px', sm: '145px', md: '160px', lg: '165px' }}
         bgSize="150%"
-        rounded={'xl'}
+        rounded={['2xl', 'xl']}
         shadow={isSelected ? 'Block Up' : '0px 0px 10px #0008'}
         variant={'secondary'}
         sx={isSelected && { ...gradientBorder({ borderWidth: 2 }) }}
@@ -64,7 +64,12 @@ export const NavButton = ({
         fontSize={'sm'}
       >
         <Flex direction={'column'} align="center" w="full" lineHeight={'1rem'}>
-          <Text color={settings.textColor} fontSize={'md'} fontWeight={'bold'} mt={settings.textMt}>
+          <Text
+            color={settings.textColor}
+            fontSize={['xs', 'sm', 'md']}
+            fontWeight={'bold'}
+            mt={settings.textMt}
+          >
             {title} {isLoading && <Spinner mx={1} size={'sm'} mr={'auto'} />}
           </Text>
           {isConnected && !isLoading ? (
@@ -75,11 +80,11 @@ export const NavButton = ({
                   gap={1}
                   fontWeight={'semibold'}
                   key={index + title}
-                  fontSize={'xs'}
+                  fontSize={['xx-small', 'xs']}
                   color="text.low"
                 >
                   {summaryObject.label}:{' '}
-                  <Text color="white" fontSize={'xs'}>
+                  <Text color="white" fontSize={['xx-small', 'xs']}>
                     {' '}
                     {summaryObject.data}
                   </Text>

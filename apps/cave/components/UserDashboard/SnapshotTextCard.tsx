@@ -5,7 +5,7 @@ export function SnapshotTextCard({ children }) {
     <Card
       w={'30%'}
       h={{ base: 'fit-content', lg: 'full' }}
-      p={{ base: 6, lg: 8 }}
+      p={{ base: 2, lg: 8 }}
       m={['2.5%', null, null, null, 0]}
       flexDir={'column'}
       width={{ base: '95%', lg: 'fit-content' }}
@@ -15,9 +15,9 @@ export function SnapshotTextCard({ children }) {
     >
       <Flex
         flex={1}
-        justify={{ base: 'center', lg: 'center' }}
+        justify={{ base: 'space-around', lg: 'center' }}
         align={'start'}
-        gap={{ base: 8, lg: 3 }}
+        gap={{ base: 4, sm: 8, lg: 3 }}
         wrap="wrap"
         direction={{ base: 'row', lg: 'column' }}
       >

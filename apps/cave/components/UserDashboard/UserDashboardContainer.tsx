@@ -36,7 +36,7 @@ export const UserDashboardContainer = () => {
       >
         <UserDashboardWallet />
         <Card w="full" h="100%" rounded={'inherit'} variant="primary">
-          <Flex w="full" wrap={'wrap'} p={8} gap={8} justify="space-between">
+          <Flex w="full" wrap={'wrap'} p={{ base: 3, md: 8 }} gap={8} justify="space-between">
             <UserDashboardNav currentSnapshot={currentSnapshot} changeSnapshot={changeSnapshot} />
             <UserDashboardContent />
           </Flex>

@@ -14,8 +14,8 @@ const COLORS = ['#D49F60', '#4E7DB5']
 
 export function SnapshotLineChart({ data, dataKeys }: { data: any[]; dataKeys: string[] }) {
   return (
-    <Flex w={{ base: '100%', lg: '75%' }} height={{ base: '60%', lg: 'full' }}>
-      <ResponsiveContainer width={'95%'} height={350}>
+    <Flex w={{ base: '100%', lg: '75%' }} height={{ base: '60%', sm: '70%', lg: '80%' }}>
+      <ResponsiveContainer width={'95%'} height={'100%'}>
         <LineChart data={data} margin={{ top: 40, right: 0, left: 0, bottom: 0 }}>
           <CartesianGrid strokeDasharray="3 3" opacity={0.25} />
           <XAxis dataKey="date" />
