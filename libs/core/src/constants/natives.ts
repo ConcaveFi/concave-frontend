@@ -21,6 +21,7 @@ import { NativeMap } from '../types'
 
 export const NATIVE: NativeMap = {
   [ChainId.ETHEREUM]: Ether.onChain(ChainId.ETHEREUM),
+  [ChainId.LOCALHOST]: Ether.onChain(ChainId.LOCALHOST),
   [ChainId.ROPSTEN]: Ether.onChain(ChainId.ROPSTEN),
   [ChainId.RINKEBY]: Ether.onChain(ChainId.RINKEBY),
   [ChainId.GÖRLI]: Ether.onChain(ChainId.GÖRLI),
