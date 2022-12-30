@@ -6,21 +6,21 @@ import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
-import { concaveProvider, concaveRPC, concaveWSProvider } from '../../lib/providers'
+import { concaveProvider, concaveProviderConfig, concaveWSProvider, hardhatProviderConfig } from '../../lib/providers'
 import { UnstoppableConnector } from './Connectors/UnstoppableConnector'
 
-const chains = [chain.mainnet, chain.goerli] // app supported chains
-export const supportedChainsId = chains.map((c) => c.id)
+export const chains = [chain.localhost, chain.goerli, chain.mainnet] // app supported chains
 
+export const supportedChainsId = chains.map((c) => c.id)
 const connectors = [
   new SafeConnector({ chains }),
   new InjectedConnector({ chains }),
   new MetaMaskConnector({ chains }),
   new WalletConnectConnector({ chains, options: { 
     qrcode: false,
-    infuraId: NEXT_PUBLIC_INFURA_ID,
     rpc: {
-      1: `https://eth-mainnet.alchemyapi.io/v2/${NEXT_PUBLIC_ALCHEMY_ID}`,
+      [chain.mainnet.id]: concaveProviderConfig.rpc,
+      [chain.localhost.id]: hardhatProviderConfig.rpc,
     },
  } }),
   new UnstoppableConnector({ chains }),
@@ -28,7 +28,7 @@ const connectors = [
     chains,
     options: {
       appName: 'Concave App',
-      jsonRpcUrl: concaveRPC,
+      jsonRpcUrl: concaveProviderConfig.rpc,
       appLogoUrl: 'https://app.concave.lol/assets/tokens/cnv.svg',
       darkMode: true,
       headlessMode: true,
@@ -36,7 +36,7 @@ const connectors = [
   }),
 ] as Connector[]
 
-const isChainSupported = (chainId?: number) => defaultChains.some((x) => x.id === chainId)
+const isChainSupported = (chainId?: number) => supportedChainsId.some((x) => x === chainId)
 
 const provider = ({ chainId }) =>
   concaveProvider(isChainSupported(chainId) ? chainId : chain.mainnet.id)
