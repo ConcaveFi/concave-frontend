@@ -10,10 +10,11 @@ import { SwapCard } from 'components/AMM/Swap/SwapCard'
 import { withPageTransition } from 'components/PageTransition'
 import { LayoutGroup } from 'framer-motion'
 
-export const swapSupportedChains = [ChainId.ETHEREUM, ChainId.GÖRLI] as const
+export const swapSupportedChains = [ChainId.ETHEREUM, ChainId.GÖRLI, ChainId.LOCALHOST] as const
 export const swapDefaultCurrencies: {
   [chain in typeof swapSupportedChains[number]]: [Currency, Currency]
 } = {
+  [ChainId.LOCALHOST]: [DAI[ChainId.LOCALHOST], CNV[ChainId.LOCALHOST]],
   [ChainId.ETHEREUM]: [DAI[ChainId.ETHEREUM], CNV[ChainId.ETHEREUM]],
   [ChainId.GÖRLI]: [DAI[ChainId.GÖRLI], CNV[ChainId.GÖRLI]],
 }
