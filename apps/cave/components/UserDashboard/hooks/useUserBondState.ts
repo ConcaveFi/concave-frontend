@@ -6,7 +6,7 @@ import { concaveProvider as providers } from 'lib/providers'
 import { useQuery } from 'react-query'
 import { useAccount } from 'wagmi'
 
-type BondPosition = {
+export type BondPosition = {
   creationTimestamp: number
   creationDate: string
   elapsed: number

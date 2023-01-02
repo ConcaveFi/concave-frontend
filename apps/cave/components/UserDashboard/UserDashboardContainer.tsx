@@ -33,10 +33,18 @@ export const UserDashboardContainer = () => {
         // minH={'940px'}
         h="fit-content"
         w={'100%'}
+        overflow="visible"
       >
         <UserDashboardWallet />
-        <Card w="full" h="100%" rounded={'inherit'} variant="primary">
-          <Flex w="full" wrap={'wrap'} p={{ base: 3, md: 8 }} gap={8} justify="space-between">
+        <Card overflow={'visible'} w="full" h="100%" rounded={'inherit'} variant="primary">
+          <Flex
+            w="full"
+            wrap={'wrap'}
+            p={{ base: 3, md: 8 }}
+            gap={8}
+            overflow="visible"
+            justify="space-between"
+          >
             <UserDashboardNav currentSnapshot={currentSnapshot} changeSnapshot={changeSnapshot} />
             <UserDashboardContent />
           </Flex>
