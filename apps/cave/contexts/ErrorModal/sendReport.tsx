@@ -1,4 +1,4 @@
-import { ReportBody } from "pages/api/report"
+import { ReportBody } from 'pages/api/report'
 
 const endpoint = '/api/report'
 

@@ -1,8 +1,8 @@
 import { SpinIcon } from '@concave/icons'
 import { Box, Card, Flex, keyframes, Text } from '@concave/ui'
-import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/TransactionDialog/TransactionWaitingConfirmationDialog'
+import { useErrorModal } from 'contexts/ErrorModal'
 import { utils } from 'ethers'
 import { useTransaction } from 'hooks/TransactionsRegistry/useTransaction'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
@@ -25,6 +25,7 @@ interface BondPanelProps {
 }
 export function BondPanel(props: BondPanelProps) {
   const networkId = useCurrentSupportedNetworkId()
+  const errorModal = useErrorModal()
   const { data: signer } = useSigner()
   const redeemBond = useTransaction(
     () => {
@@ -33,9 +34,8 @@ export function BondPanel(props: BondPanelProps) {
     },
     {
       meta: { type: 'redeem', amount: 'CNV Bonds' },
-      onSuccess: () => {
-        updateBondPositions()
-      },
+      onSuccess: updateBondPositions,
+      onError: errorModal.onOpen,
     },
   )
   const buttonDisabled =
@@ -101,10 +101,6 @@ export function BondPanel(props: BondPanelProps) {
       <TransactionSubmittedDialog
         tx={redeemBond.tx}
         isOpen={redeemBond.isWaitingTransactionReceipt}
-      />
-      <TransactionErrorDialog
-        error={redeemBond?.error?.reason}
-        isOpen={!!redeemBond?.error?.reason}
       />
       <WaitingConfirmationDialog
         isOpen={redeemBond.isWaitingForConfirmation}

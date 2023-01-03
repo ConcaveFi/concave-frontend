@@ -11,11 +11,12 @@ const makeTradePlaceholder = (exactAmount, otherCurrency, tradeType) =>
   (tradeType === TradeType.EXACT_INPUT
     ? { inputAmount: exactAmount, outputAmount: toAmount(0, otherCurrency) }
     : { inputAmount: toAmount(0, otherCurrency), outputAmount: exactAmount }) as Trade<
-    Currency,
-    Currency,
-    TradeType
-  >
+      Currency,
+      Currency,
+      TradeType
+    >
 
+export type SwapState = ReturnType<typeof useSwapState>
 export const useSwapState = () => {
   const { currencies, onChangeCurrencies } = useQueryCurrencies()
   const settings = useSwapSettings((s) => ({ multihops: s.settings.multihops }))

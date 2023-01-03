@@ -1,17 +1,19 @@
-import { Modal, useDisclosure } from '@concave/ui'
+import { useDisclosure } from '@concave/ui'
 import { createContext, ReactNode, useState } from 'react'
 import { ReportErrorModal } from './ErrorModal'
 
-type TransactionError = {
-  reason: string
-  method: string
-  code: string
-  transaction: { from: string; to: string }
-}
+type TransactionError =
+  | {
+      reason: string
+      method: string
+      code: string
+      transaction: { from: string; to: string }
+    }
+  | 'Failed or Rejected Request'
 type ErrorModalContextType = {
   isOpen: boolean
-  extra?:Record<string, string>,
-  onOpen: (e: unknown, extra?:Record<string, string>) => void
+  extra?: Record<string, string>
+  onOpen: (e: unknown, extra?: Record<string, string>) => void
   onClose: () => void
   error: Partial<TransactionError>
 }
@@ -23,9 +25,10 @@ const useErrorHandle = () => {
   const [error, setError] = useState<Partial<TransactionError>>()
   const [extra, setExtraInfo] = useState<Record<string, string>>()
   const onOpen = (e: TransactionError, extra?: Record<string, string>) => {
+    if (typeof e === 'string' && e.includes('Failed or Rejected Request')) return
+    const { host, pathname } = location
     setError(e)
-    console.table(extra)
-    setExtraInfo(extra)
+    setExtraInfo({ ...extra, host, pathname })
     modalInfo.onOpen()
   }
   return {
@@ -41,7 +44,7 @@ export const ErrorModalProvider = ({ children }: { children: ReactNode }) => {
   const errorHandle = useErrorHandle()
   return (
     <ErrorModalContext.Provider value={errorHandle}>
-      <ReportErrorModal />      
+      <ReportErrorModal />
       {children}
     </ErrorModalContext.Provider>
   )

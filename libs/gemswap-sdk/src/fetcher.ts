@@ -14,6 +14,7 @@ import {
   WNATIVE,
   WNATIVE_ADDRESS,
 } from '@concave/core'
+import { BigNumber } from '@ethersproject/bignumber'
 import { Contract } from '@ethersproject/contracts'
 import { getNetwork } from '@ethersproject/networks'
 import { getDefaultProvider } from '@ethersproject/providers'
@@ -53,7 +54,7 @@ export abstract class Fetcher {
   /**
    * Cannot be constructed.
    */
-  private constructor() {}
+  private constructor() { }
 
   /**
    * Fetch information for a given token on the given chain, using the given ethers provider.
@@ -63,10 +64,11 @@ export abstract class Fetcher {
   public static async fetchTokenData(
     address: string,
     provider = getDefaultProvider(getNetwork(1)),
+    storage?: Storage
   ): Promise<Token> {
     const chainId = await provider.getNetwork().then((n) => n.chainId)
     if (TOKENS_CACHE[address]?.[chainId]) return TOKENS_CACHE[address][chainId]
-
+    const KEY = `TOKEN-${chainId}-${address}`
     const tokenContract = new Contract(
       address,
       [
@@ -77,13 +79,15 @@ export abstract class Fetcher {
       ],
       provider,
     )
+    const json = storage?.getItem(KEY) || '{}';
+    const FROM_STORAGE = JSON.parse(json)
     const [symbol, decimals, name, totalSupply] = await Promise.all([
-      tokenContract.symbol(),
-      tokenContract.decimals(),
-      tokenContract.name(),
+      FROM_STORAGE.symbol || tokenContract.symbol(),
+      FROM_STORAGE.decimals || tokenContract.decimals(),
+      FROM_STORAGE.name || tokenContract.name(),
       tokenContract.totalSupply(),
     ])
-
+    storage?.setItem(KEY, JSON.stringify({ symbol, decimals, name }))
     const token = new Token(chainId, address, decimals, symbol, name, totalSupply)
 
     TOKENS_CACHE[address] = {
@@ -102,6 +106,7 @@ export abstract class Fetcher {
   public static async fetchPairFromAddress(
     pairAddress: string,
     provider = getDefaultProvider(getNetwork(1)),
+    storage?: Storage
   ): Promise<Pair> {
     const pairContract = new Contract(
       pairAddress,
@@ -116,8 +121,8 @@ export abstract class Fetcher {
     const token0Address = pairContract.token0()
     const token1Address = pairContract.token1()
     const [token0, token1, [reserves0, reserves1], liquidityToken] = await Promise.all([
-      Fetcher.fetchTokenData(await token0Address, provider),
-      Fetcher.fetchTokenData(await token1Address, provider),
+      Fetcher.fetchTokenData(await token0Address, provider, storage),
+      Fetcher.fetchTokenData(await token1Address, provider, storage),
       pairContract.getReserves(),
       Fetcher.fetchTokenData(pairAddress, provider),
     ])
@@ -184,8 +189,12 @@ export abstract class Fetcher {
   public static async fetchPairs(
     chainId = 1,
     provider = getDefaultProvider(chainId),
+    storage?: Storage
   ): Promise<Pair[]> {
-    const pairContract = await new Contract(
+    const address = FACTORY_ADDRESS[chainId];
+    const FACTORY_PAIRS_ADDRESS = `PAIRS-${chainId}-${address}`
+    const pairs: string[] = JSON.parse(storage?.getItem(FACTORY_PAIRS_ADDRESS) || `[]`)
+    const pairContract = new Contract(
       FACTORY_ADDRESS[chainId],
       [
         'function allPairs(uint256 index) external view returns (address)',
@@ -193,14 +202,14 @@ export abstract class Fetcher {
       ],
       provider,
     )
-    const promiseAddress: Promise<Pair>[] = []
-    const index = await pairContract.allPairsLength()
-    for (let i = 0; i < index; i++) {
-      const LPPromise = pairContract
-        .allPairs(i)
-        .then((add: string) => Fetcher.fetchPairFromAddress(add, provider))
-      promiseAddress.push(LPPromise)
+
+    const totalPairs: BigNumber = await pairContract.allPairsLength()
+    const index = totalPairs.toNumber()
+    for (let i = pairs.length; i < index; i++) {
+      const address: string = await pairContract.allPairs(i)
+      pairs.push(address)
     }
-    return await Promise.all(promiseAddress)
+    storage?.setItem(FACTORY_PAIRS_ADDRESS, JSON.stringify(pairs))
+    return Promise.all(pairs.map((add: string) => Fetcher.fetchPairFromAddress(add, provider, storage)))
   }
 }

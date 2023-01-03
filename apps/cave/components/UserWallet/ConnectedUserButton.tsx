@@ -30,6 +30,8 @@ export const ConnectedUserButton = () => {
         _focus={{ color: 'text.high', shadow: 'up' }}
         w="100%"
         rounded="2xl"
+        px={4}
+        justifyContent="start"
       >
         <Image
           filter={chain.testnet ? 'grayscale(1)' : ''}

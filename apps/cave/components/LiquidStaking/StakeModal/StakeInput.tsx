@@ -3,10 +3,9 @@ import { stakingPools, StakingV1Contract } from '@concave/marketplace'
 import { Box, Button, Card, Flex, Text } from '@concave/ui'
 import { useCurrencyApprove } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { CurrencyInputField } from 'components/CurrencyAmountField'
-import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
-
 import { WaitingConfirmationDialog } from 'components/TransactionDialog/TransactionWaitingConfirmationDialog'
+import { useErrorModal } from 'contexts/ErrorModal'
 import { useTransaction } from 'hooks/TransactionsRegistry/useTransaction'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
@@ -17,6 +16,7 @@ import { useAccount, useSigner } from 'wagmi'
 
 export function StakeInput({ onClose, poolId }: { poolId: number; onClose: () => void }) {
   const { address } = useAccount()
+  const errorModal = useErrorModal()
   const chainId = useCurrentSupportedNetworkId()
   const { data: signer } = useSigner()
   const [stakeInput, setStakeInput] = useState<CurrencyAmount<Currency>>(toAmount(0, CNV[chainId]))
@@ -31,6 +31,7 @@ export function StakeInput({ onClose, poolId }: { poolId: number; onClose: () =>
       return contract.lock(signer, address, amount, poolId, currencyState.permit.signedPermit)
     },
     {
+      onError: errorModal.onOpen,
       meta: {
         type: 'stake',
         amount: stakeInput.toString(),
@@ -93,11 +94,6 @@ export function StakeInput({ onClose, poolId }: { poolId: number; onClose: () =>
       <TransactionSubmittedDialog
         isOpen={lockTransaction.isWaitingTransactionReceipt}
         tx={lockTransaction.tx}
-        closeParentComponent={onClose}
-      />
-      <TransactionErrorDialog
-        error={lockTransaction.error?.reason}
-        isOpen={lockTransaction.isError}
         closeParentComponent={onClose}
       />
     </>

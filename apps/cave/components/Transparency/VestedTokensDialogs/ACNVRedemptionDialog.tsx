@@ -1,30 +1,19 @@
 import { ACNVRedeemContract, ChainId } from '@concave/core'
-import { Button, Card, Flex, Link, Modal, Text, useDisclosure } from '@concave/ui'
-import { TransactionResponse } from '@ethersproject/providers'
-import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
+import { Button, Card, Flex, Link, Modal, Text } from '@concave/ui'
 import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
 
 import { WaitingConfirmationDialog } from 'components/TransactionDialog/TransactionWaitingConfirmationDialog'
 import { useGet_User_Acnv_RedeemedQuery } from 'graphql/generated/graphql'
-import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
-import { useState } from 'react'
+import { useTransaction } from 'hooks/TransactionsRegistry/useTransaction'
 import { useAccount, useProvider, useSigner } from 'wagmi'
 import useVestedTokens from '../Hooks/useVestedTokens'
 import { VestedTokenButtonProps } from '../TreasuryRedeemCard'
 
 export const ACNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) => {
   const provider = useProvider()
-  const { isOpen: isConfirmOpen, onOpen: onOpenConfirm, onClose: onCloseConfirm } = useDisclosure()
-  const { isOpen: isSubOpen, onOpen: onOpenSub, onClose: onCloseSub } = useDisclosure()
-  const { isOpen: isErrorOpen, onOpen: onOpenError, onClose: onCloseError } = useDisclosure()
   const { onClose, isOpen } = props
-
   const { data: signer } = useSigner()
   const { address, isConnected } = useAccount()
-
-  const [tx, setTx] = useState<TransactionResponse>()
-  const [error, setError] = useState('')
-
   const { data, isLoading } = useGet_User_Acnv_RedeemedQuery({
     address: address,
   })
@@ -37,29 +26,16 @@ export const ACNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) =>
   const alreadyRedeemed = redeemed === +aCNVData?.formatted
   const unsupportedNetwork = provider?.network?.chainId !== ChainId.ETHEREUM
   const canRedeem = validBalance && !alreadyRedeemed && !unsupportedNetwork
-
-  const { registerTransaction } = useTransactionRegistry()
-
-  function redeem() {
-    onOpenConfirm()
+  const redeemTransaction = useTransaction(() => {
     const aCNVContract = new ACNVRedeemContract(provider)
-    aCNVContract
-      .redeem(signer, address)
-      .then((tx) => {
-        onCloseConfirm()
-        registerTransaction(tx, {
-          type: 'redeem',
-          amount: `${aCNVData.formatted} aCNV`,
-        })
-        setTx(tx)
-        onOpenSub()
-      })
-      .catch((e) => {
-        onCloseConfirm()
-        setError('Transaction rejected')
-        onOpenError()
-      })
-  }
+    return aCNVContract.redeem(signer, address)
+  }, {
+    meta: {
+      type: 'redeem',
+      amount: `${aCNVData?.formatted} aCNV`,
+    }
+  });
+
 
   return (
     <>
@@ -117,7 +93,7 @@ export const ACNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) =>
           <Button
             onClick={() => {
               if (!canRedeem) return
-              redeem()
+              redeemTransaction.sendTx()
             }}
             py={2}
             fontSize="22"
@@ -142,13 +118,8 @@ export const ACNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) =>
           </Button>
         </Card>
       </Modal>
-      <WaitingConfirmationDialog isOpen={isConfirmOpen} />
-      <TransactionSubmittedDialog isOpen={isSubOpen} closeParentComponent={onCloseSub} tx={tx} />
-      <TransactionErrorDialog
-        error={error}
-        isOpen={isErrorOpen}
-        closeParentComponent={onCloseError}
-      />
+      <WaitingConfirmationDialog isOpen={redeemTransaction.isWaitingForConfirmation} />
+      <TransactionSubmittedDialog isOpen={redeemTransaction.isWaitingTransactionReceipt} tx={redeemTransaction.tx} />      
     </>
   )
 }

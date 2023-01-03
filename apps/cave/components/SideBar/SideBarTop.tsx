@@ -64,28 +64,31 @@ function SideBarTop({ closeSidebar }: { closeSidebar: VoidFunction }) {
       </Flex>
 
       <Stack gap="1" align="flex-end" mt={7}>
+        <Button
+          position="relative"
+          onClick={onOpen}
+          variant={'secondary'}
+          shadow="up"
+          w="100%"
+          h="40px"
+          justifyContent={'start'}
+          px={6}
+        >
+          <Image pr="4" src="./assets/airdrop/airdrop-white.png" w="30px" alt="airdrop-icon" />
+          Airdrop
+        </Button>
         <ButtonLink
           href="/transparency" // and redirect to the treasury page
           variant="secondary"
           border="primary"
           size="medium"
-          w="full"
-          alignItems="center"
           leftIcon={<DashboardIcon h="20px" w="20px" />}
+          justifyContent="start"
+          px={5}
+          gap={1}
         >
           Transparency
         </ButtonLink>
-        <Button mt={4} onClick={onOpen} variant={'secondary'} shadow="up" w="100%" h="40px">
-          <Image
-            pr="4"
-            src="./assets/airdrop/airdrop-white.png"
-            w="28px"
-            ml="-8"
-            mr="-1"
-            alt="airdrop-icon"
-          />
-          Airdrop
-        </Button>
         <Box shadow="down" w="full" p={1} rounded="2xl">
           {isConnected ? (
             <ConnectedUserButton />

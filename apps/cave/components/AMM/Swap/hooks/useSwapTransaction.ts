@@ -12,7 +12,7 @@ import { useSwapSettings } from '../Settings'
 export const useSwapTransaction = (
   _trade: Trade<Currency, Currency, TradeType>,
   recipient: string,
-  { onSuccess }: { onSuccess?: (tx: TransactionResponse) => void },
+  { onSuccess, onError }: { onSuccess?: (tx: TransactionResponse) => void, onError?: (e: Error) => void },
   permit?: UsePermiReturn,
 ) => {
   const { address } = useAccount()
@@ -66,6 +66,7 @@ export const useSwapTransaction = (
     },
     onError: (error) => {
       if (error.name === 'UserRejectedRequestError') reset()
+      onError(error)
     },
   })
 

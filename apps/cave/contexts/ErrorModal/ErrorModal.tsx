@@ -1,8 +1,9 @@
-import { Box, Button, HStack, Modal, Text, VStack } from '@concave/ui'
+import { Button, HStack, Modal, Text, VStack } from '@concave/ui'
+import { DiscordInput } from 'components/DiscordInput'
 import { useErrorModal } from './useErrorModal'
 
 export const ReportErrorModal = () => {
-  const { infos, isOpen, onClose, onConfirm } = useErrorModal()
+  const { infos, isOpen, onClose, onConfirm, setUsername } = useErrorModal()
   return (
     <Modal
       bluryOverlay={true}
@@ -10,28 +11,23 @@ export const ReportErrorModal = () => {
       titleAlign="center"
       isOpen={isOpen}
       onClose={onClose}
-      bodyProps={{ w: '450px', gap: 3, textAlign: 'center' }}
+      bodyProps={{ w: { base: 'full', md: '370px' }, gap: 3, textAlign: 'center' }}
     >
-      <VStack>
+      <VStack gap={4}>
         <Text fontWeight={'bold'} size={'md'}>
-          Do you want to report this?
+          Do you want to submit this?
         </Text>
-        <Text as="i" fontSize={'sm'}>
-          We will send your address and wallet name (MetaMask, Brave Wallet), error, browser and
-          System Operation info
+        <Text w="full" as="i" fontSize={'sm'}>
+          We will send your address and wallet name (MetaMask, Brave Wallet), browser, System
+          Operation and the error
         </Text>
-        <Box p={2} borderRadius={'2xl'} shadow={'Down Big'}>
-          {Object.entries(infos).map((i) => {
-            return (
-              <HStack key={i[0]} maxW={'full'}>
-                {' '}
-                <Text fontWeight={'bold'}>{i[0]}:</Text>
-                <Text fontSize={'sm'}>{i[1]}</Text>
-              </HStack>
-            )
-          })}
-        </Box>
-        <Box p={2}></Box>
+        <HStack w="full">
+          <DiscordInput
+            onUpdate={({ username, valid }) => {
+              setUsername(valid ? username : 'anonymous')
+            }}
+          ></DiscordInput>
+        </HStack>
         <HStack w={'full'}>
           <Button
             w={'full'}
@@ -44,10 +40,7 @@ export const ReportErrorModal = () => {
             p={2}
             variant={'primary'}
           >
-            Yes
-          </Button>
-          <Button w={'full'} onClick={onClose} p={2} variant={'secondary'}>
-            No
+            Submit the error
           </Button>
         </HStack>
       </VStack>
