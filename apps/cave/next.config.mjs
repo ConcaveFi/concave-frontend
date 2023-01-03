@@ -20,15 +20,13 @@ const nextConfig = {
   async redirects() {
     return [{ source: '/treasury', destination: '/transparency', permanent: true }]
   },
-  experimental: {
-    transpilePackages: [
-      '@concave/core',
-      '@concave/gemswap-sdk',
-      '@concave/marketplace',
-      '@concave/icons',
-      '@concave/ui',
-    ],
-  },
+  transpilePackages: [
+    '@concave/core',
+    '@concave/gemswap-sdk',
+    '@concave/marketplace',
+    '@concave/icons',
+    '@concave/ui',
+  ],
 }
 
 export default withBundleAnalyzer(nextConfig)
