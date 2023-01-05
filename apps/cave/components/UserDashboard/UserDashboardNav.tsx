@@ -39,11 +39,18 @@ export const UserDashboardNav = ({
     marketplaceIsLoading,
     nftPositionCount,
   }
+  const hasSnapshot = withSnapshots.includes(currentSnapshot)
   return (
     <Flex
       // h="full"
-      maxH={{ base: '260px', sm: '240px', lg: '190px', '2xl': '384px' }}
-      minW={{ base: 'full', sm: 'full', md: 'full', lg: '750px', '2xl': '350px' }}
+      maxH={{ base: '260px', sm: '240px', lg: '190px', '2xl': hasSnapshot ? '384px' : '182px' }}
+      minW={{
+        base: 'full',
+        sm: 'full',
+        md: 'full',
+        lg: '750px',
+        '2xl': hasSnapshot ? '350px' : '700px',
+      }}
       mx="auto"
       wrap="wrap"
       align={'center'}
@@ -59,3 +66,5 @@ export const UserDashboardNav = ({
     </Flex>
   )
 }
+
+const withSnapshots = [SnapshotOptions.DynamicBonds, SnapshotOptions.LiquidStaking]
