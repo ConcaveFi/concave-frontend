@@ -3,6 +3,7 @@ import { useMarketplaceDashbord } from 'components/Marketplace/Main/UseMarkeplac
 import { useStakePositions } from 'components/StakingPositions/DashboardBody/DashBoardState'
 import { useAccount } from 'wagmi'
 import { useUserBondState } from './hooks/useUserBondState'
+import { useUserTxHistoryState } from './hooks/useUserTxHistoryState'
 import { NavButton } from './NavButton'
 import { SnapshotOptions } from './SnapshotOptions'
 
@@ -27,6 +28,9 @@ export const UserDashboardNav = ({
 
   // Bonding
   const userBondState = useUserBondState()
+
+  // Tx History
+  const { isLoading: txHistoryIsLoading } = useUserTxHistoryState()
 
   return (
     <Flex
@@ -78,6 +82,12 @@ export const UserDashboardNav = ({
         onClick={() => changeSnapshot(SnapshotOptions.AMM)}
       />
       <NavButton
+        title={'Transaction History'}
+        isSelected={currentSnapshot === SnapshotOptions.TxHistory}
+        isLoading={txHistoryIsLoading}
+        onClick={() => changeSnapshot(SnapshotOptions.TxHistory)}
+      />
+      <NavButton
         title={'Delta Neutral'}
         isSelected={currentSnapshot === SnapshotOptions.DeltaNeutral}
         summaryArray={[
@@ -86,7 +96,6 @@ export const UserDashboardNav = ({
         ]}
         onClick={() => changeSnapshot(SnapshotOptions.DeltaNeutral)}
       />
-      <NavButton title={'Coming Soon'} isDisabled />
       <NavButton title={'Coming Soon'} isDisabled />
     </Flex>
   )

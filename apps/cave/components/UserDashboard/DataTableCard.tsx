@@ -15,10 +15,10 @@ export function DataTableCard({
   isLoading,
   hasPositions,
 }: {
-  route: string
-  buttonLabel: string
+  route?: string
+  buttonLabel?: string
   dataTableLabel: string
-  setExpand: Function
+  setExpand?: Function
   isExpanded: boolean
   SortComponent?: JSX.Element
   children: JSX.Element | JSX.Element[]
@@ -54,33 +54,37 @@ export function DataTableCard({
               {dataTableLabel}
             </Text>
             <Flex w={'33%'} justifyContent={'center'}>
-              <Button
-                w={'150px'}
-                h={'45px'}
-                variant={'secondary'}
-                onClick={() => setExpand(!isExpanded)}
-                justifyContent={'space-between'}
-                px={6}
-              >
-                <ExpandArrowIcon
-                  transition="all 0.7s"
-                  transform={isExpanded ? 'rotate(0deg)' : 'rotate(180deg)'}
-                />
-                <Text>Show more</Text>
-              </Button>
+              {setExpand && (
+                <Button
+                  w={'150px'}
+                  h={'45px'}
+                  variant={'secondary'}
+                  onClick={() => setExpand(!isExpanded)}
+                  justifyContent={'space-between'}
+                  px={6}
+                >
+                  <ExpandArrowIcon
+                    transition="all 0.7s"
+                    transform={isExpanded ? 'rotate(0deg)' : 'rotate(180deg)'}
+                  />
+                  <Text>Show more</Text>
+                </Button>
+              )}
             </Flex>
-            <Flex w={'33%'} justifyContent={'flex-end'}>
-              <Button
-                onClick={() => router.push('/' + route)}
-                w={buttonWidth}
-                h={'45px'}
-                variant={'secondary'}
-                justifyContent={'space-between'}
-                px={6}
-              >
-                <Text mr={2}>Go to {buttonLabel}</Text>
-                <ExpandArrowIcon transform={'rotate(270deg)'} />
-              </Button>
+            <Flex w={'33%'} h={'45px'} justifyContent={'flex-end'}>
+              {route && buttonLabel && (
+                <Button
+                  onClick={() => router.push('/' + route)}
+                  w={buttonWidth}
+                  h={'45px'}
+                  variant={'secondary'}
+                  justifyContent={'space-between'}
+                  px={6}
+                >
+                  <Text mr={2}>Go to {buttonLabel}</Text>
+                  <ExpandArrowIcon transform={'rotate(270deg)'} />
+                </Button>
+              )}
             </Flex>
           </Flex>
           <Flex width={'100%'} ml={2} align={'center'} gap={2} fontWeight={'bold'}>

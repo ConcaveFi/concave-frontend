@@ -7,6 +7,7 @@ import { BondingSnapshot } from './Summary/Bonding/BondingSnapshot'
 import { MarketplaceSnapshot } from './Summary/Marketplace/MarketplaceSnapshot'
 import { LiquiditySnapshot } from './Summary/Pools/LiquiditySnapshot'
 import { LiquidStakingSnapshot } from './Summary/Staking/LiquidStakingSnapshot'
+import { TxHistory } from './Summary/TxHistory/TxHistory'
 
 export function UserDashboardContent() {
   const router = useRouter()
@@ -20,6 +21,8 @@ export function UserDashboardContent() {
 
 function getView(selectedSnapshot: SnapshotOptions) {
   switch (selectedSnapshot) {
+    case SnapshotOptions.TxHistory:
+      return <TxHistory />
     case SnapshotOptions.AMM:
       return <LiquiditySnapshot />
     case SnapshotOptions.DynamicBonds:

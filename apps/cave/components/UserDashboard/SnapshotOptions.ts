@@ -3,6 +3,7 @@ export enum SnapshotOptions {
   LiquidStaking = 'LiquidStaking',
   DynamicBonds = 'DynamicBonds',
   Marketplace = 'Marketplace',
+  TxHistory = 'TxHistory',
   AMM = 'AMM',
   DeltaNeutral = 'DeltaNeutral',
   Redeem = 'Redeem',
