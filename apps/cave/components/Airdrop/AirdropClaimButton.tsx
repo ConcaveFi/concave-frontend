@@ -5,8 +5,7 @@ import { useErrorModal } from 'contexts/ErrorModal'
 import { parseUnits } from 'ethers/lib/utils'
 import { AidropSeasonProps, AirdropSeason } from 'hooks/useAirdropSeason'
 import { concaveProvider } from 'lib/providers'
-import { useQuery } from 'react-query'
-import { useAccount, useSigner, useWaitForTransaction } from 'wagmi'
+import { useAccount, useQuery, useSigner, useWaitForTransaction } from 'wagmi'
 import { useTransaction } from '../../hooks/TransactionsRegistry/useTransaction'
 import { useCurrentSupportedNetworkId } from '../../hooks/useCurrentSupportedNetworkId'
 import { airdropToken } from './special/airdrop'
@@ -24,8 +23,8 @@ export function AirdropClaimButton({ season }: AirdropClaimButton) {
   const errorModal = useErrorModal()
   const canRedeem = Boolean(redeemable)
 
-  const { data: claimed } = useQuery(['AirdropClaimContract', networkId], async () => {
-    const airdrop = new AirdropClaimContract(concaveProvider(networkId), season)
+  const { data: claimed } = useQuery(['AirdropClaim', season, networkId], async () => {
+    let airdrop = new AirdropClaimContract(concaveProvider(networkId), season)
     return await airdrop.claimed(address)
   })
 
@@ -45,10 +44,11 @@ export function AirdropClaimButton({ season }: AirdropClaimButton) {
 
   return (
     <Button
-      {...claimButtonProps({ claimed, canRedeem, status, whiteListed })}
+      {...claimButtonProps({ claimed: !!claimed, canRedeem, status, whiteListed })}
       onClick={() => airdrop.sendTx()}
     >
-      {getButtonLabel({ claimed, isConnected, whiteListed, status }) || nameBySeason[season]}
+      {getButtonLabel({ claimed: !!claimed, isConnected, whiteListed, status }) ||
+        nameBySeason[season]}
     </Button>
   )
 }
