@@ -29,8 +29,6 @@ export function AirdropClaimButton({ season }: AirdropClaimButton) {
     return await airdrop.claimed(address)
   })
 
-  console.log(seasonVal)
-
   async function claimAidrop() {
     const airdrop = new AirdropClaimContract(concaveProvider(networkId), season)
     const convertedAmount = parseUnits(redeemable?.toString() || '0', airdropToken.decimals)
