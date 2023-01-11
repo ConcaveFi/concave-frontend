@@ -1,20 +1,23 @@
 import { AirdropClaimContract } from '@concave/core'
 import { Button } from '@concave/ui'
-import { airdropToken } from 'components/Airdrop/airdrop'
 import { useAirdrop } from 'contexts/AirdropContext'
 import { useErrorModal } from 'contexts/ErrorModal'
 import { parseUnits } from 'ethers/lib/utils'
+import { AidropSeasonProps, AirdropSeason } from 'hooks/useAirdropSeason'
 import { concaveProvider } from 'lib/providers'
 import { useQuery } from 'react-query'
 import { useAccount, useSigner, useWaitForTransaction } from 'wagmi'
 import { useTransaction } from '../../hooks/TransactionsRegistry/useTransaction'
 import { useCurrentSupportedNetworkId } from '../../hooks/useCurrentSupportedNetworkId'
+import { airdropToken } from './special/airdrop'
 
 interface AirdropClaimButton {
-  edition?: 'first' | 'second'
+  season: AirdropSeason
 }
-export function AirdropClaimButton({ edition = 'first' }: AirdropClaimButton) {
-  const { proof, redeemable, whiteListed } = useAirdrop()
+export function AirdropClaimButton({ season }: AirdropClaimButton) {
+  const airdopCtx = useAirdrop()
+  const seasonVal: AidropSeasonProps = airdopCtx[season]
+  const { proof, redeemable, whiteListed } = seasonVal || {}
   const { address, isConnected } = useAccount()
   const networkId = useCurrentSupportedNetworkId()
   const { data: signer } = useSigner()
@@ -22,12 +25,14 @@ export function AirdropClaimButton({ edition = 'first' }: AirdropClaimButton) {
   const canRedeem = Boolean(redeemable)
 
   const { data: claimed } = useQuery(['AirdropClaimContract', networkId], async () => {
-    const airdrop = new AirdropClaimContract(concaveProvider(networkId))
+    const airdrop = new AirdropClaimContract(concaveProvider(networkId), season)
     return await airdrop.claimed(address)
   })
 
+  console.log(seasonVal)
+
   async function claimAidrop() {
-    const airdrop = new AirdropClaimContract(concaveProvider(networkId))
+    const airdrop = new AirdropClaimContract(concaveProvider(networkId), season)
     const convertedAmount = parseUnits(redeemable?.toString() || '0', airdropToken.decimals)
     return airdrop.claim(signer, proof, convertedAmount)
   }
@@ -45,7 +50,7 @@ export function AirdropClaimButton({ edition = 'first' }: AirdropClaimButton) {
       {...claimButtonProps({ claimed, canRedeem, status, whiteListed })}
       onClick={() => airdrop.sendTx()}
     >
-      {getButtonLabel({ claimed, isConnected, whiteListed, status }) || nameByEdition[edition]}
+      {getButtonLabel({ claimed, isConnected, whiteListed, status }) || nameBySeason[season]}
     </Button>
   )
 }
@@ -81,13 +86,12 @@ function claimButtonProps({ claimed, canRedeem, status, whiteListed }: ClaimButt
     loadingText: 'Claiming...',
     bg: 'stroke.brightGreen',
     position: 'relative',
-    w: 'fit-content',
     h: '50px',
-    px: '8',
+    width: '150px',
     mt: 7,
   } as const
 }
-const nameByEdition = {
-  first: 'Especial airdrop',
-  second: 'Airdrop #2',
+const nameBySeason = {
+  special: 'Special Airdrop',
+  Q4: 'Q4 Airdrop',
 }

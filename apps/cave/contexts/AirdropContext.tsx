@@ -1,41 +1,35 @@
 import { useDisclosure } from '@concave/ui'
-import { getAirdropClaimableAmount, getProof, isWhitelisted } from 'components/Airdrop/airdrop'
+import { AidropSeasonProps, useAirdropSeason } from 'hooks/useAirdropSeason'
 import { createContext, useContext } from 'react'
-import { useAccount } from 'wagmi'
 
 interface AirdropContextProps {
   isOpen: boolean
   onOpen: VoidFunction
   onClose: VoidFunction
-  whiteListed: boolean
-  redeemable: number
-  proof: string[]
+  Q4: AidropSeasonProps
+  special: AidropSeasonProps
 }
 const AirdropContext = createContext<AirdropContextProps>({
-  isOpen: false,
-  whiteListed: false,
+  special: { proof: [''], redeemable: 0, whiteListed: false },
+  Q4: { proof: [''], redeemable: 0, whiteListed: false },
   onClose: () => {},
   onOpen: () => {},
-  redeemable: 0,
-  proof: [],
+  isOpen: false,
 })
 
 export function AirdropProvider({ children }) {
   const airdropModal = useDisclosure()
-  const { address } = useAccount()
 
-  const proof = getProof(address)
-  const whiteListed = isWhitelisted(address)
-  const redeemable = getAirdropClaimableAmount(address)
+  const special = useAirdropSeason('special')
+  const Q4 = useAirdropSeason('Q4')
   return (
     <AirdropContext.Provider
       value={{
-        redeemable,
         onOpen: airdropModal.onOpen,
         onClose: airdropModal.onClose,
         isOpen: airdropModal.isOpen,
-        whiteListed,
-        proof,
+        special,
+        Q4,
       }}
     >
       {children}
