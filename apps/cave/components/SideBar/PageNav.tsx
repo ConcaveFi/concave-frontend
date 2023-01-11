@@ -14,11 +14,7 @@ const NavButton = (props: ButtonLinkProps) => {
 
   return (
     <ButtonLink
-      overflow="hidden"
       color="text.low"
-      iconSpacing={2}
-      role="group"
-      w="100%"
       h="50px"
       px={4}
       bg={active && 'linear-gradient(270deg, #08448C -0.12%, #070C1E 99.82%)'}
@@ -28,11 +24,13 @@ const NavButton = (props: ButtonLinkProps) => {
       _hover={{ textDecoration: 'underline', textColor: 'text.bright' }}
       leftIcon={
         props.leftIcon || (
-          <NotInteractableImage
-            src={`/assets/sidebar${props.href}.svg`}
-            _groupHover={{ filter: 'brightness(3)' }}
-            _groupActive={{ filter: 'brightness(3)' }}
-          />
+          <Flex position={'absolute'} h="full" w="full" align={'center'} top="0">
+            <NotInteractableImage
+              src={`/assets/sidebar${props.href}.svg`}
+              _groupHover={{ filter: 'brightness(3)' }}
+              _groupActive={{ filter: 'brightness(3)' }}
+            />
+          </Flex>
         )
       }
       {...props}
@@ -58,7 +56,6 @@ const SubnavButton = ({ children, ...props }: ButtonLinkProps) => {
       shadow="none"
       _active={{}}
       _focus={{}}
-      minW="100%"
       bg="none"
       m="-3px"
       px={4}

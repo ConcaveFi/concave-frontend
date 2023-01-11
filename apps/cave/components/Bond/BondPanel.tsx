@@ -35,10 +35,11 @@ export function BondPanel(props: BondPanelProps) {
     {
       meta: { type: 'redeem', amount: 'CNV Bonds' },
       onSuccess: updateBondPositions,
-      onError: errorModal.onOpen
+      onError: errorModal.onOpen,
     },
   )
-  const buttonDisabled = redeemBond.isWaitingForConfirmation || redeemBond.isWaitingTransactionReceipt
+  const buttonDisabled =
+    redeemBond.isWaitingForConfirmation || redeemBond.isWaitingTransactionReceipt
   const isRedeeming = redeemBond.isWaitingForConfirmation || redeemBond.isWaitingTransactionReceipt
   const spinnerStyles = { animation: `${spin} 2s linear infinite`, size: 'sm' }
 

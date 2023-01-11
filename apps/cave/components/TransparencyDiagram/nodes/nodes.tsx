@@ -209,6 +209,18 @@ const avaxSafe = (x: number, y: number): Node => ({
   type: NodeTypeEnum.Multisig,
 })
 
+const arbitrumSafe = (x: number, y: number): Node => ({
+  id: 'Arbitrum CO-OP Treasury',
+  data: {
+    label: 'Arbitrum CO-OP Treasury',
+    addressType: AddressTypeEnum.MULTISIG,
+    address: '0x966C0c73ACa434158FABdB9628277a8725C0337d',
+    chain: ChainEnum.ARBI,
+  },
+  position: { x: x, y: y },
+  type: NodeTypeEnum.Multisig,
+})
+
 export const generalNodes = [
   bbtCNV(650, 400),
   aCNV(385, 600),
@@ -219,13 +231,14 @@ export const generalNodes = [
   coopTreasury(1225, 480),
   policyMultisig(1475, 480),
   proxyAdmin(0, 500),
-  accrualBondsV1Proxy(700, 0),
-  accrualBondsV1Impl(1150, 0),
+  accrualBondsV1Proxy(975, 20),
+  accrualBondsV1Impl(1300, 20),
   stakingV1Proxy(760, 1000),
   stakingV1Impl(1150, 1000),
   valueShuttle(1650, 1019),
   bscSafe(100, 0),
   avaxSafe(375, 0),
+  arbitrumSafe(675, 0),
 ]
 
 /**
@@ -241,8 +254,9 @@ export const generalNodesMobile = [
   lsdCNV(580, 0),
 
   //line 1
-  bscSafe(28, 0),
-  avaxSafe(250, 0),
+  bscSafe(0, 0),
+  avaxSafe(150, 0),
+  arbitrumSafe(300, 0),
 
   //line 2
   valueShuttle(0, 402 + 20),

@@ -67,9 +67,9 @@ export const getTransactionStatusLabel = ({ status, meta }: Partial<TrackedTrans
         error: `Failed to purchased position #${tokenId}`,
       }),
       airdrop: ({ amount }) => ({
-        pending: `Claming  ${amount}`,
-        success: `Successfully claimed ${amount}`,
-        error: `Failed to claim ${amount}`,
+        pending: `Claming  ${amount} USDC`,
+        success: `Successfully claimed ${amount} USDC`,
+        error: `Failed to claim ${amount} USDC`,
       }),
       fallback,
     })[meta?.type] || fallback
