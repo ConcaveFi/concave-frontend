@@ -1,12 +1,13 @@
 import { SafeConnector } from '@gnosis.pm/safe-apps-wagmi'
-import { NEXT_PUBLIC_ALCHEMY_ID, NEXT_PUBLIC_INFURA_ID } from 'lib/env.conf'
+import { IMPERSONATE, LOCALHOST, NODE_ENV } from 'lib/env.conf'
 import { ReactNode, useEffect } from 'react'
 import { chain, Connector, createClient, defaultChains, useConnect, WagmiConfig } from 'wagmi'
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
-import { concaveProvider, concaveProviderConfig, concaveWSProvider, hardhatProviderConfig } from '../../lib/providers'
+import { concaveProvider, concaveProviderConfig, concaveWSProvider } from '../../lib/providers'
+import { ImpersonateConnector } from './Connectors/ImpersonateConnector'
 import { UnstoppableConnector } from './Connectors/UnstoppableConnector'
 
 export const chains = [chain.localhost, chain.goerli, chain.mainnet] // app supported chains
@@ -16,13 +17,15 @@ const connectors = [
   new SafeConnector({ chains }),
   new InjectedConnector({ chains }),
   new MetaMaskConnector({ chains }),
-  new WalletConnectConnector({ chains, options: { 
-    qrcode: false,
-    rpc: {
-      [chain.mainnet.id]: concaveProviderConfig.rpc,
-      [chain.localhost.id]: hardhatProviderConfig.rpc,
-    },
- } }),
+  new WalletConnectConnector({
+    chains, options: {
+      qrcode: false,
+      rpc: {
+        [chain.mainnet.id]: concaveProviderConfig.rpc,
+        [chain.localhost.id]: chain.localhost.rpcUrls.default,
+      },
+    }
+  }),
   new UnstoppableConnector({ chains }),
   new CoinbaseWalletConnector({
     chains,
@@ -34,7 +37,8 @@ const connectors = [
       headlessMode: true,
     },
   }),
-] as Connector[]
+  NODE_ENV === "development" ? new ImpersonateConnector() : undefined,
+].filter(e => e) as Connector[]
 
 const isChainSupported = (chainId?: number) => supportedChainsId.some((x) => x === chainId)
 
