@@ -1,5 +1,5 @@
 import { SafeConnector } from '@gnosis.pm/safe-apps-wagmi'
-import { IMPERSONATE, LOCALHOST, NODE_ENV } from 'lib/env.conf'
+import { NODE_ENV } from 'lib/env.conf'
 import { ReactNode, useEffect } from 'react'
 import { chain, Connector, createClient, defaultChains, useConnect, WagmiConfig } from 'wagmi'
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'

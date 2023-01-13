@@ -9,6 +9,7 @@ declare namespace NodeJS {
     NEXT_PUBLIC_DISCORD_ETHERSCAN_API_KEY: string
     NEXT_PUBLIC_DISCORD_GRAPHQL_ENDPOINT: string
     NEXT_PUBLIC_DISCORD_CHART_ENDPOINT: string
+    NEXT_PUBLIC_CONCAVE_RPC_KEY: string
     GRAPHQL_ADMIN_SECRET: string
     LIVE_URL: string
     NODE_ENV: 'development' | 'production' | 'test'

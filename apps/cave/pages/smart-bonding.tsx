@@ -61,6 +61,7 @@ export function Bond() {
           showUserPosition={showUserPosition}
           isLoadingBondSigma={isLoadingBondSigma}
           bondSigma={bondSigma}
+          updateBondPositions={updateBondPositions}
         />
         <BondBuyCard updateBondPositions={updateBondPositions} />
       </Flex>

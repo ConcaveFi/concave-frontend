@@ -77,8 +77,8 @@ export const SearchableTokenList = ({
         p={3}
       >
         {tokenList.isLoading ||
-        (!tokenList.data.length && tokenList.isFetching) ||
-        searchedToken.isLoading ? (
+          (!tokenList.data?.length && tokenList.isFetching) ||
+          searchedToken.isLoading ? (
           <Spinner />
         ) : !searchedToken.data && tokens.length === 0 ? (
           <Text w="full" align="center" fontSize="sm" fontWeight="bold" color="text.low">
