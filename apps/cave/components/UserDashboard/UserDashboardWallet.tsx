@@ -17,16 +17,16 @@ function formatNumber2DP(value: number) {
 const WalletSurface = ({ children }: { children: JSX.Element | JSX.Element[] }) => (
   <Flex
     shadow={'down'}
-    w={'95%'}
+    w={'100%'}
     h={'72px'}
     borderRadius={'50px'}
     flexDir={'row'}
     justifyContent={'space-evenly'}
     alignItems={'center'}
     gap={6}
-    p={6}
-    mt={3.5}
-    mb={8}
+    // p={6}
+    // mt={3.5}
+    // mb={8}
   >
     {children}
   </Flex>

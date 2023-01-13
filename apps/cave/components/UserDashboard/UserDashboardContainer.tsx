@@ -24,17 +24,18 @@ export const UserDashboardContainer = () => {
   }, [currentSnapshot])
 
   return (
-    <Flex w={'100%'} direction={'column'} gap={5} alignItems={'center'}>
+    <Flex w={'100%'} direction={'column'} alignItems={'center'}>
       <Card
         variant={'primary'}
         w={'100%'}
-        p={4}
+        p={6}
+        gap={6}
         h={'940px'}
         borderRadius={'60px'}
         alignItems={'center'}
       >
         <UserDashboardWallet />
-        <Flex w={'95%'} maxH={796} flexGrow={1} flexDirection={'row'} gap={6} mb={4}>
+        <Flex w={'100%'} maxH={'900px'} flexGrow={1} flexDirection={'row'} gap={6}>
           <UserDashboardNav currentSnapshot={currentSnapshot} changeSnapshot={changeSnapshot} />
           <UserDashboardContent />
         </Flex>
