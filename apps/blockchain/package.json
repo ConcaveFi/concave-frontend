@@ -1,0 +1,16 @@
+{
+  "name": "@concave/blockchain",
+  "author": "schrammel",
+  "version": "0.0.0",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "hardhat node"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3"
+  },
+  "devDependencies": {
+    "hardhat": "^2.12.4"
+  }
+}
