@@ -10,9 +10,9 @@
     "test": "turbo run test",
     "postinstall": "turbo run postinstall",
     "build:cave": "turbo run build --filter=cave...",
-    "dev:cave": "turbo run dev --filter=cave...",
+    "dev:cave": "turbo run dev --filter=blockchain --filter=cave...",
     "test:cave": "turbo run test --filter=cave...",
-    "clean": "rimraf \"./**/{node_modules,dist,.turbo,.next,.eslintcache,.vercel}\"",
+    "clean": "rimraf \"./**/{node_modules,dist,.turbo,.next,.eslintcache,.vercel,.cache}\"",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
