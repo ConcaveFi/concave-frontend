@@ -75,9 +75,9 @@ export const useAddLiquidityTransaction = (
     onError: errorModal.onOpen,
     meta: {
       type: 'add liquidity',
-      amount0: tokenAmountA.toString(),
-      amount1: tokenAmountB.toString(),
-      pairSymbol: `${tokenAmountA.currency.symbol}-${tokenAmountB.currency.symbol}`,
+      amount0: tokenAmountA?.toString(),
+      amount1: tokenAmountB?.toString(),
+      pairSymbol: `${tokenAmountA?.currency?.symbol}-${tokenAmountB?.currency.symbol}`,
     }
   })
 }
