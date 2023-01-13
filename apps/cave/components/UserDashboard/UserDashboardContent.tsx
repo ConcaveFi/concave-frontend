@@ -12,6 +12,8 @@ import { TxHistory } from './Summary/TxHistory/TxHistory'
 export function UserDashboardContent() {
   const router = useRouter()
   const selectedView = getView(SnapshotOptions[router.query.view as string])
+  console.log(router.query.view as string)
+
   return (
     <Flex w={'100%'} flexGrow={1}>
       {selectedView}
@@ -23,7 +25,9 @@ function getView(selectedSnapshot: SnapshotOptions) {
   switch (selectedSnapshot) {
     case SnapshotOptions.TxHistory:
       return <TxHistory />
-    case SnapshotOptions.AMM:
+    case SnapshotOptions.Liquidity:
+      console.log('teste')
+
       return <LiquiditySnapshot />
     case SnapshotOptions.DynamicBonds:
       return <BondingSnapshot />

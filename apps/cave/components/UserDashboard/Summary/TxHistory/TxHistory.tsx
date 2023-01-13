@@ -47,7 +47,7 @@ export const TxHistory = () => {
 }
 
 const TxTable = ({ reactTable }) => (
-  <Table style={{ height: '100%', width: '100%' }}>
+  <Table style={{ width: '100%' }}>
     <Thead>
       {reactTable.getHeaderGroups().map((headerGroup) => (
         <Tr key={headerGroup.id}>
@@ -82,18 +82,12 @@ const TxTable = ({ reactTable }) => (
     </Thead>
     <Tbody>
       {reactTable.getRowModel().rows.map((row) => (
-        <Tr key={row.id}>
-          {row.getVisibleCells().map((cell) => {
-            const teste = cell.column.columnDef.cell
-            // console.log(cell.getContext())
-
-            return (
-              <Td key={cell.id} px={'16px'}>
-                {/* {cell.column.columnDef.cell?.includes('TokenID:') &&} */}
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </Td>
-            )
-          })}
+        <Tr key={row.id} h={'40px'}>
+          {row.getVisibleCells().map((cell) => (
+            <Td key={cell.id} px={'16px'}>
+              {flexRender(cell.column.columnDef.cell, cell.getContext())}
+            </Td>
+          ))}
         </Tr>
       ))}
     </Tbody>

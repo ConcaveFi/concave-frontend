@@ -4,7 +4,7 @@ export enum SnapshotOptions {
   DynamicBonds = 'DynamicBonds',
   Marketplace = 'Marketplace',
   TxHistory = 'TxHistory',
-  AMM = 'AMM',
+  Liquidity = 'Liquidity',
   DeltaNeutral = 'DeltaNeutral',
   Redeem = 'Redeem',
 }

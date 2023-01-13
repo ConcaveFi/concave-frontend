@@ -73,13 +73,13 @@ export const UserDashboardNav = ({
         onClick={() => changeSnapshot(SnapshotOptions.Marketplace)}
       />
       <NavButton
-        title={'AMM'}
-        isSelected={currentSnapshot === SnapshotOptions.AMM}
+        title={'Liquidity Pools'}
+        isSelected={currentSnapshot === SnapshotOptions.Liquidity}
         summaryArray={[
           { label: 'row0', data: 'data row0' },
           { label: 'row1', data: 'data row1' },
         ]}
-        onClick={() => changeSnapshot(SnapshotOptions.AMM)}
+        onClick={() => changeSnapshot(SnapshotOptions.Liquidity)}
       />
       <NavButton
         title={'Transaction History'}
@@ -87,15 +87,8 @@ export const UserDashboardNav = ({
         isLoading={txHistoryIsLoading}
         onClick={() => changeSnapshot(SnapshotOptions.TxHistory)}
       />
-      <NavButton
-        title={'Delta Neutral'}
-        isSelected={currentSnapshot === SnapshotOptions.DeltaNeutral}
-        summaryArray={[
-          { label: 'row0', data: 'data row0' },
-          { label: 'row1', data: 'data row1' },
-        ]}
-        onClick={() => changeSnapshot(SnapshotOptions.DeltaNeutral)}
-      />
+
+      <NavButton title={'Coming Soon'} isDisabled />
       <NavButton title={'Coming Soon'} isDisabled />
     </Flex>
   )

@@ -37,7 +37,7 @@ export function DataTableCard({
         alignItems={'center'}
         gap={4}
       >
-        <Flex w={'100%'} h={isExpanded ? '15%' : '22%'} flexDir={'column'}>
+        <Flex w={'100%'} h={isExpanded ? '4%' : '22%'} flexDir={'column'}>
           <Flex
             w={'95%'}
             alignSelf={'center'}
