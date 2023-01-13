@@ -133,7 +133,7 @@ const columns = [
   columnHelper.accessor('amountIn', {
     id: 'amountIn',
     header: () => 'Amount In',
-    cell: (info) => (+info.getValue()).toFixed(2),
+    cell: (info) => (+info.getValue()).toLocaleString('en-US', { maximumFractionDigits: 2 }),
     enableMultiSort: true,
   }),
   columnHelper.accessor('currencyIn', {
@@ -145,7 +145,7 @@ const columns = [
   columnHelper.accessor('amountOut', {
     id: 'amountOut',
     header: () => 'Amount Out',
-    cell: (info) => (+info.getValue()).toFixed(2),
+    cell: (info) => (+info.getValue()).toLocaleString('en-US', { maximumFractionDigits: 2 }),
     enableMultiSort: true,
   }),
   columnHelper.accessor('currencyOut', {
