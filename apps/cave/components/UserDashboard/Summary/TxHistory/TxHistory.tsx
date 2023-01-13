@@ -145,7 +145,7 @@ const columns = [
   columnHelper.accessor('amountOut', {
     id: 'amountOut',
     header: () => 'Amount Out',
-    cell: (info) => +info.getValue(),
+    cell: (info) => (+info.getValue()).toFixed(2),
     enableMultiSort: true,
   }),
   columnHelper.accessor('currencyOut', {
