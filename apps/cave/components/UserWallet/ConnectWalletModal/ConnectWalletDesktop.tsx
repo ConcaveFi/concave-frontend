@@ -7,6 +7,7 @@ import {
   CloseButton,
   Flex,
   HStack,
+  Input,
   Modal,
   ScaleFade,
   Spinner,
@@ -14,6 +15,7 @@ import {
   Text,
   useToken,
 } from '@concave/ui'
+import { ImpersonateConnector } from 'contexts/Wagmi/Connectors/ImpersonateConnector'
 import copy from 'copy-to-clipboard'
 import { useRouter } from 'next/router'
 import { FC, PropsWithChildren, useCallback, useRef, useState } from 'react'
@@ -94,6 +96,24 @@ const LoadingLabel: FC<PropsWithChildren> = ({ children }) => (
   </HStack>
 )
 
+
+const PendingImpersonate = ({
+  pendingConnector,
+}: {
+  pendingConnector: Connector
+}) => {
+  if (!(pendingConnector instanceof ImpersonateConnector)) return <></>
+  return (
+    <Stack align="center" justify="center" w={'full'} textAlign="center" fontWeight="medium">
+      <ConnectorIcon name={pendingConnector.name} size="48px" />
+      <Text fontWeight="bold">Opening {pendingConnector.name}</Text>
+      <LoadingLabel>Waiting for an address</LoadingLabel>
+      <Input placeholder={"Paste the address"} w={'full'} type={"text"} onChange={(ev) => pendingConnector.setAddresss(ev.target.value)}></Input>
+    </Stack>
+  )
+}
+
+
 const PendingInjected = ({
   pendingConnector,
   onRetry,
@@ -104,7 +124,7 @@ const PendingInjected = ({
   status: MutationStatus
 }) => {
   return (
-    <Stack align="center" justify="center" textAlign="center" fontWeight="medium">
+    <Stack align="center" justify="center" w={'full'} textAlign="center" fontWeight="medium">
       <ConnectorIcon name={pendingConnector.name} size="48px" />
       {status === 'error' && (
         <>
@@ -114,7 +134,7 @@ const PendingInjected = ({
           </Button>
         </>
       )}
-      {status === 'loading' && (
+      {status === 'loading' && pendingConnector.id !== ImpersonateConnector.ID && (
         <>
           <Text fontWeight="bold">Opening {pendingConnector.name}</Text>
           <LoadingLabel>Confirm in your wallet</LoadingLabel>
@@ -194,15 +214,17 @@ export const DesktopConnect: FC<{ isOpen: boolean; onClose: VoidFunction }> = ({
     chainId,
     onSuccess: () => onClose(),
   })
-
+  const modalPadding = useToken('space', 6)
   const isQRConnector = ['walletConnect', 'coinbaseWallet', 'unstoppable'].includes(
     pendingConnector?.id,
   )
-
-  const status =
-    !isLoading && !pendingConnector ? 'idle' : isQRConnector ? 'pending qr' : 'pending injected'
-
-  const modalPadding = useToken('space', 6)
+  const pendingImpersonate = connectionStatus === 'loading' && pendingConnector instanceof ImpersonateConnector 
+  const status = (() => {
+    if (pendingImpersonate) return 'pending impersonate';
+    if (isLoading || pendingConnector) 'pending injected';
+    if (isQRConnector) return 'pending qr';
+    return 'idle'
+  })();
 
   return (
     <Modal
@@ -226,7 +248,7 @@ export const DesktopConnect: FC<{ isOpen: boolean; onClose: VoidFunction }> = ({
               key={c.id}
               name={c.name}
               onConnect={() => connect({ connector: c, chainId: ChainId.ETHEREUM })}
-              isPending={c.id === pendingConnector?.id}
+              isPending={c.id === pendingConnector?.id && connectionStatus !== 'success'}
             />
           ))}
         </Stack>
@@ -244,6 +266,9 @@ export const DesktopConnect: FC<{ isOpen: boolean; onClose: VoidFunction }> = ({
         >
           {status === 'idle' && <SelectAWallet />}
           {status === 'pending qr' && <PendingQRCode connector={pendingConnector} />}
+          {status === 'pending impersonate' && <PendingImpersonate
+              pendingConnector={pendingConnector}
+          />}
           {status === 'pending injected' && (
             <PendingInjected
               pendingConnector={pendingConnector}
