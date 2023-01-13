@@ -34,7 +34,7 @@ export const ConnectedUserButton = () => {
         justifyContent="start"
       >
         <Image
-          filter={chain.testnet ? 'grayscale(1)' : ''}
+          filter={chain?.testnet ? 'grayscale(1)' : ''}
           src="/assets/tokens/eth.svg"
           alt="ethereum icon"
           w="22px"

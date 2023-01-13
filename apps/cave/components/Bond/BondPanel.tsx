@@ -22,6 +22,7 @@ interface BondPanelProps {
   isLoadingBondSigma?: boolean
   bondSigma: any
   showUserPosition: boolean
+  updateBondPositions?: VoidFunction
 }
 export function BondPanel(props: BondPanelProps) {
   const networkId = useCurrentSupportedNetworkId()
@@ -34,7 +35,7 @@ export function BondPanel(props: BondPanelProps) {
     },
     {
       meta: { type: 'redeem', amount: 'CNV Bonds' },
-      onSuccess: updateBondPositions,
+      onSuccess: props.updateBondPositions,
       onError: errorModal.onOpen,
     },
   )
@@ -109,16 +110,13 @@ export function BondPanel(props: BondPanelProps) {
         <Text fontSize="lg" color="text.accent">
           {props?.bondSigma && props?.bondSigma['parseRedeemable']
             ? `Redeeming ` +
-              (+utils.formatEther(BigInt(Math.floor(props?.bondSigma.parseRedeemable)))).toFixed(
-                2,
-              ) +
-              ` CNV`
+            (+utils.formatEther(BigInt(Math.floor(props?.bondSigma.parseRedeemable)))).toFixed(
+              2,
+            ) +
+            ` CNV`
             : ''}
         </Text>
       </WaitingConfirmationDialog>
     </Card>
   )
-}
-function updateBondPositions() {
-  throw new Error('Function not implemented.')
 }

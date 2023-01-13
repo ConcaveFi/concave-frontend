@@ -11,9 +11,11 @@ const concaveTokenList = (networkName: string) =>
   `/assets/tokenlists/${networkName.toLowerCase()}/concave.json`
 
 const fetchLiquidityTokenList = async (chain: Chain) => {
+  const store = typeof window !== 'undefined' && window.localStorage ? window.localStorage : undefined;
+  if (!store) return []
   const [tokenList, pairs] = await Promise.all([
     fetchJson(concaveTokenList(chain.name)) as Promise<{ tokens: Token[] }>,
-    Fetcher.fetchPairs(chain.id, concaveProvider(chain.id), localStorage),
+    Fetcher.fetchPairs(chain.id, concaveProvider(chain.id), store),
   ])
   const chainTokens = tokenList.tokens.filter((t) => t.chainId === chain.id)
   const liquidityTokens = chainTokens.filter((t) => {
@@ -35,6 +37,7 @@ export const useLiquidityTokenList = () => {
     ['token-liqidity-list', activeChain.id],
     async () => fetchLiquidityTokenList(activeChain),
     {
+      enabled: typeof window !== 'undefined' && !!window.localStorage,
       cacheTime: ms('10h'),
       refetchOnMount: false,
       refetchOnReconnect: false,
