@@ -220,9 +220,9 @@ export const DesktopConnect: FC<{ isOpen: boolean; onClose: VoidFunction }> = ({
   )
   const pendingImpersonate = connectionStatus === 'loading' && pendingConnector instanceof ImpersonateConnector 
   const status = (() => {
-    if (pendingImpersonate) return 'pending impersonate';
-    if (isLoading || pendingConnector) 'pending injected';
-    if (isQRConnector) return 'pending qr';
+    if (pendingImpersonate) return 'pending impersonate'
+    if (isQRConnector) return 'pending qr'
+    if (isLoading) return 'pending injected'
     return 'idle'
   })();
 
@@ -241,7 +241,7 @@ export const DesktopConnect: FC<{ isOpen: boolean; onClose: VoidFunction }> = ({
       <Flex align="start">
         <Stack>
           <Text fontFamily="heading" fontWeight="bold" fontSize="xl">
-            Connect a Wallet
+            Connect a Wallet { status }
           </Text>
           {filterConnectors(connectors).map((c) => (
             <ConnectorButton

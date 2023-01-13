@@ -6,6 +6,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "node": "hardhat node",
     "build": "next build",
     "local-build": "next build",
     "start": "next start",
