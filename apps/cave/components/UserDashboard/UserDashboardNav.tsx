@@ -22,7 +22,7 @@ export const UserDashboardNav = ({
   const { address } = useAccount()
   const { isFetching: marketplaceIsLoading, nftPositions } = useMarketplaceDashbord()
   const nftPositionCount = nftPositions.filter((stakingPosition) => {
-    if (stakingPosition.market?.seller.toUpperCase() === address.toUpperCase())
+    if (stakingPosition.market?.seller.toUpperCase() === address?.toUpperCase())
       return stakingPosition
   }).length
 
