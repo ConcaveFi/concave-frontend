@@ -36,4 +36,7 @@ export const NEXT_PUBLIC_CHART_ENDPOINT =
   process.env.NODE_ENV !== 'development'
     ? process.env.NEXT_PUBLIC_CHART_API
     : process.env.NEXT_PUBLIC_CHART_API_DEV
-
+export const NEXT_PUBLIC_USERDASHBOARD_ENDPOINT =
+  process.env.NODE_ENV !== 'development'
+    ? process.env.NEXT_PUBLIC_USERDASHBOARD_API
+    : process.env.NEXT_PUBLIC_USERDASHBOARD_API_DEV

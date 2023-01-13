@@ -5,7 +5,7 @@ import { PairsAccordion } from 'components/LiquidityPoolPositions/MyPositions'
 import { useRouter } from 'next/router'
 
 export function LiquiditySnapshot() {
-  const state = usePositionsState({ initialView: 'user' })
+  const state = usePositionsState('user')
   const router = useRouter()
   return (
     <Card w="90%" h="85%" m="auto" p="10" variant="primary" shadow={'2xl'}>
