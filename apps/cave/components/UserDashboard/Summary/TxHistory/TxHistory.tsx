@@ -32,56 +32,54 @@ export const TxHistory = () => {
     <Flex flexDir={'column'} w={'100%'} justifyContent={'space-between'}>
       <DataTableCard dataTableLabel={'Transaction History'} isExpanded hasPositions>
         <DataTable h={'100%'}>
-          {!isLoading && isSuccess ? (
-            <>
-              <Table style={{ height: '100%', width: '100%' }}>
-                <Thead>
-                  {reactTable.getHeaderGroups().map((headerGroup) => (
-                    <Tr key={headerGroup.id}>
-                      {headerGroup.headers.map((header) => {
-                        return (
-                          <Th px={'16px'} key={header.id} colSpan={header.colSpan}>
-                            {header.isPlaceholder ? null : (
-                              <Flex
-                                textAlign={'center'}
-                                textColor={header.column.getIsSorted() ? 'text.accent' : ''}
-                                cursor={header.column.getCanSort() ? 'pointer' : 'default'}
-                                onClick={header.column.getToggleSortingHandler()}
-                              >
-                                {flexRender(header.column.columnDef.header, header.getContext())}
-                                {{
-                                  asc: ' 🔼',
-                                  desc: ' 🔽',
-                                }[header.column.getIsSorted() as string] ?? null}
-                              </Flex>
-                            )}
-                          </Th>
-                        )
-                      })}
-                    </Tr>
-                  ))}
-                </Thead>
-                <Tbody>
-                  {reactTable.getRowModel().rows.map((row) => (
-                    <Tr key={row.id}>
-                      {row.getVisibleCells().map((cell) => (
-                        <Td key={cell.id} px={'16px'}>
-                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                        </Td>
-                      ))}
-                    </Tr>
-                  ))}
-                </Tbody>
-              </Table>
-            </>
-          ) : (
-            <></>
-          )}
+          {!isLoading && isSuccess ? <TxTable reactTable={reactTable} /> : <></>}
         </DataTable>
       </DataTableCard>
     </Flex>
   )
 }
+
+const TxTable = ({ reactTable }) => (
+  <Table style={{ height: '100%', width: '100%' }}>
+    <Thead>
+      {reactTable.getHeaderGroups().map((headerGroup) => (
+        <Tr key={headerGroup.id}>
+          {headerGroup.headers.map((header) => {
+            return (
+              <Th px={'16px'} key={header.id} colSpan={header.colSpan}>
+                {header.isPlaceholder ? null : (
+                  <Flex
+                    textAlign={'center'}
+                    textColor={header.column.getIsSorted() ? 'text.accent' : ''}
+                    cursor={header.column.getCanSort() ? 'pointer' : 'default'}
+                    onClick={header.column.getToggleSortingHandler()}
+                  >
+                    {flexRender(header.column.columnDef.header, header.getContext())}
+                    {{
+                      asc: ' 🔼',
+                      desc: ' 🔽',
+                    }[header.column.getIsSorted() as string] ?? null}
+                  </Flex>
+                )}
+              </Th>
+            )
+          })}
+        </Tr>
+      ))}
+    </Thead>
+    <Tbody>
+      {reactTable.getRowModel().rows.map((row) => (
+        <Tr key={row.id}>
+          {row.getVisibleCells().map((cell) => (
+            <Td key={cell.id} px={'16px'}>
+              {flexRender(cell.column.columnDef.cell, cell.getContext())}
+            </Td>
+          ))}
+        </Tr>
+      ))}
+    </Tbody>
+  </Table>
+)
 
 const columnHelper = createColumnHelper<DashItem>()
 const columns = [
