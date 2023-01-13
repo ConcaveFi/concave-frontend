@@ -1,6 +1,6 @@
 import { AirdropClaimContract } from '@concave/core'
 import { Flex } from '@concave/ui'
-import { airdropToken, getAirdropClaimableAmount } from 'components/Airdrop/airdrop'
+import { airdropToken, getAirdropQ4ClaimableAmount } from 'components/Airdrop/Q4/airdrop'
 import { useFilterByRange } from 'components/NftFilters/Filters/hooks/useFilterByRange'
 import { useFilterByStakePool } from 'components/NftFilters/Filters/hooks/useFilterByStakePool'
 import { usePositionSorter } from 'components/NftFilters/Sorters/hooks/useNftSort'
@@ -30,10 +30,10 @@ export const LiquidStakingSnapshot = () => {
   const { userNonFungibleTokensInfo, totalLocked, isLoading } = stakePosition
   const networkId = useCurrentSupportedNetworkId()
 
-  const airdropClaimableAmount = getAirdropClaimableAmount(address)
+  const airdropClaimableAmount = getAirdropQ4ClaimableAmount(address)
   const airdropAmount = airdropClaimableAmount || 0
   const { data: claimed } = useQuery(['AirdropClaimContract', networkId], async () => {
-    const airdrop = new AirdropClaimContract(concaveProvider(networkId))
+    const airdrop = new AirdropClaimContract(concaveProvider(networkId), 'Q4')
     return await airdrop.claimed(address)
   })
 
