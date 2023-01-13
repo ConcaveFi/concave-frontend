@@ -1,6 +1,7 @@
 import { CNV_ADDRESS, CurrencyAmount, DAI, DAI_ADDRESS, Token } from '@concave/core'
 import { ErrorModalContext, useErrorModal } from 'contexts/ErrorModal'
 import { Signer } from 'ethers'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useQuery } from 'react-query'
 import { chain, useSigner } from 'wagmi'
 import { signPermitAllowed, signPermitAmount } from './permit'
@@ -36,7 +37,7 @@ const signPermit = async (
  */
 const PERMITTABLE_TOKENS = [...Object.values(CNV_ADDRESS), DAI_ADDRESS[chain.mainnet.id]]
 const isTokenPermissible = (token: Token) => {
-  return !!PERMITTABLE_TOKENS.includes(token?.address)
+  return !!PERMITTABLE_TOKENS.includes(token?.address) && token.chainId !== chain.localhost.id
 }
 export type UsePermiReturn = ReturnType<typeof usePermit>
 export const usePermit = (
