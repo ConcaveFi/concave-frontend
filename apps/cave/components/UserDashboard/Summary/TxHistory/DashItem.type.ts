@@ -1,4 +1,4 @@
-export type dashItem = {
+export type DashItem = {
   amountIn: number | string
   amountOut: number | string
   currencyIn: string

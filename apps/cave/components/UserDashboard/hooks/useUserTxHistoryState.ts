@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query'
 import { useAccount } from 'wagmi'
-import { dashItem } from '../dashItem.type'
+import { DashItem } from '../Summary/TxHistory/DashItem.type'
 
 export const useUserTxHistoryState = () => {
   const { address } = useAccount()
@@ -22,5 +22,5 @@ async function fetchData(bodyData: object) {
   if (data.status === 400) {
     throw new Error(data.msg)
   }
-  return data as dashItem[]
+  return data as DashItem[]
 }

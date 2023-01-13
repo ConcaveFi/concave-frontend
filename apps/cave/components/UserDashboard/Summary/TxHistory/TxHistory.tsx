@@ -7,11 +7,11 @@ import {
   SortingState,
   useReactTable,
 } from '@tanstack/react-table'
-import { dashItem } from 'components/UserDashboard/dashItem.type'
 import { DataTable } from 'components/UserDashboard/DataTable'
 import { useUserTxHistoryState } from 'components/UserDashboard/hooks/useUserTxHistoryState'
 import { useState } from 'react'
 import { DataTableCard } from '../../DataTableCard'
+import { DashItem } from './DashItem.type'
 
 export const TxHistory = () => {
   const [sorting, setSorting] = useState<SortingState>([])
@@ -40,22 +40,20 @@ export const TxHistory = () => {
                     <Tr key={headerGroup.id}>
                       {headerGroup.headers.map((header) => {
                         return (
-                          <Th key={header.id} colSpan={header.colSpan}>
+                          <Th px={'16px'} key={header.id} colSpan={header.colSpan}>
                             {header.isPlaceholder ? null : (
-                              <div
-                                style={{
-                                  cursor: header.column.getCanSort() ? 'pointer' : 'default',
-                                }}
-                                {...{
-                                  onClick: header.column.getToggleSortingHandler(),
-                                }}
+                              <Flex
+                                textAlign={'center'}
+                                textColor={header.column.getIsSorted() ? 'text.accent' : ''}
+                                cursor={header.column.getCanSort() ? 'pointer' : 'default'}
+                                onClick={header.column.getToggleSortingHandler()}
                               >
                                 {flexRender(header.column.columnDef.header, header.getContext())}
                                 {{
                                   asc: ' 🔼',
                                   desc: ' 🔽',
                                 }[header.column.getIsSorted() as string] ?? null}
-                              </div>
+                              </Flex>
                             )}
                           </Th>
                         )
@@ -67,7 +65,7 @@ export const TxHistory = () => {
                   {reactTable.getRowModel().rows.map((row) => (
                     <Tr key={row.id}>
                       {row.getVisibleCells().map((cell) => (
-                        <Td key={cell.id}>
+                        <Td key={cell.id} px={'16px'}>
                           {flexRender(cell.column.columnDef.cell, cell.getContext())}
                         </Td>
                       ))}
@@ -85,7 +83,7 @@ export const TxHistory = () => {
   )
 }
 
-const columnHelper = createColumnHelper<dashItem>()
+const columnHelper = createColumnHelper<DashItem>()
 const columns = [
   columnHelper.accessor('timestamp', {
     id: 'timestamp',
@@ -117,7 +115,7 @@ const columns = [
   }),
   columnHelper.accessor('eventType', {
     id: 'eventType',
-    header: () => 'Type',
+    header: () => 'Action',
     cell: (info) => info.getValue(),
     enableMultiSort: true,
   }),
@@ -129,7 +127,7 @@ const columns = [
   }),
   columnHelper.accessor('currencyIn', {
     id: 'currencyIn',
-    header: () => 'Currency In',
+    header: () => 'Token In',
     cell: (info) => info.getValue().substring(0, 7),
     enableSorting: false,
   }),
@@ -141,7 +139,7 @@ const columns = [
   }),
   columnHelper.accessor('currencyOut', {
     id: 'currencyOut',
-    header: () => 'Currency Out',
+    header: () => 'Token Out',
     cell: (info) => info.getValue().substring(0, 7),
     enableSorting: false,
   }),
