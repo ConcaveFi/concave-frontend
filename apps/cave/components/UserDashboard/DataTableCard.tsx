@@ -1,6 +1,7 @@
 import { ExpandArrowIcon } from '@concave/icons'
-import { Button, Card, Collapse, Flex, Text } from '@concave/ui'
+import { Button, Card, Collapse, Flex, Spinner, Text } from '@concave/ui'
 import router from 'next/router'
+import { NoPositions } from './Summary/NoPositions'
 
 export function DataTableCard({
   setExpand,
@@ -11,15 +12,19 @@ export function DataTableCard({
   SortComponent,
   children,
   buttonWidth = 'auto',
+  isLoading,
+  hasPositions,
 }: {
-  route: string
-  buttonLabel: string
+  route?: string
+  buttonLabel?: string
   dataTableLabel: string
-  setExpand: Function
+  setExpand?: Function
   isExpanded: boolean
-  SortComponent: JSX.Element
+  SortComponent?: JSX.Element
   children: JSX.Element | JSX.Element[]
   buttonWidth?: string | number
+  isLoading?: boolean
+  hasPositions?: boolean | number
 }) {
   return (
     <Collapse in={isExpanded} startingHeight={'49%'} endingHeight={'100%'}>
@@ -32,7 +37,7 @@ export function DataTableCard({
         alignItems={'center'}
         gap={4}
       >
-        <Flex w={'100%'} h={isExpanded ? '15%' : '22%'} flexDir={'column'}>
+        <Flex w={'100%'} h={isExpanded ? '4%' : '22%'} flexDir={'column'}>
           <Flex
             w={'95%'}
             alignSelf={'center'}
@@ -49,40 +54,44 @@ export function DataTableCard({
               {dataTableLabel}
             </Text>
             <Flex w={'33%'} justifyContent={'center'}>
-              <Button
-                w={'150px'}
-                h={'45px'}
-                variant={'secondary'}
-                onClick={() => setExpand(!isExpanded)}
-                justifyContent={'space-between'}
-                px={6}
-              >
-                <ExpandArrowIcon
-                  transition="all 0.7s"
-                  transform={isExpanded ? 'rotate(0deg)' : 'rotate(180deg)'}
-                />
-                <Text>Show more</Text>
-              </Button>
+              {setExpand && (
+                <Button
+                  w={'150px'}
+                  h={'45px'}
+                  variant={'secondary'}
+                  onClick={() => setExpand(!isExpanded)}
+                  justifyContent={'space-between'}
+                  px={6}
+                >
+                  <ExpandArrowIcon
+                    transition="all 0.7s"
+                    transform={isExpanded ? 'rotate(0deg)' : 'rotate(180deg)'}
+                  />
+                  <Text>Show more</Text>
+                </Button>
+              )}
             </Flex>
-            <Flex w={'33%'} justifyContent={'flex-end'}>
-              <Button
-                onClick={() => router.push('/' + route)}
-                w={buttonWidth}
-                h={'45px'}
-                variant={'secondary'}
-                justifyContent={'space-between'}
-                px={6}
-              >
-                <Text mr={2}>Go to {buttonLabel}</Text>
-                <ExpandArrowIcon transform={'rotate(270deg)'} />
-              </Button>
+            <Flex w={'33%'} h={'45px'} justifyContent={'flex-end'}>
+              {route && buttonLabel && (
+                <Button
+                  onClick={() => router.push('/' + route)}
+                  w={buttonWidth}
+                  h={'45px'}
+                  variant={'secondary'}
+                  justifyContent={'space-between'}
+                  px={6}
+                >
+                  <Text mr={2}>Go to {buttonLabel}</Text>
+                  <ExpandArrowIcon transform={'rotate(270deg)'} />
+                </Button>
+              )}
             </Flex>
           </Flex>
           <Flex width={'100%'} ml={2} align={'center'} gap={2} fontWeight={'bold'}>
             {SortComponent}
           </Flex>
         </Flex>
-        {children}
+        {isLoading ? <Spinner /> : hasPositions ? children : <NoPositions />}
       </Card>
     </Collapse>
   )
