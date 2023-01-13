@@ -26,7 +26,7 @@ export const MarketplaceDashboard = (props: BoxProps | any) => {
   let nftPositionsArray: StakingPosition[]
   if (props.filterUserPositions) {
     nftPositionsArray = nftPositions.filter((stakingPosition) => {
-      if (stakingPosition.market?.seller.toUpperCase() === address.toUpperCase())
+      if (stakingPosition.market?.seller.toUpperCase() === address?.toUpperCase())
         return stakingPosition
     })
   } else {
