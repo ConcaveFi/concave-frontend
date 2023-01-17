@@ -8,13 +8,11 @@ import { UserDashboardWallet } from './UserDashboardWallet'
 
 export const UserDashboardContainer = () => {
   const router = useRouter()
-  const [currentSnapshot, setSnapshot] = useState<SnapshotOptions>(SnapshotOptions.Global)
+  const [currentSnapshot, setSnapshot] = useState<SnapshotOptions>(SnapshotOptions.LiquidStaking)
   const [isLoading, setIsLoading] = useState(true)
 
   const changeSnapshot = (snapshotSelected: SnapshotOptions) => {
-    if (snapshotSelected === currentSnapshot) {
-      setSnapshot(SnapshotOptions.Global)
-    } else {
+    if (snapshotSelected !== currentSnapshot) {
       setSnapshot(snapshotSelected)
     }
   }
