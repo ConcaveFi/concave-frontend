@@ -4,10 +4,10 @@ import { useAddressTokenList } from 'hooks/useTokenList'
 import { concaveProvider } from 'lib/providers'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
+import { useAccount } from 'wagmi'
 
 export const usePositionsState = (initialView?: 'user' | 'all' | undefined) => {
-  // const { address } = useAccount()
-  const address = '0xdd11ae83b49ee68b37ff3e6442f994fc037bb4a1'
+  const { address } = useAccount()
   const chainId = useCurrentSupportedNetworkId()
   const allPairs = useQuery(['fetchPairs', chainId], () => {
     return Fetcher.fetchPairs(chainId, concaveProvider(chainId))
