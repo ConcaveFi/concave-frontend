@@ -40,7 +40,7 @@ export function DataTableCard({
       alignItems={'center'}
       h={{ base: '', lg: '420px' }}
     >
-      <Flex w={'100%'} h={'100px'} align="center" flexDir={'column'}>
+      <Flex w={'100%'} h={'fit-content'} align="center" flexDir={'column'}>
         <Flex w={'95%'} alignSelf={'center'} alignItems={'center'} justifyContent={'space-between'}>
           <Text
             fontWeight={'700'}
