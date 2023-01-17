@@ -20,7 +20,7 @@ export const BondingSnapshot = () => {
   const cnvPrice = useCNVPrice()
 
   return (
-    <Flex flexDir={'column'} w={'100%'} justifyContent={'space-between'}>
+    <Flex flexDir={'column'} w={'100%'} gap={{ base: 6 }} justifyContent={'space-between'}>
       <SnapshotCard isExpanded={!isExpanded}>
         <SnapshotLineChart data={bondchartdata} dataKeys={['CNV Price', 'Bond Price']} />
         <SnapshotTextCard>
