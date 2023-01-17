@@ -1,85 +1,76 @@
-import type WalletConnectProvider from '@walletconnect/ethereum-provider'
-import { ethers, providers } from 'ethers'
-import { getAddress, hexValue } from 'ethers/lib/utils'
-import { chain } from 'wagmi'
-import {
-  Connector,
-  normalizeChainId,
-  ProviderRpcError,
-  UserRejectedRequestError,
-} from '@wagmi/core'
+import { EventEmitter } from 'eventemitter3';
+import { ethers } from 'ethers'
+import { getAddress } from 'ethers/lib/utils'
+import { chain, ConnectorData } from 'wagmi'
+import { normalizeChainId } from '@wagmi/core'
 
-type WalletConnectOptions = ConstructorParameters<typeof WalletConnectProvider>[0]
+class StaticJsonRpcProvider extends ethers.providers.StaticJsonRpcProvider { }
 
-type WalletConnectSigner = providers.JsonRpcSigner
+export type ImpersonateConnectorEvents = {
+  changeAddress(address: string): void;
+  change(data: ConnectorData<StaticJsonRpcProvider>): void;
+  connect(data: ConnectorData<StaticJsonRpcProvider>): void;
+  message({ type, data }: {
+    type: string;
+    data?: unknown;
+  }): void;
+  disconnect(): void;
+  error(error: Error): void;
+}
 
-export class ImpersonateConnector extends Connector<
-  ethers.providers.StaticJsonRpcProvider,
-  WalletConnectOptions,
-  WalletConnectSigner
-> {
+export class ImpersonateConnector extends EventEmitter<ImpersonateConnectorEvents>  {
+  private _address: string;
+  private provider?: StaticJsonRpcProvider
   public static ID = 'impersonateConnect'
-  id = ImpersonateConnector.ID
-  name = 'Impersonate'
-  wcLink?: { universal?: string; native?: string }
-  readonly ready = true
-  private address: string;
-  #provider?: ethers.providers.StaticJsonRpcProvider
+  public readonly id = ImpersonateConnector.ID
+  public readonly name = 'Impersonate'
+  public readonly ready = true
+  public storage = typeof sessionStorage === 'undefined' ? undefined : sessionStorage
+
   constructor() {
-    super({ chains: [chain.localhost], options: { qrcode: false, rpc: chain.localhost.rpcUrls.default } })
-    const isServer = typeof window === 'undefined'
-    if (!isServer) {
-      this.connect({ chainId: chain.localhost.id })
-    }
+    super()
+    if (!this.storage) return
+    this.address = this.storage.getItem(ImpersonateConnector.ID)
+    this.connect({ chainId: chain.localhost.id })
   }
-  public setAddresss = (address: string) => {
+
+  public get address(): string {
+    return this._address;
+  }
+
+  public set address(address: string) {
     if (!ethers.utils.isAddress(address)) return
-    sessionStorage.setItem(ImpersonateConnector.ID, address)
-    this.address = address
+    this._address = address;
+    this.storage?.setItem(ImpersonateConnector.ID, address)
+    this.emit('changeAddress', address)
   }
+
   async connect({ chainId }: { chainId?: number } = {}) {
-    const currentConnectedAddress: string = sessionStorage.getItem(ImpersonateConnector.ID)
-    if (currentConnectedAddress) {
-      this.address = currentConnectedAddress
-    } else {
-      await new Promise((resolve) => {
-        if (currentConnectedAddress) resolve(true)
-        const interval = setInterval(() => {
-          if (this.address) {
-            clearInterval(interval)
-            resolve(this.address)
-          }
-        }, 100)
-      });
-    }
-    try {
-      const provider = await this.getProvider({ chainId, create: true })
-      provider.on('accountsChanged', this.onAccountsChanged)
-      provider.on('chainChanged', this.onChainChanged)
-      provider.on('disconnect', this.onDisconnect)
-      const account = getAddress(this.address as string)
-      const id = await this.getChainId()
-      const unsupported = this.isChainUnsupported(id)
-      return {
-        account,
-        chain: { id, unsupported },
-        provider: this.getProvider()
-      }
-    } catch (error) {
-      if (/user closed modal/i.test((error as ProviderRpcError).message))
-        throw new UserRejectedRequestError(error)
-      throw error
+    const address = await new Promise((resolve) => {
+      this.address && resolve(this.address)
+      this.once('changeAddress', resolve)
+    })
+    const provider = await this.getProvider({ chainId, create: true })
+    provider.on('accountsChanged', this.onAccountsChanged)
+    provider.on('chainChanged', this.onChainChanged)
+    provider.on('disconnect', this.onDisconnect)
+    const account = getAddress(address as string)
+    const id = await this.getChainId()
+    const unsupported = this.isChainUnsupported(id)
+    return {
+      account,
+      chain: { id, unsupported },
+      provider: this.getProvider()
     }
   }
 
   async disconnect() {
-    sessionStorage.removeItem(ImpersonateConnector.ID)
-    this.address = ''
     const provider = await this.getProvider()
     provider.removeListener('accountsChanged', this.onAccountsChanged)
     provider.removeListener('chainChanged', this.onChainChanged)
     provider.removeListener('disconnect', this.onDisconnect)
-    typeof localStorage !== 'undefined' && localStorage.removeItem('walletconnect')
+    this.address = ''
+    this.storage?.removeItem(ImpersonateConnector.ID)
   }
 
   async getAccount() {
@@ -92,18 +83,17 @@ export class ImpersonateConnector extends Connector<
   }
 
   async getProvider({ create }: { chainId?: number; create?: boolean } = {}) {
-    if (!this.#provider || create) {
-      this.#provider = new ethers.providers.StaticJsonRpcProvider(chain.localhost.rpcUrls.default)
+    if (!this.provider || create) {
+      this.provider = new StaticJsonRpcProvider(chain.localhost.rpcUrls.default)
     }
-    return this.#provider
+    return this.provider
   }
 
   async getSigner({ chainId }: { chainId?: number } = {}) {
     const [provider] = await Promise.all([
       this.getProvider({ chainId }),
     ])
-    await new Promise((resolve) => { setTimeout(() => resolve(1), 3000) })
-    await provider.send("hardhat_impersonateAccount", [this.address])
+    await provider.send('hardhat_impersonateAccount', [this.address])
     return provider.getSigner(this.address);
   }
 
@@ -114,6 +104,10 @@ export class ImpersonateConnector extends Connector<
     } catch {
       return false
     }
+  }
+
+  protected isChainUnsupported(id: number) {
+    return id !== chain.localhost.id
   }
 
   protected onAccountsChanged = (accounts: string[]) => {
