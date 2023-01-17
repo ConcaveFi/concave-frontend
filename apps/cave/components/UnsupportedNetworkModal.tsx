@@ -3,7 +3,6 @@ import { Button, Image, Modal, Text } from '@concave/ui'
 import dynamic from 'next/dynamic'
 import { useNetwork, useSwitchNetwork } from 'wagmi'
 
-const availableChains = [ChainId.ETHEREUM, ChainId.GÖRLI, ChainId.LOCALHOST]
 export const UnsupportedNetworkModal = dynamic(
   () =>
     Promise.resolve(() => {
@@ -15,7 +14,7 @@ export const UnsupportedNetworkModal = dynamic(
           bluryOverlay={true}
           title="Unsupported network"
           titleAlign="center"
-          isOpen={chain?.id && !availableChains.includes(chain?.id)}
+          isOpen={chain?.unsupported}
           onClose={() => {}}
           bodyProps={{ w: '350px', gap: 2 }}
           hideClose
