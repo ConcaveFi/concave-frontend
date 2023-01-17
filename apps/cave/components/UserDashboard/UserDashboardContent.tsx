@@ -15,7 +15,7 @@ export function UserDashboardContent() {
   console.log(router.query.view as string)
 
   return (
-    <Flex w={'100%'} flexGrow={1}>
+    <Flex w={'100%'} h="full">
       {selectedView}
     </Flex>
   )
