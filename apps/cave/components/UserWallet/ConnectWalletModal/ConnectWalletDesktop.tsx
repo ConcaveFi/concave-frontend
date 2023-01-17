@@ -241,7 +241,7 @@ export const DesktopConnect: FC<{ isOpen: boolean; onClose: VoidFunction }> = ({
       <Flex align="start">
         <Stack>
           <Text fontFamily="heading" fontWeight="bold" fontSize="xl">
-            Connect a Wallet { status }
+            Connect a Wallet
           </Text>
           {filterConnectors(connectors).map((c) => (
             <ConnectorButton
