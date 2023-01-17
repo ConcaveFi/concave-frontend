@@ -1,4 +1,4 @@
-import { Flex } from '@concave/ui'
+import { Flex, Heading } from '@concave/ui'
 import { StakeSettingsProvider } from 'contexts/PositionsFilterProvider'
 import { useRouter } from 'next/router'
 import { RedeemTokens } from './RedeemTokens'
@@ -39,9 +39,12 @@ function getView(selectedSnapshot: SnapshotOptions) {
       return <MarketplaceSnapshot />
     case SnapshotOptions.Redeem:
       return <RedeemTokens />
-    case SnapshotOptions.Global:
 
     default:
-      return <>Global Summary</>
+      return (
+        <Flex flex={1} justify={'center'} align="center">
+          <Heading>Coming soon</Heading>
+        </Flex>
+      )
   }
 }
