@@ -11,8 +11,8 @@ import { ImpersonateConnector } from './Connectors/ImpersonateConnector'
 import { UnstoppableConnector } from './Connectors/UnstoppableConnector'
 
 export const chains = [chain.localhost, chain.goerli, chain.mainnet] // app supported chains
-
 export const supportedChainsId = chains.map((c) => c.id)
+
 const connectors = [
   new SafeConnector({ chains }),
   new InjectedConnector({ chains }),
