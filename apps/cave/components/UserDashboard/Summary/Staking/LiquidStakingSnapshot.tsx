@@ -46,7 +46,7 @@ export const LiquidStakingSnapshot = () => {
   const { filterByStakePool } = useFilterByStakePool(stakePoolFilters)
   const sortFunction = sorter ? positionSorter.data?.[sorter.sort][sorter.order] : () => 0
   return (
-    <Flex flexDir={'column'} w={'100%'} gap={6}>
+    <Flex flexDir={'column'} w={'100%'} h="100%" gap={6}>
       <SnapshotCard isExpanded={!isExpanded}>
         <SnapshotLineChart data={stakechartdata} dataKeys={['Airdrop', 'Locked CNV']} />
         <SnapshotTextCard>
@@ -72,7 +72,7 @@ export const LiquidStakingSnapshot = () => {
         isLoading={isLoading}
         hasPositions={userNonFungibleTokensInfo.length}
       >
-        <DataTable h="full">
+        <DataTable isExpanded={isExpanded} h="full">
           {userNonFungibleTokensInfo
             .filter((position) => {
               if (!tokenIdFilter) return true
