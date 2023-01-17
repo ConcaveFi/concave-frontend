@@ -30,19 +30,20 @@ export const UserDashboardContainer = () => {
         w={'100%'}
         p={6}
         gap={6}
-        h={{ base: '1400px', lg: '940px' }}
-        borderRadius={'60px'}
+        minH={{ base: '640px', lg: '' }}
+        borderRadius={{ base: '30px', lg: '60px' }}
         alignItems={'center'}
       >
         <UserDashboardWallet />
         <Flex
           w={'100%'}
           direction={{ base: 'column', lg: 'row' }}
-          maxH={'900px'}
+          maxH={{ base: '', lg: '900px' }}
           flexGrow={1}
           gap={6}
         >
           <UserDashboardNav currentSnapshot={currentSnapshot} changeSnapshot={changeSnapshot} />
+
           <UserDashboardContent />
         </Flex>
       </Card>
