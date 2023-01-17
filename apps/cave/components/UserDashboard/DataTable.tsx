@@ -9,17 +9,15 @@ export function DataTable({
 }) {
   return (
     <Box
+      h="400px"
       w={'100%'}
-      h={h}
-      maxH={{ lg: '675px', md: '740px', base: '800px' }}
-      overflowY={'auto'}
+      overflowY={'visible'}
       overflowX="hidden"
       borderRadius="3xl"
       px={'0.5rem'}
       mx={4}
       shadow={'down'}
       apply="scrollbar.big"
-      mb={3}
     >
       {children}
     </Box>

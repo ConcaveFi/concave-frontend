@@ -1,5 +1,5 @@
 import { ExpandArrowIcon } from '@concave/icons'
-import { Button, Card, Collapse, Flex, Spinner, Text } from '@concave/ui'
+import { Button, Card, Collapse, Flex, Spinner, Text, useBreakpointValue } from '@concave/ui'
 import router from 'next/router'
 import { NoPositions } from './Summary/NoPositions'
 
@@ -26,18 +26,21 @@ export function DataTableCard({
   isLoading?: boolean
   hasPositions?: boolean | number
 }) {
+  const isMobile = useBreakpointValue({ base: true, lg: false })
   return (
-    <Collapse in={isExpanded} startingHeight={'49%'} endingHeight={'100%'}>
+    <Collapse in={isExpanded} startingHeight={'50%'} endingHeight={'100%'}>
       <Card
         variant={'primary'}
+        shadow="down"
+        borderGradient=""
         w={'100%'}
-        h={isExpanded ? '100%' : '390px'}
+        h={{ base: '80%', lg: '50%' }}
+        minH={'400px'}
         p={4}
         borderRadius={'3xl'}
         alignItems={'center'}
-        gap={4}
       >
-        <Flex w={'100%'} h={isExpanded ? '4%' : '22%'} flexDir={'column'}>
+        <Flex flex={1} w={'100%'} h={isExpanded ? '4%' : '22%'} align="center" flexDir={'column'}>
           <Flex
             w={'95%'}
             alignSelf={'center'}
@@ -47,13 +50,14 @@ export function DataTableCard({
             <Text
               fontWeight={'700'}
               color={'text.low'}
-              w={'33%'}
+              flex={1}
               alignItems={'flex-start'}
               textAlign={'left'}
+              fontSize={['sm', 'sm', 'sm', 'lg']}
             >
               {dataTableLabel}
             </Text>
-            <Flex w={'33%'} justifyContent={'center'}>
+            <Flex hidden={isMobile} w={'33%'} justifyContent={'center'}>
               {setExpand && (
                 <Button
                   w={'150px'}
@@ -67,11 +71,20 @@ export function DataTableCard({
                     transition="all 0.7s"
                     transform={isExpanded ? 'rotate(0deg)' : 'rotate(180deg)'}
                   />
-                  <Text>Show more</Text>
+                  <Text
+                    fontWeight={'700'}
+                    color={'text.low'}
+                    flex={1}
+                    alignItems={'flex-start'}
+                    textAlign={'left'}
+                    fontSize={['sm', 'lg']}
+                  >
+                    Show more
+                  </Text>
                 </Button>
               )}
             </Flex>
-            <Flex w={'33%'} h={'45px'} justifyContent={'flex-end'}>
+            <Flex flex={1} justifyContent={'flex-end'}>
               {route && buttonLabel && (
                 <Button
                   onClick={() => router.push('/' + route)}
@@ -79,10 +92,11 @@ export function DataTableCard({
                   h={'45px'}
                   variant={'secondary'}
                   justifyContent={'space-between'}
-                  px={6}
+                  px={[2, 6]}
                 >
-                  <Text mr={2}>Go to {buttonLabel}</Text>
-                  <ExpandArrowIcon transform={'rotate(270deg)'} />
+                  <Text fontSize={['xs', 'lg']} mr={2}>
+                    Go to {buttonLabel}
+                  </Text>
                 </Button>
               )}
             </Flex>
@@ -90,8 +104,8 @@ export function DataTableCard({
           <Flex width={'100%'} ml={2} align={'center'} gap={2} fontWeight={'bold'}>
             {SortComponent}
           </Flex>
+          {isLoading ? <Spinner /> : hasPositions ? children : <NoPositions />}
         </Flex>
-        {isLoading ? <Spinner /> : hasPositions ? children : <NoPositions />}
       </Card>
     </Collapse>
   )

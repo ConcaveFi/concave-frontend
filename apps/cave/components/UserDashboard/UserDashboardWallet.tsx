@@ -18,12 +18,13 @@ const WalletSurface = ({ children }: { children: JSX.Element | JSX.Element[] }) 
   <Flex
     shadow={'down'}
     w={'100%'}
-    h={'72px'}
-    borderRadius={'50px'}
+    minH={{ base: '122px', lg: '72px' }}
+    wrap="wrap"
+    borderRadius={{ base: '26px', lg: '50px' }}
     flexDir={'row'}
     justifyContent={'space-evenly'}
     alignItems={'center'}
-    gap={6}
+    gap={{ base: 0, lg: 6 }}
     // p={6}
     // mt={3.5}
     // mb={8}
