@@ -108,7 +108,7 @@ const PendingImpersonate = ({
       <ConnectorIcon name={pendingConnector.name} size="48px" />
       <Text fontWeight="bold">Opening {pendingConnector.name}</Text>
       <LoadingLabel>Waiting for an address</LoadingLabel>
-      <Input placeholder={"Paste the address"} w={'full'} type={"text"} onChange={(ev) => pendingConnector.setAddresss(ev.target.value)}></Input>
+      <Input placeholder={"Paste the address"} w={'full'} type={"text"} onChange={(ev) => pendingConnector.address = ev.target.value}></Input>
     </Stack>
   )
 }
