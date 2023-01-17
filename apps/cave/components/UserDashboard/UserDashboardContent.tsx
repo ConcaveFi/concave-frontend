@@ -26,8 +26,6 @@ function getView(selectedSnapshot: SnapshotOptions) {
     case SnapshotOptions.TxHistory:
       return <TxHistory />
     case SnapshotOptions.Liquidity:
-      console.log('teste')
-
       return <LiquiditySnapshot />
     case SnapshotOptions.DynamicBonds:
       return <BondingSnapshot />

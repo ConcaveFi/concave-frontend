@@ -1,10 +1,11 @@
-import { Flex } from '@concave/ui'
+import { Flex, useBreakpointValue } from '@concave/ui'
 import { useMarketplaceDashbord } from 'components/Marketplace/Main/UseMarkeplaceState'
 import { useStakePositions } from 'components/StakingPositions/DashboardBody/DashBoardState'
 import { useAccount } from 'wagmi'
+import { DashboardNavButtons } from './DashboardNavButtons'
+import { DashboardNavMenu } from './DashboardNavMenu'
 import { useUserBondState } from './hooks/useUserBondState'
 import { useUserTxHistoryState } from './hooks/useUserTxHistoryState'
-import { NavButton } from './NavButton'
 import { SnapshotOptions } from './SnapshotOptions'
 
 export const UserDashboardNav = ({
@@ -31,65 +32,31 @@ export const UserDashboardNav = ({
 
   // Tx History
   const { isLoading: txHistoryIsLoading } = useUserTxHistoryState()
-
+  const isMobile = useBreakpointValue({ base: true, lg: false })
+  const buttonOptions = {
+    userBondState,
+    changeSnapshot,
+    cnvDataIsLoading,
+    currentSnapshot,
+    lsdCNVPositions,
+    totalLocked,
+    marketplaceIsLoading,
+    nftPositionCount,
+  }
   return (
     <Flex
-      w={'25%'}
+      w={{ base: 'full', lg: '25%' }}
       flexGrow={0}
       flexDirection={'column'}
       borderRadius={'3xl'}
-      p={3}
-      shadow={'down'}
+      p={{ base: 0, lg: 3 }}
+      shadow={{ base: 'none', lg: 'down' }}
       gap={3}
     >
-      <NavButton
-        title={'Liquid Staking'}
-        isSelected={currentSnapshot === SnapshotOptions.LiquidStaking}
-        isLoading={cnvDataIsLoading}
-        summaryArray={[
-          { label: 'Locked', data: `${totalLocked.toFixed(2, { groupSeparator: ',' })} CNV` },
-          { label: 'Positions', data: lsdCNVPositions },
-        ]}
-        onClick={() => changeSnapshot(SnapshotOptions.LiquidStaking)}
-      />
-      <NavButton
-        title={'Dynamic Bonds'}
-        isSelected={currentSnapshot === SnapshotOptions.DynamicBonds}
-        isLoading={userBondState.isLoading}
-        summaryArray={[
-          { label: 'Bonding', data: userBondState.data?.totalPending + ' CNV' },
-          { label: 'Claimable', data: userBondState.data?.totalOwed + ' CNV' },
-        ]}
-        onClick={() => changeSnapshot(SnapshotOptions.DynamicBonds)}
-      />
-      <NavButton
-        title={'Marketplace'}
-        isSelected={currentSnapshot === SnapshotOptions.Marketplace}
-        isLoading={cnvDataIsLoading && marketplaceIsLoading}
-        summaryArray={[
-          { label: 'Positions', data: lsdCNVPositions },
-          { label: 'Positions Listed', data: nftPositionCount },
-        ]}
-        onClick={() => changeSnapshot(SnapshotOptions.Marketplace)}
-      />
-      <NavButton
-        title={'Liquidity Pools'}
-        isSelected={currentSnapshot === SnapshotOptions.Liquidity}
-        summaryArray={[
-          { label: 'row0', data: 'data row0' },
-          { label: 'row1', data: 'data row1' },
-        ]}
-        onClick={() => changeSnapshot(SnapshotOptions.Liquidity)}
-      />
-      <NavButton
-        title={'Transaction History'}
-        isSelected={currentSnapshot === SnapshotOptions.TxHistory}
-        isLoading={txHistoryIsLoading}
-        onClick={() => changeSnapshot(SnapshotOptions.TxHistory)}
-      />
-
-      <NavButton title={'Coming Soon'} isDisabled />
-      <NavButton title={'Coming Soon'} isDisabled />
+      {!isMobile && <DashboardNavButtons {...buttonOptions} />}
+      {isMobile && (
+        <DashboardNavMenu changeSnapshot={changeSnapshot} currentSnapshot={currentSnapshot} />
+      )}
     </Flex>
   )
 }
