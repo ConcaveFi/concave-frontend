@@ -28,3 +28,6 @@ export const numberMask = (number: Number, decimals?: number): string => {
   const decimalCount = decimals || 2
   return commify(numSplice(number, decimalCount))
 }
+
+export const compactFormat = (number: number) =>
+  Intl.NumberFormat('en', { notation: 'compact' }).format(number)
