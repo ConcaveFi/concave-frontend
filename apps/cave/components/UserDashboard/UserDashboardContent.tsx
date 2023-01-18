@@ -11,8 +11,8 @@ import { TxHistory } from './Summary/TxHistory/TxHistory'
 
 export function UserDashboardContent() {
   const router = useRouter()
-  const selectedView = getView(SnapshotOptions[router.query.view as string])
-  console.log(router.query.view as string)
+  const selectedView = getView(router.query.view as SnapshotOptions)
+  console.log(router.query.view as string, SnapshotOptions.LiquidStaking)
 
   return (
     <Flex w={'100%'} h="full">
@@ -23,7 +23,7 @@ export function UserDashboardContent() {
 
 function getView(selectedSnapshot: SnapshotOptions) {
   switch (selectedSnapshot) {
-    case SnapshotOptions.TxHistory:
+    case SnapshotOptions.History:
       return <TxHistory />
     case SnapshotOptions.Liquidity:
       return <LiquiditySnapshot />

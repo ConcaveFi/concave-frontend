@@ -1,12 +1,14 @@
 import { ACNV_ADDRESS, BBTCNV_ADDRESS, CNV, DAI, NATIVE, PCNV, Token } from '@concave/core'
-import { Button, Flex, Text, Tooltip } from '@concave/ui'
+import { Avatar, Button, Flex, gradientBorder, Text, Tooltip } from '@concave/ui'
 import useVestedTokens from 'components/Transparency/Hooks/useVestedTokens'
 import { ConnectedUserButton } from 'components/UserWallet/ConnectedUserButton'
 import useAddTokenToWallet, { injectedTokenResponse } from 'hooks/useAddTokenToWallet'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useUnstoppableDomain } from 'hooks/useUnstoppableDomain'
+import { useRouter } from 'next/router'
 import { useAccount, useEnsName } from 'wagmi'
+import { SnapshotOptions } from './SnapshotOptions'
 
 function formatNumber2DP(value: number) {
   return value.toLocaleString(undefined, {
@@ -24,7 +26,7 @@ const WalletSurface = ({ children }: { children: JSX.Element | JSX.Element[] }) 
     flexDir={'row'}
     justifyContent={'space-evenly'}
     alignItems={'center'}
-    gap={{ base: 0, lg: 6 }}
+    gap={{ base: 0, lg: 3 }}
     // p={6}
     // mt={3.5}
     // mb={8}
@@ -33,7 +35,7 @@ const WalletSurface = ({ children }: { children: JSX.Element | JSX.Element[] }) 
   </Flex>
 )
 
-export function UserDashboardWallet() {
+export function UserDashboardWallet({ onSelectHistory }: { onSelectHistory: VoidFunction }) {
   const { address, isConnected } = useAccount()
   const { data: ens } = useEnsName({ address })
   const { data: uns } = useUnstoppableDomain({ address })
@@ -67,6 +69,10 @@ export function UserDashboardWallet() {
   const bbtCNVBalance = formatNumber2DP(+bbtCNVData?.data?.formatted)
   const pCNVBalance = formatNumber2DP(+pCNVData?.data?.formatted)
 
+  const router = useRouter()
+  const currentView = router.query.view as SnapshotOptions
+  const historyPressed = currentView === SnapshotOptions.History
+
   return (
     <WalletSurface>
       {isConnected ? (
@@ -78,6 +84,19 @@ export function UserDashboardWallet() {
           <TokenButton token={bbtCNVToken} tokenAmount={bbtCNVBalance} />
           <TokenButton token={daiToken} tokenAmount={daiBalance} />
           <TokenButton token={nativeToken} tokenAmount={nativeBalance} isDisabled />
+          <Button
+            display={{ base: 'none', lg: 'flex' }}
+            shadow={historyPressed ? 'Blue Light' : 'up'}
+            onClick={onSelectHistory}
+            color="text.low"
+            px="10"
+            rounded={'16px'}
+            py="2"
+            _hover={{ textDecor: 'underline' }}
+            sx={historyPressed && { ...gradientBorder() }}
+          >
+            History
+          </Button>
         </>
       ) : (
         <Text>Please connect wallet</Text>
@@ -113,21 +132,29 @@ const WalletButton = ({ token, tokenAmount, isDisabled }) => {
     tokenAddress: token.address,
     tokenChainId: token.chainId,
   })
+
+  const hasImage = blackList.includes(token?.symbol)
   return (
     <Button
       height="40px"
-      shadow="up"
       fontFamily="heading"
-      _active={{ shadow: 'down' }}
       w={'auto'}
       rounded="2xl"
       px={4}
+      gap={2}
       disabled={isDisabled}
       onClick={addingToWallet}
+      color="text.accent"
     >
-      <Text fontWeight={'normal'} overflow={'hidden'} textOverflow={'ellipsis'}>
+      <Avatar
+        hidden={hasImage}
+        src={`/assets/tokens/${token?.symbol?.toLowerCase()}.svg`}
+        size="xs"
+      />
+      <Text fontWeight={'bold'} overflow={'hidden'} textOverflow={'ellipsis'}>
         {tokenAmount} {token.symbol}
       </Text>
     </Button>
   )
 }
+const blackList = ['aCNV', 'bbtCNV']
