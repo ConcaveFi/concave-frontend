@@ -1,4 +1,4 @@
-import { Text } from '@concave/ui'
+import { Text, useBreakpointValue } from '@concave/ui'
 import {
   Area,
   AreaChart,
@@ -9,6 +9,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
+import { compactFormat } from 'utils/numberMask'
 import { ChartCard } from './ChartCard'
 import { ChartTooltip } from './ChartTooltip'
 import { CustomizedAxisTick } from './CustomizedAxisTick'
@@ -30,6 +31,7 @@ export const LockedCNVSeriesChart = () => {
     bottom: 50,
   }
 
+  const isMobile = useBreakpointValue({ base: true, xl: false })
   const lockedCNVSeries = useFetchData<LockedCNVSeriesData>('locked-series')
   const dataLoaded = !lockedCNVSeries.isLoading
   const data = lockedCNVSeries.data
@@ -76,7 +78,7 @@ export const LockedCNVSeriesChart = () => {
             <YAxis
               axisLine={{ stroke: CHART_COLORS.TextLow }}
               tickLine={{ stroke: CHART_COLORS.TextLow }}
-              tickFormatter={(v) => v.toLocaleString()}
+              tickFormatter={(v: number) => (isMobile ? compactFormat(v) : v.toLocaleString())}
               style={{ fill: CHART_COLORS.TextLow, fontSize: '0.8rem' }}
             >
               <Label
