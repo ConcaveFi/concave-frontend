@@ -1,6 +1,5 @@
 import { AirdropClaimContract } from '@concave/core'
 import { Button } from '@concave/ui'
-import { useAirdrop } from 'contexts/AirdropContext'
 import { useErrorModal } from 'contexts/ErrorModal'
 import { parseUnits } from 'ethers/lib/utils'
 import { AidropSeasonProps, AirdropSeason } from 'hooks/useAirdropSeason'
@@ -10,13 +9,10 @@ import { useTransaction } from 'hooks/useTransaction'
 import { useCurrentSupportedNetworkId } from '../../hooks/useCurrentSupportedNetworkId'
 import { airdropToken } from './special/airdrop'
 
-interface AirdropClaimButton {
+interface AirdropClaimButton extends AidropSeasonProps {
   season: AirdropSeason
 }
-export function AirdropClaimButton({ season }: AirdropClaimButton) {
-  const airdopCtx = useAirdrop()
-  const seasonVal: AidropSeasonProps = airdopCtx[season]
-  const { proof, redeemable, whiteListed } = seasonVal || {}
+export function AirdropClaimButton({ season, proof, redeemable, whiteListed }: AirdropClaimButton) {
   const { address, isConnected } = useAccount()
   const networkId = useCurrentSupportedNetworkId()
   const { data: signer } = useSigner()
