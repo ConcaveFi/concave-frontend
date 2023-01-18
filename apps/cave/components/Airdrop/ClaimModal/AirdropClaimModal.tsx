@@ -1,43 +1,13 @@
-import { Box, CloseButton, Flex, Heading, Image, Link, Modal, Text } from '@concave/ui'
+import { CloseButton, Flex, Heading, Image, Modal, Text } from '@concave/ui'
 import { useAirdrop } from 'contexts/AirdropContext'
-import { AirdropClaimButton } from '../AirdropClaimButton'
+import { AirdropClaimCard } from '../AirdropClaimCard'
 
 export function AirdropClaimModal() {
-  const { isOpen, onClose, Q4, special } = useAirdrop()
+  const { isOpen, onClose } = useAirdrop()
 
   return (
     <AirdropModal onClose={onClose} isOpen={isOpen}>
-      <Flex w={'full'} gap={4} px={4}>
-        <Flex direction={'column'} flex={1} align={'center'}>
-          <Text pb="6" textAlign={'center'} mt={2} color="text.low">
-            Special airdrop <br />
-            <Link color={'text.bright'} href="https://spoon.fyi/proofOfGemInfo" isExternal>
-              Click here
-            </Link>{' '}
-            for more info
-          </Text>
-          <ItemInfo info={`${special.redeemable || 0} USDC`} title="Redeemable amount" />
-          <AirdropClaimButton season="special" />
-        </Flex>
-        <Box w="px" height={'full'} border={'1px dashed'} borderColor="text.low" />
-        <Flex flex={1}>
-          <Flex direction={'column'} flex={1} align={'center'}>
-            <Text pb="6" textAlign={'center'} mt={2} color="text.low">
-              Q4 airdrop is up! <br />{' '}
-              <Link
-                color={'text.bright'}
-                href="https://concave.lol/blog/concave-q4-airdrop-is-here/"
-                isExternal
-              >
-                Click here{' '}
-              </Link>
-              for more info
-            </Text>
-            <ItemInfo info={`${Q4.redeemable || 0} USDC`} title="Redeemable amount" />
-            <AirdropClaimButton season="Q4" />
-          </Flex>
-        </Flex>
-      </Flex>
+      <AirdropClaimCard />
     </AirdropModal>
   )
 }
