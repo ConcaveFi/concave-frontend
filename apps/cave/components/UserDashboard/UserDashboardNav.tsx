@@ -1,4 +1,5 @@
 import { Flex, useBreakpointValue } from '@concave/ui'
+import { usePositionsState } from 'components/LiquidityPoolPositions/hooks/usePositionsState'
 import { useMarketplaceDashbord } from 'components/Marketplace/Main/UseMarkeplaceState'
 import { useStakePositions } from 'components/StakingPositions/DashboardBody/DashBoardState'
 import { useAccount } from 'wagmi'
@@ -29,6 +30,7 @@ export const UserDashboardNav = ({
 
   // Bonding
   const userBondState = useUserBondState()
+  const state = usePositionsState('user')
 
   // Tx History
   const { isLoading: txHistoryIsLoading } = useUserTxHistoryState()
@@ -42,6 +44,7 @@ export const UserDashboardNav = ({
     totalLocked,
     marketplaceIsLoading,
     nftPositionCount,
+    totalPools: state?.pairs?.length || 0,
   }
   return (
     <Flex
@@ -50,7 +53,6 @@ export const UserDashboardNav = ({
       flexDirection={'column'}
       borderRadius={'3xl'}
       p={{ base: 0, lg: 3 }}
-      shadow={{ base: 'none', lg: 'down' }}
       gap={3}
     >
       {!isMobile && <DashboardNavButtons {...buttonOptions} />}
