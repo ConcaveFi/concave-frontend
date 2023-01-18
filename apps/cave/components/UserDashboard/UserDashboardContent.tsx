@@ -1,4 +1,5 @@
-import { Flex, Heading } from '@concave/ui'
+import { Flex, Heading, Image } from '@concave/ui'
+import { AirdropClaimCard } from 'components/Airdrop/AirdropClaimCard'
 import { StakeSettingsProvider } from 'contexts/PositionsFilterProvider'
 import { useRouter } from 'next/router'
 import { RedeemTokens } from './RedeemTokens'
@@ -39,6 +40,14 @@ function getView(selectedSnapshot: SnapshotOptions) {
       return <MarketplaceSnapshot />
     case SnapshotOptions.Redeem:
       return <RedeemTokens />
+
+    case SnapshotOptions.Airdrop:
+      return (
+        <Flex flex={1} align={'center'} direction={'column'}>
+          <Image src="./assets/airdrop/airdrops.png" alt="airdrop rain" objectFit={'contain'} />
+          <AirdropClaimCard />
+        </Flex>
+      )
 
     default:
       return (

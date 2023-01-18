@@ -66,7 +66,13 @@ export const NavButton = ({
           {isConnected && !isLoading ? (
             <>
               {summaryArray?.map((summaryObject, index) => (
-                <Text key={index + title} fontSize={'sm'}>
+                <Text
+                  color={'text.accent'}
+                  fontWeight="medium"
+                  opacity={0.6}
+                  key={index + title}
+                  fontSize={'sm'}
+                >
                   {summaryObject.label}: {summaryObject.data}
                 </Text>
               ))}

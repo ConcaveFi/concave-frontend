@@ -1,5 +1,9 @@
-import { Currency, CurrencyAmount } from '@concave/core'
-import { UseQueryResult } from 'react-query'
+import { AirdropClaimContract, Currency, CurrencyAmount } from '@concave/core'
+import { useAirdropSeason } from 'hooks/useAirdropSeason'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import { concaveProvider } from 'lib/providers'
+import { useQuery, UseQueryResult } from 'react-query'
+import { useAccount } from 'wagmi'
 import { BondPosition } from './hooks/useUserBondState'
 import { NavButton } from './NavButton'
 import { SnapshotOptions } from './SnapshotOptions'
@@ -25,6 +29,18 @@ export interface NavButtonProps {
 
 export function DashboardNavButtons(props: NavButtonProps) {
   const { userBondState } = props
+  const networkId = useCurrentSupportedNetworkId()
+  const { address } = useAccount()
+  const { data: claimedQ4 } = useQuery(['AirdropClaim', 'Q4', networkId], async () => {
+    let airdrop = new AirdropClaimContract(concaveProvider(networkId), 'Q4')
+    return await airdrop.claimed(address)
+  })
+  const { data: claimedSpecial } = useQuery(['AirdropClaim', 'special', networkId], async () => {
+    let airdrop = new AirdropClaimContract(concaveProvider(networkId), 'special')
+    return await airdrop.claimed(address)
+  })
+  const special = useAirdropSeason('special')
+  const Q4 = useAirdropSeason('Q4')
 
   return (
     <>
@@ -65,7 +81,18 @@ export function DashboardNavButtons(props: NavButtonProps) {
         summaryArray={[{ label: 'Total pools', data: props.totalPools }]}
       />
 
-      <NavButton title={'Coming Soon'} isDisabled />
+      <NavButton
+        title={'Airdrop'}
+        onClick={() => props.changeSnapshot(SnapshotOptions.Airdrop)}
+        isSelected={props.currentSnapshot === SnapshotOptions.Airdrop}
+        summaryArray={[
+          {
+            label: 'Special',
+            data: claimedSpecial ? 'claimed' : `${special.redeemable} USDC `,
+          },
+          { label: 'Q4', data: claimedQ4 ? 'claimed' : `${Q4.redeemable} USDC ` },
+        ]}
+      />
       <NavButton title={'Coming Soon'} isDisabled />
       <NavButton title={'Coming Soon'} isDisabled />
     </>
