@@ -12,6 +12,7 @@ export interface NavButtonProps {
   changeSnapshot: (snapshotSelected: SnapshotOptions) => void
   marketplaceIsLoading: boolean
   nftPositionCount: number
+  totalPools: number
   userBondState: UseQueryResult<
     {
       totalPending: string
@@ -24,6 +25,7 @@ export interface NavButtonProps {
 
 export function DashboardNavButtons(props: NavButtonProps) {
   const { userBondState } = props
+
   return (
     <>
       <NavButton
@@ -57,23 +59,13 @@ export function DashboardNavButtons(props: NavButtonProps) {
         onClick={() => props.changeSnapshot(SnapshotOptions.Marketplace)}
       />
       <NavButton
-        title={'Liquidity'}
+        title={'Liquidity Pools'}
         isSelected={props.currentSnapshot === SnapshotOptions.Liquidity}
-        summaryArray={[
-          { label: 'row0', data: 'data row0' },
-          { label: 'row1', data: 'data row1' },
-        ]}
         onClick={() => props.changeSnapshot(SnapshotOptions.Liquidity)}
+        summaryArray={[{ label: 'Total pools', data: props.totalPools }]}
       />
-      <NavButton
-        title={'Delta Neutral'}
-        isSelected={props.currentSnapshot === SnapshotOptions.DeltaNeutral}
-        summaryArray={[
-          { label: 'row0', data: 'data row0' },
-          { label: 'row1', data: 'data row1' },
-        ]}
-        onClick={() => props.changeSnapshot(SnapshotOptions.DeltaNeutral)}
-      />
+
+      <NavButton title={'Coming Soon'} isDisabled />
       <NavButton title={'Coming Soon'} isDisabled />
       <NavButton title={'Coming Soon'} isDisabled />
     </>
