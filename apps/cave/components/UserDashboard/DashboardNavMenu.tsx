@@ -27,7 +27,7 @@ export function DashboardNavMenu({ currentSnapshot, changeSnapshot }) {
             transition="all .4s ease-out"
             onClick={() => changeSnapshot(option)}
           >
-            {option}
+            {option.replace('-', ' ')}
           </MenuItem>
         ))}
       </MenuList>

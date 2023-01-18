@@ -1,4 +1,4 @@
-import { Flex, Input, Link, Table, Tbody, Td, Th, Thead, Tr } from '@concave/ui'
+import { Flex, Input, Link, Table, Tbody, Td, Th, Thead, Tr, useBreakpointValue } from '@concave/ui'
 import {
   Column,
   ColumnFiltersState,
@@ -14,6 +14,7 @@ import {
 import { DataTable } from 'components/UserDashboard/DataTable'
 import { useUserTxHistoryState } from 'components/UserDashboard/hooks/useUserTxHistoryState'
 import React, { useState } from 'react'
+import { isMobile } from 'utils/isMobile'
 import { DataTableCard } from '../../DataTableCard'
 import { DashItem } from './DashItem.type'
 
@@ -21,6 +22,7 @@ export const TxHistory = () => {
   const [sorting, setSorting] = useState<SortingState>([])
   const { data, isLoading, isSuccess } = useUserTxHistoryState()
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const isMobile = useBreakpointValue({ base: true, lg: false })
   const reactTable = useReactTable({
     data,
     columns,
@@ -37,8 +39,8 @@ export const TxHistory = () => {
 
   return (
     <Flex flexDir={'column'} w={'100%'} justifyContent={'space-between'}>
-      <DataTableCard dataTableLabel={'Transaction History'} isExpanded hasPositions>
-        <DataTable h={'100%'}>
+      <DataTableCard dataTableLabel={''} isExpanded hasPositions>
+        <DataTable shadow="none" h={'100%'}>
           {!isLoading && isSuccess ? <TxTable reactTable={reactTable} /> : <></>}
         </DataTable>
       </DataTableCard>
@@ -69,7 +71,7 @@ const TxTable = ({ reactTable }) => (
                         desc: '  🔽',
                       }[header.column.getIsSorted() as string] ?? null}
                     </Flex>
-                    {header.column.getCanFilter() && (
+                    {header.column.getCanFilter() && !isMobile && (
                       <Filter column={header.column} table={reactTable} />
                     )}
                   </Flex>

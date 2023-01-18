@@ -32,7 +32,7 @@ export const UserDashboardContainer = () => {
         borderRadius={{ base: '30px', lg: '60px' }}
         alignItems={'center'}
       >
-        <UserDashboardWallet />
+        <UserDashboardWallet onSelectHistory={() => setSnapshot(SnapshotOptions.History)} />
         <Flex
           w={'100%'}
           direction={{ base: 'column', lg: 'row' }}
