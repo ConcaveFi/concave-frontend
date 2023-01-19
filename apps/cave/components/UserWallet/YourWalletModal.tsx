@@ -1,12 +1,17 @@
 import { CloseIcon } from '@concave/icons'
-import { Button, Flex, Modal, Text } from '@concave/ui'
+import { Button, Flex, Modal, Stack, Text } from '@concave/ui'
+import { useUnstoppableDomain } from 'hooks/useUnstoppableDomain'
 import { formatAddress } from 'utils/formatAddress'
-import { useAccount, useDisconnect } from 'wagmi'
+import { useAccount, useDisconnect, useEnsName } from 'wagmi'
 import RecentTransactionsContainer from './RecentTransactions'
 
 export function YourWalletModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const { address } = useAccount()
   const { disconnect } = useDisconnect()
+  const { data: ens } = useEnsName({ address })
+  const { data: uns } = useUnstoppableDomain({ address })
+
+  const name = ens || uns
 
   return (
     <Modal
@@ -33,7 +38,16 @@ export function YourWalletModal({ isOpen, onClose }: { isOpen: boolean; onClose:
             <Text textColor="text.low" fontSize="xl">
               Your wallet
             </Text>
-            <Text fontSize={'3xl'}>{formatAddress(address)}</Text>
+            {name ? (
+              <Stack>
+                <Text fontSize={'3xl'}>{name}</Text>
+                <Text fontSize={'xl'} color="text.low">
+                  {formatAddress(address)}
+                </Text>
+              </Stack>
+            ) : (
+              <Text fontSize={'3xl'}>{formatAddress(address)}</Text>
+            )}
           </Flex>
           <CloseIcon color={'text.low'} cursor="pointer" onClick={onClose} />
         </Flex>
