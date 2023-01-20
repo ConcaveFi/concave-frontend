@@ -1,5 +1,5 @@
 import { CloseIcon } from '@concave/icons'
-import { Button, Card, CardProps, Flex, Heading, Image, useDisclosure } from '@concave/ui'
+import { Button, Card, CardProps, Flex, Heading, Image, useBreakpointValue, useDisclosure } from '@concave/ui'
 import { useAirdrop } from 'contexts/AirdropContext'
 import { useIsMounted } from 'hooks/useIsMounted'
 
@@ -7,17 +7,17 @@ export function AirdropClaimBanner() {
   const { isOpen, onClose } = useDisclosure({ defaultIsOpen: true })
   const isMounted = useIsMounted()
   const { onOpen } = useAirdrop()
-
+  const isMobile = useBreakpointValue({ base: true, sm: false })
   if (!isOpen) return <></>
   return (
     <Flex
-      pos="fixed"
-      pt={2}
+      mx="auto" pos={ isMobile ? "unset" : "fixed" }
       w={'full'}
       transition="all .8s ease"
+      pr={isMobile ? "unset" : 2}
       opacity={isMounted ? 1 : 0}
-      top={isMounted ? '3%' : '-2%'}
-      zIndex={10}
+      top={isMounted ? 8 : 6}
+      zIndex={2}
     >
       <Flex flexDirection={'row-reverse'} w={'full'}>
         <Card {...airdropBanner} mx={2} minH={'90px'}>
