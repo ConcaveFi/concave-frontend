@@ -2,14 +2,13 @@ import { useDisclosure } from '@concave/ui'
 import { createContext, ReactNode, useState } from 'react'
 import { ReportErrorModal } from './ErrorModal'
 
-type TransactionError =
-  | {
-      reason: string
-      method: string
-      code: string
-      transaction: { from: string; to: string }
-    }
-  | 'Failed or Rejected Request'
+type TransactionError = {
+  reason: string
+  method: string
+  code: number
+  transaction: { from: string; to: string }
+}
+
 type ErrorModalContextType = {
   isOpen: boolean
   extra?: Record<string, string>
@@ -25,7 +24,8 @@ const useErrorHandle = () => {
   const [error, setError] = useState<Partial<TransactionError>>()
   const [extra, setExtraInfo] = useState<Record<string, string>>()
   const onOpen = (e: TransactionError, extra?: Record<string, string>) => {
-    if (typeof e === 'string' && e.includes('Failed or Rejected Request')) return
+    // 4001 - UserRejectedRequestError
+    if (typeof e === 'object' && 'code' in e && e.code === 4001 ) return 
     const { host, pathname } = location
     setError(e)
     setExtraInfo({ ...extra, host, pathname })
