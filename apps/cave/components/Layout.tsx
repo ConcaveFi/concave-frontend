@@ -30,27 +30,27 @@ export const Layout = ({ children }) => {
         h="full"
         bg="radial-gradient(100% 211.23% at 100% 0%, rgba(0, 148, 255, 0.3) 0%, rgba(27, 61, 148, 0.1) 50%, rgba(2, 42, 65, 0.01) 100%)"
       ></Flex>
-      <AirdropProvider>
+        <AirdropProvider>
         <SideBar />
         <AirdropClaimBanner />
-        <AirdropClaimModal />
-      </AirdropProvider>
-      <Container
-        display="flex"
-        maxWidth="container.xl"
-        position="relative"
-        p={2}
-        pb="300px" // add a lil padding to the bottom of the page for better scroll experience
-      >
-        <SecurityBanner />
-        <AnimatePresence
-          exitBeforeEnter
-          initial={false}
-          onExitComplete={() => window.scrollTo(0, 0)}
+        <Container
+          display="flex"
+          maxWidth="container.xl"
+          position="relative"
+          p={2}
+          pb="300px" // add a lil padding to the bottom of the page for better scroll experience
         >
+        <SecurityBanner />
+        <AirdropClaimModal />
+          <AnimatePresence
+            exitBeforeEnter
+            initial={false}
+            onExitComplete={() => window.scrollTo(0, 0)}
+          >
           {children}
         </AnimatePresence>
       </Container>
+      </AirdropProvider>
     </Flex>
   )
 }
