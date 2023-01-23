@@ -16,9 +16,8 @@ const UserDashboard = () => (
       </Heading>
       <Flex mt={0} align="center" gap={10} width="full" justify="center" alignItems={'center'}>
         <Text apply="background.text-brightBlue" maxW={620} textAlign={'center'}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam sollicitudin, est id
-          euismod aliquet, erat magna aliquet turpis, sed blandit purus dolor nec velit. Integer
-          iaculis justo fringilla sem gravida dignissim sed sed dui.
+          The User Dashboard is all of your currently connected wallet positions in one place to be
+          managed and claimed.
         </Text>
       </Flex>
       <UserDashboardContainer />
