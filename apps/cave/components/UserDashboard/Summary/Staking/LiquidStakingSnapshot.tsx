@@ -1,6 +1,8 @@
 import { AirdropClaimContract } from '@concave/core'
-import { Flex } from '@concave/ui'
+import { SpinIcon, SpinnerIcon } from '@concave/icons'
+import { Flex, Spinner } from '@concave/ui'
 import { airdropToken, getAirdropQ4ClaimableAmount } from 'components/Airdrop/Q4/airdrop'
+import { getAirdropSpecialClaimableAmount } from 'components/Airdrop/special/airdrop'
 import { useFilterByRange } from 'components/NftFilters/Filters/hooks/useFilterByRange'
 import { useFilterByStakePool } from 'components/NftFilters/Filters/hooks/useFilterByStakePool'
 import { usePositionSorter } from 'components/NftFilters/Sorters/hooks/useNftSort'
@@ -9,6 +11,7 @@ import { FilterContainer } from 'components/StakingPositions/DashboardBody/Filte
 import { SnapshotLineChart } from 'components/UserDashboard/SnapshotLineChart'
 import { SnapshotTextCard } from 'components/UserDashboard/SnapshotTextCard'
 import { useStakeSettings } from 'contexts/PositionsFilterProvider'
+import { AirdropSeason } from 'hooks/useAirdropSeason'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
 import { useState } from 'react'
@@ -21,25 +24,41 @@ import { SnapshotCard } from '../../SnapshotCard'
 import { SnapshotText } from '../../SnapshotText'
 import { stakechartdata } from '../dummyChartData'
 
+const useAirdropOverview = (address:string, chainId) => {
+  return useQuery(['AirdropClaimOverview', chainId], async () => {
+    const provider = concaveProvider(chainId)
+    const seasons = [{
+        claimed: await new AirdropClaimContract(provider, 'special').claimed(address),
+        amount: getAirdropSpecialClaimableAmount(address) || 0
+      },{
+        claimed: await new AirdropClaimContract(provider, 'Q4').claimed(address),
+        amount: getAirdropQ4ClaimableAmount(address) || 0
+      }
+    ]
+    const overview = seasons.reduce((prev, current) => {
+      const airdropTotal = prev.airdropTotal + current.amount;
+      const claimed = prev.claimed + (current.claimed ? current.amount: 0)
+      return { airdropTotal, claimed,  }
+    }, { airdropTotal: 0, claimed: 0 })
+
+    const airdropShare = (overview.claimed / overview.airdropTotal )*100
+    return { seasons, overview: {...overview, airdropShare} }
+  }, {
+    enabled: !!address
+  })
+}
+
+
 export const LiquidStakingSnapshot = () => {
   const [isExpanded, setExpand] = useState(false)
   const { address } = useAccount()
   const stakePosition = useStakePositions()
   const positionSorter = usePositionSorter()
-
   const { userNonFungibleTokensInfo, totalLocked, isLoading } = stakePosition
   const networkId = useCurrentSupportedNetworkId()
-
-  const airdropClaimableAmount = getAirdropQ4ClaimableAmount(address)
-  const airdropAmount = airdropClaimableAmount || 0
-  const { data: claimed } = useQuery(['AirdropClaimContract', networkId], async () => {
-    const airdrop = new AirdropClaimContract(concaveProvider(networkId), 'Q4')
-    return await airdrop.claimed(address)
-  })
-
-  const airdropTotal = 510691.11 //TODO
-  const airdropShare = (airdropAmount / airdropTotal).toLocaleString(undefined, {
-    maximumFractionDigits: 4,
+  const airdropOverview = useAirdropOverview(address, networkId)
+  const airdropShare = (airdropOverview.data?.overview.airdropShare||0).toLocaleString(undefined, {
+    maximumFractionDigits: 2,
   })
   const { initialCNVFilter, stakePoolFilters, tokenIdFilter, sorter } = useStakeSettings()
   const { filterByRange } = useFilterByRange(initialCNVFilter)
@@ -54,12 +73,14 @@ export const LiquidStakingSnapshot = () => {
             title={'Total locked'}
             data={totalLocked.toFixed(2, { groupSeparator: ',' }) + ' CNV'}
           />
-          <SnapshotText
-            title={'Available airdrop'}
-            data={`${airdropAmount} ${airdropToken.symbol}`}
-          />
-          <SnapshotText title={'Airdrop share'} data={airdropShare + '%'} />
-          <SnapshotText title={'Airdrop'} data={<SnapshotButton claimed={claimed} />} />
+          {airdropOverview.isSuccess ? <>
+            <SnapshotText
+              title={'Available airdrop'}
+              data={`${airdropOverview.data.overview.airdropTotal} ${airdropToken.symbol}`}
+            />
+            <SnapshotText title={'Airdrop share'} data={airdropShare + '%'} />
+            <SnapshotText title={'Airdrop'} data={<SnapshotButton claimed={airdropOverview.data.overview.claimed} />} />
+          </> : <Spinner />}
         </SnapshotTextCard>
       </SnapshotCard>
       <DataTableCard
@@ -112,3 +133,4 @@ const SnapshotButton = ({ claimed }) => (
     {claimed ? 'Claimed' : 'Claim'}
   </Flex>
 )
+ 
