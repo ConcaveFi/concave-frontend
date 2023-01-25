@@ -82,7 +82,7 @@ function claimButtonProps({ claimed, canRedeem, status, whiteListed }: ClaimButt
     position: 'relative',
     h: '50px',
     width: '150px',
-    mt: 7,
+    my: { base: 2, sm: 7 },
   } as const
 }
 const nameBySeason = {
