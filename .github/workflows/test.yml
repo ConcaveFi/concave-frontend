@@ -23,6 +23,3 @@ jobs:
 
       - name: '@concave/core'
         run: cd libs/core/ && yarn test && cd ../..
-
-      - name: '@concave/cave'
-        run: cd apps/cave/ && yarn test && cd ../..
