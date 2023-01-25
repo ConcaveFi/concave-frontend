@@ -7,13 +7,13 @@ export function AirdropClaimCard() {
   const Q4 = useAirdropSeason('Q4')
 
   return (
-    <Flex w={'full'} direction={{ base: 'column', md: 'row' }} gap={4} px={4}>
+    <Flex w={'full'} direction={{ base: 'column', md: 'row' }} gap={{base: 2, sm: 4}} px={{base: 0, sm: 4}}>
       <Flex direction={'column'} flex={1} align={'center'}>
-        <Text pb="6" textAlign={'center'} mt={2} color="text.low">
+        <Text pb="6" textAlign={'center'} mt={{sm: 2}} color="text.low">
           Special airdrop <br />
           <Link color={'text.bright'} href="https://spoon.fyi/proofOfGemInfo" isExternal>
             Click here
-          </Link>{' '}
+          </Link>
           for more info
         </Text>
         <ItemInfo info={`${special.redeemable || 0} USDC`} title="Redeemable amount" />
@@ -29,13 +29,13 @@ export function AirdropClaimCard() {
       <Flex flex={1}>
         <Flex direction={'column'} flex={1} align={'center'}>
           <Text pb="6" textAlign={'center'} mt={2} color="text.low">
-            Q4 airdrop is up! <br />{' '}
+            Q4 airdrop is up! <br />
             <Link
               color={'text.bright'}
               href="https://concave.lol/blog/concave-q4-airdrop-is-here/"
               isExternal
             >
-              Click here{' '}
+              Click here
             </Link>
             for more info
           </Text>
