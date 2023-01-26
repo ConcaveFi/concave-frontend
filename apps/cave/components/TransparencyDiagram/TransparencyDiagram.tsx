@@ -29,8 +29,10 @@ import { ReactFlowDiagram } from './ReactFlowDiagram'
 
 enum DiagramButtons {
   TreasuryOverview = 'Treasury Overview',
-  COOPTreasury = 'CO-OP Treasury',
-  ConcaveTreasury = 'Concave Treasury',
+  Revenue = 'Revenue',
+  Trades = 'Trades',
+  ClipperLP = 'Clipper LP',
+  OperatingCosts = 'Operating Costs',
   GeneralDiagram = 'General Diagram',
   BondingDiagram = 'Bonding Diagram',
   StakingDiagram = 'Staking Diagram',
@@ -93,21 +95,31 @@ export function TransparencyDiagram({ isMobile }: { isMobile: boolean }) {
               }
             />
           )}
-          {diagramShown === DiagramButtons.COOPTreasury && (
+          {diagramShown === DiagramButtons.Revenue && (
             <DataStudio
               src={
-                isMobile
-                  ? 'https://datastudio.google.com/embed/reporting/8f3baa69-b193-41be-9d4f-ffcbc08d691a/page/p_hjeiqnsnyc'
-                  : 'https://datastudio.google.com/embed/reporting/f0ba2360-88f4-468a-8306-1923dd49f8a8/page/p_va7gtbqnyc'
+                'https://lookerstudio.google.com/embed/reporting/f0ba2360-88f4-468a-8306-1923dd49f8a8/page/p_ns2smuqp2c'
               }
             />
           )}
-          {diagramShown === DiagramButtons.ConcaveTreasury && (
+          {diagramShown === DiagramButtons.Trades && (
             <DataStudio
               src={
-                isMobile
-                  ? 'https://datastudio.google.com/embed/reporting/8f3baa69-b193-41be-9d4f-ffcbc08d691a/page/p_k60ihuz1yc'
-                  : 'https://datastudio.google.com/embed/reporting/f0ba2360-88f4-468a-8306-1923dd49f8a8/page/p_65t8ugz1yc'
+                'https://lookerstudio.google.com/embed/reporting/f0ba2360-88f4-468a-8306-1923dd49f8a8/page/p_afzrzcbq2c'
+              }
+            />
+          )}
+          {diagramShown === DiagramButtons.ClipperLP && (
+            <DataStudio
+              src={
+                'https://lookerstudio.google.com/embed/reporting/f0ba2360-88f4-468a-8306-1923dd49f8a8/page/p_wmvudkqp2c'
+              }
+            />
+          )}
+          {diagramShown === DiagramButtons.OperatingCosts && (
+            <DataStudio
+              src={
+                'https://lookerstudio.google.com/embed/reporting/f0ba2360-88f4-468a-8306-1923dd49f8a8/page/p_2bjylnpr2c'
               }
             />
           )}
@@ -146,43 +158,20 @@ const DesktopMenu = ({
   setDiagramShown: Dispatch<SetStateAction<DiagramButtons>>
 }) => (
   <Box
-    justifyContent={'space-between'}
+    justifyContent={'center'}
     flexWrap={'wrap'}
-    w={'620px'}
+    w={'850px'}
     display={'flex'}
     flexDirection={'row'}
     gap={'1rem'}
   >
-    <SelectionButton
-      chartName={DiagramButtons.TreasuryOverview}
-      diagramShown={diagramShown}
-      setDiagramShown={setDiagramShown}
-    />
-    <SelectionButton
-      chartName={DiagramButtons.COOPTreasury}
-      diagramShown={diagramShown}
-      setDiagramShown={setDiagramShown}
-    />
-    <SelectionButton
-      chartName={DiagramButtons.ConcaveTreasury}
-      diagramShown={diagramShown}
-      setDiagramShown={setDiagramShown}
-    />
-    <SelectionButton
-      chartName={DiagramButtons.GeneralDiagram}
-      diagramShown={diagramShown}
-      setDiagramShown={setDiagramShown}
-    />
-    <SelectionButton
-      chartName={DiagramButtons.BondingDiagram}
-      diagramShown={diagramShown}
-      setDiagramShown={setDiagramShown}
-    />
-    <SelectionButton
-      chartName={DiagramButtons.StakingDiagram}
-      diagramShown={diagramShown}
-      setDiagramShown={setDiagramShown}
-    />
+    {Object.values(DiagramButtons).map((currentValue) => (
+      <SelectionButton
+        chartName={currentValue}
+        diagramShown={diagramShown}
+        setDiagramShown={setDiagramShown}
+      />
+    ))}
   </Box>
 )
 
@@ -211,15 +200,15 @@ const MobileMenu = ({
           <ChevronDownIcon transition="0.4s all" transform={isOpen && 'rotate(180deg)'} />
         </MenuButton>
         <MenuList zIndex={5} py={3}>
-          {Object.keys(DiagramButtons).map((buttonOption) => (
+          {Object.values(DiagramButtons).map((buttonOption) => (
             <MenuItem
               justifyContent={'center'}
               py={3}
               fontSize={'lg'}
               key={buttonOption}
-              onClick={() => setDiagramShown(DiagramButtons[buttonOption])}
+              onClick={() => setDiagramShown(buttonOption)}
             >
-              {DiagramButtons[buttonOption]}
+              {buttonOption}
             </MenuItem>
           ))}
         </MenuList>
