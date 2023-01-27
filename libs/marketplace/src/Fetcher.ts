@@ -2,18 +2,19 @@ import { BaseProvider } from '@ethersproject/providers'
 import { StakingV1Contract } from './contract'
 import { StakingPool, stakingPools } from './entities'
 import { parser } from './graphql/parser'
-import {
-  fetchAllCavemart,
-  fetchUserPositionsQuery,
-  listCavemartListingDocuments,
-} from './graphql/querys'
-import { fetcher } from './util'
+import { fetchAllCavemart, fetchUsersPositions, listCavemartListingDocuments, listReceivedTokensHistoryByAddress, listSellPositionsHistoryByAddressQuery } from './graphql/querys'
 
-const getHasuraEndpoint = ({ chainId = 1 }) => {
-  if (chainId === 1) {
-    return `https://concave.hasura.app/v1/graphql`
-  }
-  return 'https://dev-concave.hasura.app/v1/graphql'
+export const listUserHistory = ({
+  chainId,
+  address,
+}: {
+  address: string
+  chainId: number
+}) => {
+  return ([
+    listReceivedTokensHistoryByAddress(chainId, address),
+    listSellPositionsHistoryByAddressQuery(chainId, address)
+  ]) as const
 }
 
 export const listPositons = async ({
@@ -24,15 +25,7 @@ export const listPositons = async ({
   provider: BaseProvider
 }) => {
   const stakingV1Contract = new StakingV1Contract(provider)
-  const { data } = await fetcher<{ data: { logStakingV1: LogStakingV1[] } }>(
-    getHasuraEndpoint(provider.network),
-    {
-      method: 'POST',
-      body: JSON.stringify({
-        query: fetchUserPositionsQuery,
-      }),
-    },
-  )
+  const { data } = await fetchUsersPositions(provider.network.chainId)
   const preFilter = data.logStakingV1
     .filter((l) => l.tokenID)
     .filter((l) => !owner || l.to.toLocaleLowerCase() === owner.toLocaleLowerCase())
@@ -43,13 +36,7 @@ export const listPositons = async ({
 
 export const listListedPositions = async ({ provider }: { provider: BaseProvider }) => {
   const stakingV1Contract = new StakingV1Contract(provider)
-  const { data } = await fetcher<{ data: { logStakingV1: LogStakingV1[] } }>(
-    getHasuraEndpoint(provider.network),
-    {
-      method: 'POST',
-      body: JSON.stringify({ query: listCavemartListingDocuments }),
-    },
-  )
+  const { data } = await listCavemartListingDocuments(provider.network.chainId)
   const { stakingV1ToStakingPosition } = parser(stakingV1Contract, provider)
   const dirtyResults = data.logStakingV1
   const cleanResults = dirtyResults
@@ -64,13 +51,7 @@ export const listListedPositions = async ({ provider }: { provider: BaseProvider
 }
 
 export const marketplaceActivity = async ({ provider }: { provider: BaseProvider }) => {
-  const { data } = await fetcher<{ data: { logStakingV1: LogStakingV1[] } }>(
-    getHasuraEndpoint(provider.network),
-    {
-      method: 'POST',
-      body: JSON.stringify({ query: fetchAllCavemart }),
-    },
-  )
+  const { data } = await fetchAllCavemart(provider.network.chainId)
   const dirtyResults = data.logStakingV1
   const keys = (obj: Marketplace & StakingPool & LogStakingV1) => {
     return JSON.stringify({ a: obj.tokenID, soldFor: obj.soldFor })
@@ -104,6 +85,9 @@ export interface LogStakingV1 {
   to: string
   poolID: number
   tokenID?: number
+  amountLocked: string//"20.0",
+  txHash: string //"0x777173eff35a94b7a58967059ccfa5c497b1d94831003c45a9aef56cb2f5918f",
+  lockedUntil: number //1705715051,
   marketplace: Marketplace[]
 }
 
