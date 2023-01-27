@@ -18,6 +18,7 @@
     "@alch/alchemy-web3": "^1.4.7",
     "@concave/core": "^0.0.0",
     "@concave/gemswap-sdk": "^0.0.0",
+    "@wagmi/core": "^0.5.8",
     "@ethersproject/address": "^5.7.0",
     "@ethersproject/bignumber": "^5.7.0",
     "@ethersproject/contracts": "^5.7.0",
