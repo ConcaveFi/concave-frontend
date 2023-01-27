@@ -167,6 +167,7 @@ const DesktopMenu = ({
   >
     {Object.values(DiagramButtons).map((currentValue) => (
       <SelectionButton
+        key={currentValue}
         chartName={currentValue}
         diagramShown={diagramShown}
         setDiagramShown={setDiagramShown}
