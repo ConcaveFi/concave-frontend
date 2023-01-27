@@ -13,6 +13,8 @@ export type StakingPositionArgs = {
   chainId: number
   position: Position
   reward: StakingReward
+  hash: string,
+  lockedUntil: number,
   market?: MarketItem
 }
 
