@@ -20,9 +20,9 @@ const WalletSurface = ({ children }: { children: JSX.Element | JSX.Element[] }) 
   <Flex
     shadow={'down'}
     w={'100%'}
-    minH={{ base: '122px', lg: '72px' }}
+    p={{base: 2, '2xl': 4 }}
     wrap="wrap"
-    borderRadius={{ base: '26px', lg: '50px' }}
+    borderRadius='50px'
     flexDir={'row'}
     justifyContent={'space-evenly'}
     alignItems={'center'}
@@ -77,7 +77,7 @@ export function UserDashboardWallet({ onSelectHistory }: { onSelectHistory: Void
     <WalletSurface>
       {isConnected ? (
         <>
-          <Tooltip label={ens || uns || address} icon={<ConnectedUserButton w={'190px'} />} />
+          <Tooltip label={ens || uns || address} icon={<ConnectedUserButton  />} />
           <TokenButton token={cnvToken} tokenAmount={cnvBalance} />
           <TokenButton token={pCNVToken} tokenAmount={pCNVBalance} />
           <TokenButton token={aCNVToken} tokenAmount={aCNVBalance} />
@@ -140,7 +140,7 @@ const WalletButton = ({ token, tokenAmount, isDisabled }) => {
       fontFamily="heading"
       w={'auto'}
       rounded="2xl"
-      px={4}
+      px={{base: 2, '2xl': 4}}
       gap={2}
       disabled={isDisabled}
       onClick={addingToWallet}

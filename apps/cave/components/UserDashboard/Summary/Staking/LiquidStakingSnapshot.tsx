@@ -109,7 +109,6 @@ export const LiquidStakingSnapshot = () => {
   const stakeInfo = useStakeChart(address, networkId)
   return (
     <Flex flexDir={'column'} w={'100%'} h="100%" gap={6}>
-      <Button onClick={() => stakeInfo.refetch() }>Refresh</Button>
       <SnapshotCard isExpanded={!isExpanded}>
         <SnapshotLineChart { ...stakeInfo}  dataKeys={['Airdrop', 'Locked CNV']} />
         <SnapshotTextCard>
