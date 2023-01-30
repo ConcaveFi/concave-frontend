@@ -43,7 +43,7 @@ export const ConnectedUserButton = ({ w = '100%' }: { w?: number | string }) => 
           h="22px"
           mr={2}
         />
-        <Text noOfLines={1} wordBreak="break-all" whiteSpace="normal" maxW="60%">
+        <Text noOfLines={1} wordBreak="break-all" whiteSpace="normal" maxW="100%">
           {ens || uns || formatAddress(address)}
         </Text>
         {hasPendingTransactions && (
