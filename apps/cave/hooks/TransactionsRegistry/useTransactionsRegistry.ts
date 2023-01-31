@@ -6,8 +6,8 @@ import { useLocalStorage } from 'hooks/useLocalStorage'
 import { concaveProvider } from 'lib/providers'
 import { useCallback, useEffect } from 'react'
 import { QueriesObserver, useQueryClient } from 'react-query'
-import { useAccount, useNetwork } from 'wagmi'
-import { TrackedTransaction } from './TrackedTransactions'
+import { Address, useAccount, useNetwork } from 'wagmi'
+import { TrackedTransaction } from './getTransactionStatusLabel'
 
 const hrs2 = 2 * 60 * 60 * 1000 // 2 hours
 const useTrackedTransactions = () => {
@@ -48,23 +48,21 @@ const useTrackedTransactions = () => {
 export const useTransactionRegistry = () => {
   const { transactions, pushTransaction } = useTrackedTransactions()
   const { chain } = useNetwork()
+  const { address: from } = useAccount()
 
   const registerTransaction = useCallback(
-    (
-      { hash, from, chainId }: TransactionResponse | Transaction,
-      meta: TrackedTransaction['meta'],
-    ) => {
+    (hash: `0x${string}`, meta: TrackedTransaction['meta']) => {
       const newTrackedTransaction = {
         hash,
         from,
-        chainId: chainId || chain.id,
+        chainId: chain.id,
         timestamp: Date.now(),
         status: <const>'pending',
         meta,
       }
       pushTransaction(newTrackedTransaction)
     },
-    [pushTransaction, chain?.id],
+    [pushTransaction, chain?.id, from],
   )
 
   return {

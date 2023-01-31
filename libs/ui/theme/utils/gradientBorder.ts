@@ -1,4 +1,4 @@
-import type { BoxProps } from '@chakra-ui/layout'
+import type { BoxProps } from '@chakra-ui/react'
 import { SystemStyleInterpolation } from '@chakra-ui/theme-tools'
 import { toPx } from './toPx'
 

@@ -1,4 +1,4 @@
-import { Box, Button, Flex } from '@chakra-ui/react'
+import { Box, Button, Flex } from '@concave/ui'
 import { gradientBorder, NumericInput } from '@concave/ui'
 import { useState } from 'react'
 import { RangeFilter } from './hooks/useFilterByRange'

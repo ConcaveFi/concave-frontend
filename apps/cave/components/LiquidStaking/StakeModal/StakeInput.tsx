@@ -93,7 +93,7 @@ export function StakeInput({ onClose, poolId }: { poolId: number; onClose: () =>
 
       <TransactionSubmittedDialog
         isOpen={lockTransaction.isWaitingTransactionReceipt}
-        tx={lockTransaction.tx}
+        txHash={lockTransaction.tx?.hash}
         closeParentComponent={onClose}
       />
     </>

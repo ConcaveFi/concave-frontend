@@ -6,17 +6,17 @@ export default function useVestedTokens() {
   const { address } = useAccount()
   const networkId = useCurrentSupportedNetworkId()
   const { data: bbtCNVData, isLoading: loadingBBTCNV } = useBalance({
-    addressOrName: address,
+    address: address,
     token: BBTCNV_ADDRESS[networkId],
   })
 
   const { data: aCNVData, isLoading: loadingACNV } = useBalance({
-    addressOrName: address,
+    address: address,
     token: ACNV_ADDRESS[networkId],
   })
 
   const { data: pCNVData, isLoading: loadingPCNV } = useBalance({
-    addressOrName: address,
+    address: address,
     token: PCNV_ADDRESS[networkId],
   })
 

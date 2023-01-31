@@ -1,4 +1,4 @@
-import { CloseIcon, SearchIcon } from '@chakra-ui/icons'
+import { CloseIcon, SearchIcon } from '@concave/icons'
 import { Flex, NumericInput, Text } from '@concave/ui'
 import { RangeFilter } from 'components/NftFilters/Filters/hooks/useFilterByRange'
 import { StakePoolFilterEnum } from 'components/NftFilters/Filters/hooks/useFilterByStakePool'

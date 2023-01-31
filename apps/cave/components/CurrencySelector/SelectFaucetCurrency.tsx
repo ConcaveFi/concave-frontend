@@ -2,7 +2,7 @@ import { CNV, Currency, DAI, FRAX, USDC } from '@concave/core'
 import { Button, Flex, Heading, Modal } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { defaultChains } from 'wagmi'
+import { mainnet } from 'wagmi'
 import { CurrencySelector } from './CurrencySelector'
 
 const FaucetCurrencySelectorModal = ({
@@ -40,7 +40,7 @@ const FaucetCurrencySelectorModal = ({
             aria-selected={!!selected?.equals(currency)}
             variant="select"
           >
-            {defaultChains.findIndex((c) => c.id === currency.chainId) ? 't' : ''}
+            {mainnet.id === currency.chainId ? '' : 't'}
             {currency.symbol}
           </Button>
         ))}

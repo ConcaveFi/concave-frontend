@@ -1,6 +1,6 @@
 import { BBTCNV_ADDRESS, BBTRedemptionContractV2, Token } from '@concave/core'
 import { useDisclosure } from '@concave/ui'
-import { TransactionResponse } from '@ethersproject/providers'
+import { TransactionResponse } from '@ethersproject/abstract-provider'
 import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
 
@@ -10,11 +10,12 @@ import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
 import { useState } from 'react'
-import { useAccount, useSigner } from 'wagmi'
+import { Address, useAccount, useSigner } from 'wagmi'
 import useBBTCNVRedeemable from '../Hooks/useBBTCNVRedeemable'
 import useVestedTokens from '../Hooks/useVestedTokens'
 import { VestedTokenButtonProps } from '../TreasuryRedeemCard'
 import { VestedTokenDialog } from './VestedTokenDialog'
+
 export const BBTCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) => {
   const {
     isOpen: transactionSubmitted,
@@ -36,6 +37,26 @@ export const BBTCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) 
   const networdId = useCurrentSupportedNetworkId()
   const balance = parseEther(bbtCNV?.data?.formatted || '0')
   const { registerTransaction } = useTransactionRegistry()
+
+  function redeem(amount: BigNumber, redeemMax: boolean) {
+    const bbtCNVContract = new BBTRedemptionContractV2(concaveProvider(networdId))
+    setStatus('approve')
+    bbtCNVContract
+      .redeem(signer, amount, address, redeemMax)
+      .then((transaction) => {
+        registerTransaction(transaction.hash as Address, {
+          type: 'redeem',
+          amount: formatEther(amount) + ' bbtCNV',
+        })
+        setTx(transaction)
+        submitTransactionModal()
+        setStatus('submitted')
+      })
+      .catch((error) => {
+        if (error.code === 4001) setStatus('rejected')
+        else setStatus('error')
+      })
+  }
 
   const onCloseModal = () => {
     setStatus('default')
@@ -60,28 +81,8 @@ export const BBTCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) 
       <TransactionSubmittedDialog
         closeParentComponent={onCloseModal}
         isOpen={transactionSubmitted && Boolean(tx) && status === 'submitted'}
-        tx={tx}
+        txHash={tx.hash as `0x${string}`}
       />
     </>
   )
-
-  function redeem(amount: BigNumber, redeemMax: boolean) {
-    const bbtCNVContract = new BBTRedemptionContractV2(concaveProvider(networdId))
-    setStatus('approve')
-    bbtCNVContract
-      .redeem(signer, amount, address, redeemMax)
-      .then((transaction) => {
-        registerTransaction(transaction, {
-          type: 'redeem',
-          amount: formatEther(amount) + ' bbtCNV',
-        })
-        setTx(transaction)
-        submitTransactionModal()
-        setStatus('submitted')
-      })
-      .catch((error) => {
-        if (error.code === 4001) setStatus('rejected')
-        else setStatus('error')
-      })
-  }
 }

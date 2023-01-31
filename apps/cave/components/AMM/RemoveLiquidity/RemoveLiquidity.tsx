@@ -12,11 +12,9 @@ import {
   useBreakpointValue,
   useDisclosure,
 } from '@concave/ui'
-import { TransactionResponse } from '@ethersproject/abstract-provider'
 import { useCurrencyApprove } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { PositionInfoItem } from 'components/LiquidityPoolPositions/MyPositions'
-import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
 import { useErrorModal } from 'contexts/ErrorModal'
 
@@ -211,7 +209,7 @@ const RemoveLiquidityActions = ({
     },
     {
       meta,
-      onError: errorModal.onOpen
+      onError: errorModal.onOpen,
     },
   )
 
@@ -259,7 +257,7 @@ const RemoveLiquidityActions = ({
       <TransactionSubmittedDialog
         title="Withdraw"
         subtitle="Withdraw"
-        tx={{ hash: removeTransaction.tx?.hash } as TransactionResponse}
+        txHash={removeTransaction.tx?.hash}
         isOpen={removeTransaction.isWaitingTransactionReceipt}
         closeParentComponent={closeParentComponent}
       />
