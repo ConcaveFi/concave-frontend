@@ -114,12 +114,12 @@ export type Marketplace = {
   startPrice?: string
   endPrice?: string
   tokenID: number
-  tokenOwner: string
+  tokenOwner: `0x${string}`
   tokenIsListed: boolean
   deadline?: number
   updated_at: string
   soldFor: string
   txHash: string
-  newOwner: string
+  newOwner: `0x${string}`
   tokenOption: string
 }

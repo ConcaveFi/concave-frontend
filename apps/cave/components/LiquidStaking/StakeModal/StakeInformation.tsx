@@ -1,4 +1,4 @@
-import { Box, Flex, Image, Text } from '@chakra-ui/react'
+import { Box, Flex, Image, Text } from '@concave/ui'
 import { AddIcon } from '@concave/icons'
 
 type StakeInformationProps = {

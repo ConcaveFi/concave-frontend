@@ -2,7 +2,7 @@ import { CurrencyAmount, MaxUint256, Token } from '@concave/core'
 import { StakingV1Contract } from '@concave/marketplace'
 import { TransactionReceipt } from '@ethersproject/abstract-provider'
 import { useErrorModal } from 'contexts/ErrorModal'
-import { BigNumberish } from 'ethers'
+import { BigNumber, BigNumberish } from 'ethers'
 import { formatUnits } from 'ethers/lib/utils'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry/'
 import { concaveProvider } from 'lib/providers'
@@ -15,12 +15,14 @@ import {
   useContractWrite,
   useSigner,
   useWaitForTransaction,
+  Address,
+  usePrepareContractWrite,
 } from 'wagmi'
 import { useTransaction } from './TransactionsRegistry/useTransaction'
 import { useCurrentSupportedNetworkId } from './useCurrentSupportedNetworkId'
 import { usePermit } from './usePermit'
 
-export const useAllowance = (token: Token, spender: string, userAddress: string) => {
+export const useAllowance = (token: Token, spender: Address, userAddress: Address) => {
   const {
     data: value,
     isLoading,
@@ -29,8 +31,8 @@ export const useAllowance = (token: Token, spender: string, userAddress: string)
     isSuccess,
     refetch,
   } = useContractRead({
-    addressOrName: token?.address,
-    contractInterface: erc20ABI,
+    address: token?.address,
+    abi: erc20ABI,
     functionName: 'allowance',
     args: [userAddress, spender],
     chainId: token?.chainId,
@@ -51,12 +53,21 @@ export const useAllowance = (token: Token, spender: string, userAddress: string)
 
 export const useContractApprove = (
   token: Token,
-  spender: string,
+  spender: Address,
   amountToApprove: BigNumberish = MaxUint256.toString(),
   { onSuccess }: { onSuccess: (receipt: TransactionReceipt) => void },
 ) => {
   const { registerTransaction } = useTransactionRegistry()
   const errorModal = useErrorModal()
+  const { address } = useAccount()
+
+  const { config } = usePrepareContractWrite({
+    abi: erc20ABI,
+    address: token?.address,
+    functionName: 'approve',
+    args: [spender, BigNumber.from(amountToApprove)],
+  })
+
   const {
     data: tx,
     isLoading: isWaitingForConfirmation,
@@ -64,18 +75,24 @@ export const useContractApprove = (
     isError,
     error,
     writeAsync: sendApproveTx,
+    reset,
   } = useContractWrite({
-    contractInterface: erc20ABI,
-    addressOrName: token?.address,
-    functionName: 'approve',
-    args: [spender, amountToApprove],
-    onError: (e) => {
-      if (error.name !== 'UserRejectedRequestError')
-        errorModal.onOpen(e, { spender, amountToApprove: amountToApprove.toString() })
+    ...config,
+    onMutate: () => {
+      // if user doesn't sign nor reject in 45 seconds, reset state
+      setTimeout(() => reset(), 45 * 1000)
     },
+    onError: (e) => {
+      if (e.name === 'UserRejectedRequestError') {
+        reset()
+        return
+      }
 
+      errorModal.onOpen(e, { spender, amountToApprove: amountToApprove.toString() })
+      setTimeout(() => reset(), 4000)
+    },
     onSuccess: (tx) => {
-      registerTransaction(tx, { type: 'approve', tokenSymbol: token.symbol })
+      registerTransaction(tx.hash, { type: 'approve', tokenSymbol: token.symbol })
     },
   })
 
@@ -98,7 +115,7 @@ export const useContractApprove = (
 
 export const useApprove = (
   token: Token,
-  spender: string,
+  spender: Address,
   amount: BigNumberish = MaxUint256.toString(),
   { deadline }: { deadline: number },
 ) => {
@@ -119,15 +136,15 @@ export const useApprove = (
 }
 
 export const useApproveForAll = (props: {
-  erc721: string
-  operator: string
+  erc721: Address
+  operator: Address
   approved: boolean
 }) => {
   const account = useAccount()
   const owner = account.address
   const approve = useContractRead({
-    addressOrName: props.erc721,
-    contractInterface: erc721ABI,
+    address: props.erc721,
+    abi: erc721ABI,
     functionName: 'isApprovedForAll',
     args: [owner, props.operator],
     enabled: !!(props?.erc721 && props.operator),

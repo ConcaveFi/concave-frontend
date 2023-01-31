@@ -1,6 +1,6 @@
 import { Transaction } from 'ethers'
 import { useEffect, useRef, useState } from 'react'
-import { useWaitForTransaction } from 'wagmi'
+import { Address, useWaitForTransaction } from 'wagmi'
 import { TrackedTransaction, useTransactionRegistry } from '.'
 
 export type UseTransaction = ReturnType<typeof useTransaction>
@@ -20,7 +20,7 @@ export const useTransaction = (
   const { registerTransaction } = useTransactionRegistry()
   const [isWaitingForConfirmation, setIsWaitingForConfirmation] = useState(false)
   const [error, setError] = useState<{ code: number; reason: string }>()
-  const tx = useRef<Transaction>()
+  const tx = useRef<Transaction & { hash: `0x${string}` }>()
   const { status } = useWaitForTransaction({
     hash: tx.current?.hash,
   })
@@ -37,10 +37,10 @@ export const useTransaction = (
   const sendTx = async () => {
     setIsWaitingForConfirmation(true)
     try {
-      const transaction = await doTx()
+      const transaction = (await doTx()) as Transaction & { hash: `0x${string}`; from: Address }
       tx.current = transaction
       if (extra.meta) {
-        registerTransaction(transaction, extra.meta)
+        registerTransaction(transaction.hash, extra.meta)
       }
     } catch (e) {
       if (e[`code`] !== 4001) {

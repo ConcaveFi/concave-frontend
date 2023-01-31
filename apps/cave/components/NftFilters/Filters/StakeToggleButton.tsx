@@ -1,4 +1,4 @@
-import { Flex, Text } from '@chakra-ui/react'
+import { Flex, Text } from '@concave/ui'
 import { stakingPools } from '@concave/marketplace'
 import { ToggleButton } from 'components/ToggleButton'
 import { StakePoolFilterEnum } from './hooks/useFilterByStakePool'

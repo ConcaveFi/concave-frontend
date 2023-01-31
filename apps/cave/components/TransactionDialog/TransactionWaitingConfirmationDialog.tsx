@@ -1,6 +1,5 @@
-import { keyframes } from '@chakra-ui/system'
 import { SpinIcon } from '@concave/icons'
-import { Heading, Modal, Text } from '@concave/ui'
+import { Heading, Modal, Text, keyframes } from '@concave/ui'
 import { ReactNode } from 'react'
 
 const spin = keyframes({

@@ -1,13 +1,13 @@
 import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/providers'
 import { MARKETPLACE_CONTRACT } from '@concave/core'
-import { splitSignature } from '@ethersproject/bytes'
 import { BaseProvider } from '@ethersproject/providers'
-import { ethers, Signer, Transaction } from 'ethers'
+import { Contract, Signer, Transaction } from 'ethers'
+import { splitSignature } from 'ethers/lib/utils'
 import { MarketItem } from '../entities'
 import { MarketplaceABI } from './MarketplaceAbi'
 
 export class FixedOrderMarketContract {
-  private readonly contract: ethers.Contract
+  private readonly contract: Contract
   public readonly address: string
   constructor(private readonly provider: BaseProvider | MulticallProvider) {
     if (!provider.network.chainId)
@@ -15,7 +15,7 @@ export class FixedOrderMarketContract {
     this.address = MARKETPLACE_CONTRACT[provider.network.chainId]
     if (!this.address)
       throw 'Address is undefined for constructor of contract ConcaveNFTMarketplace'
-    this.contract = new ethers.Contract(this.address, MarketplaceABI, this.provider)
+    this.contract = new Contract(this.address, MarketplaceABI, this.provider)
   }
 
   public getContract() {

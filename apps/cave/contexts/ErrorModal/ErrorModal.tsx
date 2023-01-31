@@ -3,7 +3,7 @@ import { DiscordInput } from 'components/DiscordInput'
 import { useErrorModal } from './useErrorModal'
 
 export const ReportErrorModal = () => {
-  const { infos, isOpen, onClose, onConfirm, setUsername } = useErrorModal()
+  const { infos, isOpen, onClose, onConfirm, setUsername, username } = useErrorModal()
   return (
     <Modal
       bluryOverlay={true}
@@ -22,11 +22,7 @@ export const ReportErrorModal = () => {
           Operation and the error
         </Text>
         <HStack w="full">
-          <DiscordInput
-            onUpdate={({ username, valid }) => {
-              setUsername(valid ? username : 'anonymous')
-            }}
-          ></DiscordInput>
+          <DiscordInput username={username} onChangeUsername={setUsername} />
         </HStack>
         <HStack w={'full'}>
           <Button

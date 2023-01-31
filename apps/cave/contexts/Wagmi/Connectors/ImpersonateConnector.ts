@@ -1,25 +1,23 @@
-import { EventEmitter } from 'eventemitter3';
+import { EventEmitter } from 'eventemitter3'
 import { ethers } from 'ethers'
 import { getAddress } from 'ethers/lib/utils'
-import { chain, ConnectorData } from 'wagmi'
+import { ConnectorData } from 'wagmi'
+import { localhost } from 'wagmi/chains'
 import { normalizeChainId } from '@wagmi/core'
 
-class StaticJsonRpcProvider extends ethers.providers.StaticJsonRpcProvider { }
+class StaticJsonRpcProvider extends ethers.providers.StaticJsonRpcProvider {}
 
 export type ImpersonateConnectorEvents = {
-  changeAddress(address: string): void;
-  change(data: ConnectorData<StaticJsonRpcProvider>): void;
-  connect(data: ConnectorData<StaticJsonRpcProvider>): void;
-  message({ type, data }: {
-    type: string;
-    data?: unknown;
-  }): void;
-  disconnect(): void;
-  error(error: Error): void;
+  changeAddress(address: string): void
+  change(data: ConnectorData<StaticJsonRpcProvider>): void
+  connect(data: ConnectorData<StaticJsonRpcProvider>): void
+  message({ type, data }: { type: string; data?: unknown }): void
+  disconnect(): void
+  error(error: Error): void
 }
 
-export class ImpersonateConnector extends EventEmitter<ImpersonateConnectorEvents>  {
-  private _address: string;
+export class ImpersonateConnector extends EventEmitter<ImpersonateConnectorEvents> {
+  private _address: string
   private provider?: StaticJsonRpcProvider
   public static ID = 'impersonateConnect'
   public readonly id = ImpersonateConnector.ID
@@ -31,16 +29,16 @@ export class ImpersonateConnector extends EventEmitter<ImpersonateConnectorEvent
     super()
     if (!this.storage) return
     this.address = this.storage.getItem(ImpersonateConnector.ID)
-    this.connect({ chainId: chain.localhost.id })
+    this.connect({ chainId: localhost.id })
   }
 
   public get address(): string {
-    return this._address;
+    return this._address
   }
 
   public set address(address: string) {
     if (!ethers.utils.isAddress(address)) return
-    this._address = address;
+    this._address = address
     this.storage?.setItem(ImpersonateConnector.ID, address)
     this.emit('changeAddress', address)
   }
@@ -60,7 +58,7 @@ export class ImpersonateConnector extends EventEmitter<ImpersonateConnectorEvent
     return {
       account,
       chain: { id, unsupported },
-      provider: this.getProvider()
+      provider: this.getProvider(),
     }
   }
 
@@ -78,23 +76,21 @@ export class ImpersonateConnector extends EventEmitter<ImpersonateConnectorEvent
   }
 
   async getChainId() {
-    const chainId = normalizeChainId(chain.localhost.id)
+    const chainId = normalizeChainId(localhost.id)
     return chainId
   }
 
   async getProvider({ create }: { chainId?: number; create?: boolean } = {}) {
     if (!this.provider || create) {
-      this.provider = new StaticJsonRpcProvider(chain.localhost.rpcUrls.default)
+      this.provider = new StaticJsonRpcProvider(localhost.rpcUrls.default[0])
     }
     return this.provider
   }
 
   async getSigner({ chainId }: { chainId?: number } = {}) {
-    const [provider] = await Promise.all([
-      this.getProvider({ chainId }),
-    ])
+    const [provider] = await Promise.all([this.getProvider({ chainId })])
     await provider.send('hardhat_impersonateAccount', [this.address])
-    return provider.getSigner(this.address);
+    return provider.getSigner(this.address)
   }
 
   async isAuthorized() {
@@ -107,7 +103,7 @@ export class ImpersonateConnector extends EventEmitter<ImpersonateConnectorEvent
   }
 
   protected isChainUnsupported(id: number) {
-    return id !== chain.localhost.id
+    return id !== localhost.id
   }
 
   protected onAccountsChanged = (accounts: string[]) => {

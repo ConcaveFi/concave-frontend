@@ -26,16 +26,18 @@ export const ACNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) =>
   const alreadyRedeemed = redeemed === +aCNVData?.formatted
   const unsupportedNetwork = provider?.network?.chainId !== ChainId.ETHEREUM
   const canRedeem = validBalance && !alreadyRedeemed && !unsupportedNetwork
-  const redeemTransaction = useTransaction(() => {
-    const aCNVContract = new ACNVRedeemContract(provider)
-    return aCNVContract.redeem(signer, address)
-  }, {
-    meta: {
-      type: 'redeem',
-      amount: `${aCNVData?.formatted} aCNV`,
-    }
-  });
-
+  const redeemTransaction = useTransaction(
+    () => {
+      const aCNVContract = new ACNVRedeemContract(provider)
+      return aCNVContract.redeem(signer, address)
+    },
+    {
+      meta: {
+        type: 'redeem',
+        amount: `${aCNVData?.formatted} aCNV`,
+      },
+    },
+  )
 
   return (
     <>
@@ -119,7 +121,10 @@ export const ACNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) =>
         </Card>
       </Modal>
       <WaitingConfirmationDialog isOpen={redeemTransaction.isWaitingForConfirmation} />
-      <TransactionSubmittedDialog isOpen={redeemTransaction.isWaitingTransactionReceipt} tx={redeemTransaction.tx} />      
+      <TransactionSubmittedDialog
+        isOpen={redeemTransaction.isWaitingTransactionReceipt}
+        txHash={redeemTransaction.tx?.hash}
+      />
     </>
   )
 }

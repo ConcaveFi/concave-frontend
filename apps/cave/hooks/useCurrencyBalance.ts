@@ -1,7 +1,7 @@
 import { Currency, CurrencyAmount } from '@concave/core'
 import { useMemo } from 'react'
 import { toAmount } from 'utils/toAmount'
-import { useAccount, useBalance } from 'wagmi'
+import { Address, useAccount, useBalance } from 'wagmi'
 
 export type UseCurrencyBalanceData = Omit<ReturnType<typeof useBalance>, 'data'> & {
   data: CurrencyAmount<Currency>
@@ -17,15 +17,15 @@ export const useCurrencyBalance = (
 
 export const useCurrencyBalanceOfAddress = (
   currency: Currency,
-  address: string,
+  address: Address,
   { watch = false } = {},
 ): UseCurrencyBalanceData => {
   const enabled = !!currency && !!address
   const balance = useBalance({
-    addressOrName: address,
+    address: address,
     chainId: currency?.chainId,
     formatUnits: currency?.decimals,
-    token: currency?.isToken && currency?.wrapped.address,
+    ...(currency?.isToken && { token: currency.wrapped.address }),
     watch,
     enabled,
     staleTime: 500,

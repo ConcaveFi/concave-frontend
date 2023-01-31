@@ -25,13 +25,11 @@ export const BOND_ADDRESS: AddressMap = {
 export const ACNV_ADDRESS: AddressMap = {
   [ChainId.LOCALHOST]: '0x6Ff0106D34FEEe8A8aCF2e7b9168480f86B82E2f',
   [ChainId.ETHEREUM]: '0x6Ff0106D34FEEe8A8aCF2e7b9168480f86B82E2f',
-  [ChainId.RINKEBY]: '',
 }
 
 export const ACNV_REDEEMPTION: AddressMap = {
   [ChainId.LOCALHOST]: '0x38baBedCb1f226B49b2089DA0b84e52b6181Ca59',
   [ChainId.ETHEREUM]: '0x38baBedCb1f226B49b2089DA0b84e52b6181Ca59',
-  [ChainId.RINKEBY]: '',
 }
 
 export const AIRDROP_CLAIM: AddressMap = {
@@ -42,7 +40,6 @@ export const AIRDROP_CLAIM: AddressMap = {
 export const AIRDROP_CLAIM_Q4: AddressMap = {
   [ChainId.LOCALHOST]: '0x86F7627742b33d5e70Ef086D3AFB00E22c246178',
   [ChainId.ETHEREUM]: '0x86F7627742b33d5e70Ef086D3AFB00E22c246178',
-  [ChainId.GÖRLI]: '',
 }
 
 export const BBTCNV_ADDRESS: AddressMap = {

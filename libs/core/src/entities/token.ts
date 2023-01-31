@@ -8,7 +8,7 @@ import { CurrencyAmount } from './currencyAmount'
  * Represents an ERC20 token with a unique address and some metadata.
  */
 export class Token extends AbstractCurrency {
-  public readonly address: string
+  public readonly address: `0x${string}`
 
   public readonly isNative: false = false
   public readonly isToken: true = true

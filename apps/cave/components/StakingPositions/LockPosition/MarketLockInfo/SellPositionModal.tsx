@@ -114,11 +114,11 @@ export const useListeForSaleState = ({
       seller: market.seller,
       erc721: market.erc721,
       erc20: market.erc20,
-      tokenId: market.tokenId.toString(),
-      startPrice: market.startPrice.toString(),
-      endPrice: market.endPrice.toString(),
-      start: market.start.toString(),
-      deadline: market.deadline.toString(),
+      tokenId: market.tokenId,
+      startPrice: market.startPrice,
+      endPrice: market.endPrice,
+      start: market.start,
+      deadline: market.deadline,
     },
   })
 

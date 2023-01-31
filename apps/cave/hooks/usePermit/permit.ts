@@ -1,8 +1,6 @@
 import { CurrencyAmount, Token } from '@concave/core'
-import { Signer } from '@ethersproject/abstract-signer'
-import { splitSignature } from '@ethersproject/bytes'
-import { Contract } from '@ethersproject/contracts'
-import { Wallet } from '@ethersproject/wallet'
+import { Wallet, Contract, Signer } from 'ethers'
+import { splitSignature } from 'ethers/lib/utils'
 
 interface PermitAllowedMessage {
   holder: string

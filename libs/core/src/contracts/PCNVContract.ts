@@ -1,10 +1,10 @@
 import { BaseProvider, TransactionResponse } from '@ethersproject/providers'
-import { BigNumber, Contract, ethers } from 'ethers'
+import { BigNumber, Contract, Signer } from 'ethers'
 import { PCNV_REDEMPTION_ABI } from '../abis/PcnvRedemptionAbi'
 import { PCNV_ADDRESS } from '../constants'
 
 export class PCNVContract {
-  private readonly pCNVContract: ethers.Contract
+  private readonly pCNVContract: Contract
   constructor(private readonly provider: BaseProvider) {
     if (!provider) {
       throw 'Provider is undefined to constructor of pCNVContract.'
@@ -20,7 +20,7 @@ export class PCNVContract {
     return this.pCNVContract.redeemable(address)
   }
   public async redeem(
-    signer: ethers.Signer,
+    signer: Signer,
     amount: BigNumber,
     address: string,
     redeemMax?: boolean,

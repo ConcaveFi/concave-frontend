@@ -1,3 +1,4 @@
+import { isDiscordUsername } from 'components/DiscordInput'
 import { detect } from 'detect-browser'
 import { useContext, useState } from 'react'
 import { useAccount, useNetwork } from 'wagmi'
@@ -9,7 +10,7 @@ export const useErrorModal = () => {
   const { name, os, version } = detect()
   const chain = useNetwork()
   const account = useAccount()
-  const [username, setUsername] = useState('anonymous')
+  const [username, setUsername] = useState('')
   const error = errorContext.error || {}
   const infos = {
     Address: account?.address,
@@ -17,7 +18,7 @@ export const useErrorModal = () => {
     OS: os,
     Browser: `${name} ${version}`,
     Chain: chain.chain?.name,
-    Discord: username,
+    Discord: isDiscordUsername(username) ? username : 'anonymous',
   }
   return {
     infos,

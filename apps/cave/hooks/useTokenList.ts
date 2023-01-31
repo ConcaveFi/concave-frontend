@@ -5,13 +5,15 @@ import { fetchJson } from 'ethers/lib/utils'
 import { concaveProvider } from 'lib/providers'
 import ms from 'ms'
 import { useQuery, UseQueryResult } from 'react-query'
-import { Chain, chain, useNetwork } from 'wagmi'
+import { Chain, useNetwork } from 'wagmi'
+import { mainnet, goerli } from 'wagmi/chains'
 
 const concaveTokenList = (networkName: string) =>
   `/assets/tokenlists/${networkName.toLowerCase()}/concave.json`
 
 const fetchLiquidityTokenList = async (chain: Chain) => {
-  const store = typeof window !== 'undefined' && window.localStorage ? window.localStorage : undefined;
+  const store =
+    typeof window !== 'undefined' && window.localStorage ? window.localStorage : undefined
   if (!store) return []
   const [tokenList, pairs] = await Promise.all([
     fetchJson(concaveTokenList(chain.name)) as Promise<{ tokens: Token[] }>,
@@ -31,7 +33,7 @@ const fetchLiquidityTokenList = async (chain: Chain) => {
 
 export const useLiquidityTokenList = () => {
   const network = useNetwork()
-  const activeChain = network.chain?.unsupported ? chain.mainnet : network.chain || chain.mainnet
+  const activeChain = network.chain?.unsupported ? mainnet : network.chain || mainnet
 
   const tokens = useQuery(
     ['token-liqidity-list', activeChain.id],
@@ -51,7 +53,7 @@ export const useLiquidityTokenList = () => {
 
 export const useTokenList = () => {
   const network = useNetwork()
-  const activeChain = network.chain?.unsupported ? chain.mainnet : network.chain || chain.mainnet
+  const activeChain = network.chain?.unsupported ? mainnet : network.chain || mainnet
   const tokens = useQuery(
     ['token-list', activeChain.id],
     async () => fetchLiquidityTokenList(activeChain),
@@ -87,7 +89,7 @@ export const useAddressTokenList: (address?: string) => UseQueryResult<Token[], 
   address: string,
 ) => {
   const { chain: activeChain } = useNetwork()
-  const chainName = activeChain?.id === chain.goerli.id ? chain.goerli.name : 'eth'
+  const chainName = activeChain?.id === goerli.id ? goerli.name : 'eth'
   const url = `https://deep-index.moralis.io/api/v2/${address}/erc20?chain=${chainName}`
   return useQuery(['LISTTOKENS', address], () => {
     if (!address) {
@@ -110,10 +112,11 @@ export const useAddressTokenList: (address?: string) => UseQueryResult<Token[], 
   })
 }
 
-export const prefetchTokenList = () => queryClient.prefetchQuery({
-  queryKey: ['token-liqidity-list', 1],
-  queryFn: async () => fetchLiquidityTokenList(chain.mainnet),
-})
+export const prefetchTokenList = () =>
+  queryClient.prefetchQuery({
+    queryKey: ['token-liqidity-list', 1],
+    queryFn: async () => fetchLiquidityTokenList(mainnet),
+  })
 
 type MoralisERC20Token = {
   token_address: string

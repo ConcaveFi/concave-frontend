@@ -1,11 +1,11 @@
 import {
-  Modal,
+  RawModal,
   ModalContent,
   ModalOverlay,
   useBreakpointValue,
   useDisclosure,
   VStack,
-} from '@chakra-ui/react'
+} from '@concave/ui'
 import { Card } from '@concave/ui'
 import { StakeData } from '../hooks/useLiquidStakeData'
 import { Emissions } from './Emissions'
@@ -37,7 +37,7 @@ export const StakeModal = ({
   const descriptionType = useBreakpointValue<'modal' | 'card'>({ base: 'modal', xl: 'card' })
   const informationType = { modal: 'click', card: 'hover' } as const
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="4xl" isCentered>
+    <RawModal isOpen={isOpen} onClose={onClose} size="4xl" isCentered>
       <ModalOverlay backdropFilter={'blur(15px)'} />
       <ModalContent width={{ base: '340px', md: '650px' }} flexDirection="row">
         <Card
@@ -69,6 +69,6 @@ export const StakeModal = ({
           </VStack>
         </Card>
       </ModalContent>
-    </Modal>
+    </RawModal>
   )
 }

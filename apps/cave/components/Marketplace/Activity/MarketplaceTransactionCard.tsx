@@ -7,7 +7,7 @@ import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId
 import { useFetchTokenData } from 'hooks/useTokenList'
 import { useEffect, useState } from 'react'
 import { compactFormat } from 'utils/bigNumberMask'
-import { chain } from 'wagmi'
+import { mainnet } from 'wagmi'
 import { Data } from './MarketplaceActivityCard'
 interface MarketplaceTransactionCardProps {
   data?: Data & StakingPool & Marketplace & LogStakingV1
@@ -18,7 +18,7 @@ export const MarketplaceTransactionCard = ({ data }: MarketplaceTransactionCardP
   const cardListing = data.type === 'sale' ? 'sold for' : 'listed at'
   const chainId = useCurrentSupportedNetworkId()
   const etherscanBaseUrl =
-    chainId === chain.mainnet.id ? `https://etherscan.io` : `https://goerli.etherscan.io`
+    chainId === mainnet.id ? `https://etherscan.io` : `https://goerli.etherscan.io`
   const etherscanLink = etherscanBaseUrl + `/tx/${data.transactionHash}`
   const [isLargerThan770] = useMediaQuery('(min-width: 770px)')
   const [width, setWidth] = useState('0')

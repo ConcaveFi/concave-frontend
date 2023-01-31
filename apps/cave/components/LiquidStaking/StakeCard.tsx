@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Image, Stack, Text, TextProps, useDisclosure } from '@chakra-ui/react'
+import { Box, Button, Flex, Image, Stack, Text, TextProps, useDisclosure } from '@concave/ui'
 import { Percent } from '@concave/core'
 import { stakingPools } from '@concave/marketplace'
 import { Card, gradientBorder, HStack } from '@concave/ui'

@@ -1,4 +1,3 @@
-import { keyframes } from '@chakra-ui/system'
 import { Box, Card, Flex, Image, Spinner, Text } from '@concave/ui'
 import { Loading } from 'components/Loading'
 import { utils } from 'ethers'
@@ -6,12 +5,7 @@ import { useCNVPrice } from 'hooks/useCNVPrice'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useQuery, UseQueryResult } from 'react-query'
 import { getRoiWarnColor } from 'utils/getRoiWarnColor'
-import { chainId } from 'wagmi'
 import { getBondSpotPrice, getBondTermLength } from './BondState'
-const spin = keyframes({
-  '0%': { transform: 'rotate(0deg)' },
-  '100%': { transform: 'rotate(360deg)' },
-})
 
 export const InfoItem = ({ value, isLoading = false, label, ...props }) => (
   <Flex
@@ -52,6 +46,7 @@ export const useBondSpotPrice = () => {
 
 export const useRoi = (bondSpotPrice: UseQueryResult<string, unknown>) => {
   const cnvPrice = useCNVPrice()
+  const chainId = useCurrentSupportedNetworkId()
   return useQuery(
     ['CNV', 'ROI', chainId],
     () => {

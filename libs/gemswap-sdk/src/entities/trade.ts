@@ -80,9 +80,9 @@ export interface BestTradeOptions {
  * Does not account for slippage, i.e. trades that front run this trade and move the price.
  */
 export class Trade<
-  TInput extends Currency,
-  TOutput extends Currency,
-  TTradeType extends TradeType,
+  TInput extends Currency = Currency,
+  TOutput extends Currency = Currency,
+  TTradeType extends TradeType = TradeType,
 > {
   /**
    * The route of the trade, i.e. which pairs the trade goes through and the input/output currencies.

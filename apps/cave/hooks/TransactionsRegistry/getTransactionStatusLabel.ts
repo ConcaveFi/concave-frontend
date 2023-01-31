@@ -1,5 +1,26 @@
 import { UnionToIntersection } from 'types/utils'
-import { TrackedTransaction, TransactionMeta } from './TrackedTransactions'
+
+export type TransactionMeta =
+  | { type: 'approve'; tokenSymbol: string }
+  | { type: 'swap'; amountIn: string; amountOut: string }
+  | { type: 'add liquidity'; amount0: string; amount1: string; pairSymbol: string }
+  | { type: 'remove liquidity'; amount0: string; amount1: string; pairSymbol: string }
+  | { type: 'bond'; amountIn: string; amountOut: string }
+  | { type: 'stake'; amount: string; pool: number }
+  | { type: 'redeem'; amount: string }
+  | { type: 'offer marketplace'; tokenId: number }
+  | { type: 'list position'; tokenId: number; action: 'auction' | 'sale' }
+  | { type: 'unlist position'; tokenId: number }
+  | { type: 'airdrop'; amount: string | number }
+
+export type TrackedTransaction = {
+  from: string
+  hash: string
+  chainId: number
+  timestamp: number
+  status: 'pending' | 'success' | 'error'
+  meta: TransactionMeta
+}
 
 type TransactionMetaToStatusLabel = {
   [Meta in TransactionMeta as Meta['type']]: (

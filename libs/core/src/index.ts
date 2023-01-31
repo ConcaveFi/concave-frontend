@@ -1,4 +1,4 @@
-import JSBI from 'jsbi'
+export { default as JSBI } from 'jsbi'
 
 // Export JSBI
 export * from './abis'
@@ -8,4 +8,3 @@ export * from './entities'
 export * from './enums'
 export * from './functions'
 export * from './types'
-export { JSBI }

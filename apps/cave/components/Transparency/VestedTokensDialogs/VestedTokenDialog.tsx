@@ -1,5 +1,5 @@
-import { CloseButton, Modal, ModalContent, ModalOverlay } from '@chakra-ui/react'
 import { Token } from '@concave/core'
+import { CloseButton, RawModal, ModalContent, ModalOverlay } from '@concave/ui'
 import { InfoIcon } from '@concave/icons'
 import { Button, Card, Flex, Spinner, Text, Tooltip } from '@concave/ui'
 import { ToggleButton } from 'components/ToggleButton'
@@ -49,7 +49,7 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
 
   return (
     <>
-      <Modal
+      <RawModal
         preserveScrollBarGap
         isOpen={isOpen}
         onClose={onClose}
@@ -143,7 +143,7 @@ export const VestedTokenDialog: React.FC<VestedTokenButtonProps & VestedTokenDia
             </Button>
           </Card>
         </ModalContent>
-      </Modal>
+      </RawModal>
     </>
   )
 }

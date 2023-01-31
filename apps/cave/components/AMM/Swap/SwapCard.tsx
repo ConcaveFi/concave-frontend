@@ -14,7 +14,6 @@ import {
 import { useSwapSettings } from 'components/AMM/Swap/Settings'
 import { useCurrencyApprove } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency'
-import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
 
 import { WaitingConfirmationDialog } from 'components/TransactionDialog/TransactionWaitingConfirmationDialog'
@@ -34,16 +33,16 @@ const requestDBSync = () => fetch('https://cnv-amm.vercel.app/api/gemswap', { ke
 export function SwapCard() {
   const swapState: SwapState = useSwapState()
 
-  if ( !swapState.trade.inputAmount ) {
+  if (!swapState.trade.inputAmount) {
     return <></>
   }
-  return <Swap {...swapState}></Swap> 
+  return <Swap {...swapState}></Swap>
 }
 
 export function Swap(props: SwapState) {
-  const { trade, error, onChangeInput, onChangeOutput, switchFields, onReset } = props;
-  const errorModal = useErrorModal();
-  
+  const { trade, error, onChangeInput, onChangeOutput, switchFields, onReset } = props
+  const errorModal = useErrorModal()
+
   const { deadline: ttl } = useSwapSettings((s) => ({
     deadline: s.settings.deadline,
   }))
@@ -68,13 +67,13 @@ export function Swap(props: SwapState) {
         onChangeInput(toAmount(0, trade.inputAmount.currency))
         closeConfirmationModal()
       },
-      onError: errorModal.onOpen
+      onError: errorModal.onOpen,
     },
     currencyApprove.permit,
   )
 
   useWaitForTransaction({
-    wait: swapTx.data?.wait,
+    hash: swapTx.data?.hash,
     onSuccess: requestDBSync,
     enabled: swapTx.isSuccess,
   })
@@ -167,7 +166,11 @@ export function Swap(props: SwapState) {
         </Text>
       </WaitingConfirmationDialog>
 
-      <TransactionSubmittedDialog title="Swap submitted" tx={swapTx.data} isOpen={swapTx.isSuccess}>
+      <TransactionSubmittedDialog
+        title="Swap submitted"
+        txHash={swapTx.data?.hash}
+        isOpen={swapTx.isSuccess}
+      >
         {swapTx.trade?.outputAmount.currency.isToken && (
           <AddTokenToWalletButton token={swapTx.trade.outputAmount.currency.wrapped} />
         )}

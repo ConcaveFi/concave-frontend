@@ -1,6 +1,5 @@
 import ProgressBar from '@badrap/bar-of-progress'
-import { Styles } from '@chakra-ui/theme-tools'
-import { ConcaveFonts } from '@concave/ui'
+import { ConcaveFonts, Styles } from '@concave/ui'
 import { DefaultLayout } from 'components/Layout'
 import { MetaHead, MetaProps } from 'components/MetaHead'
 import { Modals } from 'components/Modals'
@@ -12,6 +11,7 @@ import type { AppProps } from 'next/app'
 import Router, { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import * as gtag from '../lib/analytics'
+
 const globalStyles: Styles = {
   global: {
     html: {

@@ -9,7 +9,8 @@ import {
   Text,
   useDisclosure,
 } from '@concave/ui'
-import { TransactionResponse } from '@ethersproject/providers'
+import { TransactionResponse } from '@ethersproject/abstract-provider'
+
 import { TransactionErrorDialog } from 'components/TransactionDialog/TransactionErrorDialog'
 import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
 
@@ -20,7 +21,7 @@ import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useEffect, useState } from 'react'
 import { formatFixed } from 'utils/bigNumberMask'
-import { useAccount, useProvider, useSigner } from 'wagmi'
+import { Address, useAccount, useProvider, useSigner } from 'wagmi'
 import { usePCNVUserData } from '../Hooks/usePCNVUserData'
 import useVestedTokens from '../Hooks/useVestedTokens'
 import { VestedTokenButtonProps } from '../TreasuryRedeemCard'
@@ -125,7 +126,7 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
       <TransactionSubmittedDialog
         closeParentComponent={onCloseModal}
         isOpen={transactionSubmitted && Boolean(tx) && status === 'submitted'}
-        tx={tx}
+        txHash={tx.hash as Address}
       />
       <PCNVConfirmationModal
         redeemMax={redeemMax}
@@ -149,7 +150,7 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
     pCNVContract
       .redeem(signer, amount, address, redeemMax)
       .then((transaction) => {
-        registerTransaction(transaction, {
+        registerTransaction(transaction.hash as Address, {
           type: 'redeem',
           amount: `${formatEther(amount)} pCNV`,
         })

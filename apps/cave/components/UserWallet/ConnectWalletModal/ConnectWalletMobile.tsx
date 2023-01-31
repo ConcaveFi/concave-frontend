@@ -256,7 +256,7 @@ export const MobileConnect: FC<{ isOpen: boolean; onClose: VoidFunction }> = ({
   onClose,
 }) => {
   const router = useRouter()
-  const queryChainId = +router.query.chainId
+  const queryChainId = +router.query.chainId as (typeof supportedChainsId)[number]
   const chainId = supportedChainsId.includes(queryChainId) ? queryChainId : ChainId.ETHEREUM
 
   const { connectors, connect, pendingConnector, reset } = useConnect({

@@ -1,11 +1,11 @@
 import { BaseProvider, TransactionResponse } from '@ethersproject/providers'
-import { Contract, ethers } from 'ethers'
+import { Contract, Signer } from 'ethers'
 import { ACNV_REDEMPTION_ABI } from '../abis'
 import { ACNV_REDEEMPTION } from '../constants'
 import { ChainId } from '../enums'
 
 export class ACNVRedeemContract {
-  private readonly aCNVContract: ethers.Contract
+  private readonly aCNVContract: Contract
   constructor(private readonly provider: BaseProvider) {
     if (!provider) {
       throw 'Provider is undefined for constructor of ACNVRedemptionContract'
@@ -16,7 +16,7 @@ export class ACNVRedeemContract {
     const chainID = this.provider.network.chainId
     this.aCNVContract = new Contract(ACNV_REDEEMPTION[chainID], ACNV_REDEMPTION_ABI, this.provider)
   }
-  public async redeem(signer: ethers.Signer, address: string): Promise<TransactionResponse> {
+  public async redeem(signer: Signer, address: string): Promise<TransactionResponse> {
     return this.aCNVContract.connect(signer).redeem(address)
   }
 }

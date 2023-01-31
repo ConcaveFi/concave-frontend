@@ -5,12 +5,12 @@ import { useApprove } from 'hooks/useApprove'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useMemo } from 'react'
 import { compactFormat } from 'utils/bigNumberMask'
-import { useAccount } from 'wagmi'
+import { Address, useAccount } from 'wagmi'
 
 export type CurrencyApproveState = ReturnType<typeof useCurrencyApprove>
 export const useCurrencyApprove = (
   amount: CurrencyAmount<Currency>,
-  spender: string,
+  spender: Address,
   { amountInfo = false, enablePermit = false, ttl = 30 } = {},
 ) => {
   const { address } = useAccount()
@@ -97,7 +97,7 @@ type CurrencyAmountButton = {
   /**
    * address of spender
    */
-  spender: string
+  spender: Address
 }
 
 export const CurrencyAmountButton = ({
@@ -120,7 +120,7 @@ export const CurrencyAmountButton = ({
 
   // if the amount is approved, and autoHide is enable, we must not render
   if (currencyButtonState.approved && autoHide) {
-    return <></>
+    return null
   }
 
   return <Button {...buttonProps} {...currencyButtonState.buttonProps}></Button>

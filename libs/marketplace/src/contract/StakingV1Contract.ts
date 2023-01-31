@@ -8,7 +8,7 @@ import { StakingV1Abi } from './StakingV1Abi'
 export class StakingV1Contract {
   private readonly contract: ethers.Contract
   public readonly chainId: number
-  public readonly address: string
+  public readonly address: `0x${string}`
   constructor(private readonly provider: BaseProvider | MulticallProvider) {
     this.chainId = provider.network.chainId
     if (!this.chainId) throw 'ChainID is undefined for constructor of contract StakingV1Contract'

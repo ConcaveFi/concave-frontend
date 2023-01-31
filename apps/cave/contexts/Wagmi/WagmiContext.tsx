@@ -1,7 +1,8 @@
-import { SafeConnector } from '@gnosis.pm/safe-apps-wagmi'
+// import { SafeConnector } from '@gnosis.pm/safe-apps-wagmi'
 import { NODE_ENV } from 'lib/env.conf'
 import { ReactNode, useEffect } from 'react'
-import { chain, Connector, createClient, defaultChains, useConnect, WagmiConfig } from 'wagmi'
+import { Connector, createClient, useConnect, WagmiConfig } from 'wagmi'
+import { goerli, mainnet, localhost } from 'wagmi/chains'
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
@@ -10,21 +11,23 @@ import { concaveProvider, concaveProviderConfig, concaveWSProvider } from '../..
 import { ImpersonateConnector } from './Connectors/ImpersonateConnector'
 import { UnstoppableConnector } from './Connectors/UnstoppableConnector'
 
-export const chains = [chain.localhost, chain.goerli, chain.mainnet] // app supported chains
+export const chains = [localhost, goerli, mainnet] // app supported chains
 export const supportedChainsId = chains.map((c) => c.id)
 
 const connectors = [
-  new SafeConnector({ chains }),
+  // new SafeConnector({ chains }),
   new InjectedConnector({ chains }),
   new MetaMaskConnector({ chains }),
   new WalletConnectConnector({
-    chains, options: {
+    chains,
+    options: {
       qrcode: false,
       rpc: {
-        [chain.mainnet.id]: concaveProviderConfig.rpc,
-        [chain.localhost.id]: chain.localhost.rpcUrls.default,
+        [mainnet.id]: concaveProviderConfig.rpc,
+        [goerli.id]: concaveProviderConfig.rpc,
+        [localhost.id]: localhost.rpcUrls.default.http[0],
       },
-    }
+    },
   }),
   new UnstoppableConnector({ chains }),
   new CoinbaseWalletConnector({
@@ -37,40 +40,39 @@ const connectors = [
       headlessMode: true,
     },
   }),
-  NODE_ENV === "development" ? new ImpersonateConnector() : undefined,
-].filter(e => e) as Connector[]
+  NODE_ENV === 'development' ? new ImpersonateConnector() : undefined,
+].filter(Boolean) as Connector[]
 
 const isChainSupported = (chainId?: number) => supportedChainsId.some((x) => x === chainId)
 
-const provider = ({ chainId }) =>
-  concaveProvider(isChainSupported(chainId) ? chainId : chain.mainnet.id)
+const provider = ({ chainId }) => concaveProvider(isChainSupported(chainId) ? chainId : mainnet.id)
 
 const webSocketProvider = ({ chainId }) =>
-  concaveWSProvider(isChainSupported(chainId) ? chainId : chain.mainnet.id)
+  concaveWSProvider(isChainSupported(chainId) ? chainId : mainnet.id)
 
-const isServer = typeof window === 'undefined'
-const isIframe = !isServer && window?.parent !== window
+// const isServer = typeof window === 'undefined'
+// const isIframe = !isServer && window?.parent !== window
 
 const client = createClient({
-  autoConnect: !isIframe,
+  autoConnect: true, //!isIframe,
   connectors,
   provider,
   webSocketProvider,
 })
 
-const AutoConnect = () => {
-  // auto connects to gnosis safe if in context
-  const { connect, connectors } = useConnect()
-  useEffect(() => {
-    const safeConnector = connectors.find((c) => c.id === 'safe' && c.ready)
-    if (safeConnector) connect({ connector: safeConnector })
-  }, [connectors, connect])
-  return null
-}
+// const AutoConnect = () => {
+//   // auto connects to gnosis safe if in context
+//   const { connect, connectors } = useConnect()
+//   useEffect(() => {
+//     const safeConnector = connectors.find((c) => c.id === 'safe' && c.ready)
+//     if (safeConnector) connect({ connector: safeConnector })
+//   }, [connectors, connect])
+//   return null
+// }
 
 export const WagmiProvider = ({ children }: { children: ReactNode }) => (
   <WagmiConfig client={client}>
-    {isIframe && <AutoConnect />}
+    {/* {isIframe && <AutoConnect />} */}
     {children}
   </WagmiConfig>
 )
