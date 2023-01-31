@@ -2,7 +2,7 @@ import { UnsupportedNetworkModal } from 'components/UnsupportedNetworkModal'
 import dynamic from 'next/dynamic'
 import { ComponentType } from 'react'
 import { useAccount } from 'wagmi'
-import create from 'zustand'
+import { create } from 'zustand'
 import { combine } from 'zustand/middleware'
 
 const ConnectWalletModal: ComponentType<{ isOpen: boolean; onClose: () => void }> = dynamic(
