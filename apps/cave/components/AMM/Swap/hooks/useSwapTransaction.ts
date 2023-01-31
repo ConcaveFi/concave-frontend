@@ -1,18 +1,22 @@
 import { Currency, RouterAbi, ROUTER_ADDRESS } from '@concave/core'
 import { Router, Trade, TradeType } from '@concave/gemswap-sdk'
-import { TransactionResponse } from '@ethersproject/abstract-provider'
+import { SendTransactionResult } from '@wagmi/core'
+import { BigNumber } from 'ethers'
 import { isAddress } from 'ethers/lib/utils'
 import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { UsePermiReturn } from 'hooks/usePermit'
 import { useMemo } from 'react'
 import { toPercent } from 'utils/toPercent'
-import { useAccount, useContractWrite, useNetwork } from 'wagmi'
+import { useAccount, useContractWrite, useNetwork, usePrepareContractWrite } from 'wagmi'
 import { useSwapSettings } from '../Settings'
 
 export const useSwapTransaction = (
   _trade: Trade<Currency, Currency, TradeType>,
   recipient: string,
-  { onSuccess, onError }: { onSuccess?: (tx: TransactionResponse) => void, onError?: (e: Error) => void },
+  {
+    onSuccess,
+    onError,
+  }: { onSuccess?: (tx: SendTransactionResult) => void; onError?: (e: Error) => void },
   permit?: UsePermiReturn,
 ) => {
   const { address } = useAccount()
@@ -50,15 +54,19 @@ export const useSwapTransaction = (
 
   const { registerTransaction } = useTransactionRegistry()
 
-  const { reset, ...rest } = useContractWrite({
-    addressOrName: ROUTER_ADDRESS[chain?.id],
-    contractInterface: RouterAbi,
+  const { config } = usePrepareContractWrite({
+    address: ROUTER_ADDRESS[chain?.id],
+    abi: RouterAbi,
     functionName: swapParams?.methodName,
     args: swapParams?.args,
-    overrides: { value: swapParams?.value },
+    overrides: { value: swapParams?.value && BigNumber.from(swapParams?.value) },
+  })
+
+  const { reset, ...rest } = useContractWrite({
+    ...config,
     onSuccess: (tx) => {
       onSuccess?.(tx)
-      registerTransaction(tx, {
+      registerTransaction(tx.hash, {
         type: 'swap',
         amountIn: trade.inputAmount.toString(),
         amountOut: trade.outputAmount.toString(),

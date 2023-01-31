@@ -1,4 +1,4 @@
-import { Flex, Text } from '@chakra-ui/react'
+import { Flex, Text } from '@concave/ui'
 import { CloseIcon } from '@concave/icons'
 import { Tooltip } from '@concave/ui'
 import { NftSort } from './hooks/useNftSort'

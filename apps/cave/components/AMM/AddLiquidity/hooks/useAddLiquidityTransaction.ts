@@ -1,10 +1,8 @@
 import { Currency, CurrencyAmount, Percent, RouterAbi, ROUTER_ADDRESS } from '@concave/core'
 import { useErrorModal } from 'contexts/ErrorModal'
 import { BigNumber, Contract } from 'ethers'
-import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
 import { useTransaction } from 'hooks/TransactionsRegistry/useTransaction'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { useState } from 'react'
 import { useContract, useSigner } from 'wagmi'
 
 const currencyAmountToBigNumber = (amount: CurrencyAmount<Currency>) => {
@@ -62,22 +60,25 @@ export const useAddLiquidityTransaction = (
 ) => {
   const networkId = useCurrentSupportedNetworkId()
   const { data: signer } = useSigner()
-  const routerContract = useContract<Contract>({
-    addressOrName: ROUTER_ADDRESS[networkId],
-    contractInterface: RouterAbi,
+  const routerContract = useContract({
+    address: ROUTER_ADDRESS[networkId],
+    abi: RouterAbi,
     signerOrProvider: signer,
   })
-  const errorModal = useErrorModal();
-  return useTransaction(async () => {
-    const to = recipient || (await signer.getAddress())
-    return await addLiquidity(tokenAmountA, tokenAmountB, routerContract, to)
-  }, {
-    onError: errorModal.onOpen,
-    meta: {
-      type: 'add liquidity',
-      amount0: tokenAmountA?.toString(),
-      amount1: tokenAmountB?.toString(),
-      pairSymbol: `${tokenAmountA?.currency?.symbol}-${tokenAmountB?.currency.symbol}`,
-    }
-  })
+  const errorModal = useErrorModal()
+  return useTransaction(
+    async () => {
+      const to = recipient || (await signer.getAddress())
+      return await addLiquidity(tokenAmountA, tokenAmountB, routerContract, to)
+    },
+    {
+      onError: errorModal.onOpen,
+      meta: {
+        type: 'add liquidity',
+        amount0: tokenAmountA?.toString(),
+        amount1: tokenAmountB?.toString(),
+        pairSymbol: `${tokenAmountA?.currency?.symbol}-${tokenAmountB?.currency.symbol}`,
+      },
+    },
+  )
 }

@@ -7,7 +7,7 @@ import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId
 import { concaveProvider } from 'lib/providers'
 import { useEffect, useState } from 'react'
 import { formatFixed } from 'utils/bigNumberMask'
-import { useAccount, useSigner, useWaitForTransaction } from 'wagmi'
+import { Address, useAccount, useSigner, useWaitForTransaction } from 'wagmi'
 
 const bigNumberMask = (number: BigNumber) => {
   if (number.eq(0)) {
@@ -44,7 +44,7 @@ export const RedeemCardViewer = ({ stakingPosition }: RedeemCardViewerProps) => 
 
   const { status: txStatus } = useWaitForTransaction({
     chainId: stakingPosition.chainId,
-    hash: recentRedeemed?.tx?.hash,
+    hash: recentRedeemed?.tx?.hash as `0x${string}`,
   })
 
   const redeem = () => {
@@ -54,7 +54,7 @@ export const RedeemCardViewer = ({ stakingPosition }: RedeemCardViewerProps) => 
       .unlock(signer, address, stakingPosition.tokenId)
       .then((tx) => {
         setStatus('waitingTx')
-        registerTransaction(tx, {
+        registerTransaction(tx.hash as Address, {
           type: 'redeem',
           amount: bigNumberMask(stakingPosition.currentValue) + ' from token id: ' + tokenId,
         })

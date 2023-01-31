@@ -6,7 +6,7 @@ import {
   PopoverTrigger,
   Portal,
   useDisclosure,
-} from '@chakra-ui/react'
+} from '@concave/ui'
 import { DropdownCard } from '../DropdownCard'
 import { StakePoolFilterEnum } from './hooks/useFilterByStakePool'
 import { StakeToggleButton } from './StakeToggleButton'

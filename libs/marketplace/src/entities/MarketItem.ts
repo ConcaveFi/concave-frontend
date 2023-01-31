@@ -1,9 +1,11 @@
 import { Currency, CurrencyAmount } from '@concave/core'
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
 
+type Address = `0x${string}`
+
 type MarketArgs = {
-  seller: string
-  erc721: string
+  seller: Address
+  erc721: Address
   currency: Currency
   tokenId: BigNumberish
   startPrice: BigNumberish
@@ -50,10 +52,9 @@ type MarketArgs = {
  *
  * @param deadline      The time in which the signature/swap is not valid after.
  */
-
 export class MarketItem {
-  readonly seller: string
-  readonly erc721: string
+  readonly seller: Address
+  readonly erc721: Address
   readonly tokenId: BigNumber
   readonly startPrice: BigNumber
   readonly endPrice: BigNumber
@@ -75,14 +76,14 @@ export class MarketItem {
     this.isListed = args.isListed
     this.signature = args.signature
   }
-  get erc20() {
+  get erc20(): Address {
     if (!this.currency) {
-      return ``
+      return `` as Address
     }
     if (this.currency.isNative) {
       return `0x0000000000000000000000000000000000000000`
     }
-    return this.currency.wrapped.address
+    return this.currency.wrapped.address as Address
   }
   public new(parial: Partial<MarketArgs> = {}) {
     return new MarketItem({ ...this, ...parial })

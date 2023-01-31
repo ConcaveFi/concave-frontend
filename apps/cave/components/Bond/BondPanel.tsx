@@ -100,7 +100,7 @@ export function BondPanel(props: BondPanelProps) {
 
       {/* DIALOGS */}
       <TransactionSubmittedDialog
-        tx={redeemBond.tx}
+        txHash={redeemBond.tx?.hash}
         isOpen={redeemBond.isWaitingTransactionReceipt}
       />
       <WaitingConfirmationDialog
@@ -110,10 +110,10 @@ export function BondPanel(props: BondPanelProps) {
         <Text fontSize="lg" color="text.accent">
           {props?.bondSigma && props?.bondSigma['parseRedeemable']
             ? `Redeeming ` +
-            (+utils.formatEther(BigInt(Math.floor(props?.bondSigma.parseRedeemable)))).toFixed(
-              2,
-            ) +
-            ` CNV`
+              (+utils.formatEther(BigInt(Math.floor(props?.bondSigma.parseRedeemable)))).toFixed(
+                2,
+              ) +
+              ` CNV`
             : ''}
         </Text>
       </WaitingConfirmationDialog>

@@ -129,7 +129,7 @@ export function BondBuyCard(props: { updateBondPositions?: VoidFunction }) {
       </WaitingConfirmationDialog>
       <TransactionSubmittedDialog
         title="Bond submitted"
-        tx={bondTransaction.tx}
+        txHash={bondTransaction.tx?.hash}
         isOpen={bondTransaction.isWaitingTransactionReceipt}
       >
         <AddTokenToWalletButton token={currencyOut} />

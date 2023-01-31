@@ -1,6 +1,6 @@
 import { CNV } from '@concave/core'
 import { Button, Card, Flex, Text, useDisclosure } from '@concave/ui'
-import useAddTokenToWallet, { injectedTokenResponse } from 'hooks/useAddTokenToWallet'
+import { getCurrencyLogoURI } from 'components/CurrencyIcon'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { FC } from 'react'
 import { useAccount } from 'wagmi'
@@ -10,10 +10,7 @@ import { PCNVRedemptionDialog } from './VestedTokensDialogs/PCNVRedemptionDialog
 
 export const TreasuryRedeemCard = () => {
   const chaindId = useCurrentSupportedNetworkId()
-  const { addingToWallet }: injectedTokenResponse = useAddTokenToWallet({
-    tokenAddress: CNV[chaindId].address,
-    tokenChainId: CNV[chaindId].chainId,
-  })
+  const cnv = CNV[chaindId]
 
   const { connector } = useAccount()
   return (
@@ -51,7 +48,14 @@ export const TreasuryRedeemCard = () => {
           <VestedTokenButton title="bbtCNV" VestedTokenDialog={BBTCNVRedemptionDialog} />
         </Flex>
         <Button
-          onClick={addingToWallet}
+          onClick={() => {
+            connector.watchAsset({
+              address: cnv.address,
+              decimals: cnv.decimals,
+              symbol: cnv.symbol,
+              image: getCurrencyLogoURI(cnv),
+            })
+          }}
           textColor={'text.low'}
           fontWeight={'bold'}
           cursor="pointer"

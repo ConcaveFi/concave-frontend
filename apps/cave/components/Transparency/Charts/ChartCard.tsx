@@ -1,4 +1,4 @@
-import { Tooltip } from '@chakra-ui/react'
+import { ChakraTooltip } from '@concave/ui'
 import { QuestionIcon } from '@concave/icons'
 import { Box, Card, Flex, Spinner, Text, useBreakpointValue, WrapItem } from '@concave/ui'
 import { Loading } from 'components/Loading'
@@ -44,7 +44,7 @@ export const ChartCard = ({
         onClick={() => setOpen((o) => !o)}
         onBlur={() => setOpen(false)}
       >
-        <Tooltip closeDelay={500} label={tooltipDescription} isOpen={open}>
+        <ChakraTooltip closeDelay={500} label={tooltipDescription} isOpen={open}>
           <Box display={'flex'} flexDir={'row'} width={'full'} justifyContent={'space-between'}>
             <Text borderBottom={isMobile && tooltipDescription ? '1px solid white' : ''}>
               {chartTitle}
@@ -54,7 +54,7 @@ export const ChartCard = ({
               <QuestionIcon w={{ base: 6, sm: 5 }} h={{ base: 6, sm: 5 }} />
             )}
           </Box>
-        </Tooltip>
+        </ChakraTooltip>
       </WrapItem>
       <Flex
         direction={'column'}

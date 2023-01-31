@@ -1,4 +1,3 @@
-import { keyframes } from '@chakra-ui/system'
 import { Flex, Heading, Stack } from '@concave/ui'
 import { BondBuyCard } from 'components/Bond/BondBuyCard'
 import { BondPanel } from 'components/Bond/BondPanel'
@@ -14,11 +13,6 @@ import { withPageTransition } from 'components/PageTransition'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 
-const spin = keyframes({
-  '0%': { transform: 'rotate(0deg)' },
-  '100%': { transform: 'rotate(360deg)' },
-})
-
 const useCurrentBlockTs = (networkId: number) => {
   const enabled = networkId != undefined
   return useQuery(['useCurrentBlockTs', networkId], () => getCurrentBlockTimestamp(networkId), {
@@ -27,8 +21,7 @@ const useCurrentBlockTs = (networkId: number) => {
 }
 
 export function Bond() {
-  const { userAddress, signer, networkId } = useBondState()
-  const spinnerStyles = { animation: `${spin} 2s linear infinite`, size: 'sm' }
+  const { userAddress, networkId } = useBondState()
   const [bondSigma, setBondSigma] = useState<ReturnBondPositions>()
   const [showUserPosition, setShowUserPosition] = useState(true)
   const currentBlockTs = useCurrentBlockTs(networkId)

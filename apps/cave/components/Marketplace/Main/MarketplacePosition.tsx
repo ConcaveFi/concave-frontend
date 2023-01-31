@@ -1,4 +1,4 @@
-import { Box, Flex, Image, Popover, PopoverContent, PopoverTrigger, Text } from '@chakra-ui/react'
+import { Box, Flex, Image, Popover, PopoverContent, PopoverTrigger, Text } from '@concave/ui'
 import { Currency, CurrencyAmount, MARKETPLACE_CONTRACT, NATIVE, Percent } from '@concave/core'
 import { FixedOrderMarketContract, StakingPosition } from '@concave/marketplace'
 import { FlexProps, gradientBorder, HStack, Spinner } from '@concave/ui'

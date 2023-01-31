@@ -1,5 +1,5 @@
 import { Currency, CurrencyAmount, JSBI } from '@concave/core'
-import { parseUnits } from '@ethersproject/units'
+import { parseUnits } from 'ethers/lib/utils'
 
 // try to parse a user entered amount for a given token
 export const toAmount = <T extends Currency>(

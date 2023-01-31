@@ -1,4 +1,4 @@
-import { Flex, Text, VStack } from '@chakra-ui/react'
+import { Flex, Text, VStack } from '@concave/ui'
 import { BoxProps, HStack, useBreakpointValue } from '@concave/ui'
 import { Loading } from 'components/Loading'
 import { MarketplaceFilterContainer } from 'components/Marketplace/Main/MarketplaceFilterContainer'

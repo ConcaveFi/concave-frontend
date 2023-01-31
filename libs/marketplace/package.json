@@ -14,6 +14,7 @@
     "test:watch": "tsdx test --passWithNoTests --watch"
   },
   "dependencies": {
+    "@0xsequence/multicall": "^0.43.14",
     "@alch/alchemy-web3": "^1.4.4",
     "@concave/core": "*",
     "@concave/gemswap-sdk": "*",
@@ -25,6 +26,7 @@
     "@ethersproject/wallet": "^5.7.0",
     "@types/big.js": "^6.1.6",
     "decimal.js-light": "^2.5.1",
+    "ethers": "^5.7.2",
     "jsbi": "^4.3.0",
     "prettier": "^2.8.3",
     "tiny-invariant": "^1.3.1",
