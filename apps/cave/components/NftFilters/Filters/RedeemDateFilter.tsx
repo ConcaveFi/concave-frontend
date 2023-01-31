@@ -6,7 +6,7 @@ import {
   PopoverTrigger,
   Portal,
   useDisclosure,
-} from '@chakra-ui/react'
+} from '@concave/ui'
 import { DropdownCard } from '../DropdownCard'
 export const RedeemDateFilter = () => {
   const { isOpen, onOpen, onClose, onToggle } = useDisclosure()

@@ -113,70 +113,34 @@ export abstract class Router {
    * @param trade to produce call parameters for
    * @param options options for the call parameters
    */
-  public static swapCallParameters(
-    trade: Trade<Currency, Currency, TradeType>,
-    options: TradeOptions,
-  ): SwapParameters {
+  public static swapCallParameters(trade: Trade, options: TradeOptions): SwapParameters {
     const etherIn = trade.inputAmount.currency.isNative
     const etherOut = trade.outputAmount.currency.isNative
-    const signature = options.signature
     invariant(!(etherIn && etherOut), 'ETHER_IN_OUT')
-    const to: string = validateAndParseAddress(options.recipient)
-    const amountIn: string = toHex(trade.maximumAmountIn(options.allowedSlippage))
-    const amountOut: string = toHex(trade.minimumAmountOut(options.allowedSlippage))
-    const path: string[] = trade.route.path.map((token: Token) => token.address)
+    const to = validateAndParseAddress(options.recipient)
+    const amountIn = toHex(trade.maximumAmountIn(options.allowedSlippage))
+    const amountOut = toHex(trade.minimumAmountOut(options.allowedSlippage))
+    const path = trade.route.path.map((token: Token) => token.address)
 
     const deadline = options.deadline || Math.floor(Date.now() / 1000 + options.ttl)
-    const useFeeOnTransfer = Boolean(options.feeOnTransfer) && !signature
 
-    let methodName: string
-    let args: (string | number | string[])[]
-    let value: string
-    switch (trade.tradeType) {
-      case TradeType.EXACT_INPUT:
-        if (etherIn) {
-          methodName = useFeeOnTransfer
-            ? 'swapExactETHForTokensSupportingFeeOnTransferTokens'
-            : 'swapExactETHForTokens'
-          // (uint amountOutMin, address[] calldata path, address to, uint deadline)
-          args = [amountOut, path, to, deadline]
-          value = amountIn
-        } else if (etherOut) {
-          methodName = useFeeOnTransfer
-            ? 'swapExactTokensForETHSupportingFeeOnTransferTokens'
-            : 'swapExactTokensForETH'
-          // (uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline)
-          args = [amountIn, amountOut, path, to, deadline]
-          value = ZERO_HEX
-        } else {
-          methodName = useFeeOnTransfer
-            ? 'swapExactTokensForTokensSupportingFeeOnTransferTokens'
-            : 'swapExactTokensForTokens'
-          // (uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline)
-          args = [amountIn, amountOut, path, to, deadline]
-          value = ZERO_HEX
-        }
-        break
-      case TradeType.EXACT_OUTPUT:
-        invariant(!useFeeOnTransfer, 'EXACT_OUT_FOT')
-        if (etherIn) {
-          methodName = 'swapETHForExactTokens'
-          // (uint amountOut, address[] calldata path, address to, uint deadline)
-          args = [amountOut, path, to, deadline]
-          value = amountIn
-        } else if (etherOut) {
-          methodName = 'swapTokensForExactETH'
-          // (uint amountOut, uint amountInMax, address[] calldata path, address to, uint deadline)
-          args = [amountOut, amountIn, path, to, deadline]
-          value = ZERO_HEX
-        } else {
-          methodName = 'swapTokensForExactTokens'
-          // (uint amountOut, uint amountInMax, address[] calldata path, address to, uint deadline)
-          args = [amountOut, amountIn, path, to, deadline]
-          value = ZERO_HEX
-        }
-        break
+    const isExactInput = trade.tradeType === TradeType.EXACT_INPUT
+
+    let methodName = ''
+    {
+      methodName += isExactInput ? 'swapExact' : 'swap'
+
+      if (etherIn) methodName += 'ETHForTokens'
+      else if (etherOut) methodName += 'TokensForETH'
+      else methodName += 'TokensForTokens'
+
+      if (isExactInput && !!options.feeOnTransfer && !options.signature)
+        methodName += 'SupportingFeeOnTransferTokens'
     }
+
+    const args = [etherIn ? undefined : amountIn, amountOut, path, to, deadline].filter(Boolean)
+    const value = etherIn ? amountIn : ZERO_HEX
+
     const [permitMethod, permitArgs] = decoreWithPermit(methodName, args, options)
     return {
       methodName: permitMethod,

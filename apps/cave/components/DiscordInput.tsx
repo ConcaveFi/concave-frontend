@@ -1,17 +1,16 @@
 import { CheckIcon, CloseIcon, DiscordIcon } from '@concave/icons'
 import { Input, InputGroup, InputLeftElement, InputRightElement } from '@concave/ui'
-import { useEffect, useState } from 'react'
+
+export const isDiscordUsername = (username: string) =>
+  !!username.match(/^(?!(here|everyone))^(?!.*(discord|```)).[^\@\#\:]{2,32}#\d{4}$/s)
 
 export const DiscordInput = ({
-  onUpdate,
+  username,
+  onChangeUsername,
 }: {
-  onUpdate: ({ username: string, valid: boolean }) => void
+  username: string
+  onChangeUsername: (username: string) => void
 }) => {
-  const [username, setUsername] = useState('')
-  const valid = !!username.match(/^(?!(here|everyone))^(?!.*(discord|```)).[^\@\#\:]{2,32}#\d{4}$/s)
-  useEffect(() => {
-    username && onUpdate({ username, valid })
-  }, [valid, username])
   return (
     <InputGroup w={'full'}>
       <InputLeftElement borderRadius={'2xl'} pointerEvents="none">
@@ -22,12 +21,16 @@ export const DiscordInput = ({
         placeholder="Enter your Username#0000"
         value={username}
         onChange={({ target }) => {
-          setUsername(target.value)
+          onChangeUsername(target.value)
         }}
       />
       {username && (
         <InputRightElement>
-          {valid ? <CheckIcon color="green.500" /> : <CloseIcon color="red.500" />}
+          {isDiscordUsername(username) ? (
+            <CheckIcon color="green.500" />
+          ) : (
+            <CloseIcon color="red.500" />
+          )}
         </InputRightElement>
       )}
     </InputGroup>

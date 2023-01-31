@@ -159,7 +159,7 @@ function AddLiquidityContent({
         </Flex>
       </WaitingConfirmationDialog>
       <TransactionSubmittedDialog
-        tx={addLiquidityTransaction.tx}
+        txHash={addLiquidityTransaction.tx?.hash}
         isOpen={addLiquidityTransaction.isWaitingTransactionReceipt}
         closeParentComponent={() => {
           onChangeFirstField(toAmount(0, firstFieldAmount.currency))

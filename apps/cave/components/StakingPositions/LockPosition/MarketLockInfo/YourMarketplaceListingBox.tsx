@@ -14,7 +14,7 @@ import { BigNumber } from 'ethers'
 import { useApproveForAll } from 'hooks/useApprove'
 import { FC, useState } from 'react'
 import { formatFixed } from 'utils/bigNumberMask'
-import { useAccount } from 'wagmi'
+import { Address, useAccount } from 'wagmi'
 import { usePositionDiscount } from './hooks/usePositionDiscount'
 import { SaleModal } from './SellPositionModal'
 
@@ -191,7 +191,7 @@ const generateDefaultMarket = (staking: StakingPosition) => {
     return staking.market
   }
   return new MarketItem({
-    seller: '',
+    seller: '' as Address,
     erc721: staking.address,
     currency: DAI[staking.chainId],
     tokenId: staking.tokenId.toString(),

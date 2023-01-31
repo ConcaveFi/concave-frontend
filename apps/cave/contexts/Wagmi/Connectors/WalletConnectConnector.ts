@@ -72,7 +72,8 @@ export class ExtendedWalletConnectConnector extends Connector<
       // Not all WalletConnect options support programmatic chain switching
       // Only enable for wallet options that do
       const walletName = provider.connector?.peerMeta?.name ?? ''
-      if (switchChainAllowedRegex.test(walletName)) this.switchChain = this.#switchChain
+      if (switchChainAllowedRegex.test(walletName))
+        this.switchChain = this.#switchChain as typeof this.switchChain
 
       return {
         account,

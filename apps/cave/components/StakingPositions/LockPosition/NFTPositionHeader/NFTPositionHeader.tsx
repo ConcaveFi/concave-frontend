@@ -10,7 +10,7 @@ import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId
 import { concaveProvider } from 'lib/providers'
 import { FC, useEffect, useState } from 'react'
 import { formatFixed } from 'utils/bigNumberMask'
-import { useAccount, useSigner, useWaitForTransaction } from 'wagmi'
+import { Address, useAccount, useSigner, useWaitForTransaction } from 'wagmi'
 import { NFTPositionHeaderProps, useNFTLockedPositionState } from './hooks/useNFTPositionViewer'
 const bigNumberMask = (number: BigNumber) => {
   if (number.eq(0)) {
@@ -63,7 +63,7 @@ export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
       .unlock(signer, address, stakingPosition.tokenId)
       .then((tx) => {
         setStatus('waitingTx')
-        registerTransaction(tx, {
+        registerTransaction(tx.hash as Address, {
           type: 'redeem',
           amount: bigNumberMask(stakingPosition.currentValue) + ' from token id: ' + tokenId,
         })

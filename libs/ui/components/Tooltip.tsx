@@ -7,6 +7,7 @@ import {
   PopoverTrigger,
   Portal,
   Text,
+  Tooltip as ChakraTooltip,
 } from '@chakra-ui/react'
 import { Card } from './Card'
 
@@ -44,3 +45,5 @@ export function Tooltip({
     </Popover>
   )
 }
+
+export { ChakraTooltip }

@@ -3,7 +3,6 @@ import {
   CardProps,
   CloseButton,
   Link,
-  RenderProps,
   Stack,
   Text,
   useBreakpointValue,
@@ -36,7 +35,7 @@ export const TransactionStatusToast = ({
   chainId,
   onClose,
   id,
-}: TrackedTransaction & RenderProps) => {
+}: TrackedTransaction & { onClose: VoidFunction; id: string }) => {
   return (
     <Card
       minW="300px"
@@ -65,7 +64,7 @@ export const TransactionStatusToast = ({
 }
 
 const makeTransactionStatusToast = (tx: TrackedTransaction) =>
-  function TransactionToast({ onClose, id }: RenderProps) {
+  function TransactionToast({ onClose, id }) {
     return <TransactionStatusToast onClose={onClose} id={id} {...tx} />
   }
 

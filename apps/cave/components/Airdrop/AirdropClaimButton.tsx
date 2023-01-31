@@ -40,7 +40,10 @@ export function AirdropClaimButton({ season }: AirdropClaimButton) {
       proof: JSON.stringify(proof),
     })
   const airdrop = useTransaction(claimAidrop, { meta, onError })
-  const { status } = useWaitForTransaction({ chainId: networkId, hash: airdrop?.tx?.hash })
+  const { status } = useWaitForTransaction({
+    chainId: networkId,
+    hash: airdrop?.tx?.hash as `0x${string}`,
+  })
 
   return (
     <Button

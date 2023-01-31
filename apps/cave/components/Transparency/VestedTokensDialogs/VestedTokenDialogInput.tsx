@@ -1,4 +1,4 @@
-import { Flex, Text, useDisclosure } from '@chakra-ui/react'
+import { Flex, Text, useDisclosure } from '@concave/ui'
 import { NumericInput } from '@concave/ui'
 import { BigNumber } from 'ethers'
 import { formatEther } from 'ethers/lib/utils'

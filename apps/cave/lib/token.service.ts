@@ -10,11 +10,11 @@ import {
   USDC_ADDRESS,
   WETH9_ADDRESS,
 } from '@concave/core'
-import { chain } from 'wagmi'
+import { mainnet, goerli } from 'wagmi/chains'
 import { coingeckoApi } from './coingecko.api'
 
 export const chartIntervals = ['5m', '15m', '1H', '4H', '1D'] as const
-export type ChartInterval = typeof chartIntervals[number]
+export type ChartInterval = (typeof chartIntervals)[number]
 
 const whitelist = [
   ...Object.values(FRAX_ADDRESS),
@@ -33,7 +33,7 @@ const tokenToCoingeckId = (currency: Currency) => {
 }
 
 class TokenService {
-  constructor(private networkName: string = chain.mainnet.name) {}
+  constructor(private networkName: string = mainnet.name) {}
   async getTokenPrice(currency: Currency) {
     const coingecko = tokenToCoingeckId(currency)
     if (!coingecko) {
@@ -61,4 +61,4 @@ const daysOptions = {
   '4H': '30',
   '1D': '365',
 } as const
-export const tokenService = new TokenService(chain.goerli.name)
+export const tokenService = new TokenService(goerli.name)
