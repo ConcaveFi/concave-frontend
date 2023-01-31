@@ -14,7 +14,7 @@ import {
 import { ReactNode } from 'react'
 import { shallowEqualObjects } from 'react-query/lib/core/utils'
 
-import create from 'zustand'
+import { create } from 'zustand'
 import { combine, persist } from 'zustand/middleware'
 
 export const createTransactionSettingsStore = <T extends Object>(
