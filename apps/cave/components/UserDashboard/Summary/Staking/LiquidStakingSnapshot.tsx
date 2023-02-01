@@ -1,8 +1,9 @@
 import { AirdropClaimContract } from '@concave/core'
 import { listUserHistory, stakingPools } from '@concave/marketplace'
-import { Flex, Spinner } from '@concave/ui'
+import { Flex, HStack, Spinner } from '@concave/ui'
 import { airdropToken, getAirdropQ4ClaimableAmount } from 'components/Airdrop/Q4/airdrop'
 import { getAirdropSpecialClaimableAmount } from 'components/Airdrop/special/airdrop'
+import { ComingSoom } from 'components/ComingSoon'
 import { useFilterByRange } from 'components/NftFilters/Filters/hooks/useFilterByRange'
 import { useFilterByStakePool } from 'components/NftFilters/Filters/hooks/useFilterByStakePool'
 import { usePositionSorter } from 'components/NftFilters/Sorters/hooks/useNftSort'
@@ -109,8 +110,10 @@ export const LiquidStakingSnapshot = () => {
   return (
     <Flex flexDir={'column'} w={'100%'} h="100%" gap={6}>
       <SnapshotCard isExpanded={!isExpanded}>
-        <SnapshotLineChart { ...stakeInfo}  dataKeys={['Airdrop', 'Locked CNV']} />
-        <SnapshotTextCard>
+        <ComingSoom>
+          <SnapshotLineChart { ...stakeInfo}  dataKeys={['Airdrop', 'Locked CNV']} />
+        </ComingSoom>
+        <SnapshotTextCard >
           <SnapshotText
             title={'Total locked'}
             data={totalLocked.toFixed(2, { groupSeparator: ',' }) + ' CNV'}
@@ -121,7 +124,7 @@ export const LiquidStakingSnapshot = () => {
               data={`${ numberMask( airdropOverview.data.overview.airdropTotal)} ${airdropToken.symbol}`}
             />
             <SnapshotText title={'Airdrop share'} data={airdropShare + '%'} />
-            <SnapshotText title={'Airdrop'} data={<SnapshotButton claimed={airdropOverview.data.overview.claimed} />} />
+            <SnapshotText title='Airdrop' data={<SnapshotButton claimed={airdropOverview.data.overview.claimed} />} />
           </> : <Spinner />}
         </SnapshotTextCard>
       </SnapshotCard>
@@ -158,14 +161,17 @@ export const LiquidStakingSnapshot = () => {
 
 const SortComponent = () => <FilterContainer />
 
-const SnapshotButton = ({ claimed }) => (
+const SnapshotButton = ({ claimed }) => { 
+
+  return (
   <Flex
     textColor={claimed ? 'text.low' : ''}
     justifyContent={'center'}
     alignItems={'center'}
     alignSelf={'center'}
     height={'40px'}
-    width={'145px'}
+    width={'100%'}
+    px={4}
     shadow={claimed ? 'Down Big' : 'Up Big'}
     _active={{ shadow: 'Down Big' }}
     borderRadius={'3xl'}
@@ -174,5 +180,5 @@ const SnapshotButton = ({ claimed }) => (
   >
     {claimed ? 'Claimed' : 'Claim'}
   </Flex>
-)
+) }
  

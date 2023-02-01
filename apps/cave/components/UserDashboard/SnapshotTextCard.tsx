@@ -4,10 +4,10 @@ export function SnapshotTextCard({ children }) {
   return (
     <Card
       w={'30%'}
+      minW={'200px'}
       h={{ base: '150px', lg: 'full' }}
       p={{ base: 2, lg: 0 }}
       px={{ base: 0, lg: 6 }}
-      m={['2.5%', null, null, null, 0]}
       flexDir={'column'}
       width={{ base: '95%', lg: 'fit-content' }}
       variant="secondary"
