@@ -32,7 +32,7 @@
     "@graphql-codegen/typescript": "^2.8.8",
     "@graphql-codegen/typescript-operations": "^2.5.13",
     "@graphql-codegen/typescript-react-query": "^4.1.0",
-    "@next/bundle-analyzer": "^12.2.0",
+    "@next/bundle-analyzer": "^13.1.6",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
     "@uauth/js": "^2.4.0",
