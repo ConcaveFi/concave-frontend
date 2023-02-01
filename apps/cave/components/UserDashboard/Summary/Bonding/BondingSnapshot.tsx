@@ -1,5 +1,6 @@
 import { Flex } from '@concave/ui'
 import { useBondSpotPrice, useRoi } from 'components/Bond/BondInfo'
+import { ComingSoom } from 'components/ComingSoon'
 import { DataTable } from 'components/UserDashboard/DataTable'
 import { SnapshotLineChart } from 'components/UserDashboard/SnapshotLineChart'
 import { SnapshotTextCard } from 'components/UserDashboard/SnapshotTextCard'
@@ -22,7 +23,9 @@ export const BondingSnapshot = () => {
   return (
     <Flex flexDir={'column'} w={'100%'} gap={{ base: 6 }} justifyContent={'space-between'}>
       <SnapshotCard isExpanded={!isExpanded}>
-        <SnapshotLineChart data={bondchartdata} dataKeys={['CNV Price', 'Bond Price']} />
+        <ComingSoom>
+          <SnapshotLineChart data={bondchartdata} dataKeys={['CNV Price', 'Bond Price']} />
+        </ComingSoom>
         <SnapshotTextCard>
           <SnapshotText
             title={'Current Bond Price'}
