@@ -1,5 +1,6 @@
 
 import { chain } from '@wagmi/core'
+import { Address } from '../entities'
 
 const listCavemartListingDocumentsQuery = `query GET_ALL_CAVEMART_USERS_LISTINGS {
   logStakingV1(
@@ -179,13 +180,14 @@ export const fetchAllCavemart = (chainId: number) => {
   )
 }
 
+
 export interface LogStakingV1 {
   to: string
   poolID: number
   tokenID?: number
   amountLocked: string // "20.0",
   txHash: string // "0x777173eff35a94b7a58967059ccfa5c497b1d94831003c45a9aef56cb2f5918f",
-  lockedUntil: number // 1705715051,
+  lockedUntil: number
   marketplace: Marketplace[]
 }
 
@@ -196,7 +198,7 @@ export type Marketplace = {
   startPrice?: string
   endPrice?: string
   tokenID: number
-  tokenOwner: string
+  tokenOwner: Address
   tokenIsListed: boolean
   deadline?: number
   updated_at: string

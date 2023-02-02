@@ -1,4 +1,4 @@
-import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/providers'
+import { providers as multicallProvider } from '@0xsequence/multicall'
 import { Currency, CurrencyAmount, RouterAbi, ROUTER_ADDRESS, Token } from '@concave/core'
 import { PermitSignature } from '@concave/gemswap-sdk'
 import { BigNumber, ethers } from 'ethers'
@@ -7,7 +7,7 @@ import { concaveProvider } from 'lib/providers'
 
 export class Router {
   private readonly contract: ethers.Contract
-  private readonly provider: MulticallProvider
+  private readonly provider: multicallProvider.MulticallProvider
 
   constructor(chainId: number, private readonly signer: ethers.Signer) {
     this.provider = concaveProvider(chainId)
