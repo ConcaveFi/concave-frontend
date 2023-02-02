@@ -1,3 +1,4 @@
+import { StakingPosition } from '@concave/marketplace'
 import { Flex, Text, VStack } from '@concave/ui'
 import { BoxProps, HStack, useBreakpointValue } from '@concave/ui'
 import { Loading } from 'components/Loading'
@@ -8,6 +9,8 @@ import { MarketplacePosition } from './MarketplacePosition'
 import { MarketplaceSortConainer } from './MarketplaceSortContainer'
 import { TokenIdSearchBar } from './TokenIdSearchBar'
 import { useMarketplaceDashbord } from './UseMarkeplaceState'
+
+const ownerOfStaking =(address: `0x${string}`) => (stakingPosition: StakingPosition) => stakingPosition.market?.seller.toUpperCase() === address?.toUpperCase()
 
 export const MarketplaceDashboard = (props: BoxProps | any) => {
   const {
@@ -22,16 +25,10 @@ export const MarketplaceDashboard = (props: BoxProps | any) => {
   const isMobile = useBreakpointValue({ base: true, sm: false })
   const [activePosition, setActivePosition] = useState('')
   const { address } = useAccount()
-
-  let nftPositionsArray: StakingPosition[]
-  if (props.filterUserPositions) {
-    nftPositionsArray = nftPositions.filter((stakingPosition) => {
-      if (stakingPosition.market?.seller.toUpperCase() === address?.toUpperCase())
-        return stakingPosition
-    })
-  } else {
-    nftPositionsArray = nftPositions
-  }
+  
+  const nftPositionsArray = props.filterUserPositions ? 
+      nftPositions.filter(ownerOfStaking(address)) :
+      nftPositions
 
   const positions = nftPositionsArray.map((stakingPosition) => (
     <MarketplacePosition
