@@ -1,6 +1,6 @@
 import { AirdropClaimContract } from '@concave/core'
 import { listUserHistory, stakingPools } from '@concave/marketplace'
-import { Flex, HStack, Spinner } from '@concave/ui'
+import { Flex, Spinner } from '@concave/ui'
 import { airdropToken, getAirdropQ4ClaimableAmount } from 'components/Airdrop/Q4/airdrop'
 import { getAirdropSpecialClaimableAmount } from 'components/Airdrop/special/airdrop'
 import { ComingSoom } from 'components/ComingSoon'
@@ -22,7 +22,6 @@ import { DataTable } from '../../DataTable'
 import { DataTableCard } from '../../DataTableCard'
 import { SnapshotCard } from '../../SnapshotCard'
 import { SnapshotText } from '../../SnapshotText'
-import { stakechartdata } from '../dummyChartData'
 
 function generateDateArray(startDate: Date, endDate: Date, size: number): Date[] {
   const dateArray: Date[] = [];
@@ -45,10 +44,9 @@ const calculateMintDate = ({lockedUntil, poolID}:{lockedUntil: number, poolID: n
 }
 
 const useStakeChart = ( address: string, chainId: number ) => {
-  return useQuery(['STAKE_HISTORY', chainId, address], async () => {
+  return useQuery(['STAKE_CHART', chainId, address], async () => {
     let [input, output] = await Promise.all(listUserHistory({address, chainId}))
     const today = new Date();
-    console.log(output)
     const lastYear = new Date(today.getFullYear() - 1, today.getMonth(), today.getDate());
     const dates = generateDateArray(lastYear, today, 12)
     return dates.map((date) => {
@@ -56,7 +54,6 @@ const useStakeChart = ( address: string, chainId: number ) => {
             .filter(stake => calculateMintDate(stake) < date.getTime() / 1000 )
             .filter(stake => stake.lockedUntil > date.getTime() / 1000 )
       const totalLocked = avaiableLocks.reduce((prev, current) => prev + (+current.amountLocked), 0)
-
       return {
         date: `${date.getMonth()+1}/${date.getDate()} `,
         Airdrop: 15,
@@ -68,12 +65,14 @@ const useStakeChart = ( address: string, chainId: number ) => {
 
 const useAirdropOverview = (address:string, chainId: number) => {
   const provider = useProvider()
-  return useQuery(['AirdropClaimOverview', chainId], async () => {
+  return useQuery(['AIRDROP_OVERVIEW', chainId], async () => {
+    const claimedSpecial = new AirdropClaimContract(provider, 'special').claimed(address)
+    const claimedQ4 = new AirdropClaimContract(provider, 'Q4').claimed(address)
     const seasons = [{
-        claimed: await new AirdropClaimContract(provider, 'special').claimed(address),
+        claimed: await claimedSpecial,
         amount: getAirdropSpecialClaimableAmount(address) || 0
       },{
-        claimed: await new AirdropClaimContract(provider, 'Q4').claimed(address),
+        claimed: await claimedQ4,
         amount: getAirdropQ4ClaimableAmount(address) || 0
       }
     ]
