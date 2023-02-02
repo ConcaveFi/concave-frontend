@@ -61,26 +61,6 @@ export const BBTCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) 
       })
   }
 
-  function redeem(amount: BigNumber, redeemMax: boolean) {
-    const bbtCNVContract = new BBTRedemptionContractV2(concaveProvider(networdId))
-    setStatus('approve')
-    bbtCNVContract
-      .redeem(signer, amount, address, redeemMax)
-      .then((transaction) => {
-        registerTransaction(transaction.hash as Address, {
-          type: 'redeem',
-          amount: formatEther(amount) + ' bbtCNV',
-        })
-        setTx(transaction)
-        submitTransactionModal()
-        setStatus('submitted')
-      })
-      .catch((error) => {
-        if (error.code === 4001) setStatus('rejected')
-        else setStatus('error')
-      })
-  }
-
   const onCloseModal = () => {
     setStatus('default')
     onCloseTransactionModal()
