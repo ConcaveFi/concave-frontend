@@ -1,7 +1,7 @@
 import { Currency, CurrencyAmount } from '@concave/core'
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
 
-type Address = `0x${string}`
+export type Address = `0x${string}`
 
 type MarketArgs = {
   seller: Address
