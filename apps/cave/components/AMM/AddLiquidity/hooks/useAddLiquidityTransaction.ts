@@ -1,7 +1,7 @@
 import { Currency, CurrencyAmount, Percent, RouterAbi, ROUTER_ADDRESS } from '@concave/core'
 import { useErrorModal } from 'contexts/ErrorModal'
 import { BigNumber, Contract } from 'ethers'
-import { useTransaction } from 'hooks/TransactionsRegistry/useTransaction'
+import { useTransaction } from 'hooks/useTransaction'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useContract, useSigner } from 'wagmi'
 

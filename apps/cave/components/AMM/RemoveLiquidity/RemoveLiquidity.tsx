@@ -19,7 +19,7 @@ import { TransactionSubmittedDialog } from 'components/TransactionDialog/Transac
 import { useErrorModal } from 'contexts/ErrorModal'
 
 import { WaitingConfirmationDialog } from 'components/TransactionDialog/TransactionWaitingConfirmationDialog'
-import { useTransaction } from 'hooks/TransactionsRegistry/useTransaction'
+import { useTransaction } from 'hooks/useTransaction'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { RemoveLiquidityState, useRemoveLiquidity } from 'hooks/useRemoveLiquidity'
 import { Router } from 'lib/Router'

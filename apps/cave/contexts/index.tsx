@@ -3,6 +3,7 @@ import { WagmiProvider } from 'contexts/Wagmi/WagmiContext'
 import { MotionConfig } from 'framer-motion'
 import { ErrorModalProvider } from './ErrorModal'
 import { ReactQueryProvider } from './ReactQueryContext'
+import { TransactionsContext } from './Transactions/TransactionsContext'
 
 export const AppProviders = ({ children, globalStyles, cookies }) => {
   return (
@@ -10,7 +11,9 @@ export const AppProviders = ({ children, globalStyles, cookies }) => {
       <MotionConfig reducedMotion="user">
         <ReactQueryProvider>
           <WagmiProvider>
-            <ErrorModalProvider>{children}</ErrorModalProvider>
+            <TransactionsContext>
+              <ErrorModalProvider>{children}</ErrorModalProvider>
+            </TransactionsContext>
           </WagmiProvider>
         </ReactQueryProvider>
       </MotionConfig>

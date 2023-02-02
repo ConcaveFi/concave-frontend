@@ -17,7 +17,7 @@ import { TransactionSubmittedDialog } from 'components/TransactionDialog/Transac
 import { BigNumber } from 'ethers'
 import { formatEther, parseEther } from 'ethers/lib/utils'
 import { useGet_Amm_Cnv_InfosQuery } from 'graphql/generated/graphql'
-import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
+import { useAddRecentTransaction } from 'contexts/Transactions'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useEffect, useState } from 'react'
 import { formatFixed } from 'utils/bigNumberMask'
@@ -55,7 +55,7 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
 
   const chainId = useCurrentSupportedNetworkId()
   const balance = parseEther(pCNV?.data?.formatted || '0')
-  const { registerTransaction } = useTransactionRegistry()
+  const registerTransaction = useAddRecentTransaction()
   const onCloseModal = () => {
     setStatus('default')
     onCloseTransactionModal()
@@ -150,9 +150,12 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
     pCNVContract
       .redeem(signer, amount, address, redeemMax)
       .then((transaction) => {
-        registerTransaction(transaction.hash as Address, {
-          type: 'redeem',
-          amount: `${formatEther(amount)} pCNV`,
+        registerTransaction({
+          hash: transaction.hash as Address,
+          meta: {
+            type: 'redeem',
+            amount: `${formatEther(amount)} pCNV`,
+          },
         })
         setTx(transaction)
         submitTransactionModal()
