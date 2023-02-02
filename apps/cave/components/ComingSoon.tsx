@@ -7,13 +7,6 @@ return <Flex
   height="full"
   justifyContent="center"
   alignItems="center">
-  <Text 
-    position={'absolute'} 
-    fontSize={'lg'}
-    fontWeight={'bold'}
-    zIndex={4}>
-      Coming Soon
-  </Text>
   {children}
   <Box   
     width={'100%'} 
@@ -21,9 +14,16 @@ return <Flex
     position={'absolute'} 
     backdropFilter="blur(8px)"
     backdropBlur={'16px'}
-    zIndex={3}
     top={0} 
     right={0}  
   />
+  <Text 
+    position={'absolute'} 
+    fontSize={'lg'}
+    fontWeight={'bold'}
+    >
+      Coming Soon
+  </Text>
+  
 </Flex>
 }

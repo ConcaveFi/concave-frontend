@@ -1,5 +1,5 @@
 
-import { chain } from 'wagmi'
+import { chain } from '@wagmi/core'
 
 const listCavemartListingDocumentsQuery = `query GET_ALL_CAVEMART_USERS_LISTINGS {
   logStakingV1(
