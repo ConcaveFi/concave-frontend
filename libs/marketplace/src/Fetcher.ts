@@ -2,7 +2,7 @@ import { BaseProvider } from '@ethersproject/providers'
 import { StakingV1Contract } from './contract'
 import { StakingPool, stakingPools } from './entities'
 import { parser } from './graphql/parser'
-import { fetchAllCavemart, fetchUsersPositions, listCavemartListingDocuments, listReceivedTokensHistoryByAddress, listSellPositionsHistoryByAddressQuery } from './graphql/querys'
+import { fetchAllCavemart, fetchUsersPositions, listCavemartListingDocuments, listReceivedTokensHistoryByAddress, listSellPositionsHistoryByAddressQuery, LogStakingV1, Marketplace } from './graphql/querys'
 
 export const listUserHistory = ({
   chainId,
@@ -79,31 +79,4 @@ export const marketplaceActivity = async ({ provider }: { provider: BaseProvider
       new Date(seccond.updated_at).getTime() - new Date(first.updated_at).getTime(),
   )
   return activity
-}
-
-export type LogStakingV1 = {
-  to: string
-  poolID: number
-  tokenID?: number
-  amountLocked: string
-  txHash: string
-  lockedUntil: number
-  marketplace: Marketplace[]
-}
-
-export type Marketplace = {
-  created_at: string
-  signatureHash: string
-  start: string
-  startPrice?: string
-  endPrice?: string
-  tokenID: number
-  tokenOwner: `0x${string}`
-  tokenIsListed: boolean
-  deadline?: number
-  updated_at: string
-  soldFor: string
-  txHash: string
-  newOwner: `0x${string}`
-  tokenOption: string
 }

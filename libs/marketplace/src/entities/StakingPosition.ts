@@ -26,8 +26,9 @@ export class StakingPosition implements NFT {
   public readonly chainId: number
   public readonly reward: StakingReward
   public readonly market?: MarketItem
+  public readonly lockedUntil: number
 
-  constructor({ position, reward, chainId, tokenId, market }: StakingPositionArgs) {
+  constructor({ position, reward, chainId, tokenId, market, lockedUntil }: StakingPositionArgs) {
     this.tokenId = tokenId
     this.chainId = chainId
     this.deposit = position.deposit
@@ -35,6 +36,7 @@ export class StakingPosition implements NFT {
     this.poolID = position.poolID
     this.reward = reward
     this.market = market
+    this.lockedUntil = lockedUntil
   }
 
   get initialValue() {

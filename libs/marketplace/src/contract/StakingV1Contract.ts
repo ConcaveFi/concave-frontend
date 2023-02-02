@@ -1,15 +1,17 @@
-import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/providers'
 import { STAKING_CONTRACT } from '@concave/core'
 import { BaseProvider } from '@ethersproject/providers'
-import { BigNumber, BigNumberish, Contract, ethers } from 'ethers'
+import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
+import { TransactionResponse } from "@ethersproject/abstract-provider";
+import { Contract } from '@ethersproject/contracts'
 import { PoolState, Position, StakingReward } from '../entities'
 import { StakingV1Abi } from './StakingV1Abi'
+import { Signer } from '@wagmi/core'
 
 export class StakingV1Contract {
-  private readonly contract: ethers.Contract
+  private readonly contract: Contract
   public readonly chainId: number
   public readonly address: `0x${string}`
-  constructor(private readonly provider: BaseProvider | MulticallProvider) {
+  constructor(private readonly provider: BaseProvider) {
     this.chainId = provider.network.chainId
     if (!this.chainId) throw 'ChainID is undefined for constructor of contract StakingV1Contract'
     this.address = STAKING_CONTRACT[this.chainId]
@@ -27,7 +29,7 @@ export class StakingV1Contract {
   }
 
   public async lock(
-    signer: ethers.Signer,
+    signer: Signer,
     address: string,
     amount: BigNumberish,
     poolId: BigNumberish,
@@ -37,14 +39,14 @@ export class StakingV1Contract {
       r: string
       s: string
     },
-  ): Promise<ethers.Transaction & { wait: (confirmations) => unknown }> {
+  ): Promise<TransactionResponse & { wait: (confirmations) => unknown }> {
     if (signature) {
       return this.lockWithPermit(signer, address, amount, poolId, signature)
     }
     return this.contract.connect(signer).lock(address, amount, poolId)
   }
   public async lockWithPermit(
-    signer: ethers.Signer,
+    signer: Signer,
     address: string,
     amount: BigNumberish,
     poolId: BigNumberish,
@@ -59,15 +61,15 @@ export class StakingV1Contract {
       r: string
       s: string
     },
-  ): Promise<ethers.Transaction & { wait: (confirmations) => unknown }> {
+  ): Promise<TransactionResponse & { wait: (confirmations) => unknown }> {
     return this.contract.connect(signer).lockWithPermit(address, amount, poolId, deadline, v, r, s)
   }
 
   public async unlock(
-    signer: ethers.Signer,
+    signer: Signer,
     address: string,
     tokenId: BigNumberish,
-  ): Promise<ethers.Transaction & { wait: (confirmations) => unknown }> {
+  ): Promise<TransactionResponse & { wait: (confirmations) => unknown }> {
     return this.contract.connect(signer).unlock(address, tokenId)
   }
 
@@ -76,18 +78,18 @@ export class StakingV1Contract {
   }
 
   public async approve(
-    signer: ethers.Signer,
+    signer: Signer,
     address: string,
     tokenId: BigNumberish,
-  ): Promise<ethers.Transaction> {
+  ): Promise<TransactionResponse> {
     return this.contract.connect(signer).approve(address, tokenId)
   }
 
   public async setApprovalForAll(
-    signer: ethers.Signer,
+    signer: Signer,
     address: string,
     bool: boolean,
-  ): Promise<ethers.Transaction> {
+  ): Promise<TransactionResponse> {
     return this.contract.connect(signer).setApprovalForAll(address, bool)
   }
 
