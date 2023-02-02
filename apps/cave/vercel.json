@@ -1,5 +1,7 @@
 {
   "github": {
     "silent": true
-  }
+  },
+  "buildCommand": "cd ../.. && pnpm build:cave",
+  "installCommand": "pnpm install -r"
 }
