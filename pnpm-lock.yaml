@@ -117,11 +117,8 @@ importers:
       '@graphql-codegen/typescript-operations': 2.5.13_graphql@16.6.0
       '@graphql-codegen/typescript-react-query': 4.1.0_graphql@16.6.0
       '@next/bundle-analyzer': 12.3.4
-<<<<<<< HEAD
       '@pcnv/txs-react': 0.0.4_y4v2kzvlpxowoxiwcu74updihq
-=======
       '@tanstack/react-table': 8.7.9_biqbaboplfbrettd7655fr4n2y
->>>>>>> 58a20f90 (fix build problems)
       '@testing-library/jest-dom': 5.16.5
       '@testing-library/react': 13.4.0_biqbaboplfbrettd7655fr4n2y
       '@uauth/js': 2.4.0
