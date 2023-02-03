@@ -1,14 +1,12 @@
 import { CheckIcon, CloseIcon, SpinnerIcon } from '@concave/icons'
 import { Flex, keyframes, Link, Text } from '@concave/ui'
-import {
-  getTransactionStatusLabel,
-  TrackedTransaction,
-  useTransactionRegistry,
-} from 'hooks/TransactionsRegistry'
+import { StoredTransaction } from '@pcnv/txs-react'
+import { getTransactionStatusLabel, useRecentTransactions } from 'contexts/Transactions'
+import { TransactionMeta } from 'contexts/Transactions/getTransactionStatusLabel'
 import { getTxExplorer } from 'lib/getTransactionExplorer'
 
 export default function RecentTransactionsContainer() {
-  const { recentTransactions } = useTransactionRegistry()
+  const recentTransactions = useRecentTransactions()
   const hasRecentTransactions = recentTransactions.length > 0
 
   return (
@@ -34,16 +32,18 @@ export default function RecentTransactionsContainer() {
           apply="border.secondary"
           __css={scroll}
         >
-          {recentTransactions.map((tx) => (
-            <TransactionInfo key={tx.hash} {...tx} />
-          ))}
+          {recentTransactions
+            .sort((a, b) => b.sentAt - a.sentAt)
+            .map((tx) => (
+              <TransactionInfo key={tx.hash} {...tx} />
+            ))}
         </Flex>
       )}
     </Flex>
   )
 }
 
-const TransactionInfo = ({ meta, status, chainId, hash }: TrackedTransaction) => {
+const TransactionInfo = ({ meta, status, chainId, hash }: StoredTransaction<TransactionMeta>) => {
   return (
     <Flex justify="space-between" align="center" gap={1} mb={2}>
       <Flex fontSize="sm" fontWeight="bold" direction="column">
@@ -52,7 +52,7 @@ const TransactionInfo = ({ meta, status, chainId, hash }: TrackedTransaction) =>
           {getTransactionStatusLabel({ status, meta })}
         </Link>
       </Flex>
-      {status === 'error' && (
+      {status === 'failed' && (
         <CloseIcon width={'15px'} height="15px" color={'red.300'} justifySelf="end" />
       )}
       {status === 'pending' && (
@@ -62,7 +62,7 @@ const TransactionInfo = ({ meta, status, chainId, hash }: TrackedTransaction) =>
           justifySelf="end"
         />
       )}
-      {status === 'success' && (
+      {status === 'confirmed' && (
         <CheckIcon width={'17px'} height="17px" color={'green.300'} justifySelf="end" />
       )}
     </Flex>

@@ -14,7 +14,7 @@ import { ConfirmBondModal } from './ConfirmBond'
 import { DownwardIcon } from './DownwardIcon'
 import { Settings, useBondSettings } from './Settings'
 import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
-import { useTransaction } from 'hooks/TransactionsRegistry/useTransaction'
+import { useTransaction } from 'hooks/useTransaction'
 import { useErrorModal } from 'contexts/ErrorModal'
 
 export function BondBuyCard(props: { updateBondPositions?: VoidFunction }) {

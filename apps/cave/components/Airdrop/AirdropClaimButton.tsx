@@ -6,7 +6,7 @@ import { parseUnits } from 'ethers/lib/utils'
 import { AidropSeasonProps, AirdropSeason } from 'hooks/useAirdropSeason'
 import { concaveProvider } from 'lib/providers'
 import { useAccount, useQuery, useSigner, useWaitForTransaction } from 'wagmi'
-import { useTransaction } from '../../hooks/TransactionsRegistry/useTransaction'
+import { useTransaction } from 'hooks/useTransaction'
 import { useCurrentSupportedNetworkId } from '../../hooks/useCurrentSupportedNetworkId'
 import { airdropToken } from './special/airdrop'
 

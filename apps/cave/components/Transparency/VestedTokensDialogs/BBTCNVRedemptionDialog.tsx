@@ -6,7 +6,7 @@ import { TransactionSubmittedDialog } from 'components/TransactionDialog/Transac
 
 import { BigNumber } from 'ethers'
 import { formatEther, parseEther } from 'ethers/lib/utils'
-import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
+import { useAddRecentTransaction } from 'contexts/Transactions'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
 import { useState } from 'react'
@@ -36,7 +36,7 @@ export const BBTCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) 
 
   const networdId = useCurrentSupportedNetworkId()
   const balance = parseEther(bbtCNV?.data?.formatted || '0')
-  const { registerTransaction } = useTransactionRegistry()
+  const registerTransaction = useAddRecentTransaction()
 
   function redeem(amount: BigNumber, redeemMax: boolean) {
     const bbtCNVContract = new BBTRedemptionContractV2(concaveProvider(networdId))
@@ -44,9 +44,12 @@ export const BBTCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) 
     bbtCNVContract
       .redeem(signer, amount, address, redeemMax)
       .then((transaction) => {
-        registerTransaction(transaction.hash as Address, {
-          type: 'redeem',
-          amount: formatEther(amount) + ' bbtCNV',
+        registerTransaction({
+          hash: transaction.hash as Address,
+          meta: {
+            type: 'redeem',
+            amount: formatEther(amount) + ' bbtCNV',
+          },
         })
         setTx(transaction)
         submitTransactionModal()

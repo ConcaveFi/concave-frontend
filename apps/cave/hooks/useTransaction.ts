@@ -1,7 +1,7 @@
 import { Transaction } from 'ethers'
 import { useEffect, useRef, useState } from 'react'
 import { Address, useWaitForTransaction } from 'wagmi'
-import { TrackedTransaction, useTransactionRegistry } from '.'
+import { TransactionMeta, useAddRecentTransaction } from '../contexts/Transactions'
 
 export type UseTransaction = ReturnType<typeof useTransaction>
 
@@ -11,13 +11,13 @@ export const useTransaction = (
     onSend?: () => void
     onSuccess?: (tx: Transaction) => void
     onError?: (e: unknown) => void
-    meta?: TrackedTransaction['meta']
+    meta?: TransactionMeta
   } = {},
 ) => {
   const {
     current: { onError, onSend, onSuccess },
   } = useRef(extra)
-  const { registerTransaction } = useTransactionRegistry()
+  const registerTransaction = useAddRecentTransaction()
   const [isWaitingForConfirmation, setIsWaitingForConfirmation] = useState(false)
   const [error, setError] = useState<{ code: number; reason: string }>()
   const tx = useRef<Transaction & { hash: `0x${string}` }>()
@@ -40,7 +40,7 @@ export const useTransaction = (
       const transaction = (await doTx()) as Transaction & { hash: `0x${string}`; from: Address }
       tx.current = transaction
       if (extra.meta) {
-        registerTransaction(transaction.hash, extra.meta)
+        registerTransaction({ hash: transaction.hash, meta: extra.meta })
       }
     } catch (e) {
       if (e[`code`] !== 4001) {

@@ -4,7 +4,7 @@ import { TransactionSubmittedDialog } from 'components/TransactionDialog/Transac
 import { WaitingConfirmationDialog } from 'components/TransactionDialog/TransactionWaitingConfirmationDialog'
 import { useErrorModal } from 'contexts/ErrorModal'
 import { utils } from 'ethers'
-import { useTransaction } from 'hooks/TransactionsRegistry/useTransaction'
+import { useTransaction } from 'hooks/useTransaction'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useSigner } from 'wagmi'
 import { BondInfo, UserBondPositionInfo } from './BondInfo'

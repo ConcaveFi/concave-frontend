@@ -1,6 +1,6 @@
 import { SpinnerIcon } from '@concave/icons'
 import { Button, Flex, Image, keyframes, Text, useDisclosure } from '@concave/ui'
-import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
+import { useRecentTransactions } from 'contexts/Transactions'
 import { useUnstoppableDomain } from 'hooks/useUnstoppableDomain'
 import { formatAddress } from 'utils/formatAddress'
 import { useAccount, useEnsName, useNetwork } from 'wagmi'
@@ -18,7 +18,9 @@ export const ConnectedUserButton = () => {
   const { data: ens } = useEnsName({ address })
   const { data: uns } = useUnstoppableDomain({ address })
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { hasPendingTransactions } = useTransactionRegistry()
+  const hasPendingTransactions = useRecentTransactions((txs) =>
+    txs.some((tx) => tx.status === 'pending'),
+  )
 
   return (
     <>

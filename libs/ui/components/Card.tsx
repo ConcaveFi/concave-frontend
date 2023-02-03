@@ -13,7 +13,9 @@ export type CardProps = PropsWithChildren<
   } & Merge<StackProps, MotionProps>
 >
 
-export const Card = forwardRef<CardProps, 'div'>(
+const MotionStack = motion(Stack)
+
+export const Card = forwardRef<CardProps, typeof MotionStack>(
   ({ children, variant, borderWidth, borderGradient, colorScheme, ...props }, ref) => {
     const styles = useStyleConfig('Card', {
       variant,
@@ -24,17 +26,9 @@ export const Card = forwardRef<CardProps, 'div'>(
     })
 
     return (
-      // @ts-ignore Stack not happy with the motion props (as={motion.div})
-      <Stack
-        as={motion.div}
-        layout="position"
-        ref={ref}
-        overflow="hidden"
-        __css={styles}
-        {...props}
-      >
+      <MotionStack layout="position" ref={ref} overflow="hidden" __css={styles} {...props}>
         {children}
-      </Stack>
+      </MotionStack>
     )
   },
 )
