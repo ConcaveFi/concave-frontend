@@ -6,21 +6,12 @@ import {
   ToastsViewport,
   TransactionsStoreProvider,
   TransactionStatusToastProps,
-  useRecentTransactions as _useRecentTransactions,
-  useAddRecentTransaction as _useAddRecentTransaction,
-  TypedUseRecentTransactions,
-  TypedUseAddRecentTransaction,
 } from '@pcnv/txs-react'
 import { getTxExplorer } from 'lib/getTransactionExplorer'
 
 import { getTransactionStatusLabel, TransactionMeta } from './getTransactionStatusLabel'
 
 const transactionsStore = createTransactionsStore()
-
-export const useRecentTransactions: TypedUseRecentTransactions<TransactionMeta> =
-  _useRecentTransactions
-export const useAddRecentTransaction: TypedUseAddRecentTransaction<TransactionMeta> =
-  _useAddRecentTransaction
 
 const variants: Record<StoredTransaction['status'], CardProps> = {
   confirmed: { borderGradient: '#48D89A' },
