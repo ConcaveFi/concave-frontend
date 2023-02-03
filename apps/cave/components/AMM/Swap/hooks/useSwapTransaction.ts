@@ -3,7 +3,7 @@ import { Router, Trade, TradeType } from '@concave/gemswap-sdk'
 import { SendTransactionResult } from '@wagmi/core'
 import { BigNumber } from 'ethers'
 import { isAddress } from 'ethers/lib/utils'
-import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
+import { useAddRecentTransaction } from 'contexts/Transactions'
 import { UsePermiReturn } from 'hooks/usePermit'
 import { useMemo } from 'react'
 import { toPercent } from 'utils/toPercent'
@@ -52,7 +52,7 @@ export const useSwapTransaction = (
       })
   }, [permit, trade, address, settings.slippageTolerance, settings.deadline, recipient])
 
-  const { registerTransaction } = useTransactionRegistry()
+  const registerTransaction = useAddRecentTransaction()
 
   const { config } = usePrepareContractWrite({
     address: ROUTER_ADDRESS[chain?.id],
@@ -66,10 +66,13 @@ export const useSwapTransaction = (
     ...config,
     onSuccess: (tx) => {
       onSuccess?.(tx)
-      registerTransaction(tx.hash, {
-        type: 'swap',
-        amountIn: trade.inputAmount.toString(),
-        amountOut: trade.outputAmount.toString(),
+      registerTransaction({
+        hash: tx.hash,
+        meta: {
+          type: 'swap',
+          amountIn: trade.inputAmount.toString(),
+          amountOut: trade.outputAmount.toString(),
+        },
       })
     },
     onError: (error) => {

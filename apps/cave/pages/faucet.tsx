@@ -2,7 +2,7 @@ import { Button, VStack } from '@concave/ui'
 import { purchaseBond } from 'components/Bond/BondState'
 import { withPageTransition } from 'components/PageTransition'
 import { useErrorModal } from 'contexts/ErrorModal'
-import { useTransaction } from 'hooks/TransactionsRegistry/useTransaction'
+import { useTransaction } from 'hooks/useTransaction'
 import { useAccount, useSigner } from 'wagmi'
 
 const Faucet = () => {

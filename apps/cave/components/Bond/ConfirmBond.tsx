@@ -12,7 +12,7 @@ import {
   Text,
 } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
-import { UseTransaction } from 'hooks/TransactionsRegistry/useTransaction'
+import { UseTransaction } from 'hooks/useTransaction'
 import { useState } from 'react'
 import { useBondSpotPrice, useRoi } from './BondInfo'
 

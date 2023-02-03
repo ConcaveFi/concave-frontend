@@ -7,7 +7,7 @@ import { useCurrencyApprove } from 'components/CurrencyAmountButton/CurrencyAmou
 import { ProgressBar } from 'components/ProgressBar'
 import { usePositionDiscount } from 'components/StakingPositions/LockPosition/MarketLockInfo/hooks/usePositionDiscount'
 import { differenceInDays, format, formatDistanceToNowStrict } from 'date-fns'
-import { useTransaction } from 'hooks/TransactionsRegistry/useTransaction'
+import { useTransaction } from 'hooks/useTransaction'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
 import { useMemo } from 'react'
