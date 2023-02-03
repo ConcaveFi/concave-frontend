@@ -4,7 +4,7 @@ import { TransactionSubmittedDialog } from 'components/TransactionDialog/Transac
 
 import { WaitingConfirmationDialog } from 'components/TransactionDialog/TransactionWaitingConfirmationDialog'
 import { useGet_User_Acnv_RedeemedQuery } from 'graphql/generated/graphql'
-import { useTransaction } from 'hooks/TransactionsRegistry/useTransaction'
+import { useTransaction } from 'hooks/useTransaction'
 import { useAccount, useProvider, useSigner } from 'wagmi'
 import useVestedTokens from '../Hooks/useVestedTokens'
 import { VestedTokenButtonProps } from '../TreasuryRedeemCard'

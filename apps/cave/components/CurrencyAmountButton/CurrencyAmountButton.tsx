@@ -35,7 +35,7 @@ export const useCurrencyApprove = (
         error: { disabled, children: 'Error occurred' },
         default: {
           children: `Approve ${symbol}`,
-          onClick: () => approve.sendApproveTx().catch(console.error),
+          onClick: () => approve.sendApproveTx?.().catch(console.error),
         },
         fetching: { disabled, isLoading, loadingText: `Loading ${symbol} info` },
         insufficient: {

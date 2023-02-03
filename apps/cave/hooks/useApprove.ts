@@ -4,7 +4,7 @@ import { TransactionReceipt } from '@ethersproject/abstract-provider'
 import { useErrorModal } from 'contexts/ErrorModal'
 import { BigNumber, BigNumberish } from 'ethers'
 import { formatUnits } from 'ethers/lib/utils'
-import { useTransactionRegistry } from 'hooks/TransactionsRegistry/'
+import { useAddRecentTransaction } from 'contexts/Transactions'
 import { concaveProvider } from 'lib/providers'
 import { useMemo } from 'react'
 import {
@@ -18,7 +18,7 @@ import {
   Address,
   usePrepareContractWrite,
 } from 'wagmi'
-import { useTransaction } from './TransactionsRegistry/useTransaction'
+import { useTransaction } from '../hooks/useTransaction'
 import { useCurrentSupportedNetworkId } from './useCurrentSupportedNetworkId'
 import { usePermit } from './usePermit'
 
@@ -57,7 +57,7 @@ export const useContractApprove = (
   amountToApprove: BigNumberish = MaxUint256.toString(),
   { onSuccess }: { onSuccess: (receipt: TransactionReceipt) => void },
 ) => {
-  const { registerTransaction } = useTransactionRegistry()
+  const registerTransaction = useAddRecentTransaction()
   const errorModal = useErrorModal()
   const { address } = useAccount()
 
@@ -92,7 +92,7 @@ export const useContractApprove = (
       setTimeout(() => reset(), 4000)
     },
     onSuccess: (tx) => {
-      registerTransaction(tx.hash, { type: 'approve', tokenSymbol: token.symbol })
+      registerTransaction({ hash: tx.hash, meta: { type: 'approve', tokenSymbol: token.symbol } })
     },
   })
 

@@ -5,7 +5,7 @@ import { ProgressBar } from 'components/ProgressBar'
 import { differenceInDays } from 'date-fns'
 import { BigNumber, Transaction } from 'ethers'
 import { formatEther } from 'ethers/lib/utils'
-import { useTransactionRegistry } from 'hooks/TransactionsRegistry'
+import { useAddRecentTransaction } from 'contexts/Transactions'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
 import { FC, useEffect, useState } from 'react'
@@ -36,7 +36,7 @@ export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
   const chainId = useCurrentSupportedNetworkId()
   const { data: signer } = useSigner()
   const { address } = useAccount()
-  const { registerTransaction } = useTransactionRegistry()
+  const registerTransaction = useAddRecentTransaction()
 
   const { status: txStatus } = useWaitForTransaction({
     chainId: stakingPosition.chainId,
@@ -63,9 +63,12 @@ export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
       .unlock(signer, address, stakingPosition.tokenId)
       .then((tx) => {
         setStatus('waitingTx')
-        registerTransaction(tx.hash as Address, {
-          type: 'redeem',
-          amount: bigNumberMask(stakingPosition.currentValue) + ' from token id: ' + tokenId,
+        registerTransaction({
+          hash: tx.hash as Address,
+          meta: {
+            type: 'redeem',
+            amount: bigNumberMask(stakingPosition.currentValue) + ' from token id: ' + tokenId,
+          },
         })
         localStorage.setItem(
           'positionsRedeemed',

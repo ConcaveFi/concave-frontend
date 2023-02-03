@@ -4,7 +4,6 @@ import { DefaultLayout } from 'components/Layout'
 import { MetaHead, MetaProps } from 'components/MetaHead'
 import { Modals } from 'components/Modals'
 import { AppProviders } from 'contexts'
-import { TransactionsObserver } from 'hooks/TransactionsRegistry'
 import { NODE_ENV } from 'lib/env.conf'
 import { NextPage } from 'next'
 import type { AppProps } from 'next/app'
@@ -67,7 +66,6 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
 
   return (
     <AppProviders globalStyles={globalStyles} cookies={pageProps?.cookies}>
-      <TransactionsObserver />
       <ConcaveFonts />
       <MetaHead meta={Component.Meta} />
       <Modals />
