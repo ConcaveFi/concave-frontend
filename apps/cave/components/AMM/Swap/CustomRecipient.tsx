@@ -12,20 +12,31 @@ import {
 } from '@concave/ui'
 import { isAddress } from 'ethers/lib/utils'
 import { useReducer, useRef, useState } from 'react'
-import { useEnsAddress } from 'wagmi'
+import { useDebounce } from 'usehooks-ts'
+import { Address, useEnsAddress } from 'wagmi'
 
-export const CustomRecipient = ({ onChangeRecipient }) => {
+export const CustomRecipient = ({
+  onChangeRecipient,
+}: {
+  onChangeRecipient: (r?: Address) => void
+}) => {
   const [isOpen, toggle] = useReducer((s) => !s, false)
 
-  const [recipient, setRecipient] = useState('')
+  const [recipient, setRecipient] = useReducer((s, r) => {
+    if (isAddress(r)) onChangeRecipient(r)
+    return r
+  }, '')
+  const debouncedRecipient = useDebounce(recipient, 500)
 
   const { data: ensAddress, isLoading } = useEnsAddress({
-    name: recipient,
-    enabled: !isAddress(recipient),
-    onSuccess: (address) => {
-      onChangeRecipient(address)
-    },
+    name: debouncedRecipient,
+    enabled: !isAddress(debouncedRecipient),
   })
+  const resolvedEnsAddress = useRef(ensAddress)
+  if (resolvedEnsAddress.current !== ensAddress) {
+    resolvedEnsAddress.current = ensAddress
+    if (ensAddress) onChangeRecipient(ensAddress)
+  }
 
   const styles = useMultiStyleConfig('Input', { variant: 'primary', size: 'medium' })
 
@@ -64,11 +75,7 @@ export const CustomRecipient = ({ onChangeRecipient }) => {
               variant="unstyled"
               py={1}
               my={-1}
-              onChange={(e) => {
-                const value = e.target.value
-                setRecipient(value)
-                if (isAddress(value)) onChangeRecipient(value)
-              }}
+              onChange={(e) => setRecipient(e.target.value)}
               placeholder="Recipient address"
             />
             {ensAddress && (

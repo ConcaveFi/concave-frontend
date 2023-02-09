@@ -95,6 +95,7 @@ importers:
       react-use: ^17.4.0
       recharts: 2.3.2
       typescript: 4.9.5
+      usehooks-ts: ^2.9.1
       wagmi: ^0.11.2
       zustand: ^4.3.2
     dependencies:
@@ -153,6 +154,7 @@ importers:
       react-query: 3.39.3_biqbaboplfbrettd7655fr4n2y
       react-use: 17.4.0_biqbaboplfbrettd7655fr4n2y
       recharts: 2.3.2_v2m5e27vhdewzwhryxwfaorcca
+      usehooks-ts: 2.9.1_biqbaboplfbrettd7655fr4n2y
       wagmi: 0.11.2_yuthsuns4pwf4idzhxvqiddfhu
       zustand: 4.3.2_react@18.2.0
     devDependencies:
@@ -18601,6 +18603,17 @@ packages:
     resolution: {integrity: sha512-cwESVXlO3url9YWlFW/TA9cshCEhtu7IKJ/p5soJ/gGpj7vbvFrAY/eIioQ6Dw23KjZhYgiIo8HOs1nQ2vr/oQ==}
     engines: {node: '>=0.10.0'}
     dev: true
+
+  /usehooks-ts/2.9.1_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-2FAuSIGHlY+apM9FVlj8/oNhd+1y+Uwv5QNkMQz1oSfdHk4PXo1qoCw9I5M7j0vpH8CSWFJwXbVPeYDjLCx9PA==}
+    engines: {node: '>=16.15.0', npm: '>=8'}
+    peerDependencies:
+      react: ^16.8.0  || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0  || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    dev: false
 
   /utf-8-validate/5.0.10:
     resolution: {integrity: sha512-Z6czzLq4u8fPOyx7TU6X3dvUZVvoJmxSQ+IcrlmagKhilxlhZgxPK6C5Jqbkw1IDUmFTM+cz9QDnnLTwDz/2gQ==}
