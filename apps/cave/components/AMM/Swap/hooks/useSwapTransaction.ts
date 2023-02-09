@@ -1,6 +1,6 @@
 import { Currency, RouterAbi, ROUTER_ADDRESS } from '@concave/core'
 import { Router, Trade, TradeType } from '@concave/gemswap-sdk'
-import { SendTransactionResult } from '@wagmi/core'
+import { Address, SendTransactionResult } from '@wagmi/core'
 import { BigNumber } from 'ethers'
 import { isAddress } from 'ethers/lib/utils'
 import { useAddRecentTransaction } from 'contexts/Transactions'
@@ -12,7 +12,7 @@ import { useSwapSettings } from '../Settings'
 
 export const useSwapTransaction = (
   _trade: Trade<Currency, Currency, TradeType>,
-  recipient: string,
+  recipient: Address,
   {
     onSuccess,
     onError,

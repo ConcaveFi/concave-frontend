@@ -21,7 +21,7 @@ import { useErrorModal } from 'contexts/ErrorModal'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useCallback, useState } from 'react'
 import { toAmount } from 'utils/toAmount'
-import { useWaitForTransaction } from 'wagmi'
+import { Address, useWaitForTransaction } from 'wagmi'
 import { NetworkMismatch } from '../NetworkMismatch'
 import { SwapState } from './hooks/useSwapState'
 import { PcnvNotification } from './PcnvNotification'
@@ -52,7 +52,7 @@ export function Swap(props: SwapState) {
     ROUTER_ADDRESS[trade.inputAmount?.currency.chainId],
     { enablePermit: true, ttl },
   )
-  const [recipient, setRecipient] = useState('')
+  const [recipient, setRecipient] = useState<Address>(null)
   const {
     onOpen: openConfirmationModal,
     onClose: closeConfirmationModal,
