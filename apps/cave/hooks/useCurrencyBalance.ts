@@ -22,7 +22,7 @@ export const useCurrencyBalanceOfAddress = (
 ): UseCurrencyBalanceData => {
   const enabled = !!currency && !!address
   const balance = useBalance({
-    address: address,
+    address,
     chainId: currency?.chainId,
     formatUnits: currency?.decimals,
     ...(currency?.isToken && { token: currency.wrapped.address }),

@@ -11,8 +11,10 @@ export function CurrencyAmountField({
   disabled = false,
   onChangeAmount,
   debounce = 150,
+  maxValue = Infinity,
   CurrencySelector,
 }: {
+  maxValue?: number
   children?: ReactNode
   currencyAmount: CurrencyAmount<Currency>
   disabled?: boolean
@@ -22,9 +24,7 @@ export function CurrencyAmountField({
   disableCurrencySelector?: boolean
 } & FlexProps) {
   const styles = useMultiStyleConfig('Input', { variant: 'primary', size: 'large' })
-
   const [internalValue, setInternalValue] = useState<number | string>('')
-
   const isFocused = useRef(false)
 
   useDebounce(

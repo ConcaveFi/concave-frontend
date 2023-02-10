@@ -5,9 +5,9 @@ import { ConnectorData } from 'wagmi'
 import { localhost } from 'wagmi/chains'
 import { normalizeChainId } from '@wagmi/core'
 
-class StaticJsonRpcProvider extends ethers.providers.StaticJsonRpcProvider {}
+class StaticJsonRpcProvider extends ethers.providers.StaticJsonRpcProvider { }
 
-export type ImpersonateConnectorEvents = {
+type ImpersonateConnectorEvents = {
   changeAddress(address: string): void
   change(data: ConnectorData<StaticJsonRpcProvider>): void
   connect(data: ConnectorData<StaticJsonRpcProvider>): void
