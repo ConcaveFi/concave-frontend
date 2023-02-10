@@ -1,7 +1,7 @@
 import { ChainId, CHAIN_NAME, Currency, Token } from '@concave/core'
 import { AvatarProps, Box, calc, Flex, Image, Link } from '@concave/ui'
 
-export type CurrencyIconProps = {
+type CurrencyIconProps = {
   size?: string
   currency: Currency
   link?: boolean

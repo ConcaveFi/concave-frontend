@@ -18,6 +18,7 @@ export const formatFixed = (
 
 const formatter = Intl.NumberFormat('en', { notation: 'compact', maximumSignificantDigits: 4 })
 export const compactFormat = (bigNumber: BigNumberish, params: { decimals?: number } = {}) => {
+  if (!bigNumber) return 'Nan'
   const { decimals } = fixParams(params)
   const input = utils.formatUnits(bigNumber, decimals)
   if (+input < 0.01 && +input > 0) {

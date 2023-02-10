@@ -1,6 +1,6 @@
-import { BondAbi, BOND_ADDRESS } from '@concave/core'
+import { BondAbi, BOND_ADDRESS, Percent } from '@concave/core'
 import { getCurrentBlockTimestamp } from 'components/Bond/BondState'
-import { Contract, utils } from 'ethers'
+import { BigNumber, Contract, utils } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider as providers } from 'lib/providers'
 import { useQuery } from 'react-query'
@@ -9,7 +9,7 @@ import { useAccount } from 'wagmi'
 export type BondPosition = {
   creationTimestamp: number
   creationDate: string
-  elapsed: number
+  elapsed: Percent
   owed: number
   redeemed: number
 }
@@ -22,7 +22,7 @@ export const useUserBondState = () => {
 
     const bondingContract = new Contract(BOND_ADDRESS[networkId], BondAbi, providers(networkId))
     const getUserPositionsLength = await bondingContract.getUserPositionCount(address)
-    const termData = await bondingContract.term()
+    const termData: BigNumber = await bondingContract.term()
 
     let oldest = 0
     let oldestCreationTimestamp = 0
@@ -39,16 +39,14 @@ export const useUserBondState = () => {
       }
 
       const creationTimestampMs = +positionData.creation * 1000
-      let length = currentBlockTimestamp - positionData.creation
-      let elapsed = length / termData > 1 ? 1 : length / termData
-
+      const length = currentBlockTimestamp - positionData.creation
       totalPending += +(+utils.formatEther(positionData.redeemed))
       totalOwed += +(+utils.formatEther(positionData.owed))
 
       positionDataArray.push({
         creationTimestamp: creationTimestampMs,
         creationDate: new Date(creationTimestampMs).toLocaleDateString(),
-        elapsed: elapsed,
+        elapsed: new Percent(length, termData.toNumber()),
         owed: +(+utils.formatEther(positionData.owed)).toFixed(4),
         redeemed: +(+utils.formatEther(positionData.redeemed)).toFixed(4),
       })

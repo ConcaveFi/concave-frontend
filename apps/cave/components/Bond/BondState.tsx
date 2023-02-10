@@ -90,13 +90,13 @@ export async function redeemBondBatch(
 }
 
 export type ReturnBondPositions = {
-  parseOldest: string;
-  totalOwed: number;
-  totalPending: number;
-  batchRedeemArray: any[];
-  claimed: boolean;
-  parseRedeemable: number;
-  address: string;
+  parseOldest: string
+  totalOwed: number
+  totalPending: number
+  batchRedeemArray: any[]
+  claimed: boolean
+  parsRedeemable: number
+  address: string
 }
 
 export const getUserBondPositions = async (
@@ -116,7 +116,7 @@ export const getUserBondPositions = async (
   const bondingContract = new Contract(BOND_ADDRESS[networkId], BondAbi, providers(networkId))
   const getUserPositionsLength = await bondingContract.getUserPositionCount(address)
   const termData = await bondingContract.term()
-console.log(bondingContract)
+  console.log(bondingContract)
   for (let i = 0; i < +getUserPositionsLength; i++) {
     batchRedeemArray.push(+i)
     const positionData = await bondingContract.positions(address, i)
@@ -136,7 +136,7 @@ console.log(bondingContract)
   }
   const fullyVestedTimestamp = oldest * 1000 + 432000000
   const parseOldest = new Date(fullyVestedTimestamp).toString().slice(4, 21)
-  const parseRedeemable = Math.sign(redeemable) === -1 ? 0 : +redeemable
+  const parsRedeemable = Math.sign(redeemable) === -1 ? 0 : +redeemable
   if (totalPending === totalOwed) claimed = true
   return {
     parseOldest,
@@ -144,7 +144,7 @@ console.log(bondingContract)
     totalPending,
     batchRedeemArray,
     claimed,
-    parseRedeemable,
+    parsRedeemable,
     address,
   }
 }

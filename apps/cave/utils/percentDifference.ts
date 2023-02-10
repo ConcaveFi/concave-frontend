@@ -1,6 +1,6 @@
 import { Currency, CurrencyAmount, JSBI, Percent } from '@concave/core'
 
-export const ONE_HUNDRED_PERCENT = new Percent('1')
+const ONE_HUNDRED_PERCENT = new Percent('1')
 
 export function percentDifference(
   amount0: CurrencyAmount<Currency> | undefined | null,

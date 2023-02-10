@@ -13,7 +13,7 @@ export const NavButton = ({
   isLoading?: boolean
   isSelected?: boolean
   onClick?: VoidFunction
-  summaryArray?: { label: string; data: string | number }[]
+  summaryArray?: { label: string }[]
   isDisabled?: boolean
 }) => {
   const { isConnected } = useAccount()
@@ -73,7 +73,7 @@ export const NavButton = ({
                   key={index + title}
                   fontSize={'sm'}
                 >
-                  {summaryObject.label}: {summaryObject.data}
+                  {summaryObject.label}
                 </Text>
               ))}
             </>
