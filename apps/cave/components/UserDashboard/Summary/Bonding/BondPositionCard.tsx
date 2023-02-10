@@ -14,8 +14,9 @@ import {
 import { ProgressBar } from 'components/ProgressBar'
 import { formatDistanceToNow } from 'date-fns'
 import { FC } from 'react'
+import type {BondPosition} from '../../../UserDashboard/hooks/useUserBondState'
 
-export const BondPositionCard = (props) => {
+export const BondPositionCard = (props: BondPosition) => {
   const { isOpen, onClose, onOpen } = useDisclosure()
   return (
     <Popover isOpen={isOpen}>
@@ -53,7 +54,7 @@ export const BondPositionCard = (props) => {
               {<Text color={'text.low'}>Redeem in:</Text>}
               <Text fontWeight={'bold'} color="text.accent">
                 {formatDistanceToNow(props.creationTimestamp)}{' '}
-                {new Date() > props.creationTimestamp ? 'ago' : ''}
+                {new Date().getTime() > props.creationTimestamp ? 'ago' : ''}
               </Text>
             </Flex>
           </Flex>
@@ -89,7 +90,7 @@ const ImageContainer = () => (
   </Flex>
 )
 
-const BondPosition = (props) => {
+const BondPosition = (props: BondPosition) => {
   return (
     <Flex shadow="up" width={'full'} rounded="2xl" p={3} direction="column">
       <Flex
@@ -108,7 +109,7 @@ const BondPosition = (props) => {
 
         <Button display={{ base: 'none', md: 'flex' }} minW={'110px'} py={4} />
       </Flex>
-      <ProgressBar percent={new Percent(props.elapsed)} />
+      <ProgressBar percent={props.elapsed} />
     </Flex>
   )
 }

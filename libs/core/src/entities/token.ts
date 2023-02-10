@@ -23,6 +23,7 @@ export class Token extends AbstractCurrency {
     totalSupply?: { toString: () => string },
   ) {
     super(chainId, decimals, symbol, name)
+
     this.address = validateAndParseAddress(address)
     this._totalSupply = totalSupply?.toString() ?? '0'
   }

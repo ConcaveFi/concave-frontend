@@ -45,12 +45,12 @@ type DebankProtocol = {
 const fetchJson = (url: RequestInfo, options?: RequestInit) =>
   fetch(url, options).then((d) => d.json())
 
-export const fetchTokens = (address: string, chain: DebankChain) =>
+const fetchTokens = (address: string, chain: DebankChain) =>
   fetchJson(
     `https://openapi.debank.com/v1/user/token_list?is_all=false&has_balance=true&id=${address}&chain_id=${chain}`,
   ) as Promise<DebankToken[]>
 
-export const fetchProtocols = (address: string, chain: DebankChain) =>
+const fetchProtocols = (address: string, chain: DebankChain) =>
   (
     fetchJson(
       `https://openapi.debank.com/v1/user/complex_protocol_list?id=${address}&chain_id=${chain}`,

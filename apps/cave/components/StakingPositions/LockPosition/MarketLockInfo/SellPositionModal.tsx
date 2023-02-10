@@ -82,7 +82,6 @@ export const SaleModal = ({
   )
 }
 
-export type UseListeForSaleState = ReturnType<typeof useListeForSaleState>
 export const useListeForSaleState = ({
   market,
   setMarket,

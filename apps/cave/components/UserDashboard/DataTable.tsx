@@ -2,8 +2,6 @@ import { Box } from '@concave/ui'
 
 export function DataTable({
   children,
-  h = 'unset',
-  isExpanded,
   shadow,
 }: {
   children: JSX.Element | JSX.Element[]
@@ -22,7 +20,7 @@ export function DataTable({
       mx={4}
       shadow={shadow || 'down'}
       apply="scrollbar.big"
-      maxH={{ base: '', lg: isExpanded ? '664px' : '280px' }}
+      maxH={'full'}
     >
       {children}
     </Box>

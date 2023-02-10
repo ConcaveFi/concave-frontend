@@ -125,7 +125,7 @@ export const UserBondPositionInfo = (props) => {
   const parse = props?.bondSigma
   const oldestBond = parse?.parseOldest
   const claimed = parse?.claimed
-  const redeemable = parse?.parseRedeemable
+  const redeemable = parse?.parsRedeemable
   const totalOwed = parse?.totalOwed.toFixed(2)
   const totalPending = parse?.totalPending.toFixed(2)
   const formatRedeemable =
