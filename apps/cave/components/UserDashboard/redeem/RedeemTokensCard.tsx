@@ -1,14 +1,14 @@
 import { CNV } from '@concave/core'
-import { Button, Card, Flex, Text, useDisclosure } from '@concave/ui'
+import { Button, Card, Text, useDisclosure, VStack } from '@concave/ui'
 import { getCurrencyLogoURI } from 'components/CurrencyIcon'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { FC } from 'react'
 import { useAccount } from 'wagmi'
-import { ACNVRedemptionDialog } from './VestedTokensDialogs/ACNVRedemptionDialog'
-import { BBTCNVRedemptionDialog } from './VestedTokensDialogs/BBTCNVRedemptionDialog'
-import { PCNVRedemptionDialog } from './VestedTokensDialogs/PCNVRedemptionDialog'
+import { ACNVRedemptionDialog } from '../../Transparency/VestedTokensDialogs/ACNVRedemptionDialog'
+import { BBTCNVRedemptionDialog } from '../../Transparency/VestedTokensDialogs/BBTCNVRedemptionDialog'
+import { PCNVRedemptionDialog } from '../../Transparency/VestedTokensDialogs/PCNVRedemptionDialog'
 
-export const TreasuryRedeemCard = () => {
+export const RedeemTokensCard = () => {
   const chaindId = useCurrentSupportedNetworkId()
   const cnv = CNV[chaindId]
 
@@ -16,37 +16,24 @@ export const TreasuryRedeemCard = () => {
   return (
     <Card
       variant="secondary"
-      w={'100%'}
-      h={'auto'}
-      p={6}
+      w={'full'}
+      p={{ base: 2, sm: 4, md: 6 }}
+      maxW={'490px'}
       direction={{ base: 'column', xl: 'row' }}
-      align="center"
       justifyContent={'center'}
       gap={{ base: 4, xl: 0 }}
     >
-      <Text w={{ base: '100%', lg: '33%' }} fontSize={'3xl'} fontWeight={700}>
-        Redeem CNV
-      </Text>
-      <Flex
-        justifyContent={'center'}
-        w={{ base: '100%', lg: '66%' }}
-        direction={'column'}
-        gap={{ base: 2, lg: 0 }}
-      >
+      <VStack w={'full'} gap={2}>
+        <Text fontSize={'3xl'} fontWeight={700}>
+          Redeem CNV
+        </Text>
         <Text color="text.low" textAlign={'center'} fontWeight="bold">
           Redeem your tokens for CNV below
         </Text>
 
-        <Flex
-          direction={{ base: 'column', md: 'row', lg: 'row' }}
-          w="full"
-          gap={{ base: 6, lg: 3 }}
-          py={3}
-        >
-          <VestedTokenButton title="aCNV" VestedTokenDialog={ACNVRedemptionDialog} />
-          <VestedTokenButton title="pCNV" VestedTokenDialog={PCNVRedemptionDialog} />
-          <VestedTokenButton title="bbtCNV" VestedTokenDialog={BBTCNVRedemptionDialog} />
-        </Flex>
+        <VestedTokenButton title="aCNV" Modal={ACNVRedemptionDialog} />
+        <VestedTokenButton title="pCNV" Modal={PCNVRedemptionDialog} />
+        <VestedTokenButton title="bbtCNV" Modal={BBTCNVRedemptionDialog} />
         <Button
           onClick={() => {
             connector.watchAsset({
@@ -59,21 +46,20 @@ export const TreasuryRedeemCard = () => {
           textColor={'text.low'}
           fontWeight={'bold'}
           cursor="pointer"
-          // my="auto"
           fontSize={{ base: '22px', lg: 'sm' }}
           px={2}
         >
           Add CNV to {connector?.name || 'wallet'}
         </Button>
-      </Flex>
+      </VStack>
     </Card>
   )
 }
 
-export type VestedTokenButtonProps = { onClose: VoidFunction; isOpen: boolean }
+export type ModalType = { onClose: VoidFunction; isOpen: boolean }
 
-type VestedTokenButton = { title: string; VestedTokenDialog: FC<VestedTokenButtonProps> }
-const VestedTokenButton: React.FC<VestedTokenButton> = ({ title, VestedTokenDialog }) => {
+type VestedTokenButton = { title: string; Modal: FC<ModalType> }
+const VestedTokenButton: React.FC<VestedTokenButton> = ({ title, Modal }) => {
   const { isOpen, onClose, onOpen } = useDisclosure()
   return (
     <>
@@ -81,7 +67,6 @@ const VestedTokenButton: React.FC<VestedTokenButton> = ({ title, VestedTokenDial
         mx={'auto'}
         w="full"
         size="md"
-        // h="38px"
         _hover={{ transform: 'scale(1.05)' }}
         _active={{}}
         _focus={{}}
@@ -92,7 +77,7 @@ const VestedTokenButton: React.FC<VestedTokenButton> = ({ title, VestedTokenDial
           {title}
         </Text>
       </Button>
-      <VestedTokenDialog isOpen={isOpen} onClose={onClose} />
+      <Modal isOpen={isOpen} onClose={onClose} />
     </>
   )
 }
