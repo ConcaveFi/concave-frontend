@@ -1,6 +1,6 @@
 import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/providers'
 import { BaseProvider, TransactionResponse } from '@ethersproject/providers'
-import { BigNumber, Contract, Signer } from 'ethers'
+import { BigNumber, BigNumberish, Contract, Signer } from 'ethers'
 import { BBTCNV_REDEMPTION_V2_ABI } from '../abis'
 import { BBTCNV_REDEMPTION_V2 } from '../constants'
 import { ChainId } from '../enums'
@@ -39,7 +39,7 @@ export class BBTRedemptionContractV2 {
   }
   public async redeem(
     signer: Signer,
-    amount: BigNumber,
+    amount: BigNumberish,
     address: string,
     redeemMax?: boolean,
   ): Promise<TransactionResponse> {
