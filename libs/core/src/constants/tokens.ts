@@ -2,6 +2,8 @@ import { Token } from '../entities/token'
 import { AddressMap, TokenMap } from '../types'
 
 import {
+  ACNV_ADDRESS,
+  BBTCNV_ADDRESS,
   CNV_ADDRESS,
   DAI_ADDRESS,
   FRAX_ADDRESS,
@@ -36,6 +38,23 @@ export const CNV: TokenMap = makeTokenMap(
   18,
   'CNV',
   'Concave',
+)
+
+export const BBTCNV: TokenMap = makeTokenMap(
+  getAddressesChains(BBTCNV_ADDRESS),
+  BBTCNV_ADDRESS,
+  18,
+  'bbtCNV',
+  'Concave Presale Token (BBT)',
+)
+
+
+export const ACNV: TokenMap = makeTokenMap(
+  getAddressesChains(ACNV_ADDRESS),
+  ACNV_ADDRESS,
+  18,
+  'aCNV',
+  'Concave A Token (aCNV)',
 )
 
 export const PCNV: TokenMap = makeTokenMap(

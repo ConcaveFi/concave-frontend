@@ -14,7 +14,7 @@ export const Redeem = ({
   buttonDisabled: boolean
   isRedeeming?: boolean
 }) => {
-  const redeemable = bondSigma?.parseRedeemable
+  const redeemable = bondSigma?.parsRedeemable
   const customHeightSetting = customHeight ? { height: '51.35px' } : {} // 51.35px comes out to 50px?
   const formatRedeemable =
     Math.sign(parseInt(redeemable)) === 1
