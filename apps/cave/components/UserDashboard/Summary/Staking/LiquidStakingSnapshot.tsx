@@ -137,7 +137,7 @@ export const LiquidStakingSnapshot = () => {
         isLoading={isLoading}
         hasPositions={userNonFungibleTokensInfo.length}
       >
-        <DataTable isExpanded={isExpanded} h="full">
+        <DataTable>
           {userNonFungibleTokensInfo
             .filter((position) => {
               if (!tokenIdFilter) return true

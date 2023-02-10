@@ -1,6 +1,6 @@
 import { ACNV_ADDRESS, BBTCNV_ADDRESS, CNV, DAI, NATIVE, PCNV, Token } from '@concave/core'
 import { Avatar, Button, Flex, gradientBorder, Text, Tooltip } from '@concave/ui'
-import useVestedTokens from 'components/Transparency/Hooks/useVestedTokens'
+import { useVestedTokens } from 'components/Transparency/Hooks/useVestedTokens'
 import { ConnectedUserButton } from 'components/UserWallet/ConnectedUserButton'
 import useAddTokenToWallet, { injectedTokenResponse } from 'hooks/useAddTokenToWallet'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
@@ -20,15 +20,18 @@ const WalletSurface = ({ children }: { children: JSX.Element | JSX.Element[] }) 
   <Flex
     shadow={'down'}
     w={'100%'}
-    p={{base: 2, '2xl': 4 }}
+    p={{ base: 2, '2xl': 4 }}
     wrap="wrap"
     borderRadius={{
       base: '2xl',
       md: '30px',
-      xl: '50px'
+      xl: '50px',
     }}
     flexDir={'row'}
-    justifyContent={'space-evenly'}
+    justifyContent={{
+      base: 'space-evenly',
+      xl: 'space-between',
+    }}
     alignItems={'center'}
     gap={{ base: 0, lg: 3 }}
   >
@@ -42,16 +45,6 @@ export function UserDashboardWallet({ onSelectHistory }: { onSelectHistory: Void
   const { data: uns } = useUnstoppableDomain({ address })
 
   const networkId = useCurrentSupportedNetworkId()
-
-  const aCNVToken = new Token(networkId, ACNV_ADDRESS[networkId], 18, 'aCNV', 'Concave aCNV')
-  const bbtCNVToken = new Token(
-    networkId,
-    BBTCNV_ADDRESS[networkId],
-    18,
-    'bbtCNV',
-    'Concave bbtCNV',
-  )
-
   const cnvToken = CNV[networkId]
   const nativeToken = NATIVE[networkId] as any as Token
   const daiToken = DAI[networkId]
@@ -65,9 +58,7 @@ export function UserDashboardWallet({ onSelectHistory }: { onSelectHistory: Void
   const nativeBalance = formatNumber2DP(+nativeCurrencyBalance)
   const daiBalance = formatNumber2DP(+daiCurrencyBalance)
 
-  const { aCNV: aCNVData, bbtCNV: bbtCNVData, pCNV: pCNVData } = useVestedTokens()
-  const aCNVBalance = formatNumber2DP(+aCNVData?.data?.formatted)
-  const bbtCNVBalance = formatNumber2DP(+bbtCNVData?.data?.formatted)
+  const { pCNV: pCNVData } = useVestedTokens()
   const pCNVBalance = formatNumber2DP(+pCNVData?.data?.formatted)
 
   const router = useRouter()
@@ -78,11 +69,9 @@ export function UserDashboardWallet({ onSelectHistory }: { onSelectHistory: Void
     <WalletSurface>
       {isConnected ? (
         <>
-          <Tooltip label={ens || uns || address} icon={<ConnectedUserButton  />} />
+          <Tooltip label={ens || uns || address} icon={<ConnectedUserButton />} />
           <TokenButton token={cnvToken} tokenAmount={cnvBalance} />
           <TokenButton token={pCNVToken} tokenAmount={pCNVBalance} />
-          <TokenButton token={aCNVToken} tokenAmount={aCNVBalance} />
-          <TokenButton token={bbtCNVToken} tokenAmount={bbtCNVBalance} />
           <TokenButton token={daiToken} tokenAmount={daiBalance} />
           <TokenButton token={nativeToken} tokenAmount={nativeBalance} isDisabled />
           <Button
@@ -141,7 +130,7 @@ const WalletButton = ({ token, tokenAmount, isDisabled }) => {
       fontFamily="heading"
       w={'auto'}
       rounded="2xl"
-      px={{base: 2, '2xl': 4}}
+      px={{ base: 2, '2xl': 4 }}
       gap={2}
       disabled={isDisabled}
       onClick={addingToWallet}

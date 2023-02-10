@@ -1,5 +1,5 @@
 import { BaseProvider, TransactionResponse } from '@ethersproject/providers'
-import { BigNumber, Contract, Signer } from 'ethers'
+import { BigNumber, BigNumberish, Contract, Signer } from 'ethers'
 import { PCNV_REDEMPTION_ABI } from '../abis/PcnvRedemptionAbi'
 import { PCNV_ADDRESS } from '../constants'
 
@@ -21,11 +21,12 @@ export class PCNVContract {
   }
   public async redeem(
     signer: Signer,
-    amount: BigNumber,
+    amount: BigNumberish,
     address: string,
+    to: string,
     redeemMax?: boolean,
   ): Promise<TransactionResponse> {
-    return this.pCNVContract.connect(signer).redeem(amount, address, address, redeemMax)
+    return this.pCNVContract.connect(signer).redeem(amount, address, to, redeemMax)
   }
   public async vestedPercent(time: number): Promise<BigNumber> {
     return this.pCNVContract.vestedPercent(time)

@@ -108,11 +108,9 @@ export function BondPanel(props: BondPanelProps) {
         title={'Confirm redeem'}
       >
         <Text fontSize="lg" color="text.accent">
-          {props?.bondSigma && props?.bondSigma['parseRedeemable']
+          {props?.bondSigma && props?.bondSigma['parsRedeemable']
             ? `Redeeming ` +
-              (+utils.formatEther(BigInt(Math.floor(props?.bondSigma.parseRedeemable)))).toFixed(
-                2,
-              ) +
+              (+utils.formatEther(BigInt(Math.floor(props?.bondSigma.parsRedeemable)))).toFixed(2) +
               ` CNV`
             : ''}
         </Text>

@@ -49,8 +49,10 @@ export function DashboardNavButtons(props: NavButtonProps) {
         isSelected={props.currentSnapshot === SnapshotOptions.LiquidStaking}
         isLoading={props.cnvDataIsLoading}
         summaryArray={[
-          { label: 'Locked', data: `${props.totalLocked.toFixed(2, { groupSeparator: ',' })} CNV` },
-          { label: 'Positions', data: props.lsdCNVPositions },
+          {
+            label: 'Locked: ' + `${props.totalLocked.toFixed(2, { groupSeparator: ',' })} CNV`,
+          },
+          { label: 'Positions: ' + props.lsdCNVPositions },
         ]}
         onClick={() => props.changeSnapshot(SnapshotOptions.LiquidStaking)}
       />
@@ -59,8 +61,8 @@ export function DashboardNavButtons(props: NavButtonProps) {
         isSelected={props.currentSnapshot === SnapshotOptions.DynamicBonds}
         isLoading={userBondState.isLoading}
         summaryArray={[
-          { label: 'Bonding', data: userBondState.data?.totalPending + ' CNV' },
-          { label: 'Claimable', data: userBondState.data?.totalOwed + ' CNV' },
+          { label: 'Bonding: ' + userBondState.data?.totalPending + ' CNV' },
+          { label: 'Claimable: ' + userBondState.data?.totalOwed + ' CNV' },
         ]}
         onClick={() => props.changeSnapshot(SnapshotOptions.DynamicBonds)}
       />
@@ -69,8 +71,8 @@ export function DashboardNavButtons(props: NavButtonProps) {
         isSelected={props.currentSnapshot === SnapshotOptions.Marketplace}
         isLoading={props.cnvDataIsLoading && props.marketplaceIsLoading}
         summaryArray={[
-          { label: 'Positions Listed', data: props.nftPositionCount },
-          { label: 'Positions', data: props.lsdCNVPositions },
+          { label: 'Positions Listed: ' + props.nftPositionCount },
+          { label: 'Positions: ' + props.lsdCNVPositions },
         ]}
         onClick={() => props.changeSnapshot(SnapshotOptions.Marketplace)}
       />
@@ -78,7 +80,7 @@ export function DashboardNavButtons(props: NavButtonProps) {
         title={'Liquidity Pools'}
         isSelected={props.currentSnapshot === SnapshotOptions.Liquidity}
         onClick={() => props.changeSnapshot(SnapshotOptions.Liquidity)}
-        summaryArray={[{ label: 'Total pools', data: props.totalPools }]}
+        summaryArray={[{ label: 'Total pools: ' + props.totalPools }]}
       />
 
       <NavButton
@@ -87,13 +89,18 @@ export function DashboardNavButtons(props: NavButtonProps) {
         isSelected={props.currentSnapshot === SnapshotOptions.Airdrop}
         summaryArray={[
           {
-            label: 'Special',
-            data: claimedSpecial ? 'claimed' : `${special.redeemable} USDC `,
+            label: 'Special: ' + claimedSpecial ? 'claimed' : `${special.redeemable} USDC `,
           },
-          { label: 'Q4', data: claimedQ4 ? 'claimed' : `${Q4.redeemable} USDC ` },
+          { label: 'Q4: ' + claimedQ4 ? 'claimed' : `${Q4.redeemable} USDC ` },
         ]}
       />
-      <NavButton title={'Coming Soon'} isDisabled />
+
+      <NavButton
+        title={'Redeem CNV'}
+        onClick={() => props.changeSnapshot(SnapshotOptions.Redeem)}
+        isSelected={props.currentSnapshot === SnapshotOptions.Redeem}
+        summaryArray={[{ label: 'pCNV/bbt/aCNV' }]}
+      />
       <NavButton title={'Coming Soon'} isDisabled />
     </>
   )

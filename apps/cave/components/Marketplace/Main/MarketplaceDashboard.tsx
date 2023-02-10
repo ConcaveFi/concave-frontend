@@ -1,5 +1,5 @@
 import { StakingPosition } from '@concave/marketplace'
-import { Flex, Text, VStack } from '@concave/ui'
+import { Box, Flex, Text, VStack } from '@concave/ui'
 import { BoxProps, HStack, useBreakpointValue } from '@concave/ui'
 import { Loading } from 'components/Loading'
 import { MarketplaceFilterContainer } from 'components/Marketplace/Main/MarketplaceFilterContainer'
@@ -10,9 +10,26 @@ import { MarketplaceSortConainer } from './MarketplaceSortContainer'
 import { TokenIdSearchBar } from './TokenIdSearchBar'
 import { useMarketplaceDashbord } from './UseMarkeplaceState'
 
-const ownerOfStaking =(address: `0x${string}`) => (stakingPosition: StakingPosition) => stakingPosition.market?.seller.toUpperCase() === address?.toUpperCase()
+const ownerOfStaking = (address: `0x${string}`) => (stakingPosition: StakingPosition) =>
+  stakingPosition.market?.seller.toUpperCase() === address?.toUpperCase()
 
-export const MarketplaceDashboard = (props: BoxProps | any) => {
+const NoPositions = () => (
+  <Box mt={`auto`} mb={'auto'}>
+    <Text size={'lg'} w={`full`} fontWeight={'bold'}>
+      No results found
+    </Text>
+    <Text>Check your filters</Text>
+  </Box>
+)
+
+export const MarketplaceDashboard = ({
+  children = NoPositions(),
+  ...props
+}: BoxProps & {
+  filterUserPositions?: boolean
+  justifyContentSort?: string
+  children?: JSX.Element
+}) => {
   const {
     isFetching,
     nftPositions,
@@ -25,10 +42,10 @@ export const MarketplaceDashboard = (props: BoxProps | any) => {
   const isMobile = useBreakpointValue({ base: true, sm: false })
   const [activePosition, setActivePosition] = useState('')
   const { address } = useAccount()
-  
-  const nftPositionsArray = props.filterUserPositions ? 
-      nftPositions.filter(ownerOfStaking(address)) :
-      nftPositions
+
+  const nftPositionsArray = props.filterUserPositions
+    ? nftPositions.filter(ownerOfStaking(address))
+    : nftPositions
 
   const positions = nftPositionsArray.map((stakingPosition) => (
     <MarketplacePosition
@@ -84,16 +101,7 @@ export const MarketplaceDashboard = (props: BoxProps | any) => {
           gap={4}
           p={2}
         >
-          {positions.length == 0 ? (
-            <>
-              <Text size={'lg'} w={`full`} fontWeight={'bold'}>
-                No results found
-              </Text>
-              <Text>Check your filters</Text>
-            </>
-          ) : (
-            <>{positions}</>
-          )}
+          {positions.length == 0 ? children : <>{positions}</>}
         </Flex>
       </Flex>
     </VStack>
