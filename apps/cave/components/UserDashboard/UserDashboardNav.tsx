@@ -53,6 +53,7 @@ export const UserDashboardNav = ({
       flexDirection={'column'}
       borderRadius={'3xl'}
       p={{ base: 0, lg: 3 }}
+      overflowY={'auto'}
       gap={3}
     >
       {!isMobile && <DashboardNavButtons {...buttonOptions} />}

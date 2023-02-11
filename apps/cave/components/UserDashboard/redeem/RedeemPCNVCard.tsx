@@ -1,5 +1,5 @@
 import { CNV } from '@concave/core'
-import { Button, Card, CardProps, Text, useDisclosure, VStack } from '@concave/ui'
+import { Button, Card, Text, useDisclosure, VStack } from '@concave/ui'
 import { getCurrencyLogoURI } from 'components/CurrencyIcon'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { FC } from 'react'
@@ -8,7 +8,7 @@ import { ACNVRedemptionDialog } from '../../Transparency/VestedTokensDialogs/ACN
 import { BBTCNVRedemptionDialog } from '../../Transparency/VestedTokensDialogs/BBTCNVRedemptionDialog'
 import { PCNVRedemptionDialog } from '../../Transparency/VestedTokensDialogs/PCNVRedemptionDialog'
 
-export const RedeemTokensCard = (props: CardProps) => {
+export const RedeemTokensCard = () => {
   const chaindId = useCurrentSupportedNetworkId()
   const cnv = CNV[chaindId]
 
@@ -22,7 +22,6 @@ export const RedeemTokensCard = (props: CardProps) => {
       direction={{ base: 'column', xl: 'row' }}
       justifyContent={'center'}
       gap={{ base: 4, xl: 0 }}
-      {...props}
     >
       <VStack w={'full'} gap={2}>
         <Text fontSize={'3xl'} fontWeight={700}>

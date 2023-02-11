@@ -1,6 +1,6 @@
 import { CNV, Token } from '@concave/core'
 import { ExpandArrowIcon } from '@concave/icons'
-import { Box, Button, Card, HStack, Text, VStack } from '@concave/ui'
+import { Box, Button, Card, Flex, HStack, Text, VStack } from '@concave/ui'
 import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
 
 import { CustomRecipient } from 'components/AMM'
@@ -44,6 +44,7 @@ export const RedeemCard = ({
   redeemFields,
   redeemStatus,
   redeemTransaction,
+  ...boxProps
 }: RedeemCard<Token, Token>) => {
   const {
     address,
@@ -55,8 +56,8 @@ export const RedeemCard = ({
   } = { ...redeemFields, ...redeemStatus }
   const outputFiat = useFiatValue(amountIn)
   return (
-    <Box>
-      <Card gap={4} p={4} justify="center" w={'350px'} h={'fit-content'} px={5}>
+    <Box {...boxProps}>
+      <Card gap={4} p={4} justify="center" w={'100%'} h={'fit-content'} px={5}>
         <CurrencyAmountField
           disabled={immutableAmount}
           currencyAmount={amountOut}
@@ -136,8 +137,8 @@ const Redeemed = (redeemStatus: RedeemStatus) => {
  * @returns the percent of holdings vested for right now
  */
 const VestedPercent = (redeemStatus: RedeemStatus) => {
-  if (!redeemStatus) return <></>
-  if (!redeemStatus.vestedPercent.eq(0)) return <></>
+  if (!redeemStatus?.vestedPercent) return <></>
+  if (!redeemStatus.vestedPercent?.eq(0)) return <></>
 
   return (
     <HStack width={'full'}>
