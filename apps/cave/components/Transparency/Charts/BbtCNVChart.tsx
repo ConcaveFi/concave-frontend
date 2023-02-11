@@ -1,4 +1,4 @@
-import { Flex, Text, useBreakpointValue } from '@concave/ui'
+import { Box, Flex, FlexProps, Text, useBreakpointValue } from '@concave/ui'
 import {
   Bar,
   BarChart,
@@ -25,18 +25,21 @@ type BbtCNVChartData = {
   vPCT: number
 }
 
-export function BbtCNVChart() {
+export function BbtCNVChart({ flex, w }: { flex?: number; w?: number | string }) {
   const isMobile = useBreakpointValue({ base: true, md: false })
   const bbtCNVData = useFetchData<BbtCNVChartData>('bbtcnv-redeemed')
   const dataLoaded = !bbtCNVData.isLoading
   const data = bbtCNVData.data
   const error = bbtCNVData.error
+
   return (
     <ChartCard
       {...bbtCNVData}
+      height={'full'}
+      w={w}
+      flex={flex}
       chartTitle="BBT redeem counter"
       tooltipDescription="bbtCNV redeem counter."
-      overflow="visible"
     >
       {dataLoaded && error && (
         <Text>{`Error fetching data, retrying in ${bbtCNVData.nextTriggerByError} seconds`}</Text>
