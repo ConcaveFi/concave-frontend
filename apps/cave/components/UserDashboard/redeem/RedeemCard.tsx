@@ -57,7 +57,16 @@ export const RedeemCard = ({
   const outputFiat = useFiatValue(amountIn)
   return (
     <Box {...boxProps}>
-      <Card gap={4} p={4} justify="center" w={'100%'} h={'fit-content'} px={5}>
+      <Card
+        gap={4}
+        p={4}
+        justify="center"
+        justifyContent={'space-around'}
+        w={'100%'}
+        minH={'fit-content'}
+        h={'full'}
+        px={4}
+      >
         <CurrencyAmountField
           disabled={immutableAmount}
           currencyAmount={amountOut}
