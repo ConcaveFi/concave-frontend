@@ -3,7 +3,7 @@ import { useRedeemFields } from 'components/UserDashboard/redeem/useRedeemFields
 import { useRedeemStatus } from 'components/UserDashboard/redeem/useRedeemStatus'
 import { useRedeemPCNV } from 'components/UserDashboard/redeem/useRedeemPCNV'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { RedeemCard, RedeemCard } from './RedeemCard'
+import { RedeemCard } from './RedeemCard'
 
 export const useRedeemACNVCard = () => {
   const chainId = useCurrentSupportedNetworkId()
