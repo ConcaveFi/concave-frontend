@@ -19,7 +19,7 @@ export function LsdCNVHoldersChart({ width, fontSize }: { width: string; fontSiz
       {...lsdCNVHolders}
       chartTitle="lsdCNV holders"
       tooltipDescription="The amount of unique lsdCNV holders."
-      width={width}
+      w={width}
     >
       {dataLoaded && error && (
         <Text>{`Error fetching data, retrying in ${lsdCNVHolders.nextTriggerByError} seconds`}</Text>
