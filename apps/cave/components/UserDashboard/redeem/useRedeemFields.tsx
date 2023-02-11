@@ -26,7 +26,7 @@ export type RedeemFields<Tout extends Token, Tin extends Token> = {
   ]
 }
 
-export const useRedeemInfo = <TOut extends Token, TIn extends Token>({
+export const useRedeemFields = <TOut extends Token, TIn extends Token>({
   tokenIn,
   disabled,
   immutableAmount = false,
