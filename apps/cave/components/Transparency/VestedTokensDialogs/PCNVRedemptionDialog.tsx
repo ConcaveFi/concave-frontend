@@ -1,16 +1,15 @@
-import { Modal } from '@concave/ui'
+import { BoxProps, Modal } from '@concave/ui'
 
 import { ModalType } from '../../UserDashboard/redeem/RedeemTokensCard'
 import { RedeemCard } from '../../UserDashboard/redeem/RedeemCard'
 import { useRedeemPCNVCard } from '../../UserDashboard/redeem/useRedeemPCNVCard'
 
 export const PCNVRedemptionDialog: React.FC<ModalType> = (props) => {
-  const redeemCardProps = useRedeemPCNVCard()
   return (
     <>
       <Modal
         bluryOverlay
-        title={`Redeem ${redeemCardProps.redeemFields.amountOut.currency.symbol}`}
+        title={`Redeem pCNV`}
         motionPreset="slideInBottom"
         isOpen={props.isOpen}
         onClose={props.onClose}
@@ -18,8 +17,13 @@ export const PCNVRedemptionDialog: React.FC<ModalType> = (props) => {
         isCentered
         bodyProps={{ p: 0 }}
       >
-        <RedeemCard {...redeemCardProps} />
+        <RedeemPCNVCard />
       </Modal>
     </>
   )
+}
+
+export const RedeemPCNVCard = (props: BoxProps) => {
+  const redeemCardProps = useRedeemPCNVCard()
+  return <RedeemCard {...redeemCardProps} {...props} />
 }

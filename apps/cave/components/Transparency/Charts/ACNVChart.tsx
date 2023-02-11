@@ -1,4 +1,4 @@
-import { Text } from '@concave/ui'
+import { Box, Flex, Text } from '@concave/ui'
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { ChartCard } from './ChartCard'
 import { ChartTooltip } from './ChartTooltip'
@@ -11,13 +11,22 @@ type ACNVChartData = {
   TOTAL_ACNV: number
 }
 
-export function ACNVChart({ fontSize }: { fontSize: string }) {
+export function ACNVChart({
+  fontSize,
+  flex,
+  w,
+}: {
+  fontSize: string
+  w?: number | string
+  flex?: number
+}) {
   const acnvData = useFetchData<ACNVChartData>('acnv-redeemed')
   const dataLoaded = !acnvData.isLoading
   const data = acnvData.data
   const error = acnvData.error
+
   return (
-    <ChartCard {...acnvData} chartTitle="aCNV redeem counter">
+    <ChartCard {...acnvData} height={'full'} width={w} flex={flex} chartTitle="aCNV redeem counter">
       {dataLoaded && error && (
         <Text>{`Error fetching data, retrying in ${acnvData.nextTriggerByError} seconds`}</Text>
       )}
