@@ -122,26 +122,16 @@ function getView(selectedSnapshot: SnapshotOptions) {
       )
     case SnapshotOptions.Redeem2:
       return (
-        <VStack
-          p={4}
-          gap={2}
-          borderRadius={'3xl'}
-          w={'full'}
-          h={'full'}
-          shadow={'Down Big'}
-          overflowY={'auto'}
-        >
-          <Flex w={'full'} justifyContent={'space-evenly'} h={'fit-content'} gap={4}>
-            <RedeemPCNVCard maxW={'500px'} w={'full'} flex={1} />
-          </Flex>
-          <Flex w={'full'} h={'fit-content'} gap={4}>
-            <RedemACNVCard w={'full'} flex={1} />
-            <RedemBBTCard w={'full'} flex={1} />
-          </Flex>
-          <Flex w={'full'} h={'fit-content'} gap={4}>
+        <VStack>
+          <HStack w={'full'} h={'fit-content'} gap={2}>
             <ACNVChart fontSize="6xl" w={'full'} />
             <BbtCNVChart w={'full'} />
-          </Flex>
+          </HStack>
+          <HStack w={'full'} h={'fit-content'} gap={0}>
+            <RedeemPCNVCard w={'full'} h={'full'} flex={1} />
+            <RedemACNVCard w={'full'} h={'full'} flex={1} />
+            <RedemBBTCard w={'full'} h={'full'} flex={1} />
+          </HStack>
         </VStack>
       )
 
