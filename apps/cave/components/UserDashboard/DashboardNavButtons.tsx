@@ -94,35 +94,10 @@ export function DashboardNavButtons(props: NavButtonProps) {
           { label: 'Q4: ' + claimedQ4 ? 'claimed' : `${Q4.redeemable} USDC ` },
         ]}
       />
-
       <NavButton
-        title={'Redeem CNV'}
+        title={'Redeem'}
         onClick={() => props.changeSnapshot(SnapshotOptions.Redeem)}
         isSelected={props.currentSnapshot === SnapshotOptions.Redeem}
-        summaryArray={[{ label: 'pCNV/bbt/aCNV' }]}
-      />
-      <NavButton
-        title={'Redeem PCNV'}
-        onClick={() => props.changeSnapshot(SnapshotOptions.RedeemPCNV)}
-        isSelected={props.currentSnapshot === SnapshotOptions.RedeemPCNV}
-        summaryArray={[{ label: 'Redeem CNV' }]}
-      />
-      <NavButton
-        title={'Redeem ACNV'}
-        onClick={() => props.changeSnapshot(SnapshotOptions.RedeemACNV)}
-        isSelected={props.currentSnapshot === SnapshotOptions.RedeemACNV}
-        summaryArray={[{ label: 'Redeem CNV' }]}
-      />
-      <NavButton
-        title={'Redeem BBTCNV'}
-        onClick={() => props.changeSnapshot(SnapshotOptions.RedeemBBT)}
-        isSelected={props.currentSnapshot === SnapshotOptions.RedeemBBT}
-        summaryArray={[{ label: 'Redeem CNV' }]}
-      />
-      <NavButton
-        title={'Redeem 2'}
-        onClick={() => props.changeSnapshot(SnapshotOptions.Redeem2)}
-        isSelected={props.currentSnapshot === SnapshotOptions.Redeem2}
         summaryArray={[{ label: 'Redeem CNV' }]}
       />
       <NavButton title={'Coming Soon'} isDisabled />
