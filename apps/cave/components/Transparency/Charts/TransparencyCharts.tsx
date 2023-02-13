@@ -1,6 +1,4 @@
 import { Flex } from '@concave/ui'
-import { ACNVChart } from './ACNVChart'
-import { BbtCNVChart } from './BbtCNVChart'
 import { LockedCNVChart } from './LockedCNVChart'
 import { LockedCNVSeriesChart } from './LockedCNVSeriesChart'
 import { LsdCNVHoldersChart } from './LsdCNVUniqueHolders'
@@ -36,15 +34,11 @@ export default function TransparencyCharts({ isMobile }: { isMobile: boolean }) 
     <Flex w={'100%'} direction={'column'} gap={6}>
       <Flex gap={6} direction={style.groupDirection}>
         <LockedCNVChart width={style.lockedCnv.width} fontSize={style.textChartFontSize} />
-        <LockedCNVSeriesChart />
         <LsdCNVHoldersChart width={style.lsdCnv.width} fontSize={style.textChartFontSize} />
       </Flex>
       <Flex gap={6} direction={style.groupDirection}>
+        <LockedCNVSeriesChart />
         <StakePoolEngagementChart isMobile={isMobile} />
-      </Flex>
-      <Flex gap={6} direction={style.groupDirection}>
-        <ACNVChart fontSize={style.textChartFontSize} />
-        <BbtCNVChart />
       </Flex>
     </Flex>
   )

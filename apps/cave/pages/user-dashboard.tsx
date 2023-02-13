@@ -1,9 +1,8 @@
 import { Container, Flex, Heading, Text } from '@concave/ui'
 import { withPageTransition } from 'components/PageTransition'
 import { UserDashboardContainer } from 'components/UserDashboard/UserDashboardContainer'
-
 const UserDashboard = () => (
-  <Container maxW={{ base: '60ch', sm: 'container.sm', lg: '100%' }} centerContent>
+  <Container maxW={{ base: '60ch', sm: 'container.sm', lg: 'container.lg' }} p={0} centerContent>
     <Flex align={'center'} w={'100%'} h={'100%'} gap={4} textAlign="center" direction="column">
       <Heading
         mt={16}
