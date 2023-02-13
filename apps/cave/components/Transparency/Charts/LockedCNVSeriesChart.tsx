@@ -38,7 +38,7 @@ export const LockedCNVSeriesChart = () => {
   const error = lockedCNVSeries.error
 
   return (
-    <ChartCard {...lockedCNVSeries} chartTitle="CNV locked over time">
+    <ChartCard {...lockedCNVSeries} w={'full'} chartTitle="CNV locked over time">
       {dataLoaded && error && (
         <Text>{`Error fetching data, retrying in ${lockedCNVSeries.nextTriggerByError} seconds`}</Text>
       )}

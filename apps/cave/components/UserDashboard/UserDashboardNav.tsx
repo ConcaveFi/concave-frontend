@@ -48,11 +48,11 @@ export const UserDashboardNav = ({
   }
   return (
     <Flex
-      w={{ base: 'full', lg: '24%' }}
+      w={{ base: 'full', lg: '240px' }}
       flexGrow={0}
       flexDirection={'column'}
       borderRadius={'3xl'}
-      p={{ base: 0, lg: 3 }}
+      p={{ base: 0, lg: 0 }}
       overflowY={'auto'}
       gap={3}
     >
