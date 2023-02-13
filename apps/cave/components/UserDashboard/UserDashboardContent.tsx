@@ -28,7 +28,7 @@ export function UserDashboardContent() {
     </Flex>
   )
 }
-
+const gap = 2
 function getView(selectedSnapshot: SnapshotOptions) {
   switch (selectedSnapshot) {
     case SnapshotOptions.History:
@@ -47,17 +47,17 @@ function getView(selectedSnapshot: SnapshotOptions) {
       return <MarketplaceSnapshot />
     case SnapshotOptions.Redeem:
       return (
-        <VStack>
-          <HStack w={'full'} h={'fit-content'} gap={0}>
+        <Flex w={'full'} direction={'column'} flexWrap={'wrap'} gap={gap}>
+          <Flex gap={gap} w={'full'} h={'fit-content'}>
             <ACNVChart fontSize="6xl" w={'full'} />
             <BbtCNVChart w={'full'} />
-          </HStack>
-          <HStack w={'full'} h={'fit-content'} gap={0}>
-            <RedeemPCNVCard w={'full'} h={'full'} flex={1} />
-            <RedemACNVCard w={'full'} h={'full'} flex={1} />
-            <RedemBBTCard w={'full'} h={'full'} flex={1} />
-          </HStack>
-        </VStack>
+          </Flex>
+          <Flex w={'full'} gap={gap}>
+            <RedeemPCNVCard w={'full'} />
+            <RedemACNVCard w={'full'} />
+            <RedemBBTCard w={'full'} />
+          </Flex>
+        </Flex>
       )
 
     case SnapshotOptions.Airdrop:
