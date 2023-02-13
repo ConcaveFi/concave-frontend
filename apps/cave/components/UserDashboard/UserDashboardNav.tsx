@@ -48,7 +48,7 @@ export const UserDashboardNav = ({
   }
   return (
     <Flex
-      w={{ base: 'full', lg: '25%' }}
+      w={{ base: 'full', lg: '24%' }}
       flexGrow={0}
       flexDirection={'column'}
       borderRadius={'3xl'}

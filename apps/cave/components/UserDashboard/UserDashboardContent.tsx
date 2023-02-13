@@ -47,83 +47,8 @@ function getView(selectedSnapshot: SnapshotOptions) {
       return <MarketplaceSnapshot />
     case SnapshotOptions.Redeem:
       return (
-        <VStack
-          p={4}
-          gap={2}
-          borderRadius={'3xl'}
-          justifyContent={'space-evenly'}
-          w={'full'}
-          h={'full'}
-          shadow={'Down Big'}
-          overflowY={'auto'}
-        >
-          <Flex w={'full'} h={'fit-content'} gap={4}>
-            <RedeemTokensCard maxW={'unset'} w={'full'} />
-          </Flex>
-          <Flex w={'full'} h={'fit-content'} gap={4}>
-            <ACNVChart fontSize="6xl" w={'full'} />
-            <BbtCNVChart w={'full'} />
-          </Flex>
-        </VStack>
-      )
-    case SnapshotOptions.RedeemBBT:
-      return (
-        <VStack
-          p={4}
-          gap={2}
-          borderRadius={'3xl'}
-          w={'full'}
-          shadow={'Down Big'}
-          overflowY={'auto'}
-          align="center"
-          justifyContent={'space-evenly'}
-        >
-          <Flex w={'full'} maxW={'500px'} h={'fit-content'} gap={4}>
-            <BbtCNVChart w={'full'} flex={1} />
-          </Flex>
-          <Flex w={'full'} maxW={'500px'} h={'fit-content'} gap={4}>
-            <RedemBBTCard w={'full'} fontSize="6xl" />
-          </Flex>
-        </VStack>
-      )
-    case SnapshotOptions.RedeemPCNV:
-      return (
-        <VStack
-          p={4}
-          gap={2}
-          borderRadius={'3xl'}
-          w={'full'}
-          h={'full'}
-          shadow={'Down Big'}
-          justifyContent={'space-evenly'}
-          overflowY={'auto'}
-        >
-          <Flex w={'full'} justifyContent={'space-evenly'} h={'fit-content'} gap={4}>
-            <RedeemPCNVCard maxW={'500px'} w={'full'} flex={1} />
-          </Flex>
-        </VStack>
-      )
-    case SnapshotOptions.RedeemACNV:
-      return (
-        <VStack
-          p={4}
-          gap={2}
-          borderRadius={'3xl'}
-          w={'full'}
-          h={'full'}
-          shadow={'Down Big'}
-          overflowY={'auto'}
-        >
-          <Flex w={'full'} h={'fit-content'} gap={4}>
-            <RedemACNVCard w={'full'} flex={1} />
-            <ACNVChart fontSize="6xl" />
-          </Flex>
-        </VStack>
-      )
-    case SnapshotOptions.Redeem2:
-      return (
         <VStack>
-          <HStack w={'full'} h={'fit-content'} gap={2}>
+          <HStack w={'full'} h={'fit-content'} gap={0}>
             <ACNVChart fontSize="6xl" w={'full'} />
             <BbtCNVChart w={'full'} />
           </HStack>
