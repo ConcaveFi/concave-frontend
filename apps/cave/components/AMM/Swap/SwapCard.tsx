@@ -19,10 +19,11 @@ import { TransactionSubmittedDialog } from 'components/TransactionDialog/Transac
 import { WaitingConfirmationDialog } from 'components/TransactionDialog/TransactionWaitingConfirmationDialog'
 import { useErrorModal } from 'contexts/ErrorModal'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
 import { toAmount } from 'utils/toAmount'
-import { Address, useWaitForTransaction } from 'wagmi'
+import { useWaitForTransaction } from 'wagmi'
 import { NetworkMismatch } from '../NetworkMismatch'
+import { useCustomRecipient } from './CustomRecipient'
 import { SwapState } from './hooks/useSwapState'
 import { PcnvNotification } from './PcnvNotification'
 import { TradeDetails } from './TradeDetails'
@@ -52,7 +53,7 @@ export function Swap(props: SwapState) {
     ROUTER_ADDRESS[trade.inputAmount?.currency.chainId],
     { enablePermit: true, ttl },
   )
-  const [recipient, setRecipient] = useState<Address>(null)
+  const customRecipient = useCustomRecipient()
   const {
     onOpen: openConfirmationModal,
     onClose: closeConfirmationModal,
@@ -61,7 +62,7 @@ export function Swap(props: SwapState) {
 
   const swapTx = useSwapTransaction(
     trade,
-    recipient,
+    customRecipient.address,
     {
       onSuccess: (tx) => {
         onChangeInput(toAmount(0, trade.inputAmount.currency))
@@ -82,7 +83,7 @@ export function Swap(props: SwapState) {
   const swapButtonProps = useSwapButtonProps({
     trade,
     error,
-    recipient,
+    customRecipient,
     currencyApprove,
     onSwapClick: useCallback(
       () => (isExpertMode ? swapTx.write() : openConfirmationModal()),
@@ -120,7 +121,7 @@ export function Swap(props: SwapState) {
         />
 
         <Collapse in={isExpertMode} style={{ overflow: 'visible' }}>
-          <CustomRecipient onChangeRecipient={setRecipient} />
+          <CustomRecipient {...customRecipient} />
         </Collapse>
 
         <TradeDetails
