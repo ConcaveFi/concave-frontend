@@ -1,25 +1,21 @@
 import { useDisclosure } from '@concave/ui'
+import { useRouter } from 'next/router'
 import { createContext, useContext } from 'react'
 
 interface AirdropContextProps {
-  isOpen: boolean
   onOpen: VoidFunction
-  onClose: VoidFunction
 }
 const AirdropContext = createContext<AirdropContextProps>({
-  onClose: () => {},
   onOpen: () => {},
-  isOpen: false,
 })
 
 export function AirdropProvider({ children }) {
-  const airdropModal = useDisclosure()
+  const router = useRouter()
+
   return (
     <AirdropContext.Provider
       value={{
-        onOpen: airdropModal.onOpen,
-        onClose: airdropModal.onClose,
-        isOpen: airdropModal.isOpen,
+        onOpen: () => router.push({ pathname: `/user-dashboard`, query: { view: 'Airdrop' } }),
       }}
     >
       {children}

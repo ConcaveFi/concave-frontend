@@ -1,25 +1,17 @@
 import { Card, Flex } from '@concave/ui'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
 import { SnapshotOptions } from './SnapshotOptions'
 import { UserDashboardContent } from './UserDashboardContent'
 import { UserDashboardNav } from './UserDashboardNav'
 import { UserDashboardWallet } from './UserDashboardWallet'
 
-export const UserDashboardContainer = () => {
+export type UserDashboardContainerParams = { isLoading: boolean; data: { view: SnapshotOptions } }
+export const UserDashboardContainer = (props: UserDashboardContainerParams) => {
   const router = useRouter()
-  const [currentSnapshot, setSnapshot] = useState<SnapshotOptions>(SnapshotOptions.LiquidStaking)
-  const [isLoading, setIsLoading] = useState(true)
 
-  const changeSnapshot = (snapshotSelected: SnapshotOptions) => {
-    if (snapshotSelected !== currentSnapshot) {
-      setSnapshot(snapshotSelected)
-    }
+  const onChangeSnapshot = (view: SnapshotOptions) => {
+    router.push(`/user-dashboard?view=${view}`, undefined, { shallow: true })
   }
-
-  useEffect(() => {
-    router.push(`/user-dashboard?view=${currentSnapshot}`, undefined, { shallow: true })
-  }, [currentSnapshot])
 
   return (
     <Flex w={'100%'} direction={'column'} alignItems={'center'}>
@@ -32,7 +24,11 @@ export const UserDashboardContainer = () => {
         borderRadius={{ base: '30px', lg: '60px' }}
         alignItems={'center'}
       >
-        <UserDashboardWallet onSelectHistory={() => setSnapshot(SnapshotOptions.History)} />
+        <UserDashboardWallet
+          onSelectHistory={() => {
+            onChangeSnapshot(SnapshotOptions.History)
+          }}
+        />
         <Flex
           w={'100%'}
           direction={{ base: 'column', lg: 'row' }}
@@ -40,9 +36,8 @@ export const UserDashboardContainer = () => {
           flexGrow={1}
           gap={6}
         >
-          <UserDashboardNav currentSnapshot={currentSnapshot} changeSnapshot={changeSnapshot} />
-
-          <UserDashboardContent />
+          <UserDashboardNav currentSnapshot={props.data?.view} changeSnapshot={onChangeSnapshot} />
+          <UserDashboardContent view={props.data?.view} />
         </Flex>
       </Card>
     </Flex>
