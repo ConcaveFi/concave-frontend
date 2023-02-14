@@ -13,6 +13,8 @@ export const UserDashboardContainer = (props: UserDashboardContainerParams) => {
     router.push(`/user-dashboard?view=${view}`, undefined, { shallow: true })
   }
 
+  const selectedView = props.data?.view ?? SnapshotOptions.LiquidStaking
+
   return (
     <Flex w={'100%'} direction={'column'} alignItems={'center'}>
       <Card
@@ -36,8 +38,12 @@ export const UserDashboardContainer = (props: UserDashboardContainerParams) => {
           flexGrow={1}
           gap={6}
         >
-          <UserDashboardNav currentSnapshot={props.data?.view} changeSnapshot={onChangeSnapshot} />
-          <UserDashboardContent view={props.data?.view} />
+          {!props.isLoading && (
+            <>
+              <UserDashboardNav currentSnapshot={selectedView} changeSnapshot={onChangeSnapshot} />
+              <UserDashboardContent view={selectedView} />
+            </>
+          )}
         </Flex>
       </Card>
     </Flex>

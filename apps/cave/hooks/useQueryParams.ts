@@ -2,14 +2,12 @@
 import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
 
-export const useQueryParams = <T>() => {
+export const useQueryParams = <T>(def: T) => {
   const router = useRouter()
-  const query = router.isReady ? router.query : {}
+  const query = router.isReady ? router.query : def
   return useQuery(
-    ['useView', JSON.stringify(query)],
-    async () => {
-      return query as T
-    },
+    ['queryParams', JSON.stringify(query)],
+    async () => query as T,
     { enabled: router.isReady },
   )
 }
