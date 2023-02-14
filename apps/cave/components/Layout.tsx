@@ -3,7 +3,6 @@ import { AirdropProvider } from 'contexts/AirdropContext'
 import { AnimatePresence } from 'framer-motion'
 import { useIsMounted } from 'hooks/useIsMounted'
 import { AirdropClaimBanner } from './Airdrop/AirdropClaimBanner'
-import { AirdropClaimModal } from './Airdrop/ClaimModal/AirdropClaimModal'
 import SecurityBanner from './SecurityBanner'
 import { SideBar } from './SideBar/SideBar'
 
@@ -41,7 +40,6 @@ export const Layout = ({ children }) => {
           pb="300px" // add a lil padding to the bottom of the page for better scroll experience
         >
           <SecurityBanner />
-          <AirdropClaimModal />
           <AnimatePresence mode="wait" initial={false} onExitComplete={() => window.scrollTo(0, 0)}>
             {children}
           </AnimatePresence>

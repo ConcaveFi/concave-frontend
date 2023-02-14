@@ -7,6 +7,7 @@ import { RedemACNVCard } from 'components/Transparency/VestedTokensDialogs/ACNVR
 import { RedemBBTCard } from 'components/Transparency/VestedTokensDialogs/BBTCNVRedemptionDialog'
 import { RedeemPCNVCard } from 'components/Transparency/VestedTokensDialogs/PCNVRedemptionDialog'
 import { StakeSettingsProvider } from 'contexts/PositionsFilterProvider'
+import { useQueryParams } from 'hooks/useQueryParams'
 import { useRouter } from 'next/router'
 import { RedeemTokens } from './redeem/RedeemTokens'
 import { RedeemTokensCard } from './redeem/RedeemTokensCard'
@@ -17,14 +18,11 @@ import { LiquiditySnapshot } from './Summary/Pools/LiquiditySnapshot'
 import { LiquidStakingSnapshot } from './Summary/Staking/LiquidStakingSnapshot'
 import { TxHistory } from './Summary/TxHistory/TxHistory'
 
-export function UserDashboardContent() {
-  const router = useRouter()
-  const selectedView = getView(router.query.view as SnapshotOptions)
-  console.log(router.query.view as string, SnapshotOptions.LiquidStaking)
-
+export function UserDashboardContent({ view }: { view: SnapshotOptions }) {
+  if (!view) return <></>
   return (
     <Flex w={'100%'} h="full">
-      {selectedView}
+      {getView(view)}
     </Flex>
   )
 }
