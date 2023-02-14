@@ -19,7 +19,6 @@ import { LiquidStakingSnapshot } from './Summary/Staking/LiquidStakingSnapshot'
 import { TxHistory } from './Summary/TxHistory/TxHistory'
 
 export function UserDashboardContent({ view }: { view: SnapshotOptions }) {
-  if (!view) return <></>
   return (
     <Flex w={'100%'} h="full">
       {getView(view)}
