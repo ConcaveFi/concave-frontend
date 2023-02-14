@@ -11,7 +11,8 @@ import {
   useMultiStyleConfig,
 } from '@concave/ui'
 import { isAddress } from 'ethers/lib/utils'
-import { useReducer, useRef, useState } from 'react'
+import { useReducer, useRef } from 'react'
+import { usePrevious } from 'react-use'
 import { useDebounce } from 'usehooks-ts'
 import { Address, useEnsAddress } from 'wagmi'
 
@@ -22,7 +23,8 @@ export const CustomRecipient = ({
 }) => {
   const [isOpen, toggle] = useReducer((s) => !s, false)
 
-  const [recipient, setRecipient] = useReducer((s, r) => {
+  const [recipient, setRecipient] = useReducer((_, r) => {
+    // if user types an address, set it as recipient
     if (isAddress(r)) onChangeRecipient(r)
     return r
   }, '')
@@ -32,11 +34,10 @@ export const CustomRecipient = ({
     name: debouncedRecipient,
     enabled: !isAddress(debouncedRecipient),
   })
-  const resolvedEnsAddress = useRef(ensAddress)
-  if (resolvedEnsAddress.current !== ensAddress) {
-    resolvedEnsAddress.current = ensAddress
-    if (ensAddress) onChangeRecipient(ensAddress)
-  }
+  // if user types an ens name,
+  // check if it resolved to an address and is not the same as the previous render (to avoid infinite loops)
+  const prevEnsAddress = usePrevious(ensAddress)
+  if (prevEnsAddress !== ensAddress && isAddress(ensAddress)) onChangeRecipient(ensAddress)
 
   const styles = useMultiStyleConfig('Input', { variant: 'primary', size: 'medium' })
 
@@ -45,12 +46,12 @@ export const CustomRecipient = ({
   return (
     <Flex direction="column" align="center" w="100%">
       {isOpen ? (
-        <Button onClick={() => (toggle(), onChangeRecipient())} variant="select" px={3} mb={2}>
+        <Button onClick={() => (toggle(), onChangeRecipient(null))} variant="select" px={3} mb={2}>
           <ExpandArrowIcon w="12px" />
         </Button>
       ) : (
         <Button
-          onClick={toggle}
+          onClick={() => (toggle(), setTimeout(() => inputRef.current.focus()))}
           py={1}
           px={2}
           rounded="lg"
