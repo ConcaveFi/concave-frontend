@@ -11,8 +11,8 @@ export function CurrencyAmountField({
   disabled = false,
   onChangeAmount,
   debounce = 150,
-  maxValue = Infinity,
   CurrencySelector,
+  sx,
 }: {
   maxValue?: number
   children?: ReactNode
@@ -64,7 +64,7 @@ export function CurrencyAmountField({
   )
 
   return (
-    <Stack sx={{ ...styles.field, bg: 'none' }} justify="space-between" spacing={0}>
+    <Stack sx={{ ...styles.field, bg: 'none', ...sx }} justify="space-between" spacing={0}>
       <HStack justify="space-between" align="start">
         <NumericInput
           fontSize={{ base: 'lg', md: '2xl' }}

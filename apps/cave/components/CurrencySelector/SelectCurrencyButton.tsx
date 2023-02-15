@@ -22,7 +22,7 @@ const _SelectCurrencyButton = ({
     fontWeight="bold"
     alignSelf="end"
     fontSize={{ base: '12px', md: 'lg' }}
-    rightIcon={!props.isDisabled && <DownIcon w="16px" />}
+    rightIcon={!props.isDisabled && !props.disabled && <DownIcon w="16px" />}
     leftIcon={selected?.symbol && <CurrencyIcon size="xs" currency={selected} />}
     onClick={onClick}
     {...props}

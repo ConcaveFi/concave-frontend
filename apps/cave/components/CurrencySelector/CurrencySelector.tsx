@@ -1,14 +1,10 @@
 import { Currency } from '@concave/core'
-import { Skeleton, useDisclosure } from '@concave/ui'
+import { ButtonProps, Skeleton, useDisclosure } from '@concave/ui'
 import { FC } from 'react'
 import { SelectCurrencyButton } from './SelectCurrencyButton'
 
 export type CurrencySelectorComponent = FC<{ selected: Currency; onSelect: (c: Currency) => void }>
-export const CurrencySelector = ({
-  selected,
-  onSelect,
-  CurrencySelectorModal,
-}: {
+export type CurrencySelectorType = {
   selected?: Currency
   onSelect: (token: Currency) => void
   CurrencySelectorModal?: FC<{
@@ -17,12 +13,21 @@ export const CurrencySelector = ({
     isOpen: boolean
     onClose: () => void
   }>
-}) => {
+}
+type CurrencySelectorButtonType = Omit<ButtonProps, keyof CurrencySelectorType>
+
+export const CurrencySelector = ({
+  selected,
+  onSelect,
+  CurrencySelectorModal,
+  ...buttonProps
+}: CurrencySelectorType & CurrencySelectorButtonType) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
     <>
       <SelectCurrencyButton
+        {...buttonProps}
         isDisabled={!CurrencySelectorModal}
         selected={selected}
         onClick={onOpen}
