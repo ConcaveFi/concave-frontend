@@ -29,7 +29,7 @@ export function LiquiditySnapshot() {
           </Text>
         </Flex>
         <Button variant={'secondary'} size="lg" onClick={() => router.push('/pools')}>
-        Go to liquidity pools <ChevronRightIcon />
+          Explore Concave pools <ChevronRightIcon />
         </Button>
       </Flex>
       <Text
