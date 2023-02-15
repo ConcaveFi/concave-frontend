@@ -29,18 +29,6 @@ export interface NavButtonProps {
 
 export function DashboardNavButtons(props: NavButtonProps) {
   const { userBondState } = props
-  const networkId = useCurrentSupportedNetworkId()
-  const { address } = useAccount()
-  const { data: claimedQ4 } = useQuery(['AirdropClaim', 'Q4', networkId], async () => {
-    let airdrop = new AirdropClaimContract(concaveProvider(networkId), 'Q4')
-    return await airdrop.claimed(address)
-  })
-  const { data: claimedSpecial } = useQuery(['AirdropClaim', 'special', networkId], async () => {
-    let airdrop = new AirdropClaimContract(concaveProvider(networkId), 'special')
-    return await airdrop.claimed(address)
-  })
-  const special = useAirdropSeason('special')
-  const Q4 = useAirdropSeason('Q4')
 
   return (
     <>

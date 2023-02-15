@@ -83,7 +83,7 @@ const TxTable = ({ reactTable }) => {
         {reactTable.getRowModel().rows.map((row) => (
           <Tr key={row.id} h={'40px'}>
             {row.getVisibleCells().map((cell) => (
-              <Td key={cell.id} px={'16px'}>
+              <Td key={cell.id} px={0.5}>
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </Td>
             ))}
