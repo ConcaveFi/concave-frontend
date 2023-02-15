@@ -4,9 +4,10 @@ import { SnapshotOptions } from 'components/UserDashboard/SnapshotOptions'
 import { UserDashboardContainer } from 'components/UserDashboard/UserDashboardContainer'
 import { useQueryParams } from 'hooks/useQueryParams'
 const UserDashboard = () => {
-  const { data, isLoading, isIdle, ...props } = useQueryParams({
+  const { data, isLoading } = useQueryParams({
     view: SnapshotOptions.LiquidStaking,
   })
+
   return (
     <Container maxW={{ base: '60ch', sm: 'container.sm', lg: 'container.lg' }} p={0} centerContent>
       <Flex align={'center'} w={'100%'} h={'100%'} gap={4} textAlign="center" direction="column">
