@@ -1,4 +1,4 @@
-import { CHAIN_NAME, Currency, CurrencyAmount } from '@concave/core'
+import { CHAIN_NAME, CNV, Currency, CurrencyAmount, DAI } from '@concave/core'
 import { Pair } from '@concave/gemswap-sdk'
 import { PlusIcon } from '@concave/icons'
 import { Button, ButtonProps, Card, Flex, Modal, Text, useDisclosure } from '@concave/ui'
@@ -9,6 +9,9 @@ import { SelectAMMCurrency } from 'components/CurrencySelector/SelectAMMCurrency
 import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
 import { WaitingConfirmationDialog } from 'components/TransactionDialog/TransactionWaitingConfirmationDialog'
 import { ConnectButton } from 'components/UserWallet/ConnectButton'
+import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import { useQueryParams } from 'hooks/useQueryParams'
+import Router, { useRouter } from 'next/router'
 import { toAmount } from 'utils/toAmount'
 import { useAccount } from 'wagmi'
 import { useQueryCurrencies } from '../hooks/useQueryCurrencies'
@@ -77,7 +80,7 @@ function AddLiquidityContent({
 
   return (
     <>
-      <Flex direction="column" p={4} gap={2}>
+      <Flex direction="column" gap={2}>
         <CurrencyInputField
           currencyAmountIn={firstFieldAmount}
           onChangeAmount={onChangeFirstField}
@@ -173,13 +176,46 @@ function AddLiquidityContent({
   )
 }
 
+const useQueryModalControl = <T extends Record<string, string | number>>(defaultParams: T) => {
+  const params = useQueryParams<T>()
+  const isOpen = Object.keys(defaultParams).every((key) => params.data[key])
+
+  console.log('isOpen', isOpen)
+  const currentQueryParams = Router.query
+
+  const onClose = () => {
+    const cleanQueryParams = Object.entries(currentQueryParams)
+      .filter(([key]) => defaultParams[key] === undefined)
+      .reduce((prev, [key, value]) => ({ ...prev, [key]: value }), {})
+    console.log(cleanQueryParams)
+    Router.push({ query: cleanQueryParams }, undefined, { shallow: true })
+  }
+
+  const onOpen = () => {
+    Router.push({ query: { ...currentQueryParams, ...defaultParams } }, undefined, {
+      shallow: true,
+    })
+  }
+
+  return useDisclosure({
+    isOpen,
+    onClose,
+    onOpen,
+  })
+}
+
 export const AddLiquidityModalButton = ({
   pair,
   label = 'Add liquidity',
   ...buttonProps
 }: { label?: string; pair?: Pair } & ButtonProps) => {
+  const chainId = useCurrentSupportedNetworkId()
   const { isDisconnected } = useAccount()
-  const addLiquidityDisclosure = useDisclosure()
+  const addLiquidityDisclosure = useQueryModalControl({
+    currency0: CNV[chainId].address,
+    currency1: DAI[chainId].address,
+  })
+
   const queryCurrencies = useQueryCurrencies()
   const currencies: [Currency, Currency] = pair
     ? [pair?.token0, pair?.token1]
@@ -235,7 +271,7 @@ export const AddLiquidityCard = () => {
       variant="primary"
       p={4}
       w={{ base: '340px', md: '500px' }}
-      gap={6}
+      gap={4}
       shadow="Up for Blocks"
     >
       <AddLiquidityContent currencies={currencies} onChangeCurrencies={onChangeCurrencies} />
