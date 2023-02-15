@@ -7,12 +7,16 @@ import { CustomRecipient } from 'components/AMM'
 import { useFiatValue } from 'components/AMM/hooks/useFiatPrice'
 import { CurrencyAmountField } from 'components/CurrencyAmountField'
 import { Balance, PreSetAmount } from 'components/CurrencyAmountField/Balance'
-import { CurrencySelector } from 'components/CurrencySelector/CurrencySelector'
+import {
+  CurrencySelector as Selector,
+  CurrencySelectorType,
+} from 'components/CurrencySelector/CurrencySelector'
 import { WaitingConfirmationDialog } from 'components/TransactionDialog/TransactionWaitingConfirmationDialog'
 import { RedeemFields } from 'components/UserDashboard/redeem/useRedeemFields'
 import { RedeemStatus } from 'components/UserDashboard/redeem/useRedeemStatus'
 import { UseTransaction } from 'hooks/useTransaction'
 import { compactFormat } from 'utils/bigNumberMask'
+import { SelectCurrencyButton } from 'components/CurrencySelector/SelectCurrencyButton'
 
 export type RedeemCard<Tout extends Token, Tin extends Token> = {
   redeemStatus?: RedeemStatus
@@ -38,6 +42,11 @@ const getRedeemButtonProps = ({
     return { children: 'Redeem max', onClick: redeemTransaction?.sendTx }
   }
   return { children: 'Redeem', onClick: redeemTransaction?.sendTx }
+}
+
+const CurrencySelector = (props: CurrencySelectorType) => {
+  // return <></>
+  return <Selector fontSize={'14px'} m={0} {...props} />
 }
 
 export const RedeemCard = ({
@@ -72,15 +81,25 @@ export const RedeemCard = ({
           currencyAmount={amountOut}
           CurrencySelector={CurrencySelector}
           onChangeAmount={setAmountOut}
+          sx={{ px: 2, py: 2, pb: 0 }}
         >
-          <VStack justify="space-between" align="end" textColor="text.low" w="full">
-            {redeemStatus?.redeemable && (
-              <PreSetAmount
-                amount={redeemStatus?.redeemable}
-                onClick={(amount) => setAmountOut(amount.wrapped)}
-                leftIcon={<Text>Redeemable</Text>}
-              />
-            )}
+          <VStack
+            // border={'1px solid green'}
+            h={'30px'}
+            justify="space-between"
+            align="end"
+            textColor="text.low"
+            w="full"
+          >
+            <HStack>
+              {redeemStatus?.redeemable && (
+                <PreSetAmount
+                  amount={redeemStatus?.redeemable}
+                  onClick={(amount) => setAmountOut(amount.wrapped)}
+                  leftIcon={<Text>Redeemable</Text>}
+                />
+              )}
+            </HStack>
           </VStack>
         </CurrencyAmountField>
 
@@ -93,13 +112,13 @@ export const RedeemCard = ({
           currencyAmount={amountIn}
           CurrencySelector={CurrencySelector}
           onChangeAmount={() => {}}
+          sx={{ px: 2, py: 2, pb: 0 }}
         >
-          <HStack justify="space-between" align="end" textColor="text.low" w="full">
+          <HStack justify="space-between" align="center" textColor="text.low" w="full">
             <Text noOfLines={1} fontWeight="bold" fontSize="sm" mr={1}>
               {!!outputFiat.value?.greaterThan(0) &&
                 `$${outputFiat.value.toFixed(2, { groupSeparator: ',' })}`}
             </Text>
-            <Balance currency={CNV[1]}></Balance>
           </HStack>
         </CurrencyAmountField>
 
