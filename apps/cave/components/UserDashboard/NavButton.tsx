@@ -41,6 +41,7 @@ export const NavButton = ({
   return (
     <button onClick={onClick}>
       <Flex
+        minW={'140px'}
         minH={'100px'}
         height="full"
         rounded={'3xl'}
