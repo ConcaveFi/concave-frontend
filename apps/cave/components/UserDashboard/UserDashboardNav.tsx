@@ -6,7 +6,6 @@ import { useAccount } from 'wagmi'
 import { DashboardNavButtons } from './DashboardNavButtons'
 import { DashboardNavMenu } from './DashboardNavMenu'
 import { useUserBondState } from './hooks/useUserBondState'
-import { useUserTxHistoryState } from './hooks/useUserTxHistoryState'
 import { SnapshotOptions } from './SnapshotOptions'
 
 export const UserDashboardNav = ({
@@ -32,8 +31,6 @@ export const UserDashboardNav = ({
   const userBondState = useUserBondState()
   const state = usePositionsState('user')
 
-  // Tx History
-  const { isLoading: txHistoryIsLoading } = useUserTxHistoryState()
   const isMobile = useBreakpointValue({ base: true, lg: false })
   const buttonOptions = {
     userBondState,
