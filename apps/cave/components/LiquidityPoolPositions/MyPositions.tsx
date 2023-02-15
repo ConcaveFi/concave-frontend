@@ -21,12 +21,14 @@ import { ConnectButton } from 'components/UserWallet/ConnectButton'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { concaveProvider } from 'lib/providers'
+import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
 import { compactFormat } from 'utils/bigNumberMask'
 import { useAccount } from 'wagmi'
 import { PositionsState } from './hooks/usePositionsState'
 
 export const MyPositions = ({ state }: { state: PositionsState }) => {
+  const router = useRouter()
   const { loading, error, setView, view, pairs, user } = state
   if (loading) {
     return <Loading size="lg" isLoading={true} label={loading} />
@@ -51,7 +53,9 @@ export const MyPositions = ({ state }: { state: PositionsState }) => {
           <LiquidityOptionButton
             label={'Your pools'}
             active={view === 'user'}
-            onClick={() => setView('user')}
+            onClick={() => {
+              router.push('/user-dashboard?view=Liquidity')
+            }}
           />
           <LiquidityOptionButton
             label={'All pools'}

@@ -178,7 +178,7 @@ function AddLiquidityContent({
 
 const useQueryModalControl = <T extends Record<string, string | number>>(defaultParams: T) => {
   const params = useQueryParams<T>()
-  const isOpen = Object.keys(defaultParams).every((key) => params.data[key])
+  const isOpen = Object.keys(defaultParams).every((key) => params?.data?.[key])
 
   console.log('isOpen', isOpen)
   const currentQueryParams = Router.query
