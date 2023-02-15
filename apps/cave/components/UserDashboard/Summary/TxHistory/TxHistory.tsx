@@ -38,7 +38,7 @@ export const TxHistory = () => {
   return (
     <Flex flexDir={'column'} w={'100%'} justifyContent={'space-between'}>
       <DataTableCard dataTableLabel={''} isExpanded hasPositions>
-        <DataTable shadow="none" >
+        <DataTable shadow="none">
           {!isLoading && isSuccess ? <TxTable reactTable={reactTable} /> : <></>}
         </DataTable>
       </DataTableCard>
@@ -71,9 +71,6 @@ const TxTable = ({ reactTable }) => {
                           desc: '  🔽',
                         }[header.column.getIsSorted() as string] ?? null}
                       </Flex>
-                      {header.column.getCanFilter() && !isMobile && (
-                        <Filter column={header.column} table={reactTable} />
-                      )}
                     </Flex>
                   )}
                 </Th>
@@ -158,65 +155,3 @@ const columns = [
     enableSorting: false,
   }),
 ]
-
-function Filter({ column, table }: { column: Column<any, unknown>; table: TableTp<any> }) {
-  const firstValue = table.getPreFilteredRowModel().flatRows[0]?.getValue(column.id)
-  const columnFilterValue = column.getFilterValue()
-  console.log(firstValue)
-
-  const sortedUniqueValues = React.useMemo(
-    () =>
-      typeof firstValue === 'number'
-        ? []
-        : Array.from(column.getFacetedUniqueValues().keys()).sort(),
-    [column.getFacetedUniqueValues()],
-  )
-
-  return typeof firstValue === 'number' ? (
-    <Flex minW={'100px'} gap={2}>
-      <Input
-        type="number"
-        min={Number(column.getFacetedMinMaxValues()?.[0] ?? '')}
-        max={Number(column.getFacetedMinMaxValues()?.[1] ?? '')}
-        value={(columnFilterValue as [number, number])?.[0] ?? ''}
-        onChange={({ target: { value } }) =>
-          column.setFilterValue((old: [number, number]) => [value, old?.[1]])
-        }
-        placeholder={`Min ${
-          column.getFacetedMinMaxValues()?.[0] ? `(${column.getFacetedMinMaxValues()?.[0]})` : ''
-        }`}
-        flex={1}
-        p="8px"
-        h="30px"
-        rounded={'md'}
-      />
-      <Input
-        type="number"
-        min={Number(column.getFacetedMinMaxValues()?.[0] ?? '')}
-        max={Number(column.getFacetedMinMaxValues()?.[1] ?? '')}
-        value={(columnFilterValue as [number, number])?.[1] ?? ''}
-        onChange={({ target: { value } }) =>
-          column.setFilterValue((old: [number, number]) => [old?.[0], value])
-        }
-        placeholder={`Max ${
-          column.getFacetedMinMaxValues()?.[1] ? `(${column.getFacetedMinMaxValues()?.[1]})` : ''
-        }`}
-        flex={1}
-        p="8px"
-        h="30px"
-        rounded={'md'}
-      />
-    </Flex>
-  ) : (
-    <Input
-      type="text"
-      value={(columnFilterValue ?? '') as string}
-      onChange={({ target: { value } }) => column.setFilterValue(value)}
-      placeholder={`Search `}
-      list={column.id + 'list'}
-      maxW="80px"
-      rounded={'md'}
-      h="30px"
-    />
-  )
-}

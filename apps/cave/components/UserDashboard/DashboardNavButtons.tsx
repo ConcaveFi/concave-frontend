@@ -87,18 +87,11 @@ export function DashboardNavButtons(props: NavButtonProps) {
         title={'Airdrop'}
         onClick={() => props.changeSnapshot(SnapshotOptions.Airdrop)}
         isSelected={props.currentSnapshot === SnapshotOptions.Airdrop}
-        summaryArray={[
-          {
-            label: 'Special: ' + claimedSpecial ? 'claimed' : `${special.redeemable} USDC `,
-          },
-          { label: 'Q4: ' + claimedQ4 ? 'claimed' : `${Q4.redeemable} USDC ` },
-        ]}
       />
       <NavButton
         title={'Redeem'}
         onClick={() => props.changeSnapshot(SnapshotOptions.Redeem)}
         isSelected={props.currentSnapshot === SnapshotOptions.Redeem}
-        summaryArray={[{ label: 'Redeem CNV' }]}
       />
       <NavButton title={'Coming Soon'} isDisabled />
     </>

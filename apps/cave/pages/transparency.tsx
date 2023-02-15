@@ -31,7 +31,6 @@ const TransparencyDiagram = () => {
         <TransparencyDiagramComponent isMobile={isMobile} />
         <Flex w={'100%'} direction={'column'} gap={6} alignItems={'center'}>
           <TransparencyCharts isMobile={isMobile} />
-          <DividendsCard />
         </Flex>
       </Flex>
     </Container>
