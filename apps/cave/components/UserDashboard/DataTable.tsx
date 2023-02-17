@@ -15,10 +15,9 @@ export function DataTable({
       w={'100%'}
       overflowY={'auto'}
       overflowX="auto"
-      borderRadius="3xl"
+      // borderRadius="3xl"
       px={'0.5rem'}
-      mx={4}
-      shadow={shadow || 'down'}
+      // shadow={shadow || 'down'}
       apply="scrollbar.big"
       maxH={'full'}
     >
