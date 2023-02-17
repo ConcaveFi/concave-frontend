@@ -1,4 +1,4 @@
-import { CNV, Token } from '@concave/core'
+import { Token } from '@concave/core'
 import { ExpandArrowIcon } from '@concave/icons'
 import { Box, Button, Card, Flex, HStack, Text, VStack } from '@concave/ui'
 import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
@@ -6,7 +6,7 @@ import { TransactionSubmittedDialog } from 'components/TransactionDialog/Transac
 import { CustomRecipient } from 'components/AMM'
 import { useFiatValue } from 'components/AMM/hooks/useFiatPrice'
 import { CurrencyAmountField } from 'components/CurrencyAmountField'
-import { Balance, PreSetAmount } from 'components/CurrencyAmountField/Balance'
+import { PreSetAmount } from 'components/CurrencyAmountField/Balance'
 import {
   CurrencySelector as Selector,
   CurrencySelectorType,
