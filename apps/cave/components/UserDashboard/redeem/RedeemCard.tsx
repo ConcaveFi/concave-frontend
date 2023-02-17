@@ -116,7 +116,7 @@ export const RedeemCard = ({
           sx={{ px: 2, py: 2, pb: 0 }}
         >
           <HStack justify="space-between" align="center" textColor="text.low" w="full">
-            <Text noOfLines={1} fontWeight="bold" fontSize="sm" mr={1}>
+            <Text noOfLines={1} pb={2} pl={1} fontWeight="bold" fontSize="sm" mr={1}>
               {!!outputFiat.value?.greaterThan(0) &&
                 `$${outputFiat.value.toFixed(2, { groupSeparator: ',' })}`}
             </Text>
