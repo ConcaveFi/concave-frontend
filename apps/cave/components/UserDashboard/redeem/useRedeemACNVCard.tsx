@@ -1,9 +1,9 @@
 import { ACNV, CNV, Token } from '@concave/core'
 import { useRedeemFields } from 'components/UserDashboard/redeem/useRedeemFields'
 import { useRedeemStatus } from 'components/UserDashboard/redeem/useRedeemStatus'
-import { useRedeemPCNV } from 'components/UserDashboard/redeem/useRedeemPCNV'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { RedeemCard } from './RedeemCard'
+import { useRedeemACNV } from './useRedeemACNV'
 
 export const useRedeemACNVCard = () => {
   const chainId = useCurrentSupportedNetworkId()
@@ -14,6 +14,12 @@ export const useRedeemACNVCard = () => {
     tokenIn: CNV[chainId],
     immutableAmount: true,
   })
-  const redeemTransaction = useRedeemPCNV({ ...redeemFields })
-  return { redeemFields, redeemTransaction, redeemStatus } satisfies RedeemCard<Token, Token>
+
+  const redeemMax =
+    redeemStatus?.redeemable && redeemFields.amountOut.equalTo(redeemStatus?.redeemable)
+  const redeemTransaction = useRedeemACNV({ ...redeemFields })
+  return { redeemFields, redeemTransaction, redeemStatus, redeemMax } satisfies RedeemCard<
+    Token,
+    Token
+  >
 }

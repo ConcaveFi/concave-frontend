@@ -26,6 +26,7 @@ export class PCNVContract {
     to: string,
     redeemMax?: boolean,
   ): Promise<TransactionResponse> {
+    console.table([amount, address, to, redeemMax])
     return this.pCNVContract.connect(signer).redeem(amount, address, to, redeemMax)
   }
   public async vestedPercent(time: number): Promise<BigNumber> {

@@ -16,18 +16,21 @@ import { RedeemFields } from 'components/UserDashboard/redeem/useRedeemFields'
 import { RedeemStatus } from 'components/UserDashboard/redeem/useRedeemStatus'
 import { UseTransaction } from 'hooks/useTransaction'
 import { compactFormat } from 'utils/bigNumberMask'
-import { SelectCurrencyButton } from 'components/CurrencySelector/SelectCurrencyButton'
+import { useCustomRecipient } from 'components/AMM/Swap/CustomRecipient'
+import { useEffect } from 'react'
 
 export type RedeemCard<Tout extends Token, Tin extends Token> = {
   redeemStatus?: RedeemStatus
   redeemTransaction: UseTransaction
   redeemFields: RedeemFields<Tout, Tin>
+  redeemMax: boolean
 }
 
 const getRedeemButtonProps = ({
   redeemFields,
   redeemStatus,
   redeemTransaction,
+  redeemMax,
 }: RedeemCard<Token, Token>) => {
   if (redeemFields.disabled) {
     return { children: 'Coming Soon', isDisabled: true }
@@ -38,14 +41,13 @@ const getRedeemButtonProps = ({
   if (redeemFields.amountOut.greaterThan(redeemStatus.redeemable)) {
     return { children: 'Amount overflow', isDisabled: true }
   }
-  if (redeemFields.amountOut.equalTo(redeemStatus.redeemable)) {
+  if (redeemMax) {
     return { children: 'Redeem max', onClick: redeemTransaction?.sendTx }
   }
   return { children: 'Redeem', onClick: redeemTransaction?.sendTx }
 }
 
 const CurrencySelector = (props: CurrencySelectorType) => {
-  // return <></>
   return <Selector fontSize={'14px'} p={1} {...props} />
 }
 
@@ -53,6 +55,7 @@ export const RedeemCard = ({
   redeemFields,
   redeemStatus,
   redeemTransaction,
+  redeemMax,
   ...boxProps
 }: RedeemCard<Token, Token>) => {
   const {
@@ -62,6 +65,12 @@ export const RedeemCard = ({
     amountOut,
     setTo,
   } = { ...redeemFields, ...redeemStatus }
+  const customRecipient = useCustomRecipient()
+
+  useEffect(() => {
+    setTo?.(customRecipient.address)
+  }, [customRecipient.address])
+
   const outputFiat = useFiatValue(amountIn)
   return (
     <Box {...boxProps}>
@@ -114,7 +123,7 @@ export const RedeemCard = ({
           </HStack>
         </CurrencyAmountField>
 
-        {setTo && <CustomRecipient onChangeRecipient={setTo}></CustomRecipient>}
+        {setTo && <CustomRecipient {...customRecipient}></CustomRecipient>}
         <VestedPercent {...redeemStatus} />
         <Redeemed {...redeemStatus} />
 
@@ -125,6 +134,7 @@ export const RedeemCard = ({
             redeemFields,
             redeemStatus,
             redeemTransaction,
+            redeemMax,
           })}
         />
       </Card>
@@ -138,7 +148,6 @@ export const RedeemCard = ({
 }
 
 const Redeemed = (redeemStatus: RedeemStatus) => {
-  console.log(redeemStatus)
   if (!redeemStatus?.redeemed) return <></>
   if (!redeemStatus.redeemed.greaterThan(0)) return <></>
   return (

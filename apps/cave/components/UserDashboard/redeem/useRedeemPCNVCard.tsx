@@ -13,6 +13,11 @@ export const useRedeemPCNVCard = () => {
     amountOut: CurrencyAmount.fromRawAmount(tokenOut, 0),
     tokenIn: CNV[chainId],
   })
-  const redeemTransaction = useRedeemPCNV({ ...redeemFields })
-  return { redeemFields, redeemTransaction, redeemStatus } satisfies RedeemCard<Token, Token>
+  const redeemMax =
+    redeemStatus?.redeemable && redeemFields.amountOut.equalTo(redeemStatus?.redeemable)
+  const redeemTransaction = useRedeemPCNV({ ...redeemFields, redeemMax })
+  return { redeemFields, redeemTransaction, redeemStatus, redeemMax } satisfies RedeemCard<
+    Token,
+    Token
+  >
 }

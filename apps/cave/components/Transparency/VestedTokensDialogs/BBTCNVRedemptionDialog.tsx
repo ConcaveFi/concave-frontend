@@ -2,7 +2,7 @@ import { BoxProps, Modal } from '@concave/ui'
 
 import { ModalType } from '../../UserDashboard/redeem/RedeemTokensCard'
 import { RedeemCard } from '../../UserDashboard/redeem/RedeemCard'
-import { useRedeemBBTCard } from '../../UserDashboard/redeem/useRedeemBBTCard'
+import { useRedeemBBTCNVCard } from '../../UserDashboard/redeem/useRedeemBBTCNVCard'
 
 export const BBTCNVRedemptionDialog: React.FC<ModalType> = (props) => {
   return (
@@ -24,6 +24,6 @@ export const BBTCNVRedemptionDialog: React.FC<ModalType> = (props) => {
 }
 
 export const RedemBBTCard = (props: BoxProps) => {
-  const redeemCardProps = useRedeemBBTCard()
+  const redeemCardProps = useRedeemBBTCNVCard()
   return <RedeemCard {...redeemCardProps} {...props} />
 }
