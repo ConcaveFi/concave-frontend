@@ -1,5 +1,5 @@
 import { ACNV_ADDRESS, BBTCNV_ADDRESS, CNV, DAI, NATIVE, PCNV, Token } from '@concave/core'
-import { Avatar, Button, Flex, gradientBorder, HStack, Text, Tooltip } from '@concave/ui'
+import { Avatar, Button, Flex, FlexProps, gradientBorder, HStack, Text, Tooltip } from '@concave/ui'
 import { useVestedTokens } from 'components/Transparency/Hooks/useVestedTokens'
 import { ConnectedUserButton } from 'components/UserWallet/ConnectedUserButton'
 import useAddTokenToWallet, { injectedTokenResponse } from 'hooks/useAddTokenToWallet'
@@ -39,7 +39,10 @@ const WalletSurface = ({ children }: { children: JSX.Element | JSX.Element[] }) 
   </Flex>
 )
 
-export function UserDashboardWallet({ onSelectHistory }: { onSelectHistory: VoidFunction }) {
+export function UserDashboardWallet({
+  onSelectHistory,
+  ...flexProps
+}: { onSelectHistory: VoidFunction } & FlexProps) {
   const { address, isConnected } = useAccount()
   const { data: ens } = useEnsName({ address })
   const { data: uns } = useUnstoppableDomain({ address })
@@ -66,7 +69,18 @@ export function UserDashboardWallet({ onSelectHistory }: { onSelectHistory: Void
   const historyPressed = currentView === SnapshotOptions.History
   if (!isConnected) return <></>
   return (
-    <WalletSurface>
+    <Flex
+      w={'100%'}
+      wrap="wrap"
+      flexDir={'row'}
+      justifyContent={{
+        base: 'space-evenly',
+        xl: 'space-between',
+      }}
+      alignItems={'center'}
+      gap={{ base: 0, lg: 3 }}
+      {...flexProps}
+    >
       {
         <>
           <Tooltip label={ens || uns || address} icon={<ConnectedUserButton />} />
@@ -89,7 +103,7 @@ export function UserDashboardWallet({ onSelectHistory }: { onSelectHistory: Void
           </Button>
         </>
       }
-    </WalletSurface>
+    </Flex>
   )
 }
 
