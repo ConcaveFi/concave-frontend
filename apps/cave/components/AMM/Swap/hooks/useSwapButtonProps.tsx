@@ -5,7 +5,7 @@ import { CurrencyApproveState } from 'components/CurrencyAmountButton/CurrencyAm
 import { isAddress } from 'ethers/lib/utils'
 import { swapSupportedChains } from 'pages/gemswap'
 import { toPercent } from 'utils/toPercent'
-import { useAccount, useNetwork } from 'wagmi'
+import { Address, useAccount, useNetwork } from 'wagmi'
 import { NoValidPairsError } from '../../hooks/usePair'
 import { InsufficientLiquidityError } from '../../hooks/useTrade'
 import { useSwapSettings } from '../Settings'
@@ -13,14 +13,14 @@ import { useSwapSettings } from '../Settings'
 export const useSwapButtonProps = ({
   trade,
   error,
-  recipient,
+  customRecipient,
   currencyApprove,
   onSwapClick,
 }: {
   trade: Trade<Currency, Currency, TradeType>
   error: string
   currencyApprove: CurrencyApproveState
-  recipient: string
+  customRecipient: { inputValue: string; isValid: boolean }
   onSwapClick: () => void
 }): ButtonProps => {
   const { isConnecting } = useAccount()
@@ -83,7 +83,8 @@ export const useSwapButtonProps = ({
   if (!trade.inputAmount || trade.inputAmount?.equalTo(0))
     return { isDisabled: true, children: 'Enter an amount' }
 
-  if (recipient && !isAddress(recipient)) return { children: 'Invalid recipient', isDisabled: true }
+  if (customRecipient.inputValue && !customRecipient.isValid)
+    return { children: 'Invalid recipient', isDisabled: true }
 
   if (!currencyApprove.approved) return currencyApprove.buttonProps
 

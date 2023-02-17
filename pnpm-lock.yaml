@@ -155,7 +155,6 @@ importers:
       react-query: 3.39.3_biqbaboplfbrettd7655fr4n2y
       react-use: 17.4.0_biqbaboplfbrettd7655fr4n2y
       recharts: 2.4.3_v2m5e27vhdewzwhryxwfaorcca
-      ts-hooks: 0.1.0-rc8
       usehooks-ts: 2.9.1_biqbaboplfbrettd7655fr4n2y
       wagmi: 0.11.5_264kghpkjgvhwdblqhggfx5h4a
       zustand: 4.3.3_react@18.2.0

@@ -12,20 +12,41 @@ import {
 } from '@concave/ui'
 import { isAddress } from 'ethers/lib/utils'
 import { useReducer, useRef, useState } from 'react'
+import { useDebounce } from 'usehooks-ts'
 import { useEnsAddress } from 'wagmi'
 
-export const CustomRecipient = ({ onChangeRecipient }) => {
-  const [isOpen, toggle] = useReducer((s) => !s, false)
-
-  const [recipient, setRecipient] = useState('')
+export const useCustomRecipient = () => {
+  const [inputValue, onChangeInput] = useState('')
+  const debouncedValue = useDebounce(inputValue, 500)
 
   const { data: ensAddress, isLoading } = useEnsAddress({
-    name: recipient,
-    enabled: !isAddress(recipient),
-    onSuccess: (address) => {
-      onChangeRecipient(address)
-    },
+    name: debouncedValue,
+    enabled: !isAddress(debouncedValue),
   })
+
+  const isInputAddress = isAddress(inputValue)
+  const isValidEns = isAddress(ensAddress)
+
+  return {
+    inputValue,
+    onChangeInput,
+    name: isValidEns ? debouncedValue : undefined,
+    address: isInputAddress ? inputValue : ensAddress,
+    isValid: isInputAddress || isValidEns,
+    reset: () => onChangeInput(''),
+    isLoading,
+  }
+}
+
+export const CustomRecipient = ({
+  name,
+  address,
+  onChangeInput,
+  reset,
+  isValid,
+  isLoading,
+}: ReturnType<typeof useCustomRecipient>) => {
+  const [isOpen, toggle] = useReducer((s) => !s, false)
 
   const styles = useMultiStyleConfig('Input', { variant: 'primary', size: 'medium' })
 
@@ -34,12 +55,12 @@ export const CustomRecipient = ({ onChangeRecipient }) => {
   return (
     <Flex direction="column" align="center" w="100%">
       {isOpen ? (
-        <Button onClick={() => (toggle(), onChangeRecipient())} variant="select" px={3} mb={2}>
+        <Button onClick={() => (toggle(), reset())} variant="select" px={3} mb={2}>
           <ExpandArrowIcon w="12px" />
         </Button>
       ) : (
         <Button
-          onClick={toggle}
+          onClick={() => (toggle(), setTimeout(() => inputRef.current.focus()))}
           py={1}
           px={2}
           rounded="lg"
@@ -64,16 +85,12 @@ export const CustomRecipient = ({ onChangeRecipient }) => {
               variant="unstyled"
               py={1}
               my={-1}
-              onChange={(e) => {
-                const value = e.target.value
-                setRecipient(value)
-                if (isAddress(value)) onChangeRecipient(value)
-              }}
+              onChange={(e) => onChangeInput(e.target.value)}
               placeholder="Recipient address"
             />
-            {ensAddress && (
+            {name && (
               <Text color="text.low" fontSize="xs" onClick={(e) => e.stopPropagation()}>
-                {ensAddress}
+                {address}
               </Text>
             )}
           </Stack>
