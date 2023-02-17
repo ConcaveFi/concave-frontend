@@ -94,6 +94,7 @@ importers:
       react-query: ^3.39.3
       react-use: ^17.4.0
       recharts: 2.4.3
+      ts-hooks: 0.1.0-rc8
       typescript: 4.9.5
       wagmi: ^0.11.5
       zustand: ^4.3.3
@@ -153,6 +154,7 @@ importers:
       react-query: 3.39.3_biqbaboplfbrettd7655fr4n2y
       react-use: 17.4.0_biqbaboplfbrettd7655fr4n2y
       recharts: 2.4.3_v2m5e27vhdewzwhryxwfaorcca
+      ts-hooks: 0.1.0-rc8
       wagmi: 0.11.5_264kghpkjgvhwdblqhggfx5h4a
       zustand: 4.3.3_react@18.2.0
     devDependencies:
@@ -17956,6 +17958,10 @@ packages:
 
   /ts-easing/0.2.0:
     resolution: {integrity: sha512-Z86EW+fFFh/IFB1fqQ3/+7Zpf9t2ebOAxNI/V6Wo7r5gqiqtxmgTlQ1qbqQcjLKYeSHPTsEmvlJUDg/EuL0uHQ==}
+    dev: false
+
+  /ts-hooks/0.1.0-rc8:
+    resolution: {integrity: sha512-BFji/QG9q3n/rsdFQ0WtPVvCe3ZhIDuyKUrwBOkjO/x1Q/hLfMeMCTYUSucEk0sgSM+EeQC3efTITxvqHgpaQg==}
     dev: false
 
   /ts-interface-checker/0.1.13:

@@ -71,6 +71,7 @@
     "react-query": "^3.39.3",
     "react-use": "^17.4.0",
     "recharts": "2.4.3",
+    "ts-hooks": "0.1.0-rc8",
     "wagmi": "^0.11.5",
     "zustand": "^4.3.3"
   },
