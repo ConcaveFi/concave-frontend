@@ -24276,7 +24276,6 @@ packages:
       }
     dev: false
 
-<<<<<<< HEAD
   /ts-hooks/0.1.0-rc8:
     resolution:
       {
@@ -24284,8 +24283,6 @@ packages:
       }
     dev: false
 
-=======
->>>>>>> 8278866b (lock)
   /ts-interface-checker/0.1.13:
     resolution:
       {
