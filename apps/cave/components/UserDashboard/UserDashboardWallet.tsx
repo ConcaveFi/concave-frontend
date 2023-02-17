@@ -1,5 +1,5 @@
 import { ACNV_ADDRESS, BBTCNV_ADDRESS, CNV, DAI, NATIVE, PCNV, Token } from '@concave/core'
-import { Avatar, Button, Flex, gradientBorder, Text, Tooltip } from '@concave/ui'
+import { Avatar, Button, Flex, gradientBorder, HStack, Text, Tooltip } from '@concave/ui'
 import { useVestedTokens } from 'components/Transparency/Hooks/useVestedTokens'
 import { ConnectedUserButton } from 'components/UserWallet/ConnectedUserButton'
 import useAddTokenToWallet, { injectedTokenResponse } from 'hooks/useAddTokenToWallet'
@@ -64,10 +64,10 @@ export function UserDashboardWallet({ onSelectHistory }: { onSelectHistory: Void
   const router = useRouter()
   const currentView = router.query.view as SnapshotOptions
   const historyPressed = currentView === SnapshotOptions.History
-
+  if (!isConnected) return <></>
   return (
     <WalletSurface>
-      {isConnected ? (
+      {
         <>
           <Tooltip label={ens || uns || address} icon={<ConnectedUserButton />} />
           <TokenButton token={cnvToken} tokenAmount={cnvBalance} />
@@ -88,9 +88,7 @@ export function UserDashboardWallet({ onSelectHistory }: { onSelectHistory: Void
             History
           </Button>
         </>
-      ) : (
-        <Text>Please connect wallet</Text>
-      )}
+      }
     </WalletSurface>
   )
 }

@@ -46,7 +46,7 @@ const getRedeemButtonProps = ({
 
 const CurrencySelector = (props: CurrencySelectorType) => {
   // return <></>
-  return <Selector fontSize={'14px'} m={0} {...props} />
+  return <Selector fontSize={'14px'} p={1} {...props} />
 }
 
 export const RedeemCard = ({
@@ -56,7 +56,6 @@ export const RedeemCard = ({
   ...boxProps
 }: RedeemCard<Token, Token>) => {
   const {
-    address,
     immutableAmount,
     amountIn,
     setAmountOut = () => {},
@@ -83,14 +82,7 @@ export const RedeemCard = ({
           onChangeAmount={setAmountOut}
           sx={{ px: 2, py: 2, pb: 0 }}
         >
-          <VStack
-            // border={'1px solid green'}
-            h={'30px'}
-            justify="space-between"
-            align="end"
-            textColor="text.low"
-            w="full"
-          >
+          <VStack h={'30px'} justify="space-between" align="end" textColor="text.low" w="full">
             <HStack>
               {redeemStatus?.redeemable && (
                 <PreSetAmount

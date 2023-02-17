@@ -5,9 +5,5 @@ export enum SnapshotOptions {
   History = 'History',
   Liquidity = 'Liquidity',
   Redeem = 'Redeem',
-  Redeem2 = 'Redeem2',
-  RedeemBBT = 'RedeemBBT',
-  RedeemACNV = 'RedeemACNV',
-  RedeemPCNV = 'RedeemPCNV',
   Airdrop = 'Airdrop',
 }

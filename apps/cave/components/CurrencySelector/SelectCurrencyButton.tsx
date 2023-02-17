@@ -8,6 +8,7 @@ import { mainnet } from 'wagmi'
 const _SelectCurrencyButton = ({
   selected,
   onClick,
+  sx,
   ...props
 }: ButtonProps & {
   selected: Currency
@@ -15,7 +16,7 @@ const _SelectCurrencyButton = ({
 }) => (
   <Button
     variant="select"
-    sx={{ ...(!selected?.symbol && { bgGradient: 'linear(to-r, primary.1, primary.2)' }) }}
+    sx={{ ...(!selected?.symbol && { bgGradient: 'linear(to-r, primary.1, primary.2)' }), ...sx }}
     bgColor="blackAlpha.100"
     py={1.5}
     px={3}
