@@ -1,9 +1,5 @@
-import { AirdropClaimContract, Currency, CurrencyAmount } from '@concave/core'
-import { useAirdropSeason } from 'hooks/useAirdropSeason'
-import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { concaveProvider } from 'lib/providers'
-import { useQuery, UseQueryResult } from 'react-query'
-import { useAccount } from 'wagmi'
+import { Currency, CurrencyAmount } from '@concave/core'
+import { UseQueryResult } from 'react-query'
 import { BondPosition } from './hooks/useUserBondState'
 import { NavButton } from './NavButton'
 import { SnapshotOptions } from './SnapshotOptions'
@@ -55,16 +51,6 @@ export function DashboardNavButtons(props: NavButtonProps) {
         onClick={() => props.changeSnapshot(SnapshotOptions.DynamicBonds)}
       />
       <NavButton
-        title={'Marketplace'}
-        isSelected={props.currentSnapshot === SnapshotOptions.Marketplace}
-        isLoading={props.cnvDataIsLoading && props.marketplaceIsLoading}
-        summaryArray={[
-          { label: 'Positions Listed: ' + props.nftPositionCount },
-          { label: 'Positions: ' + props.lsdCNVPositions },
-        ]}
-        onClick={() => props.changeSnapshot(SnapshotOptions.Marketplace)}
-      />
-      <NavButton
         title={'Liquidity Pools'}
         isSelected={props.currentSnapshot === SnapshotOptions.Liquidity}
         onClick={() => props.changeSnapshot(SnapshotOptions.Liquidity)}
@@ -81,6 +67,7 @@ export function DashboardNavButtons(props: NavButtonProps) {
         onClick={() => props.changeSnapshot(SnapshotOptions.Redeem)}
         isSelected={props.currentSnapshot === SnapshotOptions.Redeem}
       />
+      <NavButton title={'Coming Soon'} isDisabled />
       <NavButton title={'Coming Soon'} isDisabled />
     </>
   )

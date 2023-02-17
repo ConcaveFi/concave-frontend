@@ -53,8 +53,8 @@ export const useUserBondState = () => {
     }
 
     return {
-      totalPending: totalPending.toLocaleString(undefined, { maximumFractionDigits: 4 }),
-      totalOwed: totalOwed.toLocaleString(undefined, { maximumFractionDigits: 4 }),
+      totalPending: totalPending.toLocaleString(undefined, { maximumFractionDigits: 2 }),
+      totalOwed: totalOwed.toLocaleString(undefined, { maximumFractionDigits: 2 }),
       positions: positionDataArray,
     }
   })

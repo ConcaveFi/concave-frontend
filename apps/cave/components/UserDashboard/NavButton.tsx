@@ -1,4 +1,4 @@
-import { Flex, gradientBorder, Spinner, Text } from '@concave/ui'
+import { Button, Flex, gradientBorder, HStack, Spinner, Text, VStack } from '@concave/ui'
 import { useAccount } from 'wagmi'
 
 export const NavButton = ({
@@ -38,15 +38,17 @@ export const NavButton = ({
     }
   }
 
+  if (isLoading) {
+    return <></> //Loading stuff
+  }
   return (
-    <button onClick={onClick}>
+    <Button onClick={onClick}>
       <Flex
-        minW={'140px'}
         minH={'100px'}
         height="full"
         rounded={'3xl'}
         w={'100%'}
-        p={3}
+        px={4}
         shadow={isSelected ? 'up' : 'down'}
         fontSize={'sm'}
         cursor={isDisabled ? 'default' : 'pointer'}
@@ -54,35 +56,41 @@ export const NavButton = ({
         alignItems={settings.alignItems}
         justifyContent={settings.justifyContent}
       >
-        <Flex direction={'column'} align="start" lineHeight={'1.25rem'} ml={settings.flexMl}>
-          <Text
-            color={settings.textColor}
-            fontSize={'lg'}
-            fontWeight={'bold'}
-            mt={settings.textMt}
-            mb={settings.textMb}
-          >
-            {title} {isLoading && <Spinner mx={1} mt={1} size={'sm'} mr={'auto'} />}
-          </Text>
-          {isConnected && !isLoading ? (
-            <>
+        <Flex
+          direction={'column'}
+          w={'full'}
+          justifyContent={'space-around'}
+          align="center"
+          lineHeight={'1.25rem'}
+        >
+          <VStack>
+            <Text
+              color={settings.textColor}
+              fontSize={'lg'}
+              fontWeight={'bold'}
+              mt={settings.textMt}
+              mb={settings.textMb}
+            >
+              {title} {isLoading && <Spinner mx={1} mt={1} size={'sm'} mr={'auto'} />}
+            </Text>
+            <Flex direction={'column'}>
               {summaryArray?.map((summaryObject, index) => (
                 <Text
                   color={'text.accent'}
                   fontWeight="medium"
                   opacity={0.6}
+                  p={0}
+                  m={0}
                   key={index + title}
                   fontSize={'sm'}
                 >
                   {summaryObject.label}
                 </Text>
               ))}
-            </>
-          ) : (
-            <></>
-          )}
+            </Flex>
+          </VStack>
         </Flex>
       </Flex>
-    </button>
+    </Button>
   )
 }
