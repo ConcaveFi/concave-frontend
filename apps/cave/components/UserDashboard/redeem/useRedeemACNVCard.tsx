@@ -1,6 +1,5 @@
 import { ACNV, CNV, Token } from '@concave/core'
 import { useRedeemFields } from 'components/UserDashboard/redeem/useRedeemFields'
-import { useRedeemStatus } from 'components/UserDashboard/redeem/useRedeemStatus'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useAccount } from 'wagmi'
 import { RedeemCard } from './RedeemCard'
