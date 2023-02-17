@@ -42,7 +42,7 @@ export const NavButton = ({
     return <></> //Loading stuff
   }
   return (
-    <Button onClick={onClick}>
+    <Button mx={0.5} onClick={onClick}>
       <Flex
         minH={'100px'}
         height="full"
