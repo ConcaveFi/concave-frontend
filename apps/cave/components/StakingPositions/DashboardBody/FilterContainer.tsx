@@ -21,7 +21,7 @@ export function FilterContainer() {
       mb={2}
     >
       <Flex align="center " gap={2} fontWeight={'bold'} wrap="wrap">
-        <Text textColor="text.low">Filter by:</Text>
+        <Text textColor="text.low">Filter:</Text>
         <InitialCNVFilter />
         <StakePoolFilterCard />
         <Flex py={1} gap={2} shadow={'down'} flex={1} rounded="2xl" pl={3} align="center">
@@ -45,7 +45,7 @@ export function FilterContainer() {
         </Flex>
       </Flex>
       <Flex ml={2} align={'center'} gap={2} fontWeight={'bold'}>
-        <Text textColor="text.low">Sort by:</Text>
+        <Text textColor="text.low">Sort:</Text>
         <SortCard />
       </Flex>
     </Flex>

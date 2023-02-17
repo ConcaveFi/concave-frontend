@@ -24,38 +24,37 @@ import { SnapshotCard } from '../../SnapshotCard'
 import { SnapshotText } from '../../SnapshotText'
 
 function generateDateArray(startDate: Date, endDate: Date, size: number): Date[] {
-  const dateArray: Date[] = [];
-  const diffTime = endDate.getTime() - startDate.getTime();
-  const diffDays = diffTime / (1000 * 3600 * 24);
-  const step = diffDays / size;
-  
+  const dateArray: Date[] = []
+  const diffTime = endDate.getTime() - startDate.getTime()
+  const diffDays = diffTime / (1000 * 3600 * 24)
+  const step = diffDays / size
+
   for (let i = 0; i < size; i++) {
-    const newDate = new Date(startDate.getTime() + step * i * (1000 * 3600 * 24));
-    dateArray.push(newDate);
+    const newDate = new Date(startDate.getTime() + step * i * (1000 * 3600 * 24))
+    dateArray.push(newDate)
   }
   dateArray.push(endDate)
-  return dateArray;
+  return dateArray
 }
 
-
-const calculateMintDate = ({lockedUntil, poolID}:{lockedUntil: number, poolID: number }) => {
+const calculateMintDate = ({ lockedUntil, poolID }: { lockedUntil: number; poolID: number }) => {
   const { days } = stakingPools[poolID]
-  return lockedUntil - days * 24 * 60 * 60 
+  return lockedUntil - days * 24 * 60 * 60
 }
 
-const useStakeChart = ( address: string, chainId: number ) => {
+const useStakeChart = (address: string, chainId: number) => {
   return useQuery(['STAKE_CHART', chainId, address], async () => {
-    let [input, output] = await Promise.all(listUserHistory({address, chainId}))
-    const today = new Date();
-    const lastYear = new Date(today.getFullYear() - 1, today.getMonth(), today.getDate());
+    let [input, output] = await Promise.all(listUserHistory({ address, chainId }))
+    const today = new Date()
+    const lastYear = new Date(today.getFullYear() - 1, today.getMonth(), today.getDate())
     const dates = generateDateArray(lastYear, today, 12)
     return dates.map((date) => {
       const avaiableLocks = input.data.logStakingV1
-            .filter(stake => calculateMintDate(stake) < date.getTime() / 1000 )
-            .filter(stake => stake.lockedUntil > date.getTime() / 1000 )
-      const totalLocked = avaiableLocks.reduce((prev, current) => prev + (+current.amountLocked), 0)
+        .filter((stake) => calculateMintDate(stake) < date.getTime() / 1000)
+        .filter((stake) => stake.lockedUntil > date.getTime() / 1000)
+      const totalLocked = avaiableLocks.reduce((prev, current) => prev + +current.amountLocked, 0)
       return {
-        date: `${date.getMonth()+1}/${date.getDate()} `,
+        date: `${date.getMonth() + 1}/${date.getDate()} `,
         Airdrop: 15,
         'Locked CNV': totalLocked,
       }
@@ -63,32 +62,40 @@ const useStakeChart = ( address: string, chainId: number ) => {
   })
 }
 
-const useAirdropOverview = (address:string, chainId: number) => {
+const useAirdropOverview = (address: string, chainId: number) => {
   const provider = useProvider()
-  return useQuery(['AIRDROP_OVERVIEW', chainId], async () => {
-    const claimedSpecial = new AirdropClaimContract(provider, 'special').claimed(address)
-    const claimedQ4 = new AirdropClaimContract(provider, 'Q4').claimed(address)
-    const seasons = [{
-        claimed: await claimedSpecial,
-        amount: getAirdropSpecialClaimableAmount(address) || 0
-      },{
-        claimed: await claimedQ4,
-        amount: getAirdropQ4ClaimableAmount(address) || 0
-      }
-    ]
-    const overview = seasons.reduce((prev, current) => {
-      const airdropTotal = prev.airdropTotal + current.amount;
-      const claimed = prev.claimed + (current.claimed ? current.amount: 0)
-      return { airdropTotal, claimed,  }
-    }, { airdropTotal: 0, claimed: 0 })
+  return useQuery(
+    ['AIRDROP_OVERVIEW', chainId],
+    async () => {
+      const claimedSpecial = new AirdropClaimContract(provider, 'special').claimed(address)
+      const claimedQ4 = new AirdropClaimContract(provider, 'Q4').claimed(address)
+      const seasons = [
+        {
+          claimed: await claimedSpecial,
+          amount: getAirdropSpecialClaimableAmount(address) || 0,
+        },
+        {
+          claimed: await claimedQ4,
+          amount: getAirdropQ4ClaimableAmount(address) || 0,
+        },
+      ]
+      const overview = seasons.reduce(
+        (prev, current) => {
+          const airdropTotal = prev.airdropTotal + current.amount
+          const claimed = prev.claimed + (current.claimed ? current.amount : 0)
+          return { airdropTotal, claimed }
+        },
+        { airdropTotal: 0, claimed: 0 },
+      )
 
-    const airdropShare = (overview.claimed / overview.airdropTotal )*100
-    return { seasons, overview: {...overview, airdropShare} }
-  }, {
-    enabled: !!address
-  })
+      const airdropShare = (overview.claimed / overview.airdropTotal) * 100
+      return { seasons, overview: { ...overview, airdropShare } }
+    },
+    {
+      enabled: !!address,
+    },
+  )
 }
-
 
 export const LiquidStakingSnapshot = () => {
   const [isExpanded, setExpand] = useState(false)
@@ -98,9 +105,12 @@ export const LiquidStakingSnapshot = () => {
   const { userNonFungibleTokensInfo, totalLocked, isLoading } = stakePosition
   const networkId = useCurrentSupportedNetworkId()
   const airdropOverview = useAirdropOverview(address, networkId)
-  const airdropShare = (airdropOverview.data?.overview.airdropShare||0).toLocaleString(undefined, {
-    maximumFractionDigits: 2,
-  })
+  const airdropShare = (airdropOverview.data?.overview.airdropShare || 0).toLocaleString(
+    undefined,
+    {
+      maximumFractionDigits: 2,
+    },
+  )
   const { initialCNVFilter, stakePoolFilters, tokenIdFilter, sorter } = useStakeSettings()
   const { filterByRange } = useFilterByRange(initialCNVFilter)
   const { filterByStakePool } = useFilterByStakePool(stakePoolFilters)
@@ -110,21 +120,30 @@ export const LiquidStakingSnapshot = () => {
     <Flex flexDir={'column'} w={'100%'} h="100%" gap={6}>
       <SnapshotCard isExpanded={!isExpanded}>
         <ComingSoom>
-          <SnapshotLineChart { ...stakeInfo}  dataKeys={['Airdrop', 'Locked CNV']} />
+          <SnapshotLineChart {...stakeInfo} dataKeys={['Airdrop', 'Locked CNV']} />
         </ComingSoom>
-        <SnapshotTextCard >
+        <SnapshotTextCard>
           <SnapshotText
             title={'Total locked'}
             data={totalLocked.toFixed(2, { groupSeparator: ',' }) + ' CNV'}
           />
-          {airdropOverview.isSuccess ? <>
-            <SnapshotText
-              title={'Available airdrop'}
-              data={`${ numberMask( airdropOverview.data.overview.airdropTotal)} ${airdropToken.symbol}`}
-            />
-            <SnapshotText title={'Airdrop share'} data={airdropShare + '%'} />
-            <SnapshotText title='Airdrop' data={<SnapshotButton claimed={airdropOverview.data.overview.claimed} />} />
-          </> : <Spinner />}
+          {airdropOverview.isSuccess ? (
+            <>
+              <SnapshotText
+                title={'Available airdrop'}
+                data={`${numberMask(airdropOverview.data.overview.airdropTotal)} ${
+                  airdropToken.symbol
+                }`}
+              />
+              <SnapshotText title={'Airdrop share'} data={airdropShare + '%'} />
+              <SnapshotText
+                title="Airdrop"
+                data={<SnapshotButton claimed={airdropOverview.data.overview.claimed} />}
+              />
+            </>
+          ) : (
+            <Spinner />
+          )}
         </SnapshotTextCard>
       </SnapshotCard>
       <DataTableCard
@@ -160,24 +179,23 @@ export const LiquidStakingSnapshot = () => {
 
 const SortComponent = () => <FilterContainer />
 
-const SnapshotButton = ({ claimed }) => { 
-
+const SnapshotButton = ({ claimed }) => {
   return (
-  <Flex
-    textColor={claimed ? 'text.low' : ''}
-    justifyContent={'center'}
-    alignItems={'center'}
-    alignSelf={'center'}
-    height={'40px'}
-    width={'100%'}
-    px={4}
-    shadow={claimed ? 'Down Big' : 'Up Big'}
-    _active={{ shadow: 'Down Big' }}
-    borderRadius={'3xl'}
-    cursor={claimed ? 'default' : 'pointer'}
-    userSelect={'none'}
-  >
-    {claimed ? 'Claimed' : 'Claim'}
-  </Flex>
-) }
- 
+    <Flex
+      textColor={claimed ? 'text.low' : ''}
+      justifyContent={'center'}
+      alignItems={'center'}
+      alignSelf={'center'}
+      height={'40px'}
+      width={'100%'}
+      px={4}
+      shadow={claimed ? 'Down Big' : 'Up Big'}
+      _active={{ shadow: 'Down Big' }}
+      borderRadius={'3xl'}
+      cursor={claimed ? 'default' : 'pointer'}
+      userSelect={'none'}
+    >
+      {claimed ? 'Claimed' : 'Claim'}
+    </Flex>
+  )
+}

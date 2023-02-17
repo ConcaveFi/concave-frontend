@@ -120,6 +120,7 @@ export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
           py={4}
           onClick={redeem}
           {...getRedeemButtonProps(readyForRedeem, status)}
+          isDisabled={!readyForRedeem || status === 'redeemed'}
         />
       </Flex>
       <ProgressBar percent={loadBarPercent} />
