@@ -39,7 +39,6 @@ export function useRedeemableACNV({ address }: { address: Address }) {
   const logCNV = useGet_User_Acnv_RedeemedQuery({ address: address })
   const [log] = (logCNV.data || { logACNVRedemption: [] }).logACNVRedemption
   const redeemed: number = log?.amount || 0
-  const txHash = log?.txHash || ''
 
   const ACNVBalance = useCurrencyBalanceOfAddress(token, address)
   const data = {
