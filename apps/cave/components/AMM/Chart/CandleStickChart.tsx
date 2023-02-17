@@ -5,7 +5,6 @@ import {
   ChartOptions,
   createChart,
   DeepPartial,
-  IChartApi,
   SeriesOptionsCommon,
   WhitespaceData,
 } from 'lightweight-charts'
@@ -15,7 +14,7 @@ const chartOptions = ({ color, font }): DeepPartial<ChartOptions> => ({
   width: 0, // If 0, then the size will be calculated based its container's size
   height: 276,
   layout: {
-    backgroundColor: 'transparent',
+    background: { color: 'transparent' },
     textColor: color,
     fontFamily: font,
   },
@@ -26,7 +25,7 @@ const chartOptions = ({ color, font }): DeepPartial<ChartOptions> => ({
       bottom: 0.1,
     },
     borderVisible: false,
-    drawTicks: false,
+    ticksVisible: false,
     visible: true,
   },
   rightPriceScale: { visible: false },
@@ -78,19 +77,21 @@ const candlestickSeries = ({
 
 export const CandleStickChart = ({ data }: { data: (CandlestickData | WhitespaceData)[] }) => {
   const chartContainerRef = useRef<HTMLDivElement>()
-  const chart = useRef<IChartApi>()
 
   const color = useToken('colors', 'text.low')
   const font = useToken('fonts', 'heading')
 
   useEffect(() => {
-    chart.current?.remove()
     if (data.length === 0) return
-    chart.current = createChart(chartContainerRef.current, chartOptions({ color, font }))
-
-    chart.current.addCandlestickSeries(candlestickSeries({ color })).setData(data)
-
-    chart.current.timeScale().fitContent()
+    
+    const chart = createChart(chartContainerRef.current, chartOptions({ color, font }))
+    
+    chart.addCandlestickSeries(candlestickSeries({ color })).setData(data)
+    chart.timeScale().fitContent()
+    
+    return () => {
+      chart.remove()
+    }
   }, [data, color, font])
 
   return <Box ref={chartContainerRef} />

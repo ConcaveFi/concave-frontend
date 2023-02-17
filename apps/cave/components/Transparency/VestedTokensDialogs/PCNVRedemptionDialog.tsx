@@ -126,7 +126,7 @@ export const PCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = ({ isOpen,
       <TransactionSubmittedDialog
         closeParentComponent={onCloseModal}
         isOpen={transactionSubmitted && Boolean(tx) && status === 'submitted'}
-        txHash={tx.hash as Address}
+        txHash={tx?.hash as Address}
       />
       <PCNVConfirmationModal
         redeemMax={redeemMax}

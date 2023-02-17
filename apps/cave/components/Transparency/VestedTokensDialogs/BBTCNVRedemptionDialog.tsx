@@ -84,7 +84,7 @@ export const BBTCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) 
       <TransactionSubmittedDialog
         closeParentComponent={onCloseModal}
         isOpen={transactionSubmitted && Boolean(tx) && status === 'submitted'}
-        txHash={tx.hash as `0x${string}`}
+        txHash={tx?.hash as `0x${string}`}
       />
     </>
   )
