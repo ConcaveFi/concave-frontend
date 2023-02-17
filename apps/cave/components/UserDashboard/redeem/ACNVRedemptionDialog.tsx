@@ -1,7 +1,7 @@
 import { BoxProps, Modal } from '@concave/ui'
 
-import { RedeemCard } from '../../UserDashboard/redeem/RedeemCard'
-import { useRedeemACNVCard } from '../../UserDashboard/redeem/useRedeemACNVCard'
+import { RedeemCard } from './RedeemCard'
+import { useRedeemACNVCard } from './useRedeemACNVCard'
 
 export const ACNVRedemptionDialog: React.FC<{ onClose: VoidFunction; isOpen: boolean }> = (
   props,
