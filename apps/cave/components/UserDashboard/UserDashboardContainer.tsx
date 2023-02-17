@@ -17,34 +17,44 @@ export const UserDashboardContainer = (props: UserDashboardContainerParams) => {
 
   return (
     <Flex w={'100%'} direction={'column'} alignItems={'center'}>
-      <Card
-        variant={'primary'}
-        w={'100%'}
-        p={6}
-        gap={6}
-        minH={{ base: '640px', lg: '' }}
-        borderRadius={{ base: '30px', lg: '60px' }}
-        alignItems={'center'}
-      >
+      <Card variant={'primary'} w={'full'} borderRadius={{ base: '30px', lg: '60px' }}>
         <UserDashboardWallet
+          w={'full'}
+          justifyContent={'space-around'}
+          pt={5}
+          pb={4}
+          px={{ base: 2, md: 10 }}
           onSelectHistory={() => {
             onChangeSnapshot(SnapshotOptions.History)
           }}
         />
-        <Flex
+        <Card
+          variant="primary"
           w={'100%'}
-          direction={{ base: 'column', lg: 'row' }}
-          maxH={{ base: '', lg: '900px' }}
-          flexGrow={1}
+          p={{ base: 2, md: 6 }}
           gap={6}
+          minH={{ base: '640px', lg: '' }}
+          borderRadius={{ base: '30px', lg: '60px' }}
+          alignItems={'center'}
         >
-          {!props.isLoading && (
-            <>
-              <UserDashboardNav currentSnapshot={selectedView} changeSnapshot={onChangeSnapshot} />
-              <UserDashboardContent view={selectedView} />
-            </>
-          )}
-        </Flex>
+          <Flex
+            w={'100%'}
+            direction={{ base: 'column', lg: 'row' }}
+            maxH={{ base: '', lg: '900px' }}
+            flexGrow={1}
+            gap={6}
+          >
+            {!props.isLoading && (
+              <>
+                <UserDashboardNav
+                  currentSnapshot={selectedView}
+                  changeSnapshot={onChangeSnapshot}
+                />
+                <UserDashboardContent view={selectedView} />
+              </>
+            )}
+          </Flex>
+        </Card>
       </Card>
     </Flex>
   )
