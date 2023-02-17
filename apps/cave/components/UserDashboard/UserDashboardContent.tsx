@@ -40,11 +40,11 @@ function getView(selectedSnapshot: SnapshotOptions) {
     case SnapshotOptions.Redeem:
       return (
         <Flex w={'full'} direction={'column'} flexWrap={'wrap'} gap={gap}>
-          <Flex gap={gap} w={'full'} h={'fit-content'}>
+          <Flex direction={{ base: 'column', sm: 'row' }} gap={gap} w={'full'} h={'fit-content'}>
             <ACNVChart fontSize="6xl" w={'full'} />
             <BbtCNVChart w={'full'} />
           </Flex>
-          <Flex w={'full'} gap={gap}>
+          <Flex direction={{ base: 'column', xl: 'row' }} w={'full'} gap={gap}>
             <RedeemPCNVCard w={'full'} />
             <RedemACNVCard w={'full'} />
             <RedemBBTCard w={'full'} />
