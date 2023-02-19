@@ -307,7 +307,7 @@ export const MobileConnect: FC<{ isOpen: boolean; onClose: VoidFunction }> = ({
           dragMomentum={false}
           dragConstraints={{ top: 0, bottom: 0 }}
         >
-          <AnimatePresence initial={false} exitBeforeEnter>
+          <AnimatePresence initial={false} mode="wait">
             {pendingConnector?.id === 'walletConnect' ? (
               <ConnectWithWalletConnect
                 onCancel={reset}
