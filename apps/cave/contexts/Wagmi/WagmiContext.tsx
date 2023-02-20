@@ -1,7 +1,7 @@
 // import { SafeConnector } from '@gnosis.pm/safe-apps-wagmi'
 import { NODE_ENV } from 'lib/env.conf'
 import { PropsWithChildren } from 'react'
-import { configureChains, Connector, createClient, useConnect, WagmiConfig } from 'wagmi'
+import { configureChains, Connector, createClient, WagmiConfig } from 'wagmi'
 import { goerli, mainnet, localhost } from 'wagmi/chains'
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
 import { InjectedConnector } from 'wagmi/connectors/injected'
@@ -24,18 +24,18 @@ const concaveProviderConfig = {
 }
 
 const { chains, provider, webSocketProvider } = configureChains(
-  [mainnet, goerli, localhost],
+  [mainnet, goerli, isDevMode && localhost].filter(Boolean),
   [
     infuraProvider({ apiKey: NEXT_PUBLIC_INFURA_ID, priority: 1 }),
     alchemyProvider({ apiKey: NEXT_PUBLIC_ALCHEMY_ID, priority: 2 }),
-    isDevMode &&
-      jsonRpcProvider({
-        priority: 0,
-        rpc: (chain) => {
-          if (chain.id !== localhost.id) return
-          return { http: localhost.rpcUrls.default.http[0] }
-        },
-      }),
+    jsonRpcProvider({
+      priority: 0,
+      rpc: (chain) => {
+        if (!isDevMode) return
+        if (chain.id !== localhost.id) return
+        return { http: localhost.rpcUrls.default.http[0] }
+      },
+    }),
   ],
 )
 

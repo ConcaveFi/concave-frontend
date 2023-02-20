@@ -1,4 +1,5 @@
 import { useBreakpointValue } from '@concave/ui'
+import { Provider } from '@wagmi/core'
 import { liquidityValues } from 'components/LiquidStaking/hooks/useLiquidValues'
 import { ethers } from 'ethers'
 import { useQuery } from 'react-query'
@@ -12,6 +13,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
+import { useProvider } from 'wagmi'
 import { ChartCard } from './ChartCard'
 import { ChartTooltip } from './ChartTooltip'
 import { CustomizedAxisTick } from './CustomizedAxisTick'
@@ -27,8 +29,8 @@ type PoolIdCountDataType = {
 
 const PoolIdMap = { 0: '360 day', 1: '180 day', 2: '90 day', 3: '45 day' }
 
-async function getPoolData(poolId: number): Promise<PoolIdCountDataType> {
-  const { stakingV1Pools, stakingV1Cap } = await liquidityValues(1, poolId)
+async function getPoolData(poolId: number, provider: Provider): Promise<PoolIdCountDataType> {
+  const { stakingV1Pools, stakingV1Cap } = await liquidityValues(poolId, provider)
   if (!stakingV1Pools?.balance) return null
   const currentlyStaked = +ethers.utils.formatEther(stakingV1Pools?.balance)
   const stakingCap = +ethers.utils.formatEther(stakingV1Pools?.balance?.add(stakingV1Cap))
@@ -43,8 +45,9 @@ async function getPoolData(poolId: number): Promise<PoolIdCountDataType> {
 }
 
 const usePoolData = (pools: number[]) => {
+  const provider = useProvider()
   return useQuery(['usePoolData'], () => {
-    return Promise.all(pools.map(getPoolData))
+    return Promise.all(pools.map((p) => getPoolData(p, provider)))
   })
 }
 
