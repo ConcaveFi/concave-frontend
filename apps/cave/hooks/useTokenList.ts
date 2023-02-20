@@ -1,23 +1,24 @@
 import { Currency, NATIVE, Token } from '@concave/core'
 import { Fetcher } from '@concave/gemswap-sdk'
+import { Provider } from '@wagmi/core'
 import { queryClient } from 'contexts/ReactQueryContext'
+import { concaveProvider } from 'contexts/Wagmi/WagmiContext'
 import { fetchJson } from 'ethers/lib/utils'
-import { concaveProvider } from 'lib/providers'
 import ms from 'ms'
 import { useQuery, UseQueryResult } from 'react-query'
-import { Chain, useNetwork } from 'wagmi'
+import { Chain, useNetwork, useProvider } from 'wagmi'
 import { mainnet, goerli } from 'wagmi/chains'
 
 const concaveTokenList = (networkName: string) =>
   `/assets/tokenlists/${networkName.toLowerCase()}/concave.json`
 
-const fetchLiquidityTokenList = async (chain: Chain) => {
+const fetchLiquidityTokenList = async (chain: Chain, provider: Provider) => {
   const store =
     typeof window !== 'undefined' && window.localStorage ? window.localStorage : undefined
   if (!store) return []
   const [tokenList, pairs] = await Promise.all([
     fetchJson(concaveTokenList(chain.name)) as Promise<{ tokens: Token[] }>,
-    Fetcher.fetchPairs(chain.id, concaveProvider(chain.id), store),
+    Fetcher.fetchPairs(chain.id, provider, store),
   ])
   const chainTokens = tokenList.tokens.filter((t) => t.chainId === chain.id)
   const liquidityTokens = chainTokens.filter((t) => {
@@ -35,9 +36,11 @@ export const useLiquidityTokenList = () => {
   const network = useNetwork()
   const activeChain = network.chain?.unsupported ? mainnet : network.chain || mainnet
 
+  const provider = useProvider()
+
   const tokens = useQuery(
     ['token-liqidity-list', activeChain.id],
-    async () => fetchLiquidityTokenList(activeChain),
+    async () => fetchLiquidityTokenList(activeChain, provider),
     {
       enabled: typeof window !== 'undefined' && !!window.localStorage,
       cacheTime: ms('10h'),
@@ -54,18 +57,20 @@ export const useLiquidityTokenList = () => {
 export const useTokenList = () => {
   const network = useNetwork()
   const activeChain = network.chain?.unsupported ? mainnet : network.chain || mainnet
+  const provider = useProvider()
   const tokens = useQuery(
     ['token-list', activeChain.id],
-    async () => fetchLiquidityTokenList(activeChain),
+    async () => fetchLiquidityTokenList(activeChain, provider),
     { placeholderData: [], refetchOnWindowFocus: false },
   )
   return tokens
 }
 
 export const useFetchTokenData = (chainID: number | string, address: string) => {
+  const provider = useProvider()
   return useQuery(
     ['fetchToken', address, +chainID],
-    () => fetchTokenData(chainID, address, concaveProvider(+chainID)),
+    () => fetchTokenData(chainID, address, provider),
     {
       enabled: !!chainID && !!address,
     },
@@ -115,7 +120,7 @@ export const useAddressTokenList: (address?: string) => UseQueryResult<Token[], 
 export const prefetchTokenList = () =>
   queryClient.prefetchQuery({
     queryKey: ['token-liqidity-list', 1],
-    queryFn: async () => fetchLiquidityTokenList(mainnet),
+    queryFn: async () => fetchLiquidityTokenList(mainnet, concaveProvider({ chainId: 1 })),
   })
 
 type MoralisERC20Token = {

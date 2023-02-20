@@ -5,7 +5,6 @@ import { useErrorModal } from 'contexts/ErrorModal'
 import { BigNumber, BigNumberish } from 'ethers'
 import { formatUnits } from 'ethers/lib/utils'
 import { useAddRecentTransaction } from 'contexts/Transactions'
-import { concaveProvider } from 'lib/providers'
 import { useMemo } from 'react'
 import {
   erc20ABI,
@@ -17,6 +16,7 @@ import {
   useWaitForTransaction,
   Address,
   usePrepareContractWrite,
+  useProvider,
 } from 'wagmi'
 import { useTransaction } from '../hooks/useTransaction'
 import { useCurrentSupportedNetworkId } from './useCurrentSupportedNetworkId'
@@ -150,11 +150,12 @@ export const useApproveForAll = (props: {
     enabled: !!(props?.erc721 && props.operator),
   })
   const { data: signer } = useSigner()
-  const chainId = useCurrentSupportedNetworkId()
+
+  const provider = useProvider()
 
   const approveTx = useTransaction(
     () => {
-      const contract = new StakingV1Contract(concaveProvider(chainId))
+      const contract = new StakingV1Contract(provider)
       return contract.setApprovalForAll(signer, props.operator, props.approved)
     },
     {

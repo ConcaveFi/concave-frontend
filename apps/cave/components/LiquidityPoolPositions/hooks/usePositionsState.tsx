@@ -1,16 +1,16 @@
 import { Fetcher } from '@concave/gemswap-sdk'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useAddressTokenList } from 'hooks/useTokenList'
-import { concaveProvider } from 'lib/providers'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
-import { useAccount } from 'wagmi'
+import { useAccount, useProvider } from 'wagmi'
 
 export const usePositionsState = () => {
   const { address } = useAccount()
   const chainId = useCurrentSupportedNetworkId()
+  const provider = useProvider()
   const allPairs = useQuery(['fetchPairs', chainId], () => {
-    return Fetcher.fetchPairs(chainId, concaveProvider(chainId))
+    return Fetcher.fetchPairs(chainId, provider)
   })
   const { data: tokens, isLoading: userPoolsLoading } = useAddressTokenList(address)
   const userPairs = (allPairs?.data || []).filter((p) =>

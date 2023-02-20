@@ -1,16 +1,15 @@
-import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/providers'
 import { Currency, CurrencyAmount, RouterAbi, ROUTER_ADDRESS, Token } from '@concave/core'
 import { PermitSignature } from '@concave/gemswap-sdk'
+import { concaveProvider } from 'contexts/Wagmi/WagmiContext'
 import { BigNumber, ethers } from 'ethers'
 import { parseUnits } from 'ethers/lib/utils'
-import { concaveProvider } from 'lib/providers'
 
 export class Router {
   private readonly contract: ethers.Contract
-  private readonly provider: MulticallProvider
+  private readonly provider: ethers.providers.BaseProvider
 
   constructor(chainId: number, private readonly signer: ethers.Signer) {
-    this.provider = concaveProvider(chainId)
+    this.provider = concaveProvider({ chainId })
     this.contract = new ethers.Contract(ROUTER_ADDRESS[chainId], RouterAbi, this.provider)
   }
   public async addLiquidityETH(

@@ -18,10 +18,9 @@ import { CurrencyIcon } from 'components/CurrencyIcon'
 import { ChooseButton } from 'components/Marketplace/ChooseButton'
 import { BigNumber, BigNumberish } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { concaveProvider } from 'lib/providers'
 import { Dispatch, SetStateAction, useCallback } from 'react'
 import { formatFixed } from 'utils/bigNumberMask'
-import { useSignTypedData } from 'wagmi'
+import { useProvider, useSignTypedData } from 'wagmi'
 import { BigNumberField } from './BigNumberField'
 import { ConfirmSignature } from './ConfirmSignature'
 import { ConfirmUnlist } from './ConfirmUnlist'
@@ -122,10 +121,12 @@ export const useListeForSaleState = ({
     },
   })
 
+  const provider = useProvider()
+
   const create = async () => {
     try {
       const signature = await signTypedDataAsync()
-      const marketplaceContract = new FixedOrderMarketContract(concaveProvider(chainId))
+      const marketplaceContract = new FixedOrderMarketContract(provider)
       const computedSigner = await marketplaceContract.computeSigner(market.new({ signature }))
       if (computedSigner !== market.seller) throw `Invalid signature`
       setMarket(market.new({ signature }))

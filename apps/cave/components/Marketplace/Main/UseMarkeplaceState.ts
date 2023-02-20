@@ -6,16 +6,16 @@ import {
 import { NftSort, usePositionSorter } from 'components/NftFilters/Sorters/hooks/useNftSort'
 import { BigNumber } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { concaveProvider } from 'lib/providers'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
+import { useProvider } from 'wagmi'
 
 export const useMarketplaceDashbord = () => {
   const chainId = useCurrentSupportedNetworkId()
+  const provider = useProvider()
   const positions = useQuery(
     ['sales', chainId],
     async () => {
-      const provider = concaveProvider(chainId)
       const marketplace = new FixedOrderMarketContract(provider)
       const itens = await listListedPositions({ provider })
       const nonExecutedItens = await Promise.all(

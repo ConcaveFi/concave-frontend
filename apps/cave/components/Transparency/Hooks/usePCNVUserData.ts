@@ -1,13 +1,13 @@
 import { PCNVContract } from '@concave/core'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { concaveProvider } from 'lib/providers'
 import { useQuery } from 'react-query'
-import { useAccount } from 'wagmi'
+import { useAccount, useProvider } from 'wagmi'
 
 export const usePCNVUserData = () => {
   const { address } = useAccount()
   const chaindId = useCurrentSupportedNetworkId()
-  const pCNVContract = new PCNVContract(concaveProvider(chaindId))
+  const provider = useProvider()
+  const pCNVContract = new PCNVContract(provider)
   const { data, isLoading } = useQuery(
     ['pCNVUserData', address, chaindId],
     () =>

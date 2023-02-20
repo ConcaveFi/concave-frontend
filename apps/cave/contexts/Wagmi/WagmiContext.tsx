@@ -39,6 +39,8 @@ const { chains, provider, webSocketProvider } = configureChains(
   ],
 )
 
+export const concaveProvider = multicallProvider(provider)
+
 export { chains }
 export const supportedChainsId = chains.map((c) => c.id)
 
@@ -77,7 +79,7 @@ const connectors = [
 const client = createClient({
   autoConnect: true, //!isIframe,
   connectors,
-  provider: multicallProvider(provider),
+  provider: concaveProvider,
   webSocketProvider,
 })
 

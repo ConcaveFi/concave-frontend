@@ -8,9 +8,8 @@ import { BigNumber } from 'ethers'
 import { formatEther, parseEther } from 'ethers/lib/utils'
 import { useAddRecentTransaction } from 'contexts/Transactions'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { concaveProvider } from 'lib/providers'
 import { useState } from 'react'
-import { Address, useAccount, useSigner } from 'wagmi'
+import { Address, useAccount, useProvider, useSigner } from 'wagmi'
 import useBBTCNVRedeemable from '../Hooks/useBBTCNVRedeemable'
 import useVestedTokens from '../Hooks/useVestedTokens'
 import { VestedTokenButtonProps } from '../TreasuryRedeemCard'
@@ -38,8 +37,10 @@ export const BBTCNVRedemptionDialog: React.FC<VestedTokenButtonProps> = (props) 
   const balance = parseEther(bbtCNV?.data?.formatted || '0')
   const registerTransaction = useAddRecentTransaction()
 
+  const provider = useProvider()
+
   function redeem(amount: BigNumber, redeemMax: boolean) {
-    const bbtCNVContract = new BBTRedemptionContractV2(concaveProvider(networdId))
+    const bbtCNVContract = new BBTRedemptionContractV2(provider)
     setStatus('approve')
     bbtCNVContract
       .redeem(signer, amount, address, redeemMax)

@@ -4,10 +4,9 @@ import { BigNumber, Transaction } from 'ethers'
 import { formatEther } from 'ethers/lib/utils'
 import { useAddRecentTransaction } from 'contexts/Transactions'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { concaveProvider } from 'lib/providers'
 import { useEffect, useState } from 'react'
 import { formatFixed } from 'utils/bigNumberMask'
-import { Address, useAccount, useSigner, useWaitForTransaction } from 'wagmi'
+import { Address, useAccount, useProvider, useSigner, useWaitForTransaction } from 'wagmi'
 
 const bigNumberMask = (number: BigNumber) => {
   if (number.eq(0)) {
@@ -47,8 +46,10 @@ export const RedeemCardViewer = ({ stakingPosition }: RedeemCardViewerProps) => 
     hash: recentRedeemed?.tx?.hash as `0x${string}`,
   })
 
+  const provider = useProvider()
+
   const redeem = () => {
-    const stakingContract = new StakingV1Contract(concaveProvider(chaindID))
+    const stakingContract = new StakingV1Contract(provider)
     setStatus('approve')
     stakingContract
       .unlock(signer, address, stakingPosition.tokenId)
