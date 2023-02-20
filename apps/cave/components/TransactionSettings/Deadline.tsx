@@ -28,7 +28,6 @@ export const Deadline = ({
         <InputGroup px={3} variant="unstyled" size="sm">
           <NumericInput
             value={value}
-            isNumericString
             placeholder={`${placeholder}`}
             decimalScale={4}
             maxLength={7}
