@@ -1,17 +1,45 @@
 // import { SafeConnector } from '@gnosis.pm/safe-apps-wagmi'
 import { NODE_ENV } from 'lib/env.conf'
-import { ReactNode, useEffect } from 'react'
-import { Connector, createClient, useConnect, WagmiConfig } from 'wagmi'
+import { PropsWithChildren } from 'react'
+import { configureChains, Connector, createClient, useConnect, WagmiConfig } from 'wagmi'
 import { goerli, mainnet, localhost } from 'wagmi/chains'
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
+import { alchemyProvider } from 'wagmi/providers/alchemy'
+import { infuraProvider } from 'wagmi/providers/infura'
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
-import { concaveProvider, concaveProviderConfig, concaveWSProvider } from '../../lib/providers'
 import { ImpersonateConnector } from './Connectors/ImpersonateConnector'
 import { UnstoppableConnector } from './Connectors/UnstoppableConnector'
 
-export const chains = [localhost, goerli, mainnet] // app supported chains
+import { NEXT_PUBLIC_ALCHEMY_ID, NEXT_PUBLIC_INFURA_ID } from 'lib/env.conf'
+import { multicallProvider } from './multicall-provider/wagmi'
+
+const isDevMode = NODE_ENV === 'development'
+
+const concaveProviderConfig = {
+  rpc: `https://mainnet.infura.io/v3/${NEXT_PUBLIC_INFURA_ID}`,
+  wss: `wss://mainnet.infura.io/ws/v3/${NEXT_PUBLIC_INFURA_ID}`,
+}
+
+const { chains, provider, webSocketProvider } = configureChains(
+  [mainnet, goerli, localhost],
+  [
+    infuraProvider({ apiKey: NEXT_PUBLIC_INFURA_ID, priority: 1 }),
+    alchemyProvider({ apiKey: NEXT_PUBLIC_ALCHEMY_ID, priority: 2 }),
+    isDevMode &&
+      jsonRpcProvider({
+        priority: 0,
+        rpc: (chain) => {
+          if (chain.id !== localhost.id) return
+          return { http: localhost.rpcUrls.default.http[0] }
+        },
+      }),
+  ],
+)
+
+export { chains }
 export const supportedChainsId = chains.map((c) => c.id)
 
 const connectors = [
@@ -40,15 +68,8 @@ const connectors = [
       headlessMode: true,
     },
   }),
-  NODE_ENV === 'development' ? new ImpersonateConnector() : undefined,
+  isDevMode ? new ImpersonateConnector() : undefined,
 ].filter(Boolean) as Connector[]
-
-const isChainSupported = (chainId?: number) => supportedChainsId.some((x) => x === chainId)
-
-const provider = ({ chainId }) => concaveProvider(isChainSupported(chainId) ? chainId : mainnet.id)
-
-const webSocketProvider = ({ chainId }) =>
-  concaveWSProvider(isChainSupported(chainId) ? chainId : mainnet.id)
 
 // const isServer = typeof window === 'undefined'
 // const isIframe = !isServer && window?.parent !== window
@@ -56,7 +77,7 @@ const webSocketProvider = ({ chainId }) =>
 const client = createClient({
   autoConnect: true, //!isIframe,
   connectors,
-  provider,
+  provider: multicallProvider(provider, { logs: true }),
   webSocketProvider,
 })
 
@@ -70,7 +91,7 @@ const client = createClient({
 //   return null
 // }
 
-export const WagmiProvider = ({ children }: { children: ReactNode }) => (
+export const WagmiProvider = ({ children }: PropsWithChildren) => (
   <WagmiConfig client={client}>
     {/* {isIframe && <AutoConnect />} */}
     {children}
