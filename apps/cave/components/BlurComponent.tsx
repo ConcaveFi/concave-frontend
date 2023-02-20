@@ -1,12 +1,18 @@
-import { Box, Flex, Text } from '@concave/ui'
+import { Box, BoxProps, Flex, Text } from '@concave/ui'
 
 export const BlurComponent = ({
   children = <></>,
-  message,
+  disabled,
+  overlayElement = <></>,
+  ...boxProps
 }: {
+  disabled?: boolean
   children: JSX.Element
-  message: string
-}) => {
+  overlayElement?: JSX.Element
+} & BoxProps) => {
+  if (disabled) {
+    return children
+  }
   return (
     <Flex
       position="relative"
@@ -17,17 +23,19 @@ export const BlurComponent = ({
     >
       {children}
       <Box
-        width={'100%'}
-        height={`100%`}
+        borderRadius={'60px'}
+        zIndex={2}
+        width={'99%'}
+        height={`99%`}
         position={'absolute'}
-        backdropFilter="blur(8px)"
+        backdropFilter="blur(16px)"
         backdropBlur={'16px'}
-        top={0}
-        right={0}
+        m={1}
+        {...boxProps}
       />
-      <Text position={'absolute'} fontSize={'lg'} fontWeight={'bold'}>
-        {message}
-      </Text>
+      <Box zIndex={2} position={'absolute'}>
+        {overlayElement}
+      </Box>
     </Flex>
   )
 }
