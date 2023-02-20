@@ -14,7 +14,7 @@ import { ImpersonateConnector } from './Connectors/ImpersonateConnector'
 import { UnstoppableConnector } from './Connectors/UnstoppableConnector'
 
 import { NEXT_PUBLIC_ALCHEMY_ID, NEXT_PUBLIC_INFURA_ID } from 'lib/env.conf'
-import { multicallProvider } from './multicall-provider/wagmi'
+import { multicallProvider } from 'multicall-provider/wagmi'
 
 const isDevMode = NODE_ENV === 'development'
 
@@ -77,7 +77,7 @@ const connectors = [
 const client = createClient({
   autoConnect: true, //!isIframe,
   connectors,
-  provider: multicallProvider(provider, { logs: true }),
+  provider: multicallProvider(provider),
   webSocketProvider,
 })
 
