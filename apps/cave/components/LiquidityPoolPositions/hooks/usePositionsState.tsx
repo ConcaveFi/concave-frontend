@@ -6,7 +6,7 @@ import { useState } from 'react'
 import { useQuery } from 'react-query'
 import { useAccount } from 'wagmi'
 
-export const usePositionsState = (initialView?: 'user' | 'all' | undefined) => {
+export const usePositionsState = (initialView?: 'user' | 'all' ) => {
   const { address } = useAccount()
   const chainId = useCurrentSupportedNetworkId()
   const allPairs = useQuery(['fetchPairs', chainId], () => {
