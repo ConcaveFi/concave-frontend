@@ -31,8 +31,8 @@ const { chains, provider, webSocketProvider } = configureChains(
     jsonRpcProvider({
       priority: 0,
       rpc: (chain) => {
-        if (!isDevMode) return
-        if (chain.id !== localhost.id) return
+        if (!isDevMode) return null
+        if (chain.id !== localhost.id) return null
         return { http: localhost.rpcUrls.default.http[0] }
       },
     }),
