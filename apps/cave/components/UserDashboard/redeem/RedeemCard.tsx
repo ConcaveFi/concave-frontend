@@ -124,7 +124,6 @@ export const RedeemCard = ({
         </CurrencyAmountField>
 
         {setTo && <CustomRecipient {...customRecipient}></CustomRecipient>}
-        <VestedPercent {...redeemStatus} />
         <Redeemed {...redeemStatus} />
 
         <Button
@@ -149,7 +148,6 @@ export const RedeemCard = ({
 
 const Redeemed = (redeemStatus: RedeemStatus) => {
   if (!redeemStatus?.redeemed) return <></>
-  if (!redeemStatus.redeemed.greaterThan(0)) return <></>
   return (
     <HStack width={'full'}>
       <Text color={'text.low'} fontWeight="bold">
@@ -157,25 +155,6 @@ const Redeemed = (redeemStatus: RedeemStatus) => {
       </Text>
       <Text textColor={'text.accent'} fontWeight="bold" flex={1} textAlign="end">
         {redeemStatus?.redeemed?.toSignificant()}
-      </Text>
-    </HStack>
-  )
-}
-
-/**
- * @returns the percent of holdings vested for right now
- */
-const VestedPercent = (redeemStatus: RedeemStatus) => {
-  if (!redeemStatus?.vestedPercent) return <></>
-  if (!redeemStatus.vestedPercent?.eq(0)) return <></>
-
-  return (
-    <HStack width={'full'}>
-      <Text color={'text.low'} fontWeight="bold">
-        Vested holding rate now
-      </Text>
-      <Text textColor={'text.accent'} fontWeight="bold" flex={1} textAlign="end">
-        {compactFormat(redeemStatus?.vestedPercent || '0', { decimals: 16 })}%
       </Text>
     </HStack>
   )

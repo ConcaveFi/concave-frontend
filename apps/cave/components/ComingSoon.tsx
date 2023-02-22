@@ -3,7 +3,7 @@ import { BlurComponent } from './BlurComponent'
 
 const Message = () => (
   <Text fontSize={'lg'} noOfLines={1} fontWeight={'bold'}>
-    Comming Soon
+    Coming Soon
   </Text>
 )
 export const ComingSoom = ({ children = <></> }: { children: JSX.Element }) => {
