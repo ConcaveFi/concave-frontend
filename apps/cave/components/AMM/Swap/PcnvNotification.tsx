@@ -10,7 +10,6 @@ import { useProvider } from 'wagmi'
 type PcnvNotificationProps = { isOpen: boolean; currencyAmount: CurrencyAmount<Currency> }
 export const PcnvNotification: React.FC<PcnvNotificationProps> = ({ isOpen, currencyAmount }) => {
   const { data } = useGet_Amm_Cnv_InfosQuery()
-  const tokenSymbol = currencyAmount?.currency.symbol
   const provider = useProvider()
   const pCNVInitialSupply = 33300000
   const pCNV10PercentClaim = (data?.cnvData?.data?.totalSupply || 0) * 0.1

@@ -1,3 +1,4 @@
 export * from './contract'
 export * from './entities'
-export * from './Fetcher'
+export * from './fetcher'
+export * from './graphql/querys'

@@ -43,8 +43,7 @@ const NavButton = (props: ButtonLinkProps) => {
 }
 
 const SubnavButton = ({ children, ...props }: ButtonLinkProps) => {
-  const active = Router.route === props.href
-
+  const active = Router.route === props.href || Router.asPath.indexOf(props.href.toString()) === 0
   return (
     <ButtonLink
       _hover={{ textDecoration: 'underline', textColor: 'text.bright' }}
@@ -133,13 +132,15 @@ function PageNav() {
 
       <ButtonContainer>
         <NavButton href="/marketplace">Marketplace</NavButton>
-        <SubnavButton href="/liquid-stake-positions">Your staked positions</SubnavButton>
+        <SubnavButton href="/user-dashboard?view=Liquid-Staking">
+          Your staked positions
+        </SubnavButton>
       </ButtonContainer>
 
       <ButtonContainer>
         <NavButton href="/gemswap">Swap</NavButton>
         <SubnavButton href="/addliquidity">Add liquidity</SubnavButton>
-        <SubnavButton href="/pools">{address ? `Your pools` : `Pools`}</SubnavButton>
+        <SubnavButton href="/user-dashboard?view=Liquidity">Liquidity Pools</SubnavButton>
       </ButtonContainer>
     </Flex>
   )

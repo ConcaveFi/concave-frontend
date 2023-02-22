@@ -21,7 +21,7 @@ export function LockedCNVChart({ width, fontSize }: { width: string; fontSize: s
       {...amountLocked}
       chartTitle="CNV in lsdCNV"
       tooltipDescription="Calculated using amountLocked / totalSupply."
-      width={width}
+      w={width}
       overflow={'visible'}
     >
       {dataLoaded && error && (

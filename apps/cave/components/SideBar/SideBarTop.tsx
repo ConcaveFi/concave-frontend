@@ -1,10 +1,9 @@
 import { CNV } from '@concave/core'
-import { DashboardIcon } from '@concave/icons'
+import { DashboardIcon, TransparencyIcon } from '@concave/icons'
 import { Box, Button, Flex, Image, Stack, Text } from '@concave/ui'
 import { ButtonLink } from 'components/ButtonLink'
 import { ConnectButton } from 'components/UserWallet/ConnectButton'
 import { ConnectedUserButton } from 'components/UserWallet/ConnectedUserButton'
-import { useAirdrop } from 'contexts/AirdropContext'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useAccount, useNetwork } from 'wagmi'
@@ -49,7 +48,6 @@ const TestnetIndicator = () => {
 
 function SideBarTop({ closeSidebar }: { closeSidebar: VoidFunction }) {
   const { isConnected } = useAccount()
-  const { onOpen } = useAirdrop()
 
   return (
     <Box shadow="down" px={2} pb={3} rounded="2xl" w="100%">
@@ -64,34 +62,23 @@ function SideBarTop({ closeSidebar }: { closeSidebar: VoidFunction }) {
       </Flex>
 
       <Stack gap="1" align="flex-end" mt={7}>
-        <Button
-          position="relative"
-          onClick={onOpen}
-          variant={'secondary'}
-          shadow="up"
-          w="100%"
-          h="40px"
-          justifyContent={'start'}
-          px={6}
-        >
-          <Image pr="4" src="./assets/airdrop/airdrop-white.png" w="30px" alt="airdrop-icon" />
-          Airdrop
-        </Button>
-        <ButtonLink
-          href="/transparency" // and redirect to the treasury page
-          variant="secondary"
-          border="primary"
-          size="medium"
-          leftIcon={<DashboardIcon h="20px" w="20px" />}
-          justifyContent="start"
-          px={5}
-          gap={1}
-        >
-          Transparency
-        </ButtonLink>
+        <SideBarButton
+          route="/transparency"
+          label="Transparency"
+          icon={<TransparencyIcon h="20px" w="20px" />}
+        />
         <Box shadow="down" w="full" p={1} rounded="2xl">
           {isConnected ? (
-            <ConnectedUserButton />
+            <>
+              <SideBarButton
+                route="/user-dashboard"
+                label="User Dashboard"
+                icon={<DashboardIcon h="20px" w="20px" />}
+                mt={1}
+                mb={2}
+              />
+              <ConnectedUserButton />
+            </>
           ) : (
             <div onClick={closeSidebar}>
               <ConnectButton />
@@ -106,3 +93,31 @@ function SideBarTop({ closeSidebar }: { closeSidebar: VoidFunction }) {
 }
 
 export default SideBarTop
+
+const SideBarButton = ({
+  route,
+  label,
+  icon,
+  mt,
+  mb,
+}: {
+  route: string
+  label: string
+  icon: JSX.Element
+  mt?: number
+  mb?: number
+}) => (
+  <ButtonLink
+    href={route}
+    variant="secondary"
+    border="primary"
+    size="medium"
+    w="full"
+    alignItems="center"
+    leftIcon={icon}
+    mt={mt}
+    mb={mb}
+  >
+    {label}
+  </ButtonLink>
+)

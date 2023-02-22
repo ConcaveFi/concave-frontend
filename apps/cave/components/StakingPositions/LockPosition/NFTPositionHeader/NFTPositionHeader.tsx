@@ -26,7 +26,7 @@ export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
   const { stakingPosition } = props
 
   const [status, setStatus] = useState<RedeemedStatus>('default')
-  const readyForReedem = stakingPosition.maturity <= Date.now() / 1000
+  const readyForRedeem = stakingPosition.maturity <= Date.now() / 1000
   const positionDate = new Date(stakingPosition.maturity * 1000)
   const days = stakingPosition.pool.days
   const difference = (differenceInDays(positionDate, Date.now()) - days) * -1
@@ -103,10 +103,10 @@ export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
           <Button
             display={{ base: 'flex', md: 'none' }}
             w={'90px'}
-            py={!readyForReedem ? 3 : 4}
+            py={!readyForRedeem ? 3 : 4}
             px={4}
             onClick={redeem}
-            {...getRedeemButtonProps(readyForReedem, status)}
+            {...getRedeemButtonProps(readyForRedeem, status)}
           />
         </ImageContainer>
         <Flex w="full" justify="space-around">
@@ -120,7 +120,8 @@ export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
           minW={'110px'}
           py={4}
           onClick={redeem}
-          {...getRedeemButtonProps(readyForReedem, status)}
+          {...getRedeemButtonProps(readyForRedeem, status)}
+          isDisabled={!readyForRedeem || status === 'redeemed'}
         />
       </Flex>
       <ProgressBar percent={loadBarPercent} />

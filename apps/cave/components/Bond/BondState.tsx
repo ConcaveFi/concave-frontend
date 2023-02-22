@@ -95,7 +95,7 @@ export type ReturnBondPositions = {
   totalPending: number
   batchRedeemArray: any[]
   claimed: boolean
-  parseRedeemable: number
+  parsRedeemable: number
   address: string
 }
 
@@ -136,7 +136,7 @@ export const getUserBondPositions = async (
   }
   const fullyVestedTimestamp = oldest * 1000 + 432000000
   const parseOldest = new Date(fullyVestedTimestamp).toString().slice(4, 21)
-  const parseRedeemable = Math.sign(redeemable) === -1 ? 0 : +redeemable
+  const parsRedeemable = Math.sign(redeemable) === -1 ? 0 : +redeemable
   if (totalPending === totalOwed) claimed = true
   return {
     parseOldest,
@@ -144,7 +144,7 @@ export const getUserBondPositions = async (
     totalPending,
     batchRedeemArray,
     claimed,
-    parseRedeemable,
+    parsRedeemable,
     address,
   }
 }

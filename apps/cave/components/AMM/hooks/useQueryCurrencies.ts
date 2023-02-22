@@ -31,10 +31,10 @@ type UpdateCurrenciesQuery = {
 }
 
 const updateQuery = ({ currency0, currency1, chainId }: UpdateCurrenciesQuery) => {
-  const query = { chainId: chainId || currency0?.chainId || currency1?.chainId } as any
+  const query = { ...Router.query, chainId: chainId || currency0?.chainId || currency1?.chainId } as any
   if (currency0) query.currency0 = getAddressOrSymbol(currency0)
   if (currency1) query.currency1 = getAddressOrSymbol(currency1)
-  Router.replace({ query }, undefined, { shallow: true })
+  Router.push({ query }, undefined, { shallow: true })
 }
 
 const getQueryCurrenciesKey = (chainId = 1) => `${Router.pathname} query currencies ${chainId}`

@@ -1,0 +1,80 @@
+import { Flex } from '@concave/ui'
+import { useBondSpotPrice, useRoi } from 'components/Bond/BondInfo'
+import { ComingSoom } from 'components/ComingSoon'
+import { DataTable } from 'components/UserDashboard/DataTable'
+import { SnapshotLineChart } from 'components/UserDashboard/SnapshotLineChart'
+import { SnapshotTextCard } from 'components/UserDashboard/SnapshotTextCard'
+import { useCNVPrice } from 'hooks/useCNVPrice'
+import { useState } from 'react'
+import { compactFormat } from 'utils/bigNumberMask'
+import { DataTableCard } from '../../DataTableCard'
+import { useUserBondState } from '../../hooks/useUserBondState'
+import { SnapshotCard } from '../../SnapshotCard'
+import { SnapshotText } from '../../SnapshotText'
+import { bondchartdata } from '../dummyChartData'
+import { BondPositionCard } from './BondPositionCard'
+
+export const BondingSnapshot = () => {
+  const [isExpanded, setExpand] = useState(false)
+  const userBondState = useUserBondState()
+  const bondSpotPrice = useBondSpotPrice()
+  const roi = useRoi(bondSpotPrice)
+  const cnvPrice = useCNVPrice()
+
+  return (
+    <Flex flexDir={'column'} w={'100%'} gap={{ base: 6 }} justifyContent={'space-between'}>
+      <SnapshotCard isExpanded={!isExpanded}>
+        <ComingSoom>
+          <SnapshotLineChart data={bondchartdata} dataKeys={['CNV Price', 'Bond Price']} />
+        </ComingSoom>
+        <SnapshotTextCard>
+          <SnapshotText
+            title={'Current Bond Price'}
+            data={`${(+bondSpotPrice.data || 0).toFixed(2)} USD`}
+          />
+          <SnapshotText
+            title={'CNV Market Price'}
+            data={`${(cnvPrice.price || 0).toFixed(2)} USD`}
+          />
+          <SnapshotText title={'Current ROI'} data={roi.data?.toFixed(2) + '%'} />
+          <SnapshotText
+            title={'CNV Bonding'}
+            data={`${compactFormat(userBondState.data?.bonding)} CNV`}
+          />
+          <SnapshotText
+            title={'CNV Owed'}
+            data={`${compactFormat(userBondState.data?.owed)} CNV`}
+          />
+          <Flex
+            userSelect={'none'}
+            justifyContent={'center'}
+            alignItems={'center'}
+            alignSelf={'center'}
+            height={'50px'}
+            width={'145px'}
+            shadow={'down'}
+            borderRadius={'3xl'}
+            cursor={'not-allowed'}
+          >
+            Redeem All
+          </Flex>
+        </SnapshotTextCard>
+      </SnapshotCard>
+      <DataTableCard
+        dataTableLabel={'Bonding Positions'}
+        route={'/smart-bonding'}
+        buttonLabel={'Dynamic Bonds'}
+        setExpand={setExpand}
+        isExpanded={isExpanded}
+        isLoading={userBondState.isLoading}
+        hasPositions={userBondState.data?.positions.length}
+      >
+        <DataTable>
+          {userBondState.data?.positions.map((position, i) => (
+            <BondPositionCard key={i} {...position} />
+          ))}
+        </DataTable>
+      </DataTableCard>
+    </Flex>
+  )
+}

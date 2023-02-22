@@ -1,4 +1,3 @@
-import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/providers'
 import { MARKETPLACE_CONTRACT } from '@concave/core'
 import { BaseProvider } from '@ethersproject/providers'
 import { Contract, Signer, Transaction } from 'ethers'
@@ -9,7 +8,7 @@ import { MarketplaceABI } from './MarketplaceAbi'
 export class FixedOrderMarketContract {
   private readonly contract: Contract
   public readonly address: string
-  constructor(private readonly provider: BaseProvider | MulticallProvider) {
+  constructor(private readonly provider: BaseProvider) {
     if (!provider.network.chainId)
       throw 'ChainID is undefined for constructor of contract FixedOrderMarketContract'
     this.address = MARKETPLACE_CONTRACT[provider.network.chainId]

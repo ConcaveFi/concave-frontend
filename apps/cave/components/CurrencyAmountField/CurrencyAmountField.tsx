@@ -1,5 +1,5 @@
 import { Currency, CurrencyAmount } from '@concave/core'
-import { FlexProps, HStack, NumericInput, Stack, useMultiStyleConfig } from '@concave/ui'
+import { Flex, FlexProps, HStack, NumericInput, Stack, useMultiStyleConfig } from '@concave/ui'
 import { CurrencySelectorComponent } from 'components/CurrencySelector/CurrencySelector'
 import { ReactNode, useCallback, useRef, useState } from 'react'
 import { useDebounce } from 'react-use'
@@ -12,7 +12,9 @@ export function CurrencyAmountField({
   onChangeAmount,
   debounce = 150,
   CurrencySelector,
+  sx,
 }: {
+  maxValue?: number
   children?: ReactNode
   currencyAmount: CurrencyAmount<Currency>
   disabled?: boolean
@@ -22,9 +24,7 @@ export function CurrencyAmountField({
   disableCurrencySelector?: boolean
 } & FlexProps) {
   const styles = useMultiStyleConfig('Input', { variant: 'primary', size: 'large' })
-
   const [internalValue, setInternalValue] = useState<number | string>('')
-
   const isFocused = useRef(false)
 
   useDebounce(
@@ -64,8 +64,8 @@ export function CurrencyAmountField({
   )
 
   return (
-    <Stack sx={{ ...styles.field, bg: 'none' }} justify="space-between" spacing={0}>
-      <HStack justify="space-between" align="start">
+    <Stack sx={{ ...styles.field, bg: 'none', ...sx }} justify="space-between" spacing={0}>
+      <Flex justify="space-between" align="start">
         <NumericInput
           fontSize={{ base: 'lg', md: '2xl' }}
           disabled={disabled}
@@ -75,7 +75,7 @@ export function CurrencyAmountField({
           onValueChange={handleChange}
         />
         <CurrencySelector onSelect={onSelectCurrency} selected={currencyAmount?.currency} />
-      </HStack>
+      </Flex>
       <Stack onClick={() => (isFocused.current = false)}>{children}</Stack>
     </Stack>
   )

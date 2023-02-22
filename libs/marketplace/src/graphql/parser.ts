@@ -3,7 +3,7 @@ import { Fetcher } from '@concave/gemswap-sdk'
 import { BaseProvider } from '@ethersproject/providers'
 import { StakingV1Contract } from '../contract'
 import { MarketItem, StakingPosition } from '../entities'
-import { LogStakingV1, Marketplace } from '../Fetcher'
+import { LogStakingV1, Marketplace } from './querys'
 
 export const parser = (stakingV1Contract: StakingV1Contract, provider: BaseProvider) => {
   const cavemartToMarket = async (marketplace: Marketplace) => {
@@ -37,7 +37,6 @@ export const parser = (stakingV1Contract: StakingV1Contract, provider: BaseProvi
     ])
 
     const [cavemart] = [...log.marketplace].reverse()
-    //const cavemart = log.marketplace.at(-1)
     const market = !cavemart ? undefined : await cavemartToMarket(cavemart)
 
     return new StakingPosition({
@@ -46,6 +45,8 @@ export const parser = (stakingV1Contract: StakingV1Contract, provider: BaseProvi
       position,
       reward,
       market,
+      hash: log.txHash,
+      lockedUntil: log.lockedUntil
     })
   }
   return { stakingV1ToStakingPosition, cavemartToMarket }

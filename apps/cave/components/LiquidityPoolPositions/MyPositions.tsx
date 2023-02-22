@@ -20,12 +20,14 @@ import { Loading } from 'components/Loading'
 import { ConnectButton } from 'components/UserWallet/ConnectButton'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
 import { compactFormat } from 'utils/bigNumberMask'
 import { useAccount, useProvider } from 'wagmi'
 import { PositionsState } from './hooks/usePositionsState'
 
 export const MyPositions = ({ state }: { state: PositionsState }) => {
+  const router = useRouter()
   const { loading, error, setView, view, pairs, user } = state
   if (loading) {
     return <Loading size="lg" isLoading={true} label={loading} />
@@ -50,7 +52,9 @@ export const MyPositions = ({ state }: { state: PositionsState }) => {
           <LiquidityOptionButton
             label={'Your pools'}
             active={view === 'user'}
-            onClick={() => setView('user')}
+            onClick={() => {
+              router.push('/user-dashboard?view=Liquidity')
+            }}
           />
           <LiquidityOptionButton
             label={'All pools'}
@@ -83,7 +87,7 @@ const LiquidityOptionButton = ({ active = false, onClick = () => {}, label = '' 
   )
 }
 
-const PairsAccordion = ({ pairs }: { pairs: Pair[] }) => {
+export const PairsAccordion = ({ pairs, maxH }: { pairs: Pair[]; maxH?: string }) => {
   const { address } = useAccount()
 
   if (!pairs.length) {
@@ -108,7 +112,7 @@ const PairsAccordion = ({ pairs }: { pairs: Pair[] }) => {
       <Box
         borderRadius={'2xl'}
         p={{ base: 2, sm: 4 }}
-        maxH={'55vh'}
+        maxH={maxH || '55vh'}
         apply="scrollbar.secondary"
         w={'100%'}
         overflowY={'auto'}
