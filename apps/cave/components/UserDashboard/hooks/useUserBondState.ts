@@ -1,4 +1,4 @@
-import { BondAbi, BOND_ADDRESS, Percent } from '@concave/core'
+import { BondAbi, BOND_ADDRESS, ChainId, Percent } from '@concave/core'
 import { getCurrentBlockTimestamp } from 'components/Bond/BondState'
 import { BigNumber, Contract, utils } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
@@ -7,55 +7,71 @@ import { useQuery } from 'react-query'
 import { useAccount } from 'wagmi'
 
 export type BondPosition = {
-  creationTimestamp: number
-  creationDate: string
-  elapsed: Percent
-  owed: number
-  redeemed: number
+  owed: BigNumber;
+  redeemed: BigNumber;
+  elapsed: Percent;
+  elapsedTimestamp: number,
+  creation: number;
+  creationTimestamp: number;
+  redeemTimestamp: number;
+  redeemDate: number;
+  creationDate: string;
+  claimable: BigNumber,
+  bonding: BigNumber,
+  isClaimable: boolean,
 }
+
+type PositionType = { owed: BigNumber, redeemed: BigNumber, creation: BigNumber }
 export const useUserBondState = () => {
   const { address } = useAccount()
-  const networkId = useCurrentSupportedNetworkId()
+  const chainId = useCurrentSupportedNetworkId()
 
-  return useQuery('userBondState', async () => {
-    const currentBlockTimestamp = await getCurrentBlockTimestamp(networkId)
-
-    const bondingContract = new Contract(BOND_ADDRESS[networkId], BondAbi, providers(networkId))
-    const getUserPositionsLength = await bondingContract.getUserPositionCount(address)
+  return useQuery(['userBondState', address, chainId], async () => {
+    const currentBlockTime = await getCurrentBlockTimestamp(chainId)
+    const bondingContract = new Contract(BOND_ADDRESS[chainId], BondAbi, providers(chainId))
+    const getUserPositionsLength = await bondingContract.getUserPositionCount(address) as BigNumber
     const termData: BigNumber = await bondingContract.term()
+    const positions = await Promise.all(new Array(getUserPositionsLength.toNumber()).fill(null).map(async (_, i) => {
+      const { owed, redeemed, creation }: PositionType = await bondingContract.positions(address, i)
+      const elapsedTime = currentBlockTime - creation.toNumber()
+      const elapsed = new Percent(elapsedTime, termData.toNumber())
+      const isClaimable = elapsedTime > termData.toNumber()
 
-    let oldest = 0
-    let oldestCreationTimestamp = 0
-
-    let totalPending = 0
-    let totalOwed = 0
-    let positionDataArray: BondPosition[] = []
-
-    for (let i = 0; i < +getUserPositionsLength; i++) {
-      const positionData = await bondingContract.positions(address, i)
-      if (i === getUserPositionsLength - 1) {
-        oldest += +positionData.creation
-        oldestCreationTimestamp += +positionData.creation
+      const claimable = isClaimable ? owed.sub(redeemed) : BigNumber.from(0)
+      const bonding = isClaimable ? BigNumber.from(0) : owed
+      const creationTimestamp = creation.mul(1000).toNumber()
+      const redeemTimestamp = termData.mul(1000).add(creationTimestamp).toNumber()
+      return {
+        owed,
+        redeemed,
+        elapsed,
+        elapsedTimestamp: elapsedTime,
+        claimable,
+        isClaimable,
+        bonding,
+        creation: creation.toNumber(),
+        creationTimestamp,
+        creationDate: new Date(creationTimestamp).toLocaleDateString(),
+        redeemTimestamp,
+        redeemDate: new Date(redeemTimestamp).toLocaleDateString(),
       }
-
-      const creationTimestampMs = +positionData.creation * 1000
-      const length = currentBlockTimestamp - positionData.creation
-      totalPending += +(+utils.formatEther(positionData.redeemed))
-      totalOwed += +(+utils.formatEther(positionData.owed))
-
-      positionDataArray.push({
-        creationTimestamp: creationTimestampMs,
-        creationDate: new Date(creationTimestampMs).toLocaleDateString(),
-        elapsed: new Percent(length, termData.toNumber()),
-        owed: +(+utils.formatEther(positionData.owed)).toFixed(4),
-        redeemed: +(+utils.formatEther(positionData.redeemed)).toFixed(4),
-      })
-    }
-
-    return {
-      totalPending: totalPending.toLocaleString(undefined, { maximumFractionDigits: 2 }),
-      totalOwed: totalOwed.toLocaleString(undefined, { maximumFractionDigits: 2 }),
-      positions: positionDataArray,
-    }
+    }))
+    return positions.reduce((prev, current) => {
+      return {
+        owed: prev.owed.add(current.owed),
+        bonding: prev.bonding.add(current.bonding),
+        redeemed: prev.redeemed.add(current.redeemed),
+        claimable: prev.claimable.add(current.claimable),
+        positions: [...prev.positions, current]
+      }
+    }, {
+      bonding: BigNumber.from(0),
+      claimable: BigNumber.from(0),
+      redeemed: BigNumber.from(0),
+      owed: BigNumber.from(0),
+      positions: [] as BondPosition[]
+    })
   })
 }
+
+export type UseUserBondState = ReturnType<typeof useUserBondState>
