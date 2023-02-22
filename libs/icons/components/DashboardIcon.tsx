@@ -1,4 +1,4 @@
 import { Icon, IconProps } from '@chakra-ui/icons'
-import { MdOutlineDashboard } from 'react-icons/md'
+import { MdPerson } from 'react-icons/md'
 
-export const DashboardIcon = (props: IconProps) => <Icon as={MdOutlineDashboard} {...props} />
+export const DashboardIcon = (props: IconProps) => <Icon as={MdPerson} {...props} />
