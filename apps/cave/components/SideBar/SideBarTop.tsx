@@ -1,5 +1,5 @@
 import { CNV } from '@concave/core'
-import { DashboardIcon } from '@concave/icons'
+import { DashboardIcon, TransparencyIcon } from '@concave/icons'
 import { Box, Button, Flex, Image, Stack, Text } from '@concave/ui'
 import { ButtonLink } from 'components/ButtonLink'
 import { ConnectButton } from 'components/UserWallet/ConnectButton'
@@ -65,7 +65,7 @@ function SideBarTop({ closeSidebar }: { closeSidebar: VoidFunction }) {
         <SideBarButton
           route="/transparency"
           label="Transparency"
-          icon={<DashboardIcon h="20px" w="20px" />}
+          icon={<TransparencyIcon h="20px" w="20px" />}
         />
         <Box shadow="down" w="full" p={1} rounded="2xl">
           {isConnected ? (
