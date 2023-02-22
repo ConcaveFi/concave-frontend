@@ -62,14 +62,14 @@ export const useUserBondState = () => {
         bonding: prev.bonding.add(current.bonding),
         redeemed: prev.redeemed.add(current.redeemed),
         claimable: prev.claimable.add(current.claimable),
-        positions: [...prev.positions, current]
+        positions: [...prev.positions, current] as BondPosition[]
       }
     }, {
       bonding: BigNumber.from(0),
       claimable: BigNumber.from(0),
       redeemed: BigNumber.from(0),
       owed: BigNumber.from(0),
-      positions: [] as BondPosition[]
+      positions: []
     })
   })
 }
