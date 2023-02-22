@@ -1,6 +1,8 @@
 import { Currency, CurrencyAmount } from '@concave/core'
+import { formatEther } from 'ethers/lib/utils.js'
 import { UseQueryResult } from 'react-query'
-import { BondPosition } from './hooks/useUserBondState'
+import { compactFormat } from 'utils/bigNumberMask'
+import { BondPosition, UseUserBondState } from './hooks/useUserBondState'
 import { NavButton } from './NavButton'
 import { SnapshotOptions } from './SnapshotOptions'
 
@@ -13,14 +15,7 @@ export interface NavButtonProps {
   marketplaceIsLoading: boolean
   nftPositionCount: number
   totalPools: number
-  userBondState: UseQueryResult<
-    {
-      totalPending: string
-      totalOwed: string
-      positions: BondPosition[]
-    },
-    unknown
-  >
+  userBondState: UseUserBondState
 }
 
 export function DashboardNavButtons(props: NavButtonProps) {
@@ -45,8 +40,8 @@ export function DashboardNavButtons(props: NavButtonProps) {
         isSelected={props.currentSnapshot === SnapshotOptions.DynamicBonds}
         isLoading={userBondState.isLoading}
         summaryArray={[
-          { label: 'Bonding: ' + userBondState.data?.totalPending + ' CNV' },
-          { label: 'Claimable: ' + userBondState.data?.totalOwed + ' CNV' },
+          { label: 'Bonding: ' + compactFormat(userBondState.data?.bonding || 0) + ' CNV' },
+          { label: 'Claimable: ' + compactFormat(userBondState.data?.claimable || 0) + ' CNV' },
         ]}
         onClick={() => props.changeSnapshot(SnapshotOptions.DynamicBonds)}
       />

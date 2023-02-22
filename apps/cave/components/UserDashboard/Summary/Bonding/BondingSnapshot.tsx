@@ -6,6 +6,7 @@ import { SnapshotLineChart } from 'components/UserDashboard/SnapshotLineChart'
 import { SnapshotTextCard } from 'components/UserDashboard/SnapshotTextCard'
 import { useCNVPrice } from 'hooks/useCNVPrice'
 import { useState } from 'react'
+import { compactFormat } from 'utils/bigNumberMask'
 import { DataTableCard } from '../../DataTableCard'
 import { useUserBondState } from '../../hooks/useUserBondState'
 import { SnapshotCard } from '../../SnapshotCard'
@@ -36,8 +37,14 @@ export const BondingSnapshot = () => {
             data={`${(cnvPrice.price || 0).toFixed(2)} USD`}
           />
           <SnapshotText title={'Current ROI'} data={roi.data?.toFixed(2) + '%'} />
-          <SnapshotText title={'CNV Bonding'} data={`${+userBondState.data?.totalPending} CNV`} />
-          <SnapshotText title={'CNV Owed'} data={`${+userBondState.data?.totalOwed} CNV`} />
+          <SnapshotText
+            title={'CNV Bonding'}
+            data={`${compactFormat(userBondState.data?.bonding)} CNV`}
+          />
+          <SnapshotText
+            title={'CNV Owed'}
+            data={`${compactFormat(userBondState.data?.owed)} CNV`}
+          />
           <Flex
             userSelect={'none'}
             justifyContent={'center'}

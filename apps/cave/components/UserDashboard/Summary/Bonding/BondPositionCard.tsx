@@ -14,7 +14,8 @@ import {
 import { ProgressBar } from 'components/ProgressBar'
 import { formatDistanceToNow } from 'date-fns'
 import { FC } from 'react'
-import type {BondPosition} from '../../../UserDashboard/hooks/useUserBondState'
+import { compactFormat } from 'utils/bigNumberMask'
+import type { BondPosition } from '../../../UserDashboard/hooks/useUserBondState'
 
 export const BondPositionCard = (props: BondPosition) => {
   const { isOpen, onClose, onOpen } = useDisclosure()
@@ -48,13 +49,14 @@ export const BondPositionCard = (props: BondPosition) => {
           <Flex direction={'column'} justify="center" px={6}>
             <Flex align={'center'} gap={2}>
               <Text color={'text.low'}>Redeem date:</Text>
-              <Text fontWeight={'bold'}>{props.creationDate}</Text>
+              <Text fontWeight={'bold'}>{props.redeemDate}</Text>
             </Flex>
             <Flex align={'center'} gap={2}>
               {<Text color={'text.low'}>Redeem in:</Text>}
               <Text fontWeight={'bold'} color="text.accent">
-                {formatDistanceToNow(props.creationTimestamp)}{' '}
-                {new Date().getTime() > props.creationTimestamp ? 'ago' : ''}
+                {formatDistanceToNow(props.redeemTimestamp, {
+                  addSuffix: true,
+                })}
               </Text>
             </Flex>
           </Flex>
@@ -103,8 +105,8 @@ const BondPosition = (props: BondPosition) => {
         <ImageContainer />
         <Flex w="full" justify="space-around">
           <Info title="Bond Creation" info={props.creationDate} />
-          <Info title="Owed" info={props.owed + ' CNV'} />
-          <Info title="Redeemed" info={props.redeemed + ' CNV'} />
+          <Info title="Owed" info={compactFormat(props.owed) + ' CNV'} />
+          <Info title="Redeemed" info={compactFormat(props.redeemed) + ' CNV'} />
         </Flex>
 
         <Button display={{ base: 'none', md: 'flex' }} minW={'110px'} py={4} />

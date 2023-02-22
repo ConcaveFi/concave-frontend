@@ -1,4 +1,5 @@
 import { providers as multicallProvider } from '@0xsequence/multicall'
+import { ChainId } from '@concave/core'
 import { providers } from 'ethers'
 import { mainnet, localhost } from 'wagmi/chains'
 import {
@@ -57,7 +58,7 @@ const getFallbackProvider = (chainId: number) => {
   return new providers.FallbackProvider(providerConfigs, 1)
 }
 
-const singletonProvider = {}
+const singletonProvider: { [key: number]: multicallProvider.MulticallProvider } = {}
 
 export const concaveProvider = (chainId: number) => {
   if (singletonProvider[chainId]) return singletonProvider[chainId]
