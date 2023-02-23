@@ -27,6 +27,7 @@ const baseStyleItem: SystemStyleFunction = (props) => {
   return {
     py: '0.4rem',
     px: '0.8rem',
+    background: 'transparent',
     transitionProperty: 'background',
     transitionDuration: 'ultra-fast',
     transitionTimingFunction: 'ease-in',
