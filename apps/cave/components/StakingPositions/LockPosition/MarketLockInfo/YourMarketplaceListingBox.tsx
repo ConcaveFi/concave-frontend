@@ -75,7 +75,7 @@ export const getMarketPlaceButtonProps = (
   if (isListed && market?.type === `list`) {
     return { children: 'Unlist', onClick: () => setState(`unlist`), variant: 'primary.outline' }
   }
-  if (approveContractInfo.isOK) {
+  if (!approveContractInfo.isOK) {
     return {
       children: 'Allow marketplace',
       title: 'Allow marketplace contract to handle your LSDCNV tokens',
