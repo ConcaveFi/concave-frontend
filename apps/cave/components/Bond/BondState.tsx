@@ -95,7 +95,7 @@ export type ReturnBondPositions = {
   totalPending: number
   batchRedeemArray: any[]
   claimed: boolean
-  parseRedeemable: number
+  parsRedeemable: number
   address: string
 }
 
