@@ -19675,7 +19675,10 @@ packages:
     dev: false
 
   /multicall-provider/0.1.15_zsa25jcyikvkd7ythuq4vheuny:
-    resolution: {integrity: sha512-4PXpm0ysr4K81QBrF1MTjnf+dhGEmOtyC5Iyt4UzMb5Mk/Oc4aZco/hB/D0bioccLhivYBZQNdvOi/RIgoZJQA==}
+    resolution:
+      {
+        integrity: sha512-4PXpm0ysr4K81QBrF1MTjnf+dhGEmOtyC5Iyt4UzMb5Mk/Oc4aZco/hB/D0bioccLhivYBZQNdvOi/RIgoZJQA==,
+      }
     peerDependencies:
       '@wagmi/core': ^0.9.5
       ethers: ^5.7.2

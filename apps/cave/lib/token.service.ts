@@ -13,7 +13,7 @@ import {
 import { mainnet, goerli } from 'wagmi/chains'
 import { coingeckoApi } from './coingecko.api'
 
-export const chartIntervals = ['5m', '15m', '1H', '4H', '1D'] as const
+export const chartIntervals = ['30m', '4H', '4D'] as const
 export type ChartInterval = (typeof chartIntervals)[number]
 
 const whitelist = [
@@ -33,7 +33,7 @@ const tokenToCoingeckId = (currency: Currency) => {
 }
 
 class TokenService {
-  constructor(private networkName: string = mainnet.name) {}
+  constructor() { }
   async getTokenPrice(currency: Currency) {
     const coingecko = tokenToCoingeckId(currency)
     if (!coingecko) {
@@ -55,10 +55,8 @@ class TokenService {
 }
 
 const daysOptions = {
-  '5m': '1',
-  '15m': '7',
-  '1H': '14',
+  '30m': '1',
   '4H': '30',
-  '1D': '365',
+  '4D': '365',
 } as const
-export const tokenService = new TokenService(goerli.name)
+export const tokenService = new TokenService()

@@ -23,7 +23,7 @@ export const CandleStickCard = ({ from: _from, to: _to }: { from?: Currency; to?
     ? [_to, _from]
     : [_from, _to]
 
-  const [interval, setInterval] = useState<ChartInterval>('5m')
+  const [interval, setInterval] = useState<ChartInterval>(chartIntervals[0])
   const candleStickChart = useCandleStickChart(from?.symbol, to?.symbol, interval)
 
   const hasData = candleStickChart.isLoading || candleStickChart.data.length > 0

@@ -39,7 +39,7 @@ export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
 
   const { status: txStatus } = useWaitForTransaction({
     chainId: stakingPosition.chainId,
-    hash: recentRedeemed?.tx?.hash,
+    hash: recentRedeemed?.tx?.hash as `0x${string}`,
   })
 
   useEffect(() => {
