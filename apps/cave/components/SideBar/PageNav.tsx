@@ -138,7 +138,7 @@ function PageNav() {
       <ButtonContainer>
         <NavButton href="/gemswap">Swap</NavButton>
         <SubnavButton href="/addliquidity">Add liquidity</SubnavButton>
-        <SubnavButton href="/pools">Liquidity Pools</SubnavButton>
+        <SubnavButton href="/user-dashboard?view=Liquidity">Liquidity Pools</SubnavButton>
       </ButtonContainer>
     </Flex>
   )
