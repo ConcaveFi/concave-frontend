@@ -135,7 +135,11 @@ export const useApprove = (
   )
 }
 
-export const useApproveForAll = (props: {
+export const useApproveForAll = ({
+  erc721,
+  operator,
+  approved = true,
+}: {
   erc721: Address
   operator: Address
   approved: boolean
@@ -143,20 +147,18 @@ export const useApproveForAll = (props: {
   const account = useAccount()
   const owner = account.address
   const approve = useContractRead({
-    address: props.erc721,
+    address: erc721,
     abi: erc721ABI,
     functionName: 'isApprovedForAll',
-    args: [owner, props.operator],
-    enabled: !!(props?.erc721 && props.operator),
+    args: [owner, operator],
+    enabled: !!(erc721 && operator),
   })
   const { data: signer } = useSigner()
-
   const provider = useProvider()
-
   const approveTx = useTransaction(
     () => {
       const contract = new StakingV1Contract(provider)
-      return contract.setApprovalForAll(signer, props.operator, props.approved)
+      return contract.setApprovalForAll(signer, operator, approved)
     },
     {
       onSuccess: (tx) => {
@@ -167,7 +169,7 @@ export const useApproveForAll = (props: {
 
   return {
     isLoading: approve.isLoading || approve.isRefetching,
-    isOK: !approve.isLoading && !!approve.data === props.approved,
+    approved: !approve.isLoading && !!approve.data === approved,
     ...approveTx,
   }
 }

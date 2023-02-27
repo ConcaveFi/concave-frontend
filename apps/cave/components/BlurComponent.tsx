@@ -20,16 +20,15 @@ export const BlurComponent = ({
       height="full"
       justifyContent="center"
       alignItems="center"
+      p={2}
     >
       {children}
       <Box
-        borderRadius={'60px'}
-        zIndex={2}
-        width={'99%'}
-        height={`99%`}
+        width={'full'}
+        height={'full'}
         position={'absolute'}
-        backdropFilter="blur(16px)"
-        backdropBlur={'16px'}
+        backdropFilter="blur(8px)"
+        backdropBlur={'8px'}
         m={1}
         {...boxProps}
       />

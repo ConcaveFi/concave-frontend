@@ -13,7 +13,7 @@ export function DashboardNavMenu({ currentSnapshot, changeSnapshot }) {
         shadow={'up'}
         bg="bg.primary"
       >
-        {currentSnapshot}
+        {currentSnapshot.replace('-', ' ')}
       </MenuButton>
       <MenuList zIndex={100}>
         {Object.values(SnapshotOptions).map((option) => (

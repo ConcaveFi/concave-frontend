@@ -1,23 +1,28 @@
 import { AirdropClaimContract } from '@concave/core'
+import { ChevronRightIcon } from '@concave/icons'
+import { SellIcon } from '@concave/icons'
 import { listUserHistory, stakingPools } from '@concave/marketplace'
-import { Flex, Spinner } from '@concave/ui'
+import { Button, Flex, Spinner } from '@concave/ui'
 import { airdropToken, getAirdropQ4ClaimableAmount } from 'components/Airdrop/Q4/airdrop'
 import { getAirdropSpecialClaimableAmount } from 'components/Airdrop/special/airdrop'
 import { ComingSoom } from 'components/ComingSoon'
 import { useFilterByRange } from 'components/NftFilters/Filters/hooks/useFilterByRange'
 import { useFilterByStakePool } from 'components/NftFilters/Filters/hooks/useFilterByStakePool'
+import { StakePoolFilterCard } from 'components/NftFilters/Filters/StakePoolFilter'
 import { usePositionSorter } from 'components/NftFilters/Sorters/hooks/useNftSort'
+import { SortButton } from 'components/NftFilters/Sorters/SortCard'
+import { ToggleContentButton } from 'components/ToggleContentButton'
 import { useStakePositions } from 'components/StakingPositions/DashboardBody/DashBoardState'
-import { FilterContainer } from 'components/StakingPositions/DashboardBody/FilterContainer'
 import { SnapshotLineChart } from 'components/UserDashboard/SnapshotLineChart'
 import { SnapshotTextCard } from 'components/UserDashboard/SnapshotTextCard'
 import { useStakeSettings } from 'contexts/PositionsFilterProvider'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
+import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
 import { numberMask } from 'utils/numberMask'
 import { useAccount, useProvider } from 'wagmi'
-import { UserPositionCard } from '../../../StakingPositions/LockPosition/Card/UserPositionCard'
+import { UserPositionCardMemo } from '../../../StakingPositions/LockPosition/Card/UserPositionCard'
 import { DataTable } from '../../DataTable'
 import { DataTableCard } from '../../DataTableCard'
 import { SnapshotCard } from '../../SnapshotCard'
@@ -116,9 +121,10 @@ export const LiquidStakingSnapshot = () => {
   const { filterByStakePool } = useFilterByStakePool(stakePoolFilters)
   const sortFunction = sorter ? positionSorter.data?.[sorter.sort][sorter.order] : () => 0
   const stakeInfo = useStakeChart(address, networkId)
+  const router = useRouter()
   return (
-    <Flex flexDir={'column'} w={'100%'} h="100%" gap={6}>
-      <SnapshotCard isExpanded={!isExpanded}>
+    <Flex flexDir={'column'} w={'100%'} h="100%" gap={4}>
+      <SnapshotCard show={!isExpanded}>
         <ComingSoom>
           <SnapshotLineChart {...stakeInfo} dataKeys={['Airdrop', 'Locked CNV']} />
         </ComingSoom>
@@ -148,12 +154,26 @@ export const LiquidStakingSnapshot = () => {
       </SnapshotCard>
       <DataTableCard
         dataTableLabel={'CNV Positions'}
-        route={'/marketplace'}
-        buttonLabel={'Marketplace'}
-        setExpand={setExpand}
-        isExpanded={isExpanded}
-        SortComponent={<SortComponent />}
+        SortComponent={<></>}
         isLoading={isLoading}
+        dataTableOptions={
+          <Flex gap={{ base: 2, sm: 4 }} w={'full'}>
+            <ToggleContentButton handle={setExpand} isExpanded={isExpanded} />
+            <SortButton />
+            <StakePoolFilterCard />
+            <Button
+              ml={'auto'}
+              size={'md'}
+              boxShadow={'Up Big'}
+              onClick={() => router.push('/marketplace')}
+              justifyContent={'space-between'}
+              leftIcon={<SellIcon />}
+              rightIcon={<ChevronRightIcon />}
+            >
+              Marketplace
+            </Button>
+          </Flex>
+        }
         hasPositions={userNonFungibleTokensInfo.length}
       >
         <DataTable>
@@ -166,7 +186,7 @@ export const LiquidStakingSnapshot = () => {
             .filter(filterByStakePool)
             .sort(sortFunction)
             .map((nonFungibleTokenInfo, i) => (
-              <UserPositionCard
+              <UserPositionCardMemo
                 key={+nonFungibleTokenInfo.tokenId.toString() + i}
                 stakingPosition={nonFungibleTokenInfo}
               />
@@ -176,8 +196,6 @@ export const LiquidStakingSnapshot = () => {
     </Flex>
   )
 }
-
-const SortComponent = () => <FilterContainer />
 
 const SnapshotButton = ({ claimed }) => {
   return (

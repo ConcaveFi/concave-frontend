@@ -1,86 +1,61 @@
+import { ChevronDownIcon, FilterIcon } from '@concave/icons'
+import { StakingPool, stakingPools } from '@concave/marketplace'
 import {
-  Button,
-  Flex,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
+  Menu,
+  Image,
+  MenuList,
   Portal,
-  useDisclosure,
+  MenuOptionGroup,
+  MenuItemOption,
+  HStack,
+  Text,
 } from '@concave/ui'
-import { initialPoolFilterValues, useStakeSettings } from 'contexts/PositionsFilterProvider'
-import { DropdownCard } from '../DropdownCard'
-import { StakePoolFilterEnum } from './hooks/useFilterByStakePool'
-import { StakeToggleButton } from './StakeToggleButton'
+import { ResponsiveMenuButton } from 'components/ResponsiveMenuButton'
+import { useStakeSettings } from 'contexts/PositionsFilterProvider'
+import { poolImages } from 'utils/poolImages'
 
 export const StakePoolFilterCard = () => {
-  const { isOpen, onClose, onToggle } = useDisclosure()
   const { stakePoolFilters, setStakePoolFilters } = useStakeSettings()
 
-  const canShowReset = stakePoolFilters.length <= 3
-
   return (
-    <Popover onClose={onClose}>
-      <PopoverTrigger>
-        <Button onClick={onToggle} _active={{}}>
-          <DropdownCard
-            highlighted={stakePoolFilters?.length < 4}
-            isOpen={isOpen}
-            title="Stake pool"
-          />
-        </Button>
-      </PopoverTrigger>
+    <Menu closeOnSelect={false}>
+      <ResponsiveMenuButton leftIcon={<FilterIcon />} rightIcon={<ChevronDownIcon />}>
+        Filters
+      </ResponsiveMenuButton>
       <Portal>
-        <PopoverContent
-          variants={{
-            enter: { opacity: 1, height: '175px' },
-            exit: { opacity: 0, height: '0px' },
-          }}
-          width={'160px'}
-        >
-          <Flex
-            width={'160px'}
-            rounded={'lg'}
-            height={'175px'}
-            border="2px solid"
-            borderColor={'text.low'}
-            direction="column"
-            apply={'background.glass'}
-            css={{ '::after': { opacity: 0.9 } }}
-            overflow="hidden"
-            transition={'0.3s all'}
-            pt={4}
-            gap={1}
+        <MenuList minWidth="240px">
+          <MenuOptionGroup
+            value={stakePoolFilters.map((i) => i.poolId.toString())}
+            defaultValue={[...stakePoolFilters.map((i) => i.toString())]}
+            type="checkbox"
           >
-            {Object.values(StakePoolFilterEnum)
-              .filter((filter) => typeof filter !== 'string')
-              .map((filter, index) => (
-                <StakeToggleButton
-                  filter={+filter}
-                  enabled={stakePoolFilters.includes(+filter)}
-                  key={index}
-                  onDisableFilter={(val) =>
-                    setStakePoolFilters(stakePoolFilters.filter((filter) => filter !== val))
-                  }
-                  onEnableFilter={(val) => setStakePoolFilters([...stakePoolFilters, val])}
-                />
-              ))}
-            <Button
-              onClick={() => setStakePoolFilters(initialPoolFilterValues)}
-              mt={1}
-              width="90px"
-              height={'30px'}
-              variant={canShowReset ? 'primary' : ''}
-              shadow={!canShowReset && 'down'}
-              cursor={!canShowReset && 'default'}
-              _focus={{}}
-              _active={{}}
-              mx={'auto'}
-            >
-              Reset
-            </Button>
-          </Flex>
-        </PopoverContent>
+            {Object.values(stakingPools).map((item, i) => {
+              const key = item.poolId.toString()
+              if (item.poolId === undefined) return <></>
+              return (
+                <MenuItemOption key={key} value={key} minH="48px">
+                  <HStack
+                    onClick={() => {
+                      const has = stakePoolFilters.some((p) => p.poolId === item.poolId)
+                      const removeList = [
+                        ...stakePoolFilters.filter((p: StakingPool) => p.poolId !== item.poolId),
+                      ]
+                      setStakePoolFilters(has ? removeList : [...stakePoolFilters, item])
+                    }}
+                  >
+                    <Image
+                      boxSize="2rem"
+                      src={`/assets/marketplace/${poolImages[item.poolId]}`}
+                      alt={`${item.days} days`}
+                    />
+                    <Text>{item.days} days</Text>
+                  </HStack>
+                </MenuItemOption>
+              )
+            })}
+          </MenuOptionGroup>
+        </MenuList>
       </Portal>
-    </Popover>
+    </Menu>
   )
 }

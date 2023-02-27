@@ -1,4 +1,4 @@
-import { Flex, Heading, Image } from '@concave/ui'
+import { Box, Flex, Heading, Image } from '@concave/ui'
 import { AirdropClaimCard } from 'components/Airdrop/AirdropClaimCard'
 import { ACNVChart } from 'components/Transparency/Charts/ACNVChart'
 import { BbtCNVChart } from 'components/Transparency/Charts/BbtCNVChart'
@@ -8,14 +8,13 @@ import { RedemBBTCard } from './redeem/BBTCNVRedemptionDialog'
 import { RedeemPCNVCard } from './redeem/PCNVRedemptionDialog'
 import { SnapshotOptions } from './SnapshotOptions'
 import { BondingSnapshot } from './Summary/Bonding/BondingSnapshot'
-import { MarketplaceSnapshot } from './Summary/Marketplace/MarketplaceSnapshot'
 import { LiquiditySnapshot } from './Summary/Pools/LiquiditySnapshot'
 import { LiquidStakingSnapshot } from './Summary/Staking/LiquidStakingSnapshot'
 import { TxHistory } from './Summary/TxHistory/TxHistory'
 
 export function UserDashboardContent({ view }: { view: SnapshotOptions }) {
   return (
-    <Flex w={'100%'} h="full">
+    <Flex w={'full'} h={'full'} maxH={'780px'}>
       {getView(view)}
     </Flex>
   )
@@ -35,8 +34,6 @@ function getView(selectedSnapshot: SnapshotOptions) {
           <LiquidStakingSnapshot />
         </StakeSettingsProvider>
       )
-    case SnapshotOptions.Marketplace:
-      return <MarketplaceSnapshot />
     case SnapshotOptions.Redeem:
       return (
         <Flex w={'full'} direction={'column'} flexWrap={'wrap'} gap={gap}>

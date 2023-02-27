@@ -1,5 +1,5 @@
+import { StakingPool, stakingPools } from '@concave/marketplace'
 import { RangeFilter } from 'components/NftFilters/Filters/hooks/useFilterByRange'
-import { StakePoolFilterEnum } from 'components/NftFilters/Filters/hooks/useFilterByStakePool'
 import { NftSort } from 'components/NftFilters/Sorters/hooks/useNftSort'
 import { createContext, Dispatch, SetStateAction, useContext, useState } from 'react'
 
@@ -7,11 +7,11 @@ type StakeSettingsContextProps = {
   sorter: NftSort
   initialCNVFilter: RangeFilter
   tokenIdFilter: number | undefined
-  stakePoolFilters: StakePoolFilterEnum[]
+  stakePoolFilters: StakingPool[]
   setSorter: Dispatch<SetStateAction<NftSort>>
   setInitialCNVFilter: Dispatch<SetStateAction<RangeFilter>>
   setTokenIdFilter: Dispatch<SetStateAction<number | undefined>>
-  setStakePoolFilters: Dispatch<SetStateAction<StakePoolFilterEnum[]>>
+  setStakePoolFilters: Dispatch<SetStateAction<StakingPool[]>>
 }
 const StakeSettingsCtx = createContext<StakeSettingsContextProps>({
   sorter: { order: 'ASC', sort: 'REDEEM_DATE' },
@@ -26,7 +26,7 @@ const StakeSettingsCtx = createContext<StakeSettingsContextProps>({
 
 export function StakeSettingsProvider({ children }) {
   const [sorter, setSorter] = useState<NftSort>({ order: 'ASC', sort: 'REDEEM_DATE' })
-  const [stakePoolFilters, setStakePoolFilters] = useState(initialPoolFilterValues)
+  const [stakePoolFilters, setStakePoolFilters] = useState<StakingPool[]>([...stakingPools])
   const [initialCNVFilter, setInitialCNVFilter] = useState({})
   const [tokenIdFilter, setTokenIdFilter] = useState()
 
@@ -47,12 +47,5 @@ export function StakeSettingsProvider({ children }) {
     </StakeSettingsCtx.Provider>
   )
 }
-
-export const initialPoolFilterValues = [
-  StakePoolFilterEnum['45_DAYS'],
-  StakePoolFilterEnum['90_DAYS'],
-  StakePoolFilterEnum['180_DAYS'],
-  StakePoolFilterEnum['360_DAYS'],
-]
 
 export const useStakeSettings = () => useContext(StakeSettingsCtx)
