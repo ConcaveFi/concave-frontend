@@ -2,9 +2,8 @@ import { CNV, Currency, CurrencyAmount } from '@concave/core'
 import { listPositons, StakingPosition, StakingV1Abi } from '@concave/marketplace'
 import { BigNumber, ethers } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { concaveProvider } from 'lib/providers'
 import { useQuery } from 'react-query'
-import { useAccount } from 'wagmi'
+import { useAccount, useProvider } from 'wagmi'
 
 export type UseStakePositionsState = ReturnType<typeof useStakePositions>
 export const useStakePositions = () => {
@@ -27,9 +26,11 @@ export const useStakePositions = () => {
     },
   )
 
+  const provider = useProvider()
+
   const { data: stakingPositions, isLoading } = useQuery(
     ['listUserPositions', address, chainId, unlockedTokenIds],
-    () => listPositons({ owner: address, provider: concaveProvider(chainId) }),
+    () => listPositons({ owner: address, provider }),
     { enabled: !!address && !!chainId },
   )
   const totalLocked = getTotalLocked(stakingPositions, CNV[chainId])

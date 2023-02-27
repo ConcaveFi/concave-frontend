@@ -20,11 +20,10 @@ import { Loading } from 'components/Loading'
 import { ConnectButton } from 'components/UserWallet/ConnectButton'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { concaveProvider } from 'lib/providers'
 import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
 import { compactFormat } from 'utils/bigNumberMask'
-import { useAccount } from 'wagmi'
+import { useAccount, useProvider } from 'wagmi'
 import { PositionsState } from './hooks/usePositionsState'
 
 export const MyPositions = ({ state }: { state: PositionsState }) => {
@@ -138,6 +137,7 @@ export const PairsAccordion = ({ pairs, maxH }: { pairs: Pair[]; maxH?: string }
 export const LiquidityPoolPainel = (props: LPPosition) => {
   const chainId = useCurrentSupportedNetworkId()
   const userBalance = useCurrencyBalance(props.pair.liquidityToken)
+  const provider = useProvider()
   const pairData = useQuery(
     [
       'fetchPairData',
@@ -146,7 +146,7 @@ export const LiquidityPoolPainel = (props: LPPosition) => {
       props.isExpanded,
       userBalance.data?.toExact(),
     ],
-    () => Fetcher.fetchPairFromAddress(props.pair.liquidityToken.address, concaveProvider(chainId)),
+    () => Fetcher.fetchPairFromAddress(props.pair.liquidityToken.address, provider),
     { enabled: props.isExpanded },
   )
 

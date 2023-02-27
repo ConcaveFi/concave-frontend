@@ -3,9 +3,9 @@ import { Card, Flex, HStack, Text, useBreakpointValue, VStack } from '@concave/u
 import { BigNumber } from '@ethersproject/bignumber'
 import { Loading } from 'components/Loading'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { concaveProvider } from 'lib/providers'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
+import { useProvider } from 'wagmi'
 import { MarketplaceTransactionCard } from './MarketplaceTransactionCard'
 
 export type Data = {
@@ -20,10 +20,11 @@ export const MarketplaceActivityCard = () => {
   const [filter, setFilter] = useState<'all' | 'listing' | 'sale'>('all')
   const chainId = useCurrentSupportedNetworkId()
 
+  const provider = useProvider()
+
   const { data, isLoading, isFetching } = useQuery(
     ['marketplaceActivity', chainId],
     async () => {
-      const provider = concaveProvider(chainId)
       const positions = await marketplaceActivity({ provider })
       return positions.map((item) => {
         const type = item.soldFor ? `sale` : `listing`

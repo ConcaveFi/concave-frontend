@@ -2,7 +2,7 @@ import { BondAbi, BOND_ADDRESS, CNV, DAI, DAI_ADDRESS, Token } from '@concave/co
 import { Contract, ethers, utils } from 'ethers'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { concaveProvider, concaveProvider as providers } from 'lib/providers'
+import { concaveProvider } from 'contexts/Wagmi/WagmiContext'
 import { useMemo, useState } from 'react'
 import { useAccount, useSigner } from 'wagmi'
 import { BondSettings } from './Settings'
@@ -10,11 +10,11 @@ import { BondSettings } from './Settings'
 export const getBondAmountOut = async (
   quoteAddress: string,
   decimals: number,
-  networkId: number,
+  chainId: number,
   input: string,
 ) => {
-  const bondingContract = new Contract(BOND_ADDRESS[networkId], BondAbi, providers(networkId))
-  const DAI = DAI_ADDRESS[networkId]
+  const bondingContract = new Contract(BOND_ADDRESS[chainId], BondAbi, concaveProvider({ chainId }))
+  const DAI = DAI_ADDRESS[chainId]
   // pass decimals argument where 18 is hardcoded
   const formattedInput = ethers.utils.parseUnits(input.toString(), 18)
   const amountOut = await bondingContract.getAmountOut(DAI, formattedInput)
@@ -25,16 +25,16 @@ export const getBondAmountOut = async (
   return cleanedOutput
 }
 
-export const getBondTermLength = async (networkId: number) => {
-  const bondingContract = new Contract(BOND_ADDRESS[networkId], BondAbi, providers(networkId))
+export const getBondTermLength = async (chainId: number) => {
+  const bondingContract = new Contract(BOND_ADDRESS[chainId], BondAbi, concaveProvider({ chainId }))
   const termLength = await bondingContract.term()
   const formattedTermLength = termLength.toString()
   return formattedTermLength / 60 / 60 / 24
 }
 
-export const getBondSpotPrice = async (networkId: number) => {
-  const bondingContract = new Contract(BOND_ADDRESS[networkId], BondAbi, providers(networkId))
-  const DAI = DAI_ADDRESS[networkId]
+export const getBondSpotPrice = async (chainId: number) => {
+  const bondingContract = new Contract(BOND_ADDRESS[chainId], BondAbi, concaveProvider({ chainId }))
+  const DAI = DAI_ADDRESS[chainId]
   const spotPrice = await bondingContract.getSpotPrice(DAI)
   const formatted = ethers.utils.formatEther(spotPrice)
   return formatted
@@ -65,9 +65,9 @@ export const purchaseBond = async (
   })
 }
 
-export async function getCurrentBlockTimestamp(networkId) {
+export async function getCurrentBlockTimestamp(chainId: number) {
   try {
-    const provider = concaveProvider(networkId)
+    const provider = concaveProvider({ chainId })
     const getBlock = await provider.getBlockNumber()
     const timestamp = (await provider.getBlock(getBlock)).timestamp
     return timestamp
@@ -100,7 +100,7 @@ export type ReturnBondPositions = {
 }
 
 export const getUserBondPositions = async (
-  networkId: number,
+  chainId: number,
   address: string,
   currentBlockTimestamp: number,
   currentRedeemable?: number,
@@ -113,7 +113,7 @@ export const getUserBondPositions = async (
   let oldestCreationTimestamp = 0
   let claimed = false
   let redeemable = currentRedeemable || 0
-  const bondingContract = new Contract(BOND_ADDRESS[networkId], BondAbi, providers(networkId))
+  const bondingContract = new Contract(BOND_ADDRESS[chainId], BondAbi, concaveProvider({ chainId }))
   const getUserPositionsLength = await bondingContract.getUserPositionCount(address)
   const termData = await bondingContract.term()
   console.log(bondingContract)

@@ -7,10 +7,9 @@ import { BigNumber, Transaction } from 'ethers'
 import { formatEther } from 'ethers/lib/utils'
 import { useAddRecentTransaction } from 'contexts/Transactions'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { concaveProvider } from 'lib/providers'
 import { FC, useEffect, useState } from 'react'
 import { formatFixed } from 'utils/bigNumberMask'
-import { Address, useAccount, useSigner, useWaitForTransaction } from 'wagmi'
+import { Address, useAccount, useProvider, useSigner, useWaitForTransaction } from 'wagmi'
 import { NFTPositionHeaderProps, useNFTLockedPositionState } from './hooks/useNFTPositionViewer'
 const bigNumberMask = (number: BigNumber) => {
   if (number.eq(0)) {
@@ -40,7 +39,7 @@ export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
 
   const { status: txStatus } = useWaitForTransaction({
     chainId: stakingPosition.chainId,
-    hash: recentRedeemed?.tx?.hash,
+    hash: recentRedeemed?.tx?.hash as `0x${string}`,
   })
 
   useEffect(() => {
@@ -56,8 +55,10 @@ export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
     }
   }, [txStatus])
 
+  const provider = useProvider()
+
   const redeem = () => {
-    const stakingContract = new StakingV1Contract(concaveProvider(chainId))
+    const stakingContract = new StakingV1Contract(provider)
     setStatus('approve')
     stakingContract
       .unlock(signer, address, stakingPosition.tokenId)

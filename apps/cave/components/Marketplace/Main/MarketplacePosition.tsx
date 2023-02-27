@@ -9,10 +9,9 @@ import { usePositionDiscount } from 'components/StakingPositions/LockPosition/Ma
 import { differenceInDays, format, formatDistanceToNowStrict } from 'date-fns'
 import { useTransaction } from 'hooks/useTransaction'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { concaveProvider } from 'lib/providers'
 import { useMemo } from 'react'
 import { compactFormat, formatFixed } from 'utils/bigNumberMask'
-import { useAccount, useSigner } from 'wagmi'
+import { useAccount, useProvider, useSigner } from 'wagmi'
 import { ConfirmPurchaseModal } from './ConfirmBuy'
 
 type MarketplacePositionProps = { stakingPosition: StakingPosition; isActive: boolean } & FlexProps
@@ -138,9 +137,10 @@ const BuyContainer = ({ stakingPosition, active = false }: BuyContainerProps) =>
     stakingPosition.market.startPrice.toString(),
   )
   const { data: signer } = useSigner()
+  const provider = useProvider()
   const swap = useTransaction(
     async () => {
-      const contract = new FixedOrderMarketContract(concaveProvider(stakingPosition.chainId))
+      const contract = new FixedOrderMarketContract(provider)
       return contract.swap(signer, stakingPosition.market)
     },
     { meta: { type: 'offer marketplace', tokenId: +tokenId.toString() }, onError: console.error },
