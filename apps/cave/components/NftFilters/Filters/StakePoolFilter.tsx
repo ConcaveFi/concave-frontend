@@ -15,7 +15,7 @@ import { useStakeSettings } from 'contexts/PositionsFilterProvider'
 import { poolImages } from 'utils/poolImages'
 
 export const StakePoolFilterCard = () => {
-  const { stakePoolFilters, setStakePoolFilters } = useStakeSettings()
+  const { stakePoolFilters, tooglePoolFilter } = useStakeSettings()
 
   return (
     <Menu closeOnSelect={false}>
@@ -25,8 +25,7 @@ export const StakePoolFilterCard = () => {
       <Portal>
         <MenuList minWidth="240px">
           <MenuOptionGroup
-            value={stakePoolFilters.map((i) => i.poolId.toString())}
-            defaultValue={[...stakePoolFilters.map((i) => i.toString())]}
+            value={[...stakePoolFilters.keys()].map((i) => i.toString())}
             type="checkbox"
           >
             {Object.values(stakingPools).map((item, i) => {
@@ -34,15 +33,7 @@ export const StakePoolFilterCard = () => {
               if (item.poolId === undefined) return <></>
               return (
                 <MenuItemOption key={key} value={key} minH="48px">
-                  <HStack
-                    onClick={() => {
-                      const has = stakePoolFilters.some((p) => p.poolId === item.poolId)
-                      const removeList = [
-                        ...stakePoolFilters.filter((p: StakingPool) => p.poolId !== item.poolId),
-                      ]
-                      setStakePoolFilters(has ? removeList : [...stakePoolFilters, item])
-                    }}
-                  >
+                  <HStack onClick={() => tooglePoolFilter(item.poolId)}>
                     <Image
                       boxSize="2rem"
                       src={`/assets/marketplace/${poolImages[item.poolId]}`}

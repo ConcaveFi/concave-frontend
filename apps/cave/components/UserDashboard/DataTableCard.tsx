@@ -1,18 +1,12 @@
-import { ExpandArrowIcon } from '@concave/icons'
-import { Box, Button, Card, Flex, HStack, Spinner, Text, useBreakpointValue } from '@concave/ui'
-import { useRouter } from 'next/router'
+import { Card, Flex, HStack, Spinner } from '@concave/ui'
 import { NoPositions } from './Summary/NoPositions'
 
 export function DataTableCard({
-  dataTableLabel,
-  SortComponent,
   children,
   isLoading,
   hasPositions,
   dataTableOptions,
 }: {
-  dataTableLabel: string
-  SortComponent?: JSX.Element
   children: JSX.Element | JSX.Element[]
   isLoading?: boolean
   hasPositions?: boolean | number

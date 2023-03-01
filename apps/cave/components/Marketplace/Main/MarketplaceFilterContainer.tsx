@@ -4,8 +4,8 @@ import { useLiquidStakeData } from 'components/LiquidStaking/hooks/useLiquidStak
 import { MakeplaceStakeFilter } from '../Filters/MarketplaceStakeFilter'
 
 interface FilterContainerProps {
-  stakeFilters: StakingPool[]
-  onChangeStakeFilters: (stakeFilters: StakingPool[]) => void
+  stakeFilters: number[]
+  onChangeStakeFilters: (stakeFilters: number[]) => void
 }
 
 export function MarketplaceFilterContainer(props: FilterContainerProps) {

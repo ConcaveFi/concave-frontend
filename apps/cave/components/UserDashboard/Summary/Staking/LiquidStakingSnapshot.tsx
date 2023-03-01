@@ -7,7 +7,7 @@ import { airdropToken, getAirdropQ4ClaimableAmount } from 'components/Airdrop/Q4
 import { getAirdropSpecialClaimableAmount } from 'components/Airdrop/special/airdrop'
 import { ComingSoom } from 'components/ComingSoon'
 import { useFilterByRange } from 'components/NftFilters/Filters/hooks/useFilterByRange'
-import { useFilterByStakePool } from 'components/NftFilters/Filters/hooks/useFilterByStakePool'
+import { filterStakePool } from 'components/NftFilters/Filters/hooks/useFilterByStakePool'
 import { StakePoolFilterCard } from 'components/NftFilters/Filters/StakePoolFilter'
 import { usePositionSorter } from 'components/NftFilters/Sorters/hooks/useNftSort'
 import { SortButton } from 'components/NftFilters/Sorters/SortCard'
@@ -118,7 +118,7 @@ export const LiquidStakingSnapshot = () => {
   )
   const { initialCNVFilter, stakePoolFilters, tokenIdFilter, sorter } = useStakeSettings()
   const { filterByRange } = useFilterByRange(initialCNVFilter)
-  const { filterByStakePool } = useFilterByStakePool(stakePoolFilters)
+  const { filterByStakePool } = filterStakePool([...stakePoolFilters.values()])
   const sortFunction = sorter ? positionSorter.data?.[sorter.sort][sorter.order] : () => 0
   const stakeInfo = useStakeChart(address, networkId)
   const router = useRouter()
@@ -153,8 +153,6 @@ export const LiquidStakingSnapshot = () => {
         </SnapshotTextCard>
       </SnapshotCard>
       <DataTableCard
-        dataTableLabel={'CNV Positions'}
-        SortComponent={<></>}
         isLoading={isLoading}
         dataTableOptions={
           <Flex gap={{ base: 2, sm: 4 }} w={'full'}>

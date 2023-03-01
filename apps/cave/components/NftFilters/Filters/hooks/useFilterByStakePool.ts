@@ -1,6 +1,6 @@
-import { StakingPool, stakingPools, StakingPosition } from '@concave/marketplace'
+import { StakingPosition } from '@concave/marketplace'
 
-export const useFilterByStakePool = (filters: StakingPool[]) => ({
+export const filterStakePool = (filters: number[]) => ({
   filterByStakePool: (current: StakingPosition) =>
-    filters.some((value) => current.poolID === value.poolId),
+    filters.some((value) => current.poolID === value),
 })

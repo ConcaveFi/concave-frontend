@@ -7,35 +7,43 @@ type StakeSettingsContextProps = {
   sorter: NftSort
   initialCNVFilter: RangeFilter
   tokenIdFilter: number | undefined
-  stakePoolFilters: StakingPool[]
+  stakePoolFilters: Set<number>
   setSorter: Dispatch<SetStateAction<NftSort>>
   setInitialCNVFilter: Dispatch<SetStateAction<RangeFilter>>
   setTokenIdFilter: Dispatch<SetStateAction<number | undefined>>
-  setStakePoolFilters: Dispatch<SetStateAction<StakingPool[]>>
+  tooglePoolFilter: (poolId: number) => void
 }
 const StakeSettingsCtx = createContext<StakeSettingsContextProps>({
   sorter: { order: 'ASC', sort: 'REDEEM_DATE' },
   setInitialCNVFilter: () => {},
-  setStakePoolFilters: () => {},
+  tooglePoolFilter: (poolId: number) => {},
   setTokenIdFilter: () => {},
   tokenIdFilter: undefined,
   initialCNVFilter: {},
-  stakePoolFilters: [],
+  stakePoolFilters: new Set(),
   setSorter: () => {},
 })
 
 export function StakeSettingsProvider({ children }) {
   const [sorter, setSorter] = useState<NftSort>({ order: 'ASC', sort: 'REDEEM_DATE' })
-  const [stakePoolFilters, setStakePoolFilters] = useState<StakingPool[]>([...stakingPools])
+  const [stakePoolFilters, setStakePoolFilters] = useState<Set<number>>(
+    new Set(stakingPools.map((i) => i.poolId)),
+  )
   const [initialCNVFilter, setInitialCNVFilter] = useState({})
   const [tokenIdFilter, setTokenIdFilter] = useState()
+
+  const tooglePoolFilter = (poolId: number) => {
+    stakePoolFilters.has(poolId) ? stakePoolFilters.delete(poolId) : stakePoolFilters.add(poolId)
+    console.log(stakePoolFilters)
+    setStakePoolFilters(new Set(stakePoolFilters))
+  }
 
   return (
     <StakeSettingsCtx.Provider
       value={{
         tokenIdFilter,
         setTokenIdFilter,
-        setStakePoolFilters,
+        tooglePoolFilter,
         setInitialCNVFilter,
         stakePoolFilters,
         initialCNVFilter,

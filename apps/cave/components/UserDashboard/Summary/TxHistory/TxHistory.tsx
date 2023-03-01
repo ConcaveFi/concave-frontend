@@ -37,7 +37,7 @@ export const TxHistory = () => {
 
   return (
     <Flex flexDir={'column'} w={'100%'} justifyContent={'space-between'}>
-      <DataTableCard dataTableOptions={<></>} dataTableLabel={''} hasPositions>
+      <DataTableCard dataTableOptions={<></>} hasPositions>
         <DataTable shadow="none">
           {!isLoading && isSuccess ? <TxTable reactTable={reactTable} /> : <></>}
         </DataTable>

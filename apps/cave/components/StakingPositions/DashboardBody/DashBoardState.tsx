@@ -1,5 +1,5 @@
 import { CNV, Currency, CurrencyAmount } from '@concave/core'
-import { listPositons, StakingPosition, StakingV1Abi } from '@concave/marketplace'
+import { listPositions, StakingPosition, StakingV1Abi } from '@concave/marketplace'
 import { BigNumber, ethers } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useQuery } from 'react-query'
@@ -12,7 +12,7 @@ export const useStakePositions = () => {
 
   const { data: stakingPositions, isLoading } = useQuery(
     ['listUserPositions', address, chainId],
-    () => listPositons({ owner: address, excludeRedeemed: true, provider }),
+    () => listPositions({ owner: address, excludeRedeemed: true, provider }),
     { enabled: !!address && !!chainId },
   )
   const totalLocked = getTotalLocked(stakingPositions, CNV[chainId])

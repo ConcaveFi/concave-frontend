@@ -64,7 +64,6 @@ export const BondingSnapshot = () => {
         </SnapshotTextCard>
       </SnapshotCard>
       <DataTableCard
-        dataTableLabel={'Bonding Positions'}
         dataTableOptions={
           <Flex gap={{ base: 2, sm: 4 }} w={'full'}>
             <ToggleContentButton handle={setExpand} isExpanded={isExpanded} />
