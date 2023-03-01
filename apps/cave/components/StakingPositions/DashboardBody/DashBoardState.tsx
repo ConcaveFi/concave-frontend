@@ -16,12 +16,11 @@ export const useStakePositions = () => {
     { enabled: !!address && !!chainId },
   )
   const totalLocked = getTotalLocked(stakingPositions, CNV[chainId])
-  const filteredPositions = stakingPositions
 
   return {
     isLoading: isLoading,
     totalLocked,
-    userNonFungibleTokensInfo: filteredPositions || [],
+    userNonFungibleTokensInfo: stakingPositions || [],
     netWorkId: chainId,
   }
 }
