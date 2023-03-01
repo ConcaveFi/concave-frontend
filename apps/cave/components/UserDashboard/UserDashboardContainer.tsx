@@ -37,9 +37,6 @@ export const UserDashboardContainer = (props: UserDashboardContainerParams) => {
               pt={5}
               pb={4}
               px={{ base: 2, md: 10 }}
-              onSelectHistory={() => {
-                onChangeSnapshot(SnapshotOptions.History)
-              }}
             />
             <Card
               variant="primary"

@@ -1,8 +1,6 @@
 import { Currency, CurrencyAmount } from '@concave/core'
-import { formatEther } from 'ethers/lib/utils.js'
-import { UseQueryResult } from 'react-query'
 import { compactFormat } from 'utils/bigNumberMask'
-import { BondPosition, UseUserBondState } from './hooks/useUserBondState'
+import { UseUserBondState } from './hooks/useUserBondState'
 import { NavButton } from './NavButton'
 import { SnapshotOptions } from './SnapshotOptions'
 
@@ -62,7 +60,11 @@ export function DashboardNavButtons(props: NavButtonProps) {
         onClick={() => props.changeSnapshot(SnapshotOptions.Redeem)}
         isSelected={props.currentSnapshot === SnapshotOptions.Redeem}
       />
-      <NavButton title={'Coming Soon'} isDisabled />
+      <NavButton
+        title={'History'}
+        onClick={() => props.changeSnapshot(SnapshotOptions.History)}
+        isSelected={props.currentSnapshot === SnapshotOptions.History}
+      />
       <NavButton title={'Coming Soon'} isDisabled />
     </>
   )

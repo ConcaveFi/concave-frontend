@@ -9,6 +9,7 @@ import { RedeemPCNVCard } from './redeem/PCNVRedemptionDialog'
 import { SnapshotOptions } from './SnapshotOptions'
 import { BondingSnapshot } from './Summary/Bonding/BondingSnapshot'
 import { LiquiditySnapshot } from './Summary/Pools/LiquiditySnapshot'
+import { RedeemSnapshot } from './Summary/Redeem/RedeemSnapshot'
 import { LiquidStakingSnapshot } from './Summary/Staking/LiquidStakingSnapshot'
 import { TxHistory } from './Summary/TxHistory/TxHistory'
 
@@ -19,7 +20,6 @@ export function UserDashboardContent({ view }: { view: SnapshotOptions }) {
     </Flex>
   )
 }
-const gap = 2
 function getView(selectedSnapshot: SnapshotOptions) {
   switch (selectedSnapshot) {
     case SnapshotOptions.History:
@@ -35,19 +35,7 @@ function getView(selectedSnapshot: SnapshotOptions) {
         </StakeSettingsProvider>
       )
     case SnapshotOptions.Redeem:
-      return (
-        <Flex w={'full'} direction={'column'} flexWrap={'wrap'} gap={gap}>
-          <Flex direction={{ base: 'column', sm: 'row' }} gap={gap} w={'full'} h={'fit-content'}>
-            <ACNVChart fontSize="6xl" w={'full'} />
-            <BbtCNVChart w={'full'} />
-          </Flex>
-          <Flex direction={{ base: 'column', xl: 'row' }} w={'full'} gap={gap}>
-            <RedeemPCNVCard w={'full'} />
-            <RedemACNVCard w={'full'} />
-            <RedemBBTCard w={'full'} />
-          </Flex>
-        </Flex>
-      )
+      return <RedeemSnapshot />
 
     case SnapshotOptions.Airdrop:
       return (

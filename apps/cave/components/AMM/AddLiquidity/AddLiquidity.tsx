@@ -180,14 +180,12 @@ const useQueryModalControl = <T extends Record<string, string | number>>(default
   const params = useQueryParams<T>()
   const isOpen = Object.keys(defaultParams).every((key) => params?.data?.[key])
 
-  console.log('isOpen', isOpen)
   const currentQueryParams = Router.query
 
   const onClose = () => {
     const cleanQueryParams = Object.entries(currentQueryParams)
       .filter(([key]) => defaultParams[key] === undefined)
       .reduce((prev, [key, value]) => ({ ...prev, [key]: value }), {})
-    console.log(cleanQueryParams)
     Router.push({ query: cleanQueryParams }, undefined, { shallow: true })
   }
 

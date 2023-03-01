@@ -1,7 +1,6 @@
-import { Card, Collapse, useBreakpointValue } from '@concave/ui'
+import { Card } from '@concave/ui'
 
 export const SnapshotCard = ({ show, children }) => {
-  const isMobile = useBreakpointValue({ base: true, lg: false })
   if (!show) return <></>
   return (
     <Card

@@ -21,9 +21,10 @@ export const TxHistory = () => {
   const [sorting, setSorting] = useState<SortingState>([])
   const { data, isLoading, isSuccess } = useUserTxHistoryState()
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const columns = useColumns()
   const reactTable = useReactTable({
     data,
-    columns,
+    columns: [...columns],
     state: {
       sorting,
       columnFilters,
@@ -37,7 +38,7 @@ export const TxHistory = () => {
 
   return (
     <Flex flexDir={'column'} w={'100%'} justifyContent={'space-between'}>
-      <DataTableCard dataTableOptions={<></>} hasPositions>
+      <DataTableCard dataTableOptions={<></>} isLoading={isLoading} hasPositions>
         <DataTable shadow="none">
           {!isLoading && isSuccess ? <TxTable reactTable={reactTable} /> : <></>}
         </DataTable>
@@ -46,7 +47,7 @@ export const TxHistory = () => {
   )
 }
 
-const TxTable = ({ reactTable }) => {
+const TxTable = ({ reactTable }: { reactTable: TableTp<DashItem> }) => {
   return (
     <Table style={{ width: '100%' }}>
       <Thead>
@@ -93,64 +94,70 @@ const TxTable = ({ reactTable }) => {
   )
 }
 
-const columnHelper = createColumnHelper<DashItem>()
-const columns = [
-  columnHelper.accessor('timestamp', {
-    id: 'timestamp',
-    header: () => 'Timestamp',
-    cell: (info) => {
-      const date = new Date(info.getValue())
-      return <div title={date.toString()}>{date.toLocaleDateString()}</div>
-    },
-    enableMultiSort: true,
-  }),
-  columnHelper.accessor('txHash', {
-    id: 'txHash',
-    header: () => 'Tx Hash',
-    cell: (info) => {
-      const value = info.getValue()
-      return (
-        <Link title={value} target="_blank" href={'https://etherscan.io/tx/' + value}>
-          {value.substring(0, 7) + '...'}
-        </Link>
-      )
-    },
-    enableSorting: false,
-  }),
-  columnHelper.accessor('category', {
-    id: 'category',
-    header: () => 'Category',
-    cell: (info) => info.getValue(),
-    enableMultiSort: true,
-  }),
-  columnHelper.accessor('eventType', {
-    id: 'eventType',
-    header: () => 'Action',
-    cell: (info) => info.getValue(),
-    enableMultiSort: true,
-  }),
-  columnHelper.accessor('amountIn', {
-    id: 'amountIn',
-    header: () => 'Amount In',
-    cell: (info) => (+info.getValue()).toLocaleString('en-US', { maximumFractionDigits: 2 }),
-    enableMultiSort: true,
-  }),
-  columnHelper.accessor('currencyIn', {
-    id: 'currencyIn',
-    header: () => 'Token In',
-    cell: (info) => info.getValue().substring(0, 7),
-    enableSorting: false,
-  }),
-  columnHelper.accessor('amountOut', {
-    id: 'amountOut',
-    header: () => 'Amount Out',
-    cell: (info) => (+info.getValue()).toLocaleString('en-US', { maximumFractionDigits: 2 }),
-    enableMultiSort: true,
-  }),
-  columnHelper.accessor('currencyOut', {
-    id: 'currencyOut',
-    header: () => 'Token Out',
-    cell: (info) => info.getValue().substring(0, 7),
-    enableSorting: false,
-  }),
-]
+const useColumns = () => {
+  const columnSize = useBreakpointValue({ base: 3, sm: 4, md: 8 })
+
+  const columnHelper = createColumnHelper<DashItem>()
+  const columns = [
+    columnHelper.accessor('timestamp', {
+      id: 'timestamp',
+      header: () => 'Timestamp',
+      cell: (info) => {
+        const date = new Date(info.getValue())
+        return <div title={date.toString()}>{date.toLocaleDateString()}</div>
+      },
+      enableMultiSort: true,
+    }),
+    columnHelper.accessor('txHash', {
+      id: 'txHash',
+      header: () => 'Tx Hash',
+      cell: (info) => {
+        const value = info.getValue()
+        return (
+          <Link title={value} target="_blank" href={'https://etherscan.io/tx/' + value}>
+            {value.substring(0, 7) + '...'}
+          </Link>
+        )
+      },
+      enableSorting: false,
+    }),
+    columnHelper.accessor('category', {
+      id: 'category',
+      header: () => 'Category',
+      cell: (info) => info.getValue(),
+      enableMultiSort: true,
+    }),
+    columnHelper.accessor('eventType', {
+      id: 'eventType',
+      header: () => 'Action',
+      cell: (info) => info.getValue(),
+      enableMultiSort: true,
+    }),
+    columnHelper.accessor('amountIn', {
+      id: 'amountIn',
+      header: () => 'Amount In',
+      cell: (info) => (+info.getValue()).toLocaleString('en-US', { maximumFractionDigits: 2 }),
+      enableMultiSort: true,
+    }),
+    columnHelper.accessor('currencyIn', {
+      id: 'currencyIn',
+      header: () => 'Token In',
+      cell: (info) => info.getValue().substring(0, 7),
+      enableSorting: false,
+    }),
+    columnHelper.accessor('amountOut', {
+      id: 'amountOut',
+      header: () => 'Amount Out',
+      cell: (info) => (+info.getValue()).toLocaleString('en-US', { maximumFractionDigits: 2 }),
+      enableMultiSort: true,
+    }),
+    columnHelper.accessor('currencyOut', {
+      id: 'currencyOut',
+      header: () => 'Token Out',
+      cell: (info) => info.getValue().substring(0, 7),
+      enableSorting: false,
+    }),
+  ] as const
+
+  return columns.slice(0, columnSize)
+}
