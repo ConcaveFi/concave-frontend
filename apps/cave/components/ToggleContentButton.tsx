@@ -1,4 +1,4 @@
-import { FullScreenExitIcon, FullScreenIcon } from '@concave/icons'
+import { FullscreenExitIcon, FullscreenIcon } from '@concave/icons'
 import { Button, ButtonProps } from '@concave/ui'
 import { Dispatch, SetStateAction } from 'react'
 import { useResponsiveButton } from './ResponsiveMenuButton'
@@ -12,7 +12,7 @@ export const ToggleContentButton = ({
   handle: Dispatch<SetStateAction<boolean>>
 } & ButtonProps) => {
   const responsiveProps = useResponsiveButton({
-    leftIcon: isExpanded ? <FullScreenExitIcon /> : <FullScreenIcon />,
+    leftIcon: isExpanded ? <FullscreenExitIcon /> : <FullscreenIcon />,
   })
 
   return (
