@@ -35,10 +35,9 @@ export class RedemptionContract {
     signer: Signer,
     amount: BigNumberish,
     address: string,
-    redeemMax?: boolean,
+    redeemMax: boolean,
   ): Promise<TransactionResponse> {
-    console.log([amount, address, redeemMax, signer])
-    return this.contract.connect(signer).redeem(amount, address, true)
+    return this.contract.connect(signer).redeem(amount, address, redeemMax)
   }
 
   public async vestedPercent(time: number = Math.floor(Date.now() / 1000)): Promise<BigNumber> {

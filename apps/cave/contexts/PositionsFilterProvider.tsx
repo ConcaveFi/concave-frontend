@@ -34,7 +34,6 @@ export function StakeSettingsProvider({ children }) {
 
   const tooglePoolFilter = (poolId: number) => {
     stakePoolFilters.has(poolId) ? stakePoolFilters.delete(poolId) : stakePoolFilters.add(poolId)
-    console.log(stakePoolFilters)
     setStakePoolFilters(new Set(stakePoolFilters))
   }
 
