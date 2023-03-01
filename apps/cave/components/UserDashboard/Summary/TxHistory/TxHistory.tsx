@@ -37,7 +37,7 @@ export const TxHistory = () => {
 
   return (
     <Flex flexDir={'column'} w={'100%'} justifyContent={'space-between'}>
-      <DataTableCard dataTableLabel={''} isExpanded hasPositions>
+      <DataTableCard dataTableOptions={<></>} hasPositions>
         <DataTable shadow="none">
           {!isLoading && isSuccess ? <TxTable reactTable={reactTable} /> : <></>}
         </DataTable>
@@ -47,7 +47,6 @@ export const TxHistory = () => {
 }
 
 const TxTable = ({ reactTable }) => {
-  const isMobile = useBreakpointValue({ base: true, lg: false })
   return (
     <Table style={{ width: '100%' }}>
       <Thead>

@@ -36,10 +36,5 @@ export const stakingPools = [
   { poolId: 3, days: 45, bondRevenue: '25%', rewardsBoost: '1.25x', quarterlyBoost: '1.25x' },
 ] as const
 
-export type StakingPool = {
-  readonly poolId: 0 | 1 | 2 | 3
-  readonly days: 360 | 180 | 90 | 45
-  readonly bondRevenue: '100%' | '75%' | '50%' | '25%'
-  readonly rewardsBoost: '4x' | '2x' | '1.5x' | '1.25x'
-  readonly quarterlyBoost: '2x' | '1.75x' | '1.5x' | '1.25x'
-}
+export type StakingPool = typeof stakingPools[number]
+

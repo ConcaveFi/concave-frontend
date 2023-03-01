@@ -6,7 +6,7 @@ import { BondPosition, UseUserBondState } from './hooks/useUserBondState'
 import { NavButton } from './NavButton'
 import { SnapshotOptions } from './SnapshotOptions'
 
-export interface NavButtonProps {
+interface NavButtonProps {
   currentSnapshot: SnapshotOptions
   cnvDataIsLoading: boolean
   totalLocked: CurrencyAmount<Currency>

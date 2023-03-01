@@ -7,6 +7,7 @@ import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId
 import { useFetchTokenData } from 'hooks/useTokenList'
 import { useEffect, useState } from 'react'
 import { compactFormat } from 'utils/bigNumberMask'
+import { poolImages } from 'utils/poolImages'
 import { mainnet } from 'wagmi'
 import { Data } from './MarketplaceActivityCard'
 interface MarketplaceTransactionCardProps {
@@ -22,12 +23,7 @@ export const MarketplaceTransactionCard = ({ data }: MarketplaceTransactionCardP
   const etherscanLink = etherscanBaseUrl + `/tx/${data.transactionHash}`
   const [isLargerThan770] = useMediaQuery('(min-width: 770px)')
   const [width, setWidth] = useState('0')
-  const imgNameByPeriod = {
-    0: '12mposition.png',
-    1: '6mposition.png',
-    2: '3mposition.png',
-    3: '1mposition.png',
-  }[data.poolID]
+  const imgNameByPeriod = poolImages[data.poolID]
   useEffect(() => {
     setWidth(isLargerThan770 ? '' : '180px')
   }, [isLargerThan770])

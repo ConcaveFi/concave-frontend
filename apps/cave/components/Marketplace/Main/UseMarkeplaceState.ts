@@ -1,7 +1,6 @@
-import { FixedOrderMarketContract, listListedPositions } from '@concave/marketplace'
+import { FixedOrderMarketContract, listListedPositions, StakingPool, stakingPools } from '@concave/marketplace'
 import {
-  StakePoolFilterEnum,
-  useFilterByStakePool,
+  filterStakePool,
 } from 'components/NftFilters/Filters/hooks/useFilterByStakePool'
 import { NftSort, usePositionSorter } from 'components/NftFilters/Sorters/hooks/useNftSort'
 import { BigNumber } from 'ethers'
@@ -41,14 +40,9 @@ export const useMarketplaceDashbord = () => {
   const [sort, setSort] = useState<NftSort>({ sort: 'REDEEM_DATE', order: 'ASC' })
   const sortFunction = sort ? positionSorter.data?.[sort.sort][sort.order] : () => 0
 
-  const [stakeFilters, setStakeFilters] = useState([
-    StakePoolFilterEnum['45_DAYS'],
-    StakePoolFilterEnum['180_DAYS'],
-    StakePoolFilterEnum['180_DAYS'],
-    StakePoolFilterEnum['360_DAYS'],
-  ])
+  const [stakeFilters, setStakeFilters] = useState<number[]>(stakingPools.map(i => i.poolId))
   const now = BigNumber.from(Date.now()).div(1000)
-  const { filterByStakePool } = useFilterByStakePool(stakeFilters)
+  const { filterByStakePool } = filterStakePool(stakeFilters)
   const nftPositions = salePositions
     .filter((stakingPosition) => {
       if (!tokenIdFilter) return true

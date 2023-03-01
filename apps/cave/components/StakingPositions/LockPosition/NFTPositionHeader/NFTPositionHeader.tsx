@@ -3,23 +3,15 @@ import { StakingPosition, StakingV1Contract } from '@concave/marketplace'
 import { Button, Flex, FlexProps, Image, Spinner, Text } from '@concave/ui'
 import { ProgressBar } from 'components/ProgressBar'
 import { differenceInDays } from 'date-fns'
-import { BigNumber, Transaction } from 'ethers'
-import { formatEther } from 'ethers/lib/utils'
+import { Transaction } from 'ethers'
 import { useAddRecentTransaction } from 'contexts/Transactions'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { FC, useEffect, useState } from 'react'
 import { formatFixed } from 'utils/bigNumberMask'
 import { Address, useAccount, useProvider, useSigner, useWaitForTransaction } from 'wagmi'
 import { NFTPositionHeaderProps, useNFTLockedPositionState } from './hooks/useNFTPositionViewer'
-const bigNumberMask = (number: BigNumber) => {
-  if (number.eq(0)) {
-    return `0`
-  }
-  if (+formatEther(number) < 0.01) {
-    return `<.01`
-  }
-  return formatFixed(number)
-}
+import { compactFormat } from 'utils/bigNumberMask'
+
 export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
   const { period, redeemInDays, imgNameByPeriod, redeemDate, active, toogleActive, tokenId } =
     useNFTLockedPositionState(props)
@@ -68,7 +60,7 @@ export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
           hash: tx.hash as Address,
           meta: {
             type: 'redeem',
-            amount: bigNumberMask(stakingPosition.currentValue) + ' from token id: ' + tokenId,
+            amount: compactFormat(stakingPosition.currentValue) + ' from token id: ' + tokenId,
           },
         })
         localStorage.setItem(
@@ -107,12 +99,13 @@ export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
             px={4}
             onClick={redeem}
             {...getRedeemButtonProps(readyForRedeem, status)}
+            isDisabled={!readyForRedeem || status === 'redeemed'}
           />
         </ImageContainer>
         <Flex w="full" justify="space-around">
-          <Info title="Initial" info={`${bigNumberMask(stakingPosition.initialValue)} CNV`} />
-          <Info title="Gained" info={`${bigNumberMask(stakingPosition.totalRewards)} CNV`} />
-          <Info title="Current value" info={`${bigNumberMask(stakingPosition.currentValue)} CNV`} />
+          <Info title="Initial" info={`${compactFormat(stakingPosition.initialValue)} CNV`} />
+          <Info title="Gained" info={`${compactFormat(stakingPosition.totalRewards)} CNV`} />
+          <Info title="Current value" info={`${compactFormat(stakingPosition.currentValue)} CNV`} />
         </Flex>
 
         <Button
@@ -129,13 +122,13 @@ export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
   )
 }
 
-type InfoProps = { title: string; info: string }
-const Info: FC<InfoProps & FlexProps> = ({ info, title, ...props }) => (
-  <Flex direction={'column'} align="start" {...props}>
+type InfoProps = { title: string; info: string; variant?: 'header' }
+const Info: FC<InfoProps & FlexProps> = ({ info, variant, title, ...props }) => (
+  <Flex direction={'column'} align={{ base: 'center', md: 'start' }} {...props}>
     <Text fontSize="xs" color={'text.low'}>
       {title}
     </Text>
-    <Text fontSize={{ base: 'xs', lg: 'sm' }} fontWeight={'bold'}>
+    <Text fontSize={{ base: variant ? 16 : 'xs', lg: 'sm' }} fontWeight={'bold'}>
       {info}
     </Text>
   </Flex>
@@ -146,14 +139,15 @@ const ImageContainer: FC<ImageContainerProps> = ({ period, src, children }) => (
   <Flex
     minW={'150px'}
     width={{ base: 'full', md: '150px' }}
-    px={4}
-    justify={{ base: 'space-around', md: 'center' }}
+    justify={{ base: 'space-between', md: 'center' }}
     shadow={'Down Medium'}
     align="center"
+    gap={2}
+    p={2}
     rounded={'2xl'}
   >
-    <Image ml={-5} boxSize={'70px'} src={src} alt={period} />
-    <Info title="Stake period" info={period} />
+    <Image w={'60px'} src={src} alt={period} />
+    <Info title="Stake period" info={period} variant={'header'} />
     {children}
   </Flex>
 )

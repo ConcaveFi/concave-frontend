@@ -1,10 +1,13 @@
-import { Flex } from '@concave/ui'
+import { ChevronRightIcon } from '@concave/icons'
+import { Button, Flex } from '@concave/ui'
 import { useBondSpotPrice, useRoi } from 'components/Bond/BondInfo'
 import { ComingSoom } from 'components/ComingSoon'
+import { ToggleContentButton } from 'components/ToggleContentButton'
 import { DataTable } from 'components/UserDashboard/DataTable'
 import { SnapshotLineChart } from 'components/UserDashboard/SnapshotLineChart'
 import { SnapshotTextCard } from 'components/UserDashboard/SnapshotTextCard'
 import { useCNVPrice } from 'hooks/useCNVPrice'
+import router from 'next/router'
 import { useState } from 'react'
 import { compactFormat } from 'utils/bigNumberMask'
 import { DataTableCard } from '../../DataTableCard'
@@ -12,7 +15,7 @@ import { useUserBondState } from '../../hooks/useUserBondState'
 import { SnapshotCard } from '../../SnapshotCard'
 import { SnapshotText } from '../../SnapshotText'
 import { bondchartdata } from '../dummyChartData'
-import { BondPositionCard } from './BondPositionCard'
+import { BondPositionCardMemo } from './BondPositionCard'
 
 export const BondingSnapshot = () => {
   const [isExpanded, setExpand] = useState(false)
@@ -22,8 +25,8 @@ export const BondingSnapshot = () => {
   const cnvPrice = useCNVPrice()
 
   return (
-    <Flex flexDir={'column'} w={'100%'} gap={{ base: 6 }} justifyContent={'space-between'}>
-      <SnapshotCard isExpanded={!isExpanded}>
+    <Flex flexDir={'column'} w={'100%'} h="100%" gap={4}>
+      <SnapshotCard show={!isExpanded}>
         <ComingSoom>
           <SnapshotLineChart data={bondchartdata} dataKeys={['CNV Price', 'Bond Price']} />
         </ComingSoom>
@@ -61,17 +64,27 @@ export const BondingSnapshot = () => {
         </SnapshotTextCard>
       </SnapshotCard>
       <DataTableCard
-        dataTableLabel={'Bonding Positions'}
-        route={'/smart-bonding'}
-        buttonLabel={'Dynamic Bonds'}
-        setExpand={setExpand}
-        isExpanded={isExpanded}
+        dataTableOptions={
+          <Flex gap={{ base: 2, sm: 4 }} w={'full'}>
+            <ToggleContentButton handle={setExpand} isExpanded={isExpanded} />
+            <Button
+              ml={'auto'}
+              size={'md'}
+              boxShadow={'Up Big'}
+              onClick={() => router.push('/smart-bonding')}
+              justifyContent={'space-between'}
+              rightIcon={<ChevronRightIcon />}
+            >
+              Dynamic Bonds
+            </Button>
+          </Flex>
+        }
         isLoading={userBondState.isLoading}
         hasPositions={userBondState.data?.positions.length}
       >
         <DataTable>
           {userBondState.data?.positions.map((position, i) => (
-            <BondPositionCard key={i} {...position} />
+            <BondPositionCardMemo key={i} {...position} />
           ))}
         </DataTable>
       </DataTableCard>

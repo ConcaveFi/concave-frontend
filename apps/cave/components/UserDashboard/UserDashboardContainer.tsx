@@ -8,7 +8,7 @@ import { UserDashboardContent } from './UserDashboardContent'
 import { UserDashboardNav } from './UserDashboardNav'
 import { UserDashboardWallet } from './UserDashboardWallet'
 
-export type UserDashboardContainerParams = { isLoading: boolean; data: { view: SnapshotOptions } }
+type UserDashboardContainerParams = { isLoading: boolean; data: { view: SnapshotOptions } }
 export const UserDashboardContainer = (props: UserDashboardContainerParams) => {
   const router = useRouter()
   const { isConnected } = useAccount()
@@ -23,6 +23,7 @@ export const UserDashboardContainer = (props: UserDashboardContainerParams) => {
       <Card variant={'primary'} w={'full'} borderRadius={{ base: '30px', lg: '60px' }}>
         <BlurComponent
           disabled={isConnected}
+          zIndex={2}
           overlayElement={
             <Text fontSize={'lg'} noOfLines={1} fontWeight={'bold'}>
               You are not connected
