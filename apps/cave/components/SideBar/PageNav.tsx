@@ -109,8 +109,6 @@ const ButtonContainer = ({ children, ...props }) => (
 )
 
 function PageNav() {
-  const { address } = useAccount()
-
   return (
     <Flex direction="column" position="relative" gap="10px" w="100%" pl="32px">
       <NotInteractableImage

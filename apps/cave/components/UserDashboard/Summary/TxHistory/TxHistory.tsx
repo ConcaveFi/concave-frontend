@@ -1,6 +1,7 @@
-import { Flex, Input, Link, Table, Tbody, Td, Th, Thead, Tr, useBreakpointValue } from '@concave/ui'
+import { Flex, Link, Table, Tbody, Td, Th, Thead, Tr, useBreakpointValue } from '@concave/ui'
 import {
   Column,
+  ColumnDef,
   ColumnFiltersState,
   createColumnHelper,
   flexRender,
@@ -21,10 +22,10 @@ export const TxHistory = () => {
   const [sorting, setSorting] = useState<SortingState>([])
   const { data, isLoading, isSuccess } = useUserTxHistoryState()
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-  const columns = useColumns()
+  const columns = useTxtColumns()
   const reactTable = useReactTable({
     data,
-    columns: [...columns],
+    columns,
     state: {
       sorting,
       columnFilters,
@@ -94,9 +95,8 @@ const TxTable = ({ reactTable }: { reactTable: TableTp<DashItem> }) => {
   )
 }
 
-const useColumns = () => {
+const useTxtColumns = () => {
   const columnSize = useBreakpointValue({ base: 3, sm: 4, md: 8 })
-
   const columnHelper = createColumnHelper<DashItem>()
   const columns = [
     columnHelper.accessor('timestamp', {
@@ -157,7 +157,6 @@ const useColumns = () => {
       cell: (info) => info.getValue().substring(0, 7),
       enableSorting: false,
     }),
-  ] as const
-
+  ] satisfies ColumnDef<DashItem, number | string>[]
   return columns.slice(0, columnSize)
 }

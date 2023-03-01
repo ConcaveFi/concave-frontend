@@ -13,7 +13,7 @@ import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId
 import { useQueryParams } from 'hooks/useQueryParams'
 import Router, { useRouter } from 'next/router'
 import { toAmount } from 'utils/toAmount'
-import { useAccount } from 'wagmi'
+import { useAccount, useNetwork } from 'wagmi'
 import { useQueryCurrencies } from '../hooks/useQueryCurrencies'
 import { NetworkMismatch } from '../NetworkMismatch'
 import { useAddLiquidityState } from './hooks/useAddLiquidityState'
@@ -179,7 +179,6 @@ function AddLiquidityContent({
 const useQueryModalControl = <T extends Record<string, string | number>>(defaultParams: T) => {
   const params = useQueryParams<T>()
   const isOpen = Object.keys(defaultParams).every((key) => params?.data?.[key])
-
   const currentQueryParams = Router.query
 
   const onClose = () => {
@@ -212,6 +211,7 @@ export const AddLiquidityModalButton = ({
   const addLiquidityDisclosure = useQueryModalControl({
     currency0: CNV[chainId].address,
     currency1: DAI[chainId].address,
+    chainId,
   })
 
   const queryCurrencies = useQueryCurrencies()
