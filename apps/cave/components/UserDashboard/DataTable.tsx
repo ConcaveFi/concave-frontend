@@ -1,4 +1,4 @@
-import { Box } from '@concave/ui'
+import { Box, VStack } from '@concave/ui'
 
 export function DataTable({
   children,
