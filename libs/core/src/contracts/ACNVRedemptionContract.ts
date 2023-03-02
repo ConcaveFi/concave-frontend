@@ -10,7 +10,10 @@ export class ACNVRedeemContract {
     if (!provider) {
       throw 'Provider is undefined for constructor of ACNVRedemptionContract'
     }
-    if (provider.network.chainId !== ChainId.ETHEREUM && provider.network.chainId !== ChainId.LOCALHOST) {
+    if (
+      provider.network.chainId !== ChainId.ETHEREUM &&
+      provider.network.chainId !== ChainId.LOCALHOST
+    ) {
       throw 'Unsupported network provider for ACNVRedeemContract constructor'
     }
     const chainID = this.provider.network.chainId

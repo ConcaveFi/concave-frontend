@@ -46,7 +46,7 @@ export const parser = (stakingV1Contract: StakingV1Contract, provider: BaseProvi
       reward,
       market,
       hash: log.txHash,
-      lockedUntil: log.lockedUntil
+      lockedUntil: log.lockedUntil,
     })
   }
   return { stakingV1ToStakingPosition, cavemartToMarket }

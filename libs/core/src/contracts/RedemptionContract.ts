@@ -16,11 +16,7 @@ export class RedemptionContract {
     if (!provider) {
       throw 'Provider is undefined to constructor of BBTRedemptionContractV2'
     }
-    this.contract = new Contract(
-      address,
-      ABI,
-      provider,
-    )
+    this.contract = new Contract(address, ABI, provider)
   }
 
   public async redeemable(address: string): Promise<BigNumber> {

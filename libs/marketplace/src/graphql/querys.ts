@@ -1,4 +1,3 @@
-
 import { chain } from '@wagmi/core'
 import { Address } from '../entities'
 
@@ -100,7 +99,9 @@ const fetchAllCavemartQuery = `query ListCavemart {
   }
 }`
 
-const sellPositionsHistoryByAddressQuery = (address: string) => `query LIST_SELL_POSITIONS_BY_ADDRESS_HISTORY {
+const sellPositionsHistoryByAddressQuery = (
+  address: string,
+) => `query LIST_SELL_POSITIONS_BY_ADDRESS_HISTORY {
   logStakingV1(
     distinct_on: [tokenID]
     order_by: [{tokenID: asc}, {txBlockNumber: desc}, {created_at: desc}]
@@ -116,7 +117,9 @@ const sellPositionsHistoryByAddressQuery = (address: string) => `query LIST_SELL
   }
 }`
 
-const getReceivedTokensHistoryByAddressQuery = (address: string) => `query LIST_RECEIVED_POSITIONS_BY_ADDRESS_HISTORY {
+const getReceivedTokensHistoryByAddressQuery = (
+  address: string,
+) => `query LIST_RECEIVED_POSITIONS_BY_ADDRESS_HISTORY {
   logStakingV1(
     distinct_on: [tokenID]
     order_by: [{tokenID: asc}, {txBlockNumber: desc}, {created_at: desc}]
@@ -136,14 +139,20 @@ const getReceivedTokensHistoryByAddressQuery = (address: string) => `query LIST_
 export const listReceivedTokensHistoryByAddress = (chainId: number, address: string) => {
   return fetcher<{ data: { logStakingV1: (LogStakingV1 & { marketplace: never })[] } }>(
     getHasuraEndpoint({ chainId }),
-    { method: 'POST', body: JSON.stringify({ query: getReceivedTokensHistoryByAddressQuery(address), }) },
+    {
+      method: 'POST',
+      body: JSON.stringify({ query: getReceivedTokensHistoryByAddressQuery(address) }),
+    },
   )
 }
 
 export const listSellPositionsHistoryByAddressQuery = (chainId: number, address: string) => {
   return fetcher<{ data: { logStakingV1: (LogStakingV1 & { marketplace: never })[] } }>(
     getHasuraEndpoint({ chainId }),
-    { method: 'POST', body: JSON.stringify({ query: sellPositionsHistoryByAddressQuery(address), }) },
+    {
+      method: 'POST',
+      body: JSON.stringify({ query: sellPositionsHistoryByAddressQuery(address) }),
+    },
   )
 }
 
@@ -160,26 +169,25 @@ const getHasuraEndpoint = ({ chainId = chain.mainnet.id }) => {
 }
 
 export const fetchUsersPositions = (chainId: number) => {
-  return fetcher<{ data: { logStakingV1: LogStakingV1[] } }>(
-    getHasuraEndpoint({ chainId }),
-    { method: 'POST', body: JSON.stringify({ query: fetchUserPositionsQuery, }) },
-  )
+  return fetcher<{ data: { logStakingV1: LogStakingV1[] } }>(getHasuraEndpoint({ chainId }), {
+    method: 'POST',
+    body: JSON.stringify({ query: fetchUserPositionsQuery }),
+  })
 }
 
 export const listCavemartListingDocuments = (chainId: number) => {
-  return fetcher<{ data: { logStakingV1: LogStakingV1[] } }>(
-    getHasuraEndpoint({ chainId }),
-    { method: 'POST', body: JSON.stringify({ query: listCavemartListingDocumentsQuery, }) },
-  )
+  return fetcher<{ data: { logStakingV1: LogStakingV1[] } }>(getHasuraEndpoint({ chainId }), {
+    method: 'POST',
+    body: JSON.stringify({ query: listCavemartListingDocumentsQuery }),
+  })
 }
 
 export const fetchAllCavemart = (chainId: number) => {
-  return fetcher<{ data: { logStakingV1: LogStakingV1[] } }>(
-    getHasuraEndpoint({ chainId }),
-    { method: 'POST', body: JSON.stringify({ query: fetchAllCavemartQuery, }) },
-  )
+  return fetcher<{ data: { logStakingV1: LogStakingV1[] } }>(getHasuraEndpoint({ chainId }), {
+    method: 'POST',
+    body: JSON.stringify({ query: fetchAllCavemartQuery }),
+  })
 }
-
 
 export interface LogStakingV1 {
   to: string

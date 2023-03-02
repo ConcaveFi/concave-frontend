@@ -25,7 +25,7 @@ const useErrorHandle = () => {
   const [extra, setExtraInfo] = useState<Record<string, string>>()
   const onOpen = (e: TransactionError, extra?: Record<string, string>) => {
     // 4001 - UserRejectedRequestError
-    if (typeof e === 'object' && 'code' in e && e.code === 4001 ) return 
+    if (typeof e === 'object' && 'code' in e && e.code === 4001) return
     const { host, pathname } = location
     setError(e)
     setExtraInfo({ ...extra, host, pathname })

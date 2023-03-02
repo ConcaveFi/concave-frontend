@@ -48,7 +48,6 @@ export const BBTCNV: TokenMap = makeTokenMap(
   'Concave Presale Token (BBT)',
 )
 
-
 export const ACNV: TokenMap = makeTokenMap(
   getAddressesChains(ACNV_ADDRESS),
   ACNV_ADDRESS,

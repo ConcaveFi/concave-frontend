@@ -2,25 +2,27 @@ import { BaseProvider } from '@ethersproject/providers'
 import { StakingV1Contract } from './contract'
 import { StakingPool, stakingPools } from './entities'
 import { parser } from './graphql/parser'
-import { fetchAllCavemart, fetchUsersPositions, listCavemartListingDocuments, listReceivedTokensHistoryByAddress, listSellPositionsHistoryByAddressQuery, LogStakingV1, Marketplace } from './graphql/querys'
+import {
+  fetchAllCavemart,
+  fetchUsersPositions,
+  listCavemartListingDocuments,
+  listReceivedTokensHistoryByAddress,
+  listSellPositionsHistoryByAddressQuery,
+  LogStakingV1,
+  Marketplace,
+} from './graphql/querys'
 
-export const listUserHistory = ({
-  chainId,
-  address,
-}: {
-  address: string
-  chainId: number
-}) => {
-  return ([
+export const listUserHistory = ({ chainId, address }: { address: string; chainId: number }) => {
+  return [
     listReceivedTokensHistoryByAddress(chainId, address),
-    listSellPositionsHistoryByAddressQuery(chainId, address)
-  ]) as const
+    listSellPositionsHistoryByAddressQuery(chainId, address),
+  ] as const
 }
 
 export const listPositions = async ({
   provider,
   owner,
-  excludeRedeemed
+  excludeRedeemed,
 }: {
   owner?: string
   excludeRedeemed?: boolean

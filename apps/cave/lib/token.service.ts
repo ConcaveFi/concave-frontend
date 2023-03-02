@@ -33,7 +33,6 @@ const tokenToCoingeckId = (currency: Currency) => {
 }
 
 class TokenService {
-  constructor() { }
   async getTokenPrice(currency: Currency) {
     const coingecko = tokenToCoingeckId(currency)
     if (!coingecko) {
