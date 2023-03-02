@@ -25,7 +25,7 @@ export const StakeCard = ({ status, poolId, stakeData }: StakeCardProps) => {
   if (!stakingV1Pools?.balance)
     return (
       <HStack justifyContent={`space-around`} flex={1}>
-        <Loading size="sm" isLoading={true} />
+        <Loading />
       </HStack>
     )
 

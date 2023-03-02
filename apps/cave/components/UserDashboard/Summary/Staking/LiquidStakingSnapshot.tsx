@@ -159,12 +159,11 @@ export const LiquidStakingSnapshot = () => {
               ml={'auto'}
               size={'md'}
               boxShadow={'Up Big'}
-              onClick={() => router.push('/marketplace')}
+              onClick={() => router.push('/liquid-staking')}
               justifyContent={'space-between'}
-              leftIcon={<SellIcon />}
               rightIcon={<ChevronRightIcon />}
             >
-              Marketplace
+              Stake
             </Button>
           </Flex>
         }

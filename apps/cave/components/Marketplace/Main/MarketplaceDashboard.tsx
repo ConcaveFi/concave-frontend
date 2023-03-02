@@ -86,17 +86,14 @@ export const MarketplaceDashboard = ({
       <Flex flexGrow={100} w="full" shadow="down" rounded={'16px'} p={2} overflow="hidden">
         <Flex
           onScroll={() => setActivePosition('')}
-          isLoading={isFetching}
           apply="scrollbar.big"
           textAlign={`center`}
           overflowY={'scroll'}
           rounded={'inherit'}
           direction="column"
           justify="start"
-          as={Loading}
+          as={isFetching ? Loading : Flex}
           h={'auto'}
-          rLabel=""
-          size="md"
           w="full"
           gap={4}
           p={2}

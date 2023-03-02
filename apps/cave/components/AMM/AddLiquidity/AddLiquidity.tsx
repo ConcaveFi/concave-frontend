@@ -206,6 +206,32 @@ export const AddLiquidityModalButton = ({
   label = 'Add liquidity',
   ...buttonProps
 }: { label?: string; pair?: Pair } & ButtonProps) => {
+  const { isDisconnected } = useAccount()
+  if (isDisconnected) return <ConnectButton />
+  return (
+    <AddLiquidityModal>
+      {({ onOpen }) => {
+        return (
+          <Button
+            onClick={onOpen}
+            variant="primary"
+            size="medium"
+            fontFamily="heading"
+            w="100%"
+            {...buttonProps}
+          >
+            Add liquidity
+          </Button>
+        )
+      }}
+    </AddLiquidityModal>
+  )
+}
+
+export const AddLiquidityModal = ({
+  pair,
+  children,
+}: { pair?: Pair } & { children: ({ onOpen }) => JSX.Element }) => {
   const chainId = useCurrentSupportedNetworkId()
   const { isDisconnected } = useAccount()
   const addLiquidityDisclosure = useQueryModalControl({
@@ -222,17 +248,7 @@ export const AddLiquidityModalButton = ({
   if (isDisconnected) return <ConnectButton />
   return (
     <>
-      <Button
-        onClick={addLiquidityDisclosure.onOpen}
-        variant="primary"
-        size="medium"
-        fontFamily="heading"
-        w="100%"
-        {...buttonProps}
-      >
-        {label}
-      </Button>
-
+      {children({ onOpen: addLiquidityDisclosure.onOpen })}
       <Modal
         bluryOverlay={true}
         title="Add liquidity"

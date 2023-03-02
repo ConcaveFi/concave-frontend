@@ -77,7 +77,7 @@ export const MarketplaceActivityCard = () => {
           label="Sale"
         />
       </HStack>
-      <Loading size={'md'} label={'Loading activities'} isLoading={isLoading} />
+      {isLoading && <Loading message={'Loading activities'} />}
       <VStack
         backdropFilter="blur(8px)"
         pos="relative"
