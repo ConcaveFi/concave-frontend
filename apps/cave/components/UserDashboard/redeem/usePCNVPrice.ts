@@ -1,8 +1,4 @@
-import {
-  CNV,
-  Currency,
-  CurrencyAmount, PCNV, Percent
-} from '@concave/core'
+import { CNV, Currency, CurrencyAmount, PCNV, Percent } from '@concave/core'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useMemo } from 'react'
 import { useQuery } from 'react-query'
@@ -10,16 +6,26 @@ import { useToken } from 'wagmi'
 
 const PCNV_INITIAL_SUPPLY = 33300000n * 10n ** 18n
 
-const useDefaultCNVRedenption = <C1 extends Currency, C2 extends Currency>(currencyOut: C1, currencyIn: C2) => {
+const useDefaultCNVRedenption = <C1 extends Currency, C2 extends Currency>(
+  currencyOut: C1,
+  currencyIn: C2,
+) => {
   const calculateRedemptionAmount = (amountOut: CurrencyAmount<C1>) => {
-    return CurrencyAmount.fromFractionalAmount(currencyIn, amountOut.numerator, amountOut.denominator)
+    return CurrencyAmount.fromFractionalAmount(
+      currencyIn,
+      amountOut.numerator,
+      amountOut.denominator,
+    )
   }
   return useQuery(['CNV_DEFAULT_REDENPTION'], async () => {
     return { calculateRedemptionAmount } as const
   })
 }
 
-const usePCNVRedenption = <C1 extends Currency, C2 extends Currency>(currencyOut: C1, currencyIn: C2) => {
+const usePCNVRedenption = <C1 extends Currency, C2 extends Currency>(
+  currencyOut: C1,
+  currencyIn: C2,
+) => {
   const chainId = useCurrentSupportedNetworkId()
   const { data, ...queryInfo } = useToken({
     address: CNV[chainId].address,
@@ -37,10 +43,12 @@ const usePCNVRedenption = <C1 extends Currency, C2 extends Currency>(currencyOut
   }, [data])
 }
 
-export const useCalculateRedemptionAmount = <C1 extends Currency, C2 extends Currency>(currencyOut: C1, currencyIn: C2) => {
+export const useCalculateRedemptionAmount = <C1 extends Currency, C2 extends Currency>(
+  currencyOut: C1,
+  currencyIn: C2,
+) => {
   const defaultStrategy = useDefaultCNVRedenption(currencyOut, currencyIn)
   const pncvStrategy = usePCNVRedenption(currencyOut, currencyIn)
   if (currencyOut.wrapped.address === PCNV[currencyOut.chainId].address) return pncvStrategy
   return defaultStrategy
 }
-

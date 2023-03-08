@@ -11,11 +11,7 @@ import { BondInfo, UserBondPositionInfo } from './BondInfo'
 import { redeemBondBatch } from './BondState'
 import { Redeem } from './Redeem'
 import { SelectedBondType } from './SelectedBondType'
-
-const spin = keyframes({
-  '0%': { transform: 'rotate(0deg)' },
-  '100%': { transform: 'rotate(360deg)' },
-})
+import { Loading } from 'components/Loading'
 
 interface BondPanelProps {
   userAddress: string
@@ -42,7 +38,6 @@ export function BondPanel(props: BondPanelProps) {
   const buttonDisabled =
     redeemBond.isWaitingForConfirmation || redeemBond.isWaitingTransactionReceipt
   const isRedeeming = redeemBond.isWaitingForConfirmation || redeemBond.isWaitingTransactionReceipt
-  const spinnerStyles = { animation: `${spin} 2s linear infinite`, size: 'sm' }
 
   return (
     <Card px={{ base: 0, md: 6 }} variant="secondary" height="386px" align="center" w="full">
@@ -68,16 +63,7 @@ export function BondPanel(props: BondPanelProps) {
             Wallet not connected
           </Box>
         ) : props.isLoadingBondSigma ? (
-          <Flex
-            position={'relative'}
-            flexDirection="column"
-            my="auto"
-            alignItems={'center'}
-            gap={5}
-          >
-            Checking positions...
-            <SpinIcon __css={spinnerStyles} width={'10'} height={'10'} />
-          </Flex>
+          <Loading message="Checking positions..." />
         ) : (
           ''
         )}

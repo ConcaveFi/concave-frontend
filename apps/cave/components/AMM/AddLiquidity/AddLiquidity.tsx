@@ -13,7 +13,7 @@ import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId
 import { useQueryParams } from 'hooks/useQueryParams'
 import Router, { useRouter } from 'next/router'
 import { toAmount } from 'utils/toAmount'
-import { useAccount } from 'wagmi'
+import { useAccount, useNetwork } from 'wagmi'
 import { useQueryCurrencies } from '../hooks/useQueryCurrencies'
 import { NetworkMismatch } from '../NetworkMismatch'
 import { useAddLiquidityState } from './hooks/useAddLiquidityState'
@@ -179,15 +179,12 @@ function AddLiquidityContent({
 const useQueryModalControl = <T extends Record<string, string | number>>(defaultParams: T) => {
   const params = useQueryParams<T>()
   const isOpen = Object.keys(defaultParams).every((key) => params?.data?.[key])
-
-  console.log('isOpen', isOpen)
   const currentQueryParams = Router.query
 
   const onClose = () => {
     const cleanQueryParams = Object.entries(currentQueryParams)
       .filter(([key]) => defaultParams[key] === undefined)
       .reduce((prev, [key, value]) => ({ ...prev, [key]: value }), {})
-    console.log(cleanQueryParams)
     Router.push({ query: cleanQueryParams }, undefined, { shallow: true })
   }
 
@@ -209,11 +206,38 @@ export const AddLiquidityModalButton = ({
   label = 'Add liquidity',
   ...buttonProps
 }: { label?: string; pair?: Pair } & ButtonProps) => {
+  const { isDisconnected } = useAccount()
+  if (isDisconnected) return <ConnectButton />
+  return (
+    <AddLiquidityModal>
+      {({ onOpen }) => {
+        return (
+          <Button
+            onClick={onOpen}
+            variant="primary"
+            size="medium"
+            fontFamily="heading"
+            w="100%"
+            {...buttonProps}
+          >
+            Add liquidity
+          </Button>
+        )
+      }}
+    </AddLiquidityModal>
+  )
+}
+
+export const AddLiquidityModal = ({
+  pair,
+  children,
+}: { pair?: Pair } & { children: ({ onOpen }) => JSX.Element }) => {
   const chainId = useCurrentSupportedNetworkId()
   const { isDisconnected } = useAccount()
   const addLiquidityDisclosure = useQueryModalControl({
     currency0: CNV[chainId].address,
     currency1: DAI[chainId].address,
+    chainId,
   })
 
   const queryCurrencies = useQueryCurrencies()
@@ -224,17 +248,7 @@ export const AddLiquidityModalButton = ({
   if (isDisconnected) return <ConnectButton />
   return (
     <>
-      <Button
-        onClick={addLiquidityDisclosure.onOpen}
-        variant="primary"
-        size="medium"
-        fontFamily="heading"
-        w="100%"
-        {...buttonProps}
-      >
-        {label}
-      </Button>
-
+      {children({ onOpen: addLiquidityDisclosure.onOpen })}
       <Modal
         bluryOverlay={true}
         title="Add liquidity"

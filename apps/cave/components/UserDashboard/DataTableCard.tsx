@@ -1,4 +1,5 @@
-import { Card, Flex, HStack, Spinner } from '@concave/ui'
+import { Card, HStack } from '@concave/ui'
+import { Loading } from 'components/Loading'
 import { NoPositions } from './Summary/NoPositions'
 
 export function DataTableCard({
@@ -17,13 +18,5 @@ export function DataTableCard({
       <HStack>{dataTableOptions}</HStack>
       {isLoading ? <Loading /> : hasPositions ? children : <NoPositions />}
     </Card>
-  )
-}
-
-const Loading = () => {
-  return (
-    <Flex w={'full'} justifyContent={'center'} align={'center'} h={'full'}>
-      <Spinner />
-    </Flex>
   )
 }

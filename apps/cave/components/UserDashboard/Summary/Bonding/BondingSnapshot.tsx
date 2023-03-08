@@ -48,19 +48,6 @@ export const BondingSnapshot = () => {
             title={'CNV Owed'}
             data={`${compactFormat(userBondState.data?.owed)} CNV`}
           />
-          <Flex
-            userSelect={'none'}
-            justifyContent={'center'}
-            alignItems={'center'}
-            alignSelf={'center'}
-            height={'50px'}
-            width={'145px'}
-            shadow={'down'}
-            borderRadius={'3xl'}
-            cursor={'not-allowed'}
-          >
-            Redeem All
-          </Flex>
         </SnapshotTextCard>
       </SnapshotCard>
       <DataTableCard

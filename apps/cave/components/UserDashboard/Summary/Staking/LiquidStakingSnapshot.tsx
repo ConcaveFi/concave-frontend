@@ -142,10 +142,6 @@ export const LiquidStakingSnapshot = () => {
                 }`}
               />
               <SnapshotText title={'Airdrop share'} data={airdropShare + '%'} />
-              <SnapshotText
-                title="Airdrop"
-                data={<SnapshotButton claimed={airdropOverview.data.overview.claimed} />}
-              />
             </>
           ) : (
             <Spinner />
@@ -163,12 +159,11 @@ export const LiquidStakingSnapshot = () => {
               ml={'auto'}
               size={'md'}
               boxShadow={'Up Big'}
-              onClick={() => router.push('/marketplace')}
+              onClick={() => router.push('/liquid-staking')}
               justifyContent={'space-between'}
-              leftIcon={<SellIcon />}
               rightIcon={<ChevronRightIcon />}
             >
-              Marketplace
+              Stake
             </Button>
           </Flex>
         }
@@ -191,27 +186,6 @@ export const LiquidStakingSnapshot = () => {
             ))}
         </DataTable>
       </DataTableCard>
-    </Flex>
-  )
-}
-
-const SnapshotButton = ({ claimed }) => {
-  return (
-    <Flex
-      textColor={claimed ? 'text.low' : ''}
-      justifyContent={'center'}
-      alignItems={'center'}
-      alignSelf={'center'}
-      height={'40px'}
-      width={'100%'}
-      px={4}
-      shadow={claimed ? 'Down Big' : 'Up Big'}
-      _active={{ shadow: 'Down Big' }}
-      borderRadius={'3xl'}
-      cursor={claimed ? 'default' : 'pointer'}
-      userSelect={'none'}
-    >
-      {claimed ? 'Claimed' : 'Claim'}
     </Flex>
   )
 }

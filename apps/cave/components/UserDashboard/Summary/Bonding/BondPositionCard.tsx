@@ -25,7 +25,6 @@ export const BondPositionCard = (props: BondPosition) => {
       <PopoverTrigger>
         <Flex
           w={'full'}
-          // minH="200px"
           rounded={'2xl'}
           bg="bg.primary"
           my={2}
@@ -94,7 +93,7 @@ const ImageContainer = () => (
     align="center"
     rounded={'2xl'}
   >
-    <Image ml={-5} boxSize={'70px'} src={`/assets/marketplace/12mposition.png`} />
+    <Image boxSize={'70px'} src={`/assets/marketplace/12mposition.png`} />
   </Flex>
 )
 

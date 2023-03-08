@@ -25,12 +25,11 @@ import { useQuery } from 'react-query'
 import { compactFormat } from 'utils/bigNumberMask'
 import { useAccount, useProvider } from 'wagmi'
 import { PositionsState } from './hooks/usePositionsState'
-
 export const MyPositions = ({ state }: { state: PositionsState }) => {
   const router = useRouter()
   const { loading, error, setView, view, pairs, user } = state
   if (loading) {
-    return <Loading size="lg" isLoading={true} label={loading} />
+    return <Loading message={loading} />
   }
   if (error) {
     return <Text>error</Text>
@@ -87,20 +86,42 @@ const LiquidityOptionButton = ({ active = false, onClick = () => {}, label = '' 
   )
 }
 
-export const PairsAccordion = ({ pairs, maxH }: { pairs: Pair[]; maxH?: string }) => {
+export const PairsAccordion = ({
+  pairs,
+  maxH,
+  isLoading,
+  isFetching,
+}: {
+  pairs: Pair[]
+  maxH?: string
+  isLoading?: boolean
+  isFetching?: boolean
+}) => {
   const { address } = useAccount()
+  if (isLoading) {
+    return <Loading message="Loading positions" />
+  }
+  if (isFetching) {
+    return <Loading message="Updating positions" />
+  }
 
   if (!pairs.length) {
     const { label, Button } = address
       ? {
           label: 'You are not in any pools',
-          Button: <AddLiquidityModalButton />,
+          Button: <></>,
         }
       : { label: 'You are disconnected.', Button: <ConnectButton /> }
 
     return (
-      <Box borderRadius={'2xl'} p={{ base: 4, sm: 6 }} shadow={'down'}>
-        <Flex gap={4} direction={'column'} justify="center" align={'center'}>
+      <Box borderRadius={'2xl'} p={{ base: 4, sm: 6 }} h={'full'} shadow={'down'}>
+        <Flex
+          gap={4}
+          direction={'column'}
+          justifyContent={'space-around'}
+          h={'full'}
+          align={'center'}
+        >
           <Text>{label}</Text>
           {Button}
         </Flex>
@@ -154,7 +175,7 @@ export const LiquidityPoolPainel = (props: LPPosition) => {
   if (userBalance.isLoading || pairData.isLoading || !userBalance.data) {
     return (
       <AccordionPanel>
-        <Loading isLoading size="sm" />
+        <Loading />
       </AccordionPanel>
     )
   }
