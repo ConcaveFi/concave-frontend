@@ -40,7 +40,7 @@
     "@uauth/js": "^2.4.0",
     "@unstoppabledomains/resolution": "^8.5.0",
     "@wagmi/core": "^0.9.5",
-    "@walletconnect/ethereum-provider": "^1.8.0",
+    "@walletconnect/ethereum-provider": "^2.5.2",
     "copy-to-clipboard": "^3.3.3",
     "date-fns": "^2.29.3",
     "debounce": "^1.2.1",
