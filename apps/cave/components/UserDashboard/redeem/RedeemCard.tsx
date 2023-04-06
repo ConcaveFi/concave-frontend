@@ -1,6 +1,16 @@
 import { Token } from '@concave/core'
 import { ExpandArrowIcon } from '@concave/icons'
-import { Box, Button, Card, Flex, HStack, Text, VStack } from '@concave/ui'
+import {
+  Box,
+  BoxProps,
+  Button,
+  Card,
+  Flex,
+  HStack,
+  Text,
+  useBreakpointValue,
+  VStack,
+} from '@concave/ui'
 import { TransactionSubmittedDialog } from 'components/TransactionDialog/TransactionSubmittedDialog'
 
 import { CustomRecipient } from 'components/AMM'
@@ -57,7 +67,7 @@ export const RedeemCard = ({
   redeemTransaction,
   redeemMax,
   ...boxProps
-}: RedeemCard<Token, Token>) => {
+}: RedeemCard<Token, Token> & BoxProps) => {
   const {
     immutableAmount,
     amountIn,
@@ -66,12 +76,18 @@ export const RedeemCard = ({
     setTo,
   } = { ...redeemFields, ...redeemStatus }
   const customRecipient = useCustomRecipient()
+  const isMobileLayout = useBreakpointValue({ base: true, sm: false })
 
   useEffect(() => {
     setTo?.(customRecipient.address)
   }, [customRecipient.address])
 
   const outputFiat = useFiatValue(amountIn)
+
+  if (redeemStatus?.redeemable.equalTo(0) && isMobileLayout) {
+    return <></>
+  }
+
   return (
     <Box {...boxProps}>
       <Card

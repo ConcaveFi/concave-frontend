@@ -17,7 +17,14 @@ export function useRedeemable({
 }) {
   const chainId = useCurrentSupportedNetworkId()
   const provider = useProvider()
-  return useQuery(['redeemable', contract, address, chainId], async () => {
+  return useQuery(
+    ['redeemable', contract, address, chainId],
+    redeemable(contract, provider, address, token),
+  )
+}
+
+function redeemable(contract: string, provider, address: string, token: Token) {
+  return async () => {
     const redemptionContract = new RedemptionContract(contract, provider)
     return Promise.all([
       redemptionContract.redeemable(address),
@@ -30,7 +37,7 @@ export function useRedeemable({
         vestedPercent,
       }
     })
-  })
+  }
 }
 
 export function useRedeemableACNV({ address }: { address: Address }) {

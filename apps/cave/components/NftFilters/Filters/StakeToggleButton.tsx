@@ -1,12 +1,11 @@
 import { Flex, Text } from '@concave/ui'
-import { stakingPools } from '@concave/marketplace'
+import { StakingPool, stakingPools } from '@concave/marketplace'
 import { ToggleButton } from 'components/ToggleButton'
-import { StakePoolFilterEnum } from './hooks/useFilterByStakePool'
 type StakeToggleButton = {
-  filter: StakePoolFilterEnum
+  filter: StakingPool
   enabled: boolean
-  onEnableFilter: (filter: StakePoolFilterEnum) => void
-  onDisableFilter: (filter: StakePoolFilterEnum) => void
+  onEnableFilter: (filter: StakingPool) => void
+  onDisableFilter: (filter: StakingPool) => void
 }
 
 export const StakeToggleButton: React.FC<StakeToggleButton> = ({
@@ -18,7 +17,7 @@ export const StakeToggleButton: React.FC<StakeToggleButton> = ({
   return (
     <Flex textColor={'white'} fontWeight="bold" width={'full'} justify="space-between" px={4}>
       <Text textAlign={'end'} width="70px">
-        {stakingPools[filter].days + ' days'}
+        {filter.days + ' days'}
       </Text>
       <ToggleButton
         enabled={enabled}

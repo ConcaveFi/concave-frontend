@@ -9,13 +9,13 @@ import { usePositionDiscount } from 'components/StakingPositions/LockPosition/Ma
 import { differenceInDays, format, formatDistanceToNowStrict } from 'date-fns'
 import { useTransaction } from 'hooks/useTransaction'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { concaveProvider } from 'lib/providers'
 import { useMemo } from 'react'
 import { compactFormat, formatFixed } from 'utils/bigNumberMask'
-import { useAccount, useSigner } from 'wagmi'
+import { useAccount, useProvider, useSigner } from 'wagmi'
 import { ConfirmPurchaseModal } from './ConfirmBuy'
+import { poolImages } from 'utils/poolImages'
 
-type MarketplacePositionProps = { stakingPosition: StakingPosition; isActive: boolean } & FlexProps
+type MarketplacePositionProps = { stakingPosition: StakingPosition; isActive?: boolean } & FlexProps
 export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({
   stakingPosition,
   isActive,
@@ -95,12 +95,6 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({
   )
 }
 
-const stakeImage = {
-  0: '12mposition.png',
-  1: '6mposition.png',
-  2: '3mposition.png',
-  3: '1mposition.png',
-}
 type ImageContainerProps = { stakingPosition: StakingPosition } & FlexProps
 const ImageContainer: React.FC<ImageContainerProps> = ({ stakingPosition, ...flexProps }) => {
   const label = `${stakingPosition.pool.days} Days`
@@ -118,7 +112,7 @@ const ImageContainer: React.FC<ImageContainerProps> = ({ stakingPosition, ...fle
           width={'auto'}
           height={{ base: '90px', lg: '70px' }}
           alt={`Image of stake ${label}`}
-          src={`/assets/marketplace/${stakeImage[stakingPosition.poolID]}`}
+          src={`/assets/marketplace/${poolImages[stakingPosition.poolID]}`}
         />
       </Flex>
       <Info info={`${label}`} title="Stake period" />
@@ -138,9 +132,10 @@ const BuyContainer = ({ stakingPosition, active = false }: BuyContainerProps) =>
     stakingPosition.market.startPrice.toString(),
   )
   const { data: signer } = useSigner()
+  const provider = useProvider()
   const swap = useTransaction(
     async () => {
-      const contract = new FixedOrderMarketContract(concaveProvider(stakingPosition.chainId))
+      const contract = new FixedOrderMarketContract(provider)
       return contract.swap(signer, stakingPosition.market)
     },
     { meta: { type: 'offer marketplace', tokenId: +tokenId.toString() }, onError: console.error },

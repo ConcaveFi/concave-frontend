@@ -1,7 +1,7 @@
 import { STAKING_CONTRACT } from '@concave/core'
 import { BaseProvider } from '@ethersproject/providers'
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
-import { TransactionResponse } from "@ethersproject/abstract-provider";
+import { TransactionResponse } from '@ethersproject/abstract-provider'
 import { Contract } from '@ethersproject/contracts'
 import { PoolState, Position, StakingReward } from '../entities'
 import { StakingV1Abi } from './StakingV1Abi'

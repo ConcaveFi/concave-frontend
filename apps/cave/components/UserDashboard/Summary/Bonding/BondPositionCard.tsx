@@ -16,6 +16,7 @@ import { formatDistanceToNow } from 'date-fns'
 import { FC } from 'react'
 import { compactFormat } from 'utils/bigNumberMask'
 import type { BondPosition } from '../../../UserDashboard/hooks/useUserBondState'
+import { memo } from 'react'
 
 export const BondPositionCard = (props: BondPosition) => {
   const { isOpen, onClose, onOpen } = useDisclosure()
@@ -24,7 +25,6 @@ export const BondPositionCard = (props: BondPosition) => {
       <PopoverTrigger>
         <Flex
           w={'full'}
-          // minH="200px"
           rounded={'2xl'}
           bg="bg.primary"
           my={2}
@@ -66,6 +66,11 @@ export const BondPositionCard = (props: BondPosition) => {
   )
 }
 
+export const BondPositionCardMemo = memo(
+  BondPositionCard,
+  (propa, propb) => JSON.stringify(propa) === JSON.stringify(propb),
+)
+
 type InfoProps = { title: string; info: string }
 const Info: FC<InfoProps & FlexProps> = ({ info, title, ...props }) => (
   <Flex direction={'column'} align="start" {...props}>
@@ -88,7 +93,7 @@ const ImageContainer = () => (
     align="center"
     rounded={'2xl'}
   >
-    <Image ml={-5} boxSize={'70px'} src={`/assets/marketplace/12mposition.png`} />
+    <Image boxSize={'70px'} src={`/assets/marketplace/12mposition.png`} />
   </Flex>
 )
 

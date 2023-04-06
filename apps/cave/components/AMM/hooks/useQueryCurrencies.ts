@@ -1,12 +1,12 @@
 import { ChainId, Currency, NATIVE } from '@concave/core'
 import { Fetcher } from '@concave/gemswap-sdk'
+import { Provider } from '@wagmi/core'
 import { isAddress } from 'ethers/lib/utils'
-import { concaveProvider } from 'lib/providers'
 import Router, { useRouter } from 'next/router'
 import { useCallback, useRef } from 'react'
 import { useQuery, useQueryClient } from 'react-query'
 import { getQueryValue } from 'utils/getQueryValue'
-import { useNetwork } from 'wagmi'
+import { useNetwork, useProvider } from 'wagmi'
 
 const getAddressOrSymbol = (c: Currency) => {
   if (!c) return null
@@ -16,10 +16,10 @@ const getAddressOrSymbol = (c: Currency) => {
 const fetchTokenOrNativeData = (
   addressOrSymbol: string,
   chainId: ChainId,
+  provider: Provider,
 ): Promise<Currency> | Currency => {
   if (!addressOrSymbol) return
-  if (isAddress(addressOrSymbol))
-    return Fetcher.fetchTokenData(addressOrSymbol, concaveProvider(+chainId))
+  if (isAddress(addressOrSymbol)) return Fetcher.fetchTokenData(addressOrSymbol, provider)
   if (NATIVE[chainId].symbol === addressOrSymbol) return NATIVE[chainId]
   return undefined
 }
@@ -55,17 +55,19 @@ export const useQueryCurrencies = () => {
 
   const queryHasCurrency = query.currency0 || query.currency1
 
+  const provider = useProvider()
+
   const { data: currencies, isFetching } = useQuery<[Currency, Currency]>(
     getQueryCurrenciesKey(chainId),
     async () => {
       const currency0 = getQueryValue(query, 'currency0')
       const currency1 = getQueryValue(query, 'currency1')
       if (currency0 === currency1)
-        return [await fetchTokenOrNativeData(currency0, chainId), undefined]
+        return [await fetchTokenOrNativeData(currency0, chainId, provider), undefined]
       // we're letting the token fetcher do the caching
       return [
-        await fetchTokenOrNativeData(currency0, chainId),
-        await fetchTokenOrNativeData(currency1, chainId),
+        await fetchTokenOrNativeData(currency0, chainId, provider),
+        await fetchTokenOrNativeData(currency1, chainId, provider),
       ]
     },
     {

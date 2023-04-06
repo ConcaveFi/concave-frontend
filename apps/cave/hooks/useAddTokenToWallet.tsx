@@ -1,6 +1,6 @@
 import { CHAIN_NAME, Erc20Abi } from '@concave/core'
 import { Contract } from 'ethers'
-import { concaveProvider } from 'lib/providers'
+import { concaveProvider } from 'contexts/Wagmi/WagmiContext'
 import { useEffect, useState } from 'react'
 
 interface injectedToken {
@@ -44,7 +44,7 @@ const useAddTokenToWallet = ({ tokenAddress, tokenChainId, tokenImage }: injecte
         if (typeof window.ethereum === 'undefined') return
         try {
           const getToken = async () => {
-            const fetcher = concaveProvider(tokenChainId)
+            const fetcher = concaveProvider({ chainId: tokenChainId })
             const contractInstance = new Contract(tokenAddress, Erc20Abi, fetcher)
             return contractInstance
           }

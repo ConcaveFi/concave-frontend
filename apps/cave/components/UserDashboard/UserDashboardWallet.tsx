@@ -39,10 +39,7 @@ const WalletSurface = ({ children }: { children: JSX.Element | JSX.Element[] }) 
   </Flex>
 )
 
-export function UserDashboardWallet({
-  onSelectHistory,
-  ...flexProps
-}: { onSelectHistory: VoidFunction } & FlexProps) {
+export function UserDashboardWallet({ ...flexProps }: FlexProps) {
   const { address, isConnected } = useAccount()
   const { data: ens } = useEnsName({ address })
   const { data: uns } = useUnstoppableDomain({ address })
@@ -88,19 +85,6 @@ export function UserDashboardWallet({
           <TokenButton token={pCNVToken} tokenAmount={pCNVBalance} />
           <TokenButton token={daiToken} tokenAmount={daiBalance} />
           <TokenButton token={nativeToken} tokenAmount={nativeBalance} isDisabled />
-          <Button
-            display={{ base: 'none', lg: 'flex' }}
-            shadow={historyPressed ? 'Blue Light' : 'up'}
-            onClick={onSelectHistory}
-            color="text.low"
-            px="10"
-            rounded={'16px'}
-            py="2"
-            _hover={{ textDecor: 'underline' }}
-            sx={historyPressed && { ...gradientBorder() }}
-          >
-            History
-          </Button>
         </>
       }
     </Flex>

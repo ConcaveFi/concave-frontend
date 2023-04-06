@@ -1,75 +1,60 @@
-import {
-  Button,
-  Flex,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  Portal,
-  useDisclosure,
-} from '@concave/ui'
+import { ChevronDownIcon, SortIcon } from '@concave/icons'
+import { Menu, MenuDivider, MenuItemOption, MenuList, MenuOptionGroup, Portal } from '@concave/ui'
+import { ResponsiveMenuButton } from 'components/ResponsiveMenuButton'
 import { useStakeSettings } from 'contexts/PositionsFilterProvider'
-import { useState } from 'react'
-import { DropdownCard } from '../DropdownCard'
-import { NftSort } from './hooks/useNftSort'
-import { SortOption } from './SortOption'
+import { PositionFilters } from './hooks/useNftSort'
 
-export const SortCard = () => {
-  const { isOpen, onToggle, onClose } = useDisclosure()
-  const [title, setTitle] = useState<string>('Redeem date (ASC)')
-  const { setSorter } = useStakeSettings()
+const sortTypes: { title: string; sort: keyof PositionFilters }[] = [
+  { title: 'Stake pool', sort: 'STAKE_POOL' },
+  { title: 'Redeem date', sort: 'REDEEM_DATE' },
+  { title: 'Initial CNV', sort: 'INITIAL' },
+]
+
+const ORDERS = { Ascending: 'ASC', Descending: 'DESC' } as const
+
+export const SortButton = () => {
+  const { setSorter, sorter } = useStakeSettings()
 
   return (
-    <Popover onClose={onClose}>
-      <PopoverTrigger>
-        <Button onClick={onToggle} _active={{}}>
-          <DropdownCard minW={'160px'} title={title || 'None'} isOpen={isOpen} />
-        </Button>
-      </PopoverTrigger>
+    <Menu closeOnSelect={false}>
+      <ResponsiveMenuButton leftIcon={<SortIcon />} rightIcon={<ChevronDownIcon />}>
+        Sorter
+      </ResponsiveMenuButton>
       <Portal>
-        <PopoverContent
-          variants={{
-            enter: { opacity: 1, height: '195px' },
-            exit: { opacity: 0, height: '0px' },
-          }}
-          width={190}
-        >
-          <Flex
-            width={'190px'}
-            height="195px"
-            rounded={'lg'}
-            boxShadow="up"
-            direction="column"
-            apply={'background.glass'}
-            css={{ '::after': { opacity: 0.9 } }}
-            border="2px solid"
-            borderColor={'text.low'}
-            overflow={'hidden'}
-            py={3}
-          >
-            {sortOptions.map((sorter, index) => (
-              <SortOption
-                enabled={title === sorter.title}
-                onClick={(clickedSorter) => {
-                  if (clickedSorter === undefined) setTitle('None')
-                  else setTitle(sorter.title)
-                  setSorter(clickedSorter)
-                }}
-                sorter={sorter.nftSort}
-                title={sorter.title}
-                key={index}
-              />
-            ))}
-          </Flex>
-        </PopoverContent>
+        <MenuList minWidth="240px">
+          <MenuOptionGroup value={sorter.order} title="Order" type="radio">
+            {Object.entries(ORDERS).map(([key, order]) => {
+              return (
+                <MenuItemOption
+                  key={key}
+                  onClick={() => {
+                    setSorter((prev) => ({ ...prev, order }))
+                  }}
+                  value={order}
+                >
+                  {key}
+                </MenuItemOption>
+              )
+            })}
+          </MenuOptionGroup>
+          <MenuDivider />
+          <MenuOptionGroup defaultValue={sortTypes[0].sort} title="Sorter" type="radio">
+            {sortTypes.map((option) => {
+              return (
+                <MenuItemOption
+                  key={option.sort}
+                  value={option.sort}
+                  onClick={() => {
+                    setSorter((prev) => ({ ...prev, ...option }))
+                  }}
+                >
+                  {option.title}
+                </MenuItemOption>
+              )
+            })}
+          </MenuOptionGroup>
+        </MenuList>
       </Portal>
-    </Popover>
+    </Menu>
   )
 }
-const sortOptions: { title: string; nftSort: NftSort }[] = [
-  { title: 'Stake pool (ASC)', nftSort: { order: 'DESC', sort: 'STAKE_POOL' } },
-  { title: 'Stake pool (DESC)', nftSort: { order: 'ASC', sort: 'STAKE_POOL' } },
-  { title: 'Redeem date (ASC)', nftSort: { order: 'ASC', sort: 'REDEEM_DATE' } },
-  { title: 'Redeem date (DESC)', nftSort: { order: 'DESC', sort: 'REDEEM_DATE' } },
-  { title: 'Initial CNV (ASC)', nftSort: { order: 'ASC', sort: 'INITIAL' } },
-  { title: 'Initial CNV (DESC)', nftSort: { order: 'DESC', sort: 'INITIAL' } },
-]

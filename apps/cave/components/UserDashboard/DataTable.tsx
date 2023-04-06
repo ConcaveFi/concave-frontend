@@ -2,7 +2,6 @@ import { Box } from '@concave/ui'
 
 export function DataTable({
   children,
-  shadow,
 }: {
   children: JSX.Element | JSX.Element[]
   h?: string
@@ -11,15 +10,15 @@ export function DataTable({
 }) {
   return (
     <Box
-      h="full"
-      w={'100%'}
+      h={'full'}
+      w={'full'}
+      shadow={'Down Big'}
+      borderRadius={'xl'}
       overflowY={'auto'}
       overflowX="auto"
-      // borderRadius="3xl"
+      pt={2}
       px={'0.5rem'}
-      // shadow={shadow || 'down'}
       apply="scrollbar.big"
-      maxH={'full'}
     >
       {children}
     </Box>
