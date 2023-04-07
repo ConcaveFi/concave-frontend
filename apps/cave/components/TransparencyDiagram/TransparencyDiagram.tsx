@@ -32,14 +32,18 @@ enum DiagramButtons {
   Revenue = 'Revenue',
   Trades = 'Trades',
   ClipperLP = 'Clipper LP',
+  Assets = 'Asset Investments',
+  Seeds = 'Seed Investments',
   OperatingCosts = 'Operating Costs',
   GeneralDiagram = 'General Diagram',
   BondingDiagram = 'Bonding Diagram',
   StakingDiagram = 'Staking Diagram',
 }
 
-const SelectionButton = ({ diagramShown, setDiagramShown, chartName }) => (
+const SelectionButton = ({ diagramShown, setDiagramShown, chartName, minW }) => (
   <Button
+    minW={minW}
+    flexGrow={1}
     variant={diagramShown === chartName ? 'primary.outline' : 'secondary'}
     size={'lg'}
     onClick={() => setDiagramShown(chartName)}
@@ -58,9 +62,9 @@ export function TransparencyDiagram({ isMobile }: { isMobile: boolean }) {
   return (
     <>
       <VStack
-        w={'100%'}
         height={'800px'}
         rounded={'2xl'}
+        flexGrow={1}
         bg="bg.primary"
         shadow={'up'}
         minH={'500px'}
@@ -92,6 +96,20 @@ export function TransparencyDiagram({ isMobile }: { isMobile: boolean }) {
                 isMobile
                   ? 'https://datastudio.google.com/embed/reporting/8f3baa69-b193-41be-9d4f-ffcbc08d691a/page/p_0h786h6otc'
                   : 'https://datastudio.google.com/embed/reporting/f0ba2360-88f4-468a-8306-1923dd49f8a8/page/p_0h786h6otc'
+              }
+            />
+          )}
+          {diagramShown === DiagramButtons.Assets && (
+            <DataStudio
+              src={
+                'https://datastudio.google.com/embed/reporting/f0ba2360-88f4-468a-8306-1923dd49f8a8/page/p_wfmeya5k3c'
+              }
+            />
+          )}
+          {diagramShown === DiagramButtons.Seeds && (
+            <DataStudio
+              src={
+                'https://datastudio.google.com/embed/reporting/f0ba2360-88f4-468a-8306-1923dd49f8a8/page/p_204yjqs62c'
               }
             />
           )}
@@ -158,15 +176,16 @@ const DesktopMenu = ({
   setDiagramShown: Dispatch<SetStateAction<DiagramButtons>>
 }) => (
   <Box
+    flexBasis={'33%'}
     justifyContent={'center'}
     flexWrap={'wrap'}
-    w={'850px'}
     display={'flex'}
     flexDirection={'row'}
     gap={'1rem'}
   >
-    {Object.values(DiagramButtons).map((currentValue) => (
+    {Object.values(DiagramButtons).map((currentValue, i) => (
       <SelectionButton
+        minW={i > 3 ? '32%' : '23%'}
         key={currentValue}
         chartName={currentValue}
         diagramShown={diagramShown}
