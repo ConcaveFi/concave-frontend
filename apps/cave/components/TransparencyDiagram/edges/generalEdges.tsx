@@ -161,7 +161,7 @@ export const generalEdges = [
     id: 'AccrualBondsV1 (Impl)-ValueShuttle',
     source: 'AccrualBondsV1 (Impl)',
     target: 'ValueShuttle',
-    sourceHandle: 'rightSource',
+    sourceHandle: 'bottomSource',
     targetHandle: 'topTarget',
     label: 'Value goes into shuttle',
     animated: true,

@@ -7,7 +7,7 @@ const TransparencyDiagram = () => {
   const isMobile = useBreakpointValue({ base: true, xl: false })
 
   return (
-    <Container maxW={{ base: '60ch', sm: 'container.sm', lg: '90%' }} centerContent>
+    <Container maxW={{ base: '60ch', sm: 'container.sm', lg: '90%' }} p={{ base: 0 }} centerContent>
       <Flex align={'center'} w={'100%'} h={'100%'} gap={4} textAlign="center" direction="column">
         <Heading
           as="h1"

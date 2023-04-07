@@ -42,7 +42,7 @@ export function AirdropClaimButton({ season, proof, redeemable, whiteListed }: A
   return (
     <Button
       {...claimButtonProps({ claimed: !!claimed, canRedeem, status, whiteListed })}
-      onClick={() => airdrop.sendTx()}
+      onClick={() => !claimed && airdrop.sendTx()}
     >
       {getButtonLabel({ claimed: !!claimed, isConnected, whiteListed, status }) ||
         nameBySeason[season]}
@@ -74,9 +74,11 @@ interface ClaimButtonProps {
   canRedeem: boolean
 }
 function claimButtonProps({ claimed, canRedeem, status, whiteListed }: ClaimButtonProps) {
+  console.log(claimed)
   return {
     disabled: claimed || !whiteListed || status === 'loading' || !canRedeem,
     isLoading: status === 'loading',
+    cursor: claimed ? 'not-allowed' : 'pointer',
     shadow: '0px 0px 20px #0006',
     loadingText: 'Claiming...',
     bg: 'stroke.brightGreen',
