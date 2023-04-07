@@ -197,6 +197,42 @@ const bscSafe = (x: number, y: number): Node => ({
   type: NodeTypeEnum.Multisig,
 })
 
+const fantonSafe = (x: number, y: number): Node => ({
+  id: 'FTM CO-OP Treasury',
+  data: {
+    label: 'FTM CO-OP Treasury',
+    addressType: AddressTypeEnum.MULTISIG,
+    address: '0x34B6171DcC3D4Ab2a4c58fFeE105e03c7332a781',
+    chain: ChainEnum.FTM,
+  },
+  position: { x: x, y: y },
+  type: NodeTypeEnum.Multisig,
+})
+
+const polygonSafe = (x: number, y: number): Node => ({
+  id: 'Polygon CO-OP Treasury',
+  data: {
+    label: 'Polygon CO-OP Treasury',
+    addressType: AddressTypeEnum.MULTISIG,
+    address: '0x70eD00A5A54a2d4962B6fF5F97F709c2a0C8C463',
+    chain: ChainEnum.POLYGON,
+  },
+  position: { x: x, y: y },
+  type: NodeTypeEnum.Multisig,
+})
+
+const optSafe = (x: number, y: number): Node => ({
+  id: 'OP CO-OP Treasury',
+  data: {
+    label: 'OP CO-OP Treasury',
+    addressType: AddressTypeEnum.MULTISIG,
+    address: '0x463A522F657e1c591c495d688c8627bA2d9342dE',
+    chain: ChainEnum.OP,
+  },
+  position: { x: x, y: y },
+  type: NodeTypeEnum.Multisig,
+})
+
 const avaxSafe = (x: number, y: number): Node => ({
   id: 'AVAX CO-OP Treasury',
   data: {
@@ -231,14 +267,18 @@ export const generalNodes = [
   coopTreasury(1225, 480),
   policyMultisig(1475, 480),
   proxyAdmin(0, 500),
-  accrualBondsV1Proxy(975, 20),
-  accrualBondsV1Impl(1300, 20),
   stakingV1Proxy(760, 1000),
   stakingV1Impl(1150, 1000),
   valueShuttle(1650, 1019),
-  bscSafe(100, 0),
-  avaxSafe(375, 0),
-  arbitrumSafe(675, 0),
+
+  bscSafe(0, 0),
+  avaxSafe(263, 0),
+  arbitrumSafe(550, 0),
+  optSafe(825, 0),
+  fantonSafe(1100, 0),
+  polygonSafe(1375, 0),
+  accrualBondsV1Proxy(1632, 20),
+  accrualBondsV1Impl(1925, 20),
 ]
 
 /**
@@ -253,15 +293,20 @@ export const generalNodesMobile = [
   pCNV(580, 920),
   lsdCNV(580, 0),
 
+  //line 0
+  optSafe(0, -300),
+  polygonSafe(150, -300),
+  fantonSafe(300, -300),
+
   //line 1
-  bscSafe(0, 0),
-  avaxSafe(150, 0),
-  arbitrumSafe(300, 0),
+  bscSafe(0, 30),
+  avaxSafe(150, 30),
+  arbitrumSafe(300, 30),
 
   //line 2
-  valueShuttle(0, 402 + 20),
-  stakingV1Proxy(365, 383 + 20),
-  stakingV1Impl(219, 383 + 20),
+  valueShuttle(0, 402),
+  stakingV1Proxy(365, 383),
+  stakingV1Impl(219, 383),
 
   //line 3
   policyMultisig(0, 767 + 10),
