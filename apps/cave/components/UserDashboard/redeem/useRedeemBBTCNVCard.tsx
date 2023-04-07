@@ -13,13 +13,13 @@ export const useRedeemBBTCNVCard = () => {
 
   const tokenOut = BBTCNV[chainId]
   const {data: redeemStatusOld} = useRedeemable({
-    address: "0xdd11Ae83B49ee68B37fF3E6442f994Fc037bb4a1",
-    contract: "0x7fcc30E97D718864d46a84F13E3Ba111a56123D3",
+    address,
+    contract: "0x7fcc30E97D718864d46a84F13E3Ba111a56123D3", // Contract V1
     token: BBTCNV[chainId],
   })
   
   const { data: redeemStatusNew } = useRedeemable({
-    address: "0xdd11Ae83B49ee68B37fF3E6442f994Fc037bb4a1",
+    address,
     contract: BBTCNV_REDEMPTION_V2[chainId],
     token: BBTCNV[chainId],
   })
