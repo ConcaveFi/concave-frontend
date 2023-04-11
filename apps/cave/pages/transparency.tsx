@@ -37,7 +37,7 @@ const TransparencyDiagram = () => {
 
 TransparencyDiagram.Meta = {
   title: 'Concave | Transparency Overview',
-  description: `Concave CO-OP's Treasury is fully transparent and managed to increase its value and generate quarterly dividends for CNV Stakers or pToken holders. Earn some Real Yield with DeFi 3.0`,
+  description: `Concave works to increase treasury value via asset management of seed investments, asset investments, trades, revenue, and bonding. Take a look at our transparency dashboard to get a view of treasury and protocol statistics`,
 }
 
 export default withPageTransition(TransparencyDiagram)
