@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, Image } from '@concave/ui'
+import { Box, Card, Flex, Heading, Image } from '@concave/ui'
 import { AirdropClaimCard } from 'components/Airdrop/AirdropClaimCard'
 import { ACNVChart } from 'components/Transparency/Charts/ACNVChart'
 import { BbtCNVChart } from 'components/Transparency/Charts/BbtCNVChart'
@@ -39,10 +39,18 @@ function getView(selectedSnapshot: SnapshotOptions) {
 
     case SnapshotOptions.Airdrop:
       return (
-        <Flex flex={1} align={'center'} direction={'column'}>
+        <Card
+          variant="primary"
+          flex={1}
+          borderRadius={'3xl'}
+          alignItems={'center'}
+          justifyContent={'center'}
+          // align={'center'}
+          direction={'column'}
+        >
           <Image src="./assets/airdrop/airdrops.png" alt="airdrop rain" objectFit={'contain'} />
           <AirdropClaimCard />
-        </Flex>
+        </Card>
       )
 
     default:
