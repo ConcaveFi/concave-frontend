@@ -68,7 +68,7 @@ export function TransparencyDiagram({ isMobile }: { isMobile: boolean }) {
         bg="bg.primary"
         shadow={'up'}
         minH={'500px'}
-        maxH={{ base: '90vh', md: '800px' }}
+        w={'full'}
         p={{ base: 4, sm: 5 }}
         gap={{ base: 2, sm: 5 }}
       >
