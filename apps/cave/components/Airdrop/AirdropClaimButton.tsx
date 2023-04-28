@@ -74,7 +74,6 @@ interface ClaimButtonProps {
   canRedeem: boolean
 }
 function claimButtonProps({ claimed, canRedeem, status, whiteListed }: ClaimButtonProps) {
-  console.log(claimed)
   return {
     disabled: claimed || !whiteListed || status === 'loading' || !canRedeem,
     isLoading: status === 'loading',

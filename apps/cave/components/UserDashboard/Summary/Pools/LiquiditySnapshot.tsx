@@ -48,16 +48,6 @@ export function LiquiditySnapshot() {
       </Text>
       <Flex gap={{ base: 2, sm: 4 }} w={'full'}>
         <ToggleContentButton handle={() => {}} isExpanded={false} />
-        <ResponsiveButton
-          size={'md'}
-          boxShadow={'Up Big'}
-          onClick={state.refetch}
-          isDisabled={state.isLoading}
-          justifyContent={'space-between'}
-          leftIcon={<RepeatIcon />}
-        >
-          Refresh
-        </ResponsiveButton>
         <AddLiquidityModal>
           {({ onOpen }) => (
             <ResponsiveButton
