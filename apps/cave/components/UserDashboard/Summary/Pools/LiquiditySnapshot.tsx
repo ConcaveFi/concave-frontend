@@ -1,13 +1,9 @@
 import { ChevronRightIcon, RepeatIcon, AddIcon } from '@concave/icons'
 import { Box, Button, Card, Flex, Heading, HStack, Text } from '@concave/ui'
-import {
-  AddLiquidityModal,
-  AddLiquidityModalButton,
-} from 'components/AMM/AddLiquidity/AddLiquidity'
+import { AddLiquidityModal } from 'components/AMM/AddLiquidity/AddLiquidity'
 import { usePositionsState } from 'components/LiquidityPoolPositions/hooks/usePositionsState'
 import { PairsAccordion } from 'components/LiquidityPoolPositions/MyPositions'
 import { ResponsiveButton } from 'components/ResponsiveMenuButton'
-import { ToggleContentButton } from 'components/ToggleContentButton'
 import { useRouter } from 'next/router'
 
 export function LiquiditySnapshot() {
@@ -47,7 +43,16 @@ export function LiquiditySnapshot() {
         liquidity.
       </Text>
       <Flex gap={{ base: 2, sm: 4 }} w={'full'}>
-        <ToggleContentButton handle={() => {}} isExpanded={false} />
+        <ResponsiveButton
+          size={'md'}
+          boxShadow={'Up Big'}
+          onClick={state.refetch}
+          isDisabled={state.isLoading}
+          justifyContent={'space-between'}
+          leftIcon={<RepeatIcon />}
+        >
+          Refresh
+        </ResponsiveButton>
         <AddLiquidityModal>
           {({ onOpen }) => (
             <ResponsiveButton
