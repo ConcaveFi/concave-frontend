@@ -1,13 +1,17 @@
 import { StakingV1Contract } from '@concave/marketplace'
+import { Provider } from '@wagmi/core'
 import { BigNumber } from 'ethers'
-import { concaveProvider } from 'lib/providers'
 import { useQuery } from 'react-query'
+import { useProvider } from 'wagmi'
 
-export const useLiquidValues = (chainId: number, poolId: number) =>
-  useQuery(['LiquidValues', chainId, poolId], async () => liquidityValues(chainId, poolId))
+export const useLiquidValues = (chainId: number, poolId: number) => {
+  const provider = useProvider()
+  return useQuery(['LiquidValues', chainId, poolId], async () => liquidityValues(poolId, provider))
+}
 
-export const liquidityValues = async (chainId: number, poolId: number) => {
-  const stakingV1Contract = new StakingV1Contract(concaveProvider(chainId))
+export const liquidityValues = async (poolId: number, provider: Provider) => {
+  const stakingV1Contract = new StakingV1Contract(provider)
+
   const contractReads = await Promise.all([
     stakingV1Contract.pools(poolId),
     stakingV1Contract.viewStakingCap(poolId).catch(() => {

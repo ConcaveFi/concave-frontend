@@ -1,6 +1,7 @@
 import { stakingPools } from '@concave/marketplace'
 import { Box, Flex, gradientBorder, Image, SlideFade, Text, useDisclosure } from '@concave/ui'
 import { numberMask } from 'utils/numberMask'
+import { poolImages } from 'utils/poolImages'
 
 interface MakeplaceStakeFilterProps {
   poolId: number
@@ -42,6 +43,7 @@ export function MakeplaceStakeFilter(props: MakeplaceStakeFilterProps) {
       >
         <Image
           my={'auto'}
+          mx={2}
           width={{
             base: '100px',
             sm: '80px',
@@ -52,7 +54,7 @@ export function MakeplaceStakeFilter(props: MakeplaceStakeFilterProps) {
           }}
           objectFit={`cover`}
           alt={`Image of stake ${stakingPools[poolId]?.days}`}
-          src={`/assets/marketplace/${stakeImage[poolId]}`}
+          src={`/assets/marketplace/${poolImages[poolId]}`}
         />
         <Flex direction={'column'} justify="center" align="start" lineHeight={'18px'}>
           <Text fontSize={'sm'} color={'text.low'}>
@@ -67,10 +69,4 @@ export function MakeplaceStakeFilter(props: MakeplaceStakeFilterProps) {
       </Flex>
     </Box>
   )
-}
-const stakeImage = {
-  0: '12mposition.png',
-  1: '6mposition.png',
-  2: '3mposition.png',
-  3: '1mposition.png',
 }

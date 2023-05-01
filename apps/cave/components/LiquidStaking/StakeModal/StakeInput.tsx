@@ -9,10 +9,9 @@ import { useErrorModal } from 'contexts/ErrorModal'
 import { useTransaction } from 'hooks/useTransaction'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { concaveProvider } from 'lib/providers'
 import { useState } from 'react'
 import { toAmount } from 'utils/toAmount'
-import { useAccount, useSigner } from 'wagmi'
+import { useAccount, useProvider, useSigner } from 'wagmi'
 
 export function StakeInput({ onClose, poolId }: { poolId: number; onClose: () => void }) {
   const { address } = useAccount()
@@ -20,7 +19,8 @@ export function StakeInput({ onClose, poolId }: { poolId: number; onClose: () =>
   const chainId = useCurrentSupportedNetworkId()
   const { data: signer } = useSigner()
   const [stakeInput, setStakeInput] = useState<CurrencyAmount<Currency>>(toAmount(0, CNV[chainId]))
-  const contract = new StakingV1Contract(concaveProvider(chainId))
+  const provider = useProvider()
+  const contract = new StakingV1Contract(provider)
   const currencyState = useCurrencyApprove(stakeInput.wrapped, contract.address, {
     enablePermit: true,
   })

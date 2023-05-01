@@ -13,8 +13,6 @@ const normalizeWhitelist = (whitelist) => {
 
 const whitelist = normalizeWhitelist(_whitelist)
 
-export const isWhitelistedSpecial = (address: string): boolean =>
-  address && !!whitelist[getAddress(address)]
 export const getAirdropSpecialClaimableAmount = (address: string): number =>
   address && whitelist[getAddress(address)]
 

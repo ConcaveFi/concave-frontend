@@ -1,18 +1,19 @@
 import { Fetcher } from '@concave/gemswap-sdk'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useAddressTokenList } from 'hooks/useTokenList'
-import { concaveProvider } from 'lib/providers'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
-import { useAccount } from 'wagmi'
+import { useAccount, useProvider } from 'wagmi'
 
-export const usePositionsState = (initialView?: 'user' | 'all' ) => {
+export const usePositionsState = (initialView?: 'user' | 'all') => {
   const { address } = useAccount()
   const chainId = useCurrentSupportedNetworkId()
-  const allPairs = useQuery(['fetchPairs', chainId], () => {
-    return Fetcher.fetchPairs(chainId, concaveProvider(chainId))
-  })
-  const { data: tokens, isLoading: userPoolsLoading } = useAddressTokenList(address)
+  const provider = useProvider()
+  const allPairs = useQuery(['fetchPairs', chainId], async () =>
+    Fetcher.fetchPairs(chainId, provider),
+  )
+  const userTokens = useAddressTokenList(address)
+  const { data: tokens, isLoading: userPoolsLoading } = userTokens
   const userPairs = (allPairs?.data || []).filter((p) =>
     tokens?.find((t) => p.liquidityToken.address === t.address),
   )
@@ -31,6 +32,12 @@ export const usePositionsState = (initialView?: 'user' | 'all' ) => {
     loading,
     user: address,
     error: allPairs.error,
+    isLoading: allPairs.isLoading || userTokens.isLoading,
+    isFetching: allPairs.isFetching || userTokens.isFetching,
+    refetch: () => {
+      allPairs.refetch()
+      userTokens.refetch()
+    },
     allPairs,
     pairs: view === 'user' ? userPairs : allPairs.data,
     view,

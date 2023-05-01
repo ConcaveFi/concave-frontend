@@ -1,4 +1,4 @@
-import { Flex, Heading, Image } from '@concave/ui'
+import { Box, Card, Flex, Heading, Image } from '@concave/ui'
 import { AirdropClaimCard } from 'components/Airdrop/AirdropClaimCard'
 import { ACNVChart } from 'components/Transparency/Charts/ACNVChart'
 import { BbtCNVChart } from 'components/Transparency/Charts/BbtCNVChart'
@@ -8,19 +8,18 @@ import { RedemBBTCard } from './redeem/BBTCNVRedemptionDialog'
 import { RedeemPCNVCard } from './redeem/PCNVRedemptionDialog'
 import { SnapshotOptions } from './SnapshotOptions'
 import { BondingSnapshot } from './Summary/Bonding/BondingSnapshot'
-import { MarketplaceSnapshot } from './Summary/Marketplace/MarketplaceSnapshot'
 import { LiquiditySnapshot } from './Summary/Pools/LiquiditySnapshot'
+import { RedeemSnapshot } from './Summary/Redeem/RedeemSnapshot'
 import { LiquidStakingSnapshot } from './Summary/Staking/LiquidStakingSnapshot'
 import { TxHistory } from './Summary/TxHistory/TxHistory'
 
 export function UserDashboardContent({ view }: { view: SnapshotOptions }) {
   return (
-    <Flex w={'100%'} h="full">
+    <Flex w={'full'} h={'full'} maxH={'780px'}>
       {getView(view)}
     </Flex>
   )
 }
-const gap = 2
 function getView(selectedSnapshot: SnapshotOptions) {
   switch (selectedSnapshot) {
     case SnapshotOptions.History:
@@ -35,29 +34,23 @@ function getView(selectedSnapshot: SnapshotOptions) {
           <LiquidStakingSnapshot />
         </StakeSettingsProvider>
       )
-    case SnapshotOptions.Marketplace:
-      return <MarketplaceSnapshot />
     case SnapshotOptions.Redeem:
-      return (
-        <Flex w={'full'} direction={'column'} flexWrap={'wrap'} gap={gap}>
-          <Flex direction={{ base: 'column', sm: 'row' }} gap={gap} w={'full'} h={'fit-content'}>
-            <ACNVChart fontSize="6xl" w={'full'} />
-            <BbtCNVChart w={'full'} />
-          </Flex>
-          <Flex direction={{ base: 'column', xl: 'row' }} w={'full'} gap={gap}>
-            <RedeemPCNVCard w={'full'} />
-            <RedemACNVCard w={'full'} />
-            <RedemBBTCard w={'full'} />
-          </Flex>
-        </Flex>
-      )
+      return <RedeemSnapshot />
 
     case SnapshotOptions.Airdrop:
       return (
-        <Flex flex={1} align={'center'} direction={'column'}>
+        <Card
+          variant="primary"
+          flex={1}
+          borderRadius={'3xl'}
+          alignItems={'center'}
+          justifyContent={'center'}
+          // align={'center'}
+          direction={'column'}
+        >
           <Image src="./assets/airdrop/airdrops.png" alt="airdrop rain" objectFit={'contain'} />
           <AirdropClaimCard />
-        </Flex>
+        </Card>
       )
 
     default:

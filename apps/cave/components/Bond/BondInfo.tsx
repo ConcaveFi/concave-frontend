@@ -158,7 +158,7 @@ export const UserBondPositionInfo = (props) => {
           <InfoItem value={formatRedeemable} label={'Redeemable'} px={5} pl={2} flexBasis="35%" />
         </Card>
       ) : !!props.userAddress ? (
-        <Loading size="sm" isLoading={!!props.userAddress} label="Fetching bonds..."></Loading>
+        <Loading message="Fetching bonds..."></Loading>
       ) : (
         ''
       )}

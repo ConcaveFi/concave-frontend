@@ -2,26 +2,30 @@ import { BaseProvider } from '@ethersproject/providers'
 import { StakingV1Contract } from './contract'
 import { StakingPool, stakingPools } from './entities'
 import { parser } from './graphql/parser'
-import { fetchAllCavemart, fetchUsersPositions, listCavemartListingDocuments, listReceivedTokensHistoryByAddress, listSellPositionsHistoryByAddressQuery, LogStakingV1, Marketplace } from './graphql/querys'
+import {
+  fetchAllCavemart,
+  fetchUsersPositions,
+  listCavemartListingDocuments,
+  listReceivedTokensHistoryByAddress,
+  listSellPositionsHistoryByAddressQuery,
+  LogStakingV1,
+  Marketplace,
+} from './graphql/querys'
 
-export const listUserHistory = ({
-  chainId,
-  address,
-}: {
-  address: string
-  chainId: number
-}) => {
-  return ([
+export const listUserHistory = ({ chainId, address }: { address: string; chainId: number }) => {
+  return [
     listReceivedTokensHistoryByAddress(chainId, address),
-    listSellPositionsHistoryByAddressQuery(chainId, address)
-  ]) as const
+    listSellPositionsHistoryByAddressQuery(chainId, address),
+  ] as const
 }
 
-export const listPositons = async ({
+export const listPositions = async ({
   provider,
   owner,
+  excludeRedeemed,
 }: {
   owner?: string
+  excludeRedeemed?: boolean
   provider: BaseProvider
 }) => {
   const stakingV1Contract = new StakingV1Contract(provider)
@@ -31,7 +35,7 @@ export const listPositons = async ({
     .filter((l) => !owner || l.to.toLocaleLowerCase() === owner.toLocaleLowerCase())
   const { stakingV1ToStakingPosition } = parser(stakingV1Contract, provider)
   const result = await Promise.all(preFilter.map(stakingV1ToStakingPosition))
-  return result.filter((p) => !p.currentValue.eq(0)) //remove redeemeds
+  return excludeRedeemed ? result.filter((p) => !p.currentValue.eq(0)) : result
 }
 
 export const listListedPositions = async ({ provider }: { provider: BaseProvider }) => {

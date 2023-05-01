@@ -3,8 +3,7 @@ import { Button } from '@concave/ui'
 import { useErrorModal } from 'contexts/ErrorModal'
 import { parseUnits } from 'ethers/lib/utils'
 import { AidropSeasonProps, AirdropSeason } from 'hooks/useAirdropSeason'
-import { concaveProvider } from 'lib/providers'
-import { useAccount, useQuery, useSigner, useWaitForTransaction } from 'wagmi'
+import { useAccount, useProvider, useQuery, useSigner, useWaitForTransaction } from 'wagmi'
 import { useTransaction } from 'hooks/useTransaction'
 import { useCurrentSupportedNetworkId } from '../../hooks/useCurrentSupportedNetworkId'
 import { airdropToken } from './special/airdrop'
@@ -19,13 +18,15 @@ export function AirdropClaimButton({ season, proof, redeemable, whiteListed }: A
   const errorModal = useErrorModal()
   const canRedeem = Boolean(redeemable)
 
+  const provider = useProvider()
+
   const { data: claimed } = useQuery(['AirdropClaim', season, networkId], async () => {
-    let airdrop = new AirdropClaimContract(concaveProvider(networkId), season)
+    let airdrop = new AirdropClaimContract(provider, season)
     return await airdrop.claimed(address)
   })
 
   async function claimAidrop() {
-    const airdrop = new AirdropClaimContract(concaveProvider(networkId), season)
+    const airdrop = new AirdropClaimContract(provider, season)
     const convertedAmount = parseUnits(redeemable?.toString() || '0', airdropToken.decimals)
     return airdrop.claim(signer, proof, convertedAmount)
   }
@@ -41,7 +42,7 @@ export function AirdropClaimButton({ season, proof, redeemable, whiteListed }: A
   return (
     <Button
       {...claimButtonProps({ claimed: !!claimed, canRedeem, status, whiteListed })}
-      onClick={() => airdrop.sendTx()}
+      onClick={() => !claimed && airdrop.sendTx()}
     >
       {getButtonLabel({ claimed: !!claimed, isConnected, whiteListed, status }) ||
         nameBySeason[season]}
@@ -76,6 +77,7 @@ function claimButtonProps({ claimed, canRedeem, status, whiteListed }: ClaimButt
   return {
     disabled: claimed || !whiteListed || status === 'loading' || !canRedeem,
     isLoading: status === 'loading',
+    cursor: claimed ? 'not-allowed' : 'pointer',
     shadow: '0px 0px 20px #0006',
     loadingText: 'Claiming...',
     bg: 'stroke.brightGreen',

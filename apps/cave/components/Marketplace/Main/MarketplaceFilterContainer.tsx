@@ -1,11 +1,11 @@
+import { StakingPool } from '@concave/marketplace'
 import { Flex } from '@concave/ui'
 import { useLiquidStakeData } from 'components/LiquidStaking/hooks/useLiquidStakeData'
-import { StakePoolFilterEnum } from 'components/NftFilters/Filters/hooks/useFilterByStakePool'
 import { MakeplaceStakeFilter } from '../Filters/MarketplaceStakeFilter'
 
 interface FilterContainerProps {
-  stakeFilters: StakePoolFilterEnum[]
-  onChangeStakeFilters: (stakeFilters: StakePoolFilterEnum[]) => void
+  stakeFilters: number[]
+  onChangeStakeFilters: (stakeFilters: number[]) => void
 }
 
 export function MarketplaceFilterContainer(props: FilterContainerProps) {

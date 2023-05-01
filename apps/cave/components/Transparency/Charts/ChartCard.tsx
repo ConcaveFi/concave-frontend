@@ -67,7 +67,7 @@ export const ChartCard = ({
           justifyContent={'center'}
           alignItems={overflow === 'visible' ? 'center' : 'unset'}
         >
-          {!isLoading ? <>{children}</> : <Loading size={'md'} label={loadingMessage} isLoading />}
+          {!isLoading ? <>{children}</> : <Loading message={loadingMessage} />}
         </Flex>
       </Card>
     </Box>
