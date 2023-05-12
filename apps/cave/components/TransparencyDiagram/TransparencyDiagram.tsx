@@ -90,7 +90,7 @@ export function TransparencyDiagram({ isMobile }: { isMobile: boolean }) {
           apply="scrollbar.big"
           gap={2}
         >
-          {diagramShown === DiagramButtons.TreasuryOverview && (
+          {/* {diagramShown === DiagramButtons.TreasuryOverview && (
             <DataStudio
               src={
                 isMobile
@@ -98,42 +98,42 @@ export function TransparencyDiagram({ isMobile }: { isMobile: boolean }) {
                   : 'https://datastudio.google.com/embed/reporting/f0ba2360-88f4-468a-8306-1923dd49f8a8/page/p_0h786h6otc'
               }
             />
-          )}
-          {diagramShown === DiagramButtons.Assets && (
+          )} */}
+          {/* {diagramShown === DiagramButtons.Assets && (
             <DataStudio
               src={
                 'https://datastudio.google.com/embed/reporting/f0ba2360-88f4-468a-8306-1923dd49f8a8/page/p_wfmeya5k3c'
               }
             />
-          )}
-          {diagramShown === DiagramButtons.Seeds && (
+          )} */}
+          {/* {diagramShown === DiagramButtons.Seeds && (
             <DataStudio
               src={
                 'https://datastudio.google.com/embed/reporting/f0ba2360-88f4-468a-8306-1923dd49f8a8/page/p_204yjqs62c'
               }
             />
-          )}
-          {diagramShown === DiagramButtons.Revenue && (
+          )} */}
+          {/* {diagramShown === DiagramButtons.Revenue && (
             <DataStudio
               src={
                 'https://lookerstudio.google.com/embed/reporting/f0ba2360-88f4-468a-8306-1923dd49f8a8/page/p_ns2smuqp2c'
               }
             />
-          )}
-          {diagramShown === DiagramButtons.Trades && (
+          )} */}
+          {/* {diagramShown === DiagramButtons.Trades && (
             <DataStudio
               src={
                 'https://lookerstudio.google.com/embed/reporting/f0ba2360-88f4-468a-8306-1923dd49f8a8/page/p_afzrzcbq2c'
               }
             />
-          )}
-          {diagramShown === DiagramButtons.ClipperLP && (
+          )} */}
+          {/* {diagramShown === DiagramButtons.ClipperLP && (
             <DataStudio
               src={
                 'https://lookerstudio.google.com/embed/reporting/f0ba2360-88f4-468a-8306-1923dd49f8a8/page/p_wmvudkqp2c'
               }
             />
-          )}
+          )} */}
           {diagramShown === DiagramButtons.OperatingCosts && (
             <DataStudio
               src={
