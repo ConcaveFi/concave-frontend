@@ -28,12 +28,12 @@ import {
 import { ReactFlowDiagram } from './ReactFlowDiagram'
 
 enum DiagramButtons {
-  TreasuryOverview = 'Treasury Overview',
-  Revenue = 'Revenue',
-  Trades = 'Trades',
-  ClipperLP = 'Clipper LP',
-  Assets = 'Asset Investments',
-  Seeds = 'Seed Investments',
+  // TreasuryOverview = 'Treasury Overview',
+  // Revenue = 'Revenue',
+  // Trades = 'Trades',
+  // ClipperLP = 'Clipper LP',
+  // Assets = 'Asset Investments',
+  // Seeds = 'Seed Investments',
   OperatingCosts = 'Operating Costs',
   GeneralDiagram = 'General Diagram',
   BondingDiagram = 'Bonding Diagram',
@@ -57,7 +57,7 @@ const DataStudio = ({ src }: { src: string }) => (
 )
 
 export function TransparencyDiagram({ isMobile }: { isMobile: boolean }) {
-  const [diagramShown, setDiagramShown] = useState<DiagramButtons>(DiagramButtons.TreasuryOverview)
+  const [diagramShown, setDiagramShown] = useState<DiagramButtons>(DiagramButtons.OperatingCosts)
 
   return (
     <>
@@ -176,7 +176,7 @@ const DesktopMenu = ({
   setDiagramShown: Dispatch<SetStateAction<DiagramButtons>>
 }) => (
   <Box
-    flexBasis={'33%'}
+    // flexBasis={'33%'}
     justifyContent={'center'}
     flexWrap={'wrap'}
     display={'flex'}
@@ -185,7 +185,7 @@ const DesktopMenu = ({
   >
     {Object.values(DiagramButtons).map((currentValue, i) => (
       <SelectionButton
-        minW={i > 3 ? '32%' : '23%'}
+        minW={'20%'}
         key={currentValue}
         chartName={currentValue}
         diagramShown={diagramShown}
