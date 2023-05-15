@@ -93,9 +93,7 @@ export function TransparencyDiagram({ isMobile }: { isMobile: boolean }) {
           {diagramShown === DiagramButtons.TreasuryOverview && (
             <DataStudio
               src={
-                isMobile
-                  ? 'https://datastudio.google.com/embed/reporting/8f3baa69-b193-41be-9d4f-ffcbc08d691a/page/p_0h786h6otc'
-                  : 'https://docs.google.com/spreadsheets/d/1NsuG9VO2mYXBLrcHfKUnsKPGkFvVyPLAm6fOojmTApY/edit#gid=0'
+                'https://lookerstudio.google.com/reporting/f0ba2360-88f4-468a-8306-1923dd49f8a8/page/p_2ler97h25c'
               }
             />
           )}
