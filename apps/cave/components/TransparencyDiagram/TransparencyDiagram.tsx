@@ -27,13 +27,9 @@ import {
 } from './nodes/nodes'
 import { ReactFlowDiagram } from './ReactFlowDiagram'
 
+// see old buttons as "Revenue, Trades, ClipperLP, Assets, Seeds in older version. Commit: 714e894c93dc38a44d89a9a316bd417e1a70415e"
 enum DiagramButtons {
   TreasuryOverview = 'Treasury Overview',
-  // Revenue = 'Revenue',
-  // Trades = 'Trades',
-  // ClipperLP = 'Clipper LP',
-  // Assets = 'Asset Investments',
-  // Seeds = 'Seed Investments',
   OperatingCosts = 'Operating Costs',
   GeneralDiagram = 'General Diagram',
   BondingDiagram = 'Bonding Diagram',
@@ -97,41 +93,6 @@ export function TransparencyDiagram({ isMobile }: { isMobile: boolean }) {
               }
             />
           )}
-          {/* {diagramShown === DiagramButtons.Assets && (
-            <DataStudio
-              src={
-                'https://datastudio.google.com/embed/reporting/f0ba2360-88f4-468a-8306-1923dd49f8a8/page/p_wfmeya5k3c'
-              }
-            />
-          )} */}
-          {/* {diagramShown === DiagramButtons.Seeds && (
-            <DataStudio
-              src={
-                'https://datastudio.google.com/embed/reporting/f0ba2360-88f4-468a-8306-1923dd49f8a8/page/p_204yjqs62c'
-              }
-            />
-          )} */}
-          {/* {diagramShown === DiagramButtons.Revenue && (
-            <DataStudio
-              src={
-                'https://lookerstudio.google.com/embed/reporting/f0ba2360-88f4-468a-8306-1923dd49f8a8/page/p_ns2smuqp2c'
-              }
-            />
-          )} */}
-          {/* {diagramShown === DiagramButtons.Trades && (
-            <DataStudio
-              src={
-                'https://lookerstudio.google.com/embed/reporting/f0ba2360-88f4-468a-8306-1923dd49f8a8/page/p_afzrzcbq2c'
-              }
-            />
-          )} */}
-          {/* {diagramShown === DiagramButtons.ClipperLP && (
-            <DataStudio
-              src={
-                'https://lookerstudio.google.com/embed/reporting/f0ba2360-88f4-468a-8306-1923dd49f8a8/page/p_wmvudkqp2c'
-              }
-            />
-          )} */}
           {diagramShown === DiagramButtons.OperatingCosts && (
             <DataStudio
               src={
@@ -174,7 +135,6 @@ const DesktopMenu = ({
   setDiagramShown: Dispatch<SetStateAction<DiagramButtons>>
 }) => (
   <Box
-    // flexBasis={'33%'}
     justifyContent={'center'}
     flexWrap={'wrap'}
     display={'flex'}
