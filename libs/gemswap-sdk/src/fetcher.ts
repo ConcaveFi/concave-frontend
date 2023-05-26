@@ -20,9 +20,10 @@ import { getNetwork, Network, Networkish } from '@ethersproject/networks'
 import invariant from 'tiny-invariant'
 import { Pair } from './entities'
 import { InfuraProvider, Provider } from '@ethersproject/providers'
+import { env } from "process";
 
 const getDefaultProvider = (network: Networkish): Provider => {
-  return new InfuraProvider(network, process.env.NEXT_PUBLIC_ALCHEMY_ID)
+  return new InfuraProvider(network, env.NEXT_PUBLIC_ALCHEMY_ID)
 }
 
 
