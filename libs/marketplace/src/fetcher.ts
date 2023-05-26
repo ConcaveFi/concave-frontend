@@ -62,9 +62,11 @@ export const marketplaceActivity = async ({ provider }: { provider: BaseProvider
   }
 
   const activity: (Marketplace & StakingPool & LogStakingV1)[] = dirtyResults
+  //@ts-ignore
     .reduce((previousValue, currentValue) => {
       const marketplaceActivity = currentValue.marketplace.map((marketplace) => {
         const stakingPool: StakingPool = stakingPools[currentValue.poolID]
+  //@ts-ignore
         return {
           ...currentValue,
           ...stakingPool,
@@ -74,8 +76,10 @@ export const marketplaceActivity = async ({ provider }: { provider: BaseProvider
       })
       return [...previousValue, ...marketplaceActivity]
     }, [])
-    .filter((value, index, arr) => {
+  //@ts-ignore
+  .filter((value, index, arr) => {
       const _value = keys(value)
+        //@ts-ignore
       return index === arr.findIndex((obj) => keys(obj) === _value)
     })
   activity.sort(

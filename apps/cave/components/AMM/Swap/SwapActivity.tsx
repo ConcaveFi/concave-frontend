@@ -106,6 +106,7 @@ export const SwapActivity = () => {
           </Text>
         </Flex>
         {isSuccess &&
+        //@ts-ignore
           data.logAmm.map(
             ({
               from,
