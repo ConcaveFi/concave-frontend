@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "build": "turbo build",
+    "build": "turbo build --filter core",
     "clean": "turbo clean",
     "dev:cave": "turbo run dev --filter=cave...",
     "dev": "turbo dev --no-cache  --continue",

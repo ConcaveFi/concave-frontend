@@ -23,7 +23,7 @@ import { InfuraProvider, Provider } from '@ethersproject/providers'
 import { env } from "process";
 
 const getDefaultProvider = (network: Networkish): Provider => {
-  return new InfuraProvider(network, env.NEXT_PUBLIC_ALCHEMY_ID)
+  return new InfuraProvider(network, env.NEXT_PUBLIC_INFURA_ID)
 }
 
 
