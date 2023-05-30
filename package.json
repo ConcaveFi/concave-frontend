@@ -1,13 +1,14 @@
 {
   "private": true,
   "scripts": {
-    "build": "turbo build --filter core",
-    "clean": "turbo clean",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "test": "turbo test --filter=!cave",
+    "build:cave": "turbo run build --filter=cave...",
     "dev:cave": "turbo run dev --filter=cave...",
+    "clean": "turbo clean",
     "dev": "turbo dev --no-cache  --continue",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "lint": "turbo lint",
-    "test": "turbo test --filter=!cave"
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
     "prettier": "^2.7.1",
