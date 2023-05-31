@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "strict": false,
+    "allowJs": true,
+    "target": "es2022",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": false
+  },
+  "exclude": ["node_modules"]
+}
