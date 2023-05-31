@@ -3,21 +3,30 @@
   "description": "Concave Marketplace library",
   "version": "0.0.0",
   "private": true,
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
-  "sideEffects": false,
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist/**"
   ],
   "scripts": {
-    "test": "tsdx test --passWithNoTests",
-    "test:watch": "tsdx test --passWithNoTests --watch"
+    "build": "tsup src/index.ts --format esm,cjs --dts --external react",
+    "clean": "rm -rf dist node_modules",
+    "dev": "tsup src/index.ts --format esm,cjs --watch --dts --external react",
+    "lint": "eslint \"src/**/*.ts*\"",
+    "test": "jest",
+    "test:watch": "jest --watchAll"
+  },
+  "jest": {
+    "preset": "jest-presets/jest/node"
   },
   "dependencies": {
     "@0xsequence/multicall": "^0.43.15",
     "@alch/alchemy-web3": "^1.4.7",
-    "@concave/core": "^0.0.0",
-    "@concave/gemswap-sdk": "^0.0.0",
+    "@concave/core": "workspace:*",
+    "@concave/gemswap-sdk": "workspace:*",
+    "tsconfig": "workspace:*",
     "@ethersproject/abstract-provider": "^5.7.0",
     "@ethersproject/address": "^5.7.0",
     "@ethersproject/bignumber": "^5.7.0",
@@ -36,6 +45,9 @@
     "toformat": "^2.0.0"
   },
   "devDependencies": {
-    "tsdx": "^0.14.1"
+    "@types/jest": "^26.0.22",
+    "jest": "^26.6.3",
+    "jest-presets": "workspace:*",
+    "tsup": "^6.2.3"
   }
 }

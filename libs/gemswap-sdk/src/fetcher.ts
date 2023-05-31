@@ -16,13 +16,21 @@ import {
 } from '@concave/core'
 import { BigNumber } from '@ethersproject/bignumber'
 import { Contract } from '@ethersproject/contracts'
-import { getNetwork } from '@ethersproject/networks'
-import { getDefaultProvider } from '@ethersproject/providers'
+import { getNetwork, Network, Networkish } from '@ethersproject/networks'
 import invariant from 'tiny-invariant'
 import { Pair } from './entities'
+import { InfuraProvider, Provider } from '@ethersproject/providers'
+import { env } from "process";
+
+const getDefaultProvider = (network: Networkish): Provider => {
+  return new InfuraProvider(network, env.NEXT_PUBLIC_INFURA_ID)
+}
+
 
 const makeTokenCacheItem = (addresses: AddressMap, tokenMap: TokenMap) =>
   Object.values(addresses).reduce((a, address) => ({ ...a, [address]: tokenMap }), {})
+
+
 // preload some tokens we already know
 const TOKENS_CACHE: { [address: string]: { [chainId in ChainId]: Token } } = {
   ...makeTokenCacheItem(CNV_ADDRESS, CNV),
@@ -66,7 +74,7 @@ export abstract class Fetcher {
     provider = getDefaultProvider(getNetwork(1)),
     storage?: Storage
   ): Promise<Token> {
-    const chainId = await provider.getNetwork().then((n) => n.chainId)
+    const chainId: ChainId = await provider.getNetwork().then((n) => n.chainId)
     if (TOKENS_CACHE[address]?.[chainId]) return TOKENS_CACHE[address][chainId]
     const KEY = `TOKEN-${chainId}-${address}`
     const tokenContract = new Contract(
@@ -163,7 +171,6 @@ export abstract class Fetcher {
     PAIR_ADDRESSES_CACHE[addresses] = pairAddress
 
     if (pairAddress === `0x0000000000000000000000000000000000000000`) return
-
     const [reserves0, reserves1] = await new Contract(
       pairAddress,
       ['function getReserves() external view returns (uint112, uint112, uint32)'],
@@ -172,7 +179,6 @@ export abstract class Fetcher {
 
     const liquidityToken = await Fetcher.fetchTokenData(pairAddress, provider)
     const reserves = tokenA.sortsBefore(tokenB) ? [reserves0, reserves1] : [reserves1, reserves0]
-
     return new Pair(
       CurrencyAmount.fromRawAmount(tokenA, reserves[0]),
       CurrencyAmount.fromRawAmount(tokenB, reserves[1]),

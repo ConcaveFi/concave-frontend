@@ -5,11 +5,11 @@ import invariant from 'tiny-invariant'
 import { Pair, Route, Trade } from '../src/entities'
 import { Router } from '../src/router'
 
-function checkDeadline(deadline: string[] | string): void {
-  expect(typeof deadline).toBe('string')
-  invariant(typeof deadline === 'string')
+function checkDeadline(deadline: any): void {
+  expect(typeof deadline).toBe('number')
+  invariant(typeof deadline === 'number')
   // less than 5 seconds on the deadline
-  expect(new Date().getTime() / 1000 - parseInt(deadline)).toBeLessThanOrEqual(5)
+  expect(new Date().getTime() / 1000 - deadline).toBeLessThanOrEqual(5)
 }
 
 describe('Router', () => {
