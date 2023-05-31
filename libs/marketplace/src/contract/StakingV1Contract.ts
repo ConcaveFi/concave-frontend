@@ -39,7 +39,7 @@ export class StakingV1Contract {
       r: string
       s: string
     },
-  ): Promise<TransactionResponse & { wait: (confirmations) => unknown }> {
+  ): Promise<TransactionResponse & { wait: (confirmations:unknown) => unknown }> {
     if (signature) {
       return this.lockWithPermit(signer, address, amount, poolId, signature)
     }
@@ -61,7 +61,7 @@ export class StakingV1Contract {
       r: string
       s: string
     },
-  ): Promise<TransactionResponse & { wait: (confirmations) => unknown }> {
+  ): Promise<TransactionResponse & { wait: (confirmations:unknown) => unknown }> {
     return this.contract.connect(signer).lockWithPermit(address, amount, poolId, deadline, v, r, s)
   }
 
@@ -69,7 +69,7 @@ export class StakingV1Contract {
     signer: Signer,
     address: string,
     tokenId: BigNumberish,
-  ): Promise<TransactionResponse & { wait: (confirmations) => unknown }> {
+  ): Promise<TransactionResponse & { wait: (confirmations:unknown) => unknown }> {
     return this.contract.connect(signer).unlock(address, tokenId)
   }
 
@@ -98,7 +98,7 @@ export class StakingV1Contract {
   }
 
   public async pools(poolId: number): Promise<PoolState> {
-    return this.contract.pools(poolId).then((p) => new PoolState({ poolId, ...p }))
+    return this.contract.pools(poolId).then((p: any) => new PoolState({ poolId, ...p }))
   }
 
   public async positions(tokenId: BigNumberish): Promise<Position> {

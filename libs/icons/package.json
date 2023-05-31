@@ -1,21 +1,37 @@
 {
   "name": "@concave/icons",
-  "description": "Concave icon library",
+  "description": "Concave Icons",
   "version": "0.0.0",
   "private": true,
-  "main": "./index.tsx",
-  "types": "./index.tsx",
-  "sideEffects": false,
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist/**"
   ],
+  "scripts": {
+    "build": "tsup index.tsx --format esm,cjs --dts --external react",
+    "clean": "rm -rf dist node_modules",
+    "dev": "tsup index.tsx --format esm,cjs --watch --dts --external react",
+    "lint": "eslint \"src/**/*.ts*\"",
+    "test": "jest --passWithNoTests",
+    "test:watch": "jest --watchAll"
+  },
+  "jest": {
+    "preset": "jest-presets/jest/node"
+  },
   "devDependencies": {
-    "@types/react": "^18.0.28",
-    "@types/react-dom": "^18.0.11"
+    "@types/jest": "^26.0.22",
+    "@types/react": "^18.2.7",
+    "jest": "^26.6.3",
+    "jest-presets": "workspace:*",
+    "tsup": "^6.2.3"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.0.17",
     "react": "^18.2.0",
-    "react-icons": "^4.7.1"
+    "react-icons": "^4.7.1",
+    "tsconfig": "workspace:*"
   }
 }
