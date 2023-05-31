@@ -82,7 +82,6 @@ export function UserDashboardWallet({ ...flexProps }: FlexProps) {
         <>
           <Tooltip label={ens || uns || address} icon={<ConnectedUserButton />} />
           <TokenButton token={cnvToken} tokenAmount={cnvBalance} />
-          <TokenButton token={pCNVToken} tokenAmount={pCNVBalance} />
           <TokenButton token={daiToken} tokenAmount={daiBalance} />
           <TokenButton token={nativeToken} tokenAmount={nativeBalance} isDisabled />
         </>
