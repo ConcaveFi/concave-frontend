@@ -42,7 +42,7 @@ export const ChartCard = ({
       <Card fontWeight={'bold'} variant={variant} p={p} h={'full'} w={'full'} minH={300} flex={1}>
         <WrapItem
           as={Box}
-          tabIndex={0}
+          tabindex="0"
           onClick={() => setOpen((o) => !o)}
           onBlur={() => setOpen(false)}
         >

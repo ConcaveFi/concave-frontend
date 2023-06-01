@@ -1,6 +1,6 @@
-import { Icon, IconProps } from '@chakra-ui/icons'
+import { Icon } from '@chakra-ui/icons'
 
-export const SwapIcon = (props: IconProps) => (
+export const SwapIcon = (props) => (
   <Icon
     viewBox="0 0 48 48"
     fill="none"

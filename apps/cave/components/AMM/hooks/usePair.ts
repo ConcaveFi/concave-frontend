@@ -60,7 +60,6 @@ export const usePairs = <T = Pair[]>(
       const commonPairs = getAllCommonPairs(tokenA, tokenB, maxHops)
       const pairs: Pair[] = (
         await Promise.all(
-          //@ts-ignore
           commonPairs.map(([a, b]) => Fetcher.fetchPairData(a, b, provider).catch(() => null)),
         )
       ).filter(Boolean)

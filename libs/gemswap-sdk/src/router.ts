@@ -6,11 +6,17 @@ import { Trade, TradeType } from './entities'
 /**
  * Options for producing the arguments to send call to the router.
  */
-export interface TradeOptionsBase {
+export interface TradeOptions {
   /**
    * How much the execution price is allowed to move unfavorably from the trade execution price.
    */
   allowedSlippage: Percent
+  /**
+   * How long the swap is valid until it expires, in seconds.
+   * This will be used to produce a `deadline` parameter which is computed from when the swap call parameters
+   * are generated.
+   */
+  deadline: number
 
   /**
    * The account that should receive the output of the swap.
@@ -23,31 +29,15 @@ export interface TradeOptionsBase {
   feeOnTransfer?: boolean
 
   /**
-   * Signature, if present it will use other method
-   */
-  signature?: PermitSignature | PermitAllowSignature
-}
-
-export type TradeOptionsDeadline = {
-
-  /**
-   * How long the swap is valid until it expires, in seconds.
-   * This will be used to produce a `deadline` parameter which is computed from when the swap call parameters
-   * are generated.
-   */
-  deadline: number
-} & TradeOptionsBase 
-
-export type TradeOptionsTTL = {
-  /**
    * This will be used to produce a `deadline` parameter which is computed from when the swap call parameters
    * are generated.
    */
   ttl: number
-}& TradeOptionsBase 
-
-export type TradeOptions =  TradeOptionsDeadline | TradeOptionsTTL
-
+  /**
+   * Signature, if present it will use other method
+   */
+  signature?: PermitSignature | PermitAllowSignature
+}
 
 type VSR = {
   v: number
@@ -97,7 +87,7 @@ const decoreWithPermit = (
   method: string,
   args: (string | number | string[])[],
   { signature }: TradeOptions,
-): [string, (string | number | string[])[]] | undefined=> {
+): [string, (string | number | string[])[]] => {
   if (!signature) {
     return [method, args]
   }
@@ -123,7 +113,7 @@ export abstract class Router {
    * @param trade to produce call parameters for
    * @param options options for the call parameters
    */
-  public static swapCallParameters(trade: Trade, options: TradeOptionsDeadline | TradeOptionsTTL): SwapParameters {
+  public static swapCallParameters(trade: Trade, options: TradeOptions): SwapParameters {
     const etherIn = trade.inputAmount.currency.isNative
     const etherOut = trade.outputAmount.currency.isNative
     invariant(!(etherIn && etherOut), 'ETHER_IN_OUT')
@@ -132,7 +122,7 @@ export abstract class Router {
     const amountOut = toHex(trade.minimumAmountOut(options.allowedSlippage))
     const path = trade.route.path.map((token: Token) => token.address)
 
-    const deadline = "deadline" in options ? options.deadline : Math.floor(Date.now() / 1000 + options.ttl)
+    const deadline = options.deadline || Math.floor(Date.now() / 1000 + options.ttl)
 
     const isExactInput = trade.tradeType === TradeType.EXACT_INPUT
 
@@ -150,7 +140,7 @@ export abstract class Router {
 
     const args = [etherIn ? undefined : amountIn, amountOut, path, to, deadline].filter(Boolean)
     const value = etherIn ? amountIn : ZERO_HEX
-    //@ts-ignore
+
     const [permitMethod, permitArgs] = decoreWithPermit(methodName, args, options)
     return {
       methodName: permitMethod,

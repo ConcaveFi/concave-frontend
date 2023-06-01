@@ -14,7 +14,7 @@ export const AddTokenToWalletButton = ({ token }: { token: Token }) => {
       variant="secondary"
       size="medium"
       onClick={() =>
-        connector?.watchAsset({
+        connector.watchAsset({
           address,
           symbol,
           image,

@@ -1,33 +1,23 @@
 {
-  "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["**/.env.*local"],
-  "globalEnv": ["PORT"],
+  "$schema": "https://turborepo.org/schema.json",
   "pipeline": {
     "build": {
-      "outputs": [
-        "dist/**",
-        ".next/**",
-        "!.next/cache/**",
-        "build/**",
-        "api/**",
-        "public/build/**"
-      ],
-      "dependsOn": ["^build"]
+      "cache": false,
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", ".next/**"]
     },
     "test": {
-      "outputs": ["coverage/**"],
-      "dependsOn": []
+      "dependsOn": ["build"]
     },
     "lint": {
-      "dependsOn": ["^build"]
+      "outputs": []
     },
     "dev": {
-      "dependsOn": ["^build"],
-      "cache": false,
-      "persistent": true
+      "cache": false
     },
-    "clean": {
+    "postinstall": {
       "cache": false
     }
-  }
+  },
+  "globalDependencies": ["tsconfig.json", ".eslintrc"]
 }

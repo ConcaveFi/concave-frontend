@@ -9,7 +9,6 @@ import { Currency } from './currency'
 import { Fraction } from './fraction'
 import { Token } from './token'
 
-//@ts-ignore
 const Big = toFormat(_Big)
 
 Big.strict = true

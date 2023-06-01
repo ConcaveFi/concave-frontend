@@ -14,15 +14,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v1
-      - uses: actions/setup-node@v3
-      - uses: pnpm/action-setup@v2
-        name: Install pnpm
-        id: pnpm-install
+      - uses: actions/setup-node@v1
         with:
-          run_install: false
+          node-version: 16
+
       - name: Set up packages
-        run: pnpm install
-      - name: build
-        run: pnpm build
-      - name: test
-        run: pnpm test
+        run: yarn && yarn build
+
+      - name: '@concave/core'
+        run: cd libs/core/ && yarn test && cd ../..

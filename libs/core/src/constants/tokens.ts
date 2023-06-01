@@ -30,7 +30,7 @@ const makeTokenMap = (
     {},
   )
 
-const getAddressesChains = (addresses: { [key: number]: string }) => Object.keys(addresses).map((chainId) => +chainId)
+const getAddressesChains = (addresses) => Object.keys(addresses).map((chainId) => +chainId)
 
 export const CNV: TokenMap = makeTokenMap(
   getAddressesChains(CNV_ADDRESS),
