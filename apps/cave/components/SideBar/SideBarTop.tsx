@@ -1,7 +1,8 @@
-import { CNV } from '@concave/core'
-import { DashboardIcon, TransparencyIcon } from '@concave/icons'
+import { CNV, PCNV } from '@concave/core'
+import { DashboardIcon, TransparencyIcon, WithdrawIcon } from '@concave/icons'
 import { Box, Button, Flex, Image, Stack, Text } from '@concave/ui'
 import { ButtonLink } from 'components/ButtonLink'
+import { useClaimPCNVModal } from 'components/Modals'
 import { ConnectButton } from 'components/UserWallet/ConnectButton'
 import { ConnectedUserButton } from 'components/UserWallet/ConnectedUserButton'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
@@ -11,22 +12,25 @@ import { useAccount, useNetwork } from 'wagmi'
 const UserCnvBalance = () => {
   const networkId = useCurrentSupportedNetworkId()
   const { data: cnvAmount, isSuccess } = useCurrencyBalance(CNV[networkId], { watch: true })
+  const pCNV = useCurrencyBalance(PCNV[networkId], { watch: true })
 
   return (
-    isSuccess && (
-      <Flex pt={2} pb={3} px={4} mt={2} color="text.low" fontWeight="bold" fontSize="sm">
-        <Text w="100%">
-          Your CNV
-          <br />
-          Balance
-        </Text>
+    <Flex py={2} flexDirection={'column'}>
+      {isSuccess && (
+        <Flex px={4} mt={2} color="text.low" fontWeight="bold" fontSize="sm">
+          <Text w="100%">CNV</Text>
+          <Text w="100%" textAlign="right">
+            {cnvAmount.toSignificant(6, { groupSeparator: ',' })}
+          </Text>
+        </Flex>
+      )}
+      <Flex px={4} color="text.low" fontWeight="bold" fontSize="sm">
+        <Text w="100%">pCNV</Text>
         <Text w="100%" textAlign="right">
-          {cnvAmount.toSignificant(6, { groupSeparator: ',' })}
-          <br />
-          CNV
+          {pCNV.data?.toSignificant(6, { groupSeparator: ',' })}
         </Text>
       </Flex>
-    )
+    </Flex>
   )
 }
 
@@ -48,6 +52,7 @@ const TestnetIndicator = () => {
 
 function SideBarTop({ closeSidebar }: { closeSidebar: VoidFunction }) {
   const { isConnected } = useAccount()
+  const claimPCNVModal = useClaimPCNVModal()
 
   return (
     <Box shadow="down" px={2} pb={3} rounded="2xl" w="100%">
@@ -78,13 +83,23 @@ function SideBarTop({ closeSidebar }: { closeSidebar: VoidFunction }) {
                 mb={2}
               />
               <ConnectedUserButton />
+              <UserCnvBalance />
+              <Button
+                onClick={claimPCNVModal.onOpen}
+                variant={'primary'}
+                fontSize={'14px'}
+                w={'full'}
+                py={1.5}
+              >
+                <WithdrawIcon w={'30px'} h={'30px'} />
+                Claim pCNV
+              </Button>
             </>
           ) : (
             <div onClick={closeSidebar}>
               <ConnectButton />
             </div>
           )}
-          <UserCnvBalance />
         </Box>
       </Stack>
       <TestnetIndicator />

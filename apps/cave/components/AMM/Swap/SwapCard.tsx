@@ -25,7 +25,6 @@ import { useWaitForTransaction } from 'wagmi'
 import { NetworkMismatch } from '../NetworkMismatch'
 import { useCustomRecipient } from './CustomRecipient'
 import { SwapState } from './hooks/useSwapState'
-import { PcnvNotification } from './PcnvNotification'
 import { TradeDetails } from './TradeDetails'
 
 /** webhook to start a db syncronization with the blockchain */
@@ -128,14 +127,6 @@ export function Swap(props: SwapState) {
           trade={trade}
           inputAmount={trade.inputAmount}
           outputAmount={trade.outputAmount}
-        />
-
-        <PcnvNotification
-          isOpen={
-            PCNV[networkId].equals(trade.inputAmount?.currency) ||
-            PCNV[networkId].equals(trade.outputAmount?.currency)
-          }
-          currencyAmount={trade.outputAmount}
         />
 
         <Button variant="primary" size="large" w="full" {...swapButtonProps} />
