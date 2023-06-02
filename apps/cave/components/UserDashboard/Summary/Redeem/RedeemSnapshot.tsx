@@ -3,11 +3,9 @@ import { ACNVChart } from 'components/Transparency/Charts/ACNVChart'
 import { BbtCNVChart } from 'components/Transparency/Charts/BbtCNVChart'
 import { RedemACNVCard } from 'components/UserDashboard/redeem/ACNVRedemptionDialog'
 import { RedemBBTCard } from 'components/UserDashboard/redeem/BBTCNVRedemptionDialog'
-import { RedeemPCNVCard } from 'components/UserDashboard/redeem/PCNVRedemptionDialog'
 import { RedeemCard } from 'components/UserDashboard/redeem/RedeemCard'
 import { useRedeemACNVCard } from 'components/UserDashboard/redeem/useRedeemACNVCard'
 import { useRedeemBBTCNVCard } from 'components/UserDashboard/redeem/useRedeemBBTCNVCard'
-import { useRedeemPCNVCard } from 'components/UserDashboard/redeem/useRedeemPCNVCard'
 
 export const RedeemSnapshot = () => {
   const View = useBreakpointValue({ base: RedeemSnapshotMobile, md: RedeemSnapshotDesktop })
@@ -15,11 +13,9 @@ export const RedeemSnapshot = () => {
 }
 
 export const RedeemSnapshotMobile = () => {
-  const redeemPCNVProps = useRedeemPCNVCard()
   const redeemACNVProps = useRedeemACNVCard()
   const redeemBBTCNVProps = useRedeemBBTCNVCard()
   if (
-    redeemPCNVProps.redeemStatus?.redeemable.equalTo(0) &&
     redeemACNVProps.redeemStatus?.redeemable.equalTo(0) &&
     redeemBBTCNVProps.redeemStatus?.redeemable.equalTo(0)
   ) {
@@ -34,7 +30,7 @@ export const RedeemSnapshotMobile = () => {
         gap={2}
         p={2}
       >
-        <Text>{"Your wallet don't have aCNV, bbtCNV or pCNV to redeem"} </Text>
+        <Text>{"Your wallet don't have aCNV, bbtCNV to redeem"} </Text>
       </Flex>
     )
   }

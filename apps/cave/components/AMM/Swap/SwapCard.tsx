@@ -25,7 +25,6 @@ import { useWaitForTransaction } from 'wagmi'
 import { NetworkMismatch } from '../NetworkMismatch'
 import { useCustomRecipient } from './CustomRecipient'
 import { SwapState } from './hooks/useSwapState'
-import { PcnvNotification } from './PcnvNotification'
 import { TradeDetails } from './TradeDetails'
 
 /** webhook to start a db syncronization with the blockchain */
