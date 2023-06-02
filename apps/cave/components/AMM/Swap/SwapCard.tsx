@@ -130,14 +130,6 @@ export function Swap(props: SwapState) {
           outputAmount={trade.outputAmount}
         />
 
-        <PcnvNotification
-          isOpen={
-            PCNV[networkId].equals(trade.inputAmount?.currency) ||
-            PCNV[networkId].equals(trade.outputAmount?.currency)
-          }
-          currencyAmount={trade.outputAmount}
-        />
-
         <Button variant="primary" size="large" w="full" {...swapButtonProps} />
 
         <NetworkMismatch onReset={onReset}>
