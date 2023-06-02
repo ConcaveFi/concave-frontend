@@ -1,7 +1,8 @@
 import { CNV } from '@concave/core'
-import { DashboardIcon, TransparencyIcon } from '@concave/icons'
+import { DashboardIcon, TransparencyIcon, WithdrawIcon } from '@concave/icons'
 import { Box, Button, Flex, Image, Stack, Text } from '@concave/ui'
 import { ButtonLink } from 'components/ButtonLink'
+import { useClaimPCNVModal } from 'components/Modals'
 import { ConnectButton } from 'components/UserWallet/ConnectButton'
 import { ConnectedUserButton } from 'components/UserWallet/ConnectedUserButton'
 import { useCurrencyBalance } from 'hooks/useCurrencyBalance'
@@ -48,6 +49,7 @@ const TestnetIndicator = () => {
 
 function SideBarTop({ closeSidebar }: { closeSidebar: VoidFunction }) {
   const { isConnected } = useAccount()
+  const claimPCNVModal = useClaimPCNVModal()
 
   return (
     <Box shadow="down" px={2} pb={3} rounded="2xl" w="100%">
@@ -85,6 +87,16 @@ function SideBarTop({ closeSidebar }: { closeSidebar: VoidFunction }) {
             </div>
           )}
           <UserCnvBalance />
+          <Button
+            onClick={claimPCNVModal.onOpen}
+            variant={'primary'}
+            fontSize={'14px'}
+            w={'full'}
+            py={1.5}
+          >
+            <WithdrawIcon w={'30px'} h={'30px'} />
+            Claim pCNV
+          </Button>
         </Box>
       </Stack>
       <TestnetIndicator />
