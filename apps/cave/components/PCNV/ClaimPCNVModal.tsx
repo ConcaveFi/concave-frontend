@@ -16,7 +16,6 @@ import { parseUnits } from 'ethers/lib/utils.js'
 import { useAddRecentTransaction } from 'contexts/Transactions'
 
 export function ClaimPCNVModal(props: { isOpen: boolean; onClose: VoidFunction }) {
-  const chainId = useCurrentSupportedNetworkId()
   const { address } = useAccount()
   const balance = useBalance({ address, token: PCNV_ADDRESS[ChainId.ETHEREUM] })
   const isWhitelisted = isWhitelistedPCNV(address)
@@ -30,8 +29,6 @@ export function ClaimPCNVModal(props: { isOpen: boolean; onClose: VoidFunction }
     abi: AIRDROP_CLAIM_ABI,
     args: [address],
   })
-
-  // console.log(claimedPCNV)
 
   const config = usePrepareContractWrite({
     address: claimPCNVContract,
