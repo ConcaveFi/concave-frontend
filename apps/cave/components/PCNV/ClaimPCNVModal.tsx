@@ -68,7 +68,7 @@ export function ClaimPCNVModal(props: { isOpen: boolean; onClose: VoidFunction }
         gap: 4,
       }}
     >
-      <Image width={'190px'} h={'200px'} src="/assets/airdrop/cube.png" />
+      <Image width={'190px'} h={'200px'} alt="cube image" src="/assets/airdrop/cube.png" />
       <Heading
         textShadow={'0px 0px 27px rgba(129, 179, 255, 0.31)'}
         fontWeight={'bold'}
