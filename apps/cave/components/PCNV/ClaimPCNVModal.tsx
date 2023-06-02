@@ -77,9 +77,9 @@ export function ClaimPCNVModal(props: { isOpen: boolean; onClose: VoidFunction }
         Got pCNV tokens?
       </Heading>
       <Text textAlign={'center'} fontSize={'sm'} fontWeight={'medium'}>
-        Press "Claim" below to redeem them for CNV! &nbsp; See the exact conversion using the
+        {`Press "Claim" below to redeem them for CNV! See the exact conversion using the
         calculations below. Remember, it's a one-time deal and your pCNV won't be redeemable
-        afterwards.
+        afterwards.`}
       </Text>
       <Text color={'text.low'}>Read the doc for more info</Text>
       {claimedPCNV && (
