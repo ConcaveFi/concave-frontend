@@ -2,11 +2,12 @@ import { Transaction } from 'ethers'
 import { useEffect, useRef, useState } from 'react'
 import { Address, useWaitForTransaction } from 'wagmi'
 import { TransactionMeta, useAddRecentTransaction } from '../contexts/Transactions'
+import { SendTransactionArgs, SendTransactionResult } from '@wagmi/core'
 
 export type UseTransaction = ReturnType<typeof useTransaction>
 
 export const useTransaction = (
-  doTx: () => Promise<Transaction>,
+  doTx: () => Promise<Transaction | SendTransactionResult>,
   extra: {
     onSend?: () => void
     onSuccess?: (tx: Transaction) => void
