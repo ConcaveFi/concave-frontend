@@ -12,6 +12,7 @@ export type TransactionMeta =
   | { type: 'list position'; tokenId: number; action: 'auction' | 'sale' }
   | { type: 'unlist position'; tokenId: number }
   | { type: 'airdrop'; amount: string | number }
+  | { type: 'claim'; amount: String; token: string }
 
 type TransactionMetaToStatusLabel = {
   [Meta in TransactionMeta as Meta['type']]: (
@@ -80,6 +81,11 @@ const typeToStatusDescription = {
     pending: `Claming  ${amount} USDC`,
     confirmed: `Successfully claimed ${amount} USDC`,
     failed: `Failed to claim ${amount} USDC`,
+  }),
+  claim: ({ amount, token }) => ({
+    pending: `Claiming ${amount} ${token}`,
+    confirmed: `Successfully claimed ${amount} ${token}`,
+    failed: `Failed to claim ${amount} ${token}`,
   }),
 } satisfies TransactionMetaToStatusLabel
 

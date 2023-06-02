@@ -1,11 +1,8 @@
-import { Box, Card, Flex, Heading, Image } from '@concave/ui'
+import { Card, Flex, Heading, Image } from '@concave/ui'
 import { AirdropClaimCard } from 'components/Airdrop/AirdropClaimCard'
-import { ACNVChart } from 'components/Transparency/Charts/ACNVChart'
-import { BbtCNVChart } from 'components/Transparency/Charts/BbtCNVChart'
-import { RedemACNVCard } from 'components/UserDashboard/redeem/ACNVRedemptionDialog'
+
 import { StakeSettingsProvider } from 'contexts/PositionsFilterProvider'
-import { RedemBBTCard } from './redeem/BBTCNVRedemptionDialog'
-import { RedeemPCNVCard } from './redeem/PCNVRedemptionDialog'
+
 import { SnapshotOptions } from './SnapshotOptions'
 import { BondingSnapshot } from './Summary/Bonding/BondingSnapshot'
 import { LiquiditySnapshot } from './Summary/Pools/LiquiditySnapshot'
