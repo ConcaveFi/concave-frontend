@@ -40,7 +40,6 @@ export const RedeemSnapshotMobile = () => {
   }
   return (
     <Flex w={'full'} direction={'column'} overflowX={'scroll'} gap={2}>
-      <RedeemCard {...redeemPCNVProps} w={'full'} />
       <RedeemCard {...redeemACNVProps} w={'full'} />
       <RedeemCard {...redeemBBTCNVProps} w={'full'} />
     </Flex>
@@ -56,7 +55,6 @@ export const RedeemSnapshotDesktop = () => {
         <BbtCNVChart w={'full'} />
       </Flex>
       <Flex direction={{ base: 'column', xl: 'row' }} w={'full'} gap={gap}>
-        <RedeemPCNVCard w={'full'} />
         <RedemACNVCard w={'full'} />
         <RedemBBTCard w={'full'} />
       </Flex>

@@ -111,11 +111,10 @@ export function ClaimPCNVModal(props: { isOpen: boolean; onClose: VoidFunction }
             </Flex>
           </Flex>
           <Button
-            disabled={!isWhitelisted || !proof}
+            disabled={!isWhitelisted || !proof || config.isSuccess}
+            isLoading={config.isLoading || claimPCNV.isLoading}
             onClick={onClaimPCNV}
             variant="primary"
-            isLoading={false}
-            loadingText="Claiming CNV"
             h="42px"
             w="full"
           >
