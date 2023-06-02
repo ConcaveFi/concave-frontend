@@ -1,6 +1,6 @@
 import { AIRDROP_CLAIM_ABI, ChainId, PCNV, PCNV_ADDRESS } from '@concave/core'
 import { WithdrawIcon } from '@concave/icons'
-import { Button, Flex, Heading, Image, Modal, Text, useToast } from '@concave/ui'
+import { Button, CloseButton, Flex, Heading, Image, Modal, Text, useToast } from '@concave/ui'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import {
   mainnet,
@@ -65,6 +65,14 @@ export function ClaimPCNVModal(props: { isOpen: boolean; onClose: VoidFunction }
         gap: 4,
       }}
     >
+      <CloseButton
+        position={'absolute'}
+        top={2}
+        right={2}
+        size={'md'}
+        color={'text.low'}
+        onClick={props.onClose}
+      />
       <Image width={'190px'} h={'200px'} alt="cube image" src="/assets/airdrop/cube.png" />
       <Heading
         textShadow={'0px 0px 27px rgba(129, 179, 255, 0.31)'}
