@@ -2,6 +2,7 @@ import { Container, Flex, Heading, Text, useBreakpointValue } from '@concave/ui'
 import { withPageTransition } from 'components/PageTransition'
 import TransparencyCharts from 'components/Transparency/Charts/TransparencyCharts'
 import { TransparencyDiagram as TransparencyDiagramComponent } from 'components/TransparencyDiagram/TransparencyDiagram'
+import { TreasuryUpdateBanner } from 'components/TreasuryUpdateBanner'
 
 const TransparencyDiagram = () => {
   const isMobile = useBreakpointValue({ base: true, xl: false })
@@ -26,6 +27,8 @@ const TransparencyDiagram = () => {
             page.
           </Text>
         </Flex>
+        <TreasuryUpdateBanner />
+
         <TransparencyDiagramComponent isMobile={isMobile} />
         <Flex w={'100%'} direction={'column'} gap={6} alignItems={'center'}>
           <TransparencyCharts isMobile={isMobile} />
