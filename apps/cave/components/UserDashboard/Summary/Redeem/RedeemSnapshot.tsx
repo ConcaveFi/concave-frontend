@@ -3,6 +3,7 @@ import { ACNVChart } from 'components/Transparency/Charts/ACNVChart'
 import { BbtCNVChart } from 'components/Transparency/Charts/BbtCNVChart'
 import { RedemACNVCard } from 'components/UserDashboard/redeem/ACNVRedemptionDialog'
 import { RedemBBTCard } from 'components/UserDashboard/redeem/BBTCNVRedemptionDialog'
+import { RedemCNVCard } from 'components/UserDashboard/redeem/CNVRedemptionCard'
 import { RedeemCard } from 'components/UserDashboard/redeem/RedeemCard'
 import { useRedeemACNVCard } from 'components/UserDashboard/redeem/useRedeemACNVCard'
 import { useRedeemBBTCNVCard } from 'components/UserDashboard/redeem/useRedeemBBTCNVCard'
@@ -53,6 +54,7 @@ export const RedeemSnapshotDesktop = () => {
       <Flex direction={{ base: 'column', xl: 'row' }} w={'full'} gap={gap}>
         <RedemACNVCard w={'full'} />
         <RedemBBTCard w={'full'} />
+        <RedemCNVCard w={'full'} />
       </Flex>
     </Flex>
   )

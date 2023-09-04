@@ -42,7 +42,7 @@ function redeemable(contract: string, provider, address: string, token: Token) {
 
 export function useRedeemableACNV({ address }: { address: Address }) {
   const chainId = useCurrentSupportedNetworkId()
-  const token = ACNV[chainId]
+  const token = ACNV[chainId] || ACNV[1]
   const logCNV = useGet_User_Acnv_RedeemedQuery({ address: address })
   const [log] = (logCNV.data || { logACNVRedemption: [] }).logACNVRedemption
   const redeemed: number = log?.amount || 0

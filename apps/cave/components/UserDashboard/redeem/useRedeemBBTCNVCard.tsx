@@ -11,8 +11,8 @@ export const useRedeemBBTCNVCard = () => {
   const chainId = useCurrentSupportedNetworkId()
   const { address } = useAccount()
 
-  const tokenOut = BBTCNV[chainId]
-  const {data: redeemStatusOld} = useRedeemable({
+  const tokenOut = BBTCNV[chainId] || BBTCNV[1]
+  const { data: redeemStatusOld } = useRedeemable({
     address,
     contract: "0x7fcc30E97D718864d46a84F13E3Ba111a56123D3", // Contract V1
     token: BBTCNV[chainId],
