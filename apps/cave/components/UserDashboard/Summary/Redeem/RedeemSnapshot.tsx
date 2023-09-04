@@ -54,7 +54,6 @@ export const RedeemSnapshotDesktop = () => {
       <Flex direction={{ base: 'column', xl: 'row' }} w={'full'} gap={gap}>
         <RedemACNVCard w={'full'} />
         <RedemBBTCard w={'full'} />
-        <RedemCNVCard w={'full'} />
       </Flex>
     </Flex>
   )

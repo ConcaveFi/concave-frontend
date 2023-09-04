@@ -13,8 +13,8 @@ const nextConfig = {
   },
   async rewrites() {
     return [
-      { source: '/', destination: '/gemswap' },
-      { source: '/swap', destination: '/gemswap' },
+      { source: '/', destination: '/redeem' },
+      { source: '/swap', destination: '/redeem' },
     ]
   },
   async redirects() {

@@ -26,7 +26,7 @@ export const RedemCNVCard = () => {
   })
 
   const [amountIn, setAmountIn] = useState<CurrencyAmount<Currency>>(initialAmountIn)
-  const fraction = new Percent(`1000000000000000000`, rate.data.toString() || 100)
+  const fraction = new Percent(`1000000000000000000`, rate.data?.toString() || 100)
   const amountOut = CurrencyAmount.fromRawAmount(USDC[chainId], amountIn.divide(fraction).quotient)
   const account = useAccount()
   const approve = useCurrencyApprove(amountIn, CNV_REDEEM_ADDRESS[chainId])

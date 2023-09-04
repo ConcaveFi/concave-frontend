@@ -92,6 +92,7 @@ export const CNV_ADDRESS: AddressMap = {
 }
 
 export const CNV_REDEEM_ADDRESS: AddressMap = {
+  [ChainId.ETHEREUM]: '0xD7DCa59C59cf0B407f292341f99901B5e7e2f91C',
   [ChainId.GÖRLI]: '0xaf707F93aef6D9001dD2B344097b6D1666F3A88c',
 }
 
