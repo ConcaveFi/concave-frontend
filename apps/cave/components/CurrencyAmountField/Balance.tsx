@@ -71,7 +71,7 @@ export const Balance = ({
       fontSize="xs"
       ml="auto"
       onClick={() => onMax(balance.data)}
-      rightIcon={balance.data.greaterThan(0) && !!onMax && <Text textColor="#2E97E2">Max</Text>}
+      rightIcon={balance.data?.greaterThan(0) && !!onMax && <Text textColor="#2E97E2">Max</Text>}
       leftIcon={<Text>Balance:</Text>}
       iconSpacing={1}
       {...(!!onMax && {
@@ -79,7 +79,7 @@ export const Balance = ({
         _focus: { transform: 'scale(1.02)' },
       })}
       _active={!onMax && { transform: 'none' }}
-      isDisabled={!onMax || balance.data.equalTo(0)}
+      isDisabled={!onMax || balance.data?.equalTo(0)}
     >
       <Text noOfLines={1} maxW="100px">
         {balance.data?.toFixed(2, { groupSeparator: ',' })}

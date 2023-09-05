@@ -721,4 +721,4 @@ export const StakingV1Abi = [
     stateMutability: 'view',
     type: 'function',
   },
-]
+] as const
