@@ -84,7 +84,7 @@ export const getMarketPlaceButtonProps = (
       variant: 'primary',
     }
   }
-  return { children: 'List for sale', onClick: () => setState(`list`) }
+  return null
 }
 
 export const MarketListing = ({ stakingPosition }: { stakingPosition: StakingPosition }) => {
@@ -168,15 +168,17 @@ export const MarketListing = ({ stakingPosition }: { stakingPosition: StakingPos
               <Info title="Expiration date" info={market?.isListed ? auctionEnd : '--.--.--'} />
             </Flex>
           </Flex>
-          <Button
-            height={{ base: '40px', md: '50px' }}
-            variant={'primary'}
-            minW={{ base: '200px', md: '110px' }}
-            maxW={{ md: '150px' }}
-            size={'sm'}
-            width={'full'}
-            {...buttonState}
-          />
+          {buttonState && (
+            <Button
+              height={{ base: '40px', md: '50px' }}
+              variant={'primary'}
+              minW={{ base: '200px', md: '110px' }}
+              maxW={{ md: '150px' }}
+              size={'sm'}
+              width={'full'}
+              {...buttonState}
+            />
+          )}
         </Flex>
       </Flex>
       <SaleModal
