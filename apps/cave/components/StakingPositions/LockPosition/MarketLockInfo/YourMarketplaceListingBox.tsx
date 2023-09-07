@@ -1,5 +1,5 @@
-import { CNV_REDEEM_ADDRESS, DAI, MARKETPLACE_CONTRACT, STAKING_CONTRACT } from '@concave/core'
-import { MarketItem, StakingPosition, StakingV1Abi } from '@concave/marketplace'
+import { DAI, MARKETPLACE_CONTRACT } from '@concave/core'
+import { MarketItem, StakingPosition } from '@concave/marketplace'
 import {
   Button,
   ButtonProps,
@@ -12,10 +12,9 @@ import {
 import { formatDistanceToNow } from 'date-fns'
 import { BigNumber } from 'ethers'
 import { useApproveForAll } from 'hooks/useApprove'
-import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { FC, useState } from 'react'
 import { formatFixed } from 'utils/bigNumberMask'
-import { Address, useAccount, useContractRead } from 'wagmi'
+import { Address, useAccount } from 'wagmi'
 import { usePositionDiscount } from './hooks/usePositionDiscount'
 import { SaleModal } from './SellPositionModal'
 
@@ -30,7 +29,7 @@ export const useYourMarketPlaceListing = ({
 
   const approveContractInfo = useApproveForAll({
     erc721: stakingPosition.address,
-    operator: CNV_REDEEM_ADDRESS[chainId],
+    operator: MARKETPLACE_CONTRACT[chainId],
     approved: true,
   })
 
@@ -78,13 +77,13 @@ export const getMarketPlaceButtonProps = (
   }
   if (!approveContractInfo.approved) {
     return {
-      children: 'Allow redeem',
-      title: '',
+      children: 'Allow marketplace',
+      title: 'Allow marketplace contract to handle your LSDCNV tokens',
       onClick: () => approveContractInfo.sendTx(),
       variant: 'primary',
     }
   }
-  return null
+  return { children: 'List for sale', onClick: () => setState(`list`) }
 }
 
 export const MarketListing = ({ stakingPosition }: { stakingPosition: StakingPosition }) => {
@@ -92,15 +91,6 @@ export const MarketListing = ({ stakingPosition }: { stakingPosition: StakingPos
   const account = useAccount()
   const tmp = generateDefaultMarket(stakingPosition).new({ seller: account.address, signature: '' })
   const [market, setMarket] = useState(tmp.new())
-  const chainId = useCurrentSupportedNetworkId()
-
-  const owner = useContractRead({
-    abi: StakingV1Abi,
-    address: STAKING_CONTRACT[chainId],
-    functionName: `ownerOf`,
-    args: [BigNumber.from(stakingPosition.tokenId)],
-  })
-
   const buttonState = getMarketPlaceButtonProps({ ...marketItemState, market })
   const { isOpen, onToggle } = useDisclosure()
   const auctionEnd = formatDistanceToNow(new Date(+market?.deadline.toString() * 1000), {
@@ -118,9 +108,6 @@ export const MarketListing = ({ stakingPosition }: { stakingPosition: StakingPos
     : '---'
 
   const layoutIsMobile = useBreakpointValue({ base: true, md: false })
-  if (owner.data?.toLowerCase() !== account.address.toLowerCase()) {
-    return null
-  }
   return (
     <Flex direction={'column'} height="full" position={'relative'}>
       <Flex
@@ -168,17 +155,15 @@ export const MarketListing = ({ stakingPosition }: { stakingPosition: StakingPos
               <Info title="Expiration date" info={market?.isListed ? auctionEnd : '--.--.--'} />
             </Flex>
           </Flex>
-          {buttonState && (
-            <Button
-              height={{ base: '40px', md: '50px' }}
-              variant={'primary'}
-              minW={{ base: '200px', md: '110px' }}
-              maxW={{ md: '150px' }}
-              size={'sm'}
-              width={'full'}
-              {...buttonState}
-            />
-          )}
+          <Button
+            height={{ base: '40px', md: '50px' }}
+            variant={'primary'}
+            minW={{ base: '200px', md: '110px' }}
+            maxW={{ md: '150px' }}
+            size={'sm'}
+            width={'full'}
+            {...buttonState}
+          />
         </Flex>
       </Flex>
       <SaleModal
