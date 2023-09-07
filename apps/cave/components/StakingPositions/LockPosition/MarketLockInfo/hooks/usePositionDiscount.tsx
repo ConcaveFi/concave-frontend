@@ -28,16 +28,3 @@ export const useCoingeckoPrice = (base: Currency, quote: Currency) => {
     },
   )
 }
-
-export const usePositionDiscount = (staking: StakingPosition, market?: MarketItem) => {
-  const m = market || staking.market
-  const price = useCoingeckoPrice(m.currency, CNV[staking.chainId])
-  if (!price.data) return { ...price, discount: undefined }
-  const cnvPrice = price.data.quote(m.currencyAmount)
-  return {
-    ...price,
-    discount: staking
-      .calculateDiscount(m.new({ startPrice: cnvPrice.quotient.toString() }))
-      .toNumber(),
-  }
-}

@@ -10,12 +10,10 @@ import {
   useDisclosure,
 } from '@concave/ui'
 import { formatDistanceToNow } from 'date-fns'
-import { BigNumber } from 'ethers'
 import { useApproveForAll } from 'hooks/useApprove'
 import { FC, useState } from 'react'
 import { formatFixed } from 'utils/bigNumberMask'
 import { Address, useAccount } from 'wagmi'
-import { usePositionDiscount } from './hooks/usePositionDiscount'
 import { SaleModal } from './SellPositionModal'
 
 export type UserMarketInfoState = ReturnType<typeof useYourMarketPlaceListing>
@@ -96,15 +94,11 @@ export const MarketListing = ({ stakingPosition }: { stakingPosition: StakingPos
   const auctionEnd = formatDistanceToNow(new Date(+market?.deadline.toString() * 1000), {
     addSuffix: false,
   })
-  const discount = usePositionDiscount(stakingPosition, market)
 
   const listPrice = market?.isListed
     ? `${formatFixed(market.startPrice, { decimals: market.currency.decimals })} ${
         market.currency?.symbol
       }`
-    : '---'
-  const discountText = market?.isListed
-    ? `${formatFixed(discount.discount || BigNumber.from(0), { decimals: 2 })} %`
     : '---'
 
   const layoutIsMobile = useBreakpointValue({ base: true, md: false })
@@ -151,7 +145,6 @@ export const MarketListing = ({ stakingPosition }: { stakingPosition: StakingPos
               justify={'space-around'}
               direction={{ base: 'column', md: 'row' }}
             >
-              <Info title="Discount" info={discountText} />
               <Info title="Expiration date" info={market?.isListed ? auctionEnd : '--.--.--'} />
             </Flex>
           </Flex>

@@ -3,7 +3,6 @@ import { Box, Button, HStack, Text, VStack } from '@concave/ui'
 import { useInsert_Marketplace_ListingMutation } from 'graphql/generated/graphql'
 import { Dispatch, SetStateAction } from 'react'
 import { formatFixed } from 'utils/bigNumberMask'
-import { usePositionDiscount } from './hooks/usePositionDiscount'
 import { Info } from './Info'
 
 export const ConfirmSignature = ({
@@ -33,7 +32,6 @@ export const ConfirmSignature = ({
     setMarket(market.new({ isListed: true }))
     onClose()
   }
-  const discount = usePositionDiscount(staking, market)
 
   return (
     <VStack direction={'column'} gap={4} p={4}>
@@ -48,11 +46,6 @@ export const ConfirmSignature = ({
           value={
             formatFixed(market.startPrice, { ...market.currency }) + ` ${market.currency.symbol}`
           }
-        ></Info>
-        <Info
-          label="Discount:"
-          isLoading={discount.isLoading}
-          value={formatFixed(discount.discount || 0, { decimals: 2 }) + `%`}
         ></Info>
       </Box>
       <HStack w={'full'} gap={2}>
