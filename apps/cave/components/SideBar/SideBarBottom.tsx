@@ -17,11 +17,6 @@ const Media: Array<MediaProps> = [
     link: 'https://concave.lol/',
   },
   {
-    icon: 'discord',
-    name: 'Discord',
-    link: 'https://discord.com/invite/concave',
-  },
-  {
     icon: 'twitter',
     name: 'Twitter',
     link: 'https://twitter.com/ConcaveFi',
