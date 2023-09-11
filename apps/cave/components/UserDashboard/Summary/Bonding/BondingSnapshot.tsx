@@ -54,16 +54,6 @@ export const BondingSnapshot = () => {
         dataTableOptions={
           <Flex gap={{ base: 2, sm: 4 }} w={'full'}>
             <ToggleContentButton handle={setExpand} isExpanded={isExpanded} />
-            <Button
-              ml={'auto'}
-              size={'md'}
-              boxShadow={'Up Big'}
-              onClick={() => router.push('/smart-bonding')}
-              justifyContent={'space-between'}
-              rightIcon={<ChevronRightIcon />}
-            >
-              Dynamic Bonds
-            </Button>
           </Flex>
         }
         isLoading={userBondState.isLoading}
