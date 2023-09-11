@@ -25,7 +25,6 @@ import { BigNumberField } from './BigNumberField'
 import { ConfirmSignature } from './ConfirmSignature'
 import { ConfirmUnlist } from './ConfirmUnlist'
 import { EpochDateField } from './EpochDateField'
-import { usePositionDiscount } from './hooks/usePositionDiscount'
 import { Info } from './Info'
 
 type ListForSaleState = ReturnType<typeof useListeForSaleState>
@@ -177,7 +176,6 @@ export const ListPositionForSale = ({
   onClose: VoidFunction
   setMarket: Dispatch<SetStateAction<MarketItem>>
 }) => {
-  const discount = usePositionDiscount(staking, market)
   const tomorrow = addDays(new Date(), 1)
   const disabled = market.deadline?.mul(1000).lt(Date.now()) || market.startPrice.eq(0)
 
@@ -203,12 +201,6 @@ export const ListPositionForSale = ({
         minDate={tomorrow.getTime() / 1000}
         maxDate={staking.maturity}
       />
-      {discount.isSuccess && (
-        <Info
-          label="Discount:"
-          value={formatFixed(discount.discount, { decimals: 2 }) + '%'}
-        ></Info>
-      )}
       <Text textColor={'text.low'} as="em" fontSize={'xs'}>
         1.5% sale fee
       </Text>

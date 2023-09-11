@@ -2,7 +2,6 @@ import { CNV } from '@concave/core'
 import { StakingPosition } from '@concave/marketplace'
 import { Flex, HStack, Modal, Spinner, Text, VStack } from '@concave/ui'
 import { CurrencyIcon } from 'components/CurrencyIcon'
-import { usePositionDiscount } from 'components/StakingPositions/LockPosition/MarketLockInfo/hooks/usePositionDiscount'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { formatFixed } from 'utils/bigNumberMask'
 
@@ -16,7 +15,6 @@ export const ConfirmPurchaseModal = ({
   staking: StakingPosition
 }) => {
   const market = staking.market
-  const discount = usePositionDiscount(staking)
   const chainId = useCurrentSupportedNetworkId()
   const stakingPostion = CNV[chainId]
   if (!isOpen) return null
@@ -49,12 +47,6 @@ export const ConfirmPurchaseModal = ({
               title={market.currency.name}
             ></CurrencyIcon>
           </ConfirmBuyInfo>
-          <ConfirmBuyInfo
-            label="Discount:"
-            isLoading={discount.isLoading}
-            color={discount.discount > 0 ? '#7AF0CD' : `red.700`}
-            value={formatFixed(discount.discount || 0, { decimals: 2 }) + `%`}
-          />
         </VStack>
         <Text fontWeight={'bold'}>
           <Spinner size="xs" mr={2} />

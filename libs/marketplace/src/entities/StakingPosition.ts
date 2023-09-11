@@ -58,18 +58,6 @@ export class StakingPosition implements NFT {
   get pool() {
     return stakingPools[this.poolID]
   }
-
-  /**
-   * calculate discount with 2 digits of precision 10000 = 100%, 5050 = 50,5% ...
-   * @param market
-   * @returns
-   */
-  public calculateDiscount(market: MarketItem = this.market) {
-    if (!market) return BigNumber.from(0)
-    if (!market.startPrice.gt(0)) return BigNumber.from(0)
-    if (this.currentValue.eq(0)) return BigNumber.from(0)
-    return market.startPrice.mul(10000).div(this.currentValue).sub(10000).mul(-1)
-  }
 }
 
 export type Position = {

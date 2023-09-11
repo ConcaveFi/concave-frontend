@@ -72,36 +72,6 @@ const NotInteractableImage = ({ src, ...props }) => (
   <Image alt="" src={src} userSelect="none" draggable="false" pointerEvents="none" {...props} />
 )
 
-const BondROI = () => {
-  const currentSupportedNetworkId = useCurrentSupportedNetworkId()
-  const cnvPrice = useCNVPrice()
-  const { isError, isFetching, isIdle, data } = useQuery(
-    ['bondROI', currentSupportedNetworkId, cnvPrice.price],
-    async () => {
-      const cnvMarketPrice = cnvPrice?.price?.toSignificant(8)
-      const bondSpotPrice = await getBondSpotPrice(currentSupportedNetworkId)
-      return {
-        amount: (1 - +bondSpotPrice / +cnvMarketPrice) * 100,
-        formatted: getROI(cnvMarketPrice, bondSpotPrice),
-      }
-    },
-    { enabled: cnvPrice.isSuccess && !!currentSupportedNetworkId, refetchInterval: 17000 },
-  )
-  const { amount, formatted } = data || {}
-  return (
-    <Flex justify="center" align="center" textColor="text.low" p="9px" m="-3px" mt="0">
-      <Text fontSize="xs" fontWeight="bold" mr={1}>
-        {`CNV-DAI `}
-        <Text as={'span'} color={getRoiWarnColor(amount)} fontSize="xs" fontWeight="bold">
-          {formatted}
-        </Text>
-        {isError ? 'error' : ''}
-      </Text>
-      {(isFetching || isIdle) && <Spinner size={'xs'} />}
-    </Flex>
-  )
-}
-
 const ButtonContainer = ({ children, ...props }) => (
   <Flex flexDir="column" shadow="Down Big" rounded="24px" p="3px" overflow="hidden" {...props}>
     {children}
@@ -110,22 +80,11 @@ const ButtonContainer = ({ children, ...props }) => (
 
 function PageNav() {
   return (
-    <Flex direction="column" position="relative" gap="10px" w="100%" pl="32px">
-      <NotInteractableImage
-        src="/assets/sidebar/linkage.svg"
-        position="absolute"
-        left={0}
-        top={6}
-      />
-      <ButtonContainer mb="11px">
+    <Flex direction="column" position="relative" gap="10px" w="100%">
+      <ButtonContainer>
         <NavButton href="/liquid-staking" border="primary">
           Stake
         </NavButton>
-      </ButtonContainer>
-
-      <ButtonContainer>
-        <NavButton href="/smart-bonding">Bond</NavButton>
-        <SubnavButton href="/smart-bonding">DAI/CNV</SubnavButton>
       </ButtonContainer>
 
       <ButtonContainer>
@@ -133,12 +92,6 @@ function PageNav() {
         <SubnavButton href="/user-dashboard?view=Liquid-Staking">
           Your staked positions
         </SubnavButton>
-      </ButtonContainer>
-
-      <ButtonContainer>
-        <NavButton href="/redeem">Redeem</NavButton>
-        <SubnavButton href="/addliquidity">Add liquidity</SubnavButton>
-        <SubnavButton href="/pools">Liquidity Pools</SubnavButton>
       </ButtonContainer>
     </Flex>
   )

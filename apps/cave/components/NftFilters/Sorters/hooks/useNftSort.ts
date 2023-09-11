@@ -49,20 +49,6 @@ export const usePositionSorter = () => {
     return currentPrice.greaterThan(previousPrice) ? -1 : 1
   }
 
-  const discountSorter = (c: StakingPosition, p: StakingPosition) => {
-    const currentPrice = getCNVPrice(c.market)
-    const currentDiscount = c
-      .calculateDiscount(c.market.new({ startPrice: currentPrice.quotient.toString() }))
-      .toNumber()
-
-    const previousPrice = getCNVPrice(p.market)
-    const previusDiscount = p
-      .calculateDiscount(c.market.new({ startPrice: previousPrice.quotient.toString() }))
-      .toNumber()
-
-    return previusDiscount - currentDiscount
-  }
-
   return {
     ...prices,
     data: {
@@ -81,10 +67,6 @@ export const usePositionSorter = () => {
       PRICE: {
         ASC: (c: StakingPosition, p: StakingPosition) => priceSorter(c, p),
         DESC: (c: StakingPosition, p: StakingPosition) => priceSorter(c, p) * -1,
-      },
-      DISCOUNT: {
-        ASC: (c: StakingPosition, p: StakingPosition) => discountSorter(c, p),
-        DESC: (c: StakingPosition, p: StakingPosition) => discountSorter(c, p) * -1,
       },
     } as const,
   }

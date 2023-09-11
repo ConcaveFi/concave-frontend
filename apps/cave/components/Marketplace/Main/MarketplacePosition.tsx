@@ -5,7 +5,6 @@ import { FlexProps, gradientBorder, HStack, Spinner } from '@concave/ui'
 import { BuyButton } from 'components/BuyButton/BuyButton'
 import { useCurrencyApprove } from 'components/CurrencyAmountButton/CurrencyAmountButton'
 import { ProgressBar } from 'components/ProgressBar'
-import { usePositionDiscount } from 'components/StakingPositions/LockPosition/MarketLockInfo/hooks/usePositionDiscount'
 import { differenceInDays, format, formatDistanceToNowStrict } from 'date-fns'
 import { useTransaction } from 'hooks/useTransaction'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
@@ -27,7 +26,6 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({
   const days = stakingPosition.pool.days
   const diff = (differenceInDays(positionDate, Date.now()) - days) * -1
   const percentToMaturity = new Percent(diff, days)
-  const discount = usePositionDiscount(stakingPosition)
 
   return (
     <Popover trigger="hover" isOpen={isActive}>
@@ -53,14 +51,6 @@ export const MarketplacePosition: React.FC<MarketplacePositionProps> = ({
               stakingPosition={stakingPosition}
             />
             <Info title="Current value" info={`${currentValue} CNV`} />
-            <Info
-              title="Discount"
-              color={discount.discount > 0 ? '#7AF0CD' : `red.700`}
-              info={
-                discount.discount ? `${compactFormat(discount.discount, { decimals: 2 })}%` : '-'
-              }
-              isLoading={discount.isLoading}
-            />
             <BuyContainer active={isActive} stakingPosition={stakingPosition} />
           </HStack>
           <ProgressBar percent={percentToMaturity} />

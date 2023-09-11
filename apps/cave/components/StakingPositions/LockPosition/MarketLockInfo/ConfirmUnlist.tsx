@@ -3,7 +3,6 @@ import { Box, Button, HStack, Text, VStack } from '@concave/ui'
 import { useInsert_Marketplace_ListingMutation } from 'graphql/generated/graphql'
 import { Dispatch, SetStateAction } from 'react'
 import { formatFixed } from 'utils/bigNumberMask'
-import { usePositionDiscount } from './hooks/usePositionDiscount'
 import { Info } from './Info'
 
 export const ConfirmUnlist = ({
@@ -34,7 +33,6 @@ export const ConfirmUnlist = ({
     setMarket(market.new({ isListed: false }))
     onClose()
   }
-  const discount = usePositionDiscount(staking, market)
 
   return (
     <VStack direction={'column'} gap={4} p={4}>
@@ -47,11 +45,6 @@ export const ConfirmUnlist = ({
         <Info
           label="Listed price:"
           value={formatFixed(market.startPrice, market.currency) + ` ${market.currency.symbol}`}
-        ></Info>
-        <Info
-          label="Discount:"
-          isLoading={discount.isLoading}
-          value={formatFixed(discount.discount, { decimals: 2 }) + `%`}
         ></Info>
       </Box>
       <HStack w={'full'} gap={2}>
