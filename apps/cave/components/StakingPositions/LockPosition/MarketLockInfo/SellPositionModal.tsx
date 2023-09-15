@@ -6,6 +6,7 @@ import {
   Button,
   Flex,
   HStack,
+  Link,
   Menu,
   MenuButton,
   MenuItem,
@@ -17,38 +18,33 @@ import {
 import { CurrencyIcon } from 'components/CurrencyIcon'
 import { ChooseButton } from 'components/Marketplace/ChooseButton'
 import { BigNumber, BigNumberish } from 'ethers'
+import { useInsert_Marketplace_ListingMutation } from 'graphql/generated/graphql'
+import { useApproveForAll } from 'hooks/useApprove'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
-import { Dispatch, SetStateAction, useCallback } from 'react'
+import { useState } from 'react'
 import { formatFixed } from 'utils/bigNumberMask'
-import { useProvider, useSignTypedData } from 'wagmi'
+import { Address, useAccount, useProvider, useSignTypedData } from 'wagmi'
 import { BigNumberField } from './BigNumberField'
 import { ConfirmSignature } from './ConfirmSignature'
 import { ConfirmUnlist } from './ConfirmUnlist'
 import { EpochDateField } from './EpochDateField'
 import { Info } from './Info'
 
-type ListForSaleState = ReturnType<typeof useListeForSaleState>
-
 export const SaleModal = ({
-  market,
   staking,
-  state,
-  setMarket,
+  isOpen,
   onClose,
 }: {
+  isOpen: boolean
   onClose: VoidFunction
   staking: StakingPosition
-  market: MarketItem
-  state: `` | 'list' | 'unlist'
-  setMarket: Dispatch<SetStateAction<MarketItem>>
 }) => {
-  const listForSaleState = useListeForSaleState({ market, setMarket })
   return (
     <Modal
       bluryOverlay
       title=""
       size={'xs'}
-      isOpen={state != ''}
+      isOpen={isOpen}
       onClose={onClose}
       isCentered
       hideClose
@@ -60,35 +56,20 @@ export const SaleModal = ({
         variant: 'primary',
       }}
     >
-      {state === 'list' && (
-        <ListPositionForSale
-          {...listForSaleState}
-          onClose={onClose}
-          setMarket={setMarket}
-          staking={staking}
-        />
-      )}
-      {state === 'unlist' && (
-        <ConfirmUnlist
-          {...listForSaleState}
-          onClose={onClose}
-          setMarket={setMarket}
-          staking={staking}
-        />
-      )}
+      {!staking.market.isListed && <ListPositionForSale onClose={onClose} staking={staking} />}
+      {staking.market.isListed && <ConfirmUnlist onClose={onClose} staking={staking} />}
     </Modal>
   )
 }
 
-export const useListeForSaleState = ({
-  market,
-  setMarket,
-}: {
-  market: MarketItem
-  setMarket: Dispatch<SetStateAction<MarketItem>>
-}) => {
+export const useListeForSaleState = ({ staking }: { staking: StakingPosition }) => {
+  const { address } = useAccount()
+  const insertMarketplace = useInsert_Marketplace_ListingMutation()
+  const [signature, setSignature] = useState(``)
+
+  const [market, setMarket] = useState(generateDefaultMarket(staking, address))
   const chainId = useCurrentSupportedNetworkId()
-  const { signTypedDataAsync, isLoading, isIdle } = useSignTypedData({
+  const { signTypedDataAsync, isLoading } = useSignTypedData({
     domain: {
       name: 'Marketplace',
       version: '1',
@@ -121,33 +102,58 @@ export const useListeForSaleState = ({
 
   const provider = useProvider()
 
-  const create = async () => {
+  const sign = async () => {
     try {
       const signature = await signTypedDataAsync()
       const marketplaceContract = new FixedOrderMarketContract(provider)
       const computedSigner = await marketplaceContract.computeSigner(market.new({ signature }))
       if (computedSigner !== market.seller) throw `Invalid signature`
-      setMarket(market.new({ signature }))
-    } catch (e) {
-      console.error(e)
-    }
+      setSignature(signature)
+    } catch (e) {}
   }
-  const setCurrency = useCallback((currency: Currency) => setMarket((m) => m.new({ currency })), [])
 
-  const setPrice = useCallback(
-    (startPrice: BigNumber) => setMarket((m) => m.new({ startPrice })),
-    [],
-  )
-  const setDeadline = useCallback(
-    (deadline: BigNumberish) => setMarket((m) => m.new({ deadline })),
-    [],
-  )
+  const submitSignature = async (callback: () => void) => {
+    await insertMarketplace.mutateAsync({
+      tokenID: market.tokenId.toString(),
+      signatureHash: signature,
+      endPrice: market.endPrice.toString(),
+      start: market.start.toString(),
+      startPrice: market.startPrice.toString(),
+      tokenOwner: market.seller,
+      tokenIsListed: true,
+      deadline: market.deadline.toString(),
+      tokenOption: market.erc20,
+    })
+    callback()
+  }
+
+  const clearSignature = async (callback: () => void) => {
+    await insertMarketplace.mutateAsync({
+      tokenID: market.tokenId.toString(),
+      signatureHash: ``,
+      endPrice: market.endPrice.toString(),
+      start: market.start.toString(),
+      startPrice: market.startPrice.toString(),
+      tokenOwner: market.seller,
+      tokenIsListed: false,
+      deadline: market.deadline.toString(),
+      tokenOption: market.erc20,
+    })
+
+    callback()
+  }
+
+  const setCurrency = (currency: Currency) => setMarket((m) => m.new({ currency }))
+  const setPrice = (startPrice: BigNumber) => setMarket((m) => m.new({ startPrice }))
+  const setDeadline = (deadline: BigNumberish) => setMarket((m) => m.new({ deadline }))
 
   return {
     isLoading,
-    isIdle,
     market,
-    create,
+    signature,
+    sign,
+    submitSignature,
+    clearSignature,
     setCurrency,
     setPrice,
     setDeadline,
@@ -161,27 +167,82 @@ function addDays(date: Date, days: number) {
 }
 
 export const ListPositionForSale = ({
-  isLoading,
-  isIdle,
-  market,
-  staking,
-  setMarket,
   onClose,
-  create,
-  setCurrency,
-  setPrice,
-  setDeadline,
-}: ListForSaleState & {
+  staking,
+}: {
   staking: StakingPosition
   onClose: VoidFunction
-  setMarket: Dispatch<SetStateAction<MarketItem>>
 }) => {
+  const {
+    isLoading,
+    signature,
+    market,
+    sign,
+    submitSignature,
+    clearSignature,
+    setCurrency,
+    setPrice,
+    setDeadline,
+  } = useListeForSaleState({ staking })
   const tomorrow = addDays(new Date(), 1)
   const disabled = market.deadline?.mul(1000).lt(Date.now()) || market.startPrice.eq(0)
+  const chainId = useCurrentSupportedNetworkId()
 
-  if (market.signature) {
+  const approveContractInfo = useApproveForAll({
+    erc721: staking.address,
+    operator: MARKETPLACE_CONTRACT[chainId],
+  })
+
+  if (!approveContractInfo.approved) {
     return (
-      <ConfirmSignature market={market} staking={staking} setMarket={setMarket} onClose={onClose} />
+      <VStack direction={'column'} w={`400px`} max-w={`full`} gap={4} p={4}>
+        <Text fontSize={`xl`} textAlign={'center'} fontWeight="bold" width={'full'}>
+          Empower Marketplace
+        </Text>
+        <Text>
+          Empower our{' '}
+          <Link
+            target={`_blank`}
+            href="https://etherscan.io/address/0x4Da0E49363e796cba0c3E57114858E05260E705a#code"
+          >
+            marketplace
+          </Link>{' '}
+          to handle your Liquid Staked CNV (lsdCNV) collection.
+        </Text>
+        <HStack w={'full'} gap={2}>
+          <Button
+            w={'full'}
+            isLoading={
+              approveContractInfo.isWaitingForConfirmation ||
+              approveContractInfo.isWaitingTransactionReceipt
+            }
+            loadingText={
+              approveContractInfo.isWaitingForConfirmation ? 'Approve in wallet' : 'Waiting receipt'
+            }
+            onClick={() => {
+              approveContractInfo.sendTx()
+            }}
+            variant={`primary`}
+            size={`md`}
+          >
+            Approve
+          </Button>
+          <Button w={'full'} onClick={onClose} variant={`secondary`} size={`md`}>
+            Cancel
+          </Button>
+        </HStack>
+      </VStack>
+    )
+  }
+
+  if (signature) {
+    return (
+      <ConfirmSignature
+        market={market}
+        staking={staking}
+        onSubmit={() => submitSignature(onClose)}
+        onCancel={() => clearSignature(onClose)}
+      />
     )
   }
   return (
@@ -206,8 +267,9 @@ export const ListPositionForSale = ({
       </Text>
       <Flex pt={3} justifyContent="center">
         <ChooseButton
-          onClick={create}
-          isLoading={!isIdle}
+          onClick={sign}
+          isLoading={isLoading}
+          isDisabled={disabled}
           disabled={disabled}
           loadingText={'Confirm on wallet'}
           title={`List`}
@@ -295,4 +357,19 @@ export const SelectMarketCurrency = ({
       </MenuList>
     </Menu>
   )
+}
+
+const generateDefaultMarket = (staking: StakingPosition, seller: Address) => {
+  return new MarketItem({
+    seller,
+    erc721: staking.address,
+    currency: DAI[staking.chainId],
+    tokenId: staking.tokenId.toString(),
+    startPrice: 0,
+    endPrice: 0,
+    start: 0,
+    deadline: 0,
+    isListed: false,
+    signature: '',
+  })
 }

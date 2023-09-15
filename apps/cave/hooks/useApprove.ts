@@ -142,7 +142,7 @@ export const useApproveForAll = ({
 }: {
   erc721: Address
   operator: Address
-  approved: boolean
+  approved?: boolean
 }) => {
   const account = useAccount()
   const owner = account.address

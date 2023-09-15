@@ -1,6 +1,5 @@
 import { CNV, DAI, FRAX, NATIVE, USDC } from '@concave/core'
 import { MarketItem, StakingPosition } from '@concave/marketplace'
-import { coingeckoPrice } from 'components/StakingPositions/LockPosition/MarketLockInfo/hooks/usePositionDiscount'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { useQuery } from 'react-query'
 
@@ -11,29 +10,6 @@ export type NftSort = { sort: keyof PositionFilters; order: NftOrder }
 export type NftSortType = keyof PositionFilters
 
 export const usePositionSorter = () => {
-  const chainId = useCurrentSupportedNetworkId() // we will use mainnet to get prices.
-  const prices = useQuery([`marketplaceTokens`, chainId], async () => {
-    const [USDCPrice, FRAXPrice, NATIVEPrice, DAIPrice] = await Promise.all([
-      coingeckoPrice(USDC[chainId], CNV[chainId]),
-      coingeckoPrice(FRAX[chainId], CNV[chainId]),
-      coingeckoPrice(NATIVE[chainId], CNV[chainId]),
-      coingeckoPrice(DAI[chainId], CNV[chainId]),
-    ])
-    return {
-      [USDC[chainId].symbol]: USDCPrice,
-      [FRAX[chainId].symbol]: FRAXPrice,
-      [NATIVE[chainId].symbol]: NATIVEPrice,
-      [DAI[chainId].symbol]: DAIPrice,
-    }
-  })
-
-  const getCNVPrice = (market: MarketItem) => {
-    if (prices.error) throw prices.error
-    if (!prices.data) throw 'No price data'
-    const price = prices.data[market.currency.symbol]
-    return price.quote(market.currencyAmount)
-  }
-
   const poolSorter = (current: StakingPosition, previus: StakingPosition) =>
     current?.poolID - previus?.poolID
 
@@ -44,13 +20,10 @@ export const usePositionSorter = () => {
     current?.initialValue.gt(previus?.initialValue) ? 1 : -1
 
   const priceSorter = (c: StakingPosition, p: StakingPosition) => {
-    const currentPrice = getCNVPrice(c.market)
-    const previousPrice = getCNVPrice(p.market)
-    return currentPrice.greaterThan(previousPrice) ? -1 : 1
+    return c.currentValue.gt(p.currentValue) ? -1 : 1
   }
 
   return {
-    ...prices,
     data: {
       STAKE_POOL: {
         ASC: (c: StakingPosition, p: StakingPosition) => poolSorter(c, p),

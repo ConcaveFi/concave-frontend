@@ -10,17 +10,16 @@ import {
   useDisclosure,
 } from '@concave/ui'
 import { format, formatDistanceToNow } from 'date-fns'
-import { memo } from 'react'
+import { memo, useState } from 'react'
 import { MarketListing } from '../MarketLockInfo/YourMarketplaceListingBox'
 import { NFTPositionHeader } from '../NFTPositionHeader/NFTPositionHeader'
-import { useUserPositionState } from './useUserPositionState'
 
 interface NftPositionCardProps {
   stakingPosition: StakingPosition
 }
 
 export const UserPositionCard = (props: NftPositionCardProps) => {
-  const { stakingPosition } = useUserPositionState(props)
+  const { stakingPosition } = props
   const { isOpen, onClose, onOpen } = useDisclosure()
   const redeemable = stakingPosition.maturity <= Date.now() / 1000
   return (
@@ -38,11 +37,7 @@ export const UserPositionCard = (props: NftPositionCardProps) => {
           onMouseOutCapture={onClose}
           _hover={{ ...gradientBorder({ borderWidth: 2 }), shadow: 'Blue Light' }}
         >
-          <NFTPositionHeader
-            active={true}
-            stakingPosition={stakingPosition}
-            toogleActive={() => {}}
-          />
+          <NFTPositionHeader active={true} stakingPosition={stakingPosition} />
           <MarketListing stakingPosition={stakingPosition} />
         </Flex>
       </PopoverTrigger>

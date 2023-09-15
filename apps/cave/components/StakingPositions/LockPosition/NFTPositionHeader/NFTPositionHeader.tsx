@@ -7,14 +7,12 @@ import { Transaction } from 'ethers'
 import { useAddRecentTransaction } from 'contexts/Transactions'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
 import { FC, useEffect, useState } from 'react'
-import { formatFixed } from 'utils/bigNumberMask'
 import { Address, useAccount, useProvider, useSigner, useWaitForTransaction } from 'wagmi'
 import { NFTPositionHeaderProps, useNFTLockedPositionState } from './hooks/useNFTPositionViewer'
 import { compactFormat } from 'utils/bigNumberMask'
 
 export const NFTPositionHeader = (props: NFTPositionHeaderProps) => {
-  const { period, redeemInDays, imgNameByPeriod, redeemDate, active, toogleActive, tokenId } =
-    useNFTLockedPositionState(props)
+  const { period, imgNameByPeriod, tokenId } = useNFTLockedPositionState(props)
   const { stakingPosition } = props
 
   const [status, setStatus] = useState<RedeemedStatus>('default')

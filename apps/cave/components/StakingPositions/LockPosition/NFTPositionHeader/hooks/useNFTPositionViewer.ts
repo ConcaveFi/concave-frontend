@@ -5,14 +5,9 @@ import { poolImages } from 'utils/poolImages'
 export interface NFTPositionHeaderProps {
   stakingPosition: StakingPosition
   active: boolean
-  toogleActive: VoidFunction
 }
 
-export const useNFTLockedPositionState = ({
-  stakingPosition,
-  active,
-  toogleActive,
-}: NFTPositionHeaderProps) => {
+export const useNFTLockedPositionState = ({ stakingPosition, active }: NFTPositionHeaderProps) => {
   const { poolID, maturity, tokenId } = stakingPosition
   const redeemInDays = !maturity || formatDistanceToNow(maturity * 1000).replace('about', '')
 
@@ -34,6 +29,5 @@ export const useNFTLockedPositionState = ({
     imgNameByPeriod,
     redeemInDays,
     active,
-    toogleActive,
   }
 }

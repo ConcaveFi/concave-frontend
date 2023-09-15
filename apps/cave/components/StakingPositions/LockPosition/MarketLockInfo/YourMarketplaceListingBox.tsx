@@ -1,5 +1,5 @@
 import { DAI, MARKETPLACE_CONTRACT } from '@concave/core'
-import { MarketItem, StakingPosition } from '@concave/marketplace'
+import { MarketItem, StakingPosition, stakingPositionInfo } from '@concave/marketplace'
 import {
   Button,
   ButtonProps,
@@ -10,98 +10,45 @@ import {
   useDisclosure,
 } from '@concave/ui'
 import { formatDistanceToNow } from 'date-fns'
+import { BigNumber } from 'ethers'
 import { useApproveForAll } from 'hooks/useApprove'
 import { FC, useState } from 'react'
 import { formatFixed } from 'utils/bigNumberMask'
-import { Address, useAccount } from 'wagmi'
+import { useProvider, useQuery } from 'wagmi'
 import { SaleModal } from './SellPositionModal'
 
-export type UserMarketInfoState = ReturnType<typeof useYourMarketPlaceListing>
-export const useYourMarketPlaceListing = ({
-  stakingPosition,
-}: {
-  stakingPosition: StakingPosition
-}) => {
-  const chainId = stakingPosition.chainId
-  const [state, setState] = useState<`` | `list` | `unlist`>('')
+export const MarketListing = (props: { stakingPosition: StakingPosition }) => {
+  const provider = useProvider()
+  const layoutIsMobile = useBreakpointValue({ base: true, md: false })
 
-  const approveContractInfo = useApproveForAll({
-    erc721: stakingPosition.address,
-    operator: MARKETPLACE_CONTRACT[chainId],
-    approved: true,
+  const positionInfo = useQuery([`position_info`, props.stakingPosition.tokenId], () => {
+    return stakingPositionInfo({
+      provider,
+      tokenId: BigNumber.from(props.stakingPosition.tokenId).toNumber(),
+    })
   })
-
-  return {
-    stakingPosition,
-    isWaitingForConfirmation: approveContractInfo.isWaitingForConfirmation,
-    isWaitingTransactionReceipt: approveContractInfo.isWaitingTransactionReceipt,
-    state,
-    setState,
-    chainId,
-    approveContractInfo,
-  }
-}
-
-export const getMarketPlaceButtonProps = (
-  marketItemState: UserMarketInfoState & { market: MarketItem },
-): ButtonProps => {
-  const {
-    market,
-    setState,
-    isWaitingForConfirmation,
-    isWaitingTransactionReceipt,
-    approveContractInfo,
-  } = marketItemState
-
-  if (approveContractInfo.isLoading) {
-    return { loadingText: '', disabled: true, isLoading: true }
-  }
-  if (isWaitingForConfirmation || approveContractInfo.isWaitingForConfirmation) {
-    return { loadingText: 'Approve in wallet', disabled: true, isLoading: true }
-  }
-  if (isWaitingTransactionReceipt || approveContractInfo.isWaitingTransactionReceipt) {
-    return { loadingText: 'Waiting receipt', disabled: true, isLoading: true }
-  }
-  if (market?.isListed && market?.type === `dutch auction`) {
-    return {
-      children: 'Unlist auction',
-      onClick: () => setState(`unlist`),
-      variant: 'primary.outline',
-    }
-  }
-  const isListed = market?.isListed && market.deadline.mul(1000).gte(Date.now())
-  if (isListed && market?.type === `list`) {
-    return { children: 'Unlist', onClick: () => setState(`unlist`), variant: 'primary.outline' }
-  }
-  if (!approveContractInfo.approved) {
-    return {
-      children: 'Allow marketplace',
-      title: 'Allow marketplace contract to handle your LSDCNV tokens',
-      onClick: () => approveContractInfo.sendTx(),
-      variant: 'primary',
-    }
-  }
-  return { children: 'List for sale', onClick: () => setState(`list`) }
-}
-
-export const MarketListing = ({ stakingPosition }: { stakingPosition: StakingPosition }) => {
-  const marketItemState = useYourMarketPlaceListing({ stakingPosition })
-  const account = useAccount()
-  const tmp = generateDefaultMarket(stakingPosition).new({ seller: account.address, signature: '' })
-  const [market, setMarket] = useState(tmp.new())
-  const buttonState = getMarketPlaceButtonProps({ ...marketItemState, market })
+  const [stakingPosition] = positionInfo.data || []
   const { isOpen, onToggle } = useDisclosure()
-  const auctionEnd = formatDistanceToNow(new Date(+market?.deadline.toString() * 1000), {
+  const saleModal = useDisclosure({
+    onClose: () => {
+      console.log(`refetching`)
+      positionInfo.refetch()
+    },
+  })
+  if (!stakingPosition) return <p>Loading</p>
+  const market = stakingPosition?.market
+
+  const auctionEnd = formatDistanceToNow((market?.deadline.toNumber() || 1) * 1000, {
     addSuffix: false,
   })
+  const isListed = market?.isListed && market?.signature
 
-  const listPrice = market?.isListed
+  const listPrice = isListed
     ? `${formatFixed(market.startPrice, { decimals: market.currency.decimals })} ${
         market.currency?.symbol
       }`
     : '---'
 
-  const layoutIsMobile = useBreakpointValue({ base: true, md: false })
   return (
     <Flex direction={'column'} height="full" position={'relative'}>
       <Flex
@@ -137,7 +84,7 @@ export const MarketListing = ({ stakingPosition }: { stakingPosition: StakingPos
               justify={'space-around'}
               direction={{ base: 'column', md: 'row' }}
             >
-              <Info title="Token Id" info={stakingPosition.tokenId.toString()} />
+              <Info title="Token Id" info={stakingPosition.tokenId?.toString()} />
               <Info title="List price" info={listPrice} />
             </Flex>
             <Flex
@@ -145,7 +92,7 @@ export const MarketListing = ({ stakingPosition }: { stakingPosition: StakingPos
               justify={'space-around'}
               direction={{ base: 'column', md: 'row' }}
             >
-              <Info title="Expiration date" info={market?.isListed ? auctionEnd : '--.--.--'} />
+              <Info title="Expiration date" info={isListed ? auctionEnd : '--.--.--'} />
             </Flex>
           </Flex>
           <Button
@@ -155,20 +102,18 @@ export const MarketListing = ({ stakingPosition }: { stakingPosition: StakingPos
             maxW={{ md: '150px' }}
             size={'sm'}
             width={'full'}
-            {...buttonState}
-          />
+            onClick={saleModal.onOpen}
+          >
+            {isListed ? `Unlist` : `List for sale`}
+          </Button>
+
+          <SaleModal staking={stakingPosition} {...saleModal} />
         </Flex>
       </Flex>
-      <SaleModal
-        staking={stakingPosition}
-        market={market}
-        setMarket={setMarket}
-        onClose={() => marketItemState.setState('')}
-        state={marketItemState.state}
-      />
     </Flex>
   )
 }
+
 type InfoProps = { title: string; info: string }
 const Info: FC<InfoProps & FlexProps> = ({ info, title, ...props }) => (
   <Flex direction={'column'} align="start" {...props}>
@@ -180,20 +125,3 @@ const Info: FC<InfoProps & FlexProps> = ({ info, title, ...props }) => (
     </Text>
   </Flex>
 )
-const generateDefaultMarket = (staking: StakingPosition) => {
-  if (staking?.market?.isListed) {
-    return staking.market
-  }
-  return new MarketItem({
-    seller: '' as Address,
-    erc721: staking.address,
-    currency: DAI[staking.chainId],
-    tokenId: staking.tokenId.toString(),
-    startPrice: 0,
-    endPrice: 0,
-    start: 0,
-    deadline: 0,
-    isListed: false,
-    signature: '',
-  })
-}

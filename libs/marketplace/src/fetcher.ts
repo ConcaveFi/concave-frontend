@@ -4,6 +4,7 @@ import { StakingPool, stakingPools } from './entities'
 import { parser } from './graphql/parser'
 import {
   fetchAllCavemart,
+  fetchPositionInfo,
   fetchUsersPositions,
   listCavemartListingDocuments,
   listReceivedTokensHistoryByAddress,
@@ -52,6 +53,26 @@ export const listListedPositions = async ({ provider }: { provider: BaseProvider
     .filter((c) => c.marketplace[0].tokenIsListed)
   const result = await Promise.all(cleanResults.map(stakingV1ToStakingPosition))
   return result.filter((p) => !p.currentValue.eq(0)) //remove redeemeds
+}
+
+export const stakingPositionInfo = async ({
+  provider,
+  tokenId,
+}: {
+  provider: BaseProvider
+  tokenId: number
+}) => {
+  const stakingV1Contract = new StakingV1Contract(provider)
+  const { data } = await fetchPositionInfo(provider.network.chainId, tokenId)
+  const { stakingV1ToStakingPosition } = parser(stakingV1Contract, provider)
+  const dirtyResults = data.logStakingV1
+  const cleanResults = dirtyResults.filter(({ marketplace, to }) => {
+    const [lastMarket] = [...marketplace].reverse()
+    const tokenOwner = to === lastMarket.tokenOwner
+    return tokenOwner
+  })
+  const result = await Promise.all(cleanResults.map(stakingV1ToStakingPosition))
+  return result.filter((p) => !p.currentValue.eq(0))
 }
 
 export const marketplaceActivity = async ({ provider }: { provider: BaseProvider }) => {
