@@ -39,6 +39,13 @@ export const SaleModal = ({
   onClose: VoidFunction
   staking: StakingPosition
 }) => {
+  const market = staking.market
+  const isListed =
+    market?.isListed &&
+    market?.signature &&
+    market.deadline.gte(0) &&
+    market?.deadline.mul(1000).gt(Date.now())
+
   return (
     <Modal
       bluryOverlay
@@ -56,8 +63,8 @@ export const SaleModal = ({
         variant: 'primary',
       }}
     >
-      {!staking.market.isListed && <ListPositionForSale onClose={onClose} staking={staking} />}
-      {staking.market.isListed && <ConfirmUnlist onClose={onClose} staking={staking} />}
+      {!isListed && <ListPositionForSale onClose={onClose} staking={staking} />}
+      {isListed && <ConfirmUnlist onClose={onClose} staking={staking} />}
     </Modal>
   )
 }

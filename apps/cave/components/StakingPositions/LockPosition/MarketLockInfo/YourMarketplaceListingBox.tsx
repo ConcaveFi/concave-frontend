@@ -41,7 +41,11 @@ export const MarketListing = (props: { stakingPosition: StakingPosition }) => {
   const auctionEnd = formatDistanceToNow((market?.deadline.toNumber() || 1) * 1000, {
     addSuffix: false,
   })
-  const isListed = market?.isListed && market?.signature
+  const isListed =
+    market?.isListed &&
+    market?.signature &&
+    market.deadline.gte(0) &&
+    market?.deadline.mul(1000).gt(Date.now())
 
   const listPrice = isListed
     ? `${formatFixed(market.startPrice, { decimals: market.currency.decimals })} ${
