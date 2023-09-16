@@ -36,6 +36,42 @@ const listCavemartListingDocumentsQuery = `query GET_ALL_CAVEMART_USERS_LISTINGS
   }
 }`
 
+const stakingPositionInfo = (tokenId: number) => `query GET_MARKETPLACE_POSITION_INFO {
+  logStakingV1(
+    where: {marketplace: {tokenID: {_eq: "${tokenId}"}, }}
+    distinct_on: [tokenID]
+    order_by: [{tokenID: asc}, {txBlockNumber: desc}, {created_at: desc}]
+  ) {
+    created_at
+    to
+    amountLocked
+    poolID
+    tokenID
+    txHash
+    lockedUntil
+    marketplace(
+      where: {tokenID: {_is_null: false}}
+      distinct_on: [tokenID]
+      order_by: [{tokenID: asc}, {created_at: desc}]
+    ) {
+      tokenID
+      newOwner
+      start
+      startPrice
+      endPrice
+      deadline
+      soldFor
+      tokenOwner
+      txHash
+      tokenIsListed
+      signatureHash
+      tokenOption
+      created_at
+    }
+  }
+}
+`
+
 const fetchUserPositionsQuery = `query GET_ALL_USERS_POSITIONS {
   logStakingV1(
     distinct_on: [tokenID]
@@ -179,6 +215,13 @@ export const listCavemartListingDocuments = (chainId: number) => {
   return fetcher<{ data: { logStakingV1: LogStakingV1[] } }>(getHasuraEndpoint({ chainId }), {
     method: 'POST',
     body: JSON.stringify({ query: listCavemartListingDocumentsQuery }),
+  })
+}
+
+export const fetchPositionInfo = (chainId: number, tokenId: number) => {
+  return fetcher<{ data: { logStakingV1: LogStakingV1[] } }>(getHasuraEndpoint({ chainId }), {
+    method: 'POST',
+    body: JSON.stringify({ query: stakingPositionInfo(tokenId) }),
   })
 }
 

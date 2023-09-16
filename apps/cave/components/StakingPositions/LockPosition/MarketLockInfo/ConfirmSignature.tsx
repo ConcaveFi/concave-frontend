@@ -1,38 +1,19 @@
 import { MarketItem, StakingPosition } from '@concave/marketplace'
 import { Box, Button, HStack, Text, VStack } from '@concave/ui'
-import { useInsert_Marketplace_ListingMutation } from 'graphql/generated/graphql'
-import { Dispatch, SetStateAction } from 'react'
 import { formatFixed } from 'utils/bigNumberMask'
 import { Info } from './Info'
 
 export const ConfirmSignature = ({
   market,
   staking,
-  setMarket,
-  onClose,
+  onSubmit,
+  onCancel,
 }: {
-  setMarket: Dispatch<SetStateAction<MarketItem>>
-  onClose: VoidFunction
+  onSubmit: VoidFunction
+  onCancel: VoidFunction
   staking: StakingPosition
   market: MarketItem
 }) => {
-  const insertMarketplace = useInsert_Marketplace_ListingMutation()
-  const onSubmit = async () => {
-    await insertMarketplace.mutateAsync({
-      tokenID: market.tokenId.toString(),
-      signatureHash: market.signature,
-      endPrice: market.endPrice.toString(),
-      start: market.start.toString(),
-      startPrice: market.startPrice.toString(),
-      tokenOwner: market.seller,
-      tokenIsListed: true,
-      deadline: market.deadline.toString(),
-      tokenOption: market.erc20,
-    })
-    setMarket(market.new({ isListed: true }))
-    onClose()
-  }
-
   return (
     <VStack direction={'column'} gap={4} p={4}>
       <Text fontSize={`xl`} textAlign={'center'} fontWeight="bold" width={'full'}>
@@ -52,15 +33,7 @@ export const ConfirmSignature = ({
         <Button w={'full'} onClick={onSubmit} variant={`primary`} size={`md`}>
           Submit
         </Button>
-        <Button
-          w={'full'}
-          onClick={() => {
-            setMarket(market.new({ isListed: false, signature: '' }))
-            onClose()
-          }}
-          variant={`secondary`}
-          size={`md`}
-        >
+        <Button w={'full'} onClick={onCancel} variant={`secondary`} size={`md`}>
           Cancel
         </Button>
       </HStack>

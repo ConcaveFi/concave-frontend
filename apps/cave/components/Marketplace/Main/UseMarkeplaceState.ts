@@ -1,7 +1,10 @@
-import { FixedOrderMarketContract, listListedPositions, StakingPool, stakingPools } from '@concave/marketplace'
 import {
-  filterStakePool,
-} from 'components/NftFilters/Filters/hooks/useFilterByStakePool'
+  FixedOrderMarketContract,
+  listListedPositions,
+  StakingPool,
+  stakingPools,
+} from '@concave/marketplace'
+import { filterStakePool } from 'components/NftFilters/Filters/hooks/useFilterByStakePool'
 import { NftSort, usePositionSorter } from 'components/NftFilters/Sorters/hooks/useNftSort'
 import { BigNumber } from 'ethers'
 import { useCurrentSupportedNetworkId } from 'hooks/useCurrentSupportedNetworkId'
@@ -60,7 +63,7 @@ export const useMarketplaceDashbord = () => {
     setStakeFilters,
     setSort,
     setTokenIdFilter,
-    isLoading: positions.isLoading || positionSorter.isLoading,
-    isFetching: positions.isFetching || positionSorter.isFetching,
+    isLoading: positions.isLoading,
+    isFetching: positions.isFetching,
   }
 }
