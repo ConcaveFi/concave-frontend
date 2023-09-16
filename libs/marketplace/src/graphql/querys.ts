@@ -38,7 +38,7 @@ const listCavemartListingDocumentsQuery = `query GET_ALL_CAVEMART_USERS_LISTINGS
 
 const stakingPositionInfo = (tokenId: number) => `query GET_MARKETPLACE_POSITION_INFO {
   logStakingV1(
-    where: {marketplace: {tokenID: {_eq: "${tokenId}"}, }}
+    where: {tokenID: {_eq: "${tokenId}"}}
     distinct_on: [tokenID]
     order_by: [{tokenID: asc}, {txBlockNumber: desc}, {created_at: desc}]
   ) {

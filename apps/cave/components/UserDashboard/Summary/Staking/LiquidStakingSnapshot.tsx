@@ -22,7 +22,10 @@ import { useState } from 'react'
 import { useQuery } from 'react-query'
 import { numberMask } from 'utils/numberMask'
 import { useAccount, useProvider } from 'wagmi'
-import { UserPositionCardMemo } from '../../../StakingPositions/LockPosition/Card/UserPositionCard'
+import {
+  UserPositionCard,
+  UserPositionCardMemo,
+} from '../../../StakingPositions/LockPosition/Card/UserPositionCard'
 import { DataTable } from '../../DataTable'
 import { DataTableCard } from '../../DataTableCard'
 import { SnapshotCard } from '../../SnapshotCard'
@@ -190,8 +193,11 @@ export const LiquidStakingSnapshot = () => {
             .filter(filterByRange)
             .filter(filterByStakePool)
             .sort(sortFunction)
+            // .map((nft, i) => {
+            //   return <p key={`` + i}>{nft.tokenId.toString()}</p>
+            // })
             .map((nonFungibleTokenInfo, i) => (
-              <UserPositionCardMemo
+              <UserPositionCard
                 key={+nonFungibleTokenInfo.tokenId.toString() + i}
                 stakingPosition={nonFungibleTokenInfo}
               />
