@@ -1,5 +1,5 @@
 import { AirdropClaimContract } from '@concave/core'
-import { ChevronRightIcon } from '@concave/icons'
+import { ChevronRightIcon, RepeatIcon } from '@concave/icons'
 import { SellIcon } from '@concave/icons'
 import { listUserHistory, stakingPools } from '@concave/marketplace'
 import { Button, Flex, Spinner } from '@concave/ui'
@@ -22,11 +22,15 @@ import { useState } from 'react'
 import { useQuery } from 'react-query'
 import { numberMask } from 'utils/numberMask'
 import { useAccount, useProvider } from 'wagmi'
-import { UserPositionCardMemo } from '../../../StakingPositions/LockPosition/Card/UserPositionCard'
+import {
+  UserPositionCard,
+  UserPositionCardMemo,
+} from '../../../StakingPositions/LockPosition/Card/UserPositionCard'
 import { DataTable } from '../../DataTable'
 import { DataTableCard } from '../../DataTableCard'
 import { SnapshotCard } from '../../SnapshotCard'
 import { SnapshotText } from '../../SnapshotText'
+import { ResponsiveButton } from 'components/ResponsiveMenuButton'
 
 function generateDateArray(startDate: Date, endDate: Date, size: number): Date[] {
   const dateArray: Date[] = []
@@ -152,6 +156,17 @@ export const LiquidStakingSnapshot = () => {
         isLoading={isLoading}
         dataTableOptions={
           <Flex gap={{ base: 2, sm: 4 }} w={'full'}>
+            <ResponsiveButton
+              size={'md'}
+              boxShadow={'Up Big'}
+              onClick={stakePosition.reIndex}
+              isDisabled={stakePosition.isLoading}
+              justifyContent={'space-between'}
+              leftIcon={<RepeatIcon />}
+            >
+              Refresh
+            </ResponsiveButton>
+
             <ToggleContentButton handle={setExpand} isExpanded={isExpanded} />
             <SortButton />
             <StakePoolFilterCard />
@@ -178,8 +193,11 @@ export const LiquidStakingSnapshot = () => {
             .filter(filterByRange)
             .filter(filterByStakePool)
             .sort(sortFunction)
+            // .map((nft, i) => {
+            //   return <p key={`` + i}>{nft.tokenId.toString()}</p>
+            // })
             .map((nonFungibleTokenInfo, i) => (
-              <UserPositionCardMemo
+              <UserPositionCard
                 key={+nonFungibleTokenInfo.tokenId.toString() + i}
                 stakingPosition={nonFungibleTokenInfo}
               />

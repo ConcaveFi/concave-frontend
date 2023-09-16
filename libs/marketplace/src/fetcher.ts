@@ -68,7 +68,7 @@ export const stakingPositionInfo = async ({
   const dirtyResults = data.logStakingV1
   const cleanResults = dirtyResults.filter(({ marketplace, to }) => {
     const [lastMarket] = [...marketplace].reverse()
-    const tokenOwner = to === lastMarket.tokenOwner
+    const tokenOwner = lastMarket === undefined || to === lastMarket.tokenOwner
     return tokenOwner
   })
   const result = await Promise.all(cleanResults.map(stakingV1ToStakingPosition))
