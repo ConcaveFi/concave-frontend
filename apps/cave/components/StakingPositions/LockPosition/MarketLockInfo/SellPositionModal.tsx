@@ -267,7 +267,7 @@ export const ListPositionForSale = ({
         label="Deadline:"
         onChange={setDeadline}
         minDate={tomorrow.getTime() / 1000}
-        maxDate={staking.maturity}
+        maxDate={1864645261}
       />
       <Text textColor={'text.low'} as="em" fontSize={'xs'}>
         1.5% sale fee
@@ -375,7 +375,7 @@ const generateDefaultMarket = (staking: StakingPosition, seller: Address) => {
     startPrice: 0,
     endPrice: 0,
     start: 0,
-    deadline: 0,
+    deadline: 1861966861,
     isListed: false,
     signature: '',
   })
