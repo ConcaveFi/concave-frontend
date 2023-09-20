@@ -6,11 +6,11 @@ interface MediaProps {
   link: string
 }
 const Media: Array<MediaProps> = [
-  {
-    icon: 'documentation',
-    name: 'Documentation',
-    link: 'https://docs.concave.lol/introduction/',
-  },
+  // {
+  //   icon: 'documentation',
+  //   name: 'Documentation',
+  //   link: 'https://docs.concave.lol/introduction/',
+  // },
   {
     icon: 'concavelol',
     name: 'Concave.lol',
