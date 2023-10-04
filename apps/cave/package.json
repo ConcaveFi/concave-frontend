@@ -64,7 +64,7 @@
     "next-router-mock": "^0.9.1",
     "next-usequerystate": "^1.7.2",
     "nock": "^13.3.0",
-    "node-mocks-http": "^1.12.1",
+    "node-mocks-http": "^1.13.0",
     "patch-package": "^6.5.1",
     "qrcode": "^1.5.1",
     "react": "^18.2.0",
