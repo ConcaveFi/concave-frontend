@@ -42,7 +42,7 @@ importers:
       '@pcnv/txs-react': ^0.0.6
       '@tanstack/react-table': ^8.7.6
       '@testing-library/react': ^14.0.0
-      '@types/gtag.js': ^0.0.12
+      '@types/gtag.js': ^0.0.17
       '@types/jest': ^26.0.22
       '@types/ms': ^0.7.31
       '@types/node': ^18.14.0
@@ -150,7 +150,7 @@ importers:
       zustand: 4.3.8_react@18.2.0
     devDependencies:
       '@chakra-ui/cli': 2.4.1
-      '@types/gtag.js': 0.0.12
+      '@types/gtag.js': 0.0.17
       '@types/jest': 26.0.24
       '@types/ms': 0.7.31
       '@types/node': 18.16.16
@@ -5266,8 +5266,8 @@ packages:
     dependencies:
       '@types/node': 20.2.5
 
-  /@types/gtag.js/0.0.12:
-    resolution: {integrity: sha512-YQV9bUsemkzG81Ea295/nF/5GijnD2Af7QhEofh7xu+kvCN6RdodgNwwGWXB5GMI3NoyvQo0odNctoH/qLMIpg==}
+  /@types/gtag.js/0.0.17:
+    resolution: {integrity: sha512-OsSO6Yyuygr3DeeTovOY0ppLiAVHoXg4CSanO9/vzDQCV+e8pkZNE+HR2dVxGJfUbtRe2IqzC97PYuHSNUepJw==}
     dev: true
 
   /@types/http-cache-semantics/4.0.1:
