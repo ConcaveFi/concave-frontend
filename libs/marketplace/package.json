@@ -37,7 +37,7 @@
     "@types/big.js": "^6.1.6",
     "@wagmi/core": "^0.5.8",
     "decimal.js-light": "^2.5.1",
-    "ethers": "^5.7.2",
+    "ethers": "^6.8.0",
     "jsbi": "^4.3.0",
     "prettier": "^2.8.4",
     "tiny-invariant": "^1.3.1",
