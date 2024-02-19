@@ -34,7 +34,7 @@ export function AirdropClaimBanner() {
         <Image pr="4" src="./assets/airdrop/airdrop.png" w="35px" alt="airdrop-icon" />
         <Flex flex={1} direction={'column'}>
           <Heading fontSize={'md'} fontWeight="semibold">
-            Airdrop is here!
+            NEW Airdrop is here!
           </Heading>
           <Heading fontSize={'md'} fontWeight="medium" textColor={'text.low'}>
             click to redeem now
