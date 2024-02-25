@@ -2,7 +2,7 @@
 import { NODE_ENV } from 'lib/env.conf'
 import { PropsWithChildren } from 'react'
 import { configureChains, Connector, createClient, WagmiConfig } from 'wagmi'
-import { goerli, mainnet, localhost } from 'wagmi/chains'
+import { goerli, mainnet, localhost, sepolia } from 'wagmi/chains'
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
@@ -24,7 +24,7 @@ const concaveProviderConfig = {
 }
 
 const { chains, provider, webSocketProvider } = configureChains(
-  [mainnet, goerli, isDevMode && localhost].filter(Boolean),
+  [mainnet, goerli, isDevMode && localhost, sepolia].filter(Boolean),
   [
     infuraProvider({ apiKey: NEXT_PUBLIC_INFURA_ID, priority: 1 }),
     alchemyProvider({ apiKey: NEXT_PUBLIC_ALCHEMY_ID, priority: 2 }),
