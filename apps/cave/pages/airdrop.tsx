@@ -1,5 +1,5 @@
 import { AirdropClaimCard } from 'components/Airdrop/AirdropClaimCard'
 
-export function AirdropPage() {
+export default function AirdropPage() {
   return <AirdropClaimCard />
 }
