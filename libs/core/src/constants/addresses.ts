@@ -1,6 +1,5 @@
 import { ChainId } from '../enums'
 import { AddressMap } from '../types'
-
 export const MARKETPLACE_CONTRACT: AddressMap = {
   [ChainId.LOCALHOST]: '0x4Da0E49363e796cba0c3E57114858E05260E705a',
   [ChainId.ETHEREUM]: '0x4Da0E49363e796cba0c3E57114858E05260E705a',
@@ -37,9 +36,11 @@ export const AIRDROP_CLAIM: AddressMap = {
   [ChainId.ETHEREUM]: '0x8b8be4848934812d6e24af1ae9aad01d3c0ef3fd',
   [ChainId.GÖRLI]: '0xC0044Db759B013a6A0885100231BD5ba8b9aa839',
 }
+
 export const AIRDROP_CLAIM_Q4: AddressMap = {
   [ChainId.LOCALHOST]: '0x86F7627742b33d5e70Ef086D3AFB00E22c246178',
   [ChainId.ETHEREUM]: '0x86F7627742b33d5e70Ef086D3AFB00E22c246178',
+  [ChainId.SEPOLIA]: '0x86F7627742b33d5e70Ef086D3AFB00E22c246178',
 }
 
 export const BBTCNV_ADDRESS: AddressMap = {
