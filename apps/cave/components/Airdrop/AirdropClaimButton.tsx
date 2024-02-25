@@ -18,7 +18,7 @@ export function AirdropClaimButton({ season, proof, redeemable, whiteListed }: A
   const errorModal = useErrorModal()
   const canRedeem = Boolean(redeemable)
 
-  const provider = useProvider()
+  const provider = useProvider({ chainId: networkId })
 
   const { data: claimed } = useQuery(['AirdropClaim', season, networkId], async () => {
     let airdrop = new AirdropClaimContract(provider, season)
@@ -44,8 +44,7 @@ export function AirdropClaimButton({ season, proof, redeemable, whiteListed }: A
       {...claimButtonProps({ claimed: !!claimed, canRedeem, status, whiteListed })}
       onClick={() => !claimed && airdrop.sendTx()}
     >
-      {getButtonLabel({ claimed: !!claimed, isConnected, whiteListed, status }) ||
-        nameBySeason[season]}
+      Claim
     </Button>
   )
 }
