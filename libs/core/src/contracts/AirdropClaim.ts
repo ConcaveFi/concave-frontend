@@ -13,6 +13,7 @@ export class AirdropClaimContract {
     const contractAddress = AIRDROP_CLAIM_Q4[chainID]
     this.airdropClaimContract = new Contract(contractAddress, AIRDROP_CLAIM_ABI, this.provider)
   }
+
   public async claimed(address: string): Promise<boolean> {
     return this.airdropClaimContract.claimed(address)
   }
