@@ -56,6 +56,7 @@ const connectors = [
         [mainnet.id]: concaveProviderConfig.rpc,
         [goerli.id]: concaveProviderConfig.rpc,
         [localhost.id]: localhost.rpcUrls.default.http[0],
+        [sepolia.id]: sepolia.rpcUrls.default.http[0],
       },
     },
   }),
