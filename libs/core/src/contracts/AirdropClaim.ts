@@ -10,10 +10,10 @@ export class AirdropClaimContract {
       throw 'Provider is undefined for constructor of AirdropClaimContract'
     }
     const chainID = this.provider.network.chainId
-    const contractAddress =
-      season === 'special' ? AIRDROP_CLAIM[chainID] : AIRDROP_CLAIM_Q4[chainID]
+    const contractAddress = AIRDROP_CLAIM_Q4[chainID]
     this.airdropClaimContract = new Contract(contractAddress, AIRDROP_CLAIM_ABI, this.provider)
   }
+
   public async claimed(address: string): Promise<boolean> {
     return this.airdropClaimContract.claimed(address)
   }
